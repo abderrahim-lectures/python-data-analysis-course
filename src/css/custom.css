@@ -47,3 +47,9 @@
   display: inline-flex;
   align-items: center;
 }
+
+/* Classical mode hides gamified-only decoration (badges, toasts, meme beats) —
+   see src/theme/Root/UiModeBodyAttribute.tsx for how data-ui-mode gets set. */
+body[data-ui-mode='classical'] .gamified-flourish {
+  display: none;
+}
