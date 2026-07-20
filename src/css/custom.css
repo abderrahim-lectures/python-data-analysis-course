@@ -1,0 +1,49 @@
+/**
+ * Design tokens for the Python & Data Analysis Course.
+ * Deliberately not default Infima green/blue — a distinct violet/amber
+ * palette with personality, tuned for both light and dark mode.
+ */
+:root {
+  --ifm-color-primary: #5b3df5;
+  --ifm-color-primary-dark: #3f1ff2;
+  --ifm-color-primary-darker: #3315e8;
+  --ifm-color-primary-darkest: #2a11c0;
+  --ifm-color-primary-light: #775bf7;
+  --ifm-color-primary-lighter: #8469f8;
+  --ifm-color-primary-lightest: #a894fa;
+  --ifm-code-font-size: 95%;
+  --ifm-heading-font-weight: 700;
+  --ifm-global-radius: 10px;
+  --docusaurus-highlighted-code-line-bg: rgba(91, 61, 245, 0.1);
+
+  /* Course-specific tokens, reused across custom components */
+  --pda-accent: #f59e0b;
+  --pda-accent-soft: rgba(245, 158, 11, 0.12);
+  --pda-surface: #f7f6fd;
+  --pda-radius-lg: 14px;
+  --pda-touch-target: 44px;
+}
+
+[data-theme='dark'] {
+  --ifm-color-primary: #a894fa;
+  --ifm-color-primary-dark: #9678f8;
+  --ifm-color-primary-darker: #8a68f7;
+  --ifm-color-primary-darkest: #6a41f3;
+  --ifm-color-primary-light: #bab0fb;
+  --ifm-color-primary-lighter: #c6befc;
+  --ifm-color-primary-lightest: #ebe7fe;
+  --docusaurus-highlighted-code-line-bg: rgba(168, 148, 250, 0.15);
+
+  --pda-accent: #fbbf24;
+  --pda-accent-soft: rgba(251, 191, 36, 0.12);
+  --pda-surface: #1e1b2e;
+}
+
+/* Generous touch targets on interactive elements, per the mobile-first requirement */
+.button,
+.navbar__toggle,
+.menu__link {
+  min-height: var(--pda-touch-target);
+  display: inline-flex;
+  align-items: center;
+}
