@@ -8,7 +8,7 @@ A free, browser-based Python and data analysis course — no installs required u
 
 Run entirely in the browser via embedded Trinket (Python 101) and a self-hosted JupyterLite notebook (Data Analysis) — click the floating button on any page to start coding immediately.
 
-See [`PLAN.md`](./PLAN.md) for the full design plan.
+See [`PLAN.md`](./PLAN.md) for the full design plan. This site is built with [Docusaurus](https://docusaurus.io/).
 
 ## Development
 
