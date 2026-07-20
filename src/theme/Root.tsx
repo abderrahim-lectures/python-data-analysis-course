@@ -1,14 +1,19 @@
 import React, {type ReactNode} from 'react';
 import {UiModeProvider} from '@site/src/context/UiModeContext';
+import {CurrentDocProvider} from '@site/src/context/CurrentDocContext';
 import UiModeBodyAttribute from '@site/src/theme/Root/UiModeBodyAttribute';
+import PlaygroundFab from '@site/src/components/PlaygroundFab';
 
-// Swizzled Root: mounts context providers that need to wrap every page.
-// The FAB itself is added here too once it exists (see PlaygroundFab issue).
+// Swizzled Root: mounts context providers and the global FAB that need to be
+// present on every page.
 export default function Root({children}: {children: ReactNode}): React.JSX.Element {
   return (
     <UiModeProvider>
-      <UiModeBodyAttribute />
-      {children}
+      <CurrentDocProvider>
+        <UiModeBodyAttribute />
+        {children}
+        <PlaygroundFab />
+      </CurrentDocProvider>
     </UiModeProvider>
   );
 }
