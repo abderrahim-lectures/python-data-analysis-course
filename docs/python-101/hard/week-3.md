@@ -20,6 +20,7 @@ By the end of this week you can:
 - Extract **bigrams** (consecutive word pairs) from tokenized sentences.
 - Build a nested dictionary `dict[str, dict[str, float]]` mapping each word to a probability distribution over the words that follow it.
 - Explain, with an example, why bigrams capture context the unigram model couldn't.
+- Handle the "unseen context" problem: what to do when a word has no known followers at all.
 
 ## Lesson
 
@@ -35,7 +36,7 @@ bigrams(["the", "cat", "sat"])
 # [('the', 'cat'), ('cat', 'sat')]
 ```
 
-This is the same `range(len(...) - 1)` pattern that shows up whenever you need to look at pairs of neighbors in a sequence — the `-1` exists because the *last* word has no word after it to pair with.
+This is the same `range(len(...) - 1)` pattern that shows up whenever you need to look at pairs of neighbors in a sequence — the `-1` exists because the *last* word has no word after it to pair with. For a sentence with $k$ tokens, there are always exactly $k - 1$ bigrams.
 
 ### A conditional probability table
 
@@ -70,6 +71,25 @@ probs_table["the"]
 
 Read `probs_table["the"]["cat"]` as $P(\text{"cat"} \mid \text{"the"})$: given the previous word was "the", how likely is "cat" to come next?
 
+### The unseen-context problem
+
+A word that only ever appears at the *end* of a sentence never starts a bigram, so it's simply missing as a top-level key in `probs_table` — there's no row for it at all, since `bigram_counts` only ever adds a key for words that appear as the *first* element of some bigram. This matters a lot for Week 4, where you'll need to check `word in probs_table` before looking anything up, exactly the same defensive pattern as checking a key exists before indexing a plain dict.
+
+```python
+def next_word_distribution(word, probs_table):
+    if word not in probs_table:
+        return None   # this word never starts a bigram in our corpus
+    return probs_table[word]
+```
+
+This "the model has literally never seen this situation" case is a real, unavoidable limitation of any counting-based approach — it can only ever say something about patterns it actually observed in training data, a theme that will come back explicitly in Week 4.
+
+## ⚠️ Common pitfalls
+
+- **Assuming every word is a top-level key in `probs_table`.** Only words that appear as the *first* element of at least one bigram get a row — see "the unseen-context problem" above.
+- **Confusing `probs_table[word]` with `probs_table[word][other_word]`.** The first is a whole distribution (a dict); the second is a single probability (a float). Forgetting which one you have leads to confusing `TypeError`s down the line.
+- **Building the counts table and probability table in the same pass.** Keeping `bigram_counts` and `bigram_probabilities` as two separate functions (rather than merging them) means you still have the raw counts available afterward — useful for sanity-checking, and for Week 5's timing experiment, which cares about the *counting* step specifically.
+
 ## 🧩 Challenges
 
 <Challenge id="python101-hard-w3-c1" answer={<>Build the full bigram table with <code>bigram_counts</code> then <code>bigram_probabilities</code>, and look up <code>probs_table["the"]["cat"]</code> and <code>probs_table["the"]["dog"]</code> directly. Whichever has the larger probability is more likely to follow "the" in this corpus.</>}>
@@ -96,11 +116,25 @@ Generalize `bigrams(tokens)` into a `trigrams(tokens)` function that returns all
 
 </Challenge>
 
+<Challenge id="python101-hard-w3-c5" answer={<>Use the next_word_distribution helper: call it with a word you know is never a top-level key (e.g. a word that only ends sentences), and confirm it returns None instead of raising a KeyError, then handle that None case explicitly wherever you call it.</>}>
+
+Use `next_word_distribution` to safely look up a word you already identified in Challenge 3 as never starting a bigram. Confirm it returns `None` instead of crashing.
+
+</Challenge>
+
+<Challenge id="python101-hard-w3-c6" answer={<>For each key in the bigram counts table, sum its inner dict's values to get that word's total bigram occurrences, and compare it to that same word's count from Week 2's unigram counts dict -- they should match exactly, since every occurrence of a word (except possibly the very last word of a sentence) starts exactly one bigram.</>}>
+
+For a word that appears in *both* Week 2's unigram `counts` and this week's `bigram_counts`, compare its unigram count to the sum of its bigram row's values (`sum(bigram_counts[word].values())`). Should these match? Check a few words and explain any small discrepancies you find.
+
+</Challenge>
+
 ## 🤔 Socratic Questions
 
 - Look up `probs_table["the"]` and compare it to last week's overall `probs`. Are they the same distribution? What does that tell you about whether "the" changes what's likely to come next?
 - A trigram model (conditioning on the previous *two* words) captures more context than a bigram model. Given how small our 20-sentence corpus is, what practical problem do you predict trigram counts would run into that bigram counts mostly avoid?
 - `bigram_probabilities` builds one full probability distribution *per word* in the vocabulary. If the vocabulary has $V$ distinct words, roughly how many numbers could the full bigram table contain in the worst case (every word following every other word at least once)? What does that suggest about how table size scales with vocabulary size?
+- The unseen-context problem means a bigram model can be completely silent about words it never saw start a bigram. Can you think of a way to make the model *always* have something to say, even for an unseen word — perhaps by falling back to something from last week?
+- Challenge 6 asks you to compare unigram counts to summed bigram counts. For most words these match, but the very *last* word of a sentence is systematically undercounted by one in the bigram version. Why exactly one, and why only the last word?
 
 ## ✅ Weekly quiz
 
@@ -143,6 +177,17 @@ Generalize `bigrams(tokens)` into a `trigrams(tokens)` function that returns all
         'Uses one word of previous context',
         'Uses the entire sentence as context',
         'Cannot be represented as a dict',
+      ],
+      correctOptionIndex: 1,
+    },
+    {
+      id: 'q5',
+      prompt: 'A word that never appears as the FIRST element of any bigram in the corpus is:',
+      options: [
+        'Automatically assigned probability 0 for every possible next word',
+        'Missing entirely as a top-level key in probs_table',
+        'Still included, with an empty distribution {}',
+        'Impossible -- every word starts at least one bigram',
       ],
       correctOptionIndex: 1,
     },
