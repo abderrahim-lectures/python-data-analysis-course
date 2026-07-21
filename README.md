@@ -4,12 +4,12 @@
 [![CI](https://github.com/abderrahim-lectures/python-data-analysis-course/actions/workflows/ci.yml/badge.svg)](https://github.com/abderrahim-lectures/python-data-analysis-course/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/code-MIT-blue.svg)](./LICENSE)
 [![Content: CC BY 4.0](https://img.shields.io/badge/content-CC--BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
-[![Live site](https://img.shields.io/badge/live-www.pyda--course.online-5b3df5)](https://www.pyda-course.online/)
+[![Live site](https://img.shields.io/badge/live-pyda--course.online-5b3df5)](https://pyda-course.online/)
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/abderrahim-lectures/python-data-analysis-course)
 
 A free, browser-based Python and data analysis course — no installs required until you're ready to graduate to the real thing.
 
-**🌐 [www.pyda-course.online](https://www.pyda-course.online/)**
+**🌐 [pyda-course.online](https://pyda-course.online/)**
 
 - **Section 1: Python 101** (5 weeks) — fundamentals, with a Normal track and a Hard track (build a tiny language model from scratch, pure Python, deliberately no numpy).
 - **Section 2: Pandas & Data Analysis** (5 weeks) — pandas basics reproducing a Kaggle-style notebook, with a Hard track doing a full exploratory data analysis project with visualizations.
@@ -96,4 +96,4 @@ Please don't open a PR without a linked issue first for anything non-trivial —
 
 ## License
 
-Code is MIT-licensed (see [`LICENSE`](./LICENSE)); course content is additionally available under CC-BY 4.0. Third-party datasets and tools are credited on the site's [Credits page](https://www.pyda-course.online/credits).
+Code is MIT-licensed (see [`LICENSE`](./LICENSE)); course content is additionally available under CC-BY 4.0. Third-party datasets and tools are credited on the site's [Credits page](https://pyda-course.online/credits).

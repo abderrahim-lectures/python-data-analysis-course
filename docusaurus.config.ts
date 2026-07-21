@@ -13,7 +13,7 @@ const config: Config = {
     v4: true,
   },
 
-  url: 'https://www.pyda-course.online',
+  url: 'https://pyda-course.online',
   baseUrl: '/',
 
   organizationName: 'abderrahim-lectures',
