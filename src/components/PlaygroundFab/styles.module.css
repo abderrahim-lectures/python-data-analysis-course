@@ -153,10 +153,15 @@
 .loadingState {
   position: absolute;
   inset: 0;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   padding: 2rem;
   color: var(--ifm-color-emphasis-700);
+  /* Fully covers the iframe while it loads -- the iframe itself has no
+     visibility toggle of its own anymore (see JupyterLiteEmbed.tsx), so this
+     background is what actually prevents a blank/white flash underneath. */
+  background: var(--ifm-background-color);
 }
