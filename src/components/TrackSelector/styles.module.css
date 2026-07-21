@@ -1,0 +1,35 @@
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+/* Mobile: stack the comparison instead of side-by-side, per PLAN.md's mobile-first requirement */
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: var(--pda-radius-lg);
+  padding: 1.25rem;
+  background: var(--pda-surface);
+  display: flex;
+  flex-direction: column;
+}
+
+.card h3 {
+  margin-top: 0;
+}
+
+.card ul {
+  flex: 1;
+}
+
+.timeCommitment {
+  font-weight: 600;
+  color: var(--ifm-color-emphasis-700);
+}

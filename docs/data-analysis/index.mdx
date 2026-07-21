@@ -1,0 +1,55 @@
+---
+id: index
+title: Pandas & Data Analysis
+slug: /data-analysis
+sidebar_position: 1
+---
+
+import TrackSelector from '@site/src/components/TrackSelector';
+
+# 📊 Pandas & Data Analysis
+
+## Why Pandas? The Speed Problem
+
+If you did the Python 101 Hard track, you already timed your own pure-Python word-counting code
+on a text corpus — and felt it get sluggish as the corpus grew. That's not a coincidence: plain
+Python loops are slow for this kind of work. Pandas (built on numpy) exists precisely to fix that,
+by doing the looping in fast, vectorized C code under the hood instead of in Python itself. This
+section is about learning to use that speed.
+
+**🎯 Learning objectives** — by the end of these 5 weeks you'll be able to:
+- Load, explore, and clean tabular data with pandas
+- Filter, group, and aggregate real datasets
+- Reproduce a Kaggle-style analysis end to end
+
+<TrackSelector
+  section="data-analysis"
+  requiresPlacementQuizForHard
+  normal={{
+    title: 'Pandas Basics',
+    description: 'Learn pandas fundamentals, then reproduce a classic Kaggle notebook end to end.',
+    bullets: [
+      'Series & DataFrame basics, reading CSV',
+      'Selection, filtering, indexing',
+      'Cleaning: missing values, dtypes, string ops',
+      'Groupby, aggregation, merging',
+      'Guided reproduction of a Titanic EDA notebook',
+    ],
+    timeCommitment: '~3–4 hours/week',
+    startUrl: '/docs/data-analysis/normal/week-6',
+  }}
+  hard={{
+    title: 'Full EDA Project',
+    description:
+      'A project-based track: run a complete exploratory data analysis, framing questions, visualizing, and delivering a final report.',
+    bullets: [
+      'EDA framework: framing questions, profiling a dataset',
+      'Univariate analysis + visualizations',
+      'Bivariate/multivariate analysis, correlation',
+      'Advanced, storytelling visualizations',
+      'Final deliverable: a full EDA report on a real dataset',
+    ],
+    timeCommitment: '~4–6 hours/week',
+    startUrl: '/docs/data-analysis/hard/week-6',
+  }}
+/>

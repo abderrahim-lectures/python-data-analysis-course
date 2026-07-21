@@ -1,0 +1,52 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.card {
+  background: var(--ifm-background-color);
+  border-radius: var(--pda-radius-lg);
+  padding: 1.75rem;
+  max-width: 440px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin: 1rem 0;
+  border: none;
+  padding: 0;
+}
+
+.field input[type='text'] {
+  min-height: var(--pda-touch-target);
+  padding: 0 0.75rem;
+  border-radius: 8px;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  background: var(--ifm-background-color);
+  color: var(--ifm-font-color-base);
+}
+
+.radioOption {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: var(--pda-touch-target);
+  cursor: pointer;
+}
+
+.radioOption input {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
