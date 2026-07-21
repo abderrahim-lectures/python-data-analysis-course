@@ -37,7 +37,7 @@ export default function TrackSelector({
   // useHistory().push() takes a path relative to the router's root, not this
   // site's baseUrl — unlike <Link>, it doesn't resolve baseUrl automatically,
   // so the target path must be resolved through useBaseUrl first or this
-  // navigates outside /python-data-analysis-course/ entirely.
+  // navigates outside the site's configured baseUrl entirely.
   const hardStartUrl = useBaseUrl(hard.startUrl);
 
   const chooseNormal = () => {
