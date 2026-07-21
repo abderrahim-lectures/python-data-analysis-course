@@ -97,3 +97,7 @@ Please don't open a PR without a linked issue first for anything non-trivial —
 ## License
 
 Code is MIT-licensed (see [`LICENSE`](./LICENSE)); course content is additionally available under CC-BY 4.0. Third-party datasets and tools are credited on the site's [Credits page](https://pyda-course.online/credits).
+
+---
+
+Created by [Abderrahim Adrabi](https://github.com/abderrahim-lectures).

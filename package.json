@@ -2,6 +2,7 @@
   "name": "python-data-analysis-course",
   "version": "0.1.0",
   "private": true,
+  "author": "Abderrahim Adrabi",
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
