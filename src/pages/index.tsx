@@ -4,6 +4,7 @@ import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import Heading from '@theme/Heading';
+import InstallPwaButton from '@site/src/components/InstallPwaButton';
 
 import styles from './index.module.css';
 
@@ -20,6 +21,7 @@ function HomepageHeader() {
           <Link className="button button--secondary button--lg" to="/docs/python-101">
             Start Python 101 →
           </Link>
+          <InstallPwaButton />
         </div>
       </div>
     </header>
