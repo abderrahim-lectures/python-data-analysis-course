@@ -1,0 +1,55 @@
+---
+id: index
+title: Pandas & Data Analysis
+slug: /data-analysis
+sidebar_position: 1
+---
+
+import TrackSelector from '@site/src/components/TrackSelector';
+
+# 📊 Pandas y Análisis de Datos
+
+## ¿Por qué Pandas? El Problema de la Velocidad
+
+Si hiciste el track Difícil de Python 101, ya cronometraste tu propio código de conteo de palabras en Python puro
+sobre un corpus de texto — y sentiste cómo se volvía lento a medida que crecía el corpus. Eso no es una coincidencia: los bucles
+normales de Python son lentos para este tipo de trabajo. Pandas (construido sobre numpy) existe precisamente para arreglar eso,
+haciendo el bucleo en código C rápido y vectorizado por debajo, en lugar de en el propio Python. Esta
+sección se trata de aprender a usar esa velocidad.
+
+**🎯 Objetivos de aprendizaje** — al final de estas 5 semanas podrás:
+- Cargar, explorar y limpiar datos tabulares con pandas
+- Filtrar, agrupar y agregar datasets reales
+- Reproducir un análisis al estilo Kaggle de principio a fin
+
+<TrackSelector
+  section="data-analysis"
+  requiresPlacementQuizForHard
+  normal={{
+    title: 'Fundamentos de Pandas',
+    description: 'Aprende los fundamentos de pandas, y luego reproduce un notebook clásico de Kaggle de principio a fin.',
+    bullets: [
+      'Fundamentos de Series y DataFrame, lectura de CSV',
+      'Selección, filtrado, indexación',
+      'Limpieza: valores faltantes, dtypes, operaciones de texto',
+      'Groupby, agregación, fusión',
+      'Reproducción guiada de un notebook de EDA del Titanic',
+    ],
+    timeCommitment: '~3–4 horas/semana',
+    startUrl: '/docs/data-analysis/normal/week-6',
+  }}
+  hard={{
+    title: 'Proyecto Completo de EDA',
+    description:
+      'Un track basado en proyecto: ejecuta un análisis exploratorio de datos completo, formulando preguntas, visualizando, y entregando un informe final.',
+    bullets: [
+      'Marco de trabajo de EDA: formular preguntas, perfilar un dataset',
+      'Análisis univariado + visualizaciones',
+      'Análisis bivariado/multivariado, correlación',
+      'Visualizaciones avanzadas y narrativas',
+      'Entregable final: un informe de EDA completo sobre un dataset real',
+    ],
+    timeCommitment: '~4–6 horas/semana',
+    startUrl: '/docs/data-analysis/hard/week-6',
+  }}
+/>
