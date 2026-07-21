@@ -5,4 +5,4 @@ Allow: /
 # excluded here too so crawlers don't waste budget on the query-string variants.
 Disallow: /share
 
-Sitemap: https://www.pyda-course.online/sitemap.xml
+Sitemap: https://pyda-course.online/sitemap.xml
