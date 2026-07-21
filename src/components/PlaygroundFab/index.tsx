@@ -11,6 +11,32 @@ export default function PlaygroundFab(): React.JSX.Element {
   const {doc} = useCurrentDoc();
   const panelRef = useRef<HTMLDivElement>(null);
 
+  // Default to Trinket when the FAB is opened outside any doc page (e.g. the homepage) —
+  // Python 101 is the course's entry point, so that's the most useful universal default.
+  const showJupyterLite = doc.section === 'data-analysis';
+  const weekId =
+    doc.section && doc.track && doc.week != null
+      ? buildWeekId(doc.section, doc.track, doc.week)
+      : null;
+  const embedKey = weekId ?? 'default';
+
+  // PlaygroundFab is mounted once, globally, in Root — it never unmounts on
+  // navigation. `mountedKey` tracks which page's embed is currently loaded
+  // into the iframe (if any). Closing the panel used to unconditionally
+  // unmount it, destroying the iframe outright — for JupyterLite specifically,
+  // that meant any notebook edits typed since the last save (manual or its own
+  // ~2-minute autosave interval) were lost the moment a student closed the FAB,
+  // which is exactly what "my notebook isn't saving" looks like from the
+  // outside. Now the embed, once opened, stays mounted (just visually hidden
+  // via CSS) across closes on the *same* page, so it keeps running — and
+  // keeps whatever the student typed — in the background. It only actually
+  // unmounts (via the `key` below) when the page itself changes, which is the
+  // per-page reset this was always meant to have.
+  const [mountedKey, setMountedKey] = useState<string | null>(null);
+  useEffect(() => {
+    setMountedKey(null);
+  }, [embedKey]);
+
   useEffect(() => {
     if (!isOpen) return;
     const onKeyDown = (event: KeyboardEvent) => {
@@ -21,27 +47,17 @@ export default function PlaygroundFab(): React.JSX.Element {
     return () => document.removeEventListener('keydown', onKeyDown);
   }, [isOpen]);
 
-  // Default to Trinket when the FAB is opened outside any doc page (e.g. the homepage) —
-  // Python 101 is the course's entry point, so that's the most useful universal default.
-  const showJupyterLite = doc.section === 'data-analysis';
-  const weekId =
-    doc.section && doc.track && doc.week != null
-      ? buildWeekId(doc.section, doc.track, doc.week)
-      : null;
-  // PlaygroundFab is mounted once, globally, in Root — it never unmounts on navigation.
-  // Without a per-page `key`, the embed's iframe DOM node (and, for JupyterLite, its
-  // `loaded` state) would carry over verbatim from whichever page it was last opened on,
-  // instead of resetting per lesson. Keying by the current page forces a fresh mount —
-  // and therefore a fresh Trinket/JupyterLite session — every time the student switches
-  // pages, rather than one continuous session shared across the whole site.
-  const embedKey = weekId ?? 'default';
+  const openFab = () => {
+    setMountedKey(embedKey);
+    setIsOpen(true);
+  };
 
   return (
     <>
       <button
         type="button"
         className={styles.fab}
-        onClick={() => setIsOpen(true)}
+        onClick={openFab}
         aria-label={translate({
           id: 'playground.fab.open',
           message: 'Open the code playground',
@@ -49,19 +65,21 @@ export default function PlaygroundFab(): React.JSX.Element {
         <span aria-hidden="true">{'</>'}</span>
       </button>
 
-      {isOpen && (
-        <div className={styles.overlay} role="presentation" onClick={() => setIsOpen(false)}>
+      {mountedKey === embedKey && (
+        // Not a modal: no backdrop, no click-outside-to-close. Students often
+        // want to scroll back up through the lesson while the playground
+        // stays open next to (or, on mobile, over) it, so the rest of the
+        // page must stay fully visible and interactive.
+        <div className={`${styles.dock} ${isOpen ? '' : styles.dockHidden}`}>
           <div
             className={styles.panel}
-            role="dialog"
-            aria-modal="true"
+            role="region"
             aria-label={translate({
               id: 'playground.panel.label',
               message: 'Code playground',
             })}
             tabIndex={-1}
-            ref={panelRef}
-            onClick={(e) => e.stopPropagation()}>
+            ref={panelRef}>
             <div className={styles.panelHeader}>
               <span>
                 <Translate id="playground.panel.title">Playground</Translate>

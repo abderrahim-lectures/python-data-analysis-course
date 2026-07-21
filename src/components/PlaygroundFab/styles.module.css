@@ -48,14 +48,39 @@
   }
 }
 
-.overlay {
+/*
+ * Not a modal: no backdrop, no dimming, no click-outside-to-close. `.dock`
+ * only exists to position `.panel` in a fixed spot on screen; it has
+ * `pointer-events: none` so it never intercepts clicks/scroll over the rest
+ * of the page — students need to keep scrolling and interacting with the
+ * lesson while the playground stays open next to it. `.panel` itself opts
+ * back into `pointer-events: auto` since it obviously still needs to be
+ * usable.
+ */
+.dock {
   position: fixed;
   inset: 0;
   z-index: 250;
-  background: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: flex-end;
   justify-content: flex-end;
+  pointer-events: none;
+}
+
+/* Hides without unmounting — keeps the embedded iframe (and any unsaved
+   JupyterLite notebook edits in it) alive in the background across a simple
+   close/reopen on the same page, instead of destroying and reloading it.
+   `.panel` sets pointer-events: auto to opt back into being clickable while
+   visible; visibility: hidden alone doesn't reliably stop an <iframe>'s own
+   document from still intercepting hit-testing underneath it (confirmed via
+   elementFromPoint — an empirical browser quirk, not a spec violation on our
+   part), so pointer-events must be explicitly turned back off here too. */
+.dockHidden {
+  visibility: hidden;
+}
+
+.dockHidden .panel {
+  pointer-events: none;
 }
 
 .panel {
@@ -63,6 +88,7 @@
   display: flex;
   flex-direction: column;
   box-shadow: -2px 0 20px rgba(0, 0, 0, 0.3);
+  pointer-events: auto;
 }
 
 /* Desktop: docked drawer, bottom-right */
@@ -76,9 +102,9 @@
   }
 }
 
-/* Mobile: full-screen — neither Trinket nor JupyterLite is usable in a tiny modal */
+/* Mobile: full-screen — neither Trinket nor JupyterLite is usable in a tiny panel */
 @media (max-width: 768px) {
-  .overlay {
+  .dock {
     align-items: stretch;
     justify-content: stretch;
   }
