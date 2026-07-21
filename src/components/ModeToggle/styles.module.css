@@ -7,7 +7,8 @@
   height: 40px;
   border-radius: 50%;
   border: 1px solid var(--ifm-color-emphasis-300);
-  background: var(--ifm-background-color);
+  /* --ifm-background-color is `transparent` by default in light mode. */
+  background: var(--pda-surface);
   font-size: 1.1rem;
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);

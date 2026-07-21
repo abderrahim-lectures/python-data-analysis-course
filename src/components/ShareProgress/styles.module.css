@@ -12,7 +12,8 @@
   padding: 0 0.75rem;
   border-radius: 8px;
   border: 1px solid var(--ifm-color-emphasis-300);
-  background: var(--ifm-background-color);
+  /* --ifm-background-color is `transparent` by default in light mode. */
+  background: var(--pda-surface);
   color: var(--ifm-font-color-base);
 }
 

@@ -10,7 +10,10 @@
 }
 
 .card {
-  background: var(--ifm-background-color);
+  /* --ifm-background-color is `transparent` by default in light mode
+     (Infima only gives it a real color in dark mode) — --pda-surface is
+     opaque in both themes, which is what an overlay card actually needs. */
+  background: var(--pda-surface);
   border-radius: var(--pda-radius-lg);
   padding: 1.75rem;
   max-width: 440px;
