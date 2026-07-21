@@ -3,23 +3,49 @@
   right: 1.25rem;
   bottom: 1.25rem;
   z-index: 200;
-  width: 56px;
-  height: 56px;
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
-  border: none;
-  background: var(--ifm-color-primary);
+  border: 3px solid white;
+  background: linear-gradient(135deg, var(--ifm-color-primary) 0%, var(--pda-accent) 100%);
   color: white;
-  font-size: 1.1rem;
+  font-size: 1.6rem;
   font-weight: 700;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+  box-shadow:
+    0 6px 20px rgba(0, 0, 0, 0.35),
+    0 0 0 4px rgba(91, 61, 245, 0.25);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  animation: pda-fab-pulse 2.4s ease-in-out infinite;
+  transition: transform 0.15s ease;
 }
 
 .fab:hover {
-  background: var(--ifm-color-primary-dark);
+  background: linear-gradient(135deg, var(--ifm-color-primary-dark) 0%, var(--pda-accent) 100%);
+  transform: scale(1.06);
+  animation-play-state: paused;
+}
+
+@keyframes pda-fab-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 6px 20px rgba(0, 0, 0, 0.35),
+      0 0 0 4px rgba(91, 61, 245, 0.25);
+  }
+  50% {
+    box-shadow:
+      0 6px 20px rgba(0, 0, 0, 0.35),
+      0 0 0 10px rgba(91, 61, 245, 0.05);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fab {
+    animation: none;
+  }
 }
 
 .overlay {
