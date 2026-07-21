@@ -1,0 +1,38 @@
+.card {
+  width: 420px;
+  max-width: 100%;
+  padding: 2rem;
+  border-radius: var(--pda-radius-lg);
+  background: linear-gradient(135deg, var(--ifm-color-primary) 0%, var(--pda-accent) 100%);
+  color: white;
+  text-align: center;
+}
+
+.card h2 {
+  color: white;
+  margin-top: 0;
+}
+
+.name {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.stat {
+  font-size: 1rem;
+}
+
+.id {
+  font-size: 0.8rem;
+  opacity: 0.85;
+  letter-spacing: 0.05em;
+}
+
+.qr {
+  width: 120px;
+  height: 120px;
+  margin-top: 1rem;
+  background: white;
+  padding: 6px;
+  border-radius: 8px;
+}
