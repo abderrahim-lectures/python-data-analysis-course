@@ -34,7 +34,7 @@ Before touching CSVs specifically, one new piece of syntax: `with open(...) as f
 
 A CSV (comma-separated values) file is a plain-text table — one line per row, values separated by commas. This week's dataset, [`students-normal.csv`](pathname:///datasets/students-normal.csv), has a header row (`name,quiz1,quiz2,quiz3`) followed by one row per student.
 
-:::tip Using this file in the Trinket playground
+:::tip[Using this file in the Trinket playground]
 The FAB's Trinket playground is a sandboxed third-party editor — it can't reach files on this site directly. Open the dataset link above, copy its contents, then in Trinket create a new file named `students.csv` (use the file-tree "+" button) and paste the contents in. Your `open("students.csv")` calls will then find it.
 :::
 

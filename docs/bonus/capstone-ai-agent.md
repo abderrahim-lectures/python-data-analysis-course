@@ -77,7 +77,7 @@ $env:GITHUB_TOKEN = "your-key-here"
 
 An API key is a secret, exactly like a password — anyone with it can use your account's quota. Treating it as an environment variable rather than a hardcoded string is the standard practice for exactly this reason, and it's the first real-world security habit this course asks you to build.
 
-:::tip A .env file is often more convenient than export
+:::tip[A .env file is often more convenient than export]
 Instead of `export`-ing a key in every new terminal session, you can put it in a `.env` file in your project folder (see the repo example's `.env.example`) and load it automatically with the `python-dotenv` package — covered in Step 4.
 :::
 
@@ -93,7 +93,7 @@ uv add deepagents langchain-openai python-dotenv
 
 If you picked a different provider in Step 2, swap `langchain-openai` for that provider's own package — `langchain-google-genai` (Gemini), `langchain-groq` (Groq), or `langchain-mistralai` (Mistral). Cerebras and OpenRouter are also OpenAI-compatible, so they use `langchain-openai` too, just with a different `base_url`.
 
-:::tip Check the current docs — and the model name
+:::tip[Check the current docs — and the model name]
 Agent frameworks move fast, and so do model names: they get renamed and retired on a timescale of months, not years. `create_deep_agent`'s own keyword arguments have already changed once since earlier drafts of this page (it's `system_prompt`, not `instructions`) — a reminder that this snippet can drift out of date even after being checked once. Use an explicit, versioned model ID rather than a `-latest` alias: several providers, including Google, have deprecated those because they silently hot-swap to a new model version, which can break working code with no warning. Before running this, check your provider's current pricing/model page, and skim `deepagents`' own README for its current API.
 :::
 
@@ -122,6 +122,11 @@ def search_course_topics(query: str) -> str:
     matches = [t for t in topics if query.lower() in t]
     return f"Matching topics: {matches}" if matches else "No matching topics found."
 
+def count_weeks_remaining(current_week: int) -> str:
+    """A second toy tool: how many weeks are left in the 10-week course."""
+    remaining = max(0, 10 - current_week)
+    return f"{remaining} week(s) remaining out of 10."
+
 model = ChatOpenAI(
     model="gpt-4o-mini",  # confirm this still has a free tier before running — see the tip above
     api_key=os.environ["GITHUB_TOKEN"],
@@ -130,7 +135,7 @@ model = ChatOpenAI(
 
 agent = create_deep_agent(
     model=model,
-    tools=[search_course_topics],
+    tools=[search_course_topics, count_weeks_remaining],
     system_prompt="You help students figure out whether a topic was covered in their course.",
 )
 
@@ -147,6 +152,20 @@ uv run python agent.py
 
 `load_dotenv()` reads your `.env` file into `os.environ` before anything else runs, so `os.environ["GITHUB_TOKEN"]` finds the key you set in Step 2 — the same `os` module concept as `input()` reading from the keyboard, just reading from a file instead. `create_deep_agent` wires the model together with a list of Python functions the agent can call as **tools** — this is the core idea behind agents: a language model that can not just respond with text, but decide to call your code, read the result, and use it to inform its answer.
 
+Notice `tools=[search_course_topics, count_weeks_remaining]` — two tools, not one. The model picks *which* tool (if any) fits the question, entirely on its own: ask "Did we cover groupby?" and it calls `search_course_topics`; ask "How many weeks are left if I'm on week 4?" and it calls `count_weeks_remaining` instead. You never write an `if`/`elif` chain routing questions to tools yourself — the docstring on each function (the triple-quoted string right after `def`) is what the model reads to decide which tool matches which request, exactly like Python 101 Week 4's docstrings, except here a language model is the one reading them, not a human skimming your code.
+
+### How the agent actually decides what to do
+
+Nothing here is magic — `create_deep_agent` builds a loop, and every iteration of that loop is one ordinary API call to the model you configured:
+
+1. Your question goes to the model, along with the *list* of available tools (their names, parameters, and docstrings — not their code).
+2. The model replies with either a final text answer, **or** a request to call one specific tool with specific arguments.
+3. If it requested a tool call, your own Python code (not the model) actually runs that function and gets a real result.
+4. That result goes back to the model as new context, and the loop repeats from step 2 — the model might call another tool, or now have enough information to answer.
+5. Once the model replies with text and no further tool request, the loop stops and that's your final answer.
+
+This is exactly why a rate-limit error (see below) can happen even for what feels like "one question" — a question needing two tool calls costs at least three round trips to the model (decide to call tool A, decide to call tool B, produce the final answer), not one.
+
 ### What you should see
 
 A single printed line — the agent's final answer, something like:
@@ -160,6 +179,27 @@ If instead you see a Python traceback, check which kind:
 - **`KeyError: 'GITHUB_TOKEN'`** — the environment variable/`.env` value isn't being found. Confirm `.env` is in the same folder as `agent.py` and has no typo in the variable name, or that you actually ran `export` in the same terminal session you're running the script from.
 - **An authentication error (401/403)** — the key itself is wrong, expired, or (for GitHub Models) missing the `models: read` scope. Regenerate it.
 - **A rate-limit error (429)** — see the next section. This one is common and expected, not a sign anything is broken.
+
+### Understanding the full internal trace
+
+`result["messages"][-1].content` above deliberately shows only the final answer. If you print the *whole* `result` instead, you'll see something much noisier — every message LangGraph tracked internally, each carrying bookkeeping fields alongside the actual content:
+
+```python
+result = agent.invoke({"messages": [{"role": "user", "content": "Did we cover groupby?"}]})
+for message in result["messages"]:
+    print(type(message).__name__, "->", message)
+```
+
+Stripped down to what actually matters, the trace behind that one question looks like this:
+
+| # | Message type | What it holds |
+|---|---|---|
+| 1 | `HumanMessage` | Your question: `"Did we cover groupby?"` |
+| 2 | `AIMessage` (no text) | The model decided to call `search_course_topics(query="groupby")` — no answer yet, just a tool request |
+| 3 | `ToolMessage` | The *real* return value of your Python function: `"Matching topics: ['groupby']"` |
+| 4 | `AIMessage` (final) | The model's actual answer, now that it has the tool's result: `"Yes, groupby was covered."` |
+
+The noisy parts you can safely ignore when reading a raw trace: `id`/`tool_call_id` fields (bookkeeping to match a tool call to its result), provider-specific internal reasoning traces (not meant to be human-readable), and `usage_metadata` (token counts, useful for cost tracking, irrelevant to the conversation itself). This 4-row shape — question, tool call, tool result, answer — is the entire agent loop from the previous section, just written out as data instead of as a numbered list.
 
 ### Handling rate limits
 
@@ -175,7 +215,7 @@ This isn't a bug in your code — it's the provider telling you to slow down. Tw
 1. **Simplest**: just wait the suggested number of seconds and run the script again.
 2. **More robust**: wrap the `agent.invoke(...)` call in a `try`/`except` that catches the error, waits, and retries automatically — exactly the pattern taught as bonus content back in Python 101 Week 4. The repo's fuller example does this for real: see `ask()` in [`examples/capstone-agent/agent.py`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/capstone-agent/agent.py) for a working version you can copy, including parsing the provider's suggested retry delay out of the error message.
 
-:::tip Using a different provider?
+:::tip[Using a different provider?]
 Swap the `ChatOpenAI(...)` block for your provider's own client — e.g. `ChatGoogleGenerativeAI(model="gemini-3.5-flash", google_api_key=os.environ["GOOGLE_API_KEY"])` for Gemini, or `ChatGroq(model="llama-3.3-70b-versatile", api_key=os.environ["GROQ_API_KEY"])` for Groq. Everything else in this file stays the same — `deepagents` doesn't care which provider is behind the model. See [`examples/capstone-agent/agent.py`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/capstone-agent) in the course repo for all six wired up side by side, selectable with one environment variable.
 :::
 
@@ -183,14 +223,34 @@ Swap the `ChatOpenAI(...)` block for your provider's own client — e.g. `ChatGo
 
 `search_course_topics` is deliberately trivial — a real agent's tools might search the web, query a database, or run code. But the shape is the same one powering far more capable systems: a model that reasons about a task, decides which tool to call and with what arguments, reads the tool's output, and continues — sometimes calling several tools in sequence before responding. You just built the smallest possible version of that loop, locally, with your own key.
 
-:::tip Run it without any local setup
-A real, runnable copy of this exact agent lives in the course repo at [`examples/capstone-agent/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/capstone-agent) — clone it, or open the whole repo in a [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python, and `uv` already installed) and run it from there.
+:::tip[Run a fuller version without any local setup]
+[`examples/capstone-agent/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/capstone-agent) in the course repo is **not a copy of the code above** — it's a deliberately fuller version, with real tools (it searches this course's actual lesson files and analyzes its actual datasets with pandas, instead of a hardcoded topic list) and support for all six providers from the table above, selected with one setting. Clone it, or open the whole repo in a [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python, and `uv` already installed) and run it from there.
 :::
 
 ## Where to go from here
 
-- Give your agent a second, more useful tool — maybe one that reads a local file, or calls a public API. The [`examples/capstone-agent/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/capstone-agent) copy in the repo already does this: it searches this course's real lesson files and analyzes its real datasets with pandas, instead of guessing.
-- Look at `deepagents`' support for **sub-agents** — delegating part of a task to a separately-instructed agent, similar to how a manager might delegate a sub-task to a specialist.
+- Give your agent a genuinely *useful* tool, not just a toy one — one that reads a real local file, or calls a real public API. The [`examples/capstone-agent/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/capstone-agent) copy in the repo already does this: it searches this course's real lesson files and analyzes its real datasets with pandas, instead of guessing.
+- Look at `deepagents`' support for **sub-agents** — delegating part of a task to a separately-instructed agent, similar to how a manager might delegate a sub-task to a specialist:
+
+```python
+from deepagents import create_deep_agent
+
+research_subagent = {
+    "name": "topic-researcher",
+    "description": "Looks up whether a topic was covered in the course, in detail.",
+    "system_prompt": "You research course topics thoroughly using the available tools.",
+    "tools": [search_course_topics],
+}
+
+agent = create_deep_agent(
+    model=model,
+    tools=[search_course_topics, count_weeks_remaining],
+    subagents=[research_subagent],
+    system_prompt="Delegate topic-research questions to the topic-researcher sub-agent.",
+)
+```
+
+The main agent can now hand off a sub-task to `topic-researcher` instead of doing everything itself — useful once a single agent's instructions and tool list start growing too large to reason about in one place.
 - Revisit the bonus `try`/`except` and `class` content from Python 101 — real agent code leans on both constantly (catching a failed tool call, wrapping related state in a class) in ways this course's core curriculum deliberately avoided.
 
 ## Share your agent with the class
