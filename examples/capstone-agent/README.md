@@ -2,13 +2,17 @@
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/abderrahim-lectures/python-data-analysis-course)
 
-A real, runnable copy of the agent built in the course's [Capstone Bonus](../../docs/bonus/capstone-ai-agent.md) — a minimal tool-calling agent built with LangChain's [`deepagents`](https://github.com/langchain-ai/deepagents), backed by Gemini's free-tier API.
+A real, runnable "course study assistant" agent — the fuller version of the one built step by step in the course's [Capstone Bonus](../../docs/bonus/capstone-ai-agent.md), built with LangChain's [`deepagents`](https://github.com/langchain-ai/deepagents) and Gemini's free-tier API.
 
-## What it does
+## Objective
 
-Ask it something like *"Did we cover groupby?"* and the agent doesn't just guess from what it already knows — it decides it needs to check, calls a real Python function (`search_course_topics`) to look it up, reads the actual result, and only then answers. That reasoning → tool call → observe → answer loop is the core idea behind agent frameworks: a model that can act, not just respond.
+Answer questions about **this course** by actually checking, not guessing:
 
-The included tool (`search_course_topics`) is intentionally trivial — a hardcoded list of course topics — so the *mechanism* stays easy to follow. The same pattern scales to tools that search the web, query a database, or edit files.
+- **"Which lessons cover X?"** → `search_course_docs` really searches every lesson file under `docs/` for the topic and returns the actual matching pages.
+- **"What does dataset Y look like?"** → `analyze_dataset` really loads that dataset with pandas and returns its real shape, columns, and summary statistics.
+- **"What datasets are there?"** → `list_datasets` really lists the files in `static/datasets/`.
+
+This is the difference between a chatbot that might hallucinate an answer and an agent that can go verify one. Nothing here is faked or hardcoded — every tool reads real files from the actual course repo it's running in.
 
 ## Running it
 
@@ -22,7 +26,19 @@ The included tool (`search_course_topics`) is intentionally trivial — a hardco
    uv run python agent.py
    ```
 
-`uv` reads `pyproject.toml`/`uv.lock` and creates an isolated environment for this project automatically on first run.
+`uv` reads `pyproject.toml`/`uv.lock` and creates an isolated environment for this project automatically on first run. The script asks the agent two example questions and prints a readable, step-by-step trace of what it did (see `print_conversation` in `agent.py`) instead of a raw Python object dump.
+
+### Using it from your own code
+
+```python
+from agent import build_agent, ask, print_conversation, final_answer
+
+agent = build_agent()
+result = ask(agent, "Which lessons cover groupby?")
+
+print_conversation(result)   # readable step-by-step trace
+print(final_answer(result))  # just the final text answer
+```
 
 ## Running it in GitHub Codespaces
 
@@ -36,3 +52,7 @@ uv run python agent.py
 ## A note on staying current
 
 Model names and library APIs in this space change fast — the model ID and `create_deep_agent()` call here were both verified against a live run while writing this example, but may have drifted by the time you read this. See the callout in the [Capstone Bonus doc](../../docs/bonus/capstone-ai-agent.md#step-4-write-your-first-agent) for what to check before relying on this code.
+
+## Built your own agent for the capstone?
+
+See [`examples/student-agents/`](../student-agents/) for how to share it with the class via a pull request — no git experience required, it walks through every step.

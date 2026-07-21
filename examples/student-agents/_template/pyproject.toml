@@ -1,0 +1,9 @@
+[project]
+name = "my-capstone-agent"
+version = "0.1.0"
+description = "A student capstone agent for the Python & Data Analysis course."
+requires-python = ">=3.12"
+dependencies = [
+    "deepagents>=0.6.12",
+    "langchain-google-genai>=4.2.7",
+]
