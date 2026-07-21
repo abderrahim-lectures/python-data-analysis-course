@@ -21,6 +21,7 @@ By the end of this week you can:
 - Assemble every piece from Weeks 1–4 into one end-to-end command-line text generator.
 - Add a **temperature** parameter that controls how random vs. predictable the generated text is.
 - Time your pure-Python pipeline on a larger corpus and explain, from firsthand measurement, why this motivates Section 2.
+- Reason informally about how your pipeline's running time scales with input size.
 
 ## Lesson
 
@@ -85,6 +86,8 @@ $$
 - $T < 1$ (e.g. $0.5$): sharpens the distribution — high-probability words become *even* more likely, pushing generation toward the greedy behavior from last week.
 - $T > 1$ (e.g. $2.0$): flattens the distribution — low-probability words get relatively more likely, producing more surprising, more chaotic text.
 
+Why exponentiation, rather than just scaling the probabilities directly? Because raising each $P(w)$ to a power $\frac{1}{T}$ affects large and small probabilities *unevenly* in exactly the direction you want: for $T < 1$ (so $\frac{1}{T} > 1$), a probability like $0.5$ raised to a power greater than 1 shrinks, but a smaller probability like $0.05$ shrinks by a much larger relative amount — widening the *gap* between likely and unlikely words. The renormalization step (dividing by the new sum) is what turns this reshaped set of numbers back into a valid probability distribution that sums to 1, the same "sums to 1" property from Week 2.
+
 ```python
 def apply_temperature(probs, temperature):
     adjusted = {w: p ** (1 / temperature) for w, p in probs.items()}
@@ -116,7 +119,25 @@ elapsed = time.time() - start
 print(f"Built bigram table for {len(big_corpus)} sentences in {elapsed:.3f} seconds")
 ```
 
-Run this in the playground and note your actual number. It's probably still fast at this size — but watch what happens as you multiply the corpus size again (`* 1000`, `* 5000`): the nested-loop, dict-of-dicts approach from Week 3 does real work for *every single word occurrence*, with no shortcuts. There's no way to "vectorize" a plain Python `for` loop the way specialized numeric libraries can. **That gap — between what plain Python can do comfortably and what real-sized text/data problems need — is exactly what Section 2 exists to close.** Pandas and numpy don't just make code shorter; they make operations like this run orders of magnitude faster, by pushing the actual looping down into optimized, compiled code instead of Python's own interpreter loop.
+Run this in the playground and note your actual number. It's probably still fast at this size — but watch what happens as you multiply the corpus size again (`* 1000`, `* 5000`): the nested-loop, dict-of-dicts approach from Week 3 does real work for *every single word occurrence*, with no shortcuts. There's no way to "vectorize" a plain Python `for` loop the way specialized numeric libraries can.
+
+### What the timing actually shows
+
+Every extra sentence in the corpus adds a roughly constant amount of work: tokenize it, form its bigrams, update a handful of dict entries. Doubling the number of sentences roughly doubles the number of word occurrences to process, which roughly doubles the running time — a **linear** relationship between input size and time, informally $O(n)$ where $n$ is the total word count. That's actually a *good* scaling behavior, not a bad one — the real issue isn't that this algorithm scales poorly in theory, it's that each individual step (a dict lookup, a function call, a loop iteration) costs more in plain, interpreted Python than the equivalent step would cost in the compiled, vectorized code underneath numpy/pandas. Illustrative numbers (yours will differ by machine, but the *shape* should look similar):
+
+| Corpus repeats | Approx. sentences | Approx. time |
+|---|---|---|
+| 1× | 20 | a few milliseconds |
+| 200× | 4,000 | still well under a second |
+| 5,000× | 100,000 | now clearly noticeable |
+
+**That gap — between what plain Python can do comfortably and what real-sized text/data problems need — is exactly what Section 2 exists to close.** Pandas and numpy don't just make code shorter; they make operations like this run orders of magnitude faster, by pushing the actual looping down into optimized, compiled code instead of Python's own interpreter loop.
+
+## ⚠️ Common pitfalls
+
+- **Timing something that includes one-time setup costs.** If your timing code accidentally includes `load_corpus`'s file-reading time alongside `build_bigram_probabilities`'s actual computation, you're measuring two different things at once — time only the specific step you care about.
+- **Comparing timings across wildly different machine loads.** Running other heavy programs at the same time can skew a timing measurement; if a result looks surprising, re-run it a couple of times.
+- **Assuming linear scaling means "no problem at any size."** $O(n)$ is good, but a large enough constant factor per operation still adds up — this week's whole point is that the *constant factor* per operation is what plain Python loses on compared to vectorized code, even with the same big-picture scaling.
 
 ## 🧩 Challenges
 
@@ -144,11 +165,24 @@ Why does `sample_next` special-case `temperature != 1.0` instead of always calli
 
 </Challenge>
 
+<Challenge id="python101-hard-w5-c5" answer={<>Divide the elapsed time at 1000x by the elapsed time at 50x, and separately divide 1000 by 50 (=20). If the algorithm is truly linear, the time ratio should be roughly close to 20 too -- confirming that 20x more sentences takes roughly 20x longer, not 400x (quadratic) or barely any longer (constant).</>}>
+
+Using your Challenge 3 timings, compute the *ratio* of time at `1000x` to time at `50x`. Compare that ratio to the ratio of corpus sizes (`1000/50 = 20`). Does the time ratio roughly match, confirming linear scaling?
+
+</Challenge>
+
+<Challenge id="python101-hard-w5-c6" answer={<>Write generate_batch(probs_table, start_word, temperatures, max_words=10) that loops over the temperatures list, calling generate_text (or the temperature-aware version) once per value and collecting results in a list, e.g. [generate_text(...) for t in temperatures] with sample_next's temperature parameter threaded through.</>}>
+
+Write a function `generate_batch(probs_table, start_word, temperatures, max_words=10)` that generates one sentence per temperature value in a given list (e.g. `[0.5, 1.0, 1.5, 2.0]`) and returns all of them together, so you can compare the effect of temperature side by side in one call.
+
+</Challenge>
+
 ## 🤔 Socratic Questions
 
 - You just personally measured plain-Python's performance on a text-processing task. Do you think the slowdown you saw is mainly about Python's `for` loop, the dict operations, or something else? What would you need to test to isolate the cause?
 - Temperature reshapes a probability distribution but never changes *which* outcomes are possible (a word with probability 0 stays at probability 0 no matter the temperature). Why is that an important property for a "randomness knob" to have?
 - Section 2 begins with a demo showing the same kind of word-counting task running dramatically faster with numpy/pandas than the pure-Python version you just built. Based on what you now know about how your `build_bigram_probabilities` actually works (nested loops, dict lookups), what do you predict a vectorized version would need to do differently to be faster?
+- This week's scaling was linear ($O(n)$) in total word count — not the *worst* possible scaling behavior. Can you think of a step in this whole 5-week pipeline that could have been much worse (e.g. quadratic) if it had been written a different, more naive way?
 
 ## ✅ Weekly quiz
 
@@ -197,6 +231,12 @@ Why does `sample_next` special-case `temperature != 1.0` instead of always calli
         'Import the standard library',
         'Speed up the script',
       ],
+      correctOptionIndex: 1,
+    },
+    {
+      id: 'q5',
+      prompt: "Roughly doubling the corpus size and seeing the build time roughly double is an example of:",
+      options: ['Constant time scaling', 'Linear time scaling', 'Quadratic time scaling', 'No relationship at all'],
       correctOptionIndex: 1,
     },
   ]}
