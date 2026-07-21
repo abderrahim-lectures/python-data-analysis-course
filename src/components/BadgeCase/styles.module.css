@@ -1,0 +1,54 @@
+.progressSummary {
+  margin-bottom: 2rem;
+}
+
+.percent {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.barTrack {
+  height: 12px;
+  border-radius: 6px;
+  background: var(--ifm-color-emphasis-200);
+  overflow: hidden;
+}
+
+.barFill {
+  height: 100%;
+  background: var(--ifm-color-primary);
+  transition: width 0.3s ease;
+}
+
+.badgeGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 1rem;
+}
+
+.badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 1rem 0.5rem;
+  border-radius: var(--pda-radius-lg);
+  background: var(--pda-accent-soft);
+  border: 1px solid var(--pda-accent);
+  text-align: center;
+}
+
+.badgeEmoji {
+  font-size: 2rem;
+}
+
+.badgeLabel {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.settings {
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+}

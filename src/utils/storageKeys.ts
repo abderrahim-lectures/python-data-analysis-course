@@ -11,6 +11,7 @@ export const STORAGE_KEYS = {
   studentName: 'pda-course:student-name',
   lastVisit: 'pda-course:last-visit',
   studentId: 'pda-course:student-id',
+  welcomeBackDismissedDate: 'pda-course:welcome-back-dismissed-date',
 } as const;
 
 /** Every key this site owns — used by DataTransfer export/import and the reset control. */
