@@ -20,6 +20,7 @@ By the end of this week you can:
 - Independently plan and execute a complete EDA project on a new dataset, from framing questions to final charts.
 - Produce a short written report combining findings, evidence (charts/statistics), and appropriately cautious interpretation.
 - Identify this dataset's real-world limitations and what conclusions it can't support.
+- Assemble a full report structure from the individual techniques of Weeks 6–9.
 
 ## Lesson
 
@@ -38,6 +39,20 @@ Produce a short EDA report (a notebook with markdown cells explaining each step,
 3. **A correlation analysis** (Week 8) of the three score columns, with a heatmap.
 4. **At least one faceted or annotated storytelling chart** (Week 9).
 5. **A short written conclusion** for each question: what you found, how confident you are (referencing sample size per group, per Week 6), and one plausible alternative explanation you can't rule out (per Week 8's correlation-is-not-causation discussion).
+
+### The full toolkit, at a glance
+
+Every technique from this section maps onto one part of the report:
+
+| Report section | Techniques (from) |
+|---|---|
+| Dataset profile | `.shape`, `.dtypes`, `.isna().sum()`, `.value_counts()`, mean/median skew check (Week 6) |
+| Univariate question | Histogram, boxplot, bar chart, bin-count sensitivity (Week 7) |
+| Bivariate/multivariate question | `.corr()`, heatmap, scatter plot with `hue`, grouped boxplot, `pd.crosstab` (Week 8) |
+| Storytelling chart | Faceting (`col=`/`row=`), deliberate ordering, colorblind-safe palette, annotation (Week 9) |
+| Conclusion | Finding + confidence (sample size) + alternative explanation, per question |
+
+Treat this table as your report's outline before you write a single cell — the same "frame the structure before diving in" discipline Week 6 introduced for individual questions, now applied to the whole deliverable.
 
 ### A worked starting example
 
@@ -67,9 +82,31 @@ plt.show()
 
 `.mean(axis=1)` computes a row-wise mean across the three score columns (`axis=1` means "across columns, for each row" — as opposed to the default `axis=0`, "down each column"), producing one combined `average_score` per student.
 
+### A second worked example: a multivariate storytelling chart
+
+Combining Week 8's correlation work with Week 9's faceting into one report-ready figure:
+
+```python
+sns.relplot(
+    data=df, x="reading_score", y="writing_score",
+    col="test_preparation_course", hue="lunch", palette="colorblind",
+)
+plt.show()
+```
+
+> **Finding:** The strong positive relationship between reading and writing scores holds in both test-preparation panels, suggesting it isn't specific to either group — likely reflecting a shared underlying factor (general literacy/verbal skill) rather than one subject's score influencing the other directly.
+> **Caveat:** Faceting by two categorical variables (`col` and `hue`) at once starts to strain how much a reader can take in from one figure — worth a sentence acknowledging that, and considering whether this would be clearer split into two simpler figures for a real report.
+
 ### Wrapping up: what this dataset can't tell you
 
 Before finalizing your report, note explicitly what conclusions this dataset does *not* support: it's a single snapshot (not a study over time), the exact population and collection methodology aren't specified in the version of the dataset used here, and — as emphasized throughout Weeks 8-9 — none of these associations establish causation. A rigorous EDA report is honest about these boundaries, not just about what it found.
+
+## ⚠️ Common pitfalls
+
+- **Skipping the profile step because the dataset "looks clean."** Always run the Week 6 profiling steps first, even on a dataset that seems tidy — confirming there's nothing missing or miscoded is part of the deliverable, not an optional formality.
+- **Writing conclusions before checking sample sizes.** A dramatic-looking difference in a small subgroup (e.g. one `race_ethnicity` category with few students) deserves a caveat about sample size, the same discipline from Week 6.
+- **Treating "correlation is not causation" as a footnote instead of load-bearing.** Every finding in the required deliverable needs its own honest caveat, not one generic disclaimer at the very end covering everything.
+- **Running out of time on polish before finishing the required content.** All 5 deliverable pieces (profile, 3 questions, correlation analysis, storytelling chart, conclusions) matter more than making any single chart perfect — get a complete draft first, then improve it.
 
 ## 🧩 Challenges
 
@@ -97,11 +134,25 @@ Write one paragraph for your report's conclusion, listing at least one specific 
 
 </Challenge>
 
+<Challenge id="dataanalysis-hard-w10-c5" answer={<>Use the mean-vs-median skew check and IQR outlier count from Week 6 on average_score, then a histogram from Week 7 to confirm visually -- combining a "before you plot" numeric check with the chart that verifies it, exactly the workflow Week 7 was built around.</>}>
+
+Complete the required "dataset profile" section for your report: use Week 6's mean-vs-median skew check and IQR outlier count on the `average_score` column, and confirm what you find with a Week 7 histogram.
+
+</Challenge>
+
+<Challenge id="dataanalysis-hard-w10-c6" answer={<>Assemble a single markdown/text section combining: a one-sentence summary of the profile, the 3+ questions with findings and caveats, the correlation heatmap's headline finding, and the closing limitations paragraph -- essentially copying the report's required pieces into one continuous narrative a first-time reader could follow start to finish.</>}>
+
+Assemble everything from this week's challenges into one continuous written narrative (not just a list of separate code cells) that a reader could follow from start to finish without needing to see your code.
+
+</Challenge>
+
 ## 🤔 Socratic Questions
 
 - Across your full report, which finding do you feel most confident about, and which do you feel least confident about? What specifically (sample size, effect size, plausibility of a confound) drives that difference in confidence?
 - If you had to pick just *one* chart from your entire report to show someone with 10 seconds of attention, which would it be, and why? What does that choice tell you about which finding is actually the most important one?
 - You've now completed a full EDA cycle — question, evidence, honest interpretation — on a real-shaped dataset. Which specific week's material (6 through 9) did you personally lean on most while doing it? Does that match what you expected going in?
+- The second worked example's caveat admits that faceting by two variables at once might already be "too much" for one figure. Looking back at your own report, is there a chart you built that you'd now consider simplifying, having gone through this whole process?
+- Now that you've built a complete EDA report from scratch, how would you explain the *difference* between "exploratory data analysis" and "just making some charts" to someone who hasn't taken this course — in your own words, not the lesson's?
 
 ## ✅ Weekly quiz
 
@@ -151,6 +202,17 @@ Write one paragraph for your report's conclusion, listing at least one specific 
         'Just the raw pandas output with no interpretation',
       ],
       correctOptionIndex: 1,
+    },
+    {
+      id: 'q5',
+      prompt: 'Per the lesson, when should you check sample size (count) per group?',
+      options: [
+        'Only for the final chart',
+        'Never — mean alone is always sufficient',
+        'Whenever comparing group means, since small groups deserve less confidence',
+        'Only if the dataset has missing values',
+      ],
+      correctOptionIndex: 2,
     },
   ]}
 />
