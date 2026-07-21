@@ -1,0 +1,47 @@
+---
+id: index
+title: Python 101
+slug: /python-101
+sidebar_position: 1
+---
+
+import TrackSelector from '@site/src/components/TrackSelector';
+
+# 🐍 Python 101
+
+**🎯 Learning objectives** — by the end of these 5 weeks you'll be able to:
+- Write and reason about Python programs using variables, control flow, and functions
+- Work with Python's core data structures: lists, dicts, tuples, sets
+- Read and write CSV files — your first taste of working with real data
+
+Both tracks cover the same 5 weeks. Pick the one that fits how you want to learn:
+
+<TrackSelector
+  section="python-101"
+  normal={{
+    title: 'Python Fundamentals',
+    description: "No classes, no frameworks — just the core language, building up week by week.",
+    bullets: [
+      'Variables, types, operators, input/output',
+      'Control flow: if/else, loops',
+      'Data structures: lists, dicts, tuples, sets',
+      'Functions',
+      'Reading and writing CSV files',
+    ],
+    timeCommitment: '~3–4 hours/week',
+    startUrl: '/docs/python-101/normal/week-1',
+  }}
+  hard={{
+    title: 'Build a Tiny Language Model',
+    description:
+      "A project-based track: build a tiny language model from a text corpus using nothing but Python's built-in types — no numpy yet, on purpose.",
+    bullets: [
+      'Load and tokenize a text corpus from CSV',
+      'Build bigram probability tables with nested dicts',
+      'Sample generated text from those probabilities',
+      'Time your own code and feel where plain Python gets slow',
+    ],
+    timeCommitment: '~4–6 hours/week',
+    startUrl: '/docs/python-101/hard/week-1',
+  }}
+/>

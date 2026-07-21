@@ -1,0 +1,39 @@
+.card {
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: var(--pda-radius-lg);
+  padding: 1.5rem;
+  background: var(--pda-surface);
+  margin: 1.5rem 0;
+}
+
+.question {
+  border: none;
+  padding: 0;
+  margin: 1.25rem 0;
+}
+
+.question legend {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: var(--pda-touch-target);
+  cursor: pointer;
+}
+
+.option input {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
