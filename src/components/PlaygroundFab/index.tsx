@@ -28,6 +28,13 @@ export default function PlaygroundFab(): React.JSX.Element {
     doc.section && doc.track && doc.week != null
       ? buildWeekId(doc.section, doc.track, doc.week)
       : null;
+  // PlaygroundFab is mounted once, globally, in Root — it never unmounts on navigation.
+  // Without a per-page `key`, the embed's iframe DOM node (and, for JupyterLite, its
+  // `loaded` state) would carry over verbatim from whichever page it was last opened on,
+  // instead of resetting per lesson. Keying by the current page forces a fresh mount —
+  // and therefore a fresh Trinket/JupyterLite session — every time the student switches
+  // pages, rather than one continuous session shared across the whole site.
+  const embedKey = weekId ?? 'default';
 
   return (
     <>
@@ -69,9 +76,9 @@ export default function PlaygroundFab(): React.JSX.Element {
             </div>
             <div className={styles.panelBody}>
               {showJupyterLite ? (
-                <JupyterLiteEmbed weekId={weekId} />
+                <JupyterLiteEmbed key={embedKey} weekId={weekId} />
               ) : (
-                <TrinketEmbed />
+                <TrinketEmbed key={embedKey} />
               )}
             </div>
           </div>
