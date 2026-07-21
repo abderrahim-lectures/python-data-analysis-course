@@ -111,7 +111,15 @@ const config: Config = {
       '@docusaurus/plugin-pwa',
       {
         debug: false,
-        offlineModeActivationStrategies: ['appInstalled', 'standalone', 'queryString'],
+        // 'always' (not just 'appInstalled'/'standalone'/'queryString', the
+        // plugin's own default) so precaching and offline serving work for
+        // every visitor, not only students who installed the app — this
+        // course's whole pitch is "works offline", and the precached
+        // manifest is just the Docusaurus build output (HTML/JS/CSS), not
+        // the much heavier JupyterLite/Pyodide payload, which lives outside
+        // this manifest and is loaded lazily/separately, so this doesn't
+        // meaningfully add to first-visit mobile data cost.
+        offlineModeActivationStrategies: ['always'],
         pwaHead: [
           {tagName: 'link', rel: 'icon', href: '/img/pwa/icon-192.png'},
           {tagName: 'link', rel: 'manifest', href: '/manifest.json'},
