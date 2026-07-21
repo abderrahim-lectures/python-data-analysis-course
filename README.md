@@ -73,6 +73,8 @@ The badge above opens a ready-to-go [GitHub Codespace](https://github.com/featur
 
 [`examples/capstone-agent/`](./examples/capstone-agent/) is a real, runnable copy of the agent built in the [Capstone Bonus](./docs/bonus/capstone-ai-agent.md) lesson — see its own README for how to run it (locally with `uv run python agent.py`, or directly in Codespaces).
 
+[`examples/student-agents/`](./examples/student-agents/) is a gallery of agents students have built for the capstone — its README walks complete git beginners through forking, branching, and opening a PR to add their own.
+
 ## Contributing
 
 Every change — a lesson, a component, a bug fix, a translation — goes through the same flow:
