@@ -77,8 +77,8 @@ uv add deepagents langchain-google-genai
 
 `uv init` creates a small project (a `pyproject.toml` tracking your dependencies) and `uv add` installs packages into an isolated environment for that project — automatically, with no manual virtual-environment setup. `deepagents` is LangChain's framework for building agents with planning, tool use, and sub-agent delegation built in; `langchain-google-genai` is the integration package connecting LangChain to the Gemini API from Step 2.
 
-:::tip Check the current docs
-Agent frameworks move fast. Before writing code, skim `deepagents`' own README/docs for its current API — the shape below illustrates the core idea, but exact function names may have evolved since this was written.
+:::tip Check the current docs — and the model name
+Agent frameworks move fast, and so do Gemini's model names: they get renamed and retired on a timescale of months, not years. `create_deep_agent`'s own keyword arguments have already changed once since earlier drafts of this page (it's `system_prompt`, not `instructions`) — a reminder that this snippet can drift out of date even after being checked once. Use an explicit, versioned model ID like `gemini-3.5-flash` below rather than a `-latest` alias: Google has deprecated those aliases because they silently hot-swap to a new model version, which can break working code with no warning. Before running this, check [Google AI Studio](https://aistudio.google.com/) or the [Gemini API pricing page](https://ai.google.dev/gemini-api/docs/pricing) for whichever model currently has a free tier, and skim `deepagents`' own README for its current API.
 :::
 
 ## Step 4: Write your first agent
@@ -97,14 +97,14 @@ def search_course_topics(query: str) -> str:
     return f"Matching topics: {matches}" if matches else "No matching topics found."
 
 model = ChatGoogleGenerativeAI(
-    model="gemini-1.5-flash",
+    model="gemini-3.5-flash",  # confirm this still has a free tier before running — see the tip above
     google_api_key=os.environ["GOOGLE_API_KEY"],
 )
 
 agent = create_deep_agent(
     model=model,
     tools=[search_course_topics],
-    instructions="You help students figure out whether a topic was covered in their course.",
+    system_prompt="You help students figure out whether a topic was covered in their course.",
 )
 
 if __name__ == "__main__":
