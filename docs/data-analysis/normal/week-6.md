@@ -18,8 +18,9 @@ import WeeklyQuiz from '@site/src/components/WeeklyQuiz';
 
 By the end of this week you can:
 - Explain what a `Series` and a `DataFrame` are, and how they relate to a vector and a matrix.
-- Load a CSV into a `DataFrame` with `pd.read_csv`.
-- Inspect a `DataFrame`'s shape, columns, dtypes, and summary statistics.
+- Build a `DataFrame` from Python data structures, and load one from a CSV with `pd.read_csv`.
+- Inspect a `DataFrame`'s shape, columns, dtypes, index, and summary statistics.
+- Select a single column as a `Series`, and know the difference between the two main ways to do it.
 
 ## Lesson
 
@@ -37,6 +38,18 @@ df = pd.DataFrame({
 df
 ```
 
+You can also build one from a list of dicts — the exact "list of records" shape from Python 101 Normal Week 3's nested-collections example:
+
+```python
+records = [
+    {"name": "Amina", "score": 88},
+    {"name": "Youssef", "score": 74},
+]
+pd.DataFrame(records)
+```
+
+Both forms produce the same kind of object; which is more convenient just depends on how your data already happens to be shaped — dict-of-lists when you think "column by column," list-of-dicts when you think "record by record."
+
 A **`Series`** is a single labeled column — think of it as a vector $\mathbf{v} \in \mathbb{R}^n$, except each entry also has a label (its index), not just a position:
 
 ```python
@@ -46,6 +59,18 @@ type(df["score"])   # pandas.core.series.Series
 
 A **`DataFrame`** is a 2D table of such columns sharing one row index — the tabular analogue of a matrix $A \in \mathbb{R}^{m \times n}$, except columns can hold different dtypes and both axes carry labels, not just numeric positions.
 
+### The index
+
+Every `DataFrame` (and `Series`) has a row **index** — the labels along the left edge — visible whenever you print one. By default it's just `0, 1, 2, ...`, but it doesn't have to be:
+
+```python
+df.index                       # RangeIndex(start=0, stop=3, step=1) by default
+df_named = df.set_index("name")   # use the "name" column as the index instead
+df_named.loc["Amina"]              # now you can look up a row by name directly
+```
+
+`set_index` doesn't modify `df` in place by default — it returns a *new* DataFrame with the change, the same "returns a new value, doesn't mutate" pattern you've already seen with `sorted()` in Python 101.
+
 ### Reading a CSV
 
 The same `students-normal.csv` from Python 101 loads in one call — no manual `csv.DictReader` loop, no manual `int(...)` conversions:
@@ -53,6 +78,7 @@ The same `students-normal.csv` from Python 101 loads in one call — no manual `
 ```python
 df = pd.read_csv("students-normal.csv")
 df.head()      # first 5 rows
+df.tail(3)      # last 3 rows
 ```
 
 `pd.read_csv` infers each column's dtype automatically (numbers become `int64`/`float64`, text stays `object`), which is most of what Python 101 Normal Week 5 did by hand, done for you in one line.
@@ -69,7 +95,17 @@ df.info()       # shape + dtypes + non-null counts, all at once
 df.describe()   # count, mean, std, min, quartiles, max — for numeric columns
 ```
 
-`df.describe()` is worth lingering on: mean and standard deviation are exactly the statistics you already know from a stats course, computed instantly across an entire column instead of by hand.
+`df.describe()` is worth lingering on: mean and standard deviation are exactly the statistics you already know from a stats course, computed instantly across an entire column instead of by hand. You can rename columns after the fact if the source file's names aren't convenient to work with:
+
+```python
+df = df.rename(columns={"quiz1": "quiz_1"})
+```
+
+## ⚠️ Common pitfalls
+
+- **Forgetting most DataFrame operations return a new object.** `df.rename(...)`, `df.set_index(...)`, and many others don't change `df` itself unless you either reassign (`df = df.rename(...)`) or pass `inplace=True`.
+- **Confusing `df.shape` (no parentheses) with a method call.** `.shape` is an attribute, not a function — `df.shape()` raises a `TypeError`.
+- **Assuming `.describe()` covers every column.** By default it only summarizes numeric columns; text columns need a different look (Week 8 covers cleaning and inspecting those).
 
 ## 🧩 Challenges
 
@@ -97,11 +133,24 @@ Run `df.describe()` on the students DataFrame. Does it include the `name` column
 
 </Challenge>
 
+<Challenge id="dataanalysis-normal-w6-c5" answer={<>Call df.set_index("name") and store the result (e.g. df_by_name = df.set_index("name")), then use df_by_name.loc["Amina"] to retrieve that row directly by label instead of hunting for the matching row number.</>}>
+
+Set `name` as the index of the students DataFrame, then look up Amina's row directly by her name instead of by row number.
+
+</Challenge>
+
+<Challenge id="dataanalysis-normal-w6-c6" answer={<>Build it either as a dict of lists (one key per column) or a list of dicts (one dict per city) passed to <code>pd.DataFrame(...)</code> — both are valid, matching whichever shape the data started in.</>}>
+
+Construct a small DataFrame by hand (not from a CSV) with two columns, `city` and `population`, for 3 cities of your choice — using either the dict-of-lists or list-of-dicts style.
+
+</Challenge>
+
 ## 🤔 Socratic Questions
 
 - A `Series` is often compared to a Python `list` with labels. What can you do with a Series's `.mean()`/`.std()` in one call that you couldn't do with a plain `list` without writing your own function?
 - `df.dtypes` shows each column's inferred type. What could go wrong if a numeric-looking column (like `quiz1`) actually contained one row with text in it, like `"absent"`? What dtype would pandas likely infer for the whole column?
 - You spent 5 weeks of Python 101 building CSV-reading and averaging logic by hand. Which specific lines of that logic does `pd.read_csv(...).describe()` replace? Is anything actually *lost* by using the shortcut, or only time saved?
+- `df.set_index("name")` swaps the default numeric index for a meaningful one. What would go wrong if the `name` column had a duplicate value — could two different students still be told apart afterward?
 
 ## ✅ Weekly quiz
 
@@ -139,6 +188,17 @@ Run `df.describe()` on the students DataFrame. Does it include the `name` column
         'A (rows, columns) tuple',
         'The data types of each column',
         'The first 5 rows',
+      ],
+      correctOptionIndex: 1,
+    },
+    {
+      id: 'q5',
+      prompt: 'df.set_index("name") by default:',
+      options: [
+        'Modifies df in place and returns None',
+        'Returns a new DataFrame, leaving the original df unchanged',
+        'Deletes the name column entirely',
+        'Only works on numeric columns',
       ],
       correctOptionIndex: 1,
     },

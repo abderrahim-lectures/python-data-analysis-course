@@ -19,6 +19,7 @@ import WeeklyQuiz from '@site/src/components/WeeklyQuiz';
 By the end of this week you can:
 - Partition a DataFrame into groups with `.groupby()`, and explain the connection to partitioning a set.
 - Compute per-group aggregates (`.mean()`, `.sum()`, `.count()`, and multiple at once with `.agg()`).
+- Group by more than one column at once, and turn a grouped result back into a plain DataFrame.
 - Combine two DataFrames with `.merge()`, matching rows by a shared key.
 
 ## Lesson
@@ -49,6 +50,29 @@ df.groupby("lunch").agg({                      # multiple columns/stats at once
 
 `.groupby(...)[...]` reads left to right as "partition by this column, then look at this other column within each part" — the pandas phrasing of "for each group, compute a statistic over a different variable."
 
+### Grouping by more than one column
+
+Passing a *list* of column names groups by every unique combination of their values at once — the same idea as partitioning by a pair $(a, b)$ instead of a single value:
+
+```python
+df.groupby(["lunch", "gender"])["math_score"].mean()
+```
+
+This answers a more specific question than either column alone: does the effect of `lunch` on `math_score` hold the same way within each `gender`, or does it look different once you separate them out?
+
+### Getting a plain DataFrame back
+
+A groupby-aggregate result uses the grouped column(s) as its index rather than a plain `0, 1, 2, ...` row index — convenient for further lookups, but sometimes you want an ordinary DataFrame back (for example, to sort it, or to merge it with something else). `.reset_index()` does that:
+
+```python
+summary = df.groupby("lunch")["math_score"].mean().reset_index()
+# lunch          math_score
+# free/reduced   58.2
+# standard       66.9
+
+summary.sort_values("math_score", ascending=False)   # now a plain column you can sort by
+```
+
 ### Merging: combining two DataFrames
 
 `.merge()` joins two DataFrames on a shared key column, the same idea as a database join or matching entries between two lookup tables by a common ID:
@@ -64,7 +88,18 @@ merged = students.merge(grades, on="student_id")
 #     3      | Sara    |   A
 ```
 
-`how="inner"` (the default) keeps only rows where the key exists in *both* DataFrames; `how="left"`/`"right"`/`"outer"` control what happens to rows whose key is missing from the other side — worth checking explicitly whenever row counts might not match after a merge.
+`how="inner"` (the default) keeps only rows where the key exists in *both* DataFrames; `how="left"`/`"right"`/`"outer"` control what happens to rows whose key is missing from the other side — worth checking explicitly whenever row counts might not match after a merge. If the key columns have different names in each DataFrame, use `left_on`/`right_on` instead of `on`:
+
+```python
+students.merge(scores, left_on="student_id", right_on="id")
+```
+
+## ⚠️ Common pitfalls
+
+- **Forgetting `.groupby()` alone computes nothing.** `df.groupby("lunch")` by itself is just a description of the split — you always need an aggregation (`.mean()`, `.agg(...)`, etc.) attached to actually see numbers.
+- **Assuming a merge preserves the original row count.** A `merge` with a duplicated key on either side can produce *more* rows than either input had — always sanity-check `.shape` after a merge you're not 100% sure about.
+- **Not checking `how=` explicitly.** The default `"inner"` silently drops any row whose key doesn't exist on the other side — fine when that's genuinely what you want, but worth being a deliberate choice, not an accident.
+- **Forgetting `.reset_index()` when you need a plain column back.** Trying to `.sort_values()` or `.merge()` using a groupby result's index (rather than a regular column) as if it were a normal column will fail or behave unexpectedly until you `.reset_index()`.
 
 ## 🧩 Challenges
 
@@ -92,11 +127,25 @@ Create two small DataFrames by hand (e.g. one with student names, one with a sep
 
 </Challenge>
 
+<Challenge id="dataanalysis-normal-w9-c5" answer={<><code>df.groupby(["lunch", "test_preparation_course"])["math_score"].mean()</code> — groups by every combination of the two columns, showing whether the effects combine, cancel out, or hold independently.</>}>
+
+Group by both `lunch` and `test_preparation_course` together, and compute the average `math_score` for each combination. Does the pattern from Challenge 3 hold within *both* test-prep groups, or does it look different?
+
+</Challenge>
+
+<Challenge id="dataanalysis-normal-w9-c6" answer={<>Chain .reset_index() after the groupby-aggregate, then .sort_values("math_score", ascending=False) on the resulting plain column, e.g. df.groupby("lunch")["math_score"].mean().reset_index().sort_values("math_score", ascending=False).</>}>
+
+Take your Challenge 1 result (average `math_score` by `gender`), turn it into a plain DataFrame with `.reset_index()`, and sort it from highest to lowest average.
+
+</Challenge>
+
 ## 🤔 Socratic Questions
 
 - `.groupby("lunch")` alone (with no aggregation attached) doesn't print a table of numbers — what do you think it actually returns, and why does pandas wait to compute anything until you specify an aggregation?
 - If two DataFrames being merged share a key column but one DataFrame has a *duplicate* key (two rows with the same `student_id`), what do you predict happens to the row count after merging? Test it.
 - `.groupby(...).agg({...})` lets you apply a *different* aggregation to each column (e.g. mean of one, max of another) in one call. Why might averaging every column with the same statistic not always make sense for a real dataset?
+- Grouping by two columns at once (`["lunch", "test_preparation_course"]`) can reveal a pattern that grouping by either column alone hides, or make a pattern that looked strong actually look weaker once you account for the second factor. Why does splitting into finer groups sometimes change the story so much?
+- A groupby-aggregate result uses the grouped column as its index instead of a plain integer index. What practical difference does that make the first time you try to use `.iloc[0]` on it, versus on an ordinary DataFrame?
 
 ## ✅ Weekly quiz
 
@@ -141,6 +190,17 @@ Create two small DataFrames by hand (e.g. one with student names, one with a sep
         'Dropping missing values',
       ],
       correctOptionIndex: 2,
+    },
+    {
+      id: 'q5',
+      prompt: 'What does .reset_index() do after a groupby-aggregate?',
+      options: [
+        'Deletes the aggregated values',
+        'Turns the grouped column back into a plain column, with a normal integer index',
+        'Groups the data again',
+        'Merges with another DataFrame',
+      ],
+      correctOptionIndex: 1,
     },
   ]}
 />
