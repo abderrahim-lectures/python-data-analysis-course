@@ -26,12 +26,12 @@ const credits: Credit[] = [
   {
     name: 'Titanic dataset',
     url: 'https://www.kaggle.com/c/titanic',
-    note: 'Used for the Week 10 Normal-track guided EDA reproduction.',
+    note: 'Week 10 Normal-track guided EDA reproduction uses a small synthetic dataset modeled on this well-known Kaggle dataset\'s schema (same columns, generated passenger data), bundled locally so it works offline in JupyterLite.',
   },
   {
     name: 'Students Performance in Exams',
     url: 'https://www.kaggle.com/datasets/spscientist/students-performance-in-exams',
-    note: 'Used for the Week 10 Hard-track final EDA deliverable.',
+    note: 'Week 10 Hard-track final EDA deliverable uses a small synthetic dataset modeled on this Kaggle dataset\'s schema, bundled locally so it works offline in JupyterLite.',
   },
 ];
 
