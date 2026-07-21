@@ -64,8 +64,18 @@ export default function TrackSelector({
 
   return (
     <div className={styles.grid}>
-      <TrackCard track={normal} label="Normal" emoji="🟢" onSelect={chooseNormal} />
-      <TrackCard track={hard} label="Hard" emoji="🔴" onSelect={chooseHard} />
+      <TrackCard
+        track={normal}
+        label={<Translate id="trackSelector.label.normal" description="Normal track label">Normal</Translate>}
+        emoji="🟢"
+        onSelect={chooseNormal}
+      />
+      <TrackCard
+        track={hard}
+        label={<Translate id="trackSelector.label.hard" description="Hard track label">Hard</Translate>}
+        emoji="🔴"
+        onSelect={chooseHard}
+      />
     </div>
   );
 }
@@ -77,7 +87,7 @@ function TrackCard({
   onSelect,
 }: {
   track: TrackInfo;
-  label: string;
+  label: React.ReactNode;
   emoji: string;
   onSelect: (event: React.MouseEvent) => void;
 }): React.JSX.Element {

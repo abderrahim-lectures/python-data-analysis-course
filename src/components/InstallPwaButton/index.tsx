@@ -1,6 +1,7 @@
 import type {ReactNode} from 'react';
 import {useEffect, useState} from 'react';
 import clsx from 'clsx';
+import Translate, {translate} from '@docusaurus/Translate';
 
 import styles from './styles.module.css';
 
@@ -75,7 +76,11 @@ export default function InstallPwaButton(): ReactNode {
         type="button"
         className={clsx('button button--outline button--secondary button--lg', styles.installButton)}
         onClick={handleInstallClick}>
-        📲 Install the course app — works offline
+        📲{' '}
+        {translate({
+          id: 'installPwaButton.label',
+          message: 'Install the course app — works offline',
+        })}
       </button>
     );
   }
@@ -83,9 +88,27 @@ export default function InstallPwaButton(): ReactNode {
   if (showIosHint) {
     return (
       <p className={styles.iosHint}>
-        📲 On iPhone/iPad: tap <strong>Share</strong> →{' '}
-        <strong>Add to Home Screen</strong> to install this course and use already-visited
-        lessons offline.
+        📲{' '}
+        <Translate
+          id="installPwaButton.iosHint"
+          values={{
+            share: (
+              <strong>
+                <Translate id="installPwaButton.iosHint.share">Share</Translate>
+              </strong>
+            ),
+            addToHomeScreen: (
+              <strong>
+                <Translate id="installPwaButton.iosHint.addToHomeScreen">
+                  Add to Home Screen
+                </Translate>
+              </strong>
+            ),
+          }}>
+          {
+            'On iPhone/iPad: tap {share} → {addToHomeScreen} to install this course and use already-visited lessons offline.'
+          }
+        </Translate>
       </p>
     );
   }

@@ -1,5 +1,6 @@
 import type {ReactNode} from 'react';
 import Link from '@docusaurus/Link';
+import Translate, {translate} from '@docusaurus/Translate';
 import Layout from '@theme/Layout';
 import BadgeCase from '@site/src/components/BadgeCase';
 import ShareProgress from '@site/src/components/ShareProgress';
@@ -10,16 +11,34 @@ export default function ProgressPage(): ReactNode {
   const courseComplete = useCourseComplete();
 
   return (
-    <Layout title="My Progress" description="Track your course progress and badges.">
+    <Layout
+      title={translate({id: 'progressPage.pageTitle', message: 'My Progress'})}
+      description={translate({
+        id: 'progressPage.pageDescription',
+        message: 'Track your course progress and badges.',
+      })}>
       <main className="container margin-vert--lg">
-        <h1>My Progress</h1>
+        <h1>
+          <Translate id="progressPage.heading">My Progress</Translate>
+        </h1>
         {courseComplete && (
           <div className="alert alert--success margin-bottom--lg" role="alert">
-            🎓 You've finished the whole course! Your Capstone Bonus is unlocked —{' '}
-            <Link to="/docs/bonus/capstone-ai-agent">
-              <strong>install Python for real and build your first AI agent</strong>
-            </Link>
-            .
+            🎓{' '}
+            <Translate
+              id="progressPage.courseComplete"
+              values={{
+                link: (
+                  <Link to="/docs/bonus/capstone-ai-agent">
+                    <strong>
+                      <Translate id="progressPage.courseComplete.linkText">
+                        install Python for real and build your first AI agent
+                      </Translate>
+                    </strong>
+                  </Link>
+                ),
+              }}>
+              {"You've finished the whole course! Your Capstone Bonus is unlocked — {link}."}
+            </Translate>
           </div>
         )}
         <BadgeCase />

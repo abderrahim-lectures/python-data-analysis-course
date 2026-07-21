@@ -1,6 +1,7 @@
 import React from 'react';
 import {useLocation} from '@docusaurus/router';
 import Head from '@docusaurus/Head';
+import Translate, {translate} from '@docusaurus/Translate';
 import Layout from '@theme/Layout';
 import {decodeSharePayload} from '@site/src/utils/shareEncoding';
 import SharedProgressCard from '@site/src/components/ShareProgress/SharedProgressCard';
@@ -12,7 +13,12 @@ export default function SharePage(): React.JSX.Element {
   const payload = encoded ? decodeSharePayload(encoded) : null;
 
   return (
-    <Layout title="Shared Progress" description="A student's shared course progress.">
+    <Layout
+      title={translate({id: 'sharePage.pageTitle', message: 'Shared Progress'})}
+      description={translate({
+        id: 'sharePage.pageDescription',
+        message: "A student's shared course progress.",
+      })}>
       {/* Ephemeral, query-string-driven, per-student content — no canonical
           SEO value, so keep it out of search results (also excluded in
           robots.txt and the sitemap). */}
@@ -23,7 +29,11 @@ export default function SharePage(): React.JSX.Element {
         {payload ? (
           <SharedProgressCard payload={payload} />
         ) : (
-          <p>This link doesn't contain a valid progress summary.</p>
+          <p>
+            <Translate id="sharePage.invalidLink">
+              This link doesn't contain a valid progress summary.
+            </Translate>
+          </p>
         )}
       </main>
     </Layout>

@@ -1,4 +1,5 @@
 import React, {forwardRef} from 'react';
+import Translate, {translate} from '@docusaurus/Translate';
 import type {SharePayload} from '@site/src/types/share';
 import styles from './SharedProgressCard.module.css';
 
@@ -19,18 +20,47 @@ const SharedProgressCard = forwardRef<HTMLDivElement, Props>(function SharedProg
   return (
     <div ref={ref} className={styles.card}>
       {payload.completed ? (
-        <h2>🎓 Course Complete!</h2>
+        <h2>
+          🎓 <Translate id="sharedProgressCard.completeHeading">Course Complete!</Translate>
+        </h2>
       ) : (
-        <h2>📊 Course Progress</h2>
+        <h2>
+          📊 <Translate id="sharedProgressCard.progressHeading">Course Progress</Translate>
+        </h2>
       )}
-      <p className={styles.name}>{payload.name ?? 'A Python & Data Analysis student'}</p>
-      <p className={styles.stat}>
-        {payload.completedCount} / {payload.totalCount} weeks · {payload.badgeCount} badges
+      <p className={styles.name}>
+        {payload.name ?? (
+          <Translate id="sharedProgressCard.defaultName">
+            A Python & Data Analysis student
+          </Translate>
+        )}
       </p>
-      <p className={styles.id}>ID: {payload.studentId}</p>
+      <p className={styles.stat}>
+        <Translate
+          id="sharedProgressCard.stats"
+          values={{
+            completed: payload.completedCount,
+            total: payload.totalCount,
+            badges: payload.badgeCount,
+          }}>
+          {'{completed} / {total} weeks · {badges} badges'}
+        </Translate>
+      </p>
+      <p className={styles.id}>
+        <Translate id="sharedProgressCard.idLabel" values={{studentId: payload.studentId}}>
+          {'ID: {studentId}'}
+        </Translate>
+      </p>
       {qrDataUrl && (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={qrDataUrl} alt="Verification QR code" className={styles.qr} />
+        <img
+          src={qrDataUrl}
+          alt={translate({
+            id: 'sharedProgressCard.qrAlt',
+            message: 'Verification QR code',
+          })}
+          className={styles.qr}
+        />
       )}
     </div>
   );

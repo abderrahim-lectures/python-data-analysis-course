@@ -555,5 +555,156 @@
   "theme.tags.tagsPageTitle": {
     "message": "Tags",
     "description": "The title of the tag list page"
+  },
+  "credits.pageTitle": {
+    "message": "Crédits"
+  },
+  "credits.pageDescription": {
+    "message": "Jeux de données et outils utilisés dans ce cours."
+  },
+  "credits.heading": {
+    "message": "Crédits"
+  },
+  "credits.intro": {
+    "message": "Jeux de données et outils tiers sur lesquels ce cours s'appuie :"
+  },
+  "credits.trinket": {
+    "message": "Éditeur Python dans le navigateur utilisé tout au long de Python 101."
+  },
+  "credits.jupyterlite": {
+    "message": "Notebook Jupyter dans le navigateur (via Pyodide) utilisé tout au long d'Analyse de Données."
+  },
+  "credits.pyodide": {
+    "message": "Environnement d'exécution Python en WebAssembly qui fait fonctionner JupyterLite dans ce cours."
+  },
+  "credits.titanic": {
+    "message": "La reproduction guidée d'EDA de la Semaine 10 du parcours normal utilise un petit jeu de données synthétique modélisé sur le schéma de ce jeu de données Kaggle bien connu (mêmes colonnes, données de passagers générées), intégré localement pour fonctionner hors ligne dans JupyterLite."
+  },
+  "credits.studentsPerformance": {
+    "message": "Le livrable final d'EDA de la Semaine 10 du parcours difficile utilise un petit jeu de données synthétique modélisé sur le schéma de ce jeu de données Kaggle, intégré localement pour fonctionner hors ligne dans JupyterLite."
+  },
+  "homepage.hero.title": {
+    "message": "Cours de Python et d'Analyse de Données",
+    "description": "Homepage hero title"
+  },
+  "homepage.hero.tagline": {
+    "message": "Apprenez Python et l'analyse de données dans votre navigateur — aucune installation nécessaire",
+    "description": "Homepage hero tagline"
+  },
+  "homepage.hero.startButton": {
+    "message": "Commencer Python 101 →",
+    "description": "Homepage hero CTA button"
+  },
+  "homepage.section1.title": {
+    "message": "🐍 Section 1 : Python 101",
+    "description": "Homepage Python 101 card title"
+  },
+  "homepage.section1.description": {
+    "message": "5 semaines de fondamentaux Python. Choisissez un parcours {normal} (sans installation, codez directement dans votre navigateur) ou un parcours {hard} où vous construisez un mini modèle de langage à partir de zéro en n'utilisant que les types intégrés de Python.",
+    "description": "Homepage Python 101 card description"
+  },
+  "homepage.trackNormal": {
+    "message": "Normal",
+    "description": "Normal track, short label"
+  },
+  "homepage.trackHard": {
+    "message": "Difficile",
+    "description": "Hard track, short label"
+  },
+  "homepage.section1.cta": {
+    "message": "Explorer Python 101",
+    "description": "Homepage Python 101 card CTA"
+  },
+  "homepage.section2.title": {
+    "message": "📊 Section 2 : Pandas et Analyse de Données",
+    "description": "Homepage Data Analysis card title"
+  },
+  "homepage.section2.description": {
+    "message": "5 semaines de pandas et d'analyse exploratoire de données. Reproduisez un notebook façon Kaggle dans le parcours {normal}, ou menez un projet EDA complet avec visualisations dans le parcours {hard}.",
+    "description": "Homepage Data Analysis card description"
+  },
+  "homepage.section2.cta": {
+    "message": "Explorer l'Analyse de Données",
+    "description": "Homepage Data Analysis card CTA"
+  },
+  "homepage.capstoneTeaser": {
+    "message": "{finishBold} pour débloquer un guide pas à pas : installez Python pour de vrai et construisez votre propre agent IA — {link}.",
+    "description": "Homepage capstone teaser"
+  },
+  "homepage.capstoneTeaser.finishBold": {
+    "message": "Terminez le cours",
+    "description": "Bolded lead-in phrase"
+  },
+  "homepage.capstoneTeaser.linkText": {
+    "message": "voir le Bonus Final",
+    "description": "Capstone teaser link text"
+  },
+  "homepage.pageTitle": {
+    "message": "Cours de Python et d'Analyse de Données"
+  },
+  "homepage.pageDescription": {
+    "message": "Un cours gratuit de Python et d'analyse de données dans le navigateur — aucune installation nécessaire jusqu'à ce que vous soyez prêt à passer à Python pour de vrai."
+  },
+  "progressPage.pageTitle": {
+    "message": "Ma Progression"
+  },
+  "progressPage.pageDescription": {
+    "message": "Suivez votre progression et vos badges du cours."
+  },
+  "progressPage.heading": {
+    "message": "Ma Progression"
+  },
+  "progressPage.courseComplete": {
+    "message": "Vous avez terminé tout le cours ! Votre Bonus Final est débloqué — {link}."
+  },
+  "progressPage.courseComplete.linkText": {
+    "message": "installez Python pour de vrai et construisez votre premier agent IA"
+  },
+  "sharePage.pageTitle": {
+    "message": "Progression Partagée"
+  },
+  "sharePage.pageDescription": {
+    "message": "La progression partagée du cours d'un·e étudiant·e."
+  },
+  "sharePage.invalidLink": {
+    "message": "Ce lien ne contient pas de résumé de progression valide."
+  },
+  "installPwaButton.label": {
+    "message": "Installer l'application du cours — fonctionne hors ligne"
+  },
+  "installPwaButton.iosHint": {
+    "message": "Sur iPhone/iPad : appuyez sur {share} → {addToHomeScreen} pour installer ce cours et utiliser les leçons déjà visitées hors ligne."
+  },
+  "installPwaButton.iosHint.share": {
+    "message": "Partager"
+  },
+  "installPwaButton.iosHint.addToHomeScreen": {
+    "message": "Sur l'écran d'accueil"
+  },
+  "sharedProgressCard.completeHeading": {
+    "message": "Cours terminé !"
+  },
+  "sharedProgressCard.progressHeading": {
+    "message": "Progression du cours"
+  },
+  "sharedProgressCard.defaultName": {
+    "message": "Un·e étudiant·e de Python et Analyse de Données"
+  },
+  "sharedProgressCard.stats": {
+    "message": "{completed} / {total} semaines · {badges} badges"
+  },
+  "sharedProgressCard.idLabel": {
+    "message": "ID : {studentId}"
+  },
+  "sharedProgressCard.qrAlt": {
+    "message": "Code QR de vérification"
+  },
+  "trackSelector.label.normal": {
+    "message": "Normal",
+    "description": "Normal track label"
+  },
+  "trackSelector.label.hard": {
+    "message": "Difficile",
+    "description": "Hard track label"
   }
 }
