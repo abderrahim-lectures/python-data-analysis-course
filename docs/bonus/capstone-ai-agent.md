@@ -147,6 +147,34 @@ uv run python agent.py
 
 `load_dotenv()` reads your `.env` file into `os.environ` before anything else runs, so `os.environ["GITHUB_TOKEN"]` finds the key you set in Step 2 — the same `os` module concept as `input()` reading from the keyboard, just reading from a file instead. `create_deep_agent` wires the model together with a list of Python functions the agent can call as **tools** — this is the core idea behind agents: a language model that can not just respond with text, but decide to call your code, read the result, and use it to inform its answer.
 
+### What you should see
+
+A single printed line — the agent's final answer, something like:
+
+```
+Yes, "groupby" was covered in the course.
+```
+
+If instead you see a Python traceback, check which kind:
+
+- **`KeyError: 'GITHUB_TOKEN'`** — the environment variable/`.env` value isn't being found. Confirm `.env` is in the same folder as `agent.py` and has no typo in the variable name, or that you actually ran `export` in the same terminal session you're running the script from.
+- **An authentication error (401/403)** — the key itself is wrong, expired, or (for GitHub Models) missing the `models: read` scope. Regenerate it.
+- **A rate-limit error (429)** — see the next section. This one is common and expected, not a sign anything is broken.
+
+### Handling rate limits
+
+Every free tier here caps how many requests you can make per minute or per day, and each turn of the agent — deciding to call a tool, then reading the result — uses at least one request. Run a few questions back to back and you may well see something like:
+
+```
+Error calling model ... (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED.
+...Please retry in 41.7s.
+```
+
+This isn't a bug in your code — it's the provider telling you to slow down. Two ways to handle it:
+
+1. **Simplest**: just wait the suggested number of seconds and run the script again.
+2. **More robust**: wrap the `agent.invoke(...)` call in a `try`/`except` that catches the error, waits, and retries automatically — exactly the pattern taught as bonus content back in Python 101 Week 4. The repo's fuller example does this for real: see `ask()` in [`examples/capstone-agent/agent.py`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/capstone-agent/agent.py) for a working version you can copy, including parsing the provider's suggested retry delay out of the error message.
+
 :::tip Using a different provider?
 Swap the `ChatOpenAI(...)` block for your provider's own client — e.g. `ChatGoogleGenerativeAI(model="gemini-3.5-flash", google_api_key=os.environ["GOOGLE_API_KEY"])` for Gemini, or `ChatGroq(model="llama-3.3-70b-versatile", api_key=os.environ["GROQ_API_KEY"])` for Groq. Everything else in this file stays the same — `deepagents` doesn't care which provider is behind the model. See [`examples/capstone-agent/agent.py`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/capstone-agent) in the course repo for all six wired up side by side, selectable with one environment variable.
 :::
