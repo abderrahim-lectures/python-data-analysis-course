@@ -2,6 +2,7 @@
   "LiteBuildConfig": {
     "apps": ["notebooks"],
     "contents": ["files"],
-    "output_dir": "_output"
+    "output_dir": "_output",
+    "base_url": "/python-data-analysis-course/lite/"
   }
 }
