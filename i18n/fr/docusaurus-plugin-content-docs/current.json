@@ -1,0 +1,22 @@
+{
+  "version.label": {
+    "message": "Suivant",
+    "description": "The label for version current"
+  },
+  "sidebar.python101Sidebar.category.Normal Track": {
+    "message": "Parcours Normal",
+    "description": "The label for category 'Normal Track' in sidebar 'python101Sidebar'"
+  },
+  "sidebar.python101Sidebar.category.Hard Track: Build a Tiny Language Model": {
+    "message": "Parcours Difficile : Construire un Petit Modèle de Langage",
+    "description": "The label for category 'Hard Track: Build a Tiny Language Model' in sidebar 'python101Sidebar'"
+  },
+  "sidebar.dataAnalysisSidebar.category.Normal Track": {
+    "message": "Parcours Normal",
+    "description": "The label for category 'Normal Track' in sidebar 'dataAnalysisSidebar'"
+  },
+  "sidebar.dataAnalysisSidebar.category.Hard Track: Full EDA Project": {
+    "message": "Parcours Difficile : Projet EDA Complet",
+    "description": "The label for category 'Hard Track: Full EDA Project' in sidebar 'dataAnalysisSidebar'"
+  }
+}

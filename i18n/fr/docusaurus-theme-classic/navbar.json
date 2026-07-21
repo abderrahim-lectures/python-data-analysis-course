@@ -1,0 +1,34 @@
+{
+  "title": {
+    "message": "Cours PyDA",
+    "description": "The title in the navbar"
+  },
+  "logo.alt": {
+    "message": "Logo du cours Python et Analyse de Données",
+    "description": "The alt text of navbar logo"
+  },
+  "item.label.Python 101": {
+    "message": "Python 101",
+    "description": "Navbar item with label Python 101"
+  },
+  "item.label.Data Analysis": {
+    "message": "Analyse de Données",
+    "description": "Navbar item with label Data Analysis"
+  },
+  "item.label.Capstone Bonus": {
+    "message": "Projet Final",
+    "description": "Navbar item with label Capstone Bonus"
+  },
+  "item.label.My Progress": {
+    "message": "Ma Progression",
+    "description": "Navbar item with label My Progress"
+  },
+  "item.label.Credits": {
+    "message": "Crédits",
+    "description": "Navbar item with label Credits"
+  },
+  "item.label.GitHub": {
+    "message": "GitHub",
+    "description": "Navbar item with label GitHub"
+  }
+}

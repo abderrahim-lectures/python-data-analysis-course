@@ -60,9 +60,11 @@ export default function BadgeCase(): React.JSX.Element {
 
       <section>
         <h2>
-          <Translate id="badgeCase.heading">
-            {isGamified ? 'My Badges' : 'Milestones Earned'}
-          </Translate>
+          {isGamified ? (
+            <Translate id="badgeCase.heading.gamified">My Badges</Translate>
+          ) : (
+            <Translate id="badgeCase.heading.classical">Milestones Earned</Translate>
+          )}
         </h2>
         {badges.length === 0 ? (
           <p>

@@ -1,0 +1,34 @@
+{
+  "title": {
+    "message": "دورة بايدا",
+    "description": "The title in the navbar"
+  },
+  "logo.alt": {
+    "message": "شعار دورة بايثون وتحليل البيانات",
+    "description": "The alt text of navbar logo"
+  },
+  "item.label.Python 101": {
+    "message": "بايثون 101",
+    "description": "Navbar item with label Python 101"
+  },
+  "item.label.Data Analysis": {
+    "message": "تحليل البيانات",
+    "description": "Navbar item with label Data Analysis"
+  },
+  "item.label.Capstone Bonus": {
+    "message": "المشروع الختامي",
+    "description": "Navbar item with label Capstone Bonus"
+  },
+  "item.label.My Progress": {
+    "message": "تقدمي",
+    "description": "Navbar item with label My Progress"
+  },
+  "item.label.Credits": {
+    "message": "المصادر",
+    "description": "Navbar item with label Credits"
+  },
+  "item.label.GitHub": {
+    "message": "GitHub",
+    "description": "Navbar item with label GitHub"
+  }
+}
