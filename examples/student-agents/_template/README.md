@@ -15,10 +15,12 @@ _List the tools your agent has, one line each — what each one does, and whethe
 ## Running it
 
 ```bash
-export GOOGLE_API_KEY="your-key-here"   # or whichever provider you used
+cp .env.example .env   # then fill in your key -- defaults to GitHub Models
 cd examples/student-agents/your-name
 uv run python agent.py
 ```
+
+You're free to use whichever free-tier provider you like (GitHub Models, Gemini, Groq, Mistral, Cerebras, OpenRouter, or another) — see the [Capstone Bonus doc](../../../docs/bonus/capstone-ai-agent.md#step-2-get-a-free-ai-api-key)'s provider table. If you're not using the default, swap the client in `agent.py` for your provider's own (a couple of lines) and update `.env` accordingly.
 
 ## Notes
 

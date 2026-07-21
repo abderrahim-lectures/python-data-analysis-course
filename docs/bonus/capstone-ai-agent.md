@@ -13,7 +13,7 @@ This is optional and ungraded. It's here because finishing 10 weeks of fundament
 ## 🎯 What you'll do
 
 1. Install `uv`, a fast, modern tool for managing Python itself and your project's dependencies — no separate Python installer needed.
-2. Get a free-tier AI API key (Gemini via Google AI Studio is the suggested default).
+2. Get a free-tier AI API key. **You're free to use whichever provider you like** — GitHub Models is the suggested default below since it needs no separate signup (you already have a GitHub account), but Gemini, Groq, Mistral, Cerebras, and OpenRouter all have workable free tiers too.
 3. Set up a small project and install LangChain's `deepagents`.
 4. Write and run one small agent, locally, from your own terminal.
 
@@ -51,44 +51,70 @@ This is your graduation moment: a real Python, installed and managed on your own
 
 ## Step 2: Get a free AI API key
 
-This capstone uses **Gemini's free-tier API** via [Google AI Studio](https://aistudio.google.com/) as the default — no credit card required for the free tier at the time of writing. Any other free-tier LLM API (OpenAI's trial credits, Anthropic's, etc.) works the same way; only the specific LangChain integration package in Step 4 would differ.
+**Pick whichever provider you like** — none of them require a credit card at the time of writing, and this course doesn't favor one over another. The example agent in the course repo ([`examples/capstone-agent/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/capstone-agent)) supports all six out of the box, selected with one setting.
 
-1. Visit Google AI Studio and sign in with a Google account.
-2. Generate an API key.
-3. **Never paste this key directly into code or commit it to a repository.** Set it as an environment variable instead:
+| Provider | Where to get a key | Why you might pick it |
+|---|---|---|
+| **GitHub Models** *(suggested default)* | [github.com/settings/tokens](https://github.com/settings/tokens) — a personal access token with the `models: read` scope | No separate signup — you already have a GitHub account. More generous free-tier limits than Gemini's. |
+| Gemini | [Google AI Studio](https://aistudio.google.com/) | The most commonly referenced option; used in earlier drafts of this page. |
+| Groq | [console.groq.com/keys](https://console.groq.com/keys) | Fast inference, generous free tier, no card. |
+| Mistral | [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys) | One of the more generous permanent free quotas. |
+| Cerebras | [cloud.cerebras.ai](https://cloud.cerebras.ai/) | High daily token volume, no card. |
+| OpenRouter | [openrouter.ai/keys](https://openrouter.ai/keys) | One API, many free models — good for comparing providers. |
+
+Whichever you pick, the process is the same:
+
+1. Sign in and generate an API key on that provider's site.
+2. **Never paste this key directly into code or commit it to a repository.** Set it as an environment variable instead:
 
 ```bash
 # macOS / Linux (add to ~/.bashrc or ~/.zshrc to persist it)
-export GOOGLE_API_KEY="your-key-here"
+export GITHUB_TOKEN="your-key-here"   # or GOOGLE_API_KEY, GROQ_API_KEY, etc. -- match your provider
 
 # Windows (PowerShell)
-$env:GOOGLE_API_KEY = "your-key-here"
+$env:GITHUB_TOKEN = "your-key-here"
 ```
 
 An API key is a secret, exactly like a password — anyone with it can use your account's quota. Treating it as an environment variable rather than a hardcoded string is the standard practice for exactly this reason, and it's the first real-world security habit this course asks you to build.
+
+:::tip A .env file is often more convenient than export
+Instead of `export`-ing a key in every new terminal session, you can put it in a `.env` file in your project folder (see the repo example's `.env.example`) and load it automatically with the `python-dotenv` package — covered in Step 4.
+:::
 
 ## Step 3: Set up the project with `uv`
 
 ```bash
 uv init capstone-agent
 cd capstone-agent
-uv add deepagents langchain-google-genai
+uv add deepagents langchain-openai python-dotenv
 ```
 
-`uv init` creates a small project (a `pyproject.toml` tracking your dependencies) and `uv add` installs packages into an isolated environment for that project — automatically, with no manual virtual-environment setup. `deepagents` is LangChain's framework for building agents with planning, tool use, and sub-agent delegation built in; `langchain-google-genai` is the integration package connecting LangChain to the Gemini API from Step 2.
+`uv init` creates a small project (a `pyproject.toml` tracking your dependencies) and `uv add` installs packages into an isolated environment for that project — automatically, with no manual virtual-environment setup. `deepagents` is LangChain's framework for building agents with planning, tool use, and sub-agent delegation built in; `langchain-openai` is the integration package this example uses to talk to GitHub Models (its API is OpenAI-compatible, so the OpenAI integration package works for it — see the tip below if you picked a different provider); `python-dotenv` lets you keep your API key in a local `.env` file instead of `export`-ing it every session.
+
+If you picked a different provider in Step 2, swap `langchain-openai` for that provider's own package — `langchain-google-genai` (Gemini), `langchain-groq` (Groq), or `langchain-mistralai` (Mistral). Cerebras and OpenRouter are also OpenAI-compatible, so they use `langchain-openai` too, just with a different `base_url`.
 
 :::tip Check the current docs — and the model name
-Agent frameworks move fast, and so do Gemini's model names: they get renamed and retired on a timescale of months, not years. `create_deep_agent`'s own keyword arguments have already changed once since earlier drafts of this page (it's `system_prompt`, not `instructions`) — a reminder that this snippet can drift out of date even after being checked once. Use an explicit, versioned model ID like `gemini-3.5-flash` below rather than a `-latest` alias: Google has deprecated those aliases because they silently hot-swap to a new model version, which can break working code with no warning. Before running this, check [Google AI Studio](https://aistudio.google.com/) or the [Gemini API pricing page](https://ai.google.dev/gemini-api/docs/pricing) for whichever model currently has a free tier, and skim `deepagents`' own README for its current API.
+Agent frameworks move fast, and so do model names: they get renamed and retired on a timescale of months, not years. `create_deep_agent`'s own keyword arguments have already changed once since earlier drafts of this page (it's `system_prompt`, not `instructions`) — a reminder that this snippet can drift out of date even after being checked once. Use an explicit, versioned model ID rather than a `-latest` alias: several providers, including Google, have deprecated those because they silently hot-swap to a new model version, which can break working code with no warning. Before running this, check your provider's current pricing/model page, and skim `deepagents`' own README for its current API.
 :::
 
 ## Step 4: Write your first agent
 
-Create `agent.py`:
+Create a `.env` file (never commit this) with the key for whichever provider you picked:
+
+```bash
+# .env
+GITHUB_TOKEN=your-key-here
+```
+
+Then create `agent.py`:
 
 ```python
 import os
-from langchain_google_genai import ChatGoogleGenerativeAI
+from dotenv import load_dotenv
+from langchain_openai import ChatOpenAI
 from deepagents import create_deep_agent
+
+load_dotenv()  # reads .env into the environment, if present
 
 def search_course_topics(query: str) -> str:
     """A toy tool: pretends to look up whether a topic was covered in this course."""
@@ -96,9 +122,10 @@ def search_course_topics(query: str) -> str:
     matches = [t for t in topics if query.lower() in t]
     return f"Matching topics: {matches}" if matches else "No matching topics found."
 
-model = ChatGoogleGenerativeAI(
-    model="gemini-3.5-flash",  # confirm this still has a free tier before running — see the tip above
-    google_api_key=os.environ["GOOGLE_API_KEY"],
+model = ChatOpenAI(
+    model="gpt-4o-mini",  # confirm this still has a free tier before running — see the tip above
+    api_key=os.environ["GITHUB_TOKEN"],
+    base_url="https://models.github.ai/inference",
 )
 
 agent = create_deep_agent(
@@ -109,7 +136,7 @@ agent = create_deep_agent(
 
 if __name__ == "__main__":
     result = agent.invoke({"messages": [{"role": "user", "content": "Did we cover groupby?"}]})
-    print(result)
+    print(result["messages"][-1].content)  # just the final answer, not the full internal trace
 ```
 
 Run it — with `uv`, no manual environment activation is needed:
@@ -118,7 +145,11 @@ Run it — with `uv`, no manual environment activation is needed:
 uv run python agent.py
 ```
 
-`os.environ["GOOGLE_API_KEY"]` reads the environment variable you set in Step 2 — the same `os` module concept as `input()` reading from the keyboard, just reading from your shell's environment instead. `create_deep_agent` wires the model together with a list of Python functions the agent can call as **tools** — this is the core idea behind agents: a language model that can not just respond with text, but decide to call your code, read the result, and use it to inform its answer.
+`load_dotenv()` reads your `.env` file into `os.environ` before anything else runs, so `os.environ["GITHUB_TOKEN"]` finds the key you set in Step 2 — the same `os` module concept as `input()` reading from the keyboard, just reading from a file instead. `create_deep_agent` wires the model together with a list of Python functions the agent can call as **tools** — this is the core idea behind agents: a language model that can not just respond with text, but decide to call your code, read the result, and use it to inform its answer.
+
+:::tip Using a different provider?
+Swap the `ChatOpenAI(...)` block for your provider's own client — e.g. `ChatGoogleGenerativeAI(model="gemini-3.5-flash", google_api_key=os.environ["GOOGLE_API_KEY"])` for Gemini, or `ChatGroq(model="llama-3.3-70b-versatile", api_key=os.environ["GROQ_API_KEY"])` for Groq. Everything else in this file stays the same — `deepagents` doesn't care which provider is behind the model. See [`examples/capstone-agent/agent.py`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/capstone-agent) in the course repo for all six wired up side by side, selectable with one environment variable.
+:::
 
 ## What you just built
 

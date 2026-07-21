@@ -1,8 +1,17 @@
 """Capstone example: a tool-calling AI agent with real, useful tools.
 
 See docs/bonus/capstone-ai-agent.md for the walkthrough this file accompanies.
-Requires a GOOGLE_API_KEY environment variable (see .env.example) — never
-hardcode a real key here or commit one to the repo.
+
+You're free to use whichever free-tier provider you like -- this isn't
+locked to Gemini. Set LLM_PROVIDER in a .env file (copy .env.example) or a
+real environment variable to pick one; see PROVIDERS below for the full
+list and which API key each one needs. Defaults to "github" (GitHub Models)
+since it's free with no separate signup, tied to a GitHub account every
+student here already has, and its free tier (150 req/day on gpt-4o-mini at
+the time of writing) is far more forgiving than Gemini's free tier
+(as low as 5 req/minute), which is what most students will hit first.
+
+Never hardcode a real API key here or commit one to the repo.
 
 Objective: a "course study assistant" that can answer questions about this
 course by actually looking things up — searching the real lesson content in
@@ -11,16 +20,88 @@ static/datasets/ — rather than guessing from what the model already knows.
 """
 
 import os
+import re
+import time
 from pathlib import Path
 
 import pandas as pd
 from deepagents import create_deep_agent
+from dotenv import load_dotenv
 from langchain_core.messages import AIMessage, HumanMessage, ToolMessage
-from langchain_google_genai import ChatGoogleGenerativeAI
+
+load_dotenv()  # reads a local .env file, if present; real env vars always win
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DOCS_DIR = REPO_ROOT / "docs"
 DATASETS_DIR = REPO_ROOT / "static" / "datasets"
+
+
+def _build_github_model():
+    from langchain_openai import ChatOpenAI
+
+    return ChatOpenAI(
+        model="gpt-4o-mini",
+        api_key=os.environ["GITHUB_TOKEN"],
+        base_url="https://models.github.ai/inference",
+    )
+
+
+def _build_gemini_model():
+    from langchain_google_genai import ChatGoogleGenerativeAI
+
+    return ChatGoogleGenerativeAI(
+        # Pinned, versioned model ID -- deliberately not a "-latest" alias, which
+        # Google has deprecated because it can silently hot-swap model versions.
+        model="gemini-3.5-flash",
+        google_api_key=os.environ["GOOGLE_API_KEY"],
+    )
+
+
+def _build_groq_model():
+    from langchain_groq import ChatGroq
+
+    return ChatGroq(model="llama-3.3-70b-versatile", api_key=os.environ["GROQ_API_KEY"])
+
+
+def _build_mistral_model():
+    from langchain_mistralai import ChatMistralAI
+
+    return ChatMistralAI(model="mistral-small-latest", api_key=os.environ["MISTRAL_API_KEY"])
+
+
+def _build_cerebras_model():
+    from langchain_openai import ChatOpenAI
+
+    return ChatOpenAI(
+        model="llama-3.3-70b",
+        api_key=os.environ["CEREBRAS_API_KEY"],
+        base_url="https://api.cerebras.ai/v1",
+    )
+
+
+def _build_openrouter_model():
+    from langchain_openai import ChatOpenAI
+
+    return ChatOpenAI(
+        model="meta-llama/llama-3.3-70b-instruct:free",
+        api_key=os.environ["OPENROUTER_API_KEY"],
+        base_url="https://openrouter.ai/api/v1",
+    )
+
+
+# Every builder here is free-tier at the time of writing, with no credit card
+# required -- but check the provider's own pricing page before relying on
+# that, since free tiers change. Add your own here if you want a provider
+# that isn't listed; the shape is always the same (a LangChain chat model
+# instance, reading its own key from an environment variable).
+PROVIDERS = {
+    "github": _build_github_model,
+    "gemini": _build_gemini_model,
+    "groq": _build_groq_model,
+    "mistral": _build_mistral_model,
+    "cerebras": _build_cerebras_model,
+    "openrouter": _build_openrouter_model,
+}
 
 
 def search_course_docs(query: str) -> str:
@@ -73,15 +154,18 @@ def analyze_dataset(name: str) -> str:
     )
 
 
-def build_agent():
-    model = ChatGoogleGenerativeAI(
-        # Pinned, versioned model ID -- deliberately not a "-latest" alias, which
-        # Google has deprecated because it can silently hot-swap model versions.
-        # Confirm this still has a free tier at https://ai.google.dev/gemini-api/docs/pricing
-        # before relying on it; model names change on a timescale of months.
-        model="gemini-3.5-flash",
-        google_api_key=os.environ["GOOGLE_API_KEY"],
-    )
+def build_agent(provider: str | None = None):
+    """Build the agent using whichever provider you choose.
+
+    `provider` defaults to the LLM_PROVIDER environment variable, or "github"
+    if that isn't set either -- see PROVIDERS above for the full list. Pass
+    it explicitly to override without touching your .env, e.g.
+    build_agent("groq").
+    """
+    provider = provider or os.environ.get("LLM_PROVIDER", "github")
+    if provider not in PROVIDERS:
+        raise ValueError(f"Unknown LLM_PROVIDER '{provider}'. Choose one of: {', '.join(PROVIDERS)}")
+    model = PROVIDERS[provider]()
     return create_deep_agent(
         model=model,
         tools=[search_course_docs, list_datasets, analyze_dataset],
@@ -94,9 +178,45 @@ def build_agent():
     )
 
 
-def ask(agent, question: str) -> dict:
-    """Run one question through the agent and return the raw LangGraph result."""
-    return agent.invoke({"messages": [HumanMessage(content=question)]})
+_RATE_LIMIT_SIGNALS = ("429", "RESOURCE_EXHAUSTED", "rate_limit", "Too Many Requests", "rate limit")
+
+
+def _retry_delay_seconds(error_message: str) -> float | None:
+    """Parse "Please retry in 41.7s" (or similar) out of a provider's error message, if present."""
+    match = re.search(r"retry in ([\d.]+)s", error_message)
+    return float(match.group(1)) if match else None
+
+
+def ask(agent, question: str, max_retries: int = 1) -> dict | None:
+    """Run one question through the agent and return the raw LangGraph result.
+
+    Every free-tier provider here rate-limits you, and every agent turn --
+    deciding to call a tool, then reading its result -- burns at least one
+    request, so running several questions back to back can hit that limit
+    easily. Rather than letting the whole script crash, this catches it,
+    waits for a suggested delay if the provider gave one (otherwise a fixed
+    fallback), and retries once before giving up on that question.
+
+    Different providers raise different exception classes for this (Gemini's
+    ChatGoogleGenerativeAIError, OpenAI-compatible providers' RateLimitError,
+    Groq's and Mistral's own equivalents) -- rather than importing and
+    special-casing each one, this catches broadly and inspects the message
+    text for a rate-limit signal, re-raising anything that isn't one so real
+    bugs are never silently swallowed.
+    """
+    try:
+        return agent.invoke({"messages": [HumanMessage(content=question)]})
+    except Exception as error:
+        message = str(error)
+        if not any(signal in message for signal in _RATE_LIMIT_SIGNALS):
+            raise  # a real bug, not a rate limit -- don't hide it
+        delay = _retry_delay_seconds(message) or 30.0
+        if max_retries <= 0:
+            print(f"⚠️  Rate limited and out of retries -- skipping this question. ({message[:200]})")
+            return None
+        print(f"⚠️  Rate limited by the free tier. Waiting {delay:.0f}s before retrying...")
+        time.sleep(delay)
+        return ask(agent, question, max_retries=max_retries - 1)
 
 
 def print_conversation(result: dict) -> None:
@@ -145,5 +265,6 @@ if __name__ == "__main__":
     for question in questions:
         print("=" * 70)
         result = ask(agent, question)
-        print_conversation(result)
+        if result is not None:
+            print_conversation(result)
         print()
