@@ -1,0 +1,42 @@
+{
+  "link.title.Course": {
+    "message": "الدورة",
+    "description": "The title of the footer links column with title=Course in the footer"
+  },
+  "link.title.Site": {
+    "message": "الموقع",
+    "description": "The title of the footer links column with title=Site in the footer"
+  },
+  "link.title.More": {
+    "message": "المزيد",
+    "description": "The title of the footer links column with title=More in the footer"
+  },
+  "link.item.label.Python 101": {
+    "message": "بايثون 101",
+    "description": "The label of footer link with label=Python 101 linking to /docs/python-101"
+  },
+  "link.item.label.Data Analysis": {
+    "message": "تحليل البيانات",
+    "description": "The label of footer link with label=Data Analysis linking to /docs/data-analysis"
+  },
+  "link.item.label.Capstone Bonus": {
+    "message": "المشروع الختامي",
+    "description": "The label of footer link with label=Capstone Bonus linking to /docs/bonus/capstone-ai-agent"
+  },
+  "link.item.label.My Progress": {
+    "message": "تقدمي",
+    "description": "The label of footer link with label=My Progress linking to /progress"
+  },
+  "link.item.label.Credits": {
+    "message": "المصادر",
+    "description": "The label of footer link with label=Credits linking to /credits"
+  },
+  "link.item.label.GitHub": {
+    "message": "GitHub",
+    "description": "The label of footer link with label=GitHub linking to https://github.com/abderrahim-lectures/python-data-analysis-course"
+  },
+  "copyright": {
+    "message": "حقوق النشر © 2026 دورة بايثون وتحليل البيانات. الكود مرخّص بموجب MIT، والمحتوى بموجب CC-BY 4.0.",
+    "description": "The footer copyright"
+  }
+}
