@@ -98,6 +98,24 @@ const config: Config = {
 
   themes: ['@easyops-cn/docusaurus-search-local'],
 
+  plugins: [
+    [
+      '@docusaurus/plugin-pwa',
+      {
+        debug: false,
+        offlineModeActivationStrategies: ['appInstalled', 'standalone', 'queryString'],
+        pwaHead: [
+          {tagName: 'link', rel: 'icon', href: '/img/pwa/icon-192.png'},
+          {tagName: 'link', rel: 'manifest', href: '/manifest.json'},
+          {tagName: 'meta', name: 'theme-color', content: '#3ecc5f'},
+          {tagName: 'meta', name: 'apple-mobile-web-app-capable', content: 'yes'},
+          {tagName: 'meta', name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent'},
+          {tagName: 'link', rel: 'apple-touch-icon', href: '/img/pwa/apple-icon-180.png'},
+        ],
+      },
+    ],
+  ],
+
   themeConfig: {
     image: 'img/social-card.jpg',
     metadata: [
