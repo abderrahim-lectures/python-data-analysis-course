@@ -4,6 +4,7 @@ sidebar_position: 4
 section: data-analysis
 track: hard
 week: 9
+description: "Construisez des visualisations avancées et narratives : graphiques à facettes, ordonnancement délibéré et palettes adaptées au daltonisme."
 ---
 
 import Challenge from '@site/src/components/Challenge';

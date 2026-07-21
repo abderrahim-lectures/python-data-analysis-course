@@ -4,6 +4,7 @@ sidebar_position: 4
 section: data-analysis
 track: normal
 week: 9
+description: "Agrupa, agrega y combina conjuntos de datos en pandas para responder preguntas que involucran varias tablas."
 ---
 
 import Challenge from '@site/src/components/Challenge';

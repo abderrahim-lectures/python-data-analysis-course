@@ -4,6 +4,7 @@ sidebar_position: 4
 section: python-101
 track: normal
 week: 4
+description: "Écrivez et raisonnez sur les fonctions Python : paramètres, valeurs de retour et portée, avec de véritables défis de programmation."
 ---
 
 import Challenge from '@site/src/components/Challenge';

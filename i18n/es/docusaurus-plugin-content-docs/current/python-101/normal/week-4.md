@@ -4,6 +4,7 @@ sidebar_position: 4
 section: python-101
 track: normal
 week: 4
+description: "Escribe y razona sobre funciones en Python: parámetros, valores de retorno y alcance, con retos de programación reales."
 ---
 
 import Challenge from '@site/src/components/Challenge';

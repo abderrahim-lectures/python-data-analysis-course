@@ -4,6 +4,7 @@ sidebar_position: 1
 section: data-analysis
 track: hard
 week: 6
+description: "Aprende el marco de trabajo del análisis exploratorio: formular preguntas y perfilar un conjunto de datos antes de analizarlo."
 ---
 
 import Challenge from '@site/src/components/Challenge';

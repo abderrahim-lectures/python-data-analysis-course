@@ -4,6 +4,7 @@ sidebar_position: 3
 section: python-101
 track: hard
 week: 3
+description: "Construye tablas de probabilidad de bigramas como diccionarios anidados — el núcleo estadístico de un modelo de lenguaje diminuto hecho desde cero."
 ---
 
 import Challenge from '@site/src/components/Challenge';

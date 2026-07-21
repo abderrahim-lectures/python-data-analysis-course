@@ -4,6 +4,7 @@ sidebar_position: 5
 section: python-101
 track: hard
 week: 5
+description: "Assemblez un générateur de texte en ligne de commande avec un réglage de température, puis mesurez le temps d'exécution de votre code Python pur pour sentir où il ralentit."
 ---
 
 import Challenge from '@site/src/components/Challenge';

@@ -4,6 +4,7 @@ sidebar_position: 3
 section: python-101
 track: hard
 week: 3
+description: "Construisez des tables de probabilité de bigrammes sous forme de dictionnaires imbriqués — le cœur statistique d'un modèle de langage miniature construit de zéro."
 ---
 
 import Challenge from '@site/src/components/Challenge';

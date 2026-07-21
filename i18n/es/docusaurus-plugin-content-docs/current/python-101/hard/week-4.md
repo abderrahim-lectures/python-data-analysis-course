@@ -4,6 +4,7 @@ sidebar_position: 4
 section: python-101
 track: hard
 week: 4
+description: "Genera texto muestreando probabilidades de bigramas con random.choices, completando el bucle central de tu modelo de lenguaje diminuto."
 ---
 
 import Challenge from '@site/src/components/Challenge';

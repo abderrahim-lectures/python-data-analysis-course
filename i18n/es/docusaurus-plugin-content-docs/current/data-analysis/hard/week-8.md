@@ -4,6 +4,7 @@ sidebar_position: 3
 section: data-analysis
 track: hard
 week: 8
+description: "Analiza relaciones entre variables con correlación, diagramas de dispersión y diagramas de caja agrupados."
 ---
 
 import Challenge from '@site/src/components/Challenge';

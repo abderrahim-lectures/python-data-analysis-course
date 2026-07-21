@@ -4,6 +4,7 @@ sidebar_position: 3
 section: data-analysis
 track: normal
 week: 8
+description: "Limpia datos del mundo real con pandas: maneja valores faltantes, corrige tipos de datos y trabaja con columnas de texto."
 ---
 
 import Challenge from '@site/src/components/Challenge';

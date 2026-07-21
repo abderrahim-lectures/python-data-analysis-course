@@ -4,6 +4,7 @@ sidebar_position: 4
 section: python-101
 track: hard
 week: 4
+description: "Générez du texte en échantillonnant des probabilités de bigrammes avec random.choices, complétant la boucle centrale de votre modèle de langage miniature."
 ---
 
 import Challenge from '@site/src/components/Challenge';

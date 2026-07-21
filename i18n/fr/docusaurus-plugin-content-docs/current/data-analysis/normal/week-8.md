@@ -4,6 +4,7 @@ sidebar_position: 3
 section: data-analysis
 track: normal
 week: 8
+description: "Nettoyez des données réelles avec pandas : gérez les valeurs manquantes, corrigez les types de données et manipulez les colonnes de texte."
 ---
 
 import Challenge from '@site/src/components/Challenge';

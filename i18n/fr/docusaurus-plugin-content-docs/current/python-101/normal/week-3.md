@@ -4,6 +4,7 @@ sidebar_position: 3
 section: python-101
 track: normal
 week: 3
+description: "Travaillez avec les structures de données fondamentales de Python — listes, dictionnaires, tuples et ensembles — à travers des défis et exemples guidés."
 ---
 
 import Challenge from '@site/src/components/Challenge';

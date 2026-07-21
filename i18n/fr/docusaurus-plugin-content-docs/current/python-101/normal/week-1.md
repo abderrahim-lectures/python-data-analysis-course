@@ -4,6 +4,7 @@ sidebar_position: 1
 section: python-101
 track: normal
 week: 1
+description: "Apprenez les variables, types de données, opérateurs et entrées/sorties en Python — la première semaine du parcours Normal de Python 101, sans aucune installation."
 ---
 
 import Challenge from '@site/src/components/Challenge';

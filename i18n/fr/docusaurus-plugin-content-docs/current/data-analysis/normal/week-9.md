@@ -4,6 +4,7 @@ sidebar_position: 4
 section: data-analysis
 track: normal
 week: 9
+description: "Groupez, agrégez et fusionnez des jeux de données avec pandas pour répondre à des questions impliquant plusieurs tables."
 ---
 
 import Challenge from '@site/src/components/Challenge';

@@ -4,6 +4,7 @@ sidebar_position: 2
 section: data-analysis
 track: normal
 week: 7
+description: "Sélectionnez, filtrez et indexez des DataFrames pandas pour répondre à de vraies questions sur un jeu de données."
 ---
 
 import Challenge from '@site/src/components/Challenge';

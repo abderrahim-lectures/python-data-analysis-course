@@ -4,6 +4,7 @@ sidebar_position: 5
 section: data-analysis
 track: normal
 week: 10
+description: "Reproduce de principio a fin un cuaderno clásico de análisis exploratorio del Titanic con pandas."
 ---
 
 import Challenge from '@site/src/components/Challenge';

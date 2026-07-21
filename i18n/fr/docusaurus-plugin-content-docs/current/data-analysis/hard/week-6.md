@@ -4,6 +4,7 @@ sidebar_position: 1
 section: data-analysis
 track: hard
 week: 6
+description: "Apprenez le cadre de l'analyse exploratoire : formuler des questions et profiler un jeu de données avant de l'analyser."
 ---
 
 import Challenge from '@site/src/components/Challenge';

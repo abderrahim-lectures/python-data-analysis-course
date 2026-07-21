@@ -4,6 +4,7 @@ sidebar_position: 4
 section: data-analysis
 track: hard
 week: 9
+description: "Construye visualizaciones avanzadas y narrativas: gráficos divididos en paneles, ordenamiento deliberado y paletas seguras para daltónicos."
 ---
 
 import Challenge from '@site/src/components/Challenge';
