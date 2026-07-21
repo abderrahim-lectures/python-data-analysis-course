@@ -5,6 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/code-MIT-blue.svg)](./LICENSE)
 [![Content: CC BY 4.0](https://img.shields.io/badge/content-CC--BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
 [![Live site](https://img.shields.io/badge/live-abderrahim--lectures.github.io-5b3df5)](https://abderrahim-lectures.github.io/python-data-analysis-course/)
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/abderrahim-lectures/python-data-analysis-course)
 
 A free, browser-based Python and data analysis course — no installs required until you're ready to graduate to the real thing.
 
@@ -63,6 +64,14 @@ uv run --with jupyterlite-core --with jupyterlite-pyodide-kernel --with jupyterl
 ```
 
 This step runs automatically in CI (see [`.github/workflows/deploy.yml`](./.github/workflows/deploy.yml)) and its output is merged into the deployed site under `/lite/`.
+
+### Codespaces
+
+The badge above opens a ready-to-go [GitHub Codespace](https://github.com/features/codespaces) (Node + Python + `uv` preinstalled, via [`.devcontainer/devcontainer.json`](./.devcontainer/devcontainer.json)) — no local setup needed to start contributing.
+
+### Capstone agent example
+
+[`examples/capstone-agent/`](./examples/capstone-agent/) is a real, runnable copy of the agent built in the [Capstone Bonus](./docs/bonus/capstone-ai-agent.md) lesson — see its own README for how to run it (locally with `uv run python agent.py`, or directly in Codespaces).
 
 ## Contributing
 

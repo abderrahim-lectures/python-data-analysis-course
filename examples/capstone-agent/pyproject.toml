@@ -1,0 +1,10 @@
+[project]
+name = "capstone-agent"
+version = "0.1.0"
+description = "Minimal tool-calling AI agent example for the course's Capstone Bonus, built with LangChain's deepagents."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "deepagents>=0.6.12",
+    "langchain-google-genai>=4.2.7",
+]

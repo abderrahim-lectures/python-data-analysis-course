@@ -124,6 +124,10 @@ uv run python agent.py
 
 `search_course_topics` is deliberately trivial — a real agent's tools might search the web, query a database, or run code. But the shape is the same one powering far more capable systems: a model that reasons about a task, decides which tool to call and with what arguments, reads the tool's output, and continues — sometimes calling several tools in sequence before responding. You just built the smallest possible version of that loop, locally, with your own key.
 
+:::tip Run it without any local setup
+A real, runnable copy of this exact agent lives in the course repo at [`examples/capstone-agent/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/capstone-agent) — clone it, or open the whole repo in a [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python, and `uv` already installed) and run it from there.
+:::
+
 ## Where to go from here
 
 - Give your agent a second, more useful tool — maybe one that reads a local file, or calls a public API.
