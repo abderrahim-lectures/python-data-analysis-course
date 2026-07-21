@@ -21,6 +21,10 @@ const config: Config = {
 
   headTags: [
     {
+      tagName: 'meta',
+      attributes: {name: 'author', content: 'Abderrahim Adrabi'},
+    },
+    {
       tagName: 'script',
       attributes: {type: 'application/ld+json'},
       innerHTML: JSON.stringify({
@@ -29,6 +33,10 @@ const config: Config = {
         name: 'Python & Data Analysis Course',
         description:
           'A free, browser-based Python and data analysis course covering Python fundamentals and pandas/EDA across two 5-week sections, each with Normal and Hard tracks.',
+        author: {
+          '@type': 'Person',
+          name: 'Abderrahim Adrabi',
+        },
         provider: {
           '@type': 'Organization',
           name: 'Python & Data Analysis Course',
@@ -196,7 +204,7 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Python & Data Analysis Course. Code MIT-licensed, content CC-BY 4.0.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Abderrahim Adrabi. Code MIT-licensed, content CC-BY 4.0.`,
     },
     prism: {
       theme: prismThemes.github,
