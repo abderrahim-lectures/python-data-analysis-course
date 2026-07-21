@@ -1,0 +1,47 @@
+---
+id: index
+title: Python 101
+slug: /python-101
+sidebar_position: 1
+---
+
+import TrackSelector from '@site/src/components/TrackSelector';
+
+# 🐍 Python 101
+
+**🎯 Objetivos de aprendizaje** — al final de estas 5 semanas podrás:
+- Escribir y razonar sobre programas de Python usando variables, flujo de control y funciones
+- Trabajar con las estructuras de datos centrales de Python: listas, diccionarios, tuplas, conjuntos
+- Leer y escribir archivos CSV — tu primer contacto con el trabajo con datos reales
+
+Ambos tracks cubren las mismas 5 semanas. Elige el que se ajuste a cómo quieres aprender:
+
+<TrackSelector
+  section="python-101"
+  normal={{
+    title: 'Fundamentos de Python',
+    description: "Sin clases, sin frameworks — solo el lenguaje central, construido semana a semana.",
+    bullets: [
+      'Variables, tipos, operadores, entrada/salida',
+      'Flujo de control: if/else, bucles',
+      'Estructuras de datos: listas, diccionarios, tuplas, conjuntos',
+      'Funciones',
+      'Leer y escribir archivos CSV',
+    ],
+    timeCommitment: '~3–4 horas/semana',
+    startUrl: '/docs/python-101/normal/week-1',
+  }}
+  hard={{
+    title: 'Construye un Modelo de Lenguaje Diminuto',
+    description:
+      "Un track basado en proyecto: construye un modelo de lenguaje diminuto a partir de un corpus de texto usando nada más que los tipos incorporados de Python — sin numpy todavía, a propósito.",
+    bullets: [
+      'Cargar y tokenizar un corpus de texto desde CSV',
+      'Construir tablas de probabilidad de bigramas con diccionarios anidados',
+      'Muestrear texto generado a partir de esas probabilidades',
+      'Cronometrar tu propio código y sentir dónde Python puro se vuelve lento',
+    ],
+    timeCommitment: '~4–6 horas/semana',
+    startUrl: '/docs/python-101/hard/week-1',
+  }}
+/>
