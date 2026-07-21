@@ -5,13 +5,19 @@ here — see the README in this folder (and the one one level up) for the full
 walkthrough, including how to open a pull request with your finished agent.
 
 Requires an API key as an environment variable -- never hardcode a real key
-here or commit one to the repo.
+here or commit one to the repo. Uses GitHub Models by default (no separate
+signup needed), but you're free to use any provider you like -- see the
+Capstone Bonus doc's provider table, or examples/capstone-agent/agent.py for
+several wired up side by side.
 """
 
 import os
 
 from deepagents import create_deep_agent
-from langchain_google_genai import ChatGoogleGenerativeAI
+from dotenv import load_dotenv
+from langchain_openai import ChatOpenAI
+
+load_dotenv()  # reads a local .env file, if present
 
 
 def example_tool(text: str) -> str:
@@ -26,11 +32,12 @@ def example_tool(text: str) -> str:
 
 
 def build_agent():
-    model = ChatGoogleGenerativeAI(
-        # Check https://ai.google.dev/gemini-api/docs/pricing for whichever
-        # model currently has a free tier -- model names change often.
-        model="gemini-3.5-flash",
-        google_api_key=os.environ["GOOGLE_API_KEY"],
+    model = ChatOpenAI(
+        # Check your provider's current model/pricing page before relying on
+        # this -- model names and free-tier availability change often.
+        model="gpt-4o-mini",
+        api_key=os.environ["GITHUB_TOKEN"],
+        base_url="https://models.github.ai/inference",
     )
     return create_deep_agent(
         model=model,
