@@ -1,0 +1,41 @@
+.linkRow {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin: 1rem 0;
+}
+
+.linkInput {
+  flex: 1;
+  min-width: 200px;
+  min-height: var(--pda-touch-target);
+  padding: 0 0.75rem;
+  border-radius: 8px;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  background: var(--ifm-background-color);
+  color: var(--ifm-font-color-base);
+}
+
+.certificateSection {
+  margin-top: 2rem;
+  padding: 1.25rem;
+  border-radius: var(--pda-radius-lg);
+  background: var(--pda-accent-soft);
+}
+
+.disclaimer {
+  font-size: 0.85rem;
+  color: var(--ifm-color-emphasis-700);
+}
+
+.certificateActions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.offscreen {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+}
