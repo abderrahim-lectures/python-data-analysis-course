@@ -4,6 +4,7 @@ sidebar_position: 1
 section: data-analysis
 track: hard
 week: 6
+description: "Learn the EDA framework: framing questions and profiling a dataset before diving into analysis."
 ---
 
 import Challenge from '@site/src/components/Challenge';

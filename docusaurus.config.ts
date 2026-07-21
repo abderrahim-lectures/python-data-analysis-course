@@ -18,6 +18,27 @@ const config: Config = {
 
   organizationName: 'abderrahim-lectures',
   projectName: 'python-data-analysis-course',
+
+  headTags: [
+    {
+      tagName: 'script',
+      attributes: {type: 'application/ld+json'},
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'Course',
+        name: 'Python & Data Analysis Course',
+        description:
+          'A free, browser-based Python and data analysis course covering Python fundamentals and pandas/EDA across two 5-week sections, each with Normal and Hard tracks.',
+        provider: {
+          '@type': 'Organization',
+          name: 'Python & Data Analysis Course',
+          sameAs: 'https://github.com/abderrahim-lectures/python-data-analysis-course',
+        },
+        isAccessibleForFree: true,
+        inLanguage: ['en', 'ar', 'es', 'fr'],
+      }),
+    },
+  ],
   trailingSlash: false,
 
   onBrokenLinks: 'throw',
@@ -53,6 +74,14 @@ const config: Config = {
         theme: {
           customCss: './src/css/custom.css',
         },
+        sitemap: {
+          // /share renders per-student, query-string-driven content with no
+          // canonical SEO value of its own — keep it out of the sitemap
+          // (it's also disallowed in static/robots.txt and marked noindex).
+          ignorePatterns: ['/share'],
+          changefreq: 'weekly',
+          priority: 0.5,
+        },
       } satisfies Preset.Options,
     ],
   ],
@@ -71,6 +100,13 @@ const config: Config = {
 
   themeConfig: {
     image: 'img/social-card.jpg',
+    metadata: [
+      {
+        name: 'keywords',
+        content:
+          'python course, learn python, data analysis course, pandas tutorial, free python course, python for beginners, exploratory data analysis, jupyter, in-browser python',
+      },
+    ],
     colorMode: {
       defaultMode: 'dark',
       respectPrefersColorScheme: true,

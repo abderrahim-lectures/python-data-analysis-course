@@ -4,6 +4,7 @@ sidebar_position: 2
 section: data-analysis
 track: normal
 week: 7
+description: "Select, filter, and index pandas DataFrames to answer real questions about a dataset."
 ---
 
 import Challenge from '@site/src/components/Challenge';

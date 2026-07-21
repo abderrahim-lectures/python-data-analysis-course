@@ -4,6 +4,7 @@ sidebar_position: 4
 section: data-analysis
 track: hard
 week: 9
+description: "Build advanced, storytelling visualizations: faceted charts, deliberate ordering, and colorblind-safe palettes."
 ---
 
 import Challenge from '@site/src/components/Challenge';

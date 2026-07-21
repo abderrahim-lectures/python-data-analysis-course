@@ -4,6 +4,7 @@ sidebar_position: 1
 section: python-101
 track: normal
 week: 1
+description: "Learn Python variables, data types, operators, and input/output — the first week of the Python 101 Normal track, no installs required."
 ---
 
 import Challenge from '@site/src/components/Challenge';

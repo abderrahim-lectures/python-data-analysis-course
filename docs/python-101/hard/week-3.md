@@ -4,6 +4,7 @@ sidebar_position: 3
 section: python-101
 track: hard
 week: 3
+description: "Build bigram probability tables as nested dictionaries — the statistical core of a from-scratch tiny language model."
 ---
 
 import Challenge from '@site/src/components/Challenge';

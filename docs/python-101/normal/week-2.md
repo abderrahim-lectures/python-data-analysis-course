@@ -4,6 +4,7 @@ sidebar_position: 2
 section: python-101
 track: normal
 week: 2
+description: "Master control flow in Python: if/else conditionals and for/while loops, with hands-on challenges in your browser."
 ---
 
 import Challenge from '@site/src/components/Challenge';

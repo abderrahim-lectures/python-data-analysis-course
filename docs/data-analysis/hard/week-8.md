@@ -4,6 +4,7 @@ sidebar_position: 3
 section: data-analysis
 track: hard
 week: 8
+description: "Analyze relationships between variables with correlation, scatter plots, and grouped boxplots."
 ---
 
 import Challenge from '@site/src/components/Challenge';

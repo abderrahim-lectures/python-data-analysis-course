@@ -4,6 +4,7 @@ sidebar_position: 3
 section: data-analysis
 track: normal
 week: 8
+description: "Clean real-world data in pandas: handle missing values, fix dtypes, and work with string columns."
 ---
 
 import Challenge from '@site/src/components/Challenge';

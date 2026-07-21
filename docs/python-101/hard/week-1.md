@@ -4,6 +4,7 @@ sidebar_position: 1
 section: python-101
 track: hard
 week: 1
+description: "Start the Python 101 Hard track: load and explore a small text corpus from CSV, the first step toward building a tiny language model."
 ---
 
 import Challenge from '@site/src/components/Challenge';
