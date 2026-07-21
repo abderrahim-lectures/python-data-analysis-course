@@ -22,3 +22,4 @@ yarn-error.log*
 
 # JupyterLite build output
 jupyterlite-config/_output
+jupyterlite-config/.jupyterlite.doit.db
