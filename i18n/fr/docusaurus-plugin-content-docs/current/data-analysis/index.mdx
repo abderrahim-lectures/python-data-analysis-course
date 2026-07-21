@@ -1,0 +1,57 @@
+---
+id: index
+title: Pandas & Data Analysis
+slug: /data-analysis
+sidebar_position: 1
+description: "Pandas et analyse de données : apprenez à charger, nettoyer, et analyser de vrais jeux de données avec pandas, des fondamentaux à un projet complet d'analyse exploratoire des données."
+---
+
+import TrackSelector from '@site/src/components/TrackSelector';
+
+# 📊 Pandas et analyse de données
+
+## Pourquoi Pandas ? Le problème de la vitesse
+
+Si vous avez suivi le parcours difficile de Python 101, vous avez déjà chronométré votre propre code de comptage
+de mots en Python pur sur un corpus de texte — et l'avez senti ralentir à mesure que le corpus grandissait.
+Ce n'est pas une coïncidence : les boucles Python ordinaires sont lentes pour ce genre de travail. Pandas
+(construit sur numpy) existe précisément pour résoudre cela, en effectuant les boucles en code C rapide et
+vectorisé sous le capot plutôt qu'en Python lui-même. Cette section porte sur l'apprentissage de l'utilisation
+de cette vitesse.
+
+**🎯 Objectifs d'apprentissage** — à la fin de ces 5 semaines vous serez capable de :
+- Charger, explorer, et nettoyer des données tabulaires avec pandas
+- Filtrer, grouper, et agréger de vrais jeux de données
+- Reproduire une analyse de style Kaggle de bout en bout
+
+<TrackSelector
+  section="data-analysis"
+  requiresPlacementQuizForHard
+  normal={{
+    title: 'Bases de Pandas',
+    description: 'Apprenez les fondamentaux de pandas, puis reproduisez un notebook Kaggle classique de bout en bout.',
+    bullets: [
+      'Bases des Series et DataFrame, lecture de CSV',
+      'Sélection, filtrage, indexation',
+      'Nettoyage : valeurs manquantes, dtypes, opérations sur le texte',
+      'Groupby, agrégation, fusion',
+      'Reproduction guidée d\'un notebook d\'EDA Titanic',
+    ],
+    timeCommitment: '~3–4 heures/semaine',
+    startUrl: '/docs/data-analysis/normal/week-6',
+  }}
+  hard={{
+    title: 'Projet EDA complet',
+    description:
+      'Un parcours basé sur un projet : menez une analyse exploratoire des données complète, en formulant des questions, en visualisant, et en livrant un rapport final.',
+    bullets: [
+      'Cadre de l\'EDA : formuler des questions, profiler un jeu de données',
+      'Analyse univariée + visualisations',
+      'Analyse bivariée/multivariée, corrélation',
+      'Visualisations avancées et narratives',
+      'Livrable final : un rapport d\'EDA complet sur un vrai jeu de données',
+    ],
+    timeCommitment: '~4–6 heures/semaine',
+    startUrl: '/docs/data-analysis/hard/week-6',
+  }}
+/>

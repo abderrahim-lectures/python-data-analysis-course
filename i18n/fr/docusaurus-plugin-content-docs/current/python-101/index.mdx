@@ -1,0 +1,48 @@
+---
+id: index
+title: Python 101
+slug: /python-101
+sidebar_position: 1
+description: "Python 101 : une introduction gratuite à Python dans le navigateur — variables, flux de contrôle, structures de données, fonctions, et fichiers CSV, avec des parcours normal et difficile."
+---
+
+import TrackSelector from '@site/src/components/TrackSelector';
+
+# 🐍 Python 101
+
+**🎯 Objectifs d'apprentissage** — à la fin de ces 5 semaines vous serez capable de :
+- Écrire des programmes Python et raisonner sur eux en utilisant les variables, le flux de contrôle, et les fonctions
+- Travailler avec les structures de données de base de Python : listes, dicts, tuples, ensembles
+- Lire et écrire des fichiers CSV — votre premier aperçu du travail avec de vraies données
+
+Les deux parcours couvrent les 5 mêmes semaines. Choisissez celui qui correspond à votre façon d'apprendre :
+
+<TrackSelector
+  section="python-101"
+  normal={{
+    title: 'Fondamentaux de Python',
+    description: "Pas de classes, pas de frameworks — juste le langage de base, construit semaine après semaine.",
+    bullets: [
+      'Variables, types, opérateurs, entrée/sortie',
+      'Flux de contrôle : if/else, boucles',
+      'Structures de données : listes, dicts, tuples, ensembles',
+      'Fonctions',
+      'Lire et écrire des fichiers CSV',
+    ],
+    timeCommitment: '~3–4 heures/semaine',
+    startUrl: '/docs/python-101/normal/week-1',
+  }}
+  hard={{
+    title: 'Construire un mini modèle de langage',
+    description:
+      "Un parcours basé sur un projet : construisez un mini modèle de langage à partir d'un corpus de texte en n'utilisant que les types intégrés de Python — pas de numpy encore, exprès.",
+    bullets: [
+      'Charger et tokeniser un corpus de texte depuis un CSV',
+      'Construire des tables de probabilité bigramme avec des dicts imbriqués',
+      'Échantillonner du texte généré à partir de ces probabilités',
+      'Chronométrer votre propre code et ressentir où le Python pur devient lent',
+    ],
+    timeCommitment: '~4–6 heures/semaine',
+    startUrl: '/docs/python-101/hard/week-1',
+  }}
+/>
