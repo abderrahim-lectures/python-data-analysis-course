@@ -289,6 +289,17 @@ Once approved, the first commit copies this plan file into the project itself at
 - **Custom domain:** the site is served from `https://www.pyda-course.online/` rather than the default `abderrahim-lectures.github.io/python-data-analysis-course/` project-page URL, via a `static/CNAME` file (containing `www.pyda-course.online`, copied into the build output and picked up by `actions/deploy-pages`) plus DNS pointed at GitHub Pages and the custom domain configured in the repo's Settings → Pages (both one-time, outside-the-repo steps). Because of this, `baseUrl` is `/` (root), not a `/python-data-analysis-course/` subpath — that subpath convention only applies to the default project-page URL.
 - **Known GH Pages footguns to get right up front**, since they're easy to miss until something 404s in production: for a project page *without* a custom domain, `baseUrl` must match the repo name exactly (`/python-data-analysis-course/`, not `/`) — with a custom domain and `baseUrl: '/'` as configured here, this doesn't apply, but it's worth knowing if the custom domain is ever removed. `trailingSlash` needs an explicit, consistent value (`false` is the common safe choice) — GH Pages' static-file serving behaves differently from `docusaurus start`'s dev server here, so this only actually gets exercised by the deployed site, not local `npm run serve`.
 
+## SEO
+
+A bundle of standard, static-site-appropriate SEO practices, all shipped:
+- `static/robots.txt`: allows all crawlers, points at the sitemap, disallows `/share` (per-student, query-string-driven content with no canonical value of its own — also marked `noindex, nofollow` on the page itself and excluded from the sitemap).
+- Sitemap plugin config (in the `classic` preset's `sitemap` options): excludes `/share`, sets `changefreq`/`priority`. Docusaurus generates `sitemap.xml` automatically from the doc/page tree, no separate plugin needed.
+- Explicit `description` frontmatter on every doc page (all 20 weekly lessons, both section landing pages, the capstone page) in every locale, rather than relying solely on Docusaurus's auto-derived description from body text.
+- `themeConfig.image` (`img/social-card.jpg`, used for `og:image`/Twitter cards) — generated once as a real asset; this had silently pointed at a nonexistent file before the SEO pass, so `og:image` was broken on every page until fixed.
+- Site-wide `Course` JSON-LD structured data (via top-level `headTags`) and global `keywords` metadata.
+- Canonical URLs, `hreflang` alternates across the 4 locales, and per-locale `<html lang>`/`dir` are all handled automatically by Docusaurus's i18n system — no custom code needed.
+- All of the above (sitemap URLs, canonical links, `og:url`, `og:image`) automatically track whatever `url`/`baseUrl` is configured, so they update correctly with the custom domain described above.
+
 ## Automated Smoke Tests
 
 Given the Development Workflow above means many small, independent PRs over time, a handful of Playwright smoke tests (run in CI on every PR, alongside `npm run build`) catch regressions in the riskiest custom logic cheaply — this is deliberately a *small* suite, not full coverage:
