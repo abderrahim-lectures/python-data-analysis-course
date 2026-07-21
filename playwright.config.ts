@@ -12,13 +12,13 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   reporter: 'list',
   use: {
-    baseURL: 'http://localhost:3050/python-data-analysis-course/',
+    baseURL: 'http://localhost:3050/',
     trace: 'retain-on-failure',
   },
   projects: [{name: 'chromium', use: {...devices['Desktop Chrome']}}],
   webServer: {
     command: 'npm run serve -- --port 3050',
-    url: 'http://localhost:3050/python-data-analysis-course/',
+    url: 'http://localhost:3050/',
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
   },

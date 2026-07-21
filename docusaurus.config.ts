@@ -13,8 +13,8 @@ const config: Config = {
     v4: true,
   },
 
-  url: 'https://abderrahim-lectures.github.io',
-  baseUrl: '/python-data-analysis-course/',
+  url: 'https://www.pyda-course.online',
+  baseUrl: '/',
 
   organizationName: 'abderrahim-lectures',
   projectName: 'python-data-analysis-course',
