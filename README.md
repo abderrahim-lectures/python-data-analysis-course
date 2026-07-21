@@ -89,7 +89,7 @@ Found a typo or a broken example while going through a lesson? Every doc page ha
 
 **Ways to contribute:**
 - **Content**: write or improve a week's lesson, challenges, or socratic questions — see the *Content Pattern* and *Content Style Guide* sections of [`PLAN.md`](./PLAN.md) for the expected structure and tone.
-- **Translations**: lesson content is English-only for now; UI chrome is translated for Arabic/Spanish/French (see [`i18n/`](./i18n/)) but full content translation is scaffolded, not done — a `type:i18n` PR for one locale's docs is very welcome.
+- **Translations**: lesson content and UI chrome are fully translated for Arabic, Spanish, and French (see [`i18n/`](./i18n/)) — a `type:i18n` PR fixing or improving an existing translation is welcome.
 - **Components/infra**: bug fixes, accessibility improvements, and performance work on the playground, gamification, or sharing features.
 
 Please don't open a PR without a linked issue first for anything non-trivial — it avoids duplicated or conflicting work.
