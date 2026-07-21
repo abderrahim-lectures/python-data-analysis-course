@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import Link from '@docusaurus/Link';
 import {useHistory} from '@docusaurus/router';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 import Translate from '@docusaurus/Translate';
 import {useLocalStorage} from '@site/src/hooks/useLocalStorage';
 import {STORAGE_KEYS} from '@site/src/utils/storageKeys';
@@ -33,6 +34,11 @@ export default function TrackSelector({
   const [tracks, setTracks] = useLocalStorage<PerSectionTrack>(STORAGE_KEYS.track, {});
   const [showPlacementGate, setShowPlacementGate] = useState(false);
   const history = useHistory();
+  // useHistory().push() takes a path relative to the router's root, not this
+  // site's baseUrl — unlike <Link>, it doesn't resolve baseUrl automatically,
+  // so the target path must be resolved through useBaseUrl first or this
+  // navigates outside /python-data-analysis-course/ entirely.
+  const hardStartUrl = useBaseUrl(hard.startUrl);
 
   const chooseNormal = () => {
     setTracks((prev) => ({...prev, [section]: 'normal'}));
@@ -49,7 +55,7 @@ export default function TrackSelector({
 
   const proceedToHard = () => {
     setTracks((prev) => ({...prev, [section]: 'hard'}));
-    history.push(hard.startUrl);
+    history.push(hardStartUrl);
   };
 
   if (showPlacementGate) {
