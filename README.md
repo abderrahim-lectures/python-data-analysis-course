@@ -1,14 +1,47 @@
 # Python & Data Analysis Course
 
+[![Deploy to GitHub Pages](https://github.com/abderrahim-lectures/python-data-analysis-course/actions/workflows/deploy.yml/badge.svg)](https://github.com/abderrahim-lectures/python-data-analysis-course/actions/workflows/deploy.yml)
+[![CI](https://github.com/abderrahim-lectures/python-data-analysis-course/actions/workflows/ci.yml/badge.svg)](https://github.com/abderrahim-lectures/python-data-analysis-course/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/code-MIT-blue.svg)](./LICENSE)
+[![Content: CC BY 4.0](https://img.shields.io/badge/content-CC--BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
+[![Live site](https://img.shields.io/badge/live-abderrahim--lectures.github.io-5b3df5)](https://abderrahim-lectures.github.io/python-data-analysis-course/)
+
 A free, browser-based Python and data analysis course — no installs required until you're ready to graduate to the real thing.
 
-- **Section 1: Python 101** (5 weeks) — fundamentals, with a Normal track and a Hard track (build a tiny language model from scratch, pure Python).
-- **Section 2: Pandas & Data Analysis** (5 weeks) — pandas basics reproducing a Kaggle-style notebook, with a Hard track doing full exploratory data analysis with visualizations.
-- **Capstone bonus** — install Python locally and build your first AI agent with a free API key.
+**🌐 [abderrahim-lectures.github.io/python-data-analysis-course](https://abderrahim-lectures.github.io/python-data-analysis-course/)**
 
-Run entirely in the browser via embedded Trinket (Python 101) and a self-hosted JupyterLite notebook (Data Analysis) — click the floating button on any page to start coding immediately.
+- **Section 1: Python 101** (5 weeks) — fundamentals, with a Normal track and a Hard track (build a tiny language model from scratch, pure Python, deliberately no numpy).
+- **Section 2: Pandas & Data Analysis** (5 weeks) — pandas basics reproducing a Kaggle-style notebook, with a Hard track doing a full exploratory data analysis project with visualizations.
+- **Capstone bonus** — install Python locally for real with `uv` and build your first AI agent with LangChain's `deepagents`, using a free-tier API key.
 
-See [`PLAN.md`](./PLAN.md) for the full design plan. This site is built with [Docusaurus](https://docusaurus.io/).
+Run entirely in the browser via an embedded Trinket editor (Python 101) and a self-hosted JupyterLite notebook (Data Analysis) — click the floating button on any page to start coding immediately, no account and no local install needed until the capstone.
+
+See [`PLAN.md`](./PLAN.md) for the full design plan and rationale behind every major decision.
+
+## Screenshots
+
+| Homepage | Lesson + playground | Progress & badges | Mobile |
+|---|---|---|---|
+| ![Homepage](./static/img/screenshots/homepage.png) | ![Lesson page with the playground open](./static/img/screenshots/lesson-page.png) | ![Progress page with badges](./static/img/screenshots/progress-page.png) | ![Mobile lesson view](./static/img/screenshots/mobile-lesson.png) |
+
+## Learning objectives
+
+By the end of the course, a student can:
+
+- Write Python programs using variables, control flow, data structures (lists, dicts, tuples, sets), and functions — without relying on classes or external libraries.
+- Explain, from first principles, how a simple language model predicts text (tokenization → frequency counts → conditional probability → weighted sampling) by building one from scratch in pure Python (Hard track).
+- Load, clean, filter, group, and aggregate real tabular data with pandas, and explain *why* vectorized tools exist by having personally measured pure Python's performance limits first.
+- Run a complete, honest exploratory data analysis project — framing questions before charting, visualizing distributions and relationships appropriately, and stating a finding's confidence and caveats rather than overclaiming causation (Hard track).
+- Install Python locally, manage a project with `uv`, handle an API key as a secret, and build a minimal tool-calling AI agent (Capstone).
+
+## Pedagogical approach
+
+- **Math-first framing.** The audience is math/data-analysis students, so new concepts are introduced in the notation they already know — a `for` loop via summation notation before syntax, a function as $f(x)$ before `def`, list comprehensions via set-builder notation — before showing the Python code.
+- **Build, don't just read.** Both Hard tracks are project-based: a tiny language model built from nothing but the standard library, and a full EDA report on a real-shaped dataset. Struggling with plain Python's speed limits in Week 5 of Python 101 is the intentional setup for *why* pandas exists in Section 2.
+- **Challenge + Socratic pattern, every week.** Each lesson pairs 🧩 **Challenges** (a concrete task with a collapsible answer you can self-check) with 🤔 **Socratic Questions** (open-ended, no answer provided — designed to make you reason about edge cases and *why*, not just *how*).
+- **Optional gamification, not required motivation.** Badges, unlock toasts, and quiz-gated bonus content (try/except, classes) are all opt-in — a Classical mode renders the exact same underlying progress as a plain checklist, and switching between modes any time never loses data.
+- **Honest, not hyped.** The EDA track explicitly teaches correlation-vs-causation and chart-honesty practices (truncated axes, cherry-picked ranges) as core material, not a footnote — and the completion certificate is labeled a lightweight spot-check, not a verifiable credential, because that's actually true of a backend-free static site.
+- **Zero-install first, real install as a reward.** Every core week runs in-browser (Trinket / JupyterLite via Pyodide). Installing Python for real is saved for the Capstone, once fundamentals are solid enough to make that step feel like graduation rather than a chore.
 
 ## Development
 
@@ -17,10 +50,39 @@ npm install
 npm start       # local dev server
 npm run build   # production build
 npm run serve   # preview the production build
+npm run typecheck   # TypeScript check
+npm run test:e2e    # Playwright smoke tests (run npm run build && npm run serve first, or let it start its own server)
 ```
 
-See `PLAN.md`'s "Development Workflow" section for how work is tracked (issue → branch → PR → merge).
+The Data Analysis playground (JupyterLite) is built separately with [`uv`](https://docs.astral.sh/uv/):
+
+```bash
+cd jupyterlite-config
+uv run --with jupyterlite-core --with jupyterlite-pyodide-kernel --with jupyterlab_server \
+  jupyter lite build --config jupyter_lite_config.json
+```
+
+This step runs automatically in CI (see [`.github/workflows/deploy.yml`](./.github/workflows/deploy.yml)) and its output is merged into the deployed site under `/lite/`.
+
+## Contributing
+
+Every change — a lesson, a component, a bug fix, a translation — goes through the same flow:
+
+1. **Open an issue** describing the change, labeled by type (`type:feature`, `type:bug`, `type:content`, `type:infra`, `type:i18n`) and area (`area:python-101`, `area:data-analysis`, `area:playground`, `area:gamification`, `area:design`).
+2. **Branch off `main`** (`issue-<number>-<short-slug>`) and do the work there.
+3. **Open a PR** referencing the issue (`Closes #N`), with `npm run build` (and `npm run test:e2e` for anything touching interactive components) passing.
+4. **CI runs automatically** on the PR — typecheck, build, and the Playwright smoke suite.
+5. Once checks pass, the PR merges into `main` and the [deploy workflow](./.github/workflows/deploy.yml) publishes the update.
+
+Found a typo or a broken example while going through a lesson? Every doc page has an "Edit this page" link (bottom of the page) that opens a PR directly against that file — the fastest way to fix something small.
+
+**Ways to contribute:**
+- **Content**: write or improve a week's lesson, challenges, or socratic questions — see the *Content Pattern* and *Content Style Guide* sections of [`PLAN.md`](./PLAN.md) for the expected structure and tone.
+- **Translations**: lesson content is English-only for now; UI chrome is translated for Arabic/Spanish/French (see [`i18n/`](./i18n/)) but full content translation is scaffolded, not done — a `type:i18n` PR for one locale's docs is very welcome.
+- **Components/infra**: bug fixes, accessibility improvements, and performance work on the playground, gamification, or sharing features.
+
+Please don't open a PR without a linked issue first for anything non-trivial — it avoids duplicated or conflicting work.
 
 ## License
 
-Code is MIT-licensed (see [`LICENSE`](./LICENSE)); course content is additionally available under CC-BY 4.0. Third-party datasets and tools are credited on the site's Credits page.
+Code is MIT-licensed (see [`LICENSE`](./LICENSE)); course content is additionally available under CC-BY 4.0. Third-party datasets and tools are credited on the site's [Credits page](https://abderrahim-lectures.github.io/python-data-analysis-course/credits).
