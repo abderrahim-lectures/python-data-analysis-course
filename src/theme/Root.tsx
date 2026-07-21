@@ -2,6 +2,7 @@ import React, {type ReactNode} from 'react';
 import {UiModeProvider} from '@site/src/context/UiModeContext';
 import {CurrentDocProvider} from '@site/src/context/CurrentDocContext';
 import UiModeBodyAttribute from '@site/src/theme/Root/UiModeBodyAttribute';
+import LocaleRedirect from '@site/src/theme/Root/LocaleRedirect';
 import PlaygroundFab from '@site/src/components/PlaygroundFab';
 import LearningStylePicker from '@site/src/components/LearningStylePicker';
 import ModeToggle from '@site/src/components/ModeToggle';
@@ -17,6 +18,7 @@ export default function Root({children}: {children: ReactNode}): React.JSX.Eleme
     <UiModeProvider>
       <CurrentDocProvider>
         <UiModeBodyAttribute />
+        <LocaleRedirect />
         <CourseCompletionWatcher />
         <WelcomeBackBanner />
         {children}
