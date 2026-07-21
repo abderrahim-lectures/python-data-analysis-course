@@ -84,7 +84,10 @@
 }
 
 .panel {
-  background: var(--ifm-background-color);
+  /* --ifm-background-color is `transparent` by default in light mode
+     (Infima only gives it a real color in dark mode) — --pda-surface is
+     opaque in both themes, which a floating panel actually needs. */
+  background: var(--pda-surface);
   display: flex;
   flex-direction: column;
   box-shadow: -2px 0 20px rgba(0, 0, 0, 0.3);
@@ -162,6 +165,9 @@
   color: var(--ifm-color-emphasis-700);
   /* Fully covers the iframe while it loads -- the iframe itself has no
      visibility toggle of its own anymore (see JupyterLiteEmbed.tsx), so this
-     background is what actually prevents a blank/white flash underneath. */
-  background: var(--ifm-background-color);
+     background is what actually prevents a blank/white flash underneath.
+     --ifm-background-color is `transparent` in light mode by default, which
+     would defeat the point here, so --pda-surface (opaque in both themes)
+     is used instead. */
+  background: var(--pda-surface);
 }
