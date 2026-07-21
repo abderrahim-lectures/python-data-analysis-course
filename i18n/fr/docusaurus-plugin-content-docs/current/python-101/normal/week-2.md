@@ -4,6 +4,7 @@ sidebar_position: 2
 section: python-101
 track: normal
 week: 2
+description: "Maîtrisez le flux de contrôle en Python : conditions if/else et boucles for/while, avec des défis pratiques directement dans votre navigateur."
 ---
 
 import Challenge from '@site/src/components/Challenge';

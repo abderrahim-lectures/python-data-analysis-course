@@ -4,6 +4,7 @@ sidebar_position: 2
 section: python-101
 track: hard
 week: 2
+description: "Tokeniza texto y cuenta frecuencias de palabras con diccionarios de Python, presentando las tablas de frecuencia como distribuciones de probabilidad discretas."
 ---
 
 import Challenge from '@site/src/components/Challenge';

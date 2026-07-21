@@ -4,6 +4,7 @@ sidebar_position: 2
 section: python-101
 track: normal
 week: 2
+description: "Domina el flujo de control en Python: condicionales if/else y bucles for/while, con retos prácticos en tu navegador."
 ---
 
 import Challenge from '@site/src/components/Challenge';

@@ -4,6 +4,7 @@ sidebar_position: 1
 section: data-analysis
 track: normal
 week: 6
+description: "Aprende los fundamentos de Series y DataFrame en pandas y cómo leer archivos CSV — la primera semana del recorrido Normal de Análisis de Datos."
 ---
 
 import Challenge from '@site/src/components/Challenge';

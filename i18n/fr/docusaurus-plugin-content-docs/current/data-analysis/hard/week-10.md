@@ -4,6 +4,7 @@ sidebar_position: 5
 section: data-analysis
 track: hard
 week: 10
+description: "Livrez un rapport complet d'analyse exploratoire sur le jeu de données Students Performance in Exams."
 ---
 
 import Challenge from '@site/src/components/Challenge';

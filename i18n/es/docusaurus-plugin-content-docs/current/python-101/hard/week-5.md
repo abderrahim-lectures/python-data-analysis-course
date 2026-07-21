@@ -4,6 +4,7 @@ sidebar_position: 5
 section: python-101
 track: hard
 week: 5
+description: "Ensambla un generador de texto en línea de comandos con un parámetro de temperatura, y luego mide el tiempo de tu código en Python puro para sentir dónde se vuelve lento."
 ---
 
 import Challenge from '@site/src/components/Challenge';

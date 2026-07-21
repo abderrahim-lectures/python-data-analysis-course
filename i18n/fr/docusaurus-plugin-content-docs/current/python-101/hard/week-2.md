@@ -4,6 +4,7 @@ sidebar_position: 2
 section: python-101
 track: hard
 week: 2
+description: "Tokenisez du texte et comptez les fréquences de mots avec des dictionnaires Python, en présentant les tables de fréquence comme des distributions de probabilité discrètes."
 ---
 
 import Challenge from '@site/src/components/Challenge';

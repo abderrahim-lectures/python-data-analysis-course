@@ -4,6 +4,7 @@ sidebar_position: 5
 section: python-101
 track: normal
 week: 5
+description: "Lee y escribe archivos CSV en Python y construye un mini proyecto final usando el módulo csv."
 ---
 
 import Challenge from '@site/src/components/Challenge';

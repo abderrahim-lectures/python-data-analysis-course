@@ -4,6 +4,7 @@ sidebar_position: 1
 section: python-101
 track: hard
 week: 1
+description: "Démarrez le parcours Difficile de Python 101 : chargez et explorez un petit corpus de texte depuis un CSV, première étape vers la construction d'un modèle de langage miniature."
 ---
 
 import Challenge from '@site/src/components/Challenge';

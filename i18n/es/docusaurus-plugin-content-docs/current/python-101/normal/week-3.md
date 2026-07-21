@@ -4,6 +4,7 @@ sidebar_position: 3
 section: python-101
 track: normal
 week: 3
+description: "Trabaja con las estructuras de datos fundamentales de Python — listas, diccionarios, tuplas y conjuntos — mediante retos y ejemplos guiados."
 ---
 
 import Challenge from '@site/src/components/Challenge';
