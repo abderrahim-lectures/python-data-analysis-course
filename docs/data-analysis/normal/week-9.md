@@ -4,6 +4,7 @@ sidebar_position: 4
 section: data-analysis
 track: normal
 week: 9
+description: "Group, aggregate, and merge datasets in pandas to answer multi-table questions."
 ---
 
 import Challenge from '@site/src/components/Challenge';

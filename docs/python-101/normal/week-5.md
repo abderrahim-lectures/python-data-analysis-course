@@ -4,6 +4,7 @@ sidebar_position: 5
 section: python-101
 track: normal
 week: 5
+description: "Read and write CSV files in Python and build a mini wrap-up project using the csv module."
 ---
 
 import Challenge from '@site/src/components/Challenge';

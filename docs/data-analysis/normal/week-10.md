@@ -4,6 +4,7 @@ sidebar_position: 5
 section: data-analysis
 track: normal
 week: 10
+description: "Reproduce a classic Titanic exploratory data analysis notebook end to end with pandas."
 ---
 
 import Challenge from '@site/src/components/Challenge';

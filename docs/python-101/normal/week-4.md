@@ -4,6 +4,7 @@ sidebar_position: 4
 section: python-101
 track: normal
 week: 4
+description: "Write and reason about Python functions: parameters, return values, and scope, with real coding challenges."
 ---
 
 import Challenge from '@site/src/components/Challenge';

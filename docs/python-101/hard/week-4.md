@@ -4,6 +4,7 @@ sidebar_position: 4
 section: python-101
 track: hard
 week: 4
+description: "Generate text by sampling from bigram probabilities with random.choices, completing your tiny language model's core loop."
 ---
 
 import Challenge from '@site/src/components/Challenge';

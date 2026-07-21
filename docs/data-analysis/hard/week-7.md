@@ -4,6 +4,7 @@ sidebar_position: 2
 section: data-analysis
 track: hard
 week: 7
+description: "Perform univariate analysis and build matplotlib/seaborn visualizations of single variables."
 ---
 
 import Challenge from '@site/src/components/Challenge';

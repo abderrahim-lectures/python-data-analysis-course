@@ -4,6 +4,7 @@ sidebar_position: 5
 section: python-101
 track: hard
 week: 5
+description: "Assemble a CLI text generator with a temperature knob, then time your pure-Python code to feel where it gets slow."
 ---
 
 import Challenge from '@site/src/components/Challenge';

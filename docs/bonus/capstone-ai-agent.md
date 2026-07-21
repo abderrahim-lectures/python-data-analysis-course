@@ -2,6 +2,7 @@
 id: capstone-ai-agent
 title: "Capstone Bonus: Graduate to Real Python + Build an AI Agent"
 slug: /bonus/capstone-ai-agent
+description: "Graduate from the in-browser playground to real Python: install Python locally and build your first AI agent with LangChain's deepagents."
 ---
 
 # 🎁 Capstone Bonus: Graduate to Real Python + Build an AI Agent

@@ -4,6 +4,7 @@ sidebar_position: 2
 section: python-101
 track: hard
 week: 2
+description: "Tokenize text and count word frequencies with Python dictionaries, framing frequency tables as discrete probability distributions."
 ---
 
 import Challenge from '@site/src/components/Challenge';

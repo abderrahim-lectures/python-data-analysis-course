@@ -4,6 +4,7 @@ sidebar_position: 3
 section: python-101
 track: normal
 week: 3
+description: "Work with Python's core data structures — lists, dictionaries, tuples, and sets — through guided challenges and examples."
 ---
 
 import Challenge from '@site/src/components/Challenge';
