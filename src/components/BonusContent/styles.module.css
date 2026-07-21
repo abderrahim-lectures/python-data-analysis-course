@@ -1,0 +1,25 @@
+.unlocked {
+  border: 1px solid var(--pda-accent);
+  border-radius: var(--pda-radius-lg);
+  padding: 1.25rem;
+  margin: 1.5rem 0;
+  background: var(--pda-accent-soft);
+}
+
+.badge {
+  font-weight: 700;
+  margin-top: 0;
+}
+
+.locked {
+  border: 1px dashed var(--ifm-color-emphasis-300);
+  border-radius: var(--pda-radius-lg);
+  padding: 1.25rem;
+  margin: 1.5rem 0;
+  color: var(--ifm-color-emphasis-600);
+  text-align: center;
+}
+
+.locked p {
+  margin: 0;
+}

@@ -1,9 +1,4 @@
-import type {QuizQuestion} from '@site/src/utils/quizScoring';
-
-export interface DisplayQuizQuestion extends QuizQuestion {
-  prompt: string;
-  options: string[];
-}
+import type {DisplayQuizQuestion} from '@site/src/types/quiz';
 
 /** 8-question self-check on Python 101 fundamentals, gating Data Analysis's Hard track. */
 export const PLACEMENT_QUIZ_QUESTIONS: DisplayQuizQuestion[] = [
