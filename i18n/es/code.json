@@ -555,5 +555,156 @@
   "theme.tags.tagsPageTitle": {
     "message": "Etiquetas",
     "description": "The title of the tag list page"
+  },
+  "credits.pageTitle": {
+    "message": "Créditos"
+  },
+  "credits.pageDescription": {
+    "message": "Conjuntos de datos y herramientas utilizados en este curso."
+  },
+  "credits.heading": {
+    "message": "Créditos"
+  },
+  "credits.intro": {
+    "message": "Conjuntos de datos y herramientas de terceros en los que se basa este curso:"
+  },
+  "credits.trinket": {
+    "message": "Editor de Python en el navegador utilizado en todo Python 101."
+  },
+  "credits.jupyterlite": {
+    "message": "Notebook de Jupyter en el navegador (vía Pyodide) utilizado en todo Análisis de Datos."
+  },
+  "credits.pyodide": {
+    "message": "Entorno de ejecución de Python en WebAssembly que impulsa JupyterLite en este curso."
+  },
+  "credits.titanic": {
+    "message": "La reproducción guiada de EDA de la Semana 10 del recorrido Normal usa un pequeño conjunto de datos sintético modelado según el esquema de este conocido conjunto de datos de Kaggle (mismas columnas, datos de pasajeros generados), incluido localmente para que funcione sin conexión en JupyterLite."
+  },
+  "credits.studentsPerformance": {
+    "message": "El entregable final de EDA de la Semana 10 del recorrido Difícil usa un pequeño conjunto de datos sintético modelado según el esquema de este conjunto de datos de Kaggle, incluido localmente para que funcione sin conexión en JupyterLite."
+  },
+  "homepage.hero.title": {
+    "message": "Curso de Python y Análisis de Datos",
+    "description": "Homepage hero title"
+  },
+  "homepage.hero.tagline": {
+    "message": "Aprende Python y análisis de datos en tu navegador — sin instalaciones necesarias",
+    "description": "Homepage hero tagline"
+  },
+  "homepage.hero.startButton": {
+    "message": "Empezar Python 101 →",
+    "description": "Homepage hero CTA button"
+  },
+  "homepage.section1.title": {
+    "message": "🐍 Sección 1: Python 101",
+    "description": "Homepage Python 101 card title"
+  },
+  "homepage.section1.description": {
+    "message": "5 semanas de fundamentos de Python. Elige un recorrido {normal} (sin instalaciones, programa directamente en tu navegador) o un recorrido {hard} donde construyes un modelo de lenguaje diminuto desde cero usando solo tipos integrados de Python.",
+    "description": "Homepage Python 101 card description"
+  },
+  "homepage.trackNormal": {
+    "message": "Normal",
+    "description": "Normal track, short label"
+  },
+  "homepage.trackHard": {
+    "message": "Difícil",
+    "description": "Hard track, short label"
+  },
+  "homepage.section1.cta": {
+    "message": "Explorar Python 101",
+    "description": "Homepage Python 101 card CTA"
+  },
+  "homepage.section2.title": {
+    "message": "📊 Sección 2: Pandas y Análisis de Datos",
+    "description": "Homepage Data Analysis card title"
+  },
+  "homepage.section2.description": {
+    "message": "5 semanas de pandas y análisis exploratorio de datos. Reproduce un notebook al estilo Kaggle en el recorrido {normal}, o realiza un proyecto EDA completo con visualizaciones en el recorrido {hard}.",
+    "description": "Homepage Data Analysis card description"
+  },
+  "homepage.section2.cta": {
+    "message": "Explorar Análisis de Datos",
+    "description": "Homepage Data Analysis card CTA"
+  },
+  "homepage.capstoneTeaser": {
+    "message": "{finishBold} para desbloquear una guía paso a paso: instala Python de verdad y construye tu propio agente de IA — {link}.",
+    "description": "Homepage capstone teaser"
+  },
+  "homepage.capstoneTeaser.finishBold": {
+    "message": "Termina el curso",
+    "description": "Bolded lead-in phrase"
+  },
+  "homepage.capstoneTeaser.linkText": {
+    "message": "ver la Bonificación Final",
+    "description": "Capstone teaser link text"
+  },
+  "homepage.pageTitle": {
+    "message": "Curso de Python y Análisis de Datos"
+  },
+  "homepage.pageDescription": {
+    "message": "Un curso gratuito de Python y análisis de datos en el navegador — sin instalaciones necesarias hasta que estés listo para dar el salto a la Python real."
+  },
+  "progressPage.pageTitle": {
+    "message": "Mi Progreso"
+  },
+  "progressPage.pageDescription": {
+    "message": "Sigue tu progreso e insignias del curso."
+  },
+  "progressPage.heading": {
+    "message": "Mi Progreso"
+  },
+  "progressPage.courseComplete": {
+    "message": "¡Has terminado todo el curso! Tu Bonificación Final está desbloqueada — {link}."
+  },
+  "progressPage.courseComplete.linkText": {
+    "message": "instala Python de verdad y construye tu primer agente de IA"
+  },
+  "sharePage.pageTitle": {
+    "message": "Progreso Compartido"
+  },
+  "sharePage.pageDescription": {
+    "message": "El progreso compartido del curso de un estudiante."
+  },
+  "sharePage.invalidLink": {
+    "message": "Este enlace no contiene un resumen de progreso válido."
+  },
+  "installPwaButton.label": {
+    "message": "Instalar la app del curso — funciona sin conexión"
+  },
+  "installPwaButton.iosHint": {
+    "message": "En iPhone/iPad: toca {share} → {addToHomeScreen} para instalar este curso y usar las lecciones ya visitadas sin conexión."
+  },
+  "installPwaButton.iosHint.share": {
+    "message": "Compartir"
+  },
+  "installPwaButton.iosHint.addToHomeScreen": {
+    "message": "Añadir a pantalla de inicio"
+  },
+  "sharedProgressCard.completeHeading": {
+    "message": "¡Curso completado!"
+  },
+  "sharedProgressCard.progressHeading": {
+    "message": "Progreso del curso"
+  },
+  "sharedProgressCard.defaultName": {
+    "message": "Un estudiante de Python y Análisis de Datos"
+  },
+  "sharedProgressCard.stats": {
+    "message": "{completed} / {total} semanas · {badges} insignias"
+  },
+  "sharedProgressCard.idLabel": {
+    "message": "ID: {studentId}"
+  },
+  "sharedProgressCard.qrAlt": {
+    "message": "Código QR de verificación"
+  },
+  "trackSelector.label.normal": {
+    "message": "Normal",
+    "description": "Normal track label"
+  },
+  "trackSelector.label.hard": {
+    "message": "Difícil",
+    "description": "Hard track label"
   }
 }

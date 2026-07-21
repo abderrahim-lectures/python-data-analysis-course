@@ -555,5 +555,156 @@
   "theme.tags.tagsPageTitle": {
     "message": "الوسوم",
     "description": "The title of the tag list page"
+  },
+  "credits.pageTitle": {
+    "message": "شكر وتقدير"
+  },
+  "credits.pageDescription": {
+    "message": "مجموعات البيانات والأدوات المستخدمة في هذه الدورة."
+  },
+  "credits.heading": {
+    "message": "شكر وتقدير"
+  },
+  "credits.intro": {
+    "message": "مجموعات البيانات والأدوات الخارجية التي تعتمد عليها هذه الدورة:"
+  },
+  "credits.trinket": {
+    "message": "محرر بايثون داخل المتصفح يُستخدم طوال دورة Python 101."
+  },
+  "credits.jupyterlite": {
+    "message": "دفتر ملاحظات Jupyter داخل المتصفح (عبر Pyodide) يُستخدم طوال قسم تحليل البيانات."
+  },
+  "credits.pyodide": {
+    "message": "بيئة تشغيل بايثون بتقنية WebAssembly تُشغّل JupyterLite في هذه الدورة."
+  },
+  "credits.titanic": {
+    "message": "يستخدم إعادة الإنتاج الموجّهة للتحليل الاستكشافي في المسار العادي للأسبوع 10 مجموعة بيانات اصطناعية صغيرة مصمّمة على نمط مخطط مجموعة بيانات Kaggle الشهيرة هذه (نفس الأعمدة، بيانات ركاب مولّدة)، مضمّنة محليًا لتعمل دون اتصال في JupyterLite."
+  },
+  "credits.studentsPerformance": {
+    "message": "يستخدم التسليم النهائي للتحليل الاستكشافي في المسار الصعب للأسبوع 10 مجموعة بيانات اصطناعية صغيرة مصمّمة على نمط مخطط مجموعة بيانات Kaggle هذه، مضمّنة محليًا لتعمل دون اتصال في JupyterLite."
+  },
+  "homepage.hero.title": {
+    "message": "دورة بايثون وتحليل البيانات",
+    "description": "Homepage hero title"
+  },
+  "homepage.hero.tagline": {
+    "message": "تعلّم بايثون وتحليل البيانات في متصفحك — دون الحاجة لأي تثبيت",
+    "description": "Homepage hero tagline"
+  },
+  "homepage.hero.startButton": {
+    "message": "ابدأ Python 101 ←",
+    "description": "Homepage hero CTA button"
+  },
+  "homepage.section1.title": {
+    "message": "🐍 القسم 1: Python 101",
+    "description": "Homepage Python 101 card title"
+  },
+  "homepage.section1.description": {
+    "message": "5 أسابيع من أساسيات بايثون. اختر مسار {normal} (بلا تثبيت، برمجة مباشرة في متصفحك) أو مسار {hard} حيث تبني نموذجًا لغويًا مصغّرًا من الصفر باستخدام أنواع بايثون المدمجة فقط.",
+    "description": "Homepage Python 101 card description"
+  },
+  "homepage.trackNormal": {
+    "message": "عادي",
+    "description": "Normal track, short label"
+  },
+  "homepage.trackHard": {
+    "message": "صعب",
+    "description": "Hard track, short label"
+  },
+  "homepage.section1.cta": {
+    "message": "استكشف Python 101",
+    "description": "Homepage Python 101 card CTA"
+  },
+  "homepage.section2.title": {
+    "message": "📊 القسم 2: Pandas وتحليل البيانات",
+    "description": "Homepage Data Analysis card title"
+  },
+  "homepage.section2.description": {
+    "message": "5 أسابيع من pandas والتحليل الاستكشافي للبيانات. أعد إنتاج دفتر ملاحظات بأسلوب Kaggle في المسار {normal}، أو نفّذ مشروع تحليل استكشافي كاملاً بالتصورات في المسار {hard}.",
+    "description": "Homepage Data Analysis card description"
+  },
+  "homepage.section2.cta": {
+    "message": "استكشف تحليل البيانات",
+    "description": "Homepage Data Analysis card CTA"
+  },
+  "homepage.capstoneTeaser": {
+    "message": "{finishBold} لتفتح دليلاً إرشاديًا: ثبّت بايثون فعليًا وابنِ وكيل ذكاء اصطناعي خاص بك — {link}.",
+    "description": "Homepage capstone teaser"
+  },
+  "homepage.capstoneTeaser.finishBold": {
+    "message": "أكمل الدورة",
+    "description": "Bolded lead-in phrase"
+  },
+  "homepage.capstoneTeaser.linkText": {
+    "message": "شاهد المكافأة الختامية",
+    "description": "Capstone teaser link text"
+  },
+  "homepage.pageTitle": {
+    "message": "دورة بايثون وتحليل البيانات"
+  },
+  "homepage.pageDescription": {
+    "message": "دورة مجانية لتعلّم بايثون وتحليل البيانات داخل المتصفح — دون الحاجة لأي تثبيت حتى تكون جاهزًا للانتقال إلى الشيء الحقيقي."
+  },
+  "progressPage.pageTitle": {
+    "message": "تقدمي"
+  },
+  "progressPage.pageDescription": {
+    "message": "تتبّع تقدمك في الدورة وأوسمتك."
+  },
+  "progressPage.heading": {
+    "message": "تقدمي"
+  },
+  "progressPage.courseComplete": {
+    "message": "لقد أنهيت الدورة بأكملها! تم فتح مكافأتك الختامية — {link}."
+  },
+  "progressPage.courseComplete.linkText": {
+    "message": "ثبّت بايثون فعليًا وابنِ أول وكيل ذكاء اصطناعي خاص بك"
+  },
+  "sharePage.pageTitle": {
+    "message": "التقدم المشارَك"
+  },
+  "sharePage.pageDescription": {
+    "message": "تقدم أحد الطلاب المشارَك في الدورة."
+  },
+  "sharePage.invalidLink": {
+    "message": "هذا الرابط لا يحتوي على ملخص تقدم صالح."
+  },
+  "installPwaButton.label": {
+    "message": "ثبّت تطبيق الدورة — يعمل دون اتصال"
+  },
+  "installPwaButton.iosHint": {
+    "message": "على iPhone/iPad: اضغط على {share} ← {addToHomeScreen} لتثبيت هذه الدورة واستخدام الدروس التي زرتها سابقًا دون اتصال."
+  },
+  "installPwaButton.iosHint.share": {
+    "message": "مشاركة"
+  },
+  "installPwaButton.iosHint.addToHomeScreen": {
+    "message": "إضافة إلى الشاشة الرئيسية"
+  },
+  "sharedProgressCard.completeHeading": {
+    "message": "الدورة مكتملة!"
+  },
+  "sharedProgressCard.progressHeading": {
+    "message": "تقدم الدورة"
+  },
+  "sharedProgressCard.defaultName": {
+    "message": "طالب في دورة بايثون وتحليل البيانات"
+  },
+  "sharedProgressCard.stats": {
+    "message": "{completed} / {total} أسابيع · {badges} أوسمة"
+  },
+  "sharedProgressCard.idLabel": {
+    "message": "المعرّف: {studentId}"
+  },
+  "sharedProgressCard.qrAlt": {
+    "message": "رمز QR للتحقق"
+  },
+  "trackSelector.label.normal": {
+    "message": "عادي",
+    "description": "Normal track label"
+  },
+  "trackSelector.label.hard": {
+    "message": "صعب",
+    "description": "Hard track label"
   }
 }
