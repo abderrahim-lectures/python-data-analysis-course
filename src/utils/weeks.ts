@@ -40,3 +40,23 @@ export function getChosenWeeks(tracks: PerSectionTrack): WeekMeta[] | null {
   }
   return weeks;
 }
+
+/**
+ * Same idea as `getChosenWeeks`, but for "how far along am I" displays
+ * (BadgeCase, the share card) rather than the strict "is the whole course
+ * done" gate — includes weeks from whichever section(s) already have a
+ * track chosen, instead of collapsing to nothing until *both* do. Most
+ * students work through one section before touching the other, so the
+ * all-or-nothing version showed a confusing "0 / 0 weeks" for anyone with
+ * real, in-progress work in just one section. Never null: an empty array
+ * when no track is chosen anywhere yet.
+ */
+export function getChosenWeeksPartial(tracks: PerSectionTrack): WeekMeta[] {
+  const sections: SectionId[] = ['python-101', 'data-analysis'];
+  const weeks: WeekMeta[] = [];
+  for (const section of sections) {
+    const track = tracks[section];
+    if (track) weeks.push(...weeksForTrack(section, track));
+  }
+  return weeks;
+}
