@@ -718,5 +718,9 @@
   },
   "playground.jupyterlite.notebookTitle": {
     "message": "Notebook JupyterLite"
+  },
+  "autoLocaleRedirect.message": {
+    "message": "Changé en {locale} selon votre navigateur — ",
+    "description": "Auto-locale-redirect banner message, before the link back to the original locale"
   }
 }
