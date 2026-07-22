@@ -73,7 +73,9 @@ The badge above opens a ready-to-go [GitHub Codespace](https://github.com/featur
 
 [`examples/capstone-agent/`](./examples/capstone-agent/) is a real, runnable copy of the agent built in the [2026 Capstone](./docs/bonus/2026-ai-agent/index.md) lesson — see its own README for how to run it (locally with `uv run python agent.py`, or directly in Codespaces). Every year's Capstone gets its own `examples/<year>-<slug>/` folder, and past years' folders stay as-is once shipped.
 
-[`examples/student-agents/`](./examples/student-agents/) is a gallery of agents students have built for the 2026 Capstone — its README walks complete git beginners through forking, branching, and opening a PR to add their own.
+[`examples/2027-finetune-llm/`](./examples/2027-finetune-llm/) is the local companion to the [2027 Capstone](./docs/bonus/2027-finetune-llm/index.md) lesson — dataset prep and local inference scripts; the fine-tuning step itself runs on a free Colab/Kaggle GPU notebook, linked from the lesson.
+
+[`examples/student-agents/`](./examples/student-agents/) is a gallery of capstone projects students have built — its README walks complete git beginners through forking, branching, and opening a PR to add their own.
 
 ## Contributing
 
