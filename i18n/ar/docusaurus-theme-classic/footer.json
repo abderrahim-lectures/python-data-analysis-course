@@ -19,10 +19,6 @@
     "message": "تحليل البيانات",
     "description": "The label of footer link with label=Data Analysis linking to /docs/data-analysis"
   },
-  "link.item.label.Capstone Bonus": {
-    "message": "المشروع الختامي",
-    "description": "The label of footer link with label=Capstone Bonus linking to /docs/bonus/capstone-ai-agent"
-  },
   "link.item.label.My Progress": {
     "message": "تقدمي",
     "description": "The label of footer link with label=My Progress linking to /progress"
@@ -38,5 +34,13 @@
   "copyright": {
     "message": "حقوق النشر © 2026 دورة بايثون وتحليل البيانات. الكود مرخّص بموجب MIT، والمحتوى بموجب CC-BY 4.0.",
     "description": "The footer copyright"
+  },
+  "link.item.label.Capstone Projects": {
+    "message": "مشاريع المشروع الختامي",
+    "description": "The label of footer link with label=Capstone Projects linking to /docs/bonus"
+  },
+  "link.item.label.Changelog": {
+    "message": "Changelog",
+    "description": "The label of footer link with label=Changelog linking to https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/CHANGELOG.md"
   }
 }

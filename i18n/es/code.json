@@ -625,7 +625,7 @@
     "description": "Homepage Data Analysis card CTA"
   },
   "homepage.capstoneTeaser": {
-    "message": "{finishBold} para desbloquear una guía paso a paso: instala Python de verdad y construye tu propio agente de IA — {link}.",
+    "message": "{finishBold} para desbloquear un proyecto Capstone — instala Python de verdad y construye algo que el playground nunca pudo ejecutar — {link}.",
     "description": "Homepage capstone teaser"
   },
   "homepage.capstoneTeaser.finishBold": {
@@ -633,7 +633,7 @@
     "description": "Bolded lead-in phrase"
   },
   "homepage.capstoneTeaser.linkText": {
-    "message": "ver la Bonificación Final",
+    "message": "ver los proyectos Capstone",
     "description": "Capstone teaser link text"
   },
   "homepage.pageTitle": {
@@ -652,10 +652,10 @@
     "message": "Mi Progreso"
   },
   "progressPage.courseComplete": {
-    "message": "¡Has terminado todo el curso! Tu Bonificación Final está desbloqueada — {link}."
+    "message": "¡Has terminado todo el curso! Tus proyectos Capstone están desbloqueados — {link}."
   },
   "progressPage.courseComplete.linkText": {
-    "message": "instala Python de verdad y construye tu primer agente de IA"
+    "message": "elige un proyecto Capstone para construir"
   },
   "sharePage.pageTitle": {
     "message": "Progreso Compartido"
@@ -703,5 +703,20 @@
   "trackSelector.label.hard": {
     "message": "Difícil",
     "description": "Hard track label"
+  },
+  "capstoneChooser.lockedLabel": {
+    "message": "Termina cada semana de ambas secciones para desbloquear los proyectos Capstone."
+  },
+  "capstoneChooser.completedLabel": {
+    "message": "Completado"
+  },
+  "capstoneProgressCheckbox.label": {
+    "message": "Marcar este Capstone como completado"
+  },
+  "playground.jupyterlite.replTitle": {
+    "message": "Consola de Python de JupyterLite"
+  },
+  "playground.jupyterlite.notebookTitle": {
+    "message": "Notebook de JupyterLite"
   }
 }

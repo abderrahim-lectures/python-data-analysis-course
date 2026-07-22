@@ -1,15 +1,18 @@
 ---
 id: 2026-ai-agent
 title: "Capstone 2026 : passez à du vrai Python + construisez un agent IA"
+sidebar_label: "2026 : construire un agent IA"
 slug: /bonus/2026-ai-agent
 description: "Passez du bac à sable dans le navigateur à du vrai Python : installez Python en local et construisez votre premier agent IA avec deepagents de LangChain."
 ---
 
-# 🎁 Capstone Bonus : passez à du vrai Python + construisez un agent IA
+import CapstoneProgressCheckbox from '@site/src/components/CapstoneProgressCheckbox';
 
-**Félicitations d'avoir terminé le cours.** Tout jusqu'ici tournait dans un bac à sable isolé, dans le navigateur — Trinket ou JupyterLite — pour que vous puissiez commencer à écrire du Python dès le premier jour sans aucune configuration. Ce capstone est l'étape de remise de diplôme : installez Python pour de vrai sur votre propre machine, puis utilisez-le pour construire quelque chose qu'aucun des deux bacs à sable ne pouvait exécuter — un agent IA avec sa propre clé API, appelant un vrai modèle de langage.
+# 🎁 Capstone 2026 : passez à du vrai Python + construisez un agent IA
 
-Ceci est optionnel et non noté. C'est ici parce que terminer 10 semaines de fondamentaux mérite une récompense qui pointe vers ce qui vient ensuite.
+**Félicitations d'avoir terminé le cours.** Tout jusqu'ici tournait dans un bac à sable isolé, dans le navigateur — pour que vous puissiez commencer à écrire du Python dès le premier jour sans aucune configuration. Ce Capstone est l'étape de remise de diplôme : installez Python pour de vrai sur votre propre machine, puis utilisez-le pour construire quelque chose que le bac à sable n'a jamais pu exécuter — un agent IA avec sa propre clé API, appelant un vrai modèle de langage.
+
+Ceci est optionnel et non noté. C'est ici parce que terminer 10 semaines de fondamentaux mérite une récompense qui pointe vers ce qui vient ensuite. C'est aussi le projet de cette année — un nouveau projet est ajouté chaque année, et ceux des années précédentes restent disponibles ; voir [Choisissez votre Capstone](/docs/bonus) pour la liste complète.
 
 ## 🎯 Ce que vous allez faire
 
@@ -259,3 +262,5 @@ L'agent principal peut maintenant transférer une sous-tâche à `topic-research
 Vous avez construit quelque chose dont vous êtes fier ? [`examples/student-agents/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-agents) est une galerie d'agents que d'autres étudiants ont soumis — et son README a un guide complet et accessible aux débutants pour ajouter le vôtre via une **pull request**, même si vous n'avez jamais utilisé git auparavant : forker le dépôt, créer une branche, valider vos fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable de git n'est présumée.
 
 Bienvenue dans l'écriture de Python en dehors du navigateur. 🎓
+
+<CapstoneProgressCheckbox capstoneId="2026-ai-agent" />

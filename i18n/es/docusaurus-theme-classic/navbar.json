@@ -15,10 +15,6 @@
     "message": "Análisis de Datos",
     "description": "Navbar item with label Data Analysis"
   },
-  "item.label.Capstone Bonus": {
-    "message": "Proyecto Final",
-    "description": "Navbar item with label Capstone Bonus"
-  },
   "item.label.My Progress": {
     "message": "Mi Progreso",
     "description": "Navbar item with label My Progress"
@@ -30,5 +26,9 @@
   "item.label.GitHub": {
     "message": "GitHub",
     "description": "Navbar item with label GitHub"
+  },
+  "item.label.Capstone Projects": {
+    "message": "Proyectos Capstone",
+    "description": "Navbar item with label Capstone Projects"
   }
 }
