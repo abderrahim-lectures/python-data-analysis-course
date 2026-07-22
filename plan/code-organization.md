@@ -1,0 +1,8 @@
+# Code Organization & Engineering Practices
+
+Given the real scale here (a dozen-plus custom components, several cross-cutting concerns like localStorage/i18n/gamification), a few practices keep things manageable rather than accumulating into sprawling files:
+
+- **Small, single-responsibility files**: a component's `index.tsx` handles composition/rendering; state and business logic move into their own hook (e.g. `useBadges`, `useProgress`, `useQuizScore`) rather than living inline in a large component body. If a component's `index.tsx` is creeping past roughly 150–200 lines, that's the signal to split out a subcomponent or extract a hook, not push through in one file.
+- **Logic that repeats across components is centralized once, not copy-pasted**: badge-earning rules, quiz-scoring, and "is this content unlocked" checks are each exactly one small module (e.g. `src/utils/badges.ts`, `src/utils/quizScoring.ts`, `src/hooks/useUnlockCondition.ts`) that `PlacementQuiz`, `WeeklyQuiz`, and `BonusContent` all call into — since these three components all implement variations of the same "score → gate → unlock" pattern, they should share one implementation instead of three near-duplicate ones.
+- **Shared types live in one place** (`src/types/`) — the shape of progress data, badge IDs, quiz results, etc. — so components and hooks reference the same source of truth instead of each redefining its own local shape that can drift.
+- **This also fits the Development Workflow's per-component-issue granularity above**: small, focused files map naturally onto small, focused PRs — a component that's already split into composition + hooks + utils is easier to review and land incrementally than one monolithic file touched by every related PR.

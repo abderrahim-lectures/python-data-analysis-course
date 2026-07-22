@@ -17,7 +17,7 @@ A free, browser-based Python and data analysis course — no installs required u
 
 Run entirely in the browser via self-hosted JupyterLite: a lightweight Python console (Python 101) and a full notebook (Data Analysis), both powered by Pyodide — click the floating button on any page to start coding immediately, no account and no local install needed until the capstone. Since it's self-hosted (not a third-party embed), it also works offline once you've visited a page. The site itself is installable (a real PWA) — a homepage button offers "Install the course app" on supported browsers.
 
-See [`PLAN.md`](./PLAN.md) for the full design plan and rationale behind every major decision.
+See [`plan/`](./plan/README.md) for the full design plan and rationale behind every major decision.
 
 ## Screenshots
 
@@ -88,7 +88,7 @@ Every change — a lesson, a component, a bug fix, a translation — goes throug
 Found a typo or a broken example while going through a lesson? Every doc page has an "Edit this page" link (bottom of the page) that opens a PR directly against that file — the fastest way to fix something small.
 
 **Ways to contribute:**
-- **Content**: write or improve a week's lesson, challenges, or socratic questions — see the *Content Pattern* and *Content Style Guide* sections of [`PLAN.md`](./PLAN.md) for the expected structure and tone.
+- **Content**: write or improve a week's lesson, challenges, or socratic questions — see [`plan/content-pattern.md`](./plan/content-pattern.md) and [`plan/content-style-guide.md`](./plan/content-style-guide.md) for the expected structure and tone.
 - **Translations**: lesson content and UI chrome are fully translated for Arabic, Spanish, and French (see [`i18n/`](./i18n/)) — a `type:i18n` PR fixing or improving an existing translation is welcome.
 - **Components/infra**: bug fixes, accessibility improvements, and performance work on the playground, gamification, or sharing features.
 
