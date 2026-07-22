@@ -15,7 +15,7 @@ A free, browser-based Python and data analysis course — no installs required u
 - **Section 2: Pandas & Data Analysis** (5 weeks) — pandas basics reproducing a Kaggle-style notebook, with a Hard track doing a full exploratory data analysis project with visualizations.
 - **Capstone projects** — install Python locally for real with `uv` and build something the in-browser playground never could. A new Capstone is added every year (2026's is an AI agent built with LangChain's `deepagents`); students can pick any past year's project too, not just the latest.
 
-Run entirely in the browser via self-hosted JupyterLite: a lightweight Python console (Python 101) and a full notebook (Data Analysis), both powered by Pyodide — click the floating button on any page to start coding immediately, no account and no local install needed until the capstone. Since it's self-hosted (not a third-party embed), it also works offline once you've visited a page.
+Run entirely in the browser via self-hosted JupyterLite: a lightweight Python console (Python 101) and a full notebook (Data Analysis), both powered by Pyodide — click the floating button on any page to start coding immediately, no account and no local install needed until the capstone. Since it's self-hosted (not a third-party embed), it also works offline once you've visited a page. The site itself is installable (a real PWA) — a homepage button offers "Install the course app" on supported browsers.
 
 See [`PLAN.md`](./PLAN.md) for the full design plan and rationale behind every major decision.
 
