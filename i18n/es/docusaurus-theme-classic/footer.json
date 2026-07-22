@@ -19,10 +19,6 @@
     "message": "Análisis de Datos",
     "description": "The label of footer link with label=Data Analysis linking to /docs/data-analysis"
   },
-  "link.item.label.Capstone Bonus": {
-    "message": "Proyecto Final",
-    "description": "The label of footer link with label=Capstone Bonus linking to /docs/bonus/capstone-ai-agent"
-  },
   "link.item.label.My Progress": {
     "message": "Mi Progreso",
     "description": "The label of footer link with label=My Progress linking to /progress"
@@ -38,5 +34,13 @@
   "copyright": {
     "message": "Copyright © 2026 Curso de Python y Análisis de Datos. Código con licencia MIT, contenido con licencia CC-BY 4.0.",
     "description": "The footer copyright"
+  },
+  "link.item.label.Capstone Projects": {
+    "message": "Proyectos Capstone",
+    "description": "The label of footer link with label=Capstone Projects linking to /docs/bonus"
+  },
+  "link.item.label.Changelog": {
+    "message": "Changelog",
+    "description": "The label of footer link with label=Changelog linking to https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/CHANGELOG.md"
   }
 }

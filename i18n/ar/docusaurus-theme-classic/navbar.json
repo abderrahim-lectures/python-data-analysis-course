@@ -15,10 +15,6 @@
     "message": "تحليل البيانات",
     "description": "Navbar item with label Data Analysis"
   },
-  "item.label.Capstone Bonus": {
-    "message": "المشروع الختامي",
-    "description": "Navbar item with label Capstone Bonus"
-  },
   "item.label.My Progress": {
     "message": "تقدمي",
     "description": "Navbar item with label My Progress"
@@ -30,5 +26,9 @@
   "item.label.GitHub": {
     "message": "GitHub",
     "description": "Navbar item with label GitHub"
+  },
+  "item.label.Capstone Projects": {
+    "message": "مشاريع المشروع الختامي",
+    "description": "Navbar item with label Capstone Projects"
   }
 }

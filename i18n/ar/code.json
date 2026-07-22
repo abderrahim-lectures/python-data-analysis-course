@@ -625,7 +625,7 @@
     "description": "Homepage Data Analysis card CTA"
   },
   "homepage.capstoneTeaser": {
-    "message": "{finishBold} لتفتح دليلاً إرشاديًا: ثبّت بايثون فعليًا وابنِ وكيل ذكاء اصطناعي خاص بك — {link}.",
+    "message": "{finishBold} لفتح مشروع ختامي — ثبّت بايثون فعليًا وابنِ شيئًا لم تستطع بيئة البرمجة تشغيله أبدًا — {link}.",
     "description": "Homepage capstone teaser"
   },
   "homepage.capstoneTeaser.finishBold": {
@@ -633,7 +633,7 @@
     "description": "Bolded lead-in phrase"
   },
   "homepage.capstoneTeaser.linkText": {
-    "message": "شاهد المكافأة الختامية",
+    "message": "شاهد مشاريع المشروع الختامي",
     "description": "Capstone teaser link text"
   },
   "homepage.pageTitle": {
@@ -652,10 +652,10 @@
     "message": "تقدمي"
   },
   "progressPage.courseComplete": {
-    "message": "لقد أنهيت الدورة بأكملها! تم فتح مكافأتك الختامية — {link}."
+    "message": "لقد أنهيت الدورة بأكملها! مشاريع المشروع الختامي مفتوحة الآن — {link}."
   },
   "progressPage.courseComplete.linkText": {
-    "message": "ثبّت بايثون فعليًا وابنِ أول وكيل ذكاء اصطناعي خاص بك"
+    "message": "اختر مشروعًا ختاميًا لتبنيه"
   },
   "sharePage.pageTitle": {
     "message": "التقدم المشارَك"
@@ -703,5 +703,20 @@
   "trackSelector.label.hard": {
     "message": "صعب",
     "description": "Hard track label"
+  },
+  "capstoneChooser.lockedLabel": {
+    "message": "أنهِ كل أسبوع في كلا القسمين لفتح مشاريع المشروع الختامي."
+  },
+  "capstoneChooser.completedLabel": {
+    "message": "مكتمل"
+  },
+  "capstoneProgressCheckbox.label": {
+    "message": "ضع علامة على إتمام هذا المشروع الختامي"
+  },
+  "playground.jupyterlite.replTitle": {
+    "message": "طرفية بايثون JupyterLite"
+  },
+  "playground.jupyterlite.notebookTitle": {
+    "message": "دفتر ملاحظات JupyterLite"
   }
 }

@@ -1,15 +1,18 @@
 ---
 id: 2026-ai-agent
 title: "Capstone 2026: Gradúate a Python Real y Construye un Agente de IA"
+sidebar_label: "2026: Construye un Agente de IA"
 slug: /bonus/2026-ai-agent
 description: "Da el salto del entorno de práctica en el navegador a Python real: instala Python localmente y construye tu primer agente de IA con deepagents de LangChain."
 ---
 
-# 🎁 Bono Capstone: Gradúate a Python Real y Construye un Agente de IA
+import CapstoneProgressCheckbox from '@site/src/components/CapstoneProgressCheckbox';
 
-**Felicitaciones por terminar el curso.** Todo hasta ahora se ejecutó en un playground aislado dentro del navegador — Trinket o JupyterLite— para que pudieras empezar a escribir Python desde el primer día sin ninguna configuración. Este capstone es el paso de graduación: instala Python de verdad en tu propia máquina, y luego úsalo para construir algo que ninguno de los dos playgrounds podía ejecutar — un agente de IA con su propia clave de API, llamando a un modelo de lenguaje real.
+# 🎁 Capstone 2026: Gradúate a Python Real y Construye un Agente de IA
 
-Esto es opcional y no calificado. Está aquí porque terminar 10 semanas de fundamentos merece una recompensa que apunte hacia lo que viene después.
+**Felicitaciones por terminar el curso.** Todo hasta ahora se ejecutó en un playground aislado dentro del navegador — para que pudieras empezar a escribir Python desde el primer día sin ninguna configuración. Este Capstone es el paso de graduación: instala Python de verdad en tu propia máquina, y luego úsalo para construir algo que el playground nunca pudo ejecutar — un agente de IA con su propia clave de API, llamando a un modelo de lenguaje real.
+
+Esto es opcional y no calificado. Está aquí porque terminar 10 semanas de fundamentos merece una recompensa que apunte hacia lo que viene después. También es el proyecto de este año — cada año se añade uno nuevo, y los de años anteriores siguen disponibles; consulta [Elige tu Capstone](/docs/bonus) para ver la lista completa.
 
 ## 🎯 Qué harás
 
@@ -259,3 +262,5 @@ El agente principal ahora puede entregar una subtarea a `topic-researcher` en lu
 ¿Construiste algo de lo que estás orgulloso? [`examples/student-agents/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-agents) es una galería de agentes que otros estudiantes han enviado — y su README tiene un recorrido completo y amigable para principiantes para agregar el tuyo vía un **pull request**, incluso si nunca has usado git antes: hacer fork del repositorio, crear una rama, subir tus archivos, y abrir el PR, un paso a la vez. No se asume ninguna experiencia previa con git.
 
 Bienvenido a escribir Python fuera del navegador. 🎓
+
+<CapstoneProgressCheckbox capstoneId="2026-ai-agent" />

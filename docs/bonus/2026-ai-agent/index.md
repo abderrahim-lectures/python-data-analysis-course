@@ -1,6 +1,7 @@
 ---
 id: 2026-ai-agent
 title: "2026 Capstone: Graduate to Real Python + Build an AI Agent"
+sidebar_label: "2026: Build an AI Agent"
 slug: /bonus/2026-ai-agent
 description: "Graduate from the in-browser playground to real Python: install Python locally and build your first AI agent with LangChain's deepagents."
 ---
