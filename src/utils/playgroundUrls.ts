@@ -1,4 +1,23 @@
-import useBaseUrl from '@docusaurus/useBaseUrl';
+/**
+ * The `/lite/` JupyterLite build is a single shared static directory, not
+ * part of Docusaurus's per-locale content — it only ever exists unprefixed
+ * (e.g. `/lite/repl/index.html`), never under `/fr/lite/...` etc. It's
+ * deliberately hardcoded as an absolute path here rather than resolved
+ * through `useBaseUrl`/`siteConfig.baseUrl`: Docusaurus locale-prefixes
+ * *both* of those per locale build (confirmed empirically — `siteConfig`
+ * itself reports `baseUrl: '/fr/'` when running inside the French build,
+ * not just the URLs `useBaseUrl` produces), so either one 404s on every
+ * non-default locale. Confirmed live: the iframe then rendered this site's
+ * own React 404 page ("Page Not Found") inside the panel — which at a
+ * glance looks exactly like a copy of the website, not a broken embed, and
+ * is what prompted this fix. This hardcoded path is only correct because
+ * the site's actual `baseUrl` is `/` (root, via the custom domain) and
+ * JupyterLite's own `base_url` in jupyter_lite_config.json is independently
+ * hardcoded to `/lite/` too — if the site ever moves off a custom domain
+ * back onto a GH Pages project-page subpath, both of those need updating
+ * together.
+ */
+const LITE_BASE = '/lite';
 
 /**
  * JupyterLite Notebook app URL, optionally deep-linked to a specific week's
@@ -16,7 +35,7 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
  * static server started with something like `python3 -m http.server`.
  */
 export function useJupyterLiteNotebookUrl(weekId: string | null): string {
-  const liteBase = useBaseUrl('/lite/notebooks/');
+  const liteBase = `${LITE_BASE}/notebooks/`;
   if (!weekId) {
     return liteBase;
   }
@@ -33,6 +52,5 @@ export function useJupyterLiteNotebookUrl(weekId: string | null): string {
  * manual copy/paste step required, unlike Trinket's sandboxed filesystem.
  */
 export function useJupyterLiteReplUrl(): string {
-  const replBase = useBaseUrl('/lite/repl/index.html');
-  return `${replBase}?kernel=python&toolbar=1`;
+  return `${LITE_BASE}/repl/index.html?kernel=python&toolbar=1`;
 }
