@@ -153,10 +153,7 @@
     "message": "Esto es una herramienta de verificación rápida, no una credencial verificada — el código QR enlaza a tu resumen de progreso para una comprobación rápida, no es una garantía criptográfica."
   },
   "shareProgress.certificate.png": {
-    "message": "Descargar PNG"
-  },
-  "shareProgress.certificate.pdf": {
-    "message": "Descargar PDF"
+    "message": "Descargar certificado"
   },
   "trackSelector.timeCommitment": {
     "message": "Tiempo requerido:"
@@ -678,9 +675,6 @@
   "installPwaButton.iosHint.addToHomeScreen": {
     "message": "Añadir a pantalla de inicio"
   },
-  "sharedProgressCard.completeHeading": {
-    "message": "¡Curso completado!"
-  },
   "sharedProgressCard.progressHeading": {
     "message": "Progreso del curso"
   },
@@ -722,5 +716,17 @@
   "autoLocaleRedirect.message": {
     "message": "Cambiado a {locale} según tu navegador — ",
     "description": "Auto-locale-redirect banner message, before the link back to the original locale"
+  },
+  "sharedProgressCard.certificateHeading": {
+    "message": "Certificado de Finalización",
+    "description": "Certificate heading"
+  },
+  "sharedProgressCard.certifyLine": {
+    "message": "Se certifica que",
+    "description": "Certificate intro line before the student's name"
+  },
+  "sharedProgressCard.completedLine": {
+    "message": "ha completado el curso completo",
+    "description": "Certificate line after the student's name"
   }
 }

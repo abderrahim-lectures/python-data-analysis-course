@@ -153,10 +153,7 @@
     "message": "هذه أداة تحقق سريع وليست شهادة موثقة رسميًا — رمز الاستجابة السريعة يشير إلى ملخص تقدمك للتحقق السريع، وليس ضمانًا تشفيريًا."
   },
   "shareProgress.certificate.png": {
-    "message": "تحميل PNG"
-  },
-  "shareProgress.certificate.pdf": {
-    "message": "تحميل PDF"
+    "message": "تنزيل الشهادة"
   },
   "trackSelector.timeCommitment": {
     "message": "الوقت المطلوب:"
@@ -678,9 +675,6 @@
   "installPwaButton.iosHint.addToHomeScreen": {
     "message": "إضافة إلى الشاشة الرئيسية"
   },
-  "sharedProgressCard.completeHeading": {
-    "message": "الدورة مكتملة!"
-  },
   "sharedProgressCard.progressHeading": {
     "message": "تقدم الدورة"
   },
@@ -722,5 +716,17 @@
   "autoLocaleRedirect.message": {
     "message": "تم التحويل إلى {locale} حسب متصفحك — ",
     "description": "Auto-locale-redirect banner message, before the link back to the original locale"
+  },
+  "sharedProgressCard.certificateHeading": {
+    "message": "شهادة إتمام",
+    "description": "Certificate heading"
+  },
+  "sharedProgressCard.certifyLine": {
+    "message": "تشهد هذه الوثيقة بأن",
+    "description": "Certificate intro line before the student's name"
+  },
+  "sharedProgressCard.completedLine": {
+    "message": "قد أتمّ الدورة كاملة",
+    "description": "Certificate line after the student's name"
   }
 }

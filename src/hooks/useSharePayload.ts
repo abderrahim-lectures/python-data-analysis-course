@@ -27,5 +27,9 @@ export function useSharePayload(): SharePayload {
     totalCount,
     badgeCount: badges.length,
     completed: totalCount > 0 && completedCount === totalCount,
+    // "Issued on" today — no completion timestamp is tracked anywhere else
+    // in localStorage, so this is the date the link/certificate was
+    // generated, not necessarily the date the student actually finished.
+    date: new Date().toISOString().slice(0, 10),
   };
 }

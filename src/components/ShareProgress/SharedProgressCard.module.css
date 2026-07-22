@@ -36,3 +36,60 @@
   padding: 6px;
   border-radius: 8px;
 }
+
+/* Certificate mode: a formal layout distinct from the plain progress card —
+   a serif face (system stack, no webfont fetch needed) sets the student's
+   name and the certificate title apart from the sans-serif body text used
+   everywhere else on the site. */
+.certificate {
+  width: 480px;
+  padding: 2.5rem 2rem;
+  border: 3px solid rgba(255, 255, 255, 0.6);
+  outline: 1px solid rgba(255, 255, 255, 0.35);
+  outline-offset: -10px;
+}
+
+.courseName {
+  margin: 0 0 1rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+.certTitle {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.6rem;
+  margin-bottom: 0.5rem;
+}
+
+.certifyLine {
+  margin: 0.25rem 0;
+  font-size: 0.9rem;
+  opacity: 0.9;
+  font-style: italic;
+}
+
+.studentName {
+  margin: 0.5rem 0;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.6);
+  padding-bottom: 0.4rem;
+  display: inline-block;
+}
+
+.date {
+  margin: 1rem 0 0;
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
+.website {
+  margin: 0.15rem 0 0.75rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  opacity: 0.75;
+}
