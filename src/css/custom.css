@@ -16,21 +16,6 @@
   --ifm-global-radius: 10px;
   --docusaurus-highlighted-code-line-bg: rgba(91, 61, 245, 0.1);
 
-  /* Infima leaves --ifm-background-color as `transparent` by default in
-     light mode (it only gets a real color in dark mode) — harmless for
-     <body> itself (the browser's own white canvas shows through), but a
-     real bug for anything that actually paints a background from this
-     variable, including Docusaurus's own built-in mobile sidebar drawer:
-     its dark backdrop appeared correctly, but the drawer itself was
-     invisible on top of it, since Infima's underlying CSS uses this
-     variable for the drawer's background too. Several of our own custom
-     components hit the exact same issue earlier and were patched
-     individually (see git history) before this was traced back to Infima's
-     own default — setting it explicitly here, once, fixes it everywhere,
-     including any other built-in Docusaurus UI this project hasn't
-     touched directly. */
-  --ifm-background-color: #ffffff;
-
   /* Course-specific tokens, reused across custom components */
   --pda-accent: #f59e0b;
   --pda-accent-soft: rgba(245, 158, 11, 0.12);
