@@ -1,0 +1,33 @@
+.banner {
+  position: sticky;
+  top: 0;
+  z-index: 150;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 0.6rem 1rem;
+  background: var(--ifm-color-primary);
+  color: white;
+  text-align: center;
+}
+
+.banner a {
+  color: white;
+  text-decoration: underline;
+  font-weight: 700;
+}
+
+.banner p {
+  margin: 0;
+}
+
+.dismiss {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  min-width: var(--pda-touch-target);
+  min-height: var(--pda-touch-target);
+  font-size: 1rem;
+}
