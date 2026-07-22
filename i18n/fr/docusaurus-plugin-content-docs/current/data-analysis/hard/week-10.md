@@ -222,4 +222,4 @@ Assemblez tout ce qui vient des défis de cette semaine en un seul récit écrit
 
 ---
 
-**🎉 Vous avez terminé le parcours difficile de Pandas et analyse de données — et le cours entier, si vous avez suivi le parcours difficile/difficile ou toute combinaison à travers les deux sections.** Rendez-vous sur [Ma progression](/progress) pour voir vos badges et, si vous avez terminé chaque semaine, débloquez le [Capstone Bonus](/docs/bonus/capstone-ai-agent) : installer Python pour de vrai et construire votre premier agent IA.
+**🎉 Vous avez terminé le parcours difficile de Pandas et analyse de données — et le cours entier, si vous avez suivi le parcours difficile/difficile ou toute combinaison à travers les deux sections.** Rendez-vous sur [Ma progression](/progress) pour voir vos badges et, si vous avez terminé chaque semaine, débloquez le [projets Capstone](/docs/bonus) : installer Python pour de vrai et construire votre premier agent IA.

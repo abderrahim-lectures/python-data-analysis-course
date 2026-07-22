@@ -1,7 +1,7 @@
 ---
-id: capstone-ai-agent
-title: "Capstone Bonus : passez à du vrai Python + construisez un agent IA"
-slug: /bonus/capstone-ai-agent
+id: 2026-ai-agent
+title: "Capstone 2026 : passez à du vrai Python + construisez un agent IA"
+slug: /bonus/2026-ai-agent
 description: "Passez du bac à sable dans le navigateur à du vrai Python : installez Python en local et construisez votre premier agent IA avec deepagents de LangChain."
 ---
 

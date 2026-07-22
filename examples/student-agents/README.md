@@ -1,6 +1,6 @@
 # Student Agents
 
-A gallery of agents students have built for the [Capstone Bonus](../../docs/bonus/capstone-ai-agent.md) — browse the folders below to see what other students built, or add your own.
+A gallery of agents students have built for the [Capstone Bonus](../../docs/bonus/2026-ai-agent/index.md) — browse the folders below to see what other students built, or add your own.
 
 Each submission gets its own folder, named after you (or a project name), containing your `agent.py` and a short `README.md` explaining what it does. [`_template/`](./_template/) is a ready-to-copy starting point.
 
@@ -48,7 +48,7 @@ Replace `your-name` with your actual name or a short project name (lowercase, hy
 - **`agent.py`** — your actual agent code. Start from the [capstone example](../capstone-agent/agent.py) and change the tools to do whatever you want it to do.
 - **`README.md`** — fill in the template's sections: what your agent's objective is, which tools it has, and how to run it.
 
-**Never commit a real API key.** Your `agent.py` should read it from an environment variable (e.g. `os.environ["GITHUB_TOKEN"]`), exactly like the capstone example — never paste a real key into any file you commit. Use whichever free-tier provider you like; the template defaults to GitHub Models, but the [Capstone Bonus doc](../../docs/bonus/capstone-ai-agent.md#step-2-get-a-free-ai-api-key) lists other options.
+**Never commit a real API key.** Your `agent.py` should read it from an environment variable (e.g. `os.environ["GITHUB_TOKEN"]`), exactly like the capstone example — never paste a real key into any file you commit. Use whichever free-tier provider you like; the template defaults to GitHub Models, but the [Capstone Bonus doc](../../docs/bonus/2026-ai-agent/index.md#step-2-get-a-free-ai-api-key) lists other options.
 
 ### 5. Save your changes with git
 

@@ -222,4 +222,4 @@ Ensambla todo lo de los retos de esta semana en una sola narrativa escrita conti
 
 ---
 
-**🎉 Completaste el track Difícil de Pandas y Análisis de Datos — y todo el curso, si tomaste Difícil/Difícil o cualquier combinación entre ambas secciones.** Ve a [Mi Progreso](/progress) para ver tus insignias y, si terminaste cada semana, desbloquea el [Bono Capstone](/docs/bonus/capstone-ai-agent): instalar Python de verdad y construir tu primer agente de IA.
+**🎉 Completaste el track Difícil de Pandas y Análisis de Datos — y todo el curso, si tomaste Difícil/Difícil o cualquier combinación entre ambas secciones.** Ve a [Mi Progreso](/progress) para ver tus insignias y, si terminaste cada semana, desbloquea el [proyectos Capstone](/docs/bonus): instalar Python de verdad y construir tu primer agente de IA.

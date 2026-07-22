@@ -237,4 +237,4 @@ Redo the Pclass survival-rate groupby, but this time include both the mean *and*
 
 ---
 
-**🎉 You've completed the Pandas & Data Analysis Normal track — and the whole course, if you took Normal in both sections.** Head to [My Progress](/progress) to see your badges and, if you've finished every week, unlock the [Capstone Bonus](/docs/bonus/capstone-ai-agent): installing Python for real and building your first AI agent.
+**🎉 You've completed the Pandas & Data Analysis Normal track — and the whole course, if you took Normal in both sections.** Head to [My Progress](/progress) to see your badges and, if you've finished every week, unlock the [Capstone projects](/docs/bonus): installing Python for real and building a Capstone project.

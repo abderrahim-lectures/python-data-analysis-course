@@ -136,15 +136,15 @@ function SectionCards() {
                   </strong>
                 ),
                 link: (
-                  <Link to="/docs/bonus/capstone-ai-agent">
+                  <Link to="/docs/bonus">
                     <Translate id="homepage.capstoneTeaser.linkText" description="Capstone teaser link text">
-                      see the Capstone Bonus
+                      see the Capstone projects
                     </Translate>
                   </Link>
                 ),
               }}>
               {
-                '{finishBold} to unlock a guided walkthrough: install Python for real and build your own AI agent — {link}.'
+                '{finishBold} to unlock a Capstone project — install Python for real and build something the playground could never run — {link}.'
               }
             </Translate>
           </p>

@@ -13,7 +13,7 @@ A free, browser-based Python and data analysis course — no installs required u
 
 - **Section 1: Python 101** (5 weeks) — fundamentals, with a Normal track and a Hard track (build a tiny language model from scratch, pure Python, deliberately no numpy).
 - **Section 2: Pandas & Data Analysis** (5 weeks) — pandas basics reproducing a Kaggle-style notebook, with a Hard track doing a full exploratory data analysis project with visualizations.
-- **Capstone bonus** — install Python locally for real with `uv` and build your first AI agent with LangChain's `deepagents`, using a free-tier API key.
+- **Capstone projects** — install Python locally for real with `uv` and build something the in-browser playground never could. A new Capstone is added every year (2026's is an AI agent built with LangChain's `deepagents`); students can pick any past year's project too, not just the latest.
 
 Run entirely in the browser via self-hosted JupyterLite: a lightweight Python console (Python 101) and a full notebook (Data Analysis), both powered by Pyodide — click the floating button on any page to start coding immediately, no account and no local install needed until the capstone. Since it's self-hosted (not a third-party embed), it also works offline once you've visited a page.
 
@@ -33,7 +33,7 @@ By the end of the course, a student can:
 - Explain, from first principles, how a simple language model predicts text (tokenization → frequency counts → conditional probability → weighted sampling) by building one from scratch in pure Python (Hard track).
 - Load, clean, filter, group, and aggregate real tabular data with pandas, and explain *why* vectorized tools exist by having personally measured pure Python's performance limits first.
 - Run a complete, honest exploratory data analysis project — framing questions before charting, visualizing distributions and relationships appropriately, and stating a finding's confidence and caveats rather than overclaiming causation (Hard track).
-- Install Python locally, manage a project with `uv`, handle an API key as a secret, and build a minimal tool-calling AI agent (Capstone).
+- Install Python locally, manage a project with `uv`, and build a real project outside the browser playground (Capstone — 2026's is a minimal tool-calling AI agent, handling an API key as a secret).
 
 ## Pedagogical approach
 
@@ -69,11 +69,11 @@ This step runs automatically in CI (see [`.github/workflows/deploy.yml`](./.gith
 
 The badge above opens a ready-to-go [GitHub Codespace](https://github.com/features/codespaces) (Node + Python + `uv` preinstalled, via [`.devcontainer/devcontainer.json`](./.devcontainer/devcontainer.json)) — no local setup needed to start contributing.
 
-### Capstone agent example
+### Capstone examples
 
-[`examples/capstone-agent/`](./examples/capstone-agent/) is a real, runnable copy of the agent built in the [Capstone Bonus](./docs/bonus/capstone-ai-agent.md) lesson — see its own README for how to run it (locally with `uv run python agent.py`, or directly in Codespaces).
+[`examples/capstone-agent/`](./examples/capstone-agent/) is a real, runnable copy of the agent built in the [2026 Capstone](./docs/bonus/2026-ai-agent/index.md) lesson — see its own README for how to run it (locally with `uv run python agent.py`, or directly in Codespaces). Every year's Capstone gets its own `examples/<year>-<slug>/` folder, and past years' folders stay as-is once shipped.
 
-[`examples/student-agents/`](./examples/student-agents/) is a gallery of agents students have built for the capstone — its README walks complete git beginners through forking, branching, and opening a PR to add their own.
+[`examples/student-agents/`](./examples/student-agents/) is a gallery of agents students have built for the 2026 Capstone — its README walks complete git beginners through forking, branching, and opening a PR to add their own.
 
 ## Contributing
 

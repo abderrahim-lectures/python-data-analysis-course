@@ -20,7 +20,7 @@ cd examples/student-agents/your-name
 uv run python agent.py
 ```
 
-You're free to use whichever free-tier provider you like (GitHub Models, Gemini, Groq, Mistral, Cerebras, OpenRouter, or another) — see the [Capstone Bonus doc](../../../docs/bonus/capstone-ai-agent.md#step-2-get-a-free-ai-api-key)'s provider table. If you're not using the default, swap the client in `agent.py` for your provider's own (a couple of lines) and update `.env` accordingly.
+You're free to use whichever free-tier provider you like (GitHub Models, Gemini, Groq, Mistral, Cerebras, OpenRouter, or another) — see the [Capstone Bonus doc](../../../docs/bonus/2026-ai-agent/index.md#step-2-get-a-free-ai-api-key)'s provider table. If you're not using the default, swap the client in `agent.py` for your provider's own (a couple of lines) and update `.env` accordingly.
 
 ## Notes
 

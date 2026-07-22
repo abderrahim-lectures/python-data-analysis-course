@@ -1,4 +1,4 @@
-import type {BadgeId, SectionId, TrackId, WeekId} from '@site/src/types/progress';
+import type {BadgeId, CapstoneId, SectionId, TrackId, WeekId} from '@site/src/types/progress';
 
 /** Score (0-1) a WeeklyQuiz/PlacementQuiz must reach to count as "passed". */
 export const QUIZ_PASS_THRESHOLD = 0.8;
@@ -27,4 +27,9 @@ export const COURSE_GRADUATE_BADGE: BadgeId = 'course-graduate';
 /** Badge earned when a week's bonus content is unlocked. */
 export function bonusUnlockedBadge(weekId: WeekId): BadgeId {
   return `${weekId}-bonus-unlocked`;
+}
+
+/** Badge earned for marking a given year's Capstone project complete. */
+export function capstoneCompleteBadge(capstoneId: CapstoneId): BadgeId {
+  return `capstone-${capstoneId}-complete`;
 }
