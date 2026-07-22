@@ -1,0 +1,16 @@
+# Python & Data Analysis Course
+
+> A free, browser-based Python and data analysis course. No installs required until the capstone. Runs entirely in-browser via self-hosted JupyterLite (Pyodide/WebAssembly), works offline once installed as a PWA. Available in English, Arabic, Spanish, and French.
+
+Two 5-week sections, each with a Normal track (guided fundamentals) and a Hard track (project-based, no shortcuts): Python 101 builds a tiny language model from scratch in pure Python; Data Analysis runs a full exploratory data analysis project with pandas. A Capstone project is added every year after the core curriculum, with past years' projects staying available.
+
+## Course
+
+- [Python 101](https://pyda-course.online/docs/python-101): variables, control flow, data structures, functions, CSV files — Normal track for fundamentals, Hard track builds a tiny language model from scratch in pure Python.
+- [Pandas & Data Analysis](https://pyda-course.online/docs/data-analysis): loading, cleaning, filtering, grouping real data — Normal track reproduces a Kaggle-style notebook, Hard track runs a full exploratory data analysis project.
+- [Capstone Projects](https://pyda-course.online/docs/bonus): install Python locally for real and build something the in-browser playground never could. A new project every year; past years stay available.
+
+## About
+
+- [Credits](https://pyda-course.online/credits): third-party datasets and tools this course relies on.
+- [Source code](https://github.com/abderrahim-lectures/python-data-analysis-course): MIT-licensed code, CC-BY 4.0 content.
