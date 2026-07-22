@@ -11,7 +11,7 @@ Each section offers two parallel tracks (**Normal** and **Hard**) so students ca
 
 Decisions locked in with the user:
 - **Site generator:** Docusaurus
-- **Playground (dual, section-aware):** **Trinket.io** for Section 1 (Python 101) — a simple no-login script editor, the right weight for basics without notebooks. **Self-hosted JupyterLite** for Section 2 (Data Analysis) — a full Jupyter Notebook UI running in-browser via Pyodide/WebAssembly, no login, no external server, deployed as static files alongside the rest of the site; it matches the cell-based, Kaggle-notebook feel that Section 2's pedagogy is built around, and ships pandas/numpy/matplotlib out of the box.
+- **Playground (dual-mode, section-aware, self-hosted throughout):** **Self-hosted JupyterLite** for both sections — no login, no external server, no third-party embed, deployed as static files alongside the rest of the site. Section 1 (Python 101) uses JupyterLite's **REPL app**: a plain console, the right weight for single-snippet exercises without notebook cells. Section 2 (Data Analysis) uses JupyterLite's **Notebook app**: a full Jupyter Notebook UI matching the cell-based, Kaggle-notebook feel that Section 2's pedagogy is built around. Both apps share the same underlying Pyodide/WebAssembly runtime and the same bundled dataset files (mounted into the virtual filesystem, so `open("students-normal.csv")` just works with no manual upload step). This originally used Trinket.io (a third-party embed) for Section 1, but Trinket can never work offline regardless of this site's own service worker — since the whole course now pitches "works offline" (see Progressive Web App below), Python 101 was migrated to JupyterLite's REPL app too, which is self-hosted and precached like the rest of the site.
 - **Content depth:** full content for all 10 weeks × 2 tracks in this pass (not just scaffolding)
 - **Languages:** English (default) plus Arabic, Spanish, and French via Docusaurus's built-in i18n system — see Internationalization section below for details. All four locales are now fully translated: all 20 weekly lessons, both section landing pages, the capstone page, and every custom React page/component (homepage, credits, progress, share, onboarding, track selector, etc.) — Arabic, Spanish, and French were done one locale at a time, in that order.
 - **Pedagogy pattern:** replace plain "Exercises" with **Challenges (with revealable answers)** + **Socratic Questions** (open-ended, no-answer reflection prompts) on every lesson page
@@ -35,7 +35,7 @@ Every unit of work — a component, a week's content, an infra piece, a bug fix,
 
 "Small" is scoped at roughly the granularity already broken out across this plan — one issue per component, per week's content, per infra piece — not one issue per individual file edit, which would just produce noise given this project's real size (dozens of components, 20 weekly content pages, i18n scaffolding, a JupyterLite build, a gamification system).
 
-**The loop closes with students, not just us:** every doc page footer carries a small "Found a problem with this page? Report it" link that opens a pre-filled `gh` issue (page path + a `type:bug`/`area:*` label pre-selected) — so a typo or a broken Trinket embed a student hits mid-lesson feeds into the exact same issue → branch → PR pipeline, rather than getting lost in a Slack DM or forgotten.
+**The loop closes with students, not just us:** every doc page footer carries a small "Found a problem with this page? Report it" link that opens a pre-filled `gh` issue (page path + a `type:bug`/`area:*` label pre-selected) — so a typo or a broken playground embed a student hits mid-lesson feeds into the exact same issue → branch → PR pipeline, rather than getting lost in a Slack DM or forgotten.
 
 This adds prerequisites before any content work starts:
 - A **public** GitHub repo named **`python-data-analysis-course`** needs to exist and be connected — there is currently no git repo at all in the working directory (currently named `pyda-course`; it gets renamed to `python-data-analysis-course` to match, or the new repo is simply cloned to a matching path), so step one is `git init` plus `gh repo create python-data-analysis-course --public` (under whichever account `gh` is authenticated as), which also fixes `docusaurus.config.js`'s `baseUrl` to `/python-data-analysis-course/`.
@@ -94,7 +94,7 @@ python-data-analysis-course/
 │       ├── index.tsx           # landing page: course overview, section/track picker
 │       ├── progress.tsx        # student's badge case + overall completion, reads localStorage
 │       ├── share.tsx           # read-only rendering of a shared progress link, decodes ?data= from the URL, no localStorage read
-│       └── credits.tsx         # dataset/tool attribution: Titanic mirror, Students Performance in Exams, Trinket, JupyterLite, Pyodide
+│       └── credits.tsx         # dataset/tool attribution: Titanic mirror, Students Performance in Exams, JupyterLite, Pyodide
 ├── docs/
 │   ├── python-101/
 │   │   ├── index.md            # section overview + learning objectives (both tracks, comparison table)
@@ -131,18 +131,19 @@ Nobody lands inside a track blind. The click-path is:
 5. Into the chosen track's Week 1.
 6. **On every return visit**, `WelcomeBackBanner` compares "now" against `pda-course:last-visit`; after a multi-day gap it shows a dismissible "Welcome back, {name} — you left off at Week X" banner linking straight to the next incomplete week. No push notifications, no backend — this is the closest no-infrastructure equivalent to a Duolingo-style nudge, triggered on the next visit rather than while the student is away.
 
-## Playground (FAB) — dual, section-aware
+## Playground (FAB) — dual-mode, self-hosted throughout
 
-- `src/components/PlaygroundFab`: a fixed-position, thumb-reachable button (bottom-right, all pages) that opens the playground. **On mobile it opens full-screen** (not a small modal — neither a code editor nor a notebook UI is usable in a tiny modal on a phone); on desktop it's a docked drawer/modal.
-- **Which tool it opens depends on where the student is:**
-  - On any **Python 101** page → a Trinket.io iframe (`https://trinket.io/embed/python3/...`), a simple no-login scratch REPL.
-  - On any **Data Analysis** page → the self-hosted **JupyterLite** instance, deep-linked to that week's starter notebook (`/lite/notebooks/?path=week-6.ipynb`) when opened from a specific week, or a blank scratch notebook from the generic FAB on the section landing page.
+- `src/components/PlaygroundFab`: a fixed-position, thumb-reachable button (bottom-right, all pages) that opens the playground. **On mobile it opens full-screen** (not a small modal — neither a console nor a notebook UI is usable in a tiny modal on a phone); on desktop it's a docked drawer/modal.
+- **Which JupyterLite app it opens depends on where the student is** (`src/components/PlaygroundFab/JupyterLiteEmbed.tsx`, `mode: 'notebook' | 'repl'`):
+  - On any **Python 101** page → JupyterLite's **REPL app** (`/lite/repl/`), a plain Python console — the lightweight scratch playground Python 101's single-snippet exercises need.
+  - On any **Data Analysis** page → JupyterLite's **Notebook app** (`/lite/notebooks/`), deep-linked to that week's starter notebook (`?path=week-6.ipynb`) when opened from a specific week, or a blank scratch notebook from the generic FAB on the section landing page.
   - Detected via the current doc's frontmatter/route (`section: python-101 | data-analysis`), not guessed from the URL string.
-- **JupyterLite uses its "Notebook" app, not the full "Lab" app** — Lab's multi-panel layout (file browser + tabs + sidebars) doesn't work on a phone; the single-document Notebook view does, which also keeps this consistent with the mobile-first requirement.
-- Mounted globally via a swizzled `src/theme/Root.tsx` so it appears on every doc page and the landing page.
-- Individual Python 101 lesson pages additionally embed **inline** Trinket iframes next to code examples/challenges where students should run that specific snippet. Data Analysis lesson pages link/deep-link into the relevant cell of that week's JupyterLite notebook instead of embedding a separate inline iframe per snippet (a notebook is the unit of interaction there, not a single snippet). All embeds are sized responsively so they don't overflow on narrow screens.
-- **First-load weight is a real risk on mobile data**: Pyodide plus pandas/numpy/matplotlib wheels are tens of MB. The FAB shows an explicit loading state ("Loading the notebook environment — first load can take a moment, faster on Wi-Fi") rather than a blank iframe that looks frozen; the browser caches it after the first visit so this cost is paid once per device, not once per page.
-- **Iframes are mounted lazily, not eagerly**: neither the Trinket nor the JupyterLite iframe gets an `src` (or gets rendered at all) until the student actually opens the FAB or an inline embed — a student who never opens the playground on a given page pays zero extra network/JS cost for it, which matters a lot on mobile data.
+  - Both apps are built from the same `jupyterlite-config/jupyter_lite_config.json` (`"apps": ["notebooks", "repl"]`) and share the same mounted dataset files (`jupyterlite-config/files/`) — a dataset bundled for one is automatically available to the other, since they're the same underlying Pyodide virtual filesystem.
+- **JupyterLite's Notebook app, not the full "Lab" app** — Lab's multi-panel layout (file browser + tabs + sidebars) doesn't work on a phone; the single-document Notebook view does, which also keeps this consistent with the mobile-first requirement. The REPL app is single-document by nature, so this doesn't apply to it.
+- Mounted globally via a swizzled `src/theme/Root.tsx` so it appears on every doc page and the landing page. There are no separate per-snippet inline embeds on individual lesson pages — the single global FAB is the only playground entry point, for both sections.
+- **Self-hosted, not a third-party embed** — this was originally Trinket.io for Python 101 (a third-party no-login script editor), but Trinket could never work offline no matter what this site's own service worker did, since it's a separate origin the student's browser has to reach live. Migrated to JupyterLite's REPL app so Python 101 gets the same "works offline once visited" property as Data Analysis (see Progressive Web App below) — and as a bonus, students no longer need Trinket's manual copy-paste-into-a-new-file step to use a bundled dataset: it's already mounted.
+- **First-load weight is a real risk on mobile data**: Pyodide plus pandas/numpy/matplotlib wheels are tens of MB. The FAB shows an explicit loading state ("Loading the Python environment — first load can take a moment, faster on Wi-Fi") rather than a blank iframe that looks frozen; the browser (and, once installed, the PWA's service worker) caches it after the first visit so this cost is paid once per device, not once per page.
+- **The iframe is mounted lazily, not eagerly**: it gets no `src` (isn't rendered at all) until the student actually opens the FAB — a student who never opens the playground on a given page pays zero extra network/JS cost for it, which matters a lot on mobile data.
 
 ## Client-Side Persistence (localStorage)
 
@@ -152,7 +153,7 @@ No backend/login exists, so all per-student state lives in the browser via a sin
 
 - **Progress tracking** (`pda-course:progress`): a map of `weekId -> completed boolean`, written by a `ProgressCheckbox` on each week page. The section landing pages read this to render a progress bar/checklist across the 5 weeks.
 - **Challenge answers revealed** (`pda-course:revealed`): a map of `challengeId -> boolean`, written by the `Challenge` component so a previously-revealed answer stays expanded on return visits instead of re-hiding.
-- **Playground scratch code** (`pda-course:playground-code`): the FAB's own textarea/state (for any parts of the playground UI we control directly, e.g. a "notes/scratch" pane next to the Trinket embed) persists across reloads. Code typed *inside* the embedded Trinket iframe itself is sandboxed and outside our control — Trinket has its own save/fork mechanism. JupyterLite needs nothing from us here: it persists notebook edits itself via its own browser storage (IndexedDB) automatically.
+- **Playground scratch code**: JupyterLite (both the REPL and Notebook apps) persists everything a student types itself, via its own browser storage (IndexedDB) — no separate scratch-pane mechanism of our own was needed. (`pda-course:playground-code` exists as a reserved key in `storageKeys.ts` for a possible future "notes" pane, but is currently unused.)
 - **Track selection** (`pda-course:track`): `"normal" | "hard"` per section, written by `TrackSelector`. Section landing pages and the sidebar default to the student's last-chosen track (with an obvious way to switch).
 - **Placement quiz result** (`pda-course:quiz-data-analysis`): score + pass/fail + timestamp from `PlacementQuiz`, so returning students who already took it aren't asked again (a "retake" link resets just this key).
 - **Weekly quiz results** (`pda-course:weekly-quiz`): a map of `weekId -> {score, passed}`, written by `WeeklyQuiz`. `BonusContent` on that week's page reads this to decide whether to render unlocked or show a "🔒 pass this week's quiz to unlock" teaser.
@@ -201,7 +202,7 @@ Uses Docusaurus's **built-in i18n system** (no separate library needed/added —
 
 Each `week-N.md` follows the same skeleton:
 1. **🎯 Learning objectives** — 2–3 bullet statements of what you'll be able to do by the end
-2. **Lesson** — concept explanation (math-first where it fits) + runnable inline Trinket examples
+2. **Lesson** — concept explanation (math-first where it fits) + runnable examples via the playground FAB
 3. **🧩 Challenges** — 3–5 coding tasks of increasing difficulty, each answer hidden in a collapsible `<details>`/admonition block so students can self-check without seeing it prematurely
 4. **🤔 Socratic Questions** — 2–4 open-ended questions with no provided answer, designed to make students reason about *why* (e.g., "What would happen if you used `>` instead of `>=` here? Try it and explain the boundary case.")
 5. **✅ Weekly quiz** — 3–5 short auto-graded questions on that week's material via `WeeklyQuiz`; completing the week awards a completion badge, and passing the quiz (e.g. ≥80%) unlocks that week's `BonusContent` block
@@ -232,7 +233,7 @@ The one big reward at the very end of the whole course — deliberately teased o
 
 - **Unlock condition:** finishing both sections (all 10 weeks, either track) — this is course-level completion, not a single week's quiz, so it's checked against `pda-course:progress` rather than `pda-course:weekly-quiz`. Earning it awards a `course-graduate` badge and surfaces the capstone link prominently on `progress.tsx` (and in the welcome page teaser for anyone who hasn't reached it yet).
 - **What it covers**, in `docs/bonus/capstone-ai-agent.md`:
-  1. Installing Python locally for real (a short, OS-by-OS guide — python.org installer, verifying `python --version`/`pip`) — the natural "graduation" off the in-browser Trinket/JupyterLite playgrounds the rest of the course relies on.
+  1. Installing Python locally for real (a short, OS-by-OS guide — python.org installer, verifying `python --version`/`pip`) — the natural "graduation" off the in-browser JupyterLite playgrounds the rest of the course relies on.
   2. Getting a **free-tier AI API key** from whichever provider the student prefers (GitHub Models is the suggested default; Gemini, Groq, Mistral, Cerebras, and OpenRouter are documented alternatives) and setting it as a local environment variable or `.env` file — never a key embedded in course content or committed to the repo.
   3. Installing and configuring LangChain's **`deepagents`** against that key.
   4. Building and running one small example agent locally, wrapping up the course on "here's where this goes next" rather than ending cold at Week 10.
@@ -274,7 +275,7 @@ A small hand-authored sentence corpus (public-domain/original, avoiding copyrigh
 - Week 9: advanced/storytelling visualizations
 - Week 10: final deliverable — full EDA report on **"Students Performance in Exams"** (scores in math/reading/writing vs. gender, parental education, lunch type, test-prep completion) — one of Kaggle's most-voted beginner EDA datasets, and thematically on-topic for a course about education — loaded via a public raw-CSV URL, with a required set of charts
 
-Every external dataset/tool used (Titanic mirror, the Students Performance in Exams dataset, Trinket, JupyterLite/Pyodide) is credited on the `credits.tsx` page — good academic practice for a course aimed at students who'll be expected to cite sources themselves.
+Every external dataset/tool used (Titanic mirror, the Students Performance in Exams dataset, JupyterLite/Pyodide) is credited on the `credits.tsx` page — good academic practice for a course aimed at students who'll be expected to cite sources themselves.
 
 ## Plan Copy in Repo
 
@@ -304,11 +305,12 @@ A bundle of standard, static-site-appropriate SEO practices, all shipped:
 
 ## Progressive Web App (PWA)
 
-Fits the course's "no installs, on your phone" framing — the site itself is installable and works offline once installed, via `@docusaurus/plugin-pwa`:
+Fits the course's "no installs, on your phone" framing — the site itself is installable and works offline for every visitor (not just those who install it), via `@docusaurus/plugin-pwa`:
 - `static/manifest.json`: name, icons (192/512/maskable-512/apple-touch-180, rendered from the existing logo), `theme_color`, `display: standalone`.
-- The plugin's generated service worker precaches the built asset manifest, so pages already visited before going offline continue to work without a network connection once the app is installed. Offline-mode activation is gated to `appInstalled`/`standalone`/`queryString` contexts (the plugin's own default), so it doesn't interfere with normal browsing before install.
+- The plugin's generated service worker precaches the built Docusaurus asset manifest (every lesson page, JS/CSS — not the separate JupyterLite build, see below), so pages already visited before going offline continue to work without a network connection. `offlineModeActivationStrategies: ['always']` — deliberately broader than the plugin's own default (`appInstalled`/`standalone`/`queryString`, install-only), since that default meant a normal browser visit never actually cached anything; `'always'` is what makes "works offline" true for every visitor, matching this course's own pitch, not just students who installed the app.
 - `InstallPwaButton` (homepage hero): shows a real "Install the course app" button via `beforeinstallprompt` on Chromium-based browsers (Chrome/Brave/Edge on desktop and Android), an "Add to Home Screen" text hint on iOS Safari (which never fires that event), and renders nothing once the app is already installed/running standalone.
 - **Known platform gap:** Brave for Android has historically had incomplete `beforeinstallprompt`/WebAPK support compared to Chrome (it lacks the Google Play Services integration Chrome uses to generate a real installable app) — confirmed during manual testing that Chrome Android shows the install button correctly while Brave Android does not, which is a Brave limitation, not a bug in this site.
+- **The JupyterLite playground has a separate offline story, on purpose**: it's a distinct static build (`/lite/`) with its own service worker/IndexedDB-based persistence, not part of the Docusaurus PWA plugin's precache manifest — this is *why* Python 101 was migrated off Trinket (see Playground section above): a self-hosted JupyterLite REPL can be part of "this site works offline," a third-party Trinket iframe never could be, regardless of anything configured here.
 
 ## Automated Smoke Tests
 
@@ -316,21 +318,20 @@ Given the Development Workflow above means many small, independent PRs over time
 - `localStorage` round-trip: progress/badges/quiz-result/ui-mode survive a reload.
 - `UiModeContext` toggle actually changes rendering (gamified flourishes present/absent).
 - `PlacementQuiz` gate: choosing Hard on Data Analysis shows the quiz; "continue anyway" reaches Week 6.
-- `PlaygroundFab` opens the correct tool (Trinket vs. JupyterLite) depending on section.
+- `PlaygroundFab` opens the correct JupyterLite app (REPL vs. Notebook) depending on section.
 
 ## Verification
 
 - `npm run build` succeeds with no broken links (Docusaurus's built-in broken-link checker).
 - **The actual deployed GH Pages URL loads correctly** (not just local `npm run serve`) — this is the real test of `baseUrl`/`trailingSlash` correctness, since GH Pages' static-file serving can behave differently from the local dev server.
 - `npm run serve` locally; click through every week page in both tracks/sections to confirm nav, challenge answer-reveal, and socratic question rendering.
-- Manually click the FAB on a Python 101 page to confirm the Trinket iframe loads and a sample snippet runs inside it.
+- Manually click the FAB on a Python 101 page to confirm the JupyterLite REPL loads and a sample snippet runs inside it.
 - Manually click the FAB on a Data Analysis week page to confirm it opens JupyterLite's Notebook app (not Lab), deep-linked to that week's starter notebook, and that a `pandas`/`pd.read_csv(...)` cell against a bundled dataset actually executes and returns a DataFrame.
-- Spot-check inline per-lesson Trinket embeds on at least one Python 101 page per track.
 - Confirm localStorage persistence: mark a week complete, reveal a challenge answer, pick a track, take the quiz, reload the page, and verify all states survive; then use the reset control and confirm the namespaced keys clear.
 - Walk the full flow end-to-end: welcome page → section objectives → choose Hard on Data Analysis → confirm `PlacementQuiz` appears and both a high score and "continue anyway" on a low score correctly proceed into Week 6.
 - Complete a week's `WeeklyQuiz` with a passing score and confirm: a badge toast fires, the badge appears on `progress.tsx`, and that week's `BonusContent` (try/except or classes teaser) switches from locked to unlocked and stays unlocked on reload.
 - Earn progress/badges in Gamified mode, flip `ModeToggle` to Classical, and confirm the same completions/quiz results still show (as plain text/checklist, no badges/toasts) with nothing lost; flip back to Gamified and confirm the badges reappear exactly as before.
-- Test primarily at a phone viewport (e.g. 375px wide) in browser devtools: FAB reachability, full-screen Trinket and full-screen JupyterLite Notebook both usable one-handed (this is the highest-risk mobile item — JupyterLite's Notebook app must be confirmed genuinely workable at phone width, not just "technically renders"), stacked track-comparison cards, quiz and challenge components usable one-handed, inline Trinket embeds not overflowing horizontally. Then confirm desktop still looks intentional, not just "stretched mobile."
+- Test primarily at a phone viewport (e.g. 375px wide) in browser devtools: FAB reachability, full-screen JupyterLite REPL and full-screen JupyterLite Notebook both usable one-handed (this is the highest-risk mobile item — the Notebook app in particular must be confirmed genuinely workable at phone width, not just "technically renders"), stacked track-comparison cards, quiz and challenge components usable one-handed. Then confirm desktop still looks intentional, not just "stretched mobile."
 - Run a mobile Lighthouse pass on a representative lesson page (not one with the FAB open) and confirm the performance score reflects lazy-loaded iframes and dynamically-imported certificate libraries actually working — a low score here likely means something is loading eagerly that shouldn't be.
 - Switch the locale to Arabic and confirm the layout mirrors correctly (RTL) including the FAB, sidebar, homepage, and badge/quiz components — done, confirmed via a real screenshot showing a fully translated, correctly-mirrored Arabic homepage. Switch to Spanish/French and confirm the UI chrome and lesson content are both translated (all four locales are now fully translated, so there's no English-fallback case left to check here).
 - Enter a name at onboarding and confirm it's used in personalized copy (badge toast, welcome-back banner); skip the name field on a fresh profile and confirm everything still reads naturally with generic phrasing.

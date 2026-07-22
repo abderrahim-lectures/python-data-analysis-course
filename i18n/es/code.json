@@ -568,9 +568,6 @@
   "credits.intro": {
     "message": "Conjuntos de datos y herramientas de terceros en los que se basa este curso:"
   },
-  "credits.trinket": {
-    "message": "Editor de Python en el navegador utilizado en todo Python 101."
-  },
   "credits.jupyterlite": {
     "message": "Notebook de Jupyter en el navegador (vía Pyodide) utilizado en todo Análisis de Datos."
   },

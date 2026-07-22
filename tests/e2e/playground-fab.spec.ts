@@ -1,17 +1,17 @@
 import {test, expect} from '@playwright/test';
 import {skipOnboarding} from './helpers';
 
-test('FAB opens Trinket on a Python 101 page', async ({page}) => {
+test('FAB opens the JupyterLite REPL on a Python 101 page', async ({page}) => {
   await skipOnboarding(page);
   await page.goto('docs/python-101/normal/week-1');
 
   await page.getByRole('button', {name: /open the code playground/i}).click();
-  const iframe = page.locator('iframe[title="Trinket Python playground"]');
+  const iframe = page.locator('iframe[title="JupyterLite Python console"]');
   await expect(iframe).toBeVisible();
-  await expect(iframe).toHaveAttribute('src', /trinket\.io/);
+  await expect(iframe).toHaveAttribute('src', /\/lite\/repl\//);
 });
 
-test('FAB opens JupyterLite on a Data Analysis page', async ({page}) => {
+test('FAB opens the JupyterLite Notebook app on a Data Analysis page', async ({page}) => {
   await skipOnboarding(page);
   await page.goto('docs/data-analysis/normal/week-6');
 
@@ -28,7 +28,7 @@ test('closing the FAB hides the embed without unmounting it, and does not block 
   await page.goto('docs/python-101/normal/week-1');
 
   await page.getByRole('button', {name: /open the code playground/i}).click();
-  const iframe = page.locator('iframe[title="Trinket Python playground"]');
+  const iframe = page.locator('iframe[title="JupyterLite Python console"]');
   await expect(iframe).toBeVisible();
 
   await page.getByRole('button', {name: /^close$/i}).click();

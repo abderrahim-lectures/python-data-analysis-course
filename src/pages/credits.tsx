@@ -21,15 +21,6 @@ export default function CreditsPage(): ReactNode {
         </p>
         <ul>
           <li>
-            <a href="https://trinket.io" target="_blank" rel="noreferrer">
-              Trinket
-            </a>{' '}
-            —{' '}
-            <Translate id="credits.trinket">
-              In-browser Python editor used throughout Python 101.
-            </Translate>
-          </li>
-          <li>
             <a href="https://jupyterlite.readthedocs.io" target="_blank" rel="noreferrer">
               JupyterLite
             </a>{' '}

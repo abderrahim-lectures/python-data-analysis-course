@@ -15,7 +15,7 @@ A free, browser-based Python and data analysis course — no installs required u
 - **Section 2: Pandas & Data Analysis** (5 weeks) — pandas basics reproducing a Kaggle-style notebook, with a Hard track doing a full exploratory data analysis project with visualizations.
 - **Capstone bonus** — install Python locally for real with `uv` and build your first AI agent with LangChain's `deepagents`, using a free-tier API key.
 
-Run entirely in the browser via an embedded Trinket editor (Python 101) and a self-hosted JupyterLite notebook (Data Analysis) — click the floating button on any page to start coding immediately, no account and no local install needed until the capstone.
+Run entirely in the browser via self-hosted JupyterLite: a lightweight Python console (Python 101) and a full notebook (Data Analysis), both powered by Pyodide — click the floating button on any page to start coding immediately, no account and no local install needed until the capstone. Since it's self-hosted (not a third-party embed), it also works offline once you've visited a page.
 
 See [`PLAN.md`](./PLAN.md) for the full design plan and rationale behind every major decision.
 
@@ -42,7 +42,7 @@ By the end of the course, a student can:
 - **Challenge + Socratic pattern, every week.** Each lesson pairs 🧩 **Challenges** (a concrete task with a collapsible answer you can self-check) with 🤔 **Socratic Questions** (open-ended, no answer provided — designed to make you reason about edge cases and *why*, not just *how*).
 - **Optional gamification, not required motivation.** Badges, unlock toasts, and quiz-gated bonus content (try/except, classes) are all opt-in — a Classical mode renders the exact same underlying progress as a plain checklist, and switching between modes any time never loses data.
 - **Honest, not hyped.** The EDA track explicitly teaches correlation-vs-causation and chart-honesty practices (truncated axes, cherry-picked ranges) as core material, not a footnote — and the completion certificate is labeled a lightweight spot-check, not a verifiable credential, because that's actually true of a backend-free static site.
-- **Zero-install first, real install as a reward.** Every core week runs in-browser (Trinket / JupyterLite via Pyodide). Installing Python for real is saved for the Capstone, once fundamentals are solid enough to make that step feel like graduation rather than a chore.
+- **Zero-install first, real install as a reward.** Every core week runs in-browser (JupyterLite via Pyodide). Installing Python for real is saved for the Capstone, once fundamentals are solid enough to make that step feel like graduation rather than a chore.
 
 ## Development
 

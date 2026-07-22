@@ -35,14 +35,14 @@ Antes de tocar CSV específicamente, una nueva pieza de sintaxis: `with open(...
 
 Un archivo CSV (comma-separated values, valores separados por comas) es una tabla de texto plano — una línea por fila, valores separados por comas. El conjunto de datos de esta semana, [`students-normal.csv`](pathname:///datasets/students-normal.csv), tiene una fila de encabezado (`name,quiz1,quiz2,quiz3`) seguida de una fila por estudiante.
 
-:::tip[Usar este archivo en el playground de Trinket]
-El playground de Trinket del FAB es un editor de terceros en un entorno aislado (sandbox) — no puede acceder directamente a los archivos de este sitio. Abre el enlace del conjunto de datos de arriba, copia su contenido, y luego en Trinket crea un archivo nuevo llamado `students.csv` (usa el botón "+" del árbol de archivos) y pega el contenido ahí. Tus llamadas a `open("students.csv")` lo encontrarán entonces.
+:::tip[Este archivo ya está disponible en el playground]
+El playground del FAB ya tiene `students-normal.csv` precargado — no hace falta copiar ni pegar nada. `open("students-normal.csv")` en tu código de abajo lo encontrará directamente.
 :::
 
 ```python
 import csv
 
-with open("students.csv", newline="") as f:
+with open("students-normal.csv", newline="") as f:
     reader = csv.reader(f)
     header = next(reader)          # primera fila: nombres de columnas
     for row in reader:
@@ -56,7 +56,7 @@ Todo valor leído de esta forma es un `str` — un número como `"87"` en el arc
 En lugar de rastrear las posiciones de columna por índice, `csv.DictReader` te entrega cada fila como un `dict` indexado por los nombres del encabezado — esta suele ser la opción más legible, y lee automáticamente la fila de encabezado por ti (no hace falta un `next(reader)` manual):
 
 ```python
-with open("students.csv", newline="") as f:
+with open("students-normal.csv", newline="") as f:
     reader = csv.DictReader(f)
     for row in reader:
         name = row["name"]
@@ -98,7 +98,7 @@ def average(scores):
     return sum(scores) / len(scores)
 
 averages = {}   # name -> average
-with open("students.csv", newline="") as f:
+with open("students-normal.csv", newline="") as f:
     reader = csv.DictReader(f)
     for row in reader:
         name = row["name"]

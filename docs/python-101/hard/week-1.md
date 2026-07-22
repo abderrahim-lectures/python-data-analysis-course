@@ -41,8 +41,8 @@ Why does *counting* let you estimate a probability at all? Because probability i
 
 This track works with [`slm-corpus.csv`](pathname:///datasets/slm-corpus.csv), a small hand-written set of simple sentences, one per row under a `sentence` column. A "corpus" is just the dataset of text a language model learns from — ours is deliberately tiny (20 sentences) so every step stays fast enough to run and inspect by hand this early in the course.
 
-:::tip[Using this file in the Trinket playground]
-Open the dataset link above, copy its contents, then in Trinket create a file named `slm-corpus.csv` and paste it in, exactly like Python 101 Normal Week 5.
+:::tip[This file is already available in the playground]
+The FAB's playground has `slm-corpus.csv` pre-loaded — no need to copy/paste anything, `load_corpus("slm-corpus.csv")` below will just find it directly.
 :::
 
 ### Loading it

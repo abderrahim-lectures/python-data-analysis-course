@@ -2,7 +2,6 @@ import React, {useEffect, useRef, useState} from 'react';
 import Translate, {translate} from '@docusaurus/Translate';
 import {useCurrentDoc} from '@site/src/context/CurrentDocContext';
 import {buildWeekId} from '@site/src/utils/weekId';
-import TrinketEmbed from './TrinketEmbed';
 import JupyterLiteEmbed from './JupyterLiteEmbed';
 import styles from './styles.module.css';
 
@@ -11,9 +10,13 @@ export default function PlaygroundFab(): React.JSX.Element {
   const {doc} = useCurrentDoc();
   const panelRef = useRef<HTMLDivElement>(null);
 
-  // Default to Trinket when the FAB is opened outside any doc page (e.g. the homepage) —
-  // Python 101 is the course's entry point, so that's the most useful universal default.
-  const showJupyterLite = doc.section === 'data-analysis';
+  // Both sections use JupyterLite (self-hosted, works offline) — Data Analysis
+  // gets the full Notebook app (cell-based, matches its pedagogy), Python 101
+  // gets the lighter REPL app (a plain console, closer to what a "scratch
+  // playground" should feel like for single-snippet exercises). Defaults to
+  // the REPL when the FAB is opened outside any doc page (e.g. the homepage),
+  // since Python 101 is the course's entry point.
+  const embedMode: 'notebook' | 'repl' = doc.section === 'data-analysis' ? 'notebook' : 'repl';
   const weekId =
     doc.section && doc.track && doc.week != null
       ? buildWeekId(doc.section, doc.track, doc.week)
@@ -93,11 +96,7 @@ export default function PlaygroundFab(): React.JSX.Element {
               </button>
             </div>
             <div className={styles.panelBody}>
-              {showJupyterLite ? (
-                <JupyterLiteEmbed key={embedKey} weekId={weekId} />
-              ) : (
-                <TrinketEmbed key={embedKey} />
-              )}
+              <JupyterLiteEmbed key={embedKey} weekId={weekId} mode={embedMode} />
             </div>
           </div>
         </div>
