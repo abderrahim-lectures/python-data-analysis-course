@@ -35,14 +35,14 @@ Before touching CSVs specifically, one new piece of syntax: `with open(...) as f
 
 A CSV (comma-separated values) file is a plain-text table — one line per row, values separated by commas. This week's dataset, [`students-normal.csv`](pathname:///datasets/students-normal.csv), has a header row (`name,quiz1,quiz2,quiz3`) followed by one row per student.
 
-:::tip[Using this file in the Trinket playground]
-The FAB's Trinket playground is a sandboxed third-party editor — it can't reach files on this site directly. Open the dataset link above, copy its contents, then in Trinket create a new file named `students.csv` (use the file-tree "+" button) and paste the contents in. Your `open("students.csv")` calls will then find it.
+:::tip[This file is already available in the playground]
+The FAB's playground has `students-normal.csv` pre-loaded — no need to copy/paste anything. `open("students-normal.csv")` in your code below will just find it directly.
 :::
 
 ```python
 import csv
 
-with open("students.csv", newline="") as f:
+with open("students-normal.csv", newline="") as f:
     reader = csv.reader(f)
     header = next(reader)          # first row: column names
     for row in reader:
@@ -56,7 +56,7 @@ Every value read this way is a `str` — a number like `"87"` in the file arrive
 Rather than tracking column positions by index, `csv.DictReader` gives you each row as a `dict` keyed by the header names — this is usually the more readable option, and it automatically reads the header row for you (no manual `next(reader)` needed):
 
 ```python
-with open("students.csv", newline="") as f:
+with open("students-normal.csv", newline="") as f:
     reader = csv.DictReader(f)
     for row in reader:
         name = row["name"]
@@ -98,7 +98,7 @@ def average(scores):
     return sum(scores) / len(scores)
 
 averages = {}   # name -> average
-with open("students.csv", newline="") as f:
+with open("students-normal.csv", newline="") as f:
     reader = csv.DictReader(f)
     for row in reader:
         name = row["name"]

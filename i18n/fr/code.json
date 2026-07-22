@@ -568,9 +568,6 @@
   "credits.intro": {
     "message": "Jeux de données et outils tiers sur lesquels ce cours s'appuie :"
   },
-  "credits.trinket": {
-    "message": "Éditeur Python dans le navigateur utilisé tout au long de Python 101."
-  },
   "credits.jupyterlite": {
     "message": "Notebook Jupyter dans le navigateur (via Pyodide) utilisé tout au long d'Analyse de Données."
   },

@@ -1,14 +1,6 @@
 import useBaseUrl from '@docusaurus/useBaseUrl';
 
 /**
- * Generic no-login Python 3 scratch playground — used for every Python 101 page.
- * No `runOption` param: this keeps Trinket's default split editor+console view
- * (with its own visible "Run" button) instead of the console-only REPL, so
- * students see and edit code rather than just an output console.
- */
-export const TRINKET_EMBED_URL = 'https://trinket.io/embed/python3';
-
-/**
  * JupyterLite Notebook app URL, optionally deep-linked to a specific week's
  * starter notebook. Falls back to a blank scratch notebook when weekId is null
  * (e.g. opened from the Data Analysis section landing page, not a specific week).
@@ -23,10 +15,24 @@ export const TRINKET_EMBED_URL = 'https://trinket.io/embed/python3';
  * `npm run serve` locally, only via the actual deployed site or an equivalent
  * static server started with something like `python3 -m http.server`.
  */
-export function useJupyterLiteUrl(weekId: string | null): string {
+export function useJupyterLiteNotebookUrl(weekId: string | null): string {
   const liteBase = useBaseUrl('/lite/notebooks/');
   if (!weekId) {
     return liteBase;
   }
   return `${liteBase}?path=${weekId}.ipynb`;
+}
+
+/**
+ * JupyterLite's REPL app: a plain Python console (no notebook cells, no file
+ * browser chrome) — the same self-hosted Pyodide runtime as the Notebook app,
+ * just a lighter-weight interface, used for Python 101 in place of Trinket
+ * (a third-party embed that could never work offline). Every dataset bundled
+ * into `jupyterlite-config/files/` is mounted into the REPL's virtual
+ * filesystem too, so `open("students-normal.csv")` etc. just works — no
+ * manual copy/paste step required, unlike Trinket's sandboxed filesystem.
+ */
+export function useJupyterLiteReplUrl(): string {
+  const replBase = useBaseUrl('/lite/repl/index.html');
+  return `${replBase}?kernel=python&toolbar=1`;
 }

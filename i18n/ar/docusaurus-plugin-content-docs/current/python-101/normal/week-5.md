@@ -34,14 +34,14 @@ import BonusContent from '@site/src/components/BonusContent';
 
 ملف CSV (قيم مفصولة بفواصل) هو جدول نصي بسيط — سطر واحد لكل صف، والقيم مفصولة بفواصل. مجموعة بيانات هذا الأسبوع، [`students-normal.csv`](pathname:///datasets/students-normal.csv)، تحتوي على صف رأس (`name,quiz1,quiz2,quiz3`) متبوعًا بصف لكل طالب.
 
-:::tip[استخدام هذا الملف في ملعب Trinket البرمجي]
-ملعب Trinket البرمجي الخاص بالزر العائم هو محرر خارجي معزول — لا يمكنه الوصول لملفات هذا الموقع مباشرة. افتح رابط مجموعة البيانات أعلاه، انسخ محتواها، ثم في Trinket أنشئ ملفًا جديدًا باسم `students.csv` (استخدم زر "+" في شجرة الملفات) والصق المحتوى فيه. عندها ستجد استدعاءات `open("students.csv")` الملف.
+:::tip[هذا الملف متوفر بالفعل في بيئة البرمجة]
+بيئة البرمجة الخاصة بالزر العائم تحتوي بالفعل على `students-normal.csv` محمّلاً مسبقًا — لا حاجة لنسخ أو لصق أي شيء. استدعاء `open("students-normal.csv")` في كودك أدناه سيجد الملف مباشرة.
 :::
 
 ```python
 import csv
 
-with open("students.csv", newline="") as f:
+with open("students-normal.csv", newline="") as f:
     reader = csv.reader(f)
     header = next(reader)          # الصف الأول: أسماء الأعمدة
     for row in reader:
@@ -55,7 +55,7 @@ with open("students.csv", newline="") as f:
 بدلًا من تتبّع مواضع الأعمدة بالفهرس، يمنحك `csv.DictReader` كل صف كـ `dict` مفتاحه أسماء الرأس — هذا عادة الخيار الأوضح للقراءة، ويقرأ صف الرأس تلقائيًا نيابة عنك (لا حاجة لـ `next(reader)` يدويًا):
 
 ```python
-with open("students.csv", newline="") as f:
+with open("students-normal.csv", newline="") as f:
     reader = csv.DictReader(f)
     for row in reader:
         name = row["name"]
@@ -97,7 +97,7 @@ def average(scores):
     return sum(scores) / len(scores)
 
 averages = {}   # name -> average
-with open("students.csv", newline="") as f:
+with open("students-normal.csv", newline="") as f:
     reader = csv.DictReader(f)
     for row in reader:
         name = row["name"]
