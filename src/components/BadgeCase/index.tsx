@@ -4,7 +4,7 @@ import {useUiMode} from '@site/src/context/UiModeContext';
 import {useBadges} from '@site/src/hooks/useBadges';
 import {useLocalStorage} from '@site/src/hooks/useLocalStorage';
 import {STORAGE_KEYS, ALL_STORAGE_KEYS} from '@site/src/utils/storageKeys';
-import {getChosenWeeks} from '@site/src/utils/weeks';
+import {getChosenWeeksPartial} from '@site/src/utils/weeks';
 import {describeBadge} from '@site/src/utils/describeBadge';
 import type {PerSectionTrack, ProgressMap} from '@site/src/types/progress';
 import styles from './styles.module.css';
@@ -20,9 +20,13 @@ export default function BadgeCase(): React.JSX.Element {
   const [progress, setProgress] = useLocalStorage<ProgressMap>(STORAGE_KEYS.progress, {});
   const [tracks] = useLocalStorage<PerSectionTrack>(STORAGE_KEYS.track, {});
 
-  const chosenWeeks = getChosenWeeks(tracks);
-  const completedCount = chosenWeeks?.filter((w) => progress[w.weekId]).length ?? 0;
-  const totalCount = chosenWeeks?.length ?? 0;
+  // Partial on purpose: counts progress in whichever section(s) already have
+  // a track chosen, so a student who's only started one section sees real
+  // numbers instead of "0 / 0" (getChosenWeeks' strict both-sections version
+  // is still what gates actual course completion, in useCourseComplete).
+  const chosenWeeks = getChosenWeeksPartial(tracks);
+  const completedCount = chosenWeeks.filter((w) => progress[w.weekId]).length;
+  const totalCount = chosenWeeks.length;
   const percent = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
 
   const handleReset = () => {

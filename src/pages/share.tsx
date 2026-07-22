@@ -1,16 +1,29 @@
-import React from 'react';
-import {useLocation} from '@docusaurus/router';
+import React, {useEffect, useState} from 'react';
 import Head from '@docusaurus/Head';
 import Translate, {translate} from '@docusaurus/Translate';
 import Layout from '@theme/Layout';
 import {decodeSharePayload} from '@site/src/utils/shareEncoding';
 import SharedProgressCard from '@site/src/components/ShareProgress/SharedProgressCard';
+import type {SharePayload} from '@site/src/types/share';
 
 export default function SharePage(): React.JSX.Element {
-  const location = useLocation();
-  const params = new URLSearchParams(location.search);
-  const encoded = params.get('data');
-  const payload = encoded ? decodeSharePayload(encoded) : null;
+  const [payload, setPayload] = useState<SharePayload | null>(null);
+
+  // Deliberately not read from Docusaurus's useLocation()/synchronously
+  // during render: this page is statically generated with no query string
+  // (the ?data= only ever exists on a real visitor's actual URL), and
+  // reading it inline produced a hydration bug — the SSR pass renders the
+  // "invalid link" branch, and re-computing the same way on the client
+  // during hydration doesn't reliably replace it (confirmed: the decoded
+  // payload was provably correct, but the DOM stayed stuck on the SSR
+  // output). Reading the real browser URL in an effect after mount instead
+  // triggers an ordinary client-side state update, which React always
+  // re-renders for, sidestepping the hydration-reconciliation edge case.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const encoded = params.get('data');
+    setPayload(encoded ? decodeSharePayload(encoded) : null);
+  }, []);
 
   return (
     <Layout

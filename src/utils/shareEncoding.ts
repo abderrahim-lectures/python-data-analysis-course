@@ -9,11 +9,49 @@ export function encodeSharePayload(payload: SharePayload): string {
     .replace(/=+$/, '');
 }
 
+const MAX_STRING_LENGTH = 200;
+const MAX_COUNT = 10_000;
+
+function isValidCount(value: unknown): value is number {
+  return typeof value === 'number' && Number.isFinite(value) && value >= 0 && value <= MAX_COUNT;
+}
+
+function isValidOptionalString(value: unknown): value is string | undefined {
+  return value === undefined || (typeof value === 'string' && value.length <= MAX_STRING_LENGTH);
+}
+
+/**
+ * `data=` comes straight from a URL a student pastes somewhere (WhatsApp,
+ * social media) — anyone can craft one by hand, so this can't just trust
+ * `JSON.parse(json) as SharePayload` (a compile-time-only cast, no runtime
+ * check). Rendering an unvalidated payload's `name` directly as a JSX child
+ * (see SharedProgressCard) would crash the page if it turned out to be an
+ * object or array instead of a string — not a code-execution risk (React
+ * escapes text content, and nothing here uses dangerouslySetInnerHTML), but
+ * a real, easy-to-trigger "open this link and the page breaks" one. Bounded
+ * string/number ranges here also stop a payload from carrying absurdly large
+ * values that would just look broken once rendered.
+ */
+function isValidSharePayload(value: unknown): value is SharePayload {
+  if (typeof value !== 'object' || value === null) return false;
+  const p = value as Record<string, unknown>;
+  return (
+    isValidOptionalString(p.name) &&
+    typeof p.studentId === 'string' &&
+    p.studentId.length <= MAX_STRING_LENGTH &&
+    isValidCount(p.completedCount) &&
+    isValidCount(p.totalCount) &&
+    isValidCount(p.badgeCount) &&
+    typeof p.completed === 'boolean'
+  );
+}
+
 export function decodeSharePayload(encoded: string): SharePayload | null {
   try {
     const base64 = encoded.replace(/-/g, '+').replace(/_/g, '/');
     const json = decodeURIComponent(escape(atob(base64)));
-    return JSON.parse(json) as SharePayload;
+    const parsed: unknown = JSON.parse(json);
+    return isValidSharePayload(parsed) ? parsed : null;
   } catch {
     return null;
   }
