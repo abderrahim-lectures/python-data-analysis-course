@@ -34,7 +34,7 @@ export default function ShareProgress(): React.JSX.Element {
     return dataUrl;
   };
 
-  const handleDownloadCertificate = async (format: 'png' | 'pdf') => {
+  const handleDownloadCertificate = async () => {
     setDownloading(true);
     try {
       await ensureQrCode();
@@ -46,17 +46,10 @@ export default function ShareProgress(): React.JSX.Element {
       const {toPng} = await import('html-to-image');
       const pngDataUrl = await toPng(node, {pixelRatio: 2});
 
-      if (format === 'png') {
-        const link = document.createElement('a');
-        link.download = 'pyda-course-certificate.png';
-        link.href = pngDataUrl;
-        link.click();
-      } else {
-        const {jsPDF} = await import('jspdf');
-        const pdf = new jsPDF({orientation: 'portrait', unit: 'px', format: [500, 650]});
-        pdf.addImage(pngDataUrl, 'PNG', 40, 40, 420, 546);
-        pdf.save('pyda-course-certificate.pdf');
-      }
+      const link = document.createElement('a');
+      link.download = 'pyda-course-certificate.png';
+      link.href = pngDataUrl;
+      link.click();
     } finally {
       setDownloading(false);
     }
@@ -100,15 +93,8 @@ export default function ShareProgress(): React.JSX.Element {
               className="button button--primary"
               type="button"
               disabled={downloading}
-              onClick={() => handleDownloadCertificate('png')}>
-              <Translate id="shareProgress.certificate.png">Download PNG</Translate>
-            </button>
-            <button
-              className="button button--secondary"
-              type="button"
-              disabled={downloading}
-              onClick={() => handleDownloadCertificate('pdf')}>
-              <Translate id="shareProgress.certificate.pdf">Download PDF</Translate>
+              onClick={handleDownloadCertificate}>
+              <Translate id="shareProgress.certificate.png">Download certificate</Translate>
             </button>
           </div>
         </div>

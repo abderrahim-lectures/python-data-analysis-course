@@ -20,6 +20,12 @@ function isValidOptionalString(value: unknown): value is string | undefined {
   return value === undefined || (typeof value === 'string' && value.length <= MAX_STRING_LENGTH);
 }
 
+const ISO_DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+
+function isValidOptionalDate(value: unknown): value is string | undefined {
+  return value === undefined || (typeof value === 'string' && ISO_DATE_RE.test(value));
+}
+
 /**
  * `data=` comes straight from a URL a student pastes somewhere (WhatsApp,
  * social media) — anyone can craft one by hand, so this can't just trust
@@ -42,7 +48,8 @@ function isValidSharePayload(value: unknown): value is SharePayload {
     isValidCount(p.completedCount) &&
     isValidCount(p.totalCount) &&
     isValidCount(p.badgeCount) &&
-    typeof p.completed === 'boolean'
+    typeof p.completed === 'boolean' &&
+    isValidOptionalDate(p.date)
   );
 }
 
