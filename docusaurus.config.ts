@@ -227,6 +227,11 @@ const config: Config = {
           ],
         },
       ],
+      // This English string is computed fresh on every build (year, version).
+      // Its translated counterparts in i18n/{ar,es,fr}/docusaurus-theme-classic/footer.json
+      // are static text (Docusaurus's i18n JSON files can't embed a dynamic
+      // template like this one) — bump those three "copyright" messages by
+      // hand whenever the version or year changes here, or they'll drift.
       copyright: `Copyright © ${new Date().getFullYear()} Abderrahim Adrabi. Code MIT-licensed, content CC-BY 4.0. v${pkgVersion}`,
     },
     prism: {
