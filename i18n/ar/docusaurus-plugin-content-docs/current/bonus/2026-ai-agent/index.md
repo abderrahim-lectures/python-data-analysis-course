@@ -1,7 +1,7 @@
 ---
-id: capstone-ai-agent
-title: "المكافأة الختامية: انتقل إلى Python الحقيقية وابنِ وكيل ذكاء اصطناعي"
-slug: /bonus/capstone-ai-agent
+id: 2026-ai-agent
+title: "مشروع 2026: انتقل إلى Python الحقيقية وابنِ وكيل ذكاء اصطناعي"
+slug: /bonus/2026-ai-agent
 ---
 
 # 🎁 المكافأة الختامية: انتقل إلى Python الحقيقية وابنِ وكيل ذكاء اصطناعي

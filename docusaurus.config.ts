@@ -176,7 +176,12 @@ const config: Config = {
           position: 'left',
           label: 'Data Analysis',
         },
-        {to: '/docs/bonus/capstone-ai-agent', label: 'Capstone Bonus', position: 'left'},
+        {
+          type: 'docSidebar',
+          sidebarId: 'bonusSidebar',
+          position: 'left',
+          label: 'Capstone Projects',
+        },
         {to: '/progress', label: 'My Progress', position: 'right'},
         {to: '/credits', label: 'Credits', position: 'right'},
         {
@@ -198,7 +203,7 @@ const config: Config = {
           items: [
             {label: 'Python 101', to: '/docs/python-101'},
             {label: 'Data Analysis', to: '/docs/data-analysis'},
-            {label: 'Capstone Bonus', to: '/docs/bonus/capstone-ai-agent'},
+            {label: 'Capstone Projects', to: '/docs/bonus'},
           ],
         },
         {

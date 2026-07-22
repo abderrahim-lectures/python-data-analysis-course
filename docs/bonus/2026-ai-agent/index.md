@@ -1,15 +1,17 @@
 ---
-id: capstone-ai-agent
-title: "Capstone Bonus: Graduate to Real Python + Build an AI Agent"
-slug: /bonus/capstone-ai-agent
+id: 2026-ai-agent
+title: "2026 Capstone: Graduate to Real Python + Build an AI Agent"
+slug: /bonus/2026-ai-agent
 description: "Graduate from the in-browser playground to real Python: install Python locally and build your first AI agent with LangChain's deepagents."
 ---
 
-# 🎁 Capstone Bonus: Graduate to Real Python + Build an AI Agent
+import CapstoneProgressCheckbox from '@site/src/components/CapstoneProgressCheckbox';
 
-**Congratulations on finishing the course.** Everything so far ran in a sandboxed, in-browser playground — Trinket or JupyterLite — so you could start writing Python on day one with zero setup. This capstone is the graduation step: install Python for real on your own machine, then use it to build something neither playground could run — an AI agent with its own API key, calling out to a real language model.
+# 🎁 2026 Capstone: Graduate to Real Python + Build an AI Agent
 
-This is optional and ungraded. It's here because finishing 10 weeks of fundamentals deserves a payoff that points toward what comes next.
+**Congratulations on finishing the course.** Everything so far ran in a sandboxed, in-browser playground — so you could start writing Python on day one with zero setup. This capstone is the graduation step: install Python for real on your own machine, then use it to build something the playground could never run — an AI agent with its own API key, calling out to a real language model.
+
+This is optional and ungraded. It's here because finishing 10 weeks of fundamentals deserves a payoff that points toward what comes next. It's also this year's project — every year adds a new one, and past years' projects stay available; see [Choose your Capstone](/docs/bonus) for the full list.
 
 ## 🎯 What you'll do
 
@@ -259,3 +261,5 @@ The main agent can now hand off a sub-task to `topic-researcher` instead of doin
 Built something you're proud of? [`examples/student-agents/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-agents) is a gallery of agents other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓
+
+<CapstoneProgressCheckbox capstoneId="2026-ai-agent" />

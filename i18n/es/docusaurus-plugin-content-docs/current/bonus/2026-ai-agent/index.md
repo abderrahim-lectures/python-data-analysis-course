@@ -1,7 +1,7 @@
 ---
-id: capstone-ai-agent
-title: "Bono Capstone: Gradúate a Python Real y Construye un Agente de IA"
-slug: /bonus/capstone-ai-agent
+id: 2026-ai-agent
+title: "Capstone 2026: Gradúate a Python Real y Construye un Agente de IA"
+slug: /bonus/2026-ai-agent
 description: "Da el salto del entorno de práctica en el navegador a Python real: instala Python localmente y construye tu primer agente de IA con deepagents de LangChain."
 ---
 

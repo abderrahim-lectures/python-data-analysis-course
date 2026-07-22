@@ -222,4 +222,4 @@ Assemble everything from this week's challenges into one continuous written narr
 
 ---
 
-**🎉 You've completed the Pandas & Data Analysis Hard track — and the whole course, if you took Hard/Hard or any combination across both sections.** Head to [My Progress](/progress) to see your badges and, if you've finished every week, unlock the [Capstone Bonus](/docs/bonus/capstone-ai-agent): installing Python for real and building your first AI agent.
+**🎉 You've completed the Pandas & Data Analysis Hard track — and the whole course, if you took Hard/Hard or any combination across both sections.** Head to [My Progress](/progress) to see your badges and, if you've finished every week, unlock the [Capstone projects](/docs/bonus): installing Python for real and building a Capstone project.

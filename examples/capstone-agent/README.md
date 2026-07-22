@@ -2,7 +2,7 @@
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/abderrahim-lectures/python-data-analysis-course)
 
-A real, runnable "course study assistant" agent — the fuller version of the one built step by step in the course's [Capstone Bonus](../../docs/bonus/capstone-ai-agent.md), built with LangChain's [`deepagents`](https://github.com/langchain-ai/deepagents) and your choice of free-tier API provider.
+A real, runnable "course study assistant" agent — the fuller version of the one built step by step in the course's [Capstone Bonus](../../docs/bonus/2026-ai-agent/index.md), built with LangChain's [`deepagents`](https://github.com/langchain-ai/deepagents) and your choice of free-tier API provider.
 
 ## Objective
 
@@ -18,7 +18,7 @@ This is the difference between a chatbot that might hallucinate an answer and an
 
 **You're free to use whichever free-tier provider you like** — this isn't locked to any one of them. Six are wired up already: **GitHub Models** (the default — no separate signup, uses a GitHub account you already have), Gemini, Groq, Mistral, Cerebras, and OpenRouter.
 
-1. **Get a free-tier API key** from your chosen provider — see the table in the [Capstone Bonus doc](../../docs/bonus/capstone-ai-agent.md#step-2-get-a-free-ai-api-key) for where to get one for each.
+1. **Get a free-tier API key** from your chosen provider — see the table in the [Capstone Bonus doc](../../docs/bonus/2026-ai-agent/index.md#step-2-get-a-free-ai-api-key) for where to get one for each.
 2. **Copy `.env.example` to `.env`** and fill in the key for your provider (and `LLM_PROVIDER` if you're not using the default):
    ```bash
    cp .env.example .env
@@ -55,7 +55,7 @@ uv run python agent.py
 
 ## A note on staying current
 
-Model names and library APIs in this space change fast — the model ID and `create_deep_agent()` call here were both verified against a live run while writing this example, but may have drifted by the time you read this. See the callout in the [Capstone Bonus doc](../../docs/bonus/capstone-ai-agent.md#step-4-write-your-first-agent) for what to check before relying on this code.
+Model names and library APIs in this space change fast — the model ID and `create_deep_agent()` call here were both verified against a live run while writing this example, but may have drifted by the time you read this. See the callout in the [Capstone Bonus doc](../../docs/bonus/2026-ai-agent/index.md#step-4-write-your-first-agent) for what to check before relying on this code.
 
 ## Built your own agent for the capstone?
 

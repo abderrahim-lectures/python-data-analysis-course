@@ -1,0 +1,50 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.card {
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: var(--pda-radius-lg);
+  padding: 1.25rem;
+  background: var(--pda-surface);
+  display: flex;
+  flex-direction: column;
+  color: var(--ifm-font-color-base);
+  text-decoration: none;
+}
+
+.card:hover {
+  border-color: var(--pda-accent);
+  text-decoration: none;
+  color: var(--ifm-font-color-base);
+}
+
+.card h3 {
+  margin-top: 0;
+}
+
+.checkmark {
+  color: var(--pda-accent);
+}
+
+.completedLabel {
+  font-weight: 600;
+  color: var(--pda-accent);
+  margin-bottom: 0;
+}
+
+.locked {
+  border: 1px dashed var(--ifm-color-emphasis-300);
+  border-radius: var(--pda-radius-lg);
+  padding: 1.25rem;
+  margin: 1.5rem 0;
+  color: var(--ifm-color-emphasis-600);
+  text-align: center;
+}
+
+.locked p {
+  margin: 0;
+}
