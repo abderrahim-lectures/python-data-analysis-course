@@ -92,6 +92,10 @@ const config: Config = {
           changefreq: 'weekly',
           priority: 0.5,
         },
+        gtag: {
+          trackingID: 'G-FTR585C5BX',
+          anonymizeIP: true,
+        },
       } satisfies Preset.Options,
     ],
   ],
