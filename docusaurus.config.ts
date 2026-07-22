@@ -1,6 +1,8 @@
 import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const {version: pkgVersion} = require('./package.json');
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
@@ -209,10 +211,14 @@ const config: Config = {
               label: 'GitHub',
               href: 'https://github.com/abderrahim-lectures/python-data-analysis-course',
             },
+            {
+              label: 'Changelog',
+              href: 'https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/CHANGELOG.md',
+            },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Abderrahim Adrabi. Code MIT-licensed, content CC-BY 4.0.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Abderrahim Adrabi. Code MIT-licensed, content CC-BY 4.0. v${pkgVersion}`,
     },
     prism: {
       theme: prismThemes.github,
