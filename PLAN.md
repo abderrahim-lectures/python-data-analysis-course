@@ -320,6 +320,16 @@ A bundle of standard, static-site-appropriate SEO practices, all shipped:
 - Canonical URLs, `hreflang` alternates across the 4 locales, and per-locale `<html lang>`/`dir` are all handled automatically by Docusaurus's i18n system — no custom code needed.
 - All of the above (sitemap URLs, canonical links, `og:url`, `og:image`) automatically track whatever `url`/`baseUrl` is configured, so they update correctly with the custom domain described above.
 - The site's author (Abderrahim Adrabi) is credited in `package.json`, `LICENSE`, the footer copyright line, a `<meta name="author">` tag, and the JSON-LD `Course` schema's `author` field.
+- Google Analytics via Docusaurus's built-in `gtag` preset option (not a raw pasted script tag — the preset correctly tracks client-side route changes in this single-page app, which a bare script tag would miss after the first load).
+
+## Discoverability
+
+Beyond on-site SEO, a bundle of "actually get found" work — split into what can be automated (no login needed) versus what genuinely requires a human with account access:
+
+- **`static/llms.txt`**: an emerging convention giving AI crawlers/agents a quick, structured summary of the course and links to its main sections — cheap to add, no downside.
+- **IndexNow**: a verification key file (`static/<key>.txt`) plus a bulk POST of every URL across all 4 locale sitemaps to `api.indexnow.org`, so Bing/Yandex (and other participating engines) get pinged about new/updated pages directly, without needing an interactive Search-Console-style login. This is a one-time push, not a standing subscription — worth re-running the same bulk submission after any large batch of new content ships (a new Capstone year, a new locale, etc.), not just once at launch.
+- **Directory outreach**: opened PRs to 3 well-established, curated "awesome list" repos (not owned by this project) adding the course as a learning resource — [EbookFoundation/free-programming-books](https://github.com/EbookFoundation/free-programming-books) (its own strict alphabetization linter was run locally first, via the `free-programming-books-lint` npm package, before opening the PR — this list enforces CI-checked ordering rules that are easy to get subtly wrong), [Data-Centric-AI-Community/awesome-python-for-data-science](https://github.com/Data-Centric-AI-Community/awesome-python-for-data-science), and [siboehm/awesome-learn-datascience](https://github.com/siboehm/awesome-learn-datascience). These are genuinely external, third-party repos — merge is at their maintainers' discretion, not something this project controls.
+- **Deliberately not automated — needs the site owner's own login**: Google Search Console (verify the domain, submit the sitemap — the single biggest lever for organic Google visibility) and Bing Webmaster Tools. Both require an interactive account, which isn't something that can be scripted from here; flagged as a manual follow-up rather than skipped silently.
 
 ## Progressive Web App (PWA)
 
