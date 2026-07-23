@@ -645,6 +645,38 @@
     "message": "ثبّت Python فعليًا وابنِ أول وكيل ذكاء اصطناعي خاص بك باستخدام deepagents من LangChain، بمفتاح API مجاني.",
     "description": "Homepage project card summary"
   },
+  "homepage.projects.mcpServer.title": {
+    "message": "بناء خادم MCP",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.mcpServer.summary": {
+    "message": "ابنِ خادم بروتوكول سياق النموذج (MCP) يعرض أدواتك الخاصة، واربطه بعميل ذكاء اصطناعي حقيقي مثل Claude Desktop.",
+    "description": "Homepage project card summary"
+  },
+  "homepage.projects.mlClassifier.title": {
+    "message": "درّب أول نموذج تعلّم آلي لك",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.mlClassifier.summary": {
+    "message": "انتقل من وصف البيانات إلى التنبؤ منها: درّب وقارن مصنِّفات ثنائية بـ scikit-learn على مجموعة بيانات تايتانك.",
+    "description": "Homepage project card summary"
+  },
+  "homepage.projects.ragNotes.title": {
+    "message": "بناء تطبيق RAG فوق ملاحظاتك الخاصة",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.ragNotes.summary": {
+    "message": "حادِث ملاحظاتك الخاصة: تضمينات محلية بـ sentence-transformers، بحث تشابه بـ NumPy، ونموذج لغوي من مستوى مجاني للإجابة النهائية.",
+    "description": "Homepage project card summary"
+  },
+  "homepage.projects.scrapeAnalyze.title": {
+    "message": "استخلاص وتحليل موقع ويب حي",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.scrapeAnalyze.summary": {
+    "message": "استخلص موقعًا حقيقيًا صديقًا للاستخلاص بـ requests وBeautifulSoup، ثم نظّف النتائج ورسمها بيانيًا بـ pandas وmatplotlib — دون الحاجة لأي مفتاح API.",
+    "description": "Homepage project card summary"
+  },
   "homepage.pageTitle": {
     "message": "دورة بايثون وتحليل البيانات"
   },

@@ -645,6 +645,38 @@
     "message": "Instala Python de verdad y construye tu primer agente de IA con deepagents de LangChain, usando una clave API gratuita.",
     "description": "Homepage project card summary"
   },
+  "homepage.projects.mcpServer.title": {
+    "message": "Construye un Servidor MCP",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.mcpServer.summary": {
+    "message": "Construye un servidor Model Context Protocol que expone tus propias herramientas, y conéctalo a un cliente de IA real como Claude Desktop.",
+    "description": "Homepage project card summary"
+  },
+  "homepage.projects.mlClassifier.title": {
+    "message": "Entrena tu Primer Modelo de Machine Learning",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.mlClassifier.summary": {
+    "message": "Gradúate de describir datos a predecir a partir de ellos: entrena y compara clasificadores binarios con scikit-learn sobre el dataset del Titanic.",
+    "description": "Homepage project card summary"
+  },
+  "homepage.projects.ragNotes.title": {
+    "message": "Construye una App RAG Sobre Tus Propias Notas",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.ragNotes.summary": {
+    "message": "Chatea con tus propias notas: embeddings locales con sentence-transformers, búsqueda de similitud con NumPy, y un LLM de nivel gratuito para la respuesta final.",
+    "description": "Homepage project card summary"
+  },
+  "homepage.projects.scrapeAnalyze.title": {
+    "message": "Extrae y Analiza un Sitio Web en Vivo",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.scrapeAnalyze.summary": {
+    "message": "Extrae datos de un sitio web real y amigable con el scraping usando requests y BeautifulSoup, y luego limpia y grafica los resultados con pandas y matplotlib — sin necesitar clave de API.",
+    "description": "Homepage project card summary"
+  },
   "homepage.pageTitle": {
     "message": "Curso de Python y Análisis de Datos"
   },

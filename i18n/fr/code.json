@@ -645,6 +645,38 @@
     "message": "Installez Python pour de vrai et construisez votre premier agent IA avec deepagents de LangChain, en utilisant une clé API gratuite.",
     "description": "Homepage project card summary"
   },
+  "homepage.projects.mcpServer.title": {
+    "message": "Construire un serveur MCP",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.mcpServer.summary": {
+    "message": "Construisez un serveur Model Context Protocol exposant vos propres outils, et connectez-le à un vrai client IA comme Claude Desktop.",
+    "description": "Homepage project card summary"
+  },
+  "homepage.projects.mlClassifier.title": {
+    "message": "Entraînez votre premier modèle de machine learning",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.mlClassifier.summary": {
+    "message": "Passez de décrire des données à prédire à partir d'elles : entraînez et comparez des classificateurs binaires avec scikit-learn sur le jeu de données Titanic.",
+    "description": "Homepage project card summary"
+  },
+  "homepage.projects.ragNotes.title": {
+    "message": "Construire une appli RAG sur vos propres notes",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.ragNotes.summary": {
+    "message": "Dialoguez avec vos propres notes : embeddings locaux avec sentence-transformers, recherche de similarité NumPy, et un LLM de palier gratuit pour la réponse finale.",
+    "description": "Homepage project card summary"
+  },
+  "homepage.projects.scrapeAnalyze.title": {
+    "message": "Scraper et analyser un site web en direct",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.scrapeAnalyze.summary": {
+    "message": "Scrapez un vrai site adapté au scraping avec requests et BeautifulSoup, puis nettoyez et représentez graphiquement les résultats avec pandas et matplotlib — sans clé API nécessaire.",
+    "description": "Homepage project card summary"
+  },
   "homepage.pageTitle": {
     "message": "Cours de Python et d'Analyse de Données"
   },
