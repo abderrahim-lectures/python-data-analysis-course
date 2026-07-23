@@ -137,13 +137,42 @@ function SectionCards() {
   );
 }
 
-function RealWorldProjects() {
-  const aiAgent = projectMeta('2026-ai-agent');
-  const finetuneLlm = projectMeta('2027-finetune-llm');
+interface HomepageProjectCardProps {
+  id: string;
+  title: ReactNode;
+  summary: ReactNode;
+}
+
+/**
+ * date/url/tags come from the shared PROJECTS source of truth; title/summary
+ * are passed in as already-built <Translate> elements from the call site
+ * (not string props) so Docusaurus's static i18n extraction — which needs a
+ * literal <Translate id="..."> with literal children right there in the
+ * JSX — can still find them despite the shared layout being a component.
+ */
+function HomepageProjectCard({id, title, summary}: HomepageProjectCardProps) {
+  const meta = projectMeta(id);
   const {
     i18n: {currentLocale},
   } = useDocusaurusContext();
 
+  return (
+    <Link to={meta.url} className={styles.projectCard}>
+      <h3>{title}</h3>
+      <p className={styles.projectDate}>{formatProjectDate(meta.date, currentLocale)}</p>
+      <p>{summary}</p>
+      <div className={styles.projectTags}>
+        {meta.tags.map((tag) => (
+          <span key={tag} className={styles.projectTag}>
+            {tag}
+          </span>
+        ))}
+      </div>
+    </Link>
+  );
+}
+
+function RealWorldProjects() {
   return (
     <section className={styles.projects}>
       <div className="container">
@@ -161,56 +190,106 @@ function RealWorldProjects() {
           </Translate>
         </p>
         <div className={styles.projectGrid}>
-          <Link to={finetuneLlm.url} className={styles.projectCard}>
-            <h3>
-              <Translate
-                id="homepage.projects.finetuneLlm.title"
-                description="Homepage project card title">
+          <HomepageProjectCard
+            id="2027-finetune-llm"
+            title={
+              <Translate id="homepage.projects.finetuneLlm.title" description="Homepage project card title">
                 Fine-tune a Small Language Model
               </Translate>
-            </h3>
-            <p className={styles.projectDate}>
-              {formatProjectDate(finetuneLlm.date, currentLocale)}
-            </p>
-            <p>
+            }
+            summary={
               <Translate
                 id="homepage.projects.finetuneLlm.summary"
                 description="Homepage project card summary">
                 Fine-tune a small open-source language model with LoRA using Unsloth, on a free
                 Colab/Kaggle GPU.
               </Translate>
-            </p>
-            <div className={styles.projectTags}>
-              {finetuneLlm.tags.map((tag) => (
-                <span key={tag} className={styles.projectTag}>
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </Link>
-          <Link to={aiAgent.url} className={styles.projectCard}>
-            <h3>
+            }
+          />
+          <HomepageProjectCard
+            id="scrape-analyze"
+            title={
+              <Translate
+                id="homepage.projects.scrapeAnalyze.title"
+                description="Homepage project card title">
+                Scrape and Analyze a Live Website
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.scrapeAnalyze.summary"
+                description="Homepage project card summary">
+                Scrape a real, scraping-friendly website with requests and BeautifulSoup, then
+                clean and chart the results with pandas and matplotlib — no API key needed.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
+            id="ml-classifier"
+            title={
+              <Translate
+                id="homepage.projects.mlClassifier.title"
+                description="Homepage project card title">
+                Train Your First Machine Learning Model
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.mlClassifier.summary"
+                description="Homepage project card summary">
+                Go from describing data to predicting from it: train and compare binary
+                classifiers with scikit-learn on the Titanic dataset.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
+            id="mcp-server"
+            title={
+              <Translate id="homepage.projects.mcpServer.title" description="Homepage project card title">
+                Build an MCP Server
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.mcpServer.summary"
+                description="Homepage project card summary">
+                Build a Model Context Protocol server exposing your own tools, and connect it to a
+                real AI client like Claude Desktop.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
+            id="rag-notes"
+            title={
+              <Translate id="homepage.projects.ragNotes.title" description="Homepage project card title">
+                Build a RAG App Over Your Own Notes
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.ragNotes.summary"
+                description="Homepage project card summary">
+                Chat with your own notes: local embeddings with sentence-transformers, NumPy
+                similarity search, and a free-tier LLM for the final answer.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
+            id="2026-ai-agent"
+            title={
               <Translate id="homepage.projects.aiAgent.title" description="Homepage project card title">
                 Build an AI Agent
               </Translate>
-            </h3>
-            <p className={styles.projectDate}>{formatProjectDate(aiAgent.date, currentLocale)}</p>
-            <p>
+            }
+            summary={
               <Translate
                 id="homepage.projects.aiAgent.summary"
                 description="Homepage project card summary">
                 Install Python for real and build your first AI agent with LangChain's deepagents,
                 using a free-tier API key.
               </Translate>
-            </p>
-            <div className={styles.projectTags}>
-              {aiAgent.tags.map((tag) => (
-                <span key={tag} className={styles.projectTag}>
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </Link>
+            }
+          />
         </div>
       </div>
     </section>

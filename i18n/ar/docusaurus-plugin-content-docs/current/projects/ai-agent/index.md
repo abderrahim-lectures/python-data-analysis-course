@@ -7,10 +7,13 @@ slug: /projects/ai-agent
 
 import ProjectProgressCheckbox from '@site/src/components/ProjectProgressCheckbox';
 import ProjectPublishedDate from '@site/src/components/ProjectPublishedDate';
+import ProjectGreeting from '@site/src/components/ProjectGreeting';
 
 # 🌍 بناء وكيل ذكاء اصطناعي
 
 <ProjectPublishedDate projectId="2026-ai-agent" />
+
+<ProjectGreeting />
 
 كل شيء حتى الآن عمل في بيئة تجريبية معزولة داخل المتصفح — حتى تتمكن من البدء بكتابة Python من اليوم الأول بلا أي إعداد. هذا المشروع هو خطوة التخرّج: ثبّت Python فعليًا على جهازك الخاص، ثم استخدمها لبناء شيء لم تستطع بيئة البرمجة تشغيله أبدًا — وكيل ذكاء اصطناعي بمفتاح API خاص به، يستدعي نموذج لغوي حقيقي.
 

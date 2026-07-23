@@ -1,0 +1,12 @@
+[project]
+name = "rag-notes"
+version = "0.1.0"
+description = "Local companion to the course's 'Build a RAG App Over Your Own Notes' project: chunk notes, embed them locally, retrieve with NumPy cosine similarity, and answer questions with a free-tier LLM."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "sentence-transformers>=3.3.1",
+    "numpy>=2.2.0",
+    "python-dotenv>=1.2.2",
+    "openai>=1.59.0",
+]

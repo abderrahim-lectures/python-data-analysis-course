@@ -2,6 +2,16 @@
 
 All notable changes to this project are documented in this file. Format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.3.0] — 2026-07-23
+
+### Added
+- Four new Real-World Projects: **Build a RAG App Over Your Own Notes** (local embeddings with `sentence-transformers`, NumPy similarity search, a free-tier LLM for the final answer), **Build an MCP Server** (FastMCP, connects to Claude Desktop), **Scrape and Analyze a Live Website** (`requests`/BeautifulSoup + pandas/matplotlib, no API key needed), and **Train Your First Machine Learning Model** (scikit-learn on the course's own Titanic dataset, the direct sequel to Data Analysis Week 10's EDA). Each ships with a real, runnable `examples/<slug>/` companion, a "Where to run this" section covering local/Codespaces/Colab-Kaggle, and a Checklist + Socratic Question(s) block after every hands-on step, matching the weekly-lesson pattern.
+- `ProjectGreeting`: a warm, empathetic, name-personalized greeting at the top of every real-world project page (reads the student's stored name, falls back to "Guest").
+- English content only for now — Arabic/Spanish/French translation of these four projects ships as a separate follow-up batch.
+
+### Fixed
+- A hydration mismatch on every project page caused by `ProjectGreeting` reading `localStorage` on the very first client render — now gated behind a post-mount check so the first client render always matches the server-rendered fallback.
+
 ## [1.2.0] — 2026-07-23
 
 ### Added

@@ -8,10 +8,13 @@ description: "Graduate from the in-browser playground to real Python: fine-tune 
 
 import ProjectProgressCheckbox from '@site/src/components/ProjectProgressCheckbox';
 import ProjectPublishedDate from '@site/src/components/ProjectPublishedDate';
+import ProjectGreeting from '@site/src/components/ProjectGreeting';
 
 # 🌍 Fine-tune a Small Language Model with Unsloth
 
 <ProjectPublishedDate projectId="2027-finetune-llm" />
+
+<ProjectGreeting />
 
 Back in Python 101's Hard track, you built a tiny language model completely from scratch — word counts, bigram probability tables, weighted sampling. This project picks up that exact thread: instead of building a language model's math from nothing, you'll take a real, pretrained open-source model and specialize it for a task of your choosing by *fine-tuning* it — nudging its existing weights with a small amount of your own data, using [Unsloth](https://unsloth.ai), a library built specifically to make this fast and (importantly) free.
 

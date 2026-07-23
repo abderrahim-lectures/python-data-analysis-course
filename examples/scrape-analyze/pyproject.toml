@@ -1,0 +1,12 @@
+[project]
+name = "scrape-analyze"
+version = "0.1.0"
+description = "Local companion to the course's Scrape and Analyze a Live Website project: scrape quotes.toscrape.com, then clean and analyze the results with pandas and matplotlib."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "requests>=2.32.0",
+    "beautifulsoup4>=4.12.0",
+    "pandas>=3.0.3",
+    "matplotlib>=3.10.0",
+]

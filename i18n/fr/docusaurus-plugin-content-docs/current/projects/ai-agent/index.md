@@ -8,10 +8,13 @@ description: "Passez du bac à sable dans le navigateur à du vrai Python : inst
 
 import ProjectProgressCheckbox from '@site/src/components/ProjectProgressCheckbox';
 import ProjectPublishedDate from '@site/src/components/ProjectPublishedDate';
+import ProjectGreeting from '@site/src/components/ProjectGreeting';
 
 # 🌍 Construire un agent IA
 
 <ProjectPublishedDate projectId="2026-ai-agent" />
+
+<ProjectGreeting />
 
 Tout jusqu'ici tournait dans un bac à sable isolé, dans le navigateur — pour que vous puissiez commencer à écrire du Python dès le premier jour sans aucune configuration. Ce projet est l'étape de remise de diplôme : installez Python pour de vrai sur votre propre machine, puis utilisez-le pour construire quelque chose que le bac à sable n'a jamais pu exécuter — un agent IA avec sa propre clé API, appelant un vrai modèle de langage.
 
