@@ -2,11 +2,11 @@
 id: index
 title: Projets concrets
 slug: /projects
-sidebar_position: 1
+sidebar_position: 0
 description: "Des projets concrets à construire avec Python — installez-le pour de vrai, hors du bac à sable dans le navigateur. De nouveaux projets sont ajoutés dès qu'un outil ou framework tendance mérite d'être couvert."
 ---
 
-import CapstoneChooser from '@site/src/components/CapstoneChooser';
+import ProjectChooser from '@site/src/components/ProjectChooser';
 import {mergeProjectMeta} from '@site/src/data/projects';
 
 # 🌍 Projets concrets
@@ -15,8 +15,8 @@ Tout jusqu'ici tournait dans un bac à sable isolé, dans le navigateur — pour
 
 Ils sont optionnels et non notés. Parcourez-les à tout moment — l'introduction de chaque projet précise les prérequis attendus (généralement Python 101, parfois aussi Data Analysis), donc vous n'avez pas besoin d'avoir terminé tout le cours d'abord. De nouveaux projets sont ajoutés dès qu'un outil ou framework tendance mérite un vrai guide pratique — pas selon un calendrier fixe.
 
-<CapstoneChooser
-  capstones={mergeProjectMeta([
+<ProjectChooser
+  projects={mergeProjectMeta([
     {
       id: '2027-finetune-llm',
       title: 'Affiner un petit modèle de langage',

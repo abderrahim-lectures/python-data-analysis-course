@@ -716,6 +716,10 @@
   "capstoneProgressCheckbox.label": {
     "message": "Marcar este proyecto como completado"
   },
+  "projectPublishedDate.label": {
+    "message": "Publicado en {date}.",
+    "description": "Published-date line on a project's own page"
+  },
   "playground.jupyterlite.replTitle": {
     "message": "Consola de Python de JupyterLite"
   },

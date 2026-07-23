@@ -5,9 +5,12 @@ sidebar_label: "بناء وكيل ذكاء اصطناعي"
 slug: /projects/ai-agent
 ---
 
-import CapstoneProgressCheckbox from '@site/src/components/CapstoneProgressCheckbox';
+import ProjectProgressCheckbox from '@site/src/components/ProjectProgressCheckbox';
+import ProjectPublishedDate from '@site/src/components/ProjectPublishedDate';
 
 # 🌍 بناء وكيل ذكاء اصطناعي
+
+<ProjectPublishedDate projectId="2026-ai-agent" />
 
 كل شيء حتى الآن عمل في بيئة تجريبية معزولة داخل المتصفح — حتى تتمكن من البدء بكتابة Python من اليوم الأول بلا أي إعداد. هذا المشروع هو خطوة التخرّج: ثبّت Python فعليًا على جهازك الخاص، ثم استخدمها لبناء شيء لم تستطع بيئة البرمجة تشغيله أبدًا — وكيل ذكاء اصطناعي بمفتاح API خاص به، يستدعي نموذج لغوي حقيقي.
 
@@ -262,4 +265,4 @@ agent = create_deep_agent(
 
 مرحبًا بك في كتابة Python خارج المتصفح. 🎓
 
-<CapstoneProgressCheckbox capstoneId="2026-ai-agent" />
+<ProjectProgressCheckbox projectId="2026-ai-agent" />

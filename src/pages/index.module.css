@@ -80,6 +80,12 @@
   margin-top: 0;
 }
 
+.projectDate {
+  font-size: 0.85rem;
+  color: var(--ifm-color-emphasis-600);
+  margin: -0.5rem 0 0.75rem;
+}
+
 .projectTags {
   display: flex;
   flex-wrap: wrap;

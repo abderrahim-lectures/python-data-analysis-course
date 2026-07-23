@@ -1,11 +1,11 @@
-import type {CapstoneId} from '@site/src/types/progress';
+import type {ProjectId} from '@site/src/types/progress';
 
 export interface ProjectMeta {
   /** Stable id, kept unchanged even across folder/URL renames — see
-   *  CapstoneProgressCheckbox and CapstoneChooser for why this must never
+   *  ProjectProgressCheckbox and ProjectChooser for why this must never
    *  change once a project ships (it's the localStorage/badge key). */
-  id: CapstoneId;
-  /** ISO date, used only to sort newest-first — never rendered in the UI. */
+  id: ProjectId;
+  /** ISO "YYYY-MM" date, drives newest-first sort and is shown (formatted, localized) on cards. */
   date: string;
   url: string;
   tags: string[];
@@ -34,7 +34,7 @@ export const PROJECTS: ProjectMeta[] = [
 ];
 
 interface TranslatedProjectText {
-  id: CapstoneId;
+  id: ProjectId;
   title: string;
   summary: string;
 }
@@ -48,4 +48,12 @@ export function mergeProjectMeta(translated: TranslatedProjectText[]) {
     }
     return {...t, ...meta};
   });
+}
+
+/** Formats a project's "YYYY-MM" date as a localized "Month YYYY" string, e.g. "July 2027". */
+export function formatProjectDate(date: string, locale: string): string {
+  const [year, month] = date.split('-').map(Number);
+  return new Intl.DateTimeFormat(locale, {year: 'numeric', month: 'long'}).format(
+    new Date(Date.UTC(year, month - 1, 1)),
+  );
 }

@@ -6,9 +6,12 @@ slug: /projects/ai-agent
 description: "Graduate from the in-browser playground to real Python: install Python locally and build your first AI agent with LangChain's deepagents."
 ---
 
-import CapstoneProgressCheckbox from '@site/src/components/CapstoneProgressCheckbox';
+import ProjectProgressCheckbox from '@site/src/components/ProjectProgressCheckbox';
+import ProjectPublishedDate from '@site/src/components/ProjectPublishedDate';
 
 # 🌍 Build an AI Agent
+
+<ProjectPublishedDate projectId="2026-ai-agent" />
 
 Everything in the course so far ran in a sandboxed, in-browser playground — so you could start writing Python on day one with zero setup. This project is the graduation step: install Python for real on your own machine, then use it to build something the playground could never run — an AI agent with its own API key, calling out to a real language model.
 
@@ -263,4 +266,4 @@ Built something you're proud of? [`examples/student-projects/`](https://github.c
 
 Welcome to writing Python outside the browser. 🎓
 
-<CapstoneProgressCheckbox capstoneId="2026-ai-agent" />
+<ProjectProgressCheckbox projectId="2026-ai-agent" />

@@ -716,6 +716,10 @@
   "capstoneProgressCheckbox.label": {
     "message": "ضع علامة على إتمام هذا المشروع"
   },
+  "projectPublishedDate.label": {
+    "message": "نُشر في {date}.",
+    "description": "Published-date line on a project's own page"
+  },
   "playground.jupyterlite.replTitle": {
     "message": "طرفية بايثون JupyterLite"
   },

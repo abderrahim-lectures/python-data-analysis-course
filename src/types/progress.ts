@@ -25,9 +25,9 @@ export type BadgeSet = BadgeId[];
 
 /** e.g. "2026-ai-agent" — one per real-world project. Stable once shipped;
  *  never renamed even if the project's folder/URL/title changes later. */
-export type CapstoneId = string;
+export type ProjectId = string;
 
-/** capstoneId -> completed */
-export type CapstoneProgressMap = Record<CapstoneId, boolean>;
+/** projectId -> completed */
+export type ProjectProgressMap = Record<ProjectId, boolean>;
 
 export type PerSectionTrack = Partial<Record<SectionId, TrackId>>;

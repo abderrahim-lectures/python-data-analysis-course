@@ -1,14 +1,16 @@
 import React from 'react';
 import Link from '@docusaurus/Link';
 import Translate from '@docusaurus/Translate';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import {useLocalStorage} from '@site/src/hooks/useLocalStorage';
 import {STORAGE_KEYS} from '@site/src/utils/storageKeys';
-import type {CapstoneId, CapstoneProgressMap} from '@site/src/types/progress';
+import {formatProjectDate} from '@site/src/data/projects';
+import type {ProjectId, ProjectProgressMap} from '@site/src/types/progress';
 import styles from './styles.module.css';
 
-export interface CapstoneInfo {
-  id: CapstoneId;
-  /** ISO date, used only to sort newest-first — never rendered. */
+export interface ProjectInfo {
+  id: ProjectId;
+  /** ISO "YYYY-MM" date — drives newest-first sort and is shown, formatted, on the card. */
   date: string;
   title: string;
   summary: string;
@@ -17,7 +19,7 @@ export interface CapstoneInfo {
 }
 
 interface Props {
-  capstones: CapstoneInfo[];
+  projects: ProjectInfo[];
 }
 
 /**
@@ -26,29 +28,33 @@ interface Props {
  * separately (optional, student-driven) so a project already built shows a
  * checkmark on return visits.
  */
-export default function CapstoneChooser({capstones}: Props): React.JSX.Element {
-  const [progress] = useLocalStorage<CapstoneProgressMap>(STORAGE_KEYS.capstoneProgress, {});
+export default function ProjectChooser({projects}: Props): React.JSX.Element {
+  const [progress] = useLocalStorage<ProjectProgressMap>(STORAGE_KEYS.projectProgress, {});
+  const {
+    i18n: {currentLocale},
+  } = useDocusaurusContext();
 
-  const sorted = [...capstones].sort((a, b) => (a.date < b.date ? 1 : -1));
+  const sorted = [...projects].sort((a, b) => (a.date < b.date ? 1 : -1));
 
   return (
     <div className={styles.grid}>
-      {sorted.map((capstone) => {
-        const completed = progress[capstone.id] ?? false;
+      {sorted.map((project) => {
+        const completed = progress[project.id] ?? false;
         return (
-          <Link key={capstone.id} to={capstone.url} className={styles.card}>
+          <Link key={project.id} to={project.url} className={styles.card}>
             <h3>
               {completed && (
                 <span aria-hidden="true" className={styles.checkmark}>
                   ✅{' '}
                 </span>
               )}
-              {capstone.title}
+              {project.title}
             </h3>
-            <p>{capstone.summary}</p>
-            {capstone.tags.length > 0 && (
+            <p className={styles.date}>{formatProjectDate(project.date, currentLocale)}</p>
+            <p>{project.summary}</p>
+            {project.tags.length > 0 && (
               <div className={styles.tags}>
-                {capstone.tags.map((tag) => (
+                {project.tags.map((tag) => (
                   <span key={tag} className={styles.tag}>
                     {tag}
                   </span>
