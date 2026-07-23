@@ -34,7 +34,15 @@ export default function ProjectChooser({projects}: Props): React.JSX.Element {
     i18n: {currentLocale},
   } = useDocusaurusContext();
 
-  const sorted = [...projects].sort((a, b) => (a.date < b.date ? 1 : -1));
+  // Newest date first; same-day ties break alphabetically by id, so the
+  // order is identical everywhere this list is rendered (docs page,
+  // homepage) regardless of the order projects happen to be passed in.
+  const sorted = [...projects].sort((a, b) => {
+    if (a.date !== b.date) {
+      return a.date < b.date ? 1 : -1;
+    }
+    return a.id < b.id ? -1 : 1;
+  });
 
   return (
     <div className={styles.grid}>

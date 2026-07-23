@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented in this file. Format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.3.1] — 2026-07-23
+
+### Fixed
+- Project publish dates were fictional placeholder values, some in the future (e.g. "July 2027" while the site's actual date was 2026-07-23). Replaced with each project's real ship date, taken from git history. Four projects now share the same real date, so `ProjectChooser`'s sort gained a deterministic alphabetical-by-id tiebreak, so the display order is identical everywhere the list renders regardless of the order projects are passed in.
+- Each project step's "✅ Checklist" rendered as permanently disabled GFM `- [ ]` checkboxes — impossible to actually check off. Replaced with a new `StepChecklist`/`StepChecklistItem` component: real, clickable checkboxes (session-only, not persisted — this is a "did I do this right" scratch check, not tracked progress).
+
 ## [1.3.0] — 2026-07-23
 
 ### Added

@@ -191,36 +191,18 @@ function RealWorldProjects() {
         </p>
         <div className={styles.projectGrid}>
           <HomepageProjectCard
-            id="2027-finetune-llm"
+            id="mcp-server"
             title={
-              <Translate id="homepage.projects.finetuneLlm.title" description="Homepage project card title">
-                Fine-tune a Small Language Model
+              <Translate id="homepage.projects.mcpServer.title" description="Homepage project card title">
+                Build an MCP Server
               </Translate>
             }
             summary={
               <Translate
-                id="homepage.projects.finetuneLlm.summary"
+                id="homepage.projects.mcpServer.summary"
                 description="Homepage project card summary">
-                Fine-tune a small open-source language model with LoRA using Unsloth, on a free
-                Colab/Kaggle GPU.
-              </Translate>
-            }
-          />
-          <HomepageProjectCard
-            id="scrape-analyze"
-            title={
-              <Translate
-                id="homepage.projects.scrapeAnalyze.title"
-                description="Homepage project card title">
-                Scrape and Analyze a Live Website
-              </Translate>
-            }
-            summary={
-              <Translate
-                id="homepage.projects.scrapeAnalyze.summary"
-                description="Homepage project card summary">
-                Scrape a real, scraping-friendly website with requests and BeautifulSoup, then
-                clean and chart the results with pandas and matplotlib — no API key needed.
+                Build a Model Context Protocol server exposing your own tools, and connect it to a
+                real AI client like Claude Desktop.
               </Translate>
             }
           />
@@ -243,22 +225,6 @@ function RealWorldProjects() {
             }
           />
           <HomepageProjectCard
-            id="mcp-server"
-            title={
-              <Translate id="homepage.projects.mcpServer.title" description="Homepage project card title">
-                Build an MCP Server
-              </Translate>
-            }
-            summary={
-              <Translate
-                id="homepage.projects.mcpServer.summary"
-                description="Homepage project card summary">
-                Build a Model Context Protocol server exposing your own tools, and connect it to a
-                real AI client like Claude Desktop.
-              </Translate>
-            }
-          />
-          <HomepageProjectCard
             id="rag-notes"
             title={
               <Translate id="homepage.projects.ragNotes.title" description="Homepage project card title">
@@ -271,6 +237,40 @@ function RealWorldProjects() {
                 description="Homepage project card summary">
                 Chat with your own notes: local embeddings with sentence-transformers, NumPy
                 similarity search, and a free-tier LLM for the final answer.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
+            id="scrape-analyze"
+            title={
+              <Translate
+                id="homepage.projects.scrapeAnalyze.title"
+                description="Homepage project card title">
+                Scrape and Analyze a Live Website
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.scrapeAnalyze.summary"
+                description="Homepage project card summary">
+                Scrape a real, scraping-friendly website with requests and BeautifulSoup, then
+                clean and chart the results with pandas and matplotlib — no API key needed.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
+            id="2027-finetune-llm"
+            title={
+              <Translate id="homepage.projects.finetuneLlm.title" description="Homepage project card title">
+                Fine-tune a Small Language Model
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.finetuneLlm.summary"
+                description="Homepage project card summary">
+                Fine-tune a small open-source language model with LoRA using Unsloth, on a free
+                Colab/Kaggle GPU.
               </Translate>
             }
           />
