@@ -20,38 +20,38 @@ export interface ProjectMeta {
  */
 export const PROJECTS: ProjectMeta[] = [
   {
-    id: '2027-finetune-llm',
-    date: '2027-07',
-    url: '/docs/projects/finetune-llm-unsloth',
-    tags: ['Fine-tuning', 'LoRA', 'LLMs'],
-  },
-  {
-    id: 'scrape-analyze',
-    date: '2026-10',
-    url: '/docs/projects/scrape-analyze',
-    tags: ['Web Scraping', 'Data Analysis', 'pandas'],
-  },
-  {
-    id: 'ml-classifier',
-    date: '2026-09',
-    url: '/docs/projects/ml-classifier',
-    tags: ['Machine Learning', 'scikit-learn', 'Data Analysis'],
-  },
-  {
     id: 'mcp-server',
-    date: '2026-08',
+    date: '2026-07-23',
     url: '/docs/projects/mcp-server',
     tags: ['MCP', 'AI Agents'],
   },
   {
+    id: 'ml-classifier',
+    date: '2026-07-23',
+    url: '/docs/projects/ml-classifier',
+    tags: ['Machine Learning', 'scikit-learn', 'Data Analysis'],
+  },
+  {
     id: 'rag-notes',
-    date: '2026-07',
+    date: '2026-07-23',
     url: '/docs/projects/rag-notes',
     tags: ['RAG', 'Embeddings', 'LLMs'],
   },
   {
+    id: 'scrape-analyze',
+    date: '2026-07-23',
+    url: '/docs/projects/scrape-analyze',
+    tags: ['Web Scraping', 'Data Analysis', 'pandas'],
+  },
+  {
+    id: '2027-finetune-llm',
+    date: '2026-07-22',
+    url: '/docs/projects/finetune-llm-unsloth',
+    tags: ['Fine-tuning', 'LoRA', 'LLMs'],
+  },
+  {
     id: '2026-ai-agent',
-    date: '2026-06',
+    date: '2026-07-21',
     url: '/docs/projects/ai-agent',
     tags: ['AI Agents', 'LangChain'],
   },

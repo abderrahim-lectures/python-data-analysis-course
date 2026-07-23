@@ -9,6 +9,7 @@ description: "Graduate from the in-browser playground to real Python: scrape a r
 import ProjectProgressCheckbox from '@site/src/components/ProjectProgressCheckbox';
 import ProjectPublishedDate from '@site/src/components/ProjectPublishedDate';
 import ProjectGreeting from '@site/src/components/ProjectGreeting';
+import {StepChecklist, StepChecklistItem} from '@site/src/components/StepChecklist';
 
 # 🌍 Scrape and Analyze a Live Website
 
@@ -120,9 +121,11 @@ You should see ten printed lines, one per quote on the front page.
 
 **✅ Checklist**
 
-- [ ] `uv run python scrape.py` runs without errors.
-- [ ] It prints exactly 10 lines, one per quote on the front page.
-- [ ] Each printed line has real text, a real author name, and a non-empty list of tags — not `None` or empty strings.
+<StepChecklist>
+<StepChecklistItem>`uv run python scrape.py` runs without errors.</StepChecklistItem>
+<StepChecklistItem>It prints exactly 10 lines, one per quote on the front page.</StepChecklistItem>
+<StepChecklistItem>Each printed line has real text, a real author name, and a non-empty list of tags — not `None` or empty strings.</StepChecklistItem>
+</StepChecklist>
 
 **🤔 Socratic Question(s)**
 
@@ -193,9 +196,11 @@ The `try`/`except` around the request is the important addition here, not a form
 
 **✅ Checklist**
 
-- [ ] `uv run python scrape.py` finishes and prints a "Saved N quotes" line.
-- [ ] `quotes.csv` exists and has more than 10 rows (i.e. it actually followed pagination, not just the front page).
-- [ ] Opening `quotes.csv` in a text editor shows three columns — `text`, `author`, `tags` — with no obviously broken/empty rows.
+<StepChecklist>
+<StepChecklistItem>`uv run python scrape.py` finishes and prints a "Saved N quotes" line.</StepChecklistItem>
+<StepChecklistItem>`quotes.csv` exists and has more than 10 rows (i.e. it actually followed pagination, not just the front page).</StepChecklistItem>
+<StepChecklistItem>Opening `quotes.csv` in a text editor shows three columns — `text`, `author`, `tags` — with no obviously broken/empty rows.</StepChecklistItem>
+</StepChecklist>
 
 **🤔 Socratic Question(s)**
 
@@ -233,9 +238,11 @@ Two things worth noticing here. First, `tags` is stored in the CSV as one comma-
 
 **✅ Checklist**
 
-- [ ] `df["tags"]` holds real Python lists after the `.apply` call, not strings — check with `type(df["tags"].iloc[0])`.
-- [ ] `df["quote_length"]` is a numeric column with no missing values.
-- [ ] `df.head()` shows clean text with no stray leading/trailing whitespace.
+<StepChecklist>
+<StepChecklistItem>`df["tags"]` holds real Python lists after the `.apply` call, not strings — check with `type(df["tags"].iloc[0])`.</StepChecklistItem>
+<StepChecklistItem>`df["quote_length"]` is a numeric column with no missing values.</StepChecklistItem>
+<StepChecklistItem>`df.head()` shows clean text with no stray leading/trailing whitespace.</StepChecklistItem>
+</StepChecklist>
 
 **🤔 Socratic Question(s)**
 
@@ -288,9 +295,11 @@ Both charts follow the same honesty rules from Data Analysis Hard Week 9: axes a
 
 **✅ Checklist**
 
-- [ ] `top_tags.png` and `quote_length_dist.png` both exist and open as real images.
-- [ ] The bar chart's x-axis starts at 0.
-- [ ] Both charts have a title and labeled axes — no bare numbers with no units.
+<StepChecklist>
+<StepChecklistItem>`top_tags.png` and `quote_length_dist.png` both exist and open as real images.</StepChecklistItem>
+<StepChecklistItem>The bar chart's x-axis starts at 0.</StepChecklistItem>
+<StepChecklistItem>Both charts have a title and labeled axes — no bare numbers with no units.</StepChecklistItem>
+</StepChecklist>
 
 **🤔 Socratic Question(s)**
 

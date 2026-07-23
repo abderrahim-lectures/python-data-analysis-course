@@ -9,6 +9,7 @@ description: "Graduate from the in-browser playground to real Python: build a Mo
 import ProjectProgressCheckbox from '@site/src/components/ProjectProgressCheckbox';
 import ProjectPublishedDate from '@site/src/components/ProjectPublishedDate';
 import ProjectGreeting from '@site/src/components/ProjectGreeting';
+import {StepChecklist, StepChecklistItem} from '@site/src/components/StepChecklist';
 
 # 🌍 Build an MCP Server
 
@@ -122,9 +123,11 @@ MCP is a young, fast-moving spec — the protocol itself, and the Python SDK's o
 
 **✅ Checklist**
 
-- [ ] `server.py` saves without syntax errors and defines both `search_course_topics` and `count_words`.
-- [ ] Each tool has a real, plain-English docstring — not a placeholder.
-- [ ] `DOCS_DIR` points at a real `docs/` folder that actually exists on your machine.
+<StepChecklist>
+<StepChecklistItem>`server.py` saves without syntax errors and defines both `search_course_topics` and `count_words`.</StepChecklistItem>
+<StepChecklistItem>Each tool has a real, plain-English docstring — not a placeholder.</StepChecklistItem>
+<StepChecklistItem>`DOCS_DIR` points at a real `docs/` folder that actually exists on your machine.</StepChecklistItem>
+</StepChecklist>
 
 **🤔 Socratic Question(s)**
 
@@ -157,9 +160,11 @@ It's tempting to skip straight to Claude Desktop. Resist that — the Inspector 
 
 **✅ Checklist**
 
-- [ ] `uv run mcp dev server.py` starts without errors and opens the Inspector in your browser.
-- [ ] The Inspector lists both `search_course_topics` and `count_words`.
-- [ ] Calling each tool by hand in the Inspector returns a real, correct result — not an error.
+<StepChecklist>
+<StepChecklistItem>`uv run mcp dev server.py` starts without errors and opens the Inspector in your browser.</StepChecklistItem>
+<StepChecklistItem>The Inspector lists both `search_course_topics` and `count_words`.</StepChecklistItem>
+<StepChecklistItem>Calling each tool by hand in the Inspector returns a real, correct result — not an error.</StepChecklistItem>
+</StepChecklist>
 
 **🤔 Socratic Question(s)**
 
@@ -196,9 +201,11 @@ Claude Desktop should show it calling `search_course_topics` (often as a small c
 
 **✅ Checklist**
 
-- [ ] `course-tools` (or your chosen server name) appears in Claude Desktop's tool/connector list after a full restart.
-- [ ] Asking a question that should trigger `search_course_topics` actually shows Claude calling it, not just answering from memory.
-- [ ] The result Claude shows using matches what you saw testing the same call in the Inspector.
+<StepChecklist>
+<StepChecklistItem>`course-tools` (or your chosen server name) appears in Claude Desktop's tool/connector list after a full restart.</StepChecklistItem>
+<StepChecklistItem>Asking a question that should trigger `search_course_topics` actually shows Claude calling it, not just answering from memory.</StepChecklistItem>
+<StepChecklistItem>The result Claude shows using matches what you saw testing the same call in the Inspector.</StepChecklistItem>
+</StepChecklist>
 
 **🤔 Socratic Question(s)**
 

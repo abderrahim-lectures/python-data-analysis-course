@@ -9,6 +9,7 @@ description: "Graduate from the in-browser playground to real Python: build a re
 import ProjectProgressCheckbox from '@site/src/components/ProjectProgressCheckbox';
 import ProjectPublishedDate from '@site/src/components/ProjectPublishedDate';
 import ProjectGreeting from '@site/src/components/ProjectGreeting';
+import {StepChecklist, StepChecklistItem} from '@site/src/components/StepChecklist';
 
 # 🌍 Build a RAG App Over Your Own Notes
 
@@ -148,9 +149,11 @@ Smaller chunks retrieve more precisely (a question matches a narrow, specific pi
 
 **✅ Checklist**
 
-- [ ] `uv run python prepare_notes.py` runs without errors and prints a nonzero chunk count.
-- [ ] The printed previews look like real fragments of your notes, not empty strings or giant walls of merged text.
-- [ ] `NOTES_DIR` points at a folder that actually contains `.md`/`.txt` files.
+<StepChecklist>
+<StepChecklistItem>`uv run python prepare_notes.py` runs without errors and prints a nonzero chunk count.</StepChecklistItem>
+<StepChecklistItem>The printed previews look like real fragments of your notes, not empty strings or giant walls of merged text.</StepChecklistItem>
+<StepChecklistItem>`NOTES_DIR` points at a folder that actually contains `.md`/`.txt` files.</StepChecklistItem>
+</StepChecklist>
 
 **🤔 Socratic Question(s)**
 
@@ -218,9 +221,11 @@ This deliberately avoids a vector database — for a personal folder of notes (h
 
 **✅ Checklist**
 
-- [ ] `uv run python build_index.py` completed without errors.
-- [ ] An `index.npy` file and a `chunks.json` file now exist in your project folder.
-- [ ] The printed shape's first number matches the chunk count from Step 2, and the second number is 384.
+<StepChecklist>
+<StepChecklistItem>`uv run python build_index.py` completed without errors.</StepChecklistItem>
+<StepChecklistItem>An `index.npy` file and a `chunks.json` file now exist in your project folder.</StepChecklistItem>
+<StepChecklistItem>The printed shape's first number matches the chunk count from Step 2, and the second number is 384.</StepChecklistItem>
+</StepChecklist>
 
 **🤔 Socratic Question(s)**
 
@@ -298,9 +303,11 @@ uv run python retrieve.py
 
 **✅ Checklist**
 
-- [ ] `uv run python retrieve.py` prints `top_k` results, each with a similarity score and a source filename.
-- [ ] The top-ranked chunk for an easy, obvious test question actually looks relevant when you read it.
-- [ ] Scores are between -1 and 1 (the valid range for cosine similarity) — if you see numbers far outside that, one of the vectors probably wasn't normalized.
+<StepChecklist>
+<StepChecklistItem>`uv run python retrieve.py` prints `top_k` results, each with a similarity score and a source filename.</StepChecklistItem>
+<StepChecklistItem>The top-ranked chunk for an easy, obvious test question actually looks relevant when you read it.</StepChecklistItem>
+<StepChecklistItem>Scores are between -1 and 1 (the valid range for cosine similarity) — if you see numbers far outside that, one of the vectors probably wasn't normalized.</StepChecklistItem>
+</StepChecklist>
 
 **🤔 Socratic Question(s)**
 
@@ -404,9 +411,11 @@ Swap the `OpenAI(...)` block for your provider's own client, following the same 
 
 **✅ Checklist**
 
-- [ ] `uv run python ask.py "a real question about your notes"` prints an answer, not a traceback.
-- [ ] The answer actually reflects the content of your notes, not generic knowledge the model already had.
-- [ ] Asking something your notes clearly don't cover makes the model say so, rather than confidently making something up.
+<StepChecklist>
+<StepChecklistItem>`uv run python ask.py "a real question about your notes"` prints an answer, not a traceback.</StepChecklistItem>
+<StepChecklistItem>The answer actually reflects the content of your notes, not generic knowledge the model already had.</StepChecklistItem>
+<StepChecklistItem>Asking something your notes clearly don't cover makes the model say so, rather than confidently making something up.</StepChecklistItem>
+</StepChecklist>
 
 **🤔 Socratic Question(s)**
 
