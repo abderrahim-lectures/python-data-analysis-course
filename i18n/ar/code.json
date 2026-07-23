@@ -716,6 +716,14 @@
   "capstoneProgressCheckbox.label": {
     "message": "ضع علامة على إتمام هذا المشروع"
   },
+  "projectGreeting.named": {
+    "message": "مرحبًا {name} — عمل رائع لوصولك إلى هنا. قد يبدو تثبيت Python فعليًا وبناء شيء بمفردك خطوة كبيرة بعد بيئة البرمجة في المتصفح، لكن لديك ما تحتاجه لذلك. لنبدأ.",
+    "description": "Warm, empathetic greeting with the student's name (or 'Guest' if none set) at the top of a project page"
+  },
+  "projectGreeting.guestName": {
+    "message": "ضيفنا",
+    "description": "Fallback name used in the project greeting when no student name is set"
+  },
   "projectPublishedDate.label": {
     "message": "نُشر في {date}.",
     "description": "Published-date line on a project's own page"

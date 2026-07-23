@@ -75,6 +75,14 @@ The badge above opens a ready-to-go [GitHub Codespace](https://github.com/featur
 
 [`examples/finetune-llm-unsloth/`](./examples/finetune-llm-unsloth/) is the local companion to the [Fine-tune a Small Language Model](./docs/projects/finetune-llm-unsloth/index.md) project — dataset prep and local inference scripts; the fine-tuning step itself runs on a free Colab/Kaggle GPU notebook, linked from the project.
 
+[`examples/rag-notes/`](./examples/rag-notes/) is the companion to the [Build a RAG App](./docs/projects/rag-notes/index.md) project — local embeddings with `sentence-transformers`, a NumPy similarity search, and a free-tier LLM call for the final answer.
+
+[`examples/mcp-server/`](./examples/mcp-server/) is the companion to the [Build an MCP Server](./docs/projects/mcp-server/index.md) project — a FastMCP server exposing two tools, ready to connect to Claude Desktop or another MCP client.
+
+[`examples/scrape-analyze/`](./examples/scrape-analyze/) is the companion to the [Scrape and Analyze a Website](./docs/projects/scrape-analyze/index.md) project — scrapes a real, scraping-friendly site with `requests`/BeautifulSoup, then cleans and charts the results with pandas/matplotlib. No API key needed.
+
+[`examples/ml-classifier/`](./examples/ml-classifier/) is the companion to the [Train an ML Classifier](./docs/projects/ml-classifier/index.md) project — trains and compares two scikit-learn classifiers on the course's own Titanic dataset.
+
 [`examples/student-projects/`](./examples/student-projects/) is a gallery of real-world projects students have built — its README walks complete git beginners through forking, branching, and opening a PR to add their own.
 
 ## Contributing

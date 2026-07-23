@@ -8,10 +8,13 @@ description: "تخرّج من بيئة البرمجة في المتصفح إلى
 
 import ProjectProgressCheckbox from '@site/src/components/ProjectProgressCheckbox';
 import ProjectPublishedDate from '@site/src/components/ProjectPublishedDate';
+import ProjectGreeting from '@site/src/components/ProjectGreeting';
 
 # 🌍 اضبط نموذجًا لغويًا صغيرًا دقيقًا باستخدام Unsloth
 
 <ProjectPublishedDate projectId="2027-finetune-llm" />
+
+<ProjectGreeting />
 
 في مسار Python 101 الصعب، بنيتَ نموذجًا لغويًا صغيرًا جدًا من الصفر تمامًا — عدّ الكلمات، جداول احتمالات الثنائيات (bigrams)، أخذ العينات الموزون. يواصل هذا المشروع هذا الخيط بالضبط: بدلًا من بناء رياضيات نموذج لغوي من لا شيء، ستأخذ نموذجًا حقيقيًا مُدرَّبًا مسبقًا ومفتوح المصدر وتخصصه لمهمة من اختيارك عبر *الضبط الدقيق* (fine-tuning) — تعديل أوزانه الحالية بكمية صغيرة من بياناتك الخاصة، باستخدام [Unsloth](https://unsloth.ai)، وهي مكتبة صُممت خصيصًا لجعل هذا سريعًا و(الأهم) مجانيًا.
 

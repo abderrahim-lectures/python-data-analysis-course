@@ -1,0 +1,10 @@
+[project]
+name = "ml-classifier"
+version = "0.1.0"
+description = "Local companion to the course's Real-World Project: train and compare two binary classifiers on the Titanic dataset with scikit-learn."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "pandas>=2.2.0",
+    "scikit-learn>=1.5.0",
+]

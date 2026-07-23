@@ -1,0 +1,9 @@
+[project]
+name = "mcp-server-example"
+version = "0.1.0"
+description = "A real, runnable MCP server example -- two tools exposed with FastMCP, for the course's Build an MCP Server project."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "mcp[cli]>=1.6.0",
+]

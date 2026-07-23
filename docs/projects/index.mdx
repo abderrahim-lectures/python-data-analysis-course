@@ -18,16 +18,40 @@ They're optional and ungraded. Browse them any time — each project's intro say
 <ProjectChooser
   projects={mergeProjectMeta([
     {
+      id: 'mcp-server',
+      title: 'Build an MCP Server',
+      summary:
+        "Build a Model Context Protocol server exposing your own tools, and connect it to a real AI client like Claude Desktop.",
+    },
+    {
       id: '2027-finetune-llm',
       title: 'Fine-tune a Small Language Model',
       summary:
         'Fine-tune a small open-source language model with LoRA using Unsloth, on a free Colab/Kaggle GPU.',
     },
     {
+      id: 'rag-notes',
+      title: 'Build a RAG App Over Your Own Notes',
+      summary:
+        'Chat with your own notes: local embeddings with sentence-transformers, NumPy similarity search, and a free-tier LLM for the final answer.',
+    },
+    {
       id: '2026-ai-agent',
       title: 'Build an AI Agent',
       summary:
         "Install Python for real and build your first AI agent with LangChain's deepagents, using a free-tier API key.",
+    },
+    {
+      id: 'scrape-analyze',
+      title: 'Scrape and Analyze a Live Website',
+      summary:
+        'Scrape a real, scraping-friendly website with requests and BeautifulSoup, then clean and chart the results with pandas and matplotlib — no API key needed.',
+    },
+    {
+      id: 'ml-classifier',
+      title: 'Train Your First Machine Learning Model',
+      summary:
+        'Go from describing data to predicting from it: train and compare binary classifiers with scikit-learn on the Titanic dataset from Data Analysis Week 10.',
     },
   ])}
 />

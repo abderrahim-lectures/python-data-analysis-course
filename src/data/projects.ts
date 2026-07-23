@@ -26,6 +26,30 @@ export const PROJECTS: ProjectMeta[] = [
     tags: ['Fine-tuning', 'LoRA', 'LLMs'],
   },
   {
+    id: 'scrape-analyze',
+    date: '2026-10',
+    url: '/docs/projects/scrape-analyze',
+    tags: ['Web Scraping', 'Data Analysis', 'pandas'],
+  },
+  {
+    id: 'ml-classifier',
+    date: '2026-09',
+    url: '/docs/projects/ml-classifier',
+    tags: ['Machine Learning', 'scikit-learn', 'Data Analysis'],
+  },
+  {
+    id: 'mcp-server',
+    date: '2026-08',
+    url: '/docs/projects/mcp-server',
+    tags: ['MCP', 'AI Agents'],
+  },
+  {
+    id: 'rag-notes',
+    date: '2026-07',
+    url: '/docs/projects/rag-notes',
+    tags: ['RAG', 'Embeddings', 'LLMs'],
+  },
+  {
     id: '2026-ai-agent',
     date: '2026-06',
     url: '/docs/projects/ai-agent',

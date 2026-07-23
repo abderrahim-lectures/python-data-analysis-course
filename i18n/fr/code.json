@@ -716,6 +716,14 @@
   "capstoneProgressCheckbox.label": {
     "message": "Marquer ce projet comme terminé"
   },
+  "projectGreeting.named": {
+    "message": "Salut {name} — bravo d'être arrivé·e jusqu'ici. Installer Python pour de vrai et construire quelque chose par vous-même peut sembler un grand saut depuis le bac à sable dans le navigateur, mais vous avez ce qu'il faut pour y arriver. Commençons.",
+    "description": "Warm, empathetic greeting with the student's name (or 'Guest' if none set) at the top of a project page"
+  },
+  "projectGreeting.guestName": {
+    "message": "cher invité",
+    "description": "Fallback name used in the project greeting when no student name is set"
+  },
   "projectPublishedDate.label": {
     "message": "Publié en {date}.",
     "description": "Published-date line on a project's own page"

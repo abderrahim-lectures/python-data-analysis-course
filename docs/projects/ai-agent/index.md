@@ -8,10 +8,13 @@ description: "Graduate from the in-browser playground to real Python: install Py
 
 import ProjectProgressCheckbox from '@site/src/components/ProjectProgressCheckbox';
 import ProjectPublishedDate from '@site/src/components/ProjectPublishedDate';
+import ProjectGreeting from '@site/src/components/ProjectGreeting';
 
 # 🌍 Build an AI Agent
 
 <ProjectPublishedDate projectId="2026-ai-agent" />
+
+<ProjectGreeting />
 
 Everything in the course so far ran in a sandboxed, in-browser playground — so you could start writing Python on day one with zero setup. This project is the graduation step: install Python for real on your own machine, then use it to build something the playground could never run — an AI agent with its own API key, calling out to a real language model.
 
