@@ -1,0 +1,33 @@
+---
+id: index
+title: Real-World Projects
+slug: /projects
+sidebar_position: 1
+description: "Practical projects you can build with Python — installing it for real, outside the in-browser playground. New ones are added whenever a trending tool or framework is worth covering."
+---
+
+import CapstoneChooser from '@site/src/components/CapstoneChooser';
+import {mergeProjectMeta} from '@site/src/data/projects';
+
+# 🌍 Real-World Projects
+
+Everything in the course so far ran in a sandboxed, in-browser playground — so you could start writing Python on day one with zero setup. These projects are the graduation step: install Python for real on your own machine, then build something the playground could never run.
+
+They're optional and ungraded. Browse them any time — each project's intro says what background it expects (usually Python 101, sometimes Data Analysis too), so you don't need to have finished the whole course first. New projects are added whenever a trending tool or framework is worth a real, hands-on write-up — not on a fixed schedule.
+
+<CapstoneChooser
+  capstones={mergeProjectMeta([
+    {
+      id: '2027-finetune-llm',
+      title: 'Fine-tune a Small Language Model',
+      summary:
+        'Fine-tune a small open-source language model with LoRA using Unsloth, on a free Colab/Kaggle GPU.',
+    },
+    {
+      id: '2026-ai-agent',
+      title: 'Build an AI Agent',
+      summary:
+        "Install Python for real and build your first AI agent with LangChain's deepagents, using a free-tier API key.",
+    },
+  ])}
+/>

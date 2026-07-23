@@ -26,9 +26,10 @@ export function usePlacementQuizStatus(): {
 
 /**
  * Has every week of the student's chosen tracks (both sections) been marked
- * complete? Gates the Capstone Bonus. False if either section's track hasn't
- * been chosen yet — completion can't be evaluated without knowing which 5
- * weeks apply per section.
+ * complete? Used for the completion congratulations banner on /progress —
+ * real-world projects themselves are ungated. False if either section's
+ * track hasn't been chosen yet — completion can't be evaluated without
+ * knowing which 5 weeks apply per section.
  */
 export function useCourseComplete(): boolean {
   const [progress] = useLocalStorage<ProgressMap>(STORAGE_KEYS.progress, {});

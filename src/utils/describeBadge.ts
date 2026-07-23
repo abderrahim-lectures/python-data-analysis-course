@@ -28,7 +28,7 @@ export function describeBadge(badgeId: BadgeId): BadgeDescription {
   }
   if (badgeId.startsWith('capstone-') && badgeId.endsWith('-complete')) {
     const capstoneId = badgeId.slice('capstone-'.length, -'-complete'.length);
-    return {emoji: '🎓', label: `Capstone complete: ${capstoneId}`};
+    return {emoji: '🎓', label: `Project complete: ${capstoneId}`};
   }
   if (badgeId.endsWith('-complete')) {
     return {emoji: '🏁', label: `${formatWeekId(badgeId, '-complete')} complete`};

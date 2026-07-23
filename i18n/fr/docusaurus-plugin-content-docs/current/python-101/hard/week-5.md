@@ -73,7 +73,7 @@ if __name__ == "__main__":
     print(generate_text(probs_table, "the", max_words=8))
 ```
 
-`dict.setdefault(key, {})` dans `build_bigram_probabilities` est un petit raccourci pour le motif `if key not in table: table[key] = {}` de la semaine 3 — il fait la même chose en une ligne. `if __name__ == "__main__":` est la façon standard de marquer « exécute ceci quand le fichier est lancé directement » — vous verrez cette convention constamment une fois que vous installerez Python en local dans le Capstone Bonus.
+`dict.setdefault(key, {})` dans `build_bigram_probabilities` est un petit raccourci pour le motif `if key not in table: table[key] = {}` de la semaine 3 — il fait la même chose en une ligne. `if __name__ == "__main__":` est la façon standard de marquer « exécute ceci quand le fichier est lancé directement » — vous verrez cette convention constamment une fois que vous installerez Python en local pour l'un des [projets concrets](/docs/projects).
 
 ### Température : régler l'aléatoire
 

@@ -237,4 +237,4 @@ Rehaz el groupby de tasa de supervivencia por Pclass, pero esta vez incluye tant
 
 ---
 
-**🎉 Completaste el track Normal de Pandas y Análisis de Datos — y todo el curso, si tomaste Normal en ambas secciones.** Ve a [Mi Progreso](/progress) para ver tus insignias y, si terminaste cada semana, desbloquea el [proyectos Capstone](/docs/bonus): instalar Python de verdad y construir tu primer agente de IA.
+**🎉 Completaste el track Normal de Pandas y Análisis de Datos — y todo el curso, si tomaste Normal en ambas secciones.** Ve a [Mi Progreso](/progress) para ver tus insignias, y descubre los [proyectos del mundo real](/docs/projects): instala Python de verdad y construye algo que el playground nunca pudo ejecutar.

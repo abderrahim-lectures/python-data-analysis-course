@@ -36,15 +36,18 @@
   margin-bottom: 0;
 }
 
-.locked {
-  border: 1px dashed var(--ifm-color-emphasis-300);
-  border-radius: var(--pda-radius-lg);
-  padding: 1.25rem;
-  margin: 1.5rem 0;
-  color: var(--ifm-color-emphasis-600);
-  text-align: center;
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.5rem;
 }
 
-.locked p {
-  margin: 0;
+.tag {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  background: var(--pda-accent-soft);
+  color: var(--pda-accent);
 }

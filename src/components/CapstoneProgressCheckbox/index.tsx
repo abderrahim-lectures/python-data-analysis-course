@@ -11,7 +11,7 @@ interface Props {
   capstoneId: CapstoneId;
 }
 
-/** "Mark this Capstone complete" checkbox — same pattern as ProgressCheckbox, one level up. */
+/** "Mark this project complete" checkbox — same pattern as ProgressCheckbox, one level up. */
 export default function CapstoneProgressCheckbox({capstoneId}: Props): React.JSX.Element {
   const [progress, setProgress] = useLocalStorage<CapstoneProgressMap>(
     STORAGE_KEYS.capstoneProgress,
@@ -32,7 +32,7 @@ export default function CapstoneProgressCheckbox({capstoneId}: Props): React.JSX
     <label className={styles.wrapper}>
       <input type="checkbox" checked={isComplete} onChange={toggle} />
       <span>
-        <Translate id="capstoneProgressCheckbox.label">Mark this Capstone complete</Translate>
+        <Translate id="capstoneProgressCheckbox.label">Mark this project complete</Translate>
       </span>
     </label>
   );

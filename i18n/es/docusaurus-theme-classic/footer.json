@@ -35,9 +35,9 @@
     "message": "Copyright © 2026 Abderrahim Adrabi. Código con licencia MIT, contenido con licencia CC-BY 4.0. v1.1.0",
     "description": "The footer copyright"
   },
-  "link.item.label.Capstone Projects": {
-    "message": "Proyectos Capstone",
-    "description": "The label of footer link with label=Capstone Projects linking to /docs/bonus"
+  "link.item.label.Projects": {
+    "message": "Proyectos",
+    "description": "The label of footer link with label=Projects linking to /docs/projects"
   },
   "link.item.label.Changelog": {
     "message": "Changelog",

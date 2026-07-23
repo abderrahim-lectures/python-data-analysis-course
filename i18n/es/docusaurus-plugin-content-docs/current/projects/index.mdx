@@ -1,0 +1,33 @@
+---
+id: index
+title: Proyectos del mundo real
+slug: /projects
+sidebar_position: 1
+description: "Proyectos prácticos que puedes construir con Python — instálalo de verdad, fuera del playground del navegador. Se añaden proyectos nuevos cada vez que vale la pena cubrir una herramienta o framework de tendencia."
+---
+
+import CapstoneChooser from '@site/src/components/CapstoneChooser';
+import {mergeProjectMeta} from '@site/src/data/projects';
+
+# 🌍 Proyectos del mundo real
+
+Todo hasta ahora se ejecutó en un playground aislado dentro del navegador — para que pudieras empezar a escribir Python desde el primer día sin ninguna configuración. Estos proyectos son el paso de graduación: instala Python de verdad en tu propia máquina, y luego construye algo que el playground nunca pudo ejecutar.
+
+Son opcionales y no calificados. Explóralos en cualquier momento — la introducción de cada proyecto indica qué conocimientos previos espera (normalmente Python 101, a veces también Data Analysis), así que no necesitas haber terminado todo el curso primero. Se añaden proyectos nuevos cada vez que una herramienta o framework de tendencia merece una guía práctica real — no según un calendario fijo.
+
+<CapstoneChooser
+  capstones={mergeProjectMeta([
+    {
+      id: '2027-finetune-llm',
+      title: 'Ajusta finamente un Modelo de Lenguaje Pequeño',
+      summary:
+        'Ajusta finamente un modelo de lenguaje pequeño de código abierto con LoRA usando Unsloth, en una GPU gratuita de Colab o Kaggle.',
+    },
+    {
+      id: '2026-ai-agent',
+      title: 'Construye un Agente de IA',
+      summary:
+        "Instala Python de verdad y construye tu primer agente de IA con deepagents de LangChain, usando una clave API gratuita.",
+    },
+  ])}
+/>

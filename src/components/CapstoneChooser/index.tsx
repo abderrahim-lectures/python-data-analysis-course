@@ -2,17 +2,18 @@ import React from 'react';
 import Link from '@docusaurus/Link';
 import Translate from '@docusaurus/Translate';
 import {useLocalStorage} from '@site/src/hooks/useLocalStorage';
-import {useCourseComplete} from '@site/src/hooks/useUnlockCondition';
 import {STORAGE_KEYS} from '@site/src/utils/storageKeys';
 import type {CapstoneId, CapstoneProgressMap} from '@site/src/types/progress';
 import styles from './styles.module.css';
 
 export interface CapstoneInfo {
   id: CapstoneId;
-  year: number;
+  /** ISO date, used only to sort newest-first — never rendered. */
+  date: string;
   title: string;
   summary: string;
   url: string;
+  tags: string[];
 }
 
 interface Props {
@@ -20,32 +21,15 @@ interface Props {
 }
 
 /**
- * Lists every year's Capstone project (past and current) once the whole
- * course is complete. Unlock is still course-wide (finish all weeks) — same
- * `useCourseComplete()` gate as before, now guarding a list instead of one
- * fixed page. Completion of each individual capstone is tracked separately
- * so a student who's done a past year's project still sees it checked off.
+ * Lists every real-world project, newest first. Freely browsable any time —
+ * no completion gate. Each project's own completion is still tracked
+ * separately (optional, student-driven) so a project already built shows a
+ * checkmark on return visits.
  */
 export default function CapstoneChooser({capstones}: Props): React.JSX.Element {
-  const unlocked = useCourseComplete();
   const [progress] = useLocalStorage<CapstoneProgressMap>(STORAGE_KEYS.capstoneProgress, {});
 
-  if (!unlocked) {
-    return (
-      <div className={styles.locked}>
-        <p>
-          <span className="gamified-flourish" aria-hidden="true">
-            🔒{' '}
-          </span>
-          <Translate id="capstoneChooser.lockedLabel">
-            Finish every week of both sections to unlock the Capstone projects.
-          </Translate>
-        </p>
-      </div>
-    );
-  }
-
-  const sorted = [...capstones].sort((a, b) => b.year - a.year);
+  const sorted = [...capstones].sort((a, b) => (a.date < b.date ? 1 : -1));
 
   return (
     <div className={styles.grid}>
@@ -59,9 +43,18 @@ export default function CapstoneChooser({capstones}: Props): React.JSX.Element {
                   ✅{' '}
                 </span>
               )}
-              {capstone.year} — {capstone.title}
+              {capstone.title}
             </h3>
             <p>{capstone.summary}</p>
+            {capstone.tags.length > 0 && (
+              <div className={styles.tags}>
+                {capstone.tags.map((tag) => (
+                  <span key={tag} className={styles.tag}>
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            )}
             {completed && (
               <p className={styles.completedLabel}>
                 <Translate id="capstoneChooser.completedLabel">Completed</Translate>

@@ -237,4 +237,4 @@ Refaites le groupby de taux de survie par Pclass, mais cette fois incluez à la 
 
 ---
 
-**🎉 Vous avez terminé le parcours normal de Pandas et analyse de données — et le cours entier, si vous avez suivi le parcours normal dans les deux sections.** Rendez-vous sur [Ma progression](/progress) pour voir vos badges et, si vous avez terminé chaque semaine, débloquez le [projets Capstone](/docs/bonus) : installer Python pour de vrai et construire votre premier agent IA.
+**🎉 Vous avez terminé le parcours normal de Pandas et analyse de données — et le cours entier, si vous avez suivi le parcours normal dans les deux sections.** Rendez-vous sur [Ma progression](/progress) pour voir vos badges, et découvrez les [projets concrets](/docs/projects) : installez Python pour de vrai et construisez quelque chose que le bac à sable n'a jamais pu exécuter.

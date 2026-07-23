@@ -27,8 +27,8 @@
     "message": "GitHub",
     "description": "Navbar item with label GitHub"
   },
-  "item.label.Capstone Projects": {
-    "message": "Proyectos Capstone",
-    "description": "Navbar item with label Capstone Projects"
+  "item.label.Projects": {
+    "message": "Proyectos",
+    "description": "Navbar item with label Projects"
   }
 }
