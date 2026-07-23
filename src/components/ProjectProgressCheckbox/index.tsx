@@ -3,28 +3,28 @@ import Translate from '@docusaurus/Translate';
 import {useLocalStorage} from '@site/src/hooks/useLocalStorage';
 import {useBadges} from '@site/src/hooks/useBadges';
 import {STORAGE_KEYS} from '@site/src/utils/storageKeys';
-import {capstoneCompleteBadge} from '@site/src/utils/badges';
-import type {CapstoneId, CapstoneProgressMap} from '@site/src/types/progress';
+import {projectCompleteBadge} from '@site/src/utils/badges';
+import type {ProjectId, ProjectProgressMap} from '@site/src/types/progress';
 import styles from './styles.module.css';
 
 interface Props {
-  capstoneId: CapstoneId;
+  projectId: ProjectId;
 }
 
 /** "Mark this project complete" checkbox — same pattern as ProgressCheckbox, one level up. */
-export default function CapstoneProgressCheckbox({capstoneId}: Props): React.JSX.Element {
-  const [progress, setProgress] = useLocalStorage<CapstoneProgressMap>(
-    STORAGE_KEYS.capstoneProgress,
+export default function ProjectProgressCheckbox({projectId}: Props): React.JSX.Element {
+  const [progress, setProgress] = useLocalStorage<ProjectProgressMap>(
+    STORAGE_KEYS.projectProgress,
     {},
   );
   const {awardBadge} = useBadges();
-  const isComplete = progress[capstoneId] ?? false;
+  const isComplete = progress[projectId] ?? false;
 
   const toggle = () => {
     const next = !isComplete;
-    setProgress((prev) => ({...prev, [capstoneId]: next}));
+    setProgress((prev) => ({...prev, [projectId]: next}));
     if (next) {
-      awardBadge(capstoneCompleteBadge(capstoneId));
+      awardBadge(projectCompleteBadge(projectId));
     }
   };
 

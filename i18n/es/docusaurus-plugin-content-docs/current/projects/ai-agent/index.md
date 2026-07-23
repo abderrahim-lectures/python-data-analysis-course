@@ -6,9 +6,12 @@ slug: /projects/ai-agent
 description: "Da el salto del entorno de práctica en el navegador a Python real: instala Python localmente y construye tu primer agente de IA con deepagents de LangChain."
 ---
 
-import CapstoneProgressCheckbox from '@site/src/components/CapstoneProgressCheckbox';
+import ProjectProgressCheckbox from '@site/src/components/ProjectProgressCheckbox';
+import ProjectPublishedDate from '@site/src/components/ProjectPublishedDate';
 
 # 🌍 Construye un Agente de IA
+
+<ProjectPublishedDate projectId="2026-ai-agent" />
 
 Todo hasta ahora se ejecutó en un playground aislado dentro del navegador — para que pudieras empezar a escribir Python desde el primer día sin ninguna configuración. Este proyecto es el paso de graduación: instala Python de verdad en tu propia máquina, y luego úsalo para construir algo que el playground nunca pudo ejecutar — un agente de IA con su propia clave de API, llamando a un modelo de lenguaje real.
 
@@ -263,4 +266,4 @@ El agente principal ahora puede entregar una subtarea a `topic-researcher` en lu
 
 Bienvenido a escribir Python fuera del navegador. 🎓
 
-<CapstoneProgressCheckbox capstoneId="2026-ai-agent" />
+<ProjectProgressCheckbox projectId="2026-ai-agent" />

@@ -2,6 +2,20 @@
 
 All notable changes to this project are documented in this file. Format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.2.0] — 2026-07-23
+
+### Added
+- **Real-World Projects**: the year-labeled, completion-gated "Capstone Projects" feature is redesigned into an open, ongoing project library — no year in visible titles, no completion gate (browsable/linkable any time), a `tags` field per project (with a `Community` tag ready for future learner-contributed projects via plain PRs), and a new homepage section listing every project. Moved from `/docs/bonus` to `/docs/projects`, with redirects covering the old URLs; existing students' progress/badges keep working since the underlying project ids didn't change.
+- New Real-World Project: fine-tune a small open-source language model with LoRA using Unsloth on a free Colab/Kaggle GPU, translated into Arabic, Spanish, and French.
+- Completion certificate redesign: PDF export removed (PNG only), with course name, date, website, and student name added in distinct serif typography.
+- `plan/` folder: the monolithic `PLAN.md` split into one file per section, with a `plan/README.md` index.
+
+### Fixed
+- The mobile navbar hamburger toggle being visible and clickable on desktop but not actually opening the menu, caused by a shared touch-target CSS rule overriding Infima's own responsive behavior.
+- Dark mode background forced to white by a leftover CSS override from the hamburger-menu fix above.
+- The "Projects" navbar link and sidebar order pointing at the wrong page — the Real-World Projects index page and the "Build an AI Agent" project both had the same sidebar position, so the tie-break sent visitors to the wrong place.
+- Project cards not showing when each project was published — added a localized "Month Year" date to both the project chooser and homepage cards.
+
 ## [1.1.0] — 2026-07-22
 
 ### Added

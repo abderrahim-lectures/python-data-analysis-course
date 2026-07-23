@@ -6,9 +6,12 @@ slug: /projects/finetune-llm-unsloth
 description: "تخرّج من بيئة البرمجة في المتصفح إلى Python فعلي: اضبط نموذجًا لغويًا صغيرًا مفتوح المصدر دقيقًا باستخدام LoRA عبر Unsloth، على وحدة معالجة رسومية مجانية."
 ---
 
-import CapstoneProgressCheckbox from '@site/src/components/CapstoneProgressCheckbox';
+import ProjectProgressCheckbox from '@site/src/components/ProjectProgressCheckbox';
+import ProjectPublishedDate from '@site/src/components/ProjectPublishedDate';
 
 # 🌍 اضبط نموذجًا لغويًا صغيرًا دقيقًا باستخدام Unsloth
+
+<ProjectPublishedDate projectId="2027-finetune-llm" />
 
 في مسار Python 101 الصعب، بنيتَ نموذجًا لغويًا صغيرًا جدًا من الصفر تمامًا — عدّ الكلمات، جداول احتمالات الثنائيات (bigrams)، أخذ العينات الموزون. يواصل هذا المشروع هذا الخيط بالضبط: بدلًا من بناء رياضيات نموذج لغوي من لا شيء، ستأخذ نموذجًا حقيقيًا مُدرَّبًا مسبقًا ومفتوح المصدر وتخصصه لمهمة من اختيارك عبر *الضبط الدقيق* (fine-tuning) — تعديل أوزانه الحالية بكمية صغيرة من بياناتك الخاصة، باستخدام [Unsloth](https://unsloth.ai)، وهي مكتبة صُممت خصيصًا لجعل هذا سريعًا و(الأهم) مجانيًا.
 
@@ -162,4 +165,4 @@ uv run python infer.py
 
 مرحبًا بك في كتابة Python خارج المتصفح. 🎓
 
-<CapstoneProgressCheckbox capstoneId="2027-finetune-llm" />
+<ProjectProgressCheckbox projectId="2027-finetune-llm" />

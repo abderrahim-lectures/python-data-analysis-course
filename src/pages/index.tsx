@@ -4,8 +4,9 @@ import Link from '@docusaurus/Link';
 import Translate, {translate} from '@docusaurus/Translate';
 import Layout from '@theme/Layout';
 import Heading from '@theme/Heading';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import InstallPwaButton from '@site/src/components/InstallPwaButton';
-import {PROJECTS} from '@site/src/data/projects';
+import {PROJECTS, formatProjectDate} from '@site/src/data/projects';
 
 import styles from './index.module.css';
 
@@ -139,6 +140,9 @@ function SectionCards() {
 function RealWorldProjects() {
   const aiAgent = projectMeta('2026-ai-agent');
   const finetuneLlm = projectMeta('2027-finetune-llm');
+  const {
+    i18n: {currentLocale},
+  } = useDocusaurusContext();
 
   return (
     <section className={styles.projects}>
@@ -165,6 +169,9 @@ function RealWorldProjects() {
                 Fine-tune a Small Language Model
               </Translate>
             </h3>
+            <p className={styles.projectDate}>
+              {formatProjectDate(finetuneLlm.date, currentLocale)}
+            </p>
             <p>
               <Translate
                 id="homepage.projects.finetuneLlm.summary"
@@ -187,6 +194,7 @@ function RealWorldProjects() {
                 Build an AI Agent
               </Translate>
             </h3>
+            <p className={styles.projectDate}>{formatProjectDate(aiAgent.date, currentLocale)}</p>
             <p>
               <Translate
                 id="homepage.projects.aiAgent.summary"

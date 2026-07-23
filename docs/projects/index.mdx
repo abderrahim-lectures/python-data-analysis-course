@@ -2,11 +2,11 @@
 id: index
 title: Real-World Projects
 slug: /projects
-sidebar_position: 1
+sidebar_position: 0
 description: "Practical projects you can build with Python — installing it for real, outside the in-browser playground. New ones are added whenever a trending tool or framework is worth covering."
 ---
 
-import CapstoneChooser from '@site/src/components/CapstoneChooser';
+import ProjectChooser from '@site/src/components/ProjectChooser';
 import {mergeProjectMeta} from '@site/src/data/projects';
 
 # 🌍 Real-World Projects
@@ -15,8 +15,8 @@ Everything in the course so far ran in a sandboxed, in-browser playground — so
 
 They're optional and ungraded. Browse them any time — each project's intro says what background it expects (usually Python 101, sometimes Data Analysis too), so you don't need to have finished the whole course first. New projects are added whenever a trending tool or framework is worth a real, hands-on write-up — not on a fixed schedule.
 
-<CapstoneChooser
-  capstones={mergeProjectMeta([
+<ProjectChooser
+  projects={mergeProjectMeta([
     {
       id: '2027-finetune-llm',
       title: 'Fine-tune a Small Language Model',

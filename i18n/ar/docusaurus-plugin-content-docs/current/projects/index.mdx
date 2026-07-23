@@ -2,11 +2,11 @@
 id: index
 title: مشاريع من العالم الحقيقي
 slug: /projects
-sidebar_position: 1
+sidebar_position: 0
 description: "مشاريع عملية يمكنك بناؤها باستخدام Python — ثبّته فعليًا، خارج بيئة البرمجة في المتصفح. تُضاف مشاريع جديدة كلما استحقت أداة أو إطار عمل رائج تغطية حقيقية."
 ---
 
-import CapstoneChooser from '@site/src/components/CapstoneChooser';
+import ProjectChooser from '@site/src/components/ProjectChooser';
 import {mergeProjectMeta} from '@site/src/data/projects';
 
 # 🌍 مشاريع من العالم الحقيقي
@@ -15,8 +15,8 @@ import {mergeProjectMeta} from '@site/src/data/projects';
 
 هذه المشاريع اختيارية وغير مُقيَّمة. تصفّحها في أي وقت — تذكر مقدمة كل مشروع الخلفية المطلوبة (عادةً Python 101، وأحيانًا تحليل البيانات أيضًا)، لذا لست بحاجة لإنهاء الدورة بأكملها أولًا. تُضاف مشاريع جديدة كلما استحقت أداة أو إطار عمل رائج دليلًا عمليًا حقيقيًا — وليس وفق جدول زمني ثابت.
 
-<CapstoneChooser
-  capstones={mergeProjectMeta([
+<ProjectChooser
+  projects={mergeProjectMeta([
     {
       id: '2027-finetune-llm',
       title: 'ضبط نموذج لغوي صغير دقيقًا',

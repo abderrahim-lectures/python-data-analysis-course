@@ -27,8 +27,8 @@ export function describeBadge(badgeId: BadgeId): BadgeDescription {
     return {emoji: '🔓', label: `${formatWeekId(badgeId, '-bonus-unlocked')} bonus unlocked`};
   }
   if (badgeId.startsWith('capstone-') && badgeId.endsWith('-complete')) {
-    const capstoneId = badgeId.slice('capstone-'.length, -'-complete'.length);
-    return {emoji: '🎓', label: `Project complete: ${capstoneId}`};
+    const projectId = badgeId.slice('capstone-'.length, -'-complete'.length);
+    return {emoji: '🎓', label: `Project complete: ${projectId}`};
   }
   if (badgeId.endsWith('-complete')) {
     return {emoji: '🏁', label: `${formatWeekId(badgeId, '-complete')} complete`};

@@ -6,9 +6,12 @@ slug: /projects/finetune-llm-unsloth
 description: "Passez du bac à sable dans le navigateur à du vrai Python : affinez un petit modèle de langage open-source avec LoRA via Unsloth, sur un GPU gratuit."
 ---
 
-import CapstoneProgressCheckbox from '@site/src/components/CapstoneProgressCheckbox';
+import ProjectProgressCheckbox from '@site/src/components/ProjectProgressCheckbox';
+import ProjectPublishedDate from '@site/src/components/ProjectPublishedDate';
 
 # 🌍 Affiner un petit modèle de langage avec Unsloth
+
+<ProjectPublishedDate projectId="2027-finetune-llm" />
 
 Dans le track Difficile de Python 101, vous avez construit un tout petit modèle de langage entièrement à partir de zéro — comptages de mots, tables de probabilités bigrammes, échantillonnage pondéré. Ce projet reprend exactement ce fil : plutôt que de construire les mathématiques d'un modèle de langage à partir de rien, vous allez prendre un vrai modèle pré-entraîné open-source et le spécialiser pour une tâche de votre choix en l'*affinant* (fine-tuning) — en ajustant légèrement ses poids existants avec une petite quantité de vos propres données, en utilisant [Unsloth](https://unsloth.ai), une bibliothèque conçue spécifiquement pour rendre cela rapide et (surtout) gratuit.
 
@@ -162,4 +165,4 @@ Vous avez construit quelque chose dont vous êtes fier ? [`examples/student-proj
 
 Bienvenue dans l'écriture de Python en dehors du navigateur. 🎓
 
-<CapstoneProgressCheckbox capstoneId="2027-finetune-llm" />
+<ProjectProgressCheckbox projectId="2027-finetune-llm" />

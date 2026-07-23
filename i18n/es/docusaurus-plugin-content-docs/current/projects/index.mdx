@@ -2,11 +2,11 @@
 id: index
 title: Proyectos del mundo real
 slug: /projects
-sidebar_position: 1
+sidebar_position: 0
 description: "Proyectos prácticos que puedes construir con Python — instálalo de verdad, fuera del playground del navegador. Se añaden proyectos nuevos cada vez que vale la pena cubrir una herramienta o framework de tendencia."
 ---
 
-import CapstoneChooser from '@site/src/components/CapstoneChooser';
+import ProjectChooser from '@site/src/components/ProjectChooser';
 import {mergeProjectMeta} from '@site/src/data/projects';
 
 # 🌍 Proyectos del mundo real
@@ -15,8 +15,8 @@ Todo hasta ahora se ejecutó en un playground aislado dentro del navegador — p
 
 Son opcionales y no calificados. Explóralos en cualquier momento — la introducción de cada proyecto indica qué conocimientos previos espera (normalmente Python 101, a veces también Data Analysis), así que no necesitas haber terminado todo el curso primero. Se añaden proyectos nuevos cada vez que una herramienta o framework de tendencia merece una guía práctica real — no según un calendario fijo.
 
-<CapstoneChooser
-  capstones={mergeProjectMeta([
+<ProjectChooser
+  projects={mergeProjectMeta([
     {
       id: '2027-finetune-llm',
       title: 'Ajusta finamente un Modelo de Lenguaje Pequeño',

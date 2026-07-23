@@ -6,9 +6,12 @@ slug: /projects/ai-agent
 description: "Passez du bac à sable dans le navigateur à du vrai Python : installez Python en local et construisez votre premier agent IA avec deepagents de LangChain."
 ---
 
-import CapstoneProgressCheckbox from '@site/src/components/CapstoneProgressCheckbox';
+import ProjectProgressCheckbox from '@site/src/components/ProjectProgressCheckbox';
+import ProjectPublishedDate from '@site/src/components/ProjectPublishedDate';
 
 # 🌍 Construire un agent IA
+
+<ProjectPublishedDate projectId="2026-ai-agent" />
 
 Tout jusqu'ici tournait dans un bac à sable isolé, dans le navigateur — pour que vous puissiez commencer à écrire du Python dès le premier jour sans aucune configuration. Ce projet est l'étape de remise de diplôme : installez Python pour de vrai sur votre propre machine, puis utilisez-le pour construire quelque chose que le bac à sable n'a jamais pu exécuter — un agent IA avec sa propre clé API, appelant un vrai modèle de langage.
 
@@ -263,4 +266,4 @@ Vous avez construit quelque chose dont vous êtes fier ? [`examples/student-proj
 
 Bienvenue dans l'écriture de Python en dehors du navigateur. 🎓
 
-<CapstoneProgressCheckbox capstoneId="2026-ai-agent" />
+<ProjectProgressCheckbox projectId="2026-ai-agent" />
