@@ -28,16 +28,16 @@ export default function ProgressPage(): ReactNode {
               id="progressPage.courseComplete"
               values={{
                 link: (
-                  <Link to="/docs/bonus">
+                  <Link to="/docs/projects">
                     <strong>
                       <Translate id="progressPage.courseComplete.linkText">
-                        choose a Capstone project to build
+                        build one of the real-world projects
                       </Translate>
                     </strong>
                   </Link>
                 ),
               }}>
-              {"You've finished the whole course! Your Capstone projects are unlocked — {link}."}
+              {"You've finished the whole course! Nice work — go {link}."}
             </Translate>
           </div>
         )}

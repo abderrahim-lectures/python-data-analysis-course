@@ -35,9 +35,9 @@
     "message": "حقوق النشر © 2026 Abderrahim Adrabi. الكود مرخّص بموجب MIT، والمحتوى بموجب CC-BY 4.0. v1.1.0",
     "description": "The footer copyright"
   },
-  "link.item.label.Capstone Projects": {
-    "message": "مشاريع المشروع الختامي",
-    "description": "The label of footer link with label=Capstone Projects linking to /docs/bonus"
+  "link.item.label.Projects": {
+    "message": "المشاريع",
+    "description": "The label of footer link with label=Projects linking to /docs/projects"
   },
   "link.item.label.Changelog": {
     "message": "Changelog",

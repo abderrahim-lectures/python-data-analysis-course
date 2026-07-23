@@ -15,7 +15,7 @@ The design plan and rationale behind every major decision in this course, split 
 - [`content-pattern.md`](./content-pattern.md) — the five-part skeleton every weekly lesson page follows.
 - [`gamification.md`](./gamification.md) — badges, quiz-gated bonus content, and the Gamified/Classical mode toggle.
 - [`sharing-progress.md`](./sharing-progress.md) — the no-backend shareable progress link and downloadable completion certificate.
-- [`capstones.md`](./capstones.md) — the Capstone Projects architecture: one new project every year, past years stay available, per-capstone completion tracking.
+- [`capstones.md`](./capstones.md) — the Real-World Projects architecture: an open, ongoing series (no completion gate, no year prefix), per-project completion tracking.
 - [`section-1-python-101.md`](./section-1-python-101.md) — the Python 101 syllabus (both tracks, weeks 1–5).
 - [`section-2-data-analysis.md`](./section-2-data-analysis.md) — the Data Analysis syllabus (both tracks, weeks 6–10).
 - [`deployment.md`](./deployment.md) — the GitHub Pages deploy workflow and the custom domain setup.

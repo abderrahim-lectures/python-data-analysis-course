@@ -72,7 +72,7 @@ if __name__ == "__main__":
     print(generate_text(probs_table, "the", max_words=8))
 ```
 
-`dict.setdefault(key, {})` في `build_bigram_probabilities` اختصار صغير لنمط `if key not in table: table[key] = {}` من الأسبوع 3 — تفعل نفس الشيء في سطر واحد. `if __name__ == "__main__":` هي الطريقة القياسية لتحديد "شغّل هذا عندما يُنفَّذ الملف مباشرة" — سترى هذا العُرف باستمرار بمجرد تثبيت بايثون محليًا في المشروع الختامي.
+`dict.setdefault(key, {})` في `build_bigram_probabilities` اختصار صغير لنمط `if key not in table: table[key] = {}` من الأسبوع 3 — تفعل نفس الشيء في سطر واحد. `if __name__ == "__main__":` هي الطريقة القياسية لتحديد "شغّل هذا عندما يُنفَّذ الملف مباشرة" — سترى هذا العُرف باستمرار بمجرد تثبيت بايثون محليًا لأحد [المشاريع من العالم الحقيقي](/docs/projects).
 
 ### درجة الحرارة (Temperature): ضبط العشوائية
 

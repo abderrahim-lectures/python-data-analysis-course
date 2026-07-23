@@ -6,7 +6,7 @@
       "version": "3.12"
     }
   },
-  "postCreateCommand": "npm install && curl -LsSf https://astral.sh/uv/install.sh | sh && (cd examples/capstone-agent && $HOME/.local/bin/uv sync)",
+  "postCreateCommand": "npm install && curl -LsSf https://astral.sh/uv/install.sh | sh && (cd examples/ai-agent && $HOME/.local/bin/uv sync)",
   "forwardPorts": [3000],
   "portsAttributes": {
     "3000": {

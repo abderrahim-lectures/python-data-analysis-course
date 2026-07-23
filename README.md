@@ -13,9 +13,9 @@ A free, browser-based Python and data analysis course — no installs required u
 
 - **Section 1: Python 101** (5 weeks) — fundamentals, with a Normal track and a Hard track (build a tiny language model from scratch, pure Python, deliberately no numpy).
 - **Section 2: Pandas & Data Analysis** (5 weeks) — pandas basics reproducing a Kaggle-style notebook, with a Hard track doing a full exploratory data analysis project with visualizations.
-- **Capstone projects** — install Python locally for real with `uv` and build something the in-browser playground never could. A new Capstone is added every year (2026's is an AI agent built with LangChain's `deepagents`); students can pick any past year's project too, not just the latest.
+- **Real-World Projects** — install Python locally for real with `uv` and build something the in-browser playground never could. New projects are added whenever a trending tool or framework is worth a hands-on write-up (e.g. building an AI agent with LangChain's `deepagents`, fine-tuning a small LLM with Unsloth) — browsable any time, not gated behind finishing the course.
 
-Run entirely in the browser via self-hosted JupyterLite: a lightweight Python console (Python 101) and a full notebook (Data Analysis), both powered by Pyodide — click the floating button on any page to start coding immediately, no account and no local install needed until the capstone. Since it's self-hosted (not a third-party embed), it also works offline once you've visited a page. The site itself is installable (a real PWA) — a homepage button offers "Install the course app" on supported browsers.
+Run entirely in the browser via self-hosted JupyterLite: a lightweight Python console (Python 101) and a full notebook (Data Analysis), both powered by Pyodide — click the floating button on any page to start coding immediately, no account and no local install needed until you try one of the real-world projects. Since it's self-hosted (not a third-party embed), it also works offline once you've visited a page. The site itself is installable (a real PWA) — a homepage button offers "Install the course app" on supported browsers.
 
 See [`plan/`](./plan/README.md) for the full design plan and rationale behind every major decision.
 
@@ -33,7 +33,7 @@ By the end of the course, a student can:
 - Explain, from first principles, how a simple language model predicts text (tokenization → frequency counts → conditional probability → weighted sampling) by building one from scratch in pure Python (Hard track).
 - Load, clean, filter, group, and aggregate real tabular data with pandas, and explain *why* vectorized tools exist by having personally measured pure Python's performance limits first.
 - Run a complete, honest exploratory data analysis project — framing questions before charting, visualizing distributions and relationships appropriately, and stating a finding's confidence and caveats rather than overclaiming causation (Hard track).
-- Install Python locally, manage a project with `uv`, and build a real project outside the browser playground (Capstone — 2026's is a minimal tool-calling AI agent, handling an API key as a secret).
+- Install Python locally, manage a project with `uv`, and build a real project outside the browser playground (Real-World Projects — e.g. a minimal tool-calling AI agent, handling an API key as a secret).
 
 ## Pedagogical approach
 
@@ -42,7 +42,7 @@ By the end of the course, a student can:
 - **Challenge + Socratic pattern, every week.** Each lesson pairs 🧩 **Challenges** (a concrete task with a collapsible answer you can self-check) with 🤔 **Socratic Questions** (open-ended, no answer provided — designed to make you reason about edge cases and *why*, not just *how*).
 - **Optional gamification, not required motivation.** Badges, unlock toasts, and quiz-gated bonus content (try/except, classes) are all opt-in — a Classical mode renders the exact same underlying progress as a plain checklist, and switching between modes any time never loses data.
 - **Honest, not hyped.** The EDA track explicitly teaches correlation-vs-causation and chart-honesty practices (truncated axes, cherry-picked ranges) as core material, not a footnote — and the completion certificate is labeled a lightweight spot-check, not a verifiable credential, because that's actually true of a backend-free static site.
-- **Zero-install first, real install as a reward.** Every core week runs in-browser (JupyterLite via Pyodide). Installing Python for real is saved for the Capstone, once fundamentals are solid enough to make that step feel like graduation rather than a chore.
+- **Zero-install first, real install as a reward.** Every core week runs in-browser (JupyterLite via Pyodide). Installing Python for real is saved for the real-world projects, once fundamentals are solid enough to make that step feel like graduation rather than a chore.
 
 ## Development
 
@@ -69,13 +69,13 @@ This step runs automatically in CI (see [`.github/workflows/deploy.yml`](./.gith
 
 The badge above opens a ready-to-go [GitHub Codespace](https://github.com/features/codespaces) (Node + Python + `uv` preinstalled, via [`.devcontainer/devcontainer.json`](./.devcontainer/devcontainer.json)) — no local setup needed to start contributing.
 
-### Capstone examples
+### Real-world project examples
 
-[`examples/capstone-agent/`](./examples/capstone-agent/) is a real, runnable copy of the agent built in the [2026 Capstone](./docs/bonus/2026-ai-agent/index.md) lesson — see its own README for how to run it (locally with `uv run python agent.py`, or directly in Codespaces). Every year's Capstone gets its own `examples/<year>-<slug>/` folder, and past years' folders stay as-is once shipped.
+[`examples/ai-agent/`](./examples/ai-agent/) is a real, runnable copy of the agent built in the [Build an AI Agent](./docs/projects/ai-agent/index.md) project — see its own README for how to run it (locally with `uv run python agent.py`, or directly in Codespaces). Each project gets its own `examples/<slug>/` folder.
 
-[`examples/2027-finetune-llm/`](./examples/2027-finetune-llm/) is the local companion to the [2027 Capstone](./docs/bonus/2027-finetune-llm/index.md) lesson — dataset prep and local inference scripts; the fine-tuning step itself runs on a free Colab/Kaggle GPU notebook, linked from the lesson.
+[`examples/finetune-llm-unsloth/`](./examples/finetune-llm-unsloth/) is the local companion to the [Fine-tune a Small Language Model](./docs/projects/finetune-llm-unsloth/index.md) project — dataset prep and local inference scripts; the fine-tuning step itself runs on a free Colab/Kaggle GPU notebook, linked from the project.
 
-[`examples/student-agents/`](./examples/student-agents/) is a gallery of capstone projects students have built — its README walks complete git beginners through forking, branching, and opening a PR to add their own.
+[`examples/student-projects/`](./examples/student-projects/) is a gallery of real-world projects students have built — its README walks complete git beginners through forking, branching, and opening a PR to add their own.
 
 ## Contributing
 

@@ -621,17 +621,29 @@
     "message": "استكشف تحليل البيانات",
     "description": "Homepage Data Analysis card CTA"
   },
-  "homepage.capstoneTeaser": {
-    "message": "{finishBold} لفتح مشروع ختامي — ثبّت بايثون فعليًا وابنِ شيئًا لم تستطع بيئة البرمجة تشغيله أبدًا — {link}.",
-    "description": "Homepage capstone teaser"
+  "homepage.projects.title": {
+    "message": "🌍 مشاريع من العالم الحقيقي",
+    "description": "Homepage real-world projects section title"
   },
-  "homepage.capstoneTeaser.finishBold": {
-    "message": "أكمل الدورة",
-    "description": "Bolded lead-in phrase"
+  "homepage.projects.intro": {
+    "message": "مشاريع عملية يمكنك بناؤها باستخدام Python، مثبتة فعليًا على جهازك الخاص — تصفّحها في أي وقت، دون الحاجة لإنهاء الدورة أولًا.",
+    "description": "Homepage real-world projects section intro"
   },
-  "homepage.capstoneTeaser.linkText": {
-    "message": "شاهد مشاريع المشروع الختامي",
-    "description": "Capstone teaser link text"
+  "homepage.projects.finetuneLlm.title": {
+    "message": "ضبط نموذج لغوي صغير دقيقًا",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.finetuneLlm.summary": {
+    "message": "اضبط نموذجًا لغويًا صغيرًا مفتوح المصدر بدقة باستخدام LoRA عبر Unsloth، على وحدة معالجة رسومية مجانية من Colab أو Kaggle.",
+    "description": "Homepage project card summary"
+  },
+  "homepage.projects.aiAgent.title": {
+    "message": "بناء وكيل ذكاء اصطناعي",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.aiAgent.summary": {
+    "message": "ثبّت Python فعليًا وابنِ أول وكيل ذكاء اصطناعي خاص بك باستخدام deepagents من LangChain، بمفتاح API مجاني.",
+    "description": "Homepage project card summary"
   },
   "homepage.pageTitle": {
     "message": "دورة بايثون وتحليل البيانات"
@@ -649,10 +661,10 @@
     "message": "تقدمي"
   },
   "progressPage.courseComplete": {
-    "message": "لقد أنهيت الدورة بأكملها! مشاريع المشروع الختامي مفتوحة الآن — {link}."
+    "message": "لقد أنهيت الدورة بأكملها! عمل رائع — اذهب و{link}."
   },
   "progressPage.courseComplete.linkText": {
-    "message": "اختر مشروعًا ختاميًا لتبنيه"
+    "message": "ابنِ أحد المشاريع الحقيقية"
   },
   "sharePage.pageTitle": {
     "message": "التقدم المشارَك"
@@ -698,14 +710,11 @@
     "message": "صعب",
     "description": "Hard track label"
   },
-  "capstoneChooser.lockedLabel": {
-    "message": "أنهِ كل أسبوع في كلا القسمين لفتح مشاريع المشروع الختامي."
-  },
   "capstoneChooser.completedLabel": {
     "message": "مكتمل"
   },
   "capstoneProgressCheckbox.label": {
-    "message": "ضع علامة على إتمام هذا المشروع الختامي"
+    "message": "ضع علامة على إتمام هذا المشروع"
   },
   "playground.jupyterlite.replTitle": {
     "message": "طرفية بايثون JupyterLite"

@@ -23,7 +23,8 @@ export type WeeklyQuizResults = Record<WeekId, QuizResult>;
 export type BadgeId = string;
 export type BadgeSet = BadgeId[];
 
-/** e.g. "2026-ai-agent" — one per year's Capstone project. */
+/** e.g. "2026-ai-agent" — one per real-world project. Stable once shipped;
+ *  never renamed even if the project's folder/URL/title changes later. */
 export type CapstoneId = string;
 
 /** capstoneId -> completed */

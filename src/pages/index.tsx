@@ -5,8 +5,18 @@ import Translate, {translate} from '@docusaurus/Translate';
 import Layout from '@theme/Layout';
 import Heading from '@theme/Heading';
 import InstallPwaButton from '@site/src/components/InstallPwaButton';
+import {PROJECTS} from '@site/src/data/projects';
 
 import styles from './index.module.css';
+
+/** Structural metadata (date/url/tags) looked up by id, from the shared PROJECTS source of truth. */
+function projectMeta(id: string) {
+  const meta = PROJECTS.find((p) => p.id === id);
+  if (!meta) {
+    throw new Error(`No PROJECTS entry for id "${id}" — add one to src/data/projects.ts`);
+  }
+  return meta;
+}
 
 function HomepageHeader() {
   return (
@@ -121,33 +131,78 @@ function SectionCards() {
             </div>
           </div>
         </div>
-        <div className={styles.capstoneTeaser}>
-          <p>
-            🎁{' '}
-            <Translate
-              id="homepage.capstoneTeaser"
-              description="Homepage capstone teaser"
-              values={{
-                finishBold: (
-                  <strong>
-                    <Translate id="homepage.capstoneTeaser.finishBold" description="Bolded lead-in phrase">
-                      Finish the course
-                    </Translate>
-                  </strong>
-                ),
-                link: (
-                  <Link to="/docs/bonus">
-                    <Translate id="homepage.capstoneTeaser.linkText" description="Capstone teaser link text">
-                      see the Capstone projects
-                    </Translate>
-                  </Link>
-                ),
-              }}>
-              {
-                '{finishBold} to unlock a Capstone project — install Python for real and build something the playground could never run — {link}.'
-              }
-            </Translate>
-          </p>
+      </div>
+    </section>
+  );
+}
+
+function RealWorldProjects() {
+  const aiAgent = projectMeta('2026-ai-agent');
+  const finetuneLlm = projectMeta('2027-finetune-llm');
+
+  return (
+    <section className={styles.projects}>
+      <div className="container">
+        <Heading as="h2">
+          <Translate id="homepage.projects.title" description="Homepage real-world projects section title">
+            🌍 Real-World Projects
+          </Translate>
+        </Heading>
+        <p className={styles.projectsIntro}>
+          <Translate
+            id="homepage.projects.intro"
+            description="Homepage real-world projects section intro">
+            Practical projects you can build with Python, installed for real on your own machine —
+            browse any time, no need to finish the course first.
+          </Translate>
+        </p>
+        <div className={styles.projectGrid}>
+          <Link to={finetuneLlm.url} className={styles.projectCard}>
+            <h3>
+              <Translate
+                id="homepage.projects.finetuneLlm.title"
+                description="Homepage project card title">
+                Fine-tune a Small Language Model
+              </Translate>
+            </h3>
+            <p>
+              <Translate
+                id="homepage.projects.finetuneLlm.summary"
+                description="Homepage project card summary">
+                Fine-tune a small open-source language model with LoRA using Unsloth, on a free
+                Colab/Kaggle GPU.
+              </Translate>
+            </p>
+            <div className={styles.projectTags}>
+              {finetuneLlm.tags.map((tag) => (
+                <span key={tag} className={styles.projectTag}>
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </Link>
+          <Link to={aiAgent.url} className={styles.projectCard}>
+            <h3>
+              <Translate id="homepage.projects.aiAgent.title" description="Homepage project card title">
+                Build an AI Agent
+              </Translate>
+            </h3>
+            <p>
+              <Translate
+                id="homepage.projects.aiAgent.summary"
+                description="Homepage project card summary">
+                Install Python for real and build your first AI agent with LangChain's deepagents,
+                using a free-tier API key.
+              </Translate>
+            </p>
+            <div className={styles.projectTags}>
+              {aiAgent.tags.map((tag) => (
+                <span key={tag} className={styles.projectTag}>
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </Link>
         </div>
       </div>
     </section>
@@ -166,6 +221,7 @@ export default function Home(): ReactNode {
       <HomepageHeader />
       <main>
         <SectionCards />
+        <RealWorldProjects />
       </main>
     </Layout>
   );

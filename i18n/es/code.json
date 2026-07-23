@@ -621,17 +621,29 @@
     "message": "Explorar Análisis de Datos",
     "description": "Homepage Data Analysis card CTA"
   },
-  "homepage.capstoneTeaser": {
-    "message": "{finishBold} para desbloquear un proyecto Capstone — instala Python de verdad y construye algo que el playground nunca pudo ejecutar — {link}.",
-    "description": "Homepage capstone teaser"
+  "homepage.projects.title": {
+    "message": "🌍 Proyectos del mundo real",
+    "description": "Homepage real-world projects section title"
   },
-  "homepage.capstoneTeaser.finishBold": {
-    "message": "Termina el curso",
-    "description": "Bolded lead-in phrase"
+  "homepage.projects.intro": {
+    "message": "Proyectos prácticos que puedes construir con Python, instalado de verdad en tu propia máquina — explóralos en cualquier momento, sin necesidad de terminar el curso primero.",
+    "description": "Homepage real-world projects section intro"
   },
-  "homepage.capstoneTeaser.linkText": {
-    "message": "ver los proyectos Capstone",
-    "description": "Capstone teaser link text"
+  "homepage.projects.finetuneLlm.title": {
+    "message": "Ajusta finamente un Modelo de Lenguaje Pequeño",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.finetuneLlm.summary": {
+    "message": "Ajusta finamente un modelo de lenguaje pequeño de código abierto con LoRA usando Unsloth, en una GPU gratuita de Colab o Kaggle.",
+    "description": "Homepage project card summary"
+  },
+  "homepage.projects.aiAgent.title": {
+    "message": "Construye un Agente de IA",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.aiAgent.summary": {
+    "message": "Instala Python de verdad y construye tu primer agente de IA con deepagents de LangChain, usando una clave API gratuita.",
+    "description": "Homepage project card summary"
   },
   "homepage.pageTitle": {
     "message": "Curso de Python y Análisis de Datos"
@@ -649,10 +661,10 @@
     "message": "Mi Progreso"
   },
   "progressPage.courseComplete": {
-    "message": "¡Has terminado todo el curso! Tus proyectos Capstone están desbloqueados — {link}."
+    "message": "¡Has terminado todo el curso! Buen trabajo — ve y {link}."
   },
   "progressPage.courseComplete.linkText": {
-    "message": "elige un proyecto Capstone para construir"
+    "message": "construye uno de los proyectos del mundo real"
   },
   "sharePage.pageTitle": {
     "message": "Progreso Compartido"
@@ -698,14 +710,11 @@
     "message": "Difícil",
     "description": "Hard track label"
   },
-  "capstoneChooser.lockedLabel": {
-    "message": "Termina cada semana de ambas secciones para desbloquear los proyectos Capstone."
-  },
   "capstoneChooser.completedLabel": {
     "message": "Completado"
   },
   "capstoneProgressCheckbox.label": {
-    "message": "Marcar este Capstone como completado"
+    "message": "Marcar este proyecto como completado"
   },
   "playground.jupyterlite.replTitle": {
     "message": "Consola de Python de JupyterLite"

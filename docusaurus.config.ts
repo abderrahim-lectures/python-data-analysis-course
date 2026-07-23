@@ -114,6 +114,19 @@ const config: Config = {
 
   plugins: [
     [
+      '@docusaurus/plugin-client-redirects',
+      {
+        // The Capstone Projects feature was renamed/reorganized into an
+        // open, ongoing "Real-World Projects" library — these keep old
+        // shared links, search results, and README references working.
+        redirects: [
+          {to: '/docs/projects', from: '/docs/bonus'},
+          {to: '/docs/projects/ai-agent', from: '/docs/bonus/2026-ai-agent'},
+          {to: '/docs/projects/finetune-llm-unsloth', from: '/docs/bonus/2027-finetune-llm'},
+        ],
+      },
+    ],
+    [
       '@docusaurus/plugin-pwa',
       {
         debug: false,
@@ -178,9 +191,9 @@ const config: Config = {
         },
         {
           type: 'docSidebar',
-          sidebarId: 'bonusSidebar',
+          sidebarId: 'projectsSidebar',
           position: 'left',
-          label: 'Capstone Projects',
+          label: 'Projects',
         },
         {to: '/progress', label: 'My Progress', position: 'right'},
         {to: '/credits', label: 'Credits', position: 'right'},
@@ -203,7 +216,7 @@ const config: Config = {
           items: [
             {label: 'Python 101', to: '/docs/python-101'},
             {label: 'Data Analysis', to: '/docs/data-analysis'},
-            {label: 'Capstone Projects', to: '/docs/bonus'},
+            {label: 'Projects', to: '/docs/projects'},
           ],
         },
         {
