@@ -2,6 +2,15 @@
 
 All notable changes to this project are documented in this file. Format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.4.0] — 2026-07-23
+
+### Added
+- Full Arabic, Spanish, and French translations of the four Real-World Projects added in 1.3.0 (Build a RAG App, Build an MCP Server, Scrape and Analyze a Website, Train an ML Classifier) — lesson content, category labels, chooser entries, and homepage cards, matching the depth of the existing translated projects.
+
+### Fixed
+- Two cross-project links in the RAG project pointed at English heading anchors on the AI Agent project page; in the ar/es/fr translations these now point at that locale's own translated anchor slugs.
+- The French translations left "Checklist" section labels untranslated.
+
 ## [1.3.1] — 2026-07-23
 
 ### Fixed

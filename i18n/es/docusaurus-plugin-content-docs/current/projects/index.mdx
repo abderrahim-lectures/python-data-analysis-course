@@ -18,16 +18,40 @@ Son opcionales y no calificados. Explóralos en cualquier momento — la introdu
 <ProjectChooser
   projects={mergeProjectMeta([
     {
+      id: 'mcp-server',
+      title: 'Construye un Servidor MCP',
+      summary:
+        "Construye un servidor Model Context Protocol que expone tus propias herramientas, y conéctalo a un cliente de IA real como Claude Desktop.",
+    },
+    {
       id: '2027-finetune-llm',
       title: 'Ajusta finamente un Modelo de Lenguaje Pequeño',
       summary:
         'Ajusta finamente un modelo de lenguaje pequeño de código abierto con LoRA usando Unsloth, en una GPU gratuita de Colab o Kaggle.',
     },
     {
+      id: 'rag-notes',
+      title: 'Construye una App RAG Sobre Tus Propias Notas',
+      summary:
+        'Chatea con tus propias notas: embeddings locales con sentence-transformers, búsqueda de similitud con NumPy, y un LLM de nivel gratuito para la respuesta final.',
+    },
+    {
       id: '2026-ai-agent',
       title: 'Construye un Agente de IA',
       summary:
         "Instala Python de verdad y construye tu primer agente de IA con deepagents de LangChain, usando una clave API gratuita.",
+    },
+    {
+      id: 'scrape-analyze',
+      title: 'Extrae y Analiza un Sitio Web en Vivo',
+      summary:
+        'Extrae datos de un sitio web real y amigable con el scraping usando requests y BeautifulSoup, y luego limpia y grafica los resultados con pandas y matplotlib — sin necesitar clave de API.',
+    },
+    {
+      id: 'ml-classifier',
+      title: 'Entrena tu Primer Modelo de Machine Learning',
+      summary:
+        'Gradúate de describir datos a predecir a partir de ellos: entrena y compara clasificadores binarios con scikit-learn sobre el dataset del Titanic de la Semana 10 de Data Analysis.',
     },
   ])}
 />

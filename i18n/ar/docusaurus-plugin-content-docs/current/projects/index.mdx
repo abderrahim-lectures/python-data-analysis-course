@@ -18,16 +18,40 @@ import {mergeProjectMeta} from '@site/src/data/projects';
 <ProjectChooser
   projects={mergeProjectMeta([
     {
+      id: 'mcp-server',
+      title: 'بناء خادم MCP',
+      summary:
+        'ابنِ خادم بروتوكول سياق النموذج (MCP) يعرض أدواتك الخاصة، واربطه بعميل ذكاء اصطناعي حقيقي مثل Claude Desktop.',
+    },
+    {
       id: '2027-finetune-llm',
       title: 'ضبط نموذج لغوي صغير دقيقًا',
       summary:
         'اضبط نموذجًا لغويًا صغيرًا مفتوح المصدر بدقة باستخدام LoRA عبر Unsloth، على وحدة معالجة رسومية مجانية من Colab أو Kaggle.',
     },
     {
+      id: 'rag-notes',
+      title: 'بناء تطبيق RAG فوق ملاحظاتك الخاصة',
+      summary:
+        'حادِث ملاحظاتك الخاصة: تضمينات محلية بـ sentence-transformers، بحث تشابه بـ NumPy، ونموذج لغوي من مستوى مجاني للإجابة النهائية.',
+    },
+    {
       id: '2026-ai-agent',
       title: 'بناء وكيل ذكاء اصطناعي',
       summary:
         'ثبّت Python فعليًا وابنِ أول وكيل ذكاء اصطناعي خاص بك باستخدام deepagents من LangChain، بمفتاح API مجاني.',
+    },
+    {
+      id: 'scrape-analyze',
+      title: 'استخلاص وتحليل موقع ويب حي',
+      summary:
+        'استخلص موقعًا حقيقيًا صديقًا للاستخلاص بـ requests وBeautifulSoup، ثم نظّف النتائج ورسمها بيانيًا بـ pandas وmatplotlib — دون الحاجة لأي مفتاح API.',
+    },
+    {
+      id: 'ml-classifier',
+      title: 'درّب أول نموذج تعلّم آلي لك',
+      summary:
+        'انتقل من وصف البيانات إلى التنبؤ منها: درّب وقارن مصنِّفات ثنائية بـ scikit-learn على مجموعة بيانات تايتانك من الأسبوع 10 لتحليل البيانات.',
     },
   ])}
 />
