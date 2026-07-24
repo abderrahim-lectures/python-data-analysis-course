@@ -1,6 +1,9 @@
 # Capstone Agent Example
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/abderrahim-lectures/python-data-analysis-course)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-agent/notebook.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-agent/notebook.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fai-agent%2Fnotebook.ipynb)
 
 A real, runnable "course study assistant" agent — the fuller version of the one built step by step in the course's [Capstone Bonus](../../docs/bonus/2026-ai-agent/index.md), built with LangChain's [`deepagents`](https://github.com/langchain-ai/deepagents) and your choice of free-tier API provider.
 
@@ -43,6 +46,13 @@ result = ask(agent, "Which lessons cover groupby?")
 print_conversation(result)   # readable step-by-step trace
 print(final_answer(result))  # just the final text answer
 ```
+
+## Running it without any local install
+
+Prefer not to install anything at all? [`notebook.ipynb`](./notebook.ipynb) in this folder is a Colab/Kaggle/Binder-friendly
+version of this same agent (the toy tools + `create_deep_agent` setup from the [project doc](../../docs/projects/ai-agent/index.md#step-4-write-your-first-agent),
+not the fuller `docs`/`static/datasets`-searching tools above, since those need a real repo checkout). Click a badge above to launch it directly in your browser —
+it installs its own dependencies and prompts for your API key with `getpass`, so no `.env` file or local setup is needed.
 
 ## Running it in GitHub Codespaces
 
