@@ -35,7 +35,13 @@ Three reasonable ways to do this project — pick whichever fits your setup:
 
 - **Locally with `uv` (recommended).** This project is small and needs no GPU, so it's a good candidate for actually installing Python for real on your own machine, same as the other Real-World Projects. Steps 1–5 below assume this path.
 - **GitHub Codespaces.** Open [codespaces.new/abderrahim-lectures/python-data-analysis-course](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) to get a cloud dev environment with Node, Python, and `uv` already installed (see [`.devcontainer/devcontainer.json`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/.devcontainer/devcontainer.json)) — the exact same commands below work from a browser tab, no local install at all.
-- **Google Colab or Kaggle Notebooks.** A genuinely good fit here: training `LogisticRegression` or `RandomForestClassifier` on a dataset this small (a few hundred rows at most) needs no GPU, so a free notebook environment is more than enough. Run `!pip install scikit-learn pandas` in a cell, then paste and adapt the code from the steps below. **Kaggle Notebooks specifically** is a nice full-circle choice — the Titanic dataset is itself one of Kaggle's original, most famous beginner competitions, so you'd be training a model on Kaggle's own platform, on Kaggle's own dataset.
+- **Google Colab or Kaggle Notebooks.** A genuinely good fit here: training `LogisticRegression` or `RandomForestClassifier` on a dataset this small (a few hundred rows at most) needs no GPU, so a free notebook environment is more than enough.
+
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ml-classifier/notebook.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ml-classifier/notebook.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fml-classifier%2Fnotebook.ipynb)
+
+  Click a badge above to open a ready-to-run notebook (`examples/ml-classifier/notebook.ipynb`) with the install cell, data loading/encoding, train/test split, and both classifiers already filled in. **Kaggle Notebooks specifically** is a nice full-circle choice — the Titanic dataset is itself one of Kaggle's original, most famous beginner competitions, so you'd be training a model on Kaggle's own platform, on Kaggle's own dataset.
 
 ## Step 1: Install `uv`
 
