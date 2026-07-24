@@ -191,6 +191,24 @@ function RealWorldProjects() {
         </p>
         <div className={styles.projectGrid}>
           <HomepageProjectCard
+            id="recipe-planner-agent"
+            title={
+              <Translate
+                id="homepage.projects.recipePlannerAgent.title"
+                description="Homepage project card title">
+                Build a Recipe-Planner Agent
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.recipePlannerAgent.summary"
+                description="Homepage project card summary">
+                Build a tool-using AI agent that suggests meals from ingredients you have on
+                hand, grounded in a real local recipe database instead of guessing.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
             id="mcp-server"
             title={
               <Translate id="homepage.projects.mcpServer.title" description="Homepage project card title">
