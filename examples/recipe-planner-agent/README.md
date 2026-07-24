@@ -1,6 +1,9 @@
 # Recipe-Planner Agent Example
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/abderrahim-lectures/python-data-analysis-course)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/add-recipe-planner-agent-project/examples/recipe-planner-agent/notebook.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/add-recipe-planner-agent-project/examples/recipe-planner-agent/notebook.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/add-recipe-planner-agent-project?filepath=examples%2Frecipe-planner-agent%2Fnotebook.ipynb)
 
 A real, runnable "recipe planner" agent — the example that accompanies the course's [Recipe-Planner Agent](../../docs/projects/recipe-planner-agent/index.md) project, built with LangChain's [`deepagents`](https://github.com/langchain-ai/deepagents).
 
@@ -28,6 +31,10 @@ This is the same tool-calling pattern taught in the [AI Agent project](../../doc
    ```
 
 `uv` reads `pyproject.toml`/`uv.lock` and creates an isolated environment for this project automatically on first run. The script asks the agent for meal suggestions given a sample ingredient list, then asks it to build a shopping list for the first suggestion — printing each step of the conversation.
+
+## Running it in a notebook
+
+No local setup at all? [`notebook.ipynb`](./notebook.ipynb) is a self-contained Jupyter version of this same example — the recipe database, the search tool, and the agent, all in one notebook you can run cell-by-cell in Google Colab, Kaggle Notebooks, or Binder (badges above), or in Jupyter/JupyterLab locally. It asks for your API key with `getpass` instead of a `.env` file, so nothing gets written to disk.
 
 ## Running it in GitHub Codespaces
 
