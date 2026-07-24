@@ -1,6 +1,10 @@
 # Study-Buddy Agent Example
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/abderrahim-lectures/python-data-analysis-course)
+<!-- TODO: update these badge links to point at main once this PR merges -->
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/add-study-buddy-agent-project/examples/study-buddy-agent/notebook.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/add-study-buddy-agent-project/examples/study-buddy-agent/notebook.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/add-study-buddy-agent-project?filepath=examples%2Fstudy-buddy-agent%2Fnotebook.ipynb)
 
 The local companion to the course's [Build a Study-Buddy Quiz Agent](../../docs/projects/study-buddy-agent/index.md) project — a small script that reads one of your own notes files, asks a free-tier LLM to write quiz questions grounded in that specific text, then quizzes you on them interactively in the terminal, with the same LLM judging whether your typed answers are correct.
 
@@ -8,6 +12,7 @@ The local companion to the course's [Build a Study-Buddy Quiz Agent](../../docs/
 
 - `notes/` — three short sample notes files (cell biology, the Pacific theater of WWII, and Python dictionaries) so the script runs out of the box with no setup of your own.
 - `study_buddy.py` — the whole thing: `generate_questions()` (grounded question generation, [Step 2](../../docs/projects/study-buddy-agent/index.md#step-2-generate-quiz-questions-grounded-in-your-notes) of the lesson), `judge_answer()` and `run_quiz()` (the interactive quiz loop, [Step 3](../../docs/projects/study-buddy-agent/index.md#step-3-build-the-interactive-quiz-loop)).
+- `notebook.ipynb` — a notebook version of the same script, for running it in Colab, Kaggle, or Binder with zero local setup (badges above). It mirrors the same `generate_questions()` / `judge_answer()` / `run_quiz()` logic, embeds the `notes/cell-biology.txt` sample directly, and still uses real interactive `input()` cells for the quiz.
 
 This script deliberately feeds the LLM one whole notes file as context, rather than chunking/embedding/retrieving like the course's [RAG project](../rag-notes/) — see the lesson's Step 1 for why that's a reasonable choice here, and when you'd want the RAG approach instead.
 

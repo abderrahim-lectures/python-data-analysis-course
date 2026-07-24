@@ -35,7 +35,14 @@ This is optional and ungraded — a good fit once you've finished Python 101; no
 
 **GitHub Codespaces** is a zero-setup alternative if you'd rather not install anything locally yet: open [the whole course repo in a free Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python, and `uv` are already installed, per the repo's `.devcontainer/devcontainer.json`) and run the exact same `uv` commands from a terminal in your browser tab.
 
-**Google Colab or Kaggle Notebooks** work fine too — this project is just a terminal script that calls a hosted API, no GPU or heavy local package involved. Paste the code into notebook cells, use `input()` in a cell the same way you would in a terminal, and adapt file paths as needed. It's a lower-fidelity way to experience it than a real local project (no real file structure, no separate `.py` files), but it's a reasonable way to try the idea quickly.
+**Google Colab, Kaggle Notebooks, or Binder** work fine too — this project is just a terminal script that calls a hosted API, no GPU or heavy local package involved. A ready-to-run notebook version lives at [`examples/study-buddy-agent/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/add-study-buddy-agent-project/examples/study-buddy-agent/notebook.ipynb) — it mirrors the same `generate_questions()` / `judge_answer()` / `run_quiz()` logic, uses `input()` in a cell the same way you would in a terminal, and embeds one of the sample notes files directly so it runs with no file upload needed. Launch it with one of the badges below:
+
+{/* TODO: update these badge links to point at main once this PR merges */}
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/add-study-buddy-agent-project/examples/study-buddy-agent/notebook.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/add-study-buddy-agent-project/examples/study-buddy-agent/notebook.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/add-study-buddy-agent-project?filepath=examples%2Fstudy-buddy-agent%2Fnotebook.ipynb)
+
+It's a lower-fidelity way to experience it than a real local project (no real file structure, no separate `.py` files), but it's a reasonable way to try the idea quickly.
 
 ## Setup
 
