@@ -1,0 +1,20 @@
+From: priya.nair@partnerorg.example.com
+To: you@example.com
+Subject: Rescheduling our Thursday call
+Date: Tue, 21 Jul 2026 10:05:00 -0400
+
+Hi there,
+
+Something came up on my end and I won't be able to make our call this
+Thursday at 2pm. Would any of these alternative times work for you
+instead?
+
+- Friday at 10am
+- Monday at 1pm
+- Monday at 3:30pm
+
+Let me know which one fits your schedule, or feel free to suggest a
+different time if none of these work. Sorry for the shuffle!
+
+Best,
+Priya

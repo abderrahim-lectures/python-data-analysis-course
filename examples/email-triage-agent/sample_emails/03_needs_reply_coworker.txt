@@ -1,0 +1,19 @@
+From: sam.okoye@yourcompany.example.com
+To: you@example.com
+Subject: Quick question about the Q3 numbers before I present tomorrow
+Date: Mon, 20 Jul 2026 14:32:00 -0400
+
+Hey,
+
+I'm putting together the slides for tomorrow's Q3 review and the revenue
+figure in the shared spreadsheet doesn't match what you sent me last
+week -- the spreadsheet says 482K but your email said 512K. Which one is
+right? I want to make sure I don't put a wrong number in front of the
+leadership team.
+
+Also, quick unrelated thing: are you around for a 15-minute sync
+tomorrow morning before the review, just to make sure we're aligned on
+talking points?
+
+Thanks,
+Sam
