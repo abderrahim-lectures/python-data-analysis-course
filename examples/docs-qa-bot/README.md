@@ -1,6 +1,9 @@
 # Docs Q&A Discord Bot Example
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/abderrahim-lectures/python-data-analysis-course)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/add-docs-qa-bot-project/examples/docs-qa-bot/notebook.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/add-docs-qa-bot-project/examples/docs-qa-bot/notebook.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/add-docs-qa-bot-project?filepath=examples%2Fdocs-qa-bot%2Fnotebook.ipynb)
 
 The local companion to the course's [Build a RAG-Backed Docs Q&A Discord Bot](../../docs/projects/docs-qa-bot/index.md) project — the same local-embedding, NumPy-cosine-similarity retrieval pipeline as the [RAG App project](../../docs/projects/rag-notes/index.md), wrapped in a live `discord.py` bot instead of a CLI script.
 
@@ -11,6 +14,7 @@ The local companion to the course's [Build a RAG-Backed Docs Q&A Discord Bot](..
 - `build_index.py` — embeds every chunk locally with `sentence-transformers` and saves the vectors (`index.npy`) and chunk text (`chunks.json`).
 - `retrieve.py` — `retrieve(question, top_k)`: finds the most relevant chunks for a question using NumPy cosine similarity. Identical logic to `rag-notes`'s `retrieve.py`.
 - `bot.py` — the actual Discord bot: connects with `discord.py`, answers when mentioned, using `retrieve()` + a free-tier LLM to generate an answer grounded in `docs/`.
+- `notebook.ipynb` — a Colab/Kaggle/Binder-runnable notebook demoing the RAG **core** (chunk the sample docs, embed them, retrieve, generate answers) with no setup beyond a free-tier LLM key. It deliberately does **not** run the Discord bot itself — Colab/Kaggle/Binder sessions can't host a persistent background process like `bot.py`'s event loop, so that part still needs `uv run python bot.py` locally or in Codespaces (see below).
 
 ## Running it
 
@@ -43,6 +47,10 @@ Once it's running, invite the bot to a test server (OAuth2 URL Generator in the 
 ```
 
 `uv` reads `pyproject.toml`/`uv.lock` and creates an isolated environment for this project automatically on first run.
+
+## Trying the RAG core in a notebook
+
+If you just want to see the retrieval-and-generation pipeline work without installing anything locally, click one of the Colab/Kaggle/Binder badges above to open `notebook.ipynb`. It embeds the same three sample docs from `docs/`, builds an in-memory index, and runs a few example questions through `retrieve()` + a free-tier LLM — the same logic as `build_index.py`/`retrieve.py`/`bot.py`'s `answer()`, minus the Discord wiring. It's a good way to sanity-check the pipeline or experiment with the sample docs before setting up the full local project below.
 
 ### Using your own docs
 

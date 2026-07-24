@@ -37,7 +37,14 @@ This is optional and ungraded. See [Real-World Projects](/docs/projects) for the
 
 **GitHub Codespaces** works too, and is a reasonable substitute if you'd rather not install anything locally: open [the whole course repo in a free Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python, and `uv` are already installed, per the repo's `.devcontainer/devcontainer.json`) and run `uv run python bot.py` in a terminal there — it stays running for as long as that terminal (and the Codespace) stays open, the same "long-running process" requirement as running it locally.
 
-**Google Colab or Kaggle Notebooks are a poor fit for this one** — be honest with yourself about that rather than fighting it. Notebooks are built around running a cell, getting output, and moving to the next cell; they aren't meant for a background process that sits and waits for events indefinitely. You *can* start a bot's event loop in a notebook cell, but the moment the notebook's runtime recycles, disconnects, or you close the tab, the bot goes down with it — skip Colab/Kaggle for this project and use a real local process or Codespaces instead.
+**Google Colab, Kaggle Notebooks, and Binder are a poor fit for the actual bot** — be honest with yourself about that rather than fighting it. Notebooks are built around running a cell, getting output, and moving to the next cell; they aren't meant for a background process that sits and waits for events indefinitely. You *can* start a bot's event loop in a notebook cell, but the moment the notebook's runtime recycles, disconnects, or you close the tab, the bot goes down with it — skip Colab/Kaggle/Binder for the live bot and use a real local process or Codespaces instead.
+
+That said, the RAG pipeline *underneath* the bot — chunking, embedding, retrieval, and generation — is just regular code that runs a cell at a time, which is exactly what notebooks are good at. The badges below open a notebook that walks through that core pipeline against the project's sample docs and prints real retrieved-and-generated answers, so you can see it work without installing anything locally. It deliberately stops short of the Discord layer — for that, come back here and run `bot.py` locally or in Codespaces as described above.
+
+{/* TODO: update these badge links to point at main once this PR merges */}
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/add-docs-qa-bot-project/examples/docs-qa-bot/notebook.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/add-docs-qa-bot-project/examples/docs-qa-bot/notebook.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/add-docs-qa-bot-project?filepath=examples%2Fdocs-qa-bot%2Fnotebook.ipynb)
 
 ## Setup
 
