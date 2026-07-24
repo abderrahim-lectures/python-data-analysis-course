@@ -45,6 +45,17 @@ uv run python review.py --commit <hash>
 
 Click into a [Codespace for the whole repo](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python, `uv`, and git are preinstalled) -- it's a real clone with real history, so every command above, including `--commit`, works exactly as it does locally.
 
+## Try it with zero setup: `notebook.ipynb`
+
+[`notebook.ipynb`](./notebook.ipynb) in this folder is a runnable notebook version of this same tool, for Colab, Kaggle, or Binder:
+
+<!-- TODO: update these badge links to point at main once this PR merges -->
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/add-agentic-code-reviewer-project/examples/agentic-code-reviewer/notebook.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/add-agentic-code-reviewer-project/examples/agentic-code-reviewer/notebook.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/add-agentic-code-reviewer-project?filepath=examples%2Fagentic-code-reviewer%2Fnotebook.ipynb)
+
+A notebook environment has no local git repository of your own to diff, which is this tool's whole premise -- so rather than pretending that gap doesn't exist, the notebook shallow-clones this course's own repository and reviews one real, small, historical commit from it (`git show` on a real commit hash) instead of your own uncommitted work. Every other part of the tool -- the `subprocess` diff capture, the system prompt, the LLM call, the structured output -- runs unmodified. It's a fast way to see the whole thing work end to end before setting it up locally; once you want to review your own actual changes, come back to `uv run python review.py` above or a Codespace.
+
 ## A note on staying current
 
 Model names and provider free-tier terms change fast -- the model IDs and endpoints in `review.py`'s `PROVIDERS` dict were verified against a live run while writing this example, but check each provider's own docs before relying on them, since they may have drifted by the time you read this.

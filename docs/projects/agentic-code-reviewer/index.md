@@ -35,7 +35,12 @@ This assumes Python 101 and enough comfort with git to know what `git diff` show
 
 **GitHub Codespaces** works well too: open [the whole course repo in a free Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python, `uv`, and git are already installed) — it's a real clone with real history, so every step below, including the "review a real past commit" demo, works exactly as it does locally.
 
-**Google Colab or Kaggle Notebooks are a poor fit for this one** — be honest with yourself about the tradeoff rather than forcing it. Neither gives you a real local git repository with commit history by default; you'd have to `!git clone` a repo into the notebook's ephemeral filesystem first just to have something to diff, which defeats the point of a tool meant to run against *your own* in-progress work. Skip them here.
+**Google Colab, Kaggle Notebooks, and Binder are a reasonable way to *try* the tool, but not to run it for real.** Neither gives you a real local git repository with commit history by default, and the whole premise of this tool is reviewing *your own* in-progress work — a notebook's ephemeral filesystem has none of that. The notebook below works around this honestly, rather than pretending the gap doesn't exist: it `!git clone`s this course's own repository into the notebook and reviews one real, small, historical commit from it with `git show`, so every piece of the tool (the `subprocess` diff capture, the system prompt, the LLM call, the structured output) still runs against real, real-looking output — it's just reviewing a fixed example commit instead of anything you personally wrote. Use it to see the tool work end to end with zero setup; switch to local `uv` or a Codespace once you want it pointed at your own actual changes.
+
+{/* TODO: update these badge links to point at main once this PR merges */}
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/add-agentic-code-reviewer-project/examples/agentic-code-reviewer/notebook.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/add-agentic-code-reviewer-project/examples/agentic-code-reviewer/notebook.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/add-agentic-code-reviewer-project?filepath=examples%2Fagentic-code-reviewer%2Fnotebook.ipynb)
 
 ## Setup
 
