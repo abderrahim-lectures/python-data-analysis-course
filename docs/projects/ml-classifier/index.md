@@ -37,7 +37,7 @@ Three reasonable ways to do this project — pick whichever fits your setup:
 - **GitHub Codespaces.** Open [codespaces.new/abderrahim-lectures/python-data-analysis-course](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) to get a cloud dev environment with Node, Python, and `uv` already installed (see [`.devcontainer/devcontainer.json`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/.devcontainer/devcontainer.json)) — the exact same commands below work from a browser tab, no local install at all.
 - **Google Colab or Kaggle Notebooks.** A genuinely good fit here: training `LogisticRegression` or `RandomForestClassifier` on a dataset this small (a few hundred rows at most) needs no GPU, so a free notebook environment is more than enough. Run `!pip install scikit-learn pandas` in a cell, then paste and adapt the code from the steps below. **Kaggle Notebooks specifically** is a nice full-circle choice — the Titanic dataset is itself one of Kaggle's original, most famous beginner competitions, so you'd be training a model on Kaggle's own platform, on Kaggle's own dataset.
 
-## Step 1: Install `uv`
+## Setup
 
 `uv` is a single tool that replaces the usual "install Python, then install pip, then install a virtual environment tool, then install packages" chain — it can install and manage Python versions itself, alongside your project's dependencies.
 
@@ -67,7 +67,7 @@ cd ml-classifier
 uv add scikit-learn pandas
 ```
 
-## Step 2: Load and prepare the data
+## Step 1: Load and prepare the data
 
 Same dataset, same columns as Week 10's EDA — this time loaded from the course's raw dataset file instead of the in-browser sandbox:
 
@@ -117,7 +117,7 @@ y = df["Survived"]
 
 `pd.get_dummies` was applied to `Sex` and `Embarked`, but not to `Pclass` (1, 2, or 3) — it was left as a single numeric column. `Pclass` is a category too (there's no meaningful sense in which class 2 is "twice" class 1), yet leaving it as-is is a defensible choice some real analyses make. Can you think of an argument for encoding `Pclass` the same way as `Sex`, and an argument for leaving it alone?
 
-## Step 3: Split into training and test sets
+## Step 2: Split into training and test sets
 
 Here's the core idea this step is built on: **a model's score on data it was trained on tells you almost nothing about how it'll do on data it hasn't seen.** A model can — and, given enough freedom, will — simply memorize the training rows rather than learn a genuine pattern. Imagine grading a student using the exact questions they were handed the answer key for beforehand: a perfect score wouldn't tell you whether they understood the material or just memorized those specific answers. Evaluating a model on its own training data has the same flaw. To get an honest measure of how the model performs on passengers it's never seen, you have to hold some data back and never let the model train on it.
 
@@ -132,7 +132,7 @@ X_train, X_test, y_train, y_test = train_test_split(
 `test_size=0.2` holds back 20% of the rows for testing, training on the remaining 80%. `random_state=42` fixes the random shuffle used to pick which rows go where — without it, you'd get a *different* split (and therefore a slightly different accuracy score) every time you rerun the script, making it hard to tell whether a change to your code actually helped or you just got a luckier split.
 
 :::tip[Data leakage: prepare, then split — not the other way around]
-Step 2's encoding was done on the *whole* dataset, before this split, which is fine here because `pd.get_dummies` only looks at each row's own category, not at any other row. But it's easy to get this wrong with transformations that *do* look across rows — for example, scaling a column using its mean and standard deviation. If you compute that mean/std on the full dataset and then split, the training set has quietly "seen" information from the test set (its rows contributed to that mean). This is called **data leakage**, and it's one of the most common real-world mistakes in applied machine learning — the fix is to always compute anything that summarizes the data (means, standard deviations, category lists) using the *training* set only, then apply that same transformation to the test set.
+Step 1's encoding was done on the *whole* dataset, before this split, which is fine here because `pd.get_dummies` only looks at each row's own category, not at any other row. But it's easy to get this wrong with transformations that *do* look across rows — for example, scaling a column using its mean and standard deviation. If you compute that mean/std on the full dataset and then split, the training set has quietly "seen" information from the test set (its rows contributed to that mean). This is called **data leakage**, and it's one of the most common real-world mistakes in applied machine learning — the fix is to always compute anything that summarizes the data (means, standard deviations, category lists) using the *training* set only, then apply that same transformation to the test set.
 :::
 
 **✅ Checklist**
@@ -147,7 +147,7 @@ Step 2's encoding was done on the *whole* dataset, before this split, which is f
 
 If you trained a model and evaluated it on `X_train`/`y_train` instead of `X_test`/`y_test` by mistake, would you expect the accuracy to look *better* or *worse* than the honest number — and why?
 
-## Step 4: Train a classifier
+## Step 3: Train a classifier
 
 `LogisticRegression`, despite the name, is a classifier, not a regression model in the usual sense. The idea: for each passenger, it computes a weighted sum of their features (age, fare, sex, class, ...) — the same shape of computation as an ordinary linear equation — and then squashes that sum through a function (the logistic/sigmoid function) that maps any number onto a value between 0 and 1. That output is interpreted as an estimated *probability* of survival. "Fitting the model" means finding the set of weights that makes those estimated probabilities line up as closely as possible with the actual 0/1 outcomes in the training data. A prediction is then just "probability ≥ 0.5 → predict survived."
 
@@ -174,7 +174,7 @@ predictions = model.predict(X_test)
 
 `predict_proba` might return something like 0.51 for one passenger and 0.98 for another — both get rounded to the same final prediction (1), but they represent very different levels of confidence. What real-world decision might change if you had access to that probability, instead of just the final yes/no prediction?
 
-## Step 5: Evaluate and compare models
+## Step 4: Evaluate and compare models
 
 The single number to start with is accuracy — the fraction of test-set predictions that matched the real outcome:
 
@@ -226,7 +226,7 @@ A random forest trains many small decision trees, each on a slightly different r
 ## ⚠️ Common pitfalls
 
 - **Encoding train and test sets inconsistently.** If you split first and then run `pd.get_dummies` separately on each half, a category present in training but absent in test (or vice versa) can produce mismatched columns between `X_train` and `X_test`, breaking `.fit()`/`.predict()` or silently producing wrong results. Encode before splitting when the encoding only looks at each row's own values (as here), or fit the encoder on training data only and apply it to test data, never the reverse.
-- **Data leakage** — fitting any transformation that summarizes the *whole* dataset (a scaler, an encoder with cross-row statistics) before splitting, instead of after. See the tip in Step 3; this is one of the most common real-world mistakes in applied machine learning, and it quietly inflates your test accuracy into an overly optimistic number.
+- **Data leakage** — fitting any transformation that summarizes the *whole* dataset (a scaler, an encoder with cross-row statistics) before splitting, instead of after. See the tip in Step 2; this is one of the most common real-world mistakes in applied machine learning, and it quietly inflates your test accuracy into an overly optimistic number.
 - **Over-interpreting a small accuracy difference.** With a test set this small (around 20 rows, since this course's dataset has only about 100 rows total), a 2-3 percentage point gap — often just one or two flipped predictions — is well within the range you'd expect from random noise in *which* rows happened to land in the test split, not necessarily evidence one model is genuinely better. Cross-validation (see below) is the standard way to get a more trustworthy comparison, and matters even more on a dataset this size.
 - **Forgetting `random_state`.** Without it, your split (and some models' internal randomness) changes every run, making it impossible to tell whether a change you made actually improved anything or you just got a different random split.
 
@@ -240,8 +240,8 @@ scikit-learn is a mature, stable library, but its API does shift between major v
 
 ## Where to go from here
 
-- **Feature engineering.** The `Name` column was dropped in Step 2, but it isn't useless — titles like "Mr.", "Mrs.", "Miss.", and "Master." (embedded in the name string) correlate strongly with age and sex, and extracting them as a new categorical column is a classic improvement to this exact dataset.
-- **Cross-validation.** A single train/test split gives one accuracy number that depends partly on luck (which rows landed where). `sklearn.model_selection.cross_val_score` repeats the split-train-evaluate cycle several times on different slices and averages the result — a more trustworthy way to compare two models than the single comparison in Step 5.
+- **Feature engineering.** The `Name` column was dropped in Step 1, but it isn't useless — titles like "Mr.", "Mrs.", "Miss.", and "Master." (embedded in the name string) correlate strongly with age and sex, and extracting them as a new categorical column is a classic improvement to this exact dataset.
+- **Cross-validation.** A single train/test split gives one accuracy number that depends partly on luck (which rows landed where). `sklearn.model_selection.cross_val_score` repeats the split-train-evaluate cycle several times on different slices and averages the result — a more trustworthy way to compare two models than the single comparison in Step 4.
 - **A different dataset entirely.** Kaggle hosts hundreds of small, well-documented beginner datasets similar in spirit to Titanic — a good next step once this workflow feels routine.
 
 ## Share your project with the class
