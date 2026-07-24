@@ -191,6 +191,24 @@ function RealWorldProjects() {
         </p>
         <div className={styles.projectGrid}>
           <HomepageProjectCard
+            id="github-issue-triage-agent"
+            title={
+              <Translate
+                id="homepage.projects.githubIssueTriageAgent.title"
+                description="Homepage project card title">
+                Build a GitHub Issue Triage Agent
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.githubIssueTriageAgent.summary"
+                description="Homepage project card summary">
+                Fetch open issues from a real public GitHub repo and use a free-tier LLM to draft
+                suggested triage labels for a human maintainer to review.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
             id="mcp-server"
             title={
               <Translate id="homepage.projects.mcpServer.title" description="Homepage project card title">

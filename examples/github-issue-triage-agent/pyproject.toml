@@ -1,0 +1,11 @@
+[project]
+name = "github-issue-triage-agent"
+version = "0.1.0"
+description = "Fetches open issues from a real public GitHub repo and drafts triage-label suggestions with a free-tier LLM, for a human maintainer to review."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "requests>=2.32.3",
+    "python-dotenv>=1.2.2",
+    "openai>=2.2.0",
+]
