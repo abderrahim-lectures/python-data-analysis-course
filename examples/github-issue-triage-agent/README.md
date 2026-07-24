@@ -43,6 +43,10 @@ suggestions = [suggest_triage(issue, call_llm) for issue in issues]
 print_triage_report("psf", "requests", issues, suggestions)
 ```
 
+## Running it in a hosted notebook (Colab / Kaggle / Binder)
+
+Prefer not to set up `uv` locally? [`notebook.ipynb`](notebook.ipynb) in this folder is a self-contained port of `triage.py` — same fetch-issues / build-prompt / call-LLM / print-report logic, split into cells with a `getpass()` prompt for your GitHub Models API key (and an optional second one for a higher GitHub REST API rate limit). Open it with the "Open in Colab" / "Open in Kaggle" / "Binder" badges at the top of the [lesson's "Where to run this" section](../../docs/projects/github-issue-triage-agent/index.md#where-to-run-this) and run the cells top to bottom — no local install required.
+
 ## Running it in GitHub Codespaces
 
 Click the badge above, or go to the [repo's Codespaces page](https://github.com/abderrahim-lectures/python-data-analysis-course), to get a ready-to-go cloud dev environment (Node + Python + `uv` preinstalled via [`.devcontainer/devcontainer.json`](../../.devcontainer/devcontainer.json)) — notably convenient here since a Codespace already has `git`/`gh` context for the repo you're in. Once it's open, add your API key as a [Codespaces secret](https://docs.github.com/en/codespaces/managing-your-codespaces/managing-encrypted-secrets-for-your-repository-and-organization#adding-secrets-for-a-repository), or just `export` it in the terminal for a one-off session, then run:
