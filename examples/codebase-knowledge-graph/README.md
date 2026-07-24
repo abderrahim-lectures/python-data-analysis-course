@@ -2,12 +2,18 @@
 
 The local companion to the course's [Turn a Codebase into a Knowledge Graph](../../docs/projects/codebase-knowledge-graph/index.md) project — a real, runnable tool that parses a Python repo's own source with the built-in `ast` module, builds a graph of its files/functions/classes with `networkx`, and visualizes it as an interactive HTML page with `pyvis`.
 
+<!-- TODO: update these badge links to point at main once this PR merges -->
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/add-codebase-knowledge-graph-project/examples/codebase-knowledge-graph/notebook.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/add-codebase-knowledge-graph-project/examples/codebase-knowledge-graph/notebook.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/add-codebase-knowledge-graph-project?filepath=examples%2Fcodebase-knowledge-graph%2Fnotebook.ipynb)
+
 ## What's here
 
 - `build_graph.py` — parses every `.py` file under a target folder, builds a directed graph (nodes: files, functions, classes, methods, imported modules; edges: "defines", "imports", "calls"), then visualizes it and/or answers simple queries like "what does this function call?".
 - `sample_repo/` — three tiny toy files (`utils.py`, `models.py`, `main.py`) with deliberate import and call relationships, so the tool has something small and self-contained to run against without needing any other repo.
+- `notebook.ipynb` — the same walkthrough (AST parsing, graph building, `pyvis`/`matplotlib` visualization, and queries) as a self-contained Jupyter notebook, including the `sample_repo/` files written out inline. Click a badge above to run it in Colab, Kaggle, or Binder with no local setup at all.
 
-No API key, no signup, no network access needed — this is pure static analysis and graph theory, running entirely on your own machine.
+No API key, no signup, no network access needed — this is pure static analysis and graph theory, running entirely on your own machine (or a free hosted notebook).
 
 ## How to run this
 
