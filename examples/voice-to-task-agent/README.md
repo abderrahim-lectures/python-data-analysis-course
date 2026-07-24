@@ -1,8 +1,15 @@
 # Voice-to-Task Agent Example
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/abderrahim-lectures/python-data-analysis-course)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/add-voice-to-task-agent-project/examples/voice-to-task-agent/notebook.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/add-voice-to-task-agent-project/examples/voice-to-task-agent/notebook.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/add-voice-to-task-agent-project?filepath=examples%2Fvoice-to-task-agent%2Fnotebook.ipynb)
+
+<!-- TODO: update the Colab/Kaggle/Binder badge links above to point at main once this PR merges -->
 
 A real, runnable version of the pipeline built step by step in the course's [Build a Voice-to-Task Agent](../../docs/projects/voice-to-task-agent/index.md) project: transcribe a voice memo locally with OpenAI's open-source [Whisper](https://github.com/openai/whisper) model, then ask a free-tier LLM to turn the transcript into a structured task list.
+
+**Zero-install alternative:** click one of the Colab / Kaggle / Binder badges above to run the whole pipeline in a hosted notebook — no `uv`, no local Python setup, and (on Colab) a free GPU for faster transcription. See [`notebook.ipynb`](./notebook.ipynb) for the source, or "Running it" below for the local `uv` path.
 
 ## Objective
 

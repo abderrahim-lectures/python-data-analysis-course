@@ -33,7 +33,12 @@ This is optional and ungraded. See [Real-World Projects](/docs/projects) for the
 
 **GitHub Codespaces** works too: open [the whole course repo in a free Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python, and `uv` are already installed) and run the exact same `uv` commands from a terminal in your browser tab. It's a bit slower than a modern laptop for the transcription step, since Codespaces machines are CPU-only, but perfectly workable for the short sample clips here.
 
-**Google Colab is a notably good fit for this one** — better than for most other projects in this series. Whisper's transcription speed scales a lot with hardware, and Colab gives you a free GPU that a local CPU-only laptop doesn't: `!pip install openai-whisper` in a cell, then a GPU runtime, and even the larger Whisper model sizes (more accurate, normally too slow to consider on a CPU) become practical. If you want to experiment with model size vs. accuracy (see the tip in Step 1), Colab is where to do it.
+{/* TODO: update these badge links to point at main once this PR merges */}
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/add-voice-to-task-agent-project/examples/voice-to-task-agent/notebook.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/add-voice-to-task-agent-project/examples/voice-to-task-agent/notebook.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/add-voice-to-task-agent-project?filepath=examples%2Fvoice-to-task-agent%2Fnotebook.ipynb)
+
+**Google Colab is a notably good fit for this one** — better than for most other projects in this series. Whisper's transcription speed scales a lot with hardware, and Colab gives you a free GPU that a local CPU-only laptop doesn't: `!pip install openai-whisper` in a cell, then a GPU runtime, and even the larger Whisper model sizes (more accurate, normally too slow to consider on a CPU) become practical. If you want to experiment with model size vs. accuracy (see the tip in Step 1), Colab is where to do it. The badges above open a ready-made [`notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/voice-to-task-agent/notebook.ipynb) that runs the whole pipeline with zero local setup — same two-step pipeline, same sample audio, just in a hosted notebook instead of a terminal.
 
 ## Setup
 
