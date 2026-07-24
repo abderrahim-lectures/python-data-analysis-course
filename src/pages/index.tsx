@@ -191,6 +191,24 @@ function RealWorldProjects() {
         </p>
         <div className={styles.projectGrid}>
           <HomepageProjectCard
+            id="agentic-code-reviewer"
+            title={
+              <Translate
+                id="homepage.projects.agenticCodeReviewer.title"
+                description="Homepage project card title">
+                Build an Agentic Code Reviewer
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.agenticCodeReviewer.summary"
+                description="Homepage project card summary">
+                Build a CLI tool that reads a real git diff via subprocess and asks a free-tier
+                LLM to review it like a human reviewer would.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
             id="mcp-server"
             title={
               <Translate id="homepage.projects.mcpServer.title" description="Homepage project card title">
