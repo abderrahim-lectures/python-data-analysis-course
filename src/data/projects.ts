@@ -20,6 +20,12 @@ export interface ProjectMeta {
  */
 export const PROJECTS: ProjectMeta[] = [
   {
+    id: 'recipe-planner-agent',
+    date: '2026-07-24',
+    url: '/docs/projects/recipe-planner-agent',
+    tags: ['AI Agents', 'Tool Calling', 'Productivity'],
+  },
+  {
     id: 'mcp-server',
     date: '2026-07-23',
     url: '/docs/projects/mcp-server',
