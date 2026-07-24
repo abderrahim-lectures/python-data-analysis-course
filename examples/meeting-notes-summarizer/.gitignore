@@ -1,0 +1,6 @@
+.venv
+__pycache__
+*.pyc
+.env
+*_summary.json
+*_summary.md

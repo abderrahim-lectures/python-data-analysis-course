@@ -1,0 +1,17 @@
+Incident Review -- Checkout Service Outage (2026-07-18)
+
+Nadia: Let's walk through the timeline. The outage started at 14:02 UTC when checkout error rates spiked to 80%.
+Tomas: Right, and we didn't get paged until 14:11 because the alert threshold was set too high. That's the first thing we need to fix.
+Nadia: Agreed -- let's lower the checkout error-rate alert threshold from 50% to 10%. I'll make that change myself this week.
+Tomas: Root cause was the new rate limiter deploy at 13:55 -- it was misconfigured and started rejecting legitimate checkout requests, not just abusive traffic.
+Elena: Should we roll back deploys automatically when error rates spike like that, or is that too risky to automate right now?
+Nadia: That's a good question, and I don't think we should decide it today -- it needs a broader discussion with the platform team about failure modes. Let's leave it open for now.
+Tomas: Fair. In the meantime, I'll add a canary stage to the rate limiter's deploy pipeline so a bad config only hits a small percentage of traffic before a full rollout.
+Nadia: Good, let's do that -- Tomas, that's on you, no firm deadline yet but let's aim for before the end of the month.
+Elena: What about customer comms? We didn't post a status page update until 14:40, almost 40 minutes after the outage started.
+Nadia: Agreed that's too slow. Let's commit to updating the status page within 10 minutes of any confirmed sev-1 going forward -- that's now our standard.
+Elena: I can update the incident runbook to reflect that new 10-minute target.
+Nadia: Thanks Elena, please do.
+Tomas: One open item -- do we actually know the total revenue impact yet? I haven't seen final numbers.
+Nadia: Not yet, finance is still calculating that. Let's leave it open until they get back to us.
+Nadia: Okay, I think we've covered the key points. Thanks everyone for a thorough review.
