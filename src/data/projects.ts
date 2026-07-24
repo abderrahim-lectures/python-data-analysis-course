@@ -20,6 +20,12 @@ export interface ProjectMeta {
  */
 export const PROJECTS: ProjectMeta[] = [
   {
+    id: 'meeting-notes-summarizer',
+    date: '2026-07-24',
+    url: '/docs/projects/meeting-notes-summarizer',
+    tags: ['AI Agents', 'Productivity', 'Automation'],
+  },
+  {
     id: 'mcp-server',
     date: '2026-07-23',
     url: '/docs/projects/mcp-server',

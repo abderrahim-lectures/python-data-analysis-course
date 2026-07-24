@@ -191,6 +191,24 @@ function RealWorldProjects() {
         </p>
         <div className={styles.projectGrid}>
           <HomepageProjectCard
+            id="meeting-notes-summarizer"
+            title={
+              <Translate
+                id="homepage.projects.meetingNotesSummarizer.title"
+                description="Homepage project card title">
+                Build a Meeting-Notes Summarizer
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.meetingNotesSummarizer.summary"
+                description="Homepage project card summary">
+                Turn a raw meeting transcript into structured decisions, action items, and open
+                questions using a free-tier LLM and a carefully designed JSON-extraction prompt.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
             id="mcp-server"
             title={
               <Translate id="homepage.projects.mcpServer.title" description="Homepage project card title">
