@@ -35,7 +35,11 @@ This is optional and ungraded. See [Real-World Projects](/docs/projects) for the
 
 **GitHub Codespaces** is a zero-setup alternative if you'd rather not install anything locally yet: open [the whole course repo in a free Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python, and `uv` are already installed, per the repo's `.devcontainer/devcontainer.json`) and run the exact same `uv` commands from a terminal in your browser tab.
 
-**Google Colab or Kaggle Notebooks** are a genuinely good fit for this particular project, not just a fallback — there's no local file server, no GPU, and no long-running process to manage, and inline chart output is exactly what a notebook does well. Run `!pip install requests beautifulsoup4 pandas matplotlib` in a cell, then paste the scripts below in as notebook cells, adapting file paths (e.g. saving `quotes.csv` to the notebook's working directory instead of your own machine) as needed. This is a comfortable, legitimate way to do this project end-to-end without leaving the browser.
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/scrape-analyze/notebook.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/scrape-analyze/notebook.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fscrape-analyze%2Fnotebook.ipynb)
+
+**Google Colab or Kaggle Notebooks** are a genuinely good fit for this particular project, not just a fallback — there's no local file server, no GPU, and no long-running process to manage, and inline chart output is exactly what a notebook does well. Click a badge above to open a ready-to-run notebook (`examples/scrape-analyze/notebook.ipynb`) with the same scraper and analysis already filled in — install cell, pagination-following scraper, pandas cleanup, and both charts, adapted to save `quotes.csv` to the notebook's working directory instead of your own machine. This is a comfortable, legitimate way to do this project end-to-end without leaving the browser.
 
 ## Step 1: Install `uv`
 
