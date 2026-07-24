@@ -191,6 +191,24 @@ function RealWorldProjects() {
         </p>
         <div className={styles.projectGrid}>
           <HomepageProjectCard
+            id="study-buddy-agent"
+            title={
+              <Translate
+                id="homepage.projects.studyBuddyAgent.title"
+                description="Homepage project card title">
+                Build a Study-Buddy Quiz Agent
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.studyBuddyAgent.summary"
+                description="Homepage project card summary">
+                Turn your own study notes into an interactive quiz: a free-tier LLM writes
+                questions grounded in your notes, then judges your typed answers.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
             id="mcp-server"
             title={
               <Translate id="homepage.projects.mcpServer.title" description="Homepage project card title">

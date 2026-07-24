@@ -1,0 +1,10 @@
+[project]
+name = "study-buddy-agent"
+version = "0.1.0"
+description = "Local companion to the course's 'Build a Study-Buddy Quiz Agent' project: generates quiz questions grounded in your own notes, then quizzes you interactively with a free-tier LLM judging your answers."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "openai>=1.59.0",
+    "python-dotenv>=1.2.2",
+]

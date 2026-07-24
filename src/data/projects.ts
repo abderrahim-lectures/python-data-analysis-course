@@ -20,6 +20,12 @@ export interface ProjectMeta {
  */
 export const PROJECTS: ProjectMeta[] = [
   {
+    id: 'study-buddy-agent',
+    date: '2026-07-24',
+    url: '/docs/projects/study-buddy-agent',
+    tags: ['AI Agents', 'Education', 'Productivity'],
+  },
+  {
     id: 'mcp-server',
     date: '2026-07-23',
     url: '/docs/projects/mcp-server',
