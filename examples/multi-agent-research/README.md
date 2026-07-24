@@ -1,6 +1,10 @@
 # Multi-Agent Research Assistant Example
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/abderrahim-lectures/python-data-analysis-course)
+<!-- TODO: update these badge links to point at main once this PR merges -->
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/add-multi-agent-research-project/examples/multi-agent-research/notebook.ipynb)
+[![Open in Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/add-multi-agent-research-project/examples/multi-agent-research/notebook.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/add-multi-agent-research-project?filepath=examples%2Fmulti-agent-research%2Fnotebook.ipynb)
 
 A real, runnable multi-agent research assistant — the fuller version of the one built step by step in the course's [Multi-Agent Research Assistant project](../../docs/projects/multi-agent-research/index.md), built with LangChain's [`deepagents`](https://github.com/langchain-ai/deepagents) and your choice of free-tier API provider.
 
@@ -45,6 +49,10 @@ result = ask(agent, "What makes a programming language good for beginners to lea
 print_conversation(result)   # readable step-by-step trace of every delegation
 print(final_answer(result))  # just the writer's final report
 ```
+
+## Running it with zero install (Colab / Kaggle / Binder)
+
+Don't want to install `uv` or anything else locally? Click one of the badges above (Colab, Kaggle, or Binder) to open [`notebook.ipynb`](./notebook.ipynb) — a real, runnable notebook version of this same planner/researcher/writer pipeline. It installs its own dependencies with a `!pip install` cell and asks for your API key interactively at runtime with `getpass` (no `.env` file, since these hosted sessions are ephemeral and don't have one). It's a lower-fidelity way to run this than a real local `uv` project, but it's the fastest way to try the idea out with nothing installed.
 
 ## Running it in GitHub Codespaces
 
