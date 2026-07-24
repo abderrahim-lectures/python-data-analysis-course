@@ -38,6 +38,13 @@ MCP is one of the more actively adopted patterns for extending AI assistants rig
 
 **Google Colab and Kaggle are not a good fit for this project**, unlike most others in this series — skip them here. Neither gives you a persistent local process a desktop AI client can connect to; a notebook cell that "runs a server" in Colab isn't reachable by Claude Desktop on your own machine at all.
 
+That said, if you just want to poke at `search_course_topics` and `count_words` as plain Python — no MCP protocol, no server process, no Claude Desktop — a narrower notebook exists for exactly that:
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/mcp-server/notebook.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/mcp-server/notebook.ipynb)
+
+It calls the same tool logic directly as ordinary functions, with no decorator, no server, and no client connection — useful for experimenting with the code, not a substitute for the actual project above.
+
 ## Step 1: Install `uv`
 
 `uv` is a single tool that replaces the usual "install Python, then install pip, then install a virtual environment tool, then install packages" chain — it can install and manage Python versions itself, alongside your project's dependencies.
