@@ -34,11 +34,11 @@ MCP is one of the more actively adopted patterns for extending AI assistants rig
 
 **Locally with `uv`** is the primary, recommended path for this one, more so than most other projects in this series — the whole point is connecting your server to Claude Desktop, and Claude Desktop is an app installed on your own machine. There's no way around doing at least the last step locally.
 
-**GitHub Codespaces** is a reasonable place to write and test the *tool logic itself*: open [the whole course repo in a free Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python, and `uv` are already installed, per the repo's `.devcontainer/devcontainer.json`), write `server.py`, and call your tool functions directly in a Python shell, or even run `mcp dev server.py` and use the Inspector through the Codespace's forwarded port. What a Codespace *can't* be is your final Claude Desktop connection point — Claude Desktop runs on your own desktop and needs to launch a local process it can talk to directly; reaching into a Codespace from it would need extra tunneling that's out of scope for this project. Treat Codespaces as good for Steps 1–3, and do Step 4 locally.
+**GitHub Codespaces** is a reasonable place to write and test the *tool logic itself*: open [the whole course repo in a free Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python, and `uv` are already installed, per the repo's `.devcontainer/devcontainer.json`), write `server.py`, and call your tool functions directly in a Python shell, or even run `mcp dev server.py` and use the Inspector through the Codespace's forwarded port. What a Codespace *can't* be is your final Claude Desktop connection point — Claude Desktop runs on your own desktop and needs to launch a local process it can talk to directly; reaching into a Codespace from it would need extra tunneling that's out of scope for this project. Treat Codespaces as good for Steps 1–2, and do Step 3 locally.
 
 **Google Colab and Kaggle are not a good fit for this project**, unlike most others in this series — skip them here. Neither gives you a persistent local process a desktop AI client can connect to; a notebook cell that "runs a server" in Colab isn't reachable by Claude Desktop on your own machine at all.
 
-## Step 1: Install `uv`
+## Setup
 
 `uv` is a single tool that replaces the usual "install Python, then install pip, then install a virtual environment tool, then install packages" chain — it can install and manage Python versions itself, alongside your project's dependencies.
 
@@ -60,7 +60,7 @@ Close and reopen your terminal, then confirm it installed:
 uv --version
 ```
 
-Then set up a project and install the official Python MCP SDK, with its optional `cli` extra (this is what gives you the `mcp dev` command used in Step 3):
+Then set up a project and install the official Python MCP SDK, with its optional `cli` extra (this is what gives you the `mcp dev` command used in Step 2):
 
 ```bash
 uv init mcp-server
@@ -68,7 +68,7 @@ cd mcp-server
 uv add "mcp[cli]"
 ```
 
-## Step 2: Write your first MCP server
+## Step 1: Write your first MCP server
 
 The SDK's high-level API, `FastMCP`, turns an ordinary Python function into an MCP tool with one decorator — no protocol-level code to write by hand. Create `server.py`:
 
@@ -134,7 +134,7 @@ MCP is a young, fast-moving spec — the protocol itself, and the Python SDK's o
 - What would happen if two of your tools had very similar docstrings? How might a model choose between them, and what does that suggest about writing docstrings for a server with many tools?
 - `search_course_topics` returns a string, not structured data. What would you lose, or gain, by returning a list of matches instead?
 
-## Step 3: Run and test your server locally
+## Step 2: Run and test your server locally
 
 Before wiring this up to any real AI client, run it on its own and confirm the tools actually work. The SDK ships a **dev/inspector** command for exactly this:
 
@@ -171,7 +171,7 @@ It's tempting to skip straight to Claude Desktop. Resist that — the Inspector 
 - If `search_course_topics` returned an error instead of a result, how would you tell whether the bug is in your Python code or in the MCP connection itself? What does testing with the Inspector first buy you here?
 - Why might it matter that the Inspector needs no AI model at all to test your tools?
 
-## Step 4: Connect it to Claude Desktop
+## Step 3: Connect it to Claude Desktop
 
 [Claude Desktop](https://claude.ai/download)'s free tier supports connecting to local MCP servers. It reads a JSON config file that tells it which servers to launch and how:
 
@@ -191,7 +191,7 @@ If the file doesn't exist yet, create it. Add your server, using an **absolute**
 }
 ```
 
-`command` and `args` describe exactly the process Claude Desktop will launch to talk to your server — the same `uv run` invocation you already tested in Step 3, just started by Claude Desktop instead of by you. Using `uv run` (rather than a bare `python`) matters here: Claude Desktop launches this command in its own environment, with no guarantee your project's virtual environment is already active, and `uv run` finds and uses the right one on its own.
+`command` and `args` describe exactly the process Claude Desktop will launch to talk to your server — the same `uv run` invocation you already tested in Step 2, just started by Claude Desktop instead of by you. Using `uv run` (rather than a bare `python`) matters here: Claude Desktop launches this command in its own environment, with no guarantee your project's virtual environment is already active, and `uv run` finds and uses the right one on its own.
 
 **Fully quit and restart Claude Desktop** — a running instance doesn't re-read this file on its own. Once it restarts, your server should show up in its tool/connector list (usually behind a small icon near the message box). Ask it something that should trigger a tool call, e.g.:
 
