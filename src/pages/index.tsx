@@ -191,6 +191,25 @@ function RealWorldProjects() {
         </p>
         <div className={styles.projectGrid}>
           <HomepageProjectCard
+            id="multi-agent-research"
+            title={
+              <Translate
+                id="homepage.projects.multiAgentResearch.title"
+                description="Homepage project card title">
+                Build a Multi-Agent Research Assistant
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.multiAgentResearch.summary"
+                description="Homepage project card summary">
+                Build a small multi-agent system — a planner, a researcher, and a writer — that
+                breaks down a research question and synthesizes a final report, using deepagents
+                sub-agents and a free-tier LLM.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
             id="mcp-server"
             title={
               <Translate id="homepage.projects.mcpServer.title" description="Homepage project card title">
