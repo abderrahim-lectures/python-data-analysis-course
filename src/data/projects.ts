@@ -20,6 +20,12 @@ export interface ProjectMeta {
  */
 export const PROJECTS: ProjectMeta[] = [
   {
+    id: 'email-triage-agent',
+    date: '2026-07-24',
+    url: '/docs/projects/email-triage-agent',
+    tags: ['AI Agents', 'Automation', 'Productivity'],
+  },
+  {
     id: 'mcp-server',
     date: '2026-07-23',
     url: '/docs/projects/mcp-server',

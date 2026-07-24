@@ -1,0 +1,16 @@
+From: newsletter@pythonweekly.example.com
+To: you@example.com
+Subject: Python Weekly #612: pattern matching, faster pandas, and more
+Date: Sun, 19 Jul 2026 07:00:00 -0400
+
+This week in Python:
+
+- A deep dive on structural pattern matching (match/case) beyond the basics
+- Benchmarks: the new pandas release is up to 30% faster on groupby
+- Five underrated standard library modules you're probably not using
+- Job board: 40 new remote Python roles posted this week
+- Upcoming conferences and meetups near you
+
+Read the full issue on our website. You're receiving this because you
+subscribed at pythonweekly.example.com. Unsubscribe anytime from the link
+in the footer.

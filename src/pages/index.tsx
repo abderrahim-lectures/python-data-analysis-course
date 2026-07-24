@@ -191,6 +191,24 @@ function RealWorldProjects() {
         </p>
         <div className={styles.projectGrid}>
           <HomepageProjectCard
+            id="email-triage-agent"
+            title={
+              <Translate
+                id="homepage.projects.emailTriageAgent.title"
+                description="Homepage project card title">
+                Build a Personal Email-Triage Agent
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.emailTriageAgent.summary"
+                description="Homepage project card summary">
+                Categorize, prioritize, and draft replies for a batch of emails with a free-tier
+                LLM — the agent never sends anything, only you do.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
             id="mcp-server"
             title={
               <Translate id="homepage.projects.mcpServer.title" description="Homepage project card title">
