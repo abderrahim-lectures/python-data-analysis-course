@@ -1,6 +1,9 @@
 # Meeting-Notes Summarizer Example
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/abderrahim-lectures/python-data-analysis-course)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/add-meeting-notes-summarizer-project/examples/meeting-notes-summarizer/notebook.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/add-meeting-notes-summarizer-project/examples/meeting-notes-summarizer/notebook.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/add-meeting-notes-summarizer-project?filepath=examples%2Fmeeting-notes-summarizer%2Fnotebook.ipynb)
 
 The local companion to the course's [Build a Meeting-Notes Summarizer](../../docs/projects/meeting-notes-summarizer/index.md) project — a small, complete structured-extraction pipeline that turns a plain-text meeting transcript into decisions, action items, and open questions, using a free-tier LLM and a carefully designed JSON-extraction prompt.
 
@@ -8,6 +11,7 @@ The local companion to the course's [Build a Meeting-Notes Summarizer](../../doc
 
 - `sample_transcripts/` — three realistic sample transcripts (a daily standup, a product-planning meeting, and an incident review), so this runs with zero setup.
 - `summarize.py` — the whole pipeline: loads a transcript, builds the structured-extraction prompt, calls the LLM, defensively parses and validates the JSON response, and writes both a `.json` and a `.md` output file. Supports all six free-tier providers from the lesson's table, selected with one environment variable — deliberately fuller than the lesson's step-by-step snippets, which split this file into `load_transcript.py`, `extract_prompt.py`, and `format_summary.py` for teaching purposes.
+- `notebook.ipynb` — the same structured-extraction pipeline as a self-contained Jupyter notebook, with two of the real sample transcripts embedded directly as strings so it runs with zero file uploads. Click a badge above to open it in Colab, Kaggle, or Binder — no local setup required.
 
 ## Running it
 

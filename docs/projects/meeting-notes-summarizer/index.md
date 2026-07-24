@@ -36,7 +36,12 @@ This is optional and ungraded. See [Real-World Projects](/docs/projects) for the
 
 **GitHub Codespaces** is a zero-setup alternative if you'd rather not install anything locally yet: open [the whole course repo in a free Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python, and `uv` are already installed, per the repo's `.devcontainer/devcontainer.json`) and run the exact same `uv` commands from a terminal in your browser tab.
 
-**Google Colab or Kaggle Notebooks** work well too, and are genuinely good options here — this project is a lightweight script that makes a handful of API calls, not something that needs a GPU or a real project structure to be useful. Create a new notebook, run `!pip install openai python-dotenv` in a cell, paste the scripts below in as notebook cells, and set your API key with a notebook secret (Colab) or environment variable instead of a `.env` file.
+**Google Colab, Kaggle Notebooks, or Binder** work well too, and are genuinely good options here — this project is a lightweight script that makes a handful of API calls, not something that needs a GPU or a real project structure to be useful. A ready-to-run notebook version ships with this project — click a badge below to open it, no local setup required — or create your own notebook, run `!pip install openai python-dotenv` in a cell, paste the scripts below in as notebook cells, and set your API key with a notebook secret (Colab) or environment variable instead of a `.env` file.
+
+{/* TODO: update these badge links to point at main once this PR merges */}
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/add-meeting-notes-summarizer-project/examples/meeting-notes-summarizer/notebook.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/add-meeting-notes-summarizer-project/examples/meeting-notes-summarizer/notebook.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/add-meeting-notes-summarizer-project?filepath=examples%2Fmeeting-notes-summarizer%2Fnotebook.ipynb)
 
 ## Setup
 
