@@ -1,0 +1,11 @@
+[project]
+name = "voice-to-task-agent"
+version = "0.1.0"
+description = "Local companion to the course's 'Build a Voice-to-Task Agent' project: transcribe a voice memo locally and for free with OpenAI's open-source Whisper model, then extract structured action items with a free-tier LLM."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "openai-whisper>=20240930",
+    "openai>=1.59.0",
+    "python-dotenv>=1.2.2",
+]
