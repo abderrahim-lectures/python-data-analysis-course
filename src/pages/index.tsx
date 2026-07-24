@@ -191,6 +191,22 @@ function RealWorldProjects() {
         </p>
         <div className={styles.projectGrid}>
           <HomepageProjectCard
+            id="docs-qa-bot"
+            title={
+              <Translate id="homepage.projects.docsQaBot.title" description="Homepage project card title">
+                Build a RAG-Backed Docs Q&A Discord Bot
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.docsQaBot.summary"
+                description="Homepage project card summary">
+                Wrap the RAG App project's retrieval pipeline in a live Discord bot that answers
+                questions from a folder of documentation.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
             id="mcp-server"
             title={
               <Translate id="homepage.projects.mcpServer.title" description="Homepage project card title">
