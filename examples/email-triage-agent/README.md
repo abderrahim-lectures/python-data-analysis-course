@@ -1,6 +1,10 @@
 # Email-Triage Agent Example
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/abderrahim-lectures/python-data-analysis-course)
+<!-- TODO: update these badge links to point at main once this PR merges -->
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/add-email-triage-agent-project/examples/email-triage-agent/notebook.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/add-email-triage-agent-project/examples/email-triage-agent/notebook.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/add-email-triage-agent-project?filepath=examples%2Femail-triage-agent%2Fnotebook.ipynb)
 
 The local companion to the course's [Build a Personal Email-Triage Agent](../../docs/projects/email-triage-agent/index.md) project — an agent that categorizes, prioritizes, and drafts (but **never sends**) replies for a batch of emails, using your choice of free-tier LLM.
 
@@ -8,6 +12,7 @@ The local companion to the course's [Build a Personal Email-Triage Agent](../../
 
 - `sample_emails/` — six short, realistic sample emails (urgent, newsletter, two needing a reply, spam-ish, and an automated FYI) so the whole pipeline runs with no real inbox or credentials needed.
 - `triage.py` — parses the sample emails, categorizes/prioritizes each with an LLM (`triage_email`), and drafts a reply for anything that needs one (`draft_reply`) — saved to `drafts/`, never sent. Explained step by step in the [lesson](../../docs/projects/email-triage-agent/index.md).
+- `notebook.ipynb` — a zero-install alternative to running `triage.py` locally: the same pipeline, with the sample emails embedded directly in the notebook, runnable straight from your browser via the Colab/Kaggle/Binder badges above — no clone, no `uv`, no `.env` file. Prompts interactively for your API key with `getpass` instead of reading one from disk. Lower-fidelity than the real local project (no separate files, one long notebook instead of a real project structure), so treat it as a quick way to experiment rather than the primary path — see the lesson's "Where to run this" section.
 - `fetch_from_imap.py` — **optional, not part of the core lesson path.** Fetches your most recent *unread* emails from a real inbox over IMAP, read-only (`mark_seen=False`), and saves them in the same format `triage.py` reads — see the lesson's "Optional, go further" section.
 
 ## Safety boundary
