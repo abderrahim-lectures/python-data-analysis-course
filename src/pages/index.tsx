@@ -191,6 +191,24 @@ function RealWorldProjects() {
         </p>
         <div className={styles.projectGrid}>
           <HomepageProjectCard
+            id="voice-to-task-agent"
+            title={
+              <Translate
+                id="homepage.projects.voiceToTaskAgent.title"
+                description="Homepage project card title">
+                Build a Voice-to-Task Agent
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.voiceToTaskAgent.summary"
+                description="Homepage project card summary">
+                Transcribe a voice memo locally and for free with OpenAI's open-source Whisper
+                model, then use a free-tier LLM to turn it into a structured task list.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
             id="mcp-server"
             title={
               <Translate id="homepage.projects.mcpServer.title" description="Homepage project card title">
