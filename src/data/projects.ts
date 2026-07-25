@@ -55,6 +55,12 @@ export const PROJECTS: ProjectMeta[] = [
     url: '/docs/projects/ai-agent',
     tags: ['AI Agents', 'LangChain'],
   },
+  {
+    id: '2027-wordle-clone',
+    date: '2027-08',
+    url: '/docs/projects/wordle-clone',
+    tags: ['Games', 'CLI Tools'],
+  },
 ];
 
 interface TranslatedProjectText {
