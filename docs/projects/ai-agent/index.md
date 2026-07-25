@@ -29,11 +29,11 @@ This is optional and ungraded — a good fit once you've finished Python 101 (da
 
 ## Where to run this
 
-**Locally with `uv`** is the path this lesson's steps follow, and the recommended one — it's real Python running on your own machine, the same "graduate to real Python" move as every other project in this section. Step 1 below walks through installing it.
+**Locally with `uv`** is the path this lesson's steps follow, and the recommended one — it's real Python running on your own machine, the same "graduate to real Python" move as every other project in this section. The Setup section below walks through installing it.
 
 **GitHub Codespaces** is a zero-setup alternative if you'd rather not install anything locally yet: open [the whole course repo in a free Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python, and `uv` are already installed, per the repo's `.devcontainer/devcontainer.json`) and run the exact same `uv` commands from a terminal in your browser tab.
 
-**Google Colab, Kaggle Notebooks, or Binder** also work, since this project needs no GPU — a real, runnable notebook version of this project's agent (the same toy tools and `create_deep_agent` setup as Step 4 below) lives at [`examples/ai-agent/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-agent/notebook.ipynb). Click a badge to launch it directly, no local install at all:
+**Google Colab, Kaggle Notebooks, or Binder** also work, since this project needs no GPU — a real, runnable notebook version of this project's agent (the same toy tools and `create_deep_agent` setup as Step 1 below) lives at [`examples/ai-agent/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-agent/notebook.ipynb). Click a badge to launch it directly, no local install at all:
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-agent/notebook.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-agent/notebook.ipynb)
@@ -41,7 +41,9 @@ This is optional and ungraded — a good fit once you've finished Python 101 (da
 
 Be honest with yourself about the tradeoff, though: this is a lower-fidelity way to experience the project than a real local `uv` project — no separate files, no real project structure, just cells in a notebook. Treat it as a quick way to experiment, not the primary path.
 
-## Step 1: Install `uv`
+## Setup
+
+### Install `uv`
 
 `uv` is a single tool that replaces the usual "install Python, then install pip, then install a virtual environment tool, then install packages" chain — it can install and manage Python versions itself, alongside your project's dependencies.
 
@@ -73,7 +75,7 @@ uv python install 3.12
 
 This is your graduation moment: a real Python, installed and managed on your own computer, not inside a browser sandbox.
 
-## Step 2: Get a free AI API key
+### Get a free AI API key
 
 **Pick whichever provider you like** — none of them require a credit card at the time of writing, and this course doesn't favor one over another. The example agent in the course repo ([`examples/ai-agent/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/ai-agent)) supports all six out of the box, selected with one setting.
 
@@ -102,10 +104,10 @@ $env:GITHUB_TOKEN = "your-key-here"
 An API key is a secret, exactly like a password — anyone with it can use your account's quota. Treating it as an environment variable rather than a hardcoded string is the standard practice for exactly this reason, and it's the first real-world security habit this course asks you to build.
 
 :::tip[A .env file is often more convenient than export]
-Instead of `export`-ing a key in every new terminal session, you can put it in a `.env` file in your project folder (see the repo example's `.env.example`) and load it automatically with the `python-dotenv` package — covered in Step 4.
+Instead of `export`-ing a key in every new terminal session, you can put it in a `.env` file in your project folder (see the repo example's `.env.example`) and load it automatically with the `python-dotenv` package — covered below.
 :::
 
-## Step 3: Set up the project with `uv`
+### Set up the project with `uv`
 
 ```bash
 uv init ai-agent
@@ -115,13 +117,13 @@ uv add deepagents langchain-openai python-dotenv
 
 `uv init` creates a small project (a `pyproject.toml` tracking your dependencies) and `uv add` installs packages into an isolated environment for that project — automatically, with no manual virtual-environment setup. `deepagents` is LangChain's framework for building agents with planning, tool use, and sub-agent delegation built in; `langchain-openai` is the integration package this example uses to talk to GitHub Models (its API is OpenAI-compatible, so the OpenAI integration package works for it — see the tip below if you picked a different provider); `python-dotenv` lets you keep your API key in a local `.env` file instead of `export`-ing it every session.
 
-If you picked a different provider in Step 2, swap `langchain-openai` for that provider's own package — `langchain-google-genai` (Gemini), `langchain-groq` (Groq), or `langchain-mistralai` (Mistral). Cerebras and OpenRouter are also OpenAI-compatible, so they use `langchain-openai` too, just with a different `base_url`.
+If you picked a different provider above, swap `langchain-openai` for that provider's own package — `langchain-google-genai` (Gemini), `langchain-groq` (Groq), or `langchain-mistralai` (Mistral). Cerebras and OpenRouter are also OpenAI-compatible, so they use `langchain-openai` too, just with a different `base_url`.
 
 :::tip[Check the current docs — and the model name]
 Agent frameworks move fast, and so do model names: they get renamed and retired on a timescale of months, not years. `create_deep_agent`'s own keyword arguments have already changed once since earlier drafts of this page (it's `system_prompt`, not `instructions`) — a reminder that this snippet can drift out of date even after being checked once. Use an explicit, versioned model ID rather than a `-latest` alias: several providers, including Google, have deprecated those because they silently hot-swap to a new model version, which can break working code with no warning. Before running this, check your provider's current pricing/model page, and skim `deepagents`' own README for its current API.
 :::
 
-## Step 4: Write your first agent
+## Step 1: Write your first agent
 
 Create a `.env` file (never commit this) with the key for whichever provider you picked:
 
@@ -174,7 +176,7 @@ Run it — with `uv`, no manual environment activation is needed:
 uv run python agent.py
 ```
 
-`load_dotenv()` reads your `.env` file into `os.environ` before anything else runs, so `os.environ["GITHUB_TOKEN"]` finds the key you set in Step 2 — the same `os` module concept as `input()` reading from the keyboard, just reading from a file instead. `create_deep_agent` wires the model together with a list of Python functions the agent can call as **tools** — this is the core idea behind agents: a language model that can not just respond with text, but decide to call your code, read the result, and use it to inform its answer.
+`load_dotenv()` reads your `.env` file into `os.environ` before anything else runs, so `os.environ["GITHUB_TOKEN"]` finds the key you set during Setup — the same `os` module concept as `input()` reading from the keyboard, just reading from a file instead. `create_deep_agent` wires the model together with a list of Python functions the agent can call as **tools** — this is the core idea behind agents: a language model that can not just respond with text, but decide to call your code, read the result, and use it to inform its answer.
 
 Notice `tools=[search_course_topics, count_weeks_remaining]` — two tools, not one. The model picks *which* tool (if any) fits the question, entirely on its own: ask "Did we cover groupby?" and it calls `search_course_topics`; ask "How many weeks are left if I'm on week 4?" and it calls `count_weeks_remaining` instead. You never write an `if`/`elif` chain routing questions to tools yourself — the docstring on each function (the triple-quoted string right after `def`) is what the model reads to decide which tool matches which request, exactly like Python 101 Week 4's docstrings, except here a language model is the one reading them, not a human skimming your code.
 

@@ -31,7 +31,7 @@ The AI Agent project runs entirely on your own machine. This one can't, fully �
 3. Get free GPU access via Google Colab or Kaggle, and use Unsloth to LoRA-fine-tune a small open model (around 1 billion parameters) on your dataset.
 4. Download the result — a small "adapter" file, not a whole new model — and run it locally to see your fine-tuned model in action.
 
-## Step 1: Install `uv`
+## Setup
 
 `uv` is a single tool that replaces the usual "install Python, then install pip, then install a virtual environment tool, then install packages" chain — it can install and manage Python versions itself, alongside your project's dependencies.
 
@@ -61,7 +61,7 @@ cd finetune-llm
 uv add datasets huggingface_hub
 ```
 
-## Step 2: Prepare a small dataset
+## Step 1: Prepare a small dataset
 
 Fine-tuning teaches a model a specific *behavior*, not new facts from scratch — it works best with a small, focused, well-formatted set of examples, not a huge pile of raw text. A common format is a list of instruction/response pairs. Pick a narrow, personal task — a few ideas: answering questions in a specific tone or persona, following a fixed output format (e.g. always replying in valid JSON), or summarizing text the way you personally would.
 
@@ -100,12 +100,12 @@ uv run python build_dataset.py
 Unsloth's own documentation and most fine-tuning guides agree on this: 50 carefully written, consistent examples teach a model a behavior far more reliably than 500 sloppy or inconsistent ones. If your examples contradict each other (answering the same kind of question differently each time), the model has nothing consistent to learn.
 :::
 
-## Step 3: Fine-tune with Unsloth on a free GPU
+## Step 2: Fine-tune with Unsloth on a free GPU
 
 This is the step that needs a GPU. [Unsloth](https://github.com/unslothai/unsloth) ships ready-to-run notebooks specifically designed for Google Colab's and Kaggle's **free** GPU tiers — you don't install anything locally for this part.
 
 1. Go to [Unsloth's notebooks page](https://docs.unsloth.ai/get-started/unsloth-notebooks) and open one of the beginner-friendly Colab notebooks for a small model (around 1B parameters — small enough to fine-tune quickly and to actually download and run afterward). A 1B-parameter open model, like a small Llama or Qwen release, is a reasonable, well-supported starting point; check Unsloth's notebook list for whichever small model has a current, working template, since which exact model is best-supported shifts over time.
-2. In the notebook, replace its example dataset with your own: upload the `dataset.jsonl` you built in Step 2 (Colab's file-upload panel, or mount Google Drive), and point the notebook's data-loading cell at it instead.
+2. In the notebook, replace its example dataset with your own: upload the `dataset.jsonl` you built in Step 1 (Colab's file-upload panel, or mount Google Drive), and point the notebook's data-loading cell at it instead.
 3. Run the notebook's cells in order. The core fine-tuning step uses **LoRA** (Low-Rank Adaptation): instead of updating all of a model's billions of parameters (slow, needs a lot of memory), LoRA freezes the original model and trains a much smaller pair of low-rank matrices that get added on top — mathematically, if the original weight matrix is $W$, LoRA learns a low-rank update $\Delta W = BA$ (where $B$ and $A$ are much smaller matrices) and uses $W + \Delta W$ at inference time. This is the same idea as approximating a large matrix with a lower-dimensional one — a concept from linear algebra you already have the background for — applied to make fine-tuning cheap enough to run on a free GPU.
 4. Once training finishes, the notebook saves your result as a small **adapter** — just the $A$ and $B$ matrices, typically tens of megabytes, not a multi-gigabyte copy of the whole model. Download this adapter folder to your computer.
 
@@ -113,7 +113,7 @@ This is the step that needs a GPU. [Unsloth](https://github.com/unslothai/unslot
 Which specific model, which specific notebook, and Unsloth's own API all move fast — faster than most software, since this is an actively developed research-adjacent tool. Before running anything, open [Unsloth's current documentation](https://docs.unsloth.ai) and use whichever notebook and model it currently recommends for beginners, rather than assuming last year's specifics still apply.
 :::
 
-## Step 4: Run your fine-tuned model locally
+## Step 3: Run your fine-tuned model locally
 
 Back on your own machine, load the base model plus your downloaded adapter and try it out:
 
@@ -126,7 +126,7 @@ uv add transformers peft torch --extra-index-url https://download.pytorch.org/wh
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from peft import PeftModel
 
-base_model_name = "unsloth/<the-base-model-you-fine-tuned>"  # match Step 3's notebook
+base_model_name = "unsloth/<the-base-model-you-fine-tuned>"  # match Step 2's notebook
 adapter_path = "./my-adapter"  # the folder you downloaded from Colab
 
 tokenizer = AutoTokenizer.from_pretrained(base_model_name)
