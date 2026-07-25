@@ -50,6 +50,12 @@ export const PROJECTS: ProjectMeta[] = [
     tags: ['Fine-tuning', 'LoRA', 'LLMs'],
   },
   {
+    id: '2027-webcam-object-counter',
+    date: '2026-07-25',
+    url: '/docs/projects/webcam-object-counter',
+    tags: ['Computer Vision', 'OpenCV'],
+  },
+  {
     id: '2026-ai-agent',
     date: '2026-07-21',
     url: '/docs/projects/ai-agent',
