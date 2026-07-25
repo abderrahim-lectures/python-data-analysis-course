@@ -191,6 +191,22 @@ function RealWorldProjects() {
         </p>
         <div className={styles.projectGrid}>
           <HomepageProjectCard
+            id="trivia-bot"
+            title={
+              <Translate id="homepage.projects.triviaBot.title" description="Homepage project card title">
+                Build a Discord Trivia Bot
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.triviaBot.summary"
+                description="Homepage project card summary">
+                Run trivia rounds in a Discord server with discord.py: a persistent leaderboard, and
+                questions generated fresh on any topic with a free-tier LLM.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
             id="mcp-server"
             title={
               <Translate id="homepage.projects.mcpServer.title" description="Homepage project card title">

@@ -20,6 +20,12 @@ export interface ProjectMeta {
  */
 export const PROJECTS: ProjectMeta[] = [
   {
+    id: 'trivia-bot',
+    date: '2026-07-25',
+    url: '/docs/projects/trivia-bot',
+    tags: ['Discord', 'Chatbots', 'Games'],
+  },
+  {
     id: 'mcp-server',
     date: '2026-07-23',
     url: '/docs/projects/mcp-server',
