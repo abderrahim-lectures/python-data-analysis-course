@@ -290,6 +290,24 @@ function RealWorldProjects() {
               </Translate>
             }
           />
+          <HomepageProjectCard
+            id="2027-habit-streak-visualizer"
+            title={
+              <Translate
+                id="homepage.projects.habitStreakVisualizer.title"
+                description="Homepage project card title">
+                Build a Habit-Streak Visualizer
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.habitStreakVisualizer.summary"
+                description="Homepage project card summary">
+                Track daily habit check-ins locally and render a GitHub-contributions-graph-style
+                calendar heatmap, for any habit you want to track.
+              </Translate>
+            }
+          />
         </div>
       </div>
     </section>
