@@ -20,6 +20,12 @@ export interface ProjectMeta {
  */
 export const PROJECTS: ProjectMeta[] = [
   {
+    id: '2027-chat-with-pdfs',
+    date: '2027-08',
+    url: '/docs/projects/chat-with-pdfs',
+    tags: ['RAG', 'PDFs', 'Embeddings'],
+  },
+  {
     id: '2027-mcp-notes-server',
     date: '2026-07-25',
     url: '/docs/projects/mcp-notes-server',

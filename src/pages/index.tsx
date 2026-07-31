@@ -438,6 +438,22 @@ function RealWorldProjects() {
             }
           />
           <HomepageProjectCard
+            id="2027-chat-with-pdfs"
+            title={
+              <Translate id="homepage.projects.chatWithPdfs.title" description="Homepage project card title">
+                Chat with Your PDFs
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.chatWithPdfs.summary"
+                description="Homepage project card summary">
+                Multi-document RAG over a folder of PDFs: page-aware chunking, local embeddings, and
+                page-cited answers from a free-tier LLM.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
             id="scrape-analyze"
             title={
               <Translate
