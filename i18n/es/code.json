@@ -789,5 +789,13 @@
   "homepage.projects.agenticCodeReviewer.summary": {
     "message": "Construye una herramienta CLI que lee un git diff real vía subprocess y le pide a un LLM de nivel gratuito que lo revise como lo haría un revisor humano.",
     "description": "Homepage project card summary"
+  },
+  "homepage.projects.browserAutomationAgent.title": {
+    "message": "Construye un Agente de Automatización de Navegador",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.browserAutomationAgent.summary": {
+    "message": "Combina la automatización de navegador de Playwright con un agente LLM de nivel gratuito que llama herramientas y llena por sí solo un formulario web de práctica real.",
+    "description": "Homepage project card summary"
   }
 }

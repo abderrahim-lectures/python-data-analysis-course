@@ -789,5 +789,13 @@
   "homepage.projects.agenticCodeReviewer.summary": {
     "message": "Construis un outil CLI qui lit un vrai git diff via subprocess et demande à un LLM gratuit de le relire comme le ferait un relecteur humain.",
     "description": "Homepage project card summary"
+  },
+  "homepage.projects.browserAutomationAgent.title": {
+    "message": "Construire un Agent d'Automatisation de Navigateur",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.browserAutomationAgent.summary": {
+    "message": "Combine l'automatisation de navigateur Playwright avec un agent LLM gratuit à appel d'outils qui remplit tout seul un vrai formulaire web de pratique.",
+    "description": "Homepage project card summary"
   }
 }

@@ -789,5 +789,13 @@
   "homepage.projects.agenticCodeReviewer.summary": {
     "message": "ابنِ أداة CLI تقرأ فرق git diff حقيقيًا عبر subprocess وتطلب من نموذج لغوي مجاني مراجعته كما يفعل مراجع بشري.",
     "description": "Homepage project card summary"
+  },
+  "homepage.projects.browserAutomationAgent.title": {
+    "message": "بناء وكيل أتمتة متصفح",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.browserAutomationAgent.summary": {
+    "message": "ادمج أتمتة متصفح Playwright مع وكيل نموذج لغوي مجاني يستدعي أدوات ويملأ استمارة ويب حقيقية للتدريب بمفرده.",
+    "description": "Homepage project card summary"
   }
 }
