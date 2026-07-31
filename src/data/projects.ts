@@ -26,6 +26,12 @@ export const PROJECTS: ProjectMeta[] = [
     tags: ['Knowledge Graphs', 'Static Analysis', 'Developer Tools'],
   },
   {
+    id: 'docs-qa-bot',
+    date: '2026-07-24',
+    url: '/docs/projects/docs-qa-bot',
+    tags: ['AI Agents', 'RAG', 'Chatbots'],
+  },
+  {
     id: 'email-triage-agent',
     date: '2026-07-24',
     url: '/docs/projects/email-triage-agent',
