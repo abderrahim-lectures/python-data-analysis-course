@@ -20,6 +20,12 @@ export interface ProjectMeta {
  */
 export const PROJECTS: ProjectMeta[] = [
   {
+    id: 'multi-agent-research',
+    date: '2026-07-24',
+    url: '/docs/projects/multi-agent-research',
+    tags: ['AI Agents', 'Multi-Agent', 'LangChain'],
+  },
+  {
     id: 'agentic-code-reviewer',
     date: '2026-07-24',
     url: '/docs/projects/agentic-code-reviewer',
