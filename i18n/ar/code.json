@@ -805,5 +805,13 @@
   "homepage.projects.chatWithPdfs.summary": {
     "message": "RAG متعدد المستندات فوق مجلد من ملفات PDF: تقسيم واعٍ بالصفحات، تضمينات محلية، وإجابات مُستشهَد بصفحاتها من نموذج لغوي من مستوى مجاني.",
     "description": "Homepage project card summary"
+  },
+  "homepage.projects.codebaseKnowledgeGraph.title": {
+    "message": "حوّل قاعدة كود إلى رسم بياني معرفي",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.codebaseKnowledgeGraph.summary": {
+    "message": "حلّل ملفات Python لقاعدة كود حقيقية بوحدة ast، وابنِ رسمًا بيانيًا لبنيتها بـnetworkx، وتصوّره واستعلمه — بلا مفتاح API، بلا وصول للشبكة.",
+    "description": "Homepage project card summary"
   }
 }

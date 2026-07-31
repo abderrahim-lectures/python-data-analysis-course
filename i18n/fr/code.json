@@ -805,5 +805,13 @@
   "homepage.projects.chatWithPdfs.summary": {
     "message": "RAG multi-documents sur un dossier de PDF : découpage conscient des pages, embeddings locaux, et réponses citées par page d'un LLM gratuit.",
     "description": "Homepage project card summary"
+  },
+  "homepage.projects.codebaseKnowledgeGraph.title": {
+    "message": "Transforme une Base de Code en Graphe de Connaissances",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.codebaseKnowledgeGraph.summary": {
+    "message": "Analyse les fichiers Python d'une vraie base de code avec le module ast, construis un graphe de sa structure avec networkx, et visualise-le et interroge-le — sans clé API, sans accès réseau.",
+    "description": "Homepage project card summary"
   }
 }

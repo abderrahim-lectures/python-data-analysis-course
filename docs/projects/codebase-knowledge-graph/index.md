@@ -38,7 +38,6 @@ This assumes Python 101 and comfort with functions and imports — nothing from 
 
 **Google Colab or Kaggle Notebooks** are a genuinely easy option too, not just a fallback — this project needs no GPU, no long-running server process, and no API key, just `pip install`s and pure computation. `!pip install networkx pyvis` in a cell, then either `!git clone` a public repo to analyze or upload a small folder of `.py` files, and the rest of the code below works essentially unchanged (pyvis's HTML output can even be displayed inline in a notebook cell).
 
-{/* TODO: update these badge links to point at main once this PR merges */}
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/codebase-knowledge-graph/notebook.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/codebase-knowledge-graph/notebook.ipynb)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fcodebase-knowledge-graph%2Fnotebook.ipynb)
