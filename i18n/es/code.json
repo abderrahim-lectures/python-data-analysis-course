@@ -821,5 +821,13 @@
   "homepage.projects.commitMessageAgent.summary": {
     "message": "Redacta un mensaje estilo Conventional Commits a partir de un git diff staged real con un LLM de nivel gratuito, y solo confirma el commit después de que apruebes explícitamente.",
     "description": "Homepage project card summary"
+  },
+  "homepage.projects.dependencyFreshnessChecker.title": {
+    "message": "Construye un Verificador de Frescura de Dependencias",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.dependencyFreshnessChecker.summary": {
+    "message": "Construye una herramienta CLI real que lee un pyproject.toml, verifica en PyPI versiones más nuevas de cada dependencia, y reporta qué está desactualizado — sin clave de API necesaria.",
+    "description": "Homepage project card summary"
   }
 }
