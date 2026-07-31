@@ -1,0 +1,42 @@
+Python Dictionaries, Quick Notes
+
+A dictionary stores key-value pairs, written with curly braces:
+
+    student = {"name": "Amina", "age": 21, "major": "Biology"}
+
+Keys must be unique and hashable (strings, numbers, and tuples work; lists
+do not, because lists are mutable and hashability requires the value to
+never change after creation). Values can be anything, including other
+dicts or lists.
+
+Look up a value by key with square brackets, which raises a KeyError if
+the key is missing, or with .get(key, default), which returns the default
+instead of crashing:
+
+    student["age"]          # 21
+    student.get("gpa", 0)   # 0 -- "gpa" isn't a key, so the default is used
+
+Add or update a key by assigning to it directly -- there's no separate
+"insert" method:
+
+    student["gpa"] = 3.8       # adds a new key
+    student["age"] = 22         # updates an existing key
+
+Loop over a dict with .items() to get both key and value at once, .keys()
+for just keys (the default if you loop over the dict directly), or
+.values() for just values:
+
+    for key, value in student.items():
+        print(key, "->", value)
+
+Remove a key with del student["gpa"], or with .pop("gpa", None) if you
+also want to keep the removed value (or avoid an error if it's missing).
+
+Dictionaries preserve insertion order since Python 3.7 -- iterating gives
+keys back in the order they were first added, not some arbitrary hash
+order like in older Python versions.
+
+A dict comprehension builds a dictionary in one line, the same idea as a
+list comprehension:
+
+    squares = {n: n * n for n in range(5)}   # {0: 0, 1: 1, 2: 4, 3: 9, 4: 16}
