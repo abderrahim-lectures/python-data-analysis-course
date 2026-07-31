@@ -1,0 +1,9 @@
+[project]
+name = "job-aggregator"
+version = "0.1.0"
+description = "Scrape, dedupe, and alert on job listings from sample job-board HTML."
+requires-python = ">=3.12"
+dependencies = [
+    "beautifulsoup4>=4.15.0",
+    "pandas>=3.0.5",
+]
