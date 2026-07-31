@@ -127,6 +127,12 @@ export const PROJECTS: ProjectMeta[] = [
     url: '/docs/projects/ai-agent',
     tags: ['AI Agents', 'LangChain'],
   },
+  {
+    id: '2027-habit-streak-visualizer',
+    date: '2027-08',
+    url: '/docs/projects/habit-streak-visualizer',
+    tags: ['Data Visualization', 'Pandas', 'Productivity'],
+  },
 ];
 
 interface TranslatedProjectText {
