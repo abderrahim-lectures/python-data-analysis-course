@@ -520,6 +520,24 @@ function RealWorldProjects() {
             }
           />
           <HomepageProjectCard
+            id="2027-webcam-object-counter"
+            title={
+              <Translate
+                id="homepage.projects.webcamObjectCounter.title"
+                description="Homepage project card title">
+                Count Objects in Real Time with a Webcam
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.webcamObjectCounter.summary"
+                description="Homepage project card summary">
+                Count objects live from a webcam feed with OpenCV and a pretrained YOLO11n model, no
+                API key or signup needed.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
             id="2027-wordle-clone"
             title={
               <Translate
