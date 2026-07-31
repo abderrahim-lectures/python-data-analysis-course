@@ -861,5 +861,13 @@
   "homepage.projects.githubIssueTriageAgent.summary": {
     "message": "Récupère les issues ouvertes d'un vrai dépôt GitHub public et utilise un LLM gratuit pour rédiger des étiquettes de tri suggérées et des justifications qu'un mainteneur humain relira.",
     "description": "Homepage project card summary"
+  },
+  "homepage.projects.habitStreakVisualizer.title": {
+    "message": "Construire un Visualiseur de Séries d'Habitudes",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.habitStreakVisualizer.summary": {
+    "message": "Suis les pointages quotidiens d'habitudes en local et affiche une carte de chaleur calendaire façon graphe de contributions GitHub, pour n'importe quelle habitude que tu veux suivre, avec pandas et matplotlib.",
+    "description": "Homepage project card summary"
   }
 }

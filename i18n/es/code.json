@@ -861,5 +861,13 @@
   "homepage.projects.githubIssueTriageAgent.summary": {
     "message": "Obtén issues abiertos de un repositorio público real de GitHub y usa un LLM de nivel gratuito para redactar etiquetas de triaje sugeridas y justificaciones para que un mantenedor humano las revise.",
     "description": "Homepage project card summary"
+  },
+  "homepage.projects.habitStreakVisualizer.title": {
+    "message": "Construye un Visualizador de Rachas de Hábitos",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.habitStreakVisualizer.summary": {
+    "message": "Rastrea check-ins diarios de hábitos localmente y renderiza un mapa de calor de calendario estilo grafo de contribuciones de GitHub, para cualquier hábito que quieras rastrear, con pandas y matplotlib.",
+    "description": "Homepage project card summary"
   }
 }
