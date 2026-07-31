@@ -869,5 +869,13 @@
   "homepage.projects.habitStreakVisualizer.summary": {
     "message": "تتبّع تسجيلات دخول عادات يومية محليًا واعرض خريطة حرارية تقويمية بأسلوب رسم مساهمات GitHub، لأي عادة تريد تتبعها، بـpandas وmatplotlib.",
     "description": "Homepage project card summary"
+  },
+  "homepage.projects.jobAggregator.title": {
+    "message": "بناء مُجمِّع إعلانات وظائف",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.jobAggregator.summary": {
+    "message": "استخرج بيانات من مصادر متعددة بأسلوب لوحة وظائف، وأزل التكرار بينها، ونبّه عن تطابقات جديدة مقابل مرشِّح كلمات مفتاحية — بـrequests/BeautifulSoup وpandas، بلا حاجة لمفتاح API.",
+    "description": "Homepage project card summary"
   }
 }

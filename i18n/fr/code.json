@@ -869,5 +869,13 @@
   "homepage.projects.habitStreakVisualizer.summary": {
     "message": "Suis les pointages quotidiens d'habitudes en local et affiche une carte de chaleur calendaire façon graphe de contributions GitHub, pour n'importe quelle habitude que tu veux suivre, avec pandas et matplotlib.",
     "description": "Homepage project card summary"
+  },
+  "homepage.projects.jobAggregator.title": {
+    "message": "Construire un Agrégateur d'Offres d'Emploi",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.jobAggregator.summary": {
+    "message": "Scrape plusieurs sources façon plateforme d'emploi, déduplique les annonces entre elles, et alerte sur les nouvelles correspondances par rapport à un filtre de mots-clés — avec requests/BeautifulSoup et pandas, aucune clé API nécessaire.",
+    "description": "Homepage project card summary"
   }
 }
