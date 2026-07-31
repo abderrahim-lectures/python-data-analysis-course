@@ -1,0 +1,9 @@
+[project]
+name = "mcp-notes-server-example"
+version = "0.1.0"
+description = "A real, runnable MCP server example -- indexes a folder of Markdown notes and exposes search/lookup tools with FastMCP, for the course's Build an MCP Server for Your Notes project."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "mcp[cli]>=1.6.0",
+]
