@@ -1,0 +1,10 @@
+[project]
+name = "meeting-notes-summarizer"
+version = "0.1.0"
+description = "Local companion to the course's 'Build a Meeting-Notes Summarizer' project: extracts decisions, action items, and open questions from a meeting transcript as structured JSON and Markdown, using a free-tier LLM."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "openai>=1.59.0",
+    "python-dotenv>=1.2.2",
+]
