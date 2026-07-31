@@ -134,6 +134,12 @@ export const PROJECTS: ProjectMeta[] = [
     tags: ['AI Agents', 'LangChain'],
   },
   {
+    id: '2027-wordle-clone',
+    date: '2027-08',
+    url: '/docs/projects/wordle-clone',
+    tags: ['Games', 'CLI Tools'],
+  },
+  {
     id: '2027-habit-streak-visualizer',
     date: '2027-08',
     url: '/docs/projects/habit-streak-visualizer',

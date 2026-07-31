@@ -520,6 +520,24 @@ function RealWorldProjects() {
             }
           />
           <HomepageProjectCard
+            id="2027-wordle-clone"
+            title={
+              <Translate
+                id="homepage.projects.wordleClone.title"
+                description="Homepage project card title">
+                Build a Wordle Clone
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.wordleClone.summary"
+                description="Homepage project card summary">
+                Build a real terminal Wordle game from scratch: correct guess feedback, a custom
+                word list, and persistent stats tracking across sessions.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
             id="2027-habit-streak-visualizer"
             title={
               <Translate
