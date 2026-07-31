@@ -821,5 +821,13 @@
   "homepage.projects.commitMessageAgent.summary": {
     "message": "اصغ رسالة بأسلوب Conventional Commits من فرق git staged حقيقي بنموذج لغوي من مستوى مجاني، ولا تُثبِّت الالتزام إلا بعد موافقتك الصريحة.",
     "description": "Homepage project card summary"
+  },
+  "homepage.projects.dependencyFreshnessChecker.title": {
+    "message": "بناء مدقق حداثة التبعيات",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.dependencyFreshnessChecker.summary": {
+    "message": "ابنِ أداة CLI حقيقية تقرأ pyproject.toml، وتتحقق من PyPI عن إصدارات أحدث لكل تبعية، وتُبلِّغ عمّا هو قديم — بلا حاجة لمفتاح API.",
+    "description": "Homepage project card summary"
   }
 }
