@@ -23,21 +23,22 @@ This is optional and ungraded. See [Real-World Projects](/docs/projects) for the
 
 ## 🎯 What you'll do
 
-1. Install `uv`, a fast, modern tool for managing Python itself and your project's dependencies.
-2. Take a folder of your own `.md`/`.txt` notes and split them into small, searchable chunks.
-3. Turn each chunk into a vector — a list of numbers capturing its meaning — entirely locally, with no API key and no cost, using `sentence-transformers`.
-4. Write a small local search function that finds the chunks most relevant to a question, using nothing but `numpy`.
-5. Get a free-tier LLM API key and write a script that retrieves relevant chunks, then asks the model to answer *using only that context*.
+1. Take a folder of your own `.md`/`.txt` notes and split them into small, searchable chunks.
+2. Turn each chunk into a vector — a list of numbers capturing its meaning — entirely locally, with no API key and no cost, using `sentence-transformers`.
+3. Write a small local search function that finds the chunks most relevant to a question, using nothing but `numpy`.
+4. Write a script that retrieves relevant chunks, then asks a free-tier LLM to answer *using only that context*.
 
 ## Where to run this
 
-**Locally with `uv`** is the path this lesson's steps follow, and the recommended one — it's real Python running on your own machine, the same "graduate to real Python" move as every other project in this section. Step 1 below walks through installing it.
+**Locally with `uv`** is the path this lesson's steps follow, and the recommended one — it's real Python running on your own machine, the same "graduate to real Python" move as every other project in this section. The Setup section below walks through installing it.
 
 **GitHub Codespaces** is a zero-setup alternative if you'd rather not install anything locally yet: open [the whole course repo in a free Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python, and `uv` are already installed, per the repo's `.devcontainer/devcontainer.json`) and run the exact same `uv` commands from a terminal in your browser tab.
 
 **Google Colab or Kaggle Notebooks** also work, since this project — unlike the fine-tuning one — needs no GPU: create a new notebook, run `!pip install sentence-transformers numpy` in a cell, then paste the scripts below in as notebook cells, adapting file paths as needed. Be honest with yourself about the tradeoff, though: this is a lower-fidelity way to experience the project than a real local `uv` project — no separate files, no real project structure, just cells in a notebook. Treat it as a quick way to experiment, not the primary path.
 
-## Step 1: Install `uv`
+## Setup
+
+### Install `uv`
 
 `uv` is a single tool that replaces the usual "install Python, then install pip, then install a virtual environment tool, then install packages" chain — it can install and manage Python versions itself, alongside your project's dependencies.
 
@@ -67,9 +68,42 @@ cd rag-notes
 uv add sentence-transformers numpy python-dotenv
 ```
 
-`sentence-transformers` is the library that turns text into vectors locally, on your own CPU — no API call, no key. `numpy` does the actual math for comparing vectors. `python-dotenv` lets you keep your LLM API key (Step 5) in a local `.env` file.
+`sentence-transformers` is the library that turns text into vectors locally, on your own CPU — no API call, no key. `numpy` does the actual math for comparing vectors. `python-dotenv` lets you keep your LLM API key in a local `.env` file.
 
-## Step 2: Prepare your notes
+### Get a free LLM API key
+
+Generation (the last step of this project) needs a free-tier LLM API — retrieval itself (embedding and searching your notes) is fully local and needs no key at all, but it's simplest to get this set up now, before you start building, rather than pausing partway through.
+
+**Pick whichever provider you like** — none of them require a credit card at the time of writing, and this course doesn't favor one over another.
+
+| Provider | Where to get a key | Why you might pick it |
+|---|---|---|
+| **GitHub Models** *(suggested default)* | [github.com/settings/tokens](https://github.com/settings/tokens) — a personal access token with the `models: read` scope | No separate signup — you already have a GitHub account. More generous free-tier limits than Gemini's. |
+| Gemini | [Google AI Studio](https://aistudio.google.com/) | The most commonly referenced option. |
+| Groq | [console.groq.com/keys](https://console.groq.com/keys) | Fast inference, generous free tier, no card. |
+| Mistral | [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys) | One of the more generous permanent free quotas. |
+| Cerebras | [cloud.cerebras.ai](https://cloud.cerebras.ai/) | High daily token volume, no card. |
+| OpenRouter | [openrouter.ai/keys](https://openrouter.ai/keys) | One API, many free models — good for comparing providers. |
+
+Whichever you pick, the process is the same:
+
+1. Sign in and generate an API key on that provider's site.
+2. **Never paste this key directly into code or commit it to a repository.** Put it in a `.env` file instead (already gitignored):
+
+```bash
+# .env
+GITHUB_TOKEN=your-key-here
+```
+
+`python-dotenv` (installed above) reads this file into `os.environ` automatically, the same pattern used throughout the [AI Agent project](/docs/projects/ai-agent) if you've done that one — GitHub Models happens to expose an OpenAI-compatible API, so the plain `openai` client library works for it without any extra package:
+
+```bash
+uv add openai
+```
+
+If you picked a different provider, swap in that provider's own client when you get to the generation step below (see the tip there).
+
+## Step 1: Prepare your notes
 
 Put your notes in a `notes/` folder as plain `.md` or `.txt` files — lecture notes, a journal, documentation you've written, anything. The app you're building only ever answers from what's actually in these files.
 
@@ -86,7 +120,7 @@ Split each file into chunks by paragraph, then re-merge tiny paragraphs up to a 
 
 Run with: uv run python prepare_notes.py
 
-This only prints a summary -- build_index.py (Step 3) imports load_chunks()
+This only prints a summary -- build_index.py (Step 2) imports load_chunks()
 from this file and does the actual embedding.
 """
 
@@ -160,16 +194,16 @@ Smaller chunks retrieve more precisely (a question matches a narrow, specific pi
 - If you split on blank lines but one of your notes files has no blank lines at all (just one giant paragraph), what would `split_into_paragraphs` return, and what would that do to retrieval later?
 - What would happen to retrieval quality if you made `TARGET_CHUNK_SIZE` much larger — say, 5,000 characters? Much smaller, like 50? Why?
 
-## Step 3: Embed your notes locally
+## Step 2: Embed your notes locally
 
 An **embedding** is a list of numbers — a vector — that represents a piece of text's *meaning*, not its exact wording. `all-MiniLM-L6-v2` maps each chunk to a point in 384-dimensional space, and it's trained so that chunks with similar meaning end up close together in that space, while unrelated chunks end up far apart. You already have the core intuition for this: it's the same idea as plotting numeric data on axes, just with 384 axes instead of 2, and "close together" measured the same way you'd measure distance in any space of numbers.
 
-This model is small (about 80MB), runs entirely on your CPU in about a second per chunk on a typical laptop, needs no API key, and costs nothing — unlike the LLM in Step 5, embedding is fully local.
+This model is small (about 80MB), runs entirely on your CPU in about a second per chunk on a typical laptop, needs no API key, and costs nothing — unlike the LLM in Step 4, embedding is fully local.
 
 ```python
 # build_index.py
 """Embeds every chunk from prepare_notes.py and saves the vectors + text
-locally, so retrieve() (Step 4) doesn't need to re-embed anything at query time.
+locally, so retrieve() (Step 3) doesn't need to re-embed anything at query time.
 
 Run with: uv run python build_index.py
 Re-run this any time you add or edit files in notes/ -- the saved index
@@ -217,14 +251,14 @@ uv run python build_index.py
 
 This deliberately avoids a vector database — for a personal folder of notes (hundreds or low thousands of chunks, not millions), a plain NumPy array that fits comfortably in memory is simpler, has no extra service to install or run, and is fully transparent: `index.npy` is a matrix, `chunks.json` is the text it came from, nothing more.
 
-`normalize_embeddings=True` scales every vector to length 1 — worth doing now rather than at query time, since it's what makes Step 4's cosine similarity reduce to a single dot product.
+`normalize_embeddings=True` scales every vector to length 1 — worth doing now rather than at query time, since it's what makes Step 3's cosine similarity reduce to a single dot product.
 
 **✅ Checklist**
 
 <StepChecklist>
 <StepChecklistItem>`uv run python build_index.py` completed without errors.</StepChecklistItem>
 <StepChecklistItem>An `index.npy` file and a `chunks.json` file now exist in your project folder.</StepChecklistItem>
-<StepChecklistItem>The printed shape's first number matches the chunk count from Step 2, and the second number is 384.</StepChecklistItem>
+<StepChecklistItem>The printed shape's first number matches the chunk count from Step 1, and the second number is 384.</StepChecklistItem>
 </StepChecklist>
 
 **🤔 Socratic Question(s)**
@@ -232,7 +266,7 @@ This deliberately avoids a vector database — for a personal folder of notes (h
 - Two chunks use the word "Python" in completely different senses — one about the programming language, one about a snake. Do you expect their embedding vectors to end up close together or far apart? What does that tell you about what the embedding model is actually capturing?
 - Why save the embeddings to a file at all, instead of just re-embedding all your notes every time you ask a question?
 
-## Step 4: Retrieve relevant chunks
+## Step 3: Retrieve relevant chunks
 
 To find which chunks are relevant to a question, embed the question with the *same* model, then rank every chunk by how close its vector is to the question's vector. The standard way to measure "close" for embeddings is **cosine similarity** — the cosine of the angle between two vectors, which cares about *direction* (meaning) and ignores *magnitude* (roughly, text length):
 
@@ -246,7 +280,7 @@ Since every vector was already normalized to length 1 when it was saved ($\|a\| 
 # retrieve.py
 """Given a question, finds the notes chunks most relevant to it.
 
-Imported by ask.py (Step 5) -- not meant to be run directly, though the
+Imported by ask.py (Step 4) -- not meant to be run directly, though the
 __main__ block below lets you try it standalone.
 """
 
@@ -278,7 +312,7 @@ def retrieve(question: str, top_k: int = 3) -> list[dict]:
 
     question_vector = get_model().encode([question], normalize_embeddings=True)[0]
 
-    # Every row of `embeddings` is already unit-length (Step 3), and so is
+    # Every row of `embeddings` is already unit-length (Step 2), and so is
     # question_vector, so this dot product *is* the cosine similarity.
     similarities = embeddings @ question_vector
 
@@ -314,36 +348,9 @@ uv run python retrieve.py
 - `np.argsort(similarities)[::-1][:top_k]` sorts *all* similarities before taking the top few. For a personal notes folder this is fine, but why might sorting the entire array become a problem if you had ten million chunks instead of a few hundred?
 - What would you expect to happen to the top result's score if you asked a question that has no real answer anywhere in your notes? Try it — does the score confirm your prediction?
 
-## Step 5: Generate an answer with a free LLM
+## Step 4: Generate an answer with a free LLM
 
-Retrieval alone gives you back raw chunks of your own notes — useful, but not a written answer. The last step hands those chunks to a language model as context and asks it to answer *using them*. This is what "RAG" (retrieval-augmented generation) means: generation, augmented by a retrieval step run first.
-
-**Pick whichever provider you like** — none of them require a credit card at the time of writing, and this course doesn't favor one over another.
-
-| Provider | Where to get a key | Why you might pick it |
-|---|---|---|
-| **GitHub Models** *(suggested default)* | [github.com/settings/tokens](https://github.com/settings/tokens) — a personal access token with the `models: read` scope | No separate signup — you already have a GitHub account. More generous free-tier limits than Gemini's. |
-| Gemini | [Google AI Studio](https://aistudio.google.com/) | The most commonly referenced option. |
-| Groq | [console.groq.com/keys](https://console.groq.com/keys) | Fast inference, generous free tier, no card. |
-| Mistral | [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys) | One of the more generous permanent free quotas. |
-| Cerebras | [cloud.cerebras.ai](https://cloud.cerebras.ai/) | High daily token volume, no card. |
-| OpenRouter | [openrouter.ai/keys](https://openrouter.ai/keys) | One API, many free models — good for comparing providers. |
-
-Whichever you pick, the process is the same:
-
-1. Sign in and generate an API key on that provider's site.
-2. **Never paste this key directly into code or commit it to a repository.** Put it in a `.env` file instead (already gitignored if you followed Step 1):
-
-```bash
-# .env
-GITHUB_TOKEN=your-key-here
-```
-
-`python-dotenv` (installed in Step 1) reads this file into `os.environ` automatically, the same pattern used throughout the [AI Agent project](/docs/projects/ai-agent) if you've done that one — GitHub Models happens to expose an OpenAI-compatible API, so the plain `openai` client library works for it without any extra package:
-
-```bash
-uv add openai
-```
+Retrieval alone gives you back raw chunks of your own notes — useful, but not a written answer. The last step hands those chunks to a language model as context and asks it to answer *using them*. This is what "RAG" (retrieval-augmented generation) means: generation, augmented by a retrieval step run first. You already got a free-tier API key and installed the `openai` client during Setup, above.
 
 ```python
 # ask.py
@@ -406,7 +413,7 @@ uv run python ask.py "What is this course about?"
 `build_prompt` is the whole idea of RAG in one function: it doesn't ask the model to answer from what it already knows, it hands the model the *actual retrieved text* and asks it to answer from that — which is why a RAG app can correctly answer questions about notes the underlying model has never seen before, written yesterday, on your own machine.
 
 :::tip[Using a different provider?]
-Swap the `OpenAI(...)` block for your provider's own client, following the same pattern as the [AI Agent project](/docs/projects/ai-agent#step-4-write-your-first-agent) — e.g. Google's `google-genai` package for Gemini, or `groq`'s own client for Groq. Cerebras and OpenRouter are also OpenAI-compatible, so the `openai` package works for them too, just with a different `base_url`.
+Swap the `OpenAI(...)` block for your provider's own client, following the same pattern as the [AI Agent project](/docs/projects/ai-agent#step-1-write-your-first-agent) — e.g. Google's `google-genai` package for Gemini, or `groq`'s own client for Groq. Cerebras and OpenRouter are also OpenAI-compatible, so the `openai` package works for them too, just with a different `base_url`.
 :::
 
 **✅ Checklist**
@@ -424,10 +431,10 @@ Swap the `OpenAI(...)` block for your provider's own client, following the same 
 
 ## ⚠️ Common pitfalls
 
-- **Chunks too large or too small.** Too large and retrieval gets blurry (Step 2); too small and a chunk loses the surrounding context the model needs to answer well. If answers feel off, try a different `TARGET_CHUNK_SIZE` and re-run `build_index.py`.
+- **Chunks too large or too small.** Too large and retrieval gets blurry (Step 1); too small and a chunk loses the surrounding context the model needs to answer well. If answers feel off, try a different `TARGET_CHUNK_SIZE` and re-run `build_index.py`.
 - **Forgetting to rebuild the index after editing `notes/`.** `build_index.py` only runs when you run it — add a new note, and `retrieve()` won't find anything in it until you re-run `uv run python build_index.py`. There's no file-watcher here; this is a manual step by design, so you always know exactly what's indexed.
 - **Embedding the question with a different model than the one used to build the index.** `retrieve.py` and `build_index.py` both hardcode `MODEL_NAME = "all-MiniLM-L6-v2"` on purpose — vectors from two different embedding models aren't comparable to each other at all, even if both are "384-dimensional." Change the model in one file and you must change it in both, then rebuild the index.
-- **Rate limits on the free LLM tier.** Retrieval (Steps 3-4) is local and unlimited; only Step 5's `ask()` call counts against your provider's free-tier quota. A 429 error there is the provider telling you to slow down, not a bug — see the [AI Agent project](/docs/projects/ai-agent#handling-rate-limits) for the same pattern and a retry approach you can copy.
+- **Rate limits on the free LLM tier.** Retrieval (Steps 2-3) is local and unlimited; only Step 4's `ask()` call counts against your provider's free-tier quota. A 429 error there is the provider telling you to slow down, not a bug — see the [AI Agent project](/docs/projects/ai-agent#handling-rate-limits) for the same pattern and a retry approach you can copy.
 
 ## What you just built
 

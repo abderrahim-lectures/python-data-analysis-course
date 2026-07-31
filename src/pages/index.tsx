@@ -209,6 +209,113 @@ function RealWorldProjects() {
             }
           />
           <HomepageProjectCard
+            id="study-buddy-agent"
+            title={
+              <Translate
+                id="homepage.projects.studyBuddyAgent.title"
+                description="Homepage project card title">
+                Build a Study-Buddy Quiz Agent
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.studyBuddyAgent.summary"
+                description="Homepage project card summary">
+                Turn your own study notes into an interactive quiz: a free-tier LLM writes
+                questions grounded in your notes, then judges your typed answers.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
+            id="codebase-knowledge-graph"
+            title={
+              <Translate
+                id="homepage.projects.codebaseKnowledgeGraph.title"
+                description="Homepage project card title">
+                Turn a Codebase into a Knowledge Graph
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.codebaseKnowledgeGraph.summary"
+                description="Homepage project card summary">
+                Parse a real codebase's Python files with the ast module, build a graph of its
+                structure with networkx, and visualize and query it — no API key needed.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
+            id="docs-qa-bot"
+            title={
+              <Translate id="homepage.projects.docsQaBot.title" description="Homepage project card title">
+                Build a RAG-Backed Docs Q&A Discord Bot
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.docsQaBot.summary"
+                description="Homepage project card summary">
+                Wrap the RAG App project's retrieval pipeline in a live Discord bot that answers
+                questions from a folder of documentation.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
+            id="email-triage-agent"
+            title={
+              <Translate
+                id="homepage.projects.emailTriageAgent.title"
+                description="Homepage project card title">
+                Build a Personal Email-Triage Agent
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.emailTriageAgent.summary"
+                description="Homepage project card summary">
+                Categorize, prioritize, and draft replies for a batch of emails with a free-tier
+                LLM — the agent never sends anything, only you do.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
+            id="multi-agent-research"
+            title={
+              <Translate
+                id="homepage.projects.multiAgentResearch.title"
+                description="Homepage project card title">
+                Build a Multi-Agent Research Assistant
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.multiAgentResearch.summary"
+                description="Homepage project card summary">
+                Build a small multi-agent system — a planner, a researcher, and a writer — that
+                breaks down a research question and synthesizes a final report, using deepagents
+                sub-agents and a free-tier LLM.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
+            id="agentic-code-reviewer"
+            title={
+              <Translate
+                id="homepage.projects.agenticCodeReviewer.title"
+                description="Homepage project card title">
+                Build an Agentic Code Reviewer
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.agenticCodeReviewer.summary"
+                description="Homepage project card summary">
+                Build a CLI tool that reads a real git diff via subprocess and asks a free-tier
+                LLM to review it like a human reviewer would.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
             id="mcp-server"
             title={
               <Translate id="homepage.projects.mcpServer.title" description="Homepage project card title">
