@@ -877,5 +877,13 @@
   "homepage.projects.jobAggregator.summary": {
     "message": "استخرج بيانات من مصادر متعددة بأسلوب لوحة وظائف، وأزل التكرار بينها، ونبّه عن تطابقات جديدة مقابل مرشِّح كلمات مفتاحية — بـrequests/BeautifulSoup وpandas، بلا حاجة لمفتاح API.",
     "description": "Homepage project card summary"
+  },
+  "homepage.projects.mcpNotesServer.title": {
+    "message": "بناء خادم MCP لملاحظاتك",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.mcpNotesServer.summary": {
+    "message": "فهرس مجلد Markdown حقيقي لملاحظات واعرضه لـClaude Desktop كأدوات قابلة للبحث بـModel Context Protocol.",
+    "description": "Homepage project card summary"
   }
 }

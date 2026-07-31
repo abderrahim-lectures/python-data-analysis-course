@@ -41,8 +41,6 @@ That said, if you just want to poke at the search and lookup functions as plain 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/mcp-notes-server/notebook.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/mcp-notes-server/notebook.ipynb)
 
-(will point at `main` once merged)
-
 It calls the same tool logic directly as ordinary functions, with no decorator, no server, and no client connection -- useful for experimenting with the code, not a substitute for the actual project below.
 
 ## Setup
