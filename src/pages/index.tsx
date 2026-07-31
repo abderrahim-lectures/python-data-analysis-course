@@ -538,6 +538,24 @@ function RealWorldProjects() {
             }
           />
           <HomepageProjectCard
+            id="2027-browser-automation-agent"
+            title={
+              <Translate
+                id="homepage.projects.browserAutomationAgent.title"
+                description="Homepage project card title">
+                Build a Browser-Automation Agent
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.browserAutomationAgent.summary"
+                description="Homepage project card summary">
+                Combine Playwright browser automation with a free-tier LLM tool-calling agent
+                that fills out a real practice web form on its own.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
             id="2027-webcam-object-counter"
             title={
               <Translate
