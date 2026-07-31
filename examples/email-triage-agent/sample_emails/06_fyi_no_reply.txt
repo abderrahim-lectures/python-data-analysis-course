@@ -1,0 +1,16 @@
+From: notifications@teamboard.example.com
+To: you@example.com
+Subject: [TeamBoard] Your weekly project summary is ready
+Date: Sun, 19 Jul 2026 23:00:00 -0400
+
+Hi,
+
+Here's your automated weekly summary for the "Website Redesign" board:
+
+- 8 tasks completed this week
+- 3 tasks moved to "In Review"
+- 1 task overdue: "Finalize color palette" (assigned to Jordan)
+
+No action is needed from you -- this is an automated summary email sent
+every Sunday. You can adjust your notification preferences in your
+account settings.
