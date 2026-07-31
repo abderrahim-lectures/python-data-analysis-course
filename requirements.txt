@@ -1,0 +1,30 @@
+# Pre-installed environment for MyBinder (repo2docker) launches of the
+# notebooks under examples/*/notebook.ipynb — see docs/projects/*/index.md
+# "Where to run this" sections for the Colab/Kaggle/Binder badges.
+#
+# Each notebook also has its own `!pip install` first cell (so it still works
+# standalone on Colab/Kaggle, which don't read this file), but pre-installing
+# everything here means a Binder launch doesn't reinstall packages from
+# scratch on every session.
+#
+# The finetune-llm-unsloth project intentionally has no Binder badge (its
+# fine-tuning step needs a GPU Binder's free tier doesn't have), so its heavy
+# deps (torch, transformers, peft, datasets) are deliberately left out.
+
+deepagents>=0.6.12
+langchain-openai>=1.3.5
+langchain-google-genai>=4.2.7
+langchain-groq>=1.1.3
+langchain-mistralai>=1.1.6
+python-dotenv>=1.2.2
+openai>=1.59.0
+openai-whisper
+requests
+beautifulsoup4
+pandas
+matplotlib
+scikit-learn
+numpy
+sentence-transformers
+networkx
+pyvis

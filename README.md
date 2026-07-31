@@ -73,6 +73,8 @@ The badge above opens a ready-to-go [GitHub Codespace](https://github.com/featur
 
 [`examples/ai-agent/`](./examples/ai-agent/) is a real, runnable copy of the agent built in the [Build an AI Agent](./docs/projects/ai-agent/index.md) project — see its own README for how to run it (locally with `uv run python agent.py`, or directly in Codespaces). Each project gets its own `examples/<slug>/` folder.
 
+Most projects also ship a `notebook.ipynb` alongside their example code, with one-click Colab/Kaggle/Binder badges on the project's own page ("Where to run this") — a lower-setup way to try a project before committing to a local `uv` install. The root-level [`requirements.txt`](./requirements.txt) pre-installs the packages these notebooks need so MyBinder launches build a shared, cached environment instead of reinstalling from scratch every time.
+
 [`examples/finetune-llm-unsloth/`](./examples/finetune-llm-unsloth/) is the local companion to the [Fine-tune a Small Language Model](./docs/projects/finetune-llm-unsloth/index.md) project — dataset prep and local inference scripts; the fine-tuning step itself runs on a free Colab/Kaggle GPU notebook, linked from the project.
 
 [`examples/rag-notes/`](./examples/rag-notes/) is the companion to the [Build a RAG App](./docs/projects/rag-notes/index.md) project — local embeddings with `sentence-transformers`, a NumPy similarity search, and a free-tier LLM call for the final answer.

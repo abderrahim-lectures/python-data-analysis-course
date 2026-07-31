@@ -1,0 +1,17 @@
+Q3 Product Planning -- Mobile App Team
+
+Devon: Thanks for joining. Today we need to lock the Q3 roadmap. Let's start with the offline mode proposal.
+Sofia: I've reviewed the spec. I think we should ship offline mode for reading, but not for editing -- editing offline opens up a whole conflict-resolution problem we don't have time for this quarter.
+Devon: Agreed. Let's decide that now: offline mode ships read-only in Q3, editing support is explicitly out of scope for this quarter.
+Liam: Works for me. I can start on the local caching layer next week.
+Devon: Good, Liam, that's yours then -- local caching layer, targeting a first working version by the end of the month.
+Sofia: What about the redesigned onboarding flow? Marketing's been asking about it.
+Devon: I don't think we can commit to that this quarter with the offline mode work already planned. Let's leave that as an open question for the Q4 planning session instead of deciding now.
+Liam: Fair. One more thing -- do we know yet whether the offline cache should use SQLite or just flat files? I haven't seen a decision on that anywhere.
+Sofia: No, that's still open. I can spike on both next week and bring a recommendation.
+Devon: Perfect, Sofia can you own that spike and report back by Thursday?
+Sofia: Yep, I've got it.
+Devon: Last thing -- push notifications for offline sync completion. Are we doing that in Q3 or not?
+Liam: I'd lean toward yes, but we haven't actually agreed on it as a team.
+Devon: Let's leave that open too -- we'll revisit once the caching layer spike is done, since it depends on what Sofia finds.
+Devon: Okay, I think that covers the big items. Thanks everyone.
