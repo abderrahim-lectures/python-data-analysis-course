@@ -31,6 +31,17 @@ The AI Agent project runs entirely on your own machine. This one can't, fully �
 3. Get free GPU access via Google Colab or Kaggle, and use Unsloth to LoRA-fine-tune a small open model (around 1 billion parameters) on your dataset.
 4. Download the result — a small "adapter" file, not a whole new model — and run it locally to see your fine-tuned model in action.
 
+## Where to run this
+
+**Locally with `uv`** is the path this lesson's steps follow, and the recommended one for Setup, dataset prep, and local inference (Steps 1 and 3) — the Setup section below walks through installing it. Step 2, the actual fine-tuning, needs a GPU and runs on Unsloth's own official Colab/Kaggle notebook regardless (see Step 2 below), since that step genuinely can't happen on most laptops.
+
+If you'd rather try the local dataset-prep and inference steps in a hosted notebook instead of with `uv`, there's a companion notebook for exactly that:
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/finetune-llm-unsloth/notebook.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/finetune-llm-unsloth/notebook.ipynb)
+
+This badge covers the **local** steps only (dataset prep and inference) — the fine-tuning step itself still uses Unsloth's own official notebook, linked separately in Step 2.
+
 ## Setup
 
 `uv` is a single tool that replaces the usual "install Python, then install pip, then install a virtual environment tool, then install packages" chain — it can install and manage Python versions itself, alongside your project's dependencies.

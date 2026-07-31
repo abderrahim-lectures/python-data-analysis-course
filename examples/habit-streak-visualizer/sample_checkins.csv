@@ -1,0 +1,375 @@
+date,habit,done
+2026-01-01,Exercise,n
+2026-01-01,Read 10 pages,y
+2026-01-02,Exercise,y
+2026-01-02,Read 10 pages,y
+2026-01-03,Exercise,y
+2026-01-04,Exercise,y
+2026-01-04,Read 10 pages,n
+2026-01-05,Exercise,n
+2026-01-05,Read 10 pages,n
+2026-01-06,Exercise,n
+2026-01-06,Read 10 pages,y
+2026-01-07,Exercise,n
+2026-01-07,Read 10 pages,n
+2026-01-08,Exercise,y
+2026-01-08,Read 10 pages,n
+2026-01-09,Exercise,n
+2026-01-09,Read 10 pages,y
+2026-01-10,Exercise,y
+2026-01-10,Read 10 pages,y
+2026-01-11,Exercise,y
+2026-01-11,Read 10 pages,n
+2026-01-12,Exercise,n
+2026-01-13,Exercise,y
+2026-01-13,Read 10 pages,y
+2026-01-14,Exercise,y
+2026-01-14,Read 10 pages,y
+2026-01-15,Exercise,n
+2026-01-15,Read 10 pages,y
+2026-01-16,Exercise,n
+2026-01-16,Read 10 pages,y
+2026-01-17,Exercise,y
+2026-01-17,Read 10 pages,y
+2026-01-18,Exercise,n
+2026-01-19,Exercise,n
+2026-01-19,Read 10 pages,y
+2026-01-20,Exercise,y
+2026-01-20,Read 10 pages,n
+2026-01-21,Exercise,y
+2026-01-21,Read 10 pages,y
+2026-01-22,Exercise,y
+2026-01-22,Read 10 pages,n
+2026-01-23,Exercise,y
+2026-01-23,Read 10 pages,n
+2026-01-24,Exercise,y
+2026-01-24,Read 10 pages,y
+2026-01-25,Exercise,n
+2026-01-25,Read 10 pages,y
+2026-01-26,Exercise,y
+2026-01-26,Read 10 pages,n
+2026-01-27,Exercise,y
+2026-01-28,Exercise,y
+2026-01-28,Read 10 pages,n
+2026-01-29,Exercise,y
+2026-01-29,Read 10 pages,y
+2026-01-30,Exercise,y
+2026-01-30,Read 10 pages,y
+2026-01-31,Exercise,y
+2026-01-31,Read 10 pages,n
+2026-02-01,Exercise,y
+2026-02-01,Read 10 pages,y
+2026-02-02,Exercise,y
+2026-02-02,Read 10 pages,n
+2026-02-03,Exercise,n
+2026-02-03,Read 10 pages,n
+2026-02-04,Exercise,y
+2026-02-04,Read 10 pages,n
+2026-02-05,Exercise,y
+2026-02-06,Exercise,y
+2026-02-06,Read 10 pages,y
+2026-02-07,Exercise,y
+2026-02-07,Read 10 pages,n
+2026-02-08,Exercise,y
+2026-02-09,Exercise,y
+2026-02-10,Exercise,y
+2026-02-11,Exercise,y
+2026-02-11,Read 10 pages,y
+2026-02-12,Exercise,y
+2026-02-12,Read 10 pages,n
+2026-02-13,Exercise,y
+2026-02-13,Read 10 pages,n
+2026-02-14,Exercise,y
+2026-02-14,Read 10 pages,y
+2026-02-15,Exercise,y
+2026-02-15,Read 10 pages,n
+2026-02-16,Exercise,y
+2026-02-17,Exercise,y
+2026-02-17,Read 10 pages,y
+2026-02-18,Exercise,y
+2026-02-19,Exercise,y
+2026-02-19,Read 10 pages,n
+2026-02-20,Exercise,y
+2026-02-20,Read 10 pages,n
+2026-02-21,Exercise,y
+2026-02-21,Read 10 pages,y
+2026-02-22,Exercise,y
+2026-02-23,Exercise,n
+2026-02-24,Exercise,y
+2026-02-24,Read 10 pages,n
+2026-02-25,Exercise,y
+2026-02-25,Read 10 pages,n
+2026-02-26,Exercise,y
+2026-02-26,Read 10 pages,y
+2026-02-27,Exercise,y
+2026-02-28,Exercise,y
+2026-02-28,Read 10 pages,n
+2026-03-01,Exercise,y
+2026-03-01,Read 10 pages,n
+2026-03-02,Exercise,n
+2026-03-02,Read 10 pages,y
+2026-03-03,Exercise,y
+2026-03-03,Read 10 pages,y
+2026-03-04,Exercise,y
+2026-03-04,Read 10 pages,n
+2026-03-05,Exercise,y
+2026-03-05,Read 10 pages,n
+2026-03-06,Exercise,y
+2026-03-06,Read 10 pages,n
+2026-03-07,Exercise,y
+2026-03-07,Read 10 pages,n
+2026-03-08,Exercise,y
+2026-03-08,Read 10 pages,n
+2026-03-09,Exercise,y
+2026-03-10,Exercise,y
+2026-03-10,Read 10 pages,y
+2026-03-11,Exercise,y
+2026-03-11,Read 10 pages,n
+2026-03-12,Exercise,y
+2026-03-12,Read 10 pages,n
+2026-03-13,Exercise,n
+2026-03-13,Read 10 pages,n
+2026-03-14,Exercise,y
+2026-03-15,Exercise,y
+2026-03-15,Read 10 pages,n
+2026-03-16,Exercise,y
+2026-03-16,Read 10 pages,n
+2026-03-17,Exercise,y
+2026-03-17,Read 10 pages,y
+2026-03-18,Exercise,n
+2026-03-18,Read 10 pages,y
+2026-03-19,Exercise,y
+2026-03-20,Exercise,y
+2026-03-20,Read 10 pages,y
+2026-03-21,Exercise,y
+2026-03-21,Read 10 pages,n
+2026-03-22,Exercise,y
+2026-03-22,Read 10 pages,n
+2026-03-23,Exercise,y
+2026-03-23,Read 10 pages,n
+2026-03-24,Exercise,y
+2026-03-24,Read 10 pages,n
+2026-03-25,Exercise,y
+2026-03-26,Exercise,y
+2026-03-26,Read 10 pages,y
+2026-03-27,Exercise,y
+2026-03-27,Read 10 pages,y
+2026-03-28,Exercise,n
+2026-03-29,Exercise,y
+2026-03-29,Read 10 pages,n
+2026-03-30,Exercise,y
+2026-03-30,Read 10 pages,n
+2026-03-31,Exercise,y
+2026-03-31,Read 10 pages,y
+2026-04-01,Exercise,y
+2026-04-01,Read 10 pages,y
+2026-04-02,Exercise,y
+2026-04-02,Read 10 pages,y
+2026-04-03,Exercise,y
+2026-04-03,Read 10 pages,y
+2026-04-04,Exercise,y
+2026-04-04,Read 10 pages,n
+2026-04-05,Exercise,y
+2026-04-05,Read 10 pages,y
+2026-04-06,Exercise,y
+2026-04-07,Exercise,n
+2026-04-07,Read 10 pages,y
+2026-04-08,Exercise,y
+2026-04-08,Read 10 pages,n
+2026-04-09,Exercise,n
+2026-04-09,Read 10 pages,y
+2026-04-10,Exercise,n
+2026-04-10,Read 10 pages,y
+2026-04-11,Exercise,y
+2026-04-11,Read 10 pages,y
+2026-04-12,Exercise,n
+2026-04-13,Exercise,n
+2026-04-13,Read 10 pages,n
+2026-04-14,Exercise,n
+2026-04-14,Read 10 pages,n
+2026-04-15,Exercise,n
+2026-04-15,Read 10 pages,y
+2026-04-16,Exercise,n
+2026-04-16,Read 10 pages,y
+2026-04-17,Exercise,y
+2026-04-17,Read 10 pages,y
+2026-04-18,Exercise,n
+2026-04-18,Read 10 pages,n
+2026-04-19,Exercise,n
+2026-04-19,Read 10 pages,y
+2026-04-20,Exercise,n
+2026-04-20,Read 10 pages,y
+2026-04-21,Exercise,n
+2026-04-21,Read 10 pages,n
+2026-04-22,Exercise,n
+2026-04-22,Read 10 pages,y
+2026-04-23,Exercise,n
+2026-04-23,Read 10 pages,n
+2026-04-24,Exercise,n
+2026-04-24,Read 10 pages,n
+2026-04-25,Exercise,n
+2026-04-25,Read 10 pages,n
+2026-04-26,Exercise,n
+2026-04-26,Read 10 pages,y
+2026-04-27,Exercise,n
+2026-04-28,Exercise,n
+2026-04-28,Read 10 pages,y
+2026-04-29,Exercise,n
+2026-04-29,Read 10 pages,y
+2026-04-30,Exercise,n
+2026-04-30,Read 10 pages,n
+2026-05-01,Exercise,n
+2026-05-01,Read 10 pages,n
+2026-05-02,Exercise,y
+2026-05-02,Read 10 pages,y
+2026-05-03,Exercise,n
+2026-05-03,Read 10 pages,y
+2026-05-04,Exercise,y
+2026-05-04,Read 10 pages,n
+2026-05-05,Exercise,y
+2026-05-06,Exercise,y
+2026-05-06,Read 10 pages,y
+2026-05-07,Exercise,y
+2026-05-07,Read 10 pages,y
+2026-05-08,Exercise,n
+2026-05-09,Exercise,n
+2026-05-09,Read 10 pages,n
+2026-05-10,Exercise,n
+2026-05-10,Read 10 pages,n
+2026-05-11,Exercise,y
+2026-05-11,Read 10 pages,n
+2026-05-12,Exercise,y
+2026-05-12,Read 10 pages,n
+2026-05-13,Exercise,n
+2026-05-13,Read 10 pages,n
+2026-05-14,Exercise,n
+2026-05-14,Read 10 pages,y
+2026-05-15,Exercise,y
+2026-05-15,Read 10 pages,y
+2026-05-16,Exercise,y
+2026-05-16,Read 10 pages,n
+2026-05-17,Exercise,y
+2026-05-17,Read 10 pages,y
+2026-05-18,Exercise,n
+2026-05-18,Read 10 pages,n
+2026-05-19,Exercise,n
+2026-05-19,Read 10 pages,y
+2026-05-20,Exercise,y
+2026-05-20,Read 10 pages,y
+2026-05-21,Exercise,y
+2026-05-22,Exercise,y
+2026-05-22,Read 10 pages,y
+2026-05-23,Exercise,y
+2026-05-23,Read 10 pages,y
+2026-05-24,Exercise,n
+2026-05-25,Exercise,y
+2026-05-25,Read 10 pages,n
+2026-05-26,Exercise,y
+2026-05-26,Read 10 pages,y
+2026-05-27,Exercise,y
+2026-05-27,Read 10 pages,y
+2026-05-28,Exercise,y
+2026-05-28,Read 10 pages,y
+2026-05-29,Exercise,y
+2026-05-29,Read 10 pages,n
+2026-05-30,Exercise,y
+2026-05-30,Read 10 pages,n
+2026-05-31,Exercise,n
+2026-05-31,Read 10 pages,n
+2026-06-01,Exercise,y
+2026-06-01,Read 10 pages,y
+2026-06-02,Exercise,y
+2026-06-02,Read 10 pages,n
+2026-06-03,Exercise,y
+2026-06-03,Read 10 pages,n
+2026-06-04,Exercise,y
+2026-06-04,Read 10 pages,n
+2026-06-05,Exercise,y
+2026-06-05,Read 10 pages,n
+2026-06-06,Exercise,y
+2026-06-06,Read 10 pages,y
+2026-06-07,Exercise,y
+2026-06-07,Read 10 pages,y
+2026-06-08,Exercise,y
+2026-06-08,Read 10 pages,n
+2026-06-09,Exercise,y
+2026-06-09,Read 10 pages,y
+2026-06-10,Exercise,y
+2026-06-10,Read 10 pages,y
+2026-06-11,Exercise,y
+2026-06-11,Read 10 pages,y
+2026-06-12,Exercise,y
+2026-06-12,Read 10 pages,y
+2026-06-13,Exercise,n
+2026-06-14,Exercise,n
+2026-06-14,Read 10 pages,y
+2026-06-15,Exercise,y
+2026-06-15,Read 10 pages,y
+2026-06-16,Exercise,y
+2026-06-16,Read 10 pages,y
+2026-06-17,Exercise,y
+2026-06-17,Read 10 pages,n
+2026-06-18,Exercise,y
+2026-06-18,Read 10 pages,n
+2026-06-19,Exercise,y
+2026-06-19,Read 10 pages,y
+2026-06-20,Exercise,n
+2026-06-21,Exercise,y
+2026-06-22,Exercise,y
+2026-06-22,Read 10 pages,n
+2026-06-23,Exercise,n
+2026-06-23,Read 10 pages,n
+2026-06-24,Exercise,n
+2026-06-24,Read 10 pages,n
+2026-06-25,Exercise,y
+2026-06-25,Read 10 pages,n
+2026-06-26,Exercise,y
+2026-06-26,Read 10 pages,y
+2026-06-27,Exercise,y
+2026-06-27,Read 10 pages,y
+2026-06-28,Exercise,y
+2026-06-28,Read 10 pages,y
+2026-06-29,Exercise,y
+2026-06-29,Read 10 pages,n
+2026-06-30,Exercise,y
+2026-06-30,Read 10 pages,y
+2026-07-01,Exercise,y
+2026-07-01,Read 10 pages,n
+2026-07-02,Exercise,n
+2026-07-03,Exercise,y
+2026-07-03,Read 10 pages,n
+2026-07-04,Exercise,y
+2026-07-05,Exercise,y
+2026-07-06,Exercise,n
+2026-07-06,Read 10 pages,n
+2026-07-07,Exercise,y
+2026-07-07,Read 10 pages,y
+2026-07-08,Exercise,y
+2026-07-08,Read 10 pages,y
+2026-07-09,Exercise,y
+2026-07-09,Read 10 pages,n
+2026-07-10,Exercise,y
+2026-07-11,Exercise,y
+2026-07-11,Read 10 pages,n
+2026-07-12,Exercise,y
+2026-07-12,Read 10 pages,y
+2026-07-13,Exercise,n
+2026-07-13,Read 10 pages,n
+2026-07-14,Exercise,y
+2026-07-14,Read 10 pages,y
+2026-07-15,Exercise,n
+2026-07-15,Read 10 pages,y
+2026-07-16,Exercise,y
+2026-07-16,Read 10 pages,n
+2026-07-17,Exercise,y
+2026-07-17,Read 10 pages,y
+2026-07-18,Exercise,n
+2026-07-18,Read 10 pages,n
+2026-07-19,Exercise,n
+2026-07-19,Read 10 pages,n
+2026-07-20,Exercise,n
+2026-07-20,Read 10 pages,n
+2026-07-21,Exercise,n
+2026-07-21,Read 10 pages,y
+2026-07-22,Exercise,n
+2026-07-22,Read 10 pages,y

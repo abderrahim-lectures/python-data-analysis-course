@@ -1,0 +1,13 @@
+[project]
+name = "chat-with-pdfs"
+version = "0.1.0"
+description = "Local companion to the course's 'Chat with Your PDFs' project: extract and chunk PDFs with page numbers preserved, embed them locally, retrieve with NumPy cosine similarity, and answer questions with page-cited answers from a free-tier LLM."
+requires-python = ">=3.12"
+dependencies = [
+    "numpy>=2.5.1",
+    "openai>=2.48.0",
+    "pypdf>=6.14.2",
+    "python-dotenv>=1.2.2",
+    "reportlab>=5.0.0",
+    "sentence-transformers>=5.6.1",
+]
