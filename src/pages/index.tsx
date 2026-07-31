@@ -290,6 +290,24 @@ function RealWorldProjects() {
               </Translate>
             }
           />
+          <HomepageProjectCard
+            id="2027-rate-limited-api"
+            title={
+              <Translate
+                id="homepage.projects.rateLimitedApi.title"
+                description="Homepage project card title">
+                Build a Rate-Limited API Service
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.rateLimitedApi.summary"
+                description="Homepage project card summary">
+                Build a real FastAPI service wrapping your own dataset, with API-key auth and a
+                sliding-window rate limiter built from scratch.
+              </Translate>
+            }
+          />
         </div>
       </div>
     </section>

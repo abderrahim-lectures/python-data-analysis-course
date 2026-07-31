@@ -1,0 +1,15 @@
+[project]
+name = "rate-limited-api"
+version = "0.1.0"
+description = "Local companion to the course's Build a Rate-Limited API Service project: a real FastAPI app wrapping a bundled quotes dataset, with API-key auth and a from-scratch sliding-window rate limiter."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+]
+
+[dependency-groups]
+dev = [
+    "httpx>=0.27.0",
+]

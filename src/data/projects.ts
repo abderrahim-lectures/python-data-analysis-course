@@ -50,6 +50,12 @@ export const PROJECTS: ProjectMeta[] = [
     tags: ['Fine-tuning', 'LoRA', 'LLMs'],
   },
   {
+    id: '2027-rate-limited-api',
+    date: '2027-08',
+    url: '/docs/projects/rate-limited-api',
+    tags: ['APIs', 'FastAPI', 'Web Services'],
+  },
+  {
     id: '2026-ai-agent',
     date: '2026-07-21',
     url: '/docs/projects/ai-agent',
