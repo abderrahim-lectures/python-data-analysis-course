@@ -781,5 +781,13 @@
   "sharedProgressCard.completedLine": {
     "message": "a terminé l'intégralité du cours",
     "description": "Certificate line after the student's name"
+  },
+  "homepage.projects.agenticCodeReviewer.title": {
+    "message": "Construire un Relecteur de Code Agentique",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.agenticCodeReviewer.summary": {
+    "message": "Construis un outil CLI qui lit un vrai git diff via subprocess et demande à un LLM gratuit de le relire comme le ferait un relecteur humain.",
+    "description": "Homepage project card summary"
   }
 }

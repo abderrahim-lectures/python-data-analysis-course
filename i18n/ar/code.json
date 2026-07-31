@@ -781,5 +781,13 @@
   "sharedProgressCard.completedLine": {
     "message": "قد أتمّ الدورة كاملة",
     "description": "Certificate line after the student's name"
+  },
+  "homepage.projects.agenticCodeReviewer.title": {
+    "message": "بناء مُراجِع كود عامل",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.agenticCodeReviewer.summary": {
+    "message": "ابنِ أداة CLI تقرأ فرق git diff حقيقيًا عبر subprocess وتطلب من نموذج لغوي مجاني مراجعته كما يفعل مراجع بشري.",
+    "description": "Homepage project card summary"
   }
 }
