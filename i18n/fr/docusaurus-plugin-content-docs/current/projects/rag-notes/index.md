@@ -406,7 +406,7 @@ uv run python ask.py "What is this course about?"
 `build_prompt` est toute l'idée du RAG en une seule fonction : elle ne demande pas au modèle de répondre à partir de ce qu'il sait déjà, elle lui donne le *vrai texte récupéré* et lui demande de répondre à partir de ça — c'est pourquoi une appli RAG peut correctement répondre à des questions sur des notes que le modèle sous-jacent n'a jamais vues, écrites hier, sur votre propre machine.
 
 :::tip[Vous utilisez un fournisseur différent ?]
-Remplacez le bloc `OpenAI(...)` par le propre client de votre fournisseur, en suivant le même motif que le [projet Agent IA](/docs/projects/ai-agent#étape-4--écrire-votre-premier-agent) — par ex. le paquet `google-genai` de Google pour Gemini, ou le propre client de `groq` pour Groq. Cerebras et OpenRouter sont aussi compatibles OpenAI, donc le paquet `openai` fonctionne pour eux aussi, juste avec une `base_url` différente.
+Remplacez le bloc `OpenAI(...)` par le propre client de votre fournisseur, en suivant le même motif que le [projet Agent IA](/docs/projects/ai-agent#étape-1--écrire-votre-premier-agent) — par ex. le paquet `google-genai` de Google pour Gemini, ou le propre client de `groq` pour Groq. Cerebras et OpenRouter sont aussi compatibles OpenAI, donc le paquet `openai` fonctionne pour eux aussi, juste avec une `base_url` différente.
 :::
 
 **✅ Liste de vérification**
