@@ -813,5 +813,13 @@
   "homepage.projects.codebaseKnowledgeGraph.summary": {
     "message": "حلّل ملفات Python لقاعدة كود حقيقية بوحدة ast، وابنِ رسمًا بيانيًا لبنيتها بـnetworkx، وتصوّره واستعلمه — بلا مفتاح API، بلا وصول للشبكة.",
     "description": "Homepage project card summary"
+  },
+  "homepage.projects.commitMessageAgent.title": {
+    "message": "بناء مولّد رسائل التزام Git",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.commitMessageAgent.summary": {
+    "message": "اصغ رسالة بأسلوب Conventional Commits من فرق git staged حقيقي بنموذج لغوي من مستوى مجاني، ولا تُثبِّت الالتزام إلا بعد موافقتك الصريحة.",
+    "description": "Homepage project card summary"
   }
 }
