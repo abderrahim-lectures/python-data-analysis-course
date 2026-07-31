@@ -853,5 +853,13 @@
   "homepage.projects.financeAgent.summary": {
     "message": "Categoriza una exportación CSV bancaria y marca anomalías de gasto, combinando manipulación de datos con pandas con un agente LLM que llama herramientas para categorización inteligente.",
     "description": "Homepage project card summary"
+  },
+  "homepage.projects.githubIssueTriageAgent.title": {
+    "message": "Construye un Agente de Triaje de Issues de GitHub",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.githubIssueTriageAgent.summary": {
+    "message": "Obtén issues abiertos de un repositorio público real de GitHub y usa un LLM de nivel gratuito para redactar etiquetas de triaje sugeridas y justificaciones para que un mantenedor humano las revise.",
+    "description": "Homepage project card summary"
   }
 }
