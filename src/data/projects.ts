@@ -152,6 +152,12 @@ export const PROJECTS: ProjectMeta[] = [
     tags: ['AI Agents', 'LangChain'],
   },
   {
+    id: '2027-finance-agent',
+    date: '2026-07-25',
+    url: '/docs/projects/finance-agent',
+    tags: ['AI Agents', 'Pandas', 'Finance'],
+  },
+  {
     id: '2027-browser-automation-agent',
     date: '2027-08',
     url: '/docs/projects/browser-automation-agent',

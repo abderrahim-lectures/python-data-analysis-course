@@ -556,6 +556,22 @@ function RealWorldProjects() {
             }
           />
           <HomepageProjectCard
+            id="2027-finance-agent"
+            title={
+              <Translate id="homepage.projects.financeAgent.title" description="Homepage project card title">
+                Build a Personal Finance Agent
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.financeAgent.summary"
+                description="Homepage project card summary">
+                Categorize a bank CSV export and flag spending anomalies, combining pandas with an
+                LLM tool-calling agent.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
             id="2027-browser-automation-agent"
             title={
               <Translate
