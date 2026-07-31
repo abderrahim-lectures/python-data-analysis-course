@@ -877,5 +877,13 @@
   "homepage.projects.jobAggregator.summary": {
     "message": "Scrape plusieurs sources façon plateforme d'emploi, déduplique les annonces entre elles, et alerte sur les nouvelles correspondances par rapport à un filtre de mots-clés — avec requests/BeautifulSoup et pandas, aucune clé API nécessaire.",
     "description": "Homepage project card summary"
+  },
+  "homepage.projects.mcpNotesServer.title": {
+    "message": "Construire un Serveur MCP pour tes Notes",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.mcpNotesServer.summary": {
+    "message": "Indexe un vrai dossier de notes Markdown et expose-le à Claude Desktop comme des outils consultables avec le Model Context Protocol.",
+    "description": "Homepage project card summary"
   }
 }
