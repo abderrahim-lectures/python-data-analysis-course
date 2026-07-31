@@ -20,6 +20,12 @@ export interface ProjectMeta {
  */
 export const PROJECTS: ProjectMeta[] = [
   {
+    id: '2027-dependency-freshness-checker',
+    date: '2027-08',
+    url: '/docs/projects/dependency-freshness-checker',
+    tags: ['CLI Tools', 'Automation'],
+  },
+  {
     id: '2027-commit-message-agent',
     date: '2026-07-25',
     url: '/docs/projects/commit-message-agent',
