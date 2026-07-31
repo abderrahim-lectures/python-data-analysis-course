@@ -191,6 +191,24 @@ function RealWorldProjects() {
         </p>
         <div className={styles.projectGrid}>
           <HomepageProjectCard
+            id="2027-mcp-sqlite-server"
+            title={
+              <Translate
+                id="homepage.projects.mcpSqliteServer.title"
+                description="Homepage project card title">
+                Query a Database in Plain English with MCP
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.mcpSqliteServer.summary"
+                description="Homepage project card summary">
+                Build an MCP server that exposes a local SQLite database, then watch an LLM
+                client write and run its own SQL to answer plain-English questions about it.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
             id="trivia-bot"
             title={
               <Translate id="homepage.projects.triviaBot.title" description="Homepage project card title">

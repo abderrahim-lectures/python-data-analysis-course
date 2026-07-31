@@ -20,6 +20,12 @@ export interface ProjectMeta {
  */
 export const PROJECTS: ProjectMeta[] = [
   {
+    id: '2027-mcp-sqlite-server',
+    date: '2027-08',
+    url: '/docs/projects/mcp-sqlite-server',
+    tags: ['MCP', 'SQL', 'Databases'],
+  },
+  {
     id: 'trivia-bot',
     date: '2026-07-25',
     url: '/docs/projects/trivia-bot',
