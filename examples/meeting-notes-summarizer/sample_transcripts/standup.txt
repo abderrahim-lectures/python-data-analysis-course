@@ -1,0 +1,16 @@
+Daily Standup -- Payments Team -- Tuesday
+
+Maria: Morning everyone, let's keep this quick. James, how's the API migration going?
+James: About 70% done. I should finish the auth endpoints by Friday. I'll also write up the migration guide for the team once that's done.
+Maria: Great, thanks. Priya, what about the invoice export bug?
+Priya: Found the root cause yesterday -- it's a timezone issue in how we format the PDF timestamps. Fix is small, I'll have a PR up by end of day.
+Maria: Nice. Can you also add a regression test for it so we don't hit this again?
+Priya: Yep, will do -- I'll add that in the same PR.
+James: Quick question -- are we still planning to deprecate the v1 endpoints next month?
+Maria: Let's hold off on committing to a date for that. I want to see the v2 adoption numbers first before we lock anything in.
+Priya: Makes sense. Separately, has anyone heard back from the infra team about the staging environment being slow?
+Maria: Not yet, I'll ping them after this and follow up.
+James: Sounds good. I think that's everything from me.
+Maria: Great, let's also revisit next week whether we need a dedicated on-call rotation for the payments service -- we haven't decided on that yet.
+Priya: Agreed, worth a real conversation, not just a standup mention.
+Maria: Okay, that's a wrap. Thanks everyone.
