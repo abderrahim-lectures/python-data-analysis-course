@@ -55,6 +55,12 @@ export const PROJECTS: ProjectMeta[] = [
     url: '/docs/projects/ai-agent',
     tags: ['AI Agents', 'LangChain'],
   },
+  {
+    id: '2027-browser-automation-agent',
+    date: '2027-08',
+    url: '/docs/projects/browser-automation-agent',
+    tags: ['AI Agents', 'Automation', 'Playwright'],
+  },
 ];
 
 interface TranslatedProjectText {
