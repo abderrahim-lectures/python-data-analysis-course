@@ -853,5 +853,13 @@
   "homepage.projects.financeAgent.summary": {
     "message": "صنّف ملف CSV مصرفي مُصدَّر وحدد شذوذ الإنفاق، بدمج معالجة بيانات pandas مع وكيل نموذج لغوي يستدعي أدوات للتصنيف الذكي.",
     "description": "Homepage project card summary"
+  },
+  "homepage.projects.githubIssueTriageAgent.title": {
+    "message": "بناء وكيل فرز issues في GitHub",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.githubIssueTriageAgent.summary": {
+    "message": "اجلب issues مفتوحة من مستودع GitHub عام حقيقي واستخدم نموذجًا لغويًا من مستوى مجاني لصياغة وسوم فرز مقترحة وتبريرات يراجعها صائن بشري.",
+    "description": "Homepage project card summary"
   }
 }
