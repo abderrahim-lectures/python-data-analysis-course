@@ -37,7 +37,6 @@ This is optional and ungraded. See [Real-World Projects](/docs/projects) for the
 
 **Google Colab, Kaggle Notebooks, or Binder** also work for the core lesson — zero install, right in your browser. The repo ships a ready-to-run notebook that mirrors this lesson's steps exactly:
 
-{/* TODO: update these badge links to point at main once this PR merges */}
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/email-triage-agent/notebook.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/email-triage-agent/notebook.ipynb)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Femail-triage-agent%2Fnotebook.ipynb)

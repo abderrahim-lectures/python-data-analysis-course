@@ -837,5 +837,13 @@
   "homepage.projects.docsQaBot.summary": {
     "message": "Envuelve el pipeline de recuperación del proyecto de App RAG en un bot de Discord en vivo que responde preguntas de una carpeta de documentación, usando discord.py.",
     "description": "Homepage project card summary"
+  },
+  "homepage.projects.emailTriageAgent.title": {
+    "message": "Construye un Agente Personal de Triaje de Correo",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.emailTriageAgent.summary": {
+    "message": "Categoriza, prioriza, y redacta respuestas para un lote de correos con un LLM de nivel gratuito — el agente nunca envía nada, solo tú lo haces.",
+    "description": "Homepage project card summary"
   }
 }
