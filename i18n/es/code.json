@@ -869,5 +869,13 @@
   "homepage.projects.habitStreakVisualizer.summary": {
     "message": "Rastrea check-ins diarios de hábitos localmente y renderiza un mapa de calor de calendario estilo grafo de contribuciones de GitHub, para cualquier hábito que quieras rastrear, con pandas y matplotlib.",
     "description": "Homepage project card summary"
+  },
+  "homepage.projects.jobAggregator.title": {
+    "message": "Construye un Agregador de Ofertas de Empleo",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.jobAggregator.summary": {
+    "message": "Extrae datos de múltiples fuentes estilo bolsa de trabajo, elimina duplicados entre ellas, y alerta sobre nuevas coincidencias contra un filtro de palabras clave — con requests/BeautifulSoup y pandas, sin clave de API necesaria.",
+    "description": "Homepage project card summary"
   }
 }
