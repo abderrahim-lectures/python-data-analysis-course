@@ -829,5 +829,13 @@
   "homepage.projects.dependencyFreshnessChecker.summary": {
     "message": "Construis un vrai outil CLI qui lit un pyproject.toml, vérifie sur PyPI les versions plus récentes de chaque dépendance, et signale ce qui est obsolète — sans clé API nécessaire.",
     "description": "Homepage project card summary"
+  },
+  "homepage.projects.docsQaBot.title": {
+    "message": "Construire un Bot Discord de Questions-Réponses Adossé au RAG",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.docsQaBot.summary": {
+    "message": "Enveloppe le pipeline de récupération du projet Appli RAG dans un bot Discord en direct qui répond aux questions à partir d'un dossier de documentation, en utilisant discord.py.",
+    "description": "Homepage project card summary"
   }
 }
