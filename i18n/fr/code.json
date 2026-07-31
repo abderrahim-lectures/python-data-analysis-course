@@ -797,5 +797,13 @@
   "homepage.projects.browserAutomationAgent.summary": {
     "message": "Combine l'automatisation de navigateur Playwright avec un agent LLM gratuit à appel d'outils qui remplit tout seul un vrai formulaire web de pratique.",
     "description": "Homepage project card summary"
+  },
+  "homepage.projects.chatWithPdfs.title": {
+    "message": "Discute avec tes PDF",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.chatWithPdfs.summary": {
+    "message": "RAG multi-documents sur un dossier de PDF : découpage conscient des pages, embeddings locaux, et réponses citées par page d'un LLM gratuit.",
+    "description": "Homepage project card summary"
   }
 }

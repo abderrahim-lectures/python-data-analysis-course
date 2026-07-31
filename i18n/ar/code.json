@@ -797,5 +797,13 @@
   "homepage.projects.browserAutomationAgent.summary": {
     "message": "ادمج أتمتة متصفح Playwright مع وكيل نموذج لغوي مجاني يستدعي أدوات ويملأ استمارة ويب حقيقية للتدريب بمفرده.",
     "description": "Homepage project card summary"
+  },
+  "homepage.projects.chatWithPdfs.title": {
+    "message": "تحدث مع ملفات PDF الخاصة بك",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.chatWithPdfs.summary": {
+    "message": "RAG متعدد المستندات فوق مجلد من ملفات PDF: تقسيم واعٍ بالصفحات، تضمينات محلية، وإجابات مُستشهَد بصفحاتها من نموذج لغوي من مستوى مجاني.",
+    "description": "Homepage project card summary"
   }
 }
