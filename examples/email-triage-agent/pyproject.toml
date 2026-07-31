@@ -1,0 +1,10 @@
+[project]
+name = "email-triage-agent"
+version = "0.1.0"
+description = "Local companion to the course's 'Build a Personal Email-Triage Agent' project: categorize, prioritize, and draft (never send) replies for a folder of sample emails using a free-tier LLM."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "python-dotenv>=1.2.2",
+    "openai>=1.59.0",
+]
