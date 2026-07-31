@@ -146,6 +146,12 @@ export const PROJECTS: ProjectMeta[] = [
     tags: ['Fine-tuning', 'LoRA', 'LLMs'],
   },
   {
+    id: '2027-rate-limited-api',
+    date: '2027-08',
+    url: '/docs/projects/rate-limited-api',
+    tags: ['APIs', 'FastAPI', 'Web Services'],
+  },
+  {
     id: '2027-webcam-object-counter',
     date: '2026-07-25',
     url: '/docs/projects/webcam-object-counter',
