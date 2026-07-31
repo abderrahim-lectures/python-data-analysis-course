@@ -845,5 +845,13 @@
   "homepage.projects.emailTriageAgent.summary": {
     "message": "Catégorise, priorise, et rédige des réponses pour un lot d'e-mails avec un LLM gratuit — l'agent n'envoie jamais rien, seul toi le fais.",
     "description": "Homepage project card summary"
+  },
+  "homepage.projects.financeAgent.title": {
+    "message": "Construire un Agent de Finances Personnelles",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.financeAgent.summary": {
+    "message": "Catégorise un export CSV bancaire et signale les anomalies de dépenses, en combinant la manipulation de données avec pandas et un agent LLM à appel d'outils pour une catégorisation intelligente.",
+    "description": "Homepage project card summary"
   }
 }
