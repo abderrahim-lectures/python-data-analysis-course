@@ -1,0 +1,15 @@
+[project]
+name = "finance-agent"
+version = "0.1.0"
+description = "Local companion to the course's Real-World Project: categorize a synthetic bank CSV export and flag spending anomalies with pandas + an LLM tool-calling agent."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "deepagents>=0.6.12",
+    "langchain-google-genai>=4.2.7",
+    "langchain-groq>=1.1.3",
+    "langchain-mistralai>=1.1.6",
+    "langchain-openai>=1.3.5",
+    "pandas>=3.0.3",
+    "python-dotenv>=1.2.2",
+]

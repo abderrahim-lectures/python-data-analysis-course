@@ -1,0 +1,11 @@
+[project]
+name = "trivia-bot"
+version = "0.1.0"
+description = "Local companion to the course's 'Build a Discord Trivia Bot' project: a discord.py bot that runs trivia rounds with a fixed question bank or fresh LLM-generated questions, and tracks a per-player leaderboard."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "discord.py>=2.4.0",
+    "openai>=1.59.0",
+    "python-dotenv>=1.2.2",
+]

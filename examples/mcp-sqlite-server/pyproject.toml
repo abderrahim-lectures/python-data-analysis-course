@@ -1,0 +1,9 @@
+[project]
+name = "mcp-sqlite-server-example"
+version = "0.1.0"
+description = "A real, runnable MCP server example -- exposes a local SQLite database (a small library) for plain-English queries, for the course's Query a Database in Plain English with MCP project."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "mcp[cli]>=1.6.0",
+]
