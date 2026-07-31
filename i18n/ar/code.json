@@ -845,5 +845,13 @@
   "homepage.projects.emailTriageAgent.summary": {
     "message": "صنّف، ورتّب أولوية، وصُغ ردودًا لدفعة من رسائل البريد بنموذج لغوي من مستوى مجاني — لا يرسل الوكيل شيئًا أبدًا، أنت فقط من يفعل.",
     "description": "Homepage project card summary"
+  },
+  "homepage.projects.financeAgent.title": {
+    "message": "بناء وكيل مالي شخصي",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.financeAgent.summary": {
+    "message": "صنّف ملف CSV مصرفي مُصدَّر وحدد شذوذ الإنفاق، بدمج معالجة بيانات pandas مع وكيل نموذج لغوي يستدعي أدوات للتصنيف الذكي.",
+    "description": "Homepage project card summary"
   }
 }
