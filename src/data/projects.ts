@@ -26,6 +26,24 @@ export const PROJECTS: ProjectMeta[] = [
     tags: ['Knowledge Graphs', 'Static Analysis', 'Developer Tools'],
   },
   {
+    id: 'email-triage-agent',
+    date: '2026-07-24',
+    url: '/docs/projects/email-triage-agent',
+    tags: ['AI Agents', 'Automation', 'Productivity'],
+  },
+  {
+    id: 'multi-agent-research',
+    date: '2026-07-24',
+    url: '/docs/projects/multi-agent-research',
+    tags: ['AI Agents', 'Multi-Agent', 'LangChain'],
+  },
+  {
+    id: 'agentic-code-reviewer',
+    date: '2026-07-24',
+    url: '/docs/projects/agentic-code-reviewer',
+    tags: ['AI Agents', 'Developer Tools', 'Automation'],
+  },
+  {
     id: 'mcp-server',
     date: '2026-07-23',
     url: '/docs/projects/mcp-server',

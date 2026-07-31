@@ -31,13 +31,13 @@ This is optional and ungraded. See [Real-World Projects](/docs/projects) for the
 
 ## Where to run this
 
-**Locally with `uv`** is the path this lesson's steps follow, and the recommended one — it's real Python running on your own machine, the same "graduate to real Python" move as every other project in this section. Step 1 below walks through installing it.
+**Locally with `uv`** is the path this lesson's steps follow, and the recommended one — it's real Python running on your own machine, the same "graduate to real Python" move as every other project in this section. The Setup section below walks through installing it.
 
 **GitHub Codespaces** is a zero-setup alternative if you'd rather not install anything locally yet: open [the whole course repo in a free Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python, and `uv` are already installed, per the repo's `.devcontainer/devcontainer.json`) and run the exact same `uv` commands from a terminal in your browser tab.
 
 **Google Colab or Kaggle Notebooks** are a genuinely good fit for this particular project, not just a fallback — there's no local file server, no GPU, and no long-running process to manage, and inline chart output is exactly what a notebook does well. Run `!pip install requests beautifulsoup4 pandas matplotlib` in a cell, then paste the scripts below in as notebook cells, adapting file paths (e.g. saving `quotes.csv` to the notebook's working directory instead of your own machine) as needed. This is a comfortable, legitimate way to do this project end-to-end without leaving the browser.
 
-## Step 1: Install `uv`
+## Setup
 
 `uv` is a single tool that replaces the usual "install Python, then install pip, then install a virtual environment tool, then install packages" chain — it can install and manage Python versions itself, alongside your project's dependencies.
 
@@ -69,7 +69,7 @@ uv add requests beautifulsoup4 pandas matplotlib
 
 Notice what's missing from that list: no API key, no free-tier signup, nothing to configure before you can run a single line of code — just your own script and a real website. That's a deliberate contrast with this section's AI-flavored projects, and one of the reasons scraping is a good next step to try.
 
-## Step 2: Fetch and parse the page
+## Step 1: Fetch and parse the page
 
 This project targets [quotes.toscrape.com](https://quotes.toscrape.com) — a public site built and maintained specifically for scraping practice. It has no login wall, no rate limiting to fight, a stable, well-structured HTML layout, and pagination, tags, and author pages to work with. That matters: scraping a real commercial site raises real questions about its terms of service and `robots.txt` that this lesson deliberately sidesteps by using a site built for exactly this purpose.
 
@@ -129,10 +129,10 @@ You should see ten printed lines, one per quote on the front page.
 
 **🤔 Socratic Question(s)**
 
-- `.get_text(strip=True)` and `.text` both return a tag's text content, but only one of them strips leading/trailing whitespace. What would break later in this project — specifically in Step 4's cleaning step — if you used `.text` everywhere instead?
+- `.get_text(strip=True)` and `.text` both return a tag's text content, but only one of them strips leading/trailing whitespace. What would break later in this project — specifically in Step 3's cleaning step — if you used `.text` everywhere instead?
 - The quote text on the page is wrapped in curly quotation marks (`"…"`), not straight ones. If you're comparing quote text against a hardcoded string later, what could go wrong, and how would you notice?
 
-## Step 3: Handle pagination and collect all the data
+## Step 2: Handle pagination and collect all the data
 
 quotes.toscrape.com spreads its quotes across multiple pages, with a "Next" link at the bottom of every page except the last. Rather than hardcode "loop 10 times," follow the link itself — that way the script keeps working even if the number of pages changes:
 
@@ -207,7 +207,7 @@ The `try`/`except` around the request is the important addition here, not a form
 - What would happen to your scraper if the site added a tenth field to each quote — say, a publication year? How would you notice, and how would you adapt `parse_quotes` to pick it up?
 - The loop stops when `find("li", class_="next")` returns `None`. What would happen if the site's last page still had a (disabled-looking) "Next" link in its HTML, just not a clickable one? How would you check for that before trusting this stopping condition on a different site?
 
-## Step 4: Clean and load into pandas
+## Step 3: Clean and load into pandas
 
 Section 2 introduced pandas as the fix for plain Python loops getting slow as data grows — vectorized operations in C instead of a Python `for` loop over every row. Scraped data adds a second, equally real reason to reach for it: it rarely arrives clean, and pandas' string and type-checking tools make cleaning it fast to write and easy to verify.
 
@@ -249,7 +249,7 @@ Two things worth noticing here. First, `tags` is stored in the CSV as one comma-
 - If one row's `tags` cell were empty (a quote with no tags), what would `raw.split(",")` return, and does the `if tag.strip()` filter in the list comprehension handle that case correctly? Test it.
 - Why compute `quote_length` from `text` after stripping whitespace rather than before? What number would be wrong if you computed it before?
 
-## Step 5: Analyze and visualize
+## Step 4: Analyze and visualize
 
 With clean, typed columns, the actual analysis is a few lines of `groupby`/`value_counts`, exactly like Section 2's guided notebooks — the difference is that this data came from your own scraper, not a bundled file.
 
@@ -308,9 +308,9 @@ Both charts follow the same honesty rules from Data Analysis Hard Week 9: axes a
 
 ## ⚠️ Common pitfalls
 
-- **Scraping too fast and getting rate-limited or blocked.** Even a practice-friendly site can slow down or reject requests fired with no delay between them. The `time.sleep()` calls in Steps 2-3 aren't decorative — remove them and you're more likely to see connection errors or missing pages, especially on a real (non-practice) site.
+- **Scraping too fast and getting rate-limited or blocked.** Even a practice-friendly site can slow down or reject requests fired with no delay between them. The `time.sleep()` calls in Steps 1-2 aren't decorative — remove them and you're more likely to see connection errors or missing pages, especially on a real (non-practice) site.
 - **HTML structure changing and breaking your selectors.** `find("div", class_="quote")` only works because that's the *current* class name on quotes.toscrape.com. Sites change their markup over time (a redesign, an A/B test, a new CSS framework); a scraper that worked yesterday can silently stop finding anything today. If a scrape returns zero results, check the live page's HTML before assuming your code is the problem.
-- **Forgetting `try`/`except` around network calls.** One flaky request or timeout, on page 7 of 10, without a `try`/`except`, throws an unhandled exception and loses everything already collected. Step 3's version catches `requests.RequestException` and saves what it has instead.
+- **Forgetting `try`/`except` around network calls.** One flaky request or timeout, on page 7 of 10, without a `try`/`except`, throws an unhandled exception and loses everything already collected. Step 2's version catches `requests.RequestException` and saves what it has instead.
 - **Confusing `.text` with `.get_text(strip=True)`.** BeautifulSoup's `.text` property returns a tag's text content as-is, including any surrounding whitespace from the HTML's own indentation; `.get_text(strip=True)` strips it. Skipping `strip=True` is a common source of quietly broken string comparisons and grouping later — two "identical" author names that don't match because one has trailing whitespace.
 
 ## What you just built
