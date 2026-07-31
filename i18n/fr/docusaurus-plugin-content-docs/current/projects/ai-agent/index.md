@@ -27,7 +27,23 @@ Ceci est optionnel et non noté — un bon choix une fois que vous avez terminé
 3. Configurer un petit projet et installer `deepagents` de LangChain.
 4. Écrire et exécuter un petit agent, localement, depuis votre propre terminal.
 
-## Étape 1 : installer `uv`
+## Où exécuter ceci
+
+**En local avec `uv`** est le chemin que suivent les étapes de cette leçon, et celui recommandé — c'est du vrai Python qui tourne sur votre propre machine, la même démarche de « passage au vrai Python » que chaque autre projet de cette section. La section Configuration ci-dessous explique comment l'installer.
+
+**GitHub Codespaces** est une alternative sans configuration si vous préférez ne rien installer localement pour l'instant : ouvrez [tout le dépôt du cours dans un Codespace gratuit](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python et `uv` sont déjà installés, selon le `.devcontainer/devcontainer.json` du dépôt) et exécutez exactement les mêmes commandes `uv` depuis un terminal dans l'onglet de votre navigateur.
+
+**Google Colab, Kaggle Notebooks, ou Binder** fonctionnent aussi, puisque ce projet n'a pas besoin de GPU — une version réelle et exécutable en notebook de l'agent de ce projet (les mêmes outils jouets et la même configuration `create_deep_agent` qu'à l'Étape 1 ci-dessous) se trouve dans [`examples/ai-agent/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-agent/notebook.ipynb). Cliquez sur un badge pour le lancer directement, sans aucune installation locale :
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-agent/notebook.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-agent/notebook.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fai-agent%2Fnotebook.ipynb)
+
+Soyez honnête avec vous-même sur le compromis, cependant : c'est une façon moins fidèle de vivre le projet qu'un vrai projet `uv` local — pas de fichiers séparés, pas de vraie structure de projet, juste des cellules dans un notebook. Traitez-le comme un moyen rapide d'expérimenter, pas comme le chemin principal.
+
+## Configuration
+
+### Installer `uv`
 
 `uv` est un outil unique qui remplace la chaîne habituelle « installer Python, puis installer pip, puis installer un outil d'environnement virtuel, puis installer les paquets » — il peut installer et gérer lui-même les versions de Python, en plus des dépendances de votre projet.
 
@@ -59,7 +75,7 @@ uv python install 3.12
 
 C'est votre moment de remise de diplôme : un vrai Python, installé et géré sur votre propre ordinateur, pas dans un bac à sable de navigateur.
 
-## Étape 2 : obtenir une clé API IA gratuite
+### Obtenir une clé API IA gratuite
 
 **Choisissez le fournisseur de votre choix** — aucun d'eux ne nécessite de carte de crédit au moment de l'écriture, et ce cours n'en favorise aucun par rapport aux autres. L'agent d'exemple du dépôt du cours ([`examples/ai-agent/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/ai-agent)) prend en charge les six directement, sélectionnés avec un seul paramètre.
 
@@ -88,10 +104,10 @@ $env:GITHUB_TOKEN = "your-key-here"
 Une clé API est un secret, exactement comme un mot de passe — quiconque la possède peut utiliser le quota de votre compte. La traiter comme une variable d'environnement plutôt qu'une chaîne codée en dur est la pratique standard exactement pour cette raison, et c'est la première véritable habitude de sécurité que ce cours vous demande de développer.
 
 :::tip[Un fichier .env est souvent plus pratique qu'export]
-Plutôt que de faire `export` d'une clé à chaque nouvelle session de terminal, vous pouvez la mettre dans un fichier `.env` dans le dossier de votre projet (voir le `.env.example` de l'exemple du dépôt) et la charger automatiquement avec le paquet `python-dotenv` — couvert à l'étape 4.
+Plutôt que de faire `export` d'une clé à chaque nouvelle session de terminal, vous pouvez la mettre dans un fichier `.env` dans le dossier de votre projet (voir le `.env.example` de l'exemple du dépôt) et la charger automatiquement avec le paquet `python-dotenv` — couvert plus bas.
 :::
 
-## Étape 3 : configurer le projet avec `uv`
+### Configurer le projet avec `uv`
 
 ```bash
 uv init ai-agent
@@ -101,13 +117,13 @@ uv add deepagents langchain-openai python-dotenv
 
 `uv init` crée un petit projet (un `pyproject.toml` suivant vos dépendances) et `uv add` installe des paquets dans un environnement isolé pour ce projet — automatiquement, sans configuration manuelle d'environnement virtuel. `deepagents` est le framework de LangChain pour construire des agents avec planification, utilisation d'outils, et délégation à des sous-agents intégrées ; `langchain-openai` est le paquet d'intégration que cet exemple utilise pour parler à GitHub Models (son API est compatible OpenAI, donc le paquet d'intégration OpenAI fonctionne pour lui — voir l'astuce ci-dessous si vous avez choisi un fournisseur différent) ; `python-dotenv` vous permet de garder votre clé API dans un fichier `.env` local plutôt que de faire `export` à chaque session.
 
-Si vous avez choisi un fournisseur différent à l'étape 2, remplacez `langchain-openai` par le propre paquet de ce fournisseur — `langchain-google-genai` (Gemini), `langchain-groq` (Groq), ou `langchain-mistralai` (Mistral). Cerebras et OpenRouter sont aussi compatibles OpenAI, donc ils utilisent aussi `langchain-openai`, juste avec une `base_url` différente.
+Si vous avez choisi un fournisseur différent ci-dessus, remplacez `langchain-openai` par le propre paquet de ce fournisseur — `langchain-google-genai` (Gemini), `langchain-groq` (Groq), ou `langchain-mistralai` (Mistral). Cerebras et OpenRouter sont aussi compatibles OpenAI, donc ils utilisent aussi `langchain-openai`, juste avec une `base_url` différente.
 
 :::tip[Vérifiez la documentation actuelle — et le nom du modèle]
 Les frameworks d'agents évoluent vite, tout comme les noms de modèles : ils sont renommés et retirés sur une échelle de temps de mois, pas d'années. Les propres arguments nommés de `create_deep_agent` ont déjà changé une fois depuis les versions précédentes de cette page (c'est `system_prompt`, pas `instructions`) — un rappel que cet extrait peut devenir obsolète même après avoir été vérifié une fois. Utilisez un identifiant de modèle explicite et versionné plutôt qu'un alias `-latest` : plusieurs fournisseurs, dont Google, ont déprécié ceux-ci car ils basculent silencieusement vers une nouvelle version de modèle, ce qui peut casser du code fonctionnel sans avertissement. Avant d'exécuter ceci, vérifiez la page de tarification/modèles actuelle de votre fournisseur, et parcourez le propre README de `deepagents` pour son API actuelle.
 :::
 
-## Étape 4 : écrire votre premier agent
+## Étape 1 : écrire votre premier agent
 
 Créez un fichier `.env` (ne le validez jamais) avec la clé du fournisseur que vous avez choisi :
 
@@ -160,7 +176,7 @@ Exécutez-le — avec `uv`, aucune activation manuelle d'environnement n'est né
 uv run python agent.py
 ```
 
-`load_dotenv()` lit votre fichier `.env` dans `os.environ` avant que quoi que ce soit d'autre ne s'exécute, donc `os.environ["GITHUB_TOKEN"]` trouve la clé que vous avez définie à l'étape 2 — le même concept de module `os` que `input()` lisant depuis le clavier, sauf qu'il lit depuis un fichier à la place. `create_deep_agent` relie le modèle à une liste de fonctions Python que l'agent peut appeler comme **outils** — c'est l'idée centrale derrière les agents : un modèle de langage qui ne peut pas seulement répondre par du texte, mais décider d'appeler votre code, lire le résultat, et l'utiliser pour éclairer sa réponse.
+`load_dotenv()` lit votre fichier `.env` dans `os.environ` avant que quoi que ce soit d'autre ne s'exécute, donc `os.environ["GITHUB_TOKEN"]` trouve la clé que vous avez définie lors de la Configuration — le même concept de module `os` que `input()` lisant depuis le clavier, sauf qu'il lit depuis un fichier à la place. `create_deep_agent` relie le modèle à une liste de fonctions Python que l'agent peut appeler comme **outils** — c'est l'idée centrale derrière les agents : un modèle de langage qui ne peut pas seulement répondre par du texte, mais décider d'appeler votre code, lire le résultat, et l'utiliser pour éclairer sa réponse.
 
 Remarquez `tools=[search_course_topics, count_weeks_remaining]` — deux outils, pas un. Le modèle choisit *quel* outil (le cas échéant) correspond à la question, entièrement par lui-même : demandez « Did we cover groupby? » et il appelle `search_course_topics` ; demandez « How many weeks are left if I'm on week 4? » et il appelle `count_weeks_remaining` à la place. Vous n'écrivez jamais vous-même une chaîne `if`/`elif` acheminant les questions vers les outils — la docstring de chaque fonction (la chaîne entre triples guillemets juste après `def`) est ce que le modèle lit pour décider quel outil correspond à quelle demande, exactement comme les docstrings de la semaine 4 de Python 101, sauf qu'ici c'est un modèle de langage qui les lit, pas un humain parcourant votre code.
 

@@ -191,6 +191,185 @@ function RealWorldProjects() {
         </p>
         <div className={styles.projectGrid}>
           <HomepageProjectCard
+            id="recipe-planner-agent"
+            title={
+              <Translate
+                id="homepage.projects.recipePlannerAgent.title"
+                description="Homepage project card title">
+                Build a Recipe-Planner Agent
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.recipePlannerAgent.summary"
+                description="Homepage project card summary">
+                Build a tool-using AI agent that suggests meals from ingredients you have on
+                hand, grounded in a real local recipe database instead of guessing.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
+            id="meeting-notes-summarizer"
+            title={
+              <Translate
+                id="homepage.projects.meetingNotesSummarizer.title"
+                description="Homepage project card title">
+                Build a Meeting-Notes Summarizer
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.meetingNotesSummarizer.summary"
+                description="Homepage project card summary">
+                Turn a raw meeting transcript into structured decisions, action items, and open
+                questions using a free-tier LLM and a carefully designed JSON-extraction prompt.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
+            id="github-issue-triage-agent"
+            title={
+              <Translate
+                id="homepage.projects.githubIssueTriageAgent.title"
+                description="Homepage project card title">
+                Build a GitHub Issue Triage Agent
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.githubIssueTriageAgent.summary"
+                description="Homepage project card summary">
+                Fetch open issues from a real public GitHub repo and use a free-tier LLM to draft
+                suggested triage labels for a human maintainer to review.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
+            id="voice-to-task-agent"
+            title={
+              <Translate
+                id="homepage.projects.voiceToTaskAgent.title"
+                description="Homepage project card title">
+                Build a Voice-to-Task Agent
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.voiceToTaskAgent.summary"
+                description="Homepage project card summary">
+                Transcribe a voice memo locally and for free with OpenAI's open-source Whisper
+                model, then use a free-tier LLM to turn it into a structured task list.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
+            id="study-buddy-agent"
+            title={
+              <Translate
+                id="homepage.projects.studyBuddyAgent.title"
+                description="Homepage project card title">
+                Build a Study-Buddy Quiz Agent
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.studyBuddyAgent.summary"
+                description="Homepage project card summary">
+                Turn your own study notes into an interactive quiz: a free-tier LLM writes
+                questions grounded in your notes, then judges your typed answers.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
+            id="codebase-knowledge-graph"
+            title={
+              <Translate
+                id="homepage.projects.codebaseKnowledgeGraph.title"
+                description="Homepage project card title">
+                Turn a Codebase into a Knowledge Graph
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.codebaseKnowledgeGraph.summary"
+                description="Homepage project card summary">
+                Parse a real codebase's Python files with the ast module, build a graph of its
+                structure with networkx, and visualize and query it — no API key needed.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
+            id="docs-qa-bot"
+            title={
+              <Translate id="homepage.projects.docsQaBot.title" description="Homepage project card title">
+                Build a RAG-Backed Docs Q&A Discord Bot
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.docsQaBot.summary"
+                description="Homepage project card summary">
+                Wrap the RAG App project's retrieval pipeline in a live Discord bot that answers
+                questions from a folder of documentation.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
+            id="email-triage-agent"
+            title={
+              <Translate
+                id="homepage.projects.emailTriageAgent.title"
+                description="Homepage project card title">
+                Build a Personal Email-Triage Agent
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.emailTriageAgent.summary"
+                description="Homepage project card summary">
+                Categorize, prioritize, and draft replies for a batch of emails with a free-tier
+                LLM — the agent never sends anything, only you do.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
+            id="multi-agent-research"
+            title={
+              <Translate
+                id="homepage.projects.multiAgentResearch.title"
+                description="Homepage project card title">
+                Build a Multi-Agent Research Assistant
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.multiAgentResearch.summary"
+                description="Homepage project card summary">
+                Build a small multi-agent system — a planner, a researcher, and a writer — that
+                breaks down a research question and synthesizes a final report, using deepagents
+                sub-agents and a free-tier LLM.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
+            id="agentic-code-reviewer"
+            title={
+              <Translate
+                id="homepage.projects.agenticCodeReviewer.title"
+                description="Homepage project card title">
+                Build an Agentic Code Reviewer
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.agenticCodeReviewer.summary"
+                description="Homepage project card summary">
+                Build a CLI tool that reads a real git diff via subprocess and asks a free-tier
+                LLM to review it like a human reviewer would.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
             id="mcp-server"
             title={
               <Translate id="homepage.projects.mcpServer.title" description="Homepage project card title">

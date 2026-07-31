@@ -1,0 +1,35 @@
+Cell Biology: The Basics
+
+Every living thing is made of cells, the smallest unit of life. There are
+two broad categories: prokaryotic cells (bacteria and archaea), which have
+no nucleus and no membrane-bound organelles, and eukaryotic cells (animals,
+plants, fungi, protists), which do.
+
+The nucleus stores the cell's DNA and controls gene expression -- deciding
+which proteins get made and when. It's surrounded by a double membrane
+called the nuclear envelope, with pores that let molecules pass in and out.
+
+Mitochondria are the cell's power plants. They convert nutrients into ATP
+(adenosine triphosphate), the molecule cells actually spend as energy
+currency, through a process called cellular respiration. Mitochondria have
+their own small DNA, separate from the nucleus -- one of the strongest
+pieces of evidence for the endosymbiotic theory, which holds that
+mitochondria were once free-living bacteria engulfed by an ancestral cell
+roughly 1.5 billion years ago.
+
+The cell membrane (plasma membrane) is a double layer of phospholipids that
+separates the inside of the cell from the outside world. It's selectively
+permeable: small nonpolar molecules like oxygen pass through freely, but
+larger or charged molecules need specific protein channels or transporters
+to cross.
+
+Plant cells have three extra structures animal cells lack: a rigid cell
+wall made of cellulose for structural support, a large central vacuole that
+stores water and maintains internal pressure (turgor), and chloroplasts,
+which capture sunlight and convert it into chemical energy through
+photosynthesis -- the rough inverse of what mitochondria do with that
+energy afterward.
+
+Ribosomes, found either floating free in the cytoplasm or attached to the
+endoplasmic reticulum, are where proteins actually get built, translating
+the instructions carried by messenger RNA into chains of amino acids.

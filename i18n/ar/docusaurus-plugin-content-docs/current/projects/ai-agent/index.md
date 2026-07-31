@@ -3,6 +3,7 @@ id: 2026-ai-agent
 title: "بناء وكيل ذكاء اصطناعي"
 sidebar_label: "بناء وكيل ذكاء اصطناعي"
 slug: /projects/ai-agent
+description: "تخرّج من بيئة اللعب داخل المتصفح إلى Python حقيقية: ثبّت Python محليًا وابنِ أول وكيل ذكاء اصطناعي لك باستخدام deepagents من LangChain."
 ---
 
 import ProjectProgressCheckbox from '@site/src/components/ProjectProgressCheckbox';
@@ -26,7 +27,23 @@ import ProjectGreeting from '@site/src/components/ProjectGreeting';
 3. إعداد مشروع صغير وتثبيت `deepagents` من LangChain.
 4. كتابة وتشغيل وكيل صغير واحد، محليًا، من طرفيتك الخاصة.
 
-## الخطوة 1: تثبيت `uv`
+## أين تشغّل هذا
+
+**محليًا باستخدام `uv`** هو المسار الذي تتبعه خطوات هذا الدرس، والموصى به — إنه Python حقيقي يعمل على جهازك الخاص، نفس حركة "التخرّج إلى Python حقيقية" كما في كل مشروع آخر في هذا القسم. يشرح قسم الإعداد أدناه كيفية تثبيته.
+
+**GitHub Codespaces** بديل بلا أي إعداد إن كنت تفضّل عدم تثبيت أي شيء محليًا الآن: افتح [مستودع الدورة كاملاً في Codespace مجاني](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node وPython وuv مثبّتة مسبقًا، حسب ملف `.devcontainer/devcontainer.json` الخاص بالمستودع) وشغّل نفس أوامر `uv` تمامًا من طرفية في تبويب متصفحك.
+
+**Google Colab أو Kaggle Notebooks أو Binder** تعمل أيضًا، لأن هذا المشروع لا يحتاج GPU — نسخة دفتر ملاحظات حقيقية وقابلة للتشغيل من وكيل هذا المشروع (نفس الأدوات التجريبية وإعداد `create_deep_agent` كما في الخطوة 1 أدناه) موجودة في [`examples/ai-agent/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-agent/notebook.ipynb). انقر على شارة لتشغيله مباشرة، دون أي تثبيت محلي على الإطلاق:
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-agent/notebook.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-agent/notebook.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fai-agent%2Fnotebook.ipynb)
+
+كن صريحًا مع نفسك بشأن المقايضة رغم ذلك: هذه طريقة أقل دقة لتجربة المشروع مقارنة بمشروع `uv` محلي حقيقي — لا ملفات منفصلة، لا بنية مشروع حقيقية، مجرد خلايا في دفتر ملاحظات. تعامل معها كطريقة سريعة للتجربة، لا كالمسار الأساسي.
+
+## الإعداد
+
+### تثبيت `uv`
 
 `uv` أداة واحدة تحل محل سلسلة "ثبّت Python، ثم ثبّت pip، ثم ثبّت أداة بيئة افتراضية، ثم ثبّت الحزم" المعتادة — تستطيع تثبيت وإدارة إصدارات Python بنفسها، إلى جانب اعتماديات مشروعك.
 
@@ -58,7 +75,7 @@ uv python install 3.12
 
 هذه لحظة تخرّجك: Python حقيقية، مثبّتة ومُدارة على جهاز حاسوبك الخاص، لا داخل بيئة معزولة في متصفح.
 
-## الخطوة 2: الحصول على مفتاح API مجاني
+### الحصول على مفتاح API مجاني
 
 **اختر أي مزوّد تفضله** — لا يتطلب أيٌّ منها بطاقة ائتمان وقت كتابة هذا النص، وهذه الدورة لا تفضّل واحدًا على آخر. الوكيل المثال في مستودع الدورة ([`examples/ai-agent/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/ai-agent)) يدعم الستة جميعًا جاهزين للاستخدام، ويُختار عبر إعداد واحد.
 
@@ -87,10 +104,10 @@ $env:GITHUB_TOKEN = "your-key-here"
 مفتاح API سرّ، تمامًا مثل كلمة مرور — أي شخص يملكه يستطيع استخدام حصة حسابك. معاملته كمتغيّر بيئة بدلاً من نص ثابت مكتوب في الكود هي الممارسة المعيارية لهذا السبب بالتحديد، وهي أول عادة أمان واقعية تطلبها منك هذه الدورة.
 
 :::tip[ملف .env غالبًا أكثر ملاءمة من export]
-بدلاً من استخدام `export` لمفتاح في كل جلسة طرفية جديدة، يمكنك وضعه في ملف `.env` داخل مجلد مشروعك (انظر `.env.example` في مثال المستودع) وتحميله تلقائيًا بحزمة `python-dotenv` — مشروحة في الخطوة 4.
+بدلاً من استخدام `export` لمفتاح في كل جلسة طرفية جديدة، يمكنك وضعه في ملف `.env` داخل مجلد مشروعك (انظر `.env.example` في مثال المستودع) وتحميله تلقائيًا بحزمة `python-dotenv` — مشروحة أدناه.
 :::
 
-## الخطوة 3: إعداد المشروع بـ `uv`
+### إعداد المشروع بـ `uv`
 
 ```bash
 uv init ai-agent
@@ -100,13 +117,13 @@ uv add deepagents langchain-openai python-dotenv
 
 ينشئ `uv init` مشروعًا صغيرًا (ملف `pyproject.toml` يتتبع اعتمادياتك)، ويثبّت `uv add` الحزم في بيئة معزولة لذلك المشروع — تلقائيًا، دون إعداد بيئة افتراضية يدويًا. `deepagents` هو إطار عمل LangChain لبناء وكلاء مزوّدين بتخطيط واستخدام أدوات وتفويض إلى وكلاء فرعيين مدمج فيهم؛ `langchain-openai` هي حزمة التكامل التي يستخدمها هذا المثال للتحدث مع GitHub Models (واجهته البرمجية متوافقة مع OpenAI، لذا تعمل حزمة تكامل OpenAI معه — انظر التلميح أدناه إن اخترت مزوّدًا مختلفًا)؛ `python-dotenv` تتيح لك إبقاء مفتاح API في ملف `.env` محلي بدلاً من استخدام `export` في كل جلسة.
 
-إن اخترت مزوّدًا مختلفًا في الخطوة 2، استبدل `langchain-openai` بحزمة ذلك المزوّد الخاصة — `langchain-google-genai` (لـ Gemini)، `langchain-groq` (لـ Groq)، أو `langchain-mistralai` (لـ Mistral). Cerebras وOpenRouter متوافقان أيضًا مع OpenAI، لذا يستخدمان `langchain-openai` أيضًا، فقط بـ `base_url` مختلف.
+إن اخترت مزوّدًا مختلفًا أعلاه، استبدل `langchain-openai` بحزمة ذلك المزوّد الخاصة — `langchain-google-genai` (لـ Gemini)، `langchain-groq` (لـ Groq)، أو `langchain-mistralai` (لـ Mistral). Cerebras وOpenRouter متوافقان أيضًا مع OpenAI، لذا يستخدمان `langchain-openai` أيضًا، فقط بـ `base_url` مختلف.
 
 :::tip[تحقق من الوثائق الحالية — واسم النموذج]
 أطر عمل الوكلاء تتطور بسرعة، وكذلك أسماء النماذج: تُعاد تسميتها ويُوقَف دعمها على مقياس أشهر لا سنوات. وسائط `create_deep_agent` نفسها تغيّرت بالفعل مرة منذ مسودات سابقة لهذه الصفحة (إنها `system_prompt`، لا `instructions`) — تذكير بأن هذا المقتطف يمكن أن يصبح قديمًا حتى بعد التحقق منه مرة واحدة. استخدم معرّف نموذج صريحًا ومُرقّمًا بدلاً من لاحقة `-latest`: عدة مزوّدين، بما فيهم Google، أوقفوا دعم تلك اللواحق لأنها تستبدل النموذج بصمت بنسخة جديدة، مما قد يكسر كودًا يعمل دون أي تحذير. قبل تشغيل هذا، تحقق من صفحة التسعير/النماذج الحالية لمزوّدك، وتصفّح ملف README الخاص بـ `deepagents` نفسه لواجهته البرمجية الحالية.
 :::
 
-## الخطوة 4: اكتب وكيلك الأول
+## الخطوة 1: اكتب وكيلك الأول
 
 أنشئ ملف `.env` (لا تُودعه في المستودع أبدًا) بمفتاح المزوّد الذي اخترته:
 
@@ -159,7 +176,7 @@ if __name__ == "__main__":
 uv run python agent.py
 ```
 
-يقرأ `load_dotenv()` ملف `.env` الخاص بك إلى `os.environ` قبل تشغيل أي شيء آخر، لذا يجد `os.environ["GITHUB_TOKEN"]` المفتاح الذي ضبطته في الخطوة 2 — نفس مفهوم وحدة `os` كما في قراءة `input()` من لوحة المفاتيح، إلا أنه يقرأ من ملف بدلاً من ذلك. يربط `create_deep_agent` النموذج بقائمة من دوال Python يستطيع الوكيل استدعاءها كـ **أدوات** — هذه هي الفكرة الجوهرية وراء الوكلاء: نموذج لغوي لا يكتفي بالرد بنص، بل يقرر استدعاء كودك، وقراءة النتيجة، واستخدامها لإثراء إجابته.
+يقرأ `load_dotenv()` ملف `.env` الخاص بك إلى `os.environ` قبل تشغيل أي شيء آخر، لذا يجد `os.environ["GITHUB_TOKEN"]` المفتاح الذي ضبطته في قسم الإعداد — نفس مفهوم وحدة `os` كما في قراءة `input()` من لوحة المفاتيح، إلا أنه يقرأ من ملف بدلاً من ذلك. يربط `create_deep_agent` النموذج بقائمة من دوال Python يستطيع الوكيل استدعاءها كـ **أدوات** — هذه هي الفكرة الجوهرية وراء الوكلاء: نموذج لغوي لا يكتفي بالرد بنص، بل يقرر استدعاء كودك، وقراءة النتيجة، واستخدامها لإثراء إجابته.
 
 لاحظ `tools=[search_course_topics, count_weeks_remaining]` — أداتان، لا واحدة. يختار النموذج *أي* أداة (إن وُجدت) تناسب السؤال، بمفرده تمامًا: اسأل "هل تناولنا groupby؟" فيستدعي `search_course_topics`؛ اسأل "كم أسبوعًا تبقى إن كنت في الأسبوع 4؟" فيستدعي `count_weeks_remaining` بدلاً من ذلك. لن تكتب أبدًا سلسلة `if`/`elif` توجّه الأسئلة إلى الأدوات بنفسك — سلسلة التوثيق (docstring) على كل دالة (النص المُحاط بثلاث علامات اقتباس مباشرة بعد `def`) هي ما يقرأه النموذج ليقرر أي أداة تناسب أي طلب، تمامًا مثل سلاسل التوثيق في الأسبوع 4 من Python 101، إلا أن نموذجًا لغويًا هو من يقرأها هنا، لا إنسان يتصفح كودك.
 
