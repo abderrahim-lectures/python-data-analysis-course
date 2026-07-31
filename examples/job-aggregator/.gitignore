@@ -1,0 +1,6 @@
+.venv
+__pycache__
+*.pyc
+listings.csv
+new_matches.csv
+seen.json
