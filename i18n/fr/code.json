@@ -813,5 +813,13 @@
   "homepage.projects.codebaseKnowledgeGraph.summary": {
     "message": "Analyse les fichiers Python d'une vraie base de code avec le module ast, construis un graphe de sa structure avec networkx, et visualise-le et interroge-le — sans clé API, sans accès réseau.",
     "description": "Homepage project card summary"
+  },
+  "homepage.projects.commitMessageAgent.title": {
+    "message": "Construire un Générateur de Messages de Commit Git",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.commitMessageAgent.summary": {
+    "message": "Rédige un message façon Conventional Commits à partir d'un vrai git diff en stage avec un LLM gratuit, et ne commite qu'après ta confirmation explicite.",
+    "description": "Homepage project card summary"
   }
 }
