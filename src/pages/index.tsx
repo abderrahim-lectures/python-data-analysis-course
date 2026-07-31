@@ -488,6 +488,24 @@ function RealWorldProjects() {
             }
           />
           <HomepageProjectCard
+            id="2027-job-aggregator"
+            title={
+              <Translate
+                id="homepage.projects.jobAggregator.title"
+                description="Homepage project card title">
+                Build a Job-Listing Aggregator
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.jobAggregator.summary"
+                description="Homepage project card summary">
+                Scrape multiple job-board-style sources, dedupe listings across them, and alert on
+                new matches against a keyword filter — no API key needed.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
             id="2027-finetune-llm"
             title={
               <Translate id="homepage.projects.finetuneLlm.title" description="Homepage project card title">

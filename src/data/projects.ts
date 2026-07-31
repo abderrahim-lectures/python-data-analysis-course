@@ -122,6 +122,12 @@ export const PROJECTS: ProjectMeta[] = [
     tags: ['Web Scraping', 'Data Analysis', 'pandas'],
   },
   {
+    id: '2027-job-aggregator',
+    date: '2027-08',
+    url: '/docs/projects/job-aggregator',
+    tags: ['Web Scraping', 'Pandas', 'Automation'],
+  },
+  {
     id: '2027-finetune-llm',
     date: '2026-07-22',
     url: '/docs/projects/finetune-llm-unsloth',
