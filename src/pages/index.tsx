@@ -209,6 +209,24 @@ function RealWorldProjects() {
             }
           />
           <HomepageProjectCard
+            id="codebase-knowledge-graph"
+            title={
+              <Translate
+                id="homepage.projects.codebaseKnowledgeGraph.title"
+                description="Homepage project card title">
+                Turn a Codebase into a Knowledge Graph
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.codebaseKnowledgeGraph.summary"
+                description="Homepage project card summary">
+                Parse a real codebase's Python files with the ast module, build a graph of its
+                structure with networkx, and visualize and query it — no API key needed.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
             id="docs-qa-bot"
             title={
               <Translate id="homepage.projects.docsQaBot.title" description="Homepage project card title">

@@ -26,6 +26,12 @@ export const PROJECTS: ProjectMeta[] = [
     tags: ['AI Agents', 'Education', 'Productivity'],
   },
   {
+    id: 'codebase-knowledge-graph',
+    date: '2026-07-24',
+    url: '/docs/projects/codebase-knowledge-graph',
+    tags: ['Knowledge Graphs', 'Static Analysis', 'Developer Tools'],
+  },
+  {
     id: 'docs-qa-bot',
     date: '2026-07-24',
     url: '/docs/projects/docs-qa-bot',
