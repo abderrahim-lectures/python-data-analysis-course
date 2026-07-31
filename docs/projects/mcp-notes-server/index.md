@@ -38,8 +38,8 @@ If you keep notes in Obsidian, Notion, or just a plain folder of Markdown files,
 
 That said, if you just want to poke at the search and lookup functions as plain Python -- no MCP protocol, no server process, no Claude Desktop -- a narrower notebook exists for exactly that. It demos the underlying search/lookup functions in isolation, not the live MCP server:
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/add-mcp-notes-server-project/examples/mcp-notes-server/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/add-mcp-notes-server-project/examples/mcp-notes-server/notebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/mcp-notes-server/notebook.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/mcp-notes-server/notebook.ipynb)
 
 (will point at `main` once merged)
 

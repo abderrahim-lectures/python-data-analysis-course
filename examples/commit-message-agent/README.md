@@ -59,8 +59,8 @@ Click into a [Codespace for the whole repo](https://codespaces.new/abderrahim-le
 [`notebook.ipynb`](./notebook.ipynb) in this folder is a runnable notebook version of the message-drafting logic, for Colab or Kaggle:
 
 <!-- TODO: update these badge links to point at main once this PR merges -->
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/add-commit-message-agent-project/examples/commit-message-agent/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/add-commit-message-agent-project/examples/commit-message-agent/notebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/commit-message-agent/notebook.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/commit-message-agent/notebook.ipynb)
 
 A notebook environment has no local git repository of your own with staged changes, which is this tool's whole premise -- so rather than pretending that gap doesn't exist, the notebook shallow-clones this course's own repository and drafts a message for one real, small, historical commit's diff (`git show` on a real commit hash) instead of your own staged work. It demos `SYSTEM_PROMPT`, `truncate_diff`, and `draft_commit_message` unmodified -- it does **not** demo the interactive accept/edit/commit loop, since that only makes sense against a real repo you're actually working in. Come back to `uv run python commit_helper.py` above or a Codespace for that part.
 

@@ -38,9 +38,9 @@ This is optional and ungraded. See [Real-World Projects](/docs/projects) for the
 **Google Colab, Kaggle Notebooks, or Binder** also work for the core lesson — zero install, right in your browser. The repo ships a ready-to-run notebook that mirrors this lesson's steps exactly:
 
 {/* TODO: update these badge links to point at main once this PR merges */}
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/add-email-triage-agent-project/examples/email-triage-agent/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/add-email-triage-agent-project/examples/email-triage-agent/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/add-email-triage-agent-project?filepath=examples%2Femail-triage-agent%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/email-triage-agent/notebook.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/email-triage-agent/notebook.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Femail-triage-agent%2Fnotebook.ipynb)
 
 Click a badge, run the cells top to bottom, and paste in a free-tier API key when prompted. This is a lower-fidelity way to experience the project than a real local `uv` project (no separate files, no real project structure), so treat it as a quick way to experiment rather than the primary path.
 

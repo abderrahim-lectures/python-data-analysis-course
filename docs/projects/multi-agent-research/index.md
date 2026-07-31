@@ -37,13 +37,13 @@ This is optional and ungraded. See [Real-World Projects](/docs/projects) for the
 
 **GitHub Codespaces** is a zero-setup alternative if you'd rather not install anything locally yet: open [the whole course repo in a free Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python, and `uv` are already installed, per the repo's `.devcontainer/devcontainer.json`) and run the exact same `uv` commands from a terminal in your browser tab.
 
-**Google Colab, Kaggle Notebooks, or Binder** work fine too, since nothing here needs a GPU — every step is just an API call to a free-tier LLM. A real, runnable notebook version of this project lives in the repo at [`examples/multi-agent-research/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/add-multi-agent-research-project/examples/multi-agent-research/notebook.ipynb) — click a badge below to launch it with zero local setup, no `.env` file needed (it asks for your API key interactively with `getpass` instead):
+**Google Colab, Kaggle Notebooks, or Binder** work fine too, since nothing here needs a GPU — every step is just an API call to a free-tier LLM. A real, runnable notebook version of this project lives in the repo at [`examples/multi-agent-research/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/multi-agent-research/notebook.ipynb) — click a badge below to launch it with zero local setup, no `.env` file needed (it asks for your API key interactively with `getpass` instead):
 
 {/* TODO: update these badge links to point at main once this PR merges */}
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/add-multi-agent-research-project/examples/multi-agent-research/notebook.ipynb)
-[![Open in Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/add-multi-agent-research-project/examples/multi-agent-research/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/add-multi-agent-research-project?filepath=examples%2Fmulti-agent-research%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/multi-agent-research/notebook.ipynb)
+[![Open in Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/multi-agent-research/notebook.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fmulti-agent-research%2Fnotebook.ipynb)
 
 It's a lower-fidelity way to experience the project than a real local `uv` project, but perfectly workable for trying the idea out quickly.
 

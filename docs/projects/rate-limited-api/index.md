@@ -37,11 +37,9 @@ This is optional and ungraded; see [Real-World Projects](/docs/projects) for the
 
 **Notebooks are a genuinely good fit here, unlike most other long-running-server projects in this series** — with a catch. A notebook cell can't hold open a real listening port the way Colab, Kaggle, and Binder sandbox networking, so it's a poor fit for *actually running* `uvicorn` and hitting it over real HTTP. But FastAPI ships a `TestClient` that talks to your `app` object directly, in-process, with no socket or port involved at all — the exact same routes, status codes, and headers, just invoked as Python function calls instead of network requests. That's a legitimately good notebook demo of the pagination, filtering, auth, and rate-limiting logic, and [`examples/rate-limited-api/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/rate-limited-api/notebook.ipynb) does exactly that:
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/add-rate-limited-api-project/examples/rate-limited-api/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/add-rate-limited-api-project/examples/rate-limited-api/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/add-rate-limited-api-project?filepath=examples%2Frate-limited-api%2Fnotebook.ipynb)
-
-{/* These badges point at this PR's own branch and will point at `main` once merged. */}
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/rate-limited-api/notebook.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/rate-limited-api/notebook.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Frate-limited-api%2Fnotebook.ipynb)
 
 Treat the notebook as a way to *see* the API's behavior quickly, not a replacement for actually running `uvicorn` locally and firing real requests at it — the steps below do the real thing.
 

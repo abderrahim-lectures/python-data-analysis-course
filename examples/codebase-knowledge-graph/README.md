@@ -3,9 +3,9 @@
 The local companion to the course's [Turn a Codebase into a Knowledge Graph](../../docs/projects/codebase-knowledge-graph/index.md) project — a real, runnable tool that parses a Python repo's own source with the built-in `ast` module, builds a graph of its files/functions/classes with `networkx`, and visualizes it as an interactive HTML page with `pyvis`.
 
 <!-- TODO: update these badge links to point at main once this PR merges -->
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/add-codebase-knowledge-graph-project/examples/codebase-knowledge-graph/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/add-codebase-knowledge-graph-project/examples/codebase-knowledge-graph/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/add-codebase-knowledge-graph-project?filepath=examples%2Fcodebase-knowledge-graph%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/codebase-knowledge-graph/notebook.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/codebase-knowledge-graph/notebook.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fcodebase-knowledge-graph%2Fnotebook.ipynb)
 
 ## What's here
 

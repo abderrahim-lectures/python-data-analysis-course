@@ -36,11 +36,11 @@ Three reasonable ways to do this project — pick whichever fits your setup:
 - **GitHub Codespaces.** Open [codespaces.new/abderrahim-lectures/python-data-analysis-course](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) to get a cloud dev environment with Node, Python, and `uv` already installed (see [`.devcontainer/devcontainer.json`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/.devcontainer/devcontainer.json)) — the exact same commands below work from a browser tab, no local install at all.
 - **Google Colab, Kaggle Notebooks, or Binder.** A genuinely good fit: nothing here needs a GPU or an API key, and the whole pipeline (load a log, compute streaks, build a grid, render a heatmap) fits comfortably in a few notebook cells against the course's bundled sample data.
 
-  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/add-habit-streak-visualizer-project/examples/habit-streak-visualizer/notebook.ipynb)
-  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/add-habit-streak-visualizer-project/examples/habit-streak-visualizer/notebook.ipynb)
-  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/add-habit-streak-visualizer-project?filepath=examples%2Fhabit-streak-visualizer%2Fnotebook.ipynb)
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/habit-streak-visualizer/notebook.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/habit-streak-visualizer/notebook.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fhabit-streak-visualizer%2Fnotebook.ipynb)
 
-  (These badges point at this project's own branch for now — they'll point at `main` once it's merged.) Be honest with yourself about the tradeoff, though: a notebook is a lower-fidelity way to experience this project than a real local `uv` project with its own `checkins.csv` you add to day after day — treat it as a quick way to explore the code, not the primary path.
+  Be honest with yourself about the tradeoff, though: a notebook is a lower-fidelity way to experience this project than a real local `uv` project with its own `checkins.csv` you add to day after day — treat it as a quick way to explore the code, not the primary path.
 
 ## Setup
 
