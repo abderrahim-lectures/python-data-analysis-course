@@ -191,6 +191,24 @@ function RealWorldProjects() {
         </p>
         <div className={styles.projectGrid}>
           <HomepageProjectCard
+            id="2027-dependency-freshness-checker"
+            title={
+              <Translate
+                id="homepage.projects.dependencyFreshnessChecker.title"
+                description="Homepage project card title">
+                Build a Dependency-Freshness Checker
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.dependencyFreshnessChecker.summary"
+                description="Homepage project card summary">
+                A real CLI that reads a pyproject.toml, checks PyPI for newer dependency
+                versions, and reports what's outdated — no API key needed.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
             id="mcp-server"
             title={
               <Translate id="homepage.projects.mcpServer.title" description="Homepage project card title">

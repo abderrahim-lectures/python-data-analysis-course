@@ -1,0 +1,9 @@
+[project]
+name = "dependency-freshness-checker"
+version = "0.1.0"
+description = "Checks a pyproject.toml's dependencies against their current PyPI versions."
+requires-python = ">=3.11"
+dependencies = [
+    "requests>=2.31",
+    "packaging>=24.0",
+]
