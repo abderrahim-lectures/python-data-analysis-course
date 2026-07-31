@@ -191,6 +191,219 @@ function RealWorldProjects() {
         </p>
         <div className={styles.projectGrid}>
           <HomepageProjectCard
+            id="trivia-bot"
+            title={
+              <Translate id="homepage.projects.triviaBot.title" description="Homepage project card title">
+                Build a Discord Trivia Bot
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.triviaBot.summary"
+                description="Homepage project card summary">
+                Run trivia rounds in a Discord server with discord.py: a persistent leaderboard, and
+                questions generated fresh on any topic with a free-tier LLM.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
+            id="2027-mcp-notes-server"
+            title={
+              <Translate
+                id="homepage.projects.mcpNotesServer.title"
+                description="Homepage project card title">
+                Build an MCP Server for Your Notes
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.mcpNotesServer.summary"
+                description="Homepage project card summary">
+                Index a real folder of Markdown notes and expose it to Claude Desktop as
+                searchable tools with the Model Context Protocol.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
+            id="recipe-planner-agent"
+            title={
+              <Translate
+                id="homepage.projects.recipePlannerAgent.title"
+                description="Homepage project card title">
+                Build a Recipe-Planner Agent
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.recipePlannerAgent.summary"
+                description="Homepage project card summary">
+                Build a tool-using AI agent that suggests meals from ingredients you have on
+                hand, grounded in a real local recipe database instead of guessing.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
+            id="meeting-notes-summarizer"
+            title={
+              <Translate
+                id="homepage.projects.meetingNotesSummarizer.title"
+                description="Homepage project card title">
+                Build a Meeting-Notes Summarizer
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.meetingNotesSummarizer.summary"
+                description="Homepage project card summary">
+                Turn a raw meeting transcript into structured decisions, action items, and open
+                questions using a free-tier LLM and a carefully designed JSON-extraction prompt.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
+            id="github-issue-triage-agent"
+            title={
+              <Translate
+                id="homepage.projects.githubIssueTriageAgent.title"
+                description="Homepage project card title">
+                Build a GitHub Issue Triage Agent
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.githubIssueTriageAgent.summary"
+                description="Homepage project card summary">
+                Fetch open issues from a real public GitHub repo and use a free-tier LLM to draft
+                suggested triage labels for a human maintainer to review.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
+            id="voice-to-task-agent"
+            title={
+              <Translate
+                id="homepage.projects.voiceToTaskAgent.title"
+                description="Homepage project card title">
+                Build a Voice-to-Task Agent
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.voiceToTaskAgent.summary"
+                description="Homepage project card summary">
+                Transcribe a voice memo locally and for free with OpenAI's open-source Whisper
+                model, then use a free-tier LLM to turn it into a structured task list.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
+            id="study-buddy-agent"
+            title={
+              <Translate
+                id="homepage.projects.studyBuddyAgent.title"
+                description="Homepage project card title">
+                Build a Study-Buddy Quiz Agent
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.studyBuddyAgent.summary"
+                description="Homepage project card summary">
+                Turn your own study notes into an interactive quiz: a free-tier LLM writes
+                questions grounded in your notes, then judges your typed answers.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
+            id="codebase-knowledge-graph"
+            title={
+              <Translate
+                id="homepage.projects.codebaseKnowledgeGraph.title"
+                description="Homepage project card title">
+                Turn a Codebase into a Knowledge Graph
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.codebaseKnowledgeGraph.summary"
+                description="Homepage project card summary">
+                Parse a real codebase's Python files with the ast module, build a graph of its
+                structure with networkx, and visualize and query it — no API key needed.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
+            id="docs-qa-bot"
+            title={
+              <Translate id="homepage.projects.docsQaBot.title" description="Homepage project card title">
+                Build a RAG-Backed Docs Q&A Discord Bot
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.docsQaBot.summary"
+                description="Homepage project card summary">
+                Wrap the RAG App project's retrieval pipeline in a live Discord bot that answers
+                questions from a folder of documentation.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
+            id="email-triage-agent"
+            title={
+              <Translate
+                id="homepage.projects.emailTriageAgent.title"
+                description="Homepage project card title">
+                Build a Personal Email-Triage Agent
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.emailTriageAgent.summary"
+                description="Homepage project card summary">
+                Categorize, prioritize, and draft replies for a batch of emails with a free-tier
+                LLM — the agent never sends anything, only you do.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
+            id="multi-agent-research"
+            title={
+              <Translate
+                id="homepage.projects.multiAgentResearch.title"
+                description="Homepage project card title">
+                Build a Multi-Agent Research Assistant
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.multiAgentResearch.summary"
+                description="Homepage project card summary">
+                Build a small multi-agent system — a planner, a researcher, and a writer — that
+                breaks down a research question and synthesizes a final report, using deepagents
+                sub-agents and a free-tier LLM.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
+            id="agentic-code-reviewer"
+            title={
+              <Translate
+                id="homepage.projects.agenticCodeReviewer.title"
+                description="Homepage project card title">
+                Build an Agentic Code Reviewer
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.agenticCodeReviewer.summary"
+                description="Homepage project card summary">
+                Build a CLI tool that reads a real git diff via subprocess and asks a free-tier
+                LLM to review it like a human reviewer would.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
             id="mcp-server"
             title={
               <Translate id="homepage.projects.mcpServer.title" description="Homepage project card title">
@@ -237,6 +450,22 @@ function RealWorldProjects() {
                 description="Homepage project card summary">
                 Chat with your own notes: local embeddings with sentence-transformers, NumPy
                 similarity search, and a free-tier LLM for the final answer.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
+            id="2027-chat-with-pdfs"
+            title={
+              <Translate id="homepage.projects.chatWithPdfs.title" description="Homepage project card title">
+                Chat with Your PDFs
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.chatWithPdfs.summary"
+                description="Homepage project card summary">
+                Multi-document RAG over a folder of PDFs: page-aware chunking, local embeddings, and
+                page-cited answers from a free-tier LLM.
               </Translate>
             }
           />
@@ -305,6 +534,42 @@ function RealWorldProjects() {
                 description="Homepage project card summary">
                 Count objects live from a webcam feed with OpenCV and a pretrained YOLO11n model, no
                 API key or signup needed.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
+            id="2027-wordle-clone"
+            title={
+              <Translate
+                id="homepage.projects.wordleClone.title"
+                description="Homepage project card title">
+                Build a Wordle Clone
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.wordleClone.summary"
+                description="Homepage project card summary">
+                Build a real terminal Wordle game from scratch: correct guess feedback, a custom
+                word list, and persistent stats tracking across sessions.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
+            id="2027-habit-streak-visualizer"
+            title={
+              <Translate
+                id="homepage.projects.habitStreakVisualizer.title"
+                description="Homepage project card title">
+                Build a Habit-Streak Visualizer
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.habitStreakVisualizer.summary"
+                description="Homepage project card summary">
+                Track daily habit check-ins locally and render a GitHub-contributions-graph-style
+                calendar heatmap, for any habit you want to track.
               </Translate>
             }
           />

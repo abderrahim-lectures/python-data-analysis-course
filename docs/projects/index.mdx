@@ -18,6 +18,78 @@ They're optional and ungraded. Browse them any time — each project's intro say
 <ProjectChooser
   projects={mergeProjectMeta([
     {
+      id: 'trivia-bot',
+      title: 'Build a Discord Trivia Bot',
+      summary:
+        'Run trivia rounds in a Discord server with discord.py: a persistent leaderboard, and questions generated fresh on any topic with a free-tier LLM.',
+    },
+    {
+      id: '2027-mcp-notes-server',
+      title: 'Build an MCP Server for Your Notes',
+      summary:
+        'Index a real folder of Markdown notes and expose it to Claude Desktop as searchable tools with the Model Context Protocol.',
+    },
+    {
+      id: 'recipe-planner-agent',
+      title: 'Build a Recipe-Planner Agent',
+      summary:
+        "Build a tool-using AI agent with LangChain's deepagents that suggests meals from ingredients you have on hand, grounded in a real local recipe database.",
+    },
+    {
+      id: 'meeting-notes-summarizer',
+      title: 'Build a Meeting-Notes Summarizer',
+      summary:
+        'Turn a raw meeting transcript into structured decisions, action items, and open questions using a free-tier LLM and a carefully designed JSON-extraction prompt.',
+    },
+    {
+      id: 'github-issue-triage-agent',
+      title: 'Build a GitHub Issue Triage Agent',
+      summary:
+        'Fetch open issues from a real public GitHub repo and use a free-tier LLM to draft suggested triage labels and rationales for a human maintainer to review.',
+    },
+    {
+      id: 'voice-to-task-agent',
+      title: 'Build a Voice-to-Task Agent',
+      summary:
+        "Transcribe a voice memo locally and for free with OpenAI's open-source Whisper model, then use a free-tier LLM to turn it into a structured task list.",
+    },
+    {
+      id: 'study-buddy-agent',
+      title: 'Build a Study-Buddy Quiz Agent',
+      summary:
+        'Turn your own study notes into an interactive quiz: a free-tier LLM writes questions grounded in your notes, then judges your typed answers and tracks your score.',
+    },
+    {
+      id: 'codebase-knowledge-graph',
+      title: 'Turn a Codebase into a Knowledge Graph',
+      summary:
+        "Parse a real codebase's Python files with the ast module, build a graph of its structure with networkx, and visualize and query it — no API key, no network access needed.",
+    },
+    {
+      id: 'docs-qa-bot',
+      title: 'Build a RAG-Backed Docs Q&A Discord Bot',
+      summary:
+        "Wrap the RAG App project's retrieval pipeline in a live Discord bot that answers questions from a folder of documentation, using discord.py.",
+    },
+    {
+      id: 'email-triage-agent',
+      title: 'Build a Personal Email-Triage Agent',
+      summary:
+        'Categorize, prioritize, and draft replies for a batch of emails with a free-tier LLM — the agent never sends anything, only you do.',
+    },
+    {
+      id: 'multi-agent-research',
+      title: 'Build a Multi-Agent Research Assistant',
+      summary:
+        "Build a small multi-agent system — a planner, a researcher, and a writer — that breaks down a research question, answers each part, and synthesizes a final report, using LangChain's deepagents sub-agents and a free-tier LLM.",
+    },
+    {
+      id: 'agentic-code-reviewer',
+      title: 'Build an Agentic Code Reviewer',
+      summary:
+        'Build a CLI tool that reads a real git diff via subprocess and asks a free-tier LLM to review it like a human reviewer would.',
+    },
+    {
       id: 'mcp-server',
       title: 'Build an MCP Server',
       summary:
@@ -34,6 +106,12 @@ They're optional and ungraded. Browse them any time — each project's intro say
       title: 'Build a RAG App Over Your Own Notes',
       summary:
         'Chat with your own notes: local embeddings with sentence-transformers, NumPy similarity search, and a free-tier LLM for the final answer.',
+    },
+    {
+      id: '2027-chat-with-pdfs',
+      title: 'Chat with Your PDFs',
+      summary:
+        'Multi-document RAG over a folder of PDFs: page-aware chunking, local embeddings, and page-cited answers from a free-tier LLM.',
     },
     {
       id: '2026-ai-agent',
@@ -58,6 +136,18 @@ They're optional and ungraded. Browse them any time — each project's intro say
       title: 'Count Objects in Real Time with a Webcam',
       summary:
         'Count objects live from a webcam feed with OpenCV and a pretrained YOLO11n model, or run the same detection on a bundled sample image or video with no camera at all.',
+    },
+    {
+      id: '2027-wordle-clone',
+      title: 'Build a Wordle Clone',
+      summary:
+        'Build a real terminal Wordle game from scratch: correct green/yellow/gray guess feedback (including the classic repeated-letter bug), a custom word list, and persistent stats tracking across sessions.',
+    },
+    {
+      id: '2027-habit-streak-visualizer',
+      title: 'Build a Habit-Streak Visualizer',
+      summary:
+        'Track daily habit check-ins locally and render a GitHub-contributions-graph-style calendar heatmap, for any habit you want to track, with pandas and matplotlib.',
     },
   ])}
 />
