@@ -191,6 +191,24 @@ function RealWorldProjects() {
         </p>
         <div className={styles.projectGrid}>
           <HomepageProjectCard
+            id="2027-mcp-notes-server"
+            title={
+              <Translate
+                id="homepage.projects.mcpNotesServer.title"
+                description="Homepage project card title">
+                Build an MCP Server for Your Notes
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.mcpNotesServer.summary"
+                description="Homepage project card summary">
+                Index a real folder of Markdown notes and expose it to Claude Desktop as
+                searchable tools with the Model Context Protocol.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
             id="recipe-planner-agent"
             title={
               <Translate
