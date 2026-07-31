@@ -27,3 +27,6 @@ jupyterlite-config/.jupyterlite.doit.db
 # Playwright
 /test-results
 /playwright-report
+
+# Generated sample database (examples/mcp-sqlite-server/seed.py)
+examples/mcp-sqlite-server/library.db
