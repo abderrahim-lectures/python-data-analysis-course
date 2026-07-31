@@ -20,6 +20,12 @@ export interface ProjectMeta {
  */
 export const PROJECTS: ProjectMeta[] = [
   {
+    id: 'agentic-code-reviewer',
+    date: '2026-07-24',
+    url: '/docs/projects/agentic-code-reviewer',
+    tags: ['AI Agents', 'Developer Tools', 'Automation'],
+  },
+  {
     id: 'mcp-server',
     date: '2026-07-23',
     url: '/docs/projects/mcp-server',
