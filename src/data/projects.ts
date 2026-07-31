@@ -55,6 +55,12 @@ export const PROJECTS: ProjectMeta[] = [
     url: '/docs/projects/ai-agent',
     tags: ['AI Agents', 'LangChain'],
   },
+  {
+    id: '2027-finance-agent',
+    date: '2026-07-25',
+    url: '/docs/projects/finance-agent',
+    tags: ['AI Agents', 'Pandas', 'Finance'],
+  },
 ];
 
 interface TranslatedProjectText {
