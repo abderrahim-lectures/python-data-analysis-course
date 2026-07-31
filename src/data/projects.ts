@@ -26,6 +26,12 @@ export const PROJECTS: ProjectMeta[] = [
     tags: ['AI Agents', 'Multi-Agent', 'LangChain'],
   },
   {
+    id: 'agentic-code-reviewer',
+    date: '2026-07-24',
+    url: '/docs/projects/agentic-code-reviewer',
+    tags: ['AI Agents', 'Developer Tools', 'Automation'],
+  },
+  {
     id: 'mcp-server',
     date: '2026-07-23',
     url: '/docs/projects/mcp-server',
