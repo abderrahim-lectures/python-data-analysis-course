@@ -191,6 +191,24 @@ function RealWorldProjects() {
         </p>
         <div className={styles.projectGrid}>
           <HomepageProjectCard
+            id="2027-commit-message-agent"
+            title={
+              <Translate
+                id="homepage.projects.commitMessageAgent.title"
+                description="Homepage project card title">
+                Build a Git Commit-Message Generator
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.commitMessageAgent.summary"
+                description="Homepage project card summary">
+                Draft a Conventional-Commits-style message from a real staged git diff with a
+                free-tier LLM, and only commit it after you explicitly confirm.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
             id="2027-mcp-sqlite-server"
             title={
               <Translate

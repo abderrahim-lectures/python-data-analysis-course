@@ -20,6 +20,12 @@ export interface ProjectMeta {
  */
 export const PROJECTS: ProjectMeta[] = [
   {
+    id: '2027-commit-message-agent',
+    date: '2026-07-25',
+    url: '/docs/projects/commit-message-agent',
+    tags: ['CLI Tools', 'Git', 'AI Agents'],
+  },
+  {
     id: '2027-mcp-sqlite-server',
     date: '2027-08',
     url: '/docs/projects/mcp-sqlite-server',
