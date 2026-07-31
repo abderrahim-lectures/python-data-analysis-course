@@ -1,0 +1,11 @@
+[project]
+name = "codebase-knowledge-graph"
+version = "0.1.0"
+description = "Local companion to the course's Turn a Codebase into a Knowledge Graph project: parse a repo's Python files with ast, build a networkx graph, and visualize it with pyvis."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "networkx>=3.4.0",
+    "pyvis>=0.3.2",
+    "matplotlib>=3.10.0",
+]
