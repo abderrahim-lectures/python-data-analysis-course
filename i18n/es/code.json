@@ -781,5 +781,13 @@
   "sharedProgressCard.completedLine": {
     "message": "ha completado el curso completo",
     "description": "Certificate line after the student's name"
+  },
+  "homepage.projects.agenticCodeReviewer.title": {
+    "message": "Construye un Revisor de Código Agéntico",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.agenticCodeReviewer.summary": {
+    "message": "Construye una herramienta CLI que lee un git diff real vía subprocess y le pide a un LLM de nivel gratuito que lo revise como lo haría un revisor humano.",
+    "description": "Homepage project card summary"
   }
 }
