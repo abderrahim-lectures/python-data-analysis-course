@@ -191,6 +191,24 @@ function RealWorldProjects() {
         </p>
         <div className={styles.projectGrid}>
           <HomepageProjectCard
+            id="github-repo-rag"
+            title={
+              <Translate
+                id="homepage.projects.githubRepoRag.title"
+                description="Homepage project card title">
+                Build a RAG App Over a GitHub Repo
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.githubRepoRag.summary"
+                description="Homepage project card summary">
+                Clone a real repository, chunk its code and docs with line tracking, embed
+                them locally, and ask questions that come back with file-and-line citations.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
             id="2027-dependency-freshness-checker"
             title={
               <Translate
