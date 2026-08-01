@@ -933,5 +933,13 @@
   "homepage.projects.studyBuddyAgent.summary": {
     "message": "Convierte tus propias notas de estudio en un cuestionario interactivo: un LLM de nivel gratuito escribe preguntas fundamentadas en tus notas, luego juzga tus respuestas escritas.",
     "description": "Homepage project card summary"
+  },
+  "homepage.projects.triviaBot.title": {
+    "message": "Construye un Bot de Trivia para Discord",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.triviaBot.summary": {
+    "message": "Ejecuta rondas de trivia en un servidor de Discord con discord.py: una tabla de clasificación persistente, y preguntas generadas al momento sobre cualquier tema con un LLM de nivel gratuito.",
+    "description": "Homepage project card summary"
   }
 }
