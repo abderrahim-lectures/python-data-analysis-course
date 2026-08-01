@@ -941,5 +941,13 @@
   "homepage.projects.triviaBot.summary": {
     "message": "Organise des manches de trivia dans un serveur Discord avec discord.py : un classement persistant, et des questions générées à la volée sur n'importe quel sujet avec un LLM de niveau gratuit.",
     "description": "Homepage project card summary"
+  },
+  "homepage.projects.voiceToTaskAgent.title": {
+    "message": "Construire un Agent de la Voix vers les Tâches",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.voiceToTaskAgent.summary": {
+    "message": "Transcris une note vocale localement et gratuitement avec le modèle open source Whisper d'OpenAI, puis utilise un LLM de niveau gratuit pour la transformer en une liste de tâches structurée.",
+    "description": "Homepage project card summary"
   }
 }

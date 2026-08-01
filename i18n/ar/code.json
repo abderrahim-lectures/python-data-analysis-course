@@ -941,5 +941,13 @@
   "homepage.projects.triviaBot.summary": {
     "message": "شغّل جولات Trivia في خادم Discord بـ`discord.py`: لوحة متصدّرين دائمة، وأسئلة تُولَّد حديثًا حول أي موضوع باستخدام LLM من مستوى مجاني.",
     "description": "Homepage project card summary"
+  },
+  "homepage.projects.voiceToTaskAgent.title": {
+    "message": "بناء وكيل صوت-إلى-مهام",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.voiceToTaskAgent.summary": {
+    "message": "انسخ مذكرة صوتية محليًا ومجانًا باستخدام نموذج Whisper مفتوح المصدر من OpenAI، ثم استخدم LLM بمستوى مجاني لتحويلها إلى قائمة مهام مُهيكَلة.",
+    "description": "Homepage project card summary"
   }
 }

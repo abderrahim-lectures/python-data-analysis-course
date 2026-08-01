@@ -941,5 +941,13 @@
   "homepage.projects.triviaBot.summary": {
     "message": "Ejecuta rondas de trivia en un servidor de Discord con discord.py: una tabla de clasificación persistente, y preguntas generadas al momento sobre cualquier tema con un LLM de nivel gratuito.",
     "description": "Homepage project card summary"
+  },
+  "homepage.projects.voiceToTaskAgent.title": {
+    "message": "Construye un Agente de Voz a Tarea",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.voiceToTaskAgent.summary": {
+    "message": "Transcribe una nota de voz localmente y gratis con el modelo de código abierto Whisper de OpenAI, y luego usa un LLM de nivel gratuito para convertirla en una lista de tareas estructurada.",
+    "description": "Homepage project card summary"
   }
 }
