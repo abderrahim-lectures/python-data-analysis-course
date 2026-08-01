@@ -1,0 +1,10 @@
+[project]
+name = "blog-post-generator"
+version = "0.1.0"
+description = "A CLI that turns a rough Markdown outline into a polished blog post draft with a free-tier LLM, the fuller companion to the course's Outline→Blog Post Generator project."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "python-dotenv>=1.2.2",
+    "openai>=2.8.0",
+]

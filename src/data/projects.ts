@@ -20,6 +20,12 @@ export interface ProjectMeta {
  */
 export const PROJECTS: ProjectMeta[] = [
   {
+    id: 'blog-post-generator',
+    date: '2027-08',
+    url: '/docs/projects/blog-post-generator',
+    tags: ['AI Agents', 'Writing', 'Automation'],
+  },
+  {
     id: '2027-dependency-freshness-checker',
     date: '2027-08',
     url: '/docs/projects/dependency-freshness-checker',
