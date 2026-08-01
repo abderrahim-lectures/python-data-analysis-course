@@ -925,5 +925,13 @@
   "homepage.projects.recipePlannerAgent.summary": {
     "message": "ابنِ وكيل ذكاء اصطناعي يستخدم الأدوات يقترح وجبات من المكونات المتوفرة لديك، مرتكزًا على قاعدة بيانات وصفات محلية حقيقية بدلًا من التخمين.",
     "description": "Homepage project card summary"
+  },
+  "homepage.projects.studyBuddyAgent.title": {
+    "message": "بناء وكيل اختبارات رفيق المذاكرة",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.studyBuddyAgent.summary": {
+    "message": "حوّل ملاحظات دراستك الخاصة إلى اختبار تفاعلي: نموذج لغوي من مستوى مجاني يكتب أسئلة مبنية على ملاحظاتك، ثم يحكم على إجاباتك المكتوبة.",
+    "description": "Homepage project card summary"
   }
 }
