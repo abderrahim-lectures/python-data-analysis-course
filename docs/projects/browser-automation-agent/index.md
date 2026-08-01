@@ -28,12 +28,10 @@ This is optional and ungraded. See [Real-World Projects](/docs/projects) for the
 
 ## 🎯 What you'll do
 
-1. Install Python [Playwright](https://playwright.dev/python/) and a real Chromium browser binary.
-2. Write a hardcoded script that fills out a real practice form by hand — and see exactly how brittle
-   that is.
-3. Wrap page-reading and field-filling as **tools** an LLM agent can call.
-4. Give the agent a plain-English goal ("fill this form with these details") and let it decide which
-   fields map to which tool calls, then run it end-to-end and verify the real submission.
+1. **Install** Python [Playwright](https://playwright.dev/python/) and a real Chromium browser binary.
+2. **Author** a hardcoded script that fills out a real practice form by hand — and **analyze** exactly how brittle that approach is.
+3. **Design** page-reading and field-filling as **tools** an LLM agent can call.
+4. **Direct** the agent with a plain-English goal ("fill this form with these details"), let it decide which fields map to which tool calls, then run it end-to-end and **verify** the real submission.
 
 ## Where to run this
 
@@ -59,6 +57,7 @@ demo only the agent's *decision-making* — which field it thinks matches which 
 with no actual browser opened anywhere. That's a legitimate way to explore Step 3's reasoning in
 isolation, but it is not this project; treat it as a toy, not a substitute for Setup below.
 
+**opencode** *(optional)* — a free, open-source AI coding agent that runs in your terminal. If you'd rather have an agent write and run this project for you than type the code yourself, install it with `curl -fsSL https://opencode.ai/install | bash` (or `npm install -g opencode-ai`) and point it at this repo with the same API key from Setup below. It's optional — this project's whole point is building it yourself, so treat it as a bonus, not a shortcut.
 ## Setup
 
 ### Install `uv`
@@ -406,3 +405,4 @@ Built something you're proud of? [`examples/student-projects/`](https://github.c
 Welcome to writing Python outside the browser. 🎓
 
 <ProjectProgressCheckbox projectId="2027-browser-automation-agent" />
+

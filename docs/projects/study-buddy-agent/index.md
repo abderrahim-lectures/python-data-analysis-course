@@ -23,11 +23,11 @@ This is optional and ungraded — a good fit once you've finished Python 101; no
 
 ## 🎯 What you'll do
 
-1. Install `uv` and get a free-tier LLM API key.
-2. Load one of your own notes files and decide how much of it to hand the model as context.
-3. Write a prompt that generates quiz questions grounded in that specific text, along with an expected answer the program keeps to itself.
-4. Build the interactive loop: ask a question, take your typed answer, have the model judge it and give feedback.
-5. Track a running score and report it at the end.
+1. **Set up** `uv` and a free-tier LLM API key.
+2. **Load** one of your own notes files and **choose** how much of it to hand the model as context.
+3. **Design** a prompt that generates quiz questions grounded in that specific text, along with an expected answer the program keeps to itself.
+4. **Build** the interactive loop: ask a question, take your typed answer, have the model judge it and give feedback.
+5. **Track** a running score and **report** it at the end.
 
 ## Where to run this
 
@@ -43,6 +43,7 @@ This is optional and ungraded — a good fit once you've finished Python 101; no
 
 It's a lower-fidelity way to experience it than a real local project (no real file structure, no separate `.py` files), but it's a reasonable way to try the idea quickly.
 
+**opencode** *(optional)* — a free, open-source AI coding agent that runs in your terminal. If you'd rather have an agent write and run this project for you than type the code yourself, install it with `curl -fsSL https://opencode.ai/install | bash` (or `npm install -g opencode-ai`) and point it at this repo with the same API key from Setup below. It's optional — this project's whole point is building it yourself, so treat it as a bonus, not a shortcut.
 ## Setup
 
 Everything you need before Step 1 — installing `uv`, creating the project, and getting an API key — lives here, all up front, so the steps below can focus purely on the quiz logic.
@@ -334,3 +335,4 @@ Built something you're proud of? [`examples/student-projects/`](https://github.c
 Welcome to writing Python outside the browser. 🎓
 
 <ProjectProgressCheckbox projectId="study-buddy-agent" />
+

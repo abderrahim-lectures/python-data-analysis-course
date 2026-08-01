@@ -23,11 +23,11 @@ This assumes Python 101 — nothing from Data Analysis is required. It's optiona
 
 ## 🎯 What you'll do
 
-1. Install `uv`, get a free-tier LLM API key, and set up a small project.
-2. Fetch OPEN issues from a real public GitHub repo using GitHub's free REST API — no authentication required for public reads.
-3. Write a prompt that turns one issue's title and body into a request for a suggested triage label and a one-sentence rationale.
-4. Call the LLM for each issue and parse its reply.
-5. Print a readable triage report, and run the whole thing end to end against a real repo.
+1. **Set up** `uv`, a free-tier LLM API key, and a small project.
+2. **Fetch** OPEN issues from a real public GitHub repo using GitHub's free REST API — no authentication required for public reads.
+3. **Design** a prompt that turns one issue's title and body into a request for a suggested triage label and a one-sentence rationale.
+4. **Call** the LLM for each issue and **parse** its reply.
+5. **Produce** a readable triage report, and **evaluate** the whole pipeline end to end against a real repo.
 
 ## Where to run this
 
@@ -41,6 +41,7 @@ This assumes Python 101 — nothing from Data Analysis is required. It's optiona
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/github-issue-triage-agent/notebook.ipynb)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fgithub-issue-triage-agent%2Fnotebook.ipynb)
 
+**opencode** *(optional)* — a free, open-source AI coding agent that runs in your terminal. If you'd rather have an agent write and run this project for you than type the code yourself, install it with `curl -fsSL https://opencode.ai/install | bash` (or `npm install -g opencode-ai`) and point it at this repo with the same API key from Setup below. It's optional — this project's whole point is building it yourself, so treat it as a bonus, not a shortcut.
 ## Setup
 
 ### 1. Install `uv`
@@ -343,3 +344,4 @@ Built something you're proud of? [`examples/student-projects/`](https://github.c
 Welcome to writing Python outside the browser. 🎓
 
 <ProjectProgressCheckbox projectId="github-issue-triage-agent" />
+

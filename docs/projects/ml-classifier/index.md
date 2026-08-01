@@ -23,11 +23,11 @@ This is optional and ungraded. See [Real-World Projects](/docs/projects) for the
 
 ## 🎯 What you'll do
 
-1. Install `uv` and set up a local project with `scikit-learn` and `pandas`.
-2. Load the same Titanic dataset from Week 10, and encode its categorical columns as numbers.
-3. Split the data into a training set and a test set, and understand why that split matters.
-4. Train a `LogisticRegression` classifier and use it to predict survival.
-5. Evaluate it properly, then train a second model (`RandomForestClassifier`) and compare.
+1. **Set up** a local project with `uv`, `scikit-learn`, and `pandas`.
+2. **Load** the same Titanic dataset from Week 10, and **encode** its categorical columns as numbers.
+3. **Split** the data into a training set and a test set, and **explain** why that split matters.
+4. **Train** a `LogisticRegression` classifier and **apply** it to predict survival.
+5. **Evaluate** it properly, then train a second model (`RandomForestClassifier`) and **compare** the two.
 
 ## Where to run this
 
@@ -257,3 +257,4 @@ Built something you're proud of? [`examples/student-projects/`](https://github.c
 Welcome to writing Python outside the browser. 🎓
 
 <ProjectProgressCheckbox projectId="ml-classifier" />
+

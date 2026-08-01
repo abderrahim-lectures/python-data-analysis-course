@@ -26,10 +26,10 @@ The AI Agent project runs entirely on your own machine. This one can't, fully �
 
 ## 🎯 What you'll do
 
-1. Install `uv` and set up a local project — same first step as every project.
-2. Prepare a small dataset of examples that show the model the behavior you want it to learn.
-3. Get free GPU access via Google Colab or Kaggle, and use Unsloth to LoRA-fine-tune a small open model (around 1 billion parameters) on your dataset.
-4. Download the result — a small "adapter" file, not a whole new model — and run it locally to see your fine-tuned model in action.
+1. **Set up** a local project with `uv` — same first step as every project.
+2. **Prepare** a small dataset of examples that show the model the behavior you want it to learn.
+3. **Fine-tune** a small open model (around 1 billion parameters) with Unsloth on a free GPU via Google Colab or Kaggle, using LoRA.
+4. **Download** the result — a small "adapter" file, not a whole new model — and run it locally to **evaluate** your fine-tuned model in action.
 
 ## Where to run this
 
@@ -180,3 +180,4 @@ Built something you're proud of? [`examples/student-projects/`](https://github.c
 Welcome to writing Python outside the browser. 🎓
 
 <ProjectProgressCheckbox projectId="2027-finetune-llm" />
+

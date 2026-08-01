@@ -23,12 +23,12 @@ This assumes Python 101 and comfort with functions and imports — nothing from 
 
 ## 🎯 What you'll do
 
-1. Install `uv` and set up a small project with `networkx` and `pyvis` — no API key, no signup, nothing to configure.
-2. Parse a single Python file's AST to find its function definitions, class definitions, and imports.
-3. Walk an entire repository and build a graph out of everything you find, using `networkx`.
-4. Add edges for **import** and **call** relationships, so the graph captures how the pieces actually connect, not just what exists.
-5. Visualize the graph as an interactive HTML page with `pyvis` (and, optionally, a static image with `matplotlib`).
-6. Write a small query function — "what does this function call?", "what imports this module?" — and run the whole thing against a real repository.
+1. **Set up** a small project with `uv`, `networkx`, and `pyvis` — no API key, no signup, nothing to configure.
+2. **Parse** a single Python file's AST to **identify** its function definitions, class definitions, and imports.
+3. **Build** a graph of an entire repository with `networkx`, walking everything you find.
+4. **Model** **import** and **call** relationships as graph edges, so the graph captures how the pieces actually connect, not just what exists.
+5. **Visualize** the graph as an interactive HTML page with `pyvis` (and, optionally, a static image with `matplotlib`).
+6. **Query** the graph with a small function — "what does this function call?", "what imports this module?" — and **evaluate** it against a real repository.
 
 ## Where to run this
 
@@ -448,3 +448,4 @@ Built something you're proud of? [`examples/student-projects/`](https://github.c
 Welcome to writing Python outside the browser. 🎓
 
 <ProjectProgressCheckbox projectId="codebase-knowledge-graph" />
+

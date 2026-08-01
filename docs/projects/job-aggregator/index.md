@@ -23,10 +23,10 @@ This is optional and ungraded. See [Real-World Projects](/docs/projects) for the
 
 ## 🎯 What you'll do
 
-1. Parse a single job-listing page's HTML into structured fields with BeautifulSoup.
-2. Write one small parser per source and combine several differently-structured sources into one table.
-3. Dedupe listings that were posted to more than one board, using pandas.
-4. Filter by keyword and print/save only the matches that are new since the last run.
+1. **Parse** a single job-listing page's HTML into structured fields with BeautifulSoup.
+2. **Build** one small parser per source and **combine** several differently-structured sources into one table.
+3. **Deduplicate** listings that were posted to more than one board, using pandas.
+4. **Filter** by keyword and **save** only the matches that are new since the last run.
 
 ## Where to run this
 
@@ -360,3 +360,4 @@ A complete parse → combine → dedupe → filter → alert pipeline: real HTML
 Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 <ProjectProgressCheckbox projectId="2027-job-aggregator" />
+

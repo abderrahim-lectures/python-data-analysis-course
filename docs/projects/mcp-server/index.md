@@ -25,10 +25,10 @@ MCP is one of the more actively adopted patterns for extending AI assistants rig
 
 ## 🎯 What you'll do
 
-1. Install `uv` and set up a small project with the official MCP Python SDK.
-2. Write an MCP server exposing two of your own tools, using the SDK's `FastMCP` API.
-3. Run your server locally and test its tools by hand with the MCP Inspector, before connecting any real AI client.
-4. Register your server with Claude Desktop's free tier and watch it actually call your code.
+1. **Set up** a small project with `uv` and the official MCP Python SDK.
+2. **Design** an MCP server exposing two of your own tools, using the SDK's `FastMCP` API.
+3. **Run** your server locally and **test** its tools by hand with the MCP Inspector, before connecting any real AI client.
+4. **Register** your server with Claude Desktop's free tier and **observe** it actually calling your code.
 
 ## Where to run this
 
@@ -247,3 +247,4 @@ Built something you're proud of? [`examples/student-projects/`](https://github.c
 Welcome to writing Python outside the browser. 🎓
 
 <ProjectProgressCheckbox projectId="mcp-server" />
+

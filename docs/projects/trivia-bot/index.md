@@ -25,13 +25,13 @@ This is optional and ungraded. See [Real-World Projects](/docs/projects) for the
 
 ## 🎯 What you'll do
 
-1. Create a Discord bot application and grab its token from Discord's free developer portal.
-2. Install `uv`, set up a project, and add `discord.py` alongside a free-tier LLM client.
-3. Build a fixed trivia question bank and a basic Discord slash command that posts one.
-4. Add a persistent per-player leaderboard, stored across restarts.
-5. Add an LLM-generated question mode: give the bot a topic, get back a fresh question.
-6. Wire it all into a full round loop — post a question, collect answers within a time limit, reveal the answer, update the leaderboard.
-7. Invite the bot to a test server and run real rounds, end to end.
+1. **Create** a Discord bot application and **retrieve** its token from Discord's free developer portal.
+2. **Set up** a project with `uv`, adding `discord.py` alongside a free-tier LLM client.
+3. **Build** a fixed trivia question bank and a basic Discord slash command that posts one.
+4. **Add** a persistent per-player leaderboard, stored across restarts.
+5. **Add** an LLM-generated question mode: give the bot a topic, get back a fresh question.
+6. **Integrate** it all into a full round loop — post a question, collect answers within a time limit, reveal the answer, update the leaderboard.
+7. **Evaluate** the bot on a test server with real rounds, end to end.
 
 ## Where to run this
 
@@ -46,6 +46,7 @@ That said, question generation and scoring *underneath* the bot are just regular
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/trivia-bot/notebook.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/trivia-bot/notebook.ipynb)
 
+**opencode** *(optional)* — a free, open-source AI coding agent that runs in your terminal. If you'd rather have an agent write and run this project for you than type the code yourself, install it with `curl -fsSL https://opencode.ai/install | bash` (or `npm install -g opencode-ai`) and point it at this repo with the same API key from Setup below. It's optional — this project's whole point is building it yourself, so treat it as a bonus, not a shortcut.
 ## Setup
 
 Everything in this section only needs to happen once, before you write a line of the bot itself: installing `uv`, creating the Discord bot application and grabbing its token, getting a free LLM key, and setting up the project. Every step after this one assumes all of it is already done.
@@ -538,3 +539,4 @@ Built something you're proud of? [`examples/student-projects/`](https://github.c
 Welcome to writing Python outside the browser. 🎓
 
 <ProjectProgressCheckbox projectId="trivia-bot" />
+
