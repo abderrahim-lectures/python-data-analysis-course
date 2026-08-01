@@ -917,5 +917,13 @@
   "homepage.projects.rateLimitedApi.summary": {
     "message": "Construye un servicio FastAPI real que envuelve tu propio conjunto de datos, con autenticación genuina por clave de API y un limitador de tasa de ventana deslizante que construyes desde cero.",
     "description": "Homepage project card summary"
+  },
+  "homepage.projects.recipePlannerAgent.title": {
+    "message": "Construye un Agente Planificador de Recetas",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.recipePlannerAgent.summary": {
+    "message": "Construye un agente de IA que usa herramientas que sugiere comidas a partir de los ingredientes que tienes a la mano, anclado a una base de datos de recetas local real en lugar de adivinar.",
+    "description": "Homepage project card summary"
   }
 }
