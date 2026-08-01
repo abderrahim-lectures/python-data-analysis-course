@@ -33,7 +33,6 @@ This is optional and ungraded. See [Real-World Projects](/docs/projects) for the
 
 **GitHub Codespaces** works too: open [the whole course repo in a free Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python, and `uv` are already installed) and run the exact same `uv` commands from a terminal in your browser tab. It's a bit slower than a modern laptop for the transcription step, since Codespaces machines are CPU-only, but perfectly workable for the short sample clips here.
 
-{/* TODO: update these badge links to point at main once this PR merges */}
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/voice-to-task-agent/notebook.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/voice-to-task-agent/notebook.ipynb)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fvoice-to-task-agent%2Fnotebook.ipynb)
