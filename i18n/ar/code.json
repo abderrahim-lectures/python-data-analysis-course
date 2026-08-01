@@ -949,5 +949,21 @@
   "homepage.projects.voiceToTaskAgent.summary": {
     "message": "انسخ مذكرة صوتية محليًا ومجانًا باستخدام نموذج Whisper مفتوح المصدر من OpenAI، ثم استخدم LLM بمستوى مجاني لتحويلها إلى قائمة مهام مُهيكَلة.",
     "description": "Homepage project card summary"
+  },
+  "homepage.projects.webcamObjectCounter.title": {
+    "message": "عُدّ الأشياء في الوقت الفعلي باستخدام كاميرا ويب",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.webcamObjectCounter.summary": {
+    "message": "عُدّ الأشياء مباشرة من بثّ كاميرا ويب بـOpenCV ونموذج YOLO11n مُدرَّب مسبقًا، دون حاجة لمفتاح API أو تسجيل.",
+    "description": "Homepage project card summary"
+  },
+  "homepage.projects.wordleClone.title": {
+    "message": "ابنِ نسخة من Wordle",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.wordleClone.summary": {
+    "message": "ابنِ لعبة Wordle حقيقية في الطرفية من الصفر: تغذية راجعة صحيحة بالتخمين، وقائمة كلمات مخصصة، وتتبّع إحصائيات دائم عبر الجلسات.",
+    "description": "Homepage project card summary"
   }
 }
