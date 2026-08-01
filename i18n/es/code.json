@@ -949,5 +949,21 @@
   "homepage.projects.voiceToTaskAgent.summary": {
     "message": "Transcribe una nota de voz localmente y gratis con el modelo de código abierto Whisper de OpenAI, y luego usa un LLM de nivel gratuito para convertirla en una lista de tareas estructurada.",
     "description": "Homepage project card summary"
+  },
+  "homepage.projects.webcamObjectCounter.title": {
+    "message": "Cuenta Objetos en Tiempo Real con una Cámara Web",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.webcamObjectCounter.summary": {
+    "message": "Cuenta objetos en vivo desde el feed de una cámara web con OpenCV y un modelo YOLO11n preentrenado, sin necesidad de clave de API ni registro.",
+    "description": "Homepage project card summary"
+  },
+  "homepage.projects.wordleClone.title": {
+    "message": "Construye un Clon de Wordle",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.wordleClone.summary": {
+    "message": "Construye un juego Wordle real de terminal desde cero: retroalimentación correcta de acierto, una lista de palabras personalizada, y seguimiento persistente de estadísticas entre sesiones.",
+    "description": "Homepage project card summary"
   }
 }
