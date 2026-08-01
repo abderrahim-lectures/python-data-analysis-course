@@ -1,0 +1,6 @@
+.env
+__pycache__/
+index.npy
+chunks.json
+build/
+node_modules/
