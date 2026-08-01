@@ -851,7 +851,7 @@
     "description": "Homepage project card title"
   },
   "homepage.projects.financeAgent.summary": {
-    "message": "صنّف ملف CSV مصرفي مُصدَّر وحدد شذوذ الإنفاق، بدمج معالجة بيانات pandas مع وكيل نموذج لغوي يستدعي أدوات للتصنيف الذكي.",
+    "message": "صنّف ملف CSV مصرفي مُصدَّر وحدد الإنفاق غير الاعتيادي، بدمج معالجة بيانات pandas مع وكيل نموذج لغوي يستدعي أدوات للتصنيف الذكي.",
     "description": "Homepage project card summary"
   },
   "homepage.projects.githubIssueTriageAgent.title": {
