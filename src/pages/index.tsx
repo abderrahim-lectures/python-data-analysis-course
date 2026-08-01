@@ -191,6 +191,24 @@ function RealWorldProjects() {
         </p>
         <div className={styles.projectGrid}>
           <HomepageProjectCard
+            id="blog-post-generator"
+            title={
+              <Translate
+                id="homepage.projects.blogPostGenerator.title"
+                description="Homepage project card title">
+                Build an Outline→Blog Post Generator
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.blogPostGenerator.summary"
+                description="Homepage project card summary">
+                Turn a rough bullet-point outline into a polished blog post draft with a free-tier
+                LLM — you own the structure and ideas, the model does the writing.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
             id="2027-dependency-freshness-checker"
             title={
               <Translate
