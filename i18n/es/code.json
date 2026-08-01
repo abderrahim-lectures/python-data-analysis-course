@@ -893,5 +893,13 @@
   "homepage.projects.mcpSqliteServer.summary": {
     "message": "Construye un servidor MCP que expone una base de datos SQLite local, y observa a un cliente LLM escribir y ejecutar su propio SQL para responder preguntas en lenguaje natural sobre ella.",
     "description": "Homepage project card summary"
+  },
+  "homepage.projects.meetingNotesSummarizer.title": {
+    "message": "Construye un Resumidor de Notas de Reuniones",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.meetingNotesSummarizer.summary": {
+    "message": "Convierte una transcripción de reunión en bruto en decisiones estructuradas, elementos de acción y preguntas abiertas, usando un LLM de nivel gratuito y un prompt de extracción JSON cuidadosamente diseñado.",
+    "description": "Homepage project card summary"
   }
 }
