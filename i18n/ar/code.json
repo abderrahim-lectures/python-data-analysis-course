@@ -885,5 +885,13 @@
   "homepage.projects.mcpNotesServer.summary": {
     "message": "فهرس مجلد Markdown حقيقي لملاحظات واعرضه لـClaude Desktop كأدوات قابلة للبحث بـModel Context Protocol.",
     "description": "Homepage project card summary"
+  },
+  "homepage.projects.mcpSqliteServer.title": {
+    "message": "استعلام قاعدة بيانات بلغة طبيعية عبر MCP",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.mcpSqliteServer.summary": {
+    "message": "ابنِ خادم MCP يعرض قاعدة بيانات SQLite محلية، وشاهد عميل نموذج لغوي يكتب وينفّذ SQL الخاص به للإجابة عن أسئلة بلغة طبيعية حولها.",
+    "description": "Homepage project card summary"
   }
 }

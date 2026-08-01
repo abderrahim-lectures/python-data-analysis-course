@@ -885,5 +885,13 @@
   "homepage.projects.mcpNotesServer.summary": {
     "message": "Indexa una carpeta real de notas Markdown y expónla a Claude Desktop como herramientas buscables con el Model Context Protocol.",
     "description": "Homepage project card summary"
+  },
+  "homepage.projects.mcpSqliteServer.title": {
+    "message": "Consulta una Base de Datos en Lenguaje Natural con MCP",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.mcpSqliteServer.summary": {
+    "message": "Construye un servidor MCP que expone una base de datos SQLite local, y observa a un cliente LLM escribir y ejecutar su propio SQL para responder preguntas en lenguaje natural sobre ella.",
+    "description": "Homepage project card summary"
   }
 }
