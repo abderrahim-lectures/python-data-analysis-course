@@ -39,7 +39,6 @@ This is optional and ungraded. See [Real-World Projects](/docs/projects) for the
 
 **Google Colab, Kaggle Notebooks, or Binder** work fine too, since nothing here needs a GPU — every step is just an API call to a free-tier LLM. A real, runnable notebook version of this project lives in the repo at [`examples/multi-agent-research/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/multi-agent-research/notebook.ipynb) — click a badge below to launch it with zero local setup, no `.env` file needed (it asks for your API key interactively with `getpass` instead):
 
-{/* TODO: update these badge links to point at main once this PR merges */}
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/multi-agent-research/notebook.ipynb)
 [![Open in Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/multi-agent-research/notebook.ipynb)
