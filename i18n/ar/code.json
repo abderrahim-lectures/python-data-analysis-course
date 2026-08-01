@@ -933,5 +933,13 @@
   "homepage.projects.studyBuddyAgent.summary": {
     "message": "حوّل ملاحظات دراستك الخاصة إلى اختبار تفاعلي: نموذج لغوي من مستوى مجاني يكتب أسئلة مبنية على ملاحظاتك، ثم يحكم على إجاباتك المكتوبة.",
     "description": "Homepage project card summary"
+  },
+  "homepage.projects.triviaBot.title": {
+    "message": "بناء بوت Trivia على Discord",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.triviaBot.summary": {
+    "message": "شغّل جولات Trivia في خادم Discord بـ`discord.py`: لوحة متصدّرين دائمة، وأسئلة تُولَّد حديثًا حول أي موضوع باستخدام LLM من مستوى مجاني.",
+    "description": "Homepage project card summary"
   }
 }
