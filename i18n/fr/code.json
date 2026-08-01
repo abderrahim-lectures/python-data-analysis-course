@@ -901,5 +901,13 @@
   "homepage.projects.meetingNotesSummarizer.summary": {
     "message": "Transforme une transcription de réunion brute en décisions structurées, éléments d'action et questions ouvertes, en utilisant un LLM de niveau gratuit et un prompt d'extraction JSON soigneusement conçu.",
     "description": "Homepage project card summary"
+  },
+  "homepage.projects.multiAgentResearch.title": {
+    "message": "Construire un Assistant de Recherche Multi-Agents",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.multiAgentResearch.summary": {
+    "message": "Construis un petit système multi-agents — un planificateur, un chercheur et un rédacteur — qui décompose une question de recherche et synthétise un rapport final, en utilisant les sous-agents deepagents de LangChain et un LLM de palier gratuit.",
+    "description": "Homepage project card summary"
   }
 }

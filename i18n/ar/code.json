@@ -901,5 +901,13 @@
   "homepage.projects.meetingNotesSummarizer.summary": {
     "message": "حوّل نص اجتماع خام إلى قرارات وعناصر عمل وأسئلة مفتوحة مُهيكَلة، باستخدام نموذج لغوي من مستوى مجاني وprompt استخلاص JSON مصمَّم بعناية.",
     "description": "Homepage project card summary"
+  },
+  "homepage.projects.multiAgentResearch.title": {
+    "message": "بناء مساعد بحث متعدد الوكلاء",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.multiAgentResearch.summary": {
+    "message": "ابنِ نظامًا صغيرًا متعدد الوكلاء — مُخطِّطًا وباحثًا وكاتبًا — يقسّم سؤال بحث ويركّب تقريرًا نهائيًا، باستخدام وكلاء deepagents الفرعيين من LangChain ونموذجًا لغويًا من مستوى مجاني.",
+    "description": "Homepage project card summary"
   }
 }
