@@ -23,11 +23,11 @@ This is optional and ungraded. See [Real-World Projects](/docs/projects) for the
 
 ## 🎯 What you'll do
 
-1. Load a bundled folder of sample emails — no real inbox, password, or IMAP setup required to complete this project.
-2. Get a free-tier AI API key and write a prompt that categorizes each email (urgent / needs-reply / newsletter / fyi / spam-ish) and assigns it a priority.
-3. Write a second prompt that drafts a suggested reply for anything that needs one — and build in a hard rule this agent never breaks: **it never sends anything, ever**. Every draft is only printed and saved locally for you to read and send yourself.
-4. Run the whole pipeline end to end and read what it produced.
-5. *(Optional, "go further")* Point the same script at your own real inbox over IMAP instead of the sample emails, using a Gmail "app password" — not your real password.
+1. **Load** a bundled folder of sample emails — no real inbox, password, or IMAP setup required to complete this project.
+2. **Obtain** a free-tier AI API key and **write** a prompt that categorizes each email (urgent / needs-reply / newsletter / fyi / spam-ish) and assigns it a priority.
+3. **Design** a second prompt that drafts a suggested reply for anything that needs one — with a hard rule this agent never breaks: **it never sends anything, ever**. Every draft is only printed and saved locally for you to read and send yourself.
+4. **Run** the whole pipeline end to end and **review** what it produced.
+5. *(Optional, "go further")* **Apply** the same script to your own real inbox over IMAP, using a Gmail "app password" — not your real password.
 
 ## Where to run this
 
@@ -45,6 +45,7 @@ Click a badge, run the cells top to bottom, and paste in a free-tier API key whe
 
 **A note on the optional IMAP extension**: none of the three options above are a good place to type in a real email password, app password or not. If you try the optional "go further" step, do it locally, in a `.env` file that never leaves your machine — not in a notebook cell or a cloud IDE you don't fully control.
 
+**opencode** *(optional)* — a free, open-source AI coding agent that runs in your terminal. If you'd rather have an agent write and run this project for you than type the code yourself, install it with `curl -fsSL https://opencode.ai/install | bash` (or `npm install -g opencode-ai`) and point it at this repo with the same API key from Setup below. It's optional — this project's whole point is building it yourself, so treat it as a bonus, not a shortcut.
 ## Setup
 
 ### Install `uv`
@@ -473,3 +474,4 @@ Built something you're proud of? [`examples/student-projects/`](https://github.c
 Welcome to writing Python outside the browser. 🎓
 
 <ProjectProgressCheckbox projectId="email-triage-agent" />
+

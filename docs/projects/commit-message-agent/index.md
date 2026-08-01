@@ -23,11 +23,11 @@ This assumes Python 101 and enough comfort with git to know what `git add` and `
 
 ## 🎯 What you'll do
 
-1. Install `uv`, get a free-tier LLM API key, and set up a small project — all in one place, before any building starts.
-2. Use Python's `subprocess` module to run `git diff --staged` for real and capture its output as text.
-3. Design a system prompt that turns a general-purpose LLM into a focused Conventional-Commits-style message drafter.
-4. Build an interactive CLI loop: show the draft, let the user accept, edit, or regenerate it.
-5. Wire the loop up to actually run `git commit -m "..."` — but only after the user explicitly confirms.
+1. **Set up** `uv`, a free-tier LLM API key, and a small project — all in one place, before any building starts.
+2. **Capture** a staged `git diff --staged` with Python's `subprocess` module and read its output as text.
+3. **Design** a system prompt that turns a general-purpose LLM into a focused Conventional-Commits-style message drafter.
+4. **Build** an interactive CLI loop: show the draft, let the user accept, edit, or regenerate it.
+5. **Execute** the loop's `git commit -m "..."` step — but only after the user explicitly confirms.
 
 ## Where to run this
 
@@ -40,6 +40,7 @@ This assumes Python 101 and enough comfort with git to know what `git add` and `
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/commit-message-agent/notebook.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/commit-message-agent/notebook.ipynb)
 
+**opencode** *(optional)* — a free, open-source AI coding agent that runs in your terminal. If you'd rather have an agent write and run this project for you than type the code yourself, install it with `curl -fsSL https://opencode.ai/install | bash` (or `npm install -g opencode-ai`) and point it at this repo with the same API key from Setup below. It's optional — this project's whole point is building it yourself, so treat it as a bonus, not a shortcut.
 ## Setup
 
 Everything you need before you write a line of the drafter itself: a real Python, a free API key, and a small project to hold both.
@@ -454,3 +455,4 @@ Built something you're proud of? [`examples/student-projects/`](https://github.c
 Welcome to writing Python outside the browser. 🎓
 
 <ProjectProgressCheckbox projectId="2027-commit-message-agent" />
+

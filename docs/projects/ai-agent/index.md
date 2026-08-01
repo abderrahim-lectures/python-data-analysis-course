@@ -22,10 +22,10 @@ This is optional and ungraded — a good fit once you've finished Python 101 (da
 
 ## 🎯 What you'll do
 
-1. Install `uv`, a fast, modern tool for managing Python itself and your project's dependencies — no separate Python installer needed.
-2. Get a free-tier AI API key. **You're free to use whichever provider you like** — GitHub Models is the suggested default below since it needs no separate signup (you already have a GitHub account), but Gemini, Groq, Mistral, Cerebras, and OpenRouter all have workable free tiers too.
-3. Set up a small project and install LangChain's `deepagents`.
-4. Write and run one small agent, locally, from your own terminal.
+1. **Set up** `uv`, a fast, modern tool for managing Python itself and your project's dependencies — no separate Python installer needed.
+2. **Obtain** a free-tier AI API key. **You're free to use whichever provider you like** — GitHub Models is the suggested default below since it needs no separate signup (you already have a GitHub account), but Gemini, Groq, Mistral, Cerebras, and OpenRouter all have workable free tiers too.
+3. **Configure** a small project with LangChain's `deepagents` installed.
+4. **Write and run** one small agent, locally, from your own terminal.
 
 ## Where to run this
 
@@ -41,6 +41,7 @@ This is optional and ungraded — a good fit once you've finished Python 101 (da
 
 Be honest with yourself about the tradeoff, though: this is a lower-fidelity way to experience the project than a real local `uv` project — no separate files, no real project structure, just cells in a notebook. Treat it as a quick way to experiment, not the primary path.
 
+**opencode** *(optional)* — a free, open-source AI coding agent that runs in your terminal. If you'd rather have an agent write and run this project for you than type the code yourself, install it with `curl -fsSL https://opencode.ai/install | bash` (or `npm install -g opencode-ai`) and point it at this repo with the same API key from Setup below. It's optional — this project's whole point is building it yourself, so treat it as a bonus, not a shortcut.
 ## Setup
 
 ### Install `uv`
@@ -286,3 +287,4 @@ Built something you're proud of? [`examples/student-projects/`](https://github.c
 Welcome to writing Python outside the browser. 🎓
 
 <ProjectProgressCheckbox projectId="2026-ai-agent" />
+

@@ -23,11 +23,11 @@ This is optional and ungraded. See [Real-World Projects](/docs/projects) for the
 
 ## 🎯 What you'll do
 
-1. Install `uv` and set up a local project.
-2. Fetch a real web page with `requests` and parse its HTML with `beautifulsoup4`.
-3. Follow pagination links to collect an entire site's worth of data into a CSV.
-4. Load that CSV into pandas and clean it — splitting a packed string column, checking whitespace and dtypes.
-5. Analyze the cleaned data and produce a couple of honest, properly labeled charts with `matplotlib`.
+1. **Set up** a local project with `uv`.
+2. **Fetch** a real web page with `requests` and **parse** its HTML with `beautifulsoup4`.
+3. **Collect** an entire site's worth of data into a CSV by following pagination links.
+4. **Load** that CSV into pandas and **clean** it — splitting a packed string column, checking whitespace and dtypes.
+5. **Analyze** the cleaned data and **produce** a couple of honest, properly labeled charts with `matplotlib`.
 
 ## Where to run this
 
@@ -334,3 +334,4 @@ Built something you're proud of? [`examples/student-projects/`](https://github.c
 Welcome to writing Python outside the browser. 🎓
 
 <ProjectProgressCheckbox projectId="scrape-analyze" />
+

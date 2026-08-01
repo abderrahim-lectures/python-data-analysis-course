@@ -23,9 +23,9 @@ This is optional and ungraded. See [Real-World Projects](/docs/projects) for the
 
 ## 🎯 What you'll do
 
-1. Transcribe a short voice memo to text, entirely locally and for free, using OpenAI's *open-source* Whisper model (`openai-whisper`, run on your own CPU) — not the paid Whisper API.
-2. Write a prompt that asks a free-tier LLM to read that transcript and pull out structured action items: a task, an optional due date, an optional priority.
-3. Run the whole pipeline end to end on a provided sample recording (or your own), and save the result as a simple task list.
+1. **Transcribe** a short voice memo to text, entirely locally and for free, using OpenAI's *open-source* Whisper model (`openai-whisper`, run on your own CPU) — not the paid Whisper API.
+2. **Design** a prompt that asks a free-tier LLM to read that transcript and **extract** structured action items: a task, an optional due date, an optional priority.
+3. **Run** the whole pipeline end to end on a provided sample recording (or your own), and **save** the result as a simple task list.
 
 ## Where to run this
 
@@ -39,6 +39,7 @@ This is optional and ungraded. See [Real-World Projects](/docs/projects) for the
 
 **Google Colab is a notably good fit for this one** — better than for most other projects in this series. Whisper's transcription speed scales a lot with hardware, and Colab gives you a free GPU that a local CPU-only laptop doesn't: `!pip install openai-whisper` in a cell, then a GPU runtime, and even the larger Whisper model sizes (more accurate, normally too slow to consider on a CPU) become practical. If you want to experiment with model size vs. accuracy (see the tip in Step 1), Colab is where to do it. The badges above open a ready-made [`notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/voice-to-task-agent/notebook.ipynb) that runs the whole pipeline with zero local setup — same two-step pipeline, same sample audio, just in a hosted notebook instead of a terminal.
 
+**opencode** *(optional)* — a free, open-source AI coding agent that runs in your terminal. If you'd rather have an agent write and run this project for you than type the code yourself, install it with `curl -fsSL https://opencode.ai/install | bash` (or `npm install -g opencode-ai`) and point it at this repo with the same API key from Setup below. It's optional — this project's whole point is building it yourself, so treat it as a bonus, not a shortcut.
 ## Setup
 
 Everything needed before you write any pipeline code — installing `uv`, creating the project, and getting an LLM API key — lives here, once, up front. The actual build starts at Step 1, assuming all of this is already in place.
@@ -350,3 +351,4 @@ Built something you're proud of? [`examples/student-projects/`](https://github.c
 Welcome to writing Python outside the browser. 🎓
 
 <ProjectProgressCheckbox projectId="voice-to-task-agent" />
+

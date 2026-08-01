@@ -23,11 +23,11 @@ This is optional and ungraded; see [Real-World Projects](/docs/projects) for the
 
 ## 🎯 What you'll do
 
-1. Install `uv` and set up a local FastAPI project — no external API key needed, since this project ships its own dataset.
-2. Bundle a dataset and build paginated `list`/`get` endpoints over it.
-3. Add filtering by category and author with query parameters.
-4. Build real API-key issuance and a dependency that validates a key on protected endpoints.
-5. Implement a from-scratch sliding-window rate limiter and return real `429 Too Many Requests` responses with a `Retry-After` header once a key exceeds its budget.
+1. **Set up** a local FastAPI project with `uv` — no external API key needed, since this project ships its own dataset.
+2. **Build** paginated `list`/`get` endpoints over a bundled dataset.
+3. **Implement** filtering by category and author with query parameters.
+4. **Build** real API-key issuance and a dependency that validates a key on protected endpoints.
+5. **Implement** a from-scratch sliding-window rate limiter and **return** real `429 Too Many Requests` responses with a `Retry-After` header once a key exceeds its budget.
 
 ## Where to run this
 
@@ -400,3 +400,4 @@ Built something you're proud of? [`examples/student-projects/`](https://github.c
 Welcome to writing Python outside the browser. 🎓
 
 <ProjectProgressCheckbox projectId="2027-rate-limited-api" />
+

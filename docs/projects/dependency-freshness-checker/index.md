@@ -23,10 +23,10 @@ This is optional and ungraded — a good fit once you've finished Python 101 (no
 
 ## 🎯 What you'll do
 
-1. Parse a real `pyproject.toml` file and extract its dependency list.
-2. Query PyPI's public JSON API to find each dependency's current published version.
-3. Compare your pinned/installed version against the latest, using real semantic-version parsing — not naive string comparison.
-4. Print a clean, categorized freshness report (up to date / outdated / unable to check).
+1. **Parse** a real `pyproject.toml` file and **extract** its dependency list.
+2. **Query** PyPI's public JSON API to find each dependency's current published version.
+3. **Compare** your pinned/installed version against the latest, using real semantic-version parsing — not naive string comparison.
+4. **Produce** a clean, categorized freshness report (up to date / outdated / unable to check).
 
 ## Where to run this
 
@@ -290,3 +290,4 @@ Built something you're proud of? [`examples/student-projects/`](https://github.c
 Welcome to writing Python outside the browser. 🎓
 
 <ProjectProgressCheckbox projectId="2027-dependency-freshness-checker" />
+

@@ -23,10 +23,10 @@ If you keep notes in Obsidian, Notion, or just a plain folder of Markdown files,
 
 ## 🎯 What you'll do
 
-1. Install `uv` and set up a small project with the official MCP Python SDK.
-2. Index a real folder of sample Markdown notes -- load them off disk, pull out titles and modification times.
-3. Write search and lookup functions as plain Python, and test them before any MCP code is involved.
-4. Wire those functions up as MCP tools with `FastMCP`, and connect the server to Claude Desktop.
+1. **Set up** a small project with `uv` and the official MCP Python SDK.
+2. **Index** a real folder of sample Markdown notes — loading them off disk and **extracting** titles and modification times.
+3. **Write** search and lookup functions as plain Python, and **test** them before any MCP code is involved.
+4. **Expose** those functions as MCP tools with `FastMCP`, and **connect** the server to Claude Desktop.
 
 ## Where to run this
 
@@ -373,3 +373,4 @@ Built something you're proud of? [`examples/student-projects/`](https://github.c
 Welcome to writing Python outside the browser. 🎓
 
 <ProjectProgressCheckbox projectId="2027-mcp-notes-server" />
+

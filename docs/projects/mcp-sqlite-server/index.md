@@ -23,10 +23,10 @@ This assumes Python 101, ideally Data Analysis too (comfort with tables, columns
 
 ## 🎯 What you'll do
 
-1. Build a small, realistic SQLite database with a few related tables, using nothing but the standard library's `sqlite3` module.
-2. Write plain Python functions to list tables, describe a table's schema, and run a query — with a real, non-hand-wavy safety check that rejects anything that isn't a read-only `SELECT`.
-3. Wire those functions up as MCP tools with `FastMCP`, the same decorator-based API from the Build an MCP Server project.
-4. Connect your server to Claude Desktop and ask it a genuine plain-English question, watching it write and run its own SQL through your tools.
+1. **Build** a small, realistic SQLite database with a few related tables, using nothing but the standard library's `sqlite3` module.
+2. **Write** plain Python functions to list tables, describe a table's schema, and run a query — with a real, non-hand-wavy safety check that rejects anything that isn't a read-only `SELECT`.
+3. **Expose** those functions as MCP tools with `FastMCP`, the same decorator-based API from the Build an MCP Server project.
+4. **Connect** your server to Claude Desktop and **evaluate** it with a genuine plain-English question, watching it write and run its own SQL through your tools.
 
 ## Where to run this
 
@@ -362,3 +362,4 @@ Built something you're proud of? [`examples/student-projects/`](https://github.c
 Welcome to letting an AI write its own SQL — carefully. 🎓
 
 <ProjectProgressCheckbox projectId="2027-mcp-sqlite-server" />
+

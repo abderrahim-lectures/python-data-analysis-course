@@ -23,12 +23,12 @@ This is optional and ungraded. See [Real-World Projects](/docs/projects) for the
 
 ## 🎯 What you'll do
 
-1. Install `uv`, a fast, modern tool for managing Python itself and your project's dependencies.
-2. Get a free-tier LLM API key — any of six providers work.
-3. Load a real meeting transcript (three realistic samples ship with this project, so it runs with zero setup).
-4. Design a prompt that asks the model to return **structured JSON**, not free-flowing prose — the core, transferable skill of this project.
-5. Call the model, then parse and validate its JSON response — handling the case where it comes back slightly malformed, which happens more often than you'd like.
-6. Format the structured result as both readable Markdown and a `.json` file, and run the whole thing end to end on a real transcript.
+1. **Set up** `uv`, a fast, modern tool for managing Python itself and your project's dependencies.
+2. **Obtain** a free-tier LLM API key — any of six providers work.
+3. **Load** a real meeting transcript (three realistic samples ship with this project, so it runs with zero setup).
+4. **Design** a prompt that asks the model to return **structured JSON**, not free-flowing prose — the core, transferable skill of this project.
+5. **Call** the model, then **parse** and **validate** its JSON response — handling the case where it comes back slightly malformed, which happens more often than you'd like.
+6. **Format** the structured result as both readable Markdown and a `.json` file, and **run** the whole thing end to end on a real transcript.
 
 ## Where to run this
 
@@ -42,6 +42,7 @@ This is optional and ungraded. See [Real-World Projects](/docs/projects) for the
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/meeting-notes-summarizer/notebook.ipynb)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fmeeting-notes-summarizer%2Fnotebook.ipynb)
 
+**opencode** *(optional)* — a free, open-source AI coding agent that runs in your terminal. If you'd rather have an agent write and run this project for you than type the code yourself, install it with `curl -fsSL https://opencode.ai/install | bash` (or `npm install -g opencode-ai`) and point it at this repo with the same API key from Setup below. It's optional — this project's whole point is building it yourself, so treat it as a bonus, not a shortcut.
 ## Setup
 
 Everything you need before writing any summarization code — installing `uv`, creating the project, getting a free API key, and setting it up as an environment variable — lives in this one section, so you only have to do it once.
@@ -492,3 +493,4 @@ Built something you're proud of? [`examples/student-projects/`](https://github.c
 Welcome to writing Python outside the browser. 🎓
 
 <ProjectProgressCheckbox projectId="meeting-notes-summarizer" />
+

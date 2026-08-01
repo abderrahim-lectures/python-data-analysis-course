@@ -25,11 +25,11 @@ This is optional and ungraded. See [Real-World Projects](/docs/projects) for the
 
 ## 🎯 What you'll do
 
-1. Create a Discord bot application and grab its token from Discord's free developer portal.
-2. Install `uv`, set up a project, and add `discord.py` alongside the same embedding/retrieval libraries from the RAG App project.
-3. Reuse and adapt the RAG App's retrieval pipeline over a folder of documentation instead of personal notes.
-4. Wire a `discord.py` message handler so the bot retrieves relevant docs and generates an answer whenever it's mentioned.
-5. Invite the bot to a test server and ask it real questions, end to end.
+1. **Create** a Discord bot application and **retrieve** its token from Discord's free developer portal.
+2. **Set up** a project with `uv`, adding `discord.py` alongside the same embedding/retrieval libraries from the RAG App project.
+3. **Adapt** the RAG App's retrieval pipeline to a folder of documentation instead of personal notes.
+4. **Implement** a `discord.py` message handler so the bot retrieves relevant docs and generates an answer whenever it's mentioned.
+5. **Evaluate** the bot on a test server by asking it real questions, end to end.
 
 ## Where to run this
 
@@ -45,6 +45,7 @@ That said, the RAG pipeline *underneath* the bot — chunking, embedding, retrie
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/docs-qa-bot/notebook.ipynb)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fdocs-qa-bot%2Fnotebook.ipynb)
 
+**opencode** *(optional)* — a free, open-source AI coding agent that runs in your terminal. If you'd rather have an agent write and run this project for you than type the code yourself, install it with `curl -fsSL https://opencode.ai/install | bash` (or `npm install -g opencode-ai`) and point it at this repo with the same API key from Setup below. It's optional — this project's whole point is building it yourself, so treat it as a bonus, not a shortcut.
 ## Setup
 
 Everything in this section only needs to happen once, before you write a line of the bot itself: installing `uv`, creating the Discord bot application and grabbing its token, getting a free LLM key, and setting up the project. Every step after this one assumes all of it is already done.
@@ -486,3 +487,4 @@ Built something you're proud of? [`examples/student-projects/`](https://github.c
 Welcome to writing Python outside the browser. 🎓
 
 <ProjectProgressCheckbox projectId="docs-qa-bot" />
+

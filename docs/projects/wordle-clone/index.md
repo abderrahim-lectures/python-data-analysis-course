@@ -23,10 +23,10 @@ This is optional and ungraded. See [Real-World Projects](/docs/projects) for the
 
 ## 🎯 What you'll do
 
-1. Implement the core guess-feedback logic — comparing a guess to a target word and producing green/yellow/gray marks per letter, correctly handling repeated letters (the classic Wordle logic bug).
-2. Build an interactive game loop backed by a real word list, giving the player 6 guesses.
-3. Validate guesses against the word list and give clear feedback when a guess is rejected.
-4. Add persistent stats tracking — win rate, current streak, and a guess-count distribution — saved to a local JSON file so it survives across runs.
+1. **Implement** the core guess-feedback logic — comparing a guess to a target word and producing green/yellow/gray marks per letter, correctly handling repeated letters (the classic Wordle logic bug).
+2. **Build** an interactive game loop backed by a real word list, giving the player 6 guesses.
+3. **Validate** guesses against the word list and **give** clear feedback when a guess is rejected.
+4. **Add** persistent stats tracking — win rate, current streak, and a guess-count distribution — saved to a local JSON file so it survives across runs.
 
 ## Where to run this
 
@@ -328,3 +328,4 @@ Built something you're proud of? [`examples/student-projects/`](https://github.c
 Welcome to writing Python outside the browser. 🎓
 
 <ProjectProgressCheckbox projectId="2027-wordle-clone" />
+

@@ -23,10 +23,10 @@ This is optional and ungraded — a good fit once you've finished Python 101. Se
 
 ## 🎯 What you'll do
 
-1. Load and clean a sample bank CSV export with pandas.
-2. Build a fast, rule-based baseline categorizer — and see exactly where keyword rules run out of road.
-3. Build an LLM agent tool that categorizes the transactions the rules couldn't confidently label, and explains its reasoning.
-4. Flag statistically unusual transactions (an unusually large purchase compared to that category's typical spend) and have the agent summarize what it found in plain English.
+1. **Load** and **clean** a sample bank CSV export with pandas.
+2. **Build** a fast, rule-based baseline categorizer — and **analyze** exactly where keyword rules run out of road.
+3. **Design** an LLM agent tool that categorizes the transactions the rules couldn't confidently label, and **explains** its reasoning.
+4. **Detect** statistically unusual transactions (an unusually large purchase compared to that category's typical spend) and have the agent **summarize** what it found in plain English.
 
 ## Where to run this
 
@@ -42,6 +42,7 @@ This is optional and ungraded — a good fit once you've finished Python 101. Se
 
 Be honest with yourself about the tradeoff, though: this is a lower-fidelity way to experience the project than a real local `uv` project — no separate files, no real project structure, just cells in a notebook. Treat it as a quick way to experiment, not the primary path.
 
+**opencode** *(optional)* — a free, open-source AI coding agent that runs in your terminal. If you'd rather have an agent write and run this project for you than type the code yourself, install it with `curl -fsSL https://opencode.ai/install | bash` (or `npm install -g opencode-ai`) and point it at this repo with the same API key from Setup below. It's optional — this project's whole point is building it yourself, so treat it as a bonus, not a shortcut.
 ## Setup
 
 ### Install `uv`
@@ -354,3 +355,4 @@ Built something you're proud of? [`examples/student-projects/`](https://github.c
 Welcome to writing Python outside the browser. 🎓
 
 <ProjectProgressCheckbox projectId="2027-finance-agent" />
+

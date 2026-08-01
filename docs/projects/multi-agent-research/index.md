@@ -25,11 +25,11 @@ This is optional and ungraded. See [Real-World Projects](/docs/projects) for the
 
 ## 🎯 What you'll do
 
-1. Install `uv`, a fast, modern tool for managing Python itself and your project's dependencies.
-2. Get a free-tier AI API key — the same six-provider choice as the AI Agent project.
-3. Set up a small project and install `deepagents`.
-4. Define three sub-agents — planner, researcher, writer — each with its own narrow system prompt.
-5. Wire them together into one top-level agent and run it on a real research question, end to end.
+1. **Set up** `uv`, a fast, modern tool for managing Python itself and your project's dependencies.
+2. **Obtain** a free-tier AI API key — the same six-provider choice as the AI Agent project.
+3. **Configure** a small project with `deepagents` installed.
+4. **Define** three sub-agents — planner, researcher, writer — each with its own narrow system prompt.
+5. **Integrate** them into one top-level agent and **evaluate** it on a real research question, end to end.
 
 ## Where to run this
 
@@ -46,6 +46,7 @@ This is optional and ungraded. See [Real-World Projects](/docs/projects) for the
 
 It's a lower-fidelity way to experience the project than a real local `uv` project, but perfectly workable for trying the idea out quickly.
 
+**opencode** *(optional)* — a free, open-source AI coding agent that runs in your terminal. If you'd rather have an agent write and run this project for you than type the code yourself, install it with `curl -fsSL https://opencode.ai/install | bash` (or `npm install -g opencode-ai`) and point it at this repo with the same API key from Setup below. It's optional — this project's whole point is building it yourself, so treat it as a bonus, not a shortcut.
 ## Setup
 
 Everything below gets your environment fully ready before any building starts: installing `uv`, getting a free API key, setting up the project, and configuring your `.env` file.
@@ -276,3 +277,4 @@ Built something you're proud of? [`examples/student-projects/`](https://github.c
 Welcome to writing Python outside the browser. 🎓
 
 <ProjectProgressCheckbox projectId="multi-agent-research" />
+

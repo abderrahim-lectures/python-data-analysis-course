@@ -23,11 +23,11 @@ This is optional and ungraded. See [Real-World Projects](/docs/projects) for the
 
 ## 🎯 What you'll do
 
-1. Install `uv` and set up a local project with OpenCV and a pretrained object-detection model.
-2. Run detection on a single bundled sample image and draw bounding boxes around what it finds.
-3. Count objects of one target class (e.g. `person`) and print a running total.
-4. Process a short bundled sample video frame-by-frame.
-5. Wire the same detection loop up to your own webcam for live, real-time counting.
+1. **Set up** a local project with `uv`, OpenCV, and a pretrained object-detection model.
+2. **Run** detection on a single bundled sample image and **draw** bounding boxes around what it finds.
+3. **Count** objects of one target class (e.g. `person`) and **print** a running total.
+4. **Process** a short bundled sample video frame-by-frame.
+5. **Apply** the same detection loop to your own webcam for live, real-time counting.
 
 ## Where to run this
 
@@ -300,3 +300,4 @@ Built something you're proud of? [`examples/student-projects/`](https://github.c
 Welcome to writing Python outside the browser. 🎓
 
 <ProjectProgressCheckbox projectId="2027-webcam-object-counter" />
+

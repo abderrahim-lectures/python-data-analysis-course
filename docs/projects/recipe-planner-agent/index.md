@@ -23,11 +23,11 @@ This assumes Python 101. Having done the [AI Agent project](/docs/projects/ai-ag
 
 ## 🎯 What you'll do
 
-1. Install `uv`, get a free-tier AI API key, and set up a small project with `deepagents` — all up front, in Setup below.
-2. Define a small local "recipe database" — a plain Python list of dicts, 10-15 recipes, each with its own ingredient list.
-3. Write a tool function the agent can call to search that database by ingredients you have on hand.
-4. Wire that tool into a `deepagents` agent with a system prompt that keeps it grounded in real recipes only.
-5. Ask the agent for meal suggestions from a real ingredient list, then have it build a shopping list for the one you pick.
+1. **Set up** `uv`, a free-tier AI API key, and a small project with `deepagents` — all up front, in Setup below.
+2. **Define** a small local "recipe database" — a plain Python list of dicts, 10-15 recipes, each with its own ingredient list.
+3. **Write** a tool function the agent can call to search that database by ingredients you have on hand.
+4. **Integrate** that tool into a `deepagents` agent with a system prompt that keeps it grounded in real recipes only.
+5. **Evaluate** the agent's meal suggestions from a real ingredient list, then have it **build** a shopping list for the one you pick.
 
 ## Where to run this
 
@@ -43,6 +43,7 @@ This assumes Python 101. Having done the [AI Agent project](/docs/projects/ai-ag
 
 It's a lower-fidelity way to experience the project than a real local `uv` project — no separate files, no real project structure — but perfectly workable for trying the idea out. Set your API key with `os.environ["GITHUB_TOKEN"] = "..."` in the getpass cell (or use Colab's Secrets panel).
 
+**opencode** *(optional)* — a free, open-source AI coding agent that runs in your terminal. If you'd rather have an agent write and run this project for you than type the code yourself, install it with `curl -fsSL https://opencode.ai/install | bash` (or `npm install -g opencode-ai`) and point it at this repo with the same API key from Setup below. It's optional — this project's whole point is building it yourself, so treat it as a bonus, not a shortcut.
 ## Setup
 
 Everything needed before you write a single line of the agent itself lives here — installing `uv`, getting an API key, creating the project, and setting up your `.env` file. Steps 1 onward assume all of this is already done.
@@ -410,3 +411,4 @@ Built something you're proud of? [`examples/student-projects/`](https://github.c
 Welcome to writing Python outside the browser. 🎓
 
 <ProjectProgressCheckbox projectId="recipe-planner-agent" />
+

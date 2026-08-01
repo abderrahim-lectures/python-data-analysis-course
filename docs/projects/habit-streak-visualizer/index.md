@@ -23,10 +23,10 @@ This is optional and ungraded. See [Real-World Projects](/docs/projects) for the
 
 ## 🎯 What you'll do
 
-1. Design a simple check-in log format (a CSV: date, habit, done) and write a CLI to append to it.
-2. Compute a habit's current streak and longest streak from that log.
-3. Lay a range of days out into a GitHub-contributions-graph-style grid: seven weekday rows by however many week columns the range needs.
-4. Render that grid as a matplotlib heatmap, colored by how long a streak was building on each day, using several months of real-looking sample data so the picture actually looks interesting.
+1. **Design** a simple check-in log format (a CSV: date, habit, done) and **build** a CLI to append to it.
+2. **Compute** a habit's current streak and longest streak from that log.
+3. **Arrange** a range of days into a GitHub-contributions-graph-style grid: seven weekday rows by however many week columns the range needs.
+4. **Render** that grid as a matplotlib heatmap, colored by how long a streak was building on each day, using several months of real-looking sample data so the picture actually looks interesting.
 
 ## Where to run this
 
@@ -315,3 +315,4 @@ Built something you're proud of? [`examples/student-projects/`](https://github.c
 Welcome to writing Python outside the browser. 🎓
 
 <ProjectProgressCheckbox projectId="2027-habit-streak-visualizer" />
+

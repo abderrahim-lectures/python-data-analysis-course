@@ -23,11 +23,11 @@ This assumes Python 101 and enough comfort with git to know what `git diff` show
 
 ## 🎯 What you'll do
 
-1. Install `uv`, get a free-tier LLM API key, and set up a small project — all in one place, before any building starts.
-2. Use Python's `subprocess` module to run `git diff` for real and capture its output as text.
-3. Design a system prompt that turns a general-purpose LLM into a focused, structured code reviewer.
-4. Send a diff to the model and print its feedback in a clear, readable format.
-5. Run the whole tool against a real diff — your own uncommitted changes, and a specific past commit from this course's own repo history.
+1. **Set up** `uv`, a free-tier LLM API key, and a small project — all in one place, before any building starts.
+2. **Capture** a real `git diff` with Python's `subprocess` module and read its output as text.
+3. **Design** a system prompt that turns a general-purpose LLM into a focused, structured code reviewer.
+4. **Evaluate** a diff with the model and **present** its feedback in a clear, readable format.
+5. **Apply** the whole tool to real diffs — your own uncommitted changes, and a specific past commit from this course's own repo history.
 
 ## Where to run this
 
@@ -41,6 +41,7 @@ This assumes Python 101 and enough comfort with git to know what `git diff` show
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/agentic-code-reviewer/notebook.ipynb)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fagentic-code-reviewer%2Fnotebook.ipynb)
 
+**opencode** *(optional)* — a free, open-source AI coding agent that runs in your terminal. If you'd rather have an agent write and run this project for you than type the code yourself, install it with `curl -fsSL https://opencode.ai/install | bash` (or `npm install -g opencode-ai`) and point it at this repo with the same API key from Setup below. It's optional — this project's whole point is building it yourself, so treat it as a bonus, not a shortcut.
 ## Setup
 
 Everything you need before you write a line of the reviewer itself: a real Python, a free API key, and a small project to hold both.
@@ -417,3 +418,4 @@ Built something you're proud of? [`examples/student-projects/`](https://github.c
 Welcome to writing Python outside the browser. 🎓
 
 <ProjectProgressCheckbox projectId="agentic-code-reviewer" />
+
