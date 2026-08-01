@@ -20,6 +20,12 @@ export interface ProjectMeta {
  */
 export const PROJECTS: ProjectMeta[] = [
   {
+    id: 'resume-tailor-agent',
+    date: '2027-08',
+    url: '/docs/projects/resume-tailor-agent',
+    tags: ['AI Agents', 'Career', 'Automation'],
+  },
+  {
     id: '2027-dependency-freshness-checker',
     date: '2027-08',
     url: '/docs/projects/dependency-freshness-checker',

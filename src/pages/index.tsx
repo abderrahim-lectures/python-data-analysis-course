@@ -191,6 +191,25 @@ function RealWorldProjects() {
         </p>
         <div className={styles.projectGrid}>
           <HomepageProjectCard
+            id="resume-tailor-agent"
+            title={
+              <Translate
+                id="homepage.projects.resumeTailorAgent.title"
+                description="Homepage project card title">
+                Build a Resume & Cover-Letter Tailoring Agent
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.resumeTailorAgent.summary"
+                description="Homepage project card summary">
+                Score your match against a specific job description, draft a tailored cover
+                letter, and list concrete resume edits — with a hard no-fabrication rule,
+                using a free-tier LLM.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
             id="2027-dependency-freshness-checker"
             title={
               <Translate

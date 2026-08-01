@@ -1,0 +1,39 @@
+# Sample Job Description -- Junior Machine Learning Engineer
+
+## About the role
+We're looking for a Junior Machine Learning Engineer to join our data team of
+six. You'll work alongside senior engineers to build and ship machine learning
+features that improve how our retail customers shop online. This is a
+build-focused role: you'll write production Python, train and evaluate models,
+and get code reviewed and deployed by a real team.
+
+## What you'll do
+- Train, evaluate, and tune machine learning models (classification and
+  regression) on real customer and sales data.
+- Write clean, tested Python in a shared codebase reviewed by senior engineers.
+- Build data pipelines in Python and SQL to prepare features for models.
+- Turn model results into dashboards and reports that non-technical
+  stakeholders can actually understand.
+- Collaborate with analysts and product managers to define what "good" looks
+  like before building.
+
+## What we're looking for
+- Working knowledge of Python and one or more of: scikit-learn, pandas, numpy.
+- Some experience with SQL for querying and shaping data.
+- Basic understanding of evaluation: what accuracy, precision, and recall are,
+  and when each one matters.
+- Comfort presenting findings to people who are not data people.
+- Bonus: experience with A/B testing, Git, or any cloud platform.
+
+## Nice to have
+- Any deployed project you can point to -- a notebook, a GitHub repo, anything
+  you built yourself and can talk about.
+
+## Why join us
+We value honest, clearly-explained work over impressive-sounding results.
+There is no fake-it-till-you-make-it here -- we'd rather hire someone who
+candidly says "I don't know yet" than someone who overstates their skills.
+
+## Apply
+Send your resume and a short note about a data project you're proud of to
+careers@example-store.example.

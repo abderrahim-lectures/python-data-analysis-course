@@ -1,0 +1,43 @@
+# Sample Resume -- Alex Rivera
+
+## Summary
+Data analyst with 2 years of experience turning raw data into decisions for a
+regional retail chain. Comfortable with pandas, SQL, and building dashboards
+that non-technical colleagues actually use. Looking to grow into a role with
+more machine learning.
+
+## Experience
+
+### Data Analyst -- Northwind Retail, Portland OR (2024 - present)
+- Built a daily sales dashboard in Python (pandas + matplotlib) that regional
+  managers check every morning.
+- Wrote and maintained SQL queries against a PostgreSQL warehouse, cutting
+  weekly reporting time from a day to under an hour.
+- Cleaned and joined messy export files from three different store systems
+  into one weekly dataset for the finance team.
+- Ran A/B tests on two store layouts and presented results to store managers.
+
+### Junior Data Analyst -- Local Radio Group, Portland OR (2022 - 2024)
+- Automated a weekly listener-numbers report with Python, replacing a manual
+  Excel workflow.
+- Responded to ad-hoc data requests from sales and programming teams.
+- Learned pandas, matplotlib, and basic SQL on the job, mostly by doing.
+
+## Education
+
+- B.S. in Economics, Portland State University (2022)
+
+## Skills
+
+- Python (pandas, matplotlib, requests, Jupyter)
+- SQL (PostgreSQL, SQLite)
+- Excel / Google Sheets
+- Basic statistics (hypothesis testing, A/B testing)
+- Git and GitHub basics
+
+## Projects
+
+- Personal habit-tracker dashboard (pandas + matplotlib) -- a weekly calendar
+  heatmap of my own exercise habits.
+- Web scraper for local event listings (requests + BeautifulSoup) -- published
+  a cleaned weekly dataset on GitHub.
