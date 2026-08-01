@@ -925,5 +925,13 @@
   "homepage.projects.recipePlannerAgent.summary": {
     "message": "Construis un agent IA qui utilise des outils et suggère des repas à partir des ingrédients que tu as sous la main, ancré dans une vraie base de données de recettes locale plutôt que de deviner.",
     "description": "Homepage project card summary"
+  },
+  "homepage.projects.studyBuddyAgent.title": {
+    "message": "Construire un Agent de Quiz de Compagnon d'Étude",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.studyBuddyAgent.summary": {
+    "message": "Transforme tes propres notes d'étude en quiz interactif : un LLM de niveau gratuit écrit des questions ancrées dans tes notes, puis juge tes réponses tapées.",
+    "description": "Homepage project card summary"
   }
 }

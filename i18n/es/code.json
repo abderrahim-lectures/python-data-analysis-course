@@ -925,5 +925,13 @@
   "homepage.projects.recipePlannerAgent.summary": {
     "message": "Construye un agente de IA que usa herramientas que sugiere comidas a partir de los ingredientes que tienes a la mano, anclado a una base de datos de recetas local real en lugar de adivinar.",
     "description": "Homepage project card summary"
+  },
+  "homepage.projects.studyBuddyAgent.title": {
+    "message": "Construye un Agente de Cuestionarios de Compañero de Estudio",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.studyBuddyAgent.summary": {
+    "message": "Convierte tus propias notas de estudio en un cuestionario interactivo: un LLM de nivel gratuito escribe preguntas fundamentadas en tus notas, luego juzga tus respuestas escritas.",
+    "description": "Homepage project card summary"
   }
 }
