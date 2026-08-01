@@ -893,5 +893,13 @@
   "homepage.projects.mcpSqliteServer.summary": {
     "message": "ابنِ خادم MCP يعرض قاعدة بيانات SQLite محلية، وشاهد عميل نموذج لغوي يكتب وينفّذ SQL الخاص به للإجابة عن أسئلة بلغة طبيعية حولها.",
     "description": "Homepage project card summary"
+  },
+  "homepage.projects.meetingNotesSummarizer.title": {
+    "message": "بناء مُلخِّص ملاحظات الاجتماعات",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.meetingNotesSummarizer.summary": {
+    "message": "حوّل نص اجتماع خام إلى قرارات وعناصر عمل وأسئلة مفتوحة مُهيكَلة، باستخدام نموذج لغوي من مستوى مجاني وprompt استخلاص JSON مصمَّم بعناية.",
+    "description": "Homepage project card summary"
   }
 }
