@@ -909,5 +909,13 @@
   "homepage.projects.multiAgentResearch.summary": {
     "message": "Construye un pequeño sistema multi-agente — un planificador, un investigador y un escritor — que descompone una pregunta de investigación y sintetiza un informe final, usando los sub-agentes de deepagents de LangChain y un LLM de nivel gratuito.",
     "description": "Homepage project card summary"
+  },
+  "homepage.projects.rateLimitedApi.title": {
+    "message": "Construye un Servicio de API con Límite de Tasa",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.rateLimitedApi.summary": {
+    "message": "Construye un servicio FastAPI real que envuelve tu propio conjunto de datos, con autenticación genuina por clave de API y un limitador de tasa de ventana deslizante que construyes desde cero.",
+    "description": "Homepage project card summary"
   }
 }

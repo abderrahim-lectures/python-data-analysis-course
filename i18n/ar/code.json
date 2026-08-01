@@ -909,5 +909,13 @@
   "homepage.projects.multiAgentResearch.summary": {
     "message": "ابنِ نظامًا صغيرًا متعدد الوكلاء — مُخطِّطًا وباحثًا وكاتبًا — يقسّم سؤال بحث ويركّب تقريرًا نهائيًا، باستخدام وكلاء deepagents الفرعيين من LangChain ونموذجًا لغويًا من مستوى مجاني.",
     "description": "Homepage project card summary"
+  },
+  "homepage.projects.rateLimitedApi.title": {
+    "message": "بناء خدمة API محدودة المعدل",
+    "description": "Homepage project card title"
+  },
+  "homepage.projects.rateLimitedApi.summary": {
+    "message": "ابنِ خدمة FastAPI حقيقية تغلّف مجموعة بياناتك الخاصة، مع مصادقة حقيقية بمفتاح API ومحدِّد معدل بنافذة منزلقة تبنيّه من الصفر.",
+    "description": "Homepage project card summary"
   }
 }
