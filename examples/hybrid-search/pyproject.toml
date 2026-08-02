@@ -1,0 +1,10 @@
+[project]
+name = "hybrid-search"
+version = "0.1.0"
+description = "Compare keyword (BM25-style), embedding-based, and hybrid retrieval on the same small corpus — no API key needed."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "sentence-transformers>=2.2.0",
+    "numpy>=1.24",
+]
