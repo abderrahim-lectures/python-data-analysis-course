@@ -5,6 +5,40 @@
   margin: 1.5rem 0;
 }
 
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 1.5rem 0 0.5rem;
+}
+
+.filterChip {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  background: transparent;
+  color: var(--ifm-font-color-base);
+  cursor: pointer;
+  min-height: 0;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.filterChip:hover {
+  border-color: var(--pda-accent);
+  color: var(--pda-accent);
+}
+
+.filterChipActive {
+  background: var(--pda-accent-soft);
+  border-color: var(--pda-accent);
+  color: var(--pda-accent);
+}
+
 .card {
   border: 1px solid var(--ifm-color-emphasis-200);
   border-radius: var(--pda-radius-lg);
@@ -14,12 +48,18 @@
   flex-direction: column;
   color: var(--ifm-font-color-base);
   text-decoration: none;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    border-color 0.15s ease;
 }
 
 .card:hover {
   border-color: var(--pda-accent);
   text-decoration: none;
   color: var(--ifm-font-color-base);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
 }
 
 .card h3 {

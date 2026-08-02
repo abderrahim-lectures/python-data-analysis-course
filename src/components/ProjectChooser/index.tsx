@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useMemo, useState} from 'react';
 import Link from '@docusaurus/Link';
 import Translate from '@docusaurus/Translate';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import clsx from 'clsx';
 import {useLocalStorage} from '@site/src/hooks/useLocalStorage';
 import {STORAGE_KEYS} from '@site/src/utils/storageKeys';
 import {formatProjectDate} from '@site/src/data/projects';
@@ -44,39 +45,71 @@ export default function ProjectChooser({projects}: Props): React.JSX.Element {
     return a.id < b.id ? -1 : 1;
   });
 
+  const tags = useMemo(() => {
+    const seen = new Set<string>();
+    for (const p of projects) {
+      for (const tag of p.tags) {
+        seen.add(tag);
+      }
+    }
+    return [...seen];
+  }, [projects]);
+
+  const [activeTag, setActiveTag] = useState<string | null>(null);
+  const filtered = activeTag === null ? sorted : sorted.filter((p) => p.tags.includes(activeTag));
+
   return (
-    <div className={styles.grid}>
-      {sorted.map((project) => {
-        const completed = progress[project.id] ?? false;
-        return (
-          <Link key={project.id} to={project.url} className={styles.card}>
-            <h3>
-              {completed && (
-                <span aria-hidden="true" className={styles.checkmark}>
-                  ✅{' '}
-                </span>
-              )}
-              {project.title}
-            </h3>
-            <p className={styles.date}>{formatProjectDate(project.date, currentLocale)}</p>
-            <p>{project.summary}</p>
-            {project.tags.length > 0 && (
-              <div className={styles.tags}>
-                {project.tags.map((tag) => (
-                  <span key={tag} className={styles.tag}>
-                    {tag}
+    <>
+      <div className={styles.filters} role="group" aria-label="Filter projects by topic">
+        <button
+          type="button"
+          className={clsx(styles.filterChip, activeTag === null && styles.filterChipActive)}
+          onClick={() => setActiveTag(null)}>
+          <Translate id="capstoneChooser.filterAll">All</Translate>
+        </button>
+        {tags.map((tag) => (
+          <button
+            key={tag}
+            type="button"
+            className={clsx(styles.filterChip, activeTag === tag && styles.filterChipActive)}
+            onClick={() => setActiveTag((current) => (current === tag ? null : tag))}>
+            {tag}
+          </button>
+        ))}
+      </div>
+      <div className={styles.grid}>
+        {filtered.map((project) => {
+          const completed = progress[project.id] ?? false;
+          return (
+            <Link key={project.id} to={project.url} className={styles.card}>
+              <h3>
+                {completed && (
+                  <span aria-hidden="true" className={styles.checkmark}>
+                    ✅{' '}
                   </span>
-                ))}
-              </div>
-            )}
-            {completed && (
-              <p className={styles.completedLabel}>
-                <Translate id="capstoneChooser.completedLabel">Completed</Translate>
-              </p>
-            )}
-          </Link>
-        );
-      })}
-    </div>
+                )}
+                {project.title}
+              </h3>
+              <p className={styles.date}>{formatProjectDate(project.date, currentLocale)}</p>
+              <p>{project.summary}</p>
+              {project.tags.length > 0 && (
+                <div className={styles.tags}>
+                  {project.tags.map((tag) => (
+                    <span key={tag} className={styles.tag}>
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+              {completed && (
+                <p className={styles.completedLabel}>
+                  <Translate id="capstoneChooser.completedLabel">Completed</Translate>
+                </p>
+              )}
+            </Link>
+          );
+        })}
+      </div>
+    </>
   );
 }

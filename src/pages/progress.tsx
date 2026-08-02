@@ -5,7 +5,75 @@ import Layout from '@theme/Layout';
 import BadgeCase from '@site/src/components/BadgeCase';
 import ShareProgress from '@site/src/components/ShareProgress';
 import DataTransfer from '@site/src/components/DataTransfer';
+import {useLocalStorage} from '@site/src/hooks/useLocalStorage';
 import {useCourseComplete} from '@site/src/hooks/useUnlockCondition';
+import {PROJECTS} from '@site/src/data/projects';
+import {STORAGE_KEYS} from '@site/src/utils/storageKeys';
+import {getChosenWeeksPartial} from '@site/src/utils/weeks';
+import type {PerSectionTrack, ProgressMap, ProjectProgressMap} from '@site/src/types/progress';
+import styles from './progress.module.css';
+
+function OverallProgress(): React.JSX.Element {
+  const [progress] = useLocalStorage<ProgressMap>(STORAGE_KEYS.progress, {});
+  const [tracks] = useLocalStorage<PerSectionTrack>(STORAGE_KEYS.track, {});
+  const [projectProgress] = useLocalStorage<ProjectProgressMap>(STORAGE_KEYS.projectProgress, {});
+
+  const chosenWeeks = getChosenWeeksPartial(tracks);
+  const weeksDone = chosenWeeks.filter((w) => progress[w.weekId]).length;
+  const weeksTotal = chosenWeeks.length;
+  const projectsDone = PROJECTS.filter((p) => projectProgress[p.id]).length;
+  const projectsTotal = PROJECTS.length;
+
+  const tracked = weeksTotal > 0;
+  const itemsDone = weeksDone + projectsDone;
+  const itemsTotal = weeksTotal + projectsTotal;
+  const percent = tracked && itemsTotal > 0 ? Math.round((itemsDone / itemsTotal) * 100) : 0;
+
+  if (!tracked) {
+    return (
+      <section className={styles.overall}>
+        <p>
+          <Translate id="progressPage.overall.empty">
+            Choose a track on Python 101 or Data Analysis to start tracking progress.
+          </Translate>
+        </p>
+      </section>
+    );
+  }
+
+  return (
+    <section className={styles.overall}>
+      <div className={styles.overallHeader}>
+        <h2>
+          <Translate id="progressPage.overall.heading">Overall progress</Translate>
+        </h2>
+        <span className={styles.overallPercent}>{percent}%</span>
+      </div>
+      <div className={styles.barTrack} role="progressbar" aria-valuenow={percent} aria-valuemin={0} aria-valuemax={100}>
+        <div className={styles.barFill} style={{width: `${percent}%`}} />
+      </div>
+      <p className={styles.overallDetail}>
+        <Translate
+          id="progressPage.overall.detail"
+          values={{
+            weeks: (
+              <strong>
+                {weeksDone} / {weeksTotal} <Translate id="progressPage.overall.weeks">weeks</Translate>
+              </strong>
+            ),
+            projects: (
+              <strong>
+                {projectsDone} / {projectsTotal}{' '}
+                <Translate id="progressPage.overall.projects">projects</Translate>
+              </strong>
+            ),
+          }}>
+          {'{weeks} completed and {projects} built'}
+        </Translate>
+      </p>
+    </section>
+  );
+}
 
 export default function ProgressPage(): ReactNode {
   const courseComplete = useCourseComplete();
@@ -41,6 +109,7 @@ export default function ProgressPage(): ReactNode {
             </Translate>
           </div>
         )}
+        <OverallProgress />
         <BadgeCase />
         <ShareProgress />
         <DataTransfer />

@@ -1,0 +1,44 @@
+.overall {
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border-radius: var(--pda-radius-lg);
+  background: var(--pda-surface);
+  border: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.overallHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.overallHeader h2 {
+  margin: 0;
+}
+
+.overallPercent {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--pda-accent);
+}
+
+.barTrack {
+  height: 0.75rem;
+  border-radius: 999px;
+  background: var(--ifm-color-emphasis-200);
+  overflow: hidden;
+  margin: 1rem 0 0.75rem;
+}
+
+.barFill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--ifm-color-primary), var(--pda-accent));
+  transition: width 0.3s ease;
+}
+
+.overallDetail {
+  margin: 0;
+  color: var(--ifm-color-emphasis-700);
+}

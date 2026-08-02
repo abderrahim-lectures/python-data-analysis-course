@@ -8,12 +8,77 @@
   text-align: center;
   position: relative;
   overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    var(--ifm-color-primary-darkest) 0%,
+    var(--ifm-color-primary) 55%,
+    var(--pda-accent) 140%
+  );
+  color: #fff;
+}
+
+.heroBanner :global(.button--secondary) {
+  background: #fff;
+  color: var(--ifm-color-primary-darker);
+  border-color: #fff;
+}
+
+.heroBanner :global(.button--secondary):hover {
+  background: var(--pda-accent-soft);
+  color: var(--ifm-color-primary-darker);
+  border-color: #fff;
+}
+
+[data-theme='dark'] .heroBanner {
+  background: linear-gradient(
+    135deg,
+    #171428 0%,
+    var(--ifm-color-primary-darkest) 45%,
+    var(--pda-accent) 150%
+  );
 }
 
 @media screen and (max-width: 996px) {
   .heroBanner {
     padding: 2.5rem 1rem;
   }
+}
+
+.heroTitle {
+  font-size: clamp(2rem, 5vw, 3rem);
+  margin-bottom: 0.5rem;
+}
+
+.heroSubtitle {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  opacity: 0.9;
+}
+
+.heroStats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem 2.5rem;
+  margin-bottom: 2rem;
+}
+
+.heroStat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+.heroStatValue {
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.heroStatLabel {
+  font-size: 0.85rem;
+  opacity: 0.8;
 }
 
 .buttons {
@@ -50,7 +115,41 @@
 }
 
 .projectsIntro {
+  margin-bottom: 1.25rem;
+}
+
+.projectFilters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
   margin-bottom: 1.5rem;
+}
+
+.projectFilterChip {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  background: transparent;
+  color: var(--ifm-font-color-base);
+  cursor: pointer;
+  min-height: 0;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.projectFilterChip:hover {
+  border-color: var(--pda-accent);
+  color: var(--pda-accent);
+}
+
+.projectFilterChipActive {
+  background: var(--pda-accent-soft);
+  border-color: var(--pda-accent);
+  color: var(--pda-accent);
 }
 
 .projectGrid {
@@ -68,12 +167,19 @@
   flex-direction: column;
   color: var(--ifm-font-color-base);
   text-decoration: none;
+  position: relative;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    border-color 0.15s ease;
 }
 
 .projectCard:hover {
   border-color: var(--pda-accent);
   text-decoration: none;
   color: var(--ifm-font-color-base);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
 }
 
 .projectCard h3 {
@@ -100,4 +206,19 @@
   border-radius: 999px;
   background: var(--pda-accent-soft);
   color: var(--pda-accent);
+}
+
+.projectCardCompleted {
+  border-color: var(--ifm-color-success);
+}
+
+.projectCompleted {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ifm-color-success);
 }

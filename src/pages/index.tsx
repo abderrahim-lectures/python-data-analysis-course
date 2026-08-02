@@ -1,4 +1,4 @@
-import type {ReactNode} from 'react';
+import {createContext, useContext, useState, type ReactNode} from 'react';
 import clsx from 'clsx';
 import Link from '@docusaurus/Link';
 import Translate, {translate} from '@docusaurus/Translate';
@@ -6,7 +6,10 @@ import Layout from '@theme/Layout';
 import Heading from '@theme/Heading';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import InstallPwaButton from '@site/src/components/InstallPwaButton';
+import {useLocalStorage} from '@site/src/hooks/useLocalStorage';
+import {STORAGE_KEYS} from '@site/src/utils/storageKeys';
 import {PROJECTS, formatProjectDate} from '@site/src/data/projects';
+import type {ProjectProgressMap} from '@site/src/types/progress';
 
 import styles from './index.module.css';
 
@@ -21,18 +24,44 @@ function projectMeta(id: string) {
 
 function HomepageHeader() {
   return (
-    <header className={clsx('hero hero--primary', styles.heroBanner)}>
+    <header className={clsx('hero', styles.heroBanner)}>
       <div className="container">
-        <Heading as="h1" className="hero__title">
+        <Heading as="h1" className={styles.heroTitle}>
           <Translate id="homepage.hero.title" description="Homepage hero title">
             Python & Data Analysis Course
           </Translate>
         </Heading>
-        <p className="hero__subtitle">
+        <p className={styles.heroSubtitle}>
           <Translate id="homepage.hero.tagline" description="Homepage hero tagline">
             Learn Python and data analysis in your browser — no installs needed
           </Translate>
         </p>
+        <div className={styles.heroStats} aria-label="Course highlights">
+          <div className={styles.heroStat}>
+            <span className={styles.heroStatValue}>10</span>
+            <span className={styles.heroStatLabel}>
+              <Translate id="homepage.hero.statWeeks" description="Homepage hero stat: weeks">
+                weeks
+              </Translate>
+            </span>
+          </div>
+          <div className={styles.heroStat}>
+            <span className={styles.heroStatValue}>{PROJECTS.length}+</span>
+            <span className={styles.heroStatLabel}>
+              <Translate id="homepage.hero.statProjects" description="Homepage hero stat: projects">
+                real-world projects
+              </Translate>
+            </span>
+          </div>
+          <div className={styles.heroStat}>
+            <span className={styles.heroStatValue}>0</span>
+            <span className={styles.heroStatLabel}>
+              <Translate id="homepage.hero.statInstalls" description="Homepage hero stat: installs">
+                installs to start
+              </Translate>
+            </span>
+          </div>
+        </div>
         <div className={styles.buttons}>
           <Link className="button button--secondary button--lg" to="/docs/python-101">
             <Translate id="homepage.hero.startButton" description="Homepage hero CTA button">
@@ -144,6 +173,18 @@ interface HomepageProjectCardProps {
 }
 
 /**
+ * Lets each statically-defined project card opt out of rendering when a tag
+ * filter chip is active — cards stay as literal <Translate> JSX (required for
+ * Docusaurus's static i18n extraction), and the filter chips live in the
+ * parent section. null means "show all".
+ */
+const ProjectTagContext = createContext<string | null>(null);
+
+function useActiveTag(): string | null {
+  return useContext(ProjectTagContext);
+}
+
+/**
  * date/url/tags come from the shared PROJECTS source of truth; title/summary
  * are passed in as already-built <Translate> elements from the call site
  * (not string props) so Docusaurus's static i18n extraction — which needs a
@@ -155,9 +196,16 @@ function HomepageProjectCard({id, title, summary}: HomepageProjectCardProps) {
   const {
     i18n: {currentLocale},
   } = useDocusaurusContext();
+  const [progress] = useLocalStorage<ProjectProgressMap>(STORAGE_KEYS.projectProgress, {});
+  const completed = progress[id] ?? false;
+  const activeTag = useActiveTag();
+  const matchesFilter = activeTag === null || meta.tags.includes(activeTag);
+  if (!matchesFilter) {
+    return null;
+  }
 
   return (
-    <Link to={meta.url} className={styles.projectCard}>
+    <Link to={meta.url} className={clsx(styles.projectCard, completed && styles.projectCardCompleted)}>
       <h3>{title}</h3>
       <p className={styles.projectDate}>{formatProjectDate(meta.date, currentLocale)}</p>
       <p>{summary}</p>
@@ -168,11 +216,34 @@ function HomepageProjectCard({id, title, summary}: HomepageProjectCardProps) {
           </span>
         ))}
       </div>
+      {completed && (
+        <span className={styles.projectCompleted}>
+          <Translate id="homepage.projects.completed" description="Homepage project card completed label">
+            Completed
+          </Translate>
+        </span>
+      )}
     </Link>
   );
 }
 
+/** All distinct project tags, ordered by first appearance — drives the filter chips. */
+function allProjectTags(): string[] {
+  const seen = new Set<string>();
+  for (const p of PROJECTS) {
+    for (const tag of p.tags) {
+      if (!seen.has(tag)) {
+        seen.add(tag);
+      }
+    }
+  }
+  return [...seen];
+}
+
 function RealWorldProjects() {
+  const [activeTag, setActiveTag] = useState<string | null>(null);
+  const tags = allProjectTags();
+
   return (
     <section className={styles.projects}>
       <div className="container">
@@ -189,7 +260,30 @@ function RealWorldProjects() {
             browse any time, no need to finish the course first.
           </Translate>
         </p>
-        <div className={styles.projectGrid}>
+        <div className={styles.projectFilters} role="group" aria-label="Filter projects by topic">
+          <button
+            type="button"
+            className={clsx(styles.projectFilterChip, activeTag === null && styles.projectFilterChipActive)}
+            onClick={() => setActiveTag(null)}>
+            <Translate id="homepage.projects.filterAll" description="Project filter chip: all projects">
+              All
+            </Translate>
+          </button>
+          {tags.map((tag) => (
+            <button
+              key={tag}
+              type="button"
+              className={clsx(
+                styles.projectFilterChip,
+                activeTag === tag && styles.projectFilterChipActive,
+              )}
+              onClick={() => setActiveTag((current) => (current === tag ? null : tag))}>
+              {tag}
+            </button>
+          ))}
+        </div>
+        <ProjectTagContext.Provider value={activeTag}>
+          <div className={styles.projectGrid}>
           <HomepageProjectCard
             id="2027-dependency-freshness-checker"
             title={
@@ -698,6 +792,7 @@ function RealWorldProjects() {
             }
           />
         </div>
+        </ProjectTagContext.Provider>
       </div>
     </section>
   );
