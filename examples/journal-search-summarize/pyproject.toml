@@ -1,0 +1,12 @@
+[project]
+name = "journal-search-summarize"
+version = "0.1.0"
+description = "Local companion to the course's 'Search and Summarize Your Own Journal' project: embed dated markdown journal entries locally, search them semantically with NumPy, and summarize a date range with a free-tier LLM."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "sentence-transformers>=3.3.1",
+    "numpy>=2.2.0",
+    "python-dotenv>=1.2.2",
+    "openai>=2.8.0",
+]

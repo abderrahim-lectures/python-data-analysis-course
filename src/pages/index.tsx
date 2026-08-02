@@ -191,6 +191,25 @@ function RealWorldProjects() {
         </p>
         <div className={styles.projectGrid}>
           <HomepageProjectCard
+            id="journal-search-summarize"
+            title={
+              <Translate
+                id="homepage.projects.journalSearchSummarize.title"
+                description="Homepage project card title">
+                Search and Summarize Your Own Journal
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.journalSearchSummarize.summary"
+                description="Homepage project card summary">
+                Index a folder of your own dated journal entries with local embeddings,
+                search them semantically, and summarize a date range with a free-tier LLM
+                that cites the dates behind every claim.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
             id="2027-dependency-freshness-checker"
             title={
               <Translate
