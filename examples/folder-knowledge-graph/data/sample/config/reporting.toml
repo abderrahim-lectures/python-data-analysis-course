@@ -1,0 +1,10 @@
+# reporting.toml
+# Weekly sales report configuration.
+
+[reports.weekly]
+enabled = true
+source_tables = ["orders", "order_items"]
+currency = "USD"
+
+[exports]
+include_tax_rates = true

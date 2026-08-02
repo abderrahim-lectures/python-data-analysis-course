@@ -1,0 +1,11 @@
+[project]
+name = "folder-knowledge-graph"
+version = "0.1.0"
+description = "Local companion to the course's Turn a Folder of PDFs, Configs, and SQL Schemas Into a Queryable Knowledge Graph project: walk a mixed-document folder with pypdf + the standard library, build a networkx graph of its hidden references, and query it."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "pypdf>=5.0.0",
+    "networkx>=3.4.0",
+    "pyvis>=0.3.2",
+]
