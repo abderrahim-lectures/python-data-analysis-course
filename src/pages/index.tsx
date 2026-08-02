@@ -191,6 +191,24 @@ function RealWorldProjects() {
         </p>
         <div className={styles.projectGrid}>
           <HomepageProjectCard
+            id="changelog-from-git"
+            title={
+              <Translate
+                id="homepage.projects.changelogFromGit.title"
+                description="Homepage project card title">
+                Build a Changelog Generator from Git History
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.changelogFromGit.summary"
+                description="Homepage project card summary">
+                Turn a noisy stream of commit messages into a clean, categorized changelog —
+                with every entry traceable back to the commit hash it came from.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
             id="2027-dependency-freshness-checker"
             title={
               <Translate
