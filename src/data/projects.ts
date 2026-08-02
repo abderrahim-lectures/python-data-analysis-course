@@ -20,6 +20,12 @@ export interface ProjectMeta {
  */
 export const PROJECTS: ProjectMeta[] = [
   {
+    id: 'journal-search-summarize',
+    date: '2027-08',
+    url: '/docs/projects/journal-search-summarize',
+    tags: ['AI Agents', 'Retrieval-Augmented Generation'],
+  },
+  {
     id: '2027-dependency-freshness-checker',
     date: '2027-08',
     url: '/docs/projects/dependency-freshness-checker',

@@ -1,0 +1,29 @@
+{
+  "description": "Example queries for the sample journal in data/journal/ (2026-07-06 through 2026-07-22). Each query's 'note' names the entries that hold the ground truth, so you can check whether search -- and, for the summarizer, a dated summary -- actually found them.",
+  "queries": [
+    {
+      "query": "when did I last mention planning a trip?",
+      "note": "The Chefchaouen trip planning arc: comparing riads on 2026-07-10, confirming dates on 2026-07-16, and booking the riad on 2026-07-22."
+    },
+    {
+      "query": "how often did I go running in the past two weeks?",
+      "note": "Running appears on 2026-07-06, 2026-07-09, 2026-07-14, and 2026-07-21."
+    },
+    {
+      "query": "what did I do for my mother's birthday?",
+      "note": "Planned on 2026-07-09 and described on 2026-07-18: a family dinner at home with her cooking."
+    },
+    {
+      "query": "what is the finance tracker project about?",
+      "note": "A personal expense-tracking CLI: recording expenses (2026-07-08), CSV import (2026-07-14), and a monthly summary command (2026-07-21)."
+    },
+    {
+      "query": "when are my friends and I going to Chefchaouen?",
+      "note": "August 22-25, confirmed on 2026-07-16; the riad is booked for August 22-24 on 2026-07-22."
+    },
+    {
+      "query": "did I skip any workouts?",
+      "note": "Skipped the gym on 2026-07-15 after a long debugging day."
+    }
+  ]
+}
