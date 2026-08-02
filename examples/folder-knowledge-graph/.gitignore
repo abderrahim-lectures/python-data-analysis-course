@@ -1,0 +1,10 @@
+.venv
+__pycache__
+*.pyc
+graph.html
+graph.png
+lib/
+
+# Generated sample PDFs -- committed for out-of-the-box use (see make_pdf_data.py).
+# If you regenerate them and want to update the committed set, `git add -f` them.
+data/sample/pdfs/*.pdf

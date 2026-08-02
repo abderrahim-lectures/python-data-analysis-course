@@ -191,6 +191,25 @@ function RealWorldProjects() {
         </p>
         <div className={styles.projectGrid}>
           <HomepageProjectCard
+            id="folder-knowledge-graph"
+            title={
+              <Translate
+                id="homepage.projects.folderKnowledgeGraph.title"
+                description="Homepage project card title">
+                Turn a Folder of PDFs, Configs, and SQL Schemas Into a Knowledge Graph
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.folderKnowledgeGraph.summary"
+                description="Homepage project card summary">
+                Walk a folder of mixed PDFs, config files, and SQL schemas, extract the
+                references between them with pypdf and the standard library, and build a
+                queryable knowledge graph — no API key, no LLM.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
             id="2027-dependency-freshness-checker"
             title={
               <Translate
