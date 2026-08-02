@@ -1,0 +1,10 @@
+[project]
+name = "changelog-from-git"
+version = "0.1.0"
+description = "Local companion to the course's 'Build a Changelog Generator from Git History' project: fetch commit history with git, synthesize a categorized changelog with a free-tier LLM, and verify every entry against the real commits."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "python-dotenv>=1.2.2",
+    "openai>=2.8.0",
+]
