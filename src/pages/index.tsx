@@ -191,6 +191,24 @@ function RealWorldProjects() {
         </p>
         <div className={styles.projectGrid}>
           <HomepageProjectCard
+            id="codebase-qa"
+            title={
+              <Translate
+                id="homepage.projects.codebaseQa.title"
+                description="Homepage project card title">
+                Build a Codebase Q&A Tool — Where Is X Implemented?
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.codebaseQa.summary"
+                description="Homepage project card summary">
+                Answer "where is X defined?" with an exact ast-based symbol index and "how
+                does X work?" with embedding search, grounded in file-and-line citations.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
             id="2027-dependency-freshness-checker"
             title={
               <Translate
