@@ -20,6 +20,12 @@ export interface ProjectMeta {
  */
 export const PROJECTS: ProjectMeta[] = [
   {
+    id: 'multihop-wikipedia-qa',
+    date: '2027-08',
+    url: '/docs/projects/multihop-wikipedia-qa',
+    tags: ['AI Agents', 'Retrieval-Augmented Generation', 'Developer Tools'],
+  },
+  {
     id: '2027-dependency-freshness-checker',
     date: '2027-08',
     url: '/docs/projects/dependency-freshness-checker',

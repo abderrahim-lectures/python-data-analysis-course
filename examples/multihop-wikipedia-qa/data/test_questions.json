@@ -1,0 +1,41 @@
+{
+  "note": "Bundled test questions for the multi-hop QA example. Each question's answer can be found in the articles in data/articles/. The 'hops' field marks how many articles a fully-grounded answer requires: 1 means one article has everything, 2 means the fact is split across two articles. 'expected' and 'articles' are there so you can audit the tool's output against a known answer -- they are not used to stop the pipeline, just for your own comparison.",
+  "questions": [
+    {
+      "question": "What is the name of Lisbon's public transit authority?",
+      "hops": 1,
+      "expected": "TransLisboa",
+      "articles": ["lisbon.md"]
+    },
+    {
+      "question": "What product did Cereolabs launch in 2017?",
+      "hops": 1,
+      "expected": "AquaPro",
+      "articles": ["cereolabs.md"]
+    },
+    {
+      "question": "What international agreement was signed in Basel in 2019?",
+      "hops": 1,
+      "expected": "Basel Climate Accord",
+      "articles": ["basel.md"]
+    },
+    {
+      "question": "Who founded the company that powered TransLisboa's electric buses?",
+      "hops": 2,
+      "expected": "Elena Marchetti",
+      "articles": ["volta-dynamics.md", "elena-marchetti.md"]
+    },
+    {
+      "question": "In which city was the company that launched AquaPro founded?",
+      "hops": 2,
+      "expected": "Basel",
+      "articles": ["cereolabs.md", "basel.md"]
+    },
+    {
+      "question": "Where was the scientist who developed AquaPro's extraction method born?",
+      "hops": 2,
+      "expected": "Dhaka",
+      "articles": ["cereolabs.md", "amina-rahman.md"]
+    }
+  ]
+}

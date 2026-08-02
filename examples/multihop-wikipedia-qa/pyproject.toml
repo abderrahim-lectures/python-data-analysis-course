@@ -1,0 +1,12 @@
+[project]
+name = "multihop-wikipedia-qa"
+version = "0.1.0"
+description = "A two-round (multi-hop) question-answering tool over a small Wikipedia-style sample, comparing single-hop RAG against a follow-up-guided second retrieval pass."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "python-dotenv>=1.2.2",
+    "openai>=2.8.0",
+    "numpy",
+    "sentence-transformers",
+]

@@ -191,6 +191,24 @@ function RealWorldProjects() {
         </p>
         <div className={styles.projectGrid}>
           <HomepageProjectCard
+            id="multihop-wikipedia-qa"
+            title={
+              <Translate
+                id="homepage.projects.multihopWikipediaQa.title"
+                description="Homepage project card title">
+                Build a Multi-Hop QA Tool Over a Wikipedia Sample
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.multihopWikipediaQa.summary"
+                description="Homepage project card summary">
+                A two-round RAG pipeline that answers questions whose facts live in two
+                different articles, and shows you the exact evidence chain it used.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
             id="2027-dependency-freshness-checker"
             title={
               <Translate
