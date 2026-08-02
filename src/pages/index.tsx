@@ -191,6 +191,25 @@ function RealWorldProjects() {
         </p>
         <div className={styles.projectGrid}>
           <HomepageProjectCard
+            id="reranking-pipeline"
+            title={
+              <Translate
+                id="homepage.projects.rerankingPipeline.title"
+                description="Homepage project card title">
+                Build a Re-Ranking Pipeline
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.rerankingPipeline.summary"
+                description="Homepage project card summary">
+                Retrieve fast with a cheap keyword stage, re-rank the top-K hits with a
+                cross-encoder model, and benchmark whether the extra compute actually buys
+                better precision — no API key, no LLM.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
             id="2027-dependency-freshness-checker"
             title={
               <Translate

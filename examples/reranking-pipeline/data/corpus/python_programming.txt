@@ -1,0 +1,1 @@
+Python is a high-level programming language known for its readable syntax and a huge ecosystem of libraries.

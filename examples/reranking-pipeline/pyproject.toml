@@ -1,0 +1,10 @@
+[project]
+name = "reranking-pipeline"
+version = "0.1.0"
+description = "Local companion to the course's Build a Re-Ranking Pipeline project: retrieve fast with a keyword stage, re-rank the top-K with a sentence-transformers cross-encoder, and benchmark precision@1/@3 against timing."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "sentence-transformers>=3.0.0",
+    "numpy>=1.26.0",
+]

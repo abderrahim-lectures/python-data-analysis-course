@@ -20,6 +20,12 @@ export interface ProjectMeta {
  */
 export const PROJECTS: ProjectMeta[] = [
   {
+    id: 'reranking-pipeline',
+    date: '2027-08',
+    url: '/docs/projects/reranking-pipeline',
+    tags: ['AI Agents', 'Retrieval-Augmented Generation', 'Machine Learning'],
+  },
+  {
     id: '2027-dependency-freshness-checker',
     date: '2027-08',
     url: '/docs/projects/dependency-freshness-checker',

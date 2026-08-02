@@ -1,0 +1,50 @@
+[
+  {
+    "query": "What is the biggest planet in the solar system?",
+    "relevant": ["jupiter.txt"]
+  },
+  {
+    "query": "Which planet in our solar system is closest to the Sun?",
+    "relevant": ["mercury_planet.txt"]
+  },
+  {
+    "query": "How does a computer run Python code?",
+    "relevant": ["python_programming.txt"]
+  },
+  {
+    "query": "Which snake squeezes its prey to death?",
+    "relevant": ["python_snake.txt"]
+  },
+  {
+    "query": "What animal flies at night and hunts insects?",
+    "relevant": ["bat_animal.txt"]
+  },
+  {
+    "query": "Which company makes the iPhone smartphone?",
+    "relevant": ["apple_iphone.txt"]
+  },
+  {
+    "query": "What metal is liquid at room temperature?",
+    "relevant": ["mercury_element.txt"]
+  },
+  {
+    "query": "Where can you keep your money and earn interest?",
+    "relevant": ["money_bank.txt"]
+  },
+  {
+    "query": "What is the tallest mountain in the world?",
+    "relevant": ["mount_everest.txt"]
+  },
+  {
+    "query": "Which river is the longest in the world?",
+    "relevant": ["nile_river.txt"]
+  },
+  {
+    "query": "What molecule carries genetic information?",
+    "relevant": ["dna.txt"]
+  },
+  {
+    "query": "What do plants use sunlight to make?",
+    "relevant": ["photosynthesis.txt"]
+  }
+]
