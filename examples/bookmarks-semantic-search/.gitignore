@@ -1,0 +1,6 @@
+.env
+__pycache__/
+index.npy
+records.json
+build/
+node_modules/

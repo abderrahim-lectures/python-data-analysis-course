@@ -1,0 +1,11 @@
+[project]
+name = "bookmarks-semantic-search"
+version = "0.1.0"
+description = "Local companion to the course's 'Build Semantic Search Over Your Browser Bookmarks' project: parse a Netscape bookmarks export, embed every bookmark locally, and search by meaning instead of title keywords."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "sentence-transformers>=3.3.1",
+    "numpy>=2.2.0",
+    "python-dotenv>=1.2.2",
+]
