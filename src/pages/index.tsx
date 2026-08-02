@@ -191,6 +191,24 @@ function RealWorldProjects() {
         </p>
         <div className={styles.projectGrid}>
           <HomepageProjectCard
+            id="bookmarks-semantic-search"
+            title={
+              <Translate
+                id="homepage.projects.bookmarksSemanticSearch.title"
+                description="Homepage project card title">
+                Build Semantic Search Over Your Browser Bookmarks
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.bookmarksSemanticSearch.summary"
+                description="Homepage project card summary">
+                Parse your browser's bookmarks export, embed every bookmark locally, and
+                find the page you saved months ago by describing what you remember.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
             id="2027-dependency-freshness-checker"
             title={
               <Translate
