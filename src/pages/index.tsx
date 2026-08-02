@@ -191,6 +191,25 @@ function RealWorldProjects() {
         </p>
         <div className={styles.projectGrid}>
           <HomepageProjectCard
+            id="hybrid-search"
+            title={
+              <Translate
+                id="homepage.projects.hybridSearch.title"
+                description="Homepage project card title">
+                Build a Hybrid Search Demo
+              </Translate>
+            }
+            summary={
+              <Translate
+                id="homepage.projects.hybridSearch.summary"
+                description="Homepage project card summary">
+                Run keyword (BM25-style), embedding-based, and hybrid retrieval side by
+                side on the same small corpus, and see where each approach wins and
+                loses — no API key, no LLM.
+              </Translate>
+            }
+          />
+          <HomepageProjectCard
             id="2027-dependency-freshness-checker"
             title={
               <Translate

@@ -1,0 +1,62 @@
+[
+  {
+    "query": "Neptune planet winds",
+    "expected": "neptune.txt",
+    "kind": "keyword",
+    "note": "Exact-match query: the rare word 'Neptune' is only in neptune.txt, so keyword should win."
+  },
+  {
+    "query": "an icy mystery world charted by pure calculation",
+    "expected": "paraphrase_neptune.txt",
+    "kind": "semantic",
+    "note": "Paraphrase query: none of these words appear anywhere in the corpus, so only embeddings can connect it to the Neptune passage."
+  },
+  {
+    "query": "espresso crema",
+    "expected": "espresso.txt",
+    "kind": "keyword",
+    "note": "Exact-match query: both rare tokens live only in espresso.txt."
+  },
+  {
+    "query": "squeezing hot water through fine grounds for a quick cup",
+    "expected": "paraphrase_espresso.txt",
+    "kind": "semantic",
+    "note": "Paraphrase query: the words 'hot water' overlap the cold-brew passage and lead keyword astray, but the meaning matches the espresso paraphrase."
+  },
+  {
+    "query": "bicycle hill climbing gears",
+    "expected": "cycling.txt",
+    "kind": "keyword",
+    "note": "Exact-match query: 'bicycle', 'hill', and 'gears' are distinctive tokens."
+  },
+  {
+    "query": "grinding uphill against gravity",
+    "expected": "cycling.txt",
+    "kind": "semantic",
+    "note": "Paraphrase query: none of these words appear verbatim, but the meaning matches cycling.txt's steep-hills passage."
+  },
+  {
+    "query": "why did my overnight dough get that bite",
+    "expected": "sourdough.txt",
+    "kind": "semantic",
+    "note": "Paraphrase query: 'dough' and 'bite' are absent from the corpus; the tang of a long fermentation must be found by meaning."
+  },
+  {
+    "query": "grand piano sustain pedal",
+    "expected": "piano.txt",
+    "kind": "keyword",
+    "note": "Exact-match query: all three tokens are distinctive to piano.txt."
+  },
+  {
+    "query": "a freezing abyss where animals make their own glow",
+    "expected": "deepsea.txt",
+    "kind": "semantic",
+    "note": "Paraphrase query: no vocabulary overlap, but the deep-sea creatures with glowing lures are the intended match."
+  },
+  {
+    "query": "reflecting telescope mirror aberration",
+    "expected": "telescope.txt",
+    "kind": "keyword",
+    "note": "Exact-match query: distinctive telescope vocabulary."
+  }
+]

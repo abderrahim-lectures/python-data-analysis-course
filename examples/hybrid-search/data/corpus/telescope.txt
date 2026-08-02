@@ -1,0 +1,1 @@
+A reflecting telescope gathers light with a curved primary mirror instead of a glass lens. Using a mirror avoids chromatic aberration, the colored fringing that afflicts refracting telescopes, and lets builders create much larger instruments for the same price.

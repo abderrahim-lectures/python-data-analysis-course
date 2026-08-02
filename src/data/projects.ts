@@ -20,6 +20,12 @@ export interface ProjectMeta {
  */
 export const PROJECTS: ProjectMeta[] = [
   {
+    id: 'hybrid-search',
+    date: '2027-08',
+    url: '/docs/projects/hybrid-search',
+    tags: ['AI Agents', 'Retrieval-Augmented Generation', 'Developer Tools'],
+  },
+  {
     id: '2027-dependency-freshness-checker',
     date: '2027-08',
     url: '/docs/projects/dependency-freshness-checker',
