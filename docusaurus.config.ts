@@ -13,6 +13,10 @@ const config: Config = {
 
   future: {
     v4: true,
+    // Git-backed "last updated" timestamps — feeds the sitemap's per-page
+    // <lastmod> (a real freshness signal for crawlers) and a "Last updated"
+    // line on docs pages.
+    experimental_vcs: true,
   },
 
   url: 'https://pyda-course.online',
@@ -27,25 +31,74 @@ const config: Config = {
       attributes: {name: 'author', content: 'Abderrahim Adrabi'},
     },
     {
+      tagName: 'meta',
+      attributes: {property: 'og:site_name', content: 'Python & Data Analysis Course'},
+    },
+    {
       tagName: 'script',
       attributes: {type: 'application/ld+json'},
       innerHTML: JSON.stringify({
         '@context': 'https://schema.org',
-        '@type': 'Course',
-        name: 'Python & Data Analysis Course',
-        description:
-          'A free, browser-based Python and data analysis course covering Python fundamentals and pandas/EDA across two 5-week sections, each with Normal and Hard tracks.',
-        author: {
-          '@type': 'Person',
-          name: 'Abderrahim Adrabi',
-        },
-        provider: {
-          '@type': 'Organization',
-          name: 'Python & Data Analysis Course',
-          sameAs: 'https://github.com/abderrahim-lectures/python-data-analysis-course',
-        },
-        isAccessibleForFree: true,
-        inLanguage: ['en', 'ar', 'es', 'fr'],
+        '@graph': [
+          {
+            '@type': 'WebSite',
+            '@id': 'https://pyda-course.online/#website',
+            url: 'https://pyda-course.online/',
+            name: 'Python & Data Analysis Course',
+            description:
+              'A free, browser-based Python and data analysis course — no installs required.',
+            inLanguage: ['en', 'ar', 'es', 'fr'],
+            publisher: {'@id': 'https://pyda-course.online/#organization'},
+          },
+          {
+            '@type': 'Organization',
+            '@id': 'https://pyda-course.online/#organization',
+            name: 'Python & Data Analysis Course',
+            url: 'https://pyda-course.online/',
+            logo: {
+              '@type': 'ImageObject',
+              url: 'https://pyda-course.online/img/logo.svg',
+            },
+            sameAs: ['https://github.com/abderrahim-lectures/python-data-analysis-course'],
+          },
+          {
+            '@type': 'Course',
+            '@id': 'https://pyda-course.online/#course',
+            name: 'Python & Data Analysis Course',
+            description:
+              'A free, browser-based Python and data analysis course covering Python fundamentals and pandas/EDA across two 5-week sections, each with Normal and Hard tracks, plus a growing library of real-world projects to build after you graduate from the playground.',
+            url: 'https://pyda-course.online/',
+            isAccessibleForFree: true,
+            inLanguage: ['en', 'ar', 'es', 'fr'],
+            learningResourceType: 'Course',
+            educationalLevel: 'Beginner',
+            coursePrerequisites: 'None — no prior programming experience needed.',
+            teaches: [
+              'Python fundamentals',
+              'Pandas and data analysis',
+              'Exploratory data analysis',
+              'Building real-world Python projects',
+            ],
+            offers: {
+              '@type': 'Offer',
+              category: 'Free',
+              price: '0',
+              priceCurrency: 'USD',
+            },
+            provider: {'@id': 'https://pyda-course.online/#organization'},
+            author: {
+              '@type': 'Person',
+              name: 'Abderrahim Adrabi',
+            },
+            hasCourseInstance: {
+              '@type': 'CourseInstance',
+              courseMode: 'Online',
+              courseWorkload: 'PT20H',
+              inLanguage: ['en', 'ar', 'es', 'fr'],
+              isAccessibleForFree: true,
+            },
+          },
+        ],
       }),
     },
   ],
@@ -77,6 +130,9 @@ const config: Config = {
           sidebarPath: './sidebars.ts',
           editUrl:
             'https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/',
+          // Git-backed "Last updated" line on docs pages + the data that feeds
+          // the sitemap's per-page <lastmod> (see future.experimental_vcs).
+          showLastUpdateTime: true,
           remarkPlugins: [require('remark-math')],
           rehypePlugins: [require('rehype-katex')],
         },
@@ -91,6 +147,8 @@ const config: Config = {
           ignorePatterns: ['/share'],
           changefreq: 'weekly',
           priority: 0.5,
+          // Include a per-page lastmod so crawlers see when each doc changes.
+          lastmod: 'datetime',
         },
         gtag: {
           trackingID: 'G-FTR585C5BX',

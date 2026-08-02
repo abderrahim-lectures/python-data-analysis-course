@@ -1,5 +1,11 @@
 import type {ProjectId} from '@site/src/types/progress';
 
+/** Difficulty bucket shown as a badge on every project card and used to filter. */
+export type ProjectLevel = 'beginner' | 'intermediate' | 'advanced';
+
+/** Display order for the level filter chips (not alphabetical). */
+export const PROJECT_LEVELS: ProjectLevel[] = ['beginner', 'intermediate', 'advanced'];
+
 export interface ProjectMeta {
   /** Stable id, kept unchanged even across folder/URL renames — see
    *  ProjectProgressCheckbox and ProjectChooser for why this must never
@@ -9,6 +15,12 @@ export interface ProjectMeta {
   date: string;
   url: string;
   tags: string[];
+  /** Assumed background: beginner = Python 101 only, intermediate = a prior
+   *  project or Data Analysis comfort, advanced = Hard track / GPU work. */
+  level: ProjectLevel;
+  /** The libraries, frameworks, and services the project actually uses —
+   *  displayed as compact pills on the card (technical terms, not translated). */
+  tools: string[];
 }
 
 /**
@@ -24,176 +36,246 @@ export const PROJECTS: ProjectMeta[] = [
     date: '2027-08',
     url: '/docs/projects/dependency-freshness-checker',
     tags: ['CLI Tools', 'Automation'],
+    level: 'beginner',
+    tools: ['Python', 'requests', 'PyPI'],
   },
   {
     id: '2027-commit-message-agent',
     date: '2026-07-25',
     url: '/docs/projects/commit-message-agent',
     tags: ['CLI Tools', 'Git', 'AI Agents'],
+    level: 'beginner',
+    tools: ['Python', 'git', 'LLM API'],
   },
   {
     id: '2027-mcp-sqlite-server',
     date: '2027-08',
     url: '/docs/projects/mcp-sqlite-server',
     tags: ['MCP', 'SQL', 'Databases'],
+    level: 'intermediate',
+    tools: ['Python', 'FastMCP', 'SQLite'],
   },
   {
     id: 'trivia-bot',
     date: '2026-07-25',
     url: '/docs/projects/trivia-bot',
     tags: ['Discord', 'Chatbots', 'Games'],
+    level: 'beginner',
+    tools: ['Python', 'discord.py', 'LLM API'],
   },
   {
     id: '2027-chat-with-pdfs',
     date: '2027-08',
     url: '/docs/projects/chat-with-pdfs',
     tags: ['RAG', 'PDFs', 'Embeddings'],
+    level: 'intermediate',
+    tools: ['Python', 'sentence-transformers', 'RAG', 'LLM API'],
   },
   {
     id: '2027-mcp-notes-server',
     date: '2026-07-25',
     url: '/docs/projects/mcp-notes-server',
     tags: ['MCP', 'Claude Desktop', 'Search'],
+    level: 'intermediate',
+    tools: ['Python', 'FastMCP', 'Markdown'],
   },
   {
     id: 'recipe-planner-agent',
     date: '2026-07-24',
     url: '/docs/projects/recipe-planner-agent',
     tags: ['AI Agents', 'Tool Calling', 'Productivity'],
+    level: 'intermediate',
+    tools: ['Python', 'deepagents', 'LLM API'],
   },
   {
     id: 'meeting-notes-summarizer',
     date: '2026-07-24',
     url: '/docs/projects/meeting-notes-summarizer',
     tags: ['AI Agents', 'Productivity', 'Automation'],
+    level: 'beginner',
+    tools: ['Python', 'LLM API'],
   },
   {
     id: 'github-issue-triage-agent',
     date: '2026-07-24',
     url: '/docs/projects/github-issue-triage-agent',
     tags: ['AI Agents', 'Developer Tools', 'Automation'],
+    level: 'beginner',
+    tools: ['Python', 'GitHub API', 'LLM API'],
   },
   {
     id: 'voice-to-task-agent',
     date: '2026-07-24',
     url: '/docs/projects/voice-to-task-agent',
     tags: ['AI Agents', 'Speech-to-Text', 'Automation'],
+    level: 'beginner',
+    tools: ['Python', 'Whisper', 'LLM API'],
   },
   {
     id: 'study-buddy-agent',
     date: '2026-07-24',
     url: '/docs/projects/study-buddy-agent',
     tags: ['AI Agents', 'Education', 'Productivity'],
+    level: 'beginner',
+    tools: ['Python', 'LLM API'],
   },
   {
     id: 'codebase-knowledge-graph',
     date: '2026-07-24',
     url: '/docs/projects/codebase-knowledge-graph',
     tags: ['Knowledge Graphs', 'Static Analysis', 'Developer Tools'],
+    level: 'beginner',
+    tools: ['Python', 'ast', 'networkx'],
   },
   {
     id: 'docs-qa-bot',
     date: '2026-07-24',
     url: '/docs/projects/docs-qa-bot',
     tags: ['AI Agents', 'RAG', 'Chatbots'],
+    level: 'intermediate',
+    tools: ['Python', 'discord.py', 'RAG', 'LLM API'],
   },
   {
     id: 'email-triage-agent',
     date: '2026-07-24',
     url: '/docs/projects/email-triage-agent',
     tags: ['AI Agents', 'Automation', 'Productivity'],
+    level: 'beginner',
+    tools: ['Python', 'LLM API'],
   },
   {
     id: 'multi-agent-research',
     date: '2026-07-24',
     url: '/docs/projects/multi-agent-research',
     tags: ['AI Agents', 'Multi-Agent', 'LangChain'],
+    level: 'intermediate',
+    tools: ['Python', 'deepagents', 'LLM API'],
   },
   {
     id: 'agentic-code-reviewer',
     date: '2026-07-24',
     url: '/docs/projects/agentic-code-reviewer',
     tags: ['AI Agents', 'Developer Tools', 'Automation'],
+    level: 'beginner',
+    tools: ['Python', 'git', 'LLM API'],
   },
   {
     id: 'mcp-server',
     date: '2026-07-23',
     url: '/docs/projects/mcp-server',
     tags: ['MCP', 'AI Agents'],
+    level: 'beginner',
+    tools: ['Python', 'FastMCP', 'Claude Desktop'],
   },
   {
     id: 'ml-classifier',
     date: '2026-07-23',
     url: '/docs/projects/ml-classifier',
     tags: ['Machine Learning', 'scikit-learn', 'Data Analysis'],
+    level: 'intermediate',
+    tools: ['Python', 'pandas', 'scikit-learn'],
   },
   {
     id: 'rag-notes',
     date: '2026-07-23',
     url: '/docs/projects/rag-notes',
     tags: ['RAG', 'Embeddings', 'LLMs'],
+    level: 'beginner',
+    tools: ['Python', 'sentence-transformers', 'NumPy', 'LLM API'],
   },
   {
     id: 'scrape-analyze',
     date: '2026-07-23',
     url: '/docs/projects/scrape-analyze',
     tags: ['Web Scraping', 'Data Analysis', 'pandas'],
+    level: 'intermediate',
+    tools: ['Python', 'requests', 'BeautifulSoup', 'pandas', 'matplotlib'],
   },
   {
     id: '2027-job-aggregator',
     date: '2027-08',
     url: '/docs/projects/job-aggregator',
     tags: ['Web Scraping', 'Pandas', 'Automation'],
+    level: 'intermediate',
+    tools: ['Python', 'requests', 'BeautifulSoup', 'pandas'],
   },
   {
     id: '2027-finetune-llm',
     date: '2026-07-22',
     url: '/docs/projects/finetune-llm-unsloth',
     tags: ['Fine-tuning', 'LoRA', 'LLMs'],
+    level: 'advanced',
+    tools: ['Python', 'Unsloth', 'LoRA', 'GPU'],
   },
   {
     id: '2027-rate-limited-api',
     date: '2027-08',
     url: '/docs/projects/rate-limited-api',
     tags: ['APIs', 'FastAPI', 'Web Services'],
+    level: 'beginner',
+    tools: ['Python', 'FastAPI', 'uvicorn'],
   },
   {
     id: '2027-webcam-object-counter',
     date: '2026-07-25',
     url: '/docs/projects/webcam-object-counter',
     tags: ['Computer Vision', 'OpenCV'],
+    level: 'beginner',
+    tools: ['Python', 'OpenCV', 'YOLO11n'],
   },
   {
     id: '2026-ai-agent',
     date: '2026-07-21',
     url: '/docs/projects/ai-agent',
     tags: ['AI Agents', 'LangChain'],
+    level: 'beginner',
+    tools: ['Python', 'deepagents', 'LLM API'],
   },
   {
     id: '2027-finance-agent',
     date: '2026-07-25',
     url: '/docs/projects/finance-agent',
     tags: ['AI Agents', 'Pandas', 'Finance'],
+    level: 'intermediate',
+    tools: ['Python', 'pandas', 'LLM API'],
   },
   {
     id: '2027-browser-automation-agent',
     date: '2027-08',
     url: '/docs/projects/browser-automation-agent',
     tags: ['AI Agents', 'Automation', 'Playwright'],
+    level: 'intermediate',
+    tools: ['Python', 'Playwright', 'deepagents', 'LLM API'],
   },
   {
     id: '2027-wordle-clone',
     date: '2027-08',
     url: '/docs/projects/wordle-clone',
     tags: ['Games', 'CLI Tools'],
+    level: 'beginner',
+    tools: ['Python', 'stdlib', 'JSON'],
   },
   {
     id: '2027-habit-streak-visualizer',
     date: '2027-08',
     url: '/docs/projects/habit-streak-visualizer',
     tags: ['Data Visualization', 'Pandas', 'Productivity'],
+    level: 'beginner',
+    tools: ['Python', 'pandas', 'matplotlib'],
   },
 ];
+
+const projectMetaById = new Map(PROJECTS.map((p) => [p.id, p]));
+
+/** O(1) metadata lookup by id — used by every card-list surface (not an
+ *  O(n) find per card, so 200+ projects stay cheap to render). */
+export function getProjectMeta(id: ProjectId): ProjectMeta {
+  const meta = projectMetaById.get(id);
+  if (!meta) {
+    throw new Error(`No PROJECTS entry for id "${id}" — add one to src/data/projects.ts`);
+  }
+  return meta;
+}
 
 interface TranslatedProjectText {
   id: ProjectId;

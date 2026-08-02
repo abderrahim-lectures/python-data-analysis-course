@@ -1,0 +1,389 @@
+/* Shared "real-world projects" gallery — used by both the docs projects page
+   (docs/projects/index.mdx → ProjectChooser) and the homepage. Mobile-first,
+   matching the homepage project grid so both surfaces feel like one system. */
+
+.filters {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1.5rem 0 0.5rem;
+  padding-bottom: 0.25rem;
+  overflow-x: auto;
+  flex-wrap: nowrap;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.filters::-webkit-scrollbar {
+  display: none;
+}
+
+.filterChip {
+  flex: 0 0 auto;
+  min-height: var(--pda-touch-target);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.55rem 1.05rem;
+  border-radius: 999px;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  background: var(--pda-surface);
+  color: var(--ifm-font-color-base);
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease,
+    transform 0.1s ease;
+}
+
+.filterChip:hover {
+  border-color: var(--pda-accent);
+  color: var(--pda-accent);
+}
+
+.filterChipActive {
+  background: var(--pda-accent-soft);
+  border-color: var(--pda-accent);
+  color: var(--pda-accent);
+}
+
+.filterChip:active {
+  transform: scale(0.96);
+}
+
+/* Colored dot on the level filter chips (and nowhere else) so Beginner /
+   Intermediate / Advanced are scannable without reading the label. */
+.levelDot {
+  width: 0.55rem;
+  height: 0.55rem;
+  margin-inline-end: 0.35rem;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.levelDot-beginner {
+  color: var(--ifm-color-success);
+}
+
+.levelDot-intermediate {
+  color: var(--pda-accent);
+}
+
+.levelDot-advanced {
+  color: #e11d48;
+}
+
+/* Star glyph inside the "Favorites" filter chip. */
+.favoriteStar {
+  color: var(--pda-accent);
+}
+
+.chipCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.35rem;
+  height: 1.35rem;
+  margin-inline-start: 0.4rem;
+  padding: 0 0.35rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1;
+  border-radius: 999px;
+  background: var(--pda-accent-soft);
+  color: var(--pda-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+@media screen and (min-width: 768px) {
+  .filters {
+    flex-wrap: wrap;
+    overflow: visible;
+  }
+}
+
+.counter {
+  margin: 0.5rem 0 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ifm-color-emphasis-600);
+  font-variant-numeric: tabular-nums;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin: 1.25rem 0;
+}
+
+@media screen and (min-width: 640px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.card {
+  position: relative;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: var(--pda-radius-lg);
+  background: var(--pda-surface);
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease;
+  /* 200+ cards: let the browser skip layout for everything offscreen. */
+  content-visibility: auto;
+  contain-intrinsic-size: 360px;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 2.5px;
+  border-radius: var(--pda-radius-lg) var(--pda-radius-lg) 0 0;
+  background: linear-gradient(90deg, var(--ifm-color-primary), var(--pda-accent));
+  opacity: 0.55;
+  transition: opacity 0.18s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--pda-shadow-md);
+  border-color: var(--ifm-color-emphasis-300);
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+.card:active {
+  transform: translateY(-1px) scale(0.985);
+}
+
+/* Favorited cards get a faint amber ring so starred projects are scannable. */
+.cardFavorite {
+  border-color: rgba(245, 158, 11, 0.45);
+}
+
+.cardBody {
+  display: block;
+  color: var(--ifm-font-color-base);
+  text-decoration: none;
+}
+
+.cardBody:hover {
+  text-decoration: none;
+  color: var(--ifm-font-color-base);
+}
+
+/* Generated SVG thumbnail — full-bleed across the top of the card. */
+.thumb {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--pda-radius-lg) var(--pda-radius-lg) 0 0;
+}
+
+.thumbArt {
+  display: block;
+  width: 100%;
+  height: 7.5rem;
+}
+
+/* Difficulty badge pinned to the top corner of the thumbnail. */
+.levelBadge {
+  position: absolute;
+  top: 0.6rem;
+  inset-inline-start: 0.6rem;
+  padding: 0.28rem 0.6rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-radius: 999px;
+  background: rgba(17, 16, 30, 0.72);
+  color: #fff;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.levelBadge::before {
+  content: '';
+  display: inline-block;
+  width: 0.45rem;
+  height: 0.45rem;
+  margin-inline-end: 0.35rem;
+  border-radius: 50%;
+  background: currentColor;
+  vertical-align: 1px;
+}
+
+.levelBadge-beginner {
+  color: #6ee7a0;
+}
+
+.levelBadge-intermediate {
+  color: #fbbf24;
+}
+
+.levelBadge-advanced {
+  color: #fb7185;
+}
+
+.cardContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 1.1rem 1.4rem 1.35rem;
+}
+
+.cardContent h3 {
+  margin: 0.35rem 0 0;
+  padding-inline-end: 1.75rem;
+  font-size: 1.08rem;
+  line-height: 1.3;
+  text-wrap: balance;
+}
+
+.favoriteButton {
+  position: absolute;
+  top: 0.55rem;
+  inset-inline-end: 0.55rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--pda-touch-target);
+  height: var(--pda-touch-target);
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ifm-color-emphasis-400);
+  font-size: 1.15rem;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    color 0.15s ease,
+    background 0.15s ease,
+    transform 0.12s ease;
+}
+
+.favoriteButton:hover {
+  color: var(--pda-accent);
+  background: var(--pda-accent-soft);
+}
+
+.favoriteButton:active {
+  transform: scale(0.88);
+}
+
+/* Starred state — filled accent, subtle glow. */
+.cardFavorite .favoriteButton {
+  color: var(--pda-accent);
+  text-shadow: 0 0 8px rgba(245, 158, 11, 0.55);
+}
+
+.date {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ifm-color-emphasis-600);
+}
+
+.summary {
+  margin: 0.25rem 0 0;
+  color: var(--ifm-color-emphasis-700);
+  font-size: 0.95rem;
+  line-height: 1.55;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  padding-top: 0.5rem;
+}
+
+.tool {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: var(--ifm-color-emphasis-100);
+  color: var(--ifm-color-emphasis-700);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  white-space: nowrap;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: auto;
+  padding-top: 0.75rem;
+}
+
+.tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  background: var(--pda-accent-soft);
+  color: var(--pda-accent);
+}
+
+.completedLabel {
+  margin: 0;
+  align-self: flex-start;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ifm-color-success);
+  background: rgba(46, 160, 67, 0.12);
+  border: 1px solid rgba(46, 160, 67, 0.3);
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+}
+
+/* Invisible sentinel the IntersectionObserver watches to load the next batch. */
+.sentinel {
+  height: 1px;
+  margin: -1px 0 0;
+}
+
+.end,
+.empty {
+  margin: 0.5rem 0 1.5rem;
+  font-size: 0.85rem;
+  color: var(--ifm-color-emphasis-600);
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card:hover {
+    transform: none;
+  }
+  .card:active {
+    transform: none;
+  }
+  .filterChip:active {
+    transform: none;
+  }
+  .favoriteButton:active {
+    transform: none;
+  }
+}

@@ -9,6 +9,7 @@ export const STORAGE_KEYS = {
   weeklyQuiz: 'pda-course:weekly-quiz',
   badges: 'pda-course:badges',
   projectProgress: 'pda-course:capstone-progress',
+  projectFavorites: 'pda-course:favorite-projects',
   studentName: 'pda-course:student-name',
   lastVisit: 'pda-course:last-visit',
   studentId: 'pda-course:student-id',

@@ -1,0 +1,94 @@
+.overall {
+  padding: 1.75rem;
+  margin-bottom: 2rem;
+  border-radius: var(--pda-radius-lg);
+  background: var(--pda-surface);
+  border: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.overallInner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1.75rem;
+}
+
+@media screen and (min-width: 640px) {
+  .overallInner {
+    justify-content: flex-start;
+  }
+}
+
+/* Circular progress ring, drawn with a conic gradient; the inner disc
+   is punched out so the ring matches the card background. */
+.ring {
+  position: relative;
+  flex: 0 0 auto;
+  width: 7.5rem;
+  height: 7.5rem;
+  border-radius: 50%;
+  background: conic-gradient(
+    var(--ifm-color-primary) 0%,
+    var(--pda-accent) calc(var(--ring-pct) * 1),
+    var(--ifm-color-emphasis-200) calc(var(--ring-pct) * 1) 100%
+  );
+}
+
+.ringInner {
+  position: absolute;
+  inset: 0.625rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--pda-surface);
+}
+
+.ringPercent {
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--ifm-color-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.overallBody {
+  flex: 1 1 16rem;
+  min-width: 0;
+}
+
+.overallHeader {
+  margin-bottom: 0.75rem;
+}
+
+.overallHeader h2 {
+  margin: 0;
+  font-size: 1.35rem;
+  text-wrap: balance;
+}
+
+.barTrack {
+  height: 0.6rem;
+  margin-bottom: 0.85rem;
+  border-radius: 999px;
+  background: var(--ifm-color-emphasis-200);
+  overflow: hidden;
+}
+
+.barFill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--ifm-color-primary), var(--pda-accent));
+  transition: width 0.4s ease;
+}
+
+.overallDetail {
+  margin: 0;
+  color: var(--ifm-color-emphasis-700);
+}
+
+.overallEmpty {
+  margin: 0;
+  color: var(--ifm-color-emphasis-700);
+}
