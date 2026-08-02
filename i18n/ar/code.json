@@ -965,5 +965,96 @@
   "homepage.projects.wordleClone.summary": {
     "message": "ابنِ لعبة Wordle حقيقية في الطرفية من الصفر: تغذية راجعة صحيحة بالتخمين، وقائمة كلمات مخصصة، وتتبّع إحصائيات دائم عبر الجلسات.",
     "description": "Homepage project card summary"
+  },
+  "homepage.hero.statWeeks": {
+    "message": "أسابيع",
+    "description": "Homepage hero stat: weeks"
+  },
+  "homepage.hero.statProjects": {
+    "message": "مشاريع من العالم الحقيقي",
+    "description": "Homepage hero stat: projects"
+  },
+  "homepage.hero.statInstalls": {
+    "message": "تثبيتات للبدء",
+    "description": "Homepage hero stat: installs"
+  },
+  "homepage.projects.completed": {
+    "message": "مكتمل",
+    "description": "Homepage project card completed label"
+  },
+  "homepage.projects.filterAll": {
+    "message": "الكل",
+    "description": "Project filter chip: all projects"
+  },
+  "capstoneChooser.filterAll": {
+    "message": "الكل"
+  },
+  "progressPage.overall.heading": {
+    "message": "التقدم العام"
+  },
+  "progressPage.overall.detail": {
+    "message": "{weeks} مكتملة و{projects} مبنية"
+  },
+  "progressPage.overall.weeks": {
+    "message": "أسابيع"
+  },
+  "progressPage.overall.projects": {
+    "message": "مشاريع"
+  },
+  "progressPage.overall.empty": {
+    "message": "اختر مسارًا في بايثون 101 أو تحليل البيانات لبدء تتبع تقدمك."
+  },
+  "projectGallery.filtersLabel": {
+    "message": "تصفية المشاريع"
+  },
+  "projectGallery.filterAll": {
+    "message": "الكل",
+    "description": "Project filter chip: all projects"
+  },
+  "projectGallery.favoritesFilter": {
+    "message": "المفضلة",
+    "description": "Project filter chip: favorites only"
+  },
+  "projectGallery.favorite.add": {
+    "message": "أضف إلى المفضلة"
+  },
+  "projectGallery.favorite.remove": {
+    "message": "أزل من المفضلة"
+  },
+  "projectGallery.showing": {
+    "message": "عرض {shown} من {total}",
+    "description": "Result counter: how many of the total are currently rendered"
+  },
+  "projectGallery.empty": {
+    "message": "لا توجد مشاريع تطابق عوامل التصفية.",
+    "description": "Empty state when no projects match the active filters"
+  },
+  "projectGallery.end": {
+    "message": "لقد شاهدت جميع المشاريع الـ{total}.",
+    "description": "End of list message with the total project count"
+  },
+  "projectGallery.completed": {
+    "message": "مكتمل",
+    "description": "Project card completed label"
+  },
+  "projectLevel.beginner": {
+    "message": "مبتدئ",
+    "description": "Project level label"
+  },
+  "projectLevel.intermediate": {
+    "message": "متوسط",
+    "description": "Project level label"
+  },
+  "projectLevel.advanced": {
+    "message": "متقدم",
+    "description": "Project level label"
+  },
+  "projectGallery.toolsLabel": {
+    "message": "الأدوات",
+    "description": "Project card tools row aria-label"
+  },
+  "homepage.hero.runChip": {
+    "message": "شغّل في متصفحك",
+    "description": "Homepage hero floating chip"
   }
 }

@@ -965,5 +965,96 @@
   "homepage.projects.wordleClone.summary": {
     "message": "Construye un juego Wordle real de terminal desde cero: retroalimentación correcta de acierto, una lista de palabras personalizada, y seguimiento persistente de estadísticas entre sesiones.",
     "description": "Homepage project card summary"
+  },
+  "homepage.hero.statWeeks": {
+    "message": "semanas",
+    "description": "Homepage hero stat: weeks"
+  },
+  "homepage.hero.statProjects": {
+    "message": "proyectos del mundo real",
+    "description": "Homepage hero stat: projects"
+  },
+  "homepage.hero.statInstalls": {
+    "message": "instalaciones para empezar",
+    "description": "Homepage hero stat: installs"
+  },
+  "homepage.projects.completed": {
+    "message": "Completado",
+    "description": "Homepage project card completed label"
+  },
+  "homepage.projects.filterAll": {
+    "message": "Todos",
+    "description": "Project filter chip: all projects"
+  },
+  "capstoneChooser.filterAll": {
+    "message": "Todos"
+  },
+  "progressPage.overall.heading": {
+    "message": "Progreso general"
+  },
+  "progressPage.overall.detail": {
+    "message": "{weeks} completadas y {projects} construidos"
+  },
+  "progressPage.overall.weeks": {
+    "message": "semanas"
+  },
+  "progressPage.overall.projects": {
+    "message": "proyectos"
+  },
+  "progressPage.overall.empty": {
+    "message": "Elige un track en Python 101 o Análisis de Datos para empezar a registrar tu progreso."
+  },
+  "projectGallery.filtersLabel": {
+    "message": "Filtrar proyectos"
+  },
+  "projectGallery.filterAll": {
+    "message": "Todos",
+    "description": "Project filter chip: all projects"
+  },
+  "projectGallery.favoritesFilter": {
+    "message": "Favoritos",
+    "description": "Project filter chip: favorites only"
+  },
+  "projectGallery.favorite.add": {
+    "message": "Añadir a favoritos"
+  },
+  "projectGallery.favorite.remove": {
+    "message": "Quitar de favoritos"
+  },
+  "projectGallery.showing": {
+    "message": "Mostrando {shown} de {total}",
+    "description": "Result counter: how many of the total are currently rendered"
+  },
+  "projectGallery.empty": {
+    "message": "Ningún proyecto coincide con tus filtros.",
+    "description": "Empty state when no projects match the active filters"
+  },
+  "projectGallery.end": {
+    "message": "Has visto los {total} proyectos.",
+    "description": "End of list message with the total project count"
+  },
+  "projectGallery.completed": {
+    "message": "Completado",
+    "description": "Project card completed label"
+  },
+  "projectLevel.beginner": {
+    "message": "Principiante",
+    "description": "Project level label"
+  },
+  "projectLevel.intermediate": {
+    "message": "Intermedio",
+    "description": "Project level label"
+  },
+  "projectLevel.advanced": {
+    "message": "Avanzado",
+    "description": "Project level label"
+  },
+  "projectGallery.toolsLabel": {
+    "message": "Herramientas",
+    "description": "Project card tools row aria-label"
+  },
+  "homepage.hero.runChip": {
+    "message": "Ejecuta en tu navegador",
+    "description": "Homepage hero floating chip"
   }
 }

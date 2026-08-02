@@ -1,84 +1,128 @@
 /**
  * CSS files with the .module.css suffix will be treated as CSS modules
  * and scoped locally.
+ *
+ * Mobile-first: base rules target small screens, then `min-width` media
+ * queries progressively enhance layout for larger viewports.
  */
 
+/* ---------- Hero ---------- */
+
 .heroBanner {
-  padding: 4rem 0;
-  text-align: center;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(
-    135deg,
-    var(--ifm-color-primary-darkest) 0%,
-    var(--ifm-color-primary) 55%,
-    var(--pda-accent) 140%
-  );
+  padding: 3rem 0 3.5rem;
+  text-align: center;
   color: #fff;
+  background-color: var(--ifm-color-primary-darkest);
+  background-image:
+    radial-gradient(56rem 26rem at 12% -8%, rgba(168, 148, 250, 0.4), transparent 62%),
+    radial-gradient(46rem 24rem at 108% 118%, rgba(245, 158, 11, 0.32), transparent 62%),
+    linear-gradient(135deg, var(--ifm-color-primary-darkest) 0%, var(--ifm-color-primary) 62%, var(--pda-accent) 175%);
 }
 
-.heroBanner :global(.button--secondary) {
-  background: #fff;
-  color: var(--ifm-color-primary-darker);
-  border-color: #fff;
+/* Fine grid overlay, faded out toward the edges. */
+.heroBanner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 44px 44px;
+  -webkit-mask-image: radial-gradient(58% 62% at 50% 30%, #000 0%, transparent 100%);
+  mask-image: radial-gradient(58% 62% at 50% 30%, #000 0%, transparent 100%);
 }
 
-.heroBanner :global(.button--secondary):hover {
-  background: var(--pda-accent-soft);
-  color: var(--ifm-color-primary-darker);
-  border-color: #fff;
+/* Soft amber glow orb, tucked into a corner. */
+.heroBanner::after {
+  content: '';
+  position: absolute;
+  inset-inline-end: -7rem;
+  bottom: -9rem;
+  width: 26rem;
+  height: 26rem;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.3) 0%, rgba(245, 158, 11, 0) 62%);
+}
+
+.heroBanner :global(.container) {
+  position: relative;
+  z-index: 1;
 }
 
 [data-theme='dark'] .heroBanner {
-  background: linear-gradient(
-    135deg,
-    #171428 0%,
-    var(--ifm-color-primary-darkest) 45%,
-    var(--pda-accent) 150%
-  );
+  background-color: #12101f;
+  background-image:
+    radial-gradient(56rem 26rem at 12% -8%, rgba(168, 148, 250, 0.28), transparent 62%),
+    radial-gradient(46rem 24rem at 108% 118%, rgba(245, 158, 11, 0.22), transparent 62%),
+    linear-gradient(135deg, #171428 0%, var(--ifm-color-primary-darkest) 48%, #2a11c0 130%);
 }
 
-@media screen and (max-width: 996px) {
-  .heroBanner {
-    padding: 2.5rem 1rem;
-  }
+.heroGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  align-items: center;
 }
 
 .heroTitle {
-  font-size: clamp(2rem, 5vw, 3rem);
-  margin-bottom: 0.5rem;
+  font-size: clamp(2.1rem, 6vw, 3.4rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 0.75rem;
+  text-wrap: balance;
 }
 
 .heroSubtitle {
-  font-size: 1.1rem;
-  margin-bottom: 2rem;
-  opacity: 0.9;
+  font-size: clamp(1rem, 2.4vw, 1.2rem);
+  line-height: 1.6;
+  max-width: 34rem;
+  margin: 0 auto 2.25rem;
+  opacity: 0.92;
 }
 
+/* Stat chips — translucent glass pills that wrap cleanly on mobile. */
 .heroStats {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 1rem 2.5rem;
-  margin-bottom: 2rem;
+  gap: 0.75rem;
+  margin-bottom: 2.25rem;
 }
 
 .heroStat {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.15rem;
+  justify-content: center;
+  gap: 0.25rem;
+  min-width: 6.75rem;
+  padding: 0.85rem 1.25rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(6px);
 }
 
 .heroStatValue {
-  font-size: 2rem;
+  font-size: 1.75rem;
   font-weight: 800;
   line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
 }
 
 .heroStatLabel {
-  font-size: 0.85rem;
-  opacity: 0.8;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.85;
 }
 
 .buttons {
@@ -89,136 +133,341 @@
   gap: 0.75rem;
 }
 
+/* Primary CTA — solid white so it pops against the gradient. */
+.heroCta {
+  background: #fff;
+  color: var(--ifm-color-primary-dark);
+  border-color: transparent;
+  font-weight: 700;
+  box-shadow: 0 12px 28px -10px rgba(0, 0, 0, 0.4);
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease,
+    color 0.18s ease;
+}
+
+.heroCta:hover {
+  background: var(--ifm-color-primary-dark);
+  color: #fff;
+  text-decoration: none;
+  transform: translateY(-2px);
+  box-shadow: 0 16px 32px -10px rgba(0, 0, 0, 0.45);
+}
+
+.heroCta:active {
+  transform: translateY(-1px) scale(0.97);
+}
+
+/* Secondary CTA (e.g. Install the app) — translucent glass outline. */
+.heroBanner :global(.button--outline) {
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.45);
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.heroBanner :global(.button--outline):hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: #fff;
+  transform: translateY(-2px);
+}
+
+.heroBanner :global(.button--outline):active {
+  transform: translateY(-1px) scale(0.97);
+}
+
+/* ---------- Hero visual (browser-window mockup) ---------- */
+
+.heroVisual {
+  position: relative;
+  width: 100%;
+  max-width: 30rem;
+  margin-inline: auto;
+  animation: heroFloat 7s ease-in-out infinite alternate;
+}
+
+@keyframes heroFloat {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-8px);
+  }
+}
+
+.window {
+  overflow: hidden;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 30px 60px -20px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
+}
+
+.windowBar {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.65rem 0.9rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.windowDot {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+}
+
+.windowDot:nth-child(1) {
+  background: #f87171;
+}
+
+.windowDot:nth-child(2) {
+  background: #fbbf24;
+}
+
+.windowDot:nth-child(3) {
+  background: #4ade80;
+}
+
+.windowUrl {
+  margin-inline-start: auto;
+  padding: 0.15rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.09);
+  color: rgba(255, 255, 255, 0.8);
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.68rem;
+  white-space: nowrap;
+}
+
+.windowBody {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 0.6rem;
+  padding: 0.9rem;
+}
+
+.editor {
+  display: flex;
+  min-width: 0;
+  padding: 0.7rem 0.6rem;
+  border-radius: 10px;
+  background: rgba(8, 8, 18, 0.45);
+  font-family: var(--ifm-font-family-monospace);
+  overflow: hidden;
+}
+
+.lineGutter {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding-inline-end: 0.65rem;
+  font-size: 0.66rem;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.3);
+  text-align: end;
+  user-select: none;
+}
+
+.code {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  font-size: 0.72rem;
+  line-height: 1.45;
+  color: #ece7ff;
+  white-space: nowrap;
+}
+
+.kw {
+  color: #c4b5fd;
+}
+
+.mod {
+  color: #7dd3fc;
+}
+
+.fn {
+  color: #fbbf24;
+}
+
+.str {
+  color: #86efac;
+}
+
+.output {
+  color: #4ade80;
+  font-size: 0.66rem;
+}
+
+.plot {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  padding: 0.5rem 0.4rem;
+  border-radius: 10px;
+  background: rgba(8, 8, 18, 0.45);
+}
+
+.plot svg {
+  width: 100%;
+  height: auto;
+}
+
+/* Floating chip that leans over the mockup's bottom edge. */
+.runChip {
+  position: absolute;
+  bottom: -0.8rem;
+  inset-inline-start: 1.4rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.5rem 0.95rem;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ifm-color-primary-dark);
+  font-weight: 700;
+  font-size: 0.8rem;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: var(--pda-shadow-md);
+}
+
+.runArrow {
+  color: var(--pda-accent);
+  font-size: 0.72rem;
+}
+
+@media screen and (min-width: 640px) {
+  .heroBanner {
+    padding: 4.5rem 0 5rem;
+  }
+
+  .heroStats {
+    gap: 1rem;
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .heroGrid {
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 3.5rem;
+    text-align: start;
+  }
+
+  .heroVisual {
+    max-width: none;
+    margin-inline: 0;
+  }
+
+  .heroSubtitle {
+    margin-inline: 0;
+  }
+
+  .heroStats {
+    justify-content: flex-start;
+  }
+
+  .buttons {
+    justify-content: flex-start;
+  }
+}
+
+/* ---------- Section cards (Python 101 / Data Analysis) ---------- */
+
 .sections {
-  padding: 2.5rem 0;
+  padding: 3rem 0 1.5rem;
 }
 
 .sectionCard {
+  position: relative;
   height: 100%;
-  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  padding: 1.75rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
   border-radius: var(--pda-radius-lg);
   background: var(--pda-surface);
   border: 1px solid var(--ifm-color-emphasis-200);
-  margin-bottom: 1.5rem;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+/* Accent hairline along the top edge. */
+.sectionCard::before {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--ifm-color-primary), var(--pda-accent));
+  opacity: 0.85;
+}
+
+.sectionCard:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--pda-shadow-md);
+  border-color: var(--ifm-color-emphasis-300);
 }
 
 .sectionCard h2 {
-  margin-top: 0;
+  margin: 0 0 0.5rem;
+  font-size: 1.35rem;
+  text-wrap: balance;
 }
 
-.projects {
-  padding: 1rem 0 2.5rem;
+.sectionCard p {
+  flex-grow: 1;
+  margin: 0;
+  color: var(--ifm-color-emphasis-700);
+  line-height: 1.6;
 }
 
-.projects h2 {
-  margin-bottom: 0.5rem;
-}
-
-.projectsIntro {
-  margin-bottom: 1.25rem;
-}
-
-.projectFilters {
+.sectionTracks {
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem;
-  margin-bottom: 1.5rem;
+  margin: 0.9rem 0 1.25rem;
 }
 
-.projectFilterChip {
-  font-size: 0.8rem;
-  font-weight: 600;
-  padding: 0.35rem 0.85rem;
-  border-radius: 999px;
-  border: 1px solid var(--ifm-color-emphasis-300);
-  background: transparent;
-  color: var(--ifm-font-color-base);
-  cursor: pointer;
-  min-height: 0;
-  transition:
-    background 0.15s ease,
-    border-color 0.15s ease,
-    color 0.15s ease;
-}
-
-.projectFilterChip:hover {
-  border-color: var(--pda-accent);
-  color: var(--pda-accent);
-}
-
-.projectFilterChipActive {
-  background: var(--pda-accent-soft);
-  border-color: var(--pda-accent);
-  color: var(--pda-accent);
-}
-
-.projectGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 1rem;
-}
-
-.projectCard {
-  border: 1px solid var(--ifm-color-emphasis-200);
-  border-radius: var(--pda-radius-lg);
-  padding: 1.25rem;
-  background: var(--pda-surface);
-  display: flex;
-  flex-direction: column;
-  color: var(--ifm-font-color-base);
-  text-decoration: none;
-  position: relative;
-  transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease,
-    border-color 0.15s ease;
-}
-
-.projectCard:hover {
-  border-color: var(--pda-accent);
-  text-decoration: none;
-  color: var(--ifm-font-color-base);
-  transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-}
-
-.projectCard h3 {
-  margin-top: 0;
-}
-
-.projectDate {
-  font-size: 0.85rem;
-  color: var(--ifm-color-emphasis-600);
-  margin: -0.5rem 0 0.75rem;
-}
-
-.projectTags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-  margin-top: 0.5rem;
-}
-
-.projectTag {
-  font-size: 0.75rem;
-  font-weight: 600;
-  padding: 0.15rem 0.55rem;
-  border-radius: 999px;
-  background: var(--pda-accent-soft);
-  color: var(--pda-accent);
-}
-
-.projectCardCompleted {
-  border-color: var(--ifm-color-success);
-}
-
-.projectCompleted {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  font-size: 0.7rem;
+.sectionTrack {
+  font-size: 0.72rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--ifm-color-success);
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  background: var(--pda-accent-soft);
+  color: var(--pda-accent);
+}
+
+.sectionCard > :global(.button) {
+  align-self: flex-start;
+}
+
+/* ---------- Real-world projects ---------- */
+
+.projects {
+  padding: 1rem 0 4rem;
+}
+
+.projects h2 {
+  margin-bottom: 0.75rem;
+  font-size: 1.6rem;
+}
+
+.projectsIntro {
+  max-width: 46rem;
+  margin-bottom: 1.5rem;
+  color: var(--ifm-color-emphasis-700);
+  line-height: 1.6;
 }

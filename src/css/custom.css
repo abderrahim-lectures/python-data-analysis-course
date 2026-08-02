@@ -3,6 +3,11 @@
  * Deliberately not default Infima green/blue — a distinct violet/amber
  * palette with personality, tuned for both light and dark mode.
  */
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 :root {
   --ifm-color-primary: #5b3df5;
   --ifm-color-primary-dark: #3f1ff2;
@@ -22,6 +27,8 @@
   --pda-surface: #f7f6fd;
   --pda-radius-lg: 14px;
   --pda-touch-target: 44px;
+  --pda-shadow-sm: 0 1px 2px rgba(23, 20, 40, 0.06), 0 1px 3px rgba(23, 20, 40, 0.1);
+  --pda-shadow-md: 0 8px 24px -8px rgba(23, 20, 40, 0.18), 0 2px 6px -2px rgba(23, 20, 40, 0.08);
 }
 
 [data-theme='dark'] {
@@ -37,6 +44,8 @@
   --pda-accent: #fbbf24;
   --pda-accent-soft: rgba(251, 191, 36, 0.12);
   --pda-surface: #1e1b2e;
+  --pda-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --pda-shadow-md: 0 10px 28px -10px rgba(0, 0, 0, 0.6);
 }
 
 /* Generous touch targets on interactive elements, per the mobile-first requirement.
@@ -67,4 +76,17 @@ body[data-ui-mode='classical'] .gamified-flourish {
   outline: 3px solid var(--pda-accent);
   outline-offset: 2px;
   border-radius: 4px;
+}
+
+/* Respect users who prefer reduced motion — collapse the decorative
+   transitions/transforms added by the custom components above. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
