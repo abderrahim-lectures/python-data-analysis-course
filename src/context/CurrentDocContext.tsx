@@ -18,8 +18,9 @@ const CurrentDocContext = createContext<CurrentDocContextValue | undefined>(unde
 
 /**
  * Tracks which section/track/week the student is currently reading, sourced from doc
- * frontmatter (see src/theme/DocItem/Content) rather than guessed from the URL — this is
- * what lets PlaygroundFab decide Trinket vs. JupyterLite and which notebook to deep-link to.
+ * frontmatter (see src/theme/DocItem/Content) rather than guessed from the URL — this
+ * is what lets the VS Code playground decide between the Python editor/REPL and the
+ * JupyterLite notebook, and which notebook to deep-link to.
  */
 export function CurrentDocProvider({children}: {children: ReactNode}): React.JSX.Element {
   const [doc, setDoc] = useState<CurrentDocInfo>(EMPTY_DOC_INFO);

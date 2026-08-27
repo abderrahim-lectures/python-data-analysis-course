@@ -20,8 +20,9 @@ interface CourseFrontMatter {
 
 /**
  * Reads this doc's `section`/`track`/`week` frontmatter and pushes it into
- * CurrentDocContext, which PlaygroundFab (mounted higher up, in Root) reads
- * to decide Trinket vs. JupyterLite and which notebook to deep-link to.
+ * CurrentDocContext, which the VS Code playground (mounted higher up, in Root)
+ * reads to decide between the Python editor/REPL and the JupyterLite notebook,
+ * and which notebook to deep-link to.
  */
 export default function ContentWrapper(props: Props): ReactNode {
   const {frontMatter} = useDoc();

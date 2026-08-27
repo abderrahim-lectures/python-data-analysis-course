@@ -7,7 +7,7 @@
   height: 40px;
   border-radius: 50%;
   border: 1px solid var(--ifm-color-emphasis-300);
-  /* --ifm-background-color is `transparent` by default in light mode. */
+  /* --ifm-background-color is `transparent` in light mode. */
   background: var(--pda-surface);
   font-size: 1.1rem;
   cursor: pointer;
@@ -15,4 +15,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* When the docked VS Code playground is open on desktop, slide this toggle
+   clear of the panel so it doesn't sit on top of the editor title bar. */
+@media (min-width: 1440px) {
+  body[data-vsc-open='1'] .toggle {
+    right: calc(520px + 1.25rem);
+  }
 }

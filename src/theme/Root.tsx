@@ -4,7 +4,7 @@ import {CurrentDocProvider} from '@site/src/context/CurrentDocContext';
 import UiModeBodyAttribute from '@site/src/theme/Root/UiModeBodyAttribute';
 import LocaleRedirect from '@site/src/theme/Root/LocaleRedirect';
 import AutoLocaleRedirectBanner from '@site/src/components/AutoLocaleRedirectBanner';
-import PlaygroundFab from '@site/src/components/PlaygroundFab';
+import VsCodePlayground from '@site/src/components/VsCodePlayground';
 import LearningStylePicker from '@site/src/components/LearningStylePicker';
 import ModeToggle from '@site/src/components/ModeToggle';
 import WelcomeBackBanner from '@site/src/components/WelcomeBackBanner';
@@ -24,7 +24,7 @@ export default function Root({children}: {children: ReactNode}): React.JSX.Eleme
         <CourseCompletionWatcher />
         <WelcomeBackBanner />
         {children}
-        <PlaygroundFab />
+        <VsCodePlayground />
         <LearningStylePicker />
         <ModeToggle />
         <BadgeToast />

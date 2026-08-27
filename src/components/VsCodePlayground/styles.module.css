@@ -1,0 +1,29 @@
+.embedFrame {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.jupyterLiteWrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.loadingState {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  color: #d4d4d4;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.8rem;
+  /* Fully covers the iframe while it loads -- --ifm-background-color is
+     `transparent` in light mode by default, which would defeat the point,
+     so an opaque editor-chrome dark is used instead (matches the .vsc-dock). */
+  background: #1e1e1e;
+}

@@ -131,6 +131,30 @@
   "playground.panel.close": {
     "message": "إغلاق"
   },
+  "playground.vscode.terminalLabel": {
+    "message": "الطرفية المدمجة"
+  },
+  "playground.vscode.clearTerminal": {
+    "message": "مسح الطرفية"
+  },
+  "playground.vscode.terminalEmpty": {
+    "message": "اضغط على تشغيل لتنفيذ main.py في المتصفح — لا حاجة لخادم."
+  },
+  "playground.vscode.booting": {
+    "message": "جارٍ تشغيل Python (WASM)… أول تشغيل ينزّل ~10 م.ب"
+  },
+  "playground.vscode.openEditor": {
+    "message": "فتح المحرر"
+  },
+  "playground.vscode.collapse": {
+    "message": "إخفاء المحرر"
+  },
+  "playground.vscode.reopen": {
+    "message": "إظهار المحرر"
+  },
+  "playground.vscode.editorLabel": {
+    "message": "محرر بايثون (main.py)"
+  },
   "progressCheckbox.label": {
     "message": "وضع علامة على إتمام هذا الأسبوع"
   },

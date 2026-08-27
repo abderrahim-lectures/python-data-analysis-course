@@ -131,6 +131,30 @@
   "playground.panel.close": {
     "message": "Fermer"
   },
+  "playground.vscode.terminalLabel": {
+    "message": "Terminal intégré"
+  },
+  "playground.vscode.clearTerminal": {
+    "message": "Effacer le terminal"
+  },
+  "playground.vscode.terminalEmpty": {
+    "message": "Appuyez sur Exécuter pour lancer main.py dans le navigateur — aucun serveur requis."
+  },
+  "playground.vscode.booting": {
+    "message": "Démarrage de Python (WASM)… le premier lancement télécharge ~10 Mo"
+  },
+  "playground.vscode.openEditor": {
+    "message": "Ouvrir l'éditeur"
+  },
+  "playground.vscode.collapse": {
+    "message": "Masquer l'éditeur"
+  },
+  "playground.vscode.reopen": {
+    "message": "Afficher l'éditeur"
+  },
+  "playground.vscode.editorLabel": {
+    "message": "Éditeur Python (main.py)"
+  },
   "progressCheckbox.label": {
     "message": "Marquer cette semaine comme terminée"
   },
