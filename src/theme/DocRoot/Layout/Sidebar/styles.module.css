@@ -1,0 +1,27 @@
+/**
+ * Mirrors the stock DocRoot/Layout/Sidebar container so the trail rail slots
+ * into the same responsive slots (hidden under the mobile breakpoint, where
+ * the navbar drawer takes over).
+ */
+.docSidebarContainer {
+  display: none;
+}
+
+@media (min-width: 997px) {
+  .docSidebarContainer {
+    display: block;
+    width: 196px;
+    margin-top: calc(-1 * var(--ifm-navbar-height));
+    border-right: 1px solid var(--ifm-toc-border-color);
+    will-change: width;
+    transition: width var(--ifm-transition-fast) ease;
+    clip-path: inset(0);
+  }
+}
+
+.sidebarViewport {
+  top: 0;
+  position: sticky;
+  height: 100%;
+  max-height: 100vh;
+}

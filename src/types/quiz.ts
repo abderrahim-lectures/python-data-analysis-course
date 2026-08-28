@@ -4,4 +4,5 @@ import type {QuizQuestion} from '@site/src/utils/quizScoring';
 export interface DisplayQuizQuestion extends QuizQuestion {
   prompt: string;
   options: string[];
+  explanation?: string;
 }

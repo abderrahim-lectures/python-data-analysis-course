@@ -1,3 +1,6 @@
+/* Import animation library */
+@import './animations.css';
+
 /**
  * Design tokens for the Python & Data Analysis Course.
  * Deliberately not default Infima green/blue — a distinct violet/amber
@@ -26,7 +29,7 @@ html {
   --pda-accent-soft: rgba(245, 158, 11, 0.12);
   --pda-surface: #f7f6fd;
   --pda-radius-lg: 14px;
-  --pda-touch-target: 44px;
+  --pda-touch-target: 48px;
   --pda-shadow-sm: 0 1px 2px rgba(23, 20, 40, 0.06), 0 1px 3px rgba(23, 20, 40, 0.1);
   --pda-shadow-md: 0 8px 24px -8px rgba(23, 20, 40, 0.18), 0 2px 6px -2px rgba(23, 20, 40, 0.08);
 }
@@ -48,19 +51,25 @@ html {
   --pda-shadow-md: 0 10px 28px -10px rgba(0, 0, 0, 0.6);
 }
 
-/* Generous touch targets on interactive elements, per the mobile-first requirement.
-   Deliberately NOT .navbar__toggle here: forcing its `display` overrides Infima's
-   own `display: none` above the mobile breakpoint, which left the hamburger button
-   visible (and clickable) on desktop even though Docusaurus's own JS-level
-   breakpoint check still correctly treats it as a mobile-only control — the button
-   would toggle its "show" state and the dark backdrop, but the drawer's actual menu
-   content never mounted, since that decision is made independently in JS. Infima's
-   own mobile styles already size this button reasonably; no override needed. */
+/* Generous touch targets on interactive elements, per the mobile-first requirement. */
 .button,
 .menu__link {
   min-height: var(--pda-touch-target);
   display: inline-flex;
   align-items: center;
+}
+
+/* Bigger buttons on mobile for easier tapping */
+@media (max-width: 768px) {
+  .button {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+  }
+  
+  .button--lg {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+  }
 }
 
 /* Classical mode hides gamified-only decoration (badges, toasts, meme beats) —
@@ -152,7 +161,7 @@ body[data-ui-mode='classical'] .gamified-flourish {
   }
 }
 
-/* Slim "Code" strip pinned to the right edge — desktop reopen affordance. */
+/* "Code" strip pinned to the right edge — desktop reopen affordance. */
 .vsc-reopen {
   position: fixed;
   right: 0;
@@ -162,17 +171,31 @@ body[data-ui-mode='classical'] .gamified-flourish {
   display: none;
   flex-direction: column;
   align-items: center;
-  gap: 0.15rem;
-  padding: 0.5rem 0.4rem;
+  justify-content: center;
+  gap: 0.3rem;
+  padding: 1rem 0.65rem;
   background: #1e1e1e;
   color: #d4d4d4;
   border: 1px solid #3c3c3c;
   border-right: none;
   border-radius: 8px 0 0 8px;
   font-family: var(--ifm-font-family-monospace);
-  font-size: 0.68rem;
+  font-size: 0.85rem;
+  font-weight: 500;
   cursor: pointer;
   box-shadow: -6px 0 16px rgba(0, 0, 0, 0.35);
+  min-height: 64px;
+  min-width: 36px;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.vsc-reopen:hover {
+  background: #2d2d2d;
+  transform: translateY(-50%) translateX(-2px);
+}
+
+.vsc-reopen:active {
+  transform: translateY(-50%) translateX(0);
 }
 
 @media (min-width: 1440px) {
@@ -190,20 +213,32 @@ body[data-ui-mode='classical'] .gamified-flourish {
   z-index: 210;
   display: none;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.55rem 0.85rem;
+  gap: 0.5rem;
+  padding: 0.75rem 1.1rem;
   background: #1e1e1e;
   color: #d4d4d4;
   border: 1px solid #3c3c3c;
-  border-radius: 8px;
+  border-radius: 10px;
   font-family: var(--ifm-font-family-monospace);
-  font-size: 0.85rem;
+  font-size: 0.95rem;
+  font-weight: 500;
   cursor: pointer;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  min-height: 48px;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.vsc-mobile-toggle:hover {
+  background: #2d2d2d;
+}
+
+.vsc-mobile-toggle:active {
+  transform: scale(0.97);
 }
 
 .vsc-mobile-toggle__prompt {
   color: var(--pda-accent);
+  font-size: 1.1rem;
 }
 
 @media (max-width: 1439px) {
@@ -262,16 +297,47 @@ body[data-ui-mode='classical'] .gamified-flourish {
   background: none;
   border: none;
   color: #cccccc;
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+  min-width: 36px;
+  min-height: 36px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+
+.vsc-titlebar__close:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.vsc-titlebar__minimap {
+  background: none;
+  border: none;
+  color: #cccccc;
   font-size: 1rem;
   line-height: 1;
   cursor: pointer;
   min-width: 32px;
   min-height: 32px;
-  border-radius: 4px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+  opacity: 0.5;
 }
 
-.vsc-titlebar__close:hover {
+.vsc-titlebar__minimap:hover {
   background: rgba(255, 255, 255, 0.12);
+  opacity: 0.8;
+}
+
+.vsc-titlebar__minimap--active {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.08);
 }
 
 /* --- Main row: activity bar + workbench ---------------------------------- */
@@ -285,21 +351,26 @@ body[data-ui-mode='classical'] .gamified-flourish {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
-  width: 44px;
+  gap: 0.75rem;
+  width: 48px;
   padding-top: 0.5rem;
   background: #333333;
   flex: none;
 }
 
 .vsc-activitybar__icon {
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   color: #858585;
   fill: currentColor;
+  cursor: pointer;
+  padding: 2px;
+  border-radius: 4px;
+  transition: background 0.15s;
 }
 
-.vsc-activitybar__icon--active {
+.vsc-activitybar__icon:hover {
+  background: rgba(255, 255, 255, 0.1);
   color: #ffffff;
 }
 
@@ -314,7 +385,7 @@ body[data-ui-mode='classical'] .gamified-flourish {
 .vsc-tabs {
   display: flex;
   align-items: stretch;
-  height: 35px;
+  height: 40px;
   background: #252526;
   flex: none;
   overflow-x: auto;
@@ -329,15 +400,22 @@ body[data-ui-mode='classical'] .gamified-flourish {
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  padding: 0 0.85rem;
+  padding: 0 1rem;
   background: #2d2d2d;
   border: none;
   border-right: 1px solid #1e1e1e;
   color: #969696;
   font-family: inherit;
-  font-size: 0.78rem;
+  font-size: 0.82rem;
   cursor: pointer;
   white-space: nowrap;
+  min-height: 36px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.vsc-tab:hover {
+  background: #353535;
+  color: #cccccc;
 }
 
 .vsc-tab--active {
@@ -347,7 +425,7 @@ body[data-ui-mode='classical'] .gamified-flourish {
 }
 
 .vsc-tab__dot {
-  font-size: 0.6rem;
+  font-size: 0.7rem;
   color: #e37933;
 }
 
@@ -362,22 +440,50 @@ body[data-ui-mode='classical'] .gamified-flourish {
 .vsc-run {
   display: flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.4rem;
   margin: 0.25rem;
-  padding: 0.2rem 0.9rem;
+  padding: 0.35rem 1rem;
   background: #0e639c;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   color: #ffffff;
   font-family: inherit;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
+  min-height: 32px;
+  transition: background 0.15s, transform 0.1s;
 }
 
 .vsc-run:hover {
   background: #1177bb;
+}
+
+.vsc-run:active {
+  transform: scale(0.97);
+}
+
+.vsc-reset {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.75rem;
+  background: transparent;
+  border: 1px solid #3c3c3c;
+  border-radius: 6px;
+  color: #858585;
+  font-family: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+  white-space: nowrap;
+  min-height: 32px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.vsc-reset:hover {
+  background: #2d2d2d;
+  color: #cccccc;
 }
 
 /* --- Editor / notebook content ------------------------------------------- */
@@ -416,15 +522,21 @@ body[data-ui-mode='classical'] .gamified-flourish {
 .vsc-terminal__tab {
   display: flex;
   align-items: center;
-  gap: 0.3rem;
+  gap: 0.35rem;
   background: #1e1e1e;
   border: none;
-  border-radius: 3px 3px 0 0;
+  border-radius: 4px 4px 0 0;
   color: #ffffff;
   font-family: inherit;
-  font-size: 0.7rem;
-  padding: 0.25rem 0.6rem;
+  font-size: 0.75rem;
+  padding: 0.35rem 0.75rem;
   cursor: pointer;
+  min-height: 28px;
+  transition: background 0.15s;
+}
+
+.vsc-terminal__tab:hover {
+  background: #2d2d2d;
 }
 
 .vsc-terminal__chevron {
@@ -441,11 +553,15 @@ body[data-ui-mode='classical'] .gamified-flourish {
   background: none;
   border: none;
   color: #858585;
-  font-size: 0.9rem;
+  font-size: 1rem;
   cursor: pointer;
-  min-width: 28px;
-  min-height: 28px;
+  min-width: 32px;
+  min-height: 32px;
   border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, color 0.15s;
 }
 
 .vsc-terminal__action:hover {
@@ -485,6 +601,16 @@ body[data-ui-mode='classical'] .gamified-flourish {
 
 .vsc-terminal__line--info {
   color: #6a6a6a;
+}
+
+.vsc-terminal__line--hint {
+  color: #4ec9b0;
+  font-style: italic;
+}
+
+.vsc-terminal__line--success {
+  color: #4ade80;
+  font-weight: 500;
 }
 
 .vsc-terminal__prompt {
@@ -533,3 +659,239 @@ body[data-ui-mode='classical'] .gamified-flourish {
   flex: 1;
 }
 
+
+/* ==========================================================================
+   Micro-interactions — Tactile Buttons & Card Hover Effects
+   ========================================================================== */
+
+/* Tactile button effect (Duolingo-style 3D press) */
+.button-tactile {
+  position: relative;
+  transform: translateY(0);
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 0 0 rgba(0, 0, 0, 0.15);
+}
+
+.button-tactile:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 0 rgba(0, 0, 0, 0.15);
+}
+
+.button-tactile:active {
+  transform: translateY(4px);
+  box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.15);
+}
+
+/* Card hover effect */
+.card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--pda-shadow-md);
+}
+
+/* Ripple effect on buttons */
+.ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.4s, height 0.4s;
+}
+
+.ripple:active::after {
+  width: 200px;
+  height: 200px;
+}
+
+/* Focus ring animation */
+@keyframes focusPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(91, 61, 245, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 0 8px rgba(91, 61, 245, 0);
+  }
+}
+
+.button:focus-visible {
+  animation: focusPulse 0.6s ease-out;
+}
+
+/* Card shimmer loading effect */
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--ifm-color-emphasis-100) 0px, var(--ifm-color-emphasis-200) 40px, var(--ifm-color-emphasis-100) 80px);
+  background-size: 200px 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: var(--ifm-global-radius);
+}
+
+/* Badge unlock animation */
+@keyframes badgeUnlock {
+  0% {
+    transform: scale(0) rotate(-180deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2) rotate(10deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.badge-unlock {
+  animation: badgeUnlock 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+/* XP gain float animation */
+@keyframes xpFloat {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-20px) scale(1.1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-40px) scale(0.9);
+  }
+}
+
+.xp-float {
+  animation: xpFloat 1s ease-out forwards;
+  color: var(--pda-accent);
+  font-weight: 700;
+  pointer-events: none;
+}
+
+/* Streak fire glow */
+@keyframes streakGlow {
+  0%, 100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.2);
+  }
+}
+
+.streak-active {
+  animation: streakGlow 2s ease-in-out infinite;
+}
+
+/* Progress bar shimmer */
+@keyframes progressShimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: 200px 0;
+  }
+}
+
+.progress-shimmer {
+  background: linear-gradient(90deg, var(--ifm-color-primary) 0px, var(--ifm-color-primary-light) 40px, var(--ifm-color-primary) 80px);
+  background-size: 200px 100%;
+  animation: progressShimmer 2s linear infinite;
+}
+
+/* Confetti particle */
+@keyframes confettiFall {
+  0% {
+    transform: translateY(-100%) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+/* Celebration bounce */
+@keyframes celebrationBounce {
+  0%, 20%, 53%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40%, 43% {
+    transform: translateY(-20px);
+  }
+  70% {
+    transform: translateY(-10px);
+  }
+  90% {
+    transform: translateY(-4px);
+  }
+}
+
+.celebration-bounce {
+  animation: celebrationBounce 1s ease-in-out;
+}
+
+/* Toast slide in */
+@keyframes toastSlideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.toast-enter {
+  animation: toastSlideIn 0.3s ease-out forwards;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .button-tactile,
+  .card-hover,
+  .ripple,
+  .badge-unlock,
+  .xp-float,
+  .streak-active,
+  .progress-shimmer,
+  .celebration-bounce,
+  .toast-enter {
+    animation: none;
+    transition: none;
+  }
+}
+
+/* Smooth scroll for anchor links */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--ifm-navbar-height, 3.75rem) + 1rem);
+}
+
+/* Better anchor link styling */
+article h2:not(:first-child),
+article h3:not(:first-child),
+article h4:not(:first-child) {
+  scroll-margin-top: calc(var(--ifm-navbar-height, 3.75rem) + 1rem);
+}

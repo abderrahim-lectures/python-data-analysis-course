@@ -1,0 +1,133 @@
+.progressTracker {
+  background: var(--ifm-background-surface-color);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: var(--pda-radius-lg);
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.progressHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.levelBadge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, var(--ifm-color-primary) 0%, var(--ifm-color-primary-dark) 100%);
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(91, 61, 245, 0.3);
+  flex-shrink: 0;
+}
+
+.levelNumber {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  line-height: 1;
+}
+
+.levelLabel {
+  font-size: 0.6rem;
+  color: rgba(255, 255, 255, 0.8);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.xpInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.xpTotal {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--ifm-color-emphasis-900);
+}
+
+.xpWeekly {
+  font-size: 0.85rem;
+  color: var(--ifm-color-success);
+}
+
+.progressBarContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.progressBar {
+  flex: 1;
+  height: 10px;
+  background: var(--ifm-color-emphasis-200);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--ifm-color-primary) 0%, var(--ifm-color-primary-light) 100%);
+  border-radius: 5px;
+  transition: width 0.5s ease;
+}
+
+.progressText {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--ifm-color-emphasis-700);
+  white-space: nowrap;
+}
+
+.levelProgress {
+  margin-top: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.levelProgressBar {
+  flex: 1;
+  height: 6px;
+  background: var(--ifm-color-emphasis-100);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.levelProgressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #f59e0b 0%, #f97316 100%);
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+.levelProgressText {
+  font-size: 0.75rem;
+  color: var(--ifm-color-emphasis-600);
+  white-space: nowrap;
+}
+
+/* RTL support */
+[dir='rtl'] .progressHeader {
+  flex-direction: row-reverse;
+}
+
+[dir='rtl'] .progressBarContainer,
+[dir='rtl'] .levelProgress {
+  flex-direction: row-reverse;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.progressFill {
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite linear;
+}

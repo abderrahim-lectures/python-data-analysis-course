@@ -1080,5 +1080,11 @@
   "homepage.hero.runChip": {
     "message": "Exécuter dans votre navigateur",
     "description": "Homepage hero floating chip"
+  },
+  "shortcuts.title": {
+    "message": "Raccourcis clavier"
+  },
+  "stickyRun.run": {
+    "message": "Exécuter"
   }
 }

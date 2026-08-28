@@ -1,6 +1,5 @@
 import React from 'react';
 import Translate from '@docusaurus/Translate';
-import {useUiMode} from '@site/src/context/UiModeContext';
 import {useBadges} from '@site/src/hooks/useBadges';
 import {useLocalStorage} from '@site/src/hooks/useLocalStorage';
 import {STORAGE_KEYS, ALL_STORAGE_KEYS} from '@site/src/utils/storageKeys';
@@ -10,12 +9,9 @@ import type {PerSectionTrack, ProgressMap} from '@site/src/types/progress';
 import styles from './styles.module.css';
 
 /**
- * Earned badges + overall completion — the "trophy case." Same underlying
- * data either way; Gamified mode renders badge icons, Classical mode
- * renders the same facts as a plain checklist/percentage.
+ * Earned badges + overall completion — the "trophy case."
  */
 export default function BadgeCase(): React.JSX.Element {
-  const {isGamified} = useUiMode();
   const {badges} = useBadges();
   const [progress, setProgress] = useLocalStorage<ProgressMap>(STORAGE_KEYS.progress, {});
   const [tracks] = useLocalStorage<PerSectionTrack>(STORAGE_KEYS.track, {});
@@ -64,17 +60,13 @@ export default function BadgeCase(): React.JSX.Element {
 
       <section>
         <h2>
-          {isGamified ? (
-            <Translate id="badgeCase.heading.gamified">My Badges</Translate>
-          ) : (
-            <Translate id="badgeCase.heading.classical">Milestones Earned</Translate>
-          )}
+          <Translate id="badgeCase.heading.gamified">My Badges</Translate>
         </h2>
         {badges.length === 0 ? (
           <p>
             <Translate id="badgeCase.empty">No badges yet — complete a week to earn one!</Translate>
           </p>
-        ) : isGamified ? (
+        ) : (
           <div className={styles.badgeGrid}>
             {badges.map((badgeId) => {
               const {emoji, label} = describeBadge(badgeId);
@@ -86,12 +78,6 @@ export default function BadgeCase(): React.JSX.Element {
               );
             })}
           </div>
-        ) : (
-          <ul>
-            {badges.map((badgeId) => (
-              <li key={badgeId}>{describeBadge(badgeId).label}</li>
-            ))}
-          </ul>
         )}
       </section>
 

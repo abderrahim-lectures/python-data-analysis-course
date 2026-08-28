@@ -1,9 +1,9 @@
 import {test, expect} from '@playwright/test';
-import {skipOnboarding} from './helpers';
+import {skipOnboarding, goto} from './helpers';
 
 test('progress, badges, and ui-mode survive a reload', async ({page}) => {
   await skipOnboarding(page);
-  await page.goto('docs/python-101/normal/week-1');
+  await goto(page, 'docs/python-101/normal/week-1');
 
   const checkbox = page.getByRole('checkbox', {name: /mark this week complete/i});
   await expect(checkbox).toBeVisible();

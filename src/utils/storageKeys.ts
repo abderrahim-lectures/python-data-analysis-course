@@ -16,6 +16,15 @@ export const STORAGE_KEYS = {
   welcomeBackDismissedDate: 'pda-course:welcome-back-dismissed-date',
   localeRedirectChecked: 'pda-course:locale-redirect-checked',
   localeAutoRedirectNotice: 'pda-course:locale-auto-redirect-notice',
+  editorTutorialSeen: 'pda-course:editor-tutorial-seen',
+  firstSuccess: 'pda-course:first-success',
+  studentProfile: 'pda-course:student-profile',
+  errorHistory: 'pda-course:error-history',
+  xp: 'pda-course:xp',
+  streak: 'pda-course:streak',
+  achievements: 'pda-course:achievements',
+  dailyQuests: 'pda-course:daily-quests',
+  leaderboard: 'pda-course:leaderboard',
 } as const;
 
 /** Every key this site owns — used by DataTransfer export/import and the reset control. */

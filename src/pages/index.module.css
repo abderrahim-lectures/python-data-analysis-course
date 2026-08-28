@@ -471,3 +471,140 @@
   color: var(--ifm-color-emphasis-700);
   line-height: 1.6;
 }
+
+/* ---------- How it works ---------- */
+
+.howItWorks {
+  padding: 3rem 0;
+  background: var(--pda-surface);
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.howItWorksTitle {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1.75rem;
+}
+
+.howItWorksGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+@media (min-width: 640px) {
+  .howItWorksGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.howItWorksCard {
+  text-align: center;
+  padding: 1.5rem 1rem;
+  border-radius: var(--pda-radius-lg);
+  background: var(--ifm-background-surface-color);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  transition: transform 0.2s, box-shadow 0.2s;
+  animation: fadeInUp 0.5s ease-out backwards;
+}
+
+.howItWorksCard:nth-child(1) { animation-delay: 0.1s; }
+.howItWorksCard:nth-child(2) { animation-delay: 0.2s; }
+.howItWorksCard:nth-child(3) { animation-delay: 0.3s; }
+.howItWorksCard:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.howItWorksCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--pda-shadow-md);
+}
+
+.howItWorksIcon {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+.howItWorksCardTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+  color: var(--ifm-font-color-base);
+}
+
+.howItWorksCardDescription {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0;
+  color: var(--ifm-color-emphasis-700);
+}
+
+.howItWorksCta {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+/* ---------- Gamification Preview ---------- */
+
+.gamification {
+  padding: 4rem 0;
+  background: linear-gradient(180deg, var(--ifm-background-color) 0%, rgba(91, 61, 245, 0.03) 100%);
+}
+
+.gamificationTitle {
+  text-align: center;
+  margin-bottom: 0.5rem;
+  font-size: 2rem;
+}
+
+.gamificationSubtitle {
+  text-align: center;
+  color: var(--ifm-color-emphasis-600);
+  margin-bottom: 2.5rem;
+  font-size: 1.1rem;
+}
+
+.gamificationGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .gamificationGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.gamificationCard {
+  background: var(--ifm-background-surface-color);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: var(--pda-radius-lg);
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.gamificationCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+}
+
+.gamificationCta {
+  text-align: center;
+  margin-top: 2.5rem;
+}

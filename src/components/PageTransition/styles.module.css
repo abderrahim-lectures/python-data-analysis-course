@@ -1,0 +1,18 @@
+.transition {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+}
+
+.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .transition {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

@@ -1,5 +1,5 @@
 import {test, expect} from '@playwright/test';
-import {skipOnboarding} from './helpers';
+import {skipOnboarding, goto} from './helpers';
 
 const TOTAL = 29;
 
@@ -14,7 +14,7 @@ test.describe('projects gallery', () => {
     const raw = await (await request.get('/')).text();
     expect(raw.match(/data-testid=["']?gallery-card/g)?.length).toBe(12);
 
-    await page.goto('/');
+    await goto(page, '/');
     await expect(page.getByTestId('gallery-counter')).toHaveText(`Showing ${12} of ${TOTAL}`);
 
     const cardCount = () => page.getByTestId('gallery-card').count();
@@ -35,7 +35,7 @@ test.describe('projects gallery', () => {
   });
 
   test('starring a card persists to localStorage and toggles off', async ({page}) => {
-    await page.goto('/');
+    await goto(page, '/');
 
     const card = page.getByTestId('gallery-card').filter({
       has: page.getByRole('heading', {name: 'Build a Dependency-Freshness Checker'}),
@@ -56,7 +56,7 @@ test.describe('projects gallery', () => {
   });
 
   test('favorites filter shows only starred projects', async ({page}) => {
-    await page.goto('/');
+    await goto(page, '/');
 
     const card = page.getByTestId('gallery-card').filter({
       has: page.getByRole('heading', {name: 'Build a Dependency-Freshness Checker'}),
@@ -73,14 +73,14 @@ test.describe('projects gallery', () => {
   });
 
   test('favorites are shared across the homepage and the docs projects page', async ({page}) => {
-    await page.goto('/');
+    await goto(page, '/');
 
     const card = page.getByTestId('gallery-card').filter({
       has: page.getByRole('heading', {name: 'Build a Browser-Automation Agent'}),
     });
     await card.getByTestId('favorite-button').click();
 
-    await page.goto('/docs/projects');
+    await goto(page, '/docs/projects');
     const favoritesButton = page.getByRole('button', {name: /Favorites/});
     await expect(favoritesButton).toContainText('1');
     await favoritesButton.click();
@@ -91,7 +91,7 @@ test.describe('projects gallery', () => {
   });
 
   test('every card shows a level badge and a tools row', async ({page}) => {
-    await page.goto('/');
+    await goto(page, '/');
 
     const firstCard = page.getByTestId('gallery-card').first();
     await expect(firstCard.getByTestId('level-badge')).toBeVisible();
@@ -101,7 +101,7 @@ test.describe('projects gallery', () => {
   });
 
   test('level filter narrows to projects of that difficulty', async ({page}) => {
-    await page.goto('/');
+    await goto(page, '/');
 
     await page.getByTestId('level-filter-beginner').click();
     await expect(page.getByTestId('gallery-counter')).toHaveText(`Showing ${12} of ${17}`);

@@ -1,11 +1,11 @@
 import {test, expect} from '@playwright/test';
-import {skipOnboarding} from './helpers';
+import {skipOnboarding, goto} from './helpers';
 
 test('choosing Hard on Data Analysis shows the placement quiz; continuing reaches Week 6', async ({
   page,
 }) => {
   await skipOnboarding(page);
-  await page.goto('docs/data-analysis');
+  await goto(page, 'docs/data-analysis');
 
   await page.getByRole('link', {name: /start hard/i}).click();
   await expect(

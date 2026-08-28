@@ -10,6 +10,11 @@ description: "Start the Python 101 Hard track: load and explore a small text cor
 import Challenge from '@site/src/components/Challenge';
 import ProgressCheckbox from '@site/src/components/ProgressCheckbox';
 import WeeklyQuiz from '@site/src/components/WeeklyQuiz';
+import StuckHelp from '@site/src/components/StuckHelp';
+
+:::tip[First time here?]
+This course runs Python right in your browser — no install needed. The editor on the right lets you type and run code instantly. **Take a quick look at the editor panel →**
+:::
 
 # Week 1: Building a Tiny Language Model — Loading the Corpus
 
@@ -228,3 +233,5 @@ Find the *most common* sentence length in the corpus (in words) — not the aver
 />
 
 <ProgressCheckbox weekId="python-101-hard-week-1" />
+
+<StuckHelp weekId="python-101-hard-week-1" section="python-101" />

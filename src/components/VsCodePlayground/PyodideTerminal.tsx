@@ -1,84 +1,115 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import Translate, {translate} from '@docusaurus/Translate';
-import {loadPyodideRuntime} from './pyodide';
-
-interface TerminalLine {
-  id: number;
-  kind: 'cmd' | 'out' | 'err' | 'info';
-  text: string;
-}
+import {usePyodideRunner} from '@site/src/hooks/usePyodideRunner';
+import {useTerminalOutput} from '@site/src/hooks/useTerminalOutput';
+import {STORAGE_KEYS} from '@site/src/utils/storageKeys';
 
 interface Props {
-  /** Current editor contents, read at Run time via a ref to avoid re-running on each keystroke. */
   getCode: () => string;
-  /** Incremented by the panel's Run button; each bump triggers an execution. */
   runRequest: number;
+  /** Called whenever a run finishes with an error (for error-history tracking). */
+  onError?: (message: string) => void;
 }
 
-let lineId = 0;
-
 /**
- * The playground's integrated terminal: renders Pyodide's stdout/stderr under a
- * `$ python main.py` prompt, styled like a real VS Code terminal panel.
+ * Integrated terminal that executes Python code via Pyodide (WASM).
+ * Displays stdout/stderr with beginner-friendly error messages.
  */
-export default function PyodideTerminal({getCode, runRequest}: Props): React.JSX.Element {
-  const [lines, setLines] = useState<TerminalLine[]>([]);
-  const [busy, setBusy] = useState(false);
-  const [collapsed, setCollapsed] = useState(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const codeRef = useRef(getCode);
-  codeRef.current = getCode;
+export default function PyodideTerminal({getCode, runRequest, onError}: Props): React.JSX.Element {
+  const {lines, collapsed, toggleCollapsed, expand, append, clear, scrollRef} = useTerminalOutput();
 
-  const append = useCallback((kind: TerminalLine['kind'], text: string) => {
-    setLines((prev) => [...prev, {id: ++lineId, kind, text}]);
-  }, []);
+  const handleOutput = useCallback(
+    (line: {id: number; kind: 'cmd' | 'out' | 'err' | 'info' | 'hint' | 'success'; text: string}) => {
+      append(line);
+    },
+    [append],
+  );
 
+  const {busy, loadingProgress, lastError, run, clearError} = usePyodideRunner({
+    getCode,
+    onOutput: handleOutput,
+  });
+
+  // Report errors to the parent (StillStuck) once per distinct error message
+  const lastReportedRef = React.useRef<string | null>(null);
   useEffect(() => {
-    const el = scrollRef.current;
-    if (el) el.scrollTop = el.scrollHeight;
-  }, [lines, collapsed]);
+    if (lastError && lastError !== lastReportedRef.current) {
+      lastReportedRef.current = lastError;
+      onError?.(lastError);
+    }
+  }, [lastError, onError]);
 
-  // The panel's Run button bumps `runRequest`; expand the terminal and run.
+  // Trigger run when runRequest changes
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (runRequest === 0) return;
-    setCollapsed(false);
+    expand();
     void run();
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- run is stable enough; only react to bumps
   }, [runRequest]);
 
-  const run = useCallback(async () => {
-    if (busy) return;
-    setBusy(true);
-    append('cmd', '$ python main.py');
-    try {
-      const py = await loadPyodideRuntime();
-      py.setStdout({batched: (s) => append('out', s)});
-      py.setStderr({batched: (s) => append('err', s)});
-      try {
-        await py.loadPackagesFromImports(codeRef.current());
-      } catch {
-        // Unknown/absent package names are simply not installed; the run below
-        // will raise the real ImportError, which is more useful than dying here.
-      }
-      await py.runPythonAsync(codeRef.current());
-    } catch (err) {
-      append('err', err instanceof Error ? err.message : String(err));
-    } finally {
-      setBusy(false);
+  const copyError = useCallback(async () => {
+    if (lastError) {
+      await navigator.clipboard.writeText(lastError);
     }
-  }, [append, busy]);
+  }, [lastError]);
 
-  const clear = useCallback(() => setLines([]), []);
+  const reportIssue = useCallback(() => {
+    if (lastError) {
+      const title = encodeURIComponent(`Error: ${lastError.slice(0, 50)}`);
+      const body = encodeURIComponent(
+        `## Error Report\n\n**Error:**\n\`\`\`\n${lastError}\n\`\`\`\n\n**Code:**\n\`\`\`python\n${getCode()}\n\`\`\`\n\n**Steps to reproduce:**\n1. Open the editor\n2. Paste the code above\n3. Click Run\n\n**Expected behavior:**\n[What should happen?]\n\n**Actual behavior:**\n[What actually happened?]`,
+      );
+      window.open(
+        `https://github.com/abderrahim-lectures/python-data-analysis-course/issues/new?title=${title}&body=${body}`,
+        '_blank',
+      );
+    }
+  }, [lastError, getCode]);
 
   return (
-    <div className="vsc-terminal" data-testid="vsc-terminal" aria-label={translate({id: 'playground.vscode.terminalLabel', message: 'Integrated terminal'})}>
+    <div
+      className="vsc-terminal"
+      data-testid="vsc-terminal"
+      data-tutorial-target="terminal"
+      aria-label={translate({id: 'playground.vscode.terminalLabel', message: 'Integrated terminal'})}>
       <div className="vsc-terminal__header">
-        <button type="button" className="vsc-terminal__tab" aria-expanded={!collapsed} onClick={() => setCollapsed((c) => !c)}>
-          <span className="vsc-terminal__chevron" aria-hidden="true">{collapsed ? '▸' : '▾'}</span>
+        <button
+          type="button"
+          className="vsc-terminal__tab"
+          aria-expanded={!collapsed}
+          onClick={toggleCollapsed}>
+          <span className="vsc-terminal__chevron" aria-hidden="true">
+            {collapsed ? '▸' : '▾'}
+          </span>
           TERMINAL
         </button>
         <span className="vsc-terminal__meta">python (pyodide · wasm)</span>
-        <button type="button" className="vsc-terminal__action" onClick={clear} aria-label={translate({id: 'playground.vscode.clearTerminal', message: 'Clear terminal'})}>
+        {lastError && (
+          <>
+            <button
+              type="button"
+              className="vsc-terminal__action"
+              onClick={copyError}
+              aria-label={translate({id: 'playground.vscode.copyError', message: 'Copy error'})}>
+              📋
+            </button>
+            <button
+              type="button"
+              className="vsc-terminal__action"
+              onClick={reportIssue}
+              aria-label={translate({id: 'playground.vscode.reportIssue', message: 'Report issue'})}>
+              🐛
+            </button>
+          </>
+        )}
+        <button
+          type="button"
+          className="vsc-terminal__action"
+          onClick={() => {
+            clear();
+            clearError();
+          }}
+          aria-label={translate({id: 'playground.vscode.clearTerminal', message: 'Clear terminal'})}>
           ⌫
         </button>
       </div>
@@ -93,16 +124,24 @@ export default function PyodideTerminal({getCode, runRequest}: Props): React.JSX
           )}
           {lines.map((l) => (
             <div key={l.id} className={`vsc-terminal__line vsc-terminal__line--${l.kind}`}>
-              {l.kind === 'cmd' ? <span className="vsc-terminal__prompt" aria-hidden="true">❯ </span> : null}
+              {l.kind === 'cmd' ? (
+                <span className="vsc-terminal__prompt" aria-hidden="true">
+                  ❯{' '}
+                </span>
+              ) : null}
               {l.text}
             </div>
           ))}
           {busy && (
             <div className="vsc-terminal__line vsc-terminal__line--info">
               <span className="vsc-terminal__spinner" aria-hidden="true" />
-              <Translate id="playground.vscode.booting">
-                Booting Python (WASM)… first run downloads ~10 MB
-              </Translate>
+              {loadingProgress < 100 ? (
+                <Translate id="playground.vscode.booting" values={{progress: loadingProgress}}>
+                  {'Booting Python (WASM)… {progress}%'}
+                </Translate>
+              ) : (
+                <Translate id="playground.vscode.running">Running code…</Translate>
+              )}
             </div>
           )}
         </div>

@@ -6,13 +6,14 @@ import LocaleRedirect from '@site/src/theme/Root/LocaleRedirect';
 import AutoLocaleRedirectBanner from '@site/src/components/AutoLocaleRedirectBanner';
 import VsCodePlayground from '@site/src/components/VsCodePlayground';
 import LearningStylePicker from '@site/src/components/LearningStylePicker';
-import ModeToggle from '@site/src/components/ModeToggle';
 import WelcomeBackBanner from '@site/src/components/WelcomeBackBanner';
 import BadgeToast from '@site/src/components/BadgeCase/BadgeToast';
 import CourseCompletionWatcher from '@site/src/components/BadgeCase/CourseCompletionWatcher';
+import MobileBottomNav from '@site/src/components/MobileBottomNav';
+import PageTransition from '@site/src/components/PageTransition';
 
 // Swizzled Root: mounts context providers and the global, always-present UI
-// (FAB, onboarding, mode toggle, welcome-back nudge, badge toast) that need
+// (onboarding, welcome-back nudge, badge toast, mobile nav) that need
 // to be on every page regardless of which doc is being viewed.
 export default function Root({children}: {children: ReactNode}): React.JSX.Element {
   return (
@@ -23,11 +24,11 @@ export default function Root({children}: {children: ReactNode}): React.JSX.Eleme
         <AutoLocaleRedirectBanner />
         <CourseCompletionWatcher />
         <WelcomeBackBanner />
-        {children}
+        <PageTransition>{children}</PageTransition>
         <VsCodePlayground />
         <LearningStylePicker />
-        <ModeToggle />
         <BadgeToast />
+        <MobileBottomNav />
       </CurrentDocProvider>
     </UiModeProvider>
   );

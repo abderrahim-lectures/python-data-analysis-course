@@ -1,17 +1,12 @@
 import {useEffect} from 'react';
-import {useUiMode} from '@site/src/context/UiModeContext';
 
 /**
- * Stamps `data-ui-mode` on <body> so plain CSS can hide gamified-only
- * flourishes in Classical mode, e.g.:
- *   body[data-ui-mode="classical"] .gamified-flourish { display: none; }
+ * Stamps `data-ui-mode="gamified"` on <body> for CSS styling.
  */
 export default function UiModeBodyAttribute(): null {
-  const {mode} = useUiMode();
-
   useEffect(() => {
-    document.body.setAttribute('data-ui-mode', mode);
-  }, [mode]);
+    document.body.setAttribute('data-ui-mode', 'gamified');
+  }, []);
 
   return null;
 }

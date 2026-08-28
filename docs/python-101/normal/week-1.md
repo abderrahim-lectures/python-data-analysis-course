@@ -10,6 +10,15 @@ description: "Learn Python variables, data types, operators, and input/output �
 import Challenge from '@site/src/components/Challenge';
 import ProgressCheckbox from '@site/src/components/ProgressCheckbox';
 import WeeklyQuiz from '@site/src/components/WeeklyQuiz';
+import StuckHelp from '@site/src/components/StuckHelp';
+
+:::tip[First time here?]
+This course runs Python right in your browser — no install needed. The 🐍 code boxes on this page **run instantly**: press ▶ Run and watch the output appear right below the code. Try the very next box!
+::: 
+
+:::tip[Want a bigger workspace?]
+Every code box also has a ⛶ button that opens a full editor, and the sidebar-toggle **Code** strip lets you bring back the advanced editor + notebook whenever you like.
+:::
 
 # Week 1: Variables, Types & I/O
 
@@ -262,3 +271,5 @@ Extend the worked example's tip calculator to also ask how many people are split
 />
 
 <ProgressCheckbox weekId="python-101-normal-week-1" />
+
+<StuckHelp weekId="python-101-normal-week-1" section="python-101" />

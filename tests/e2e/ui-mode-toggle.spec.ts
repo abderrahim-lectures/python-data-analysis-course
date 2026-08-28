@@ -1,22 +1,16 @@
 import {test, expect} from '@playwright/test';
-import {skipOnboarding} from './helpers';
+import {skipOnboarding, goto} from './helpers';
 
-test('toggling Gamified/Classical actually changes rendering', async ({page}) => {
+test('the lesson is gamified by default, with no classical mode toggle', async ({page}) => {
   await skipOnboarding(page);
-  await page.goto('docs/python-101/normal/week-1');
+  await goto(page, 'docs/python-101/normal/week-1');
 
   await expect(page.locator('body')).toHaveAttribute('data-ui-mode', 'gamified');
-  const flourish = page.locator('.gamified-flourish').first();
-  await expect(flourish).toBeVisible();
+  await expect(page.locator('.gamified-flourish').first()).toBeVisible();
 
-  const toggle = page.getByRole('button', {name: /switch between gamified and classical/i});
-  await toggle.click();
-
-  await expect(page.locator('body')).toHaveAttribute('data-ui-mode', 'classical');
-  await expect(flourish).toBeHidden();
-
-  // Flip back and confirm it's reversible, per the plan's "reversible" requirement.
-  await toggle.click();
-  await expect(page.locator('body')).toHaveAttribute('data-ui-mode', 'gamified');
-  await expect(flourish).toBeVisible();
+  // The gamified/Classical reversible toggle was removed: gamified is always on.
+  const toggle = page.getByRole('button', {
+    name: /switch between gamified and classical/i,
+  });
+  await expect(toggle).toHaveCount(0);
 });

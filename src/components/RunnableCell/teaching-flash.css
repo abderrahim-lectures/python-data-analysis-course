@@ -1,0 +1,16 @@
+/** Flash highlight applied to the teaching paragraph the error-map points back to. */
+.runnable-cell__teaching-flash {
+  animation: runnable-cell__teaching-flash 2.6s ease-out;
+}
+
+@keyframes runnable-cell__teaching-flash {
+  0% {
+    background-color: rgba(245, 158, 11, 0.45);
+    border-radius: 6px;
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.35);
+  }
+  100% {
+    background-color: transparent;
+    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0);
+  }
+}

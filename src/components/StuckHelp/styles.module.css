@@ -1,0 +1,134 @@
+.stuckHelp {
+  margin-top: 2rem;
+  border: 2px solid var(--pda-accent);
+  border-radius: var(--pda-radius-lg);
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.03) 0%, transparent 100%);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 1rem 1.25rem;
+  background: rgba(245, 158, 11, 0.08);
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ifm-font-color-base);
+  transition: background 0.2s;
+}
+
+.header:hover {
+  background: rgba(245, 158, 11, 0.12);
+}
+
+.icon {
+  font-size: 1.25rem;
+}
+
+.chevron {
+  margin-left: auto;
+  color: var(--ifm-color-emphasis-600);
+  transition: transform 0.2s ease;
+}
+
+.content {
+  padding: 1rem 1.25rem 1.25rem;
+  background: var(--ifm-background-surface-color);
+}
+
+.mistakesList {
+  list-style: none;
+  margin: 0 0 1.25rem;
+  padding: 0;
+}
+
+.mistake {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--ifm-color-emphasis-100);
+}
+
+.mistake:last-child {
+  border-bottom: none;
+}
+
+.mistakeError {
+  display: block;
+  font-size: 0.95rem;
+  color: var(--ifm-color-danger);
+  margin-bottom: 0.25rem;
+  font-weight: 500;
+}
+
+.mistakeFix {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--ifm-color-emphasis-700);
+  line-height: 1.5;
+}
+
+.lessonLink {
+  display: inline-block;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--ifm-color-primary);
+  text-decoration: none;
+  padding: 0.25rem 0.5rem;
+  background: rgba(91, 61, 245, 0.05);
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.lessonLink:hover {
+  background: rgba(91, 61, 245, 0.1);
+  text-decoration: none;
+}
+
+.helpLinks {
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+  font-size: 0.9rem;
+  color: var(--ifm-color-emphasis-700);
+}
+
+.helpLinks ul {
+  margin: 0.5rem 0 0;
+  padding-left: 1.25rem;
+}
+
+.helpLinks li {
+  margin-bottom: 0.5rem;
+}
+
+.helpLinks a {
+  color: var(--ifm-color-primary);
+  text-decoration: none;
+}
+
+.helpLinks a:hover {
+  text-decoration: underline;
+}
+
+/* RTL support for Arabic */
+[dir='rtl'] .mistakesList {
+  padding-right: 0;
+  padding-left: 1.25rem;
+}
+
+[dir='rtl'] .helpLinks ul {
+  padding-right: 1.25rem;
+  padding-left: 0;
+}
+
+[dir='rtl'] .lessonLink::before {
+  content: '← ';
+}
+
+[dir='rtl'] .chevron {
+  margin-left: 0;
+  margin-right: auto;
+}

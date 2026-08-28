@@ -1,21 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import Translate, {translate} from '@docusaurus/Translate';
-import {useUiMode} from '@site/src/context/UiModeContext';
 import {useStudentIdentity} from '@site/src/hooks/useStudentIdentity';
-import type {UiMode} from '@site/src/types/progress';
 import styles from './styles.module.css';
 
 /**
- * One-time onboarding modal: optional first name + Gamified/Classical choice.
+ * One-time onboarding modal: optional first name.
  * Shown once, on first visit (hasOnboarded is false until a student ID exists).
- * The learning-style choice isn't a lock-in — ModeToggle lets it change any time.
  */
 export default function LearningStylePicker(): React.JSX.Element | null {
-  const {setMode} = useUiMode();
   const {name, setName, ensureStudentId, hasOnboarded} = useStudentIdentity();
   const [mounted, setMounted] = useState(false);
   const [nameInput, setNameInput] = useState('');
-  const [selectedMode, setSelectedMode] = useState<UiMode>('gamified');
 
   useEffect(() => setMounted(true), []);
 
@@ -28,7 +23,6 @@ export default function LearningStylePicker(): React.JSX.Element | null {
     if (nameInput.trim()) {
       setName(nameInput.trim());
     }
-    setMode(selectedMode);
     ensureStudentId();
   };
 
@@ -45,7 +39,7 @@ export default function LearningStylePicker(): React.JSX.Element | null {
         </h2>
         <p>
           <Translate id="onboarding.intro">
-            Two quick questions before you start — you can change either any time.
+            Ready to start learning Python? Let's get you set up!
           </Translate>
         </p>
 
@@ -63,42 +57,8 @@ export default function LearningStylePicker(): React.JSX.Element | null {
           />
         </label>
 
-        <fieldset className={styles.field}>
-          <legend>
-            <Translate id="onboarding.mode.label">How do you like to learn?</Translate>
-          </legend>
-          <label className={styles.radioOption}>
-            <input
-              type="radio"
-              name="learning-style"
-              checked={selectedMode === 'gamified'}
-              onChange={() => setSelectedMode('gamified')}
-            />
-            <span>
-              🎮{' '}
-              <Translate id="onboarding.mode.gamified">
-                Gamified — badges, quizzes, bonus unlocks, playful UI
-              </Translate>
-            </span>
-          </label>
-          <label className={styles.radioOption}>
-            <input
-              type="radio"
-              name="learning-style"
-              checked={selectedMode === 'classical'}
-              onChange={() => setSelectedMode('classical')}
-            />
-            <span>
-              📄{' '}
-              <Translate id="onboarding.mode.classical">
-                Classical — clean, minimal, no gamification chrome
-              </Translate>
-            </span>
-          </label>
-        </fieldset>
-
         <button type="submit" className="button button--primary button--block">
-          <Translate id="onboarding.submit">Let's go →</Translate>
+          <Translate id="onboarding.submit">Let's start learning →</Translate>
         </button>
       </form>
     </div>

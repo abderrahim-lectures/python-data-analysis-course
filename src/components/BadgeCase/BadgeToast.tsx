@@ -1,5 +1,4 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {useUiMode} from '@site/src/context/UiModeContext';
 import {useBadges} from '@site/src/hooks/useBadges';
 import {describeBadge} from '@site/src/utils/describeBadge';
 import type {BadgeId} from '@site/src/types/progress';
@@ -7,9 +6,8 @@ import styles from './BadgeToast.module.css';
 
 const TOAST_DURATION_MS = 4000;
 
-/** Gamified-only: a brief toast whenever a new badge is earned, anywhere on the site. */
+/** A brief toast whenever a new badge is earned, anywhere on the site. */
 export default function BadgeToast(): React.JSX.Element | null {
-  const {isGamified} = useUiMode();
   const {badges} = useBadges();
   const previousCount = useRef<number | null>(null);
   const [toastBadge, setToastBadge] = useState<BadgeId | null>(null);
@@ -24,7 +22,7 @@ export default function BadgeToast(): React.JSX.Element | null {
     previousCount.current = badges.length;
   }, [badges]);
 
-  if (!isGamified || !toastBadge) {
+  if (!toastBadge) {
     return null;
   }
 

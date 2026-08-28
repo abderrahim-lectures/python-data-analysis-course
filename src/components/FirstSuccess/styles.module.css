@@ -1,0 +1,128 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.confettiContainer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.confettiPiece {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  top: -10px;
+  animation: confettiFall 3s ease-out forwards;
+}
+
+@keyframes confettiFall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+.confettiPiece:nth-child(1) { left: 10%; background: #f59e0b; animation-delay: 0s; }
+.confettiPiece:nth-child(2) { left: 20%; background: #5b3df5; animation-delay: 0.1s; }
+.confettiPiece:nth-child(3) { left: 30%; background: #10b981; animation-delay: 0.2s; }
+.confettiPiece:nth-child(4) { left: 40%; background: #f48771; animation-delay: 0.3s; }
+.confettiPiece:nth-child(5) { left: 50%; background: #a894fa; animation-delay: 0.4s; }
+.confettiPiece:nth-child(6) { left: 60%; background: #fbbf24; animation-delay: 0.5s; }
+.confettiPiece:nth-child(7) { left: 70%; background: #4ade80; animation-delay: 0.6s; }
+.confettiPiece:nth-child(8) { left: 80%; background: #60a5fa; animation-delay: 0.7s; }
+.confettiPiece:nth-child(9) { left: 90%; background: #f472b6; animation-delay: 0.8s; }
+.confettiPiece:nth-child(10) { left: 15%; background: #34d399; animation-delay: 0.15s; }
+
+.card {
+  position: relative;
+  z-index: 1;
+  background: var(--ifm-background-surface-color);
+  border-radius: var(--pda-radius-lg);
+  box-shadow: var(--pda-shadow-md);
+  padding: 32px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  animation: scaleIn 0.3s ease-out;
+}
+
+@keyframes scaleIn {
+  from { 
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to { 
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.celebration {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.confetti {
+  display: inline-block;
+  animation: bounce 0.6s ease-out;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 12px;
+  color: var(--ifm-color-primary);
+}
+
+.message {
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 0 0 24px;
+  color: var(--ifm-color-emphasis-800);
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+}
+
+.continueButton {
+  background: var(--ifm-color-primary);
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  color: white;
+  transition: opacity 0.2s;
+}
+
+.continueButton:hover {
+  opacity: 0.9;
+}

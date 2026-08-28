@@ -1,13 +1,32 @@
-import React, {useRef, useState} from 'react';
+import React, {useRef, useState, useMemo} from 'react';
 import Translate, {translate} from '@docusaurus/Translate';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import {useJupyterLiteNotebookUrl, useJupyterLiteReplUrl} from '@site/src/utils/playgroundUrls';
 import styles from './styles.module.css';
+
+export type PlaygroundMode = 'notebook' | 'repl';
 
 interface Props {
   weekId: string | null;
   /** 'notebook' for Data Analysis, 'repl' for Python 101 (a plain console, no cells). */
-  mode: 'notebook' | 'repl';
+  mode: PlaygroundMode;
 }
+
+/** Map Docusaurus locale codes to JupyterLite locale codes */
+const LOCALE_MAP: Record<string, string> = {
+  en: 'en-US',
+  ar: 'ar',
+  es: 'es',
+  fr: 'fr-FR',
+};
+
+/** Loading messages in all supported languages */
+const LOADING_MESSAGES: Record<string, string> = {
+  en: 'Loading the Python environment — first load can take a moment, faster on Wi-Fi.',
+  ar: 'جاري تحميل بيئة Python — قد يستغرق التحميل الأول لحظة، أسرع عبر Wi-Fi.',
+  es: 'Cargando el entorno de Python — la primera carga puede tardar un momento, es más rápida por Wi-Fi.',
+  fr: "Chargement de l'environnement Python — le premier chargement peut prendre un moment, plus rapide en Wi-Fi.",
+};
 
 /**
  * JupyterLab's default toolbar (thin gray icons on plain white, no visible
@@ -37,12 +56,26 @@ const TOOLBAR_VISIBILITY_CSS = `
  * Shows an explicit loading state: Pyodide + pandas/numpy/matplotlib wheels are
  * tens of MB on first load, so a blank iframe would otherwise look frozen.
  */
-export default function JupyterLiteEmbed({weekId, mode}: Props): React.JSX.Element {
+const JupyterLiteEmbed = React.memo(function JupyterLiteEmbed({
+  weekId,
+  mode,
+}: Props): React.JSX.Element {
   const [loaded, setLoaded] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const notebookSrc = useJupyterLiteNotebookUrl(weekId);
   const replSrc = useJupyterLiteReplUrl();
-  const src = mode === 'repl' ? replSrc : notebookSrc;
+  const {i18n} = useDocusaurusContext();
+  const locale = i18n.currentLocale;
+
+  const src = useMemo(() => {
+    const jupyterLocale = LOCALE_MAP[locale] ?? 'en-US';
+    const baseSrc = mode === 'repl' ? replSrc : notebookSrc;
+    return `${baseSrc}?locale=${jupyterLocale}`;
+  }, [locale, mode, replSrc, notebookSrc]);
+
+  const loadingMessage = useMemo(() => {
+    return LOADING_MESSAGES[locale] ?? LOADING_MESSAGES.en;
+  }, [locale]);
 
   const handleLoad = () => {
     setLoaded(true);
@@ -64,9 +97,10 @@ export default function JupyterLiteEmbed({weekId, mode}: Props): React.JSX.Eleme
     <div className={styles.jupyterLiteWrapper}>
       {!loaded && (
         <div className={styles.loadingState}>
-          <Translate id="playground.jupyterlite.loading">
-            Loading the Python environment — first load can take a moment, faster on Wi-Fi.
-          </Translate>
+          <div className={styles.loadingContent}>
+            <div className={styles.loadingSpinner} />
+            <p className={styles.loadingText}>{loadingMessage}</p>
+          </div>
         </div>
       )}
       {/* No inline visibility toggle here: an inline style on the iframe would
@@ -90,4 +124,6 @@ export default function JupyterLiteEmbed({weekId, mode}: Props): React.JSX.Eleme
       />
     </div>
   );
-}
+});
+
+export default JupyterLiteEmbed;

@@ -9,6 +9,9 @@ import {defineConfig, devices} from '@playwright/test';
 export default defineConfig({
   testDir: './tests/e2e',
   fullyParallel: true,
+  // The Trail cells download Pyodide (~10 MB) on first run; cap workers so the
+  // shared serve server doesn't stall page `load` under parallel load.
+  workers: 2,
   retries: process.env.CI ? 1 : 0,
   reporter: 'list',
   use: {

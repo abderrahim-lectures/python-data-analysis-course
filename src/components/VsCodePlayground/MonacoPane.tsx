@@ -1,10 +1,16 @@
 import React, {useEffect, useRef} from 'react';
 
+interface MonacoEditorRef {
+  editor: import('monaco-editor').editor.IStandaloneCodeEditor;
+  dispose: () => void;
+}
+
 interface Props {
   value: string;
   onChange: (value: string) => void;
   ariaLabel: string;
   resetKey: string;
+  minimap?: boolean;
 }
 
 /**
@@ -22,9 +28,15 @@ interface Props {
  * wired up — and if that worker ever fails to spawn, the editor still works,
  * just without worker-backed services.
  */
-export default function MonacoPane({value, onChange, ariaLabel, resetKey}: Props): React.JSX.Element {
+const MonacoPane = React.memo(function MonacoPane({
+  value,
+  onChange,
+  ariaLabel,
+  resetKey,
+  minimap = false,
+}: Props): React.JSX.Element {
   const containerRef = useRef<HTMLDivElement>(null);
-  const editorRef = useRef<{editor: import('monaco-editor').editor.IStandaloneCodeEditor; dispose: () => void} | null>(null);
+  const editorRef = useRef<MonacoEditorRef | null>(null);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -35,7 +47,7 @@ export default function MonacoPane({value, onChange, ariaLabel, resetKey}: Props
     void (async () => {
       try {
         // Must be set before editor.create; see doc comment above.
-        // @ts-ignore -- MonacoEnvironment is a global Monaco expects us to set.
+        // MonacoEnvironment is a global Monaco expects us to set.
         window.MonacoEnvironment = {
           getWorker() {
             return new Worker(
@@ -53,7 +65,7 @@ export default function MonacoPane({value, onChange, ariaLabel, resetKey}: Props
           automaticLayout: true,
           fontSize: 13,
           fontFamily: 'var(--ifm-font-family-monospace)',
-          minimap: {enabled: false},
+          minimap: {enabled: minimap},
           scrollBeyondLastLine: false,
           renderLineHighlight: 'all',
           padding: {top: 12},
@@ -92,5 +104,22 @@ export default function MonacoPane({value, onChange, ariaLabel, resetKey}: Props
     // eslint-disable-next-line react-hooks/exhaustive-deps -- only react to page changes
   }, [resetKey]);
 
-  return <div ref={containerRef} data-testid="vsc-editor" className="vsc-monaco-host" aria-label={ariaLabel} />;
-}
+  // Toggle minimap when the prop changes
+  useEffect(() => {
+    const editor = editorRef.current?.editor;
+    if (editor) {
+      editor.updateOptions({minimap: {enabled: minimap}});
+    }
+  }, [minimap]);
+
+  return (
+    <div
+      ref={containerRef}
+      data-testid="vsc-editor"
+      className="vsc-monaco-host"
+      aria-label={ariaLabel}
+    />
+  );
+});
+
+export default MonacoPane;

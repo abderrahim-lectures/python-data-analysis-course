@@ -1,4 +1,4 @@
-import {type ReactNode} from 'react';
+import {type ReactNode, useEffect} from 'react';
 import clsx from 'clsx';
 import Link from '@docusaurus/Link';
 import Translate, {translate} from '@docusaurus/Translate';
@@ -6,10 +6,106 @@ import Layout from '@theme/Layout';
 import Heading from '@theme/Heading';
 import InstallPwaButton from '@site/src/components/InstallPwaButton';
 import ProjectGallery from '@site/src/components/ProjectGallery';
+import ProgressTracker from '@site/src/components/ProgressTracker';
+import StreakCounter from '@site/src/components/StreakCounter';
+import DailyQuests from '@site/src/components/DailyQuests';
 import {PROJECTS, getProjectMeta} from '@site/src/data/projects';
 import {HOMEPAGE_PROJECTS} from '@site/src/data/homepageProjects';
 
 import styles from './index.module.css';
+
+interface HowItWorksStep {
+  icon: string;
+  title: React.ReactNode;
+  description: React.ReactNode;
+}
+
+function HowItWorks() {
+  const steps: HowItWorksStep[] = [
+    {
+      icon: '💻',
+      title: (
+        <Translate id="homepage.howItWorks.step1.title">
+          Code in your browser
+        </Translate>
+      ),
+      description: (
+        <Translate id="homepage.howItWorks.step1.description">
+          No installs needed. Type Python, click Run, see results instantly.
+        </Translate>
+      ),
+    },
+    {
+      icon: '📱',
+      title: (
+        <Translate id="homepage.howItWorks.step2.title">
+          Works on your phone
+        </Translate>
+      ),
+      description: (
+        <Translate id="homepage.howItWorks.step2.description">
+          Designed for mobile-first. Learn anywhere, anytime.
+        </Translate>
+      ),
+    },
+    {
+      icon: '🎮',
+      title: (
+        <Translate id="homepage.howItWorks.step3.title">
+          Choose your path
+        </Translate>
+      ),
+      description: (
+        <Translate id="homepage.howItWorks.step3.description">
+          Normal track for fundamentals, Hard track for a challenge.
+        </Translate>
+      ),
+    },
+    {
+      icon: '🏆',
+      title: (
+        <Translate id="homepage.howItWorks.step4.title">
+          Track your progress
+        </Translate>
+      ),
+      description: (
+        <Translate id="homepage.howItWorks.step4.description">
+          Badges, quizzes, and a certificate when you finish.
+        </Translate>
+      ),
+    },
+  ];
+
+  return (
+    <section className={styles.howItWorks}>
+      <div className="container">
+        <Heading as="h2" className={styles.howItWorksTitle}>
+          <Translate id="homepage.howItWorks.title">
+            How this course works
+          </Translate>
+        </Heading>
+        <div className={styles.howItWorksGrid}>
+          {steps.map((step, index) => (
+            <div key={index} className={styles.howItWorksCard}>
+              <span className={styles.howItWorksIcon} aria-hidden="true">
+                {step.icon}
+              </span>
+              <h3 className={styles.howItWorksCardTitle}>{step.title}</h3>
+              <p className={styles.howItWorksCardDescription}>{step.description}</p>
+            </div>
+          ))}
+        </div>
+        <div className={styles.howItWorksCta}>
+          <Link className="button button--primary button--lg" to="/docs/python-101">
+            <Translate id="homepage.howItWorks.cta">
+              Start learning now →
+            </Translate>
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 /* Browser-window mockup that illustrates "run Python in your browser":
    a tiny Jupyter-style notebook with syntax-highlighted code and a plot. */
@@ -289,7 +385,55 @@ function RealWorldProjects() {
   );
 }
 
+function GamificationPreview() {
+  return (
+    <section className={styles.gamification}>
+      <div className="container">
+        <Heading as="h2" className={styles.gamificationTitle}>
+          <Translate id="homepage.gamification.title" description="Homepage gamification section title">
+            🎮 Learn with Fun
+          </Translate>
+        </Heading>
+        <p className={styles.gamificationSubtitle}>
+          <Translate id="homepage.gamification.subtitle" description="Homepage gamification section subtitle">
+            Earn XP, maintain streaks, and unlock achievements as you progress
+          </Translate>
+        </p>
+        <div className={styles.gamificationGrid}>
+          <div className={styles.gamificationCard}>
+            <ProgressTracker showDetails={false} />
+          </div>
+          <div className={styles.gamificationCard}>
+            <StreakCounter />
+          </div>
+          <div className={styles.gamificationCard}>
+            <DailyQuests />
+          </div>
+        </div>
+        <div className={styles.gamificationCta}>
+          <Link className="button button--primary button--lg" to="/docs/python-101">
+            <Translate id="homepage.gamification.cta">
+              Start earning XP →
+            </Translate>
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function Home(): ReactNode {
+  // Pre-warm Pyodide on homepage visit so it's ready when students reach Week 1
+  useEffect(() => {
+    const link = document.createElement('link');
+    link.rel = 'prefetch';
+    link.href = 'https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.mjs';
+    document.head.appendChild(link);
+    return () => {
+      document.head.removeChild(link);
+    };
+  }, []);
+
   return (
     <Layout
       title={translate({id: 'homepage.pageTitle', message: 'Python & Data Analysis Course'})}
@@ -300,6 +444,8 @@ export default function Home(): ReactNode {
       })}>
       <HomepageHeader />
       <main>
+        <HowItWorks />
+        <GamificationPreview />
         <SectionCards />
         <RealWorldProjects />
       </main>

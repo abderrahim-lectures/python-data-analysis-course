@@ -1,4 +1,5 @@
 import type {CSSProperties, ReactNode} from 'react';
+import {useEffect, useState} from 'react';
 import Link from '@docusaurus/Link';
 import Head from '@docusaurus/Head';
 import Translate, {translate} from '@docusaurus/Translate';
@@ -6,6 +7,7 @@ import Layout from '@theme/Layout';
 import BadgeCase from '@site/src/components/BadgeCase';
 import ShareProgress from '@site/src/components/ShareProgress';
 import DataTransfer from '@site/src/components/DataTransfer';
+import TrailMap from '@site/src/components/TrailMap';
 import {useLocalStorage} from '@site/src/hooks/useLocalStorage';
 import {useCourseComplete} from '@site/src/hooks/useUnlockCondition';
 import {PROJECTS} from '@site/src/data/projects';
@@ -14,7 +16,9 @@ import {getChosenWeeksPartial} from '@site/src/utils/weeks';
 import type {PerSectionTrack, ProgressMap, ProjectProgressMap} from '@site/src/types/progress';
 import styles from './progress.module.css';
 
-function OverallProgress(): React.JSX.Element {
+function OverallProgress(): React.JSX.Element | null {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
   const [progress] = useLocalStorage<ProgressMap>(STORAGE_KEYS.progress, {});
   const [tracks] = useLocalStorage<PerSectionTrack>(STORAGE_KEYS.track, {});
   const [projectProgress] = useLocalStorage<ProjectProgressMap>(STORAGE_KEYS.projectProgress, {});
@@ -30,16 +34,8 @@ function OverallProgress(): React.JSX.Element {
   const itemsTotal = weeksTotal + projectsTotal;
   const percent = tracked && itemsTotal > 0 ? Math.round((itemsDone / itemsTotal) * 100) : 0;
 
-  if (!tracked) {
-    return (
-      <section className={styles.overall}>
-        <p className={styles.overallEmpty}>
-          <Translate id="progressPage.overall.empty">
-            Choose a track on Python 101 or Data Analysis to start tracking progress.
-          </Translate>
-        </p>
-      </section>
-    );
+  if (!mounted || !tracked) {
+    return null;
   }
 
   return (
@@ -133,6 +129,7 @@ export default function ProgressPage(): ReactNode {
             </Translate>
           </div>
         )}
+        <TrailMap />
         <OverallProgress />
         <BadgeCase />
         <ShareProgress />

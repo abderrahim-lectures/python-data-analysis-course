@@ -100,6 +100,49 @@ export default function PlacementQuiz({onProceed}: Props): React.JSX.Element {
             </Link>
           </p>
         )}
+
+        <div className={styles.explanations}>
+          <h4>
+            <Translate id="placementQuiz.result.explanationsTitle">Review your answers:</Translate>
+          </h4>
+          {PLACEMENT_QUIZ_QUESTIONS.map((q, qIndex) => {
+            const isCorrect = answers[q.id] === q.correctOptionIndex;
+            return (
+              <div key={q.id} className={`${styles.explanationItem} ${isCorrect ? styles.correct : styles.incorrect}`}>
+                <div className={styles.explanationHeader}>
+                  <span className={styles.explanationNumber}>{qIndex + 1}</span>
+                  <span className={styles.explanationStatus}>{isCorrect ? '✓' : '✗'}</span>
+                  <span className={styles.explanationPrompt}>{q.prompt}</span>
+                </div>
+                {!isCorrect && (
+                  <div className={styles.explanationDetails}>
+                    <p>
+                      <Translate id="placementQuiz.result.yourAnswer">Your answer:</Translate>{' '}
+                      <strong>{q.options[answers[q.id]!]}</strong>
+                    </p>
+                    <p>
+                      <Translate id="placementQuiz.result.correctAnswer">Correct answer:</Translate>{' '}
+                      <strong>{q.options[q.correctOptionIndex]}</strong>
+                    </p>
+                    {q.explanation && (
+                      <p className={styles.explanationText}>
+                        💡 {q.explanation}
+                      </p>
+                    )}
+                  </div>
+                )}
+                {isCorrect && q.explanation && (
+                  <div className={styles.explanationDetails}>
+                    <p className={styles.explanationText}>
+                      💡 {q.explanation}
+                    </p>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
         <div className={styles.actions}>
           <button className="button button--primary" type="button" onClick={onProceed}>
             <Translate id="placementQuiz.continueAnyway">Continue anyway →</Translate>
@@ -123,6 +166,21 @@ export default function PlacementQuiz({onProceed}: Props): React.JSX.Element {
           continue afterward, whatever your score.
         </Translate>
       </p>
+
+      <div className={styles.progressBar}>
+        <div 
+          className={styles.progressFill}
+          style={{width: `${(Object.keys(answers).length / PLACEMENT_QUIZ_QUESTIONS.length) * 100}%`}}
+        />
+      </div>
+      <div className={styles.progressText}>
+        <Translate 
+          id="placementQuiz.progress" 
+          values={{answered: Object.keys(answers).length, total: PLACEMENT_QUIZ_QUESTIONS.length}}>
+          {'{answered} of {total} answered'}
+        </Translate>
+      </div>
+
       {PLACEMENT_QUIZ_QUESTIONS.map((q, qIndex) => (
         <fieldset className={styles.question} key={q.id}>
           <legend>
