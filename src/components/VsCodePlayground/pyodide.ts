@@ -19,6 +19,7 @@ const PYODIDE_LOADER_URL = `${PYODIDE_INDEX_URL}pyodide.mjs`;
 export interface PyodideRuntime {
   setStdout: (opts: {batched: (line: string) => void}) => void;
   setStderr: (opts: {batched: (line: string) => void}) => void;
+  setStdin: (opts: {stdin: () => string | null}) => void;
   runPythonAsync: (code: string) => Promise<unknown>;
   loadPackagesFromImports: (code: string) => Promise<unknown>;
 }

@@ -128,9 +128,21 @@ interface UsePyodideRunnerProps {
   onOutput: (line: TerminalLine) => void;
   /** The command banner printed before each run (e.g. '$ python main.py'). */
   commandLabel?: string;
+  /**
+   * Synchronously returns one line of stdin for `input()`. Pyodide calls this
+   * from the (main) thread while `runPythonAsync` blocks waiting, so it must
+   * return a plain string (or null for EOF) without awaiting. Defaults to the
+   * browser's native `prompt()`, which is exactly Pyodide's own default.
+   */
+  getStdin?: () => string | null;
 }
 
-export function usePyodideRunner({getCode, onOutput, commandLabel = '$ python main.py'}: UsePyodideRunnerProps) {
+export function usePyodideRunner({
+  getCode,
+  onOutput,
+  commandLabel = '$ python main.py',
+  getStdin,
+}: UsePyodideRunnerProps) {
   const [busy, setBusy] = useState(false);
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [lastError, setLastError] = useState<string | null>(null);
@@ -176,6 +188,7 @@ export function usePyodideRunner({getCode, onOutput, commandLabel = '$ python ma
       py.setStderr({
         batched: (s) => onOutput({id: Date.now() + Math.random(), kind: 'err', text: s}),
       });
+      py.setStdin({stdin: getStdin ?? (() => window.prompt())});
 
       try {
         await py.loadPackagesFromImports(getCode());
@@ -210,7 +223,7 @@ export function usePyodideRunner({getCode, onOutput, commandLabel = '$ python ma
       setLoadingProgress(0);
       busyRef.current = false;
     }
-  }, [getCode, onOutput, prettifyError, commandLabel]);
+  }, [getCode, onOutput, prettifyError, commandLabel, getStdin]);
 
   const clearError = useCallback(() => {
     setLastError(null);

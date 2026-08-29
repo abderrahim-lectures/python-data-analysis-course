@@ -57,7 +57,6 @@ export default function RunnableCell({code}: Props): React.JSX.Element {
   const [actualText, setActualText] = useState('');
   const [overlayOpen, setOverlayOpen] = useState(false);
   const [draft, setDraft] = useState(code);
-  const [stdinBlocked, setStdinBlocked] = useState(false);
   const [hasError, setHasError] = useState(false);
 
   const {addXp} = useXp();
@@ -97,11 +96,6 @@ export default function RunnableCell({code}: Props): React.JSX.Element {
     async (src?: string) => {
       const isEdit = typeof src === 'string';
       const target = isEdit ? src : runningCodeRef.current;
-      if (/\binput\(/.test(target)) {
-        setStdinBlocked(true);
-        return;
-      }
-      setStdinBlocked(false);
       runningCodeRef.current = target;
       setOverlayOpen(false);
       setPredictionResult(null);
@@ -223,14 +217,6 @@ export default function RunnableCell({code}: Props): React.JSX.Element {
       </div>
 
       <CodeBlock language="python">{code}</CodeBlock>
-
-      {stdinBlocked && (
-        <div className={`${styles.feedback} ${styles.feedbackSurprise}`} role="status">
-          <Translate id="runnablecell.stdinBlocked">
-            This example waits for typed input (input()), which the in-browser sandbox can't supply yet — skip it, or edit the code to remove the input() line.
-          </Translate>
-        </div>
-      )}
 
       {predictionOpen && predictionResult === null && (
         <form
