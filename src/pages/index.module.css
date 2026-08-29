@@ -581,27 +581,78 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: 1.5rem;
-  max-width: 900px;
+  max-width: 1080px;
   margin: 0 auto;
+  align-items: stretch;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 820px) {
   .gamificationGrid {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
-.gamificationCard {
+.gamificationPanel {
+  display: flex;
+  flex-direction: column;
   background: var(--ifm-background-surface-color);
   border: 1px solid var(--ifm-color-emphasis-200);
   border-radius: var(--pda-radius-lg);
-  padding: 1.5rem;
-  transition: all 0.3s ease;
+  box-shadow: var(--pda-shadow-sm);
+  padding: 1.25rem 1.25rem 1.5rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
 
-.gamificationCard:hover {
+.gamificationPanel:hover {
+  border-color: var(--ifm-color-primary-light);
+  box-shadow: var(--pda-shadow-md);
   transform: translateY(-4px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+}
+
+.gamificationPanelHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--ifm-color-emphasis-100);
+}
+
+.gamificationChip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  font-size: 1.15rem;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.14), rgba(139, 92, 246, 0.14));
+}
+
+.chipWarm {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.16), rgba(249, 115, 22, 0.16));
+}
+
+.chipCool {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.14), rgba(139, 92, 246, 0.14));
+}
+
+.gamificationPanelTitle {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--ifm-color-emphasis-900);
+  letter-spacing: -0.01em;
+}
+
+.gamificationPanelBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.gamificationPanelBody > * {
+  flex: 1;
 }
 
 .gamificationCta {

@@ -1494,5 +1494,17 @@
   },
   "tutorial.step6.title": {
     "message": "Pruébalo ahora"
+  },
+  "dailyQuests.completed": {
+    "message": "Completadas"
+  },
+  "homepage.gamification.levelTitle": {
+    "message": "Nivel y XP"
+  },
+  "homepage.gamification.streakTitle": {
+    "message": "Racha diaria"
+  },
+  "homepage.gamification.questsTitle": {
+    "message": "Misiones diarias"
   }
 }

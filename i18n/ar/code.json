@@ -1494,5 +1494,17 @@
   },
   "tutorial.step6.title": {
     "message": "جرّبه الآن"
+  },
+  "dailyQuests.completed": {
+    "message": "مكتمل"
+  },
+  "homepage.gamification.levelTitle": {
+    "message": "المستوى والنقاط"
+  },
+  "homepage.gamification.streakTitle": {
+    "message": "السلسلة اليومية"
+  },
+  "homepage.gamification.questsTitle": {
+    "message": "مهام اليوم"
   }
 }

@@ -5,6 +5,13 @@
   padding: 1.25rem;
 }
 
+.flat {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+}
+
 .header {
   display: flex;
   align-items: center;
@@ -24,6 +31,13 @@
 
 .titleIcon {
   font-size: 1.25rem;
+}
+
+.flatTitle {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ifm-color-emphasis-600);
+  margin: 0;
 }
 
 .counter {

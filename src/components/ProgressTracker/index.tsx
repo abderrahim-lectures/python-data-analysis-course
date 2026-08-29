@@ -14,13 +14,16 @@ interface XpData {
 
 interface Props {
   showDetails?: boolean;
+  /** Removes the outer card chrome so a wrapping panel can supply it. */
+  flat?: boolean;
 }
 
 /**
  * Displays the student's learning progress with XP, progress bar, and level.
  * Gamification element: Progress visualization (highest ROI per research).
  */
-export default function ProgressTracker({showDetails = true}: Props): React.JSX.Element {
+export default function ProgressTracker({showDetails = true, flat = false}: Props): React.JSX.Element {
+  const rootClass = flat ? styles.flat : styles.progressTracker;
   const [progress] = useLocalStorage<ProgressMap>(STORAGE_KEYS.progress, {});
   const [tracks] = useLocalStorage<PerSectionTrack>(STORAGE_KEYS.track, {});
   const [xp] = useLocalStorage<XpData>(STORAGE_KEYS.xp, {total: 0, weekly: 0, lastUpdated: ''});
@@ -42,7 +45,7 @@ export default function ProgressTracker({showDetails = true}: Props): React.JSX.
   }, [progress, tracks, xp]);
 
   return (
-    <div className={styles.progressTracker}>
+    <div className={rootClass}>
       <div className={styles.progressHeader}>
         <div className={styles.levelBadge}>
           <span className={styles.levelNumber}>{stats.level}</span>

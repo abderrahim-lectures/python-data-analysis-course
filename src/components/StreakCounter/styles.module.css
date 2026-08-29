@@ -6,6 +6,30 @@
   transition: all 0.3s ease;
 }
 
+.flatStreak {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  transition: none;
+}
+
+.flatHero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 0.5rem 0 1rem;
+}
+
+.flatNumber {
+  font-size: 3.25rem;
+  font-weight: 800;
+  line-height: 1;
+  color: #f59e0b;
+}
+
 .streak-active {
   border-color: var(--ifm-color-success);
   background: linear-gradient(135deg, rgba(34, 197, 94, 0.05) 0%, rgba(34, 197, 94, 0.02) 100%);

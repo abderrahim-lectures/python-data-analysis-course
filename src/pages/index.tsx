@@ -400,15 +400,47 @@ function GamificationPreview() {
           </Translate>
         </p>
         <div className={styles.gamificationGrid}>
-          <div className={styles.gamificationCard}>
-            <ProgressTracker showDetails={false} />
-          </div>
-          <div className={styles.gamificationCard}>
-            <StreakCounter />
-          </div>
-          <div className={styles.gamificationCard}>
-            <DailyQuests />
-          </div>
+          <article className={styles.gamificationPanel}>
+            <header className={styles.gamificationPanelHeader}>
+              <span className={styles.gamificationChip} aria-hidden="true">
+                ⚡
+              </span>
+              <span className={styles.gamificationPanelTitle}>
+                <Translate id="homepage.gamification.levelTitle">Level &amp; XP</Translate>
+              </span>
+            </header>
+            <div className={styles.gamificationPanelBody}>
+              <ProgressTracker showDetails={false} flat />
+            </div>
+          </article>
+
+          <article className={styles.gamificationPanel}>
+            <header className={styles.gamificationPanelHeader}>
+              <span className={`${styles.gamificationChip} ${styles.chipWarm}`} aria-hidden="true">
+                🔥
+              </span>
+              <span className={styles.gamificationPanelTitle}>
+                <Translate id="homepage.gamification.streakTitle">Daily Streak</Translate>
+              </span>
+            </header>
+            <div className={styles.gamificationPanelBody}>
+              <StreakCounter flat />
+            </div>
+          </article>
+
+          <article className={styles.gamificationPanel}>
+            <header className={styles.gamificationPanelHeader}>
+              <span className={`${styles.gamificationChip} ${styles.chipCool}`} aria-hidden="true">
+                🎯
+              </span>
+              <span className={styles.gamificationPanelTitle}>
+                <Translate id="homepage.gamification.questsTitle">Daily Quests</Translate>
+              </span>
+            </header>
+            <div className={styles.gamificationPanelBody}>
+              <DailyQuests flat />
+            </div>
+          </article>
         </div>
         <div className={styles.gamificationCta}>
           <Link className="button button--primary button--lg" to="/docs/python-101">

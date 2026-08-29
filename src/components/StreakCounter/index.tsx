@@ -13,13 +13,15 @@ interface StreakData {
 
 interface Props {
   compact?: boolean;
+  /** Removes the outer card chrome so a wrapping panel can supply it. */
+  flat?: boolean;
 }
 
 /**
  * Displays the student's daily practice streak.
  * Gamification element: Streaks drive daily habits (3.6x more likely to stay engaged).
  */
-export default function StreakCounter({compact = false}: Props): React.JSX.Element {
+export default function StreakCounter({compact = false, flat = false}: Props): React.JSX.Element {
   const [streak] = useLocalStorage<StreakData>(STORAGE_KEYS.streak, {
     current: 0,
     longest: 0,
@@ -54,16 +56,25 @@ export default function StreakCounter({compact = false}: Props): React.JSX.Eleme
   }
 
   return (
-    <div className={`${styles.streakContainer} ${styles[`streak-${streakStatus}`]}`}>
-      <div className={styles.streakHeader}>
-        <span className={styles.streakFireIcon}>🔥</span>
-        <div className={styles.streakInfo}>
-          <span className={styles.streakNumber}>{streak.current}</span>
+    <div className={`${flat ? styles.flatStreak : styles.streakContainer} ${styles[`streak-${streakStatus}`]}`}>
+      {flat ? (
+        <div className={styles.flatHero}>
+          <span className={styles.flatNumber}>{streak.current}</span>
           <span className={styles.streakLabel}>
             <Translate id="streak.dayStreak">Day Streak</Translate>
           </span>
         </div>
-      </div>
+      ) : (
+        <div className={styles.streakHeader}>
+          <span className={styles.streakFireIcon}>🔥</span>
+          <div className={styles.streakInfo}>
+            <span className={styles.streakNumber}>{streak.current}</span>
+            <span className={styles.streakLabel}>
+              <Translate id="streak.dayStreak">Day Streak</Translate>
+            </span>
+          </div>
+        </div>
+      )}
 
       <div className={styles.streakDetails}>
         <div className={styles.streakStat}>

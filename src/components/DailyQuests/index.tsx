@@ -24,6 +24,8 @@ interface DailyQuestsData {
 interface Props {
   compact?: boolean;
   onQuestComplete?: (quest: Quest) => void;
+  /** Removes the outer card chrome so a wrapping panel can supply it. */
+  flat?: boolean;
 }
 
 // Quest templates
@@ -62,7 +64,7 @@ function generateDailyQuests(): Quest[] {
  * Daily quest system for habit formation.
  * Inspired by Duolingo's daily quest mechanics.
  */
-export default function DailyQuests({compact = false, onQuestComplete}: Props): React.JSX.Element {
+export default function DailyQuests({compact = false, onQuestComplete, flat = false}: Props): React.JSX.Element {
   const [questsData, setQuestsData] = useLocalStorage<DailyQuestsData>(
     STORAGE_KEYS.dailyQuests,
     {date: '', quests: []}
@@ -95,12 +97,17 @@ export default function DailyQuests({compact = false, onQuestComplete}: Props): 
   }
 
   return (
-    <div className={styles.container}>
+    <div className={flat ? styles.flat : styles.container}>
       <div className={styles.header}>
-        <h3 className={styles.title}>
-          <span className={styles.titleIcon}>🎯</span>
-          <Translate id="dailyQuests.title">Daily Quests</Translate>
-        </h3>
+        {!flat && (
+          <h3 className={styles.title}>
+            <span className={styles.titleIcon}>🎯</span>
+            <Translate id="dailyQuests.title">Daily Quests</Translate>
+          </h3>
+        )}
+        {flat && <span className={styles.flatTitle}>
+          <Translate id="dailyQuests.completed">Completed</Translate>
+        </span>}
         <span className={styles.counter}>
           {completedCount}/{totalCount}
         </span>
