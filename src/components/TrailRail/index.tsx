@@ -74,28 +74,40 @@ export default function TrailRail(): React.JSX.Element | null {
                 aria-current={state === 'current' ? 'step' : undefined}
                 aria-label={
                   state === 'current'
-                    ? translate({
-                        id: 'trailRail.current',
-                        message: `Week ${week}: here`,
-                      })
+                    ? translate(
+                        {
+                          id: 'trailRail.current',
+                          message: 'Week {number}: here',
+                        },
+                        {number: week},
+                      )
                     : state === 'done'
-                      ? translate({
-                          id: 'trailRail.done',
-                          message: `Week ${week}: completed`,
-                        })
-                      : translate({
-                          id: 'trailRail.upcoming',
-                          message: `Week ${week}: upcoming`,
-                        })
+                      ? translate(
+                          {
+                            id: 'trailRail.done',
+                            message: 'Week {number}: completed',
+                          },
+                          {number: week},
+                        )
+                      : translate(
+                          {
+                            id: 'trailRail.upcoming',
+                            message: 'Week {number}: upcoming',
+                          },
+                          {number: week},
+                        )
                 }>
                 <span className={styles.marker} aria-hidden="true">
                   {state === 'done' ? '✓' : ''}
                 </span>
                 <span className={styles.label}>
-                  {translate({
-                    id: 'trailRail.weekLabel',
-                    message: `Week ${week}`,
-                  })}
+                  {translate(
+                    {
+                      id: 'trailRail.weekLabel',
+                      message: 'Week {number}',
+                    },
+                    {number: week},
+                  )}
                 </span>
               </a>
             </li>

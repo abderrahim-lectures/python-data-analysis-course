@@ -1086,5 +1086,413 @@
   },
   "stickyRun.run": {
     "message": "تشغيل"
+  },
+  "dailyQuests.allComplete": {
+    "message": "أكملت كل المهام! عُد غدًا لتحديات جديدة 🎉"
+  },
+  "dailyQuests.title": {
+    "message": "مهام اليوم"
+  },
+  "firstSuccess.continue": {
+    "message": "المتابعة إلى الدرس ←"
+  },
+  "firstSuccess.message": {
+    "message": "لا تثبيت. لا إعداد. أنت والكود فقط."
+  },
+  "firstSuccess.title": {
+    "message": "لقد شغّلت بايثون للتو!"
+  },
+  "homepage.gamification.cta": {
+    "message": "ابدأ في كسب نقاط XP ←"
+  },
+  "homepage.gamification.subtitle": {
+    "message": "اكسب نقاط XP، وحافظ على سلسلة تقدمك، وافتح الإنجازات كلما تقدمت"
+  },
+  "homepage.gamification.title": {
+    "message": "🎮 تعلّم بمرح"
+  },
+  "homepage.howItWorks.cta": {
+    "message": "ابدأ التعلم الآن ←"
+  },
+  "homepage.howItWorks.step1.description": {
+    "message": "لا حاجة لأي تثبيت. اكتب بايثون، اضغط تشغيل، وشاهد النتيجة فورًا."
+  },
+  "homepage.howItWorks.step1.title": {
+    "message": "اكتب الكود في متصفحك"
+  },
+  "homepage.howItWorks.step2.description": {
+    "message": "مصمم للجوال أولًا. تعلّم أينما كنت ومتى شئت."
+  },
+  "homepage.howItWorks.step2.title": {
+    "message": "يعمل على هاتفك"
+  },
+  "homepage.howItWorks.step3.description": {
+    "message": "المسار العادي للأساسيات، والمسار المتقدم للتحدي."
+  },
+  "homepage.howItWorks.step3.title": {
+    "message": "اختر مسارك"
+  },
+  "homepage.howItWorks.step4.description": {
+    "message": "أوسمة واختبارات وشهادة عند إتمامك."
+  },
+  "homepage.howItWorks.step4.title": {
+    "message": "تابع تقدمك"
+  },
+  "homepage.howItWorks.title": {
+    "message": "كيف يعمل هذا المساق"
+  },
+  "microSurvey.option1a": {
+    "message": "لا، هذه أول مرة لي"
+  },
+  "microSurvey.option1b": {
+    "message": "قليلًا (HTML/CSS أو ما يشابهها)"
+  },
+  "microSurvey.option1c": {
+    "message": "نعم، أعرف بعض بايثون"
+  },
+  "microSurvey.option2a": {
+    "message": "خطوة بخطوة، مع أمثلة"
+  },
+  "microSurvey.option2b": {
+    "message": "ببناء شيء حقيقي"
+  },
+  "microSurvey.option2c": {
+    "message": "بالقراءة والتفكير"
+  },
+  "microSurvey.progress": {
+    "message": "السؤال {current} من {total}"
+  },
+  "microSurvey.question1": {
+    "message": "هل كتبت كودًا من قبل؟"
+  },
+  "microSurvey.question2": {
+    "message": "كيف تتعلّم أفضل؟"
+  },
+  "placementQuiz.progress": {
+    "message": "{answered} من {total} تمت الإجابة"
+  },
+  "placementQuiz.result.correctAnswer": {
+    "message": "الإجابة الصحيحة:"
+  },
+  "placementQuiz.result.explanationsTitle": {
+    "message": "راجع إجاباتك:"
+  },
+  "placementQuiz.result.yourAnswer": {
+    "message": "إجابتك:"
+  },
+  "playground.vscode.copyError": {
+    "message": "نسخ الخطأ"
+  },
+  "playground.vscode.explorer": {
+    "message": "المستكشف"
+  },
+  "playground.vscode.extensions": {
+    "message": "الإضافات"
+  },
+  "playground.vscode.reportIssue": {
+    "message": "الإبلاغ عن مشكلة"
+  },
+  "playground.vscode.reset": {
+    "message": "إعادة تعيين الكود"
+  },
+  "playground.vscode.running": {
+    "message": "جارٍ تشغيل الكود…"
+  },
+  "playground.vscode.search": {
+    "message": "بحث"
+  },
+  "playground.vscode.settings": {
+    "message": "الإعدادات"
+  },
+  "playground.vscode.toggleMinimap": {
+    "message": "تبديل العرض المصغّر"
+  },
+  "progress.level": {
+    "message": "المستوى"
+  },
+  "progress.weeklyXp": {
+    "message": "+{xp} هذا الأسبوع"
+  },
+  "progress.weeksCompleted": {
+    "message": "{completed}/{total} أسابيع"
+  },
+  "progress.xpToNext": {
+    "message": "{xp} نقطة للمستوى التالي"
+  },
+  "progressPage.map.current": {
+    "message": "أنت هنا"
+  },
+  "progressPage.map.done": {
+    "message": "مكتمل"
+  },
+  "progressPage.map.empty": {
+    "message": "اختر مسارًا في بايثون 101 أو تحليل البيانات لإظهار خريطة مسارك."
+  },
+  "progressPage.map.emptySsr": {
+    "message": "ستظهر خريطة مسارك هنا بمجرد أن تبدأ."
+  },
+  "progressPage.map.label": {
+    "message": "خريطة المسار"
+  },
+  "progressPage.map.nextUp": {
+    "message": "واصل مسارك ←"
+  },
+  "progressPage.map.projects": {
+    "message": "المشاريع المنجزة"
+  },
+  "progressPage.map.sectionDone": {
+    "message": "اكتمل القسم 🎉"
+  },
+  "progressPage.map.streak": {
+    "message": "سلسلة التقدم الحالية"
+  },
+  "progressPage.map.streakLabel": {
+    "message": "يوم متتالٍ"
+  },
+  "progressPage.map.upcoming": {
+    "message": "قادم"
+  },
+  "progressPage.map.weekLabel": {
+    "message": "الأسبوع {number}"
+  },
+  "progressPage.map.weeks": {
+    "message": "الأسابيع المكتملة"
+  },
+  "progressPage.map.xp": {
+    "message": "إجمالي نقاط XP"
+  },
+  "progressPage.map.xpLabel": {
+    "message": "XP"
+  },
+  "readingTime.minutes": {
+    "message": "{minutes} دقيقة قراءة"
+  },
+  "runnablecell.ask": {
+    "message": "اطلب المساعدة"
+  },
+  "runnablecell.booting": {
+    "message": "جارٍ تشغيل بايثون… {progress}%"
+  },
+  "runnablecell.clear": {
+    "message": "مسح"
+  },
+  "runnablecell.correct": {
+    "message": "🎯 كان توقعك صحيحًا. أنت تتقن هذا!"
+  },
+  "runnablecell.editorTitle": {
+    "message": "التعديل والتشغيل"
+  },
+  "runnablecell.predict": {
+    "message": "توقّع"
+  },
+  "runnablecell.predictLabel": {
+    "message": "ما رأيك أن هذا الكود سيطبع؟"
+  },
+  "runnablecell.reread": {
+    "message": "أعد قراءة فقرة الشرح أعلاه ↑"
+  },
+  "runnablecell.reset": {
+    "message": "إعادة تعيين إلى كود الدرس"
+  },
+  "runnablecell.run": {
+    "message": "تشغيل"
+  },
+  "runnablecell.runAndCheck": {
+    "message": "تشغيل والتحقق"
+  },
+  "runnablecell.runEdited": {
+    "message": "تشغيل"
+  },
+  "runnablecell.running": {
+    "message": "جارٍ التشغيل…"
+  },
+  "runnablecell.search": {
+    "message": "ابحث عن هذا الخطأ"
+  },
+  "runnablecell.stdinBlocked": {
+    "message": "هذا المثال ينتظر إدخالًا (input())، وهو غير متاح في بيئة المتصفح حاليًا — تجاوزه، أو عدّل الكود لإزالة سطر input()."
+  },
+  "runnablecell.stuckBody": {
+    "message": "التلميح تحت السطر الأحمر أعلاه يحدد الخطأ بدقة — وفقرة الشرح أعلى هذا الكود مباشرة توضح طريقة إصلاحه."
+  },
+  "runnablecell.stuckTitle": {
+    "message": "ما زال أحمر؟ هذا طبيعي."
+  },
+  "runnablecell.surpriseBody": {
+    "message": "الكود طبع بالفعل \"{actual}\". إذا كان مختلفًا عن توقعك، أعد قراءة الفقرة أعلاه مباشرة — هذه المفاجأة هي الدرس."
+  },
+  "runnablecell.surpriseTitle": {
+    "message": "مفاجأة!"
+  },
+  "stillStuck.actions.help": {
+    "message": "اطلب المساعدة"
+  },
+  "stillStuck.actions.report": {
+    "message": "الإبلاغ عن هذه المشكلة"
+  },
+  "stillStuck.actions.search": {
+    "message": "ابحث عن هذا الخطأ"
+  },
+  "stillStuck.dismiss": {
+    "message": "إغلاق المساعدة"
+  },
+  "stillStuck.step1": {
+    "message": "أصلح خطأً واحدًا في كل مرة — اقرأ أولًا التلميح الملون تحت الرسالة الحمراء أسفل المحرر."
+  },
+  "stillStuck.step2": {
+    "message": "أعد النظر إلى كتلة الكود في الدرس أعلاه مباشرة — انسخها بدقة، ثم غيّر الجزء الذي يطلبه التحدي."
+  },
+  "stillStuck.step3": {
+    "message": "ما زال أحمر بعد ثلاث محاولات؟ ألقِ نظرة على إجابة التحدي — قراءة حل منجَز هكذا يتعلم الجميع."
+  },
+  "stillStuck.subtitle": {
+    "message": "لاحظت {count} في هذا الدرس. هذا طبيعي تمامًا. إليك خطة."
+  },
+  "stillStuck.title": {
+    "message": "أنت لست عالقًا — كل مبرمج يمر بهذا"
+  },
+  "stillStuck.toggleErrors": {
+    "message": "إظهار الأخطاء التي واجهتها بالضبط"
+  },
+  "streak.atRisk": {
+    "message": "تدرّب اليوم للحفاظ على سلسلتك! ⏰"
+  },
+  "streak.broken": {
+    "message": "انقطعت السلسلة! ابدأ سلسلة جديدة اليوم 💪"
+  },
+  "streak.dayStreak": {
+    "message": "سلسلة الأيام"
+  },
+  "streak.freezes": {
+    "message": "التجميدات"
+  },
+  "streak.longest": {
+    "message": "الأفضل"
+  },
+  "streak.start": {
+    "message": "ابدأ سلسلتك! تدرّب يوميًا لبناء العادات 🌱"
+  },
+  "stuckHelp.stillStuck": {
+    "message": "ما زلت عالقًا؟ جرّب التالي:"
+  },
+  "stuckHelp.title": {
+    "message": "عالق؟ الأخطاء الشائعة هذا الأسبوع"
+  },
+  "theme.PwaReloadPopup.info": {
+    "message": "يتوفر إصدار جديد"
+  },
+  "theme.PwaReloadPopup.refreshButtonText": {
+    "message": "تحديث"
+  },
+  "tips.askHelp": {
+    "message": "عالق؟ اضغط تلميح 💡 في الطرفية — يعرض الأخطاء الشائعة وطريقة إصلاحها."
+  },
+  "tips.category.data": {
+    "message": "تحليل البيانات"
+  },
+  "tips.category.editor": {
+    "message": "المحرر"
+  },
+  "tips.category.python": {
+    "message": "بايثون"
+  },
+  "tips.comments": {
+    "message": "أضف تعليقات باستخدام #. تساعدك على تذكّر ما يفعله كودك!"
+  },
+  "tips.copyPaste": {
+    "message": "يمكنك نسخ الكود من الدروس ولصقه في المحرر لتجربته!"
+  },
+  "tips.dataframe": {
+    "message": "DataFrame في pandas يشبه جدول Excel — صفوف وأعمدة من البيانات يمكنك تحليلها."
+  },
+  "tips.errorMessages": {
+    "message": "اقرأ رسائل الخطأ من الأسفل إلى الأعلى — السطر الأخير يخبرك عادةً بما حدث خطأً."
+  },
+  "tips.gotIt": {
+    "message": "فهمت!"
+  },
+  "tips.indentation": {
+    "message": "تستخدم بايثون المسافات لتجميع الكود. استخدم 4 مسافات (وليس tab) لكل مستوى."
+  },
+  "tips.keyboardRun": {
+    "message": "اضغط Ctrl+Enter لتشغيل كودك بسرعة دون استخدام الفأرة."
+  },
+  "tips.notebook": {
+    "message": "تبويب المفكرات يشغّل دفاتر Jupyter التفاعلية — مثالي لتحليل البيانات مع الرسوم البيانية!"
+  },
+  "tips.printDebug": {
+    "message": "استخدم print() لترى ما يفعله كودك خطوة بخطوة — طريقة رائعة لاكتشاف الأخطاء!"
+  },
+  "tips.title": {
+    "message": "نصيحة اليوم"
+  },
+  "tips.variables": {
+    "message": "لا تحتاج للإعلان عن المتغيرات. فقط name = value وستنشئه بايثون."
+  },
+  "trailRail.current": {
+    "message": "الأسبوع {number}: أنت هنا"
+  },
+  "trailRail.done": {
+    "message": "الأسبوع {number}: مكتمل"
+  },
+  "trailRail.home": {
+    "message": "العودة إلى المسار"
+  },
+  "trailRail.label": {
+    "message": "مسارك التعليمي"
+  },
+  "trailRail.title": {
+    "message": "مسارك"
+  },
+  "trailRail.upcoming": {
+    "message": "الأسبوع {number}: قادم"
+  },
+  "trailRail.weekLabel": {
+    "message": "الأسبوع {number}"
+  },
+  "tutorial.next": {
+    "message": "التالي"
+  },
+  "tutorial.skip": {
+    "message": "تخطّي البرنامج التعليمي"
+  },
+  "tutorial.start": {
+    "message": "ابدأ البرمجة!"
+  },
+  "tutorial.step1.content": {
+    "message": "هنا ستكتب كود بايثون. اكتب مباشرة — لا حاجة لأي تثبيت!"
+  },
+  "tutorial.step1.title": {
+    "message": "مرحبًا بك في محرر بايثون"
+  },
+  "tutorial.step2.content": {
+    "message": "اضغط \"تشغيل\" أو Ctrl+Enter لتنفيذ الكود. يظهر الناتج في الطرفية بالأسفل."
+  },
+  "tutorial.step2.title": {
+    "message": "شغّل كودك"
+  },
+  "tutorial.step3.content": {
+    "message": "تعرض هذه الطرفية مخرجات الكود وأخطاءه ورسائل المساعدة. اقرأ السطر الأخير عندما يحدث خطأ."
+  },
+  "tutorial.step3.title": {
+    "message": "شاهد النتائج هنا"
+  },
+  "tutorial.step4.content": {
+    "message": "اضغط هذا التبويب للمفكرات التفاعلية مع الرسوم البيانية وتحليل البيانات. سنستخدمه في الأسبوع 3."
+  },
+  "tutorial.step4.title": {
+    "message": "وضع المفكرات"
+  },
+  "tutorial.step5.content": {
+    "message": "اختصارات مفيدة لتسريع البرمجة:"
+  },
+  "tutorial.step5.title": {
+    "message": "اختصارات لوحة المفاتيح"
+  },
+  "tutorial.step6.content": {
+    "message": "اكتب هذا واضغط تشغيل:"
+  },
+  "tutorial.step6.title": {
+    "message": "جرّبه الآن"
   }
 }

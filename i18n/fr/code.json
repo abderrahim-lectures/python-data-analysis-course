@@ -1086,5 +1086,413 @@
   },
   "stickyRun.run": {
     "message": "Exécuter"
+  },
+  "dailyQuests.allComplete": {
+    "message": "Toutes les missions terminées ! Revenez demain pour de nouveaux défis 🎉"
+  },
+  "dailyQuests.title": {
+    "message": "Missions quotidiennes"
+  },
+  "firstSuccess.continue": {
+    "message": "Continuer vers la leçon →"
+  },
+  "firstSuccess.message": {
+    "message": "Aucune installation. Aucune configuration. Juste vous et le code."
+  },
+  "firstSuccess.title": {
+    "message": "Vous venez d'exécuter Python !"
+  },
+  "homepage.gamification.cta": {
+    "message": "Commencez à gagner de l'XP →"
+  },
+  "homepage.gamification.subtitle": {
+    "message": "Gagnez de l'XP, gardez des séries et débloquez des succès en progressant"
+  },
+  "homepage.gamification.title": {
+    "message": "🎮 Apprenez en vous amusant"
+  },
+  "homepage.howItWorks.cta": {
+    "message": "Commencez à apprendre →"
+  },
+  "homepage.howItWorks.step1.description": {
+    "message": "Aucune installation. Écrivez du Python, cliquez sur Exécuter, voyez le résultat instantanément."
+  },
+  "homepage.howItWorks.step1.title": {
+    "message": "Codez dans votre navigateur"
+  },
+  "homepage.howItWorks.step2.description": {
+    "message": "Conçu d'abord pour mobile. Apprenez où vous voulez, quand vous voulez."
+  },
+  "homepage.howItWorks.step2.title": {
+    "message": "Fonctionne sur votre téléphone"
+  },
+  "homepage.howItWorks.step3.description": {
+    "message": "Le parcours Normal pour les fondamentaux, le parcours Difficile pour un défi."
+  },
+  "homepage.howItWorks.step3.title": {
+    "message": "Choisissez votre parcours"
+  },
+  "homepage.howItWorks.step4.description": {
+    "message": "Badges, quiz et un certificat quand vous terminez."
+  },
+  "homepage.howItWorks.step4.title": {
+    "message": "Suivez votre progression"
+  },
+  "homepage.howItWorks.title": {
+    "message": "Comment fonctionne ce cours"
+  },
+  "microSurvey.option1a": {
+    "message": "Non, c'est la première fois"
+  },
+  "microSurvey.option1b": {
+    "message": "Un peu (HTML/CSS ou similaire)"
+  },
+  "microSurvey.option1c": {
+    "message": "Oui, je connais un peu Python"
+  },
+  "microSurvey.option2a": {
+    "message": "Pas à pas, avec des exemples"
+  },
+  "microSurvey.option2b": {
+    "message": "En construisant quelque chose de concret"
+  },
+  "microSurvey.option2c": {
+    "message": "En lisant et en réfléchissant"
+  },
+  "microSurvey.progress": {
+    "message": "Question {current} sur {total}"
+  },
+  "microSurvey.question1": {
+    "message": "Avez-vous déjà écrit du code ?"
+  },
+  "microSurvey.question2": {
+    "message": "Comment apprenez-vous le mieux ?"
+  },
+  "placementQuiz.progress": {
+    "message": "{answered} sur {total} répondues"
+  },
+  "placementQuiz.result.correctAnswer": {
+    "message": "Bonne réponse :"
+  },
+  "placementQuiz.result.explanationsTitle": {
+    "message": "Revoyez vos réponses :"
+  },
+  "placementQuiz.result.yourAnswer": {
+    "message": "Votre réponse :"
+  },
+  "playground.vscode.copyError": {
+    "message": "Copier l'erreur"
+  },
+  "playground.vscode.explorer": {
+    "message": "Explorateur"
+  },
+  "playground.vscode.extensions": {
+    "message": "Extensions"
+  },
+  "playground.vscode.reportIssue": {
+    "message": "Signaler un problème"
+  },
+  "playground.vscode.reset": {
+    "message": "Réinitialiser le code"
+  },
+  "playground.vscode.running": {
+    "message": "Exécution du code…"
+  },
+  "playground.vscode.search": {
+    "message": "Rechercher"
+  },
+  "playground.vscode.settings": {
+    "message": "Paramètres"
+  },
+  "playground.vscode.toggleMinimap": {
+    "message": "Afficher/masquer la minicarte"
+  },
+  "progress.level": {
+    "message": "Niveau"
+  },
+  "progress.weeklyXp": {
+    "message": "+{xp} cette semaine"
+  },
+  "progress.weeksCompleted": {
+    "message": "{completed}/{total} semaines"
+  },
+  "progress.xpToNext": {
+    "message": "{xp} XP pour le niveau suivant"
+  },
+  "progressPage.map.current": {
+    "message": "Vous êtes ici"
+  },
+  "progressPage.map.done": {
+    "message": "Terminé"
+  },
+  "progressPage.map.empty": {
+    "message": "Choisissez un parcours dans Python 101 ou Analyse de données pour voir votre carte de progression."
+  },
+  "progressPage.map.emptySsr": {
+    "message": "Votre carte de progression se chargera ici dès que vous commencerez."
+  },
+  "progressPage.map.label": {
+    "message": "Carte de progression"
+  },
+  "progressPage.map.nextUp": {
+    "message": "Continuez votre parcours →"
+  },
+  "progressPage.map.projects": {
+    "message": "Projets réalisés"
+  },
+  "progressPage.map.sectionDone": {
+    "message": "Section terminée 🎉"
+  },
+  "progressPage.map.streak": {
+    "message": "Série actuelle"
+  },
+  "progressPage.map.streakLabel": {
+    "message": "jours d'affilée"
+  },
+  "progressPage.map.upcoming": {
+    "message": "À venir"
+  },
+  "progressPage.map.weekLabel": {
+    "message": "Semaine {number}"
+  },
+  "progressPage.map.weeks": {
+    "message": "Semaines terminées"
+  },
+  "progressPage.map.xp": {
+    "message": "XP totales"
+  },
+  "progressPage.map.xpLabel": {
+    "message": "XP"
+  },
+  "readingTime.minutes": {
+    "message": "{minutes} min de lecture"
+  },
+  "runnablecell.ask": {
+    "message": "Demander de l'aide"
+  },
+  "runnablecell.booting": {
+    "message": "Démarrage de Python… {progress}%"
+  },
+  "runnablecell.clear": {
+    "message": "Effacer"
+  },
+  "runnablecell.correct": {
+    "message": "🎯 Votre prédiction était juste. Vous avez compris !"
+  },
+  "runnablecell.editorTitle": {
+    "message": "Modifier et exécuter"
+  },
+  "runnablecell.predict": {
+    "message": "Prédire"
+  },
+  "runnablecell.predictLabel": {
+    "message": "Que pensez-vous que ce code va afficher ?"
+  },
+  "runnablecell.reread": {
+    "message": "Relisez le paragraphe de la leçon ↑"
+  },
+  "runnablecell.reset": {
+    "message": "Réinitialiser au code de la leçon"
+  },
+  "runnablecell.run": {
+    "message": "Exécuter"
+  },
+  "runnablecell.runAndCheck": {
+    "message": "Exécuter et vérifier"
+  },
+  "runnablecell.runEdited": {
+    "message": "Exécuter"
+  },
+  "runnablecell.running": {
+    "message": "Exécution…"
+  },
+  "runnablecell.search": {
+    "message": "Rechercher cette erreur"
+  },
+  "runnablecell.stdinBlocked": {
+    "message": "Cet exemple attend une saisie (input()), ce que le bac à sable du navigateur ne peut pas fournir pour l'instant — ignorez-le ou modifiez le code pour retirer la ligne input()."
+  },
+  "runnablecell.stuckBody": {
+    "message": "L'indice sous la ligne rouge ci-dessus désigne l'erreur exacte — et le paragraphe de cours juste au-dessus de ce code explique comment la corriger."
+  },
+  "runnablecell.stuckTitle": {
+    "message": "Toujours rouge ? C'est normal."
+  },
+  "runnablecell.surpriseBody": {
+    "message": "Le code a en réalité affiché \"{actual}\". Si cela diffère de votre supposition, relisez le paragraphe au-dessus — cette surprise est la leçon."
+  },
+  "runnablecell.surpriseTitle": {
+    "message": "Surprise !"
+  },
+  "stillStuck.actions.help": {
+    "message": "Demander de l'aide"
+  },
+  "stillStuck.actions.report": {
+    "message": "Signaler ce problème"
+  },
+  "stillStuck.actions.search": {
+    "message": "Rechercher cette erreur"
+  },
+  "stillStuck.dismiss": {
+    "message": "Fermer l'aide"
+  },
+  "stillStuck.step1": {
+    "message": "Corrigez une erreur à la fois — lisez d'abord l'indice coloré sous le message rouge en dessous de l'éditeur."
+  },
+  "stillStuck.step2": {
+    "message": "Regardez le bloc de code de la leçon juste au-dessus — copiez-le exactement, puis modifiez la partie demandée par le défi."
+  },
+  "stillStuck.step3": {
+    "message": "Toujours rouge après trois essais ? Jetez un œil à la réponse du défi — lire une solution détaillée, c'est comme ça qu'on apprend tous."
+  },
+  "stillStuck.subtitle": {
+    "message": "J'ai remarqué {count} sur cette leçon. C'est tout à fait normal. Voici un plan."
+  },
+  "stillStuck.title": {
+    "message": "Vous n'êtes pas bloqué — tout développeur rencontre ça"
+  },
+  "stillStuck.toggleErrors": {
+    "message": "Afficher les erreurs exactes rencontrées"
+  },
+  "streak.atRisk": {
+    "message": "Entraînez-vous aujourd'hui pour garder votre série ! ⏰"
+  },
+  "streak.broken": {
+    "message": "Série cassée ! Lancez-en une nouvelle aujourd'hui 💪"
+  },
+  "streak.dayStreak": {
+    "message": "Série de jours"
+  },
+  "streak.freezes": {
+    "message": "Gels"
+  },
+  "streak.longest": {
+    "message": "Record"
+  },
+  "streak.start": {
+    "message": "Lancez votre série ! Pratiquez chaque jour pour créer des habitudes 🌱"
+  },
+  "stuckHelp.stillStuck": {
+    "message": "Toujours bloqué ? Essayez ceci :"
+  },
+  "stuckHelp.title": {
+    "message": "Bloqué ? Erreurs courantes cette semaine"
+  },
+  "theme.PwaReloadPopup.info": {
+    "message": "Nouvelle version disponible"
+  },
+  "theme.PwaReloadPopup.refreshButtonText": {
+    "message": "Actualiser"
+  },
+  "tips.askHelp": {
+    "message": "Bloqué ? Cliquez sur l'astuce 💡 dans le terminal — elle montre les erreurs courantes et comment les corriger."
+  },
+  "tips.category.data": {
+    "message": "Analyse de données"
+  },
+  "tips.category.editor": {
+    "message": "Éditeur"
+  },
+  "tips.category.python": {
+    "message": "Python"
+  },
+  "tips.comments": {
+    "message": "Ajoutez des commentaires avec #. Ils vous aident à vous souvenir de ce que fait votre code !"
+  },
+  "tips.copyPaste": {
+    "message": "Vous pouvez copier le code des leçons et le coller dans l'éditeur pour l'essayer !"
+  },
+  "tips.dataframe": {
+    "message": "Un DataFrame pandas est comme une table Excel — des lignes et colonnes de données que vous pouvez analyser."
+  },
+  "tips.errorMessages": {
+    "message": "Lisez les messages d'erreur de bas en haut — la dernière ligne indique généralement ce qui a cloché."
+  },
+  "tips.gotIt": {
+    "message": "Compris !"
+  },
+  "tips.indentation": {
+    "message": "Python utilise l'indentation pour regrouper le code. Utilisez 4 espaces (pas de tabulations) par niveau."
+  },
+  "tips.keyboardRun": {
+    "message": "Appuyez sur Ctrl+Entrée pour exécuter votre code rapidement sans la souris."
+  },
+  "tips.notebook": {
+    "message": "L'onglet Notebook exécute des notebooks Jupyter interactifs — parfaits pour analyser des données avec des graphiques !"
+  },
+  "tips.printDebug": {
+    "message": "Utilisez print() pour voir ce que fait votre code étape par étape — un excellent moyen de trouver les bugs !"
+  },
+  "tips.title": {
+    "message": "Conseil du jour"
+  },
+  "tips.variables": {
+    "message": "Les variables n'ont pas besoin d'être déclarées. Écrivez juste nom = valeur et Python la crée."
+  },
+  "trailRail.current": {
+    "message": "Semaine {number} : vous êtes ici"
+  },
+  "trailRail.done": {
+    "message": "Semaine {number} : terminée"
+  },
+  "trailRail.home": {
+    "message": "Retour au parcours"
+  },
+  "trailRail.label": {
+    "message": "Votre parcours d'apprentissage"
+  },
+  "trailRail.title": {
+    "message": "Votre parcours"
+  },
+  "trailRail.upcoming": {
+    "message": "Semaine {number} : à venir"
+  },
+  "trailRail.weekLabel": {
+    "message": "Semaine {number}"
+  },
+  "tutorial.next": {
+    "message": "Suivant"
+  },
+  "tutorial.skip": {
+    "message": "Passer le tutoriel"
+  },
+  "tutorial.start": {
+    "message": "Commencer à coder !"
+  },
+  "tutorial.step1.content": {
+    "message": "C'est ici que vous écrirez du code Python. Tapez directement — aucune installation nécessaire !"
+  },
+  "tutorial.step1.title": {
+    "message": "Bienvenue dans l'éditeur Python"
+  },
+  "tutorial.step2.content": {
+    "message": "Cliquez sur « Exécuter » ou appuyez sur Ctrl+Entrée pour exécuter votre code. La sortie apparaît dans le terminal ci-dessous."
+  },
+  "tutorial.step2.title": {
+    "message": "Exécutez votre code"
+  },
+  "tutorial.step3.content": {
+    "message": "Ce terminal affiche la sortie, les erreurs et les messages d'aide de votre code. Lisez la dernière ligne quand quelque chose ne va pas."
+  },
+  "tutorial.step3.title": {
+    "message": "Voyez les résultats ici"
+  },
+  "tutorial.step4.content": {
+    "message": "Cliquez sur cet onglet pour des notebooks interactifs avec graphiques et analyse de données. Nous l'utiliserons à la Semaine 3."
+  },
+  "tutorial.step4.title": {
+    "message": "Mode Notebook"
+  },
+  "tutorial.step5.content": {
+    "message": "Des raccourcis utiles pour coder plus vite :"
+  },
+  "tutorial.step5.title": {
+    "message": "Raccourcis clavier"
+  },
+  "tutorial.step6.content": {
+    "message": "Tapez ceci et cliquez sur Exécuter :"
+  },
+  "tutorial.step6.title": {
+    "message": "Essayez maintenant"
   }
 }
