@@ -12,12 +12,12 @@ interface Props {
   mode: PlaygroundMode;
 }
 
-/** Map Docusaurus locale codes to JupyterLite locale codes */
+/** Map Docusaurus locale codes to JupyterLite language-pack codes */
 const LOCALE_MAP: Record<string, string> = {
-  en: 'en-US',
-  ar: 'ar',
-  es: 'es',
-  fr: 'fr-FR',
+  en: 'default',
+  ar: 'ar_SA',
+  es: 'es_ES',
+  fr: 'fr_FR',
 };
 
 /** Loading messages in all supported languages */

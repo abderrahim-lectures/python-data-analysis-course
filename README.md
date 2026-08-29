@@ -60,8 +60,12 @@ The Data Analysis playground (JupyterLite) is built separately with [`uv`](https
 ```bash
 cd jupyterlite-config
 uv run --with jupyterlite-core --with jupyterlite-pyodide-kernel --with jupyterlab_server \
+  --with jupyterlab-language-pack-ar --with jupyterlab-language-pack-es --with jupyterlab-language-pack-fr \
   jupyter lite build --config jupyter_lite_config.json
+uv run --with jupyterlite-core python patch_config_utils.py _output/config-utils.js
 ```
+
+The language packs localize the interface for the `ar`/`es`/`fr` locales, and `patch_config_utils.py` teases the app to honour the site's per-URL `?locale=` deep-link (each embedded locale renders in its own language).
 
 This step runs automatically in CI (see [`.github/workflows/deploy.yml`](./.github/workflows/deploy.yml)) and its output is merged into the deployed site under `/lite/`.
 
