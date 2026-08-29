@@ -40,13 +40,16 @@ test.describe('Trail inline runnable cells', () => {
     await expect(target).toContainText('Total: $20.00');
   });
 
-  test('cells that wait for input() are blocked instead of hanging', async ({page}) => {
+  test('cells that read input() prompt for a value and keep running', async ({page}) => {
+    test.setTimeout(180_000);
+    page.on('dialog', (dialog) => dialog.accept('Amira'));
     await goto(page, 'docs/python-101/normal/week-1');
 
     const inputCell = page.getByTestId('runnable-cell').filter({hasText: "What's your name?"}).first();
     await inputCell.getByRole('button', {name: 'Run this Python code'}).click();
 
-    await expect(inputCell).toContainText('input()', {timeout: 15_000});
+    const output = inputCell.getByTestId('runnable-cell-output');
+    await expect(output).toContainText('Hello, Amira', {timeout: 120_000});
   });
 
   test('an errored edit surfaces the still-red hints and is recorded', async ({page}) => {
