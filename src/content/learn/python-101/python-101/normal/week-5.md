@@ -27,7 +27,7 @@ Before touching CSVs specifically, one new piece of syntax: `with open(...) as f
 
 ### CSV: rows of comma-separated values
 
-A CSV (comma-separated values) file is a plain-text table — one line per row, values separated by commas. This week's dataset, [`students-normal.csv`](pathname:///datasets/students-normal.csv), has a header row (`name,quiz1,quiz2,quiz3`) followed by one row per student.
+A CSV (comma-separated values) file is a plain-text table — one line per row, values separated by commas. This week's dataset, [`students-normal.csv`](/datasets/students-normal.csv), has a header row (`name,quiz1,quiz2,quiz3`) followed by one row per student.
 
 :::tip[This file is already available in the playground]
 The FAB's playground has `students-normal.csv` pre-loaded — no need to copy/paste anything. `open("students-normal.csv")` in your code below will just find it directly.

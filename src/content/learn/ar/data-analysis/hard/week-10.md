@@ -23,7 +23,7 @@ description: "الأسبوع 10: التسليم النهائي — تقرير ت
 
 ### مجموعة البيانات: أداء الطلاب في الاختبارات
 
-يُعد [`students-performance.csv`](pathname:///datasets/students-performance.csv) ([موثّق هنا](/credits)) من أكثر مجموعات بيانات التحليل الاستكشافي للمبتدئين استخدامًا على Kaggle، ويضم 8 أعمدة: `gender`، `race_ethnicity`، `parental_level_of_education`، `lunch`، `test_preparation_course`، وثلاثة أعمدة نتائج رقمية — `math_score`، `reading_score`، `writing_score`.
+يُعد [`students-performance.csv`](/datasets/students-performance.csv) ([موثّق هنا](/ar/المصادر)) من أكثر مجموعات بيانات التحليل الاستكشافي للمبتدئين استخدامًا على Kaggle، ويضم 8 أعمدة: `gender`، `race_ethnicity`، `parental_level_of_education`، `lunch`، `test_preparation_course`، وثلاثة أعمدة نتائج رقمية — `math_score`، `reading_score`، `writing_score`.
 
 ### التسليم المطلوب
 

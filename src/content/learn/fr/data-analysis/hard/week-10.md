@@ -23,7 +23,7 @@ description: "Livrez un rapport complet d'analyse exploratoire sur le jeu de don
 
 ### Le jeu de données : Students Performance in Exams
 
-[`students-performance.csv`](pathname:///datasets/students-performance.csv) ([crédité ici](/credits)) est l'un des jeux de données d'EDA pour débutants les plus utilisés sur Kaggle, avec 8 colonnes : `gender`, `race_ethnicity`, `parental_level_of_education`, `lunch`, `test_preparation_course`, et trois colonnes de résultat numériques — `math_score`, `reading_score`, `writing_score`.
+[`students-performance.csv`](/datasets/students-performance.csv) ([crédité ici](/fr/credits)) est l'un des jeux de données d'EDA pour débutants les plus utilisés sur Kaggle, avec 8 colonnes : `gender`, `race_ethnicity`, `parental_level_of_education`, `lunch`, `test_preparation_course`, et trois colonnes de résultat numériques — `math_score`, `reading_score`, `writing_score`.
 
 ### Le livrable requis
 

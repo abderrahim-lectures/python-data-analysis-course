@@ -35,7 +35,7 @@ Los modelos reales (incluidos los grandes) estiman esta probabilidad usando enor
 
 ### El corpus
 
-Este track trabaja con [`slm-corpus.csv`](pathname:///datasets/slm-corpus.csv), un pequeño conjunto de oraciones simples escritas a mano, una por fila bajo una columna `sentence`. Un "corpus" es simplemente el conjunto de datos de texto del que aprende un modelo de lenguaje — el nuestro es deliberadamente diminuto (20 oraciones) para que cada paso siga siendo lo bastante rápido de ejecutar e inspeccionar a mano en esta etapa temprana del curso.
+Este track trabaja con [`slm-corpus.csv`](/datasets/slm-corpus.csv), un pequeño conjunto de oraciones simples escritas a mano, una por fila bajo una columna `sentence`. Un "corpus" es simplemente el conjunto de datos de texto del que aprende un modelo de lenguaje — el nuestro es deliberadamente diminuto (20 oraciones) para que cada paso siga siendo lo bastante rápido de ejecutar e inspeccionar a mano en esta etapa temprana del curso.
 
 :::tip[Este archivo ya está disponible en el playground]
 El playground del FAB ya tiene `slm-corpus.csv` precargado — no hace falta copiar ni pegar nada, `load_corpus("slm-corpus.csv")` de abajo lo encontrará directamente.

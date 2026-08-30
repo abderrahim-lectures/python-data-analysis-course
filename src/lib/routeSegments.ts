@@ -10,11 +10,11 @@ export type Locale = 'en' | 'ar' | 'es' | 'fr';
 
 export const LOCALES: Locale[] = ['ar', 'es', 'fr'];
 
-export const NAV_WORDS: Record<Locale, {learn: string; projects: string; progress: string}> = {
-  en: {learn: 'learn', projects: 'projects', progress: 'progress'},
-  ar: {learn: 'تعلم', projects: 'مشاريع', progress: 'تقدم'},
-  es: {learn: 'aprender', projects: 'proyectos', progress: 'progreso'},
-  fr: {learn: 'apprendre', projects: 'projets', progress: 'progression'},
+export const NAV_WORDS: Record<Locale, {learn: string; projects: string; progress: string; credits: string}> = {
+  en: {learn: 'learn', projects: 'projects', progress: 'progress', credits: 'credits'},
+  ar: {learn: 'تعلم', projects: 'مشاريع', progress: 'تقدم', credits: 'المصادر'},
+  es: {learn: 'aprender', projects: 'proyectos', progress: 'progreso', credits: 'creditos'},
+  fr: {learn: 'apprendre', projects: 'projets', progress: 'progression', credits: 'credits'},
 };
 
 export const TRACK_WORDS: Record<Locale, {normal: string; hard: string}> = {
@@ -53,4 +53,9 @@ export function progressHref(locale: Locale, base: string): string {
 
 export function weekHref(locale: Locale, base: string, section: string, track: 'normal' | 'hard', week: number): string {
   return learnHref(locale, base, section, TRACK_WORDS[locale][track], `week-${week}`);
+}
+
+/** `/credits`, `/ar/المصادر`, ... */
+export function creditsHref(locale: Locale, base: string): string {
+  return `${localeBase(locale, base)}${NAV_WORDS[locale].credits}`;
 }

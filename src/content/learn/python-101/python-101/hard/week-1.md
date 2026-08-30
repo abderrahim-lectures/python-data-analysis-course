@@ -38,7 +38,7 @@ Why does *counting* let you estimate a probability at all? Because probability i
 
 ### The corpus
 
-This track works with [`slm-corpus.csv`](pathname:///datasets/slm-corpus.csv), a small hand-written set of simple sentences, one per row under a `sentence` column. A "corpus" is just the dataset of text a language model learns from — ours is deliberately tiny (20 sentences) so every step stays fast enough to run and inspect by hand this early in the course.
+This track works with [`slm-corpus.csv`](/datasets/slm-corpus.csv), a small hand-written set of simple sentences, one per row under a `sentence` column. A "corpus" is just the dataset of text a language model learns from — ours is deliberately tiny (20 sentences) so every step stays fast enough to run and inspect by hand this early in the course.
 
 :::tip[This file is already available in the playground]
 The FAB's playground has `slm-corpus.csv` pre-loaded — no need to copy/paste anything, `load_corpus("slm-corpus.csv")` below will just find it directly.

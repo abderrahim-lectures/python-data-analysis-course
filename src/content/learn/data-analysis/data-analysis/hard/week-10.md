@@ -22,7 +22,7 @@ By the end of this week you can:
 
 ### The dataset: Students Performance in Exams
 
-[`students-performance.csv`](pathname:///datasets/students-performance.csv) ([credited here](/credits)) is one of Kaggle's most-used beginner EDA datasets, with 8 columns: `gender`, `race_ethnicity`, `parental_level_of_education`, `lunch`, `test_preparation_course`, and three numeric outcome columns — `math_score`, `reading_score`, `writing_score`.
+[`students-performance.csv`](/datasets/students-performance.csv) ([credited here](/credits)) is one of Kaggle's most-used beginner EDA datasets, with 8 columns: `gender`, `race_ethnicity`, `parental_level_of_education`, `lunch`, `test_preparation_course`, and three numeric outcome columns — `math_score`, `reading_score`, `writing_score`.
 
 ### The required deliverable
 

@@ -23,7 +23,7 @@ Al final de esta semana podrás:
 
 ### El dataset: Students Performance in Exams
 
-[`students-performance.csv`](pathname:///datasets/students-performance.csv) ([créditos aquí](/credits)) es uno de los datasets de EDA para principiantes más usados de Kaggle, con 8 columnas: `gender`, `race_ethnicity`, `parental_level_of_education`, `lunch`, `test_preparation_course`, y tres columnas de resultado numéricas — `math_score`, `reading_score`, `writing_score`.
+[`students-performance.csv`](/datasets/students-performance.csv) ([créditos aquí](/es/creditos)) es uno de los datasets de EDA para principiantes más usados de Kaggle, con 8 columnas: `gender`, `race_ethnicity`, `parental_level_of_education`, `lunch`, `test_preparation_course`, y tres columnas de resultado numéricas — `math_score`, `reading_score`, `writing_score`.
 
 ### El entregable requerido
 

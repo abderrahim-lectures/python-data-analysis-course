@@ -35,7 +35,7 @@ Pourquoi le *comptage* permet-il d'estimer une probabilité ? Parce que la proba
 
 ### Le corpus
 
-Ce parcours utilise [`slm-corpus.csv`](pathname:///datasets/slm-corpus.csv), un petit ensemble de phrases simples écrites à la main, une par ligne sous une colonne `sentence`. Un « corpus » est simplement le jeu de données textuel à partir duquel un modèle de langage apprend — le nôtre est délibérément minuscule (20 phrases) pour que chaque étape reste assez rapide à exécuter et à inspecter à la main, à ce stade précoce du cours.
+Ce parcours utilise [`slm-corpus.csv`](/datasets/slm-corpus.csv), un petit ensemble de phrases simples écrites à la main, une par ligne sous une colonne `sentence`. Un « corpus » est simplement le jeu de données textuel à partir duquel un modèle de langage apprend — le nôtre est délibérément minuscule (20 phrases) pour que chaque étape reste assez rapide à exécuter et à inspecter à la main, à ce stade précoce du cours.
 
 :::tip[Ce fichier est déjà disponible dans le bac à sable]
 Le bac à sable du FAB a déjà `slm-corpus.csv` préchargé — pas besoin de copier-coller quoi que ce soit, `load_corpus("slm-corpus.csv")` ci-dessous le trouvera directement.

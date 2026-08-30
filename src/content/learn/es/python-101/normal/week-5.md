@@ -28,7 +28,7 @@ Antes de tocar CSV específicamente, una nueva pieza de sintaxis: `with open(...
 
 ### CSV: filas de valores separados por comas
 
-Un archivo CSV (comma-separated values, valores separados por comas) es una tabla de texto plano — una línea por fila, valores separados por comas. El conjunto de datos de esta semana, [`students-normal.csv`](pathname:///datasets/students-normal.csv), tiene una fila de encabezado (`name,quiz1,quiz2,quiz3`) seguida de una fila por estudiante.
+Un archivo CSV (comma-separated values, valores separados por comas) es una tabla de texto plano — una línea por fila, valores separados por comas. El conjunto de datos de esta semana, [`students-normal.csv`](/datasets/students-normal.csv), tiene una fila de encabezado (`name,quiz1,quiz2,quiz3`) seguida de una fila por estudiante.
 
 :::tip[Este archivo ya está disponible en el playground]
 El playground del FAB ya tiene `students-normal.csv` precargado — no hace falta copiar ni pegar nada. `open("students-normal.csv")` en tu código de abajo lo encontrará directamente.

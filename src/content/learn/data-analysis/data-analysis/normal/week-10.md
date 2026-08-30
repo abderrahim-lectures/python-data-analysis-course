@@ -13,7 +13,7 @@ description: "Reproduce a classic Titanic exploratory data analysis notebook end
 ## 🎯 Learning objectives
 
 By the end of this week you can:
-- Load and clean a real-shaped dataset ([`titanic.csv`](pathname:///datasets/titanic.csv)) end to end.
+- Load and clean a real-shaped dataset ([`titanic.csv`](/datasets/titanic.csv)) end to end.
 - Answer concrete analytical questions using selection, filtering, and `.groupby()` together.
 - Bucket a continuous column into ranges with `pd.cut` for grouped analysis.
 - Reproduce the structure of a classic Kaggle-style EDA notebook, one cell at a time, and summarize findings in plain English.

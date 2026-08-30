@@ -14,14 +14,14 @@ description: "Reproduce de principio a fin un cuaderno clásico de análisis exp
 ## 🎯 Objetivos de aprendizaje
 
 Al final de esta semana podrás:
-- Cargar y limpiar un dataset con forma real ([`titanic.csv`](pathname:///datasets/titanic.csv)) de principio a fin.
+- Cargar y limpiar un dataset con forma real ([`titanic.csv`](/datasets/titanic.csv)) de principio a fin.
 - Responder preguntas analíticas concretas usando selección, filtrado y `.groupby()` juntos.
 - Agrupar en categorías (bucketing) una columna continua en rangos con `pd.cut` para análisis agrupado.
 - Reproducir la estructura de un notebook de EDA clásico al estilo Kaggle, una celda a la vez, y resumir hallazgos en español llano.
 
 ## Lección
 
-Esta semana es deliberadamente menos "concepto nuevo, sintaxis nueva" y más "aplica todo, en secuencia, sobre un dataset". El dataset del Titanic ([créditos aquí](/credits)) se ha convertido en un punto de referencia estándar para principiantes exactamente por esta razón: es pequeño, tiene una columna de resultado clara (`Survived`), y tiene suficiente textura desordenada del mundo real (edades faltantes, tipos mixtos) para necesitar cada herramienta de esta sección.
+Esta semana es deliberadamente menos "concepto nuevo, sintaxis nueva" y más "aplica todo, en secuencia, sobre un dataset". El dataset del Titanic ([créditos aquí](/es/creditos)) se ha convertido en un punto de referencia estándar para principiantes exactamente por esta razón: es pequeño, tiene una columna de resultado clara (`Survived`), y tiene suficiente textura desordenada del mundo real (edades faltantes, tipos mixtos) para necesitar cada herramienta de esta sección.
 
 ### Paso 1: Cargar e inspeccionar
 

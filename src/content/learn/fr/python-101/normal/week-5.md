@@ -28,7 +28,7 @@ Avant d'aborder les CSV spécifiquement, une nouvelle syntaxe : `with open(...) 
 
 ### CSV : des lignes de valeurs séparées par des virgules
 
-Un fichier CSV (comma-separated values, valeurs séparées par des virgules) est un tableau en texte brut — une ligne par enregistrement, les valeurs séparées par des virgules. Le jeu de données de cette semaine, [`students-normal.csv`](pathname:///datasets/students-normal.csv), a une ligne d'en-tête (`name,quiz1,quiz2,quiz3`) suivie d'une ligne par étudiant.
+Un fichier CSV (comma-separated values, valeurs séparées par des virgules) est un tableau en texte brut — une ligne par enregistrement, les valeurs séparées par des virgules. Le jeu de données de cette semaine, [`students-normal.csv`](/datasets/students-normal.csv), a une ligne d'en-tête (`name,quiz1,quiz2,quiz3`) suivie d'une ligne par étudiant.
 
 :::tip[Ce fichier est déjà disponible dans le bac à sable]
 Le bac à sable du bouton flottant (FAB) a déjà `students-normal.csv` préchargé — pas besoin de copier-coller quoi que ce soit. `open("students-normal.csv")` dans votre code ci-dessous le trouvera directement.

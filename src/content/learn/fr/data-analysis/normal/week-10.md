@@ -14,14 +14,14 @@ description: "Reproduisez de bout en bout un notebook classique d'analyse explor
 ## 🎯 Objectifs d'apprentissage
 
 À la fin de cette semaine vous serez capable de :
-- Charger et nettoyer un jeu de données de forme réaliste ([`titanic.csv`](pathname:///datasets/titanic.csv)) de bout en bout.
+- Charger et nettoyer un jeu de données de forme réaliste ([`titanic.csv`](/datasets/titanic.csv)) de bout en bout.
 - Répondre à des questions analytiques concrètes en utilisant sélection, filtrage, et `.groupby()` ensemble.
 - Découper une colonne continue en tranches avec `pd.cut` pour une analyse groupée.
 - Reproduire la structure d'un notebook d'EDA classique de style Kaggle, cellule par cellule, et résumer les constats en langage clair.
 
 ## Leçon
 
-Cette semaine est délibérément moins « nouveau concept, nouvelle syntaxe » et davantage « appliquer tout, en séquence, sur un jeu de données ». Le jeu de données Titanic ([crédité ici](/credits)) est devenu une référence standard pour débutants exactement pour cette raison : il est petit, a une colonne de résultat claire (`Survived`), et a assez de texture réaliste et désordonnée (âges manquants, types mixtes) pour nécessiter chaque outil de cette section.
+Cette semaine est délibérément moins « nouveau concept, nouvelle syntaxe » et davantage « appliquer tout, en séquence, sur un jeu de données ». Le jeu de données Titanic ([crédité ici](/fr/credits)) est devenu une référence standard pour débutants exactement pour cette raison : il est petit, a une colonne de résultat claire (`Survived`), et a assez de texture réaliste et désordonnée (âges manquants, types mixtes) pour nécessiter chaque outil de cette section.
 
 ### Étape 1 : Charger et inspecter
 
