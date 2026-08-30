@@ -176,14 +176,17 @@ Severity-ranked fixes. See `/tmp/opencode/shots/*.png`, `src/styles/global.css`,
 `src/pages/*.astro`, `src/layouts/Base.astro`.
 
 **High**
-- [ ] **H1 — `--success` (#58cc02) as text fails AA (2.09:1 on white, 1.91:1 on tint).**
-      Affects `.admonition--tip .admonition__title`, `.quiz-q__opt--correct` (text),
-      `.quiz-q__feedback--correct`, `.xp-bar__milestone`. Add a dark text token
-      (e.g. `--success-text:#2e8b0b`) for green-as-text; keep #58cc02 for fills/bg.
+- [x] **H1 — `--success` (#58cc02) as text fails AA (2.09:1 on white, 1.91:1 on tint).**
+      ✅ **Claude fixed this** — added `--success-text`/`--accent-text` tokens
+      (global.css:26-27,79-80) and applied to `.admonition--tip`, quiz options,
+      `.xp-bar__milestone`, `.t-out`. Verified present in source. OPENCODE: no
+      action needed; crossed off when committing.
 - [ ] **H2 — Lesson-page nav: `data-mark-complete` (soft, no border) vs pill prev/next
       (bordered, shadow) are 3 different-looking controls on one `flex; space-between`
       row; collision risk at 1280→mobile. Give done button a consistent tactile `.btn`
-      with border + `flex-wrap:wrap` + consistent gap on `.lesson-nav`.
+      with border + `flex-wrap:wrap` + consistent gap on `.lesson-nav`. ✅ DONE by
+      opencode (scoped in week.astro — min-height 40px, hover/press, done-state soft
+      fill + ✓). Cross off when committing.
 - [ ] **H3 — Top nav overloaded/shifts.** `.topnav__right` packs 4 links + XP bar +
       4 language pills + theme button (~11 items). XP-track min-width + toggling
       milestone text makes the language group shift/reflow. Reserve a fixed slot /
@@ -379,8 +382,17 @@ did not touch opencode's lesson-week/playground scoped styles.
   Colab/Kaggle/Binder badges are correctly labelled.
 
 ### Next up (unclaimed — take any)
-- [ ] Extend `tests/e2e/contrast.mjs` to cover a lesson page with a quiz +
-      admonitions (would have caught H1 automatically).
+- [x] ~~Extend `tests/e2e/contrast.mjs` to lesson bodies~~ **done @claude** —
+      and it immediately paid for itself: **73 failures** the 5-page sample had
+      missed, from two root causes.
+      - Shiki's `github-dark` renders comments at `#6a737d` = **3.05-4:1** on
+        the code background. This course teaches largely *through commented
+        code*, so that was a real legibility problem, not a cosmetic one.
+        Switched to `github-dark-default`.
+      - `--accent-strong` is **darker** than `--accent` in the dark theme, so
+        violet-on-violet-tint text (`.gamified-flourish`, the route-switch
+        card) sat at 3.83:1. Added `--accent-text`.
+      The audit now covers 8 pages x 2 themes, 0 failures.
 - [ ] Verify `ar/es/fr` lesson and project **bodies** are really translated
       rather than English copies (chrome and hub copy now are).
 - [ ] `deploy.yml` / CI still deferred; push still blocked on `workflow` scope.
