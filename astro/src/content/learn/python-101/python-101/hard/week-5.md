@@ -136,41 +136,71 @@ Every extra sentence in the corpus adds a roughly constant amount of work: token
 
 ## 🧩 Challenges
 
-<div class="challenge">Wrap the CLI's <code>generate_text</code> call in a loop reading <code>input("Start word: ")</code>, and use <code>input("Max words: ")</code> converted with <code>int(...)</code> — the same input-then-convert pattern from Python 101 Normal Week 1, now feeding a generation pipeline instead of a simple calculation.</>}>
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Extend the `if __name__ == "__main__":` block so it asks the user (via `input()`) for a start word and a max word count, instead of hardcoding them.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Wrap the CLI's <code>generate_text</code> call in a loop reading <code>input("Start word: ")</code>, and use <code>input("Max words: ")</code> converted with <code>int(...)</code> — the same input-then-convert pattern from Python 101 Normal Week 1, now feeding a generation pipeline instead of a simple calculation.</p>
 
-<div class="challenge">Call <code>generate_text</code> (using the temperature-aware <code>sample_next</code>) three times each at <code>temperature=0.5</code> and <code>temperature=2.0</code> with the same start word, and compare: the low-temperature runs should look more repetitive/predictable, the high-temperature runs more erratic.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Generate text at `temperature=0.5` and `temperature=2.0` with the same start word, several times each. Describe the qualitative difference you observe.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Call <code>generate_text</code> (using the temperature-aware <code>sample_next</code>) three times each at <code>temperature=0.5</code> and <code>temperature=2.0</code> with the same start word, and compare: the low-temperature runs should look more repetitive/predictable, the high-temperature runs more erratic.</p>
 
-<div class="challenge">Time <code>build_bigram_probabilities</code> at a few different corpus-repeat multipliers (e.g. 1x, 50x, 200x, 1000x) and print the elapsed time for each — the growth should look roughly linear (or worse) in the number of word occurrences, since every occurrence triggers dict operations.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Time `build_bigram_probabilities` at increasing corpus sizes (`corpus * 1`, `* 50`, `* 200`, `* 1000`) and print a small table of size vs. elapsed time. Does the growth look linear, or worse than linear?
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Time <code>build_bigram_probabilities</code> at a few different corpus-repeat multipliers (e.g. 1x, 50x, 200x, 1000x) and print the elapsed time for each — the growth should look roughly linear (or worse) in the number of word occurrences, since every occurrence triggers dict operations.</p>
 
-<div class="challenge">At temperature exactly 1.0, <code>apply_temperature</code> raises every probability to the power <code>1/1 = 1</code>, i.e. leaves them unchanged, then renormalizes by dividing by their (already-1) sum — so it's mathematically a no-op, which is exactly why <code>sample_next</code> special-cases <code>temperature != 1.0</code> to skip the (redundant) computation entirely.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Why does `sample_next` special-case `temperature != 1.0` instead of always calling `apply_temperature`? What does `apply_temperature` actually compute when `temperature == 1.0`?
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> At temperature exactly 1.0, <code>apply_temperature</code> raises every probability to the power <code>1/1 = 1</code>, i.e. leaves them unchanged, then renormalizes by dividing by their (already-1) sum — so it's mathematically a no-op, which is exactly why <code>sample_next</code> special-cases <code>temperature != 1.0</code> to skip the (redundant) computation entirely.</p>
 
-<div class="challenge">Divide the elapsed time at 1000x by the elapsed time at 50x, and separately divide 1000 by 50 (=20). If the algorithm is truly linear, the time ratio should be roughly close to 20 too -- confirming that 20x more sentences takes roughly 20x longer, not 400x (quadratic) or barely any longer (constant).</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Using your Challenge 3 timings, compute the *ratio* of time at `1000x` to time at `50x`. Compare that ratio to the ratio of corpus sizes (`1000/50 = 20`). Does the time ratio roughly match, confirming linear scaling?
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Divide the elapsed time at 1000x by the elapsed time at 50x, and separately divide 1000 by 50 (=20). If the algorithm is truly linear, the time ratio should be roughly close to 20 too -- confirming that 20x more sentences takes roughly 20x longer, not 400x (quadratic) or barely any longer (constant).</p>
 
-<div class="challenge">Write generate_batch(probs_table, start_word, temperatures, max_words=10) that loops over the temperatures list, calling generate_text (or the temperature-aware version) once per value and collecting results in a list, e.g. [generate_text(...) for t in temperatures] with sample_next's temperature parameter threaded through.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Write a function `generate_batch(probs_table, start_word, temperatures, max_words=10)` that generates one sentence per temperature value in a given list (e.g. `[0.5, 1.0, 1.5, 2.0]`) and returns all of them together, so you can compare the effect of temperature side by side in one call.
 
+<p class="challenge__answer">💡 <strong>Answer:</strong> Write generate_batch(probs_table, start_word, temperatures, max_words=10) that loops over the temperatures list, calling generate_text (or the temperature-aware version) once per value and collecting results in a list, e.g. [generate_text(...) for t in temperatures] with sample_next's temperature parameter threaded through.</p>
+
 </div>
+</details>
 
 ## 🤔 Socratic Questions
 
@@ -183,7 +213,8 @@ Write a function `generate_batch(probs_table, start_word, temperatures, max_word
 
 ## 🎁 Bonus: packaging the model as a class
 
-<BonusContent weekId="python-101-hard-week-5">
+<div class="bonus">
+
 
 Every function this track wrote takes a `probs_table` as an explicit argument, passed around from function to function. A `class` lets you bundle the table and the functions that operate on it into one object:
 
@@ -202,7 +233,8 @@ model.generate("the")
 
 This isn't part of the core curriculum — the whole track was deliberately solvable with functions and dicts, to keep focus on the *ideas* (counting, conditional probability, sampling) rather than object-oriented design. But now that you've felt where plain functions get unwieldy (passing `probs_table` into every single call), you're in a good position to appreciate what a class buys you. Try wrapping this week's full pipeline as a `BigramModel` class, then compare: does it feel cleaner, or just different?
 
-</BonusContent>
+
+</div>
 
 ---
 

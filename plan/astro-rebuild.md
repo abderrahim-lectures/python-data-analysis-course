@@ -183,6 +183,62 @@ do not build it until asked. Push all work-in-progress to the current branch
      Fixed the stack to `ui-monospace, 'SFMono-Regular', 'SF Mono', Menlo,
      Consolas, 'Liberation Mono', 'Fira Code', monospace`.
 
+- **Syntax highlighting restored in runnable cells** — the earlier fix
+  replaced Shiki's highlighted `<code>` children with a flattened plain-text
+  node (needed to fix the invisible-text font bug), which lost per-token
+  color. `rehype-runnable-python.mjs` now keeps Shiki's highlighted spans and
+  only strips the `<pre>`'s own inline background/class, so `.cell__code`'s
+  background wins while token colors survive — `textContent` still
+  reconstructs the plain source fine for the Pyodide runner even through
+  nested spans. Also refactored both custom plugins to build hast nodes with
+  `hastscript` (`h(...)`) instead of hand-written object literals — install:
+  `hastscript`.
+- **Tables**: added `.lesson-content table` styling (100% width,
+  `border-collapse`, striped rows, horizontal scroll on mobile) — there was
+  none before; markdown tables rendered as plain unstyled browser default.
+- **Cleaned up real leftover Docusaurus/MDX JSX debris in content** — not
+  cosmetic-only, this was literally malformed markup rendering broken text
+  in the browser (e.g. a stray `}>` after each challenge's answer). Found by
+  actually reading rendered lesson/project pages, not by `astro build`
+  (which stayed green through all of this). Three one-time content-migration
+  scripts (run once, not part of the build):
+  - **Challenge blocks** (120 across 20 lesson files): source was
+    `<div class="challenge">answer text</>}>` + blank line + question
+    paragraph + blank line + `</div>` — a mangled leftover of the original
+    `<Challenge answer={<>...</>}>question</Challenge>` JSX. Converted to
+    `<details class="challenge"><summary>🧩 Challenge — think first, then
+    reveal</summary><div class="challenge__body">QUESTION<p
+    class="challenge__answer">💡 <strong>Answer:</strong> ANSWER</p></div></details>`
+    — a native, no-JS collapsible reveal. Styled in global.css.
+  - **Bonus content** (4 blocks, `<BonusContent weekId="...">...</BonusContent>`):
+    unwrapped to a styled `<div class="bonus">`.
+  - **Project step checklists** (339 items across 27 project files,
+    `<StepChecklist><StepChecklistItem>...</StepChecklistItem>...</StepChecklist>`
+    plus a leftover `import {StepChecklist, ...} from '@site/...'` line):
+    converted to plain markdown bullet lists (`- ✅ item`) rather than raw
+    HTML `<li>` tags — **important gotcha**: CommonMark treats a line
+    starting with `<li`/`<ul`/`<div`/`<p` etc. as a raw HTML block and does
+    **not** process inline markdown (backticks, `*emphasis*`) inside it, so
+    emitting raw `<li>` tags would have silently broken every inline code
+    span in every checklist item. Real markdown list syntax doesn't have
+    this problem and was used instead.
+  - **Not yet fixed**: `## ✅ Weekly quiz` headings in every lesson have no
+    quiz content — the original `<WeeklyQuiz questions={[...]}>` JSX and its
+    question data were already gone by the time this session started (lost
+    in an earlier, undocumented porting pass), not something these scripts
+    could recover. Needs sourcing quiz questions from somewhere (git history
+    of `docs/` pre-Astro-migration, or the i18n copies, might still have
+    them — check before assuming they need to be written from scratch).
+  - These scripts touched only `src/content/**` (EN content). **The same
+    JSX debris almost certainly exists in the untouched `i18n/{ar,es,fr}/`
+    source docs** — rerun equivalent fixes when porting those locales
+    (gap #1 below), don't assume the translated source is clean just
+    because the English copy now is.
+- **Projects grid**: added a 🌍 icon and an "Optional · ungraded" badge to
+  each card (`src/pages/projects/index.astro`) to match the rest of the
+  site's gamified visual language — previously just title + description,
+  visually flat compared to the Learn cards.
+
 ### Known gaps / next steps
 
 1. **i18n content**: only EN lesson content exists in `src/content/learn`.

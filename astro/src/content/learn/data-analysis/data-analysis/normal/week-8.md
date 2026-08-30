@@ -107,41 +107,71 @@ This is genuinely just Python 101's functions again — `grade_letter` is an ord
 
 ## 🧩 Challenges
 
-<div class="challenge"><code>df.isna().sum()</code> — one number per column, the count of missing (NaN) values in that column.</>}>
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Load `students-normal.csv` and print how many missing values each column has.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>df.isna().sum()</code> — one number per column, the count of missing (NaN) values in that column.</p>
 
-<div class="challenge">Introduce a NaN manually first (e.g. <code>df.loc[0, "quiz1"] = None</code>), then compare <code>df.dropna(subset=["quiz1"])</code> (fewer rows) against <code>df["quiz1"].fillna(df["quiz1"].mean())</code> (same row count, missing value replaced) to see the row-count difference directly.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Manually set one `quiz1` value to missing (e.g. `df.loc[0, "quiz1"] = None`), then compare the resulting row count after `.dropna(subset=["quiz1"])` versus after `.fillna(df["quiz1"].mean())`.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Introduce a NaN manually first (e.g. <code>df.loc[0, "quiz1"] = None</code>), then compare <code>df.dropna(subset=["quiz1"])</code> (fewer rows) against <code>df["quiz1"].fillna(df["quiz1"].mean())</code> (same row count, missing value replaced) to see the row-count difference directly.</p>
 
-<div class="challenge"><code>df["name"].str.lower()</code> converts the whole column to lowercase in one call, vectorized — equivalent to looping and calling <code>.lower()</code> on each name individually, but without writing the loop.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Lowercase every value in the `name` column using `.str`, without writing a manual loop.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>df["name"].str.lower()</code> converts the whole column to lowercase in one call, vectorized — equivalent to looping and calling <code>.lower()</code> on each name individually, but without writing the loop.</p>
 
-<div class="challenge"><code>df["name"].str.contains("a")</code> returns a boolean mask; wrap it in <code>df[...]</code> to get only the matching rows, or call <code>.sum()</code> on the mask to just count them.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Using `.str.contains(...)`, find how many students have the letter "a" anywhere in their name.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>df["name"].str.contains("a")</code> returns a boolean mask; wrap it in <code>df[...]</code> to get only the matching rows, or call <code>.sum()</code> on the mask to just count them.</p>
 
-<div class="challenge">Duplicate a row first (e.g. pd.concat([df, df.iloc[[0]]])), then run .duplicated().sum() to confirm at least one duplicate is detected, and .drop_duplicates() to remove it, checking df.shape before and after to confirm the row count dropped by one.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Manually duplicate one row of the DataFrame (append a copy of an existing row), confirm `.duplicated()` catches it, then remove it with `.drop_duplicates()`.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Duplicate a row first (e.g. pd.concat([df, df.iloc[[0]]])), then run .duplicated().sum() to confirm at least one duplicate is detected, and .drop_duplicates() to remove it, checking df.shape before and after to confirm the row count dropped by one.</p>
 
-<div class="challenge">Write a function like grade_letter that returns "Pass" if the score is &gt;= 60 and "Fail" otherwise, then apply it: df["quiz1_result"] = df["quiz1"].apply(pass_fail).</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Write your own function that takes a score and returns `"Pass"` or `"Fail"` based on a 60% threshold, then use `.apply()` to add a new `quiz1_result` column built from it.
 
+<p class="challenge__answer">💡 <strong>Answer:</strong> Write a function like grade_letter that returns "Pass" if the score is &gt;= 60 and "Fail" otherwise, then apply it: df["quiz1_result"] = df["quiz1"].apply(pass_fail).</p>
+
 </div>
+</details>
 
 ## 🤔 Socratic Questions
 

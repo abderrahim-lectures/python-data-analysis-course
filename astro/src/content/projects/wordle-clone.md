@@ -4,8 +4,6 @@ slug: /projects/wordle-clone
 description: "Build a real terminal Wordle game from scratch: correct green/yellow/gray guess feedback (including the classic repeated-letter bug), a custom word list, and persistent stats tracking across sessions."
 ---
 
-import {StepChecklist, StepChecklistItem} from '@site/src/components/StepChecklist';
-
 # 🌍 Build a Wordle Clone
 
 This project only assumes Python 101-level basics — functions, lists, dictionaries, loops, reading and writing a file. No pandas, no API key, no GPU, no external service of any kind — just a terminal, a word list, and some logic that's trickier to get right than it looks. That makes this a great *earlier* Real-World Project to try, even before some of the pandas- or AI-flavored ones: everything you need is stuff Python 101 already gave you, applied to something genuinely fun to play afterward.
@@ -128,12 +126,10 @@ One `E` (position 0) is yellow, the other (position 3) is also yellow because `E
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`score_guess("CRANE", "CRANE")` returns all greens.</StepChecklistItem>
-<StepChecklistItem>`score_guess("SPEED", "ERASE")` returns exactly two yellow `E`s, not more.</StepChecklistItem>
-<StepChecklistItem>A guess and target that share zero letters returns all grays.</StepChecklistItem>
-<StepChecklistItem>You've tried a case where the *guess* repeats a letter but the target only has one copy, and confirmed only one mark comes back non-gray.</StepChecklistItem>
-</StepChecklist>
+- ✅ `score_guess("CRANE", "CRANE")` returns all greens.
+- ✅ `score_guess("SPEED", "ERASE")` returns exactly two yellow `E`s, not more.
+- ✅ A guess and target that share zero letters returns all grays.
+- ✅ You've tried a case where the *guess* repeats a letter but the target only has one copy, and confirmed only one mark comes back non-gray.
 
 **🤔 Socratic Question(s)**
 
@@ -169,11 +165,9 @@ def play_round(words: list[str]) -> tuple[bool, int]:
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>Each round picks a genuinely random target from the word list (print it temporarily to confirm, then remove the print — no spoilers once you trust it).</StepChecklistItem>
-<StepChecklistItem>The loop stops immediately once all five marks are green, even before 6 guesses are used.</StepChecklistItem>
-<StepChecklistItem>After exactly 6 wrong guesses, the loop ends and reveals the target.</StepChecklistItem>
-</StepChecklist>
+- ✅ Each round picks a genuinely random target from the word list (print it temporarily to confirm, then remove the print — no spoilers once you trust it).
+- ✅ The loop stops immediately once all five marks are green, even before 6 guesses are used.
+- ✅ After exactly 6 wrong guesses, the loop ends and reveals the target.
 
 **🤔 Socratic Question(s)**
 
@@ -204,11 +198,9 @@ Validating the guess's *shape* (5 letters, alphabetic) before checking the word 
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>Guessing a non-word (e.g. `"ZZZZZ"`) prints a clear rejection message and re-prompts, without consuming one of the 6 tries.</StepChecklistItem>
-<StepChecklistItem>Guessing something that isn't 5 letters (too short, too long, contains a digit) is also rejected before it ever reaches the word-list check.</StepChecklistItem>
-<StepChecklistItem>A valid, in-list guess is accepted immediately, lowercase or uppercase.</StepChecklistItem>
-</StepChecklist>
+- ✅ Guessing a non-word (e.g. `"ZZZZZ"`) prints a clear rejection message and re-prompts, without consuming one of the 6 tries.
+- ✅ Guessing something that isn't 5 letters (too short, too long, contains a digit) is also rejected before it ever reaches the word-list check.
+- ✅ A valid, in-list guess is accepted immediately, lowercase or uppercase.
 
 **🤔 Socratic Question(s)**
 
@@ -278,12 +270,10 @@ Calling `save_stats(stats)` right after `record_result`, every round, means an i
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>Quitting the program and restarting it shows the same `played`/`wins`/streak numbers as before you quit, loaded from `stats.json`.</StepChecklistItem>
-<StepChecklistItem>Winning in, say, 3 guesses increments `guess_distribution["3"]` specifically, not some other key.</StepChecklistItem>
-<StepChecklistItem>Losing a round resets `current_streak` to 0 but does not touch `guess_distribution` or `max_streak`.</StepChecklistItem>
-<StepChecklistItem>Deleting `stats.json` and rerunning the program doesn't crash — it starts a fresh, zeroed stats file instead.</StepChecklistItem>
-</StepChecklist>
+- ✅ Quitting the program and restarting it shows the same `played`/`wins`/streak numbers as before you quit, loaded from `stats.json`.
+- ✅ Winning in, say, 3 guesses increments `guess_distribution["3"]` specifically, not some other key.
+- ✅ Losing a round resets `current_streak` to 0 but does not touch `guess_distribution` or `max_streak`.
+- ✅ Deleting `stats.json` and rerunning the program doesn't crash — it starts a fresh, zeroed stats file instead.
 
 **🤔 Socratic Question(s)**
 

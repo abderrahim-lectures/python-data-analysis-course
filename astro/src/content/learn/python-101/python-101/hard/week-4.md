@@ -104,41 +104,71 @@ for sentence in generate_many(probs_table, "the", n=5):
 
 ## 🧩 Challenges
 
-<div class="challenge">Call <code>generate_text(probs_table, "the")</code> five times in a row and print each result — since sampling is random, you should see at least some different sentences even with the exact same starting word.</>}>
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Call `generate_text` five times with the same `start_word`. Are the outputs identical? Why or why not?
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Call <code>generate_text(probs_table, "the")</code> five times in a row and print each result — since sampling is random, you should see at least some different sentences even with the exact same starting word.</p>
 
-<div class="challenge">Pick a word that never starts a bigram in the corpus (e.g. a word that only ever appears as the last word of a sentence) as <code>start_word</code>; <code>sample_next</code> will immediately return <code>None</code> since that word isn't a key in <code>probs_table</code>, so <code>generate_text</code> returns just that one seed word.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Call `generate_text` with a `start_word` that never appears as the *first* word of a bigram anywhere in the corpus (you found candidates for this in last week's Challenge 3). What happens, and why?
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Pick a word that never starts a bigram in the corpus (e.g. a word that only ever appears as the last word of a sentence) as <code>start_word</code>; <code>sample_next</code> will immediately return <code>None</code> since that word isn't a key in <code>probs_table</code>, so <code>generate_text</code> returns just that one seed word.</p>
 
-<div class="challenge">Add a check: if <code>next_word == current</code> repeatedly (e.g. track the last few words in a small list/deque and break if the same word repeats more than, say, 3 times in a row), stop generation early. This won't happen often on this small corpus, but it's a real failure mode of naive sampling loops on larger ones.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Modify `generate_text` so it stops early if the same word gets picked 3 times in a row (a simple guard against repetitive loops). Under what corpus conditions do you think this could actually happen?
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Add a check: if <code>next_word == current</code> repeatedly (e.g. track the last few words in a small list/deque and break if the same word repeats more than, say, 3 times in a row), stop generation early. This won't happen often on this small corpus, but it's a real failure mode of naive sampling loops on larger ones.</p>
 
-<div class="challenge">Change <code>sample_next</code> to pick <code>max(probs_table[word], key=lambda w: probs_table[word][w])</code> instead of <code>random.choices</code> — this is the "greedy" strategy from the lesson. Calling <code>generate_text</code> repeatedly with the same start word will now always produce the exact same sentence.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Write a `sample_next_greedy(word, probs_table)` that always picks the single *most likely* next word instead of sampling randomly. Run `generate_text` (using this greedy version) five times with the same start word — what do you notice?
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Change <code>sample_next</code> to pick <code>max(probs_table[word], key=lambda w: probs_table[word][w])</code> instead of <code>random.choices</code> — this is the "greedy" strategy from the lesson. Calling <code>generate_text</code> repeatedly with the same start word will now always produce the exact same sentence.</p>
 
-<div class="challenge">Call random.seed(1), then generate_text(...), then random.seed(1) again, then generate_text(...) with the same arguments -- the two outputs should be identical, since resetting to the same seed replays the exact same sequence of "random" choices.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Call `random.seed(1)` before generating a sentence, note the result, then call `random.seed(1)` again before generating another sentence with the same arguments. Are the two results identical? Why?
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Call random.seed(1), then generate_text(...), then random.seed(1) again, then generate_text(...) with the same arguments -- the two outputs should be identical, since resetting to the same seed replays the exact same sequence of "random" choices.</p>
 
-<div class="challenge">Use generate_many to produce, say, 20 sentences, then pick the one with the most words (using max(..., key=len) on the split sentences, or comparing len(sentence.split())) as a simple proxy for "most developed" output.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Using `generate_many`, generate 20 candidate sentences from the same start word, then print whichever one is *longest* (has the most words).
 
+<p class="challenge__answer">💡 <strong>Answer:</strong> Use generate_many to produce, say, 20 sentences, then pick the one with the most words (using max(..., key=len) on the split sentences, or comparing len(sentence.split())) as a simple proxy for "most developed" output.</p>
+
 </div>
+</details>
 
 ## 🤔 Socratic Questions
 
@@ -151,7 +181,8 @@ Using `generate_many`, generate 20 candidate sentences from the same start word,
 
 ## 🎁 Bonus: error handling for a bad start word
 
-<BonusContent weekId="python-101-hard-week-4">
+<div class="bonus">
+
 
 Right now, calling `generate_text(probs_table, "zzz")` for a word that isn't even in the vocabulary at all quietly returns `"zzz"` — no crash, but also no useful signal that something's off. A more defensive version might raise a clear error instead:
 
@@ -168,4 +199,5 @@ def generate_text_safe(probs_table, start_word, max_words=10):
 
 This isn't part of the core curriculum, but it's the same `try`/`except` idea Python 101 Normal Week 4 introduced, applied here to a generation pipeline instead of an average calculation. Try triggering the `ValueError` on purpose, and think about where else in this week's `generate_text` a similar guard might be worth adding.
 
-</BonusContent>
+
+</div>

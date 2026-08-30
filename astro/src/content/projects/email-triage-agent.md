@@ -4,8 +4,6 @@ slug: /projects/email-triage-agent
 description: "Graduate from the in-browser playground to real Python: build an agent that categorizes, prioritizes, and drafts (but never sends) replies for your email, using a free-tier LLM."
 ---
 
-import {StepChecklist, StepChecklistItem} from '@site/src/components/StepChecklist';
-
 # 🌍 Build a Personal Email-Triage Agent
 
 Everything in the course so far ran in a sandboxed, in-browser playground — so you could start writing Python on day one with zero setup. This project is the graduation step: install Python for real on your own machine, then use it to build something genuinely useful — an agent that reads a batch of emails, tells you which ones actually matter, and drafts a suggested reply for the ones that need one. This assumes Python 101; nothing from Data Analysis is required.
@@ -171,11 +169,9 @@ uv run python triage.py
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`uv run python triage.py` runs without errors and prints six loaded emails.</StepChecklistItem>
-<StepChecklistItem>Each printed line shows a real subject and sender, not `"unknown"` or `"(no subject)"`.</StepChecklistItem>
-<StepChecklistItem>`sample_emails/` exists in your project folder and contains the six `.txt` files.</StepChecklistItem>
-</StepChecklist>
+- ✅ `uv run python triage.py` runs without errors and prints six loaded emails.
+- ✅ Each printed line shows a real subject and sender, not `"unknown"` or `"(no subject)"`.
+- ✅ `sample_emails/` exists in your project folder and contains the six `.txt` files.
 
 **🤔 Socratic Question(s)**
 
@@ -295,11 +291,9 @@ The prompt asking for "ONLY a JSON object" and then parsing it with `json.loads`
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`uv run python triage.py` prints a category, priority, and reasoning line for all six sample emails.</StepChecklistItem>
-<StepChecklistItem>The urgent client email and the newsletter get visibly different categories and priorities.</StepChecklistItem>
-<StepChecklistItem>No `JSONDecodeError` — if you see one, print the raw `content` string before parsing to see what the model actually returned.</StepChecklistItem>
-</StepChecklist>
+- ✅ `uv run python triage.py` prints a category, priority, and reasoning line for all six sample emails.
+- ✅ The urgent client email and the newsletter get visibly different categories and priorities.
+- ✅ No `JSONDecodeError` — if you see one, print the raw `content` string before parsing to see what the model actually returned.
 
 **🤔 Socratic Question(s)**
 
@@ -341,11 +335,9 @@ This is the single most important lesson in this project, more important than an
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`draft_reply` is defined, takes an `Email`, and returns a plain string — nothing about it touches the network except the one LLM API call.</StepChecklistItem>
-<StepChecklistItem>You can point to the exact place in your code where a reply would need to be sent from, and confirm that code doesn't exist.</StepChecklistItem>
-<StepChecklistItem>You understand *why* this matters, not just that it's a rule — see the Socratic questions below.</StepChecklistItem>
-</StepChecklist>
+- ✅ `draft_reply` is defined, takes an `Email`, and returns a plain string — nothing about it touches the network except the one LLM API call.
+- ✅ You can point to the exact place in your code where a reply would need to be sent from, and confirm that code doesn't exist.
+- ✅ You understand *why* this matters, not just that it's a rule — see the Socratic questions below.
 
 **🤔 Socratic Question(s)**
 
@@ -389,11 +381,9 @@ Open the files in `drafts/` and actually read them — this is the point of the 
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`uv run python triage.py` runs to completion and prints a triage line for all six sample emails.</StepChecklistItem>
-<StepChecklistItem>`drafts/` contains a saved reply for each email the model marked `needs_reply: true`, and no file for the ones it didn't.</StepChecklistItem>
-<StepChecklistItem>You've actually opened and read at least one draft reply, and could say whether you'd send it as-is or would edit it first.</StepChecklistItem>
-</StepChecklist>
+- ✅ `uv run python triage.py` runs to completion and prints a triage line for all six sample emails.
+- ✅ `drafts/` contains a saved reply for each email the model marked `needs_reply: true`, and no file for the ones it didn't.
+- ✅ You've actually opened and read at least one draft reply, and could say whether you'd send it as-is or would edit it first.
 
 **🤔 Socratic Question(s)**
 

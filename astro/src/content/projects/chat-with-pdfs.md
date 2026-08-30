@@ -4,8 +4,6 @@ slug: /projects/chat-with-pdfs
 description: "Build a multi-document RAG app over a folder of PDFs, with local embeddings, a free-tier LLM, and page-number citations in every answer."
 ---
 
-import {StepChecklist, StepChecklistItem} from '@site/src/components/StepChecklist';
-
 # 🌍 Chat with Your PDFs
 
 The [RAG App project](/docs/projects/rag-notes) chats with a folder of plain-text notes. This project takes the same idea somewhere more useful: a folder of real PDFs — reports, guides, handbooks, papers — with answers that cite exactly which document and which page a fact came from, the way a research assistant would. This assumes Python 101; it also helps a lot to have already built the RAG App project, since this one reuses its whole architecture and only changes how the source documents are read and cited, but it isn't a strict requirement if you're comfortable with the concepts.
@@ -193,11 +191,9 @@ Nothing downstream of `load_chunks()` needs to know or care how many PDFs there 
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`uv run python load_pdfs.py` runs without errors and prints a nonzero chunk count.</StepChecklistItem>
-<StepChecklistItem>The printed previews look like real fragments of your PDFs' text, not empty strings or garbled characters.</StepChecklistItem>
-<StepChecklistItem>Each printed chunk shows both a filename and a page number that match what you'd see opening the PDF yourself.</StepChecklistItem>
-</StepChecklist>
+- ✅ `uv run python load_pdfs.py` runs without errors and prints a nonzero chunk count.
+- ✅ The printed previews look like real fragments of your PDFs' text, not empty strings or garbled characters.
+- ✅ Each printed chunk shows both a filename and a page number that match what you'd see opening the PDF yourself.
 
 **🤔 Socratic Question(s)**
 
@@ -260,11 +256,9 @@ Just like the RAG App project, this deliberately avoids a vector database — fo
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`uv run python build_index.py` completed without errors.</StepChecklistItem>
-<StepChecklistItem>An `index.npy` file and a `chunks.json` file now exist in your project folder.</StepChecklistItem>
-<StepChecklistItem>Opening `chunks.json`, each entry has a `text`, `source`, and `page` field.</StepChecklistItem>
-</StepChecklist>
+- ✅ `uv run python build_index.py` completed without errors.
+- ✅ An `index.npy` file and a `chunks.json` file now exist in your project folder.
+- ✅ Opening `chunks.json`, each entry has a `text`, `source`, and `page` field.
 
 **🤔 Socratic Question(s)**
 
@@ -401,12 +395,10 @@ Swap the `OpenAI(...)` block for your provider's own client, following the same 
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`uv run python retrieve.py` prints results from your PDFs with plausible-looking source filenames and page numbers.</StepChecklistItem>
-<StepChecklistItem>`uv run python ask.py "a real question"` prints an answer, not a traceback.</StepChecklistItem>
-<StepChecklistItem>Every factual claim in the answer is followed by a `(source, page N)` citation, and each citation's page actually contains that fact when you check the PDF.</StepChecklistItem>
-<StepChecklistItem>Asking something your PDFs clearly don't cover makes the model say so, rather than confidently making something up (including a fake citation).</StepChecklistItem>
-</StepChecklist>
+- ✅ `uv run python retrieve.py` prints results from your PDFs with plausible-looking source filenames and page numbers.
+- ✅ `uv run python ask.py "a real question"` prints an answer, not a traceback.
+- ✅ Every factual claim in the answer is followed by a `(source, page N)` citation, and each citation's page actually contains that fact when you check the PDF.
+- ✅ Asking something your PDFs clearly don't cover makes the model say so, rather than confidently making something up (including a fake citation).
 
 **🤔 Socratic Question(s)**
 
@@ -452,11 +444,9 @@ There's no server, no framework, no UI toolkit here — a `while True` loop arou
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`uv run python chat.py` starts, accepts a question, prints a cited answer, and loops back to a new `>` prompt.</StepChecklistItem>
-<StepChecklistItem>Typing `quit` or `exit` ends the loop cleanly.</StepChecklistItem>
-<StepChecklistItem>You can ask two different questions about two different PDFs in the same session without restarting anything.</StepChecklistItem>
-</StepChecklist>
+- ✅ `uv run python chat.py` starts, accepts a question, prints a cited answer, and loops back to a new `>` prompt.
+- ✅ Typing `quit` or `exit` ends the loop cleanly.
+- ✅ You can ask two different questions about two different PDFs in the same session without restarting anything.
 
 **🤔 Socratic Question(s)**
 

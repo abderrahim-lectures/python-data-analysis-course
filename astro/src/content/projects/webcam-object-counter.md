@@ -4,8 +4,6 @@ slug: /projects/webcam-object-counter
 description: "Count objects live from a webcam feed with OpenCV and a pretrained YOLO11n model — or run the same detection on a bundled sample image or video with no camera at all."
 ---
 
-import {StepChecklist, StepChecklistItem} from '@site/src/components/StepChecklist';
-
 # 🌍 Count Objects in Real Time with a Webcam
 
 This project assumes you're comfortable with Python 101 — functions, loops, and installing packages — and needs no prior data-analysis or machine-learning background. It's this course's first foray into computer vision: instead of loading a pretrained model that reads text or tabular rows, you'll load one that reads pixels, and use it to answer a genuinely practical question in real time — "how many of *this* are in front of the camera right now?"
@@ -101,11 +99,9 @@ uv run python detect_image.py
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>Running the script prints at least one detected object with a class name and a confidence score.</StepChecklistItem>
-<StepChecklistItem>`output_street.jpg` exists and, opened in an image viewer, shows boxes drawn around real objects in the picture.</StepChecklistItem>
-<StepChecklistItem>You can explain, in one sentence, what `box.cls` and `box.conf` each represent.</StepChecklistItem>
-</StepChecklist>
+- ✅ Running the script prints at least one detected object with a class name and a confidence score.
+- ✅ `output_street.jpg` exists and, opened in an image viewer, shows boxes drawn around real objects in the picture.
+- ✅ You can explain, in one sentence, what `box.cls` and `box.conf` each represent.
 
 **🤔 Socratic Question(s)**
 
@@ -142,11 +138,9 @@ The count is just a filter-and-sum over `result.boxes`, comparing each box's cla
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>The script prints a per-image count and a running total that only ever goes up.</StepChecklistItem>
-<StepChecklistItem>Changing `target_class` to a different COCO class (e.g. `"bus"`) changes the printed counts accordingly.</StepChecklistItem>
-<StepChecklistItem>You understand why this reuses `model.names[int(box.cls)]` rather than hardcoding a class index number.</StepChecklistItem>
-</StepChecklist>
+- ✅ The script prints a per-image count and a running total that only ever goes up.
+- ✅ Changing `target_class` to a different COCO class (e.g. `"bus"`) changes the printed counts accordingly.
+- ✅ You understand why this reuses `model.names[int(box.cls)]` rather than hardcoding a class index number.
 
 **🤔 Socratic Question(s)**
 
@@ -195,11 +189,9 @@ uv run python detect_video.py
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`output_video.mp4` exists and plays, showing bounding boxes and a live count overlaid on each frame.</StepChecklistItem>
-<StepChecklistItem>You can explain what `cap.read()` returns and why the loop checks `ok` before using `frame`.</StepChecklistItem>
-<StepChecklistItem>You've noticed the count can flicker frame-to-frame even though nothing in the scene visibly changed.</StepChecklistItem>
-</StepChecklist>
+- ✅ `output_video.mp4` exists and plays, showing bounding boxes and a live count overlaid on each frame.
+- ✅ You can explain what `cap.read()` returns and why the loop checks `ok` before using `frame`.
+- ✅ You've noticed the count can flicker frame-to-frame even though nothing in the scene visibly changed.
 
 **🤔 Socratic Question(s)**
 
@@ -252,12 +244,10 @@ uv run python detect_webcam.py
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>A window opens showing your live camera feed with bounding boxes and a running count drawn on it.</StepChecklistItem>
-<StepChecklistItem>Holding up a different number of the target object (e.g. yourself, then you and a second person) changes the printed/on-screen count accordingly.</StepChecklistItem>
-<StepChecklistItem>Unplugging or covering the camera mid-run produces the "lost the camera feed" message, not a silent hang.</StepChecklistItem>
-<StepChecklistItem>Pressing "q" closes the window cleanly instead of needing a force-quit.</StepChecklistItem>
-</StepChecklist>
+- ✅ A window opens showing your live camera feed with bounding boxes and a running count drawn on it.
+- ✅ Holding up a different number of the target object (e.g. yourself, then you and a second person) changes the printed/on-screen count accordingly.
+- ✅ Unplugging or covering the camera mid-run produces the "lost the camera feed" message, not a silent hang.
+- ✅ Pressing "q" closes the window cleanly instead of needing a force-quit.
 
 **🤔 Socratic Question(s)**
 

@@ -4,8 +4,6 @@ slug: /projects/mcp-sqlite-server
 description: "Build an MCP server that exposes a local SQLite database, then watch an LLM client write and run its own SQL to answer plain-English questions about it."
 ---
 
-import {StepChecklist, StepChecklistItem} from '@site/src/components/StepChecklist';
-
 # 🌍 Query a Database in Plain English with MCP
 
 Databases are usually behind a wall of SQL that only the people who wrote it can query comfortably. MCP changes that shape: instead of teaching everyone SQL, you expose a database through a handful of well-described tools, and let an LLM client write and run the SQL itself, on your behalf, one question at a time. This project builds exactly that — a small local SQLite database (a neighborhood library: books, authors, members, loans) and an MCP server that lets an AI assistant list its tables, inspect a table's schema, and run **read-only** queries against it, so you can ask something like "which books has the library not gotten back yet?" in plain English and watch it get answered correctly.
@@ -130,11 +128,9 @@ uv run python seed.py
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`uv run python seed.py` runs without errors and creates `library.db`.</StepChecklistItem>
-<StepChecklistItem>The database has at least three related tables, connected by foreign keys (not one flat table).</StepChecklistItem>
-<StepChecklistItem>At least one row has a `NULL` in a nullable column (e.g. an unreturned loan) — real data has gaps.</StepChecklistItem>
-</StepChecklist>
+- ✅ `uv run python seed.py` runs without errors and creates `library.db`.
+- ✅ The database has at least three related tables, connected by foreign keys (not one flat table).
+- ✅ At least one row has a `NULL` in a nullable column (e.g. an unreturned loan) — real data has gaps.
 
 **🤔 Socratic Question(s)**
 
@@ -203,12 +199,10 @@ It's tempting to think "it's just a demo, nobody's going to type `DROP TABLE`." 
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`db_tools.py` has no `import` of `mcp` anywhere in it — it's pure `sqlite3` and stdlib.</StepChecklistItem>
-<StepChecklistItem>`run_read_only_query("DROP TABLE books")` raises `UnsafeQueryError` instead of running.</StepChecklistItem>
-<StepChecklistItem>`run_read_only_query("SELECT * FROM books; DROP TABLE books")` also raises `UnsafeQueryError` — the semicolon check catches chained statements.</StepChecklistItem>
-<StepChecklistItem>A real `SELECT` query against your database returns the correct rows as a list of dicts.</StepChecklistItem>
-</StepChecklist>
+- ✅ `db_tools.py` has no `import` of `mcp` anywhere in it — it's pure `sqlite3` and stdlib.
+- ✅ `run_read_only_query("DROP TABLE books")` raises `UnsafeQueryError` instead of running.
+- ✅ `run_read_only_query("SELECT * FROM books; DROP TABLE books")` also raises `UnsafeQueryError` — the semicolon check catches chained statements.
+- ✅ A real `SELECT` query against your database returns the correct rows as a list of dicts.
 
 **🤔 Socratic Question(s)**
 
@@ -273,11 +267,9 @@ Notice `query_db` catches `UnsafeQueryError` itself and returns a plain `{"error
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`uv run mcp dev server.py` starts cleanly and the Inspector lists all three tools.</StepChecklistItem>
-<StepChecklistItem>`list_db_tables` and `describe_db_table` both return real, correct data in the Inspector.</StepChecklistItem>
-<StepChecklistItem>`query_db` with a real `SELECT` returns rows; `query_db` with a write/DDL query returns a clear `{"error": ...}` instead of crashing.</StepChecklistItem>
-</StepChecklist>
+- ✅ `uv run mcp dev server.py` starts cleanly and the Inspector lists all three tools.
+- ✅ `list_db_tables` and `describe_db_table` both return real, correct data in the Inspector.
+- ✅ `query_db` with a real `SELECT` returns rows; `query_db` with a write/DDL query returns a clear `{"error": ...}` instead of crashing.
 
 **🤔 Socratic Question(s)**
 
@@ -307,11 +299,9 @@ Watch what happens: Claude should call `list_db_tables`, then `describe_db_table
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`library-db` appears in Claude Desktop's tool list after a full restart.</StepChecklistItem>
-<StepChecklistItem>Asking the sample question above shows Claude actually calling `list_db_tables`, `describe_db_table`, and `query_db` in sequence, not just answering from memory.</StepChecklistItem>
-<StepChecklistItem>The SQL Claude wrote (visible in the expanded tool-call details) is a genuine multi-table join, and the answer matches what you'd get running that query yourself.</StepChecklistItem>
-</StepChecklist>
+- ✅ `library-db` appears in Claude Desktop's tool list after a full restart.
+- ✅ Asking the sample question above shows Claude actually calling `list_db_tables`, `describe_db_table`, and `query_db` in sequence, not just answering from memory.
+- ✅ The SQL Claude wrote (visible in the expanded tool-call details) is a genuine multi-table join, and the answer matches what you'd get running that query yourself.
 
 **🤔 Socratic Question(s)**
 

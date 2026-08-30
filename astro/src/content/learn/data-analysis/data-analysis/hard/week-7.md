@@ -103,41 +103,71 @@ A bar chart of a numeric column (treating each unique score as its own "category
 
 ## 🧩 Challenges
 
-<div class="challenge"><code>df["reading_score"].hist(bins=20, edgecolor="black")</code> with axis labels and a title — a direct histogram of the numeric column.</>}>
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Plot a histogram of `reading_score` with labeled axes and a title.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>df["reading_score"].hist(bins=20, edgecolor="black")</code> with axis labels and a title — a direct histogram of the numeric column.</p>
 
-<div class="challenge"><code>df.boxplot(column="writing_score")</code> — read the box's three lines as the 25th percentile, median, and 75th percentile, and any points beyond the whiskers as potential outliers.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Create a boxplot of `writing_score`. Looking at it, does the distribution appear symmetric, or is the median noticeably closer to one edge of the box?
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>df.boxplot(column="writing_score")</code> — read the box's three lines as the 25th percentile, median, and 75th percentile, and any points beyond the whiskers as potential outliers.</p>
 
-<div class="challenge"><code>df["test_preparation_course"].value_counts().plot(kind="bar")</code> with axis labels/title — since this column only has two categories, rotation usually isn't necessary.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Plot a bar chart of the `test_preparation_course` column's category counts, with labeled axes.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>df["test_preparation_course"].value_counts().plot(kind="bar")</code> with axis labels/title — since this column only has two categories, rotation usually isn't necessary.</p>
 
-<div class="challenge">A histogram of <code>gender</code> makes little sense: it's categorical (only "male"/"female"), so binning it numerically is meaningless — the right chart is a bar chart of <code>.value_counts()</code>, exactly like <code>test_preparation_course</code> above.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Someone plots `df["gender"].hist()`. Explain why this is the wrong chart choice, and what they should use instead.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> A histogram of <code>gender</code> makes little sense: it's categorical (only "male"/"female"), so binning it numerically is meaningless — the right chart is a bar chart of <code>.value_counts()</code>, exactly like <code>test_preparation_course</code> above.</p>
 
-<div class="challenge">Plot writing_score with a small bin count (e.g. 5) and a large one (e.g. 50), comparing them side by side using the subplots pattern from the lesson. The 5-bin version likely looks smoother/more general; the 50-bin version may look noisier/spikier, especially in regions with fewer students.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Plot `writing_score` as a histogram with 5 bins, then again with 50 bins. Describe how the apparent shape of the distribution changes between the two.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Plot writing_score with a small bin count (e.g. 5) and a large one (e.g. 50), comparing them side by side using the subplots pattern from the lesson. The 5-bin version likely looks smoother/more general; the 50-bin version may look noisier/spikier, especially in regions with fewer students.</p>
 
-<div class="challenge">Build a boxplot for each of the three score columns using df.boxplot(column=["math_score", "reading_score", "writing_score"]), which draws all three side by side in one call for direct visual comparison.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Create a single boxplot showing all three score columns (`math_score`, `reading_score`, `writing_score`) side by side, so their spreads can be compared at a glance.
 
+<p class="challenge__answer">💡 <strong>Answer:</strong> Build a boxplot for each of the three score columns using df.boxplot(column=["math_score", "reading_score", "writing_score"]), which draws all three side by side in one call for direct visual comparison.</p>
+
 </div>
+</details>
 
 ## 🤔 Socratic Questions
 

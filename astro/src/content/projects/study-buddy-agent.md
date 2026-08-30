@@ -4,8 +4,6 @@ slug: /projects/study-buddy-agent
 description: "Graduate from the in-browser playground to real Python: build a terminal app that turns your own study notes into a quiz, using a free-tier LLM to write the questions and judge your answers."
 ---
 
-import {StepChecklist, StepChecklistItem} from '@site/src/components/StepChecklist';
-
 # 🌍 Build a Study-Buddy Quiz Agent
 
 Everything in the course so far ran in a sandboxed, in-browser playground — so you could start writing Python on day one with zero setup. This project is the graduation step: install Python for real on your own machine, then use it to build a tool you might actually keep using for a different class entirely — a quiz app that reads your own study notes, writes questions grounded in what's actually in them (not generic trivia), quizzes you one question at a time in the terminal, and has a language model judge whether your typed answer is close enough, with brief feedback either way.
@@ -120,11 +118,9 @@ Here's the design decision this project asks you to make explicitly, rather than
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>You have a `notes/` folder with at least one real `.txt`/`.md` file of your own study notes in it.</StepChecklistItem>
-<StepChecklistItem>Reading the file and printing its length shows a real character count, not `0` or an error.</StepChecklistItem>
-<StepChecklistItem>You can explain, in one sentence, why this lesson feeds the whole file to the model instead of retrieving chunks.</StepChecklistItem>
-</StepChecklist>
+- ✅ You have a `notes/` folder with at least one real `.txt`/`.md` file of your own study notes in it.
+- ✅ Reading the file and printing its length shows a real character count, not `0` or an error.
+- ✅ You can explain, in one sentence, why this lesson feeds the whole file to the model instead of retrieving chunks.
 
 **🤔 Socratic Question(s)**
 
@@ -176,11 +172,9 @@ Small free-tier models occasionally produce a vague or oddly-phrased question. I
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`generate_questions(notes_text)` returns a Python list of dicts, each with a `"question"` and `"expected_answer"` key.</StepChecklistItem>
-<StepChecklistItem>Reading a couple of the generated questions, they clearly reference specifics from your notes file, not generic facts about the topic a search engine could have written.</StepChecklistItem>
-<StepChecklistItem>You understand why `expected_answer` is generated but not printed to the screen yet.</StepChecklistItem>
-</StepChecklist>
+- ✅ `generate_questions(notes_text)` returns a Python list of dicts, each with a `"question"` and `"expected_answer"` key.
+- ✅ Reading a couple of the generated questions, they clearly reference specifics from your notes file, not generic facts about the topic a search engine could have written.
+- ✅ You understand why `expected_answer` is generated but not printed to the screen yet.
 
 **🤔 Socratic Question(s)**
 
@@ -248,11 +242,9 @@ A three-way verdict (`correct` / `close` / `incorrect`) is deliberately more for
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`run_quiz(questions)` prints one question at a time and actually waits for typed input before continuing.</StepChecklistItem>
-<StepChecklistItem>A deliberately correct answer gets marked correct, and a deliberately wrong one gets marked incorrect, with the expected answer shown.</StepChecklistItem>
-<StepChecklistItem>An answer that's roughly right but not exact wording (e.g. paraphrased) gets a reasonable verdict, not an unfair "incorrect".</StepChecklistItem>
-</StepChecklist>
+- ✅ `run_quiz(questions)` prints one question at a time and actually waits for typed input before continuing.
+- ✅ A deliberately correct answer gets marked correct, and a deliberately wrong one gets marked incorrect, with the expected answer shown.
+- ✅ An answer that's roughly right but not exact wording (e.g. paraphrased) gets a reasonable verdict, not an unfair "incorrect".
 
 **🤔 Socratic Question(s)**
 
@@ -287,11 +279,9 @@ You should see a short "Generating questions..." pause (one API call), then five
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`uv run python study_buddy.py` runs end to end: generation, then all questions, then a final score line.</StepChecklistItem>
-<StepChecklistItem>The final score number matches what you'd expect from your own answers (correct = +1, close = +0.5, incorrect = +0).</StepChecklistItem>
-<StepChecklistItem>Running it again on the same notes file produces a *different* set of questions — confirming generation isn't hardcoded or cached.</StepChecklistItem>
-</StepChecklist>
+- ✅ `uv run python study_buddy.py` runs end to end: generation, then all questions, then a final score line.
+- ✅ The final score number matches what you'd expect from your own answers (correct = +1, close = +0.5, incorrect = +0).
+- ✅ Running it again on the same notes file produces a *different* set of questions — confirming generation isn't hardcoded or cached.
 
 **🤔 Socratic Question(s)**
 

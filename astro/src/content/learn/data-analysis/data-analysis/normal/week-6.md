@@ -105,41 +105,71 @@ df = df.rename(columns={"quiz1": "quiz_1"})
 
 ## 🧩 Challenges
 
-<div class="challenge">Use <code>pd.read_csv("students-normal.csv")</code> then <code>df.shape</code> — the first element of the tuple is the row count, the second is the column count.</>}>
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Load `students-normal.csv` (from Python 101 Week 5 — reuse the same file) into a DataFrame and print how many rows and columns it has.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Use <code>pd.read_csv("students-normal.csv")</code> then <code>df.shape</code> — the first element of the tuple is the row count, the second is the column count.</p>
 
-<div class="challenge"><code>df["quiz1"]</code> or <code>df.quiz1</code> both select the column as a Series; the second only works because <code>quiz1</code> is a valid Python identifier with no spaces.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Select just the `quiz1` column as a Series. What are two different syntaxes for doing this?
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>df["quiz1"]</code> or <code>df.quiz1</code> both select the column as a Series; the second only works because <code>quiz1</code> is a valid Python identifier with no spaces.</p>
 
-<div class="challenge"><code>df["quiz1"].mean()</code> — every Series has statistical methods like <code>.mean()</code>, <code>.median()</code>, <code>.std()</code> built in, no manual sum()/len() needed.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Compute the mean of the `quiz1` column using a Series method (not `sum()`/`len()` by hand).
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>df["quiz1"].mean()</code> — every Series has statistical methods like <code>.mean()</code>, <code>.median()</code>, <code>.std()</code> built in, no manual sum()/len() needed.</p>
 
-<div class="challenge"><code>df.describe()</code> summarizes only numeric columns by default (count/mean/std/min/quartiles/max) and silently skips the <code>name</code> column, since none of those statistics are meaningful for text — pandas infers this from each column's dtype.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Run `df.describe()` on the students DataFrame. Does it include the `name` column? Why or why not?
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>df.describe()</code> summarizes only numeric columns by default (count/mean/std/min/quartiles/max) and silently skips the <code>name</code> column, since none of those statistics are meaningful for text — pandas infers this from each column's dtype.</p>
 
-<div class="challenge">Call df.set_index("name") and store the result (e.g. df_by_name = df.set_index("name")), then use df_by_name.loc["Amina"] to retrieve that row directly by label instead of hunting for the matching row number.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Set `name` as the index of the students DataFrame, then look up Amina's row directly by her name instead of by row number.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Call df.set_index("name") and store the result (e.g. df_by_name = df.set_index("name")), then use df_by_name.loc["Amina"] to retrieve that row directly by label instead of hunting for the matching row number.</p>
 
-<div class="challenge">Build it either as a dict of lists (one key per column) or a list of dicts (one dict per city) passed to <code>pd.DataFrame(...)</code> — both are valid, matching whichever shape the data started in.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Construct a small DataFrame by hand (not from a CSV) with two columns, `city` and `population`, for 3 cities of your choice — using either the dict-of-lists or list-of-dicts style.
 
+<p class="challenge__answer">💡 <strong>Answer:</strong> Build it either as a dict of lists (one key per column) or a list of dicts (one dict per city) passed to <code>pd.DataFrame(...)</code> — both are valid, matching whichever shape the data started in.</p>
+
 </div>
+</details>
 
 ## 🤔 Socratic Questions
 

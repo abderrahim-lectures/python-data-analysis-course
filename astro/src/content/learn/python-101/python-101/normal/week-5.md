@@ -114,41 +114,71 @@ for name in sorted(averages, key=lambda n: averages[n], reverse=True):
 
 ## 🧩 Challenges
 
-<div class="challenge">Open the file with <code>csv.DictReader</code>, loop over rows, convert the score column with <code>int(...)</code>, and keep a running <code>total</code> and <code>count</code> (or use a list and <code>sum()</code>/<code>len()</code>) to compute the class average.</>}>
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Given a CSV with columns `name,score`, write a program that computes and prints the average score across *all* students in the file.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Open the file with <code>csv.DictReader</code>, loop over rows, convert the score column with <code>int(...)</code>, and keep a running <code>total</code> and <code>count</code> (or use a list and <code>sum()</code>/<code>len()</code>) to compute the class average.</p>
 
-<div class="challenge">Loop over the DictReader rows, keep a running <code>best_name</code>/<code>best_score</code> pair, and update them whenever you see a higher score — the same "track the running maximum" pattern as finding the max of a list.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Extend the previous program to also print the name of the student with the *highest* single score.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Loop over the DictReader rows, keep a running <code>best_name</code>/<code>best_score</code> pair, and update them whenever you see a higher score — the same "track the running maximum" pattern as finding the max of a list.</p>
 
-<div class="challenge">Use <code>csv.writer</code>, write a header row, then loop over your averages dict writing one row per student — mirroring the read side but with <code>writerow</code> instead of iterating a reader.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Write the per-student averages you computed above out to a new file `summary.csv` with columns `name,average`.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Use <code>csv.writer</code>, write a header row, then loop over your averages dict writing one row per student — mirroring the read side but with <code>writerow</code> instead of iterating a reader.</p>
 
-<div class="challenge">Wrap the int(...) conversion so a missing/blank value is skipped or defaulted (e.g. treat it as 0, or exclude that quiz from the average) rather than crashing the whole program — this is exactly the kind of situation try/except (this week's bonus) is designed for.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 What would happen if one row in the CSV had a missing score (an empty string instead of a number)? Modify your program so it doesn't crash on that row.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Wrap the int(...) conversion so a missing/blank value is skipped or defaulted (e.g. treat it as 0, or exclude that quiz from the average) rather than crashing the whole program — this is exactly the kind of situation try/except (this week's bonus) is designed for.</p>
 
-<div class="challenge">Rewrite the write step using <code>csv.DictWriter</code> with <code>fieldnames=["name", "average"]</code>, call <code>writer.writeheader()</code> once, then <code>writer.writerow(...)</code> with a dict per student inside the loop, instead of <code>csv.writer</code>'s plain list rows.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Redo Challenge 3 using `csv.DictWriter` instead of `csv.writer`. Which version do you find easier to read, and why?
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Rewrite the write step using <code>csv.DictWriter</code> with <code>fieldnames=["name", "average"]</code>, call <code>writer.writeheader()</code> once, then <code>writer.writerow(...)</code> with a dict per student inside the loop, instead of <code>csv.writer</code>'s plain list rows.</p>
 
-<div class="challenge">Use "a" (append) mode instead of "w": with open("summary.csv", "a", newline="") as f — this adds new rows after whatever the file already contains, instead of erasing it first. Note you'd only call writer.writeheader() the first time the file is created, not on every append.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 If you wanted to add one more student's row to `summary.csv` *without* erasing what's already there, which file mode would you use instead of `"w"`? Try it.
 
+<p class="challenge__answer">💡 <strong>Answer:</strong> Use "a" (append) mode instead of "w": with open("summary.csv", "a", newline="") as f — this adds new rows after whatever the file already contains, instead of erasing it first. Note you'd only call writer.writeheader() the first time the file is created, not on every append.</p>
+
 </div>
+</details>
 
 ## 🤔 Socratic Questions
 
@@ -162,7 +192,8 @@ If you wanted to add one more student's row to `summary.csv` *without* erasing w
 
 ## 🎁 Bonus: a first taste of classes
 
-<BonusContent weekId="python-101-normal-week-5">
+<div class="bonus">
+
 
 Every student this week was a loose collection of separate values — a name in one dict, a list of scores in another. A `class` lets you bundle related data and behavior into one object:
 
@@ -181,4 +212,5 @@ print(amina.average())   # 86.33...
 
 `__init__` runs when you create a `Student(...)`; `self` refers to *this particular* student object. This isn't part of the core curriculum — everything in Weeks 1–5 was deliberately solvable with just functions, lists, and dicts — but classes become genuinely useful once a program has many related pieces of state and behavior that travel together, which you'll start to feel in the **Data Analysis** section's larger projects. Try rewriting this week's mini-project so each student is a `Student` object instead of a name-keyed dict.
 
-</BonusContent>
+
+</div>

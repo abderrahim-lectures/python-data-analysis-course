@@ -180,41 +180,71 @@ This exact shape — a list of dicts, one dict per record — is close to what y
 
 ## 🧩 Challenges
 
-<div class="challenge">[grade for grade in grades if grade &gt;= 60] — a list comprehension filtering with a condition, the code form of {'{'}g ∈ grades : g ≥ 60{'}'}.</>}>
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Given `grades = [55, 72, 88, 40, 91, 60]`, write a one-line list comprehension producing only the passing grades (≥ 60).
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> [grade for grade in grades if grade &gt;= 60] — a list comprehension filtering with a condition, the code form of {'{'}g ∈ grades : g ≥ 60{'}'}.</p>
 
-<div class="challenge">Loop over the words, and for each one do <code>counts[word] = counts.get(word, 0) + 1</code> — this is a frequency table, the same structure the Hard track builds on in Week 2.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Given a list of words, build a `dict` mapping each unique word to how many times it appears (a "word frequency count").
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Loop over the words, and for each one do <code>counts[word] = counts.get(word, 0) + 1</code> — this is a frequency table, the same structure the Hard track builds on in Week 2.</p>
 
-<div class="challenge">Convert both lists to sets and use set difference: <code>set(roster_a) - set(roster_b)</code> gives students in A but not B.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 You have two lists of student names, `roster_a` and `roster_b`. Find students who are in `roster_a` but *not* in `roster_b`, without writing a manual loop.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Convert both lists to sets and use set difference: <code>set(roster_a) - set(roster_b)</code> gives students in A but not B.</p>
 
-<div class="challenge">Tuples are the right choice: a coordinate pair shouldn't be mutated in place, and its fixed two-element shape matches a tuple's fixed-shape nature better than a list, which implies "a growable sequence."</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Would you store a 2D coordinate `(x, y)` as a `list` or a `tuple`? Justify your choice using what makes each type distinct.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Tuples are the right choice: a coordinate pair shouldn't be mutated in place, and its fixed two-element shape matches a tuple's fixed-shape nature better than a list, which implies "a growable sequence."</p>
 
-<div class="challenge">{"{name: len(name) for name in ['Amina', 'Karim', 'Sara']}"} — a dict comprehension mapping each name to its own length, e.g. {"{'Amina': 5, 'Karim': 5, 'Sara': 4}"}.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Given a list of names, write a dict comprehension mapping each name to the length of that name.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> {"{name: len(name) for name in ['Amina', 'Karim', 'Sara']}"} — a dict comprehension mapping each name to its own length, e.g. {"{'Amina': 5, 'Karim': 5, 'Sara': 4}"}.</p>
 
-<div class="challenge">Loop over the list of student dicts, and for each one compute <code>sum(student["scores"]) / len(student["scores"])</code>, then use <code>max(...)</code> with a <code>key</code> function (or track a running best manually) to find whichever student's average is highest.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Using the `students` list of dicts from the worked example, find the name of the student with the *highest* average score, without hardcoding which one it is.
 
+<p class="challenge__answer">💡 <strong>Answer:</strong> Loop over the list of student dicts, and for each one compute <code>sum(student["scores"]) / len(student["scores"])</code>, then use <code>max(...)</code> with a <code>key</code> function (or track a running best manually) to find whichever student's average is highest.</p>
+
 </div>
+</details>
 
 ## 🤔 Socratic Questions
 

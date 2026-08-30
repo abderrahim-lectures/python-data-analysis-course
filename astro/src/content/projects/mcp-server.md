@@ -4,8 +4,6 @@ slug: /projects/mcp-server
 description: "Graduate from the in-browser playground to real Python: build a Model Context Protocol server exposing your own tools, and connect it to a real AI client like Claude Desktop."
 ---
 
-import {StepChecklist, StepChecklistItem} from '@site/src/components/StepChecklist';
-
 # 🌍 Build an MCP Server
 
 The [Model Context Protocol](https://modelcontextprotocol.io) (MCP) is a standard way for an AI assistant to call code, tools, and data that live outside of it. An MCP *server* is a small program you write that exposes a handful of tools; an MCP *client* — Claude Desktop, for instance — connects to that server and lets the model call those tools on your behalf, the same way a web browser is a client that talks to a web server. This project builds the server side: your own Python functions, registered as MCP tools, callable by a real AI assistant running on your own machine.
@@ -118,11 +116,9 @@ MCP is a young, fast-moving spec — the protocol itself, and the Python SDK's o
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`server.py` saves without syntax errors and defines both `search_course_topics` and `count_words`.</StepChecklistItem>
-<StepChecklistItem>Each tool has a real, plain-English docstring — not a placeholder.</StepChecklistItem>
-<StepChecklistItem>`DOCS_DIR` points at a real `docs/` folder that actually exists on your machine.</StepChecklistItem>
-</StepChecklist>
+- ✅ `server.py` saves without syntax errors and defines both `search_course_topics` and `count_words`.
+- ✅ Each tool has a real, plain-English docstring — not a placeholder.
+- ✅ `DOCS_DIR` points at a real `docs/` folder that actually exists on your machine.
 
 **🤔 Socratic Question(s)**
 
@@ -155,11 +151,9 @@ It's tempting to skip straight to Claude Desktop. Resist that — the Inspector 
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`uv run mcp dev server.py` starts without errors and opens the Inspector in your browser.</StepChecklistItem>
-<StepChecklistItem>The Inspector lists both `search_course_topics` and `count_words`.</StepChecklistItem>
-<StepChecklistItem>Calling each tool by hand in the Inspector returns a real, correct result — not an error.</StepChecklistItem>
-</StepChecklist>
+- ✅ `uv run mcp dev server.py` starts without errors and opens the Inspector in your browser.
+- ✅ The Inspector lists both `search_course_topics` and `count_words`.
+- ✅ Calling each tool by hand in the Inspector returns a real, correct result — not an error.
 
 **🤔 Socratic Question(s)**
 
@@ -196,11 +190,9 @@ Claude Desktop should show it calling `search_course_topics` (often as a small c
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`course-tools` (or your chosen server name) appears in Claude Desktop's tool/connector list after a full restart.</StepChecklistItem>
-<StepChecklistItem>Asking a question that should trigger `search_course_topics` actually shows Claude calling it, not just answering from memory.</StepChecklistItem>
-<StepChecklistItem>The result Claude shows using matches what you saw testing the same call in the Inspector.</StepChecklistItem>
-</StepChecklist>
+- ✅ `course-tools` (or your chosen server name) appears in Claude Desktop's tool/connector list after a full restart.
+- ✅ Asking a question that should trigger `search_course_topics` actually shows Claude calling it, not just answering from memory.
+- ✅ The result Claude shows using matches what you saw testing the same call in the Inspector.
 
 **🤔 Socratic Question(s)**
 

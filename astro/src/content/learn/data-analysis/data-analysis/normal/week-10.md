@@ -121,41 +121,71 @@ print(f"Female survival rate: {sex_survival['female']:.1%}, "
 
 ## 🧩 Challenges
 
-<div class="challenge"><code>df.groupby("Embarked")["Survived"].mean()</code> — same one-liner pattern as class/sex, just grouped by the embarkation port column instead.</>}>
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Compute the survival rate by `Embarked` port. Which port had the highest survival rate in this dataset?
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>df.groupby("Embarked")["Survived"].mean()</code> — same one-liner pattern as class/sex, just grouped by the embarkation port column instead.</p>
 
-<div class="challenge"><code>df[df["Age"] &lt; 18]["Survived"].mean()</code> compared against <code>df[df["Age"] &gt;= 18]["Survived"].mean()</code> — two filtered subsets, each summarized with the same aggregate.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Compare the survival rate of passengers under 18 to passengers 18 and older.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>df[df["Age"] &lt; 18]["Survived"].mean()</code> compared against <code>df[df["Age"] &gt;= 18]["Survived"].mean()</code> — two filtered subsets, each summarized with the same aggregate.</p>
 
-<div class="challenge"><code>df.groupby(["Pclass", "Sex"])["Survived"].mean()</code>, then read off both entries where Sex is "female" across the three Pclass values.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Using the combined `["Pclass", "Sex"]` groupby, does passenger class still matter for survival *within* female passengers specifically? Read the relevant rows of the result.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>df.groupby(["Pclass", "Sex"])["Survived"].mean()</code>, then read off both entries where Sex is "female" across the three Pclass values.</p>
 
-<div class="challenge">Add a new column: <code>df["family_size"] = df["SibSp"] + df["Parch"] + 1</code> (the +1 counts the passenger themself), then group by it: <code>df.groupby("family_size")["Survived"].mean()</code>.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Create a new column `family_size` as `SibSp + Parch + 1` (siblings/spouses + parents/children + the passenger themself), then compute survival rate grouped by `family_size`.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Add a new column: <code>df["family_size"] = df["SibSp"] + df["Parch"] + 1</code> (the +1 counts the passenger themself), then group by it: <code>df.groupby("family_size")["Survived"].mean()</code>.</p>
 
-<div class="challenge">Use the age_group column from Step 5 and read off its survival rate; compare it to the raw Age &lt; 18 filter from Challenge 2 -- they should be broadly consistent, though the exact boundary (12 vs 18) differs, so the numbers won't match exactly.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Using the `age_group` column from Step 5, what's the survival rate for the `"Child"` bucket? How does it compare to your Challenge 2 answer for passengers under 18?
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Use the age_group column from Step 5 and read off its survival rate; compare it to the raw Age &lt; 18 filter from Challenge 2 -- they should be broadly consistent, though the exact boundary (12 vs 18) differs, so the numbers won't match exactly.</p>
 
-<div class="challenge">Group by Pclass and use .agg(["mean", "count"]) on Survived, so both the survival rate and the group size are visible together -- a small group's rate can then be judged with appropriate caution.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Redo the Pclass survival-rate groupby, but this time include both the mean *and* the count of passengers in each class, in one `.agg(...)` call — so you can judge how much to trust each class's number.
 
+<p class="challenge__answer">💡 <strong>Answer:</strong> Group by Pclass and use .agg(["mean", "count"]) on Survived, so both the survival rate and the group size are visible together -- a small group's rate can then be judged with appropriate caution.</p>
+
 </div>
+</details>
 
 ## 🤔 Socratic Questions
 

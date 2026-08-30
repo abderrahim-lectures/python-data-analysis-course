@@ -4,8 +4,6 @@ slug: /projects/ml-classifier
 description: "Graduate from describing data to predicting from it: train a real binary classifier on the Titanic dataset with scikit-learn."
 ---
 
-import {StepChecklist, StepChecklistItem} from '@site/src/components/StepChecklist';
-
 # 🌍 Train Your First Machine Learning Model
 
 This project assumes you're comfortable with pandas at roughly the level of Data Analysis's Normal track — filtering, `.groupby()`, handling missing values. In fact it assumes you've specifically done [Week 10's guided Titanic EDA](/docs/data-analysis/normal/week-10): you already loaded that dataset, cleaned it, and asked questions like "did survival rate differ by class or sex?" This project is the direct sequel. You already *described* this dataset. Now you'll *predict* from it — training a model that looks at a passenger it has never seen and guesses whether they survived.
@@ -104,11 +102,9 @@ y = df["Survived"]
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`df.isna().sum()` shows zero missing values in every column you're about to feed the model.</StepChecklistItem>
-<StepChecklistItem>`X.dtypes` shows no `object` columns left — everything is numeric.</StepChecklistItem>
-<StepChecklistItem>`X` does not contain the `Survived` column; `y` does not contain anything else.</StepChecklistItem>
-</StepChecklist>
+- ✅ `df.isna().sum()` shows zero missing values in every column you're about to feed the model.
+- ✅ `X.dtypes` shows no `object` columns left — everything is numeric.
+- ✅ `X` does not contain the `Survived` column; `y` does not contain anything else.
 
 **🤔 Socratic Question(s)**
 
@@ -134,11 +130,9 @@ Step 1's encoding was done on the *whole* dataset, before this split, which is f
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`X_train.shape` and `X_test.shape` show roughly an 80/20 split of the total row count.</StepChecklistItem>
-<StepChecklistItem>Rerunning the split with the same `random_state` reproduces the exact same rows in `X_test` every time.</StepChecklistItem>
-<StepChecklistItem>`y_train` and `y_test` are both a mix of 0s and 1s, not all one value.</StepChecklistItem>
-</StepChecklist>
+- ✅ `X_train.shape` and `X_test.shape` show roughly an 80/20 split of the total row count.
+- ✅ Rerunning the split with the same `random_state` reproduces the exact same rows in `X_test` every time.
+- ✅ `y_train` and `y_test` are both a mix of 0s and 1s, not all one value.
 
 **🤔 Socratic Question(s)**
 
@@ -161,11 +155,9 @@ predictions = model.predict(X_test)
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`model.fit(...)` runs without a convergence warning (or you've raised `max_iter` until it doesn't).</StepChecklistItem>
-<StepChecklistItem>`predictions` is an array of the same length as `y_test`, containing only 0s and 1s.</StepChecklistItem>
-<StepChecklistItem>You can print `model.predict_proba(X_test)[:5]` and see it return actual probabilities, not just the final 0/1 call.</StepChecklistItem>
-</StepChecklist>
+- ✅ `model.fit(...)` runs without a convergence warning (or you've raised `max_iter` until it doesn't).
+- ✅ `predictions` is an array of the same length as `y_test`, containing only 0s and 1s.
+- ✅ You can print `model.predict_proba(X_test)[:5]` and see it return actual probabilities, not just the final 0/1 call.
 
 **🤔 Socratic Question(s)**
 
@@ -209,11 +201,9 @@ A random forest trains many small decision trees, each on a slightly different r
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>You have two accuracy numbers, computed on the *same* `X_test`/`y_test`, one per model.</StepChecklistItem>
-<StepChecklistItem>You've printed both confusion matrices and can say, in a sentence, which kinds of mistakes each model made.</StepChecklistItem>
-<StepChecklistItem>You haven't declared a "winner" without considering how small the gap between them actually is.</StepChecklistItem>
-</StepChecklist>
+- ✅ You have two accuracy numbers, computed on the *same* `X_test`/`y_test`, one per model.
+- ✅ You've printed both confusion matrices and can say, in a sentence, which kinds of mistakes each model made.
+- ✅ You haven't declared a "winner" without considering how small the gap between them actually is.
 
 **🤔 Socratic Question(s)**
 

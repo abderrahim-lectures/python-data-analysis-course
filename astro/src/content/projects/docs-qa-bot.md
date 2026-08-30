@@ -4,8 +4,6 @@ slug: /projects/docs-qa-bot
 description: "Graduate from the in-browser playground to real Python: wrap the RAG App project's retrieval pipeline in a live Discord bot that answers questions from a folder of documentation."
 ---
 
-import {StepChecklist, StepChecklistItem} from '@site/src/components/StepChecklist';
-
 # 🌍 Build a RAG-Backed Docs Q&A Discord Bot
 
 This project takes the retrieval-augmented generation pipeline from [Build a RAG App](/docs/projects/rag-notes) — local embeddings, NumPy cosine-similarity search, a free-tier LLM for the final answer — and puts a different front end on it: instead of a script you run from a terminal one question at a time, the same pipeline answers questions live, inside a Discord server, whenever someone mentions the bot. Nothing about *how* it retrieves or generates changes; only the interface does.
@@ -112,12 +110,10 @@ GITHUB_TOKEN=your-llm-key-here
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>A Discord application and bot exist in the Developer Portal, and you've copied its token.</StepChecklistItem>
-<StepChecklistItem>"Message Content" is turned on under Privileged Gateway Intents.</StepChecklistItem>
-<StepChecklistItem>You have a free-tier LLM API key from a provider of your choice.</StepChecklistItem>
-<StepChecklistItem>`uv init`/`uv add` completed without errors, and `.env` has both `DISCORD_BOT_TOKEN` and your LLM key set.</StepChecklistItem>
-</StepChecklist>
+- ✅ A Discord application and bot exist in the Developer Portal, and you've copied its token.
+- ✅ "Message Content" is turned on under Privileged Gateway Intents.
+- ✅ You have a free-tier LLM API key from a provider of your choice.
+- ✅ `uv init`/`uv add` completed without errors, and `.env` has both `DISCORD_BOT_TOKEN` and your LLM key set.
 
 **🤔 Socratic Question(s)**
 
@@ -220,11 +216,9 @@ uv run python build_index.py
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>A `docs/` folder exists with at least a couple of real `.md`/`.txt` files in it.</StepChecklistItem>
-<StepChecklistItem>`uv run python build_index.py` runs without errors and reports a nonzero chunk count.</StepChecklistItem>
-<StepChecklistItem>`index.npy` and `chunks.json` now exist in your project folder.</StepChecklistItem>
-</StepChecklist>
+- ✅ A `docs/` folder exists with at least a couple of real `.md`/`.txt` files in it.
+- ✅ `uv run python build_index.py` runs without errors and reports a nonzero chunk count.
+- ✅ `index.npy` and `chunks.json` now exist in your project folder.
 
 **🤔 Socratic Question(s)**
 
@@ -290,11 +284,9 @@ Get `retrieve.py` returning genuinely relevant chunks for a few test questions *
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`uv run python retrieve.py` prints ranked results with real similarity scores.</StepChecklistItem>
-<StepChecklistItem>The top result for an easy test question actually looks relevant when you read it.</StepChecklistItem>
-<StepChecklistItem>You've tried at least one question your docs folder clearly doesn't cover, and confirmed the top score is noticeably lower.</StepChecklistItem>
-</StepChecklist>
+- ✅ `uv run python retrieve.py` prints ranked results with real similarity scores.
+- ✅ The top result for an easy test question actually looks relevant when you read it.
+- ✅ You've tried at least one question your docs folder clearly doesn't cover, and confirmed the top score is noticeably lower.
 
 **🤔 Socratic Question(s)**
 
@@ -396,11 +388,9 @@ The `if message.author == client.user: return` guard matters more than it might 
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`bot.py` defines `on_ready` and `on_message`, both as `async def`, both decorated with `@client.event`.</StepChecklistItem>
-<StepChecklistItem>`on_message` checks `message.author == client.user` before doing anything else.</StepChecklistItem>
-<StepChecklistItem>`answer()` calls the same `retrieve()` from Step 2, unchanged.</StepChecklistItem>
-</StepChecklist>
+- ✅ `bot.py` defines `on_ready` and `on_message`, both as `async def`, both decorated with `@client.event`.
+- ✅ `on_message` checks `message.author == client.user` before doing anything else.
+- ✅ `answer()` calls the same `retrieve()` from Step 2, unchanged.
 
 **🤔 Socratic Question(s)**
 
@@ -427,11 +417,9 @@ Within a few seconds you should see a typing indicator, then a reply grounded in
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>The bot appears online in your test server's member list after running `uv run python bot.py`.</StepChecklistItem>
-<StepChecklistItem>Mentioning it with a real question produces a typing indicator, then a reply.</StepChecklistItem>
-<StepChecklistItem>The reply's content actually reflects your `docs/` folder, and a question your docs don't cover gets an honest "I don't know" instead of a confident guess.</StepChecklistItem>
-</StepChecklist>
+- ✅ The bot appears online in your test server's member list after running `uv run python bot.py`.
+- ✅ Mentioning it with a real question produces a typing indicator, then a reply.
+- ✅ The reply's content actually reflects your `docs/` folder, and a question your docs don't cover gets an honest "I don't know" instead of a confident guess.
 
 **🤔 Socratic Question(s)**
 

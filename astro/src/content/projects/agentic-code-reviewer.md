@@ -4,8 +4,6 @@ slug: /projects/agentic-code-reviewer
 description: "Graduate from the in-browser playground to real Python: build a CLI tool that reads a real git diff via subprocess and asks a free-tier LLM to review it like a human would."
 ---
 
-import {StepChecklist, StepChecklistItem} from '@site/src/components/StepChecklist';
-
 # 🌍 Build an Agentic Code Reviewer
 
 Every pull request eventually gets read by a human reviewer looking for bugs, style problems, missing tests, and confusing names — before that, though, it's just text: the output of `git diff`. This project builds a CLI tool that does that first pass automatically: it captures a real diff with Python's `subprocess` module, hands it to a free-tier language model with a carefully-designed reviewer system prompt, and prints back structured, actionable feedback — not a vague "looks good," but specific issues with a file, a category, a severity, and a suggested fix.
@@ -100,11 +98,9 @@ Instead of `export`-ing a key in every new terminal session, `python-dotenv` rea
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`uv --version` prints a version number.</StepChecklistItem>
-<StepChecklistItem>`agentic-code-reviewer/` exists with a `pyproject.toml`, and `openai` and `python-dotenv` are installed.</StepChecklistItem>
-<StepChecklistItem>You have a real API key from one provider, saved in a `.env` file in your project folder — not pasted into any script.</StepChecklistItem>
-</StepChecklist>
+- ✅ `uv --version` prints a version number.
+- ✅ `agentic-code-reviewer/` exists with a `pyproject.toml`, and `openai` and `python-dotenv` are installed.
+- ✅ You have a real API key from one provider, saved in a `.env` file in your project folder — not pasted into any script.
 
 ## Step 1: Capture a git diff with `subprocess`
 
@@ -159,11 +155,9 @@ uv run python review.py
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`get_diff_uncommitted()` returns real diff text when you have uncommitted changes, and an empty string when you don't.</StepChecklistItem>
-<StepChecklistItem>Running `review.py` inside a folder that isn't a git repo at all raises a clear `RuntimeError`, not a confusing traceback from deep inside `subprocess`.</StepChecklistItem>
-<StepChecklistItem>You can explain, in your own words, why the command is passed as a list (`["git", "diff", "HEAD"]`) instead of the single string `"git diff HEAD"`.</StepChecklistItem>
-</StepChecklist>
+- ✅ `get_diff_uncommitted()` returns real diff text when you have uncommitted changes, and an empty string when you don't.
+- ✅ Running `review.py` inside a folder that isn't a git repo at all raises a clear `RuntimeError`, not a confusing traceback from deep inside `subprocess`.
+- ✅ You can explain, in your own words, why the command is passed as a list (`["git", "diff", "HEAD"]`) instead of the single string `"git diff HEAD"`.
 
 **🤔 Socratic Question(s)**
 
@@ -217,10 +211,8 @@ Treat this system prompt as a first draft, not a finished spec. Run it against a
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>You can explain, in your own words, why the prompt tells the model to say when it finds nothing wrong, instead of leaving that unstated.</StepChecklistItem>
-<StepChecklistItem>The prompt specifies a concrete output structure (file, category, severity, explanation, fix), not just "give feedback."</StepChecklistItem>
-</StepChecklist>
+- ✅ You can explain, in your own words, why the prompt tells the model to say when it finds nothing wrong, instead of leaving that unstated.
+- ✅ The prompt specifies a concrete output structure (file, category, severity, explanation, fix), not just "give feedback."
 
 **🤔 Socratic Question(s)**
 
@@ -287,11 +279,9 @@ Swap the `OpenAI(...)` block for a different `base_url` and key — e.g. `base_u
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`uv run python review.py` prints a numbered list of real issues (or a clear "no issues found" message) for a diff you know has changes in it.</StepChecklistItem>
-<StepChecklistItem>Each reported issue names a file and a category, not just a vague comment.</StepChecklistItem>
-<StepChecklistItem>Running it with an empty diff prints "No changes to review" instead of making an API call at all.</StepChecklistItem>
-</StepChecklist>
+- ✅ `uv run python review.py` prints a numbered list of real issues (or a clear "no issues found" message) for a diff you know has changes in it.
+- ✅ Each reported issue names a file and a category, not just a vague comment.
+- ✅ Running it with an empty diff prints "No changes to review" instead of making an API call at all.
 
 **🤔 Socratic Question(s)**
 
@@ -358,11 +348,9 @@ git diff main | uv run python review.py --stdin
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`uv run python review.py --commit <a real hash>` prints real feedback about that commit's actual changes.</StepChecklistItem>
-<StepChecklistItem>`uv run python review.py --against main` and piping via `--stdin` both produce sensible output on a repo with more than one branch.</StepChecklistItem>
-<StepChecklistItem>You've run the tool on at least one diff you wrote yourself, and read the feedback closely enough to agree or disagree with it.</StepChecklistItem>
-</StepChecklist>
+- ✅ `uv run python review.py --commit <a real hash>` prints real feedback about that commit's actual changes.
+- ✅ `uv run python review.py --against main` and piping via `--stdin` both produce sensible output on a repo with more than one branch.
+- ✅ You've run the tool on at least one diff you wrote yourself, and read the feedback closely enough to agree or disagree with it.
 
 **🤔 Socratic Question(s)**
 

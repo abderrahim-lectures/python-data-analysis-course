@@ -139,41 +139,71 @@ Every recursive function needs a **base case** that doesn't call itself (otherwi
 
 ## 🧩 Challenges
 
-<div class="challenge"><code>def is_even(n): return n % 2 == 0</code> — the function body is just the same divisibility check you already know, wrapped so it can be reused.</>}>
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Write a function `is_even(n)` that returns `True` if `n` is even, `False` otherwise.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>def is_even(n): return n % 2 == 0</code> — the function body is just the same divisibility check you already know, wrapped so it can be reused.</p>
 
-<div class="challenge"><code>def average(numbers): return sum(numbers) / len(numbers)</code>. Calling with an empty list raises <code>ZeroDivisionError</code> — worth noting even though handling it gracefully is next week's bonus material.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Write a function `average(numbers)` that takes a list of numbers and returns their mean. What happens if you call it with an empty list?
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>def average(numbers): return sum(numbers) / len(numbers)</code>. Calling with an empty list raises <code>ZeroDivisionError</code> — worth noting even though handling it gracefully is next week's bonus material.</p>
 
-<div class="challenge">Define <code>def is_prime(n): ...</code> reusing last week's primality loop inside the function body, then call it in a comprehension: <code>[n for n in range(2, 50) if is_prime(n)]</code>.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Turn last week's "is this number prime?" logic into a function `is_prime(n)`, then use it inside a list comprehension to build a list of all primes below 50.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Define <code>def is_prime(n): ...</code> reusing last week's primality loop inside the function body, then call it in a comprehension: <code>[n for n in range(2, 50) if is_prime(n)]</code>.</p>
 
-<div class="challenge">def f(x, y=1): return x + y — calling f(5) uses the default (6), f(5, 10) overrides it (15).</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Write a function `f(x, y=1)` that returns `x + y`. Call it once with only `x` and once with both arguments, and explain why the two results differ.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> def f(x, y=1): return x + y — calling f(5) uses the default (6), f(5, 10) overrides it (15).</p>
 
-<div class="challenge">def fibonacci(n): if n &lt;= 1: return n; return fibonacci(n - 1) + fibonacci(n - 2) — mirrors the mathematical definition F(n) = F(n-1) + F(n-2) directly, with F(0)=0 and F(1)=1 as the two base cases.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Write a recursive function `fibonacci(n)` that returns the `n`th Fibonacci number, using the definition $F(0) = 0$, $F(1) = 1$, $F(n) = F(n-1) + F(n-2)$.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> def fibonacci(n): if n &lt;= 1: return n; return fibonacci(n - 1) + fibonacci(n - 2) — mirrors the mathematical definition F(n) = F(n-1) + F(n-2) directly, with F(0)=0 and F(1)=1 as the two base cases.</p>
 
-<div class="challenge">def stats(numbers): return min(numbers), max(numbers), sum(numbers) / len(numbers) — returns a 3-tuple, unpacked at the call site as lo, hi, avg = stats(numbers).</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Write a function `stats(numbers)` that returns three values at once — the minimum, maximum, and average — and call it using tuple unpacking to capture all three in separate variables.
 
+<p class="challenge__answer">💡 <strong>Answer:</strong> def stats(numbers): return min(numbers), max(numbers), sum(numbers) / len(numbers) — returns a 3-tuple, unpacked at the call site as lo, hi, avg = stats(numbers).</p>
+
 </div>
+</details>
 
 ## 🤔 Socratic Questions
 
@@ -187,7 +217,8 @@ Write a function `stats(numbers)` that returns three values at once — the mini
 
 ## 🎁 Bonus: handling errors with try/except
 
-<BonusContent weekId="python-101-normal-week-4">
+<div class="bonus">
+
 
 Right now, calling `average([])` crashes your whole program with a `ZeroDivisionError`. Python lets you *catch* errors instead of crashing:
 
@@ -203,4 +234,5 @@ average([])   # 0, instead of a crash
 
 `try` wraps code that might fail; `except <ErrorType>` catches that specific failure and runs alternative code instead. This isn't part of the core curriculum (it's easy to overuse and hide real bugs), but it's a natural next step once functions can fail in predictable ways. Try wrapping your `average` and `is_prime` functions from this week's challenges with a `try`/`except` that handles a bad input gracefully, like a non-numeric value in the list.
 
-</BonusContent>
+
+</div>

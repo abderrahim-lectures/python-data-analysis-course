@@ -4,8 +4,6 @@ slug: /projects/meeting-notes-summarizer
 description: "Graduate from the in-browser playground to real Python: write a script that turns a raw meeting transcript into a structured summary — decisions, action items, and open questions — using a free-tier LLM and careful prompt design."
 ---
 
-import {StepChecklist, StepChecklistItem} from '@site/src/components/StepChecklist';
-
 # 🌍 Build a Meeting-Notes Summarizer
 
 Everything in the course so far ran in a sandboxed, in-browser playground — so you could start writing Python on day one with zero setup. This project is the graduation step: install Python for real on your own machine, then use it to build a tool that solves a genuinely annoying real-world problem — turning a wall of raw meeting-transcript text into a short, structured summary: what got decided, who owes what, and what's still unresolved. This assumes Python 101; nothing from Data Analysis is required.
@@ -150,11 +148,9 @@ uv run python load_transcript.py transcripts/standup.txt
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`uv run python load_transcript.py <path>` prints a nonzero character count and a preview that looks like real transcript text.</StepChecklistItem>
-<StepChecklistItem>Running it on a path that doesn't exist raises a clear Python error rather than silently doing nothing.</StepChecklistItem>
-<StepChecklistItem>Running it on an empty file raises the `ValueError` you wrote, not a confusing downstream error later.</StepChecklistItem>
-</StepChecklist>
+- ✅ `uv run python load_transcript.py <path>` prints a nonzero character count and a preview that looks like real transcript text.
+- ✅ Running it on a path that doesn't exist raises a clear Python error rather than silently doing nothing.
+- ✅ Running it on an empty file raises the `ValueError` you wrote, not a confusing downstream error later.
 
 **🤔 Socratic Question(s)**
 
@@ -219,11 +215,9 @@ Three things make this prompt design deliberate, not accidental:
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`build_prompt(transcript)` returns a list of two message dicts (`system`, `user`), with the transcript text actually embedded in the user message.</StepChecklistItem>
-<StepChecklistItem>You can point to the exact sentence in `JSON_SCHEMA_DESCRIPTION` that tells the model what to do when no owner is named.</StepChecklistItem>
-<StepChecklistItem>You could explain, in one sentence, why the schema is written as a literal JSON example instead of a paragraph description.</StepChecklistItem>
-</StepChecklist>
+- ✅ `build_prompt(transcript)` returns a list of two message dicts (`system`, `user`), with the transcript text actually embedded in the user message.
+- ✅ You can point to the exact sentence in `JSON_SCHEMA_DESCRIPTION` that tells the model what to do when no owner is named.
+- ✅ You could explain, in one sentence, why the schema is written as a literal JSON example instead of a paragraph description.
 
 **🤔 Socratic Question(s)**
 
@@ -328,11 +322,9 @@ Treat a language model's response the same way you'd treat data from an untruste
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`uv run python summarize.py transcripts/standup.txt` prints valid, readable JSON with all three required keys.</StepChecklistItem>
-<StepChecklistItem>You can explain what `extract_json` does with a response wrapped in ```` ```json ... ``` ````, versus one with no fence at all.</StepChecklistItem>
-<StepChecklistItem>Temporarily changing `REQUIRED_KEYS` to include a key you know isn't in the schema and re-running produces your own clear `ValueError`, not a crash somewhere else.</StepChecklistItem>
-</StepChecklist>
+- ✅ `uv run python summarize.py transcripts/standup.txt` prints valid, readable JSON with all three required keys.
+- ✅ You can explain what `extract_json` does with a response wrapped in ```` ```json ... ``` ````, versus one with no fence at all.
+- ✅ Temporarily changing `REQUIRED_KEYS` to include a key you know isn't in the schema and re-running produces your own clear `ValueError`, not a crash somewhere else.
 
 **🤔 Socratic Question(s)**
 
@@ -382,11 +374,9 @@ def format_markdown(summary: dict, source: str) -> str:
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`format_markdown(summary, "standup.txt")` returns a string starting with a `# Meeting Summary` heading.</StepChecklistItem>
-<StepChecklistItem>An action item with no named owner renders as "unassigned", not a blank or the word "None".</StepChecklistItem>
-<StepChecklistItem>Passing a summary where every list is empty still produces valid, readable Markdown (the `_No ... recorded._` lines), not an empty or broken section.</StepChecklistItem>
-</StepChecklist>
+- ✅ `format_markdown(summary, "standup.txt")` returns a string starting with a `# Meeting Summary` heading.
+- ✅ An action item with no named owner renders as "unassigned", not a blank or the word "None".
+- ✅ Passing a summary where every list is empty still produces valid, readable Markdown (the `_No ... recorded._` lines), not an empty or broken section.
 
 **🤔 Socratic Question(s)**
 
@@ -437,11 +427,9 @@ Every free tier caps requests per minute or per day, and each call to `summarize
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`uv run python summarize.py transcripts/standup.txt` prints a readable Markdown summary and reports writing two output files.</StepChecklistItem>
-<StepChecklistItem>Both `standup_summary.json` and `standup_summary.md` exist afterward, and the JSON file is valid (open it, or re-parse it with `json.load`).</StepChecklistItem>
-<StepChecklistItem>Running it on a second, different transcript produces a summary that actually reflects *that* transcript's content — not a copy of the first one's output.</StepChecklistItem>
-</StepChecklist>
+- ✅ `uv run python summarize.py transcripts/standup.txt` prints a readable Markdown summary and reports writing two output files.
+- ✅ Both `standup_summary.json` and `standup_summary.md` exist afterward, and the JSON file is valid (open it, or re-parse it with `json.load`).
+- ✅ Running it on a second, different transcript produces a summary that actually reflects *that* transcript's content — not a copy of the first one's output.
 
 **🤔 Socratic Question(s)**
 

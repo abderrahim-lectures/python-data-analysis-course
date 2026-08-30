@@ -4,8 +4,6 @@ slug: /projects/trivia-bot
 description: "Build a discord.py bot that runs trivia rounds in a server, tracks scores on a persistent leaderboard, and can generate fresh questions on any topic with a free-tier LLM."
 ---
 
-import {StepChecklist, StepChecklistItem} from '@site/src/components/StepChecklist';
-
 # 🌍 Build a Discord Trivia Bot
 
 A live `discord.py` bot that runs trivia rounds in a server: post a question, collect answers within a time limit, reveal who got it right, and keep a persistent leaderboard across rounds. Most trivia bots stop at a fixed question bank — this one adds a twist that fits a Python course: it can also generate a fresh question on any topic on the spot with a free-tier LLM, instead of only ever asking from a canned list.
@@ -112,12 +110,10 @@ GITHUB_TOKEN=your-llm-key-here
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>A Discord application and bot exist in the Developer Portal, and you've copied its token.</StepChecklistItem>
-<StepChecklistItem>"Message Content" is turned on under Privileged Gateway Intents.</StepChecklistItem>
-<StepChecklistItem>You have a free-tier LLM API key from a provider of your choice.</StepChecklistItem>
-<StepChecklistItem>`uv init`/`uv add` completed without errors, and `.env` has both `DISCORD_BOT_TOKEN` and your LLM key set.</StepChecklistItem>
-</StepChecklist>
+- ✅ A Discord application and bot exist in the Developer Portal, and you've copied its token.
+- ✅ "Message Content" is turned on under Privileged Gateway Intents.
+- ✅ You have a free-tier LLM API key from a provider of your choice.
+- ✅ `uv init`/`uv add` completed without errors, and `.env` has both `DISCORD_BOT_TOKEN` and your LLM key set.
 
 **🤔 Socratic Question(s)**
 
@@ -199,11 +195,9 @@ A regular bot invite only needs the `bot` scope. Slash commands specifically nee
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`questions.py` defines `QUESTION_BANK` and `random_question()`.</StepChecklistItem>
-<StepChecklistItem>`bot.py` registers a `/trivia` slash command via `app_commands.CommandTree`.</StepChecklistItem>
-<StepChecklistItem>`on_ready` calls `await tree.sync()` before printing its ready message.</StepChecklistItem>
-</StepChecklist>
+- ✅ `questions.py` defines `QUESTION_BANK` and `random_question()`.
+- ✅ `bot.py` registers a `/trivia` slash command via `app_commands.CommandTree`.
+- ✅ `on_ready` calls `await tree.sync()` before printing its ready message.
 
 **🤔 Socratic Question(s)**
 
@@ -275,11 +269,9 @@ Nothing awards a point yet — `trivia_command` from Step 1 doesn't check answer
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`scores.py` defines `load_scores()`, `award_point()`, and `leaderboard_text()`.</StepChecklistItem>
-<StepChecklistItem>Running `scores.py`'s standalone test prints a leaderboard with Alice ranked above Bob.</StepChecklistItem>
-<StepChecklistItem>`/leaderboard` is registered in `bot.py` and replies with the (still-empty) leaderboard.</StepChecklistItem>
-</StepChecklist>
+- ✅ `scores.py` defines `load_scores()`, `award_point()`, and `leaderboard_text()`.
+- ✅ Running `scores.py`'s standalone test prints a leaderboard with Alice ranked above Bob.
+- ✅ `/leaderboard` is registered in `bot.py` and replies with the (still-empty) leaderboard.
 
 **🤔 Socratic Question(s)**
 
@@ -376,11 +368,9 @@ An LLM asked for a trivia question can still get facts wrong, especially on obsc
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`generate.py`'s `generate_question(topic)` returns a dict with 4 options and a valid `answer_index`, or raises a clear error.</StepChecklistItem>
-<StepChecklistItem>`round.py`'s `pick_question()` returns a bank question when `topic` is empty, and a generated one otherwise.</StepChecklistItem>
-<StepChecklistItem>`/trivia` accepts an optional `topic` argument and visibly uses it.</StepChecklistItem>
-</StepChecklist>
+- ✅ `generate.py`'s `generate_question(topic)` returns a dict with 4 options and a valid `answer_index`, or raises a clear error.
+- ✅ `round.py`'s `pick_question()` returns a bank question when `topic` is empty, and a generated one otherwise.
+- ✅ `/trivia` accepts an optional `topic` argument and visibly uses it.
 
 **🤔 Socratic Question(s)**
 
@@ -470,12 +460,10 @@ Set `ROUND_TIME_LIMIT = 5` while you're getting the loop right, so you're not wa
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`/trivia` posts a question, then genuinely waits for an answer instead of resolving instantly.</StepChecklistItem>
-<StepChecklistItem>The first correct answer within the time limit is announced as the winner and gets a point via `award_point()`.</StepChecklistItem>
-<StepChecklistItem>Letting the timer run out with no correct answer reveals the answer without crashing or hanging.</StepChecklistItem>
-<StepChecklistItem>Running `/trivia` twice in a row starts a fresh round each time, using the updated leaderboard.</StepChecklistItem>
-</StepChecklist>
+- ✅ `/trivia` posts a question, then genuinely waits for an answer instead of resolving instantly.
+- ✅ The first correct answer within the time limit is announced as the winner and gets a point via `award_point()`.
+- ✅ Letting the timer run out with no correct answer reveals the answer without crashing or hanging.
+- ✅ Running `/trivia` twice in a row starts a fresh round each time, using the updated leaderboard.
 
 **🤔 Socratic Question(s)**
 

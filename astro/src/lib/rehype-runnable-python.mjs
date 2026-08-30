@@ -5,7 +5,7 @@
 // overrides (that's an MDX-only feature), so this is the only way to make
 // ```python fences in .md lesson files interactive.
 import {visit} from 'unist-util-visit';
-import {toString} from 'hast-util-to-string';
+import {h} from 'hastscript';
 
 export default function rehypeRunnablePython() {
   return (tree) => {
@@ -23,31 +23,23 @@ export default function rehypeRunnablePython() {
         (Array.isArray(cls) && cls.some((c) => /language-(python|py)$/.test(String(c))));
       if (!isPython) return;
 
-      const source = toString(code);
-      parent.children[index] = {
-        type: 'element',
-        tagName: 'div',
-        properties: {className: ['cell'], 'data-runnable': ''},
-        children: [
-          {
-            type: 'element', tagName: 'div', properties: {className: ['cell__actions']},
-            children: [
-              {type: 'element', tagName: 'button', properties: {className: ['btn', 'btn-primary', 'cell__run'], 'data-run': '', 'aria-label': 'Run this Python code'}, children: [{type: 'text', value: '▶ Run'}]},
-              {type: 'element', tagName: 'span', properties: {className: ['cell__lang']}, children: [{type: 'text', value: 'python'}]},
-            ],
-          },
-          {type: 'element', tagName: 'pre', properties: {className: ['cell__code']}, children: [
-            {type: 'element', tagName: 'code', properties: {}, children: [{type: 'text', value: source}]},
-          ]},
-          {
-            type: 'element', tagName: 'div', properties: {className: ['cell__output'], 'data-output': '', hidden: true},
-            children: [
-              {type: 'element', tagName: 'div', properties: {className: ['cell__lines'], 'data-lines': ''}, children: []},
-              {type: 'element', tagName: 'button', properties: {className: ['cell__clear'], 'data-clear': '', hidden: true}, children: [{type: 'text', value: 'Clear'}]},
-            ],
-          },
-        ],
-      };
+      // Keep Shiki's highlighted spans (per-token inline `color:`) for syntax
+      // colors, but drop the <pre>'s own inline background/class so our
+      // .cell__code background wins — textContent still reconstructs the
+      // plain source fine for the client script even with nested spans.
+      const highlightedPre = h('pre.cell__code', [{...code, properties: {...code.properties, className: undefined}}]);
+
+      parent.children[index] = h('div.cell', {dataRunnable: ''}, [
+        h('div.cell__actions', [
+          h('button.btn.btn-primary.cell__run', {dataRun: '', ariaLabel: 'Run this Python code'}, '▶ Run'),
+          h('span.cell__lang', 'python'),
+        ]),
+        highlightedPre,
+        h('div.cell__output', {dataOutput: '', hidden: true}, [
+          h('div.cell__lines', {dataLines: ''}),
+          h('button.cell__clear', {dataClear: '', hidden: true}, 'Clear'),
+        ]),
+      ]);
     });
   };
 }

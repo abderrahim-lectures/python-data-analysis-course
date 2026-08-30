@@ -4,8 +4,6 @@ slug: /projects/job-aggregator
 description: "Scrape multiple job-board-style sources, dedupe listings across them, and alert on new matches against a keyword filter — with requests/BeautifulSoup and pandas, no API key needed."
 ---
 
-import {StepChecklist, StepChecklistItem} from '@site/src/components/StepChecklist';
-
 # 🌍 Build a Job-Listing Aggregator
 
 [Scrape and Analyze a Live Website](/docs/projects/scrape-analyze) fetched one site and turned its HTML into a CSV. Real job hunting means watching *several* sources at once, none of which agree on markup, and caring only about what's genuinely new since you last checked. This project builds that: parse listings out of a handful of differently-structured "job board" pages, combine them into one table, dedupe the postings that show up on more than one board, filter to the roles that match a keyword you care about, and alert only on new matches — not the same ten listings every single run. It assumes Python 101-level Python and, for the dedupe/filter step, Data Analysis-level pandas comfort — filtering, `drop_duplicates`, boolean masks.
@@ -104,11 +102,9 @@ You should see four printed lines, one per listing on Alpha's board.
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`uv run python aggregate.py` runs without errors.</StepChecklistItem>
-<StepChecklistItem>It prints exactly 4 lines, one per listing in `board_alpha.html`.</StepChecklistItem>
-<StepChecklistItem>Each line has a real title, company, and location — not `None` or an empty string.</StepChecklistItem>
-</StepChecklist>
+- ✅ `uv run python aggregate.py` runs without errors.
+- ✅ It prints exactly 4 lines, one per listing in `board_alpha.html`.
+- ✅ Each line has a real title, company, and location — not `None` or an empty string.
 
 **🤔 Socratic Question(s)**
 
@@ -187,11 +183,9 @@ You should see 10 raw listings total (4 + 3 + 3) — "raw" because nothing has b
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`scrape_all_boards()` returns 10 listings.</StepChecklistItem>
-<StepChecklistItem>Every listing dict has the same five keys (`title`, `company`, `location`, `description`, `source`), regardless of which board it came from.</StepChecklistItem>
-<StepChecklistItem>The `source` field correctly identifies which board each listing came from.</StepChecklistItem>
-</StepChecklist>
+- ✅ `scrape_all_boards()` returns 10 listings.
+- ✅ Every listing dict has the same five keys (`title`, `company`, `location`, `description`, `source`), regardless of which board it came from.
+- ✅ The `source` field correctly identifies which board each listing came from.
 
 **🤔 Socratic Question(s)**
 
@@ -237,11 +231,9 @@ The dedupe key here is normalized `title + company` text, not a hash of the enti
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`aggregate.py` prints "2 duplicate posting(s) removed".</StepChecklistItem>
-<StepChecklistItem>`listings.csv` has exactly 8 rows (plus the header).</StepChecklistItem>
-<StepChecklistItem>The Northwind Analytics "Senior Python Developer" row and the Contoso Retail "Data Analyst" row each appear exactly once in `listings.csv`.</StepChecklistItem>
-</StepChecklist>
+- ✅ `aggregate.py` prints "2 duplicate posting(s) removed".
+- ✅ `listings.csv` has exactly 8 rows (plus the header).
+- ✅ The Northwind Analytics "Senior Python Developer" row and the Contoso Retail "Data Analyst" row each appear exactly once in `listings.csv`.
 
 **🤔 Socratic Question(s)**
 
@@ -306,11 +298,9 @@ The first run should report 6 new matches (every listing whose title or descript
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>The first run of `filter_alerts.py` reports 6 new matches and creates `new_matches.csv`.</StepChecklistItem>
-<StepChecklistItem>A second run, with no changes to `listings.csv`, reports "No new matches since the last run."</StepChecklistItem>
-<StepChecklistItem>Deleting `seen.json` and running again brings back all 6 matches as "new."</StepChecklistItem>
-</StepChecklist>
+- ✅ The first run of `filter_alerts.py` reports 6 new matches and creates `new_matches.csv`.
+- ✅ A second run, with no changes to `listings.csv`, reports "No new matches since the last run."
+- ✅ Deleting `seen.json` and running again brings back all 6 matches as "new."
 
 **🤔 Socratic Question(s)**
 

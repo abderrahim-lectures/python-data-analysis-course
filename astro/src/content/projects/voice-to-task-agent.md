@@ -4,8 +4,6 @@ slug: /projects/voice-to-task-agent
 description: "Graduate from the in-browser playground to real Python: transcribe a voice memo locally and for free with OpenAI's open-source Whisper model, then use a free-tier LLM to turn it into a structured task list."
 ---
 
-import {StepChecklist, StepChecklistItem} from '@site/src/components/StepChecklist';
-
 # 🌍 Build a Voice-to-Task Agent
 
 Everything in the course so far ran in a sandboxed, in-browser playground — so you could start writing Python on day one with zero setup. This project is the graduation step: install Python for real on your own machine, then use it to build something genuinely useful — a small pipeline that takes a rambling voice memo and turns it into a short, structured task list, without you having to type or organize any of it by hand. This assumes Python 101; nothing from Data Analysis is required.
@@ -147,11 +145,9 @@ Whisper ships in five sizes — `tiny`, `base`, `small`, `medium`, `large` — e
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`uv run python voice_to_tasks.py sample_audio/memo_1_work_followups.wav` prints a real transcript, not a traceback.</StepChecklistItem>
-<StepChecklistItem>The printed text roughly matches what the sample memo actually says — Whisper won't be perfect, but it should be clearly recognizable.</StepChecklistItem>
-<StepChecklistItem>Running it again is noticeably faster than the first run (the model weights are now cached locally, not re-downloaded).</StepChecklistItem>
-</StepChecklist>
+- ✅ `uv run python voice_to_tasks.py sample_audio/memo_1_work_followups.wav` prints a real transcript, not a traceback.
+- ✅ The printed text roughly matches what the sample memo actually says — Whisper won't be perfect, but it should be clearly recognizable.
+- ✅ Running it again is noticeably faster than the first run (the model weights are now cached locally, not re-downloaded).
 
 **🤔 Socratic Question(s)**
 
@@ -238,11 +234,9 @@ Everything above already works for all six providers in the table — just set `
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`extract_action_items(transcript)` returns a Python list of dicts, not an error.</StepChecklistItem>
-<StepChecklistItem>Each dict has `"task"`, `"due_date"`, and `"priority"` keys — even when a value is `None`.</StepChecklistItem>
-<StepChecklistItem>Running it on `memo_1_work_followups.wav` finds roughly three separate tasks, matching the three follow-ups actually mentioned in that memo.</StepChecklistItem>
-</StepChecklist>
+- ✅ `extract_action_items(transcript)` returns a Python list of dicts, not an error.
+- ✅ Each dict has `"task"`, `"due_date"`, and `"priority"` keys — even when a value is `None`.
+- ✅ Running it on `memo_1_work_followups.wav` finds roughly three separate tasks, matching the three follow-ups actually mentioned in that memo.
 
 **🤔 Socratic Question(s)**
 
@@ -295,11 +289,9 @@ Try all three sample clips, and — if you have a way to record one — your own
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`uv run python voice_to_tasks.py` (with any of the three sample clips) prints a transcript, then a marked-up task list, then a "Saved N task(s)" line.</StepChecklistItem>
-<StepChecklistItem>A `tasks.json` file now exists in your project folder, and its contents match what was printed.</StepChecklistItem>
-<StepChecklistItem>Running it on a memo with no real action items in it (try just describing your day) prints "No action items found" rather than inventing fake ones.</StepChecklistItem>
-</StepChecklist>
+- ✅ `uv run python voice_to_tasks.py` (with any of the three sample clips) prints a transcript, then a marked-up task list, then a "Saved N task(s)" line.
+- ✅ A `tasks.json` file now exists in your project folder, and its contents match what was printed.
+- ✅ Running it on a memo with no real action items in it (try just describing your day) prints "No action items found" rather than inventing fake ones.
 
 **🤔 Socratic Question(s)**
 

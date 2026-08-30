@@ -94,41 +94,71 @@ df[["name", "quiz1"]]          # multiple columns, as a DataFrame (note the doub
 
 ## 🧩 Challenges
 
-<div class="challenge"><code>df[df["quiz1"] &gt;= 90]</code> — a boolean mask keeping only rows where quiz1 is at least 90.</>}>
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Using `students-normal.csv`, select all rows where `quiz1` is 90 or above.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>df[df["quiz1"] &gt;= 90]</code> — a boolean mask keeping only rows where quiz1 is at least 90.</p>
 
-<div class="challenge"><code>df[(df["quiz1"] &gt;= 60) &amp; (df["quiz2"] &gt;= 60) &amp; (df["quiz3"] &gt;= 60)]</code> — three chained conditions combined with <code>&amp;</code>, each parenthesized.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Select students who passed (≥60) *all three* quizzes at once, combining three conditions.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>df[(df["quiz1"] &gt;= 60) &amp; (df["quiz2"] &gt;= 60) &amp; (df["quiz3"] &gt;= 60)]</code> — three chained conditions combined with <code>&amp;</code>, each parenthesized.</p>
 
-<div class="challenge"><code>df.iloc[0:3]</code> selects the first three rows by position; <code>df.loc[0:3]</code> would select rows labeled 0, 1, 2, and 3 — four rows — since <code>.loc</code>'s slice end is inclusive.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Select the first 3 rows of the DataFrame using `.iloc`. Then try `.loc[0:3]` — how many rows does it return, and why does that differ from `.iloc[0:3]`?
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>df.iloc[0:3]</code> selects the first three rows by position; <code>df.loc[0:3]</code> would select rows labeled 0, 1, 2, and 3 — four rows — since <code>.loc</code>'s slice end is inclusive.</p>
 
-<div class="challenge"><code>df[["name", "quiz1"]]</code> — double brackets: the outer brackets index the DataFrame, the inner brackets are a Python list of column names.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Select just the `name` and `quiz1` columns together, as a DataFrame (not a single Series).
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>df[["name", "quiz1"]]</code> — double brackets: the outer brackets index the DataFrame, the inner brackets are a Python list of column names.</p>
 
-<div class="challenge"><code>df[df["name"].isin(["Amina", "Karim", "Sara"])]</code> — filters to just the rows whose name matches one of the three given values.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Using `.isin()`, select rows for three specific students by name (pick any three names from the dataset).
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>df[df["name"].isin(["Amina", "Karim", "Sara"])]</code> — filters to just the rows whose name matches one of the three given values.</p>
 
-<div class="challenge"><code>df.loc[df["quiz1"] &lt; 60, ["name", "quiz1"]]</code> — combines a boolean mask (rows) with a column list, in one .loc call.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Using `.loc` with a boolean mask *and* a column list in the same call, select just the `name` and `quiz1` columns for students who failed `quiz1` (below 60).
 
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>df.loc[df["quiz1"] &lt; 60, ["name", "quiz1"]]</code> — combines a boolean mask (rows) with a column list, in one .loc call.</p>
+
 </div>
+</details>
 
 ## 🤔 Socratic Questions
 

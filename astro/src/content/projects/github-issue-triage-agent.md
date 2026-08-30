@@ -4,8 +4,6 @@ slug: /projects/github-issue-triage-agent
 description: "Graduate from the in-browser playground to real Python: fetch open issues from a real public GitHub repo and use a free-tier LLM to draft triage-label suggestions for a human maintainer to review."
 ---
 
-import {StepChecklist, StepChecklistItem} from '@site/src/components/StepChecklist';
-
 # 🌍 Build a GitHub Issue Triage Agent
 
 Every open-source repo with any traffic accumulates a backlog of untriaged issues — bug reports, feature requests, questions, and duplicates, all sitting there unlabeled until a maintainer has time to sort through them by hand. This project builds a small script that does the first pass for them: it fetches a real public repo's OPEN issues straight from GitHub's own API, sends each one to a free-tier LLM, and prints a report suggesting a triage label and a one-sentence rationale for each issue — the kind of thing a maintainer could skim in a minute instead of reading every issue from scratch.
@@ -140,11 +138,9 @@ Unauthenticated requests to GitHub's REST API are capped at **60 requests/hour, 
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`uv run python triage.py` runs without errors and prints real issue numbers and titles.</StepChecklistItem>
-<StepChecklistItem>No printed line is a pull request — check a couple of the printed numbers against the repo's actual Issues tab on GitHub.</StepChecklistItem>
-<StepChecklistItem>Changing `owner`/`repo` to a different real public repo still works.</StepChecklistItem>
-</StepChecklist>
+- ✅ `uv run python triage.py` runs without errors and prints real issue numbers and titles.
+- ✅ No printed line is a pull request — check a couple of the printed numbers against the repo's actual Issues tab on GitHub.
+- ✅ Changing `owner`/`repo` to a different real public repo still works.
 
 **🤔 Socratic Question(s)**
 
@@ -184,11 +180,9 @@ Notice the prompt explicitly tells the model it's drafting a suggestion for huma
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`build_triage_prompt` includes the real issue title and (truncated) body, not placeholder text.</StepChecklistItem>
-<StepChecklistItem>The prompt lists all of `LABEL_CHOICES` explicitly, not a vague "pick a label" instruction.</StepChecklistItem>
-<StepChecklistItem>Printing `build_triage_prompt(issues[0])` for a real fetched issue produces a well-formed, readable prompt.</StepChecklistItem>
-</StepChecklist>
+- ✅ `build_triage_prompt` includes the real issue title and (truncated) body, not placeholder text.
+- ✅ The prompt lists all of `LABEL_CHOICES` explicitly, not a vague "pick a label" instruction.
+- ✅ Printing `build_triage_prompt(issues[0])` for a real fetched issue produces a well-formed, readable prompt.
 
 **🤔 Socratic Question(s)**
 
@@ -237,11 +231,9 @@ Don't forget `from dotenv import load_dotenv` plus `load_dotenv()` near the top 
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>Calling `suggest_triage` on one real fetched issue returns a `dict` with a real `label` and a real, sentence-length `rationale` — not an error or empty strings.</StepChecklistItem>
-<StepChecklistItem>The returned `label` is always one of `LABEL_CHOICES` (or the `"other"` fallback), never arbitrary text leaking through unparsed.</StepChecklistItem>
-<StepChecklistItem>Deliberately feeding `parse_triage_reply` a malformed reply (e.g. just `"I think this is a bug"`, no `Label:`/`Rationale:` lines) doesn't crash — it falls back gracefully.</StepChecklistItem>
-</StepChecklist>
+- ✅ Calling `suggest_triage` on one real fetched issue returns a `dict` with a real `label` and a real, sentence-length `rationale` — not an error or empty strings.
+- ✅ The returned `label` is always one of `LABEL_CHOICES` (or the `"other"` fallback), never arbitrary text leaking through unparsed.
+- ✅ Deliberately feeding `parse_triage_reply` a malformed reply (e.g. just `"I think this is a bug"`, no `Label:`/`Rationale:` lines) doesn't crash — it falls back gracefully.
 
 **🤔 Socratic Question(s)**
 
@@ -286,11 +278,9 @@ You should see a full report: a header naming the repo and issue count, then one
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>Running `triage.py` end to end prints a full report with no unhandled tracebacks.</StepChecklistItem>
-<StepChecklistItem>Every issue in the report has a real GitHub URL, a suggested label, and a non-empty rationale.</StepChecklistItem>
-<StepChecklistItem>Running it against a second, different real public repo produces genuinely different suggestions, not a copy-pasted-looking report.</StepChecklistItem>
-</StepChecklist>
+- ✅ Running `triage.py` end to end prints a full report with no unhandled tracebacks.
+- ✅ Every issue in the report has a real GitHub URL, a suggested label, and a non-empty rationale.
+- ✅ Running it against a second, different real public repo produces genuinely different suggestions, not a copy-pasted-looking report.
 
 **🤔 Socratic Question(s)**
 

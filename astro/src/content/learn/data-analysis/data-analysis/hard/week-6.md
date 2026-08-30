@@ -115,41 +115,71 @@ Checking `count` alongside `mean` matters: a striking-looking average based on o
 
 ## 🧩 Challenges
 
-<div class="challenge"><code>df["lunch"].value_counts()</code> — counts each distinct category and how often it appears, sorted from most to least common by default.</>}>
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Load `students-performance.csv` and use `.value_counts()` to see the distribution of the `lunch` column's categories.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>df["lunch"].value_counts()</code> — counts each distinct category and how often it appears, sorted from most to least common by default.</p>
 
-<div class="challenge">Write down at least 2–3 specific questions in plain English (e.g. "Does parental education level associate with reading_score?") before writing any pandas code to answer them — the discipline is in ordering, not in the code itself.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Before writing any analysis code, write down (in a markdown cell, or just as comments) three specific questions this dataset could plausibly answer, based only on its column names.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Write down at least 2–3 specific questions in plain English (e.g. "Does parental education level associate with reading_score?") before writing any pandas code to answer them — the discipline is in ordering, not in the code itself.</p>
 
-<div class="challenge"><code>df.groupby("parental_level_of_education")["writing_score"].agg(["mean", "count"])</code> — checking count alongside mean surfaces whether any group's average is based on too few rows to trust.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Compute mean `writing_score` grouped by `parental_level_of_education`, along with the count of students in each group. Are any groups small enough that their mean deserves less confidence?
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>df.groupby("parental_level_of_education")["writing_score"].agg(["mean", "count"])</code> — checking count alongside mean surfaces whether any group's average is based on too few rows to trust.</p>
 
-<div class="challenge">Compute all three: <code>df["math_score"].mean()</code>, <code>.median()</code>, <code>.std()</code>. A mean well above or below the median, or a very large std relative to the score range (0–100), would be signs of a skewed or spread-out distribution worth investigating with a histogram next week.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Compute the mean, median, and standard deviation of `math_score`. Based on these three numbers alone (no chart yet), do you expect the distribution to be roughly symmetric, or skewed?
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Compute all three: <code>df["math_score"].mean()</code>, <code>.median()</code>, <code>.std()</code>. A mean well above or below the median, or a very large std relative to the score range (0–100), would be signs of a skewed or spread-out distribution worth investigating with a histogram next week.</p>
 
-<div class="challenge">Compute Q1, Q3, and IQR for reading_score the same way as the math_score example, then filter for values outside [Q1 - 1.5*IQR, Q3 + 1.5*IQR] and count how many rows qualify.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Repeat the IQR outlier check from Step 4, but for the `reading_score` column instead of `math_score`. How many outliers do you find?
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Compute Q1, Q3, and IQR for reading_score the same way as the math_score example, then filter for values outside [Q1 - 1.5*IQR, Q3 + 1.5*IQR] and count how many rows qualify.</p>
 
-<div class="challenge">Call df["test_preparation_course"].value_counts(normalize=True) to get the proportion completing vs. not completing test prep, and multiply by 100 (or format as a percent) to read it as a percentage.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Using `.value_counts(normalize=True)`, what proportion of students completed the `test_preparation_course`?
 
+<p class="challenge__answer">💡 <strong>Answer:</strong> Call df["test_preparation_course"].value_counts(normalize=True) to get the proportion completing vs. not completing test prep, and multiply by 100 (or format as a percent) to read it as a percentage.</p>
+
 </div>
+</details>
 
 ## 🤔 Socratic Questions
 

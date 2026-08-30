@@ -4,8 +4,6 @@ slug: /projects/habit-streak-visualizer
 description: "Track daily habit check-ins locally and render a GitHub-contributions-graph-style calendar heatmap, with pandas and matplotlib — no ML, no API key."
 ---
 
-import {StepChecklist, StepChecklistItem} from '@site/src/components/StepChecklist';
-
 # 🌍 Build a Habit-Streak Visualizer
 
 This project assumes you're comfortable with Python 101 — variables, functions, reading and writing files, basic loops. Some pandas and matplotlib from Data Analysis (`DataFrame`s, `.groupby()`, plotting a simple chart) will make a few steps feel familiar, but nothing here needs anything beyond that: there's no machine learning, no external API, and no dataset to download. You bring your own data, one day at a time.
@@ -118,11 +116,9 @@ Run that a handful of times with `--date`/`--done` for different days to build u
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>Running `checkin.py` twice for the same habit and date, once "y" and once "n", leaves the log with both rows — you'll need to decide (next step) which one wins.</StepChecklistItem>
-<StepChecklistItem>Opening `checkins.csv` in a text editor shows exactly three columns, one row per check-in, human-readable.</StepChecklistItem>
-<StepChecklistItem>You can log a check-in for a past date with `--date` and `--done`, without the interactive prompt.</StepChecklistItem>
-</StepChecklist>
+- ✅ Running `checkin.py` twice for the same habit and date, once "y" and once "n", leaves the log with both rows — you'll need to decide (next step) which one wins.
+- ✅ Opening `checkins.csv` in a text editor shows exactly three columns, one row per check-in, human-readable.
+- ✅ You can log a check-in for a past date with `--date` and `--done`, without the interactive prompt.
 
 **🤔 Socratic Question(s)**
 
@@ -172,11 +168,9 @@ If you haven't logged today yet, `daily`'s last day is `False` by default (from 
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`daily.index` contains every calendar day between your first and last log entry, with no gaps — `len(daily)` matches that day count exactly.</StepChecklistItem>
-<StepChecklistItem>Manually counting a known run of consecutive "y" days in your test log matches what `compute_streaks` reports for `longest_streak`.</StepChecklistItem>
-<StepChecklistItem>Logging a "n" (or skipping a day) resets `current_streak` to 0 the next time you compute it.</StepChecklistItem>
-</StepChecklist>
+- ✅ `daily.index` contains every calendar day between your first and last log entry, with no gaps — `len(daily)` matches that day count exactly.
+- ✅ Manually counting a known run of consecutive "y" days in your test log matches what `compute_streaks` reports for `longest_streak`.
+- ✅ Logging a "n" (or skipping a day) resets `current_streak` to 0 the next time you compute it.
 
 **🤔 Socratic Question(s)**
 
@@ -211,11 +205,9 @@ def build_grid(daily: pd.Series):
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`grid.shape[0]` is exactly 7 (one row per weekday), regardless of how long the date range is.</StepChecklistItem>
-<StepChecklistItem>Feeding `build_grid` a date range that crosses a January 1st does *not* produce two clusters of low week-numbered columns — the columns increase steadily across the boundary.</StepChecklistItem>
-<StepChecklistItem>The first and last few cells in the grid (before the first logged day, after the last) are `NaN`, not `0`.</StepChecklistItem>
-</StepChecklist>
+- ✅ `grid.shape[0]` is exactly 7 (one row per weekday), regardless of how long the date range is.
+- ✅ Feeding `build_grid` a date range that crosses a January 1st does *not* produce two clusters of low week-numbered columns — the columns increase steadily across the boundary.
+- ✅ The first and last few cells in the grid (before the first logged day, after the last) are `NaN`, not `0`.
 
 **🤔 Socratic Question(s)**
 
@@ -268,11 +260,9 @@ Drawing unlogged cells at the palest step of the same blue ramp as a genuine mis
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>The rendered heatmap visibly darkens across a real multi-day streak in your data, rather than every "done" cell looking identical.</StepChecklistItem>
-<StepChecklistItem>Cells outside your logged date range render as flat gray, distinguishable at a glance from a pale-blue "missed" day.</StepChecklistItem>
-<StepChecklistItem>Running the visualizer against the bundled sample data produces a grid that's recognizably GitHub-contributions-shaped: seven rows, many columns, a clear left-to-right time axis.</StepChecklistItem>
-</StepChecklist>
+- ✅ The rendered heatmap visibly darkens across a real multi-day streak in your data, rather than every "done" cell looking identical.
+- ✅ Cells outside your logged date range render as flat gray, distinguishable at a glance from a pale-blue "missed" day.
+- ✅ Running the visualizer against the bundled sample data produces a grid that's recognizably GitHub-contributions-shaped: seven rows, many columns, a clear left-to-right time axis.
 
 **🤔 Socratic Question(s)**
 

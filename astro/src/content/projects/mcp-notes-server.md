@@ -4,8 +4,6 @@ slug: /projects/mcp-notes-server
 description: "Index a real folder of Markdown notes and expose it to Claude Desktop as searchable tools with the Model Context Protocol -- a genuinely useful personal-knowledge-base MCP server, not a toy."
 ---
 
-import {StepChecklist, StepChecklistItem} from '@site/src/components/StepChecklist';
-
 # 🌍 Build an MCP Server for Your Notes
 
 This assumes Python 101 and comfort writing plain functions -- and it helps a lot to have already built the [Build an MCP Server](/docs/projects/mcp-server) project first, since this one reuses the same `FastMCP` decorator pattern and only adds real content to search over instead of two toy tools. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
@@ -117,11 +115,9 @@ You should see every note's title printed back. If the list is empty, `NOTES_DIR
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`notes/` contains at least 4 real, genuinely different `.md` notes, each with a `# Title` heading.</StepChecklistItem>
-<StepChecklistItem>`_all_notes()` returns one `Note` per file, with the right title pulled from each heading.</StepChecklistItem>
-<StepChecklistItem>`NOTES_DIR` points at a real folder that actually exists on your machine.</StepChecklistItem>
-</StepChecklist>
+- ✅ `notes/` contains at least 4 real, genuinely different `.md` notes, each with a `# Title` heading.
+- ✅ `_all_notes()` returns one `Note` per file, with the right title pulled from each heading.
+- ✅ `NOTES_DIR` points at a real folder that actually exists on your machine.
 
 **🤔 Socratic Question(s)**
 
@@ -195,11 +191,9 @@ Every bug is easier to find here than after `@mcp.tool()`, the Inspector, and Cl
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`search_notes` finds a keyword you know is in one of your notes, and returns a real, correct snippet.</StepChecklistItem>
-<StepChecklistItem>`get_note_by_title` returns full note text for an exact title, and a real "be more specific" message for an ambiguous partial one.</StepChecklistItem>
-<StepChecklistItem>`list_recent_notes` returns notes in the right order -- most recently edited first.</StepChecklistItem>
-</StepChecklist>
+- ✅ `search_notes` finds a keyword you know is in one of your notes, and returns a real, correct snippet.
+- ✅ `get_note_by_title` returns full note text for an exact title, and a real "be more specific" message for an ambiguous partial one.
+- ✅ `list_recent_notes` returns notes in the right order -- most recently edited first.
 
 **🤔 Socratic Question(s)**
 
@@ -268,11 +262,9 @@ With one tool, the model has nothing to choose between. With three, try asking t
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`server.py` defines all three tools with `@mcp.tool()` and real, specific docstrings.</StepChecklistItem>
-<StepChecklistItem>`uv run mcp dev server.py` starts without errors and the Inspector lists all three tools.</StepChecklistItem>
-<StepChecklistItem>Calling each tool by hand in the Inspector returns the same correct results you already saw in Step 2.</StepChecklistItem>
-</StepChecklist>
+- ✅ `server.py` defines all three tools with `@mcp.tool()` and real, specific docstrings.
+- ✅ `uv run mcp dev server.py` starts without errors and the Inspector lists all three tools.
+- ✅ Calling each tool by hand in the Inspector returns the same correct results you already saw in Step 2.
 
 **🤔 Socratic Question(s)**
 
@@ -313,11 +305,9 @@ Claude Desktop should show it calling `search_notes`, `list_recent_notes`, or `g
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`notes` (or your chosen server name) appears in Claude Desktop's tool/connector list after a full restart.</StepChecklistItem>
-<StepChecklistItem>Asking about a topic you know is in one of your notes actually shows Claude calling a tool, not just answering from memory or guessing.</StepChecklistItem>
-<StepChecklistItem>Asking Claude to pull up one specific note by name returns its real, full content.</StepChecklistItem>
-</StepChecklist>
+- ✅ `notes` (or your chosen server name) appears in Claude Desktop's tool/connector list after a full restart.
+- ✅ Asking about a topic you know is in one of your notes actually shows Claude calling a tool, not just answering from memory or guessing.
+- ✅ Asking Claude to pull up one specific note by name returns its real, full content.
 
 **🤔 Socratic Question(s)**
 

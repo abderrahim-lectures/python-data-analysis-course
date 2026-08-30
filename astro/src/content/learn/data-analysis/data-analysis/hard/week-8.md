@@ -123,41 +123,71 @@ $r$ close to $1$ or $-1$ tells you two variables move together — it says nothi
 
 ## 🧩 Challenges
 
-<div class="challenge"><code>df["math_score"].corr(df["writing_score"])</code> — a single Pearson correlation coefficient between the two columns.</>}>
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Compute the correlation coefficient between `math_score` and `writing_score`.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>df["math_score"].corr(df["writing_score"])</code> — a single Pearson correlation coefficient between the two columns.</p>
 
-<div class="challenge"><code>df[["math_score","reading_score","writing_score"]].corr()</code> then <code>sns.heatmap(..., annot=True)</code> — the pairwise matrix visualized with color and printed numbers together.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Build the full 3x3 correlation matrix for the three score columns and visualize it as a heatmap with the actual values annotated on each cell.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>df[["math_score","reading_score","writing_score"]].corr()</code> then <code>sns.heatmap(..., annot=True)</code> — the pairwise matrix visualized with color and printed numbers together.</p>
 
-<div class="challenge"><code>sns.boxplot(data=df, x="lunch", y="math_score")</code> — a grouped boxplot comparing the math_score distribution between the two lunch categories side by side.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Create a grouped boxplot comparing `math_score` distributions across the two `lunch` categories.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>sns.boxplot(data=df, x="lunch", y="math_score")</code> — a grouped boxplot comparing the math_score distribution between the two lunch categories side by side.</p>
 
-<div class="challenge">A plausible third factor is socioeconomic status: it could independently affect both <code>lunch</code> type (free/reduced lunch programs are tied to household income) and academic preparation/resources (affecting scores) — so lunch type and scores could correlate without lunch itself causing score differences.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 If `lunch` type and `math_score` show a noticeable difference in your boxplot from the previous challenge, propose one plausible *third factor* that could explain both without `lunch` type directly causing score differences.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> A plausible third factor is socioeconomic status: it could independently affect both <code>lunch</code> type (free/reduced lunch programs are tied to household income) and academic preparation/resources (affecting scores) — so lunch type and scores could correlate without lunch itself causing score differences.</p>
 
-<div class="challenge">sns.scatterplot(data=df, x="math_score", y="reading_score", hue="test_preparation_course", alpha=0.6) -- colors each point by test-prep status, letting you visually compare whether the math/reading relationship looks similar for both groups.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Create a scatter plot of `math_score` vs. `reading_score`, colored (`hue`) by `test_preparation_course`. Does the relationship look similar for both groups, or does one group's points look shifted?
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> sns.scatterplot(data=df, x="math_score", y="reading_score", hue="test_preparation_course", alpha=0.6) -- colors each point by test-prep status, letting you visually compare whether the math/reading relationship looks similar for both groups.</p>
 
-<div class="challenge">pd.crosstab(df["lunch"], df["test_preparation_course"], normalize="index") shows, within each lunch category, what fraction completed vs. did not complete test prep -- letting you check whether the two categorical variables appear related without needing a numeric correlation.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Using `pd.crosstab` with `normalize="index"`, check whether `lunch` type and `test_preparation_course` completion seem related to each other.
 
+<p class="challenge__answer">💡 <strong>Answer:</strong> pd.crosstab(df["lunch"], df["test_preparation_course"], normalize="index") shows, within each lunch category, what fraction completed vs. did not complete test prep -- letting you check whether the two categorical variables appear related without needing a numeric correlation.</p>
+
 </div>
+</details>
 
 ## 🤔 Socratic Questions
 

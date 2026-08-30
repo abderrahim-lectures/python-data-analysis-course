@@ -182,41 +182,71 @@ Notice how each line does one clear thing: read a value, convert it to the right
 
 ## 🧩 Challenges
 
-<div class="challenge"><code>type(7 / 2)</code> is <code>float</code> — true division (<code>/</code>) always produces a float in Python 3, even when both operands are ints and the result is a whole number.</>}>
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 What is `type(7 / 2)`? Predict it before running it in the playground, then check.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>type(7 / 2)</code> is <code>float</code> — true division (<code>/</code>) always produces a float in Python 3, even when both operands are ints and the result is a whole number.</p>
 
-<div class="challenge">Yes: <code>"3" + "4"</code> is the string <code>"34"</code> (concatenation), not <code>7</code>. Adding a <code>str</code> and an <code>int</code> directly (<code>"3" + 4</code>) raises a <code>TypeError</code> — you must convert first.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Predict the output of `"3" + "4"`. Is it the same as `3 + 4`?
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Yes: <code>"3" + "4"</code> is the string <code>"34"</code> (concatenation), not <code>7</code>. Adding a <code>str</code> and an <code>int</code> directly (<code>"3" + 4</code>) raises a <code>TypeError</code> — you must convert first.</p>
 
-<div class="challenge">Write a small program: read a name and a birth year with two <code>input()</code> calls, convert the year to <code>int</code>, subtract from the current year, and print a sentence with an f-string, e.g. <code>{"f\"{name}, you are about {age} years old.\""}</code>.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Write a program that asks for a name and a birth year (as two separate `input()` prompts), computes an approximate age, and prints a sentence like `"Amina, you are about 21 years old."` Try it in the playground.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Write a small program: read a name and a birth year with two <code>input()</code> calls, convert the year to <code>int</code>, subtract from the current year, and print a sentence with an f-string, e.g. <code>{"f\"{name}, you are about {age} years old.\""}</code>.</p>
 
-<div class="challenge">15 // 4 is 3 (floor of 3.75), and 15 % 4 is 3 (since 15 = 4·3 + 3). Together they satisfy 15 = 4·(15 // 4) + (15 % 4), the same identity as the division algorithm you know from number theory.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Without running it, compute `15 // 4` and `15 % 4` by hand. Then verify: does `4 * (15 // 4) + (15 % 4)` equal `15`?
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> 15 // 4 is 3 (floor of 3.75), and 15 % 4 is 3 (since 15 = 4·3 + 3). Together they satisfy 15 = 4·(15 // 4) + (15 % 4), the same identity as the division algorithm you know from number theory.</p>
 
-<div class="challenge">int(-7.9) is -7 (truncates toward zero — chops off the decimal part), while -7.9 // 1 is -8.0 (floors toward negative infinity). They agree for positive numbers but disagree for negative ones, which is exactly the pitfall the "Common pitfalls" section above warns about.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Predict `int(-7.9)` and `-7.9 // 1`. Are they the same? Run both in the playground and explain any difference using what you learned about truncation versus flooring.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> int(-7.9) is -7 (truncates toward zero — chops off the decimal part), while -7.9 // 1 is -8.0 (floors toward negative infinity). They agree for positive numbers but disagree for negative ones, which is exactly the pitfall the "Common pitfalls" section above warns about.</p>
 
-<div class="challenge">Extend the tip calculator: read a third input for the number of people, convert it to <code>int</code>, and divide <code>total</code> by that number to get <code>per_person</code>, printed with <code>:.2f</code> formatting like the other amounts.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Extend the worked example's tip calculator to also ask how many people are splitting the bill, and print each person's share.
 
+<p class="challenge__answer">💡 <strong>Answer:</strong> Extend the tip calculator: read a third input for the number of people, convert it to <code>int</code>, and divide <code>total</code> by that number to get <code>per_person</code>, printed with <code>:.2f</code> formatting like the other amounts.</p>
+
 </div>
+</details>
 
 ## 🤔 Socratic Questions
 

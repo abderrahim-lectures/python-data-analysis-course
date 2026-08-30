@@ -4,8 +4,6 @@ slug: /projects/codebase-knowledge-graph
 description: "Graduate from the in-browser playground to real Python: parse a real codebase's Python files with the ast module, build a graph of its structure with networkx, and visualize and query it — no API key, no network access needed."
 ---
 
-import {StepChecklist, StepChecklistItem} from '@site/src/components/StepChecklist';
-
 # 🌍 Turn a Codebase into a Knowledge Graph
 
 Every other project in this section eventually reaches for an API key, a free-tier signup, or a live website. This one doesn't need any of that. You'll write a tool that reads Python source code the way the interpreter itself does — by parsing it into an **AST** (abstract syntax tree) with the standard library's built-in `ast` module — then turns what it finds into a **graph**: files, functions, and classes as nodes, "imports"/"calls"/"defined in" relationships as edges. That's a real, working example of a data structure from way back in the course showing up in a genuinely useful tool, not a classroom exercise: a graph is just nodes and edges, and a codebase's own structure turns out to already be one.
@@ -128,11 +126,9 @@ Not every `.py` file in a real repository parses cleanly: a file might be Python
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`uv run python explore_ast.py` runs without errors and prints `function: greet`, `class: Greeter`, and `import: os`.</StepChecklistItem>
-<StepChecklistItem>`function: greet_twice` also gets printed, even though it's nested inside `Greeter` — confirming `ast.walk` visits every node, not just top-level ones.</StepChecklistItem>
-<StepChecklistItem>You can explain, in one sentence, the difference between `ast.Import` (`import os`) and `ast.ImportFrom` (`from x import y`).</StepChecklistItem>
-</StepChecklist>
+- ✅ `uv run python explore_ast.py` runs without errors and prints `function: greet`, `class: Greeter`, and `import: os`.
+- ✅ `function: greet_twice` also gets printed, even though it's nested inside `Greeter` — confirming `ast.walk` visits every node, not just top-level ones.
+- ✅ You can explain, in one sentence, the difference between `ast.Import` (`import os`) and `ast.ImportFrom` (`from x import y`).
 
 **🤔 Socratic Question(s)**
 
@@ -204,11 +200,9 @@ Every node in a `networkx` graph is just a hashable value — here, a plain stri
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>Running `build_graph.py` against a small folder of `.py` files prints a nonzero node and edge count.</StepChecklistItem>
-<StepChecklistItem>A file that defines two functions and imports one module produces at least 4 nodes for that file alone (the file itself, the module, and the two functions).</StepChecklistItem>
-<StepChecklistItem>Deliberately break one file's syntax (an unclosed bracket) and confirm the tool skips it with a warning instead of crashing.</StepChecklistItem>
-</StepChecklist>
+- ✅ Running `build_graph.py` against a small folder of `.py` files prints a nonzero node and edge count.
+- ✅ A file that defines two functions and imports one module produces at least 4 nodes for that file alone (the file itself, the module, and the two functions).
+- ✅ Deliberately break one file's syntax (an unclosed bracket) and confirm the tool skips it with a warning instead of crashing.
 
 **🤔 Socratic Question(s)**
 
@@ -257,11 +251,9 @@ This two-pass structure — first collect every definition, *then* resolve calls
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>After running the full tool on `sample_repo/` (from the companion example, or your own test files), at least one `"calls"` edge exists between two functions in different files.</StepChecklistItem>
-<StepChecklistItem>You can point to one specific call in your test code and find the matching edge in the graph.</StepChecklistItem>
-<StepChecklistItem>You can explain why the call-resolution step has to run *after* every file has been scanned, not file-by-file as you go.</StepChecklistItem>
-</StepChecklist>
+- ✅ After running the full tool on `sample_repo/` (from the companion example, or your own test files), at least one `"calls"` edge exists between two functions in different files.
+- ✅ You can point to one specific call in your test code and find the matching edge in the graph.
+- ✅ You can explain why the call-resolution step has to run *after* every file has been scanned, not file-by-file as you go.
 
 **🤔 Socratic Question(s)**
 
@@ -324,12 +316,10 @@ def visualize_matplotlib(graph, output_path="graph.png"):
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`graph.html` opens in a browser and shows a real, non-empty graph — not a blank page.</StepChecklistItem>
-<StepChecklistItem>Dragging a node moves it, and the connected edges follow it.</StepChecklistItem>
-<StepChecklistItem>Hovering a node shows its kind and full id in a tooltip.</StepChecklistItem>
-<StepChecklistItem>(If you tried the matplotlib version) `graph.png` exists and opens as a real image, with distinguishable node colors.</StepChecklistItem>
-</StepChecklist>
+- ✅ `graph.html` opens in a browser and shows a real, non-empty graph — not a blank page.
+- ✅ Dragging a node moves it, and the connected edges follow it.
+- ✅ Hovering a node shows its kind and full id in a tooltip.
+- ✅ (If you tried the matplotlib version) `graph.png` exists and opens as a real image, with distinguishable node colors.
 
 **🤔 Socratic Question(s)**
 
@@ -369,11 +359,9 @@ def who_imports(graph, module_name):
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`what_does_it_call(graph, ...)` on a function you know calls two others returns both, by name.</StepChecklistItem>
-<StepChecklistItem>`who_imports(graph, ...)` on a module you know is imported by two files returns both file names.</StepChecklistItem>
-<StepChecklistItem>Querying a name that doesn't exist in the graph returns an empty result, not a crash.</StepChecklistItem>
-</StepChecklist>
+- ✅ `what_does_it_call(graph, ...)` on a function you know calls two others returns both, by name.
+- ✅ `who_imports(graph, ...)` on a module you know is imported by two files returns both file names.
+- ✅ Querying a name that doesn't exist in the graph returns an empty result, not a crash.
 
 **🤔 Socratic Question(s)**
 
@@ -398,11 +386,9 @@ Open the resulting HTML and actually look at it: which files import the most oth
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>The tool runs against a real, multi-file repository (not just the toy `sample_repo/`) without crashing.</StepChecklistItem>
-<StepChecklistItem>The resulting graph has visibly more nodes and edges than the toy example, and the visualization still renders.</StepChecklistItem>
-<StepChecklistItem>You can name one thing the graph showed you about that codebase's structure that you didn't already know going in.</StepChecklistItem>
-</StepChecklist>
+- ✅ The tool runs against a real, multi-file repository (not just the toy `sample_repo/`) without crashing.
+- ✅ The resulting graph has visibly more nodes and edges than the toy example, and the visualization still renders.
+- ✅ You can name one thing the graph showed you about that codebase's structure that you didn't already know going in.
 
 **🤔 Socratic Question(s)**
 

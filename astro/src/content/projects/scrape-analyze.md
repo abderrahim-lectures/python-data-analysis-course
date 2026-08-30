@@ -4,8 +4,6 @@ slug: /projects/scrape-analyze
 description: "Graduate from the in-browser playground to real Python: scrape a real website, clean the data with pandas, and produce your own charts — no API key needed."
 ---
 
-import {StepChecklist, StepChecklistItem} from '@site/src/components/StepChecklist';
-
 # 🌍 Scrape and Analyze a Live Website
 
 Every dataset in the Data Analysis section so far arrived as a ready-made CSV, already sitting in `static/datasets/`, waiting to be loaded with `pd.read_csv`. Real analysis rarely starts there — usually you have to go get the data yourself. This project is that step: fetch a real, live web page over HTTP, parse the HTML into structured rows, clean the result with pandas, and produce your own small analysis with charts. It assumes Data Analysis Normal-track-level pandas comfort — selection, filtering, `groupby`, basic cleaning — the same skills you already used to reproduce a guided EDA notebook. This project asks you to point those same skills at data nobody handed you.
@@ -116,11 +114,9 @@ You should see ten printed lines, one per quote on the front page.
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`uv run python scrape.py` runs without errors.</StepChecklistItem>
-<StepChecklistItem>It prints exactly 10 lines, one per quote on the front page.</StepChecklistItem>
-<StepChecklistItem>Each printed line has real text, a real author name, and a non-empty list of tags — not `None` or empty strings.</StepChecklistItem>
-</StepChecklist>
+- ✅ `uv run python scrape.py` runs without errors.
+- ✅ It prints exactly 10 lines, one per quote on the front page.
+- ✅ Each printed line has real text, a real author name, and a non-empty list of tags — not `None` or empty strings.
 
 **🤔 Socratic Question(s)**
 
@@ -188,11 +184,9 @@ The `try`/`except` around the request is the important addition here, not a form
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`uv run python scrape.py` finishes and prints a "Saved N quotes" line.</StepChecklistItem>
-<StepChecklistItem>`quotes.csv` exists and has more than 10 rows (i.e. it actually followed pagination, not just the front page).</StepChecklistItem>
-<StepChecklistItem>Opening `quotes.csv` in a text editor shows three columns — `text`, `author`, `tags` — with no obviously broken/empty rows.</StepChecklistItem>
-</StepChecklist>
+- ✅ `uv run python scrape.py` finishes and prints a "Saved N quotes" line.
+- ✅ `quotes.csv` exists and has more than 10 rows (i.e. it actually followed pagination, not just the front page).
+- ✅ Opening `quotes.csv` in a text editor shows three columns — `text`, `author`, `tags` — with no obviously broken/empty rows.
 
 **🤔 Socratic Question(s)**
 
@@ -230,11 +224,9 @@ Two things worth noticing here. First, `tags` is stored in the CSV as one comma-
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`df["tags"]` holds real Python lists after the `.apply` call, not strings — check with `type(df["tags"].iloc[0])`.</StepChecklistItem>
-<StepChecklistItem>`df["quote_length"]` is a numeric column with no missing values.</StepChecklistItem>
-<StepChecklistItem>`df.head()` shows clean text with no stray leading/trailing whitespace.</StepChecklistItem>
-</StepChecklist>
+- ✅ `df["tags"]` holds real Python lists after the `.apply` call, not strings — check with `type(df["tags"].iloc[0])`.
+- ✅ `df["quote_length"]` is a numeric column with no missing values.
+- ✅ `df.head()` shows clean text with no stray leading/trailing whitespace.
 
 **🤔 Socratic Question(s)**
 
@@ -287,11 +279,9 @@ Both charts follow the same honesty rules from Data Analysis Hard Week 9: axes a
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`top_tags.png` and `quote_length_dist.png` both exist and open as real images.</StepChecklistItem>
-<StepChecklistItem>The bar chart's x-axis starts at 0.</StepChecklistItem>
-<StepChecklistItem>Both charts have a title and labeled axes — no bare numbers with no units.</StepChecklistItem>
-</StepChecklist>
+- ✅ `top_tags.png` and `quote_length_dist.png` both exist and open as real images.
+- ✅ The bar chart's x-axis starts at 0.
+- ✅ Both charts have a title and labeled axes — no bare numbers with no units.
 
 **🤔 Socratic Question(s)**
 

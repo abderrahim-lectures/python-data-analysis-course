@@ -4,8 +4,6 @@ slug: /projects/browser-automation-agent
 description: "Combine Playwright browser automation with a free-tier LLM tool-calling agent that fills out a real practice web form on its own."
 ---
 
-import {StepChecklist, StepChecklistItem} from '@site/src/components/StepChecklist';
-
 # 🌍 Build a Browser-Automation Agent
 
 Every other project in this section either talks to an API or reads local files. This one drives an
@@ -178,10 +176,8 @@ Now imagine the form's owner renames `custname` to `customer_name`, or adds a ne
 script breaks immediately, with no idea *why* — it never looked at the page, it just replayed a fixed
 sequence of selectors. That fragility is the actual problem this project solves.
 
-<StepChecklist>
-  <StepChecklistItem>`uv run python scripted_fill.py` opens a visible browser, fills the form, and prints the submitted JSON.</StepChecklistItem>
-  <StepChecklistItem>You can point to at least one field name or selector in the script that would silently break if the form changed.</StepChecklistItem>
-</StepChecklist>
+  - ✅ `uv run python scripted_fill.py` opens a visible browser, fills the form, and prints the submitted JSON.
+  - ✅ You can point to at least one field name or selector in the script that would silently break if the form changed.
 
 **🤔 Socratic Question(s)**: If you didn't control the target website and it changed its form tomorrow, how would you even *find out* this script broke, short of running it and reading the error?
 
@@ -255,10 +251,8 @@ Notice what changed from Step 1: nothing here mentions `custname` or `size` or a
 `read_form_fields` discovers whatever fields actually exist on whatever page it's pointed at — the
 agent, not this code, is responsible for matching "customer name" to `name="custname"`.
 
-<StepChecklist>
-  <StepChecklistItem>You can explain, in one sentence, why these tool functions take plain strings (a URL, a field name, a value) instead of a Playwright `Page` object as an argument.</StepChecklistItem>
-  <StepChecklistItem>`read_form_fields()` called manually against a real page returns a real list of the page's actual field names — not a hardcoded guess.</StepChecklistItem>
-</StepChecklist>
+  - ✅ You can explain, in one sentence, why these tool functions take plain strings (a URL, a field name, a value) instead of a Playwright `Page` object as an argument.
+  - ✅ `read_form_fields()` called manually against a real page returns a real list of the page's actual field names — not a hardcoded guess.
 
 **🤔 Socratic Question(s)**: `read_form_fields` truncates nothing and returns the *real* page structure to the model. What could go wrong if you instead trusted the model to guess field names without ever calling it?
 
@@ -309,10 +303,8 @@ Run it and watch the browser window: the agent calls `navigate`, then `read_form
 sequence of `fill_text_field`/`select_option` calls it chose itself — in an order it chose itself,
 using field names it read off the real page rather than ones you told it about in the goal text.
 
-<StepChecklist>
-  <StepChecklistItem>The agent's tool calls (print `result["messages"]` and look for `AIMessage` tool-call entries, same as the AI Agent project's trace) show it calling `read_form_fields` before any `fill_text_field`/`select_option` call.</StepChecklistItem>
-  <StepChecklistItem>You changed one detail in the plain-English goal (e.g. a different topping) and re-ran it without touching any tool code, and the submission changed accordingly.</StepChecklistItem>
-</StepChecklist>
+  - ✅ The agent's tool calls (print `result["messages"]` and look for `AIMessage` tool-call entries, same as the AI Agent project's trace) show it calling `read_form_fields` before any `fill_text_field`/`select_option` call.
+  - ✅ You changed one detail in the plain-English goal (e.g. a different topping) and re-ran it without touching any tool code, and the submission changed accordingly.
 
 **🤔 Socratic Question(s)**: The system prompt explicitly says "never guess a field name `read_form_fields` didn't show you." Why does that instruction matter more here than it did for the toy tools in the AI Agent project?
 
@@ -328,10 +320,8 @@ Check the final printed page text (from `read_page_text`) against what httpbin a
 it should be a JSON blob under `"form"` containing every value you asked for, using the real field
 names the agent discovered, not the plain-English names from your goal.
 
-<StepChecklist>
-  <StepChecklistItem>The final page text shown by the agent contains every value from your goal, correctly matched to the right field.</StepChecklistItem>
-  <StepChecklistItem>You ran it a second time with `headless=True` and it completed with no visible window, confirming it doesn't secretly depend on you watching it.</StepChecklistItem>
-</StepChecklist>
+  - ✅ The final page text shown by the agent contains every value from your goal, correctly matched to the right field.
+  - ✅ You ran it a second time with `headless=True` and it completed with no visible window, confirming it doesn't secretly depend on you watching it.
 
 **🤔 Socratic Question(s)**: If the agent had submitted the form with one field wrong — say, the wrong topping — how would you know, short of reading the confirmation text yourself? What would it take to have the agent check its own work?
 

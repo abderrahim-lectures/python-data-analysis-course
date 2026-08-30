@@ -119,41 +119,71 @@ A storytelling chart earns trust by making its honesty easy to verify, not just 
 
 ## 🧩 Challenges
 
-<div class="challenge"><code>sns.relplot(data=df, x="math_score", y="reading_score", col="lunch")</code> — one scatter panel per lunch category, sharing axis scales for direct comparison.</>}>
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Create a faceted scatter plot of `math_score` vs. `reading_score`, with one panel per `lunch` category.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>sns.relplot(data=df, x="math_score", y="reading_score", col="lunch")</code> — one scatter panel per lunch category, sharing axis scales for direct comparison.</p>
 
-<div class="challenge">Compute <code>order = df.groupby("race_ethnicity")["writing_score"].mean().sort_values().index</code> then pass <code>order=order</code> to <code>sns.barplot</code> — this sorts the bars from lowest to highest average instead of an arbitrary default order.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Build a bar chart of average `writing_score` by `race_ethnicity`, with bars explicitly ordered from lowest to highest average.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Compute <code>order = df.groupby("race_ethnicity")["writing_score"].mean().sort_values().index</code> then pass <code>order=order</code> to <code>sns.barplot</code> — this sorts the bars from lowest to highest average instead of an arbitrary default order.</p>
 
-<div class="challenge">A y-axis that doesn't start at 0 on a bar chart exaggerates the visual size of differences between bars — two bars that differ by only a few points can look dramatically different in height if the axis is truncated close to their values.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Take one of your bar charts from this week and deliberately set `plt.ylim(bottom=some_value_above_0)`. Compare the two versions side by side — how does the truncated version visually mislead about the size of the difference?
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> A y-axis that doesn't start at 0 on a bar chart exaggerates the visual size of differences between bars — two bars that differ by only a few points can look dramatically different in height if the axis is truncated close to their values.</p>
 
-<div class="challenge">Loop with <code>enumerate</code> over the group means and call <code>ax.text(i, value + 1, f"{'{'}value:.1f{'}'}", ha="center")</code> for each bar — placing the numeric value just above each bar, centered horizontally.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Take a bar chart of group means and annotate each bar with its numeric value directly above it, as shown in the lesson.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Loop with <code>enumerate</code> over the group means and call <code>ax.text(i, value + 1, f"{'{'}value:.1f{'}'}", ha="center")</code> for each bar — placing the numeric value just above each bar, centered horizontally.</p>
 
-<div class="challenge">Add palette="colorblind" to any of this week's charts that use hue or category colors, e.g. sns.barplot(..., palette="colorblind") or sns.relplot(..., hue="gender", palette="colorblind"), and compare visually to the default palette.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Take one chart from this week that uses color to distinguish categories, and redo it with `palette="colorblind"`. Does the distinction between categories still read clearly?
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Add palette="colorblind" to any of this week's charts that use hue or category colors, e.g. sns.barplot(..., palette="colorblind") or sns.relplot(..., hue="gender", palette="colorblind"), and compare visually to the default palette.</p>
 
-<div class="challenge">Call plt.savefig("my_chart.png", dpi=150, bbox_inches="tight") right after building a chart and before plt.show(), then confirm the file exists (e.g. via a file listing) with a reasonable, non-zero size.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Save one of this week's finished charts to a PNG file using `plt.savefig`, with `dpi=150` and `bbox_inches="tight"`.
 
+<p class="challenge__answer">💡 <strong>Answer:</strong> Call plt.savefig("my_chart.png", dpi=150, bbox_inches="tight") right after building a chart and before plt.show(), then confirm the file exists (e.g. via a file listing) with a reasonable, non-zero size.</p>
+
 </div>
+</details>
 
 ## 🤔 Socratic Questions
 

@@ -119,41 +119,71 @@ Even this small amount of profiling tells you something useful: if every sentenc
 
 ## 🧩 Challenges
 
-<div class="challenge">Call <code>load_corpus</code>, then use a list comprehension: <code>[tokenize(s) for s in corpus]</code>. This produces a list of lists — each inner list is one sentence's tokens.</>}>
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Using `load_corpus` and `tokenize` together, produce a list where each element is the tokenized (list-of-words) version of one sentence from the corpus.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Call <code>load_corpus</code>, then use a list comprehension: <code>[tokenize(s) for s in corpus]</code>. This produces a list of lists — each inner list is one sentence's tokens.</p>
 
-<div class="challenge">Loop over the tokenized sentences and take <code>len(tokens)</code> for each, then use <code>sum(...) / len(...)</code> across all of them — the same average pattern from Python 101 Normal Week 4/5, just applied to token counts instead of scores.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Compute the average number of words per sentence in the corpus.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Loop over the tokenized sentences and take <code>len(tokens)</code> for each, then use <code>sum(...) / len(...)</code> across all of them — the same average pattern from Python 101 Normal Week 4/5, just applied to token counts instead of scores.</p>
 
-<div class="challenge">Build a <code>set()</code> and add every token from every tokenized sentence to it (or use a set comprehension over a flattened list); <code>len(...)</code> of that set is the vocabulary size — the count of *distinct* words, unlike total word count which counts repeats.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Compute the size of the corpus's **vocabulary** — the number of *distinct* words that appear anywhere in the corpus (not counting repeats).
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Build a <code>set()</code> and add every token from every tokenized sentence to it (or use a set comprehension over a flattened list); <code>len(...)</code> of that set is the vocabulary size — the count of *distinct* words, unlike total word count which counts repeats.</p>
 
-<div class="challenge">A naive <code>.split()</code> tokenizer would treat <code>"mat."</code> and <code>"mat"</code> as different tokens, and <code>"Amina's"</code> would stay glued to its apostrophe — punctuation attached to a word isn't stripped off. Real tokenizers (and this course's corpus) sidestep this by keeping sentences punctuation-free for now.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 The corpus's sentences deliberately contain no punctuation. What would go wrong with `tokenize`'s simple `.split()` approach if a sentence *did* contain punctuation, like `"The cat sat on the mat."`? Try it on that string and inspect the result.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> A naive <code>.split()</code> tokenizer would treat <code>"mat."</code> and <code>"mat"</code> as different tokens, and <code>"Amina's"</code> would stay glued to its apostrophe — punctuation attached to a word isn't stripped off. Real tokenizers (and this course's corpus) sidestep this by keeping sentences punctuation-free for now.</p>
 
-<div class="challenge">Call <code>tokenize_robust("The cat sat on the mat.")</code> and compare to <code>tokenize("The cat sat on the mat.")</code> — the robust version strips the trailing period before splitting, producing <code>"mat"</code> instead of <code>"mat."</code> as the last token.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Run the same punctuated sentence from Challenge 4 through `tokenize_robust` instead. Does it produce the token list you'd expect?
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Call <code>tokenize_robust("The cat sat on the mat.")</code> and compare to <code>tokenize("The cat sat on the mat.")</code> — the robust version strips the trailing period before splitting, producing <code>"mat"</code> instead of <code>"mat."</code> as the last token.</p>
 
-<div class="challenge">Loop over the tokenized sentences, build a frequency count for sentence lengths (e.g. a dict mapping each length to how many sentences have it), and find the length with the highest count — the same "track a running maximum over a dict" pattern from Python 101 Normal Week 3.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Find the *most common* sentence length in the corpus (in words) — not the average, the length that occurs most often.
 
+<p class="challenge__answer">💡 <strong>Answer:</strong> Loop over the tokenized sentences, build a frequency count for sentence lengths (e.g. a dict mapping each length to how many sentences have it), and find the length with the highest count — the same "track a running maximum over a dict" pattern from Python 101 Normal Week 3.</p>
+
 </div>
+</details>
 
 ## 🤔 Socratic Questions
 

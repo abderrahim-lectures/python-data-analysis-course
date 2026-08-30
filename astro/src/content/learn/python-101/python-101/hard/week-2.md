@@ -94,41 +94,71 @@ for rank, (word, count) in enumerate(ranked[:10], start=1):
 
 ## 🧩 Challenges
 
-<div class="challenge">Use <code>sorted(counts, key=lambda w: counts[w], reverse=True)[:5]</code>, or equivalently sort the <code>counts.items()</code> pairs by count — the same sorted-by-a-key pattern from Python 101 Normal Week 5's summary program.</>}>
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Given `counts` from `count_words`, find the 5 most frequent words in the corpus.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Use <code>sorted(counts, key=lambda w: counts[w], reverse=True)[:5]</code>, or equivalently sort the <code>counts.items()</code> pairs by count — the same sorted-by-a-key pattern from Python 101 Normal Week 5's summary program.</p>
 
-<div class="challenge">Loop over <code>probs.values()</code> and sum them, or simply <code>sum(probs.values())</code>; it should print something extremely close to 1.0 (like 0.9999999999999999) due to floating-point rounding, not exactly 1.0.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Verify property 2 from the lesson: compute `sum(probs.values())` for your corpus and confirm it's (almost exactly) `1.0`.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Loop over <code>probs.values()</code> and sum them, or simply <code>sum(probs.values())</code>; it should print something extremely close to 1.0 (like 0.9999999999999999) due to floating-point rounding, not exactly 1.0.</p>
 
-<div class="challenge">Words that appear only once will each have the same, smallest, nonzero probability — computable as <code>1 / total</code>. You can find them by filtering <code>counts</code> for entries where the count equals 1.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Words that appear only once in the corpus are called **hapax legomena**. Find all of them, and explain what probability `to_probabilities` assigns to each.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Words that appear only once will each have the same, smallest, nonzero probability — computable as <code>1 / total</code>. You can find them by filtering <code>counts</code> for entries where the count equals 1.</p>
 
-<div class="challenge">A word never seen in the corpus has count 0, so it's simply absent from the <code>counts</code>/<code>probs</code> dict — looking it up directly with <code>probs["giraffe"]</code> raises a <code>KeyError</code> rather than returning 0, which is why <code>.get(word, 0)</code> matters here too.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 What probability does this model assign to a word that never appeared anywhere in the corpus, like `"giraffe"`? What actually happens if you write `probs["giraffe"]` directly?
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> A word never seen in the corpus has count 0, so it's simply absent from the <code>counts</code>/<code>probs</code> dict — looking it up directly with <code>probs["giraffe"]</code> raises a <code>KeyError</code> rather than returning 0, which is why <code>.get(word, 0)</code> matters here too.</p>
 
-<div class="challenge">Use collections.Counter directly: Counter(word for tokens in tokenized for word in tokens).most_common(5). Compare its output to your Challenge 1 answer -- they should list the same 5 words in the same order, just computed with a built-in tool instead of sorted() by hand.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Rewrite Challenge 1 (the 5 most frequent words) using `collections.Counter` and `.most_common()` instead of `sorted()`. Do you get the same answer?
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Use collections.Counter directly: Counter(word for tokens in tokenized for word in tokens).most_common(5). Compare its output to your Challenge 1 answer -- they should list the same 5 words in the same order, just computed with a built-in tool instead of sorted() by hand.</p>
 
-<div class="challenge">Print rank and count side by side for the top 10 ranked words, then compute count / rank for each — for a corpus following Zipf's law reasonably well, this ratio should stay roughly similar (close to the top word's own count) across the ranks, since c(w) times rank is approximately constant under c(w) ∝ 1/rank.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Using the `ranked` list from the Zipf's law example, compute `count * rank` for each of the top 10 words. Zipf's law predicts this product should be roughly constant. Is it, for our small corpus?
 
+<p class="challenge__answer">💡 <strong>Answer:</strong> Print rank and count side by side for the top 10 ranked words, then compute count / rank for each — for a corpus following Zipf's law reasonably well, this ratio should stay roughly similar (close to the top word's own count) across the ranks, since c(w) times rank is approximately constant under c(w) ∝ 1/rank.</p>
+
 </div>
+</details>
 
 ## 🤔 Socratic Questions
 

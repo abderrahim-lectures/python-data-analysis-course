@@ -25,8 +25,10 @@ const projects = (await getCollection('projects')).sort((a, b) => a.data.title.l
     <div class="grid">
       {projects.map((p) => (
         <a class="card" href={`${base}projects/${p.slug.replace(/^\/?projects\//, '')}`}>
+          <div class="card__icon">🌍</div>
           <h2>{p.data.title}</h2>
           <p>{p.data.description}</p>
+          <span class="badge badge--accent card__badge">🎯 Optional · ungraded</span>
         </a>
       ))}
     </div>
@@ -39,8 +41,14 @@ const projects = (await getCollection('projects')).sort((a, b) => a.data.title.l
   .head h1 { font-size: clamp(2rem, 4vw, 2.8rem); margin: .4rem 0 .2rem; }
   .head p { color: var(--ink-soft); }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.1rem; margin: 1.5rem 0 3rem; }
-  .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 1.3rem; text-decoration: none; color: var(--ink); box-shadow: var(--shadow-sm); transition: all var(--transition-smooth); }
+  .card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg);
+    padding: 1.3rem; text-decoration: none; color: var(--ink); box-shadow: var(--shadow-sm);
+    transition: all var(--transition-smooth); display: flex; flex-direction: column; gap: .5rem;
+  }
   .card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
-  .card h2 { font-size: 1.05rem; margin: 0 0 .5rem; }
-  .card p { color: var(--ink-soft); font-size: .88rem; margin: 0; line-height: 1.5; }
+  .card__icon { font-size: 1.6rem; }
+  .card h2 { font-size: 1.05rem; margin: 0; }
+  .card p { color: var(--ink-soft); font-size: .88rem; margin: 0; line-height: 1.5; flex-grow: 1; }
+  .card__badge { width: fit-content; margin-top: .3rem; }
 </style>

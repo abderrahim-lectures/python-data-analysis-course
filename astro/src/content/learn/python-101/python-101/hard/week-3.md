@@ -88,41 +88,71 @@ This "the model has literally never seen this situation" case is a real, unavoid
 
 ## 🧩 Challenges
 
-<div class="challenge">Build the full bigram table with <code>bigram_counts</code> then <code>bigram_probabilities</code>, and look up <code>probs_table["the"]["cat"]</code> and <code>probs_table["the"]["dog"]</code> directly. Whichever has the larger probability is more likely to follow "the" in this corpus.</>}>
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Using the corpus from Week 1, compute the bigram probability table. Which is more likely to directly follow "the": "cat" or "dog"?
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Build the full bigram table with <code>bigram_counts</code> then <code>bigram_probabilities</code>, and look up <code>probs_table["the"]["cat"]</code> and <code>probs_table["the"]["dog"]</code> directly. Whichever has the larger probability is more likely to follow "the" in this corpus.</p>
 
-<div class="challenge">Loop over <code>probs_table</code> and print <code>len(probs_table[word])</code> for each, or use <code>max(probs_table, key=lambda w: len(probs_table[w]))</code> to find the word with the most distinct followers directly.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Which word in the corpus is followed by the *most* distinct other words (i.e. has the largest inner dict in `probs_table`)?
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Loop over <code>probs_table</code> and print <code>len(probs_table[word])</code> for each, or use <code>max(probs_table, key=lambda w: len(probs_table[w]))</code> to find the word with the most distinct followers directly.</p>
 
-<div class="challenge">The last word of a sentence never appears as the <code>first</code> element of a bigram (only as the <code>second</code>), so it's missing as a top-level key in <code>probs_table</code> unless it also happens to appear mid-sentence elsewhere in the corpus. Looking it up directly, e.g. <code>probs_table["mat"]</code>, would raise a <code>KeyError</code> if "mat" never starts a bigram anywhere in the corpus.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Pick a word that only ever appears as the *last* word of a sentence in the corpus. Is it a top-level key in `probs_table`? Why or why not, given how `bigrams()` is defined?
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> The last word of a sentence never appears as the <code>first</code> element of a bigram (only as the <code>second</code>), so it's missing as a top-level key in <code>probs_table</code> unless it also happens to appear mid-sentence elsewhere in the corpus. Looking it up directly, e.g. <code>probs_table["mat"]</code>, would raise a <code>KeyError</code> if "mat" never starts a bigram anywhere in the corpus.</p>
 
-<div class="challenge">Extend <code>bigrams</code> to a general <code>ngrams(tokens, n)</code> that returns tuples of <code>n</code> consecutive tokens using <code>range(len(tokens) - n + 1)</code> and slicing, e.g. <code>tuple(tokens[i:i+n])</code>. Bigrams are just the special case n=2.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Generalize `bigrams(tokens)` into a `trigrams(tokens)` function that returns all consecutive *triples* of words. How would you further generalize it to an `ngrams(tokens, n)` function?
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Extend <code>bigrams</code> to a general <code>ngrams(tokens, n)</code> that returns tuples of <code>n</code> consecutive tokens using <code>range(len(tokens) - n + 1)</code> and slicing, e.g. <code>tuple(tokens[i:i+n])</code>. Bigrams are just the special case n=2.</p>
 
-<div class="challenge">Use the next_word_distribution helper: call it with a word you know is never a top-level key (e.g. a word that only ends sentences), and confirm it returns None instead of raising a KeyError, then handle that None case explicitly wherever you call it.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Use `next_word_distribution` to safely look up a word you already identified in Challenge 3 as never starting a bigram. Confirm it returns `None` instead of crashing.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Use the next_word_distribution helper: call it with a word you know is never a top-level key (e.g. a word that only ends sentences), and confirm it returns None instead of raising a KeyError, then handle that None case explicitly wherever you call it.</p>
 
-<div class="challenge">For each key in the bigram counts table, sum its inner dict's values to get that word's total bigram occurrences, and compare it to that same word's count from Week 2's unigram counts dict -- they should match exactly, since every occurrence of a word (except possibly the very last word of a sentence) starts exactly one bigram.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 For a word that appears in *both* Week 2's unigram `counts` and this week's `bigram_counts`, compare its unigram count to the sum of its bigram row's values (`sum(bigram_counts[word].values())`). Should these match? Check a few words and explain any small discrepancies you find.
 
+<p class="challenge__answer">💡 <strong>Answer:</strong> For each key in the bigram counts table, sum its inner dict's values to get that word's total bigram occurrences, and compare it to that same word's count from Week 2's unigram counts dict -- they should match exactly, since every occurrence of a word (except possibly the very last word of a sentence) starts exactly one bigram.</p>
+
 </div>
+</details>
 
 ## 🤔 Socratic Questions
 

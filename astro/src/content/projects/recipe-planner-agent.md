@@ -4,8 +4,6 @@ slug: /projects/recipe-planner-agent
 description: "Graduate from the in-browser playground to real Python: build a tool-using AI agent with LangChain's deepagents that suggests meals from the ingredients you have on hand, grounded in a real local recipe database."
 ---
 
-import {StepChecklist, StepChecklistItem} from '@site/src/components/StepChecklist';
-
 # 🌍 Build a Recipe-Planner Agent
 
 You type in a list of ingredients you actually have on hand — say, eggs, tomatoes, garlic, and bread — and an agent suggests 2-3 real meals you could make with them, then builds a shopping list of whatever's missing for the best one. The twist that makes this a genuinely useful agent, not just a chatbot: it never invents a recipe. It calls a tool that searches a real, local recipe database and can only suggest what that tool actually returns — the same grounding idea behind far more serious "don't let the model make things up" systems, shrunk down to something you can build in an afternoon.
@@ -110,11 +108,9 @@ GITHUB_TOKEN=your-key-here
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`uv --version` prints a version number.</StepChecklistItem>
-<StepChecklistItem>You have a real API key from one provider, and it's saved in a `.env` file — not pasted into any `.py` file.</StepChecklistItem>
-<StepChecklistItem>`uv add deepagents langchain-openai python-dotenv` (or your provider's package) completed without errors.</StepChecklistItem>
-</StepChecklist>
+- ✅ `uv --version` prints a version number.
+- ✅ You have a real API key from one provider, and it's saved in a `.env` file — not pasted into any `.py` file.
+- ✅ `uv add deepagents langchain-openai python-dotenv` (or your provider's package) completed without errors.
 
 ## Step 1: Build your local recipe database
 
@@ -166,11 +162,9 @@ A recipe database with 3-4 entries will make your agent look broken even when th
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`recipes.py` defines `RECIPES` as a list of at least 10 dicts.</StepChecklistItem>
-<StepChecklistItem>Every recipe has `name`, `ingredients` (a list), and `instructions`.</StepChecklistItem>
-<StepChecklistItem>Ingredient names are lowercase and consistent across recipes (e.g. always `"tomatoes"`, never a mix of `"tomatoes"` and `"Tomato"`).</StepChecklistItem>
-</StepChecklist>
+- ✅ `recipes.py` defines `RECIPES` as a list of at least 10 dicts.
+- ✅ Every recipe has `name`, `ingredients` (a list), and `instructions`.
+- ✅ Ingredient names are lowercase and consistent across recipes (e.g. always `"tomatoes"`, never a mix of `"tomatoes"` and `"Tomato"`).
 
 **🤔 Socratic Question(s)**
 
@@ -225,11 +219,9 @@ Notice the return type is a plain string, same as `search_course_topics` and `co
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`search_recipes_by_ingredients(["eggs", "tomatoes", "garlic"])` called directly in Python (no agent yet) returns a real, non-empty string.</StepChecklistItem>
-<StepChecklistItem>Calling it with ingredients that match nothing in `RECIPES` returns the "no matching recipes" message, not an error.</StepChecklistItem>
-<StepChecklistItem>The docstring explains what the function does and what it returns — not a placeholder.</StepChecklistItem>
-</StepChecklist>
+- ✅ `search_recipes_by_ingredients(["eggs", "tomatoes", "garlic"])` called directly in Python (no agent yet) returns a real, non-empty string.
+- ✅ Calling it with ingredients that match nothing in `RECIPES` returns the "no matching recipes" message, not an error.
+- ✅ The docstring explains what the function does and what it returns — not a placeholder.
 
 **🤔 Socratic Question(s)**
 
@@ -287,11 +279,9 @@ This is the same `create_deep_agent(model=..., tools=[...], system_prompt=...)` 
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`planner.py` imports `RECIPES` and `search_recipes_by_ingredients` from `recipes.py` without errors.</StepChecklistItem>
-<StepChecklistItem>`agent = create_deep_agent(...)` runs without raising — this alone doesn't call the model yet, just builds the agent.</StepChecklistItem>
-<StepChecklistItem>The system prompt explicitly says not to suggest a recipe the tool didn't return.</StepChecklistItem>
-</StepChecklist>
+- ✅ `planner.py` imports `RECIPES` and `search_recipes_by_ingredients` from `recipes.py` without errors.
+- ✅ `agent = create_deep_agent(...)` runs without raising — this alone doesn't call the model yet, just builds the agent.
+- ✅ The system prompt explicitly says not to suggest a recipe the tool didn't return.
 
 **🤔 Socratic Question(s)**
 
@@ -320,11 +310,9 @@ You should see the agent's final answer: 2-3 real recipe names pulled straight f
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>Running `uv run python planner.py` prints a real answer, not a traceback.</StepChecklistItem>
-<StepChecklistItem>Every recipe name in the answer actually appears in `RECIPES` — check by eye, or by searching `recipes.py`.</StepChecklistItem>
-<StepChecklistItem>You tried at least one ingredient list that matches poorly, and the agent handled it reasonably (said so, or suggested loosely-related options) instead of inventing something.</StepChecklistItem>
-</StepChecklist>
+- ✅ Running `uv run python planner.py` prints a real answer, not a traceback.
+- ✅ Every recipe name in the answer actually appears in `RECIPES` — check by eye, or by searching `recipes.py`.
+- ✅ You tried at least one ingredient list that matches poorly, and the agent handled it reasonably (said so, or suggested loosely-related options) instead of inventing something.
 
 **🤔 Socratic Question(s)**
 
@@ -365,11 +353,9 @@ Run it again with only one or two ingredients, something like `"I have onions an
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>The second question in the conversation correctly refers back to "the first one" from the earlier answer.</StepChecklistItem>
-<StepChecklistItem>The shopping list it produces matches the "missing" ingredients the tool reported for that recipe — not a different or invented list.</StepChecklistItem>
-<StepChecklistItem>You ran the sparse-ingredient test above and the agent didn't invent a recipe not present in `RECIPES`.</StepChecklistItem>
-</StepChecklist>
+- ✅ The second question in the conversation correctly refers back to "the first one" from the earlier answer.
+- ✅ The shopping list it produces matches the "missing" ingredients the tool reported for that recipe — not a different or invented list.
+- ✅ You ran the sparse-ingredient test above and the agent didn't invent a recipe not present in `RECIPES`.
 
 **🤔 Socratic Question(s)**
 

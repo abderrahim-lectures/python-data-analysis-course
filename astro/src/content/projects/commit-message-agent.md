@@ -4,8 +4,6 @@ slug: /projects/commit-message-agent
 description: "Build a CLI tool that reads a real staged git diff via subprocess, drafts a Conventional-Commits-style message with a free-tier LLM, and only commits it after you explicitly confirm."
 ---
 
-import {StepChecklist, StepChecklistItem} from '@site/src/components/StepChecklist';
-
 # 🌍 Build a Git Commit-Message Generator
 
 "wip", "fix stuff", "asdf" — every developer has typed a lazy commit message at 6pm on a Friday. This project builds a CLI tool that removes the excuse: it captures your real **staged** `git diff` with Python's `subprocess` module, hands it to a free-tier language model with a system prompt designed specifically for writing Conventional-Commits-style messages, and shows you a draft you can accept, edit, or throw away — before anything is ever committed. The tool never commits on its own; a human always confirms the final message first.
@@ -99,11 +97,9 @@ Instead of `export`-ing a key in every new terminal session, `python-dotenv` rea
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`uv --version` prints a version number.</StepChecklistItem>
-<StepChecklistItem>`commit-message-agent/` exists with a `pyproject.toml`, and `openai` and `python-dotenv` are installed.</StepChecklistItem>
-<StepChecklistItem>You have a real API key from one provider, saved in a `.env` file in your project folder — not pasted into any script.</StepChecklistItem>
-</StepChecklist>
+- ✅ `uv --version` prints a version number.
+- ✅ `commit-message-agent/` exists with a `pyproject.toml`, and `openai` and `python-dotenv` are installed.
+- ✅ You have a real API key from one provider, saved in a `.env` file in your project folder — not pasted into any script.
 
 ## Step 1: Capture a staged git diff with `subprocess`
 
@@ -154,11 +150,9 @@ uv run python commit_helper.py
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`get_diff_staged()` returns real diff text after `git add`-ing a change, and an empty string when nothing is staged.</StepChecklistItem>
-<StepChecklistItem>Running `commit_helper.py` inside a folder that isn't a git repo at all raises a clear `RuntimeError`, not a confusing traceback from deep inside `subprocess`.</StepChecklistItem>
-<StepChecklistItem>You can explain, in your own words, why this tool reads `git diff --staged` instead of plain `git diff` (unstaged changes).</StepChecklistItem>
-</StepChecklist>
+- ✅ `get_diff_staged()` returns real diff text after `git add`-ing a change, and an empty string when nothing is staged.
+- ✅ Running `commit_helper.py` inside a folder that isn't a git repo at all raises a clear `RuntimeError`, not a confusing traceback from deep inside `subprocess`.
+- ✅ You can explain, in your own words, why this tool reads `git diff --staged` instead of plain `git diff` (unstaged changes).
 
 **🤔 Socratic Question(s)**
 
@@ -210,10 +204,8 @@ Treat this system prompt as a first draft, not a finished spec. Run it against a
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>You can explain, in your own words, why the prompt forbids inventing a ticket number or issue reference that isn't in the diff.</StepChecklistItem>
-<StepChecklistItem>The prompt specifies a concrete output format (`type(scope): summary`, optional body), not just "write a commit message."</StepChecklistItem>
-</StepChecklist>
+- ✅ You can explain, in your own words, why the prompt forbids inventing a ticket number or issue reference that isn't in the diff.
+- ✅ The prompt specifies a concrete output format (`type(scope): summary`, optional body), not just "write a commit message."
 
 **🤔 Socratic Question(s)**
 
@@ -312,11 +304,9 @@ Swap the `OpenAI(...)` block for a different `base_url` and key — e.g. `base_u
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`uv run python commit_helper.py` prints a Conventional-Commits-style draft for a real staged diff.</StepChecklistItem>
-<StepChecklistItem>Typing `r` at the prompt asks the model again and prints a (possibly different) draft, without doing anything else.</StepChecklistItem>
-<StepChecklistItem>Typing `n` cancels cleanly, and typing `e` lets you type a replacement message before continuing.</StepChecklistItem>
-</StepChecklist>
+- ✅ `uv run python commit_helper.py` prints a Conventional-Commits-style draft for a real staged diff.
+- ✅ Typing `r` at the prompt asks the model again and prints a (possibly different) draft, without doing anything else.
+- ✅ Typing `n` cancels cleanly, and typing `e` lets you type a replacement message before continuing.
 
 **🤔 Socratic Question(s)**
 
@@ -394,11 +384,9 @@ git log -1
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>Typing `y` at the prompt actually creates a real commit — `git log -1` shows the message you accepted.</StepChecklistItem>
-<StepChecklistItem>Typing `n` at the prompt leaves your staged changes staged and uncommitted — nothing happened.</StepChecklistItem>
-<StepChecklistItem>You can point to the single line of code where `git commit` is actually invoked, and explain why it's reachable from exactly one place.</StepChecklistItem>
-</StepChecklist>
+- ✅ Typing `y` at the prompt actually creates a real commit — `git log -1` shows the message you accepted.
+- ✅ Typing `n` at the prompt leaves your staged changes staged and uncommitted — nothing happened.
+- ✅ You can point to the single line of code where `git commit` is actually invoked, and explain why it's reachable from exactly one place.
 
 **🤔 Socratic Question(s)**
 

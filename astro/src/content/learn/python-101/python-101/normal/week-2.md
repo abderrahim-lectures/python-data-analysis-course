@@ -162,41 +162,71 @@ The inner loop runs to completion for *every* iteration of the outer loop — fo
 
 ## 🧩 Challenges
 
-<div class="challenge">Use a <code>for</code> loop over <code>range(1, 11)</code>, and inside it an <code>if/elif/else</code> chain checking divisibility by 15, then 3, then 5, with a final <code>else</code> that prints the number itself.</>}>
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Write "FizzBuzz" for the numbers 1 through 10: print `"Fizz"` if divisible by 3, `"Buzz"` if divisible by 5, `"FizzBuzz"` if divisible by both, otherwise the number itself.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Use a <code>for</code> loop over <code>range(1, 11)</code>, and inside it an <code>if/elif/else</code> chain checking divisibility by 15, then 3, then 5, with a final <code>else</code> that prints the number itself.</p>
 
-<div class="challenge">A <code>while</code> loop that keeps calling <code>input()</code> and checking <code>== "quit"</code> to decide whether to <code>break</code>, since you don't know in advance how many times the student will respond.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Write a loop that keeps asking `"Type 'quit' to stop: "` until the student types exactly `quit`. Would `for` or `while` fit this task better, and why?
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> A <code>while</code> loop that keeps calling <code>input()</code> and checking <code>== "quit"</code> to decide whether to <code>break</code>, since you don't know in advance how many times the student will respond.</p>
 
-<div class="challenge">Initialize <code>total = 0</code>, loop <code>for i in range(1, 101)</code>, add <code>i</code> to <code>total</code> each time, then print it. The closed-form sum formula n(n+1)/2 with n=100 gives 5050, which lets you check the loop's answer without re-running it.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Sum the integers from 1 to 100 using a loop, and check your program's answer against the closed-form formula $\sum_{i=1}^{n} i = \frac{n(n+1)}{2}$.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Initialize <code>total = 0</code>, loop <code>for i in range(1, 101)</code>, add <code>i</code> to <code>total</code> each time, then print it. The closed-form sum formula n(n+1)/2 with n=100 gives 5050, which lets you check the loop's answer without re-running it.</p>
 
-<div class="challenge">Loop over <code>range(2, n)</code> and check whether <code>n % i == 0</code> for any of them using a flag or <code>break</code>; if no divisor is found, <code>n</code> is prime. This is the same "for every i from 2 up to n-1, n mod i is not 0" definition of primality written as code.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Write a program that reads a number `n` and prints whether it's prime, by checking whether any integer from 2 up to (but not including) `n` divides it evenly.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Loop over <code>range(2, n)</code> and check whether <code>n % i == 0</code> for any of them using a flag or <code>break</code>; if no divisor is found, <code>n</code> is prime. This is the same "for every i from 2 up to n-1, n mod i is not 0" definition of primality written as code.</p>
 
-<div class="challenge">Use nested for loops like the multiplication-table example: an outer loop over rows and an inner loop over columns, printing a fixed character (e.g. <code>"*"</code>) with <code>end=""</code> in the inner loop, and a plain <code>print()</code> after the inner loop to move to the next row.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Using nested loops, print a square of asterisks, `n` rows by `n` columns, for a number `n` you choose (e.g. a 4×4 block of `*` characters).
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Use nested for loops like the multiplication-table example: an outer loop over rows and an inner loop over columns, printing a fixed character (e.g. <code>"*"</code>) with <code>end=""</code> in the inner loop, and a plain <code>print()</code> after the inner loop to move to the next row.</p>
 
-<div class="challenge">if 18 &lt;= age &lt; 65 and has_ticket: ... — combining the chained comparison from Week 1 with and, exactly mirroring 18 ≤ age {"<"} 65.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Write a condition using `and` that checks whether a variable `age` is between 18 and 65 (inclusive of 18, exclusive of 65) *and* a boolean `has_ticket` is `True`.
 
+<p class="challenge__answer">💡 <strong>Answer:</strong> if 18 &lt;= age &lt; 65 and has_ticket: ... — combining the chained comparison from Week 1 with and, exactly mirroring 18 ≤ age {"<"} 65.</p>
+
 </div>
+</details>
 
 ## 🤔 Socratic Questions
 

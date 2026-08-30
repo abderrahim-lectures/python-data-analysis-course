@@ -4,8 +4,6 @@ slug: /projects/rate-limited-api
 description: "Graduate from the in-browser playground to real Python: build a FastAPI service wrapping your own dataset, with genuine API-key auth and a rate limiter you build from scratch."
 ---
 
-import {StepChecklist, StepChecklistItem} from '@site/src/components/StepChecklist';
-
 # 🌍 Build a Rate-Limited API Service
 
 Every other project in this section builds a *client* of some kind — a script or agent that calls somebody else's API. This one flips that around: you build the API. This project stands up a real [FastAPI](https://fastapi.tiangolo.com/) service wrapping a dataset of a few hundred quotes and jokes that ships with the project, with the two things every real public API needs and toy examples usually skip — API-key authentication and rate limiting — built by hand, not imported from a library. It assumes Python 101; nothing from Data Analysis is required.
@@ -145,11 +143,9 @@ curl -i "http://127.0.0.1:8000/quotes/99999"   # a real 404
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`uv run uvicorn main:app --reload` starts without errors.</StepChecklistItem>
-<StepChecklistItem>`GET /quotes?limit=3` returns exactly 3 items and a `total` matching your full dataset size.</StepChecklistItem>
-<StepChecklistItem>`GET /quotes/{a-real-id}` returns that quote; `GET /quotes/99999` returns a real `404`, not a `500` or an empty `200`.</StepChecklistItem>
-</StepChecklist>
+- ✅ `uv run uvicorn main:app --reload` starts without errors.
+- ✅ `GET /quotes?limit=3` returns exactly 3 items and a `total` matching your full dataset size.
+- ✅ `GET /quotes/{a-real-id}` returns that quote; `GET /quotes/99999` returns a real `404`, not a `500` or an empty `200`.
 
 **🤔 Socratic Question(s)**
 
@@ -194,11 +190,9 @@ curl "http://127.0.0.1:8000/categories"
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`?category=<a-real-category>` returns only quotes in that category, and `total` reflects the filtered count.</StepChecklistItem>
-<StepChecklistItem>`?author=<partial-name>` matches case-insensitively (e.g. `sagan` matches `Carl Sagan`).</StepChecklistItem>
-<StepChecklistItem>Combining `category` and `author` together narrows results further, not just one or the other.</StepChecklistItem>
-</StepChecklist>
+- ✅ `?category=<a-real-category>` returns only quotes in that category, and `total` reflects the filtered count.
+- ✅ `?author=<partial-name>` matches case-insensitively (e.g. `sagan` matches `Carl Sagan`).
+- ✅ Combining `category` and `author` together narrows results further, not just one or the other.
 
 **🤔 Socratic Question(s)**
 
@@ -249,11 +243,9 @@ curl -i -H "X-API-Key: <your-key>" "http://127.0.0.1:8000/me"        # 200
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`GET /me` with no `X-API-Key` header returns a real `401`, with a body that says how to get a key.</StepChecklistItem>
-<StepChecklistItem>`POST /keys` returns a new key every time you call it.</StepChecklistItem>
-<StepChecklistItem>`GET /me` with a valid key in `X-API-Key` returns `200`; with a made-up key it still returns `401`.</StepChecklistItem>
-</StepChecklist>
+- ✅ `GET /me` with no `X-API-Key` header returns a real `401`, with a body that says how to get a key.
+- ✅ `POST /keys` returns a new key every time you call it.
+- ✅ `GET /me` with a valid key in `X-API-Key` returns `200`; with a made-up key it still returns `401`.
 
 **🤔 Socratic Question(s)**
 
@@ -338,12 +330,10 @@ It's tempting to set `response.headers["Retry-After"] = ...` right before raisin
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>The first `RATE_LIMIT_MAX_REQUESTS` requests from one key within the window succeed with `200`.</StepChecklistItem>
-<StepChecklistItem>The next request from that same key, still inside the window, returns a real `429`.</StepChecklistItem>
-<StepChecklistItem>The `429` response actually carries a `Retry-After` header — verified with `curl -i`, not assumed.</StepChecklistItem>
-<StepChecklistItem>Waiting past the window and retrying succeeds again (the limit isn't permanent).</StepChecklistItem>
-</StepChecklist>
+- ✅ The first `RATE_LIMIT_MAX_REQUESTS` requests from one key within the window succeed with `200`.
+- ✅ The next request from that same key, still inside the window, returns a real `429`.
+- ✅ The `429` response actually carries a `Retry-After` header — verified with `curl -i`, not assumed.
+- ✅ Waiting past the window and retrying succeeds again (the limit isn't permanent).
 
 **🤔 Socratic Question(s)**
 

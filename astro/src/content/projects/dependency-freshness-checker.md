@@ -4,8 +4,6 @@ slug: /projects/dependency-freshness-checker
 description: "Build a real CLI tool that reads a pyproject.toml, checks PyPI for newer versions of every dependency, and reports what's outdated — no API key needed."
 ---
 
-import {StepChecklist, StepChecklistItem} from '@site/src/components/StepChecklist';
-
 # 🌍 Build a Dependency-Freshness Checker
 
 Every real Python project accumulates dependencies, and every dependency eventually falls behind — a security fix ships, a bug gets patched, a new feature lands, and your `pyproject.toml` just... doesn't know. This project builds the tool that tells you: a real CLI that reads a `pyproject.toml`, asks PyPI's public API what the current version of each dependency actually is, and reports which ones you're behind on — the same category of tool as `pip list --outdated`, but one you understand completely because you built it yourself.
@@ -95,10 +93,8 @@ if __name__ == "__main__":
 uv run python parse_deps.py
 ```
 
-<StepChecklist>
-  <StepChecklistItem>Running this against your own project's `pyproject.toml` prints each dependency's raw specifier string.</StepChecklistItem>
-  <StepChecklistItem>You can explain why `tomllib` needs the file opened in binary mode (`"rb"`), not text mode.</StepChecklistItem>
-</StepChecklist>
+  - ✅ Running this against your own project's `pyproject.toml` prints each dependency's raw specifier string.
+  - ✅ You can explain why `tomllib` needs the file opened in binary mode (`"rb"`), not text mode.
 
 **🤔 Socratic Question(s)**: A `pyproject.toml`'s `dependencies` list holds strings like `"requests>=2.31"` — not just package names. What's the *name* on its own, separate from any version constraint attached to it? You'll need to split those apart cleanly in the next step, and a real dependency string can be sloppier than it looks (extra spaces, extras like `"requests[socks]>=2.31"`, exact-pin `==` instead of `>=`) — which of those would break a naive `.split(">=")`?
 
@@ -142,10 +138,8 @@ uv run python check_pypi.py
 
 Notice the deliberately-broken `"not-a-real-package-xyz"` in the test list — it should print `latest is None`, not crash. A real tool has to handle a typo'd or private package name gracefully, not assume every name in a `pyproject.toml` resolves.
 
-<StepChecklist>
-  <StepChecklistItem>Real packages print their real, current PyPI version — you can cross-check one against pypi.org in your browser.</StepChecklistItem>
-  <StepChecklistItem>The fake package name prints `None` instead of crashing the script.</StepChecklistItem>
-</StepChecklist>
+  - ✅ Real packages print their real, current PyPI version — you can cross-check one against pypi.org in your browser.
+  - ✅ The fake package name prints `None` instead of crashing the script.
 
 **🤔 Socratic Question(s)**: `response.raise_for_status()` runs *after* the explicit 404 check above it — why single out 404 specially instead of letting `raise_for_status()` handle every non-2xx status the same way? What would happen to this script's control flow if that 404 check weren't there?
 
@@ -175,10 +169,8 @@ if __name__ == "__main__":
 uv run python compare.py
 ```
 
-<StepChecklist>
-  <StepChecklistItem>`is_outdated("2.9.0", "2.10.0")` prints `True`, proving this isn't naive string comparison.</StepChecklistItem>
-  <StepChecklistItem>An unparseable version string returns `None`, not a crash or a silently-wrong `True`/`False`.</StepChecklistItem>
-</StepChecklist>
+  - ✅ `is_outdated("2.9.0", "2.10.0")` prints `True`, proving this isn't naive string comparison.
+  - ✅ An unparseable version string returns `None`, not a crash or a silently-wrong `True`/`False`.
 
 **🤔 Socratic Question(s)**: Why does `is_outdated` return three possible outcomes (`True`, `False`, `None`) instead of just two? What real, non-hypothetical situation in a `pyproject.toml` would make `None` the *only* honest answer?
 
@@ -238,10 +230,8 @@ uv run python freshness_report.py pyproject.toml
 
 Try pointing it at a `pyproject.toml` from a real, older project you have lying around (or this course repo's own `examples/*/pyproject.toml` files) — that's where you'll actually see the "outdated" bucket populate with real results, not just up-to-date dependencies you added five minutes ago.
 
-<StepChecklist>
-  <StepChecklistItem>Running the report against your project's own `pyproject.toml` prints a categorized ✅/⚠️/❓ summary.</StepChecklistItem>
-  <StepChecklistItem>Pointing it at an intentionally older `pyproject.toml` shows at least one real outdated dependency.</StepChecklistItem>
-</StepChecklist>
+  - ✅ Running the report against your project's own `pyproject.toml` prints a categorized ✅/⚠️/❓ summary.
+  - ✅ Pointing it at an intentionally older `pyproject.toml` shows at least one real outdated dependency.
 
 **🤔 Socratic Question(s)**: This script makes one HTTP request per dependency, one after another. For a `pyproject.toml` with 40 dependencies, what's the user-experienced cost of that — and what's a concrete way you'd speed it up (hint: these requests don't depend on each other's results at all)?
 

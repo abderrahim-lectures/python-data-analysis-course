@@ -106,41 +106,71 @@ Before finalizing your report, note explicitly what conclusions this dataset doe
 
 ## 🧩 Challenges
 
-<div class="challenge">Following the worked example's pattern: group by <code>parental_level_of_education</code>, compute mean and count of <code>average_score</code> per group, then visualize with an ordered bar chart or grouped boxplot (Week 9's techniques), and write a finding + caveat pair like the worked example.</>}>
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Answer this question for your report: does `parental_level_of_education` associate with `average_score`? Follow the full pattern — summary table, chart, finding, and caveat.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Following the worked example's pattern: group by <code>parental_level_of_education</code>, compute mean and count of <code>average_score</code> per group, then visualize with an ordered bar chart or grouped boxplot (Week 9's techniques), and write a finding + caveat pair like the worked example.</p>
 
-<div class="challenge">Use <code>sns.relplot</code> or <code>sns.boxplot</code> with both <code>col="gender"</code> (or <code>hue="gender"</code>) and grouping by <code>test_preparation_course</code>, following Week 9's faceting pattern, to see whether the test-prep effect on scores looks similar for both genders or differs.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Extend the worked example's test-preparation question to check whether the effect looks the same across `gender` — does test prep seem to associate with a bigger score gain for one gender than the other?
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Use <code>sns.relplot</code> or <code>sns.boxplot</code> with both <code>col="gender"</code> (or <code>hue="gender"</code>) and grouping by <code>test_preparation_course</code>, following Week 9's faceting pattern, to see whether the test-prep effect on scores looks similar for both genders or differs.</p>
 
-<div class="challenge">Build the 3-column correlation matrix and heatmap exactly as in Week 8, then write a short interpretation noting which pair correlates most strongly and offering a plausible shared-cause explanation (e.g. general academic preparation) rather than claiming one score causes another.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Produce the required correlation heatmap for the three score columns, and write one sentence interpreting the strongest pairwise correlation, being explicit about what it does and doesn't imply.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Build the 3-column correlation matrix and heatmap exactly as in Week 8, then write a short interpretation noting which pair correlates most strongly and offering a plausible shared-cause explanation (e.g. general academic preparation) rather than claiming one score causes another.</p>
 
-<div class="challenge">A reasonable answer notes at least one real limitation, e.g.: the dataset doesn't record when/where it was collected, so results may not generalize to other schools, regions, or years; "test scores" as an outcome captures only one narrow measure of educational success; and group sizes for some categories may be small enough that averages carry real uncertainty.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Write one paragraph for your report's conclusion, listing at least one specific limitation of this dataset that should make a reader cautious about generalizing your findings beyond it.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> A reasonable answer notes at least one real limitation, e.g.: the dataset doesn't record when/where it was collected, so results may not generalize to other schools, regions, or years; "test scores" as an outcome captures only one narrow measure of educational success; and group sizes for some categories may be small enough that averages carry real uncertainty.</p>
 
-<div class="challenge">Use the mean-vs-median skew check and IQR outlier count from Week 6 on average_score, then a histogram from Week 7 to confirm visually -- combining a "before you plot" numeric check with the chart that verifies it, exactly the workflow Week 7 was built around.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Complete the required "dataset profile" section for your report: use Week 6's mean-vs-median skew check and IQR outlier count on the `average_score` column, and confirm what you find with a Week 7 histogram.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Use the mean-vs-median skew check and IQR outlier count from Week 6 on average_score, then a histogram from Week 7 to confirm visually -- combining a "before you plot" numeric check with the chart that verifies it, exactly the workflow Week 7 was built around.</p>
 
-<div class="challenge">Assemble a single markdown/text section combining: a one-sentence summary of the profile, the 3+ questions with findings and caveats, the correlation heatmap's headline finding, and the closing limitations paragraph -- essentially copying the report's required pieces into one continuous narrative a first-time reader could follow start to finish.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Assemble everything from this week's challenges into one continuous written narrative (not just a list of separate code cells) that a reader could follow from start to finish without needing to see your code.
 
+<p class="challenge__answer">💡 <strong>Answer:</strong> Assemble a single markdown/text section combining: a one-sentence summary of the profile, the 3+ questions with findings and caveats, the correlation heatmap's headline finding, and the closing limitations paragraph -- essentially copying the report's required pieces into one continuous narrative a first-time reader could follow start to finish.</p>
+
 </div>
+</details>
 
 ## 🤔 Socratic Questions
 

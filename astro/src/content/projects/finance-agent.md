@@ -4,8 +4,6 @@ slug: /projects/finance-agent
 description: "Categorize a bank CSV export and flag spending anomalies, combining pandas data-wrangling with an LLM tool-calling agent for smart categorization."
 ---
 
-import {StepChecklist, StepChecklistItem} from '@site/src/components/StepChecklist';
-
 # 🌍 Build a Personal Finance Agent
 
 This project assumes you're comfortable with Python 101, and it leans on ideas from two other Real-World Projects without strictly requiring either: pandas data-cleaning at roughly the level of [Train Your First Machine Learning Model](/docs/projects/ml-classifier) (loading a CSV, handling messy columns), and the tool-calling agent pattern from [Build an AI Agent](/docs/projects/ai-agent) (a language model that decides to call your Python functions instead of just replying with text). Having seen either helps, but the steps below re-explain what they need as they go.
@@ -112,11 +110,9 @@ df.head()
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`df["date"].dtype` shows a datetime type, not `object`.</StepChecklistItem>
-<StepChecklistItem>`df["amount"]` contains both negative (expenses) and positive (income) values.</StepChecklistItem>
-<StepChecklistItem>`df.isna().sum()` shows no missing values in `date`, `description`, or `amount`.</StepChecklistItem>
-</StepChecklist>
+- ✅ `df["date"].dtype` shows a datetime type, not `object`.
+- ✅ `df["amount"]` contains both negative (expenses) and positive (income) values.
+- ✅ `df.isna().sum()` shows no missing values in `date`, `description`, or `amount`.
 
 **🤔 Socratic Question(s)**
 
@@ -152,10 +148,8 @@ Run this against the sample data and a solid majority of rows get categorized in
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>You can print the exact rows `categorize_rule_based` left as `None`, and see why each one is genuinely ambiguous (a payment-processor prefix or a P2P transfer, not just a typo in your rules dict).</StepChecklistItem>
-<StepChecklistItem>You resisted the urge to just add more keywords for every case — a handful of remaining unresolved rows is expected, not a bug to rules-patch away.</StepChecklistItem>
-</StepChecklist>
+- ✅ You can print the exact rows `categorize_rule_based` left as `None`, and see why each one is genuinely ambiguous (a payment-processor prefix or a P2P transfer, not just a typo in your rules dict).
+- ✅ You resisted the urge to just add more keywords for every case — a handful of remaining unresolved rows is expected, not a bug to rules-patch away.
 
 **🤔 Socratic Question(s)**
 
@@ -239,11 +233,9 @@ The `categorize_transaction` body above is deliberately still a small heuristic,
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>Every row that was `None` after Step 2 now has a non-null `category` after this step runs.</StepChecklistItem>
-<StepChecklistItem>You've printed at least one agent response and can point to which tool call produced which category.</StepChecklistItem>
-<StepChecklistItem>`df["category"].value_counts()` shows categories that make sense for what you know about each merchant.</StepChecklistItem>
-</StepChecklist>
+- ✅ Every row that was `None` after Step 2 now has a non-null `category` after this step runs.
+- ✅ You've printed at least one agent response and can point to which tool call produced which category.
+- ✅ `df["category"].value_counts()` shows categories that make sense for what you know about each merchant.
 
 **🤔 Socratic Question(s)**
 
@@ -301,11 +293,9 @@ The prompt deliberately says "no new numbers, no advice beyond what the data sup
 
 **✅ Checklist**
 
-<StepChecklist>
-<StepChecklistItem>`flagged` contains the transaction(s) you'd expect to stand out by eye, and excludes ordinary ones.</StepChecklistItem>
-<StepChecklistItem>You understand why the z-score is computed *per category*, not globally across all spending.</StepChecklistItem>
-<StepChecklistItem>The agent's plain-English summary mentions only categories/amounts that actually appear in `anomaly_summary` — nothing invented.</StepChecklistItem>
-</StepChecklist>
+- ✅ `flagged` contains the transaction(s) you'd expect to stand out by eye, and excludes ordinary ones.
+- ✅ You understand why the z-score is computed *per category*, not globally across all spending.
+- ✅ The agent's plain-English summary mentions only categories/amounts that actually appear in `anomaly_summary` — nothing invented.
 
 **🤔 Socratic Question(s)**
 

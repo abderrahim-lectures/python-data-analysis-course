@@ -99,41 +99,71 @@ students.merge(scores, left_on="student_id", right_on="id")
 
 ## 🧩 Challenges
 
-<div class="challenge"><code>df.groupby("gender")["math_score"].mean()</code> — groups the students by gender, then averages math_score within each group.</>}>
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Using a students-performance-style DataFrame (columns include `gender` and `math_score`), compute the average `math_score` for each `gender`.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>df.groupby("gender")["math_score"].mean()</code> — groups the students by gender, then averages math_score within each group.</p>
 
-<div class="challenge"><code>df.groupby("test_preparation_course")["math_score"].agg(["mean", "count"])</code> — <code>.agg</code> with a list computes multiple statistics for the same column at once, as separate result columns.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Group by `test_preparation_course` and compute *both* the mean and the count of `math_score` for each group, in a single `.agg(...)` call.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>df.groupby("test_preparation_course")["math_score"].agg(["mean", "count"])</code> — <code>.agg</code> with a list computes multiple statistics for the same column at once, as separate result columns.</p>
 
-<div class="challenge">Compare <code>df.groupby("lunch")["reading_score"].mean()</code> across the two lunch categories directly — whichever group's mean is higher answers the question.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Which `lunch` category has a higher average `reading_score`? Answer using `.groupby()`, not manual filtering.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Compare <code>df.groupby("lunch")["reading_score"].mean()</code> across the two lunch categories directly — whichever group's mean is higher answers the question.</p>
 
-<div class="challenge">Create two small DataFrames sharing a key column (e.g. <code>student_id</code>) and call <code>left.merge(right, on="student_id")</code>; try mismatched keys on each side to see how <code>how="inner"</code> silently drops unmatched rows compared to <code>how="outer"</code>.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Create two small DataFrames by hand (e.g. one with student names, one with a separate score for each), sharing a common key column, and merge them. Then try mismatching one key on purpose and observe what `how="inner"` does with it versus `how="outer"`.
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Create two small DataFrames sharing a key column (e.g. <code>student_id</code>) and call <code>left.merge(right, on="student_id")</code>; try mismatched keys on each side to see how <code>how="inner"</code> silently drops unmatched rows compared to <code>how="outer"</code>.</p>
 
-<div class="challenge"><code>df.groupby(["lunch", "test_preparation_course"])["math_score"].mean()</code> — groups by every combination of the two columns, showing whether the effects combine, cancel out, or hold independently.</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Group by both `lunch` and `test_preparation_course` together, and compute the average `math_score` for each combination. Does the pattern from Challenge 3 hold within *both* test-prep groups, or does it look different?
 
-</div>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>df.groupby(["lunch", "test_preparation_course"])["math_score"].mean()</code> — groups by every combination of the two columns, showing whether the effects combine, cancel out, or hold independently.</p>
 
-<div class="challenge">Chain .reset_index() after the groupby-aggregate, then .sort_values("math_score", ascending=False) on the resulting plain column, e.g. df.groupby("lunch")["math_score"].mean().reset_index().sort_values("math_score", ascending=False).</>}>
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
 
 Take your Challenge 1 result (average `math_score` by `gender`), turn it into a plain DataFrame with `.reset_index()`, and sort it from highest to lowest average.
 
+<p class="challenge__answer">💡 <strong>Answer:</strong> Chain .reset_index() after the groupby-aggregate, then .sort_values("math_score", ascending=False) on the resulting plain column, e.g. df.groupby("lunch")["math_score"].mean().reset_index().sort_values("math_score", ascending=False).</p>
+
 </div>
+</details>
 
 ## 🤔 Socratic Questions
 

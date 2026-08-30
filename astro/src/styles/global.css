@@ -501,6 +501,79 @@ button { font-family: inherit; cursor: pointer; }
 .admonition--danger .admonition__title { color: var(--bad); }
 .admonition--note { border-inline-start-color: var(--accent); background: var(--accent-soft); }
 
+/* === Lesson content tables === */
+.lesson-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.25rem 0;
+  font-size: .92rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+.lesson-content thead { background: var(--surface-2); }
+.lesson-content th {
+  text-align: start;
+  font-weight: 800;
+  color: var(--ink-hi);
+  padding: .65rem .9rem;
+  border-bottom: 2px solid var(--line);
+}
+.lesson-content td { padding: .65rem .9rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+.lesson-content tbody tr:last-child td { border-bottom: none; }
+.lesson-content tbody tr:nth-child(even) { background: var(--surface-2); }
+.lesson-content table :not(pre) > code { white-space: nowrap; }
+@media (max-width: 640px) {
+  .lesson-content table { display: block; overflow-x: auto; white-space: nowrap; }
+}
+
+/* === Challenge blocks (<details class="challenge">) === */
+.challenge {
+  margin: 1.25rem 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+.challenge > summary {
+  cursor: pointer;
+  list-style: none;
+  padding: .9rem 1.2rem;
+  font-weight: 800;
+  color: var(--accent-strong);
+  background: var(--accent-soft);
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.challenge > summary::-webkit-details-marker { display: none; }
+.challenge > summary::before { content: '▸'; transition: transform var(--transition-fast); }
+.challenge[open] > summary::before { transform: rotate(90deg); }
+.challenge__body { padding: 1rem 1.2rem; }
+.challenge__body > :first-child { margin-top: 0; }
+.challenge__answer {
+  margin-top: 1rem;
+  padding: .8rem 1rem;
+  border-radius: var(--radius-md);
+  background: var(--success-soft);
+  border-inline-start: 4px solid var(--success);
+  color: var(--ink);
+}
+
+/* === Bonus content block (<div class="bonus">) === */
+.bonus {
+  margin: 1.25rem 0;
+  padding: 1.1rem 1.3rem;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, var(--xp-glow), transparent 60%), var(--surface);
+  border: 1px solid var(--line);
+  border-inline-start: 4px solid var(--xp);
+  box-shadow: var(--shadow-sm);
+}
+.bonus > :first-child { margin-top: 0; }
+.bonus > :last-child { margin-bottom: 0; }
+
 /* === KaTeX: keep math legible on both themes and scrollable on mobile === */
 .katex-display { overflow-x: auto; overflow-y: hidden; padding: .5rem 0; }
 .katex { color: var(--ink-hi); }
