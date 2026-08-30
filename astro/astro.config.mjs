@@ -23,7 +23,13 @@ export default defineConfig({
   markdown: {
     shikiConfig: {theme: 'github-dark'},
     remarkPlugins: [remarkAdmonitions, remarkMath],
-    rehypePlugins: [rehypeKatex, rehypeRunnablePython, rehypeSectionBlocks],
+    // strict: false — the es/fr lesson content writes natural-language prose
+    // (with accents, French guillemets) inside LaTeX \text{...} inside math
+    // spans, e.g. $P(\text{événement}) \approx ...$. That's valid, renders
+    // correctly, but KaTeX's default strict mode still warns on raw Unicode
+    // in math mode. These are non-fatal warnings, not errors — silencing the
+    // console noise, not working around an actual bug.
+    rehypePlugins: [[rehypeKatex, {strict: false}], rehypeRunnablePython, rehypeSectionBlocks],
   },
   integrations: [sitemap()],
 });
