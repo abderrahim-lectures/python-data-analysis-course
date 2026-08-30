@@ -647,3 +647,4 @@ button { font-family: inherit; cursor: pointer; }
 .lesson-nav__done:disabled { cursor: default; }
 .btn:disabled { opacity: .5; cursor: not-allowed; filter: grayscale(.4); transform: none; }
 .btn:disabled:hover { transform: none; filter: grayscale(.4); }
+.onboarding__steps { list-style: none; padding: 0; }

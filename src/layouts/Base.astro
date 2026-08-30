@@ -109,16 +109,19 @@ const t = UI_STRINGS[resolveLocale(lang)];
       <slot />
     </main>
 
-    <div class="onboarding" id="onboarding">
+    <!-- Starts hidden: it used to render visible and get hidden by JS after
+         load, so every returning visitor saw it flash on every page. -->
+    <div class="onboarding" id="onboarding" hidden role="dialog" aria-modal="true"
+      aria-labelledby="onboarding-title" aria-describedby="onboarding-sub">
       <div class="onboarding__card">
-        <div class="onboarding__emoji">🚀</div>
-        <h2 class="onboarding__title">{t.onboarding.title}</h2>
-        <p class="onboarding__sub">{t.onboarding.sub}</p>
-        <div class="onboarding__steps">
+        <div class="onboarding__emoji" aria-hidden="true">🚀</div>
+        <h2 class="onboarding__title" id="onboarding-title">{t.onboarding.title}</h2>
+        <p class="onboarding__sub" id="onboarding-sub">{t.onboarding.sub}</p>
+        <ol class="onboarding__steps">
           {t.onboarding.steps.map((step, i) => (
-            <div class="onboarding__step"><span class="onboarding__step-num">{i + 1}</span> {step}</div>
+            <li class="onboarding__step"><span class="onboarding__step-num" aria-hidden="true">{i + 1}</span> {step}</li>
           ))}
-        </div>
+        </ol>
         <button class="onboarding__cta btn btn-primary" id="onboarding-start">{t.onboarding.cta}</button>
         <button class="onboarding__skip" id="onboarding-skip">{t.onboarding.skip}</button>
       </div>
@@ -250,17 +253,43 @@ const t = UI_STRINGS[resolveLocale(lang)];
       function initOnboarding() {
         const overlay = document.getElementById('onboarding');
         if (!overlay) return;
-        const visited = localStorage.getItem('pda:onboarded');
-        const skipParam = new URLSearchParams(location.search).get('onboarded');
-        if (visited || skipParam) { overlay.style.display = 'none'; return; }
-        document.getElementById('onboarding-start')?.addEventListener('click', () => {
-          localStorage.setItem('pda:onboarded', '1');
-          overlay.style.display = 'none';
-        });
-        document.getElementById('onboarding-skip')?.addEventListener('click', () => {
-          localStorage.setItem('pda:onboarded', '1');
-          overlay.style.display = 'none';
-        });
+
+        // A blocked/absent localStorage must not take the rest of init down
+        // with it, and must not trap the visitor behind an undismissable modal.
+        let seen = true;
+        try {
+          seen = !!localStorage.getItem('pda:onboarded');
+        } catch { seen = true; }
+        if (seen || new URLSearchParams(location.search).has('onboarded')) return;
+
+        const opener = document.activeElement;
+        const dismiss = () => {
+          try { localStorage.setItem('pda:onboarded', '1'); } catch { /* private mode */ }
+          overlay.hidden = true;
+          document.removeEventListener('keydown', onKey);
+          if (opener instanceof HTMLElement) opener.focus();
+        };
+        const focusable = () => Array.from(
+          overlay.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')
+        );
+        function onKey(e) {
+          if (e.key === 'Escape') { dismiss(); return; }
+          if (e.key !== 'Tab') return;
+          // Keep focus inside the dialog while it is open.
+          const items = focusable();
+          if (items.length === 0) return;
+          const first = items[0];
+          const last = items[items.length - 1];
+          if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+          else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+        }
+
+        overlay.hidden = false;
+        document.addEventListener('keydown', onKey);
+        overlay.addEventListener('click', (e) => { if (e.target === overlay) dismiss(); });
+        document.getElementById('onboarding-start')?.addEventListener('click', dismiss);
+        document.getElementById('onboarding-skip')?.addEventListener('click', dismiss);
+        focusable()[0]?.focus();
       }
       let lastXP = readState().xp || 0;
       function initXPToastListener() {

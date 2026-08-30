@@ -106,6 +106,16 @@ See `astro-rebuild.md` for full detail.
       tested removed features (JupyterLite, VSCode playground, placement quiz)
       and could not run at all since Playwright isn't installed.
 
+- [x] **Onboarding fixed and hardened.** The modal was rendered *visible* in
+      HTML and hidden by JS after load, so every returning visitor saw it
+      flash on every page. It now starts `hidden` and is only revealed for
+      genuine first visits. Added dialog semantics (`role="dialog"`,
+      `aria-modal`, labelled by title/description), focus move-in and
+      restore-on-close, a Tab focus trap, Escape and backdrop-click to
+      dismiss, and a try/catch around localStorage so private mode can't
+      trap a visitor behind an undismissable overlay or take the rest of
+      page init down with it. Steps are now a real `<ol>`.
+
 ### Still open
 - `deploy.yml` still assumes the old JupyterLite build step; GH Pages CI work
   remains deferred per standing instruction.

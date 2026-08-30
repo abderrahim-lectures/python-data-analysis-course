@@ -138,6 +138,29 @@ for (const path of ['/', '/progress', '/playground', '/projects', '/learn', '/le
   check(`${path} renders a heading`, await evaluate('!!document.querySelector("h1")'), true);
 }
 
+console.log('\nonboarding');
+await goto('/');
+await evaluate('(localStorage.clear(), 1)');
+await goto('/');
+check('shows on a first visit', await evaluate('!document.getElementById("onboarding").hidden'), true);
+check('is a labelled dialog', await evaluate('document.getElementById("onboarding").getAttribute("role")'), 'dialog');
+check('moves focus into the dialog', await evaluate('document.getElementById("onboarding").contains(document.activeElement)'), true);
+await evaluate('(document.getElementById("onboarding-start").click(), 1)');
+check('dismisses on the CTA', await evaluate('document.getElementById("onboarding").hidden'), true);
+check('remembers the dismissal', await evaluate('localStorage.getItem("pda:onboarded")'), '1');
+
+await goto('/progress');
+check('does not reappear for a returning visitor', await evaluate('document.getElementById("onboarding").hidden'), true);
+
+await evaluate('(localStorage.clear(), 1)');
+await goto('/');
+await evaluate(`(document.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape'})), 1)`);
+check('closes on Escape', await evaluate('document.getElementById("onboarding").hidden'), true);
+
+await evaluate('(localStorage.clear(), 1)');
+await goto('/?onboarded=1');
+check('the ?onboarded= escape hatch suppresses it', await evaluate('document.getElementById("onboarding").hidden'), true);
+
 const failed = results.filter(r => !r.pass).length;
 console.log(`\n${results.length - failed}/${results.length} checks passed`);
 ws.close();
