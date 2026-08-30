@@ -31,8 +31,8 @@ const alternates = {
       <div class="sectioncard">
         <div class="sectioncard__badge">🐍 {s.track1}</div>
         <div class="sectioncard__icon">🐍</div>
-        <h2>Python 101</h2>
-        <p>Weeks 1–5. The fundamentals: variables, types, control flow, functions — then a tiny language model.</p>
+        <h2>{s.track1Name}</h2>
+        <p>{s.track1Desc}</p>
         <div class="routes">
           <span class="routes__label">{s.chooseRoute}</span>
           <div class="routes__pills">
@@ -45,8 +45,8 @@ const alternates = {
       <div class="sectioncard">
         <div class="sectioncard__badge sectioncard__badge--streak">📊 {s.track2}</div>
         <div class="sectioncard__icon">📊</div>
-        <h2>Pandas &amp; Data</h2>
-        <p>Weeks 6–10. Ship a real notebook: pandas the way a data analyst actually uses it.</p>
+        <h2>{s.track2Name}</h2>
+        <p>{s.track2Desc}</p>
         <div class="routes">
           <span class="routes__label">{s.chooseRoute}</span>
           <div class="routes__pills">
@@ -94,6 +94,7 @@ const alternates = {
   }
   .route-pill:active { transform: translateY(3px); box-shadow: 0 1px 0 rgba(0,0,0,.08), 0 2px 8px rgba(16,24,40,.06); }
   .route-pill--normal { background: var(--success); box-shadow: 0 4px 0 #3d9401, 0 6px 16px rgba(88,204,2,.25); }
+  .route-pill--normal:hover, .route-pill--hard:hover { transform: translateY(-1px); }
   .route-pill--normal:hover { filter: brightness(1.06); box-shadow: 0 4px 0 #3d9401, 0 8px 20px rgba(88,204,2,.35); }
   .route-pill--normal:active { box-shadow: 0 1px 0 #3d9401, 0 2px 8px rgba(88,204,2,.15); }
   .route-pill--hard { background: var(--bad); box-shadow: 0 4px 0 #c81e3f, 0 6px 16px rgba(244,63,94,.25); }

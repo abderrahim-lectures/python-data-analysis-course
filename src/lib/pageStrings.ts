@@ -21,6 +21,10 @@ export const PAGE_STRINGS: Record<Locale, {
   projectsEyebrow: string;
   projectsH1: string;
   projectsLead: string;
+  track1Name: string;
+  track1Desc: string;
+  track2Name: string;
+  track2Desc: string;
   markComplete: string;
   completed: string;
 }> = {
@@ -42,6 +46,10 @@ export const PAGE_STRINGS: Record<Locale, {
     projectsH1: 'Real-World Projects',
     projectsLead: 'Optional, ungraded builds that graduate you from the browser playground to real Python.',
     optionalUngraded: '🎯 Optional · ungraded',
+    track1Name: 'Python 101',
+    track1Desc: 'Weeks 1–5. The fundamentals: variables, types, control flow, functions — then a tiny language model.',
+    track2Name: 'Pandas & Data',
+    track2Desc: 'Weeks 6–10. Ship a real notebook: pandas the way a data analyst actually uses it.',
     markComplete: 'Mark complete ✓',
     completed: 'Completed ✓',
   },
@@ -63,6 +71,10 @@ export const PAGE_STRINGS: Record<Locale, {
     projectsH1: 'مشاريع واقعية',
     projectsLead: 'مشاريع اختيارية غير مقيَّمة تُخرّجك من ملعب المتصفح إلى بايثون حقيقية.',
     optionalUngraded: '🎯 اختياري · غير مقيَّم',
+    track1Name: 'بايثون 101',
+    track1Desc: 'الأسابيع 1–5. الأساسيات: المتغيّرات، الأنواع، التحكّم بالتدفّق، الدوال — ثم نموذج لغوي مصغّر.',
+    track2Name: 'Pandas والبيانات',
+    track2Desc: 'الأسابيع 6–10. أنجز دفتر عمل حقيقي: pandas كما يستخدمها محلّل البيانات فعليًا.',
     markComplete: 'تحديد كمكتمل ✓',
     completed: 'مكتمل ✓',
   },
@@ -84,6 +96,10 @@ export const PAGE_STRINGS: Record<Locale, {
     projectsH1: 'Proyectos del Mundo Real',
     projectsLead: 'Builds opcionales, sin calificar, que te gradúan del playground del navegador a Python real.',
     optionalUngraded: '🎯 Opcional · sin calificar',
+    track1Name: 'Python 101',
+    track1Desc: 'Semanas 1–5. Los fundamentos: variables, tipos, control de flujo, funciones — y luego un pequeño modelo de lenguaje.',
+    track2Name: 'Pandas y Datos',
+    track2Desc: 'Semanas 6–10. Publica un notebook real: pandas tal como lo usa de verdad un analista de datos.',
     markComplete: 'Marcar como completado ✓',
     completed: 'Completado ✓',
   },
@@ -105,6 +121,10 @@ export const PAGE_STRINGS: Record<Locale, {
     projectsH1: 'Projets Concrets',
     projectsLead: 'Des builds optionnels, non notés, qui te font passer du bac à sable du navigateur à du vrai Python.',
     optionalUngraded: '🎯 Optionnel · non noté',
+    track1Name: 'Python 101',
+    track1Desc: 'Semaines 1–5. Les fondamentaux : variables, types, structures de contrôle, fonctions — puis un mini modèle de langage.',
+    track2Name: 'Pandas & Données',
+    track2Desc: 'Semaines 6–10. Réalisez un vrai notebook : pandas tel qu’un analyste de données l’utilise vraiment.',
     markComplete: 'Marquer comme terminé ✓',
     completed: 'Terminé ✓',
   },

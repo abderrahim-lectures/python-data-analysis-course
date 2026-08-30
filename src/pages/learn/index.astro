@@ -1,15 +1,17 @@
 ---
 import Base from '../../layouts/Base.astro';
 import Icon from '../../components/Icon.astro';
+import {PAGE_STRINGS} from '../../lib/pageStrings';
 const base = import.meta.env.BASE_URL;
+const s = PAGE_STRINGS.en;
 ---
 
-<Base title="Learn — PyDA Course" lang="en" dir="ltr">
+<Base title={s.learnHubTitle} description={s.learnHubDescription} lang="en" dir="ltr">
   <section class="hero">
     <div class="container head">
-      <div class="head__eyebrow"><Icon name="code" size={16} /> Your learning trail</div>
-      <h1>Two tracks. Two routes. Pick your path.</h1>
-      <p>Each lesson earns XP. Streaks multiply it. Badges mark your climb.</p>
+      <div class="head__eyebrow"><Icon name="code" size={16} /> {s.learnHubEyebrow}</div>
+      <h1>{s.learnHubH1}</h1>
+      <p>{s.learnHubLead}</p>
     </div>
   </section>
 
@@ -23,40 +25,40 @@ const base = import.meta.env.BASE_URL;
   <section class="container">
     <div class="sections">
       <div class="sectioncard">
-        <div class="sectioncard__badge">🐍 Track 1</div>
+        <div class="sectioncard__badge">🐍 {s.track1}</div>
         <div class="sectioncard__icon">🐍</div>
-        <h2>Python 101</h2>
-        <p>Weeks 1–5. The fundamentals: variables, types, control flow, functions — then a tiny language model.</p>
+        <h2>{s.track1Name}</h2>
+        <p>{s.track1Desc}</p>
         <div class="sectioncard__meta">
           <span class="badge badge--xp">⚡ 100 XP</span>
           <span class="badge badge--streak">🔥 5 weeks</span>
         </div>
         <div class="routes">
-          <span class="routes__label">Choose your route:</span>
+          <span class="routes__label">{s.chooseRoute}</span>
           <div class="routes__pills">
-            <a class="route-pill route-pill--normal" href={`${base}learn/python-101/normal/week-1`}>🌿 Normal — start here</a>
-            <a class="route-pill route-pill--hard" href={`${base}learn/python-101/hard/week-1`}>⚡ Hard — start here</a>
+            <a class="route-pill route-pill--normal" href={`${base}learn/python-101/normal/week-1`}>🌿 {s.normalStart}</a>
+            <a class="route-pill route-pill--hard" href={`${base}learn/python-101/hard/week-1`}>⚡ {s.hardStart}</a>
           </div>
         </div>
-        <a class="sectioncard__all" href={`${base}learn/python-101`}>See all 5 weeks →</a>
+        <a class="sectioncard__all" href={`${base}learn/python-101`}>{s.seeAllWeeks}</a>
       </div>
       <div class="sectioncard">
-        <div class="sectioncard__badge sectioncard__badge--streak">📊 Track 2</div>
+        <div class="sectioncard__badge sectioncard__badge--streak">📊 {s.track2}</div>
         <div class="sectioncard__icon">📊</div>
-        <h2>Pandas &amp; Data</h2>
-        <p>Weeks 6–10. Ship a real notebook: pandas the way a data analyst actually uses it.</p>
+        <h2>{s.track2Name}</h2>
+        <p>{s.track2Desc}</p>
         <div class="sectioncard__meta">
           <span class="badge badge--xp">⚡ 100 XP</span>
           <span class="badge badge--streak">🔥 5 weeks</span>
         </div>
         <div class="routes">
-          <span class="routes__label">Choose your route:</span>
+          <span class="routes__label">{s.chooseRoute}</span>
           <div class="routes__pills">
-            <a class="route-pill route-pill--normal" href={`${base}learn/data-analysis/normal/week-6`}>🌿 Normal — start here</a>
-            <a class="route-pill route-pill--hard" href={`${base}learn/data-analysis/hard/week-6`}>⚡ Hard — start here</a>
+            <a class="route-pill route-pill--normal" href={`${base}learn/data-analysis/normal/week-6`}>🌿 {s.normalStart}</a>
+            <a class="route-pill route-pill--hard" href={`${base}learn/data-analysis/hard/week-6`}>⚡ {s.hardStart}</a>
           </div>
         </div>
-        <a class="sectioncard__all" href={`${base}learn/data-analysis`}>See all 5 weeks →</a>
+        <a class="sectioncard__all" href={`${base}learn/data-analysis`}>{s.seeAllWeeks}</a>
       </div>
     </div>
 
@@ -128,6 +130,7 @@ const base = import.meta.env.BASE_URL;
   }
   .route-pill:active { transform: translateY(3px); box-shadow: 0 1px 0 rgba(0,0,0,.08), 0 2px 8px rgba(16,24,40,.06); }
   .route-pill--normal { background: var(--success); box-shadow: 0 4px 0 #3d9401, 0 6px 16px rgba(88,204,2,.25); }
+  .route-pill--normal:hover, .route-pill--hard:hover { transform: translateY(-1px); }
   .route-pill--normal:hover { filter: brightness(1.06); box-shadow: 0 4px 0 #3d9401, 0 8px 20px rgba(88,204,2,.35); }
   .route-pill--normal:active { box-shadow: 0 1px 0 #3d9401, 0 2px 8px rgba(88,204,2,.15); }
   .route-pill--hard { background: var(--bad); box-shadow: 0 4px 0 #c81e3f, 0 6px 16px rgba(244,63,94,.25); }

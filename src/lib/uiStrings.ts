@@ -17,6 +17,7 @@ export interface UiStrings {
     projects: string;
     myProgress: string;
     github: string;
+    tagline: string;
     changelog: string;
     copyright: (year: number, version: string) => string;
   };
@@ -43,7 +44,8 @@ export const UI_STRINGS: Record<Locale, UiStrings> = {
       projects: 'Projects',
       myProgress: 'My Progress',
       github: 'GitHub',
-      changelog: 'Changelog',
+      tagline: 'Learn Python and data analysis in your browser. Zero installs, zero boring.',
+    changelog: 'Changelog',
       copyright: (year, version) =>
         `Copyright © ${year} Abderrahim Adrabi. Code MIT-licensed, content CC-BY 4.0. v${version}`,
     },
@@ -68,7 +70,8 @@ export const UI_STRINGS: Record<Locale, UiStrings> = {
       projects: 'المشاريع',
       myProgress: 'تقدمي',
       github: 'GitHub',
-      changelog: 'Changelog',
+      tagline: 'تعلّم بايثون وتحليل البيانات في متصفّحك. بلا تثبيت، وبلا ملل.',
+    changelog: 'Changelog',
       copyright: (year, version) =>
         `حقوق النشر © ${year} Abderrahim Adrabi. الكود مرخّص بموجب MIT، والمحتوى بموجب CC-BY 4.0. v${version}`,
     },
@@ -93,7 +96,8 @@ export const UI_STRINGS: Record<Locale, UiStrings> = {
       projects: 'Proyectos',
       myProgress: 'Mi Progreso',
       github: 'GitHub',
-      changelog: 'Changelog',
+      tagline: 'Aprende Python y análisis de datos en tu navegador. Cero instalaciones, cero aburrimiento.',
+    changelog: 'Changelog',
       copyright: (year, version) =>
         `Copyright © ${year} Abderrahim Adrabi. Código con licencia MIT, contenido con licencia CC-BY 4.0. v${version}`,
     },
@@ -118,7 +122,8 @@ export const UI_STRINGS: Record<Locale, UiStrings> = {
       projects: 'Projets',
       myProgress: 'Ma Progression',
       github: 'GitHub',
-      changelog: 'Changelog',
+      tagline: 'Apprenez Python et l’analyse de données dans votre navigateur. Zéro installation, zéro ennui.',
+    changelog: 'Changelog',
       copyright: (year, version) =>
         `Copyright © ${year} Abderrahim Adrabi. Code sous licence MIT, contenu sous licence CC-BY 4.0. v${version}`,
     },
