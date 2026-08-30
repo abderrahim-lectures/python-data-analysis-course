@@ -1,4 +1,4 @@
 ---
-title: "Pandas & Data Analysis"
-description: "Pandas & Data Analysis — pandas & data analysis."
+title: "Pandas وتحليل البيانات"
+description: "Pandas وتحليل البيانات: تعلّم تحميل مجموعات بيانات حقيقية وتنظيفها وتحليلها باستخدام pandas، من الأساسيات وحتى مشروع تحليل استكشافي كامل."
 ---

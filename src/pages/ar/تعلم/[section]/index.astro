@@ -23,7 +23,8 @@ const {section, lessons} = Astro.props;
 const base = import.meta.env.BASE_URL;
 const dir = 'rtl' as const;
 
-const indexEntry = (await getCollection('learn')).find((e) => e.slug === `ar/${section}/index`);
+// Astro strips a trailing `/index` from content slugs.
+const indexEntry = (await getCollection('learn')).find((e) => e.slug === `ar/${section}`);
 const title = indexEntry?.data.title ?? section;
 const description = indexEntry?.data.description ?? `${section} lessons.`;
 

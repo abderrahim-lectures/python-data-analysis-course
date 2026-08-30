@@ -83,3 +83,63 @@ describe('shared layout', () => {
     expect(src).toContain('aria-labelledby="onboarding-title"');
   });
 });
+
+describe('locale content is actually translated', () => {
+  // The Arabic section index files shipped English placeholder descriptions
+  // ("Python 101 — Python fundamentals.") that became the page's meta
+  // description, while es/fr were properly translated.
+  const frontmatter = (p: string) => {
+    const m = readFileSync(p, 'utf8').match(/^---\r?\n([\s\S]*?)\r?\n---/);
+    return m ? m[1] : '';
+  };
+  const field = (fm: string, key: string) => {
+    const m = fm.match(new RegExp(`^${key}:\\s*"?(.*?)"?\\s*$`, 'm'));
+    return m ? m[1] : '';
+  };
+  const arabicRatio = (s: string) => {
+    const letters = [...s].filter((c) => /\p{L}/u.test(c));
+    if (!letters.length) return 0;
+    return letters.filter((c) => /[؀-ۿ]/.test(c)).length / letters.length;
+  };
+
+  const AR_SECTIONS = [
+    'src/content/learn/ar/python-101/index.md',
+    'src/content/learn/ar/data-analysis/index.md',
+  ];
+
+  test.each(AR_SECTIONS)('%s has an Arabic description', (path) => {
+    const desc = field(frontmatter(path), 'description');
+    expect(desc.length).toBeGreaterThan(0);
+    // Product names (pandas, CSV, Python) stay Latin, so require a majority
+    // rather than the whole string.
+    expect(arabicRatio(desc)).toBeGreaterThan(0.5);
+  });
+
+  test.each(AR_SECTIONS)('%s has an Arabic title', (path) => {
+    expect(arabicRatio(field(frontmatter(path), 'title'))).toBeGreaterThan(0.3);
+  });
+});
+
+describe('section landing pages resolve their index content', () => {
+  // Astro strips a trailing `/index` from slugs and emits a leading slash for
+  // a nested `<section>/<section>/index.md`. The routes matched on
+  // `.endsWith('<section>/index')`, which never hit, so every section page in
+  // every locale fell back to a raw-slug title and `"<slug> lessons."`.
+  const ROUTES = [
+    'src/pages/learn/[section]/index.astro',
+    'src/pages/ar/تعلم/[section]/index.astro',
+    'src/pages/es/aprender/[section]/index.astro',
+    'src/pages/fr/apprendre/[section]/index.astro',
+  ];
+
+  test.each(ROUTES)('%s does not match on a trailing /index', (path) => {
+    const src = readFileSync(path, 'utf8');
+    expect(src).not.toMatch(/slug\s*===\s*`[^`]*\/index`/);
+    expect(src).not.toMatch(/endsWith\(`\$\{section\}\/index`\)/);
+  });
+
+  test('the English route normalises the leading slash', () => {
+    const src = readFileSync('src/pages/learn/[section]/index.astro', 'utf8');
+    expect(src).toContain("replace(/^\\//, '')");
+  });
+});

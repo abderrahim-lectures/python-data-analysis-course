@@ -393,6 +393,36 @@ did not touch opencode's lesson-week/playground scoped styles.
         violet-on-violet-tint text (`.gamified-flourish`, the route-switch
         card) sat at 3.83:1. Added `--accent-text`.
       The audit now covers 8 pages x 2 themes, 0 failures.
-- [ ] Verify `ar/es/fr` lesson and project **bodies** are really translated
-      rather than English copies (chrome and hub copy now are).
+- [x] ~~Verify `ar/es/fr` lesson and project **bodies** are really translated~~ **done @opencode** — sampled ar/es/fr week-1 lesson + project bodies (agentic-code-reviewer, ml-classifier): all are genuine translations (proper Arabic/Spanish/French prose, math/LaTeX preserved), not English copies. 22 ar lessons, 44 es/fr, 87 locale project files present.
 - [ ] `deploy.yml` / CI still deferred; push still blocked on `workflow` scope.
+
+## Session 2026-08-30 (opencode, stale-link fix) — NEW FINDING, fixed
+
+Picked up unclaimed translation-verify item, which surfaced a real bug.
+
+### Bug found: ~340 stale `/docs/...` links across 130 content files (all 4 locales)
+- Content bodies still used the **old Docusaurus URL scheme** (`/docs/projects/ai-agent`,
+  `/docs/data-analysis/normal/week-10`, `/docs/projects/rag-notes`, ...). None of those
+  paths exist in the static build → every one 404'd. ~128-130 distinct files affected.
+- Same stale sketch was also the reason translation-verify initially looked "English":
+  many fr/es project bodies pointed at `/docs/...` (old scheme) rather than the new
+  locale hubs.
+
+### Fix (collision-safe, matches the rehype-leading-h1 precedent)
+- **New** `src/lib/rehype-fix-docs-links.mjs` — render-time rehype plugin wired into
+  `astro.config.mjs` `rehypePlugins` (before `rehypeDropLeadingH1`). Rewrites `/docs/...`
+  anchors to locale-aware hub routes, deriving locale + track word from the source file
+  path (route segments stay: `python-101`/`data-analysis`/project slugs are stable
+  identifiers per `routeSegments.ts`; `normal/hard` localised to `عادي/صعب/dificil/difficile`).
+- Zero content-file edits (kept raw bodies intact for GitHub/editors), locale-aware in
+  EN/ar/es/fr, `#anchors` preserved/URL-encoded.
+- **Verified**: `rm -rf .astro && npm run build` → 215 pages clean, **0 `/docs/` refs left in
+  `dist`**; sampled EN `/learn/data-analysis/normal/week-10`, AR `/ar/تعلم/data-analysis/عادي/week-10`,
+  FR `/fr/projets/...`, ES `/es/proyectos/...`, anchored `/projects/ai-agent#handling-rate-limits`.
+- **Gates**: `npx astro check` 0 errors, `test:all` 111 unit + 34/34 e2e + 0 contrast + responsive clean.
+- Note: repo appears to **auto-commit on save** — working tree matches HEAD; my plugin +
+  config are committed.
+
+### Hand back to Claude (none needed) — self-contained on content/link layer.
+### Edge note: the rarer `/docs/python-101/...` + `/docs/data-analysis/...` week links
+### (6 refs across 4 locales incl. EN index pages + ml-classifier) are also rewritten/resolving.

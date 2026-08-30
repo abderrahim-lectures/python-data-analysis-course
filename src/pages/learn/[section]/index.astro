@@ -24,9 +24,18 @@ interface Props { section: string; lessons: Awaited<ReturnType<typeof getCollect
 const {section, lessons} = Astro.props;
 const base = import.meta.env.BASE_URL;
 
-const indexEntry = (await getCollection('learn')).find(
-  (e) => !/^(ar|es|fr)\//.test(e.slug) && (e.slug.endsWith(`${section}/index`) || e.slug.endsWith(`${section}/${section}/index`))
-);
+// Astro strips a trailing `/index` from content slugs, so matching on
+// `.../index` never hit and every section page silently fell back to the
+// English `"<slug> lessons."` placeholder with a raw-slug title.
+// Astro strips a trailing `/index` from content slugs and, for a nested
+// `<section>/<section>/index.md`, emits a leading slash — so the original
+// `.endsWith('<section>/index')` match never hit and every section page
+// silently fell back to the English `"<slug> lessons."` placeholder.
+const indexEntry = (await getCollection('learn')).find((e) => {
+  if (/^(ar|es|fr)\//.test(e.slug)) return false;
+  const norm = e.slug.replace(/^\//, '').replace(/\/index$/, '');
+  return norm === section || norm === `${section}/${section}`;
+});
 const title = indexEntry?.data.title ?? section;
 const description = indexEntry?.data.description ?? `${section} lessons.`;
 
