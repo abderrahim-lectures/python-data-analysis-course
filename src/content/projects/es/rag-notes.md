@@ -4,7 +4,7 @@ description: "Gradúate del playground en el navegador a Python de verdad: const
 ---
 
 
-# 🌍 Construye una App RAG Sobre Tus Propias Notas
+# 📚 Construye una App RAG Sobre Tus Propias Notas
 
 Todo en el curso hasta ahora se ejecutó en un playground aislado dentro del navegador — para que pudieras empezar a escribir Python desde el primer día sin ninguna configuración. Este proyecto es el paso de graduación: instala Python de verdad en tu propia máquina, y luego úsalo para construir una herramienta que quizás sigas usando de verdad — una app que responde preguntas sobre una carpeta de tus propias notas, buscando primero en ellas y solo después pidiéndole a un modelo de lenguaje que responda usando lo que encontró. Esto asume Python 101; nada de Data Analysis es necesario, aunque ayuda si los arrays de `numpy` ya te resultan familiares.
 

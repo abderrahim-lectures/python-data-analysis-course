@@ -4,7 +4,7 @@ description: "Graduéate del playground en el navegador al Python real: construy
 ---
 
 
-# 🌍 Construye un Agente Planificador de Recetas
+# 🧰 Construye un Agente Planificador de Recetas
 
 Escribes una lista de ingredientes que de hecho tienes a la mano — digamos, huevos, tomates, ajo y pan — y un agente sugiere 2-3 comidas reales que podrías hacer con ellos, luego arma una lista de compras de lo que falta para la mejor opción. El giro que hace de esto un agente genuinamente útil, no solo un chatbot: nunca inventa una receta. Llama a una herramienta que busca en una base de datos de recetas local real y solo puede sugerir lo que esa herramienta realmente devuelve — la misma idea de anclaje detrás de sistemas mucho más serios de "no dejes que el modelo invente cosas", reducida a algo que puedes construir en una tarde.
 

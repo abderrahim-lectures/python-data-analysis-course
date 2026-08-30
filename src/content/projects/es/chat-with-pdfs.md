@@ -4,7 +4,7 @@ description: "Construye una app RAG multi-documento sobre una carpeta de PDFs, c
 ---
 
 
-# 🌍 Chatea con tus PDFs
+# 📚 Chatea con tus PDFs
 
 El [proyecto de App RAG](/docs/projects/rag-notes) chatea con una carpeta de notas de texto plano. Este proyecto lleva la misma idea a algo más útil: una carpeta de PDFs reales — informes, guías, manuales, papers — con respuestas que citan exactamente de qué documento y qué página proviene un hecho, como lo haría un asistente de investigación. Esto asume Python 101; también ayuda mucho haber construido ya el proyecto de App RAG, ya que este reutiliza toda su arquitectura y solo cambia cómo se leen y citan los documentos fuente, pero no es un requisito estricto si te sientes cómodo con los conceptos.
 

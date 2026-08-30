@@ -4,7 +4,7 @@ slug: /projects/recipe-planner-agent
 description: "Graduate from the in-browser playground to real Python: build a tool-using AI agent with LangChain's deepagents that suggests meals from the ingredients you have on hand, grounded in a real local recipe database."
 ---
 
-# 🌍 Build a Recipe-Planner Agent
+# 🧰 Build a Recipe-Planner Agent
 
 You type in a list of ingredients you actually have on hand — say, eggs, tomatoes, garlic, and bread — and an agent suggests 2-3 real meals you could make with them, then builds a shopping list of whatever's missing for the best one. The twist that makes this a genuinely useful agent, not just a chatbot: it never invents a recipe. It calls a tool that searches a real, local recipe database and can only suggest what that tool actually returns — the same grounding idea behind far more serious "don't let the model make things up" systems, shrunk down to something you can build in an afternoon.
 

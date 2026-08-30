@@ -4,7 +4,7 @@ slug: /projects/docs-qa-bot
 description: "Graduate from the in-browser playground to real Python: wrap the RAG App project's retrieval pipeline in a live Discord bot that answers questions from a folder of documentation."
 ---
 
-# 🌍 Build a RAG-Backed Docs Q&A Discord Bot
+# 📚 Build a RAG-Backed Docs Q&A Discord Bot
 
 This project takes the retrieval-augmented generation pipeline from [Build a RAG App](/docs/projects/rag-notes) — local embeddings, NumPy cosine-similarity search, a free-tier LLM for the final answer — and puts a different front end on it: instead of a script you run from a terminal one question at a time, the same pipeline answers questions live, inside a Discord server, whenever someone mentions the bot. Nothing about *how* it retrieves or generates changes; only the interface does.
 

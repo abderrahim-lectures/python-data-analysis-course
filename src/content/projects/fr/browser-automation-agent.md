@@ -4,7 +4,7 @@ description: "Combine l'automatisation de navigateur Playwright avec un agent LL
 ---
 
 
-# 🌍 Construire un Agent d'Automatisation de Navigateur
+# 🎭 Construire un Agent d'Automatisation de Navigateur
 
 Chaque autre projet de cette section parle à une API ou lit des fichiers locaux. Celui-ci pilote un vrai navigateur — cliquant, tapant, et lisant une vraie page — puis remet ce contrôle à un agent LLM, pour qu'il puisse décider *quel* champ remplir avec *quoi*, au lieu que tu codes en dur chaque sélecteur à la main. Prérequis supposés : Python 101, plus avoir déjà construit le [projet Agent IA](/docs/projects/ai-agent) — celui-ci réutilise son pattern d'appel d'outils (`deepagents`, une clé API gratuite) et ajoute un vrai contrôle de navigateur par-dessus, donc ce n'est pas l'endroit pour débuter avec les agents à partir de zéro.
 

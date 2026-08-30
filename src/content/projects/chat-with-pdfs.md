@@ -4,7 +4,7 @@ slug: /projects/chat-with-pdfs
 description: "Build a multi-document RAG app over a folder of PDFs, with local embeddings, a free-tier LLM, and page-number citations in every answer."
 ---
 
-# 🌍 Chat with Your PDFs
+# 📚 Chat with Your PDFs
 
 The [RAG App project](/docs/projects/rag-notes) chats with a folder of plain-text notes. This project takes the same idea somewhere more useful: a folder of real PDFs — reports, guides, handbooks, papers — with answers that cite exactly which document and which page a fact came from, the way a research assistant would. This assumes Python 101; it also helps a lot to have already built the RAG App project, since this one reuses its whole architecture and only changes how the source documents are read and cited, but it isn't a strict requirement if you're comfortable with the concepts.
 

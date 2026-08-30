@@ -4,7 +4,7 @@ description: "Passe du bac à sable dans le navigateur à du vrai Python : écri
 ---
 
 
-# 🌍 Construire un Résumeur de Notes de Réunion
+# 🤖 Construire un Résumeur de Notes de Réunion
 
 Tout dans le cours jusqu'ici tournait dans un bac à sable isolé, dans le navigateur — pour que tu puisses commencer à écrire du Python dès le premier jour sans aucune configuration. Ce projet est l'étape de remise de diplôme : installe Python pour de vrai sur ta propre machine, puis utilise-le pour construire un outil qui résout un problème du monde réel authentiquement agaçant — transformer un mur de texte brut de transcription de réunion en un résumé court et structuré : ce qui a été décidé, qui doit quoi, et ce qui reste sans solution. Cela suppose du Python 101 ; rien de Data Analysis n'est requis.
 

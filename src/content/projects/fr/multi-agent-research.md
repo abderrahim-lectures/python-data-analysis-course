@@ -4,7 +4,7 @@ description: "Passe du bac à sable dans le navigateur à du vrai Python : const
 ---
 
 
-# 🌍 Construire un Assistant de Recherche Multi-Agents
+# 🧩 Construire un Assistant de Recherche Multi-Agents
 
 Un seul agent avec une pile d'outils et un long prompt système fonctionne bien pour les petites tâches, mais il commence à craquer dès qu'une tâche a des *phases* vraiment différentes qui demandent des instructions différentes — planifier quoi chercher, chercher réellement chaque morceau, puis tout rédiger. Ce projet répartit ce travail entre trois petits agents aux instructions étroites au lieu d'un seul gros : un **planificateur** qui décompose une question de recherche en une poignée de sous-questions, un **chercheur** qui répond à chaque sous-question par lui-même, et un **rédacteur** qui synthétise tout en un rapport final — coordonnés avec la fonctionnalité de sous-agents `deepagents` de LangChain.
 

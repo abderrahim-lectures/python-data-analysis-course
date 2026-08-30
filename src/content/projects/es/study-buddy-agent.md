@@ -4,7 +4,7 @@ description: "Pasa del playground dentro del navegador al Python real: construye
 ---
 
 
-# 🌍 Construye un Agente de Cuestionarios de Compañero de Estudio
+# 🎓 Construye un Agente de Cuestionarios de Compañero de Estudio
 
 Todo en el curso hasta ahora corrió en un playground sandbox, dentro del navegador — para que pudieras empezar a escribir Python desde el día uno con cero configuración. Este proyecto es el paso de graduación: instala Python de verdad en tu propia máquina, y luego úsalo para construir una herramienta que podrías seguir usando de verdad para una clase completamente distinta — una app de cuestionario que lee tus propias notas de estudio, escribe preguntas fundamentadas en lo que realmente está en ellas (no trivia genérica), te examina una pregunta a la vez en la terminal, y tiene un modelo de lenguaje que juzga si tu respuesta escrita se acerca lo suficiente, con retroalimentación breve en cualquier caso.
 

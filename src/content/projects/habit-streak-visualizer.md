@@ -4,7 +4,7 @@ slug: /projects/habit-streak-visualizer
 description: "Track daily habit check-ins locally and render a GitHub-contributions-graph-style calendar heatmap, with pandas and matplotlib — no ML, no API key."
 ---
 
-# 🌍 Build a Habit-Streak Visualizer
+# 📈 Build a Habit-Streak Visualizer
 
 This project assumes you're comfortable with Python 101 — variables, functions, reading and writing files, basic loops. Some pandas and matplotlib from Data Analysis (`DataFrame`s, `.groupby()`, plotting a simple chart) will make a few steps feel familiar, but nothing here needs anything beyond that: there's no machine learning, no external API, and no dataset to download. You bring your own data, one day at a time.
 

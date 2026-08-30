@@ -4,7 +4,7 @@ description: "Rastrea check-ins diarios de hábitos localmente y renderiza un ma
 ---
 
 
-# 🌍 Construye un Visualizador de Rachas de Hábitos
+# 📈 Construye un Visualizador de Rachas de Hábitos
 
 Este proyecto asume que te sientes cómodo con Python 101 — variables, funciones, leer y escribir archivos, bucles básicos. Algo de pandas y matplotlib de Análisis de Datos (`DataFrame`s, `.groupby()`, graficar un gráfico simple) hará que algunos pasos se sientan familiares, pero nada aquí necesita más que eso: no hay machine learning, ninguna API externa, y ningún dataset que descargar. Traes tus propios datos, un día a la vez.
 

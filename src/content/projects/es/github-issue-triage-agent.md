@@ -4,7 +4,7 @@ description: "Gradúate del playground del navegador a Python real: obtén issue
 ---
 
 
-# 🌍 Construye un Agente de Triaje de Issues de GitHub
+# 🤖 Construye un Agente de Triaje de Issues de GitHub
 
 Cada repositorio de código abierto con algo de tráfico acumula un backlog de issues sin triar — reportes de bugs, solicitudes de características, preguntas, y duplicados, todos sentados ahí sin etiquetar hasta que un mantenedor tiene tiempo de ordenarlos a mano. Este proyecto construye un pequeño script que hace la primera pasada por ellos: obtiene los issues ABIERTOS de un repositorio público real directamente de la propia API de GitHub, envía cada uno a un LLM de nivel gratuito, e imprime un reporte sugiriendo una etiqueta de triaje y una justificación de una oración para cada issue — el tipo de cosa que un mantenedor podría hojear en un minuto en lugar de leer cada issue desde cero.
 

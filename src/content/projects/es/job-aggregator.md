@@ -4,7 +4,7 @@ description: "Extrae datos de múltiples fuentes estilo bolsa de trabajo, elimin
 ---
 
 
-# 🌍 Construye un Agregador de Ofertas de Empleo
+# 🕷️ Construye un Agregador de Ofertas de Empleo
 
 [Extrae y Analiza un Sitio Web en Vivo](/docs/projects/scrape-analyze) obtuvo un sitio y convirtió su HTML en un CSV. Buscar empleo de verdad significa vigilar *varias* fuentes a la vez, ninguna de las cuales concuerda en marcado, y preocuparse solo por lo que es genuinamente nuevo desde la última vez que revisaste. Este proyecto construye eso: analiza ofertas de un puñado de páginas de "bolsa de trabajo" estructuradas de forma diferente, combínalas en una tabla, elimina duplicados de las publicaciones que aparecen en más de una bolsa, filtra a los roles que coinciden con una palabra clave que te importa, y alerta solo sobre coincidencias nuevas — no las mismas diez ofertas cada ejecución. Asume Python a nivel 101 y, para el paso de eliminación de duplicados/filtrado, comodidad con pandas a nivel de Análisis de Datos — filtrado, `drop_duplicates`, máscaras booleanas.
 

@@ -68,8 +68,7 @@ const t = UI_STRINGS[resolveLocale(lang)];
         </a>
         <nav class="topnav__right" aria-label="Primary">
           <a class="topnav__link" href={`${base}learn`}><Icon name="code" size={15} /> {t.nav.learn}</a>
-          <a class="topnav__link" href={`${base}projects`}><Icon name="chart" size={15} /> {t.nav.projects}</a>
-          <a class="topnav__link" href={`${base}stats`}><Icon name="chart" size={15} /> {t.nav.stats}</a>
+          <a class="topnav__link" href={`${base}projects`}><Icon name="globe" size={15} /> {t.nav.projects}</a>
           <a class="topnav__link" href={`${base}progress`}><Icon name="trail" size={15} /> {t.nav.progress}</a>
           <div class="topnav__xp" id="xp-bar"></div>
           <div class="topnav__group">
@@ -107,19 +106,25 @@ const t = UI_STRINGS[resolveLocale(lang)];
 
     <footer class="footer">
       <div class="container footer__grid">
+        <div class="footer__brand">
+          <a class="footer__brandmark" href={base}>
+            <span class="footer__logo" aria-hidden="true"><Icon name="code" size={16} /></span>
+            <span>PyDA</span>
+          </a>
+          <p class="footer__tagline">Learn Python and data analysis in your browser. Zero installs, zero boring.</p>
+        </div>
         <div class="footer__col">
-          <h3>{t.footer.courseCol}</h3>
+          <h3><Icon name="code" size={13} /> {t.footer.courseCol}</h3>
           <a href={`${base}learn/python-101`}>{t.footer.python101}</a>
           <a href={`${base}learn/data-analysis`}>{t.footer.dataAnalysis}</a>
           <a href={`${base}projects`}>{t.footer.projects}</a>
         </div>
         <div class="footer__col">
-          <h3>{t.footer.siteCol}</h3>
+          <h3><Icon name="chart" size={13} /> {t.footer.siteCol}</h3>
           <a href={`${base}progress`}>{t.footer.myProgress}</a>
-          <a href={`${base}stats`}>{t.footer.stats}</a>
         </div>
         <div class="footer__col">
-          <h3>{t.footer.moreCol}</h3>
+          <h3><Icon name="globe" size={13} /> {t.footer.moreCol}</h3>
           <a href="https://github.com/abderrahim-lectures/python-data-analysis-course" target="_blank" rel="noopener noreferrer">{t.footer.github}</a>
           <a href="https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/CHANGELOG.md" target="_blank" rel="noopener noreferrer">{t.footer.changelog}</a>
         </div>

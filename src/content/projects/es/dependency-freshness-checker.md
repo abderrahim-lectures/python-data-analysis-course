@@ -4,7 +4,7 @@ description: "Construye una herramienta CLI real que lee un pyproject.toml, veri
 ---
 
 
-# 🌍 Construye un Verificador de Frescura de Dependencias
+# ⌨️ Construye un Verificador de Frescura de Dependencias
 
 Cada proyecto Python real acumula dependencias, y cada dependencia eventualmente se queda atrás — sale una corrección de seguridad, se parchea un bug, llega una nueva característica, y tu `pyproject.toml` simplemente... no lo sabe. Este proyecto construye la herramienta que te lo dice: un CLI real que lee un `pyproject.toml`, le pregunta a la API pública de PyPI cuál es realmente la versión actual de cada dependencia, y reporta en cuáles estás atrasado — la misma categoría de herramienta que `pip list --outdated`, pero una que entiendes completamente porque la construiste tú mismo.
 

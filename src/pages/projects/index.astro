@@ -2,6 +2,7 @@
 import {getCollection} from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Icon from '../../components/Icon.astro';
+import ProjectArt from '../../components/ProjectArt.astro';
 
 const base = import.meta.env.BASE_URL;
 const projects = (await getCollection('projects', ({slug}) => !/^(ar|es|fr)\//.test(slug)))
@@ -24,14 +25,19 @@ const projects = (await getCollection('projects', ({slug}) => !/^(ar|es|fr)\//.t
 
   <section class="container">
     <div class="grid">
-      {projects.map((p) => (
-        <a class="card" href={`${base}projects/${p.slug.replace(/^\/?projects\//, '')}`}>
-          <div class="card__icon">🌍</div>
-          <h2>{p.data.title}</h2>
-          <p>{p.data.description}</p>
-          <span class="badge badge--accent card__badge">🎯 Optional · ungraded</span>
-        </a>
-      ))}
+      {projects.map((p) => {
+        const slug = p.slug.replace(/^\/?projects\//, '');
+        return (
+          <a class="card" href={`${base}projects/${slug}`}>
+            <ProjectArt slug={slug} class="card__art" />
+            <div class="card__body">
+              <h2>{p.data.title}</h2>
+              <p>{p.data.description}</p>
+              <span class="badge badge--accent card__badge">🎯 Optional · ungraded</span>
+            </div>
+          </a>
+        );
+      })}
     </div>
   </section>
 </Base>
@@ -44,11 +50,12 @@ const projects = (await getCollection('projects', ({slug}) => !/^(ar|es|fr)\//.t
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.1rem; margin: 1.5rem 0 3rem; }
   .card {
     background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg);
-    padding: 1.3rem; text-decoration: none; color: var(--ink); box-shadow: var(--shadow-sm);
-    transition: all var(--transition-smooth); display: flex; flex-direction: column; gap: .5rem;
+    overflow: hidden; text-decoration: none; color: var(--ink); box-shadow: var(--shadow-sm);
+    transition: all var(--transition-smooth); display: flex; flex-direction: column;
   }
   .card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
-  .card__icon { font-size: 1.6rem; }
+  .card__art { display: block; width: 100%; height: 100px; }
+  .card__body { padding: 1.1rem 1.3rem 1.3rem; display: flex; flex-direction: column; gap: .5rem; flex: 1; }
   .card h2 { font-size: 1.05rem; margin: 0; }
   .card p { color: var(--ink-soft); font-size: .88rem; margin: 0; line-height: 1.5; flex-grow: 1; }
   .card__badge { width: fit-content; margin-top: .3rem; }

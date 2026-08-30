@@ -4,7 +4,7 @@ description: "Passez du bac à sable dans le navigateur à du vrai Python : affi
 ---
 
 
-# 🌍 Affiner un petit modèle de langage avec Unsloth
+# 🎛️ Affiner un petit modèle de langage avec Unsloth
 
 Dans le track Difficile de Python 101, vous avez construit un tout petit modèle de langage entièrement à partir de zéro — comptages de mots, tables de probabilités bigrammes, échantillonnage pondéré. Ce projet reprend exactement ce fil : plutôt que de construire les mathématiques d'un modèle de langage à partir de rien, vous allez prendre un vrai modèle pré-entraîné open-source et le spécialiser pour une tâche de votre choix en l'*affinant* (fine-tuning) — en ajustant légèrement ses poids existants avec une petite quantité de vos propres données, en utilisant [Unsloth](https://unsloth.ai), une bibliothèque conçue spécifiquement pour rendre cela rapide et (surtout) gratuit.
 

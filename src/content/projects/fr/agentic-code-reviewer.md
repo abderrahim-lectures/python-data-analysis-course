@@ -4,7 +4,7 @@ description: "Passe du bac à sable dans le navigateur au vrai Python : construi
 ---
 
 
-# 🌍 Construire un Relecteur de Code Agentique
+# 🤖 Construire un Relecteur de Code Agentique
 
 Chaque pull request finit par être lue par un relecteur humain qui cherche des bugs, des problèmes de style, des tests manquants et des noms confus — avant cela, ce n'est cependant que du texte : la sortie de `git diff`. Ce projet construit un outil CLI qui fait cette première passe automatiquement : il capture un vrai diff avec le module `subprocess` de Python, le transmet à un modèle de langage gratuit avec un system prompt de relecteur soigneusement conçu, et affiche un retour structuré et actionnable — pas un vague « ça a l'air bien », mais des problèmes précis avec un fichier, une catégorie, une sévérité et une correction suggérée.
 

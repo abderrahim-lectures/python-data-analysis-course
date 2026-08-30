@@ -4,7 +4,7 @@ description: "Catégorise un export CSV bancaire et signale les anomalies de dé
 ---
 
 
-# 🌍 Construire un Agent de Finances Personnelles
+# 🐼 Construire un Agent de Finances Personnelles
 
 Ce projet suppose que tu es à l'aise avec Python 101, et s'appuie sur des idées de deux autres Projets du Monde Réel sans strictement exiger l'un ou l'autre : le nettoyage de données avec pandas à peu près au niveau de [Entraîne ton Premier Modèle de Machine Learning](/docs/projects/ml-classifier) (charger un CSV, gérer des colonnes en désordre), et le pattern d'agent à appel d'outils de [Construire un Agent IA](/docs/projects/ai-agent) (un modèle de langage qui décide d'appeler tes fonctions Python plutôt que de simplement répondre par du texte). Avoir vu l'un ou l'autre aide, mais les étapes ci-dessous réexpliquent ce dont elles ont besoin au fur et à mesure.
 

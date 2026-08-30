@@ -4,7 +4,7 @@ description: "Passe du playground intégré au navigateur au vrai Python : const
 ---
 
 
-# 🌍 Construire un Agent de Quiz de Compagnon d'Étude
+# 🎓 Construire un Agent de Quiz de Compagnon d'Étude
 
 Tout dans le cours jusqu'à présent s'est exécuté dans un playground en bac à sable, intégré au navigateur — pour que tu puisses commencer à écrire du Python dès le premier jour avec zéro configuration. Ce projet est l'étape de la graduation : installe le vrai Python sur ta propre machine, puis utilise-le pour construire un outil que tu pourrais réellement continuer à utiliser pour une toute autre classe — une app de quiz qui lit tes propres notes d'étude, écrit des questions ancrées dans ce qui s'y trouve réellement (pas des trivia génériques), t'interroge une question à la fois dans le terminal, et fait juger par un modèle de langage si ta réponse tapée est assez proche, avec un retour bref dans les deux cas.
 

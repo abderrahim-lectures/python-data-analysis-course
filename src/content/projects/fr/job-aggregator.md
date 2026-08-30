@@ -4,7 +4,7 @@ description: "Scrape plusieurs sources façon plateforme d'emploi, déduplique l
 ---
 
 
-# 🌍 Construire un Agrégateur d'Offres d'Emploi
+# 🕷️ Construire un Agrégateur d'Offres d'Emploi
 
 [Scraper et Analyser un Site Web en Direct](/docs/projects/scrape-analyze) a récupéré un site et transformé son HTML en CSV. La vraie recherche d'emploi signifie surveiller *plusieurs* sources à la fois, dont aucune ne s'accorde sur le balisage, et ne se soucier que de ce qui est authentiquement nouveau depuis ta dernière vérification. Ce projet construit ça : analyse les annonces d'une poignée de pages « plateforme d'emploi » structurées différemment, combine-les en une seule table, déduplique les publications qui apparaissent sur plus d'une plateforme, filtre vers les postes qui correspondent à un mot-clé qui t'intéresse, et n'alerte que sur les nouvelles correspondances — pas les dix mêmes annonces à chaque exécution. Cela suppose du Python de niveau Python 101 et, pour l'étape de déduplication/filtrage, de l'aisance avec pandas au niveau Analyse de Données — filtrage, `drop_duplicates`, masques booléens.
 

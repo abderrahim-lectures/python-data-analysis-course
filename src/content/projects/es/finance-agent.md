@@ -4,7 +4,7 @@ description: "Categoriza una exportación CSV bancaria y marca anomalías de gas
 ---
 
 
-# 🌍 Construye un Agente de Finanzas Personales
+# 🐼 Construye un Agente de Finanzas Personales
 
 Este proyecto asume que te sientes cómodo con Python 101, y se apoya en ideas de otros dos Proyectos del Mundo Real sin requerir estrictamente ninguno: limpieza de datos con pandas aproximadamente al nivel de [Entrena tu Primer Modelo de Machine Learning](/docs/projects/ml-classifier) (cargar un CSV, manejar columnas desordenadas), y el patrón de agente que llama herramientas de [Construye un Agente de IA](/docs/projects/ai-agent) (un modelo de lenguaje que decide llamar a tus funciones Python en lugar de solo responder con texto). Haber visto cualquiera de los dos ayuda, pero los pasos de abajo vuelven a explicar lo que necesitan sobre la marcha.
 

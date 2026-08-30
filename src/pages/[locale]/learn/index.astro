@@ -89,7 +89,9 @@ const dir = locale === 'ar' ? 'rtl' : 'ltr';
     box-shadow: var(--shadow-tactile); transition: transform .1s ease, box-shadow .1s ease;
   }
   .route-pill--normal { background: var(--success); box-shadow: 0 4px 0 #3d9401, 0 6px 16px rgba(88,204,2,.25); }
+  .route-pill--normal:hover { filter: brightness(1.06); box-shadow: 0 4px 0 #3d9401, 0 8px 20px rgba(88,204,2,.35); }
   .route-pill--hard { background: var(--bad); box-shadow: 0 4px 0 #c81e3f, 0 6px 16px rgba(244,63,94,.25); }
+  .route-pill--hard:hover { filter: brightness(1.06); box-shadow: 0 4px 0 #c81e3f, 0 8px 20px rgba(244,63,94,.35); }
   .sectioncard__all { align-self: flex-start; font-size: .82rem; font-weight: 700; color: var(--ink-soft); text-decoration: none; }
   .sectioncard__all:hover { color: var(--accent); }
   @media (max-width: 720px) { .sections { grid-template-columns: 1fr; } }

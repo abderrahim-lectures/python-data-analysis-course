@@ -4,7 +4,7 @@ description: "Gradúate del playground en el navegador a Python de verdad: extra
 ---
 
 
-# 🌍 Extrae y Analiza un Sitio Web en Vivo
+# 🕷️ Extrae y Analiza un Sitio Web en Vivo
 
 Cada dataset de la sección de Data Analysis hasta ahora llegó como un CSV ya listo, sentado en `static/datasets/`, esperando ser cargado con `pd.read_csv`. El análisis real rara vez empieza ahí — normalmente tienes que ir a buscar los datos tú mismo. Este proyecto es ese paso: obtén una página web real y en vivo por HTTP, transforma el HTML en filas estructuradas, limpia el resultado con pandas, y produce tu propio pequeño análisis con gráficos. Asume comodidad con pandas al nivel del track Normal de Data Analysis — selección, filtrado, `groupby`, limpieza básica — las mismas habilidades que ya usaste para reproducir un notebook de EDA guiado. Este proyecto te pide apuntar esas mismas habilidades a datos que nadie te entregó.
 

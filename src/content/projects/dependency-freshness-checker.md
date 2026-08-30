@@ -4,7 +4,7 @@ slug: /projects/dependency-freshness-checker
 description: "Build a real CLI tool that reads a pyproject.toml, checks PyPI for newer versions of every dependency, and reports what's outdated — no API key needed."
 ---
 
-# 🌍 Build a Dependency-Freshness Checker
+# ⌨️ Build a Dependency-Freshness Checker
 
 Every real Python project accumulates dependencies, and every dependency eventually falls behind — a security fix ships, a bug gets patched, a new feature lands, and your `pyproject.toml` just... doesn't know. This project builds the tool that tells you: a real CLI that reads a `pyproject.toml`, asks PyPI's public API what the current version of each dependency actually is, and reports which ones you're behind on — the same category of tool as `pip list --outdated`, but one you understand completely because you built it yourself.
 

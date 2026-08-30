@@ -4,7 +4,7 @@ description: "Passe du terrain de jeu dans le navigateur à du vrai Python : con
 ---
 
 
-# 🌍 Construis un Service d'API à Débit Limité
+# 🌐 Construis un Service d'API à Débit Limité
 
 Chaque autre projet de cette section construit un *client* d'une sorte ou d'une autre — un script ou un agent qui appelle l'API de quelqu'un d'autre. Celui-ci inverse ça : c'est toi qui construis l'API. Ce projet met en place un vrai service [FastAPI](https://fastapi.tiangolo.com/) qui enveloppe un jeu de données de quelques centaines de citations et de blagues livré avec le projet, avec les deux choses dont toute vraie API publique a besoin et que les exemples jouets ignorent habituellement — l'authentification par clé API et la limitation de débit — construites à la main, pas importées d'une bibliothèque. Cela suppose du Python de niveau Python 101 ; rien de l'Analyse de Données n'est requis.
 

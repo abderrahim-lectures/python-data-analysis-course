@@ -4,7 +4,7 @@ description: "Gradúate del playground del navegador a Python real: construye un
 ---
 
 
-# 🌍 Construye un Agente Personal de Triaje de Correo
+# 🤖 Construye un Agente Personal de Triaje de Correo
 
 Todo en el curso hasta ahora corrió en un playground aislado dentro del navegador — para que pudieras empezar a escribir Python desde el primer día sin ninguna configuración. Este proyecto es el paso de graduación: instala Python de verdad en tu propia máquina, y luego úsalo para construir algo genuinamente útil — un agente que lee un lote de correos, te dice cuáles realmente importan, y redacta una respuesta sugerida para los que necesitan una. Esto asume Python 101; no se requiere nada de Análisis de Datos.
 

@@ -4,7 +4,7 @@ slug: /projects/rag-notes
 description: "Graduate from the in-browser playground to real Python: build a retrieval-augmented generation app that lets you chat with your own notes, with local embeddings and a free-tier LLM."
 ---
 
-# 🌍 Build a RAG App Over Your Own Notes
+# 📚 Build a RAG App Over Your Own Notes
 
 Everything in the course so far ran in a sandboxed, in-browser playground — so you could start writing Python on day one with zero setup. This project is the graduation step: install Python for real on your own machine, then use it to build a tool you might actually keep using — an app that answers questions about a folder of your own notes, by searching them first and only then asking a language model to answer using what it found. This assumes Python 101; nothing from Data Analysis is required, though it helps if `numpy` arrays already feel familiar.
 

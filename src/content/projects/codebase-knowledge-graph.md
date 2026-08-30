@@ -4,7 +4,7 @@ slug: /projects/codebase-knowledge-graph
 description: "Graduate from the in-browser playground to real Python: parse a real codebase's Python files with the ast module, build a graph of its structure with networkx, and visualize and query it — no API key, no network access needed."
 ---
 
-# 🌍 Turn a Codebase into a Knowledge Graph
+# 🕸️ Turn a Codebase into a Knowledge Graph
 
 Every other project in this section eventually reaches for an API key, a free-tier signup, or a live website. This one doesn't need any of that. You'll write a tool that reads Python source code the way the interpreter itself does — by parsing it into an **AST** (abstract syntax tree) with the standard library's built-in `ast` module — then turns what it finds into a **graph**: files, functions, and classes as nodes, "imports"/"calls"/"defined in" relationships as edges. That's a real, working example of a data structure from way back in the course showing up in a genuinely useful tool, not a classroom exercise: a graph is just nodes and edges, and a codebase's own structure turns out to already be one.
 

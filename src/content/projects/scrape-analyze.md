@@ -4,7 +4,7 @@ slug: /projects/scrape-analyze
 description: "Graduate from the in-browser playground to real Python: scrape a real website, clean the data with pandas, and produce your own charts — no API key needed."
 ---
 
-# 🌍 Scrape and Analyze a Live Website
+# 🕷️ Scrape and Analyze a Live Website
 
 Every dataset in the Data Analysis section so far arrived as a ready-made CSV, already sitting in `static/datasets/`, waiting to be loaded with `pd.read_csv`. Real analysis rarely starts there — usually you have to go get the data yourself. This project is that step: fetch a real, live web page over HTTP, parse the HTML into structured rows, clean the result with pandas, and produce your own small analysis with charts. It assumes Data Analysis Normal-track-level pandas comfort — selection, filtering, `groupby`, basic cleaning — the same skills you already used to reproduce a guided EDA notebook. This project asks you to point those same skills at data nobody handed you.
 

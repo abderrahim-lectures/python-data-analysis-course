@@ -2,7 +2,9 @@
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
 import { xpProgress, trackProgress, questsToShow, streakProgress } from '../lib/gameState.ts';
+import { emptyStats } from '../lib/gamestats.ts';
 const base = import.meta.env.BASE_URL;
+const gs = emptyStats();
 
 const xp = xpProgress();
 const py = trackProgress('python-101', 5);
@@ -139,12 +141,78 @@ const daWeeks = [6,7,8,9,10].map((w) => {
     </div>
   </section>
 
+  <!-- Improvement report -->
+  <section class="container">
+    <div class="report">
+      <div class="report__head">
+        <h2>📈 Improvement report</h2>
+        <span class="report__kda" id="r-kda-label">{gs.kda.label}</span>
+      </div>
+      <p class="report__lede">
+        How you're climbing vs. a proven learning-science benchmark
+        (<a href="https://doi.org/10.58477/dj.v4i1.348" target="_blank" rel="noreferrer">Prayoga et&nbsp;al., 2026</a>).
+      </p>
+
+      <div class="kpis">
+        <div class="kpi">
+          <span class="kpi__label">Win rate</span>
+          <span class="kpi__value" id="r-winrate">{gs.quiz.winRate}%</span>
+          <span class="kpi__sub" id="r-winrate-sub">quiz accuracy</span>
+        </div>
+        <div class="kpi">
+          <span class="kpi__label">K/D/A</span>
+          <span class="kpi__value" id="r-kda">{gs.kda.kills}/{gs.kda.deaths}/{gs.kda.assists}</span>
+          <span class="kpi__sub" id="r-kda-ratio">ratio {gs.kda.ratio}</span>
+        </div>
+        <div class="kpi">
+          <span class="kpi__label">Farm</span>
+          <span class="kpi__value" id="r-farm">{gs.lessonsDone}/{gs.lessonsTotal}</span>
+          <span class="kpi__sub">lessons cleared</span>
+        </div>
+      </div>
+
+      <div class="diag" id="r-diag">
+        <div class="diag__row">
+          <span class="diag__name">Progress (improvement)</span>
+          <div class="diag__bar"><div class="diag__fill" id="r-diag-improvement" style={`width:${gs.diagnostics.improvementPct}%`}></div></div>
+          <span class="diag__val" id="r-diag-improvement-val">{gs.diagnostics.improvementPct}%</span>
+        </div>
+        <div class="diag__row">
+          <span class="diag__name">Gain vs study (N-Gain)</span>
+          <div class="diag__bar"><div class="diag__fill" id="r-diag-ngain" style="width:0%"></div></div>
+          <span class="diag__val" id="r-diag-ngain-val">{gs.diagnostics.nGainEquivalent.toFixed(2)}</span>
+        </div>
+        <div class="diag__row">
+          <span class="diag__name">Acceptance (motivation)</span>
+          <div class="diag__bar"><div class="diag__fill" id="r-diag-acceptance" style={`width:${gs.diagnostics.acceptancePct}%`}></div></div>
+          <span class="diag__val" id="r-diag-acceptance-val">{gs.diagnostics.acceptancePct}%</span>
+        </div>
+        <div class="diag__row">
+          <span class="diag__name">Usefulness (accuracy)</span>
+          <div class="diag__bar"><div class="diag__fill" id="r-diag-usefulness" style={`width:${gs.diagnostics.usefulnessPct}%`}></div></div>
+          <span class="diag__val" id="r-diag-usefulness-val">{gs.diagnostics.usefulnessPct}%</span>
+        </div>
+        <div class="diag__row">
+          <span class="diag__name">Learning experience</span>
+          <div class="diag__bar"><div class="diag__fill" id="r-diag-experience" style={`width:${gs.diagnostics.learningExperiencePct}%`}></div></div>
+          <span class="diag__val" id="r-diag-experience-val">{gs.diagnostics.learningExperiencePct}%</span>
+        </div>
+      </div>
+
+      <p class="report__footnote">
+        In the study, students improved from 41.5% &rarr; 76.9% after the course (N-Gain 0.61).
+        Your numbers above are <strong>your own</strong>, computed from everything you've done here.
+      </p>
+    </div>
+  </section>
+
   <script>
     // Everything on this page (stations, quests, milestones, XP/streak/rank)
     // is computed at build time with zero data — there's no localStorage in
     // the Node/SSG build — so the static HTML always shows a fresh-account
     // skeleton. This hydrates it with the visitor's real progress on load.
     import {xpProgress, trackProgress, questsToShow, streakProgress, isWeekComplete, rankFor, RANK_EMOJIS} from '../lib/gameState.ts';
+    import {computeGameStats} from '../lib/gamestats.ts';
 
     function render() {
       const xp = xpProgress();
@@ -205,6 +273,30 @@ const daWeeks = [6,7,8,9,10].map((w) => {
           ...locked.map((q) => `<span class="badge badge--locked">🔒 ${q.label}</span>`),
         ].join('');
       }
+
+      // Improvement report (merged in from the old /stats page).
+      const gs = computeGameStats();
+      const fmt = (pct: number) => `${Math.max(0, Math.min(100, Math.round(pct)))}%`;
+      const fillWidth = (id: string, pct: number) => {
+        const el = document.getElementById(id) as HTMLElement | null;
+        if (el) el.style.width = fmt(pct);
+      };
+      set('r-kda-label', gs.kda.label);
+      set('r-winrate', fmt(gs.quiz.winRate));
+      set('r-winrate-sub', `${gs.quiz.correct}/${gs.quiz.total} correct`);
+      set('r-kda', `${gs.kda.kills}/${gs.kda.deaths}/${gs.kda.assists}`);
+      set('r-kda-ratio', `ratio ${gs.kda.ratio}`);
+      set('r-farm', `${gs.lessonsDone}/${gs.lessonsTotal}`);
+      fillWidth('r-diag-improvement', gs.diagnostics.improvementPct);
+      set('r-diag-improvement-val', fmt(gs.diagnostics.improvementPct));
+      fillWidth('r-diag-ngain', gs.diagnostics.nGainEquivalent * 100);
+      set('r-diag-ngain-val', gs.diagnostics.nGainEquivalent.toFixed(2));
+      fillWidth('r-diag-acceptance', gs.diagnostics.acceptancePct);
+      set('r-diag-acceptance-val', fmt(gs.diagnostics.acceptancePct));
+      fillWidth('r-diag-usefulness', gs.diagnostics.usefulnessPct);
+      set('r-diag-usefulness-val', fmt(gs.diagnostics.usefulnessPct));
+      fillWidth('r-diag-experience', gs.diagnostics.learningExperiencePct);
+      set('r-diag-experience-val', fmt(gs.diagnostics.learningExperiencePct));
     }
     render();
   </script>
@@ -279,9 +371,31 @@ const daWeeks = [6,7,8,9,10].map((w) => {
   .quest__check { color: var(--success); font-weight: 800; display: none; }
   .quest:not(.quest--locked) .quest__check { display: inline; }
 
+  /* Improvement report (merged in from the old /stats page) */
+  .report { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 1.25rem; margin-bottom: 3rem; box-shadow: var(--shadow-sm); }
+  .report__head { display: flex; justify-content: space-between; align-items: center; gap: .6rem; }
+  .report__head h2 { margin: 0; font-size: 1.25rem; }
+  .report__kda { color: var(--accent); font-weight: 800; font-size: .85rem; }
+  .report__lede { color: var(--ink-soft); margin: .2rem 0 1.1rem; font-size: .9rem; }
+  .report__lede a { color: var(--accent); }
+  .kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: .75rem; margin-bottom: 1.4rem; }
+  .kpi { background: var(--bg-soft); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 1rem .6rem; text-align: center; }
+  .kpi__label { display: block; color: var(--ink-soft); font-size: .72rem; text-transform: uppercase; letter-spacing: .04em; font-weight: 700; }
+  .kpi__value { display: block; font-family: var(--font-display); font-size: 1.6rem; font-weight: 800; color: var(--accent); margin: .1rem 0; }
+  .kpi__sub { color: var(--ink-soft); font-size: .75rem; }
+  .diag { display: flex; flex-direction: column; gap: .55rem; }
+  .diag__row { display: grid; grid-template-columns: 170px 1fr 52px; gap: .6rem; align-items: center; }
+  .diag__name { font-size: .85rem; font-weight: 600; }
+  .diag__bar { height: 10px; background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--radius-sm); overflow: hidden; }
+  .diag__fill { height: 100%; border-radius: var(--radius-sm); background: linear-gradient(90deg, var(--accent), var(--accent-strong)); transition: width .8s cubic-bezier(.4,0,.2,1); }
+  .diag__val { font-weight: 800; font-size: .85rem; text-align: right; color: var(--accent); }
+  .report__footnote { color: var(--ink-soft); font-size: .82rem; border-top: 1px dashed var(--line); padding-top: .8rem; margin-top: 1rem; }
+
   @media (max-width: 640px) {
     .trails { grid-template-columns: 1fr; }
     .stations { grid-template-columns: repeat(5, 1fr); }
     .player-card__stats { gap: 1rem; }
+    .kpis { grid-template-columns: repeat(2, 1fr); }
+    .diag__row { grid-template-columns: 120px 1fr 46px; }
   }
 </style>

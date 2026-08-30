@@ -4,7 +4,7 @@ slug: /projects/finance-agent
 description: "Categorize a bank CSV export and flag spending anomalies, combining pandas data-wrangling with an LLM tool-calling agent for smart categorization."
 ---
 
-# 🌍 Build a Personal Finance Agent
+# 🐼 Build a Personal Finance Agent
 
 This project assumes you're comfortable with Python 101, and it leans on ideas from two other Real-World Projects without strictly requiring either: pandas data-cleaning at roughly the level of [Train Your First Machine Learning Model](/docs/projects/ml-classifier) (loading a CSV, handling messy columns), and the tool-calling agent pattern from [Build an AI Agent](/docs/projects/ai-agent) (a language model that decides to call your Python functions instead of just replying with text). Having seen either helps, but the steps below re-explain what they need as they go.
 

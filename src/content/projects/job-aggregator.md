@@ -4,7 +4,7 @@ slug: /projects/job-aggregator
 description: "Scrape multiple job-board-style sources, dedupe listings across them, and alert on new matches against a keyword filter — with requests/BeautifulSoup and pandas, no API key needed."
 ---
 
-# 🌍 Build a Job-Listing Aggregator
+# 🕷️ Build a Job-Listing Aggregator
 
 [Scrape and Analyze a Live Website](/docs/projects/scrape-analyze) fetched one site and turned its HTML into a CSV. Real job hunting means watching *several* sources at once, none of which agree on markup, and caring only about what's genuinely new since you last checked. This project builds that: parse listings out of a handful of differently-structured "job board" pages, combine them into one table, dedupe the postings that show up on more than one board, filter to the roles that match a keyword you care about, and alert only on new matches — not the same ten listings every single run. It assumes Python 101-level Python and, for the dedupe/filter step, Data Analysis-level pandas comfort — filtering, `drop_duplicates`, boolean masks.
 

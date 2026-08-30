@@ -4,7 +4,7 @@ slug: /projects/meeting-notes-summarizer
 description: "Graduate from the in-browser playground to real Python: write a script that turns a raw meeting transcript into a structured summary — decisions, action items, and open questions — using a free-tier LLM and careful prompt design."
 ---
 
-# 🌍 Build a Meeting-Notes Summarizer
+# 🤖 Build a Meeting-Notes Summarizer
 
 Everything in the course so far ran in a sandboxed, in-browser playground — so you could start writing Python on day one with zero setup. This project is the graduation step: install Python for real on your own machine, then use it to build a tool that solves a genuinely annoying real-world problem — turning a wall of raw meeting-transcript text into a short, structured summary: what got decided, who owes what, and what's still unresolved. This assumes Python 101; nothing from Data Analysis is required.
 

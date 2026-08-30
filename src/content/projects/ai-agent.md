@@ -4,7 +4,7 @@ slug: /projects/ai-agent
 description: "Graduate from the in-browser playground to real Python: install Python locally and build your first AI agent with LangChain's deepagents."
 ---
 
-# 🌍 Build an AI Agent
+# 🤖 Build an AI Agent
 
 Everything in the course so far ran in a sandboxed, in-browser playground — so you could start writing Python on day one with zero setup. This project is the graduation step: install Python for real on your own machine, then use it to build something the playground could never run — an AI agent with its own API key, calling out to a real language model.
 

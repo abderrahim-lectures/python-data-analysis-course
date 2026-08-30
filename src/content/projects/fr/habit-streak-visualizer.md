@@ -4,7 +4,7 @@ description: "Suis les pointages quotidiens d'habitudes en local et affiche une 
 ---
 
 
-# 🌍 Construire un Visualiseur de Séries d'Habitudes
+# 📈 Construire un Visualiseur de Séries d'Habitudes
 
 Ce projet suppose que tu es à l'aise avec Python 101 — variables, fonctions, lecture et écriture de fichiers, boucles basiques. Un peu de pandas et matplotlib de Analyse de Données (`DataFrame`s, `.groupby()`, tracer un graphique simple) rendra quelques étapes familières, mais rien ici n'a besoin de plus que ça : pas de machine learning, pas d'API externe, et aucun jeu de données à télécharger. Tu apportes tes propres données, un jour à la fois.
 

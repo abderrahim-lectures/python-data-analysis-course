@@ -4,7 +4,7 @@ description: "Compte des objets en direct depuis le flux d'une caméra web avec 
 ---
 
 
-# 🌍 Compte des Objets en Temps Réel avec une Caméra Web
+# 👁️ Compte des Objets en Temps Réel avec une Caméra Web
 
 Ce projet suppose que tu es à l'aise avec le Python 101 — fonctions, boucles et installation de paquets — et ne nécessite aucun bagage préalable en analyse de données ou apprentissage automatique. C'est la première incursion de ce cours dans la vision par ordinateur : au lieu de charger un modèle pré-entraîné qui lit du texte ou des lignes tabulaires, tu chargeras un modèle qui lit des pixels, et tu l'utiliseras pour répondre à une question authentiquement pratique en temps réel — « combien de *ceci* y a-t-il devant la caméra en ce moment ? »
 

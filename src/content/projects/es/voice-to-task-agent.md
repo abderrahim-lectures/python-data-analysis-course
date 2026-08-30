@@ -4,7 +4,7 @@ description: "Pasa del playground en el navegador al Python real: transcribe una
 ---
 
 
-# 🌍 Construye un Agente de Voz a Tarea
+# 🎙️ Construye un Agente de Voz a Tarea
 
 Todo en el curso hasta ahora corrió en un playground aislado dentro del navegador — así que pudiste empezar a escribir Python desde el día uno con cero configuración. Este proyecto es el paso de graduación: instala Python de verdad en tu propia máquina, y luego úsalo para construir algo genuinamente útil — un pequeño pipeline que toma una nota de voz divagante y la convierte en una lista de tareas corta y estructurada, sin que tengas que escribir u organizar nada de eso a mano. Esto asume Python 101; no se requiere nada de Análisis de Datos.
 

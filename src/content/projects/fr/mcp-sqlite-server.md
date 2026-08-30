@@ -4,7 +4,7 @@ description: "Construisez un serveur MCP qui expose une base de données SQLite 
 ---
 
 
-# 🌍 Interroger une base de données en langage naturel avec MCP
+# 🔌 Interroger une base de données en langage naturel avec MCP
 
 Les bases de données se trouvent généralement derrière un mur de SQL que seules les personnes qui l'ont écrit peuvent interroger confortablement. MCP change cette donne : au lieu d'enseigner le SQL à tout le monde, vous exposez une base de données via une poignée d'outils bien décrits, et laissez un client LLM écrire et exécuter le SQL lui-même, en votre nom, une question à la fois. Ce projet construit exactement cela — une petite base de données SQLite locale (une bibliothèque de quartier : livres, auteurs, membres, emprunts) et un serveur MCP qui permet à un assistant IA de lister ses tables, d'inspecter le schéma d'une table et d'exécuter des requêtes **en lecture seule** sur celle-ci, afin que vous puissiez poser une question comme « quels livres la bibliothèque n'a-t-elle pas encore récupérés ? » en langage naturel et la voir correctement répondue.
 

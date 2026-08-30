@@ -4,7 +4,7 @@ description: "Graduado del playground en el navegador a Python real: construye u
 ---
 
 
-# 🌍 Construye un Servicio de API con Límite de Tasa
+# 🌐 Construye un Servicio de API con Límite de Tasa
 
 Cada uno de los otros proyectos de esta sección construye un *cliente* de algún tipo — un script o agente que llama a la API de otra persona. Este lo invierte: tú construyes la API. Este proyecto levanta un servicio real de [FastAPI](https://fastapi.tiangolo.com/) que envuelve un conjunto de datos de unos cientos de citas y chistes que viene incluido con el proyecto, con las dos cosas que toda API pública real necesita y que los ejemplos de juguete suelen omitir — autenticación por clave de API y limitación de tasa — construidas a mano, no importadas de una biblioteca. Asume Python a nivel 101; no se requiere nada de Análisis de Datos.
 

@@ -4,7 +4,7 @@ description: "Passez du bac à sable dans le navigateur à du vrai Python : scra
 ---
 
 
-# 🌍 Scraper et analyser un site web en direct
+# 🕷️ Scraper et analyser un site web en direct
 
 Chaque jeu de données de la section Data Analysis jusqu'ici est arrivé sous forme de CSV prêt à l'emploi, déjà posé dans `static/datasets/`, attendant d'être chargé avec `pd.read_csv`. La vraie analyse commence rarement là — d'habitude, vous devez aller chercher les données vous-même. Ce projet est cette étape : récupérer une vraie page web en direct via HTTP, analyser le HTML en lignes structurées, nettoyer le résultat avec pandas, et produire votre propre petite analyse avec des graphiques. Il suppose une aisance avec pandas au niveau du track Normal de Data Analysis — sélection, filtrage, `groupby`, nettoyage de base — les mêmes compétences que vous avez déjà utilisées pour reproduire un notebook d'EDA guidé. Ce projet vous demande de pointer ces mêmes compétences vers des données que personne ne vous a données.
 

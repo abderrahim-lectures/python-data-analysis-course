@@ -7,16 +7,14 @@ import remarkAdmonitions from './src/lib/remark-admonitions.mjs';
 import rehypeRunnablePython from './src/lib/rehype-runnable-python.mjs';
 import rehypeSectionBlocks from './src/lib/rehype-section-blocks.mjs';
 
-// GitHub Pages deploys to `https://<user>.github.io/<repo>/`, so production
-// builds live under that base path. Locally we want plain `localhost:4321/`
-// with no prefix, so `astro dev`/`astro preview` default `base` to `/`.
-// Custom-domain endpoints override both via `ASTRO_SITE`/`ASTRO_BASE` env in CI.
-const isDev = process.argv.includes('dev');
-
+// Served from the custom domain https://pyda-course.online/ (GitHub Pages
+// CNAME, see public/CNAME) — custom domains serve from root, no repo-name
+// subpath, so `base` is `/` in both dev and production. `ASTRO_SITE`/
+// `ASTRO_BASE` env vars still override both if that ever needs to change.
 export default defineConfig({
   output: 'static',
-  site: process.env.ASTRO_SITE ?? 'https://abderrahim-lectures.github.io/python-data-analysis-course/',
-  base: process.env.ASTRO_BASE ?? (isDev ? '/' : '/python-data-analysis-course/'),
+  site: process.env.ASTRO_SITE ?? 'https://pyda-course.online/',
+  base: process.env.ASTRO_BASE ?? '/',
   build: {
     inlineStylesheets: 'auto',
   },

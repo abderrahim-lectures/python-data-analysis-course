@@ -1,7 +1,7 @@
 // @ts-nocheck
 // Hydrates `.quiz[data-quiz]` blocks (rendered from recovered WeeklyQuiz
 // data — see plan/astro-rebuild.md) with click-to-answer feedback, wired
-// into gameState.recordQuiz() so the "quiz accuracy" stat on /stats becomes
+// into gameState.recordQuiz() so the "quiz accuracy" stat on /progress becomes
 // real instead of permanently 0%. Loaded once from Base.astro.
 function initQuiz(quiz: Element) {
   if (quiz.hasAttribute('data-hydrated')) return;

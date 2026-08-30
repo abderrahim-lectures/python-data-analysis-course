@@ -4,7 +4,7 @@ slug: /projects/webcam-object-counter
 description: "Count objects live from a webcam feed with OpenCV and a pretrained YOLO11n model — or run the same detection on a bundled sample image or video with no camera at all."
 ---
 
-# 🌍 Count Objects in Real Time with a Webcam
+# 👁️ Count Objects in Real Time with a Webcam
 
 This project assumes you're comfortable with Python 101 — functions, loops, and installing packages — and needs no prior data-analysis or machine-learning background. It's this course's first foray into computer vision: instead of loading a pretrained model that reads text or tabular rows, you'll load one that reads pixels, and use it to answer a genuinely practical question in real time — "how many of *this* are in front of the camera right now?"
 

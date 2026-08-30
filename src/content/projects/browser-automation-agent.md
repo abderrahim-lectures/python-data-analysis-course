@@ -4,7 +4,7 @@ slug: /projects/browser-automation-agent
 description: "Combine Playwright browser automation with a free-tier LLM tool-calling agent that fills out a real practice web form on its own."
 ---
 
-# 🌍 Build a Browser-Automation Agent
+# 🎭 Build a Browser-Automation Agent
 
 Every other project in this section either talks to an API or reads local files. This one drives an
 actual browser — clicking, typing, and reading a real page — and then hands that control to an LLM

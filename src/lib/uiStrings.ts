@@ -7,7 +7,7 @@
 export type Locale = 'en' | 'ar' | 'es' | 'fr';
 
 export interface UiStrings {
-  nav: {learn: string; projects: string; stats: string; progress: string};
+  nav: {learn: string; projects: string; progress: string};
   footer: {
     courseCol: string;
     siteCol: string;
@@ -16,7 +16,6 @@ export interface UiStrings {
     dataAnalysis: string;
     projects: string;
     myProgress: string;
-    stats: string;
     github: string;
     changelog: string;
     copyright: (year: number, version: string) => string;
@@ -34,7 +33,7 @@ export interface UiStrings {
 
 export const UI_STRINGS: Record<Locale, UiStrings> = {
   en: {
-    nav: {learn: 'Learn', projects: 'Projects', stats: 'Stats', progress: 'Progress'},
+    nav: {learn: 'Learn', projects: 'Projects', progress: 'Progress'},
     footer: {
       courseCol: 'Course',
       siteCol: 'Site',
@@ -43,7 +42,6 @@ export const UI_STRINGS: Record<Locale, UiStrings> = {
       dataAnalysis: 'Data Analysis',
       projects: 'Projects',
       myProgress: 'My Progress',
-      stats: 'Stats',
       github: 'GitHub',
       changelog: 'Changelog',
       copyright: (year, version) =>
@@ -60,7 +58,7 @@ export const UI_STRINGS: Record<Locale, UiStrings> = {
     mobileNav: {home: 'Home', learn: 'Learn', progress: 'Progress'},
   },
   ar: {
-    nav: {learn: 'تعلّم', projects: 'المشاريع', stats: 'الإحصائيات', progress: 'تقدمي'},
+    nav: {learn: 'تعلّم', projects: 'المشاريع', progress: 'تقدمي'},
     footer: {
       courseCol: 'الدورة',
       siteCol: 'الموقع',
@@ -69,7 +67,6 @@ export const UI_STRINGS: Record<Locale, UiStrings> = {
       dataAnalysis: 'تحليل البيانات',
       projects: 'المشاريع',
       myProgress: 'تقدمي',
-      stats: 'الإحصائيات',
       github: 'GitHub',
       changelog: 'Changelog',
       copyright: (year, version) =>
@@ -86,7 +83,7 @@ export const UI_STRINGS: Record<Locale, UiStrings> = {
     mobileNav: {home: 'الرئيسية', learn: 'تعلّم', progress: 'تقدمي'},
   },
   es: {
-    nav: {learn: 'Aprender', projects: 'Proyectos', stats: 'Estadísticas', progress: 'Progreso'},
+    nav: {learn: 'Aprender', projects: 'Proyectos', progress: 'Progreso'},
     footer: {
       courseCol: 'Curso',
       siteCol: 'Sitio',
@@ -95,7 +92,6 @@ export const UI_STRINGS: Record<Locale, UiStrings> = {
       dataAnalysis: 'Análisis de Datos',
       projects: 'Proyectos',
       myProgress: 'Mi Progreso',
-      stats: 'Estadísticas',
       github: 'GitHub',
       changelog: 'Changelog',
       copyright: (year, version) =>
@@ -112,7 +108,7 @@ export const UI_STRINGS: Record<Locale, UiStrings> = {
     mobileNav: {home: 'Inicio', learn: 'Aprender', progress: 'Progreso'},
   },
   fr: {
-    nav: {learn: 'Apprendre', projects: 'Projets', stats: 'Statistiques', progress: 'Progression'},
+    nav: {learn: 'Apprendre', projects: 'Projets', progress: 'Progression'},
     footer: {
       courseCol: 'Cours',
       siteCol: 'Site',
@@ -121,7 +117,6 @@ export const UI_STRINGS: Record<Locale, UiStrings> = {
       dataAnalysis: 'Analyse de Données',
       projects: 'Projets',
       myProgress: 'Ma Progression',
-      stats: 'Statistiques',
       github: 'GitHub',
       changelog: 'Changelog',
       copyright: (year, version) =>

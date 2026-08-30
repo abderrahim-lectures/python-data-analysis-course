@@ -4,7 +4,7 @@ description: "Cuenta objetos en vivo desde el feed de una cámara web con OpenCV
 ---
 
 
-# 🌍 Cuenta Objetos en Tiempo Real con una Cámara Web
+# 👁️ Cuenta Objetos en Tiempo Real con una Cámara Web
 
 Este proyecto asume que te sientes cómodo con Python 101 — funciones, bucles e instalación de paquetes — y no necesita ningún conocimiento previo de análisis de datos o aprendizaje automático. Es la primera incursión de este curso en la visión por computadora: en lugar de cargar un modelo preentrenado que lee texto o filas tabulares, cargarás uno que lee píxeles, y lo usarás para responder una pregunta genuinamente práctica en tiempo real — "¿cuántos de *esto* hay frente a la cámara ahora mismo?"
 

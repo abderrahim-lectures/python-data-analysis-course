@@ -4,7 +4,7 @@ description: "Passez du bac à sable dans le navigateur à du vrai Python : cons
 ---
 
 
-# 🌍 Construire une appli RAG sur vos propres notes
+# 📚 Construire une appli RAG sur vos propres notes
 
 Tout jusqu'ici tournait dans un bac à sable isolé, dans le navigateur — pour que vous puissiez commencer à écrire du Python dès le premier jour sans aucune configuration. Ce projet est l'étape de remise de diplôme : installez Python pour de vrai sur votre propre machine, puis utilisez-le pour construire un outil que vous pourriez réellement continuer à utiliser — une appli qui répond à des questions sur un dossier de vos propres notes, en les cherchant d'abord et en ne demandant qu'ensuite à un modèle de langage de répondre à partir de ce qu'il a trouvé. Ceci suppose Python 101 ; rien de Data Analysis n'est requis, même si c'est un plus si les tableaux `numpy` vous sont déjà familiers.
 

@@ -4,7 +4,7 @@ slug: /projects/github-issue-triage-agent
 description: "Graduate from the in-browser playground to real Python: fetch open issues from a real public GitHub repo and use a free-tier LLM to draft triage-label suggestions for a human maintainer to review."
 ---
 
-# 🌍 Build a GitHub Issue Triage Agent
+# 🤖 Build a GitHub Issue Triage Agent
 
 Every open-source repo with any traffic accumulates a backlog of untriaged issues — bug reports, feature requests, questions, and duplicates, all sitting there unlabeled until a maintainer has time to sort through them by hand. This project builds a small script that does the first pass for them: it fetches a real public repo's OPEN issues straight from GitHub's own API, sends each one to a free-tier LLM, and prints a report suggesting a triage label and a one-sentence rationale for each issue — the kind of thing a maintainer could skim in a minute instead of reading every issue from scratch.
 

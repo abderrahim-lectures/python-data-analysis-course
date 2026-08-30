@@ -4,7 +4,7 @@ description: "Construis un vrai outil CLI qui lit un pyproject.toml, vérifie su
 ---
 
 
-# 🌍 Construire un Vérificateur de Fraîcheur des Dépendances
+# ⌨️ Construire un Vérificateur de Fraîcheur des Dépendances
 
 Chaque vrai projet Python accumule des dépendances, et chaque dépendance finit par prendre du retard — un correctif de sécurité sort, un bug est corrigé, une nouvelle fonctionnalité arrive, et ton `pyproject.toml` ne le sait tout simplement pas. Ce projet construit l'outil qui te le dit : un vrai CLI qui lit un `pyproject.toml`, demande à l'API publique de PyPI quelle est réellement la version actuelle de chaque dépendance, et signale sur lesquelles tu as du retard — la même catégorie d'outil que `pip list --outdated`, mais un que tu comprends complètement parce que tu l'as construit toi-même.
 

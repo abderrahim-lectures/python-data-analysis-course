@@ -4,7 +4,7 @@ description: "Construis un bot `discord.py` qui organise des manches de trivia d
 ---
 
 
-# 🌍 Construire un Bot de Trivia pour Discord
+# 💬 Construire un Bot de Trivia pour Discord
 
 Un bot `discord.py` en direct qui organise des manches de trivia dans un serveur : poste une question, recueille les réponses dans un délai, révèle qui a trouvé la bonne réponse, et garde un classement persistant à travers les manches. La plupart des bots de trivia s'arrêtent à une banque de questions fixe — celui-ci ajoute une touche qui convient à un cours de Python : il peut aussi générer une question inédite sur n'importe quel sujet à la volée avec un LLM de niveau gratuit, au lieu de toujours puiser dans une liste préfabriquée.
 

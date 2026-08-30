@@ -4,7 +4,7 @@ slug: /projects/voice-to-task-agent
 description: "Graduate from the in-browser playground to real Python: transcribe a voice memo locally and for free with OpenAI's open-source Whisper model, then use a free-tier LLM to turn it into a structured task list."
 ---
 
-# 🌍 Build a Voice-to-Task Agent
+# 🎙️ Build a Voice-to-Task Agent
 
 Everything in the course so far ran in a sandboxed, in-browser playground — so you could start writing Python on day one with zero setup. This project is the graduation step: install Python for real on your own machine, then use it to build something genuinely useful — a small pipeline that takes a rambling voice memo and turns it into a short, structured task list, without you having to type or organize any of it by hand. This assumes Python 101; nothing from Data Analysis is required.
 

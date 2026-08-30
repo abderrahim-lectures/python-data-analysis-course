@@ -4,7 +4,7 @@ description: "Da el salto del playground en el navegador a Python real: construy
 ---
 
 
-# 🌍 Construye un Asistente de Investigación Multi-Agente
+# 🧩 Construye un Asistente de Investigación Multi-Agente
 
 Un único agente con una pila de herramientas y un largo prompt de sistema funciona bien para tareas pequeñas, pero empieza a flaquear una vez que una tarea tiene *fases* genuinamente distintas que piden instrucciones diferentes — planificar en qué indagar, investigar de verdad cada pieza, y luego escribir todo. Este proyecto divide ese trabajo entre tres agentes pequeños y con instrucciones estrechas en lugar de uno grande: un **planificador** que descompone una pregunta de investigación en un puñado de sub-preguntas, un **investigador** que responde cada sub-pregunta por su cuenta, y un **escritor** que sintetiza todo en un informe final — coordinados con la función de sub-agentes `deepagents` de LangChain.
 

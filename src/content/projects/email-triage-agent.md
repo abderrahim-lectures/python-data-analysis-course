@@ -4,7 +4,7 @@ slug: /projects/email-triage-agent
 description: "Graduate from the in-browser playground to real Python: build an agent that categorizes, prioritizes, and drafts (but never sends) replies for your email, using a free-tier LLM."
 ---
 
-# 🌍 Build a Personal Email-Triage Agent
+# 🤖 Build a Personal Email-Triage Agent
 
 Everything in the course so far ran in a sandboxed, in-browser playground — so you could start writing Python on day one with zero setup. This project is the graduation step: install Python for real on your own machine, then use it to build something genuinely useful — an agent that reads a batch of emails, tells you which ones actually matter, and drafts a suggested reply for the ones that need one. This assumes Python 101; nothing from Data Analysis is required.
 

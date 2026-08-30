@@ -4,7 +4,7 @@ slug: /projects/ml-classifier
 description: "Graduate from describing data to predicting from it: train a real binary classifier on the Titanic dataset with scikit-learn."
 ---
 
-# 🌍 Train Your First Machine Learning Model
+# 🧠 Train Your First Machine Learning Model
 
 This project assumes you're comfortable with pandas at roughly the level of Data Analysis's Normal track — filtering, `.groupby()`, handling missing values. In fact it assumes you've specifically done [Week 10's guided Titanic EDA](/docs/data-analysis/normal/week-10): you already loaded that dataset, cleaned it, and asked questions like "did survival rate differ by class or sex?" This project is the direct sequel. You already *described* this dataset. Now you'll *predict* from it — training a model that looks at a passenger it has never seen and guesses whether they survived.
 

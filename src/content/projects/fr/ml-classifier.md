@@ -4,7 +4,7 @@ description: "Passez de décrire des données à prédire à partir d'elles : en
 ---
 
 
-# 🌍 Entraînez votre premier modèle de machine learning
+# 🧠 Entraînez votre premier modèle de machine learning
 
 Ce projet suppose que vous êtes à l'aise avec pandas à peu près au niveau du track Normal de Data Analysis — filtrage, `.groupby()`, gestion des valeurs manquantes. En fait, il suppose que vous avez précisément fait l'[EDA Titanic guidée de la semaine 10](/docs/data-analysis/normal/week-10) : vous avez déjà chargé ce jeu de données, l'avez nettoyé, et posé des questions comme « le taux de survie différait-il selon la classe ou le sexe ? ». Ce projet en est la suite directe. Vous avez déjà *décrit* ce jeu de données. Maintenant, vous allez *prédire* à partir de lui — en entraînant un modèle qui regarde un passager qu'il n'a jamais vu et devine s'il a survécu.
 

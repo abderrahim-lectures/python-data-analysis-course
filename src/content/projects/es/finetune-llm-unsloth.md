@@ -4,7 +4,7 @@ description: "Gradúate del playground en el navegador a Python de verdad: ajust
 ---
 
 
-# 🌍 Ajusta finamente un pequeño modelo de lenguaje con Unsloth
+# 🎛️ Ajusta finamente un pequeño modelo de lenguaje con Unsloth
 
 En el track Difícil de Python 101, construiste un pequeñísimo modelo de lenguaje completamente desde cero — conteos de palabras, tablas de probabilidad de bigramas, muestreo ponderado. Este proyecto retoma exactamente ese hilo: en lugar de construir las matemáticas de un modelo de lenguaje desde la nada, tomarás un modelo real, preentrenado y de código abierto, y lo especializarás para una tarea de tu elección mediante el *ajuste fino* (fine-tuning) — ajustando sus pesos existentes con una pequeña cantidad de tus propios datos, usando [Unsloth](https://unsloth.ai), una biblioteca construida específicamente para hacer esto rápido y (lo importante) gratis.
 

@@ -4,7 +4,7 @@ description: "Passe du bac à sable dans le navigateur au vrai Python : analyse 
 ---
 
 
-# 🌍 Transforme une Base de Code en Graphe de Connaissances
+# 🕸️ Transforme une Base de Code en Graphe de Connaissances
 
 Chaque autre projet de cette section finit par recourir à une clé API, une inscription gratuite, ou un site web en direct. Celui-ci n'a besoin de rien de tout ça. Tu vas écrire un outil qui lit le code source Python de la même façon que l'interpréteur lui-même — en l'analysant en un **AST** (arbre syntaxique abstrait) avec le module `ast` intégré de la bibliothèque standard — puis transforme ce qu'il trouve en un **graphe** : fichiers, fonctions et classes comme nœuds, relations « importe »/« appelle »/« défini dans » comme arêtes. C'est un exemple réel et fonctionnel d'une structure de données vue bien plus tôt dans le cours apparaissant dans un outil authentiquement utile, pas un exercice de classe : un graphe n'est que des nœuds et des arêtes, et la structure propre d'une base de code s'avère déjà en être un.
 

@@ -4,7 +4,7 @@ description: "Passe du bac à sable dans le navigateur au vrai Python : récupè
 ---
 
 
-# 🌍 Construire un Agent de Tri d'Issues GitHub
+# 🤖 Construire un Agent de Tri d'Issues GitHub
 
 Chaque dépôt open-source avec un peu de trafic accumule un backlog d'issues non triées — rapports de bugs, demandes de fonctionnalités, questions, et doublons, tous assis là sans étiquette jusqu'à ce qu'un mainteneur ait le temps de les trier à la main. Ce projet construit un petit script qui fait la première passe pour eux : il récupère les issues OUVERTES d'un vrai dépôt public directement depuis la propre API de GitHub, envoie chacune à un LLM gratuit, et affiche un rapport suggérant une étiquette de tri et une justification d'une phrase pour chaque issue — le genre de chose qu'un mainteneur pourrait survoler en une minute au lieu de lire chaque issue à partir de zéro.
 

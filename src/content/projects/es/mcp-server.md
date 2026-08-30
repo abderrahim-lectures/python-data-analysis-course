@@ -4,7 +4,7 @@ description: "Gradúate del playground en el navegador a Python de verdad: const
 ---
 
 
-# 🌍 Construye un Servidor MCP
+# 🔌 Construye un Servidor MCP
 
 El [Model Context Protocol](https://modelcontextprotocol.io) (MCP) es una forma estándar para que un asistente de IA llame a código, herramientas y datos que viven fuera de él. Un *servidor* MCP es un pequeño programa que escribes tú y que expone un puñado de herramientas; un *cliente* MCP — Claude Desktop, por ejemplo — se conecta a ese servidor y deja que el modelo llame a esas herramientas en tu nombre, de la misma forma en que un navegador web es un cliente que habla con un servidor web. Este proyecto construye el lado del servidor: tus propias funciones de Python, registradas como herramientas MCP, invocables por un asistente de IA real corriendo en tu propia máquina.
 

@@ -4,7 +4,7 @@ description: "Construis une appli RAG multi-documents sur un dossier de PDF, ave
 ---
 
 
-# 🌍 Discute avec tes PDF
+# 📚 Discute avec tes PDF
 
 Le [projet Appli RAG](/docs/projects/rag-notes) discute avec un dossier de notes en texte brut. Ce projet emmène la même idée quelque part de plus utile : un dossier de vrais PDF — rapports, guides, manuels, articles — avec des réponses qui citent exactement de quel document et de quelle page vient un fait, comme le ferait un assistant de recherche. Cela suppose Python 101 ; il aide aussi beaucoup d'avoir déjà construit le projet Appli RAG, puisque celui-ci réutilise toute son architecture et ne change que la façon dont les documents source sont lus et cités, mais ce n'est pas une exigence stricte si tu es à l'aise avec les concepts.
 

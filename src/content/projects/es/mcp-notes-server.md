@@ -4,7 +4,7 @@ description: "Indexa una carpeta real de notas Markdown y expónla a Claude Desk
 ---
 
 
-# 🌍 Construye un Servidor MCP para tus Notas
+# 🔌 Construye un Servidor MCP para tus Notas
 
 Esto asume Python 101 y comodidad escribiendo funciones simples -- y ayuda mucho haber construido ya el proyecto [Construye un Servidor MCP](/docs/projects/mcp-server) primero, ya que este reutiliza el mismo patrón de decorador `FastMCP` y solo añade contenido real sobre el cual buscar en lugar de dos herramientas de juguete. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa y creciente.
 

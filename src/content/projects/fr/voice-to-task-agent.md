@@ -4,7 +4,7 @@ description: "Passe du playground intégré au navigateur au vrai Python : trans
 ---
 
 
-# 🌍 Construire un Agent de la Voix vers les Tâches
+# 🎙️ Construire un Agent de la Voix vers les Tâches
 
 Tout dans le cours jusqu'ici s'est exécuté dans un playground isolé intégré au navigateur — pour que tu puisses commencer à écrire du Python dès le premier jour avec zéro configuration. Ce projet est l'étape de remise des diplômes : installe du vrai Python sur ta propre machine, puis utilise-le pour construire quelque chose d'authentiquement utile — un petit pipeline qui prend une note vocale décousue et la transforme en une courte liste de tâches structurée, sans que tu aies à taper ou à organiser quoi que ce soit à la main. Cela suppose du Python 101 ; rien de l'Analyse de Données n'est requis.
 

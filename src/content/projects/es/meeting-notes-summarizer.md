@@ -4,7 +4,7 @@ description: "Da el salto del entorno de práctica en el navegador a Python real
 ---
 
 
-# 🌍 Construye un Resumidor de Notas de Reuniones
+# 🤖 Construye un Resumidor de Notas de Reuniones
 
 Todo en el curso hasta ahora se ejecutó en un playground aislado dentro del navegador — para que pudieras empezar a escribir Python desde el primer día sin ninguna configuración. Este proyecto es el paso de graduación: instala Python de verdad en tu propia máquina, y luego úsalo para construir una herramienta que resuelve un problema del mundo real genuinamente molesto — convertir una pared de texto en bruto de transcripción de reunión en un resumen corto y estructurado: qué se decidió, quién es responsable de qué, y qué sigue sin resolver. Esto asume Python 101; nada de Data Analysis es requerido.
 

@@ -4,7 +4,7 @@ slug: /projects/study-buddy-agent
 description: "Graduate from the in-browser playground to real Python: build a terminal app that turns your own study notes into a quiz, using a free-tier LLM to write the questions and judge your answers."
 ---
 
-# 🌍 Build a Study-Buddy Quiz Agent
+# 🎓 Build a Study-Buddy Quiz Agent
 
 Everything in the course so far ran in a sandboxed, in-browser playground — so you could start writing Python on day one with zero setup. This project is the graduation step: install Python for real on your own machine, then use it to build a tool you might actually keep using for a different class entirely — a quiz app that reads your own study notes, writes questions grounded in what's actually in them (not generic trivia), quizzes you one question at a time in the terminal, and has a language model judge whether your typed answer is close enough, with brief feedback either way.
 

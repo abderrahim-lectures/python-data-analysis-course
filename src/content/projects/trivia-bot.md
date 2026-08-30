@@ -4,7 +4,7 @@ slug: /projects/trivia-bot
 description: "Build a discord.py bot that runs trivia rounds in a server, tracks scores on a persistent leaderboard, and can generate fresh questions on any topic with a free-tier LLM."
 ---
 
-# 🌍 Build a Discord Trivia Bot
+# 💬 Build a Discord Trivia Bot
 
 A live `discord.py` bot that runs trivia rounds in a server: post a question, collect answers within a time limit, reveal who got it right, and keep a persistent leaderboard across rounds. Most trivia bots stop at a fixed question bank — this one adds a twist that fits a Python course: it can also generate a fresh question on any topic on the spot with a free-tier LLM, instead of only ever asking from a canned list.
 

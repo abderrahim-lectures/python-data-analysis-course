@@ -4,7 +4,7 @@ slug: /projects/mcp-server
 description: "Graduate from the in-browser playground to real Python: build a Model Context Protocol server exposing your own tools, and connect it to a real AI client like Claude Desktop."
 ---
 
-# 🌍 Build an MCP Server
+# 🔌 Build an MCP Server
 
 The [Model Context Protocol](https://modelcontextprotocol.io) (MCP) is a standard way for an AI assistant to call code, tools, and data that live outside of it. An MCP *server* is a small program you write that exposes a handful of tools; an MCP *client* — Claude Desktop, for instance — connects to that server and lets the model call those tools on your behalf, the same way a web browser is a client that talks to a web server. This project builds the server side: your own Python functions, registered as MCP tools, callable by a real AI assistant running on your own machine.
 

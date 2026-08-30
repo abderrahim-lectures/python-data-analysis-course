@@ -4,7 +4,7 @@ slug: /projects/commit-message-agent
 description: "Build a CLI tool that reads a real staged git diff via subprocess, drafts a Conventional-Commits-style message with a free-tier LLM, and only commits it after you explicitly confirm."
 ---
 
-# 🌍 Build a Git Commit-Message Generator
+# 🌿 Build a Git Commit-Message Generator
 
 "wip", "fix stuff", "asdf" — every developer has typed a lazy commit message at 6pm on a Friday. This project builds a CLI tool that removes the excuse: it captures your real **staged** `git diff` with Python's `subprocess` module, hands it to a free-tier language model with a system prompt designed specifically for writing Conventional-Commits-style messages, and shows you a draft you can accept, edit, or throw away — before anything is ever committed. The tool never commits on its own; a human always confirms the final message first.
 

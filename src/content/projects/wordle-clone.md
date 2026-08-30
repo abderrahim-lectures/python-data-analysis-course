@@ -4,7 +4,7 @@ slug: /projects/wordle-clone
 description: "Build a real terminal Wordle game from scratch: correct green/yellow/gray guess feedback (including the classic repeated-letter bug), a custom word list, and persistent stats tracking across sessions."
 ---
 
-# 🌍 Build a Wordle Clone
+# 🎮 Build a Wordle Clone
 
 This project only assumes Python 101-level basics — functions, lists, dictionaries, loops, reading and writing a file. No pandas, no API key, no GPU, no external service of any kind — just a terminal, a word list, and some logic that's trickier to get right than it looks. That makes this a great *earlier* Real-World Project to try, even before some of the pandas- or AI-flavored ones: everything you need is stuff Python 101 already gave you, applied to something genuinely fun to play afterward.
 

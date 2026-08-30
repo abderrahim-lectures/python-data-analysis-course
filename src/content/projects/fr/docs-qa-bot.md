@@ -4,7 +4,7 @@ description: "Passe du bac à sable dans le navigateur au vrai Python : envelopp
 ---
 
 
-# 🌍 Construire un Bot Discord de Questions-Réponses Adossé au RAG
+# 📚 Construire un Bot Discord de Questions-Réponses Adossé au RAG
 
 Ce projet reprend le pipeline de génération augmentée par récupération du [projet Appli RAG](/docs/projects/rag-notes) — embeddings locaux, recherche de similarité cosinus avec NumPy, un LLM gratuit pour la réponse finale — et lui met un front-end différent : au lieu d'un script que tu exécutes depuis un terminal une question à la fois, le même pipeline répond aux questions en direct, dans un serveur Discord, chaque fois que quelqu'un mentionne le bot. Rien sur *comment* il récupère ou génère ne change ; seule l'interface change.
 

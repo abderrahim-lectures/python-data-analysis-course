@@ -4,7 +4,7 @@ slug: /projects/mcp-sqlite-server
 description: "Build an MCP server that exposes a local SQLite database, then watch an LLM client write and run its own SQL to answer plain-English questions about it."
 ---
 
-# 🌍 Query a Database in Plain English with MCP
+# 🔌 Query a Database in Plain English with MCP
 
 Databases are usually behind a wall of SQL that only the people who wrote it can query comfortably. MCP changes that shape: instead of teaching everyone SQL, you expose a database through a handful of well-described tools, and let an LLM client write and run the SQL itself, on your behalf, one question at a time. This project builds exactly that — a small local SQLite database (a neighborhood library: books, authors, members, loans) and an MCP server that lets an AI assistant list its tables, inspect a table's schema, and run **read-only** queries against it, so you can ask something like "which books has the library not gotten back yet?" in plain English and watch it get answered correctly.
 

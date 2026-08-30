@@ -4,7 +4,7 @@ slug: /projects/rate-limited-api
 description: "Graduate from the in-browser playground to real Python: build a FastAPI service wrapping your own dataset, with genuine API-key auth and a rate limiter you build from scratch."
 ---
 
-# 🌍 Build a Rate-Limited API Service
+# 🌐 Build a Rate-Limited API Service
 
 Every other project in this section builds a *client* of some kind — a script or agent that calls somebody else's API. This one flips that around: you build the API. This project stands up a real [FastAPI](https://fastapi.tiangolo.com/) service wrapping a dataset of a few hundred quotes and jokes that ships with the project, with the two things every real public API needs and toy examples usually skip — API-key authentication and rate limiting — built by hand, not imported from a library. It assumes Python 101; nothing from Data Analysis is required.
 

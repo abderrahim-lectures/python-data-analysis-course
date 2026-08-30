@@ -4,7 +4,7 @@ description: "Gradúate de describir datos a predecir a partir de ellos: entrena
 ---
 
 
-# 🌍 Entrena tu Primer Modelo de Machine Learning
+# 🧠 Entrena tu Primer Modelo de Machine Learning
 
 Este proyecto asume que te sientes cómodo con pandas más o menos al nivel del track Normal de Data Analysis — filtrado, `.groupby()`, manejo de valores faltantes. De hecho, asume que hiciste específicamente el [EDA guiado del Titanic de la Semana 10](/docs/data-analysis/normal/week-10): ya cargaste ese dataset, lo limpiaste, e hiciste preguntas como "¿la tasa de supervivencia varió según la clase o el sexo?". Este proyecto es la secuela directa. Ya *describiste* este dataset. Ahora vas a *predecir* a partir de él — entrenando un modelo que mira a un pasajero que nunca ha visto y adivina si sobrevivió.
 

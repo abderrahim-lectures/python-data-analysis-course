@@ -4,7 +4,7 @@ description: "Gradúate del playground del navegador a Python real: construye un
 ---
 
 
-# 🌍 Construye un Revisor de Código Agéntico
+# 🤖 Construye un Revisor de Código Agéntico
 
 Todo pull request eventualmente es leído por un revisor humano que busca errores, problemas de estilo, tests faltantes y nombres confusos — antes de eso, sin embargo, es solo texto: la salida de `git diff`. Este proyecto construye una herramienta CLI que hace esa primera pasada automáticamente: captura un diff real con el módulo `subprocess` de Python, se lo entrega a un modelo de lenguaje de nivel gratuito con un system prompt de revisor cuidadosamente diseñado, y devuelve retroalimentación estructurada y accionable — no un vago "se ve bien", sino problemas específicos con un archivo, una categoría, una severidad y una corrección sugerida.
 

@@ -4,7 +4,7 @@ description: "Gradúate del playground del navegador a Python real: envuelve el 
 ---
 
 
-# 🌍 Construye un Bot de Discord de Preguntas y Respuestas Respaldado por RAG
+# 📚 Construye un Bot de Discord de Preguntas y Respuestas Respaldado por RAG
 
 Este proyecto toma el pipeline de generación aumentada por recuperación de [Construye una App RAG](/docs/projects/rag-notes) — embeddings locales, búsqueda de similitud de coseno con NumPy, un LLM de nivel gratuito para la respuesta final — y le pone un front end diferente: en lugar de un script que ejecutas desde una terminal una pregunta a la vez, el mismo pipeline responde preguntas en vivo, dentro de un servidor de Discord, cada vez que alguien menciona al bot. Nada sobre *cómo* recupera o genera cambia; solo la interfaz lo hace.
 

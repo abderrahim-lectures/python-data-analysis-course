@@ -4,7 +4,7 @@ slug: /projects/mcp-notes-server
 description: "Index a real folder of Markdown notes and expose it to Claude Desktop as searchable tools with the Model Context Protocol -- a genuinely useful personal-knowledge-base MCP server, not a toy."
 ---
 
-# 🌍 Build an MCP Server for Your Notes
+# 🔌 Build an MCP Server for Your Notes
 
 This assumes Python 101 and comfort writing plain functions -- and it helps a lot to have already built the [Build an MCP Server](/docs/projects/mcp-server) project first, since this one reuses the same `FastMCP` decorator pattern and only adds real content to search over instead of two toy tools. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
 

@@ -33,13 +33,13 @@ const base = import.meta.env.BASE_URL;
           </div>
           <div class="player-card__actions">
             <a class="btn btn-xp btn-sm" href={`${base}learn`}><Icon name="play" size={14} /> Quest</a>
-            <a class="btn btn-streak btn-sm" href={`${base}stats`}><Icon name="trophy" size={14} /> Profile</a>
+            <a class="btn btn-streak btn-sm" href={`${base}progress`}><Icon name="trophy" size={14} /> Profile</a>
           </div>
         </div>
 
         <div class="hero__actions">
           <a class="btn btn-primary btn-lg" href={`${base}learn`}><Icon name="play" size={16} /> Start your quest</a>
-          <a class="btn btn-ghost btn-lg" href={`${base}stats`}><Icon name="trophy" size={16} /> See your rank</a>
+          <a class="btn btn-ghost btn-lg" href={`${base}progress`}><Icon name="trophy" size={16} /> See your rank</a>
         </div>
       </div>
       <div class="hero__art" aria-hidden="true">
@@ -126,7 +126,7 @@ const base = import.meta.env.BASE_URL;
         <SceneBg scene="forest" height={140} particles={false}>
           <span class="hub__icon">🐍</span>
         </SceneBg>
-        <div class="hub__badge" style="background:var(--accent-soft);color:var(--accent)">🐍 Track 1</div>
+        <div class="hub__badge" style="color:var(--accent)">🐍 Track 1</div>
         <div class="hub__inner">
           <div class="hub__meta">5 lessons · 100 XP total</div>
           <h2>Python 101</h2>
@@ -139,7 +139,7 @@ const base = import.meta.env.BASE_URL;
         <SceneBg scene="city" height={140} particles={false}>
           <span class="hub__icon">📊</span>
         </SceneBg>
-        <div class="hub__badge" style="background:rgba(255,150,0,.1);color:var(--streak)">🔥 Track 2</div>
+        <div class="hub__badge" style="color:var(--streak)">🔥 Track 2</div>
         <div class="hub__inner">
           <div class="hub__meta">5 lessons · 100 XP total</div>
           <h2>Pandas &amp; Data</h2>
@@ -152,7 +152,7 @@ const base = import.meta.env.BASE_URL;
         <SceneBg scene="library" height={140} particles={false}>
           <span class="hub__icon">🚀</span>
         </SceneBg>
-        <div class="hub__badge" style="background:rgba(251,191,36,.12);color:#b45309">👑 Projects</div>
+        <div class="hub__badge" style="color:#b45309">👑 Projects</div>
         <div class="hub__inner">
           <div class="hub__meta">20+ builds · open-ended</div>
           <h2>Real-World Projects</h2>
@@ -297,7 +297,7 @@ const base = import.meta.env.BASE_URL;
   }
   .hub__card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
   .hub__icon { font-size: 3.2rem; margin-bottom: -.4rem; filter: drop-shadow(0 6px 12px rgba(0,0,0,.35)); }
-  .hub__badge { display: inline-flex; align-items: center; gap: .25rem; padding: .2rem .6rem; border-radius: var(--radius-pill); font-size: .72rem; font-weight: 700; margin: -.8rem 0 0 1rem; position: relative; z-index: 1; width: fit-content; }
+  .hub__badge { display: inline-flex; align-items: center; gap: .25rem; padding: .2rem .6rem; border-radius: var(--radius-pill); font-size: .72rem; font-weight: 700; margin: -.8rem 0 0 1rem; position: relative; z-index: 1; width: fit-content; background: var(--surface); box-shadow: var(--shadow-sm); border: 1px solid var(--line); }
   .hub__meta { font-size: .75rem; color: var(--ink-faint); font-weight: 600; letter-spacing: .03em; }
   .hub__inner { padding: 1.15rem; display: flex; flex-direction: column; flex: 1; }
   .hub__card h2 { margin: .25rem 0 .25rem; font-size: 1.2rem; }

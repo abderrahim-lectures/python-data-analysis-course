@@ -4,7 +4,7 @@ description: "Gradúate del playground del navegador a Python real: analiza los 
 ---
 
 
-# 🌍 Convierte un Código Base en un Grafo de Conocimiento
+# 🕸️ Convierte un Código Base en un Grafo de Conocimiento
 
 Cada otro proyecto de esta sección eventualmente recurre a una clave de API, un registro de nivel gratuito, o un sitio web en vivo. Este no necesita nada de eso. Escribirás una herramienta que lee código fuente Python de la misma forma que lo hace el propio intérprete — analizándolo en un **AST** (árbol de sintaxis abstracta) con el módulo `ast` integrado de la biblioteca estándar — luego convierte lo que encuentra en un **grafo**: archivos, funciones y clases como nodos, relaciones "importa"/"llama"/"definido en" como aristas. Ese es un ejemplo real y funcional de una estructura de datos de muy atrás en el curso apareciendo en una herramienta genuinamente útil, no un ejercicio de clase: un grafo es solo nodos y aristas, y resulta que la propia estructura de un código base ya es uno.
 
