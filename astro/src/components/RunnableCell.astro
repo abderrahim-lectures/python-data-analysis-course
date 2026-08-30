@@ -1,0 +1,100 @@
+---
+// Runnable Python cell — an interactive island that runs code through Pyodide.
+interface Props { code: string; lessonId?: string; }
+const {code, lessonId} = Astro.props;
+---
+
+<div class="cell" data-runnable data-lesson={lessonId ?? ''}>
+  <div class="cell__actions">
+    <button class="btn btn-primary cell__run" data-run aria-label="Run this Python code">▶ Run</button>
+    <span class="cell__lang">python</span>
+  </div>
+  <pre class="cell__code"><code>{code}</code></pre>
+  <div class="cell__output" data-output hidden>
+    <div class="cell__lines" data-lines></div>
+    <button class="cell__clear" data-clear hidden>Clear</button>
+  </div>
+</div>
+
+<script is:inline>
+  (() => {
+  const PYODIDE_VERSION = '0.26.4';
+  const INDEX = `https://cdn.jsdelivr.net/pyodide/v${PYODIDE_VERSION}/full/`;
+  const lessonId = document.currentScript?.parentElement?.dataset?.lesson ?? '';
+  let awarded = false;
+  let pyPromise = null;
+  async function py() {
+    if (!pyPromise) {
+      const mod = (await import(/* @vite-ignore */ `${INDEX}pyodide.mjs`));
+      pyPromise = mod.loadPyodide({indexURL: INDEX});
+    }
+    return pyPromise;
+  }
+
+  document.querySelectorAll('[data-runnable]').forEach((cell) => {
+    const run = cell.querySelector('[data-run]');
+    const out = cell.querySelector('[data-output]');
+    const lines = cell.querySelector('[data-lines]');
+    const clear = cell.querySelector('[data-clear]');
+    const src = cell.querySelector('code').textContent;
+
+    const appendLine = (kind, text) => {
+      const d = document.createElement('div');
+      d.className = `o-line o-line--${kind}`;
+      d.textContent = text;
+      lines.appendChild(d);
+    };
+
+    run.addEventListener('click', async () => {
+      out.hidden = false;
+      clear.hidden = false;
+      lines.innerHTML = '';
+      appendLine('cmd', '$ python');
+      const engine = await py();
+      engine.setStdout({batched: (s) => appendLine('out', s)});
+      engine.setStderr({batched: (s) => appendLine('err', s)});
+      engine.setStdin({stdin: () => window.prompt()});
+      try {
+        await engine.loadPackagesFromImports(src);
+        await engine.runPythonAsync(src);
+      } catch (e) {
+        appendLine('err', e instanceof Error ? e.message : String(e));
+      }
+      // award XP once per lesson on first run — show floating toast
+      if (!awarded && lessonId) {
+        awarded = true;
+        try {
+          const m = await import('../lib/gameState.ts');
+          const xp = m.addXP(lessonId);
+          const t = document.createElement('div');
+          t.className = 'rctoast';
+          t.textContent = `⚡ +${xp} XP`;
+          t.style.cssText = 'position:fixed;z-index:9999;left:50%;top:50%;transform:translate(-50%,-50%) scale(.9);background:linear-gradient(135deg,#5b21b6,#4c1d95);color:#fff;padding:.5rem 1.2rem;border-radius:999px;font-weight:800;font-size:.95rem;box-shadow:0 6px 24px rgba(91,33,182,.45);pointer-events:none;';
+          document.body.appendChild(t);
+          requestAnimationFrame(() => {
+            t.style.transition = 'all .7s cubic-bezier(.22,.61,.36,1)';
+            t.style.transform = 'translate(-50%,-70%) scale(1.05)';
+            t.style.opacity = '0';
+          });
+          setTimeout(() => t.remove(), 900);
+          cell.dispatchEvent(new CustomEvent('lesson:complete', {detail: {lessonId, xp}}));
+        } catch (e) { /* silently ignore offline */ }
+      }
+    });
+    clear.addEventListener('click', () => { lines.innerHTML = ''; out.hidden = true; clear.hidden = true; });
+  });
+  })();
+</script>
+
+<style>
+  .cell { border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); overflow: hidden; margin: 1rem 0; box-shadow: var(--shadow-sm); }
+  .cell__actions { display: flex; align-items: center; gap: .75rem; padding: .6rem .9rem; border-bottom: 1px solid var(--line); }
+  .cell__lang { color: var(--ink-soft); font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
+  .cell__code { margin: 0; padding: 1rem; background: #0f0c1d; color: #e2dcff; overflow-x: auto; font-size: .95rem; }
+  .cell__output { border-top: 1px solid var(--line); background: #15122a; color: #d8d0ff; padding: .6rem .9rem; font-family: ui-monospace, monospace; font-size: .9rem; }
+  .o-line { white-space: pre-wrap; padding: .1rem 0; }
+  .o-line--cmd { color: #8f86c9; }
+  .o-line--out { color: #d8d0ff; }
+  .o-line--err { color: #ff8fa3; }
+  .cell__clear { margin-top: .5rem; background: transparent; border: 1px solid var(--line); color: var(--ink-soft); border-radius: 999px; padding: .2rem .8rem; cursor: pointer; font-size: .8rem; }
+</style>

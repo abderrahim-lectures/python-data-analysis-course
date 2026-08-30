@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://abderrahim-lectures.github.io/python-data-analysis-course/sitemap-index.xml

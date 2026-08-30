@@ -1,0 +1,111 @@
+---
+// Dynamic lesson route: renders every markdown lesson in the `learn` content
+// collection under /learn/<section>/<track>/week-<n>. Replaces the hand-written
+// proof-of-concept page (which stays as a redirect target via the same slug).
+import {getCollection, type CollectionEntry} from 'astro:content';
+import Base from '../../../../layouts/Base.astro';
+import RunnableCell from '../../../../components/RunnableCell.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('learn');
+  return entries
+    .filter((e) => e.data.track && e.data.week)
+    .map((entry) => {
+      const parts = entry.slug.split('/'); // e.g. python-101/python-101/normal/week-1
+      const week = parts[parts.length - 1];
+      const track = parts[parts.length - 2];
+      const section = entry.data.section!;
+      return {
+        params: {section, track, week},
+        props: {entry},
+      };
+    });
+}
+
+interface Props { entry: CollectionEntry<'learn'> }
+const {entry} = Astro.props;
+const {title, description, week, track, section} = entry.data;
+const {Content} = await entry.render();
+const base = import.meta.env.BASE_URL;
+
+const allLessons = await getCollection('learn');
+const siblings = allLessons
+  .filter((e) => e.data.section === section && e.data.track === track && typeof e.data.week === 'number')
+  .sort((a, b) => (a.data.week ?? 0) - (b.data.week ?? 0));
+const idx = siblings.findIndex((e) => e.slug === entry.slug);
+const prev = idx > 0 ? siblings[idx - 1] : null;
+const next = idx >= 0 && idx < siblings.length - 1 ? siblings[idx + 1] : null;
+const otherTrack = track === 'normal' ? 'hard' : 'normal';
+const lessonId = `${section}/${track}/week-${week}`;
+---
+
+<Base title={`${title} — PyDA`} description={description} lang="en" dir="ltr">
+  <nav class="crumb container">
+    <a href={`${base}learn`}>Learn</a> <span>/</span>
+    <a href={`${base}learn/${section}`}>{section}</a> <span>/</span>
+    <span class="crumb__here">Week {week}</span>
+  </nav>
+
+  <article class="container lesson-body" data-lesson-id={lessonId}>
+    <header class="lesson-head">
+      <span class="lesson-head__week">{section} · {track === 'normal' ? 'Normal' : 'Hard'} Track</span>
+      <h1>{title}</h1>
+      {description && <p class="lesson-head__sub">{description}</p>}
+    </header>
+
+    <div class="lesson-content">
+      <Content components={{pre: RunnableCell}} />
+    </div>
+
+    <div class="lesson-nav">
+      {prev
+        ? <a class="lesson-nav__prev" href={`${base}learn/${section}/${track}/week-${prev.data.week}`}>← Week {prev.data.week}</a>
+        : <span />}
+      {next
+        ? <a class="lesson-nav__next" href={`${base}learn/${section}/${track}/week-${next.data.week}`}>Week {next.data.week} →</a>
+        : <a class="lesson-nav__next lesson-nav__next--done" data-mark-complete href="#">Mark complete ✓</a>}
+    </div>
+
+    <div class="route">
+      <a class="route__card" href={`${base}learn/${section}/${otherTrack}/week-${week}`}>
+        <span class="route__icon">{otherTrack === 'hard' ? '⚡' : '🌿'}</span>
+        <strong>Switch to {otherTrack === 'hard' ? 'Hard' : 'Normal'}</strong>
+        <small>Same week, {otherTrack === 'hard' ? 'steeper climb' : 'gentler pace'}.</small>
+      </a>
+    </div>
+  </article>
+</Base>
+
+<script>
+  import {completeLesson} from '../../../../lib/gameState';
+  const article = document.querySelector('[data-lesson-id]');
+  const id = article?.getAttribute('data-lesson-id');
+  document.querySelector('[data-mark-complete]')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (id) {
+      completeLesson(id);
+      document.dispatchEvent(new CustomEvent('lesson:complete'));
+    }
+  });
+</script>
+
+<style>
+  .crumb { display: flex; gap: .5rem; padding-top: 1.2rem; color: var(--ink-soft); font-size: .88rem; align-items: center; }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb__here { font-weight: 700; color: var(--ink); }
+  .lesson-head { margin: 1.5rem 0 1rem; }
+  .lesson-head__week { color: var(--accent); font-weight: 800; letter-spacing: .04em; text-transform: uppercase; font-size: .8rem; }
+  .lesson-head h1 { font-size: clamp(1.8rem, 4vw, 2.6rem); margin: .3rem 0; }
+  .lesson-head__sub { color: var(--ink-soft); font-size: 1.05rem; }
+  .lesson-content :global(code) { background: var(--surface-2); padding: .1rem .35rem; border-radius: 6px; font-size: .9em; }
+  .lesson-content :global(h2) { margin-top: 2.2rem; }
+  .lesson-content :global(.gamified-flourish) { display: block; background: var(--accent-soft); color: var(--accent-strong); border-radius: var(--radius-md); padding: .8rem 1rem; margin: 1rem 0; font-weight: 600; }
+  .lesson-nav { display: flex; justify-content: space-between; align-items: center; margin: 2rem 0; gap: 1rem; }
+  .lesson-nav a { text-decoration: none; font-weight: 700; padding: .6rem 1.1rem; border-radius: var(--radius-pill); background: var(--surface); border: 1px solid var(--line); color: var(--ink); box-shadow: var(--shadow-sm); }
+  .lesson-nav__next--done { background: var(--success-soft); color: var(--success); border-color: rgba(88,204,2,.3); }
+  .route { display: grid; margin: 1.5rem 0 3rem; }
+  .route__card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 1.2rem; text-decoration: none; color: var(--ink); display: flex; flex-direction: column; gap: .3rem; box-shadow: var(--shadow-sm); transition: transform .2s ease, box-shadow .2s ease; }
+  .route__card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+  .route__card small { color: var(--ink-soft); }
+  .route__icon { font-size: 1.6rem; }
+</style>

@@ -1,0 +1,328 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+
+const base = import.meta.env.BASE_URL;
+const scenes = {forest: 'linear-gradient(160deg, #0f2020 0%, #1a4a3a 100%)', city: 'linear-gradient(160deg, #1a1040 0%, #2d1b69 100%)', library: 'linear-gradient(160deg, #2a1f0e 0%, #5c4033 100%)'};
+---
+
+<Base title="PyDA Course — Learn Python the gamer way" lang="en" dir="ltr">
+  <!-- === GAMIFIED HERO === -->
+  <section class="hero">
+    <div class="hero__bg" aria-hidden="true"></div>
+    <div class="hero__grid">
+      <div class="hero__copy">
+        <span class="hero__eyebrow">🐍 Python · Data Analysis · Zero installs</span>
+        <h1 class="hero__title">Learn Python by actually<br/>running it — and <span class="text-gradient">leveling up</span> while you do.</h1>
+        <p class="hero__lead">Every lesson earns XP. Streaks multiply it. Badges mark your climb. It's a course that plays like a game.</p>
+
+        <!-- Player card -->
+        <div class="player-card" id="player-card">
+          <div class="player-card__left">
+            <div class="player-card__avatar" id="player-avatar">🧑‍💻</div>
+            <div class="player-card__info">
+              <div class="player-card__rank" id="player-rank"><span class="badge badge--streak">🌱 Bronze</span></div>
+              <div class="player-card__level">Lv.<span id="player-level">1</span></div>
+            </div>
+          </div>
+          <div class="player-card__xp">
+            <div class="player-card__xpbar" role="progressbar" aria-label="XP progress">
+              <div class="player-card__xpfill" id="player-xpfill" style="width:0%"></div>
+            </div>
+            <div class="player-card__xptext"><span id="player-xp">0</span> XP · <span id="player-xpnext">100</span> to next</div>
+          </div>
+          <div class="player-card__actions">
+            <a class="btn btn-xp btn-sm" href={`${base}learn`}><Icon name="play" size={14} /> Quest</a>
+            <a class="btn btn-streak btn-sm" href={`${base}stats`}><Icon name="trophy" size={14} /> Profile</a>
+          </div>
+        </div>
+
+        <div class="hero__actions">
+          <a class="btn btn-primary btn-lg" href={`${base}learn`}><Icon name="play" size={16} /> Start your quest</a>
+          <a class="btn btn-ghost btn-lg" href={`${base}stats`}><Icon name="trophy" size={16} /> See your rank</a>
+        </div>
+      </div>
+      <div class="hero__art" aria-hidden="true">
+        <div class="hero__bracket">⚔️ Quest log — Run · Debug · Level up</div>
+        <div class="hero__terminal">
+          <div class="hero__termbar"><span></span><span></span><span></span></div>
+          <div class="hero__termbody">
+            <span class="t-soft">$ python main.py</span>
+            <span class="t-prompt">&gt;&gt;&gt; </span><span class="t-code">print("Hello, world!")</span>
+            <span class="t-out">Hello, world!</span>
+            <span class="t-soft">✨ +20 XP earned</span>
+            <span class="t-soft">🔥 streak: 3 (+5 bonus)</span>
+            <span class="t-soft">🏆 Badge unlocked: First Step</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- === GAMIFIED STATS STRIP === -->
+  <section class="container">
+    <div class="gamestrip">
+      <div class="gamestrip__item" id="gs-xp">
+        <span class="gamestrip__icon">⚡</span>
+        <span class="gamestrip__val" id="gs-xp-val">0</span>
+        <span class="gamestrip__label">Total XP</span>
+      </div>
+      <div class="gamestrip__item" id="gs-streak">
+        <span class="gamestrip__icon">🔥</span>
+        <span class="gamestrip__val" id="gs-streak-val">0</span>
+        <span class="gamestrip__label">Day streak</span>
+      </div>
+      <div class="gamestrip__item" id="gs-badges">
+        <span class="gamestrip__icon">🏅</span>
+        <span class="gamestrip__val" id="gs-badges-val">0</span>
+        <span class="gamestrip__label">Badges</span>
+      </div>
+      <div class="gamestrip__item" id="gs-level">
+        <span class="gamestrip__icon">⬆️</span>
+        <span class="gamestrip__val" id="gs-level-val">1</span>
+        <span class="gamestrip__label">Your level</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- === WHAT YOU'LL EARN === -->
+  <section class="container">
+    <div class="rewards">
+      <h2 class="rewards__title">What you'll <span class="text-gradient">earn</span></h2>
+      <p class="rewards__sub">Every action pays off. Here's the scoreboard.</p>
+      <div class="rewards__grid">
+        <div class="reward">
+          <div class="reward__icon">⚡</div>
+          <h3>+20 XP per lesson</h3>
+          <p>Each completed lesson fills your XP bar. Climb from Bronze to Grandmaster.</p>
+          <div class="reward__bar"><div class="reward__fill" style="--p:20"></div></div>
+        </div>
+        <div class="reward">
+          <div class="reward__icon">🔥</div>
+          <h3>+5 XP streak bonus</h3>
+          <p>3+ day streak? Extra XP on every lesson. Keep it hot — fire intensity rises with consistency.</p>
+          <div class="reward__bar"><div class="reward__fill reward__fill--streak" style="--p:5"></div></div>
+        </div>
+        <div class="reward">
+          <div class="reward__icon">🏅</div>
+          <h3>11 unlockable badges</h3>
+          <p>From "First Step" to "14-day streak" — each badge marks a real milestone in your progress.</p>
+          <div class="reward__bar"><div class="reward__fill reward__fill--xp" style="--p:11"></div></div>
+        </div>
+        <div class="reward">
+          <div class="reward__icon">👑</div>
+          <h3>7 rank tiers</h3>
+          <p>Bronze → Silver → Gold → Platinum → Diamond → Master → Grandmaster. Earned, not given.</p>
+          <div class="reward__bar"><div class="reward__fill reward__fill--rank" style="--p:7"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- === HUB === -->
+  <section class="container">
+    <div class="hub">
+      <a class="hub__card" href={`${base}learn/python-101`}>
+        <div class="hub__thumb" style={`background:${scenes.forest}`}></div>
+        <div class="hub__badge" style="background:var(--accent-soft);color:var(--accent)">🐍 Track 1</div>
+        <div class="hub__inner">
+          <div class="hub__meta">5 lessons · 100 XP total</div>
+          <h2>Python 101</h2>
+          <p>Variables → functions → a mini language model. Two paths: chill or challenge.</p>
+          <div class="hub__progress"><div class="hub__progress-fill" id="hub-python" style="width:0%"></div></div>
+          <span class="btn btn-primary hub__cta">Start Python 101 <Icon name="play" size={14} /></span>
+        </div>
+      </a>
+      <a class="hub__card" href={`${base}learn/data-analysis`}>
+        <div class="hub__thumb" style={`background:${scenes.city}`}></div>
+        <div class="hub__badge" style="background:rgba(255,150,0,.1);color:var(--streak)">🔥 Track 2</div>
+        <div class="hub__inner">
+          <div class="hub__meta">5 lessons · 100 XP total</div>
+          <h2>Pandas &amp; Data</h2>
+          <p>Reproduce a Kaggle-style notebook with pandas, from clean to insight.</p>
+          <div class="hub__progress"><div class="hub__progress-fill hub__progress-fill--streak" id="hub-data" style="width:0%"></div></div>
+          <span class="btn btn-streak hub__cta">Start Data Analysis <Icon name="play" size={14} /></span>
+        </div>
+      </a>
+      <a class="hub__card" href={`${base}projects`}>
+        <div class="hub__thumb" style={`background:${scenes.library}`}></div>
+        <div class="hub__badge" style="background:rgba(251,191,36,.12);color:#b45309">👑 Projects</div>
+        <div class="hub__inner">
+          <div class="hub__meta">20+ builds · open-ended</div>
+          <h2>Real Projects</h2>
+          <p>20+ things you can actually build — browse any time, graduation not required.</p>
+          <span class="btn btn-xp hub__cta">Browse projects</span>
+        </div>
+      </a>
+    </div>
+  </section>
+</Base>
+
+<script>
+  // Client-side: read gameState from localStorage and populate gamification UI
+  const STORAGE_KEY = 'pda:state';
+  function readState() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch { return {}; }
+  }
+
+  const RANKS = ['Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond', 'Master', 'Grandmaster'];
+  const RANK_EMOJIS: Record<string, string> = { Bronze:'🌱', Silver:'⚙️', Gold:'🥇', Platinum:'💠', Diamond:'💎', Master:'🔥', Grandmaster:'👑' };
+
+  function rankFor(xp: number): string {
+    let r = 'Bronze';
+    for (const k of RANKS) { if (xp >= ({Bronze:0,Silver:300,Gold:800,Platinum:1600,Diamond:2800,Master:4500,Grandmaster:7000}[k] || 0)) r = k; }
+    return r;
+  }
+
+  function render() {
+    const s = readState();
+    const xp = s.xp || 0;
+    const level = Math.floor(xp / 100) + 1;
+    const pct = xp % 100;
+    const streak = s.streak || 0;
+    const badges = s.badges || [];
+    const rank = rankFor(xp);
+
+    // Player card
+    const levelEl = document.getElementById('player-level');
+    const xpEl = document.getElementById('player-xp');
+    const xpnextEl = document.getElementById('player-xpnext');
+    const xpfillEl = document.getElementById('player-xpfill');
+    const rankEl = document.getElementById('player-rank');
+    if (levelEl) levelEl.textContent = String(level);
+    if (xpEl) xpEl.textContent = String(xp);
+    if (xpnextEl) xpnextEl.textContent = String(100 - pct);
+    if (xpfillEl) xpfillEl.style.width = pct + '%';
+    if (rankEl) rankEl.innerHTML = `<span class="badge badge--streak">${RANK_EMOJIS[rank] || '🌱'} ${rank}</span>`;
+
+    // Stats strip
+    const gsLevel = document.getElementById('gs-level-val');
+    const gsStreak = document.getElementById('gs-streak-val');
+    const gsBadges = document.getElementById('gs-badges-val');
+    const gsXp = document.getElementById('gs-xp-val');
+    if (gsLevel) gsLevel.textContent = String(level);
+    if (gsStreak) gsStreak.textContent = String(streak);
+    if (gsBadges) gsBadges.textContent = String(badges.length);
+    if (gsXp) gsXp.textContent = String(xp);
+
+    // Streak intensity
+    const streakItem = document.getElementById('gs-streak');
+    if (streakItem) {
+      streakItem.classList.remove('gamestrip__item--hot', 'gamestrip__item--blazing');
+      if (streak >= 7) streakItem.classList.add('gamestrip__item--blazing');
+      else if (streak >= 3) streakItem.classList.add('gamestrip__item--hot');
+    }
+
+    // Hub progress bars
+    const pythonDone = Object.keys(s.lessonsCompleted || {}).filter((k: string) => k.includes('python-101')).length;
+    const dataDone = Object.keys(s.lessonsCompleted || {}).filter((k: string) => k.includes('data-analysis')).length;
+    const pythonFill = document.getElementById('hub-python');
+    const dataFill = document.getElementById('hub-data');
+    if (pythonFill) pythonFill.style.width = (pythonDone / 5 * 100) + '%';
+    if (dataFill) dataFill.style.width = (dataDone / 5 * 100) + '%';
+  }
+
+  // Delay render slightly for hydration
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', render);
+  } else {
+    render();
+  }
+</script>
+
+<style>
+  /* === HERO === */
+  .hero { position: relative; overflow: hidden; padding: 2.5rem 0 2rem; }
+  .hero__bg { position: absolute; inset: 0; z-index: 0; background: radial-gradient(60% 80% at 70% 60%, rgba(124,58,237,.10), rgba(255,150,0,.05), transparent 70%); }
+  .hero__grid {
+    position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; padding: 0 1.25rem;
+    display: grid; grid-template-columns: 1.2fr .8fr; gap: 2.5rem; align-items: center;
+  }
+  .hero__eyebrow { color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: .08em; font-size: .76rem; }
+  .hero__title { margin: .6rem 0 .7rem; font-size: clamp(2rem, 4.5vw, 3rem); line-height: 1.08; }
+  .hero__lead { color: var(--ink-soft); font-size: 1.05rem; max-width: 34rem; margin: 0 0 1.2rem; line-height: 1.7; }
+
+  /* === PLAYER CARD === */
+  .player-card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg);
+    padding: 1rem 1.25rem; margin-bottom: 1.2rem; box-shadow: var(--shadow-md);
+    display: flex; flex-direction: column; gap: .6rem;
+    animation: slide-up .5s cubic-bezier(.34,1.56,.64,1);
+  }
+  .player-card__left { display: flex; align-items: center; gap: .75rem; }
+  .player-card__avatar {
+    font-size: 2rem; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;
+    background: var(--bg-soft); border-radius: var(--radius-md); border: 2px solid var(--line);
+  }
+  .player-card__rank { display: flex; align-items: center; }
+  .player-card__level { font-family: var(--font-display); font-weight: 800; font-size: .85rem; color: var(--ink-soft); }
+  .player-card__xp { display: flex; flex-direction: column; gap: 3px; }
+  .player-card__xpbar { height: 8px; background: var(--surface-2); border-radius: var(--radius-pill); overflow: hidden; }
+  .player-card__xpfill { height: 100%; width: 0; border-radius: var(--radius-pill); background: linear-gradient(90deg, var(--accent), var(--streak)); transition: width .6s cubic-bezier(.4,0,.2,1); }
+  .player-card__xptext { font-size: .72rem; font-weight: 700; color: var(--ink-soft); }
+  .player-card__actions { display: flex; gap: .5rem; }
+
+  .hero__actions { display: flex; gap: .7rem; flex-wrap: wrap; }
+
+  /* === GAMIFIED STATS STRIP === */
+  .gamestrip { display: grid; grid-template-columns: repeat(4, 1fr); gap: .75rem; margin: 0 0 2rem; }
+  .gamestrip__item {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg);
+    padding: .85rem .75rem; text-align: center; box-shadow: var(--shadow-sm);
+    display: flex; flex-direction: column; align-items: center; gap: .25rem;
+    transition: all var(--transition-smooth);
+  }
+  .gamestrip__item:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+  .gamestrip__item--hot { border-color: rgba(255,150,0,.3); box-shadow: var(--shadow-streak-glow); }
+  .gamestrip__item--blazing { border-color: rgba(255,80,0,.4); box-shadow: 0 0 24px rgba(255,80,0,.25); }
+  .gamestrip__icon { font-size: 1.2rem; }
+  .gamestrip__val { font-family: var(--font-display); font-weight: 800; font-size: 1.5rem; color: var(--ink-hi); }
+  .gamestrip__label { color: var(--ink-soft); font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
+
+  /* === REWARDS === */
+  .rewards { padding: 2rem 0; text-align: center; }
+  .rewards__title { font-size: clamp(1.5rem, 3vw, 2rem); margin-bottom: .3rem; }
+  .rewards__sub { color: var(--ink-soft); margin-bottom: 1.5rem; }
+  .rewards__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+  .reward {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg);
+    padding: 1.25rem 1rem; text-align: left; box-shadow: var(--shadow-sm);
+    transition: all var(--transition-smooth);
+  }
+  .reward:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+  .reward__icon { font-size: 1.75rem; margin-bottom: .5rem; }
+  .reward h3 { font-size: 1rem; margin: 0 0 .3rem; }
+  .reward p { color: var(--ink-soft); font-size: .85rem; margin: 0 0 .75rem; line-height: 1.5; }
+  .reward__bar { height: 6px; background: var(--surface-2); border-radius: var(--radius-pill); overflow: hidden; }
+  .reward__fill { height: 100%; width: var(--p, 20); border-radius: var(--radius-pill); background: linear-gradient(90deg, var(--accent), var(--accent-strong)); transition: width .6s cubic-bezier(.4,0,.2,1); }
+  .reward__fill--streak { background: linear-gradient(90deg, var(--streak), var(--streak-deep)); }
+  .reward__fill--xp { background: linear-gradient(90deg, var(--xp), #f59e0b); }
+  .reward__fill--rank { background: linear-gradient(90deg, var(--accent), var(--streak), var(--success)); }
+
+  /* === HUB === */
+  .hub { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.4rem; margin: 1rem 0 3rem; }
+  .hub__card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg);
+    overflow: hidden; text-decoration: none; color: var(--ink); display: flex; flex-direction: column;
+    box-shadow: var(--shadow-sm); transition: transform .25s ease, box-shadow .25s ease;
+  }
+  .hub__card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
+  .hub__thumb { height: 120px; background-size: cover; background-position: center; position: relative; }
+  .hub__thumb::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.04), rgba(0,0,0,.2)); }
+  .hub__badge { display: inline-flex; align-items: center; gap: .25rem; padding: .2rem .6rem; border-radius: var(--radius-pill); font-size: .72rem; font-weight: 700; margin: -.8rem 0 0 1rem; position: relative; z-index: 1; width: fit-content; }
+  .hub__meta { font-size: .75rem; color: var(--ink-faint); font-weight: 600; letter-spacing: .03em; }
+  .hub__inner { padding: 1.15rem; display: flex; flex-direction: column; flex: 1; }
+  .hub__card h2 { margin: .25rem 0 .25rem; font-size: 1.2rem; }
+  .hub__card p { color: var(--ink-soft); flex: 1; font-size: .9rem; margin: 0 0 .6rem; }
+  .hub__progress { height: 6px; background: var(--surface-2); border-radius: var(--radius-pill); overflow: hidden; margin-bottom: .75rem; }
+  .hub__progress-fill { height: 100%; width: 0; border-radius: var(--radius-pill); background: linear-gradient(90deg, var(--accent), var(--accent-strong)); transition: width .8s cubic-bezier(.4,0,.2,1); }
+  .hub__progress-fill--streak { background: linear-gradient(90deg, var(--streak), var(--streak-deep)); }
+  .hub__cta { margin-top: auto; }
+
+  @media (max-width: 820px) { .hero__grid { grid-template-columns: 1fr; } .hero__art { display: none; } }
+  @media (max-width: 640px) {
+    .gamestrip { grid-template-columns: repeat(2, 1fr); }
+    .gamestrip__item--blazing { grid-column: span 2; }
+    .rewards__grid { grid-template-columns: 1fr; }
+  }
+</style>

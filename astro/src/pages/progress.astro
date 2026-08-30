@@ -1,0 +1,247 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import { xpProgress, trackProgress, questsToShow, streakProgress } from '../lib/gameState.ts';
+const base = import.meta.env.BASE_URL;
+
+const xp = xpProgress();
+const py = trackProgress('python-101', 5);
+const da = trackProgress('data-analysis', 5);
+const quests = questsToShow();
+const sp = streakProgress();
+
+const pyWeeks = [1,2,3,4,5].map((w) => {
+  const done = w <= py.done;
+  return {w, done};
+});
+const daWeeks = [6,7,8,9,10].map((w) => {
+  const done = w <= (5 + da.done);
+  return {w, done};
+});
+---
+
+<Base title="Progress — PyDA" lang="en" dir="ltr">
+  <section class="hero">
+    <div class="container head">
+      <div class="head__eyebrow"><Icon name="trophy" size={16} /> Your trail</div>
+      <h1>Track your climb</h1>
+      <p>Every lesson lights up a station. XP, streaks, and badges move with you.</p>
+    </div>
+  </section>
+
+  <section class="container">
+    <!-- Player card -->
+    <div class="player-card" id="progress-player">
+      <div class="player-card__left">
+        <div class="player-card__avatar">🧑‍💻</div>
+        <div class="player-card__info">
+          <div class="player-card__rank"><span class="badge badge--streak" id="p-rank">🌱 Bronze</span></div>
+          <div class="player-card__level">Lv.<span id="p-level">{xp.level}</span></div>
+        </div>
+      </div>
+      <div class="player-card__xp">
+        <div class="player-card__xpbar" role="progressbar" aria-label="XP progress">
+          <div class="player-card__xpfill" id="p-xpfill" style="width:{xp.pct}%"></div>
+        </div>
+        <div class="player-card__xptext"><span id="p-xp">{xp.xp}</span> XP · <span id="p-xpnext">{xp.toNext}</span> to next</div>
+      </div>
+      <div class="player-card__stats">
+        <div class="player-card__stat">
+          <span class="player-card__stat-val" id="p-streak">{sp.current}🔥</span>
+          <span class="player-card__stat-label">streak</span>
+        </div>
+        <div class="player-card__stat">
+          <span class="player-card__stat-val" id="p-best">{sp.best}</span>
+          <span class="player-card__stat-label">best</span>
+        </div>
+        <div class="player-card__stat">
+          <span class="player-card__stat-val" id="p-quests">{quests.filter((q) => q.done).length}/{quests.length}</span>
+          <span class="player-card__stat-label">quests</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- XP bar -->
+    <div class="xpbar" role="progressbar" aria-label="XP progress" aria-valuenow={xp.pct} aria-valuemin="0" aria-valuemax="100">
+      <div class="xpbar__fill" style="width:{xp.pct}%"></div>
+      <span class="xpbar__text">{xp.xp} XP</span>
+    </div>
+
+    <!-- Milestones -->
+    <div class="milestones">
+      {quests.filter((q) => q.done).slice(0, 6).map((q) => (
+        <span class="badge badge--success">✅ {q.label}</span>
+      ))}
+      {quests.filter((q) => !q.done).slice(0, 3).map((q) => (
+        <span class="badge badge--locked">🔒 {q.label}</span>
+      ))}
+    </div>
+  </section>
+
+  <!-- Trails -->
+  <section class="container">
+    <div class="trails">
+      <div class="trail">
+        <div class="trail__head">
+          <div>
+            <h2>🐍 Python 101</h2>
+            <span class="trail__meta">Variables → functions → language model</span>
+          </div>
+          <span class="trail__pct">{py.done}/{py.total} done</span>
+        </div>
+        <ol class="stations">
+          {pyWeeks.map(({w, done}) => (
+            <li class="station{done ? ' station--done' : ''}" data-week={w}>
+              <a class="station__link" href={`${base}learn/python-101/normal/week-${w}`}>
+                <span class="station__dot"></span>
+                <span class="station__label">Week {w}</span>
+                {done && <span class="station__check">✅</span>}
+              </a>
+            </li>
+          ))}
+        </ol>
+        <div class="trail__xp">+{py.done * 20} XP earned</div>
+      </div>
+
+      <div class="trail">
+        <div class="trail__head">
+          <div>
+            <h2>📊 Pandas &amp; Data</h2>
+            <span class="trail__meta">Kaggle-style notebook with pandas</span>
+          </div>
+          <span class="trail__pct">{da.done}/{da.total} done</span>
+        </div>
+        <ol class="stations">
+          {daWeeks.map(({w, done}) => (
+            <li class="station{done ? ' station--done' : ''}" data-week={w}>
+              <a class="station__link" href={`${base}learn/data-analysis/normal/week-${w}`}>
+                <span class="station__dot"></span>
+                <span class="station__label">Week {w}</span>
+                {done && <span class="station__check">✅</span>}
+              </a>
+            </li>
+          ))}
+        </ol>
+        <div class="trail__xp trail__xp--streak">+{da.done * 20} XP earned</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quests -->
+  <section class="container">
+    <div class="quests">
+      <div class="quests__head">
+        <h2>Quests</h2>
+        <span class="badge badge--accent">{quests.filter((q) => q.done).length}/{quests.length} done</span>
+      </div>
+      <div class="quest-grid">
+        {quests.map((q) => (
+          <div class="quest{!q.done ? ' quest--locked' : ''}">
+            <span class="quest__icon">{q.done ? '✅' : '🔒'}</span>
+            <span class="quest__label">{q.label}</span>
+            {q.done && <span class="quest__check">✓</span>}
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <script is:inline>
+    function tick() {
+      const s = JSON.parse(localStorage.getItem('pda:state') || '{}');
+      const xp = s.xp || 0;
+      const level = Math.floor(xp / 100) + 1;
+      const pct = xp % 100;
+      const streak = s.streak || 0;
+      const best = s.bestStreak || 0;
+      const badges = s.badges || [];
+      const xpfill = document.getElementById('p-xpfill');
+      const pctText = document.getElementById('p-xp');
+      const nextText = document.getElementById('p-xpnext');
+      const levelText = document.getElementById('p-level');
+      const streakText = document.getElementById('p-streak');
+      const bestText = document.getElementById('p-best');
+      if (xpfill) xpfill.style.width = pct + '%';
+      if (pctText) pctText.textContent = String(xp);
+      if (nextText) nextText.textContent = String(100 - pct);
+      if (levelText) levelText.textContent = String(level);
+      if (streakText) streakText.textContent = String(streak) + '🔥';
+      if (bestText) bestText.textContent = String(best);
+    }
+    tick();
+  </script>
+</Base>
+
+<style>
+  .hero { padding: 2.5rem 0 1.5rem; }
+  .head__eyebrow { color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: .08em; font-size: .76rem; display: inline-flex; align-items: center; gap: .3rem; }
+  .head h1 { font-size: clamp(2rem, 4vw, 2.8rem); margin: .4rem 0 .2rem; }
+  .head p { color: var(--ink-soft); }
+
+  /* Player card */
+  .player-card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg);
+    padding: 1.25rem; margin-bottom: 1.25rem; box-shadow: var(--shadow-md);
+    display: flex; flex-direction: column; gap: .75rem;
+    animation: slide-up .5s cubic-bezier(.34,1.56,.64,1);
+  }
+  .player-card__left { display: flex; align-items: center; gap: .75rem; }
+  .player-card__avatar {
+    font-size: 2rem; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center;
+    background: var(--bg-soft); border-radius: var(--radius-md); border: 2px solid var(--line);
+  }
+  .player-card__info { display: flex; flex-direction: column; gap: .2rem; }
+  .player-card__level { font-family: var(--font-display); font-weight: 800; font-size: .85rem; color: var(--ink-soft); }
+  .player-card__xp { display: flex; flex-direction: column; gap: 3px; }
+  .player-card__xpbar { height: 8px; background: var(--surface-2); border-radius: var(--radius-pill); overflow: hidden; }
+  .player-card__xpfill { height: 100%; width: 0; border-radius: var(--radius-pill); background: linear-gradient(90deg, var(--accent), var(--streak)); transition: width .6s cubic-bezier(.4,0,.2,1); }
+  .player-card__xptext { font-size: .72rem; font-weight: 700; color: var(--ink-soft); }
+  .player-card__stats { display: flex; gap: 1.5rem; }
+  .player-card__stat { display: flex; flex-direction: column; align-items: center; gap: .1rem; }
+  .player-card__stat-val { font-family: var(--font-display); font-weight: 800; font-size: 1.1rem; color: var(--ink-hi); }
+  .player-card__stat-label { font-size: .65rem; font-weight: 700; color: var(--ink-faint); text-transform: uppercase; letter-spacing: .04em; }
+
+  /* XP bar */
+  .xpbar { height: 12px; background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--radius-pill); overflow: hidden; margin-bottom: 1.5rem; position: relative; }
+  .xpbar__fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-strong)); border-radius: var(--radius-pill); transition: width .6s ease; }
+  .xpbar__text { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); font-size: .72rem; font-weight: 700; color: var(--ink); }
+
+  /* Milestones */
+  .milestones { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 2rem; }
+
+  /* Trails */
+  .trails { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 3rem; }
+  .trail { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 1.25rem; box-shadow: var(--shadow-sm); transition: box-shadow var(--transition-smooth); }
+  .trail:hover { box-shadow: var(--shadow-md); }
+  .trail__head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
+  .trail__head h2 { font-size: 1.15rem; margin: 0; }
+  .trail__meta { color: var(--ink-soft); font-size: .8rem; margin-top: .15rem; }
+  .trail__pct { color: var(--streak); font-weight: 800; font-size: .85rem; white-space: nowrap; }
+  .stations { list-style: none; padding: 0; margin: 0 0 .75rem; display: grid; grid-template-columns: repeat(5, 1fr); gap: .5rem; }
+  .station__link { display: flex; flex-direction: column; align-items: center; gap: .3rem; text-decoration: none; color: var(--ink-soft); padding: .75rem .5rem; border-radius: var(--radius-md); border: 2px solid var(--line); background: var(--bg); transition: all var(--transition-fast); position: relative; }
+  .station__link:hover { transform: translateY(-2px); border-color: var(--accent); }
+  .station--done .station__link { border-color: var(--accent); background: var(--accent-soft); }
+  .station__dot { width: 14px; height: 14px; border-radius: 50%; border: 3px solid var(--line); background: var(--bg); transition: all var(--transition-fast); }
+  .station--done .station__dot { border-color: var(--accent); background: var(--accent); box-shadow: 0 0 8px rgba(91,33,182,.3); }
+  .station__label { font-size: .78rem; font-weight: 700; }
+  .station__check { font-size: .7rem; }
+  .trail__xp { font-size: .75rem; font-weight: 700; color: var(--ink-faint); }
+  .trail__xp--streak { color: var(--streak); }
+
+  /* Quests */
+  .quests { margin-bottom: 3rem; }
+  .quests__head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+  .quests h2 { margin: 0; }
+  .quest-grid { display: flex; flex-wrap: wrap; gap: .6rem; }
+  .quest { display: flex; align-items: center; gap: .5rem; padding: .5rem .9rem; border-radius: var(--radius-pill); border: 1px solid var(--line); background: var(--surface); font-size: .85rem; font-weight: 600; transition: all var(--transition-fast); }
+  .quest:hover { box-shadow: var(--shadow-sm); }
+  .quest--locked { opacity: .45; filter: grayscale(.4); }
+  .quest__icon { font-size: .95rem; }
+  .quest__check { color: var(--success); font-weight: 800; }
+
+  @media (max-width: 640px) {
+    .trails { grid-template-columns: 1fr; }
+    .stations { grid-template-columns: repeat(5, 1fr); }
+    .player-card__stats { gap: 1rem; }
+  }
+</style>

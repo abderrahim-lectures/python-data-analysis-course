@@ -1,0 +1,14 @@
+# deps
+node_modules/
+
+# build output
+dist/
+
+# astro
+.astro/
+
+# env
+.env
+
+# logs
+npm-debug.log*

@@ -1,0 +1,129 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+const base = import.meta.env.BASE_URL;
+---
+
+<Base title="Learn — PyDA" lang="en" dir="ltr">
+  <section class="hero">
+    <div class="container head">
+      <div class="head__eyebrow"><Icon name="code" size={16} /> Your learning trail</div>
+      <h1>Two tracks. Two routes. Pick your path.</h1>
+      <p>Each lesson earns XP. Streaks multiply it. Badges mark your climb.</p>
+    </div>
+  </section>
+
+  <section class="container">
+    <div class="note">
+      A <strong>trail</strong> is your path through the course. Each week is a station — finish it to light it up and earn <span class="text-gradient">+20 XP</span>.
+      You can switch routes at any time. Keep your streak alive for bonus XP.
+    </div>
+  </section>
+
+  <section class="container">
+    <div class="sections">
+      <a class="sectioncard" href={`${base}learn/python-101`}>
+        <div class="sectioncard__badge">🐍 Track 1</div>
+        <div class="sectioncard__icon">🐍</div>
+        <h2>Python 101</h2>
+        <p>Weeks 1–5. The fundamentals: variables, types, control flow, functions — then a tiny language model.</p>
+        <div class="sectioncard__meta">
+          <span class="badge badge--xp">⚡ 100 XP</span>
+          <span class="badge badge--streak">🔥 5 weeks</span>
+        </div>
+        <div class="routes">
+          <a class="route-pill route-pill--normal" href={`${base}learn/python-101/normal/week-1`}>🌿 Normal — start here</a>
+          <a class="route-pill route-pill--hard" href={`${base}learn/python-101/hard/week-1`}>⚡ Hard</a>
+        </div>
+      </a>
+      <a class="sectioncard" href={`${base}learn/data-analysis`}>
+        <div class="sectioncard__badge sectioncard__badge--streak">📊 Track 2</div>
+        <div class="sectioncard__icon">📊</div>
+        <h2>Pandas &amp; Data</h2>
+        <p>Weeks 6–10. Ship a real notebook: pandas the way a data analyst actually uses it.</p>
+        <div class="sectioncard__meta">
+          <span class="badge badge--xp">⚡ 100 XP</span>
+          <span class="badge badge--streak">🔥 5 weeks</span>
+        </div>
+        <div class="routes">
+          <a class="route-pill route-pill--normal" href={`${base}learn/data-analysis/normal/week-6`}>🌿 Normal</a>
+          <a class="route-pill route-pill--hard" href={`${base}learn/data-analysis/hard/week-6`}>⚡ Hard</a>
+        </div>
+      </a>
+    </div>
+
+    <!-- Rewards preview -->
+    <div class="rewards-preview">
+      <h3>What you'll earn <span class="text-gradient">along the way</span></h3>
+      <div class="rewards-preview__grid">
+        <div class="rpv">
+          <span class="rpv__icon">⚡</span>
+          <span class="rpv__val">+20</span>
+          <span class="rpv__label">XP per lesson</span>
+        </div>
+        <div class="rpv">
+          <span class="rpv__icon">🔥</span>
+          <span class="rpv__val">+5</span>
+          <span class="rpv__label">streak bonus</span>
+        </div>
+        <div class="rpv">
+          <span class="rpv__icon">🏅</span>
+          <span class="rpv__val">11</span>
+          <span class="rpv__label">badges</span>
+        </div>
+        <div class="rpv">
+          <span class="rpv__icon">👑</span>
+          <span class="rpv__val">7</span>
+          <span class="rpv__label">rank tiers</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero { padding: 2.5rem 0 1.5rem; }
+  .head__eyebrow { color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: .08em; font-size: .76rem; display: inline-flex; align-items: center; gap: .3rem; }
+  .head h1 { font-size: clamp(2rem, 4vw, 2.8rem); margin: .4rem 0 .2rem; }
+  .head p { color: var(--ink-soft); }
+
+  .sections { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin: 1.5rem 0 2rem; }
+  .sectioncard {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg);
+    padding: 1.5rem; text-decoration: none; color: var(--ink); display: flex; flex-direction: column; gap: .75rem;
+    box-shadow: var(--shadow-sm); transition: all var(--transition-smooth);
+    position: relative; overflow: hidden;
+  }
+  .sectioncard:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
+  .sectioncard__badge {
+    display: inline-flex; align-items: center; gap: .25rem;
+    padding: .2rem .6rem; border-radius: var(--radius-pill);
+    font-size: .72rem; font-weight: 700; width: fit-content;
+    background: var(--accent-soft); color: var(--accent);
+  }
+  .sectioncard__badge--streak { background: rgba(255,150,0,.1); color: var(--streak); }
+  .sectioncard__icon { font-size: 2rem; }
+  .sectioncard h2 { font-size: 1.2rem; margin: 0; }
+  .sectioncard p { color: var(--ink-soft); font-size: .9rem; margin: 0; line-height: 1.5; }
+  .sectioncard__meta { display: flex; gap: .5rem; flex-wrap: wrap; }
+  .routes { display: flex; gap: .7rem; flex-wrap: wrap; margin-top: auto; }
+  .route-pill { text-decoration: none; padding: .5rem 1rem; border-radius: var(--radius-pill); font-weight: 700; font-size: .85rem; }
+  .route-pill--normal { background: var(--success-soft); color: var(--success); border: 1px solid rgba(88,204,2,.3); }
+  .route-pill--hard { background: var(--bad-soft); color: var(--bad); border: 1px solid rgba(244,63,94,.3); }
+
+  .rewards-preview { padding: 1.5rem 0 2rem; }
+  .rewards-preview h3 { font-size: 1.2rem; margin-bottom: .75rem; }
+  .rewards-preview__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: .75rem; }
+  .rpv {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg);
+    padding: 1rem; text-align: center; box-shadow: var(--shadow-sm);
+    display: flex; flex-direction: column; align-items: center; gap: .2rem;
+    transition: all var(--transition-smooth);
+  }
+  .rpv:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+  .rpv__icon { font-size: 1.25rem; }
+  .rpv__val { font-family: var(--font-display); font-weight: 800; font-size: 1.4rem; color: var(--ink-hi); }
+  .rpv__label { font-size: .72rem; font-weight: 700; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .03em; }
+
+  @media (max-width: 720px) { .sections { grid-template-columns: 1fr; } .rewards-preview__grid { grid-template-columns: repeat(2, 1fr); } }
+</style>
