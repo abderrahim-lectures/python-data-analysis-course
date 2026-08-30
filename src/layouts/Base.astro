@@ -79,6 +79,7 @@ const t = UI_STRINGS[resolveLocale(lang)];
     </script>
   </head>
   <body>
+    <a class="skip-link" href="#main">{t.skipToContent}</a>
     <header class="topnav">
       <div class="container topnav__inner">
         <a class="topnav__brand" href={base}>
@@ -105,7 +106,7 @@ const t = UI_STRINGS[resolveLocale(lang)];
       </div>
     </header>
 
-    <main>
+    <main id="main" tabindex="-1">
       <slot />
     </main>
 

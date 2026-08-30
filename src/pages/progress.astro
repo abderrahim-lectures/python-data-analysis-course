@@ -64,8 +64,10 @@ const daWeeks = [6,7,8,9,10].map((w) => {
     </div>
 
     <!-- XP bar -->
-    <div class="xpbar" role="progressbar" aria-label="XP progress" aria-valuenow={xp.pct} aria-valuemin="0" aria-valuemax="100" id="xpbar">
-      <div class="xpbar__fill" id="xpbar-fill" style="width:{xp.pct}%"></div>
+    <div class="xpbar-wrap">
+      <div class="xpbar" role="progressbar" aria-label="XP progress" aria-valuenow={xp.pct} aria-valuemin="0" aria-valuemax="100" id="xpbar">
+        <div class="xpbar__fill" id="xpbar-fill" style="width:{xp.pct}%"></div>
+      </div>
       <span class="xpbar__text" id="xpbar-text">{xp.xp} XP</span>
     </div>
 
@@ -129,6 +131,9 @@ const daWeeks = [6,7,8,9,10].map((w) => {
         <h2>Quests</h2>
         <span class="badge badge--accent" id="quests-pct">{quests.filter((q) => q.done).length}/{quests.length} done</span>
       </div>
+      <p class="quests__legend">
+        Milestones that unlock on their own as you learn — 🔒 just means not yet.
+      </p>
       <div class="quest-grid" id="quest-grid">
         {quests.map((q) => (
           <div class={`quest${!q.done ? ' quest--locked' : ''}`} data-quest={q.id}>
@@ -144,6 +149,15 @@ const daWeeks = [6,7,8,9,10].map((w) => {
   <!-- Improvement report -->
   <section class="container">
     <div class="report">
+      <div class="report__empty" id="report-empty">
+        <span class="report__empty-icon" aria-hidden="true">📈</span>
+        <h2>Your improvement report</h2>
+        <p>Complete your first lesson and this fills in with your own numbers —
+           accuracy, consistency, and how far you've climbed.</p>
+        <a class="btn btn-primary" href={`${base}learn`}>Start your first lesson</a>
+      </div>
+
+      <div class="report__body" id="report-body" hidden>
       <div class="report__head">
         <h2>📈 Improvement report</h2>
         <span class="report__kda" id="r-kda-label">{gs.kda.label}</span>
@@ -203,6 +217,7 @@ const daWeeks = [6,7,8,9,10].map((w) => {
         In the study, students improved from 41.5% &rarr; 76.9% after the course (N-Gain 0.61).
         Your numbers above are <strong>your own</strong>, computed from everything you've done here.
       </p>
+      </div>
     </div>
   </section>
 
@@ -281,6 +296,14 @@ const daWeeks = [6,7,8,9,10].map((w) => {
         const el = document.getElementById(id) as HTMLElement | null;
         if (el) el.style.width = fmt(pct);
       };
+      // A fresh visitor was shown 0% win rate, 0/0/0 K/D/A and empty bars under
+      // a confident benchmark headline, which reads as broken rather than empty.
+      const hasProgress = xp.xp > 0;
+      const emptyEl = document.getElementById('report-empty');
+      const bodyEl = document.getElementById('report-body');
+      if (emptyEl) emptyEl.hidden = hasProgress;
+      if (bodyEl) bodyEl.hidden = !hasProgress;
+
       set('r-kda-label', gs.kda.label);
       set('r-winrate', fmt(gs.quiz.winRate));
       set('r-winrate-sub', `${gs.quiz.correct}/${gs.quiz.total} correct`);
@@ -332,9 +355,10 @@ const daWeeks = [6,7,8,9,10].map((w) => {
   .player-card__stat-label { font-size: .65rem; font-weight: 700; color: var(--ink-faint); text-transform: uppercase; letter-spacing: .04em; }
 
   /* XP bar */
-  .xpbar { height: 12px; background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--radius-pill); overflow: hidden; margin-bottom: 1.5rem; position: relative; }
+  .xpbar-wrap { display: flex; align-items: center; gap: .6rem; margin-bottom: 1.5rem; }
+  .xpbar { flex: 1; height: 12px; background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--radius-pill); overflow: hidden; position: relative; }
   .xpbar__fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-strong)); border-radius: var(--radius-pill); transition: width .6s ease; }
-  .xpbar__text { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); font-size: .72rem; font-weight: 700; color: var(--ink); }
+  .xpbar__text { flex: none; font-size: .78rem; font-weight: 800; color: var(--ink); font-variant-numeric: tabular-nums; }
 
   /* Milestones */
   .milestones { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 2rem; }
@@ -363,12 +387,13 @@ const daWeeks = [6,7,8,9,10].map((w) => {
   .quests { margin-bottom: 3rem; }
   .quests__head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
   .quests h2 { margin: 0; }
+  .quests__legend { color: var(--ink-soft); font-size: .85rem; margin: .1rem 0 .9rem; }
   .quest-grid { display: flex; flex-wrap: wrap; gap: .6rem; }
   .quest { display: flex; align-items: center; gap: .5rem; padding: .5rem .9rem; border-radius: var(--radius-pill); border: 1px solid var(--line); background: var(--surface); font-size: .85rem; font-weight: 600; transition: all var(--transition-fast); }
   .quest:hover { box-shadow: var(--shadow-sm); }
   .quest--locked { opacity: .45; filter: grayscale(.4); }
   .quest__icon { font-size: .95rem; }
-  .quest__check { color: var(--success); font-weight: 800; display: none; }
+  .quest__check { color: var(--success-text); font-weight: 800; display: none; }
   .quest:not(.quest--locked) .quest__check { display: inline; }
 
   /* Improvement report (merged in from the old /stats page) */
@@ -389,6 +414,11 @@ const daWeeks = [6,7,8,9,10].map((w) => {
   .diag__bar { height: 10px; background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--radius-sm); overflow: hidden; }
   .diag__fill { height: 100%; border-radius: var(--radius-sm); background: linear-gradient(90deg, var(--accent), var(--accent-strong)); transition: width .8s cubic-bezier(.4,0,.2,1); }
   .diag__val { font-weight: 800; font-size: .85rem; text-align: right; color: var(--accent); }
+  .report__empty { text-align: center; padding: 1.5rem 1rem; }
+  .report__empty[hidden] { display: none; }
+  .report__empty-icon { font-size: 2.2rem; display: block; margin-bottom: .4rem; }
+  .report__empty h2 { margin: 0 0 .35rem; font-size: 1.25rem; }
+  .report__empty p { color: var(--ink-soft); margin: 0 auto 1rem; max-width: 46ch; font-size: .9rem; }
   .report__footnote { color: var(--ink-soft); font-size: .82rem; border-top: 1px dashed var(--line); padding-top: .8rem; margin-top: 1rem; }
 
   @media (max-width: 640px) {

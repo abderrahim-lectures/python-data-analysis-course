@@ -247,7 +247,7 @@ const base = import.meta.env.BASE_URL;
   .player-card__level { font-family: var(--font-display); font-weight: 800; font-size: .85rem; color: var(--ink-soft); }
   .player-card__xp { display: flex; flex-direction: column; gap: 3px; }
   .player-card__xpbar { height: 8px; background: var(--surface-2); border-radius: var(--radius-pill); overflow: hidden; }
-  .player-card__xpfill { height: 100%; width: 0; border-radius: var(--radius-pill); background: linear-gradient(90deg, var(--accent), var(--streak)); transition: width .6s cubic-bezier(.4,0,.2,1); }
+  .player-card__xpfill { height: 100%; width: 0; border-radius: var(--radius-pill); background: linear-gradient(90deg, var(--accent), var(--accent-strong)); transition: width .6s cubic-bezier(.4,0,.2,1); }
   .player-card__xptext { font-size: .72rem; font-weight: 700; color: var(--ink-soft); }
   .player-card__actions { display: flex; gap: .5rem; }
 
@@ -261,7 +261,8 @@ const base = import.meta.env.BASE_URL;
     display: flex; flex-direction: column; align-items: center; gap: .25rem;
     transition: all var(--transition-smooth);
   }
-  .gamestrip__item:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+  /* Not clickable — a lift here promises an interaction that does not exist. */
+  .gamestrip__item:hover { box-shadow: var(--shadow-sm); }
   .gamestrip__item--hot { border-color: rgba(255,150,0,.3); box-shadow: var(--shadow-streak-glow); }
   .gamestrip__item--blazing { border-color: rgba(255,80,0,.4); box-shadow: 0 0 24px rgba(255,80,0,.25); }
   .gamestrip__icon { font-size: 1.2rem; }
@@ -278,7 +279,7 @@ const base = import.meta.env.BASE_URL;
     padding: 1.25rem 1rem; text-align: left; box-shadow: var(--shadow-sm);
     transition: all var(--transition-smooth);
   }
-  .reward:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+  .reward:hover { box-shadow: var(--shadow-sm); }
   .reward__icon { font-size: 1.75rem; margin-bottom: .5rem; }
   .reward h3 { font-size: 1rem; margin: 0 0 .3rem; }
   .reward p { color: var(--ink-soft); font-size: .85rem; margin: 0 0 .75rem; line-height: 1.5; }
@@ -286,7 +287,7 @@ const base = import.meta.env.BASE_URL;
   .reward__fill { height: 100%; width: 100%; border-radius: var(--radius-pill); background: linear-gradient(90deg, var(--accent), var(--accent-strong)); }
   .reward__fill--streak { background: linear-gradient(90deg, var(--streak), var(--streak-deep)); }
   .reward__fill--xp { background: linear-gradient(90deg, var(--xp), #f59e0b); }
-  .reward__fill--rank { background: linear-gradient(90deg, var(--accent), var(--streak), var(--success)); }
+  .reward__fill--rank { background: linear-gradient(90deg, var(--accent), var(--accent-strong)); }
 
   /* === HUB === */
   .hub { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.4rem; margin: 1rem 0 3rem; }

@@ -148,7 +148,8 @@ const s = PAGE_STRINGS.en;
     display: flex; flex-direction: column; align-items: center; gap: .2rem;
     transition: all var(--transition-smooth);
   }
-  .rpv:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+  /* Not clickable — no lift. */
+  .rpv:hover { box-shadow: var(--shadow-sm); }
   .rpv__icon { font-size: 1.25rem; }
   .rpv__val { font-family: var(--font-display); font-weight: 800; font-size: 1.4rem; color: var(--ink-hi); }
   .rpv__label { font-size: .72rem; font-weight: 700; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .03em; }

@@ -111,14 +111,39 @@ const lessonId = `${section}/${track}/week-${week}`;
   .lesson-head__week { color: var(--accent); font-weight: 800; letter-spacing: .04em; text-transform: uppercase; font-size: .8rem; }
   .lesson-head h1 { font-size: clamp(1.8rem, 4vw, 2.6rem); margin: .3rem 0; }
   .lesson-head__sub { color: var(--ink-soft); font-size: 1.05rem; }
+  .lesson-head h1 { text-wrap: balance; }
   .lesson-content :global(h2) { margin-top: 2.2rem; }
   .lesson-content :global(.gamified-flourish) { display: block; background: var(--accent-soft); color: var(--accent-strong); border-radius: var(--radius-md); padding: .8rem 1rem; margin: 1rem 0; font-weight: 600; }
   .lesson-nav { display: flex; justify-content: space-between; align-items: center; margin: 2rem 0; gap: 1rem; }
-  .lesson-nav a { text-decoration: none; font-weight: 700; padding: .6rem 1.1rem; border-radius: var(--radius-pill); background: var(--surface); border: 1px solid var(--line); color: var(--ink); box-shadow: var(--shadow-sm); }
-  .lesson-nav__next--done { background: var(--success-soft); color: var(--success); border-color: rgba(88,204,2,.3); }
+  .lesson-nav a {
+    text-decoration: none; font-weight: 700; padding: .6rem 1.1rem; min-height: 40px;
+    border-radius: var(--radius-pill); background: var(--surface); border: 1px solid var(--line);
+    color: var(--ink); box-shadow: var(--shadow-sm); display: inline-flex; align-items: center;
+    transition: transform .1s ease, box-shadow .1s ease, border-color .15s ease, color .15s ease;
+  }
+  .lesson-nav a:hover { transform: translateY(-1px); border-color: var(--accent); color: var(--accent); box-shadow: var(--shadow-md); }
+  .lesson-nav a:active { transform: translateY(1px); box-shadow: var(--shadow-sm); }
+  .lesson-nav .btn { white-space: nowrap; }
+  /* Completed state: same tactile language as every other button, not a flat
+     green slab. A soft success fill + success-deep bottom shadow reads as a
+     fired control, and the check marks the win. */
+  .lesson-nav__done { transition: transform .1s ease, box-shadow .1s ease, background .15s ease, color .15s ease; }
+  .lesson-nav__done.is-done {
+    background: var(--success-soft); color: #2e8b0b;
+    box-shadow: inset 0 0 0 2px rgba(88, 204, 2, .35), var(--shadow-sm);
+  }
+  [data-theme='dark'] .lesson-nav__done.is-done { color: #6ce07f; }
+  .lesson-nav__done.is-done::before { content: '✓ '; font-weight: 900; }
   .route { display: grid; margin: 1.5rem 0 3rem; }
-  .route__card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 1.2rem; text-decoration: none; color: var(--ink); display: flex; flex-direction: column; gap: .3rem; box-shadow: var(--shadow-sm); transition: transform .2s ease, box-shadow .2s ease; }
+  .route__card {
+    background: var(--accent-soft); border: 1px solid rgba(124,58,237,.22);
+    border-inline-start: 4px solid var(--accent); border-radius: var(--radius-lg);
+    padding: 1.2rem; text-decoration: none; color: var(--ink);
+    display: flex; flex-direction: column; gap: .3rem; box-shadow: var(--shadow-sm);
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
   .route__card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+  .route__card strong { color: var(--accent-strong); }
   .route__card small { color: var(--ink-soft); }
   .route__icon { font-size: 1.6rem; }
 </style>

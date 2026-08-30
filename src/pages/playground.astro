@@ -96,4 +96,7 @@ print(greet("world"))
   .pg-warn p { flex: 1 1 22ch; margin: 0; color: var(--ink); font-size: .88rem; }
   .playground-page :global(.cell--big .cell__code) { min-height: 50vh; font-size: 1rem; }
   .playground-page :global(.cell--big .cell__output) { max-height: 30vh; overflow-y: auto; }
+  /* Run/Reset/python cram into one line on narrow viewports; let them wrap. */
+  .playground-page :global(.cell__actions) { flex-wrap: wrap; }
+  .playground-page :global(.cell__actions .btn) { white-space: nowrap; }
 </style>

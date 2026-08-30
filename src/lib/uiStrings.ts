@@ -28,6 +28,7 @@ export interface UiStrings {
     cta: string;
     skip: string;
   };
+  skipToContent: string;
   themeToggleLabel: string;
   mobileNav: {home: string; learn: string; projects: string; playground: string; progress: string};
 }
@@ -56,6 +57,7 @@ export const UI_STRINGS: Record<Locale, UiStrings> = {
       cta: "Let's go!",
       skip: 'Skip',
     },
+    skipToContent: 'Skip to content',
     themeToggleLabel: 'Toggle theme',
     mobileNav: {home: 'Home', learn: 'Learn', projects: 'Projects', playground: 'Playground', progress: 'Progress'},
   },
@@ -82,6 +84,7 @@ export const UI_STRINGS: Record<Locale, UiStrings> = {
       cta: 'لنبدأ ←',
       skip: 'تخطّي',
     },
+    skipToContent: 'تخطَّ إلى المحتوى',
     themeToggleLabel: 'تبديل المظهر',
     mobileNav: {home: 'الرئيسية', learn: 'تعلّم', projects: 'المشاريع', playground: 'التجربة', progress: 'تقدمي'},
   },
@@ -108,6 +111,7 @@ export const UI_STRINGS: Record<Locale, UiStrings> = {
       cta: '¡Vamos!',
       skip: 'Omitir',
     },
+    skipToContent: 'Saltar al contenido',
     themeToggleLabel: 'Cambiar tema',
     mobileNav: {home: 'Inicio', learn: 'Aprender', projects: 'Proyectos', playground: 'Playground', progress: 'Progreso'},
   },
@@ -134,6 +138,7 @@ export const UI_STRINGS: Record<Locale, UiStrings> = {
       cta: 'Allons-y !',
       skip: 'Passer',
     },
+    skipToContent: 'Aller au contenu',
     themeToggleLabel: 'Changer de thème',
     mobileNav: {home: 'Accueil', learn: 'Apprendre', projects: 'Projets', playground: 'Bac à sable', progress: 'Progression'},
   },

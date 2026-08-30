@@ -31,6 +31,7 @@ const slug = entry.slug.replace(/^\/?projects\//, '');
   </div>
 
   <article class="container lesson-content">
+    <h1 class="project-title">{title}</h1>
     <Content />
   </article>
 </Base>
@@ -40,6 +41,7 @@ const slug = entry.slug.replace(/^\/?projects\//, '');
   .crumb a { color: var(--ink-soft); text-decoration: none; }
   .crumb__here { font-weight: 700; color: var(--ink); }
   .hero-art { display: block; width: 100%; height: 140px; border-radius: var(--radius-lg); margin-top: 1rem; box-shadow: var(--shadow-sm); }
+  .project-title { font-size: clamp(1.8rem, 4vw, 2.6rem); margin: 1.2rem 0 .5rem; }
   .lesson-content { padding-bottom: 3rem; }
   .lesson-content :global(h1) { font-size: clamp(1.8rem, 4vw, 2.6rem); margin: 1.2rem 0 .5rem; }
   .lesson-content :global(h2) { margin-top: 2.2rem; }
