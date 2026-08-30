@@ -190,3 +190,47 @@ Using `.value_counts(normalize=True)`, what proportion of students completed the
 - Comparing mean and median is a cheap way to detect skew without plotting anything. What information does this trick *not* give you that an actual histogram (next week) would reveal?
 
 ## ✅ Weekly quiz
+
+<div class="quiz" data-quiz="data-analysis-hard-week-6">
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">1. EDA is best described as:</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">Building a predictive model as fast as possible</button>
+        <button class="quiz-q__opt" data-idx="1">Systematically investigating a dataset's structure and quality before drawing conclusions</button>
+        <button class="quiz-q__opt" data-idx="2">Making as many charts as possible</button>
+        <button class="quiz-q__opt" data-idx="3">Cleaning data only, with no analysis</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="2">
+        <p class="quiz-q__prompt">2. For a categorical column, which method summarizes the distribution of its categories?</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">.describe()</button>
+        <button class="quiz-q__opt" data-idx="1">.mean()</button>
+        <button class="quiz-q__opt" data-idx="2">.value_counts()</button>
+        <button class="quiz-q__opt" data-idx="3">.std()</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">3. Why check count alongside mean when comparing groups?</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">It is not actually useful</button>
+        <button class="quiz-q__opt" data-idx="1">A striking mean based on very few rows deserves less confidence</button>
+        <button class="quiz-q__opt" data-idx="2">count is required syntax for .groupby()</button>
+        <button class="quiz-q__opt" data-idx="3">It converts the mean into a percentage</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="2">
+        <p class="quiz-q__prompt">4. The lesson recommends framing analytical questions:</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">After making all your charts</button>
+        <button class="quiz-q__opt" data-idx="1">Only at the very end of the report</button>
+        <button class="quiz-q__opt" data-idx="2">Before generating charts, to avoid retroactively picking &quot;interesting&quot; patterns</button>
+        <button class="quiz-q__opt" data-idx="3">It does not matter when</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <p class="quiz__summary" data-quiz-summary hidden></p>
+    </div>

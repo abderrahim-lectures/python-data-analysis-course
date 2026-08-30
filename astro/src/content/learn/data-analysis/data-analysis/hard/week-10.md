@@ -182,6 +182,50 @@ Assemble everything from this week's challenges into one continuous written narr
 
 ## ✅ Weekly quiz
 
+<div class="quiz" data-quiz="data-analysis-hard-week-10">
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">1. df[[&quot;math_score&quot;,&quot;reading_score&quot;,&quot;writing_score&quot;]].mean(axis=1) computes:</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">The mean of each column separately</button>
+        <button class="quiz-q__opt" data-idx="1">A row-wise mean across the three columns, one value per student</button>
+        <button class="quiz-q__opt" data-idx="2">The overall mean of the whole DataFrame</button>
+        <button class="quiz-q__opt" data-idx="3">A correlation matrix</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">2. A rigorous EDA report's conclusion should:</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">State findings as proven facts with no caveats</button>
+        <button class="quiz-q__opt" data-idx="1">Include findings, confidence level, and plausible alternative explanations</button>
+        <button class="quiz-q__opt" data-idx="2">Only include charts, no written interpretation</button>
+        <button class="quiz-q__opt" data-idx="3">Avoid mentioning sample sizes</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="2">
+        <p class="quiz-q__prompt">3. Which of these is NOT something this dataset can support, per the lesson?</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">Associations between test prep and scores</button>
+        <button class="quiz-q__opt" data-idx="1">A description of score distributions</button>
+        <button class="quiz-q__opt" data-idx="2">A causal claim that test prep directly causes higher scores</button>
+        <button class="quiz-q__opt" data-idx="3">A comparison of average scores across categories</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">4. The required deliverable this week must include at minimum:</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">Only a correlation heatmap</button>
+        <button class="quiz-q__opt" data-idx="1">Dataset profile, framed questions, correlation analysis, a storytelling chart, and written conclusions</button>
+        <button class="quiz-q__opt" data-idx="2">A machine learning model trained on the data</button>
+        <button class="quiz-q__opt" data-idx="3">Just the raw pandas output with no interpretation</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <p class="quiz__summary" data-quiz-summary hidden></p>
+    </div>
+
 ---
 
 **🎉 You've completed the Pandas & Data Analysis Hard track — and the whole course, if you took Hard/Hard or any combination across both sections.** Head to [My Progress](/progress) to see your badges, and check out the [real-world projects](/docs/projects): install Python for real and build something the playground could never run.

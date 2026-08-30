@@ -163,3 +163,47 @@ For a word that appears in *both* Week 2's unigram `counts` and this week's `big
 - Challenge 6 asks you to compare unigram counts to summed bigram counts. For most words these match, but the very *last* word of a sentence is systematically undercounted by one in the bigram version. Why exactly one, and why only the last word?
 
 ## ✅ Weekly quiz
+
+<div class="quiz" data-quiz="python-101-hard-week-3">
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">1. A bigram is:</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">A single word</button>
+        <button class="quiz-q__opt" data-idx="1">A pair of consecutive words</button>
+        <button class="quiz-q__opt" data-idx="2">The full vocabulary of a corpus</button>
+        <button class="quiz-q__opt" data-idx="3">A probability threshold</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="2">
+        <p class="quiz-q__prompt">2. probs_table[&quot;the&quot;][&quot;cat&quot;] represents:</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">P(the)</button>
+        <button class="quiz-q__opt" data-idx="1">P(cat)</button>
+        <button class="quiz-q__opt" data-idx="2">P(cat | the) — probability of &quot;cat&quot; given the previous word was &quot;the&quot;</button>
+        <button class="quiz-q__opt" data-idx="3">The total count of &quot;the&quot; in the corpus</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">3. What does each inner dict probs_table[word] sum to (approximately)?</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">0</button>
+        <button class="quiz-q__opt" data-idx="1">1</button>
+        <button class="quiz-q__opt" data-idx="2">The vocabulary size</button>
+        <button class="quiz-q__opt" data-idx="3">It varies per word with no fixed total</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">4. Compared to a unigram model, a bigram model:</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">Uses less context (no memory at all)</button>
+        <button class="quiz-q__opt" data-idx="1">Uses one word of previous context</button>
+        <button class="quiz-q__opt" data-idx="2">Uses the entire sentence as context</button>
+        <button class="quiz-q__opt" data-idx="3">Cannot be represented as a dict</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <p class="quiz__summary" data-quiz-summary hidden></p>
+    </div>

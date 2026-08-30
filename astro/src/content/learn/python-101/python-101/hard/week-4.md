@@ -179,6 +179,50 @@ Using `generate_many`, generate 20 candidate sentences from the same start word,
 
 ## ✅ Weekly quiz
 
+<div class="quiz" data-quiz="python-101-hard-week-4">
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">1. What does random.choices(population, weights=weights) do?</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">Always returns the highest-weighted item</button>
+        <button class="quiz-q__opt" data-idx="1">Returns items with probability proportional to their weight</button>
+        <button class="quiz-q__opt" data-idx="2">Returns every item exactly once, in a random order</button>
+        <button class="quiz-q__opt" data-idx="3">Ignores the weights and picks uniformly at random</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="2">
+        <p class="quiz-q__prompt">2. Why does calling generate_text() multiple times with the same start word give different results?</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">It is a bug</button>
+        <button class="quiz-q__opt" data-idx="1">probs_table changes between calls</button>
+        <button class="quiz-q__opt" data-idx="2">sample_next uses random sampling, not a fixed greedy choice</button>
+        <button class="quiz-q__opt" data-idx="3">Python dicts are unordered</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">3. sample_next returns None when:</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">The weights do not sum to 1</button>
+        <button class="quiz-q__opt" data-idx="1">The given word is not a key in probs_table (no known continuation)</button>
+        <button class="quiz-q__opt" data-idx="2">max_words is reached</button>
+        <button class="quiz-q__opt" data-idx="3">random.choices always eventually returns None</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">4. The &quot;greedy&quot; next-word strategy differs from sampling because it:</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">Is faster but otherwise identical</button>
+        <button class="quiz-q__opt" data-idx="1">Always picks the single most likely word, so it is deterministic</button>
+        <button class="quiz-q__opt" data-idx="2">Picks uniformly at random ignoring probabilities</button>
+        <button class="quiz-q__opt" data-idx="3">Only works with unigram models, not bigram models</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <p class="quiz__summary" data-quiz-summary hidden></p>
+    </div>
+
 ## 🎁 Bonus: error handling for a bad start word
 
 <div class="bonus">

@@ -257,3 +257,47 @@ Extend the worked example's tip calculator to also ask how many people are split
 - The augmented assignment `x += 1` and the plain `x = x + 1` produce the same result for numbers. Can you think of a reason a language might still bother providing both forms, rather than requiring everyone to always write out `x = x + 1`?
 
 ## ✅ Weekly quiz
+
+<div class="quiz" data-quiz="python-101-normal-week-1">
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">1. What is the type of the result of 7 / 2 in Python 3?</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">int</button>
+        <button class="quiz-q__opt" data-idx="1">float</button>
+        <button class="quiz-q__opt" data-idx="2">str</button>
+        <button class="quiz-q__opt" data-idx="3">bool</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="2">
+        <p class="quiz-q__prompt">2. What does input() always return, regardless of what the user types?</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">int</button>
+        <button class="quiz-q__opt" data-idx="1">float</button>
+        <button class="quiz-q__opt" data-idx="2">str</button>
+        <button class="quiz-q__opt" data-idx="3">bool</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">3. What does 17 % 5 evaluate to?</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">3</button>
+        <button class="quiz-q__opt" data-idx="1">2</button>
+        <button class="quiz-q__opt" data-idx="2">5</button>
+        <button class="quiz-q__opt" data-idx="3">0</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">4. Which operator tests equality (not assignment)?</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">=</button>
+        <button class="quiz-q__opt" data-idx="1">==</button>
+        <button class="quiz-q__opt" data-idx="2">===</button>
+        <button class="quiz-q__opt" data-idx="3">is</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <p class="quiz__summary" data-quiz-summary hidden></p>
+    </div>

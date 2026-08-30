@@ -190,6 +190,50 @@ If you wanted to add one more student's row to `summary.csv` *without* erasing w
 
 ## ✅ Weekly quiz
 
+<div class="quiz" data-quiz="python-101-normal-week-5">
+      <div class="quiz-q" data-answer="2">
+        <p class="quiz-q__prompt">1. What type is every value read from a CSV file with the csv module, before you convert it?</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">int</button>
+        <button class="quiz-q__opt" data-idx="1">float</button>
+        <button class="quiz-q__opt" data-idx="2">str</button>
+        <button class="quiz-q__opt" data-idx="3">Depends on the column</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">2. What does csv.DictReader give you for each row, compared to csv.reader?</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">A list of strings, same as csv.reader</button>
+        <button class="quiz-q__opt" data-idx="1">A dict keyed by the header column names</button>
+        <button class="quiz-q__opt" data-idx="2">A tuple of ints</button>
+        <button class="quiz-q__opt" data-idx="3">A single string of the whole row</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">3. In sorted(names, key=lambda n: averages[n]), what is the key argument for?</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">It filters out some names</button>
+        <button class="quiz-q__opt" data-idx="1">It tells sorted() what value to sort each item by</button>
+        <button class="quiz-q__opt" data-idx="2">It converts names to numbers permanently</button>
+        <button class="quiz-q__opt" data-idx="3">It reverses the order</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="2">
+        <p class="quiz-q__prompt">4. Which module from Python's standard library was used to read/write CSV files this week?</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">json</button>
+        <button class="quiz-q__opt" data-idx="1">os</button>
+        <button class="quiz-q__opt" data-idx="2">csv</button>
+        <button class="quiz-q__opt" data-idx="3">io</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <p class="quiz__summary" data-quiz-summary hidden></p>
+    </div>
+
 ## 🎁 Bonus: a first taste of classes
 
 <div class="bonus">

@@ -179,3 +179,47 @@ Construct a small DataFrame by hand (not from a CSV) with two columns, `city` an
 - `df.set_index("name")` swaps the default numeric index for a meaningful one. What would go wrong if the `name` column had a duplicate value — could two different students still be told apart afterward?
 
 ## ✅ Weekly quiz
+
+<div class="quiz" data-quiz="data-analysis-normal-week-6">
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">1. A pandas Series is best described as:</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">A 2D table of rows and columns</button>
+        <button class="quiz-q__opt" data-idx="1">A single labeled column of data</button>
+        <button class="quiz-q__opt" data-idx="2">A CSV file on disk</button>
+        <button class="quiz-q__opt" data-idx="3">A Python dict with no labels</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">2. Which function loads a CSV file into a DataFrame?</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">pd.load_csv()</button>
+        <button class="quiz-q__opt" data-idx="1">pd.read_csv()</button>
+        <button class="quiz-q__opt" data-idx="2">pd.DataFrame.open()</button>
+        <button class="quiz-q__opt" data-idx="3">pd.csv()</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">3. df.describe() by default summarizes:</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">Every column, including text</button>
+        <button class="quiz-q__opt" data-idx="1">Only numeric columns</button>
+        <button class="quiz-q__opt" data-idx="2">Only the first row</button>
+        <button class="quiz-q__opt" data-idx="3">Only column names</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">4. df.shape returns:</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">The column names</button>
+        <button class="quiz-q__opt" data-idx="1">A (rows, columns) tuple</button>
+        <button class="quiz-q__opt" data-idx="2">The data types of each column</button>
+        <button class="quiz-q__opt" data-idx="3">The first 5 rows</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <p class="quiz__summary" data-quiz-summary hidden></p>
+    </div>

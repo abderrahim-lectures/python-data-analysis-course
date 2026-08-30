@@ -383,6 +383,27 @@ Sources: [Design and Development of Visual Novel-Based Educational Game...](http
   building it — `RangeError: Maximum call stack size exceeded` — see the
   comment in the file).
 
+- **Weekly quiz content recovered and made interactive** — the "check git
+  history before writing new questions" note above was itself the plan;
+  followed it. Found the original `<WeeklyQuiz questions={[...]}>` JSX data
+  intact in the commits that first wrote each track (`4b41865` python-101
+  normal, `4294e7b` python-101 hard, `4f23887` data-analysis normal,
+  `8008cdd` data-analysis hard) — 4 questions × 20 lessons = 80 real,
+  human-authored questions, never edited after that initial write (so no
+  risk of pulling a stale/superseded version). Extracted with a one-off
+  Node script (`new Function('return ' + arrText)` on the recovered JS
+  object-literal text — safe here since it's this repo's own git history,
+  not external input) and regenerated a native, no-framework interactive
+  quiz block per lesson: `.quiz[data-quiz]` → `.quiz-q` (prompt + option
+  buttons) → click reveals correct/wrong and calls
+  `gameState.recordQuiz(isCorrect)`. New `src/lib/quiz.client.ts`, loaded
+  globally from `Base.astro` alongside the runnable-cell script. This also
+  fixes a second latent bug: `StatsProfile.astro`'s "Win rate / quiz
+  accuracy" stat reads `getQuizProgress()`, which was permanently 0% because
+  nothing on the entire site ever called `recordQuiz()` before now.
+  Directly implements the testing-effect finding from the pedagogy research
+  above, using real content instead of fabricated questions.
+
 ### Known gaps / next steps
 
 1. **i18n content**: only EN lesson content exists in `src/content/learn`.
@@ -395,17 +416,14 @@ Sources: [Design and Development of Visual Novel-Based Educational Game...](http
    cleaned out of the EN copies — check for it and reuse the same
    remark/rehype approach rather than copying broken markup forward. This is
    plan step 2, still not done.
-2. **Docusaurus JSX widgets — partially resolved this session**:
-   `Challenge` and `BonusContent` are now real (native `<details>`/`<div>`
-   conversions, see above) — the ones actually missing are `WeeklyQuiz` and
-   `ProgressCheckbox`. `WeeklyQuiz` is worse than "not built": the question
-   *data* itself is gone (every lesson's `## ✅ Weekly quiz` heading has no
-   content under it, and this predates this session — check git history /
-   the i18n copies before writing new quiz questions from scratch, don't
-   assume they need to be authored fresh). `ProgressCheckbox` was a
-   Docusaurus per-lesson "mark as read" checkbox — likely superseded by
-   `gameState.completeLesson()` already wired into the runnable-cell flow,
-   worth confirming rather than rebuilding.
+2. **Docusaurus JSX widgets — resolved this session** except one:
+   `Challenge`, `BonusContent`, and `WeeklyQuiz` are all now real (native
+   `<details>`/`<div>`/`.quiz` conversions — the quiz one recovered its
+   original question data from git history rather than being rebuilt with
+   fabricated content, see above). Only `ProgressCheckbox` remains — a
+   Docusaurus per-lesson "mark as read" checkbox, likely superseded by
+   `gameState.completeLesson()` already wired into the runnable-cell flow;
+   worth confirming that covers the same need rather than rebuilding it.
 3. **Trail rail — fixed this session**, was more broken than the original
    plan note anticipated: not just the weeks-6..10 numbering (that part was
    already correct in this Astro build), but the entire `/progress` page

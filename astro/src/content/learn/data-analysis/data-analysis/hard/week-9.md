@@ -194,3 +194,47 @@ Save one of this week's finished charts to a PNG file using `plt.savefig`, with 
 - A colorblind-friendly palette costs nothing to use by default. Can you think of other "accessible by default, costs nothing" choices from earlier weeks (axis labels, chart titles, avoiding color as the *only* way to distinguish groups) that follow the same principle?
 
 ## ✅ Weekly quiz
+
+<div class="quiz" data-quiz="data-analysis-hard-week-9">
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">1. Faceting (e.g. sns.relplot with col=...) is used to:</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">Remove outliers automatically</button>
+        <button class="quiz-q__opt" data-idx="1">Add a third (often categorical) dimension via a grid of comparable panels</button>
+        <button class="quiz-q__opt" data-idx="2">Convert numeric columns to categorical</button>
+        <button class="quiz-q__opt" data-idx="3">Compute correlation automatically</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">2. Why should a bar chart's y-axis almost always start at 0?</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">It is a matplotlib requirement</button>
+        <button class="quiz-q__opt" data-idx="1">Starting above 0 visually exaggerates differences between bars</button>
+        <button class="quiz-q__opt" data-idx="2">It makes the chart render faster</button>
+        <button class="quiz-q__opt" data-idx="3">It is only a style preference with no real effect</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">3. sns.barplot, unlike a plain bar chart of raw values, automatically shows:</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">Raw counts only</button>
+        <button class="quiz-q__opt" data-idx="1">The mean per category with error bars</button>
+        <button class="quiz-q__opt" data-idx="2">A correlation matrix</button>
+        <button class="quiz-q__opt" data-idx="3">A boxplot instead of bars</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">4. Explicitly ordering bars by their mean value (rather than alphabetically) mainly improves:</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">The underlying statistics</button>
+        <button class="quiz-q__opt" data-idx="1">Readability — the pattern becomes immediately visible</button>
+        <button class="quiz-q__opt" data-idx="2">Nothing — order does not affect interpretation</button>
+        <button class="quiz-q__opt" data-idx="3">The correlation coefficient</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <p class="quiz__summary" data-quiz-summary hidden></p>
+    </div>

@@ -182,3 +182,47 @@ Write your own function that takes a score and returns `"Pass"` or `"Fail"` base
 - `.apply()` can run *any* Python function, including ones with side effects (like printing, or writing to a file) — not just ones that return a transformed value. Why might running code with side effects inside `.apply()` be a bad idea, given you don't control exactly how many times or in what order pandas might call your function internally?
 
 ## ✅ Weekly quiz
+
+<div class="quiz" data-quiz="data-analysis-normal-week-8">
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">1. Which method counts missing values per column?</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">df.count()</button>
+        <button class="quiz-q__opt" data-idx="1">df.isna().sum()</button>
+        <button class="quiz-q__opt" data-idx="2">df.dropna()</button>
+        <button class="quiz-q__opt" data-idx="3">df.fillna()</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">2. pd.to_numeric(col, errors=&quot;coerce&quot;) does what with a value it cannot convert?</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">Raises an exception immediately</button>
+        <button class="quiz-q__opt" data-idx="1">Turns it into NaN</button>
+        <button class="quiz-q__opt" data-idx="2">Leaves it as the original string</button>
+        <button class="quiz-q__opt" data-idx="3">Deletes that row</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">3. Why use df[&quot;col&quot;].str.lower() instead of df[&quot;col&quot;].lower()?</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">They are identical, just different style</button>
+        <button class="quiz-q__opt" data-idx="1">.str is required to apply string methods element-wise across a Series</button>
+        <button class="quiz-q__opt" data-idx="2">.lower() only works on DataFrames, not Series</button>
+        <button class="quiz-q__opt" data-idx="3">.str.lower() is faster for numeric columns</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">4. df.dropna(subset=[&quot;quiz1&quot;]) removes rows where:</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">Any column is missing a value</button>
+        <button class="quiz-q__opt" data-idx="1">Specifically quiz1 is missing a value</button>
+        <button class="quiz-q__opt" data-idx="2">quiz1 is below 60</button>
+        <button class="quiz-q__opt" data-idx="3">The row index is missing</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <p class="quiz__summary" data-quiz-summary hidden></p>
+    </div>

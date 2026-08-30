@@ -198,3 +198,47 @@ Using `pd.crosstab` with `normalize="index"`, check whether `lunch` type and `te
 - Adding `hue` to a scatter plot is one way to bring in a third variable. What would you lose, compared to Week 9's faceting (separate side-by-side panels), if you tried to color-code a fourth *and* fifth variable onto the same single chart?
 
 ## ✅ Weekly quiz
+
+<div class="quiz" data-quiz="data-analysis-hard-week-8">
+      <div class="quiz-q" data-answer="2">
+        <p class="quiz-q__prompt">1. A Pearson correlation coefficient of -0.9 indicates:</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">No relationship at all</button>
+        <button class="quiz-q__opt" data-idx="1">A strong positive relationship</button>
+        <button class="quiz-q__opt" data-idx="2">A strong negative relationship</button>
+        <button class="quiz-q__opt" data-idx="3">That one variable causes the other</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">2. The ice cream sales / drowning incidents example illustrates:</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">A perfect causal relationship</button>
+        <button class="quiz-q__opt" data-idx="1">Correlation without causation, both driven by a third factor (weather)</button>
+        <button class="quiz-q__opt" data-idx="2">A negative correlation</button>
+        <button class="quiz-q__opt" data-idx="3">A chart-reading mistake, not a statistical concept</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">3. A grouped boxplot (numeric variable split by category) shows more than a groupby mean because it also reveals:</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">The exact sample size only</button>
+        <button class="quiz-q__opt" data-idx="1">The spread/outliers within each group, not just the average</button>
+        <button class="quiz-q__opt" data-idx="2">Causation between the variables</button>
+        <button class="quiz-q__opt" data-idx="3">It shows exactly the same information as a bar chart of means</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">4. What does alpha=0.5 do in a matplotlib scatter plot?</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">Changes the marker shape</button>
+        <button class="quiz-q__opt" data-idx="1">Makes points semi-transparent so overlapping points are visible</button>
+        <button class="quiz-q__opt" data-idx="2">Filters out half the data points</button>
+        <button class="quiz-q__opt" data-idx="3">Sets the correlation threshold</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <p class="quiz__summary" data-quiz-summary hidden></p>
+    </div>

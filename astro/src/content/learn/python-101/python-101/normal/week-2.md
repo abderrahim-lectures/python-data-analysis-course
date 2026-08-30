@@ -237,3 +237,47 @@ Write a condition using `and` that checks whether a variable `age` is between 18
 - The multiplication-table example nests a `for` inside a `for`. What would nesting a `while` inside a `for` look like, and can you think of a real task (not just a made-up example) where that combination would be the natural choice?
 
 ## ✅ Weekly quiz
+
+<div class="quiz" data-quiz="python-101-normal-week-2">
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">1. What does range(5) produce?</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">1,2,3,4,5</button>
+        <button class="quiz-q__opt" data-idx="1">0,1,2,3,4</button>
+        <button class="quiz-q__opt" data-idx="2">0,1,2,3,4,5</button>
+        <button class="quiz-q__opt" data-idx="3">5,4,3,2,1</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="2">
+        <p class="quiz-q__prompt">2. Which statement immediately exits the nearest enclosing loop?</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">continue</button>
+        <button class="quiz-q__opt" data-idx="1">return</button>
+        <button class="quiz-q__opt" data-idx="2">break</button>
+        <button class="quiz-q__opt" data-idx="3">pass</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">3. What determines which lines belong to an if block in Python?</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">Curly braces {}</button>
+        <button class="quiz-q__opt" data-idx="1">Indentation</button>
+        <button class="quiz-q__opt" data-idx="2">Semicolons</button>
+        <button class="quiz-q__opt" data-idx="3">Parentheses</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="2">
+        <p class="quiz-q__prompt">4. A while loop with a condition that never becomes False will:</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">Raise a SyntaxError immediately</button>
+        <button class="quiz-q__opt" data-idx="1">Run once and stop</button>
+        <button class="quiz-q__opt" data-idx="2">Loop forever (infinite loop)</button>
+        <button class="quiz-q__opt" data-idx="3">Be automatically converted to a for loop</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <p class="quiz__summary" data-quiz-summary hidden></p>
+    </div>

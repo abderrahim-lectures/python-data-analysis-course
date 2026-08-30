@@ -215,6 +215,50 @@ Write a function `stats(numbers)` that returns three values at once — the mini
 
 ## ✅ Weekly quiz
 
+<div class="quiz" data-quiz="python-101-normal-week-4">
+      <div class="quiz-q" data-answer="2">
+        <p class="quiz-q__prompt">1. What does a function return if it has no explicit return statement?</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">0</button>
+        <button class="quiz-q__opt" data-idx="1">An empty string</button>
+        <button class="quiz-q__opt" data-idx="2">None</button>
+        <button class="quiz-q__opt" data-idx="3">A SyntaxError</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">2. In def greet(name, greeting=&quot;Hello&quot;), what is &quot;Hello&quot;?</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">A required argument</button>
+        <button class="quiz-q__opt" data-idx="1">A default value used when greeting is not supplied</button>
+        <button class="quiz-q__opt" data-idx="2">A global variable</button>
+        <button class="quiz-q__opt" data-idx="3">A return value</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">3. A variable created inside a function is, by default:</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">Global</button>
+        <button class="quiz-q__opt" data-idx="1">Local to that function</button>
+        <button class="quiz-q__opt" data-idx="2">Shared across all functions</button>
+        <button class="quiz-q__opt" data-idx="3">A constant</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="2">
+        <p class="quiz-q__prompt">4. What does greet(name=&quot;Sara&quot;) use to pass the argument?</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">Positional argument</button>
+        <button class="quiz-q__opt" data-idx="1">Default parameter</button>
+        <button class="quiz-q__opt" data-idx="2">Keyword argument</button>
+        <button class="quiz-q__opt" data-idx="3">Global scope</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <p class="quiz__summary" data-quiz-summary hidden></p>
+    </div>
+
 ## 🎁 Bonus: handling errors with try/except
 
 <div class="bonus">

@@ -174,3 +174,47 @@ Take your Challenge 1 result (average `math_score` by `gender`), turn it into a 
 - A groupby-aggregate result uses the grouped column as its index instead of a plain integer index. What practical difference does that make the first time you try to use `.iloc[0]` on it, versus on an ordinary DataFrame?
 
 ## ✅ Weekly quiz
+
+<div class="quiz" data-quiz="data-analysis-normal-week-9">
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">1. df.groupby(&quot;lunch&quot;) on its own (no aggregation attached) does what?</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">Immediately prints group means</button>
+        <button class="quiz-q__opt" data-idx="1">Describes how to split rows into groups, computing nothing yet</button>
+        <button class="quiz-q__opt" data-idx="2">Raises an error</button>
+        <button class="quiz-q__opt" data-idx="3">Deletes rows with missing lunch values</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="2">
+        <p class="quiz-q__prompt">2. Which merge type keeps only rows whose key exists in both DataFrames?</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">outer</button>
+        <button class="quiz-q__opt" data-idx="1">left</button>
+        <button class="quiz-q__opt" data-idx="2">inner</button>
+        <button class="quiz-q__opt" data-idx="3">cross</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">3. df.groupby(&quot;lunch&quot;).agg({&quot;math_score&quot;: &quot;mean&quot;, &quot;reading_score&quot;: &quot;mean&quot;}) computes:</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">One combined average across both columns</button>
+        <button class="quiz-q__opt" data-idx="1">The mean of each listed column, separately, within each group</button>
+        <button class="quiz-q__opt" data-idx="2">A merge between math_score and reading_score</button>
+        <button class="quiz-q__opt" data-idx="3">The overall mean, ignoring groups</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="2">
+        <p class="quiz-q__prompt">4. A DataFrame .merge() is conceptually most similar to:</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">A boolean mask filter</button>
+        <button class="quiz-q__opt" data-idx="1">Sorting by a column</button>
+        <button class="quiz-q__opt" data-idx="2">A database-style join on a shared key</button>
+        <button class="quiz-q__opt" data-idx="3">Dropping missing values</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <p class="quiz__summary" data-quiz-summary hidden></p>
+    </div>

@@ -255,3 +255,47 @@ Using the `students` list of dicts from the worked example, find the name of the
 - Strings are immutable but lists are mutable, even though both support indexing and slicing the same way. What practical difference does that make the first time you try to "edit" a string in place versus a list?
 
 ## ✅ Weekly quiz
+
+<div class="quiz" data-quiz="python-101-normal-week-3">
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">1. What does scores[1:3] return for scores = [10, 20, 30, 40, 50]?</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">[10, 20]</button>
+        <button class="quiz-q__opt" data-idx="1">[20, 30]</button>
+        <button class="quiz-q__opt" data-idx="2">[20, 30, 40]</button>
+        <button class="quiz-q__opt" data-idx="3">[10, 20, 30]</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="2">
+        <p class="quiz-q__prompt">2. Which collection type cannot contain duplicate values?</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">list</button>
+        <button class="quiz-q__opt" data-idx="1">tuple</button>
+        <button class="quiz-q__opt" data-idx="2">set</button>
+        <button class="quiz-q__opt" data-idx="3">dict values</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">3. What is the safest way to look up a key that might not exist in a dict?</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">d[key]</button>
+        <button class="quiz-q__opt" data-idx="1">d.get(key, default)</button>
+        <button class="quiz-q__opt" data-idx="2">d.find(key)</button>
+        <button class="quiz-q__opt" data-idx="3">key in d[...]</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="3">
+        <p class="quiz-q__prompt">4. Which type is immutable (cannot be changed after creation)?</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">list</button>
+        <button class="quiz-q__opt" data-idx="1">dict</button>
+        <button class="quiz-q__opt" data-idx="2">set</button>
+        <button class="quiz-q__opt" data-idx="3">tuple</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <p class="quiz__summary" data-quiz-summary hidden></p>
+    </div>

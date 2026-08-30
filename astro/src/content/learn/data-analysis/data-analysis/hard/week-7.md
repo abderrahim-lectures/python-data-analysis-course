@@ -177,3 +177,47 @@ Create a single boxplot showing all three score columns (`math_score`, `reading_
 - If a colleague showed you only a 50-bin histogram of a variable and claimed to see "three distinct clusters," what would you want to check before trusting that claim, given what you now know about bin-count sensitivity?
 
 ## ✅ Weekly quiz
+
+<div class="quiz" data-quiz="data-analysis-hard-week-7">
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">1. A histogram is the right chart choice for:</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">A categorical column's category counts</button>
+        <button class="quiz-q__opt" data-idx="1">A numeric column's distribution shape</button>
+        <button class="quiz-q__opt" data-idx="2">Comparing two DataFrames</button>
+        <button class="quiz-q__opt" data-idx="3">Showing missing value counts</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">2. A boxplot's box represents:</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">The minimum and maximum only</button>
+        <button class="quiz-q__opt" data-idx="1">The 25th percentile, median, and 75th percentile</button>
+        <button class="quiz-q__opt" data-idx="2">The mean and standard deviation</button>
+        <button class="quiz-q__opt" data-idx="3">Every individual data point</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="2">
+        <p class="quiz-q__prompt">3. Why do two distributions with the same mean and std still need a chart to compare properly?</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">They cannot actually have the same mean and std</button>
+        <button class="quiz-q__opt" data-idx="1">Charts are always more accurate than numbers</button>
+        <button class="quiz-q__opt" data-idx="2">The same mean/std can come from very differently-shaped distributions</button>
+        <button class="quiz-q__opt" data-idx="3">pandas requires a chart before computing statistics</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="2">
+        <p class="quiz-q__prompt">4. The right chart for a categorical column's value_counts() is:</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">A histogram</button>
+        <button class="quiz-q__opt" data-idx="1">A boxplot</button>
+        <button class="quiz-q__opt" data-idx="2">A bar chart</button>
+        <button class="quiz-q__opt" data-idx="3">A scatter plot</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <p class="quiz__summary" data-quiz-summary hidden></p>
+    </div>

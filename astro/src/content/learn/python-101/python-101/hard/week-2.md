@@ -169,3 +169,47 @@ Using the `ranked` list from the Zipf's law example, compute `count * rank` for 
 - Our corpus only has 20 sentences, so most words are hapax legomena (appear exactly once). What do you think happens to the *proportion* of hapax legomena as a corpus grows much larger — does it shrink toward zero, or does Zipf's law suggest it stays surprisingly high even for huge corpora?
 
 ## ✅ Weekly quiz
+
+<div class="quiz" data-quiz="python-101-hard-week-2">
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">1. For a valid probability distribution over words, what must sum(probs.values()) equal (approximately)?</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">0</button>
+        <button class="quiz-q__opt" data-idx="1">1</button>
+        <button class="quiz-q__opt" data-idx="2">The vocabulary size</button>
+        <button class="quiz-q__opt" data-idx="3">The total word count</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="2">
+        <p class="quiz-q__prompt">2. A &quot;unigram&quot; model estimates word probability based on:</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">The previous 2 words</button>
+        <button class="quiz-q__opt" data-idx="1">The entire sentence so far</button>
+        <button class="quiz-q__opt" data-idx="2">No context at all — just overall frequency</button>
+        <button class="quiz-q__opt" data-idx="3">The next word only</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="2">
+        <p class="quiz-q__prompt">3. What probability does the unigram model assign to a word never seen in the corpus?</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">1.0</button>
+        <button class="quiz-q__opt" data-idx="1">A very small positive number</button>
+        <button class="quiz-q__opt" data-idx="2">0 (it is simply absent from the table)</button>
+        <button class="quiz-q__opt" data-idx="3">It raises an error at model-building time</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">4. counts.get(word, 0) + 1 is used instead of counts[word] + 1 because:</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">It runs faster</button>
+        <button class="quiz-q__opt" data-idx="1">It avoids a KeyError the first time a word is seen</button>
+        <button class="quiz-q__opt" data-idx="2">It only works for numbers</button>
+        <button class="quiz-q__opt" data-idx="3">They behave identically, it is just style</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <p class="quiz__summary" data-quiz-summary hidden></p>
+    </div>

@@ -194,3 +194,47 @@ Find the *most common* sentence length in the corpus (in words) — not the aver
 - Given the frequentist idea that "probability ≈ count / total," what do you think happens to your probability estimates as the corpus grows from 20 sentences to 20,000? Would you expect the estimates to become more or less trustworthy, and why?
 
 ## ✅ Weekly quiz
+
+<div class="quiz" data-quiz="python-101-hard-week-1">
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">1. A language model estimates which of the following?</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">The exact next word with 100% certainty</button>
+        <button class="quiz-q__opt" data-idx="1">The probability of the next word given the previous words</button>
+        <button class="quiz-q__opt" data-idx="2">Whether a sentence is grammatically correct</button>
+        <button class="quiz-q__opt" data-idx="3">The total number of words in a document</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="2">
+        <p class="quiz-q__prompt">2. Why does tokenize() call .lower() before .split()?</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">It makes the code run faster</button>
+        <button class="quiz-q__opt" data-idx="1">It ensures csv.DictReader works correctly</button>
+        <button class="quiz-q__opt" data-idx="2">So &quot;The&quot; and &quot;the&quot; are counted as the same word later</button>
+        <button class="quiz-q__opt" data-idx="3">It is required by Python syntax</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">3. What does load_corpus() return?</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">A single long string</button>
+        <button class="quiz-q__opt" data-idx="1">A list of strings, one per sentence</button>
+        <button class="quiz-q__opt" data-idx="2">A dict mapping words to counts</button>
+        <button class="quiz-q__opt" data-idx="3">A CSV file object</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="2">
+        <p class="quiz-q__prompt">4. What does &quot;vocabulary size&quot; mean for a corpus?</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">The total word count including repeats</button>
+        <button class="quiz-q__opt" data-idx="1">The number of sentences</button>
+        <button class="quiz-q__opt" data-idx="2">The number of distinct words</button>
+        <button class="quiz-q__opt" data-idx="3">The average sentence length</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <p class="quiz__summary" data-quiz-summary hidden></p>
+    </div>

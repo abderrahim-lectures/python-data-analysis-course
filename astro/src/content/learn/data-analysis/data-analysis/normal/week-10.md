@@ -197,6 +197,50 @@ Redo the Pclass survival-rate groupby, but this time include both the mean *and*
 
 ## ✅ Weekly quiz
 
+<div class="quiz" data-quiz="data-analysis-normal-week-10">
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">1. For a 0/1 (survived/did not) column, what does .mean() within a group represent?</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">The total number of survivors</button>
+        <button class="quiz-q__opt" data-idx="1">The survival rate (proportion) within that group</button>
+        <button class="quiz-q__opt" data-idx="2">The most common value</button>
+        <button class="quiz-q__opt" data-idx="3">Nothing meaningful — mean only works on continuous data</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">2. Why fill missing Age with the median rather than the mean in this lesson?</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">The mean cannot be computed on a column with missing values</button>
+        <button class="quiz-q__opt" data-idx="1">Median is less sensitive to a skewed distribution with outliers</button>
+        <button class="quiz-q__opt" data-idx="2">They always give identical results</button>
+        <button class="quiz-q__opt" data-idx="3">pandas does not support .mean() with NaN present</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">3. df.groupby([&quot;Pclass&quot;, &quot;Sex&quot;]) groups rows by:</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">Pclass only, ignoring Sex</button>
+        <button class="quiz-q__opt" data-idx="1">Every unique combination of Pclass and Sex</button>
+        <button class="quiz-q__opt" data-idx="2">Sex only, ignoring Pclass</button>
+        <button class="quiz-q__opt" data-idx="3">Neither — this raises an error</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">4. The general EDA pattern this week repeatedly used was:</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">Merge, then sort</button>
+        <button class="quiz-q__opt" data-idx="1">Filter/group, then aggregate</button>
+        <button class="quiz-q__opt" data-idx="2">Drop all missing data, then plot</button>
+        <button class="quiz-q__opt" data-idx="3">Convert every column to string</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <p class="quiz__summary" data-quiz-summary hidden></p>
+    </div>
+
 ---
 
 **🎉 You've completed the Pandas & Data Analysis Normal track — and the whole course, if you took Normal in both sections.** Head to [My Progress](/progress) to see your badges, and check out the [real-world projects](/docs/projects): install Python for real and build something the playground could never run.

@@ -170,6 +170,50 @@ Using `.loc` with a boolean mask *and* a column list in the same call, select ju
 
 ## ✅ Weekly quiz
 
+<div class="quiz" data-quiz="data-analysis-normal-week-7">
+      <div class="quiz-q" data-answer="2">
+        <p class="quiz-q__prompt">1. Which operator combines two boolean masks in pandas (not Python and/or)?</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">and / or</button>
+        <button class="quiz-q__opt" data-idx="1">&amp;&amp; / ||</button>
+        <button class="quiz-q__opt" data-idx="2">&amp; / |</button>
+        <button class="quiz-q__opt" data-idx="3">both work identically</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">2. .loc selects by:</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">Position only</button>
+        <button class="quiz-q__opt" data-idx="1">Label</button>
+        <button class="quiz-q__opt" data-idx="2">Random access</button>
+        <button class="quiz-q__opt" data-idx="3">Column dtype</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">3. df[df[&quot;score&quot;] &gt;= 60] works because df[&quot;score&quot;] &gt;= 60 produces:</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">A single True/False value</button>
+        <button class="quiz-q__opt" data-idx="1">A boolean Series, used to filter rows</button>
+        <button class="quiz-q__opt" data-idx="2">A new DataFrame with one column</button>
+        <button class="quiz-q__opt" data-idx="3">A SyntaxError</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">4. df[[&quot;name&quot;, &quot;quiz1&quot;]] (double brackets) returns:</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">A Series</button>
+        <button class="quiz-q__opt" data-idx="1">A DataFrame with those two columns</button>
+        <button class="quiz-q__opt" data-idx="2">A single value</button>
+        <button class="quiz-q__opt" data-idx="3">A list of column names</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <p class="quiz__summary" data-quiz-summary hidden></p>
+    </div>
+
 = 60] works because df["score"] >= 60 produces:',
       options: [
         'A single True/False value',

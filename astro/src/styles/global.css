@@ -604,6 +604,24 @@ button { font-family: inherit; cursor: pointer; }
 .lesson-section--challenges .challenge:first-of-type { margin-top: 0; }
 .lesson-section--challenges .challenge:last-of-type { margin-bottom: 0; }
 
+/* === Weekly quiz (quiz.client.ts) === */
+.quiz-q { margin: 0 0 1.5rem; }
+.quiz-q:last-of-type { margin-bottom: .5rem; }
+.quiz-q__prompt { font-weight: 700; margin: 0 0 .6rem; }
+.quiz-q__options { display: flex; flex-direction: column; gap: .5rem; }
+.quiz-q__opt {
+  text-align: start; padding: .6rem .9rem; border-radius: var(--radius-md);
+  border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+  cursor: pointer; font-size: .92rem; transition: all var(--transition-fast);
+}
+.quiz-q__opt:hover:not(:disabled) { border-color: var(--accent); background: var(--accent-soft); }
+.quiz-q--answered .quiz-q__opt { cursor: default; pointer-events: none; }
+.quiz-q__opt--correct { border-color: var(--success); background: var(--success-soft); color: var(--success); font-weight: 700; }
+.quiz-q__opt--wrong { border-color: var(--bad); background: var(--bad-soft); color: var(--bad); }
+.quiz-q__feedback { margin: .5rem 0 0; font-size: .88rem; font-weight: 700; color: var(--bad); }
+.quiz-q__feedback--correct { color: var(--success); }
+.quiz__summary { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--line); font-weight: 800; }
+
 /* === KaTeX: keep math legible on both themes and scrollable on mobile === */
 .katex-display { overflow-x: auto; overflow-y: hidden; padding: .5rem 0; }
 .katex { color: var(--ink-hi); }

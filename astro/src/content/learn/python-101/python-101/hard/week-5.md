@@ -211,6 +211,50 @@ Write a function `generate_batch(probs_table, start_word, temperatures, max_word
 
 ## ✅ Weekly quiz
 
+<div class="quiz" data-quiz="python-101-hard-week-5">
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">1. A temperature below 1.0 (e.g. 0.5) makes generated text:</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">More random/chaotic</button>
+        <button class="quiz-q__opt" data-idx="1">More predictable/repetitive, closer to greedy</button>
+        <button class="quiz-q__opt" data-idx="2">Exactly identical to temperature 1.0</button>
+        <button class="quiz-q__opt" data-idx="3">Impossible to generate (raises an error)</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="2">
+        <p class="quiz-q__prompt">2. What does dict.setdefault(key, {}) do if key is already present?</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">Overwrites the existing value with {}</button>
+        <button class="quiz-q__opt" data-idx="1">Raises a KeyError</button>
+        <button class="quiz-q__opt" data-idx="2">Leaves the existing value unchanged</button>
+        <button class="quiz-q__opt" data-idx="3">Deletes the key</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">3. This week's timing exercise on a larger corpus is meant to demonstrate:</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">That Python is always too slow to be useful</button>
+        <button class="quiz-q__opt" data-idx="1">A concrete, felt motivation for why vectorized tools like numpy/pandas exist</button>
+        <button class="quiz-q__opt" data-idx="2">That bigram models are faster than unigram models</button>
+        <button class="quiz-q__opt" data-idx="3">How to fix slow code using multithreading</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <div class="quiz-q" data-answer="1">
+        <p class="quiz-q__prompt">4. if __name__ == &quot;__main__&quot;: is used to:</p>
+        <div class="quiz-q__options">
+        <button class="quiz-q__opt" data-idx="0">Declare the main class of the program</button>
+        <button class="quiz-q__opt" data-idx="1">Mark code that should run only when the file is executed directly</button>
+        <button class="quiz-q__opt" data-idx="2">Import the standard library</button>
+        <button class="quiz-q__opt" data-idx="3">Speed up the script</button>
+        </div>
+        <p class="quiz-q__feedback" hidden></p>
+      </div>
+      <p class="quiz__summary" data-quiz-summary hidden></p>
+    </div>
+
 ## 🎁 Bonus: packaging the model as a class
 
 <div class="bonus">
