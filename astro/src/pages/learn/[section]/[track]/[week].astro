@@ -8,7 +8,7 @@ import Base from '../../../../layouts/Base.astro';
 export async function getStaticPaths() {
   const entries = await getCollection('learn');
   return entries
-    .filter((e) => e.data.track && e.data.week)
+    .filter((e) => !/^(ar|es|fr)\//.test(e.slug) && e.data.track && e.data.week)
     .map((entry) => {
       const parts = entry.slug.split('/'); // e.g. python-101/python-101/normal/week-1
       const week = parts[parts.length - 1];
@@ -29,7 +29,7 @@ const base = import.meta.env.BASE_URL;
 
 const allLessons = await getCollection('learn');
 const siblings = allLessons
-  .filter((e) => e.data.section === section && e.data.track === track && typeof e.data.week === 'number')
+  .filter((e) => !/^(ar|es|fr)\//.test(e.slug) && e.data.section === section && e.data.track === track && typeof e.data.week === 'number')
   .sort((a, b) => (a.data.week ?? 0) - (b.data.week ?? 0));
 const idx = siblings.findIndex((e) => e.slug === entry.slug);
 const prev = idx > 0 ? siblings[idx - 1] : null;

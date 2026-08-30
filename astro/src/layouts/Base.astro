@@ -22,11 +22,11 @@ const {
 } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const ogImage = image ? new URL(image, Astro.site) : new URL('og-default.png', Astro.site);
-// es/fr have no ported pages yet (see plan/astro-rebuild.md) — omit them from
-// the switcher rather than link to a 404. Re-add once those locales have content.
 const locales = [
   {code: 'en', label: 'EN', href: () => base},
   {code: 'ar', label: 'عربي', href: () => `${base}ar/learn`},
+  {code: 'es', label: 'ES', href: () => `${base}es/learn`},
+  {code: 'fr', label: 'FR', href: () => `${base}fr/learn`},
 ];
 const base = import.meta.env.BASE_URL;
 ---

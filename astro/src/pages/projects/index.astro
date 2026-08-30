@@ -4,7 +4,8 @@ import Base from '../../layouts/Base.astro';
 import Icon from '../../components/Icon.astro';
 
 const base = import.meta.env.BASE_URL;
-const projects = (await getCollection('projects')).sort((a, b) => a.data.title.localeCompare(b.data.title));
+const projects = (await getCollection('projects', ({slug}) => !/^(ar|es|fr)\//.test(slug)))
+  .sort((a, b) => a.data.title.localeCompare(b.data.title));
 ---
 
 <Base

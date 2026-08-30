@@ -9,7 +9,7 @@ export async function getStaticPaths() {
   const entries = await getCollection('learn');
   const sections = new Map<string, typeof entries>();
   for (const e of entries) {
-    if (!e.data.section) continue;
+    if (!e.data.section || /^(ar|es|fr)\//.test(e.slug)) continue;
     const list = sections.get(e.data.section) ?? [];
     list.push(e);
     sections.set(e.data.section, list);
@@ -25,7 +25,7 @@ const {section, lessons} = Astro.props;
 const base = import.meta.env.BASE_URL;
 
 const indexEntry = (await getCollection('learn')).find(
-  (e) => e.slug.endsWith(`${section}/index`) || e.slug.endsWith(`${section}/${section}/index`)
+  (e) => !/^(ar|es|fr)\//.test(e.slug) && (e.slug.endsWith(`${section}/index`) || e.slug.endsWith(`${section}/${section}/index`))
 );
 const title = indexEntry?.data.title ?? section;
 const description = indexEntry?.data.description ?? `${section} lessons.`;

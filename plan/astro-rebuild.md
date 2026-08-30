@@ -404,18 +404,100 @@ Sources: [Design and Development of Visual Novel-Based Educational Game...](http
   Directly implements the testing-effect finding from the pedagogy research
   above, using real content instead of fabricated questions.
 
+## i18n content port — ar/es/fr (2026-08-30, later same session)
+
+**Plan step 2 is done.** Ported all 153 content files (51 per locale ×
+ar/es/fr) from `i18n/{locale}/docusaurus-plugin-content-docs/current/**` into
+`astro/src/content/{learn,projects}/<locale>/**`, reusing the exact
+Docusaurus-JSX-cleanup approach this session already built and validated for
+EN (see "Cleaned up real leftover Docusaurus/MDX JSX debris" above) — the
+i18n source had the *same* debris, confirmed before porting rather than
+assumed. One-off port script: `stripImports` → `fixClassName` (JSX
+`className=` → HTML `class=`) → `fixChallenges` (note: the i18n source still
+had the *original*, well-formed `<Challenge id="..." answer={<>X</>}>Y</Challenge>`
+JSX — cleaner than the EN copies' already-mangled `</>}>` remnant, so this
+needed a different regex than the EN fix, not the same one reused verbatim)
+→ `fixBonusContent` → `fixStepChecklist` → `fixWeeklyQuiz` (same
+`questions={[...]}` extraction as the EN quiz recovery, but these are the
+*original translated* questions, not an English fallback) →
+`stripSelfClosingTags` for `ProgressCheckbox`/`ProjectProgressCheckbox`/
+`ProjectPublishedDate`/`ProjectGreeting`/`TrackSelector`/`ProjectChooser`/
+`ProjectsListingJsonLd` (all stripped in the EN port too, confirmed by
+grepping the EN astro content for them first — none present).
+
+**New routes** (parallel to the EN ones, not a unification — see the comment
+in the `[locale]` lesson route file for why): `src/pages/[locale]/learn/index.astro`,
+`.../[section]/index.astro`, `.../[section]/[track]/[week].astro`,
+`src/pages/[locale]/projects/index.astro`, `.../[...slug].astro`. `dir="rtl"`
+only for `ar`; `lang={locale}` everywhere. Lesson `lessonId` (used for
+`gameState.completeLesson()`/XP) is locale-agnostic
+(`${section}/${track}/week-${week}`) — progress is shared across languages
+for the same lesson, not tracked per-locale, which seems like the right call
+(a learner switching language mid-course shouldn't lose progress) but flag
+if that turns out to be wrong.
+
+Removed the old hand-written `src/pages/ar/**` proof-of-concept pages (now
+superseded by the real ported content) and updated the topnav locale
+switcher to link `es`/`fr` to `${base}${locale}/learn` alongside `ar`
+(previously omitted since they had no content — see the earlier note about
+that, now stale).
+
+**Two real routing bugs found and fixed while wiring this up** — the EN
+routes' `getStaticPaths` (`learn/[section]/[track]/[week].astro`,
+`learn/[section]/index.astro`, `projects/[...slug].astro`,
+`projects/index.astro`) queried `getCollection('learn')` /
+`getCollection('projects')` without excluding the newly-added locale
+entries. Since section/track/week values are identical across locales
+(e.g. every locale has a `python-101`/`normal`/week `1`), this silently
+either (a) generated colliding EN routes that risked serving the wrong
+locale's content depending on array order, or (b) in `projects/[...slug].astro`,
+where the slug param comes straight from `entry.slug` and locale entries
+don't match the `^projects/` strip regex, actually did leak: it briefly
+built `/projects/es/wordle-clone/` etc. — locale projects nested under the
+*English* projects path — before the fix. All four EN route files now
+explicitly filter out `!/^(ar|es|fr)\//.test(slug)`. **If you add a 4th
+locale, this filter needs the new code added in all four places** (no
+single shared source of truth for "which slug prefixes are locales" right
+now — worth extracting into one constant if a 5th locale ever shows up,
+not worth the abstraction for four call sites today).
+
+**Astro gotcha hit twice while building the `[locale]` routes**: a
+module-level `const LOCALES = [...]` referenced inside `getStaticPaths`
+throws `LOCALES is not defined` at build time — Astro isolates/bundles
+`getStaticPaths` separately from the rest of the component module in a way
+that drops sibling top-level consts. Every `getStaticPaths` in this repo
+now either declares its own locale list inline or uses the regex literal
+directly — don't hoist it back out to module scope without testing a build.
+
+Verified: `astro build` green (215 pages, up from 58), zero leftover JSX
+debris across the whole `dist/`, zero broken internal links (same 5 known
+`_astro/*.css` false positives as every prior crawl), and one locale
+(`ar`) visually confirmed end-to-end in a real screenshot — full RTL
+mirroring (nav, breadcrumb, text direction) with code/math staying LTR
+correctly inside the RTL flow, active-locale highlighting in the switcher,
+and the admonition/quiz/challenge styling all working on translated
+content. `es`/`fr` were verified by HTTP 200 + correct translated
+`<title>` only, not screenshotted — same code path as `ar` minus the RTL
+branch, so lower risk, but worth a visual spot-check before considering
+this fully done.
+
+**Not done as part of this pass**: UI chrome (nav labels, footer, hero
+copy, onboarding modal text) is still English-only for ar/es/fr — only
+*content* was ported. Docusaurus's own `i18n/{locale}/docusaurus-theme-classic/{navbar,footer}.json`
+and `code.json` have the translated UI strings ready to pull from if that's
+wanted next.
+
 ### Known gaps / next steps
 
-1. **i18n content**: only EN lesson content exists in `src/content/learn`.
-   `ar/es/fr` still only have the one hand-written static page each
-   (`src/pages/ar/learn/...`) — no content-collection-driven locale routing
-   yet. 156 translated markdown files sit in `i18n/{ar,es,fr}/` unported.
-   **Before porting them**: they almost certainly contain the same
-   Docusaurus JSX debris (`</>}>`, `<StepChecklistItem>`, `<BonusContent>`,
-   leftover `import ... from '@site/...'` lines) that this session found and
-   cleaned out of the EN copies — check for it and reuse the same
-   remark/rehype approach rather than copying broken markup forward. This is
-   plan step 2, still not done.
+1. **i18n content — done**: ar/es/fr lesson + project content is ported and
+   routed (see "i18n content port" section above for the full writeup —
+   route filtering gotchas, the Astro `getStaticPaths` module-scope trap,
+   what's verified vs. not). What's left of the original plan step 2: UI
+   chrome (nav/footer/hero copy) is still English-only for all three
+   locales — content is translated, the site frame around it isn't. The
+   translated strings already exist in
+   `i18n/{locale}/docusaurus-theme-classic/{navbar,footer}.json` and
+   `code.json` if picking this up.
 2. **Docusaurus JSX widgets — resolved this session** except one:
    `Challenge`, `BonusContent`, and `WeeklyQuiz` are all now real (native
    `<details>`/`<div>`/`.quiz` conversions — the quiz one recovered its

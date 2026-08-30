@@ -4,10 +4,12 @@ import Base from '../../layouts/Base.astro';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects');
-  return projects.map((entry) => ({
-    params: {slug: entry.slug.replace(/^\/?projects\//, '')},
-    props: {entry},
-  }));
+  return projects
+    .filter((entry) => !/^(ar|es|fr)\//.test(entry.slug))
+    .map((entry) => ({
+      params: {slug: entry.slug.replace(/^\/?projects\//, '')},
+      props: {entry},
+    }));
 }
 
 interface Props { entry: CollectionEntry<'projects'> }
