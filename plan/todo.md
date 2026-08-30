@@ -438,3 +438,40 @@ Picked up unclaimed translation-verify item, which surfaced a real bug.
 ### Hand back to Claude (none needed) — self-contained on content/link layer.
 ### Edge note: the rarer `/docs/python-101/...` + `/docs/data-analysis/...` week links
 ### (6 refs across 4 locales incl. EN index pages + ml-classifier) are also rewritten/resolving.
+
+---
+
+## Session 2026-08-30 (Claude, 4th pass) — migration link rot @claude
+
+Ran a link-integrity scan over the **built** site (`dist/**/*.html`), which no
+earlier pass had done. Found 20 broken internal links, all migration fallout.
+
+- [x] **The four course CSVs were never shipped.** They lived in Docusaurus's
+      `static/datasets/` and the migration didn't move them to `public/`.
+      Weeks 5 and 10 of *both tracks in all four locales* instruct learners to
+      load `titanic.csv` / `students-normal.csv` / `students-performance.csv` /
+      `slm-corpus.csv` — and there was nothing to download. Restored from the
+      pre-migration commit, verified byte-identical to the
+      `jupyterlite-config/files/` copies.
+- [x] **`pathname://` prefix** — a Docusaurus-only escape hatch that Astro
+      renders literally, so those links would have 404'd even with the files
+      present. Rewritten in 16 content files.
+- [x] **`/credits` never existed in Astro.** `src/pages/credits.tsx` wasn't
+      ported, so 8 lesson pages linked to a 404 — and it's the *dataset
+      attribution* page, the one link that really shouldn't rot. Rebuilt in all
+      4 locales (`/credits`, `/ar/المصادر`, `/es/creditos`, `/fr/credits`),
+      locale content now links to its own translation. Dropped the stale
+      JupyterLite entry (that runtime is gone; it's Pyodide now) and kept the
+      precise wording that the bundled CSVs are *synthetic files modelled on*
+      the Kaggle schemas, not the Kaggle data.
+- [x] `tests/unit/links.test.ts` (17 checks) so none of this can regress.
+
+**Result: 0 broken internal links across 219 pages.** Suite now 137 unit +
+34 e2e + a11y + contrast + responsive, `astro check` 0 errors.
+
+### Suggested for whoever goes next
+- [ ] The same scan only covers *internal* links. **External** links (Kaggle,
+      Pyodide, GitHub, the Colab/Binder/Kaggle badges) are unverified — a
+      link-checker pass over outbound URLs would be a genuinely new angle.
+- [ ] No performance audit exists yet (bundle size, LCP, the Pyodide CDN
+      fetch). Also untouched: structured data / JSON-LD for SEO.
