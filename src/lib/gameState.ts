@@ -65,44 +65,62 @@ export function loadState(): PDAState { return read(); }
 
 export function saveState(s: PDAState): void { write(s); }
 
-export function addXP(lessonId: string): number {
-  const s = read();
-  const wasComplete = s.lessonsCompleted[lessonId];
-  s.lastActive = today();
-
-  // streak logic
-  if (s.lastActive === today() && s.lastActive !== '') {
-    // same day — no change
-  } else if (s.lastActive === yesterday()) {
+// Advance the daily streak, then stamp today. Must read lastActive BEFORE
+// overwriting it — comparing it to today() after assignment always matches,
+// which silently pinned every learner's streak at 0.
+function bumpStreak(s: PDAState): void {
+  const prev = s.lastActive;
+  if (prev === today()) {
+    if (s.streak === 0) s.streak = 1;   // first activity ever, today
+  } else if (prev === yesterday()) {
     s.streak += 1;
   } else {
     s.streak = 1;
   }
+  s.lastActive = today();
   s.bestStreak = Math.max(s.bestStreak, s.streak);
+}
 
-  if (!wasComplete) {
-    s.lessonsCompleted[lessonId] = true;
-    const base = XP_PER_LESSON;
-    const bonus = s.streak >= 3 ? STREAK_BONUS : 0;
-    s.xp += base + bonus;
-    markQuest(s, 'first-run', 'First Run');
-    markQuest(s, `completed-${lessonId}`, `Lesson complete`);
-    markQuest(s, 'first-lesson', 'First Step');
-    markQuest(s, `track-${lessonId.split('-')[0]}`, 'Track starter');
-  }
+function awardLesson(s: PDAState, lessonId: string): void {
+  if (s.lessonsCompleted[lessonId]) return;
+  s.lessonsCompleted[lessonId] = true;
+  s.xp += XP_PER_LESSON + (s.streak >= 3 ? STREAK_BONUS : 0);
+  markQuest(s, 'first-lesson', 'First Step');
+  markQuest(s, `completed-${lessonId}`, 'Lesson complete');
+  markQuest(s, `track-${lessonId.split('/')[0]}`, 'Track starter');
+}
+
+// Streak, XP and track-completion quests have no other award site — without
+// this pass they stay locked forever no matter how much the learner does.
+function evaluateMilestones(s: PDAState): void {
+  if (s.streak >= 3) markQuest(s, 'streak-3', '3-day streak');
+  if (s.streak >= 7) markQuest(s, 'streak-7', '7-day streak');
+  if (s.streak >= 14) markQuest(s, 'streak-14', '14-day streak');
+  if (s.xp >= 100) markQuest(s, 'xp-100', '100 XP');
+  if (s.xp >= 500) markQuest(s, 'xp-500', '500 XP');
+
+  const doneIn = (section: string, weeks: number[]) =>
+    weeks.every(w => s.lessonsCompleted[`${section}/normal/week-${w}`] || s.lessonsCompleted[`${section}/hard/week-${w}`]);
+  if (doneIn('python-101', [1, 2, 3, 4, 5])) markQuest(s, 'all-python', 'Python 101 done');
+  if (doneIn('data-analysis', [6, 7, 8, 9, 10])) markQuest(s, 'all-data', 'Data Analysis done');
+}
+
+export function addXP(lessonId: string): number {
+  const s = read();
+  bumpStreak(s);
+  markQuest(s, 'first-run', 'First Run');
+  awardLesson(s, lessonId);
   s.lessonsRun[lessonId] = true;
+  evaluateMilestones(s);
   write(s);
   return s.xp;
 }
 
 export function completeLesson(lessonId: string): number {
   const s = read();
-  s.lastActive = today();
-  if (!s.lessonsCompleted[lessonId]) {
-    s.lessonsCompleted[lessonId] = true;
-    s.xp += XP_PER_LESSON + (s.streak >= 3 ? STREAK_BONUS : 0);
-    markQuest(s, `completed-${lessonId}`, 'Lesson complete');
-  }
+  bumpStreak(s);
+  awardLesson(s, lessonId);
+  evaluateMilestones(s);
   write(s);
   return s.xp;
 }

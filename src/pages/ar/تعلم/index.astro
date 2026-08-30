@@ -65,7 +65,7 @@ const alternates = {
   .head__eyebrow { color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: .08em; font-size: .76rem; display: inline-flex; align-items: center; gap: .3rem; }
   .head h1 { font-size: clamp(2rem, 4vw, 2.8rem); margin: .4rem 0 .2rem; }
   .head p { color: var(--ink-soft); }
-  .sections { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin: 1.5rem 0 3rem; }
+  .sections { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 1.25rem; margin: 1.5rem 0 3rem; }
   .sectioncard {
     background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg);
     padding: 1.5rem; display: flex; flex-direction: column; gap: .75rem;

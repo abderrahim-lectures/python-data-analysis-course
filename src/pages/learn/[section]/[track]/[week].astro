@@ -4,6 +4,7 @@
 // proof-of-concept page (which stays as a redirect target via the same slug).
 import {getCollection, type CollectionEntry} from 'astro:content';
 import Base from '../../../../layouts/Base.astro';
+import {PAGE_STRINGS} from '../../../../lib/pageStrings';
 
 export async function getStaticPaths() {
   const entries = await getCollection('learn');
@@ -35,10 +36,11 @@ const idx = siblings.findIndex((e) => e.slug === entry.slug);
 const prev = idx > 0 ? siblings[idx - 1] : null;
 const next = idx >= 0 && idx < siblings.length - 1 ? siblings[idx + 1] : null;
 const otherTrack = track === 'normal' ? 'hard' : 'normal';
+const ps = PAGE_STRINGS['en'];
 const lessonId = `${section}/${track}/week-${week}`;
 ---
 
-<Base title={`${title} — PyDA`} description={description} lang="en" dir="ltr">
+<Base title={`${title} — PyDA Course`} description={description} lang="en" dir="ltr">
   <nav class="crumb container">
     <a href={`${base}learn`}>Learn</a> <span>/</span>
     <a href={`${base}learn/${section}`}>{section}</a> <span>/</span>
@@ -62,7 +64,9 @@ const lessonId = `${section}/${track}/week-${week}`;
         : <span />}
       {next
         ? <a class="lesson-nav__next" href={`${base}learn/${section}/${track}/week-${next.data.week}`}>Week {next.data.week} →</a>
-        : <a class="lesson-nav__next lesson-nav__next--done" data-mark-complete href="#">Mark complete ✓</a>}
+        : <span />}
+      <button class="btn btn-soft lesson-nav__done" data-mark-complete
+        data-label-done={ps.completed}>{ps.markComplete}</button>
     </div>
 
     <div class="route">
@@ -76,15 +80,26 @@ const lessonId = `${section}/${track}/week-${week}`;
 </Base>
 
 <script>
-  import {completeLesson} from '../../../../lib/gameState';
+  import {completeLesson, isLessonComplete} from '../../../../lib/gameState';
   const article = document.querySelector('[data-lesson-id]');
   const id = article?.getAttribute('data-lesson-id');
-  document.querySelector('[data-mark-complete]')?.addEventListener('click', (e) => {
+  const btn = document.querySelector('[data-mark-complete]') as HTMLButtonElement | null;
+
+  const markDone = () => {
+    if (!btn) return;
+    btn.textContent = btn.dataset.labelDone ?? 'Completed';
+    btn.classList.add('is-done');
+    btn.disabled = true;
+  };
+
+  if (id && isLessonComplete(id)) markDone();
+
+  btn?.addEventListener('click', (e) => {
     e.preventDefault();
-    if (id) {
-      completeLesson(id);
-      document.dispatchEvent(new CustomEvent('lesson:complete'));
-    }
+    if (!id) return;
+    completeLesson(id);
+    markDone();
+    document.dispatchEvent(new CustomEvent('lesson:complete'));
   });
 </script>
 

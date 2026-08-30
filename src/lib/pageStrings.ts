@@ -21,10 +21,11 @@ export const PAGE_STRINGS: Record<Locale, {
   projectsEyebrow: string;
   projectsH1: string;
   projectsLead: string;
-  optionalUngraded: string;
+  markComplete: string;
+  completed: string;
 }> = {
   en: {
-    learnHubTitle: 'Learn — PyDA',
+    learnHubTitle: 'Learn — PyDA Course',
     learnHubDescription: 'Two tracks, two routes: Python 101 and Data Analysis. Pick your path and start earning XP.',
     learnHubEyebrow: 'Your learning trail',
     learnHubH1: 'Two tracks. Two routes. Pick your path.',
@@ -35,15 +36,17 @@ export const PAGE_STRINGS: Record<Locale, {
     seeAllWeeks: 'See all 5 weeks →',
     track1: 'Track 1',
     track2: 'Track 2',
-    projectsTitle: 'Real-World Projects — PyDA',
+    projectsTitle: 'Real-World Projects — PyDA Course',
     projectsDescription: 'Optional, ungraded projects that take you from the in-browser playground to real Python.',
     projectsEyebrow: 'Beyond the course',
     projectsH1: 'Real-World Projects',
     projectsLead: 'Optional, ungraded builds that graduate you from the browser playground to real Python.',
     optionalUngraded: '🎯 Optional · ungraded',
+    markComplete: 'Mark complete ✓',
+    completed: 'Completed ✓',
   },
   ar: {
-    learnHubTitle: 'تعلّم — PyDA',
+    learnHubTitle: 'تعلّم — PyDA Course',
     learnHubDescription: 'مساران، طريقان: بايثون 101 وتحليل البيانات. اختر طريقك وابدأ بكسب نقاط الخبرة.',
     learnHubEyebrow: 'مسار تعلّمك',
     learnHubH1: 'مساران. طريقان. اختر طريقك.',
@@ -54,15 +57,17 @@ export const PAGE_STRINGS: Record<Locale, {
     seeAllWeeks: 'عرض كل الأسابيع الخمسة ←',
     track1: 'المسار 1',
     track2: 'المسار 2',
-    projectsTitle: 'مشاريع واقعية — PyDA',
+    projectsTitle: 'مشاريع واقعية — PyDA Course',
     projectsDescription: 'مشاريع اختيارية غير مقيَّمة تنقلك من ملعب المتصفح إلى بايثون حقيقية.',
     projectsEyebrow: 'ما بعد الدورة',
     projectsH1: 'مشاريع واقعية',
     projectsLead: 'مشاريع اختيارية غير مقيَّمة تُخرّجك من ملعب المتصفح إلى بايثون حقيقية.',
     optionalUngraded: '🎯 اختياري · غير مقيَّم',
+    markComplete: 'تحديد كمكتمل ✓',
+    completed: 'مكتمل ✓',
   },
   es: {
-    learnHubTitle: 'Aprender — PyDA',
+    learnHubTitle: 'Aprender — PyDA Course',
     learnHubDescription: 'Dos pistas, dos rutas: Python 101 y Análisis de Datos. Elige tu camino y empieza a ganar XP.',
     learnHubEyebrow: 'Tu ruta de aprendizaje',
     learnHubH1: 'Dos pistas. Dos rutas. Elige tu camino.',
@@ -73,15 +78,17 @@ export const PAGE_STRINGS: Record<Locale, {
     seeAllWeeks: 'Ver las 5 semanas →',
     track1: 'Pista 1',
     track2: 'Pista 2',
-    projectsTitle: 'Proyectos del Mundo Real — PyDA',
+    projectsTitle: 'Proyectos del Mundo Real — PyDA Course',
     projectsDescription: 'Proyectos opcionales, sin calificar, que te llevan del playground del navegador a Python real.',
     projectsEyebrow: 'Más allá del curso',
     projectsH1: 'Proyectos del Mundo Real',
     projectsLead: 'Builds opcionales, sin calificar, que te gradúan del playground del navegador a Python real.',
     optionalUngraded: '🎯 Opcional · sin calificar',
+    markComplete: 'Marcar como completado ✓',
+    completed: 'Completado ✓',
   },
   fr: {
-    learnHubTitle: 'Apprendre — PyDA',
+    learnHubTitle: 'Apprendre — PyDA Course',
     learnHubDescription: 'Deux parcours, deux routes : Python 101 et Analyse de Données. Choisis ta voie et gagne des XP.',
     learnHubEyebrow: 'Ton parcours',
     learnHubH1: 'Deux parcours. Deux routes. Choisis ta voie.',
@@ -92,11 +99,13 @@ export const PAGE_STRINGS: Record<Locale, {
     seeAllWeeks: 'Voir les 5 semaines →',
     track1: 'Parcours 1',
     track2: 'Parcours 2',
-    projectsTitle: 'Projets Concrets — PyDA',
+    projectsTitle: 'Projets Concrets — PyDA Course',
     projectsDescription: 'Projets optionnels, non notés, qui te font passer du bac à sable du navigateur à du vrai Python.',
     projectsEyebrow: 'Au-delà du cours',
     projectsH1: 'Projets Concrets',
     projectsLead: 'Des builds optionnels, non notés, qui te font passer du bac à sable du navigateur à du vrai Python.',
     optionalUngraded: '🎯 Optionnel · non noté',
+    markComplete: 'Marquer comme terminé ✓',
+    completed: 'Terminé ✓',
   },
 };

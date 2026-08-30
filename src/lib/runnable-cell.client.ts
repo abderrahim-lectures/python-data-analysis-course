@@ -2,6 +2,8 @@
 // Hydrates every `.cell[data-runnable]` on the page (whether hand-authored via
 // <RunnableCell> or generated from ```python fences by rehype-runnable-python)
 // with a Pyodide-backed Run button. Loaded once per page from Base.astro.
+import {usesJsBridge} from './pythonGuard.ts';
+
 const PYODIDE_VERSION = '0.26.4';
 const INDEX = `https://cdn.jsdelivr.net/pyodide/v${PYODIDE_VERSION}/full/`;
 let pyPromise: Promise<any> | null = null;
@@ -17,7 +19,12 @@ async function py() {
 function initCell(cell: Element) {
   if (cell.hasAttribute('data-hydrated')) return;
   cell.setAttribute('data-hydrated', '1');
-  const lessonId = (cell as HTMLElement).dataset.lesson ?? '';
+  // Cells generated from markdown ```python fences carry no data-lesson, so
+  // fall back to the lesson the page itself declares — otherwise running code
+  // in a lesson awards nothing.
+  const lessonId = (cell as HTMLElement).dataset.lesson
+    || document.querySelector('[data-lesson-id]')?.getAttribute('data-lesson-id')
+    || '';
   let awarded = false;
   const run = cell.querySelector('[data-run]') as HTMLButtonElement | null;
   const expand = cell.querySelector('[data-expand]') as HTMLButtonElement | null;
@@ -42,6 +49,7 @@ function initCell(cell: Element) {
   run.addEventListener('click', async () => {
     // Read live, in case the learner edited the code in place before running.
     const src = codeEl.textContent ?? '';
+    if (cell.hasAttribute('data-untrusted')) return;
     out.hidden = false;
     clear.hidden = false;
     lines.innerHTML = '';
@@ -51,6 +59,10 @@ function initCell(cell: Element) {
     engine.setStderr({batched: (s: string) => appendLine('err', s)});
     engine.setStdin({stdin: () => window.prompt('') ?? ''});
     try {
+      if (usesJsBridge(src)) {
+        appendLine('err', "Blocked: the 'js' and 'pyodide' bridge modules are disabled here.");
+        return;
+      }
       await engine.loadPackagesFromImports(src);
       await engine.runPythonAsync(src);
     } catch (e) {

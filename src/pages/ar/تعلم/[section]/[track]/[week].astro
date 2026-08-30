@@ -6,6 +6,7 @@
 // still drive gameState's lessonId — see the comment below).
 import {getCollection, type CollectionEntry} from 'astro:content';
 import Base from '../../../../../layouts/Base.astro';
+import {PAGE_STRINGS} from '../../../../../lib/pageStrings';
 import {weekHref, learnHref, TRACK_WORDS} from '../../../../../lib/routeSegments';
 
 const locale = 'ar' as const;
@@ -45,6 +46,7 @@ const otherTrack = track === 'normal' ? 'hard' : 'normal';
 // Same lessonId shape as the EN route (locale-agnostic, and independent of
 // which word the URL uses for the track) — progress/XP is shared across
 // locales for the same lesson, not tracked per-language or per-URL-word.
+const ps = PAGE_STRINGS['ar'];
 const lessonId = `${section}/${track}/week-${week}`;
 const alternates = {
   en: `learn/${section}/${track}/week-${week}`,
@@ -54,7 +56,7 @@ const alternates = {
 };
 ---
 
-<Base title={`${title} — PyDA`} description={description} lang={locale} dir={dir} alternates={alternates}>
+<Base title={`${title} — PyDA Course`} description={description} lang={locale} dir={dir} alternates={alternates}>
   <nav class="crumb container">
     <a href={learnHref(locale, base)}>{section}</a> <span>/</span>
     <a href={learnHref(locale, base, section)}>{section}</a> <span>/</span>
@@ -78,7 +80,9 @@ const alternates = {
         : <span />}
       {next
         ? <a class="lesson-nav__next" href={weekHref(locale, base, section, track, next.data.week!)}>Week {next.data.week} →</a>
-        : <a class="lesson-nav__next lesson-nav__next--done" data-mark-complete href="#">Mark complete ✓</a>}
+        : <span />}
+      <button class="btn btn-soft lesson-nav__done" data-mark-complete
+        data-label-done={ps.completed}>{ps.markComplete}</button>
     </div>
 
     <div class="route">
@@ -92,15 +96,26 @@ const alternates = {
 </Base>
 
 <script>
-  import {completeLesson} from '../../../../../lib/gameState';
+  import {completeLesson, isLessonComplete} from '../../../../../lib/gameState';
   const article = document.querySelector('[data-lesson-id]');
   const id = article?.getAttribute('data-lesson-id');
-  document.querySelector('[data-mark-complete]')?.addEventListener('click', (e) => {
+  const btn = document.querySelector('[data-mark-complete]') as HTMLButtonElement | null;
+
+  const markDone = () => {
+    if (!btn) return;
+    btn.textContent = btn.dataset.labelDone ?? 'Completed';
+    btn.classList.add('is-done');
+    btn.disabled = true;
+  };
+
+  if (id && isLessonComplete(id)) markDone();
+
+  btn?.addEventListener('click', (e) => {
     e.preventDefault();
-    if (id) {
-      completeLesson(id);
-      document.dispatchEvent(new CustomEvent('lesson:complete'));
-    }
+    if (!id) return;
+    completeLesson(id);
+    markDone();
+    document.dispatchEvent(new CustomEvent('lesson:complete'));
   });
 </script>
 

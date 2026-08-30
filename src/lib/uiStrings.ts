@@ -48,7 +48,7 @@ export const UI_STRINGS: Record<Locale, UiStrings> = {
         `Copyright © ${year} Abderrahim Adrabi. Code MIT-licensed, content CC-BY 4.0. v${version}`,
     },
     onboarding: {
-      title: 'Welcome to PyDA',
+      title: 'Welcome to PyDA Course',
       sub: 'Learn Python, earn XP, build streaks. Zero boring.',
       steps: ['Run code cells & earn ⚡ XP', 'Build streaks 🔥 for bonus XP', 'Complete quests & unlock badges'],
       cta: "Let's go!",
@@ -73,7 +73,7 @@ export const UI_STRINGS: Record<Locale, UiStrings> = {
         `حقوق النشر © ${year} Abderrahim Adrabi. الكود مرخّص بموجب MIT، والمحتوى بموجب CC-BY 4.0. v${version}`,
     },
     onboarding: {
-      title: 'أهلًا بك في PyDA',
+      title: 'أهلًا بك في PyDA Course',
       sub: 'تعلّم بايثون، اكسب نقاط خبرة، وابنِ سلسلة تقدّم يومية. بلا ملل.',
       steps: ['شغّل خلايا الكود واكسب ⚡ نقاط خبرة', 'ابنِ سلسلة تقدّم 🔥 لنقاط إضافية', 'أكمل المهام وافتح الأوسمة'],
       cta: 'لنبدأ ←',
@@ -98,7 +98,7 @@ export const UI_STRINGS: Record<Locale, UiStrings> = {
         `Copyright © ${year} Abderrahim Adrabi. Código con licencia MIT, contenido con licencia CC-BY 4.0. v${version}`,
     },
     onboarding: {
-      title: 'Bienvenido a PyDA',
+      title: 'Bienvenido a PyDA Course',
       sub: 'Aprende Python, gana XP, construye rachas. Cero aburrimiento.',
       steps: ['Ejecuta celdas de código y gana ⚡ XP', 'Construye rachas 🔥 para XP extra', 'Completa misiones y desbloquea insignias'],
       cta: '¡Vamos!',
@@ -123,7 +123,7 @@ export const UI_STRINGS: Record<Locale, UiStrings> = {
         `Copyright © ${year} Abderrahim Adrabi. Code sous licence MIT, contenu sous licence CC-BY 4.0. v${version}`,
     },
     onboarding: {
-      title: 'Bienvenue sur PyDA',
+      title: 'Bienvenue sur PyDA Course',
       sub: 'Apprends Python, gagne des XP, construis des séries. Zéro ennui.',
       steps: ['Exécute des cellules de code et gagne ⚡ des XP', 'Construis des séries 🔥 pour des XP bonus', 'Termine des quêtes et débloque des badges'],
       cta: 'Allons-y !',

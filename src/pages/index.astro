@@ -95,25 +95,25 @@ const base = import.meta.env.BASE_URL;
           <div class="reward__icon">⚡</div>
           <h3>+20 XP per lesson</h3>
           <p>Each completed lesson fills your XP bar. Climb from Bronze to Grandmaster.</p>
-          <div class="reward__bar"><div class="reward__fill" style="--p:20"></div></div>
+          <div class="reward__bar"><div class="reward__fill"></div></div>
         </div>
         <div class="reward">
           <div class="reward__icon">🔥</div>
           <h3>+5 XP streak bonus</h3>
           <p>3+ day streak? Extra XP on every lesson. Keep it hot — fire intensity rises with consistency.</p>
-          <div class="reward__bar"><div class="reward__fill reward__fill--streak" style="--p:5"></div></div>
+          <div class="reward__bar"><div class="reward__fill reward__fill--streak"></div></div>
         </div>
         <div class="reward">
           <div class="reward__icon">🏅</div>
           <h3>11 unlockable badges</h3>
           <p>From "First Step" to "14-day streak" — each badge marks a real milestone in your progress.</p>
-          <div class="reward__bar"><div class="reward__fill reward__fill--xp" style="--p:11"></div></div>
+          <div class="reward__bar"><div class="reward__fill reward__fill--xp"></div></div>
         </div>
         <div class="reward">
           <div class="reward__icon">👑</div>
           <h3>7 rank tiers</h3>
           <p>Bronze → Silver → Gold → Platinum → Diamond → Master → Grandmaster. Earned, not given.</p>
-          <div class="reward__bar"><div class="reward__fill reward__fill--rank" style="--p:7"></div></div>
+          <div class="reward__bar"><div class="reward__fill reward__fill--rank"></div></div>
         </div>
       </div>
     </div>
@@ -283,7 +283,7 @@ const base = import.meta.env.BASE_URL;
   .reward h3 { font-size: 1rem; margin: 0 0 .3rem; }
   .reward p { color: var(--ink-soft); font-size: .85rem; margin: 0 0 .75rem; line-height: 1.5; }
   .reward__bar { height: 6px; background: var(--surface-2); border-radius: var(--radius-pill); overflow: hidden; }
-  .reward__fill { height: 100%; width: var(--p, 20); border-radius: var(--radius-pill); background: linear-gradient(90deg, var(--accent), var(--accent-strong)); transition: width .6s cubic-bezier(.4,0,.2,1); }
+  .reward__fill { height: 100%; width: 100%; border-radius: var(--radius-pill); background: linear-gradient(90deg, var(--accent), var(--accent-strong)); }
   .reward__fill--streak { background: linear-gradient(90deg, var(--streak), var(--streak-deep)); }
   .reward__fill--xp { background: linear-gradient(90deg, var(--xp), #f59e0b); }
   .reward__fill--rank { background: linear-gradient(90deg, var(--accent), var(--streak), var(--success)); }

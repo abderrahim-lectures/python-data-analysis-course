@@ -114,14 +114,15 @@ button { font-family: inherit; cursor: pointer; }
   box-shadow: var(--shadow-tactile);
   transition: transform .1s ease, box-shadow .1s ease, filter .15s ease;
 }
+.btn-primary:hover, .btn-streak:hover, .btn-xp:hover { transform: translateY(-1px); }
 .btn:active { transform: translateY(3px); box-shadow: 0 1px 0 rgba(0,0,0,.08), 0 2px 8px rgba(16,24,40,.06); }
 .btn-primary { background: var(--accent); color: var(--accent-contrast); }
-.btn-primary:hover { background: var(--accent-strong); box-shadow: var(--shadow-tactile-hover); }
+.btn-primary:hover { background: var(--accent-strong); filter: brightness(1.06); box-shadow: 0 5px 0 rgba(0,0,0,.1), 0 10px 24px rgba(124,58,237,.32); }
 .btn-streak { background: var(--streak); color: #fff; box-shadow: 0 4px 0 var(--streak-deep), 0 6px 16px rgba(255,150,0,.2); }
-.btn-streak:hover { filter: brightness(1.06); box-shadow: 0 4px 0 var(--streak-deep), 0 8px 20px rgba(255,150,0,.3); }
+.btn-streak:hover { filter: brightness(1.06); box-shadow: 0 5px 0 var(--streak-deep), 0 10px 24px rgba(255,150,0,.35); }
 .btn-streak:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--streak-deep), 0 2px 8px rgba(255,150,0,.15); }
 .btn-xp { background: linear-gradient(135deg, var(--xp), #f59e0b); color: #1a1a2e; box-shadow: 0 4px 0 #d97706, 0 6px 16px rgba(251,191,36,.25); }
-.btn-xp:hover { filter: brightness(1.06); box-shadow: 0 4px 0 #d97706, 0 8px 20px rgba(251,191,36,.35); }
+.btn-xp:hover { filter: brightness(1.06); box-shadow: 0 5px 0 #d97706, 0 10px 24px rgba(251,191,36,.4); }
 .btn-xp:active { transform: translateY(3px); box-shadow: 0 1px 0 #d97706, 0 2px 8px rgba(251,191,36,.15); }
 .btn-ghost { background: var(--surface); color: var(--ink); border: 2px solid var(--line-strong); box-shadow: none; }
 .btn-ghost:hover { border-color: var(--accent); color: var(--accent); box-shadow: var(--shadow-sm); }
@@ -640,3 +641,9 @@ button { font-family: inherit; cursor: pointer; }
 /* === KaTeX: keep math legible on both themes and scrollable on mobile === */
 .katex-display { overflow-x: auto; overflow-y: hidden; padding: .5rem 0; }
 .katex { color: var(--ink-hi); }
+
+/* Mark-complete control on every lesson week (not just the last one). */
+.lesson-nav__done.is-done { background: var(--success, #16a34a); color: #fff; cursor: default; opacity: 1; }
+.lesson-nav__done:disabled { cursor: default; }
+.btn:disabled { opacity: .5; cursor: not-allowed; filter: grayscale(.4); transform: none; }
+.btn:disabled:hover { transform: none; filter: grayscale(.4); }
