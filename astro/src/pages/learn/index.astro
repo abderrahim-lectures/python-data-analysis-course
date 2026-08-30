@@ -22,34 +22,38 @@ const base = import.meta.env.BASE_URL;
 
   <section class="container">
     <div class="sections">
-      <a class="sectioncard" href={`${base}learn/python-101`}>
-        <div class="sectioncard__badge">🐍 Track 1</div>
-        <div class="sectioncard__icon">🐍</div>
-        <h2>Python 101</h2>
-        <p>Weeks 1–5. The fundamentals: variables, types, control flow, functions — then a tiny language model.</p>
-        <div class="sectioncard__meta">
-          <span class="badge badge--xp">⚡ 100 XP</span>
-          <span class="badge badge--streak">🔥 5 weeks</span>
-        </div>
+      <div class="sectioncard">
+        <a class="sectioncard__hit" href={`${base}learn/python-101`} aria-label="Python 101">
+          <div class="sectioncard__badge">🐍 Track 1</div>
+          <div class="sectioncard__icon">🐍</div>
+          <h2>Python 101</h2>
+          <p>Weeks 1–5. The fundamentals: variables, types, control flow, functions — then a tiny language model.</p>
+          <div class="sectioncard__meta">
+            <span class="badge badge--xp">⚡ 100 XP</span>
+            <span class="badge badge--streak">🔥 5 weeks</span>
+          </div>
+        </a>
         <div class="routes">
           <a class="route-pill route-pill--normal" href={`${base}learn/python-101/normal/week-1`}>🌿 Normal — start here</a>
           <a class="route-pill route-pill--hard" href={`${base}learn/python-101/hard/week-1`}>⚡ Hard</a>
         </div>
-      </a>
-      <a class="sectioncard" href={`${base}learn/data-analysis`}>
-        <div class="sectioncard__badge sectioncard__badge--streak">📊 Track 2</div>
-        <div class="sectioncard__icon">📊</div>
-        <h2>Pandas &amp; Data</h2>
-        <p>Weeks 6–10. Ship a real notebook: pandas the way a data analyst actually uses it.</p>
-        <div class="sectioncard__meta">
-          <span class="badge badge--xp">⚡ 100 XP</span>
-          <span class="badge badge--streak">🔥 5 weeks</span>
-        </div>
+      </div>
+      <div class="sectioncard">
+        <a class="sectioncard__hit" href={`${base}learn/data-analysis`} aria-label="Pandas & Data">
+          <div class="sectioncard__badge sectioncard__badge--streak">📊 Track 2</div>
+          <div class="sectioncard__icon">📊</div>
+          <h2>Pandas &amp; Data</h2>
+          <p>Weeks 6–10. Ship a real notebook: pandas the way a data analyst actually uses it.</p>
+          <div class="sectioncard__meta">
+            <span class="badge badge--xp">⚡ 100 XP</span>
+            <span class="badge badge--streak">🔥 5 weeks</span>
+          </div>
+        </a>
         <div class="routes">
           <a class="route-pill route-pill--normal" href={`${base}learn/data-analysis/normal/week-6`}>🌿 Normal</a>
           <a class="route-pill route-pill--hard" href={`${base}learn/data-analysis/hard/week-6`}>⚡ Hard</a>
         </div>
-      </a>
+      </div>
     </div>
 
     <!-- Rewards preview -->
@@ -90,11 +94,15 @@ const base = import.meta.env.BASE_URL;
   .sections { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin: 1.5rem 0 2rem; }
   .sectioncard {
     background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg);
-    padding: 1.5rem; text-decoration: none; color: var(--ink); display: flex; flex-direction: column; gap: .75rem;
+    padding: 1.5rem; display: flex; flex-direction: column; gap: .75rem;
     box-shadow: var(--shadow-sm); transition: all var(--transition-smooth);
     position: relative; overflow: hidden;
   }
   .sectioncard:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
+  /* This link covers only the icon/title/description area — the route pills
+     below are separate <a> targets, and nesting <a> inside <a> is invalid
+     HTML (browsers auto-close the outer one, breaking the whole layout). */
+  .sectioncard__hit { text-decoration: none; color: inherit; display: flex; flex-direction: column; gap: .75rem; }
   .sectioncard__badge {
     display: inline-flex; align-items: center; gap: .25rem;
     padding: .2rem .6rem; border-radius: var(--radius-pill);

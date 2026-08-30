@@ -162,6 +162,27 @@ do not build it until asked. Push all work-in-progress to the current branch
     runs the *old* (or no) plugin with zero errors, which cost real time
     debugging "why isn't my plugin running" in this session.
 
+- **Two more real UI bugs**, both found by looking at actual screenshots
+  (`astro build` succeeding proves nothing about visual correctness):
+  1. `/learn` section cards were visually broken — an empty box floating
+     next to disconnected route pills. Root cause: `src/pages/learn/index.astro`
+     nested `<a class="route-pill">` links inside an outer
+     `<a class="sectioncard">` link. **Nesting `<a>` inside `<a>` is invalid
+     HTML** — browsers auto-close the outer anchor as soon as they hit the
+     inner one, which silently un-nests everything after it (the whole
+     `.routes` block) into document flow outside the card. Fixed by making
+     the outer element a `<div class="sectioncard">` with an inner
+     `<a class="sectioncard__hit">` covering just the icon/title/description,
+     and `.routes` as a sibling `<div>` inside the same card. **Grep for
+     `<a class="sectioncard"` or similar nested-anchor patterns before
+     reusing this card pattern elsewhere.**
+  2. Code inside runnable cells (`.cell__code`) rendered as blank/invisible
+     bars in real screenshots, not literal strikethrough. Cause:
+     `--font-mono` in `global.css` listed `'Space Grotesk'` — the site's
+     *display/heading* font, not a monospace font — as its first choice.
+     Fixed the stack to `ui-monospace, 'SFMono-Regular', 'SF Mono', Menlo,
+     Consolas, 'Liberation Mono', 'Fira Code', monospace`.
+
 ### Known gaps / next steps
 
 1. **i18n content**: only EN lesson content exists in `src/content/learn`.

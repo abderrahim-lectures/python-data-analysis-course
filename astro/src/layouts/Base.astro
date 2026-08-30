@@ -203,7 +203,8 @@ const base = import.meta.env.BASE_URL;
         const overlay = document.getElementById('onboarding');
         if (!overlay) return;
         const visited = localStorage.getItem('pda:onboarded');
-        if (visited) { overlay.style.display = 'none'; return; }
+        const skipParam = new URLSearchParams(location.search).get('onboarded');
+        if (visited || skipParam) { overlay.style.display = 'none'; return; }
         document.getElementById('onboarding-start')?.addEventListener('click', () => {
           localStorage.setItem('pda:onboarded', '1');
           overlay.style.display = 'none';

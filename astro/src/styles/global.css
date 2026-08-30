@@ -42,7 +42,7 @@
   --shadow-xp-glow: 0 0 16px var(--xp-glow);
   --font-body: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
   --font-display: 'Space Grotesk', 'Inter', system-ui, sans-serif;
-  --font-mono: 'Space Grotesk', 'SF Mono', 'Fira Code', monospace;
+  --font-mono: ui-monospace, 'SFMono-Regular', 'SF Mono', Menlo, Consolas, 'Liberation Mono', 'Fira Code', monospace;
   --nav-h: 64px;
   --transition-fast: .15s ease;
   --transition-smooth: .3s cubic-bezier(.4,0,.2,1);
