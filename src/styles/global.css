@@ -9,7 +9,7 @@
   --ink: #1a1a2e;
   --ink-hi: #0f0d17;
   --ink-soft: #57534e;
-  --ink-faint: #9a95a4;
+  --ink-faint: #6b6675;
   --line: #e5e1ea;
   --line-strong: #cfc9d8;
   /* Gamification palette */
@@ -20,6 +20,9 @@
   --streak: #ff9600;
   --streak-deep: #cc7a00;
   --streak-glow: rgba(255, 150, 0, 0.35);
+  /* --streak/--xp are fill colours; they fail AA as text, so text uses these. */
+  --streak-text: #8f4e00;
+  --xp-text: #8a5a06;
   --xp: #fbbf24;
   --xp-glow: rgba(251, 191, 36, 0.3);
   --success: #58cc02;
@@ -57,15 +60,20 @@
   --ink: #e8e4f0;
   --ink-hi: #fff;
   --ink-soft: #a89ec4;
-  --ink-faint: #7a7288;
+  --ink-faint: #9a92a8;
   --line: #2e2b42;
   --line-strong: #3f3b54;
   --accent: #a78bfa;
   --accent-strong: #8b5cf6;
   --accent-soft: rgba(167, 139, 250, .14);
+  /* The dark accent is a light purple, so white-on-accent only reaches
+     2.7:1. Flip the contrast colour dark instead. */
+  --accent-contrast: #17102b;
   --streak: #fb923c;
   --streak-deep: #ea580c;
   --streak-glow: rgba(251, 146, 60, .4);
+  --streak-text: #fb923c;
+  --xp-text: #fcd34d;
   --xp: #fcd34d;
   --xp-glow: rgba(252, 211, 77, .3);
   --success: #4ade80;
@@ -150,8 +158,8 @@ button { font-family: inherit; cursor: pointer; }
   font-size: .75rem; font-weight: 700; letter-spacing: .02em;
 }
 .badge--accent { background: var(--accent-soft); color: var(--accent); }
-.badge--streak { background: rgba(255,150,0,.12); color: var(--streak); }
-.badge--xp { background: rgba(251,191,36,.15); color: #b45309; }
+.badge--streak { background: rgba(255,150,0,.12); color: var(--streak-text); }
+.badge--xp { background: rgba(251,191,36,.15); color: var(--xp-text); }
 .badge--success { background: var(--success-soft); color: var(--success); }
 .badge--locked { opacity: .45; filter: grayscale(.6); }
 .badge-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: .75rem; }

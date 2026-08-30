@@ -91,9 +91,9 @@ print(greet("world"))
   .head h1 { font-size: clamp(2rem, 4vw, 2.8rem); margin: .4rem 0 .2rem; }
   .head p { color: var(--ink-soft); max-width: 60ch; }
   .playground-page { padding-bottom: 3rem; }
-  .pg-warn { border: 2px solid var(--streak); background: color-mix(in srgb, var(--streak) 10%, var(--surface)); border-radius: var(--radius-md); padding: .9rem 1.1rem; margin-bottom: 1rem; display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; }
-  .pg-warn strong { flex-basis: 100%; }
-  .pg-warn p { flex: 1 1 22ch; margin: 0; color: var(--ink-soft); font-size: .88rem; }
+  .pg-warn { border: 2px solid var(--streak); background: var(--warn-soft); color: var(--ink); border-radius: var(--radius-md); padding: .9rem 1.1rem; margin-bottom: 1rem; display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; }
+  .pg-warn strong { flex-basis: 100%; color: var(--ink-hi); }
+  .pg-warn p { flex: 1 1 22ch; margin: 0; color: var(--ink); font-size: .88rem; }
   .playground-page :global(.cell--big .cell__code) { min-height: 50vh; font-size: 1rem; }
   .playground-page :global(.cell--big .cell__output) { max-height: 30vh; overflow-y: auto; }
 </style>

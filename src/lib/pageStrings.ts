@@ -21,6 +21,7 @@ export const PAGE_STRINGS: Record<Locale, {
   projectsEyebrow: string;
   projectsH1: string;
   projectsLead: string;
+  optionalUngraded: string;
   track1Name: string;
   track1Desc: string;
   track2Name: string;

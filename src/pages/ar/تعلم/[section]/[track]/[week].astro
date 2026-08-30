@@ -59,7 +59,7 @@ const alternates = {
 <Base title={`${title} — PyDA Course`} description={description} lang={locale} dir={dir} alternates={alternates}>
   <nav class="crumb container">
     <a href={learnHref(locale, base)}>{section}</a> <span>/</span>
-    <a href={learnHref(locale, base, section)}>{section}</a> <span>/</span>
+    <a href={learnHref(locale, base, section!)}>{section}</a> <span>/</span>
     <span class="crumb__here">Week {week}</span>
   </nav>
 
@@ -76,17 +76,17 @@ const alternates = {
 
     <div class="lesson-nav">
       {prev
-        ? <a class="lesson-nav__prev" href={weekHref(locale, base, section, track, prev.data.week!)}>← Week {prev.data.week}</a>
+        ? <a class="lesson-nav__prev" href={weekHref(locale, base, section!, track!, prev.data.week!)}>← Week {prev.data.week}</a>
         : <span />}
       {next
-        ? <a class="lesson-nav__next" href={weekHref(locale, base, section, track, next.data.week!)}>Week {next.data.week} →</a>
+        ? <a class="lesson-nav__next" href={weekHref(locale, base, section!, track!, next.data.week!)}>Week {next.data.week} →</a>
         : <span />}
       <button class="btn btn-soft lesson-nav__done" data-mark-complete
         data-label-done={ps.completed}>{ps.markComplete}</button>
     </div>
 
     <div class="route">
-      <a class="route__card" href={weekHref(locale, base, section, otherTrack, week!)}>
+      <a class="route__card" href={weekHref(locale, base, section!, otherTrack, week!)}>
         <span class="route__icon">{otherTrack === 'hard' ? '⚡' : '🌿'}</span>
         <strong>Switch to {otherTrack === 'hard' ? 'Hard' : 'Normal'}</strong>
         <small>Same week, {otherTrack === 'hard' ? 'steeper climb' : 'gentler pace'}.</small>
