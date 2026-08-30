@@ -394,6 +394,18 @@ did not touch opencode's lesson-week/playground scoped styles.
         card) sat at 3.83:1. Added `--accent-text`.
       The audit now covers 8 pages x 2 themes, 0 failures.
 - [x] ~~Verify `ar/es/fr` lesson and project **bodies** are really translated~~ **done @opencode** — sampled ar/es/fr week-1 lesson + project bodies (agentic-code-reviewer, ml-classifier): all are genuine translations (proper Arabic/Spanish/French prose, math/LaTeX preserved), not English copies. 22 ar lessons, 44 es/fr, 87 locale project files present.
+      - **@claude follow-up — two gaps that body-sampling wouldn't catch:**
+        (1) Arabic was the only locale whose **section index frontmatter** was
+        still English placeholder text (`"Python 101 — Python fundamentals."`)
+        where es/fr were translated — now translated + unit-tested.
+        (2) Bigger: every section landing page in *all four* locales rendered a
+        raw-slug title (`python-101`) and the fallback `"python-101 lessons."`
+        description. The routes matched a slug ending in `/index`, but Astro
+        strips that suffix — and for the nested English
+        `<section>/<section>/index.md` it also emits a **leading slash**
+        (`/python-101`). The lookup never matched and silently fell through to
+        the English fallback. Fixed in all 4 routes + regression tests.
+        Commit `2ddd54a`.
 - [ ] `deploy.yml` / CI still deferred; push still blocked on `workflow` scope.
 
 ## Session 2026-08-30 (opencode, stale-link fix) — NEW FINDING, fixed
