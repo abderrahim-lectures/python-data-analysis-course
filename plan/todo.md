@@ -38,14 +38,27 @@ status log once done, don't duplicate here.
 - [x] **Locale hub "Track 1"/"Track 2" badge** was still hardcoded English
       on the ar/es/fr learn hubs even after the rest of the page translated
       — added `track1`/`track2` to `pageStrings.ts`, fixed.
-- [ ] **Add the full playground**: known gap from earlier in the session —
-      no dedicated `/playground` page exists yet, only inline `RunnableCell`
-      cells per-lesson. The old Docusaurus `VsCodePlayground` React
-      component (Monaco + JupyterLite terminal, ~615 lines across 4 files)
-      was never ported. This is a large, separate feature — needs its own
-      scoping pass (what's the MVP: just a bigger Monaco editor + run
-      button? A saved-snippets sidebar? JupyterLite notebook mode?) before
-      implementation starts.
+- [x] **Playground — done, scoped as a pragmatic MVP, not a Monaco/JupyterLite
+      port.** Added `/playground.astro`: a bigger, standalone version of the
+      inline lesson code cell (same `.cell` markup, same shared Pyodide
+      runtime via `runnable-cell.client.ts` — no new execution engine).
+      Every code cell site-wide (`RunnableCell.astro` and
+      `rehype-runnable-python.mjs`'s generated cells) got a ⛶ "open in
+      full-screen editor" button that hands the cell's current code to
+      `/playground?code=...` via a query param. Added to the top nav and
+      footer for discoverability (this is what "where is the playground?"
+      was asking about earlier). Also fixed the stale week-1 admonition
+      that promised a "sidebar-toggle Code strip" / notebook mode from the
+      old Docusaurus `VsCodePlayground` component — rewrote it to describe
+      what's actually built.
+      Verified: query-param handoff renders the handed-off code correctly
+      (screenshot-tested with a real snippet); the Run/Pyodide path itself
+      is unmodified reused code, already screenshot-verified working
+      earlier in the session.
+      **Explicitly not built**: Monaco editor, JupyterLite terminal,
+      notebook mode, saved snippets. If a real Monaco/JupyterLite
+      workspace turns out to still be wanted after trying this, that's a
+      separate, much larger task — flagging rather than assuming.
 
 ## Already done this session (for context, not re-tracked)
 Astro promoted to repo root + Docusaurus removed · UI chrome i18n

@@ -7,7 +7,7 @@
 export type Locale = 'en' | 'ar' | 'es' | 'fr';
 
 export interface UiStrings {
-  nav: {learn: string; projects: string; progress: string};
+  nav: {learn: string; projects: string; progress: string; playground: string};
   footer: {
     courseCol: string;
     siteCol: string;
@@ -33,7 +33,7 @@ export interface UiStrings {
 
 export const UI_STRINGS: Record<Locale, UiStrings> = {
   en: {
-    nav: {learn: 'Learn', projects: 'Projects', progress: 'Progress'},
+    nav: {learn: 'Learn', projects: 'Projects', progress: 'Progress', playground: 'Playground'},
     footer: {
       courseCol: 'Course',
       siteCol: 'Site',
@@ -58,7 +58,7 @@ export const UI_STRINGS: Record<Locale, UiStrings> = {
     mobileNav: {home: 'Home', learn: 'Learn', progress: 'Progress'},
   },
   ar: {
-    nav: {learn: 'تعلّم', projects: 'المشاريع', progress: 'تقدمي'},
+    nav: {learn: 'تعلّم', projects: 'المشاريع', progress: 'تقدمي', playground: 'ساحة التجربة'},
     footer: {
       courseCol: 'الدورة',
       siteCol: 'الموقع',
@@ -83,7 +83,7 @@ export const UI_STRINGS: Record<Locale, UiStrings> = {
     mobileNav: {home: 'الرئيسية', learn: 'تعلّم', progress: 'تقدمي'},
   },
   es: {
-    nav: {learn: 'Aprender', projects: 'Proyectos', progress: 'Progreso'},
+    nav: {learn: 'Aprender', projects: 'Proyectos', progress: 'Progreso', playground: 'Playground'},
     footer: {
       courseCol: 'Curso',
       siteCol: 'Sitio',
@@ -108,7 +108,7 @@ export const UI_STRINGS: Record<Locale, UiStrings> = {
     mobileNav: {home: 'Inicio', learn: 'Aprender', progress: 'Progreso'},
   },
   fr: {
-    nav: {learn: 'Apprendre', projects: 'Projets', progress: 'Progression'},
+    nav: {learn: 'Apprendre', projects: 'Projets', progress: 'Progression', playground: 'Bac à sable'},
     footer: {
       courseCol: 'Cours',
       siteCol: 'Site',

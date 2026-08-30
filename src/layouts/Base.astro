@@ -88,6 +88,7 @@ const t = UI_STRINGS[resolveLocale(lang)];
         <nav class="topnav__right" aria-label="Primary">
           <a class="topnav__link" href={`${base}learn`}><Icon name="code" size={15} /> {t.nav.learn}</a>
           <a class="topnav__link" href={`${base}projects`}><Icon name="globe" size={15} /> {t.nav.projects}</a>
+          <a class="topnav__link" href={`${base}playground`}><Icon name="expand" size={15} /> {t.nav.playground}</a>
           <a class="topnav__link" href={`${base}progress`}><Icon name="trail" size={15} /> {t.nav.progress}</a>
           <div class="topnav__xp" id="xp-bar"></div>
           <div class="topnav__group">
@@ -141,6 +142,7 @@ const t = UI_STRINGS[resolveLocale(lang)];
         <div class="footer__col">
           <h3><Icon name="chart" size={13} /> {t.footer.siteCol}</h3>
           <a href={`${base}progress`}>{t.footer.myProgress}</a>
+          <a href={`${base}playground`}>{t.nav.playground}</a>
         </div>
         <div class="footer__col">
           <h3><Icon name="globe" size={13} /> {t.footer.moreCol}</h3>

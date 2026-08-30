@@ -11,7 +11,7 @@ This course runs Python right in your browser — no install needed. The 🐍 co
 ::: 
 
 :::tip[Want a bigger workspace?]
-Every code box also has a ⛶ button that opens a full editor, and the sidebar-toggle **Code** strip lets you bring back the advanced editor + notebook whenever you like.
+Every code box has a ⛶ button that opens it full-screen in the **Playground** — same code, more room, still no install.
 :::
 
 # Week 1: Variables, Types & I/O

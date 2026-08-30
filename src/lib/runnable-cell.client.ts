@@ -20,11 +20,17 @@ function initCell(cell: Element) {
   const lessonId = (cell as HTMLElement).dataset.lesson ?? '';
   let awarded = false;
   const run = cell.querySelector('[data-run]') as HTMLButtonElement | null;
+  const expand = cell.querySelector('[data-expand]') as HTMLButtonElement | null;
   const out = cell.querySelector('[data-output]') as HTMLElement | null;
   const lines = cell.querySelector('[data-lines]') as HTMLElement | null;
   const clear = cell.querySelector('[data-clear]') as HTMLButtonElement | null;
   const codeEl = cell.querySelector('code');
   if (!run || !out || !lines || !clear || !codeEl) return;
+
+  expand?.addEventListener('click', () => {
+    const src = codeEl.textContent ?? '';
+    window.location.href = `${import.meta.env.BASE_URL}playground?code=${encodeURIComponent(src)}`;
+  });
 
   const appendLine = (kind: string, text: string) => {
     const d = document.createElement('div');

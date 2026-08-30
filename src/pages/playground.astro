@@ -1,0 +1,66 @@
+---
+// Freeform Python playground — a bigger, standalone version of the inline
+// lesson code cells (same Pyodide runtime, same .cell markup so the shared
+// runnable-cell.client.ts hydrates it automatically). Reached either
+// directly or via a lesson cell's ⛶ "open in full-screen editor" button,
+// which hands off the cell's current code via a `?code=` query param.
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+
+const STARTER = `# Playground — write and run any Python here.
+# Nothing is graded here; it's just a bigger scratch space.
+
+def greet(name):
+    return f"Hello, {name}!"
+
+print(greet("world"))
+`;
+---
+
+<Base
+  title="Playground — PyDA"
+  description="A freeform, full-screen Python editor — run any code right in your browser, no install needed."
+  lang="en"
+  dir="ltr"
+>
+  <section class="container head">
+    <div class="head__eyebrow"><Icon name="expand" size={16} /> Full-screen editor</div>
+    <h1>Playground</h1>
+    <p>Write and run any Python here — nothing is graded, nothing is saved when you leave. Came from a lesson's ⛶ button? Your code came with you.</p>
+  </section>
+
+  <section class="container playground-page">
+    <div class="cell cell--big" data-runnable>
+      <div class="cell__actions">
+        <button class="btn btn-primary cell__run" data-run aria-label="Run this Python code">▶ Run</button>
+        <button class="btn btn-ghost btn-sm" id="pg-reset">Reset</button>
+        <span class="cell__lang">python</span>
+      </div>
+      <pre class="cell__code"><code id="pg-code">{STARTER}</code></pre>
+      <div class="cell__output" data-output hidden>
+        <div class="cell__lines" data-lines></div>
+        <button class="cell__clear" data-clear hidden>Clear</button>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script define:vars={{STARTER}}>
+  const codeEl = document.getElementById('pg-code');
+  const params = new URLSearchParams(location.search);
+  const fromLesson = params.get('code');
+  if (fromLesson) codeEl.textContent = fromLesson;
+  document.getElementById('pg-reset')?.addEventListener('click', () => {
+    codeEl.textContent = STARTER;
+  });
+</script>
+
+<style>
+  .head { padding: 2.5rem 0 1rem; }
+  .head__eyebrow { color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: .08em; font-size: .76rem; display: inline-flex; align-items: center; gap: .3rem; }
+  .head h1 { font-size: clamp(2rem, 4vw, 2.8rem); margin: .4rem 0 .2rem; }
+  .head p { color: var(--ink-soft); max-width: 60ch; }
+  .playground-page { padding-bottom: 3rem; }
+  .playground-page :global(.cell--big .cell__code) { min-height: 50vh; font-size: 1rem; }
+  .playground-page :global(.cell--big .cell__output) { max-height: 30vh; overflow-y: auto; }
+</style>
