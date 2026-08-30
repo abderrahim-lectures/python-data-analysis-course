@@ -237,3 +237,63 @@ describe('corrupt storage', () => {
     expect(gs.xpProgress().xp).toBe(0);
   });
 });
+
+describe('repairing state saved by the buggy build', () => {
+  // What earlier builds left behind: real XP and completed lessons, but a
+  // streak pinned at 0 and an empty quest map. This is the exact shape a
+  // returning learner has in localStorage.
+  const legacy = {
+    xp: 20,
+    lessonsCompleted: {'python-101/normal/week-2': true},
+    lessonsRun: {'python-101/normal/week-2': true},
+    quizCorrect: 0, quizTotal: 0,
+    streak: 0, bestStreak: 0,
+    lastActive: '', quests: {}, badges: [],
+  };
+
+  async function loadLegacy() {
+    vi.resetModules();
+    installLocalStorage();
+    localStorage.setItem('pda:state', JSON.stringify(legacy));
+    return import('../../src/lib/gameState.ts');
+  }
+
+  test('keeps the XP the learner already earned', async () => {
+    const gs = await loadLegacy();
+    expect(gs.xpProgress().xp).toBe(20);
+  });
+
+  test('lifts the stuck 0 streak to 1', async () => {
+    const gs = await loadLegacy();
+    expect(gs.streakProgress().current).toBe(1);
+  });
+
+  test('backfills the quests that were never awarded', async () => {
+    const gs = await loadLegacy();
+    const done = gs.questsToShow().filter((q) => q.done).map((q) => q.id);
+
+    expect(done).toContain('first-lesson');
+    expect(done).toContain('first-run');
+    expect(done).toContain('track-python-101');
+  });
+
+  test('no longer reports 0/11 quests', async () => {
+    const gs = await loadLegacy();
+    expect(gs.questsToShow().filter((q) => q.done).length).toBeGreaterThan(0);
+  });
+
+  test('does not invent progress for a brand-new learner', async () => {
+    const gs = await fresh();
+    expect(gs.streakProgress().current).toBe(0);
+    expect(gs.questsToShow().filter((q) => q.done)).toHaveLength(0);
+  });
+
+  test('does not retroactively unlock milestones that were not reached', async () => {
+    const gs = await loadLegacy();
+    const done = gs.questsToShow().filter((q) => q.done).map((q) => q.id);
+
+    expect(done).not.toContain('xp-100');
+    expect(done).not.toContain('all-python');
+    expect(done).not.toContain('streak-3');
+  });
+});

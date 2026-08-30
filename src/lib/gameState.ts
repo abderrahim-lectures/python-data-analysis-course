@@ -41,12 +41,35 @@ function defaults(): PDAState {
   };
 }
 
+// Earlier builds shipped a streak that could never leave 0 and never awarded
+// the milestone quests, so existing learners carry state with real XP but an
+// empty quest map. Rebuild what is derivable from the record of completed
+// lessons so their history is not silently lost.
+function repairLegacy(s: PDAState): PDAState {
+  const completed = Object.keys(s.lessonsCompleted);
+  if (completed.length === 0) return s;
+
+  // Any completed lesson means at least one active day.
+  if (s.streak === 0) s.streak = 1;
+  if (!s.lastActive) s.lastActive = today();
+  s.bestStreak = Math.max(s.bestStreak, s.streak);
+
+  markQuest(s, 'first-lesson', 'First Step');
+  if (Object.keys(s.lessonsRun).length > 0) markQuest(s, 'first-run', 'First Run');
+  for (const id of completed) {
+    markQuest(s, `completed-${id}`, 'Lesson complete');
+    markQuest(s, `track-${id.split('/')[0]}`, 'Track starter');
+  }
+  evaluateMilestones(s);
+  return s;
+}
+
 function read(): PDAState {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return defaults();
     const parsed = JSON.parse(raw) as Partial<PDAState>;
-    return { ...defaults(), ...parsed };
+    return repairLegacy({ ...defaults(), ...parsed });
   } catch { return defaults(); }
 }
 

@@ -9,7 +9,8 @@
     "preview": "astro preview",
     "check": "astro check",
     "test": "vitest run tests/unit",
-    "test:watch": "vitest tests/unit"
+    "test:watch": "vitest tests/unit",
+    "test:e2e": "node tests/e2e/smoke.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.0",

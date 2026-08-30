@@ -66,3 +66,48 @@ Astro promoted to repo root + Docusaurus removed · UI chrome i18n
 card art restored (per-project gradient + tag emoji, was a flat 🌍 for
 every card) · footer redesign · KaTeX strict-mode warnings silenced.
 See `astro-rebuild.md` for full detail.
+
+## Session 2026-08-30 (later) — progress tracking was dead, now fixed
+
+- [x] **Progress tracking repaired.** Three independent bugs meant nothing
+      could ever be marked done: (1) markdown-generated code cells carried no
+      `data-lesson`, so the XP award was gated on an always-empty id;
+      (2) "Mark complete" only rendered on the *last* week of a track, so
+      weeks 1-4 had no completion path at all; (3) `addXP` assigned
+      `s.lastActive = today()` *before* comparing it to `today()`, so the
+      "same day" branch always won and the streak was pinned at 0 forever.
+- [x] **Quests were unreachable.** 7 of 11 (streak-3/7/14, xp-100/500,
+      all-python, all-data) had no `markQuest` call anywhere. Added an
+      `evaluateMilestones` pass. Also `track-${id.split('-')[0]}` produced
+      `track-python` instead of `track-python-101`, so that one never matched.
+- [x] **Legacy state migration.** Learners who used the buggy build have real
+      XP but a 0 streak and an empty quest map; the fix alone only applied to
+      *future* awards. `repairLegacy()` now rebuilds what's derivable from
+      `lessonsCompleted` on read. Verified against the exact reported state
+      (20 XP / 0 / 0 / 0-11 -> 20 XP / 1 / 1 / 3-11).
+- [x] **Playground hardened.** `?code=` is attacker-controllable and Pyodide's
+      `js` bridge reaches this origin's localStorage/DOM/fetch. Shared code is
+      now size-capped, gated behind an explicit review step (Run disabled
+      until confirmed), and screened by `src/lib/pythonGuard.ts`. The guard is
+      deliberately conservative — it also refuses bridge imports mentioned
+      inside strings; over-blocking costs a reword, under-blocking leaks
+      progress data.
+- [x] **Visual fixes**: reward bars used `width: var(--p)` with unitless
+      numbers (invalid CSS) and rendered as broken partial meters — they were
+      never real meters, now uniform accents; `.btn-primary` had a
+      near-invisible hover; learn hubs used a hard `1fr 1fr` that clipped
+      between 720-900px (the reported Arabic card clipping) — now `auto-fit`;
+      disabled buttons now look disabled. Site name is "PyDA Course"
+      throughout, including the onboarding modal in all 4 locales.
+- [x] **Tests added.** `npm test` runs 82 vitest unit tests (game state,
+      bridge guard, lesson wiring). `npm run test:e2e` runs 26 real-browser
+      checks over CDP via Node's built-in WebSocket — no Playwright dependency.
+      Replaced the stale Docusaurus-era `tests/e2e/*.spec.ts` suite, which
+      tested removed features (JupyterLite, VSCode playground, placement quiz)
+      and could not run at all since Playwright isn't installed.
+
+### Still open
+- `deploy.yml` still assumes the old JupyterLite build step; GH Pages CI work
+  remains deferred per standing instruction.
+- Push to `redesign/astro-visual-novel` is still blocked by the OAuth
+  `workflow`-scope limitation — commits are local only.
