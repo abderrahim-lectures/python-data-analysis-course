@@ -255,7 +255,8 @@ button { font-family: inherit; cursor: pointer; }
   color: #fff; font-size: .9rem; font-weight: 800;
   box-shadow: 0 2px 8px rgba(124,58,237,.3);
 }
-.topnav__right { display: flex; align-items: center; gap: .6rem; }
+.topnav__right { display: flex; align-items: center; gap: .6rem; min-width: 0; }
+.topnav__inner { min-width: 0; }
 .topnav__link {
   color: var(--ink-soft); text-decoration: none; font-weight: 600; font-size: .88rem;
   display: inline-flex; align-items: center; gap: .3rem; padding: .3rem .5rem;
@@ -426,7 +427,7 @@ button { font-family: inherit; cursor: pointer; }
 @keyframes xp-pop { 0%{transform:scale(0) rotate(-20deg)} 60%{transform:scale(1.2) rotate(5deg)} 100%{transform:scale(1) rotate(0)} }
 
 /* === Responsive === */
-@media (max-width: 640px) {
+@media (max-width: 900px) {
   .topnav__link { display: none; }
   .mobilenav {
     display: flex; position: fixed; bottom: 0; left: 0; right: 0; z-index: 60;
@@ -443,9 +444,21 @@ button { font-family: inherit; cursor: pointer; }
   .mobilenav__item:active { background: var(--accent-soft); color: var(--accent); }
   .topnav__xp { display: none; }
   body { padding-bottom: 60px; }
+}
+
+@media (max-width: 640px) {
   .onboarding__card { padding: 2rem 1.5rem; }
   .lvlup__text { font-size: 3rem; }
   .badge-grid { grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); }
+  /* Four language pills plus the theme button overflowed 320px viewports. */
+  .topnav__lang { padding: .2rem .45rem; font-size: .68rem; }
+  .topnav__group { gap: .15rem; padding: .15rem; }
+}
+
+@media (max-width: 400px) {
+  /* Below this the wordmark + 4 language pills + theme button cannot fit;
+     keep the logo mark and drop the word so the page never scrolls sideways. */
+  .topnav__name { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {

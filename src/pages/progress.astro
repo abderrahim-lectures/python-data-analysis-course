@@ -347,7 +347,7 @@ const daWeeks = [6,7,8,9,10].map((w) => {
   .trail__head h2 { font-size: 1.15rem; margin: 0; }
   .trail__meta { color: var(--ink-soft); font-size: .8rem; margin-top: .15rem; }
   .trail__pct { color: var(--streak-text); font-weight: 800; font-size: .85rem; white-space: nowrap; }
-  .stations { list-style: none; padding: 0; margin: 0 0 .75rem; display: grid; grid-template-columns: repeat(5, 1fr); gap: .5rem; }
+  .stations { list-style: none; padding: 0; margin: 0 0 .75rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(52px, 1fr)); gap: .5rem; }
   .station__link { display: flex; flex-direction: column; align-items: center; gap: .3rem; text-decoration: none; color: var(--ink-soft); padding: .75rem .5rem; border-radius: var(--radius-md); border: 2px solid var(--line); background: var(--bg); transition: all var(--transition-fast); position: relative; }
   .station__link:hover { transform: translateY(-2px); border-color: var(--accent); }
   .station--done .station__link { border-color: var(--accent); background: var(--accent-soft); }
@@ -393,9 +393,8 @@ const daWeeks = [6,7,8,9,10].map((w) => {
 
   @media (max-width: 640px) {
     .trails { grid-template-columns: 1fr; }
-    .stations { grid-template-columns: repeat(5, 1fr); }
     .player-card__stats { gap: 1rem; }
     .kpis { grid-template-columns: repeat(2, 1fr); }
-    .diag__row { grid-template-columns: 120px 1fr 46px; }
+    .diag__row { grid-template-columns: 96px 1fr 42px; }
   }
 </style>
