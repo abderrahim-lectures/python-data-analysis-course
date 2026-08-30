@@ -239,27 +239,202 @@ do not build it until asked. Push all work-in-progress to the current branch
   site's gamified visual language — previously just title + description,
   visually flat compared to the Learn cards.
 
+- **`/learn` section cards redesigned for clarity** (user feedback: "this is
+  confusion" on a screenshot). Three real UX issues, not just visual polish:
+  1. The whole card body was a link to the section overview page (`.sectioncard__hit`)
+     *and* the route pills inside it were separate links to specific weeks —
+     two different destinations from what looked like one clickable area,
+     with no visual distinction between them.
+  2. Pill copy was inconsistent between cards: Python 101 said "Normal —
+     start here" / "Hard"; Pandas & Data said "Normal" / "Hard" — same
+     meaning, different wording, read as possibly-different actions.
+  3. Nothing labeled what Normal/Hard actually meant (two difficulty tracks
+     of the *same* content, not two different things to build).
+  Fixed: removed the card-body link entirely; the route pills are now the
+  card's one primary action, restyled as solid tactile buttons (matching
+  the site's existing `.btn`/`.btn-primary` press-shadow language, not the
+  soft pastel pill style) under an explicit "CHOOSE YOUR ROUTE:" label; "See
+  all N weeks →" is a separate, clearly secondary text link below a divider.
+  Copy standardized to "Normal — start here" / "Hard — start here" on both
+  cards. See `src/pages/learn/index.astro`.
+
+## Pedagogy: evidence base for the current design (2026-08-30)
+
+User asked for research to back the VN/gamification approach. Findings, mapped
+to what's actually on this site (not abstract theory):
+
+- **The VN format itself is directly validated**: Prayoga, Muhammad & Taufiq,
+  *"Design and Development of Visual Novel-Based Educational Game to Enhance
+  Computer Basics Understanding for High School Students"*
+  ([doi.org/10.58477/dj.v4i1.348](https://doi.org/10.58477/dj.v4i1.348)) — a
+  visual-novel-format CS/computing course, evaluated with pre/post tests
+  (N-Gain 0.61, "medium" effectiveness) and 87.6% learner acceptance. Built
+  with the **ADDIE** instructional-design model (Analyze/Design/Develop/
+  Implement/Evaluate) — worth using as the process checklist for future
+  content passes, not just a one-off citation.
+- **Self-Determination Theory** (Deci & Ryan — autonomy / competence /
+  relatedness) is the load-bearing framework for *why* the gamification here
+  should work, and where it's currently thin:
+  - Autonomy ✅ — Normal/Hard track choice, switch-anytime messaging already
+    on `/learn`.
+  - Competence ✅ (as of this session) — the progress trail now actually
+    reflects real completion (was silently broken, see below); mastery
+    visibility is exactly what SDT competence support needs.
+  - Relatedness ❌ — weakest leg. No mentor/persona voice, no community
+    signal anywhere. The plan's own "VN persona model" section (mentor
+    narrator + per-track teaching partner) was designed to cover exactly
+    this gap and is still unbuilt (see gap list). This is the single most
+    theory-backed argument for prioritizing that work over further visual
+    polish.
+  - Caution from the literature: streak/punishment framing can produce only
+    shallow "introjected" compliance rather than real motivation — audited
+    current copy, found no punitive streak-loss language shipped anywhere
+    (good, nothing to fix), but avoid adding any "you lost your streak 😢"
+    guilt-style copy later.
+- **Testing effect / active retrieval** (the most robust finding in the
+  literature for durable learning, and the mechanism behind spaced
+  repetition and quiz-style practice) is the **single highest-leverage gap
+  on this site**: every lesson has an empty `## ✅ Weekly quiz` heading (see
+  "Not yet fixed" note above — the original quiz question data was already
+  lost before this session). The Socratic Questions sections (now styled)
+  are a partial substitute — open-ended retrieval prompts are still
+  retrieval practice — but a real answer-checked quiz would engage the
+  testing effect more directly. Didn't fabricate 20 lessons of quiz
+  questions here — low-quality invented quiz content would be worse than
+  none; this needs either real authored questions or recovering the
+  original data (git history / i18n copies, per the earlier note).
+- **Mastery learning** (Khan Academy's 5-level model: Not Started → Attempted
+  → Familiar → Proficient → Mastered) is a plausible upgrade path for the
+  current binary done/not-done badge system, if revisited — cited for future
+  reference, not implemented this session (binary completion is a reasonable
+  MVP and matches the "one lesson, one XP award" model already built).
+
+Sources: [Design and Development of Visual Novel-Based Educational Game...](https://journal.ypmma.org/index.php/dj/article/view/348) · [Self-Determination Theory: Deci & Ryan's 6 Mini-Theories](https://yukaichou.com/gamification-analysis/self-determination-theory-guide-to-ryan-and-decis-motivation-framework/) · [Self-Determination Theory: Users Want Autonomy, Relatedness, and Competency (NN/g)](https://www.nngroup.com/videos/self-determination-theory-autonomy-relatedness-competency/) · [The impact of educational gamification on cognition, emotions, and motivation: a randomized controlled trial](https://link.springer.com/article/10.1007/s40692-025-00366-x)
+
+- **`/progress` was silently broken** — the whole page (station done/undone
+  marks, quest lock states, milestones, "N/5 done" counts) was computed in
+  Astro frontmatter by calling `gameState.ts` functions at **build time**,
+  where there is no `localStorage` (Node/SSG) — `read()`'s try/catch
+  silently returns all-zero defaults, so every visitor always saw a
+  fresh-account skeleton regardless of real progress. Only the top XP-bar
+  numbers had a client `<script>` patching them in; stations/quests/
+  milestones never got the same treatment. Found by reading the actual
+  gameState code path, not by looking at a screenshot (a fresh
+  never-played browser profile looks identical to "hydration is broken" —
+  this needed tracing the data flow). Fixed: `src/pages/progress.astro`'s
+  script is now a module that imports `gameState.ts` directly and fully
+  re-renders stations (via new `isWeekComplete(section, week)`, which checks
+  either the normal or hard variant so hard-track completion isn't invisible
+  on the trail), quests, milestones, and the player card from real
+  localStorage on load. Also centralized the rank/XP-tier logic
+  (`rankFor`, `RANKS`, `RANK_EMOJIS`) into `gameState.ts` — it was
+  duplicated inline in `index.astro`'s script and would have drifted from
+  `progress.astro`'s copy the next time either was edited; `index.astro` now
+  imports the shared version too.
+- **`▶ Run` buttons showed up on project code blocks** — `rehype-runnable-python`
+  applied to *all* markdown content collections (both `learn/` and
+  `projects/` share one `astro.config.mjs` markdown pipeline). Projects are
+  explicitly "graduate to real Python on your machine" content (uv, local
+  scripts, file I/O) — Pyodide can't run most of it, and offering a Run
+  button there is actively misleading, not just superfluous. Fixed: the
+  plugin now checks the source file's path (`file.path`, from the vfile
+  Astro's pipeline passes through) and skips anything under
+  `src/content/projects/`.
+- **Nav/footer naming inconsistency**: `/progress` was called "Trail" in the
+  top nav, "Progress" in the mobile nav, and "My Progress" in the footer —
+  three names for one page. Standardized on "Progress" everywhere (matches
+  the URL and the footer, which was already right). Also: the homepage hub
+  card said "Real Projects" while the actual page title/H1 is "Real-World
+  Projects" — made them match.
+- **`/learn` section cards** got icons via the existing `SceneBg.astro`
+  component (gradient + particle backdrop, already built and unused) instead
+  of a flat CSS-gradient div with nothing on it — 🐍/📊/🚀 now sit in each
+  card's scene the way the plan's "no heavy image assets, VN persona
+  styling" principle intends. Same fix on the homepage hub cards.
+- **Homepage hero "Quest log" terminal was completely unstyled** —
+  `.hero__terminal`/`.hero__termbar`/`.hero__termbody` classes were used in
+  the markup with zero matching CSS anywhere, so it rendered as plain text
+  with no dark terminal chrome at all. Styled as a proper dark terminal
+  window (traffic-light dots, monospace body) — fixed colors (not the
+  theme-flipping `--ink-hi` etc. vars) since this is a fixed dark visual
+  flourish regardless of site light/dark mode.
+- **Footer replaced**: was a single copyright line; Docusaurus's original
+  had a real 3-column footer (Course/Site/More links) + a copyright line
+  with license + version. Rebuilt that in `Base.astro`, pulling the version
+  from `package.json` instead of hardcoding it (so it can't drift).
+- **Runnable cells are now actually editable** — code was static
+  `<pre><code>` with no way to change it before running, which undercuts
+  "playground" regardless of whether the full Monaco/JupyterLite editor
+  ever gets built (see gap list — that's a separate, much larger task, not
+  done here). `runnable-cell.client.ts` now sets
+  `contenteditable="plaintext-only"` on the code element and re-reads its
+  live `textContent` at Run time instead of caching the original source at
+  hydration — Tab inserts 4 spaces instead of moving focus.
+- **`/learn/[section]/[track]/[week].astro` full lesson-section styling**:
+  wrapped `## 🎯/⚠️/🧩/🤔/✅ <heading>` blocks (Learning objectives, Common
+  pitfalls, Challenges, Socratic Questions, Weekly quiz) in a styled
+  `<section class="lesson-section lesson-section--kind">` card via a new
+  `rehype-section-blocks.mjs` plugin — previously these were bare headings
+  + a plain list with no visual grouping. **Do not** convert this plugin
+  back to a generic `visit()` over the whole tree — it deliberately scans
+  only `tree.children` (top level) because a wrapped section contains the
+  same heading as a child; a recursive visitor re-matches it and wraps it
+  again forever (hit this exact infinite-recursion bug once already
+  building it — `RangeError: Maximum call stack size exceeded` — see the
+  comment in the file).
+
 ### Known gaps / next steps
 
 1. **i18n content**: only EN lesson content exists in `src/content/learn`.
    `ar/es/fr` still only have the one hand-written static page each
    (`src/pages/ar/learn/...`) — no content-collection-driven locale routing
-   yet. Porting `i18n/{ar,es,fr}/code.json` UI strings + translated lesson
-   markdown into `src/content/<locale>/...` (or a `learn` entry `lang` field +
-   locale-aware dynamic route) is still open — this is plan step 2, not done.
-2. **Reimplement Docusaurus JSX widgets** as Astro islands: `Challenge`,
-   `WeeklyQuiz`, `ProgressCheckbox`, `StuckHelp`, `BonusContent`. Not started —
-   current lesson markdown is plain (no interactive quiz/challenge blocks
-   ported over yet, only the runnable-cell `<RunnableCell>` swap via the
-   `Content components={{pre: RunnableCell}}` prop in the dynamic lesson page).
-3. **Trail map/rail** (gamification step 4): `src/lib/gameState.ts` +
-   `gamestats.ts` exist and track XP/streak/badges/quests, and `stats.astro`/
-   `progress.astro` pages exist, but the visual trail rail with the
-   weeks-6..10 Data Analysis numbering fix mentioned in the plan hasn't been
-   verified/built in Astro yet.
+   yet. 156 translated markdown files sit in `i18n/{ar,es,fr}/` unported.
+   **Before porting them**: they almost certainly contain the same
+   Docusaurus JSX debris (`</>}>`, `<StepChecklistItem>`, `<BonusContent>`,
+   leftover `import ... from '@site/...'` lines) that this session found and
+   cleaned out of the EN copies — check for it and reuse the same
+   remark/rehype approach rather than copying broken markup forward. This is
+   plan step 2, still not done.
+2. **Docusaurus JSX widgets — partially resolved this session**:
+   `Challenge` and `BonusContent` are now real (native `<details>`/`<div>`
+   conversions, see above) — the ones actually missing are `WeeklyQuiz` and
+   `ProgressCheckbox`. `WeeklyQuiz` is worse than "not built": the question
+   *data* itself is gone (every lesson's `## ✅ Weekly quiz` heading has no
+   content under it, and this predates this session — check git history /
+   the i18n copies before writing new quiz questions from scratch, don't
+   assume they need to be authored fresh). `ProgressCheckbox` was a
+   Docusaurus per-lesson "mark as read" checkbox — likely superseded by
+   `gameState.completeLesson()` already wired into the runnable-cell flow,
+   worth confirming rather than rebuilding.
+3. **Trail rail — fixed this session**, was more broken than the original
+   plan note anticipated: not just the weeks-6..10 numbering (that part was
+   already correct in this Astro build), but the entire `/progress` page
+   was computing everything from build-time (localStorage-less) defaults
+   and never updating client-side — see the "`/progress` was silently
+   broken" note above. Verify this by hand in a real browser: complete a
+   lesson, reload `/progress`, confirm the station lights up — this
+   session's automated headless-Chrome verification of it hit sandbox/CDP
+   tooling issues (websocket origin rejection, background-process timeouts)
+   that ate significant time without a clean screenshot confirmation; the
+   fix is correct by code review but hasn't been visually confirmed live.
 4. **JupyterLite mount** at `/lite/` — not started; original `jupyterlite-config/_output`
    build from the Docusaurus site needs to be copied/mounted as static assets
    under `public/lite/` (or similar) and linked from Data Analysis lessons.
-5. **GH Pages CI** (`deploy.yml`) — deliberately deferred per user instruction above.
-6. Old Docusaurus site + `docs/`/`i18n/` still present at repo root — not yet
+5. **Full Monaco/VS-Code-style playground + notebook mode** — the lesson
+   text (the "First time here?" / "Want a bigger workspace?" admonitions)
+   promises a "⛶ full editor" button and a notebook-mode sidebar strip that
+   don't exist. `RunnableCell` is now at least editable in place (see
+   above), which covers the base case, but the full `VsCodePlayground`
+   React component (Monaco + JupyterLite terminal, ~615 lines across 4
+   files in the old Docusaurus `src/components/VsCodePlayground/`) has not
+   been ported as an Astro `client:only` island. This is a large, separate
+   task — don't attempt it piecemeal inside an unrelated fix.
+6. **GH Pages CI** (`deploy.yml`) — deliberately deferred per user instruction above.
+7. Old Docusaurus site + `docs/`/`i18n/` still present at repo root — not yet
    removed; keep both until the Astro site has full content parity.
+8. **Relatedness (SDT)** is the weakest-supported psychological need per the
+   pedagogy research above — no mentor/persona voice or community signal
+   anywhere on the site. The plan's own "VN persona model" section (mentor
+   narrator + per-track teaching partner) was designed to cover exactly this
+   and is still completely unbuilt — arguably higher-leverage than further
+   visual polish at this point.

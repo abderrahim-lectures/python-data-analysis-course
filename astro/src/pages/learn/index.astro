@@ -23,36 +23,40 @@ const base = import.meta.env.BASE_URL;
   <section class="container">
     <div class="sections">
       <div class="sectioncard">
-        <a class="sectioncard__hit" href={`${base}learn/python-101`} aria-label="Python 101">
-          <div class="sectioncard__badge">🐍 Track 1</div>
-          <div class="sectioncard__icon">🐍</div>
-          <h2>Python 101</h2>
-          <p>Weeks 1–5. The fundamentals: variables, types, control flow, functions — then a tiny language model.</p>
-          <div class="sectioncard__meta">
-            <span class="badge badge--xp">⚡ 100 XP</span>
-            <span class="badge badge--streak">🔥 5 weeks</span>
-          </div>
-        </a>
-        <div class="routes">
-          <a class="route-pill route-pill--normal" href={`${base}learn/python-101/normal/week-1`}>🌿 Normal — start here</a>
-          <a class="route-pill route-pill--hard" href={`${base}learn/python-101/hard/week-1`}>⚡ Hard</a>
+        <div class="sectioncard__badge">🐍 Track 1</div>
+        <div class="sectioncard__icon">🐍</div>
+        <h2>Python 101</h2>
+        <p>Weeks 1–5. The fundamentals: variables, types, control flow, functions — then a tiny language model.</p>
+        <div class="sectioncard__meta">
+          <span class="badge badge--xp">⚡ 100 XP</span>
+          <span class="badge badge--streak">🔥 5 weeks</span>
         </div>
+        <div class="routes">
+          <span class="routes__label">Choose your route:</span>
+          <div class="routes__pills">
+            <a class="route-pill route-pill--normal" href={`${base}learn/python-101/normal/week-1`}>🌿 Normal — start here</a>
+            <a class="route-pill route-pill--hard" href={`${base}learn/python-101/hard/week-1`}>⚡ Hard — start here</a>
+          </div>
+        </div>
+        <a class="sectioncard__all" href={`${base}learn/python-101`}>See all 5 weeks →</a>
       </div>
       <div class="sectioncard">
-        <a class="sectioncard__hit" href={`${base}learn/data-analysis`} aria-label="Pandas & Data">
-          <div class="sectioncard__badge sectioncard__badge--streak">📊 Track 2</div>
-          <div class="sectioncard__icon">📊</div>
-          <h2>Pandas &amp; Data</h2>
-          <p>Weeks 6–10. Ship a real notebook: pandas the way a data analyst actually uses it.</p>
-          <div class="sectioncard__meta">
-            <span class="badge badge--xp">⚡ 100 XP</span>
-            <span class="badge badge--streak">🔥 5 weeks</span>
-          </div>
-        </a>
-        <div class="routes">
-          <a class="route-pill route-pill--normal" href={`${base}learn/data-analysis/normal/week-6`}>🌿 Normal</a>
-          <a class="route-pill route-pill--hard" href={`${base}learn/data-analysis/hard/week-6`}>⚡ Hard</a>
+        <div class="sectioncard__badge sectioncard__badge--streak">📊 Track 2</div>
+        <div class="sectioncard__icon">📊</div>
+        <h2>Pandas &amp; Data</h2>
+        <p>Weeks 6–10. Ship a real notebook: pandas the way a data analyst actually uses it.</p>
+        <div class="sectioncard__meta">
+          <span class="badge badge--xp">⚡ 100 XP</span>
+          <span class="badge badge--streak">🔥 5 weeks</span>
         </div>
+        <div class="routes">
+          <span class="routes__label">Choose your route:</span>
+          <div class="routes__pills">
+            <a class="route-pill route-pill--normal" href={`${base}learn/data-analysis/normal/week-6`}>🌿 Normal — start here</a>
+            <a class="route-pill route-pill--hard" href={`${base}learn/data-analysis/hard/week-6`}>⚡ Hard — start here</a>
+          </div>
+        </div>
+        <a class="sectioncard__all" href={`${base}learn/data-analysis`}>See all 5 weeks →</a>
       </div>
     </div>
 
@@ -99,10 +103,6 @@ const base = import.meta.env.BASE_URL;
     position: relative; overflow: hidden;
   }
   .sectioncard:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
-  /* This link covers only the icon/title/description area — the route pills
-     below are separate <a> targets, and nesting <a> inside <a> is invalid
-     HTML (browsers auto-close the outer one, breaking the whole layout). */
-  .sectioncard__hit { text-decoration: none; color: inherit; display: flex; flex-direction: column; gap: .75rem; }
   .sectioncard__badge {
     display: inline-flex; align-items: center; gap: .25rem;
     padding: .2rem .6rem; border-radius: var(--radius-pill);
@@ -114,10 +114,25 @@ const base = import.meta.env.BASE_URL;
   .sectioncard h2 { font-size: 1.2rem; margin: 0; }
   .sectioncard p { color: var(--ink-soft); font-size: .9rem; margin: 0; line-height: 1.5; }
   .sectioncard__meta { display: flex; gap: .5rem; flex-wrap: wrap; }
-  .routes { display: flex; gap: .7rem; flex-wrap: wrap; margin-top: auto; }
-  .route-pill { text-decoration: none; padding: .5rem 1rem; border-radius: var(--radius-pill); font-weight: 700; font-size: .85rem; }
-  .route-pill--normal { background: var(--success-soft); color: var(--success); border: 1px solid rgba(88,204,2,.3); }
-  .route-pill--hard { background: var(--bad-soft); color: var(--bad); border: 1px solid rgba(244,63,94,.3); }
+  /* Route pills are the card's one primary action (pick a track and jump
+     straight into week 1); "See all N weeks" below is a clearly separate,
+     secondary text link — kept apart so the two don't read as the same click. */
+  .routes { margin-top: auto; padding-top: .5rem; border-top: 1px solid var(--line); }
+  .routes__label { display: block; font-size: .74rem; font-weight: 700; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .04em; margin-bottom: .5rem; }
+  .routes__pills { display: flex; gap: .7rem; flex-wrap: wrap; }
+  .route-pill {
+    display: inline-flex; align-items: center; gap: .4rem;
+    text-decoration: none; padding: .6rem 1.1rem; border-radius: var(--radius-md);
+    font-weight: 700; font-size: .85rem; color: #fff; border: none;
+    box-shadow: var(--shadow-tactile); transition: transform .1s ease, box-shadow .1s ease;
+  }
+  .route-pill:active { transform: translateY(3px); box-shadow: 0 1px 0 rgba(0,0,0,.08), 0 2px 8px rgba(16,24,40,.06); }
+  .route-pill--normal { background: var(--success); box-shadow: 0 4px 0 #3d9401, 0 6px 16px rgba(88,204,2,.25); }
+  .route-pill--normal:active { box-shadow: 0 1px 0 #3d9401, 0 2px 8px rgba(88,204,2,.15); }
+  .route-pill--hard { background: var(--bad); box-shadow: 0 4px 0 #c81e3f, 0 6px 16px rgba(244,63,94,.25); }
+  .route-pill--hard:active { box-shadow: 0 1px 0 #c81e3f, 0 2px 8px rgba(244,63,94,.15); }
+  .sectioncard__all { align-self: flex-start; font-size: .82rem; font-weight: 700; color: var(--ink-soft); text-decoration: none; }
+  .sectioncard__all:hover { color: var(--accent); }
 
   .rewards-preview { padding: 1.5rem 0 2rem; }
   .rewards-preview h3 { font-size: 1.2rem; margin-bottom: .75rem; }

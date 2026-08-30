@@ -1,9 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
+import SceneBg from '../components/SceneBg.astro';
 
 const base = import.meta.env.BASE_URL;
-const scenes = {forest: 'linear-gradient(160deg, #0f2020 0%, #1a4a3a 100%)', city: 'linear-gradient(160deg, #1a1040 0%, #2d1b69 100%)', library: 'linear-gradient(160deg, #2a1f0e 0%, #5c4033 100%)'};
 ---
 
 <Base title="PyDA Course — Learn Python the gamer way" lang="en" dir="ltr">
@@ -123,7 +123,9 @@ const scenes = {forest: 'linear-gradient(160deg, #0f2020 0%, #1a4a3a 100%)', cit
   <section class="container">
     <div class="hub">
       <a class="hub__card" href={`${base}learn/python-101`}>
-        <div class="hub__thumb" style={`background:${scenes.forest}`}></div>
+        <SceneBg scene="forest" height={140} particles={false}>
+          <span class="hub__icon">🐍</span>
+        </SceneBg>
         <div class="hub__badge" style="background:var(--accent-soft);color:var(--accent)">🐍 Track 1</div>
         <div class="hub__inner">
           <div class="hub__meta">5 lessons · 100 XP total</div>
@@ -134,7 +136,9 @@ const scenes = {forest: 'linear-gradient(160deg, #0f2020 0%, #1a4a3a 100%)', cit
         </div>
       </a>
       <a class="hub__card" href={`${base}learn/data-analysis`}>
-        <div class="hub__thumb" style={`background:${scenes.city}`}></div>
+        <SceneBg scene="city" height={140} particles={false}>
+          <span class="hub__icon">📊</span>
+        </SceneBg>
         <div class="hub__badge" style="background:rgba(255,150,0,.1);color:var(--streak)">🔥 Track 2</div>
         <div class="hub__inner">
           <div class="hub__meta">5 lessons · 100 XP total</div>
@@ -145,11 +149,13 @@ const scenes = {forest: 'linear-gradient(160deg, #0f2020 0%, #1a4a3a 100%)', cit
         </div>
       </a>
       <a class="hub__card" href={`${base}projects`}>
-        <div class="hub__thumb" style={`background:${scenes.library}`}></div>
+        <SceneBg scene="library" height={140} particles={false}>
+          <span class="hub__icon">🚀</span>
+        </SceneBg>
         <div class="hub__badge" style="background:rgba(251,191,36,.12);color:#b45309">👑 Projects</div>
         <div class="hub__inner">
           <div class="hub__meta">20+ builds · open-ended</div>
-          <h2>Real Projects</h2>
+          <h2>Real-World Projects</h2>
           <p>20+ things you can actually build — browse any time, graduation not required.</p>
           <span class="btn btn-xp hub__cta">Browse projects</span>
         </div>
@@ -159,75 +165,58 @@ const scenes = {forest: 'linear-gradient(160deg, #0f2020 0%, #1a4a3a 100%)', cit
 </Base>
 
 <script>
-  // Client-side: read gameState from localStorage and populate gamification UI
-  const STORAGE_KEY = 'pda:state';
-  function readState() {
-    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch { return {}; }
-  }
-
-  const RANKS = ['Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond', 'Master', 'Grandmaster'];
-  const RANK_EMOJIS: Record<string, string> = { Bronze:'🌱', Silver:'⚙️', Gold:'🥇', Platinum:'💠', Diamond:'💎', Master:'🔥', Grandmaster:'👑' };
-
-  function rankFor(xp: number): string {
-    let r = 'Bronze';
-    for (const k of RANKS) { if (xp >= ({Bronze:0,Silver:300,Gold:800,Platinum:1600,Diamond:2800,Master:4500,Grandmaster:7000}[k] || 0)) r = k; }
-    return r;
-  }
+  // Client-side: read gameState from localStorage and populate gamification UI.
+  // Shares rank/XP/streak logic with progress.astro via gameState.ts — don't
+  // re-duplicate these thresholds here again.
+  import {xpProgress, streakProgress, loadState, rankFor, RANK_EMOJIS} from '../lib/gameState.ts';
 
   function render() {
-    const s = readState();
-    const xp = s.xp || 0;
-    const level = Math.floor(xp / 100) + 1;
-    const pct = xp % 100;
-    const streak = s.streak || 0;
+    const xp = xpProgress();
+    const sp = streakProgress();
+    const s = loadState();
     const badges = s.badges || [];
-    const rank = rankFor(xp);
+    const rank = rankFor(xp.xp);
 
     // Player card
     const levelEl = document.getElementById('player-level');
     const xpEl = document.getElementById('player-xp');
     const xpnextEl = document.getElementById('player-xpnext');
-    const xpfillEl = document.getElementById('player-xpfill');
+    const xpfillEl = document.getElementById('player-xpfill') as HTMLElement | null;
     const rankEl = document.getElementById('player-rank');
-    if (levelEl) levelEl.textContent = String(level);
-    if (xpEl) xpEl.textContent = String(xp);
-    if (xpnextEl) xpnextEl.textContent = String(100 - pct);
-    if (xpfillEl) xpfillEl.style.width = pct + '%';
-    if (rankEl) rankEl.innerHTML = `<span class="badge badge--streak">${RANK_EMOJIS[rank] || '🌱'} ${rank}</span>`;
+    if (levelEl) levelEl.textContent = String(xp.level);
+    if (xpEl) xpEl.textContent = String(xp.xp);
+    if (xpnextEl) xpnextEl.textContent = String(xp.toNext);
+    if (xpfillEl) xpfillEl.style.width = xp.pct + '%';
+    if (rankEl) rankEl.innerHTML = `<span class="badge badge--streak">${RANK_EMOJIS[rank] ?? '🌱'} ${rank}</span>`;
 
     // Stats strip
     const gsLevel = document.getElementById('gs-level-val');
     const gsStreak = document.getElementById('gs-streak-val');
     const gsBadges = document.getElementById('gs-badges-val');
     const gsXp = document.getElementById('gs-xp-val');
-    if (gsLevel) gsLevel.textContent = String(level);
-    if (gsStreak) gsStreak.textContent = String(streak);
+    if (gsLevel) gsLevel.textContent = String(xp.level);
+    if (gsStreak) gsStreak.textContent = String(sp.current);
     if (gsBadges) gsBadges.textContent = String(badges.length);
-    if (gsXp) gsXp.textContent = String(xp);
+    if (gsXp) gsXp.textContent = String(xp.xp);
 
     // Streak intensity
     const streakItem = document.getElementById('gs-streak');
     if (streakItem) {
       streakItem.classList.remove('gamestrip__item--hot', 'gamestrip__item--blazing');
-      if (streak >= 7) streakItem.classList.add('gamestrip__item--blazing');
-      else if (streak >= 3) streakItem.classList.add('gamestrip__item--hot');
+      if (sp.current >= 7) streakItem.classList.add('gamestrip__item--blazing');
+      else if (sp.current >= 3) streakItem.classList.add('gamestrip__item--hot');
     }
 
     // Hub progress bars
     const pythonDone = Object.keys(s.lessonsCompleted || {}).filter((k: string) => k.includes('python-101')).length;
     const dataDone = Object.keys(s.lessonsCompleted || {}).filter((k: string) => k.includes('data-analysis')).length;
-    const pythonFill = document.getElementById('hub-python');
-    const dataFill = document.getElementById('hub-data');
+    const pythonFill = document.getElementById('hub-python') as HTMLElement | null;
+    const dataFill = document.getElementById('hub-data') as HTMLElement | null;
     if (pythonFill) pythonFill.style.width = (pythonDone / 5 * 100) + '%';
     if (dataFill) dataFill.style.width = (dataDone / 5 * 100) + '%';
   }
 
-  // Delay render slightly for hydration
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', render);
-  } else {
-    render();
-  }
+  render();
 </script>
 
 <style>
@@ -307,8 +296,7 @@ const scenes = {forest: 'linear-gradient(160deg, #0f2020 0%, #1a4a3a 100%)', cit
     box-shadow: var(--shadow-sm); transition: transform .25s ease, box-shadow .25s ease;
   }
   .hub__card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
-  .hub__thumb { height: 120px; background-size: cover; background-position: center; position: relative; }
-  .hub__thumb::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.04), rgba(0,0,0,.2)); }
+  .hub__icon { font-size: 3.2rem; margin-bottom: -.4rem; filter: drop-shadow(0 6px 12px rgba(0,0,0,.35)); }
   .hub__badge { display: inline-flex; align-items: center; gap: .25rem; padding: .2rem .6rem; border-radius: var(--radius-pill); font-size: .72rem; font-weight: 700; margin: -.8rem 0 0 1rem; position: relative; z-index: 1; width: fit-content; }
   .hub__meta { font-size: .75rem; color: var(--ink-faint); font-weight: 600; letter-spacing: .03em; }
   .hub__inner { padding: 1.15rem; display: flex; flex-direction: column; flex: 1; }
@@ -320,6 +308,19 @@ const scenes = {forest: 'linear-gradient(160deg, #0f2020 0%, #1a4a3a 100%)', cit
   .hub__cta { margin-top: auto; }
 
   @media (max-width: 820px) { .hero__grid { grid-template-columns: 1fr; } .hero__art { display: none; } }
+
+  .hero__bracket { font-size: .82rem; font-weight: 700; color: var(--ink-soft); margin-bottom: .6rem; }
+  .hero__terminal { border-radius: var(--radius-lg); overflow: hidden; background: #0f0c1d; box-shadow: var(--shadow-md); border: 1px solid rgba(255,255,255,.08); }
+  .hero__termbar { display: flex; gap: .4rem; padding: .7rem .9rem; background: rgba(255,255,255,.04); border-bottom: 1px solid rgba(255,255,255,.06); }
+  .hero__termbar span { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,.18); }
+  .hero__termbar span:nth-child(1) { background: #ff5f57; }
+  .hero__termbar span:nth-child(2) { background: #febc2e; }
+  .hero__termbar span:nth-child(3) { background: #28c840; }
+  .hero__termbody { padding: 1.1rem 1.2rem; display: flex; flex-direction: column; gap: .5rem; font-family: var(--font-mono); font-size: .88rem; line-height: 1.6; }
+  .hero__termbody .t-soft { color: #8f86c9; }
+  .hero__termbody .t-prompt { color: #a78bfa; font-weight: 700; }
+  .hero__termbody .t-code { color: #e2dcff; }
+  .hero__termbody .t-out { color: #4ade80; font-weight: 600; }
   @media (max-width: 640px) {
     .gamestrip { grid-template-columns: repeat(2, 1fr); }
     .gamestrip__item--blazing { grid-column: span 2; }

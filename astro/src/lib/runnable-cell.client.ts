@@ -23,8 +23,8 @@ function initCell(cell: Element) {
   const out = cell.querySelector('[data-output]') as HTMLElement | null;
   const lines = cell.querySelector('[data-lines]') as HTMLElement | null;
   const clear = cell.querySelector('[data-clear]') as HTMLButtonElement | null;
-  const src = cell.querySelector('code')?.textContent ?? '';
-  if (!run || !out || !lines || !clear) return;
+  const codeEl = cell.querySelector('code');
+  if (!run || !out || !lines || !clear || !codeEl) return;
 
   const appendLine = (kind: string, text: string) => {
     const d = document.createElement('div');
@@ -34,6 +34,8 @@ function initCell(cell: Element) {
   };
 
   run.addEventListener('click', async () => {
+    // Read live, in case the learner edited the code in place before running.
+    const src = codeEl.textContent ?? '';
     out.hidden = false;
     clear.hidden = false;
     lines.innerHTML = '';
@@ -70,6 +72,16 @@ function initCell(cell: Element) {
     }
   });
   clear.addEventListener('click', () => { lines.innerHTML = ''; out.hidden = true; clear.hidden = true; });
+
+  // Learners can edit the snippet in place before running it — this is the
+  // "playground" part of a runnable cell, not just a static example.
+  codeEl.setAttribute('contenteditable', 'plaintext-only' as string);
+  codeEl.setAttribute('spellcheck', 'false');
+  codeEl.addEventListener('keydown', (e) => {
+    if (e.key !== 'Tab') return;
+    e.preventDefault();
+    document.execCommand('insertText', false, '    ');
+  });
 }
 
 export function initRunnableCells(root: ParentNode = document) {

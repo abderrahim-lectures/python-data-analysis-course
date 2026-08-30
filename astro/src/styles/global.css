@@ -270,7 +270,14 @@ button { font-family: inherit; cursor: pointer; }
 .topnav__xp { display: flex; align-items: center; }
 
 /* === Footer === */
-.footer { padding: 2.5rem 0; color: var(--ink-soft); font-size: .88rem; border-top: 1px solid var(--line); margin-top: 3rem; }
+.footer { background: var(--bg-soft); border-top: 1px solid var(--line); margin-top: 3rem; padding-top: 2.5rem; }
+.footer__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1.75rem; padding-bottom: 2rem; }
+.footer__col { display: flex; flex-direction: column; gap: .55rem; }
+.footer__col h3 { font-size: .78rem; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: var(--ink); margin: 0 0 .25rem; }
+.footer__col a { color: var(--ink-soft); text-decoration: none; font-size: .9rem; }
+.footer__col a:hover { color: var(--accent); }
+.footer__bottom { padding: 1.25rem 0; border-top: 1px solid var(--line); color: var(--ink-faint); font-size: .82rem; }
+.footer__bottom p { margin: 0; }
 
 /* === Mobile nav === */
 .mobilenav { display: none; }
@@ -455,6 +462,8 @@ button { font-family: inherit; cursor: pointer; }
 .cell__actions { display: flex; align-items: center; gap: .75rem; padding: .6rem .9rem; border-bottom: 1px solid var(--line); }
 .cell__lang { color: var(--ink-soft); font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
 .cell__code { margin: 0; padding: 1rem; background: #0f0c1d; color: #e2dcff; overflow-x: auto; font-size: .92rem; line-height: 1.6; font-family: var(--font-mono); }
+.cell__code code[contenteditable]:focus { outline: none; box-shadow: inset 2px 0 0 var(--accent); }
+.cell__code code[contenteditable] { cursor: text; display: block; }
 .cell__output { border-top: 1px solid var(--line); background: #15122a; color: #d8d0ff; padding: .6rem .9rem; font-family: ui-monospace, monospace; font-size: .9rem; }
 .o-line { white-space: pre-wrap; padding: .1rem 0; }
 .o-line--cmd { color: #8f86c9; }
@@ -573,6 +582,27 @@ button { font-family: inherit; cursor: pointer; }
 }
 .bonus > :first-child { margin-top: 0; }
 .bonus > :last-child { margin-bottom: 0; }
+
+/* === Lesson section blocks (rehype-section-blocks.mjs) === */
+.lesson-section {
+  margin: 2rem 0;
+  padding: 1.3rem 1.4rem 1.5rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+.lesson-section > h2 { margin: 0 0 .9rem; font-size: 1.15rem; }
+.lesson-section > :last-child { margin-bottom: 0; }
+.lesson-section ul, .lesson-section ol { margin: 0; padding-inline-start: 1.2rem; }
+.lesson-section li { margin: .45rem 0; }
+.lesson-section--objectives { border-inline-start: 4px solid var(--accent); background: var(--accent-soft); }
+.lesson-section--pitfalls { border-inline-start: 4px solid var(--warn); background: var(--warn-soft); }
+.lesson-section--socratic { border-inline-start: 4px solid var(--streak); background: rgba(255,150,0,.06); }
+.lesson-section--quiz { border-inline-start: 4px solid var(--success); background: var(--success-soft); }
+.lesson-section--challenges { border-inline-start: 4px solid var(--accent-strong); }
+.lesson-section--challenges .challenge:first-of-type { margin-top: 0; }
+.lesson-section--challenges .challenge:last-of-type { margin-bottom: 0; }
 
 /* === KaTeX: keep math legible on both themes and scrollable on mobile === */
 .katex-display { overflow-x: auto; overflow-y: hidden; padding: .5rem 0; }

@@ -62,20 +62,13 @@ const daWeeks = [6,7,8,9,10].map((w) => {
     </div>
 
     <!-- XP bar -->
-    <div class="xpbar" role="progressbar" aria-label="XP progress" aria-valuenow={xp.pct} aria-valuemin="0" aria-valuemax="100">
-      <div class="xpbar__fill" style="width:{xp.pct}%"></div>
-      <span class="xpbar__text">{xp.xp} XP</span>
+    <div class="xpbar" role="progressbar" aria-label="XP progress" aria-valuenow={xp.pct} aria-valuemin="0" aria-valuemax="100" id="xpbar">
+      <div class="xpbar__fill" id="xpbar-fill" style="width:{xp.pct}%"></div>
+      <span class="xpbar__text" id="xpbar-text">{xp.xp} XP</span>
     </div>
 
     <!-- Milestones -->
-    <div class="milestones">
-      {quests.filter((q) => q.done).slice(0, 6).map((q) => (
-        <span class="badge badge--success">✅ {q.label}</span>
-      ))}
-      {quests.filter((q) => !q.done).slice(0, 3).map((q) => (
-        <span class="badge badge--locked">🔒 {q.label}</span>
-      ))}
-    </div>
+    <div class="milestones" id="milestones"></div>
   </section>
 
   <!-- Trails -->
@@ -87,20 +80,20 @@ const daWeeks = [6,7,8,9,10].map((w) => {
             <h2>🐍 Python 101</h2>
             <span class="trail__meta">Variables → functions → language model</span>
           </div>
-          <span class="trail__pct">{py.done}/{py.total} done</span>
+          <span class="trail__pct" id="pct-python-101">{py.done}/{py.total} done</span>
         </div>
-        <ol class="stations">
+        <ol class="stations" data-track="python-101">
           {pyWeeks.map(({w, done}) => (
             <li class="station{done ? ' station--done' : ''}" data-week={w}>
               <a class="station__link" href={`${base}learn/python-101/normal/week-${w}`}>
                 <span class="station__dot"></span>
                 <span class="station__label">Week {w}</span>
-                {done && <span class="station__check">✅</span>}
+                <span class="station__check">✅</span>
               </a>
             </li>
           ))}
         </ol>
-        <div class="trail__xp">+{py.done * 20} XP earned</div>
+        <div class="trail__xp" id="xp-python-101">+{py.done * 20} XP earned</div>
       </div>
 
       <div class="trail">
@@ -109,20 +102,20 @@ const daWeeks = [6,7,8,9,10].map((w) => {
             <h2>📊 Pandas &amp; Data</h2>
             <span class="trail__meta">Kaggle-style notebook with pandas</span>
           </div>
-          <span class="trail__pct">{da.done}/{da.total} done</span>
+          <span class="trail__pct" id="pct-data-analysis">{da.done}/{da.total} done</span>
         </div>
-        <ol class="stations">
+        <ol class="stations" data-track="data-analysis">
           {daWeeks.map(({w, done}) => (
             <li class="station{done ? ' station--done' : ''}" data-week={w}>
               <a class="station__link" href={`${base}learn/data-analysis/normal/week-${w}`}>
                 <span class="station__dot"></span>
                 <span class="station__label">Week {w}</span>
-                {done && <span class="station__check">✅</span>}
+                <span class="station__check">✅</span>
               </a>
             </li>
           ))}
         </ol>
-        <div class="trail__xp trail__xp--streak">+{da.done * 20} XP earned</div>
+        <div class="trail__xp trail__xp--streak" id="xp-data-analysis">+{da.done * 20} XP earned</div>
       </div>
     </div>
   </section>
@@ -132,43 +125,88 @@ const daWeeks = [6,7,8,9,10].map((w) => {
     <div class="quests">
       <div class="quests__head">
         <h2>Quests</h2>
-        <span class="badge badge--accent">{quests.filter((q) => q.done).length}/{quests.length} done</span>
+        <span class="badge badge--accent" id="quests-pct">{quests.filter((q) => q.done).length}/{quests.length} done</span>
       </div>
-      <div class="quest-grid">
+      <div class="quest-grid" id="quest-grid">
         {quests.map((q) => (
-          <div class="quest{!q.done ? ' quest--locked' : ''}">
+          <div class={`quest${!q.done ? ' quest--locked' : ''}`} data-quest={q.id}>
             <span class="quest__icon">{q.done ? '✅' : '🔒'}</span>
             <span class="quest__label">{q.label}</span>
-            {q.done && <span class="quest__check">✓</span>}
+            <span class="quest__check">✓</span>
           </div>
         ))}
       </div>
     </div>
   </section>
 
-  <script is:inline>
-    function tick() {
-      const s = JSON.parse(localStorage.getItem('pda:state') || '{}');
-      const xp = s.xp || 0;
-      const level = Math.floor(xp / 100) + 1;
-      const pct = xp % 100;
-      const streak = s.streak || 0;
-      const best = s.bestStreak || 0;
-      const badges = s.badges || [];
-      const xpfill = document.getElementById('p-xpfill');
-      const pctText = document.getElementById('p-xp');
-      const nextText = document.getElementById('p-xpnext');
-      const levelText = document.getElementById('p-level');
-      const streakText = document.getElementById('p-streak');
-      const bestText = document.getElementById('p-best');
-      if (xpfill) xpfill.style.width = pct + '%';
-      if (pctText) pctText.textContent = String(xp);
-      if (nextText) nextText.textContent = String(100 - pct);
-      if (levelText) levelText.textContent = String(level);
-      if (streakText) streakText.textContent = String(streak) + '🔥';
-      if (bestText) bestText.textContent = String(best);
+  <script>
+    // Everything on this page (stations, quests, milestones, XP/streak/rank)
+    // is computed at build time with zero data — there's no localStorage in
+    // the Node/SSG build — so the static HTML always shows a fresh-account
+    // skeleton. This hydrates it with the visitor's real progress on load.
+    import {xpProgress, trackProgress, questsToShow, streakProgress, isWeekComplete, rankFor, RANK_EMOJIS} from '../lib/gameState.ts';
+
+    function render() {
+      const xp = xpProgress();
+      const sp = streakProgress();
+      const quests = questsToShow();
+      const rank = rankFor(xp.xp);
+
+      const set = (id: string, text: string) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = text;
+      };
+      set('p-xp', String(xp.xp));
+      set('p-xpnext', String(xp.toNext));
+      set('p-level', String(xp.level));
+      set('p-streak', `${sp.current}🔥`);
+      set('p-best', String(sp.best));
+      set('p-quests', `${quests.filter((q) => q.done).length}/${quests.length}`);
+      const xpfill = document.getElementById('p-xpfill') as HTMLElement | null;
+      if (xpfill) xpfill.style.width = xp.pct + '%';
+      const rankEl = document.getElementById('p-rank');
+      if (rankEl) rankEl.innerHTML = `${RANK_EMOJIS[rank] ?? '🌱'} ${rank}`;
+
+      const xpbarFill = document.getElementById('xpbar-fill') as HTMLElement | null;
+      if (xpbarFill) xpbarFill.style.width = xp.pct + '%';
+      set('xpbar-text', `${xp.xp} XP`);
+
+      // Tracks: mark each station done/undone, update the "N/5 done" and
+      // "+N XP earned" text per track.
+      for (const [section, weeks] of [['python-101', [1, 2, 3, 4, 5]], ['data-analysis', [6, 7, 8, 9, 10]]] as const) {
+        const list = document.querySelector(`.stations[data-track="${section}"]`);
+        let done = 0;
+        weeks.forEach((w) => {
+          const complete = isWeekComplete(section, w);
+          if (complete) done++;
+          const li = list?.querySelector(`li[data-week="${w}"]`);
+          li?.classList.toggle('station--done', complete);
+        });
+        set(`pct-${section}`, `${done}/${weeks.length} done`);
+        set(`xp-${section}`, `+${done * 20} XP earned`);
+      }
+
+      // Quests grid + milestones preview.
+      quests.forEach((q) => {
+        const el = document.querySelector(`.quest[data-quest="${q.id}"]`);
+        if (!el) return;
+        el.classList.toggle('quest--locked', !q.done);
+        const icon = el.querySelector('.quest__icon');
+        if (icon) icon.textContent = q.done ? '✅' : '🔒';
+      });
+      set('quests-pct', `${quests.filter((q) => q.done).length}/${quests.length} done`);
+
+      const milestones = document.getElementById('milestones');
+      if (milestones) {
+        const done = quests.filter((q) => q.done).slice(0, 6);
+        const locked = quests.filter((q) => !q.done).slice(0, 3);
+        milestones.innerHTML = [
+          ...done.map((q) => `<span class="badge badge--success">✅ ${q.label}</span>`),
+          ...locked.map((q) => `<span class="badge badge--locked">🔒 ${q.label}</span>`),
+        ].join('');
+      }
     }
-    tick();
+    render();
   </script>
 </Base>
 
@@ -224,7 +262,8 @@ const daWeeks = [6,7,8,9,10].map((w) => {
   .station__dot { width: 14px; height: 14px; border-radius: 50%; border: 3px solid var(--line); background: var(--bg); transition: all var(--transition-fast); }
   .station--done .station__dot { border-color: var(--accent); background: var(--accent); box-shadow: 0 0 8px rgba(91,33,182,.3); }
   .station__label { font-size: .78rem; font-weight: 700; }
-  .station__check { font-size: .7rem; }
+  .station__check { font-size: .7rem; display: none; }
+  .station--done .station__check { display: inline; }
   .trail__xp { font-size: .75rem; font-weight: 700; color: var(--ink-faint); }
   .trail__xp--streak { color: var(--streak); }
 
@@ -237,7 +276,8 @@ const daWeeks = [6,7,8,9,10].map((w) => {
   .quest:hover { box-shadow: var(--shadow-sm); }
   .quest--locked { opacity: .45; filter: grayscale(.4); }
   .quest__icon { font-size: .95rem; }
-  .quest__check { color: var(--success); font-weight: 800; }
+  .quest__check { color: var(--success); font-weight: 800; display: none; }
+  .quest:not(.quest--locked) .quest__check { display: inline; }
 
   @media (max-width: 640px) {
     .trails { grid-template-columns: 1fr; }

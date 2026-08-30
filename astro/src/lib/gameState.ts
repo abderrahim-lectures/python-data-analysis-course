@@ -160,3 +160,20 @@ export function trackProgress(trackId: string, totalWeeks: number): { done: numb
   const done = Object.keys(s.lessonsCompleted).filter(k => k.includes(trackId)).length;
   return { done, total: totalWeeks, pct: Math.round((done / totalWeeks) * 100) };
 }
+
+// Whether a specific week is complete on EITHER track difficulty — a learner
+// who does the hard version of week 3 shouldn't see week 3 as locked.
+export function isWeekComplete(section: string, week: number): boolean {
+  const s = read();
+  return !!s.lessonsCompleted[`${section}/normal/week-${week}`] || !!s.lessonsCompleted[`${section}/hard/week-${week}`];
+}
+
+export const RANKS = ['Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond', 'Master', 'Grandmaster'] as const;
+export const RANK_EMOJIS: Record<string, string> = { Bronze: '🌱', Silver: '⚙️', Gold: '🥇', Platinum: '💠', Diamond: '💎', Master: '🔥', Grandmaster: '👑' };
+const RANK_THRESHOLDS: Record<string, number> = { Bronze: 0, Silver: 300, Gold: 800, Platinum: 1600, Diamond: 2800, Master: 4500, Grandmaster: 7000 };
+
+export function rankFor(xp: number): string {
+  let r: string = RANKS[0];
+  for (const k of RANKS) { if (xp >= (RANK_THRESHOLDS[k] || 0)) r = k; }
+  return r;
+}
