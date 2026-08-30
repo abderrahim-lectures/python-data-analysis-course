@@ -24,6 +24,7 @@
   --streak-text: #8f4e00;
   --xp-text: #8a5a06;
   --success-text: #2e7d0a;
+  --accent-text: #6d28d9;
   --xp: #fbbf24;
   --xp-glow: rgba(251, 191, 36, 0.3);
   --success: #58cc02;
@@ -76,6 +77,7 @@
   --streak-text: #fb923c;
   --xp-text: #fcd34d;
   --success-text: #6ee7a0;
+  --accent-text: #c4b5fd;
   --xp: #fcd34d;
   --xp-glow: rgba(252, 211, 77, .3);
   --success: #4ade80;

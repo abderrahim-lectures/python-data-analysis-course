@@ -101,7 +101,15 @@ const AUDIT = `(() => {
   return out.filter(o => { const k = o.t + o.ratio; if (seen.has(k)) return false; seen.add(k); return true; });
 })()`;
 
-const PAGES = ['/?onboarded=1', '/progress?onboarded=1', '/learn?onboarded=1', '/projects?onboarded=1', '/playground?onboarded=1'];
+const PAGES = [
+  '/?onboarded=1', '/progress?onboarded=1', '/learn?onboarded=1',
+  '/projects?onboarded=1', '/playground?onboarded=1',
+  // Lesson + project bodies carry admonitions, quizzes and code cells whose
+  // colours appear nowhere else — H1 (green-as-text) hid here.
+  '/learn/python-101/normal/week-1?onboarded=1',
+  '/learn/python-101/hard/week-1?onboarded=1',
+  '/projects/wordle-clone?onboarded=1',
+];
 let total = 0;
 for (const theme of ['light', 'dark']) {
   await goto('/?onboarded=1');
