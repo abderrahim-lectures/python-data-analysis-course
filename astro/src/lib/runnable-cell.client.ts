@@ -1,0 +1,81 @@
+// @ts-nocheck
+// Hydrates every `.cell[data-runnable]` on the page (whether hand-authored via
+// <RunnableCell> or generated from ```python fences by rehype-runnable-python)
+// with a Pyodide-backed Run button. Loaded once per page from Base.astro.
+const PYODIDE_VERSION = '0.26.4';
+const INDEX = `https://cdn.jsdelivr.net/pyodide/v${PYODIDE_VERSION}/full/`;
+let pyPromise: Promise<any> | null = null;
+
+async function py() {
+  if (!pyPromise) {
+    const mod = await import(/* @vite-ignore */ `${INDEX}pyodide.mjs`);
+    pyPromise = mod.loadPyodide({indexURL: INDEX});
+  }
+  return pyPromise;
+}
+
+function initCell(cell: Element) {
+  if (cell.hasAttribute('data-hydrated')) return;
+  cell.setAttribute('data-hydrated', '1');
+  const lessonId = (cell as HTMLElement).dataset.lesson ?? '';
+  let awarded = false;
+  const run = cell.querySelector('[data-run]') as HTMLButtonElement | null;
+  const out = cell.querySelector('[data-output]') as HTMLElement | null;
+  const lines = cell.querySelector('[data-lines]') as HTMLElement | null;
+  const clear = cell.querySelector('[data-clear]') as HTMLButtonElement | null;
+  const src = cell.querySelector('code')?.textContent ?? '';
+  if (!run || !out || !lines || !clear) return;
+
+  const appendLine = (kind: string, text: string) => {
+    const d = document.createElement('div');
+    d.className = `o-line o-line--${kind}`;
+    d.textContent = text;
+    lines.appendChild(d);
+  };
+
+  run.addEventListener('click', async () => {
+    out.hidden = false;
+    clear.hidden = false;
+    lines.innerHTML = '';
+    appendLine('cmd', '$ python');
+    const engine = await py();
+    engine.setStdout({batched: (s: string) => appendLine('out', s)});
+    engine.setStderr({batched: (s: string) => appendLine('err', s)});
+    engine.setStdin({stdin: () => window.prompt('') ?? ''});
+    try {
+      await engine.loadPackagesFromImports(src);
+      await engine.runPythonAsync(src);
+    } catch (e) {
+      appendLine('err', e instanceof Error ? e.message : String(e));
+    }
+    if (!awarded && lessonId) {
+      awarded = true;
+      try {
+        const m = await import('./gameState.ts');
+        const xp = m.addXP(lessonId);
+        const t = document.createElement('div');
+        t.className = 'rctoast';
+        t.textContent = `⚡ +${xp} XP`;
+        t.style.cssText = 'position:fixed;z-index:9999;left:50%;top:50%;transform:translate(-50%,-50%) scale(.9);background:linear-gradient(135deg,#5b21b6,#4c1d95);color:#fff;padding:.5rem 1.2rem;border-radius:999px;font-weight:800;font-size:.95rem;box-shadow:0 6px 24px rgba(91,33,182,.45);pointer-events:none;';
+        document.body.appendChild(t);
+        requestAnimationFrame(() => {
+          t.style.transition = 'all .7s cubic-bezier(.22,.61,.36,1)';
+          t.style.transform = 'translate(-50%,-70%) scale(1.05)';
+          t.style.opacity = '0';
+        });
+        setTimeout(() => t.remove(), 900);
+        cell.dispatchEvent(new CustomEvent('lesson:complete', {bubbles: true, detail: {lessonId, xp}}));
+        document.dispatchEvent(new CustomEvent('lesson:complete'));
+      } catch { /* offline: skip XP award */ }
+    }
+  });
+  clear.addEventListener('click', () => { lines.innerHTML = ''; out.hidden = true; clear.hidden = true; });
+}
+
+export function initRunnableCells(root: ParentNode = document) {
+  root.querySelectorAll('[data-runnable]').forEach(initCell);
+}
+
+if (typeof document !== 'undefined') {
+  document.addEventListener('DOMContentLoaded', () => initRunnableCells());
+}

@@ -1,6 +1,10 @@
 // @ts-check
 import {defineConfig} from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
+import remarkAdmonitions from './src/lib/remark-admonitions.mjs';
+import rehypeRunnablePython from './src/lib/rehype-runnable-python.mjs';
 
 // GitHub Pages deploys to `https://<user>.github.io/<repo>/`, so production
 // builds live under that base path. Locally we want plain `localhost:4321/`
@@ -17,6 +21,8 @@ export default defineConfig({
   },
   markdown: {
     shikiConfig: {theme: 'github-dark'},
+    remarkPlugins: [remarkAdmonitions, remarkMath],
+    rehypePlugins: [rehypeKatex, rehypeRunnablePython],
   },
   integrations: [sitemap()],
 });

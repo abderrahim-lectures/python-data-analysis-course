@@ -4,7 +4,6 @@
 // proof-of-concept page (which stays as a redirect target via the same slug).
 import {getCollection, type CollectionEntry} from 'astro:content';
 import Base from '../../../../layouts/Base.astro';
-import RunnableCell from '../../../../components/RunnableCell.astro';
 
 export async function getStaticPaths() {
   const entries = await getCollection('learn');
@@ -54,7 +53,7 @@ const lessonId = `${section}/${track}/week-${week}`;
     </header>
 
     <div class="lesson-content">
-      <Content components={{pre: RunnableCell}} />
+      <Content />
     </div>
 
     <div class="lesson-nav">

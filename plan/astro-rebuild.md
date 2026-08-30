@@ -111,6 +111,57 @@ do not build it until asked. Push all work-in-progress to the current branch
   `process.argv` check, don't revert to the function form without checking
   that `Astro.site` still resolves.)
 
+- **Link audit**: added `src/pages/learn/[section]/index.astro` (was 404 —
+  the Learn cards and lesson breadcrumbs link to `/learn/<section>`, which
+  had no page). Ran a full internal-link crawl of `dist/` after build; fixed
+  the remaining two real breaks: the ar week-1 breadcrumb pointed at a
+  nonexistent `/ar/learn/python-101`, and the topnav locale switcher linked
+  to `/es/`, `/fr/`, and a nonexistent `/ar/` root — `es`/`fr` are now
+  omitted from the switcher (no content yet) and `ar` points at the one real
+  Arabic page (`/ar/learn`) instead of a 404 root. Zero broken internal
+  `href`s in `dist/` as of this commit — re-run the crawl after adding pages.
+
+- **Lesson content rendering pipeline fixed** — three real bugs found by
+  actually reading a rendered lesson page (not just running `astro build`):
+  1. ```python fenced code blocks in markdown were completely static —
+     `<Content components={{pre: RunnableCell}} />` looked plausible but is
+     an **MDX-only** Astro feature; `type: 'content'` (plain markdown, which
+     is what every lesson `.md` file is) ignores the `components` prop
+     silently. Fixed by adding a rehype plugin
+     (`src/lib/rehype-runnable-python.mjs`) that rewrites Shiki-highlighted
+     `<pre data-language="python">` blocks (note: Shiki puts the language on
+     `data-language` on `<pre>`, **not** a `language-python` class on
+     `<code>` — that's the class you'd expect pre-Shiki, and it's gone by
+     the time a rehype plugin sees the tree) into the same markup
+     `RunnableCell.astro` produces. The Pyodide hydration script used to
+     live inline inside `RunnableCell.astro`'s `<script is:inline>` (so it
+     only ever ran for hand-authored `<RunnableCell>` usages); it's now
+     `src/lib/runnable-cell.client.ts`, loaded once globally from
+     `Base.astro`, and hydrates *any* `.cell[data-runnable]` on the page —
+     component-based or rehype-generated.
+  2. Docusaurus `:::tip[Title] ... :::` admonitions rendered as literal
+     `:::tip[...]` text — Astro's markdown pipeline doesn't know Docusaurus
+     container syntax. Fixed with a custom remark plugin
+     (`src/lib/remark-admonitions.mjs`). Note for future edits: because the
+     content has no blank line between the `:::` markers and the body, they
+     parse as **one single paragraph** with the markers embedded in the
+     first/last text child (soft line breaks), not as separate sibling
+     paragraphs — the plugin has to split within one paragraph's children,
+     not scan across paragraphs.
+  3. LaTeX (`$$ ... $$`) wasn't rendered at all (no math plugin configured).
+     Fixed with `remark-math` + `rehype-katex` + `katex/dist/katex.min.css`
+     imported in `Base.astro`.
+  - Also added base CSS for fenced/inline code and the `.admonition`/`.cell`
+    classes to `src/styles/global.css` (previously there was **no** base
+    styling for `<pre>`/`<code>` at all outside the hand-authored
+    `RunnableCell` component, hence "code block is ugly").
+  - **Before reusing any of this on new content**: always `rm -rf .astro`
+    (or `node_modules/.astro`) after editing a remark/rehype plugin file —
+    Astro's content-collection cache does not reliably pick up plugin
+    changes on a warm `astro build`/`astro dev`; a stale cache silently
+    runs the *old* (or no) plugin with zero errors, which cost real time
+    debugging "why isn't my plugin running" in this session.
+
 ### Known gaps / next steps
 
 1. **i18n content**: only EN lesson content exists in `src/content/learn`.

@@ -1,6 +1,7 @@
 ---
 // Base page layout: sticky top nav (locale + theme + progress) + footer.
 import '../styles/global.css';
+import 'katex/dist/katex.min.css';
 import Icon from '../components/Icon.astro';
 
 interface Props {
@@ -20,11 +21,11 @@ const {
 } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const ogImage = image ? new URL(image, Astro.site) : new URL('og-default.png', Astro.site);
+// es/fr have no ported pages yet (see plan/astro-rebuild.md) — omit them from
+// the switcher rather than link to a 404. Re-add once those locales have content.
 const locales = [
-  {code: 'en', label: 'EN'},
-  {code: 'ar', label: 'عربي'},
-  {code: 'es', label: 'ES'},
-  {code: 'fr', label: 'FR'},
+  {code: 'en', label: 'EN', href: () => base},
+  {code: 'ar', label: 'عربي', href: () => `${base}ar/learn`},
 ];
 const base = import.meta.env.BASE_URL;
 ---
@@ -72,7 +73,7 @@ const base = import.meta.env.BASE_URL;
             {locales.map((l) => (
               <a
                 class:list={['topnav__lang', l.code === lang && 'topnav__lang--active']}
-                href={l.code === 'en' ? base : `${base}${l.code}/`}
+                href={l.href()}
                 aria-current={l.code === lang ? 'page' : undefined}
               >{l.label}</a>
             ))}
@@ -121,6 +122,10 @@ const base = import.meta.env.BASE_URL;
       <div class="lvlup__text">LEVEL UP</div>
       <div class="lvlup__sub" id="lvlup-sub"></div>
     </div>
+
+    <script>
+      import '../lib/runnable-cell.client.ts';
+    </script>
 
     <script>
       // @ts-nocheck

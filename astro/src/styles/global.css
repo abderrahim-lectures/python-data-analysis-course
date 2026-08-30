@@ -449,3 +449,58 @@ button { font-family: inherit; cursor: pointer; }
 
 /* Level-up overlay state classes */
 .lvlup--show { display: flex; }
+
+/* === Runnable Python cell (RunnableCell.astro + rehype-runnable-python) === */
+.cell { border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); overflow: hidden; margin: 1.25rem 0; box-shadow: var(--shadow-sm); }
+.cell__actions { display: flex; align-items: center; gap: .75rem; padding: .6rem .9rem; border-bottom: 1px solid var(--line); }
+.cell__lang { color: var(--ink-soft); font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
+.cell__code { margin: 0; padding: 1rem; background: #0f0c1d; color: #e2dcff; overflow-x: auto; font-size: .92rem; line-height: 1.6; font-family: var(--font-mono); }
+.cell__output { border-top: 1px solid var(--line); background: #15122a; color: #d8d0ff; padding: .6rem .9rem; font-family: ui-monospace, monospace; font-size: .9rem; }
+.o-line { white-space: pre-wrap; padding: .1rem 0; }
+.o-line--cmd { color: #8f86c9; }
+.o-line--out { color: #d8d0ff; }
+.o-line--err { color: #ff8fa3; }
+.cell__clear { margin-top: .5rem; background: transparent; border: 1px solid var(--line); color: var(--ink-soft); border-radius: 999px; padding: .2rem .8rem; cursor: pointer; font-size: .8rem; }
+
+/* === Generic (non-runnable) fenced code blocks, e.g. shell/output snippets === */
+.lesson-content pre:not(.cell__code):not([data-runnable] pre) {
+  margin: 1.25rem 0;
+  padding: 1rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--line);
+  overflow-x: auto;
+  font-size: .92rem;
+  line-height: 1.6;
+  box-shadow: var(--shadow-sm);
+}
+.lesson-content :not(pre) > code {
+  background: var(--surface-2);
+  padding: .15rem .4rem;
+  border-radius: 6px;
+  font-size: .88em;
+  font-family: var(--font-mono);
+  color: var(--accent-strong);
+}
+
+/* === Admonitions (:::tip / :::warning / :::note / :::danger) === */
+.admonition {
+  margin: 1.25rem 0;
+  padding: 1rem 1.2rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--line);
+  border-inline-start: 4px solid var(--accent);
+  background: var(--accent-soft);
+}
+.admonition__title { font-weight: 800; margin: 0 0 .4rem; color: var(--accent-strong); }
+.admonition > :last-child { margin-bottom: 0; }
+.admonition--tip { border-inline-start-color: var(--success); background: var(--success-soft); }
+.admonition--tip .admonition__title { color: var(--success); }
+.admonition--warning { border-inline-start-color: var(--warn); background: var(--warn-soft); }
+.admonition--warning .admonition__title { color: var(--warn); }
+.admonition--danger { border-inline-start-color: var(--bad); background: var(--bad-soft); }
+.admonition--danger .admonition__title { color: var(--bad); }
+.admonition--note { border-inline-start-color: var(--accent); background: var(--accent-soft); }
+
+/* === KaTeX: keep math legible on both themes and scrollable on mobile === */
+.katex-display { overflow-x: auto; overflow-y: hidden; padding: .5rem 0; }
+.katex { color: var(--ink-hi); }
