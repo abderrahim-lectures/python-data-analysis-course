@@ -1,62 +1,23 @@
 {
-  "name": "python-data-analysis-course",
-  "version": "1.4.0",
+  "name": "pyda-course-astro",
+  "version": "2.0.0",
   "private": true,
-  "author": "Abderrahim Adrabi",
+  "type": "module",
   "scripts": {
-    "docusaurus": "docusaurus",
-    "start": "docusaurus start",
-    "build": "docusaurus build",
-    "swizzle": "docusaurus swizzle",
-    "deploy": "docusaurus deploy",
-    "clear": "docusaurus clear",
-    "serve": "docusaurus serve",
-    "write-translations": "docusaurus write-translations",
-    "write-heading-ids": "docusaurus write-heading-ids",
-    "typecheck": "tsc",
-    "test:e2e": "playwright test"
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check"
   },
   "dependencies": {
-    "@docusaurus/core": "3.10.2",
-    "@docusaurus/faster": "3.10.2",
-    "@docusaurus/plugin-client-redirects": "^3.10.2",
-    "@docusaurus/plugin-pwa": "^3.10.2",
-    "@docusaurus/preset-classic": "3.10.2",
-    "@easyops-cn/docusaurus-search-local": "^0.55.2",
-    "@mdx-js/react": "^3.0.0",
-    "clsx": "^2.0.0",
-    "html-to-image": "^1.11.13",
-    "monaco-editor": "^0.52.2",
-    "prism-react-renderer": "^2.3.0",
-    "qrcode": "^1.5.4",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "@astrojs/check": "^0.9.0",
+    "@astrojs/sitemap": "^3.7.3",
+    "astro": "^5.0.0",
+    "hast-util-to-string": "^3.0.1",
+    "hastscript": "^9.0.1",
+    "katex": "^0.18.4",
     "rehype-katex": "^7.0.1",
-    "remark-math": "^6.0.0"
-  },
-  "devDependencies": {
-    "@docusaurus/module-type-aliases": "3.10.2",
-    "@docusaurus/tsconfig": "3.10.2",
-    "@docusaurus/types": "3.10.2",
-    "@playwright/test": "^1.61.1",
-    "@types/qrcode": "^1.5.6",
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.2.5",
-    "typescript": "~6.0.2"
-  },
-  "browserslist": {
-    "production": [
-      ">0.5%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 3 chrome version",
-      "last 3 firefox version",
-      "last 5 safari version"
-    ]
-  },
-  "engines": {
-    "node": ">=20.0"
+    "remark-math": "^6.0.0",
+    "typescript": "^5.6.0"
   }
 }

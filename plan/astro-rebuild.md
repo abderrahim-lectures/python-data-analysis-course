@@ -487,17 +487,87 @@ copy, onboarding modal text) is still English-only for ar/es/fr — only
 and `code.json` have the translated UI strings ready to pull from if that's
 wanted next.
 
+### Status log — 2026-08-30 (root restructure + UI chrome i18n)
+
+**KaTeX strict-mode warnings** (`unicodeTextInMathMode`/`unknownSymbol` on
+accented chars and French guillemets inside `\text{...}` in es/fr math
+spans — legitimate content, not a bug): silenced via
+`[rehypeKatex, {strict: false}]` in `astro.config.mjs`. Verified: warnings
+gone, 215 pages still build clean. Committed as `f527316`.
+
+**UI chrome i18n (nav/footer/onboarding modal) — done.** Added
+`src/lib/uiStrings.ts`, a `Record<Locale, UiStrings>` dictionary wired into
+`Base.astro` via `resolveLocale(lang)`. Nav labels, footer columns/links,
+copyright line, theme-toggle aria-label, and mobile nav are now translated
+for ar/es/fr. Nav/footer/copyright wording for ar/es/fr was carried over
+from the (now-deleted) `i18n/{locale}/docusaurus-theme-classic/{navbar,footer}.json`
+human-reviewed translations before that source was removed. The onboarding
+modal's 3-step copy has no Docusaurus equivalent (that modal is new to
+Astro) and was translated fresh. Verified by grepping the built
+`dist/ar|es|fr/**/*.html` for the translated strings (e.g. ar nav renders
+"تعلّم / المشاريع / الإحصائيات / تقدمي", fr footer renders the translated
+copyright line) — not just a successful build.
+
+Note: full UI-string coverage (`code.json`, ~350 keys/locale — onboarding
+variants, badges, toasts, quiz feedback, etc. from the old React
+components) was **not** ported; only the chrome `Base.astro` actually
+renders today. Most of those old keys don't have a 1:1 Astro equivalent
+since the components were rewritten, not reused.
+
+**Astro promoted to repo root; Docusaurus removed.** Per user instruction
+("make astro as the root project and clean up docusaurus"). Moved
+`astro/{src,public,package.json,package-lock.json,astro.config.mjs,tsconfig.json}`
+up to the repo root via `git mv` (history preserved); removed the
+Docusaurus-only tracked tree: `docusaurus.config.ts`, `sidebars.ts`,
+`docs/`, `static/`, the old root `src/` (React components/theme
+overrides), `i18n/` (content already ported into `src/content/`, and the
+UI-chrome strings were pulled into `uiStrings.ts` first per the user's
+"use them first, then we delete them"), and the old root
+`package.json`/`package-lock.json`/`tsconfig.json`. Deleted the untracked,
+gitignored `build/` and `.docusaurus/` artifact dirs. Merged `.gitignore`
+(dropped Docusaurus-specific entries, added `/dist` and `/.astro`).
+Reinstalled `node_modules` at the new root and verified with a full clean
+build (`rm -rf .astro dist && npm run build` → 215 pages) plus a `npm run
+dev` smoke test (curl 200 on `/`, `/learn/`, `/ar/learn/` from the new
+root path) and the debris-grep from earlier passes (0 real hits — the 4
+`className=` matches on `/progress`, `/stats`, `/projects`, `/learn` are
+plain-JS `el.className = "..."` assignments, not leftover JSX).
+
+Also fixed two things that would have silently broken from the swap:
+- `.github/workflows/ci.yml`: `npm run typecheck` → `npm run check`
+  (Astro's package.json has no `typecheck` script). The Playwright
+  install/`test:e2e`/artifact-upload steps are commented out with an
+  inline note — `tests/e2e/*.spec.ts` still target the old Docusaurus
+  build (`npm run serve` on :3050, React component DOM/selectors) and need
+  porting to the Astro site before that gate means anything again. Running
+  them as-is would just be a permanently-red CI check.
+- `.devcontainer/devcontainer.json`: forwarded port 3000 ("Docusaurus dev
+  server") → 4321 ("Astro dev server").
+
+Not touched, deliberately: `deploy.yml` (still deferred per standing
+instruction), `examples/`, `jupyterlite-config/`, `requirements.txt`,
+`tests/e2e/*.spec.ts` themselves (left in place, not deleted — still
+useful as a reference for what user flows to re-cover, just not runnable
+against the current site yet).
+
+`git status` after all this: ~488 deletions (old Docusaurus tree), 233
+renames (astro/* → root, history preserved via `git mv`), 6 modified
+(`Base.astro`, `.gitignore`, `astro.config.mjs` path-relative comment,
+`ci.yml`, `devcontainer.json`, `plan/astro-rebuild.md`), 1 new file
+(`uiStrings.ts`). Not yet committed/pushed as of this log entry — same
+`workflow`-scope push block as every prior attempt this session applies
+here too once committed.
+
 ### Known gaps / next steps
 
-1. **i18n content — done**: ar/es/fr lesson + project content is ported and
-   routed (see "i18n content port" section above for the full writeup —
-   route filtering gotchas, the Astro `getStaticPaths` module-scope trap,
-   what's verified vs. not). What's left of the original plan step 2: UI
-   chrome (nav/footer/hero copy) is still English-only for all three
-   locales — content is translated, the site frame around it isn't. The
-   translated strings already exist in
-   `i18n/{locale}/docusaurus-theme-classic/{navbar,footer}.json` and
-   `code.json` if picking this up.
+1. **i18n — content and UI chrome now both done.** ar/es/fr lesson +
+   project content is ported and routed (see "i18n content port" section
+   above), and nav/footer/onboarding chrome is translated (see status log
+   above). Not covered: the deeper in-page UI strings (badges, toasts,
+   quiz feedback copy, etc.) — those come from rewritten React components
+   with no clean 1:1 source to port from anymore (`i18n/` is deleted; see
+   git history at or before this session's root-restructure commit if
+   ever needed).
 2. **Docusaurus JSX widgets — resolved this session** except one:
    `Challenge`, `BonusContent`, and `WeeklyQuiz` are all now real (native
    `<details>`/`<div>`/`.quiz` conversions — the quiz one recovered its
@@ -530,8 +600,13 @@ wanted next.
    been ported as an Astro `client:only` island. This is a large, separate
    task — don't attempt it piecemeal inside an unrelated fix.
 6. **GH Pages CI** (`deploy.yml`) — deliberately deferred per user instruction above.
-7. Old Docusaurus site + `docs/`/`i18n/` still present at repo root — not yet
-   removed; keep both until the Astro site has full content parity.
+   Note `deploy.yml` still assumes a `jupyterlite-config` build step feeding
+   a static site build; it has not been re-pointed at the Astro `npm run
+   build` output and needs a look whenever this is picked up.
+7. **Astro promoted to root, Docusaurus removed — done this session** (see
+   status log above). `tests/e2e/*.spec.ts` are the one leftover artifact
+   of the old site: still present, but stale against the Astro DOM and
+   need porting before CI's e2e step can be re-enabled.
 8. **Relatedness (SDT)** is the weakest-supported psychological need per the
    pedagogy research above — no mentor/persona voice or community signal
    anywhere on the site. The plan's own "VN persona model" section (mentor

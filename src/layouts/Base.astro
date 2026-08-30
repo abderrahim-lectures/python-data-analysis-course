@@ -1,0 +1,271 @@
+---
+// Base page layout: sticky top nav (locale + theme + progress) + footer.
+import '../styles/global.css';
+import 'katex/dist/katex.min.css';
+import Icon from '../components/Icon.astro';
+import pkg from '../../package.json';
+import {UI_STRINGS, resolveLocale} from '../lib/uiStrings';
+
+interface Props {
+  title?: string;
+  description?: string;
+  lang?: string;
+  dir?: 'ltr' | 'rtl';
+  image?: string;
+}
+
+const {
+  title = 'PyDA Course',
+  description = 'Learn Python and data analysis in your browser — run real code, earn XP, build streaks. Zero installs, zero boring.',
+  lang = 'en',
+  dir = 'ltr',
+  image,
+} = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogImage = image ? new URL(image, Astro.site) : new URL('og-default.png', Astro.site);
+const locales = [
+  {code: 'en', label: 'EN', href: () => base},
+  {code: 'ar', label: 'عربي', href: () => `${base}ar/learn`},
+  {code: 'es', label: 'ES', href: () => `${base}es/learn`},
+  {code: 'fr', label: 'FR', href: () => `${base}fr/learn`},
+];
+const base = import.meta.env.BASE_URL;
+const t = UI_STRINGS[resolveLocale(lang)];
+---
+
+<!doctype html>
+<html lang={lang} dir={dir} data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <script is:inline>
+      // Persisted theme
+      const t = localStorage.getItem('pda:theme');
+      if (t) document.documentElement.dataset.theme = t;
+    </script>
+  </head>
+  <body>
+    <header class="topnav">
+      <div class="container topnav__inner">
+        <a class="topnav__brand" href={base}>
+          <span class="topnav__logo" aria-hidden="true"><Icon name="code" size={16} /></span>
+          <span class="topnav__name">PyDA</span>
+        </a>
+        <nav class="topnav__right" aria-label="Primary">
+          <a class="topnav__link" href={`${base}learn`}><Icon name="code" size={15} /> {t.nav.learn}</a>
+          <a class="topnav__link" href={`${base}projects`}><Icon name="chart" size={15} /> {t.nav.projects}</a>
+          <a class="topnav__link" href={`${base}stats`}><Icon name="chart" size={15} /> {t.nav.stats}</a>
+          <a class="topnav__link" href={`${base}progress`}><Icon name="trail" size={15} /> {t.nav.progress}</a>
+          <div class="topnav__xp" id="xp-bar"></div>
+          <div class="topnav__group">
+            {locales.map((l) => (
+              <a
+                class:list={['topnav__lang', l.code === lang && 'topnav__lang--active']}
+                href={l.href()}
+                aria-current={l.code === lang ? 'page' : undefined}
+              >{l.label}</a>
+            ))}
+          </div>
+          <button class="topnav__btn" data-theme-toggle aria-label={t.themeToggleLabel}><Icon name="sun" size={16} /></button>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <div class="onboarding" id="onboarding">
+      <div class="onboarding__card">
+        <div class="onboarding__emoji">🚀</div>
+        <h2 class="onboarding__title">{t.onboarding.title}</h2>
+        <p class="onboarding__sub">{t.onboarding.sub}</p>
+        <div class="onboarding__steps">
+          {t.onboarding.steps.map((step, i) => (
+            <div class="onboarding__step"><span class="onboarding__step-num">{i + 1}</span> {step}</div>
+          ))}
+        </div>
+        <button class="onboarding__cta btn btn-primary" id="onboarding-start">{t.onboarding.cta}</button>
+        <button class="onboarding__skip" id="onboarding-skip">{t.onboarding.skip}</button>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div class="container footer__grid">
+        <div class="footer__col">
+          <h3>{t.footer.courseCol}</h3>
+          <a href={`${base}learn/python-101`}>{t.footer.python101}</a>
+          <a href={`${base}learn/data-analysis`}>{t.footer.dataAnalysis}</a>
+          <a href={`${base}projects`}>{t.footer.projects}</a>
+        </div>
+        <div class="footer__col">
+          <h3>{t.footer.siteCol}</h3>
+          <a href={`${base}progress`}>{t.footer.myProgress}</a>
+          <a href={`${base}stats`}>{t.footer.stats}</a>
+        </div>
+        <div class="footer__col">
+          <h3>{t.footer.moreCol}</h3>
+          <a href="https://github.com/abderrahim-lectures/python-data-analysis-course" target="_blank" rel="noopener noreferrer">{t.footer.github}</a>
+          <a href="https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/CHANGELOG.md" target="_blank" rel="noopener noreferrer">{t.footer.changelog}</a>
+        </div>
+      </div>
+      <div class="container footer__bottom">
+        <p>{t.footer.copyright(new Date().getFullYear(), pkg.version)}</p>
+      </div>
+    </footer>
+
+    <nav class="mobilenav" aria-label="Mobile">
+      <a class="mobilenav__item" href={base}><Icon name="home" size={18} /> <span>{t.mobileNav.home}</span></a>
+      <a class="mobilenav__item" href={`${base}learn`}><Icon name="code" size={18} /> <span>{t.mobileNav.learn}</span></a>
+      <a class="mobilenav__item" href={`${base}progress`}><Icon name="trail" size={18} /> <span>{t.mobileNav.progress}</span></a>
+    </nav>
+
+    <div class="xp-toast-container" id="xp-toast-container"></div>
+
+    <!-- Level-up celebration overlay -->
+    <div class="lvlup" id="lvlup" hidden>
+      <div class="lvlup__bg"></div>
+      <div class="lvlup__text">LEVEL UP</div>
+      <div class="lvlup__sub" id="lvlup-sub"></div>
+    </div>
+
+    <script>
+      import '../lib/runnable-cell.client.ts';
+      import '../lib/quiz.client.ts';
+    </script>
+
+    <script>
+      // @ts-nocheck
+      const STORAGE_KEY = 'pda:state';
+      function readState() {
+        try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch { return {}; }
+      }
+      function xpProgress(s) {
+        const xp = s.xp || 0;
+        const level = Math.floor(xp / 100) + 1;
+        const pct = xp % 100;
+        const toNext = 100 - pct;
+        return { xp, level, pct, toNext };
+      }
+      function streakEmoji(streak) {
+        if (streak >= 14) return '🔥🔥🔥';
+        if (streak >= 7) return '🔥🔥';
+        if (streak >= 3) return '🔥';
+        return '';
+      }
+      function renderXPBar() {
+        const bar = document.getElementById('xp-bar');
+        if (!bar) return;
+        const s = readState();
+        const { xp, level, pct, toNext } = xpProgress(s);
+        const streak = s.streak || 0;
+        const prevLevel = parseInt(bar.dataset.level || '0');
+        bar.dataset.level = String(level);
+        bar.innerHTML = `
+          <div class="xp-bar" title="Level ${level} · ${xp} XP · ${streakEmoji(streak)}">
+            <span class="xp-bar__level">Lv.${level}</span>
+            <div class="xp-bar__track"><div class="xp-bar__fill" style="width:${pct}%"></div></div>
+            <span class="xp-bar__streak">${streakEmoji(streak)}</span>
+            ${toNext <= 20 && xp > 0 ? `<span class="xp-bar__milestone">${toNext} XP!</span>` : ''}
+          </div>`;
+        if (prevLevel && level > prevLevel) {
+          showLevelUp(level, xp, (s.badges || []));
+        }
+      }
+      function showLevelUp(level, xp, badges) {
+        const overlay = document.getElementById('lvlup');
+        if (!overlay) return;
+        const subEl = document.getElementById('lvlup-sub');
+        const newBadges = (badges || []).slice(-3);
+        if (subEl) subEl.textContent = newBadges.length ? `Unlocked: ${newBadges.join(', ')}` : `${xp} total XP`;
+        overlay.hidden = false;
+        overlay.classList.remove('lvlup--hide');
+        overlay.classList.add('lvlup--show');
+        spawnParticles();
+        setTimeout(() => {
+          overlay.classList.remove('lvlup--show');
+          overlay.classList.add('lvlup--hide');
+          setTimeout(() => { overlay.hidden = true; }, 600);
+        }, 2200);
+      }
+      function spawnParticles() {
+        const container = document.getElementById('lvlup');
+        if (!container) return;
+        const colors = ['#5b21b6','#4c1d95','#8b5cf6','#a78bfa','#fbbf24','#34d399'];
+        for (let i = 0; i < 24; i++) {
+          const p = document.createElement('div');
+          p.className = 'particle';
+          const dx = (Math.random() - .5) * 160;
+          const dy = -(40 + Math.random() * 120);
+          p.style.left = Math.random() * 100 + '%';
+          p.style.top = Math.random() * 100 + '%';
+          p.style.setProperty('--c', colors[Math.floor(Math.random() * colors.length)]);
+          p.style.setProperty('--dx', dx + 'px');
+          p.style.setProperty('--dy', dy + 'px');
+          p.style.animationDelay = Math.random() * .4 + 's';
+          container.appendChild(p);
+        }
+      }
+      function initOnboarding() {
+        const overlay = document.getElementById('onboarding');
+        if (!overlay) return;
+        const visited = localStorage.getItem('pda:onboarded');
+        const skipParam = new URLSearchParams(location.search).get('onboarded');
+        if (visited || skipParam) { overlay.style.display = 'none'; return; }
+        document.getElementById('onboarding-start')?.addEventListener('click', () => {
+          localStorage.setItem('pda:onboarded', '1');
+          overlay.style.display = 'none';
+        });
+        document.getElementById('onboarding-skip')?.addEventListener('click', () => {
+          localStorage.setItem('pda:onboarded', '1');
+          overlay.style.display = 'none';
+        });
+      }
+      let lastXP = readState().xp || 0;
+      function initXPToastListener() {
+        document.addEventListener('lesson:complete', () => {
+          const s = readState();
+          const { xp } = xpProgress(s);
+          renderXPBar();
+          const container = document.getElementById('xp-toast-container');
+          if (!container) return;
+          const toast = document.createElement('div');
+          toast.className = 'floating-xp';
+          const gained = xp - lastXP;
+          lastXP = xp;
+          toast.innerHTML = `⚡ +${gained} XP`;
+          container.appendChild(toast);
+          setTimeout(() => toast.remove(), 3000);
+        });
+      }
+      renderXPBar();
+      initOnboarding();
+      initXPToastListener();
+      const btn = document.querySelector('[data-theme-toggle]');
+      btn?.addEventListener('click', () => {
+        const el = document.documentElement;
+        const next = el.dataset.theme === 'dark' ? 'light' : 'dark';
+        el.dataset.theme = next;
+        localStorage.setItem('pda:theme', next);
+        renderXPBar();
+      });
+    </script>
+  </body>
+</html>
+
+

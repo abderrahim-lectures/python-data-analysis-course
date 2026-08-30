@@ -1,8 +1,0 @@
-User-agent: *
-Allow: /
-
-# Per-student share links are ephemeral/user-generated and marked noindex on the page itself;
-# excluded here too so crawlers don't waste budget on the query-string variants.
-Disallow: /share
-
-Sitemap: https://pyda-course.online/sitemap.xml

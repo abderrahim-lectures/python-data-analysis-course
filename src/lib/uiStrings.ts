@@ -1,0 +1,144 @@
+// Site-chrome UI strings for Base.astro (nav, footer, onboarding modal).
+// Nav/footer link labels and copyright phrasing for ar/es/fr are carried over
+// from the old Docusaurus i18n/<locale>/docusaurus-theme-classic/{navbar,footer}.json
+// (human-reviewed translations) before that source was removed from the repo.
+// Onboarding copy has no Docusaurus equivalent (the modal is new to Astro) and
+// is translated fresh here.
+export type Locale = 'en' | 'ar' | 'es' | 'fr';
+
+export interface UiStrings {
+  nav: {learn: string; projects: string; stats: string; progress: string};
+  footer: {
+    courseCol: string;
+    siteCol: string;
+    moreCol: string;
+    python101: string;
+    dataAnalysis: string;
+    projects: string;
+    myProgress: string;
+    stats: string;
+    github: string;
+    changelog: string;
+    copyright: (year: number, version: string) => string;
+  };
+  onboarding: {
+    title: string;
+    sub: string;
+    steps: [string, string, string];
+    cta: string;
+    skip: string;
+  };
+  themeToggleLabel: string;
+  mobileNav: {home: string; learn: string; progress: string};
+}
+
+export const UI_STRINGS: Record<Locale, UiStrings> = {
+  en: {
+    nav: {learn: 'Learn', projects: 'Projects', stats: 'Stats', progress: 'Progress'},
+    footer: {
+      courseCol: 'Course',
+      siteCol: 'Site',
+      moreCol: 'More',
+      python101: 'Python 101',
+      dataAnalysis: 'Data Analysis',
+      projects: 'Projects',
+      myProgress: 'My Progress',
+      stats: 'Stats',
+      github: 'GitHub',
+      changelog: 'Changelog',
+      copyright: (year, version) =>
+        `Copyright © ${year} Abderrahim Adrabi. Code MIT-licensed, content CC-BY 4.0. v${version}`,
+    },
+    onboarding: {
+      title: 'Welcome to PyDA',
+      sub: 'Learn Python, earn XP, build streaks. Zero boring.',
+      steps: ['Run code cells & earn ⚡ XP', 'Build streaks 🔥 for bonus XP', 'Complete quests & unlock badges'],
+      cta: "Let's go!",
+      skip: 'Skip',
+    },
+    themeToggleLabel: 'Toggle theme',
+    mobileNav: {home: 'Home', learn: 'Learn', progress: 'Progress'},
+  },
+  ar: {
+    nav: {learn: 'تعلّم', projects: 'المشاريع', stats: 'الإحصائيات', progress: 'تقدمي'},
+    footer: {
+      courseCol: 'الدورة',
+      siteCol: 'الموقع',
+      moreCol: 'المزيد',
+      python101: 'بايثون 101',
+      dataAnalysis: 'تحليل البيانات',
+      projects: 'المشاريع',
+      myProgress: 'تقدمي',
+      stats: 'الإحصائيات',
+      github: 'GitHub',
+      changelog: 'Changelog',
+      copyright: (year, version) =>
+        `حقوق النشر © ${year} Abderrahim Adrabi. الكود مرخّص بموجب MIT، والمحتوى بموجب CC-BY 4.0. v${version}`,
+    },
+    onboarding: {
+      title: 'أهلًا بك في PyDA',
+      sub: 'تعلّم بايثون، اكسب نقاط خبرة، وابنِ سلسلة تقدّم يومية. بلا ملل.',
+      steps: ['شغّل خلايا الكود واكسب ⚡ نقاط خبرة', 'ابنِ سلسلة تقدّم 🔥 لنقاط إضافية', 'أكمل المهام وافتح الأوسمة'],
+      cta: 'لنبدأ ←',
+      skip: 'تخطّي',
+    },
+    themeToggleLabel: 'تبديل المظهر',
+    mobileNav: {home: 'الرئيسية', learn: 'تعلّم', progress: 'تقدمي'},
+  },
+  es: {
+    nav: {learn: 'Aprender', projects: 'Proyectos', stats: 'Estadísticas', progress: 'Progreso'},
+    footer: {
+      courseCol: 'Curso',
+      siteCol: 'Sitio',
+      moreCol: 'Más',
+      python101: 'Python 101',
+      dataAnalysis: 'Análisis de Datos',
+      projects: 'Proyectos',
+      myProgress: 'Mi Progreso',
+      stats: 'Estadísticas',
+      github: 'GitHub',
+      changelog: 'Changelog',
+      copyright: (year, version) =>
+        `Copyright © ${year} Abderrahim Adrabi. Código con licencia MIT, contenido con licencia CC-BY 4.0. v${version}`,
+    },
+    onboarding: {
+      title: 'Bienvenido a PyDA',
+      sub: 'Aprende Python, gana XP, construye rachas. Cero aburrimiento.',
+      steps: ['Ejecuta celdas de código y gana ⚡ XP', 'Construye rachas 🔥 para XP extra', 'Completa misiones y desbloquea insignias'],
+      cta: '¡Vamos!',
+      skip: 'Omitir',
+    },
+    themeToggleLabel: 'Cambiar tema',
+    mobileNav: {home: 'Inicio', learn: 'Aprender', progress: 'Progreso'},
+  },
+  fr: {
+    nav: {learn: 'Apprendre', projects: 'Projets', stats: 'Statistiques', progress: 'Progression'},
+    footer: {
+      courseCol: 'Cours',
+      siteCol: 'Site',
+      moreCol: 'Plus',
+      python101: 'Python 101',
+      dataAnalysis: 'Analyse de Données',
+      projects: 'Projets',
+      myProgress: 'Ma Progression',
+      stats: 'Statistiques',
+      github: 'GitHub',
+      changelog: 'Changelog',
+      copyright: (year, version) =>
+        `Copyright © ${year} Abderrahim Adrabi. Code sous licence MIT, contenu sous licence CC-BY 4.0. v${version}`,
+    },
+    onboarding: {
+      title: 'Bienvenue sur PyDA',
+      sub: 'Apprends Python, gagne des XP, construis des séries. Zéro ennui.',
+      steps: ['Exécute des cellules de code et gagne ⚡ des XP', 'Construis des séries 🔥 pour des XP bonus', 'Termine des quêtes et débloque des badges'],
+      cta: 'Allons-y !',
+      skip: 'Passer',
+    },
+    themeToggleLabel: 'Changer de thème',
+    mobileNav: {home: 'Accueil', learn: 'Apprendre', progress: 'Progression'},
+  },
+};
+
+export function resolveLocale(lang: string): Locale {
+  return lang === 'ar' || lang === 'es' || lang === 'fr' ? lang : 'en';
+}
