@@ -121,6 +121,8 @@ check('the dead streak is repaired', await evaluate('document.getElementById("p-
 check('missing quests are backfilled', await evaluate('document.getElementById("p-quests").textContent'), '3/11');
 
 console.log('\nplayground safety');
+// A direct navigation (no referrer) is the untrusted case: an externally
+// shared link, or typing the URL directly.
 await goto(`/playground?code=${encodeURIComponent('print("hi")')}`);
 check('shared code loads into the editor', await evaluate('document.getElementById("pg-code").textContent'), 'print("hi")');
 check('it is flagged untrusted', await evaluate('!document.getElementById("pg-warn").hidden'), true);
@@ -137,6 +139,13 @@ for (const path of ['/', '/progress', '/playground', '/projects', '/learn', '/le
   await goto(path);
   check(`${path} renders a heading`, await evaluate('!!document.querySelector("h1")'), true);
 }
+
+console.log('\nplayground trusts its own ⛶ button');
+await goto('/learn/python-101/normal/week-1');
+await evaluate('(document.querySelector("[data-expand]").click(), 1)');
+await new Promise(r => setTimeout(r, 400));
+check('same-origin nav from the expand button is not flagged', await evaluate('document.getElementById("pg-warn").hidden'), true);
+check('Run stays enabled for the site\'s own code', await evaluate('document.querySelector("[data-run]").disabled'), false);
 
 console.log('\nonboarding');
 await goto('/');

@@ -66,14 +66,26 @@ print(greet("world"))
   };
 
   const shared = new URLSearchParams(location.search).get('code');
+  // The lesson page's own ⛶ button lands here the same way an externally
+  // shared link would (?code=...), and the two are indistinguishable from the
+  // URL alone. document.referrer tells them apart: our own ⛶ button navigates
+  // same-origin, so a same-origin referrer means this is in-app, not a link
+  // someone sent. An empty or cross-origin referrer is the real untrusted case.
+  const fromThisSite = document.referrer && new URL(document.referrer).origin === location.origin;
   if (shared && shared.length <= MAX_SHARED_CODE) {
-    // Anyone can craft a ?code= link, so treat it as untrusted until the
-    // learner has actually looked at it: Pyodide can reach this origin's
-    // localStorage and fetch through the `js` bridge.
     codeEl.textContent = shared;
-    cell?.setAttribute('data-untrusted', '1');
-    warn.hidden = false;
-    if (runBtn) runBtn.disabled = true;
+    if (fromThisSite) {
+      cell?.removeAttribute('data-untrusted');
+      warn.hidden = true;
+      if (runBtn) runBtn.disabled = false;
+    } else {
+      // Anyone can craft a ?code= link, so treat it as untrusted until the
+      // learner has actually looked at it: Pyodide can reach this origin's
+      // localStorage and fetch through the `js` bridge.
+      cell?.setAttribute('data-untrusted', '1');
+      warn.hidden = false;
+      if (runBtn) runBtn.disabled = true;
+    }
   }
 
   document.getElementById('pg-trust')?.addEventListener('click', () => {
