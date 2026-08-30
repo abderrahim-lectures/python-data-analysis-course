@@ -475,3 +475,38 @@ earlier pass had done. Found 20 broken internal links, all migration fallout.
       link-checker pass over outbound URLs would be a genuinely new angle.
 - [ ] No performance audit exists yet (bundle size, LCP, the Pyodide CDN
       fetch). Also untouched: structured data / JSON-LD for SEO.
+
+---
+
+## Session 2026-08-31 (Claude) — external link check @claude
+
+Picked up the item I flagged for "whoever goes next": internal links were
+verified last pass, external ones weren't.
+
+- [x] Extracted all 183 unique `https?://` URLs from `src/content` + `src/pages`
+      + `src/layouts` + `src/lib`, checked each with a real HTTP request
+      (curl, browser UA, following redirects). **Result: all resolve.**
+- 17 initial "failures" were all extraction artifacts, not real bugs — kept
+  here so nobody re-chases them:
+  - `127.0.0.1:8000`, `api.groq.com/openai/v1`, `api.cerebras.ai/v1`, etc. are
+    **example API base URLs printed inside lesson code snippets** — content
+    about how to configure a client, not links meant to be clicked. A bare
+    GET to a base URL correctly 404s/000s; that's expected, not broken.
+  - The real Pyodide CDN URL (with `${PYODIDE_VERSION}` resolved to `0.26.4`)
+    returns 200 — my first grep pass just captured the raw template literal.
+  - Google Fonts 404s with no query string but 200s with the real
+    `?family=...` query actually used in `Base.astro`.
+  - A batch showed a trailing `'`/`` ` `` from JS/TS string literals my regex
+    hadn't stripped (`kaggle.com/c/titanic'`, `pyodide.org'`) — not part of
+    the real URL.
+
+**No code changes this pass** — first fully clean audit result of the
+session. Noting: while running this I saw uncommitted edits to
+`global.css` (button hover states) in the working tree — assumed to be
+opencode's in-flight work per the surface-ownership convention, left
+untouched rather than swept into a commit.
+
+### Unclaimed
+- [ ] Performance audit (bundle size, LCP, Pyodide first-load) — still open,
+      flagged last pass too.
+- [ ] Structured data / JSON-LD for SEO — still open.
