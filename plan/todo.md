@@ -4,22 +4,40 @@ Tracking list for requests that came in faster than they could be finished.
 Check items off as they land; move detail write-ups to `astro-rebuild.md`'s
 status log once done, don't duplicate here.
 
-- [ ] **i18n URL segment translation** (in progress): restructure `/ar/learn`,
-      `/es/learn`, `/fr/learn` etc. into locale-native segment words
-      (`/es/aprender/`, `/fr/apprendre/`, `/ar/تعلم/`, and `/proyectos/`,
-      `/projets/`, `/مشاريع/` for projects). Content slugs (`python-101`,
-      `data-analysis`, project slugs) stay untranslated — they're
-      gameState/XP-tracking keys shared across locales, not display text.
-      Also: localize `<title>`/description per locale page (currently
-      hardcoded English even on ar/es/fr — real bug), add `hreflang`
-      alternate `<link>` tags for SEO.
-- [ ] **Button hover states audit**: `.btn-streak`/`.btn-xp` had `:active`
-      but no `:hover` at all — fixed. Still need to sweep other custom
-      buttons (`.route-pill--normal/--hard` on `/learn` hub, hub card CTAs,
-      onboarding buttons) for the same gap.
-- [ ] **Top nav icon check**: verify Learn/Projects/Progress nav icons look
-      right visually (not just that the name resolves) — screenshot and
-      inspect at normal size, not just crop.
+- [x] **i18n URL segment translation** — done. Locale routes restructured
+      from `/ar/learn` → `/ar/تعلم`, `/es/learn` → `/es/aprender`,
+      `/fr/learn` → `/fr/apprendre`, and `/projects` → `/مشاريع`/
+      `/proyectos`/`/projets`. Track words in the URL too (`normal`/`hard`
+      → `عادي`/`صعب`, `dificil`, `difficile`). Content slugs (`python-101`,
+      `data-analysis`, project slugs) stay untranslated — gameState/XP keys
+      shared across locales. Added `src/lib/routeSegments.ts` (word map +
+      href builders) and `src/lib/pageStrings.ts` (localized titles/copy
+      for the learn hub + projects index, the two pages whose text was
+      hardcoded English rather than pulled from content). Added `hreflang`
+      alternate `<link>` tags to `Base.astro` via a new `alternates` prop,
+      wired through all 5 locale route templates. Verified: Unicode (Arabic)
+      directory names build fine on disk, canonical/hreflang URLs
+      percent-encode correctly, titles render translated
+      (`تعلّم — PyDA`/`Aprender — PyDA`/`Apprendre — PyDA`).
+      Old `/ar/learn` etc. URLs are gone with no redirect (site isn't
+      indexed yet — same call as the earlier `/stats` removal).
+- [x] **Custom domain / base path fix**: discovered mid-session that
+      production is `https://pyda-course.online/` (custom domain), not
+      `github.io/python-data-analysis-course/`. `astro.config.mjs` was
+      still assuming the GH Pages repo-subpath. Added `public/CNAME`,
+      fixed `site`/`base` — this was silently breaking every canonical URL,
+      OG tag, and the sitemap.
+- [x] **Button hover states audit**: `.btn-streak`/`.btn-xp` and
+      `.route-pill--normal/--hard` (both EN and locale `/learn` hubs) had
+      `:active` press feedback but no `:hover` at all — fixed all of them.
+- [x] **Top nav icon check**: the Progress icon (a two-dot winding-path
+      glyph) was illegible at 15px, just read as a stray squiggle —
+      redesigned as a flag glyph, reads clearly now. Learn/Projects icons
+      were already fine once Projects got its dedicated globe icon (see
+      "already done" section below).
+- [x] **Locale hub "Track 1"/"Track 2" badge** was still hardcoded English
+      on the ar/es/fr learn hubs even after the rest of the page translated
+      — added `track1`/`track2` to `pageStrings.ts`, fixed.
 - [ ] **Add the full playground**: known gap from earlier in the session —
       no dedicated `/playground` page exists yet, only inline `RunnableCell`
       cells per-lesson. The old Docusaurus `VsCodePlayground` React

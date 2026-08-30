@@ -1,30 +1,27 @@
 ---
-// Locale-prefixed lesson route: /<locale>/learn/<section>/<track>/week-<n>
-// for ar/es/fr. Mirrors src/pages/learn/[section]/[track]/[week].astro (the
-// EN route) but reads from the locale-nested content collection entries
-// (learn/<locale>/<section>/<track>/week-N.md) instead. Kept as a separate
-// route rather than unifying with the EN one because EN's slugs are
-// double-nested (python-101/python-101/normal/week-1, an artifact of the
-// original doc copy) while locale slugs are clean (<locale>/<section>/<track>/week-N).
+// Locale-prefixed lesson route: /es/aprender/<section>/<track-word>/week-<n>.
+// Mirrors src/pages/learn/[section]/[track]/[week].astro (the EN route) but
+// reads from the locale-nested content collection entries and uses
+// locale-translated track words in the URL (canonical 'normal'/'hard'
+// still drive gameState's lessonId — see the comment below).
 import {getCollection, type CollectionEntry} from 'astro:content';
 import Base from '../../../../../layouts/Base.astro';
+import {weekHref, learnHref, TRACK_WORDS} from '../../../../../lib/routeSegments';
+
+const locale = 'es' as const;
 
 export async function getStaticPaths() {
-  const LOCALES = ['ar', 'es', 'fr'];
+  const trackWords = TRACK_WORDS.es;
   const entries = await getCollection('learn');
   return entries
-    .filter((e) => {
-      const locale = e.slug.split('/')[0];
-      return LOCALES.includes(locale) && e.data.track && e.data.week;
-    })
+    .filter((e) => e.slug.split('/')[0] === 'es' && e.data.track && e.data.week)
     .map((entry) => {
-      const parts = entry.slug.split('/'); // <locale>/<section>/<track>/week-<n>
-      const locale = parts[0];
+      const parts = entry.slug.split('/');
       const week = parts[parts.length - 1];
-      const track = parts[parts.length - 2];
+      const track = entry.data.track === 'hard' ? trackWords.hard : trackWords.normal;
       const section = entry.data.section!;
       return {
-        params: {locale, section, track, week},
+        params: {section, track, week},
         props: {entry},
       };
     });
@@ -32,29 +29,35 @@ export async function getStaticPaths() {
 
 interface Props { entry: CollectionEntry<'learn'> }
 const {entry} = Astro.props;
-const {locale} = Astro.params;
 const {title, description, week, track, section} = entry.data;
 const {Content} = await entry.render();
 const base = import.meta.env.BASE_URL;
-const dir = locale === 'ar' ? 'rtl' : 'ltr';
+const dir = 'ltr' as const;
 
 const allLessons = await getCollection('learn');
 const siblings = allLessons
-  .filter((e) => e.slug.startsWith(`${locale}/`) && e.data.section === section && e.data.track === track && typeof e.data.week === 'number')
+  .filter((e) => e.slug.startsWith('es/') && e.data.section === section && e.data.track === track && typeof e.data.week === 'number')
   .sort((a, b) => (a.data.week ?? 0) - (b.data.week ?? 0));
 const idx = siblings.findIndex((e) => e.slug === entry.slug);
 const prev = idx > 0 ? siblings[idx - 1] : null;
 const next = idx >= 0 && idx < siblings.length - 1 ? siblings[idx + 1] : null;
 const otherTrack = track === 'normal' ? 'hard' : 'normal';
-// Same lessonId shape as the EN route (locale-agnostic) — progress/XP is
-// shared across locales for the same lesson, not tracked per-language.
+// Same lessonId shape as the EN route (locale-agnostic, and independent of
+// which word the URL uses for the track) — progress/XP is shared across
+// locales for the same lesson, not tracked per-language or per-URL-word.
 const lessonId = `${section}/${track}/week-${week}`;
+const alternates = {
+  en: `learn/${section}/${track}/week-${week}`,
+  ar: `ar/تعلم/${section}/${track === 'hard' ? TRACK_WORDS.ar.hard : TRACK_WORDS.ar.normal}/week-${week}`,
+  es: `es/aprender/${section}/${track === 'hard' ? TRACK_WORDS.es.hard : TRACK_WORDS.es.normal}/week-${week}`,
+  fr: `fr/apprendre/${section}/${track === 'hard' ? TRACK_WORDS.fr.hard : TRACK_WORDS.fr.normal}/week-${week}`,
+};
 ---
 
-<Base title={`${title} — PyDA`} description={description} lang={locale} dir={dir}>
+<Base title={`${title} — PyDA`} description={description} lang={locale} dir={dir} alternates={alternates}>
   <nav class="crumb container">
-    <a href={`${base}${locale}/learn`}>Learn</a> <span>/</span>
-    <a href={`${base}${locale}/learn/${section}`}>{section}</a> <span>/</span>
+    <a href={learnHref(locale, base)}>{section}</a> <span>/</span>
+    <a href={learnHref(locale, base, section)}>{section}</a> <span>/</span>
     <span class="crumb__here">Week {week}</span>
   </nav>
 
@@ -71,15 +74,15 @@ const lessonId = `${section}/${track}/week-${week}`;
 
     <div class="lesson-nav">
       {prev
-        ? <a class="lesson-nav__prev" href={`${base}${locale}/learn/${section}/${track}/week-${prev.data.week}`}>← Week {prev.data.week}</a>
+        ? <a class="lesson-nav__prev" href={weekHref(locale, base, section, track, prev.data.week!)}>← Week {prev.data.week}</a>
         : <span />}
       {next
-        ? <a class="lesson-nav__next" href={`${base}${locale}/learn/${section}/${track}/week-${next.data.week}`}>Week {next.data.week} →</a>
+        ? <a class="lesson-nav__next" href={weekHref(locale, base, section, track, next.data.week!)}>Week {next.data.week} →</a>
         : <a class="lesson-nav__next lesson-nav__next--done" data-mark-complete href="#">Mark complete ✓</a>}
     </div>
 
     <div class="route">
-      <a class="route__card" href={`${base}${locale}/learn/${section}/${otherTrack}/week-${week}`}>
+      <a class="route__card" href={weekHref(locale, base, section, otherTrack, week!)}>
         <span class="route__icon">{otherTrack === 'hard' ? '⚡' : '🌿'}</span>
         <strong>Switch to {otherTrack === 'hard' ? 'Hard' : 'Normal'}</strong>
         <small>Same week, {otherTrack === 'hard' ? 'steeper climb' : 'gentler pace'}.</small>

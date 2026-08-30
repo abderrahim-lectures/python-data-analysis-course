@@ -1,0 +1,69 @@
+---
+import {getCollection} from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import Icon from '../../../components/Icon.astro';
+import ProjectArt from '../../../components/ProjectArt.astro';
+import {projectsHref} from '../../../lib/routeSegments';
+import {PAGE_STRINGS} from '../../../lib/pageStrings';
+
+const locale = 'es' as const;
+const allProjects = await getCollection('projects');
+const localeProjects = allProjects.filter((p) => p.slug.split('/')[0] === 'es');
+const base = import.meta.env.BASE_URL;
+const dir = 'ltr' as const;
+const sorted = [...localeProjects].sort((a, b) => a.data.title.localeCompare(b.data.title));
+const s = PAGE_STRINGS[locale];
+const alternates = {
+  en: 'projects',
+  ar: `ar/مشاريع`,
+  es: `es/proyectos`,
+  fr: `fr/projets`,
+};
+---
+
+<Base title={s.projectsTitle} description={s.projectsDescription} lang={locale} dir={dir} alternates={alternates}>
+  <section class="hero">
+    <div class="container head">
+      <div class="head__eyebrow"><Icon name="code" size={16} /> {s.projectsEyebrow}</div>
+      <h1>{s.projectsH1}</h1>
+      <p>{s.projectsLead}</p>
+    </div>
+  </section>
+
+  <section class="container">
+    <div class="grid">
+      {sorted.map((p) => {
+        const slug = p.slug.replace(`es/`, '');
+        return (
+          <a class="card" href={projectsHref(locale, base, slug)}>
+            <ProjectArt slug={slug} class="card__art" />
+            <div class="card__body">
+              <h2>{p.data.title}</h2>
+              <p>{p.data.description}</p>
+              <span class="badge badge--accent card__badge">{s.optionalUngraded}</span>
+            </div>
+          </a>
+        );
+      })}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero { padding: 2.5rem 0 1.5rem; }
+  .head__eyebrow { color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: .08em; font-size: .76rem; display: inline-flex; align-items: center; gap: .3rem; }
+  .head h1 { font-size: clamp(2rem, 4vw, 2.8rem); margin: .4rem 0 .2rem; }
+  .head p { color: var(--ink-soft); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.1rem; margin: 1.5rem 0 3rem; }
+  .card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg);
+    overflow: hidden; text-decoration: none; color: var(--ink); box-shadow: var(--shadow-sm);
+    transition: all var(--transition-smooth); display: flex; flex-direction: column;
+  }
+  .card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
+  .card__art { display: block; width: 100%; height: 100px; }
+  .card__body { padding: 1.1rem 1.3rem 1.3rem; display: flex; flex-direction: column; gap: .5rem; flex: 1; }
+  .card h2 { font-size: 1.05rem; margin: 0; }
+  .card p { color: var(--ink-soft); font-size: .88rem; margin: 0; line-height: 1.5; flex-grow: 1; }
+  .card__badge { width: fit-content; margin-top: .3rem; }
+</style>

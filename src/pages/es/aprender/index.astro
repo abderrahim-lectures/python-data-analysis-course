@@ -1,56 +1,60 @@
 ---
-// Locale learn hub: /<locale>/learn.
+// Locale learn hub: /es/aprender.
 import Base from '../../../layouts/Base.astro';
 import Icon from '../../../components/Icon.astro';
+import {weekHref, learnHref} from '../../../lib/routeSegments';
+import {PAGE_STRINGS} from '../../../lib/pageStrings';
 
-export function getStaticPaths() {
-  const LOCALES = ['ar', 'es', 'fr'];
-  return LOCALES.map((locale) => ({params: {locale}}));
-}
-
-const {locale} = Astro.params;
+const locale = 'es' as const;
 const base = import.meta.env.BASE_URL;
-const dir = locale === 'ar' ? 'rtl' : 'ltr';
+const dir = 'ltr' as const;
+const s = PAGE_STRINGS[locale];
+const alternates = {
+  en: 'learn',
+  ar: `ar/تعلم`,
+  es: `es/aprender`,
+  fr: `fr/apprendre`,
+};
 ---
 
-<Base title="Learn — PyDA" lang={locale} dir={dir}>
+<Base title={s.learnHubTitle} description={s.learnHubDescription} lang={locale} dir={dir} alternates={alternates}>
   <section class="hero">
     <div class="container head">
-      <div class="head__eyebrow"><Icon name="code" size={16} /> Your learning trail</div>
-      <h1>Two tracks. Two routes. Pick your path.</h1>
-      <p>Each lesson earns XP. Streaks multiply it. Badges mark your climb.</p>
+      <div class="head__eyebrow"><Icon name="code" size={16} /> {s.learnHubEyebrow}</div>
+      <h1>{s.learnHubH1}</h1>
+      <p>{s.learnHubLead}</p>
     </div>
   </section>
 
   <section class="container">
     <div class="sections">
       <div class="sectioncard">
-        <div class="sectioncard__badge">🐍 Track 1</div>
+        <div class="sectioncard__badge">🐍 {s.track1}</div>
         <div class="sectioncard__icon">🐍</div>
         <h2>Python 101</h2>
         <p>Weeks 1–5. The fundamentals: variables, types, control flow, functions — then a tiny language model.</p>
         <div class="routes">
-          <span class="routes__label">Choose your route:</span>
+          <span class="routes__label">{s.chooseRoute}</span>
           <div class="routes__pills">
-            <a class="route-pill route-pill--normal" href={`${base}${locale}/learn/python-101/normal/week-1`}>🌿 Normal — start here</a>
-            <a class="route-pill route-pill--hard" href={`${base}${locale}/learn/python-101/hard/week-1`}>⚡ Hard — start here</a>
+            <a class="route-pill route-pill--normal" href={weekHref(locale, base, 'python-101', 'normal', 1)}>🌿 {s.normalStart}</a>
+            <a class="route-pill route-pill--hard" href={weekHref(locale, base, 'python-101', 'hard', 1)}>⚡ {s.hardStart}</a>
           </div>
         </div>
-        <a class="sectioncard__all" href={`${base}${locale}/learn/python-101`}>See all 5 weeks →</a>
+        <a class="sectioncard__all" href={learnHref(locale, base, 'python-101')}>{s.seeAllWeeks}</a>
       </div>
       <div class="sectioncard">
-        <div class="sectioncard__badge sectioncard__badge--streak">📊 Track 2</div>
+        <div class="sectioncard__badge sectioncard__badge--streak">📊 {s.track2}</div>
         <div class="sectioncard__icon">📊</div>
         <h2>Pandas &amp; Data</h2>
         <p>Weeks 6–10. Ship a real notebook: pandas the way a data analyst actually uses it.</p>
         <div class="routes">
-          <span class="routes__label">Choose your route:</span>
+          <span class="routes__label">{s.chooseRoute}</span>
           <div class="routes__pills">
-            <a class="route-pill route-pill--normal" href={`${base}${locale}/learn/data-analysis/normal/week-6`}>🌿 Normal — start here</a>
-            <a class="route-pill route-pill--hard" href={`${base}${locale}/learn/data-analysis/hard/week-6`}>⚡ Hard — start here</a>
+            <a class="route-pill route-pill--normal" href={weekHref(locale, base, 'data-analysis', 'normal', 6)}>🌿 {s.normalStart}</a>
+            <a class="route-pill route-pill--hard" href={weekHref(locale, base, 'data-analysis', 'hard', 6)}>⚡ {s.hardStart}</a>
           </div>
         </div>
-        <a class="sectioncard__all" href={`${base}${locale}/learn/data-analysis`}>See all 5 weeks →</a>
+        <a class="sectioncard__all" href={learnHref(locale, base, 'data-analysis')}>{s.seeAllWeeks}</a>
       </div>
     </div>
   </section>
@@ -86,12 +90,15 @@ const dir = locale === 'ar' ? 'rtl' : 'ltr';
     display: inline-flex; align-items: center; gap: .4rem;
     text-decoration: none; padding: .6rem 1.1rem; border-radius: var(--radius-md);
     font-weight: 700; font-size: .85rem; color: #fff; border: none;
-    box-shadow: var(--shadow-tactile); transition: transform .1s ease, box-shadow .1s ease;
+    box-shadow: var(--shadow-tactile); transition: transform .1s ease, box-shadow .1s ease, filter .15s ease;
   }
+  .route-pill:active { transform: translateY(3px); box-shadow: 0 1px 0 rgba(0,0,0,.08), 0 2px 8px rgba(16,24,40,.06); }
   .route-pill--normal { background: var(--success); box-shadow: 0 4px 0 #3d9401, 0 6px 16px rgba(88,204,2,.25); }
   .route-pill--normal:hover { filter: brightness(1.06); box-shadow: 0 4px 0 #3d9401, 0 8px 20px rgba(88,204,2,.35); }
+  .route-pill--normal:active { box-shadow: 0 1px 0 #3d9401, 0 2px 8px rgba(88,204,2,.15); }
   .route-pill--hard { background: var(--bad); box-shadow: 0 4px 0 #c81e3f, 0 6px 16px rgba(244,63,94,.25); }
   .route-pill--hard:hover { filter: brightness(1.06); box-shadow: 0 4px 0 #c81e3f, 0 8px 20px rgba(244,63,94,.35); }
+  .route-pill--hard:active { box-shadow: 0 1px 0 #c81e3f, 0 2px 8px rgba(244,63,94,.15); }
   .sectioncard__all { align-self: flex-start; font-size: .82rem; font-weight: 700; color: var(--ink-soft); text-decoration: none; }
   .sectioncard__all:hover { color: var(--accent); }
   @media (max-width: 720px) { .sections { grid-template-columns: 1fr; } }

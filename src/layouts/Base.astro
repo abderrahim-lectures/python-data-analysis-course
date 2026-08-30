@@ -5,6 +5,7 @@ import 'katex/dist/katex.min.css';
 import Icon from '../components/Icon.astro';
 import pkg from '../../package.json';
 import {UI_STRINGS, resolveLocale} from '../lib/uiStrings';
+import {NAV_WORDS, type Locale as RouteLocale} from '../lib/routeSegments';
 
 interface Props {
   title?: string;
@@ -12,6 +13,11 @@ interface Props {
   lang?: string;
   dir?: 'ltr' | 'rtl';
   image?: string;
+  /** Path (no leading base, no leading slash) to this page's equivalent in
+   *  each locale — e.g. {en: 'learn/python-101', es: 'es/aprender/python-101'}.
+   *  Powers both the locale switcher and hreflang tags. Pages that don't
+   *  pass this fall back to that locale's learn hub. */
+  alternates?: Partial<Record<RouteLocale, string>>;
 }
 
 const {
@@ -20,16 +26,24 @@ const {
   lang = 'en',
   dir = 'ltr',
   image,
+  alternates,
 } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const ogImage = image ? new URL(image, Astro.site) : new URL('og-default.png', Astro.site);
-const locales = [
-  {code: 'en', label: 'EN', href: () => base},
-  {code: 'ar', label: 'عربي', href: () => `${base}ar/learn`},
-  {code: 'es', label: 'ES', href: () => `${base}es/learn`},
-  {code: 'fr', label: 'FR', href: () => `${base}fr/learn`},
-];
 const base = import.meta.env.BASE_URL;
+const defaultAlternates: Record<RouteLocale, string> = {
+  en: NAV_WORDS.en.learn,
+  ar: `ar/${NAV_WORDS.ar.learn}`,
+  es: `es/${NAV_WORDS.es.learn}`,
+  fr: `fr/${NAV_WORDS.fr.learn}`,
+};
+const alt: Record<RouteLocale, string> = {...defaultAlternates, ...alternates};
+const locales = [
+  {code: 'en', label: 'EN', href: () => `${base}${alt.en}`},
+  {code: 'ar', label: 'عربي', href: () => `${base}${alt.ar}`},
+  {code: 'es', label: 'ES', href: () => `${base}${alt.es}`},
+  {code: 'fr', label: 'FR', href: () => `${base}${alt.fr}`},
+];
 const t = UI_STRINGS[resolveLocale(lang)];
 ---
 
@@ -42,6 +56,11 @@ const t = UI_STRINGS[resolveLocale(lang)];
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
+    <link rel="alternate" hreflang="en" href={new URL(`${base}${alt.en}`, Astro.site)} />
+    <link rel="alternate" hreflang="ar" href={new URL(`${base}${alt.ar}`, Astro.site)} />
+    <link rel="alternate" hreflang="es" href={new URL(`${base}${alt.es}`, Astro.site)} />
+    <link rel="alternate" hreflang="fr" href={new URL(`${base}${alt.fr}`, Astro.site)} />
+    <link rel="alternate" hreflang="x-default" href={new URL(`${base}${alt.en}`, Astro.site)} />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />

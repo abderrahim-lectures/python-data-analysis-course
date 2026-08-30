@@ -1,0 +1,56 @@
+---
+import {getCollection, type CollectionEntry} from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import ProjectArt from '../../../components/ProjectArt.astro';
+import {projectsHref} from '../../../lib/routeSegments';
+
+const locale = 'ar' as const;
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects
+    .filter((p) => p.slug.split('/')[0] === 'ar')
+    .map((entry) => {
+      const slug = entry.slug.slice('ar'.length + 1);
+      return {params: {slug}, props: {entry}};
+    });
+}
+
+interface Props { entry: CollectionEntry<'projects'> }
+const {entry} = Astro.props;
+const {title, description} = entry.data;
+const {Content} = await entry.render();
+const base = import.meta.env.BASE_URL;
+const dir = 'rtl' as const;
+const slug = entry.slug.slice('ar'.length + 1);
+const alternates = {
+  en: `projects/${slug}`,
+  ar: `ar/مشاريع/${slug}`,
+  es: `es/proyectos/${slug}`,
+  fr: `fr/projets/${slug}`,
+};
+---
+
+<Base title={`${title} — PyDA`} description={description} lang={locale} dir={dir} alternates={alternates}>
+  <nav class="crumb container">
+    <a href={projectsHref(locale, base)}>{title}</a> <span>/</span> <span class="crumb__here">{title}</span>
+  </nav>
+
+  <div class="container">
+    <ProjectArt slug={slug} class="hero-art" />
+  </div>
+
+  <article class="container lesson-content">
+    <Content />
+  </article>
+</Base>
+
+<style>
+  .crumb { display: flex; gap: .5rem; padding-top: 1.2rem; color: var(--ink-soft); font-size: .88rem; align-items: center; }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb__here { font-weight: 700; color: var(--ink); }
+  .hero-art { display: block; width: 100%; height: 140px; border-radius: var(--radius-lg); margin-top: 1rem; box-shadow: var(--shadow-sm); }
+  .lesson-content { padding-bottom: 3rem; }
+  .lesson-content :global(h1) { font-size: clamp(1.8rem, 4vw, 2.6rem); margin: 1.2rem 0 .5rem; }
+  .lesson-content :global(h2) { margin-top: 2.2rem; }
+</style>
