@@ -107,6 +107,10 @@ Python's `subprocess` module runs another program and captures its output as tex
 
 Create `commit_helper.py`:
 
+### 1.1 Write `get_diff_staged` and the `subprocess` wrapper
+
+**👟 Starter hint:** `subprocess.run(["git", "diff", "--staged"], capture_output=True, text=True)` is the whole call — pass the command as a list (not a shell string), then check `result.returncode` yourself instead of relying on `check=True`'s generic error:
+
 ```python
 # commit_helper.py
 import subprocess
@@ -148,6 +152,12 @@ uv run python commit_helper.py
 `subprocess.run` doesn't care that the program being run is `git` — it works identically for any command-line tool: `ls`, a shell script, another Python program. Once this pattern clicks, "let Python drive an existing CLI tool and use its output" becomes available for a lot more than just git.
 :::
 
+### 1.2 Verify with staged, unstaged, and no changes
+
+**🎯 Expected output:** With a staged change, `get_diff_staged()` prints real unified-diff text (`+`/`-` lines); with nothing staged, it prints the "No staged changes" message instead of an empty blob.
+
+**🩹 If it's off:** If it prints your changes even though nothing is `git add`-ed, you're calling plain `git diff` somewhere instead of `git diff --staged` — double check the `_run_git` call. Running this outside any git repo should raise a clear `RuntimeError` naming git's real stderr, not a raw `FileNotFoundError` — that means the `if result.returncode != 0` check is missing.
+
 **✅ Checklist**
 
 - ✅ `get_diff_staged()` returns real diff text after `git add`-ing a change, and an empty string when nothing is staged.
@@ -162,6 +172,10 @@ uv run python commit_helper.py
 ## Step 2: Design the commit-message system prompt
 
 A language model with no instructions might write a message that's too vague ("update code"), too verbose (a full paragraph for a one-line typo fix), or in no consistent format at all. The **system prompt** is what turns a general-purpose chat model into a drafter that behaves like a disciplined project maintainer: what format to use, what mood to write in, and when to bother with more than one line.
+
+### 2.1 Write the system prompt
+
+**👟 Starter hint:** Spell out the exact `type(scope): summary` shape you want, list the valid Conventional Commits types explicitly (don't let the model invent its own), and forbid inventing ticket numbers the diff doesn't mention:
 
 ```python
 SYSTEM_PROMPT = """\
@@ -202,6 +216,12 @@ Three deliberate design choices worth noticing:
 Treat this system prompt as a first draft, not a finished spec. Run it against a diff you already know deserves a specific `type` (a pure test addition, a docs-only change, a real bug fix) — if the model picks the wrong type or the summary runs long, tighten the wording and try again.
 :::
 
+### 2.2 Verify it holds up on a diff with a known answer
+
+**🎯 Expected output:** This step has no runnable code on its own (Step 3 wires the prompt to a real call) — the check here is reading the prompt back and confirming it actually forbids everything the design notes above claim it does.
+
+**🩹 If it's off:** If, once you test it in Step 3, the model still invents a ticket number or writes a multi-paragraph body for a one-line fix, that's a sign the corresponding rule needs to be stated more forcefully or more specifically, not that prompting doesn't work — see the tip on iterating like code.
+
 **✅ Checklist**
 
 - ✅ You can explain, in your own words, why the prompt forbids inventing a ticket number or issue reference that isn't in the diff.
@@ -215,6 +235,10 @@ Treat this system prompt as a first draft, not a finished spec. Run it against a
 ## Step 3: Call the LLM and build the interactive loop
 
 Wire the diff-capturing code from Step 1 and the system prompt from Step 2 together, then add the part that makes this a real tool instead of a one-shot script: a loop that shows the draft and lets a human accept, edit, or regenerate it.
+
+### 3.1 Write `draft_commit_message`
+
+**👟 Starter hint:** Guard against an empty diff before ever touching the network, truncate an oversized one, then send it as the user message alongside `SYSTEM_PROMPT` and return `response.choices[0].message.content.strip()` — this function's whole job is "diff in, message string out," nothing about terminals or committing:
 
 ```python
 # commit_helper.py (continued -- add these imports and functions)
@@ -253,7 +277,17 @@ def draft_commit_message(diff: str) -> str:
         ],
     )
     return response.choices[0].message.content.strip()
+```
 
+**🎯 Expected output:** `draft_commit_message(diff)` on a real staged diff returns a plain string shaped like `feat(scope): short summary` — no surrounding quotes, no code fence, no commentary before or after.
+
+**🩹 If it's off:** If the returned string still has a ` ```diff ` fence around it despite the prompt saying not to, that's a free-tier model occasionally not following instructions exactly — strip fences defensively the same way the study-buddy and voice-to-task projects do, rather than assuming the prompt alone is airtight. A `KeyError` on `GITHUB_TOKEN` means `.env` isn't being loaded — confirm `load_dotenv()` ran before this function is called.
+
+### 3.2 Build the interactive accept/edit/regenerate loop
+
+**👟 Starter hint:** A `while True:` loop that prints the current draft, reads one character of input (`y`/`e`/`r`/`n`), and either returns, replaces `message` with typed text, or calls `draft_commit_message` again — nothing here calls `git commit` yet, that's deliberately deferred to Step 4:
+
+```python
 def run_interactive_loop(diff: str) -> None:
     """Drafts a message and lets the user accept, edit, or regenerate it -- see Step 4
     for where (and only where) an accepted message actually gets committed."""
@@ -302,6 +336,10 @@ uv run python commit_helper.py
 Swap the `OpenAI(...)` block for a different `base_url` and key — e.g. `base_url="https://api.groq.com/openai/v1"` with `api_key=os.environ["GROQ_API_KEY"]` for Groq, or `base_url="https://generativelanguage.googleapis.com/v1beta/openai/"` with `api_key=os.environ["GOOGLE_API_KEY"]` for Gemini's OpenAI-compatible endpoint. Everything else in this file stays the same. See [`examples/commit-message-agent/commit_helper.py`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/commit-message-agent/commit_helper.py) in the course repo for all six wired up side by side, selectable with one environment variable.
 :::
 
+**🎯 Expected output:** A draft prints, followed by the `[y]es / [e]dit / [r]egenerate / [n]o` prompt; each option behaves distinctly — `r` calls the model again, `e` waits for typed replacement text, `n` prints "Cancelled" and returns, `y` prints the placeholder commit message (Step 4 makes it real).
+
+**🩹 If it's off:** If typing `e` then pressing Enter with nothing typed wipes out the draft instead of keeping it, check the `or message` fallback in the `input(...).strip() or message` line — an empty typed string should keep the previous draft, not replace it with an empty one. An input loop that never re-prints the prompt after an invalid answer means the trailing `print("Please answer y, e, r, or n.")` branch isn't being reached — check every `if` above it uses `continue` or `return`, not a silent fallthrough.
+
 **✅ Checklist**
 
 - ✅ `uv run python commit_helper.py` prints a Conventional-Commits-style draft for a real staged diff.
@@ -316,6 +354,10 @@ Swap the `OpenAI(...)` block for a different `base_url` and key — e.g. `base_u
 ## Step 4: Wire it up to actually commit — only on confirmation
 
 The last piece: replace the "(Would commit here...)" placeholder from Step 3 with a function that actually runs `git commit -m`, called from exactly one place — right after the user types `y`.
+
+### 4.1 Write `_commit` and wire it into the `y` branch
+
+**👟 Starter hint:** Same `subprocess.run([...], capture_output=True, text=True, check=False)` pattern as Step 1's `_run_git`, just with `["git", "commit", "-m", message]` — then replace Step 3's placeholder print in the `y` branch with a real call to it:
 
 ```python
 # commit_helper.py (continued)
@@ -381,6 +423,12 @@ Check that it actually happened:
 ```bash
 git log -1
 ```
+
+### 4.2 Verify a real commit lands, and that "no" leaves things untouched
+
+**🎯 Expected output:** After typing `y`, `git commit` output prints followed by `Committed.`, and `git log -1` shows exactly the message you accepted. After typing `n` on a separate run, `git log -1` is unchanged and `git status` still shows your change staged.
+
+**🩹 If it's off:** If `git log -1` doesn't reflect the accepted message, check `_commit` is actually being called from the `y` branch, not still printing the Step 3 placeholder. If `n` somehow still commits, that's a serious bug for this specific tool — re-read the `if choice in ("n", "no"): ... return` branch and confirm it returns before reaching any code path that calls `_commit`.
 
 **✅ Checklist**
 
