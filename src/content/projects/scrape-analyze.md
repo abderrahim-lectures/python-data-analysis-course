@@ -70,7 +70,11 @@ This project targets [quotes.toscrape.com](https://quotes.toscrape.com) — a pu
 Before pointing this code at any site other than quotes.toscrape.com, check that site's `robots.txt` (e.g. `https://example.com/robots.txt`) and terms of service. `robots.txt` states which parts of a site automated tools are and aren't allowed to fetch — respecting it is the baseline expectation for any scraper, and some sites explicitly forbid scraping in their terms even where `robots.txt` stays silent.
 :::
 
-An HTTP `GET` request is the same thing your browser does every time you visit a page — it asks a server for a URL and gets back the raw HTML as text. `requests` does this in one line:
+An HTTP `GET` request is the same thing your browser does every time you visit a page — it asks a server for a URL and gets back the raw HTML as text. Two small sub-steps: fetch the raw HTML, then parse it into the fields you actually want.
+
+### 1.1 Fetch the raw HTML
+
+**👟 Starter hint:** `requests.get(url)` does the HTTP request; `.raise_for_status()` right after it turns a 404/500 into a loud exception instead of letting a broken page silently flow into the parser as if it were real content:
 
 ```python
 import requests
@@ -80,7 +84,15 @@ response.raise_for_status()  # turns a 404/500 into a loud exception instead of 
 html = response.text
 ```
 
+**🎯 Expected output:** No visible output yet — `html` should be a long string starting with `<!DOCTYPE html>`. Check with `print(html[:100])` or `print(len(html))` (several thousand characters).
+
+**🩹 If it's off:** A `ConnectionError` usually means you're offline, not a bug in this code. If `raise_for_status()` raises, check the URL for a typo — `quotes.toscrape.com` (not `.org` or missing the trailing content).
+
+### 1.2 Parse it into quote, author, and tags
+
 That `html` string is a tree of nested tags — `<div>`, `<span>`, `<a>` — each one optionally carrying attributes like `class` or `href`. BeautifulSoup parses that text into a navigable tree and gives you two main tools to search it: `find` (the first match) and `find_all` (every match), both filterable by tag name and by attributes like `class_`. Open the page's HTML in your browser's "View Page Source" and you'll see each quote sits inside a `<div class="quote">`, with the quote text in a `<span class="text">`, the author in a `<small class="author">`, and each tag in an `<a class="tag">`.
+
+**👟 Starter hint:** `find_all("div", class_="quote")` gets you one BeautifulSoup tag per quote; inside each, `find("span", class_="text")` and `find("small", class_="author")` narrow to the two fields you need, and `.get_text(strip=True)` pulls out clean text:
 
 ```python
 # scrape.py
@@ -112,6 +124,10 @@ You should see ten printed lines, one per quote on the front page.
 `time.sleep(1)` between requests isn't strictly required by quotes.toscrape.com, but it's a habit worth building now rather than after you accidentally hammer a real server with dozens of requests per second. A short, deliberate delay between requests is standard scraping etiquette — it keeps your script from looking like (or acting like) a denial-of-service attempt, and it's cheap insurance against getting your IP temporarily blocked on sites that do enforce limits.
 :::
 
+**🎯 Expected output:** Ten lines, one per quote, each shaped like `Albert Einstein: "Life is like riding a bicycle..." ['change', 'deep-thoughts', 'thinking', 'world']`.
+
+**🩹 If it's off:** An `AttributeError: 'NoneType' object has no attribute 'get_text'` means `find(...)` returned `None` — the class name you passed doesn't match anything on the page; re-check "View Page Source" for the exact current class names. Fewer than 10 lines usually means the CSS class filter is too narrow or slightly misspelled, not that the page has fewer quotes.
+
 **✅ Checklist**
 
 - ✅ `uv run python scrape.py` runs without errors.
@@ -125,7 +141,11 @@ You should see ten printed lines, one per quote on the front page.
 
 ## Step 2: Handle pagination and collect all the data
 
-quotes.toscrape.com spreads its quotes across multiple pages, with a "Next" link at the bottom of every page except the last. Rather than hardcode "loop 10 times," follow the link itself — that way the script keeps working even if the number of pages changes:
+quotes.toscrape.com spreads its quotes across multiple pages, with a "Next" link at the bottom of every page except the last. Rather than hardcode "loop 10 times," follow the link itself — that way the script keeps working even if the number of pages changes. Three sub-steps: turn Step 1's per-page loop into a reusable function, follow "Next" links across every page, then save the result to a CSV.
+
+### 2.1 Turn the per-page parsing into a function
+
+**👟 Starter hint:** Take the exact loop body from Step 1 and wrap it in a function that takes a parsed `soup` and returns a list of dicts — this is the same parsing logic, just reusable across however many pages you end up fetching:
 
 ```python
 # scrape.py (continued)
@@ -142,7 +162,17 @@ def parse_quotes(soup):
         tags = [t.get_text(strip=True) for t in quote_div.find_all("a", class_="tag")]
         quotes.append({"text": text, "author": author, "tags": ", ".join(tags)})
     return quotes
+```
 
+**🎯 Expected output:** No output yet — this is a function definition. The check is that it matches Step 1's loop body exactly, just returning instead of printing.
+
+**🩹 If it's off:** If you find yourself needing to re-check the class names, that's a sign you copied from memory instead of Step 1's working code — copy it directly to avoid reintroducing a typo you already fixed once.
+
+### 2.2 Follow "Next" links across every page, then save
+
+**👟 Starter hint:** Loop with `while url is not None:`, fetching and parsing each page, then look for `<li class="next">` — its presence (or absence) *is* your loop's continue/stop signal, no page-count needed:
+
+```python
 def scrape_all_quotes():
     all_quotes = []
     url = f"{BASE_URL}/"
@@ -182,6 +212,10 @@ uv run python scrape.py
 
 The `try`/`except` around the request is the important addition here, not a formality: without it, one flaky request on page 7 of 10 would throw an unhandled exception and lose the six pages already fetched, instead of saving what you have and stopping cleanly. `requests.compat.urljoin` turns the "Next" link's relative `href` (like `/page/2/`) into a full URL by combining it with the current page's URL — the same thing your browser does automatically when you click a relative link.
 
+**🎯 Expected output:** `Saved N quotes to quotes.csv` where N is comfortably more than 10 (quotes.toscrape.com has 10 pages of 10 quotes each — expect around 100), and a real `quotes.csv` with a header row plus one row per quote.
+
+**🩹 If it's off:** If the script only ever saves 10 quotes, `next_li` is being found but the URL isn't actually being followed — check that `url = requests.compat.urljoin(...)` is inside the `if next_li else None` branch, not accidentally always resetting to the front page. If it hangs or runs very slowly, that's the `time.sleep(1)` between every one of ~10 pages working as intended, not a bug — ~10 seconds total is expected.
+
 **✅ Checklist**
 
 - ✅ `uv run python scrape.py` finishes and prints a "Saved N quotes" line.
@@ -195,7 +229,13 @@ The `try`/`except` around the request is the important addition here, not a form
 
 ## Step 3: Clean and load into pandas
 
-Section 2 introduced pandas as the fix for plain Python loops getting slow as data grows — vectorized operations in C instead of a Python `for` loop over every row. Scraped data adds a second, equally real reason to reach for it: it rarely arrives clean, and pandas' string and type-checking tools make cleaning it fast to write and easy to verify.
+Section 2 introduced pandas as the fix for plain Python loops getting slow as data grows — vectorized operations in C instead of a Python `for` loop over every row. Scraped data adds a second, equally real reason to reach for it: it rarely arrives clean, and pandas' string and type-checking tools make cleaning it fast to write and easy to verify. Two sub-steps: reconstruct the packed tags column, then run whitespace/dtype sanity checks.
+
+### 3.1 Reconstruct the packed `tags` column
+
+`tags` is stored in the CSV as one comma-joined string because CSV cells can't hold a real Python list — reconstructing the list on load, with `.apply`, is the standard pattern for any "packed" column like this.
+
+**👟 Starter hint:** `.fillna("")` first so a genuinely empty cell doesn't crash `.split`, then `.apply` a small lambda that splits on `,`, strips whitespace off each piece, and drops any that end up empty:
 
 ```python
 # analyze.py
@@ -208,7 +248,19 @@ df = pd.read_csv("quotes.csv")
 df["tags"] = df["tags"].fillna("").apply(
     lambda raw: [tag.strip() for tag in raw.split(",") if tag.strip()]
 )
+```
 
+**🎯 Expected output:** `type(df["tags"].iloc[0])` prints `<class 'list'>`, and `df["tags"].iloc[0]` shows real strings like `['change', 'deep-thoughts']`, not one long comma-joined string.
+
+**🩹 If it's off:** If `df["tags"]` still holds strings after this, the `.apply` result wasn't assigned back to `df["tags"]` — check you didn't drop the assignment while copying. A `AttributeError: 'float' object has no attribute 'split'` means a `NaN` slipped through — confirm `.fillna("")` ran before `.apply`, not after.
+
+### 3.2 Whitespace and dtype sanity checks
+
+Cheap to do, easy to skip, and the kind of thing that silently breaks a `groupby` later if left unchecked.
+
+**👟 Starter hint:** `.str.strip()` on both text columns, then an `assert` that would fail loudly (not silently produce wrong charts) if the scrape ever left a truly empty quote behind:
+
+```python
 # Whitespace and dtype sanity checks -- cheap to do, easy to skip, and the kind
 # of thing that silently breaks a groupby later if left unchecked.
 df["text"] = df["text"].str.strip()
@@ -220,7 +272,11 @@ print(df.head())
 print(df.dtypes)
 ```
 
-Two things worth noticing here. First, `tags` is stored in the CSV as one comma-joined string because CSV cells can't hold a real Python list — reconstructing the list on load, with `.apply`, is the standard pattern for any "packed" column like this. Second, `df["text"].str.len()` computing every quote's length in one vectorized call, instead of a Python loop calling `len()` row by row, is exactly the speed argument from Section 2 — just applied to data you fetched yourself instead of a bundled CSV.
+`df["text"].str.len()` computing every quote's length in one vectorized call, instead of a Python loop calling `len()` row by row, is exactly the speed argument from Section 2 — just applied to data you fetched yourself instead of a bundled CSV.
+
+**🎯 Expected output:** `df.head()` shows clean rows with no stray leading/trailing whitespace, `df.dtypes` shows `quote_length` as an integer type, and the `assert` runs with no `AssertionError`.
+
+**🩹 If it's off:** If the `assert` fires, something upstream in Step 2 saved a row with missing text — check `quotes.csv` directly for a blank `text` cell before assuming this step's code is wrong. If `quote_length` prints as `object` instead of a numeric dtype in `df.dtypes`, `.str.len()` was probably called on the wrong column (double-check it's `df["text"]`, already stripped, not the raw CSV column).
 
 **✅ Checklist**
 
@@ -235,9 +291,13 @@ Two things worth noticing here. First, `tags` is stored in the CSV as one comma-
 
 ## Step 4: Analyze and visualize
 
-With clean, typed columns, the actual analysis is a few lines of `groupby`/`value_counts`, exactly like Section 2's guided notebooks — the difference is that this data came from your own scraper, not a bundled file.
+With clean, typed columns, the actual analysis is a few lines of `groupby`/`value_counts`, exactly like Section 2's guided notebooks — the difference is that this data came from your own scraper, not a bundled file. Three sub-steps, one per chart/number.
 
-**Most common tags** — `explode` turns the list-of-tags column into one row per tag, so `value_counts` can count them individually:
+### 4.1 Most common tags
+
+`explode` turns the list-of-tags column into one row per tag, so `value_counts` can count them individually.
+
+**👟 Starter hint:** `df.explode("tags")` first, filter out the empty-string rows that came from quotes with no tags, then `.value_counts().head(10)` and plot it as a horizontal bar chart with the x-axis pinned to start at 0:
 
 ```python
 import matplotlib.pyplot as plt
@@ -256,14 +316,28 @@ fig.tight_layout()
 fig.savefig("top_tags.png")
 ```
 
-**Most-quoted authors:**
+**🎯 Expected output:** `top_tags.png` opens as a horizontal bar chart, longest bar at top, x-axis starting at 0, with a real title and axis labels — not a bare, unlabeled plot.
+
+**🩹 If it's off:** An empty or all-zero chart usually means `exploded["tags"] != ""` filtered out everything — check that Step 3.1's list-building actually dropped empty strings itself (`if tag.strip()`), rather than leaving `""` entries inside each list for `explode` to surface here. If bars look reasonable but the x-axis doesn't start at 0, the `ax.set_xlim(left=0)` line was dropped.
+
+### 4.2 Most-quoted authors
+
+**👟 Starter hint:** One line — `.value_counts()` on the author column, same pattern as the tag counts above, just without exploding since `author` is already one value per row:
 
 ```python
 most_quoted = df["author"].value_counts().head(5)
 print(most_quoted)
 ```
 
-**Quote-length distribution** — a histogram, to see the shape of the data rather than just a single average:
+**🎯 Expected output:** A printed pandas Series, five author names as the index and their quote counts as values, sorted highest first.
+
+**🩹 If it's off:** If one author appears twice with slightly different counts split between them, that's a whitespace-cleaning bug from Step 3.2 resurfacing — `"Albert Einstein"` and `"Albert Einstein "` count as different groups to `value_counts()`.
+
+### 4.3 Quote-length distribution
+
+A histogram, to see the shape of the data rather than just a single average.
+
+**👟 Starter hint:** `ax.hist(df["quote_length"], bins=20, ...)` — a histogram bins numeric values into ranges and counts how many fall in each, unlike the bar charts above which count discrete categories directly:
 
 ```python
 fig, ax = plt.subplots(figsize=(8, 5))
@@ -276,6 +350,10 @@ fig.savefig("quote_length_dist.png")
 ```
 
 Both charts follow the same honesty rules from Data Analysis Hard Week 9: axes are labeled, the bar chart's x-axis starts at 0 rather than being truncated to exaggerate small differences, and titles say exactly what's being counted rather than leaving it to guesswork.
+
+**🎯 Expected output:** `quote_length_dist.png` opens as a histogram with a real shape (not a single flat bar or dozens of empty bins) — most quote lengths clustered somewhere in the low hundreds of characters, with a tail of longer ones.
+
+**🩹 If it's off:** A histogram that's one solid bar means `quote_length` didn't vary — re-check Step 3.2 actually computed it from the *stripped* `text` column, not a constant or a miscomputed column. If the file doesn't save, confirm `fig.savefig(...)` is called on the same `fig` object `plt.subplots()` returned, not a stale one from the previous chart.
 
 **✅ Checklist**
 

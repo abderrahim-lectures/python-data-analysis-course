@@ -103,11 +103,17 @@ With `uv`, `openai`, `python-dotenv`, and a key in `.env`, setup is done — eve
 
 Put a `.txt` or `.md` file of your own study notes somewhere in your project — a `notes/` folder, same convention as the [RAG project](/docs/projects/rag-notes), is a reasonable place. Reading it is nothing new:
 
+**👟 Starter hint:** `Path(...).read_text(encoding="utf-8")` is the entire "load" step — no chunking, no embedding, just a string. Print `len(notes_text)` after reading it as your one sanity check before moving on:
+
 ```python
 from pathlib import Path
 
 notes_text = Path("notes/cell-biology.txt").read_text(encoding="utf-8")
 ```
+
+**🎯 Expected output:** `len(notes_text)` prints a real, nonzero character count matching roughly how long your notes file actually is.
+
+**🩹 If it's off:** A `FileNotFoundError` means the path is relative to wherever you ran `uv run` from, not the script's own location — run from the project root, or use an absolute path while debugging. A suspiciously small count (a handful of characters) usually means you saved an empty file or pointed at the wrong one.
 
 Here's the design decision this project asks you to make explicitly, rather than skip past: **how much of your notes should the model actually see?**
 
@@ -130,6 +136,8 @@ Here's the design decision this project asks you to make explicitly, rather than
 ## Step 2: Generate quiz questions grounded in your notes
 
 Ask the model for a fixed number of questions, each paired with an expected answer — and be explicit in the prompt that both must come from the specific text you're handing it, not general knowledge about the subject:
+
+**👟 Starter hint:** Fill `GENERATE_PROMPT_TEMPLATE` with your notes and a question count, send it in one `chat.completions.create` call, then strip a possible code fence before `json.loads` — the fence-stripping line is defensive, not optional, since models don't always obey "no markdown fences" perfectly:
 
 ```python
 import json
@@ -170,6 +178,10 @@ Two details worth noticing:
 Small free-tier models occasionally produce a vague or oddly-phrased question. If you notice this on your own notes, a simple fix without any new code is to ask for a few extra questions in the prompt and only keep the first `N` — or just re-run generation, since it's a single API call.
 :::
 
+**🎯 Expected output:** A Python list of 5 dicts, each with a `"question"` and `"expected_answer"` key referencing specifics from your actual notes file — not generic textbook trivia a search engine could have written.
+
+**🩹 If it's off:** A `JSONDecodeError` means `json.loads` got something that wasn't clean JSON — print `raw` right before that call to see exactly what the model sent back; a stray fence the strip calls didn't catch (e.g. a fence with extra whitespace) is the usual cause. Generic, notes-agnostic questions mean `notes_text` either wasn't actually substituted into the prompt (check the `.format(...)` call) or your notes file itself is too thin to ground five distinct questions in — see the pitfalls section.
+
 **✅ Checklist**
 
 - ✅ `generate_questions(notes_text)` returns a Python list of dicts, each with a `"question"` and `"expected_answer"` key.
@@ -184,6 +196,8 @@ Small free-tier models occasionally produce a vague or oddly-phrased question. I
 ## Step 3: Build the interactive quiz loop
 
 Now the part that makes this a quiz and not just a question generator: ask each question, read the student's typed answer, and have the model judge it — free-text answers won't match the expected answer word-for-word, so an exact string comparison (`==`) would mark almost everything wrong.
+
+**👟 Starter hint:** Loop over `questions`, `input()` the student's typed answer for each, pass it to `judge_answer(question, expected_answer, student_answer)`, and accumulate `score` based on the returned `"verdict"` — `"correct"` is +1, `"close"` is +0.5, anything else is +0:
 
 ```python
 JUDGE_PROMPT_TEMPLATE = """You are grading a student's quiz answer. Judge
@@ -240,6 +254,10 @@ A three-way verdict (`correct` / `close` / `incorrect`) is deliberately more for
 `input("Your answer: ")` pauses the whole script at that line until you type something and hit Enter — exactly like `input()` back in Python 101, just now sitting inside a loop that also happens to make network calls before and after. If the terminal seems to hang after a question is printed, that's normal: it's waiting on you, not the API.
 :::
 
+**🎯 Expected output:** For each question, a prompt, a wait for your typed input, then a ✅/🟡/❌-marked verdict with one brief feedback sentence — and, on an incorrect answer, the expected answer shown underneath.
+
+**🩹 If it's off:** If every answer comes back `"incorrect"` regardless of quality, print `result` inside `judge_answer` before it's parsed — the model may be returning a verdict spelled differently than expected (`"Correct"` vs `"correct"`), which `result.get("verdict", "incorrect")`'s exact string match would silently treat as unrecognized. If the script hangs with no prompt visible, check you flushed/printed the question line before the `input()` call — some terminals buffer output differently than expected.
+
 **✅ Checklist**
 
 - ✅ `run_quiz(questions)` prints one question at a time and actually waits for typed input before continuing.
@@ -254,6 +272,8 @@ A three-way verdict (`correct` / `close` / `incorrect`) is deliberately more for
 ## Step 4: Track the score and run it end to end
 
 `run_quiz` above already tracks `score` as it goes and prints a final `score/total` line once the loop finishes. Wire the whole thing together in a `main()`:
+
+**👟 Starter hint:** `main()` is pure plumbing at this point — read the notes, call `generate_questions`, then `run_quiz` on the result. Nothing new to write, just wiring Steps 1–3 together in order:
 
 ```python
 def main() -> None:
@@ -276,6 +296,10 @@ uv run python study_buddy.py
 ```
 
 You should see a short "Generating questions..." pause (one API call), then five questions one at a time, each waiting for your typed answer before moving on, ending with a final score line like `Final score: 3.5/5`.
+
+**🎯 Expected output:** A full end-to-end run: generation pause, five questions each with typed input and verdict, ending with `Final score: N/5` where N reflects your actual answers (correct = +1, close = +0.5).
+
+**🩹 If it's off:** If the script crashes partway through instead of finishing, it's almost always a `judge_answer` JSON-parsing failure on one specific question — the Socratic question below is pointing you at the actual fix (a `try`/`except` around that one call). If two full runs on the same notes file somehow produce identical questions every time, double-check `generate_questions` is actually being called fresh each run and its result isn't accidentally cached to a file somewhere.
 
 **✅ Checklist**
 
