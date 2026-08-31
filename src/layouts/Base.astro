@@ -18,6 +18,9 @@ interface Props {
    *  Powers both the locale switcher and hreflang tags. Pages that don't
    *  pass this fall back to that locale's learn hub. */
   alternates?: Partial<Record<RouteLocale, string>>;
+  /** One schema.org object (or array of them) to emit as JSON-LD, on top of
+   *  the site-wide Organization/WebSite block every page already gets. */
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
 }
 
 const {
@@ -27,9 +30,18 @@ const {
   dir = 'ltr',
   image,
   alternates,
+  jsonLd,
 } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const ogImage = image ? new URL(image, Astro.site) : new URL('og-default.png', Astro.site);
+const siteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'PyDA Course',
+  description: 'Learn Python and data analysis in your browser — run real code, earn XP, build streaks. Zero installs, zero boring.',
+  url: String(new URL(import.meta.env.BASE_URL, Astro.site)),
+};
+const jsonLdBlocks = [siteJsonLd, ...(jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [])];
 const base = import.meta.env.BASE_URL;
 const defaultAlternates: Record<RouteLocale, string> = {
   en: NAV_WORDS.en.learn,
@@ -72,6 +84,9 @@ const t = UI_STRINGS[resolveLocale(lang)];
     <meta name="twitter:image" content={ogImage} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    {jsonLdBlocks.map((block) => (
+      <script type="application/ld+json" set:html={JSON.stringify(block)} />
+    ))}
     <script is:inline>
       // Persisted theme
       const t = localStorage.getItem('pda:theme');

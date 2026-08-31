@@ -4,9 +4,27 @@ import Icon from '../components/Icon.astro';
 import SceneBg from '../components/SceneBg.astro';
 
 const base = import.meta.env.BASE_URL;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Course',
+  name: 'PyDA Course',
+  description: 'Learn Python and data analysis in your browser — run real code, earn XP, build streaks. Zero installs, zero boring.',
+  provider: {
+    '@type': 'Organization',
+    name: 'PyDA Course',
+    url: String(new URL(base, Astro.site)),
+  },
+  isAccessibleForFree: true,
+  inLanguage: ['en', 'ar', 'es', 'fr'],
+  hasCourseInstance: {
+    '@type': 'CourseInstance',
+    courseMode: 'online',
+    courseWorkload: 'PT10W',
+  },
+};
 ---
 
-<Base title="PyDA Course — Learn Python the gamer way" lang="en" dir="ltr">
+<Base title="PyDA Course — Learn Python the gamer way" lang="en" dir="ltr" jsonLd={jsonLd}>
   <!-- === GAMIFIED HERO === -->
   <section class="hero">
     <div class="hero__bg" aria-hidden="true"></div>

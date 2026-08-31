@@ -662,6 +662,45 @@ instead of splitting them) — caught and retrofitted after direct feedback
 pointed at `wordle-clone.md` as the reference shape. All 14 done files now
 match that shape exactly: `### N.1`/`N.2`/etc. sub-headers, a 👟 starter
 hint before each code block, a 🎯 expected-output + 🩹 troubleshooting pair
-after it. Between the two of us, 28/29 project pages now share one
-consistent format — only `ai-agent.md` intentionally differs, for the
-reason above.
+after it. `ai-agent.md`'s single Step 1 turned out to split naturally too
+("write the script" / "run it") — added the same scaffolding there and
+removed a now-redundant "What you should see" section. All 29 project
+pages share one consistent format.
+
+---
+
+## Session 2026-08-31 (Claude) — structured data / JSON-LD @claude
+
+Picked up the other unclaimed item. Added a generic `jsonLd` prop to
+`Base.astro` (accepts one schema.org object or an array) that renders as
+`<script type="application/ld+json">` tags — every page already gets a
+site-wide `WebSite` block automatically, on top of whatever the page
+passes in.
+
+- [x] Homepage (`index.astro`): `Course` schema (provider, free, 4
+      languages, `CourseInstance` with `courseMode`/`courseWorkload`).
+- [x] Every project page (`projects/[...slug].astro`): `LearningResource`
+      (`learningResourceType: "Project"`), nested `isPartOf: Course`.
+- [x] Every lesson week (`learn/[section]/[track]/[week].astro`):
+      `LearningResource` (`learningResourceType: "Lesson"`),
+      `educationalLevel` set from the track, `position` set from the week
+      number, nested `isPartOf: Course`.
+
+Verified in the built HTML (`grep` for the `<script type="application/
+ld+json">` tag in `dist/index.html` and a project page — both present and
+valid JSON). `astro check`: 0 errors. 156 unit tests still green — no
+existing test covers JSON-LD yet, so this is unverified by the automated
+suite; worth a`tests/unit` addition asserting every page type's `Base`
+call includes a `jsonLd` prop, if either of us picks this back up.
+
+Not done, deliberately scoped out for now: `/progress` and `/playground`
+(no natural schema.org type fits a personal dashboard or a scratch
+editor — forcing one would be noise, not signal), and locale (ar/es/fr)
+pages (same `LearningResource`/`Course` shapes would apply via
+`inLanguage`, but wanted to ship the English pages and verify the
+approach first rather than triple the surface area in one pass).
+
+### Unclaimed (carried over)
+- [ ] Performance audit (bundle size, LCP, Pyodide first-load).
+- [ ] Locale pages' JSON-LD (ar/es/fr) — same shapes as above, not yet applied.
+- [ ] A unit test asserting JSON-LD presence/shape per page type.

@@ -38,9 +38,26 @@ const next = idx >= 0 && idx < siblings.length - 1 ? siblings[idx + 1] : null;
 const otherTrack = track === 'normal' ? 'hard' : 'normal';
 const ps = PAGE_STRINGS['en'];
 const lessonId = `${section}/${track}/week-${week}`;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'LearningResource',
+  name: title,
+  description,
+  learningResourceType: 'Lesson',
+  educationalLevel: track === 'hard' ? 'Advanced' : 'Beginner',
+  isAccessibleForFree: true,
+  inLanguage: 'en',
+  url: String(new URL(`${base}learn/${section}/${track}/${week}`, Astro.site)),
+  position: week,
+  isPartOf: {
+    '@type': 'Course',
+    name: 'PyDA Course',
+    description: 'Learn Python and data analysis in your browser — run real code, earn XP, build streaks.',
+  },
+};
 ---
 
-<Base title={`${title} — PyDA Course`} description={description} lang="en" dir="ltr">
+<Base title={`${title} — PyDA Course`} description={description} lang="en" dir="ltr" jsonLd={jsonLd}>
   <nav class="crumb container">
     <a href={`${base}learn`}>Learn</a> <span>/</span>
     <a href={`${base}learn/${section}`}>{section}</a> <span>/</span>
