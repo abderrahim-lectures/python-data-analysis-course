@@ -94,6 +94,10 @@ class Greeter:
 
 Then write `explore_ast.py` to poke at it:
 
+### 1.1 Walk the tree and print what you find
+
+**👟 Starter hint:** `ast.walk(tree)` yields every node in the tree in no particular nesting order; check each one's type with `isinstance` against `ast.FunctionDef`, `ast.ClassDef`, `ast.Import`, and `ast.ImportFrom` to decide what to print:
+
 ```python
 # explore_ast.py
 import ast
@@ -124,6 +128,12 @@ You should see `function: greet`, `class: Greeter`, and `import: os` printed —
 Not every `.py` file in a real repository parses cleanly: a file might be Python 2 code left over in an old repo, a template file with a `.py` extension that isn't valid Python at all, or genuinely have a syntax error someone forgot to fix. `ast.parse` raises `SyntaxError` in exactly this case. Wrapping it in `try`/`except SyntaxError` and skipping the file with a warning — rather than letting the whole tool crash on file one of two thousand — is standard practice for any tool that walks a real codebase, and it's built into the version in Step 2.
 :::
 
+### 1.2 Verify the nested method shows up too
+
+**🎯 Expected output:** `function: greet`, `class: Greeter`, `import: os`, and — importantly — `function: greet_twice`, even though it's nested inside `Greeter`.
+
+**🩹 If it's off:** If `greet_twice` never prints, you're iterating `tree.body` (top-level only) instead of `ast.walk(tree)` (every node, at every depth) — that's the exact distinction the first Socratic question below is pointing at. A blank result entirely usually means `sample.py` wasn't saved in the same folder you're running the script from.
+
 **✅ Checklist**
 
 - ✅ `uv run python explore_ast.py` runs without errors and prints `function: greet`, `class: Greeter`, and `import: os`.
@@ -137,7 +147,11 @@ Not every `.py` file in a real repository parses cleanly: a file might be Python
 
 ## Step 2: Walk a whole repo and build the graph
 
-A single file's structure is a start; a whole repository's worth of files, functions, classes, and their relationships is what makes this a genuine *knowledge graph* instead of a list. `networkx.DiGraph` (directed graph — edges have a direction, since "file A imports module B" isn't the same claim as "module B imports file A") is the data structure that holds all of it.
+A single file's structure is a start; a whole repository's worth of files, functions, classes, and their relationships is what makes this a genuine *knowledge graph* instead of a list. `networkx.DiGraph` (directed graph — edges have a direction, since "file A imports module B" isn't the same claim as "module B imports file A") is the data structure that holds all of it. Two sub-steps: a fail-safe per-file parser, then the walk that builds the graph.
+
+### 2.1 Write a parser that skips bad files instead of crashing
+
+**👟 Starter hint:** Wrap `ast.parse` in `try`/`except SyntaxError`, print a warning naming the file and line, and return `None` — the caller then just `continue`s past it, exactly like Step 1's tip described:
 
 ```python
 # build_graph.py (excerpt -- Step 2)
@@ -155,6 +169,11 @@ def parse_file(path):
         return None
     return tree
 
+### 2.2 Walk the repo and add nodes/edges for every file
+
+**👟 Starter hint:** `repo_path.rglob("*.py")` finds every Python file recursively; for each one, add a `"file"` node, add an `"imports"` edge per import found anywhere in the tree, then walk *only* `tree.body` (top-level, per Step 1's tip) to add `"defines"` edges for functions and classes:
+
+```python
 def build_graph(repo_path):
     graph = nx.DiGraph()
 
@@ -198,6 +217,12 @@ if __name__ == "__main__":
 
 Every node in a `networkx` graph is just a hashable value — here, a plain string like `"models.py"` or `"models.py::Order"` — with an optional dict of attributes (`kind`, `short_name`) attached. Using `"file.py::name"` as the node id, rather than just `"name"`, matters as soon as a repo has two files that both define a function called `helper` — without the file prefix, `networkx` would silently treat them as the *same* node.
 
+**🎯 Expected output:** `N nodes, M edges` with both numbers clearly nonzero for a folder with a handful of `.py` files — a file defining two functions and importing one module contributes at least 4 nodes on its own (the file, the module, and both functions).
+
+**🩹 If it's off:** A count of 0 nodes means `repo_path.rglob("*.py")` found nothing — check you're pointing `build_graph(Path(...))` at the right folder, not its parent. If node ids look like bare function names colliding across files instead of `"file.py::name"`, the `f"{rel}::{node.name}"` qualification got dropped somewhere in the loop.
+
+### 2.3 Verify against a deliberately broken file
+
 **✅ Checklist**
 
 - ✅ Running `build_graph.py` against a small folder of `.py` files prints a nonzero node and edge count.
@@ -211,7 +236,11 @@ Every node in a `networkx` graph is just a hashable value — here, a plain stri
 
 ## Step 3: Add call edges
 
-Files, functions, classes, and imports describe what *exists*. To capture how the pieces actually *use* each other, you need one more relationship: which function calls which. This is the least precise part of the tool — static analysis can't always be certain what a call targets (more on that in the pitfalls below) — but a "best effort, matched by name" version is still genuinely useful.
+Files, functions, classes, and imports describe what *exists*. To capture how the pieces actually *use* each other, you need one more relationship: which function calls which. This is the least precise part of the tool — static analysis can't always be certain what a call targets (more on that in the pitfalls below) — but a "best effort, matched by name" version is still genuinely useful. Two sub-steps: collect the names each function calls, then resolve those names into real edges.
+
+### 3.1 Collect the names each function calls
+
+**👟 Starter hint:** `ast.walk` the function's own body node, and for every `ast.Call` grab the short name off `node.func` — either `.id` (a bare `add(...)`) or `.attr` (a dotted `utils.add(...)`/`self.total()`):
 
 ```python
 # build_graph.py (excerpt -- Step 3, extends parse_file's per-function work)
@@ -230,7 +259,15 @@ def called_names(func_node):
 
 `node.func` on an `ast.Call` is either an `ast.Name` (a bare call like `add(...)`) or an `ast.Attribute` (a dotted call like `utils.add(...)` or `self.total()`) — grabbing `.id` or `.attr` respectively gets you the short name either way, though notice both `utils.add(...)` and `some_other_object.add(...)` collapse down to the same string, `"add"`. That's a real limitation, not an oversight, and it's exactly why the next step's matching is by *name*, not by certainty.
 
-Once every function/class/method in the repo has been added as a node (Step 2), a second pass resolves each recorded call to any node sharing that short name, and adds a `"calls"` edge:
+**🎯 Expected output:** `called_names(some_func_node)` returns a plain list of strings — for `greet_twice` from Step 1's `sample.py`, that's `["greet", "greet"]`.
+
+**🩹 If it's off:** An empty list for a function you know calls something usually means the wrong node was passed in — `called_names` expects a function/method's own AST node (e.g. one `ast.FunctionDef`), not the whole file's `tree`. Passing the whole tree isn't wrong per se, but it will over-collect calls from every function in the file, not just one.
+
+### 3.2 Resolve calls into edges
+
+Once every function/class/method in the repo has been added as a node (Step 2), a second pass resolves each recorded call to any node sharing that short name, and adds a `"calls"` edge.
+
+**👟 Starter hint:** Build a `short_name -> [nodes]` lookup once, then for each caller's collected call names, add a `"calls"` edge to every node matching that name — running this as a *second* pass, after every file is scanned, is what lets a function call one defined later in the same file:
 
 ```python
 # build_graph.py (excerpt -- Step 3, second pass over the whole graph)
@@ -249,6 +286,10 @@ def add_call_edges(graph, calls_by_function):
 
 This two-pass structure — first collect every definition, *then* resolve calls against the full set — is necessary because a function defined near the top of a file can call one defined near the bottom; a single top-to-bottom pass would miss forward references entirely.
 
+**🎯 Expected output:** After running Step 3 against `sample_repo/`, `graph.number_of_edges()` grows compared to Step 2 alone — new edges with `kind="calls"` connecting functions across files.
+
+**🩹 If it's off:** If no `"calls"` edges appear at all, check that `calls_by_function` was actually populated from 3.1's `called_names` for every function node, not just a hardcoded test case. If *every* function seems to call *every* same-named function across the whole repo, that's expected name-collision behavior, not a bug — see the pitfalls section and the Socratic question below.
+
 **✅ Checklist**
 
 - ✅ After running the full tool on `sample_repo/` (from the companion example, or your own test files), at least one `"calls"` edge exists between two functions in different files.
@@ -263,6 +304,10 @@ This two-pass structure — first collect every definition, *then* resolve calls
 ## Step 4: Visualize the graph
 
 A graph with a few hundred nodes is unreadable as a list of edges — visualizing it is what actually lets you *see* a codebase's shape. `pyvis` wraps `networkx` output into a self-contained, interactive HTML page: drag nodes, zoom, hover for details, no server needed beyond opening the file in a browser.
+
+### 4.1 Render an interactive HTML graph with pyvis
+
+**👟 Starter hint:** Create a `Network`, add every graph node with a color keyed off its `kind`, add every edge with its `kind` as a tooltip, then `net.write_html(...)`:
 
 ```python
 # build_graph.py (excerpt -- Step 4)
@@ -291,7 +336,15 @@ uv run python build_graph.py
 
 Open the resulting `graph.html` in a browser. Nodes are colored by kind (blue files, amber classes, green functions/methods, gray external modules); hovering any node or edge shows its full id and relationship kind in a tooltip.
 
-If you'd rather have a static image (for embedding in a document, or for a repo too large for the interactive layout to stay readable), `matplotlib` and `networkx`'s own drawing functions cover that case too:
+**🎯 Expected output:** `graph.html` opens as a colorful, draggable node-and-edge diagram — not a blank page — with tooltips on hover.
+
+**🩹 If it's off:** A blank `graph.html` (opens, but nothing renders) usually means the graph passed in had zero nodes — confirm Step 2/3 actually ran and populated it before calling `visualize_pyvis`. All-gray nodes mean the `kind` attribute wasn't set when the node was added — check `COLORS.get(kind, "#9ca3af")`'s fallback isn't masking a typo'd kind string like `"Function"` vs `"function"`.
+
+### 4.2 Optional: a static image with matplotlib
+
+If you'd rather have a static image (for embedding in a document, or for a repo too large for the interactive layout to stay readable), `matplotlib` and `networkx`'s own drawing functions cover that case too.
+
+**👟 Starter hint:** `nx.spring_layout(graph, seed=42, ...)` computes node positions once, then three separate `nx.draw_networkx_*` calls draw nodes, labels, and edges onto the same `ax`:
 
 ```python
 # build_graph.py (excerpt -- Step 4, matplotlib alternative)
@@ -314,6 +367,10 @@ def visualize_matplotlib(graph, output_path="graph.png"):
 `pyvis`'s interactivity (dragging, zooming, hovering) is genuinely better for *exploring* an unfamiliar graph — you can drag a dense cluster apart to see what's actually connected to what. `matplotlib`'s static image is better once you already know what you want to show and just need one fixed, embeddable picture — a screenshot of a `pyvis` page doesn't reflect a layout you chose on purpose. Neither is strictly better; they solve different moments in the same workflow.
 :::
 
+**🎯 Expected output:** `graph.png` opens as a static diagram matching `graph.html`'s content — same nodes, same colors, arrows showing edge direction.
+
+**🩹 If it's off:** An unreadable overlapping mess of labels usually just means too many nodes for a static layout at this figure size — try a larger `figsize` or filter the graph down before drawing, same fix as the pitfalls section suggests for `pyvis`.
+
 **✅ Checklist**
 
 - ✅ `graph.html` opens in a browser and shows a real, non-empty graph — not a blank page.
@@ -329,6 +386,10 @@ def visualize_matplotlib(graph, output_path="graph.png"):
 ## Step 5: Query the graph
 
 A graph you can only look at is already useful, but a graph you can *ask questions of* is more useful — and since `networkx` gives you real graph traversal, this is a handful of lines, not a new system.
+
+### 5.1 Write the two query functions
+
+**👟 Starter hint:** `graph.out_edges(node, data=True)` gives you every edge leaving a node (what it calls/imports); `graph.in_edges(node, data=True)` gives you every edge arriving at it (what calls/imports it) — filter each by `d.get("kind")` to pick just the relationship you want:
 
 ```python
 # build_graph.py (excerpt -- Step 5)
@@ -357,6 +418,12 @@ def who_imports(graph, module_name):
 
 `graph.out_edges(node, data=True)` and `graph.in_edges(node, data=True)` are the two directions of "follow an edge from this node" — outgoing for "what does this call/import", incoming for "what calls/imports this." That directionality is exactly why Step 2 built a `DiGraph` (directed) instead of an undirected `Graph`: "A imports B" and "B imports A" are different, checkable claims, and an undirected graph would have thrown that distinction away.
 
+### 5.2 Verify both queries against known relationships
+
+**🎯 Expected output:** `what_does_it_call(graph, "total_with_tax")` returns the function's fully-qualified node paired with a list of the short names it actually calls; `who_imports(graph, "utils")` returns every file that imports it, matching the example output shown above.
+
+**🩹 If it's off:** An empty list from `who_imports` for a module you know is imported means `module_name` doesn't exactly match the node id used when it was added in Step 2 — `os.path` gets added as just `"os"` (the `.split(".")[0]` truncation), so query with the truncated name too.
+
 **✅ Checklist**
 
 - ✅ `what_does_it_call(graph, ...)` on a function you know calls two others returns both, by name.
@@ -370,11 +437,21 @@ def who_imports(graph, module_name):
 
 ## Step 6: Run it end-to-end against a real repo
 
-Everything so far has been building toward one thing: pointing the finished tool at a codebase nobody built specifically for this lesson, and seeing what comes back. The companion example script in [`examples/codebase-knowledge-graph/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/codebase-knowledge-graph) wires up everything from Steps 1–5 into one runnable `build_graph.py`, plus a small `sample_repo/` of toy files with deliberate import/call relationships to try it on first:
+Everything so far has been building toward one thing: pointing the finished tool at a codebase nobody built specifically for this lesson, and seeing what comes back. The companion example script in [`examples/codebase-knowledge-graph/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/codebase-knowledge-graph) wires up everything from Steps 1–5 into one runnable `build_graph.py`, plus a small `sample_repo/` of toy files with deliberate import/call relationships to try it on first.
+
+### 6.1 Run against the toy `sample_repo/`
+
+**👟 Starter hint:** Run the CLI below unmodified first — proving the whole pipeline (parse → build → query → visualize) works on a small, known repo before pointing it at something real and hard to eyeball:
 
 ```bash
 uv run python build_graph.py sample_repo --html graph.html --calls total_with_tax --imports utils
 ```
+
+**🎯 Expected output:** A `graph.html` opens showing `sample_repo/`'s handful of files and functions, plus printed query results for `total_with_tax`'s calls and `utils`'s importers matching what you can see by reading `sample_repo/`'s own source.
+
+**🩹 If it's off:** If this doesn't match, debug here — on the small, fully-readable toy repo — rather than on a real repo in 6.2 where you can't eyeball every relationship to check the tool's output against ground truth.
+
+### 6.2 Point it at a real repository
 
 Once that works, point it at something real — **this course's own repository is a genuine, non-trivial Python codebase already sitting on your disk if you've cloned it**, or use any other local repo you have:
 
@@ -383,6 +460,10 @@ uv run python build_graph.py /path/to/python-data-analysis-course/examples --htm
 ```
 
 Open the resulting HTML and actually look at it: which files import the most other modules? Which function has the most incoming "calls" edges (a good proxy for "core, widely-used code")? Does the shape match what you already knew about how the codebase fits together, or does it surface a connection you didn't know was there?
+
+**🎯 Expected output:** A visibly larger, denser graph than `sample_repo/`'s — dozens or hundreds of nodes depending on the repo's size — that still opens and renders without crashing.
+
+**🩹 If it's off:** A crash partway through a large real repo almost always means Step 2.1's `try`/`except SyntaxError` guard is missing or was accidentally removed — a repo this size is far more likely than the toy one to contain at least one file the tool can't cleanly parse. An unreadably tangled visualization isn't a bug — see the pitfalls section on filtering before rendering a large graph.
 
 **✅ Checklist**
 
