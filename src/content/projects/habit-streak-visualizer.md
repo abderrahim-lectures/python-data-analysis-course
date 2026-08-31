@@ -67,6 +67,10 @@ No API key needed anywhere in this project — everything runs on data that live
 
 The log is a plain CSV with three columns: `date`, `habit`, `done`. One row per check-in. A flat file like this — rather than, say, a separate file per habit — means several habits can share one log and still be filtered independently with ordinary pandas boolean indexing later.
 
+### 1.1 Write the log module
+
+**👟 Starter hint:** `ensure_log` writes just the header row if the file doesn't exist yet; `append_checkin` opens in append mode (`"a"`) and writes one row — never rewriting the whole file just to add one check-in:
+
 ```python
 # log.py
 import csv
@@ -85,7 +89,11 @@ def append_checkin(path: Path, date: str, habit: str, done: bool) -> None:
         csv.writer(f).writerow([date, habit, "y" if done else "n"])
 ```
 
-A small CLI wraps this with the "did you do it today? y/n" interaction:
+### 1.2 Write the CLI and verify the log
+
+A small CLI wraps this with the "did you do it today? y/n" interaction.
+
+**👟 Starter hint:** `argparse` gives you `--date`/`--done` as optional overrides so you can backfill past days non-interactively; when either is omitted, fall back to today's date and an `input()` prompt:
 
 ```python
 # checkin.py
@@ -114,6 +122,10 @@ uv run python checkin.py "Exercise"
 
 Run that a handful of times with `--date`/`--done` for different days to build up a little history to test with, before moving on.
 
+**🎯 Expected output:** `Logged: 2026-01-15 — Exercise — done` (or `missed`), and `checkins.csv` grows by one row each run — three columns, human-readable.
+
+**🩹 If it's off:** If `--done y` still triggers the interactive prompt, check `args.done or input(...)` — `argparse`'s `choices=["y", "n"]` makes `"n"` a valid *string*, but Python treats a non-empty string as truthy either way, so this should work; a bug here usually means `--done` wasn't actually passed on the command line. If dates come out in the wrong order later, confirm you're always passing ISO format (`YYYY-MM-DD`) to `--date`, not a locale-specific one.
+
 **✅ Checklist**
 
 - ✅ Running `checkin.py` twice for the same habit and date, once "y" and once "n", leaves the log with both rows — you'll need to decide (next step) which one wins.
@@ -128,7 +140,11 @@ If you log the same habit twice for the same date (once by mistake, once to corr
 
 A streak is a run of *consecutive calendar days* logged as done, with no gap. The important design decision: a day that was never logged at all is treated exactly like a day explicitly logged "n" — both break the streak. That's simpler than adding a third "unknown" state, at the cost of punishing forgetting to log the same as actually skipping the habit.
 
-Reading a sparse log (only the days someone bothered to log) has to become a *dense* day-by-day series before streaks make sense — otherwise a gap in the log looks identical to a genuine break, but you can't tell which day it happened on without a full calendar to check against:
+Reading a sparse log (only the days someone bothered to log) has to become a *dense* day-by-day series before streaks make sense — otherwise a gap in the log looks identical to a genuine break, but you can't tell which day it happened on without a full calendar to check against.
+
+### 2.1 Densify the log into one row per calendar day
+
+**👟 Starter hint:** Load the CSV, coerce `done` to real booleans, drop duplicate date/habit rows keeping the last (a correction overwrites the original), then `.reindex()` the filtered habit's series onto a full `pd.date_range` with `fill_value=False`:
 
 ```python
 import pandas as pd
@@ -141,7 +157,17 @@ habit_df = df[df["habit"] == "Exercise"].set_index("date")["done"]
 daily = habit_df.reindex(pd.date_range(df["date"].min(), df["date"].max(), freq="D"), fill_value=False)
 ```
 
-`reindex` is doing the real work here: it takes a `Series` with only the dates actually present and expands it onto *every* date in the range, filling anything missing with `False`. Now streaks are a plain sequential scan:
+`reindex` is doing the real work here: it takes a `Series` with only the dates actually present and expands it onto *every* date in the range, filling anything missing with `False`.
+
+**🎯 Expected output:** `len(daily)` equals the number of calendar days between your log's first and last entries — more than the number of rows you actually logged, since gaps get filled with `False`.
+
+**🩹 If it's off:** If `daily` has the same length as the raw CSV, `reindex` isn't running against a full `date_range` — check `pd.date_range(df["date"].min(), df["date"].max(), freq="D")` is being passed, not the sparse index. A `KeyError` on the habit name means `df["habit"] == "Exercise"` matched nothing — check for a typo or case mismatch against what you actually logged.
+
+### 2.2 Compute the current and longest streak
+
+Now streaks are a plain sequential scan.
+
+**👟 Starter hint:** Walk `daily` once, incrementing a running counter on `True` and resetting it to 0 on `False`; track the max seen (longest) and whatever the counter is on the very last day (current):
 
 ```python
 def compute_streaks(daily: pd.Series) -> dict:
@@ -166,6 +192,10 @@ def compute_streaks(daily: pd.Series) -> dict:
 If you haven't logged today yet, `daily`'s last day is `False` by default (from the `reindex` fill), so `current_streak` reports 0 even if yesterday extended a real streak. Either log every day before checking your streak, or compute `current_streak` against yesterday instead of "the last row in the series" if you want it to tolerate today not being logged yet.
 :::
 
+**🎯 Expected output:** `compute_streaks(daily)` returns a dict with `current_streak`, `longest_streak`, `total_done`, and `total_days` — `longest_streak >= current_streak` always, since the current run is one specific run among all runs ever seen.
+
+**🩹 If it's off:** If `longest_streak` is smaller than a run you can count by eye in your log, the loop probably isn't updating `longest` on every iteration — check `longest = max(longest, current_run)` runs unconditionally, not only inside the `if done:` branch.
+
 **✅ Checklist**
 
 - ✅ `daily.index` contains every calendar day between your first and last log entry, with no gaps — `len(daily)` matches that day count exactly.
@@ -182,7 +212,11 @@ This is the real teaching moment of the project. A GitHub contributions graph is
 
 **The row** is just the weekday: `date.weekday()` returns 0 for Monday through 6 for Sunday, directly usable as a row index.
 
-**The column** is the tricky part. The tempting shortcut is `date.isocalendar()[1]`, the ISO week number — but ISO week numbers reset to 1 every January. A habit log that spans a year boundary (say, December into January) would have late-December dates and early-January dates land in the *same low week numbers*, scrambling the grid into overlapping columns instead of a clean left-to-right timeline. The fix: pick one fixed anchor date — the Monday on or before the very first logged day — and compute every column as a plain day-offset from that anchor:
+**The column** is the tricky part. The tempting shortcut is `date.isocalendar()[1]`, the ISO week number — but ISO week numbers reset to 1 every January. A habit log that spans a year boundary (say, December into January) would have late-December dates and early-January dates land in the *same low week numbers*, scrambling the grid into overlapping columns instead of a clean left-to-right timeline. The fix: pick one fixed anchor date — the Monday on or before the very first logged day — and compute every column as a plain day-offset from that anchor.
+
+### 3.1 Compute row/column for every date and fill the grid
+
+**👟 Starter hint:** `dates[0] - pd.Timedelta(days=dates[0].weekday())` gets you the anchor Monday; then `(dates - anchor).days // 7` is every date's column as a plain integer offset, and `.weekday` is the row — fill a `np.nan`-initialized array at `grid[row, week]`:
 
 ```python
 import numpy as np
@@ -203,6 +237,12 @@ def build_grid(daily: pd.Series):
 
 `(dates - anchor).days // 7` only ever increases — it doesn't care whether the log spans one year or five. Cells that fall outside the actual logged range (because the first logged day isn't necessarily a Monday, or the last isn't necessarily a Sunday) are left as `NaN`, so they can be drawn differently from a genuine "missed" day in the next step.
 
+**🎯 Expected output:** `grid.shape` is `(7, num_weeks)` where `num_weeks` grows roughly by 1 every 7 days of log history; a handful of cells at the very start and end are `NaN`, everything actually logged is `0.0` or `1.0`.
+
+**🩹 If it's off:** If the grid looks shifted by one row compared to a real calendar, check `date.weekday()`'s convention (0=Monday) matches what you're assuming — this is the exact off-by-one class of bug the pitfalls section calls out. If columns reset partway through a log that spans a year boundary, you're accidentally using `isocalendar()`'s week number somewhere instead of the anchor-offset calculation above.
+
+### 3.2 Verify across a year boundary
+
 **✅ Checklist**
 
 - ✅ `grid.shape[0]` is exactly 7 (one row per weekday), regardless of how long the date range is.
@@ -215,7 +255,11 @@ GitHub's own contributions graph starts weeks on Sunday, not Monday. What would 
 
 ## Step 4: Render it as a heatmap
 
-Color intensity shouldn't just be binary (done/not done) — a day that's the 15th in a row of a streak should read as visually different from the very first day of a new streak, even though both are "done." Compute intensity as a function of the *current* streak length on each day, capped so it doesn't keep darkening forever:
+Color intensity shouldn't just be binary (done/not done) — a day that's the 15th in a row of a streak should read as visually different from the very first day of a new streak, even though both are "done." Compute intensity as a function of the *current* streak length on each day, capped so it doesn't keep darkening forever.
+
+### 4.1 Compute per-day streak intensity
+
+**👟 Starter hint:** Same running-counter idea as Step 2's `compute_streaks`, but instead of just tracking the max, record `min(run, cap) / cap` for *every* day — a value between 0 and 1 that grows with the current run and flattens out once it hits the cap:
 
 ```python
 def streak_intensity(daily: pd.Series, cap: int = 10) -> list[float]:
@@ -226,7 +270,15 @@ def streak_intensity(daily: pd.Series, cap: int = 10) -> list[float]:
     return values
 ```
 
-Feed that into `build_grid` in place of the plain 0/1 fill, then render with matplotlib — a single-hue sequential ramp (light to dark blue), not a rainbow, since this is one continuous magnitude, not several categories:
+Feed that into `build_grid` in place of the plain 0/1 fill, then render with matplotlib — a single-hue sequential ramp (light to dark blue), not a rainbow, since this is one continuous magnitude, not several categories.
+
+**🎯 Expected output (4.1):** `streak_intensity(daily)` returns one float per day in `[0, 1]` — 0 for a missed/unlogged day, growing toward 1 as a streak lengthens, capping out rather than continuing to increase past `cap` days.
+
+**🩹 If it's off:** If every "done" day returns the same intensity regardless of streak length, `run` isn't actually accumulating — check it resets to 0 on a miss and increments (not reassigns to 1) on a hit.
+
+### 4.2 Render the heatmap with matplotlib
+
+**👟 Starter hint:** Two layered `imshow` calls — one for the real 0-to-1 intensity values on a blue colormap, a second `masked_where` layer painting only the `NaN` (no-data) cells flat gray on top:
 
 ```python
 import matplotlib.pyplot as plt
@@ -257,6 +309,10 @@ uv run python visualize.py --habit "Exercise"
 :::tip[Gray "no data" is not the same as blue "0 intensity"]
 Drawing unlogged cells at the palest step of the same blue ramp as a genuine miss would visually claim "this habit existed and you skipped it" for days before you'd even started tracking. Painting them a flat neutral gray, layered on top with a separate `imshow` call and a masked array, keeps "no data" honestly distinct from "data, and the answer was no."
 :::
+
+**🎯 Expected output:** `habit_heatmap.png` opens as a seven-row grid, days deepening in blue across a real streak and resetting to pale after a miss, with flat gray cells before your first logged day.
+
+**🩹 If it's off:** If gray "no data" cells are indistinguishable from pale-blue "0 intensity" ones, check the masked-array layer is drawn *after* (on top of) the main `imshow` call, not before it — layering order matters here since the second call needs to paint over the first. If the whole image is one flat color, `vmin=0, vmax=1` may be missing from `imshow`, letting matplotlib auto-scale the color range to whatever narrow band of values happens to be in this particular grid.
 
 **✅ Checklist**
 
