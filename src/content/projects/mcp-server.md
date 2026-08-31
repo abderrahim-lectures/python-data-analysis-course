@@ -68,6 +68,8 @@ uv add "mcp[cli]"
 
 The SDK's high-level API, `FastMCP`, turns an ordinary Python function into an MCP tool with one decorator — no protocol-level code to write by hand. Create `server.py`:
 
+### 1.1 Write the server
+
 **👟 Starter hint:** Instantiate `FastMCP("course-tools")`, then write two ordinary Python functions with type hints and a docstring, each decorated with `@mcp.tool()` — the decorator is what turns a plain function into something an MCP client can discover and call:
 
 ```python
@@ -120,6 +122,8 @@ MCP is a young, fast-moving spec — the protocol itself, and the Python SDK's o
 
 **🩹 If it's off:** A `ModuleNotFoundError: No module named 'mcp'` means the `uv add "mcp[cli]"` from Setup didn't run in this project folder — confirm you're inside the `mcp-server` directory `uv init` created. If `DOCS_DIR` doesn't point at a real folder on your machine, `search_course_topics` won't error yet (that only shows up when you actually call it in Step 2) — fix the path now while it's fresh.
 
+### 1.2 Verify it imports cleanly
+
 **✅ Checklist**
 
 - ✅ `server.py` saves without syntax errors and defines both `search_course_topics` and `count_words`.
@@ -134,6 +138,8 @@ MCP is a young, fast-moving spec — the protocol itself, and the Python SDK's o
 ## Step 2: Run and test your server locally
 
 Before wiring this up to any real AI client, run it on its own and confirm the tools actually work. The SDK ships a **dev/inspector** command for exactly this:
+
+### 2.1 Start the Inspector
 
 **👟 Starter hint:** Run the dev command below, let it open a browser tab, and call each tool by hand from there before you go anywhere near Claude Desktop:
 
@@ -161,6 +167,8 @@ It's tempting to skip straight to Claude Desktop. Resist that — the Inspector 
 
 **🩹 If it's off:** If `search_course_topics` returns `No lesson pages mention '...'` for a query you know is covered, `DOCS_DIR` almost certainly still points at the placeholder path from Step 1 — fix it and restart the dev server (it doesn't hot-reload). If the Inspector tab never opens, check the terminal for an `npx` install prompt it may be waiting on.
 
+### 2.2 Call both tools by hand
+
 **✅ Checklist**
 
 - ✅ `uv run mcp dev server.py` starts without errors and opens the Inspector in your browser.
@@ -180,6 +188,8 @@ It's tempting to skip straight to Claude Desktop. Resist that — the Inspector 
 - **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
 
 If the file doesn't exist yet, create it. Add your server, using an **absolute** path to your project folder:
+
+### 3.1 Edit the config file
 
 **👟 Starter hint:** Copy the JSON below into that config file, then replace `/absolute/path/to/mcp-server` with the real, full path to your project folder — `pwd` (macOS/Linux) or `cd` with no arguments (Windows) from inside it will print exactly that:
 
@@ -205,6 +215,8 @@ Claude Desktop should show it calling `search_course_topics` (often as a small c
 **🎯 Expected output:** A visible "used a tool" block in Claude Desktop's reply showing `search_course_topics` was called, with the same result you already saw in the Inspector, followed by Claude's answer built from that result.
 
 **🩹 If it's off:** If `course-tools` never appears in the connector list, the config file's JSON has a syntax error (a trailing comma is the classic one) or you skipped the *full* quit-and-restart — closing the window alone doesn't reload it. If it appears but Claude answers without calling the tool, try rephrasing the question to more explicitly reference "the course-tools search" the way the example question does — the model decides on its own whether a tool is relevant, and a vague question gives it less reason to.
+
+### 3.2 Restart Claude Desktop and verify it calls your tool
 
 **✅ Checklist**
 

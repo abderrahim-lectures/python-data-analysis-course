@@ -68,6 +68,8 @@ Fine-tuning teaches a model a specific *behavior*, not new facts from scratch �
 
 Write your examples locally as a small JSON file:
 
+### 1.1 Write and save the examples
+
 **👟 Starter hint:** Start from the two examples below, keep the exact `{"instruction": ..., "response": ...}` shape for every entry, and grow the list to 30-50 before you move on — one JSON object per line (`.jsonl`), not a single JSON array:
 
 ```python
@@ -101,6 +103,8 @@ uv run python build_dataset.py
 
 **🎯 Expected output:** `Wrote N examples to dataset.jsonl` where N matches your list's length, and opening `dataset.jsonl` in an editor shows one valid JSON object per line — no trailing comma issues, since each line is written independently.
 
+### 1.2 Verify the file and grow it to a real dataset
+
 **🩹 If it's off:** If `dataset.jsonl` has fewer lines than examples you wrote, check for a stray duplicate key in one of your dicts (Python silently keeps only the last value for a repeated key, which won't crash but will look wrong). Keep the list short (2-3 examples) just to confirm the script runs, then grow it to 30-50 before Step 2 — a 2-example dataset runs through the fine-tuning notebook fine but won't produce a visible behavior change afterward.
 
 :::tip[Quality over quantity]
@@ -111,12 +115,16 @@ Unsloth's own documentation and most fine-tuning guides agree on this: 50 carefu
 
 This is the step that needs a GPU. [Unsloth](https://github.com/unslothai/unsloth) ships ready-to-run notebooks specifically designed for Google Colab's and Kaggle's **free** GPU tiers — you don't install anything locally for this part.
 
+### 2.1 Run the stock notebook once, unmodified
+
 **👟 Starter hint:** Run the notebook's cells top to bottom *unmodified* once, on its own example data, before you touch anything — confirming the stock notebook trains and produces an adapter first isolates "did Unsloth work at all" from "did my dataset swap work," the same way testing with known-good input helps everywhere else in this course.
 
 1. Go to [Unsloth's notebooks page](https://docs.unsloth.ai/get-started/unsloth-notebooks) and open one of the beginner-friendly Colab notebooks for a small model (around 1B parameters — small enough to fine-tune quickly and to actually download and run afterward). A 1B-parameter open model, like a small Llama or Qwen release, is a reasonable, well-supported starting point; check Unsloth's notebook list for whichever small model has a current, working template, since which exact model is best-supported shifts over time.
 2. In the notebook, replace its example dataset with your own: upload the `dataset.jsonl` you built in Step 1 (Colab's file-upload panel, or mount Google Drive), and point the notebook's data-loading cell at it instead.
 3. Run the notebook's cells in order. The core fine-tuning step uses **LoRA** (Low-Rank Adaptation): instead of updating all of a model's billions of parameters (slow, needs a lot of memory), LoRA freezes the original model and trains a much smaller pair of low-rank matrices that get added on top — mathematically, if the original weight matrix is $W$, LoRA learns a low-rank update $\Delta W = BA$ (where $B$ and $A$ are much smaller matrices) and uses $W + \Delta W$ at inference time. This is the same idea as approximating a large matrix with a lower-dimensional one — a concept from linear algebra you already have the background for — applied to make fine-tuning cheap enough to run on a free GPU.
 4. Once training finishes, the notebook saves your result as a small **adapter** — just the $A$ and $B$ matrices, typically tens of megabytes, not a multi-gigabyte copy of the whole model. Download this adapter folder to your computer.
+
+### 2.2 Swap in your own dataset and download the adapter
 
 **🎯 Expected output:** A visibly decreasing training loss number printed as the notebook's training cell runs (it won't hit zero, and shouldn't), and a downloaded adapter folder that's tens of megabytes, not gigabytes — that size difference is the whole point of LoRA.
 
@@ -129,6 +137,8 @@ Which specific model, which specific notebook, and Unsloth's own API all move fa
 ## Step 3: Run your fine-tuned model locally
 
 Back on your own machine, load the base model plus your downloaded adapter and try it out:
+
+### 3.1 Write the inference script
 
 **👟 Starter hint:** Load the *base* model and tokenizer first with `AutoModelForCausalLM`/`AutoTokenizer`, exactly as named in Step 2's notebook, then wrap the base model with `PeftModel.from_pretrained(base_model, adapter_path)` — that's the one line that actually applies your fine-tuning on top:
 
@@ -159,6 +169,8 @@ uv run python infer.py
 ```
 
 Running a ~1B-parameter model on CPU is slow (expect it to take real seconds, not milliseconds, per response) but works — this is your own machine actually running a fine-tuned language model, no API key, no internet connection required once the model files are downloaded.
+
+### 3.2 Verify the fine-tuned behavior shows up
 
 **🎯 Expected output:** A generated response that leans noticeably toward the style or format of your training examples — not identical wording, but a visible shift from how the un-fine-tuned base model would answer the same prompt.
 

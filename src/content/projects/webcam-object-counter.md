@@ -71,6 +71,8 @@ OpenCV ships **Haar cascades** built in — small, fast, no extra download, but 
 
 Every script below reuses this same core idea. `yolo11n.pt` is a pretrained checkpoint — `ultralytics` downloads it automatically the first time you construct `YOLO(...)`, and caches it locally after that:
 
+### 1.1 Detect and draw boxes
+
 **👟 Starter hint:** Construct `YOLO("yolo11n.pt")` once, call it directly on an image path like a function, and pull the class name and confidence off each entry in `result.boxes` using `model.names[int(box.cls)]`:
 
 ```python
@@ -99,6 +101,8 @@ uv run python detect_image.py
 
 `model(image_path)` runs the full detection pipeline in one call: resize the image, run it through the network, and convert the raw output into a list of boxes, each with a class label and a confidence score. `result.boxes` is that list — `box.cls` is a class index into `model.names` (a dict of all 80 COCO class names), and `box.conf` is the model's confidence that the box actually contains that class. `result.plot()` is a convenience method that draws all of that back onto the image for you, so you don't have to write your own box-drawing loop with `cv2.rectangle`.
 
+### 1.2 Verify against the sample image
+
 **🎯 Expected output:** Console lines like `person (94% confidence)` for each detected object, and `output_street.jpg` opens as the same photo with colored boxes and labels drawn over real objects.
 
 **🩹 If it's off:** A long pause with no output on the very first run is `ultralytics` downloading `yolo11n.pt` (a few MB) — let it finish; it's cached after that. If `Detected 0 object(s)`, confirm `samples/street.jpg` actually exists at that relative path from where you're running the script, not just that the file exists somewhere in the project.
@@ -116,6 +120,8 @@ The model returns a confidence score for every box, not just a yes/no "object he
 ## Step 2: Count one target class and keep a running total
 
 Detecting everything is a good start, but "count objects" usually means counting *one kind* of thing — people walking through a doorway, cars in a lot, and so on:
+
+### 2.1 Filter and sum
 
 **👟 Starter hint:** Loop over your image paths, and for each one filter `result.boxes` down to just the ones whose class name matches `target_class`, summing with a generator expression rather than a manual counter loop:
 
@@ -144,6 +150,8 @@ uv run python count_class.py
 
 The count is just a filter-and-sum over `result.boxes`, comparing each box's class name against the one you care about. `verbose=False` quiets `ultralytics`'s own per-call logging so your own `print` statements aren't buried under it.
 
+### 2.2 Verify counts change with the target class
+
 **🎯 Expected output:** One line per image (`samples/street.jpg: N person(s) -- running total: N`), then a final `Total person(s): M` line where M is the sum across all images.
 
 **🩹 If it's off:** If the count is always 0 regardless of `target_class`, check the spelling matches a real COCO class name exactly (`"person"`, not `"people"` or `"Person"`) — `model.names.values()` prints the full valid list if you're unsure. If `running_total` doesn't match the sum of the per-image counts you saw printed, you likely reset it inside the loop instead of before it.
@@ -161,6 +169,8 @@ If two people in a photo are standing so close together that their bounding boxe
 ## Step 3: Process a short sample video frame-by-frame
 
 A video is just a sequence of images — the exact same per-image detection code from Steps 1–2, run once per frame in a loop:
+
+### 3.1 Loop over frames and write the annotated video
 
 **👟 Starter hint:** Open the file with `cv2.VideoCapture(path)`, and inside a `while True:` loop call `.read()` each iteration — it returns `(ok, frame)`, and `ok` turning `False` is your signal to `break`, not an error to handle:
 
@@ -201,6 +211,8 @@ uv run python detect_video.py
 
 `cv2.VideoCapture` reads a video file (or, in Step 4, a live camera) one frame at a time via `.read()`, which returns `(ok, frame)` — `ok` is `False` once there are no more frames. `cv2.VideoWriter` is the same idea in reverse: it accumulates frames you hand it into a new video file. Note the `if not ok: break` here means "the file ended" — Step 4 reuses this exact same check, but there it means something importantly different.
 
+### 3.2 Verify the output video
+
 **🎯 Expected output:** `output_video.mp4` written to disk, playable in any video app, showing bounding boxes and a `persons: N` overlay that updates every frame.
 
 **🩹 If it's off:** A 0-byte or unplayable `output_video.mp4` usually means the `fourcc`/codec isn't supported on your platform — try `"avc1"` instead of `"mp4v"` if `mp4v` fails silently on your machine. If the script finishes instantly with no frames written, `cap.get(cv2.CAP_PROP_FPS)` may have returned 0 and the `or 15` fallback masked a deeper problem — confirm `samples/sample_street.mp4` actually opened by checking `cap.isOpened()`.
@@ -218,6 +230,8 @@ The count you print is a per-frame snapshot, not a per-video total — running t
 ## Step 4: Go live with your webcam
 
 Same loop, one line different: swap the video file path for `0`, the index of your computer's default camera:
+
+### 4.1 Swap the file for the live camera
 
 **👟 Starter hint:** Change only the `VideoCapture` argument from a file path to `0`, add an `.isOpened()` guard before the loop (a live camera can fail to open in ways a bundled file never does), and swap `cv2.VideoWriter` for `cv2.imshow` plus a `cv2.waitKey(1) & 0xFF == ord("q")` quit check:
 
@@ -261,6 +275,8 @@ uv run python detect_webcam.py
 ```
 
 `cv2.VideoCapture(0)` opens your default camera the same way `VideoCapture("some_file.mp4")` opened a file in Step 3 — same `.read()` loop, same `(ok, frame)` shape. The two important differences: `.isOpened()` is checked *up front* here, since "no webcam available" is a real, common failure that should produce a clear message rather than a confusing crash deep in the loop; and once running, `ok` turning `False` mid-loop means the camera connection was lost (unplugged, permission revoked), not "reached the end," since a live camera has no end. `cv2.imshow` opens a live window — a real GUI window, so this script won't produce visible output in a plain remote terminal with no display.
+
+### 4.2 Verify live counting works
 
 **🎯 Expected output:** A live "Webcam Object Counter" window showing your camera feed with boxes and a running `persons: N` count that updates as you move in and out of frame, closing cleanly when you press "q".
 
