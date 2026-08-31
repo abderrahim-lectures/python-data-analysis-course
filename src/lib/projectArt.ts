@@ -84,7 +84,7 @@ export const PROJECT_TAGS: Record<string, string[]> = {
   'mcp-server': ['MCP', 'AI Agents'],
   'ml-classifier': ['Machine Learning', 'scikit-learn', 'Data Analysis'],
   'rag-notes': ['RAG', 'Embeddings', 'LLMs'],
-  'scrape-analyze': ['Web Scraping', 'Data Analysis', 'pandas'],
+  'scrape-analyze': ['Web Scraping', 'Data Analysis', 'Pandas'],
   'job-aggregator': ['Web Scraping', 'Pandas', 'Automation'],
   'finetune-llm-unsloth': ['Fine-tuning', 'LoRA', 'LLMs'],
   'rate-limited-api': ['APIs', 'FastAPI', 'Web Services'],

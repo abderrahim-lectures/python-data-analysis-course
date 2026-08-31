@@ -97,3 +97,18 @@ describe('credits page', () => {
     }
   });
 });
+
+describe('project tags are consistent for the /projects filter UI', () => {
+  test('no tag differs from another only by case', async () => {
+    const {PROJECT_TAGS} = await import('../../src/lib/projectArt.ts');
+    const allTags = Object.values(PROJECT_TAGS).flat();
+    const byLower = new Map<string, Set<string>>();
+    for (const tag of allTags) {
+      const key = tag.toLowerCase();
+      if (!byLower.has(key)) byLower.set(key, new Set());
+      byLower.get(key)!.add(tag);
+    }
+    const inconsistent = [...byLower.entries()].filter(([, variants]) => variants.size > 1);
+    expect(inconsistent).toEqual([]);
+  });
+});

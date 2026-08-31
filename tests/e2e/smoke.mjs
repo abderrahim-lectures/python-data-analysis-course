@@ -130,6 +130,24 @@ for (const path of ['/', '/progress', '/playground', '/projects', '/learn', '/le
   check(`${path} renders a heading`, await evaluate('!!document.querySelector("h1")'), true);
 }
 
+console.log('\nprojects search and filter');
+await goto('/projects');
+check('starts showing every project', await evaluate('document.getElementById("project-count").textContent'), '29 of 29 projects');
+await evaluate(`((() => { const el = document.getElementById('project-search'); el.value = 'wordle'; el.dispatchEvent(new Event('input', {bubbles:true})); })(), 1)`);
+check('search narrows to a single match', await evaluate('document.getElementById("project-count").textContent'), '1 of 29 projects');
+check('the empty state stays hidden with a real match', await evaluate('document.getElementById("project-empty").hidden'), true);
+check('the query lands in the URL', await evaluate('location.search'), '?q=wordle');
+await evaluate(`((() => { const el = document.getElementById('project-search'); el.value = 'zzz-no-such-project'; el.dispatchEvent(new Event('input', {bubbles:true})); })(), 1)`);
+check('a non-matching search shows the empty state', await evaluate('!document.getElementById("project-empty").hidden'), true);
+await evaluate(`((() => { const el = document.getElementById('project-search'); el.value = ''; el.dispatchEvent(new Event('input', {bubbles:true})); })(), 1)`);
+await evaluate('(document.querySelector(\'[data-tag="AI Agents"]\').click(), 1)');
+check('tag filter narrows the grid', await evaluate('document.getElementById("project-count").textContent'), '14 of 29 projects');
+check('the tag lands in the URL', await evaluate('location.search'), '?tag=AI+Agents');
+const filteredUrl = await evaluate('location.href');
+await goto(filteredUrl.replace(/^https?:\/\/[^/]+/, ''));
+check('the tag filter survives a reload from the URL', await evaluate('document.getElementById("project-count").textContent'), '14 of 29 projects');
+check('the reloaded tag pill is marked active', await evaluate('document.querySelector(\'[data-tag="AI Agents"]\').classList.contains("is-active")'), true);
+
 console.log('\nthe ⛶ expand button hands code to the playground');
 // Shared code travels as a gzip+base64url path segment (/playground/<code>),
 // not a query string: the site is fully static, so this resolves through
