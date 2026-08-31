@@ -700,7 +700,14 @@ pages (same `LearningResource`/`Course` shapes would apply via
 `inLanguage`, but wanted to ship the English pages and verify the
 approach first rather than triple the surface area in one pass).
 
+Added `tests/unit/jsonLd.test.ts` (5 tests): source-level checks that
+`Base.astro` renders the `jsonLdBlocks` array with the `WebSite` default,
+and that each of the three page types passes the right `@type` +
+`jsonLd={jsonLd}` prop, plus one build-output check that `dist/index.html`
+actually contains a syntactically valid `<script type="application/
+ld+json">` tag (skips gracefully if no `dist/` is present in the run).
+161 unit tests total now, all green.
+
 ### Unclaimed (carried over)
 - [ ] Performance audit (bundle size, LCP, Pyodide first-load).
 - [ ] Locale pages' JSON-LD (ar/es/fr) — same shapes as above, not yet applied.
-- [ ] A unit test asserting JSON-LD presence/shape per page type.
