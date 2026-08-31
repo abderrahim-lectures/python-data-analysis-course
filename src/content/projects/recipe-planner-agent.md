@@ -116,6 +116,10 @@ GITHUB_TOKEN=your-key-here
 
 Everything the agent will ever suggest comes from this one data structure — a plain Python list of dicts, no database server, no external API. Create `recipes.py`:
 
+### 1.1 Write the recipe list
+
+**👟 Starter hint:** Each recipe is a dict with `name`, a lowercase `ingredients` list, and short `instructions` — copy the shape below and add 10-15 more real, varied entries, not near-duplicates of each other:
+
 ```python
 # recipes.py
 RECIPES = [
@@ -160,6 +164,12 @@ Each recipe is just a dict with a `name`, an `ingredients` list (lowercase, no q
 A recipe database with 3-4 entries will make your agent look broken even when the code is fine — most ingredient lists a student types in just won't overlap with anything. Aim for the full 10-15 recipes (the repo copy has 13), covering a real mix of proteins, carbs, and vegetables, so a typical "what's in my fridge" list actually has a decent chance of matching something.
 :::
 
+### 1.2 Verify the database's shape and consistency
+
+**🎯 Expected output:** `uv run python -c "from recipes import RECIPES; print(len(RECIPES))"` prints a number ≥ 10, and every entry has exactly the three keys `name`, `ingredients`, `instructions`.
+
+**🩹 If it's off:** If `len(RECIPES)` is small, you copied only the starter example and didn't add more — Step 2's matching will look "broken" against a database this thin, so grow it now. Inconsistent casing (`"Tomatoes"` in one recipe, `"tomatoes"` in another) won't error here but will silently break Step 2's set-based matching — grep the file for capitalized ingredient names before moving on.
+
 **✅ Checklist**
 
 - ✅ `recipes.py` defines `RECIPES` as a list of at least 10 dicts.
@@ -173,7 +183,11 @@ A recipe database with 3-4 entries will make your agent look broken even when th
 
 ## Step 2: Write a tool the agent can search recipes with
 
-The agent doesn't get to read `recipes.py` directly — it can only see what a tool function returns, exactly like `search_course_topics` in the AI Agent project. Add this to `recipes.py`, or a new file that imports `RECIPES`:
+The agent doesn't get to read `recipes.py` directly — it can only see what a tool function returns, exactly like `search_course_topics` in the AI Agent project. Add this to `recipes.py`, or a new file that imports `RECIPES`.
+
+### 2.1 Write the search-by-ingredients function
+
+**👟 Starter hint:** For each recipe, compute `have & needed` (set intersection) to score the overlap and `needed - have` (set difference) for what's missing; sort by overlap size descending and format the top 5 as one line each:
 
 ```python
 def search_recipes_by_ingredients(ingredients: list[str]) -> str:
@@ -217,6 +231,12 @@ The core idea: `have & needed` (set intersection) counts how many of a recipe's 
 
 Notice the return type is a plain string, same as `search_course_topics` and `count_words` in the earlier projects — the model reads text, not Python objects, so a clearly formatted string is what a tool should hand back.
 
+### 2.2 Verify it as plain Python, before any agent is involved
+
+**🎯 Expected output:** `search_recipes_by_ingredients(["eggs", "tomatoes", "garlic"])` called directly returns a multi-line string starting with `Matching recipes (best match first):`, each line naming a recipe and its missing ingredients.
+
+**🩹 If it's off:** If it always returns "No matching recipes found" even for ingredients you know are in your database, the culprit is almost always casing — confirm both `have` and `needed` are lowercased before the set intersection, and that your database's ingredient names are lowercase too (Step 1.2's check). If the "missing" list includes an ingredient you *do* have, check `have` is being built from the actual passed-in `ingredients` argument, not a stale or hardcoded list.
+
 **✅ Checklist**
 
 - ✅ `search_recipes_by_ingredients(["eggs", "tomatoes", "garlic"])` called directly in Python (no agent yet) returns a real, non-empty string.
@@ -231,6 +251,10 @@ Notice the return type is a plain string, same as `search_course_topics` and `co
 ## Step 3: Wire the tool into a `deepagents` agent
 
 Create `planner.py`:
+
+### 3.1 Write the system prompt and build the agent
+
+**👟 Starter hint:** The system prompt has to explicitly forbid the failure mode this project is designed to demonstrate — suggesting a recipe the tool never returned — not just describe what the tool does; then pass the tool function (not the raw data) into `create_deep_agent`:
 
 ```python
 import os
@@ -277,6 +301,12 @@ agent = create_deep_agent(
 
 This is the same `create_deep_agent(model=..., tools=[...], system_prompt=...)` shape from the AI Agent project, with one tool instead of two. What's different, and worth sitting with, is the **system prompt**: it doesn't just describe the tool, it explicitly forbids the failure mode this whole project is designed to demonstrate — suggesting a recipe the tool never returned. A tool being *available* doesn't guarantee the model always uses it; the system prompt is where you tell it that using the tool, and only the tool, is not optional here.
 
+### 3.2 Verify it builds without calling the model yet
+
+**🎯 Expected output:** `uv run python -c "import planner"` completes with no error — this only builds the agent object, no network call happens yet, so success here just means the imports and `create_deep_agent(...)` call are wired correctly.
+
+**🩹 If it's off:** An `ImportError` on `RECIPES` or `search_recipes_by_ingredients` means Step 2's function isn't actually saved in `recipes.py`, or is in a different file than `planner.py` imports from. A `KeyError` on `GITHUB_TOKEN` means `.env` isn't in the same folder or `load_dotenv()` wasn't called before the `ChatOpenAI(...)` line.
+
 **✅ Checklist**
 
 - ✅ `planner.py` imports `RECIPES` and `search_recipes_by_ingredients` from `recipes.py` without errors.
@@ -291,6 +321,10 @@ This is the same `create_deep_agent(model=..., tools=[...], system_prompt=...)` 
 ## Step 4: Ask for meal suggestions
 
 Add a run block at the bottom of `planner.py`:
+
+### 4.1 Ask the agent a real question
+
+**👟 Starter hint:** `agent.invoke({"messages": [{"role": "user", "content": on_hand}]})` sends one question and returns the full conversation state; the answer text is `result["messages"][-1].content`:
 
 ```python
 if __name__ == "__main__":
@@ -308,6 +342,12 @@ uv run python planner.py
 
 You should see the agent's final answer: 2-3 real recipe names pulled straight from `RECIPES`, each with a short reason it fits your ingredients. If you're curious *how* it got there — which tool call happened, with what arguments, and what the tool actually returned before the model wrote its answer — print the full `result["messages"]` list instead of just the last one, same technique covered in the AI Agent project's "Understanding the full internal trace" section: a `HumanMessage` (your question), an `AIMessage` requesting the tool call, a `ToolMessage` with the real string `search_recipes_by_ingredients` returned, then a final `AIMessage` with the answer.
 
+### 4.2 Verify the suggestions are grounded, not invented
+
+**🎯 Expected output:** 2-3 real recipe names from `RECIPES`, each with a one-line reason it fits — no recipe name that isn't a `recipes.py` entry.
+
+**🩹 If it's off:** If the agent suggests a plausible-sounding recipe that isn't in `RECIPES`, that's the exact failure mode Step 3's system prompt exists to prevent — re-read it for anything too vague ("try to use real recipes" is weaker than "never invent... only suggest recipes that tool actually returned"). If the script errors instead of answering, print `result` before `result["messages"][-1].content` to see the raw structure and confirm the agent actually ran to completion.
+
 **✅ Checklist**
 
 - ✅ Running `uv run python planner.py` prints a real answer, not a traceback.
@@ -321,7 +361,11 @@ You should see the agent's final answer: 2-3 real recipe names pulled straight f
 
 ## Step 5: Build a shopping list and run it end to end
 
-Because `search_recipes_by_ingredients` already computed the missing ingredients for every candidate recipe, getting a shopping list is just a follow-up question in the same conversation — no new tool needed. Extend the run block to continue the conversation instead of starting a fresh one each time:
+Because `search_recipes_by_ingredients` already computed the missing ingredients for every candidate recipe, getting a shopping list is just a follow-up question in the same conversation — no new tool needed. Extend the run block to continue the conversation instead of starting a fresh one each time.
+
+### 5.1 Carry conversation history into a follow-up question
+
+**👟 Starter hint:** After each `agent.invoke(...)` call, reassign `conversation = result["messages"]` before the next call — that's what lets "the first one" in the follow-up resolve to something:
 
 ```python
 if __name__ == "__main__":
@@ -350,6 +394,12 @@ Run it again with `uv run python planner.py` and you should see a full, real exc
 :::tip[Try a deliberately sparse ingredient list]
 Run it again with only one or two ingredients, something like `"I have onions and salt. What can I make?"` This is the best way to actually see your system prompt's guardrail do something: with almost nothing to match, you'll either get honest "not much of a match, but here's the closest option" suggestions, or (if the overlap is too thin) the tool's "no matches" message passed straight through — either way, watch for whether the agent still resists inventing something that isn't in `RECIPES`.
 :::
+
+### 5.2 Verify the shopping list matches the tool's data, not a fresh guess
+
+**🎯 Expected output:** A suggestion, then a shopping list for "the first one" listing exactly the `missing` ingredients the tool reported for that recipe in the first response — no new or different ingredients appearing.
+
+**🩹 If it's off:** If the follow-up answer is confused about which recipe "the first one" means, `conversation = result["messages"]` is missing after the first `agent.invoke(...)` call — each call is otherwise stateless. If the shopping list doesn't match the tool's originally-reported "missing" list, the model may be recomputing from scratch instead of reusing prior tool output — tightening the system prompt's instruction on this point (Step 3) is the fix, not new code.
 
 **✅ Checklist**
 
