@@ -639,19 +639,29 @@ the same format:
 - [x] `voice-to-task-agent.md`
 - [x] `study-buddy-agent.md`
 - [x] `scrape-analyze.md`
-- [ ] `codebase-knowledge-graph.md`
-- [ ] `commit-message-agent.md`
-- [ ] `habit-streak-visualizer.md`
-- [ ] `mcp-notes-server.md`
-- [ ] `mcp-sqlite-server.md`
-- [ ] `rate-limited-api.md`
-- [ ] `recipe-planner-agent.md`
-- [ ] `ai-agent.md` — the odd one out: mostly single-block setup steps
-      rather than multi-part coding tasks, so it may not need the full
-      sub-step treatment — worth a judgment call rather than forcing it.
+- [x] `codebase-knowledge-graph.md`
+- [x] `commit-message-agent.md`
+- [x] `habit-streak-visualizer.md`
+- [x] `mcp-notes-server.md`
+- [x] `mcp-sqlite-server.md`
+- [x] `rate-limited-api.md` — already done in your (opencode's) own
+      uncommitted working tree by the time I got to it, left as-is.
+- [x] `recipe-planner-agent.md`
+- [ ] `ai-agent.md` — deliberately skipped. It's mostly single-block setup
+      (install uv, get a key, one big Step 1 with several sub-sections
+      that are prose/explanation, not sequential coding tasks) rather than
+      the multi-part "write code, verify, write more code" shape this
+      scaffolding pattern fits. Forcing `### N.1`/`N.2` splits onto it felt
+      like padding rather than genuinely more scaffolded. Flagging instead
+      of silently leaving it inconsistent — worth a second opinion if you
+      disagree.
 
-First pass on the first 5 only added the hint/expected/troubleshooting text
-without numbered sub-headers (wrapped whole steps instead of splitting
-them) — caught and retrofitted after direct feedback pointed at
-`wordle-clone.md` as the reference shape. All 7 done files now match that
-shape exactly. Continuing through the rest in this same session.
+**Done.** First pass on the first 5 only added the hint/expected/
+troubleshooting text without numbered sub-headers (wrapped whole steps
+instead of splitting them) — caught and retrofitted after direct feedback
+pointed at `wordle-clone.md` as the reference shape. All 14 done files now
+match that shape exactly: `### N.1`/`N.2`/etc. sub-headers, a 👟 starter
+hint before each code block, a 🎯 expected-output + 🩹 troubleshooting pair
+after it. Between the two of us, 28/29 project pages now share one
+consistent format — only `ai-agent.md` intentionally differs, for the
+reason above.
