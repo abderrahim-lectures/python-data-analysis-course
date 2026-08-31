@@ -70,6 +70,10 @@ Create a `notes/` folder next to where `server.py` will live, and drop a handful
 
 Then write the loading code in `server.py`:
 
+### 1.1 Write the note loader
+
+**👟 Starter hint:** `_load_note` reads one file and scans its lines for the first one starting with `"# "` to use as the title, falling back to the filename; `_all_notes` globs `*.md` and calls it for each, with no caching:
+
 ```python
 # server.py
 from __future__ import annotations
@@ -113,6 +117,12 @@ uv run python -c "from server import _all_notes; print([n.title for n in _all_no
 
 You should see every note's title printed back. If the list is empty, `NOTES_DIR` is wrong before anything else is.
 
+### 1.2 Verify against your real notes folder
+
+**🎯 Expected output:** A Python list of real titles, one per `.md` file in `NOTES_DIR` — e.g. `['Sourdough starter notes', 'Side project ideas', ...]`.
+
+**🩹 If it's off:** An empty list almost always means `NOTES_DIR` still points at the placeholder path — replace it with your real folder's absolute path. A title that's just the filename (not the heading text) for a note that does have a `# Title` line means the heading detection missed it — check the line actually starts with `"# "` (one hash, one space) and not `"## "` or a bare `"#Title"`.
+
 **✅ Checklist**
 
 - ✅ `notes/` contains at least 4 real, genuinely different `.md` notes, each with a `# Title` heading.
@@ -126,7 +136,11 @@ You should see every note's title printed back. If the list is empty, `NOTES_DIR
 
 ## Step 2: Build the search and lookup functions
 
-With notes loading correctly, write the functions that actually answer questions about them -- still plain Python, still testable without any AI client in the loop:
+With notes loading correctly, write the functions that actually answer questions about them -- still plain Python, still testable without any AI client in the loop.
+
+### 2.1 Write search, lookup, and recency functions
+
+**👟 Starter hint:** `search_notes` scans each note's lines for a case-insensitive substring match, one snippet per note; `get_note_by_title` tries an exact match first, then a partial match only if exactly one note qualifies; `list_recent_notes` sorts by `.modified` descending:
 
 ```python
 import time
@@ -189,6 +203,12 @@ uv run python -c "from server import search_notes; print(search_notes('your-keyw
 Every bug is easier to find here than after `@mcp.tool()`, the Inspector, and Claude Desktop are all in the mix at once. If `search_notes` returns the wrong thing right now, you know for certain the bug is in this function -- not in a connection, a config file, or the model's own tool-picking.
 :::
 
+### 2.2 Verify all three by hand
+
+**🎯 Expected output:** `search_notes('sourdough')` (or any keyword genuinely in your notes) returns `Found in:\n"Note Title": ...snippet...`; a title-based `get_note_by_title` call returns full note text; an ambiguous partial title returns a "Be more specific" message naming the candidates.
+
+**🩹 If it's off:** If `get_note_by_title` silently returns the wrong note for an ambiguous partial title instead of the "be more specific" message, the `len(partial) > 1` branch isn't running before a fallback — check it's checked before any code that just returns `partial[0]`. If `search_notes` reports "No notes mention" for a keyword you can see with your own eyes, confirm the match is happening on `line.lower()` against `query_lower`, not comparing cased strings directly.
+
 **✅ Checklist**
 
 - ✅ `search_notes` finds a keyword you know is in one of your notes, and returns a real, correct snippet.
@@ -202,7 +222,11 @@ Every bug is easier to find here than after `@mcp.tool()`, the Inspector, and Cl
 
 ## Step 3: Wire them up as MCP tools with FastMCP
 
-Everything so far has been plain Python. Turning it into an MCP server is one decorator per function -- no protocol-level code to write by hand:
+Everything so far has been plain Python. Turning it into an MCP server is one decorator per function -- no protocol-level code to write by hand.
+
+### 3.1 Wrap the three functions with `@mcp.tool()`
+
+**👟 Starter hint:** Same three function bodies from Step 2, unchanged — just add `@mcp.tool()` above each and write a docstring that's specific enough for the model to pick the right one of three, not just "does something with notes":
 
 ```python
 from mcp.server.fastmcp import FastMCP
@@ -248,6 +272,8 @@ if __name__ == "__main__":
 
 `@mcp.tool()` inspects each function's name, type-hinted parameters, and docstring, and builds an MCP tool definition automatically -- the model reads your docstring, not your code, to decide when a tool matches a request. With three tools now instead of one, docstrings that clearly distinguish *when* to call each one matter more than they did with a single tool: notice that `get_note_by_title`'s docstring explicitly says it's for after search, not instead of it.
 
+### 3.2 Test all three in the Inspector
+
 Before touching any real AI client, run the SDK's dev/inspector command and test all three tools by hand:
 
 ```bash
@@ -259,6 +285,10 @@ This opens the **MCP Inspector** -- a free, browser-based tool that lets you cal
 :::tip[Three tools is more than enough to see docstrings matter]
 With one tool, the model has nothing to choose between. With three, try asking the Inspector's underlying prompts (or, once connected, Claude Desktop itself) something ambiguous, like "tell me about my pasta note" -- and watch whether it reaches for `search_notes` or `get_note_by_title` first. If it picks the "wrong" one, that's almost always a docstring problem, not a bug in your function.
 :::
+
+**🎯 Expected output:** The Inspector's tool list shows all three tools with parameter forms auto-generated from the type hints; calling each with real arguments returns the same results you verified in Step 2.2.
+
+**🩹 If it's off:** If a tool is missing from the Inspector's list, its `@mcp.tool()` decorator is likely missing or misspelled. If results differ from what Step 2.2 showed, `server.py`'s copy of the function body may have diverged from the tested version — diff them, don't retype from memory.
 
 **✅ Checklist**
 
@@ -280,6 +310,10 @@ With one tool, the model has nothing to choose between. With three, try asking t
 
 If the file doesn't exist yet, create it. Add your server, using an **absolute** path to your project folder:
 
+### 4.1 Edit the config file
+
+**👟 Starter hint:** Copy the JSON below and replace `/absolute/path/to/mcp-notes-server` with your project folder's real, full path (`pwd` prints it):
+
 ```json
 {
   "mcpServers": {
@@ -293,6 +327,8 @@ If the file doesn't exist yet, create it. Add your server, using an **absolute**
 
 `command` and `args` describe exactly the process Claude Desktop will launch to talk to your server -- the same `uv run` invocation you already tested in Step 3, just started by Claude Desktop instead of by you. Using `uv run` (rather than a bare `python`) matters here: Claude Desktop launches this command in its own environment, with no guarantee your project's virtual environment is already active, and `uv run` finds and uses the right one on its own.
 
+### 4.2 Restart Claude Desktop and try real questions
+
 **Fully quit and restart Claude Desktop** -- a running instance doesn't re-read this file on its own. Once it restarts, your server should show up in its tool/connector list. Try questions like:
 
 > Do I have any notes about sourdough? Use the notes tools if you have them.
@@ -302,6 +338,10 @@ If the file doesn't exist yet, create it. Add your server, using an **absolute**
 > Pull up my full "side project ideas" note.
 
 Claude Desktop should show it calling `search_notes`, `list_recent_notes`, or `get_note_by_title` (often as a small collapsible "used a tool" block, with the arguments and result visible if you expand it), then answer using the real result your function returned -- not a guess.
+
+**🎯 Expected output:** For each example question, a visible "used a tool" block naming the right tool, followed by an answer grounded in your actual notes content.
+
+**🩹 If it's off:** If `notes` never appears in the connector list, check the config JSON for a syntax error (trailing comma is the classic one) and confirm you did a *full* quit, not just closing the window. If Claude answers from general knowledge instead of calling a tool, try rephrasing more explicitly ("use my notes tools") — same tool-selection behavior noted in the earlier MCP project.
 
 **✅ Checklist**
 
