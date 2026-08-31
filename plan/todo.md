@@ -478,6 +478,46 @@ earlier pass had done. Found 20 broken internal links, all migration fallout.
 
 ---
 
+## Session 2026-08-31 (opencode) — projects: sub-steps + learner scaffolding (EN template)
+
+User workstream: "improve projects by breaking them into smaller steps for
+intermediate learners with learner scaffolding." Both options requested
+(granular sub-steps AND scaffolding).
+
+### Template done + verified (EN `wordle-clone.md`)
+- Restructured **all 4 steps** into numbered sub-steps (`### 1.1`→`1.4`,
+  `2.1`→`2.3`, `3.1`→`3.3`, `4.1`→`4.4`). Format per sub-step:
+  - **👟 Starter hint** — where to start / smallest first move (reuses the code,
+    prompts what to try).
+  - **🎯 Expected output** — concrete, runnable success signal to check against.
+  - **🩹 If it's off** — the common pitfall that sub-step exists to avoid
+    (e.g. the naive-scorer double-count, `remaining[g] -= 1` forgotten,
+    save-after-every-round, set vs list membership).
+  - Ends with a **`### N.x Verify`** sub-step that keeps the existing **✅
+    Checklist** + **🤔 Socratic Question(s)** (no new prose added there).
+- Kept original intro/code — sub-steps re-frame, don't duplicate. Scaffolding is
+  integrated into the existing flow, not bolted on as filler.
+- **Verified**: `npm run build` → 219 pages clean; **es/ar/fr + EN wordle page**
+  in `dist`; EN page renders all 4 sub-step h3 headings (`1.1`–`1.4` …) + 10 👟 /
+  11 🎯 / 10 🩹. `astro check` currently reports 2 errors BUT they are **Claude's
+  in-flight `codeShare.ts`** (untracked WIP, last modified today, imported by
+  runnable-cell/notFoundPlayground client; `Uint8Array<ArrayBufferLike>` →
+  `BufferSource` generics) — NOT from my content edits (which are pure markdown).
+
+### Scope decision (please confirm / take from here)
+- EN template is established. Remaining work is large and should be coordinated,
+  not blasted through unattended:
+  1. **28 remaining EN projects** (`src/content/projects/*.md`, non-locale) —
+     apply the same sub-step + scaffolding format. This is EN content, my
+     surface; I can do these.
+  2. **87 locale mirrors** (`es/ fr/ ar/*.md`) — translating/restructuring the
+     scaffolding into es/fr/ar is **Claude's locale surface**. Hand off: once EN
+     is decided, mirror the sub-step + scaffolding structure per-locale, reusing
+     the existing translations of each step's prose.
+- NOTE: build passes regardless of the codeShare type errors (client script is
+  type-annotated but runs; not imported in a build-blocking path). Flagging so
+  nobody files it as a content regression.
+
 ## Session 2026-08-31 (Claude) — external link check @claude
 
 Picked up the item I flagged for "whoever goes next": internal links were
@@ -510,3 +550,73 @@ untouched rather than swept into a commit.
 - [ ] Performance audit (bundle size, LCP, Pyodide first-load) — still open,
       flagged last pass too.
 - [ ] Structured data / JSON-LD for SEO — still open.
+
+---
+
+## Session 2026-08-31 (Claude) — playground UX overhaul + projects finder @claude
+
+Direct user feedback this pass, addressed as it came in.
+
+- [x] **Syntax highlighting for editable code** (`src/lib/pyHighlight.ts`) —
+      regex-based Python tokenizer, VS Code Dark+ colors, injected client-side
+      into every `.cell[data-runnable]` on init and re-applied on every edit
+      with caret position preserved by character offset. Colors verified
+      4.5:1+ against the cell's fixed `#0f0c1d` background.
+- [x] **Removed the untrusted-code warning gate** on the playground entirely —
+      user flagged it "useless"/"nonsense" after it fired on the site's own
+      ⛶-button traffic (a same-origin in-app navigation, not a real
+      untrusted-link scenario). Narrowed with `document.referrer` first, then
+      dropped outright on explicit repeat request. Kept only the (invisible)
+      size cap.
+- [x] **Share links now use `/playground/<code>`**, gzip-compressed +
+      base64url-encoded (`src/lib/codeShare.ts`), not `?code=<percent-encoded>`.
+      Since the site is fully static, `src/pages/404.astro` repurposes the
+      static-host 404 fallback to detect that path client-side and render the
+      shared code, falling back to a real 404 otherwise.
+      **Real bug caught mid-build**: the first version decoded inside a
+      `<script define:vars>` block, which silently fails in production —
+      those aren't bundled by Vite, so a relative dynamic import inside one
+      never gets rewritten. Moved to a real module
+      (`src/lib/notFoundPlayground.client.ts`).
+- [x] **Line numbers on every code cell**, not just the playground — injected
+      client-side in the shared hydration script so markdown-generated lesson
+      cells, `RunnableCell.astro`, and the playground all get one uniformly.
+- [x] **Real, unrelated bug found while testing all this**: filled buttons
+      (`.btn-primary` etc.) went **invisible on hover** — "Start your first
+      lesson" text became the exact same color as its own hover background.
+      Root cause: a bare `a:hover { color: var(--accent-strong) }` in
+      `global.css` wins a CSS specificity tie against any `.btn-*:hover` rule
+      that changes background but doesn't redeclare `color`. Fixed on
+      `.btn-primary`/`.btn-streak`/`.btn-xp` and the route pills in all 4
+      locales; added `tests/unit/hoverColor.test.ts` guarding the whole class
+      of bug, not just the one instance.
+- [x] **Playground/404 header consistency + a back button.** The two entry
+      points (`/playground` blank-start vs. the `/playground/<code>`
+      shared-link view) had drifted into hand-duplicated, slightly different
+      headers. Extracted `PlaygroundHead.astro` so both are structurally
+      identical. Added a back link, shown only on the shared-link path:
+      `document.referrer` distinguishes a real ⛶-button click (same-origin —
+      goes back to the exact lesson) from a pasted/emailed link (goes to the
+      learn hub instead of a dead end).
+- [x] **A CSS-only page entrance animation** (fade + slight rise on `#main`).
+      Deliberately **not** Astro's View Transitions/`ClientRouter` — that
+      takes over navigation client-side, and `DOMContentLoaded` (which every
+      interactive script on this site keys off — Run buttons, the new
+      gutters, XP tracking, onboarding) never fires again once it's in
+      charge. Would have silently broken every lesson cell on the second page
+      a learner visits. Already covered by the existing global
+      `prefers-reduced-motion` rule.
+- [x] **Search + tag filter on `/projects`** — client-side, URL-as-state
+      (`?q=`/`?tag=`, survives a reload/share), built from the existing
+      `PROJECT_TAGS` data that covered all 29 projects but was never
+      surfaced. Surfaced a real data bug: `"Pandas"`/`"pandas"` were two
+      different tags purely by case — normalized, with a regression test so
+      a casing slip can't reintroduce a duplicate filter pill.
+
+Suite: 156 unit, 45 e2e, a11y, contrast, responsive — all green. `astro
+check` 0 errors. 4 commits this pass, all still local (push still blocked
+on the `workflow`-scope OAuth issue).
+
+### Unclaimed (carried over)
+- [ ] Performance audit (bundle size, LCP, Pyodide first-load).
+- [ ] Structured data / JSON-LD for SEO.
