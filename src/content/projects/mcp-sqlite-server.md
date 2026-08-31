@@ -64,6 +64,10 @@ uv add "mcp[cli]"
 
 Create `seed.py` — a script that builds a tiny library database with four related tables:
 
+### 1.1 Write the schema and seed script
+
+**👟 Starter hint:** `conn.executescript(SCHEMA)` runs the whole multi-statement `CREATE TABLE` block in one call; insert a handful of rows per table after it, making sure at least one loan's `returned_on` stays `NULL`:
+
 ```python
 # seed.py
 import sqlite3
@@ -126,6 +130,12 @@ uv run python seed.py
 
 `returned_on` being `NULL` for a row is deliberate — it's what makes "which books are still out?" a real, answerable question later, instead of every loan looking identical.
 
+### 1.2 Verify the database and its relationships
+
+**🎯 Expected output:** `Built sample database at .../library.db`, and a real `library.db` file on disk with four tables connected by foreign keys.
+
+**🩹 If it's off:** A `sqlite3.OperationalError` mentioning a table name usually means a foreign key references a table defined *after* it in `SCHEMA` — SQLite runs `CREATE TABLE` statements in order, so `books` (which references `authors`) must come after `authors`, not before. If `library.db` doesn't rebuild on a second run, check `db_path.unlink()` actually ran before reconnecting — otherwise old data lingers alongside new inserts.
+
 **✅ Checklist**
 
 - ✅ `uv run python seed.py` runs without errors and creates `library.db`.
@@ -139,7 +149,11 @@ uv run python seed.py
 
 ## Step 2: Write the query and schema functions, safely
 
-Create `db_tools.py` — plain Python functions, with no MCP import at all, that the server will wrap in Step 3:
+Create `db_tools.py` — plain Python functions, with no MCP import at all, that the server will wrap in Step 3.
+
+### 2.1 Write `list_tables` and the layered `run_read_only_query` check
+
+**👟 Starter hint:** `list_tables` is a plain query against `sqlite_master`; `run_read_only_query` layers three text checks (no semicolon, must start with `SELECT`, no forbidden keyword) *and* opens the connection with SQLite's `mode=ro` URI as an independent second line of defense:
 
 ```python
 # db_tools.py
@@ -197,6 +211,12 @@ Two things worth noticing. First, `run_read_only_query` doesn't try to be a full
 It's tempting to think "it's just a demo, nobody's going to type `DROP TABLE`." The point isn't a malicious *user* — it's that the query text here is written by an LLM, not by you, and LLMs occasionally produce exactly the query that seemed reasonable given an ambiguous request but does something you didn't intend. Treat any tool that runs model-composed SQL against a real database as needing this check for real, not as an afterthought — this is the same discipline that matters (at much higher stakes) the first time you point a tool like this at a database that isn't just a sample you built for a lesson.
 :::
 
+### 2.2 Verify the safety checks reject real attack shapes
+
+**🎯 Expected output:** A real `SELECT` returns a list of dicts, one per row; `run_read_only_query("DROP TABLE books")` and `run_read_only_query("SELECT * FROM books; DROP TABLE books")` both raise `UnsafeQueryError` instead of touching the database.
+
+**🩹 If it's off:** If the chained-statement query slips through, check the semicolon check runs on `stripped` (post-`.rstrip(";")`, which only strips a *trailing* semicolon) — an embedded semicolon should still be caught. If a legitimate `SELECT` gets rejected, check `_FORBIDDEN_KEYWORDS` isn't matching a column or table name that happens to contain one of the forbidden words as a substring (the `\b` word-boundary in the regex is what prevents this — confirm it's still there).
+
 **✅ Checklist**
 
 - ✅ `db_tools.py` has no `import` of `mcp` anywhere in it — it's pure `sqlite3` and stdlib.
@@ -211,7 +231,11 @@ It's tempting to think "it's just a demo, nobody's going to type `DROP TABLE`." 
 
 ## Step 3: Wire the functions up as MCP tools
 
-Create `server.py`, importing the functions from Step 2 and wrapping each one with `@mcp.tool()`, exactly like the Build an MCP Server project's `FastMCP` pattern:
+Create `server.py`, importing the functions from Step 2 and wrapping each one with `@mcp.tool()`, exactly like the Build an MCP Server project's `FastMCP` pattern.
+
+### 3.1 Wrap the three tools
+
+**👟 Starter hint:** Each `@mcp.tool()` function is a thin wrapper calling straight into Step 2's functions — the only new logic is `query_db` catching `UnsafeQueryError` and returning it as `{"error": ...}` instead of letting it raise:
 
 ```python
 # server.py
@@ -255,6 +279,8 @@ if __name__ == "__main__":
     mcp.run()
 ```
 
+### 3.2 Test all three in the Inspector, including a rejected query
+
 Test it exactly like the earlier MCP project, with the Inspector, before touching any real client:
 
 ```bash
@@ -264,6 +290,10 @@ uv run mcp dev server.py
 Call `list_db_tables`, then `describe_db_table` with `"books"`, then `query_db` with a real `SELECT` — and, deliberately, once with something like `DROP TABLE books`, to see it come back as a clear rejection instead of an Inspector-level error.
 
 Notice `query_db` catches `UnsafeQueryError` itself and returns a plain `{"error": ...}` result, rather than letting the exception propagate up through MCP. That's a small but real design choice: an unhandled exception from a tool call generally surfaces to the client as an opaque protocol-level failure, while a returned error message is something the model can read, understand, and react to — for instance, by rephrasing its own query.
+
+**🎯 Expected output:** All three tools listed in the Inspector; `list_db_tables` returns your four table names; `describe_db_table("books")` returns its columns; `query_db` with a real `SELECT` returns rows, and with `DROP TABLE books` returns `{"error": "..."}`, not a crash or an Inspector-level failure.
+
+**🩹 If it's off:** If a rejected query shows up as an Inspector error/crash instead of a clean `{"error": ...}` result, the `try`/`except UnsafeQueryError` in `query_db` is missing or catching the wrong exception type.
 
 **✅ Checklist**
 
@@ -280,6 +310,10 @@ Notice `query_db` catches `UnsafeQueryError` itself and returns a plain `{"error
 
 Add your server to `claude_desktop_config.json` (same file the Build an MCP Server project used — macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`; Windows: `%APPDATA%\Claude\claude_desktop_config.json`):
 
+### 4.1 Edit the config file
+
+**👟 Starter hint:** Same shape as the earlier MCP project's config — replace `/absolute/path/to/mcp-sqlite-server` with your project's real, full path:
+
 ```json
 {
   "mcpServers": {
@@ -291,11 +325,17 @@ Add your server to `claude_desktop_config.json` (same file the Build an MCP Serv
 }
 ```
 
+### 4.2 Restart Claude Desktop and ask a real multi-table question
+
 **Fully quit and restart Claude Desktop.** Once it's back, ask a genuine plain-English question that needs more than one table to answer, for example:
 
 > Using the library-db tools, which books are currently checked out and haven't been returned yet? Give me the titles and who has them.
 
 Watch what happens: Claude should call `list_db_tables`, then `describe_db_table` on `books`, `loans`, and `members` to learn the column names, then compose and run its own `SELECT ... JOIN ...` through `query_db` — and answer using the real result, not a guess. This is the actual payoff of the whole project: you never wrote that join yourself.
+
+**🎯 Expected output:** A visible sequence of tool calls — `list_db_tables`, then `describe_db_table` on the relevant tables, then `query_db` with a genuine `JOIN` — followed by an answer naming real, correct book titles and member names.
+
+**🩹 If it's off:** If Claude answers without calling any tools, rephrase to explicitly reference "the library-db tools," same tool-selection nudge as the earlier MCP projects. If the SQL it writes references a column that doesn't exist, check `describe_db_table`'s actual output — a wrong or incomplete schema description is the most likely reason a model would guess a plausible-but-wrong column name.
 
 **✅ Checklist**
 
