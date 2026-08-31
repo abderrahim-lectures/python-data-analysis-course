@@ -122,7 +122,11 @@ GITHUB_TOKEN=your-llm-key-here
 
 ## Step 1: A fixed question bank and a basic slash command
 
-Start with the simplest possible question source — a plain Python list of dicts — and just enough Discord wiring to post one:
+Start with the simplest possible question source — a plain Python list of dicts — and just enough Discord wiring to post one. Take it in three small sub-steps: build the bank, register the command, then verify.
+
+### 1.1 Build the fixed question bank
+
+**👟 Starter hint:** Every question source in this project — the fixed bank now, the LLM generator in Step 3 — produces the same shape: `{"question": str, "options": list[str], "answer_index": int}`. Start by creating `questions.py` with a `QUESTION_BANK` list and a `random_question()` that returns one entry at random:
 
 ```python
 # questions.py
@@ -150,7 +154,13 @@ def random_question() -> dict:
     return random.choice(QUESTION_BANK)
 ```
 
-`discord.py`'s modern interface for this is a **slash command**: instead of watching every message for something that looks like a command, you register `/trivia` with Discord itself, and Discord shows it in the UI with autocomplete. That needs a `Client` plus an `app_commands.CommandTree` attached to it:
+**🎯 Expected output:** `random_question()` returns one of the bank's dicts each call — run it a few times with `from questions import random_question; print(random_question())` and you should get different questions, not the same one every time.
+
+**🩹 If it's off:** A `NameError` means you forgot `import random` at the top of the file. If a question prints with a wrong or missing answer, check the shape: `answer_index` is zero-based and points *into* `options`, so "the answer" is `options[answer_index]` — a bank entry hand-written so the index doesn't match the right option looks perfectly fine while being permanently unanswerable.
+
+### 1.2 Register a /trivia slash command
+
+**👟 Starter hint:** `discord.py`'s modern interface for this is a **slash command**: instead of watching every message for something that looks like a command, you register `/trivia` with Discord itself, and Discord shows it in the UI with autocomplete. Create `bot.py` with a `Client`, an `app_commands.CommandTree` attached to it, and one `/trivia` command that posts a random question:
 
 ```python
 # bot.py (Step 1 version — grows through the rest of this project)
@@ -193,6 +203,12 @@ if __name__ == "__main__":
 A regular bot invite only needs the `bot` scope. Slash commands specifically need `applications.commands` too — if you generated your invite URL before adding `/trivia`, regenerate it with both scopes checked (see Setup above) or the command will silently never appear in your server.
 :::
 
+**🎯 Expected output:** `uv run python bot.py` connects, prints `Logged in as trivia-bot#1234 -- ready in 1 server(s).`, and typing `/` in your server autocompletes `/trivia`. Sending it posts the question with its `A) ... B) ...` options.
+
+**🩹 If it's off:** If `/trivia` never appears in Discord's UI, check the three places this can silently fail: the **Message Content** privileged intent toggled on in the Developer Portal (not just `intents.message_content = True` in code), `await tree.sync()` actually called inside `on_ready`, and an invite URL generated with *both* scopes checked after adding the command. If you get a connection error instead, the token in `.env` is wrong or the bot isn't in the server yet.
+
+### 1.3 Verify the slash command
+
 **✅ Checklist**
 
 - ✅ `questions.py` defines `QUESTION_BANK` and `random_question()`.
@@ -206,7 +222,11 @@ A regular bot invite only needs the `bot` scope. Slash commands specifically nee
 
 ## Step 2: Score tracking, persisted across rounds
 
-A leaderboard only means something if it survives the bot restarting, so scores go to a small JSON file rather than living only in memory:
+A leaderboard only means something if it survives the bot restarting, so scores go to a small JSON file rather than living only in memory. Three small sub-steps: the persistence module, a standalone test, then the `/leaderboard` command.
+
+### 2.1 Persist scores in a JSON file
+
+**👟 Starter hint:** Write `scores.py` with four functions: `load_scores()` (reads `scores.json`, or returns `{}` when it doesn't exist yet), `save_scores()` (writes it back), `award_point()` (bumps one player's score and saves), and `leaderboard_text()` (turns the whole thing into a ranked message). Start by copying the module below and running it on a throwaway dict:
 
 ```python
 # scores.py
@@ -243,7 +263,13 @@ def leaderboard_text(scores: dict, top_n: int = 10) -> str:
     return "\n".join(lines)
 ```
 
-Test it standalone before wiring it into `bot.py` at all — the same "prove the piece works on its own first" pattern as any multi-part project:
+**🎯 Expected output:** Calling `award_point(scores, ...)` twice for the same user id, then `leaderboard_text(scores)`, prints `1. <name> — 2`-style lines ordered by score, highest first.
+
+**🩹 If it's off:** `award_point` returns the mutated dict precisely because `scores.get(key, default)` hands back the *default* entry without inserting it — if you forget to use the return value, `scores` never changes and the file never updates. And note why scores are keyed by `str(user_id)` rather than the display name: a nickname change shouldn't silently reset someone's score, which is exactly what a name-keyed dict would do.
+
+### 2.2 Test the storage standalone
+
+**👟 Starter hint:** Prove the piece works on its own first, before it's anywhere near `bot.py` — the same "test each module independently" pattern as every multi-part project:
 
 ```bash
 uv run python -c "
@@ -256,7 +282,13 @@ print(leaderboard_text(s))
 "
 ```
 
-Then add a second slash command that just reads the file:
+**🎯 Expected output:** The snippet prints a leaderboard with Alice ranked above Bob — `1. Alice — 2`, `2. Bob — 1` — and a `scores.json` file appears in the project folder.
+
+**🩹 If it's off:** If it prints `No scores yet`, the `s = award_point(...)` return values are being dropped — reassign the returned dict each time. If it's a `KeyError` or the file lands somewhere unexpected, check `SCORES_PATH` resolves to the folder you're running from, so `scores.json` goes where `load_scores()` will later look for it.
+
+### 2.3 Add a /leaderboard slash command
+
+**👟 Starter hint:** Wire in a second slash command that just reads the file and posts the ranked text — no scoring yet, only the read path:
 
 ```python
 @tree.command(name="leaderboard", description="Show the trivia leaderboard")
@@ -266,6 +298,12 @@ async def leaderboard_command(interaction: discord.Interaction) -> None:
 ```
 
 Nothing awards a point yet — `trivia_command` from Step 1 doesn't check answers at all — that's what Step 4's round loop adds. This step is deliberately just the storage half, tested and working on its own first.
+
+**🎯 Expected output:** `/leaderboard` replies with `No scores yet -- play a round with /trivia!` (nobody has scored anything yet), confirming the read path into `scores.json` works.
+
+**🩹 If it's off:** If the command errors instead, the `load_scores`/`leaderboard_text` import is missing or `scores.py` isn't on the same path as `bot.py` — keep both files in the project folder and import the functions by name at the top of `bot.py`.
+
+### 2.4 Verify score tracking
 
 **✅ Checklist**
 
@@ -280,7 +318,11 @@ Nothing awards a point yet — `trivia_command` from Step 1 doesn't check answer
 
 ## Step 3: Generate a fresh question on any topic with an LLM
 
-The fixed bank in Step 1 only ever asks from the same handful of questions. This step adds a second question source: give the bot a topic, and it asks an LLM for a brand-new multiple-choice question about it, on the spot.
+The fixed bank in Step 1 only ever asks from the same handful of questions. This step adds a second question source: give the bot a topic, and it asks an LLM for a brand-new multiple-choice question about it, on the spot. Two sub-steps: a strict generator, then a shared `pick_question()`.
+
+### 3.1 Build the LLM question generator
+
+**👟 Starter hint:** Create `generate.py` using the `openai` client pointed at a free-tier provider's OpenAI-compatible endpoint. Ask for strict JSON in exactly the bank's shape — `{"question", "options", "answer_index"}` — then validate the structure before returning anything:
 
 ```python
 # generate.py
@@ -328,7 +370,13 @@ def generate_question(topic: str) -> dict:
 
 The explicit shape check after parsing matters: `response_format={"type": "json_object"}` guarantees the LLM's output is *valid JSON*, not that it's the *right* JSON — it could still hand back three options instead of four, or omit `answer_index` entirely. Catching that here, with a clear error, beats discovering it later as a confusing Discord message with a missing option D.
 
-Wire a `topic` parameter into `/trivia` so it can draw from either source:
+**🎯 Expected output:** `uv run python -c "from generate import generate_question; print(generate_question('classic video games'))"` prints a dict with exactly 4 options and an `answer_index` in `0..3` — or raises a clear `ValueError`, never returning malformed data silently.
+
+**🩹 If it's off:** A `ValueError` here is the guard working — the model handed back the wrong shape (three options, or an out-of-range index) — so read the printed `question!r` and decide whether it's a one-off or a sign the prompt template needs tightening. A `json.decoder.JSONDecodeError` instead means the provider returned non-JSON despite `response_format` — some providers ignore that parameter, and you'd need to retry or parse more defensively.
+
+### 3.2 Wire a topic through a shared pick_question
+
+**👟 Starter hint:** Rather than making `trivia_command` know about both sources, put a tiny `pick_question(topic)` in a new `round.py` that draws from the bank when no topic is given and calls the generator otherwise — one decision point shared by `bot.py` and the notebook:
 
 ```python
 from round import pick_question  # combines random_question() and generate_question()
@@ -362,6 +410,12 @@ uv run python -c "from round import pick_question; print(pick_question())"
 uv run python -c "from round import pick_question; print(pick_question('classic video games'))"
 ```
 
+**🎯 Expected output:** The first command prints a question from the fixed bank; the second prints a freshly generated one about the topic you named — proof `topic` actually changes the source.
+
+**🩹 If it's off:** If the no-topic call still hits the LLM, check the truthiness in `pick_question` — `if topic:` treats an empty string as "no topic", so keep the default as `None`, not the string `"None"`. If it works in the terminal but errors in Discord, the bot is still running the old `trivia_command` signature — restart it so the new `topic` parameter registers.
+
+### 3.3 Verify LLM question generation
+
 :::tip[Validate LLM-generated content before it reaches a live channel]
 An LLM asked for a trivia question can still get facts wrong, especially on obscure topics — there's no `try`/`except` that catches "confidently incorrect." The shape validation in `generate_question()` only guards against malformed *structure*; for a public server, skim a handful of generated questions on topics you actually know before trusting the mode on topics you don't.
 :::
@@ -379,7 +433,11 @@ An LLM asked for a trivia question can still get facts wrong, especially on obsc
 
 ## Step 4: A full trivia round loop
 
-Everything so far has been pieces tested in isolation: a question source, score storage, generation. This step wires them into what a round actually looks like live — post a question, wait for the first correct answer within a time limit, reveal it, update the leaderboard:
+Everything so far has been pieces tested in isolation: a question source, score storage, generation. This step wires them into what a round actually looks like live — post a question, wait for the first correct answer within a time limit, reveal it, update the leaderboard. Two sub-steps: `run_round`, then a thin command wrapper.
+
+### 4.1 Write the round loop
+
+**👟 Starter hint:** Put the timing-sensitive logic in a plain `run_round(channel, topic)` function: pick a question, send it with a time limit, wait for a plausible answer message, and stop at the first correct one:
 
 ```python
 # bot.py (relevant part -- see examples/trivia-bot/bot.py for the full file)
@@ -439,7 +497,13 @@ async def run_round(channel: discord.abc.Messageable, topic: str | None = None) 
 
 Only the *first* correct answer scores; `break` as soon as `winner` is set. Wrong guesses get a ❌ reaction instead of an error message — free feedback without spamming the channel with replies.
 
-Finally, `trivia_command` from Step 1 becomes a thin wrapper around `run_round`:
+**🎯 Expected output:** A round posts a question, the first correct letter reply wins and gets a point via `award_point()`, and letting the timer run out reveals the answer without crashing — with `ROUND_TIME_LIMIT` set small while you test.
+
+**🩹 If it's off:** If the round never ends (or runs far past the limit), you're passing the fixed `ROUND_TIME_LIMIT` to `wait_for(...)` instead of the shrinking `remaining` value — every wrong guess restarts the full clock. If answers from other channels are stealing the round, the `message.channel == channel` check in `is_candidate_answer` is missing. If `check_answer` always returns False, verify the letter comparison normalizes case and that `answer_index` actually matches the question you posted.
+
+### 4.2 Make /trivia a thin wrapper
+
+**👟 Starter hint:** Turn `trivia_command` from Step 1 into a thin wrapper around `run_round` — an immediate "starting" message, then the round, wrapped so one failing round can't kill the whole bot:
 
 ```python
 @tree.command(name="trivia", description="Start a trivia round, optionally on a topic")
@@ -453,6 +517,12 @@ async def trivia_command(interaction: discord.Interaction, topic: str | None = N
         print(f"Error running trivia round: {error!r}")
         await interaction.channel.send("Something went wrong running that round -- see the bot's console log.")
 ```
+
+**🎯 Expected output:** `/trivia` posts a `🎲 Starting a round...` message, then the question follows, the round resolves, and the leaderboard updates — and the bot stays connected even if that particular round throws.
+
+**🩹 If it's off:** If the starting message appears but no question ever posts, `run_round` is being called but not *awaited* — a plain `run_round(...)` returns a coroutine that never runs. If one bad round takes the whole bot down with a traceback, the `try`/`except` around the call got dropped — but keep the `print`, so a swallowed error isn't silent either.
+
+### 4.3 Verify the round loop
 
 :::tip[Test round timing with a short ROUND_TIME_LIMIT first]
 Set `ROUND_TIME_LIMIT = 5` while you're getting the loop right, so you're not waiting 30 seconds per test cycle to find out `check_answer` has a bug. Bump it back up to something reasonable for real play once the loop itself works.

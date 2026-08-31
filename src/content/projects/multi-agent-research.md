@@ -114,7 +114,11 @@ GITHUB_TOKEN=your-key-here
 
 ## Step 1: Define the planner, researcher, and writer sub-agents
 
-Each sub-agent in `deepagents` is just a plain dict: a `name`, a `description` (used by the top-level agent to decide when to delegate to it), a `system_prompt` (its own narrow instructions), and optionally its own `tools`. Create `agent.py`:
+Each sub-agent in `deepagents` is just a plain dict: a `name`, a `description` (used by the top-level agent to decide when to delegate to it), a `system_prompt` (its own narrow instructions), and optionally its own `tools`.
+
+### 1.1 Define the three sub-agents
+
+**👟 Starter hint:** The smallest first move is defining `planner_subagent`, `researcher_subagent`, and `writer_subagent` as three dicts, each with a narrow `system_prompt` scoped to exactly one job. Copy the code below into `agent.py`:
 
 ```python
 import os
@@ -170,6 +174,12 @@ writer_subagent = {
 The researcher sub-agent above answers from the model's own training knowledge — there is no real web search tool wired in. That is a deliberate simplification, not a hidden shortcut: it keeps this project small and free-tier friendly, but it means answers can be stale or wrong on anything the model wasn't trained on well, with no way to verify against a live source. See "Where to go from here" for how to plug in a real search tool once you're comfortable with this version.
 :::
 
+**🎯 Expected output:** `agent.py` runs and defines all three sub-agents without errors, each with a distinct `system_prompt` that says clearly what that one role does — and does *not* do (e.g. the planner's prompt tells it not to answer its own sub-questions).
+
+**🩹 If it's off:** A `KeyError` on `GITHUB_TOKEN` means `load_dotenv()` isn't finding your key — check your `.env` from Setup. If you get a `TypeError` about an unexpected keyword, your `deepagents` version's sub-agent dict shape has changed — the current shape is `name`/`description`/`system_prompt`/`tools`; see the tip in Step 2 about checking the current docs.
+
+### 1.2 Verify the sub-agent definitions
+
 **✅ Checklist**
 
 - ✅ `agent.py` defines `planner_subagent`, `researcher_subagent`, and `writer_subagent`, each with a distinct `system_prompt`.
@@ -182,7 +192,11 @@ The researcher sub-agent above answers from the model's own training knowledge �
 
 ## Step 2: Wire the sub-agents together and run it
 
-The top-level agent doesn't do any research itself — its whole job is delegation, in order: plan, then research each sub-question, then write. Add this to the bottom of `agent.py`:
+The top-level agent doesn't do any research itself — its whole job is delegation, in order: plan, then research each sub-question, then write.
+
+### 2.1 Wire the sub-agents together and run it
+
+**👟 Starter hint:** The smallest first move is a top-level `create_deep_agent` call that lists all three sub-agents in `subagents=[...]` and instructs the coordinator to delegate in a strict order, plus a `__main__` block that invokes it. Copy this to the bottom of `agent.py`, then run it:
 
 ```python
 agent = create_deep_agent(
@@ -212,11 +226,11 @@ uv run python agent.py
 
 `subagents=[...]` is the whole mechanism: the top-level agent sees each sub-agent's `name` and `description` the same way it would see a tool's name and docstring, and decides when to hand off to which one, based on the top-level `system_prompt`'s instructions and the state of the conversation so far. This is the identical idea taught in the AI Agent project's "Where to go from here" section, just used for the entire pipeline here instead of for one extra specialist alongside a general-purpose agent.
 
-### What you should see
+**🎯 Expected output:** `uv run python agent.py` prints a single block of text — the writer's final synthesized report, a few paragraphs covering the sub-questions the planner came up with. If you print the full `result["messages"]` list instead (the same pattern as the AI Agent project), you'll see the whole trace: the planner's numbered list, each researcher call and its answer, then the writer's final pass — all as real messages passed between the top-level agent and each sub-agent, proving all three roles actually ran.
 
-A single printed block of text — the writer's final synthesized report, a few paragraphs covering the sub-questions the planner came up with. If you print the full `result["messages"]` list instead (the same pattern as the AI Agent project), you'll see the whole trace: the planner's numbered list, each researcher call and its answer, then the writer's final pass — all as real messages passed between the top-level agent and each sub-agent.
+**🩹 If it's off:** If instead you see a traceback, check which kind — the same three categories as the AI Agent project: a missing/wrong environment variable (`KeyError`), a bad key (401/403), or a rate limit (429, see the 'Common pitfalls' section below — one research question costs six to eight round trips, so a 429 shows up sooner here than in the AI Agent project).
 
-If instead you see a traceback, check which kind — the same three categories as the AI Agent project: a missing/wrong environment variable (`KeyError`), a bad key (401/403), or a rate limit (429, see the pitfall below).
+### 2.2 Verify the multi-agent run
 
 **✅ Checklist**
 

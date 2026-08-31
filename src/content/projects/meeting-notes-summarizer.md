@@ -105,7 +105,7 @@ With setup done, everything below is about the actual summarizer.
 
 ## Step 1: Load a sample transcript
 
-Create a `transcripts/` folder and drop a plain-text meeting transcript into it — or copy one of the three realistic samples that ship with this project's repo example: a daily standup, a product-planning meeting, and an incident review (see [`examples/meeting-notes-summarizer/sample_transcripts/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/meeting-notes-summarizer/sample_transcripts)). A transcript is just speaker-labeled plain text, nothing fancier:
+A transcript is just speaker-labeled plain text, nothing fancier:
 
 ```text
 Maria: Let's start with the API migration. Where are we?
@@ -115,6 +115,16 @@ James: Yeah, I'll own that too.
 Priya: Quick question -- are we still deprecating the v1 endpoints next month?
 Maria: Let's hold off on that decision until James finishes the migration. I don't want to commit to a date yet.
 ```
+
+### 1.1 Set up your transcripts folder and sample files
+
+**👟 Starter hint:** Create a `transcripts/` folder and drop a plain-text meeting transcript into it — or copy one of the three realistic samples that ship with this project's repo example: a daily standup, a product-planning meeting, and an incident review (see [`examples/meeting-notes-summarizer/sample_transcripts/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/meeting-notes-summarizer/sample_transcripts)).
+
+**🎯 Expected output:** A `transcripts/` folder containing at least one readable `.txt` transcript whose lines look like the speaker-labeled sample above.
+
+**🩹 If it's off:** If there's nothing to load later, you've skipped this. Use the repo's bundled samples so the rest of the project runs with zero setup — a transcript you wrote won't hurt, but a realistic one makes the later extraction easier to sanity-check.
+
+### 1.2 Write the loader
 
 Loading it is the smallest possible step, deliberately:
 
@@ -142,9 +152,13 @@ if __name__ == "__main__":
     print(transcript[:200] + ("..." if len(transcript) > 200 else ""))
 ```
 
-```bash
-uv run python load_transcript.py transcripts/standup.txt
-```
+**👟 Starter hint:** Create `load_transcript.py` and run it on your sample file. It reads the file with `pathlib`, returns the raw text, and guards the single edge case a transcript reader actually cares about — an empty file.
+
+**🎯 Expected output:** `uv run python load_transcript.py transcripts/standup.txt` prints a nonzero character count and a preview that looks like real transcript text.
+
+**🩹 If it's off:** If the count prints `0`, the file path is wrong (run it from the same directory as `transcripts/`) or the file is empty. If it throws instead of loading, `Path.read_text(encoding="utf-8")` can't find or decode the file — double-check the path and that the file is plain UTF-8 text.
+
+### 1.3 Verify the loader
 
 **✅ Checklist**
 
@@ -162,6 +176,8 @@ uv run python load_transcript.py transcripts/standup.txt
 This is the actual skill this project teaches: instead of asking a model for a free-form paragraph summary ("Please summarize this meeting"), you ask it to return **JSON in a specific shape** — a schema you define — so the output is something your own code can reliably parse, store, and act on afterward. This is the same idea as an API contract, just enforced through prompt wording instead of a type system.
 
 The schema for this project: three lists — `decisions`, `action_items` (each with a `task` and an optional `owner`, when the transcript actually names one), and `open_questions`.
+
+### 2.1 Write the system prompt and schema description
 
 ```python
 # extract_prompt.py
@@ -195,7 +211,19 @@ Rules:
 - "owner" must be null (not the string "null", not "TBD") when no specific person is named for that task.
 - If a category has nothing to report, use an empty list -- never omit the key.
 - Do not invent information that isn't in the transcript."""
+```
 
+**👟 Starter hint:** Start by defining `SYSTEM_PROMPT` and `JSON_SCHEMA_DESCRIPTION` as constants in `extract_prompt.py` — the system prompt pins the output to a single JSON object, and the schema description spells out the exact keys and the rules that keep the model honest.
+
+**🎯 Expected output:** Two module-level constants exist: a system prompt that declares "respond with a single JSON object and nothing else," and a schema description that lists `decisions`, `action_items`, and `open_questions` with concrete rules.
+
+**🩹 If it's off:** If the schema were described only in prose ("give me the decisions and action items as JSON"), a small/free-tier model produces far less consistent shapes across runs. That's why the exact keys and example shape are written out literally — don't skip the literal example.
+
+### 2.2 Define `build_prompt`
+
+**👟 Starter hint:** Add a `build_prompt(transcript)` function that returns a two-message chat list — one `system` message with `SYSTEM_PROMPT`, and one `user` message that stitches the schema description and the transcript together.
+
+```python
 def build_prompt(transcript: str) -> list[dict]:
     """Returns the chat messages list ready to send to the LLM."""
     return [
@@ -207,11 +235,23 @@ def build_prompt(transcript: str) -> list[dict]:
     ]
 ```
 
+**🎯 Expected output:** `build_prompt(transcript)` returns a list of two message dicts (`system`, `user`), with the transcript text actually embedded in the user message.
+
+**🩹 If it's off:** If the transcript isn't in the returned user message, your later LLM call will have nothing to extract from. Make sure the f-string actually interpolates the transcript into the `user` content — a common slip is leaving the placeholder unused.
+
+### 2.3 Review why the prompt is designed this way
+
 Three things make this prompt design deliberate, not accidental:
 
 1. **The schema is spelled out literally**, key by key, with an example shape — not described in prose. Models are far more consistent at matching an example than at inferring a schema from a description.
 2. **`owner` is explicitly allowed to be `null`**, with an explicit rule for when to use it. Without that rule, models tend to invent a plausible-sounding name, or write the string `"TBD"` — a value your Python code would then have to special-case forever.
 3. **The system prompt states the output format as a hard constraint** ("nothing else -- no markdown code fences, no commentary"), because the single most common way this goes wrong (see Step 3) is a model wrapping its JSON in a ```` ```json ```` code fence out of habit, even when told not to.
+
+**🎯 Expected output:** You could point to the exact sentence that tells the model what to do when no owner is named, and explain in one sentence why the schema is a literal JSON example rather than prose.
+
+**🩹 If it's off:** If you can't name why each of the three rules exists, you're likely to skip a rule the next time you write a prompt — and each omitted rule is a specific failure mode (invented owners, wrapped JSON, leaked decisions) your parse code will later have to defend against.
+
+### 2.4 Verify the prompt design
 
 **✅ Checklist**
 
@@ -227,6 +267,8 @@ Three things make this prompt design deliberate, not accidental:
 ## Step 3: Call the LLM and parse the JSON response
 
 Now send the prompt and turn whatever text comes back into real Python data — a `dict` you can loop over, not a string you have to eyeball. This is where structured-extraction projects most often break in practice: even a well-designed prompt occasionally gets a response wrapped in a code fence, with a trailing comment, or with a stray comma — and a naive `json.loads()` call crashes on all three.
+
+### 3.1 Write `call_llm`
 
 ```python
 # summarize.py (part 1 -- LLM call + parsing)
@@ -263,7 +305,19 @@ def call_llm(transcript: str) -> str:
         temperature=0,  # deterministic-as-possible extraction, not creative writing
     )
     return response.choices[0].message.content
+```
 
+**👟 Starter hint:** Start `summarize.py` with `call_llm(transcript)` — build the `OpenAI` client from your `.env` key, send `build_prompt(transcript)`, and return the raw text reply. Note `temperature=0`: extraction should be repeatable, not creative.
+
+**🎯 Expected output:** Calling `call_llm` returns the model's raw reply as a string, and an environment-variable misconfiguration raises a clear `KeyError` at `os.environ["GITHUB_TOKEN"]` rather than failing silently.
+
+**🩹 If it's off:** If you get a `KeyError` or authentication error, your `.env` key isn't loaded — confirm `load_dotenv()` runs and the variable name matches. If you forgot `temperature=0`, identical transcripts can produce visibly different output between runs, which makes debugging your prompt harder.
+
+### 3.2 Write `extract_json`
+
+**👟 Starter hint:** Add `extract_json(raw_text)` to strip the two most common things a model wraps around otherwise-valid JSON: a ```` ```json ... ``` ```` markdown fence, and stray prose before/after the object. Fall back to grabbing between the first `{` and last `}` when there's no fence.
+
+```python
 def extract_json(raw_text: str) -> str:
     """Strips common wrapping the model adds around JSON despite being told not to.
 
@@ -280,7 +334,17 @@ def extract_json(raw_text: str) -> str:
     if start != -1 and end != -1 and end > start:
         return text[start : end + 1]
     return text
+```
 
+**🎯 Expected output:** A response wrapped in ```` ```json ... ``` ```` gets stripped to just the JSON, and a response with a stray sentence around it still yields the object.
+
+**🩹 If it's off:** Skipping `extract_json` and calling `json.loads()` directly on the raw response crashes on exactly the fence the model is most likely to add. If your fallback grabs too much or picks the wrong braces, remember it only runs when there's no fence — keep the fence branch first.
+
+### 3.3 Write `parse_summary`
+
+**👟 Starter hint:** Add `parse_summary(raw_text)` that cleans with `extract_json`, `json.loads` it, then validates: it must be a `dict` containing at least `REQUIRED_KEYS`, and each list field must really be a list (coerce a single object into a one-item list if not).
+
+```python
 def parse_summary(raw_text: str) -> dict:
     """Parses and validates the model's response, raising a clear error if it
     doesn't match the schema after the best-effort cleanup in extract_json()."""
@@ -303,7 +367,17 @@ def parse_summary(raw_text: str) -> dict:
             data[key] = [data[key]]
 
     return data
+```
 
+**🎯 Expected output:** A well-formed response parses to a `dict` with all three keys as lists, and a genuinely malformed response raises a clear `ValueError` with the raw text attached — not a `KeyError` or `JSONDecodeError` three functions later.
+
+**🩹 If it's off:** If you don't validate and just `json.loads`, a model that returns a dict missing `action_items` will crash with a mysterious `KeyError` later. The coercive normalization also matters — models sometimes return a single object where you asked for a list, and treating that as a one-item list beats crashing on `.append` of a `dict`.
+
+### 3.4 Run `summarize.py` and inspect the output
+
+**👟 Starter hint:** Wire everything into `__main__`, load a transcript, call the model, parse the summary, and print the JSON.
+
+```python
 if __name__ == "__main__":
     path = sys.argv[1] if len(sys.argv) > 1 else "transcripts/standup.txt"
     transcript = load_transcript(path)
@@ -320,6 +394,12 @@ uv run python summarize.py transcripts/standup.txt
 Treat a language model's response the same way you'd treat data from an untrusted API or a user-uploaded CSV: validate it before using it, don't assume it. `extract_json` handles the common wrapping issues, and `parse_summary` still raises a clear, specific error — with the raw text attached — if the result truly doesn't match the schema, rather than letting a `KeyError` three functions later leave you guessing what went wrong. Silently returning an empty summary on a parse failure would be worse than crashing: you'd never notice the extraction quietly stopped working.
 :::
 
+**🎯 Expected output:** `uv run python summarize.py transcripts/standup.txt` prints valid, readable JSON with all three required keys.
+
+**🩹 If it's off:** If printing shows an empty/odd list where you expected content, scrub the transcript or re-run — extraction with `temperature=0` is deterministic, so varying output points at a prompt or parsing bug, not randomness.
+
+### 3.5 Verify the parsing
+
 **✅ Checklist**
 
 - ✅ `uv run python summarize.py transcripts/standup.txt` prints valid, readable JSON with all three required keys.
@@ -334,6 +414,8 @@ Treat a language model's response the same way you'd treat data from an untruste
 ## Step 4: Format the result as readable Markdown
 
 The parsed `dict` is exactly what you'd want for saving to a database or feeding into another script, but it's not something a teammate wants to read in a Slack message. Convert it into a short, skimmable Markdown summary too — the same data, formatted for a human instead of a program.
+
+### 4.1 Write the Markdown formatter
 
 ```python
 # format_summary.py
@@ -370,7 +452,23 @@ def format_markdown(summary: dict, source: str) -> str:
     return "\n".join(lines)
 ```
 
+**👟 Starter hint:** Create `format_summary.py` with `format_markdown(summary, source)` that builds one line at a time — one section per list, a bullet per item, and an `_No ... recorded._` fallback whenever a list is empty.
+
+**🎯 Expected output:** `format_markdown(summary, "standup.txt")` returns a string starting with a `# Meeting Summary` heading, with each category rendered as a section.
+
+**🩹 If it's off:** If an empty list renders as a blank/broken section, you skipped the `else` fallback — every empty category should still produce a readable `_No ... recorded._` line, never an empty section.
+
+### 4.2 Handle a missing owner
+
 `item.get("owner") or "unassigned"` is doing double duty: it handles both a literal `None` (what the prompt asks the model to use when no owner is named) and, defensively, an empty string or the word `"null"` some smaller models occasionally produce despite the instructions — either way, the reader sees "unassigned" instead of a blank or a confusing literal `null`.
+
+**👟 Starter hint:** Run `format_markdown` against a test summary where one action item has `owner: None` and another has `owner: "null"` (as a string), and check what each renders to.
+
+**🎯 Expected output:** An action item with no named owner renders as "unassigned", not a blank or the word "None" or the literal `"null"`.
+
+**🩹 If it's off:** If `"unassigned"` doesn't show up for both cases, you're likely reading `owner` without the `or "unassigned"` fallback — a bare `None` needs that guard, and a literal string `"null"` is falsy too, so `or` handles both.
+
+### 4.3 Verify the formatter
 
 **✅ Checklist**
 
@@ -386,6 +484,8 @@ def format_markdown(summary: dict, source: str) -> str:
 ## Step 5: Run it end to end
 
 Wire the pieces together: load a transcript, call the model, parse and validate the JSON, then write both a `.md` and a `.json` file next to the input.
+
+### 5.1 Write the `summarize` pipeline
 
 ```python
 # summarize.py (part 2 -- appended to part 1 above)
@@ -413,6 +513,14 @@ if __name__ == "__main__":
     print(f"\n(also wrote {Path(path).stem}_summary.json and {Path(path).stem}_summary.md)")
 ```
 
+**👟 Starter hint:** Add a `summarize(path)` function to `summarize.py` that chains everything you've built: `load_transcript` → `call_llm` → `parse_summary`, then writes both a `.json` and a `.md` file named after the input's stem.
+
+**🎯 Expected output:** `uv run python summarize.py transcripts/standup.txt` prints a readable Markdown summary and reports writing two output files.
+
+**🩹 If it's off:** If only one file appears, check both `write_text` calls — the `.json` and `.md` must both be written. If the stem is wrong (files named oddly), re-check how `Path(path).stem` strips the extension.
+
+### 5.2 Run it on all three transcripts
+
 ```bash
 uv run python summarize.py transcripts/standup.txt
 uv run python summarize.py transcripts/product_planning.txt
@@ -424,6 +532,12 @@ Run it on all three sample transcripts (or the repo's fuller [`examples/meeting-
 :::tip[Rate limits are expected, not a bug]
 Every free tier caps requests per minute or per day, and each call to `summarize()` is exactly one API call — so running this across several transcripts back to back can occasionally hit a `429` error. That's the provider telling you to slow down, not a sign anything is broken; wait the suggested number of seconds and re-run. See the [AI Agent project](/docs/projects/ai-agent#handling-rate-limits) for a `try`/`except`-with-retry pattern you can copy directly if you want this to recover automatically.
 :::
+
+**🎯 Expected output:** Each transcript produces its own `.json` and `.md` file, and the incident review visibly yields more open questions than action items — each file reflecting *that* transcript's content, not a copy of the first run's output.
+
+**🩹 If it's off:** If running multiple transcripts back to back hits a `429` rate-limit error, that's the provider pacing you, not a bug — wait and re-run. If two different transcripts produce near-identical summaries, check that `summarize` is actually using each transcript's content rather than a hardcoded path.
+
+### 5.3 Verify end to end
 
 **✅ Checklist**
 

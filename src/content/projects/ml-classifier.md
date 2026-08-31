@@ -64,7 +64,11 @@ uv add scikit-learn pandas
 
 ## Step 1: Load and prepare the data
 
-Same dataset, same columns as Week 10's EDA — this time loaded from the course's raw dataset file instead of the in-browser sandbox:
+Same dataset, same columns as Week 10's EDA — this time loaded from the course's raw dataset file instead of the in-browser sandbox. Four small sub-steps: load, clean, encode the categorical columns, then separate features from target.
+
+### 1.1 Load the Titanic dataset
+
+**👟 Starter hint:** Read the CSV straight from the URL into a DataFrame and look at it before touching anything — you should recognize exactly the columns you cleaned back in Week 10:
 
 ```python
 import pandas as pd
@@ -82,9 +86,13 @@ df["Embarked"] = df["Embarked"].fillna(df["Embarked"].mode()[0])
 df = df.drop(columns=["PassengerId", "Name"])  # identifiers, not predictive signal
 ```
 
-### Encoding categorical columns
+**🎯 Expected output:** `df.head()` shows passenger rows with the familiar Week 10 columns, and after the cleaning lines `df.isna().sum()` shows zero missing values in `Age` and `Embarked`.
 
-This part is new. `Sex` and `Embarked` are strings ("male"/"female", "S"/"C"/"Q") — Week 10's `.groupby()` was perfectly happy grouping by a string column, but scikit-learn's models are not: every model in this project is, underneath, doing arithmetic on numbers, so every column that goes in has to already be numeric. `pd.get_dummies` handles this by turning one categorical column into several 0/1 columns, one per category:
+**🩹 If it's off:** A URL read error usually means you're offline or the URL changed — open the link in a browser to confirm. If `df.isna().sum()` still shows blanks, re-check the two `fillna` lines: `Age` is filled with the *median* (a float), `Embarked` with the *mode* (the most common value) — and forgetting the `drop(columns=...)` line leaves `PassengerId`/`Name` in the frame, where the model would later waste effort on columns that carry no predictive signal.
+
+### 1.2 Encode categorical columns
+
+**👟 Starter hint:** `Sex` and `Embarked` are strings ("male"/"female", "S"/"C"/"Q") — Week 10's `.groupby()` was perfectly happy grouping by a string column, but scikit-learn's models are not: every model in this project is, underneath, doing arithmetic on numbers, so every column that goes in has to already be numeric. Turn each categorical column into 0/1 indicator columns with `pd.get_dummies`:
 
 ```python
 df = pd.get_dummies(df, columns=["Sex", "Embarked"], drop_first=True)
@@ -93,12 +101,24 @@ df.head()
 
 `drop_first=True` drops one category per column (e.g. keeps `Sex_male` but not `Sex_female`) because the dropped category is fully implied by the others being 0 — keeping both would be redundant. `Sex` becomes one column (`Sex_male`, 1 or 0); `Embarked` becomes two (`Embarked_Q`, `Embarked_S`, both 0 meaning "C"). This is the same shape of transformation as `pd.cut` in Week 10 — turning one column into a form easier for the next step to consume — just going from text to numbers instead of from continuous to binned.
 
-Finally, separate the columns you're predicting *from* (the features, `X`) from the column you're predicting (the target, `y`):
+**🎯 Expected output:** `df.head()` now shows only numeric columns — `Sex_male` of 0/1 and `Embarked_Q`/`Embarked_S` of 0/1 — with no more `"male"`/`"female"` or `"S"`/`"C"` strings anywhere.
+
+**🩹 If it's off:** If a string column still remains, check the `columns` argument is spelled and cased exactly (`Sex`, `Embarked`) — a typo silently leaves that column un-encoded, and `X.dtypes` in the next sub-step is where it will surface. And a deliberate note: `Pclass` is left alone here even though it's a category too — that's a defensible real-world choice (see the Socratic question), not an oversight.
+
+### 1.3 Separate features from target
+
+**👟 Starter hint:** Split the frame: everything except `Survived` goes into `X` (the features the model learns from), and `Survived` alone becomes `y` (the thing you're predicting). The model must never see `Survived` as an input:
 
 ```python
 X = df.drop(columns=["Survived"])
 y = df["Survived"]
 ```
+
+**🎯 Expected output:** `X.shape` has one fewer column than the DataFrame; `y` is a Series of 0s and 1s with the same row count as `X`. `X.dtypes` shows no `object` columns left.
+
+**🩹 If it's off:** The classic silent mistake is leaving `Survived` in `X` — the model then "memorizes" the answer column, and Step 4's accuracy looks impossibly great because it isn't predicting anything. Run `X.columns` and confirm `Survived` is absent before you move on; it's the cheapest way to catch the single most damaging prep error in this project.
+
+### 1.4 Verify the prepared data
 
 **✅ Checklist**
 
@@ -114,6 +134,12 @@ y = df["Survived"]
 
 Here's the core idea this step is built on: **a model's score on data it was trained on tells you almost nothing about how it'll do on data it hasn't seen.** A model can — and, given enough freedom, will — simply memorize the training rows rather than learn a genuine pattern. Imagine grading a student using the exact questions they were handed the answer key for beforehand: a perfect score wouldn't tell you whether they understood the material or just memorized those specific answers. Evaluating a model on its own training data has the same flaw. To get an honest measure of how the model performs on passengers it's never seen, you have to hold some data back and never let the model train on it.
 
+Take it in two sub-steps: make the split, then verify it — and read the leakage tip before you go further.
+
+### 2.1 Make the split
+
+**👟 Starter hint:** Hold back a slice of rows that the model never trains on, so Step 4's score measures generalization, not memorization. Use `train_test_split` to carve out a 20% test slice, with a fixed `random_state` so you can rerun reproducibly:
+
 ```python
 from sklearn.model_selection import train_test_split
 
@@ -123,6 +149,12 @@ X_train, X_test, y_train, y_test = train_test_split(
 ```
 
 `test_size=0.2` holds back 20% of the rows for testing, training on the remaining 80%. `random_state=42` fixes the random shuffle used to pick which rows go where — without it, you'd get a *different* split (and therefore a slightly different accuracy score) every time you rerun the script, making it hard to tell whether a change to your code actually helped or you just got a luckier split.
+
+**🎯 Expected output:** `X_train.shape` and `X_test.shape` show an 80/20 split of the total row count, and rerunning the split with the same `random_state` reproduces the *exact* same rows in `X_test` every time.
+
+**🩹 If it's off:** If rerunning changes `X_test`'s rows, `random_state=42` got dropped from the call. If either `y_train` or `y_test` ends up all 0s (or all 1s), you've caught a small-data fluke — a test set with a single class can't measure anything honestly, so re-split or add more data rather than pretending the number means something.
+
+### 2.2 Verify the split
 
 :::tip[Data leakage: prepare, then split — not the other way around]
 Step 1's encoding was done on the *whole* dataset, before this split, which is fine here because `pd.get_dummies` only looks at each row's own category, not at any other row. But it's easy to get this wrong with transformations that *do* look across rows — for example, scaling a column using its mean and standard deviation. If you compute that mean/std on the full dataset and then split, the training set has quietly "seen" information from the test set (its rows contributed to that mean). This is called **data leakage**, and it's one of the most common real-world mistakes in applied machine learning — the fix is to always compute anything that summarizes the data (means, standard deviations, category lists) using the *training* set only, then apply that same transformation to the test set.
@@ -142,6 +174,12 @@ If you trained a model and evaluated it on `X_train`/`y_train` instead of `X_tes
 
 `LogisticRegression`, despite the name, is a classifier, not a regression model in the usual sense. The idea: for each passenger, it computes a weighted sum of their features (age, fare, sex, class, ...) — the same shape of computation as an ordinary linear equation — and then squashes that sum through a function (the logistic/sigmoid function) that maps any number onto a value between 0 and 1. That output is interpreted as an estimated *probability* of survival. "Fitting the model" means finding the set of weights that makes those estimated probabilities line up as closely as possible with the actual 0/1 outcomes in the training data. A prediction is then just "probability ≥ 0.5 → predict survived."
 
+Take it in two sub-steps: fit and predict, then verify.
+
+### 3.1 Fit a LogisticRegression and predict
+
+**👟 Starter hint:** `.fit(X_train, y_train)` is where the learning happens — the model never sees `X_test` or `y_test` during it. Then apply the fitted model to the held-out rows with `.predict(X_test)`:
+
 ```python
 from sklearn.linear_model import LogisticRegression
 
@@ -152,6 +190,12 @@ predictions = model.predict(X_test)
 ```
 
 `.fit(X_train, y_train)` is where the learning happens — it never sees `X_test` or `y_test`. `max_iter=1000` raises the cap on how many optimization steps the solver takes to converge; the default sometimes isn't enough for this data and scikit-learn will warn you if it stops early.
+
+**🎯 Expected output:** `predictions` is an array of the same length as `y_test`, containing only 0s and 1s, and `model.predict_proba(X_test)[:5]` returns actual probabilities — numbers between 0 and 1 — not just the final 0/1 call.
+
+**🩹 If it's off:** A `ConvergenceWarning` means the solver stopped early — raise `max_iter` until it goes away rather than ignoring it, since an under-converged model's predictions are less reliable. If `predict` throws a column-mismatch error, the feature columns in `X_test` differ from what the model trained on — that's the encoding-before-splitting discipline from Step 1 paying off, and it's easier to fix here than in Step 4.
+
+### 3.2 Verify the classifier
 
 **✅ Checklist**
 
@@ -165,7 +209,11 @@ predictions = model.predict(X_test)
 
 ## Step 4: Evaluate and compare models
 
-The single number to start with is accuracy — the fraction of test-set predictions that matched the real outcome:
+The single number to start with is accuracy — the fraction of test-set predictions that matched the real outcome. Accuracy alone hides *what kind* of mistakes the model makes, so a confusion matrix comes next, then a second model for a genuinely honest comparison. Three sub-steps.
+
+### 4.1 Compute accuracy and a confusion matrix
+
+**👟 Starter hint:** Score the logistic model first with `accuracy_score`, then build a `confusion_matrix` to see *what kind* of mistakes it made — the single number alone can't tell you that:
 
 ```python
 from sklearn.metrics import accuracy_score, confusion_matrix
@@ -183,7 +231,13 @@ print(cm)
 
 The result is a 2×2 grid. Reading it in plain terms: it counts, separately, how many passengers who actually died were correctly predicted to die, how many who actually died were wrongly predicted to survive (a **false positive** for "survived"), how many who actually survived were wrongly predicted to die (a **false negative**), and how many who actually survived were correctly predicted to survive. Two models with identical accuracy can make very different *kinds* of mistakes — worth knowing, especially in domains where one kind of error (say, a missed medical diagnosis) is far costlier than the other.
 
-Now train a second, different kind of model on the exact same split, and compare honestly:
+**🎯 Expected output:** A `Logistic Regression accuracy: NN%` line prints, and `cm` prints a 2×2 array whose four cells you can read in "actually died/survived vs predicted died/survived" terms.
+
+**🩹 If it's off:** If accuracy prints as a raw 0.86-style float instead of `86%`, the `:.1%` format string is missing from the print. If reading the grid trips you up, print `confusion_matrix(y_test, predictions)` and check the row/column meaning once — the default convention is rows = actual outcome, columns = predicted outcome, and mixing them up is the most common misreading.
+
+### 4.2 Train and compare a Random Forest
+
+**👟 Starter hint:** Train a second, structurally different model on the *exact same split* so the comparison is honest — a `RandomForestClassifier` learns many small decision trees (each on a slightly different random subset) and has them vote, instead of one weighted sum:
 
 ```python
 from sklearn.ensemble import RandomForestClassifier
@@ -198,6 +252,12 @@ print(confusion_matrix(y_test, rf_predictions))
 ```
 
 A random forest trains many small decision trees, each on a slightly different random subset of the data and features, and has them vote on the final prediction — a different underlying idea from logistic regression's single weighted-sum-plus-probability approach. Compare the two accuracy numbers you now have. Don't assume the higher one is automatically "the better model" — see the pitfall below.
+
+**🎯 Expected output:** A `Random Forest accuracy: NN%` line plus its own confusion matrix prints — a second accuracy number computed on the *same* `X_test`/`y_test` so the comparison is apples to apples.
+
+**🩹 If it's off:** If the two accuracy numbers come out identical, you may have accidentally used the logistic model's predictions for both (update `rf_predictions`, don't copy `predictions`), or the models weren't given the same `random_state`, so you're comparing two different random runs rather than two models.
+
+### 4.3 Verify the comparison
 
 **✅ Checklist**
 

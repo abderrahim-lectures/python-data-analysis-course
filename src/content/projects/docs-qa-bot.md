@@ -122,7 +122,9 @@ GITHUB_TOKEN=your-llm-key-here
 
 ## Step 1: Prepare and embed a docs folder
 
-This step is the RAG App project's Steps 2 and 3, unchanged in substance, just pointed at a `docs/` folder of documentation instead of personal notes:
+This step is the RAG App project's Steps 2 and 3, unchanged in substance, just pointed at a `docs/` folder of documentation instead of personal notes.
+
+### 1.1 Write the chunking function
 
 ```python
 # prepare_docs.py
@@ -167,6 +169,14 @@ if __name__ == "__main__":
     chunks = load_chunks()
     print(f"Loaded {len(chunks)} chunks from {DOCS_DIR}/")
 ```
+
+**👟 Starter hint:** Create `prepare_docs.py` — `load_chunks()` scans `docs/` for `.md`/`.txt` files, splits each into paragraphs, merges short ones up to ~500 characters, and tags every chunk with its source filename.
+
+**🎯 Expected output:** `uv run python prepare_docs.py` prints a nonzero chunk count for whatever documentation you added.
+
+**🩹 If it's off:** An empty folder prints `0 chunks` — make sure `docs/` exists with real `.md`/`.txt` files in it. If one giant file produces a single oversized chunk, that file has no blank lines to split on; chunking quality depends on your source formatting.
+
+### 1.2 Build the embedding index
 
 Put whatever documentation you want the bot to answer from into a `docs/` folder as `.md`/`.txt` files — a project's README and wiki pages, a team's internal runbook, this course's own lesson files, anything real. Then embed it, reusing the RAG App project's `build_index.py` verbatim (only the import changes, from `prepare_notes` to `prepare_docs`):
 
@@ -214,6 +224,14 @@ uv run python prepare_docs.py
 uv run python build_index.py
 ```
 
+**👟 Starter hint:** Run `prepare_docs.py` then `build_index.py`. The latter embeds every chunk with `all-MiniLM-L6-v2` and saves `index.npy` (the vectors) plus `chunks.json` (the text) locally.
+
+**🎯 Expected output:** `uv run python build_index.py` reports a nonzero chunk count and creates both `index.npy` and `chunks.json` in the project folder.
+
+**🩹 If it's off:** If it prints "No chunks found", your `docs/` folder is empty or uses extensions outside `.md`/`.txt`. Remember: nothing rebuilds the index automatically — after any edit to `docs/`, you must re-run `build_index.py` or the bot keeps answering from the old index.
+
+### 1.3 Verify the docs index
+
 **✅ Checklist**
 
 - ✅ A `docs/` folder exists with at least a couple of real `.md`/`.txt` files in it.
@@ -227,7 +245,9 @@ uv run python build_index.py
 
 ## Step 2: Retrieve relevant chunks
 
-Retrieval is also unchanged from the RAG App project — embed the question with the same model, then rank every chunk by cosine similarity, which collapses to a plain dot product since every vector was already normalized to length 1 at embedding time:
+Retrieval is also unchanged from the RAG App project — embed the question with the same model, then rank every chunk by cosine similarity, which collapses to a plain dot product since every vector was already normalized to length 1 at embedding time.
+
+### 2.1 Write the retrieval function
 
 ```python
 # retrieve.py
@@ -272,6 +292,14 @@ if __name__ == "__main__":
         print(f"{r['score']:.3f}  [{r['source']}]  {r['text'][:80]}...")
 ```
 
+**👟 Starter hint:** Create `retrieve.py` — `retrieve(question, top_k=3)` embeds the question, takes the dot product against every stored vector (valid because each was normalized), and returns the top `top_k` chunks with their scores. Note how `get_model()` builds the model once and caches it, since a bot will call retrieval many times.
+
+**🎯 Expected output:** `uv run python retrieve.py` prints ranked results with real similarity scores for the test question.
+
+**🩹 If it's off:** If it errors on `np.load`/`json.load`, `index.npy`/`chunks.json` don't exist — you skipped Step 1. If scores look identical or meaningless, double-check you normalized the question vector, matching how the index was built.
+
+### 2.2 Test retrieval before touching Discord
+
 ```bash
 uv run python retrieve.py
 ```
@@ -281,6 +309,14 @@ If this feels too fast, that's deliberate — the [RAG App project](/docs/projec
 :::tip[Test retrieval before touching Discord at all]
 Get `retrieve.py` returning genuinely relevant chunks for a few test questions *before* writing any bot code. If retrieval is wrong, a bot wrapped around it will just confidently deliver wrong answers in a Discord channel — much harder to debug live than a quiet terminal script.
 :::
+
+**👟 Starter hint:** Run `retrieve.py` on a few questions you expect your docs to answer, and deliberately try one your docs clearly don't cover.
+
+**🎯 Expected output:** The top result for an easy test question actually looks relevant when you read it, and a question your docs don't cover yields a noticeably lower top score.
+
+**🩹 If it's off:** If a clearly-docs-covered question returns irrelevant chunks, your docs are too sparse or the question wording differs too much from the index — tighten the docs or the question. Confirming the "uncovered question scores lower" case early is what tells you the ranking actually works.
+
+### 2.3 Verify retrieval
 
 **✅ Checklist**
 
@@ -297,7 +333,11 @@ Get `retrieve.py` returning genuinely relevant chunks for a few test questions *
 
 This is the actual new part of this project: a `discord.py` event handler that calls `retrieve()`, builds the same "answer using only this context" prompt as the RAG App project, and replies with the model's answer.
 
-`discord.py`'s core pattern is an event loop: you create a `Client` with a set of `intents` (which categories of events it's allowed to receive), then register `async def` functions decorated with `@client.event` for the events you care about — most commonly `on_ready` (fires once, when the connection is established) and `on_message` (fires for every message the bot can see):
+`discord.py`'s core pattern is an event loop: you create a `Client` with a set of `intents` (which categories of events it's allowed to receive), then register `async def` functions decorated with `@client.event` for the events you care about — most commonly `on_ready` (fires once, when the connection is established) and `on_message` (fires for every message the bot can see).
+
+### 3.1 Write the prompt and `answer` helper
+
+**👟 Starter hint:** Start `bot.py` with the setup that runs once at startup — the prompt template, the `discord.Client` with `message_content` intent, the LLM client, and an `answer(question)` that calls `retrieve()`, builds the prompt, and returns the model's reply as a string.
 
 ```python
 # bot.py
@@ -345,7 +385,24 @@ def answer(question: str, top_k: int = 3) -> str:
         messages=[{"role": "user", "content": prompt}],
     )
     return response.choices[0].message.content
+```
 
+`answer()` is line-for-line the same idea as the RAG App project's `ask()` — retrieve, build a prompt, call the LLM — just returning a string instead of printing it, so `on_message` can hand that string to `message.reply(...)`. Everything above `on_ready`/`on_message` runs once at startup; everything inside those two functions runs once per event, for as long as `client.run(...)` keeps the connection alive.
+
+**🎯 Expected output:** `answer("how do I enable the message content intent?")` returns a string grounded in your docs — test this as a plain function call before worrying about Discord.
+
+**🩹 If it's off:** If `answer` crashes on a missing key, `load_dotenv()`/`GITHUB_TOKEN` isn't set up (see Setup). If it answers from memory rather than your docs, the prompt template probably isn't instructing the model to use only the context — keep that "Using ONLY the context" wording.
+
+### 3.2 Write the event handlers
+
+**👟 Starter hint:** Add the two `@client.event` handlers and the run entry point. `on_message` should skip the bot's own messages, only act when mentioned, strip the mention out to get the question, show a typing indicator, and reply — guarding against over-long replies.
+
+```python
+if __name__ == "__main__":
+    client.run(os.environ["DISCORD_BOT_TOKEN"])  # (part of the same bot.py)
+```
+
+```python
 @client.event
 async def on_ready():
     print(f"Logged in as {client.user} -- ready in {len(client.guilds)} server(s).")
@@ -373,18 +430,25 @@ async def on_message(message: discord.Message):
     if len(reply) > MAX_DISCORD_MESSAGE_LENGTH:
         reply = reply[: MAX_DISCORD_MESSAGE_LENGTH - 1] + "…"
     await message.reply(reply)
-
-if __name__ == "__main__":
-    client.run(os.environ["DISCORD_BOT_TOKEN"])
 ```
 
-`answer()` is line-for-line the same idea as the RAG App project's `ask()` — retrieve, build a prompt, call the LLM — just returning a string instead of printing it, so `on_message` can hand that string to `message.reply(...)`. Everything above `on_ready`/`on_message` runs once at startup; everything inside those two functions runs once per event, for as long as `client.run(...)` keeps the connection alive.
-
 The `if message.author == client.user: return` guard matters more than it might look: without it, if the bot's own reply happened to mention itself (it won't here, but it's an easy mistake in general), it would trigger `on_message` again on its own output — an infinite loop of a bot replying to itself.
+
+**🎯 Expected output:** `bot.py` starts cleanly (no `SyntaxError` from a missing `async`/`await`), and you can read the handler as: skip self, require a mention, extract the question, answer, reply.
+
+**🩹 If it's off:** If `SyntaxError` appears, you left `async` off a handler or `await` off a call (see the tip in 3.3). If the bot replies to everything, you're missing the two early `return` guards — the self-check and the mention check must come first.
+
+### 3.3 Understand why `async def` and `await` are required
 
 :::tip[async def and await aren't optional here]
 `discord.py` is built entirely on Python's `asyncio` — every event handler must be declared `async def`, and any call that waits on the network (sending a message, fetching data) must be `await`-ed. Forgetting either one is one of the most common first bugs: leaving off `async` on `on_message` raises an error immediately, and forgetting `await` on `message.reply(...)` silently does nothing at all, since it just creates an un-awaited coroutine instead of actually running it.
 :::
+
+**🎯 Expected output:** You can now explain why `on_message` is `async def`, why `await message.reply(...)` is non-negotiable, and what an un-awaited coroutine would do.
+
+**🩹 If it's off:** If a reply silently never sends, you almost certainly wrote `message.reply(...)` without `await` — it created a coroutine that was never run. Add the `await` and the reply fires.
+
+### 3.4 Verify the handler
 
 **✅ Checklist**
 
@@ -399,7 +463,17 @@ The `if message.author == client.user: return` guard matters more than it might 
 
 ## Step 4: Invite the bot and try it end to end
 
+### 4.1 Generate the invite URL and add the bot
+
 Back in the Discord Developer Portal, open **OAuth2 → URL Generator**. Under **Scopes**, check `bot`; under **Bot Permissions**, check at least **Send Messages** and **Read Message History**. Copy the generated URL, open it in a browser, and pick a server you control (create a free test server if you don't already have one) to add the bot to.
+
+**👟 Starter hint:** The invite URL is generated in the Developer Portal, not in code. Use it in a browser and confirm the bot shows up in your test server's member list (offline, for now).
+
+**🎯 Expected output:** The bot appears as a member in your test server, with the `Send Messages` and `Read Message History` permissions you selected.
+
+**🩹 If it's off:** If the bot can't send or read messages once it replies, you omitted one of the two required permissions from the invite URL. If it never appears at all, re-run the URL generator and re-invite.
+
+### 4.2 Run the bot and ask it a question
 
 Run it:
 
@@ -414,6 +488,14 @@ You should see `Logged in as docs-qa-bot#1234 -- ready in 1 server(s).` printed 
 ```
 
 Within a few seconds you should see a typing indicator, then a reply grounded in your actual documentation — not a guess from the model's general training data.
+
+**👟 Starter hint:** Keep `bot.py` running in one terminal, then mention the bot in Discord with a question your docs actually answer.
+
+**🎯 Expected output:** The bot reports ready, and a mention triggers a typing indicator followed by a reply grounded in your docs folder.
+
+**🩹 If it's off:** If the bot never logs in, either `client.run` is failing to authenticate (stale `DISCORD_BOT_TOKEN` — reset it in the portal and update `.env`) or the "Message Content" toggle from Setup is off, making `message.content` silently empty. If it replies from memory instead of your docs, run `retrieve.py` in isolation (Step 2) to confirm retrieval — not the Discord wiring — is the problem.
+
+### 4.3 Verify the end-to-end flow
 
 **✅ Checklist**
 

@@ -13,7 +13,8 @@
     "test:e2e": "node tests/e2e/smoke.mjs",
     "test:contrast": "node tests/e2e/contrast.mjs",
     "test:responsive": "node tests/e2e/responsive.mjs",
-    "test:all": "npm run test && npm run test:e2e && npm run test:contrast && npm run test:responsive"
+    "test:all": "npm run test && npm run test:e2e && npm run test:a11y && npm run test:contrast && npm run test:responsive",
+    "test:a11y": "node tests/e2e/a11y.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.0",

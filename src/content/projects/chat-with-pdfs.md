@@ -104,7 +104,11 @@ Put a handful of real PDFs — reports, guides, papers, anything with actual tex
 
 ## Step 1: Load and chunk your PDFs
 
-`pypdf` extracts text from a PDF one page at a time, which is exactly the granularity this project needs — it's what makes it possible to say *which page* an answer came from later. As with the RAG App project, a whole page is usually still too big and too unfocused to embed well, so each page gets split into smaller chunks — but unlike that project, every chunk here must also remember which file and which page it came from.
+`pypdf` extracts text from a PDF one page at a time, which is exactly the granularity this project needs — it's what makes it possible to say *which page* an answer came from later. As with the RAG App project, a whole page is usually still too big and too unfocused to embed well, so each page gets split into smaller chunks — but unlike that project, every chunk here must also remember which file and which page it came from. Two sub-steps: the loader, then a run to check what it produced.
+
+### 1.1 Write the PDF loader
+
+**👟 Starter hint:** Create `load_pdfs.py`: for every `.pdf` in `pdfs/`, extract each page's text, split it into paragraphs, greedily merge short paragraphs up to `TARGET_CHUNK_SIZE`, and attach `source` (filename) and `page` (1-indexed) to every chunk:
 
 ```python
 # load_pdfs.py
@@ -181,13 +185,27 @@ if __name__ == "__main__":
         print(f"  [{chunk['source']} p{chunk['page']}] {preview}...")
 ```
 
+**🎯 Expected output:** `import load_pdfs` succeeds, and `load_chunks()` returns a list of `{"text", "source", "page"}` dicts for the PDFs actually in `pdfs/` — one list across *all* of them, not per-file.
+
+**🩹 If it's off:** A `FileNotFoundError` means `PDFS_DIR` doesn't exist or you're running from a different folder than the project root. If `load_chunks()` returns `[]`, every PDF in the folder is scanned/image-only (see "Common pitfalls") — `extract_text()` returns an empty string for those, so the loop produces zero chunks silently.
+
+### 1.2 Run it and confirm sources and pages
+
+**👟 Starter hint:** Run the script and spot-check that the printed metadata matches what opening each PDF yourself would show:
+
 ```bash
 uv run python load_pdfs.py
 ```
 
+**🎯 Expected output:** The run prints `Loaded N chunks from pdfs/` with a nonzero `N`, and three previews each carrying a `[filename pN]` prefix plus a fragment of real text from your PDFs.
+
+**🩹 If it's off:** A page number that's consistently one less than expected means the `+1` (converting pypdf's 0-based index to a human 1-indexed page) got dropped in `load_chunks`. Garbled or empty previews mean the source PDF has no clean embedded text — that's a data problem, not a chunking bug; swap in a text-based PDF before going further.
+
 :::tip[Multiple documents, one pipeline]
 Nothing downstream of `load_chunks()` needs to know or care how many PDFs there are, or which one a chunk came from — every chunk carries its own `source` and `page`, so retrieval naturally searches across *all* your PDFs at once, and the eventual answer can mix facts from several different documents in one response, each correctly attributed.
 :::
+
+### 1.3 Verify loading and chunking
 
 **✅ Checklist**
 
@@ -202,7 +220,11 @@ Nothing downstream of `load_chunks()` needs to know or care how many PDFs there 
 
 ## Step 2: Embed your chunks locally
 
-This step is identical in spirit to the RAG App project's embedding step — the same model, the same reasoning, just embedding PDF-derived chunks instead of notes chunks. `all-MiniLM-L6-v2` maps each chunk to a point in 384-dimensional space, trained so that chunks with similar meaning end up close together. It's small (about 80MB), runs entirely on your CPU in about a second per chunk on a typical laptop, needs no API key, and costs nothing.
+This step is identical in spirit to the RAG App project's embedding step — the same model, the same reasoning, just embedding PDF-derived chunks instead of notes chunks. `all-MiniLM-L6-v2` maps each chunk to a point in 384-dimensional space, trained so that chunks with similar meaning end up close together. It's small (about 80MB), runs entirely on your CPU in about a second per chunk on a typical laptop, needs no API key, and costs nothing. Two sub-steps: the index builder, then a run to confirm the saved files.
+
+### 2.1 Write the index builder
+
+**👟 Starter hint:** Create `build_index.py` that loads the chunks, embeds their text with `SentenceTransformer`, and saves both the vectors (`index.npy`) and the chunk metadata (`chunks.json`) so Step 3's retrieval never re-embeds anything at query time:
 
 ```python
 # build_index.py
@@ -248,11 +270,25 @@ if __name__ == "__main__":
     main()
 ```
 
+**🎯 Expected output:** `SentenceTransformer(MODEL_NAME)` loads (the first run downloads the ~80MB model — needs internet and takes a moment), and `encode` plus `np.save`/`json.dump` complete without errors when `main()` runs.
+
+**🩹 If it's off:** If it prints `No chunks found -- add some .pdf files to pdfs/ first.`, the loader found nothing — check Step 1's output before blaming Step 2, since indexing an empty corpus would otherwise "succeed" silently. A hung-looking first run is usually the model downloading, not a freeze.
+
+### 2.2 Run it and confirm the saved files
+
+**👟 Starter hint:** Run the builder, then open `chunks.json` to confirm the metadata survived the trip to disk:
+
 ```bash
 uv run python build_index.py
 ```
 
 Just like the RAG App project, this deliberately avoids a vector database — for a personal folder of PDFs (dozens to low hundreds of documents, not millions), a plain NumPy array is simpler, has no extra service to install or run, and is fully transparent. `normalize_embeddings=True` scales every vector to length 1, which is what makes Step 3's cosine similarity reduce to a single dot product.
+
+**🎯 Expected output:** `index.npy` and `chunks.json` now exist in the project folder, and every entry in `chunks.json` has exactly `text`, `source`, and `page` fields whose values match what Step 1 printed.
+
+**🩹 If it's off:** If an entry in `chunks.json` is missing `source` or `page`, the loader returned dicts without those keys — fix `load_chunks()` rather than patching the output. And a stale index is a silent trap: re-run `build_index.py` any time you add, remove, or edit PDFs, because the saved vectors don't update themselves.
+
+### 2.3 Verify embedding
 
 **✅ Checklist**
 
@@ -267,7 +303,11 @@ Just like the RAG App project, this deliberately avoids a vector database — fo
 
 ## Step 3: Retrieve and generate a cited answer
 
-Retrieval works exactly like the RAG App project — embed the question, rank every chunk by cosine similarity, take the top few — except now the ranking runs across every chunk from every PDF at once, so the most relevant result for a question might come from any of your documents.
+Retrieval works exactly like the RAG App project — embed the question, rank every chunk by cosine similarity, take the top few — except now the ranking runs across every chunk from every PDF at once, so the most relevant result for a question might come from any of your documents. Three sub-steps: retrieve, generate with citations, then verify.
+
+### 3.1 Retrieve the most relevant chunks
+
+**👟 Starter hint:** Write `retrieve.py` — load the saved vectors and chunk data, embed the question, and rank every chunk by dot-product similarity (the chunks were normalized in Step 2, so that dot product *is* the cosine similarity). Return the top chunks with their scores, sources, and pages:
 
 ```python
 # retrieve.py
@@ -325,7 +365,15 @@ if __name__ == "__main__":
 uv run python retrieve.py
 ```
 
-Now generation. The prompt is the whole idea of RAG-with-citations in one place: it hands the model the retrieved chunks *labeled with their source and page*, and requires every fact in the answer to be followed by a `(source, page N)` citation copied from that label — the model isn't inventing citations, it's echoing back the ones already attached to the text it was given.
+**🎯 Expected output:** `uv run python retrieve.py` prints the top chunks for the sample question with `score  [source pN]` prefixes — and they're genuinely relevant fragments of your PDFs, drawn from whichever document best matches.
+
+**🩹 If it's off:** A `FileNotFoundError` for `index.npy`/`chunks.json` means Step 2's build never ran for this folder (or you're running from a different directory) — re-run `build_index.py`. If every score is near zero and results look random, the question vector wasn't normalized — check `normalize_embeddings=True` on the `encode` call, not just on the saved chunks.
+
+### 3.2 Generate a cited answer
+
+**👟 Starter hint:** Write `ask.py` — retrieve the top chunks, then ask a free-tier LLM to answer using only that context, with a citation rule enforced in the prompt.
+
+The prompt is the whole idea of RAG-with-citations in one place: it hands the model the retrieved chunks *labeled with their source and page*, and requires every fact in the answer to be followed by a `(source, page N)` citation copied from that label — the model isn't inventing citations, it's echoing back the ones already attached to the text it was given.
 
 ```python
 # ask.py
@@ -393,6 +441,12 @@ uv run python ask.py "How many days of paid time off do employees get?"
 Swap the `OpenAI(...)` block for your provider's own client, following the same pattern as the [RAG App project](/docs/projects/rag-notes) and the [AI Agent project](/docs/projects/ai-agent) — e.g. Google's `google-genai` package for Gemini, or `groq`'s own client for Groq. Cerebras and OpenRouter are also OpenAI-compatible, so the `openai` package works for them too, just with a different `base_url`.
 :::
 
+**🎯 Expected output:** `uv run python ask.py "How many days of paid time off do employees get?"` prints an answer, not a traceback — and every factual claim in it carries a `(source, page N)` citation.
+
+**🩹 If it's off:** A `KeyError: 'GITHUB_TOKEN'` means the `.env` key isn't being loaded — check `load_dotenv()` ran before first use, and that the variable name matches the provider table in Setup. A 429 is the provider's free-tier rate limit, not a bug. If an answer contains no citations, the prompt requirement was likely edited out, or the retrieved chunks themselves had no tags — confirm `retrieve()` returns entries with `source` and `page` (see 3.1's output) before blaming generation.
+
+### 3.3 Verify retrieval and generation
+
 **✅ Checklist**
 
 - ✅ `uv run python retrieve.py` prints results from your PDFs with plausible-looking source filenames and page numbers.
@@ -407,7 +461,11 @@ Swap the `OpenAI(...)` block for your provider's own client, following the same 
 
 ## Step 4: A small interactive loop
 
-Re-running `ask.py` with a new command-line argument for every question works, but it's slow to iterate with. Wrap it in a small loop instead, so you can keep chatting with your PDFs in one running session.
+Re-running `ask.py` with a new command-line argument for every question works, but it's slow to iterate with. Wrap it in a small loop instead, so you can keep chatting with your PDFs in one running session. Two sub-steps: the loop, then verify.
+
+### 4.1 Build the chat loop
+
+**👟 Starter hint:** Write `chat.py` — a `while True` loop around `ask()`: prompt for a question, print the cited answer, and break on `quit`/`exit` (an empty line keeps you in the loop):
 
 ```python
 # chat.py
@@ -441,6 +499,12 @@ uv run python chat.py
 :::tip[This is the whole app]
 There's no server, no framework, no UI toolkit here — a `while True` loop around `ask()` *is* a legitimate chat app. Every "chat with your data" product you've seen is this same loop underneath, with a web frontend, streaming responses, and conversation history layered on top. None of those layers change what's actually happening: retrieve, then generate, then print.
 :::
+
+**🎯 Expected output:** `uv run python chat.py` starts with a `Chat with your PDFs -- ...` banner, answers a question with a cited response, and returns to a fresh `>` prompt; typing `quit` ends it cleanly.
+
+**🩹 If it's off:** If the loop exits on a normal question, check `question.lower() in {"quit", "exit"}` — the `.strip()`/`.lower()` normalization is what stops a capital or trailing space from being treated as a quit. If the first answer takes a while, that's the one-time model-load + file-load cost described in the Socratic note below, not a freeze — later questions in the same session are the payoff.
+
+### 4.2 Verify the interactive loop
 
 **✅ Checklist**
 

@@ -128,6 +128,10 @@ years.
 
 Create `scripted_fill.py`:
 
+### 1.1 Write the hardcoded script
+
+**👟 Starter hint:** The smallest first move is a script that fills one specific form field by field, with the selectors hardcoded. Copy the script below into `scripted_fill.py`, then run it:
+
 ```python
 from playwright.sync_api import sync_playwright
 
@@ -172,9 +176,17 @@ uv run python scripted_fill.py
 A real, visible Chromium window pops up (`headless=False`), types into each field, and submits —
 httpbin echoes the submitted data back as JSON, which you should see printed in your terminal.
 
+**🎯 Expected output:** `uv run python scripted_fill.py` opens a visible browser, fills the form, and prints the submitted JSON back in your terminal.
+
+**🩹 If it's off:** If it fails with "Executable doesn't exist", you skipped `uv run playwright install chromium` in Setup — the `playwright` package is only a driver; the browser binary is a separate install. If a field simply doesn't get filled, your hardcoded selector (`input[name="custname"]` etc.) no longer matches the page — which is precisely the brittleness this whole project exists to make you feel.
+
 Now imagine the form's owner renames `custname` to `customer_name`, or adds a new required field. This
 script breaks immediately, with no idea *why* — it never looked at the page, it just replayed a fixed
 sequence of selectors. That fragility is the actual problem this project solves.
+
+### 1.2 Verify the hardcoded script
+
+**✅ Checklist**
 
   - ✅ `uv run python scripted_fill.py` opens a visible browser, fills the form, and prints the submitted JSON.
   - ✅ You can point to at least one field name or selector in the script that would silently break if the form changed.
@@ -189,6 +201,10 @@ simple, JSON-friendly arguments, the same shape you saw in the AI Agent project.
 and let it decide when to use each one.
 
 Create `browser_tools.py` (or add this to the top of `agent.py` — either works):
+
+### 2.1 Write the browser tools
+
+**👟 Starter hint:** The smallest first move is a `BrowserSession` class plus a few small functions, each with plain-string arguments (a URL, a field name, a value) and a human-readable return value. Copy the tools below:
 
 ```python
 from playwright.sync_api import sync_playwright
@@ -251,6 +267,14 @@ Notice what changed from Step 1: nothing here mentions `custname` or `size` or a
 `read_form_fields` discovers whatever fields actually exist on whatever page it's pointed at — the
 agent, not this code, is responsible for matching "customer name" to `name="custname"`.
 
+**🎯 Expected output:** Calling `read_form_fields()` manually against the live form page returns a real list of the page's actual field names and types — not a hardcoded guess.
+
+**🩹 If it's off:** If `read_form_fields()` raises `RuntimeError("No active browser session...")`, you called it before `navigate` started a session — the error message is telling you the tools expect you (or the agent) to call `navigate` first. If the list you get back is empty or wrong, check the `eval_on_selector_all` selector covers the page's real `input`/`textarea`/`select` elements.
+
+### 2.2 Verify the tools
+
+**✅ Checklist**
+
   - ✅ You can explain, in one sentence, why these tool functions take plain strings (a URL, a field name, a value) instead of a Playwright `Page` object as an argument.
   - ✅ `read_form_fields()` called manually against a real page returns a real list of the page's actual field names — not a hardcoded guess.
 
@@ -259,7 +283,11 @@ agent, not this code, is responsible for matching "customer name" to `name="cust
 ## Step 3: Give the agent a plain-English goal
 
 Now wire those tools into a `deepagents` agent, the same `create_deep_agent` pattern as the AI Agent
-project, and hand it a goal in ordinary language instead of a step-by-step script:
+project, and hand it a goal in ordinary language instead of a step-by-step script.
+
+### 3.1 Wire the tools into the agent and run it
+
+**👟 Starter hint:** The smallest first move is an agent with the six tools registered and a `system_prompt` that tells it to read the real fields before acting. Copy the code below into `agent.py`, then run it and watch the browser:
 
 ```python
 import os
@@ -303,6 +331,14 @@ Run it and watch the browser window: the agent calls `navigate`, then `read_form
 sequence of `fill_text_field`/`select_option` calls it chose itself — in an order it chose itself,
 using field names it read off the real page rather than ones you told it about in the goal text.
 
+**🎯 Expected output:** The printed final page text shows the agent filled every field from your goal and submitted — and the trace (`result["messages"]`) shows it calling `read_form_fields` *before* any `fill_text_field`/`select_option` call.
+
+**🩹 If it's off:** If the agent guesses a field name that doesn't exist (e.g. it tries to fill `"phone"` as `name="phone"`), the fill silently does nothing — that's the "never guess a field name" pitfall the system prompt exists to prevent; tighten the prompt. If you get a 401/403 or `KeyError`, your `.env` key/provider isn't set up (see Setup). If it never navigates at all, the goal may need the URL spelled out, since `navigate` is the first tool the agent must learn to reach for.
+
+### 3.2 Verify the agent
+
+**✅ Checklist**
+
   - ✅ The agent's tool calls (print `result["messages"]` and look for `AIMessage` tool-call entries, same as the AI Agent project's trace) show it calling `read_form_fields` before any `fill_text_field`/`select_option` call.
   - ✅ You changed one detail in the plain-English goal (e.g. a different topping) and re-ran it without touching any tool code, and the submission changed accordingly.
 
@@ -310,7 +346,11 @@ using field names it read off the real page rather than ones you told it about i
 
 ## Step 4: Run it end-to-end and verify the real submission
 
-Run the full script and confirm the whole loop actually worked, not just that it didn't crash:
+Run the full script and confirm the whole loop actually worked, not just that it didn't crash.
+
+### 4.1 Run end to end
+
+**👟 Starter hint:** The smallest first move is just running what you have and reading the final page text against what httpbin echoes back. Run the full script:
 
 ```bash
 uv run python agent.py
@@ -319,6 +359,14 @@ uv run python agent.py
 Check the final printed page text (from `read_page_text`) against what httpbin actually echoes back —
 it should be a JSON blob under `"form"` containing every value you asked for, using the real field
 names the agent discovered, not the plain-English names from your goal.
+
+**🎯 Expected output:** The final page text the agent shows contains every value from your goal, each correctly matched to the right field — and running it a second time with `headless=True` completes with no visible window.
+
+**🩹 If it's off:** If one field's value lands in the wrong place (say, the wrong topping), the mismatch only shows up by reading the echoed JSON carefully — that's exactly why reading the page back after submitting matters. If `headless=True` breaks where `headless=False` worked, your script was relying on visible-window timing rather than Playwright's auto-waiting.
+
+### 4.2 Verify the real submission
+
+**✅ Checklist**
 
   - ✅ The final page text shown by the agent contains every value from your goal, correctly matched to the right field.
   - ✅ You ran it a second time with `headless=True` and it completed with no visible window, confirming it doesn't secretly depend on you watching it.

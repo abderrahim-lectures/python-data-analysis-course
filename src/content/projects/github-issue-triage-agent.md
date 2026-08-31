@@ -98,7 +98,11 @@ GITHUB_API_TOKEN=
 
 ## Step 1: Fetch open issues from a real repo
 
-GitHub exposes a free REST API for reading public repo data — no authentication needed to read issues from a public repo. Create `triage.py`:
+GitHub exposes a free REST API for reading public repo data — no authentication needed to read issues from a public repo.
+
+### 1.1 Write the fetch function
+
+**👟 Starter hint:** The smallest first move is a `fetch_open_issues(owner, repo, limit)` function that returns the open issues, plus a `__main__` block that prints them. Copy the code below into `triage.py` and run it:
 
 ```python
 # triage.py
@@ -136,6 +140,12 @@ You should see up to 10 lines, each a real, currently-open issue number and titl
 Unauthenticated requests to GitHub's REST API are capped at **60 requests/hour, per IP address** — easy to hit if you're re-running this script a lot while developing, or sharing an IP with classmates on the same network. This lesson only makes one API request per run (one call fetches up to 100 issues at once), so you likely won't hit it just following along — but if you do see a `403` with a message about rate limiting, that's what happened. Setting `GITHUB_API_TOKEN` (any personal access token, no scopes required for public reads) in your `.env` raises the limit to 5,000 requests/hour — see the optional step in Setup above.
 :::
 
+**🎯 Expected output:** `uv run python triage.py` runs without errors and prints up to 10 real issue numbers and titles from `psf/requests` — and no printed line is a pull request (check a couple of the numbers against the repo's Issues tab).
+
+**🩹 If it's off:** A `403` with a "rate limit" message means GitHub's unauthenticated cap is exhausted — set `GITHUB_API_TOKEN` in `.env`. If a printed line turns out to be a PR, your `"pull_request" not in item` filter isn't running (every PR also surfaces on the `/issues` endpoint). If nothing prints for a valid repo, `fetch_open_issues` may be returning fewer than `limit` issues, or the repo has none open — try a different, active public repo.
+
+### 1.2 Verify the fetch
+
 **✅ Checklist**
 
 - ✅ `uv run python triage.py` runs without errors and prints real issue numbers and titles.
@@ -149,7 +159,11 @@ Unauthenticated requests to GitHub's REST API are capped at **60 requests/hour, 
 
 ## Step 2: Write a triage-suggestion prompt per issue
 
-Each issue needs to become a prompt asking the model for exactly two things: a label from a fixed list, and a one-sentence rationale. Add this to `triage.py`:
+Each issue needs to become a prompt asking the model for exactly two things: a label from a fixed list, and a one-sentence rationale.
+
+### 2.1 Write the prompt builder
+
+**👟 Starter hint:** The smallest first move is a `build_triage_prompt(issue)` that turns one issue's title and (truncated) body into a well-formed prompt. Copy it into `triage.py`:
 
 ```python
 MAX_BODY_CHARS = 2000  # keep each issue's body well inside any model's context window
@@ -178,6 +192,12 @@ Two deliberate choices here. First, `MAX_BODY_CHARS` truncates the issue body �
 Notice the prompt explicitly tells the model it's drafting a suggestion for human review, not applying anything. This script backs that up with real behavior, not just wording: nothing in `triage.py` ever calls a GitHub endpoint that would add a label or comment to a real issue — it only reads issues and prints text to your terminal. That's a deliberate safety boundary, the same principle behind any AI tool that touches other people's things: draft confidently, act only with a human in the loop, especially for something as easy to get subtly wrong as a one-sentence read of somebody else's bug report.
 :::
 
+**🎯 Expected output:** Printing `build_triage_prompt(issues[0])` for a real fetched issue produces a well-formed, readable prompt that includes the real issue title and truncated body — not placeholder text.
+
+**🩹 If it's off:** If the prompt shows placeholder text like `{title}`, the `.format`-style f-string didn't interpolate — make sure you're calling the returned string with the real issue dict, not a stub. If an issue's body is empty (some really do have none), the `(issue.get("body") or "(no description provided)")` fallback kicks in so the prompt still reads sensibly — confirm that's working rather than interpolating `None`.
+
+### 2.2 Verify the prompt
+
 **✅ Checklist**
 
 - ✅ `build_triage_prompt` includes the real issue title and (truncated) body, not placeholder text.
@@ -191,7 +211,11 @@ Notice the prompt explicitly tells the model it's drafting a suggestion for huma
 
 ## Step 3: Call the LLM and parse its reply
 
-Now wire up a real LLM call, and turn its two-line reply back into a usable Python `dict`:
+Now wire up a real LLM call, and turn its two-line reply back into a usable Python `dict`.
+
+### 3.1 Write `call_llm` and the reply parser
+
+**👟 Starter hint:** The smallest first move is a `call_llm(prompt)` that returns the model's text, plus a `parse_triage_reply(reply)` that turns the two-line response into a dict. Copy the code below into `triage.py`:
 
 ```python
 import os
@@ -229,6 +253,12 @@ Don't forget `from dotenv import load_dotenv` plus `load_dotenv()` near the top 
 
 `parse_triage_reply` deliberately falls back to `label="other"` and the raw reply as the rationale if the model doesn't follow the requested two-line format exactly — free-tier models occasionally add stray text or skip a line, and a slightly malformed triage *draft* is still more useful printed for a human to skim than dropped silently on a parsing error.
 
+**🎯 Expected output:** Calling `suggest_triage` on one real fetched issue returns a `dict` with a real `label` (always one of `LABEL_CHOICES` or the `"other"` fallback) and a real, sentence-length `rationale` — not an error or empty strings.
+
+**🩹 If it's off:** An empty `rationale` usually means the model skipped the `Rationale:` line — feed a deliberately malformed reply (e.g. just `"I think this is a bug"`) to `parse_triage_reply` and confirm it falls back gracefully rather than raising. A `KeyError` on `GITHUB_TOKEN` means `load_dotenv()` isn't finding your `.env` — add both `from dotenv import load_dotenv` and `load_dotenv()` near the top of the file.
+
+### 3.2 Verify the LLM call and parse
+
 **✅ Checklist**
 
 - ✅ Calling `suggest_triage` on one real fetched issue returns a `dict` with a real `label` and a real, sentence-length `rationale` — not an error or empty strings.
@@ -242,7 +272,11 @@ Don't forget `from dotenv import load_dotenv` plus `load_dotenv()` near the top 
 
 ## Step 4: Print the report and run it end to end
 
-Put the whole pipeline together — fetch, suggest, report:
+Put the whole pipeline together — fetch, suggest, report.
+
+### 4.1 Print the report and run it end to end
+
+**👟 Starter hint:** The smallest first move is a `print_triage_report` function and a `__main__` loop that fetches, suggests for each issue (with a small `time.sleep` gap), and prints the report. Copy the code below, then run it:
 
 ```python
 import time
@@ -275,6 +309,12 @@ uv run python triage.py
 ```
 
 You should see a full report: a header naming the repo and issue count, then one block per issue with its number, title, real GitHub URL, suggested label, and one-sentence rationale — plus that reminder line up top that these are drafts, not applied changes. Try pointing `owner`/`repo` at a different real, active public repo (anything with open issues works) and confirm the report adapts to genuinely different issue content, not just repeating the same output.
+
+**🎯 Expected output:** Running `triage.py` end to end prints a full report with no unhandled tracebacks — every issue has a real GitHub URL, a suggested label, and a non-empty rationale.
+
+**🩹 If it's off:** A `429` partway through the loop means you hit the LLM's free-tier rate cap — the `time.sleep(0.5)` gap between calls is there to help; add a retry-with-delay if you re-run a lot (see the AI Agent project's rate-limit pattern). If the report repeats nearly identical suggestions for every issue, either the issues genuinely are similar or the model is pattern-matching on titles alone — try a repo with more varied issues and confirm the rationales track each issue's actual content.
+
+### 4.2 Verify the end-to-end report
 
 **✅ Checklist**
 

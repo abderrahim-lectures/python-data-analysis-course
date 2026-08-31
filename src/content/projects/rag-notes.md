@@ -109,6 +109,10 @@ You can't hand a whole file to an embedding model and expect a useful search res
 
 Split each file into chunks by paragraph, then re-merge tiny paragraphs up to a target size so you're not left with dozens of one-line fragments:
 
+### 1.1 Write the chunking script
+
+**👟 Starter hint:** The smallest first move is a script that just counts how many chunks your `notes/` folder produces before any embedding happens. Copy `prepare_notes.py` below — it splits on blank lines, merges tiny paragraphs up to `TARGET_CHUNK_SIZE`, and prints a summary:
+
 ```python
 # prepare_notes.py
 """Splits every .md/.txt file in notes/ into a list of text chunks.
@@ -172,6 +176,12 @@ uv run python prepare_notes.py
 Smaller chunks retrieve more precisely (a question matches a narrow, specific piece of text) but lose surrounding context (the model sees an isolated fragment, not the paragraph around it). Larger chunks keep more context but retrieve less precisely, for the same reason a whole file does, just less severely. 500 characters is a reasonable starting point for prose notes — there's no universally correct number, and it's worth trying a few sizes on your own notes to see what retrieves better.
 :::
 
+**🎯 Expected output:** `uv run python prepare_notes.py` prints a nonzero chunk count, and the previewed chunks look like real fragments of your notes — not empty strings or one giant blob of everything merged together.
+
+**🩹 If it's off:** A chunk count of 0 means `NOTES_DIR` doesn't point at a folder containing any `.md`/`.txt` files — double-check the path from where you run the script. Ultimately one giant chunk per file usually means your notes have no blank-line paragraph breaks, so `split_into_paragraphs` treats the whole file as a single paragraph — which will blur retrieval later (see the Socratic question).
+
+### 1.2 Verify the chunking
+
 **✅ Checklist**
 
 - ✅ `uv run python prepare_notes.py` runs without errors and prints a nonzero chunk count.
@@ -188,6 +198,10 @@ Smaller chunks retrieve more precisely (a question matches a narrow, specific pi
 An **embedding** is a list of numbers — a vector — that represents a piece of text's *meaning*, not its exact wording. `all-MiniLM-L6-v2` maps each chunk to a point in 384-dimensional space, and it's trained so that chunks with similar meaning end up close together in that space, while unrelated chunks end up far apart. You already have the core intuition for this: it's the same idea as plotting numeric data on axes, just with 384 axes instead of 2, and "close together" measured the same way you'd measure distance in any space of numbers.
 
 This model is small (about 80MB), runs entirely on your CPU in about a second per chunk on a typical laptop, needs no API key, and costs nothing — unlike the LLM in Step 4, embedding is fully local.
+
+### 2.1 Build the embedding index
+
+**👟 Starter hint:** The smallest first move is a script that embeds every chunk and saves the vectors. Copy `build_index.py` below — it loads your chunks from Step 1, embeds them locally with `all-MiniLM-L6-v2`, and writes two files (`index.npy` for the vectors, `chunks.json` for the text), so query time never has to re-embed anything:
 
 ```python
 # build_index.py
@@ -240,6 +254,12 @@ This deliberately avoids a vector database — for a personal folder of notes (h
 
 `normalize_embeddings=True` scales every vector to length 1 — worth doing now rather than at query time, since it's what makes Step 3's cosine similarity reduce to a single dot product.
 
+**🎯 Expected output:** `uv run python build_index.py` completes and prints the saved shape — a first number matching your Step 1 chunk count and a second number of `384` — and `index.npy` plus `chunks.json` now exist in your project folder.
+
+**🩹 If it's off:** If it prints "No chunks found", `notes/` is empty or `load_chunks` isn't seeing your files — check `NOTES_DIR` and re-run `prepare_notes.py`. If the shape's second number isn't 384, your model produced a different embedding dimension, which is fine as long as you keep using the *same* model for queries.
+
+### 2.2 Verify the index
+
 **✅ Checklist**
 
 - ✅ `uv run python build_index.py` completed without errors.
@@ -259,7 +279,11 @@ $$
 \text{cosine\_similarity}(a, b) = \frac{a \cdot b}{\|a\| \, \|b\|}
 $$
 
-Since every vector was already normalized to length 1 when it was saved ($\|a\| = \|b\| = 1$), the denominator is just 1, and cosine similarity collapses to a plain dot product — one reason to normalize at embedding time rather than skip it:
+Since every vector was already normalized to length 1 when it was saved ($\|a\| = \|b\| = 1$), the denominator is just 1, and cosine similarity collapses to a plain dot product — one reason to normalize at embedding time rather than skip it.
+
+### 3.1 Write the retrieval function
+
+**👟 Starter hint:** The smallest first move is a `retrieve(question, top_k)` function that loads the saved index and returns the most similar chunks. Copy `retrieve.py` below — it embeds the question with the *same* model, dot-products it against every saved vector, and ranks by score:
 
 ```python
 # retrieve.py
@@ -317,6 +341,12 @@ uv run python retrieve.py
 
 `embeddings @ question_vector` is matrix-vector multiplication: every row of the matrix dotted with the question vector, all at once, in one NumPy call — the same operation from the course's linear algebra material, here doing the actual work of comparing one question against every chunk in the notes.
 
+**🎯 Expected output:** `uv run python retrieve.py` prints `top_k` results, each with a similarity score and a source filename, and the top-ranked chunk for an easy, obvious test question actually looks relevant when you read it.
+
+**🩹 If it's off:** Scores far outside the -1 to 1 range almost always mean one of the vectors wasn't normalized — go back and confirm `normalize_embeddings=True` is on both in `build_index.py` and in `retrieve()`. If `retrieve` errors with `FileNotFoundError`, the index from Step 2 doesn't exist — re-run `uv run python build_index.py` first.
+
+### 3.2 Verify retrieval
+
 **✅ Checklist**
 
 - ✅ `uv run python retrieve.py` prints `top_k` results, each with a similarity score and a source filename.
@@ -331,6 +361,10 @@ uv run python retrieve.py
 ## Step 4: Generate an answer with a free LLM
 
 Retrieval alone gives you back raw chunks of your own notes — useful, but not a written answer. The last step hands those chunks to a language model as context and asks it to answer *using them*. This is what "RAG" (retrieval-augmented generation) means: generation, augmented by a retrieval step run first. You already got a free-tier API key and installed the `openai` client during Setup, above.
+
+### 4.1 Write `ask.py`
+
+**👟 Starter hint:** The smallest first move is a script that glues retrieval to generation. Copy `ask.py` below — it retrieves the top chunks, builds a prompt that hands the model only that context, and prints the answer:
 
 ```python
 # ask.py
@@ -392,6 +426,12 @@ uv run python ask.py "What is this course about?"
 :::tip[Using a different provider?]
 Swap the `OpenAI(...)` block for your provider's own client, following the same pattern as the [AI Agent project](/docs/projects/ai-agent#step-1-write-your-first-agent) — e.g. Google's `google-genai` package for Gemini, or `groq`'s own client for Groq. Cerebras and OpenRouter are also OpenAI-compatible, so the `openai` package works for them too, just with a different `base_url`.
 :::
+
+**🎯 Expected output:** `uv run python ask.py "a real question about your notes"` prints an answer, not a traceback — and the answer reflects the content of your notes, not generic knowledge the model already had.
+
+**🩹 If it's off:** A `KeyError` on `GITHUB_TOKEN` means `load_dotenv()` isn't picking up your `.env` — check the file exists next to where you run the script. If the answer is generic knowledge instead of your notes' content, retrieval returned the wrong chunks (re-check Step 3) or the model ignored the context. If asking something your notes clearly don't cover still produces a confident invented answer, the "say so" instruction isn't being followed — that's exactly what Step 4's Socratic question probes.
+
+### 4.2 Verify the RAG answer
 
 **✅ Checklist**
 

@@ -106,7 +106,9 @@ With `uv` installed, the project set up, and `.env` filled in, you're ready to b
 
 The repo example ships six short, realistic sample emails in `sample_emails/` — an urgent client request, a newsletter, two messages that genuinely need a reply, a spammy promo, and an automated FYI notification. They're plain text files shaped like a simplified `.eml`: a few `Header: value` lines, a blank line, then the body.
 
-Create `triage.py` and start with a small parser:
+### 1.1 Create `triage.py` and parse one email
+
+**👟 Starter hint:** Start with the smallest first move — a parser that turns one plain-text `.eml`-shaped file into a structured `Email` object. Copy the code below into a new `triage.py`, copy the six sample files from the repo example's [`sample_emails/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/email-triage-agent/sample_emails) folder into your own `sample_emails/`, and run it:
 
 ```python
 # triage.py
@@ -159,13 +161,17 @@ if __name__ == "__main__":
         print(f"[{email.filename}] {email.subject!r} from {email.sender}")
 ```
 
-Copy the six sample files from the repo example's [`sample_emails/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/email-triage-agent/sample_emails) folder into your own project's `sample_emails/` folder, then run:
-
 ```bash
 uv run python triage.py
 ```
 
+**🎯 Expected output:** `uv run python triage.py` runs without errors and prints six loaded emails, each line showing a real subject and sender — not `"unknown"` or `"(no subject)"`.
+
+**🩹 If it's off:** If every line prints `"unknown"` or `"(no subject)"`, the parser isn't finding the `From:`/`Subject:` headers — check that `text.partition("\n\n")` is splitting on the real blank line between headers and body, and that `sample_emails/` actually contains all six `.txt` files.
+
 `text.partition("\n\n")` is doing the real work here: it splits the file into exactly two pieces at the *first* blank line — everything before it (the headers) and everything after (the body) — which is enough structure to work with without pulling in a full email-parsing library for text this simple.
+
+### 1.2 Verify the parser
 
 **✅ Checklist**
 
@@ -180,7 +186,11 @@ uv run python triage.py
 
 ## Step 2: Categorize and prioritize each email with an LLM
 
-Now hand each parsed email to a language model and ask it to sort it into a category and a priority — the actual triage step. Add this to `triage.py`:
+Now hand each parsed email to a language model and ask it to sort it into a category and a priority — the actual triage step.
+
+### 2.1 Build the client and the triage prompt
+
+**👟 Starter hint:** The smallest first move is getting a working client and a prompt that returns *structured* output. Copy the provider table, `build_client`, and `TRIAGE_PROMPT`/`triage_email` below into `triage.py` — the prompt is what turns the model's free-text reply into something `json.loads` can reliably parse:
 
 ```python
 import json
@@ -265,7 +275,17 @@ def triage_email(client: OpenAI, model: str, email: Email) -> dict:
     return json.loads(content)
 ```
 
-Update the `if __name__ == "__main__":` block to actually call it:
+**🎯 Expected output:** Calling `triage_email(client, model, email)` on one of the six emails returns a dict with exactly the keys from the prompt — `category`, `priority`, `reasoning`, `needs_reply` — and no `JSONDecodeError`.
+
+**🩹 If it's off:** A `JSONDecodeError` means the model returned text `json.loads` can't parse. Print the raw `content` string *before* parsing it to see what actually came back — models often wrap JSON in a ```` ```json ```` fence despite being told not to, which is exactly why the `content.strip("`")` line above exists.
+
+:::tip[Ask for a fixed set of categories, not free text]
+`TRIAGE_PROMPT` spells out the exact five allowed category strings rather than asking the model to "come up with a category." A model given a fixed, explicit list is far more consistent from one email to the next than one asked to invent labels freely — which matters here, since downstream code (Step 3's `if verdict["needs_reply"]`) depends on the values being predictable.
+:::
+
+### 2.2 Wire it into the main block and run
+
+**👟 Starter hint:** Now call `triage_email` on every loaded email. Update the `if __name__ == "__main__":` block to build the client once, loop over the emails, and print each verdict:
 
 ```python
 if __name__ == "__main__":
@@ -285,9 +305,11 @@ uv run python triage.py
 
 The prompt asking for "ONLY a JSON object" and then parsing it with `json.loads` is what turns a free-text model response into something your code can actually branch on (`verdict["category"]`, `verdict["needs_reply"]`) — the same idea as `int(input(...))` turning free-typed keyboard text into something your code can do arithmetic on, just with a language model standing in for the keyboard. Models occasionally wrap JSON in a ```` ```json ```` fence despite being told not to; the `content.strip("`")` line is there specifically to survive that without crashing.
 
-:::tip[Ask for a fixed set of categories, not free text]
-`TRIAGE_PROMPT` spells out the exact five allowed category strings rather than asking the model to "come up with a category." A model given a fixed, explicit list is far more consistent from one email to the next than one asked to invent labels freely — which matters here, since downstream code (Step 3's `if verdict["needs_reply"]`) depends on the values being predictable.
-:::
+**🎯 Expected output:** `uv run python triage.py` prints a category, priority, and reasoning line for all six sample emails — and the urgent client email's category/priority clearly differs from the newsletter's.
+
+**🩹 If it's off:** If the script crashes partway with a `KeyError` on `verdict["category"]`, the model's reply didn't have that key — print the raw `content` string to see what shape it actually returned, and check your `.env` provider/key settings from Setup are correct.
+
+### 2.3 Verify the categorization
 
 **✅ Checklist**
 
@@ -304,7 +326,9 @@ The prompt asking for "ONLY a JSON object" and then parsing it with `json.loads`
 
 This is the step where "agent" starts to mean something more than "categorizer" — for anything the model marked `needs_reply: true`, ask it to draft an actual reply. But this is also where this project draws a hard line: **the agent only ever drafts text. It never sends anything, to anyone, under any condition.** There is no SMTP code in this project at all — not commented out, not behind a flag, simply not present, because a script that *can* send email is one bug or one bad prompt away from actually doing it.
 
-Add this to `triage.py`:
+### 3.1 Write the `draft_reply` function
+
+**👟 Starter hint:** The smallest first move is a function that turns one email into one draft *string* — nothing more. Copy `DRAFT_REPLY_PROMPT` and `draft_reply` below into `triage.py`. Note the design on purpose: this function only ever returns a string; there is no sending code, not even commented out:
 
 ```python
 DRAFT_REPLY_PROMPT = """Draft a short, professional reply to the email below. Write ONLY the reply body text -- no subject line, no commentary about what you're doing, just the reply itself, as if the recipient is about to review and send it.
@@ -329,9 +353,15 @@ def draft_reply(client: OpenAI, model: str, email: Email) -> str:
     return response.choices[0].message.content.strip()
 ```
 
+**🎯 Expected output:** Calling `draft_reply(client, model, email)` on one of the six emails returns a single plain string — a short, professional reply body, with nothing about it touching the network except that one LLM API call.
+
+**🩹 If it's off:** If you find yourself "helpfully" adding a send step — a comment like `# TODO: send`, an `import smtplib`, an `if confidence > 0.9: send()` branch — stop. That's the one line this project is deliberately refusing to cross. The function returns a string and saves it locally; review and send happen by hand, on purpose.
+
 :::tip[Never let an agent send anything without you in the loop]
 This is the single most important lesson in this project, more important than any specific line of code: an agent that can *draft* a reply is useful; an agent that can *send* one autonomously is a very different, much riskier thing — one wrong categorization, one prompt-injected instruction hidden in a message body, or one model having a bad day, and it's sent something you never approved, to someone real, that you can't take back. This project's `draft_reply` function returns a string and does nothing else — no `smtplib`, no "auto-send if confidence is high," no automatic anything. That's not a missing feature. It's the design. Keep that boundary if you extend this project yourself.
 :::
+
+### 3.2 Verify the draft-only boundary
 
 **✅ Checklist**
 
@@ -346,7 +376,9 @@ This is the single most important lesson in this project, more important than an
 
 ## Step 4: Run it end to end and review the output
 
-Wire everything together — categorize every email, draft a reply for the ones that need one, and save each draft to a local `drafts/` folder instead of printing walls of text to the terminal:
+### 4.1 Wire everything together and save drafts
+
+**👟 Starter hint:** The smallest first move is connecting what you already have: categorize every email, and for each one marked `needs_reply`, call `draft_reply` and *write* its result to a `drafts/` folder instead of walls of text in the terminal. Replace the `if __name__ == "__main__":` block with this:
 
 ```python
 DRAFTS_DIR = Path("drafts")
@@ -378,6 +410,12 @@ uv run python triage.py
 ```
 
 Open the files in `drafts/` and actually read them — this is the point of the whole project. Would you send what the model drafted, as-is? Would you edit it first? For at least one draft, rewrite it in your own words before you'd consider it "done" — that editorial pass is exactly the human-in-the-loop step this project is built around, not an afterthought bolted on top of it.
+
+**🎯 Expected output:** `uv run python triage.py` runs to completion, prints a triage line for all six emails, and `drafts/` contains exactly one saved reply file for each email the model marked `needs_reply: true` — and no file for the ones it didn't.
+
+**🩹 If it's off:** If a `drafts/` file is missing or empty, the model likely returned `needs_reply: false` for that email, or `draft_reply` returned an empty string — print the reply before writing it to see what actually came back. If the paths look wrong, make sure `DRAFTS_DIR` is a `Path` relative to where you run the script and that `DRAFTS_DIR.mkdir(exist_ok=True)` runs *before* the loop tries to write into it.
+
+### 4.2 Verify the end-to-end run
 
 **✅ Checklist**
 

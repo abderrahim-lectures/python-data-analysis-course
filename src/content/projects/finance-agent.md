@@ -97,6 +97,10 @@ This project works on a **synthetic** sample CSV — fake dates, fake merchant n
 
 Download the sample CSV, or copy it from [`examples/finance-agent/transactions.csv`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/finance-agent/transactions.csv) into your project folder. It looks like a real export: one row per transaction, a date, a raw merchant description exactly as a bank would print it (abbreviated, sometimes cryptic), and a signed amount — negative for money out, positive for deposits.
 
+### 1.1 Load and clean the CSV
+
+**👟 Starter hint:** The smallest first move is a pandas DataFrame that parses dates as real timestamps and drops malformed rows. Run this in a notebook cell or script:
+
 ```python
 import pandas as pd
 
@@ -107,6 +111,12 @@ df.head()
 ```
 
 `parse_dates=["date"]` gets you real `Timestamp` objects instead of plain strings, so later steps can group by month or sort chronologically without re-parsing anything. `.str.strip()` cleans up the stray whitespace real bank exports are full of. Dropping rows missing any of the three essential columns is a cheap, honest way to handle a genuinely malformed row without guessing what it meant.
+
+**🎯 Expected output:** `df["date"].dtype` shows a datetime type (not `object`), `df["amount"]` contains both negative and positive values, and `df.isna().sum()` shows no missing values in `date`, `description`, or `amount`.
+
+**🩹 If it's off:** If `date` is still `object`, the CSV's date column didn't parse — check `parse_dates=["date"]` matches the actual column name (a `ParserError` or a silently-string dtype both mean the column name is off). If there are still NaNs after `dropna`, some rows are missing one of the three columns and were kept — but that's expected handling, so confirm the drop actually ran by checking the row count changed.
+
+### 1.2 Verify the cleaned DataFrame
 
 **✅ Checklist**
 
@@ -121,6 +131,10 @@ A real bank export might also include a running `balance` column. Nothing in thi
 ## Step 2: Build a rule-based baseline categorizer — and see its limits
 
 The cheapest way to categorize a transaction is a keyword lookup: if `"STARBUCKS"` appears in the description, call it `"Dining"`. This is fast, free, and needs no API key at all — a good instinct to reach for before adding any AI to a pipeline.
+
+### 2.1 Write the rule-based categorizer
+
+**👟 Starter hint:** The smallest first move is a `RULES` dict plus a `categorize_rule_based(description)` function that returns a category or `None` when no keyword matches. Copy it and apply it to the DataFrame with `.apply(...)`:
 
 ```python
 RULES = {
@@ -146,6 +160,12 @@ print(f"Rule-based pass: {resolved}/{len(df)} categorized. {len(df) - resolved} 
 
 Run this against the sample data and a solid majority of rows get categorized instantly. But look at what's left in `df[df["category"].isna()]`: descriptions like `SQ *JOES COFFEE CART`, `TST* CORNER BISTRO`, `PAYPAL *MERCHXYZ123`, `AMZN MKTP US*1H8KX2LP2`, and `VENMO PAYMENT JSMITH`. A human glancing at `SQ *JOES COFFEE CART` recognizes "coffee cart" instantly — but no fixed keyword list can anticipate every payment-processor prefix (`SQ *`, `TST*`, `PAYPAL *`) or peer-to-peer transfer a bank export will ever contain. This is a real, common limitation of rule-based approaches to messy real-world text, not a contrived one — it's exactly the gap the next step exists to close.
 
+**🎯 Expected output:** The printout shows a solid majority of rows categorized and a handful left ambiguous — and printing `df[df["category"].isna()]` shows rows that are genuinely ambiguous (a payment-processor prefix or a P2P transfer), not just typos in your rules dict.
+
+**🩹 If it's off:** If *everything* comes back `None`, your `RULES` keywords don't match anything in the lowercase descriptions — check a few real description strings against your keywords. If you added a keyword per remaining row until they were all resolved, you're rules-patching the problem away: a few unresolved rows is the expected outcome this step exists to surface, not a bug.
+
+### 2.2 Verify the rule-based pass
+
 **✅ Checklist**
 
 - ✅ You can print the exact rows `categorize_rule_based` left as `None`, and see why each one is genuinely ambiguous (a payment-processor prefix or a P2P transfer, not just a typo in your rules dict).
@@ -158,6 +178,10 @@ If you kept adding keywords forever, could you eventually cover every possible b
 ## Step 3: Build an LLM agent tool that categorizes ambiguous transactions
 
 This is the same tool-calling shape from [Build an AI Agent](/docs/projects/ai-agent): a Python function with a docstring, handed to `create_deep_agent`, which the model decides to call on its own.
+
+### 3.1 Build the categorize tool and the agent
+
+**👟 Starter hint:** The smallest first move is one tool — `categorize_transaction(description, amount)` with a docstring that lists all 13 valid categories — wired into a `create_deep_agent`. Copy the code below, then loop it over the rows Step 2 left unresolved:
 
 ```python
 import os
@@ -231,6 +255,12 @@ Notice the loop calls `agent.invoke(...)` once per unresolved row, each a separa
 The `categorize_transaction` body above is deliberately still a small heuristic, not a hardcoded lookup — but you can go further: give the agent's `system_prompt` the full category list and ask it to reason about an unfamiliar description directly (`"SQ *"` is Square's point-of-sale prefix; `"TST*"` is Toast's — a model that's seen enough real-world payment data can often infer "this is probably a small restaurant or cart" from the shape of the string alone, the same way a human would). The repo's fuller example at [`examples/finance-agent/finance_agent.py`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/finance-agent) is written to make this swap easy — see its comments.
 :::
 
+**🎯 Expected output:** Every row that was `None` after Step 2 now has a non-null `category`, and `df["category"].value_counts()` shows categories that make sense for what you know about each merchant.
+
+**🩹 If it's off:** If some rows are still `NaN`, the `next((c for c in CATEGORIES if c.lower() in text.lower()), "Other")` fallback found no known category in the model's reply and the loop hit an exception — print the raw model text for one row to see what it returned. If you hit a 429, you're running one `agent.invoke` per unresolved row and hitting the free-tier rate cap; see the rate-limit note above for a retry pattern.
+
+### 3.2 Verify the LLM categorization
+
 **✅ Checklist**
 
 - ✅ Every row that was `None` after Step 2 now has a non-null `category` after this step runs.
@@ -244,6 +274,10 @@ The tool's docstring lists all 13 valid categories, and the code that reads the 
 ## Step 4: Flag statistical anomalies and summarize them in plain English
 
 "Anomaly" here means: unusually large *for that category*. A $400 hotel charge is unremarkable for Travel but a clear outlier for Dining — so instead of one global dollar threshold, compute a per-category **z-score**: how many standard deviations a transaction sits above its own category's mean spend.
+
+### 4.1 Compute per-category z-scores
+
+**👟 Starter hint:** The smallest first move is computing how far each transaction sits above its own category's mean. Copy the code below — it adds `spend_abs`, per-category `category_mean`/`category_std`, a `z_score`, and an `is_anomaly` flag:
 
 ```python
 spend = df["amount"].where(df["amount"] < 0)
@@ -264,7 +298,13 @@ flagged[["date", "description", "spend_abs", "category", "category_mean", "z_sco
 
 A z-score of 2.0 means "more than two standard deviations above this category's average" — a common, if somewhat arbitrary, statistical rule of thumb for "unusual." Run this on the sample data and you should see a couple of transactions stand out clearly: an outsized electronics purchase relative to typical Shopping spend, and one restaurant charge far above typical Dining spend (a big group dinner, maybe — the data can't say why, only that it's unusual).
 
-Now hand the raw flagged list to the same agent and ask it to explain what it found, in plain language:
+**🎯 Expected output:** `flagged` contains the transaction(s) you'd expect to stand out by eye (an outsized electronics purchase, a big restaurant charge) and excludes ordinary, predictable ones — and you can explain why the z-score is computed *per category*, not globally across all spending.
+
+**🩹 If it's off:** If `flagged` is empty, the `>= 2.0` threshold is too strict for this data (or NaN `z_score`s weren't filled by `.fillna(False)`). If `flagged` contains rows you wouldn't call unusual, the math is being pulled by a category with very few transactions whose standard deviation is tiny — check `category_std` and revisit the Socratic question below.
+
+### 4.2 Summarize the anomalies in plain English
+
+**👟 Starter hint:** The smallest first move is turning the raw `flagged` rows into a readable bullet list, then asking the same agent to summarize it within strict bounds. Copy the code below:
 
 ```python
 summary_lines = [
@@ -290,6 +330,12 @@ print(result["messages"][-1].content)
 ```
 
 The prompt deliberately says "no new numbers, no advice beyond what the data supports" — a real guard against a common failure mode of LLM summaries: inventing a plausible-sounding but unsupported explanation ("this was probably a birthday dinner") instead of sticking to what the statistics actually show.
+
+**🎯 Expected output:** The agent prints a 2-4 sentence plain-English summary that mentions only categories and amounts that actually appear in `anomaly_summary` — nothing invented.
+
+**🩹 If it's off:** If the summary invents a reason ("this was probably a birthday dinner"), the prompt let it drift past the numbers it was given — re-add the strict "no new numbers, no advice beyond what the data supports" constraint. If it lists figures that aren't in `anomaly_summary`, the model hallucinated a number; treat any value it didn't receive as fabricated and constrain it harder.
+
+### 4.3 Verify the anomaly report
 
 **✅ Checklist**
 

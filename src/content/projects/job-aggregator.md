@@ -75,7 +75,11 @@ If you extend this project to point at a real, live job board or any other real 
 
 ## Step 1: Parse a single listing page into structured fields
 
-Open [`board_alpha.html`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/job-aggregator/sample_data/board_alpha.html) in a text editor. Each listing sits inside a `<div class="job-card">`, with the title in an `<h2 class="job-title">`, the company in a `<span class="company">`, the location in a `<span class="location">`, and a description in a `<p class="description">`. That's the same `find`/`find_all` pattern from Scrape and Analyze a Live Website, just applied to a local file instead of a live response:
+Open [`board_alpha.html`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/job-aggregator/sample_data/board_alpha.html) in a text editor. Each listing sits inside a `<div class="job-card">`, with the title in an `<h2 class="job-title">`, the company in a `<span class="company">`, the location in a `<span class="location">`, and a description in a `<p class="description">`. That's the same `find`/`find_all` pattern from Scrape and Analyze a Live Website, just applied to a local file instead of a live response.
+
+### 1.1 Write the Alpha parser
+
+**👟 Starter hint:** Inspect `board_alpha.html` first to confirm the CSS selectors, then write the loop — for each `div.job-card`, pull the title, company, location, and description with `find(...).get_text(strip=True)` and print one line per listing.
 
 ```python
 # aggregate.py
@@ -99,6 +103,12 @@ uv run python aggregate.py
 ```
 
 You should see four printed lines, one per listing on Alpha's board.
+
+**🎯 Expected output:** `uv run python aggregate.py` runs without errors and prints exactly 4 lines, one per listing in `board_alpha.html`, each with a real title, company, and location — not `None` or an empty string.
+
+**🩹 If it's off:** A `NoneType` error on `.get_text(...)` means the selector found no tags — a typo in `class_="job-card"` or the inner selector. If a field prints empty, `.get_text(strip=True)` found the tag but no text — check the HTML actually wraps that value in that tag.
+
+### 1.2 Verify the single-source parse
 
 **✅ Checklist**
 

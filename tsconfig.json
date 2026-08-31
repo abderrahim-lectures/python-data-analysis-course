@@ -1,5 +1,9 @@
 {
   "extends": "astro/tsconfigs/strict",
   "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist"]
+  "exclude": [
+    "dist",
+    "jupyterlite-config/_output",
+    "jupyterlite-config/.jupyterlite.doit.db"
+  ]
 }

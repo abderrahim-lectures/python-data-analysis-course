@@ -106,6 +106,8 @@ Instead of `export`-ing a key in every new terminal session, `python-dotenv` rea
 
 Python's `subprocess` module runs another program and captures its output as text — here, that program is `git` itself. This is a genuinely realistic use of `subprocess`: you're not simulating anything, you're running the exact same `git diff` command you'd type by hand, and reading back exactly what it would print to your terminal.
 
+### 1.1 Write the `git` wrappers
+
 Create `review.py`:
 
 ```python
@@ -143,6 +145,14 @@ if __name__ == "__main__":
 
 `subprocess.run([...], capture_output=True, text=True)` is the key line: passing the command as a **list** of arguments (`["git", "diff", "HEAD"]`) rather than one shell string avoids a whole class of shell-quoting and injection bugs, `capture_output=True` grabs stdout/stderr instead of letting them print directly to your terminal, and `text=True` decodes that output as a string instead of raw bytes. `check=False` plus a manual `if result.returncode != 0` is deliberate here rather than `check=True`: it lets this function raise its *own* clear error message (including git's real stderr) instead of a generic `CalledProcessError`.
 
+**👟 Starter hint:** Create `review.py` with the three diff-returning functions (`_get_diff_uncommitted`, `_get_diff_against`, `_get_diff_for_commit`) plus a shared `_run_git` helper, and run the `__main__` block from a real git repo.
+
+**🎯 Expected output:** `get_diff_uncommitted()` returns real diff text when you have uncommitted changes, and an empty string when you don't. Running `review.py` inside a folder that isn't a git repo raises a clear `RuntimeError`, not a confusing traceback from deep inside `subprocess`.
+
+**🩹 If it's off:** If you get a raw `CalledProcessError` or a broken traceback, you likely used `check=True` (which throws that generic error) instead of the manual `returncode` check that raises a readable `RuntimeError` with git's stderr. If no diff appears where you expect one, `diff HEAD` compares against the last commit — with nothing committed, there's nothing to diff against.
+
+### 1.2 Try it against a real diff
+
 Try it against this project itself — edit any file, don't commit, then run:
 
 ```bash
@@ -152,6 +162,14 @@ uv run python review.py
 :::tip[This is the same subprocess pattern as any other CLI wrapper]
 `subprocess.run` doesn't care that the program being run is `git` — it works identically for any command-line tool: `ls`, a shell script, another Python program. Once this pattern clicks, "let Python drive an existing CLI tool and use its output" becomes available for a lot more than just git.
 :::
+
+**👟 Starter hint:** Make a small edit to any file (don't commit), then run `review.py` from that repo and watch it print the uncommitted diff.
+
+**🎯 Expected output:** `uv run python review.py` prints the actual uncommitted diff text; with nothing changed it prints "No uncommitted changes to review."
+
+**🩹 If it's off:** If running from a non-repo folder doesn't raise your clear `RuntimeError`, the `returncode` check isn't wired up. If the output is empty despite changes, confirm your edits are uncommitted and that you're in the right directory.
+
+### 1.3 Verify the diff capture
 
 **✅ Checklist**
 
@@ -167,6 +185,8 @@ uv run python review.py
 ## Step 2: Design the review system prompt
 
 A language model with no instructions will happily produce "looks good to me!" for almost anything — useless as a reviewer. The **system prompt** is what turns a general-purpose chat model into a reviewer that behaves consistently: what to look for, what to ignore, and what shape its answer should take.
+
+### 2.1 Write the system prompt
 
 ```python
 SYSTEM_PROMPT = """\
@@ -199,15 +219,39 @@ found, because ..." paragraph), not prose paragraphs.
 """
 ```
 
+**👟 Starter hint:** Define a `SYSTEM_PROMPT` constant that pins down three things: what to review (only the diff), what shape each finding takes (file, category, severity, explanation, fix), and what to do when nothing's wrong (say so plainly). Run it against a diff you already know has a bug as you go.
+
+**🎯 Expected output:** A single `SYSTEM_PROMPT` string exists that specifies the per-issue structure and the "say when nothing's wrong" instruction.
+
+**🩹 If it's off:** If the prompt only says "be a helpful reviewer," the model will drift to generic chat. The specific output structure (file/category/severity/explanation/fix) is what turns the reply into actionable feedback rather than impressions.
+
+### 2.2 Review the three deliberate design choices
+
 Three deliberate design choices worth noticing:
 
 - **"Review ONLY what the diff actually changes"** stops the model from inventing plausible-sounding complaints about code it can't actually see — a diff shows changed lines plus a little surrounding context, not the whole file.
 - **A required structure** (file, category, severity, explanation, fix) is what turns free-form chat into something you can actually act on quickly, the same reason a human reviewer's "LGTM with two comments" is more useful than a paragraph of vague impressions.
 - **An explicit instruction to say when nothing's wrong** exists because models tend toward being agreeable — without this line, some models manufacture minor nitpicks just to seem thorough, which trains you to stop trusting the tool's output.
 
+**👟 Starter hint:** Read your `SYSTEM_PROMPT` back and check that it names all three choices — the "only what the diff changes" scope, the required per-issue structure, and the explicit no-issues clause.
+
+**🎯 Expected output:** You can explain in your own words why the prompt tells the model to say when it finds nothing wrong, and confirm the prompt specifies a concrete output structure rather than just "give feedback."
+
+**🩹 If it's off:** If the "only the diff" scope isn't explicit, the model will comment on surrounding code it can't see. If the no-issues clause is missing, models lean agreeable and manufacture nitpicks.
+
+### 2.3 Iterate on the prompt
+
 :::tip[Iterate on the prompt like you would on code]
 Treat this system prompt as a first draft, not a finished spec. Run it against a diff you already know has a specific bug in it — if the model misses it, or the response format drifts, tighten the wording and try again. Prompt engineering for a focused task like this is closer to writing a very precise spec than "asking nicely."
 :::
+
+**👟 Starter hint:** Take a diff you know contains a deliberate bug and run it through your prompt — check whether the model catches it and whether the output format holds.
+
+**🎯 Expected output:** The model flags the known bug and sticks to the requested format; if it misses it or drifts, you've identified exactly which wording to tighten.
+
+**🩹 If it's off:** If the model consistently misses the bug, don't blame randomness — tighten the "Focus on" list or add a targeted instruction, then re-run. Iterating here is the whole point of the tip.
+
+### 2.4 Verify the prompt
 
 **✅ Checklist**
 
@@ -221,7 +265,11 @@ Treat this system prompt as a first draft, not a finished spec. Run it against a
 
 ## Step 3: Call the LLM and print structured feedback
 
-Wire the diff-capturing code from Step 1 and the system prompt from Step 2 together into one working reviewer:
+Wire the diff-capturing code from Step 1 and the system prompt from Step 2 together into one working reviewer.
+
+### 3.1 Write `review_diff` and `truncate_diff`
+
+**👟 Starter hint:** Extend `review.py` with `truncate_diff(diff)` (which caps oversized diffs to fit a free-tier context window) and `review_diff(diff)` — the function that sends the system prompt plus the diff to the model and returns the review. Guard the empty-diff case *before* building the client.
 
 ```python
 # review.py (continued -- add these imports and functions)
@@ -267,6 +315,12 @@ if __name__ == "__main__":
 
 `truncate_diff` matters more here than it might first appear — see the pitfalls section below for why a large diff isn't just slow, it can silently fail or get a shallow review. Wrapping the diff in a fenced ` ```diff ` code block in the user message, rather than pasting it in raw, is a small but real signal to the model about what kind of text it's looking at.
 
+**🎯 Expected output:** With uncommitted changes, `review_diff(diff)` returns a numbered list of real issues (or a clear "no issues found" message). With an empty diff, it returns the fixed string without making any API call.
+
+**🩹 If it's off:** If an empty diff still hits the API, your early return isn't first — check the guard sits before the `OpenAI(...)` client is built. If a very large diff errors out or reviews shallowly, `truncate_diff`'s cap is what's keeping it within the context window; don't remove the cap for genuinely huge changes, review them in pieces instead.
+
+### 3.2 Run it and try a different provider
+
 Run it:
 
 ```bash
@@ -276,6 +330,14 @@ uv run python review.py
 :::tip[Using a different provider?]
 Swap the `OpenAI(...)` block for a different `base_url` and key — e.g. `base_url="https://api.groq.com/openai/v1"` with `api_key=os.environ["GROQ_API_KEY"]` for Groq, or `base_url="https://generativelanguage.googleapis.com/v1beta/openai/"` with `api_key=os.environ["GOOGLE_API_KEY"]` for Gemini's OpenAI-compatible endpoint. Everything else in this file stays the same. See [`examples/agentic-code-reviewer/review.py`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/agentic-code-reviewer/review.py) in the course repo for all six wired up side by side, selectable with one environment variable.
 :::
+
+**👟 Starter hint:** Run `review.py` on a diff you know contains a problem and confirm it reports real issues. If you want another provider, only the `OpenAI(...)` block's `base_url` and key need to change.
+
+**🎯 Expected output:** `uv run python review.py` prints a numbered list of real issues (or a clear "no issues found" message) for a diff you know has changes in it, each issue naming a file and a category.
+
+**🩹 If it's off:** If output is a vague one-liner, the model ignored the requested structure — tighten the system prompt's format instructions. If switching providers fails to authenticate, the env var name in `.env` must match whichever key the new `base_url` expects.
+
+### 3.3 Verify the review call
 
 **✅ Checklist**
 
@@ -290,15 +352,23 @@ Swap the `OpenAI(...)` block for a different `base_url` and key — e.g. `base_u
 
 ## Step 4: Run it against a real diff, end to end
 
-Two realistic ways to use this tool, both worth trying:
+Two realistic ways to use this tool, both worth trying.
 
-**1. Review your own uncommitted changes** — the everyday use case. Make a small, deliberate change to any file (introduce an obvious bug on purpose, if you want a clean test), then:
+### 4.1 Review your own uncommitted changes
+
+**👟 Starter hint:** Make a small, deliberate change to any file (introduce an obvious bug on purpose, if you want a clean test), then run `review.py` to see the everyday use case in action.
 
 ```bash
 uv run python review.py
 ```
 
-**2. Review a specific commit from this course's own history** — a good way to see the tool work on a real diff you didn't write yourself. Add a small CLI option so you can point it at any commit by its hash:
+**🎯 Expected output:** `review.py` prints real feedback about the change you just made, without any extra flags — that's the tool's default behavior.
+
+**🩹 If it's off:** If it prints "No changes to review," you haven't made/kept any uncommitted edits for `diff HEAD` to see. If the feedback is empty, double-check the diff actually contains your change.
+
+### 4.2 Review a specific commit from this course's own history
+
+A good way to see the tool work on a real diff you didn't write yourself is to point it at a specific past commit by its hash. Add a small CLI option so you can do that:
 
 ```python
 # review.py (continued)
@@ -332,6 +402,8 @@ if __name__ == "__main__":
     print(review_diff(diff))
 ```
 
+**👟 Starter hint:** Add `parse_args()` with the mutually-exclusive `--against` / `--commit` / `--stdin` flags, then point it at a real commit from this course's repo (clone it first if you haven't).
+
 Clone or open this course's repo, then point the tool at a real past commit:
 
 ```bash
@@ -345,6 +417,12 @@ You can also compare your current branch against another one, or pipe a diff in 
 uv run python review.py --against main
 git diff main | uv run python review.py --stdin
 ```
+
+**🎯 Expected output:** `uv run python review.py --commit <a real hash>` prints real feedback about that commit's actual changes; `--against` and `--stdin` both produce sensible output on a repo with more than one branch.
+
+**🩹 If it's off:** If `--commit` errors, the hash is wrong or you're not in a clone with that commit. If `--against main` yields nothing, you have no commit after `main` (a brand-new branch or a fast-forward). If `--stdin` silently produces an empty review, nothing was piped in — pipe a real `git diff` into it.
+
+### 4.3 Verify end to end
 
 **✅ Checklist**
 

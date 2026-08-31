@@ -61,9 +61,13 @@ uv add rich
 
 ## Step 1: Score a guess against the target word
 
-Start with the piece that's easy to get *almost* right and satisfying to get *actually* right: given a 5-letter guess and a 5-letter target word, produce one mark per letter — green if that letter is in the right position, yellow if it's in the word but the wrong position, gray otherwise.
+The single hardest piece of a Wordle clone, and the one worth getting right on its own before any game loop: given a 5-letter guess and a 5-letter target word, produce one mark per letter — **G**reen if that letter is in the right position, **Y**ellow if it's in the word but the wrong position, gray (**X**) otherwise.
 
-A first attempt tends to look like this, checking each guessed letter independently:
+Take this step in three small sub-steps: build a first (deliberately naive) version, discover its flaw with one test case, then replace it with a correct two-pass algorithm.
+
+### 1.1 Write the naive scorer
+
+**👟 Starter hint:** Write a function `score_guess(guess, target)` that returns a list of marks. For each position `i`, ask three questions in order: is `guess[i]` exactly `target[i]`? If not, is `guess[i]` anywhere in `target`? If neither, it's gray. Start by copying this and running it on `"CRANE"`/`"CRANE"`:
 
 ```python
 # A tempting first version — has a bug, keep reading
@@ -79,9 +83,25 @@ def score_guess_naive(guess: str, target: str) -> list[str]:
     return marks
 ```
 
-Try it on `guess = "SPEED"`, `target = "ERASE"`. The target has exactly **one** `E`. The naive version checks each guessed letter against the whole target string independently — so *both* `E`s in `SPEED` get checked against `"E" in target`, which is `True` both times, and both get marked yellow. That's wrong: real Wordle would never award two yellow `E`s in a guess when the target only contains one `E` — one guessed `E` deserves a mark, the other doesn't have a matching letter left to justify one.
+**🎯 Expected output:** `score_guess_naive("CRANE", "CRANE")` returns `["G","G","G","G","G"]`, and a guess sharing no letters with the target (say `"XXXXX"` against `"CRANE"`) returns five `"X"`s.
 
-The fix is a two-pass algorithm:
+**🩹 If it's off:** If you get an `IndexError`, you're iterating a guess longer or shorter than 5 — double-check you're indexing both strings at position `i`. If every letter comes back gray even for an exact match, make sure you're comparing `guess[i]` to `target[i]` (the same index), not `guess[i]` to `target`.
+
+### 1.2 Find the bug with one test case
+
+The naive function *looks* like it works — but it quietly double-counts letters. Try `guess = "SPEED"`, `target = "ERASE"`.
+
+**👟 Starter hint:** Run it and read the output before reading on. The target has exactly **one** `E`. What marks do you get for the two `E`s in `SPEED`?
+
+**🎯 Expected output:** The naive version returns *both* `E`s as yellow (`["Y","X","Y","Y","X"]`) — wrong. Real Wordle would never award two yellow `E`s in a guess when the target only contains one `E`: one guessed `E` deserves a mark, the other has no matching letter left to justify one.
+
+**🩹 If it's off (this is the whole point):** Here's *why* it's wrong. The naive version checks each guessed letter against the whole target string independently — so each `E` runs `"E" in target`, which is `True` both times regardless of how many `E`s the target actually holds. Each guessed letter needs to "consume" a copy of a target letter, and the naive check never consumes anything. That's the bug to design away in the next sub-step.
+
+### 1.3 Replace it with a two-pass algorithm
+
+A correct version keeps a running count of which target letters are still unclaimed, and only awards a yellow when a copy is actually available.
+
+**👟 Starter hint:** Use `collections.Counter`. Pass 1 walks `guess`/`target` together: mark greens, and tally every *non-green* target letter into a `remaining` counter. Pass 2 walks the guess again: a letter that isn't already green gets a yellow only if `remaining` has an unclaimed copy — and claiming one decrements the count, so a repeated guessed letter can't earn two yellows from one target copy.
 
 ```python
 from collections import Counter
@@ -114,15 +134,11 @@ def score_guess(guess: str, target: str) -> list[str]:
     return marks
 ```
 
-Pass 1 marks every exact-position match green, and separately tallies (in `remaining`) how many copies of each *non-green* target letter are still "up for grabs." Pass 2 then walks the guess again: any letter not already green only gets a yellow mark if `remaining` still has an unclaimed copy of it — and claiming one decrements the count, so a second guessed copy of the same letter won't also get a yellow unless the target genuinely has a second copy too.
+**🎯 Expected output:** `score_guess("SPEED", "ERASE")` now returns `["Y", "X", "Y", "Y", "X"]`. One `E` (position 0) is yellow, the other (position 3) is also yellow because `ERASE` really does have two `E`s. But a guess like `"ELITE"` against a target with only one `E` would correctly give the *second* `E` a gray, not a yellow.
 
-Run it on the tricky case:
+**🩹 If it's off:** A common slip is to forget the `remaining[g] -= 1` after a yellow — without it, you're back to the same double-counting bug, just with extra steps. Check that a duplicate letter in the guess only earns as many yellows as the target actually has copies of.
 
-```python
-print(score_guess("SPEED", "ERASE"))  # ['Y', 'X', 'Y', 'Y', 'X']
-```
-
-One `E` (position 0) is yellow, the other (position 3) is also yellow because `ERASE` really does have two `E`s — but a guess like `"ELITE"` against a target with only one `E` would correctly give the *second* `E` a gray, not a yellow.
+### 1.4 Confirm it with your own cases
 
 **✅ Checklist**
 
@@ -137,7 +153,11 @@ Try target `"LLAMA"` and guess `"ALLOY"` by hand before running the code: `LLAMA
 
 ## Step 2: Build the game loop
 
-With scoring solid, wrap it in an actual game: pick a random target from a word list, give the player 6 guesses, and stop as soon as they get all five greens.
+With scoring solid, wrap it in an actual game: pick a random target from a word list, give the player 6 guesses, and stop as soon as they get all five greens. Two small sub-steps: get the words in, then loop the turns.
+
+### 2.1 Load the word list
+
+**👟 Starter hint:** Create a `words.txt` file with one 5-letter word per line (the real example bundles ~540 common English words), then write a function that reads it into a list of uppercased, whitespace-trimmed lines.
 
 ```python
 import random
@@ -147,7 +167,17 @@ MAX_GUESSES = 6
 def load_words(path="words.txt") -> list[str]:
     with open(path) as f:
         return [w.strip().upper() for w in f if w.strip()]
+```
 
+**🎯 Expected output:** `load_words()` returns a non-empty list, every entry exactly 5 letters, all uppercase. Calling `print(load_words()[:3])` shows the first three words.
+
+**🩹 If it's off:** An empty list usually means the path is wrong (run it from the same directory as `words.txt`) or every line failed `w.strip()`. Copying a real dictionary's *definitions* would be a licensing problem — a plain word *list* (just facts about which strings are words) is fine to redistribute, which is exactly why the example uses its own ~540-word file.
+
+### 2.2 Write the turn loop
+
+**👟 Starter hint:** Use `random.choice(words)` once for the target, then a `for` loop over `range(1, MAX_GUESSES + 1)`. Each turn: prompt, score with Step 1's `score_guess`, print the marks, and stop with a win message the moment `all(m == "G" for m in marks)`.
+
+```python
 def play_round(words: list[str]) -> tuple[bool, int]:
     target = random.choice(words)
     for attempt in range(1, MAX_GUESSES + 1):
@@ -161,7 +191,11 @@ def play_round(words: list[str]) -> tuple[bool, int]:
     return False, MAX_GUESSES
 ```
 
-`words.txt` is a plain text file, one word per line — the real example bundles a list of about 540 common English 5-letter words for exactly this purpose. A word *list* like this (just facts about which strings are English words, no creative expression) is fine to use and redistribute freely, unlike copying, say, a dictionary's actual definitions.
+**🎯 Expected output:** A round plays end to end — a correct guess ends it early with `You got it in <n>!`, and six wrong guesses end with `Out of guesses. The word was ...`.
+
+**🩹 If it's off:** If the word is revealed *before* the game ends, you're printing the target on every loop — move that `print` to just after the loop, not inside it. If a win never ends the round, check that you `return` on the all-green path instead of just printing the message. If the same word repeats every round, `random.choice` is being called in the wrong place — it must sit *inside* `play_round`, not once outside it.
+
+### 2.3 Verify the round end-to-end
 
 **✅ Checklist**
 
@@ -175,7 +209,11 @@ If `random.choice(words)` is called once per round from inside `play_round`, and
 
 ## Step 3: Validate guesses against the word list
 
-Real Wordle doesn't let you guess `"ZZZZZ"` — every guess has to be a real word from its dictionary. Add that check before scoring:
+Real Wordle doesn't let you guess `"ZZZZZ"` — every guess has to be a real word from its dictionary. Two tiny sub-steps: reject malformed input first, then reject words that aren't in the list.
+
+### 3.1 Reject the wrong shape first
+
+**👟 Starter hint:** Write a `read_guess(word_set)` that loops forever, prompting each time, and only `return`s a valid guess. For the cheapest check first, reject anything that isn't exactly 5 alphabetic letters *before* checking the word list.
 
 ```python
 def read_guess(word_set: set[str]) -> str:
@@ -190,11 +228,23 @@ def read_guess(word_set: set[str]) -> str:
         return raw
 ```
 
-Using a `set` here instead of checking `raw in words` against the list directly matters more than it might look: list membership checks scan every entry one by one, while a set check is near-instant regardless of how many words are in it — a small but genuinely good habit for any "is this value in a big collection" check.
+**🎯 Expected output:** Typing `"crane5"`, `"ab"`, or an empty line prints the shape rejection and re-prompts without ending the game or using up a try.
+
+**🩹 If it's off:** If whitespace sneaks through, your `len()` check is counting the trailing newline — call `.strip()` before checking length. If a valid word like `"abcde"` gets rejected, make sure you `continue` (not `return`) inside each rejection branch, and that only the final `return raw` sits outside all checks.
+
+### 3.2 Reject words that aren't in the list — and why a `set`
+
+**👟 Starter hint:** After the shape check passes, verify the word is real with `if raw not in word_set`. Pass the word list in as a `set` rather than the raw list.
+
+**🎯 Expected output:** `"ZZZZZ"` (a non-word) prints a clear rejection and re-prompts; a valid in-list guess is accepted immediately, lowercase or uppercase.
+
+**🩹 If it's off:** Using a `set` here matters more than it looks: list membership checks scan every entry one by one, while a set check is near-instant regardless of how many words are in it — a genuinely good habit for any "is this value in a big collection" check. If your game got noticeably slower as the word list grew, you were still checking membership against the raw list.
 
 :::tip[Reject bad input early, not mid-game]
 Validating the guess's *shape* (5 letters, alphabetic) before checking the word list catches the most common typos with the cheapest check first — no point searching a 540-word set for `"crane5"` when a `len()` and `.isalpha()` check already tells you it's malformed.
 :::
+
+### 3.3 Verify the validation
 
 **✅ Checklist**
 
@@ -208,7 +258,11 @@ Why is it important that `read_guess` re-prompts on a bad guess *inside its own 
 
 ## Step 4: Add persistent stats tracking
 
-The last piece: remember how the player's done, across separate runs of the program, not just within one session. That means writing to a file on disk.
+The last piece: remember how the player's done, across separate runs of the program, not just within one session. That means writing to a file on disk. Three small sub-steps: persist the storage helpers, record a round's result, then wire it into the game loop.
+
+### 4.1 Persist stats with load/save helpers
+
+**👟 Starter hint:** Use `json` plus `pathlib.Path`. Write `load_stats()` that returns a freshly-zeroed default dict when no file exists yet, and `save_stats(stats)` that dumps to a `stats.json` file.
 
 ```python
 import json
@@ -233,7 +287,17 @@ def load_stats() -> dict:
 def save_stats(stats: dict) -> None:
     with STATS_FILE.open("w") as f:
         json.dump(stats, f, indent=2)
+```
 
+**🎯 Expected output:** Running `load_stats()` before any `stats.json` exists returns a dict of zeroes (`played: 0`, `wins: 0`, ...) instead of crashing. After `save_stats(...)`, `stats.json` appears on disk with pretty-printed JSON you can read.
+
+**🩹 If it's off:** `json.loads(json.dumps(DEFAULT_STATS))` is there to make a *copy* — if you `return DEFAULT_STATS` directly and then mutate the result, you'd be mutating the shared default and the next fresh game would "remember" the previous run. A weird `TypeError` when saving usually means a stat value isn't JSON-serializable (e.g. you stored a `set` by mistake).
+
+### 4.2 Record a round's result
+
+**👟 Starter hint:** Write `record_result(stats, won, guesses_used)` that bumps `played` every round, bumps `wins` and adds to `guess_distribution` on a win, and resets `current_streak` to 0 on a loss.
+
+```python
 def record_result(stats: dict, won: bool, guesses_used: int) -> dict:
     stats["played"] += 1
     if won:
@@ -246,9 +310,13 @@ def record_result(stats: dict, won: bool, guesses_used: int) -> dict:
     return stats
 ```
 
-`load_stats` handles the very first run gracefully — no file exists yet, so it hands back a fresh set of zeroed defaults rather than crashing on a missing file. Every other run loads whatever was saved last time. `record_result` only adds to `guess_distribution` on a win — a loss doesn't have a meaningful "guesses used to win" value, same as real Wordle's own stats screen.
+**🎯 Expected output:** Winning in 3 guesses (then repeating once more) gives `played: 2`, `wins: 2`, `guess_distribution["3"]: 2`, `current_streak: 2`. Losing on the next round sets `current_streak: 0` while leaving `max_streak: 2` and the distribution untouched.
 
-The full game loop ties it together: load stats once at startup, update and save them after every round.
+**🩹 If it's off:** `record_result` only adds to `guess_distribution` on a win — a loss has no meaningful "guesses used to win" value, same as real Wordle's own stats screen. If your loss is bumping the distribution or `max_streak`, check you only touch those inside the `if won:` branch. And remember to *return* the mutated dict so the caller's copy is the same object.
+
+### 4.3 Wire it into the game loop
+
+**👟 Starter hint:** Load stats once at startup, then after every round update them and save. Track your totals and let the player keep playing while watching them climb.
 
 ```python
 words = load_words()
@@ -264,9 +332,11 @@ while True:
         break
 ```
 
-:::tip[Save after every round, not just at exit]
-Calling `save_stats(stats)` right after `record_result`, every round, means an interrupted program (closed terminal, `Ctrl+C`, crash) only ever loses the *current* round's result at worst — never the whole session's progress. Saving only once at the very end of the program would throw away everything if the player quits mid-session instead of through the "play again?" prompt.
-:::
+**🎯 Expected output:** Quitting and restarting the program shows the same `played`/`wins`/streak numbers as before — they survived, loaded from `stats.json`.
+
+**🩹 If it's off (a real pitfall):** Save after *every* round, not just at exit. Calling `save_stats(stats)` right after `record_result` means an interrupted program (closed terminal, `Ctrl+C`, crash) only ever loses the current round's result at worst — never the whole session's progress. Saving only at the very end throws away everything if the player quits mid-session instead of through the "play again?" prompt.
+
+### 4.4 Verify persistence
 
 **✅ Checklist**
 

@@ -66,7 +66,11 @@ Notice what's *not* here: no API key to request, no free-tier signup, nothing to
 
 ## Step 1: Bundle the dataset and build basic endpoints
 
-Real APIs serve real data. Create `quotes_data.py` with a small, hand-written dataset — a plain Python list of dicts is enough; no database needed yet:
+Real APIs serve real data. Two small sub-steps: create the dataset and the app, then run it and hit it with real requests.
+
+### 1.1 Create the dataset and the first endpoints
+
+**👟 Starter hint:** Create `quotes_data.py` with a small, hand-written dataset — a plain Python list of dicts is enough; no database needed yet:
 
 ```python
 # quotes_data.py
@@ -125,7 +129,13 @@ def get_quote(quote_id: int) -> QuoteOut:
     raise HTTPException(status_code=404, detail=f"No quote with id {quote_id}.")
 ```
 
-Run it:
+**🎯 Expected output:** Two files (a non-empty `QUOTES` list and a `main.py` defining `app`) that Python can import without errors. Run `uv run python -c "from quotes_data import QUOTES; print(len(QUOTES))"` to confirm your dataset loads.
+
+**🩹 If it's off:** An `ImportError` usually means the file isn't on the path you're importing from — both files must live in the same folder as the app. If `len(QUOTES)` is 0, your `_RAW_QUOTES` list is empty — make sure you actually populated it before running the list comprehension.
+
+### 1.2 Run the server and hit the endpoints
+
+**👟 Starter hint:** Start `uvicorn` with `--reload` so the server picks up edits automatically, then fire a few `curl` requests at the paginated list and the single-item endpoints:
 
 ```bash
 uv run uvicorn main:app --reload
@@ -139,7 +149,13 @@ curl "http://127.0.0.1:8000/quotes/1"
 curl -i "http://127.0.0.1:8000/quotes/99999"   # a real 404
 ```
 
+**🎯 Expected output:** The first command returns a JSON page with 3 items and a `total` matching your full dataset size; the second returns that quote; the third returns a clear `404` with FastAPI's default error body.
+
+**🩹 If it's off:** A connection refused error means the server isn't listening — check `uvicorn` is still running in its own terminal (a syntax error in `main.py` crashes it on startup with `--reload`). If the `99999` request returns `500` instead of `404`, the `get_quote` path isn't reaching its `HTTPException` — re-check the return/raise flow inside the loop.
+
 `limit`/`offset` pagination is the same pattern behind almost every public REST API's list endpoint — it caps how much data one response can return (`le=100` here), and lets a client walk the full dataset page by page using `total` to know when to stop.
+
+### 1.3 Verify
 
 **✅ Checklist**
 
@@ -154,7 +170,11 @@ curl -i "http://127.0.0.1:8000/quotes/99999"   # a real 404
 
 ## Step 2: Add filtering
 
-Extend `list_quotes` with optional query parameters for category and author:
+Two small sub-steps: extend `list_quotes` with the filter parameters, then confirm them for real.
+
+### 2.1 Extend `list_quotes` with category and author filters
+
+**👟 Starter hint:** Add a `list_categories` endpoint for the available category names, and give `list_quotes` two optional query params — an exact `category` match and a case-insensitive `author` substring — that narrow `filtered` before pagination:
 
 ```python
 @app.get("/categories", response_model=list[str])
@@ -180,13 +200,27 @@ def list_quotes(
     return QuotesPage(items=[QuoteOut(**q) for q in page], total=len(filtered), limit=limit, offset=offset)
 ```
 
+**🎯 Expected output:** The server reloads cleanly with the new endpoints and query params — no startup error. `GET /quotes?category=science&limit=5` returns only category-`science` items.
+
+**🩹 If it's off:** If the filter returns everything, the `if category is not None:` guard is filtering nothing — check you filtered `filtered`, not `QUOTES` ignoring the guard, and that the pagination slices `filtered` (not the original `QUOTES`). A `422` response means one of your query params isn't typed correctly (e.g. a `list` where FastAPI expects a scalar).
+
+### 2.2 Test the filters
+
+**👟 Starter hint:** Fire the filter requests and read the JSON `total` in each response to confirm the filtered count, not the whole-dataset count:
+
 ```bash
 curl "http://127.0.0.1:8000/quotes?category=science&limit=5"
 curl "http://127.0.0.1:8000/quotes?author=sagan"
 curl "http://127.0.0.1:8000/categories"
 ```
 
+**🎯 Expected output:** The `author=sagan` request matches authors case-insensitively (e.g. `Carl Sagan`), combining both filters narrows results further, and each response's `total` reflects the *filtered* count, not the full dataset.
+
+**🩹 If it's off:** If `author=sagan` returns nothing, the case-insensitive `needle in q["author"].lower()` isn't matching — you're comparing the needle against the original-case author. If combining filters returns as many rows as one filter alone, one of the two `if` blocks is being skipped.
+
 `total` in the response reflects the *filtered* count, not the whole dataset — that matters for a client trying to paginate through only the science quotes, which would otherwise think there are far more pages left than there actually are.
+
+### 2.3 Verify
 
 **✅ Checklist**
 
@@ -201,7 +235,11 @@ curl "http://127.0.0.1:8000/categories"
 
 ## Step 3: API-key issuance and validation
 
-A real API needs to know who's calling it. Add self-service key issuance and a dependency that checks a key on protected routes:
+A real API needs to know who's calling it. Two sub-steps: add key issuance and the auth dependency, then test the auth path with `curl`.
+
+### 3.1 Issue keys and add the auth dependency
+
+**👟 Starter hint:** Store issued keys in an in-memory `set`, generate them with `secrets.token_urlsafe`, and read the caller's key from the `X-API-Key` header inside a `require_api_key` function you can attach with `Depends(...)`:
 
 ```python
 import secrets
@@ -229,7 +267,15 @@ def whoami(api_key: str = Depends(require_api_key)) -> dict:
     return {"api_key": api_key}
 ```
 
+**🎯 Expected output:** The server reloads with three new routes. `POST /keys` returns a fresh `{"api_key": ...}` each call, and `GET /me` without a key returns `401`.
+
+**🩹 If it's off:** If `GET /me` succeeds with no header, `require_api_key` isn't being applied — check `api_key: str = Depends(require_api_key)` is on the route, and that `_VALID_KEYS` and `require_api_key` are defined before the route uses them.
+
 `secrets.token_urlsafe` — not `random`, which isn't cryptographically secure — generates a key nobody can guess. `Depends(require_api_key)` is FastAPI's dependency-injection system: any route that takes `api_key: str = Depends(require_api_key)` as a parameter runs `require_api_key` first, and only proceeds if it returns successfully instead of raising.
+
+### 3.2 Test the auth path
+
+**👟 Starter hint:** Send a request with no key, issue a real key, then retry the protected route with and without a valid key:
 
 ```bash
 curl -i "http://127.0.0.1:8000/me"                                   # 401, no key
@@ -237,9 +283,15 @@ curl -X POST "http://127.0.0.1:8000/keys"                            # {"api_key
 curl -i -H "X-API-Key: <your-key>" "http://127.0.0.1:8000/me"        # 200
 ```
 
+**🎯 Expected output:** The first request returns `401` with a body explaining how to get a key; the second returns a new key; the third returns `200` with your key echoed back.
+
+**🩹 If it's off:** If a valid key still gets `401`, you may have pasted the key with extra whitespace from the terminal — copy it exactly, or the `--reload` restart wiped the in-memory `_VALID_KEYS` and you need a fresh `POST /keys`.
+
 :::tip[This in-memory key store forgets everything on restart, and that's fine here]
 `_VALID_KEYS` lives in a plain Python `set` in this process's memory — restart the server and every previously issued key stops working. A real product would persist keys in a database (and store a *hash* of each key, not the raw value, the same way passwords are hashed — so a database leak doesn't leak usable keys directly). For a local learning project, the in-memory version is honest and sufficient; just don't be surprised when your key stops working after `--reload` restarts the process.
 :::
+
+### 3.3 Verify
 
 **✅ Checklist**
 
@@ -254,7 +306,11 @@ curl -i -H "X-API-Key: <your-key>" "http://127.0.0.1:8000/me"        # 200
 
 ## Step 4: Real rate limiting
 
-This is the actual point of the project. Build a sliding-window rate limiter that tracks each key's recent request timestamps and rejects requests once a key exceeds its budget within a window:
+This is the actual point of the project. Two sub-steps: build the sliding-window limiter, then wire it into a dependency on a route and verify the `429`.
+
+### 4.1 Build the sliding-window rate limiter
+
+**👟 Starter hint:** Track each key's recent request timestamps in its own `deque`, drop anything older than the window on each check, and only reject once the surviving count hits the cap — returning a `retry_after` so callers know how long to wait:
 
 ```python
 # rate_limit.py
@@ -283,9 +339,15 @@ class SlidingWindowRateLimiter:
         return False, max(retry_after, 0.0)
 ```
 
+**🎯 Expected output:** Import the class and construct `SlidingWindowRateLimiter(5, 10.0)` without error; calling `.check("k")` five times inside a short window returns `(True, 0.0)` each time, then the sixth returns `(False, retry>`0)`.
+
+**🩹 If it's off:** If calling `.check` many times never rejects, the window or the cap is mis-set — confirm `max_requests` is your intended cap and that `time.monotonic()` is being used for `now`. A wrong `retry_after` (e.g. always 0) usually means you're computing it from the wrong history entry — it should come from the *oldest* timestamp still in the window.
+
 Each key gets its own `deque` of timestamps, oldest first. On every check, timestamps older than `window_seconds` are dropped from the left before counting what's left — this is an **exact** sliding window, not a bucketed approximation that resets on a fixed clock boundary. That distinction matters: a *fixed*-window limiter (say, "reset the counter every 10 seconds on the clock") lets a client burst its full quota right at the end of one window and its full quota again right at the start of the next, getting up to 2x its intended rate in a couple of real seconds. Tracking actual timestamps avoids that.
 
-Wire it into a dependency and use it on `/me`:
+### 4.2 Wire it into a dependency and confirm the `429`
+
+**👟 Starter hint:** Wrap `limiter.check(...)` in an `enforce_rate_limit` dependency that raises `HTTPException(status_code=429, ...)` with a `Retry-After` header when a key is over budget, then put it on `/me` in place of the plain auth dependency:
 
 ```python
 from fastapi import Response
@@ -318,6 +380,10 @@ KEY=$(curl -s -X POST "http://127.0.0.1:8000/keys" | python3 -c "import sys,json
 for i in 1 2 3 4 5 6; do curl -s -o /dev/null -w "%{http_code}\n" -H "X-API-Key: $KEY" "http://127.0.0.1:8000/me"; done
 ```
 
+**🎯 Expected output:** The five-loop prints `200` for the first five requests and `429` for the sixth — then the header check below confirms that `429` actually carries `Retry-After`.
+
+**🩹 If it's off:** If all six print `200`, the limiter's cap isn't being enforced — confirm `enforce_rate_limit` is actually the dependency on `/me` (not the plain `require_api_key`), and that `limiter.check` returns `False` on the over-budget request. If all six print `429`, every request is failing auth first — you're still using the broken/in-memory key store, so issue a fresh key.
+
 The first five should print `200`; the sixth should print `429`. Check the headers on that last one:
 
 ```bash
@@ -327,6 +393,8 @@ curl -i -H "X-API-Key: $KEY" "http://127.0.0.1:8000/me"
 :::tip[HTTPException headers, not `response.headers`, on the error path]
 It's tempting to set `response.headers["Retry-After"] = ...` right before raising `HTTPException`, the same way the success path sets `X-RateLimit-Limit`. Don't — when FastAPI turns a raised `HTTPException` into an actual HTTP response, it builds a **fresh** response object from the exception, discarding whatever was written to the injected `response` parameter along the way. Any header that needs to appear on an error response has to be passed to `HTTPException(..., headers={...})` directly, or it silently never reaches the client. This bit the very first version of this lesson's own example code — verify your `429` actually carries `Retry-After` with `curl -i`, don't just trust that setting `response.headers` worked.
 :::
+
+### 4.3 Verify
 
 **✅ Checklist**
 
