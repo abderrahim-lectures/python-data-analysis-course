@@ -1,0 +1,28 @@
+---
+// Shared header for /playground (blank start) and 404.astro's shared-link
+// view, so the two entry points render structurally identical — same
+// element order, same positions — and only the copy differs.
+import Icon from './Icon.astro';
+interface Props {
+  eyebrow: string;
+  lead: string;
+}
+const {eyebrow, lead} = Astro.props;
+---
+
+<div class="head__eyebrow"><Icon name="expand" size={16} /> {eyebrow}</div>
+<h1>Playground</h1>
+<p>{lead}</p>
+<a class="pg-back" id="pg-back" href="/" hidden>&larr; Back to the lesson</a>
+
+<style>
+  .head__eyebrow { color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: .08em; font-size: .76rem; display: inline-flex; align-items: center; gap: .3rem; }
+  h1 { font-size: clamp(2rem, 4vw, 2.8rem); margin: .4rem 0 .2rem; }
+  p { color: var(--ink-soft); max-width: 60ch; }
+  .pg-back {
+    display: inline-flex; align-items: center; gap: .3rem; margin-top: .5rem;
+    font-weight: 700; font-size: .88rem; color: var(--accent);
+  }
+  .pg-back:hover { color: var(--accent-strong); }
+  .pg-back[hidden] { display: none; }
+</style>

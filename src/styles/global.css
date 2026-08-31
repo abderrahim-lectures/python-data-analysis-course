@@ -475,6 +475,13 @@ button { font-family: inherit; cursor: pointer; }
   .topnav__name { display: none; }
 }
 
+/* === Page entrance === */
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+#main { animation: page-in .35s cubic-bezier(.16,1,.3,1) both; }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
@@ -512,9 +519,20 @@ button { font-family: inherit; cursor: pointer; }
 .cell { border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); overflow: hidden; margin: 1.25rem 0; box-shadow: var(--shadow-sm); }
 .cell__actions { display: flex; align-items: center; gap: .75rem; padding: .6rem .9rem; border-bottom: 1px solid var(--line); }
 .cell__lang { color: var(--ink-soft); font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
-.cell__code { margin: 0; padding: 1rem; background: #0f0c1d; color: #e2dcff; overflow-x: auto; font-size: .92rem; line-height: 1.6; font-family: var(--font-mono); }
+.cell__code { margin: 0; padding: 0; background: #0f0c1d; color: #e2dcff; overflow-x: auto; font-size: .92rem; line-height: 1.6; font-family: var(--font-mono); display: flex; align-items: stretch; }
+.cell__code code { padding: 1rem; flex: 1; min-width: 0; }
 .cell__code code[contenteditable]:focus { outline: none; box-shadow: inset 2px 0 0 var(--accent); }
 .cell__code code[contenteditable] { cursor: text; display: block; }
+/* Line-number gutter, injected client-side (runnable-cell.client.ts) for
+   every cell — markdown-generated lesson cells, RunnableCell.astro, and the
+   playground alike. Unscoped so it reaches rehype-generated markup. */
+.cell__gutter {
+  flex: none; position: sticky; left: 0; z-index: 1;
+  padding: 1rem .75rem 1rem 1rem; text-align: right;
+  color: #8a83b3; background: #0f0c1d; user-select: none;
+  white-space: pre; font: inherit; line-height: 1.6; overflow: hidden;
+  border-right: 1px solid rgba(226,220,255,.12);
+}
 .cell__output { border-top: 1px solid var(--line); background: #15122a; color: #d8d0ff; padding: .6rem .9rem; font-family: ui-monospace, monospace; font-size: .9rem; }
 .o-line { white-space: pre-wrap; padding: .1rem 0; }
 .o-line--cmd { color: #8f86c9; }

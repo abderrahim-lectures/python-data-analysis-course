@@ -36,6 +36,17 @@ async function init() {
       codeEl.textContent = code;
       codeEl.dispatchEvent(new Event('input', {bubbles: true}));
     }
+
+    // Referrer is same-origin for the ⛶ button (a real in-app navigation);
+    // empty or cross-origin for a pasted/emailed link, where there's no
+    // lesson to go "back" to — send those to the learn hub instead.
+    const back = document.getElementById('pg-back');
+    if (back) {
+      const fromThisSite = document.referrer && new URL(document.referrer).origin === location.origin;
+      back.setAttribute('href', fromThisSite ? document.referrer : `${base}learn`);
+      back.textContent = fromThisSite ? '← Back to the lesson' : '← Browse lessons';
+      back.removeAttribute('hidden');
+    }
   } catch {
     // Malformed segment (hand-edited URL, truncated link) — leave the plain
     // 404 showing rather than a broken-looking empty editor.

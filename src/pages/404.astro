@@ -10,7 +10,7 @@
 // "page not found". This is the standard static-host trick for a
 // client-only dynamic route.
 import Base from '../layouts/Base.astro';
-import Icon from '../components/Icon.astro';
+import PlaygroundHead from '../components/PlaygroundHead.astro';
 import PlaygroundCell from '../components/PlaygroundCell.astro';
 import {PLAYGROUND_STARTER} from '../lib/playgroundStarter.ts';
 
@@ -29,9 +29,10 @@ const base = import.meta.env.BASE_URL;
   </section>
 
   <section class="container head" id="pg-head" hidden>
-    <div class="head__eyebrow"><Icon name="expand" size={16} /> Shared from a lesson</div>
-    <h1>Playground</h1>
-    <p>Write and run any Python here — nothing is graded, nothing is saved when you leave. Your code came with you.</p>
+    <PlaygroundHead
+      eyebrow="Shared from a lesson"
+      lead="Write and run any Python here — nothing is graded, nothing is saved when you leave. Your code came with you."
+    />
   </section>
 
   <section class="container playground-page" id="pg-section" hidden>
@@ -44,7 +45,4 @@ const base = import.meta.env.BASE_URL;
   .notfound h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); margin: 0 0 .5rem; }
   .notfound p { color: var(--ink-soft); margin: 0 0 1.5rem; }
   .head { padding: 2.5rem 0 1rem; }
-  .head__eyebrow { color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: .08em; font-size: .76rem; display: inline-flex; align-items: center; gap: .3rem; }
-  .head h1 { font-size: clamp(2rem, 4vw, 2.8rem); margin: .4rem 0 .2rem; }
-  .head p { color: var(--ink-soft); max-width: 60ch; }
 </style>

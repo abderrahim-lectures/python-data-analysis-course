@@ -113,6 +113,22 @@ function initCell(cell: Element) {
     codeEl.innerHTML = highlightPython(codeEl.textContent ?? '');
   }
 
+  // Line-number gutter — every cell gets one, not just the playground.
+  // Inserted client-side rather than at build/markdown time so it works
+  // uniformly for markdown-generated cells, <RunnableCell>, and the
+  // playground alike.
+  const gutter = document.createElement('span');
+  gutter.className = 'cell__gutter';
+  gutter.setAttribute('aria-hidden', 'true');
+  codeEl.parentElement?.insertBefore(gutter, codeEl);
+  const renumber = () => {
+    const n = (codeEl.textContent ?? '').split('\n').length;
+    let out = '';
+    for (let i = 1; i <= n; i++) out += i + '\n';
+    gutter.textContent = out;
+  };
+  renumber();
+
   // Re-highlight on every edit, preserving the caret by character offset —
   // innerHTML replacement otherwise drops the cursor to the start.
   const caretOffset = (): number => {
@@ -154,6 +170,7 @@ function initCell(cell: Element) {
     const offset = caretOffset();
     codeEl.innerHTML = highlightPython(codeEl.textContent ?? '');
     restoreCaret(offset);
+    renumber();
   });
 }
 

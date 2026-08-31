@@ -81,3 +81,36 @@ describe('playground', () => {
     expect(shareHandler).toMatch(/catch\s*\{/);
   });
 });
+
+describe('line-number gutter', () => {
+  const src = readFileSync('src/lib/runnable-cell.client.ts', 'utf8');
+
+  test('injects a gutter for every runnable cell, not just the playground', () => {
+    expect(src).toContain("gutter.className = 'cell__gutter'");
+  });
+
+  test('renumbers on every edit', () => {
+    const inputHandler = src.slice(src.indexOf("codeEl.addEventListener('input'"));
+    expect(inputHandler).toContain('renumber()');
+  });
+});
+
+describe('playground shared-link back button', () => {
+  const src = readFileSync('src/lib/notFoundPlayground.client.ts', 'utf8');
+
+  test('points back at the referring lesson when the referrer is same-origin', () => {
+    expect(src).toContain('fromThisSite');
+    expect(src).toContain('document.referrer');
+  });
+
+  test('falls back to the learn hub for a pasted/emailed link with no referrer', () => {
+    expect(src).toMatch(/`\$\{base\}learn`/);
+  });
+});
+
+describe('playground and its shared-link fallback share one header component', () => {
+  test('both entry points render PlaygroundHead', () => {
+    expect(readFileSync('src/pages/playground.astro', 'utf8')).toContain('<PlaygroundHead');
+    expect(readFileSync('src/pages/404.astro', 'utf8')).toContain('<PlaygroundHead');
+  });
+});
