@@ -277,13 +277,14 @@ const base = import.meta.env.BASE_URL;
   .reward {
     background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg);
     padding: 1.25rem 1rem; text-align: left; box-shadow: var(--shadow-sm);
+    display: flex; flex-direction: column;
     transition: all var(--transition-smooth);
   }
   .reward:hover { box-shadow: var(--shadow-sm); }
   .reward__icon { font-size: 1.75rem; margin-bottom: .5rem; }
   .reward h3 { font-size: 1rem; margin: 0 0 .3rem; }
   .reward p { color: var(--ink-soft); font-size: .85rem; margin: 0 0 .75rem; line-height: 1.5; }
-  .reward__bar { height: 6px; background: var(--surface-2); border-radius: var(--radius-pill); overflow: hidden; }
+  .reward__bar { height: 6px; background: var(--surface-2); border-radius: var(--radius-pill); overflow: hidden; margin-top: auto; }
   .reward__fill { height: 100%; width: 100%; border-radius: var(--radius-pill); background: linear-gradient(90deg, var(--accent), var(--accent-strong)); }
   .reward__fill--streak { background: linear-gradient(90deg, var(--streak), var(--streak-deep)); }
   .reward__fill--xp { background: linear-gradient(90deg, var(--xp), #f59e0b); }

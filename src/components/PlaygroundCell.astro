@@ -1,0 +1,31 @@
+---
+// The big, freeform editor block shared by /playground (blank start) and
+// 404.astro (the /playground/<code> shared-link fallback — see that file
+// for why a static site needs a 404 handler for a "dynamic" route).
+interface Props {
+  starter: string;
+}
+const {starter} = Astro.props;
+---
+
+<div class="cell cell--big" data-runnable>
+  <div class="cell__actions">
+    <button class="btn btn-primary cell__run" data-run aria-label="Run this Python code">▶ Run</button>
+    <button class="btn btn-ghost btn-sm" id="pg-reset">Reset</button>
+    <span class="cell__lang">python</span>
+  </div>
+  <pre class="cell__code"><code id="pg-code">{starter}</code></pre>
+  <div class="cell__output" data-output hidden>
+    <div class="cell__lines" data-lines></div>
+    <button class="cell__clear" data-clear hidden>Clear</button>
+  </div>
+</div>
+
+<style>
+  .playground-page { padding-bottom: 3rem; }
+  .playground-page :global(.cell--big .cell__code) { min-height: 50vh; font-size: 1rem; }
+  .playground-page :global(.cell--big .cell__output) { max-height: 30vh; overflow-y: auto; }
+  /* Run/Reset/python cram into one line on narrow viewports; let them wrap. */
+  .playground-page :global(.cell__actions) { flex-wrap: wrap; }
+  .playground-page :global(.cell__actions .btn) { white-space: nowrap; }
+</style>

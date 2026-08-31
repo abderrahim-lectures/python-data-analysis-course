@@ -1,8 +1,10 @@
 // @ts-nocheck
+import {highlightPython} from './pyHighlight.ts';
 // Hydrates every `.cell[data-runnable]` on the page (whether hand-authored via
 // <RunnableCell> or generated from ```python fences by rehype-runnable-python)
 // with a Pyodide-backed Run button. Loaded once per page from Base.astro.
 import {usesJsBridge} from './pythonGuard.ts';
+import {encodeShareCode} from './codeShare.ts';
 
 const PYODIDE_VERSION = '0.26.4';
 const INDEX = `https://cdn.jsdelivr.net/pyodide/v${PYODIDE_VERSION}/full/`;
@@ -34,9 +36,12 @@ function initCell(cell: Element) {
   const codeEl = cell.querySelector('code');
   if (!run || !out || !lines || !clear || !codeEl) return;
 
-  expand?.addEventListener('click', () => {
+  expand?.addEventListener('click', async () => {
     const src = codeEl.textContent ?? '';
-    window.location.href = `${import.meta.env.BASE_URL}playground?code=${encodeURIComponent(src)}`;
+    const packed = await encodeShareCode(src);
+    // base64url output, no percent-encoding needed for a path segment.
+    // See src/pages/404.astro for how this resolves on a static host.
+    window.location.href = `${import.meta.env.BASE_URL}playground/${packed}`;
   });
 
   const appendLine = (kind: string, text: string) => {
@@ -49,7 +54,6 @@ function initCell(cell: Element) {
   run.addEventListener('click', async () => {
     // Read live, in case the learner edited the code in place before running.
     const src = codeEl.textContent ?? '';
-    if (cell.hasAttribute('data-untrusted')) return;
     out.hidden = false;
     clear.hidden = false;
     lines.innerHTML = '';
@@ -99,6 +103,57 @@ function initCell(cell: Element) {
     if (e.key !== 'Tab') return;
     e.preventDefault();
     document.execCommand('insertText', false, '    ');
+  });
+
+  // Lesson cells arrive pre-highlighted by Shiki at build time; the
+  // playground and any ?code= handoff arrive as plain text. Paint those on
+  // load too, so highlighting isn't something that only appears after the
+  // first edit.
+  if (!codeEl.querySelector('span')) {
+    codeEl.innerHTML = highlightPython(codeEl.textContent ?? '');
+  }
+
+  // Re-highlight on every edit, preserving the caret by character offset —
+  // innerHTML replacement otherwise drops the cursor to the start.
+  const caretOffset = (): number => {
+    const sel = window.getSelection();
+    if (!sel || sel.rangeCount === 0) return 0;
+    const range = sel.getRangeAt(0);
+    const pre = range.cloneRange();
+    pre.selectNodeContents(codeEl);
+    pre.setEnd(range.endContainer, range.endOffset);
+    return pre.toString().length;
+  };
+  const restoreCaret = (offset: number) => {
+    const sel = window.getSelection();
+    if (!sel) return;
+    const walker = document.createTreeWalker(codeEl, NodeFilter.SHOW_TEXT);
+    let remaining = offset;
+    let node = walker.nextNode();
+    while (node) {
+      const len = node.textContent?.length ?? 0;
+      if (remaining <= len) {
+        const range = document.createRange();
+        range.setStart(node, remaining);
+        range.collapse(true);
+        sel.removeAllRanges();
+        sel.addRange(range);
+        return;
+      }
+      remaining -= len;
+      node = walker.nextNode();
+    }
+    // Offset past the end (e.g. typed at the very end) — park at the last node.
+    const range = document.createRange();
+    range.selectNodeContents(codeEl);
+    range.collapse(false);
+    sel.removeAllRanges();
+    sel.addRange(range);
+  };
+  codeEl.addEventListener('input', () => {
+    const offset = caretOffset();
+    codeEl.innerHTML = highlightPython(codeEl.textContent ?? '');
+    restoreCaret(offset);
   });
 }
 

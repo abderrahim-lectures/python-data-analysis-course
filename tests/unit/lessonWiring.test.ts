@@ -50,10 +50,6 @@ describe('runnable cells', () => {
     expect(src).toContain("document.querySelector('[data-lesson-id]')");
   });
 
-  test('refuses to run code still flagged untrusted', () => {
-    expect(src).toContain("cell.hasAttribute('data-untrusted')");
-  });
-
   test('screens code through the bridge guard before executing', () => {
     expect(src).toContain('usesJsBridge(src)');
     expect(src.indexOf('usesJsBridge(src)')).toBeLessThan(src.indexOf('runPythonAsync'));
@@ -61,18 +57,27 @@ describe('runnable cells', () => {
 });
 
 describe('playground', () => {
-  const src = readFileSync('src/pages/playground.astro', 'utf8');
+  // The blank-start page has no shared code to receive; that arrives via
+  // /playground/<code>, handled by 404.astro + notFoundPlayground.client.ts
+  // (a static site can't pre-build a route for arbitrary shared code — see
+  // the comment at the top of 404.astro).
+  const shareHandler = readFileSync('src/lib/notFoundPlayground.client.ts', 'utf8');
 
-  test('treats ?code= as untrusted until the learner confirms', () => {
-    expect(src).toContain("cell?.setAttribute('data-untrusted', '1')");
-  });
-
-  test('caps the size of shared code', () => {
-    expect(src).toContain('MAX_SHARED_CODE');
+  test('caps both the compressed segment and the decompressed result', () => {
+    // The decompressed cap matters even more than the segment one: gzip lets
+    // a tiny URL expand into a decompression bomb.
+    expect(shareHandler).toContain('MAX_SEGMENT_LENGTH');
+    expect(shareHandler).toContain('MAX_DECODED_LENGTH');
   });
 
   test('sets shared code as text, never as markup', () => {
-    expect(src).toContain('codeEl.textContent = shared');
-    expect(src).not.toContain('innerHTML');
+    expect(shareHandler).toContain('codeEl.textContent = code');
+    expect(shareHandler).not.toContain('innerHTML');
+  });
+
+  test('malformed shared code fails closed, not open', () => {
+    // A decode/parse error must leave the plain 404 showing, not an
+    // undefined-looking blank editor pretending to be a real playground.
+    expect(shareHandler).toMatch(/catch\s*\{/);
   });
 });

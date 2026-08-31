@@ -1,0 +1,50 @@
+---
+// Doubles as the handler for /playground/<code> shared links.
+//
+// The site is static (`output: 'static'` in astro.config.mjs, no server) —
+// there's no way to pre-build a page for every possible piece of shared
+// code, since that's an unbounded set chosen by whoever clicks a lesson's ⛶
+// button. Static hosts (this one included) fall back to serving 404.html for
+// any path with no matching file, so this page checks whether that missed
+// path was actually a `/playground/<code>` link before showing a real
+// "page not found". This is the standard static-host trick for a
+// client-only dynamic route.
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import PlaygroundCell from '../components/PlaygroundCell.astro';
+import {PLAYGROUND_STARTER} from '../lib/playgroundStarter.ts';
+
+const base = import.meta.env.BASE_URL;
+---
+
+<script>
+  import '../lib/notFoundPlayground.client.ts';
+</script>
+
+<Base title="Not found — PyDA Course" description="That page doesn't exist." lang="en" dir="ltr">
+  <section class="container notfound" id="notfound">
+    <h1>404 — page not found</h1>
+    <p>That page doesn't exist. Maybe it moved, or the link was mistyped.</p>
+    <a class="btn btn-primary" href={base}>Back to the homepage</a>
+  </section>
+
+  <section class="container head" id="pg-head" hidden>
+    <div class="head__eyebrow"><Icon name="expand" size={16} /> Shared from a lesson</div>
+    <h1>Playground</h1>
+    <p>Write and run any Python here — nothing is graded, nothing is saved when you leave. Your code came with you.</p>
+  </section>
+
+  <section class="container playground-page" id="pg-section" hidden>
+    <PlaygroundCell starter={PLAYGROUND_STARTER} />
+  </section>
+</Base>
+
+<style>
+  .notfound { padding: 4rem 0; text-align: center; max-width: 50ch; margin: 0 auto; }
+  .notfound h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); margin: 0 0 .5rem; }
+  .notfound p { color: var(--ink-soft); margin: 0 0 1.5rem; }
+  .head { padding: 2.5rem 0 1rem; }
+  .head__eyebrow { color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: .08em; font-size: .76rem; display: inline-flex; align-items: center; gap: .3rem; }
+  .head h1 { font-size: clamp(2rem, 4vw, 2.8rem); margin: .4rem 0 .2rem; }
+  .head p { color: var(--ink-soft); max-width: 60ch; }
+</style>

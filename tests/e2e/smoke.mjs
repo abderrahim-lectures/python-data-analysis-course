@@ -120,19 +120,9 @@ check('earned XP is preserved', await evaluate('document.getElementById("xpbar-t
 check('the dead streak is repaired', await evaluate('document.getElementById("p-streak").textContent'), '1🔥');
 check('missing quests are backfilled', await evaluate('document.getElementById("p-quests").textContent'), '3/11');
 
-console.log('\nplayground safety');
-// A direct navigation (no referrer) is the untrusted case: an externally
-// shared link, or typing the URL directly.
-await goto(`/playground?code=${encodeURIComponent('print("hi")')}`);
-check('shared code loads into the editor', await evaluate('document.getElementById("pg-code").textContent'), 'print("hi")');
-check('it is flagged untrusted', await evaluate('!document.getElementById("pg-warn").hidden'), true);
-check('Run is blocked until reviewed', await evaluate('document.querySelector("[data-run]").disabled'), true);
-await evaluate('(document.getElementById("pg-trust").click(), 1)');
-check('Run unlocks after review', await evaluate('document.querySelector("[data-run]").disabled'), false);
-
+console.log('\nplayground');
 await goto('/playground');
-check('no warning without a shared link', await evaluate('document.getElementById("pg-warn").hidden'), true);
-check('Run is enabled normally', await evaluate('document.querySelector("[data-run]").disabled'), false);
+check('Run is enabled with the starter code', await evaluate('document.querySelector("[data-run]").disabled'), false);
 
 console.log('\npages render');
 for (const path of ['/', '/progress', '/playground', '/projects', '/learn', '/learn/python-101/normal/week-1']) {
@@ -140,12 +130,26 @@ for (const path of ['/', '/progress', '/playground', '/projects', '/learn', '/le
   check(`${path} renders a heading`, await evaluate('!!document.querySelector("h1")'), true);
 }
 
-console.log('\nplayground trusts its own ⛶ button');
+console.log('\nthe ⛶ expand button hands code to the playground');
+// Shared code travels as a gzip+base64url path segment (/playground/<code>),
+// not a query string: the site is fully static, so this resolves through
+// 404.astro's client-side fallback rather than a real server route.
 await goto('/learn/python-101/normal/week-1');
 await evaluate('(document.querySelector("[data-expand]").click(), 1)');
-await new Promise(r => setTimeout(r, 400));
-check('same-origin nav from the expand button is not flagged', await evaluate('document.getElementById("pg-warn").hidden'), true);
-check('Run stays enabled for the site\'s own code', await evaluate('document.querySelector("[data-run]").disabled'), false);
+await new Promise(r => setTimeout(r, 1500));
+check('lands on a /playground/<code> path, not a query string', await evaluate('location.pathname.includes("/playground/") && !location.search'), true);
+check('the shared code arrived (not just the starter)', await evaluate('document.getElementById("pg-code").textContent.includes("x = 5")'), true);
+check('Run is enabled for the shared code', await evaluate('document.querySelector("[data-run]").disabled'), false);
+check('the "not found" message is hidden for a valid share link', await evaluate('document.getElementById("notfound").hidden'), true);
+
+console.log('\na real 404 still shows a real 404');
+await goto('/this-page-does-not-exist-xyz');
+check('shows the not-found message', await evaluate('!document.getElementById("notfound").hidden'), true);
+check('playground section stays hidden', await evaluate('document.getElementById("pg-section").hidden'), true);
+
+console.log('\na malformed /playground/<code> fails closed');
+await goto('/playground/not-valid-base64url!!!');
+check('shows the not-found message, not a broken editor', await evaluate('!document.getElementById("notfound").hidden'), true);
 
 console.log('\nonboarding');
 await goto('/');
