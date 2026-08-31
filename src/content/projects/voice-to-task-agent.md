@@ -105,6 +105,8 @@ You don't need a microphone or a real recording to start — the course repo shi
 
 Create `voice_to_tasks.py`:
 
+**👟 Starter hint:** Load the model lazily (only on first use, cached in a module-level variable) so importing this file doesn't trigger a slow download, then call `.transcribe(audio_path)` on it and pull the plain text out of `result["text"]`:
+
 ```python
 # voice_to_tasks.py
 import sys
@@ -143,6 +145,10 @@ uv run python voice_to_tasks.py sample_audio/memo_1_work_followups.wav
 Whisper ships in five sizes — `tiny`, `base`, `small`, `medium`, `large` — each one more accurate and slower than the last. `"base"` is a reasonable default on a laptop CPU for short, clear English speech like the sample clips; noisy audio, accents the model handles less well, or non-English speech often benefit from `"small"` or `"medium"`, at the cost of a noticeably longer transcription time. This is exactly the kind of tradeoff that's worth trying a GPU for — see "Where to run this" above for why Colab is a good fit here specifically.
 :::
 
+**🎯 Expected output:** After a slower first run (model download), the script prints a real English transcript of the memo — sentence-shaped text, roughly matching what the clip actually says.
+
+**🩹 If it's off:** A `FileNotFoundError` mentioning `ffmpeg` means Whisper's audio decoding step has no `ffmpeg` binary to call — install it via your OS package manager (`brew install ffmpeg`, `apt install ffmpeg`, etc.), it's a system dependency `uv add` can't install for you. Garbled or empty text on a clean sample clip (not your own noisy recording) usually means the wrong `audio_path` was passed — double check the file actually exists at that relative path.
+
 **✅ Checklist**
 
 - ✅ `uv run python voice_to_tasks.py sample_audio/memo_1_work_followups.wav` prints a real transcript, not a traceback.
@@ -159,6 +165,8 @@ Whisper ships in five sizes — `tiny`, `base`, `small`, `medium`, `large` — e
 A transcript is just a wall of text — useful, but not yet a task list. This step hands the transcript to a free-tier LLM with a prompt asking it to read it and return actual structured data: one entry per action item, each with a task description and, where the transcript implies them, a due date and a priority.
 
 Add the LLM call to `voice_to_tasks.py`:
+
+**👟 Starter hint:** Format the transcript into `EXTRACTION_PROMPT`, send it as a single user message via `client.chat.completions.create(...)`, and parse the reply with `json.loads(...)["tasks"]` — the prompt's own rules (no invented dates, `null` when nothing is implied) are doing the real work, not any code here:
 
 ```python
 # voice_to_tasks.py (additions)
@@ -232,6 +240,10 @@ The prompt is doing the real work here: it tells the model exactly what shape to
 Everything above already works for all six providers in the table — just set `LLM_PROVIDER` in your `.env` (or pass a provider name straight to `extract_action_items`). This works because GitHub Models, Gemini, Groq, Mistral, Cerebras, and OpenRouter all expose an OpenAI-compatible endpoint; unlike the [AI Agent project](/docs/projects/ai-agent), you don't need a different client library per provider here, since this script isn't using LangChain.
 :::
 
+**🎯 Expected output:** A Python list of dicts printed to the terminal, each with `"task"`, `"due_date"`, and `"priority"` keys — for `memo_1_work_followups.wav`, roughly three entries matching that memo's three follow-ups.
+
+**🩹 If it's off:** A `KeyError` on your provider's env var name means `.env` either doesn't have that line or `load_dotenv()` isn't finding the file — confirm `.env` sits in the same folder you're running the script from. A `json.decoder.JSONDecodeError` means the model didn't follow the "no markdown fences" instruction — print `response.choices[0].message.content` raw before parsing it to see exactly what came back; this is expected occasionally on free-tier models, not a sign the prompt is broken (see the pitfalls list below for the fix).
+
 **✅ Checklist**
 
 - ✅ `extract_action_items(transcript)` returns a Python list of dicts, not an error.
@@ -246,6 +258,8 @@ Everything above already works for all six providers in the table — just set `
 ## Step 3: Run it end to end and save a task list
 
 Put the two pieces together into one script that transcribes, extracts, prints a readable list, and saves it as JSON:
+
+**👟 Starter hint:** Chain the two functions you already have — `transcribe(audio_path)` then `extract_action_items(transcript)` — print each stage's result as you go so a failure is traceable to a specific step, then `json.dump` the final task list to `tasks.json`:
 
 ```python
 # voice_to_tasks.py (additions)
@@ -286,6 +300,10 @@ uv run python voice_to_tasks.py sample_audio/memo_3_project_planning.mp3
 ```
 
 Try all three sample clips, and — if you have a way to record one — your own voice memo too. A short grocery list, a set of meeting follow-ups, or a list of chores are all good tests: anything with a handful of distinct, sentence-length action items, spoken the way you'd actually talk to yourself, not a formally structured list.
+
+**🎯 Expected output:** Transcript, then a color-marker task list (🔴/🟡/🟢/⚪ by priority), then `Saved N task(s) to tasks.json` — and a real `tasks.json` file in your project folder matching what printed.
+
+**🩹 If it's off:** If `tasks.json` is written but empty (`[]`) for a memo you know has action items, re-run just Step 2's extraction on that transcript directly to see whether the transcription or the extraction stage is the actual point of failure — the two Socratic questions below are exactly this diagnostic split. A `KeyError: 'due_date'` in `print_tasks` means an item dict is missing a key entirely rather than having it set to `null` — check the LLM actually returned the full shape the prompt asked for.
 
 **✅ Checklist**
 
