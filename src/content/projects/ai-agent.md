@@ -122,7 +122,9 @@ Create a `.env` file (never commit this) with the key for whichever provider you
 GITHUB_TOKEN=your-key-here
 ```
 
-Then create `agent.py`:
+### 1.1 Write `agent.py`
+
+**👟 Starter hint:** Two plain Python functions with type hints and docstrings become the agent's tools; `create_deep_agent(model=..., tools=[...], system_prompt=...)` wires them to the model — the docstrings are what the model reads to decide which tool fits a question, not the code inside them:
 
 ```python
 import os
@@ -160,11 +162,17 @@ if __name__ == "__main__":
     print(result["messages"][-1].content)  # just the final answer, not the full internal trace
 ```
 
-Run it — with `uv`, no manual environment activation is needed:
+### 1.2 Run it and verify
+
+**👟 Starter hint:** Run it with `uv` — no manual environment activation is needed:
 
 ```bash
 uv run python agent.py
 ```
+
+**🎯 Expected output:** A single printed line — the agent's final answer, something like `Yes, "groupby" was covered in the course.`
+
+**🩹 If it's off:** A `KeyError: 'GITHUB_TOKEN'` means the environment variable/`.env` value isn't being found — confirm `.env` is in the same folder as `agent.py`, with no typo in the variable name. A 401/403 means the key itself is wrong, expired, or missing the right scope — regenerate it. A 429 rate-limit error is expected and covered below, not a bug.
 
 `load_dotenv()` reads your `.env` file into `os.environ` before anything else runs, so `os.environ["GITHUB_TOKEN"]` finds the key you set during Setup — the same `os` module concept as `input()` reading from the keyboard, just reading from a file instead. `create_deep_agent` wires the model together with a list of Python functions the agent can call as **tools** — this is the core idea behind agents: a language model that can not just respond with text, but decide to call your code, read the result, and use it to inform its answer.
 
@@ -181,20 +189,6 @@ Nothing here is magic — `create_deep_agent` builds a loop, and every iteration
 5. Once the model replies with text and no further tool request, the loop stops and that's your final answer.
 
 This is exactly why a rate-limit error (see below) can happen even for what feels like "one question" — a question needing two tool calls costs at least three round trips to the model (decide to call tool A, decide to call tool B, produce the final answer), not one.
-
-### What you should see
-
-A single printed line — the agent's final answer, something like:
-
-```
-Yes, "groupby" was covered in the course.
-```
-
-If instead you see a Python traceback, check which kind:
-
-- **`KeyError: 'GITHUB_TOKEN'`** — the environment variable/`.env` value isn't being found. Confirm `.env` is in the same folder as `agent.py` and has no typo in the variable name, or that you actually ran `export` in the same terminal session you're running the script from.
-- **An authentication error (401/403)** — the key itself is wrong, expired, or (for GitHub Models) missing the `models: read` scope. Regenerate it.
-- **A rate-limit error (429)** — see the next section. This one is common and expected, not a sign anything is broken.
 
 ### Understanding the full internal trace
 
