@@ -29,9 +29,25 @@ const alternates = {
   es: `es/proyectos/${slug}`,
   fr: `fr/projets/${slug}`,
 };
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'LearningResource',
+  name: title,
+  description,
+  learningResourceType: 'Project',
+  educationalLevel: 'Beginner',
+  isAccessibleForFree: true,
+  inLanguage: locale,
+  url: String(new URL(`${base}es/proyectos/${slug}`, Astro.site)),
+  isPartOf: {
+    '@type': 'Course',
+    name: 'PyDA Course',
+    description: 'Learn Python and data analysis in your browser — run real code, earn XP, build streaks.',
+  },
+};
 ---
 
-<Base title={`${title} — PyDA Course`} description={description} lang={locale} dir={dir} alternates={alternates}>
+<Base title={`${title} — PyDA Course`} description={description} lang={locale} dir={dir} alternates={alternates} jsonLd={jsonLd}>
   <nav class="crumb container">
     <a href={projectsHref(locale, base)}>{title}</a> <span>/</span> <span class="crumb__here">{title}</span>
   </nav>

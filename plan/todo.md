@@ -708,6 +708,13 @@ actually contains a syntactically valid `<script type="application/
 ld+json">` tag (skips gracefully if no `dist/` is present in the run).
 161 unit tests total now, all green.
 
+Locale pages done too: all 3 project-detail routes (`es/proyectos`,
+`fr/projets`, `ar/مشاريع`) and all 3 lesson-week routes (`es/aprender`,
+`fr/apprendre`, `ar/تعلم`) now pass the same `LearningResource` shape,
+with `inLanguage` set to the locale and `url` built from that locale's own
+`alternates` entry. `astro check` 0 errors, build produces 220 pages same
+as before, `learningResourceType` verified present in both an ES project
+page and an FR lesson page's built HTML. 161 unit tests still green.
+
 ### Unclaimed (carried over)
 - [ ] Performance audit (bundle size, LCP, Pyodide first-load).
-- [ ] Locale pages' JSON-LD (ar/es/fr) — same shapes as above, not yet applied.

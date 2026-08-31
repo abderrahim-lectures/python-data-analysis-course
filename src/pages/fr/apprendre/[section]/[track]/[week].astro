@@ -54,9 +54,26 @@ const alternates = {
   es: `es/aprender/${section}/${track === 'hard' ? TRACK_WORDS.es.hard : TRACK_WORDS.es.normal}/week-${week}`,
   fr: `fr/apprendre/${section}/${track === 'hard' ? TRACK_WORDS.fr.hard : TRACK_WORDS.fr.normal}/week-${week}`,
 };
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'LearningResource',
+  name: title,
+  description,
+  learningResourceType: 'Lesson',
+  educationalLevel: track === 'hard' ? 'Advanced' : 'Beginner',
+  isAccessibleForFree: true,
+  inLanguage: locale,
+  url: String(new URL(`${base}${alternates.fr}`, Astro.site)),
+  position: week,
+  isPartOf: {
+    '@type': 'Course',
+    name: 'PyDA Course',
+    description: 'Learn Python and data analysis in your browser — run real code, earn XP, build streaks.',
+  },
+};
 ---
 
-<Base title={`${title} — PyDA Course`} description={description} lang={locale} dir={dir} alternates={alternates}>
+<Base title={`${title} — PyDA Course`} description={description} lang={locale} dir={dir} alternates={alternates} jsonLd={jsonLd}>
   <nav class="crumb container">
     <a href={learnHref(locale, base)}>{section}</a> <span>/</span>
     <a href={learnHref(locale, base, section!)}>{section}</a> <span>/</span>
