@@ -84,6 +84,11 @@ const t = UI_STRINGS[resolveLocale(lang)];
     <meta name="twitter:image" content={ogImage} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <!-- Pyodide loads lazily on the first "Run" click (see runnable-cell.client.ts),
+         never on page load -- this just warms the DNS/TLS handshake early so
+         that first click doesn't also pay for connection setup. -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
     {jsonLdBlocks.map((block) => (
       <script type="application/ld+json" set:html={JSON.stringify(block)} />
     ))}

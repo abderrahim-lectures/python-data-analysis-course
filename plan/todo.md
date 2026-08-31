@@ -716,5 +716,52 @@ with `inLanguage` set to the locale and `url` built from that locale's own
 as before, `learningResourceType` verified present in both an ES project
 page and an FR lesson page's built HTML. 161 unit tests still green.
 
+---
+
+## Session 2026-08-31 (Claude) — performance audit @claude
+
+Went in expecting to find real problems; mostly found the site already in
+good shape, plus one genuine, low-risk win applied.
+
+**Findings:**
+- **JS bundle size**: already tiny. Every per-page script chunk is 4-8KB
+  (`du -h` on `dist/_astro/*.js`) — no framework runtime shipped, Astro's
+  islands architecture means each page only loads the JS it actually uses.
+  Nothing to cut here.
+- **Pyodide first-load**: already lazy. `runnable-cell.client.ts`'s `py()`
+  only dynamic-`import()`s Pyodide from jsDelivr inside the Run button's
+  click handler — it's never fetched on page load, confirmed by grepping
+  for the only call site. The real remaining cost was that the DNS/TLS
+  handshake to `cdn.jsdelivr.net` didn't start until the moment of that
+  first click. **Fixed**: added `<link rel="preconnect">` +
+  `dns-prefetch` for `cdn.jsdelivr.net` to `Base.astro`'s `<head>` — warms
+  the connection during normal page load (a `preconnect`, not `preload`,
+  so it doesn't compete with or delay LCP) without ever fetching Pyodide
+  itself early.
+- **LCP-affecting resources**: no `<img>` tags anywhere in `src/` — all
+  project/lesson art is inline SVG (`ProjectArt.astro`), so there's no
+  hero-image-blocking-LCP problem to fix, and no lazy-loading gap either.
+- **CSS**: largest per-page bundle is 60KB (one locale's page, includes
+  the global KaTeX stylesheet); everything else is 8-12KB. KaTeX's own
+  font files (the `.ttf`/`.woff2` files under `dist/_astro/`) are only
+  ever fetched by the browser on-demand for glyphs actually rendered on
+  the page, not eagerly — normal `@font-face` behavior, not a bug to fix.
+- **Total `dist/` size**: 16MB for 220 pages, dominated by KaTeX's font
+  family (bundled once, referenced everywhere, only downloaded per-glyph
+  as needed).
+
+Verified: `astro check` 0 errors, build still produces 220 pages, 161 unit
+tests green, `cdn.jsdelivr.net` preconnect confirmed present in built
+`dist/index.html`.
+
+**Honest conclusion**: this migration already did the performance work —
+no bundler bloat, no eager heavy-library loads, no unoptimized images to
+find. The preconnect hint is a real, measurable (if modest) improvement;
+everything else checked out clean rather than yielding more fixes. Marking
+this claimed/done rather than leaving it open for a bigger rewrite that
+the evidence doesn't call for.
+
 ### Unclaimed (carried over)
-- [ ] Performance audit (bundle size, LCP, Pyodide first-load).
+_None outstanding from this session — both previously-unclaimed items
+(structured data, performance audit) are now done. Open a new one if you
+find something worth flagging._
