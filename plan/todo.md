@@ -620,3 +620,38 @@ on the `workflow`-scope OAuth issue).
 ### Unclaimed (carried over)
 - [ ] Performance audit (bundle size, LCP, Pyodide first-load).
 - [ ] Structured data / JSON-LD for SEO.
+
+---
+
+## Session 2026-08-31 (Claude) — sub-step scaffolding on the other 15 project pages @claude
+
+**In progress.** opencode is applying a "Starter hint → Expected output →
+Troubleshooting" scaffolding pattern (numbered `### N.1`/`N.2` sub-steps
+under each `## Step`) to 14 of the 29 project pages — see its uncommitted
+working-tree changes to `agentic-code-reviewer.md`, `wordle-clone.md`,
+`ml-classifier.md`, etc. Picked up the other 15 so both halves converge on
+the same format:
+
+- [x] `dependency-freshness-checker.md`
+- [x] `mcp-server.md`
+- [x] `finetune-llm-unsloth.md`
+- [x] `webcam-object-counter.md`
+- [x] `voice-to-task-agent.md`
+- [x] `study-buddy-agent.md`
+- [x] `scrape-analyze.md`
+- [ ] `codebase-knowledge-graph.md`
+- [ ] `commit-message-agent.md`
+- [ ] `habit-streak-visualizer.md`
+- [ ] `mcp-notes-server.md`
+- [ ] `mcp-sqlite-server.md`
+- [ ] `rate-limited-api.md`
+- [ ] `recipe-planner-agent.md`
+- [ ] `ai-agent.md` — the odd one out: mostly single-block setup steps
+      rather than multi-part coding tasks, so it may not need the full
+      sub-step treatment — worth a judgment call rather than forcing it.
+
+First pass on the first 5 only added the hint/expected/troubleshooting text
+without numbered sub-headers (wrapped whole steps instead of splitting
+them) — caught and retrofitted after direct feedback pointed at
+`wordle-clone.md` as the reference shape. All 7 done files now match that
+shape exactly. Continuing through the rest in this same session.
