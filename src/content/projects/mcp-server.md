@@ -68,6 +68,8 @@ uv add "mcp[cli]"
 
 The SDK's high-level API, `FastMCP`, turns an ordinary Python function into an MCP tool with one decorator — no protocol-level code to write by hand. Create `server.py`:
 
+**👟 Starter hint:** Instantiate `FastMCP("course-tools")`, then write two ordinary Python functions with type hints and a docstring, each decorated with `@mcp.tool()` — the decorator is what turns a plain function into something an MCP client can discover and call:
+
 ```python
 # server.py
 from pathlib import Path
@@ -114,6 +116,10 @@ if __name__ == "__main__":
 MCP is a young, fast-moving spec — the protocol itself, and the Python SDK's own API, have both changed since early releases. `FastMCP`'s decorator-based style has been stable for a while, but before building anything beyond this lesson, skim the [SDK's own README and docs](https://github.com/modelcontextprotocol/python-sdk) rather than assuming this snippet's specifics still match exactly.
 :::
 
+**🎯 Expected output:** No output yet — `server.py` on its own just defines the two tools; there's nothing to run until Step 2. The signal at this stage is that it *imports* cleanly: `uv run python -c "import server"` should produce no traceback.
+
+**🩹 If it's off:** A `ModuleNotFoundError: No module named 'mcp'` means the `uv add "mcp[cli]"` from Setup didn't run in this project folder — confirm you're inside the `mcp-server` directory `uv init` created. If `DOCS_DIR` doesn't point at a real folder on your machine, `search_course_topics` won't error yet (that only shows up when you actually call it in Step 2) — fix the path now while it's fresh.
+
 **✅ Checklist**
 
 - ✅ `server.py` saves without syntax errors and defines both `search_course_topics` and `count_words`.
@@ -128,6 +134,8 @@ MCP is a young, fast-moving spec — the protocol itself, and the Python SDK's o
 ## Step 2: Run and test your server locally
 
 Before wiring this up to any real AI client, run it on its own and confirm the tools actually work. The SDK ships a **dev/inspector** command for exactly this:
+
+**👟 Starter hint:** Run the dev command below, let it open a browser tab, and call each tool by hand from there before you go anywhere near Claude Desktop:
 
 ```bash
 uv run mcp dev server.py
@@ -149,6 +157,10 @@ It won't print anything on its own — an MCP server sits and waits for a client
 It's tempting to skip straight to Claude Desktop. Resist that — the Inspector isolates your tool code from everything else that can go wrong in a real client connection (config paths, restarts, the model's own tool-picking). Get both tools working there first.
 :::
 
+**🎯 Expected output:** The Inspector's tool list shows `search_course_topics` and `count_words` with their parameter forms auto-generated from your type hints. Calling `search_course_topics` with `"groupby"` returns a real `Found in: ...` string with matching filenames; calling `count_words` with a short sentence returns the correct integer.
+
+**🩹 If it's off:** If `search_course_topics` returns `No lesson pages mention '...'` for a query you know is covered, `DOCS_DIR` almost certainly still points at the placeholder path from Step 1 — fix it and restart the dev server (it doesn't hot-reload). If the Inspector tab never opens, check the terminal for an `npx` install prompt it may be waiting on.
+
 **✅ Checklist**
 
 - ✅ `uv run mcp dev server.py` starts without errors and opens the Inspector in your browser.
@@ -169,6 +181,8 @@ It's tempting to skip straight to Claude Desktop. Resist that — the Inspector 
 
 If the file doesn't exist yet, create it. Add your server, using an **absolute** path to your project folder:
 
+**👟 Starter hint:** Copy the JSON below into that config file, then replace `/absolute/path/to/mcp-server` with the real, full path to your project folder — `pwd` (macOS/Linux) or `cd` with no arguments (Windows) from inside it will print exactly that:
+
 ```json
 {
   "mcpServers": {
@@ -187,6 +201,10 @@ If the file doesn't exist yet, create it. Add your server, using an **absolute**
 > Does the Python course cover groupby? Use the course-tools search if you have it.
 
 Claude Desktop should show it calling `search_course_topics` (often as a small collapsible "used a tool" block in the conversation, with the arguments and result visible if you expand it), then answer using the real result your function returned — not a guess from the model's training data.
+
+**🎯 Expected output:** A visible "used a tool" block in Claude Desktop's reply showing `search_course_topics` was called, with the same result you already saw in the Inspector, followed by Claude's answer built from that result.
+
+**🩹 If it's off:** If `course-tools` never appears in the connector list, the config file's JSON has a syntax error (a trailing comma is the classic one) or you skipped the *full* quit-and-restart — closing the window alone doesn't reload it. If it appears but Claude answers without calling the tool, try rephrasing the question to more explicitly reference "the course-tools search" the way the example question does — the model decides on its own whether a tool is relevant, and a vague question gives it less reason to.
 
 **✅ Checklist**
 

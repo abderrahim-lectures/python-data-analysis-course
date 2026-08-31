@@ -71,6 +71,8 @@ No API key is needed anywhere in this project — PyPI's JSON API (`https://pypi
 
 Python 3.11+ ships `tomllib` in the standard library — no install needed to *read* TOML (only `uv add`-ing a package if you needed to *write* TOML, which this project doesn't).
 
+**👟 Starter hint:** Open the file in binary mode, hand it to `tomllib.load`, and dig into the parsed dict to reach `project.dependencies` — that key holds the raw specifier strings, one per dependency:
+
 ```python
 # parse_deps.py
 import tomllib
@@ -93,12 +95,18 @@ if __name__ == "__main__":
 uv run python parse_deps.py
 ```
 
+**🎯 Expected output:** One line per dependency, printed as the raw specifier exactly as it appears in `pyproject.toml` (e.g. `requests>=2.31`) — no parsing of the name or version yet, that's the next step.
+
+**🩹 If it's off:** An empty result usually means the TOML's dependencies live somewhere other than `project.dependencies` — some tools (Poetry, for one) put them under `tool.poetry.dependencies` instead; `.get(..., {})` chains return `{}`/`[]` rather than crashing, so a wrong path fails silently instead of loudly. If you get a `TOMLDecodeError`, the file has a real syntax error — open it and check for a stray comma or unmatched bracket.
+
   - ✅ Running this against your own project's `pyproject.toml` prints each dependency's raw specifier string.
   - ✅ You can explain why `tomllib` needs the file opened in binary mode (`"rb"`), not text mode.
 
 **🤔 Socratic Question(s)**: A `pyproject.toml`'s `dependencies` list holds strings like `"requests>=2.31"` — not just package names. What's the *name* on its own, separate from any version constraint attached to it? You'll need to split those apart cleanly in the next step, and a real dependency string can be sloppier than it looks (extra spaces, extras like `"requests[socks]>=2.31"`, exact-pin `==` instead of `>=`) — which of those would break a naive `.split(">=")`?
 
 ## Step 2: Look up each package's current version on PyPI
+
+**👟 Starter hint:** Two small functions: one that strips the version constraint off a specifier with a regex to get just the name, and one that GETs `https://pypi.org/pypi/<name>/json` and pulls `info.version` out of the response — treating a 404 as "not found," not an error:
 
 ```python
 # check_pypi.py
@@ -138,12 +146,18 @@ uv run python check_pypi.py
 
 Notice the deliberately-broken `"not-a-real-package-xyz"` in the test list — it should print `latest is None`, not crash. A real tool has to handle a typo'd or private package name gracefully, not assume every name in a `pyproject.toml` resolves.
 
+**🎯 Expected output:** `requests: latest is '2.x.x'` and `packaging: latest is '2x.x'` with real current version numbers, then `not-a-real-package-xyz: latest is None` — no traceback.
+
+**🩹 If it's off:** A traceback on the fake package name means the 404 check isn't catching it — confirm `response.status_code == 404` runs *before* `raise_for_status()`, not after. If a real package's version looks stale, you might be hitting a cached response from an earlier run of something else — rerun to confirm it's not a network fluke.
+
   - ✅ Real packages print their real, current PyPI version — you can cross-check one against pypi.org in your browser.
   - ✅ The fake package name prints `None` instead of crashing the script.
 
 **🤔 Socratic Question(s)**: `response.raise_for_status()` runs *after* the explicit 404 check above it — why single out 404 specially instead of letting `raise_for_status()` handle every non-2xx status the same way? What would happen to this script's control flow if that 404 check weren't there?
 
 ## Step 3: Compare versions correctly
+
+**👟 Starter hint:** Wrap `Version(current) < Version(latest)` in a `try`/`except InvalidVersion` — the comparison itself is one line, the honesty is in what you return when a string isn't a real version at all:
 
 ```python
 # compare.py
@@ -169,12 +183,18 @@ if __name__ == "__main__":
 uv run python compare.py
 ```
 
+**🎯 Expected output:** `True`, `False`, `False`, `None` — one per line, in that exact order matching the four calls above.
+
+**🩹 If it's off:** If the first line prints `False` instead of `True`, you likely compared the raw strings instead of wrapping them in `Version(...)` first — that's the exact string-comparison bug this whole step exists to avoid. If the last line raises instead of printing `None`, the `except` is catching the wrong exception name or nothing at all.
+
   - ✅ `is_outdated("2.9.0", "2.10.0")` prints `True`, proving this isn't naive string comparison.
   - ✅ An unparseable version string returns `None`, not a crash or a silently-wrong `True`/`False`.
 
 **🤔 Socratic Question(s)**: Why does `is_outdated` return three possible outcomes (`True`, `False`, `None`) instead of just two? What real, non-hypothetical situation in a `pyproject.toml` would make `None` the *only* honest answer?
 
 ## Step 4: Put it together into a real freshness report
+
+**👟 Starter hint:** Wire the three previous steps together in `build_report`: load specifiers, resolve each to a name and a latest version, compare, and collect the results into a small `DependencyStatus` dataclass per dependency — then bucket and print them in `print_report`:
 
 ```python
 # freshness_report.py
@@ -229,6 +249,10 @@ uv run python freshness_report.py pyproject.toml
 ```
 
 Try pointing it at a `pyproject.toml` from a real, older project you have lying around (or this course repo's own `examples/*/pyproject.toml` files) — that's where you'll actually see the "outdated" bucket populate with real results, not just up-to-date dependencies you added five minutes ago.
+
+**🎯 Expected output:** A three-part summary — `⚠️ N outdated:` with a line per package showing pinned vs. latest, `✅ N up to date:` as a comma-joined list, and `❓ N could not be checked:` for anything unresolved. Sections with zero entries don't print at all.
+
+**🩹 If it's off:** If every dependency lands in "up to date" even on an old `pyproject.toml`, check that `pinned` in `build_report` actually stripped the comparison operator (`lstrip(">=<~! ")`) — a leftover `>=` prefix makes `Version(...)` raise, which silently routes everything into "unknown" via the `if pinned and latest` guard, not "outdated". A `ModuleNotFoundError` on `check_pypi`/`compare`/`parse_deps` means you're running this script from a different folder than the other three files — `uv run` needs them side by side.
 
   - ✅ Running the report against your project's own `pyproject.toml` prints a categorized ✅/⚠️/❓ summary.
   - ✅ Pointing it at an intentionally older `pyproject.toml` shows at least one real outdated dependency.
