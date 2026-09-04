@@ -21,10 +21,6 @@ const XP_PER_LESSON = 20;
 const STREAK_BONUS = 5;
 
 function today(): string { return new Date().toISOString().slice(0, 10); }
-function yesterday(): string {
-  const d = new Date(); d.setDate(d.getDate() - 1);
-  return d.toISOString().slice(0, 10);
-}
 
 function defaults(): PDAState {
   return {
@@ -54,10 +50,7 @@ function repairLegacy(s: PDAState): PDAState {
   if (!s.lastActive) s.lastActive = today();
   s.bestStreak = Math.max(s.bestStreak, s.streak);
 
-  markQuest(s, 'first-lesson', 'First Step');
-  if (Object.keys(s.lessonsRun).length > 0) markQuest(s, 'first-run', 'First Run');
-  for (const id of completed) {
-    markQuest(s, `completed-${id}`, 'Lesson complete');
+  markQuest(s, `completed-${id}`, 'Lesson complete');
     markQuest(s, `track-${id.split('/')[0]}`, 'Track starter');
   }
   evaluateMilestones(s);
@@ -95,7 +88,7 @@ function bumpStreak(s: PDAState): void {
   const prev = s.lastActive;
   if (prev === today()) {
     if (s.streak === 0) s.streak = 1;   // first activity ever, today
-  } else if (prev === yesterday()) {
+  } else if (prev === new Date(Date.now() - 86400000).toISOString().slice(0, 10)) {
     s.streak += 1;
   } else {
     s.streak = 1;
