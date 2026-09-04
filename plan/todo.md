@@ -869,3 +869,16 @@ User asked to "loop and improve". Executed the clean-course-ui improvement loop.
 - `64da9a7` — fix(ui): add :active and :focus-visible to .card links on projects page
 
 ---
+
+## Session 2026-09-04 (opencode, 6th pass) — clean-course-ui loop round 6
+
+### Done
+- [x] Added `:active` to `.gamestrip__item` on ar/es/fr locale pages for tactile tap feedback
+- [x] Fixed hardcoded route-pill colors on learn hub (`#10240a`/`#3d9401`/`#c81e3f` → `--success-text`/`--success`/`--bad`/`--bad-soft`)
+- [x] Added `:focus-visible` to `.route-pill`, `.sectioncard__all` on learn hub
+
+### Commits
+- `be8e0fd` — fix(ui): add :active to .gamestrip__item on locale pages
+- `d6387d9` — fix(ui): replace hardcoded route-pill colors with tokens, add focus states
+
+---
