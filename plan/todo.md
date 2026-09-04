@@ -882,3 +882,36 @@ User asked to "loop and improve". Executed the clean-course-ui improvement loop.
 - `d6387d9` — fix(ui): replace hardcoded route-pill colors with tokens, add focus states
 
 ---
+
+## Session 2026-09-04 (opencode, 7th pass) — UI/UX polish & PWA
+
+### Done (verified: all gates green)
+- [x] Pre-warm Pyodide immediately on DOMContentLoaded instead of requestIdleCallback
+- [x] Add loading spinner on Run button while Pyodide loads
+- [x] Add Ctrl+Enter (Cmd+Enter) keyboard shortcut to run code
+- [x] Add Copy Output button to cells
+- [x] Add FirstSuccess celebration toast on first code execution
+- [x] Add page-level Pyodide loading bar (top of viewport)
+- [x] Add Playground button on home page ("Run Python in Browser — No Install")
+- [x] Add offline install hint on home page
+- [x] Add PWA manifest.json, service worker (sw.js), meta tags
+- [x] Fix AR terminal t-code color — was invisible (#0f0d17 on #0f0c1d) → #e2dcff
+- [x] Fix route-pill text contrast — use --ink instead of --success-text/#fff
+
+### Commits
+- `4063433` — fix: remove duplicate dark mode route-pill override
+- `1254c7f` — fix: route-pill colors corrected to use --ink
+- `6df58aa` — feat(pwa): add PWA manifest, service worker, loading bar, playground button, fix AR terminal colors
+- `34ca885` — fix(ui): add Pyodide loading spinner, Ctrl+Run shortcut, copy output button, FirstSuccess celebration
+
+---
+
+## Remaining P0/P1 items (not yet started)
+- Editor Tutorial component
+- Week 1 micro-steps restructure
+- Pre-warm Pyodide on homepage (now implemented above)
+- JupyterLite language packs
+- Friendlier error messages
+- Adaptive difficulty layer
+
+---
