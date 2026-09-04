@@ -111,7 +111,7 @@ const jsonLd = {
 
   <section class="container">
     <div class="rewards">
-      <h2 class="rewards__title">{s.homeRewardsTitle} <span class="text-gradient">←</span></h2>
+      <h2 class="rewards__title">{s.homeRewardsTitle} <span class="text-gradient">→</span></h2>
       <p class="rewards__sub">{s.homeRewardsSub}</p>
       <div class="rewards__grid">
         <div class="reward">
@@ -174,7 +174,7 @@ const jsonLd = {
         <SceneBg scene="library" height={140} particles={false}>
           <span class="hub__icon">🚀</span>
         </SceneBg>
-        <div class="hub__badge" style="color:#b45309">{s.homeHubProjects}</div>
+        <div class="hub__badge" style="color:var(--warn)">{s.homeHubProjects}</div>
         <div class="hub__inner">
           <div class="hub__meta">{s.homeHubProjectsMeta}</div>
           <h2>{s.homeHubProjectsName}</h2>
@@ -236,7 +236,7 @@ const jsonLd = {
 
 <style>
   .hero { position: relative; overflow: hidden; padding: 2.5rem 0 2rem; }
-  .hero__bg { position: absolute; inset: 0; z-index: 0; background: radial-gradient(60% 80% at 70% 60%, rgba(124,58,237,.10), rgba(255,150,0,.05), transparent 70%); }
+  .hero__bg { position: absolute; inset: 0; z-index: 0; background: radial-gradient(60% 80% at 70% 60%, rgba(124,58,237,.10), rgba(124,58,237,.05), transparent 70%); }
   .hero__grid {
     position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; padding: 0 1.25rem;
     display: grid; grid-template-columns: 1.2fr .8fr; gap: 2.5rem; align-items: center;
@@ -273,9 +273,9 @@ const jsonLd = {
     display: flex; flex-direction: column; align-items: center; gap: .25rem;
     transition: all var(--transition-smooth);
   }
-  .gamestrip__item:hover { box-shadow: var(--shadow-sm); }
-  .gamestrip__item--hot { border-color: rgba(255,150,0,.3); box-shadow: var(--shadow-streak-glow); }
-  .gamestrip__item--blazing { border-color: rgba(255,80,0,.4); box-shadow: 0 0 24px rgba(255,80,0,.25); }
+.gamestrip__item:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.gamestrip__item--hot { border-color: var(--streak); box-shadow: var(--shadow-streak-glow); }
+.gamestrip__item--blazing { border-color: var(--streak-deep); box-shadow: 0 0 24px rgba(124,58,237,.25); }
   .gamestrip__icon { font-size: 1.2rem; }
   .gamestrip__val { font-family: var(--font-display); font-weight: 800; font-size: 1.5rem; color: var(--ink-hi); }
   .gamestrip__label { color: var(--ink-soft); font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
@@ -290,14 +290,14 @@ const jsonLd = {
     display: flex; flex-direction: column;
     transition: all var(--transition-smooth);
   }
-  .reward:hover { box-shadow: var(--shadow-sm); }
+  .reward:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
   .reward__icon { font-size: 1.75rem; margin-bottom: .5rem; }
   .reward h3 { font-size: 1rem; margin: 0 0 .3rem; }
   .reward p { color: var(--ink-soft); font-size: .85rem; margin: 0 0 .75rem; line-height: 1.5; }
   .reward__bar { height: 6px; background: var(--surface-2); border-radius: var(--radius-pill); overflow: hidden; margin-top: auto; }
   .reward__fill { height: 100%; width: 100%; border-radius: var(--radius-pill); background: linear-gradient(90deg, var(--accent), var(--accent-strong)); }
   .reward__fill--streak { background: linear-gradient(90deg, var(--streak), var(--streak-deep)); }
-  .reward__fill--xp { background: linear-gradient(90deg, var(--xp), #f59e0b); }
+  .reward__fill--xp { background: linear-gradient(90deg, var(--xp), var(--warn)); }
   .reward__fill--rank { background: linear-gradient(90deg, var(--accent), var(--accent-strong)); }
 
   .hub { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.4rem; margin: 1rem 0 3rem; }
@@ -306,10 +306,11 @@ const jsonLd = {
     text-decoration: none; color: var(--ink); display: flex; flex-direction: column;
     box-shadow: var(--shadow-sm); transition: transform .25s ease, box-shadow .25s ease;
   }
-  .hub__card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
-  .hub__icon { font-size: 3.2rem; margin-bottom: -.4rem; filter: drop-shadow(0 6px 12px rgba(0,0,0,.35)); }
-  .hub__badge { display: inline-flex; align-items: center; gap: .25rem; padding: .2rem .6rem; border-radius: var(--radius-pill); font-size: .72rem; font-weight: 700; margin: -.8rem 0 0 1rem; position: relative; z-index: 1; width: fit-content; background: var(--surface); box-shadow: var(--shadow-sm); border: 1px solid var(--line); }
-  .hub__meta { font-size: .75rem; color: var(--ink-faint); font-weight: 600; letter-spacing: .03em; }
+.hub__card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
+.hub__card:active { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+.hub__icon { font-size: 3.2rem; margin-bottom: -.4rem; filter: drop-shadow(0 6px 12px rgba(0,0,0,.35)); }
+.hub__badge { display: inline-flex; align-items: center; gap: .25rem; padding: .2rem .6rem; border-radius: var(--radius-pill); font-size: .72rem; font-weight: 700; margin: -.8rem 0 0 1rem; position: relative; z-index: 1; width: fit-content; background: var(--surface); box-shadow: var(--shadow-sm); border: 1px solid var(--line); }
+.hub__meta { font-size: .75rem; color: var(--ink-soft); font-weight: 600; letter-spacing: .03em; }
   .hub__inner { padding: 1.15rem; display: flex; flex-direction: column; flex: 1; }
   .hub__card h2 { margin: .25rem 0 .25rem; font-size: 1.2rem; }
   .hub__card p { color: var(--ink-soft); flex: 1; font-size: .9rem; margin: 0 0 .6rem; }
