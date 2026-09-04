@@ -408,12 +408,12 @@ const daWeeks = [6,7,8,9,10].map((w) => {
   .player-card__level { font-family: var(--font-display); font-weight: 800; font-size: .85rem; color: var(--ink-soft); }
   .player-card__xp { display: flex; flex-direction: column; gap: 3px; }
   .player-card__xpbar { height: 8px; background: var(--surface-2); border-radius: var(--radius-pill); overflow: hidden; }
-  .player-card__xpfill { height: 100%; width: 0; border-radius: var(--radius-pill); background: linear-gradient(90deg, var(--accent), var(--streak)); transition: width .6s cubic-bezier(.4,0,.2,1); }
+  .player-card__xpfill { height: 100%; width: 0; border-radius: var(--radius-pill); background: linear-gradient(90deg, var(--accent), var(--accent-strong)); transition: width .6s cubic-bezier(.4,0,.2,1); }
   .player-card__xptext { font-size: .72rem; font-weight: 700; color: var(--ink-soft); }
   .player-card__stats { display: flex; gap: 1.5rem; }
   .player-card__stat { display: flex; flex-direction: column; align-items: center; gap: .1rem; }
   .player-card__stat-val { font-family: var(--font-display); font-weight: 800; font-size: 1.1rem; color: var(--ink-hi); }
-  .player-card__stat-label { font-size: .65rem; font-weight: 700; color: var(--ink-faint); text-transform: uppercase; letter-spacing: .04em; }
+  .player-card__stat-label { font-size: .78rem; font-weight: 700; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .04em; }
 
   /* XP bar */
   .xpbar-wrap { display: flex; align-items: center; gap: .6rem; margin-bottom: 1.5rem; }
@@ -434,15 +434,17 @@ const daWeeks = [6,7,8,9,10].map((w) => {
   .trail__pct { color: var(--streak-text); font-weight: 800; font-size: .85rem; white-space: nowrap; }
   .stations { list-style: none; padding: 0; margin: 0 0 .75rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(52px, 1fr)); gap: .5rem; }
   .station__link { display: flex; flex-direction: column; align-items: center; gap: .3rem; text-decoration: none; color: var(--ink-soft); padding: .75rem .5rem; border-radius: var(--radius-md); border: 2px solid var(--line); background: var(--bg); transition: all var(--transition-fast); position: relative; }
-  .station__link:hover { transform: translateY(-2px); border-color: var(--accent); }
+  .station__link:hover { transform: translateY(-2px); border-color: var(--accent); background: var(--accent-soft); }
+.station__link:active { transform: translateY(0); border-color: var(--accent); background: var(--accent-soft); }
+.station__link:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   .station--done .station__link { border-color: var(--accent); background: var(--accent-soft); }
   .station__dot { width: 14px; height: 14px; border-radius: 50%; border: 3px solid var(--line); background: var(--bg); transition: all var(--transition-fast); }
-  .station--done .station__dot { border-color: var(--accent); background: var(--accent); box-shadow: 0 0 8px rgba(91,33,182,.3); }
+  .station--done .station__dot { border-color: var(--accent); background: var(--accent); box-shadow: 0 0 8px var(--accent-soft); }
   .station__label { font-size: .78rem; font-weight: 700; }
   .station__check { font-size: .7rem; display: none; }
   .station--done .station__check { display: inline; }
-  .trail__xp { font-size: .75rem; font-weight: 700; color: var(--ink-faint); }
-  .trail__xp--streak { color: var(--streak); }
+.trail__xp { font-size: .75rem; font-weight: 700; color: var(--ink-soft); }
+.trail__xp--streak { color: var(--ink); }
 
   /* Quests */
   .quests { margin-bottom: 3rem; }
@@ -451,7 +453,9 @@ const daWeeks = [6,7,8,9,10].map((w) => {
   .quests__legend { color: var(--ink-soft); font-size: .85rem; margin: .1rem 0 .9rem; }
   .quest-grid { display: flex; flex-wrap: wrap; gap: .6rem; }
   .quest { display: flex; align-items: center; gap: .5rem; padding: .5rem .9rem; border-radius: var(--radius-pill); border: 1px solid var(--line); background: var(--surface); font-size: .85rem; font-weight: 600; transition: all var(--transition-fast); }
-  .quest:hover { box-shadow: var(--shadow-sm); }
+  .quest:hover { box-shadow: var(--shadow-sm); border-color: var(--accent); background: var(--accent-soft); }
+.quest:active { box-shadow: var(--shadow-sm); transform: translateY(1px); }
+.quest:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   .quest--locked { opacity: .45; filter: grayscale(.4); }
   .quest__icon { font-size: .95rem; }
   .quest__check { color: var(--success-text); font-weight: 800; display: none; }
@@ -504,7 +508,7 @@ const daWeeks = [6,7,8,9,10].map((w) => {
   }
   .engagement-item__label { display: block; font-size: .68rem; font-weight: 700; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .03em; }
   .engagement-item__value { display: block; font-family: var(--font-display); font-weight: 800; font-size: 1.05rem; color: var(--accent); margin: .1rem 0; }
-  .engagement-item__sub { font-size: .7rem; color: var(--ink-faint); }
+  .engagement-item__sub { font-size: .78rem; color: var(--ink-soft); }
 
   @media (max-width: 640px) {
     .trails { grid-template-columns: 1fr; }

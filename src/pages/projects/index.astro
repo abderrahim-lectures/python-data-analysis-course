@@ -163,8 +163,10 @@ const alternates = {
     border-radius: var(--radius-pill); padding: .35rem .85rem; font-size: .8rem; font-weight: 700;
     cursor: pointer; transition: all var(--transition-fast);
   }
-  .tag-pill:hover { border-color: var(--accent); color: var(--accent); }
-  .tag-pill.is-active { background: var(--accent); border-color: var(--accent); color: var(--accent-contrast); }
+.tag-pill:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+.tag-pill:active { transform: translateY(1px); }
+.tag-pill:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.tag-pill.is-active { background: var(--accent); border-color: var(--accent); color: var(--accent-contrast); }
   .finder__count { margin: 0; font-size: .82rem; color: var(--ink-soft); }
 
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.1rem; margin: 1.5rem 0 3rem; }
