@@ -897,21 +897,33 @@ User asked to "loop and improve". Executed the clean-course-ui improvement loop.
 - [x] Add PWA manifest.json, service worker (sw.js), meta tags
 - [x] Fix AR terminal t-code color — was invisible (#0f0d17 on #0f0c1d) → #e2dcff
 - [x] Fix route-pill text contrast — use --ink instead of --success-text/#fff
+- [x] Add EditorTutorial component — 6-step coach marks with localStorage persistence
+- [x] Add Week 1 micro-steps progress bar on learn hub page
+- [x] Add friendlier error messages — map common errors to beginner-friendly hints
 
 ### Commits
-- `4063433` — fix: remove duplicate dark mode route-pill override
-- `1254c7f` — fix: route-pill colors corrected to use --ink
-- `6df58aa` — feat(pwa): add PWA manifest, service worker, loading bar, playground button, fix AR terminal colors
-- `34ca885` — fix(ui): add Pyodide loading spinner, Ctrl+Run shortcut, copy output button, FirstSuccess celebration
+- `ae25ec5` — feat: add EditorTutorial component, Week 1 micro-steps, friendlier error messages
+- `d2601ee` — docs: update todo.md with 7th pass session
 
 ---
 
-## Remaining P0/P1 items (not yet started)
-- Editor Tutorial component
-- Week 1 micro-steps restructure
-- Pre-warm Pyodide on homepage (now implemented above)
+## Session 2026-09-04 (opencode, 9th pass) — discovery-based learning research & implementation
+
+### Research findings
+Based on academic literature (adult learning theory, 2024-2025):
+- **Andragogy** (Knowles): adults are self-directed, need immediate relevance
+- **Heutagogy** (Hase & Kenyon): self-determined learning, learner agency
+- **Experiential Learning** (Kolb): concrete experience → reflection → abstraction → experimentation
+- **Constructivism**: learners create meaning from experience
+- **Project-Based Learning** (Dewey): learn by doing real-world problems
+
+**Design implication for PyDA**: Guided discovery hybrid — Show → Try → Figure out → Reflect. Not pure discovery (fails for novices per Kirschner et al.) but not pure instruction either.
+
+### Remaining P1 items (not yet started)
 - JupyterLite language packs
-- Friendlier error messages
 - Adaptive difficulty layer
+
+### Commits
+- `ae25ec5` — feat: add EditorTutorial component, Week 1 micro-steps, friendlier error messages
 
 ---
