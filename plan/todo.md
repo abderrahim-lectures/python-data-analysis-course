@@ -857,3 +857,15 @@ User asked to "loop and improve". Executed the clean-course-ui improvement loop.
 
 ### Commits
 - `d31a063` — fix(ui): fourth pass polish
+
+---
+
+## Session 2026-09-04 (opencode, 5th pass) — clean-course-ui loop round 5
+
+### Done
+- [x] Added `:active`/`:focus-visible` to `.card` links on projects page
+
+### Commits
+- `64da9a7` — fix(ui): add :active and :focus-visible to .card links on projects page
+
+---
