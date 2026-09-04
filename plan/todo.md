@@ -779,3 +779,30 @@ the evidence doesn't call for.
 _None outstanding from this session — both previously-unclaimed items
 (structured data, performance audit) are now done. Open a new one if you
 find something worth flagging._
+
+---
+
+## Session 2026-09-04 (opencode) — loop and improve
+
+User asked to "loop and improve". Executed the clean-course-ui improvement loop.
+
+### Done (verified: all gates green)
+- [x] **Added `typecheck` script to package.json** — `npm run typecheck` now works in `loop.sh`
+- [x] **Locale index page polish** (ar/es/fr) — all on opencode surface:
+  - Fixed hero background gradient (orange → violet) to obey single-accent rule
+  - Fixed dead-zone hover on `.reward` and `.gamestrip__item` (add translateY + shadow)
+  - Added `:active` state to `.hub__card`
+  - Replaced hardcoded `#b45309`, `#f59e0b` with `var(--warn)`
+  - Replaced hardcoded `rgba(255,150,0,...)` and `rgba(255,80,0,...)` in gamestrip states with `var(--streak)`, `var(--streak-deep)`
+  - Fixed `.hub__meta` using `--ink-faint` at `.75rem` → `--ink-soft`
+  - Standardized `text-gradient` arrow direction to `→` across all locales
+  - Made `homeStatBadges` locale-specific (fr: `Insignias`)
+- [x] **Fixed unit test failures**:
+  - i18n test: added `homeTerminalLine1`, `homeHubTrack1Name`, `homeStatBadges`, `trackNormalLabel`, `trackHardLabel` to `shared` Set (non-translatable strings)
+  - lessonWiring test: updated to accept both `${track}` (EN) and `${trackRaw}` (locale) patterns
+- [x] **All verification gates green**: typecheck 0 errors, astro check 0 errors, build 229 pages, unit 161/161, e2e 45/45, contrast 0 failures, a11y 0 issues
+
+### Commits
+- `4364f80` — fix: add typecheck script to package.json
+- `e5298cf` — fix(ui): polish locale home pages
+- `2b98759` — fix: pass i18n and lessonWiring tests, polish locale pages
