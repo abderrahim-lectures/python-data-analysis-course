@@ -27,14 +27,28 @@ Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/docs/proj
 **Google Colab o Kaggle Notebooks** también funcionan, ya que este proyecto — a diferencia del de ajuste fino — no necesita GPU: crea un notebook nuevo, ejecuta `!pip install sentence-transformers numpy` en una celda, y luego pega los scripts de abajo como celdas del notebook, adaptando las rutas de archivo según sea necesario. Sé honesto contigo mismo sobre la contrapartida, eso sí: esta es una forma de menor fidelidad de vivir el proyecto que un proyecto real local con `uv` — sin archivos separados, sin estructura de proyecto real, solo celdas en un notebook. Trátalo como una forma rápida de experimentar, no como el camino principal.
 
 ## Paso 1: Instalar `uv`
+### 1.1 `uv` es una única herramienta que reemplaza la cadena habitual de "instala Python, luego ins...
+
+**👟 Pista inicial :**
 
 `uv` es una única herramienta que reemplaza la cadena habitual de "instala Python, luego instala pip, luego instala una herramienta de entorno virtual, luego instala paquetes" — puede instalar y gestionar versiones de Python por sí misma, junto con las dependencias de tu proyecto.
-
 **macOS / Linux** (terminal):
 
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.2 **Windows** (PowerShell):
+
+**👟 Pista inicial :**
 
 **Windows** (PowerShell):
 
@@ -42,11 +56,35 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.3 Cierra y vuelve a abrir tu terminal, y luego confirma que se instaló:
+
+**👟 Pista inicial :**
+
 Cierra y vuelve a abrir tu terminal, y luego confirma que se instaló:
 
 ```bash
 uv --version
 ```
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.4 Luego configura un proyecto:
+
+**👟 Pista inicial :**
 
 Luego configura un proyecto:
 
@@ -55,18 +93,27 @@ uv init rag-notes
 cd rag-notes
 uv add sentence-transformers numpy python-dotenv
 ```
-
 `sentence-transformers` es la biblioteca que convierte texto en vectores en local, en tu propia CPU — sin llamada de API, sin clave. `numpy` hace el cálculo real para comparar vectores. `python-dotenv` te permite mantener tu clave de API del LLM (Paso 5) en un archivo `.env` local.
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.5 Verifica
+
 ## Paso 2: Prepara tus notas
+### 2.1 Pon tus notas en una carpeta `notes/` como archivos `.md` o `.txt` simples — apuntes de clas...
+
+**👟 Pista inicial :**
 
 Pon tus notas en una carpeta `notes/` como archivos `.md` o `.txt` simples — apuntes de clase, un diario, documentación que hayas escrito, lo que sea. La app que estás construyendo solo responde a partir de lo que realmente está en estos archivos.
-
 No puedes entregarle un archivo completo a un modelo de embeddings y esperar un resultado de búsqueda útil. Dos razones:
-
 - **Los modelos de embeddings tienen un límite de contexto.** `all-MiniLM-L6-v2`, el modelo que usa este proyecto, trunca la entrada más allá de 256 fragmentos de palabra — dale un archivo de 2.000 palabras y todo lo que pase el límite se ignora silenciosamente.
 - **El vector de un fragmento grande es un promedio borroso.** Si una nota cubre cinco subtemas distintos, su único vector de embedding termina en algún punto intermedio entre los cinco — cerca de ninguno de ellos con precisión. Busca una pregunta sobre solo uno de esos subtemas, y ese vector podría no rankear alto aunque la respuesta esté justo ahí en el texto. Los fragmentos más pequeños y enfocados obtienen cada uno un vector más nítido y específico, así que la recuperación encuentra el pasaje *realmente* relevante en lugar de un archivo entero que solo es parcialmente relevante.
-
 Divide cada archivo en fragmentos por párrafo, y luego vuelve a fusionar los párrafos diminutos hasta un tamaño objetivo, para que no termines con docenas de fragmentos de una sola línea:
 
 ```python
@@ -124,13 +171,36 @@ if __name__ == "__main__":
         print(f"  [{chunk['source']}] {preview}...")
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 2.2 uv run python prepare_notes.py
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
+
 ```bash
 uv run python prepare_notes.py
 ```
-
 :::tip[El tamaño del fragmento es una contrapartida, no una regla fija]
 Los fragmentos más pequeños recuperan con más precisión (una pregunta coincide con un trozo de texto estrecho y específico) pero pierden el contexto que los rodea (el modelo ve un fragmento aislado, no el párrafo que lo rodea). Los fragmentos más grandes conservan más contexto pero recuperan con menos precisión, por la misma razón que un archivo entero, solo que de forma menos severa. 500 caracteres es un punto de partida razonable para notas en prosa — no hay un número universalmente correcto, y vale la pena probar algunos tamaños distintos en tus propias notas para ver cuál recupera mejor.
 :::
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 2.3 Verifica
 
 **✅ Lista de verificación**
 
@@ -144,9 +214,11 @@ Los fragmentos más pequeños recuperan con más precisión (una pregunta coinci
 - ¿Qué le pasaría a la calidad de la recuperación si hicieras `TARGET_CHUNK_SIZE` mucho más grande — digamos, 5.000 caracteres? ¿Mucho más pequeño, como 50? ¿Por qué?
 
 ## Paso 3: Genera embeddings de tus notas en local
+### 3.1 Un **embedding** es una lista de números — un vector — que representa el *significado* de un...
+
+**👟 Pista inicial :**
 
 Un **embedding** es una lista de números — un vector — que representa el *significado* de un fragmento de texto, no su redacción exacta. `all-MiniLM-L6-v2` mapea cada fragmento a un punto en un espacio de 384 dimensiones, y está entrenado para que los fragmentos con significado similar terminen cerca entre sí en ese espacio, mientras que los fragmentos no relacionados terminen lejos. Ya tienes la intuición central para esto: es la misma idea que graficar datos numéricos en ejes, solo que con 384 ejes en lugar de 2, y "cerca entre sí" medido de la misma forma en que medirías distancia en cualquier espacio de números.
-
 Este modelo es pequeño (unos 80MB), corre enteramente en tu CPU en aproximadamente un segundo por fragmento en una laptop típica, no necesita clave de API, y no cuesta nada — a diferencia del LLM del Paso 5, generar embeddings es totalmente local.
 
 ```python
@@ -192,13 +264,35 @@ if __name__ == "__main__":
     main()
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 3.2 uv run python build_index.py
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
+
 ```bash
 uv run python build_index.py
 ```
-
 Esto evita deliberadamente una base de datos vectorial — para una carpeta personal de notas (cientos o pocos miles de fragmentos, no millones), un simple array de NumPy que cabe cómodamente en memoria es más simple, no tiene ningún servicio adicional que instalar o ejecutar, y es totalmente transparente: `index.npy` es una matriz, `chunks.json` es el texto del que proviene, nada más.
-
 `normalize_embeddings=True` escala cada vector a longitud 1 — vale la pena hacerlo ahora en lugar de en el momento de la consulta, ya que es lo que hace que la similitud de coseno del Paso 4 se reduzca a un simple producto punto.
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 3.3 Verifica
 
 **✅ Lista de verificación**
 
@@ -212,13 +306,14 @@ Esto evita deliberadamente una base de datos vectorial — para una carpeta pers
 - ¿Por qué guardar los embeddings en un archivo, en lugar de simplemente volver a generar embeddings de todas tus notas cada vez que haces una pregunta?
 
 ## Paso 4: Recupera fragmentos relevantes
+### 4.1 Para encontrar qué fragmentos son relevantes a una pregunta, genera el embedding de la pregu...
+
+**👟 Pista inicial :**
 
 Para encontrar qué fragmentos son relevantes a una pregunta, genera el embedding de la pregunta con el *mismo* modelo, y luego ordena cada fragmento según qué tan cerca esté su vector del vector de la pregunta. La forma estándar de medir "cercanía" para embeddings es la **similitud de coseno** — el coseno del ángulo entre dos vectores, que le importa la *dirección* (significado) e ignora la *magnitud* (aproximadamente, la longitud del texto):
-
 $$
 \text{cosine\_similarity}(a, b) = \frac{a \cdot b}{\|a\| \, \|b\|}
 $$
-
 Dado que cada vector ya fue normalizado a longitud 1 al guardarse ($\|a\| = \|b\| = 1$), el denominador es simplemente 1, y la similitud de coseno se colapsa a un simple producto punto — una razón para normalizar en el momento de generar el embedding en lugar de omitirlo:
 
 ```python
@@ -271,11 +366,34 @@ if __name__ == "__main__":
         print(f"{r['score']:.3f}  [{r['source']}]  {r['text'][:80]}...")
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 4.2 uv run python retrieve.py
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
+
 ```bash
 uv run python retrieve.py
 ```
-
 `embeddings @ question_vector` es multiplicación matriz-vector: cada fila de la matriz multiplicada por producto punto con el vector de la pregunta, todo a la vez, en una sola llamada de NumPy — la misma operación del material de álgebra lineal del curso, aquí haciendo el trabajo real de comparar una pregunta contra cada fragmento de las notas.
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 4.3 Verifica
 
 **✅ Lista de verificación**
 
@@ -289,11 +407,12 @@ uv run python retrieve.py
 - ¿Qué esperarías que le pasara a la puntuación del mejor resultado si hicieras una pregunta que no tiene respuesta real en ninguna parte de tus notas? Pruébalo — ¿la puntuación confirma tu predicción?
 
 ## Paso 5: Genera una respuesta con un LLM gratuito
+### 5.1 La recuperación por sí sola te devuelve fragmentos crudos de tus propias notas — útil, pero ...
+
+**👟 Pista inicial :**
 
 La recuperación por sí sola te devuelve fragmentos crudos de tus propias notas — útil, pero no una respuesta redactada. El último paso le entrega esos fragmentos a un modelo de lenguaje como contexto y le pide que responda *usándolos*. Esto es lo que significa "RAG" (generación aumentada por recuperación): generación, aumentada por un paso de recuperación ejecutado primero.
-
 **Elige el proveedor que prefieras** — ninguno de ellos requiere una tarjeta de crédito al momento de escribir esto, y este curso no favorece a uno sobre otro.
-
 | Proveedor | Dónde obtener una clave | Por qué podrías elegirlo |
 |---|---|---|
 | **GitHub Models** *(valor por defecto sugerido)* | [github.com/settings/tokens](https://github.com/settings/tokens) — un token de acceso personal con el alcance `models: read` | Sin registro separado — ya tienes una cuenta de GitHub. Límites de nivel gratuito más generosos que los de Gemini. |
@@ -302,9 +421,7 @@ La recuperación por sí sola te devuelve fragmentos crudos de tus propias notas
 | Mistral | [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys) | Una de las cuotas gratuitas permanentes más generosas. |
 | Cerebras | [cloud.cerebras.ai](https://cloud.cerebras.ai/) | Alto volumen diario de tokens, sin tarjeta. |
 | OpenRouter | [openrouter.ai/keys](https://openrouter.ai/keys) | Una API, muchos modelos gratuitos — buena para comparar proveedores. |
-
 Cualquiera que elijas, el proceso es el mismo:
-
 1. Inicia sesión y genera una clave de API en el sitio de ese proveedor.
 2. **Nunca pegues esta clave directamente en el código ni la subas a un repositorio.** Ponla en un archivo `.env` en su lugar (ya ignorado por git si seguiste el Paso 1):
 
@@ -313,11 +430,37 @@ Cualquiera que elijas, el proceso es el mismo:
 GITHUB_TOKEN=your-key-here
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 5.2 `python-dotenv` (instalado en el Paso 1) lee este archivo hacia `os.environ` automáticamente...
+
+**👟 Pista inicial :**
+
 `python-dotenv` (instalado en el Paso 1) lee este archivo hacia `os.environ` automáticamente, el mismo patrón usado a lo largo del [proyecto de Agente de IA](/docs/projects/ai-agent) si ya hiciste ese — GitHub Models expone una API compatible con OpenAI, así que la biblioteca cliente `openai` normal funciona para él sin ningún paquete adicional:
 
 ```bash
 uv add openai
 ```
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 5.3 # ask.py
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
 
 ```python
 # ask.py
@@ -370,15 +513,37 @@ if __name__ == "__main__":
     print(ask(question))
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 5.4 uv run python ask.py "What is this course about?"
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
+
 ```bash
 uv run python ask.py "What is this course about?"
 ```
-
 `build_prompt` es toda la idea de RAG en una sola función: no le pide al modelo que responda desde lo que ya sabe, le entrega al modelo el *texto realmente recuperado* y le pide que responda a partir de eso — por lo que una app RAG puede responder correctamente preguntas sobre notas que el modelo subyacente nunca vio, escritas ayer, en tu propia máquina.
-
 :::tip[¿Usas un proveedor distinto?]
 Cambia el bloque `OpenAI(...)` por el cliente propio de tu proveedor, siguiendo el mismo patrón que el [proyecto de Agente de IA](/docs/projects/ai-agent#paso-1-escribe-tu-primer-agente) — p. ej. el paquete `google-genai` de Google para Gemini, o el cliente propio de `groq` para Groq. Cerebras y OpenRouter también son compatibles con OpenAI, así que el paquete `openai` también funciona para ellos, solo que con un `base_url` distinto.
 :::
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 5.5 Verifica
 
 **✅ Lista de verificación**
 

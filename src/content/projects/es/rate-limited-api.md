@@ -65,6 +65,9 @@ uv add fastapi "uvicorn[standard]"
 Fíjate en lo que *no* hay aquí: ninguna clave de API que solicitar, ningún registro de nivel gratuito, nada que configurar antes de tu primera petición. Este proyecto incluye su propio conjunto de datos y emite sus propias claves — estás construyendo la cosa que consumen los demás proyectos de esta serie.
 
 ## Paso 1: Empaca el conjunto de datos y construye los endpoints básicos
+### 1.1 Las APIs reales sirven datos reales. Crea `quotes_data.py` con un conjunto de datos pequeño ...
+
+**👟 Pista inicial :**
 
 Las APIs reales sirven datos reales. Crea `quotes_data.py` con un conjunto de datos pequeño escrito a mano — una lista simple de Python de diccionarios es suficiente; no se necesita base de datos todavía:
 
@@ -85,6 +88,18 @@ QUOTES = [
 
 CATEGORIES = sorted({q["category"] for q in QUOTES})
 ```
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.2 Escribe el tuyo — unas pocas docenas bastan para empezar, apunta a un par de cientos para cu...
+
+**👟 Pista inicial :**
 
 Escribe el tuyo — unas pocas docenas bastan para empezar, apunta a un par de cientos para cuando termines, abarcando al menos tres o cuatro categorías. Luego crea `main.py` con la aplicación y dos endpoints de lectura:
 
@@ -125,11 +140,35 @@ def get_quote(quote_id: int) -> QuoteOut:
     raise HTTPException(status_code=404, detail=f"No quote with id {quote_id}.")
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.3 Ejecútalo:
+
+**👟 Pista inicial :**
+
 Ejecútalo:
 
 ```bash
 uv run uvicorn main:app --reload
 ```
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.4 Luego, en otra terminal:
+
+**👟 Pista inicial :**
 
 Luego, en otra terminal:
 
@@ -138,8 +177,17 @@ curl "http://127.0.0.1:8000/quotes?limit=3"
 curl "http://127.0.0.1:8000/quotes/1"
 curl -i "http://127.0.0.1:8000/quotes/99999"   # a real 404
 ```
-
 La paginación `limit`/`offset` es el mismo patrón detrás del endpoint de lista de casi todas las APIs REST públicas — limita cuántos datos puede devolver una sola respuesta (`le=100` aquí) y permite que un cliente recorra el conjunto de datos completo página a página usando `total` para saber cuándo detenerse.
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.5 Verifica
 
 **✅ Lista de verificación**
 
@@ -153,6 +201,9 @@ La paginación `limit`/`offset` es el mismo patrón detrás del endpoint de list
 - `get_quote` recorre toda la lista para encontrar un id. Con unos cientos de citas esto es instantáneo; con unos pocos millones no lo sería. ¿Qué estructura de datos haría rápido buscar por id independientemente del tamaño del conjunto de datos?
 
 ## Paso 2: Añade filtrado
+### 2.1 Extiende `list_quotes` con parámetros de consulta opcionales para categoría y autor:
+
+**👟 Pista inicial :**
 
 Extiende `list_quotes` con parámetros de consulta opcionales para categoría y autor:
 
@@ -180,13 +231,36 @@ def list_quotes(
     return QuotesPage(items=[QuoteOut(**q) for q in page], total=len(filtered), limit=limit, offset=offset)
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 2.2 curl "http://127.0.0.1:8000/quotes?category=science&limit=5"
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
+
 ```bash
 curl "http://127.0.0.1:8000/quotes?category=science&limit=5"
 curl "http://127.0.0.1:8000/quotes?author=sagan"
 curl "http://127.0.0.1:8000/categories"
 ```
-
 `total` en la respuesta refleja el recuento *filtrado*, no todo el conjunto de datos — eso importa para un cliente que intente paginar solo por las citas de ciencia, que de otro modo pensaría que quedan muchas más páginas de las que realmente hay.
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 2.3 Verifica
 
 **✅ Lista de verificación**
 
@@ -200,6 +274,9 @@ curl "http://127.0.0.1:8000/categories"
 - Si añadieras un segundo filtro que también necesitara "cualquiera de varios valores" (p. ej. varias categorías a la vez), ¿cómo extenderías el parámetro de consulta para que aceptara una lista?
 
 ## Paso 3: Emisión y validación de claves de API
+### 3.1 Una API real necesita saber quién la está llamando. Añade emisión de claves de autoservicio ...
+
+**👟 Pista inicial :**
 
 Una API real necesita saber quién la está llamando. Añade emisión de claves de autoservicio y una dependencia que verifica una clave en las rutas protegidas:
 
@@ -229,6 +306,18 @@ def whoami(api_key: str = Depends(require_api_key)) -> dict:
     return {"api_key": api_key}
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 3.2 `secrets.token_urlsafe` — no `random`, que no es criptográficamente seguro — genera una clav...
+
+**👟 Pista inicial :**
+
 `secrets.token_urlsafe` — no `random`, que no es criptográficamente seguro — genera una clave que nadie puede adivinar. `Depends(require_api_key)` es el sistema de inyección de dependencias de FastAPI: cualquier ruta que tome `api_key: str = Depends(require_api_key)` como parámetro ejecuta `require_api_key` primero, y solo continúa si retorna con éxito en lugar de lanzar una excepción.
 
 ```bash
@@ -236,10 +325,19 @@ curl -i "http://127.0.0.1:8000/me"                                   # 401, no k
 curl -X POST "http://127.0.0.1:8000/keys"                            # {"api_key": "..."}
 curl -i -H "X-API-Key: <your-key>" "http://127.0.0.1:8000/me"        # 200
 ```
-
 :::tip[Este almacén de claves en memoria lo olvida todo al reiniciar, y eso está bien aquí]
 `_VALID_KEYS` vive en un `set` simple de Python en la memoria de este proceso — reinicia el servidor y toda clave emitida previamente deja de funcionar. Un producto real persistiría las claves en una base de datos (y almacenaría un *hash* de cada clave, no el valor crudo, de la misma manera que se hacen hash las contraseñas — para que una fuga de la base de datos no filtre claves utilizables directamente). Para un proyecto local de aprendizaje, la versión en memoria es honesta y suficiente; solo no te sorprendas cuando tu clave deje de funcionar después de que `--reload` reinicie el proceso.
 :::
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 3.3 Verifica
 
 **✅ Lista de verificación**
 
@@ -253,6 +351,9 @@ curl -i -H "X-API-Key: <your-key>" "http://127.0.0.1:8000/me"        # 200
 - Ahora mismo cualquiera puede llamar a `POST /keys` tantas veces como quiera sin ningún límite. ¿Es eso un problema para *este* proyecto? ¿Qué añadirías si fuera un servicio público real?
 
 ## Paso 4: Limitación de tasa real
+### 4.1 Este es el auténtico punto del proyecto. Construye un limitador de tasa de ventana deslizant...
+
+**👟 Pista inicial :**
 
 Este es el auténtico punto del proyecto. Construye un limitador de tasa de ventana deslizante que rastrea las marcas de tiempo recientes de las peticiones de cada clave y rechaza las peticiones una vez que una clave excede su presupuesto dentro de una ventana:
 
@@ -283,8 +384,19 @@ class SlidingWindowRateLimiter:
         return False, max(retry_after, 0.0)
 ```
 
-Cada clave tiene su propio `deque` de marcas de tiempo, de más antigua a más reciente. En cada comprobación, las marcas de tiempo más antiguas que `window_seconds` se descartan por la izquierda antes de contar lo que queda — esta es una ventana deslizante **exacta**, no una aproximación por cubos que se reinicia en un límite de reloj fijo. Esa distinción importa: un limitador de *ventana fija* (digamos, "reinicia el contador cada 10 segundos según el reloj") permite que un cliente dispare su cuota completa justo al final de una ventana y su cuota completa de nuevo justo al inicio de la siguiente, alcanzando hasta 2x su tasa prevista en un par de segundos reales. Rastrear marcas de tiempo reales evita eso.
+**🎯 Resultado esperado :**
 
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 4.2 Cada clave tiene su propio `deque` de marcas de tiempo, de más antigua a más reciente. En ca...
+
+**👟 Pista inicial :**
+
+Cada clave tiene su propio `deque` de marcas de tiempo, de más antigua a más reciente. En cada comprobación, las marcas de tiempo más antiguas que `window_seconds` se descartan por la izquierda antes de contar lo que queda — esta es una ventana deslizante **exacta**, no una aproximación por cubos que se reinicia en un límite de reloj fijo. Esa distinción importa: un limitador de *ventana fija* (digamos, "reinicia el contador cada 10 segundos según el reloj") permite que un cliente dispare su cuota completa justo al final de una ventana y su cuota completa de nuevo justo al inicio de la siguiente, alcanzando hasta 2x su tasa prevista en un par de segundos reales. Rastrear marcas de tiempo reales evita eso.
 Conéctalo a una dependencia y úsalo en `/me`:
 
 ```python
@@ -311,6 +423,18 @@ def whoami(api_key: str = Depends(enforce_rate_limit)) -> dict:
     return {"api_key": api_key}
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 4.3 Fíjate en que las cabeceras se establecen de dos maneras diferentes según el resultado — no ...
+
+**👟 Pista inicial :**
+
 Fíjate en que las cabeceras se establecen de dos maneras diferentes según el resultado — no es una elección estilística, es necesario. Dispara seis peticiones en rápida sucesión con la misma clave:
 
 ```bash
@@ -318,15 +442,36 @@ KEY=$(curl -s -X POST "http://127.0.0.1:8000/keys" | python3 -c "import sys,json
 for i in 1 2 3 4 5 6; do curl -s -o /dev/null -w "%{http_code}\n" -H "X-API-Key: $KEY" "http://127.0.0.1:8000/me"; done
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 4.4 Las cinco primeras deberían imprimir `200`; la sexta debería imprimir `429`. Comprueba las c...
+
+**👟 Pista inicial :**
+
 Las cinco primeras deberían imprimir `200`; la sexta debería imprimir `429`. Comprueba las cabeceras de esa última:
 
 ```bash
 curl -i -H "X-API-Key: $KEY" "http://127.0.0.1:8000/me"
 ```
-
 :::tip[Cabeceras de HTTPException, no `response.headers`, en la ruta de error]
 Es tentador establecer `response.headers["Retry-After"] = ...` justo antes de lanzar `HTTPException`, de la misma manera que la ruta de éxito establece `X-RateLimit-Limit`. No lo hagas — cuando FastAPI convierte una `HTTPException` lanzada en una respuesta HTTP real, construye un objeto de respuesta **nuevo** a partir de la excepción, descartando por el camino lo que se haya escrito en el parámetro `response` inyectado. Cualquier cabecera que deba aparecer en una respuesta de error tiene que pasarse directamente a `HTTPException(..., headers={...})`, o nunca llega al cliente, en silencio. Esto mordió la primera versión del código de ejemplo de esta misma lección — verifica con `curl -i` que tu `429` realmente lleva `Retry-After`, no confíes simplemente en que establecer `response.headers` funcionó.
 :::
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 4.5 Verifica
 
 **✅ Lista de verificación**
 

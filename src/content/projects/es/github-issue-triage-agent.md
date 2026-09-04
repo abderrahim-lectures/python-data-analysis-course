@@ -97,6 +97,9 @@ GITHUB_API_TOKEN=
 `GITHUB_TOKEN` aquí es tu clave de **proveedor de LLM** (GitHub Models específicamente) — no es necesario que sea el mismo token que `GITHUB_API_TOKEN`, que es un token completamente separado y opcional usado solo para el paso de obtención de issues de abajo. Está bien que sean el mismo token de acceso personal si generaste uno pensando en ambos usos, pero ni este proyecto ni GitHub lo requieren.
 
 ## Paso 1: Obtén issues abiertos de un repositorio real
+### 1.1 GitHub expone una API REST gratuita para leer datos de repositorios públicos — no se necesit...
+
+**👟 Pista inicial :**
 
 GitHub expone una API REST gratuita para leer datos de repositorios públicos — no se necesita autenticación para leer issues de un repositorio público. Crea `triage.py`:
 
@@ -126,15 +129,37 @@ if __name__ == "__main__":
         print(f"#{issue['number']}: {issue['title']}")
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.2 uv run python triage.py
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
+
 ```bash
 uv run python triage.py
 ```
-
 Deberías ver hasta 10 líneas, cada una un número y título de issue real y actualmente abierto de [`psf/requests`](https://github.com/psf/requests). `params={"state": "open", ...}` está haciendo el filtrado importante aquí — el comportamiento por defecto de GitHub también incluiría issues cerrados, y este proyecto solo se preocupa por los que todavía necesitan triaje.
-
 :::tip[El límite de tasa sin autenticar de GitHub es bajo]
 Las solicitudes sin autenticar a la API REST de GitHub están limitadas a **60 solicitudes/hora, por dirección IP** — fácil de alcanzar si estás volviendo a ejecutar este script mucho mientras desarrollas, o compartiendo una IP con compañeros en la misma red. Esta lección solo hace una solicitud de API por ejecución (una llamada obtiene hasta 100 issues a la vez), así que probablemente no lo alcances solo siguiendo el tutorial — pero si ves un `403` con un mensaje sobre límite de tasa, eso es lo que pasó. Configurar `GITHUB_API_TOKEN` (cualquier token de acceso personal, no se requieren scopes para lecturas públicas) en tu `.env` eleva el límite a 5,000 solicitudes/hora — mira el paso opcional en la Configuración de arriba.
 :::
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.3 Verifica
 
 **✅ Lista de verificación**
 
@@ -148,6 +173,9 @@ Las solicitudes sin autenticar a la API REST de GitHub están limitadas a **60 s
 - `sort="updated"` significa que los 10 issues que obtienes son los 10 *actualizados más recientemente*, no los 10 más antiguos o creados más recientemente. ¿Por qué "actualizado más recientemente" podría ser un valor por defecto más útil para una herramienta de triaje que "creado más recientemente"?
 
 ## Paso 2: Escribe un prompt de sugerencia de triaje por issue
+### 2.1 Cada issue necesita convertirse en un prompt que le pida al modelo exactamente dos cosas: un...
+
+**👟 Pista inicial :**
 
 Cada issue necesita convertirse en un prompt que le pida al modelo exactamente dos cosas: una etiqueta de una lista fija, y una justificación de una oración. Añade esto a `triage.py`:
 
@@ -171,12 +199,20 @@ def build_triage_prompt(issue: dict) -> str:
         "Rationale: <one sentence explaining the suggested label and its priority>"
     )
 ```
-
 Dos decisiones deliberadas aquí. Primero, `MAX_BODY_CHARS` trunca el cuerpo del issue — algunos issues llegan a miles de palabras (stack traces pegados, logs largos), y no hay beneficio en gastar tokens en más de lo que el modelo necesita para captar la idea; mira la sección de pitfalls abajo para lo que pasa si omites esto. Segundo, el prompt pide un formato de respuesta fijo y simple de dos líneas (`Label: ...` / `Rationale: ...`) en lugar de JSON — más fácil de seguir de forma confiable para un modelo pequeño de nivel gratuito, y suficientemente fácil de analizar con métodos de cadena simples en el siguiente paso.
-
 :::tip["Sugerir, no aplicar" es una instrucción estructural, no un detalle amable]
 Nota que el prompt le dice explícitamente al modelo que está redactando una sugerencia para revisión humana, no aplicando nada. Este script respalda eso con comportamiento real, no solo con palabras: nada en `triage.py` llama jamás a un endpoint de GitHub que agregaría una etiqueta o comentario a un issue real — solo lee issues e imprime texto en tu terminal. Ese es un límite de seguridad deliberado, el mismo principio detrás de cualquier herramienta de IA que toca las cosas de otras personas: redacta con confianza, actúa solo con un humano en el ciclo, especialmente para algo tan fácil de malinterpretar sutilmente como una lectura de una oración del reporte de bug de otra persona.
 :::
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 2.2 Verifica
 
 **✅ Lista de verificación**
 
@@ -190,6 +226,9 @@ Nota que el prompt le dice explícitamente al modelo que está redactando una su
 - Si el cuerpo de un issue está vacío (algunos issues realmente no tienen ninguno), ¿qué envía actualmente `build_triage_prompt` al modelo? ¿Es eso un prompt razonable, o lo mejorarías?
 
 ## Paso 3: Llama al LLM y analiza su respuesta
+### 3.1 Ahora conecta una llamada real al LLM, y convierte su respuesta de dos líneas de vuelta en u...
+
+**👟 Pista inicial :**
 
 Ahora conecta una llamada real al LLM, y convierte su respuesta de dos líneas de vuelta en un `dict` de Python utilizable:
 
@@ -224,10 +263,18 @@ def suggest_triage(issue: dict) -> dict:
     reply = call_llm(build_triage_prompt(issue))
     return parse_triage_reply(reply)
 ```
-
 No olvides `from dotenv import load_dotenv` más `load_dotenv()` cerca de la parte superior del archivo, para que `os.environ["GITHUB_TOKEN"]` realmente encuentre la clave de tu archivo `.env` — mismo patrón que el [proyecto de Agente de IA](/docs/projects/ai-agent).
-
 `parse_triage_reply` deliberadamente recurre a `label="other"` y la respuesta cruda como justificación si el modelo no sigue el formato de dos líneas solicitado exactamente — los modelos de nivel gratuito ocasionalmente añaden texto perdido o se saltan una línea, y un *borrador* de triaje ligeramente malformado sigue siendo más útil impreso para que un humano lo hojee que descartado silenciosamente por un error de análisis.
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 3.2 Verifica
 
 **✅ Lista de verificación**
 
@@ -241,6 +288,9 @@ No olvides `from dotenv import load_dotenv` más `load_dotenv()` cerca de la par
 - Si ejecutaras `suggest_triage` en el *mismo* issue dos veces, ¿esperarías exactamente la misma justificación ambas veces? ¿Qué sugiere tu respuesta sobre cuánto debería confiar un mantenedor en una sola sugerencia versus tratarla como un punto de datos?
 
 ## Paso 4: Imprime el reporte y ejecútalo de principio a fin
+### 4.1 Junta todo el pipeline — obtén, sugiere, reporta:
+
+**👟 Pista inicial :**
 
 Junta todo el pipeline — obtén, sugiere, reporta:
 
@@ -270,11 +320,34 @@ if __name__ == "__main__":
     print_triage_report(owner, repo, issues, suggestions)
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 4.2 uv run python triage.py
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
+
 ```bash
 uv run python triage.py
 ```
-
 Deberías ver un reporte completo: un encabezado nombrando el repositorio y conteo de issues, luego un bloque por issue con su número, título, URL real de GitHub, etiqueta sugerida, y justificación de una oración — más esa línea recordatorio arriba de que estos son borradores, no cambios aplicados. Intenta apuntar `owner`/`repo` a un repositorio público real y activo diferente (cualquiera con issues abiertos funciona) y confirma que el reporte se adapta a contenido de issue genuinamente diferente, no solo repitiendo la misma salida.
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 4.3 Verifica
 
 **✅ Lista de verificación**
 

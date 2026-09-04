@@ -121,6 +121,9 @@ GITHUB_TOKEN=ta-clé-llm-ici
 - Le jeton du bot et la clé API LLM sont tous les deux des secrets, mais authentifient auprès de deux services complètement différents. Qu'est-ce qui irait mal si tu échangeais accidentellement quelle variable d'environnement contenait quelle valeur ?
 
 ## Étape 1 : Prépare et embedde un dossier de documentation
+### 1.1 Cette étape correspond aux Étapes 2 et 3 du projet Appli RAG, inchangées dans leur substance...
+
+**👟 Indice de départ :**
 
 Cette étape correspond aux Étapes 2 et 3 du projet Appli RAG, inchangées dans leur substance, juste pointées vers un dossier `docs/` de documentation plutôt que des notes personnelles :
 
@@ -168,6 +171,18 @@ if __name__ == "__main__":
     print(f"Loaded {len(chunks)} chunks from {DOCS_DIR}/")
 ```
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 1.2 Mets toute la documentation dont tu veux que le bot réponde dans un dossier `docs/` sous for...
+
+**👟 Indice de départ :**
+
 Mets toute la documentation dont tu veux que le bot réponde dans un dossier `docs/` sous forme de fichiers `.md`/`.txt` — le README et les pages wiki d'un projet, le manuel interne d'une équipe, les propres fichiers de leçon de ce cours, n'importe quoi de réel. Ensuite embedde-la, en réutilisant le `build_index.py` du projet Appli RAG textuellement (seul l'import change, de `prepare_notes` à `prepare_docs`) :
 
 ```python
@@ -209,10 +224,34 @@ if __name__ == "__main__":
     main()
 ```
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 1.3 uv run python prepare_docs.py
+
+**👟 Indice de départ :**
+
+Exécutez le code ci-dessous et confirmez qu'il fonctionne.
+
 ```bash
 uv run python prepare_docs.py
 uv run python build_index.py
 ```
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 1.4 Vérifie
 
 **✅ Liste de vérification**
 
@@ -226,6 +265,9 @@ uv run python build_index.py
 - Si ton dossier de documentation a un fichier avec un formatage très incohérent (pas de lignes vides, un gros bloc de texte), qu'est-ce que tu attendrais qu'il arrive à la qualité des fragments qu'il produit ?
 
 ## Étape 2 : Récupère les fragments pertinents
+### 2.1 La récupération reste aussi inchangée par rapport au projet Appli RAG — embedde la question ...
+
+**👟 Indice de départ :**
 
 La récupération reste aussi inchangée par rapport au projet Appli RAG — embedde la question avec le même modèle, puis classe chaque fragment par similarité cosinus, ce qui se réduit à un simple produit scalaire puisque chaque vecteur a déjà été normalisé à longueur 1 au moment de l'embedding :
 
@@ -272,15 +314,37 @@ if __name__ == "__main__":
         print(f"{r['score']:.3f}  [{r['source']}]  {r['text'][:80]}...")
 ```
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 2.2 uv run python retrieve.py
+
+**👟 Indice de départ :**
+
+Exécutez le code ci-dessous et confirmez qu'il fonctionne.
+
 ```bash
 uv run python retrieve.py
 ```
-
 Si ça semble aller trop vite, c'est délibéré — le [projet Appli RAG](/docs/projects/rag-notes#step-4-retrieve-relevant-chunks) couvre exactement pourquoi la similarité cosinus fonctionne ainsi, ce que la normalisation t'apporte, et comment les maths se connectent à une multiplication matrice-vecteur, avec bien plus de profondeur que ce que le répéter ici apporterait.
-
 :::tip[Teste la récupération avant de toucher à Discord du tout]
 Fais en sorte que `retrieve.py` retourne des fragments authentiquement pertinents pour quelques questions de test *avant* d'écrire du code de bot. Si la récupération est mauvaise, un bot enroulé autour d'elle livrera simplement des réponses erronées avec confiance dans un canal Discord — bien plus difficile à déboguer en direct qu'un script de terminal silencieux.
 :::
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 2.3 Vérifie
 
 **✅ Liste de vérification**
 
@@ -294,9 +358,11 @@ Fais en sorte que `retrieve.py` retourne des fragments authentiquement pertinent
 - Si deux fichiers de documentation disent des choses légèrement contradictoires (un obsolète et un mis à jour), qu'est-ce que tu attendrais que `retrieve()` fasse, et comment remarquerais-tu le problème rien qu'à partir des réponses du bot ?
 
 ## Étape 3 : Connecte le gestionnaire de messages du bot
+### 3.1 C'est la vraie nouvelle partie de ce projet : un gestionnaire d'événements `discord.py` qui ...
+
+**👟 Indice de départ :**
 
 C'est la vraie nouvelle partie de ce projet : un gestionnaire d'événements `discord.py` qui appelle `retrieve()`, construit le même prompt « réponds en utilisant uniquement ce contexte » que le projet Appli RAG, et répond avec la réponse du modèle.
-
 Le pattern central de `discord.py` est une boucle d'événements : tu crées un `Client` avec un ensemble d'`intents` (quelles catégories d'événements il est autorisé à recevoir), puis tu enregistres des fonctions `async def` décorées avec `@client.event` pour les événements qui t'intéressent — le plus souvent `on_ready` (se déclenche une fois, quand la connexion est établie) et `on_message` (se déclenche pour chaque message que le bot peut voir) :
 
 ```python
@@ -377,14 +443,21 @@ async def on_message(message: discord.Message):
 if __name__ == "__main__":
     client.run(os.environ["DISCORD_BOT_TOKEN"])
 ```
-
 `answer()` est ligne pour ligne la même idée que le `ask()` du projet Appli RAG — récupérer, construire un prompt, appeler le LLM — mais retourne une chaîne au lieu de l'afficher, pour que `on_message` puisse transmettre cette chaîne à `message.reply(...)`. Tout au-dessus de `on_ready`/`on_message` s'exécute une fois au démarrage ; tout à l'intérieur de ces deux fonctions s'exécute une fois par événement, tant que `client.run(...)` maintient la connexion vivante.
-
 La garde `if message.author == client.user: return` compte plus qu'il n'y paraît : sans elle, si la propre réponse du bot se mentionnait elle-même (ça n'arrivera pas ici, mais c'est une erreur facile en général), ça déclencherait `on_message` à nouveau sur sa propre sortie — une boucle infinie d'un bot se répondant à lui-même.
-
 :::tip[async def et await ne sont pas optionnels ici]
 `discord.py` est entièrement construit sur `asyncio` de Python — chaque gestionnaire d'événements doit être déclaré `async def`, et tout appel qui attend sur le réseau (envoyer un message, récupérer des données) doit avoir `await`. Oublier l'un ou l'autre est l'un des tout premiers bugs les plus courants : oublier `async` sur `on_message` lève une erreur immédiatement, et oublier `await` sur `message.reply(...)` ne fait silencieusement rien du tout, puisque ça crée juste une coroutine non attendue au lieu de réellement l'exécuter.
 :::
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 3.2 Vérifie
 
 **✅ Liste de vérification**
 
@@ -398,22 +471,45 @@ La garde `if message.author == client.user: return` compte plus qu'il n'y paraî
 - Le `try`/`except` autour de `answer(reply)` attrape *toute* exception et répond avec un message d'erreur générique plutôt que de planter. Quel est le compromis de capturer aussi largement dans un bot de longue durée par rapport à laisser un vrai bug planter le processus bruyamment ?
 
 ## Étape 4 : Invite le bot et essaie-le de bout en bout
+### 4.1 De retour dans le Portail Développeur de Discord, ouvre **OAuth2 → URL Generator**. Sous **S...
+
+**👟 Indice de départ :**
 
 De retour dans le Portail Développeur de Discord, ouvre **OAuth2 → URL Generator**. Sous **Scopes**, coche `bot` ; sous **Bot Permissions**, coche au moins **Send Messages** et **Read Message History**. Copie l'URL générée, ouvre-la dans un navigateur, et choisis un serveur que tu contrôles (crée un serveur de test gratuit si tu n'en as pas déjà un) pour y ajouter le bot.
-
 Exécute-le :
 
 ```bash
 uv run python bot.py
 ```
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 4.2 Tu devrais voir `Logged in as docs-qa-bot#1234 -- ready in 1 server(s).` affiché — le silenc...
+
+**👟 Indice de départ :**
+
 Tu devrais voir `Logged in as docs-qa-bot#1234 -- ready in 1 server(s).` affiché — le silence après ça est normal ; le processus est juste en attente d'événements sur la Gateway de Discord, la même idée « pas de sortie signifie que ça fonctionne » qu'un serveur MCP en attente sur stdio. Dans le serveur de test, mentionne le bot avec une vraie question sur ce qui se trouve dans ton dossier `docs/` :
 
 ```
 @docs-qa-bot how do I enable the message content intent?
 ```
-
 En quelques secondes tu devrais voir un indicateur « en train d'écrire », puis une réponse ancrée dans ta vraie documentation — pas une supposition venant des données d'entraînement générales du modèle.
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 4.3 Vérifie
 
 **✅ Liste de vérification**
 

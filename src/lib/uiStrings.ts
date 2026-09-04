@@ -8,6 +8,7 @@ export type Locale = 'en' | 'ar' | 'es' | 'fr';
 
 export interface UiStrings {
   nav: {learn: string; projects: string; progress: string; playground: string};
+  lvlUpText: string;
   footer: {
     courseCol: string;
     siteCol: string;
@@ -36,6 +37,7 @@ export interface UiStrings {
 export const UI_STRINGS: Record<Locale, UiStrings> = {
   en: {
     nav: {learn: 'Learn', projects: 'Projects', progress: 'Progress', playground: 'Playground'},
+    lvlUpText: 'LEVEL UP',
     footer: {
       courseCol: 'Course',
       siteCol: 'Site',
@@ -63,6 +65,7 @@ export const UI_STRINGS: Record<Locale, UiStrings> = {
   },
   ar: {
     nav: {learn: 'تعلّم', projects: 'المشاريع', progress: 'تقدمي', playground: 'ساحة التجربة'},
+    lvlUpText: 'ارتقِ',
     footer: {
       courseCol: 'الدورة',
       siteCol: 'الموقع',
@@ -90,6 +93,7 @@ export const UI_STRINGS: Record<Locale, UiStrings> = {
   },
   es: {
     nav: {learn: 'Aprender', projects: 'Proyectos', progress: 'Progreso', playground: 'Playground'},
+    lvlUpText: '¡SUBE DE NIVEL!',
     footer: {
       courseCol: 'Curso',
       siteCol: 'Sitio',
@@ -117,6 +121,7 @@ export const UI_STRINGS: Record<Locale, UiStrings> = {
   },
   fr: {
     nav: {learn: 'Apprendre', projects: 'Projets', progress: 'Progression', playground: 'Bac à sable'},
+    lvlUpText: 'NIVEAU SUPÉRIEUR',
     footer: {
       courseCol: 'Cours',
       siteCol: 'Site',
@@ -126,7 +131,7 @@ export const UI_STRINGS: Record<Locale, UiStrings> = {
       projects: 'Projets',
       myProgress: 'Ma Progression',
       github: 'GitHub',
-      tagline: 'Apprenez Python et l’analyse de données dans votre navigateur. Zéro installation, zéro ennui.',
+      tagline: 'Apprends Python et l’analyse de données dans ton navigateur. Zéro installation, zéro ennui.',
     changelog: 'Changelog',
       copyright: (year, version) =>
         `Copyright © ${year} Abderrahim Adrabi. Code sous licence MIT, contenu sous licence CC-BY 4.0. v${version}`,

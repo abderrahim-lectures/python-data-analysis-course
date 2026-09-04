@@ -1,0 +1,24 @@
+---
+import Base from '../../layouts/Base.astro';
+import PlaygroundHead from '../../components/PlaygroundHead.astro';
+import PlaygroundCell from '../../components/PlaygroundCell.astro';
+import {PLAYGROUND_STARTER} from '../../lib/playgroundStarter.ts';
+---
+
+<Base
+  title="Playground — PyDA Course"
+  description="Editor de Python libre — ejecuta cualquier código en tu navegador."
+  lang="es"
+  dir="ltr"
+>
+  <section class="container head">
+    <PlaygroundHead
+      eyebrow="Editor a pantalla completa"
+      lead="Escribe y ejecuta cualquier Python aquí — nada se califica, nada se guarda cuando te vas."
+    />
+  </section>
+
+  <section class="container playground-page">
+    <PlaygroundCell starter={PLAYGROUND_STARTER} />
+  </section>
+</Base>

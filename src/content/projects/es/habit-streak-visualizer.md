@@ -64,6 +64,9 @@ uv add pandas matplotlib
 No se necesita ninguna clave de API en ningún lugar de este proyecto — todo corre sobre datos que viven completamente en tu propia máquina.
 
 ## Paso 1: Diseña el registro de check-ins y un CLI para escribirlo
+### 1.1 El registro es un CSV simple con tres columnas: `date`, `habit`, `done`. Una fila por check-...
+
+**👟 Pista inicial :**
 
 El registro es un CSV simple con tres columnas: `date`, `habit`, `done`. Una fila por check-in. Un archivo plano como este — en lugar de, digamos, un archivo separado por hábito — significa que varios hábitos pueden compartir un registro y aún así filtrarse independientemente con indexado booleano ordinario de pandas más adelante.
 
@@ -84,6 +87,18 @@ def append_checkin(path: Path, date: str, habit: str, done: bool) -> None:
     with path.open("a", newline="") as f:
         csv.writer(f).writerow([date, habit, "y" if done else "n"])
 ```
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.2 Un pequeño CLI envuelve esto con la interacción "¿lo hiciste hoy? y/n":
+
+**👟 Pista inicial :**
 
 Un pequeño CLI envuelve esto con la interacción "¿lo hiciste hoy? y/n":
 
@@ -108,11 +123,34 @@ append_checkin(LOG_PATH, date, args.habit, answer.startswith("y"))
 print(f"Logged: {date} — {args.habit} — {'done' if answer.startswith('y') else 'missed'}")
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.3 uv run python checkin.py "Exercise"
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
+
 ```bash
 uv run python checkin.py "Exercise"
 ```
-
 Ejecuta eso un puñado de veces con `--date`/`--done` para diferentes días para acumular un poco de historial con el cual probar, antes de continuar.
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.4 Verifica
 
 **✅ Lista de verificación**
 
@@ -125,9 +163,11 @@ Ejecuta eso un puñado de veces con `--date`/`--done` para diferentes días para
 Si registras el mismo hábito dos veces para la misma fecha (una vez por error, una vez para corregirlo), ¿debería el registro mantener ambas filas, sobrescribir la primera, o algo más? ¿Qué le haría cada elección a un `.groupby("date")` posterior en este archivo?
 
 ## Paso 2: Calcula rachas
+### 2.1 Una racha es una serie de *días calendario consecutivos* registrados como hechos, sin brecha...
+
+**👟 Pista inicial :**
 
 Una racha es una serie de *días calendario consecutivos* registrados como hechos, sin brecha. La decisión de diseño importante: un día que nunca se registró en absoluto se trata exactamente igual que un día explícitamente registrado como "n" — ambos rompen la racha. Eso es más simple que añadir un tercer estado "desconocido", al costo de castigar el olvido de registrar de la misma forma que realmente saltarse el hábito.
-
 Leer un registro disperso (solo los días que alguien se molestó en registrar) tiene que convertirse en una serie *densa* día a día antes de que las rachas tengan sentido — de lo contrario, una brecha en el registro se ve idéntica a una ruptura genuina, pero no puedes saber en qué día ocurrió sin un calendario completo contra el cual comparar:
 
 ```python
@@ -140,6 +180,18 @@ df = df.drop_duplicates(subset=["date", "habit"], keep="last")  # last logged an
 habit_df = df[df["habit"] == "Exercise"].set_index("date")["done"]
 daily = habit_df.reindex(pd.date_range(df["date"].min(), df["date"].max(), freq="D"), fill_value=False)
 ```
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 2.2 `reindex` está haciendo el trabajo real aquí: toma una `Series` con solo las fechas realment...
+
+**👟 Pista inicial :**
 
 `reindex` está haciendo el trabajo real aquí: toma una `Series` con solo las fechas realmente presentes y la expande sobre *cada* fecha en el rango, rellenando cualquier cosa faltante con `False`. Ahora las rachas son un simple escaneo secuencial:
 
@@ -159,12 +211,20 @@ def compute_streaks(daily: pd.Series) -> dict:
         "total_days": len(daily),
     }
 ```
-
 `current_streak` es la serie que termina en el *último* día de la serie (hoy, si tu registro está actualizado) — se resetea a 0 en el momento en que revisas el día después de una falla. `longest_streak` es la mejor serie en cualquier parte de todo el historial, que obviamente puede ser mucho más grande, y nunca se encoge.
-
 :::tip[`current_streak` necesita un registro actualizado para significar algo]
 Si aún no has registrado hoy, el último día de `daily` es `False` por defecto (del relleno de `reindex`), así que `current_streak` reporta 0 incluso si ayer extendió una racha real. O registra cada día antes de revisar tu racha, o calcula `current_streak` contra ayer en lugar de "la última fila en la serie" si quieres que tolere que hoy aún no esté registrado.
 :::
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 2.3 Verifica
 
 **✅ Lista de verificación**
 
@@ -177,11 +237,12 @@ Si aún no has registrado hoy, el último día de `daily` es `False` por defecto
 ¿Por qué necesita `daily = habit_df.reindex(...)` suceder *antes* del bucle de conteo de rachas, en lugar de simplemente iterar sobre las filas de `df` directamente? ¿Qué específicamente saldría mal con `longest_streak` si te lo saltaras?
 
 ## Paso 3: Distribuye los días en una cuadrícula estilo GitHub
+### 3.1 Este es el verdadero momento educativo del proyecto. Un grafo de contribuciones de GitHub es...
+
+**👟 Pista inicial :**
 
 Este es el verdadero momento educativo del proyecto. Un grafo de contribuciones de GitHub es una cuadrícula: siete filas (una por día de la semana) por las columnas que un año necesite (aproximadamente 52-53), leídas de arriba a abajo y luego de izquierda a derecha. Convertir una lista simple de fechas en ese diseño 2D toma dos piezas de aritmética de fechas:
-
 **La fila** es solo el día de la semana: `date.weekday()` devuelve 0 para lunes hasta 6 para domingo, directamente usable como índice de fila.
-
 **La columna** es la parte complicada. El atajo tentador es `date.isocalendar()[1]`, el número de semana ISO — pero los números de semana ISO se resetean a 1 cada enero. Un registro de hábito que abarca un límite de año (digamos, diciembre a enero) tendría fechas de finales de diciembre y principios de enero cayendo en los *mismos números de semana bajos*, revolviendo la cuadrícula en columnas superpuestas en lugar de una línea de tiempo limpia de izquierda a derecha. La solución: elige una fecha de anclaje fija — el lunes en o antes del primer día registrado — y calcula cada columna como un desplazamiento de días simple desde ese ancla:
 
 ```python
@@ -200,8 +261,17 @@ def build_grid(daily: pd.Series):
 
     return grid, dates
 ```
-
 `(dates - anchor).days // 7` solo aumenta — no le importa si el registro abarca uno o cinco años. Las celdas que caen fuera del rango de registro real (porque el primer día registrado no es necesariamente un lunes, o el último no es necesariamente un domingo) se dejan como `NaN`, para que puedan dibujarse de forma diferente a un día genuinamente "perdido" en el siguiente paso.
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 3.2 Verifica
 
 **✅ Lista de verificación**
 
@@ -214,6 +284,9 @@ def build_grid(daily: pd.Series):
 El propio grafo de contribuciones de GitHub comienza las semanas en domingo, no lunes. ¿Qué necesitarías cambiar en `build_grid` para coincidir con esa convención — y cambiaría en qué *columna* cae una fecha dada, en qué *fila*, o ambas?
 
 ## Paso 4: Renderízalo como un mapa de calor
+### 4.1 La intensidad del color no debería ser solo binaria (hecho/no hecho) — un día que es el núme...
+
+**👟 Pista inicial :**
 
 La intensidad del color no debería ser solo binaria (hecho/no hecho) — un día que es el número 15 en una fila de una racha debería leerse como visualmente diferente del primer día de una nueva racha, aunque ambos sean "hecho." Calcula la intensidad como una función de la longitud de la racha *actual* en cada día, limitada para que no siga oscureciéndose para siempre:
 
@@ -225,6 +298,18 @@ def streak_intensity(daily: pd.Series, cap: int = 10) -> list[float]:
         values.append(min(run, cap) / cap if done else 0.0)
     return values
 ```
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 4.2 Alimenta eso a `build_grid` en lugar del relleno simple de 0/1, luego renderiza con matplotl...
+
+**👟 Pista inicial :**
 
 Alimenta eso a `build_grid` en lugar del relleno simple de 0/1, luego renderiza con matplotlib — una rampa secuencial de un solo matiz (azul claro a oscuro), no un arcoíris, ya que esto es una magnitud continua, no varias categorías:
 
@@ -248,15 +333,36 @@ ax.set_yticklabels(["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"])
 fig.savefig("habit_heatmap.png", bbox_inches="tight")
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 4.3 La versión completa — con etiquetas de mes a lo largo del eje x y líneas de cuadrícula entre...
+
+**👟 Pista inicial :**
+
 La versión completa — con etiquetas de mes a lo largo del eje x y líneas de cuadrícula entre celdas — vive en [`examples/habit-streak-visualizer/heatmap.py`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/habit-streak-visualizer/heatmap.py). Ejecútala contra los datos de muestra incluidos (varios meses, dos hábitos, rachas reales y una caída real) para ver la imagen completa inmediatamente, sin registrar nada a mano primero:
 
 ```bash
 uv run python visualize.py --habit "Exercise"
 ```
-
 :::tip[El gris de "sin datos" no es lo mismo que el azul de "0 intensidad"]
 Dibujar celdas no registradas en el paso más pálido de la misma rampa azul que una falla genuina reclamaría visualmente "este hábito existía y te lo saltaste" para días antes de que siquiera hubieras empezado a rastrearlo. Pintarlas de un gris neutro plano, en capas encima con una llamada `imshow` separada y un array enmascarado, mantiene "sin datos" honestamente distinto de "datos, y la respuesta fue no."
 :::
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 4.4 Verifica
 
 **✅ Lista de verificación**
 

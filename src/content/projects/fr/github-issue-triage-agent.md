@@ -97,6 +97,9 @@ GITHUB_API_TOKEN=
 `GITHUB_TOKEN` ici est ta clé de **fournisseur LLM** (GitHub Models spécifiquement) — pas besoin qu'elle soit le même jeton que `GITHUB_API_TOKEN`, qui est un jeton complètement séparé et optionnel utilisé uniquement pour l'étape de récupération d'issues ci-dessous. C'est bien qu'ils soient le même jeton d'accès personnel si tu en as généré un en pensant aux deux usages, mais ni ce projet ni GitHub ne l'exigent.
 
 ## Étape 1 : Récupère les issues ouvertes d'un vrai dépôt
+### 1.1 GitHub expose une API REST gratuite pour lire les données de dépôts publics — aucune authent...
+
+**👟 Indice de départ :**
 
 GitHub expose une API REST gratuite pour lire les données de dépôts publics — aucune authentification nécessaire pour lire les issues d'un dépôt public. Crée `triage.py` :
 
@@ -126,15 +129,37 @@ if __name__ == "__main__":
         print(f"#{issue['number']}: {issue['title']}")
 ```
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 1.2 uv run python triage.py
+
+**👟 Indice de départ :**
+
+Exécutez le code ci-dessous et confirmez qu'il fonctionne.
+
 ```bash
 uv run python triage.py
 ```
-
 Tu devrais voir jusqu'à 10 lignes, chacune un vrai numéro et titre d'issue actuellement ouverte de [`psf/requests`](https://github.com/psf/requests). `params={"state": "open", ...}` fait le filtrage important ici — le comportement par défaut de GitHub inclurait aussi les issues fermées, et ce projet ne se soucie que de celles qui ont encore besoin de tri.
-
 :::tip[La limite de débit non authentifiée de GitHub est basse]
 Les requêtes non authentifiées vers l'API REST de GitHub sont plafonnées à **60 requêtes/heure, par adresse IP** — facile à atteindre si tu relances ce script souvent pendant le développement, ou si tu partages une IP avec des camarades sur le même réseau. Cette leçon ne fait qu'une seule requête API par exécution (un appel récupère jusqu'à 100 issues d'un coup), donc tu ne l'atteindras probablement pas juste en suivant le tutoriel — mais si tu vois un `403` mentionnant une limite de débit, c'est ce qui s'est passé. Configurer `GITHUB_API_TOKEN` (n'importe quel jeton d'accès personnel, aucun scope requis pour les lectures publiques) dans ton `.env` élève la limite à 5 000 requêtes/heure — voir l'étape optionnelle dans la Configuration ci-dessus.
 :::
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 1.3 Vérifie
 
 **✅ Liste de vérification**
 
@@ -148,6 +173,9 @@ Les requêtes non authentifiées vers l'API REST de GitHub sont plafonnées à *
 - `sort="updated"` signifie que les 10 issues que tu obtiens sont les 10 *mises à jour le plus récemment*, pas les 10 plus anciennes ou créées le plus récemment. Pourquoi « mise à jour le plus récemment » pourrait-elle être une valeur par défaut plus utile pour un outil de tri que « créée le plus récemment » ?
 
 ## Étape 2 : Écris un prompt de suggestion de tri par issue
+### 2.1 Chaque issue doit devenir un prompt demandant au modèle exactement deux choses : une étiquet...
+
+**👟 Indice de départ :**
 
 Chaque issue doit devenir un prompt demandant au modèle exactement deux choses : une étiquette d'une liste fixe, et une justification d'une phrase. Ajoute ceci à `triage.py` :
 
@@ -171,12 +199,20 @@ def build_triage_prompt(issue: dict) -> str:
         "Rationale: <one sentence explaining the suggested label and its priority>"
     )
 ```
-
 Deux choix délibérés ici. D'abord, `MAX_BODY_CHARS` tronque le corps de l'issue — certaines issues atteignent des milliers de mots (traces de pile collées, longs logs), et il n'y a aucun avantage à dépenser des tokens sur plus que ce dont le modèle a besoin pour saisir l'essentiel ; voir la section des pièges ci-dessous pour ce qui se passe si tu sautes ça. Ensuite, le prompt demande un format de réponse fixe et simple à deux lignes (`Label: ...` / `Rationale: ...`) plutôt que du JSON — plus facile à suivre de manière fiable pour un petit modèle gratuit, et assez facile à analyser avec de simples méthodes de chaînes à l'étape suivante.
-
 :::tip[« Suggérer, pas appliquer » est une instruction structurante, pas un détail poli]
 Remarque que le prompt dit explicitement au modèle qu'il rédige une suggestion pour révision humaine, pas qu'il applique quoi que ce soit. Ce script appuie ça avec un vrai comportement, pas juste des mots : rien dans `triage.py` n'appelle jamais un endpoint GitHub qui ajouterait une étiquette ou un commentaire à une vraie issue — il ne fait que lire les issues et afficher du texte dans ton terminal. C'est une limite de sécurité délibérée, le même principe derrière n'importe quel outil d'IA qui touche aux affaires d'autres personnes : rédige avec confiance, agis seulement avec un humain dans la boucle, particulièrement pour quelque chose d'aussi facile à mal interpréter subtilement qu'une lecture en une phrase du rapport de bug de quelqu'un d'autre.
 :::
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 2.2 Vérifie
 
 **✅ Liste de vérification**
 
@@ -190,6 +226,9 @@ Remarque que le prompt dit explicitement au modèle qu'il rédige une suggestion
 - Si le corps d'une issue est vide (certaines issues n'en ont vraiment aucun), qu'envoie actuellement `build_triage_prompt` au modèle ? Est-ce un prompt raisonnable, ou l'améliorerais-tu ?
 
 ## Étape 3 : Appelle le LLM et analyse sa réponse
+### 3.1 Maintenant connecte un vrai appel LLM, et transforme sa réponse en deux lignes en un `dict` ...
+
+**👟 Indice de départ :**
 
 Maintenant connecte un vrai appel LLM, et transforme sa réponse en deux lignes en un `dict` Python utilisable :
 
@@ -224,10 +263,18 @@ def suggest_triage(issue: dict) -> dict:
     reply = call_llm(build_triage_prompt(issue))
     return parse_triage_reply(reply)
 ```
-
 N'oublie pas `from dotenv import load_dotenv` plus `load_dotenv()` près du haut du fichier, pour que `os.environ["GITHUB_TOKEN"]` trouve réellement la clé depuis ton fichier `.env` — même pattern que le [projet Agent IA](/docs/projects/ai-agent).
-
 `parse_triage_reply` retombe délibérément sur `label="other"` et la réponse brute comme justification si le modèle ne suit pas exactement le format à deux lignes demandé — les modèles gratuits ajoutent parfois du texte égaré ou sautent une ligne, et un *brouillon* de tri légèrement mal formé reste plus utile affiché pour qu'un humain le survole que jeté silencieusement sur une erreur d'analyse.
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 3.2 Vérifie
 
 **✅ Liste de vérification**
 
@@ -241,6 +288,9 @@ N'oublie pas `from dotenv import load_dotenv` plus `load_dotenv()` près du haut
 - Si tu exécutais `suggest_triage` sur la *même* issue deux fois, t'attendrais-tu à exactement la même justification les deux fois ? Qu'est-ce que ta réponse suggère sur combien un mainteneur devrait faire confiance à une seule suggestion par rapport à la traiter comme un point de données ?
 
 ## Étape 4 : Affiche le rapport et exécute-le de bout en bout
+### 4.1 Assemble tout le pipeline — récupérer, suggérer, rapporter :
+
+**👟 Indice de départ :**
 
 Assemble tout le pipeline — récupérer, suggérer, rapporter :
 
@@ -270,11 +320,34 @@ if __name__ == "__main__":
     print_triage_report(owner, repo, issues, suggestions)
 ```
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 4.2 uv run python triage.py
+
+**👟 Indice de départ :**
+
+Exécutez le code ci-dessous et confirmez qu'il fonctionne.
+
 ```bash
 uv run python triage.py
 ```
-
 Tu devrais voir un rapport complet : un en-tête nommant le dépôt et le nombre d'issues, puis un bloc par issue avec son numéro, titre, vraie URL GitHub, étiquette suggérée, et justification d'une phrase — plus cette ligne de rappel en haut disant que ce sont des brouillons, pas des changements appliqués. Essaie de pointer `owner`/`repo` vers un dépôt public réel et actif différent (n'importe lequel avec des issues ouvertes fonctionne) et confirme que le rapport s'adapte à un contenu d'issue authentiquement différent, pas juste en répétant la même sortie.
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 4.3 Vérifie
 
 **✅ Liste de vérification**
 

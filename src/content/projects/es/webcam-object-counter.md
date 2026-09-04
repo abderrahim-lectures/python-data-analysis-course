@@ -68,6 +68,9 @@ OpenCV trae integradas las **cascadas de Haar** — pequeñas, rápidas, sin des
 :::
 
 ## Paso 1: Detecta objetos en una sola imagen de muestra
+### 1.1 Cada script de abajo reutiliza esta misma idea central. `yolo11n.pt` es un punto de control ...
+
+**👟 Pista inicial :**
 
 Cada script de abajo reutiliza esta misma idea central. `yolo11n.pt` es un punto de control preentrenado — `ultralytics` lo descarga automáticamente la primera vez que construyes `YOLO(...)`, y lo almacena en caché localmente después:
 
@@ -91,11 +94,34 @@ annotated = result.plot()  # draws boxes + labels on a copy of the image
 cv2.imwrite("output_street.jpg", annotated)
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.2 uv run python detect_image.py
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
+
 ```bash
 uv run python detect_image.py
 ```
-
 `model(image_path)` ejecuta todo el pipeline de detección en una sola llamada: redimensiona la imagen, la pasa por la red, y convierte la salida cruda en una lista de cuadros, cada uno con una etiqueta de clase y un puntaje de confianza. `result.boxes` es esa lista — `box.cls` es un índice de clase dentro de `model.names` (un dict de los 80 nombres de clases COCO), y `box.conf` es la confianza del modelo de que el cuadro realmente contiene esa clase. `result.plot()` es un método de conveniencia que dibuja todo eso de vuelta en la imagen por ti, para que no tengas que escribir tu propio bucle de dibujo de cuadros con `cv2.rectangle`.
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.3 Verifica
 
 **✅ Lista de verificación**
 
@@ -108,6 +134,9 @@ uv run python detect_image.py
 El modelo devuelve un puntaje de confianza para cada cuadro, no solo un sí/no de "objeto aquí". Si filtraras cualquier cuadro con confianza por debajo del 90%, ¿esperarías ver más detecciones falsas o más detecciones perdidas — y cuál de esos dos errores importa más para un proyecto cuyo punto central es un *conteo* preciso?
 
 ## Paso 2: Cuenta una clase objetivo y mantén un total acumulado
+### 2.1 Detectarlo todo es un buen comienzo, pero "contar objetos" usualmente significa contar *un t...
+
+**👟 Pista inicial :**
 
 Detectarlo todo es un buen comienzo, pero "contar objetos" usualmente significa contar *un tipo* de cosa — personas caminando por una puerta, autos en un estacionamiento, y así:
 
@@ -130,11 +159,34 @@ for image_path in image_paths:
 print(f"\nTotal {target_class}(s): {running_total}")
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 2.2 uv run python count_class.py
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
+
 ```bash
 uv run python count_class.py
 ```
-
 El conteo es solo un filtro-y-suma sobre `result.boxes`, comparando el nombre de clase de cada cuadro contra el que te importa. `verbose=False` silencia el registro por llamada de `ultralytics` para que tus propias declaraciones `print` no queden enterradas debajo.
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 2.3 Verifica
 
 **✅ Lista de verificación**
 
@@ -147,6 +199,9 @@ El conteo es solo un filtro-y-suma sobre `result.boxes`, comparando el nombre de
 Si dos personas en una foto están paradas tan juntas que sus cuadros delimitadores casi se superponen por completo, ¿hay alguna manera realista de que este enfoque de conteo las cuente de menos o de más? ¿Qué mirarías en `result.boxes` para verificar?
 
 ## Paso 3: Procesa un breve video de muestra cuadro por cuadro
+### 3.1 Un video es solo una secuencia de imágenes — el mismo código de detección por imagen de los ...
+
+**👟 Pista inicial :**
 
 Un video es solo una secuencia de imágenes — el mismo código de detección por imagen de los Pasos 1–2, ejecutado una vez por cuadro en un bucle:
 
@@ -181,11 +236,34 @@ cap.release()
 writer.release()
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 3.2 uv run python detect_video.py
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
+
 ```bash
 uv run python detect_video.py
 ```
-
 `cv2.VideoCapture` lee un archivo de video (o, en el Paso 4, una cámara en vivo) un cuadro a la vez vía `.read()`, que devuelve `(ok, frame)` — `ok` es `False` una vez que no hay más cuadros. `cv2.VideoWriter` es la misma idea a la inversa: acumula los cuadros que le das en un nuevo archivo de video. Nota que el `if not ok: break` aquí significa "el archivo terminó" — el Paso 4 reutiliza exactamente esta misma verificación, pero allí significa algo importante y diferente.
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 3.3 Verifica
 
 **✅ Lista de verificación**
 
@@ -198,6 +276,9 @@ uv run python detect_video.py
 El conteo que imprimes es una instantánea por cuadro, no un total por video — pasar a la misma persona frente a la cámara durante tres segundos podría contarla en cada cuadro. ¿Qué requeriría "contar cuántas personas *distintas* cruzaron el cuadro", más allá de lo que este script hace actualmente?
 
 ## Paso 4: Ve en vivo con tu cámara web
+### 4.1 Mismo bucle, una línea diferente: cambia la ruta del archivo de video por `0`, el índice de ...
+
+**👟 Pista inicial :**
 
 Mismo bucle, una línea diferente: cambia la ruta del archivo de video por `0`, el índice de la cámara predeterminada de tu computadora:
 
@@ -236,11 +317,34 @@ else:
     cv2.destroyAllWindows()
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 4.2 uv run python detect_webcam.py
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
+
 ```bash
 uv run python detect_webcam.py
 ```
-
 `cv2.VideoCapture(0)` abre tu cámara predeterminada de la misma manera que `VideoCapture("some_file.mp4")` abrió un archivo en el Paso 3 — el mismo bucle `.read()`, la misma forma `(ok, frame)`. Las dos diferencias importantes: `.isOpened()` se verifica *de antemano* aquí, ya que "sin cámara web disponible" es un fallo real y común que debería producir un mensaje claro en lugar de un colapso confuso en el fondo del bucle; y una vez corriendo, que `ok` se vuelva `False` a mitad del bucle significa que la conexión de la cámara se perdió (desconectada, permiso revocado), no "se llegó al final", ya que una cámara en vivo no tiene final. `cv2.imshow` abre una ventana en vivo — una ventana GUI real, así que este script no producirá salida visible en una terminal remota simple sin pantalla.
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 4.3 Verifica
 
 **✅ Lista de verificación**
 

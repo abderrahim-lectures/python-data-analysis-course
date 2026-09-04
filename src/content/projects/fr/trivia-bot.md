@@ -121,6 +121,9 @@ GITHUB_TOKEN=your-llm-key-here
 - Le jeton du bot et la clé API LLM sont tous deux des secrets, mais ils s'authentifient auprès de deux services complètement différents. Qu'est-ce qui irait mal si tu échangeais accidentellement quelle variable d'environnement contient quelle valeur ?
 
 ## Étape 1 : Une banque de questions fixe et une commande slash de base
+### 1.1 Commence par la source de questions la plus simple possible — une liste Python plate de dict...
+
+**👟 Indice de départ :**
 
 Commence par la source de questions la plus simple possible — une liste Python plate de dicts — et juste assez de câblage Discord pour en poster une :
 
@@ -149,6 +152,18 @@ QUESTION_BANK = [
 def random_question() -> dict:
     return random.choice(QUESTION_BANK)
 ```
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 1.2 L'interface moderne de `discord.py` pour cela est une **commande slash** : au lieu de survei...
+
+**👟 Indice de départ :**
 
 L'interface moderne de `discord.py` pour cela est une **commande slash** : au lieu de surveiller chaque message pour quelque chose qui ressemble à une commande, tu enregistres `/trivia` auprès de Discord lui-même, et Discord l'affiche dans l'interface avec autocomplétion. Cela nécessite un `Client` plus un `app_commands.CommandTree` qui lui est attaché :
 
@@ -186,12 +201,20 @@ async def on_ready() -> None:
 if __name__ == "__main__":
     client.run(os.environ["DISCORD_BOT_TOKEN"])
 ```
-
 `tree.sync()` est ce qui publie réellement `/trivia` sur Discord pour qu'il apparaisse quand quelqu'un tape `/` dans ton serveur — saute-le et la commande existe dans ton code mais nulle part où l'interface de Discord peut la trouver.
-
 :::tip[Les commandes slash ont besoin d'un second scope OAuth2]
 Une invitation de bot normale ne nécessite que le scope `bot`. Les commandes slash ont spécifiquement besoin aussi de `applications.commands` — si tu as généré ton URL d'invitation avant d'ajouter `/trivia`, régénère-la avec les deux scopes cochés (voir Configuration ci-dessus) ou la commande n'apparaîtra jamais en silence dans ton serveur.
 :::
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 1.3 Vérifie
 
 **✅ Liste de vérification**
 
@@ -205,6 +228,9 @@ Une invitation de bot normale ne nécessite que le scope `bot`. Les commandes sl
 - Le `answer_index` du dict de la question pointe vers `options` par position plutôt que de stocker le texte de la bonne réponse directement. Quel est un avantage de le stocker de cette façon ?
 
 ## Étape 2 : Suivi des scores, persisté à travers les manches
+### 2.1 Un classement ne veut dire quelque chose que s'il survit au redémarrage du bot, donc les sco...
+
+**👟 Indice de départ :**
 
 Un classement ne veut dire quelque chose que s'il survit au redémarrage du bot, donc les scores vont dans un petit fichier JSON plutôt que de vivre uniquement en mémoire :
 
@@ -243,6 +269,18 @@ def leaderboard_text(scores: dict, top_n: int = 10) -> str:
     return "\n".join(lines)
 ```
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 2.2 Teste-le de manière autonome avant de le brancher dans `bot.py` du tout — le même motif « pr...
+
+**👟 Indice de départ :**
+
 Teste-le de manière autonome avant de le brancher dans `bot.py` du tout — le même motif « prouve que la pièce fonctionne seule d'abord » que n'importe quel projet en plusieurs parties :
 
 ```bash
@@ -256,6 +294,18 @@ print(leaderboard_text(s))
 "
 ```
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 2.3 Puis ajoute une seconde commande slash qui lit simplement le fichier :
+
+**👟 Indice de départ :**
+
 Puis ajoute une seconde commande slash qui lit simplement le fichier :
 
 ```python
@@ -264,8 +314,17 @@ async def leaderboard_command(interaction: discord.Interaction) -> None:
     scores = load_scores()
     await interaction.response.send_message(f"**Leaderboard:**\n{leaderboard_text(scores)}")
 ```
-
 Rien n'attribue encore de point — `trivia_command` de l'Étape 1 ne vérifie pas du tout les réponses — c'est ce que la boucle de manche de l'Étape 4 ajoute. Cette étape n'est délibérément que la moitié stockage, testée et fonctionnant seule d'abord.
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 2.4 Vérifie
 
 **✅ Liste de vérification**
 
@@ -279,6 +338,9 @@ Rien n'attribue encore de point — `trivia_command` de l'Étape 1 ne vérifie p
 - `save_scores()` réécrit tout le fichier à chaque point individuel. Pour un petit bot mono-serveur, c'est très bien — à quel moment cela cesserait-il de l'être, et vers quoi te tournerais-tu à la place ?
 
 ## Étape 3 : Générer une question inédite sur n'importe quel sujet avec un LLM
+### 3.1 La banque fixe de l'Étape 1 ne puise toujours que dans la même poignée de questions. Cette é...
+
+**👟 Indice de départ :**
 
 La banque fixe de l'Étape 1 ne puise toujours que dans la même poignée de questions. Cette étape ajoute une seconde source de questions : donne un sujet au bot, et il demande à un LLM une toute nouvelle question à choix multiples sur ce sujet, à la volée.
 
@@ -326,13 +388,38 @@ def generate_question(topic: str) -> dict:
     return question
 ```
 
-La vérification explicite de la forme après l'analyse compte : `response_format={"type": "json_object"}` garantit que la sortie du LLM est *du JSON valide*, pas que c'est *le bon* JSON — il pourrait encore renvoyer trois options au lieu de quatre, ou omettre `answer_index` complètement. L'attraper ici, avec une erreur claire, vaut mieux que de le découvrir plus tard comme un message Discord déroutant avec une option D manquante.
+**🎯 Résultat attendu :**
 
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 3.2 La vérification explicite de la forme après l'analyse compte : `response_format={"type": "js...
+
+**👟 Indice de départ :**
+
+La vérification explicite de la forme après l'analyse compte : `response_format={"type": "json_object"}` garantit que la sortie du LLM est *du JSON valide*, pas que c'est *le bon* JSON — il pourrait encore renvoyer trois options au lieu de quatre, ou omettre `answer_index` complètement. L'attraper ici, avec une erreur claire, vaut mieux que de le découvrir plus tard comme un message Discord déroutant avec une option D manquante.
 Branche un paramètre `topic` dans `/trivia` pour qu'il puisse puiser dans l'une ou l'autre source :
 
 ```python
 from round import pick_question  # combines random_question() and generate_question()
 ```
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 3.3 # round.py
+
+**👟 Indice de départ :**
+
+Exécutez le code ci-dessous et confirmez qu'il fonctionne.
 
 ```python
 # round.py
@@ -347,6 +434,20 @@ def pick_question(topic: str | None = None) -> dict:
     return random_question()
 ```
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 3.4 @tree.command(name="trivia", description="Start a trivia round, optionally on a topic")
+
+**👟 Indice de départ :**
+
+Exécutez le code ci-dessous et confirmez qu'il fonctionne.
+
 ```python
 @tree.command(name="trivia", description="Start a trivia round, optionally on a topic")
 @app_commands.describe(topic="Optional topic for a freshly generated question")
@@ -355,16 +456,37 @@ async def trivia_command(interaction: discord.Interaction, topic: str | None = N
     ...
 ```
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 3.5 Teste les deux chemins depuis un terminal avant de leur faire confiance à l'intérieur de Dis...
+
+**👟 Indice de départ :**
+
 Teste les deux chemins depuis un terminal avant de leur faire confiance à l'intérieur de Discord :
 
 ```bash
 uv run python -c "from round import pick_question; print(pick_question())"
 uv run python -c "from round import pick_question; print(pick_question('classic video games'))"
 ```
-
 :::tip[Valide le contenu généré par LLM avant qu'il n'atteigne un canal en direct]
 Un LLM à qui l'on demande une question de trivia peut encore se tromper sur les faits, surtout sur des sujets obscurs — il n'y a pas de `try`/`except` qui attrape « incorrect avec confiance ». La validation de forme dans `generate_question()` ne protège que contre une *structure* malformée ; pour un serveur public, parcours une poignée de questions générées sur des sujets que tu connais vraiment avant de faire confiance au mode sur des sujets que tu ne connais pas.
 :::
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 3.6 Vérifie
 
 **✅ Liste de vérification**
 
@@ -378,6 +500,9 @@ Un LLM à qui l'on demande une question de trivia peut encore se tromper sur les
 - Si un joueur choisit un sujet délibérément offensant ou absurde, quelle est la pire chose plausible que `generate_question()` pourrait renvoyer, et qu'ajouterais-tu pour t'en protéger ?
 
 ## Étape 4 : Une boucle de manche de trivia complète
+### 4.1 Jusqu'ici, tout était des pièces testées de manière isolée : une source de questions, le sto...
+
+**👟 Indice de départ :**
 
 Jusqu'ici, tout était des pièces testées de manière isolée : une source de questions, le stockage des scores, la génération. Cette étape les branche dans ce à quoi ressemble réellement une manche en direct — poste une question, attends la première bonne réponse dans un délai, révèle-la, mets à jour le classement :
 
@@ -435,10 +560,20 @@ async def run_round(channel: discord.abc.Messageable, topic: str | None = None) 
         await channel.send(f"⏰ Time's up! Nobody got it. The answer was **{correct_letter}) {correct_text}**.")
 ```
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 4.2 `client.wait_for("message", check=..., timeout=...)` est la façon de `discord.py` de mettre ...
+
+**👟 Indice de départ :**
+
 `client.wait_for("message", check=..., timeout=...)` est la façon de `discord.py` de mettre en pause une fonction `async` jusqu'à ce qu'un type d'événement spécifique se produise — ici, tout message dans le même canal dont le contenu est exactement l'une des lettres de réponse valides. La boucle `while` le rappelle avec un timeout `remaining` qui diminue, afin que le budget de temps *total* de la manche soit `ROUND_TIME_LIMIT`, pas `ROUND_TIME_LIMIT` par mauvaise réponse — sans recalculer `remaining`, un canal plein de mauvaises réponses enthousiastes pourrait garder la manche ouverte indéfiniment.
-
 Seule la *première* bonne réponse marque ; fais `break` dès que `winner` est défini. Les mauvaises réponses reçoivent une réaction ❌ au lieu d'un message d'erreur — un retour gratuit sans inonder le canal de réponses.
-
 Enfin, `trivia_command` de l'Étape 1 devient une fine enveloppe autour de `run_round` :
 
 ```python
@@ -453,10 +588,19 @@ async def trivia_command(interaction: discord.Interaction, topic: str | None = N
         print(f"Error running trivia round: {error!r}")
         await interaction.channel.send("Something went wrong running that round -- see the bot's console log.")
 ```
-
 :::tip[Teste d'abord le timing de la manche avec un ROUND_TIME_LIMIT court]
 Mets `ROUND_TIME_LIMIT = 5` pendant que tu règles la boucle, pour ne pas attendre 30 secondes par cycle de test pour découvrir que `check_answer` a un bug. Remonte-le à quelque chose de raisonnable pour le vrai jeu une fois que la boucle elle-même fonctionne.
 :::
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 4.3 Vérifie
 
 **✅ Liste de vérification**
 

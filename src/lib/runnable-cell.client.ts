@@ -39,8 +39,10 @@ function initCell(cell: Element) {
   expand?.addEventListener('click', async () => {
     const src = codeEl.textContent ?? '';
     const packed = await encodeShareCode(src);
-    // base64url output, no percent-encoding needed for a path segment.
-    // See src/pages/404.astro for how this resolves on a static host.
+    // Remember which cell the user was on so we can scroll back to it.
+    const allCells = Array.from(document.querySelectorAll('[data-runnable]'));
+    const idx = allCells.indexOf(cell);
+    try { sessionStorage.setItem('pg:returnCell', String(idx)); } catch {}
     window.location.href = `${import.meta.env.BASE_URL}playground/${packed}`;
   });
 
@@ -76,20 +78,10 @@ function initCell(cell: Element) {
       awarded = true;
       try {
         const m = await import('./gameState.ts');
-        const xp = m.addXP(lessonId);
-        const t = document.createElement('div');
-        t.className = 'rctoast';
-        t.textContent = `⚡ +${xp} XP`;
-        t.style.cssText = 'position:fixed;z-index:9999;left:50%;top:50%;transform:translate(-50%,-50%) scale(.9);background:linear-gradient(135deg,#5b21b6,#4c1d95);color:#fff;padding:.5rem 1.2rem;border-radius:999px;font-weight:800;font-size:.95rem;box-shadow:0 6px 24px rgba(91,33,182,.45);pointer-events:none;';
-        document.body.appendChild(t);
-        requestAnimationFrame(() => {
-          t.style.transition = 'all .7s cubic-bezier(.22,.61,.36,1)';
-          t.style.transform = 'translate(-50%,-70%) scale(1.05)';
-          t.style.opacity = '0';
-        });
-        setTimeout(() => t.remove(), 900);
-        cell.dispatchEvent(new CustomEvent('lesson:complete', {bubbles: true, detail: {lessonId, xp}}));
-        document.dispatchEvent(new CustomEvent('lesson:complete'));
+        const prevXp = m.read().xp;
+        m.addXP(lessonId);
+        const gained = m.read().xp - prevXp;
+        cell.dispatchEvent(new CustomEvent('lesson:complete', {bubbles: true, detail: {lessonId, xp: gained}}));
       } catch { /* offline: skip XP award */ }
     }
   });
@@ -179,5 +171,26 @@ export function initRunnableCells(root: ParentNode = document) {
 }
 
 if (typeof document !== 'undefined') {
-  document.addEventListener('DOMContentLoaded', () => initRunnableCells());
+  document.addEventListener('DOMContentLoaded', () => {
+    initRunnableCells();
+    // After returning from the playground, scroll to the cell the user was on.
+    try {
+      const idx = sessionStorage.getItem('pg:returnCell');
+      if (idx !== null) {
+        sessionStorage.removeItem('pg:returnCell');
+        const cells = document.querySelectorAll('[data-runnable]');
+        const cell = cells[parseInt(idx, 10)];
+        if (cell) {
+          requestAnimationFrame(() => cell.scrollIntoView({behavior: 'smooth', block: 'center'}));
+        }
+      }
+    } catch {}
+    // Preload Pyodide in the background so the first Run click is instant.
+    const preload = () => py();
+    if ('requestIdleCallback' in window) {
+      (window as any).requestIdleCallback(preload, {timeout: 5000});
+    } else {
+      setTimeout(preload, 1000);
+    }
+  });
 }

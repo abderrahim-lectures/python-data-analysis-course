@@ -103,6 +103,9 @@ Si elegiste un proveedor diferente, cambia por el cliente propio de ese proveedo
 Pon un puñado de PDFs reales — informes, guías, papers, cualquier cosa con texto real en ella (no imágenes escaneadas) — en una carpeta `pdfs/` dentro de tu proyecto. Si no tienes ninguno a mano, copia los tres PDFs de ejemplo cortos de [`examples/chat-with-pdfs/pdfs/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/chat-with-pdfs/pdfs), o genera los tuyos propios con el script [`generate_sample_pdfs.py` del ejemplo](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/chat-with-pdfs/generate_sample_pdfs.py).
 
 ## Paso 1: Carga y fragmenta tus PDFs
+### 1.1 `pypdf` extrae texto de un PDF una página a la vez, que es exactamente la granularidad que e...
+
+**👟 Pista inicial :**
 
 `pypdf` extrae texto de un PDF una página a la vez, que es exactamente la granularidad que este proyecto necesita — es lo que hace posible decir *de qué página* vino una respuesta más tarde. Como con el proyecto de App RAG, una página completa suele ser todavía demasiado grande y desenfocada para hacer embedding bien, así que cada página se divide en fragmentos más pequeños — pero a diferencia de ese proyecto, cada fragmento aquí también debe recordar de qué archivo y qué página vino.
 
@@ -181,13 +184,36 @@ if __name__ == "__main__":
         print(f"  [{chunk['source']} p{chunk['page']}] {preview}...")
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.2 uv run python load_pdfs.py
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
+
 ```bash
 uv run python load_pdfs.py
 ```
-
 :::tip[Múltiples documentos, un solo pipeline]
 Nada aguas abajo de `load_chunks()` necesita saber o importarle cuántos PDFs hay, o de cuál vino un fragmento — cada fragmento lleva su propia `source` y `page`, así que la recuperación naturalmente busca a través de *todos* tus PDFs a la vez, y la respuesta eventual puede mezclar hechos de varios documentos diferentes en una sola respuesta, cada uno correctamente atribuido.
 :::
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.3 Verifica
 
 **✅ Lista de verificación**
 
@@ -201,6 +227,9 @@ Nada aguas abajo de `load_chunks()` necesita saber o importarle cuántos PDFs ha
 - Un PDF escaneado (una foto de un documento en papel, sin texto real incrustado) haría que `page.extract_text()` devolviera una cadena vacía para cada página. ¿Cómo notarías que esto había pasado, y qué necesitarías añadir para manejarlo (pista: busca "OCR")?
 
 ## Paso 2: Haz embedding de tus fragmentos localmente
+### 2.1 Este paso es idéntico en espíritu al paso de embedding del proyecto de App RAG — el mismo mo...
+
+**👟 Pista inicial :**
 
 Este paso es idéntico en espíritu al paso de embedding del proyecto de App RAG — el mismo modelo, el mismo razonamiento, solo haciendo embedding de fragmentos derivados de PDF en lugar de fragmentos de notas. `all-MiniLM-L6-v2` mapea cada fragmento a un punto en espacio de 384 dimensiones, entrenado para que fragmentos con significado similar terminen cerca uno del otro. Es pequeño (unos 80MB), corre completamente en tu CPU en aproximadamente un segundo por fragmento en una laptop típica, no necesita clave de API, y no cuesta nada.
 
@@ -248,11 +277,34 @@ if __name__ == "__main__":
     main()
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 2.2 uv run python build_index.py
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
+
 ```bash
 uv run python build_index.py
 ```
-
 Igual que el proyecto de App RAG, esto deliberadamente evita una base de datos vectorial — para una carpeta personal de PDFs (docenas a cientos bajos de documentos, no millones), un array simple de NumPy es más simple, no tiene servicio extra que instalar o correr, y es completamente transparente. `normalize_embeddings=True` escala cada vector a longitud 1, que es lo que hace que la similitud de coseno del Paso 3 se reduzca a un solo producto punto.
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 2.3 Verifica
 
 **✅ Lista de verificación**
 
@@ -266,6 +318,9 @@ Igual que el proyecto de App RAG, esto deliberadamente evita una base de datos v
 - ¿Por qué volver a hacer embedding de los *fragmentos* aquí pero no de los PDFs mismos? ¿Qué perdería hacer embedding de un PDF completo como un solo vector, comparado con hacer embedding de cada uno de sus fragmentos por separado?
 
 ## Paso 3: Recupera y genera una respuesta citada
+### 3.1 La recuperación funciona exactamente como el proyecto de App RAG — haz embedding de la pregu...
+
+**👟 Pista inicial :**
 
 La recuperación funciona exactamente como el proyecto de App RAG — haz embedding de la pregunta, clasifica cada fragmento por similitud de coseno, toma los primeros pocos — excepto que ahora la clasificación corre a través de cada fragmento de cada PDF a la vez, así que el resultado más relevante para una pregunta podría venir de cualquiera de tus documentos.
 
@@ -321,9 +376,35 @@ if __name__ == "__main__":
         print(f"{r['score']:.3f}  [{r['source']} p{r['page']}]  {r['text'][:80]}...")
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 3.2 uv run python retrieve.py
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
+
 ```bash
 uv run python retrieve.py
 ```
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 3.3 Ahora la generación. El prompt es toda la idea de RAG-con-citas en un solo lugar: le entrega...
+
+**👟 Pista inicial :**
 
 Ahora la generación. El prompt es toda la idea de RAG-con-citas en un solo lugar: le entrega al modelo los fragmentos recuperados *etiquetados con su fuente y página*, y requiere que cada hecho en la respuesta sea seguido por una cita `(fuente, página N)` copiada de esa etiqueta — el modelo no está inventando citas, está repitiendo las que ya estaban adjuntas al texto que se le dio.
 
@@ -385,13 +466,36 @@ if __name__ == "__main__":
     print(ask(question))
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 3.4 uv run python ask.py "How many days of paid time off do employees get?"
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
+
 ```bash
 uv run python ask.py "How many days of paid time off do employees get?"
 ```
-
 :::tip[¿Usando un proveedor diferente?]
 Cambia el bloque `OpenAI(...)` por el propio cliente de tu proveedor, siguiendo el mismo patrón que el [proyecto de App RAG](/docs/projects/rag-notes) y el [proyecto de Agente de IA](/docs/projects/ai-agent) — ej. el paquete `google-genai` de Google para Gemini, o el propio cliente de `groq` para Groq. Cerebras y OpenRouter también son compatibles con OpenAI, así que el paquete `openai` también funciona para ellos, solo con una `base_url` diferente.
 :::
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 3.5 Verifica
 
 **✅ Lista de verificación**
 
@@ -406,6 +510,9 @@ Cambia el bloque `OpenAI(...)` por el propio cliente de tu proveedor, siguiendo 
 - Si `retrieve()` extrae el fragmento superior de la página correcta pero el PDF *equivocado* (digamos, dos productos diferentes ambos mencionan "garantía"), ¿lo notarías solo leyendo la cita? ¿Qué sugiere eso sobre siempre verificar citas en lugar de confiar en una respuesta solo porque tiene una?
 
 ## Paso 4: Un pequeño bucle interactivo
+### 4.1 Volver a ejecutar `ask.py` con un nuevo argumento de línea de comandos para cada pregunta fu...
+
+**👟 Pista inicial :**
 
 Volver a ejecutar `ask.py` con un nuevo argumento de línea de comandos para cada pregunta funciona, pero es lento para iterar. Envuélvelo en un pequeño bucle en su lugar, para que puedas seguir chateando con tus PDFs en una sesión en ejecución.
 
@@ -434,13 +541,36 @@ if __name__ == "__main__":
     main()
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 4.2 uv run python chat.py
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
+
 ```bash
 uv run python chat.py
 ```
-
 :::tip[Esta es toda la app]
 No hay servidor, no hay framework, no hay kit de herramientas de UI aquí — un bucle `while True` alrededor de `ask()` *es* una app de chat legítima. Cada producto de "chatea con tus datos" que has visto es este mismo bucle por debajo, con un frontend web, respuestas en streaming, e historial de conversación en capas encima. Ninguna de esas capas cambia lo que realmente está pasando: recuperar, luego generar, luego imprimir.
 :::
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 4.3 Verifica
 
 **✅ Lista de verificación**
 

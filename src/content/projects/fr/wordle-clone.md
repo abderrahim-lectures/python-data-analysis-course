@@ -62,9 +62,11 @@ uv add rich
 `rich` est la seule dépendance tierce dont tout ce projet a besoin, et elle sert uniquement à la sortie colorée du terminal (tuiles vertes/jaunes/grises) — chaque morceau de vraie logique de jeu ci-dessous est du Python de bibliothèque standard pur. Pas de clé API, pas d'inscription, rien à configurer avant de pouvoir exécuter une seule ligne de code.
 
 ## Étape 1 : Note un essai contre le mot cible
+### 1.1 Commence par la pièce qui est facile à bien faire *presque* et satisfaisante à bien faire *v...
+
+**👟 Indice de départ :**
 
 Commence par la pièce qui est facile à bien faire *presque* et satisfaisante à bien faire *vraiment* : étant donné un essai de 5 lettres et un mot cible de 5 lettres, produis une marque par lettre — vert si cette lettre est à la bonne position, jaune si elle est dans le mot mais à la mauvaise position, gris sinon.
-
 Un premier essai tend à ressembler à ça, en vérifiant chaque lettre devinée indépendamment :
 
 ```python
@@ -81,8 +83,19 @@ def score_guess_naive(guess: str, target: str) -> list[str]:
     return marks
 ```
 
-Essaie-le sur `guess = "SPEED"`, `target = "ERASE"`. Le mot cible contient exactement **un** `E`. La version naïve vérifie chaque lettre devinée contre la chaîne cible entière indépendamment — donc *les deux* `E` de `SPEED` sont vérifiés contre `"E" in target`, qui est `True` les deux fois, et les deux sont marqués en jaune. C'est faux : le vrai Wordle n'attribuerait jamais deux `E` jaunes dans un essai quand le mot cible ne contient qu'un seul `E` — un `E` deviné mérite une marque, l'autre n'a plus de lettre correspondante restante pour en justifier une.
+**🎯 Résultat attendu :**
 
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 1.2 Essaie-le sur `guess = "SPEED"`, `target = "ERASE"`. Le mot cible contient exactement **un**...
+
+**👟 Indice de départ :**
+
+Essaie-le sur `guess = "SPEED"`, `target = "ERASE"`. Le mot cible contient exactement **un** `E`. La version naïve vérifie chaque lettre devinée contre la chaîne cible entière indépendamment — donc *les deux* `E` de `SPEED` sont vérifiés contre `"E" in target`, qui est `True` les deux fois, et les deux sont marqués en jaune. C'est faux : le vrai Wordle n'attribuerait jamais deux `E` jaunes dans un essai quand le mot cible ne contient qu'un seul `E` — un `E` deviné mérite une marque, l'autre n'a plus de lettre correspondante restante pour en justifier une.
 La correction est un algorithme en deux passes :
 
 ```python
@@ -116,15 +129,35 @@ def score_guess(guess: str, target: str) -> list[str]:
     return marks
 ```
 
-La passe 1 marque chaque correspondance de position exacte en vert, et compte séparément (dans `remaining`) combien de copies de chaque lettre cible *non verte* sont encore « à prendre ». La passe 2 parcourt ensuite l'essai de nouveau : toute lettre pas déjà verte ne reçoit une marque jaune que si `remaining` a encore une copie non réclamée de celle-ci — et en réclamer une décrémente le compte, donc une seconde copie devinée de la même lettre n'obtiendra pas aussi du jaune sauf si le mot cible a vraiment une seconde copie aussi.
+**🎯 Résultat attendu :**
 
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 1.3 La passe 1 marque chaque correspondance de position exacte en vert, et compte séparément (da...
+
+**👟 Indice de départ :**
+
+La passe 1 marque chaque correspondance de position exacte en vert, et compte séparément (dans `remaining`) combien de copies de chaque lettre cible *non verte* sont encore « à prendre ». La passe 2 parcourt ensuite l'essai de nouveau : toute lettre pas déjà verte ne reçoit une marque jaune que si `remaining` a encore une copie non réclamée de celle-ci — et en réclamer une décrémente le compte, donc une seconde copie devinée de la même lettre n'obtiendra pas aussi du jaune sauf si le mot cible a vraiment une seconde copie aussi.
 Exécute-le sur le cas délicat :
 
 ```python
 print(score_guess("SPEED", "ERASE"))  # ['Y', 'X', 'Y', 'Y', 'X']
 ```
-
 Un `E` (position 0) est jaune, l'autre (position 3) est aussi jaune parce que `ERASE` a vraiment deux `E` — mais un essai comme `"ELITE"` contre un mot cible avec un seul `E` donnerait correctement au *deuxième* `E` un gris, pas un jaune.
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 1.4 Vérifie
 
 **✅ Liste de vérification**
 
@@ -138,6 +171,9 @@ Un `E` (position 0) est jaune, l'autre (position 3) est aussi jaune parce que `E
 Essaie le mot cible `"LLAMA"` et l'essai `"ALLOY"` à la main avant d'exécuter le code : `LLAMA` a deux `L` et deux `A`. Parcours les deux passes toi-même — quelles lettres finissent en vert, lesquelles en jaune, et lesquelles en gris ? Puis vérifie ta réponse contre `score_guess`. Si tu t'es trompé sur papier, où exactement ton modèle mental a-t-il divergé de l'algorithme en deux passes ?
 
 ## Étape 2 : Construis la boucle de jeu
+### 2.1 Avec un scoring solide, enveloppe-le dans un vrai jeu : choisis un mot cible aléatoire dans ...
+
+**👟 Indice de départ :**
 
 Avec un scoring solide, enveloppe-le dans un vrai jeu : choisis un mot cible aléatoire dans une liste de mots, donne au joueur 6 essais, et arrête dès qu'il a les cinq verts.
 
@@ -162,8 +198,17 @@ def play_round(words: list[str]) -> tuple[bool, int]:
     print(f"Out of guesses. The word was {target}.")
     return False, MAX_GUESSES
 ```
-
 `words.txt` est un simple fichier texte, un mot par ligne — le vrai exemple inclut une liste d'environ 540 mots anglais courants de 5 lettres exactement pour ce but. Une *liste* de mots comme celle-ci (juste des faits sur quelles chaînes sont des mots anglais, sans expression créative) est libre d'utilisation et de redistribution, contrairement à copier, disons, les vraies définitions d'un dictionnaire.
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 2.2 Vérifie
 
 **✅ Liste de vérification**
 
@@ -176,6 +221,9 @@ def play_round(words: list[str]) -> tuple[bool, int]:
 Si `random.choice(words)` est appelé une fois par manche depuis l'intérieur de `play_round`, et que tu appelles `play_round` dans une boucle pour laisser quelqu'un rejouer, est-ce que le mot cible va vraiment changer entre les manches ? Que se passerait-il si tu calculais accidentellement `target` une fois *à l'extérieur* de la boucle à la place ?
 
 ## Étape 3 : Valide les essais contre la liste de mots
+### 3.1 Le vrai Wordle ne te laisse pas deviner `"ZZZZZ"` — chaque essai doit être un vrai mot de so...
+
+**👟 Indice de départ :**
 
 Le vrai Wordle ne te laisse pas deviner `"ZZZZZ"` — chaque essai doit être un vrai mot de son dictionnaire. Ajoute cette vérification avant de noter :
 
@@ -191,12 +239,20 @@ def read_guess(word_set: set[str]) -> str:
             continue
         return raw
 ```
-
 Utiliser un `set` ici au lieu de vérifier `raw in words` contre la liste directement compte plus qu'il n'y paraît : les vérifications d'appartenance d'une liste balayent chaque entrée une par une, alors qu'une vérification de set est quasi instantanée quel que soit le nombre de mots qu'il contient — une habitude petite mais authentiquement bonne pour toute vérification « est-ce que cette valeur est dans une grande collection ».
-
 :::tip[Rejette les mauvaises saisies tôt, pas en plein jeu]
 Valider la *forme* de l'essai (5 lettres, alphabétique) avant de vérifier la liste de mots attrape les fautes de frappe les plus courantes avec la vérification la moins chère d'abord — ça ne sert à rien de chercher `"crane5"` dans un set de 540 mots quand une vérification `len()` et `.isalpha()` te dit déjà qu'il est malformé.
 :::
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 3.2 Vérifie
 
 **✅ Liste de vérification**
 
@@ -209,6 +265,9 @@ Valider la *forme* de l'essai (5 lettres, alphabétique) avant de vérifier la l
 Pourquoi est-il important que `read_guess` redemande sur un mauvais essai *à l'intérieur de sa propre boucle*, plutôt que de retourner une valeur sentinelle comme `None` pour que l'appelant (`play_round`) la gère ? Qu'est-ce qui irait mal avec le comptage d'essais de l'Étape 2 si un essai invalide était autorisé à consommer l'un des 6 essais ?
 
 ## Étape 4 : Ajoute un suivi de statistiques persistant
+### 4.1 La dernière pièce : se souvenir de la performance du joueur, à travers des exécutions séparé...
+
+**👟 Indice de départ :**
 
 La dernière pièce : se souvenir de la performance du joueur, à travers des exécutions séparées du programme, pas juste au sein d'une session. Ça signifie écrire dans un fichier sur le disque.
 
@@ -248,8 +307,19 @@ def record_result(stats: dict, won: bool, guesses_used: int) -> dict:
     return stats
 ```
 
-`load_stats` gère la toute première exécution avec élégance — aucun fichier n'existe encore, donc il renvoie un nouvel ensemble de valeurs par défaut à zéro plutôt que de planter sur un fichier manquant. Chaque autre exécution charge ce qui a été sauvegardé la dernière fois. `record_result` n'ajoute à `guess_distribution` qu'en cas de victoire — une défaite n'a pas de valeur « d'essais utilisés pour gagner » significative, comme l'écran de statistiques du vrai Wordle lui-même.
+**🎯 Résultat attendu :**
 
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 4.2 `load_stats` gère la toute première exécution avec élégance — aucun fichier n'existe encore,...
+
+**👟 Indice de départ :**
+
+`load_stats` gère la toute première exécution avec élégance — aucun fichier n'existe encore, donc il renvoie un nouvel ensemble de valeurs par défaut à zéro plutôt que de planter sur un fichier manquant. Chaque autre exécution charge ce qui a été sauvegardé la dernière fois. `record_result` n'ajoute à `guess_distribution` qu'en cas de victoire — une défaite n'a pas de valeur « d'essais utilisés pour gagner » significative, comme l'écran de statistiques du vrai Wordle lui-même.
 La boucle complète du jeu assemble tout : charge les statistiques une fois au démarrage, mets-les à jour et sauvegarde-les après chaque manche.
 
 ```python
@@ -265,10 +335,19 @@ while True:
     if input("Play again? [y/N] ").strip().lower() != "y":
         break
 ```
-
 :::tip[Sauvegarde après chaque manche, pas seulement à la sortie]
 Appeler `save_stats(stats)` juste après `record_result`, à chaque manche, signifie qu'un programme interrompu (terminal fermé, `Ctrl+C`, crash) ne perd au pire que le résultat de la manche *courante* — jamais la progression de toute la session. Sauvegarder une seule fois à la toute fin du programme jetterait tout si le joueur quitte en pleine session au lieu de passer par l'invite « rejouer ? ».
 :::
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 4.3 Vérifie
 
 **✅ Liste de vérification**
 

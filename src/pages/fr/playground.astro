@@ -1,0 +1,24 @@
+---
+import Base from '../../layouts/Base.astro';
+import PlaygroundHead from '../../components/PlaygroundHead.astro';
+import PlaygroundCell from '../../components/PlaygroundCell.astro';
+import {PLAYGROUND_STARTER} from '../../lib/playgroundStarter.ts';
+---
+
+<Base
+  title="Bac à sable — PyDA Course"
+  description="Éditeur Python libre — exécutez n'importe quel code dans votre navigateur."
+  lang="fr"
+  dir="ltr"
+>
+  <section class="container head">
+    <PlaygroundHead
+      eyebrow="Éditeur plein écran"
+      lead="Écrivez et exécutez n'importe quel Python ici — rien n'est noté, rien n'est sauvegardé quand vous partez."
+    />
+  </section>
+
+  <section class="container playground-page">
+    <PlaygroundCell starter={PLAYGROUND_STARTER} />
+  </section>
+</Base>

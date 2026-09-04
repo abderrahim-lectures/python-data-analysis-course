@@ -102,9 +102,11 @@ En lugar de hacer `export` de una clave en cada nueva sesión de terminal, `pyth
 - ✅ Tienes una clave de API real de un proveedor, guardada en un archivo `.env` en la carpeta de tu proyecto — no pegada en ningún script.
 
 ## Paso 1: Captura un git diff en stage con `subprocess`
+### 1.1 El módulo `subprocess` de Python ejecuta otro programa y captura su salida como texto — aquí...
+
+**👟 Pista inicial :**
 
 El módulo `subprocess` de Python ejecuta otro programa y captura su salida como texto — aquí, ese programa es `git diff --staged`, no el simple `git diff` al que podrías recurrir primero. Esa es una elección deliberada: un mensaje de commit debería describir lo que realmente está a punto de confirmarse, que es lo que has puesto en stage con `git add`, no cada cambio sin stage que está en tu árbol de trabajo.
-
 Crea `commit_helper.py`:
 
 ```python
@@ -136,17 +138,37 @@ if __name__ == "__main__":
     print(diff if diff.strip() else "No staged changes. Stage something first with `git add`.")
 ```
 
-`subprocess.run([...], capture_output=True, text=True)` es la línea clave: pasar el comando como una **lista** de argumentos (`["git", "diff", "--staged"]`) en lugar de una cadena única de shell evita toda una clase de bugs de quoting de shell e inyección, `capture_output=True` captura stdout/stderr en lugar de dejarlos imprimir directamente a tu terminal, y `text=True` decodifica esa salida como una cadena en lugar de bytes crudos. `check=False` más un `if result.returncode != 0` manual es deliberado aquí en lugar de `check=True`: permite que esta función lance su *propio* mensaje de error claro (incluyendo el stderr real de git) en lugar de un `CalledProcessError` genérico.
+**🎯 Resultado esperado :**
 
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.2 `subprocess.run([...], capture_output=True, text=True)` es la línea clave: pasar el comando ...
+
+**👟 Pista inicial :**
+
+`subprocess.run([...], capture_output=True, text=True)` es la línea clave: pasar el comando como una **lista** de argumentos (`["git", "diff", "--staged"]`) en lugar de una cadena única de shell evita toda una clase de bugs de quoting de shell e inyección, `capture_output=True` captura stdout/stderr en lugar de dejarlos imprimir directamente a tu terminal, y `text=True` decodifica esa salida como una cadena en lugar de bytes crudos. `check=False` más un `if result.returncode != 0` manual es deliberado aquí en lugar de `check=True`: permite que esta función lance su *propio* mensaje de error claro (incluyendo el stderr real de git) en lugar de un `CalledProcessError` genérico.
 Pruébalo contra este mismo proyecto — edita un archivo, hazle `git add`, luego ejecuta:
 
 ```bash
 uv run python commit_helper.py
 ```
-
 :::tip[Este es el mismo patrón de subprocess que cualquier otro wrapper de CLI]
 `subprocess.run` no le importa que el programa que se ejecuta sea `git` — funciona idénticamente para cualquier herramienta de línea de comandos: `ls`, un script de shell, otro programa Python. Una vez que este patrón hace clic, "dejar que Python controle una herramienta CLI existente y usar su salida" está disponible para mucho más que solo git.
 :::
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.3 Verifica
 
 **✅ Lista de verificación**
 
@@ -160,6 +182,9 @@ uv run python commit_helper.py
 - ¿Qué devolvería `_run_git(["diff", "--staged"])` en un repositorio con cambios sin confirmar que están todos sin stage? ¿Por qué manejar un diff vacío, en lugar de asumir que siempre hay algo en stage, importa para una herramienta destinada a ejecutarse como parte de un flujo de trabajo de commit normal?
 
 ## Paso 2: Diseña el system prompt del mensaje de commit
+### 2.1 Un modelo de lenguaje sin instrucciones podría escribir un mensaje demasiado vago ("actualiz...
+
+**👟 Pista inicial :**
 
 Un modelo de lenguaje sin instrucciones podría escribir un mensaje demasiado vago ("actualizar código"), demasiado extenso (un párrafo completo para una corrección de un typo de una línea), o sin ningún formato consistente. El **system prompt** es lo que convierte un modelo de chat de propósito general en un redactor que se comporta como un mantenedor de proyecto disciplinado: qué formato usar, en qué tono escribir, y cuándo molestarse en más de una línea.
 
@@ -191,16 +216,23 @@ Rules:
   else, so it can be used directly as a commit message.
 """
 ```
-
 Tres decisiones de diseño deliberadas que vale la pena notar:
-
 - **Una estructura fija (`type(scope): summary`, cuerpo opcional)** es lo que hace que la salida sea usable como un mensaje de commit real, no una respuesta de chat que resulta describir el diff — [Conventional Commits](https://www.conventionalcommits.org/) es una convención ampliamente usada específicamente porque las herramientas (changelogs, semantic-release, CI) pueden analizarla de forma confiable.
 - **"Solo incluye un cuerpo si añade información real"** evita que el modelo rellene una corrección de un typo de una línea con tres oraciones de contenido repetido del diff — el mismo instinto que tiene un revisor humano cuando ve un mensaje de commit inflado para un cambio trivial.
 - **"Basa el mensaje SOLO en lo que el diff realmente cambia... no adivines un número de ticket"** existe porque los modelos felizmente alucinan un `JIRA-1234` o referencia de issue que suena plausible si no lo prohíbes explícitamente — una referencia fabricada en un mensaje de commit es peor que ninguna referencia.
-
 :::tip[Itera sobre el prompt como lo harías con código]
 Trata este system prompt como un primer borrador, no una especificación terminada. Ejecútalo contra un diff que ya sabes que merece un `type` específico (una adición pura de tests, un cambio solo de docs, una corrección de bug real) — si el modelo elige el tipo equivocado o el resumen se extiende demasiado, ajusta la redacción e inténtalo de nuevo.
 :::
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 2.2 Verifica
 
 **✅ Lista de verificación**
 
@@ -213,6 +245,9 @@ Trata este system prompt como un primer borrador, no una especificación termina
 - El prompt lista diez tipos válidos de Conventional Commits. ¿Qué saldría mal para las herramientas de changelog de un proyecto real si el modelo fuera libre de inventar sus propios tipos en lugar de elegir de una lista fija?
 
 ## Paso 3: Llama al LLM y construye el bucle interactivo
+### 3.1 Conecta el código de captura de diff del Paso 1 y el system prompt del Paso 2, luego añade l...
+
+**👟 Pista inicial :**
 
 Conecta el código de captura de diff del Paso 1 y el system prompt del Paso 2, luego añade la parte que convierte esto en una herramienta real en lugar de un script de una sola vez: un bucle que muestra el borrador y deja que un humano lo acepte, edite, o regenere.
 
@@ -290,17 +325,37 @@ if __name__ == "__main__":
     run_interactive_loop(diff)
 ```
 
-`truncate_diff` importa más aquí de lo que podría parecer a primera vista — mira la sección de pitfalls abajo para saber por qué un diff grande no es solo lento, puede fallar silenciosamente o producir un mensaje superficial y genérico. El bucle deliberadamente **no** llama a `git commit` todavía — el Paso 4 añade eso como su propia función pequeña y explícita, así que es obvio exactamente dónde y cómo sucede el commit.
+**🎯 Resultado esperado :**
 
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 3.2 `truncate_diff` importa más aquí de lo que podría parecer a primera vista — mira la sección ...
+
+**👟 Pista inicial :**
+
+`truncate_diff` importa más aquí de lo que podría parecer a primera vista — mira la sección de pitfalls abajo para saber por qué un diff grande no es solo lento, puede fallar silenciosamente o producir un mensaje superficial y genérico. El bucle deliberadamente **no** llama a `git commit` todavía — el Paso 4 añade eso como su propia función pequeña y explícita, así que es obvio exactamente dónde y cómo sucede el commit.
 Ejecútalo:
 
 ```bash
 uv run python commit_helper.py
 ```
-
 :::tip[¿Usando un proveedor diferente?]
 Cambia el bloque `OpenAI(...)` por una `base_url` y clave diferentes — ej. `base_url="https://api.groq.com/openai/v1"` con `api_key=os.environ["GROQ_API_KEY"]` para Groq, o `base_url="https://generativelanguage.googleapis.com/v1beta/openai/"` con `api_key=os.environ["GOOGLE_API_KEY"]` para el endpoint compatible con OpenAI de Gemini. Todo lo demás en este archivo permanece igual. Mira [`examples/commit-message-agent/commit_helper.py`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/commit-message-agent/commit_helper.py) en el repositorio del curso para ver los seis conectados lado a lado, seleccionables con una variable de entorno.
 :::
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 3.3 Verifica
 
 **✅ Lista de verificación**
 
@@ -314,6 +369,9 @@ Cambia el bloque `OpenAI(...)` por una `base_url` y clave diferentes — ej. `ba
 - Si dos ejecuciones diferentes de `draft_commit_message` sobre el *mismo* diff staged exacto produjeran dos mensajes visiblemente diferentes, ¿te sorprendería? ¿Qué sugiere eso sobre por qué existe siquiera la opción `r` (regenerar), en lugar de confiar ciegamente en el primer borrador?
 
 ## Paso 4: Conéctalo para que realmente confirme el commit — solo con confirmación
+### 4.1 La última pieza: reemplaza el placeholder "(Confirmaría el commit aquí...)" del Paso 3 con u...
+
+**👟 Pista inicial :**
 
 La última pieza: reemplaza el placeholder "(Confirmaría el commit aquí...)" del Paso 3 con una función que realmente ejecuta `git commit -m`, llamada desde exactamente un lugar — justo después de que el usuario escribe `y`.
 
@@ -367,6 +425,18 @@ def run_interactive_loop(diff: str) -> None:
         print("Please answer y, e, r, or n.")
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 4.2 Prueba el bucle completo contra un cambio real:
+
+**👟 Pista inicial :**
+
 Prueba el bucle completo contra un cambio real:
 
 ```bash
@@ -376,11 +446,33 @@ uv run python commit_helper.py
 # read the draft, then type e to tweak it, r to try again, or y to commit for real
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 4.3 Verifica que realmente sucedió:
+
+**👟 Pista inicial :**
+
 Verifica que realmente sucedió:
 
 ```bash
 git log -1
 ```
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 4.4 Verifica
 
 **✅ Lista de verificación**
 

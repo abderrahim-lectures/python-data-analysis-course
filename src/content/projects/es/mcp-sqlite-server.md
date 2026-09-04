@@ -61,6 +61,9 @@ uv add "mcp[cli]"
 `sqlite3`, la biblioteca de base de datos que este proyecto realmente consulta, forma parte de la biblioteca estándar de Python — no hay nada que instalar para ella. Tampoco se necesita ninguna clave de API externa para ejecutar el propio servidor: es una herramienta puramente local, y el cliente LLM que se conecta a ella (Claude Desktop, en el Paso 4) aporta su propio modelo y, si lo necesita, su propia clave.
 
 ## Paso 1: Construye una base de datos de ejemplo pequeña
+### 1.1 Crea `seed.py` — un script que construye una pequeña base de datos de biblioteca con cuatro ...
+
+**👟 Pista inicial :**
 
 Crea `seed.py` — un script que construye una pequeña base de datos de biblioteca con cuatro tablas relacionadas:
 
@@ -118,13 +121,34 @@ if __name__ == "__main__":
     print(f"Built sample database at {DB_PATH}")
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.2 Ejecútalo una vez:
+
+**👟 Pista inicial :**
+
 Ejecútalo una vez:
 
 ```bash
 uv run python seed.py
 ```
-
 Que `returned_on` sea `NULL` en una fila es intencional — es lo que hace que "¿qué libros siguen prestados?" sea una pregunta real y respondible más adelante, en lugar de que todos los préstamos se vean idénticos.
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.3 Verifica
 
 **✅ Lista de verificación**
 
@@ -138,6 +162,9 @@ Que `returned_on` sea `NULL` en una fila es intencional — es lo que hace que "
 - ¿Qué se rompería, más adelante, si `book_id` en `loans` no hiciera referencia realmente a una fila real en `books`?
 
 ## Paso 2: Escribe las funciones de consulta y esquema, de forma segura
+### 2.1 Crea `db_tools.py` — funciones de Python simples, sin ningún import de MCP, que el servidor ...
+
+**👟 Pista inicial :**
 
 Crea `db_tools.py` — funciones de Python simples, sin ningún import de MCP, que el servidor envolverá en el Paso 3:
 
@@ -190,12 +217,20 @@ def run_read_only_query(sql: str, db_path: Path = DB_PATH) -> list[dict]:
     finally:
         conn.close()
 ```
-
 Dos cosas que vale la pena notar. Primero, `run_read_only_query` no intenta ser un analizador SQL completo — no puede serlo, no en unas pocas líneas — pero tampoco necesita serlo: rechazar cualquier cosa con una segunda sentencia encadenada por punto y coma, cualquier cosa que no sea un `SELECT`, y cualquier cosa que contenga una palabra clave de escritura o de esquema cierra las formas realistas en que una consulta compuesta por un modelo podría hacer daño, sin pretender atrapar cada truco SQL concebible. Segundo, abrir la propia conexión con el parámetro URI `mode=ro` de SQLite es una segunda capa real, independiente de la verificación de texto — si la expresión regular alguna vez pasara algo por alto, que el archivo de la base de datos sea genuinamente de solo lectura a nivel del sistema operativo sigue impidiendo que ocurra una escritura. (`describe_table`, la tercera función que necesita este proyecto, es una adición breve — consulta `examples/mcp-sqlite-server/db_tools.py` para la versión completa, que la incluye.)
-
 :::tip[No te saltes la aplicación de solo lectura, ni siquiera para una base de datos de juguete]
 Es tentador pensar "es solo una demo, nadie va a escribir `DROP TABLE`". El punto no es un *usuario* malicioso — es que el texto de la consulta aquí lo escribe un LLM, no tú, y los LLM ocasionalmente producen exactamente la consulta que parecía razonable dada una petición ambigua pero hace algo que no pretendías. Trata cualquier herramienta que ejecute SQL compuesto por un modelo contra una base de datos real como si necesitara esta verificación de verdad, no como una idea tardía — esta es la misma disciplina que importa (con mucho más en juego) la primera vez que apuntes una herramienta como esta a una base de datos que no es solo una muestra que construiste para una lección.
 :::
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 2.2 Verifica
 
 **✅ Lista de verificación**
 
@@ -210,6 +245,9 @@ Es tentador pensar "es solo una demo, nadie va a escribir `DROP TABLE`". El punt
 - `describe_table` construye una consulta con una f-string (`f"PRAGMA table_info({table_name})"`) en lugar de un marcador de posición parametrizado `?`. ¿Por qué no pueden los nombres de tablas y columnas usar el mismo enfoque de marcador `?` que usan los valores, y qué tiene que suceder en su lugar para mantener eso seguro?
 
 ## Paso 3: Conecta las funciones como herramientas MCP
+### 3.1 Crea `server.py`, importando las funciones del Paso 2 y envolviendo cada una con `@mcp.tool(...
+
+**👟 Pista inicial :**
 
 Crea `server.py`, importando las funciones del Paso 2 y envolviendo cada una con `@mcp.tool()`, exactamente igual que el patrón `FastMCP` del proyecto Construye un servidor MCP:
 
@@ -255,15 +293,35 @@ if __name__ == "__main__":
     mcp.run()
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 3.2 Pruébalo exactamente igual que en el proyecto MCP anterior, con el Inspector, antes de tocar...
+
+**👟 Pista inicial :**
+
 Pruébalo exactamente igual que en el proyecto MCP anterior, con el Inspector, antes de tocar ningún cliente real:
 
 ```bash
 uv run mcp dev server.py
 ```
-
 Llama a `list_db_tables`, luego a `describe_db_table` con `"books"`, y luego a `query_db` con un `SELECT` real — y, deliberadamente, una vez con algo como `DROP TABLE books`, para verlo regresar como un rechazo claro en lugar de un error a nivel del Inspector.
-
 Fíjate en que `query_db` captura `UnsafeQueryError` él mismo y devuelve un resultado simple `{"error": ...}`, en lugar de dejar que la excepción se propague a través de MCP. Esa es una elección de diseño pequeña pero real: una excepción no manejada de una llamada a herramienta generalmente aparece ante el cliente como un fallo opaco a nivel de protocolo, mientras que un mensaje de error devuelto es algo que el modelo puede leer, entender y ante lo cual reaccionar — por ejemplo, reformulando su propia consulta.
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 3.3 Verifica
 
 **✅ Lista de verificación**
 
@@ -277,6 +335,9 @@ Fíjate en que `query_db` captura `UnsafeQueryError` él mismo y devuelve un res
 - ¿Por qué envolver `UnsafeQueryError` en un valor devuelto `{"error": ...}` en lugar de dejar que se propague hasta arriba?
 
 ## Paso 4: Conéctate a Claude Desktop y haz una pregunta real
+### 4.1 Añade tu servidor a `claude_desktop_config.json` (el mismo archivo que usó el proyecto Const...
+
+**👟 Pista inicial :**
 
 Añade tu servidor a `claude_desktop_config.json` (el mismo archivo que usó el proyecto Construye un servidor MCP; macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`; Windows: `%APPDATA%\Claude\claude_desktop_config.json`):
 
@@ -290,12 +351,19 @@ Añade tu servidor a `claude_desktop_config.json` (el mismo archivo que usó el 
   }
 }
 ```
-
 **Cierra por completo y vuelve a abrir Claude Desktop.** Una vez que esté de vuelta, hazle una pregunta genuina en lenguaje natural que necesite más de una tabla para responderse, por ejemplo:
-
 > Usando las herramientas de library-db, ¿qué libros están actualmente prestados y aún no han sido devueltos? Dame los títulos y quién los tiene.
-
 Observa lo que sucede: Claude debería llamar a `list_db_tables`, luego a `describe_db_table` sobre `books`, `loans` y `members` para aprender los nombres de las columnas, y después componer y ejecutar su propio `SELECT ... JOIN ...` a través de `query_db` — y responder usando el resultado real, no una suposición. Esta es la recompensa real de todo el proyecto: nunca escribiste ese join tú mismo.
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 4.2 Verifica
 
 **✅ Lista de verificación**
 

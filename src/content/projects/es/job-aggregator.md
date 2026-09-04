@@ -74,6 +74,9 @@ Si extiendes este proyecto para apuntar a una bolsa de trabajo real y en vivo o 
 :::
 
 ## Paso 1: Analiza una sola página de ofertas en campos estructurados
+### 1.1 Abre [`board_alpha.html`](https://github.com/abderrahim-lectures/python-data-analysis-course...
+
+**👟 Pista inicial :**
 
 Abre [`board_alpha.html`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/job-aggregator/sample_data/board_alpha.html) en un editor de texto. Cada oferta está dentro de un `<div class="job-card">`, con el título en un `<h2 class="job-title">`, la empresa en un `<span class="company">`, la ubicación en un `<span class="location">`, y una descripción en un `<p class="description">`. Ese es el mismo patrón `find`/`find_all` de Extrae y Analiza un Sitio Web en Vivo, solo aplicado a un archivo local en lugar de una respuesta en vivo:
 
@@ -94,11 +97,34 @@ for card in soup.find_all("div", class_="job-card"):
     print(f"{title} @ {company} ({location})")
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.2 uv run python aggregate.py
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
+
 ```bash
 uv run python aggregate.py
 ```
-
 Deberías ver cuatro líneas impresas, una por cada oferta en la bolsa de Alpha.
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.3 Verifica
 
 **✅ Lista de verificación**
 
@@ -112,6 +138,9 @@ Deberías ver cuatro líneas impresas, una por cada oferta en la bolsa de Alpha.
 - Cada campo aquí es requerido por el analizador (`card.find(...)` llama inmediatamente a `.get_text(...)` en el resultado). ¿Qué pasa si a una oferta en una bolsa con formato diferente le falta su `<span>` de ubicación por completo? ¿Dónde exactamente fallaría eso, y cómo te ayudaría el mensaje de error a encontrarlo?
 
 ## Paso 2: Analiza múltiples fuentes y combínalas
+### 2.1 `board_beta.html` y `board_gamma.html` contienen el mismo *tipo* de datos — título, empresa,...
+
+**👟 Pista inicial :**
 
 `board_beta.html` y `board_gamma.html` contienen el mismo *tipo* de datos — título, empresa, ubicación, descripción — pero ninguno usa el marcado de Alpha. Beta lista trabajos como elementos `<li class="listing">` con un `<a class="position-title">`; Gamma los lista como filas de tabla `<tr class="job-row">` con celdas `<td>` simples. Un solo scraper de "un selector para todas las bolsas" no existe — en su lugar, escribe una pequeña función analizadora por fuente, cada una devolviendo exactamente la misma forma de diccionario, para que el resto del pipeline nunca tenga que saber de qué bolsa vino una oferta:
 
@@ -175,11 +204,34 @@ if __name__ == "__main__":
     print(f"Parsed {len(listings)} raw listings from {len(PARSERS)} boards")
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 2.2 uv run python aggregate.py
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
+
 ```bash
 uv run python aggregate.py
 ```
-
 Deberías ver 10 ofertas crudas en total (4 + 3 + 3) — "crudas" porque nada se ha deduplicado todavía.
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 2.3 Verifica
 
 **✅ Lista de verificación**
 
@@ -193,6 +245,9 @@ Deberías ver 10 ofertas crudas en total (4 + 3 + 3) — "crudas" porque nada se
 - `parse_board_gamma` accede a `cells[0]`, `cells[1]`, etc. por posición en lugar de por nombre de clase, a diferencia de los otros dos analizadores. ¿Qué se rompería silenciosamente si la tabla de Gamma añadiera una nueva primera columna (digamos, una fecha de publicación) sin que te dieras cuenta?
 
 ## Paso 3: Elimina duplicados de ofertas con pandas
+### 3.1 Dos de las diez ofertas son exactamente el mismo trabajo, publicado en dos bolsas diferentes...
+
+**👟 Pista inicial :**
 
 Dos de las diez ofertas son exactamente el mismo trabajo, publicado en dos bolsas diferentes: un rol de "Senior Python Developer" en Northwind Analytics aparece tanto en Alpha como en Beta, y un rol de "Data Analyst" en Contoso Retail aparece tanto en Alpha como en Gamma. Dejado así, una alerta posterior reportaría la misma vacante dos veces. La solución es una clave de deduplicación — algo lo suficientemente estable como para reconocer "el mismo trabajo" entre fuentes aunque la redacción de la descripción difiera ligeramente de bolsa a bolsa:
 
@@ -221,13 +276,35 @@ print(f"Deduped {before} listings -> {len(df)} unique jobs ({before - len(df)} d
 df.to_csv("listings.csv", index=False)
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 3.2 uv run python aggregate.py
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
+
 ```bash
 uv run python aggregate.py
 ```
-
 Deberías ver "Deduped 10 listings -> 8 unique jobs (2 duplicate posting(s) removed)".
-
 La clave de deduplicación aquí es texto normalizado de `title + company`, no un hash de la fila completa — deliberadamente. Hacer hash de la fila completa (incluyendo `description`) trataría las descripciones ligeramente diferentes de Alpha y Beta del mismo trabajo como dos trabajos *diferentes*, derrotando el propósito.
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 3.3 Verifica
 
 **✅ Lista de verificación**
 
@@ -241,6 +318,9 @@ La clave de deduplicación aquí es texto normalizado de `title + company`, no u
 - Si dos empresas diferentes resultaran publicar dos trabajos diferentes con exactamente el mismo título (ej. dos vacantes no relacionadas de "Data Analyst"), ¿esta clave de deduplicación las fusionaría incorrectamente? ¿Por qué sí o por qué no?
 
 ## Paso 4: Filtra por palabra clave y alerta sobre coincidencias nuevas
+### 4.1 El último paso es la mitad de "alerta" del proyecto: filtra las ofertas deduplicadas a las q...
+
+**👟 Pista inicial :**
 
 El último paso es la mitad de "alerta" del proyecto: filtra las ofertas deduplicadas a las que coinciden con una palabra clave, luego recuerda sobre qué ya has alertado para que una segunda ejecución contra los mismos datos no se repita a sí misma:
 
@@ -286,15 +366,37 @@ if __name__ == "__main__":
     save_seen(seen | set(matches["dedupe_key"]))
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 4.2 uv run python filter_alerts.py
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
+
 ```bash
 uv run python filter_alerts.py
 ```
-
 La primera ejecución debería reportar 6 coincidencias nuevas (cada oferta cuyo título o descripción menciona "python"). Ejecútalo de nuevo sin cambiar nada, y debería reportar cero coincidencias nuevas — `seen.json` recuerda sobre qué ya alertó, exactamente como un agregador programado real revisando cada mañana necesitaría.
-
 :::tip[Un filtro de palabra clave es solo la versión más simple de "coincide con lo que me importa"]
 `str.contains` con un patrón unido por `|` es intencionalmente el filtro más simple posible — suficientemente bueno para probar que la lógica de alertas funciona. Una versión más realista podría coincidir contra varios *grupos* de palabras clave (ej. "python" O "django" para roles de backend, "remoto" como un filtro requerido separado en `location`), o puntuar una coincidencia por cuántas palabras clave coinciden en lugar de tratarla como pasa/no pasa. Haz que la versión simple funcione primero; la lógica de coincidencia es la parte más fácil de reemplazar después.
 :::
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 4.3 Verifica
 
 **✅ Lista de verificación**
 

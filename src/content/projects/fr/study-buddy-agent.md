@@ -100,6 +100,9 @@ Au lieu de faire `export` d'une clé dans chaque nouvelle session de terminal, m
 Avec `uv`, `openai`, `python-dotenv`, et une clé dans `.env`, la configuration est terminée — tout à partir d'ici est de la logique de quiz.
 
 ## Étape 1 : Charge tes notes et choisis une stratégie de contexte
+### 1.1 Mets un fichier `.txt` ou `.md` de tes propres notes d'étude quelque part dans ton projet — ...
+
+**👟 Indice de départ :**
 
 Mets un fichier `.txt` ou `.md` de tes propres notes d'étude quelque part dans ton projet — un dossier `notes/`, même convention que le [projet RAG](/docs/projects/rag-notes), est un endroit raisonnable. Le lire n'a rien de nouveau :
 
@@ -108,13 +111,20 @@ from pathlib import Path
 
 notes_text = Path("notes/cell-biology.txt").read_text(encoding="utf-8")
 ```
-
 Voici la décision de conception que ce projet te demande de prendre explicitement, plutôt que de passer outre : **quelle part de tes notes le modèle devrait-il réellement voir ?**
-
 - **Option A — donne le fichier entier comme contexte.** L'approche la plus simple possible : lis un fichier, remets son texte entier au modèle dans le prompt, terminé. Cela fonctionne très bien tant qu'un seul fichier tient confortablement dans la fenêtre de contexte du modèle — quelques milliers de mots ne posent aucun problème pour n'importe quel modèle gratuit moderne.
 - **Option B — découper, embedder, et récupérer**, exactement comme le fait le [projet RAG](/docs/projects/rag-notes) : divise tes notes en petits morceaux, embedde-les localement, et ne récupère que les plus pertinents pour chaque question. Cela passe à l'échelle pour un dossier de notes avec des dizaines de fichiers longs qui ne tiendraient jamais dans un seul prompt.
-
 **Cette leçon choisit l'Option A** et est explicite sur le compromis : c'est moins évolutif, mais c'est une leçon entière plus simple à écrire, lire et déboguer — pas de modèle d'embedding, pas de recherche vectorielle, pas d'étape séparée de construction d'index, juste une chaîne. Ce compromis mérite d'être nommé à voix haute, le même principe d'ancrage que le projet RAG de toute façon : une bonne question de quiz doit venir de texte que le modèle a réellement reçu, pas de texte dont il devine qu'il pourrait être pertinent à partir des données d'entraînement. Si tes propres notes dépassent un seul fichier, ne réinvente pas la récupération — réutilise `retrieve.py` de l'exemple du projet RAG et remplace le prompt de l'étape 2 pour utiliser des morceaux récupérés au lieu d'un fichier entier.
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 1.2 Vérifie
 
 **✅ Liste de vérification**
 
@@ -128,6 +138,9 @@ Voici la décision de conception que ce projet te demande de prendre expliciteme
 - L'étape de découpage du projet RAG existe pour rendre chaque morceau embeddé *spécifique*. Sauter le découpage ici perd-il cette spécificité, ou donner le fichier entier au modèle lui donne-t-il réellement *plus* avec quoi travailler ? Dans quelles circonstances chaque réponse serait-elle juste ?
 
 ## Étape 2 : Génère des questions de quiz ancrées dans tes notes
+### 2.1 Demande au modèle un nombre fixe de questions, chacune appariée à une réponse attendue — et ...
+
+**👟 Indice de départ :**
 
 Demande au modèle un nombre fixe de questions, chacune appariée à une réponse attendue — et sois explicite dans le prompt que les deux doivent venir du texte spécifique que tu lui donnes, pas de la connaissance générale sur le sujet :
 
@@ -160,15 +173,22 @@ def generate_questions(notes_text: str, num_questions: int = 5) -> list[dict]:
     raw = raw.removeprefix("```json").removeprefix("```").removesuffix("```").strip()
     return json.loads(raw)
 ```
-
 Deux détails qui méritent l'attention :
-
 - **`expected_answer` est générée maintenant, mais jamais montrée à l'élève avant qu'il ne réponde.** Le programme la garde en mémoire (dans le dict retourné par `generate_questions`) uniquement pour que l'étape 3 ait quelque chose contre quoi juger plus tard — c'est la même idée « ancré, pas deviné » que le contexte récupéré du projet RAG, juste utilisée pour *vérifier* une réponse au lieu d'en *écrire* une.
 - **Demander au modèle de répondre uniquement avec du JSON, puis le parser, est un pattern fragile mais courant.** Les modèles enveloppent parfois leur réponse dans une clôture de code ` ```json ` même quand on leur a dit de ne pas le faire — les appels `removeprefix`/`removesuffix` ci-dessus l'enlèvent avant que `json.loads` s'exécute. Si le parsing échoue encore, imprimer la réponse brute avant de la parser est le moyen le plus rapide de voir ce qui est réellement revenu.
-
 :::tip[Demande plus de questions que nécessaire, si la qualité est inconstante]
 Les petits modèles de niveau gratuit produisent parfois une question vague ou bizarrement formulée. Si tu remarques cela sur tes propres notes, une solution simple sans nouveau code est de demander quelques questions supplémentaires dans le prompt et de ne garder que les premières `N` — ou juste de relancer la génération, puisque c'est un seul appel API.
 :::
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 2.2 Vérifie
 
 **✅ Liste de vérification**
 
@@ -182,6 +202,9 @@ Les petits modèles de niveau gratuit produisent parfois une question vague ou b
 - Qu'arriverait-il à la qualité des questions si `notes_text` était vide ou juste une phrase courte ? Essaie — le modèle produit-il une réponse élégante ou quelque chose de manifestement cassé ?
 
 ## Étape 3 : Construis la boucle de quiz interactive
+### 3.1 Maintenant la partie qui fait de ceci un quiz et pas juste un générateur de questions : pose...
+
+**👟 Indice de départ :**
 
 Maintenant la partie qui fait de ceci un quiz et pas juste un générateur de questions : pose chaque question, lis la réponse tapée de l'élève, et fais juger par le modèle — les réponses en texte libre ne correspondront pas mot pour mot à la réponse attendue, donc une comparaison exacte de chaînes (`==`) marquerait presque tout comme incorrect.
 
@@ -233,12 +256,20 @@ def run_quiz(questions: list[dict]) -> None:
 
     print(f"\nFinal score: {score}/{len(questions)}")
 ```
-
 Un verdict à trois voies (`correct` / `close` / `incorrect`) est délibérément plus indulgent qu'un bon/mauvais binaire — un élève qui a la bonne idée mais rate un détail reçoit un crédit partiel et un retour utile, plutôt qu'un « incorrect » plat qui ne dit pas pourquoi.
-
 :::tip[input() bloque jusqu'à ce que l'élève appuie sur Entrée]
 `input("Your answer: ")` met en pause tout le script à cette ligne jusqu'à ce que tu tapes quelque chose et appuies sur Entrée — exactement comme `input()` de retour dans Python 101, juste maintenant assis dans une boucle qui fait aussi des appels réseau avant et après. Si le terminal semble se bloquer après qu'une question soit affichée, c'est normal : il t'attend, pas l'API.
 :::
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 3.2 Vérifie
 
 **✅ Liste de vérification**
 
@@ -252,6 +283,9 @@ Un verdict à trois voies (`correct` / `close` / `incorrect`) est délibérémen
 - Le verdict `"close"` accorde un demi-crédit. Quel est un cas où la réponse d'un élève devrait clairement être « close » plutôt que complètement correcte ou complètement incorrecte — et ta propre réponse à une vraie question de tes notes y tomberait-elle ?
 
 ## Étape 4 : Suis le score et exécute-le de bout en bout
+### 4.1 `run_quiz` ci-dessus suit déjà `score` au fur et à mesure et imprime une ligne finale `score...
+
+**👟 Indice de départ :**
 
 `run_quiz` ci-dessus suit déjà `score` au fur et à mesure et imprime une ligne finale `score/total` une fois la boucle terminée. Relie tout ensemble dans un `main()` :
 
@@ -269,13 +303,34 @@ if __name__ == "__main__":
     main()
 ```
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 4.2 Exécute-le :
+
+**👟 Indice de départ :**
+
 Exécute-le :
 
 ```bash
 uv run python study_buddy.py
 ```
-
 Tu devrais voir une brève pause « Generating questions... » (un appel API), puis cinq questions une à la fois, chacune attendant ta réponse tapée avant de continuer, se terminant par une ligne de score final comme `Final score: 3.5/5`.
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 4.3 Vérifie
 
 **✅ Liste de vérification**
 

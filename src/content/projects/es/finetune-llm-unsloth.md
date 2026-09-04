@@ -22,14 +22,28 @@ El proyecto de Agente de IA corre enteramente en tu propia máquina. Este no pue
 4. Descargar el resultado — un pequeño archivo "adaptador", no un modelo completamente nuevo — y ejecutarlo localmente para ver tu modelo ajustado en acción.
 
 ## Paso 1: instala `uv`
+### 1.1 `uv` es una sola herramienta que reemplaza la cadena habitual de "instalar Python, luego ins...
+
+**👟 Pista inicial :**
 
 `uv` es una sola herramienta que reemplaza la cadena habitual de "instalar Python, luego instalar pip, luego instalar una herramienta de entorno virtual, luego instalar paquetes" — puede instalar y gestionar versiones de Python por sí misma, además de las dependencias de tu proyecto.
-
 **macOS / Linux** (terminal):
 
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.2 **Windows** (PowerShell):
+
+**👟 Pista inicial :**
 
 **Windows** (PowerShell):
 
@@ -37,11 +51,35 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.3 Cierra y vuelve a abrir tu terminal, luego confirma que se instaló:
+
+**👟 Pista inicial :**
+
 Cierra y vuelve a abrir tu terminal, luego confirma que se instaló:
 
 ```bash
 uv --version
 ```
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.4 Luego configura un proyecto local para los pasos de preparación de datos e inferencia (las p...
+
+**👟 Pista inicial :**
 
 Luego configura un proyecto local para los pasos de preparación de datos e inferencia (las partes que no necesitan una GPU):
 
@@ -51,10 +89,22 @@ cd finetune-llm
 uv add datasets huggingface_hub
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.5 Verifica
+
 ## Paso 2: prepara un pequeño conjunto de datos
+### 2.1 El ajuste fino le enseña a un modelo un *comportamiento* específico, no hechos nuevos desde ...
+
+**👟 Pista inicial :**
 
 El ajuste fino le enseña a un modelo un *comportamiento* específico, no hechos nuevos desde cero — funciona mejor con un conjunto de ejemplos pequeño, enfocado y bien formateado, no un enorme montón de texto crudo. Un formato común es una lista de pares instrucción/respuesta. Elige una tarea acotada y personal — algunas ideas: responder preguntas con un tono o personalidad específica, seguir un formato de salida fijo (por ejemplo, siempre responder en JSON válido), o resumir texto de la manera en que tú lo harías.
-
 Escribe tus ejemplos localmente como un pequeño archivo JSON:
 
 ```python
@@ -82,34 +132,80 @@ with open("dataset.jsonl", "w") as f:
 print(f"Wrote {len(examples)} examples to dataset.jsonl")
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 2.2 uv run python build_dataset.py
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
+
 ```bash
 uv run python build_dataset.py
 ```
-
 :::tip[Calidad sobre cantidad]
 La propia documentación de Unsloth y la mayoría de las guías de ajuste fino coinciden en esto: 50 ejemplos cuidadosamente escritos y consistentes le enseñan un comportamiento a un modelo mucho más confiablemente que 500 descuidados o inconsistentes. Si tus ejemplos se contradicen entre sí (respondiendo el mismo tipo de pregunta de forma diferente cada vez), el modelo no tiene nada consistente que aprender.
 :::
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 2.3 Verifica
+
 ## Paso 3: ajusta finamente con Unsloth en una GPU gratuita
+**👟 Pista inicial :**
 
 Este es el paso que necesita una GPU. [Unsloth](https://github.com/unslothai/unsloth) ofrece notebooks listos para usar diseñados específicamente para los niveles **gratuitos** de GPU de Google Colab y Kaggle — no instalas nada localmente para esta parte.
-
 1. Ve a la [página de notebooks de Unsloth](https://docs.unsloth.ai/get-started/unsloth-notebooks) y abre uno de los notebooks de Colab amigables para principiantes para un modelo pequeño (alrededor de 1000 millones de parámetros — lo suficientemente pequeño para ajustar rápidamente y para realmente descargar y ejecutar después). Un modelo abierto de 1000 millones de parámetros, como una versión pequeña de Llama o Qwen, es un punto de partida razonable y bien soportado; revisa la lista de notebooks de Unsloth para ver qué modelo pequeño tiene actualmente una plantilla vigente y funcional, ya que qué modelo específico está mejor soportado cambia con el tiempo.
 2. En el notebook, reemplaza su conjunto de datos de ejemplo por el tuyo: sube el `dataset.jsonl` que construiste en el Paso 2 (el panel de subida de archivos de Colab, o monta Google Drive), y apunta la celda de carga de datos del notebook hacia él en su lugar.
 3. Ejecuta las celdas del notebook en orden. El paso central de ajuste fino usa **LoRA** (Low-Rank Adaptation): en lugar de actualizar los miles de millones de parámetros de un modelo (lento, necesita mucha memoria), LoRA congela el modelo original y entrena un par de matrices de rango mucho menor que se añaden encima — matemáticamente, si la matriz de pesos original es $W$, LoRA aprende una actualización de rango bajo $\Delta W = BA$ (donde $B$ y $A$ son matrices mucho más pequeñas) y usa $W + \Delta W$ en el momento de la inferencia. Esta es la misma idea que aproximar una matriz grande con una de dimensión menor — un concepto de álgebra lineal para el que ya tienes la base — aplicada para hacer que el ajuste fino sea lo suficientemente barato como para correr en una GPU gratuita.
 4. Una vez que termina el entrenamiento, el notebook guarda tu resultado como un pequeño **adaptador** — solo las matrices $A$ y $B$, típicamente decenas de megabytes, no una copia de varios gigabytes del modelo completo. Descarga esta carpeta del adaptador a tu computadora.
-
 :::tip[Revisa la documentación actual antes de empezar]
 Qué modelo específico, qué notebook específico, y la propia API de Unsloth cambian rápido — más rápido que la mayoría del software, ya que esta es una herramienta activamente desarrollada y cercana a la investigación. Antes de ejecutar nada, abre la [documentación actual de Unsloth](https://docs.unsloth.ai) y usa el notebook y el modelo que actualmente recomiende para principiantes, en lugar de asumir que los detalles del año pasado todavía aplican.
 :::
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
 
 ## Paso 4: ejecuta tu modelo ajustado localmente
+### 4.1 De vuelta en tu propia máquina, carga el modelo base más tu adaptador descargado y pruébalo:
+
+**👟 Pista inicial :**
 
 De vuelta en tu propia máquina, carga el modelo base más tu adaptador descargado y pruébalo:
 
 ```bash
 uv add transformers peft torch --extra-index-url https://download.pytorch.org/whl/cpu
 ```
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 4.2 # infer.py
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
 
 ```python
 # infer.py
@@ -129,11 +225,34 @@ output = model.generate(**inputs, max_new_tokens=80)
 print(tokenizer.decode(output[0], skip_special_tokens=True))
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 4.3 uv run python infer.py
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
+
 ```bash
 uv run python infer.py
 ```
-
 Ejecutar un modelo de ~1000 millones de parámetros en CPU es lento (espera segundos reales, no milisegundos, por respuesta) pero funciona — esta es tu propia máquina realmente ejecutando un modelo de lenguaje ajustado, sin clave API, sin conexión a internet requerida una vez que los archivos del modelo están descargados.
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 4.4 Verifica
 
 ## ⚠️ Errores comunes
 

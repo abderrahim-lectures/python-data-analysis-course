@@ -100,9 +100,11 @@ Au lieu d'`export`-er une clé dans chaque nouvelle session de terminal, un fich
 Une fois la configuration faite, tout ce qui suit suppose : `uv` est installé, ton projet contient `openai-whisper`, `openai`, et `python-dotenv`, et `.env` contient une vraie clé pour le fournisseur que tu as choisi.
 
 ## Étape 1 : Transcris une note vocale d'exemple localement
+### 1.1 Tu n'as pas besoin d'un microphone ou d'un vrai enregistrement pour commencer — le dépôt du ...
+
+**👟 Indice de départ :**
 
 Tu n'as pas besoin d'un microphone ou d'un vrai enregistrement pour commencer — le dépôt du cours fournit trois courts clips d'exemple de notes vocales dans [`examples/voice-to-task-agent/sample_audio/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/voice-to-task-agent/sample_audio). Prends-en un (ou enregistre le tien avec n'importe quelle app de notes vocales de téléphone/ordinateur portable et copie-le dans ton projet — `.wav` et `.mp3` fonctionnent tous les deux).
-
 Crée `voice_to_tasks.py` :
 
 ```python
@@ -133,15 +135,37 @@ if __name__ == "__main__":
     print(transcribe(audio_path))
 ```
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 1.2 uv run python voice_to_tasks.py sample_audio/memo_1_work_followups.wav
+
+**👟 Indice de départ :**
+
+Exécutez le code ci-dessous et confirmez qu'il fonctionne.
+
 ```bash
 uv run python voice_to_tasks.py sample_audio/memo_1_work_followups.wav
 ```
-
 `whisper.load_model("base")` charge un réseau de neurones entraîné sur une énorme quantité de données de parole multilingue ; `model.transcribe(audio_path)` l'exécute sur ton fichier audio et retourne un dict dont la clé `"text"` est la transcription complète — Whisper gère lui-même le décodage audio (via `ffmpeg` sous le capot) et fonctionne sur `.wav`, `.mp3`, et la plupart des autres formats courants sans que tu aies à convertir quoi que ce soit à la main d'abord.
-
 :::tip[La taille du modèle est un compromis vitesse/précision]
 Whisper est disponible en cinq tailles — `tiny`, `base`, `small`, `medium`, `large` — chacune plus précise et plus lente que la précédente. `"base"` est un défaut raisonnable sur un CPU d'ordinateur portable pour de la parole anglaise courte et claire comme les clips d'exemple ; l'audio bruité, les accents que le modèle gère moins bien, ou la parole non anglaise profitent souvent de `"small"` ou `"medium"`, au prix d'un temps de transcription sensiblement plus long. C'est exactement le genre de compromis qui vaut la peine d'essayer avec un GPU — vois « Où exécuter ceci » ci-dessus pour pourquoi Colab est un bon ajustement ici spécifiquement.
 :::
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 1.3 Vérifie
 
 **✅ Liste de vérification**
 
@@ -155,9 +179,11 @@ Whisper est disponible en cinq tailles — `tiny`, `base`, `small`, `medium`, `l
 - Si tu exécutais ça sur une note avec de la musique de fond, ou deux personnes parlant en même temps, à quoi t'attendrais-tu qu'il arrive à la qualité de la transcription ? Essaie sur ton propre enregistrement si tu en as un qui correspond.
 
 ## Étape 2 : Extrais des éléments d'action structurés avec un LLM gratuit
+### 2.1 Une transcription n'est qu'un mur de texte — utile, mais pas encore une liste de tâches. Cet...
+
+**👟 Indice de départ :**
 
 Une transcription n'est qu'un mur de texte — utile, mais pas encore une liste de tâches. Cette étape remet la transcription à un LLM de niveau gratuit avec un prompt lui demandant de la lire et de retourner de vraies données structurées : une entrée par élément d'action, chacune avec une description de tâche et, quand la transcription les implique, une date limite et une priorité.
-
 Ajoute l'appel LLM à `voice_to_tasks.py` :
 
 ```python
@@ -216,6 +242,20 @@ def extract_action_items(transcript: str, provider: str | None = None) -> list[d
     return json.loads(response.choices[0].message.content)["tasks"]
 ```
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 2.2 uv run python -c "
+
+**👟 Indice de départ :**
+
+Exécutez le code ci-dessous et confirmez qu'il fonctionne.
+
 ```bash
 uv run python -c "
 from voice_to_tasks import transcribe, extract_action_items
@@ -223,14 +263,21 @@ transcript = transcribe('sample_audio/memo_1_work_followups.wav')
 print(extract_action_items(transcript))
 "
 ```
-
 Le prompt fait le vrai travail ici : il dit au modèle exactement quelle forme retourner (un objet JSON avec une liste `"tasks"`, pas une prose libre), et donne des règles explicites pour les parties délicates — n'invente pas une date limite qui n'a jamais été dite, ne devine pas une priorité qui n'est pas réellement impliquée. C'est la même idée que le prompt du [projet RAG](/docs/projects/rag-notes) disant au modèle de répondre *uniquement* à partir du contexte récupéré : une instruction claire et spécifique rétrécit ce que fait le modèle, au lieu d'espérer qu'il déduise la bonne forme tout seul.
-
 `json.loads(...)["tasks"]` suppose que le modèle a réellement suivi l'instruction et retourné du JSON propre — les modèles de niveau gratuit ne le font parfois pas (une phrase parasite avant le JSON, un code fence markdown autour malgré la consigne de ne pas le faire). La version plus complète dans [`examples/voice-to-task-agent/voice_to_tasks.py`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/voice-to-task-agent) retire un code fence s'il apparaît et lève une erreur claire au lieu d'un traceback déroutant si le JSON refuse toujours de s'analyser — à copier si tu prévois de l'exécuter sur plus de deux ou trois notes.
-
 :::tip[Tu utilises un fournisseur différent ?]
 Tout ce qui précède fonctionne déjà pour les six fournisseurs du tableau — il suffit de définir `LLM_PROVIDER` dans ton `.env` (ou de passer un nom de fournisseur directement à `extract_action_items`). Cela fonctionne parce que GitHub Models, Gemini, Groq, Mistral, Cerebras, et OpenRouter exposent tous un endpoint compatible OpenAI ; contrairement au [projet AI Agent](/docs/projects/ai-agent), tu n'as pas besoin d'une bibliothèque client différente par fournisseur ici, puisque ce script n'utilise pas LangChain.
 :::
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 2.3 Vérifie
 
 **✅ Liste de vérification**
 
@@ -244,6 +291,9 @@ Tout ce qui précède fonctionne déjà pour les six fournisseurs du tableau —
 - Si la transcription mentionne la même tâche deux fois, formulée légèrement différemment à chaque fois (les gens font ça quand ils pensent à voix haute), t'attendrais-tu à une tâche dans la sortie ou deux ? Qu'est-ce que ta réponse suggère sur une limitation de demander à un modèle de faire ça en un seul passage, sans étape de déduplication propre ?
 
 ## Étape 3 : Exécute-le de bout en bout et sauvegarde une liste de tâches
+### 3.1 Assemble les deux morceaux en un seul script qui transcrit, extrait, affiche une liste lisib...
+
+**👟 Indice de départ :**
 
 Assemble les deux morceaux en un seul script qui transcrit, extrait, affiche une liste lisible, et la sauvegarde en JSON :
 
@@ -281,11 +331,34 @@ if __name__ == "__main__":
     main()
 ```
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 3.2 uv run python voice_to_tasks.py sample_audio/memo_3_project_planning.mp3
+
+**👟 Indice de départ :**
+
+Exécutez le code ci-dessous et confirmez qu'il fonctionne.
+
 ```bash
 uv run python voice_to_tasks.py sample_audio/memo_3_project_planning.mp3
 ```
-
 Essaie les trois clips d'exemple, et — si tu as un moyen d'en enregistrer un — ta propre note vocale aussi. Une courte liste de courses, un ensemble de suivis de réunion, ou une liste de corvées sont tous de bons tests : n'importe quoi avec une poignée d'éléments d'action distincts de longueur de phrase, parlés comme tu te parlerais réellement, pas une liste formellement structurée.
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 3.3 Vérifie
 
 **✅ Liste de vérification**
 

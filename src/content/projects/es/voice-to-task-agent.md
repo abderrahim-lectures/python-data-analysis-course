@@ -100,9 +100,11 @@ En lugar de `export`-ar una clave en cada sesión de terminal nueva, un archivo 
 Con la configuración hecha, todo lo de abajo asume: `uv` está instalado, tu proyecto tiene `openai-whisper`, `openai`, y `python-dotenv`, y `.env` tiene una clave real para el proveedor que elegiste.
 
 ## Paso 1: Transcribe una nota de voz de muestra localmente
+### 1.1 No necesitas un micrófono o una grabación real para empezar — el repositorio del curso inclu...
+
+**👟 Pista inicial :**
 
 No necesitas un micrófono o una grabación real para empezar — el repositorio del curso incluye tres clips de muestra de notas de voz cortos en [`examples/voice-to-task-agent/sample_audio/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/voice-to-task-agent/sample_audio). Toma uno (o graba el tuyo con cualquier app de notas de voz de teléfono/portátil y cópialo en tu proyecto — `.wav` y `.mp3` funcionan ambos).
-
 Crea `voice_to_tasks.py`:
 
 ```python
@@ -133,15 +135,37 @@ if __name__ == "__main__":
     print(transcribe(audio_path))
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.2 uv run python voice_to_tasks.py sample_audio/memo_1_work_followups.wav
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
+
 ```bash
 uv run python voice_to_tasks.py sample_audio/memo_1_work_followups.wav
 ```
-
 `whisper.load_model("base")` carga una red neuronal entrenada en una gran cantidad de datos de habla multilingüe; `model.transcribe(audio_path)` lo ejecuta en tu archivo de audio y devuelve un dict cuya clave `"text"` es la transcripción completa — Whisper maneja la decodificación de audio en sí (vía `ffmpeg` bajo el capó) y funciona en `.wav`, `.mp3`, y la mayoría de los otros formatos comunes sin que tengas que convertir nada a mano primero.
-
 :::tip[El tamaño del modelo es una compensación velocidad/precisión]
 Whisper viene en cinco tamaños — `tiny`, `base`, `small`, `medium`, `large` — cada uno más preciso y más lento que el anterior. `"base"` es un valor por defecto razonable en un CPU de portátil para habla inglesa corta y clara como los clips de muestra; audio ruidoso, acentos que el modelo maneja peor, o habla no inglesa a menudo se benefician de `"small"` o `"medium"`, al costo de un tiempo de transcripción notablemente más largo. Este es exactamente el tipo de compensación que vale la pena probar con una GPU — ver "Dónde ejecutar esto" arriba para saber por qué Colab es un buen ajuste aquí específicamente.
 :::
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.3 Verifica
 
 **✅ Lista de verificación**
 
@@ -155,9 +179,11 @@ Whisper viene en cinco tamaños — `tiny`, `base`, `small`, `medium`, `large` �
 - Si ejecutaras esto en una nota con música de fondo sonando, o dos personas hablando a la vez, ¿qué esperarías que pasara con la calidad de la transcripción? Pruébalo en tu propia grabación si tienes una que encaje.
 
 ## Paso 2: Extrae elementos de acción estructurados con un LLM gratuito
+### 2.1 Una transcripción es solo un muro de texto — útil, pero aún no una lista de tareas. Este pas...
+
+**👟 Pista inicial :**
 
 Una transcripción es solo un muro de texto — útil, pero aún no una lista de tareas. Este paso le entrega la transcripción a un LLM de nivel gratuito con un prompt pidiéndole que la lea y devuelva datos estructurados reales: una entrada por elemento de acción, cada una con una descripción de tarea y, donde la transcripción los implica, una fecha límite y una prioridad.
-
 Añade la llamada al LLM a `voice_to_tasks.py`:
 
 ```python
@@ -216,6 +242,20 @@ def extract_action_items(transcript: str, provider: str | None = None) -> list[d
     return json.loads(response.choices[0].message.content)["tasks"]
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 2.2 uv run python -c "
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
+
 ```bash
 uv run python -c "
 from voice_to_tasks import transcribe, extract_action_items
@@ -223,14 +263,21 @@ transcript = transcribe('sample_audio/memo_1_work_followups.wav')
 print(extract_action_items(transcript))
 "
 ```
-
 El prompt es el que hace el trabajo real aquí: le dice al modelo exactamente qué forma devolver (un objeto JSON con una lista `"tasks"`, no prosa de forma libre), y da reglas explícitas para las partes difíciles — no inventes una fecha límite que nunca se dijo, no adivines una prioridad que no está realmente implicada. Esta es la misma idea que el prompt del [proyecto RAG](/docs/projects/rag-notes) diciéndole al modelo responder *solo* del contexto recuperado: una instrucción clara y específica estrecha lo que el modelo hace, en lugar de esperar que infiera la forma correcta por su cuenta.
-
 `json.loads(...)["tasks"]` asume que el modelo siguió la instrucción y devolvió JSON limpio — los modelos de nivel gratuito ocasionalmente no lo hacen (una oración suelta antes del JSON, un fence de markdown alrededor a pesar de que se le dijo que no). La versión más completa en [`examples/voice-to-task-agent/voice_to_tasks.py`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/voice-to-task-agent) elimina un fence de código si aparece y lanza un error claro en lugar de un traceback confuso si el JSON aún no se puede parsear — vale la pena copiarla si planeas ejecutarlo en más de un par de notas.
-
 :::tip[¿Usando un proveedor diferente?]
 Todo lo de arriba ya funciona para los seis proveedores de la tabla — solo configura `LLM_PROVIDER` en tu `.env` (o pasa un nombre de proveedor directamente a `extract_action_items`). Esto funciona porque GitHub Models, Gemini, Groq, Mistral, Cerebras, y OpenRouter todos exponen un endpoint compatible con OpenAI; a diferencia del [proyecto AI Agent](/docs/projects/ai-agent), no necesitas una biblioteca de cliente diferente por proveedor aquí, ya que este script no usa LangChain.
 :::
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 2.3 Verifica
 
 **✅ Lista de verificación**
 
@@ -244,6 +291,9 @@ Todo lo de arriba ya funciona para los seis proveedores de la tabla — solo con
 - Si la transcripción menciona la misma tarea dos veces, formulada de manera ligeramente diferente cada vez (la gente hace esto cuando piensa en voz alta), ¿esperarías una tarea en la salida o dos? ¿Qué sugiere tu respuesta sobre una limitación de pedirle a un modelo que haga esto en una sola pasada, sin paso de deduplicación propio?
 
 ## Paso 3: Ejecútalo de principio a fin y guarda una lista de tareas
+### 3.1 Junta las dos piezas en un script que transcribe, extrae, imprime una lista legible, y la gu...
+
+**👟 Pista inicial :**
 
 Junta las dos piezas en un script que transcribe, extrae, imprime una lista legible, y la guarda como JSON:
 
@@ -281,11 +331,34 @@ if __name__ == "__main__":
     main()
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 3.2 uv run python voice_to_tasks.py sample_audio/memo_3_project_planning.mp3
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
+
 ```bash
 uv run python voice_to_tasks.py sample_audio/memo_3_project_planning.mp3
 ```
-
 Prueba los tres clips de muestra, y — si tienes forma de grabar uno — tu propia nota de voz también. Una lista corta de compras, un conjunto de seguimientos de reunión, o una lista de tareas del hogar son todas buenas pruebas: cualquier cosa con un puñado de elementos de acción distintos de longitud de oración, hablados como realmente te hablarías a ti mismo, no una lista formalmente estructurada.
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 3.3 Verifica
 
 **✅ Lista de verificación**
 

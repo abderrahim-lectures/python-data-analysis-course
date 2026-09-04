@@ -5,7 +5,7 @@ import 'katex/dist/katex.min.css';
 import Icon from '../components/Icon.astro';
 import pkg from '../../package.json';
 import {UI_STRINGS, resolveLocale} from '../lib/uiStrings';
-import {NAV_WORDS, type Locale as RouteLocale} from '../lib/routeSegments';
+import {NAV_WORDS, localeBase, type Locale as RouteLocale} from '../lib/routeSegments';
 
 interface Props {
   title?: string;
@@ -34,20 +34,13 @@ const {
 } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const ogImage = image ? new URL(image, Astro.site) : new URL('og-default.png', Astro.site);
-const siteJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'WebSite',
-  name: 'PyDA Course',
-  description: 'Learn Python and data analysis in your browser — run real code, earn XP, build streaks. Zero installs, zero boring.',
-  url: String(new URL(import.meta.env.BASE_URL, Astro.site)),
-};
-const jsonLdBlocks = [siteJsonLd, ...(jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [])];
+const jsonLdBlocks = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 const base = import.meta.env.BASE_URL;
 const defaultAlternates: Record<RouteLocale, string> = {
-  en: NAV_WORDS.en.learn,
-  ar: `ar/${NAV_WORDS.ar.learn}`,
-  es: `es/${NAV_WORDS.es.learn}`,
-  fr: `fr/${NAV_WORDS.fr.learn}`,
+  en: '',
+  ar: 'ar',
+  es: 'es',
+  fr: 'fr',
 };
 const alt: Record<RouteLocale, string> = {...defaultAlternates, ...alternates};
 const locales = [
@@ -57,6 +50,17 @@ const locales = [
   {code: 'fr', label: 'FR', href: () => `${base}${alt.fr}`},
 ];
 const t = UI_STRINGS[resolveLocale(lang)];
+const navLocale = resolveLocale(lang) as RouteLocale;
+const nav = NAV_WORDS[navLocale];
+const locBase = localeBase(navLocale, base);
+const siteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'PyDA Course',
+  description: t.footer.tagline,
+  url: String(new URL(import.meta.env.BASE_URL, Astro.site)),
+};
+const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
 ---
 
 <!doctype html>
@@ -64,9 +68,29 @@ const t = UI_STRINGS[resolveLocale(lang)];
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline>
+      (function() {
+        var KEY = 'pda:locale-redirected';
+        if (sessionStorage.getItem(KEY)) return;
+        var path = location.pathname;
+        if (path !== '/' && path !== '') return;
+        var langs = navigator.languages || [navigator.language || ''];
+        var map = { ar: 'ar', es: 'es', fr: 'fr' };
+        for (var i = 0; i < langs.length; i++) {
+          var tag = langs[i].toLowerCase().split('-')[0];
+          if (map[tag]) {
+            sessionStorage.setItem(KEY, '1');
+            location.replace('/' + map[tag] + '/');
+            return;
+          }
+        }
+        sessionStorage.setItem(KEY, '1');
+      })();
+    </script>
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="author" content="Abderrahim Adrabi" />
     <link rel="canonical" href={canonicalURL} />
     <link rel="alternate" hreflang="en" href={new URL(`${base}${alt.en}`, Astro.site)} />
     <link rel="alternate" hreflang="ar" href={new URL(`${base}${alt.ar}`, Astro.site)} />
@@ -89,7 +113,7 @@ const t = UI_STRINGS[resolveLocale(lang)];
          that first click doesn't also pay for connection setup. -->
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
-    {jsonLdBlocks.map((block) => (
+    {allJsonLdBlocks.map((block) => (
       <script type="application/ld+json" set:html={JSON.stringify(block)} />
     ))}
     <script is:inline>
@@ -102,17 +126,17 @@ const t = UI_STRINGS[resolveLocale(lang)];
     <a class="skip-link" href="#main">{t.skipToContent}</a>
     <header class="topnav">
       <div class="container topnav__inner">
-        <a class="topnav__brand" href={base}>
+        <a class="topnav__brand" href={locBase}>
           <span class="topnav__logo" aria-hidden="true"><Icon name="code" size={16} /></span>
           <span class="topnav__name">PyDA Course</span>
         </a>
         <nav class="topnav__right" aria-label="Primary">
-          <a class="topnav__link" href={`${base}learn`}><Icon name="code" size={15} /> {t.nav.learn}</a>
-          <a class="topnav__link" href={`${base}projects`}><Icon name="globe" size={15} /> {t.nav.projects}</a>
-          <a class="topnav__link" href={`${base}playground`}><Icon name="expand" size={15} /> {t.nav.playground}</a>
-          <a class="topnav__link" href={`${base}progress`}><Icon name="trail" size={15} /> {t.nav.progress}</a>
+          <a class="topnav__link" href={`${locBase}${nav.learn}`}><Icon name="code" size={15} /> {t.nav.learn}</a>
+          <a class="topnav__link" href={`${locBase}${nav.projects}`}><Icon name="globe" size={15} /> {t.nav.projects}</a>
+          <a class="topnav__link" href={`${locBase}playground`}><Icon name="expand" size={15} /> {t.nav.playground}</a>
+          <a class="topnav__link" href={`${locBase}${nav.progress}`}><Icon name="trail" size={15} /> {t.nav.progress}</a>
           <div class="topnav__xp" id="xp-bar"></div>
-          <div class="topnav__group">
+          <div class="topnav__group" aria-label="Language">
             {locales.map((l) => (
               <a
                 class:list={['topnav__lang', l.code === lang && 'topnav__lang--active']}
@@ -151,7 +175,7 @@ const t = UI_STRINGS[resolveLocale(lang)];
     <footer class="footer">
       <div class="container footer__grid">
         <div class="footer__brand">
-          <a class="footer__brandmark" href={base}>
+          <a class="footer__brandmark" href={locBase}>
             <span class="footer__logo" aria-hidden="true"><Icon name="code" size={16} /></span>
             <span>PyDA Course</span>
           </a>
@@ -159,14 +183,14 @@ const t = UI_STRINGS[resolveLocale(lang)];
         </div>
         <div class="footer__col">
           <h3><Icon name="code" size={13} /> {t.footer.courseCol}</h3>
-          <a href={`${base}learn/python-101`}>{t.footer.python101}</a>
-          <a href={`${base}learn/data-analysis`}>{t.footer.dataAnalysis}</a>
-          <a href={`${base}projects`}>{t.footer.projects}</a>
+          <a href={`${locBase}${nav.learn}/python-101`}>{t.footer.python101}</a>
+          <a href={`${locBase}${nav.learn}/data-analysis`}>{t.footer.dataAnalysis}</a>
+          <a href={`${locBase}${nav.projects}`}>{t.footer.projects}</a>
         </div>
         <div class="footer__col">
           <h3><Icon name="chart" size={13} /> {t.footer.siteCol}</h3>
-          <a href={`${base}progress`}>{t.footer.myProgress}</a>
-          <a href={`${base}playground`}>{t.nav.playground}</a>
+          <a href={`${locBase}${nav.progress}`}>{t.footer.myProgress}</a>
+          <a href={`${locBase}playground`}>{t.nav.playground}</a>
         </div>
         <div class="footer__col">
           <h3><Icon name="globe" size={13} /> {t.footer.moreCol}</h3>
@@ -180,11 +204,11 @@ const t = UI_STRINGS[resolveLocale(lang)];
     </footer>
 
     <nav class="mobilenav" aria-label="Mobile">
-      <a class="mobilenav__item" href={base}><Icon name="home" size={18} /> <span>{t.mobileNav.home}</span></a>
-      <a class="mobilenav__item" href={`${base}learn`}><Icon name="code" size={18} /> <span>{t.mobileNav.learn}</span></a>
-      <a class="mobilenav__item" href={`${base}projects`}><Icon name="globe" size={18} /> <span>{t.mobileNav.projects}</span></a>
-      <a class="mobilenav__item" href={`${base}playground`}><Icon name="expand" size={18} /> <span>{t.mobileNav.playground}</span></a>
-      <a class="mobilenav__item" href={`${base}progress`}><Icon name="trail" size={18} /> <span>{t.mobileNav.progress}</span></a>
+      <a class="mobilenav__item" href={locBase}><Icon name="home" size={18} /> <span>{t.mobileNav.home}</span></a>
+      <a class="mobilenav__item" href={`${locBase}${nav.learn}`}><Icon name="code" size={18} /> <span>{t.mobileNav.learn}</span></a>
+      <a class="mobilenav__item" href={`${locBase}${nav.projects}`}><Icon name="globe" size={18} /> <span>{t.mobileNav.projects}</span></a>
+      <a class="mobilenav__item" href={`${locBase}playground`}><Icon name="expand" size={18} /> <span>{t.mobileNav.playground}</span></a>
+      <a class="mobilenav__item" href={`${locBase}${nav.progress}`}><Icon name="trail" size={18} /> <span>{t.mobileNav.progress}</span></a>
     </nav>
 
     <div class="xp-toast-container" id="xp-toast-container"></div>
@@ -192,7 +216,7 @@ const t = UI_STRINGS[resolveLocale(lang)];
     <!-- Level-up celebration overlay -->
     <div class="lvlup" id="lvlup" hidden>
       <div class="lvlup__bg"></div>
-      <div class="lvlup__text">LEVEL UP</div>
+      <div class="lvlup__text">{t.lvlUpText}</div>
       <div class="lvlup__sub" id="lvlup-sub"></div>
     </div>
 

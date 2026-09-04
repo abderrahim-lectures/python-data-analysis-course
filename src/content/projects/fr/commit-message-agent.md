@@ -102,9 +102,11 @@ Plutôt que de faire `export` d'une clé à chaque nouvelle session de terminal,
 - ✅ Tu as une vraie clé API d'un fournisseur, enregistrée dans un fichier `.env` dans le dossier de ton projet — pas collée dans un script.
 
 ## Étape 1 : Capture un git diff en stage avec `subprocess`
+### 1.1 Le module `subprocess` de Python exécute un autre programme et capture sa sortie sous forme ...
+
+**👟 Indice de départ :**
 
 Le module `subprocess` de Python exécute un autre programme et capture sa sortie sous forme de texte — ici, ce programme est `git diff --staged`, pas le simple `git diff` auquel tu pourrais penser en premier. C'est un choix délibéré : un message de commit devrait décrire ce qui va réellement être commité, c'est-à-dire ce que tu as mis en stage avec `git add`, pas chaque changement hors stage assis dans ton arbre de travail.
-
 Crée `commit_helper.py` :
 
 ```python
@@ -136,17 +138,37 @@ if __name__ == "__main__":
     print(diff if diff.strip() else "No staged changes. Stage something first with `git add`.")
 ```
 
-`subprocess.run([...], capture_output=True, text=True)` est la ligne clé : passer la commande comme une **liste** d'arguments (`["git", "diff", "--staged"]`) plutôt qu'une seule chaîne shell évite toute une classe de bugs de quoting shell et d'injection, `capture_output=True` capture stdout/stderr au lieu de les laisser s'afficher directement dans ton terminal, et `text=True` décode cette sortie comme une chaîne au lieu de bytes bruts. `check=False` plus un `if result.returncode != 0` manuel est délibéré ici plutôt que `check=True` : cela permet à cette fonction de lever sa *propre* erreur claire (incluant le vrai stderr de git) au lieu d'un `CalledProcessError` générique.
+**🎯 Résultat attendu :**
 
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 1.2 `subprocess.run([...], capture_output=True, text=True)` est la ligne clé : passer la command...
+
+**👟 Indice de départ :**
+
+`subprocess.run([...], capture_output=True, text=True)` est la ligne clé : passer la commande comme une **liste** d'arguments (`["git", "diff", "--staged"]`) plutôt qu'une seule chaîne shell évite toute une classe de bugs de quoting shell et d'injection, `capture_output=True` capture stdout/stderr au lieu de les laisser s'afficher directement dans ton terminal, et `text=True` décode cette sortie comme une chaîne au lieu de bytes bruts. `check=False` plus un `if result.returncode != 0` manuel est délibéré ici plutôt que `check=True` : cela permet à cette fonction de lever sa *propre* erreur claire (incluant le vrai stderr de git) au lieu d'un `CalledProcessError` générique.
 Essaie-le contre ce projet lui-même — modifie un fichier, fais-lui un `git add`, puis exécute :
 
 ```bash
 uv run python commit_helper.py
 ```
-
 :::tip[C'est le même pattern subprocess que n'importe quel autre wrapper CLI]
 `subprocess.run` se moque que le programme exécuté soit `git` — il fonctionne à l'identique pour n'importe quel outil en ligne de commande : `ls`, un script shell, un autre programme Python. Une fois que ce pattern fait tilt, « laisser Python piloter un outil CLI existant et utiliser sa sortie » devient disponible pour bien plus que git seul.
 :::
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 1.3 Vérifie
 
 **✅ Liste de vérification**
 
@@ -160,6 +182,9 @@ uv run python commit_helper.py
 - Que retournerait `_run_git(["diff", "--staged"])` dans un dépôt avec des changements non commités qui sont tous hors stage ? Pourquoi gérer un diff vide, plutôt que supposer qu'il y a toujours quelque chose en stage, compte-t-il pour un outil censé s'exécuter dans le cadre d'un flux de travail de commit normal ?
 
 ## Étape 2 : Conçois le system prompt du message de commit
+### 2.1 Un modèle de langage sans instructions pourrait écrire un message trop vague (« update code ...
+
+**👟 Indice de départ :**
 
 Un modèle de langage sans instructions pourrait écrire un message trop vague (« update code »), trop verbeux (un paragraphe complet pour la correction d'une faute de frappe d'une ligne), ou dans aucun format cohérent du tout. Le **system prompt** est ce qui transforme un modèle de chat généraliste en rédacteur qui se comporte comme un mainteneur de projet discipliné : quel format utiliser, quel ton adopter, et quand se donner la peine de faire plus d'une ligne.
 
@@ -191,16 +216,23 @@ Rules:
   else, so it can be used directly as a commit message.
 """
 ```
-
 Trois choix de conception délibérés qui valent la peine d'être remarqués :
-
 - **Une structure fixe (`type(scope): summary`, corps optionnel)** est ce qui rend la sortie utilisable comme un vrai message de commit, pas une réponse de chat qui décrit par hasard le diff — [Conventional Commits](https://www.conventionalcommits.org/) est une convention largement utilisée spécifiquement parce que des outils (changelogs, semantic-release, CI) peuvent l'analyser de manière fiable.
 - **« N'inclus un corps que s'il ajoute une information réelle »** empêche le modèle de rembourrer la correction d'une faute de frappe d'une ligne avec trois phrases de contenu de diff répété — le même instinct qu'a un relecteur humain quand il voit un message de commit gonflé pour un changement trivial.
 - **« Base le message SEULEMENT sur ce que le diff change réellement... ne devine pas un numéro de ticket »** existe parce que les modèles hallucinent volontiers un `JIRA-1234` ou une référence d'issue plausible si tu ne l'interdis pas explicitement — une référence fabriquée dans un message de commit est pire que pas de référence du tout.
-
 :::tip[Itère sur le prompt comme tu le ferais sur du code]
 Traite ce system prompt comme un premier brouillon, pas une spec finie. Exécute-le contre un diff dont tu sais déjà qu'il mérite un `type` spécifique (un ajout pur de tests, un changement docs uniquement, une vraie correction de bug) — si le modèle choisit le mauvais type ou si le résumé devient trop long, resserre le texte et réessaie.
 :::
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 2.2 Vérifie
 
 **✅ Liste de vérification**
 
@@ -213,6 +245,9 @@ Traite ce system prompt comme un premier brouillon, pas une spec finie. Exécute
 - Le prompt liste dix types valides de Conventional Commits. Qu'est-ce qui irait mal pour l'outillage de changelog d'un vrai projet si le modèle était libre d'inventer ses propres types plutôt que de choisir dans une liste fixe ?
 
 ## Étape 3 : Appelle le LLM et construis la boucle interactive
+### 3.1 Connecte le code de capture de diff de l'Étape 1 et le system prompt de l'Étape 2 ensemble, ...
+
+**👟 Indice de départ :**
 
 Connecte le code de capture de diff de l'Étape 1 et le system prompt de l'Étape 2 ensemble, puis ajoute la partie qui fait de ceci un vrai outil plutôt qu'un script à usage unique : une boucle qui montre le brouillon et laisse un humain l'accepter, le modifier, ou le régénérer.
 
@@ -290,17 +325,37 @@ if __name__ == "__main__":
     run_interactive_loop(diff)
 ```
 
-`truncate_diff` compte plus ici qu'il n'y paraît au premier abord — voir la section des pièges ci-dessous pour comprendre pourquoi un gros diff n'est pas juste lent, il peut échouer silencieusement ou produire un message superficiel et générique. La boucle **n'**appelle délibérément **pas** `git commit` pour l'instant — l'Étape 4 ajoute cela comme sa propre petite fonction explicite, donc c'est évident exactement où et comment le commit se produit.
+**🎯 Résultat attendu :**
 
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 3.2 `truncate_diff` compte plus ici qu'il n'y paraît au premier abord — voir la section des pièg...
+
+**👟 Indice de départ :**
+
+`truncate_diff` compte plus ici qu'il n'y paraît au premier abord — voir la section des pièges ci-dessous pour comprendre pourquoi un gros diff n'est pas juste lent, il peut échouer silencieusement ou produire un message superficiel et générique. La boucle **n'**appelle délibérément **pas** `git commit` pour l'instant — l'Étape 4 ajoute cela comme sa propre petite fonction explicite, donc c'est évident exactement où et comment le commit se produit.
 Exécute-le :
 
 ```bash
 uv run python commit_helper.py
 ```
-
 :::tip[Tu utilises un fournisseur différent ?]
 Remplace le bloc `OpenAI(...)` par une `base_url` et une clé différentes — ex. `base_url="https://api.groq.com/openai/v1"` avec `api_key=os.environ["GROQ_API_KEY"]` pour Groq, ou `base_url="https://generativelanguage.googleapis.com/v1beta/openai/"` avec `api_key=os.environ["GOOGLE_API_KEY"]` pour l'endpoint compatible OpenAI de Gemini. Tout le reste dans ce fichier reste identique. Voir [`examples/commit-message-agent/commit_helper.py`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/commit-message-agent/commit_helper.py) dans le dépôt du cours pour voir les six connectés côte à côte, sélectionnables avec une seule variable d'environnement.
 :::
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 3.3 Vérifie
 
 **✅ Liste de vérification**
 
@@ -314,6 +369,9 @@ Remplace le bloc `OpenAI(...)` par une `base_url` et une clé différentes — e
 - Si deux exécutions différentes de `draft_commit_message` sur le *même* diff en stage exact produisaient deux messages visiblement différents, cela te surprendrait-il ? Qu'est-ce que ça suggère sur la raison pour laquelle l'option `r` (régénérer) existe même, plutôt que de faire aveuglément confiance au premier brouillon ?
 
 ## Étape 4 : Connecte-le pour qu'il commite réellement — seulement sur confirmation
+### 4.1 La dernière pièce : remplace le placeholder « (Commiterait ici...) » de l'Étape 3 par une fo...
+
+**👟 Indice de départ :**
 
 La dernière pièce : remplace le placeholder « (Commiterait ici...) » de l'Étape 3 par une fonction qui exécute réellement `git commit -m`, appelée depuis exactement un endroit — juste après que l'utilisateur tape `y`.
 
@@ -367,6 +425,18 @@ def run_interactive_loop(diff: str) -> None:
         print("Please answer y, e, r, or n.")
 ```
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 4.2 Essaie la boucle complète contre un vrai changement :
+
+**👟 Indice de départ :**
+
 Essaie la boucle complète contre un vrai changement :
 
 ```bash
@@ -376,11 +446,33 @@ uv run python commit_helper.py
 # read the draft, then type e to tweak it, r to try again, or y to commit for real
 ```
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 4.3 Vérifie que ça s'est vraiment produit :
+
+**👟 Indice de départ :**
+
 Vérifie que ça s'est vraiment produit :
 
 ```bash
 git log -1
 ```
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 4.4 Vérifie
 
 **✅ Liste de vérification**
 

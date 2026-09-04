@@ -68,6 +68,9 @@ OpenCV embarque des **cascades de Haar** intégrées — petites, rapides, sans 
 :::
 
 ## Étape 1 : Détecte des objets dans une seule image d'exemple
+### 1.1 Chaque script ci-dessous réutilise cette même idée centrale. `yolo11n.pt` est un point de co...
+
+**👟 Indice de départ :**
 
 Chaque script ci-dessous réutilise cette même idée centrale. `yolo11n.pt` est un point de contrôle pré-entraîné — `ultralytics` le télécharge automatiquement la première fois que tu construis `YOLO(...)`, et le met en cache localement ensuite :
 
@@ -91,11 +94,34 @@ annotated = result.plot()  # draws boxes + labels on a copy of the image
 cv2.imwrite("output_street.jpg", annotated)
 ```
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 1.2 uv run python detect_image.py
+
+**👟 Indice de départ :**
+
+Exécutez le code ci-dessous et confirmez qu'il fonctionne.
+
 ```bash
 uv run python detect_image.py
 ```
-
 `model(image_path)` exécute tout le pipeline de détection en un seul appel : redimensionne l'image, la fait passer dans le réseau, et convertit la sortie brute en une liste de cadres, chacun avec un libellé de classe et un score de confiance. `result.boxes` est cette liste — `box.cls` est un index de classe dans `model.names` (un dict des 80 noms de classes COCO), et `box.conf` est la confiance du modèle que le cadre contient effectivement cette classe. `result.plot()` est une méthode de commodité qui redessine tout cela sur l'image pour toi, afin que tu n'aies pas à écrire ta propre boucle de dessin de cadres avec `cv2.rectangle`.
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 1.3 Vérifie
 
 **✅ Liste de vérification**
 
@@ -108,6 +134,9 @@ uv run python detect_image.py
 Le modèle renvoie un score de confiance pour chaque cadre, pas seulement un oui/non « objet ici ». Si tu filtrais tout cadre dont la confiance est inférieure à 90 %, t'attendrais-tu à voir plus de fausses détections ou plus de détections manquées — et laquelle de ces deux erreurs compte le plus pour un projet dont tout l'intérêt est un *comptage* précis ?
 
 ## Étape 2 : Compte une classe cible et garde un total cumulé
+### 2.1 Détecter tout est un bon début, mais « compter des objets » signifie généralement compter *u...
+
+**👟 Indice de départ :**
 
 Détecter tout est un bon début, mais « compter des objets » signifie généralement compter *un type* de chose — des personnes passant par une porte, des voitures dans un parking, et ainsi de suite :
 
@@ -130,11 +159,34 @@ for image_path in image_paths:
 print(f"\nTotal {target_class}(s): {running_total}")
 ```
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 2.2 uv run python count_class.py
+
+**👟 Indice de départ :**
+
+Exécutez le code ci-dessous et confirmez qu'il fonctionne.
+
 ```bash
 uv run python count_class.py
 ```
-
 Le comptage n'est qu'un filtre-et-somme sur `result.boxes`, comparant le nom de classe de chaque cadre à celui qui t'intéresse. `verbose=False` réduit au silence la journalisation propre à `ultralytics` pour que tes propres instructions `print` ne soient pas enterrées dessous.
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 2.3 Vérifie
 
 **✅ Liste de vérification**
 
@@ -147,6 +199,9 @@ Le comptage n'est qu'un filtre-et-somme sur `result.boxes`, comparant le nom de 
 Si deux personnes sur une photo sont debout si proches que leurs cadres englobants se chevauchent presque entièrement, y a-t-il un moyen réaliste pour cette approche de comptage de les sous-compter ou sur-compter ? Qu'est-ce que tu regarderais dans `result.boxes` pour vérifier ?
 
 ## Étape 3 : Traite une courte vidéo d'exemple image par image
+### 3.1 Une vidéo n'est qu'une séquence d'images — exactement le même code de détection par image de...
+
+**👟 Indice de départ :**
 
 Une vidéo n'est qu'une séquence d'images — exactement le même code de détection par image des Étapes 1-2, exécuté une fois par image dans une boucle :
 
@@ -181,11 +236,34 @@ cap.release()
 writer.release()
 ```
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 3.2 uv run python detect_video.py
+
+**👟 Indice de départ :**
+
+Exécutez le code ci-dessous et confirmez qu'il fonctionne.
+
 ```bash
 uv run python detect_video.py
 ```
-
 `cv2.VideoCapture` lit un fichier vidéo (ou, à l'Étape 4, une caméra en direct) une image à la fois via `.read()`, qui renvoie `(ok, frame)` — `ok` devient `False` une fois qu'il n'y a plus d'images. `cv2.VideoWriter` est la même idée en sens inverse : il accumule les images que tu lui donnes dans un nouveau fichier vidéo. Note que le `if not ok: break` ici signifie « le fichier est terminé » — l'Étape 4 réutilise exactement cette même vérification, mais là elle signifie quelque chose d'important et de différent.
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 3.3 Vérifie
 
 **✅ Liste de vérification**
 
@@ -198,6 +276,9 @@ uv run python detect_video.py
 Le comptage que tu affiches est un instantané par image, pas un total par vidéo — faire passer la même personne devant la caméra pendant trois secondes pourrait la compter dans chaque image. Que nécessiterait « compter combien de personnes *distinctes* ont traversé le cadre », au-delà de ce que ce script fait actuellement ?
 
 ## Étape 4 : Passe en direct avec ta caméra web
+### 4.1 Même boucle, une ligne différente : échange le chemin du fichier vidéo contre `0`, l'index d...
+
+**👟 Indice de départ :**
 
 Même boucle, une ligne différente : échange le chemin du fichier vidéo contre `0`, l'index de la caméra par défaut de ton ordinateur :
 
@@ -236,11 +317,34 @@ else:
     cv2.destroyAllWindows()
 ```
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 4.2 uv run python detect_webcam.py
+
+**👟 Indice de départ :**
+
+Exécutez le code ci-dessous et confirmez qu'il fonctionne.
+
 ```bash
 uv run python detect_webcam.py
 ```
-
 `cv2.VideoCapture(0)` ouvre ta caméra par défaut de la même manière que `VideoCapture("some_file.mp4")` a ouvert un fichier à l'Étape 3 — même boucle `.read()`, même forme `(ok, frame)`. Les deux différences importantes : `.isOpened()` est vérifiée *en amont* ici, puisque « pas de caméra web disponible » est un échec réel et courant qui devrait produire un message clair plutôt qu'un crash déroutant au fond de la boucle ; et une fois en cours, le passage de `ok` à `False` en pleine boucle signifie que la connexion de la caméra a été perdue (débranchée, permission révoquée), pas « fin atteinte », puisqu'une caméra en direct n'a pas de fin. `cv2.imshow` ouvre une fenêtre en direct — une vraie fenêtre GUI, donc ce script ne produira pas de sortie visible dans un simple terminal distant sans affichage.
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 4.3 Vérifie
 
 **✅ Liste de vérification**
 

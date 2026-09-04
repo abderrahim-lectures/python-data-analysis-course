@@ -123,23 +123,14 @@ You should see four printed lines, one per listing on Alpha's board.
 
 ## Step 2: Parse multiple sources and combine them
 
-`board_beta.html` and `board_gamma.html` hold the same *kind* of data — title, company, location, description — but neither uses Alpha's markup. Beta lists jobs as `<li class="listing">` items with an `<a class="position-title">`; Gamma lists them as `<tr class="job-row">` table rows with plain `<td>` cells. A single "one selector fits all boards" scraper doesn't exist — instead, write one small parser function per source, each returning the exact same shape of dict, so the rest of the pipeline never has to know which board a listing came from:
+`board_beta.html` and `board_gamma.html` hold the same *kind* of data — title, company, location, description — but neither uses Alpha's markup. Beta lists jobs as `<li class="listing">` items with an `<a class="position-title">`; Gamma lists them as `<tr class="job-row">` table rows with plain `<td>` cells. A single "one selector fits all boards" scraper doesn't exist — so build one small parser per source, then combine them.
+
+### 2.1 Write a parser for each board
+
+**👟 Starter hint:** Start by copying Alpha's existing `parse_board_alpha` (from Step 1) and writing `parse_board_beta` the same way, but targeting Beta's real markup. Beta uses `<li class="listing">` for each job and `<a class="position-title">` for the title, `<div class="employer">` for company, `<div class="loc">` for location, `<div class="summary">` for description.
 
 ```python
 # aggregate.py (continued)
-def parse_board_alpha(html):
-    soup = BeautifulSoup(html, "html.parser")
-    listings = []
-    for card in soup.find_all("div", class_="job-card"):
-        listings.append({
-            "title": card.find("h2", class_="job-title").get_text(strip=True),
-            "company": card.find("span", class_="company").get_text(strip=True),
-            "location": card.find("span", class_="location").get_text(strip=True),
-            "description": card.find("p", class_="description").get_text(strip=True),
-            "source": "board_alpha",
-        })
-    return listings
-
 def parse_board_beta(html):
     soup = BeautifulSoup(html, "html.parser")
     listings = []
@@ -152,7 +143,17 @@ def parse_board_beta(html):
             "source": "board_beta",
         })
     return listings
+```
 
+**🎯 Expected output:** `parse_board_beta(html)` returns a list of dicts, each with the five keys `title, company, location, description, source` — the exact same shape Alpha's parser produces.
+
+**🩹 If it's off:** If you get an `AttributeError: 'NoneType' object has no attribute 'get_text'`, one of your classes is wrong (e.g. Beta uses `class_="employer"`, not `"company"`) — inspect a real Beta row's HTML and correct the selector. Only parsing an empty list usually means `find_all` matched nothing because the class value didn't match exactly.
+
+### 2.2 Parse Gamma (position-based) and combine all boards
+
+**👟 Starter hint:** Gamma is different: jobs are `<tr class="job-row">` table rows with plain `<td>` cells, so you grab `row.find_all("td")` and read them by position. Then build a `PARSERS` dict mapping each filename to its function and a `scrape_all_boards()` that runs every parser over its own file and extends a single list.
+
+```python
 def parse_board_gamma(html):
     soup = BeautifulSoup(html, "html.parser")
     listings = []
@@ -189,7 +190,11 @@ if __name__ == "__main__":
 uv run python aggregate.py
 ```
 
-You should see 10 raw listings total (4 + 3 + 3) — "raw" because nothing has been deduped yet.
+**🎯 Expected output:** You should see 10 raw listings total (4 + 3 + 3) — "raw" because nothing has been deduped yet.
+
+**🩹 If it's off:** If `Gamma`'s parser raises `IndexError`, `cells[0]` or `cells[3]` doesn't exist — a row has fewer than 4 `<td>` cells; print `len(cells)` to see. If the total isn't 10, one parser silently returned `[]` — check each parser against its own file, one at a time, by printing `len(parse_board_X(html))`.
+
+### 2.3 Verify the combined parse
 
 **✅ Checklist**
 
@@ -204,7 +209,11 @@ You should see 10 raw listings total (4 + 3 + 3) — "raw" because nothing has b
 
 ## Step 3: Dedupe listings with pandas
 
-Two of the ten listings are the exact same job, posted on two different boards: a "Senior Python Developer" role at Northwind Analytics appears on both Alpha and Beta, and a "Data Analyst" role at Contoso Retail appears on both Alpha and Gamma. Left alone, a downstream alert would report the same opening twice. The fix is a dedupe key — something stable enough to recognize "the same job" across sources even though the wording of the description differs slightly board to board:
+Two of the ten listings are the exact same job, posted on two different boards: a "Senior Python Developer" role at Northwind Analytics appears on both Alpha and Beta, and a "Data Analyst" role at Contoso Retail appears on both Alpha and Gamma. Left alone, a downstream alert would report the same opening twice. The fix is a dedupe key — something stable enough to recognize "the same job" across sources even though the wording of the description differs slightly board to board.
+
+### 3.1 Build a stable dedupe key
+
+**👟 Starter hint:** Write `dedupe_key(listing)` that normalizes `title + company` (lowercased, whitespace-collapsed) and hashes it — not the whole row. Import `hashlib` and `re`.
 
 ```python
 # aggregate.py (continued)
@@ -218,7 +227,17 @@ def dedupe_key(listing):
     normalized = f"{listing['title'].strip().lower()}|{listing['company'].strip().lower()}"
     normalized = re.sub(r"\s+", " ", normalized)
     return hashlib.sha256(normalized.encode("utf-8")).hexdigest()[:16]
+```
 
+**🎯 Expected output:** The Alpha and Beta copies of "Senior Python Developer @ Northwind Analytics" produce the *same* `dedupe_key`, even though their descriptions differ slightly.
+
+**🩹 If it's off (this is the crux):** Do NOT hash the entire listing (including `description`) — Alpha's and Beta's differently-worded descriptions of the same job would then hash to *different* keys, and duplicates would survive deduping. The key must be built from fields that identify *the same job*, not the same words. Normalizing case and collapsing whitespace is what lets `Title ` and `title` match.
+
+### 3.2 Dedupe with pandas and export the CSV
+
+**👟 Starter hint:** Load all listings, stamp each with its `dedupe_key`, build a DataFrame, drop duplicates on that key keeping the first, reset the index, and write `listings.csv`. Print the before/after counts to see the effect.
+
+```python
 listings = scrape_all_boards()
 for listing in listings:
     listing["dedupe_key"] = dedupe_key(listing)
@@ -235,9 +254,11 @@ df.to_csv("listings.csv", index=False)
 uv run python aggregate.py
 ```
 
-You should see "Deduped 10 listings -> 8 unique jobs (2 duplicate posting(s) removed)".
+**🎯 Expected output:** You should see "Deduped 10 listings -> 8 unique jobs (2 duplicate posting(s) removed)" and a `listings.csv` with a header plus 8 rows.
 
-The dedupe key here is normalized `title + company` text, not a hash of the entire row — deliberately. Hashing the whole row (including `description`) would treat Alpha's and Beta's slightly differently-worded descriptions of the same job as two *different* jobs, defeating the point.
+**🩹 If it's off:** If nothing gets removed, the two jobs' keys don't match — re-check your normalization (case/whitespace) and that you're keying on `title + company`, not the full row. If `drop_duplicates` errors on a missing column, you forgot to assign `listing["dedupe_key"]` before building the DataFrame. If `0 duplicate posting(s) removed` prints but you expected some, confirm the duplicates really share the same title *and* company strings.
+
+### 3.3 Verify the dedupe
 
 **✅ Checklist**
 
@@ -252,7 +273,11 @@ The dedupe key here is normalized `title + company` text, not a hash of the enti
 
 ## Step 4: Filter by keyword and alert on new matches
 
-The last step is the "alert" half of the project: filter the deduped listings to ones matching a keyword, then remember what you've already alerted on so a second run against the same data doesn't repeat itself:
+The last step is the "alert" half of the project: filter the deduped listings to ones matching a keyword, then remember what you've already alerted on so a second run against the same data doesn't repeat itself.
+
+### 4.1 Filter listings by keyword
+
+**👟 Starter hint:** In a new `filter_alerts.py`, read `listings.csv` into a DataFrame and write `keyword_filter(df, keywords)` that joins title + description and uses `str.contains` with a `|`-joined pattern, case-insensitive.
 
 ```python
 # filter_alerts.py
@@ -264,14 +289,6 @@ import pandas as pd
 SEEN_FILE = Path("seen.json")
 KEYWORDS = ["python"]
 
-def load_seen():
-    if SEEN_FILE.exists():
-        return set(json.loads(SEEN_FILE.read_text(encoding="utf-8")))
-    return set()
-
-def save_seen(dedupe_keys):
-    SEEN_FILE.write_text(json.dumps(sorted(dedupe_keys)), encoding="utf-8")
-
 def keyword_filter(df, keywords):
     pattern = "|".join(keywords)
     text = df["title"].str.cat(df["description"], sep=" ")
@@ -281,30 +298,53 @@ if __name__ == "__main__":
     df = pd.read_csv("listings.csv")
     matches = keyword_filter(df, KEYWORDS)
     print(f"{len(matches)} unique listing(s) match keywords {KEYWORDS}")
-
-    seen = load_seen()
-    new_matches = matches[~matches["dedupe_key"].isin(seen)]
-
-    if new_matches.empty:
-        print("No new matches since the last run.")
-    else:
-        print(f"\n{len(new_matches)} NEW match(es):\n")
-        for _, row in new_matches.iterrows():
-            print(f"- {row['title']} @ {row['company']} ({row['location']}) [{row['source']}]")
-        new_matches.to_csv("new_matches.csv", index=False)
-
-    save_seen(seen | set(matches["dedupe_key"]))
 ```
 
 ```bash
 uv run python filter_alerts.py
 ```
 
-The first run should report 6 new matches (every listing whose title or description mentions "python"). Run it again without changing anything, and it should report zero new matches — `seen.json` remembers what it already alerted on, exactly like a real scheduled aggregator checking in every morning would need to.
+**🎯 Expected output:** The first run reports 6 matching listings — every listing whose title or description mentions "python".
+
+**🩹 If it's off:** If you get fewer matches than expected, check the `pattern` built from `|`-joined keywords and that `case=False` is set. If `str.contains` raises a `TypeError` or drops rows, a `description` is `NaN` after `pd.read_csv` — that's exactly what `na=False` guards against; without it, missing values turn into `NaN` mask results and silently drop rows.
+
+### 4.2 Remember what you've already alerted on
+
+**👟 Starter hint:** Add `load_seen()` / `save_seen()` backed by a `seen.json` file. On each run, load the set of previously-alerted `dedupe_key`s, compute `new_matches` as the matches whose key isn't in that set, print + save them for new ones, then always update `seen.json`.
+
+```python
+def load_seen():
+    if SEEN_FILE.exists():
+        return set(json.loads(SEEN_FILE.read_text(encoding="utf-8")))
+    return set()
+
+def save_seen(dedupe_keys):
+    SEEN_FILE.write_text(json.dumps(sorted(dedupe_keys)), encoding="utf-8")
+
+# (in __main__)
+seen = load_seen()
+new_matches = matches[~matches["dedupe_key"].isin(seen)]
+
+if new_matches.empty:
+    print("No new matches since the last run.")
+else:
+    print(f"\n{len(new_matches)} NEW match(es):\n")
+    for _, row in new_matches.iterrows():
+        print(f"- {row['title']} @ {row['company']} ({row['location']}) [{row['source']}]")
+    new_matches.to_csv("new_matches.csv", index=False)
+
+save_seen(seen | set(matches["dedupe_key"]))
+```
+
+**🎯 Expected output:** Run it again without changing anything, and it reports zero new matches — `seen.json` remembers what it already alerted on, exactly like a real scheduled aggregator checking in every morning would need to.
+
+**🩹 If it's off:** If a second run repeats all 6 matches, `save_seen` isn't being called (or writes before you compute `new_matches`). If it *never* shows new matches even first run, `seen.json` already exists with stale keys — delete it to test from scratch. The subtle rule: always save the full `seen | set(matches["dedupe_key"])` union, so you remember both what you alerted on *and* what you correctly skipped.
 
 :::tip[A keyword filter is just the simplest version of "match against what I care about"]
 `str.contains` with a `|`-joined pattern is intentionally the simplest possible filter — good enough to prove the alerting logic works. A more realistic version might match against several keyword *groups* (e.g. "python" OR "django" for backend roles, "remote" as a separate required filter on `location`), or score a match by how many keywords hit rather than treating it as pass/fail. Get the simple version working first; the matching logic is the easiest part to swap out later.
 :::
+
+### 4.3 Verify the alert loop
 
 **✅ Checklist**
 

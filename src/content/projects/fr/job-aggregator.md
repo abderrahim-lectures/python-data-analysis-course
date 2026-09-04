@@ -74,6 +74,9 @@ Si tu étends ce projet pour pointer vers une vraie plateforme d'emploi en direc
 :::
 
 ## Étape 1 : Analyse une seule page d'annonces en champs structurés
+### 1.1 Ouvre [`board_alpha.html`](https://github.com/abderrahim-lectures/python-data-analysis-cours...
+
+**👟 Indice de départ :**
 
 Ouvre [`board_alpha.html`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/job-aggregator/sample_data/board_alpha.html) dans un éditeur de texte. Chaque annonce se trouve dans un `<div class="job-card">`, avec le titre dans un `<h2 class="job-title">`, l'entreprise dans un `<span class="company">`, le lieu dans un `<span class="location">`, et une description dans un `<p class="description">`. C'est le même pattern `find`/`find_all` que Scraper et Analyser un Site Web en Direct, juste appliqué à un fichier local plutôt qu'à une réponse en direct :
 
@@ -94,11 +97,34 @@ for card in soup.find_all("div", class_="job-card"):
     print(f"{title} @ {company} ({location})")
 ```
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 1.2 uv run python aggregate.py
+
+**👟 Indice de départ :**
+
+Exécutez le code ci-dessous et confirmez qu'il fonctionne.
+
 ```bash
 uv run python aggregate.py
 ```
-
 Tu devrais voir quatre lignes affichées, une par annonce sur la plateforme d'Alpha.
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 1.3 Vérifie
 
 **✅ Liste de vérification**
 
@@ -112,6 +138,9 @@ Tu devrais voir quatre lignes affichées, une par annonce sur la plateforme d'Al
 - Chaque champ ici est requis par l'analyseur (`card.find(...)` appelle immédiatement `.get_text(...)` sur le résultat). Que se passe-t-il si une annonce sur une plateforme formatée différemment n'a pas son `<span>` de lieu du tout ? Où exactement cela échouerait-il, et comment le message d'erreur t'aiderait-il à le trouver ?
 
 ## Étape 2 : Analyse plusieurs sources et combine-les
+### 2.1 `board_beta.html` et `board_gamma.html` contiennent le même *type* de données — titre, entre...
+
+**👟 Indice de départ :**
 
 `board_beta.html` et `board_gamma.html` contiennent le même *type* de données — titre, entreprise, lieu, description — mais aucun n'utilise le balisage d'Alpha. Beta liste les emplois comme des éléments `<li class="listing">` avec un `<a class="position-title">` ; Gamma les liste comme des lignes de tableau `<tr class="job-row">` avec de simples cellules `<td>`. Un seul scraper « un sélecteur convient à toutes les plateformes » n'existe pas — à la place, écris une petite fonction analyseur par source, chacune retournant exactement la même forme de dict, pour que le reste du pipeline n'ait jamais besoin de savoir de quelle plateforme vient une annonce :
 
@@ -175,11 +204,34 @@ if __name__ == "__main__":
     print(f"Parsed {len(listings)} raw listings from {len(PARSERS)} boards")
 ```
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 2.2 uv run python aggregate.py
+
+**👟 Indice de départ :**
+
+Exécutez le code ci-dessous et confirmez qu'il fonctionne.
+
 ```bash
 uv run python aggregate.py
 ```
-
 Tu devrais voir 10 annonces brutes au total (4 + 3 + 3) — « brutes » parce que rien n'a encore été dédupliqué.
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 2.3 Vérifie
 
 **✅ Liste de vérification**
 
@@ -193,6 +245,9 @@ Tu devrais voir 10 annonces brutes au total (4 + 3 + 3) — « brutes » parce q
 - `parse_board_gamma` accède à `cells[0]`, `cells[1]`, etc. par position plutôt que par nom de classe, contrairement aux deux autres analyseurs. Qu'est-ce qui casserait silencieusement si le tableau de Gamma ajoutait une nouvelle première colonne (disons, une date de publication) sans que tu le remarques ?
 
 ## Étape 3 : Déduplique les annonces avec pandas
+### 3.1 Deux des dix annonces sont exactement le même emploi, publié sur deux plateformes différente...
+
+**👟 Indice de départ :**
 
 Deux des dix annonces sont exactement le même emploi, publié sur deux plateformes différentes : un poste de « Senior Python Developer » chez Northwind Analytics apparaît à la fois sur Alpha et Beta, et un poste de « Data Analyst » chez Contoso Retail apparaît à la fois sur Alpha et Gamma. Laissée telle quelle, une alerte en aval rapporterait la même ouverture deux fois. La solution est une clé de déduplication — quelque chose d'assez stable pour reconnaître « le même emploi » à travers les sources même si le libellé de la description diffère légèrement d'une plateforme à l'autre :
 
@@ -221,13 +276,35 @@ print(f"Deduped {before} listings -> {len(df)} unique jobs ({before - len(df)} d
 df.to_csv("listings.csv", index=False)
 ```
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 3.2 uv run python aggregate.py
+
+**👟 Indice de départ :**
+
+Exécutez le code ci-dessous et confirmez qu'il fonctionne.
+
 ```bash
 uv run python aggregate.py
 ```
-
 Tu devrais voir « Deduped 10 listings -> 8 unique jobs (2 duplicate posting(s) removed) ».
-
 La clé de déduplication ici est le texte normalisé `title + company`, pas un hash de la ligne entière — délibérément. Hacher toute la ligne (y compris `description`) traiterait les descriptions légèrement différemment libellées d'Alpha et Beta du même emploi comme deux emplois *différents*, annulant le but.
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 3.3 Vérifie
 
 **✅ Liste de vérification**
 
@@ -241,6 +318,9 @@ La clé de déduplication ici est le texte normalisé `title + company`, pas un 
 - Si deux entreprises différentes publiaient par hasard deux emplois différents avec exactement le même titre (ex. deux ouvertures « Data Analyst » sans rapport), cette clé de déduplication les fusionnerait-elle incorrectement ? Pourquoi ou pourquoi pas ?
 
 ## Étape 4 : Filtre par mot-clé et alerte sur les nouvelles correspondances
+### 4.1 La dernière étape est la moitié « alerte » du projet : filtre les annonces dédupliquées vers...
+
+**👟 Indice de départ :**
 
 La dernière étape est la moitié « alerte » du projet : filtre les annonces dédupliquées vers celles correspondant à un mot-clé, puis souviens-toi de ce sur quoi tu as déjà alerté pour qu'une seconde exécution contre les mêmes données ne se répète pas :
 
@@ -286,15 +366,37 @@ if __name__ == "__main__":
     save_seen(seen | set(matches["dedupe_key"]))
 ```
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 4.2 uv run python filter_alerts.py
+
+**👟 Indice de départ :**
+
+Exécutez le code ci-dessous et confirmez qu'il fonctionne.
+
 ```bash
 uv run python filter_alerts.py
 ```
-
 La première exécution devrait rapporter 6 nouvelles correspondances (chaque annonce dont le titre ou la description mentionne « python »). Relance-le sans rien changer, et il devrait rapporter zéro nouvelle correspondance — `seen.json` se souvient de ce sur quoi il a déjà alerté, exactement comme un vrai agrégateur planifié se connectant chaque matin en aurait besoin.
-
 :::tip[Un filtre de mots-clés n'est que la version la plus simple de « correspond à ce qui m'intéresse »]
 `str.contains` avec un pattern joint par `|` est intentionnellement le filtre le plus simple possible — assez bon pour prouver que la logique d'alerte fonctionne. Une version plus réaliste pourrait correspondre à plusieurs *groupes* de mots-clés (ex. « python » OU « django » pour les postes backend, « remote » comme filtre requis séparé sur `location`), ou noter une correspondance selon le nombre de mots-clés touchés plutôt que de la traiter comme réussite/échec. Fais fonctionner la version simple d'abord ; la logique de correspondance est la partie la plus facile à remplacer plus tard.
 :::
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 4.3 Vérifie
 
 **✅ Liste de vérification**
 

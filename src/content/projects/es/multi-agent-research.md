@@ -113,6 +113,9 @@ GITHUB_TOKEN=your-key-here
 - ✅ Existe un archivo `.env` en la carpeta del proyecto con una clave real, y git no lo rastrea (`uv init` te da un `.gitignore` — confirma que `.env` está en él).
 
 ## Paso 1: Define los sub-agentes planificador, investigador y escritor
+### 1.1 Cada sub-agente en `deepagents` es solo un dict simple: un `name`, un `description` (usado p...
+
+**👟 Pista inicial :**
 
 Cada sub-agente en `deepagents` es solo un dict simple: un `name`, un `description` (usado por el agente de nivel superior para decidir cuándo delegarle), un `system_prompt` (sus propias instrucciones estrechas), y opcionalmente sus propios `tools`. Crea `agent.py`:
 
@@ -165,10 +168,19 @@ writer_subagent = {
     ),
 }
 ```
-
 :::tip[Sé honesto sobre lo que "investigación" significa aquí]
 El sub-agente investigador de arriba responde desde el propio conocimiento de entrenamiento del modelo — no hay ninguna herramienta real de búsqueda web conectada. Esa es una simplificación deliberada, no un atajo oculto: mantiene este proyecto pequeño y amigable con el nivel gratuito, pero significa que las respuestas pueden estar desactualizadas o ser incorrectas en cualquier cosa en la que el modelo no fue bien entrenado, sin forma de verificarlas contra una fuente en vivo. Consulta "A dónde ir desde aquí" para ver cómo conectar una herramienta de búsqueda real una vez que te sientas cómodo con esta versión.
 :::
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.2 Verifica
 
 **✅ Lista de verificación**
 
@@ -181,6 +193,9 @@ El sub-agente investigador de arriba responde desde el propio conocimiento de en
 - ¿Por qué podría importar que el `description` de cada sub-agente esté escrito para que lo lea el *agente de nivel superior*, no un humano? ¿Qué te costaría aquí un `description` vago ("hace cosas de investigación")?
 
 ## Paso 2: Conecta los sub-agentes y ejecútalo
+### 2.1 El agente de nivel superior no hace ninguna investigación por sí mismo — todo su trabajo es ...
+
+**👟 Pista inicial :**
 
 El agente de nivel superior no hace ninguna investigación por sí mismo — todo su trabajo es delegación, en orden: planificar, luego investigar cada sub-pregunta, luego escribir. Añade esto al final de `agent.py`:
 
@@ -204,19 +219,37 @@ if __name__ == "__main__":
     print(result["messages"][-1].content)
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 2.2 Ejecútalo:
+
+**👟 Pista inicial :**
+
 Ejecútalo:
 
 ```bash
 uv run python agent.py
 ```
-
 `subagents=[...]` es todo el mecanismo: el agente de nivel superior ve el `name` y el `description` de cada sub-agente de la misma manera que vería el nombre y docstring de una herramienta, y decide cuándo entregar a cuál, basándose en las instrucciones del `system_prompt` de nivel superior y el estado de la conversación hasta ahora. Esta es la misma idea enseñada en la sección "A dónde ir desde aquí" del proyecto Agente de IA, solo que aquí se usa para todo el pipeline en lugar de para un especialista extra junto a un agente de propósito general.
-
 ### Qué deberías ver
-
 Un único bloque de texto impreso — el informe final sintetizado del escritor, unos pocos párrafos cubriendo las sub-preguntas que se le ocurrieron al planificador. Si imprimes la lista completa de `result["messages"]` en su lugar (el mismo patrón que el proyecto Agente de IA), verás toda la traza: la lista numerada del planificador, cada llamada del investigador y su respuesta, y luego la pasada final del escritor — todas como mensajes reales pasados entre el agente de nivel superior y cada sub-agente.
-
 Si en cambio ves un traceback, comprueba de qué tipo — las mismas tres categorías que el proyecto Agente de IA: una variable de entorno faltante/incorrecta (`KeyError`), una clave mala (401/403), o un límite de tasa (429, mira el escollo de abajo).
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 2.3 Verifica
 
 **✅ Lista de verificación**
 

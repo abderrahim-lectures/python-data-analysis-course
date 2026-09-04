@@ -22,7 +22,6 @@ export async function getStaticPaths() {
     });
 }
 
-interface Props { entry: CollectionEntry<'learn'> }
 const {entry} = Astro.props;
 const {title, description, week, track, section} = entry.data;
 const {Content} = await entry.render();
@@ -52,7 +51,7 @@ const jsonLd = {
   isPartOf: {
     '@type': 'Course',
     name: 'PyDA Course',
-    description: 'Learn Python and data analysis in your browser — run real code, earn XP, build streaks.',
+    description: ps.courseDescription,
   },
 };
 ---
@@ -89,8 +88,8 @@ const jsonLd = {
     <div class="route">
       <a class="route__card" href={`${base}learn/${section}/${otherTrack}/week-${week}`}>
         <span class="route__icon">{otherTrack === 'hard' ? '⚡' : '🌿'}</span>
-        <strong>Switch to {otherTrack === 'hard' ? 'Hard' : 'Normal'}</strong>
-        <small>Same week, {otherTrack === 'hard' ? 'steeper climb' : 'gentler pace'}.</small>
+        <strong>{ps.switchTo} {otherTrack === 'hard' ? ps.trackHardLabel : ps.trackNormalLabel}</strong>
+        <small>{otherTrack === 'hard' ? ps.sameWeekSteep : ps.sameWeekCalm}</small>
       </a>
     </div>
   </article>

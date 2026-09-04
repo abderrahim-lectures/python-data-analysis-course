@@ -114,6 +114,9 @@ Les frameworks d'agents évoluent vite, tout comme les noms de modèles : ils so
 :::
 
 ## Étape 1 : écrire votre premier agent
+### 1.1 Créez un fichier `.env` (ne le validez jamais) avec la clé du fournisseur que vous avez choi...
+
+**👟 Indice de départ :**
 
 Créez un fichier `.env` (ne le validez jamais) avec la clé du fournisseur que vous avez choisi :
 
@@ -121,6 +124,18 @@ Créez un fichier `.env` (ne le validez jamais) avec la clé du fournisseur que 
 # .env
 GITHUB_TOKEN=your-key-here
 ```
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 1.2 Puis créez `agent.py` :
+
+**👟 Indice de départ :**
 
 Puis créez `agent.py` :
 
@@ -160,44 +175,70 @@ if __name__ == "__main__":
     print(result["messages"][-1].content)  # just the final answer, not the full internal trace
 ```
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 1.3 Exécutez-le — avec `uv`, aucune activation manuelle d'environnement n'est nécessaire :
+
+**👟 Indice de départ :**
+
 Exécutez-le — avec `uv`, aucune activation manuelle d'environnement n'est nécessaire :
 
 ```bash
 uv run python agent.py
 ```
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 1.4 `load_dotenv()` lit votre fichier `.env` dans `os.environ` avant que quoi que ce soit d'autr...
+
+**👟 Indice de départ :**
+
 `load_dotenv()` lit votre fichier `.env` dans `os.environ` avant que quoi que ce soit d'autre ne s'exécute, donc `os.environ["GITHUB_TOKEN"]` trouve la clé que vous avez définie lors de la Configuration — le même concept de module `os` que `input()` lisant depuis le clavier, sauf qu'il lit depuis un fichier à la place. `create_deep_agent` relie le modèle à une liste de fonctions Python que l'agent peut appeler comme **outils** — c'est l'idée centrale derrière les agents : un modèle de langage qui ne peut pas seulement répondre par du texte, mais décider d'appeler votre code, lire le résultat, et l'utiliser pour éclairer sa réponse.
-
 Remarquez `tools=[search_course_topics, count_weeks_remaining]` — deux outils, pas un. Le modèle choisit *quel* outil (le cas échéant) correspond à la question, entièrement par lui-même : demandez « Did we cover groupby? » et il appelle `search_course_topics` ; demandez « How many weeks are left if I'm on week 4? » et il appelle `count_weeks_remaining` à la place. Vous n'écrivez jamais vous-même une chaîne `if`/`elif` acheminant les questions vers les outils — la docstring de chaque fonction (la chaîne entre triples guillemets juste après `def`) est ce que le modèle lit pour décider quel outil correspond à quelle demande, exactement comme les docstrings de la semaine 4 de Python 101, sauf qu'ici c'est un modèle de langage qui les lit, pas un humain parcourant votre code.
-
 ### Comment l'agent décide réellement quoi faire
-
 Rien ici n'est magique — `create_deep_agent` construit une boucle, et chaque itération de cette boucle est un appel API ordinaire au modèle que vous avez configuré :
-
 1. Votre question va au modèle, avec la *liste* des outils disponibles (leurs noms, paramètres, et docstrings — pas leur code).
 2. Le modèle répond soit par une réponse textuelle finale, **soit** par une demande d'appel d'un outil spécifique avec des arguments spécifiques.
 3. S'il a demandé un appel d'outil, votre propre code Python (pas le modèle) exécute réellement cette fonction et obtient un vrai résultat.
 4. Ce résultat retourne au modèle comme nouveau contexte, et la boucle recommence à l'étape 2 — le modèle pourrait appeler un autre outil, ou avoir maintenant assez d'information pour répondre.
 5. Une fois que le modèle répond avec du texte et aucune autre demande d'outil, la boucle s'arrête et c'est votre réponse finale.
-
 C'est exactement pourquoi une erreur de limite de débit (voir ci-dessous) peut survenir même pour ce qui ressemble à « une question » — une question nécessitant deux appels d'outils coûte au moins trois allers-retours au modèle (décider d'appeler l'outil A, décider d'appeler l'outil B, produire la réponse finale), pas un.
-
 ### Ce que vous devriez voir
-
 Une seule ligne affichée — la réponse finale de l'agent, quelque chose comme :
 
 ```
 Yes, "groupby" was covered in the course.
 ```
 
-Si à la place vous voyez une trace d'erreur Python, vérifiez laquelle :
+**🎯 Résultat attendu :**
 
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 1.5 Si à la place vous voyez une trace d'erreur Python, vérifiez laquelle :
+
+**👟 Indice de départ :**
+
+Si à la place vous voyez une trace d'erreur Python, vérifiez laquelle :
 - **`KeyError: 'GITHUB_TOKEN'`** — la variable d'environnement/valeur `.env` n'est pas trouvée. Confirmez que `.env` est dans le même dossier que `agent.py` et n'a pas de faute de frappe dans le nom de la variable, ou que vous avez bien exécuté `export` dans la même session de terminal depuis laquelle vous exécutez le script.
 - **Une erreur d'authentification (401/403)** — la clé elle-même est incorrecte, expirée, ou (pour GitHub Models) manque le scope `models: read`. Régénérez-la.
 - **Une erreur de limite de débit (429)** — voir la section suivante. C'est courant et attendu, pas un signe que quelque chose est cassé.
-
 ### Comprendre la trace interne complète
-
 `result["messages"][-1].content` ci-dessus montre délibérément seulement la réponse finale. Si vous affichez tout le `result` à la place, vous verrez quelque chose de bien plus bruyant — chaque message que LangGraph a suivi en interne, chacun portant des champs de comptabilité en plus du contenu réel :
 
 ```python
@@ -206,42 +247,54 @@ for message in result["messages"]:
     print(type(message).__name__, "->", message)
 ```
 
-Réduite à ce qui compte réellement, la trace derrière cette seule question ressemble à ceci :
+**🎯 Résultat attendu :**
 
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 1.6 Réduite à ce qui compte réellement, la trace derrière cette seule question ressemble à ceci :
+
+**👟 Indice de départ :**
+
+Réduite à ce qui compte réellement, la trace derrière cette seule question ressemble à ceci :
 | # | Type de message | Ce qu'il contient |
 |---|---|---|
 | 1 | `HumanMessage` | Votre question : `"Did we cover groupby?"` |
 | 2 | `AIMessage` (sans texte) | Le modèle a décidé d'appeler `search_course_topics(query="groupby")` — pas encore de réponse, juste une demande d'outil |
 | 3 | `ToolMessage` | La *vraie* valeur de retour de votre fonction Python : `"Matching topics: ['groupby']"` |
 | 4 | `AIMessage` (finale) | La véritable réponse du modèle, maintenant qu'il a le résultat de l'outil : `"Yes, groupby was covered."` |
-
 Les parties bruyantes que vous pouvez ignorer sans risque en lisant une trace brute : les champs `id`/`tool_call_id` (comptabilité pour faire correspondre un appel d'outil à son résultat), les traces de raisonnement interne spécifiques au fournisseur (pas destinées à être lisibles par un humain), et `usage_metadata` (comptages de tokens, utile pour le suivi des coûts, sans rapport avec la conversation elle-même). Cette forme à 4 lignes — question, appel d'outil, résultat d'outil, réponse — est toute la boucle d'agent de la section précédente, simplement écrite comme données plutôt que comme une liste numérotée.
-
 ### Gérer les limites de débit
-
 Chaque palier gratuit ici plafonne combien de requêtes vous pouvez faire par minute ou par jour, et chaque tour de l'agent — décider d'appeler un outil, puis lire le résultat — utilise au moins une requête. Exécutez quelques questions à la suite et vous pourriez bien voir quelque chose comme :
 
 ```
 Error calling model ... (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED.
 ...Please retry in 41.7s.
 ```
-
 Ce n'est pas un bug dans votre code — c'est le fournisseur qui vous dit de ralentir. Deux façons de gérer cela :
-
 1. **Le plus simple** : attendez simplement le nombre de secondes suggéré et relancez le script.
 2. **Plus robuste** : enveloppez l'appel `agent.invoke(...)` dans un `try`/`except` qui capture l'erreur, attend, et réessaie automatiquement — exactement le motif enseigné comme contenu bonus dans la semaine 4 de Python 101. L'exemple plus complet du dépôt fait cela pour de vrai : voir `ask()` dans [`examples/ai-agent/agent.py`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/ai-agent/agent.py) pour une version fonctionnelle que vous pouvez copier, y compris l'analyse du délai de réessai suggéré par le fournisseur à partir du message d'erreur.
-
 :::tip[Vous utilisez un fournisseur différent ?]
 Remplacez le bloc `ChatOpenAI(...)` par le propre client de votre fournisseur — par ex. `ChatGoogleGenerativeAI(model="gemini-3.5-flash", google_api_key=os.environ["GOOGLE_API_KEY"])` pour Gemini, ou `ChatGroq(model="llama-3.3-70b-versatile", api_key=os.environ["GROQ_API_KEY"])` pour Groq. Tout le reste dans ce fichier reste identique — `deepagents` ne se soucie pas de quel fournisseur est derrière le modèle. Voir [`examples/ai-agent/agent.py`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/ai-agent) dans le dépôt du cours pour les six connectés côte à côte, sélectionnables avec une seule variable d'environnement.
 :::
-
 ## Ce que vous venez de construire
-
 `search_course_topics` est délibérément trivial — les outils d'un vrai agent pourraient chercher sur le web, interroger une base de données, ou exécuter du code. Mais la forme est la même que celle qui alimente des systèmes bien plus capables : un modèle qui raisonne sur une tâche, décide quel outil appeler et avec quels arguments, lit le résultat de l'outil, et continue — parfois en appelant plusieurs outils en séquence avant de répondre. Vous venez de construire la plus petite version possible de cette boucle, localement, avec votre propre clé.
-
 :::tip[Exécutez une version plus complète sans aucune configuration locale]
 [`examples/ai-agent/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/ai-agent) dans le dépôt du cours n'est **pas une copie du code ci-dessus** — c'est une version délibérément plus complète, avec de vrais outils (elle recherche dans les vrais fichiers de leçon de ce cours et analyse ses vrais jeux de données avec pandas, au lieu d'une liste de sujets codée en dur) et une prise en charge des six fournisseurs du tableau ci-dessus, sélectionnés avec un seul paramètre. Clonez-le, ou ouvrez tout le dépôt dans un [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python, et `uv` déjà installés) et exécutez-le depuis là.
 :::
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 1.7 Vérifie
 
 ## Où aller à partir d'ici
 

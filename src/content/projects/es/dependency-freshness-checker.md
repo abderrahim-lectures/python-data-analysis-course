@@ -68,6 +68,9 @@ No se necesita ninguna clave de API en ningún lugar de este proyecto — la API
 :::
 
 ## Paso 1: Analiza un `pyproject.toml` real
+### 1.1 Python 3.11+ incluye `tomllib` en la biblioteca estándar — no se necesita instalación para *...
+
+**👟 Pista inicial :**
 
 Python 3.11+ incluye `tomllib` en la biblioteca estándar — no se necesita instalación para *leer* TOML (solo haría falta `uv add` de un paquete si necesitaras *escribir* TOML, lo cual este proyecto no hace).
 
@@ -89,16 +92,43 @@ if __name__ == "__main__":
         print(dep)
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.2 uv run python parse_deps.py
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
+
 ```bash
 uv run python parse_deps.py
 ```
-
   - ✅ Ejecutar esto contra el `pyproject.toml` de tu propio proyecto imprime la cadena de especificador cruda de cada dependencia.
   - ✅ Puedes explicar por qué `tomllib` necesita que el archivo se abra en modo binario (`"rb"`), no en modo texto.
-
 **🤔 Pregunta(s) socrática(s)**: La lista `dependencies` de un `pyproject.toml` contiene cadenas como `"requests>=2.31"` — no solo nombres de paquete. ¿Cuál es el *nombre* por sí solo, separado de cualquier restricción de versión adjunta? Necesitarás separarlos limpiamente en el siguiente paso, y una cadena de dependencia real puede ser más descuidada de lo que parece (espacios extra, extras como `"requests[socks]>=2.31"`, fijación exacta `==` en lugar de `>=`) — ¿cuáles de esos romperían un `.split(">=")` ingenuo?
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.3 Verifica
+
 ## Paso 2: Busca la versión actual de cada paquete en PyPI
+### 2.1 # check_pypi.py
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
 
 ```python
 # check_pypi.py
@@ -132,18 +162,44 @@ if __name__ == "__main__":
         print(f"{name}: latest is {latest!r}")
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 2.2 uv run python check_pypi.py
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
+
 ```bash
 uv run python check_pypi.py
 ```
-
 Nota el `"not-a-real-package-xyz"` deliberadamente roto en la lista de prueba — debería imprimir `latest is None`, no fallar. Una herramienta real tiene que manejar con elegancia un nombre de paquete con typo o privado, no asumir que cada nombre en un `pyproject.toml` se resuelve.
-
   - ✅ Los paquetes reales imprimen su versión real y actual de PyPI — puedes verificar cruzadamente uno contra pypi.org en tu navegador.
   - ✅ El nombre de paquete falso imprime `None` en lugar de fallar el script.
-
 **🤔 Pregunta(s) socrática(s)**: `response.raise_for_status()` se ejecuta *después* de la verificación explícita de 404 arriba de él — ¿por qué distinguir específicamente el 404 en lugar de dejar que `raise_for_status()` maneje cada estado no-2xx de la misma forma? ¿Qué le pasaría al flujo de control de este script si esa verificación de 404 no estuviera ahí?
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 2.3 Verifica
+
 ## Paso 3: Compara versiones correctamente
+### 3.1 # compare.py
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
 
 ```python
 # compare.py
@@ -165,16 +221,43 @@ if __name__ == "__main__":
     print(is_outdated("not-a-version", "2.10.0"))  # None -- can't compare
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 3.2 uv run python compare.py
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
+
 ```bash
 uv run python compare.py
 ```
-
   - ✅ `is_outdated("2.9.0", "2.10.0")` imprime `True`, probando que esto no es comparación ingenua de cadenas.
   - ✅ Una cadena de versión no analizable devuelve `None`, no un fallo o un `True`/`False` silenciosamente incorrecto.
-
 **🤔 Pregunta(s) socrática(s)**: ¿Por qué devuelve `is_outdated` tres resultados posibles (`True`, `False`, `None`) en lugar de solo dos? ¿Qué situación real y no hipotética en un `pyproject.toml` haría de `None` la *única* respuesta honesta?
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 3.3 Verifica
+
 ## Paso 4: Júntalo todo en un reporte de frescura real
+### 4.1 # freshness_report.py
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
 
 ```python
 # freshness_report.py
@@ -224,16 +307,37 @@ if __name__ == "__main__":
     print_report(build_report(path))
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 4.2 uv run python freshness_report.py pyproject.toml
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
+
 ```bash
 uv run python freshness_report.py pyproject.toml
 ```
-
 Intenta apuntarlo a un `pyproject.toml` de un proyecto real y más antiguo que tengas por ahí (o los propios archivos `examples/*/pyproject.toml` de este repositorio del curso) — ahí es donde realmente verás el bucket de "desactualizado" poblarse con resultados reales, no solo dependencias actualizadas que añadiste hace cinco minutos.
-
   - ✅ Ejecutar el reporte contra el propio `pyproject.toml` de tu proyecto imprime un resumen categorizado ✅/⚠️/❓.
   - ✅ Apuntarlo a un `pyproject.toml` intencionalmente más antiguo muestra al menos una dependencia realmente desactualizada.
-
 **🤔 Pregunta(s) socrática(s)**: Este script hace una solicitud HTTP por dependencia, una tras otra. Para un `pyproject.toml` con 40 dependencias, ¿cuál es el costo experimentado por el usuario de eso — y cuál sería una forma concreta de acelerarlo (pista: estas solicitudes no dependen en absoluto de los resultados de las demás)?
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 4.3 Verifica
 
 ## ⚠️ Errores comunes
 

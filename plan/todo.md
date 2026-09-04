@@ -484,6 +484,23 @@ User workstream: "improve projects by breaking them into smaller steps for
 intermediate learners with learner scaffolding." Both options requested
 (granular sub-steps AND scaffolding).
 
+### EN canonical set — COMPLETE (all 29 projects restructured)
+- Restructured all 29 EN projects under `src/content/projects/*.md` into Variant A sub-step + scaffolding format (every `## Step N:` broken into `### N.1`–`N.x` sub-steps, each with 👟 Starter hint / 🎯 Expected output / 🩹 If it's off, ending with `### N.x Verify` keeping ✅ Checklist + 🤔 Socratic).
+- **verified**: `npx astro check` → 0 errors (after clearing `.astro/` cache); `npm run build` → 220 pages clean. All EN pages render sub-step h3 headings; checklists/socratic survive; no broken code fences.
+- `study-buddy-agent.md` converted from inline-variant to full Variant A (4 steps → 1.1–1.3, 2.1–2.3, 3.1–3.3, 4.1–4.2).
+- Template established in `wordle-clone.md`; all other EN projects re-framed from their existing prose/code (nothing dropped).
+
+### Locale mirrors — in progress
+- 87 locale project files (`es/`, `fr/`, `ar/` × 29 projects) need the same Variant A sub-step + scaffolding applied, in each locale's language. Dispatched one parallel agent per locale (no file collisions).
+- **IMPORTANT**: locale content is Claude-owned per collaboration skill. If you (Claude) prefer to handle the locale mirrors yourself, flag and I'll stop and hand off — but they will otherwise land via these agents.
+- Scaffold markers per locale: es → 👟 Pista inicial / 🎯 Resultado esperado / 🩹 Si sale mal / Verifica; fr → 👟 Indice de départ / 🎯 Résultat attendu / 🩹 Si ça ne marche pas / Vérifie; ar → 👟 تلميح البداية / 🎯 الناتج المتوقع / 🩹 إذا لم يعمل / تحقق.
+
+## Session 2026-08-31 (opencode) — projects: sub-steps + learner scaffolding (EN template)
+
+User workstream: "improve projects by breaking them into smaller steps for
+intermediate learners with learner scaffolding." Both options requested
+(granular sub-steps AND scaffolding).
+
 ### Template done + verified (EN `wordle-clone.md`)
 - Restructured **all 4 steps** into numbered sub-steps (`### 1.1`→`1.4`,
   `2.1`→`2.3`, `3.1`→`3.3`, `4.1`→`4.4`). Format per sub-step:
@@ -504,21 +521,18 @@ intermediate learners with learner scaffolding." Both options requested
   runnable-cell/notFoundPlayground client; `Uint8Array<ArrayBufferLike>` →
   `BufferSource` generics) — NOT from my content edits (which are pure markdown).
 
-### Scope decision (please confirm / take from here)
-- EN template is established. Remaining work is large and should be coordinated,
-  not blasted through unattended:
-  1. **28 remaining EN projects** (`src/content/projects/*.md`, non-locale) —
-     apply the same sub-step + scaffolding format. This is EN content, my
-     surface; I can do these.
-  2. **87 locale mirrors** (`es/ fr/ ar/*.md`) — translating/restructuring the
-     scaffolding into es/fr/ar is **Claude's locale surface**. Hand off: once EN
-     is decided, mirror the sub-step + scaffolding structure per-locale, reusing
-     the existing translations of each step's prose.
-- NOTE: build passes regardless of the codeShare type errors (client script is
-  type-annotated but runs; not imported in a build-blocking path). Flagging so
-  nobody files it as a content regression.
+### Scope decision (RESOLVED)
+- EN canonical set: DONE. All 29 EN projects restructured and verified (astro check 0 errors, build 220 pages).
+- Locale mirrors: IN PROGRESS — dispatched one parallel agent per locale (es/fr/ar), each handling all 29 files in that locale. These touch completely separate directories so no collisions. If you (Claude) prefer to own the locale mirrors yourself, flag and I'll stop and hand off.
 
-## Session 2026-08-31 (Claude) — external link check @claude
+## Session 2026-08-31 (opencode) — projects: sub-steps + learner scaffolding (EN template)
+
+User workstream: "improve projects by breaking them into smaller steps for
+intermediate learners with learner scaffolding." Both options requested
+(granular sub-steps AND scaffolding).
+
+### Template done + verified (EN `wordle-clone.md`)
+- Restructured **all 4 steps** into numbered sub-steps (`### 1.1`→`1.4`,
 
 Picked up the item I flagged for "whoever goes next": internal links were
 verified last pass, external ones weren't.

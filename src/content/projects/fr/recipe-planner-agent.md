@@ -113,6 +113,9 @@ GITHUB_TOKEN=your-key-here
 - ✅ `uv add deepagents langchain-openai python-dotenv` (ou le paquet de ton fournisseur) s'est terminé sans erreur.
 
 ## Étape 1 : Construis ta base de données de recettes locale
+### 1.1 Tout ce que l'agent suggérera jamais vient de cette seule structure de données — une simple ...
+
+**👟 Indice de départ :**
 
 Tout ce que l'agent suggérera jamais vient de cette seule structure de données — une simple liste Python de dicts, pas de serveur de base de données, pas d'API externe. Crée `recipes.py` :
 
@@ -153,12 +156,20 @@ RECIPES = [
     # in the course repo for the full 13-recipe version this lesson uses.
 ]
 ```
-
 Chaque recette est juste un dict avec un `name`, une liste d'`ingredients` (en minuscules, sans quantités — juste ce qui est nécessaire), et de courtes `instructions`. C'est exactement la même forme que la liste jouet `topics` du `search_course_topics` du projet Agent IA, juste plus riche : une liste d'enregistrements structurés sur laquelle ta fonction d'outil peut chercher.
-
 :::tip[Plus c'est grand, mieux c'est ici]
 Une base de données de recettes avec 3-4 entrées donnera l'impression que ton agent est cassé même quand le code est bon — la plupart des listes d'ingrédients qu'un élève tape ne chevaucheront simplement rien. Vise les 10-15 recettes complètes (la copie du dépôt en a 13), couvrant un vrai mélange de protéines, de glucides et de légumes, pour qu'une liste typique de « qu'est-ce qu'il y a dans mon frigo » ait une chance décente de correspondre à quelque chose.
 :::
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 1.2 Vérifie
 
 **✅ Liste de vérification**
 
@@ -172,6 +183,9 @@ Une base de données de recettes avec 3-4 entrées donnera l'impression que ton 
 - Si deux recettes partagent presque tous leurs ingrédients, comment cela pourrait-il affecter celle que l'agent tend à suggérer en premier ?
 
 ## Étape 2 : Écris un outil avec lequel l'agent peut chercher des recettes
+### 2.1 L'agent n'a pas le droit de lire `recipes.py` directement — il ne peut voir que ce qu'une fo...
+
+**👟 Indice de départ :**
 
 L'agent n'a pas le droit de lire `recipes.py` directement — il ne peut voir que ce qu'une fonction d'outil retourne, exactement comme `search_course_topics` dans le projet Agent IA. Ajoute ceci à `recipes.py`, ou à un nouveau fichier qui importe `RECIPES` :
 
@@ -212,10 +226,18 @@ def search_recipes_by_ingredients(ingredients: list[str]) -> str:
         )
     return "Matching recipes (best match first):\n" + "\n".join(lines)
 ```
-
 L'idée centrale : `have & needed` (intersection d'ensembles) compte combien d'ingrédients d'une recette tu as déjà, `needed - have` (différence d'ensembles) est exactement ce qui manque encore. Trier par taille de chevauchement, du plus grand au plus petit, signifie que les recettes les plus proches de « prêtes à cuisiner maintenant » viennent en premier — et parce que l'outil retourne les ingrédients manquants pour *chaque* candidat, pas seulement le meilleur, l'agent a tout ce qu'il faut pour construire une liste de courses plus tard sans une deuxième recherche.
-
 Note que le type de retour est une simple chaîne, comme `search_course_topics` et `count_words` dans les projets précédents — le modèle lit du texte, pas des objets Python, donc une chaîne clairement formatée est ce qu'un outil devrait renvoyer.
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 2.2 Vérifie
 
 **✅ Liste de vérification**
 
@@ -229,6 +251,9 @@ Note que le type de retour est une simple chaîne, comme `search_course_topics` 
 - Que se passe-t-il en ce moment si quelqu'un passe `["Tomatoes"]` (avec une majuscule) — est-ce que ça correspond toujours à `"tomatoes"` dans la base de données ? Pourquoi ?
 
 ## Étape 3 : Connecte l'outil à un agent `deepagents`
+### 3.1 Crée `planner.py` :
+
+**👟 Indice de départ :**
 
 Crée `planner.py` :
 
@@ -274,8 +299,17 @@ agent = create_deep_agent(
     system_prompt=SYSTEM_PROMPT,
 )
 ```
-
 C'est la même forme `create_deep_agent(model=..., tools=[...], system_prompt=...)` du projet Agent IA, avec un outil au lieu de deux. Ce qui est différent, et mérite qu'on s'y attarde, c'est le **prompt système** : il ne décrit pas juste l'outil, il interdit explicitement le mode d'échec que tout ce projet est conçu pour démontrer — suggérer une recette que l'outil n'a jamais retournée. Qu'un outil soit *disponible* ne garantit pas que le modèle l'utilise toujours ; c'est dans le prompt système que tu lui dis qu'utiliser l'outil, et seulement l'outil, n'est pas optionnel ici.
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 3.2 Vérifie
 
 **✅ Liste de vérification**
 
@@ -289,6 +323,9 @@ C'est la même forme `create_deep_agent(model=..., tools=[...], system_prompt=..
 - Pourquoi passer `tools=[search_recipes_by_ingredients]` (la fonction elle-même) plutôt que, disons, `tools=[RECIPES]` (les données brutes) ? Que pourrait réellement faire le modèle avec une liste brute de dicts comme « outil » ?
 
 ## Étape 4 : Demande des suggestions de repas
+### 4.1 Ajoute un bloc d'exécution en bas de `planner.py` :
+
+**👟 Indice de départ :**
 
 Ajoute un bloc d'exécution en bas de `planner.py` :
 
@@ -300,13 +337,34 @@ if __name__ == "__main__":
     print("🤖 Agent:", result["messages"][-1].content)
 ```
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 4.2 Exécute-le :
+
+**👟 Indice de départ :**
+
 Exécute-le :
 
 ```bash
 uv run python planner.py
 ```
-
 Tu devrais voir la réponse finale de l'agent : 2-3 vrais noms de recettes tirés directement de `RECIPES`, chacun avec une courte raison de pourquoi il correspond à tes ingrédients. Si tu es curieux·se de *comment* il y est arrivé — quel appel d'outil s'est produit, avec quels arguments, et ce que l'outil a réellement retourné avant que le modèle écrive sa réponse — affiche la liste complète `result["messages"]` au lieu de juste la dernière, la même technique couverte dans la section « Comprendre la trace interne complète » du projet Agent IA : un `HumanMessage` (ta question), un `AIMessage` demandant l'appel d'outil, un `ToolMessage` avec la vraie chaîne retournée par `search_recipes_by_ingredients`, puis un `AIMessage` final avec la réponse.
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 4.3 Vérifie
 
 **✅ Liste de vérification**
 
@@ -320,6 +378,9 @@ Tu devrais voir la réponse finale de l'agent : 2-3 vrais noms de recettes tiré
 - L'outil retourne ses 5 meilleures correspondances, mais le prompt système demande 2-3 suggestions. Où ce resserrement se produit-il — dans ton code Python, ou dans le raisonnement du modèle ?
 
 ## Étape 5 : Construis une liste de courses et exécute-le de bout en bout
+### 5.1 Parce que `search_recipes_by_ingredients` a déjà calculé les ingrédients manquants pour chaq...
+
+**👟 Indice de départ :**
 
 Parce que `search_recipes_by_ingredients` a déjà calculé les ingrédients manquants pour chaque recette candidate, obtenir une liste de courses n'est qu'une question de suivi dans la même conversation — aucun nouvel outil nécessaire. Étends le bloc d'exécution pour continuer la conversation au lieu d'en commencer une nouvelle à chaque fois :
 
@@ -342,14 +403,21 @@ if __name__ == "__main__":
     conversation = result["messages"]
     print("🤖 Agent:", conversation[-1].content)
 ```
-
 `conversation = result["messages"]` est la ligne importante : chaque appel `agent.invoke(...)` est sans état en soi, donc la *seule* façon pour la deuxième question de savoir à quoi « le premier » se réfère est si tu lui rends tout l'historique de messages — y compris la réponse précédente du modèle lui-même et tous les appels d'outil qu'il a faits — comme partie de l'entrée de l'appel suivant. Supprime cette ligne et relance : la deuxième question ne pourra résoudre « le premier » à rien, parce qu'en ce qui concerne cet appel, aucun premier message n'a jamais existé.
-
 Relance-le avec `uv run python planner.py` et tu devrais voir un échange complet et réel : une suggestion, puis une liste de courses construite à partir des ingrédients « missing » exacts que l'outil a rapportés pour la recette que tu as choisie — pas une nouvelle supposition.
-
 :::tip[Essaie une liste d'ingrédients délibérément parcimonieuse]
 Relance-le avec seulement un ou deux ingrédients, quelque chose comme `"I have onions and salt. What can I make?"` C'est la meilleure façon de voir réellement le garde-fou de ton prompt système agir : avec presque rien à faire correspondre, tu obtiendras soit des suggestions honnêtes de « pas vraiment une correspondance, mais voici l'option la plus proche », soit (si le chevauchement est trop mince) le message « no matches » de l'outil passé directement — dans les deux cas, observe si l'agent résiste encore à inventer quelque chose qui n'est pas dans `RECIPES`.
 :::
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 5.2 Vérifie
 
 **✅ Liste de vérification**
 

@@ -113,6 +113,9 @@ GITHUB_TOKEN=your-key-here
 - ✅ Un fichier `.env` existe dans le dossier du projet avec une vraie clé, et il n'est pas suivi par git (`uv init` te donne un `.gitignore` — confirme que `.env` y figure).
 
 ## Étape 1 : Définis les sous-agents planificateur, chercheur et rédacteur
+### 1.1 Chaque sous-agent dans `deepagents` n'est qu'un simple dict : un `name`, un `description` (u...
+
+**👟 Indice de départ :**
 
 Chaque sous-agent dans `deepagents` n'est qu'un simple dict : un `name`, un `description` (utilisé par l'agent de niveau supérieur pour décider quand lui déléguer), un `system_prompt` (ses propres instructions étroites), et éventuellement ses propres `tools`. Crée `agent.py` :
 
@@ -165,10 +168,19 @@ writer_subagent = {
     ),
 }
 ```
-
 :::tip[Sois honnête sur ce que « recherche » signifie ici]
 Le sous-agent chercheur ci-dessus répond depuis les propres connaissances d'entraînement du modèle — aucun véritable outil de recherche web n'est branché. C'est une simplification délibérée, pas un raccourci caché : cela garde ce projet petit et adapté au palier gratuit, mais cela signifie que les réponses peuvent être obsolètes ou fausses sur tout ce sur quoi le modèle n'a pas été bien entraîné, sans moyen de vérifier contre une source en direct. Voir « Où aller à partir d'ici » pour savoir comment brancher un vrai outil de recherche une fois que tu es à l'aise avec cette version.
 :::
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 1.2 Vérifie
 
 **✅ Liste de vérification**
 
@@ -181,6 +193,9 @@ Le sous-agent chercheur ci-dessus répond depuis les propres connaissances d'ent
 - Pourquoi pourrait-il compter que le `description` de chaque sous-agent soit écrit pour que l'*agent de niveau supérieur* le lise, pas un humain ? Que te coûterait ici un `description` vague (« fait des trucs de recherche ») ?
 
 ## Étape 2 : Relie les sous-agents entre eux et exécute-le
+### 2.1 L'agent de niveau supérieur ne fait aucune recherche lui-même — tout son travail est de la d...
+
+**👟 Indice de départ :**
 
 L'agent de niveau supérieur ne fait aucune recherche lui-même — tout son travail est de la délégation, dans l'ordre : planifier, puis rechercher chaque sous-question, puis rédiger. Ajoute ceci en bas de `agent.py` :
 
@@ -204,19 +219,37 @@ if __name__ == "__main__":
     print(result["messages"][-1].content)
 ```
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 2.2 Exécute-le :
+
+**👟 Indice de départ :**
+
 Exécute-le :
 
 ```bash
 uv run python agent.py
 ```
-
 `subagents=[...]` est tout le mécanisme : l'agent de niveau supérieur voit le `name` et le `description` de chaque sous-agent de la même façon qu'il verrait le nom et la docstring d'un outil, et décide quand transmettre à lequel, en se basant sur les instructions du `system_prompt` de niveau supérieur et l'état de la conversation jusqu'à présent. C'est exactement l'idée enseignée dans la section « Où aller à partir d'ici » du projet Agent IA, juste utilisée ici pour tout le pipeline plutôt que pour un spécialiste supplémentaire aux côtés d'un agent à usage général.
-
 ### Ce que tu devrais voir
-
 Un seul bloc de texte affiché — le rapport final synthétisé du rédacteur, quelques paragraphes couvrant les sous-questions trouvées par le planificateur. Si tu affiches plutôt la liste complète de `result["messages"]` (le même modèle que le projet Agent IA), tu verras toute la trace : la liste numérotée du planificateur, chaque appel du chercheur et sa réponse, puis le passage final du rédacteur — tous comme de vrais messages échangés entre l'agent de niveau supérieur et chaque sous-agent.
-
 Si à la place tu vois une trace d'erreur, vérifie laquelle — les mêmes trois catégories que le projet Agent IA : une variable d'environnement manquante/erronée (`KeyError`), une mauvaise clé (401/403), ou une limite de débit (429, voir le piège ci-dessous).
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 2.3 Vérifie
 
 **✅ Liste de vérification**
 

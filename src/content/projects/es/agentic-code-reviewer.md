@@ -103,9 +103,11 @@ En lugar de hacer `export` de una clave en cada nueva sesión de terminal, `pyth
 - ✅ Tienes una clave de API real de un proveedor, guardada en un archivo `.env` en la carpeta de tu proyecto — no pegada en ningún script.
 
 ## Paso 1: Captura un git diff con `subprocess`
+### 1.1 El módulo `subprocess` de Python ejecuta otro programa y captura su salida como texto — aquí...
+
+**👟 Pista inicial :**
 
 El módulo `subprocess` de Python ejecuta otro programa y captura su salida como texto — aquí, ese programa es `git` mismo. Este es un uso genuinamente realista de `subprocess`: no estás simulando nada, estás ejecutando exactamente el mismo comando `git diff` que escribirías a mano, y leyendo de vuelta exactamente lo que imprimiría en tu terminal.
-
 Crea `review.py`:
 
 ```python
@@ -141,17 +143,37 @@ if __name__ == "__main__":
     print(diff if diff.strip() else "No hay cambios sin confirmar para revisar.")
 ```
 
-`subprocess.run([...], capture_output=True, text=True)` es la línea clave: pasar el comando como una **lista** de argumentos (`["git", "diff", "HEAD"]`) en lugar de una cadena única de shell evita toda una clase de bugs de quoting de shell e inyección, `capture_output=True` captura stdout/stderr en lugar de dejarlos imprimir directamente a tu terminal, y `text=True` decodifica esa salida como una cadena en lugar de bytes crudos. `check=False` más un `if result.returncode != 0` manual es deliberado aquí en lugar de `check=True`: permite que esta función lance su *propio* mensaje de error claro (incluyendo el stderr real de git) en lugar de un `CalledProcessError` genérico.
+**🎯 Resultado esperado :**
 
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.2 `subprocess.run([...], capture_output=True, text=True)` es la línea clave: pasar el comando ...
+
+**👟 Pista inicial :**
+
+`subprocess.run([...], capture_output=True, text=True)` es la línea clave: pasar el comando como una **lista** de argumentos (`["git", "diff", "HEAD"]`) en lugar de una cadena única de shell evita toda una clase de bugs de quoting de shell e inyección, `capture_output=True` captura stdout/stderr en lugar de dejarlos imprimir directamente a tu terminal, y `text=True` decodifica esa salida como una cadena en lugar de bytes crudos. `check=False` más un `if result.returncode != 0` manual es deliberado aquí en lugar de `check=True`: permite que esta función lance su *propio* mensaje de error claro (incluyendo el stderr real de git) en lugar de un `CalledProcessError` genérico.
 Pruébalo contra este mismo proyecto — edita cualquier archivo, no lo confirmes, luego ejecuta:
 
 ```bash
 uv run python review.py
 ```
-
 :::tip[Este es el mismo patrón de subprocess que cualquier otro wrapper de CLI]
 `subprocess.run` no le importa que el programa que se ejecuta sea `git` — funciona idénticamente para cualquier herramienta de línea de comandos: `ls`, un script de shell, otro programa Python. Una vez que este patrón hace clic, "dejar que Python controle una herramienta CLI existente y usar su salida" está disponible para mucho más que solo git.
 :::
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.3 Verifica
 
 **✅ Lista de verificación**
 
@@ -165,6 +187,9 @@ uv run python review.py
 - `check=False` fue una elección deliberada arriba. ¿Qué cambiaría sobre el error que ve quien llama si en su lugar usaras `check=True` y dejaras que `subprocess.CalledProcessError` se propague sin manejar?
 
 ## Paso 2: Diseña el system prompt de revisión
+### 2.1 Un modelo de lenguaje sin instrucciones felizmente producirá "¡se ve bien!" para casi cualqu...
+
+**👟 Pista inicial :**
 
 Un modelo de lenguaje sin instrucciones felizmente producirá "¡se ve bien!" para casi cualquier cosa — inútil como revisor. El **system prompt** es lo que convierte un modelo de chat de propósito general en un revisor que se comporta consistentemente: qué buscar, qué ignorar, y qué forma debe tomar su respuesta.
 
@@ -198,16 +223,23 @@ Format your response as a numbered list of issues (or a short "no issues
 found, because ..." paragraph), not prose paragraphs.
 """
 ```
-
 Tres decisiones de diseño deliberadas que vale la pena notar:
-
 - **"Revisa SOLO lo que el diff realmente cambia"** evita que el modelo invente quejas que suenan plausibles sobre código que no puede ver realmente — un diff muestra líneas cambiadas más un poco de contexto circundante, no el archivo completo.
 - **Una estructura requerida** (archivo, categoría, severidad, explicación, corrección) es lo que convierte un chat de formato libre en algo sobre lo que realmente puedes actuar rápidamente, la misma razón por la que "LGTM con dos comentarios" de un revisor humano es más útil que un párrafo de impresiones vagas.
 - **Una instrucción explícita de decir cuándo no hay nada mal** existe porque los modelos tienden a ser complacientes — sin esta línea, algunos modelos fabrican pequeñas quejas solo para parecer minuciosos, lo cual te entrena a dejar de confiar en la salida de la herramienta.
-
 :::tip[Itera sobre el prompt como lo harías con código]
 Trata este system prompt como un primer borrador, no una especificación terminada. Ejecútalo contra un diff que ya sabes que tiene un bug específico — si el modelo lo pasa por alto, o el formato de respuesta se desvía, ajusta la redacción e inténtalo de nuevo. La ingeniería de prompts para una tarea enfocada como esta se parece más a escribir una especificación muy precisa que a "pedir amablemente".
 :::
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 2.2 Verifica
 
 **✅ Lista de verificación**
 
@@ -220,6 +252,9 @@ Trata este system prompt como un primer borrador, no una especificación termina
 - El prompt pide un nivel de severidad por problema. ¿Qué sería peor en una herramienta de revisión que reportara *cada* problema como igualmente importante, comparado con una que distingue Crítico de Sugerencia?
 
 ## Paso 3: Llama al LLM e imprime retroalimentación estructurada
+### 3.1 Conecta el código de captura de diff del Paso 1 y el system prompt del Paso 2 en un revisor ...
+
+**👟 Pista inicial :**
 
 Conecta el código de captura de diff del Paso 1 y el system prompt del Paso 2 en un revisor funcional:
 
@@ -265,17 +300,37 @@ if __name__ == "__main__":
     print(review_diff(diff))
 ```
 
-`truncate_diff` importa más aquí de lo que podría parecer a primera vista — mira la sección de pitfalls abajo para saber por qué un diff grande no es solo lento, puede fallar silenciosamente u obtener una revisión superficial. Envolver el diff en un bloque de código con fence ` ```diff ` en el mensaje del usuario, en lugar de pegarlo crudo, es una señal pequeña pero real al modelo sobre qué tipo de texto está viendo.
+**🎯 Resultado esperado :**
 
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 3.2 `truncate_diff` importa más aquí de lo que podría parecer a primera vista — mira la sección ...
+
+**👟 Pista inicial :**
+
+`truncate_diff` importa más aquí de lo que podría parecer a primera vista — mira la sección de pitfalls abajo para saber por qué un diff grande no es solo lento, puede fallar silenciosamente u obtener una revisión superficial. Envolver el diff en un bloque de código con fence ` ```diff ` en el mensaje del usuario, en lugar de pegarlo crudo, es una señal pequeña pero real al modelo sobre qué tipo de texto está viendo.
 Ejecútalo:
 
 ```bash
 uv run python review.py
 ```
-
 :::tip[¿Usando un proveedor diferente?]
 Cambia el bloque `OpenAI(...)` por una `base_url` y clave diferentes — ej. `base_url="https://api.groq.com/openai/v1"` con `api_key=os.environ["GROQ_API_KEY"]` para Groq, o `base_url="https://generativelanguage.googleapis.com/v1beta/openai/"` con `api_key=os.environ["GOOGLE_API_KEY"]` para el endpoint compatible con OpenAI de Gemini. Todo lo demás en este archivo permanece igual. Mira [`examples/agentic-code-reviewer/review.py`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/agentic-code-reviewer/review.py) en el repositorio del curso para ver los seis conectados lado a lado, seleccionables con una variable de entorno.
 :::
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 3.3 Verifica
 
 **✅ Lista de verificación**
 
@@ -289,14 +344,28 @@ Cambia el bloque `OpenAI(...)` por una `base_url` y clave diferentes — ej. `ba
 - Si dos ejecuciones diferentes de `review_diff` sobre el *mismo* diff exacto produjeran dos listas diferentes de problemas, ¿te sorprendería? ¿Qué sugiere eso sobre tratar la salida de esta herramienta como una lista de verificación en la que confiar ciegamente versus un punto de partida para una revisión humana?
 
 ## Paso 4: Ejecútalo contra un diff real, de principio a fin
+### 4.1 Dos formas realistas de usar esta herramienta, ambas vale la pena probar:
+
+**👟 Pista inicial :**
 
 Dos formas realistas de usar esta herramienta, ambas vale la pena probar:
-
 **1. Revisa tus propios cambios sin confirmar** — el caso de uso cotidiano. Haz un cambio pequeño y deliberado en cualquier archivo (introduce un bug obvio a propósito, si quieres una prueba clara), luego:
 
 ```bash
 uv run python review.py
 ```
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 4.2 **2. Revisa un commit específico del propio historial de este curso** — una buena forma de v...
+
+**👟 Pista inicial :**
 
 **2. Revisa un commit específico del propio historial de este curso** — una buena forma de ver la herramienta funcionar en un diff real que tú no escribiste. Agrega una pequeña opción de CLI para poder apuntarla a cualquier commit por su hash:
 
@@ -332,6 +401,18 @@ if __name__ == "__main__":
     print(review_diff(diff))
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 4.3 Clona o abre el repositorio de este curso, luego apunta la herramienta a un commit real del ...
+
+**👟 Pista inicial :**
+
 Clona o abre el repositorio de este curso, luego apunta la herramienta a un commit real del pasado:
 
 ```bash
@@ -339,12 +420,34 @@ git log --oneline -10          # encuentra un hash de commit real para probar
 uv run python review.py --commit <hash>
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 4.4 También puedes comparar tu rama actual contra otra, o pasar un diff directamente por pipe en...
+
+**👟 Pista inicial :**
+
 También puedes comparar tu rama actual contra otra, o pasar un diff directamente por pipe en lugar de dejar que el script ejecute `git` por sí mismo — útil en un job de CI que ya tiene el diff como archivo:
 
 ```bash
 uv run python review.py --against main
 git diff main | uv run python review.py --stdin
 ```
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 4.5 Verifica
 
 **✅ Lista de verificación**
 

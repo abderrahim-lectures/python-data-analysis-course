@@ -65,6 +65,9 @@ uv add fastapi "uvicorn[standard]"
 Remarque ce qui n'est *pas* là : aucune clé API à demander, aucune inscription gratuite, rien à configurer avant ta première requête. Ce projet fournit son propre jeu de données et émet ses propres clés — tu construis la chose que consomment les autres projets de cette série.
 
 ## Étape 1 : Emballer le jeu de données et construire les endpoints de base
+### 1.1 Les vraies API servent de vraies données. Crée `quotes_data.py` avec un petit jeu de données...
+
+**👟 Indice de départ :**
 
 Les vraies API servent de vraies données. Crée `quotes_data.py` avec un petit jeu de données écrit à la main — une simple liste Python de dicts suffit ; pas de base de données nécessaire pour l'instant :
 
@@ -85,6 +88,18 @@ QUOTES = [
 
 CATEGORIES = sorted({q["category"] for q in QUOTES})
 ```
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 1.2 Écris le tien — quelques dizaines suffisent pour commencer, vise quelques centaines une fois...
+
+**👟 Indice de départ :**
 
 Écris le tien — quelques dizaines suffisent pour commencer, vise quelques centaines une fois terminé, répartis sur au moins trois ou quatre catégories. Puis crée `main.py` avec l'application et deux endpoints de lecture :
 
@@ -125,11 +140,35 @@ def get_quote(quote_id: int) -> QuoteOut:
     raise HTTPException(status_code=404, detail=f"No quote with id {quote_id}.")
 ```
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 1.3 Lance-le :
+
+**👟 Indice de départ :**
+
 Lance-le :
 
 ```bash
 uv run uvicorn main:app --reload
 ```
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 1.4 Puis, dans un autre terminal :
+
+**👟 Indice de départ :**
 
 Puis, dans un autre terminal :
 
@@ -138,8 +177,17 @@ curl "http://127.0.0.1:8000/quotes?limit=3"
 curl "http://127.0.0.1:8000/quotes/1"
 curl -i "http://127.0.0.1:8000/quotes/99999"   # a real 404
 ```
-
 La pagination `limit`/`offset` est le même pattern derrière l'endpoint de liste de presque chaque API REST publique — elle plafonne la quantité de données qu'une seule réponse peut retourner (`le=100` ici), et permet à un client de parcourir tout le jeu de données page par page en utilisant `total` pour savoir quand s'arrêter.
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 1.5 Vérifie
 
 **✅ Liste de vérification**
 
@@ -153,6 +201,9 @@ La pagination `limit`/`offset` est le même pattern derrière l'endpoint de list
 - `get_quote` parcourt toute la liste pour trouver un id. Avec quelques centaines de citations c'est instantané ; avec quelques millions ça ne le serait pas. Quelle structure de données rendrait la recherche par id rapide quelle que soit la taille du jeu de données ?
 
 ## Étape 2 : Ajoute le filtrage
+### 2.1 Étends `list_quotes` avec des paramètres de requête optionnels pour la catégorie et l'auteur :
+
+**👟 Indice de départ :**
 
 Étends `list_quotes` avec des paramètres de requête optionnels pour la catégorie et l'auteur :
 
@@ -180,13 +231,36 @@ def list_quotes(
     return QuotesPage(items=[QuoteOut(**q) for q in page], total=len(filtered), limit=limit, offset=offset)
 ```
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 2.2 curl "http://127.0.0.1:8000/quotes?category=science&limit=5"
+
+**👟 Indice de départ :**
+
+Exécutez le code ci-dessous et confirmez qu'il fonctionne.
+
 ```bash
 curl "http://127.0.0.1:8000/quotes?category=science&limit=5"
 curl "http://127.0.0.1:8000/quotes?author=sagan"
 curl "http://127.0.0.1:8000/categories"
 ```
-
 `total` dans la réponse reflète le nombre *filtré*, pas tout le jeu de données — cela compte pour un client qui essaie de paginer à travers seulement les citations scientifiques, qui penserait sinon qu'il reste bien plus de pages qu'il n'y en a réellement.
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 2.3 Vérifie
 
 **✅ Liste de vérification**
 
@@ -200,6 +274,9 @@ curl "http://127.0.0.1:8000/categories"
 - Si tu ajoutais un second filtre qui a aussi besoin de « l'un de plusieurs valeurs » (ex. plusieurs catégories à la fois), comment étendrais-tu le paramètre de requête pour qu'il accepte une liste ?
 
 ## Étape 3 : Émission et validation des clés API
+### 3.1 Une vraie API a besoin de savoir qui l'appelle. Ajoute une émission de clés en libre-service...
+
+**👟 Indice de départ :**
 
 Une vraie API a besoin de savoir qui l'appelle. Ajoute une émission de clés en libre-service et une dépendance qui vérifie une clé sur les routes protégées :
 
@@ -229,6 +306,18 @@ def whoami(api_key: str = Depends(require_api_key)) -> dict:
     return {"api_key": api_key}
 ```
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 3.2 `secrets.token_urlsafe` — pas `random`, qui n'est pas cryptographiquement sûr — génère une c...
+
+**👟 Indice de départ :**
+
 `secrets.token_urlsafe` — pas `random`, qui n'est pas cryptographiquement sûr — génère une clé que personne ne peut deviner. `Depends(require_api_key)` est le système d'injection de dépendances de FastAPI : toute route qui prend `api_key: str = Depends(require_api_key)` comme paramètre exécute `require_api_key` d'abord, et ne continue que si elle retourne avec succès au lieu de lever une exception.
 
 ```bash
@@ -236,10 +325,19 @@ curl -i "http://127.0.0.1:8000/me"                                   # 401, no k
 curl -X POST "http://127.0.0.1:8000/keys"                            # {"api_key": "..."}
 curl -i -H "X-API-Key: <your-key>" "http://127.0.0.1:8000/me"        # 200
 ```
-
 :::tip[Ce magasin de clés en mémoire oublie tout au redémarrage, et c'est très bien ici]
 `_VALID_KEYS` vit dans un simple `set` Python dans la mémoire de ce processus — redémarre le serveur et chaque clé émise précédemment cesse de fonctionner. Un vrai produit persisterait les clés dans une base de données (et stockerait un *hash* de chaque clé, pas la valeur brute, de la même façon que les mots de passe sont hachés — pour qu'une fuite de la base ne fuite pas des clés utilisables directement). Pour un projet d'apprentissage local, la version en mémoire est honnête et suffisante ; ne sois juste pas surpris quand ta clé cesse de fonctionner après que `--reload` a redémarré le processus.
 :::
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 3.3 Vérifie
 
 **✅ Liste de vérification**
 
@@ -253,6 +351,9 @@ curl -i -H "X-API-Key: <your-key>" "http://127.0.0.1:8000/me"        # 200
 - En ce moment, n'importe qui peut appeler `POST /keys` autant de fois qu'il veut, sans aucune limite. Est-ce un problème pour *ce* projet ? Qu'ajouterais-tu si c'était un vrai service public ?
 
 ## Étape 4 : Une vraie limitation de débit
+### 4.1 C'est le vrai but du projet. Construis un limiteur de débit à fenêtre glissante qui suit les...
+
+**👟 Indice de départ :**
 
 C'est le vrai but du projet. Construis un limiteur de débit à fenêtre glissante qui suit les horodatages récents des requêtes de chaque clé et rejette les requêtes une fois qu'une clé dépasse son budget dans une fenêtre :
 
@@ -283,8 +384,19 @@ class SlidingWindowRateLimiter:
         return False, max(retry_after, 0.0)
 ```
 
-Chaque clé a son propre `deque` d'horodatages, du plus ancien au plus récent. À chaque vérification, les horodatages plus anciens que `window_seconds` sont retirés par la gauche avant de compter ce qui reste — c'est une fenêtre glissante **exacte**, pas une approximation par compartiments qui se réinitialise à une frontière d'horloge fixe. Cette distinction compte : un limiteur à *fenêtre fixe* (disons, « réinitialise le compteur toutes les 10 secondes sur l'horloge ») laisse un client envoyer toute sa quote-part juste à la fin d'une fenêtre et toute sa quote-part de nouveau juste au début de la suivante, atteignant jusqu'à 2x son débit prévu en quelques vraies secondes. Suivre les horodatages réels évite cela.
+**🎯 Résultat attendu :**
 
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 4.2 Chaque clé a son propre `deque` d'horodatages, du plus ancien au plus récent. À chaque vérif...
+
+**👟 Indice de départ :**
+
+Chaque clé a son propre `deque` d'horodatages, du plus ancien au plus récent. À chaque vérification, les horodatages plus anciens que `window_seconds` sont retirés par la gauche avant de compter ce qui reste — c'est une fenêtre glissante **exacte**, pas une approximation par compartiments qui se réinitialise à une frontière d'horloge fixe. Cette distinction compte : un limiteur à *fenêtre fixe* (disons, « réinitialise le compteur toutes les 10 secondes sur l'horloge ») laisse un client envoyer toute sa quote-part juste à la fin d'une fenêtre et toute sa quote-part de nouveau juste au début de la suivante, atteignant jusqu'à 2x son débit prévu en quelques vraies secondes. Suivre les horodatages réels évite cela.
 Branche-le dans une dépendance et utilise-le sur `/me` :
 
 ```python
@@ -311,6 +423,18 @@ def whoami(api_key: str = Depends(enforce_rate_limit)) -> dict:
     return {"api_key": api_key}
 ```
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 4.3 Remarque que les en-têtes sont définis de deux façons différentes selon le résultat — ce n'e...
+
+**👟 Indice de départ :**
+
 Remarque que les en-têtes sont définis de deux façons différentes selon le résultat — ce n'est pas un choix stylistique, c'est requis. Envoie six requêtes en rapide succession avec la même clé :
 
 ```bash
@@ -318,15 +442,36 @@ KEY=$(curl -s -X POST "http://127.0.0.1:8000/keys" | python3 -c "import sys,json
 for i in 1 2 3 4 5 6; do curl -s -o /dev/null -w "%{http_code}\n" -H "X-API-Key: $KEY" "http://127.0.0.1:8000/me"; done
 ```
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 4.4 Les cinq premières devraient afficher `200` ; la sixième devrait afficher `429`. Vérifie les...
+
+**👟 Indice de départ :**
+
 Les cinq premières devraient afficher `200` ; la sixième devrait afficher `429`. Vérifie les en-têtes sur cette dernière :
 
 ```bash
 curl -i -H "X-API-Key: $KEY" "http://127.0.0.1:8000/me"
 ```
-
 :::tip[En-têtes HTTPException, pas `response.headers`, sur le chemin d'erreur]
 C'est tentant de définir `response.headers["Retry-After"] = ...` juste avant de lever `HTTPException`, de la même façon que le chemin de succès définit `X-RateLimit-Limit`. Ne le fais pas — quand FastAPI transforme une `HTTPException` levée en une véritable réponse HTTP, il construit un objet de réponse **neuf** à partir de l'exception, jetant au passage tout ce qui a été écrit dans le paramètre `response` injecté. Tout en-tête qui doit apparaître sur une réponse d'erreur doit être passé directement à `HTTPException(..., headers={...})`, sinon il n'atteint jamais le client, en silence. Cela a mordu la toute première version du code d'exemple de cette leçon elle-même — vérifie avec `curl -i` que ton `429` porte réellement `Retry-After`, ne fais pas simplement confiance au fait que définir `response.headers` a fonctionné.
 :::
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 4.5 Vérifie
 
 **✅ Liste de vérification**
 

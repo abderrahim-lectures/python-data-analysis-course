@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /share
 
-Sitemap: https://abderrahim-lectures.github.io/python-data-analysis-course/sitemap-index.xml
+Sitemap: https://pyda-course.online/sitemap-index.xml

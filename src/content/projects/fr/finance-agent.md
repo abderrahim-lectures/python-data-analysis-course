@@ -90,11 +90,13 @@ Plutôt que de faire `export` d'une clé à chaque nouvelle session de terminal,
 :::
 
 ## Étape 1 : Charge et nettoie un export CSV bancaire d'exemple
+### 1.1 :::tip[N'envoie jamais de vraies données bancaires non expurgées à une API tierce]
+
+**👟 Indice de départ :**
 
 :::tip[N'envoie jamais de vraies données bancaires non expurgées à une API tierce]
 Ce projet travaille sur un CSV d'exemple **synthétique** — fausses dates, faux noms de commerçants, faux montants, fourni dans [`examples/finance-agent/transactions.csv`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/finance-agent/transactions.csv). Les Étapes 3 et 4 envoient des descriptions et montants de transactions à une API LLM tierce. Faire ça avec ton export bancaire *réel* signifie qu'une copie de ton historique financier réel — noms de commerçants, montants de dépenses, potentiellement plus si tu as exporté des colonnes supplémentaires — se retrouve maintenant sur les serveurs de ce fournisseur, soumise à quelles que soient les politiques de rétention et d'entraînement qu'il a actuellement, entièrement hors de ton contrôle. Si tu adaptes un jour ceci à tes vraies dépenses, expurge ou synthétise d'abord : retire les numéros de compte, généralise les noms de commerçants qui révèlent quelque chose de sensible, arrondis ou brouille les montants. C'est une habitude authentiquement importante, pas une formalité de cours — traite tout script qui appelle une API externe comme quelque chose qui verra tout ce que tu lui donnes.
 :::
-
 Télécharge le CSV d'exemple, ou copie-le depuis [`examples/finance-agent/transactions.csv`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/finance-agent/transactions.csv) dans le dossier de ton projet. Il ressemble à un vrai export : une ligne par transaction, une date, une description brute du commerçant exactement comme une banque l'imprimerait (abrégée, parfois cryptique), et un montant signé — négatif pour l'argent qui sort, positif pour les dépôts.
 
 ```python
@@ -105,8 +107,17 @@ df["description"] = df["description"].str.strip()
 df = df.dropna(subset=["date", "description", "amount"]).sort_values("date").reset_index(drop=True)
 df.head()
 ```
-
 `parse_dates=["date"]` te donne de vrais objets `Timestamp` plutôt que de simples chaînes, pour que les étapes suivantes puissent grouper par mois ou trier chronologiquement sans tout ré-analyser. `.str.strip()` nettoie les espaces égarés dont sont pleins les vrais exports bancaires. Retirer les lignes auxquelles il manque une des trois colonnes essentielles est une façon simple et honnête de gérer une ligne authentiquement mal formée sans deviner ce qu'elle voulait dire.
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 1.2 Vérifie
 
 **✅ Liste de vérification**
 
@@ -119,6 +130,9 @@ df.head()
 Un vrai export bancaire pourrait aussi inclure une colonne `balance` cumulative. Rien dans ce projet ne l'utilise — mais peux-tu penser à une vérification de cohérence que tu pourrais faire en utilisant `balance` que `date`, `description`, et `amount` seuls ne peuvent pas te donner ?
 
 ## Étape 2 : Construis un catégoriseur de référence basé sur des règles — et vois ses limites
+### 2.1 La façon la moins coûteuse de catégoriser une transaction est une recherche par mot-clé : si...
+
+**👟 Indice de départ :**
 
 La façon la moins coûteuse de catégoriser une transaction est une recherche par mot-clé : si `"STARBUCKS"` apparaît dans la description, appelle ça `"Dining"`. C'est rapide, gratuit, et n'a besoin d'aucune clé API du tout — un bon réflexe à avoir avant d'ajouter de l'IA à un pipeline.
 
@@ -143,8 +157,17 @@ df["category"] = df["description"].apply(categorize_rule_based)
 resolved = df["category"].notna().sum()
 print(f"Rule-based pass: {resolved}/{len(df)} categorized. {len(df) - resolved} left ambiguous.")
 ```
-
 Exécute ça contre les données d'exemple et une solide majorité des lignes sont catégorisées instantanément. Mais regarde ce qui reste dans `df[df["category"].isna()]` : des descriptions comme `SQ *JOES COFFEE CART`, `TST* CORNER BISTRO`, `PAYPAL *MERCHXYZ123`, `AMZN MKTP US*1H8KX2LP2`, et `VENMO PAYMENT JSMITH`. Un humain jetant un œil à `SQ *JOES COFFEE CART` reconnaît « coffee cart » instantanément — mais aucune liste fixe de mots-clés ne peut anticiper chaque préfixe de processeur de paiement (`SQ *`, `TST*`, `PAYPAL *`) ou virement de pair-à-pair qu'un export bancaire contiendra jamais. C'est une limitation réelle et courante des approches basées sur des règles pour du texte désordonné du monde réel, pas une artificielle — c'est exactement le fossé que l'étape suivante existe pour combler.
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 2.2 Vérifie
 
 **✅ Liste de vérification**
 
@@ -156,6 +179,9 @@ Exécute ça contre les données d'exemple et une solide majorité des lignes so
 Si tu continuais à ajouter des mots-clés pour toujours, pourrais-tu éventuellement couvrir chaque description bancaire possible qu'une personne pourrait jamais voir ? Qu'est-ce que ta réponse implique sur le moment où une approche purement basée sur des règles cesse de valoir la peine d'être maintenue ?
 
 ## Étape 3 : Construis un outil d'agent LLM qui catégorise les transactions ambiguës
+### 3.1 C'est la même forme d'appel d'outils que [Construire un Agent IA](/docs/projects/ai-agent) :...
+
+**👟 Indice de départ :**
 
 C'est la même forme d'appel d'outils que [Construire un Agent IA](/docs/projects/ai-agent) : une fonction Python avec une docstring, remise à `create_deep_agent`, que le modèle décide d'appeler lui-même.
 
@@ -224,12 +250,20 @@ for idx, row in unresolved.iterrows():
 
 df["category"].value_counts()
 ```
-
 Remarque que la boucle appelle `agent.invoke(...)` une fois par ligne non résolue, chacune un aller-retour séparé vers le modèle — la même considération de limite de débit du projet Agent IA s'applique ici : exécute ça contre un gros CSV et tu peux atteindre le plafond par minute d'un niveau gratuit. Voir la section « Gérer les limites de débit » de ce projet, et `ask()` dans [`examples/ai-agent/agent.py`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/ai-agent/agent.py), pour un pattern de nouvelle tentative que tu peux réutiliser ici.
-
 :::tip[Laisse le modèle raisonner, ne recache pas juste les règles dans l'outil]
 Le corps de `categorize_transaction` ci-dessus est délibérément encore une petite heuristique, pas une recherche codée en dur — mais tu peux aller plus loin : donne au `system_prompt` de l'agent la liste complète des catégories et demande-lui de raisonner directement sur une description inconnue (`"SQ *"` est le préfixe de point de vente de Square ; `"TST*"` est celui de Toast — un modèle qui a vu suffisamment de données de paiement du monde réel peut souvent inférer « c'est probablement un petit restaurant ou un stand » juste à partir de la forme de la chaîne, de la même façon qu'un humain le ferait). L'exemple plus complet du dépôt dans [`examples/finance-agent/finance_agent.py`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/finance-agent) est écrit pour faciliter ce changement — voir ses commentaires.
 :::
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 3.2 Vérifie
 
 **✅ Liste de vérification**
 
@@ -242,6 +276,9 @@ Le corps de `categorize_transaction` ci-dessus est délibérément encore une pe
 La docstring de l'outil liste les 13 catégories valides, et le code qui lit la réponse du modèle (`match = next((c for c in CATEGORIES if c.lower() in text.lower()), "Other")`) retombe quand même sur `"Other"` si aucune d'elles n'apparaît. Pourquoi garder ce filet de sécurité même si l'outil est *censé* toujours retourner l'une des 13 ? Qu'est-ce qui pourrait mal tourner sans lui ?
 
 ## Étape 4 : Signale les anomalies statistiques et résume-les en langage clair
+### 4.1 « Anomalie » signifie ici : anormalement importante *pour cette catégorie*. Une charge d'hôt...
+
+**👟 Indice de départ :**
 
 « Anomalie » signifie ici : anormalement importante *pour cette catégorie*. Une charge d'hôtel de 400 $ est banale pour Travel mais un net cas extrême pour Dining — donc au lieu d'un seuil global unique en dollars, calcule un **z-score** par catégorie : combien d'écarts-types une transaction se situe au-dessus de la dépense moyenne de sa propre catégorie.
 
@@ -262,8 +299,19 @@ flagged = df[df["is_anomaly"]].sort_values("z_score", ascending=False)
 flagged[["date", "description", "spend_abs", "category", "category_mean", "z_score"]]
 ```
 
-Un z-score de 2,0 signifie « plus de deux écarts-types au-dessus de la moyenne de cette catégorie » — une règle empirique statistique courante, bien que quelque peu arbitraire, pour « inhabituel ». Exécute ça sur les données d'exemple et tu devrais voir quelques transactions se démarquer clairement : un achat d'électronique surdimensionné par rapport à la dépense Shopping typique, et une charge de restaurant bien au-dessus de la dépense Dining typique (un grand dîner de groupe, peut-être — les données ne peuvent pas dire pourquoi, seulement que c'est inhabituel).
+**🎯 Résultat attendu :**
 
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 4.2 Un z-score de 2,0 signifie « plus de deux écarts-types au-dessus de la moyenne de cette caté...
+
+**👟 Indice de départ :**
+
+Un z-score de 2,0 signifie « plus de deux écarts-types au-dessus de la moyenne de cette catégorie » — une règle empirique statistique courante, bien que quelque peu arbitraire, pour « inhabituel ». Exécute ça sur les données d'exemple et tu devrais voir quelques transactions se démarquer clairement : un achat d'électronique surdimensionné par rapport à la dépense Shopping typique, et une charge de restaurant bien au-dessus de la dépense Dining typique (un grand dîner de groupe, peut-être — les données ne peuvent pas dire pourquoi, seulement que c'est inhabituel).
 Remets maintenant la liste brute signalée au même agent et demande-lui d'expliquer ce qu'il a trouvé, en langage clair :
 
 ```python
@@ -288,8 +336,17 @@ result = agent.invoke({
 })
 print(result["messages"][-1].content)
 ```
-
 Le prompt dit délibérément « pas de nouveaux nombres, pas de conseil au-delà de ce que les données appuient » — une vraie protection contre un mode d'échec courant des résumés LLM : inventer une explication d'apparence plausible mais non étayée (« c'était probablement un dîner d'anniversaire ») plutôt que de s'en tenir à ce que les statistiques montrent réellement.
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 4.3 Vérifie
 
 **✅ Liste de vérification**
 

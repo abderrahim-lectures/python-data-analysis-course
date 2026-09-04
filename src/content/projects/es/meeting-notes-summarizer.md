@@ -105,6 +105,9 @@ GITHUB_TOKEN=your-key-here
 Con la configuración lista, todo lo de abajo trata sobre el resumidor en sí.
 
 ## Paso 1: Carga una transcripción de reunión de muestra
+### 1.1 Crea una carpeta `transcripts/` y coloca una transcripción de reunión en texto plano en ella...
+
+**👟 Pista inicial :**
 
 Crea una carpeta `transcripts/` y coloca una transcripción de reunión en texto plano en ella — o copia una de las tres muestras realistas que se incluyen con el ejemplo del repositorio de este proyecto: una reunión diaria de pie, una reunión de planificación de producto y una revisión de incidente (consulta [`examples/meeting-notes-summarizer/sample_transcripts/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/meeting-notes-summarizer/sample_transcripts)). Una transcripción es solo texto plano etiquetado por hablante, nada más sofisticado:
 
@@ -116,6 +119,18 @@ James: Yeah, I'll own that too.
 Priya: Quick question -- are we still deprecating the v1 endpoints next month?
 Maria: Let's hold off on that decision until James finishes the migration. I don't want to commit to a date yet.
 ```
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.2 Cargarla es el paso más pequeño posible, deliberadamente:
+
+**👟 Pista inicial :**
 
 Cargarla es el paso más pequeño posible, deliberadamente:
 
@@ -143,9 +158,33 @@ if __name__ == "__main__":
     print(transcript[:200] + ("..." if len(transcript) > 200 else ""))
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.3 uv run python load_transcript.py transcripts/standup.txt
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
+
 ```bash
 uv run python load_transcript.py transcripts/standup.txt
 ```
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.4 Verifica
 
 **✅ Lista de verificación**
 
@@ -159,9 +198,11 @@ uv run python load_transcript.py transcripts/standup.txt
 - Esta función asume que la transcripción completa cabe cómodamente en un solo prompt. ¿Qué transcripción del mundo real rompería esa suposición, y aproximadamente cómo lo sabrías antes de ejecutarla?
 
 ## Paso 2: Diseña un prompt de extracción estructurada
+### 2.1 Esta es la habilidad real que enseña este proyecto: en lugar de pedirle a un modelo un resum...
+
+**👟 Pista inicial :**
 
 Esta es la habilidad real que enseña este proyecto: en lugar de pedirle a un modelo un resumen en párrafo de forma libre ("Por favor resume esta reunión"), le pides que devuelva **JSON con una forma específica** — un esquema que tú defines — para que la salida sea algo que tu propio código pueda analizar, almacenar y sobre lo que pueda actuar de forma confiable después. Esta es la misma idea que un contrato de API, solo que aplicado a través de la redacción del prompt en lugar de un sistema de tipos.
-
 El esquema para este proyecto: tres listas — `decisions`, `action_items` (cada uno con un `task` y un `owner` opcional, cuando la transcripción realmente nombra a uno) y `open_questions`.
 
 ```python
@@ -207,12 +248,20 @@ def build_prompt(transcript: str) -> list[dict]:
         },
     ]
 ```
-
 Tres cosas hacen que este diseño de prompt sea deliberado, no accidental:
-
 1. **El esquema se escribe literalmente**, clave por clave, con una forma de ejemplo — no se describe en prosa. Los modelos son mucho más consistentes igualando un ejemplo que infiriendo un esquema de una descripción.
 2. **`owner` explícitamente puede ser `null`**, con una regla explícita sobre cuándo usarlo. Sin esa regla, los modelos tienden a inventar un nombre que suena plausible, o escribir la cadena `"TBD"` — un valor que tu código Python tendría que tratar de forma especial para siempre.
 3. **El prompt del sistema declara el formato de salida como una restricción dura** ("nada más -- sin cercas de código markdown, sin comentarios"), porque la forma más común en que esto sale mal (ver Paso 3) es un modelo envolviendo su JSON en una cerca de código ```` ```json ```` por costumbre, incluso cuando se le dice que no lo haga.
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 2.2 Verifica
 
 **✅ Lista de verificación**
 
@@ -226,6 +275,9 @@ Tres cosas hacen que este diseño de prompt sea deliberado, no accidental:
 - El prompt pide `owner: null` en lugar de omitir el campo por completo. ¿Por qué podría eso ser más fácil de manejar para tu código Python que un esquema donde un campo a veces está presente y a veces simplemente ausente?
 
 ## Paso 3: Llama al LLM y analiza la respuesta JSON
+### 3.1 Ahora envía el prompt y convierte cualquier texto que vuelva en datos reales de Python — un ...
+
+**👟 Pista inicial :**
 
 Ahora envía el prompt y convierte cualquier texto que vuelva en datos reales de Python — un `dict` sobre el que puedes iterar, no una cadena que tengas que inspeccionar con los ojos. Aquí es donde los proyectos de extracción estructurada se rompen más a menudo en la práctica: incluso un prompt bien diseñado ocasionalmente recibe una respuesta envuelta en una cerca de código, con un comentario final, o con una coma extraviada — y un `json.loads()` ingenuo se estrella con los tres.
 
@@ -313,13 +365,36 @@ if __name__ == "__main__":
     print(json.dumps(summary, indent=2))
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 3.2 uv run python summarize.py transcripts/standup.txt
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
+
 ```bash
 uv run python summarize.py transcripts/standup.txt
 ```
-
 :::tip[Nunca confíes a ciegas en la forma de la salida de un LLM]
 Trata la respuesta de un modelo de lenguaje igual que tratarías datos de una API no confiable o un CSV subido por un usuario: valídalos antes de usarlos, no los asumas. `extract_json` maneja los problemas comunes de envoltura, y `parse_summary` aún levanta un error claro y específico — con el texto en bruto adjunto — si el resultado realmente no coincide con el esquema, en lugar de dejar que un `KeyError` tres funciones después te haga adivinar qué salió mal. Devolver silenciosamente un resumen vacío en un fallo de análisis sería peor que estrellarse: nunca notarías que la extracción dejó de funcionar silenciosamente.
 :::
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 3.3 Verifica
 
 **✅ Lista de verificación**
 
@@ -333,6 +408,9 @@ Trata la respuesta de un modelo de lenguaje igual que tratarías datos de una AP
 - ¿Por qué `parse_summary` levanta una excepción con la respuesta en bruto adjunta, en lugar de simplemente devolver `None` cuando el análisis falla?
 
 ## Paso 4: Formatea el resultado como Markdown legible
+### 4.1 El `dict` analizado es exactamente lo que querrías para guardar en una base de datos o alime...
+
+**👟 Pista inicial :**
 
 El `dict` analizado es exactamente lo que querrías para guardar en una base de datos o alimentar a otro script, pero no es algo que un compañero de equipo quiera leer en un mensaje de Slack. Conviértelo también en un resumen Markdown corto y escaneable — los mismos datos, formateados para un humano en lugar de un programa.
 
@@ -370,8 +448,17 @@ def format_markdown(summary: dict, source: str) -> str:
 
     return "\n".join(lines)
 ```
-
 `item.get("owner") or "unassigned"` está haciendo doble trabajo: maneja tanto un `None` literal (lo que el prompt le pide al modelo usar cuando no se nombra ningún owner) y, defensivamente, una cadena vacía o la palabra `"null"` que algunos modelos más pequeños ocasionalmente producen a pesar de las instrucciones — de cualquier manera, el lector ve "unassigned" en lugar de un espacio en blanco o un `null` literal confuso.
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 4.2 Verifica
 
 **✅ Lista de verificación**
 
@@ -385,6 +472,9 @@ def format_markdown(summary: dict, source: str) -> str:
 - ¿Por qué construir el Markdown a partir del `dict` *ya analizado*, en lugar de pedirle al LLM que genere Markdown directamente en el Paso 3 y omitir este paso?
 
 ## Paso 5: Ejecútalo de principio a fin
+### 5.1 Conecta las piezas: carga una transcripción, llama al modelo, analiza y valida el JSON, y lu...
+
+**👟 Pista inicial :**
 
 Conecta las piezas: carga una transcripción, llama al modelo, analiza y valida el JSON, y luego escribe tanto un archivo `.md` como un `.json` junto al input.
 
@@ -414,17 +504,39 @@ if __name__ == "__main__":
     print(f"\n(also wrote {Path(path).stem}_summary.json and {Path(path).stem}_summary.md)")
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 5.2 uv run python summarize.py transcripts/standup.txt
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
+
 ```bash
 uv run python summarize.py transcripts/standup.txt
 uv run python summarize.py transcripts/product_planning.txt
 uv run python summarize.py transcripts/incident_review.txt
 ```
-
 Ejecútalo sobre las tres transcripciones de muestra (o la versión más completa de [`examples/meeting-notes-summarizer/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/meeting-notes-summarizer) del repositorio, que viene con las tres listas) y compara las salidas: una reunión de pie, una reunión de planificación y una revisión de incidente cada una estresa el esquema de manera diferente — la revisión de incidente, por ejemplo, tiende a producir mucho más preguntas abiertas que elementos de acción.
-
 :::tip[Los límites de tasa son esperados, no un error]
 Cada nivel gratuito limita las solicitudes por minuto o por día, y cada llamada a `summarize()` es exactamente una llamada API — así que ejecutar esto sobre varias transcripciones seguidas ocasionalmente puede chocar con un error `429`. Eso es el proveedor diciéndote que vayas más lento, no una señal de que algo esté roto; espera el número de segundos sugerido y vuelve a ejecutar. Consulta el proyecto [AI Agent](/docs/projects/ai-agent#manejar-límites-de-tasa) para ver un patrón de `try`/`except`-con-reintento que puedes copiar directamente si quieres que esto se recupere automáticamente.
 :::
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 5.3 Verifica
 
 **✅ Lista de verificación**
 

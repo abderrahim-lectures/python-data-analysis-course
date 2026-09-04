@@ -103,9 +103,11 @@ Plutôt que de faire `export` d'une clé à chaque nouvelle session de terminal,
 - ✅ Tu as une vraie clé API d'un fournisseur, enregistrée dans un fichier `.env` dans le dossier de ton projet — pas collée dans un script.
 
 ## Étape 1 : Capture un git diff avec `subprocess`
+### 1.1 Le module `subprocess` de Python exécute un autre programme et capture sa sortie sous forme ...
+
+**👟 Indice de départ :**
 
 Le module `subprocess` de Python exécute un autre programme et capture sa sortie sous forme de texte — ici, ce programme est `git` lui-même. C'est un usage authentiquement réaliste de `subprocess` : tu ne simules rien, tu exécutes exactement la même commande `git diff` que tu taperais à la main, et tu relis exactement ce qu'elle afficherait dans ton terminal.
-
 Crée `review.py` :
 
 ```python
@@ -141,17 +143,37 @@ if __name__ == "__main__":
     print(diff if diff.strip() else "Aucun changement non commité à relire.")
 ```
 
-`subprocess.run([...], capture_output=True, text=True)` est la ligne clé : passer la commande comme une **liste** d'arguments (`["git", "diff", "HEAD"]`) plutôt qu'une seule chaîne shell évite toute une classe de bugs de quoting shell et d'injection, `capture_output=True` capture stdout/stderr au lieu de les laisser s'afficher directement dans ton terminal, et `text=True` décode cette sortie comme une chaîne au lieu de bytes bruts. `check=False` plus un `if result.returncode != 0` manuel est délibéré ici plutôt que `check=True` : cela permet à cette fonction de lever sa *propre* erreur claire (incluant le vrai stderr de git) au lieu d'un `CalledProcessError` générique.
+**🎯 Résultat attendu :**
 
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 1.2 `subprocess.run([...], capture_output=True, text=True)` est la ligne clé : passer la command...
+
+**👟 Indice de départ :**
+
+`subprocess.run([...], capture_output=True, text=True)` est la ligne clé : passer la commande comme une **liste** d'arguments (`["git", "diff", "HEAD"]`) plutôt qu'une seule chaîne shell évite toute une classe de bugs de quoting shell et d'injection, `capture_output=True` capture stdout/stderr au lieu de les laisser s'afficher directement dans ton terminal, et `text=True` décode cette sortie comme une chaîne au lieu de bytes bruts. `check=False` plus un `if result.returncode != 0` manuel est délibéré ici plutôt que `check=True` : cela permet à cette fonction de lever sa *propre* erreur claire (incluant le vrai stderr de git) au lieu d'un `CalledProcessError` générique.
 Essaie-le contre ce projet lui-même — modifie n'importe quel fichier, ne le commite pas, puis exécute :
 
 ```bash
 uv run python review.py
 ```
-
 :::tip[C'est le même pattern subprocess que n'importe quel autre wrapper CLI]
 `subprocess.run` se moque que le programme exécuté soit `git` — il fonctionne à l'identique pour n'importe quel outil en ligne de commande : `ls`, un script shell, un autre programme Python. Une fois que ce pattern fait tilt, « laisser Python piloter un outil CLI existant et utiliser sa sortie » devient disponible pour bien plus que git seul.
 :::
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 1.3 Vérifie
 
 **✅ Liste de vérification**
 
@@ -165,6 +187,9 @@ uv run python review.py
 - `check=False` était un choix délibéré ci-dessus. Qu'est-ce qui changerait dans l'erreur que voit l'appelant si tu utilisais `check=True` à la place et laissais `subprocess.CalledProcessError` se propager sans être géré ?
 
 ## Étape 2 : Conçois le system prompt de relecture
+### 2.1 Un modèle de langage sans instructions produira volontiers « ça a l'air bien ! » pour presqu...
+
+**👟 Indice de départ :**
 
 Un modèle de langage sans instructions produira volontiers « ça a l'air bien ! » pour presque tout — inutile comme relecteur. Le **system prompt** est ce qui transforme un modèle de chat généraliste en relecteur qui se comporte de façon cohérente : quoi chercher, quoi ignorer, et quelle forme sa réponse doit prendre.
 
@@ -198,16 +223,23 @@ Format your response as a numbered list of issues (or a short "no issues
 found, because ..." paragraph), not prose paragraphs.
 """
 ```
-
 Trois choix de conception délibérés qui valent la peine d'être remarqués :
-
 - **« Relis SEULEMENT ce que le diff change réellement »** empêche le modèle d'inventer des plaintes plausibles sur du code qu'il ne peut pas réellement voir — un diff montre les lignes changées plus un peu de contexte environnant, pas le fichier entier.
 - **Une structure requise** (fichier, catégorie, sévérité, explication, correction) est ce qui transforme un chat en format libre en quelque chose sur lequel tu peux réellement agir rapidement, la même raison pour laquelle un « LGTM avec deux commentaires » d'un relecteur humain est plus utile qu'un paragraphe d'impressions vagues.
 - **Une instruction explicite de dire quand rien ne va pas** existe parce que les modèles ont tendance à être conciliants — sans cette ligne, certains modèles fabriquent de petites remarques juste pour paraître minutieux, ce qui t'entraîne à arrêter de faire confiance à la sortie de l'outil.
-
 :::tip[Itère sur le prompt comme tu le ferais sur du code]
 Traite ce system prompt comme un premier brouillon, pas une spec finie. Exécute-le contre un diff dont tu sais déjà qu'il contient un bug spécifique — si le modèle le rate, ou si le format de réponse dérive, resserre le texte et réessaie. L'ingénierie de prompt pour une tâche focalisée comme celle-ci ressemble plus à écrire une spec très précise qu'à « demander gentiment ».
 :::
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 2.2 Vérifie
 
 **✅ Liste de vérification**
 
@@ -220,6 +252,9 @@ Traite ce system prompt comme un premier brouillon, pas une spec finie. Exécute
 - Le prompt demande un niveau de sévérité par problème. Qu'est-ce qu'un outil de relecture qui rapporterait *chaque* problème comme également important serait-il pire à faire, comparé à un outil qui distingue Critical de Suggestion ?
 
 ## Étape 3 : Appelle le LLM et affiche un retour structuré
+### 3.1 Connecte le code de capture de diff de l'Étape 1 et le system prompt de l'Étape 2 ensemble d...
+
+**👟 Indice de départ :**
 
 Connecte le code de capture de diff de l'Étape 1 et le system prompt de l'Étape 2 ensemble dans un relecteur fonctionnel :
 
@@ -265,17 +300,37 @@ if __name__ == "__main__":
     print(review_diff(diff))
 ```
 
-`truncate_diff` compte plus ici qu'il n'y paraît au premier abord — voir la section des pièges ci-dessous pour comprendre pourquoi un gros diff n'est pas juste lent, il peut échouer silencieusement ou obtenir une relecture superficielle. Envelopper le diff dans un bloc de code avec fence ` ```diff ` dans le message utilisateur, plutôt que de le coller brut, est un petit signal réel envoyé au modèle sur le type de texte qu'il regarde.
+**🎯 Résultat attendu :**
 
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 3.2 `truncate_diff` compte plus ici qu'il n'y paraît au premier abord — voir la section des pièg...
+
+**👟 Indice de départ :**
+
+`truncate_diff` compte plus ici qu'il n'y paraît au premier abord — voir la section des pièges ci-dessous pour comprendre pourquoi un gros diff n'est pas juste lent, il peut échouer silencieusement ou obtenir une relecture superficielle. Envelopper le diff dans un bloc de code avec fence ` ```diff ` dans le message utilisateur, plutôt que de le coller brut, est un petit signal réel envoyé au modèle sur le type de texte qu'il regarde.
 Exécute-le :
 
 ```bash
 uv run python review.py
 ```
-
 :::tip[Tu utilises un fournisseur différent ?]
 Remplace le bloc `OpenAI(...)` par une `base_url` et une clé différentes — ex. `base_url="https://api.groq.com/openai/v1"` avec `api_key=os.environ["GROQ_API_KEY"]` pour Groq, ou `base_url="https://generativelanguage.googleapis.com/v1beta/openai/"` avec `api_key=os.environ["GOOGLE_API_KEY"]` pour l'endpoint compatible OpenAI de Gemini. Tout le reste dans ce fichier reste identique. Voir [`examples/agentic-code-reviewer/review.py`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/agentic-code-reviewer/review.py) dans le dépôt du cours pour voir les six connectés côte à côte, sélectionnables avec une seule variable d'environnement.
 :::
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 3.3 Vérifie
 
 **✅ Liste de vérification**
 
@@ -289,14 +344,28 @@ Remplace le bloc `OpenAI(...)` par une `base_url` et une clé différentes — e
 - Si deux exécutions différentes de `review_diff` sur le *même* diff exact produisaient deux listes différentes de problèmes, cela te surprendrait-il ? Qu'est-ce que ça suggère sur le fait de traiter la sortie de cet outil comme une checklist à laquelle faire aveuglément confiance versus un point de départ pour une relecture humaine ?
 
 ## Étape 4 : Exécute-le contre un vrai diff, de bout en bout
+### 4.1 Deux façons réalistes d'utiliser cet outil, toutes deux valent la peine d'être essayées :
+
+**👟 Indice de départ :**
 
 Deux façons réalistes d'utiliser cet outil, toutes deux valent la peine d'être essayées :
-
 **1. Relis tes propres changements non commités** — le cas d'usage quotidien. Fais un petit changement délibéré dans n'importe quel fichier (introduis un bug évident exprès, si tu veux un test clair), puis :
 
 ```bash
 uv run python review.py
 ```
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 4.2 **2. Relis un commit spécifique de l'historique de ce cours lui-même** — une bonne façon de ...
+
+**👟 Indice de départ :**
 
 **2. Relis un commit spécifique de l'historique de ce cours lui-même** — une bonne façon de voir l'outil fonctionner sur un vrai diff que tu n'as pas écrit toi-même. Ajoute une petite option CLI pour pouvoir le pointer vers n'importe quel commit par son hash :
 
@@ -332,6 +401,18 @@ if __name__ == "__main__":
     print(review_diff(diff))
 ```
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 4.3 Clone ou ouvre le dépôt de ce cours, puis pointe l'outil vers un vrai commit passé :
+
+**👟 Indice de départ :**
+
 Clone ou ouvre le dépôt de ce cours, puis pointe l'outil vers un vrai commit passé :
 
 ```bash
@@ -339,12 +420,34 @@ git log --oneline -10          # trouve un vrai hash de commit à essayer
 uv run python review.py --commit <hash>
 ```
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 4.4 Tu peux aussi comparer ta branche actuelle à une autre, ou passer un diff directement par pi...
+
+**👟 Indice de départ :**
+
 Tu peux aussi comparer ta branche actuelle à une autre, ou passer un diff directement par pipe plutôt que de laisser le script exécuter `git` lui-même — pratique dans un job CI qui a déjà le diff comme fichier :
 
 ```bash
 uv run python review.py --against main
 git diff main | uv run python review.py --stdin
 ```
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 4.5 Vérifie
 
 **✅ Liste de vérification**
 

@@ -172,6 +172,7 @@ const daWeeks = [6,7,8,9,10].map((w) => {
           <span class="kpi__label">Win rate</span>
           <span class="kpi__value" id="r-winrate">{gs.quiz.winRate}%</span>
           <span class="kpi__sub" id="r-winrate-sub">quiz accuracy</span>
+          <span class="kpi__hint" title="Percentage of quiz questions you answered correctly. Higher = better understanding.">?</span>
         </div>
         <div class="kpi">
           <span class="kpi__label">K/D/A</span>
@@ -182,6 +183,55 @@ const daWeeks = [6,7,8,9,10].map((w) => {
           <span class="kpi__label">Farm</span>
           <span class="kpi__value" id="r-farm">{gs.lessonsDone}/{gs.lessonsTotal}</span>
           <span class="kpi__sub">lessons cleared</span>
+        </div>
+      </div>
+
+      <div class="activity-grid">
+        <div class="activity-card">
+          <div class="activity-card__icon">📅</div>
+          <div class="activity-card__content">
+            <span class="activity-card__label">Days active</span>
+            <span class="activity-card__value" id="r-days-active">{gs.activity.daysActive}</span>
+          </div>
+        </div>
+        <div class="activity-card">
+          <div class="activity-card__icon">📊</div>
+          <div class="activity-card__content">
+            <span class="activity-card__label">Lessons/week</span>
+            <span class="activity-card__value" id="r-lessons-week">{gs.activity.lessonsPerWeek}</span>
+          </div>
+        </div>
+        <div class="activity-card">
+          <div class="activity-card__icon">⚡</div>
+          <div class="activity-card__content">
+            <span class="activity-card__label">Avg XP/day</span>
+            <span class="activity-card__value" id="r-xp-day">{gs.activity.avgXpPerDay}</span>
+          </div>
+        </div>
+        <div class="activity-card">
+          <div class="activity-card__icon">🎯</div>
+          <div class="activity-card__content">
+            <span class="activity-card__label">Consistency</span>
+            <span class="activity-card__value" id="r-consistency">{gs.activity.consistencyScore}%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="engagement-row">
+        <div class="engagement-item">
+          <span class="engagement-item__label">Return rate</span>
+          <span class="engagement-item__value" id="r-return-rate">{gs.engagement.returnRate}%</span>
+          <span class="engagement-item__sub">days you came back</span>
+        </div>
+        <div class="engagement-item">
+          <span class="engagement-item__label">Current streak</span>
+          <span class="engagement-item__value" id="r-streak-length">{gs.engagement.streakLength} days</span>
+          <span class="engagement-item__sub">consecutive learning</span>
+        </div>
+        <div class="engagement-item">
+          <span class="engagement-item__label">Best session</span>
+          <span class="engagement-item__value" id="r-longest-session">{gs.engagement.longestSession} lessons</span>
+          <span class="engagement-item__sub">in one sitting</span>
         </div>
       </div>
 
@@ -226,7 +276,7 @@ const daWeeks = [6,7,8,9,10].map((w) => {
     // is computed at build time with zero data — there's no localStorage in
     // the Node/SSG build — so the static HTML always shows a fresh-account
     // skeleton. This hydrates it with the visitor's real progress on load.
-    import {xpProgress, trackProgress, questsToShow, streakProgress, isWeekComplete, rankFor, RANK_EMOJIS} from '../lib/gameState.ts';
+    import {xpProgress, questsToShow, streakProgress, isWeekComplete, rankFor, RANK_EMOJIS} from '../lib/gameState.ts';
     import {computeGameStats} from '../lib/gamestats.ts';
 
     function render() {
@@ -320,6 +370,17 @@ const daWeeks = [6,7,8,9,10].map((w) => {
       set('r-diag-usefulness-val', fmt(gs.diagnostics.usefulnessPct));
       fillWidth('r-diag-experience', gs.diagnostics.learningExperiencePct);
       set('r-diag-experience-val', fmt(gs.diagnostics.learningExperiencePct));
+
+      // Activity metrics
+      set('r-days-active', String(gs.activity.daysActive));
+      set('r-lessons-week', String(gs.activity.lessonsPerWeek));
+      set('r-xp-day', String(gs.activity.avgXpPerDay));
+      set('r-consistency', fmt(gs.activity.consistencyScore));
+
+      // Engagement metrics
+      set('r-return-rate', fmt(gs.engagement.returnRate));
+      set('r-streak-length', `${gs.engagement.streakLength} days`);
+      set('r-longest-session', `${gs.engagement.longestSession} lessons`);
     }
     render();
   </script>
@@ -420,11 +481,37 @@ const daWeeks = [6,7,8,9,10].map((w) => {
   .report__empty h2 { margin: 0 0 .35rem; font-size: 1.25rem; }
   .report__empty p { color: var(--ink-soft); margin: 0 auto 1rem; max-width: 46ch; font-size: .9rem; }
   .report__footnote { color: var(--ink-soft); font-size: .82rem; border-top: 1px dashed var(--line); padding-top: .8rem; margin-top: 1rem; }
+  .kpi { position: relative; }
+  .kpi__hint {
+    position: absolute; top: .4rem; right: .4rem; width: 16px; height: 16px; border-radius: 50%;
+    background: var(--surface-2); color: var(--ink-soft); font-size: .65rem; font-weight: 800;
+    display: inline-flex; align-items: center; justify-content: center; cursor: help;
+    border: 1px solid var(--line);
+  }
+  .activity-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: .6rem; margin-bottom: 1rem; }
+  .activity-card {
+    background: var(--bg-soft); border: 1px solid var(--line); border-radius: var(--radius-md);
+    padding: .7rem .6rem; display: flex; align-items: center; gap: .5rem;
+  }
+  .activity-card__icon { font-size: 1.1rem; }
+  .activity-card__content { display: flex; flex-direction: column; }
+  .activity-card__label { font-size: .68rem; font-weight: 700; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .03em; }
+  .activity-card__value { font-family: var(--font-display); font-weight: 800; font-size: 1rem; color: var(--ink-hi); }
+  .engagement-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: .6rem; margin-bottom: 1.2rem; }
+  .engagement-item {
+    background: var(--bg-soft); border: 1px solid var(--line); border-radius: var(--radius-md);
+    padding: .6rem .7rem; text-align: center;
+  }
+  .engagement-item__label { display: block; font-size: .68rem; font-weight: 700; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .03em; }
+  .engagement-item__value { display: block; font-family: var(--font-display); font-weight: 800; font-size: 1.05rem; color: var(--accent); margin: .1rem 0; }
+  .engagement-item__sub { font-size: .7rem; color: var(--ink-faint); }
 
   @media (max-width: 640px) {
     .trails { grid-template-columns: 1fr; }
     .player-card__stats { gap: 1rem; }
     .kpis { grid-template-columns: repeat(2, 1fr); }
     .diag__row { grid-template-columns: 96px 1fr 42px; }
+    .activity-grid { grid-template-columns: repeat(2, 1fr); }
+    .engagement-row { grid-template-columns: 1fr; }
   }
 </style>

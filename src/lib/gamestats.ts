@@ -1,6 +1,6 @@
 // Game-style "after-action report" — computed from gameState (localStorage).
 // Renders server with empty values, client script fills real metrics.
-import { loadState, trackProgress, xpProgress, streakProgress, getQuizProgress } from './gameState.ts';
+import { loadState, trackProgress, streakProgress, getQuizProgress, rankFor as gsRankFor } from './gameState.ts';
 
 export interface GameStats {
   level: number;
@@ -18,6 +18,17 @@ export interface GameStats {
   badges: string[];
   questsDone: number;
   questsTotal: number;
+  activity: {
+    daysActive: number;
+    lessonsPerWeek: number;
+    avgXpPerDay: number;
+    consistencyScore: number;
+  };
+  engagement: {
+    returnRate: number;
+    streakLength: number;
+    longestSession: number;
+  };
 }
 
 export type Rank =
@@ -31,27 +42,13 @@ export interface Diagnostics {
   learningExperiencePct: number;
 }
 
-const RANKS: Record<Rank, {min: number; label: string}> = {
-  Bronze: {min: 0, label: '🌱 Bronze'},
-  Silver: {min: 300, label: '⚙️ Silver'},
-  Gold: {min: 800, label: '🥇 Gold'},
-  Platinum: {min: 1600, label: '💠 Platinum'},
-  Diamond: {min: 2800, label: '💎 Diamond'},
-  Master: {min: 4500, label: '🔥 Master'},
-  Grandmaster: {min: 7000, label: '👑 Grandmaster'},
-};
-
 const TRACKS = [
   { id: 'python-101', label: 'Python 101', total: 5 },
   { id: 'data-analysis', label: 'Pandas & Data', total: 5 },
 ];
 
 function rankFor(xp: number): Rank {
-  let r: Rank = 'Bronze';
-  for (const [k, v] of Object.entries(RANKS)) {
-    if (xp >= v.min) r = k as Rank;
-  }
-  return r;
+  return gsRankFor(xp) as Rank;
 }
 
 export function computeGameStats(): GameStats {
@@ -89,6 +86,19 @@ export function computeGameStats(): GameStats {
   const questsTotal = 11;
   const questsDone = Object.values(s.quests).filter(Boolean).length;
 
+  // Activity metrics
+  const lastActive = s.lastActive || new Date().toISOString().slice(0, 10);
+  const daysSinceStart = Math.max(1, Math.ceil((Date.now() - new Date(lastActive).getTime()) / 86400000));
+  const daysActive = lessonsDone > 0 ? Math.min(daysSinceStart, Math.max(1, lessonsDone)) : 0;
+  const lessonsPerWeek = +((lessonsDone / daysSinceStart) * 7).toFixed(1);
+  const avgXpPerDay = daysActive > 0 ? Math.round(xp / daysActive) : 0;
+  const consistencyScore = Math.min(100, Math.round((sp.current / Math.max(1, sp.best)) * 50 + (lessonsDone / lessonsTotal) * 50));
+
+  // Engagement metrics
+  const returnRate = daysActive > 1 ? Math.min(100, Math.round((daysActive / daysSinceStart) * 100)) : 0;
+  const streakLength = sp.current;
+  const longestSession = Math.min(5, lessonsDone);
+
   return {
     level, rank, xp, xpToNext, lanes,
     quiz: { correct: quiz.correct, total: quiz.total, winRate },
@@ -101,6 +111,17 @@ export function computeGameStats(): GameStats {
     },
     badges: s.badges,
     questsDone, questsTotal,
+    activity: {
+      daysActive,
+      lessonsPerWeek,
+      avgXpPerDay,
+      consistencyScore,
+    },
+    engagement: {
+      returnRate,
+      streakLength,
+      longestSession,
+    },
   };
 }
 
@@ -113,5 +134,7 @@ export function emptyStats(): GameStats {
     kda: { kills: 0, deaths: 0, assists: 0, ratio: 0, label: 'Rookie' },
     diagnostics: { improvementPct: 0, nGainEquivalent: 0, acceptancePct: 0, usefulnessPct: 0, learningExperiencePct: 0 },
     badges: [], questsDone: 0, questsTotal: 11,
+    activity: { daysActive: 0, lessonsPerWeek: 0, avgXpPerDay: 0, consistencyScore: 0 },
+    engagement: { returnRate: 0, streakLength: 0, longestSession: 0 },
   };
 }

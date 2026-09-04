@@ -1,0 +1,24 @@
+---
+import Base from '../../layouts/Base.astro';
+import PlaygroundHead from '../../components/PlaygroundHead.astro';
+import PlaygroundCell from '../../components/PlaygroundCell.astro';
+import {PLAYGROUND_STARTER} from '../../lib/playgroundStarter.ts';
+---
+
+<Base
+  title="ساحة التجربة — PyDA Course"
+  description="محرر بايثون حر — شغّل أي كود في متصفّحك مباشرة."
+  lang="ar"
+  dir="rtl"
+>
+  <section class="container head">
+    <PlaygroundHead
+      eyebrow="محرر ملء الشاشة"
+      lead="اكتب وشغّل أي بايثون هنا — لا شيء مقيَّم، لا شيء يُحفظ عند مغادرتك."
+    />
+  </section>
+
+  <section class="container playground-page">
+    <PlaygroundCell starter={PLAYGROUND_STARTER} />
+  </section>
+</Base>

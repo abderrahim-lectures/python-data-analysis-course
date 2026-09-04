@@ -100,6 +100,9 @@ En lugar de hacer `export` de una clave en cada nueva sesión de terminal, ponla
 Con `uv`, `openai`, `python-dotenv`, y una clave en `.env`, la configuración está hecha — todo de aquí en adelante es lógica de cuestionario.
 
 ## Paso 1: Carga tus notas y elige una estrategia de contexto
+### 1.1 Pon un archivo `.txt` o `.md` de tus propias notas de estudio en algún lugar de tu proyecto ...
+
+**👟 Pista inicial :**
 
 Pon un archivo `.txt` o `.md` de tus propias notas de estudio en algún lugar de tu proyecto — una carpeta `notes/`, misma convención que el [proyecto RAG](/docs/projects/rag-notes), es un lugar razonable. Leerlo no es nada nuevo:
 
@@ -108,13 +111,20 @@ from pathlib import Path
 
 notes_text = Path("notes/cell-biology.txt").read_text(encoding="utf-8")
 ```
-
 Aquí está la decisión de diseño que este proyecto te pide tomar explícitamente, en lugar de saltártela: **¿cuánto de tus notas debería ver el modelo realmente?**
-
 - **Opción A — alimenta el archivo completo como contexto.** El enfoque más simple posible: lee un archivo, entrega su texto completo al modelo en el prompt, listo. Esto funciona genial siempre que un solo archivo quepa cómodamente en la ventana de contexto del modelo — unas pocas miles de palabras no es ningún problema para cualquier modelo gratuito moderno.
 - **Opción B — fragmentar, incrustar y recuperar**, exactamente como hace el [proyecto RAG](/docs/projects/rag-notes): divide tus notas en piezas pequeñas, incrústalas localmente, y recupera solo las más relevantes para cada pregunta. Esto escala a una carpeta de notas con docenas de archivos largos que nunca cabrían en un solo prompt.
-
 **Esta lección elige la Opción A** y es explícita sobre la compensación: es menos escalable, pero es una lección completa más simple de escribir, leer y depurar — sin modelo de embedding, sin búsqueda vectorial, sin paso separado de construcción de índice, solo una cadena. Esa compensación vale la pena nombrarla en voz alta, el mismo principio de fundamentación que el proyecto RAG de cualquier manera: una buena pregunta de cuestionario tiene que venir de texto que el modelo realmente recibió, no texto que está adivinando que podría ser relevante de los datos de entrenamiento. Si tus propias notas superan un solo archivo, no reinventes la recuperación — reutiliza `retrieve.py` del ejemplo del proyecto RAG y cambia el prompt del Paso 2 para usar fragmentos recuperados en lugar de un archivo completo.
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.2 Verifica
 
 **✅ Lista de verificación**
 
@@ -128,6 +138,9 @@ Aquí está la decisión de diseño que este proyecto te pide tomar explícitame
 - El paso de fragmentación del proyecto RAG existe para hacer que cada pieza incrustada sea *específica*. ¿Perder la fragmentación aquí pierde esa especificidad, o darle al modelo el archivo completo en realidad le da *más* con qué trabajar? ¿Bajo qué circunstancias sería correcta cada respuesta?
 
 ## Paso 2: Genera preguntas de cuestionario fundamentadas en tus notas
+### 2.1 Pídele al modelo un número fijo de preguntas, cada una emparejada con una respuesta esperada...
+
+**👟 Pista inicial :**
 
 Pídele al modelo un número fijo de preguntas, cada una emparejada con una respuesta esperada — y sé explícito en el prompt de que ambas deben venir del texto específico que le estás entregando, no de conocimiento general sobre el tema:
 
@@ -160,15 +173,22 @@ def generate_questions(notes_text: str, num_questions: int = 5) -> list[dict]:
     raw = raw.removeprefix("```json").removeprefix("```").removesuffix("```").strip()
     return json.loads(raw)
 ```
-
 Dos detalles que vale la pena notar:
-
 - **`expected_answer` se genera ahora, pero nunca se muestra al estudiante antes de que responda.** El programa lo mantiene en memoria (en el dict devuelto por `generate_questions`) puramente para que el Paso 3 tenga algo contra qué juzgar después — esta es la misma idea de "fundamentado, no adivinado" que el contexto recuperado del proyecto RAG, solo que usada para *verificar* una respuesta en lugar de *escribir* una.
 - **Pedirle al modelo que responda solo con JSON, y luego parsearlo, es un patrón frágil pero común.** Los modelos ocasionalmente envuelven su respuesta en un fence de código ` ```json ` incluso cuando se les dice que no — las llamadas `removeprefix`/`removesuffix` de arriba lo quitan antes de que corra `json.loads`. Si el parseo aún falla, imprimir la respuesta cruda antes de parsearla es la forma más rápida de ver qué vino realmente.
-
 :::tip[Pide más preguntas de las que necesitas, si la calidad es inconsistente]
 Los modelos pequeños de nivel gratuito ocasionalmente producen una pregunta vaga o extrañamente redactada. Si notas esto en tus propias notas, una solución simple sin código nuevo es pedir unas preguntas extra en el prompt y quedarte solo con las primeras `N` — o solo re-ejecutar la generación, ya que es una sola llamada a la API.
 :::
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 2.2 Verifica
 
 **✅ Lista de verificación**
 
@@ -182,6 +202,9 @@ Los modelos pequeños de nivel gratuito ocasionalmente producen una pregunta vag
 - ¿Qué le pasaría a la calidad de las preguntas si `notes_text` estuviera vacío o fuera solo una frase corta? Pruébalo — ¿el modelo produce una respuesta elegante o algo claramente roto?
 
 ## Paso 3: Construye el bucle de cuestionario interactivo
+### 3.1 Ahora la parte que hace de esto un cuestionario y no solo un generador de preguntas: haz cad...
+
+**👟 Pista inicial :**
 
 Ahora la parte que hace de esto un cuestionario y no solo un generador de preguntas: haz cada pregunta, lee la respuesta escrita del estudiante, y haz que el modelo la juzgue — las respuestas de texto libre no coincidirán palabra por palabra con la respuesta esperada, así que una comparación exacta de cadenas (`==`) marcaría casi todo como incorrecto.
 
@@ -233,12 +256,20 @@ def run_quiz(questions: list[dict]) -> None:
 
     print(f"\nFinal score: {score}/{len(questions)}")
 ```
-
 Un veredicto de tres vías (`correct` / `close` / `incorrect`) es deliberadamente más indulgente que un correcto/incorrecto binario — un estudiante que tiene la idea correcta pero se pierde un detalle recibe crédito parcial y retroalimentación útil, en lugar de un "incorrecto" plano que no dice por qué.
-
 :::tip[input() bloquea hasta que el estudiante presiona Enter]
 `input("Your answer: ")` pausa todo el script en esa línea hasta que escribes algo y presionas Enter — exactamente como `input()` de vuelta en Python 101, solo que ahora dentro de un bucle que también hace llamadas de red antes y después. Si la terminal parece colgarse después de imprimir una pregunta, eso es normal: está esperándote a ti, no a la API.
 :::
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 3.2 Verifica
 
 **✅ Lista de verificación**
 
@@ -252,6 +283,9 @@ Un veredicto de tres vías (`correct` / `close` / `incorrect`) es deliberadament
 - El veredicto `"close"` otorga medio crédito. ¿Cuál es un caso donde la respuesta de un estudiante debería claramente ser "close" en lugar de completamente correcta o completamente incorrecta — y caería tu propia respuesta a una pregunta real de tus notas ahí?
 
 ## Paso 4: Lleva el puntaje y ejecútalo de principio a fin
+### 4.1 `run_quiz` de arriba ya lleva el `score` mientras avanza e imprime una línea final `score/to...
+
+**👟 Pista inicial :**
 
 `run_quiz` de arriba ya lleva el `score` mientras avanza e imprime una línea final `score/total` una vez que el bucle termina. Conecta todo junto en un `main()`:
 
@@ -269,13 +303,34 @@ if __name__ == "__main__":
     main()
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 4.2 Ejecútalo:
+
+**👟 Pista inicial :**
+
 Ejecútalo:
 
 ```bash
 uv run python study_buddy.py
 ```
-
 Deberías ver una breve pausa de "Generating questions..." (una llamada a la API), luego cinco preguntas una a la vez, cada una esperando tu respuesta escrita antes de continuar, terminando con una línea de puntaje final como `Final score: 3.5/5`.
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 4.3 Verifica
 
 **✅ Lista de verificación**
 

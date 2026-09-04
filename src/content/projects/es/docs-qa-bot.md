@@ -121,6 +121,9 @@ GITHUB_TOKEN=tu-clave-de-llm-aquí
 - El token del bot y la clave de API del LLM son ambos secretos, pero autentican con dos servicios completamente diferentes. ¿Qué saldría mal si accidentalmente intercambiaras qué variable de entorno contenía qué valor?
 
 ## Paso 1: Prepara y haz embedding de una carpeta de documentación
+### 1.1 Este paso son los Pasos 2 y 3 del proyecto de App RAG, sin cambios en su sustancia, solo apu...
+
+**👟 Pista inicial :**
 
 Este paso son los Pasos 2 y 3 del proyecto de App RAG, sin cambios en su sustancia, solo apuntados a una carpeta `docs/` de documentación en lugar de notas personales:
 
@@ -168,6 +171,18 @@ if __name__ == "__main__":
     print(f"Loaded {len(chunks)} chunks from {DOCS_DIR}/")
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.2 Pon cualquier documentación de la que quieras que el bot responda en una carpeta `docs/` com...
+
+**👟 Pista inicial :**
+
 Pon cualquier documentación de la que quieras que el bot responda en una carpeta `docs/` como archivos `.md`/`.txt` — el README y páginas de wiki de un proyecto, el manual interno de un equipo, los propios archivos de lección de este curso, cualquier cosa real. Luego haz embedding de ella, reutilizando el `build_index.py` del proyecto de App RAG textualmente (solo el import cambia, de `prepare_notes` a `prepare_docs`):
 
 ```python
@@ -209,10 +224,34 @@ if __name__ == "__main__":
     main()
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.3 uv run python prepare_docs.py
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
+
 ```bash
 uv run python prepare_docs.py
 uv run python build_index.py
 ```
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.4 Verifica
 
 **✅ Lista de verificación**
 
@@ -226,6 +265,9 @@ uv run python build_index.py
 - Si tu carpeta de documentación tiene un archivo con formato muy inconsistente (sin líneas en blanco, un bloque gigante de texto), ¿qué esperarías que pase con la calidad de los fragmentos que produce?
 
 ## Paso 2: Recupera fragmentos relevantes
+### 2.1 La recuperación también permanece sin cambios respecto al proyecto de App RAG — haz embeddin...
+
+**👟 Pista inicial :**
 
 La recuperación también permanece sin cambios respecto al proyecto de App RAG — haz embedding de la pregunta con el mismo modelo, luego clasifica cada fragmento por similitud de coseno, lo cual se reduce a un producto punto simple ya que cada vector ya fue normalizado a longitud 1 en el momento del embedding:
 
@@ -272,15 +314,37 @@ if __name__ == "__main__":
         print(f"{r['score']:.3f}  [{r['source']}]  {r['text'][:80]}...")
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 2.2 uv run python retrieve.py
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
+
 ```bash
 uv run python retrieve.py
 ```
-
 Si esto se siente demasiado rápido, es deliberado — el [proyecto de App RAG](/docs/projects/rag-notes#step-4-retrieve-relevant-chunks) cubre exactamente por qué la similitud de coseno funciona así, qué te da la normalización, y cómo las matemáticas se conectan a una multiplicación matriz-vector, con mucha más profundidad de la que repetirlo aquí añadiría.
-
 :::tip[Prueba la recuperación antes de tocar Discord en absoluto]
 Haz que `retrieve.py` devuelva fragmentos genuinamente relevantes para algunas preguntas de prueba *antes* de escribir cualquier código de bot. Si la recuperación está mal, un bot envuelto alrededor de ella simplemente entregará respuestas incorrectas con confianza en un canal de Discord — mucho más difícil de depurar en vivo que un script de terminal silencioso.
 :::
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 2.3 Verifica
 
 **✅ Lista de verificación**
 
@@ -294,9 +358,11 @@ Haz que `retrieve.py` devuelva fragmentos genuinamente relevantes para algunas p
 - Si dos archivos de documentación dicen cosas ligeramente contradictorias (uno desactualizado y uno actualizado), ¿qué esperarías que hiciera `retrieve()`, y cómo notarías el problema solo a partir de las respuestas del bot?
 
 ## Paso 3: Conecta el manejador de mensajes del bot
+### 3.1 Esta es la parte realmente nueva de este proyecto: un manejador de eventos de `discord.py` q...
+
+**👟 Pista inicial :**
 
 Esta es la parte realmente nueva de este proyecto: un manejador de eventos de `discord.py` que llama a `retrieve()`, construye el mismo prompt de "responde usando solo este contexto" del proyecto de App RAG, y responde con la respuesta del modelo.
-
 El patrón central de `discord.py` es un bucle de eventos: creas un `Client` con un conjunto de `intents` (qué categorías de eventos tiene permitido recibir), luego registras funciones `async def` decoradas con `@client.event` para los eventos que te importan — más comúnmente `on_ready` (se dispara una vez, cuando se establece la conexión) y `on_message` (se dispara para cada mensaje que el bot puede ver):
 
 ```python
@@ -377,14 +443,21 @@ async def on_message(message: discord.Message):
 if __name__ == "__main__":
     client.run(os.environ["DISCORD_BOT_TOKEN"])
 ```
-
 `answer()` es línea por línea la misma idea que `ask()` del proyecto de App RAG — recuperar, construir un prompt, llamar al LLM — solo que devuelve una cadena en lugar de imprimirla, para que `on_message` pueda entregar esa cadena a `message.reply(...)`. Todo por encima de `on_ready`/`on_message` corre una vez al inicio; todo dentro de esas dos funciones corre una vez por evento, mientras `client.run(...)` mantenga la conexión viva.
-
 La protección `if message.author == client.user: return` importa más de lo que podría parecer: sin ella, si la propia respuesta del bot resultara mencionarse a sí mismo (no lo hará aquí, pero es un error fácil en general), dispararía `on_message` de nuevo sobre su propia salida — un bucle infinito de un bot respondiéndose a sí mismo.
-
 :::tip[async def y await no son opcionales aquí]
 `discord.py` está construido enteramente sobre `asyncio` de Python — cada manejador de eventos debe declararse `async def`, y cualquier llamada que espere en la red (enviar un mensaje, obtener datos) debe tener `await`. Olvidar cualquiera de los dos es uno de los primeros errores más comunes: omitir `async` en `on_message` lanza un error inmediatamente, y olvidar `await` en `message.reply(...)` no hace absolutamente nada silenciosamente, ya que solo crea una corrutina sin `await` en lugar de realmente ejecutarla.
 :::
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 3.2 Verifica
 
 **✅ Lista de verificación**
 
@@ -398,22 +471,45 @@ La protección `if message.author == client.user: return` importa más de lo que
 - El `try`/`except` alrededor de `answer(reply)` captura *cualquier* excepción y responde con un mensaje de error genérico en lugar de fallar. ¿Cuál es la compensación de capturar tan ampliamente en un bot de larga duración versus dejar que un bug real falle el proceso ruidosamente?
 
 ## Paso 4: Invita al bot y pruébalo de principio a fin
+### 4.1 De vuelta en el Portal de Desarrolladores de Discord, abre **OAuth2 → URL Generator**. Bajo ...
+
+**👟 Pista inicial :**
 
 De vuelta en el Portal de Desarrolladores de Discord, abre **OAuth2 → URL Generator**. Bajo **Scopes**, marca `bot`; bajo **Bot Permissions**, marca al menos **Send Messages** y **Read Message History**. Copia la URL generada, ábrela en un navegador, y elige un servidor que controles (crea un servidor de prueba gratuito si aún no tienes uno) para añadir el bot.
-
 Ejecútalo:
 
 ```bash
 uv run python bot.py
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 4.2 Deberías ver `Logged in as docs-qa-bot#1234 -- ready in 1 server(s).` impreso — el silencio ...
+
+**👟 Pista inicial :**
+
 Deberías ver `Logged in as docs-qa-bot#1234 -- ready in 1 server(s).` impreso — el silencio después de eso es normal; el proceso simplemente está sentado y esperando eventos del Gateway de Discord, la misma idea de "sin salida significa que está funcionando" que un servidor MCP esperando en stdio. En el servidor de prueba, menciona al bot con una pregunta real sobre lo que sea que esté en tu carpeta `docs/`:
 
 ```
 @docs-qa-bot how do I enable the message content intent?
 ```
-
 En pocos segundos deberías ver un indicador de "escribiendo", luego una respuesta fundamentada en tu documentación real — no una suposición de los datos generales de entrenamiento del modelo.
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 4.3 Verifica
 
 **✅ Lista de verificación**
 

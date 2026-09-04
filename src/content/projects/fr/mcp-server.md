@@ -28,14 +28,28 @@ MCP est l'un des motifs les plus activement adoptés en ce moment pour étendre 
 **Google Colab et les notebooks Kaggle ne conviennent pas à ce projet**, contrairement à la plupart des autres de cette série — passez-les ici. Aucun des deux ne vous donne un processus local persistant auquel un client IA de bureau peut se connecter ; une cellule de notebook qui « fait tourner un serveur » dans Colab n'est pas du tout accessible par Claude Desktop sur votre propre machine.
 
 ## Étape 1 : installer `uv`
+### 1.1 `uv` est un outil unique qui remplace la chaîne habituelle « installer Python, puis installe...
+
+**👟 Indice de départ :**
 
 `uv` est un outil unique qui remplace la chaîne habituelle « installer Python, puis installer pip, puis installer un outil d'environnement virtuel, puis installer les paquets » — il peut installer et gérer lui-même les versions de Python, en plus des dépendances de votre projet.
-
 **macOS / Linux** (terminal) :
 
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 1.2 **Windows** (PowerShell) :
+
+**👟 Indice de départ :**
 
 **Windows** (PowerShell) :
 
@@ -43,11 +57,35 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
 ```
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 1.3 Fermez et rouvrez votre terminal, puis confirmez l'installation :
+
+**👟 Indice de départ :**
+
 Fermez et rouvrez votre terminal, puis confirmez l'installation :
 
 ```bash
 uv --version
 ```
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 1.4 Configurez ensuite un projet et installez le SDK Python officiel de MCP, avec son extra opti...
+
+**👟 Indice de départ :**
 
 Configurez ensuite un projet et installez le SDK Python officiel de MCP, avec son extra optionnel `cli` (c'est ce qui vous donne la commande `mcp dev` utilisée à l'étape 3) :
 
@@ -57,7 +95,20 @@ cd mcp-server
 uv add "mcp[cli]"
 ```
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 1.5 Vérifie
+
 ## Étape 2 : écrire votre premier serveur MCP
+### 2.1 L'API de haut niveau du SDK, `FastMCP`, transforme une fonction Python ordinaire en outil MC...
+
+**👟 Indice de départ :**
 
 L'API de haut niveau du SDK, `FastMCP`, transforme une fonction Python ordinaire en outil MCP avec un seul décorateur — aucun code au niveau du protocole à écrire à la main. Créez `server.py` :
 
@@ -98,14 +149,21 @@ def count_words(text: str) -> int:
 if __name__ == "__main__":
     mcp.run()
 ```
-
 `@mcp.tool()` fait tout le travail d'enregistrement ici : il inspecte le nom de la fonction, ses paramètres annotés par type, et sa docstring, et construit automatiquement une définition d'outil MCP à partir de ça — vous n'écrivez jamais un schéma à la main. C'est la même idée que le [projet Agent IA](/docs/projects/ai-agent) enseigne pour les outils LangChain : **le modèle lit votre docstring, pas votre code, pour décider quand un outil correspond à une demande.** Une docstring vague ne donne rien au modèle sur quoi se baser ; une docstring qui dit clairement ce que fait l'outil et quand l'appeler est ce qui fait réellement fonctionner la sélection d'outil.
-
 `search_course_topics` reprend délibérément la même idée que l'outil-jouet du projet Agent IA — chercher un sujet dans les propres fichiers de ce cours — mais exposée via le décorateur d'outil de MCP au lieu d'être passée directement dans la liste `tools=[...]` d'un agent. `count_words` est un utilitaire plus petit et autonome, inclus pour montrer un serveur exposant plus d'un outil à la fois — un client MCP voit les deux et choisit celui qui correspond à une question donnée.
-
 :::tip[Vérifiez la documentation actuelle du SDK MCP avant de vous y fier]
 MCP est une spécification jeune et évoluant vite — le protocole lui-même, et la propre API du SDK Python, ont tous deux changé depuis les premières versions. Le style à base de décorateur de `FastMCP` est stable depuis un moment, mais avant de construire quoi que ce soit au-delà de cette leçon, parcourez le [propre README et la documentation du SDK](https://github.com/modelcontextprotocol/python-sdk) plutôt que de supposer que les spécificités de cet extrait correspondent encore exactement.
 :::
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 2.2 Vérifie
 
 **✅ Liste de vérification**
 
@@ -119,6 +177,9 @@ MCP est une spécification jeune et évoluant vite — le protocole lui-même, e
 - `search_course_topics` retourne une chaîne de caractères, pas des données structurées. Que perdriez-vous, ou gagneriez-vous, en retournant une liste de correspondances à la place ?
 
 ## Étape 3 : exécuter et tester votre serveur localement
+### 3.1 Avant de brancher ceci sur un vrai client IA, faites-le tourner seul et confirmez que les ou...
+
+**👟 Indice de départ :**
 
 Avant de brancher ceci sur un vrai client IA, faites-le tourner seul et confirmez que les outils fonctionnent réellement. Le SDK fournit une commande **dev/inspector** exactement pour ça :
 
@@ -126,21 +187,39 @@ Avant de brancher ceci sur un vrai client IA, faites-le tourner seul et confirme
 uv run mcp dev server.py
 ```
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 3.2 Cela démarre votre serveur et ouvre le **MCP Inspector** — un outil gratuit basé sur le navi...
+
+**👟 Indice de départ :**
+
 Cela démarre votre serveur et ouvre le **MCP Inspector** — un outil gratuit basé sur le navigateur qui vous permet d'appeler `search_course_topics` et `count_words` à la main, de passer des arguments de test, et de voir les vraies valeurs de retour, sans aucun modèle IA impliqué. (Le premier lancement peut vous demander d'installer un petit paquet proxy basé sur `npx` que l'Inspector utilise ; acceptez-le.)
-
 Testez les deux outils ici avant de continuer : appelez `search_course_topics` avec une requête que vous savez présente dans `docs/` (par ex. `"groupby"`), et `count_words` avec une courte phrase. Si l'un des deux se comporte mal, vous avez affaire à un bug dans votre fonction Python — corrigez-le ici, où la seule partie mobile est votre propre code, plutôt que de le déboguer plus tard avec Claude Desktop dans la boucle, où un résultat erroné pourrait tout aussi bien être un problème de connexion, une faute de frappe de configuration, ou le modèle choisissant le mauvais outil.
-
 Vous pouvez aussi simplement exécuter le serveur directement, sans l'Inspector, pour confirmer qu'il démarre proprement :
 
 ```bash
 uv run python server.py
 ```
-
 Il n'affichera rien de lui-même — un serveur MCP attend qu'un client se connecte via stdio. Le silence ici est attendu, pas un bug ; `Ctrl+C` pour l'arrêter.
-
 :::tip[Testez avec l'Inspector avant de toucher un vrai client]
 Il est tentant de sauter directement à Claude Desktop. Résistez à ça — l'Inspector isole le code de vos outils de tout ce qui peut mal tourner ailleurs dans une vraie connexion client (chemins de configuration, redémarrages, la propre sélection d'outil du modèle). Faites d'abord fonctionner les deux outils là.
 :::
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 3.3 Vérifie
 
 **✅ Liste de vérification**
 
@@ -154,12 +233,13 @@ Il est tentant de sauter directement à Claude Desktop. Résistez à ça — l'I
 - Pourquoi pourrait-il être important que l'Inspector n'ait besoin d'aucun modèle IA pour tester vos outils ?
 
 ## Étape 4 : le connecter à Claude Desktop
+### 4.1 Le palier gratuit de [Claude Desktop](https://claude.ai/download) prend en charge la connexi...
+
+**👟 Indice de départ :**
 
 Le palier gratuit de [Claude Desktop](https://claude.ai/download) prend en charge la connexion à des serveurs MCP locaux. Il lit un fichier de configuration JSON qui lui dit quels serveurs lancer et comment :
-
 - **macOS** : `~/Library/Application Support/Claude/claude_desktop_config.json`
 - **Windows** : `%APPDATA%\Claude\claude_desktop_config.json`
-
 Si le fichier n'existe pas encore, créez-le. Ajoutez votre serveur, en utilisant un chemin **absolu** vers votre dossier de projet :
 
 ```json
@@ -172,14 +252,20 @@ Si le fichier n'existe pas encore, créez-le. Ajoutez votre serveur, en utilisan
   }
 }
 ```
-
 `command` et `args` décrivent exactement le processus que Claude Desktop lancera pour parler à votre serveur — le même appel `uv run` que vous avez déjà testé à l'étape 3, juste démarré par Claude Desktop au lieu de vous. Utiliser `uv run` (plutôt qu'un simple `python`) compte ici : Claude Desktop lance cette commande dans son propre environnement, sans garantie que l'environnement virtuel de votre projet soit déjà actif, et `uv run` trouve et utilise le bon tout seul.
-
 **Quittez complètement et redémarrez Claude Desktop** — une instance déjà en cours d'exécution ne relit pas ce fichier d'elle-même. Une fois redémarré, votre serveur devrait apparaître dans sa liste d'outils/connecteurs (généralement derrière une petite icône près de la zone de message). Demandez-lui quelque chose qui devrait déclencher un appel d'outil, par ex. :
-
 > Does the Python course cover groupby? Use the course-tools search if you have it.
-
 Claude Desktop devrait montrer qu'il appelle `search_course_topics` (souvent sous forme d'un petit bloc repliable « a utilisé un outil » dans la conversation, avec les arguments et le résultat visibles si vous le développez), puis répondre en utilisant le vrai résultat que votre fonction a retourné — pas une supposition tirée des données d'entraînement du modèle.
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 4.2 Vérifie
 
 **✅ Liste de vérification**
 

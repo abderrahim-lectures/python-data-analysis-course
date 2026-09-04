@@ -22,14 +22,28 @@ Le projet Agent IA tourne entièrement sur votre propre machine. Celui-ci ne le 
 4. Télécharger le résultat — un petit fichier « adaptateur », pas un tout nouveau modèle — et l'exécuter localement pour voir votre modèle affiné en action.
 
 ## Étape 1 : installer `uv`
+### 1.1 `uv` est un outil unique qui remplace la chaîne habituelle « installer Python, puis installe...
+
+**👟 Indice de départ :**
 
 `uv` est un outil unique qui remplace la chaîne habituelle « installer Python, puis installer pip, puis installer un outil d'environnement virtuel, puis installer les paquets » — il peut installer et gérer lui-même les versions de Python, en plus des dépendances de votre projet.
-
 **macOS / Linux** (terminal) :
 
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 1.2 **Windows** (PowerShell) :
+
+**👟 Indice de départ :**
 
 **Windows** (PowerShell) :
 
@@ -37,11 +51,35 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
 ```
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 1.3 Fermez et rouvrez votre terminal, puis confirmez l'installation :
+
+**👟 Indice de départ :**
+
 Fermez et rouvrez votre terminal, puis confirmez l'installation :
 
 ```bash
 uv --version
 ```
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 1.4 Configurez ensuite un projet local pour les étapes de préparation des données et d'inférence...
+
+**👟 Indice de départ :**
 
 Configurez ensuite un projet local pour les étapes de préparation des données et d'inférence (les parties qui n'ont pas besoin d'un GPU) :
 
@@ -51,10 +89,22 @@ cd finetune-llm
 uv add datasets huggingface_hub
 ```
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 1.5 Vérifie
+
 ## Étape 2 : préparer un petit jeu de données
+### 2.1 L'affinage enseigne à un modèle un *comportement* spécifique, pas de nouveaux faits à partir...
+
+**👟 Indice de départ :**
 
 L'affinage enseigne à un modèle un *comportement* spécifique, pas de nouveaux faits à partir de zéro — il fonctionne mieux avec un ensemble d'exemples petit, ciblé et bien formaté, pas un énorme tas de texte brut. Un format courant est une liste de paires instruction/réponse. Choisissez une tâche étroite et personnelle — quelques idées : répondre aux questions avec un ton ou un personnage spécifique, suivre un format de sortie fixe (par ex. toujours répondre en JSON valide), ou résumer du texte comme vous le feriez personnellement.
-
 Écrivez vos exemples localement dans un petit fichier JSON :
 
 ```python
@@ -82,34 +132,80 @@ with open("dataset.jsonl", "w") as f:
 print(f"Wrote {len(examples)} examples to dataset.jsonl")
 ```
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 2.2 uv run python build_dataset.py
+
+**👟 Indice de départ :**
+
+Exécutez le code ci-dessous et confirmez qu'il fonctionne.
+
 ```bash
 uv run python build_dataset.py
 ```
-
 :::tip[La qualité prime sur la quantité]
 La propre documentation d'Unsloth et la plupart des guides d'affinage s'accordent là-dessus : 50 exemples soigneusement écrits et cohérents enseignent un comportement à un modèle bien plus fiablement que 500 exemples bâclés ou incohérents. Si vos exemples se contredisent entre eux (répondant différemment au même type de question à chaque fois), le modèle n'a rien de cohérent à apprendre.
 :::
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 2.3 Vérifie
+
 ## Étape 3 : affiner avec Unsloth sur un GPU gratuit
+**👟 Indice de départ :**
 
 C'est l'étape qui nécessite un GPU. [Unsloth](https://github.com/unslothai/unsloth) fournit des notebooks prêts à l'emploi spécifiquement conçus pour les paliers GPU **gratuits** de Google Colab et Kaggle — vous n'installez rien localement pour cette partie.
-
 1. Allez sur la [page des notebooks d'Unsloth](https://docs.unsloth.ai/get-started/unsloth-notebooks) et ouvrez l'un des notebooks Colab conviviaux pour débutants pour un petit modèle (environ 1 milliard de paramètres — assez petit pour être affiné rapidement et pour être réellement téléchargé et exécuté ensuite). Un modèle ouvert de 1 milliard de paramètres, comme une petite version de Llama ou Qwen, est un point de départ raisonnable et bien pris en charge ; vérifiez la liste de notebooks d'Unsloth pour savoir quel petit modèle dispose actuellement d'un modèle fonctionnel, car le modèle le mieux pris en charge change avec le temps.
 2. Dans le notebook, remplacez son jeu de données d'exemple par le vôtre : téléversez le `dataset.jsonl` que vous avez construit à l'étape 2 (le panneau de téléversement de fichiers de Colab, ou montez Google Drive), et pointez la cellule de chargement de données du notebook vers celui-ci à la place.
 3. Exécutez les cellules du notebook dans l'ordre. L'étape centrale d'affinage utilise **LoRA** (Low-Rank Adaptation) : plutôt que de mettre à jour les milliards de paramètres d'un modèle (lent, nécessite beaucoup de mémoire), LoRA gèle le modèle d'origine et entraîne une paire de matrices de rang bien plus faible, ajoutées par-dessus — mathématiquement, si la matrice de poids d'origine est $W$, LoRA apprend une mise à jour de rang faible $\Delta W = BA$ (où $B$ et $A$ sont des matrices bien plus petites) et utilise $W + \Delta W$ au moment de l'inférence. C'est la même idée que d'approximer une grande matrice par une matrice de dimension inférieure — un concept d'algèbre linéaire que vous connaissez déjà — appliquée pour rendre l'affinage assez peu coûteux pour tourner sur un GPU gratuit.
 4. Une fois l'entraînement terminé, le notebook enregistre votre résultat sous forme d'un petit **adaptateur** — juste les matrices $A$ et $B$, typiquement quelques dizaines de mégaoctets, pas une copie de plusieurs gigaoctets du modèle entier. Téléchargez ce dossier adaptateur sur votre ordinateur.
-
 :::tip[Vérifiez la documentation actuelle avant de commencer]
 Quel modèle spécifique, quel notebook spécifique, et la propre API d'Unsloth évoluent tous vite — plus vite que la plupart des logiciels, puisqu'il s'agit d'un outil activement développé et proche de la recherche. Avant d'exécuter quoi que ce soit, ouvrez la [documentation actuelle d'Unsloth](https://docs.unsloth.ai) et utilisez le notebook et le modèle qu'elle recommande actuellement pour les débutants, plutôt que de supposer que les spécificités de l'année dernière s'appliquent encore.
 :::
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
 
 ## Étape 4 : exécutez votre modèle affiné localement
+### 4.1 De retour sur votre propre machine, chargez le modèle de base plus votre adaptateur téléchar...
+
+**👟 Indice de départ :**
 
 De retour sur votre propre machine, chargez le modèle de base plus votre adaptateur téléchargé et essayez-le :
 
 ```bash
 uv add transformers peft torch --extra-index-url https://download.pytorch.org/whl/cpu
 ```
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 4.2 # infer.py
+
+**👟 Indice de départ :**
+
+Exécutez le code ci-dessous et confirmez qu'il fonctionne.
 
 ```python
 # infer.py
@@ -129,11 +225,34 @@ output = model.generate(**inputs, max_new_tokens=80)
 print(tokenizer.decode(output[0], skip_special_tokens=True))
 ```
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 4.3 uv run python infer.py
+
+**👟 Indice de départ :**
+
+Exécutez le code ci-dessous et confirmez qu'il fonctionne.
+
 ```bash
 uv run python infer.py
 ```
-
 Exécuter un modèle d'environ 1 milliard de paramètres sur CPU est lent (attendez-vous à de vraies secondes, pas des millisecondes, par réponse) mais ça fonctionne — c'est votre propre machine qui exécute réellement un modèle de langage affiné, sans clé API, sans connexion internet requise une fois les fichiers du modèle téléchargés.
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 4.4 Vérifie
 
 ## ⚠️ Pièges courants
 

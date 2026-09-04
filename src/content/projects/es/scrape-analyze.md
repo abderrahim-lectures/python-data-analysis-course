@@ -27,14 +27,28 @@ Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/docs/proj
 **Google Colab o Kaggle Notebooks son un buen ajuste genuino para este proyecto en particular**, no solo un respaldo — no hay servidor de archivos local, ni GPU, ni proceso de larga duración que gestionar, y la salida de gráficos en línea es exactamente lo que un notebook hace bien. Ejecuta `!pip install requests beautifulsoup4 pandas matplotlib` en una celda, y luego pega los scripts de abajo como celdas del notebook, adaptando las rutas de archivo (p. ej. guardando `quotes.csv` en el directorio de trabajo del notebook en lugar de tu propia máquina) según sea necesario. Esta es una forma cómoda y legítima de hacer este proyecto de principio a fin sin salir del navegador.
 
 ## Paso 1: Instalar `uv`
+### 1.1 `uv` es una única herramienta que reemplaza la cadena habitual de "instala Python, luego ins...
+
+**👟 Pista inicial :**
 
 `uv` es una única herramienta que reemplaza la cadena habitual de "instala Python, luego instala pip, luego instala una herramienta de entorno virtual, luego instala paquetes" — puede instalar y gestionar versiones de Python por sí misma, junto con las dependencias de tu proyecto.
-
 **macOS / Linux** (terminal):
 
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.2 **Windows** (PowerShell):
+
+**👟 Pista inicial :**
 
 **Windows** (PowerShell):
 
@@ -42,11 +56,35 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.3 Cierra y vuelve a abrir tu terminal, y luego confirma que se instaló:
+
+**👟 Pista inicial :**
+
 Cierra y vuelve a abrir tu terminal, y luego confirma que se instaló:
 
 ```bash
 uv --version
 ```
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.4 Luego configura un proyecto local:
+
+**👟 Pista inicial :**
 
 Luego configura un proyecto local:
 
@@ -55,17 +93,27 @@ uv init scrape-analyze
 cd scrape-analyze
 uv add requests beautifulsoup4 pandas matplotlib
 ```
-
 Fíjate en lo que falta en esa lista: ninguna clave de API, ningún registro de nivel gratuito, nada que configurar antes de poder ejecutar una sola línea de código — solo tu propio script y un sitio web real. Ese es un contraste deliberado con los proyectos de sabor IA de esta sección, y una de las razones por las que hacer scraping es un buen próximo paso a probar.
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.5 Verifica
+
 ## Paso 2: Obtén y analiza la página
+### 2.1 Este proyecto apunta a [quotes.toscrape.com](https://quotes.toscrape.com) — un sitio público...
+
+**👟 Pista inicial :**
 
 Este proyecto apunta a [quotes.toscrape.com](https://quotes.toscrape.com) — un sitio público construido y mantenido específicamente para practicar scraping. No tiene muro de inicio de sesión, ni límite de tasa contra el cual pelear, un diseño HTML estable y bien estructurado, y paginación, etiquetas y páginas de autor con las que trabajar. Eso importa: hacer scraping de un sitio comercial real plantea preguntas reales sobre sus términos de servicio y `robots.txt` que esta lección evita deliberadamente usando un sitio construido exactamente para este propósito.
-
 :::tip[Siempre revisa robots.txt antes de hacer scraping en cualquier otro lugar]
 Antes de apuntar este código a cualquier sitio que no sea quotes.toscrape.com, revisa el `robots.txt` de ese sitio (p. ej. `https://example.com/robots.txt`) y sus términos de servicio. `robots.txt` indica qué partes de un sitio las herramientas automatizadas pueden y no pueden obtener — respetarlo es la expectativa mínima para cualquier scraper, y algunos sitios prohíben explícitamente el scraping en sus términos incluso donde `robots.txt` se queda en silencio.
 :::
-
 Una solicitud HTTP `GET` es lo mismo que hace tu navegador cada vez que visitas una página — le pide a un servidor una URL y recibe de vuelta el HTML crudo como texto. `requests` hace esto en una línea:
 
 ```python
@@ -75,6 +123,18 @@ response = requests.get("https://quotes.toscrape.com/")
 response.raise_for_status()  # turns a 404/500 into a loud exception instead of a silent bad parse
 html = response.text
 ```
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 2.2 Ese string `html` es un árbol de etiquetas anidadas — `<div>`, `<span>`, `<a>` — cada una ll...
+
+**👟 Pista inicial :**
 
 Ese string `html` es un árbol de etiquetas anidadas — `<div>`, `<span>`, `<a>` — cada una llevando opcionalmente atributos como `class` o `href`. BeautifulSoup analiza ese texto en un árbol navegable y te da dos herramientas principales para buscar en él: `find` (la primera coincidencia) y `find_all` (todas las coincidencias), ambas filtrables por nombre de etiqueta y por atributos como `class_`. Abre el HTML de la página con "Ver código fuente de la página" en tu navegador y verás que cada cita está dentro de un `<div class="quote">`, con el texto de la cita en un `<span class="text">`, el autor en un `<small class="author">`, y cada etiqueta en un `<a class="tag">`.
 
@@ -98,15 +158,37 @@ for quote_div in soup.find_all("div", class_="quote"):
 time.sleep(1)  # see the tip below
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 2.3 uv run python scrape.py
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
+
 ```bash
 uv run python scrape.py
 ```
-
 Deberías ver diez líneas impresas, una por cada cita de la página principal.
-
 :::tip[Autolimita tu tasa, incluso en un sitio de práctica]
 `time.sleep(1)` entre solicitudes no lo exige estrictamente quotes.toscrape.com, pero es un hábito que vale la pena construir ahora en lugar de después de haber golpeado accidentalmente un servidor real con docenas de solicitudes por segundo. Un retraso corto y deliberado entre solicitudes es etiqueta estándar de scraping — evita que tu script parezca (o actúe como) un intento de denegación de servicio, y es un seguro barato contra que te bloqueen temporalmente la IP en sitios que sí imponen límites.
 :::
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 2.4 Verifica
 
 **✅ Lista de verificación**
 
@@ -120,6 +202,9 @@ Deberías ver diez líneas impresas, una por cada cita de la página principal.
 - El texto de la cita en la página está envuelto en comillas curvas (`"…"`), no rectas. Si más adelante comparas el texto de una cita contra un string fijo en el código, ¿qué podría salir mal, y cómo lo notarías?
 
 ## Paso 3: Maneja la paginación y recolecta todos los datos
+### 3.1 quotes.toscrape.com reparte sus citas en varias páginas, con un enlace "Next" al final de ca...
+
+**👟 Pista inicial :**
 
 quotes.toscrape.com reparte sus citas en varias páginas, con un enlace "Next" al final de cada página excepto la última. En lugar de fijar en el código "recorre 10 veces", sigue el enlace mismo — así el script sigue funcionando aunque cambie el número de páginas:
 
@@ -172,11 +257,34 @@ if __name__ == "__main__":
     print(f"Saved {len(quotes)} quotes to quotes.csv")
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 3.2 uv run python scrape.py
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
+
 ```bash
 uv run python scrape.py
 ```
-
 El `try`/`except` alrededor de la solicitud es el agregado importante aquí, no una formalidad: sin él, una solicitud inestable en la página 7 de 10 lanzaría una excepción no manejada y perdería las seis páginas ya obtenidas, en lugar de guardar lo que tienes y detenerte limpiamente. `requests.compat.urljoin` convierte el `href` relativo del enlace "Next" (como `/page/2/`) en una URL completa combinándolo con la URL de la página actual — lo mismo que hace tu navegador automáticamente cuando haces clic en un enlace relativo.
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 3.3 Verifica
 
 **✅ Lista de verificación**
 
@@ -190,6 +298,9 @@ El `try`/`except` alrededor de la solicitud es el agregado importante aquí, no 
 - El bucle se detiene cuando `find("li", class_="next")` devuelve `None`. ¿Qué pasaría si la última página del sitio todavía tuviera un enlace "Next" (con apariencia deshabilitada) en su HTML, solo que no clicable? ¿Cómo verificarías eso antes de confiar en esta condición de parada en un sitio distinto?
 
 ## Paso 4: Limpia y carga en pandas
+### 4.1 La Sección 2 presentó pandas como la solución a que los bucles planos de Python se vuelvan l...
+
+**👟 Pista inicial :**
 
 La Sección 2 presentó pandas como la solución a que los bucles planos de Python se vuelvan lentos a medida que crecen los datos — operaciones vectorizadas en C en lugar de un bucle `for` de Python sobre cada fila. Los datos extraídos por scraping agregan una segunda razón, igual de real, para recurrir a él: rara vez llegan limpios, y las herramientas de strings y verificación de tipos de pandas hacen que limpiarlos sea rápido de escribir y fácil de verificar.
 
@@ -215,8 +326,17 @@ df["quote_length"] = df["text"].str.len()
 print(df.head())
 print(df.dtypes)
 ```
-
 Dos cosas vale la pena notar aquí. Primero, `tags` se guarda en el CSV como un solo string unido por comas porque las celdas de un CSV no pueden contener una lista real de Python — reconstruir la lista al cargar, con `.apply`, es el patrón estándar para cualquier columna "empaquetada" como esta. Segundo, que `df["text"].str.len()` calcule la longitud de cada cita en una sola llamada vectorizada, en lugar de un bucle de Python llamando a `len()` fila por fila, es exactamente el argumento de velocidad de la Sección 2 — solo que aplicado a datos que obtuviste tú mismo en lugar de un CSV empaquetado.
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 4.2 Verifica
 
 **✅ Lista de verificación**
 
@@ -230,9 +350,11 @@ Dos cosas vale la pena notar aquí. Primero, `tags` se guarda en el CSV como un 
 - ¿Por qué calcular `quote_length` a partir de `text` después de eliminar espacios en blanco en lugar de antes? ¿Qué número estaría mal si lo calcularas antes?
 
 ## Paso 5: Analiza y visualiza
+### 5.1 Con columnas limpias y tipadas, el análisis en sí son unas pocas líneas de `groupby`/`value_...
+
+**👟 Pista inicial :**
 
 Con columnas limpias y tipadas, el análisis en sí son unas pocas líneas de `groupby`/`value_counts`, exactamente como los notebooks guiados de la Sección 2 — la diferencia es que estos datos vinieron de tu propio scraper, no de un archivo empaquetado.
-
 **Etiquetas más comunes** — `explode` convierte la columna de lista de etiquetas en una fila por etiqueta, para que `value_counts` pueda contarlas individualmente:
 
 ```python
@@ -252,12 +374,36 @@ fig.tight_layout()
 fig.savefig("top_tags.png")
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 5.2 **Autores más citados:**
+
+**👟 Pista inicial :**
+
 **Autores más citados:**
 
 ```python
 most_quoted = df["author"].value_counts().head(5)
 print(most_quoted)
 ```
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 5.3 **Distribución de longitud de citas** — un histograma, para ver la forma de los datos en lug...
+
+**👟 Pista inicial :**
 
 **Distribución de longitud de citas** — un histograma, para ver la forma de los datos en lugar de solo un único promedio:
 
@@ -270,8 +416,17 @@ ax.set_title("Distribution of quote lengths")
 fig.tight_layout()
 fig.savefig("quote_length_dist.png")
 ```
-
 Ambos gráficos siguen las mismas reglas de honestidad de la Semana 9 del track Difícil de Data Analysis: los ejes están etiquetados, el eje x del gráfico de barras empieza en 0 en lugar de truncarse para exagerar diferencias pequeñas, y los títulos dicen exactamente qué se está contando en lugar de dejarlo a adivinar.
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 5.4 Verifica
 
 **✅ Lista de verificación**
 

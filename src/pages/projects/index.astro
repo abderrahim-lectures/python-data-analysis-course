@@ -4,19 +4,28 @@ import Base from '../../layouts/Base.astro';
 import Icon from '../../components/Icon.astro';
 import ProjectArt from '../../components/ProjectArt.astro';
 import {PROJECT_TAGS} from '../../lib/projectArt.ts';
+import {PAGE_STRINGS} from '../../lib/pageStrings';
 
 const base = import.meta.env.BASE_URL;
+const s = PAGE_STRINGS.en;
 const projects = (await getCollection('projects', ({slug}) => !/^(ar|es|fr)\//.test(slug)))
   .sort((a, b) => a.data.title.localeCompare(b.data.title));
 
 const allTags = [...new Set(projects.flatMap((p) => PROJECT_TAGS[p.slug.replace(/^\/?projects\//, '')] ?? []))].sort();
+const alternates = {
+  en: 'projects',
+  ar: 'ar/مشاريع',
+  es: 'es/proyectos',
+  fr: 'fr/projets',
+};
 ---
 
 <Base
-  title="Real-World Projects — PyDA Course"
-  description="Optional, ungraded projects that take you from the in-browser playground to real Python: agents, MCP servers, CLIs, and more."
+  title={s.projectsTitle}
+  description={s.projectsDescription}
   lang="en"
   dir="ltr"
+  alternates={alternates}
 >
   <section class="hero">
     <div class="container head">

@@ -83,9 +83,11 @@ GITHUB_TOKEN=ta-clé-ici
 ```
 
 ## Étape 1 : Un script codé en dur, sans LLM pour l'instant
+### 1.1 Avant de recourir à un agent, écris la version simple faite à la main — ça vaut la peine de ...
+
+**👟 Indice de départ :**
 
 Avant de recourir à un agent, écris la version simple faite à la main — ça vaut la peine de sentir exactement à quel point elle est fragile avant de résoudre ce problème. La cible de tout ce projet est [httpbin.org/forms/post](https://httpbin.org/forms/post), un petit formulaire de « commande de pizza » bien connu et stable, construit spécifiquement pour tester des outils comme celui-ci — pas de connexion, pas de vraies données client, rien derrière une autorisation, et un bac à sable public et respectueux des CGU pour tester des formulaires que des étudiants et tutoriels utilisent depuis des années.
-
 Crée `scripted_fill.py` :
 
 ```python
@@ -123,25 +125,45 @@ with sync_playwright() as p:
     browser.close()
 ```
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 1.2 Exécute-le :
+
+**👟 Indice de départ :**
+
 Exécute-le :
 
 ```bash
 uv run python scripted_fill.py
 ```
-
 Une vraie fenêtre Chromium visible apparaît (`headless=False`), tape dans chaque champ, et soumet — httpbin renvoie les données soumises en JSON, que tu devrais voir affichées dans ton terminal.
-
 Maintenant imagine que le propriétaire du formulaire renomme `custname` en `customer_name`, ou ajoute un nouveau champ requis. Ce script casse immédiatement, sans aucune idée de *pourquoi* — il n'a jamais regardé la page, il a juste rejoué une séquence fixe de sélecteurs. Cette fragilité est le vrai problème que résout ce projet.
-
   - ✅ `uv run python scripted_fill.py` ouvre un navigateur visible, remplit le formulaire, et affiche le JSON soumis.
   - ✅ Tu peux pointer au moins un nom de champ ou sélecteur dans le script qui casserait silencieusement si le formulaire changeait.
-
 **🤔 Question(s) socratique(s)** : Si tu ne contrôlais pas le site web cible et qu'il changeait son formulaire demain, comment le *découvrirais*-tu seulement, à part exécuter le script et lire l'erreur ?
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 1.3 Vérifie
+
 ## Étape 2 : Enveloppe le navigateur comme des outils
+### 2.1 Un agent LLM ne peut pas appeler directement l'API Python de Playwright — les outils `deepag...
+
+**👟 Indice de départ :**
 
 Un agent LLM ne peut pas appeler directement l'API Python de Playwright — les outils `deepagents` sont de simples fonctions avec des arguments simples et compatibles JSON, la même forme que tu as vue dans le projet Agent IA. Donc la solution à la fragilité de l'Étape 1 est de donner au modèle un petit ensemble fixe de *capacités* au lieu d'un script fixe, et de le laisser décider quand utiliser chacune.
-
 Crée `browser_tools.py` (ou ajoute ceci en haut de `agent.py` — les deux fonctionnent) :
 
 ```python
@@ -200,15 +222,25 @@ def read_page_text() -> str:
     """Read back the visible text of the current page -- use this to verify what happened."""
     return _page().inner_text("body")[:2000]
 ```
-
 Remarque ce qui a changé par rapport à l'Étape 1 : rien ici ne mentionne `custname` ou `size` ou un champ spécifique. `read_form_fields` découvre quels que soient les champs qui existent réellement sur quelle que soit la page qu'elle pointe — l'agent, pas ce code, est responsable de faire correspondre « nom du client » à `name="custname"`.
-
   - ✅ Tu peux expliquer, en une phrase, pourquoi ces fonctions-outils prennent de simples chaînes (une URL, un nom de champ, une valeur) plutôt qu'un objet `Page` de Playwright comme argument.
   - ✅ `read_form_fields()` appelée manuellement contre une vraie page retourne une vraie liste des noms de champs réels de la page — pas une supposition codée en dur.
-
 **🤔 Question(s) socratique(s)** : `read_form_fields` ne tronque rien et retourne la *vraie* structure de la page au modèle. Qu'est-ce qui pourrait mal se passer si tu faisais plutôt confiance au modèle pour deviner les noms de champs sans jamais l'appeler ?
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 2.2 Vérifie
+
 ## Étape 3 : Donne à l'agent un objectif en anglais simple
+### 3.1 Maintenant connecte ces outils à un agent `deepagents`, le même pattern `create_deep_agent` ...
+
+**👟 Indice de départ :**
 
 Maintenant connecte ces outils à un agent `deepagents`, le même pattern `create_deep_agent` que le projet Agent IA, et donne-lui un objectif en langage ordinaire plutôt qu'un script étape par étape :
 
@@ -249,36 +281,51 @@ result = agent.invoke({"messages": [{"role": "user", "content": goal}]})
 print(result["messages"][-1].content)
 _session.close()
 ```
-
 Exécute-le et observe la fenêtre du navigateur : l'agent appelle `navigate`, puis `read_form_fields`, puis une séquence d'appels `fill_text_field`/`select_option` qu'il a choisis lui-même — dans un ordre qu'il a choisi lui-même, en utilisant des noms de champs qu'il a lus sur la vraie page plutôt que ceux que tu lui as donnés dans le texte de l'objectif.
-
   - ✅ Les appels d'outils de l'agent (affiche `result["messages"]` et cherche les entrées d'appel d'outil `AIMessage`, comme la trace du projet Agent IA) montrent qu'il appelle `read_form_fields` avant tout appel `fill_text_field`/`select_option`.
   - ✅ Tu as changé un détail dans l'objectif en anglais simple (ex. un topping différent) et l'as relancé sans toucher au code des outils, et la soumission a changé en conséquence.
-
 **🤔 Question(s) socratique(s)** : Le system prompt dit explicitement « ne devine jamais un nom de champ que `read_form_fields` ne t'a pas montré. » Pourquoi cette instruction compte-t-elle plus ici qu'elle ne comptait pour les outils jouets dans le projet Agent IA ?
 
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 3.2 Vérifie
+
 ## Étape 4 : Exécute-le de bout en bout et vérifie la vraie soumission
+### 4.1 Exécute le script complet et confirme que toute la boucle a vraiment fonctionné, pas juste q...
+
+**👟 Indice de départ :**
 
 Exécute le script complet et confirme que toute la boucle a vraiment fonctionné, pas juste qu'elle n'a pas planté :
 
 ```bash
 uv run python agent.py
 ```
-
 Vérifie le texte final affiché de la page (de `read_page_text`) par rapport à ce que httpbin renvoie réellement — ça devrait être un blob JSON sous `"form"` contenant chaque valeur que tu as demandée, en utilisant les vrais noms de champs que l'agent a découverts, pas les noms en anglais simple de ton objectif.
-
   - ✅ Le texte final de la page montré par l'agent contient chaque valeur de ton objectif, correctement associée au bon champ.
   - ✅ Tu l'as exécuté une seconde fois avec `headless=True` et il s'est terminé sans fenêtre visible, confirmant qu'il ne dépend pas secrètement du fait que tu le regardes.
-
 **🤔 Question(s) socratique(s)** : Si l'agent avait soumis le formulaire avec un champ erroné — disons, le mauvais topping — comment le saurais-tu, à part lire toi-même le texte de confirmation ? Que faudrait-il pour que l'agent vérifie son propre travail ?
-
 :::tip[N'automatise que des sites pour lesquels tu as la permission]
 `httpbin.org/forms/post` est choisi délibérément parce que c'est un outil public construit *pour* ce type exact de pratique — l'automatiser est attendu, pas une violation de quoi que ce soit. Ce n'est pas vrai pour la plupart des sites web. Ne pointe jamais du code d'automatisation de navigateur vers les pages de connexion, de paiement, ou de compte d'un vrai site de production sans l'autorisation explicite du propriétaire du site — les Conditions Générales d'Utilisation de la plupart des sites interdisent la soumission automatisée de formulaires, le scraping, ou les actions de compte en masse, et « le formulaire était techniquement accessible publiquement » n'est pas la même chose que « j'avais la permission de l'automatiser. » Traite ceci comme tu traiterais n'importe quel autre identifiant ou compte : obtiens la permission explicite avant d'automatiser de vraies cibles qui ne sont pas de pratique.
 :::
-
 :::tip[Les sélecteurs sont un contrat avec une page que tu ne contrôles pas]
 Chaque appel `page.fill(...)` et `page.check(...)` ci-dessus dépend du fait que le HTML réel du site cible ne change pas — un attribut `name` renommé, un `<div>` échangé contre un vrai `<button>`, ou un formulaire redessiné casse un script codé en dur instantanément et silencieusement. C'est exactement pourquoi l'outil `read_form_fields` de l'Étape 2 existe : un agent qui *lit* la page avant d'agir s'adapte à de petits changements qu'un script codé en dur ne peut pas gérer, même s'il n'est toujours pas immunisé contre une page qui change toute sa structure ou sa signification.
 :::
+
+**🎯 Résultat attendu :**
+
+Vous devriez voir le résultat attendu sans erreur.
+
+**🩹 Si ça ne marche pas :**
+
+Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
+
+### 4.2 Vérifie
 
 ## ⚠️ Pièges courants
 

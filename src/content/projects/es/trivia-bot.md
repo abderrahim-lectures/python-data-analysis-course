@@ -121,6 +121,9 @@ GITHUB_TOKEN=your-llm-key-here
 - El token del bot y la clave API del LLM son ambos secretos, pero autentican contra dos servicios completamente diferentes. ¿Qué saldría mal si accidentalmente intercambiaras qué variable de entorno contiene qué valor?
 
 ## Paso 1: Un banco de preguntas fijo y un comando básico de barra diagonal
+### 1.1 Empieza con la fuente de preguntas más simple posible — una lista plana de Python de diccion...
+
+**👟 Pista inicial :**
 
 Empieza con la fuente de preguntas más simple posible — una lista plana de Python de diccionarios — y suficiente cableado de Discord para publicar una:
 
@@ -149,6 +152,18 @@ QUESTION_BANK = [
 def random_question() -> dict:
     return random.choice(QUESTION_BANK)
 ```
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.2 La interfaz moderna de `discord.py` para esto es un **comando de barra diagonal**: en lugar ...
+
+**👟 Pista inicial :**
 
 La interfaz moderna de `discord.py` para esto es un **comando de barra diagonal**: en lugar de vigilar cada mensaje buscando algo que parezca un comando, registras `/trivia` con Discord mismo, y Discord lo muestra en la interfaz con autocompletado. Eso necesita un `Client` además de un `app_commands.CommandTree` adjunto a él:
 
@@ -186,12 +201,20 @@ async def on_ready() -> None:
 if __name__ == "__main__":
     client.run(os.environ["DISCORD_BOT_TOKEN"])
 ```
-
 `tree.sync()` es lo que realmente publica `/trivia` en Discord para que aparezca cuando alguien escribe `/` en tu servidor — omítelo y el comando existe en tu código pero en ningún lugar donde la interfaz de Discord pueda encontrarlo.
-
 :::tip[Los comandos de barra diagonal necesitan un segundo ámbito de OAuth2]
 Una invitación de bot normal solo necesita el ámbito `bot`. Los comandos de barra diagonal necesitan específicamente también `applications.commands` — si generaste tu URL de invitación antes de añadir `/trivia`, regenérala con ambos ámbitos marcados (ver Configuración arriba) o el comando nunca aparecerá en silencio en tu servidor.
 :::
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.3 Verifica
 
 **✅ Lista de verificación**
 
@@ -205,6 +228,9 @@ Una invitación de bot normal solo necesita el ámbito `bot`. Los comandos de ba
 - El `answer_index` del dict de la pregunta apunta a `options` por posición en lugar de almacenar el texto de la respuesta correcta directamente. ¿Cuál es una ventaja de almacenarlo de esta manera?
 
 ## Paso 2: Seguimiento de puntos, persistido a lo largo de las rondas
+### 2.1 Una tabla de clasificación solo significa algo si sobrevive al reinicio del bot, así que los...
+
+**👟 Pista inicial :**
 
 Una tabla de clasificación solo significa algo si sobrevive al reinicio del bot, así que los puntos van a un pequeño archivo JSON en lugar de vivir solo en memoria:
 
@@ -243,6 +269,18 @@ def leaderboard_text(scores: dict, top_n: int = 10) -> str:
     return "\n".join(lines)
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 2.2 Pruébalo de forma independiente antes de conectarlo a `bot.py` en absoluto — el mismo patrón...
+
+**👟 Pista inicial :**
+
 Pruébalo de forma independiente antes de conectarlo a `bot.py` en absoluto — el mismo patrón de "prueba que la pieza funciona por sí sola primero" que cualquier proyecto de varias partes:
 
 ```bash
@@ -256,6 +294,18 @@ print(leaderboard_text(s))
 "
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 2.3 Luego añade un segundo comando de barra diagonal que solo lea el archivo:
+
+**👟 Pista inicial :**
+
 Luego añade un segundo comando de barra diagonal que solo lea el archivo:
 
 ```python
@@ -264,8 +314,17 @@ async def leaderboard_command(interaction: discord.Interaction) -> None:
     scores = load_scores()
     await interaction.response.send_message(f"**Leaderboard:**\n{leaderboard_text(scores)}")
 ```
-
 Nada otorga un punto todavía — `trivia_command` del Paso 1 no verifica respuestas en absoluto — eso es lo que añade el bucle de ronda del Paso 4. Este paso es deliberadamente solo la mitad de almacenamiento, probada y funcionando por sí sola primero.
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 2.4 Verifica
 
 **✅ Lista de verificación**
 
@@ -279,6 +338,9 @@ Nada otorga un punto todavía — `trivia_command` del Paso 1 no verifica respue
 - `save_scores()` reescribe todo el archivo en cada punto individual. Para un bot pequeño de un solo servidor esto está bien — ¿en qué punto dejaría de estarlo, y qué usarías en su lugar?
 
 ## Paso 3: Genera una pregunta nueva sobre cualquier tema con un LLM
+### 3.1 El banco fijo del Paso 1 solo pregunta desde el mismo puñado de preguntas. Este paso añade u...
+
+**👟 Pista inicial :**
 
 El banco fijo del Paso 1 solo pregunta desde el mismo puñado de preguntas. Este paso añade una segunda fuente de preguntas: dale un tema al bot, y le pide a un LLM una pregunta de opción múltiple completamente nueva sobre él, en el momento.
 
@@ -326,13 +388,38 @@ def generate_question(topic: str) -> dict:
     return question
 ```
 
-La verificación explícita de la forma después del análisis importa: `response_format={"type": "json_object"}` garantiza que la salida del LLM sea *JSON válido*, no que sea el *JSON correcto* — aún podría devolver tres opciones en lugar de cuatro, u omitir `answer_index` por completo. Capturarlo aquí, con un error claro, es mejor que descubrirlo más tarde como un mensaje confuso de Discord con una opción D que falta.
+**🎯 Resultado esperado :**
 
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 3.2 La verificación explícita de la forma después del análisis importa: `response_format={"type"...
+
+**👟 Pista inicial :**
+
+La verificación explícita de la forma después del análisis importa: `response_format={"type": "json_object"}` garantiza que la salida del LLM sea *JSON válido*, no que sea el *JSON correcto* — aún podría devolver tres opciones en lugar de cuatro, u omitir `answer_index` por completo. Capturarlo aquí, con un error claro, es mejor que descubrirlo más tarde como un mensaje confuso de Discord con una opción D que falta.
 Conecta un parámetro `topic` en `/trivia` para que pueda extraer de cualquiera de las dos fuentes:
 
 ```python
 from round import pick_question  # combines random_question() and generate_question()
 ```
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 3.3 # round.py
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
 
 ```python
 # round.py
@@ -347,6 +434,20 @@ def pick_question(topic: str | None = None) -> dict:
     return random_question()
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 3.4 @tree.command(name="trivia", description="Start a trivia round, optionally on a topic")
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
+
 ```python
 @tree.command(name="trivia", description="Start a trivia round, optionally on a topic")
 @app_commands.describe(topic="Optional topic for a freshly generated question")
@@ -355,16 +456,37 @@ async def trivia_command(interaction: discord.Interaction, topic: str | None = N
     ...
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 3.5 Prueba ambos caminos desde una terminal antes de confiar en ellos dentro de Discord:
+
+**👟 Pista inicial :**
+
 Prueba ambos caminos desde una terminal antes de confiar en ellos dentro de Discord:
 
 ```bash
 uv run python -c "from round import pick_question; print(pick_question())"
 uv run python -c "from round import pick_question; print(pick_question('classic video games'))"
 ```
-
 :::tip[Valida el contenido generado por LLM antes de que llegue a un canal en vivo]
 Un LLM al que se le pide una pregunta de trivia aún puede equivocarse en los hechos, especialmente en temas oscuros — no hay `try`/`except` que capture "equivocado con confianza". La validación de la forma en `generate_question()` solo protege contra una *estructura* malformada; para un servidor público, hojea un puñado de preguntas generadas sobre temas que realmente conozcas antes de confiar en el modo en temas que no conoces.
 :::
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 3.6 Verifica
 
 **✅ Lista de verificación**
 
@@ -378,6 +500,9 @@ Un LLM al que se le pide una pregunta de trivia aún puede equivocarse en los he
 - Si un jugador elige un tema intencionalmente ofensivo o sin sentido, ¿cuál es lo peor plausible que `generate_question()` podría devolver, y qué añadirías para protegerte contra ello?
 
 ## Paso 4: Un bucle de ronda de trivia completo
+### 4.1 Todo hasta ahora han sido piezas probadas de forma aislada: una fuente de preguntas, almacen...
+
+**👟 Pista inicial :**
 
 Todo hasta ahora han sido piezas probadas de forma aislada: una fuente de preguntas, almacenamiento de puntos, generación. Este paso las conecta en lo que una ronda realmente parece en vivo — publica una pregunta, espera la primera respuesta correcta dentro de un límite de tiempo, revélala, actualiza la tabla de clasificación:
 
@@ -435,10 +560,20 @@ async def run_round(channel: discord.abc.Messageable, topic: str | None = None) 
         await channel.send(f"⏰ Time's up! Nobody got it. The answer was **{correct_letter}) {correct_text}**.")
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 4.2 `client.wait_for("message", check=..., timeout=...)` es la forma de `discord.py` de pausar u...
+
+**👟 Pista inicial :**
+
 `client.wait_for("message", check=..., timeout=...)` es la forma de `discord.py` de pausar una función `async` hasta que ocurra un tipo específico de evento — aquí, cualquier mensaje en el mismo canal cuyo contenido sea exactamente una de las letras de respuesta válidas. El bucle `while` lo vuelve a llamar con un timeout `remaining` decreciente, de modo que el presupuesto de tiempo *total* de la ronda sea `ROUND_TIME_LIMIT`, no `ROUND_TIME_LIMIT` por suposición incorrecta — sin recalcular `remaining`, un canal lleno de suposiciones incorrectas entusiastas podría mantener la ronda abierta indefinidamente.
-
 Solo la *primera* respuesta correcta puntúa; haz `break` tan pronto como se establezca `winner`. Las suposiciones incorrectas obtienen una reacción ❌ en lugar de un mensaje de error — retroalimentación gratuita sin saturar el canal con respuestas.
-
 Finalmente, `trivia_command` del Paso 1 se convierte en un envoltorio delgado alrededor de `run_round`:
 
 ```python
@@ -453,10 +588,19 @@ async def trivia_command(interaction: discord.Interaction, topic: str | None = N
         print(f"Error running trivia round: {error!r}")
         await interaction.channel.send("Something went wrong running that round -- see the bot's console log.")
 ```
-
 :::tip[Prueba el tiempo de la ronda con un ROUND_TIME_LIMIT corto primero]
 Establece `ROUND_TIME_LIMIT = 5` mientras ajustas el bucle, para no esperar 30 segundos por ciclo de prueba para descubrir que `check_answer` tiene un error. Súbelo de nuevo a algo razonable para el juego real una vez que el bucle en sí funcione.
 :::
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 4.3 Verifica
 
 **✅ Lista de verificación**
 

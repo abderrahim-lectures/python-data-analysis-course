@@ -103,9 +103,11 @@ Una clave de API es un secreto, exactamente como una contraseña — cualquiera 
 Con `uv` instalado, el proyecto configurado, y `.env` completado, estás listo para construir — cada paso de aquí en adelante asume que todo esto ya está hecho.
 
 ## Paso 1: Carga e inspecciona los correos de ejemplo
+### 1.1 El ejemplo del repositorio incluye seis correos de ejemplo cortos y realistas en `sample_ema...
+
+**👟 Pista inicial :**
 
 El ejemplo del repositorio incluye seis correos de ejemplo cortos y realistas en `sample_emails/` — una solicitud urgente de cliente, un boletín, dos mensajes que genuinamente necesitan respuesta, una promoción de spam, y una notificación automática de información. Son archivos de texto plano con la forma de un `.eml` simplificado: algunas líneas `Encabezado: valor`, una línea en blanco, luego el cuerpo.
-
 Crea `triage.py` y empieza con un pequeño analizador:
 
 ```python
@@ -159,13 +161,34 @@ if __name__ == "__main__":
         print(f"[{email.filename}] {email.subject!r} from {email.sender}")
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.2 Copia los seis archivos de ejemplo de la carpeta [`sample_emails/`](https://github.com/abder...
+
+**👟 Pista inicial :**
+
 Copia los seis archivos de ejemplo de la carpeta [`sample_emails/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/email-triage-agent/sample_emails) del ejemplo del repositorio a la carpeta `sample_emails/` de tu propio proyecto, luego ejecuta:
 
 ```bash
 uv run python triage.py
 ```
-
 `text.partition("\n\n")` está haciendo el trabajo real aquí: divide el archivo en exactamente dos piezas en la *primera* línea en blanco — todo antes de ella (los encabezados) y todo después (el cuerpo) — lo cual es suficiente estructura para trabajar sin traer una librería completa de análisis de correo para texto tan simple.
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.3 Verifica
 
 **✅ Lista de verificación**
 
@@ -179,6 +202,9 @@ uv run python triage.py
 - Los archivos `.eml` reales pueden tener docenas de encabezados (`Message-ID`, `Content-Type`, `X-Mailer`, y más) que este analizador ignora silenciosamente al leer solo `from`, `subject`, y `date`. ¿Por qué es ignorar el resto la decisión correcta para este proyecto?
 
 ## Paso 2: Categoriza y prioriza cada correo con un LLM
+### 2.1 Ahora entrega cada correo analizado a un modelo de lenguaje y pídele que lo clasifique en un...
+
+**👟 Pista inicial :**
 
 Ahora entrega cada correo analizado a un modelo de lenguaje y pídele que lo clasifique en una categoría y una prioridad — el paso real de triaje. Añade esto a `triage.py`:
 
@@ -265,6 +291,18 @@ def triage_email(client: OpenAI, model: str, email: Email) -> dict:
     return json.loads(content)
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 2.2 Actualiza el bloque `if __name__ == "__main__":` para realmente llamarlo:
+
+**👟 Pista inicial :**
+
 Actualiza el bloque `if __name__ == "__main__":` para realmente llamarlo:
 
 ```python
@@ -279,15 +317,37 @@ if __name__ == "__main__":
         print(f"  reasoning: {verdict['reasoning']}\n")
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 2.3 uv run python triage.py
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
+
 ```bash
 uv run python triage.py
 ```
-
 El prompt que pide "SOLO un objeto JSON" y luego lo analiza con `json.loads` es lo que convierte una respuesta de texto libre del modelo en algo sobre lo que tu código realmente puede ramificarse (`verdict["category"]`, `verdict["needs_reply"]`) — la misma idea que `int(input(...))` convierte texto de teclado escrito libremente en algo con lo que tu código puede hacer aritmética, solo con un modelo de lenguaje sustituyendo el teclado. Los modelos ocasionalmente envuelven JSON en una valla ` ```json ` a pesar de que se les dijo que no lo hicieran; la línea `content.strip("`")` está ahí específicamente para sobrevivir eso sin fallar.
-
 :::tip[Pide un conjunto fijo de categorías, no texto libre]
 `TRIAGE_PROMPT` detalla las cinco cadenas de categoría exactas permitidas en lugar de pedirle al modelo que "invente una categoría." Un modelo dado una lista fija y explícita es mucho más consistente de un correo al siguiente que uno al que se le pide inventar etiquetas libremente — lo cual importa aquí, ya que el código posterior (`if verdict["needs_reply"]` del Paso 3) depende de que los valores sean predecibles.
 :::
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 2.4 Verifica
 
 **✅ Lista de verificación**
 
@@ -301,9 +361,11 @@ El prompt que pide "SOLO un objeto JSON" y luego lo analiza con `json.loads` es 
 - ¿Qué esperarías que pasara si eliminaras la instrucción "responde con SOLO un objeto JSON" y simplemente le pidieras al modelo "categoriza este correo"? Pruébalo, y observa qué se rompe en tu código Python como resultado.
 
 ## Paso 3: Redacta (pero nunca envíes) una respuesta
+### 3.1 Este es el paso donde "agente" empieza a significar algo más que "categorizador" — para cual...
+
+**👟 Pista inicial :**
 
 Este es el paso donde "agente" empieza a significar algo más que "categorizador" — para cualquier cosa que el modelo marcó `needs_reply: true`, pídele que redacte una respuesta real. Pero este es también donde este proyecto traza una línea dura: **el agente solo redacta texto. Nunca envía nada, a nadie, bajo ninguna condición.** No hay código SMTP en este proyecto en absoluto — no comentado, no detrás de una bandera, simplemente no presente, porque un script que *puede* enviar correo está a un bug o un mal prompt de distancia de realmente hacerlo.
-
 Añade esto a `triage.py`:
 
 ```python
@@ -328,10 +390,19 @@ def draft_reply(client: OpenAI, model: str, email: Email) -> str:
     )
     return response.choices[0].message.content.strip()
 ```
-
 :::tip[Nunca dejes que un agente envíe nada sin que tú estés en el ciclo]
 Esta es la lección más importante de este proyecto, más importante que cualquier línea de código específica: un agente que puede *redactar* una respuesta es útil; un agente que puede *enviar* una autónomamente es algo muy diferente y mucho más arriesgado — una categorización incorrecta, una instrucción inyectada por prompt escondida en el cuerpo de un mensaje, o un modelo que tuvo un mal día, y envió algo que nunca aprobaste, a alguien real, que no puedes deshacer. La función `draft_reply` de este proyecto devuelve una cadena y no hace nada más — sin `smtplib`, sin "auto-enviar si la confianza es alta," sin nada automático. Eso no es una característica faltante. Es el diseño. Mantén ese límite si extiendes este proyecto tú mismo.
 :::
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 3.2 Verifica
 
 **✅ Lista de verificación**
 
@@ -345,6 +416,9 @@ Esta es la lección más importante de este proyecto, más importante que cualqu
 - Uno de los correos de ejemplo (`04_spammy_promo.txt`) contiene lenguaje manipulador diseñado para hacer que un lector actúe rápido sin pensar. Si un atacante real elaborara un correo específicamente para manipular un *agente de IA* que lo lee (en lugar de un humano), ¿cómo se vería eso, y cómo protegería el nunca-auto-enviar contra ello incluso si el paso de categorización fuera engañado?
 
 ## Paso 4: Ejecútalo de principio a fin y revisa la salida
+### 4.1 Conecta todo — categoriza cada correo, redacta una respuesta para los que necesitan una, y g...
+
+**👟 Pista inicial :**
 
 Conecta todo — categoriza cada correo, redacta una respuesta para los que necesitan una, y guarda cada borrador en una carpeta local `drafts/` en lugar de imprimir muros de texto en la terminal:
 
@@ -373,11 +447,34 @@ if __name__ == "__main__":
     print(f"Done. Review anything in {DRAFTS_DIR}/ yourself before sending.")
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 4.2 uv run python triage.py
+
+**👟 Pista inicial :**
+
+Ejecuta el código de abajo y confirma que funciona.
+
 ```bash
 uv run python triage.py
 ```
-
 Abre los archivos en `drafts/` y realmente léelos — este es el punto de todo el proyecto. ¿Enviarías lo que el modelo redactó, tal cual? ¿Lo editarías primero? Para al menos un borrador, reescríbelo en tus propias palabras antes de considerarlo "terminado" — ese paso editorial es exactamente el paso humano-en-el-ciclo alrededor del cual está construido este proyecto, no una idea tardía atornillada encima.
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 4.3 Verifica
 
 **✅ Lista de verificación**
 

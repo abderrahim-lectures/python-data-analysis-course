@@ -27,14 +27,28 @@ Tres formas razonables de hacer este proyecto — elige la que se ajuste a tu co
 - **Google Colab o Kaggle Notebooks.** Un buen ajuste genuino aquí: entrenar `LogisticRegression` o `RandomForestClassifier` sobre un dataset de este tamaño (unos pocos cientos de filas como máximo) no necesita GPU, así que un entorno de notebook gratuito es más que suficiente. Ejecuta `!pip install scikit-learn pandas` en una celda, y luego pega y adapta el código de los pasos de abajo. **Kaggle Notebooks en particular** es una elección bonita que cierra el círculo — el dataset del Titanic es en sí mismo una de las competencias originales y más famosas para principiantes de Kaggle, así que estarías entrenando un modelo en la propia plataforma de Kaggle, sobre el propio dataset de Kaggle.
 
 ## Paso 1: Instalar `uv`
+### 1.1 `uv` es una única herramienta que reemplaza la cadena habitual de "instala Python, luego ins...
+
+**👟 Pista inicial :**
 
 `uv` es una única herramienta que reemplaza la cadena habitual de "instala Python, luego instala pip, luego instala una herramienta de entorno virtual, luego instala paquetes" — puede instalar y gestionar versiones de Python por sí misma, junto con las dependencias de tu proyecto.
-
 **macOS / Linux** (terminal):
 
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.2 **Windows** (PowerShell):
+
+**👟 Pista inicial :**
 
 **Windows** (PowerShell):
 
@@ -42,11 +56,35 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.3 Cierra y vuelve a abrir tu terminal, y luego confirma que se instaló:
+
+**👟 Pista inicial :**
+
 Cierra y vuelve a abrir tu terminal, y luego confirma que se instaló:
 
 ```bash
 uv --version
 ```
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.4 Luego configura el proyecto:
+
+**👟 Pista inicial :**
 
 Luego configura el proyecto:
 
@@ -56,7 +94,20 @@ cd ml-classifier
 uv add scikit-learn pandas
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.5 Verifica
+
 ## Paso 2: Carga y prepara los datos
+### 2.1 El mismo dataset, las mismas columnas del EDA de la Semana 10 — esta vez cargado desde el ar...
+
+**👟 Pista inicial :**
 
 El mismo dataset, las mismas columnas del EDA de la Semana 10 — esta vez cargado desde el archivo de dataset crudo del curso en lugar del sandbox del navegador:
 
@@ -68,6 +119,18 @@ df = pd.read_csv(url)
 df.head()
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 2.2 Repaso rápido de la limpieza que la Semana 10 ya recorrió en profundidad — solo lo suficient...
+
+**👟 Pista inicial :**
+
 Repaso rápido de la limpieza que la Semana 10 ya recorrió en profundidad — solo lo suficiente aquí para obtener un DataFrame limpio, no vuelto a enseñar:
 
 ```python
@@ -76,8 +139,19 @@ df["Embarked"] = df["Embarked"].fillna(df["Embarked"].mode()[0])
 df = df.drop(columns=["PassengerId", "Name"])  # identifiers, not predictive signal
 ```
 
-### Codificando columnas categóricas
+**🎯 Resultado esperado :**
 
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 2.3 ### Codificando columnas categóricas
+
+**👟 Pista inicial :**
+
+### Codificando columnas categóricas
 Esta parte es nueva. `Sex` y `Embarked` son strings ("male"/"female", "S"/"C"/"Q") — el `.groupby()` de la Semana 10 agrupaba felizmente por una columna de strings, pero los modelos de scikit-learn no lo hacen: cada modelo de este proyecto está, por debajo, haciendo aritmética con números, así que cada columna que entra tiene que ser ya numérica. `pd.get_dummies` maneja esto convirtiendo una columna categórica en varias columnas de 0/1, una por categoría:
 
 ```python
@@ -85,14 +159,35 @@ df = pd.get_dummies(df, columns=["Sex", "Embarked"], drop_first=True)
 df.head()
 ```
 
-`drop_first=True` elimina una categoría por columna (p. ej. mantiene `Sex_male` pero no `Sex_female`) porque la categoría eliminada está completamente implicada por que las demás sean 0 — mantener ambas sería redundante. `Sex` se convierte en una columna (`Sex_male`, 1 o 0); `Embarked` se convierte en dos (`Embarked_Q`, `Embarked_S`, ambas en 0 significando "C"). Esta es la misma forma de transformación que `pd.cut` en la Semana 10 — convertir una columna en una forma más fácil de consumir para el siguiente paso — solo que yendo de texto a números en lugar de de continuo a agrupado en bins.
+**🎯 Resultado esperado :**
 
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 2.4 `drop_first=True` elimina una categoría por columna (p. ej. mantiene `Sex_male` pero no `Sex...
+
+**👟 Pista inicial :**
+
+`drop_first=True` elimina una categoría por columna (p. ej. mantiene `Sex_male` pero no `Sex_female`) porque la categoría eliminada está completamente implicada por que las demás sean 0 — mantener ambas sería redundante. `Sex` se convierte en una columna (`Sex_male`, 1 o 0); `Embarked` se convierte en dos (`Embarked_Q`, `Embarked_S`, ambas en 0 significando "C"). Esta es la misma forma de transformación que `pd.cut` en la Semana 10 — convertir una columna en una forma más fácil de consumir para el siguiente paso — solo que yendo de texto a números en lugar de de continuo a agrupado en bins.
 Finalmente, separa las columnas desde las que estás prediciendo (las features, `X`) de la columna que estás prediciendo (el target, `y`):
 
 ```python
 X = df.drop(columns=["Survived"])
 y = df["Survived"]
 ```
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 2.5 Verifica
 
 **✅ Lista de verificación**
 
@@ -105,6 +200,9 @@ y = df["Survived"]
 `pd.get_dummies` se aplicó a `Sex` y `Embarked`, pero no a `Pclass` (1, 2, o 3) — se dejó como una sola columna numérica. `Pclass` también es una categoría (no hay ningún sentido significativo en el que la clase 2 sea "el doble" de la clase 1), pero dejarla tal cual es una elección defendible que hacen algunos análisis reales. ¿Puedes pensar en un argumento para codificar `Pclass` de la misma forma que `Sex`, y un argumento para dejarla en paz?
 
 ## Paso 3: Divide en conjuntos de entrenamiento y prueba
+### 3.1 Esta es la idea central sobre la que se construye este paso: **la puntuación de un modelo en...
+
+**👟 Pista inicial :**
 
 Esta es la idea central sobre la que se construye este paso: **la puntuación de un modelo en datos con los que fue entrenado casi no te dice nada sobre cómo le irá con datos que nunca ha visto.** Un modelo puede — y, con suficiente libertad, lo hará — simplemente memorizar las filas de entrenamiento en lugar de aprender un patrón genuino. Imagina calificar a un estudiante usando las mismas preguntas para las que se le entregó la hoja de respuestas de antemano: una puntuación perfecta no te diría si entendió la materia o simplemente memorizó esas respuestas específicas. Evaluar un modelo con sus propios datos de entrenamiento tiene el mismo defecto. Para obtener una medida honesta de cómo se desempeña el modelo con pasajeros que nunca ha visto, tienes que reservar algunos datos y nunca dejar que el modelo entrene con ellos.
 
@@ -115,12 +213,20 @@ X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42
 )
 ```
-
 `test_size=0.2` reserva el 20% de las filas para pruebas, entrenando con el 80% restante. `random_state=42` fija la mezcla aleatoria usada para elegir qué filas van a dónde — sin él, obtendrías una división *distinta* (y por lo tanto una puntuación de precisión ligeramente distinta) cada vez que vuelvas a ejecutar el script, dificultando saber si un cambio en tu código realmente ayudó o simplemente tuviste una división más afortunada.
-
 :::tip[Fuga de datos: prepara, luego divide — no al revés]
 La codificación del Paso 2 se hizo sobre el dataset *completo*, antes de esta división, lo cual está bien aquí porque `pd.get_dummies` solo mira la propia categoría de cada fila, no la de ninguna otra fila. Pero es fácil equivocarse en esto con transformaciones que *sí* miran entre filas — por ejemplo, escalar una columna usando su media y desviación estándar. Si calculas esa media/desviación estándar sobre el dataset completo y luego divides, el conjunto de entrenamiento ha "visto" en silencio información del conjunto de prueba (sus filas contribuyeron a esa media). Esto se llama **fuga de datos** (data leakage), y es uno de los errores más comunes en el mundo real del machine learning aplicado — la solución es calcular siempre cualquier cosa que resuma los datos (medias, desviaciones estándar, listas de categorías) usando solo el conjunto de *entrenamiento*, y luego aplicar esa misma transformación al conjunto de prueba.
 :::
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 3.2 Verifica
 
 **✅ Lista de verificación**
 
@@ -133,6 +239,9 @@ La codificación del Paso 2 se hizo sobre el dataset *completo*, antes de esta d
 Si entrenaras un modelo y lo evaluaras con `X_train`/`y_train` en lugar de `X_test`/`y_test` por error, ¿esperarías que la precisión se viera *mejor* o *peor* que el número honesto — y por qué?
 
 ## Paso 4: Entrena un clasificador
+### 4.1 `LogisticRegression`, a pesar del nombre, es un clasificador, no un modelo de regresión en e...
+
+**👟 Pista inicial :**
 
 `LogisticRegression`, a pesar del nombre, es un clasificador, no un modelo de regresión en el sentido habitual. La idea: para cada pasajero, calcula una suma ponderada de sus features (edad, tarifa, sexo, clase, ...) — la misma forma de cálculo que una ecuación lineal ordinaria — y luego aplasta esa suma a través de una función (la función logística/sigmoide) que mapea cualquier número a un valor entre 0 y 1. Esa salida se interpreta como una *probabilidad* estimada de supervivencia. "Ajustar el modelo" significa encontrar el conjunto de pesos que hace que esas probabilidades estimadas se alineen lo más posible con los resultados reales de 0/1 en los datos de entrenamiento. Una predicción es entonces simplemente "probabilidad ≥ 0.5 → predice sobrevivió".
 
@@ -144,8 +253,17 @@ model.fit(X_train, y_train)
 
 predictions = model.predict(X_test)
 ```
-
 `.fit(X_train, y_train)` es donde ocurre el aprendizaje — nunca ve `X_test` ni `y_test`. `max_iter=1000` eleva el tope de cuántos pasos de optimización da el solver para converger; el valor por defecto a veces no alcanza para estos datos y scikit-learn te avisará si se detiene antes de tiempo.
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 4.2 Verifica
 
 **✅ Lista de verificación**
 
@@ -158,6 +276,9 @@ predictions = model.predict(X_test)
 `predict_proba` podría devolver algo como 0.51 para un pasajero y 0.98 para otro — ambos se redondean a la misma predicción final (1), pero representan niveles de confianza muy distintos. ¿Qué decisión del mundo real podría cambiar si tuvieras acceso a esa probabilidad, en lugar de solo la predicción final de sí/no?
 
 ## Paso 5: Evalúa y compara modelos
+### 5.1 El único número con el que empezar es la precisión (accuracy) — la fracción de predicciones ...
+
+**👟 Pista inicial :**
 
 El único número con el que empezar es la precisión (accuracy) — la fracción de predicciones del conjunto de prueba que coincidió con el resultado real:
 
@@ -168,6 +289,18 @@ accuracy = accuracy_score(y_test, predictions)
 print(f"Logistic Regression accuracy: {accuracy:.1%}")
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 5.2 La precisión sola oculta *qué tipo* de errores comete el modelo. Una matriz de confusión des...
+
+**👟 Pista inicial :**
+
 La precisión sola oculta *qué tipo* de errores comete el modelo. Una matriz de confusión desglosa eso:
 
 ```python
@@ -175,8 +308,19 @@ cm = confusion_matrix(y_test, predictions)
 print(cm)
 ```
 
-El resultado es una cuadrícula de 2×2. Leyéndola en términos simples: cuenta, por separado, cuántos pasajeros que realmente murieron fueron correctamente predichos como muertos, cuántos que realmente murieron fueron incorrectamente predichos como sobrevivientes (un **falso positivo** de "sobrevivió"), cuántos que realmente sobrevivieron fueron incorrectamente predichos como muertos (un **falso negativo**), y cuántos que realmente sobrevivieron fueron correctamente predichos como sobrevivientes. Dos modelos con precisión idéntica pueden cometer *tipos* de errores muy distintos — algo que vale la pena saber, especialmente en dominios donde un tipo de error (digamos, un diagnóstico médico no detectado) es mucho más costoso que el otro.
+**🎯 Resultado esperado :**
 
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 5.3 El resultado es una cuadrícula de 2×2. Leyéndola en términos simples: cuenta, por separado, ...
+
+**👟 Pista inicial :**
+
+El resultado es una cuadrícula de 2×2. Leyéndola en términos simples: cuenta, por separado, cuántos pasajeros que realmente murieron fueron correctamente predichos como muertos, cuántos que realmente murieron fueron incorrectamente predichos como sobrevivientes (un **falso positivo** de "sobrevivió"), cuántos que realmente sobrevivieron fueron incorrectamente predichos como muertos (un **falso negativo**), y cuántos que realmente sobrevivieron fueron correctamente predichos como sobrevivientes. Dos modelos con precisión idéntica pueden cometer *tipos* de errores muy distintos — algo que vale la pena saber, especialmente en dominios donde un tipo de error (digamos, un diagnóstico médico no detectado) es mucho más costoso que el otro.
 Ahora entrena un segundo modelo, de tipo distinto, sobre exactamente la misma división, y compara honestamente:
 
 ```python
@@ -190,8 +334,17 @@ rf_accuracy = accuracy_score(y_test, rf_predictions)
 print(f"Random Forest accuracy: {rf_accuracy:.1%}")
 print(confusion_matrix(y_test, rf_predictions))
 ```
-
 Un bosque aleatorio (random forest) entrena muchos árboles de decisión pequeños, cada uno sobre un subconjunto aleatorio ligeramente distinto de los datos y las features, y los hace votar sobre la predicción final — una idea subyacente distinta al enfoque de suma ponderada más probabilidad de la regresión logística. Compara los dos números de precisión que ahora tienes. No asumas que el más alto es automáticamente "el mejor modelo" — mira el error común de abajo.
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 5.4 Verifica
 
 **✅ Lista de verificación**
 

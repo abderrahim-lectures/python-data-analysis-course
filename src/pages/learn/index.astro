@@ -4,9 +4,15 @@ import Icon from '../../components/Icon.astro';
 import {PAGE_STRINGS} from '../../lib/pageStrings';
 const base = import.meta.env.BASE_URL;
 const s = PAGE_STRINGS.en;
+const alternates = {
+  en: 'learn',
+  ar: 'ar/تعلم',
+  es: 'es/aprender',
+  fr: 'fr/apprendre',
+};
 ---
 
-<Base title={s.learnHubTitle} description={s.learnHubDescription} lang="en" dir="ltr">
+<Base title={s.learnHubTitle} description={s.learnHubDescription} lang="en" dir="ltr" alternates={alternates}>
   <section class="hero">
     <div class="container head">
       <div class="head__eyebrow"><Icon name="code" size={16} /> {s.learnHubEyebrow}</div>
@@ -102,7 +108,7 @@ const s = PAGE_STRINGS.en;
     background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg);
     padding: 1.5rem; display: flex; flex-direction: column; gap: .75rem;
     box-shadow: var(--shadow-sm); transition: all var(--transition-smooth);
-    position: relative; overflow: hidden;
+    position: relative;
   }
   .sectioncard:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
   .sectioncard__badge {

@@ -101,7 +101,9 @@ With `uv`, `openai`, `python-dotenv`, and a key in `.env`, setup is done — eve
 
 ## Step 1: Load your notes and choose a context strategy
 
-Put a `.txt` or `.md` file of your own study notes somewhere in your project — a `notes/` folder, same convention as the [RAG project](/docs/projects/rag-notes), is a reasonable place. Reading it is nothing new:
+Put a `.txt` or `.md` file of your own study notes somewhere in your project — a `notes/` folder, same convention as the [RAG project](/docs/projects/rag-notes), is a reasonable place. Reading it is nothing new. Take this step in two small sub-steps: load the file, then choose your context strategy.
+
+### 1.1 Load the notes file
 
 **👟 Starter hint:** `Path(...).read_text(encoding="utf-8")` is the entire "load" step — no chunking, no embedding, just a string. Print `len(notes_text)` after reading it as your one sanity check before moving on:
 
@@ -115,12 +117,20 @@ notes_text = Path("notes/cell-biology.txt").read_text(encoding="utf-8")
 
 **🩹 If it's off:** A `FileNotFoundError` means the path is relative to wherever you ran `uv run` from, not the script's own location — run from the project root, or use an absolute path while debugging. A suspiciously small count (a handful of characters) usually means you saved an empty file or pointed at the wrong one.
 
+### 1.2 Choose your context strategy
+
 Here's the design decision this project asks you to make explicitly, rather than skip past: **how much of your notes should the model actually see?**
+
+**👟 Starter hint:** Read the two options below and decide which fits your notes file. For a single file under a few thousand words, Option A is simpler and recommended. If your notes are already a folder of many long files, Option B is the path — but that's a full RAG pipeline.
 
 - **Option A — feed the whole file as context.** Simplest possible approach: read one file, hand its entire text to the model in the prompt, done. This works great as long as a single file comfortably fits in the model's context window — a few thousand words is no problem at all for any modern free-tier model.
 - **Option B — chunk, embed, and retrieve**, exactly like the [RAG project](/docs/projects/rag-notes) does: split your notes into small pieces, embed them locally, and retrieve only the most relevant ones for each question. This scales to a notes folder with dozens of long files that would never fit in one prompt.
 
 **This lesson picks Option A** and is explicit about the tradeoff: it's less scalable, but it's a full lesson simpler to write, read, and debug — no embedding model, no vector search, no separate index-building step, just a string. That tradeoff is worth naming out loud, the same grounding principle as the RAG project either way: a good quiz question has to come from text the model was actually given, not text it's guessing might be relevant from training data. If your own notes outgrow a single file, don't reinvent retrieval — reuse `retrieve.py` from the RAG project's example and swap Step 2's prompt to use retrieved chunks instead of a whole file.
+
+**🩹 If it's off:** If you pick Option A but your file exceeds the model's context window, you'll get a truncated prompt (the model only sees the beginning) and won't know it — the generated questions will miss the later parts of your notes. Option B requires more setup (embeddings, vector search) but scales; if you try Option B without first doing the RAG project, you're building a pipeline you don't yet understand.
+
+### 1.3 Verify the load + strategy choice
 
 **✅ Checklist**
 
@@ -135,9 +145,11 @@ Here's the design decision this project asks you to make explicitly, rather than
 
 ## Step 2: Generate quiz questions grounded in your notes
 
-Ask the model for a fixed number of questions, each paired with an expected answer — and be explicit in the prompt that both must come from the specific text you're handing it, not general knowledge about the subject:
+Ask the model for a fixed number of questions, each paired with an expected answer — and be explicit in the prompt that both must come from the specific text you're handing it, not general knowledge about the subject. Break this into two focused sub-steps.
 
-**👟 Starter hint:** Fill `GENERATE_PROMPT_TEMPLATE` with your notes and a question count, send it in one `chat.completions.create` call, then strip a possible code fence before `json.loads` — the fence-stripping line is defensive, not optional, since models don't always obey "no markdown fences" perfectly:
+### 2.1 Write the generation prompt and call the model
+
+**👟 Starter hint:** Fill `GENERATE_PROMPT_TEMPLATE` with your notes and a question count, send it in one `chat.completions.create` call:
 
 ```python
 import json
@@ -150,7 +162,7 @@ every expected answer strictly on facts stated in the text.
 
 Reply with ONLY a JSON array, no other text, in this exact shape:
 [
-  {{"question": "...", "expected_answer": "..."}},
+  {"question": "...", "expected_answer": "..."},
   ...
 ]
 
@@ -158,6 +170,25 @@ Study notes:
 {notes_text}
 """
 
+def generate_questions(notes_text: str, num_questions: int = 5) -> list[dict]:
+    prompt = GENERATE_PROMPT_TEMPLATE.format(num_questions=num_questions, notes_text=notes_text)
+    response = client.chat.completions.create(
+        model=MODEL,
+        messages=[{"role": "user", "content": prompt}],
+    )
+    raw = response.choices[0].message.content.strip()
+    return json.loads(raw)
+```
+
+**🎯 Expected output:** The function returns a Python list of 5 dicts, each with a `"question"` and `"expected_answer"` key referencing specifics from your actual notes file — not generic textbook trivia.
+
+**🩹 If it's off:** Generic, notes-agnostic questions mean `notes_text` either wasn't actually substituted into the prompt (check the `.format(...)` call) or your notes file itself is too thin to ground five distinct questions in — see the pitfalls section.
+
+### 2.2 Strip fences and parse the JSON response
+
+**👟 Starter hint:** Models occasionally wrap their answer in a ` ```json ` code fence even when told not to. Strip it defensively before `json.loads`.
+
+```python
 def generate_questions(notes_text: str, num_questions: int = 5) -> list[dict]:
     prompt = GENERATE_PROMPT_TEMPLATE.format(num_questions=num_questions, notes_text=notes_text)
     response = client.chat.completions.create(
@@ -178,9 +209,11 @@ Two details worth noticing:
 Small free-tier models occasionally produce a vague or oddly-phrased question. If you notice this on your own notes, a simple fix without any new code is to ask for a few extra questions in the prompt and only keep the first `N` — or just re-run generation, since it's a single API call.
 :::
 
-**🎯 Expected output:** A Python list of 5 dicts, each with a `"question"` and `"expected_answer"` key referencing specifics from your actual notes file — not generic textbook trivia a search engine could have written.
+**🎯 Expected output:** A clean Python list of dicts with no JSON parsing errors.
 
-**🩹 If it's off:** A `JSONDecodeError` means `json.loads` got something that wasn't clean JSON — print `raw` right before that call to see exactly what the model sent back; a stray fence the strip calls didn't catch (e.g. a fence with extra whitespace) is the usual cause. Generic, notes-agnostic questions mean `notes_text` either wasn't actually substituted into the prompt (check the `.format(...)` call) or your notes file itself is too thin to ground five distinct questions in — see the pitfalls section.
+**🩹 If it's off:** A `JSONDecodeError` means `json.loads` got something that wasn't clean JSON — print `raw` right before that call to see exactly what the model sent back; a stray fence the strip calls didn't catch (e.g. a fence with extra whitespace) is the usual cause.
+
+### 2.3 Verify question generation
 
 **✅ Checklist**
 
@@ -195,9 +228,11 @@ Small free-tier models occasionally produce a vague or oddly-phrased question. I
 
 ## Step 3: Build the interactive quiz loop
 
-Now the part that makes this a quiz and not just a question generator: ask each question, read the student's typed answer, and have the model judge it — free-text answers won't match the expected answer word-for-word, so an exact string comparison (`==`) would mark almost everything wrong.
+Now the part that makes this a quiz and not just a question generator: ask each question, read the student's typed answer, and have the model judge it — free-text answers won't match the expected answer word-for-word, so an exact string comparison (`==`) would mark almost everything wrong. Break this into two sub-steps.
 
-**👟 Starter hint:** Loop over `questions`, `input()` the student's typed answer for each, pass it to `judge_answer(question, expected_answer, student_answer)`, and accumulate `score` based on the returned `"verdict"` — `"correct"` is +1, `"close"` is +0.5, anything else is +0:
+### 3.1 Write the judge prompt and function
+
+**👟 Starter hint:** Create `JUDGE_PROMPT_TEMPLATE` that asks the model to grade a student's answer vs the expected answer, returning a three-way verdict (`correct` / `close` / `incorrect`) with brief feedback.
 
 ```python
 JUDGE_PROMPT_TEMPLATE = """You are grading a student's quiz answer. Judge
@@ -210,7 +245,7 @@ Expected answer: {expected_answer}
 Student's answer: {student_answer}
 
 Reply with ONLY JSON, no other text, in this exact shape:
-{{"verdict": "correct" | "close" | "incorrect", "feedback": "one brief, encouraging sentence"}}
+{"verdict": "correct" | "close" | "incorrect", "feedback": "one brief, encouraging sentence"}
 """
 
 def judge_answer(question: str, expected_answer: str, student_answer: str) -> dict:
@@ -224,7 +259,17 @@ def judge_answer(question: str, expected_answer: str, student_answer: str) -> di
     raw = response.choices[0].message.content.strip()
     raw = raw.removeprefix("```json").removeprefix("```").removesuffix("```").strip()
     return json.loads(raw)
+```
 
+**🎯 Expected output:** `judge_answer(...)` returns a dict with `"verdict"` (one of the three values) and `"feedback"` (a string).
+
+**🩹 If it's off:** If every answer comes back `"incorrect"` regardless of quality, print `result` inside `judge_answer` before it's parsed — the model may be returning a verdict spelled differently than expected (`"Correct"` vs `"correct"`), which `result.get("verdict", "incorrect")`'s exact string match would silently treat as unrecognized. If the script hangs with no prompt visible, check you flushed/printed the question line before the `input()` call — some terminals buffer output differently than expected.
+
+### 3.2 Build the run_quiz loop with scoring
+
+**👟 Starter hint:** Loop over `questions`, `input()` the student's typed answer for each, call `judge_answer`, and accumulate `score` based on the returned `"verdict"` — `"correct"` is +1, `"close"` is +0.5, anything else is +0.
+
+```python
 def run_quiz(questions: list[dict]) -> None:
     score = 0
     for i, item in enumerate(questions, start=1):
@@ -256,7 +301,9 @@ A three-way verdict (`correct` / `close` / `incorrect`) is deliberately more for
 
 **🎯 Expected output:** For each question, a prompt, a wait for your typed input, then a ✅/🟡/❌-marked verdict with one brief feedback sentence — and, on an incorrect answer, the expected answer shown underneath.
 
-**🩹 If it's off:** If every answer comes back `"incorrect"` regardless of quality, print `result` inside `judge_answer` before it's parsed — the model may be returning a verdict spelled differently than expected (`"Correct"` vs `"correct"`), which `result.get("verdict", "incorrect")`'s exact string match would silently treat as unrecognized. If the script hangs with no prompt visible, check you flushed/printed the question line before the `input()` call — some terminals buffer output differently than expected.
+**🩹 If it's off:** If the script hangs with no prompt visible, check you flushed/printed the question line before the `input()` call. If verdicts seem inconsistent, print the raw `result` to debug the model's actual output.
+
+### 3.3 Verify the interactive loop
 
 **✅ Checklist**
 
@@ -271,7 +318,9 @@ A three-way verdict (`correct` / `close` / `incorrect`) is deliberately more for
 
 ## Step 4: Track the score and run it end to end
 
-`run_quiz` above already tracks `score` as it goes and prints a final `score/total` line once the loop finishes. Wire the whole thing together in a `main()`:
+`run_quiz` above already tracks `score` as it goes and prints a final `score/total` line once the loop finishes. Wire the whole thing together in a `main()`, then verify the full run.
+
+### 4.1 Wire main() end to end
 
 **👟 Starter hint:** `main()` is pure plumbing at this point — read the notes, call `generate_questions`, then `run_quiz` on the result. Nothing new to write, just wiring Steps 1–3 together in order:
 
@@ -295,11 +344,11 @@ Run it:
 uv run python study_buddy.py
 ```
 
-You should see a short "Generating questions..." pause (one API call), then five questions one at a time, each waiting for your typed answer before moving on, ending with a final score line like `Final score: 3.5/5`.
-
 **🎯 Expected output:** A full end-to-end run: generation pause, five questions each with typed input and verdict, ending with `Final score: N/5` where N reflects your actual answers (correct = +1, close = +0.5).
 
 **🩹 If it's off:** If the script crashes partway through instead of finishing, it's almost always a `judge_answer` JSON-parsing failure on one specific question — the Socratic question below is pointing you at the actual fix (a `try`/`except` around that one call). If two full runs on the same notes file somehow produce identical questions every time, double-check `generate_questions` is actually being called fresh each run and its result isn't accidentally cached to a file somewhere.
+
+### 4.2 Verify the full end-to-end run
 
 **✅ Checklist**
 

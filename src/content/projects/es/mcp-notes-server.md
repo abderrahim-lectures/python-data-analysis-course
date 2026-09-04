@@ -65,9 +65,11 @@ uv add "mcp[cli]"
 No se necesita ninguna clave de API en ningún lugar de este proyecto -- es búsqueda local pura sobre archivos ya en tu disco, sin ninguna llamada a modelo de lenguaje involucrada en la lógica de indexación o búsqueda en sí.
 
 ## Paso 1: Indexa una carpeta de notas de muestra
+### 1.1 Crea una carpeta `notes/` junto a donde vivirá `server.py`, y pon un puñado de archivos `.md...
+
+**👟 Pista inicial :**
 
 Crea una carpeta `notes/` junto a donde vivirá `server.py`, y pon un puñado de archivos `.md` reales en ella -- una receta, un par de notas de libros, una lista de ideas de proyectos, lo que sea que realmente tengas por ahí. Cada nota solo necesita un encabezado `# Título` cerca del principio; nada más sobre su estructura importa. Si aún no tienes notas reales a mano, escribe 4–5 cortas ahora -- temas genuinamente diferentes, no cuatro variaciones de lo mismo, para que los resultados de búsqueda más adelante realmente signifiquen algo.
-
 Luego escribe el código de carga en `server.py`:
 
 ```python
@@ -105,13 +107,34 @@ def _all_notes() -> list[Note]:
     return [_load_note(p) for p in sorted(NOTES_DIR.glob("*.md"))]
 ```
 
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.2 Nada aquí es específico de MCP todavía -- es E/S de archivos ordinaria. Eso es deliberado: h...
+
+**👟 Pista inicial :**
+
 Nada aquí es específico de MCP todavía -- es E/S de archivos ordinaria. Eso es deliberado: haz que la indexación funcione correctamente por sí sola, con un shell de Python simple, antes de que entre en juego cualquier código de protocolo.
 
 ```bash
 uv run python -c "from server import _all_notes; print([n.title for n in _all_notes()])"
 ```
-
 Deberías ver el título de cada nota impreso de vuelta. Si la lista está vacía, `NOTES_DIR` está mal antes que cualquier otra cosa.
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 1.3 Verifica
 
 **✅ Lista de verificación**
 
@@ -125,6 +148,9 @@ Deberías ver el título de cada nota impreso de vuelta. Si la lista está vací
 - ¿Qué pasa ahora mismo si una nota no tiene ningún encabezado `# ` en absoluto? ¿Es ese el comportamiento que quieres, o preferirías que fallara ruidosamente?
 
 ## Paso 2: Construye las funciones de búsqueda y consulta
+### 2.1 Con las notas cargando correctamente, escribe las funciones que realmente responden pregunta...
+
+**👟 Pista inicial :**
 
 Con las notas cargando correctamente, escribe las funciones que realmente responden preguntas sobre ellas -- todavía Python simple, todavía probable sin ningún cliente de IA en el ciclo:
 
@@ -177,17 +203,37 @@ def list_recent_notes(limit: int = 5) -> str:
     return "\n".join(lines)
 ```
 
-`get_note_by_title` deliberadamente se niega a adivinar cuando un título parcial coincide con más de una nota, en lugar de devolver silenciosamente la primera coincidencia -- devolver el contenido completo de la nota equivocada a un asistente de IA (y, más adelante, a ti) es peor que pedir un título más específico.
+**🎯 Resultado esperado :**
 
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 2.2 `get_note_by_title` deliberadamente se niega a adivinar cuando un título parcial coincide co...
+
+**👟 Pista inicial :**
+
+`get_note_by_title` deliberadamente se niega a adivinar cuando un título parcial coincide con más de una nota, en lugar de devolver silenciosamente la primera coincidencia -- devolver el contenido completo de la nota equivocada a un asistente de IA (y, más adelante, a ti) es peor que pedir un título más específico.
 Prueba las tres a mano antes de continuar, de la misma forma que probaste `_all_notes()`:
 
 ```bash
 uv run python -c "from server import search_notes; print(search_notes('your-keyword'))"
 ```
-
 :::tip[Prueba funciones simples antes de que cualquier código de protocolo las toque]
 Cada bug es más fácil de encontrar aquí que después de que `@mcp.tool()`, el Inspector, y Claude Desktop están todos mezclados a la vez. Si `search_notes` devuelve lo incorrecto ahora mismo, sabes con certeza que el bug está en esta función -- no en una conexión, un archivo de configuración, o la propia selección de herramientas del modelo.
 :::
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 2.3 Verifica
 
 **✅ Lista de verificación**
 
@@ -201,6 +247,9 @@ Cada bug es más fácil de encontrar aquí que después de que `@mcp.tool()`, el
 - Si tuvieras dos notas con títulos idénticos (en carpetas diferentes, digamos), ¿cuál de las tres funciones de hoy se comportaría mal primero, y cómo?
 
 ## Paso 3: Conéctalas como herramientas MCP con FastMCP
+### 3.1 Todo hasta ahora ha sido Python simple. Convertirlo en un servidor MCP es un decorador por f...
+
+**👟 Pista inicial :**
 
 Todo hasta ahora ha sido Python simple. Convertirlo en un servidor MCP es un decorador por función -- sin código a nivel de protocolo que escribir a mano:
 
@@ -246,19 +295,38 @@ if __name__ == "__main__":
     mcp.run()
 ```
 
-`@mcp.tool()` inspecciona el nombre de cada función, sus parámetros con anotaciones de tipo, y el docstring, y construye una definición de herramienta MCP automáticamente -- el modelo lee tu docstring, no tu código, para decidir cuándo una herramienta coincide con una solicitud. Con tres herramientas ahora en lugar de una, los docstrings que distinguen claramente *cuándo* llamar a cada una importan más de lo que importaban con una sola herramienta: nota que el docstring de `get_note_by_title` dice explícitamente que es para después de la búsqueda, no en lugar de ella.
+**🎯 Resultado esperado :**
 
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 3.2 `@mcp.tool()` inspecciona el nombre de cada función, sus parámetros con anotaciones de tipo,...
+
+**👟 Pista inicial :**
+
+`@mcp.tool()` inspecciona el nombre de cada función, sus parámetros con anotaciones de tipo, y el docstring, y construye una definición de herramienta MCP automáticamente -- el modelo lee tu docstring, no tu código, para decidir cuándo una herramienta coincide con una solicitud. Con tres herramientas ahora en lugar de una, los docstrings que distinguen claramente *cuándo* llamar a cada una importan más de lo que importaban con una sola herramienta: nota que el docstring de `get_note_by_title` dice explícitamente que es para después de la búsqueda, no en lugar de ella.
 Antes de tocar cualquier cliente de IA real, ejecuta el comando dev/inspector del SDK y prueba las tres herramientas a mano:
 
 ```bash
 uv run mcp dev server.py
 ```
-
 Esto abre el **MCP Inspector** -- una herramienta gratuita basada en navegador que te permite llamar a cada herramienta con argumentos reales y ver valores de retorno reales, sin ningún modelo de IA involucrado. Confirma que las tres herramientas funcionan aquí primero.
-
 :::tip[Tres herramientas son más que suficientes para ver que los docstrings importan]
 Con una herramienta, el modelo no tiene nada entre qué elegir. Con tres, intenta preguntarle a los prompts subyacentes del Inspector (o, una vez conectado, al propio Claude Desktop) algo ambiguo, como "cuéntame sobre mi nota de pasta" -- y observa si recurre a `search_notes` o `get_note_by_title` primero. Si elige la "incorrecta", eso casi siempre es un problema de docstring, no un bug en tu función.
 :::
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 3.3 Verifica
 
 **✅ Lista de verificación**
 
@@ -272,12 +340,13 @@ Con una herramienta, el modelo no tiene nada entre qué elegir. Con tres, intent
 - Si el docstring de `list_recent_notes` no mencionara "qué he estado trabajando últimamente," ¿esperarías que el modelo la llamara igual para esa frase? ¿Qué sugiere eso sobre cuán literalmente escribir estos?
 
 ## Paso 4: Conéctalo a Claude Desktop y pruébalo
+### 4.1 El nivel gratuito de [Claude Desktop](https://claude.ai/download) soporta conectarse a servi...
+
+**👟 Pista inicial :**
 
 El nivel gratuito de [Claude Desktop](https://claude.ai/download) soporta conectarse a servidores MCP locales. Lee un archivo de configuración JSON que le dice qué servidores lanzar y cómo:
-
 - **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
 - **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
-
 Si el archivo aún no existe, créalo. Añade tu servidor, usando una ruta **absoluta** a la carpeta de tu proyecto:
 
 ```json
@@ -290,18 +359,24 @@ Si el archivo aún no existe, créalo. Añade tu servidor, usando una ruta **abs
   }
 }
 ```
-
 `command` y `args` describen exactamente el proceso que Claude Desktop lanzará para hablar con tu servidor -- la misma invocación `uv run` que ya probaste en el Paso 3, solo iniciada por Claude Desktop en lugar de por ti. Usar `uv run` (en lugar de un `python` simple) importa aquí: Claude Desktop lanza este comando en su propio entorno, sin garantía de que el entorno virtual de tu proyecto ya esté activo, y `uv run` encuentra y usa el correcto por sí mismo.
-
 **Cierra completamente y reinicia Claude Desktop** -- una instancia en ejecución no vuelve a leer este archivo por sí sola. Una vez que reinicie, tu servidor debería aparecer en su lista de herramientas/conectores. Prueba preguntas como:
-
 > Do I have any notes about sourdough? Use the notes tools if you have them.
 >
 > What have I been working on most recently, based on my notes?
 >
 > Pull up my full "side project ideas" note.
-
 Claude Desktop debería mostrar que está llamando a `search_notes`, `list_recent_notes`, o `get_note_by_title` (a menudo como un pequeño bloque colapsable "usó una herramienta", con los argumentos y resultado visibles si lo expandes), luego responder usando el resultado real que devolvió tu función -- no una suposición.
+
+**🎯 Resultado esperado :**
+
+Deberías ver la salida esperada sin errores.
+
+**🩹 Si sale mal :**
+
+Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+
+### 4.2 Verifica
 
 **✅ Lista de verificación**
 
