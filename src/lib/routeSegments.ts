@@ -9,6 +9,20 @@
 export type Locale = 'en' | 'ar' | 'es' | 'fr';
 
 export const LOCALES: Locale[] = ['ar', 'es', 'fr'];
+export const ALL_LOCALES: Locale[] = ['en', 'ar', 'es', 'fr'];
+
+/** Detect locale from a URL pathname. Checks locale prefixes first,
+    then falls back to 'en' for the root path. */
+export function detectLocale(pathname: string): Locale {
+  const segments = pathname.split('/').filter(Boolean);
+  if (segments.length > 0 && ALL_LOCALES.includes(segments[0] as Locale)) {
+    return segments[0] as Locale;
+  }
+  if (segments.length > 1 && ALL_LOCALES.includes(segments[1] as Locale)) {
+    return segments[1] as Locale;
+  }
+  return 'en';
+}
 
 export const NAV_WORDS: Record<Locale, {learn: string; projects: string; progress: string; credits: string}> = {
   en: {learn: 'learn', projects: 'projects', progress: 'progress', credits: 'credits'},

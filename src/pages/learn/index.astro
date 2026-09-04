@@ -3,8 +3,12 @@ import Base from '../../layouts/Base.astro';
 import Icon from '../../components/Icon.astro';
 import EditorTutorial from '../../components/EditorTutorial.astro';
 import {PAGE_STRINGS} from '../../lib/pageStrings';
+import {detectLocale, learnHref, localeBase, TRACK_WORDS} from '../../lib/routeSegments';
 const base = import.meta.env.BASE_URL;
-const s = PAGE_STRINGS.en;
+const locale = detectLocale(Astro.url.pathname);
+const s = PAGE_STRINGS[locale];
+const dir = locale === 'ar' ? 'rtl' : 'ltr';
+const t = TRACK_WORDS[locale];
 const alternates = {
   en: 'learn',
   ar: 'ar/تعلم',
@@ -13,8 +17,8 @@ const alternates = {
 };
 ---
 
-<Base title={s.learnHubTitle} description={s.learnHubDescription} lang="en" dir="ltr" alternates={alternates}>
-  <EditorTutorial locale="en" />
+<Base title={s.learnHubTitle} description={s.learnHubDescription} lang={locale} dir={dir} alternates={alternates}>
+  <EditorTutorial locale={locale} />
   <section class="hero">
     <div class="container head">
       <div class="head__eyebrow"><Icon name="code" size={16} /> {s.learnHubEyebrow}</div>
@@ -22,14 +26,6 @@ const alternates = {
       <p>{s.learnHubLead}</p>
     </div>
   </section>
-
-  <!-- Week 1 micro-steps progress -->
-  <section class="container">
-    <div class="microsteps">
-      <div class="microsteps__label">Week 1 — your first steps</div>
-      <div class="microsteps__bar"><div class="microsteps__fill" style="width:0%"></div></div>
-      <div class="microsteps__text">Step 1 of 5 — just type and click Run</div>
-    </div>
 
   <section class="container">
     <div class="note">
@@ -78,7 +74,6 @@ const alternates = {
       </div>
     </div>
 
-    <!-- Rewards preview -->
     <div class="rewards-preview">
       <h3>What you'll earn <span class="text-gradient">along the way</span></h3>
       <div class="rewards-preview__grid">
@@ -132,9 +127,6 @@ const alternates = {
   .sectioncard h2 { font-size: 1.2rem; margin: 0; }
   .sectioncard p { color: var(--ink-soft); font-size: .9rem; margin: 0; line-height: 1.5; }
   .sectioncard__meta { display: flex; gap: .5rem; flex-wrap: wrap; }
-  /* Route pills are the card's one primary action (pick a track and jump
-     straight into week 1); "See all N weeks" below is a clearly separate,
-     secondary text link — kept apart so the two don't read as the same click. */
   .routes { margin-top: auto; padding-top: .5rem; border-top: 1px solid var(--line); }
   .routes__label { display: block; font-size: .74rem; font-weight: 700; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .04em; margin-bottom: .5rem; }
   .routes__pills { display: flex; gap: .7rem; flex-wrap: wrap; }
@@ -144,19 +136,19 @@ const alternates = {
     font-weight: 700; font-size: .85rem; color: #fff; border: none;
     box-shadow: var(--shadow-tactile); transition: transform .1s ease, box-shadow .1s ease;
   }
-.route-pill:active { transform: translateY(3px); box-shadow: 0 1px 0 rgba(0,0,0,.08), 0 2px 8px rgba(16,24,40,.06); }
-.route-pill--normal { color: var(--ink); background: var(--success); box-shadow: 0 4px 0 rgba(46,125,10,.5), 0 6px 16px var(--success-soft); }
-.route-pill--normal:hover, .route-pill--hard:hover { transform: translateY(-1px); }
-.route-pill--normal:hover { color: var(--ink); filter: brightness(1.06); box-shadow: 0 4px 0 rgba(46,125,10,.5), 0 8px 20px var(--success-soft); }
-.route-pill--normal:active { box-shadow: 0 1px 0 rgba(46,125,10,.5), 0 2px 8px var(--success-soft); }
-.route-pill--hard { color: var(--ink); background: var(--bad); box-shadow: 0 4px 0 rgba(244,63,94,.5), 0 6px 16px var(--bad-soft); }
-.route-pill--hard:hover { filter: brightness(1.06); box-shadow: 0 4px 0 rgba(244,63,94,.5), 0 8px 20px var(--bad-soft); }
-.route-pill--hard:active { box-shadow: 0 1px 0 rgba(244,63,94,.5), 0 2px 8px var(--bad-soft); }
-.route-pill:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .route-pill:active { transform: translateY(3px); box-shadow: 0 1px 0 rgba(0,0,0,.08), 0 2px 8px rgba(16,24,40,.06); }
+  .route-pill--normal { color: var(--ink); background: var(--success); box-shadow: 0 4px 0 rgba(46,125,10,.5), 0 6px 16px var(--success-soft); }
+  .route-pill--normal:hover, .route-pill--hard:hover { transform: translateY(-1px); }
+  .route-pill--normal:hover { color: var(--ink); filter: brightness(1.06); box-shadow: 0 4px 0 rgba(46,125,10,.5), 0 8px 20px var(--success-soft); }
+  .route-pill--normal:active { box-shadow: 0 1px 0 rgba(46,125,10,.5), 0 2px 8px var(--success-soft); }
+  .route-pill--hard { color: var(--ink); background: var(--bad); box-shadow: 0 4px 0 rgba(244,63,94,.5), 0 6px 16px var(--bad-soft); }
+  .route-pill--hard:hover { filter: brightness(1.06); box-shadow: 0 4px 0 rgba(244,63,94,.5), 0 8px 20px var(--bad-soft); }
+  .route-pill--hard:active { box-shadow: 0 1px 0 rgba(244,63,94,.5), 0 2px 8px var(--bad-soft); }
+  .route-pill:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   .sectioncard__all { align-self: flex-start; font-size: .82rem; font-weight: 700; color: var(--ink-soft); text-decoration: none; transition: color var(--transition-fast), transform var(--transition-fast); }
   .sectioncard__all:hover { color: var(--accent); transform: translateX(2px); }
-.sectioncard__all:active { transform: translateX(1px); }
-.sectioncard__all:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .sectioncard__all:active { transform: translateX(1px); }
+  .sectioncard__all:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
   .rewards-preview { padding: 1.5rem 0 2rem; }
   .rewards-preview h3 { font-size: 1.2rem; margin-bottom: .75rem; }
@@ -167,7 +159,6 @@ const alternates = {
     display: flex; flex-direction: column; align-items: center; gap: .2rem;
     transition: all var(--transition-smooth);
   }
-  /* Not clickable — no lift. */
   .rpv:hover { box-shadow: var(--shadow-sm); }
   .rpv__icon { font-size: 1.25rem; }
   .rpv__val { font-family: var(--font-display); font-weight: 800; font-size: 1.4rem; color: var(--ink-hi); }
@@ -179,8 +170,7 @@ const alternates = {
   .microsteps__bar { height: 6px; background: var(--surface-2); border-radius: var(--radius-pill); overflow: hidden; }
   .microsteps__fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--accent-strong)); border-radius: var(--radius-pill); transition: width .6s cubic-bezier(.4,0,.2,1); }
   .microsteps__text { font-size: .75rem; color: var(--ink-faint); margin-top: .4rem; }
-</style>
-<style is:global>
+
   [data-theme='dark'] .route-pill--normal, [data-theme='dark'] .route-pill--hard { color: var(--ink-hi); background: var(--surface); border: 2px solid var(--success); }
   [data-theme='dark'] .route-pill--hard { border-color: var(--bad); }
 </style>

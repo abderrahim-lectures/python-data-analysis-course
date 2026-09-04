@@ -1,9 +1,7 @@
 ---
-// Section landing page: /learn/python-101, /learn/data-analysis.
-// Uses the section's own index.md (data-analysis/data-analysis/index.md etc.)
-// for title/description, and lists the weeks available per track.
 import {getCollection} from 'astro:content';
 import Base from '../../../layouts/Base.astro';
+import {detectLocale, TRACK_WORDS, learnHref, localeBase} from '../../../lib/routeSegments';
 
 export async function getStaticPaths() {
   const entries = await getCollection('learn');
@@ -23,14 +21,10 @@ export async function getStaticPaths() {
 interface Props { section: string; lessons: Awaited<ReturnType<typeof getCollection<'learn'>>> }
 const {section, lessons} = Astro.props;
 const base = import.meta.env.BASE_URL;
+const locale = detectLocale(Astro.url.pathname);
+const dir = locale === 'ar' ? 'rtl' : 'ltr';
+const t = TRACK_WORDS[locale];
 
-// Astro strips a trailing `/index` from content slugs, so matching on
-// `.../index` never hit and every section page silently fell back to the
-// English `"<slug> lessons."` placeholder with a raw-slug title.
-// Astro strips a trailing `/index` from content slugs and, for a nested
-// `<section>/<section>/index.md`, emits a leading slash — so the original
-// `.endsWith('<section>/index')` match never hit and every section page
-// silently fell back to the English `"<slug> lessons."` placeholder.
 const indexEntry = (await getCollection('learn')).find((e) => {
   if (/^(ar|es|fr)\//.test(e.slug)) return false;
   const norm = e.slug.replace(/^\//, '').replace(/\/index$/, '');
@@ -47,9 +41,9 @@ const normalWeeks = byTrack('normal');
 const hardWeeks = byTrack('hard');
 ---
 
-<Base title={`${title} — PyDA Course`} description={description} lang="en" dir="ltr">
+<Base title={`${title} — PyDA Course`} description={description} lang={locale} dir={dir}>
   <nav class="crumb container">
-    <a href={`${base}learn`}>Learn</a> <span>/</span> <span class="crumb__here">{title}</span>
+    <a href={`${localeBase(locale, base)}learn`}>Learn</a> <span>/</span> <span class="crumb__here">{title}</span>
   </nav>
 
   <section class="container head">
@@ -59,10 +53,10 @@ const hardWeeks = byTrack('hard');
 
   <section class="container tracks">
     <div class="track">
-      <h2>🌿 Normal track</h2>
+      <h2>🌿 {t.normal} track</h2>
       <div class="weeks">
         {normalWeeks.map((w) => (
-          <a class="week" href={`${base}learn/${section}/normal/week-${w.data.week}`}>
+          <a class="week" href={`${base}learn/${section}/${t.normal}/week-${w.data.week}`}>
             <span class="week__num">Week {w.data.week}</span>
             <span class="week__title">{w.data.title}</span>
           </a>
@@ -70,10 +64,10 @@ const hardWeeks = byTrack('hard');
       </div>
     </div>
     <div class="track">
-      <h2>⚡ Hard track</h2>
+      <h2>⚡ {t.hard} track</h2>
       <div class="weeks">
         {hardWeeks.map((w) => (
-          <a class="week" href={`${base}learn/${section}/hard/week-${w.data.week}`}>
+          <a class="week" href={`${base}learn/${section}/${t.hard}/week-${w.data.week}`}>
             <span class="week__num">Week {w.data.week}</span>
             <span class="week__title">{w.data.title}</span>
           </a>
