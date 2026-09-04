@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import Icon from '../../components/Icon.astro';
+import EditorTutorial from '../../components/EditorTutorial.astro';
 import {PAGE_STRINGS} from '../../lib/pageStrings';
 const base = import.meta.env.BASE_URL;
 const s = PAGE_STRINGS.en;
@@ -13,6 +14,7 @@ const alternates = {
 ---
 
 <Base title={s.learnHubTitle} description={s.learnHubDescription} lang="en" dir="ltr" alternates={alternates}>
+  <EditorTutorial locale="en" />
   <section class="hero">
     <div class="container head">
       <div class="head__eyebrow"><Icon name="code" size={16} /> {s.learnHubEyebrow}</div>
@@ -20,6 +22,14 @@ const alternates = {
       <p>{s.learnHubLead}</p>
     </div>
   </section>
+
+  <!-- Week 1 micro-steps progress -->
+  <section class="container">
+    <div class="microsteps">
+      <div class="microsteps__label">Week 1 — your first steps</div>
+      <div class="microsteps__bar"><div class="microsteps__fill" style="width:0%"></div></div>
+      <div class="microsteps__text">Step 1 of 5 — just type and click Run</div>
+    </div>
 
   <section class="container">
     <div class="note">
@@ -164,6 +174,11 @@ const alternates = {
   .rpv__label { font-size: .72rem; font-weight: 700; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .03em; }
 
   @media (max-width: 720px) { .sections { grid-template-columns: 1fr; } .rewards-preview__grid { grid-template-columns: repeat(2, 1fr); } }
+  .microsteps { margin-top: 1.5rem; padding: 1.25rem; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); }
+  .microsteps__label { font-size: .82rem; font-weight: 700; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .04em; margin-bottom: .6rem; }
+  .microsteps__bar { height: 6px; background: var(--surface-2); border-radius: var(--radius-pill); overflow: hidden; }
+  .microsteps__fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--accent-strong)); border-radius: var(--radius-pill); transition: width .6s cubic-bezier(.4,0,.2,1); }
+  .microsteps__text { font-size: .75rem; color: var(--ink-faint); margin-top: .4rem; }
 </style>
 <style is:global>
   [data-theme='dark'] .route-pill--normal, [data-theme='dark'] .route-pill--hard { color: var(--ink-hi); background: var(--surface); border: 2px solid var(--success); }
