@@ -54,13 +54,19 @@ function initCell(cell: Element) {
   };
 
   run.addEventListener('click', async () => {
-    // Read live, in case the learner edited the code in place before running.
+    if (run.disabled) return;
     const src = codeEl.textContent ?? '';
     out.hidden = false;
     clear.hidden = false;
     lines.innerHTML = '';
     appendLine('cmd', '$ python');
+    run.disabled = true;
+    run.textContent = '⟳ Loading…';
+    run.classList.add('cell__run--loading');
     const engine = await py();
+    run.textContent = '▶ Run';
+    run.disabled = false;
+    run.classList.remove('cell__run--loading');
     engine.setStdout({batched: (s: string) => appendLine('out', s)});
     engine.setStderr({batched: (s: string) => appendLine('err', s)});
     engine.setStdin({stdin: () => window.prompt('') ?? ''});
@@ -74,40 +80,43 @@ function initCell(cell: Element) {
     } catch (e) {
       appendLine('err', e instanceof Error ? e.message : String(e));
     }
-if (!awarded && lessonId) {
-       awarded = true;
-       try {
-         const m = await import('./gameState.ts');
-         const prevXp = m.read().xp;
-         m.addXP(lessonId);
-         const gained = m.read().xp - prevXp;
-         cell.dispatchEvent(new CustomEvent('lesson:complete', {bubbles: true, detail: {lessonId, xp: gained}}));
-         // FirstSuccess celebration — only on the very first run.
-         if (prevXp === 0) {
-           const style = document.createElement('style');
-           style.textContent = `
-             .firstsuccess-toast {
-               position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%) translateY(20px);
-               background: var(--accent); color: var(--accent-contrast); padding: .85rem 1.5rem;
-               border-radius: var(--radius-lg); font-weight: 700; font-size: .9rem;
-               box-shadow: var(--shadow-md); opacity: 0; transition: all .4s cubic-bezier(.4,0,.2,1);
-               z-index: 9999; pointer-events: none; white-space: nowrap;
-             }
-             .firstsuccess-toast--visible { opacity: 1; transform: translateX(-50%) translateY(0); }
-           `;
-           document.head.appendChild(style);
-           const toast = document.createElement('div');
-           toast.className = 'firstsuccess-toast';
-           toast.textContent = '🎉 First success! You just ran Python in the browser.';
-           document.body.appendChild(toast);
-           requestAnimationFrame(() => toast.classList.add('firstsuccess-toast--visible'));
-           setTimeout(() => { toast.classList.remove('firstsuccess-toast--visible'); setTimeout(() => toast.remove(), 400); }, 3000);
-           setTimeout(() => style.remove(), 3500);
-         }
-       } catch { /* offline: skip XP award */ }
-     }
+    if (!awarded && lessonId) {
+      awarded = true;
+      try {
+        const m = await import('./gameState.ts');
+        const prevXp = m.read().xp;
+        m.addXP(lessonId);
+        const gained = m.read().xp - prevXp;
+        cell.dispatchEvent(new CustomEvent('lesson:complete', {bubbles: true, detail: {lessonId, xp: gained}}));
+        if (prevXp === 0) {
+          const style = document.createElement('style');
+          style.textContent = `.firstsuccess-toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--accent);color:var(--accent-contrast);padding:.85rem 1.5rem;border-radius:var(--radius-lg);font-weight:700;font-size:.9rem;box-shadow:var(--shadow-md);opacity:0;transition:all .4s cubic-bezier(.4,0,.2,1);z-index:9999;pointer-events:none;white-space:nowrap}.firstsuccess-toast--visible{opacity:1;transform:translateX(-50%) translateY(0)}`;
+          document.head.appendChild(style);
+          const toast = document.createElement('div');
+          toast.className = 'firstsuccess-toast';
+          toast.textContent = '🎉 First success! You just ran Python in the browser.';
+          document.body.appendChild(toast);
+          requestAnimationFrame(() => toast.classList.add('firstsuccess-toast--visible'));
+          setTimeout(() => { toast.classList.remove('firstsuccess-toast--visible'); setTimeout(() => toast.remove(), 400); }, 3000);
+          setTimeout(() => style.remove(), 3500);
+        }
+      } catch { /* offline: skip XP award */ }
+    }
   });
   clear.addEventListener('click', () => { lines.innerHTML = ''; out.hidden = true; clear.hidden = true; });
+
+  // Copy output button.
+  const copyBtn = document.createElement('button');
+  copyBtn.className = 'btn btn-ghost btn-sm cell__copy';
+  copyBtn.textContent = '📋 Copy';
+  copyBtn.addEventListener('click', () => {
+    const text = lines.textContent ?? '';
+    navigator.clipboard.writeText(text).then(() => {
+      copyBtn.textContent = '✓ Copied!';
+      setTimeout(() => { copyBtn.textContent = '📋 Copy'; }, 1500);
+    }).catch(() => {});
+  });
+  cell.querySelector('.cell__actions')?.appendChild(copyBtn);
 
   // Learners can edit the snippet in place before running it — this is the
   // "playground" part of a runnable cell, not just a static example.
@@ -118,6 +127,19 @@ if (!awarded && lessonId) {
     e.preventDefault();
     document.execCommand('insertText', false, '    ');
   });
+
+  // Ctrl+Enter (or Cmd+Enter) to run code.
+  codeEl.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+      e.preventDefault();
+      run.click();
+    }
+  });
+
+  // Loading spinner styles.
+  const spinnerStyle = document.createElement('style');
+  spinnerStyle.textContent = `.cell__run--loading{opacity:.7;cursor:wait}.cell__run--loading::after{content:' ⟳';animation:spin 1s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.cell__copy{margin-left:.5rem!important}`;
+  document.head.appendChild(spinnerStyle);
 
   // Lesson cells arrive pre-highlighted by Shiki at build time; the
   // playground and any ?code= handoff arrive as plain text. Paint those on
