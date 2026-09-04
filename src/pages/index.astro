@@ -63,8 +63,13 @@ const jsonLd = {
         </div>
 
         <div class="hero__actions">
-          <a class="btn btn-primary btn-lg" href={`${base}learn`}><Icon name="play" size={16} /> {s.homeStartQuest}</a>
+          <a class="btn btn-primary btn-lg" href={`${base}playground`}><Icon name="play" size={16} /> Run Python in Browser — No Install</a>
           <a class="btn btn-ghost btn-lg" href={`${base}progress`}><Icon name="trophy" size={16} /> {s.homeSeeRank}</a>
+        </div>
+        <div class="hero__offline">
+          <span class="hero__offline-icon">📱</span>
+          <span>Install as an app for offline Python practice.</span>
+          <a class="btn btn-xp btn-sm" href={`${base}playground`}>Install →</a>
         </div>
       </div>
       <div class="hero__art" aria-hidden="true">
@@ -337,4 +342,7 @@ const jsonLd = {
     .gamestrip__item--blazing { grid-column: span 2; }
     .rewards__grid { grid-template-columns: 1fr; }
   }
+  .hero__offline { margin-top: 1rem; display: flex; align-items: center; gap: .6rem; font-size: .85rem; color: var(--ink-soft); flex-wrap: wrap; }
+  .hero__offline-icon { font-size: 1.2rem; }
+  .hero__offline .btn { margin-left: auto; }
 </style>

@@ -113,6 +113,16 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
          that first click doesn't also pay for connection setup. -->
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#5b21b6" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="PyDA" />
+    <style is:global>
+      .pyodide-bar { position: fixed; top: 0; left: 0; height: 3px; background: var(--accent); z-index: 99999; transition: width .3s ease; width: 0; }
+      .pyodide-bar--active { width: 70%; animation: pyodide-pulse 1.5s ease-in-out infinite; }
+      @keyframes pyodide-pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+    </style>
     {allJsonLdBlocks.map((block) => (
       <script type="application/ld+json" set:html={JSON.stringify(block)} />
     ))}
@@ -120,6 +130,16 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
       // Persisted theme
       const t = localStorage.getItem('pda:theme');
       if (t) document.documentElement.dataset.theme = t;
+      // Pyodide loading bar
+      const bar = document.createElement('div');
+      bar.className = 'pyodide-bar';
+      document.body.appendChild(bar);
+      window.addEventListener('pyodide:loading', () => bar.classList.add('pyodide-bar--active'));
+      window.addEventListener('pyodide:ready', () => bar.classList.remove('pyodide-bar--active'));
+      // Register PWA service worker
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      }
     </script>
   </head>
   <body>
