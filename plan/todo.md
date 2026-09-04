@@ -806,3 +806,22 @@ User asked to "loop and improve". Executed the clean-course-ui improvement loop.
 - `4364f80` — fix: add typecheck script to package.json
 - `e5298cf` — fix(ui): polish locale home pages
 - `2b98759` — fix: pass i18n and lessonWiring tests, polish locale pages
+- `932b3db` — docs: update todo.md with session 2026-09-04 improvements
+
+---
+
+## Session 2026-09-04 (opencode, 2nd pass) — clean-course-ui loop round 2
+
+Critique identified remaining issues after first polish pass.
+
+### Done (verified: all gates green)
+- [x] **Fixed `.hub__card:active` direction** — `translateY(-2px)` → `translateY(2px)` (press DOWN not UP)
+- [x] **Added `:focus-visible` to `.hub__card`** — keyboard accessibility with accent outline
+- [x] **Fixed `.gamestrip__item--blazing` box-shadow** — `rgba(124,58,237,.25)` → `var(--shadow-streak-glow)` (streak color, not violet)
+- [x] **Replaced hardcoded terminal dot colors** — `#ff5f57` → `var(--bad)`, `#febc2e` → `var(--warn)`, `#28c840` → `var(--good)`
+- [x] **Replaced hardcoded syntax colors** — `#8f86c9` → `var(--ink-soft)`, `#a78bfa` → `var(--accent)`, `#e2dcff` → `var(--ink-hi)`, `#4ade80` → `var(--good)`
+- [x] **Added `<style>` block to locale playground pages** — `.head { padding: 2.5rem 0 1rem; }` for visual parity with EN
+- [x] **Added `script define:vars` to locale playground pages** — reset button functionality
+
+### Commits
+- `c3b2da4` — fix(ui): second pass polish on locale pages
