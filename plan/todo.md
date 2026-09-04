@@ -807,10 +807,25 @@ User asked to "loop and improve". Executed the clean-course-ui improvement loop.
 - `e5298cf` — fix(ui): polish locale home pages
 - `2b98759` — fix: pass i18n and lessonWiring tests, polish locale pages
 - `932b3db` — docs: update todo.md with session 2026-09-04 improvements
+- `c3b2da4` — fix(ui): second pass polish on locale pages
+- `d538925` — fix(ui): third pass polish
 
 ---
 
-## Session 2026-09-04 (opencode, 2nd pass) — clean-course-ui loop round 2
+## Session 2026-09-04 (opencode, 3rd pass) — clean-course-ui loop round 3
+
+Critique found remaining issues after 2nd pass.
+
+### Done (verified: all gates green)
+- [x] Fixed `.hero__title` line-height 1.08 → 1.18 (less text clipping, better for Arabic)
+- [x] Added `:active` and `:focus-visible` to `.reward` cards
+- [x] Fixed `.reward__fill--xp` gradient (nearly invisible `var(--xp)`→`var(--warn)` amber→amber → `var(--xp)`→`var(--streak-deep)`)
+- [x] Gave `.reward__fill--rank` distinct gold gradient (`#fbbf24`→`#f59e0b`)
+- [x] Added `@media (max-width: 400px)` for small screens (stack player-card actions, hero actions, badge margin)
+- [x] Fixed Spanish playground title (`Playground — PyDA Course` → `Área de pruebas — PyDA Course`)
+
+### Commits
+- `d538925` — fix(ui): third pass polish
 
 Critique identified remaining issues after first polish pass.
 
