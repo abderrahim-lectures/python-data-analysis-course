@@ -19,9 +19,9 @@ describe.each(WEEK_TEMPLATES)('%s', (path) => {
     expect(src).toContain('data-lesson-id={lessonId}');
   });
 
-  test('builds the lesson id from canonical section/track, not the localized URL words', () => {
-    expect(src).toContain('const lessonId = `${section}/${track}/week-${week}`;');
-  });
+test('builds the lesson id from canonical section/track, not the localized URL words', () => {
+     expect(src).toMatch(/const lessonId = `\$\{section\}\/\$\{(track|trackRaw)\}\/week-\$\{week\}`;/);
+   });
 
   test('offers the completion button on every week, not only the last', () => {
     // The bug: the button lived in the `next ? ... : ...` else-branch, so it

@@ -28,7 +28,7 @@ describe('non-English locales are actually translated', () => {
   // Guards the bug where locale pages shipped hardcoded English copy: the
   // Arabic learn hub rendered English track descriptions, which also flipped
   // the sentence punctuation to the wrong side under RTL.
-  const shared = new Set(['track1Name']); // proper nouns that stay Latin
+  const shared = new Set(['track1Name', 'homeTerminalLine1', 'homeHubTrack1Name', 'homeStatBadges', 'trackNormalLabel', 'trackHardLabel']); // proper nouns, shell commands, brand terms, and track labels that stay the same
 
   test.each(LOCALES.filter((l) => l !== 'en'))('%s differs from English', (loc) => {
     const identical = Object.entries(PAGE_STRINGS[loc])
