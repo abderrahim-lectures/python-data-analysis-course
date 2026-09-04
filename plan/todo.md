@@ -840,3 +840,26 @@ Critique identified remaining issues after first polish pass.
 
 ### Commits
 - `c3b2da4` — fix(ui): second pass polish on locale pages
+
+---
+
+## Session 2026-09-04 (opencode, 4th pass) — clean-course-ui loop round 4
+
+Critique found remaining issues after 3rd pass.
+
+### Done (verified: all gates green)
+- [x] Fixed `.player-card__xpfill` rainbow gradient (violet→orange → accent-only)
+- [x] Fixed `.player-card__stat-label` font-size 0.65rem + --ink-faint → 0.78rem + --ink-soft
+- [x] Added `:active` and `:focus-visible` to `.station__link`
+- [x] Fixed hardcoded old-accent rgba on `.station--done .station__dot` → `var(--accent-soft)`
+- [x] Fixed `.trail__xp`/`.trail__xp--streak` colors (ink-faint/streak → ink/ink)
+- [x] Fixed `.quest` dead-zone hover → border-color/background change, added `:active`/`:focus-visible`
+- [x] Fixed `.engagement-item__sub` font-size 0.7rem + --ink-faint → 0.78rem + --ink-soft
+- [x] Added `:active` and `:focus-visible` to `.tag-pill` on projects page
+
+### Commits
+- `d31a063` — fix(ui): fourth pass polish
+
+---
+
+## Session 2026-09-04 (opencode, 4th pass) — clean-course-ui loop round 4
