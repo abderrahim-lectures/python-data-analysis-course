@@ -812,54 +812,48 @@ User asked to "loop and improve". Executed the clean-course-ui improvement loop.
 
 ---
 
-## Session 2026-09-04 (opencode, 3rd pass) — clean-course-ui loop round 3
+## Session 2026-09-04 (opencode, 2nd pass) — clean-course-ui loop round 2
 
-Critique found remaining issues after 2nd pass.
-
-### Done (verified: all gates green)
-- [x] Fixed `.hero__title` line-height 1.08 → 1.18 (less text clipping, better for Arabic)
-- [x] Added `:active` and `:focus-visible` to `.reward` cards
-- [x] Fixed `.reward__fill--xp` gradient (nearly invisible `var(--xp)`→`var(--warn)` amber→amber → `var(--xp)`→`var(--streak-deep)`)
-- [x] Gave `.reward__fill--rank` distinct gold gradient (`#fbbf24`→`#f59e0b`)
-- [x] Added `@media (max-width: 400px)` for small screens (stack player-card actions, hero actions, badge margin)
-- [x] Fixed Spanish playground title (`Playground — PyDA Course` → `Área de pruebas — PyDA Course`)
-
-### Commits
-- `d538925` — fix(ui): third pass polish
-
-Critique identified remaining issues after first polish pass.
-
-### Done (verified: all gates green)
-- [x] **Fixed `.hub__card:active` direction** — `translateY(-2px)` → `translateY(2px)` (press DOWN not UP)
-- [x] **Added `:focus-visible` to `.hub__card`** — keyboard accessibility with accent outline
-- [x] **Fixed `.gamestrip__item--blazing` box-shadow** — `rgba(124,58,237,.25)` → `var(--shadow-streak-glow)` (streak color, not violet)
-- [x] **Replaced hardcoded terminal dot colors** — `#ff5f57` → `var(--bad)`, `#febc2e` → `var(--warn)`, `#28c840` → `var(--good)`
-- [x] **Replaced hardcoded syntax colors** — `#8f86c9` → `var(--ink-soft)`, `#a78bfa` → `var(--accent)`, `#e2dcff` → `var(--ink-hi)`, `#4ade80` → `var(--good)`
-- [x] **Added `<style>` block to locale playground pages** — `.head { padding: 2.5rem 0 1rem; }` for visual parity with EN
-- [x] **Added `script define:vars` to locale playground pages** — reset button functionality
+### Done
+- [x] Fixed `.hub__card:active` direction (press DOWN not UP)
+- [x] Added `:focus-visible` to `.hub__card`
+- [x] Fixed `.gamestrip__item--blazing` glow → `var(--shadow-streak-glow)`
+- [x] Replaced hardcoded terminal dot colors → tokens
+- [x] Replaced hardcoded syntax colors → tokens
+- [x] Added `<style>` + `script define:vars` to locale playground pages
+- [x] Fixed Spanish playground title (English → Spanish)
 
 ### Commits
 - `c3b2da4` — fix(ui): second pass polish on locale pages
 
 ---
 
-## Session 2026-09-04 (opencode, 4th pass) — clean-course-ui loop round 4
+## Session 2026-09-04 (opencode, 3rd pass) — clean-course-ui loop round 3
 
-Critique found remaining issues after 3rd pass.
-
-### Done (verified: all gates green)
-- [x] Fixed `.player-card__xpfill` rainbow gradient (violet→orange → accent-only)
-- [x] Fixed `.player-card__stat-label` font-size 0.65rem + --ink-faint → 0.78rem + --ink-soft
-- [x] Added `:active` and `:focus-visible` to `.station__link`
-- [x] Fixed hardcoded old-accent rgba on `.station--done .station__dot` → `var(--accent-soft)`
-- [x] Fixed `.trail__xp`/`.trail__xp--streak` colors (ink-faint/streak → ink/ink)
-- [x] Fixed `.quest` dead-zone hover → border-color/background change, added `:active`/`:focus-visible`
-- [x] Fixed `.engagement-item__sub` font-size 0.7rem + --ink-faint → 0.78rem + --ink-soft
-- [x] Added `:active` and `:focus-visible` to `.tag-pill` on projects page
+### Done
+- [x] Fixed `.hero__title` line-height 1.08 → 1.18
+- [x] Added `:active`/`:focus-visible` to `.reward` cards
+- [x] Fixed `.reward__fill--xp` gradient (nearly invisible amber → amber→orange)
+- [x] Gave `.reward__fill--rank` distinct gold gradient
+- [x] Added `@media (max-width: 400px)` for small screens
+- [x] Fixed Spanish playground title
 
 ### Commits
-- `d31a063` — fix(ui): fourth pass polish
+- `d538925` — fix(ui): third pass polish
 
 ---
 
 ## Session 2026-09-04 (opencode, 4th pass) — clean-course-ui loop round 4
+
+### Done
+- [x] Fixed `.player-card__xpfill` rainbow gradient (violet→orange → accent-only)
+- [x] Fixed `.player-card__stat-label` font-size 0.65rem + --ink-faint → 0.78rem + --ink-soft
+- [x] Added `:active`/`:focus-visible` to `.station__link`
+- [x] Fixed hardcoded old-accent rgba on `.station--done .station__dot` → `var(--accent-soft)`
+- [x] Fixed `.trail__xp`/`.trail__xp--streak` colors (ink-faint/streak → ink/ink)
+- [x] Fixed `.quest` dead-zone hover → border-color/background change, added `:active`/`:focus-visible`
+- [x] Fixed `.engagement-item__sub` font-size 0.7rem + --ink-faint → 0.78rem + --ink-soft
+- [x] Added `:active`/`:focus-visible` to `.tag-pill` on projects page
+
+### Commits
+- `d31a063` — fix(ui): fourth pass polish
