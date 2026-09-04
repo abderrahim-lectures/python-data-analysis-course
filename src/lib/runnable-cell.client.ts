@@ -74,16 +74,38 @@ function initCell(cell: Element) {
     } catch (e) {
       appendLine('err', e instanceof Error ? e.message : String(e));
     }
-    if (!awarded && lessonId) {
-      awarded = true;
-      try {
-        const m = await import('./gameState.ts');
-        const prevXp = m.read().xp;
-        m.addXP(lessonId);
-        const gained = m.read().xp - prevXp;
-        cell.dispatchEvent(new CustomEvent('lesson:complete', {bubbles: true, detail: {lessonId, xp: gained}}));
-      } catch { /* offline: skip XP award */ }
-    }
+if (!awarded && lessonId) {
+       awarded = true;
+       try {
+         const m = await import('./gameState.ts');
+         const prevXp = m.read().xp;
+         m.addXP(lessonId);
+         const gained = m.read().xp - prevXp;
+         cell.dispatchEvent(new CustomEvent('lesson:complete', {bubbles: true, detail: {lessonId, xp: gained}}));
+         // FirstSuccess celebration — only on the very first run.
+         if (prevXp === 0) {
+           const style = document.createElement('style');
+           style.textContent = `
+             .firstsuccess-toast {
+               position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%) translateY(20px);
+               background: var(--accent); color: var(--accent-contrast); padding: .85rem 1.5rem;
+               border-radius: var(--radius-lg); font-weight: 700; font-size: .9rem;
+               box-shadow: var(--shadow-md); opacity: 0; transition: all .4s cubic-bezier(.4,0,.2,1);
+               z-index: 9999; pointer-events: none; white-space: nowrap;
+             }
+             .firstsuccess-toast--visible { opacity: 1; transform: translateX(-50%) translateY(0); }
+           `;
+           document.head.appendChild(style);
+           const toast = document.createElement('div');
+           toast.className = 'firstsuccess-toast';
+           toast.textContent = '🎉 First success! You just ran Python in the browser.';
+           document.body.appendChild(toast);
+           requestAnimationFrame(() => toast.classList.add('firstsuccess-toast--visible'));
+           setTimeout(() => { toast.classList.remove('firstsuccess-toast--visible'); setTimeout(() => toast.remove(), 400); }, 3000);
+           setTimeout(() => style.remove(), 3500);
+         }
+       } catch { /* offline: skip XP award */ }
+     }
   });
   clear.addEventListener('click', () => { lines.innerHTML = ''; out.hidden = true; clear.hidden = true; });
 
@@ -185,12 +207,8 @@ if (typeof document !== 'undefined') {
         }
       }
     } catch {}
-    // Preload Pyodide in the background so the first Run click is instant.
+    // Preload Pyodide immediately on DOMContentLoaded so the first Run click is instant.
     const preload = () => py();
-    if ('requestIdleCallback' in window) {
-      (window as any).requestIdleCallback(preload, {timeout: 5000});
-    } else {
-      setTimeout(preload, 1000);
-    }
+    preload();
   });
 }
