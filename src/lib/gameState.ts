@@ -50,7 +50,10 @@ function repairLegacy(s: PDAState): PDAState {
   if (!s.lastActive) s.lastActive = today();
   s.bestStreak = Math.max(s.bestStreak, s.streak);
 
-  markQuest(s, `completed-${id}`, 'Lesson complete');
+  markQuest(s, 'first-lesson', 'First Step');
+  if (Object.keys(s.lessonsRun).length > 0) markQuest(s, 'first-run', 'First Run');
+  for (const id of completed) {
+    markQuest(s, `completed-${id}`, 'Lesson complete');
     markQuest(s, `track-${id.split('/')[0]}`, 'Track starter');
   }
   evaluateMilestones(s);
