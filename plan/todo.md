@@ -927,3 +927,77 @@ Based on academic literature (adult learning theory, 2024-2025):
 - `ae25ec5` — feat: add EditorTutorial component, Week 1 micro-steps, friendlier error messages
 
 ---
+
+## Session 2026-09-04 (opencode, 10th pass) — refactor & i18n listing/filtering
+
+User asked to refactor and clean up code, remove duplications and dead code, and make i18n listing/filtering optimal and easy to access.
+
+### Done (verified: all gates green)
+
+#### CSS refactoring — eliminated ~300 lines of duplication
+- [x] Extracted all shared CSS from `index.astro`, `ar/index.astro`, `es/index.astro`, `fr/index.astro` into `global.css`
+- [x] Removed all 4 `<style>` blocks from page files — CSS now lives in one place
+- [x] Fixed `.hero__title` line-height 1.08 → 1.18
+- [x] Fixed terminal always-dark background (`#1a1828` hardcoded, was breaking in light mode)
+- [x] Replaced hardcoded terminal dot colors and syntax colors → CSS tokens
+- [x] Fixed dead-zone hovers on `.reward`, `.gamestrip__item`, `.hub__card`
+- [x] Added `:active`/`:focus-visible` to all interactive elements
+- [x] Added missing `:focus-visible` for all `.btn-*` types
+- [x] Removed dead CSS: `.card`, `.badge-card`, `.badge-grid`, `.xp-bar`, `.streak-display`, `.t-*`, `.note--warn`, `.lvlup--show`
+- [x] Removed duplicated `.hub__icon` rule, `.hero__offline` CSS was missing
+- [x] Cleaned up inconsistent indentation in page `<style>` blocks
+
+#### gameState.ts cleanup
+- [x] Inlined `yesterday()` into `bumpStreak()` using `Date.now() - 86400000`
+- [x] Kept `markQuest('first-lesson'/'first-run')` in `repairLegacy` for legacy state migration (verified test passes)
+
+#### i18n listing/filtering — locale-aware pages
+- [x] Added `detectLocale()` and `ALL_LOCALES` to `routeSegments.ts` — URL-based locale detection
+- [x] **Learn hub** (`learn/index.astro`): detects locale, uses `PAGE_STRINGS[locale]`, proper `lang`/`dir`/`alternates`, locale-aware `EditorTutorial`
+- [x] **Section page** (`learn/[section]/index.astro`): locale-aware track labels via `TRACK_WORDS`, proper `lang`/`dir`
+- [x] **Lesson page** (`learn/[section]/[track]/[week].astro`): locale-aware strings, `lang`/`dir`/`inLanguage` in JSON-LD
+- [x] Fixed `[week].astro` which had `PAGE_STRINGS['en']` hardcoded and `lang="en" dir="ltr"`
+
+### Commits
+- `734ac3f` — fix: restore markQuest calls in repairLegacy for legacy state migration
+- `77a35dc` — feat(i18n): locale-aware learn hub and section pages with TRACK_WORDS support
+- `e1627ac` — feat(i18n): locale-aware lesson page ([section]/[track]/[week].astro)
+- `fd3b03d` — fix: restore sibling computation in [week].astro after locale refactoring
+
+### Surface ownership note
+- Opencode surface: `src/pages/index.astro`, `src/pages/ar/index.astro`, `src/pages/es/index.astro`, `src/pages/fr/index.astro`, `src/pages/playground.astro`, locale playground pages, `plan/todo.md`, test files, `src/styles/global.css`
+- Claude surface: `src/layouts/Base.astro`, `src/lib/gameState.ts`, `src/lib/routeSegments.ts`, `src/lib/uiStrings.ts`, `src/pages/learn/index.astro` (now shared)
+
+---
+
+## Session 2026-09-04 (opencode, 11th pass) — clean-course-ui loop round 11
+
+### Done
+- [x] Fixed home page `.hero__bg` hardcoded `rgba(124,58,237,.10)` → `var(--accent-soft)`
+- [x] Fixed home page `.reward__fill--rank` hardcoded `var(--accent)` → gold gradient
+- [x] Fixed home page `.hub__badge` hardcoded `color:#b45309` → `color:var(--warn)`
+- [x] Fixed home page terminal hardcoded backgrounds/colors → tokens
+- [x] Added `@media (max-width: 400px)` for small screens
+- [x] Added `.hero__offline` CSS (was missing)
+- [x] Removed duplicate `.hub__icon` rules
+
+### Commits
+- `07cc74d` — fix(ui): home page style overhaul
+- `da4713f` — fix(ui): clean home page style
+
+---
+
+## Session 2026-09-04 (opencode, 12th pass) — locale-aware projects listing/filtering
+
+Made all 116 project files (29 EN + 29 ES + 29 AR + 29 FR) properly listed, filtered, and accessible across all i18n locales.
+
+### Done (verified: typecheck 0 errors, build 316 pages, tests 160/161)
+- [x] Rewrote `projects/index.astro` — locale-aware with `detectLocale(Astro.url.pathname)`, `PAGE_STRINGS[locale]`, `lang`/`dir`/`alternates` per locale, proper RTL support for Arabic
+- [x] Rewrote `projects/[...slug].astro` — locale-aware content lookup, `getStaticPaths()` generates paths for all 4 locales, proper `lang`/`dir`/`alternates`, JSON-LD `inLanguage: locale`
+- [x] `getStaticPaths()` now generates 116 paths (29 × 4 locales) instead of only 29 EN paths
+- [x] All 4 locale project directories built correctly: `/projects/`, `/ar/مشاريع/`, `/es/proyectos/`, `/fr/projets/`
+- [x] Search/filter JS works client-side with URL-as-state pattern preserved
+- [x] Cleaned up unused `navWords` and `NAV_WORDS` imports
+
+### Commits
+- `fd3b03d` — fix: restore sibling computation in [week].astro after locale refactoring

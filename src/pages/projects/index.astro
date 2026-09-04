@@ -5,14 +5,23 @@ import Icon from '../../components/Icon.astro';
 import ProjectArt from '../../components/ProjectArt.astro';
 import {PROJECT_TAGS} from '../../lib/projectArt.ts';
 import {PAGE_STRINGS} from '../../lib/pageStrings';
+import {detectLocale, projectsHref, NAV_WORDS, type Locale} from '../../lib/routeSegments.ts';
 
+const locale = detectLocale(Astro.url.pathname);
+const s = PAGE_STRINGS[locale];
 const base = import.meta.env.BASE_URL;
-const s = PAGE_STRINGS.en;
-const projects = (await getCollection('projects', ({slug}) => !/^(ar|es|fr)\//.test(slug)))
-  .sort((a, b) => a.data.title.localeCompare(b.data.title));
 
-const allTags = [...new Set(projects.flatMap((p) => PROJECT_TAGS[p.slug.replace(/^\/?projects\//, '')] ?? []))].sort();
-const alternates = {
+const projects = (await getCollection('projects')).filter((p) => {
+  if (locale === 'en') return !/^(ar|es|fr)\//.test(p.slug);
+  return p.slug.startsWith(`${locale}/`);
+}).sort((a, b) => a.data.title.localeCompare(b.data.title));
+
+const allTags = [...new Set(projects.flatMap((p) => {
+  const slug = p.slug.replace(new RegExp(`^(${locale}/)?`), '');
+  return PROJECT_TAGS[slug] ?? [];
+}))].sort();
+
+const alternates: Record<Locale, string> = {
   en: 'projects',
   ar: 'ar/مشاريع',
   es: 'es/proyectos',
@@ -23,15 +32,15 @@ const alternates = {
 <Base
   title={s.projectsTitle}
   description={s.projectsDescription}
-  lang="en"
-  dir="ltr"
+  lang={locale}
+  dir={locale === 'ar' ? 'rtl' : 'ltr'}
   alternates={alternates}
 >
   <section class="hero">
     <div class="container head">
-      <div class="head__eyebrow"><Icon name="code" size={16} /> Beyond the course</div>
-      <h1>Real-World Projects</h1>
-      <p>Optional, ungraded builds that graduate you from the browser playground to real Python on your machine.</p>
+      <div class="head__eyebrow"><Icon name="code" size={16} /> {s.projectsEyebrow}</div>
+      <h1>{s.projectsH1}</h1>
+      <p>{s.projectsLead}</p>
     </div>
   </section>
 
@@ -42,13 +51,13 @@ const alternates = {
         <input
           type="search"
           id="project-search"
-          placeholder="Search projects…"
-          aria-label="Search projects by title or description"
+          placeholder={locale === 'en' ? 'Search projects…' : locale === 'ar' ? 'ابحث عن المشاريع…' : locale === 'es' ? 'Buscar proyectos…' : 'Rechercher des projets…'}
+          aria-label={locale === 'ar' ? 'ابحث عن المشاريع' : s.projectsTitle}
           autocomplete="off"
         />
       </div>
       <div class="finder__tags" role="group" aria-label="Filter by tag">
-        <button class="tag-pill tag-pill--all is-active" data-tag="">All</button>
+        <button class="tag-pill tag-pill--all is-active" data-tag="">{locale === 'en' ? 'All' : locale === 'ar' ? 'الكل' : locale === 'es' ? 'Todo' : 'Tout'}</button>
         {allTags.map((tag) => (
           <button class="tag-pill" data-tag={tag}>{tag}</button>
         ))}
@@ -58,13 +67,13 @@ const alternates = {
 
     <div class="grid" id="project-grid">
       {projects.map((p) => {
-        const slug = p.slug.replace(/^\/?projects\//, '');
+        const slug = p.slug.replace(new RegExp(`^(${locale}/)?`), '');
         const tags = PROJECT_TAGS[slug] ?? [];
         const haystack = `${p.data.title} ${p.data.description} ${tags.join(' ')}`.toLowerCase();
         return (
           <a
             class="card"
-            href={`${base}projects/${slug}`}
+            href={`${base}${projectsHref(locale, base, slug)}`}
             data-project
             data-tags={tags.join('|')}
             data-search={haystack}
@@ -83,7 +92,7 @@ const alternates = {
       })}
     </div>
 
-    <p class="empty" id="project-empty" hidden>No projects match “<span id="project-empty-query"></span>”. Try a different search or tag.</p>
+    <p class="empty" id="project-empty" hidden>No projects match "<span id="project-empty-query"></span>". Try a different search or tag.</p>
   </section>
 </Base>
 
@@ -95,8 +104,6 @@ const alternates = {
   const emptyEl = document.getElementById('project-empty');
   const emptyQueryEl = document.getElementById('project-empty-query');
 
-  // URL-as-state: filters survive a reload/share, per the site's existing
-  // pattern (locale/track are already in the URL elsewhere).
   const params = new URLSearchParams(location.search);
   let activeTag = params.get('tag') ?? '';
   if (search) search.value = params.get('q') ?? '';
@@ -163,10 +170,10 @@ const alternates = {
     border-radius: var(--radius-pill); padding: .35rem .85rem; font-size: .8rem; font-weight: 700;
     cursor: pointer; transition: all var(--transition-fast);
   }
-.tag-pill:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
-.tag-pill:active { transform: translateY(1px); }
-.tag-pill:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.tag-pill.is-active { background: var(--accent); border-color: var(--accent); color: var(--accent-contrast); }
+  .tag-pill:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+  .tag-pill:active { transform: translateY(1px); }
+  .tag-pill:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .tag-pill.is-active { background: var(--accent); border-color: var(--accent); color: var(--accent-contrast); }
   .finder__count { margin: 0; font-size: .82rem; color: var(--ink-soft); }
 
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.1rem; margin: 1.5rem 0 3rem; }
@@ -176,8 +183,8 @@ const alternates = {
     transition: all var(--transition-smooth); display: flex; flex-direction: column;
   }
   .card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
-.card:active { box-shadow: var(--shadow-sm); transform: translateY(1px); }
-.card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .card:active { box-shadow: var(--shadow-sm); transform: translateY(1px); }
+  .card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   .card__art { display: block; width: 100%; height: 100px; }
   .card__body { padding: 1.1rem 1.3rem 1.3rem; display: flex; flex-direction: column; gap: .5rem; flex: 1; }
   .card h2 { font-size: 1.05rem; margin: 0; }

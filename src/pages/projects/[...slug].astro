@@ -3,23 +3,34 @@ import {getCollection, type CollectionEntry} from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import ProjectArt from '../../components/ProjectArt.astro';
 import {PAGE_STRINGS} from '../../lib/pageStrings';
+import {detectLocale, projectsHref, type Locale} from '../../lib/routeSegments.ts';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects');
-  return projects
-    .filter((entry) => !/^(ar|es|fr)\//.test(entry.slug))
-    .map((entry) => ({
-      params: {slug: entry.slug.replace(/^\/?projects\//, '')},
-      props: {entry},
-    }));
+  const paths: {params: {slug: string}; props: {entry: CollectionEntry<'projects'>}}[] = [];
+  for (const locale of ['en', 'ar', 'es', 'fr'] as const) {
+    const localeProjects = projects.filter((entry) => {
+      if (locale === 'en') return !/^(ar|es|fr)\//.test(entry.slug);
+      return entry.slug.startsWith(`${locale}/`);
+    });
+    for (const entry of localeProjects) {
+      const slug = entry.slug.replace(new RegExp(`^(${locale}/)?`), '');
+      paths.push({
+        params: {slug},
+        props: {entry},
+      });
+    }
+  }
+  return paths;
 }
 
 const {entry} = Astro.props;
+const locale = detectLocale(Astro.url.pathname);
+const s = PAGE_STRINGS[locale];
+const base = import.meta.env.BASE_URL;
 const {title, description} = entry.data;
 const {Content} = await entry.render();
-const base = import.meta.env.BASE_URL;
-const slug = entry.slug.replace(/^\/?projects\//, '');
-const ps = PAGE_STRINGS.en;
+const slug = entry.slug.replace(new RegExp(`^(${locale}/)?`), '');
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'LearningResource',
@@ -28,19 +39,19 @@ const jsonLd = {
   learningResourceType: 'Project',
   educationalLevel: 'Beginner',
   isAccessibleForFree: true,
-  inLanguage: 'en',
-  url: String(new URL(`${base}projects/${slug}`, Astro.site)),
+  inLanguage: locale,
+  url: String(new URL(`${base}${projectsHref(locale, base, slug)}`, Astro.site)),
   isPartOf: {
     '@type': 'Course',
     name: 'PyDA Course',
-    description: ps.courseDescription,
+    description: s.courseDescription,
   },
 };
 ---
 
-<Base title={`${title} — PyDA Course`} description={description} lang="en" dir="ltr" jsonLd={jsonLd}>
+<Base title={`${title} — PyDA Course`} description={description} lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'} jsonLd={jsonLd}>
   <nav class="crumb container">
-    <a href={`${base}projects`}>Projects</a> <span>/</span> <span class="crumb__here">{title}</span>
+    <a href={`${base}${projectsHref(locale, base)}`}>{s.projectsEyebrow}</a> <span>/</span> <span class="crumb__here">{title}</span>
   </nav>
 
   <div class="container">
