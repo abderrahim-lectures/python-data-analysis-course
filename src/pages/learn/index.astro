@@ -134,16 +134,19 @@ const alternates = {
     font-weight: 700; font-size: .85rem; color: #fff; border: none;
     box-shadow: var(--shadow-tactile); transition: transform .1s ease, box-shadow .1s ease;
   }
-  .route-pill:active { transform: translateY(3px); box-shadow: 0 1px 0 rgba(0,0,0,.08), 0 2px 8px rgba(16,24,40,.06); }
-  .route-pill--normal { color: #10240a; background: var(--success); box-shadow: 0 4px 0 #3d9401, 0 6px 16px rgba(88,204,2,.25); }
-  .route-pill--normal:hover, .route-pill--hard:hover { transform: translateY(-1px); }
-  .route-pill--normal:hover { color: #10240a; filter: brightness(1.06); box-shadow: 0 4px 0 #3d9401, 0 8px 20px rgba(88,204,2,.35); }
-  .route-pill--normal:active { box-shadow: 0 1px 0 #3d9401, 0 2px 8px rgba(88,204,2,.15); }
-  .route-pill--hard { background: #c81e3f; box-shadow: 0 4px 0 #c81e3f, 0 6px 16px rgba(244,63,94,.25); }
-  .route-pill--hard:hover { color: #fff; filter: brightness(1.06); box-shadow: 0 4px 0 #c81e3f, 0 8px 20px rgba(244,63,94,.35); }
-  .route-pill--hard:active { box-shadow: 0 1px 0 #c81e3f, 0 2px 8px rgba(244,63,94,.15); }
+.route-pill:active { transform: translateY(3px); box-shadow: 0 1px 0 rgba(0,0,0,.08), 0 2px 8px rgba(16,24,40,.06); }
+.route-pill--normal { color: var(--success-text); background: var(--success); box-shadow: 0 4px 0 rgba(46,125,10,.5), 0 6px 16px var(--success-soft); }
+.route-pill--normal:hover, .route-pill--hard:hover { transform: translateY(-1px); }
+.route-pill--normal:hover { color: var(--success-text); filter: brightness(1.06); box-shadow: 0 4px 0 rgba(46,125,10,.5), 0 8px 20px var(--success-soft); }
+.route-pill--normal:active { box-shadow: 0 1px 0 rgba(46,125,10,.5), 0 2px 8px var(--success-soft); }
+.route-pill--hard { color: #fff; background: var(--bad); box-shadow: 0 4px 0 rgba(244,63,94,.5), 0 6px 16px var(--bad-soft); }
+.route-pill--hard:hover { filter: brightness(1.06); box-shadow: 0 4px 0 rgba(244,63,94,.5), 0 8px 20px var(--bad-soft); }
+.route-pill--hard:active { box-shadow: 0 1px 0 rgba(244,63,94,.5), 0 2px 8px var(--bad-soft); }
+.route-pill:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   .sectioncard__all { align-self: flex-start; font-size: .82rem; font-weight: 700; color: var(--ink-soft); text-decoration: none; transition: color var(--transition-fast), transform var(--transition-fast); }
   .sectioncard__all:hover { color: var(--accent); transform: translateX(2px); }
+.sectioncard__all:active { transform: translateX(1px); }
+.sectioncard__all:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
   .rewards-preview { padding: 1.5rem 0 2rem; }
   .rewards-preview h3 { font-size: 1.2rem; margin-bottom: .75rem; }
