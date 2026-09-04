@@ -31,6 +31,14 @@ const locale = detectLocale(Astro.url.pathname);
 const dir = locale === 'ar' ? 'rtl' : 'ltr';
 const t = TRACK_WORDS[locale];
 const ps = PAGE_STRINGS[locale];
+const allLessons = await getCollection('learn');
+const siblings = allLessons
+  .filter((e) => !/^(ar|es|fr)\//.test(e.slug) && e.data.section === section && e.data.track === track && typeof e.data.week === 'number')
+  .sort((a, b) => (a.data.week ?? 0) - (b.data.week ?? 0));
+const idx = siblings.findIndex((e) => e.slug === entry.slug);
+const prev = idx > 0 ? siblings[idx - 1] : null;
+const next = idx >= 0 && idx < siblings.length - 1 ? siblings[idx + 1] : null;
+const otherTrack = track === 'normal' ? 'hard' : 'normal';
 const lessonId = `${section}/${track}/week-${week}`;
 const jsonLd = {
   '@context': 'https://schema.org',
