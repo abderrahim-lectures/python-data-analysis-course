@@ -1001,3 +1001,12 @@ Made all 116 project files (29 EN + 29 ES + 29 AR + 29 FR) properly listed, filt
 
 ### Commits
 - `5843bc6` — feat(i18n): locale-aware projects listing and filtering across all 116 project files
+
+## Session 2026-09-04 (opencode, 13th pass) — fix projects per-locale
+
+- [x] Reverted `projects/index.astro` back to showing only EN projects (29)
+- [x] Locale-specific pages (`src/pages/ar/مشاريع/index.astro`, `src/pages/es/proyectos/index.astro`, `src/pages/fr/projets/index.astro`) already correctly show their own 29 projects each
+- [x] All 4 locale detail pages (`[...slug].astro`) work correctly
+
+### Commits
+- `62980c8` — fix(projects): EN page shows only EN projects, locale pages show their own
