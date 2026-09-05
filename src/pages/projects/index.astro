@@ -3,7 +3,7 @@ import {getCollection} from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Icon from '../../components/Icon.astro';
 import ProjectArt from '../../components/ProjectArt.astro';
-import {PROJECT_TAGS} from '../../lib/projectArt.ts';
+import {PROJECT_TAGS, projectArtEmoji} from '../../lib/projectArt.ts';
 import {PAGE_STRINGS} from '../../lib/pageStrings';
 import {detectLocale} from '../../lib/routeSegments.ts';
 
@@ -55,29 +55,36 @@ const alternates = {
           autocomplete="off"
         />
       </div>
-      <div class="finder__tags" role="group" aria-label="Filter by tag">
-        <button class="tag-pill tag-pill--all is-active" data-tag="">All</button>
-        {allTags.map((tag) => (
-          <button class="tag-pill" data-tag={tag}>{tag}</button>
-        ))}
+      <div class="finder__actions">
+        <div class="finder__tags" role="group" aria-label="Filter by tag">
+          <button class="tag-pill tag-pill--all is-active" data-tag="">All</button>
+          {allTags.map((tag) => (
+            <button class="tag-pill" data-tag={tag}>{tag}</button>
+          ))}
+        </div>
+        <div class="finder__view" role="group" aria-label="View mode">
+          <button class="view-btn view-btn--list is-active" data-view="list" aria-label="List view"><Icon name="list" size={16} /></button>
+          <button class="view-btn view-btn--grid" data-view="grid" aria-label="Grid view"><Icon name="grid" size={16} /></button>
+        </div>
       </div>
       <p class="finder__count" id="project-count" aria-live="polite"></p>
     </div>
 
-    <div class="grid" id="project-grid">
+    <div class="list" id="project-grid">
       {projects.map((p) => {
         const slug = p.slug;
         const tags = PROJECT_TAGS[slug] ?? [];
+        const emoji = projectArtEmoji(tags);
         const haystack = `${p.data.title} ${p.data.description} ${tags.join(' ')}`.toLowerCase();
         return (
-             <a
+          <a
             class="card"
             href={`${base}projects/${slug}`}
             data-project
             data-tags={tags.join('|')}
             data-search={haystack}
           >
-            <ProjectArt slug={slug} class="card__art" />
+            <span class="card__icon">{emoji}</span>
             <div class="card__body">
               <h2>{p.data.title}</h2>
               <p>{p.data.description}</p>
@@ -98,14 +105,23 @@ const alternates = {
 <script>
   const search = document.getElementById('project-search') as HTMLInputElement | null;
   const tagButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('.tag-pill'));
+  const viewButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('.view-btn'));
   const cards = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-project]'));
+  const grid = document.getElementById('project-grid')!;
   const countEl = document.getElementById('project-count');
   const emptyEl = document.getElementById('project-empty');
   const emptyQueryEl = document.getElementById('project-empty-query');
 
   const params = new URLSearchParams(location.search);
   let activeTag = params.get('tag') ?? '';
+  let viewMode = params.get('view') ?? 'list';
   if (search) search.value = params.get('q') ?? '';
+
+  function setView(mode: string) {
+    viewMode = mode;
+    grid.className = mode === 'grid' ? 'grid' : 'list';
+    for (const b of viewButtons) b.classList.toggle('is-active', b.dataset.view === mode);
+  }
 
   function apply() {
     const q = (search?.value ?? '').trim().toLowerCase();
@@ -122,10 +138,15 @@ const alternates = {
     if (emptyQueryEl) emptyQueryEl.textContent = q || (activeTag || 'that tag');
 
     const next = new URLSearchParams();
+    if (viewMode !== 'list') next.set('view', viewMode);
     if (q) next.set('q', q);
     if (activeTag) next.set('tag', activeTag);
     const qs = next.toString();
     history.replaceState(null, '', qs ? `?${qs}` : location.pathname);
+  }
+
+  for (const btn of viewButtons) {
+    btn.addEventListener('click', () => setView(btn.dataset.view ?? 'list'));
   }
 
   for (const btn of tagButtons) {
@@ -142,6 +163,7 @@ const alternates = {
   }
 
   search?.addEventListener('input', apply);
+  setView(viewMode);
   apply();
 </script>
 
@@ -163,6 +185,7 @@ const alternates = {
     font-size: .95rem; width: 100%; font-family: inherit;
   }
   .finder__search input::placeholder { color: var(--ink-faint); }
+  .finder__actions { display: flex; flex-direction: column; gap: .5rem; }
   .finder__tags { display: flex; flex-wrap: wrap; gap: .5rem; }
   .tag-pill {
     border: 1px solid var(--line); background: var(--surface); color: var(--ink-soft);
@@ -173,8 +196,18 @@ const alternates = {
   .tag-pill:active { transform: translateY(1px); }
   .tag-pill:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   .tag-pill.is-active { background: var(--accent); border-color: var(--accent); color: var(--accent-contrast); }
+  .finder__view { display: flex; gap: .25rem; }
+  .view-btn {
+    border: 1px solid var(--line); background: var(--surface); color: var(--ink-soft);
+    border-radius: var(--radius-pill); padding: .3rem .55rem; cursor: pointer;
+    transition: all var(--transition-fast); display: inline-flex; align-items: center;
+  }
+  .view-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+  .view-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .view-btn.is-active { background: var(--accent); border-color: var(--accent); color: var(--accent-contrast); }
   .finder__count { margin: 0; font-size: .82rem; color: var(--ink-soft); }
 
+  .list { display: flex; flex-direction: column; gap: .75rem; margin: 1rem 0 3rem; }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.1rem; margin: 1.5rem 0 3rem; }
   .card {
     background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg);
@@ -184,13 +217,12 @@ const alternates = {
   .card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
   .card:active { box-shadow: var(--shadow-sm); transform: translateY(1px); }
   .card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-  .card__art { display: block; width: 100%; height: 100px; }
-  .card__body { padding: 1.1rem 1.3rem 1.3rem; display: flex; flex-direction: column; gap: .5rem; flex: 1; }
+  .card__icon { font-size: 1.4rem; margin: .75rem 0 0 1rem; }
+  .card__body { padding: .5rem 1.3rem 1.3rem; display: flex; flex-direction: column; gap: .5rem; flex: 1; }
   .card h2 { font-size: 1.05rem; margin: 0; }
   .card p { color: var(--ink-soft); font-size: .88rem; margin: 0; line-height: 1.5; flex-grow: 1; }
   .card__tags { display: flex; flex-wrap: wrap; gap: .35rem; align-items: center; }
   .chip { background: var(--accent-soft); color: var(--accent); font-size: .72rem; font-weight: 700; padding: .15rem .55rem; border-radius: var(--radius-pill); }
-
   .card__badge { width: fit-content; margin-top: .3rem; }
 
   .empty { text-align: center; color: var(--ink-soft); padding: 2.5rem 1rem; margin: 0 0 3rem; }
