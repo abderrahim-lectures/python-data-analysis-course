@@ -656,11 +656,15 @@ main:focus { outline: none; }
 .player-card__xpfill { height: 100%; width: 0; border-radius: var(--radius-pill); background: linear-gradient(90deg, var(--accent), var(--accent-strong)); transition: width .6s cubic-bezier(.4,0,.2,1); }
 .player-card__xptext { font-size: .72rem; font-weight: 700; color: var(--ink-soft); }
 .player-card__actions { display: flex; gap: .5rem; }
+.player-card__actions .btn { flex: 1; justify-content: center; min-width: 0; }
 
-.hero__actions { display: flex; gap: .7rem; flex-wrap: wrap; }
-.hero__offline { margin-top: 1rem; display: flex; align-items: center; gap: .6rem; font-size: .85rem; color: var(--ink-soft); flex-wrap: wrap; }
-.hero__offline-icon { font-size: 1.2rem; }
-.hero__offline .btn { margin-left: auto; }
+.hero__actions { display: flex; gap: .7rem; flex-wrap: wrap; align-items: center; }
+.hero__actions .btn-primary { flex: 0 1 auto; }
+.hero__actions .btn-ghost { flex: 0 1 auto; }
+
+.hero__offline { margin-top: 1rem; display: flex; align-items: center; gap: .6rem; font-size: .85rem; color: var(--ink-soft); flex-wrap: wrap; background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: .65rem 1rem; }
+.hero__offline-icon { font-size: 1.2rem; flex-shrink: 0; }
+.hero__offline .btn { margin-left: 0; flex-shrink: 0; }
 
 .gamestrip { display: grid; grid-template-columns: repeat(4, 1fr); gap: .75rem; margin: 0 0 2rem; }
 .gamestrip__item {
@@ -739,9 +743,11 @@ main:focus { outline: none; }
   .gamestrip__item--blazing { grid-column: span 2; }
   .rewards__grid { grid-template-columns: 1fr; }
   .hero__actions { flex-direction: column; }
+  .hero__actions .btn { width: 100%; }
   .player-card__actions { flex-direction: column; }
-  .hero__offline { flex-direction: column; align-items: flex-start; }
-  .hero__offline .btn { margin-left: 0; }
+  .player-card__actions .btn { width: 100%; }
+  .hero__offline { flex-direction: column; align-items: flex-start; gap: .5rem; }
+  .hero__offline .btn { width: 100%; margin-left: 0; }
 }
 @media (max-width: 400px) {
   .gamestrip { grid-template-columns: 1fr; }
