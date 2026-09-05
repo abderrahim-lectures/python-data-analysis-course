@@ -4,10 +4,10 @@ import Base from '../../../layouts/Base.astro';
 import Icon from '../../../components/Icon.astro';
 import ProjectArt from '../../../components/ProjectArt.astro';
 import {PROJECT_TAGS} from '../../../lib/projectArt.ts';
-import {projectsHref} from '../../../lib/routeSegments';
+import {detectLocale, projectsHref, type Locale} from "../../../lib/routeSegments";
 import {PAGE_STRINGS} from '../../../lib/pageStrings';
 
-const locale = 'ar' as const;
+const locale = detectLocale(Astro.url.pathname);
 const allProjects = await getCollection('projects');
 const localeProjects = allProjects.filter((p) => p.slug.split('/')[0] === 'ar');
 const base = import.meta.env.BASE_URL;
