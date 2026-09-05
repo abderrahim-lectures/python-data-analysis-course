@@ -1010,3 +1010,23 @@ Made all 116 project files (29 EN + 29 ES + 29 AR + 29 FR) properly listed, filt
 
 ### Commits
 - `62980c8` — fix(projects): EN page shows only EN projects, locale pages show their own
+
+## Session 2026-09-04 (opencode, 14th pass) — complete projects + GA
+
+### Done
+- [x] Added search + tag filtering to all 3 locale project index pages (AR/ES/FR)
+- [x] Fixed `localeBase('en')` in `routeSegments.ts` to return `''` instead of `base` — prevented double-slash hrefs
+- [x] Fixed EN slug prefix stripping (`/projects/` prefix removed from `p.slug` in projects/index.astro)
+- [x] Fixed EN `projects/[...slug].astro` crumb and JSON-LD URLs
+- [x] All 4 locale project index pages now have: search input, tag pills, project count, empty state
+- [x] Google Analytics gtag.js added to Base.astro (conditional on `PUBLIC_GA_ID`)
+- [x] `.env.example` created with `PUBLIC_GA_ID` template
+
+### Commits
+- `bcf0f20` — feat(projects): add search+filter to all locale project pages, fix double-slash links
+- `3bd4d65` — feat(analytics): add Google Analytics gtag.js to Base layout
+
+### Verification
+- typecheck 0 errors
+- build 316 pages
+- tests 160/161 (1 pre-existing hoverColor failure)
