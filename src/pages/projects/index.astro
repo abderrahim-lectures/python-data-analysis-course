@@ -20,6 +20,12 @@ const projects = (await getCollection('projects'))
   .sort((a, b) => a.data.title.localeCompare(b.data.title));
 
 const allTags = [...new Set(projects.flatMap((p) => PROJECT_TAGS[p.slug] ?? []))].sort();
+const tagIcon: Record<string, string> = {};
+for (const [, tags] of Object.entries(PROJECT_TAGS)) {
+  for (const t of tags) {
+    if (!tagIcon[t]) tagIcon[t] = projectArtEmoji([t]);
+  }
+}
 const alternates = {
   en: 'projects',
   ar: 'ar/مشاريع',
@@ -57,9 +63,13 @@ const alternates = {
       </div>
       <div class="finder__actions">
         <div class="finder__tags" role="group" aria-label="Filter by tag">
-          <button class="tag-pill tag-pill--all is-active" data-tag="">All</button>
+          <button class="tag-pill tag-pill--all is-active" data-tag="">
+            <span class="tag-pill__icon">🏷️</span>All
+          </button>
           {allTags.map((tag) => (
-            <button class="tag-pill" data-tag={tag}>{tag}</button>
+            <button class="tag-pill" data-tag={tag}>
+              <span class="tag-pill__icon">{tagIcon[tag] ?? '🏷️'}</span>{tag}
+            </button>
           ))}
         </div>
         <div class="finder__view" role="group" aria-label="View mode">
@@ -89,7 +99,7 @@ const alternates = {
               <h2>{p.data.title}</h2>
               <p>{p.data.description}</p>
               <div class="card__tags">
-                {tags.map((t) => <span class="chip">{t}</span>)}
+                {tags.map((t) => <span class="chip">{tagIcon[t] ?? ''} {t}</span>)}
               </div>
               <span class="badge badge--accent card__badge">{s.optionalUngraded}</span>
             </div>
@@ -222,7 +232,9 @@ const alternates = {
   .card h2 { font-size: 1.05rem; margin: 0; }
   .card p { color: var(--ink-soft); font-size: .88rem; margin: 0; line-height: 1.5; flex-grow: 1; }
   .card__tags { display: flex; flex-wrap: wrap; gap: .35rem; align-items: center; }
-  .chip { background: var(--accent-soft); color: var(--accent); font-size: .72rem; font-weight: 700; padding: .15rem .55rem; border-radius: var(--radius-pill); }
+  .chip { background: var(--accent-soft); color: var(--accent); font-size: .72rem; font-weight: 700; padding: .15rem .55rem; border-radius: var(--radius-pill); display: inline-flex; align-items: center; gap: .2rem; }
+  .chip__icon { font-size: .65rem; }
+  .tag-pill__icon { margin-right: .2rem; }
   .card__badge { width: fit-content; margin-top: .3rem; }
 
   .empty { text-align: center; color: var(--ink-soft); padding: 2.5rem 1rem; margin: 0 0 3rem; }
