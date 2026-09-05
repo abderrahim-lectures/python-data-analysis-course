@@ -1000,4 +1000,4 @@ Made all 116 project files (29 EN + 29 ES + 29 AR + 29 FR) properly listed, filt
 - [x] Cleaned up unused `navWords` and `NAV_WORDS` imports
 
 ### Commits
-- `fd3b03d` — fix: restore sibling computation in [week].astro after locale refactoring
+- `5843bc6` — feat(i18n): locale-aware projects listing and filtering across all 116 project files
