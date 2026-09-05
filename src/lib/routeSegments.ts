@@ -48,7 +48,7 @@ export function trackFromWord(locale: Locale, word: string): 'normal' | 'hard' |
 
 /** `/` for EN, `/<locale>/` for others. */
 export function localeBase(locale: Locale, base: string): string {
-  return locale === 'en' ? '' : `${base}${locale}/`;
+  return locale === 'en' ? base : `${base}${locale}/`;
 }
 
 export function learnHref(locale: Locale, base: string, ...parts: string[]): string {
