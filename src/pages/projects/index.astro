@@ -5,22 +5,28 @@ import Icon from '../../components/Icon.astro';
 import ProjectArt from '../../components/ProjectArt.astro';
 import {PROJECT_TAGS} from '../../lib/projectArt.ts';
 import {PAGE_STRINGS} from '../../lib/pageStrings';
-import {detectLocale, projectsHref, type Locale} from '../../lib/routeSegments.ts';
+import {detectLocale, type Locale} from '../../lib/routeSegments.ts';
 
 const locale = detectLocale(Astro.url.pathname);
 const s = PAGE_STRINGS[locale];
 const base = import.meta.env.BASE_URL;
 
-const projects = (await getCollection('projects')).filter((p) => !/^(ar|es|fr)\//.test(p.slug))
-  .map((p) => ({...p, slug: p.slug.replace(/^\/?projects\//, '')}))
+const projects = (await getCollection('projects'))
+  .map((p) => {
+    const localeMatch = p.slug.match(/^(ar|es|fr)\//);
+    const projLocale: Locale = localeMatch ? localeMatch[1] as Locale : 'en';
+    const slug = p.slug.replace(/^(ar|es|fr)\//, '');
+    return {...p, slug, projLocale};
+  })
   .sort((a, b) => a.data.title.localeCompare(b.data.title));
 
 const allTags = [...new Set(projects.flatMap((p) => PROJECT_TAGS[p.slug] ?? []))].sort();
+const localeLabels: Record<Locale, string> = {en: 'EN', ar: 'عربي', es: 'Español', fr: 'Français'};
 const alternates: Record<Locale, string> = {
   en: 'projects',
   ar: 'ar/مشاريع',
   es: 'es/proyectos',
-  fr: 'fr/projets',
+  fr: 'fr/proجات',
 };
 ---
 
@@ -46,10 +52,20 @@ const alternates: Record<Locale, string> = {
         <input
           type="search"
           id="project-search"
-          placeholder="Search projects…"
+          placeholder="Search all {projects.length} projects…"
           aria-label="Search projects by title or description"
           autocomplete="off"
         />
+      </div>
+      <div class="finder__langs" role="tablist" aria-label="Filter by language">
+        {(['en', 'ar', 'es', 'fr'] as const).map((l) => (
+          <button
+            class="lang-pill {l === locale ? 'lang-pill--active' : ''}"
+            data-locale={l}
+            role="tab"
+            aria-selected={l === locale}
+          >{localeLabels[l]}</button>
+        ))}
       </div>
       <div class="finder__tags" role="group" aria-label="Filter by tag">
         <button class="tag-pill tag-pill--all is-active" data-tag="">All</button>
@@ -68,8 +84,9 @@ const alternates: Record<Locale, string> = {
         return (
           <a
             class="card"
-            href={`${base}${projectsHref(locale, '', slug)}`}
+            href={`${base}projects/${slug}`}
             data-project
+            data-locale={p.projLocale}
             data-tags={tags.join('|')}
             data-search={haystack}
           >
@@ -78,6 +95,7 @@ const alternates: Record<Locale, string> = {
               <h2>{p.data.title}</h2>
               <p>{p.data.description}</p>
               <div class="card__tags">
+                <span class="chip chip--locale">{localeLabels[p.projLocale]}</span>
                 {tags.map((t) => <span class="chip">{t}</span>)}
               </div>
               <span class="badge badge--accent card__badge">{s.optionalUngraded}</span>
@@ -93,6 +111,7 @@ const alternates: Record<Locale, string> = {
 
 <script>
   const search = document.getElementById('project-search') as HTMLInputElement | null;
+  const langButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('.lang-pill'));
   const tagButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('.tag-pill'));
   const cards = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-project]'));
   const countEl = document.getElementById('project-count');
@@ -100,6 +119,7 @@ const alternates: Record<Locale, string> = {
   const emptyQueryEl = document.getElementById('project-empty-query');
 
   const params = new URLSearchParams(location.search);
+  let activeLang: string = params.get('lang') ?? 'all';
   let activeTag = params.get('tag') ?? '';
   if (search) search.value = params.get('q') ?? '';
 
@@ -107,9 +127,10 @@ const alternates: Record<Locale, string> = {
     const q = (search?.value ?? '').trim().toLowerCase();
     let visible = 0;
     for (const card of cards) {
+      const matchesLang = activeLang === 'all' || card.dataset.locale === activeLang;
       const matchesTag = !activeTag || (card.dataset.tags ?? '').split('|').includes(activeTag);
       const matchesQuery = !q || (card.dataset.search ?? '').includes(q);
-      const show = matchesTag && matchesQuery;
+      const show = matchesLang && matchesTag && matchesQuery;
       card.hidden = !show;
       if (show) visible++;
     }
@@ -118,10 +139,22 @@ const alternates: Record<Locale, string> = {
     if (emptyQueryEl) emptyQueryEl.textContent = q || (activeTag || 'that tag');
 
     const next = new URLSearchParams();
+    if (activeLang !== 'all') next.set('lang', activeLang);
     if (q) next.set('q', q);
     if (activeTag) next.set('tag', activeTag);
     const qs = next.toString();
     history.replaceState(null, '', qs ? `?${qs}` : location.pathname);
+  }
+
+  for (const btn of langButtons) {
+    const l = btn.dataset.locale ?? 'all';
+    if (l === activeLang) btn.classList.add('lang-pill--active');
+    else btn.classList.remove('lang-pill--active');
+    btn.addEventListener('click', () => {
+      activeLang = btn.dataset.locale ?? 'all';
+      for (const b of langButtons) b.classList.toggle('lang-pill--active', b === btn);
+      apply();
+    });
   }
 
   for (const btn of tagButtons) {
@@ -159,6 +192,16 @@ const alternates: Record<Locale, string> = {
     font-size: .95rem; width: 100%; font-family: inherit;
   }
   .finder__search input::placeholder { color: var(--ink-faint); }
+  .finder__langs { display: flex; gap: .5rem; }
+  .lang-pill {
+    border: 1px solid var(--line); background: var(--surface); color: var(--ink-soft);
+    border-radius: var(--radius-pill); padding: .3rem .75rem; font-size: .78rem; font-weight: 700;
+    cursor: pointer; transition: all var(--transition-fast);
+  }
+  .lang-pill:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+  .lang-pill:active { transform: translateY(1px); }
+  .lang-pill:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .lang-pill--active { background: var(--accent); border-color: var(--accent); color: var(--accent-contrast); }
   .finder__tags { display: flex; flex-wrap: wrap; gap: .5rem; }
   .tag-pill {
     border: 1px solid var(--line); background: var(--surface); color: var(--ink-soft);
@@ -184,8 +227,9 @@ const alternates: Record<Locale, string> = {
   .card__body { padding: 1.1rem 1.3rem 1.3rem; display: flex; flex-direction: column; gap: .5rem; flex: 1; }
   .card h2 { font-size: 1.05rem; margin: 0; }
   .card p { color: var(--ink-soft); font-size: .88rem; margin: 0; line-height: 1.5; flex-grow: 1; }
-  .card__tags { display: flex; flex-wrap: wrap; gap: .35rem; }
+  .card__tags { display: flex; flex-wrap: wrap; gap: .35rem; align-items: center; }
   .chip { background: var(--accent-soft); color: var(--accent); font-size: .72rem; font-weight: 700; padding: .15rem .55rem; border-radius: var(--radius-pill); }
+  .chip--locale { background: var(--surface-2); color: var(--ink); font-size: .65rem; }
   .card__badge { width: fit-content; margin-top: .3rem; }
 
   .empty { text-align: center; color: var(--ink-soft); padding: 2.5rem 1rem; margin: 0 0 3rem; }
