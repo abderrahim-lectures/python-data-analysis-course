@@ -87,6 +87,17 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
         sessionStorage.setItem(KEY, '1');
       })();
     </script>
+    {import.meta.env.PUBLIC_GA_ID && (
+      <>
+        <script is:inline>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', import.meta.env.PUBLIC_GA_ID);
+        </script>
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${import.meta.env.PUBLIC_GA_ID}`}></script>
+      </>
+    )}
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
