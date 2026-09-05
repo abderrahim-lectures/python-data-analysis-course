@@ -1030,3 +1030,19 @@ Made all 116 project files (29 EN + 29 ES + 29 AR + 29 FR) properly listed, filt
 - typecheck 0 errors
 - build 316 pages
 - tests 160/161 (1 pre-existing hoverColor failure)
+
+## Session 2026-09-04 (opencode, 15th pass) — subfolders + detectLocale
+
+### Done
+- [x] Restored locale-specific project page subfolders
+  - `src/pages/projects/` — EN (29 projects)
+  - `src/pages/ar/مشاريع/` — AR (29 projects)
+  - `src/pages/es/proyectos/` — ES (29 projects)
+  - `src/pages/fr/proجات/` — FR (29 projects)
+- [x] All locale-specific project pages use `detectLocale(Astro.url.pathname)` instead of hardcoded locale values
+- [x] Each URL path is in its i18n locale for SEO
+- [x] hreflang tags correctly point to locale-specific project URLs
+- [x] 316 pages built, typecheck 0 errors, tests 160/161
+
+### Commits
+- `c56a01f` — feat(projects): use subfolders for each locale's project pages with detectLocale
