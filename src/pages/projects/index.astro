@@ -12,6 +12,7 @@ const s = PAGE_STRINGS[locale];
 const base = import.meta.env.BASE_URL;
 
 const projects = (await getCollection('projects')).filter((p) => !/^(ar|es|fr)\//.test(p.slug))
+  .map((p) => ({...p, slug: p.slug.replace(/^\/?projects\//, '')}))
   .sort((a, b) => a.data.title.localeCompare(b.data.title));
 
 const allTags = [...new Set(projects.flatMap((p) => PROJECT_TAGS[p.slug] ?? []))].sort();
@@ -67,7 +68,7 @@ const alternates: Record<Locale, string> = {
         return (
           <a
             class="card"
-            href={`${base}${projectsHref(locale, base, slug)}`}
+            href={`${base}${projectsHref(locale, '', slug)}`}
             data-project
             data-tags={tags.join('|')}
             data-search={haystack}

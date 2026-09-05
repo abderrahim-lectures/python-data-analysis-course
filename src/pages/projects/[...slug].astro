@@ -40,7 +40,7 @@ const jsonLd = {
   educationalLevel: 'Beginner',
   isAccessibleForFree: true,
   inLanguage: locale,
-  url: String(new URL(`${base}${projectsHref(locale, base, slug)}`, Astro.site)),
+  url: String(new URL(`${base}${projectsHref(locale, '', slug)}`, Astro.site)),
   isPartOf: {
     '@type': 'Course',
     name: 'PyDA Course',
@@ -51,7 +51,7 @@ const jsonLd = {
 
 <Base title={`${title} — PyDA Course`} description={description} lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'} jsonLd={jsonLd}>
   <nav class="crumb container">
-    <a href={`${base}${projectsHref(locale, base)}`}>{s.projectsEyebrow}</a> <span>/</span> <span class="crumb__here">{title}</span>
+    <a href={`${base}${projectsHref(locale, '')}`}>{s.projectsEyebrow}</a> <span>/</span> <span class="crumb__here">{title}</span>
   </nav>
 
   <div class="container">
