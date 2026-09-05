@@ -30,13 +30,8 @@ jobs:
         working-directory: jupyterlite-config
         run: >
           uv run --with jupyterlite-core --with jupyterlite-pyodide-kernel
-          --with jupyterlab_server --with jupyterlab-language-pack-ar
-          --with jupyterlab-language-pack-es --with jupyterlab-language-pack-fr
+          --with jupyterlab_server
           jupyter lite build --config jupyter_lite_config.json
-
-      - name: Patch JupyterLite to honour the per-URL ?locale= deep-link
-        working-directory: jupyterlite-config
-        run: uv run --with jupyterlite-core python patch_config_utils.py _output/config-utils.js
 
       - uses: actions/setup-node@v4
         with:
