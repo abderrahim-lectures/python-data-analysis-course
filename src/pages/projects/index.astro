@@ -12,6 +12,10 @@ const s = PAGE_STRINGS[locale];
 const base = import.meta.env.BASE_URL;
 
 const projects = (await getCollection('projects'))
+  .filter((p) => {
+    if (locale === 'en') return !/^(ar|es|fr)\//.test(p.slug);
+    return p.slug.startsWith(`${locale}/`);
+  })
   .map((p) => ({...p, slug: p.slug.replace(/^(ar|es|fr)\//, '')}))
   .sort((a, b) => a.data.title.localeCompare(b.data.title));
 
