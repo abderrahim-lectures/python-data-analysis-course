@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
-import { xpProgress, trackProgress, questsToShow, streakProgress } from '../lib/gameState.ts';
+import { xpProgress, trackProgress, questsToShow, streakProgress, getActivityLog, getActivityStats, projectStats } from '../lib/gameState.ts';
 import { emptyStats } from '../lib/gamestats.ts';
 const base = import.meta.env.BASE_URL;
 const gs = emptyStats();
@@ -11,13 +11,15 @@ const py = trackProgress('python-101', 5);
 const da = trackProgress('data-analysis', 5);
 const quests = questsToShow();
 const sp = streakProgress();
+const actStats = getActivityStats();
+const projStats = projectStats();
 
-const pyWeeks = [1,2,3,4,5].map((w) => {
+const pyModules = [1,2,3,4,5,6,7].map((w) => {
   const done = w <= py.done;
   return {w, done};
 });
-const daWeeks = [6,7,8,9,10].map((w) => {
-  const done = w <= (5 + da.done);
+const daModules = [1,2,3,4,5].map((w) => {
+  const done = w <= da.done;
   return {w, done};
 });
 ---
@@ -87,17 +89,17 @@ const daWeeks = [6,7,8,9,10].map((w) => {
           <span class="trail__pct" id="pct-python-101">{py.done}/{py.total} done</span>
         </div>
         <ol class="stations" data-track="python-101">
-          {pyWeeks.map(({w, done}) => (
+          {pyModules.map(({w, done}) => (
             <li class="station{done ? ' station--done' : ''}" data-week={w}>
-              <a class="station__link" href={`${base}learn/python-101/normal/week-${w}`}>
+              <a class="station__link" href={`${base}learn/python-101/normal`}>
                 <span class="station__dot"></span>
-                <span class="station__label">Week {w}</span>
+                <span class="station__label">Module {w}</span>
                 <span class="station__check">✅</span>
               </a>
             </li>
           ))}
         </ol>
-        <div class="trail__xp" id="xp-python-101">+{py.done * 20} XP earned</div>
+        <div class="trail__xp" id="xp-python-101">+{py.done * 100} XP earned</div>
       </div>
 
       <div class="trail">
@@ -109,17 +111,17 @@ const daWeeks = [6,7,8,9,10].map((w) => {
           <span class="trail__pct" id="pct-data-analysis">{da.done}/{da.total} done</span>
         </div>
         <ol class="stations" data-track="data-analysis">
-          {daWeeks.map(({w, done}) => (
+          {daModules.map(({w, done}) => (
             <li class="station{done ? ' station--done' : ''}" data-week={w}>
-              <a class="station__link" href={`${base}learn/data-analysis/normal/week-${w}`}>
+              <a class="station__link" href={`${base}learn/data-analysis/normal`}>
                 <span class="station__dot"></span>
-                <span class="station__label">Week {w}</span>
+                <span class="station__label">Module {w}</span>
                 <span class="station__check">✅</span>
               </a>
             </li>
           ))}
         </ol>
-        <div class="trail__xp trail__xp--streak" id="xp-data-analysis">+{da.done * 20} XP earned</div>
+        <div class="trail__xp trail__xp--streak" id="xp-data-analysis">+{da.done * 100} XP earned</div>
       </div>
     </div>
   </section>
@@ -143,6 +145,19 @@ const daWeeks = [6,7,8,9,10].map((w) => {
           </div>
         ))}
       </div>
+    </div>
+  </section>
+
+  <!-- Activity Log -->
+  <section class="container">
+    <div class="actlog">
+      <div class="actlog__head">
+        <h2>Activity Log</h2>
+        <span class="badge badge--accent" id="actlog-total">{actStats.totalActions} actions</span>
+      </div>
+      <p class="actlog__legend">Every action you take is logged here for full transparency.</p>
+      <div class="actlog__grid" id="actlog-grid"></div>
+      <p class="actlog__empty" id="actlog-empty">No activity yet. Start a lesson or view a project to begin earning XP!</p>
     </div>
   </section>
 
@@ -272,12 +287,61 @@ const daWeeks = [6,7,8,9,10].map((w) => {
   </section>
 
   <script>
-    // Everything on this page (stations, quests, milestones, XP/streak/rank)
-    // is computed at build time with zero data — there's no localStorage in
-    // the Node/SSG build — so the static HTML always shows a fresh-account
-    // skeleton. This hydrates it with the visitor's real progress on load.
-    import {xpProgress, questsToShow, streakProgress, isWeekComplete, rankFor, RANK_EMOJIS} from '../lib/gameState.ts';
+    import {xpProgress, questsToShow, streakProgress, isWeekComplete, rankFor, RANK_EMOJIS, getActivityLog, getActivityStats, projectStats} from '../lib/gameState.ts';
     import {computeGameStats} from '../lib/gamestats.ts';
+
+    const ACT_ICONS: Record<string, string> = {
+      'lesson-run': '▶️',
+      'lesson-complete': '✅',
+      'project-view': '👁️',
+      'project-complete': '🏆',
+      'quiz': '❓',
+      'daily-login': '🌅',
+      'streak': '🔥',
+      'milestone': '🎖️',
+    };
+
+    function timeAgo(ts: number): string {
+      const diff = Date.now() - ts;
+      const mins = Math.floor(diff / 60000);
+      if (mins < 1) return 'just now';
+      if (mins < 60) return `${mins}m ago`;
+      const hrs = Math.floor(mins / 60);
+      if (hrs < 24) return `${hrs}h ago`;
+      const days = Math.floor(hrs / 24);
+      return `${days}d ago`;
+    }
+
+    function renderActivityLog() {
+      const log = getActivityLog(50);
+      const grid = document.getElementById('actlog-grid');
+      const empty = document.getElementById('actlog-empty');
+      if (!grid) return;
+      if (log.length === 0) {
+        if (empty) empty.hidden = false;
+        return;
+      }
+      if (empty) empty.hidden = true;
+      grid.innerHTML = '';
+      for (const e of log) {
+        const item = document.createElement('div');
+        item.className = 'actlog__item';
+        const icon = document.createElement('span');
+        icon.className = 'actlog__icon';
+        icon.textContent = ACT_ICONS[e.type] ?? '📌';
+        const label = document.createElement('span');
+        label.className = 'actlog__label';
+        label.textContent = e.meta ? `${e.label} — ${e.meta}` : e.label;
+        const xpEl = document.createElement('span');
+        xpEl.className = 'actlog__xp';
+        xpEl.textContent = e.xp > 0 ? `+${e.xp} XP` : '';
+        const time = document.createElement('span');
+        time.className = 'actlog__time';
+        time.textContent = timeAgo(e.ts);
+        item.append(icon, label, xpEl, time);
+        grid.appendChild(item);
+      }
+    }
 
     function render() {
       const xp = xpProgress();
@@ -316,7 +380,7 @@ const daWeeks = [6,7,8,9,10].map((w) => {
           li?.classList.toggle('station--done', complete);
         });
         set(`pct-${section}`, `${done}/${weeks.length} done`);
-        set(`xp-${section}`, `+${done * 20} XP earned`);
+        set(`xp-${section}`, `+${done * 100} XP earned`);
       }
 
       // Quests grid + milestones preview.
@@ -381,6 +445,9 @@ const daWeeks = [6,7,8,9,10].map((w) => {
       set('r-return-rate', fmt(gs.engagement.returnRate));
       set('r-streak-length', `${gs.engagement.streakLength} days`);
       set('r-longest-session', `${gs.engagement.longestSession} lessons`);
+
+      // Activity log
+      renderActivityLog();
     }
     render();
   </script>
@@ -518,4 +585,25 @@ const daWeeks = [6,7,8,9,10].map((w) => {
     .activity-grid { grid-template-columns: repeat(2, 1fr); }
     .engagement-row { grid-template-columns: 1fr; }
   }
+
+  /* Activity Log */
+  .actlog { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 1.25rem; margin-bottom: 3rem; box-shadow: var(--shadow-sm); }
+  .actlog__head { display: flex; justify-content: space-between; align-items: center; margin-bottom: .5rem; }
+  .actlog__head h2 { margin: 0; }
+  .actlog__legend { color: var(--ink-soft); font-size: .85rem; margin: .1rem 0 1rem; }
+  .actlog__grid { display: flex; flex-direction: column; gap: .4rem; max-height: 400px; overflow-y: auto; }
+  .actlog__item {
+    display: grid; grid-template-columns: auto 1fr auto auto; gap: .6rem; align-items: center;
+    padding: .55rem .75rem; border-radius: var(--radius-md); border: 1px solid var(--line);
+    background: var(--bg); font-size: .82rem; transition: background var(--transition-fast);
+  }
+  .actlog__item:hover { background: var(--accent-soft); }
+  .actlog__icon { font-size: 1rem; }
+  .actlog__label { font-weight: 600; color: var(--ink); }
+  .actlog__xp { font-weight: 800; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .actlog__time { color: var(--ink-soft); font-size: .72rem; font-variant-numeric: tabular-nums; }
+  .actlog__empty { color: var(--ink-soft); text-align: center; padding: 1.5rem 1rem; font-size: .9rem; }
+  .actlog__empty[hidden] { display: none; }
+  .actlog__types { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: .8rem; }
+  .actlog__type { font-size: .7rem; font-weight: 700; padding: .2rem .5rem; border-radius: var(--radius-pill); background: var(--surface-2); color: var(--ink-soft); }
 </style>

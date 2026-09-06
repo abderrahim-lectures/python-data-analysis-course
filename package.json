@@ -20,6 +20,7 @@
   "dependencies": {
     "@astrojs/check": "^0.9.0",
     "@astrojs/sitemap": "^3.7.3",
+    "@supabase/supabase-js": "^2.115.0",
     "astro": "^5.0.0",
     "hast-util-to-string": "^3.0.1",
     "hastscript": "^9.0.1",

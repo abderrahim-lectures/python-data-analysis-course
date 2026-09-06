@@ -106,8 +106,8 @@ const PAGES = [
   '/projects?onboarded=1', '/playground?onboarded=1',
   // Lesson + project bodies carry admonitions, quizzes and code cells whose
   // colours appear nowhere else — H1 (green-as-text) hid here.
-  '/learn/python-101/normal/week-1?onboarded=1',
-  '/learn/python-101/hard/week-1?onboarded=1',
+  '/learn/python-101/normal/lessons/01-printing?onboarded=1',
+  '/learn/python-101/hard/lessons/01-csv-loading?onboarded=1',
   '/projects/wordle-clone?onboarded=1',
 ];
 let total = 0;

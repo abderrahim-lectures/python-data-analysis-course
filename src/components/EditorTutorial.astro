@@ -24,6 +24,7 @@ const {locale = 'en'} = Astro.props;
     font-size: .88rem; line-height: 1.5; color: var(--ink);
     opacity: 0; transform: translateY(10px);
     transition: opacity .3s ease, transform .3s ease;
+    top: auto; bottom: 1.5rem; left: 1.5rem;
   }
   .tutorial-step--visible { opacity: 1; transform: translateY(0); }
   .tutorial-step__title { font-weight: 700; font-size: .95rem; margin-bottom: .4rem; color: var(--accent); }

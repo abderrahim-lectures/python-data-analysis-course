@@ -38,6 +38,20 @@ export const TRACK_WORDS: Record<Locale, {normal: string; hard: string}> = {
   fr: {normal: 'normal', hard: 'difficile'},
 };
 
+export const MODULE_WORDS: Record<Locale, string> = {
+  en: 'modules',
+  ar: 'وحدات',
+  es: 'modulos',
+  fr: 'modules',
+};
+
+export const LESSON_WORDS: Record<Locale, string> = {
+  en: 'lessons',
+  ar: 'دروس',
+  es: 'lecciones',
+  fr: 'cours',
+};
+
 /** Reverse lookup: URL track word -> canonical 'normal' | 'hard', per locale. */
 export function trackFromWord(locale: Locale, word: string): 'normal' | 'hard' | null {
   const w = TRACK_WORDS[locale];
@@ -72,4 +86,16 @@ export function weekHref(locale: Locale, base: string, section: string, track: '
 /** `/credits`, `/ar/المصادر`, ... */
 export function creditsHref(locale: Locale, base: string): string {
   return `${localeBase(locale, base)}${NAV_WORDS[locale].credits}`;
+}
+
+/** Build a module href with translated URL segments. */
+export function moduleHref(locale: Locale, base: string, section: string, track: 'normal' | 'hard', moduleSlug: string): string {
+  const segs = [NAV_WORDS[locale].learn, section, TRACK_WORDS[locale][track], MODULE_WORDS[locale], moduleSlug];
+  return `${localeBase(locale, base)}${segs.join('/')}`;
+}
+
+/** Build a lesson href with translated URL segments. */
+export function lessonHref(locale: Locale, base: string, section: string, track: 'normal' | 'hard', lessonSlug: string): string {
+  const segs = [NAV_WORDS[locale].learn, section, TRACK_WORDS[locale][track], LESSON_WORDS[locale], lessonSlug];
+  return `${localeBase(locale, base)}${segs.join('/')}`;
 }

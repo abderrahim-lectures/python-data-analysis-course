@@ -1046,3 +1046,21 @@ Made all 116 project files (29 EN + 29 ES + 29 AR + 29 FR) properly listed, filt
 
 ### Commits
 - `c56a01f` — feat(projects): use subfolders for each locale's project pages with detectLocale
+
+## Session 2026-09-04 (opencode, 16th pass) — sync all i18n pages
+
+### Done
+- [x] Removed `optionalUngraded` from ES and FR locale objects in `pageStrings.ts`
+- [x] Rewrote ES/FR `projectsDescription`/`projectsLead` to remove "optional, ungraded" phrasing
+- [x] Rewrote AR, ES, FR `index.astro` files to match EN template (search, tag filters, icons, view toggle)
+- [x] Fixed EN page hreflang alternate URL (`proجات` → `projets`)
+- [x] Build 316 pages, typecheck 0 errors
+
+### Verified
+- Build passes (316 pages)
+- Typecheck 0 errors
+
+### Notes
+- FR directory name on disk is `src/pages/fr/projets/` (not `proجات`)
+- User wants 100+ projects per locale (currently 29 per locale = 116 total)
+- 5 missing examples found in `examples/` without markdown files (only .venv dirs)

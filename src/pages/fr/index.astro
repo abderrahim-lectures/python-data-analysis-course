@@ -3,10 +3,15 @@ import Base from '../../layouts/Base.astro';
 import Icon from '../../components/Icon.astro';
 import SceneBg from '../../components/SceneBg.astro';
 import {PAGE_STRINGS} from '../../lib/pageStrings';
+import {PROJECT_TAGS, projectArtEmoji} from '../../lib/projectArt.ts';
 
 const locale = 'fr' as const;
 const base = import.meta.env.BASE_URL;
 const s = PAGE_STRINGS[locale];
+
+const sampleTags = [...new Set(Object.values(PROJECT_TAGS).flat())].slice(0, 6);
+const tagEmoji: Record<string, string> = {};
+for (const t of sampleTags) tagEmoji[t] = projectArtEmoji([t]);
 const alternates = {
   en: '',
   ar: 'ar',
@@ -46,7 +51,7 @@ const jsonLd = {
           <div class="player-card__left">
             <div class="player-card__avatar" id="player-avatar">🧑‍💻</div>
             <div class="player-card__info">
-              <div class="player-card__rank" id="player-rank"><span class="badge badge--streak">🌱 Bronze</span></div>
+              <div class="player-card__rank" id="player-rank"><span class="badge badge--streak"></span></div>
               <div class="player-card__level">Lv.<span id="player-level">1</span></div>
             </div>
           </div>
@@ -54,17 +59,21 @@ const jsonLd = {
             <div class="player-card__xpbar" role="progressbar" aria-label={s.homeXpAriaLabel}>
               <div class="player-card__xpfill" id="player-xpfill" style="width:0%"></div>
             </div>
-            <div class="player-card__xptext"><span id="player-xp">0</span> XP · <span id="player-xpnext">100</span> pour suivant</div>
+            <div class="player-card__xptext"><span id="player-xp">0</span> XP · <span id="player-xpnext">100</span> {s.homeXpToNext}</div>
           </div>
           <div class="player-card__actions">
-            <a class="btn btn-xp btn-sm" href={`${base}fr/apprendre`}><Icon name="play" size={14} /> {s.homeQuestLabel}</a>
-            <a class="btn btn-streak btn-sm" href={`${base}fr/progression`}><Icon name="trophy" size={14} /> {s.homeProfileLabel}</a>
+            <a class="btn btn-xp btn-sm" href={`${base}${s.pathLearn}`}><Icon name="play" size={14} /> {s.homeQuestLabel}</a>
+            <a class="btn btn-streak btn-sm" href={`${base}${s.pathProgress}`}><Icon name="trophy" size={14} /> {s.homeProfileLabel}</a>
           </div>
         </div>
 
         <div class="hero__actions">
-          <a class="btn btn-primary btn-lg" href={`${base}fr/apprendre`}><Icon name="play" size={16} /> {s.homeStartQuest}</a>
-          <a class="btn btn-ghost btn-lg" href={`${base}fr/progression`}><Icon name="trophy" size={16} /> {s.homeSeeRank}</a>
+          <a class="btn btn-primary btn-lg" href={`${base}${s.pathPlayground}`}><Icon name="play" size={16} /> {s.homeHeroCta}</a>
+        </div>
+        <div class="hero__features">
+          <span class="hero__feature"><Icon name="play" size={14} /> {s.homeHeroFeature1}</span>
+          <span class="hero__feature"><Icon name="code" size={14} /> {s.homeHeroFeature2}</span>
+          <span class="hero__feature">{s.homeHeroFeature3}</span>
         </div>
       </div>
       <div class="hero__art" aria-hidden="true">
@@ -111,32 +120,28 @@ const jsonLd = {
 
   <section class="container">
     <div class="rewards">
-      <h2 class="rewards__title">{s.homeRewardsTitle} <span class="text-gradient">→</span></h2>
+      <h2 class="rewards__title">{s.homeRewardsTitle} <span class="text-gradient">{s.homeRewardsGradient}</span></h2>
       <p class="rewards__sub">{s.homeRewardsSub}</p>
       <div class="rewards__grid">
         <div class="reward">
           <div class="reward__icon">⚡</div>
           <h3>{s.homeReward1Title}</h3>
           <p>{s.homeReward1Desc}</p>
-          <div class="reward__bar"><div class="reward__fill"></div></div>
         </div>
         <div class="reward">
           <div class="reward__icon">🔥</div>
           <h3>{s.homeReward2Title}</h3>
           <p>{s.homeReward2Desc}</p>
-          <div class="reward__bar"><div class="reward__fill reward__fill--streak"></div></div>
         </div>
         <div class="reward">
           <div class="reward__icon">🏅</div>
           <h3>{s.homeReward3Title}</h3>
           <p>{s.homeReward3Desc}</p>
-          <div class="reward__bar"><div class="reward__fill reward__fill--xp"></div></div>
         </div>
         <div class="reward">
           <div class="reward__icon">👑</div>
           <h3>{s.homeReward4Title}</h3>
           <p>{s.homeReward4Desc}</p>
-          <div class="reward__bar"><div class="reward__fill reward__fill--rank"></div></div>
         </div>
       </div>
     </div>
@@ -144,7 +149,7 @@ const jsonLd = {
 
   <section class="container">
     <div class="hub">
-      <a class="hub__card" href={`${base}fr/apprendre/python-101`}>
+      <a class="hub__card" href={`${base}${s.pathLearn}/python-101`}>
         <SceneBg scene="forest" height={140} particles={false}>
           <span class="hub__icon">🐍</span>
         </SceneBg>
@@ -157,7 +162,7 @@ const jsonLd = {
           <span class="btn btn-primary hub__cta">{s.homeHubTrack1CTA} <Icon name="play" size={14} /></span>
         </div>
       </a>
-      <a class="hub__card" href={`${base}fr/apprendre/data-analysis`}>
+      <a class="hub__card" href={`${base}${s.pathLearn}/data-analysis`}>
         <SceneBg scene="city" height={140} particles={false}>
           <span class="hub__icon">📊</span>
         </SceneBg>
@@ -170,7 +175,7 @@ const jsonLd = {
           <span class="btn btn-streak hub__cta">{s.homeHubTrack2CTA} <Icon name="play" size={14} /></span>
         </div>
       </a>
-      <a class="hub__card" href={`${base}fr/projets`}>
+      <a class="hub__card" href={`${base}${s.pathProjects}`}>
         <SceneBg scene="library" height={140} particles={false}>
           <span class="hub__icon">🚀</span>
         </SceneBg>
@@ -179,6 +184,9 @@ const jsonLd = {
           <div class="hub__meta">{s.homeHubProjectsMeta}</div>
           <h2>{s.homeHubProjectsName}</h2>
           <p>{s.homeHubProjectsDesc}</p>
+          <div class="hub__tags">
+            {sampleTags.map((t) => <span class="chip">{tagEmoji[t] ?? ''} {t}</span>)}
+          </div>
           <span class="btn btn-xp hub__cta">{s.homeHubProjectsCTA}</span>
         </div>
       </a>
@@ -187,50 +195,7 @@ const jsonLd = {
 </Base>
 
 <script>
-  import {xpProgress, streakProgress, loadState, rankFor, RANK_EMOJIS} from '../../lib/gameState.ts';
-
-  function render() {
-    const xp = xpProgress();
-    const sp = streakProgress();
-    const s = loadState();
-    const badges = s.badges || [];
-    const rank = rankFor(xp.xp);
-
-    const levelEl = document.getElementById('player-level');
-    const xpEl = document.getElementById('player-xp');
-    const xpnextEl = document.getElementById('player-xpnext');
-    const xpfillEl = document.getElementById('player-xpfill') as HTMLElement | null;
-    const rankEl = document.getElementById('player-rank');
-    if (levelEl) levelEl.textContent = String(xp.level);
-    if (xpEl) xpEl.textContent = String(xp.xp);
-    if (xpnextEl) xpnextEl.textContent = String(xp.toNext);
-    if (xpfillEl) xpfillEl.style.width = xp.pct + '%';
-    if (rankEl) rankEl.innerHTML = `<span class="badge badge--streak">${RANK_EMOJIS[rank] ?? '🌱'} ${rank}</span>`;
-
-    const gsLevel = document.getElementById('gs-level-val');
-    const gsStreak = document.getElementById('gs-streak-val');
-    const gsBadges = document.getElementById('gs-badges-val');
-    const gsXp = document.getElementById('gs-xp-val');
-    if (gsLevel) gsLevel.textContent = String(xp.level);
-    if (gsStreak) gsStreak.textContent = String(sp.current);
-    if (gsBadges) gsBadges.textContent = String(badges.length);
-    if (gsXp) gsXp.textContent = String(xp.xp);
-
-    const streakItem = document.getElementById('gs-streak');
-    if (streakItem) {
-      streakItem.classList.remove('gamestrip__item--hot', 'gamestrip__item--blazing');
-      if (sp.current >= 7) streakItem.classList.add('gamestrip__item--blazing');
-      else if (sp.current >= 3) streakItem.classList.add('gamestrip__item--hot');
-    }
-
-    const pythonDone = Object.keys(s.lessonsCompleted || {}).filter((k: string) => k.includes('python-101')).length;
-    const dataDone = Object.keys(s.lessonsCompleted || {}).filter((k: string) => k.includes('data-analysis')).length;
-    const pythonFill = document.getElementById('hub-python') as HTMLElement | null;
-    const dataFill = document.getElementById('hub-data') as HTMLElement | null;
-    if (pythonFill) pythonFill.style.width = (pythonDone / 5 * 100) + '%';
-    if (dataFill) dataFill.style.width = (dataDone / 5 * 100) + '%';
-  }
-
-  render();
+  import {renderHomepage} from '../../lib/homeRender.ts';
+  renderHomepage();
 </script>
 

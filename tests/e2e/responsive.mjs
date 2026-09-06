@@ -19,7 +19,7 @@ const send=(m,params={})=>new Promise(res=>{const n=++id;p.set(n,res);ws.send(JS
 await send('Page.enable');await send('Runtime.enable');
 const ev=async x=>{const r=await send('Runtime.evaluate',{expression:`JSON.stringify(${x})`,awaitPromise:true,returnByValue:true});return JSON.parse(r.result.result.value)};
 const go=async u=>{await send('Page.navigate',{url:BASE+u});for(let i=0;i<80;i++){if(await ev('document.readyState')==='complete')break;await new Promise(r=>setTimeout(r,100))}await new Promise(r=>setTimeout(r,350))};
-const PAGES=['/?onboarded=1','/progress?onboarded=1','/learn?onboarded=1','/projects?onboarded=1','/playground?onboarded=1','/learn/python-101/normal/week-1?onboarded=1'];
+const PAGES=['/?onboarded=1','/progress?onboarded=1','/learn?onboarded=1','/projects?onboarded=1','/playground?onboarded=1','/learn/python-101/normal/lessons/01-printing?onboarded=1'];
 const WIDTHS=[320,375,768,1024,1440];
 let bad=0;
 for(const w of WIDTHS){

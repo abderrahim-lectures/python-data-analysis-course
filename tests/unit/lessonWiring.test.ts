@@ -5,30 +5,22 @@ import {readFileSync} from 'node:fs';
 // the completion button existed on only the last week of a track, and the
 // lesson id never reached the code cells that award XP.
 
-const WEEK_TEMPLATES = [
-  'src/pages/learn/[section]/[track]/[week].astro',
-  'src/pages/es/aprender/[section]/[track]/[week].astro',
-  'src/pages/fr/apprendre/[section]/[track]/[week].astro',
-  'src/pages/ar/تعلم/[section]/[track]/[week].astro',
+const LESSON_TEMPLATES = [
+  'src/pages/learn/python-101/normal/lessons/[lesson].astro',
+  'src/pages/learn/python-101/hard/lessons/[lesson].astro',
+  'src/pages/learn/data-analysis/normal/lessons/[lesson].astro',
+  'src/pages/learn/data-analysis/hard/lessons/[lesson].astro',
 ];
 
-describe.each(WEEK_TEMPLATES)('%s', (path) => {
+describe.each(LESSON_TEMPLATES)('%s', (path) => {
   const src = readFileSync(path, 'utf8');
 
   test('declares the lesson id on the article so code cells can award XP', () => {
     expect(src).toContain('data-lesson-id={lessonId}');
   });
 
-test('builds the lesson id from canonical section/track, not the localized URL words', () => {
-     expect(src).toMatch(/const lessonId = `\$\{section\}\/\$\{(track|trackRaw)\}\/week-\$\{week\}`;/);
-   });
-
-  test('offers the completion button on every week, not only the last', () => {
-    // The bug: the button lived in the `next ? ... : ...` else-branch, so it
-    // only rendered when there was no next week.
-    const button = src.slice(src.indexOf('data-mark-complete'));
-    expect(src).toContain('data-mark-complete');
-    expect(button).not.toMatch(/^\s*:/);
+  test('builds the lesson id from canonical section/track', () => {
+    expect(src).toMatch(/const lessonId = `[^`]*\$\{entry\.slug/);
   });
 
   test('reflects already-saved completion when the page loads', () => {

@@ -75,7 +75,7 @@ const tab = async () => {
 const PAGES = [
   '/?onboarded=1', '/progress?onboarded=1', '/learn?onboarded=1',
   '/projects?onboarded=1', '/playground?onboarded=1',
-  '/learn/python-101/normal/week-1?onboarded=1', '/projects/wordle-clone?onboarded=1',
+  '/learn/python-101/normal/lessons/01-printing?onboarded=1', '/projects/wordle-clone?onboarded=1',
 ];
 
 let issues = 0;

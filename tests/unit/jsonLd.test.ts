@@ -22,11 +22,19 @@ describe('JSON-LD structured data', () => {
     expect(src).toMatch(/<Base[^>]*jsonLd={jsonLd}/);
   });
 
-  test('every lesson week passes a LearningResource schema to Base', () => {
-    const src = readFileSync('src/pages/learn/[section]/[track]/[week].astro', 'utf8');
-    expect(src).toContain("'@type': 'LearningResource'");
-    expect(src).toContain("learningResourceType: 'Lesson'");
-    expect(src).toMatch(/<Base[^>]*jsonLd={jsonLd}/);
+  test('every lesson page passes a LearningResource schema to Base', () => {
+    const templates = [
+      'src/pages/learn/python-101/normal/lessons/[lesson].astro',
+      'src/pages/learn/python-101/hard/lessons/[lesson].astro',
+      'src/pages/learn/data-analysis/normal/lessons/[lesson].astro',
+      'src/pages/learn/data-analysis/hard/lessons/[lesson].astro',
+    ];
+    for (const path of templates) {
+      const src = readFileSync(path, 'utf8');
+      expect(src).toContain("'@type': 'LearningResource'");
+      expect(src).toContain("learningResourceType: 'Lesson'");
+      expect(src).toMatch(/<Base[^>]*jsonLd={jsonLd}/);
+    }
   });
 
   test('built output actually contains a valid JSON-LD script tag', () => {

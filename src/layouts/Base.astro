@@ -3,6 +3,7 @@
 import '../styles/global.css';
 import 'katex/dist/katex.min.css';
 import Icon from '../components/Icon.astro';
+import LearnerActivity from '../components/LearnerActivity.astro';
 import pkg from '../../package.json';
 import {UI_STRINGS, resolveLocale} from '../lib/uiStrings';
 import {NAV_WORDS, localeBase, type Locale as RouteLocale} from '../lib/routeSegments';
@@ -397,6 +398,66 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
         localStorage.setItem('pda:theme', next);
         renderXPBar();
       });
+    </script>
+    <LearnerActivity locale={lang} supabaseUrl={import.meta.env.PUBLIC_SUPABASE_URL || ''} supabaseKey={import.meta.env.PUBLIC_SUPABASE_KEY || ''} />
+    <script is:inline>
+    (function() {
+      var bar = document.getElementById('learner-bar');
+      if (!bar) { console.warn('[learner-bar] element not found'); return; }
+      var LOCALE = bar.getAttribute('data-locale') || 'en';
+      var URL = bar.getAttribute('data-url') || '';
+      var KEY = bar.getAttribute('data-key') || '';
+      if (!URL || !KEY) { console.warn('[learner-bar] Supabase credentials not configured'); return; }
+      var HDR = {apikey: KEY, Authorization: 'Bearer ' + KEY, 'Content-Type': 'application/json'};
+      var lid;
+      try { lid = localStorage.getItem('pda:learner-id'); } catch(e) {}
+      if (!lid) { lid = crypto.randomUUID ? crypto.randomUUID() : 'x'+Math.random().toString(36).slice(2); try{localStorage.setItem('pda:learner-id',lid)}catch(e){} }
+      async function beat() {
+        try { await fetch(URL+'/rest/v1/learners',{method:'POST',headers:{...HDR,'Prefer':'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({id:lid,last_seen:new Date().toISOString(),locale:LOCALE,track:''})}); } catch(e) { console.warn('[learner-bar] beat failed', e); }
+      }
+      async function count() {
+        try {
+          var c = new Date(Date.now()-60000).toISOString();
+          var r = await fetch(URL+'/rest/v1/learners?last_seen=gt.'+encodeURIComponent(c)+'&select=id',{headers:HDR});
+          var d = await r.json();
+          return Array.isArray(d) ? d.length : 0;
+        } catch(e) { console.warn('[learner-bar] count failed', e); return 0; }
+      }
+      async function recent() {
+        try {
+          var r = await fetch(URL+'/rest/v1/completions?order=created_at.desc&limit=1&select=type,slug,created_at',{headers:HDR});
+          var d = await r.json();
+          return Array.isArray(d)&&d.length ? d[0] : null;
+        } catch(e) { return null; }
+      }
+      function ago(iso) {
+        var s=Math.floor((Date.now()-new Date(iso).getTime())/1000);
+        if(s<60)return 'just now';if(s<3600)return Math.floor(s/60)+'m ago';if(s<86400)return Math.floor(s/3600)+'h ago';return Math.floor(s/86400)+'d ago';
+      }
+      function lbl(slug) { var p=slug.split('/'); return p.length>=3?p[0].replace(/-/g,' ')+' W'+p[2].replace('week-',''):slug.replace(/-/g,' '); }
+      async function refresh() {
+        var n = await count();
+        var r = await recent();
+        console.log('[learner-bar] active='+n, r);
+        var ce=document.getElementById('learner-count'),le=document.getElementById('learner-label'),re=document.getElementById('learner-recent');
+        if(ce)ce.textContent=n;if(le)le.textContent=n===1?'learner online':'learners online';
+        if(re&&r)re.textContent=lbl(r.slug)+' · '+ago(r.created_at);
+        bar.style.display=n>0?'flex':'none';
+      }
+      async function clean() {
+        try{if(sessionStorage.getItem('pda:cleaned'))return;sessionStorage.setItem('pda:cleaned','1')}catch(e){return}
+        var d=new Date(Date.now()-86400000).toISOString(),w=new Date(Date.now()-604800000).toISOString();
+        try{await fetch(URL+'/rest/v1/learners?last_seen=lt.'+encodeURIComponent(d)+'&id=eq.'+encodeURIComponent(lid),{method:'DELETE',headers:HDR})}catch(e){}
+        try{await fetch(URL+'/rest/v1/completions?created_at=lt.'+encodeURIComponent(w)+'&learner_id=eq.'+encodeURIComponent(lid),{method:'DELETE',headers:HDR})}catch(e){}
+      }
+      async function logComp(type,slug,track) {
+        try{await fetch(URL+'/rest/v1/completions',{method:'POST',headers:{...HDR,'Prefer':'return=minimal'},body:JSON.stringify({learner_id:lid,type,slug,track:track||'',locale:LOCALE})})}catch(e){}
+      }
+      beat(); clean(); refresh();
+      setInterval(beat,30000); setInterval(refresh,30000);
+      window.__supabaseLogCompletion = logComp;
+      console.log('[learner-bar] initialized');
+    })();
     </script>
   </body>
 </html>

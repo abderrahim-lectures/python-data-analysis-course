@@ -1,7 +1,7 @@
 ---
+import {getCollection} from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Icon from '../../components/Icon.astro';
-import EditorTutorial from '../../components/EditorTutorial.astro';
 import {PAGE_STRINGS} from '../../lib/pageStrings';
 import {detectLocale, learnHref, localeBase, TRACK_WORDS} from '../../lib/routeSegments';
 const base = import.meta.env.BASE_URL;
@@ -15,10 +15,18 @@ const alternates = {
   es: 'es/aprender',
   fr: 'fr/apprendre',
 };
+
+const allLessons = await getCollection('lessons');
+const allModules = await getCollection('modules');
+const py101Lessons = allLessons.filter(e => e.slug.includes('python-101')).length;
+const py101Modules = allModules.filter(e => e.slug.includes('python-101')).length;
+const daLessons = allLessons.filter(e => e.slug.includes('data-analysis')).length;
+const daModules = allModules.filter(e => e.slug.includes('data-analysis')).length;
+const py101Minutes = allLessons.filter(e => e.slug.includes('python-101')).reduce((s, l) => s + (l.data.estimatedMinutes ?? 15), 0);
+const daMinutes = allLessons.filter(e => e.slug.includes('data-analysis')).reduce((s, l) => s + (l.data.estimatedMinutes ?? 15), 0);
 ---
 
 <Base title={s.learnHubTitle} description={s.learnHubDescription} lang={locale} dir={dir} alternates={alternates}>
-  <EditorTutorial locale={locale} />
   <section class="hero">
     <div class="container head">
       <div class="head__eyebrow"><Icon name="code" size={16} /> {s.learnHubEyebrow}</div>
@@ -29,7 +37,7 @@ const alternates = {
 
   <section class="container">
     <div class="note">
-      A <strong>trail</strong> is your path through the course. Each week is a station — finish it to light it up and earn <span class="text-gradient">+20 XP</span>.
+      A <strong>module</strong> is your path through the course. Each module has lessons — finish them to earn <span class="text-gradient">+100 XP</span>.
       You can switch routes at any time. Keep your streak alive for bonus XP.
     </div>
   </section>
@@ -42,17 +50,18 @@ const alternates = {
         <h2>{s.track1Name}</h2>
         <p>{s.track1Desc}</p>
         <div class="sectioncard__meta">
-          <span class="badge badge--xp">⚡ 100 XP</span>
-          <span class="badge badge--streak">🔥 5 weeks</span>
+          <span class="badge badge--xp">⚡ {py101Lessons * 100} XP</span>
+          <span class="badge badge--streak">📖 {py101Modules} modules · {py101Lessons} lessons</span>
+          <span class="badge">⏱ ~{Math.round(py101Minutes / 60)}h</span>
         </div>
         <div class="routes">
           <span class="routes__label">{s.chooseRoute}</span>
           <div class="routes__pills">
-            <a class="route-pill route-pill--normal" href={`${base}learn/python-101/normal/week-1`}>🌿 {s.normalStart}</a>
-            <a class="route-pill route-pill--hard" href={`${base}learn/python-101/hard/week-1`}>⚡ {s.hardStart}</a>
+            <a class="route-pill route-pill--normal" href={`${base}learn/python-101/normal`}>🌿 {s.normalStart}</a>
+            <a class="route-pill route-pill--hard" href={`${base}learn/python-101/hard`}>⚡ {s.hardStart}</a>
           </div>
         </div>
-        <a class="sectioncard__all" href={`${base}learn/python-101`}>{s.seeAllWeeks} →</a>
+        <a class="sectioncard__all" href={`${base}learn/python-101`}>{s.seeAllModules} →</a>
       </div>
       <div class="sectioncard">
         <div class="sectioncard__badge sectioncard__badge--streak">📊 {s.track2}</div>
@@ -60,17 +69,18 @@ const alternates = {
         <h2>{s.track2Name}</h2>
         <p>{s.track2Desc}</p>
         <div class="sectioncard__meta">
-          <span class="badge badge--xp">⚡ 100 XP</span>
-          <span class="badge badge--streak">🔥 5 weeks</span>
+          <span class="badge badge--xp">⚡ {daLessons * 100} XP</span>
+          <span class="badge badge--streak">📖 {daModules} modules · {daLessons} lessons</span>
+          <span class="badge">⏱ ~{Math.round(daMinutes / 60)}h</span>
         </div>
         <div class="routes">
           <span class="routes__label">{s.chooseRoute}</span>
           <div class="routes__pills">
-            <a class="route-pill route-pill--normal" href={`${base}learn/data-analysis/normal/week-6`}>🌿 {s.normalStart}</a>
-            <a class="route-pill route-pill--hard" href={`${base}learn/data-analysis/hard/week-6`}>⚡ {s.hardStart}</a>
+            <a class="route-pill route-pill--normal" href={`${base}learn/data-analysis/normal`}>🌿 {s.normalStart}</a>
+            <a class="route-pill route-pill--hard" href={`${base}learn/data-analysis/hard`}>⚡ {s.hardStart}</a>
           </div>
         </div>
-        <a class="sectioncard__all" href={`${base}learn/data-analysis`}>{s.seeAllWeeks} →</a>
+        <a class="sectioncard__all" href={`${base}learn/data-analysis`}>{s.seeAllModules} →</a>
       </div>
     </div>
 
@@ -79,23 +89,23 @@ const alternates = {
       <div class="rewards-preview__grid">
         <div class="rpv">
           <span class="rpv__icon">⚡</span>
-          <span class="rpv__val">+20</span>
-          <span class="rpv__label">XP per lesson</span>
+          <span class="rpv__val">{(py101Lessons + daLessons) * 100}</span>
+          <span class="rpv__label">total lesson XP</span>
         </div>
         <div class="rpv">
-          <span class="rpv__icon">🔥</span>
-          <span class="rpv__val">+5</span>
-          <span class="rpv__label">streak bonus</span>
+          <span class="rpv__icon">📖</span>
+          <span class="rpv__val">{py101Lessons + daLessons}</span>
+          <span class="rpv__label">lessons</span>
         </div>
         <div class="rpv">
-          <span class="rpv__icon">🏅</span>
-          <span class="rpv__val">11</span>
-          <span class="rpv__label">badges</span>
+          <span class="rpv__icon">📦</span>
+          <span class="rpv__val">{py101Modules + daModules}</span>
+          <span class="rpv__label">modules</span>
         </div>
         <div class="rpv">
-          <span class="rpv__icon">👑</span>
-          <span class="rpv__val">7</span>
-          <span class="rpv__label">rank tiers</span>
+          <span class="rpv__icon">⏱</span>
+          <span class="rpv__val">~{Math.round((py101Minutes + daMinutes) / 60)}h</span>
+          <span class="rpv__label">of content</span>
         </div>
       </div>
     </div>
@@ -142,7 +152,7 @@ const alternates = {
   .route-pill--normal:hover { color: var(--ink); filter: brightness(1.06); box-shadow: 0 4px 0 rgba(46,125,10,.5), 0 8px 20px var(--success-soft); }
   .route-pill--normal:active { box-shadow: 0 1px 0 rgba(46,125,10,.5), 0 2px 8px var(--success-soft); }
   .route-pill--hard { color: var(--ink); background: var(--bad); box-shadow: 0 4px 0 rgba(244,63,94,.5), 0 6px 16px var(--bad-soft); }
-  .route-pill--hard:hover { filter: brightness(1.06); box-shadow: 0 4px 0 rgba(244,63,94,.5), 0 8px 20px var(--bad-soft); }
+  .route-pill--hard:hover { color: var(--ink); filter: brightness(1.06); box-shadow: 0 4px 0 rgba(244,63,94,.5), 0 8px 20px var(--bad-soft); }
   .route-pill--hard:active { box-shadow: 0 1px 0 rgba(244,63,94,.5), 0 2px 8px var(--bad-soft); }
   .route-pill:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   .sectioncard__all { align-self: flex-start; font-size: .82rem; font-weight: 700; color: var(--ink-soft); text-decoration: none; transition: color var(--transition-fast), transform var(--transition-fast); }
@@ -171,6 +181,4 @@ const alternates = {
   .microsteps__fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--accent-strong)); border-radius: var(--radius-pill); transition: width .6s cubic-bezier(.4,0,.2,1); }
   .microsteps__text { font-size: .75rem; color: var(--ink-faint); margin-top: .4rem; }
 
-  [data-theme='dark'] .route-pill--normal, [data-theme='dark'] .route-pill--hard { color: var(--ink-hi); background: var(--surface); border: 2px solid var(--success); }
-  [data-theme='dark'] .route-pill--hard { border-color: var(--bad); }
-</style>
+  </style>

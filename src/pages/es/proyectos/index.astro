@@ -2,22 +2,27 @@
 import {getCollection} from 'astro:content';
 import Base from '../../../layouts/Base.astro';
 import Icon from '../../../components/Icon.astro';
-import ProjectArt from '../../../components/ProjectArt.astro';
-import {PROJECT_TAGS} from '../../../lib/projectArt.ts';
-import {detectLocale, projectsHref, type Locale} from "../../../lib/routeSegments";
+import {PROJECT_TAGS, projectArtEmoji, projectDifficulty, DIFFICULTY_COLORS} from '../../../lib/projectArt.ts';
 import {PAGE_STRINGS} from '../../../lib/pageStrings';
+import {detectLocale} from '../../../lib/routeSegments.ts';
+import '../../../styles/projects.css';
 
 const locale = detectLocale(Astro.url.pathname);
-const allProjects = await getCollection('projects');
-const localeProjects = allProjects.filter((p) => p.slug.split('/')[0] === 'es');
-const base = import.meta.env.BASE_URL;
-const dir = 'ltr' as const;
-const sorted = [...localeProjects].sort((a, b) => a.data.title.localeCompare(b.data.title));
 const s = PAGE_STRINGS[locale];
-const allTags = [...new Set(sorted.flatMap((p) => {
-  const slug = p.slug.replace('es/', '');
-  return PROJECT_TAGS[slug] ?? [];
-}))].sort();
+const base = import.meta.env.BASE_URL;
+
+const projects = (await getCollection('projects'))
+  .filter((p) => p.slug.startsWith('es/'))
+  .map((p) => ({...p, slug: p.slug.replace('es/', '')}))
+  .sort((a, b) => a.data.title.localeCompare(b.data.title));
+
+const allTags = [...new Set(projects.flatMap((p) => PROJECT_TAGS[p.slug] ?? []))].sort();
+const tagIcon: Record<string, string> = {};
+for (const [, tags] of Object.entries(PROJECT_TAGS)) {
+  for (const t of tags) {
+    if (!tagIcon[t]) tagIcon[t] = projectArtEmoji([t]);
+  }
+}
 const alternates = {
   en: 'projects',
   ar: 'ar/مشاريع',
@@ -26,7 +31,13 @@ const alternates = {
 };
 ---
 
-<Base title={s.projectsTitle} description={s.projectsDescription} lang={locale} dir={dir} alternates={alternates}>
+<Base
+  title={s.projectsTitle}
+  description={s.projectsDescription}
+  lang={locale}
+  dir="ltr"
+  alternates={alternates}
+>
   <section class="hero">
     <div class="container head">
       <div class="head__eyebrow"><Icon name="code" size={16} /> {s.projectsEyebrow}</div>
@@ -43,146 +54,75 @@ const alternates = {
           type="search"
           id="project-search"
           placeholder="Buscar proyectos…"
-          aria-label="Buscar proyectos"
+          aria-label="Buscar proyectos por título o descripción"
           autocomplete="off"
         />
       </div>
-      <div class="finder__tags" role="group" aria-label="Filter by tag">
-        <button class="tag-pill tag-pill--all is-active" data-tag="">Todo</button>
-        {allTags.map((tag) => (
-          <button class="tag-pill" data-tag={tag}>{tag}</button>
-        ))}
+      <div class="finder__actions">
+        <div class="finder__tags" role="group" aria-label="Filter by tag">
+          <button class="tag-pill tag-pill--all is-active" data-tag="">
+            <span class="tag-pill__icon">🏷️</span>Todos
+          </button>
+          {allTags.map((tag) => (
+            <button class="tag-pill" data-tag={tag}>
+              <span class="tag-pill__icon">{tagIcon[tag] ?? '🏷️'}</span>{tag}
+            </button>
+          ))}
+        </div>
+        <div style="display:flex; gap:1rem; align-items:center; flex-wrap:wrap;">
+          <div class="finder__difficulty" role="group" aria-label="Filter by difficulty">
+            <button class="diff-pill is-active" data-diff="">Todos los niveles</button>
+            <button class="diff-pill" data-diff="beginner">🌱 Principiante</button>
+            <button class="diff-pill" data-diff="intermediate">⚡ Intermedio</button>
+            <button class="diff-pill" data-diff="advanced">🔥 Avanzado</button>
+          </div>
+          <div class="finder__view" role="group" aria-label="View mode">
+            <button class="view-btn view-btn--list is-active" data-view="list" aria-label="List view"><Icon name="list" size={16} /></button>
+            <button class="view-btn view-btn--grid" data-view="grid" aria-label="Grid view"><Icon name="grid" size={16} /></button>
+          </div>
+        </div>
       </div>
       <p class="finder__count" id="project-count" aria-live="polite"></p>
     </div>
 
-    <div class="grid" id="project-grid">
-      {sorted.map((p) => {
-        const slug = p.slug.replace('es/', '');
+    <div class="list" id="project-grid">
+      {projects.map((p) => {
+        const slug = p.slug;
         const tags = PROJECT_TAGS[slug] ?? [];
+        const emoji = projectArtEmoji(tags);
+        const diff = projectDifficulty(slug);
+        const diffColor = DIFFICULTY_COLORS[diff];
         const haystack = `${p.data.title} ${p.data.description} ${tags.join(' ')}`.toLowerCase();
         return (
           <a
             class="card"
-            href={projectsHref(locale, base, slug)}
+            href={`${base}projects/${slug}`}
             data-project
             data-tags={tags.join('|')}
+            data-diff={diff}
             data-search={haystack}
           >
-            <ProjectArt slug={slug} class="card__art" />
+            <div class="card__header">
+              <span class="card__icon">{emoji}</span>
+              <span class={`card__badge card__badge--${diff}`}>{diffColor.label}</span>
+            </div>
             <div class="card__body">
               <h2>{p.data.title}</h2>
               <p>{p.data.description}</p>
               <div class="card__tags">
-                {tags.map((t) => <span class="chip">{t}</span>)}
+                {tags.slice(0, 3).map((t) => <span class="chip">{tagIcon[t] ?? ''} {t}</span>)}
               </div>
-              <span class="badge badge--accent card__badge">{s.optionalUngraded}</span>
             </div>
           </a>
         );
       })}
     </div>
 
-    <p class="empty" id="project-empty" hidden>No hay proyectos que coincidan con "<span id="project-empty-query"></span>". Intenta con otra búsqueda o etiqueta.</p>
+    <p class="empty" id="project-empty" hidden>No hay proyectos que coincidan con "<span id="project-empty-query"></span>". Prueba con otra búsqueda o etiqueta.</p>
   </section>
 </Base>
 
 <script>
-  const search = document.getElementById('project-search') as HTMLInputElement | null;
-  const tagButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('.tag-pill'));
-  const cards = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-project]'));
-  const countEl = document.getElementById('project-count');
-  const emptyEl = document.getElementById('project-empty');
-  const emptyQueryEl = document.getElementById('project-empty-query');
-
-  const params = new URLSearchParams(location.search);
-  let activeTag = params.get('tag') ?? '';
-  if (search) search.value = params.get('q') ?? '';
-
-  function apply() {
-    const q = (search?.value ?? '').trim().toLowerCase();
-    let visible = 0;
-    for (const card of cards) {
-      const matchesTag = !activeTag || (card.dataset.tags ?? '').split('|').includes(activeTag);
-      const matchesQuery = !q || (card.dataset.search ?? '').includes(q);
-      const show = matchesTag && matchesQuery;
-      card.hidden = !show;
-      if (show) visible++;
-    }
-    if (countEl) countEl.textContent = `${visible} of ${cards.length} project${cards.length === 1 ? '' : 's'}`;
-    if (emptyEl) emptyEl.hidden = visible > 0;
-    if (emptyQueryEl) emptyQueryEl.textContent = q || (activeTag || 'that tag');
-
-    const next = new URLSearchParams();
-    if (q) next.set('q', q);
-    if (activeTag) next.set('tag', activeTag);
-    const qs = next.toString();
-    history.replaceState(null, '', qs ? `?${qs}` : location.pathname);
-  }
-
-  for (const btn of tagButtons) {
-    if (btn.dataset.tag === activeTag) btn.classList.add('is-active');
-    else if (btn.dataset.tag !== '') btn.classList.remove('is-active');
-    btn.addEventListener('click', () => {
-      activeTag = btn.dataset.tag ?? '';
-      for (const b of tagButtons) b.classList.toggle('is-active', b === btn);
-      apply();
-    });
-  }
-  if (activeTag) {
-    for (const b of tagButtons) b.classList.toggle('is-active', b.dataset.tag === activeTag);
-  }
-
-  search?.addEventListener('input', apply);
-  apply();
+  import {initProjectsFinder} from '../../../lib/projectsRender.ts';
+  initProjectsFinder();
 </script>
-
-<style>
-  .hero { padding: 2.5rem 0 1.5rem; }
-  .head__eyebrow { color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: .08em; font-size: .76rem; display: inline-flex; align-items: center; gap: .3rem; }
-  .head h1 { font-size: clamp(2rem, 4vw, 2.8rem); margin: .4rem 0 .2rem; }
-  .head p { color: var(--ink-soft); }
-
-  .finder { margin: 0 0 1.25rem; display: flex; flex-direction: column; gap: .75rem; }
-  .finder__search {
-    display: flex; align-items: center; gap: .6rem;
-    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-md);
-    padding: .65rem .9rem; color: var(--ink-soft);
-  }
-  .finder__search:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
-  .finder__search input {
-    border: none; outline: none; background: none; color: var(--ink);
-    font-size: .95rem; width: 100%; font-family: inherit;
-  }
-  .finder__search input::placeholder { color: var(--ink-faint); }
-  .finder__tags { display: flex; flex-wrap: wrap; gap: .5rem; }
-  .tag-pill {
-    border: 1px solid var(--line); background: var(--surface); color: var(--ink-soft);
-    border-radius: var(--radius-pill); padding: .35rem .85rem; font-size: .8rem; font-weight: 700;
-    cursor: pointer; transition: all var(--transition-fast);
-  }
-  .tag-pill:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
-  .tag-pill:active { transform: translateY(1px); }
-  .tag-pill:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-  .tag-pill.is-active { background: var(--accent); border-color: var(--accent); color: var(--accent-contrast); }
-  .finder__count { margin: 0; font-size: .82rem; color: var(--ink-soft); }
-
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.1rem; margin: 1.5rem 0 3rem; }
-  .card {
-    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg);
-    overflow: hidden; text-decoration: none; color: var(--ink); box-shadow: var(--shadow-sm);
-    transition: all var(--transition-smooth); display: flex; flex-direction: column;
-  }
-  .card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
-  .card:active { box-shadow: var(--shadow-sm); transform: translateY(1px); }
-  .card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-  .card__art { display: block; width: 100%; height: 100px; }
-  .card__body { padding: 1.1rem 1.3rem 1.3rem; display: flex; flex-direction: column; gap: .5rem; flex: 1; }
-  .card h2 { font-size: 1.05rem; margin: 0; }
-  .card p { color: var(--ink-soft); font-size: .88rem; margin: 0; line-height: 1.5; flex-grow: 1; }
-  .card__tags { display: flex; flex-wrap: wrap; gap: .35rem; }
-  .chip { background: var(--accent-soft); color: var(--accent); font-size: .72rem; font-weight: 700; padding: .15rem .55rem; border-radius: var(--radius-pill); }
-  .card__badge { width: fit-content; margin-top: .3rem; }
-
-  .empty { text-align: center; color: var(--ink-soft); padding: 2.5rem 1rem; margin: 0 0 3rem; }
-</style>

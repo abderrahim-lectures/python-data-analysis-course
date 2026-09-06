@@ -1,0 +1,216 @@
+---
+import {getCollection} from 'astro:content';
+import Base from '../../../../../layouts/Base.astro';
+import InteractiveChallenge from '../../../../../components/InteractiveChallenge.astro';
+import Quiz from '../../../../../components/Quiz.astro';
+import {PAGE_STRINGS} from '../../../../../lib/pageStrings';
+import {detectLocale} from '../../../../../lib/routeSegments';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('lessons');
+  return entries
+    .filter((e) => e.slug.includes('data-analysis/normal'))
+    .map((entry) => {
+      const slug = entry.slug.split('/').pop()!;
+      return {
+        params: {lesson: slug},
+        props: {entry},
+      };
+    });
+}
+
+const {entry} = Astro.props;
+const {title, description, module: moduleId, order, difficulty, estimatedMinutes, learningObjectives, prerequisites, tags, hasPlayground, hasChallenge, hasQuiz, quiz, xpReward} = entry.data;
+const {Content} = await entry.render();
+const base = import.meta.env.BASE_URL;
+const locale = detectLocale(Astro.url.pathname);
+const dir = locale === 'ar' ? 'rtl' : 'ltr';
+const ps = PAGE_STRINGS[locale];
+
+const allLessons = await getCollection('lessons');
+const siblings = allLessons
+  .filter((e) => e.slug.includes('data-analysis/normal'))
+  .sort((a, b) => a.data.order - b.data.order);
+
+const allModules = await getCollection('modules');
+const sortedModules = allModules
+  .filter((e) => e.slug.includes('data-analysis/normal'))
+  .sort((a, b) => a.data.order - b.data.order);
+const idx = siblings.findIndex((e) => e.slug === entry.slug);
+const prev = idx > 0 ? siblings[idx - 1] : null;
+const next = idx >= 0 && idx < siblings.length - 1 ? siblings[idx + 1] : null;
+
+const lessonId = `data-analysis/normal/${entry.slug.split('/').pop()}`;
+const diffColor = difficulty === 'beginner' ? 'var(--success-text)' : difficulty === 'intermediate' ? 'var(--streak-text)' : 'var(--bad-text)';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'LearningResource',
+  name: title,
+  description,
+  learningResourceType: 'Lesson',
+  educationalLevel: difficulty,
+  isAccessibleForFree: true,
+  inLanguage: locale,
+  url: String(new URL(`${base}learn/data-analysis/normal/lessons/${entry.slug.split('/').pop()}`, Astro.site)),
+  position: order,
+  timeRequired: `PT${estimatedMinutes}M`,
+  isPartOf: {
+    '@type': 'Course',
+    name: 'PyDA Course',
+    description: ps.courseDescription,
+  },
+};
+---
+
+<Base title={`${title} — PyDA Course`} description={description} lang={locale} dir={dir} jsonLd={jsonLd}>
+  <nav class="crumb container">
+    <a href={`${base}learn`}>Learn</a> <span>/</span>
+    <a href={`${base}learn/data-analysis`}>Data Analysis</a> <span>/</span>
+    {(() => { const m = sortedModules.find(m => m.slug.split('/').pop()!.replace(/^module-\d+-/, '') === moduleId); return m ? <a href={`${base}learn/data-analysis/normal/modules/${m.slug.split('/').pop()}`}>{m.data.title}</a> : <span>{moduleId}</span>; })()} <span>/</span>
+    <span class="crumb__here">{title}</span>
+  </nav>
+
+  <article class="container lesson-body" data-lesson-id={lessonId}>
+    <header class="lesson-head">
+      <div class="lesson-head__meta">
+        <span class="lesson-head__diff" style={`color:${diffColor}`}>{difficulty}</span>
+        <span class="lesson-head__time">⏱ {estimatedMinutes} min</span>
+        <span class="lesson-head__xp">⚡ +{xpReward} XP</span>
+      </div>
+      <h1>{title}</h1>
+      {description && <p class="lesson-head__sub">{description}</p>}
+      {learningObjectives.length > 0 && (
+        <div class="lesson-head__objectives">
+          <strong>🎯 What you'll learn:</strong>
+          <ul>
+            {learningObjectives.map((obj) => <li>{obj}</li>)}
+          </ul>
+        </div>
+      )}
+    </header>
+
+    <div class="lesson-content">
+      <Content />
+    </div>
+
+    {hasChallenge && (
+      <>
+        <h2>🧩 Practice</h2>
+        <p>Write code in the editor and click <strong>Check</strong> to verify your answer. Earn XP for each correct solution.</p>
+        <InteractiveChallenge
+          title="Try it yourself"
+          code={`# Write your code here\nprint("Hello, World!")`}
+          expected="Hello, World!"
+          hint="Use print() to display text."
+          xp={5}
+          lessonId={lessonId}
+        />
+      </>
+    )}
+
+    {hasQuiz && quiz.length > 0 && (
+      <Quiz questions={quiz} xp={10} lessonId={lessonId} />
+    )}
+
+    {tags.length > 0 && (
+      <div class="lesson-tags">
+        {tags.map((tag) => <span class="lesson-tag">{tag}</span>)}
+      </div>
+    )}
+
+    <div class="lesson-nav">
+      {prev
+        ? <a class="lesson-nav__prev" href={`${base}learn/data-analysis/normal/lessons/${prev.slug.split('/').pop()}`}>← {prev.data.title}</a>
+        : <span />}
+      {next
+        ? <a class="lesson-nav__next" href={`${base}learn/data-analysis/normal/lessons/${next.slug.split('/').pop()}`}>{next.data.title} →</a>
+        : <span />}
+      <button class="btn btn-soft lesson-nav__done" data-mark-complete
+        data-label-done={ps.completed}>{ps.markComplete}</button>
+    </div>
+  </article>
+</Base>
+
+<script>
+  import {completeLesson, isLessonComplete} from '../../../../../lib/gameState';
+  const article = document.querySelector('[data-lesson-id]');
+  const id = article?.getAttribute('data-lesson-id');
+  const btn = document.querySelector('[data-mark-complete]') as HTMLButtonElement | null;
+
+  const markDone = () => {
+    if (!btn) return;
+    btn.textContent = btn.dataset.labelDone ?? 'Completed';
+    btn.classList.add('is-done');
+    btn.disabled = true;
+  };
+
+  if (id && isLessonComplete(id)) markDone();
+
+  btn?.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (!id) return;
+    completeLesson(id);
+    markDone();
+    document.dispatchEvent(new CustomEvent('lesson:complete'));
+  });
+</script>
+
+<style>
+  .crumb { display: flex; gap: .5rem; padding-top: 1.2rem; color: var(--ink-soft); font-size: .88rem; align-items: center; flex-wrap: wrap; }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb__here { font-weight: 700; color: var(--ink); }
+  .lesson-head { margin: 1.5rem 0 1rem; }
+  .lesson-head__meta { display: flex; gap: .75rem; align-items: center; margin-bottom: .5rem; flex-wrap: wrap; }
+  .lesson-head__diff { font-weight: 800; text-transform: uppercase; font-size: .78rem; letter-spacing: .04em; }
+  .lesson-head__time, .lesson-head__xp { font-size: .82rem; color: var(--ink-soft); font-weight: 600; }
+  .lesson-head h1 { font-size: clamp(1.8rem, 4vw, 2.6rem); margin: .3rem 0; text-wrap: balance; }
+  .lesson-head__sub { color: var(--ink-soft); font-size: 1.05rem; }
+  .lesson-head__objectives { margin-top: 1rem; padding: 1rem; background: var(--accent-soft); border-radius: var(--radius-md); border-left: 4px solid var(--accent); }
+  .lesson-head__objectives strong { display: block; margin-bottom: .4rem; }
+  .lesson-head__objectives ul { margin: 0; padding-left: 1.2rem; }
+  .lesson-head__objectives li { margin: .2rem 0; font-size: .92rem; }
+  .lesson-content :global(h2) { margin-top: 2.2rem; }
+  .lesson-content :global(.gamified-flourish) { display: block; background: var(--accent-soft); color: var(--accent-text); border-radius: var(--radius-md); padding: .8rem 1rem; margin: 1rem 0; font-weight: 600; }
+  .lesson-tags { display: flex; gap: .4rem; flex-wrap: wrap; margin: 1.5rem 0; }
+  .lesson-tag { padding: .2rem .6rem; border-radius: var(--radius-pill); background: var(--surface-2); font-size: .74rem; font-weight: 600; color: var(--ink-soft); }
+
+  /* Navigation */
+  .lesson-nav {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    margin: 2.5rem 0 1.5rem;
+    gap: .75rem;
+  }
+  .lesson-nav__prev {
+    justify-self: start;
+    text-decoration: none; font-weight: 700; padding: .6rem 1.1rem;
+    border-radius: var(--radius-md); background: var(--surface); border: 1px solid var(--line);
+    color: var(--ink); box-shadow: var(--shadow-sm); display: inline-flex; align-items: center; gap: .4rem;
+    transition: border-color .15s ease, color .15s ease;
+  }
+  .lesson-nav__prev:hover { border-color: var(--accent); color: var(--accent); }
+  .lesson-nav__next {
+    justify-self: end;
+    text-decoration: none; font-weight: 700; padding: .6rem 1.1rem;
+    border-radius: var(--radius-md); background: var(--surface); border: 1px solid var(--line);
+    color: var(--ink); box-shadow: var(--shadow-sm); display: inline-flex; align-items: center; gap: .4rem;
+    transition: border-color .15s ease, color .15s ease;
+  }
+  .lesson-nav__next:hover { border-color: var(--accent); color: var(--accent); }
+  .lesson-nav__done {
+    justify-self: center;
+    font-weight: 700; padding: .6rem 1.4rem;
+    border-radius: var(--radius-md); border: 1px solid var(--line);
+    background: var(--surface); color: var(--ink); cursor: pointer;
+    transition: background .15s ease, color .15s ease, border-color .15s ease;
+  }
+  .lesson-nav__done:hover { border-color: var(--accent); }
+  .lesson-nav__done.is-done {
+    background: var(--success-soft); color: #2e8b0b; border-color: var(--success);
+    cursor: default;
+  }
+  [data-theme='dark'] .lesson-nav__done.is-done { color: #6ce07f; }
+  .lesson-nav__done.is-done::before { content: '\2713 '; font-weight: 900; }
+</style>

@@ -1,0 +1,268 @@
+---
+// Interactive challenge component — editable code cell with validation and XP.
+interface Props {
+  title?: string;
+  code: string;
+  expected?: string;
+  hint?: string;
+  xp?: number;
+  lessonId?: string;
+}
+const {title = 'Challenge', code, expected, hint, xp = 5, lessonId = ''} = Astro.props;
+---
+
+<div class="ichallenge" data-ichallenge data-xp={xp} data-expected={expected ?? ''} data-lesson={lessonId}>
+  <div class="ichallenge__head">
+    <span class="ichallenge__icon">🧩</span>
+    <span class="ichallenge__title">{title}</span>
+    <span class="ichallenge__xp">+{xp} XP</span>
+  </div>
+  <div class="cell" data-runnable>
+    <div class="cell__actions">
+      <button class="btn btn-primary cell__run" data-run aria-label="Run this Python code">▶ Run</button>
+      <button class="btn btn-ghost cell__check" data-check aria-label="Check your answer">✓ Check</button>
+      <span class="cell__lang">python</span>
+    </div>
+    <pre class="cell__code"><code contenteditable="true" spellcheck="false">{code}</code></pre>
+    <div class="cell__output" data-output hidden>
+      <div class="cell__lines" data-lines></div>
+    </div>
+  </div>
+  {hint && (
+    <details class="ichallenge__hint">
+      <summary>💡 Need a hint?</summary>
+      <div class="ichallenge__hint-body">{hint}</div>
+    </details>
+  )}
+  <div class="ichallenge__feedback" data-feedback hidden></div>
+</div>
+
+<script>
+  const PYODIDE_VERSION = '0.26.4';
+  const INDEX = `https://cdn.jsdelivr.net/pyodide/v${PYODIDE_VERSION}/full/`;
+  let pyPromise: Promise<any> | null = null;
+  async function py() {
+    if (!pyPromise) {
+      const mod = await import(/* @vite-ignore */ `${INDEX}pyodide.mjs`);
+      pyPromise = mod.loadPyodide({indexURL: INDEX});
+    }
+    return pyPromise;
+  }
+
+  document.querySelectorAll('[data-ichallenge]').forEach((el) => {
+    if (el.hasAttribute('data-hydrated')) return;
+    el.setAttribute('data-hydrated', '1');
+
+    const runBtn = el.querySelector('[data-run]') as HTMLButtonElement;
+    const checkBtn = el.querySelector('[data-check]') as HTMLButtonElement;
+    const feedback = el.querySelector('[data-feedback]') as HTMLElement;
+    const outputEl = el.querySelector('[data-output]') as HTMLElement;
+    const linesEl = el.querySelector('[data-lines]') as HTMLElement;
+    const codeEl = el.querySelector('code[contenteditable]') as HTMLElement;
+    const expected = (el as HTMLElement).dataset.expected;
+    const xp = Number((el as HTMLElement).dataset.xp) || 5;
+    const lessonId = (el as HTMLElement).dataset.lesson ?? '';
+
+    async function runCode(showOutput = true): Promise<string> {
+      const userCode = codeEl?.textContent?.trim() ?? '';
+      if (!userCode) return '';
+
+      const engine = await py();
+      let captured = '';
+      engine.setStdout({ batched: (s: string) => { captured += s; } });
+      engine.setStderr({ batched: (s: string) => { captured += s; } });
+      engine.setStdin({ stdin: () => window.prompt('') ?? '' });
+      await engine.loadPackagesFromImports(userCode);
+      await engine.runPythonAsync(userCode);
+      const output = captured.trim();
+
+      if (showOutput && outputEl && linesEl) {
+        outputEl.hidden = false;
+        linesEl.textContent = output || '(no output)';
+      }
+      return output;
+    }
+
+    runBtn?.addEventListener('click', async () => {
+      if (runBtn.disabled) return;
+      runBtn.disabled = true;
+      runBtn.textContent = '⟳ Running…';
+      feedback.hidden = true;
+      try {
+        await runCode(true);
+      } catch (err: any) {
+        feedback.hidden = false;
+        feedback.textContent = `⚠️ Error: ${err.message}`;
+        feedback.className = 'ichallenge__feedback ichallenge__feedback--wrong';
+        if (outputEl) outputEl.hidden = true;
+      } finally {
+        runBtn.disabled = false;
+        runBtn.textContent = '▶ Run';
+      }
+    });
+
+    checkBtn?.addEventListener('click', async () => {
+      if (checkBtn.disabled) return;
+      const userCode = codeEl?.textContent?.trim() ?? '';
+      if (!userCode) {
+        feedback.hidden = false;
+        feedback.textContent = 'Write some code first!';
+        feedback.className = 'ichallenge__feedback ichallenge__feedback--warn';
+        return;
+      }
+
+      try {
+        const {usesJsBridge} = await import('../lib/pythonGuard.ts');
+        if (usesJsBridge(userCode)) {
+          feedback.hidden = false;
+          feedback.textContent = "Blocked: the 'js' and 'pyodide' bridge modules are disabled here.";
+          feedback.className = 'ichallenge__feedback ichallenge__feedback--wrong';
+          return;
+        }
+      } catch { /* offline */ }
+
+      checkBtn.disabled = true;
+      checkBtn.textContent = '⟳ Running…';
+      let awarded = false;
+
+      try {
+        const output = await runCode(true);
+
+        if (expected && output === expected.trim()) {
+          feedback.hidden = false;
+          feedback.textContent = `✅ Correct! +${xp} XP`;
+          feedback.className = 'ichallenge__feedback ichallenge__feedback--correct';
+          if (!awarded) {
+            awarded = true;
+            try {
+              const m = await import('../lib/gameState.ts');
+              if (lessonId) {
+                m.recordChallenge(lessonId);
+              }
+            } catch { /* offline */ }
+          }
+        } else if (expected) {
+          feedback.hidden = false;
+          feedback.textContent = `❌ Got "${output}", expected "${expected.trim()}". Try again!`;
+          feedback.className = 'ichallenge__feedback ichallenge__feedback--wrong';
+        } else {
+          feedback.hidden = false;
+          feedback.textContent = `Output: ${output}`;
+          feedback.className = 'ichallenge__feedback ichallenge__feedback--info';
+        }
+      } catch (err: any) {
+        feedback.hidden = false;
+        feedback.textContent = `⚠️ Error: ${err.message}`;
+        feedback.className = 'ichallenge__feedback ichallenge__feedback--wrong';
+      } finally {
+        checkBtn.disabled = false;
+        checkBtn.textContent = '✓ Check';
+      }
+    });
+  });
+</script>
+
+<style>
+  .ichallenge {
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin: 1.5rem 0;
+    background: var(--surface);
+    box-shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+    transition: box-shadow .25s ease, border-color .25s ease;
+  }
+  .ichallenge:hover { box-shadow: 0 4px 12px rgba(0,0,0,.08); border-color: var(--accent); }
+  .ichallenge__head {
+    display: flex; align-items: center; gap: .6rem;
+    padding: .7rem 1rem;
+    background: linear-gradient(135deg, var(--accent-soft), rgba(124,58,237,.06));
+    border-bottom: 1px solid var(--line);
+  }
+  .ichallenge__icon { font-size: 1.2rem; }
+  .ichallenge__title { font-weight: 700; font-size: .92rem; color: var(--ink); flex: 1; }
+  .ichallenge__xp {
+    font-size: .76rem; font-weight: 800; color: var(--accent);
+    background: rgba(124,58,237,.15); padding: .2rem .6rem;
+    border-radius: var(--radius-pill);
+    letter-spacing: .02em;
+  }
+  .ichallenge__hint {
+    padding: .6rem 1rem;
+    border-top: 1px solid var(--line);
+    font-size: .88rem;
+  }
+  .ichallenge__hint summary {
+    cursor: pointer; font-weight: 600; color: var(--ink-soft);
+    list-style: none; transition: color .15s ease;
+  }
+  .ichallenge__hint summary:hover { color: var(--accent); }
+  .ichallenge__hint summary::-webkit-details-marker { display: none; }
+  .ichallenge__hint summary::before { content: '▸ '; transition: transform .15s ease; display: inline-block; }
+  .ichallenge__hint[open] summary::before { content: '▾ '; }
+  .ichahlange__hint-body { padding: .5rem 0 0; color: var(--ink-soft); line-height: 1.5; }
+  .ichallenge__feedback {
+    padding: .7rem 1rem;
+    font-weight: 700;
+    font-size: .88rem;
+    border-top: 1px solid var(--line);
+    transition: background .2s ease, color .2s ease;
+  }
+  .ichallenge__feedback--correct { background: linear-gradient(135deg, rgba(34,197,94,.1), rgba(34,197,94,.05)); color: #16a34a; }
+  .ichallenge__feedback--wrong { background: linear-gradient(135deg, rgba(239,68,68,.1), rgba(239,68,68,.05)); color: #dc2626; }
+  .ichallenge__feedback--warn { background: linear-gradient(135deg, rgba(251,191,36,.12), rgba(251,191,36,.05)); color: #d97706; }
+  .ichallenge__feedback--info { background: var(--surface-2); color: var(--ink-soft); }
+
+  .cell {
+    border-top: 1px solid var(--line);
+  }
+  .cell__actions {
+    display: flex; align-items: center; gap: .5rem;
+    padding: .5rem .8rem;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--line);
+  }
+  .cell__run, .cell__check {
+    font-size: .82rem; font-weight: 700;
+    padding: .35rem .75rem;
+    border-radius: var(--radius-sm);
+    transition: all .15s ease;
+  }
+  .cell__run { background: var(--accent); color: var(--accent-contrast); border: none; }
+  [data-theme='dark'] .cell__run { background: #7c3aed; color: #fff; }
+  [data-theme='dark'] .cell__run:hover { background: #6d28d9; }
+  .cell__run:hover { opacity: .9; transform: translateY(-1px); }
+  .cell__run:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+  .cell__check { background: var(--surface); border: 1px solid var(--line); color: var(--ink); }
+  .cell__check:hover { border-color: var(--accent); color: var(--accent); }
+  .cell__check:disabled { opacity: .5; cursor: not-allowed; }
+  .cell__lang {
+    margin-left: auto; font-size: .72rem; font-weight: 600;
+    color: var(--ink-soft); text-transform: uppercase; letter-spacing: .05em;
+    opacity: .6;
+  }
+  .cell__code {
+    margin: 0; padding: .9rem 1rem;
+    background: #1e1e2e; color: #cdd6f4;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: .88rem; line-height: 1.6;
+    overflow-x: auto; min-height: 3rem;
+    tab-size: 4;
+  }
+  .cell__code code {
+    outline: none; white-space: pre;
+  }
+  .cell__code code:focus {
+    background: rgba(124,58,237,.08);
+    border-radius: 2px;
+  }
+  .cell__output {
+    margin: 0; padding: .7rem 1rem;
+    background: #11111b; color: #a6adc8;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: .85rem; line-height: 1.5;
+    border-top: 1px solid rgba(255,255,255,.06);
+    white-space: pre-wrap; word-break: break-word;
+  }
+  .cell__output:not([hidden]) { display: block; }
+</style>

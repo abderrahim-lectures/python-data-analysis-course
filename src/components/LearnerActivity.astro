@@ -1,0 +1,51 @@
+---
+// LearnerActivity.astro — subtle bottom bar showing live learner presence.
+// Uses Supabase for real-time heartbeat + recent completions.
+interface Props {
+  locale?: string;
+  supabaseUrl?: string;
+  supabaseKey?: string;
+}
+const {locale = 'en', supabaseUrl = '', supabaseKey = ''} = Astro.props;
+---
+
+<div class="learner-bar" id="learner-bar" data-locale={locale} data-url={supabaseUrl} data-key={supabaseKey} style="display:none">
+  <div class="learner-bar__inner">
+    <span class="learner-bar__dot" aria-hidden="true"></span>
+    <span class="learner-bar__count" id="learner-count">—</span>
+    <span class="learner-bar__label" id="learner-label">learning now</span>
+    <span class="learner-bar__sep" aria-hidden="true">·</span>
+    <span class="learner-bar__recent" id="learner-recent"></span>
+  </div>
+</div>
+
+<style>
+  .learner-bar {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 9000;
+    background: var(--surface); border-top: 1px solid var(--line);
+    padding: .45rem 1rem; display: flex; justify-content: center;
+    box-shadow: 0 -2px 8px rgba(0,0,0,.06);
+    transition: transform .3s ease, opacity .3s ease;
+    transform: translateY(0); opacity: 1;
+  }
+  .learner-bar__inner {
+    display: flex; align-items: center; gap: .5rem;
+    font-size: .76rem; color: var(--ink-soft); max-width: 600px;
+  }
+  .learner-bar__dot {
+    width: 7px; height: 7px; border-radius: 50%; background: #22c55e;
+    animation: pulse-dot 2s ease-in-out infinite; flex-shrink: 0;
+  }
+  .learner-bar__count { font-weight: 700; color: var(--ink); }
+  .learner-bar__label { color: var(--ink-soft); }
+  .learner-bar__sep { color: var(--line); }
+  .learner-bar__recent { color: var(--ink-faint); font-style: italic; }
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .4; }
+  }
+  @media (max-width: 600px) {
+    .learner-bar__inner { font-size: .7rem; }
+    .learner-bar__recent { display: none; }
+  }
+</style>
