@@ -104,6 +104,9 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
     <meta name="description" content={description} />
     <meta name="author" content="Abderrahim Adrabi" />
     <link rel="canonical" href={canonicalURL} />
+    <link rel="icon" href={new URL('favicon.ico', Astro.site)} sizes="32x32" />
+    <link rel="icon" type="image/svg+xml" href="/icons/icon-192.svg" />
+    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
     <link rel="alternate" hreflang="en" href={new URL(`${base}${alt.en}`, Astro.site)} />
     <link rel="alternate" hreflang="ar" href={new URL(`${base}${alt.ar}`, Astro.site)} />
     <link rel="alternate" hreflang="es" href={new URL(`${base}${alt.es}`, Astro.site)} />

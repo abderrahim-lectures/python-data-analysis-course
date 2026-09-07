@@ -77,8 +77,12 @@
 
 .card__header {
   display: flex; align-items: flex-start; justify-content: space-between;
-  padding: .85rem 1.2rem 0; gap: .5rem;
+  padding: .85rem 1.2rem 0; gap: .5rem; flex-wrap: wrap;
 }
+
+/* Grid view: keep the difficulty badge from overlapping the icon by giving
+   it its own line when the card is too narrow to fit both nowrap items. */
+.grid .card__badge { margin-left: auto; }
 .card__icon { font-size: 1.8rem; line-height: 1; }
 .card__badge {
   font-size: .65rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em;
@@ -103,10 +107,20 @@
 
 /* List view card layout */
 .list .card { flex-direction: row; align-items: stretch; }
-.list .card__header { flex-direction: column; align-items: center; padding: 1rem 0 0 1rem; width: 80px; flex-shrink: 0; }
-.list .card__badge { position: static; }
-.list .card__body { padding: .8rem 1rem .8rem .5rem; }
+.list .card__header { flex-direction: row; align-items: center; justify-content: flex-start; gap: .5rem; padding: .75rem 0 0 1.25rem; flex-shrink: 0; }
+.list .card__badge { position: static; white-space: nowrap; }
+.list .card__icon { font-size: 1.5rem; }
+.list .card__body { padding: .8rem 1.2rem .8rem .25rem; }
 .list .card p { -webkit-line-clamp: 1; }
+
+/* List view: replace the top accent stripe with a vertical ribbon on the
+   left edge of the card, colored by difficulty. */
+.list .card::before {
+  top: 0; left: 0; right: auto; bottom: 0; height: auto; width: 6px; opacity: 1;
+}
+.list .card[data-diff="beginner"]::before { background: #34d399; }
+.list .card[data-diff="intermediate"]::before { background: #fbbf24; }
+.list .card[data-diff="advanced"]::before { background: #f87171; }
 
 .tag-pill__icon { margin-right: .2rem; }
 .empty { text-align: center; color: var(--ink-soft); padding: 2.5rem 1rem; margin: 0 0 3rem; }
