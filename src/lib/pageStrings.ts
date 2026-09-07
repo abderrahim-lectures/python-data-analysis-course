@@ -85,6 +85,16 @@ export const PAGE_STRINGS: Record<Locale, {
   markComplete: string;
   completed: string;
   weekLabel: string;
+  moduleLabel: string;
+  moduleLessonsLabel: string;
+  lessonLabel: string;
+  projectMarkDone: string;
+  projectDoneHint: string;
+  projectCompleted: string;
+  prevLesson: string;
+  nextLesson: string;
+  objectives: string;
+  practice: string;
   trackNormalLabel: string;
   trackHardLabel: string;
   switchTo: string;
@@ -174,7 +184,17 @@ export const PAGE_STRINGS: Record<Locale, {
     track2Desc: 'Ship a real notebook: pandas the way a data analyst actually uses it.',
     markComplete: 'Mark complete ✓',
     completed: 'Completed ✓',
+    projectMarkDone: 'Mark project as done ✓',
+    projectDoneHint: 'Finish every step, then mark this project complete to claim its XP.',
+    projectCompleted: 'Project completed ✓',
     weekLabel: 'Week',
+    moduleLabel: 'Module',
+    moduleLessonsLabel: 'Lessons',
+    lessonLabel: 'Lesson',
+    prevLesson: '← Previous',
+    nextLesson: 'Next →',
+    objectives: "What you'll learn:",
+    practice: 'Practice',
     trackNormalLabel: 'Normal',
     trackHardLabel: 'Hard',
     switchTo: 'Switch to',
@@ -264,7 +284,17 @@ export const PAGE_STRINGS: Record<Locale, {
     track2Desc: 'أنجز دفتر عمل حقيقي: بانداس كما يستخدمها محلّل البيانات فعليًا.',
     markComplete: 'تحديد كمكتمل ✓',
     completed: 'مكتمل ✓',
+    projectMarkDone: 'حدد المشروع كمكتمل ✓',
+    projectDoneHint: 'أكمل كل خطوة ثم حدد المشروع كمكتمل لجمع نقاطه.',
+    projectCompleted: 'المشروع مكتمل ✓',
     weekLabel: 'الأسبوع',
+    moduleLabel: 'الوحدة',
+    moduleLessonsLabel: 'الدروس',
+    lessonLabel: 'درس',
+    prevLesson: '← السابق',
+    nextLesson: 'التالي ←',
+    objectives: 'ماذا ستتعلم:',
+    practice: 'تدريب',
     trackNormalLabel: 'عادي',
     trackHardLabel: 'صعب',
     switchTo: 'انتقل إلى',
@@ -354,7 +384,17 @@ export const PAGE_STRINGS: Record<Locale, {
     track2Desc: 'Publica un notebook real: pandas tal como lo usa de verdad un analista de datos.',
     markComplete: 'Marcar como completado ✓',
     completed: 'Completado ✓',
+    projectMarkDone: 'Marcar proyecto como terminado ✓',
+    projectDoneHint: 'Termina todos los pasos y luego marca este proyecto como completo para ganar su XP.',
+    projectCompleted: 'Proyecto completado ✓',
     weekLabel: 'Semana',
+    moduleLabel: 'Módulo',
+    moduleLessonsLabel: 'Lecciones',
+    lessonLabel: 'Lección',
+    prevLesson: '← Anterior',
+    nextLesson: 'Siguiente →',
+    objectives: 'Lo que aprenderás:',
+    practice: 'Practica',
     trackNormalLabel: 'Normal',
     trackHardLabel: 'Difícil',
     switchTo: 'Cambiar a',
@@ -444,7 +484,17 @@ export const PAGE_STRINGS: Record<Locale, {
     track2Desc: 'Réalisez un vrai notebook : pandas tel qu’un analyste de données l’utilise vraiment.',
     markComplete: 'Marquer comme terminé ✓',
     completed: 'Terminé ✓',
+    projectMarkDone: 'Marquer ce projet comme terminé ✓',
+    projectDoneHint: 'Terminez chaque étape puis marquez ce projet comme terminé pour gagner ses points.',
+    projectCompleted: 'Projet terminé ✓',
     weekLabel: 'Semaine',
+    moduleLabel: 'Module',
+    moduleLessonsLabel: 'Leçons',
+    lessonLabel: 'Leçon',
+    prevLesson: '← Précédent',
+    nextLesson: 'Suivant →',
+    objectives: 'Ce que vous apprendrez :',
+    practice: 'Pratique',
     trackNormalLabel: 'Normal',
     trackHardLabel: 'Difficile',
     switchTo: 'Passer à',

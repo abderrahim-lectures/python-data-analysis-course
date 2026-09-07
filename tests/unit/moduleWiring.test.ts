@@ -136,8 +136,13 @@ describe('module listing page', () => {
   });
 
   test('has prev/next module navigation', () => {
-    expect(src).toContain('module-nav__prev');
-    expect(src).toContain('module-nav__next');
+    expect(src).toContain('ModuleNav');
+  });
+
+  test('ModuleNav renders prev/next links', () => {
+    const nav = readFileSync('src/components/ModuleNav.astro', 'utf8');
+    expect(nav).toContain('module-nav__prev');
+    expect(nav).toContain('module-nav__next');
   });
 });
 

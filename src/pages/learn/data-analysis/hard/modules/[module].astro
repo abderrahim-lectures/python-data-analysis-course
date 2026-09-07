@@ -1,6 +1,7 @@
 ---
 import {getCollection} from 'astro:content';
 import Base from '../../../../../layouts/Base.astro';
+import ModuleNav from '../../../../../components/ModuleNav.astro';
 import {PAGE_STRINGS} from '../../../../../lib/pageStrings';
 import {detectLocale} from '../../../../../lib/routeSegments';
 
@@ -92,14 +93,7 @@ const diffColor = difficulty === 'beginner' ? 'var(--success-text)' : difficulty
     </div>
   </section>
 
-  <section class="container module-nav">
-    {prevModule
-      ? <a class="module-nav__prev" href={`${base}learn/data-analysis/hard/modules/${prevModule.slug.split('/').pop()}`}>← {prevModule.data.title}</a>
-      : <span />}
-    {nextModule
-      ? <a class="module-nav__next" href={`${base}learn/data-analysis/hard/modules/${nextModule.slug.split('/').pop()}`}>{nextModule.data.title} →</a>
-      : <span />}
-  </section>
+  <ModuleNav prevModule={prevModule} nextModule={nextModule} modulesPath="learn/data-analysis/hard/modules" />
 </Base>
 
 <style>
@@ -138,12 +132,4 @@ const diffColor = difficulty === 'beginner' ? 'var(--success-text)' : difficulty
   .lesson-card__meta { display: flex; gap: .6rem; font-size: .74rem; font-weight: 600; color: var(--ink-soft); }
   .lesson-card__arrow { font-size: 1.1rem; color: var(--ink-soft); transition: transform .15s ease; }
   .lesson-card:hover .lesson-card__arrow { transform: translateX(3px); color: var(--accent); }
-  .module-nav { display: flex; justify-content: space-between; align-items: center; margin: 2rem 0 3rem; gap: 1rem; }
-  .module-nav a {
-    text-decoration: none; font-weight: 700; padding: .6rem 1.1rem; min-height: 40px;
-    border-radius: var(--radius-pill); background: var(--surface); border: 1px solid var(--line);
-    color: var(--ink); box-shadow: var(--shadow-sm); display: inline-flex; align-items: center;
-    transition: transform .1s ease, box-shadow .1s ease, border-color .15s ease, color .15s ease;
-  }
-  .module-nav a:hover { transform: translateY(-1px); border-color: var(--accent); color: var(--accent); box-shadow: var(--shadow-md); }
 </style>

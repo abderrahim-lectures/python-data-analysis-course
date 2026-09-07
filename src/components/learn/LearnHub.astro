@@ -1,0 +1,121 @@
+---
+// Shared learn hub for locale pages: /ar/تعلم, /es/aprender, /fr/apprendre.
+import {getCollection} from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Icon from '../Icon.astro';
+import {learnHref, type Locale} from '../../lib/routeSegments';
+import {PAGE_STRINGS} from '../../lib/pageStrings';
+
+interface Props {
+  locale: Locale;
+}
+
+const {locale} = Astro.props;
+const base = import.meta.env.BASE_URL;
+const dir = locale === 'ar' ? 'rtl' : 'ltr';
+const s = PAGE_STRINGS[locale];
+const alternates: Record<Locale, string> = {
+  en: 'learn',
+  ar: 'ar/تعلم',
+  es: 'es/aprender',
+  fr: 'fr/apprendre',
+};
+
+const sections = [
+  {slug: 'python-101', icon: '🐍', badge: s.track1, name: s.track1Name, desc: s.track1Desc},
+  {slug: 'data-analysis', icon: '📊', badge: s.track2, name: s.track2Name, desc: s.track2Desc},
+];
+
+const allLessons = await getCollection('lessons');
+const allModules = await getCollection('modules');
+const stats = Object.fromEntries(
+  sections.map(({slug}) => {
+    const lessons = allLessons.filter((e) => e.slug.includes(slug));
+    const modules = allModules.filter((e) => e.slug.includes(slug));
+    const minutes = lessons.reduce((sum, l) => sum + (l.data.estimatedMinutes ?? 15), 0);
+    return [slug, {lessons: lessons.length, modules: modules.length, minutes}];
+  }),
+);
+---
+
+<Base title={s.learnHubTitle} description={s.learnHubDescription} lang={locale} dir={dir} alternates={alternates}>
+  <section class="hero">
+    <div class="container head">
+      <div class="head__eyebrow"><Icon name="code" size={16} /> {s.learnHubEyebrow}</div>
+      <h1>{s.learnHubH1}</h1>
+      <p>{s.learnHubLead}</p>
+    </div>
+  </section>
+
+  <section class="container">
+    <div class="sections">
+      {sections.map(({slug, icon, badge, name, desc}) => (
+        <div class="sectioncard">
+          <div class={`sectioncard__badge${slug === 'data-analysis' ? ' sectioncard__badge--streak' : ''}`}>{icon} {badge}</div>
+          <div class="sectioncard__icon">{icon}</div>
+          <h2>{name}</h2>
+          <p>{desc}</p>
+          <div class="sectioncard__meta">
+            <span class="badge badge--xp">⚡ {stats[slug].lessons * 100} XP</span>
+            <span class="badge badge--streak">📖 {stats[slug].modules} {s.moduleLabel}</span>
+            <span class="badge">⏱ ~{Math.round(stats[slug].minutes / 60)}h</span>
+          </div>
+          <div class="routes">
+            <span class="routes__label">{s.chooseRoute}</span>
+            <div class="routes__pills">
+              <a class="route-pill route-pill--normal" href={learnHref(locale, base, slug, 'normal')}>🌿 {s.normalStart}</a>
+              <a class="route-pill route-pill--hard" href={learnHref(locale, base, slug, 'hard')}>⚡ {s.hardStart}</a>
+            </div>
+          </div>
+          <a class="sectioncard__all" href={learnHref(locale, base, slug)}>{s.seeAllModules}</a>
+        </div>
+      ))}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero { padding: 2.5rem 0 1.5rem; }
+  .head__eyebrow { color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: .08em; font-size: .76rem; display: inline-flex; align-items: center; gap: .3rem; }
+  .head h1 { font-size: clamp(2rem, 4vw, 2.8rem); margin: .4rem 0 .2rem; }
+  .head p { color: var(--ink-soft); }
+  .sections { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 1.25rem; margin: 1.5rem 0 3rem; }
+  .sectioncard {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg);
+    padding: 1.5rem; display: flex; flex-direction: column; gap: .75rem;
+    box-shadow: var(--shadow-sm); transition: all var(--transition-smooth);
+    position: relative; overflow: hidden;
+  }
+  .sectioncard:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
+  .sectioncard__badge {
+    display: inline-flex; align-items: center; gap: .25rem;
+    padding: .2rem .6rem; border-radius: var(--radius-pill);
+    font-size: .72rem; font-weight: 700; width: fit-content;
+    background: var(--accent-soft); color: var(--accent);
+  }
+  .sectioncard__badge--streak { background: rgba(255,150,0,.1); color: var(--streak); }
+  .sectioncard__icon { font-size: 2rem; }
+  .sectioncard h2 { font-size: 1.2rem; margin: 0; }
+  .sectioncard p { color: var(--ink-soft); font-size: .9rem; margin: 0; line-height: 1.5; }
+  .sectioncard__meta { display: flex; gap: .5rem; flex-wrap: wrap; }
+  .routes { margin-top: auto; padding-top: .5rem; border-top: 1px solid var(--line); }
+  .routes__label { display: block; font-size: .74rem; font-weight: 700; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .04em; margin-bottom: .5rem; }
+  .routes__pills { display: flex; gap: .7rem; flex-wrap: wrap; }
+  .route-pill {
+    display: inline-flex; align-items: center; gap: .4rem;
+    text-decoration: none; padding: .6rem 1.1rem; border-radius: var(--radius-md);
+    font-weight: 700; font-size: .85rem; color: #fff; border: none;
+    box-shadow: var(--shadow-tactile); transition: transform .1s ease, box-shadow .1s ease, filter .15s ease;
+  }
+  .route-pill:active { transform: translateY(3px); box-shadow: 0 1px 0 rgba(0,0,0,.08), 0 2px 8px rgba(16,24,40,.06); }
+  .route-pill--normal { color: #10240a; background: var(--success); box-shadow: 0 4px 0 #3d9401, 0 6px 16px rgba(88,204,2,.25); }
+  .route-pill--normal:hover, .route-pill--hard:hover { transform: translateY(-1px); }
+  .route-pill--normal:hover { color: #10240a; filter: brightness(1.06); box-shadow: 0 4px 0 #3d9401, 0 8px 20px rgba(88,204,2,.35); }
+  .route-pill--normal:active { box-shadow: 0 1px 0 #3d9401, 0 2px 8px rgba(88,204,2,.15); }
+  .route-pill--hard { background: #c81e3f; box-shadow: 0 4px 0 #c81e3f, 0 6px 16px rgba(244,63,94,.25); }
+  .route-pill--hard:hover { color: #fff; filter: brightness(1.06); box-shadow: 0 4px 0 #c81e3f, 0 8px 20px rgba(244,63,94,.35); }
+  .route-pill--hard:active { box-shadow: 0 1px 0 #c81e3f, 0 2px 8px rgba(244,63,94,.15); }
+  .sectioncard__all { align-self: flex-start; font-size: .82rem; font-weight: 700; color: var(--ink-soft); text-decoration: none; }
+  .sectioncard__all:hover { color: var(--accent); }
+  @media (max-width: 720px) { .sections { grid-template-columns: 1fr; } }
+</style>

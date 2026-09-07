@@ -1,128 +1,26 @@
 ---
+// AR project index — thin wrapper over the shared ProjectListing component.
 import {getCollection} from 'astro:content';
-import Base from '../../../layouts/Base.astro';
-import Icon from '../../../components/Icon.astro';
-import {PROJECT_TAGS, projectArtEmoji, projectDifficulty, DIFFICULTY_COLORS} from '../../../lib/projectArt.ts';
-import {PAGE_STRINGS} from '../../../lib/pageStrings';
-import {detectLocale} from '../../../lib/routeSegments.ts';
-import '../../../styles/projects.css';
+import ProjectListing from '../../../components/projects/ProjectListing.astro';
 
-const locale = detectLocale(Astro.url.pathname);
-const s = PAGE_STRINGS[locale];
-const base = import.meta.env.BASE_URL;
+const projects = await getCollection('projects');
 
-const projects = (await getCollection('projects'))
-  .filter((p) => p.slug.startsWith('ar/'))
-  .map((p) => ({...p, slug: p.slug.replace('ar/', '')}))
-  .sort((a, b) => a.data.title.localeCompare(b.data.title));
-
-const allTags = [...new Set(projects.flatMap((p) => PROJECT_TAGS[p.slug] ?? []))].sort();
-const tagIcon: Record<string, string> = {};
-for (const [, tags] of Object.entries(PROJECT_TAGS)) {
-  for (const t of tags) {
-    if (!tagIcon[t]) tagIcon[t] = projectArtEmoji([t]);
-  }
-}
-const alternates = {
-  en: 'projects',
-  ar: 'ar/مشاريع',
-  es: 'es/proyectos',
-  fr: 'fr/projets',
+const filterStrings = {
+  searchPlaceholder: 'ابحث بين {n} مشروعاً…',
+  searchAria: 'ابحث عن المشاريع',
+  filterTagAria: 'Filter by tag',
+  tagAll: 'الكل',
+  filterDiffAria: 'Filter by difficulty',
+  diffAll: 'جميع المستويات',
+  diffBeginner: 'مبتدئ',
+  diffIntermediate: 'متوسط',
+  diffAdvanced: 'متقدم',
+  viewAria: 'View mode',
+  viewListAria: 'List view',
+  viewGridAria: 'Grid view',
+  noMatchPrefix: 'لا توجد مشاريع تطابق',
+  trySearch: 'جرّب بحثاً أو وصفاً مختلفاً.',
 };
 ---
 
-<Base
-  title={s.projectsTitle}
-  description={s.projectsDescription}
-  lang={locale}
-  dir="rtl"
-  alternates={alternates}
->
-  <section class="hero">
-    <div class="container head">
-      <div class="head__eyebrow"><Icon name="code" size={16} /> {s.projectsEyebrow}</div>
-      <h1>{s.projectsH1}</h1>
-      <p>{s.projectsLead}</p>
-    </div>
-  </section>
-
-  <section class="container">
-    <div class="finder">
-      <div class="finder__search">
-        <Icon name="search" size={16} />
-        <input
-          type="search"
-          id="project-search"
-          placeholder="ابحث عن المشاريع…"
-          aria-label="ابحث عن المشاريع"
-          autocomplete="off"
-        />
-      </div>
-      <div class="finder__actions">
-        <div class="finder__tags" role="group" aria-label="Filter by tag">
-          <button class="tag-pill tag-pill--all is-active" data-tag="">
-            <span class="tag-pill__icon">🏷️</span>الكل
-          </button>
-          {allTags.map((tag) => (
-            <button class="tag-pill" data-tag={tag}>
-              <span class="tag-pill__icon">{tagIcon[tag] ?? '🏷️'}</span>{tag}
-            </button>
-          ))}
-        </div>
-        <div style="display:flex; gap:1rem; align-items:center; flex-wrap:wrap;">
-          <div class="finder__difficulty" role="group" aria-label="Filter by difficulty">
-            <button class="diff-pill is-active" data-diff="">جميع المستويات</button>
-            <button class="diff-pill" data-diff="beginner">🌱 مبتدئ</button>
-            <button class="diff-pill" data-diff="intermediate">⚡ متوسط</button>
-            <button class="diff-pill" data-diff="advanced">🔥 متقدم</button>
-          </div>
-          <div class="finder__view" role="group" aria-label="View mode">
-            <button class="view-btn view-btn--list is-active" data-view="list" aria-label="List view"><Icon name="list" size={16} /></button>
-            <button class="view-btn view-btn--grid" data-view="grid" aria-label="Grid view"><Icon name="grid" size={16} /></button>
-          </div>
-        </div>
-      </div>
-      <p class="finder__count" id="project-count" aria-live="polite"></p>
-    </div>
-
-    <div class="list" id="project-grid">
-      {projects.map((p) => {
-        const slug = p.slug;
-        const tags = PROJECT_TAGS[slug] ?? [];
-        const emoji = projectArtEmoji(tags);
-        const diff = projectDifficulty(slug);
-        const diffColor = DIFFICULTY_COLORS[diff];
-        const haystack = `${p.data.title} ${p.data.description} ${tags.join(' ')}`.toLowerCase();
-        return (
-          <a
-            class="card"
-            href={`${base}projects/${slug}`}
-            data-project
-            data-tags={tags.join('|')}
-            data-diff={diff}
-            data-search={haystack}
-          >
-            <div class="card__header">
-              <span class="card__icon">{emoji}</span>
-              <span class={`card__badge card__badge--${diff}`}>{diffColor.label}</span>
-            </div>
-            <div class="card__body">
-              <h2>{p.data.title}</h2>
-              <p>{p.data.description}</p>
-              <div class="card__tags">
-                {tags.slice(0, 3).map((t) => <span class="chip">{tagIcon[t] ?? ''} {t}</span>)}
-              </div>
-            </div>
-          </a>
-        );
-      })}
-    </div>
-
-    <p class="empty" id="project-empty" hidden>لا توجد مشاريع تطابق "<span id="project-empty-query"></span>". جرّب بحثاً أو وصفاً مختلفاً.</p>
-  </section>
-</Base>
-
-<script>
-  import {initProjectsFinder} from '../../../lib/projectsRender.ts';
-  initProjectsFinder();
-</script>
+<ProjectListing locale="ar" projects={projects} filterStrings={filterStrings} />

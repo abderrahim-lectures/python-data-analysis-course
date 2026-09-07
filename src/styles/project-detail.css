@@ -1,8 +1,45 @@
-.crumb { display: flex; gap: .5rem; padding-top: 1.2rem; color: var(--ink-soft); font-size: .88rem; align-items: center; }
+.crumb { display: flex; gap: .5rem; padding-top: 1.2rem; color: var(--ink-soft); font-size: .88rem; align-items: center; flex-wrap: wrap; }
 .crumb a { color: var(--ink-soft); text-decoration: none; }
 .crumb__here { font-weight: 700; color: var(--ink); }
 .hero-art { display: block; width: 100%; height: 140px; border-radius: var(--radius-lg); margin-top: 1rem; box-shadow: var(--shadow-sm); }
-.project-title { font-size: clamp(1.8rem, 4vw, 2.6rem); margin: 1.2rem 0 .5rem; }
-.lesson-content { padding-bottom: 3rem; }
-.lesson-content :global(h1) { font-size: clamp(1.8rem, 4vw, 2.6rem); margin: 1.2rem 0 .5rem; }
-.lesson-content :global(h2) { margin-top: 2.2rem; }
+.project-head { margin: 1.5rem 0 1rem; }
+.project-head__meta { display: flex; gap: .75rem; align-items: center; margin-bottom: .5rem; flex-wrap: wrap; }
+.project-head__diff { font-weight: 800; text-transform: uppercase; font-size: .78rem; letter-spacing: .04em; }
+.project-head__time, .project-head__xp { font-size: .82rem; color: var(--ink-soft); font-weight: 600; }
+.project-head__tags { display: flex; gap: .4rem; flex-wrap: wrap; margin-top: .5rem; }
+.project-tag { padding: .15rem .5rem; border-radius: var(--radius-pill); background: var(--surface-2); font-size: .72rem; font-weight: 600; color: var(--ink-soft); }
+.project-title { font-size: clamp(1.8rem, 4vw, 2.6rem); margin: .3rem 0; text-wrap: balance; }
+.project-content { padding-bottom: 3rem; }
+.project-content :global(h2) { margin-top: 2.2rem; }
+.project-content :global(h3) { margin-top: 1.5rem; font-size: 1.1rem; }
+.project-content :global(.step-objective) {
+  background: var(--accent-soft); border-left: 4px solid var(--accent);
+  padding: .7rem 1rem; border-radius: var(--radius-md); margin: 1rem 0;
+  font-weight: 600; font-size: .92rem;
+}
+.project-content :global(.step-objective::before) { content: '🎯 Objective: '; }
+.project-content :global(.expected-output) {
+  background: var(--surface-2); border: 1px solid var(--line);
+  padding: .7rem 1rem; border-radius: var(--radius-md); margin: .75rem 0;
+  font-size: .88rem;
+}
+.project-content :global(.expected-output::before) { content: '🎯 Expected output: '; font-weight: 700; }
+.project-content :global(.troubleshoot) {
+  background: rgba(251,191,36,.08); border-left: 3px solid var(--streak);
+  padding: .6rem 1rem; border-radius: var(--radius-md); margin: .75rem 0;
+  font-size: .88rem;
+}
+.project-content :global(.troubleshoot::before) { content: '🩹 If it\'s off: '; font-weight: 700; }
+.project-content :global(.checklist) {
+  list-style: none; padding: 0; margin: .75rem 0;
+}
+.project-content :global(.checklist li) {
+  padding: .3rem 0; font-size: .9rem;
+}
+.project-content :global(.checklist li::before) { content: '✅ '; }
+.project-content :global(.socratic) {
+  background: var(--surface); border: 1px solid var(--line);
+  padding: .7rem 1rem; border-radius: var(--radius-md); margin: .75rem 0;
+  font-size: .88rem; font-style: italic;
+}
+.project-content :global(.socratic::before) { content: '🤔 Socratic Question: '; font-weight: 700; font-style: normal; }

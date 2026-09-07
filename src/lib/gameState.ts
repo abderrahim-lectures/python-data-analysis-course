@@ -18,6 +18,7 @@ export interface PDAState {
   lessonsRun: Record<string, boolean>;
   projectsViewed: Record<string, boolean>;
   projectsCompleted: Record<string, boolean>;
+  projectsSteps: Record<string, boolean>;
   challengesCompleted: Record<string, boolean>;
   quizCorrect: number;
   quizTotal: number;
@@ -32,19 +33,21 @@ export interface PDAState {
 const STORAGE_KEY = 'pda:state';
 
 // ── XP Economy (max 9999) ──────────────────────────────────────────
-// Designed for granularity: many small rewards keep learners motivated.
-const XP = {
-  LESSON_RUN:         10,   // ran code in playground
-  LESSON_COMPLETE:    100,  // finished a lesson
+// Balanced so that finishing a whole guided project rewards more than a
+// single lesson, and each project step pays meaningfully toward it.
+export const XP = {
+  LESSON_RUN:         5,    // ran code in playground
+  LESSON_COMPLETE:    60,   // finished a lesson
   PROJECT_VIEW:       5,    // opened a project page
-  PROJECT_COMPLETE:   150,  // finished a project
-  QUIZ_CORRECT:       10,   // got a quiz question right
-  QUIZ_PERFECT:       50,   // got all questions in a quiz right
+  PROJECT_STEP:       15,   // completed one guided project step
+  PROJECT_COMPLETE:  100,   // finished a whole project (rivals a lesson)
+  QUIZ_CORRECT:       5,    // got a quiz question right
+  QUIZ_PERFECT:       25,   // got all questions in a quiz right
   DAILY_LOGIN:        5,    // opened the site today
-  STREAK_BONUS:       10,   // extra per day after day 3
-  STREAK_MILESTONE:   25,   // bonus at streak milestones
+  STREAK_BONUS:       15,   // extra per day after day 3
+  STREAK_MILESTONE:   30,   // bonus at streak milestones
   MILESTONE_XP:       25,   // XP milestone rewards
-  CHALLENGE_COMPLETE:  5,   // solved an interactive challenge
+  CHALLENGE_COMPLETE: 15,   // solved an interactive challenge
 } as const;
 
 const MAX_XP = 9999;
@@ -58,6 +61,7 @@ function defaults(): PDAState {
     lessonsRun: {},
     projectsViewed: {},
     projectsCompleted: {},
+    projectsSteps: {},
     challengesCompleted: {},
     quizCorrect: 0,
     quizTotal: 0,
@@ -91,6 +95,7 @@ function repairLegacy(s: PDAState): PDAState {
   // Ensure new arrays exist for legacy state
   if (!s.projectsViewed) s.projectsViewed = {};
   if (!s.projectsCompleted) s.projectsCompleted = {};
+  if (!s.projectsSteps) s.projectsSteps = {};
   if (!s.challengesCompleted) s.challengesCompleted = {};
   if (!s.activityLog) s.activityLog = [];
   evaluateMilestones(s);
@@ -243,6 +248,32 @@ export function isProjectComplete(slug: string): boolean {
   return read().projectsCompleted[slug] ?? false;
 }
 
+export function recordProjectStep(projectSlug: string, stepIdx: number): number {
+  const s = read();
+  bumpStreak(s);
+  const key = `${projectSlug}:step:${stepIdx}`;
+  if (!s.projectsSteps[key]) {
+    s.projectsSteps[key] = true;
+    s.xp += XP.PROJECT_STEP;
+    clampXp(s);
+    addLog(s, 'project-step', `Project step ${stepIdx + 1}`, XP.PROJECT_STEP, projectSlug);
+    markQuest(s, 'first-project-step', 'Step by Step');
+    const stepCount = Object.keys(s.projectsSteps).filter(k => k.startsWith(`${projectSlug}:step:`)).length;
+    if (stepCount >= 10) markQuest(s, 'project-steps-10', '10 Steps');
+    if (stepCount >= 25) markQuest(s, 'project-steps-25', '25 Steps');
+    if (stepCount >= 50) markQuest(s, 'project-steps-50', '50 Steps');
+  }
+  evaluateMilestones(s);
+  write(s);
+  return s.xp;
+}
+
+export function isProjectStepDone(projectSlug: string, stepIdx: number): boolean {
+  const s = read();
+  const key = `${projectSlug}:step:${stepIdx}`;
+  return !!s.projectsSteps[key];
+}
+
 // ── Quizzes ─────────────────────────────────────────────────────────
 export function recordQuiz(correct: boolean): void {
   const s = read();
@@ -347,6 +378,10 @@ export function questsToShow(): { id: string; label: string; done: boolean }[] {
     { id: 'first-lesson', label: 'First step' },
     { id: 'first-project', label: 'Explorer' },
     { id: 'first-project-done', label: 'Builder' },
+    { id: 'first-project-step', label: 'Step by Step' },
+    { id: 'project-steps-10', label: '10 Steps' },
+    { id: 'project-steps-25', label: '25 Steps' },
+    { id: 'project-steps-50', label: '50 Steps' },
     { id: 'track-python-101', label: 'Python track' },
     { id: 'track-data-analysis', label: 'Data track' },
     { id: 'streak-3', label: '3-day streak' },
@@ -452,10 +487,11 @@ export function rankFor(xp: number): string {
 }
 
 // ── Project Stats ───────────────────────────────────────────────────
-export function projectStats(): { viewed: number; completed: number } {
+export function projectStats(): { viewed: number; completed: number; steps: number } {
   const s = read();
   return {
     viewed: Object.keys(s.projectsViewed).length,
     completed: Object.keys(s.projectsCompleted).length,
+    steps: Object.keys(s.projectsSteps).length,
   };
 }

@@ -42,10 +42,7 @@ describe('filled buttons declare their own hover color', () => {
 
 describe('route pills declare their own hover color, in every locale', () => {
   const FILES = [
-    'src/pages/learn/index.astro',
-    'src/pages/ar/تعلم/index.astro',
-    'src/pages/es/aprender/index.astro',
-    'src/pages/fr/apprendre/index.astro',
+    'src/components/learn/LearnHub.astro',
   ];
 
   test.each(FILES)('%s: .route-pill--normal:hover declares color', (path) => {

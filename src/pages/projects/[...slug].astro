@@ -1,73 +1,25 @@
 ---
-import {getCollection, type CollectionEntry} from 'astro:content';
-import Base from '../../layouts/Base.astro';
-import ProjectArt from '../../components/ProjectArt.astro';
-import {PAGE_STRINGS} from '../../lib/pageStrings';
-import {detectLocale, projectsHref, type Locale} from '../../lib/routeSegments.ts';
-import '../../styles/project-detail.css';
+// EN project detail: serves only English projects (Bug A fix — no more
+// locale loop that let the last locale's content win on /projects/* URLs).
+// Renders through the shared ProjectDetail component so the gamified
+// step-clearing and mark-done wiring live in one place for all locales.
+import {getCollection} from 'astro:content';
+import ProjectDetail from '../../components/projects/ProjectDetail.astro';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects');
-  const paths: {params: {slug: string}; props: {entry: CollectionEntry<'projects'>}}[] = [];
-  for (const locale of ['en', 'ar', 'es', 'fr'] as const) {
-    const localeProjects = projects.filter((entry) => {
-      if (locale === 'en') return !/^(ar|es|fr)\//.test(entry.slug);
-      return entry.slug.startsWith(`${locale}/`);
+  const paths = projects
+    .filter((entry) => !/^(ar|es|fr)\//.test(entry.slug))
+    .map((entry) => {
+      // Some EN files keep a legacy `slug: /projects/<name>` frontmatter that
+      // overrides entry.slug; normalize so the URL is /projects/<name>.
+      const slug = entry.slug.replace(/^\/?projects\//, '');
+      return {params: {slug}, props: {entry}};
     });
-    for (const entry of localeProjects) {
-      const slug = entry.slug.replace(new RegExp(`^(${locale}/)?`), '');
-      paths.push({
-        params: {slug},
-        props: {entry},
-      });
-    }
-  }
   return paths;
 }
 
 const {entry} = Astro.props;
-const locale = detectLocale(Astro.url.pathname);
-const s = PAGE_STRINGS[locale];
-const base = import.meta.env.BASE_URL;
-const {title, description} = entry.data;
-const {Content} = await entry.render();
-const slug = entry.slug.replace(new RegExp(`^(${locale}/)?`), '');
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'LearningResource',
-  name: title,
-  description,
-  learningResourceType: 'Project',
-  educationalLevel: 'Beginner',
-  isAccessibleForFree: true,
-  inLanguage: locale,
-  url: String(new URL(`${base}${projectsHref(locale, '', slug)}`, Astro.site)),
-  isPartOf: {
-    '@type': 'Course',
-    name: 'PyDA Course',
-    description: s.courseDescription,
-  },
-};
 ---
 
-<Base title={`${title} — PyDA Course`} description={description} lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'} jsonLd={jsonLd}>
-  <nav class="crumb container">
-    <a href={`${base}${projectsHref(locale, '')}`}>{s.projectsEyebrow}</a> <span>/</span> <span class="crumb__here">{title}</span>
-  </nav>
-
-  <div class="container">
-    <ProjectArt slug={slug} class="hero-art" />
-  </div>
-
-  <article class="container lesson-content">
-    <h1 class="project-title">{title}</h1>
-    <Content />
-  </article>
-</Base>
-
-<script>
-  import {viewProject} from '../../lib/gameState.ts';
-  const slug = location.pathname.replace(/.*\/projects\//, '').replace(/\/$/, '');
-  if (slug) viewProject(slug);
-</script>
-
+<ProjectDetail entry={entry} locale="en" />

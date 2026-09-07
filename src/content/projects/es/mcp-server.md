@@ -1,307 +1,391 @@
 ---
-title: "Construye un Servidor MCP"
-description: "Gradúate del playground en el navegador a Python de verdad: construye un servidor Model Context Protocol que expone tus propias herramientas, y conéctalo a un cliente de IA real como Claude Desktop."
+title: 'Servidor MCP'
+description: 'Construye un servidor MCP que exponga herramientas personalizadas para que Claude Code pueda usarlas en cualquier proyecto.'
+difficulty: intermediate
+estimatedMinutes: 120
+learningObjectives:
+  - Entender la arquitectura del Model Context Protocol (MCP)
+  - Implementar herramientas MCP que Claude Code pueda invocar
+  - Crear herramientas de lectura y escritura de archivos
+  - Conectar el servidor MCP con Claude Desktop o Claude Code
+  - Manejar autenticación y seguridad en herramientas MCP
+prerequisites:
+  - Python a nivel intermedio
+  - Conocimiento básico de APIs y servidores
+  - familiaridad con JSON y formato de mensajes
+  - Claude Desktop o Claude Code instalado
 ---
 
+## 🎯 Lo que harás
 
-# 🔌 Construye un Servidor MCP
+Vas a construir un servidor MCP (Model Context Protocol) que exponga herramientas personalizadas para Claude. Esto le permite a Claude interactuar con sistemas externos de forma segura y controlada.
 
-El [Model Context Protocol](https://modelcontextprotocol.io) (MCP) es una forma estándar para que un asistente de IA llame a código, herramientas y datos que viven fuera de él. Un *servidor* MCP es un pequeño programa que escribes tú y que expone un puñado de herramientas; un *cliente* MCP — Claude Desktop, por ejemplo — se conecta a ese servidor y deja que el modelo llame a esas herramientas en tu nombre, de la misma forma en que un navegador web es un cliente que habla con un servidor web. Este proyecto construye el lado del servidor: tus propias funciones de Python, registradas como herramientas MCP, invocables por un asistente de IA real corriendo en tu propia máquina.
+**Objetivo principal:** Crear un servidor MCP funcional con herramientas que Claude pueda invocar para leer, escribir y manipular datos en tu sistema.
 
-Esto asume Python 101 y comodidad escribiendo funciones simples — nada de Data Analysis es necesario. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para ver la lista completa, que sigue creciendo. Combina de forma natural con el [proyecto de Agente de IA](/docs/projects/ai-agent) — la misma idea subyacente, darle a una IA herramientas que puede llamar, abordada desde el lado opuesto: allí construiste el agente que llama a herramientas directamente, en el mismo proceso de Python; aquí construyes un servidor independiente al que *cualquier* cliente compatible con MCP puede conectarse, sin que ese cliente necesite saber nada de tu código más allá del protocolo.
+**Tu servidor podrá:**
 
-MCP es uno de los patrones más activamente adoptados para extender asistentes de IA en este momento — vale la pena haber construido uno, aunque sea una versión mínima, mientras siga siendo así de vigente.
+- **Exponer herramientas** que Claude pueda invocar desde cualquier proyecto
+- **Leer y escribir** archivos de forma segura
+- **Validar parámetros** de entrada automáticamente
+- **Manejar errores** de forma robusta
+- **Conectar con Claude** Desktop o Claude Code
 
-## 🎯 Qué harás
+Pasos:
 
-1. Instalar `uv` y configurar un pequeño proyecto con el SDK oficial de Python para MCP.
-2. Escribir un servidor MCP que exponga dos de tus propias herramientas, usando la API `FastMCP` del SDK.
-3. Ejecutar tu servidor en local y probar sus herramientas a mano con el MCP Inspector, antes de conectar cualquier cliente de IA real.
-4. Registrar tu servidor con el nivel gratuito de Claude Desktop y ver cómo realmente llama a tu código.
+- Paso 1: Diseña la arquitectura del servidor MCP
+- Paso 2: Implementa herramientas de lectura y escritura
+- Paso 3: Conecta con Claude Code
 
-## Dónde ejecutar esto
+Dónde ejecutar esto:
 
-**En local con `uv`** es el camino principal y recomendado para este proyecto, más aún que para la mayoría de los otros proyectos de esta serie — el objetivo entero es conectar tu servidor a Claude Desktop, y Claude Desktop es una app instalada en tu propia máquina. No hay forma de evitar hacer al menos el último paso en local.
+Trabaja desde la carpeta `projects/` de tu repo `pyda-course`.
 
-**GitHub Codespaces** es un lugar razonable para escribir y probar la *lógica de las herramientas en sí*: abre [todo el repositorio del curso en un Codespace gratuito](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python y `uv` ya están instalados, según el `.devcontainer/devcontainer.json` del repositorio), escribe `server.py`, y llama a tus funciones de herramienta directamente en una shell de Python, o incluso ejecuta `mcp dev server.py` y usa el Inspector a través del puerto reenviado del Codespace. Lo que un Codespace *no puede* ser es tu punto de conexión final con Claude Desktop — Claude Desktop corre en tu propio escritorio y necesita lanzar un proceso local con el que pueda hablar directamente; llegar hasta un Codespace desde ahí necesitaría un túnel adicional que está fuera del alcance de este proyecto. Trata Codespaces como bueno para los Pasos 1–3, y haz el Paso 4 en local.
+## Configuración
 
-**Google Colab y Kaggle no son un buen ajuste para este proyecto**, a diferencia de la mayoría de los demás en esta serie — sáltatelos aquí. Ninguno de los dos te da un proceso local persistente al que un cliente de IA de escritorio pueda conectarse; una celda de notebook que "ejecuta un servidor" en Colab no es alcanzable en absoluto por Claude Desktop en tu propia máquina.
-
-## Paso 1: Instalar `uv`
-### 1.1 `uv` es una única herramienta que reemplaza la cadena habitual de "instala Python, luego ins...
-
-**👟 Pista inicial :**
-
-`uv` es una única herramienta que reemplaza la cadena habitual de "instala Python, luego instala pip, luego instala una herramienta de entorno virtual, luego instala paquetes" — puede instalar y gestionar versiones de Python por sí misma, junto con las dependencias de tu proyecto.
-**macOS / Linux** (terminal):
+1. Crea un entorno virtual:
 
 ```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
+cd projects/mcp-server
+uv venv
+source .venv/bin/activate
 ```
 
-**🎯 Resultado esperado :**
-
-Deberías ver la salida esperada sin errores.
-
-**🩹 Si sale mal :**
-
-Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
-
-### 1.2 **Windows** (PowerShell):
-
-**👟 Pista inicial :**
-
-**Windows** (PowerShell):
-
-```powershell
-powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
-```
-
-**🎯 Resultado esperado :**
-
-Deberías ver la salida esperada sin errores.
-
-**🩹 Si sale mal :**
-
-Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
-
-### 1.3 Cierra y vuelve a abrir tu terminal, y luego confirma que se instaló:
-
-**👟 Pista inicial :**
-
-Cierra y vuelve a abrir tu terminal, y luego confirma que se instaló:
+2. Instala las dependencias del SDK MCP:
 
 ```bash
-uv --version
+uv pip install "mcp[cli]"
 ```
 
-**🎯 Resultado esperado :**
-
-Deberías ver la salida esperada sin errores.
-
-**🩹 Si sale mal :**
-
-Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
-
-### 1.4 Luego configura un proyecto e instala el SDK oficial de Python para MCP, con su extra opcion...
-
-**👟 Pista inicial :**
-
-Luego configura un proyecto e instala el SDK oficial de Python para MCP, con su extra opcional `cli` (esto es lo que te da el comando `mcp dev` usado en el Paso 3):
+3. Verifica la instalación:
 
 ```bash
-uv init mcp-server
-cd mcp-server
-uv add "mcp[cli]"
+python -c "import mpc; print('MCP SDK listo')"
 ```
 
-**🎯 Resultado esperado :**
+---
 
-Deberías ver la salida esperada sin errores.
+## Paso 1: Diseña la arquitectura del servidor MCP
 
-**🩹 Si sale mal :**
+Antes de escribir código, necesitas entender cómo funciona MCP y diseñar la estructura de tu servidor.
 
-Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+### 1.1 Entiende el protocolo MCP
 
-### 1.5 Verifica
+MCP es un protocolo que permite a los modelos de lenguaje interactuar con herramientas externas a través de un servidor. El flujo básico es:
 
-## Paso 2: Escribe tu primer servidor MCP
-### 2.1 La API de alto nivel del SDK, `FastMCP`, convierte una función de Python ordinaria en una he...
+1. **Claude** envía una solicitud de herramienta al servidor MCP
+2. **El servidor** valida los parámetros y ejecuta la herramienta
+3. **El servidor** retorna el resultado a Claude
+4. **Claude** usa el resultado para continuar su razonamiento
 
-**👟 Pista inicial :**
+### 1.2 Crea la estructura del proyecto
 
-La API de alto nivel del SDK, `FastMCP`, convierte una función de Python ordinaria en una herramienta MCP con un solo decorador — sin código a nivel de protocolo que escribir a mano. Crea `server.py`:
+```bash
+mkdir -p tools config tests
+```
+
+### 1.3 Crea el archivo de configuración
+
+Crea `config.py`:
 
 ```python
-# server.py
 from pathlib import Path
 
+BASE_DIR = Path(__file__).parent
+TOOLS_DIR = BASE_DIR / "tools"
+TESTS_DIR = BASE_DIR / "tests"
+
+# Configuración del servidor
+SERVER_NAME = "pyda-mcp-server"
+SERVER_VERSION = "1.0.0"
+
+# Configuración de seguridad
+ALLOWED_DIRECTORIES = [
+    Path.home() / "projects",
+    Path.home() / "documents",
+]
+MAX_FILE_SIZE_MB = 10
+BLOCKED_EXTENSIONS = [".exe", ".dll", ".so", ".dylib"]
+```
+
+### Verifica
+
+- Los directorios se crean correctamente
+- La configuración carga sin errores
+- Las rutas son consistentes
+
+### Checklist
+
+- [ ] Estructura de directorios creada
+- [ ] Configuración del servidor definida
+- [ ] Directorios permitidos configurados
+- [ ] Extensiones bloqueadas definidas
+
+---
+
+## Paso 2: Implementa herramientas de lectura y escritura
+
+Ahora vamos a crear las herramientas que Claude podrá invocar.
+
+### 2.1 Crea la herramienta de lectura de archivos
+
+Crea `tools/file_tools.py`:
+
+```python
+from mcp.types import Tool, TextContent
+from pathlib import Path
+from config import ALLOWED_DIRECTORIES, MAX_FILE_SIZE_MB, BLOCKED_EXTENSIONS
+
+async def read_file(path: str) -> list[TextContent]:
+    """Lee el contenido de un archivo de forma segura."""
+    file_path = Path(path).resolve()
+
+    # Verificar que el archivo esté en un directorio permitido
+    if not any(file_path.is_relative_to(d) for d in ALLOWED_DIRECTORIES):
+        return [TextContent(type="text", text=f"Error: Acceso denegado a {path}")]
+
+    # Verificar extensión
+    if file_path.suffix in BLOCKED_EXTENSIONS:
+        return [TextContent(type="text", text=f"Error: Extensión no permitida: {file_path.suffix}")]
+
+    # Verificar tamaño
+    if file_path.exists() and file_path.stat().st_size > MAX_FILE_SIZE_MB * 1024 * 1024:
+        return [TextContent(type="text", text=f"Error: Archivo demasiado grande (máx {MAX_FILE_SIZE_MB}MB)")]
+
+    try:
+        content = file_path.read_text(encoding="utf-8")
+        return [TextContent(type="text", text=content)]
+    except FileNotFoundError:
+        return [TextContent(type="text", text=f"Error: Archivo no encontrado: {path}")]
+    except PermissionError:
+        return [TextContent(type="text", text=f"Error: Sin permisos para leer: {path}")]
+    except UnicodeDecodeError:
+        return [TextContent(type="text", text=f"Error: No se pudo decodificar (encoding no soportado)")]
+
+async def write_file(path: str, content: str) -> list[TextContent]:
+    """Escribe contenido en un archivo de forma segura."""
+    file_path = Path(path).resolve()
+
+    # Verificar directorio permitido
+    if not any(file_path.is_relative_to(d) for d in ALLOWED_DIRECTORIES):
+        return [TextContent(type="text", text=f"Error: Acceso denegado a {path}")]
+
+    # Verificar extensión
+    if file_path.suffix in BLOCKED_EXTENSIONS:
+        return [TextContent(type="text", text=f"Error: Extensión no permitida: {file_path.suffix}")]
+
+    try:
+        file_path.parent.mkdir(parents=True, exist_ok=True)
+        file_path.write_text(content, encoding="utf-8")
+        return [TextContent(type="text", text=f"Archivo escrito exitosamente: {path}")]
+    except PermissionError:
+        return [TextContent(type="text", text=f"Error: Sin permisos para escribir: {path}")]
+```
+
+### 2.2 Crea la herramienta de listado de directorios
+
+```python
+async def list_directory(path: str = ".") -> list[TextContent]:
+    """Lista el contenido de un directorio."""
+    dir_path = Path(path).resolve()
+
+    # Verificar directorio permitido
+    if not any(dir_path.is_relative_to(d) for d in ALLOWED_DIRECTORIES):
+        return [TextContent(type="text", text=f"Error: Acceso denegado a {path}")]
+
+    try:
+        items = []
+        for item in sorted(dir_path.iterdir()):
+            prefix = "📁 " if item.is_dir() else "📄 "
+            size = f" ({item.stat().st_size / 1024:.1f}KB)" if item.is_file() else ""
+            items.append(f"{prefix}{item.name}{size}")
+
+        return [TextContent(type="text", text="\n".join(items) if items else "Directorio vacío")]
+    except PermissionError:
+        return [TextContent(type="text", text=f"Error: Sin permisos para listar: {path}")]
+```
+
+### 2.3 Registra las herramientas en el servidor MCP
+
+Crea `server.py`:
+
+```python
 from mcp.server.fastmcp import FastMCP
+from tools.file_tools import read_file, write_file, list_directory
+from config import SERVER_NAME, SERVER_VERSION
 
-mcp = FastMCP("course-tools")  # the name your AI client will show for this server
+# Crear servidor MCP
+mcp = FastMCP(SERVER_NAME, version=SERVER_VERSION)
 
-DOCS_DIR = Path.home() / "path" / "to" / "python-data-analysis-course" / "docs"  # adjust this
-
+# Registrar herramientas
 @mcp.tool()
-def search_course_topics(query: str) -> str:
-    """Search this course's lesson files for a topic and report which pages mention it.
+async def read_file_tool(path: str) -> str:
+    """Lee el contenido de un archivo en el sistema.
 
-    Looks through every .md file under docs/ for `query` (case-insensitive) and
-    returns each matching file's name plus one line of context. Call this when
-    someone asks whether, or where, a topic is covered in the course.
+    Args:
+        path: Ruta completa al archivo a leer
     """
-    query_lower = query.lower()
-    matches = []
-    for path in sorted(DOCS_DIR.rglob("*.md")):
-        for line in path.read_text(encoding="utf-8", errors="ignore").splitlines():
-            if query_lower in line.lower():
-                matches.append(f"{path.name}: \"{line.strip()[:120]}\"")
-                break
-        if len(matches) >= 5:
-            break
-    return "Found in:\n" + "\n".join(matches) if matches else f"No lesson pages mention '{query}'."
+    result = await read_file(path)
+    return result[0].text
 
 @mcp.tool()
-def count_words(text: str) -> int:
-    """Count the words in a piece of text, splitting on whitespace."""
-    return len(text.split())
+async def write_file_tool(path: str, content: str) -> str:
+    """Escribe contenido en un archivo del sistema.
+
+    Args:
+        path: Ruta completa al archivo a escribir
+        content: Contenido a escribir en el archivo
+    """
+    result = await write_file(path, content)
+    return result[0].text
+
+@mcp.tool()
+async def list_directory_tool(path: str = ".") -> str:
+    """Lista el contenido de un directorio.
+
+    Args:
+        path: Ruta al directorio a listar (por defecto: directorio actual)
+    """
+    result = await list_directory(path)
+    return result[0].text
 
 if __name__ == "__main__":
     mcp.run()
 ```
-`@mcp.tool()` está haciendo todo el trabajo de registro aquí: inspecciona el nombre de la función, sus parámetros con anotaciones de tipo, y su docstring, y construye una definición de herramienta MCP a partir de ellos automáticamente — nunca escribes un esquema a mano. Esta es la misma idea que enseña el [proyecto de Agente de IA](/docs/projects/ai-agent) para las herramientas de LangChain: **el modelo lee tu docstring, no tu código, para decidir cuándo una herramienta encaja con una solicitud.** Un docstring vago no le da al modelo nada con qué guiarse; un docstring que dice claramente qué hace la herramienta y cuándo llamarla es lo que realmente hace que funcione la selección de herramientas.
-`search_course_topics` es deliberadamente la misma idea que la herramienta de juguete del proyecto de Agente de IA — buscar en los propios archivos de este curso un tema — pero expuesta a través del decorador de herramientas de MCP en lugar de pasada directamente a la lista `tools=[...]` de un agente. `count_words` es una utilidad más pequeña e independiente, incluida para mostrar un servidor que expone más de una herramienta a la vez — un cliente MCP ve ambas y elige la que encaje con una pregunta dada.
-:::tip[Revisa la documentación actual del SDK de MCP antes de confiar en esto]
-MCP es una especificación joven y de rápido movimiento — el protocolo mismo, y la propia API del SDK de Python, han cambiado desde las primeras versiones. El estilo basado en decoradores de `FastMCP` ha sido estable por un tiempo, pero antes de construir algo más allá de esta lección, hojea el [README y la documentación propios del SDK](https://github.com/modelcontextprotocol/python-sdk) en lugar de asumir que los detalles de este fragmento siguen coincidiendo exactamente.
-:::
 
-**🎯 Resultado esperado :**
+### Verifica
 
-Deberías ver la salida esperada sin errores.
+- Las herramientas registran correctamente con `@mcp.tool()`
+- Cada herramienta tiene docstrings descriptivos
+- Los parámetros tienen anotaciones de tipo
+- El servidor se inicia sin errores
 
-**🩹 Si sale mal :**
+### Checklist
 
-Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+- [ ] `read_file` valida permisos y extensiones
+- [ ] `write_file` crea directorios si no existen
+- [ ] `list_directory` muestra archivos y carpetas
+- [ ] El servidor MCP registra todas las herramientas
+- [ ] Los errores se manejan de forma robusta
 
-### 2.2 Verifica
+---
 
-**✅ Lista de verificación**
+## Paso 3: Conecta con Claude Code
 
-- ✅ `server.py` se guarda sin errores de sintaxis y define tanto `search_course_topics` como `count_words`.
-- ✅ Cada herramienta tiene un docstring real, en inglés/español simple — no un placeholder.
-- ✅ `DOCS_DIR` apunta a una carpeta `docs/` real que realmente existe en tu máquina.
+El último paso es configurar Claude Code para que use tu servidor MCP.
 
-**🤔 Pregunta(s) socrática(s)**
+### 3.1 Configura el servidor en Claude Desktop
 
-- ¿Qué pasaría si dos de tus herramientas tuvieran docstrings muy parecidos? ¿Cómo podría un modelo elegir entre ellas, y qué sugiere eso sobre escribir docstrings para un servidor con muchas herramientas?
-- `search_course_topics` devuelve un string, no datos estructurados. ¿Qué perderías, o ganarías, devolviendo en su lugar una lista de coincidencias?
+Crea o edita el archivo de configuración de Claude Desktop:
 
-## Paso 3: Ejecuta y prueba tu servidor en local
-### 3.1 Antes de conectar esto a cualquier cliente de IA real, ejecútalo por su cuenta y confirma qu...
-
-**👟 Pista inicial :**
-
-Antes de conectar esto a cualquier cliente de IA real, ejecútalo por su cuenta y confirma que las herramientas realmente funcionan. El SDK trae un comando **dev/inspector** exactamente para esto:
-
-```bash
-uv run mcp dev server.py
-```
-
-**🎯 Resultado esperado :**
-
-Deberías ver la salida esperada sin errores.
-
-**🩹 Si sale mal :**
-
-Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
-
-### 3.2 Esto arranca tu servidor y abre el **MCP Inspector** — una herramienta gratuita basada en na...
-
-**👟 Pista inicial :**
-
-Esto arranca tu servidor y abre el **MCP Inspector** — una herramienta gratuita basada en navegador que te permite llamar a `search_course_topics` y `count_words` a mano, pasar argumentos de prueba, y ver los valores de retorno reales, sin ningún modelo de IA involucrado en absoluto. (La primera ejecución podría pedirte instalar un pequeño paquete proxy basado en `npx` que usa el Inspector; acéptalo.)
-Prueba ambas herramientas aquí antes de continuar: llama a `search_course_topics` con una consulta que sepas que aparece en `docs/` (p. ej. `"groupby"`), y a `count_words` con una oración corta. Si alguna se comporta mal, estás ante un bug en tu función de Python — arréglalo aquí, donde la única pieza móvil es tu propio código, en lugar de depurarlo más tarde con Claude Desktop en el bucle, donde un resultado incorrecto podría ser igual de fácilmente un problema de conexión, un error tipográfico de configuración, o el modelo eligiendo la herramienta equivocada.
-También puedes simplemente ejecutar el servidor directamente, sin el Inspector, para confirmar que arranca limpiamente:
-
-```bash
-uv run python server.py
-```
-No imprimirá nada por sí solo — un servidor MCP se queda esperando a que un cliente se conecte por stdio. El silencio aquí es esperado, no un bug; usa `Ctrl+C` para detenerlo.
-:::tip[Prueba con el Inspector antes de tocar un cliente real]
-Es tentador saltar directo a Claude Desktop. Resiste eso — el Inspector aísla el código de tu herramienta de todo lo demás que puede salir mal en una conexión de cliente real (rutas de configuración, reinicios, la propia selección de herramientas del modelo). Consigue que ambas herramientas funcionen ahí primero.
-:::
-
-**🎯 Resultado esperado :**
-
-Deberías ver la salida esperada sin errores.
-
-**🩹 Si sale mal :**
-
-Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
-
-### 3.3 Verifica
-
-**✅ Lista de verificación**
-
-- ✅ `uv run mcp dev server.py` arranca sin errores y abre el Inspector en tu navegador.
-- ✅ El Inspector lista tanto `search_course_topics` como `count_words`.
-- ✅ Llamar a cada herramienta a mano en el Inspector devuelve un resultado real y correcto — no un error.
-
-**🤔 Pregunta(s) socrática(s)**
-
-- Si `search_course_topics` devolviera un error en lugar de un resultado, ¿cómo distinguirías si el bug está en tu código de Python o en la propia conexión MCP? ¿Qué te da probar primero con el Inspector?
-- ¿Por qué podría importar que el Inspector no necesite ningún modelo de IA en absoluto para probar tus herramientas?
-
-## Paso 4: Conéctalo a Claude Desktop
-### 4.1 El nivel gratuito de [Claude Desktop](https://claude.ai/download) admite conectarse a servid...
-
-**👟 Pista inicial :**
-
-El nivel gratuito de [Claude Desktop](https://claude.ai/download) admite conectarse a servidores MCP locales. Lee un archivo de configuración JSON que le indica qué servidores lanzar y cómo:
-- **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
-- **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
-Si el archivo todavía no existe, créalo. Agrega tu servidor, usando una ruta **absoluta** a la carpeta de tu proyecto:
+**En macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
+**En Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
 
 ```json
 {
   "mcpServers": {
-    "course-tools": {
-      "command": "uv",
-      "args": ["run", "--directory", "/absolute/path/to/mcp-server", "python", "server.py"]
+    "pyda-mcp": {
+      "command": "python",
+      "args": ["/ruta/a/tu/proyecto/server.py"],
+      "env": {}
     }
   }
 }
 ```
-`command` y `args` describen exactamente el proceso que Claude Desktop va a lanzar para hablar con tu servidor — la misma invocación de `uv run` que ya probaste en el Paso 3, solo que iniciada por Claude Desktop en lugar de por ti. Usar `uv run` (en lugar de un `python` a secas) importa aquí: Claude Desktop lanza este comando en su propio entorno, sin ninguna garantía de que el entorno virtual de tu proyecto ya esté activo, y `uv run` encuentra y usa el correcto por su cuenta.
-**Cierra completamente y reinicia Claude Desktop** — una instancia en ejecución no vuelve a leer este archivo por su cuenta. Una vez que reinicie, tu servidor debería aparecer en su lista de herramientas/conectores (usualmente detrás de un pequeño ícono cerca de la caja de mensajes). Pídele algo que debería disparar una llamada a herramienta, p. ej.:
-> Does the Python course cover groupby? Use the course-tools search if you have it.
-Claude Desktop debería mostrar que llama a `search_course_topics` (a menudo como un pequeño bloque colapsable de "usó una herramienta" en la conversación, con los argumentos y el resultado visibles si lo expandes), y luego responder usando el resultado real que devolvió tu función — no una suposición de los datos de entrenamiento del modelo.
 
-**🎯 Resultado esperado :**
+### 3.2 Configura para Claude Code
 
-Deberías ver la salida esperada sin errores.
+Para Claude Code, crea un archivo `.mcp.json` en la raíz de tu proyecto:
 
-**🩹 Si sale mal :**
+```json
+{
+  "mcpServers": {
+    "pyda-mcp": {
+      "command": "python",
+      "args": ["/ruta/a/tu/proyecto/server.py"],
+      "env": {}
+    }
+  }
+}
+```
 
-Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+### 3.3 Prueba la conexión
 
-### 4.2 Verifica
+1. Reinicia Claude Desktop o Claude Code
+2. Verifica que las herramientas aparezcan en la interfaz
+3. Prueba con un comando como: "Lee el archivo /ruta/a/archivo.txt"
 
-**✅ Lista de verificación**
+### 3.4 Agrega autenticación (opcional)
 
-- ✅ `course-tools` (o el nombre de servidor que elegiste) aparece en la lista de herramientas/conectores de Claude Desktop después de un reinicio completo.
-- ✅ Preguntar algo que debería disparar `search_course_topics` realmente muestra a Claude llamándola, no solo respondiendo de memoria.
-- ✅ El resultado que Claude muestra usar coincide con lo que viste al probar la misma llamada en el Inspector.
+Para producción, agrega validación de tokens:
 
-**🤔 Pregunta(s) socrática(s)**
+```python
+import os
+from functools import wraps
 
-- Claude Desktop decide por su cuenta si llama a tu herramienta para un mensaje dado. ¿Qué frase en tu pregunta de prueba hizo eso más o menos probable, y por qué crees que es así?
-- Si preguntaras algo completamente ajeno al curso, ¿esperarías que Claude llamara a `search_course_topics` de todas formas? ¿Qué te diría eso sobre cómo está decidiendo realmente el modelo cuándo una herramienta es relevante?
+def require_auth(func):
+    """Decorator para requerir autenticación."""
+    @wraps(func)
+    async def wrapper(*args, **kwargs):
+        token = os.environ.get("MCP_AUTH_TOKEN")
+        if not token:
+            return [TextContent(type="text", text="Error: Token de autenticación no configurado")]
+        return await func(*args, **kwargs)
+    return wrapper
 
-## ⚠️ Errores comunes
+@mcp.tool()
+@require_auth
+async def secure_read_file(path: str) -> str:
+    """Versión segura de read_file con autenticación."""
+    result = await read_file(path)
+    return result[0].text
+```
 
-- **Una ruta relativa o incorrecta en el archivo de configuración.** `claude_desktop_config.json` necesita una ruta absoluta a la carpeta de tu proyecto — una relativa no tiene ningún "directorio actual" consistente contra el cual resolverse cuando Claude Desktop lanza tu servidor, y simplemente fallará al iniciarlo.
-- **Olvidar reiniciar completamente Claude Desktop después de editar la configuración.** Guardar el archivo JSON por sí solo no hace nada — la app solo lo lee al arrancar, así que cerrar y volver a abrir una ventana tampoco es suficiente; cierra la app por completo primero.
-- **Un docstring demasiado vago para que el modelo elija la herramienta correcta.** `"""Does stuff with text."""` no le da al modelo nada con qué comparar una pregunta real. Di claramente qué hace la herramienta e, idealmente, cuándo llamarla — exactamente como el docstring de `search_course_topics` de arriba.
-- **Ejecutar el servidor con `python server.py` a secas en lugar de `uv run python server.py`.** Sin `uv run`, el intérprete que arranca podría no ser aquel en el que `uv add` instaló `mcp`, y obtendrás un `ModuleNotFoundError` para `mcp` aunque `uv add` haya dicho claramente que se instaló con éxito.
+### Verifica
 
-## Lo que acabas de construir
+- Claude Desktop/Code detecta el servidor MCP
+- Las herramientas aparecen disponibles
+- Claude puede invocar las herramientas correctamente
+- Los errores se muestran de forma clara
 
-Dos pequeñas herramientas son un ejemplo de juguete, pero la forma es real: un proceso independiente que expone funciones de Python a través de un protocolo estándar, conectable a cualquier cliente compatible con MCP sin que ese cliente sepa nada de tu código más allá de los nombres de las herramientas, sus argumentos y sus docstrings. Ese es el punto real de MCP — el mismo servidor que acabas de construir funcionaría sin modificaciones con un cliente MCP completamente distinto, algo que no es cierto de la lista `tools=[...]` fuertemente acoplada del proyecto de Agente de IA.
+### Checklist
 
-## A dónde ir desde aquí
+- [ ] La configuración del servidor es correcta
+- [ ] Claude detecta las herramientas disponibles
+- [ ] Las herramientas funcionan correctamente
+- [ ] Los errores se manejan de forma robusta
+- [ ] (Opcional) La autenticación funciona
 
-- Dale a `search_course_topics` (o a una herramienta nueva) acceso a algo genuinamente más útil que texto de lecciones — un pequeño archivo local, un dataset real, un script que ejecute un cálculo que realmente necesites.
-- Lee sobre **recursos** y **prompts** de MCP — esta lección solo cubre *herramientas*, pero el protocolo también define formas de exponer datos legibles (recursos) y plantillas de prompt reutilizables (prompts) a un cliente. La [documentación propia del SDK](https://github.com/modelcontextprotocol/python-sdk) cubre ambos, con el mismo estilo de decorador `FastMCP`.
-- Ya que la especificación está evolucionando activamente, revisa periódicamente la [documentación oficial de MCP](https://modelcontextprotocol.io) por si algo cambió desde que construiste esto — nuevas opciones de transporte y capacidades de cliente han estado llegando a un ritmo constante.
+---
 
-:::tip[Ejecuta una versión más completa sin ninguna configuración local — al menos para la lógica de las herramientas]
-[`examples/mcp-server/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/mcp-server) en el repositorio del curso es una versión ligeramente más completa del código de arriba, con `search_course_topics` conectado a la carpeta `docs/` real del repositorio en el que se ejecuta (sin ninguna ruta que editar a mano). Clónalo, o abre todo el repositorio en un [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), para probar ambas herramientas con `uv run mcp dev server.py` — recordando que la conexión real a Claude Desktop todavía necesita ocurrir en local, según "Dónde ejecutar esto" arriba.
-:::
+## 🩹 Si sale mal
 
-## Comparte tu proyecto con la clase
+**Claude no detecta el servidor MCP:**
+Verifica que la ruta en la configuración sea correcta. Asegúrate de que el servidor pueda ejecutarse sin errores ejecutando `python server.py` directamente.
 
-¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado — y su README tiene un recorrido completo y amigable para principiantes para agregar el tuyo vía un **pull request**, incluso si nunca has usado git antes: hacer fork del repositorio, crear una rama, hacer commit de tus archivos, y abrir el PR, un paso a la vez. No se asume ninguna experiencia previa con git.
+**Las herramientas no aparecen en Claude:**
+Reinicia Claude Desktop completamente. Verifica que el JSON de configuración sea válido (sin comas extra).
 
-Bienvenido a escribir Python fuera del navegador. 🎓
+**Error de permisos al acceder a archivos:**
+Verifica que `ALLOWED_DIRECTORIES` incluya las rutas que necesitas. Los directorios home están bloqueados por defecto por seguridad.
 
+---
+
+## 🧠 Preguntas socráticas
+
+- ¿Qué tipos de herramientas MCP serían útiles para tu flujo de trabajo diario?
+- ¿Cómo balancearías seguridad y funcionalidad en las herramientas MCP?
+- ¿Qué pasaría si pudieras conectar múltiples servidores MCP en paralelo?
+- ¿Cómo monitorearías el uso de herramientas MCP en producción?
+
+---
+
+## 🎓 ¿Qué sigue?
+
+Tu servidor MCP está funcionando. Ahora puedes:
+
+- **Agregar más herramientas**: Conectar APIs externas, bases de datos, servicios web
+- **Mejorar la seguridad**: Implementar rate limiting, logging, auditoría
+- **Crear herramientas de ML**: Exponer modelos de predicción como herramientas MCP
+- **Documentar tus herramientas**: Crear documentación automática de las herramientas disponibles
+
+Si quieres crear herramientas más sofisticadas, revisa la skill de **AI Agent** para aprender a construir agentes autónomos que usen tus herramientas MCP.

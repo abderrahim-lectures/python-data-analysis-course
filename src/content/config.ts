@@ -76,6 +76,7 @@ const projectsCollection = defineCollection({
       .enum(["beginner", "intermediate", "advanced"])
       .optional(),
     estimatedMinutes: z.number().optional(),
+    xpReward: z.number().default(50),
     tags: z.array(z.string()).default([]),
     prerequisites: z.array(z.string()).default([]),
     learningObjectives: z.array(z.string()).default([]),

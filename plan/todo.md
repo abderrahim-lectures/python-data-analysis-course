@@ -1064,3 +1064,95 @@ Made all 116 project files (29 EN + 29 ES + 29 AR + 29 FR) properly listed, filt
 - FR directory name on disk is `src/pages/fr/projets/` (not `proجات`)
 - User wants 100+ projects per locale (currently 29 per locale = 116 total)
 - 5 missing examples found in `examples/` without markdown files (only .venv dirs)
+
+## Session 2026-09-06 (opencode) — shared components for the locale learn tree
+
+### Done
+- Created `src/components/learn/` shared components: `LearnHub.astro`, `SectionLanding.astro`, `TrackHub.astro`, `ModulePage.astro`, `LessonPage.astro`
+- Added `src/lib/sections.ts`: SECTION_ICONS, TRACK_ICONS, sectionName/Description/Icon, trackName
+- Added `moduleLabel`/`moduleLessonsLabel`/`lessonLabel` to `pageStrings.ts` (interface + en/ar/es/fr)
+- Cut the 3 locale hubs + 3 `[section]/index.astro` + 12 lesson + 12 module pages down to thin wrappers delegating to the shared components:
+  - `src/pages/{ar/تعلم,es/aprender,fr/apprendre}/index.astro` → `<LearnHub locale>`
+  - `…/[section]/index.astro` → `<SectionLanding>` (getStaticPaths now derives sections from `modules` collection, not the empty `learn` collection)
+  - `…/{python-101,data-analysis}/[track]/index.astro` → `<TrackHub>` (6 files; 3 old static `normal/index.astro` track hubs deleted)
+  - `…/[section]/[track]/modules/[module].astro` → `<ModulePage>` (3 files; 3 old static `python-101/normal/modules/[module].astro` deleted)
+  - `…/[section]/[track]/lessons/[lesson].astro` → `<LessonPage>` (3 files; 12 old static `lessons/[lesson].astro` deleted across all tracks)
+- Fixed path rel-base bugs: locale hub route pills point at `learnHref(…/normal|hard)` not `weekHref(…week-1)`; lesson prev/next + module nav + crumbs use `lessonHref`/`moduleHref`/`NAV_WORDS` so nothing bounces into `learn/`
+- LessonPage includes Quiz + InteractiveChallenge with `lessonId = ${section}/${track}/${slug}` (parity with EN; AR/ES/FR templates previously omitted Quiz and FR had a literal `${}` bug in lessonId)
+- Tests updated: `moduleWiring.test.ts` asserts `ModuleNav.astro` has `module-nav__prev/next` (was asserting the removed inline markup); `i18n.test.ts` HUBS grid check and `hoverColor.test.ts` route-pill checks retargeted from locale hub files to `src/components/learn/LearnHub.astro`
+
+### Verified
+- `astro check`: only 1 pre-existing error remains (`src/components/Quiz.astro:129` `hidden` — not touched this session)
+- `astro build`: 1272 pages (was ~1212; +60 from hard/data-analysis track hubs/modules/lessons)
+- `vitest run tests/unit`: 510/510 pass, 9 files
+- `dist/` scan: zero `href="/learn/` leaks under `dist/{ar,es,fr}`; hard-track and data-analysis module/lesson pages all resolve
+
+### Notes / for next time
+- The locale trees are 100% module-based via shared components now; the `learn` nav word stays the only localized URL word, track words are untranslated `normal`/`hard`, `modules`/`lessons` dirs stay English (matches reality; `TRACK_WORDS`/`MODULE_WORDS`/`LESSON_WORDS`/`weekHref` are now unused in locale pages)
+- Next queued workstream: projects listing i18n (`src/pages/projects/index.astro`, `src/lib/projectArt.ts`, `src/pages/projects/[...slug].astro`) — empty locale listings, wrong-i18n listings, overlapping listings, `/projects/code-review-bot` i18n
+
+## Session 2026-09-06 (opencode) — project i18n routing fixes + shared project components + XP rebalance
+
+### Done
+- **Bug A fixed**: EN `src/pages/projects/[...slug].astro` was looping all 4 locales in `getStaticPaths`; last (fr) won → `/projects/code-review-bot` served French. Now EN-only (`/projects/<slug>` serves EN), with legacy `slug: /projects/<name>` normalization so all 135 EN projects land at clean `/projects/<name>` URLs (was `/projects/projects/<name>` for 34 files).
+- **Bug B fixed**: locale listing card hrefs were hardcoded `projects/<slug>` (wrong — bounced to `/ar/projects/...` → 404); moved to `projectsHref(locale, base, slug)` inside the new shared card.
+- **Shared project components created** (`src/components/projects/`): `ProjectDetail.astro` (consolidates all 4 detail templates; adds `viewProject`/`recordProjectStep`/`completeProject` wiring — every `## Step N:` heading is click-to-clear for +15 XP, plus a `data-mark-project-done` button for +100 XP + quests), `ProjectCard.astro` (single card markup for all locales), `ProjectListing.astro` (single finder/grid for all locales, correct per-locale counts 135/134/134/134). All 8 project route files faded to thin wrappers.
+- **XP rebalance** (in `gameState.ts`, per user request): LESSON_COMPLETE 100→60, PROJECT_STEP 10→15, PROJECT_COMPLETE 50→100, STREAK_BONUS 10→15, STREAK_MILESTONE 25→30, CHALLENGE_COMPLETE 10→15. Added dedicated `projectsSteps: Record<string, boolean>` namespace (was overloading `challengesCompleted`), step quests (`first-project-step`, `project-steps-10/25/50`) in `questsToShow`, `projectStats` now returns `{viewed, completed, steps}`. Exported `XP` for display reuse. `projectStats()` used by progress page.
+- **pageStrings**: added per-locale `projectMarkDone`/`projectDoneHint`/`projectCompleted`.
+
+### Verified
+- `astro check`: only 1 pre-existing error remains (Quiz.astro:129 `hidden`)
+- `astro build`: clean; `dist/projects/` has 135 EN + locale dirs; zero French leak on `/projects/code-review-bot`; hreflang alternates resolve to real locale pages
+- `vitest run tests/unit`: 510/510 (updated `gameState.test.ts` expected XP values + `jsonLd.test.ts` to assert ProjectDetail holds the schema)
+
+### Notes / for the other agent
+- `gameState.ts` now has `projectsSteps` (dedicated step namespace) — if you were planning step tracking with `challengesCompleted`, use `projectsSteps` + `recordProjectStep(projectSlug, stepIdx)`.
+- The 18 in-flight project content rewrites (weather-dashboard, data-visualization, chatbot-builder, …) use `## Step N — Title` (em-dash, no colon) — they DO match the shared component's `/^Step\s+\d+/` click-to-clear, and already carry `**Expected output:**`/`**If it's off:**`. To fully hit the guided standard add `**👟 Starter hint:**`, `**✅ Checklist**`, `**🤔 Socratic Question(s)**` + a `**Setup**` checklist + `## 🎯 What you'll do` + `## Where to run this` (see `agentic-code-reviewer.md` gold standard).
+- 34 EN projects have `slug: /projects/<name>` in frontmatter — kept (they're the guided tier), normalization happens in the EN detail route.
+- Next queued workstream: master guided-project content guide + rewriting the 30 partial / 77 pitch-only EN projects to the gold standard, then examples/ + notebooks, translations, and citations in learn content.
+
+## Session 2026-09-06 (opencode) — full EN guided-tier conversion
+
+### Done
+- Wrote the master content spec: `plan/guided-project-guide.md` (structure, marker vocabulary, style rules, notebook contract, pitch→guided checklist).
+- Rewrote **91 project files** to the gold guided+gamified standard (15 partial + 76 pitch-only), each with `## 🎯 What you'll do`, `## Where to run this` (+notebook badges), `## Setup` + checklist, 4–7 `## Step N:` with 👟/🎯/🩹/✅/🤔 per step, ⚠️ Common pitfalls, What you just built / Where to go from here / Share with class.
+- **EN tier outcome: 123/135 gold, 12 partial (all owned by the other agent's in-flight edits), 0 pitch-only.** The 12 remaining partial (ai-story-writer, anomaly-detector, cli-framework, document-converter, knowledge-base, ml-classifier, note-taking-app, password-generator, scrape-analyze, sentiment-dashboard, spreadsheet-tool, weather-dashboard) are being rewritten by the Claude agent using `**Expected output:**`/`**If it's off:**` (no emoji) — to reach gold they'd add `## 🎯 What you'll do`, `**👟 Starter hint:**`, `**✅ Checklist**`, `**🤔 Socratic Question(s)**` per step. NOT touched by me (collab protocol).
+- Fixed 2 build blockers introduced by rewrites: `report-builder.md` YAML colon-in-list trap; 6 batch-3 files missing `👟 Starter hint` (added by follow-up). Verified 0 unquoted `colon+space` in any project frontmatter.
+
+### Verified
+- `astro check`: only pre-existing Quiz.astro:129 error.
+- `astro build`: clean; 135 EN project pages at `/projects/<name>/` (no `/projects/projects/` nesting); `%title%` renders imperative titles.
+- `vitest run tests/unit`: 510/510.
+- Step-clearing tiles verified in rendered HTML (`<h2 id="step-N-...">Step N`).
+
+### Notes / for next work
+- 12 in-flight partial files belong to the other agent (see claude-collab). Coordinate before touching.
+- Next queued: `examples/<slug>/notebook.ipynb` per rewritten project (135 EN), then locale ar/es/fr sync, then citations of projects in python-101/data-analysis learn content.
+
+## Session 2026-09-06 (opencode) — notebooks for all rewritten EN projects
+
+### Done
+- Built a faithful converter (`/tmp/opencode/make_notebooks.py`) that mirrors each gold project page's markdown + code chunks into `examples/<slug>/notebook.ipynb`: markdown cells preserve step intro + 👟/🎯/🩹/✅/🤔 markers; python fences become runnable code cells; bash/powershell setup fences become markdown instruction cells. Writes a badge-linked `README.md` per example dir too.
+- Generated notebooks for **96 projects** (all rewritten in the previous session); total example notebooks now 124.
+- Validated all 96: nbformat 4.5, every cell has `id`+`source` (+`outputs`/`execution_count` for code cells); 0 bad.
+
+### Notes / for the other agent
+- 23 pre-existing hand-written notebooks (agentic-code-reviewer, ai-agent, ml-classifier, …) lack cell `id` fields — legacy Jupyter format, untouched. If you normalize them, add 12-char uuid `id` + `outputs: []` to be consistent with the 96 new ones.
+- The 12 in-flight project files (ai-story-writer … weather-dashboard) still need examples/ + notebooks once their rewrites settle — converter regenerates them in seconds when ready.
+
+### Verified
+- `vitest run tests/unit`: 510/510. `astro check`: only pre-existing Quiz.astro:129. Parent build unaffected (examples/ is static content).
+
+## Session 2026-09-06 (opencode) — locale status + Bug C flag
+
+### Audited locale state
+- ar/es/fr each: 134 project files. **29 already translated to gold** (the premium AI/agent tier: agentic-code-reviewer, ai-agent, ml-classifier, mcp-*, rag-*, webcam-object-counter, wordle-clone, …). Remaining **105 pitch-only** per locale.
+- EN is 123 gold + 12 partial. So **94 EN-gold projects are still pitch-only in all 3 locales** (translation backlog: ~94 × 3 = 282 docs).
+- **Bug C confirmed**: `data-visualization.md` exists in EN only — the other agent's in-flight rewrite dropped the locale copy (−1 in ar/es/fr vs EN's 135). Flag for the other agent; not fixed forward.
+
+### Decision needed (handoff item)
+- Choose: (a) full translation of the 94 remaining EN-gold per locale by agents, (b) translate only the top-N most-used projects, or (c) leave locale tier at pitch + translate incrementally as users request. The 29-translated tier shows the translation bar + the ~~/خطوة|Paso|Étape~~ markers pattern already used.
+
+### State of play (session end)
+- EN projects 100% tiered (123 gold / 12 owned by other agent / 0 pitch); all 96 notebook + README shipped; build clean; 510/510 tests.
+- Queued beyond translation: cite the new gold projects in python-101/data-analysis learn content (needs a handshake so learner links don't collide with the other agent's lesson edits).

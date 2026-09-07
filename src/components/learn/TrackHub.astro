@@ -1,0 +1,120 @@
+---
+// Shared track landing for locale pages, e.g. /ar/تعلم/python-101/hard.
+import {getCollection} from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import {learnHref, moduleHref, type Locale} from '../../lib/routeSegments';
+import {PAGE_STRINGS} from '../../lib/pageStrings';
+import {UI_STRINGS} from '../../lib/uiStrings';
+import {TRACK_ICONS, sectionName, sectionDescription, trackName} from '../../lib/sections';
+
+interface Props {
+  locale: Locale;
+  section: string;
+  track: 'normal' | 'hard';
+}
+
+const {locale, section, track} = Astro.props;
+const base = import.meta.env.BASE_URL;
+const dir = locale === 'ar' ? 'rtl' : 'ltr';
+const ps = PAGE_STRINGS[locale];
+const t = UI_STRINGS[locale];
+
+const trackPath = `${section}/${track}`;
+const modules = (await getCollection('modules'))
+  .filter((e) => e.slug.includes(trackPath))
+  .sort((a, b) => a.data.order - b.data.order);
+
+const allLessons = await getCollection('lessons');
+const moduleLessonCounts = new Map<string, number>();
+for (const m of modules) {
+  const slug = m.slug.split('/').pop()!;
+  const moduleKey = slug.replace(/^module-\d+-/, '');
+  const count = allLessons.filter((l) => l.slug.includes(trackPath) && l.data.module === moduleKey).length;
+  moduleLessonCounts.set(slug, count);
+}
+
+const totalLessons = allLessons.filter((l) => l.slug.includes(trackPath)).length;
+const totalMinutes = allLessons
+  .filter((l) => l.slug.includes(trackPath))
+  .reduce((sum, l) => sum + (l.data.estimatedMinutes ?? 15), 0);
+const totalHours = Math.round(totalMinutes / 60);
+const trackXpPerLesson = track === 'hard' ? 150 : 100;
+
+const diffColor = (d: string) => d === 'beginner' ? 'var(--success)' : d === 'intermediate' ? 'var(--streak)' : 'var(--bad)';
+const arrow = locale === 'ar' ? '←' : '→';
+---
+
+<Base title={`${sectionName(locale, section)} ${trackName(locale, track)} Track — PyDA Course`} description={sectionDescription(locale, section)} lang={locale} dir={dir}>
+  <nav class="crumb container">
+    <a href={learnHref(locale, base)}>{t.nav.learn}</a> <span>/</span>
+    <a href={learnHref(locale, base, section)}>{sectionName(locale, section)}</a> <span>/</span>
+    <span class="crumb__here">{trackName(locale, track)}</span>
+  </nav>
+
+  <section class="container hero-section">
+    <div class="hero-icon">{TRACK_ICONS[track]}</div>
+    <h1>{sectionName(locale, section)} — {trackName(locale, track)}</h1>
+    <p>{sectionDescription(locale, section)}</p>
+    <div class="hero-stats">
+      <span class="stat">📖 {totalLessons}</span>
+      <span class="stat">⏱ ~{totalHours}h</span>
+      <span class="stat">📦 {modules.length}</span>
+      <span class="stat">⚡ +{totalLessons * trackXpPerLesson} XP</span>
+    </div>
+  </section>
+
+  <section class="container modules-grid">
+    {modules.map((m) => {
+      const slug = m.slug.split('/').pop()!;
+      const moduleKey = slug.replace(/^module-\d+-/, '');
+      const lessonCount = moduleLessonCounts.get(slug) ?? 0;
+      const totalMin = allLessons
+        .filter((l) => l.slug.includes(trackPath) && l.data.module === moduleKey)
+        .reduce((sum, l) => sum + (l.data.estimatedMinutes ?? 15), 0);
+      return (
+        <a class="module-card" href={moduleHref(locale, base, section, track, slug)}>
+          <div class="module-card__icon">{m.data.icon}</div>
+          <div class="module-card__body">
+            <span class="module-card__order">{ps.moduleLabel} {m.data.order}</span>
+            <h2>{m.data.title}</h2>
+            <p>{m.data.description}</p>
+            <div class="module-card__meta">
+              <span style={`color:${diffColor(m.data.difficulty)}`}>{m.data.difficulty}</span>
+              <span>📖 {lessonCount}</span>
+              <span>⏱ ~{Math.round(totalMin / 60)}h</span>
+            </div>
+          </div>
+          <span class="module-card__arrow">{arrow}</span>
+        </a>
+      );
+    })}
+  </section>
+</Base>
+
+<style>
+  .crumb { display: flex; gap: .5rem; padding-top: 1.2rem; color: var(--ink-soft); font-size: .88rem; align-items: center; flex-wrap: wrap; }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb__here { font-weight: 700; color: var(--ink); }
+  .hero-section { padding: 2rem 0 1.5rem; text-align: center; }
+  .hero-icon { font-size: 4rem; margin-bottom: .5rem; }
+  .hero-section h1 { font-size: clamp(2rem, 4vw, 2.8rem); margin: .3rem 0; }
+  .hero-section p { color: var(--ink-soft); font-size: 1.05rem; }
+  .hero-stats { display: flex; gap: 1.25rem; justify-content: center; margin-top: 1rem; flex-wrap: wrap; }
+  .stat { font-size: .88rem; font-weight: 600; color: var(--ink-soft); }
+  .modules-grid { display: flex; flex-direction: column; gap: .75rem; margin-bottom: 3rem; }
+  .module-card {
+    display: flex; align-items: center; gap: 1.25rem;
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg);
+    padding: 1.25rem; text-decoration: none; color: var(--ink);
+    box-shadow: var(--shadow-sm); transition: all var(--transition-smooth);
+  }
+  .module-card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); border-color: var(--accent); }
+  .module-card__icon { font-size: 2.5rem; flex-shrink: 0; }
+  .module-card__body { flex: 1; }
+  .module-card__order { font-size: .74rem; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; color: var(--accent); }
+  .module-card__body h2 { font-size: 1.2rem; margin: .2rem 0; }
+  .module-card__body p { font-size: .88rem; color: var(--ink-soft); margin: 0; }
+  .module-card__meta { display: flex; gap: .75rem; margin-top: .4rem; font-size: .78rem; font-weight: 600; color: var(--ink-soft); }
+  .module-card__arrow { font-size: 1.2rem; color: var(--ink-soft); transition: transform .15s ease; flex-shrink: 0; }
+  .module-card:hover .module-card__arrow { transform: translateX(4px); color: var(--accent); }
+</style>

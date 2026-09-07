@@ -16,7 +16,19 @@ describe('JSON-LD structured data', () => {
   });
 
   test('every project page passes a LearningResource schema to Base', () => {
-    const src = readFileSync('src/pages/projects/[...slug].astro', 'utf8');
+    // All four locale route files delegate to the shared ProjectDetail
+    // component, which owns the JSON-LD markup and Base call.
+    const routes = [
+      'src/pages/projects/[...slug].astro',
+      'src/pages/ar/مشاريع/[...slug].astro',
+      'src/pages/es/proyectos/[...slug].astro',
+      'src/pages/fr/projets/[...slug].astro',
+    ];
+    for (const path of routes) {
+      const route = readFileSync(path, 'utf8');
+      expect(route).toContain('ProjectDetail');
+    }
+    const src = readFileSync('src/components/projects/ProjectDetail.astro', 'utf8');
     expect(src).toContain("'@type': 'LearningResource'");
     expect(src).toContain("learningResourceType: 'Project'");
     expect(src).toMatch(/<Base[^>]*jsonLd={jsonLd}/);

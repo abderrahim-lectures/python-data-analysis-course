@@ -1,581 +1,696 @@
 ---
-title: "Construye una App RAG Sobre Tus Propias Notas"
-description: "Gradúate del playground en el navegador a Python de verdad: construye una app de generación aumentada por recuperación que te permita chatear con tus propias notas, con embeddings locales y un LLM de nivel gratuito."
+title: 'RAG con Notas'
+description: 'Combina búsqueda semántica con generación de texto para crear un asistente que responda preguntas sobre tus notas personales.'
+difficulty: advanced
+estimatedMinutes: 150
+learningObjectives:
+  - Entender la arquitectura RAG (Retrieval-Augmented Generation)
+  - Implementar un sistema de recuperación semántica con ChromaDB
+  - Integrar modelos de lenguaje para generación de respuestas
+  - Agregar memoria conversacional para contexto multi-turno
+  - Conectar con Claude Code para uso en producción
+prerequisites:
+  - Python a nivel intermedio
+  - Conocimientos básicos de embeddings y bases de datos vectoriales
+  - familiaridad con LLMs y prompting
+  - Acceso a una API de LLM (OpenAI, Anthropic o local)
 ---
 
+## 🎯 Lo que harás
 
-# 📚 Construye una App RAG Sobre Tus Propias Notas
+Vas a construir un sistema RAG completo que combine la recuperación semántica de notas con generación de texto. Podrás hacer preguntas en lenguaje natural y recibir respuestas fundamentadas en tu contenido personal.
 
-Todo en el curso hasta ahora se ejecutó en un playground aislado dentro del navegador — para que pudieras empezar a escribir Python desde el primer día sin ninguna configuración. Este proyecto es el paso de graduación: instala Python de verdad en tu propia máquina, y luego úsalo para construir una herramienta que quizás sigas usando de verdad — una app que responde preguntas sobre una carpeta de tus propias notas, buscando primero en ellas y solo después pidiéndole a un modelo de lenguaje que responda usando lo que encontró. Esto asume Python 101; nada de Data Analysis es necesario, aunque ayuda si los arrays de `numpy` ya te resultan familiares.
+**Objetivo principal:** Crear un asistente que recupere notas relevantes y genere respuestas coherentes basadas en tu conocimiento personal.
 
-Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/docs/projects) para ver la lista completa, que sigue creciendo.
+**Tu sistema podrá:**
 
-## 🎯 Qué harás
+- **Indexar notas** con embeddings semánticos
+- **Recuperar contexto** relevante para cada pregunta
+- **Generar respuestas** fundamentadas en tus notas
+- **Mantener contexto** conversacional multi-turno
+- **Conectar con Claude** para uso en producción
 
-1. Instalar `uv`, una herramienta rápida y moderna para gestionar el propio Python y las dependencias de tu proyecto.
-2. Tomar una carpeta de tus propias notas `.md`/`.txt` y dividirlas en fragmentos pequeños y buscables.
-3. Convertir cada fragmento en un vector — una lista de números que captura su significado — enteramente en local, sin clave de API y sin costo, usando `sentence-transformers`.
-4. Escribir una pequeña función de búsqueda local que encuentre los fragmentos más relevantes para una pregunta, usando solo `numpy`.
-5. Obtener una clave de API de LLM de nivel gratuito y escribir un script que recupere fragmentos relevantes, y luego le pida al modelo que responda *usando solo ese contexto*.
+Pasos:
 
-## Dónde ejecutar esto
+- Paso 1: Diseña la arquitectura RAG
+- Paso 2: Implementa el sistema de recuperación
+- Paso 3: Agrega generación de respuestas con LLM
+- Paso 4: Integra memoria conversacional
 
-**En local con `uv`** es el camino que siguen los pasos de esta lección, y el recomendado — es Python real corriendo en tu propia máquina, el mismo movimiento de "graduarse a Python real" que cada otro proyecto de esta sección. El Paso 1 de abajo te guía por la instalación.
+Dónde ejecutar esto:
 
-**GitHub Codespaces** es una alternativa sin configuración si prefieres no instalar nada en local todavía: abre [todo el repositorio del curso en un Codespace gratuito](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python y `uv` ya están instalados, según el `.devcontainer/devcontainer.json` del repositorio) y ejecuta exactamente los mismos comandos de `uv` desde una terminal en tu pestaña del navegador.
+Trabaja desde la carpeta `projects/` de tu repo `pyda-course`. Necesitas acceso a una API de LLM.
 
-**Google Colab o Kaggle Notebooks** también funcionan, ya que este proyecto — a diferencia del de ajuste fino — no necesita GPU: crea un notebook nuevo, ejecuta `!pip install sentence-transformers numpy` en una celda, y luego pega los scripts de abajo como celdas del notebook, adaptando las rutas de archivo según sea necesario. Sé honesto contigo mismo sobre la contrapartida, eso sí: esta es una forma de menor fidelidad de vivir el proyecto que un proyecto real local con `uv` — sin archivos separados, sin estructura de proyecto real, solo celdas en un notebook. Trátalo como una forma rápida de experimentar, no como el camino principal.
+## Configuración
 
-## Paso 1: Instalar `uv`
-### 1.1 `uv` es una única herramienta que reemplaza la cadena habitual de "instala Python, luego ins...
-
-**👟 Pista inicial :**
-
-`uv` es una única herramienta que reemplaza la cadena habitual de "instala Python, luego instala pip, luego instala una herramienta de entorno virtual, luego instala paquetes" — puede instalar y gestionar versiones de Python por sí misma, junto con las dependencias de tu proyecto.
-**macOS / Linux** (terminal):
+1. Crea un entorno virtual:
 
 ```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
+cd projects/rag-notes
+uv venv
+source .venv/bin/activate
 ```
 
-**🎯 Resultado esperado :**
-
-Deberías ver la salida esperada sin errores.
-
-**🩹 Si sale mal :**
-
-Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
-
-### 1.2 **Windows** (PowerShell):
-
-**👟 Pista inicial :**
-
-**Windows** (PowerShell):
-
-```powershell
-powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
-```
-
-**🎯 Resultado esperado :**
-
-Deberías ver la salida esperada sin errores.
-
-**🩹 Si sale mal :**
-
-Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
-
-### 1.3 Cierra y vuelve a abrir tu terminal, y luego confirma que se instaló:
-
-**👟 Pista inicial :**
-
-Cierra y vuelve a abrir tu terminal, y luego confirma que se instaló:
+2. Instala las dependencias:
 
 ```bash
-uv --version
+uv pip install chromadb sentence-transformers openai rich
 ```
 
-**🎯 Resultado esperado :**
-
-Deberías ver la salida esperada sin errores.
-
-**🩹 Si sale mal :**
-
-Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
-
-### 1.4 Luego configura un proyecto:
-
-**👟 Pista inicial :**
-
-Luego configura un proyecto:
+3. Configura tu API key:
 
 ```bash
-uv init rag-notes
-cd rag-notes
-uv add sentence-transformers numpy python-dotenv
+export OPENAI_API_KEY="tu-api-key"
 ```
-`sentence-transformers` es la biblioteca que convierte texto en vectores en local, en tu propia CPU — sin llamada de API, sin clave. `numpy` hace el cálculo real para comparar vectores. `python-dotenv` te permite mantener tu clave de API del LLM (Paso 5) en un archivo `.env` local.
 
-**🎯 Resultado esperado :**
+---
 
-Deberías ver la salida esperada sin errores.
+## Paso 1: Diseña la arquitectura RAG
 
-**🩹 Si sale mal :**
+RAG (Retrieval-Augmented Generation) es un patrón que combina recuperación de información con generación de texto. Primero busca contexto relevante, luego genera una respuesta basada en ese contexto.
 
-Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+### 1.1 Crea la estructura del proyecto
 
-### 1.5 Verifica
+```bash
+mkdir -p data indexes config
+```
 
-## Paso 2: Prepara tus notas
-### 2.1 Pon tus notas en una carpeta `notes/` como archivos `.md` o `.txt` simples — apuntes de clas...
+### 1.2 Crea el archivo de configuración
 
-**👟 Pista inicial :**
-
-Pon tus notas en una carpeta `notes/` como archivos `.md` o `.txt` simples — apuntes de clase, un diario, documentación que hayas escrito, lo que sea. La app que estás construyendo solo responde a partir de lo que realmente está en estos archivos.
-No puedes entregarle un archivo completo a un modelo de embeddings y esperar un resultado de búsqueda útil. Dos razones:
-- **Los modelos de embeddings tienen un límite de contexto.** `all-MiniLM-L6-v2`, el modelo que usa este proyecto, trunca la entrada más allá de 256 fragmentos de palabra — dale un archivo de 2.000 palabras y todo lo que pase el límite se ignora silenciosamente.
-- **El vector de un fragmento grande es un promedio borroso.** Si una nota cubre cinco subtemas distintos, su único vector de embedding termina en algún punto intermedio entre los cinco — cerca de ninguno de ellos con precisión. Busca una pregunta sobre solo uno de esos subtemas, y ese vector podría no rankear alto aunque la respuesta esté justo ahí en el texto. Los fragmentos más pequeños y enfocados obtienen cada uno un vector más nítido y específico, así que la recuperación encuentra el pasaje *realmente* relevante en lugar de un archivo entero que solo es parcialmente relevante.
-Divide cada archivo en fragmentos por párrafo, y luego vuelve a fusionar los párrafos diminutos hasta un tamaño objetivo, para que no termines con docenas de fragmentos de una sola línea:
+Crea `config/settings.py`:
 
 ```python
-# prepare_notes.py
-"""Splits every .md/.txt file in notes/ into a list of text chunks.
-
-Run with: uv run python prepare_notes.py
-
-This only prints a summary -- build_index.py (Step 3) imports load_chunks()
-from this file and does the actual embedding.
-"""
-
 from pathlib import Path
 
-NOTES_DIR = Path("notes")
-TARGET_CHUNK_SIZE = 500  # characters -- small enough to stay focused,
-                         # large enough to hold a full thought
+BASE_DIR = Path(__file__).parent.parent
+DATA_DIR = BASE_DIR / "data"
+INDEX_DIR = BASE_DIR / "indexes"
 
-def split_into_paragraphs(text: str) -> list[str]:
-    """Splits on blank lines, dropping empty paragraphs."""
-    paragraphs = [p.strip() for p in text.split("\n\n")]
-    return [p for p in paragraphs if p]
+# Configuración de embeddings
+EMBEDDING_MODEL = "all-MiniLM-L6-v2"
 
-def merge_short_paragraphs(paragraphs: list[str], target_size: int) -> list[str]:
-    """Greedily merges consecutive short paragraphs up to target_size characters,
-    so a chunk isn't just one short line with barely any context in it."""
-    chunks = []
-    current = ""
-    for paragraph in paragraphs:
-        if current and len(current) + len(paragraph) > target_size:
-            chunks.append(current)
-            current = paragraph
-        else:
-            current = f"{current}\n\n{paragraph}" if current else paragraph
-    if current:
-        chunks.append(current)
-    return chunks
+# Configuración de ChromaDB
+CHROMA_PERSIST_DIR = str(INDEX_DIR / "chroma_db")
+COLLECTION_NAME = "personal_notes"
 
-def load_chunks() -> list[dict]:
-    """Returns a list of {"text": ..., "source": ...} dicts, one per chunk,
-    across every .md/.txt file in NOTES_DIR."""
-    chunks = []
-    for path in sorted(NOTES_DIR.glob("*.md")) + sorted(NOTES_DIR.glob("*.txt")):
-        text = path.read_text(encoding="utf-8")
-        paragraphs = split_into_paragraphs(text)
-        for chunk_text in merge_short_paragraphs(paragraphs, TARGET_CHUNK_SIZE):
-            chunks.append({"text": chunk_text, "source": path.name})
-    return chunks
+# Configuración de LLM
+LLM_MODEL = "gpt-3.5-turbo"
+MAX_CONTEXT_LENGTH = 4000
+TEMPERATURE = 0.7
 
-if __name__ == "__main__":
-    chunks = load_chunks()
-    print(f"Loaded {len(chunks)} chunks from {NOTES_DIR}/")
-    for chunk in chunks[:3]:
-        preview = chunk["text"][:80].replace("\n", " ")
-        print(f"  [{chunk['source']}] {preview}...")
+# Configuración de recuperación
+TOP_K_RESULTS = 5
+SIMILARITY_THRESHOLD = 0.3
 ```
 
-**🎯 Resultado esperado :**
-
-Deberías ver la salida esperada sin errores.
-
-**🩹 Si sale mal :**
-
-Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
-
-### 2.2 uv run python prepare_notes.py
-
-**👟 Pista inicial :**
-
-Ejecuta el código de abajo y confirma que funciona.
-
-```bash
-uv run python prepare_notes.py
-```
-:::tip[El tamaño del fragmento es una contrapartida, no una regla fija]
-Los fragmentos más pequeños recuperan con más precisión (una pregunta coincide con un trozo de texto estrecho y específico) pero pierden el contexto que los rodea (el modelo ve un fragmento aislado, no el párrafo que lo rodea). Los fragmentos más grandes conservan más contexto pero recuperan con menos precisión, por la misma razón que un archivo entero, solo que de forma menos severa. 500 caracteres es un punto de partida razonable para notas en prosa — no hay un número universalmente correcto, y vale la pena probar algunos tamaños distintos en tus propias notas para ver cuál recupera mejor.
-:::
-
-**🎯 Resultado esperado :**
-
-Deberías ver la salida esperada sin errores.
-
-**🩹 Si sale mal :**
-
-Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
-
-### 2.3 Verifica
-
-**✅ Lista de verificación**
-
-- ✅ `uv run python prepare_notes.py` se ejecuta sin errores e imprime un conteo de fragmentos distinto de cero.
-- ✅ Las vistas previas impresas parecen fragmentos reales de tus notas, no strings vacíos ni enormes bloques de texto fusionado.
-- ✅ `NOTES_DIR` apunta a una carpeta que realmente contiene archivos `.md`/`.txt`.
-
-**🤔 Pregunta(s) socrática(s)**
-
-- Si divides por líneas en blanco pero uno de tus archivos de notas no tiene ninguna línea en blanco (solo un párrafo gigante), ¿qué devolvería `split_into_paragraphs`, y qué le haría eso a la recuperación más adelante?
-- ¿Qué le pasaría a la calidad de la recuperación si hicieras `TARGET_CHUNK_SIZE` mucho más grande — digamos, 5.000 caracteres? ¿Mucho más pequeño, como 50? ¿Por qué?
-
-## Paso 3: Genera embeddings de tus notas en local
-### 3.1 Un **embedding** es una lista de números — un vector — que representa el *significado* de un...
-
-**👟 Pista inicial :**
-
-Un **embedding** es una lista de números — un vector — que representa el *significado* de un fragmento de texto, no su redacción exacta. `all-MiniLM-L6-v2` mapea cada fragmento a un punto en un espacio de 384 dimensiones, y está entrenado para que los fragmentos con significado similar terminen cerca entre sí en ese espacio, mientras que los fragmentos no relacionados terminen lejos. Ya tienes la intuición central para esto: es la misma idea que graficar datos numéricos en ejes, solo que con 384 ejes en lugar de 2, y "cerca entre sí" medido de la misma forma en que medirías distancia en cualquier espacio de números.
-Este modelo es pequeño (unos 80MB), corre enteramente en tu CPU en aproximadamente un segundo por fragmento en una laptop típica, no necesita clave de API, y no cuesta nada — a diferencia del LLM del Paso 5, generar embeddings es totalmente local.
+### 1.3 Diseña el esquema de notas
 
 ```python
-# build_index.py
-"""Embeds every chunk from prepare_notes.py and saves the vectors + text
-locally, so retrieve() (Step 4) doesn't need to re-embed anything at query time.
+from dataclasses import dataclass
+from datetime import datetime
 
-Run with: uv run python build_index.py
-Re-run this any time you add or edit files in notes/ -- the saved index
-doesn't update itself.
-"""
+@dataclass
+class Note:
+    id: str
+    title: str
+    content: str
+    tags: list[str]
+    created_at: datetime
+    metadata: dict = None
 
-import json
-
-import numpy as np
-from sentence_transformers import SentenceTransformer
-
-from prepare_notes import load_chunks
-
-MODEL_NAME = "all-MiniLM-L6-v2"
-INDEX_PATH = "index.npy"
-CHUNKS_PATH = "chunks.json"
-
-def main() -> None:
-    chunks = load_chunks()
-    if not chunks:
-        print("No chunks found -- add some .md/.txt files to notes/ first.")
-        return
-
-    print(f"Embedding {len(chunks)} chunks with {MODEL_NAME}...")
-    model = SentenceTransformer(MODEL_NAME)
-    texts = [chunk["text"] for chunk in chunks]
-    embeddings = model.encode(texts, normalize_embeddings=True)
-
-    np.save(INDEX_PATH, embeddings)
-    with open(CHUNKS_PATH, "w", encoding="utf-8") as f:
-        json.dump(chunks, f, ensure_ascii=False, indent=2)
-
-    print(f"Saved {embeddings.shape[0]} vectors ({embeddings.shape[1]}-dim) to {INDEX_PATH}")
-    print(f"Saved chunk text/metadata to {CHUNKS_PATH}")
-
-if __name__ == "__main__":
-    main()
+    def to_dict(self) -> dict:
+        return {
+            "id": self.id,
+            "title": self.title,
+            "content": self.content,
+            "tags": self.tags,
+            "created_at": self.created_at.isoformat(),
+            "metadata": self.metadata or {},
+        }
 ```
 
-**🎯 Resultado esperado :**
+### Verifica
 
-Deberías ver la salida esperada sin errores.
+- La estructura del proyecto está configurada
+- Los parámetros son consistentes
+- El esquema de notas soporta metadatos flexibles
 
-**🩹 Si sale mal :**
+### Checklist
 
-Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+- [ ] Estructura de directorios creada
+- [ ] Configuración del LLM definida
+- [ ] Esquema de notas con soporte para metadatos
+- [ ] Parámetros de recuperación configurados
 
-### 3.2 uv run python build_index.py
+---
 
-**👟 Pista inicial :**
+## Paso 2: Implementa el sistema de recuperación
 
-Ejecuta el código de abajo y confirma que funciona.
+El sistema de recuperación es el corazón de RAG. Necesita indexar documentos y encontrar los más relevantes para cada consulta.
 
-```bash
-uv run python build_index.py
-```
-Esto evita deliberadamente una base de datos vectorial — para una carpeta personal de notas (cientos o pocos miles de fragmentos, no millones), un simple array de NumPy que cabe cómodamente en memoria es más simple, no tiene ningún servicio adicional que instalar o ejecutar, y es totalmente transparente: `index.npy` es una matriz, `chunks.json` es el texto del que proviene, nada más.
-`normalize_embeddings=True` escala cada vector a longitud 1 — vale la pena hacerlo ahora en lugar de en el momento de la consulta, ya que es lo que hace que la similitud de coseno del Paso 4 se reduzca a un simple producto punto.
+### 2.1 Crea el indexador de notas
 
-**🎯 Resultado esperado :**
-
-Deberías ver la salida esperada sin errores.
-
-**🩹 Si sale mal :**
-
-Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
-
-### 3.3 Verifica
-
-**✅ Lista de verificación**
-
-- ✅ `uv run python build_index.py` se completó sin errores.
-- ✅ Ahora existen un archivo `index.npy` y un archivo `chunks.json` en la carpeta de tu proyecto.
-- ✅ El primer número de la forma (shape) impresa coincide con el conteo de fragmentos del Paso 2, y el segundo número es 384.
-
-**🤔 Pregunta(s) socrática(s)**
-
-- Dos fragmentos usan la palabra "Python" en sentidos completamente distintos — uno sobre el lenguaje de programación, otro sobre una serpiente. ¿Esperas que sus vectores de embedding terminen cerca entre sí o lejos? ¿Qué te dice eso sobre lo que realmente está capturando el modelo de embeddings?
-- ¿Por qué guardar los embeddings en un archivo, en lugar de simplemente volver a generar embeddings de todas tus notas cada vez que haces una pregunta?
-
-## Paso 4: Recupera fragmentos relevantes
-### 4.1 Para encontrar qué fragmentos son relevantes a una pregunta, genera el embedding de la pregu...
-
-**👟 Pista inicial :**
-
-Para encontrar qué fragmentos son relevantes a una pregunta, genera el embedding de la pregunta con el *mismo* modelo, y luego ordena cada fragmento según qué tan cerca esté su vector del vector de la pregunta. La forma estándar de medir "cercanía" para embeddings es la **similitud de coseno** — el coseno del ángulo entre dos vectores, que le importa la *dirección* (significado) e ignora la *magnitud* (aproximadamente, la longitud del texto):
-$$
-\text{cosine\_similarity}(a, b) = \frac{a \cdot b}{\|a\| \, \|b\|}
-$$
-Dado que cada vector ya fue normalizado a longitud 1 al guardarse ($\|a\| = \|b\| = 1$), el denominador es simplemente 1, y la similitud de coseno se colapsa a un simple producto punto — una razón para normalizar en el momento de generar el embedding en lugar de omitirlo:
+Crea `retrieval/indexer.py`:
 
 ```python
-# retrieve.py
-"""Given a question, finds the notes chunks most relevant to it.
-
-Imported by ask.py (Step 5) -- not meant to be run directly, though the
-__main__ block below lets you try it standalone.
-"""
-
-import json
-
-import numpy as np
+import chromadb
 from sentence_transformers import SentenceTransformer
+from config.settings import (
+    EMBEDDING_MODEL, CHROMA_PERSIST_DIR, COLLECTION_NAME
+)
 
-MODEL_NAME = "all-MiniLM-L6-v2"
-INDEX_PATH = "index.npy"
-CHUNKS_PATH = "chunks.json"
+class NoteIndexer:
+    def __init__(self):
+        self.client = chromadb.PersistentClient(path=CHROMA_PERSIST_DIR)
+        self.collection = self.client.get_or_create_collection(
+            name=COLLECTION_NAME,
+            metadata={"hnsw:space": "cosine"}
+        )
+        self.embedding_model = SentenceTransformer(EMBEDDING_MODEL)
 
-_model = None  # loaded lazily so importing this module doesn't load the model
+    def index_note(self, note) -> str:
+        """Indexa una nota en la colección."""
+        # Crear representación textual enriquecida
+        text_representation = f"""
+        Título: {note.title}
+        Contenido: {note.content}
+        Etiquetas: {', '.join(note.tags)}
+        """
 
-def get_model() -> SentenceTransformer:
-    global _model
-    if _model is None:
-        _model = SentenceTransformer(MODEL_NAME)
-    return _model
+        # Generar embedding
+        embedding = self.embedding_model.encode([text_representation])[0].tolist()
 
-def retrieve(question: str, top_k: int = 3) -> list[dict]:
-    """Returns the top_k chunks most similar to `question`, each with its
-    similarity score, ranked highest first."""
-    embeddings = np.load(INDEX_PATH)
-    with open(CHUNKS_PATH, encoding="utf-8") as f:
-        chunks = json.load(f)
+        # Almacenar en ChromaDB
+        self.collection.add(
+            ids=[note.id],
+            embeddings=[embedding],
+            documents=[text_representation],
+            metadatas=[{
+                "title": note.title,
+                "tags": ",".join(note.tags),
+                "created_at": note.created_at.isoformat(),
+            }]
+        )
 
-    question_vector = get_model().encode([question], normalize_embeddings=True)[0]
+        return note.id
 
-    # Every row of `embeddings` is already unit-length (Step 3), and so is
-    # question_vector, so this dot product *is* the cosine similarity.
-    similarities = embeddings @ question_vector
+    def index_multiple(self, notes: list) -> int:
+        """Indexa múltiples notas."""
+        count = 0
+        for note in notes:
+            self.index_note(note)
+            count += 1
+        return count
 
-    top_indices = np.argsort(similarities)[::-1][:top_k]
-    return [
-        {**chunks[i], "score": float(similarities[i])}
-        for i in top_indices
+    def delete_note(self, note_id: str) -> bool:
+        """Elimina una nota del índice."""
+        try:
+            self.collection.delete(ids=[note_id])
+            return True
+        except Exception:
+            return False
+
+    def get_stats(self) -> dict:
+        """Retorna estadísticas del índice."""
+        return {
+            "total_notes": self.collection.count(),
+            "collection": COLLECTION_NAME,
+            "persist_directory": CHROMA_PERSIST_DIR,
+        }
+```
+
+### 2.2 Crea el motor de recuperación
+
+```python
+from config.settings import TOP_K_RESULTS, SIMILARITY_THRESHOLD
+
+class NoteRetriever:
+    def __init__(self, indexer: NoteIndexer):
+        self.indexer = indexer
+        self.embedding_model = SentenceTransformer(EMBEDDING_MODEL)
+
+    def retrieve(self, query: str, top_k: int = TOP_K_RESULTS) -> list[dict]:
+        """Recupera notas relevantes para una consulta."""
+        # Generar embedding de la consulta
+        query_embedding = self.embedding_model.encode([query])[0].tolist()
+
+        # Buscar en ChromaDB
+        results = self.indexer.collection.query(
+            query_embeddings=[query_embedding],
+            n_results=top_k,
+            include=["documents", "metadatas", "distances"]
+        )
+
+        # Formatear resultados
+        retrieved = []
+        for i in range(len(results["ids"][0])):
+            distance = results["distances"][0][i]
+            similarity = 1 - distance
+
+            if similarity >= SIMILARITY_THRESHOLD:
+                retrieved.append({
+                    "id": results["ids"][0][i],
+                    "content": results["documents"][0][i],
+                    "metadata": results["metadatas"][0][i],
+                    "similarity": similarity,
+                    "rank": i + 1,
+                })
+
+        return retrieved
+
+    def retrieve_with_context(self, query: str, context_window: int = 1) -> list[dict]:
+        """Recupera notas con contexto expandido."""
+        results = self.retrieve(query, top_k=3)
+
+        expanded = []
+        for result in results:
+            # Buscar notas relacionadas
+            related = self.retrieve(result["content"][:100], top_k=context_window + 1)
+            result["related_notes"] = [r for r in related if r["id"] != result["id"]][:context_window]
+            expanded.append(result)
+
+        return expanded
+```
+
+### Verifica
+
+- Las notas se indexan correctamente
+- La recuperación retorna notas relevantes
+- Los scores de similaridad son significativos
+
+### Checklist
+
+- [ ] `NoteIndexer` almacena notas con embeddings
+- [ ] `NoteRetriever` recupera notas relevantes
+- [ ] La búsqueda por similaridad funciona
+- [ ] El contexto expandido incluye notas relacionadas
+
+---
+
+## Paso 3: Agrega generación de respuestas con LLM
+
+Ahora conectaremos la recuperación con generación de texto para crear respuestas fundamentadas.
+
+### 3.1 Implementa el generador de respuestas
+
+Crea `generation/responder.py`:
+
+```python
+from openai import OpenAI
+from config.settings import LLM_MODEL, MAX_CONTEXT_LENGTH, TEMPERATURE
+
+class RAGResponder:
+    def __init__(self, retriever):
+        self.retriever = retriever
+        self.client = OpenAI()
+        self.conversation_history = []
+
+    def build_prompt(self, query: str, context_notes: list[dict]) -> str:
+        """Construye el prompt con contexto de las notas."""
+        context_parts = []
+        for note in context_notes:
+            context_parts.append(f"""
+Nota: {note['metadata'].get('title', 'Sin título')}
+Contenido: {note['content'][:500]}
+Similitud: {note['similarity']:.2f}
+""")
+
+        context = "\n".join(context_parts)
+
+        # Agregar historial conversacional
+        history = ""
+        if self.conversation_history:
+            history = "\n\nConversación previa:\n"
+            for msg in self.conversation_history[-4:]:  # Últimos 4 mensajes
+                role = "Usuario" if msg["role"] == "user" else "Asistente"
+                history += f"{role}: {msg['content']}\n"
+
+        prompt = f"""Eres un asistente personal inteligente que responde preguntas basándose en las notas del usuario.
+
+Contexto de notas relevantes:
+{context}
+{history}
+
+Pregunta del usuario: {query}
+
+Instrucciones:
+1. Responde SOLO usando la información de las notas proporcionadas
+2. Si la información no está en las notas, di honestamente que no tienes esa información
+3. Cita las fuentes cuando sea posible
+4. Sé conciso y directo
+5. Si la pregunta requiere información de múltiples notas, combínala coherentemente
+
+Respuesta:"""
+
+        return prompt
+
+    def generate_response(self, query: str) -> dict:
+        """Genera una respuesta usando RAG."""
+        # Recuperar notas relevantes
+        context_notes = self.retriever.retrieve_with_context(query)
+
+        if not context_notes:
+            return {
+                "response": "No encontré notas relevantes para tu pregunta.",
+                "sources": [],
+                "query": query,
+            }
+
+        # Construir prompt
+        prompt = self.build_prompt(query, context_notes)
+
+        # Llamar al LLM
+        response = self.client.chat.completions.create(
+            model=LLM_MODEL,
+            messages=[{"role": "user", "content": prompt}],
+            temperature=TEMPERATURE,
+            max_tokens=1000,
+        )
+
+        answer = response.choices[0].message.content
+
+        # Actualizar historial
+        self.conversation_history.append({"role": "user", "content": query})
+        self.conversation_history.append({"role": "assistant", "content": answer})
+
+        return {
+            "response": answer,
+            "sources": [
+                {
+                    "title": n["metadata"].get("title", "Sin título"),
+                    "similarity": n["similarity"],
+                }
+                for n in context_notes
+            ],
+            "query": query,
+        }
+
+    def clear_history(self):
+        """Limpia el historial conversacional."""
+        self.conversation_history = []
+```
+
+### 3.2 Prueba el sistema completo
+
+```python
+if __name__ == "__main__":
+    from retrieval.indexer import NoteIndexer, NoteRetriever
+    from models import Note
+    from datetime import datetime
+
+    # Indexar notas de ejemplo
+    indexer = NoteIndexer()
+
+    sample_notes = [
+        Note(
+            id="1",
+            title="Aprendizaje de Python",
+            content="Python es excelente para principiantes. Sus puntos fuertes incluyen sintaxis clara, gran ecosistema de librerías y comunidad activa.",
+            tags=["python", "programación"],
+            created_at=datetime.now(),
+        ),
+        Note(
+            id="2",
+            title="Ideas de Proyecto",
+            content="Quiero crear una app de notas con búsqueda semántica. Usaría ChromaDB para embeddings y FastAPI para la API.",
+            tags=["proyectos", "ideas"],
+            created_at=datetime.now(),
+        ),
     ]
 
-if __name__ == "__main__":
-    results = retrieve("What is this course about?")
-    for r in results:
-        print(f"{r['score']:.3f}  [{r['source']}]  {r['text'][:80]}...")
+    indexer.index_multiple(sample_notes)
+
+    # Crear retriever y responder
+    retriever = NoteRetriever(indexer)
+    responder = RAGResponder(retriever)
+
+    # Hacer una pregunta
+    result = responder.generate_response("¿Qué tan bueno es Python para principiantes?")
+    print(f"Respuesta: {result['response']}")
+    print(f"Fuentes: {result['sources']}")
 ```
 
-**🎯 Resultado esperado :**
+### Verifica
 
-Deberías ver la salida esperada sin errores.
+- Las respuestas se generan correctamente
+- Las fuentes se citan en la respuesta
+- El sistema maneja preguntas sin contexto relevante
 
-**🩹 Si sale mal :**
+### Checklist
 
-Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+- [ ] `RAGResponder` genera respuestas fundamentadas
+- [ ] Las fuentes se incluyen en la respuesta
+- [ ] El sistema maneja preguntas sin contexto
+- [ ] El historial conversacional funciona
 
-### 4.2 uv run python retrieve.py
+---
 
-**👟 Pista inicial :**
+## Paso 4: Integra memoria conversacional
 
-Ejecuta el código de abajo y confirma que funciona.
+Para conversaciones multi-turno, necesitamos mantener contexto entre preguntas.
 
-```bash
-uv run python retrieve.py
-```
-`embeddings @ question_vector` es multiplicación matriz-vector: cada fila de la matriz multiplicada por producto punto con el vector de la pregunta, todo a la vez, en una sola llamada de NumPy — la misma operación del material de álgebra lineal del curso, aquí haciendo el trabajo real de comparar una pregunta contra cada fragmento de las notas.
+### 4.1 Implementa la memoria conversacional
 
-**🎯 Resultado esperado :**
-
-Deberías ver la salida esperada sin errores.
-
-**🩹 Si sale mal :**
-
-Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
-
-### 4.3 Verifica
-
-**✅ Lista de verificación**
-
-- ✅ `uv run python retrieve.py` imprime `top_k` resultados, cada uno con una puntuación de similitud y un nombre de archivo de origen.
-- ✅ El fragmento mejor clasificado para una pregunta de prueba fácil y obvia realmente se ve relevante cuando lo lees.
-- ✅ Las puntuaciones están entre -1 y 1 (el rango válido para la similitud de coseno) — si ves números muy fuera de ese rango, probablemente uno de los vectores no estaba normalizado.
-
-**🤔 Pregunta(s) socrática(s)**
-
-- `np.argsort(similarities)[::-1][:top_k]` ordena *todas* las similitudes antes de tomar las mejores pocas. Para una carpeta personal de notas esto está bien, pero ¿por qué podría convertirse en un problema ordenar el array entero si tuvieras diez millones de fragmentos en lugar de unos pocos cientos?
-- ¿Qué esperarías que le pasara a la puntuación del mejor resultado si hicieras una pregunta que no tiene respuesta real en ninguna parte de tus notas? Pruébalo — ¿la puntuación confirma tu predicción?
-
-## Paso 5: Genera una respuesta con un LLM gratuito
-### 5.1 La recuperación por sí sola te devuelve fragmentos crudos de tus propias notas — útil, pero ...
-
-**👟 Pista inicial :**
-
-La recuperación por sí sola te devuelve fragmentos crudos de tus propias notas — útil, pero no una respuesta redactada. El último paso le entrega esos fragmentos a un modelo de lenguaje como contexto y le pide que responda *usándolos*. Esto es lo que significa "RAG" (generación aumentada por recuperación): generación, aumentada por un paso de recuperación ejecutado primero.
-**Elige el proveedor que prefieras** — ninguno de ellos requiere una tarjeta de crédito al momento de escribir esto, y este curso no favorece a uno sobre otro.
-| Proveedor | Dónde obtener una clave | Por qué podrías elegirlo |
-|---|---|---|
-| **GitHub Models** *(valor por defecto sugerido)* | [github.com/settings/tokens](https://github.com/settings/tokens) — un token de acceso personal con el alcance `models: read` | Sin registro separado — ya tienes una cuenta de GitHub. Límites de nivel gratuito más generosos que los de Gemini. |
-| Gemini | [Google AI Studio](https://aistudio.google.com/) | La opción más comúnmente referenciada. |
-| Groq | [console.groq.com/keys](https://console.groq.com/keys) | Inferencia rápida, nivel gratuito generoso, sin tarjeta. |
-| Mistral | [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys) | Una de las cuotas gratuitas permanentes más generosas. |
-| Cerebras | [cloud.cerebras.ai](https://cloud.cerebras.ai/) | Alto volumen diario de tokens, sin tarjeta. |
-| OpenRouter | [openrouter.ai/keys](https://openrouter.ai/keys) | Una API, muchos modelos gratuitos — buena para comparar proveedores. |
-Cualquiera que elijas, el proceso es el mismo:
-1. Inicia sesión y genera una clave de API en el sitio de ese proveedor.
-2. **Nunca pegues esta clave directamente en el código ni la subas a un repositorio.** Ponla en un archivo `.env` en su lugar (ya ignorado por git si seguiste el Paso 1):
-
-```bash
-# .env
-GITHUB_TOKEN=your-key-here
-```
-
-**🎯 Resultado esperado :**
-
-Deberías ver la salida esperada sin errores.
-
-**🩹 Si sale mal :**
-
-Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
-
-### 5.2 `python-dotenv` (instalado en el Paso 1) lee este archivo hacia `os.environ` automáticamente...
-
-**👟 Pista inicial :**
-
-`python-dotenv` (instalado en el Paso 1) lee este archivo hacia `os.environ` automáticamente, el mismo patrón usado a lo largo del [proyecto de Agente de IA](/docs/projects/ai-agent) si ya hiciste ese — GitHub Models expone una API compatible con OpenAI, así que la biblioteca cliente `openai` normal funciona para él sin ningún paquete adicional:
-
-```bash
-uv add openai
-```
-
-**🎯 Resultado esperado :**
-
-Deberías ver la salida esperada sin errores.
-
-**🩹 Si sale mal :**
-
-Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
-
-### 5.3 # ask.py
-
-**👟 Pista inicial :**
-
-Ejecuta el código de abajo y confirma que funciona.
+Crea `memory/conversation.py`:
 
 ```python
-# ask.py
-"""Retrieves relevant chunks for a question, then asks a free-tier LLM to
-answer using only that context.
+from datetime import datetime
+from dataclasses import dataclass
+import json
+from pathlib import Path
 
-Run with: uv run python ask.py "your question here"
-"""
+@dataclass
+class ConversationTurn:
+    role: str  # "user" or "assistant"
+    content: str
+    timestamp: datetime
+    sources: list[dict] = None
 
-import os
-import sys
+class ConversationMemory:
+    def __init__(self, max_turns: int = 20):
+        self.turns = []
+        self.max_turns = max_turns
+        self.summary = ""
 
-from dotenv import load_dotenv
-from openai import OpenAI
+    def add_turn(self, role: str, content: str, sources: list[dict] = None):
+        """Agrega un turno a la conversación."""
+        turn = ConversationTurn(
+            role=role,
+            content=content,
+            timestamp=datetime.now(),
+            sources=sources,
+        )
+        self.turns.append(turn)
 
-from retrieve import retrieve
+        # Mantener límite de turnos
+        if len(self.turns) > self.max_turns:
+            self.turns = self.turns[-self.max_turns:]
 
-load_dotenv()
+    def get_context(self, n_turns: int = 6) -> list[dict]:
+        """Retorna los últimos n_turns para contexto."""
+        recent = self.turns[-n_turns:]
+        return [
+            {"role": t.role, "content": t.content}
+            for t in recent
+        ]
 
-PROMPT_TEMPLATE = """Answer the question using ONLY the context below. If the
-context doesn't contain the answer, say so -- do not make something up.
+    def get_summary(self) -> str:
+        """Genera un resumen de la conversación."""
+        if not self.turns:
+            return ""
 
-Context:
-{context}
+        # Resumen simple: últimos 3 temas
+        recent_topics = []
+        for turn in self.turns[-6:]:
+            if turn.role == "user":
+                recent_topics.append(turn.content[:50])
 
-Question: {question}
+        self.summary = "Temas recientes: " + "; ".join(recent_topics)
+        return self.summary
 
-Answer:"""
+    def save(self, filepath: str):
+        """Guarda la conversación a archivo."""
+        data = {
+            "turns": [
+                {
+                    "role": t.role,
+                    "content": t.content,
+                    "timestamp": t.timestamp.isoformat(),
+                    "sources": t.sources,
+                }
+                for t in self.turns
+            ],
+            "summary": self.summary,
+        }
+        Path(filepath).write_text(json.dumps(data, ensure_ascii=False, indent=2))
 
-def build_prompt(question: str, chunks: list[dict]) -> str:
-    context = "\n\n".join(f"[{c['source']}] {c['text']}" for c in chunks)
-    return PROMPT_TEMPLATE.format(context=context, question=question)
+    def load(self, filepath: str):
+        """Carga una conversación desde archivo."""
+        data = json.loads(Path(filepath).read_text())
+        self.turns = [
+            ConversationTurn(
+                role=t["role"],
+                content=t["content"],
+                timestamp=datetime.fromisoformat(t["timestamp"]),
+                sources=t.get("sources"),
+            )
+            for t in data["turns"]
+        ]
+        self.summary = data.get("summary", "")
 
-def ask(question: str, top_k: int = 3) -> str:
-    chunks = retrieve(question, top_k=top_k)
-    prompt = build_prompt(question, chunks)
+    def clear(self):
+        """Limpia la memoria conversacional."""
+        self.turns = []
+        self.summary = ""
+```
 
-    client = OpenAI(
-        api_key=os.environ["GITHUB_TOKEN"],
-        base_url="https://models.github.ai/inference",
-    )
-    response = client.chat.completions.create(
-        model="gpt-4o-mini",  # confirm this still has a free tier before running
-        messages=[{"role": "user", "content": prompt}],
-    )
-    return response.choices[0].message.content
+### 4.2 Integra la memoria con el sistema RAG
+
+```python
+class ConversationalRAG:
+    def __init__(self, responder):
+        self.responder = responder
+        self.memory = ConversationMemory()
+
+    def chat(self, query: str) -> dict:
+        """Procesa una pregunta con memoria conversacional."""
+        # Agregar pregunta a la memoria
+        self.memory.add_turn("user", query)
+
+        # Obtener contexto conversacional
+        conv_context = self.memory.get_context()
+
+        # Generar respuesta (el responder ya usa sus propios turnos)
+        result = self.responder.generate_response(query)
+
+        # Agregar respuesta a la memoria
+        self.memory.add_turn("assistant", result["response"], result["sources"])
+
+        # Agregar contexto conversacional al resultado
+        result["conversation_context"] = conv_context
+        result["memory_summary"] = self.memory.get_summary()
+
+        return result
+
+    def save_conversation(self, filepath: str):
+        """Guarda la conversación."""
+        self.memory.save(filepath)
+
+    def load_conversation(self, filepath: str):
+        """Carga una conversación."""
+        self.memory.load(filepath)
+        # Sincronizar con el responder
+        self.responder.conversation_history = [
+            {"role": t.role, "content": t.content}
+            for t in self.memory.turns
+        ]
+
+    def clear(self):
+        """Limpia toda la memoria."""
+        self.memory.clear()
+        self.responder.clear_history()
+```
+
+### 4.3 Crea la interfaz de usuario
+
+```python
+from rich.console import Console
+from rich.panel import Panel
+from rich.markdown import Markdown
+
+def run_chat_interface(responder):
+    """Ejecuta la interfaz de chat."""
+    from retrieval.indexer import NoteIndexer, NoteRetriever
+
+    indexer = NoteIndexer()
+    retriever = NoteRetriever(indexer)
+    rag = ConversationalRAG(responder)
+
+    console = Console()
+    console.print(Panel.fit(
+        "[bold]🤖 RAG Notes - Asistente Personal[/bold]\n"
+        "Haz preguntas sobre tus notas. Escribe 'salir' para terminar.",
+        border_style="blue",
+    ))
+
+    while True:
+        query = console.input("\n[bold green]Tú:[/bold green] ")
+
+        if query.lower() in ["salir", "exit", "quit"]:
+            console.print("[dim]¡Hasta luego![/dim]")
+            break
+
+        if query.lower() == "limpiar":
+            rag.clear()
+            console.print("[yellow]Memoria limpiada[/yellow]")
+            continue
+
+        result = rag.chat(query)
+
+        console.print("\n[bold blue]Asistente:[/bold blue]")
+        console.print(Markdown(result["response"]))
+
+        if result["sources"]:
+            console.print("\n[dim]Fuentes:[/dim]")
+            for source in result["sources"]:
+                console.print(f"  • {source['title']} (similitud: {source['similarity']:.2f})")
 
 if __name__ == "__main__":
-    question = " ".join(sys.argv[1:]) or "What is this course about?"
-    print(ask(question))
+    from retrieval.indexer import NoteIndexer
+    from generation.responder import RAGResponder
+    from retrieval.indexer import NoteRetriever
+
+    indexer = NoteIndexer()
+    retriever = NoteRetriever(indexer)
+    responder = RAGResponder(retriever)
+
+    run_chat_interface(responder)
 ```
 
-**🎯 Resultado esperado :**
+### Verifica
 
-Deberías ver la salida esperada sin errores.
+- La memoria conversacional mantiene contexto
+- Las respuestas consideran preguntas anteriores
+- La interfaz es usable e intuitiva
 
-**🩹 Si sale mal :**
+### Checklist
 
-Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+- [ ] `ConversationMemory` guarda y carga conversaciones
+- [ ] `ConversationalRAG` integra memoria con RAG
+- [ ] La interfaz de chat funciona correctamente
+- [ ] La memoria se persiste entre sesiones
 
-### 5.4 uv run python ask.py "What is this course about?"
+---
 
-**👟 Pista inicial :**
+## 🩹 Si sale mal
 
-Ejecuta el código de abajo y confirma que funciona.
+**Las respuestas no son relevantes:**
+Verifica que las notas estén bien indexadas. Aumenta `TOP_K_RESULTS` para recuperar más contexto. Ajusta `SIMILARITY_THRESHOLD` para ser más inclusivo.
 
-```bash
-uv run python ask.py "What is this course about?"
-```
-`build_prompt` es toda la idea de RAG en una sola función: no le pide al modelo que responda desde lo que ya sabe, le entrega al modelo el *texto realmente recuperado* y le pide que responda a partir de eso — por lo que una app RAG puede responder correctamente preguntas sobre notas que el modelo subyacente nunca vio, escritas ayer, en tu propia máquina.
-:::tip[¿Usas un proveedor distinto?]
-Cambia el bloque `OpenAI(...)` por el cliente propio de tu proveedor, siguiendo el mismo patrón que el [proyecto de Agente de IA](/docs/projects/ai-agent#paso-1-escribe-tu-primer-agente) — p. ej. el paquete `google-genai` de Google para Gemini, o el cliente propio de `groq` para Groq. Cerebras y OpenRouter también son compatibles con OpenAI, así que el paquete `openai` también funciona para ellos, solo que con un `base_url` distinto.
-:::
+**El LLM no genera respuestas útiles:**
+Mejora el prompt. Sé más específico sobre el formato de respuesta esperado. Agrega ejemplos de respuestas ideales.
 
-**🎯 Resultado esperado :**
+**La memoria conversacional pierde contexto:**
+Aumenta `max_turns` en `ConversationMemory`. Verifica que el historial se esté sincronizando correctamente entre el memory y el responder.
 
-Deberías ver la salida esperada sin errores.
+---
 
-**🩹 Si sale mal :**
+## 🧠 Preguntas socráticas
 
-Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
+- ¿Cómo decidirías cuántas notas recuperar para cada pregunta?
+- ¿Qué estrategia usarías para manejar preguntas que requieren información de muchas notas?
+- ¿Cómo evaluarías la calidad de las respuestas RAG?
+- ¿Qué mejoras harías para reducir la latencia de las respuestas?
 
-### 5.5 Verifica
+---
 
-**✅ Lista de verificación**
+## 🎓 ¿Qué sigue?
 
-- ✅ `uv run python ask.py "una pregunta real sobre tus notas"` imprime una respuesta, no un traceback.
-- ✅ La respuesta realmente refleja el contenido de tus notas, no conocimiento genérico que el modelo ya tenía.
-- ✅ Preguntar algo que tus notas claramente no cubren hace que el modelo lo diga, en lugar de inventar algo con confianza.
+Tu sistema RAG está funcionando. Ahora puedes:
 
-**🤔 Pregunta(s) socrática(s)**
+- **Agregar más fuentes**: Indexar emails, documentos, bookmarks
+- **Mejorar la recuperación**: Usar re-ranking, HyDE, o búsqueda híbrida
+- **Personalizar el LLM**: Fine-tuning para tu dominio específico
+- **Crear una API**: Servir el RAG como servicio web
 
-- La plantilla del prompt dice explícitamente "using ONLY the context below" y "if the context doesn't contain the answer, say so". ¿Qué crees que pasaría si quitaras esa instrucción y simplemente le entregaras al modelo el contexto y la pregunta sin ninguna guía? Pruébalo.
-- Si `retrieve()` devuelve los fragmentos *equivocados* para una pregunta — que se ven relevantes pero no son realmente la respuesta — ¿puede un buen modelo de lenguaje seguir acertando la respuesta? ¿Qué sugiere eso sobre qué parte de este pipeline importa más cuando algo sale mal: la recuperación o la generación?
-
-## ⚠️ Errores comunes
-
-- **Fragmentos demasiado grandes o demasiado pequeños.** Demasiado grandes y la recuperación se vuelve borrosa (Paso 2); demasiado pequeños y un fragmento pierde el contexto que rodea lo que el modelo necesita para responder bien. Si las respuestas se sienten raras, prueba un `TARGET_CHUNK_SIZE` distinto y vuelve a ejecutar `build_index.py`.
-- **Olvidar reconstruir el índice después de editar `notes/`.** `build_index.py` solo se ejecuta cuando tú lo ejecutas — agrega una nota nueva, y `retrieve()` no encontrará nada en ella hasta que vuelvas a ejecutar `uv run python build_index.py`. No hay ningún vigilante de archivos aquí; este es un paso manual por diseño, para que siempre sepas exactamente qué está indexado.
-- **Generar el embedding de la pregunta con un modelo distinto al usado para construir el índice.** `retrieve.py` y `build_index.py` fijan a propósito `MODEL_NAME = "all-MiniLM-L6-v2"` en el código — los vectores de dos modelos de embeddings distintos no son comparables entre sí en absoluto, incluso si ambos son "de 384 dimensiones". Cambia el modelo en un archivo y debes cambiarlo en ambos, y luego reconstruir el índice.
-- **Límites de tasa en el nivel gratuito del LLM.** La recuperación (Pasos 3-4) es local e ilimitada; solo la llamada de `ask()` del Paso 5 cuenta contra la cuota de nivel gratuito de tu proveedor. Un error 429 ahí es el proveedor diciéndote que vayas más despacio, no un bug — mira el [proyecto de Agente de IA](/docs/projects/ai-agent#manejar-límites-de-tasa) para el mismo patrón y un enfoque de reintento que puedes copiar.
-
-## Lo que acabas de construir
-
-Un pipeline RAG pequeño pero completo: fragmentación, embeddings locales, búsqueda de similitud en memoria, y un paso final de generación anclado en tu propio texto recuperado — la misma arquitectura detrás de sistemas de producción mucho más grandes, solo que con un array plano de NumPy en lugar de una base de datos vectorial y una API de nivel gratuito en lugar de una de pago. Nada aquí fue falseado o simplificado a un juguete que no generaliza; cambia por una carpeta de notas más grande y un modelo de pago, y los mismos cuatro pasos siguen siendo todo el pipeline.
-
-## A dónde ir desde aquí
-
-- Una vez que tu carpeta de notas crezca más allá de lo que cabe cómodamente en memoria (decenas de miles de fragmentos), mira una base de datos vectorial real como [ChromaDB](https://www.trychroma.com/) — hace la misma búsqueda de vecinos más cercanos que `retrieve()` de arriba, solo que indexada para velocidad a una escala mucho mayor, con la persistencia en disco y el filtrado que esta versión de archivo plano no tiene.
-- Prueba el **re-ranking**: recupera un top-k más grande (digamos, 10) con la búsqueda rápida por embeddings, y luego usa un modelo cross-encoder más lento y preciso para volver a puntuar solo esos 10 antes de elegir los 3 finales que se envían al LLM — un patrón común de dos etapas en sistemas RAG de producción.
-- Extiende `prepare_notes.py` para manejar más tipos de archivo — PDFs (`pypdf`), o incluso tus propias exportaciones de chats pasados — a los pasos de fragmentación y embeddings que vienen después no les importa de dónde vino el texto.
-
-## Comparte tu proyecto con la clase
-
-¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado — y su README tiene un recorrido completo y amigable para principiantes para agregar el tuyo vía un **pull request**, incluso si nunca has usado git antes: hacer fork del repositorio, crear una rama, hacer commit de tus archivos, y abrir el PR, un paso a la vez. No se asume ninguna experiencia previa con git.
-
-Bienvenido a escribir Python fuera del navegador. 🎓
-
+Si quieres profundizar en la parte de embeddings, revisa la skill de **Knowledge Base** para aprender a crear índices vectoriales eficientes.

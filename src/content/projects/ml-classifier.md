@@ -1,144 +1,94 @@
 ---
 title: "Train Your First Machine Learning Model"
 slug: /projects/ml-classifier
-description: "Graduate from describing data to predicting from it: train a real binary classifier on the Titanic dataset with scikit-learn."
+description: "Build, train, and evaluate a scikit-learn classifier with real data — no ML background needed."
+difficulty: "intermediate"
+estimatedMinutes: 60
+xpReward: 50
+tags: ["Machine Learning", "scikit-learn", "pandas", "matplotlib"]
+prerequisites: ["Python basics", "Basic pandas", "Basic matplotlib"]
 ---
 
-# 🧠 Train Your First Machine Learning Model
+# Train Your First Machine Learning Model
 
-This project assumes you're comfortable with pandas at roughly the level of Data Analysis's Normal track — filtering, `.groupby()`, handling missing values. In fact it assumes you've specifically done [Week 10's guided Titanic EDA](/docs/data-analysis/normal/week-10): you already loaded that dataset, cleaned it, and asked questions like "did survival rate differ by class or sex?" This project is the direct sequel. You already *described* this dataset. Now you'll *predict* from it — training a model that looks at a passenger it has never seen and guesses whether they survived.
+Machine learning sounds intimidating, but the core idea is simple: show a computer examples of input/output pairs, and it learns a pattern it can apply to new, unseen data. In this project you'll do exactly that — load a classic dataset, train a decision tree classifier, and evaluate how well it predicts. No math background required.
 
-This is optional and ungraded. See [Real-World Projects](/docs/projects) for the full, growing list.
+## What You'll Learn
 
-## 🎯 What you'll do
+1. Load and explore a real dataset
+2. Preprocess data for machine learning
+3. Split data into train/test sets
+4. Train a decision tree classifier
+5. Evaluate model accuracy and create a confusion matrix
 
-1. Install `uv` and set up a local project with `scikit-learn` and `pandas`.
-2. Load the same Titanic dataset from Week 10, and encode its categorical columns as numbers.
-3. Split the data into a training set and a test set, and understand why that split matters.
-4. Train a `LogisticRegression` classifier and use it to predict survival.
-5. Evaluate it properly, then train a second model (`RandomForestClassifier`) and compare.
+## What You'll Build
 
-## Where to run this
-
-Three reasonable ways to do this project — pick whichever fits your setup:
-
-- **Locally with `uv` (recommended).** This project is small and needs no GPU, so it's a good candidate for actually installing Python for real on your own machine, same as the other Real-World Projects. Steps 1–5 below assume this path.
-- **GitHub Codespaces.** Open [codespaces.new/abderrahim-lectures/python-data-analysis-course](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) to get a cloud dev environment with Node, Python, and `uv` already installed (see [`.devcontainer/devcontainer.json`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/.devcontainer/devcontainer.json)) — the exact same commands below work from a browser tab, no local install at all.
-- **Google Colab or Kaggle Notebooks.** A genuinely good fit here: training `LogisticRegression` or `RandomForestClassifier` on a dataset this small (a few hundred rows at most) needs no GPU, so a free notebook environment is more than enough.
-
-  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ml-classifier/notebook.ipynb)
-  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ml-classifier/notebook.ipynb)
-  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fml-classifier%2Fnotebook.ipynb)
-
-  Click a badge above to open a ready-to-run notebook (`examples/ml-classifier/notebook.ipynb`) with the install cell, data loading/encoding, train/test split, and both classifiers already filled in. **Kaggle Notebooks specifically** is a nice full-circle choice — the Titanic dataset is itself one of Kaggle's original, most famous beginner competitions, so you'd be training a model on Kaggle's own platform, on Kaggle's own dataset.
+An ML pipeline that:
+- Loads the Iris dataset from scikit-learn
+- Explores feature distributions
+- Splits data with proper train/test separation
+- Trains a Decision Tree classifier
+- Evaluates with accuracy, precision, recall
+- Visualizes the confusion matrix
 
 ## Setup
-
-`uv` is a single tool that replaces the usual "install Python, then install pip, then install a virtual environment tool, then install packages" chain — it can install and manage Python versions itself, alongside your project's dependencies.
-
-**macOS / Linux** (terminal):
-
-```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
-```
-
-**Windows** (PowerShell):
-
-```powershell
-powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
-```
-
-Close and reopen your terminal, then confirm it installed:
-
-```bash
-uv --version
-```
-
-Then set up the project:
 
 ```bash
 uv init ml-classifier
 cd ml-classifier
-uv add scikit-learn pandas
+uv add scikit-learn pandas matplotlib
 ```
 
-## Step 1: Load and prepare the data
+## Step 1: Load and Explore Data
 
-Same dataset, same columns as Week 10's EDA — this time loaded from the course's raw dataset file instead of the in-browser sandbox. Four small sub-steps: load, clean, encode the categorical columns, then separate features from target.
-
-### 1.1 Load the Titanic dataset
-
-**👟 Starter hint:** Read the CSV straight from the URL into a DataFrame and look at it before touching anything — you should recognize exactly the columns you cleaned back in Week 10:
+The Iris dataset is one of the most famous datasets in machine learning. It contains measurements (sepal length, sepal width, petal length, petal width) for 150 iris flowers across three species. Your job: teach a model to predict the species from the measurements.
 
 ```python
 import pandas as pd
+from sklearn.datasets import load_iris
 
-url = "https://raw.githubusercontent.com/abderrahim-lectures/python-data-analysis-course/main/static/datasets/titanic.csv"
-df = pd.read_csv(url)
+# Load the dataset
+iris = load_iris()
+df = pd.DataFrame(iris.data, columns=iris.feature_names)
+df["species"] = iris.target
+df["species_name"] = df["species"].map({0: "setosa", 1: "versicolor", 2: "virginica"})
+
 df.head()
 ```
 
-Quick recap of the cleaning Week 10 already walked through in depth — just enough here to get a clean DataFrame, not re-taught:
+Explore the data to understand what you're working with:
 
 ```python
-df["Age"] = df["Age"].fillna(df["Age"].median())
-df["Embarked"] = df["Embarked"].fillna(df["Embarked"].mode()[0])
-df = df.drop(columns=["PassengerId", "Name"])  # identifiers, not predictive signal
+# How many samples per species?
+print(df["species_name"].value_counts())
+
+# Basic statistics for each feature
+df.describe()
 ```
 
-**🎯 Expected output:** `df.head()` shows passenger rows with the familiar Week 10 columns, and after the cleaning lines `df.isna().sum()` shows zero missing values in `Age` and `Embarked`.
+**Expected output:** You'll see 50 samples per species (balanced classes), and statistics showing ranges like sepal length from roughly 4.3 to 7.9 cm.
 
-**🩹 If it's off:** A URL read error usually means you're offline or the URL changed — open the link in a browser to confirm. If `df.isna().sum()` still shows blanks, re-check the two `fillna` lines: `Age` is filled with the *median* (a float), `Embarked` with the *mode* (the most common value) — and forgetting the `drop(columns=...)` line leaves `PassengerId`/`Name` in the frame, where the model would later waste effort on columns that carry no predictive signal.
+**Troubleshooting:** If `load_iris()` fails, make sure you ran `uv add scikit-learn` in your setup step. The dataset is bundled with scikit-learn — no internet required.
 
-### 1.2 Encode categorical columns
+## Step 2: Preprocess Features
 
-**👟 Starter hint:** `Sex` and `Embarked` are strings ("male"/"female", "S"/"C"/"Q") — Week 10's `.groupby()` was perfectly happy grouping by a string column, but scikit-learn's models are not: every model in this project is, underneath, doing arithmetic on numbers, so every column that goes in has to already be numeric. Turn each categorical column into 0/1 indicator columns with `pd.get_dummies`:
+Separate the input features (the measurements) from the target (the species label). Every column going into the model must be numeric —幸运ly, the Iris features already are, so no encoding is needed.
 
 ```python
-df = pd.get_dummies(df, columns=["Sex", "Embarked"], drop_first=True)
-df.head()
+X = df.drop(columns=["species", "species_name"])
+y = df["species"]
+
+print(f"Features shape: {X.shape}")
+print(f"Target shape: {y.shape}")
 ```
 
-`drop_first=True` drops one category per column (e.g. keeps `Sex_male` but not `Sex_female`) because the dropped category is fully implied by the others being 0 — keeping both would be redundant. `Sex` becomes one column (`Sex_male`, 1 or 0); `Embarked` becomes two (`Embarked_Q`, `Embarked_S`, both 0 meaning "C"). This is the same shape of transformation as `pd.cut` in Week 10 — turning one column into a form easier for the next step to consume — just going from text to numbers instead of from continuous to binned.
+**Expected output:** `Features shape: (150, 4)` and `Target shape: (150,)` — 150 rows, 4 feature columns.
 
-**🎯 Expected output:** `df.head()` now shows only numeric columns — `Sex_male` of 0/1 and `Embarked_Q`/`Embarked_S` of 0/1 — with no more `"male"`/`"female"` or `"S"`/`"C"` strings anywhere.
+**Troubleshooting:** If you see `object` dtype columns in `X.dtypes`, you accidentally included string columns. Drop anything that isn't a numeric measurement.
 
-**🩹 If it's off:** If a string column still remains, check the `columns` argument is spelled and cased exactly (`Sex`, `Embarked`) — a typo silently leaves that column un-encoded, and `X.dtypes` in the next sub-step is where it will surface. And a deliberate note: `Pclass` is left alone here even though it's a category too — that's a defensible real-world choice (see the Socratic question), not an oversight.
+## Step 3: Train/Test Split
 
-### 1.3 Separate features from target
-
-**👟 Starter hint:** Split the frame: everything except `Survived` goes into `X` (the features the model learns from), and `Survived` alone becomes `y` (the thing you're predicting). The model must never see `Survived` as an input:
-
-```python
-X = df.drop(columns=["Survived"])
-y = df["Survived"]
-```
-
-**🎯 Expected output:** `X.shape` has one fewer column than the DataFrame; `y` is a Series of 0s and 1s with the same row count as `X`. `X.dtypes` shows no `object` columns left.
-
-**🩹 If it's off:** The classic silent mistake is leaving `Survived` in `X` — the model then "memorizes" the answer column, and Step 4's accuracy looks impossibly great because it isn't predicting anything. Run `X.columns` and confirm `Survived` is absent before you move on; it's the cheapest way to catch the single most damaging prep error in this project.
-
-### 1.4 Verify the prepared data
-
-**✅ Checklist**
-
-- ✅ `df.isna().sum()` shows zero missing values in every column you're about to feed the model.
-- ✅ `X.dtypes` shows no `object` columns left — everything is numeric.
-- ✅ `X` does not contain the `Survived` column; `y` does not contain anything else.
-
-**🤔 Socratic Question(s)**
-
-`pd.get_dummies` was applied to `Sex` and `Embarked`, but not to `Pclass` (1, 2, or 3) — it was left as a single numeric column. `Pclass` is a category too (there's no meaningful sense in which class 2 is "twice" class 1), yet leaving it as-is is a defensible choice some real analyses make. Can you think of an argument for encoding `Pclass` the same way as `Sex`, and an argument for leaving it alone?
-
-## Step 2: Split into training and test sets
-
-Here's the core idea this step is built on: **a model's score on data it was trained on tells you almost nothing about how it'll do on data it hasn't seen.** A model can — and, given enough freedom, will — simply memorize the training rows rather than learn a genuine pattern. Imagine grading a student using the exact questions they were handed the answer key for beforehand: a perfect score wouldn't tell you whether they understood the material or just memorized those specific answers. Evaluating a model on its own training data has the same flaw. To get an honest measure of how the model performs on passengers it's never seen, you have to hold some data back and never let the model train on it.
-
-Take it in two sub-steps: make the split, then verify it — and read the leakage tip before you go further.
-
-### 2.1 Make the split
-
-**👟 Starter hint:** Hold back a slice of rows that the model never trains on, so Step 4's score measures generalization, not memorization. Use `train_test_split` to carve out a 20% test slice, with a fixed `random_state` so you can rerun reproducibly:
+A model's accuracy on data it trained on tells you almost nothing. You need to hold back some data the model never sees during training, then evaluate on that held-out portion. This is the single most important habit in machine learning.
 
 ```python
 from sklearn.model_selection import train_test_split
@@ -146,153 +96,111 @@ from sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42
 )
+
+print(f"Training set: {X_train.shape[0]} samples")
+print(f"Test set: {X_test.shape[0]} samples")
 ```
 
-`test_size=0.2` holds back 20% of the rows for testing, training on the remaining 80%. `random_state=42` fixes the random shuffle used to pick which rows go where — without it, you'd get a *different* split (and therefore a slightly different accuracy score) every time you rerun the script, making it hard to tell whether a change to your code actually helped or you just got a luckier split.
+`test_size=0.2` holds back 20% of rows for testing (30 samples). `random_state=42` makes the split reproducible — you'll get the same rows every time.
 
-**🎯 Expected output:** `X_train.shape` and `X_test.shape` show an 80/20 split of the total row count, and rerunning the split with the same `random_state` reproduces the *exact* same rows in `X_test` every time.
+**Expected output:** Training set: 120 samples, Test set: 30 samples.
 
-**🩹 If it's off:** If rerunning changes `X_test`'s rows, `random_state=42` got dropped from the call. If either `y_train` or `y_test` ends up all 0s (or all 1s), you've caught a small-data fluke — a test set with a single class can't measure anything honestly, so re-split or add more data rather than pretending the number means something.
+**Troubleshooting:** If the numbers don't add up to 150, double-check your `test_size`. If `y_test` contains only one species, your split is unbalanced — try a different `random_state` or check that `y` actually has all three classes.
 
-### 2.2 Verify the split
-
-:::tip[Data leakage: prepare, then split — not the other way around]
-Step 1's encoding was done on the *whole* dataset, before this split, which is fine here because `pd.get_dummies` only looks at each row's own category, not at any other row. But it's easy to get this wrong with transformations that *do* look across rows — for example, scaling a column using its mean and standard deviation. If you compute that mean/std on the full dataset and then split, the training set has quietly "seen" information from the test set (its rows contributed to that mean). This is called **data leakage**, and it's one of the most common real-world mistakes in applied machine learning — the fix is to always compute anything that summarizes the data (means, standard deviations, category lists) using the *training* set only, then apply that same transformation to the test set.
+:::tip[Data leakage]
+Always split *after* loading the data but *before* any transformation that summarizes the dataset (like scaling or encoding). Here the Iris features are already numeric and on similar scales, so no leakage risk — but this discipline matters for messier datasets.
 :::
 
-**✅ Checklist**
+## Step 4: Train a Classifier
 
-- ✅ `X_train.shape` and `X_test.shape` show roughly an 80/20 split of the total row count.
-- ✅ Rerunning the split with the same `random_state` reproduces the exact same rows in `X_test` every time.
-- ✅ `y_train` and `y_test` are both a mix of 0s and 1s, not all one value.
-
-**🤔 Socratic Question(s)**
-
-If you trained a model and evaluated it on `X_train`/`y_train` instead of `X_test`/`y_test` by mistake, would you expect the accuracy to look *better* or *worse* than the honest number — and why?
-
-## Step 3: Train a classifier
-
-`LogisticRegression`, despite the name, is a classifier, not a regression model in the usual sense. The idea: for each passenger, it computes a weighted sum of their features (age, fare, sex, class, ...) — the same shape of computation as an ordinary linear equation — and then squashes that sum through a function (the logistic/sigmoid function) that maps any number onto a value between 0 and 1. That output is interpreted as an estimated *probability* of survival. "Fitting the model" means finding the set of weights that makes those estimated probabilities line up as closely as possible with the actual 0/1 outcomes in the training data. A prediction is then just "probability ≥ 0.5 → predict survived."
-
-Take it in two sub-steps: fit and predict, then verify.
-
-### 3.1 Fit a LogisticRegression and predict
-
-**👟 Starter hint:** `.fit(X_train, y_train)` is where the learning happens — the model never sees `X_test` or `y_test` during it. Then apply the fitted model to the held-out rows with `.predict(X_test)`:
+A Decision Tree asks a series of yes/no questions about the features (e.g., "is petal length > 2.5?") and arrives at a prediction. It's intuitive, fast, and works well as a first model.
 
 ```python
-from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
 
-model = LogisticRegression(max_iter=1000)
+model = DecisionTreeClassifier(random_state=42)
 model.fit(X_train, y_train)
 
 predictions = model.predict(X_test)
 ```
 
-`.fit(X_train, y_train)` is where the learning happens — it never sees `X_test` or `y_test`. `max_iter=1000` raises the cap on how many optimization steps the solver takes to converge; the default sometimes isn't enough for this data and scikit-learn will warn you if it stops early.
+`.fit(X_train, y_train)` is where learning happens — the model never sees `X_test` during this step. Then `.predict(X_test)` applies what it learned to the held-out data.
 
-**🎯 Expected output:** `predictions` is an array of the same length as `y_test`, containing only 0s and 1s, and `model.predict_proba(X_test)[:5]` returns actual probabilities — numbers between 0 and 1 — not just the final 0/1 call.
+**Expected output:** `predictions` is an array of length 30 containing only 0, 1, or 2 (the species labels).
 
-**🩹 If it's off:** A `ConvergenceWarning` means the solver stopped early — raise `max_iter` until it goes away rather than ignoring it, since an under-converged model's predictions are less reliable. If `predict` throws a column-mismatch error, the feature columns in `X_test` differ from what the model trained on — that's the encoding-before-splitting discipline from Step 1 paying off, and it's easier to fix here than in Step 4.
+**Troubleshooting:** If you see a warning about feature names, you may have passed a DataFrame with extra columns. Make sure `X_train` and `X_test` contain only the four numeric feature columns.
 
-### 3.2 Verify the classifier
+## Step 5: Evaluate the Model
 
-**✅ Checklist**
-
-- ✅ `model.fit(...)` runs without a convergence warning (or you've raised `max_iter` until it doesn't).
-- ✅ `predictions` is an array of the same length as `y_test`, containing only 0s and 1s.
-- ✅ You can print `model.predict_proba(X_test)[:5]` and see it return actual probabilities, not just the final 0/1 call.
-
-**🤔 Socratic Question(s)**
-
-`predict_proba` might return something like 0.51 for one passenger and 0.98 for another — both get rounded to the same final prediction (1), but they represent very different levels of confidence. What real-world decision might change if you had access to that probability, instead of just the final yes/no prediction?
-
-## Step 4: Evaluate and compare models
-
-The single number to start with is accuracy — the fraction of test-set predictions that matched the real outcome. Accuracy alone hides *what kind* of mistakes the model makes, so a confusion matrix comes next, then a second model for a genuinely honest comparison. Three sub-steps.
-
-### 4.1 Compute accuracy and a confusion matrix
-
-**👟 Starter hint:** Score the logistic model first with `accuracy_score`, then build a `confusion_matrix` to see *what kind* of mistakes it made — the single number alone can't tell you that:
+Start with accuracy — the fraction of predictions that were correct — then dig deeper with precision, recall, and a confusion matrix.
 
 ```python
-from sklearn.metrics import accuracy_score, confusion_matrix
+from sklearn.metrics import accuracy_score, precision_score, recall_score, confusion_matrix
 
 accuracy = accuracy_score(y_test, predictions)
-print(f"Logistic Regression accuracy: {accuracy:.1%}")
+precision = precision_score(y_test, predictions, average="weighted")
+recall = recall_score(y_test, predictions, average="weighted")
+
+print(f"Accuracy:  {accuracy:.1%}")
+print(f"Precision: {precision:.1%}")
+print(f"Recall:    {recall:.1%}")
 ```
 
-Accuracy alone hides *what kind* of mistakes the model makes. A confusion matrix breaks that down:
+Accuracy tells you the overall hit rate. Precision tells you, of all the times the model predicted a species, how often it was right. Recall tells you, of all the actual instances of a species, how many the model found. The `average="weighted"` parameter handles the multi-class case by averaging across all three species.
+
+**Expected output:** All three metrics should be around 90–100% on this dataset — Iris is well-separated enough that a decision tree does very well.
+
+**Troubleshooting:** If accuracy is exactly 33%, the model is guessing randomly (chance level for 3 classes). Check that `X_train` and `y_train` aren't shuffled independently — they must stay aligned.
+
+## Step 6: Visualize Results
+
+A confusion matrix shows exactly *which* species the model confused. Visualizing it makes the pattern obvious at a glance.
 
 ```python
+import matplotlib.pyplot as plt
+import numpy as np
+
 cm = confusion_matrix(y_test, predictions)
-print(cm)
+
+fig, ax = plt.subplots(figsize=(6, 5))
+im = ax.imshow(cm, cmap="Blues")
+
+ax.set_xticks(range(3))
+ax.set_yticks(range(3))
+ax.set_xticklabels(iris.target_names)
+ax.set_yticklabels(iris.target_names)
+ax.set_xlabel("Predicted")
+ax.set_ylabel("Actual")
+ax.set_title("Confusion Matrix")
+
+# Add count labels in each cell
+for i in range(3):
+    for j in range(3):
+        ax.text(j, i, str(cm[i, j]), ha="center", va="center",
+                color="white" if cm[i, j] > cm.max() / 2 else "black")
+
+plt.colorbar(im)
+plt.tight_layout()
+plt.show()
 ```
 
-The result is a 2×2 grid. Reading it in plain terms: it counts, separately, how many passengers who actually died were correctly predicted to die, how many who actually died were wrongly predicted to survive (a **false positive** for "survived"), how many who actually survived were wrongly predicted to die (a **false negative**), and how many who actually survived were correctly predicted to survive. Two models with identical accuracy can make very different *kinds* of mistakes — worth knowing, especially in domains where one kind of error (say, a missed medical diagnosis) is far costlier than the other.
+The diagonal cells (top-left to bottom-right) show correct predictions. Off-diagonal cells show mistakes — for example, if versicolor and virginica are sometimes confused, that cell will light up.
 
-**🎯 Expected output:** A `Logistic Regression accuracy: NN%` line prints, and `cm` prints a 2×2 array whose four cells you can read in "actually died/survived vs predicted died/survived" terms.
+**Expected output:** A 3×3 grid with high numbers on the diagonal and zeros (or near-zeros) off it. A perfect model would have only diagonal entries.
 
-**🩹 If it's off:** If accuracy prints as a raw 0.86-style float instead of `86%`, the `:.1%` format string is missing from the print. If reading the grid trips you up, print `confusion_matrix(y_test, predictions)` and check the row/column meaning once — the default convention is rows = actual outcome, columns = predicted outcome, and mixing them up is the most common misreading.
+**Troubleshooting:** If the plot doesn't appear, make sure you're running in an environment with a display (Jupyter, VS Code, or a local script). In a headless terminal, replace `plt.show()` with `plt.savefig("confusion_matrix.png")` to save the figure to a file instead.
 
-### 4.2 Train and compare a Random Forest
+## 🧩 Challenges
 
-**👟 Starter hint:** Train a second, structurally different model on the *exact same split* so the comparison is honest — a `RandomForestClassifier` learns many small decision trees (each on a slightly different random subset) and has them vote, instead of one weighted sum:
+- **Try a different classifier.** Replace `DecisionTreeClassifier` with `RandomForestClassifier` (add `from sklearn.ensemble import RandomForestClassifier`). How does accuracy change?
+- **Tune the tree.** Set `max_depth=2` when creating the `DecisionTreeClassifier`. What happens to accuracy? What about `max_depth=10`?
+- **Feature importance.** After fitting, print `model.feature_importances_` alongside `iris.feature_names`. Which feature matters most for predicting species?
+- **Hold out a different split.** Change `test_size` to 0.3 or 0.1. How does the accuracy number shift? Run the split 10 times with different `random_state` values and report the range of accuracy scores.
 
-```python
-from sklearn.ensemble import RandomForestClassifier
+## What You Learned
 
-rf_model = RandomForestClassifier(n_estimators=100, random_state=42)
-rf_model.fit(X_train, y_train)
-rf_predictions = rf_model.predict(X_test)
-
-rf_accuracy = accuracy_score(y_test, rf_predictions)
-print(f"Random Forest accuracy: {rf_accuracy:.1%}")
-print(confusion_matrix(y_test, rf_predictions))
-```
-
-A random forest trains many small decision trees, each on a slightly different random subset of the data and features, and has them vote on the final prediction — a different underlying idea from logistic regression's single weighted-sum-plus-probability approach. Compare the two accuracy numbers you now have. Don't assume the higher one is automatically "the better model" — see the pitfall below.
-
-**🎯 Expected output:** A `Random Forest accuracy: NN%` line plus its own confusion matrix prints — a second accuracy number computed on the *same* `X_test`/`y_test` so the comparison is apples to apples.
-
-**🩹 If it's off:** If the two accuracy numbers come out identical, you may have accidentally used the logistic model's predictions for both (update `rf_predictions`, don't copy `predictions`), or the models weren't given the same `random_state`, so you're comparing two different random runs rather than two models.
-
-### 4.3 Verify the comparison
-
-**✅ Checklist**
-
-- ✅ You have two accuracy numbers, computed on the *same* `X_test`/`y_test`, one per model.
-- ✅ You've printed both confusion matrices and can say, in a sentence, which kinds of mistakes each model made.
-- ✅ You haven't declared a "winner" without considering how small the gap between them actually is.
-
-**🤔 Socratic Question(s)**
-
-- If your model scores 95% accuracy but the dataset is 95% one class, what does that number actually tell you? (Check: what fraction of Titanic passengers actually survived — is it close to 50/50, or skewed?)
-- The two models' accuracy scores probably differ by only a few percentage points, computed on a test set of only around 20 rows (this course's version of the dataset has about 100 rows total, smaller than the original Kaggle Titanic dataset's ~900). How confident should you be that this specific gap would hold up on a *different* random 20% test split?
-
-## ⚠️ Common pitfalls
-
-- **Encoding train and test sets inconsistently.** If you split first and then run `pd.get_dummies` separately on each half, a category present in training but absent in test (or vice versa) can produce mismatched columns between `X_train` and `X_test`, breaking `.fit()`/`.predict()` or silently producing wrong results. Encode before splitting when the encoding only looks at each row's own values (as here), or fit the encoder on training data only and apply it to test data, never the reverse.
-- **Data leakage** — fitting any transformation that summarizes the *whole* dataset (a scaler, an encoder with cross-row statistics) before splitting, instead of after. See the tip in Step 2; this is one of the most common real-world mistakes in applied machine learning, and it quietly inflates your test accuracy into an overly optimistic number.
-- **Over-interpreting a small accuracy difference.** With a test set this small (around 20 rows, since this course's dataset has only about 100 rows total), a 2-3 percentage point gap — often just one or two flipped predictions — is well within the range you'd expect from random noise in *which* rows happened to land in the test split, not necessarily evidence one model is genuinely better. Cross-validation (see below) is the standard way to get a more trustworthy comparison, and matters even more on a dataset this size.
-- **Forgetting `random_state`.** Without it, your split (and some models' internal randomness) changes every run, making it impossible to tell whether a change you made actually improved anything or you just got a different random split.
-
-## What you just built
-
-You took a dataset you had already explored and summarized with pandas, and pushed one step further: a model that generalizes from examples it saw to a prediction about examples it didn't. Nothing here is exotic — `LogisticRegression` and `RandomForestClassifier` are two of the most widely used classifiers in practice — but the shape of the workflow (prepare data, split honestly, fit, evaluate, compare) is the same shape used for far more sophisticated models.
+You built a complete machine learning pipeline: load data, prepare features, split into train/test, train a classifier, evaluate with multiple metrics, and visualize results. The workflow — prepare → split → fit → evaluate — is the same shape used for every supervised learning task, whether it's a 150-row toy dataset or a million-row production system. Decision trees are just one family of models; the same steps work with logistic regression, random forests, neural networks, and beyond.
 
 :::tip[Check scikit-learn's current docs]
-scikit-learn is a mature, stable library, but its API does shift between major versions occasionally — default parameter values change, and functions get deprecated in favor of newer ones. Before relying on this code beyond a course project, skim [scikit-learn's current documentation](https://scikit-learn.org/stable/) for the version you actually have installed (`uv pip show scikit-learn`).
+scikit-learn is stable, but its API shifts between major versions — default parameter values change, and functions get deprecated. Before relying on this code beyond a course project, skim [scikit-learn's current documentation](https://scikit-learn.org/stable/) for the version you actually have installed (`uv pip show scikit-learn`).
 :::
-
-## Where to go from here
-
-- **Feature engineering.** The `Name` column was dropped in Step 1, but it isn't useless — titles like "Mr.", "Mrs.", "Miss.", and "Master." (embedded in the name string) correlate strongly with age and sex, and extracting them as a new categorical column is a classic improvement to this exact dataset.
-- **Cross-validation.** A single train/test split gives one accuracy number that depends partly on luck (which rows landed where). `sklearn.model_selection.cross_val_score` repeats the split-train-evaluate cycle several times on different slices and averages the result — a more trustworthy way to compare two models than the single comparison in Step 4.
-- **A different dataset entirely.** Kaggle hosts hundreds of small, well-documented beginner datasets similar in spirit to Titanic — a good next step once this workflow feels routine.
-
-## Share your project with the class
-
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
-
-Welcome to writing Python outside the browser. 🎓

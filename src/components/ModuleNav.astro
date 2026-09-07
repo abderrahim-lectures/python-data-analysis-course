@@ -1,0 +1,36 @@
+---
+interface Props {
+  prevModule: { slug: string; data: { title: string } } | null;
+  nextModule: { slug: string; data: { title: string } } | null;
+  modulesPath: string;
+}
+
+const { prevModule, nextModule, modulesPath } = Astro.props;
+const base = import.meta.env.BASE_URL;
+
+function moduleSlug(entry: { slug: string }) {
+  return entry.slug.split('/').pop()!;
+}
+---
+
+<section class="container module-nav">
+  {prevModule
+    ? <a class="module-nav__prev" href={`${base}${modulesPath}/${moduleSlug(prevModule)}`}>← {prevModule.data.title}</a>
+    : <span />}
+  {nextModule
+    ? <a class="module-nav__next" href={`${base}${modulesPath}/${moduleSlug(nextModule)}`}>{nextModule.data.title} →</a>
+    : <span />}
+</section>
+
+<style>
+  .module-nav { display: grid; grid-template-columns: 1fr 1fr; align-items: center; margin: 2rem auto 3rem; gap: 1rem; }
+  .module-nav a {
+    text-decoration: none; font-weight: 700; padding: .6rem 1.1rem; min-height: 40px;
+    border-radius: var(--radius-md); background: var(--surface); border: 1px solid var(--line);
+    color: var(--ink); box-shadow: var(--shadow-sm); display: inline-flex; align-items: center; gap: .4rem;
+    transition: border-color .15s ease, color .15s ease;
+  }
+  .module-nav a:hover { border-color: var(--accent); color: var(--accent); }
+  .module-nav__prev { justify-self: start; }
+  .module-nav__next { justify-self: end; }
+</style>

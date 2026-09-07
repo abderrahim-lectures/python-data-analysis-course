@@ -1,0 +1,167 @@
+---
+// Shared project detail page for every locale: /projects/<slug> (en) and
+// /<locale>/<projects-word>/<slug> (ar/es/fr). Each locale's [...slug].astro
+// page is a thin wrapper passing its entry + locale here, so the date/UX
+// markup lives in exactly one place.
+//
+// Gamification: the client script below turns every `## Step N: ...` heading
+// into a clearable "step" (recordProjectStep, +15 XP) and the article into a
+// mark-done flow (completeProject, +100 XP + quests). This is the single home
+// for that wiring -- content files just write `## Step N:` headings.
+import type {CollectionEntry} from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import ProjectArt from '../ProjectArt.astro';
+import {detectLocale, projectsHref, type Locale} from '../../lib/routeSegments';
+import {PAGE_STRINGS} from '../../lib/pageStrings';
+import {PROJECT_TAGS, projectDifficulty, DIFFICULTY_COLORS} from '../../lib/projectArt';
+import {XP} from '../../lib/gameState';
+import '../../styles/project-detail.css';
+
+interface Props {
+  entry: CollectionEntry<'projects'>;
+  locale?: Locale;
+}
+
+const {entry} = Astro.props;
+const locale: Locale = Astro.props.locale ?? detectLocale(Astro.url.pathname);
+const dir = locale === 'ar' ? 'rtl' : 'ltr';
+const s = PAGE_STRINGS[locale];
+const base = import.meta.env.BASE_URL;
+
+const {title, description, difficulty, estimatedMinutes, tags} = entry.data;
+const {Content} = await entry.render();
+const xpAward = XP.PROJECT_COMPLETE;
+
+// Clean slug: strip the locale prefix and any frontmatter-override
+// /projects/ prefix so it matches gameState keys and hrefs (e.g. an EN file
+// whose `slug: /projects/<name>` frontmatter yields entry.slug with that
+// prefix). Normalize to the bare name used everywhere, including on the
+// [[...slug]] getStaticPaths param and localStorage XP keys.
+const rawSlug = entry.slug.replace(/^(ar|es|fr)\//, '');
+const slug = rawSlug.replace(/^\/?projects\//, '');
+const diff = difficulty ?? projectDifficulty(slug);
+const diffColor = DIFFICULTY_COLORS[diff] ?? DIFFICULTY_COLORS.beginner;
+const projectTags = (tags?.length ? tags : PROJECT_TAGS[slug] ?? []) as string[];
+
+const alternates = ({
+  en: `projects/${slug}`,
+  ar: `ar/مشاريع/${slug}`,
+  es: `es/proyectos/${slug}`,
+  fr: `fr/projets/${slug}`,
+} satisfies Record<Locale, string>);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'LearningResource',
+  name: title,
+  description,
+  learningResourceType: 'Project',
+  educationalLevel: difficulty ?? diff ?? 'Beginner',
+  isAccessibleForFree: true,
+  inLanguage: locale,
+  url: String(new URL(`${base}${projectsHref(locale, '', slug)}`, Astro.site)),
+  isPartOf: {
+    '@type': 'Course',
+    name: 'PyDA Course',
+    description: s.courseDescription,
+  },
+};
+---
+
+<Base title={`${title} — PyDA Course`} description={description} lang={locale} dir={dir} alternates={alternates} jsonLd={jsonLd}>
+  <nav class="crumb container">
+    <a href={`${base}${projectsHref(locale, '')}`}>{s.projectsEyebrow}</a> <span>/</span> <span class="crumb__here">{title}</span>
+  </nav>
+
+  <div class="container">
+    <ProjectArt slug={slug} class="hero-art" />
+  </div>
+
+  <article class="container lesson-content project-article" data-project-slug={slug}>
+    <header class="project-head">
+      <div class="project-head__meta">
+        <span class="project-head__diff" style={`color:${diffColor.text}`}>{diffColor.label}</span>
+        {estimatedMinutes && <span class="project-head__time">⏱ {estimatedMinutes} min</span>}
+        <span class="project-head__xp">⚡ +{xpAward} XP</span>
+        <span class="project-head__xp project-head__xp--step">＋{XP.PROJECT_STEP} XP per step</span>
+      </div>
+      <h1 class="project-title">{title}</h1>
+      {projectTags.length > 0 && (
+        <div class="project-head__tags">
+          {projectTags.map((tag: string) => <span class="project-tag">{tag}</span>)}
+        </div>
+      )}
+    </header>
+
+    <div class="project-content">
+      <Content />
+    </div>
+
+    <div class="project-done">
+      <button class="btn btn-soft project-done__btn" data-mark-project-done data-label-done={s.projectCompleted}>
+        {s.projectMarkDone}
+      </button>
+      <p class="project-done__hint">{s.projectDoneHint}</p>
+    </div>
+  </article>
+</Base>
+
+<script>
+  import {viewProject, completeProject, isProjectComplete, recordProjectStep, isProjectStepDone} from '../../lib/gameState.ts';
+
+  const article = document.querySelector('[data-project-slug]');
+  const slug = article?.getAttribute('data-project-slug') ?? '';
+
+  // ── project-view XP ──────────────────────────────────────────────
+  if (slug) viewProject(slug);
+
+  // ── step clearing: any "## Step N: …" heading becomes a clear button ──
+  const content = article?.querySelector('.project-content');
+  const steps: HTMLHeadingElement[] = content
+    ? Array.from(content.querySelectorAll('h2')).filter((h) => /^Step\s+\d+/i.test(h.textContent ?? ''))
+    : [];
+
+  const clearStep = (h: HTMLHeadingElement): void => {
+    const idx = parseInt((h.textContent ?? '').match(/^Step\s+(\d+)/i)?.[1] ?? '0', 10) - 1;
+    if (idx < 0 || !slug) return;
+    recordProjectStep(slug.replace(/.*\//, ''), idx);
+    h.classList.add('is-step-done');
+  };
+
+  steps.forEach((h) => {
+    h.classList.remove('is-step-done');
+    if (slug) {
+      const idx = parseInt((h.textContent ?? '').match(/^Step\s+(\d+)/i)?.[1] ?? '0', 10) - 1;
+      if (isProjectStepDone(slug.replace(/.*\//, ''), idx)) h.classList.add('is-step-done');
+    }
+    h.addEventListener('click', () => clearStep(h));
+  });
+
+  // ── mark-done ────────────────────────────────────────────────────
+  const btn = document.querySelector('[data-mark-project-done]') as HTMLButtonElement | null;
+  const markDone = () => {
+    if (!btn) return;
+    btn.textContent = btn.dataset.labelDone ?? '✓ Completed';
+    btn.classList.add('is-done');
+    btn.disabled = true;
+  };
+  if (slug && isProjectComplete(slug)) markDone();
+  btn?.addEventListener('click', () => {
+    if (!slug) return;
+    completeProject(slug);
+    markDone();
+    document.dispatchEvent(new CustomEvent('lesson:complete'));
+  });
+</script>
+
+<style>
+  .project-done { padding: 1.5rem 0 3rem; text-align: center; }
+  .project-done__btn { font-size: 1rem; padding: .8rem 1.6rem; }
+  .project-done__hint { color: var(--ink-soft); font-size: .82rem; margin-top: .5rem; }
+  .project-head__xp--step { opacity: .75; }
+  .project-content :global(h2.is-step-done) { color: var(--success-text); position: relative; }
+  .project-content :global(h2.is-step-done::after) {
+    content: '✅ cleared · +15 XP'; font-size: .72rem; font-weight: 700;
+    margin-left: .5rem; color: var(--success-text); vertical-align: middle;
+  }
+</style>

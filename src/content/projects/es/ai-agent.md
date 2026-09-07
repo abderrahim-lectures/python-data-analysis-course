@@ -1,330 +1,491 @@
 ---
-title: "Construye un Agente de IA"
-description: "Da el salto del entorno de práctica en el navegador a Python real: instala Python localmente y construye tu primer agente de IA con deepagents de LangChain."
+title: 'Agente Autónomo'
+description: 'Crea una skill que permita a un agente de Claude tomar decisiones y ejecutar acciones sin intervención humana.'
+difficulty: advanced
+estimatedMinutes: 150
+learningObjectives:
+  - Comprender los componentes fundamentales de un loop de agente autónomo
+  - Implementar capacidad de exploración y análisis del código fuente
+  - Crear un sistema de planificación que descomponga metas en tareas ejecutables
+  - Construir mecanismos de detección de errores con recuperación automática
+prerequisites:
+  - Python y comandos de terminal a nivel intermedio
+  - Una skill de Claude Code existente (recomendamos empezar con la skill de UI)
+  - Acceso a Claude Code con un servidor MCP
 ---
 
+## 🎯 Lo que harás
 
-# 🤖 Construye un Agente de IA
+Ya creaste una skill que le permite a Claude controlar la interfaz de usuario de tu aplicación. Pero, ¿y si pudiera *pensar* y *decidir* por sí mismo? Esta es la skill que completa el cerebro de tu agente.
 
-Todo hasta ahora se ejecutó en un playground aislado dentro del navegador — para que pudieras empezar a escribir Python desde el primer día sin ninguna configuración. Este proyecto es el paso de graduación: instala Python de verdad en tu propia máquina, y luego úsalo para construir algo que el playground nunca pudo ejecutar — un agente de IA con su propia clave de API, llamando a un modelo de lenguaje real.
+**Objetivo principal:** Construir una skill que pueda tomar una meta como "Agregar autenticación" y explorar autónomamente el código, decidir qué cambiar, implementarlo y verificar que funcione, todo sin intervención humana en cada paso.
 
-Esto es opcional y no calificado — una buena opción una vez que hayas terminado Python 101 (los fundamentos de manejo de datos de Data Analysis son un plus, no un requisito). Consulta [Proyectos del mundo real](/docs/projects) para ver la lista completa, que sigue creciendo.
+**Tu skill podrá:**
 
-## 🎯 Qué harás
+- **Explorar y comprender** tu código: leer archivos, mapear funciones y dependencies
+- **Razonar sobre tareas:** descomponer metas en pasos concretos y ejecutables
+- **Ejecutar flujos de trabajo de múltiples pasos:** con manejo de estado, lógica de branching y control de flujo
+- **Auto-recuperarse:** detectar errores y reintentar con un enfoque diferente
 
-1. Instalar `uv`, una herramienta rápida y moderna para gestionar el propio Python y las dependencias de tu proyecto — sin necesitar un instalador de Python separado.
-2. Obtener una clave de API de IA de nivel gratuito. **Eres libre de usar el proveedor que prefieras** — GitHub Models es el valor por defecto sugerido abajo ya que no necesita un registro separado (ya tienes una cuenta de GitHub), pero Gemini, Groq, Mistral, Cerebras y OpenRouter también tienen niveles gratuitos utilizables.
-3. Configurar un pequeño proyecto e instalar `deepagents` de LangChain.
-4. Escribir y ejecutar un pequeño agente, localmente, desde tu propia terminal.
+Pasos:
 
-## Dónde ejecutar esto
+- Paso 1: Diseña el loop del agente
+- Paso 2: Implementa la exploración del código fuente
+- Paso 3: Crea el sistema de planificación
+- Paso 4: Agrega detección de errores y recuperación
 
-**Localmente con `uv`** es el camino que siguen los pasos de esta lección, y el recomendado — es Python real ejecutándose en tu propia máquina, el mismo movimiento de "graduarte a Python real" que cada otro proyecto de esta sección. La sección de Configuración de abajo explica cómo instalarlo.
+Dónde ejecutar esto:
 
-**GitHub Codespaces** es una alternativa sin configuración si prefieres no instalar nada localmente todavía: abre [todo el repositorio del curso en un Codespace gratuito](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python y `uv` ya están instalados, según el `.devcontainer/devcontainer.json` del repositorio) y ejecuta exactamente los mismos comandos `uv` desde una terminal en la pestaña de tu navegador.
-
-**Google Colab, Kaggle Notebooks o Binder** también funcionan, ya que este proyecto no necesita GPU — una versión real y ejecutable en notebook del agente de este proyecto (las mismas herramientas de juguete y configuración de `create_deep_agent` que en el Paso 1 de abajo) vive en [`examples/ai-agent/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-agent/notebook.ipynb). Haz clic en una insignia para lanzarlo directamente, sin ninguna instalación local:
-
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-agent/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-agent/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fai-agent%2Fnotebook.ipynb)
-
-Sé honesto contigo mismo sobre el compromiso, sin embargo: esta es una forma de menor fidelidad de experimentar el proyecto que un proyecto `uv` local real — sin archivos separados, sin estructura de proyecto real, solo celdas en un notebook. Trátalo como una forma rápida de experimentar, no como el camino principal.
+Trabaja desde la carpeta `projects/` de tu repo `pyda-course`, dentro de una skill de Claude Code existente.
 
 ## Configuración
 
-### Instalar `uv`
+1. Asegúrate de tener Python 3.10+ y `uv` instalados
+2. Ten una skill de Claude Code existente en `~/.claude/skills/`
+3. Ten `mcp-remote` configurado y funcionando
 
-`uv` es una única herramienta que reemplaza la cadena habitual de "instala Python, luego instala pip, luego instala una herramienta de entorno virtual, luego instala paquetes" — puede instalar y gestionar versiones de Python por sí misma, junto con las dependencias de tu proyecto.
+---
 
-**macOS / Linux** (terminal):
+## Paso 1: Diseña el loop del agente
 
-```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
-```
+El loop del agente es el ciclo fundamental de decisión de un agente autónomo: **Leer → Decidir → Actuar → Observar**. Este paso construye el loop base que todos los demás componentes alimentarán.
 
-**Windows** (PowerShell):
+<details>
+<summary>¿Por qué empezar por aquí?</summary>
 
-```powershell
-powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
-```
+Un agente sin un loop definido es solo un modelo de lenguaje con acceso a herramientas. El loop es lo que le da estructura: establece cuándo el agente lee contexto, cuándo toma una decisión y cuándo termina. Sin esto, la skill será impredecible.
 
-Cierra y vuelve a abrir tu terminal, y luego confirma que se instaló:
+</details>
 
-```bash
-uv --version
-```
+### 1.1 Diseña la estructura del agente
 
-### Instalar un intérprete de Python real
+Todo agente autónomo necesita: una **meta**, un **estado** que persista entre iteraciones y una lista de **acciones** que pueda ejecutar.
 
-A diferencia de los playgrounds dentro del navegador, `uv` puede obtener y gestionar un intérprete de Python real en tu máquina directamente — no necesitas visitar python.org por separado:
+Crea el directorio de tu skill:
 
 ```bash
-uv python install 3.12
+mkdir -p ~/.claude/skills/agent-skill
 ```
 
-Este es tu momento de graduación: un Python real, instalado y gestionado en tu propia computadora, no dentro de un sandbox de navegador.
+Crea `~/.claude/skills/agent-skill/agent.py` con el loop base:
 
-### Obtener una clave de API de IA gratuita
+```python
+from typing import Any
 
-**Elige el proveedor que prefieras** — ninguno de ellos requiere una tarjeta de crédito al momento de escribir esto, y este curso no favorece a uno sobre otro. El agente de ejemplo en el repositorio del curso ([`examples/ai-agent/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/ai-agent)) soporta los seis de fábrica, seleccionados con un solo ajuste.
+def agent_loop(goal: str, state: dict[str, Any] | None = None):
+    """Loop principal del agente autónomo."""
+    state = state or {}
+    state["goal"] = goal
+    state["steps_completed"] = []
 
-| Proveedor | Dónde obtener una clave | Por qué podrías elegirlo |
-|---|---|---|
-| **GitHub Models** *(valor por defecto sugerido)* | [github.com/settings/tokens](https://github.com/settings/tokens) — un token de acceso personal con el alcance `models: read` | Sin registro separado — ya tienes una cuenta de GitHub. Límites de nivel gratuito más generosos que los de Gemini. |
-| Gemini | [Google AI Studio](https://aistudio.google.com/) | La opción más comúnmente referenciada; usada en borradores anteriores de esta página. |
-| Groq | [console.groq.com/keys](https://console.groq.com/keys) | Inferencia rápida, nivel gratuito generoso, sin tarjeta. |
-| Mistral | [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys) | Una de las cuotas gratuitas permanentes más generosas. |
-| Cerebras | [cloud.cerebras.ai](https://cloud.cerebras.ai/) | Alto volumen diario de tokens, sin tarjeta. |
-| OpenRouter | [openrouter.ai/keys](https://openrouter.ai/keys) | Una API, muchos modelos gratuitos — buena para comparar proveedores. |
+    while not state.get("done", False):
+        # 1. Leer: qué está pasando ahora
+        context = observe(state)
 
-Cualquiera que elijas, el proceso es el mismo:
+        # 2. Decidir: qué acción tomar
+        action = decide(context, state)
 
-1. Inicia sesión y genera una clave de API en el sitio de ese proveedor.
-2. **Nunca pegues esta clave directamente en el código ni la subas a un repositorio.** En su lugar, configúrala como una variable de entorno:
+        # 3. Actuar: ejecutar la acción
+        result = perform(action, state)
+
+        # 4. Observar: qué cambió
+        state = update_state(state, action, result)
+
+        # ¿Terminamos?
+        if is_complete(state):
+            state["done"] = True
+
+    return state
+```
+
+Ahora necesitamos funciones para cada componente. Agrega estas funciones auxiliares:
+
+```python
+def observe(state: dict) -> dict:
+    """Observa el estado actual y retorna contexto."""
+    return {
+        "goal": state.get("goal"),
+        "steps_completed": state.get("steps_completed", []),
+        "errors": state.get("errors", []),
+    }
+
+def decide(context: dict, state: dict) -> str:
+    """Decide qué acción ejecutar basándose en el contexto."""
+    if not context["steps_completed"]:
+        return "explore"
+    if context["errors"]:
+        return "handle_error"
+    return "plan_next"
+
+def perform(action: str, state: dict) -> dict:
+    """Ejecuta la acción seleccionada."""
+    actions = {
+        "explore": lambda s: {"type": "exploration", "files_found": []},
+        "plan_next": lambda s: {"type": "plan", "tasks": []},
+        "handle_error": lambda s: {"type": "recovery", "strategy": "retry"},
+    }
+    return actions.get(action, lambda s: {})(state)
+
+def update_state(state: dict, action: str, result: dict) -> dict:
+    """Actualiza el estado del agente con el resultado."""
+    state["steps_completed"].append({"action": action, "result": result})
+    return state
+
+def is_complete(state: dict) -> bool:
+    """Verifica si el agente alcanzó su meta."""
+    goal = state.get("goal", "")
+    steps = state.get("steps_completed", [])
+    return len(steps) >= 3 and not state.get("errors")
+```
+
+### 1.2 Construye el orquestador
+
+El orquestador conecta el loop con las herramientas de Claude. Crea `orchestrator.py`:
+
+```python
+from agent import agent_loop
+
+def run_agent(goal: str):
+    """Ejecuta el agente con una meta dada."""
+    result = agent_loop(goal)
+    print(f"Meta: {result['goal']}")
+    print(f"Pasos completados: {len(result['steps_completed'])}")
+    print(f"Estado final: {'Éxito' if result.get('done') else 'Incompleto'}")
+    return result
+
+if __name__ == "__main__":
+    run_agent("Analizar la estructura del proyecto")
+```
+
+### Verifica
+
+Ejecuta el orquestador y verifica que:
+- El loop completa al menos 3 iteraciones
+- El estado se mantiene entre iteraciones
+- La función `decide` retorna acciones válidas
 
 ```bash
-# macOS / Linux (agrégalo a ~/.bashrc o ~/.zshrc para que persista)
-export GITHUB_TOKEN="your-key-here"   # o GOOGLE_API_KEY, GROQ_API_KEY, etc. -- según tu proveedor
-
-# Windows (PowerShell)
-$env:GITHUB_TOKEN = "your-key-here"
+python orchestrator.py
 ```
 
-Una clave de API es un secreto, exactamente igual que una contraseña — cualquiera que la tenga puede usar la cuota de tu cuenta. Tratarla como una variable de entorno en lugar de un string fijo en el código es la práctica estándar exactamente por esta razón, y es el primer hábito de seguridad del mundo real que este curso te pide construir.
+### Checklist
 
-:::tip[Un archivo .env suele ser más conveniente que export]
-En lugar de usar `export` para una clave en cada nueva sesión de terminal, puedes ponerla en un archivo `.env` en la carpeta de tu proyecto (mira el `.env.example` del ejemplo del repositorio) y cargarla automáticamente con el paquete `python-dotenv` — cubierto más abajo.
-:::
+- [ ] El loop del agente ejecuta el ciclo Leer → Decidir → Actuar → Observar
+- [ ] El estado se mantiene entre iteraciones
+- [ ] La función `decide` retorna acciones válidas
+- [ ] El orquestador muestra el estado final
 
-### Configurar el proyecto con `uv`
+---
 
-```bash
-uv init ai-agent
-cd ai-agent
-uv add deepagents langchain-openai python-dotenv
-```
+## Paso 2: Implementa la exploración del código fuente
 
-`uv init` crea un pequeño proyecto (un `pyproject.toml` que rastrea tus dependencias) y `uv add` instala paquetes en un entorno aislado para ese proyecto — automáticamente, sin configuración manual de entorno virtual. `deepagents` es el framework de LangChain para construir agentes con planificación, uso de herramientas y delegación a sub-agentes incorporados; `langchain-openai` es el paquete de integración que usa este ejemplo para hablar con GitHub Models (su API es compatible con OpenAI, así que el paquete de integración de OpenAI funciona para él — mira el consejo abajo si elegiste un proveedor distinto); `python-dotenv` te permite mantener tu clave de API en un archivo `.env` local en lugar de hacer `export` en cada sesión.
+Ahora que el loop funciona, el agente necesita entender el código con el que trabaja. Este paso le da la capacidad de descubrir archivos y analizar su contenido.
 
-Si elegiste un proveedor distinto arriba, cambia `langchain-openai` por el paquete propio de ese proveedor — `langchain-google-genai` (Gemini), `langchain-groq` (Groq), o `langchain-mistralai` (Mistral). Cerebras y OpenRouter también son compatibles con OpenAI, así que también usan `langchain-openai`, solo que con un `base_url` distinto.
+### 2.1 Explora el árbol de archivos
 
-:::tip[Verifica la documentación actual — y el nombre del modelo]
-Los frameworks de agentes se mueven rápido, y también los nombres de los modelos: se renombran y se retiran en una escala de meses, no de años. Los propios argumentos de palabra clave de `create_deep_agent` ya cambiaron una vez desde borradores anteriores de esta página (es `system_prompt`, no `instructions`) — un recordatorio de que este fragmento puede quedar desactualizado incluso después de haberlo verificado una vez. Usa un ID de modelo explícito y versionado en lugar de un alias `-latest`: varios proveedores, incluyendo Google, han dejado de dar soporte a esos alias porque cambian silenciosamente a una nueva versión del modelo, lo que puede romper código que funcionaba sin ninguna advertencia. Antes de ejecutar esto, verifica la página actual de precios/modelos de tu proveedor, y hojea el propio README de `deepagents` para su API actual.
-:::
-
-## Paso 1: Escribe tu primer agente
-### 1.1 Crea un archivo `.env` (nunca lo subas al repositorio) con la clave del proveedor que elegiste:
-
-**👟 Pista inicial :**
-
-Crea un archivo `.env` (nunca lo subas al repositorio) con la clave del proveedor que elegiste:
-
-```bash
-# .env
-GITHUB_TOKEN=your-key-here
-```
-
-**🎯 Resultado esperado :**
-
-Deberías ver la salida esperada sin errores.
-
-**🩹 Si sale mal :**
-
-Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
-
-### 1.2 Luego crea `agent.py`:
-
-**👟 Pista inicial :**
-
-Luego crea `agent.py`:
+Crea una función que recorra el proyecto y encuentre archivos relevantes:
 
 ```python
 import os
-from dotenv import load_dotenv
-from langchain_openai import ChatOpenAI
-from deepagents import create_deep_agent
+from pathlib import Path
 
-load_dotenv()  # reads .env into the environment, if present
+def explore_files(root: str) -> list[dict]:
+    """Explora recursivamente el árbol de archivos desde root."""
+    files = []
+    exclude = {"node_modules", ".git", "__pycache__", ".venv", "dist", "build"}
 
-def search_course_topics(query: str) -> str:
-    """A toy tool: pretends to look up whether a topic was covered in this course."""
-    topics = ["variables", "loops", "functions", "csv files", "pandas", "dataframes", "groupby"]
-    matches = [t for t in topics if query.lower() in t]
-    return f"Matching topics: {matches}" if matches else "No matching topics found."
-
-def count_weeks_remaining(current_week: int) -> str:
-    """A second toy tool: how many weeks are left in the 10-week course."""
-    remaining = max(0, 10 - current_week)
-    return f"{remaining} week(s) remaining out of 10."
-
-model = ChatOpenAI(
-    model="gpt-4o-mini",  # confirm this still has a free tier before running — see the tip above
-    api_key=os.environ["GITHUB_TOKEN"],
-    base_url="https://models.github.ai/inference",
-)
-
-agent = create_deep_agent(
-    model=model,
-    tools=[search_course_topics, count_weeks_remaining],
-    system_prompt="You help students figure out whether a topic was covered in their course.",
-)
-
-if __name__ == "__main__":
-    result = agent.invoke({"messages": [{"role": "user", "content": "Did we cover groupby?"}]})
-    print(result["messages"][-1].content)  # just the final answer, not the full internal trace
+    for path in Path(root).rglob("*"):
+        if path.is_file() and not any(part in exclude for part in path.parts):
+            files.append({
+                "path": str(path),
+                "size": path.stat().st_size,
+                "extension": path.suffix,
+            })
+    return files
 ```
 
-**🎯 Resultado esperado :**
+### 2.2 Analiza el contenido de cada archivo
 
-Deberías ver la salida esperada sin errores.
-
-**🩹 Si sale mal :**
-
-Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
-
-### 1.3 Ejecútalo — con `uv`, no hace falta activación manual de entorno:
-
-**👟 Pista inicial :**
-
-Ejecútalo — con `uv`, no hace falta activación manual de entorno:
-
-```bash
-uv run python agent.py
-```
-
-**🎯 Resultado esperado :**
-
-Deberías ver la salida esperada sin errores.
-
-**🩹 Si sale mal :**
-
-Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
-
-### 1.4 `load_dotenv()` lee tu archivo `.env` hacia `os.environ` antes de que se ejecute cualquier o...
-
-**👟 Pista inicial :**
-
-`load_dotenv()` lee tu archivo `.env` hacia `os.environ` antes de que se ejecute cualquier otra cosa, así que `os.environ["GITHUB_TOKEN"]` encuentra la clave que configuraste durante la Configuración — el mismo concepto del módulo `os` que `input()` leyendo del teclado, solo que leyendo de un archivo en su lugar. `create_deep_agent` conecta el modelo con una lista de funciones de Python que el agente puede llamar como **herramientas** — esta es la idea central detrás de los agentes: un modelo de lenguaje que no solo puede responder con texto, sino decidir llamar a tu código, leer el resultado, y usarlo para informar su respuesta.
-Fíjate en `tools=[search_course_topics, count_weeks_remaining]` — dos herramientas, no una. El modelo elige *cuál* herramienta (si acaso) encaja con la pregunta, completamente por su cuenta: pregunta "¿Cubrimos groupby?" y llama a `search_course_topics`; pregunta "¿Cuántas semanas quedan si estoy en la semana 4?" y llama a `count_weeks_remaining` en su lugar. Nunca escribes tú mismo una cadena `if`/`elif` que dirija preguntas a herramientas — el docstring en cada función (el string entre triples comillas justo después de `def`) es lo que el modelo lee para decidir qué herramienta encaja con qué solicitud, exactamente igual que los docstrings de la Semana 4 de Python 101, salvo que aquí es un modelo de lenguaje quien los lee, no un humano hojeando tu código.
-### Cómo decide realmente el agente qué hacer
-Nada aquí es magia — `create_deep_agent` construye un bucle, y cada iteración de ese bucle es una llamada de API ordinaria al modelo que configuraste:
-1. Tu pregunta va al modelo, junto con la *lista* de herramientas disponibles (sus nombres, parámetros y docstrings — no su código).
-2. El modelo responde ya sea con una respuesta de texto final, **o** con una solicitud para llamar a una herramienta específica con argumentos específicos.
-3. Si solicitó una llamada a herramienta, tu propio código de Python (no el modelo) es el que realmente ejecuta esa función y obtiene un resultado real.
-4. Ese resultado vuelve al modelo como contexto nuevo, y el bucle se repite desde el paso 2 — el modelo podría llamar a otra herramienta, o ahora tener suficiente información para responder.
-5. Una vez que el modelo responde con texto y sin más solicitudes de herramienta, el bucle se detiene y esa es tu respuesta final.
-Esto es exactamente por qué un error de límite de tasa (ver abajo) puede ocurrir incluso para lo que se siente como "una sola pregunta" — una pregunta que necesita dos llamadas a herramientas cuesta al menos tres idas y vueltas al modelo (decidir llamar a la herramienta A, decidir llamar a la herramienta B, producir la respuesta final), no una.
-### Qué deberías ver
-Una sola línea impresa — la respuesta final del agente, algo como:
-
-```
-Yes, "groupby" was covered in the course.
-```
-
-**🎯 Resultado esperado :**
-
-Deberías ver la salida esperada sin errores.
-
-**🩹 Si sale mal :**
-
-Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
-
-### 1.5 Si en cambio ves un traceback de Python, comprueba de qué tipo:
-
-**👟 Pista inicial :**
-
-Si en cambio ves un traceback de Python, comprueba de qué tipo:
-- **`KeyError: 'GITHUB_TOKEN'`** — la variable de entorno/valor de `.env` no se está encontrando. Confirma que `.env` está en la misma carpeta que `agent.py` y no tiene un error tipográfico en el nombre de la variable, o que realmente ejecutaste `export` en la misma sesión de terminal desde la que estás ejecutando el script.
-- **Un error de autenticación (401/403)** — la clave en sí está mal, expiró, o (para GitHub Models) le falta el alcance `models: read`. Regenérala.
-- **Un error de límite de tasa (429)** — ver la siguiente sección. Este es común y esperado, no una señal de que algo esté roto.
-### Entender la traza interna completa
-`result["messages"][-1].content` arriba muestra deliberadamente solo la respuesta final. Si en cambio imprimes el `result` *completo*, verás algo mucho más ruidoso — cada mensaje que LangGraph rastreó internamente, cada uno con campos de contabilidad interna junto al contenido real:
+El agente necesita extraer información clave de cada archivo:
 
 ```python
-result = agent.invoke({"messages": [{"role": "user", "content": "Did we cover groupby?"}]})
-for message in result["messages"]:
-    print(type(message).__name__, "->", message)
+def analyze_file(filepath: str) -> dict:
+    """Analiza un archivo y extrae información relevante."""
+    try:
+        with open(filepath) as f:
+            content = f.read()
+    except (UnicodeDecodeError, PermissionError):
+        return {"error": "No se pudo leer el archivo"}
+
+    return {
+        "lines": content.count("\n"),
+        "imports": [
+            line for line in content.split("\n")
+            if line.strip().startswith(("import ", "from "))
+        ],
+        "classes": [
+            line.strip().split()[1].split("(")[0]
+            for line in content.split("\n")
+            if line.strip().startswith("class ")
+        ],
+        "functions": [
+            line.strip().split("(")[0].replace("def ", "")
+            for line in content.split("\n")
+            if line.strip().startswith("def ")
+        ],
+    }
 ```
 
-**🎯 Resultado esperado :**
+### 2.3 Acción de exploración completa
 
-Deberías ver la salida esperada sin errores.
-
-**🩹 Si sale mal :**
-
-Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
-
-### 1.6 Reducida a lo que realmente importa, la traza detrás de esa única pregunta se ve así:
-
-**👟 Pista inicial :**
-
-Reducida a lo que realmente importa, la traza detrás de esa única pregunta se ve así:
-| # | Tipo de mensaje | Qué contiene |
-|---|---|---|
-| 1 | `HumanMessage` | Tu pregunta: `"Did we cover groupby?"` |
-| 2 | `AIMessage` (sin texto) | El modelo decidió llamar a `search_course_topics(query="groupby")` — todavía sin respuesta, solo una solicitud de herramienta |
-| 3 | `ToolMessage` | El valor de retorno *real* de tu función de Python: `"Matching topics: ['groupby']"` |
-| 4 | `AIMessage` (final) | La respuesta real del modelo, ahora que tiene el resultado de la herramienta: `"Yes, groupby was covered."` |
-Las partes ruidosas que puedes ignorar de forma segura al leer una traza cruda: los campos `id`/`tool_call_id` (contabilidad interna para hacer coincidir una llamada de herramienta con su resultado), trazas de razonamiento interno específicas del proveedor (no pensadas para ser legibles por humanos), y `usage_metadata` (conteos de tokens, útiles para rastrear costos, irrelevantes para la conversación en sí). Esta forma de 4 filas —pregunta, llamada a herramienta, resultado de herramienta, respuesta— es todo el bucle del agente de la sección anterior, solo que escrito como datos en lugar de como una lista numerada.
-### Manejar límites de tasa
-Cada nivel gratuito aquí limita cuántas solicitudes puedes hacer por minuto o por día, y cada turno del agente —decidir llamar a una herramienta, y luego leer el resultado— usa al menos una solicitud. Ejecuta unas cuantas preguntas seguidas y bien podrías ver algo como:
-
-```
-Error calling model ... (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED.
-...Please retry in 41.7s.
-```
-Esto no es un error en tu código — es el proveedor diciéndote que vayas más despacio. Dos formas de manejarlo:
-1. **La más simple**: simplemente espera el número de segundos sugerido y ejecuta el script de nuevo.
-2. **Más robusta**: envuelve la llamada a `agent.invoke(...)` en un `try`/`except` que capture el error, espere, y reintente automáticamente — exactamente el patrón enseñado como contenido bono en la Semana 4 de Python 101. El ejemplo más completo del repositorio hace esto de verdad: mira `ask()` en [`examples/ai-agent/agent.py`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/ai-agent/agent.py) para una versión funcional que puedes copiar, incluyendo el análisis del retraso de reintento sugerido por el proveedor a partir del mensaje de error.
-:::tip[¿Usas un proveedor distinto?]
-Cambia el bloque `ChatOpenAI(...)` por el cliente propio de tu proveedor — p. ej. `ChatGoogleGenerativeAI(model="gemini-3.5-flash", google_api_key=os.environ["GOOGLE_API_KEY"])` para Gemini, o `ChatGroq(model="llama-3.3-70b-versatile", api_key=os.environ["GROQ_API_KEY"])` para Groq. Todo lo demás en este archivo se queda igual — `deepagents` no le importa qué proveedor esté detrás del modelo. Mira [`examples/ai-agent/agent.py`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/ai-agent) en el repositorio del curso para ver los seis conectados lado a lado, seleccionables con una sola variable de entorno.
-:::
-## Lo que acabas de construir
-`search_course_topics` es deliberadamente trivial — las herramientas de un agente real podrían buscar en la web, consultar una base de datos, o ejecutar código. Pero la forma es la misma que impulsa sistemas mucho más capaces: un modelo que razona sobre una tarea, decide qué herramienta llamar y con qué argumentos, lee el resultado de la herramienta, y continúa — a veces llamando a varias herramientas en secuencia antes de responder. Acabas de construir la versión más pequeña posible de ese bucle, localmente, con tu propia clave.
-:::tip[Ejecuta una versión más completa sin ninguna configuración local]
-[`examples/ai-agent/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/ai-agent) en el repositorio del curso **no es una copia del código de arriba** — es una versión deliberadamente más completa, con herramientas reales (busca en los archivos de lección reales de este curso y analiza sus datasets reales con pandas, en lugar de una lista fija de temas) y soporte para los seis proveedores de la tabla de arriba, seleccionado con un solo ajuste. Clónalo, o abre todo el repositorio en un [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python y `uv` ya instalados) y ejecútalo desde ahí.
-:::
-
-**🎯 Resultado esperado :**
-
-Deberías ver la salida esperada sin errores.
-
-**🩹 Si sale mal :**
-
-Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
-
-### 1.7 Verifica
-
-## A dónde ir desde aquí
-
-- Dale a tu agente una herramienta genuinamente *útil*, no solo una de juguete — una que lea un archivo local real, o llame a una API pública real. La copia de [`examples/ai-agent/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/ai-agent) en el repositorio ya hace esto: busca en los archivos de lección reales de este curso y analiza sus datasets reales con pandas, en lugar de adivinar.
-- Mira el soporte de `deepagents` para **sub-agentes** — delegar parte de una tarea a un agente instruido por separado, similar a cómo un gerente podría delegar una subtarea a un especialista:
+Integra ambas funciones en una acción que el agente pueda ejecutar:
 
 ```python
-from deepagents import create_deep_agent
+def action_explore(state: dict) -> dict:
+    """Explora el código fuente del proyecto."""
+    root = state.get("project_root", ".")
+    files = explore_files(root)
 
-research_subagent = {
-    "name": "topic-researcher",
-    "description": "Looks up whether a topic was covered in the course, in detail.",
-    "system_prompt": "You research course topics thoroughly using the available tools.",
-    "tools": [search_course_topics],
+    analysis = {}
+    for f in files[:20]:  # Limitar a 20 archivos para no sobrecargar
+        analysis[f["path"]] = analyze_file(f["path"])
+
+    return {
+        "type": "exploration",
+        "files_found": len(files),
+        "analysis": analysis,
+        "summary": {
+            "total_files": len(files),
+            "total_classes": sum(len(a.get("classes", [])) for a in analysis.values()),
+            "total_functions": sum(len(a.get("functions", [])) for a in analysis.values()),
+        },
+    }
+```
+
+### Verifica
+
+Ejecuta la exploración sobre un proyecto pequeño y verifica que:
+- Retorna información de archivos reales
+- El conteo de archivos es mayor que 0
+- El análisis contiene las funciones y clases esperadas
+
+### Checklist
+
+- [ ] `explore_files` encuentra archivos en el proyecto
+- [ ] `analyze_file` extrae imports, clases y funciones
+- [ ] `action_explore` integra ambas funciones correctamente
+- [ ] La exploración retorna un resumen con métricas
+
+---
+
+## Paso 3: Crea el sistema de planificación
+
+Un agente autónomo no solo ejecuta acciones: planifica. Este paso le permite al agente descomponer una meta en tareas concretas.
+
+### 3.1 Diseña el planificador
+
+Crea un sistema que tome una meta y la convierta en una lista de tareas:
+
+```python
+def create_plan(goal: str, exploration: dict) -> list[dict]:
+    """Crea un plan de tareas basado en la meta y la exploración."""
+    plan = []
+
+    # Analizar qué se necesita según la meta
+    if "agregar" in goal.lower() or "add" in goal.lower():
+        plan.append({"task": "Leer archivos existentes", "action": "read_files"})
+        plan.append({"task": "Identificar puntos de integración", "action": "analyze"})
+        plan.append({"task": "Implementar cambios", "action": "write_code"})
+        plan.append({"task": "Verificar que funciona", "action": "test"})
+    elif "corregir" in goal.lower() or "fix" in goal.lower():
+        plan.append({"task": "Identificar el error", "action": "debug"})
+        plan.append({"task": "Implementar la corrección", "action": "write_code"})
+        plan.append({"task": "Verificar la corrección", "action": "test"})
+    else:
+        plan.append({"task": "Explorar el código", "action": "explore"})
+        plan.append({"task": "Analizar findings", "action": "analyze"})
+
+    return plan
+```
+
+### 3.2 Implementa la ejecución del plan
+
+El agente necesita ejecutar el plan paso a paso, verificando cada tarea:
+
+```python
+def execute_plan(plan: list[dict], state: dict) -> dict:
+    """Ejecuta el plan secuencialmente."""
+    results = []
+
+    for i, step in enumerate(plan):
+        print(f"[{i + 1}/{len(plan)}] {step['task']}...")
+
+        # Simular ejecución de la tarea
+        result = perform(step["action"], state)
+        results.append({"step": step, "result": result})
+
+        if result.get("error"):
+            state["errors"].append({"step": i, "error": result["error"]})
+            break
+
+    return {"plan_results": results, "completed": len(results) == len(plan)}
+```
+
+### Verifica
+
+- La función `create_plan` genera una lista de tareas no vacía
+- Cada tarea tiene los campos `task` y `action`
+- `execute_plan` procesa las tareas secuencialmente
+
+### Checklist
+
+- [ ] `create_plan` genera un plan basado en la meta
+- [ ] Cada tarea tiene campos `task` y `action`
+- [ ] `execute_plan` procesa las tareas en orden
+- [ ] El plan se interrumpe si una tarea falla
+
+---
+
+## Paso 4: Agrega detección de errores y recuperación
+
+La parte final: hacer que el agente se recupere de errores sin intervención humana. Este es lo que separa un script de un agente autónomo.
+
+### 4.1 Detecta errores comunes
+
+Implementa un sistema que identifique errores frecuentes:
+
+```python
+ERROR_PATTERNS = {
+    "syntax_error": ["SyntaxError", "IndentationError", "invalid syntax"],
+    "import_error": ["ModuleNotFoundError", "ImportError", "No module named"],
+    "permission_error": ["PermissionError", "Access denied", "Operation not permitted"],
+    "network_error": ["TimeoutError", "ConnectionRefused", "requests.exceptions"],
+    "file_error": ["FileNotFoundError", "No such file", "directory"],
+    "type_error": ["TypeError", "argument", "unexpected keyword"],
 }
 
-agent = create_deep_agent(
-    model=model,
-    tools=[search_course_topics, count_weeks_remaining],
-    subagents=[research_subagent],
-    system_prompt="Delegate topic-research questions to the topic-researcher sub-agent.",
-)
+def detect_error(output: str) -> str | None:
+    """Detecta el tipo de error en la salida de un comando."""
+    for error_type, patterns in ERROR_PATTERNS.items():
+        if any(pattern in output for pattern in patterns):
+            return error_type
+    return None
 ```
 
-El agente principal ahora puede entregar una subtarea a `topic-researcher` en lugar de hacer todo él mismo — útil una vez que las instrucciones y la lista de herramientas de un solo agente empiezan a crecer demasiado como para razonar sobre ellas en un solo lugar.
-- Revisa el contenido bono de `try`/`except` y `class` de Python 101 — el código de agentes real se apoya constantemente en ambos (capturar una llamada de herramienta fallida, envolver estado relacionado en una clase) de formas que el currículo principal de este curso evitó deliberadamente.
+### 4.2 Construye la recuperación con reintentos
 
-## Comparte tu agente con la clase
+El agente necesita saber cuándo reintentar y cuándo rendirse:
 
-¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de agentes que otros estudiantes han enviado — y su README tiene un recorrido completo y amigable para principiantes para agregar el tuyo vía un **pull request**, incluso si nunca has usado git antes: hacer fork del repositorio, crear una rama, subir tus archivos, y abrir el PR, un paso a la vez. No se asume ninguna experiencia previa con git.
+```python
+MAX_RETRIES = 3
 
-Bienvenido a escribir Python fuera del navegador. 🎓
+def should_retry(task: str, error_type: str, state: dict) -> bool:
+    """Determina si el agente debe reintentar una tarea."""
+    retries = state.get("retry_counts", {}).get(task, 0)
 
+    # No reintentar errores de permisos
+    if error_type == "permission_error":
+        return False
+
+    # No exceder el máximo de reintentos
+    if retries >= MAX_RETRIES:
+        return False
+
+    # Actualizar contador de reintentos
+    state.setdefault("retry_counts", {})
+    state["retry_counts"][task] = retries + 1
+    return True
+
+def handle_error(task: str, error_type: str, state: dict) -> dict:
+    """Maneja un error con la estrategia apropiada."""
+    if should_retry(task, error_type, state):
+        return {"action": "retry", "attempt": state["retry_counts"][task]}
+    return {"action": "skip", "reason": f"Máximo de reintentos alcanzado para {task}"}
+```
+
+### 4.3 Integra todo
+
+Ahora conecta el manejo de errores con el loop del agente. Modifica `agent_loop` para incluir recuperación:
+
+```python
+def agent_loop_with_recovery(goal: str, project_root: str = "."):
+    """Loop del agente con recuperación de errores."""
+    state = {
+        "goal": goal,
+        "project_root": project_root,
+        "steps_completed": [],
+        "errors": [],
+        "retry_counts": {},
+        "done": False,
+    }
+
+    # Paso 1: Explorar
+    exploration = action_explore(state)
+    state["exploration"] = exploration
+
+    # Paso 2: Planificar
+    plan = create_plan(goal, exploration)
+
+    # Paso 3: Ejecutar con recuperación
+    for step in plan:
+        result = perform(step["action"], state)
+        error = detect_error(str(result))
+
+        if error:
+            recovery = handle_error(step["task"], error, state)
+            if recovery["action"] == "retry":
+                result = perform(step["action"], state)
+            else:
+                state["errors"].append({"task": step["task"], "error": error})
+                break
+
+        state["steps_completed"].append({"task": step["task"], "result": result})
+
+    state["done"] = len(state["errors"]) == 0
+    return state
+```
+
+### Verifica
+
+- `detect_error` identifica los 6 tipos de errores definidos
+- `should_retry` respeta el límite de 3 reintentos
+- `agent_loop_with_recovery` se recupera de errores automáticamente
+- El agente termina con estado `done` en `True` o reporta errores
+
+### Checklist
+
+- [ ] `detect_error` identifica errores de sintaxis, imports, permisos, red, archivos y tipos
+- [ ] `should_retry` respeta el máximo de 3 reintentos
+- [ ] `handle_error` retorna las acciones "retry" o "skip"
+- [ ] `agent_loop_with_recovery` se integra con el loop base
+- [ ] El agente reporta errores al no poder recuperarse
+
+---
+
+## 🩹 Si sale mal
+
+**El loop entra en un ciclo infinito:**
+Asegúrate de que `is_complete` tenga condiciones de salida claras. Agrega un contador de iteraciones máximo como red de seguridad.
+
+**El agente no encuentra archivos:**
+Verifica que `explore_files` excluya correctamente directorios como `node_modules` y `.venv`. Prueba con `root = "."` para verificar desde el directorio actual.
+
+**La planificación genera tareas vacías:**
+Las palabras clave en `create_plan` pueden no coincidir con tu meta. Agrega más casos o usa un enfoque de fallback más genérico.
+
+---
+
+## 🧠 Preguntas socráticas
+
+- ¿Cuándo un agente debería detenerse y pedir ayuda en lugar de reintentar?
+- ¿Cómo decidirías entre diferentes estrategias de recuperación para un mismo error?
+- ¿Qué pasaría si el agente pudiera aprender de errores pasados y evitar los mismos patrones?
+- ¿Cómo balancearías la autonomía del agente con la supervisión humana en producción?
+
+---
+
+## 🎓 ¿Qué sigue?
+
+Tu agente ahora puede tomar decisiones simples y ejecutar flujos de trabajo básicos. Pero un agente verdaderamente útil necesita integrarse con herramientas externas. En la skill de **MCP Server**, aprenderás a conectar tu agente con APIs, bases de datos y servicios para que pueda interactuar con el mundo real.
+
+Si tu agente necesita entender código existente a nivel profundo, la skill de **Code Review Agent** te muestra cómo entrenar a Claude para analizar patrones de código y sugerir mejoras.

@@ -80,7 +80,7 @@ export function progressHref(locale: Locale, base: string): string {
 }
 
 export function weekHref(locale: Locale, base: string, section: string, track: 'normal' | 'hard', week: number): string {
-  return learnHref(locale, base, section, TRACK_WORDS[locale][track], `week-${week}`);
+  return learnHref(locale, base, section, track, `week-${week}`);
 }
 
 /** `/credits`, `/ar/المصادر`, ... */
@@ -88,14 +88,14 @@ export function creditsHref(locale: Locale, base: string): string {
   return `${localeBase(locale, base)}${NAV_WORDS[locale].credits}`;
 }
 
-/** Build a module href with translated URL segments. */
+/** Build a module href. Track words stay untranslated in URLs — only the
+    learn nav word is localized (see NAV_WORDS). */
 export function moduleHref(locale: Locale, base: string, section: string, track: 'normal' | 'hard', moduleSlug: string): string {
-  const segs = [NAV_WORDS[locale].learn, section, TRACK_WORDS[locale][track], MODULE_WORDS[locale], moduleSlug];
-  return `${localeBase(locale, base)}${segs.join('/')}`;
+  return learnHref(locale, base, section, track, 'modules', moduleSlug);
 }
 
-/** Build a lesson href with translated URL segments. */
+/** Build a lesson href. Track words stay untranslated in URLs — only the
+    learn nav word is localized (see NAV_WORDS). */
 export function lessonHref(locale: Locale, base: string, section: string, track: 'normal' | 'hard', lessonSlug: string): string {
-  const segs = [NAV_WORDS[locale].learn, section, TRACK_WORDS[locale][track], LESSON_WORDS[locale], lessonSlug];
-  return `${localeBase(locale, base)}${segs.join('/')}`;
+  return learnHref(locale, base, section, track, 'lessons', lessonSlug);
 }
