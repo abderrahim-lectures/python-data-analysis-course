@@ -67,7 +67,7 @@ Every lesson's runnable cells execute in-browser via Pyodide (loaded from the js
 
 The site's UI is bilingual-to-quadrilingual: page chrome (nav, home, learn hub, credits, cheatsheets, lesson completion labels…) is translated through [Paraglide](https://inlang.com/m/gerre34r/library-inlang-paraglideJs) into en/ar/es/fr. Source strings live in `messages/{en,ar,es,fr}.json`; generated code lands in `src/paraglide/` (gitignored) and is produced by `npx paraglide-js compile` (run automatically by `astro build`/`astro dev`). `tests/unit/i18n.test.ts` enforces per-locale key parity, non-empty values, and that non-English locales are genuinely translated.
 
-Content coverage is honest and scoped: project write-ups are fully translated (ar/es/fr), lesson/module *body content* is currently English-only, and a translation backlog is tracked in `plan/todo.md`. Locale routing lives in `src/lib/routeSegments.ts`; see `plan/i18n-migration.md` for the design.
+Content coverage is honest and scoped: project write-ups are fully translated (ar/es/fr), lesson/module *body content* and the cheatsheet *reference cards* are currently English-only (non-EN cheatsheet pages carry a "content in English" note), and a translation backlog is tracked in `plan/todo.md`. Locale routing lives in `src/lib/routeSegments.ts`; see `plan/i18n-migration.md` for the design.
 
 ### Building from a clean checkout
 

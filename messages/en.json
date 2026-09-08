@@ -167,5 +167,6 @@
   "ui_changelog": "Changelog",
   "unlocked_prefix": "Unlocked: ",
   "week_label": "Week",
-  "xp_toast": "⚡ +{amount} XP"
+  "xp_toast": "⚡ +{amount} XP",
+  "cheatsheets_en_content_note": "The reference cards below are written in English."
 }
