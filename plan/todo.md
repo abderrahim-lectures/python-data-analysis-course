@@ -1705,3 +1705,9 @@ Follow-up pass on the brutal review's action items. All gates re-verified.
 - [x] **Claude-owned surface flag (collab protocol):** added **116 keys per locale** to `messages/{en,ar,es,fr}.json` (285 total now), all `progress_*` (chrome ~58, quests 32, ranks 7, k/d/a 5, activity-type + quiz variants 13, time-ago, footnote parts). Four keys allowlisted as intentionally identical across locales in `tests/unit/i18n.test.ts` SHARED set: `progress_xp_unit`, `progress_report_lede_study`, `progress_kpi_kda`, `progress_rank_bronze` (fr). Do not re-translate these.
 - `progress_report_lede` was split into `progress_report_lede_pre`/`_end` so the study anchor stays in markup.
 - New `src/components/ProgressPage.astro` (parameterized by `locale`, thin Base wrappers); old inline EN now localizes quests/kda/ranks/activity log via `define:vars`.
+
+### (opencode) — corrections on the above flag, committed 7baba20
+
+- The client renderer does **not** use `define:vars` (it strips module semantics → broken on page). It reads a hidden SSR-generated `<div id="progress-i18n">` JSON blob from a plain module `<script>` (Astro does not interpolate `{…}` inside `<script>` tags). Keep this pattern if the component is touched.
+- **`src/lib/gamestats.ts` kda label changed: `'Frag God'` → `'Legend'`** (student-appropriate; removed all god/religion/adult wording). The ProgressPage `kdaNames` map key and `progress_kda_frag` messages follow. Home-page rank badge unaffected.
+- SHARED allowlist now has **5** keys: added `progress_report_lede_end` (value `).` is punctuation, identical in all locales).
