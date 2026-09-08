@@ -168,5 +168,6 @@
   "unlocked_prefix": "Débloqué : ",
   "week_label": "Semaine",
   "xp_toast": "⚡ +{amount} XP",
-  "cheatsheets_en_content_note": "Le contenu des fiches ci-dessous est rédigé en anglais."
+  "cheatsheets_en_content_note": "Le contenu des fiches ci-dessous est rédigé en anglais.",
+  "lesson_en_content_note": "Le contenu de cette leçon est rédigé en anglais."
 }
