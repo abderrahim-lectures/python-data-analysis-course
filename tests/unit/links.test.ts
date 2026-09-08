@@ -139,10 +139,12 @@ describe('EN-only project alternate fallback (i18n route helper)', () => {
     return new Set(by.ar).has(slug) && new Set(by.es).has(slug) && new Set(by.fr).has(slug);
   };
 
-  test('EN-only projects exist (and the fallback path has something to catch)', () => {
+  test('every EN project ships ar/es/fr twins (i18n coverage is complete)', () => {
+    // The last EN-only project (data-visualization) got its twins; the
+    // ProjectDetail EN-fallback stays as defense for temporary future gaps,
+    // so any new EN project without all three twins fails this test on purpose.
     const enOnly = PROJECTS.filter((f) => !/^(ar|es|fr)\//.test(f)).filter((slug) => !hasAllTwins(slug));
-    // data-visualization is EN-only until its twins land (translation backlog).
-    expect(enOnly.includes('data-visualization')).toBe(true);
+    expect(enOnly).toEqual([]);
   });
 
   test('every localized project slug has a matching EN page', () => {
