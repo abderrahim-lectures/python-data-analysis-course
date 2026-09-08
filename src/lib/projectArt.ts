@@ -394,9 +394,9 @@ export function projectDifficulty(slug: string): Difficulty {
   return PROJECT_DIFFICULTY[slug] ?? 'beginner';
 }
 
-/** Difficulty badge color config. */
+/** Difficulty badge color config. The `label` is the localizable message key. */
 export const DIFFICULTY_COLORS: Record<Difficulty, {bg: string; text: string; label: string}> = {
-  beginner: {bg: '#065f46', text: '#a7f3d0', label: 'Beginner'},
-  intermediate: {bg: '#92400e', text: '#fde68a', label: 'Intermediate'},
-  advanced: {bg: '#7f1d1d', text: '#fca5a5', label: 'Advanced'},
+  beginner: {bg: '#065f46', text: '#a7f3d0', label: 'difficulty_beginner'},
+  intermediate: {bg: '#92400e', text: '#fde68a', label: 'difficulty_intermediate'},
+  advanced: {bg: '#7f1d1d', text: '#fca5a5', label: 'difficulty_advanced'},
 };

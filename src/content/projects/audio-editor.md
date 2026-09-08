@@ -17,7 +17,7 @@ prerequisites: ["Python basics", "File I/O"]
 
 Every podcast episode, ringtone, and video game sound effect went through the same pipeline: someone trimmed the good parts, faded the edges so nothing clicks, adjusted the loudness, and stitched pieces together. Professional studios do this in heavyweight apps; this project builds a small command-line audio editor in Python that does all of it on real audio files with `pydub` — millisecond-precise trimming, fades, volume normalization, format conversion, clip splicing, and a waveform picture so you can *see* exactly what you changed.
 
-This assumes Python 101 and basic file I/O — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python 101 and basic file I/O — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

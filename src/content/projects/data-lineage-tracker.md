@@ -19,7 +19,7 @@ learningObjectives:
 
 Every dataset arrives from somewhere and flows somewhere else — a CSV gets cleaned, the cleaned table feeds an aggregate, the aggregate feeds a dashboard, and the dashboard feeds a decision. When someone changes the source schema, the question "what is affected?" is urgent and, without tooling, terrifying. A lineage tracker answers it by making the pipeline a graph you can *walk*: nodes are datasets, edges are transformations, and impact analysis is a breadth-first fan-out from any node in the graph. This project builds that tracker from first principles — graph, loaders, traversals, impact paths, and two renderers — with zero dependencies.
 
-This assumes Python 101 plus comfortable `csv` and `json` imports — sets and loops at home. Nothing from the Data Analysis module is required. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python 101 plus comfortable `csv` and `json` imports — sets and loops at home. Nothing from the Data Analysis module is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

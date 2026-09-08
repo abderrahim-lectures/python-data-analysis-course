@@ -19,7 +19,7 @@ prerequisites:
 
 Every website has invisible SEO signals — meta descriptions, heading hierarchy, Open Graph tags — that determine whether search engines rank it well or bury it. This project builds a toolkit that fetches any URL, extracts those signals, scores them against best practices, and generates a structured report you can compare across multiple pages, all with pure Python libraries that run anywhere.
 
-This assumes Python basics, HTML basics, and the `requests` library (covered in Setup) — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python basics, HTML basics, and the `requests` library (covered in Setup) — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

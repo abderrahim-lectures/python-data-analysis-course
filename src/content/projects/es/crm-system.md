@@ -18,7 +18,7 @@ prerequisites: ["Fundamentos de Python (clases, funciones, dicts)", "pip install
 
 Un CRM es la fuente de verdad compartida de un equipo de ventas: cada contacto, cada negocio, cada llamada y correo viven en un solo lugar para que nada se escape. Este proyecto construye un CRM ligero desde cero — modelarás contactos, negocios y actividades como dataclasses tipadas de Python, diseñarás un esquema SQLite con claves foráneas reales, escribirás consultas parametrizadas para búsqueda y filtrado, empujarás negocios por un pipeline validado, reconstruirás la línea de tiempo de un contacto y lo mostrarás todo en salidas limpia de tablas `rich`.
 
-Esto asume Python 101 y suficiente comodidad con SQL para leer un SELECT — no se requiere nada de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa, en crecimiento.
+Esto asume Python 101 y suficiente comodidad con SQL para leer un SELECT — no se requiere nada de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa, en crecimiento.
 
 ## 🎯 Lo que harás
 

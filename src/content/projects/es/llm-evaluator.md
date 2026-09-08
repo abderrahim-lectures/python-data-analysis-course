@@ -7,7 +7,7 @@ description: "Compara y evalúa el rendimiento de LLMs en precisión, velocidad,
 
 Todo LLM se ve impresionante en los videos de demostración. Elegir uno para producción necesita números duros: precisión en tu tarea, latencia bajo carga, costo por llamada y si emite salida dañina. Este proyecto construye una suite de evaluación estándar que ejecuta un conjunto de casos de prueba en múltiples modelos y los puntúa en precisión, latencia, costo y seguridad.
 
-Esto asume Python 101 y comodidad con pandas de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa.
+Esto asume Python 101 y comodidad con pandas de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
 
 ## 🎯 Lo que harás
 

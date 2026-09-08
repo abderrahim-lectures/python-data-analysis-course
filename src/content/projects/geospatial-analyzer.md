@@ -16,7 +16,7 @@ prerequisites: ["Python 101", "Data Analysis"]
 
 Every rideshare trip, every delivery, every weather station reading is a point on the globe described by two numbers: latitude and longitude. This project builds a geospatial analysis tool that takes raw coordinate data and answers real questions: where are the clusters of activity, how far apart are two locations, and what does the density of points look like on a map. You'll use DBSCAN for spatial clustering, the Haversine formula for real distance calculations, and Folium for interactive map visualizations — all grounded in actual geographic data.
 
-This assumes Python 101 and comfort with pandas from Data Analysis — nothing beyond. Optional and ungraded; see [Real-World Projects](/docs/projects) for the full list.
+This assumes Python 101 and comfort with pandas from Data Analysis — nothing beyond. Optional and ungraded; see [Real-World Projects](/projects) for the full list.
 
 ## 🎯 What you'll do
 

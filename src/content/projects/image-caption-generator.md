@@ -16,7 +16,7 @@ prerequisites: ["Python 101"]
 
 Every photo on the web needs a text description — for accessibility, for search engines, for people who can't load the image. Writing captions by hand is slow; a vision-language model can generate them in seconds. This project builds a CLI tool that takes an image (from a file path or URL) and produces a human-readable caption using a free-tier vision API. You'll handle image preprocessing, API calls, batch processing with progress tracking, and even write captions back into image metadata.
 
-This assumes Python 101 — nothing from Data Analysis is required. Optional and ungraded; see [Real-World Projects](/docs/projects) for the full list.
+This assumes Python 101 — nothing from Data Analysis is required. Optional and ungraded; see [Real-World Projects](/projects) for the full list.
 
 ## 🎯 What you'll do
 

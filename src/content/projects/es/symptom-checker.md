@@ -20,7 +20,7 @@ prerequisites:
 
 Los verificadores de síntomas tienen mala reputación por buenas razones: mezclan reglas de triaje reales con una página de inicio llena de los peores desenlaces. La versión que construyes aquí evita el drama haciendo la parte que un motor puede hacer *honestamente* — emparejar síntomas con condiciones mediante solapamiento ponderado, puntuar una banda de urgencia a partir de la severidad y la duración y convertir esa banda en próximos pasos en lenguaje sencillo. Es un motor de reglas sobre una pequeña base de conocimiento curada, y lo dice: sin IA, sin diagnóstico y con una exención de responsabilidad en cada salida.
 
-Esto asume Python 101 más diccionarios y conjuntos básicos — no se requiere nada más allá de eso, y no hay paquetes externos. Es opcional y no se califica; consulta [Proyectos del Mundo Real](/docs/projects) para ver la lista completa y en crecimiento.
+Esto asume Python 101 más diccionarios y conjuntos básicos — no se requiere nada más allá de eso, y no hay paquetes externos. Es opcional y no se califica; consulta [Proyectos del Mundo Real](/es/proyectos) para ver la lista completa y en crecimiento.
 
 > **Solo con fines educativos.** La salida de este proyecto no es asesoramiento médico, no puede diagnosticar y siempre debe apuntar a un clínico real. La construcción enseña modelado de dominio y reglas por niveles — las afirmaciones médicas terminan donde empieza esta exención de responsabilidad.
 

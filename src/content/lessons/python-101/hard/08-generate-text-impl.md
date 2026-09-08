@@ -1,6 +1,5 @@
 ---
 
-
 title: "Implementing generate_text()"
 description: "Chain the sampling loop into a complete function that builds a sequence of words from the bigram model."
 module: "generate-text"
@@ -190,11 +189,3 @@ def generate_until(model, start_word, stop_words=None, max_length=50):
         word = next_word
     return " ".join(result)
 ```
-
-## Projects You Can Build
-
-Here are a few real-world projects that reinforce these concepts:
-
-- 🎨 **AI Story Writer** - Implement complete text generation pipeline with bigram model
-- 🤖 **Chatbot Builder** - Generate natural language responses using probabilistic word selection
-- 📝 **Sentiment Dashboard** - Build text generation for summarizing sentiment analysis results

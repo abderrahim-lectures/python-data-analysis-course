@@ -21,7 +21,7 @@ learningObjectives:
 
 « L'apprentissage automatique automatisé » des tutoriels vit sur un serveur que tu loues. Ce projet fait tourner la même idée sur ton ordinateur portable : un petit pilote automatique qui prend des lignes brutes, les nettoie avec un pipeline chaîné, fait courir une poignée de modèles avec une vraie validation croisée, ajuste les plus prometteurs avec une recherche par grille, et exporte un vainqueur sérialisé que tu peux recharger n'importe où. En chemin, il enseigne la discipline que les vraies bibliothèques ML encodent : **la division train/test est décidée avant tout ajustement**, l'**imputer et le scaler apprennent uniquement des données d'entraînement**, et une **recherche par grille ajustée sur la validation croisée peut quand même diverger du jeu de test** — ce projet rend les trois observables avec des données petites et générées à la main. Le jeu de données est synthétique (des statistiques de trafic réseau qui corrèlent avec un statut sain/malsain), donc chaque nombre de ce guide est reproductible à partir d'une graine fixe.
 
-Cela suppose pandas, sklearn de base, et un peu de numpy. C'est un projet facultatif et non noté — consulte [Projets du monde réel](/docs/projects) pour la liste complète et grandissante. Installe deux paquets (`pandas`, `scikit-learn`) — `uv` rend cela indolore.
+Cela suppose pandas, sklearn de base, et un peu de numpy. C'est un projet facultatif et non noté — consulte [Projets du monde réel](/fr/projets) pour la liste complète et grandissante. Installe deux paquets (`pandas`, `scikit-learn`) — `uv` rend cela indolore.
 
 ## 🎯 Ce que tu vas faire
 

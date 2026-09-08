@@ -19,7 +19,7 @@ prerequisites:
 
 La edición de video es tradicionalmente de apuntar y hacer clic, pero cada operación — recortar, superponer texto, extraer audio, convertir formatos — es en realidad una función determinista aplicada a cuadros y rangos de tiempo. Este proyecto construye un kit de herramientas que envuelve MoviePy (que envuelve ffmpeg) en funciones Python limpias, para que puedas escribir scripts de tareas de procesamiento de video de la misma manera que escribirías scripts de cualquier otra transformación de datos: cargar, operar, guardar.
 
-Esto asume fundamentos de Python y una instalación funcional de ffmpeg (cubierta en Configuración). Es opcional y no se califica; consulta [Proyectos del Mundo Real](/docs/projects) para ver la lista completa y en crecimiento.
+Esto asume fundamentos de Python y una instalación funcional de ffmpeg (cubierta en Configuración). Es opcional y no se califica; consulta [Proyectos del Mundo Real](/es/proyectos) para ver la lista completa y en crecimiento.
 
 ## 🎯 Lo que harás
 

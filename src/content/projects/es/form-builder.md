@@ -17,7 +17,7 @@ prerequisites:
 
 Cada formulario web es fundamentalmente lo mismo: una lista de campos, cada uno con un tipo, una etiqueta, reglas de validación y opcionalmente una condición que determina cuándo aparece. Este proyecto construye un constructor de formularios en Python que toma una definición declarativa de formulario y genera JSON Schema — el mismo formato usado por React JSON Schema Form, JSON Editor y docenas de otras librerías de renderizado. Defines el formulario una vez en Python, y cualquier frontend puede renderizarlo.
 
-Esto asume Python 101 — no se requiere nada de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa.
+Esto asume Python 101 — no se requiere nada de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
 
 ## 🎯 Lo que harás
 

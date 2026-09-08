@@ -21,7 +21,7 @@ learningObjectives:
 
 Editar imágenes a mano en un programa de pintura está bien para una foto; colapsa cuando necesitas la misma corrección — aclarar, recortar, agregar un borde — en cien fotos que llegan según un horario. Este proyecto construye lo que un humano no puede hacer: un editor de imágenes en Python que lee una instrucción en inglés llano como `crop to 400x300 and brighten 25%`, la aplica a cualquier imagen y puede deshacer su propio trabajo. Pillow hace la cirugía de píxeles; el pipeline hace el criterio, la pila de deshacer y el procesamiento por lotes.
 
-Esto asume Python 101 y comodidad ejecutando librerías de terceros — no se requiere nada de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa y creciente.
+Esto asume Python 101 y comodidad ejecutando librerías de terceros — no se requiere nada de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 ## 🎯 Lo que harás
 

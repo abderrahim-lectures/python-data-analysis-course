@@ -8,7 +8,7 @@ description: "Compte des objets en direct depuis le flux d'une caméra web avec 
 
 Ce projet suppose que tu es à l'aise avec le Python 101 — fonctions, boucles et installation de paquets — et ne nécessite aucun bagage préalable en analyse de données ou apprentissage automatique. C'est la première incursion de ce cours dans la vision par ordinateur : au lieu de charger un modèle pré-entraîné qui lit du texte ou des lignes tabulaires, tu chargeras un modèle qui lit des pixels, et tu l'utiliseras pour répondre à une question authentiquement pratique en temps réel — « combien de *ceci* y a-t-il devant la caméra en ce moment ? »
 
-C'est optionnel et non noté. Voir [Projets du monde réel](/docs/projects) pour la liste complète et croissante.
+C'est optionnel et non noté. Voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 
@@ -376,7 +376,7 @@ Tout ici — un détecteur pré-entraîné, une boucle sur les images, un compta
 
 - **Suivi d'objets, pas seulement détection.** La question socratique de l'Étape 3 pointe la vraie lacune : ce projet compte des objets *par image*, pas des objets distincts *à travers* une vidéo. Des bibliothèques comme le mode de suivi intégré d'`ultralytics` lui-même (`model.track(...)`, utilisant des algorithmes comme ByteTrack) assignent un ID persistant à chaque objet à travers les images, de sorte que « combien de personnes *distinctes* ont traversé le cadre » devient répondable au lieu de juste « combien sont dans le cadre en ce moment ».
 - **Un modèle plus grand et plus précis.** `yolo11n.pt` (« n » pour nano) échange un peu de précision contre de la vitesse et de la taille. `ultralytics` fournit des points de contrôle plus grands (`yolo11s.pt`, `yolo11m.pt` et plus) qui détectent plus fiablement, surtout les objets petits ou partiellement masqués, au prix de plus de calcul par image — cela vaut la peine d'essayer si les comptages en direct de l'Étape 4 semblent peu fiables sur ta configuration particulière.
-- **Une classe personnalisée, pas seulement les 80 de COCO.** YOLO11n ne reconnaît que ce sur quoi il a été entraîné. Ajuster finement un modèle YOLO sur tes propres images étiquetées (une version beaucoup plus petite de la même idée que le [projet Fine-tune a Small Language Model](/docs/projects/finetune-llm-unsloth)) te permet de compter quelque chose que COCO n'a jamais inclus — un produit spécifique sur une étagère, un outil spécifique, tout ce dont tu peux étiqueter quelques centaines d'exemples.
+- **Une classe personnalisée, pas seulement les 80 de COCO.** YOLO11n ne reconnaît que ce sur quoi il a été entraîné. Ajuster finement un modèle YOLO sur tes propres images étiquetées (une version beaucoup plus petite de la même idée que le [projet Fine-tune a Small Language Model](/fr/projets/finetune-llm-unsloth)) te permet de compter quelque chose que COCO n'a jamais inclus — un produit spécifique sur une étagère, un outil spécifique, tout ce dont tu peux étiqueter quelques centaines d'exemples.
 
 ## Partage ton projet avec la classe
 

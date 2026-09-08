@@ -21,7 +21,7 @@ learningObjectives:
 
 Los ecólogos no observan a cada individuo — observan *señales*. Una caída del 30% o más en las aves observadas en una temporada es un disparador de muestreo; una oscilación cerca de la línea base merece vigilarse; un conteo estable es "déjalo en paz". Este proyecto construye ese bucle de decisión como un pequeño **agente de muestreo**: mantiene un registro de observaciones de toda una temporada (sintético, por lo tanto reproducible), calcula la línea base de cada especie y su ventana reciente, aplica una regla de umbral para marcar `SURVEY` / `WATCH` / `OK`, ingiere nuevos lotes semanales y registra cada decisión en un CSV, para luego renderizar un gráfico de barras ASCII de los totales por especie e imprimir una cola de muestreo priorizada. Todo corre en pandas y la biblioteca estándar, con una semilla fija — la misma ejecución marca a las mismas especies cada vez, en cualquier máquina.
 
-Esto asume `groupby`, filtrado y fusión de pandas. Es un proyecto opcional y no calificado — consulta [Proyectos del mundo real](/docs/projects) para la lista completa y creciente. Una sola instalación: `pandas`.
+Esto asume `groupby`, filtrado y fusión de pandas. Es un proyecto opcional y no calificado — consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente. Una sola instalación: `pandas`.
 
 ## 🎯 Lo que harás
 

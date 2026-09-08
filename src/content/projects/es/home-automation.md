@@ -17,7 +17,7 @@ prerequisites:
 
 Tu hogar inteligente es tan inteligente como las reglas que conectan sus dispositivos — un sensor de movimiento que enciende una luz, un termostato que se ajusta cuando sales, una cerradura de puerta que se activa a la hora de dormir. Este proyecto construye un motor de automatización del hogar basado en reglas en Python: defines dispositivos (luces, termostatos, cerraduras), escribes reglas si-esto-entonces-aquello, programas activadores basados en tiempo y detectas presencia a partir de pings de red. El motor se ejecuta localmente, procesa eventos y ejecuta acciones — no se requiere ningún servicio en la nube.
 
-Esto asume Python 101 — no se requiere nada de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa.
+Esto asume Python 101 — no se requiere nada de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
 
 ## 🎯 Lo que harás
 

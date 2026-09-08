@@ -17,7 +17,7 @@ prerequisites: ["Les bases de Python", "Les bases de Pillow"]
 
 La typographie est la décision de design la plus visible de toute page web, et bien apparier deux polices — une pour les titres, une pour le corps du texte — est une compétence soutenue par un petit nombre de règles concrètes : le contraste de catégorie (serif vs. sans-serif) et le contraste de graisse (titre en gras, corps en normal). Ce projet construit un outil qui applique ces règles mécaniquement : il analyse les fichiers de polices réellement installés sur ton système, classe chacune, note chaque paire possible, classe les meilleures, génère une image d'aperçu montrant l'appariement et exporte une pile CSS `font-family` prête pour la production avec des replis multiplateformes.
 
-Ce projet suppose que tu maîtrises Python 101 et que tu as une familiarité de base avec PIL/Pillow — rien de la formation Data Analysis n'est requis. Il est facultatif et non noté ; consulte [Real-World Projects](/docs/projects) pour la liste complète, qui ne cesse de s'allonger.
+Ce projet suppose que tu maîtrises Python 101 et que tu as une familiarité de base avec PIL/Pillow — rien de la formation Data Analysis n'est requis. Il est facultatif et non noté ; consulte [Real-World Projects](/fr/projets) pour la liste complète, qui ne cesse de s'allonger.
 
 ## 🎯 Ce que tu vas faire
 

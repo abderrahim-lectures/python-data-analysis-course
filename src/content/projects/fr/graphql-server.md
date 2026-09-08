@@ -16,7 +16,7 @@ prerequisites: ["Python 101", "Data Analysis"]
 
 Les API REST te forcent à concevoir un point de terminaison par ressource, mais les clients réels ont souvent besoin des données de cinq ressources différentes dans un seul chargement d'écran. GraphQL résout cela en laissant le client demander exactement ce dont il a besoin dans une seule requête. Ce projet construit un serveur d'API GraphQL de zéro : tu définis un schéma avec des types et des requêtes, tu écris des résolveurs qui récupèrent de vraies données, tu utilises DataLoader pour regrouper les recherches en base de données et prévenir le problème de requêtes N+1, et tu ajoutes des abonnements pour les mises à jour en temps réel. Le serveur s'exécute sur Strawberry (une bibliothèque GraphQL Python) avec un stockage de données en mémoire.
 
-Ceci suppose Python 101 et une aisance avec pandas de Data Analysis — rien de plus. Optionnel et non noté ; voir [Real-World Projects](/docs/projects) pour la liste complète.
+Ceci suppose Python 101 et une aisance avec pandas de Data Analysis — rien de plus. Optionnel et non noté ; voir [Real-World Projects](/fr/projets) pour la liste complète.
 
 ## 🎯 Ce que tu vas faire
 

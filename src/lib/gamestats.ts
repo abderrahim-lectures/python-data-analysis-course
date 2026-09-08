@@ -1,6 +1,7 @@
 // Game-style "after-action report" — computed from gameState (localStorage).
 // Renders server with empty values, client script fills real metrics.
 import { loadState, trackProgress, streakProgress, getQuizProgress, rankFor as gsRankFor } from './gameState.ts';
+import { levelForXp, xpProgressFor } from './levelMath';
 
 export interface GameStats {
   level: number;
@@ -54,9 +55,9 @@ function rankFor(xp: number): Rank {
 export function computeGameStats(): GameStats {
   const s = loadState();
   const xp = s.xp;
-  const level = Math.floor(xp / 100) + 1;
+  const level = levelForXp(xp);
   const rank = rankFor(xp);
-  const xpToNext = 100 - (xp % 100);
+  const xpToNext = xpProgressFor(xp).toNext;
 
   const lanes = TRACKS.map(t => {
     const tr = trackProgress(t.id, t.total);

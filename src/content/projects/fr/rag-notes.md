@@ -7,7 +7,7 @@ description: "Passez du bac à sable dans le navigateur à du vrai Python : cons
 
 Jusqu'à présent, tout dans le cours tournait dans un bac à sable dans le navigateur — pour pouvoir commencer à écrire du Python dès le premier jour sans aucune configuration. Ce projet est l'étape de graduation : installez Python pour de vrai sur votre propre machine, puis utilisez-le pour construire un outil que vous pourriez réellement continuer à utiliser — une application qui répond à des questions sur un dossier de vos propres notes, en les cherchant d'abord et en ne demandant ensuite qu'au modèle de langage de répondre en utilisant ce qu'il a trouvé. Ceci suppose Python 101 ; rien de Data Analysis n'est requis, même si ça aide si les tableaux `numpy` vous semblent déjà familiers.
 
-Ceci est optionnel et non noté. Voir [Projets concrets](/docs/projects) pour la liste complète, qui s'enrichit au fil du temps.
+Ceci est optionnel et non noté. Voir [Projets concrets](/fr/projets) pour la liste complète, qui s'enrichit au fil du temps.
 
 ## 🎯 Ce que vous allez faire
 
@@ -89,7 +89,7 @@ Whichever you pick, the process is the same :
 GITHUB_TOKEN=your-key-here
 ```
 
-`python-dotenv` (installé ci-dessus) lit ce fichier dans `os.environ` automatiquement, le même modèle utilisé tout au long du [projet Agent IA](/docs/projects/ai-agent) si vous l'avez fait — GitHub Models expose justement une API compatible OpenAI, donc la bibliothèque client standard `openai` fonctionne pour lui sans aucun paquet supplémentaire :
+`python-dotenv` (installé ci-dessus) lit ce fichier dans `os.environ` automatiquement, le même modèle utilisé tout au long du [projet Agent IA](/fr/projets/ai-agent) si vous l'avez fait — GitHub Models expose justement une API compatible OpenAI, donc la bibliothèque client standard `openai` fonctionne pour lui sans aucun paquet supplémentaire :
 
 ```bash
 uv add openai
@@ -423,7 +423,7 @@ uv run python ask.py "What is this course about?"
 `build_prompt` est toute l'idée du RAG dans une seule fonction : elle ne demande pas au modèle de répondre à partir de ce qu'il sait déjà, elle remet au modèle le *texte récupéré réel* et lui demande de répondre à partir de ça — c'est pourquoi une application RAG peut répondre correctement à des questions sur des notes que le modèle sous-jacent n'a jamais vues, écrites hier, sur votre propre machine.
 
 :::tip[Vous utilisez un fournisseur différent ?]
-Remplacez le bloc `OpenAI(...)` par le client propre de votre fournisseur, en suivant le même modèle que le [projet Agent IA](/docs/projects/ai-agent#step-1-write-your-first-agent) — par ex. le paquet `google-genai` de Google pour Gemini, ou le client propre de `groq` pour Groq. Cerebras et OpenRouter sont aussi compatibles OpenAI, donc le paquet `openai` fonctionne pour eux aussi, juste avec un `base_url` différent.
+Remplacez le bloc `OpenAI(...)` par le client propre de votre fournisseur, en suivant le même modèle que le [projet Agent IA](/fr/projets/ai-agent#step-1-write-your-first-agent) — par ex. le paquet `google-genai` de Google pour Gemini, ou le client propre de `groq` pour Groq. Cerebras et OpenRouter sont aussi compatibles OpenAI, donc le paquet `openai` fonctionne pour eux aussi, juste avec un `base_url` différent.
 :::
 
 **🎯 Résultat attendu :** `uv run python ask.py "une vraie question sur vos notes"` affiche une réponse, pas un traceback — et la réponse reflète le contenu de vos notes, pas des connaissances génériques que le modèle avait déjà.
@@ -448,7 +448,7 @@ Remplacez le bloc `OpenAI(...)` par le client propre de votre fournisseur, en su
 - **Des morceaux trop gros ou trop petits.** Trop gros et la récupération devient floue (étape 1) ; trop petits et un morceau perd le contexte environnant dont le modèle a besoin pour bien répondre. Si les réponses semblent bizarres, essayez un autre `TARGET_CHUNK_SIZE` et relancez `build_index.py`.
 - **Oublier de reconstruire l'index après avoir modifié `notes/`.** `build_index.py` ne s'exécute que quand vous l'exécutez — ajoutez une nouvelle note, et `retrieve()` n'y trouvera rien jusqu'à ce que vous relanciez `uv run python build_index.py`. Il n'y a pas de surveillant de fichiers ici ; c'est une étape manuelle par conception, pour que vous sachiez toujours exactement ce qui est indexé.
 - **Embedder la question avec un modèle différent de celui utilisé pour construire l'index.** `retrieve.py` et `build_index.py` codent tous deux `MODEL_NAME = "all-MiniLM-L6-v2"` exprès — les vecteurs de deux modèles d'embedding différents n'ont rien de comparable entre eux, même si les deux sont « 384-dimensionnels ». Changez le modèle dans un fichier et vous devez le changer dans les deux, puis reconstruire l'index.
-- **Les limites de taux sur le palier gratuit du LLM.** La récupération (étapes 2-3) est locale et illimitée ; seul l'appel `ask()` de l'étape 4 compte contre le quota du palier gratuit de votre fournisseur. Une erreur 429 là-bas, c'est le fournisseur qui vous dit de ralentir, pas un bug — voir le [projet Agent IA](/docs/projects/ai-agent#handling-rate-limits) pour le même modèle et une approche de relance que vous pouvez copier.
+- **Les limites de taux sur le palier gratuit du LLM.** La récupération (étapes 2-3) est locale et illimitée ; seul l'appel `ask()` de l'étape 4 compte contre le quota du palier gratuit de votre fournisseur. Une erreur 429 là-bas, c'est le fournisseur qui vous dit de ralentir, pas un bug — voir le [projet Agent IA](/fr/projets/ai-agent#handling-rate-limits) pour le même modèle et une approche de relance que vous pouvez copier.
 
 ## Ce que vous venez de construire
 

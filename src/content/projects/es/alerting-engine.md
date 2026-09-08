@@ -21,7 +21,7 @@ learningObjectives:
 
 Un sistema de monitoreo no falla porque exista un umbral; falla porque un solo pico se convierte en 500 alertas idénticas. Este proyecto construye el motor pequeño y honesto detrás de ese juicio: una clase `Rule` que vigila una **ventana móvil** de muestras, dispara una alerta solo cuando un umbral se sostiene genuinamente y luego se queda en silencio durante un **cooldown** para que un incidente en curso se reporte una vez en lugar de cada segundo. El estado se serializa a JSON para que el motor sobreviva a un reinicio a mitad del incidente, y todo corre sobre una alimentación sintética determinista que puedes reproducir exactamente. El motor produce exactamente dos alertas reales a partir de una alimentación guionizada de ocho muestras — ni más, ni menos — y sabrás por qué.
 
-Esto asume clases, métodos y slicing más comodidad con JSON-como-datos. Nada de esto es calificado — es opcional y no calificado — consulta [Proyectos del mundo real](/docs/projects) para la lista completa y creciente.
+Esto asume clases, métodos y slicing más comodidad con JSON-como-datos. Nada de esto es calificado — es opcional y no calificado — consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 ## 🎯 Lo que harás
 

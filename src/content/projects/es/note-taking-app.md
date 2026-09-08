@@ -13,7 +13,7 @@ prerequisites:
   - Python a nivel intermedio
   - Conocimiento básico de SQL
   - familiaridad con argparse o click
-  - Terminal y编辑or de código
+  - Terminal yeditor de código
 ---
 
 ## 🎯 Lo que harás

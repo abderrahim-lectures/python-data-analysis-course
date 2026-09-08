@@ -19,7 +19,7 @@ learningObjectives:
 
 Une flotte d'appareils connectés est un tas croissant de petits problèmes jusqu'à ce que quelqu'un la suive : des capteurs signalent un battement de cœur puis se taisent, `cam-01` est silencieux depuis six jours, deux de tes trois capteurs `temp-hum` sont derrière une release de firmware, et le capteur du garage devrait alerter à −5 °C pendant que les autres préviennent à 28. Un gestionnaire d'appareils transforme ces faits éparpillés en un registre que tu peux trier, un verdict de santé par appareil, une file de mise à jour, une configuration résolue par appareil, et un rapport de flotte sur un écran — tout depuis du JSON et un peu d'arithmétique `datetime`, sans réseau requis.
 
-Ceci suppose Python 101 — listes, dictionnaires, boucles, fonctions — plus l'aise à ouvrir des fichiers. Rien du module Analyse de Données n'est requis. C'est facultatif et non noté ; voir [Projets du monde réel](/docs/projects) pour la liste complète et croissante.
+Ceci suppose Python 101 — listes, dictionnaires, boucles, fonctions — plus l'aise à ouvrir des fichiers. Rien du module Analyse de Données n'est requis. C'est facultatif et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 

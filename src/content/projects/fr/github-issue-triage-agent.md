@@ -8,7 +8,7 @@ description: "Passe du bac à sable dans le navigateur au vrai Python : récupè
 
 Chaque dépôt open-source avec un peu de trafic accumule un backlog d'issues non triées — rapports de bugs, demandes de fonctionnalités, questions, et doublons, tous assis là sans étiquette jusqu'à ce qu'un mainteneur ait le temps de les trier à la main. Ce projet construit un petit script qui fait la première passe pour eux : il récupère les issues OUVERTES d'un vrai dépôt public directement depuis la propre API de GitHub, envoie chacune à un LLM gratuit, et affiche un rapport suggérant une étiquette de tri et une justification d'une phrase pour chaque issue — le genre de chose qu'un mainteneur pourrait survoler en une minute au lieu de lire chaque issue à partir de zéro.
 
-Cela suppose Python 101 — rien de Analyse de Données n'est requis. C'est optionnel et non noté ; voir [Projets du monde réel](/docs/projects) pour la liste complète et croissante.
+Cela suppose Python 101 — rien de Analyse de Données n'est requis. C'est optionnel et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 
@@ -263,7 +263,7 @@ def suggest_triage(issue: dict) -> dict:
     reply = call_llm(build_triage_prompt(issue))
     return parse_triage_reply(reply)
 ```
-N'oublie pas `from dotenv import load_dotenv` plus `load_dotenv()` près du haut du fichier, pour que `os.environ["GITHUB_TOKEN"]` trouve réellement la clé depuis ton fichier `.env` — même pattern que le [projet Agent IA](/docs/projects/ai-agent).
+N'oublie pas `from dotenv import load_dotenv` plus `load_dotenv()` près du haut du fichier, pour que `os.environ["GITHUB_TOKEN"]` trouve réellement la clé depuis ton fichier `.env` — même pattern que le [projet Agent IA](/fr/projets/ai-agent).
 `parse_triage_reply` retombe délibérément sur `label="other"` et la réponse brute comme justification si le modèle ne suit pas exactement le format à deux lignes demandé — les modèles gratuits ajoutent parfois du texte égaré ou sautent une ligne, et un *brouillon* de tri légèrement mal formé reste plus utile affiché pour qu'un humain le survole que jeté silencieusement sur une erreur d'analyse.
 
 **🎯 Résultat attendu :**
@@ -375,7 +375,7 @@ Un vrai pipeline récupérer → prompt → suggérer → rapporter contre un vr
 
 - **Applique réellement des étiquettes — prudemment, une fois que tu fais confiance aux suggestions.** Le [CLI `gh`](https://cli.github.com/) (`gh issue edit 123 --add-label bug`) ou le propre endpoint d'édition d'issues de l'API GitHub peut ajouter une étiquette pour de vrai. Si tu construis ça, garde un humain explicitement dans la boucle — ex. affiche d'abord les suggestions, demande une confirmation par issue (ou par lot) avant d'appeler l'API, et n'applique jamais automatiquement une étiquette directement depuis la première passe d'un modèle. Traite l'accès en écriture aux issues du dépôt de quelqu'un d'autre avec une vraie prudence, surtout un que tu ne maintiens pas toi-même.
 - **Regroupe plusieurs issues en un seul appel LLM** au lieu d'un appel par issue — moins d'allers-retours, mais un prompt plus complexe et un problème d'analyse plus difficile (le mode sortie structurée/JSON vaut la peine d'être exploré ici).
-- **Ajoute une vérification de « possible doublon »** en embeddant les titres d'issues (voir le [projet RAG](/docs/projects/rag-notes) pour le pattern d'embeddings) et en signalant les paires suspicieusement similaires, plutôt que de dépendre du LLM pour se souvenir de chaque autre issue ouverte par lui-même.
+- **Ajoute une vérification de « possible doublon »** en embeddant les titres d'issues (voir le [projet RAG](/fr/projets/rag-notes) pour le pattern d'embeddings) et en signalant les paires suspicieusement similaires, plutôt que de dépendre du LLM pour se souvenir de chaque autre issue ouverte par lui-même.
 - **Mets en cache les résultats** pour que relancer le script ne retrie pas les issues que tu as déjà révisées — un simple fichier JSON indexé par numéro d'issue, vérifié avant chaque appel LLM, suffit pour une première version.
 
 :::tip[Exécute une version plus complète sans aucune configuration locale]

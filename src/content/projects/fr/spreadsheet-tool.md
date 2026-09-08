@@ -46,7 +46,7 @@ Charger un fichier CSV dans un DataFrame pandas, en gérant différents encodage
 
 ### Le concept
 
-Les fichiers CSV semblent simples, mais ils viennent en许多 variantes. Certains utilisent des virgules, d'autres des points-virgules. Certains fichiers sont en UTF-8, d'autres en Latin-1. Avant de pouvoir analyser quoi que ce soit, tu dois comprendre avec quoi tu travailles. Pandas nous donne les outils, mais nous devons écrire un petit wrapper pour essayer différentes options jusqu'à ce que quelque chose fonctionne.
+Les fichiers CSV semblent simples, mais ils viennent en de nombreuses variantes. Certains utilisent des virgules, d'autres des points-virgules. Certains fichiers sont en UTF-8, d'autres en Latin-1. Avant de pouvoir analyser quoi que ce soit, tu dois comprendre avec quoi tu travailles. Pandas nous donne les outils, mais nous devons écrire un petit wrapper pour essayer différentes options jusqu'à ce que quelque chose fonctionne.
 
 ### Code fonctionnel
 

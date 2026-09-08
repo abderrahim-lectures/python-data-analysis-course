@@ -227,11 +227,3 @@ print(df.groupby("Embarked")["Survived"].mean())
 ## Practice Challenge
 
 Create a "data quality report" for the Titanic dataset: for each column, note the data type, number of missing values, and one interesting fact (e.g., "Fare ranges from 0 to 512"). This report will guide your cleaning steps in the next lesson.
-
-## Projects You Can Build
-
-Here are a few real-world projects that reinforce these concepts:
-
-- 🧠 **ML Classifier** - Load and explore datasets for feature engineering and model training
-- 🕷️ **Scrape and Analyze** - Profile new datasets to understand structure and data quality
-- 📈 **Data Visualization** - Create exploratory visualizations from dataset profiling

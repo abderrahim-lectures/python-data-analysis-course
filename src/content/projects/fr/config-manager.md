@@ -18,7 +18,7 @@ learningObjectives:
 
 Toute application réelle a une configuration qui ne devrait jamais être codée en dur : sur quel port se lier, quel niveau de log utiliser, quelles clés API faire confiance. La façon standard de l'organiser est *par couches* — des valeurs par défaut sensées, surchargées par un fichier de config par environnement, surchargées par les variables d'environnement — pour que « lancer en local » et « lancer en production » diffèrent sans que personne ne modifie du code. Ce projet construit exactement ce chargeur : une petite bibliothèque qui fusionne valeurs par défaut, JSON et TOML avec des surcharges de variables d'environnement, valide le résultat selon un schéma et — crucialement — n'affiche jamais un secret.
 
-Ceci suppose Python 101 (dictionnaires, fonctions et `json` au niveau `import`) — rien de l'Analyse de Données n'est nécessaire. C'est facultatif et non noté ; voir [Projets du monde réel](/docs/projects) pour la liste complète et croissante.
+Ceci suppose Python 101 (dictionnaires, fonctions et `json` au niveau `import`) — rien de l'Analyse de Données n'est nécessaire. C'est facultatif et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 

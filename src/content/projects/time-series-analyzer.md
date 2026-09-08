@@ -20,7 +20,7 @@ prerequisites:
 
 Temperature records, server load, web traffic — nearly everything real arrives as a sequence over time, and analysts spend their days separating what a series is *doing* into three signals: the slow drift (trend), the repeating rhythm (seasonality), and the leftover noise (residual). This project builds that decomposition from scratch with pandas, then uses the pieces: it forecasts next week with a trend-plus-season model, scores the forecast against a real holdout, flags dates that don't fit the pattern, and correlates two series into a chart you can actually save.
 
-This assumes Python 101 and comfort with pandas Series — nothing from Data Analysis beyond that is required. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python 101 and comfort with pandas Series — nothing from Data Analysis beyond that is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

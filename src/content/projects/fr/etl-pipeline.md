@@ -19,7 +19,7 @@ learningObjectives:
 
 Chaque vrai travail de données ressemble à cela : prendre des commandes d'un CSV et des clients d'un JSON, les joindre, laisser tomber les lignes qui n'appartiennent pas, totaliser les choses, et écrire le résultat quelque part où un outil peut l'interroger. Ce schéma — **Extract, Transform, Load** — est ce que ce projet construit avec rien de plus que la bibliothèque standard : un extracteur CSV, un extracteur JSON, une transformation qui nettoie et joint en signalant chaque saut, une agrégation qui répond à « revenus par ville », et un chargement SQLite qui est *idempotent* : exécute-le cinq fois, il reste exactement quatre lignes. L'étape finale durcit le tout contre sa défaillance de production la plus courante — un fichier source manquant — sans laisser l'entrepôt dans un état à moitié écrit. Pas de pandas. Pas de framework. Juste `csv`, `json` et `sqlite3` qui font un vrai travail.
 
-Ce projet suppose que tu maîtrises Python 101 — listes, dicts, boucles, fonctions — plus une lecture aisée des fichiers et un terminal. Rien ici n'a besoin de numpy ou pandas. Il est facultatif et non noté ; consulte [Real-World Projects](/docs/projects) pour la liste complète, qui ne cesse de s'allonger.
+Ce projet suppose que tu maîtrises Python 101 — listes, dicts, boucles, fonctions — plus une lecture aisée des fichiers et un terminal. Rien ici n'a besoin de numpy ou pandas. Il est facultatif et non noté ; consulte [Real-World Projects](/fr/projets) pour la liste complète, qui ne cesse de s'allonger.
 
 ## 🎯 Ce que tu vas faire
 

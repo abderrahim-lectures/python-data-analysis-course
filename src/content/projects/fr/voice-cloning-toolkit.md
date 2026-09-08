@@ -20,7 +20,7 @@ prerequisites:
 
 Le clonage vocal fait les gros titres, mais sous la magie se cache un problème de mesure : qu'est-ce qui, précisément, fait qu'une voix sonne comme *cette* personne ? Cette boîte à outils construit la moitié honnête et interprétable de ce problème en numpy — lis l'audio comme des nombres bruts, mesure le pitch et l'énergie par cadre, condense un clip en profil de locuteur, compare deux profils, et enfin façonne un clip vers les statistiques d'une autre voix. Tu ne produiras pas ici la voix synthétique d'une célébrité ; tu *comprendras* les nombres à partir desquels tout vrai système de clonage démarre.
 
-Cela suppose Python 101, l'aisance avec numpy et une familiarité passagère avec le taux d'échantillonnage et la fréquence — rien d'Analyse de Données au-delà n'est requis. C'est optionnel et non noté ; voir [Projets du monde réel](/docs/projects) pour la liste complète et croissante.
+Cela suppose Python 101, l'aisance avec numpy et une familiarité passagère avec le taux d'échantillonnage et la fréquence — rien d'Analyse de Données au-delà n'est requis. C'est optionnel et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 > **La clause de responsabilité.** Cloner une voix sans consentement est de l'usurpation d'identité et, dans de nombreuses juridictions, une fraude — cette boîte à outils est conçue comme un instrument de *mesure* et ne livre aucun modèle qui reproduit une personne réelle à partir d'un échantillon. Utilise-la sur tes propres enregistrements, des clips synthétiques et du matériel de référence clairement étiqueté. N'oublie pas ce qu'un extracteur de caractéristiques peut contenir : des statistiques, pas une identité.
 

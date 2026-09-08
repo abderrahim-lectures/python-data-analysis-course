@@ -5,11 +5,11 @@ description: "Graduate from the in-browser playground to real Python: wrap the R
 
 # 📚 Build a RAG-Backed Docs Q&A Discord Bot
 
-This project takes the retrieval-augmented generation pipeline from [Build a RAG App](/docs/projects/rag-notes) — local embeddings, NumPy cosine-similarity search, a free-tier LLM for the final answer — and puts a different front end on it: instead of a script you run from a terminal one question at a time, the same pipeline answers questions live, inside a Discord server, whenever someone mentions the bot. Nothing about *how* it retrieves or generates changes; only the interface does.
+This project takes the retrieval-augmented generation pipeline from [Build a RAG App](/projects/rag-notes) — local embeddings, NumPy cosine-similarity search, a free-tier LLM for the final answer — and puts a different front end on it: instead of a script you run from a terminal one question at a time, the same pipeline answers questions live, inside a Discord server, whenever someone mentions the bot. Nothing about *how* it retrieves or generates changes; only the interface does.
 
-This assumes Python 101. Having built [Build a RAG App](/docs/projects/rag-notes) first is strongly recommended — this project reuses its embedding/retrieval code directly and moves quickly past the parts it already explained in depth.
+This assumes Python 101. Having built [Build a RAG App](/projects/rag-notes) first is strongly recommended — this project reuses its embedding/retrieval code directly and moves quickly past the parts it already explained in depth.
 
-This is optional and ungraded. See [Real-World Projects](/docs/projects) for the full, growing list.
+This is optional and ungraded. See [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 
@@ -69,12 +69,12 @@ Discord's [Developer Portal](https://discord.com/developers/applications) is fre
 4. On the same **Bot** tab, scroll to **Privileged Gateway Intents** and turn on **Message Content**. This is required for the bot to actually see the text of messages it's mentioned in — without it, `discord.py` receives an empty string for every message's content no matter what code you write.
 
 :::tip[A bot token is a secret, exactly like an API key]
-Everything the [RAG App project](/docs/projects/rag-notes) taught about handling LLM API keys applies here too, for a second secret: never hardcode the bot token, never commit it, and keep it in a local `.env` file (below) instead.
+Everything the [RAG App project](/projects/rag-notes) taught about handling LLM API keys applies here too, for a second secret: never hardcode the bot token, never commit it, and keep it in a local `.env` file (below) instead.
 :::
 
 ### Get a free LLM API key
 
-The generation half of this pipeline needs the same kind of free-tier LLM key as the [RAG App project](/docs/projects/rag-notes) — **pick whichever provider you like**, none require a credit card at the time of writing:
+The generation half of this pipeline needs the same kind of free-tier LLM key as the [RAG App project](/projects/rag-notes) — **pick whichever provider you like**, none require a credit card at the time of writing:
 
 | Provider | Where to get a key | Why you might pick it |
 |---|---|---|
@@ -303,7 +303,7 @@ if __name__ == "__main__":
 uv run python retrieve.py
 ```
 
-If this feels too fast, that's deliberate — the [RAG App project](/docs/projects/rag-notes#step-4-retrieve-relevant-chunks) covers exactly why cosine similarity works this way, what normalization buys you, and how the math connects to a matrix-vector multiply, in much more depth than repeating it here would add.
+If this feels too fast, that's deliberate — the [RAG App project](/projects/rag-notes#step-4-retrieve-relevant-chunks) covers exactly why cosine similarity works this way, what normalization buys you, and how the math connects to a matrix-vector multiply, in much more depth than repeating it here would add.
 
 :::tip[Test retrieval before touching Discord at all]
 Get `retrieve.py` returning genuinely relevant chunks for a few test questions *before* writing any bot code. If retrieval is wrong, a bot wrapped around it will just confidently deliver wrong answers in a Discord channel — much harder to debug live than a quiet terminal script.
@@ -510,19 +510,19 @@ Within a few seconds you should see a typing indicator, then a reply grounded in
 ## ⚠️ Common pitfalls
 
 - **Forgetting the "Message Content" privileged intent.** This has to be enabled in *two* places — `intents.message_content = True` in code, **and** the toggle under Bot → Privileged Gateway Intents in the Developer Portal. Miss the portal toggle and `message.content` is silently an empty string for every message, with no error telling you why.
-- **Rate limits on the free LLM tier, made worse by real bot traffic.** A CLI script like the RAG App project's `ask.py` only calls the LLM when you run it; a live bot can get several questions in quick succession from different people in a busy server, and each one is a separate call against your provider's free-tier quota. A 429 error under load isn't a bug — see the [RAG App project's pitfalls](/docs/projects/rag-notes#️-common-pitfalls) for the same rate-limit pattern and how to add a retry.
+- **Rate limits on the free LLM tier, made worse by real bot traffic.** A CLI script like the RAG App project's `ask.py` only calls the LLM when you run it; a live bot can get several questions in quick succession from different people in a busy server, and each one is a separate call against your provider's free-tier quota. A 429 error under load isn't a bug — see the [RAG App project's pitfalls](/projects/rag-notes#️-common-pitfalls) for the same rate-limit pattern and how to add a retry.
 - **Not rebuilding the index after changing `docs/`.** Exactly like the RAG App project: `build_index.py` only runs when you run it. Add or edit a doc and the bot keeps answering from the *old* index until you re-run `uv run python build_index.py` and restart the bot.
 - **Running the bot with a stale or wrong token after regenerating it.** Clicking "Reset Token" in the Developer Portal invalidates the old token immediately — if `.env` still has the old value, `client.run(...)` fails to log in. Update `.env` every time you reset the token, and never assume the value you copied once is still valid.
 
 ## What you just built
 
-A live Discord bot that answers real questions from real documentation, grounded in retrieved text rather than the model's general knowledge — the exact same RAG pipeline as the [RAG App project](/docs/projects/rag-notes), with a `discord.py` event loop standing in for a CLI script as the interface. The retrieval and generation code didn't change in any meaningful way; only how a question gets in and an answer gets out did. That's a useful thing to notice generally: a RAG pipeline's core logic is interface-agnostic, and the same `retrieve()`/`answer()` pair here could just as easily sit behind a Slack bot, a web form, or an API endpoint instead.
+A live Discord bot that answers real questions from real documentation, grounded in retrieved text rather than the model's general knowledge — the exact same RAG pipeline as the [RAG App project](/projects/rag-notes), with a `discord.py` event loop standing in for a CLI script as the interface. The retrieval and generation code didn't change in any meaningful way; only how a question gets in and an answer gets out did. That's a useful thing to notice generally: a RAG pipeline's core logic is interface-agnostic, and the same `retrieve()`/`answer()` pair here could just as easily sit behind a Slack bot, a web form, or an API endpoint instead.
 
 ## Where to go from here
 
 - Add a **slash command** (`/ask <question>`) using `discord.py`'s `app_commands` alongside, or instead of, mention-based replies — slash commands show up in Discord's UI with autocomplete and don't require typing an `@mention`, at the cost of a small amount of extra registration code.
 - Track which `docs/` source each answer actually cited, and have the bot include a "Source: filename.md" line in its reply — a small but real trust-building feature for anyone reading the answer.
-- Once your docs folder outgrows what comfortably fits in memory, look at a real vector database like [ChromaDB](https://www.trychroma.com/), exactly as suggested in the [RAG App project's "Where to go from here"](/docs/projects/rag-notes#where-to-go-from-here) — nothing about the Discord layer needs to change to support it.
+- Once your docs folder outgrows what comfortably fits in memory, look at a real vector database like [ChromaDB](https://www.trychroma.com/), exactly as suggested in the [RAG App project's "Where to go from here"](/projects/rag-notes#where-to-go-from-here) — nothing about the Discord layer needs to change to support it.
 - Deploy the bot somewhere that stays up without your own laptop running — a small always-on VM, or a free tier on a platform like Railway or Fly.io — so it keeps answering questions even when you're not at your machine.
 
 ## Share your project with the class

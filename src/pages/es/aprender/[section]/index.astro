@@ -6,7 +6,7 @@ const locale = 'es' as const;
 
 export async function getStaticPaths() {
   const modules = await getCollection('modules');
-  const sections = [...new Set(modules.map((m) => m.slug.split('/')[0]))].sort();
+  const sections = [...new Set(modules.map((m) => m.id.split('/')[0]))].sort();
   return sections.map((section) => ({params: {section}, props: {section}}));
 }
 ---

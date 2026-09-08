@@ -16,7 +16,7 @@ prerequisites: ["python-101/libraries", "data-analysis/pandas", "data-analysis/g
 
 Un motor de recomendaciones es el motor silencioso de la economía de internet: el "Viste dos episodios, aquí tienes una serie que terminarás este fin de semana" de Netflix, el "Los clientes como tú también compraron" de Amazon, el autoplay de YouTube. Por debajo es sorprendentemente poco glamoroso — una matriz de usuarios por elementos, la mayoría de las celdas vacías, y todo el truco es llenar los huecos de manera plausible con una matemática llamada *similitud*. La misma álgebra lineal que impulsa el trabajo de pandas del curso escala hacia las dos grandes familias que construirás aquí: **filtrado colaborativo** (derivar el gusto de las calificaciones de otros usuarios) y **filtrado basado en contenido** (hacer coincidir elementos nuevos contra los perfiles de lo que ya calificaste). Al final tendrás un híbrido funcional que hace recomendaciones genuinamente sensatas sobre un conjunto de datos real de 100k calificaciones.
 
-Esto asume Python 101 más un conocimiento práctico de `pandas` y la matemática de arrays de NumPy — los módulos de análisis de datos del curso. Sin aprendizaje profundo, sin sistemas de escala industrial. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa.
+Esto asume Python 101 más un conocimiento práctico de `pandas` y la matemática de arrays de NumPy — los módulos de análisis de datos del curso. Sin aprendizaje profundo, sin sistemas de escala industrial. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
 
 ## 🎯 Lo que harás
 

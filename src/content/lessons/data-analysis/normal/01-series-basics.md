@@ -193,11 +193,3 @@ print(grades > 85)
 ## Practice Challenge
 
 You have a dictionary representing monthly rainfall in millimeters: `{"Jan": 45, "Feb": 38, "Mar": 52, "Apr": 61, "May": 48, "Jun": 35}`. Create a Series from it, then calculate the total rainfall and the average monthly rainfall. Which month had the most rain? Which had the least?
-
-## Projects You Can Build
-
-Here are a few real-world projects that reinforce these concepts:
-
-- 📈 **Data Visualization** - Use pandas Series for quick data exploration and chart preparation
-- 🕷️ **Scrape and Analyze** - Store scraped metrics in Series for easy analysis and reporting
-- 💰 **Expense Tracker** - Track spending trends with time-indexed Series for monthly summaries

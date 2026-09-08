@@ -19,7 +19,7 @@ prerequisites:
 
 Chaque liste d'e-mails fait face au même pipeline : prendre un modèle, le remplir pour chaque abonné, suivre qui a ouvert et cliqué, et découvrir quel objet fonctionne vraiment. Ce projet construit ce pipeline en Python — un moteur de modèles par regex, une liste d'abonnés CSV avec tags, un suivi d'ouvertures/clics qui calcule des taux honnêtes, un test A/B pour les objets, et une étape finale qui rend une édition personnalisée pour chaque abonné d'un segment.
 
-Ceci suppose Python 101 et l'aisance avec les fonctions, les dictionnaires et les listes — tu rencontreras pandas dans une étape, mais rien au-delà n'est requis. C'est optionnel et non noté ; voir [Projets du monde réel](/docs/projects) pour la liste complète et croissante.
+Ceci suppose Python 101 et l'aisance avec les fonctions, les dictionnaires et les listes — tu rencontreras pandas dans une étape, mais rien au-delà n'est requis. C'est optionnel et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 

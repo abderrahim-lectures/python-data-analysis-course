@@ -6,7 +6,7 @@ description: "Automatically refine prompts using A/B testing, few-shot examples,
 
 A mediocre prompt gets mediocre answers. Engineers often hand-tune prompts by trial and error, but that's slow and unrepeatable. This project builds a CLI tool that takes a raw prompt, generates several structured variants (few-shot, chain-of-thought, role-based), scores them against a gold set of answers, and reports which variant performs best.
 
-This assumes Python 101 and comfort with pandas from Data Analysis. Optional and ungraded; see [Real-World Projects](/docs/projects) for the full list.
+This assumes Python 101 and comfort with pandas from Data Analysis. Optional and ungraded; see [Real-World Projects](/projects) for the full list.
 
 ## 🎯 What you'll do
 

@@ -1,4 +1,5 @@
 ---
+import {m} from '../paraglide/messages.js';
 interface QuizOption {
   text: string;
   correct?: boolean;
@@ -14,7 +15,7 @@ interface Props {
   xp?: number;
   lessonId?: string;
 }
-const {title = 'Quick check', questions, xp = 10, lessonId = ''} = Astro.props;
+const {title = m.quiz_title(), questions, xp = 10, lessonId = ''} = Astro.props;
 ---
 
 <div class="quiz" data-quiz data-xp={xp} data-lesson={lessonId} data-total={questions.length}>
@@ -45,7 +46,7 @@ const {title = 'Quick check', questions, xp = 10, lessonId = ''} = Astro.props;
   </div>
 
   <div class="quiz__foot">
-    <button class="btn btn-primary quiz__check" data-quiz-check>Check Answers</button>
+    <button type="button" class="btn btn-primary quiz__check" data-quiz-check>{m.quiz_check()}</button>
     <span class="quiz__score" data-quiz-score hidden></span>
   </div>
 
@@ -53,6 +54,7 @@ const {title = 'Quick check', questions, xp = 10, lessonId = ''} = Astro.props;
 </div>
 
 <script>
+  import {m} from '../paraglide/messages.js';
   document.querySelectorAll('[data-quiz]').forEach((el) => {
     if (el.hasAttribute('data-hydrated')) return;
     el.setAttribute('data-hydrated', '1');
@@ -97,11 +99,11 @@ const {title = 'Quick check', questions, xp = 10, lessonId = ''} = Astro.props;
       });
 
       scoreEl.hidden = false;
-      scoreEl.textContent = `${correct}/${total} correct`;
+      scoreEl.textContent = m.quiz_correct({correct, total});
 
       if (correct === total) {
         feedback.hidden = false;
-        feedback.textContent = `🎉 Perfect! +${xp} XP`;
+        feedback.textContent = m.quiz_perfect({xp});
         feedback.className = 'quiz__feedback quiz__feedback--correct';
         try {
           import('../lib/gameState.ts').then((m) => {
@@ -110,15 +112,15 @@ const {title = 'Quick check', questions, xp = 10, lessonId = ''} = Astro.props;
         } catch {}
       } else if (correct > 0) {
         feedback.hidden = false;
-        feedback.textContent = `${correct}/${total} — review the highlighted answers.`;
+        feedback.textContent = m.quiz_partial({correct, total});
         feedback.className = 'quiz__feedback quiz__feedback--partial';
       } else {
         feedback.hidden = false;
-        feedback.textContent = `0/${total} — try again!`;
+        feedback.textContent = m.quiz_wrong({total});
         feedback.className = 'quiz__feedback quiz__feedback--wrong';
       }
 
-      checkBtn.textContent = 'Retry';
+      checkBtn.textContent = m.quiz_retry();
       checkBtn.addEventListener('click', () => {
         questions.forEach((q) => {
           q.querySelectorAll('.quiz-q__opt').forEach((opt) => {
@@ -130,7 +132,7 @@ const {title = 'Quick check', questions, xp = 10, lessonId = ''} = Astro.props;
         });
         scoreEl.hidden = true;
         feedback.hidden = true;
-        checkBtn.textContent = 'Check Answers';
+        checkBtn.textContent = m.quiz_check();
       }, {once: true});
     });
   });

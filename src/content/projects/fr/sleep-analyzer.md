@@ -16,7 +16,7 @@ prerequisites: ["python-101/file-io", "python-101/strings", "python-101/datetime
 
 Chaque tracker de sommeil est au fond une petite feuille de calcul avec du jugement : journalise quand tu t'es couché et quand tu t'es réveillé, soustrais pour obtenir la durée, compare-la à un objectif, et regarde si ta moyenne rampe vers ou loin du sain sur une semaine. Ce projet construit cela — un CLI qui enregistre une nuit, attrape le piège classique du coucher-après-minuit, note chaque nuit sur la durée et la régularité, et relit tout l'historique pour comparer de semaine en semaine. Pas de wearable, pas d'EEG : le « capteur » c'est toi qui tapes deux heures, et l'analyse est du pur `datetime` Python et de l'arithmétique. C'est la plus petite chose de ce cours qui ressemble encore à un vrai outil que tu utiliserais réellement.
 
-Cela suppose le Python 101 — chaînes, datetime, entrées-sorties de fichiers, fonctions. Optionnel et non noté ; vois [Projets du monde réel](/docs/projects) pour la liste complète.
+Cela suppose le Python 101 — chaînes, datetime, entrées-sorties de fichiers, fonctions. Optionnel et non noté ; vois [Projets du monde réel](/fr/projets) pour la liste complète.
 
 ## 🎯 Ce que tu vas faire
 

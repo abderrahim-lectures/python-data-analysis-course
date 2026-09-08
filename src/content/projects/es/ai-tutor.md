@@ -21,7 +21,7 @@ learningObjectives:
 
 Un tutor que solo conoce la respuesta correcta es apenas una app de cuestionarios. Este proyecto construye la otra clase: un tutor de repetición espaciada que *recuerda en qué eres débil*, alarga el intervalo entre revisiones cuando te va bien y lo acorta cuando no. El motor de programación es una reimplementación limpia de SM-2 — un algoritmo ampliamente usado que depende solo de `interval` (días desde la última revisión) y de una puntuación de `quality` (0–5) que tú provees después de cada intento. Una capa de persistencia guarda el estado completo del mazo a JSON para que el progreso sobreviva entre sesiones, y una capa opcional de LLM redacta una "pista de tutor" de una oración que empuja sin revelar la respuesta. El núcleo es Python puro; la capa de LLM es genuina pero opcional — el tutor funciona por completo sin ninguna clave de API.
 
-Esto asume soltura con dicts y listas, JSON básico y ningún conocimiento de machine learning; nada de esto es calificado — es opcional y no calificado — consulta [Proyectos del mundo real](/docs/projects) para la lista completa y creciente.
+Esto asume soltura con dicts y listas, JSON básico y ningún conocimiento de machine learning; nada de esto es calificado — es opcional y no calificado — consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 ## 🎯 Lo que harás
 

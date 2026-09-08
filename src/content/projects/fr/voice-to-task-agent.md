@@ -8,7 +8,7 @@ description: "Passe du playground intégré au navigateur au vrai Python : trans
 
 Tout dans le cours jusqu'ici s'est exécuté dans un playground isolé intégré au navigateur — pour que tu puisses commencer à écrire du Python dès le premier jour avec zéro configuration. Ce projet est l'étape de remise des diplômes : installe du vrai Python sur ta propre machine, puis utilise-le pour construire quelque chose d'authentiquement utile — un petit pipeline qui prend une note vocale décousue et la transforme en une courte liste de tâches structurée, sans que tu aies à taper ou à organiser quoi que ce soit à la main. Cela suppose du Python 101 ; rien de l'Analyse de Données n'est requis.
 
-C'est optionnel et non noté. Voir [Projets du monde réel](/docs/projects) pour la liste complète et croissante.
+C'est optionnel et non noté. Voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 
@@ -91,7 +91,7 @@ Quel que soit ton choix, le processus est le même :
 GITHUB_TOKEN=your-key-here
 ```
 
-Une clé API est un secret, exactement comme un mot de passe — n'importe qui avec elle peut utiliser le quota de ton compte. La traiter comme une variable d'environnement plutôt qu'une chaîne en dur est la pratique standard précisément pour cette raison, et c'est la même habitude construite dans le [projet AI Agent](/docs/projects/ai-agent) si tu as fait celui-là.
+Une clé API est un secret, exactement comme un mot de passe — n'importe qui avec elle peut utiliser le quota de ton compte. La traiter comme une variable d'environnement plutôt qu'une chaîne en dur est la pratique standard précisément pour cette raison, et c'est la même habitude construite dans le [projet AI Agent](/fr/projets/ai-agent) si tu as fait celui-là.
 
 :::tip[Un fichier .env est souvent plus pratique que export]
 Au lieu d'`export`-er une clé dans chaque nouvelle session de terminal, un fichier `.env` dans ton dossier de projet, chargé automatiquement avec `python-dotenv`, persiste entre les sessions sans que tu aies à t'en souvenir. Vois le `.env.example` de l'exemple du dépôt pour la liste complète des noms de variables, un par fournisseur.
@@ -263,10 +263,10 @@ transcript = transcribe('sample_audio/memo_1_work_followups.wav')
 print(extract_action_items(transcript))
 "
 ```
-Le prompt fait le vrai travail ici : il dit au modèle exactement quelle forme retourner (un objet JSON avec une liste `"tasks"`, pas une prose libre), et donne des règles explicites pour les parties délicates — n'invente pas une date limite qui n'a jamais été dite, ne devine pas une priorité qui n'est pas réellement impliquée. C'est la même idée que le prompt du [projet RAG](/docs/projects/rag-notes) disant au modèle de répondre *uniquement* à partir du contexte récupéré : une instruction claire et spécifique rétrécit ce que fait le modèle, au lieu d'espérer qu'il déduise la bonne forme tout seul.
+Le prompt fait le vrai travail ici : il dit au modèle exactement quelle forme retourner (un objet JSON avec une liste `"tasks"`, pas une prose libre), et donne des règles explicites pour les parties délicates — n'invente pas une date limite qui n'a jamais été dite, ne devine pas une priorité qui n'est pas réellement impliquée. C'est la même idée que le prompt du [projet RAG](/fr/projets/rag-notes) disant au modèle de répondre *uniquement* à partir du contexte récupéré : une instruction claire et spécifique rétrécit ce que fait le modèle, au lieu d'espérer qu'il déduise la bonne forme tout seul.
 `json.loads(...)["tasks"]` suppose que le modèle a réellement suivi l'instruction et retourné du JSON propre — les modèles de niveau gratuit ne le font parfois pas (une phrase parasite avant le JSON, un code fence markdown autour malgré la consigne de ne pas le faire). La version plus complète dans [`examples/voice-to-task-agent/voice_to_tasks.py`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/voice-to-task-agent) retire un code fence s'il apparaît et lève une erreur claire au lieu d'un traceback déroutant si le JSON refuse toujours de s'analyser — à copier si tu prévois de l'exécuter sur plus de deux ou trois notes.
 :::tip[Tu utilises un fournisseur différent ?]
-Tout ce qui précède fonctionne déjà pour les six fournisseurs du tableau — il suffit de définir `LLM_PROVIDER` dans ton `.env` (ou de passer un nom de fournisseur directement à `extract_action_items`). Cela fonctionne parce que GitHub Models, Gemini, Groq, Mistral, Cerebras, et OpenRouter exposent tous un endpoint compatible OpenAI ; contrairement au [projet AI Agent](/docs/projects/ai-agent), tu n'as pas besoin d'une bibliothèque client différente par fournisseur ici, puisque ce script n'utilise pas LangChain.
+Tout ce qui précède fonctionne déjà pour les six fournisseurs du tableau — il suffit de définir `LLM_PROVIDER` dans ton `.env` (ou de passer un nom de fournisseur directement à `extract_action_items`). Cela fonctionne parce que GitHub Models, Gemini, Groq, Mistral, Cerebras, et OpenRouter exposent tous un endpoint compatible OpenAI ; contrairement au [projet AI Agent](/fr/projets/ai-agent), tu n'as pas besoin d'une bibliothèque client différente par fournisseur ici, puisque ce script n'utilise pas LangChain.
 :::
 
 **🎯 Résultat attendu :**
@@ -376,7 +376,7 @@ Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
 - **Confondre Whisper open source avec l'API Whisper payante.** `openai-whisper` (ce projet) s'exécute entièrement sur ta propre machine, gratuitement, sans clé API — ce n'est pas la même chose que `client.audio.transcriptions.create(...)`, l'endpoint de transcription *hébergé* et payant d'OpenAI. Les deux s'appellent « Whisper » et les deux viennent d'OpenAI, ce qui est exactement pourquoi il vaut la peine d'être explicite sur lequel un code donné utilise.
 - **Une toute première exécution très longue, prise pour un blocage.** Le premier appel à `whisper.load_model(...)` télécharge les poids du modèle (vois le conseil de Configuration) — sur une connexion lente, ça peut prendre un moment sans barre de progression dans les versions plus anciennes. Laisse-le finir une fois ; chaque exécution après est rapide.
 - **La réponse JSON du LLM n'est pas tout à fait du JSON valide.** Les modèles de niveau gratuit enveloppent parfois leur réponse dans un code fence markdown, ou ajoutent une phrase parasite, malgré une instruction explicite de ne pas le faire. Traite l'échec de `json.loads(...)` ici comme un événement attendu et occasionnel — pas un signe que ton prompt est fondamentalement cassé — et vois le `_parse_tasks_response` de l'exemple plus complet pour un correctif de suppression de fence.
-- **Les limites de débit sur le niveau gratuit du LLM.** La transcription (Étape 1) est locale et illimitée ; seul l'appel d'extraction de l'Étape 2 compte contre le quota de niveau gratuit de ton fournisseur. Une erreur 429 là-bas, c'est le fournisseur qui te dit de ralentir, pas un bug — vois le [projet AI Agent](/docs/projects/ai-agent#gérer-les-limites-de-débit) pour le même pattern et une approche de nouvelle tentative que tu peux copier.
+- **Les limites de débit sur le niveau gratuit du LLM.** La transcription (Étape 1) est locale et illimitée ; seul l'appel d'extraction de l'Étape 2 compte contre le quota de niveau gratuit de ton fournisseur. Une erreur 429 là-bas, c'est le fournisseur qui te dit de ralentir, pas un bug — vois le [projet AI Agent](/fr/projets/ai-agent#gérer-les-limites-de-débit) pour le même pattern et une approche de nouvelle tentative que tu peux copier.
 
 ## Ce que tu viens de construire
 

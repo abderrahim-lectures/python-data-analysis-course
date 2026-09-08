@@ -19,7 +19,7 @@ prerequisites:
 
 Cada lista de correo enfrenta la misma canalización: toma una plantilla, complétala para cada suscriptor, rastrea quién abrió y quién hizo clic, y descubre qué línea de asunto funciona de verdad. Este proyecto construye esa canalización en Python — un motor de plantillas con regex, una lista CSV de suscriptores con etiquetas, un rastreador de aperturas/clics que calcula tasas honestas, una prueba A/B para líneas de asunto, y un paso final que renderiza un número personalizado para cada suscriptor en un segmento.
 
-Esto asume Python 101 y comodidad con funciones, diccionarios y listas — conocerás pandas en un paso, pero no se requiere nada más allá de eso. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa y creciente.
+Esto asume Python 101 y comodidad con funciones, diccionarios y listas — conocerás pandas en un paso, pero no se requiere nada más allá de eso. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 ## 🎯 Lo que harás
 

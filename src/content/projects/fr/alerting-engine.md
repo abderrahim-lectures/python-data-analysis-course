@@ -21,7 +21,7 @@ learningObjectives:
 
 Un système de monitoring ne tombe pas en panne parce qu'un seuil existe ; il tombe en panne parce qu'un pic devient 500 alertes identiques. Ce projet construit le petit moteur honnête derrière ce jugement : une classe `Rule` qui surveille une **fenêtre glissante** d'échantillons, ne déclenche une alerte que lorsqu'un seuil tient vraiment, puis se tait pendant un **temps de refroidissement** pour qu'un incident en cours soit signalé une fois au lieu de chaque seconde. L'état se sérialise en JSON pour que le moteur survive à un redémarrage en plein incident, et tout tourne sur un flux synthétique déterministe que tu peux reproduire exactement. Le moteur produit exactement deux vraies alertes à partir d'un flux scripté de huit échantillons — ni plus, ni moins — et tu sauras pourquoi.
 
-Cela suppose de connaître les classes, les méthodes et le slicing, plus une aisance avec le JSON comme données. Rien ici n'est noté — c'est facultatif et non évalué — consulte [Projets du monde réel](/docs/projects) pour la liste complète et grandissante.
+Cela suppose de connaître les classes, les méthodes et le slicing, plus une aisance avec le JSON comme données. Rien ici n'est noté — c'est facultatif et non évalué — consulte [Projets du monde réel](/fr/projets) pour la liste complète et grandissante.
 
 ## 🎯 Ce que tu vas faire
 

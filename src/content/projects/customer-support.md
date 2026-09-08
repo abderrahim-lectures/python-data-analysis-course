@@ -18,7 +18,7 @@ learningObjectives:
 
 A support team's reality arrives as a stream of *unordered* events — a frantic billing complaint, a sleepy "how do I reset my password", a feature wish — and the whole craft of support tooling is imposing order on that stream: which ticket gets an agent first, which agent is even *able* to handle it, whether the team is answering inside its response-time promise, and whether customers are actually satisfied. This project builds the engine behind a support dashboard — a priority queue for tickets, skill- and load-based routing, SLA breach detection measured in hours from a real log file, and a CSAT summary, all rendered into one terminal report.
 
-This assumes Python 101 — functions, dictionaries, lists, and importing the standard `csv` module. Nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python 101 — functions, dictionaries, lists, and importing the standard `csv` module. Nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

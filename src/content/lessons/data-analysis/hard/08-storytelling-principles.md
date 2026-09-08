@@ -1,6 +1,5 @@
 ---
 
-
 title: "Data Storytelling Principles"
 description: "Structure visual narratives, annotate charts for clarity, and design presentations that drive action."
 module: "storytelling-viz"
@@ -353,11 +352,3 @@ plt.show()
 
 </div>
 </details>
-
-## Projects You Can Build
-
-Here are a few real-world projects that reinforce these concepts:
-
-- 📈 **Data Visualization** - Build annotated dashboards with narrative-driven design
-- 📊 **Sentiment Dashboard** - Create charts that tell clear data stories for stakeholders
-- ⚡ **Weather Dashboard** - Design audience-aware visualizations with color-coded insights

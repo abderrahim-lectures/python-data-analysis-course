@@ -16,7 +16,7 @@ prerequisites: ["python-101/strings", "python-101/sets", "python-101/loops", "py
 
 Chaque plateforme d'évaluation ne regarde qu'un seul chiffre : quelle part de cette dissertation a été copiée. Derrière ce chiffre se cache un algorithme étonnamment simple et honnête — le **shingle**. Un document est découpé en séquences de mots qui se chevauchent, de longueur N, et deux documents sont comparés selon le nombre de ces séquences qu'ils partagent. Ce projet construit un CLI qui note une dissertation contre un corpus entier de documents sources — transformant le texte brut en ensembles de jetons, calculant une similarité de Jaccard pour chaque paire, et affichant un rapport classé avec les paires suspectes en tête. Pas de ML, pas d'API, pas de magie.
 
-Cela suppose le Python 101 — chaînes, ensembles, boucles et fonctions. Rien au-delà de cela. C'est optionnel et non noté ; vois [Projets du monde réel](/docs/projects) pour la liste complète.
+Cela suppose le Python 101 — chaînes, ensembles, boucles et fonctions. Rien au-delà de cela. C'est optionnel et non noté ; vois [Projets du monde réel](/fr/projets) pour la liste complète.
 
 ## 🎯 Ce que tu vas faire
 

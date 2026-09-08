@@ -16,7 +16,7 @@ prerequisites: ["Python 101", "Data Analysis"]
 
 Machine learning models break when the code that computes features during training drifts from the code that computes them in production. A feature store fixes this by computing features once, versioning them, and serving the same values whether you're fitting a model or scoring a request. This project builds a lightweight, file-backed feature store with a CLI: you register feature definitions, compute them from raw data, and fetch them by entity key with point-in-time correctness.
 
-This assumes Python 101 and comfort with pandas from Data Analysis — nothing beyond. Optional and ungraded; see [Real-World Projects](/docs/projects) for the full list.
+This assumes Python 101 and comfort with pandas from Data Analysis — nothing beyond. Optional and ungraded; see [Real-World Projects](/projects) for the full list.
 
 ## 🎯 What you'll do
 

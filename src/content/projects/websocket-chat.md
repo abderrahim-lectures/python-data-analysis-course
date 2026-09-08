@@ -20,7 +20,7 @@ prerequisites:
 
 A chat app is the gentlest possible introduction to networking: messages go out a socket, messages come in, repeat. Almost every "live" experience — multiplayer, notifications, collaborative cursors — is this loop wearing other clothes. This project builds one for real: an echo handler, then room-based broadcasting, then history and presence replay for anyone joining late, and finally a terminal client you can actually chat with across two terminals. Everything is asyncio + `websockets`, with no browser and no fluff.
 
-This assumes Python 101 plus a bit of async — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python 101 plus a bit of async — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

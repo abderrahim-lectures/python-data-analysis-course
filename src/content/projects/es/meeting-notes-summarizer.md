@@ -8,7 +8,7 @@ description: "Da el salto del entorno de práctica en el navegador a Python real
 
 Todo en el curso hasta ahora se ejecutó en un playground aislado dentro del navegador — para que pudieras empezar a escribir Python desde el primer día sin ninguna configuración. Este proyecto es el paso de graduación: instala Python de verdad en tu propia máquina, y luego úsalo para construir una herramienta que resuelve un problema del mundo real genuinamente molesto — convertir una pared de texto en bruto de transcripción de reunión en un resumen corto y estructurado: qué se decidió, quién es responsable de qué, y qué sigue sin resolver. Esto asume Python 101; nada de Data Analysis es requerido.
 
-Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/docs/projects) para la lista completa y creciente.
+Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 ## 🎯 Qué harás
 
@@ -525,7 +525,7 @@ uv run python summarize.py transcripts/incident_review.txt
 ```
 Ejecútalo sobre las tres transcripciones de muestra (o la versión más completa de [`examples/meeting-notes-summarizer/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/meeting-notes-summarizer) del repositorio, que viene con las tres listas) y compara las salidas: una reunión de pie, una reunión de planificación y una revisión de incidente cada una estresa el esquema de manera diferente — la revisión de incidente, por ejemplo, tiende a producir mucho más preguntas abiertas que elementos de acción.
 :::tip[Los límites de tasa son esperados, no un error]
-Cada nivel gratuito limita las solicitudes por minuto o por día, y cada llamada a `summarize()` es exactamente una llamada API — así que ejecutar esto sobre varias transcripciones seguidas ocasionalmente puede chocar con un error `429`. Eso es el proveedor diciéndote que vayas más lento, no una señal de que algo esté roto; espera el número de segundos sugerido y vuelve a ejecutar. Consulta el proyecto [AI Agent](/docs/projects/ai-agent#manejar-límites-de-tasa) para ver un patrón de `try`/`except`-con-reintento que puedes copiar directamente si quieres que esto se recupere automáticamente.
+Cada nivel gratuito limita las solicitudes por minuto o por día, y cada llamada a `summarize()` es exactamente una llamada API — así que ejecutar esto sobre varias transcripciones seguidas ocasionalmente puede chocar con un error `429`. Eso es el proveedor diciéndote que vayas más lento, no una señal de que algo esté roto; espera el número de segundos sugerido y vuelve a ejecutar. Consulta el proyecto [AI Agent](/es/proyectos/ai-agent#manejar-límites-de-tasa) para ver un patrón de `try`/`except`-con-reintento que puedes copiar directamente si quieres que esto se recupere automáticamente.
 :::
 
 **🎯 Resultado esperado :**
@@ -547,7 +547,7 @@ Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
 **🤔 Pregunta(s) socrática(s)**
 
 - Si un compañero te pasara una transcripción sin decisiones claras en absoluto — solo lluvia de ideas abierta — ¿qué esperarías que pareciera `decisions`, y la redacción de tu prompt realmente garantiza eso?
-- ¿Qué se rompería si ejecutaras esto sobre una transcripción de dos horas y 15,000 palabras en lugar de estas muestras cortas? ¿En qué punto necesitarías una estrategia como el enfoque de fragmentación del proyecto [RAG](/docs/projects/rag-notes) en lugar de enviar todo en un solo prompt?
+- ¿Qué se rompería si ejecutaras esto sobre una transcripción de dos horas y 15,000 palabras en lugar de estas muestras cortas? ¿En qué punto necesitarías una estrategia como el enfoque de fragmentación del proyecto [RAG](/es/proyectos/rag-notes) en lugar de enviar todo en un solo prompt?
 
 ## ⚠️ Errores comunes
 
@@ -565,7 +565,7 @@ Un pipeline de extracción estructurada pequeño y completo: carga texto en brut
 - Extiende el esquema con un campo `sentiment` o `meeting_type`, o una `priority` en cada elemento de acción — el patrón (describe el campo en el prompt, valídalo después del análisis) es idéntico al que ya construiste.
 - Prueba alimentar al modelo una transcripción en un formato completamente diferente (una exportación de chat, un archivo de subtítulos cerrados `.vtt` en bruto) y observa cuánta limpieza necesita `load_transcript` antes de que los resultados sigan siendo buenos.
 - Investiga una biblioteca de validación de esquemas como `pydantic` para una versión mucho más estricta de `parse_summary` — en lugar de verificar las claves a mano, define un modelo `Summary` una vez y deja que valide (e incluso fuerce) los tipos por ti, levantando un error estructurado sobre cualquier cosa que no encaje.
-- Combina esto con el proyecto [AI Agent](/docs/projects/ai-agent): dale al agente una herramienta que llame a `summarize()` sobre un archivo de transcripción, para que pueda decidir *cuándo* resumir como parte de una tarea más grande en lugar de que siempre ejecutes el script a mano.
+- Combina esto con el proyecto [AI Agent](/es/proyectos/ai-agent): dale al agente una herramienta que llame a `summarize()` sobre un archivo de transcripción, para que pueda decidir *cuándo* resumir como parte de una tarea más grande en lugar de que siempre ejecutes el script a mano.
 
 ## Comparte tu proyecto con la clase
 

@@ -16,7 +16,7 @@ prerequisites: ["python-101/libraries", "data-analysis/pandas", "data-analysis/g
 
 Un moteur de recommandations est le moteur silencieux de l'économie internet : le « Vous avez regardé deux épisodes, voici une série que vous finirez ce week-end » de Netflix, le « Les clients comme vous ont aussi acheté » d'Amazon, l'autoplay de YouTube. Sous le capot, c'est étonnamment sans glamour — une matrice d'utilisateurs par éléments, la plupart des cellules vides, et tout l'art consiste à combler les trous de manière plausible avec une mathématique appelée *similarité*. La même algèbre linéaire qui alimente le travail pandas du cours monte d'échelle vers les deux grandes familles que tu construiras ici : le **filtrage collaboratif** (dériver le goût depuis les notations des autres utilisateurs) et le **filtrage basé sur le contenu** (apparier de nouveaux éléments aux profils des choses que tu as déjà notées). À la fin, tu auras un hybride fonctionnel qui fait des recommandations réellement sensées sur un vrai jeu de données de 100k notations.
 
-Cela suppose le Python 101 plus une connaissance pratique de `pandas` et du calcul matriciel NumPy — les modules d'analyse de données du cours. Pas d'apprentissage profond, pas de systèmes à l'échelle industrielle. C'est optionnel et non noté ; vois [Projets du monde réel](/docs/projects) pour la liste complète.
+Cela suppose le Python 101 plus une connaissance pratique de `pandas` et du calcul matriciel NumPy — les modules d'analyse de données du cours. Pas d'apprentissage profond, pas de systèmes à l'échelle industrielle. C'est optionnel et non noté ; vois [Projets du monde réel](/fr/projets) pour la liste complète.
 
 ## 🎯 Ce que tu vas faire
 

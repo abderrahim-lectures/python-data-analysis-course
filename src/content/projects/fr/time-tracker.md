@@ -20,7 +20,7 @@ prerequisites:
 
 Personne ne sait où va une journée de travail tant qu'on ne l'a pas notée. Ce projet construit un minuscule suivi du temps : démarre une session, travaille, arrête-la, et les minutes atterrissent dans un CSV ; ajoute une entrée manquée à la main, puis tire des rapports quotidiens et hebdomadaires et un résumé des « 3 tâches principales ». C'est uniquement de la bibliothèque standard — dataclasses, `csv` et `datetime` — donc tu apprendras le rythme charger/ajouter/sauvegarder et le vrai calcul d'horodatages, et tu finiras avec un outil pour une réponse à « où va réellement mon temps ? ».
 
-Cela suppose Python 101 et une aisance avec les bases de `datetime` — rien au-delà n'est requis. C'est optionnel et non noté ; voir [Projets du monde réel](/docs/projects) pour la liste complète et croissante.
+Cela suppose Python 101 et une aisance avec les bases de `datetime` — rien au-delà n'est requis. C'est optionnel et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 

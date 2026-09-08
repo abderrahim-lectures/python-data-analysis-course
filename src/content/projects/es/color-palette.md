@@ -18,7 +18,7 @@ learningObjectives:
 
 Elegir colores que realmente combinen es la diferencia entre una app con aspecto profesional y una de circo, y sin embargo "armónico" suele ser una vibra, no una fórmula. Resulta que importa menos de lo que parece: la **rueda** de colores te da reglas precisas — los colores complementarios están a 180°, los triádicos a 120°, los vecinos análogos a 30°. Este proyecto construye una herramienta que aplica esas reglas a *cualquier* color base, y luego verifica cada candidato contra las guías de contraste WCAG para que nunca entregues una paleta donde el texto desaparezca dentro del fondo.
 
-Esto asume Python 101 — variables, loops, funciones y `print` básico — no se requiere nada de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa, en crecimiento.
+Esto asume Python 101 — variables, loops, funciones y `print` básico — no se requiere nada de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa, en crecimiento.
 
 ## 🎯 Lo que harás
 

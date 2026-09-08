@@ -1,6 +1,7 @@
 ---
 // JupyterLite-style notebook cell — markdown or code, rendered inline.
 // For data science lessons that need a notebook-like experience.
+import {m} from '../paraglide/messages.js';
 interface Props {
   type: 'markdown' | 'code';
   code?: string;
@@ -21,13 +22,13 @@ const {type, code = '', label} = Astro.props;
     {label && <span class="nb-cell__label">{label}</span>}
     <div class="cell" data-runnable>
       <div class="cell__actions">
-        <button class="btn btn-primary cell__run" data-run aria-label="Run this Python code">▶ Run</button>
+        <button type="button" class="btn btn-primary cell__run" data-run aria-label={m.run_aria()}>{m.run_button()}</button>
         <span class="cell__lang">python</span>
       </div>
       <pre class="cell__code"><code>{code}</code></pre>
       <div class="cell__output" data-output hidden>
         <div class="cell__lines" data-lines></div>
-        <button class="cell__clear" data-clear hidden>Clear</button>
+        <button type="button" class="cell__clear" data-clear hidden>{m.clear_button()}</button>
       </div>
     </div>
   </div>

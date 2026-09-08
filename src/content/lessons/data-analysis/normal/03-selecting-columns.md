@@ -172,11 +172,3 @@ print(numeric.columns.tolist())
 ## Practice Challenge
 
 From the Titanic dataset, create a new DataFrame called `passenger_info` containing only `Name`, `Age`, `Sex`, and `Survived`. How many rows have missing Age values in this subset? (Hint: use `.isna().sum()`)
-
-## Projects You Can Build
-
-Here are a few real-world projects that reinforce these concepts:
-
-- 🧠 **ML Classifier** - Select feature columns for model training and target variables
-- 🕷️ **Scrape and Analyze** - Extract specific data columns from scraped tables for analysis
-- 📈 **Data Visualization** - Choose columns to plot for charts and dashboards

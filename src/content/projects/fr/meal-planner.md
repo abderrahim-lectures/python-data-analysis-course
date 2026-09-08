@@ -16,7 +16,7 @@ prerequisites: ["python-101/data-structures", "python-101/reading-files", "pytho
 
 Planifier les repas semble simple sur le papier — décider sept dîners, écrire une liste de courses — mais c'est exactement là que l'arithmétique s'effondre : trois recettes partagent du riz, deux partagent du poulet, et la colonne des calories passe tranquillement inaperçue. Ce projet construit un CLI qui fait la comptabilité : une base de données de recettes, un plan de semaine de repas, des totaux quotidiens de calories et de macros, et une liste de courses qui fusionne les ingrédients partagés en un seul récapitulatif consolidé au lieu de sept listes qui se chevauchent.
 
-Ceci suppose Python 101 — listes, dicts, lecture de fichiers et fonctions. Rien au-delà : pas de base de données, pas de web, pas de services externes. C'est optionnel et non noté ; voir [Projets du monde réel](/docs/projects) pour la liste complète.
+Ceci suppose Python 101 — listes, dicts, lecture de fichiers et fonctions. Rien au-delà : pas de base de données, pas de web, pas de services externes. C'est optionnel et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète.
 
 ## 🎯 Ce que tu vas faire
 

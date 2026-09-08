@@ -16,7 +16,7 @@ prerequisites: ["python-101/file-io", "python-101/strings", "python-101/datetime
 
 Cada rastreador de sueño en su núcleo es una pequeña hoja de cálculo con criterio: registra cuándo te acostaste y cuándo te despertaste, resta para obtener la duración, compárala con un objetivo y observa si tu promedio se acerca o se aleja de lo saludable a lo largo de una semana. Este proyecto construye eso — un CLI que registra una noche, atrapa la clásica trampa de acostarse-pasada-la-medianoche, puntúa cada noche por duración y consistencia, y lee todo el historial de vuelta para comparar semana a semana. Sin wearable, sin EEG: el "sensor" eres tú escribiendo dos horas, y el análisis es `datetime` de Python puro y aritmética. Es lo más pequeño de este curso que aún se siente como una herramienta real que de verdad usarías.
 
-Esto asume Python 101 — strings, datetime, E/S de archivos, funciones. Opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa.
+Esto asume Python 101 — strings, datetime, E/S de archivos, funciones. Opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
 
 ## 🎯 Lo que harás
 

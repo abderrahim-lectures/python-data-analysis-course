@@ -20,7 +20,7 @@ prerequisites:
 
 Voice cloning makes headlines, but underneath the magic is a measurement problem: what, precisely, makes one voice sound like *that* person? This toolkit builds the honest, interpretable half of that problem in numpy — read audio as raw numbers, measure pitch and energy per frame, condense a clip into a speaker profile, compare two profiles, and finally shape a clip toward another voice's statistics. You will not produce a celebrity's synthetic voice here; you *will* understand the numbers every real cloning system starts from.
 
-This assumes Python 101, comfort with numpy, and a passing familiarity with sample rate and frequency — nothing from Data Analysis beyond that is required. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python 101, comfort with numpy, and a passing familiarity with sample rate and frequency — nothing from Data Analysis beyond that is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 > **The responsibility clause.** Cloning a voice without consent is impersonation and, in many jurisdictions, fraud — this toolkit is designed as a *measurement* instrument and ships no model that reproduces a real person from a sample. Use it on your own recordings, synthetic clips, and clearly-labeled reference material. Remember what a feature extractor can hold: statistics, not identity.
 

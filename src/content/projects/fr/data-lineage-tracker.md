@@ -19,7 +19,7 @@ learningObjectives:
 
 Chaque jeu de données arrive de quelque part et coule vers ailleurs — un CSV est nettoyé, la table nettoyée alimente un agrégat, l'agrégat alimente un tableau de bord, et le tableau de bord alimente une décision. Quand quelqu'un change le schéma source, la question « qu'est-ce qui est affecté ? » est urgente et, sans outils, terrifiante. Un suiveur de lignée y répond en rendant le pipeline un graphe que tu peux *parcourir* : les nœuds sont des jeux de données, les arêtes sont des transformations, et l'analyse d'impact est une expansion en largeur d'abord depuis n'importe quel nœud du graphe. Ce projet construit ce suiveur depuis les premiers principes — graphe, chargeurs, parcours, chemins d'impact, et deux moteurs de rendu — avec zéro dépendance.
 
-Ceci suppose Python 101 plus une lecture confortable des imports `csv` et `json` — ensembles et boucles maîtrisés. Rien du module Analyse de Données n'est nécessaire. C'est facultatif et non noté ; voir [Projets du monde réel](/docs/projects) pour la liste complète et croissante.
+Ceci suppose Python 101 plus une lecture confortable des imports `csv` et `json` — ensembles et boucles maîtrisés. Rien du module Analyse de Données n'est nécessaire. C'est facultatif et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 

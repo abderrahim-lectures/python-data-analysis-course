@@ -21,7 +21,7 @@ learningObjectives:
 
 Review bots read every pull request so humans don't have to — and before any LLM gets involved, a review bot is mostly *rules*. This project builds one: a deterministic **code review agent** that takes a simulated PR diff (`payment.py`), applies a registry of rules (line length, trailing whitespace, bare `except`, debug `print`, unresolved `TODO`, missing docstrings), attaches a per-line comment for each hit, aggregates them by severity, decides `REJECT` when a major issue exists, exports the whole review as a JSON payload, and then re-reviews the *fixed* diff to watch the verdict flip to `APPROVE`. No network, no randomness — the same diff always produces the same review, which is exactly what makes rule bots auditable: every comment is traceable to a test.
 
-This assumes functions, collections, file I/O, and JSON. It is an optional, ungraded project — see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes functions, collections, file I/O, and JSON. It is an optional, ungraded project — see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

@@ -20,7 +20,7 @@ prerequisites:
 
 Le web est surtout du HTML servi aux humains, mais chaque « ensemble de données » que tu ne peux pas télécharger a commencé par quelqu'un qui le scrappait. Ce projet construit une petite API de scraping responsable contre [books.toscrape.com](https://books.toscrape.com/) — un site construit *pour* s'y entraîner — avec un client HTTP limité en débit qui réessaie poliment, un parseur BeautifulSoup qui transforme le HTML en enregistrements structurés, un crawler de pagination, et une fonction réutilisable unique qui retourne un JSON propre. Le résultat est ta propre petite API de lecture sur un site web public.
 
-Cela suppose Python 101 et assez de HTML pour reconnaître un titre, un lien et un `div` — rien d'Analyse de Données n'est requis. C'est optionnel et non noté ; voir [Projets du monde réel](/docs/projects) pour la liste complète et croissante.
+Cela suppose Python 101 et assez de HTML pour reconnaître un titre, un lien et un `div` — rien d'Analyse de Données n'est requis. C'est optionnel et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 

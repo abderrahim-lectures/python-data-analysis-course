@@ -5,11 +5,11 @@ difficulty: "intermediate"
 estimatedMinutes: 60
 tags: ["csv", "matplotlib", "automation"]
 learningObjectives:
-  - "Store time-stamped sample readings in a CSV"
-  - Validate readings against safe-range specifications
-  - "Compute rolling means and drift from a data series"
-  - "Emit severity-ranked alerts for out-of-range or drifting samples"
-  - "Chart trends with red safe-range guide lines"
+  - "خزّن قراءات العينات بطوابع زمنية في CSV"
+  - تحقق من القراءات مقابل مواصفات النطاق الآمن
+  - "احسب المتوسطات المتحركة والانحراف من سلسلة البيانات"
+  - "أصدر تنبيهات مرتّبة حسب الخطورة للعينات خارج النطاق أو المنحرفة"
+  - "ارسم الاتجاهات بخطوط إرشادية حمراء للنطاق الآمن"
 prerequisites:
   - "Python basics (functions, loops, dictionaries)"
   - "Basic matplotlib pyplot (subplots, axhline)"
@@ -20,7 +20,7 @@ prerequisites:
 
 مراقبة المياه العذبة خط أنابيب بيانات في صندوق بارد: مُستشعر (سجل عيناتك) يُنتج قراءات بطابع زمني، ومواصفة (نطاقات آمنة لكل معامل) تقرر نجاح/فشل، والاتجاهات تقرر "يزداد سوءًا"، وقائمة تنبيه تقرر الانتباه. يبني هذا المشروع الحلقة كلها بملف CSV عادي كمستشعر: حدّد المعاملات ونطاقاتها الآمنة، وسجّل قراءات، وتحقق من كل عينة، واحسب المتوسطات المتدحرجة والانجراف، وأصدر تنبيهات مُرتَّبة بدرجة الخطورة، واختم برسم matplotlib خطوطه الحمراء المتقطعة هي حدود النطاقات الآمنة.
 
-هذا يفترض Python 101 مع لمسة من matplotlib — لا شيء آخر مطلوب. هذا اختياري وغير مُقيَّم؛ راجع [مشاريع من العالم الحقيقي](/docs/projects) للقائمة الكاملة والنامية.
+هذا يفترض Python 101 مع لمسة من matplotlib — لا شيء آخر مطلوب. هذا اختياري وغير مُقيَّم؛ راجع [مشاريع من العالم الحقيقي](/ar/مشاريع) للقائمة الكاملة والنامية.
 
 ## 🎯 ما ستفعله
 

@@ -1,6 +1,5 @@
 ---
 
-
 title: "Correlation Analysis"
 description: "Compute and visualize Pearson and Spearman correlations, detect multicollinearity, and interpret correlation matrices."
 module: "bivariate-analysis"
@@ -313,11 +312,3 @@ for i in range(len(diff.columns)):
 
 </div>
 </details>
-
-## Projects You Can Build
-
-Here are a few real-world projects that reinforce these concepts:
-
-- 🧠 **ML Classifier** - Analyze feature correlations to detect multicollinearity before modeling
-- 📈 **Data Visualization** - Create correlation heatmaps and pair plots for any dataset
-- 📊 **Anomaly Detector** - Use correlation analysis to identify unusual variable relationships

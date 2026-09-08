@@ -5,10 +5,10 @@ difficulty: "intermediate"
 estimatedMinutes: 60
 tags: ["cli", "text-processing", "csv", "regex"]
 learningObjectives:
-  - "Parse a timestamped podcast transcript into speaker turns"
-  - "Separate hosts from guests by comparing speaker names against a roster"
-  - "Score a transcript against topic keyword sets with Counter"
-  - "Compose an episode fact sheet and export it as CSV"
+  - "Analizar una transcripción de pódcast con marcas de tiempo en turnos de hablante"
+  - "Separar presentadores de invitados comparando nombres de hablantes contra un registro"
+  - "Puntuar una transcripción contra conjuntos de palabras clave temáticas con Counter"
+  - "Redactar una ficha del episodio y exportarla como CSV"
 prerequisites: ["python-101/strings", "python-101/file-io", "python-101/sets", "python-101/functions"]
 ---
 
@@ -16,7 +16,7 @@ prerequisites: ["python-101/strings", "python-101/file-io", "python-101/sets", "
 
 Los podcasts producen horas de audio y casi ninguna estructura. Ya seas un fan decidiendo qué episodio saltarse o un show runner que quiere una lectura de datos sobre sus propios episodios, el artefacto útil es el mismo: una *ficha técnica* del episodio — quiénes fueron los invitados, qué temas dominaron realmente la conversación y qué frases se repitieron. Este proyecto construye un CLI que produce esa ficha a partir de una transcripción: analiza los turnos de los hablantes, separa presentadores de invitados, puntúa las palabras contra conjuntos de palabras clave por tema y escribe un resumen de un archivo más un CSV legible por máquina. Sin audio, sin ML, sin claves de API.
 
-Esto asume Python 101 — cadenas, conjuntos, E/S de archivos y funciones. Nada más allá de eso. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa.
+Esto asume Python 101 — cadenas, conjuntos, E/S de archivos y funciones. Nada más allá de eso. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
 
 ## 🎯 Lo que harás
 

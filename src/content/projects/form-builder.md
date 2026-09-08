@@ -16,7 +16,7 @@ prerequisites: ["Python 101"]
 
 Every web form is fundamentally the same thing: a list of fields, each with a type, a label, validation rules, and optionally a condition that determines when it appears. This project builds a Python form builder that takes a declarative form definition and outputs JSON schema — the same format used by React JSON Schema Form, JSON Editor, and dozens of other rendering libraries. You define the form once in Python, and any frontend can render it.
 
-This assumes Python 101 — nothing from Data Analysis is required. Optional and ungraded; see [Real-World Projects](/docs/projects) for the full list.
+This assumes Python 101 — nothing from Data Analysis is required. Optional and ungraded; see [Real-World Projects](/projects) for the full list.
 
 ## 🎯 What you'll do
 

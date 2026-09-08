@@ -20,7 +20,7 @@ prerequisites:
 
 Les vérificateurs de symptômes ont une mauvaise réputation pour de bonnes raisons : ils mélangent les vraies règles de triage avec une page d'accueil pleine d'issues les pires possibles. La version que tu construis ici contourne le drame en faisant la partie qu'un moteur peut faire *honnêtement* — faire correspondre les symptômes aux conditions avec un chevauchement pondéré, noter une bande d'urgence à partir de la sévérité et de la durée, et transformer cette bande en prochaines étapes en langage courant. C'est un moteur de règles sur une petite base de connaissances organisée, et il le dit : pas d'IA, pas de diagnostic, et un avertissement présent à chaque sortie.
 
-Cela suppose Python 101 plus les dictionnaires et ensembles de base — rien au-delà n'est requis, et aucun paquet externe. C'est optionnel et non noté ; voir [Projets du monde réel](/docs/projects) pour la liste complète et croissante.
+Cela suppose Python 101 plus les dictionnaires et ensembles de base — rien au-delà n'est requis, et aucun paquet externe. C'est optionnel et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 > **À des fins éducatives uniquement.** Le résultat de ce projet n'est pas un avis médical, ne peut pas diagnostiquer, et doit toujours pointer vers un vrai clinicien. La construction enseigne la modélisation de domaine et les règles à plusieurs niveaux — les affirmations médicales s'arrêtent là où commence cet avertissement.
 

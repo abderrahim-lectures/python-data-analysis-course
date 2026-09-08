@@ -19,7 +19,7 @@ learningObjectives:
 
 Antes de que cualquiera pueda usar datos, alguien tiene que poder *encontrarlos*, confiar en lo que son y saber de dónde vinieron. Ese es el trabajo de un catálogo de datos — el índice de una organización sobre sus propios conjuntos de datos. Este proyecto construye uno pequeño y real: escanea archivos CSV y registra su esquema (columnas, tipos inferidos, conteos de filas) en un índice JSON persistente, responde búsquedas de texto libre entre nombres de conjuntos de datos y columnas, y rastrea el *linaje* — qué conjunto de datos alimenta qué transformación, para que puedas responder "¿qué se rompe si este CSV cambia?" con un recorrido en lugar de una suposición.
 
-Esto asume Python 101 más una lectura cómoda de `csv` — colecciones, dicts y funciones. No se requiere nada del módulo de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa, en crecimiento.
+Esto asume Python 101 más una lectura cómoda de `csv` — colecciones, dicts y funciones. No se requiere nada del módulo de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa, en crecimiento.
 
 ## 🎯 Lo que harás
 

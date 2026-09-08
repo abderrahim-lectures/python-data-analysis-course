@@ -8,7 +8,7 @@ description: "Rastrea check-ins diarios de hábitos localmente y renderiza un ma
 
 Este proyecto asume que te sientes cómodo con Python 101 — variables, funciones, leer y escribir archivos, bucles básicos. Algo de pandas y matplotlib de Análisis de Datos (`DataFrame`s, `.groupby()`, graficar un gráfico simple) hará que algunos pasos se sientan familiares, pero nada aquí necesita más que eso: no hay machine learning, ninguna API externa, y ningún dataset que descargar. Traes tus propios datos, un día a la vez.
 
-Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/docs/projects) para la lista completa y creciente.
+Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 ## 🎯 Lo que harás
 

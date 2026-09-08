@@ -21,7 +21,7 @@ learningObjectives:
 
 An audit log is the record you show the investigator *after* something went wrong: who did what, in which order, and — critically — whether any of it was quietly altered afterwards. A log file of text lines proves nothing by itself; a plain text edit looks identical to a real event. This project builds the structure that makes rewriting detectable: an append-only log where every entry carries a SHA-256 hash of its own content **plus** the hash of the previous entry, forming a chain. Alter one line anywhere and every subsequent link breaks; a single `verify()` pass reports exactly which entry was touched. Around that core you'll add queries by severity and source, a retention prune that keeps the chain valid, and a JSONL export for dashboards and compliance tools. Everything runs on the standard library and is deterministic — the same sixteen events verify the same way every time.
 
-This assumes classes, methods, file I/O, and a first look at `hashlib.sha256`. It is an optional, ungraded project — see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes classes, methods, file I/O, and a first look at `hashlib.sha256`. It is an optional, ungraded project — see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

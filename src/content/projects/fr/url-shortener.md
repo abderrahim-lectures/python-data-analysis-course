@@ -20,7 +20,7 @@ prerequisites:
 
 Chaque lien que tu partages dans un chat est une courte chaîne qui cache une plus longue — et une redirection qui dit à celui qui la possède exactement à quelle fréquence, d'où et quel jour elle est cliquée. Ce projet construit ce service de bout en bout : des codes courts base62 stockés dans SQLite, un clic enregistré à chaque redirection, des analytics que tu peux interroger, et enfin une vraie couche FastAPI pour pouvoir `curl` ton propre raccourcisseur. C'est une petite mais complète API adossée à une base de données — la forme derrière de nombreux services de production.
 
-Cela suppose Python 101 et un peu de familiarité avec les API REST et `curl` — rien d'Analyse de Données n'est requis. C'est optionnel et non noté ; voir [Projets du monde réel](/docs/projects) pour la liste complète et croissante.
+Cela suppose Python 101 et un peu de familiarité avec les API REST et `curl` — rien d'Analyse de Données n'est requis. C'est optionnel et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 

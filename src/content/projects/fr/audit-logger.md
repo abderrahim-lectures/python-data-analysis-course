@@ -21,7 +21,7 @@ learningObjectives:
 
 Un journal d'audit est le compte-rendu que tu montres à l'enquêteur *après* que quelque chose a mal tourné : qui a fait quoi, dans quel ordre, et — surtout — si l'un d'entre eux a été silencieusement modifié par la suite. Un fichier de lignes de texte ne prouve rien par lui-même ; une édition de texte brut ressemble à un vrai événement. Ce projet construit la structure qui rend la réécriture détectable : un journal append-only où chaque entrée porte un hachage SHA-256 de son propre contenu **plus** le hachage de l'entrée précédente, formant une chaîne. Change une ligne où que ce soit et chaque lien suivant se brise ; un simple passage `verify()` signale exactement quelle entrée a été touchée. Autour de ce noyau, tu ajouteras des requêtes par sévérité et source, un élagage de rétention qui garde la chaîne valide, et un export JSONL pour les tableaux de bord et les outils de conformité. Tout tourne sur la bibliothèque standard et est déterministe — les mêmes seize événements se vérifient de la même façon à chaque fois.
 
-Cela suppose les classes, les méthodes, l'entrée/sortie de fichiers et un premier aperçu de `hashlib.sha256`. C'est un projet facultatif et non noté — consulte [Projets du monde réel](/docs/projects) pour la liste complète et grandissante.
+Cela suppose les classes, les méthodes, l'entrée/sortie de fichiers et un premier aperçu de `hashlib.sha256`. C'est un projet facultatif et non noté — consulte [Projets du monde réel](/fr/projets) pour la liste complète et grandissante.
 
 ## 🎯 Ce que tu vas faire
 

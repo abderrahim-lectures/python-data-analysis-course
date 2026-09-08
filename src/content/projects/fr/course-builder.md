@@ -18,7 +18,7 @@ learningObjectives:
 
 Un cours est, sous la surface, juste des données structurées : des modules faits de leçons, des leçons avec du contenu, et des élèves avec un ensemble de jalons atteints. Ce projet construit le moteur derrière une plateforme de cours en ligne — un ensemble de classes et fonctions Python qui charge un cours depuis du JSON, suit les progrès d'un vrai élève, note ses quiz contre un corrigé, affiche un tableau de bord des progrès, et délivre enfin un certificat d'achèvement quand — et *seulement* quand — le cours est réellement terminé. Pas de navigateur, pas de base de données : juste le modèle de données et les règles qui vivent au-dessus.
 
-Ceci suppose Python 101 — fonctions, dictionnaires et un import `json` aisé. Rien de l'Analyse de Données n'est nécessaire. C'est facultatif et non noté ; voir [Projets du monde réel](/docs/projects) pour la liste complète et croissante.
+Ceci suppose Python 101 — fonctions, dictionnaires et un import `json` aisé. Rien de l'Analyse de Données n'est nécessaire. C'est facultatif et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 

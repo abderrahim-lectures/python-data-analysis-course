@@ -131,19 +131,6 @@ Given two lists, find the elements that appear in both using a set.
 
 </section>
 
-<section class="lesson-section lesson-section--projects">
-<h2 id="-projects-you-can-build">Projects You Can Build</h2>
-
-<p>Here are a few real-world projects that reinforce these concepts:</p>
-
-<ul>
-  <li>✅ <strong>Note-Taking App</strong> - Use dictionaries for storing notes with metadata and sets for tag management</li>
-  <li>🧠 <strong>Flashcard App</strong> - Store flashcard decks in dictionaries and track learned cards with sets</li>
-  <li>📚 <strong>Knowledge Base</strong> - Build a searchable knowledge base using dictionaries for articles and sets for categorization</li>
-</ul>
-
-</section>
-
 <section class="lesson-section lesson-section--quiz">
 <h2 id="-quick-check">✅ Quick check</h2>
 

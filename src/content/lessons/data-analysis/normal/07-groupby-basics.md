@@ -205,11 +205,3 @@ print(df.groupby("Pclass")["Age"].agg(["mean", "median", "min", "max"]))
 ## Practice Challenge
 
 From the Titanic dataset, calculate the survival rate for each combination of Pclass, Sex, and whether the passenger was traveling alone (SibSp + Parch == 0). Which group had the highest survival rate? Which had the lowest?
-
-## Projects You Can Build
-
-Here are a few real-world projects that reinforce these concepts:
-
-- 🧠 **ML Classifier** - Group data by labels for stratified sampling and class distribution analysis
-- 💰 **Expense Tracker** - Calculate spending summaries by category, month, and payment method
-- 📊 **Gradebook** - Analyze student performance by class, subject, and assignment type

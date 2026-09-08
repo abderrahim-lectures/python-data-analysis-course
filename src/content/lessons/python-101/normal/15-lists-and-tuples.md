@@ -120,19 +120,6 @@ Swap two variables without a temporary variable using tuple unpacking.
 
 </section>
 
-<section class="lesson-section lesson-section--projects">
-<h2 id="-projects-you-can-build">Projects You Can Build</h2>
-
-<p>Here are a few real-world projects that reinforce these concepts:</p>
-
-<ul>
-  <li>💰 <strong>Expense Tracker</strong> - Store expenses in lists and use tuples for immutable record entries</li>
-  <li>✅ <strong>Note-Taking App</strong> - Manage note collections with lists and use tuples for fixed-format metadata</li>
-  <li>🧠 <strong>Flashcard App</strong> - Store question-answer pairs as tuples in lists for spaced repetition</li>
-</ul>
-
-</section>
-
 <section class="lesson-section lesson-section--quiz">
 <h2 id="-quick-check">✅ Quick check</h2>
 

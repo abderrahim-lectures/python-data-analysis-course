@@ -7,7 +7,7 @@ description: "Graduate from the in-browser playground to real Python: install Py
 
 Everything in the course so far ran in a sandboxed, in-browser playground — so you could start writing Python on day one with zero setup. This project is the graduation step: install Python for real on your own machine, then use it to build something the playground could never run — an AI agent with its own API key, calling out to a real language model.
 
-This is optional and ungraded — a good fit once you've finished Python 101 (data-handling basics from Data Analysis are a bonus, not a requirement). See [Real-World Projects](/docs/projects) for the full, growing list.
+This is optional and ungraded — a good fit once you've finished Python 101 (data-handling basics from Data Analysis are a bonus, not a requirement). See [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

@@ -18,7 +18,7 @@ prerequisites:
 
 Las oficinas de investigación manejan docenas de propuestas a la vez, cada una con un financiador, una fecha límite estricta, un presupuesto, un equipo y un rastro de gastos. Este proyecto construye un rastreador de subvenciones de línea de comandos que modela cada solicitud como un diccionario anidado, vigila el gasto contra su presupuesto, ordena las fechas límite próximas y guarda todo en disco para que tu trabajo sobreviva entre sesiones.
 
-Esto asume Python 101 y comodidad con diccionarios y listas — no se requiere nada de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa y creciente.
+Esto asume Python 101 y comodidad con diccionarios y listas — no se requiere nada de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 ## 🎯 Lo que harás
 

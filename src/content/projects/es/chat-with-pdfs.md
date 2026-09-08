@@ -6,9 +6,9 @@ description: "Construye una app RAG multi-documento sobre una carpeta de PDFs, c
 
 # 📚 Chatea con tus PDFs
 
-El [proyecto de App RAG](/docs/projects/rag-notes) chatea con una carpeta de notas de texto plano. Este proyecto lleva la misma idea a algo más útil: una carpeta de PDFs reales — informes, guías, manuales, papers — con respuestas que citan exactamente de qué documento y qué página proviene un hecho, como lo haría un asistente de investigación. Esto asume Python 101; también ayuda mucho haber construido ya el proyecto de App RAG, ya que este reutiliza toda su arquitectura y solo cambia cómo se leen y citan los documentos fuente, pero no es un requisito estricto si te sientes cómodo con los conceptos.
+El [proyecto de App RAG](/es/proyectos/rag-notes) chatea con una carpeta de notas de texto plano. Este proyecto lleva la misma idea a algo más útil: una carpeta de PDFs reales — informes, guías, manuales, papers — con respuestas que citan exactamente de qué documento y qué página proviene un hecho, como lo haría un asistente de investigación. Esto asume Python 101; también ayuda mucho haber construido ya el proyecto de App RAG, ya que este reutiliza toda su arquitectura y solo cambia cómo se leen y citan los documentos fuente, pero no es un requisito estricto si te sientes cómodo con los conceptos.
 
-Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/docs/projects) para la lista completa y creciente.
+Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 ## 🎯 Lo que harás
 
@@ -90,7 +90,7 @@ Sea cual sea el que elijas, el proceso es el mismo:
 GITHUB_TOKEN=tu-clave-aquí
 ```
 
-`python-dotenv` (instalado arriba) lee este archivo hacia `os.environ` automáticamente, el mismo patrón usado en el [proyecto de App RAG](/docs/projects/rag-notes) y el [proyecto de Agente de IA](/docs/projects/ai-agent) si has hecho alguno de esos — GitHub Models resulta que expone una API compatible con OpenAI, así que la librería cliente `openai` simple funciona para ello sin ningún paquete extra:
+`python-dotenv` (instalado arriba) lee este archivo hacia `os.environ` automáticamente, el mismo patrón usado en el [proyecto de App RAG](/es/proyectos/rag-notes) y el [proyecto de Agente de IA](/es/proyectos/ai-agent) si has hecho alguno de esos — GitHub Models resulta que expone una API compatible con OpenAI, así que la librería cliente `openai` simple funciona para ello sin ningún paquete extra:
 
 ```bash
 uv add openai
@@ -484,7 +484,7 @@ Ejecuta el código de abajo y confirma que funciona.
 uv run python ask.py "How many days of paid time off do employees get?"
 ```
 :::tip[¿Usando un proveedor diferente?]
-Cambia el bloque `OpenAI(...)` por el propio cliente de tu proveedor, siguiendo el mismo patrón que el [proyecto de App RAG](/docs/projects/rag-notes) y el [proyecto de Agente de IA](/docs/projects/ai-agent) — ej. el paquete `google-genai` de Google para Gemini, o el propio cliente de `groq` para Groq. Cerebras y OpenRouter también son compatibles con OpenAI, así que el paquete `openai` también funciona para ellos, solo con una `base_url` diferente.
+Cambia el bloque `OpenAI(...)` por el propio cliente de tu proveedor, siguiendo el mismo patrón que el [proyecto de App RAG](/es/proyectos/rag-notes) y el [proyecto de Agente de IA](/es/proyectos/ai-agent) — ej. el paquete `google-genai` de Google para Gemini, o el propio cliente de `groq` para Groq. Cerebras y OpenRouter también son compatibles con OpenAI, así que el paquete `openai` también funciona para ellos, solo con una `base_url` diferente.
 :::
 
 **🎯 Resultado esperado :**
@@ -589,7 +589,7 @@ Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
 - **Fragmentos demasiado grandes o demasiado pequeños.** Misma compensación que el proyecto de App RAG: demasiado grande y la recuperación se vuelve borrosa, demasiado pequeño y un fragmento pierde el contexto circundante que el modelo necesita para responder bien. Si las respuestas se sienten mal, prueba un `TARGET_CHUNK_SIZE` diferente y vuelve a ejecutar `build_index.py`.
 - **Olvidar reconstruir el índice después de cambiar `pdfs/`.** `build_index.py` solo corre cuando lo ejecutas — añade, elimina, o edita un PDF, y `retrieve()` no reflejará el cambio hasta que vuelvas a ejecutar `uv run python build_index.py`.
 - **Confiar en una cita sin verificarla.** El prompt *pide* al modelo citar solo lo que está realmente en el contexto recuperado, y en la práctica lo hace de forma confiable — pero nada aquí lo garantiza matemáticamente. Verifica algunas citas contra las páginas reales del PDF, especialmente antes de confiar en esto para algo que importe.
-- **Límites de tasa en el nivel gratuito del LLM.** La extracción, fragmentación, embedding y recuperación son todas locales e ilimitadas; solo la llamada al LLM de `ask()` cuenta contra la cuota de nivel gratuito de tu proveedor. Un error 429 ahí es el proveedor diciéndote que reduzcas la velocidad, no un bug — mira el [proyecto de Agente de IA](/docs/projects/ai-agent) para el mismo patrón y un enfoque de reintento que puedes copiar.
+- **Límites de tasa en el nivel gratuito del LLM.** La extracción, fragmentación, embedding y recuperación son todas locales e ilimitadas; solo la llamada al LLM de `ask()` cuenta contra la cuota de nivel gratuito de tu proveedor. Un error 429 ahí es el proveedor diciéndote que reduzcas la velocidad, no un bug — mira el [proyecto de Agente de IA](/es/proyectos/ai-agent) para el mismo patrón y un enfoque de reintento que puedes copiar.
 
 ## Lo que acabas de construir
 

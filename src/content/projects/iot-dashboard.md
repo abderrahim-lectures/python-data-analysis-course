@@ -16,7 +16,7 @@ prerequisites: ["Python 101", "Data Analysis"]
 
 An IoT system without a dashboard is like a car without a speedometer — the data exists, but nobody can see it. This project builds a real-time monitoring dashboard using Dash and Plotly: you simulate sensor data streams, render live gauges that update every second, plot historical trends as time-series charts, and group devices by type or location. The dashboard runs in your browser and refreshes automatically.
 
-This assumes Python 101 and comfort with pandas from Data Analysis — nothing beyond. Optional and ungraded; see [Real-World Projects](/docs/projects) for the full list.
+This assumes Python 101 and comfort with pandas from Data Analysis — nothing beyond. Optional and ungraded; see [Real-World Projects](/projects) for the full list.
 
 ## 🎯 What you'll do
 

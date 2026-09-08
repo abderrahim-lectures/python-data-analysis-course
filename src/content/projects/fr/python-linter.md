@@ -16,7 +16,7 @@ prerequisites: ["python-101/functions", "python-101/data-structures", "python-10
 
 Chaque projet Python sérieux exécute un linter avant de fusionner, et la première tâche du linter n'est pas de la science de fusée — c'est *lire la forme du code*. Python fournit un module de bibliothèque standard nommé `ast` qui analyse un fichier `.py` en un arbre de nœuds — imports, définitions de fonctions, appels, exceptions — que tu peux parcourir et inspecter. Ce projet construit un linter fonctionnel par-dessus : analyser un fichier, parcourir l'arbre, et signaler trois vrais problèmes — imports inutilisés, clauses `except:` nues, et fonctions plus longues qu'une limite de nombre de lignes — avec un niveau de sévérité par résultat et un code de sortie qui permet à un script de CI d'échouer dessus. Tu construis le moteur, et il est assez petit pour qu'on en comprenne chaque ligne.
 
-Cela suppose le Python 101 — fonctions, dicts, entrées-sorties de fichiers, et une idée de la portée des variables. Rien au-delà de cela : pas de paquets, pas de framework, pas de services externes. C'est optionnel et non noté ; vois [Projets du monde réel](/docs/projects) pour la liste complète.
+Cela suppose le Python 101 — fonctions, dicts, entrées-sorties de fichiers, et une idée de la portée des variables. Rien au-delà de cela : pas de paquets, pas de framework, pas de services externes. C'est optionnel et non noté ; vois [Projets du monde réel](/fr/projets) pour la liste complète.
 
 ## 🎯 Ce que tu vas faire
 

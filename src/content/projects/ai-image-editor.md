@@ -21,7 +21,7 @@ learningObjectives:
 
 Editing images by hand in a paint tool is fine for one photo; it collapses when you need the same fix — brighten, crop, add a border — to a hundred photos that arrive on a schedule. This project builds the thing a human can't do: a Python image editor that reads a plain-English instruction like `crop to 400x300 and brighten 25%`, applies it to any image, and can undo its own work. Pillow does the pixel surgery; the pipeline does the judgment, the undo stack, and the batching.
 
-This assumes Python 101 and comfort running third-party libraries — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python 101 and comfort running third-party libraries — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

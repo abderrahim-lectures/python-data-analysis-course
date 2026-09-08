@@ -19,7 +19,7 @@ prerequisites:
 
 Le montage vidéo est traditionnellement point-and-click, mais chaque opération — découper, superposer du texte, extraire l'audio, convertir les formats — est en réalité une fonction déterministe appliquée à des images et des plages horaires. Ce projet construit une boîte à outils qui enveloppe MoviePy (qui enveloppe ffmpeg) dans des fonctions Python propres, pour que tu puisses scriptiser les tâches de traitement vidéo de la même façon que tu scriptiserais n'importe quelle autre transformation de données : charger, opérer, sauvegarder.
 
-Cela suppose les bases de Python et une installation fonctionnelle de ffmpeg (couvert dans Configuration). C'est optionnel et non noté ; voir [Projets du monde réel](/docs/projects) pour la liste complète et croissante.
+Cela suppose les bases de Python et une installation fonctionnelle de ffmpeg (couvert dans Configuration). C'est optionnel et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 

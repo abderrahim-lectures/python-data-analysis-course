@@ -8,7 +8,7 @@ description: "Construye un juego de Wordle real de terminal desde cero: retroali
 
 Este proyecto solo asume lo básico a nivel de Python 101 — funciones, listas, diccionarios, bucles, leer y escribir un archivo. Sin pandas, sin clave de API, sin GPU, sin servicio externo de ningún tipo — solo una terminal, una lista de palabras, y algo de lógica que es más difícil de hacer bien de lo que parece. Eso lo convierte en un excelente Proyecto del Mundo Real *más temprano* para intentar, incluso antes de algunos de los orientados a pandas o a IA: todo lo que necesitas es material que Python 101 ya te dio, aplicado a algo genuinamente divertido de jugar después.
 
-Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/docs/projects) para la lista completa y creciente.
+Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 ## 🎯 Lo que harás
 

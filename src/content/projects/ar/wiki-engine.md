@@ -5,11 +5,11 @@ difficulty: "intermediate"
 estimatedMinutes: 60
 tags: ["markdown", "cli", "automation"]
 learningObjectives:
-  - "Store wiki pages as Markdown files with a slug naming scheme"
-  - Read and render pages to HTML with a small Markdown-lite renderer
-  - "Keep an append-only version history and diff any two versions"
-  - "Scan [[links]] to compute a reverse backlink index"
-  - "Tokenize and rank full-text search by term frequency"
+  - "خزّن صفحات الويكي كملفات Markdown بمخطط تسمية slug"
+  - اقرأ الصفحات واعرضها كـ HTML بمحرك Markdown خفيف
+  - "احتفظ بسجل إصدارات تراكمي وقارن أي إصدارين"
+  - "افحص [[الروابط]] لحساب فهرس الارتباطات العكسية"
+  - "قسّم النص إلى رموز ورتّب البحث النصي الكامل حسب تكرار المصطلح"
 prerequisites:
   - "Python basics (functions, dictionaries, file I/O)"
   - "Comfortable with basic regex (findall, sub)"
@@ -20,7 +20,7 @@ prerequisites:
 
 الويكي *صفحات على القرص زائد ثلاثة فهارس*. الصفحات ملفات Markdown؛ والفهارس هي الروابط الخلفية (أي الصفحات تشير إلى هنا؟)، والسجل (ماذا كانت تقول هذه الصفحة سابقًا؟)، والبحث (أي الصفحات تذكر هذه الكلمات؟). يبني هذا المشروع الثلاثة كلها من الصفر بالمكتبة القياسية: مخطط تسمية slugs، ومُصيِّر Markdown مصغّر، وسجل إصدارات إلحاقي فقط مع فروقات، وخريطة `[[Page]]` رابط خلفي، وبحث ترميزي يرتّب بتردد المصطلح. عند الانتهاء يمكنك تحويل ملاحظاتك الخاصة إلى wiki.
 
-هذا يفترض Python 101 مع القليل من regex — لا شيء من تحليل البيانات مطلوب. هذا اختياري وغير مُقيَّم؛ راجع [مشاريع من العالم الحقيقي](/docs/projects) للقائمة الكاملة والنامية.
+هذا يفترض Python 101 مع القليل من regex — لا شيء من تحليل البيانات مطلوب. هذا اختياري وغير مُقيَّم؛ راجع [مشاريع من العالم الحقيقي](/ar/مشاريع) للقائمة الكاملة والنامية.
 
 ## 🎯 ما ستفعله
 

@@ -19,7 +19,7 @@ learningObjectives:
 
 Tu factura de electricidad es una caja negra: un solo número cada mes y un encogimiento de hombros. Este proyecto la abre de par en par. Leerás números reales de electrodomésticos — vatios, horas al día — de un CSV, calcularás energía en la unidad que las utilities realmente facturan (kWh), clasificarás dispositivos por su parte del total, preciarás una tarifa *escalonada* (el exceso cuesta más), auditarás qué queman los dispositivos solo por estar en espera, y puntuarás en dólares un escenario de "qué pasa si uso menos la calefacción". Las matemáticas son cuatro fórmulas aritméticas; la habilidad es convertir especificaciones dispersas en un reporte honesto y listo para decisiones.
 
-Esto asume Python 101 — listas, diccionarios, bucles, funciones — además de lectura cómoda de `csv`. Nada aquí necesita pandas. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa y creciente.
+Esto asume Python 101 — listas, diccionarios, bucles, funciones — además de lectura cómoda de `csv`. Nada aquí necesita pandas. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 ## 🎯 Lo que harás
 

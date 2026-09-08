@@ -6,7 +6,7 @@ description: "Record experiments with structured data, calculations, and reprodu
 
 Scientists track experiments, hypotheses, and versioned results. A digital lab notebook does the same but structurally: each experiment gets a template, measurements feed into calculations, and results export as reproducible reports. This project builds exactly that.
 
-This assumes Python 101 and comfort with pandas from Data Analysis. Optional and ungraded; see [Real-World Projects](/docs/projects) for the full list.
+This assumes Python 101 and comfort with pandas from Data Analysis. Optional and ungraded; see [Real-World Projects](/projects) for the full list.
 
 ## 🎯 What you'll do
 

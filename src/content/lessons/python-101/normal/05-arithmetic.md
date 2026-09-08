@@ -126,14 +126,6 @@ Why does Python use `**` for exponentiation instead of `^`? What does `^` actual
 - `2 ** 3 ** 2` is `512`, not `64`. Why is `**` right-associative when `+` and `*` are left-associative?
 - Can you think of a real-world scenario where modulo arithmetic is essential? (Think about clocks, calendar days, or array indexing.)
 
-## Projects You Can Build
-
-Here are a few real-world projects that reinforce these concepts:
-
-- 💰 **Expense Tracker** - Use arithmetic operators for totals, averages, and percentage calculations
-- 🔒 **Password Generator** - Apply modulo arithmetic to select random characters from different character sets
-- ⚡ **Weather Dashboard** - Calculate temperature differences, averages, and unit conversions
-
 ## ✅ Quick check
 
 <div class="quiz" data-quiz="python-101-arithmetic">

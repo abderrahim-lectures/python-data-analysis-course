@@ -19,7 +19,7 @@ learningObjectives:
 
 Dans le monde pré-LLM — et dans chaque environnement de pointe où un LLM est trop lourd, trop lent ou trop inabordable — « poser des questions à tes documents » est un *problème de recherche avec une jolie présentation*. La machinerie est honnête et t'apprend plus que l'enveloppe de chat : découpe le corpus en morceaux, indexe chaque terme vers les morceaux où il apparaît, score les morceaux pour une requête, choisis la phrase qui y répond le mieux, et cite d'où elle vient. Ce projet construit les cinq couches en Python pur, et tu verras un vrai moteur faire une vraie chose : aucune supposition, chaque réponse porte le fichier d'où elle vient.
 
-Ceci suppose Python 101 plus une aisance avec `re` et `pathlib`. Rien du module Analyse de Données n'est requis. C'est facultatif et non noté ; voir [Projets du monde réel](/docs/projects) pour la liste complète et croissante.
+Ceci suppose Python 101 plus une aisance avec `re` et `pathlib`. Rien du module Analyse de Données n'est requis. C'est facultatif et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 

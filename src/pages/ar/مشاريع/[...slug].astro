@@ -7,9 +7,9 @@ import ProjectDetail from '../../../components/projects/ProjectDetail.astro';
 export async function getStaticPaths() {
   const projects = await getCollection('projects');
   return projects
-    .filter((p) => p.slug.split('/')[0] === 'ar')
+    .filter((p) => p.id.split('/')[0] === 'ar')
     .map((entry) => {
-      const slug = entry.slug.slice('ar'.length + 1);
+      const slug = entry.id.slice('ar'.length + 1);
       return {params: {slug}, props: {entry}};
     });
 }

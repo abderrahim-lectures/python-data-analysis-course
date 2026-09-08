@@ -8,11 +8,11 @@ const locale = 'es' as const;
 export async function getStaticPaths() {
   const modules = await getCollection('modules');
   return modules
-    .filter((m) => m.slug.includes('/'))
+    .filter((m) => m.id.includes('/'))
     .map((m) => {
-      const [section, track] = m.slug.split('/') as [string, 'normal' | 'hard'];
+      const [section, track] = m.id.split('/') as [string, 'normal' | 'hard'];
       return {
-        params: {section, track, module: m.slug.split('/').pop()!},
+        params: {section, track, module: m.id.split('/').pop()!},
         props: {section, track, entry: m},
       };
     });

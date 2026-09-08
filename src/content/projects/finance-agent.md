@@ -5,9 +5,9 @@ description: "Categorize a bank CSV export and flag spending anomalies, combinin
 
 # 🐼 Build a Personal Finance Agent
 
-This project assumes you're comfortable with Python 101, and it leans on ideas from two other Real-World Projects without strictly requiring either: pandas data-cleaning at roughly the level of [Train Your First Machine Learning Model](/docs/projects/ml-classifier) (loading a CSV, handling messy columns), and the tool-calling agent pattern from [Build an AI Agent](/docs/projects/ai-agent) (a language model that decides to call your Python functions instead of just replying with text). Having seen either helps, but the steps below re-explain what they need as they go.
+This project assumes you're comfortable with Python 101, and it leans on ideas from two other Real-World Projects without strictly requiring either: pandas data-cleaning at roughly the level of [Train Your First Machine Learning Model](/projects/ml-classifier) (loading a CSV, handling messy columns), and the tool-calling agent pattern from [Build an AI Agent](/projects/ai-agent) (a language model that decides to call your Python functions instead of just replying with text). Having seen either helps, but the steps below re-explain what they need as they go.
 
-This is optional and ungraded — a good fit once you've finished Python 101. See [Real-World Projects](/docs/projects) for the full, growing list.
+This is optional and ungraded — a good fit once you've finished Python 101. See [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 
@@ -176,7 +176,7 @@ If you kept adding keywords forever, could you eventually cover every possible b
 
 ## Step 3: Build an LLM agent tool that categorizes ambiguous transactions
 
-This is the same tool-calling shape from [Build an AI Agent](/docs/projects/ai-agent): a Python function with a docstring, handed to `create_deep_agent`, which the model decides to call on its own.
+This is the same tool-calling shape from [Build an AI Agent](/projects/ai-agent): a Python function with a docstring, handed to `create_deep_agent`, which the model decides to call on its own.
 
 ### 3.1 Build the categorize tool and the agent
 

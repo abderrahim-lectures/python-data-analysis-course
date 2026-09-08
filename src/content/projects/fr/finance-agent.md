@@ -6,9 +6,9 @@ description: "Catégorise un export CSV bancaire et signale les anomalies de dé
 
 # 🐼 Construire un Agent de Finances Personnelles
 
-Ce projet suppose que tu es à l'aise avec Python 101, et s'appuie sur des idées de deux autres Projets du Monde Réel sans strictement exiger l'un ou l'autre : le nettoyage de données avec pandas à peu près au niveau de [Entraîne ton Premier Modèle de Machine Learning](/docs/projects/ml-classifier) (charger un CSV, gérer des colonnes en désordre), et le pattern d'agent à appel d'outils de [Construire un Agent IA](/docs/projects/ai-agent) (un modèle de langage qui décide d'appeler tes fonctions Python plutôt que de simplement répondre par du texte). Avoir vu l'un ou l'autre aide, mais les étapes ci-dessous réexpliquent ce dont elles ont besoin au fur et à mesure.
+Ce projet suppose que tu es à l'aise avec Python 101, et s'appuie sur des idées de deux autres Projets du Monde Réel sans strictement exiger l'un ou l'autre : le nettoyage de données avec pandas à peu près au niveau de [Entraîne ton Premier Modèle de Machine Learning](/fr/projets/ml-classifier) (charger un CSV, gérer des colonnes en désordre), et le pattern d'agent à appel d'outils de [Construire un Agent IA](/fr/projets/ai-agent) (un modèle de langage qui décide d'appeler tes fonctions Python plutôt que de simplement répondre par du texte). Avoir vu l'un ou l'autre aide, mais les étapes ci-dessous réexpliquent ce dont elles ont besoin au fur et à mesure.
 
-C'est optionnel et non noté — un bon choix une fois que tu as terminé Python 101. Voir [Projets du monde réel](/docs/projects) pour la liste complète et croissante.
+C'est optionnel et non noté — un bon choix une fois que tu as terminé Python 101. Voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 
@@ -179,11 +179,11 @@ Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
 Si tu continuais à ajouter des mots-clés pour toujours, pourrais-tu éventuellement couvrir chaque description bancaire possible qu'une personne pourrait jamais voir ? Qu'est-ce que ta réponse implique sur le moment où une approche purement basée sur des règles cesse de valoir la peine d'être maintenue ?
 
 ## Étape 3 : Construis un outil d'agent LLM qui catégorise les transactions ambiguës
-### 3.1 C'est la même forme d'appel d'outils que [Construire un Agent IA](/docs/projects/ai-agent) :...
+### 3.1 C'est la même forme d'appel d'outils que [Construire un Agent IA](/fr/projets/ai-agent) :...
 
 **👟 Indice de départ :**
 
-C'est la même forme d'appel d'outils que [Construire un Agent IA](/docs/projects/ai-agent) : une fonction Python avec une docstring, remise à `create_deep_agent`, que le modèle décide d'appeler lui-même.
+C'est la même forme d'appel d'outils que [Construire un Agent IA](/fr/projets/ai-agent) : une fonction Python avec une docstring, remise à `create_deep_agent`, que le modèle décide d'appeler lui-même.
 
 ```python
 import os

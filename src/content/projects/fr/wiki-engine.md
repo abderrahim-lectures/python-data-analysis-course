@@ -20,7 +20,7 @@ prerequisites:
 
 Un wiki, ce sont *des pages sur disque plus trois index*. Les pages sont des fichiers Markdown ; les index sont les backlinks (quelles pages pointent ici ?), l'historique (que disait cette page avant ?) et la recherche (quelles pages mentionnent ces mots ?). Ce projet construit les trois de zéro avec la bibliothèque standard : un schéma de nommage par slug, un tout petit moteur de rendu Markdown-lite, un historique de versions en append-only avec diffs, une carte de backlinks `[[Page]]`, et une recherche qui tokenise et classe par fréquence de terme. Quand tu as fini, tu peux transformer tes propres notes en wiki.
 
-Cela suppose Python 101 plus un peu de regex — rien d'Analyse de Données n'est requis. C'est optionnel et non noté ; voir [Projets du monde réel](/docs/projects) pour la liste complète et croissante.
+Cela suppose Python 101 plus un peu de regex — rien d'Analyse de Données n'est requis. C'est optionnel et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 

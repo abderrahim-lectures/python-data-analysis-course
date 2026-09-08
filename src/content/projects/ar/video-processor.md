@@ -5,10 +5,10 @@ difficulty: "advanced"
 estimatedMinutes: 75
 tags: ["moviepy", "video-processing", "ffmpeg", "subtitles"]
 learningObjectives:
-  - Trim and cut videos to specific time ranges with frame-level precision
-  - Apply text overlays with custom fonts, positions, and timing
-  - Extract audio tracks and generate thumbnail images from any frame
-  - Convert between video formats and compress for different use cases
+  - اقصّ مقاطع الفيديو إلى نطاقات زمنية محددة بدقة مستوى الإطار
+  - طبّق تراكبات نصية بخطوط ومواضع وتوقيت مخصص
+  - استخرج المسارات الصوتية وولّد صورًا مصغّرة من أي إطار
+  - حوّل بين صيغ الفيديو واضغطها لحالات استخدام مختلفة
 prerequisites:
   - "Python basics (functions, strings, f-strings)"
   - "FFmpeg installed on your system (covered in Setup)"
@@ -19,7 +19,7 @@ prerequisites:
 
 تحرير الفيديو تقليديًا نقرة ونقر، لكن كل عملية — القص، وتراكب النص، واستخراج الصوت، وتحويل الصيغ — في الحقيقة دالة حتمية تُطبَّق على الإطارات ونطاقات الوقت. يبني هذا المشروع مجموعة أدوات تغلّف MoviePy (الذي يغلّف ffmpeg) في دوال بايثون نظيفة، فتشبّه مهام معالجة الفيديو بنفس الطريقة التي تشبّه بها أي تحويل بيانات آخر: حمّل، شغّل، احفظ.
 
-يُفترض أساسيات بايثون وتثبيت ffmpeg يعمل (مغطى في الإعداد). هذا اختياري وغير مُقيَّم؛ راجع [المشاريع الواقعية](/docs/projects) للقائمة الكاملة المتنامية.
+يُفترض أساسيات بايثون وتثبيت ffmpeg يعمل (مغطى في الإعداد). هذا اختياري وغير مُقيَّم؛ راجع [المشاريع الواقعية](/ar/مشاريع) للقائمة الكاملة المتنامية.
 
 ## 🎯 ما ستفعله
 

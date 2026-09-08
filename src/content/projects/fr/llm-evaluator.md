@@ -7,7 +7,7 @@ description: "Évaluez et comparez les performances des LLM en termes de précis
 
 Chaque LLM semble impressionnant dans les vidéos de démo. En choisir un pour la production nécessite des chiffres concrets : la précision sur ta tâche, la latence sous charge, le coût par appel et la question de savoir s'il émet des sorties nuisibles. Ce projet construit une suite d'évaluation standard qui exécute un ensemble de cas de test sur plusieurs modèles et les note sur la précision, la latence, le coût et la sécurité.
 
-Cela suppose Python 101 et l'aisance avec pandas issu de Analyse de Données. C'est optionnel et non noté ; voir [Projets du monde réel](/docs/projects) pour la liste complète.
+Cela suppose Python 101 et l'aisance avec pandas issu de Analyse de Données. C'est optionnel et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète.
 
 ## 🎯 Ce que tu vas faire
 

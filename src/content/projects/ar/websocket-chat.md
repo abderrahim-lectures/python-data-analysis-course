@@ -5,11 +5,11 @@ difficulty: "intermediate"
 estimatedMinutes: 60
 tags: ["networking", "async", "cli"]
 learningObjectives:
-  - "Move messages over a WebSocket with a coroutine handler"
-  - Broadcast to multiple connected clients with asyncio
-  - "Route messages into rooms using the connection path"
-  - "Replay history and presence events to fresh joiners"
-  - "Drive a chat client from stdin with run_in_executor"
+  - "انقل الرسائل عبر WebSocket بمعالج coroutine"
+  - بثّ إلى عدة عملاء متصلين باستخدام asyncio
+  - "وجّه الرسائل إلى الغرف باستخدام مسار الاتصال"
+  - "أعد تشغيل السجل وأحداث الحضور للوافدين الجدد"
+  - "شغّل عميل دردشة من stdin باستخدام run_in_executor"
 prerequisites:
   - "Python basics (functions, sets, tuples)"
   - "asyncio basics (async def, await, asyncio.run, asyncio.gather)"
@@ -20,7 +20,7 @@ prerequisites:
 
 تطبيق الدردشة ألطف مقدمة ممكنة للشبكات: تخرج الرسائل من مقبس، وتدخل، وتتكرر. كل تجربة "حية" تقريبًا — تعدد اللاعبين، والإشعارات، والمؤشرات التعاونية — هي هذه الحلقة بملابس أخرى. يبني هذا المشروع واحدة حقيقية: معالج صدى، ثم بثًا حسب الغرفة، ثم سجل الحضور وإعادة تشغيله لأي منضمّ متأخر، وأخيرًا عميل طرفية يمكنك الدردشة به فعلًا عبر طرفيتين. كل شيء هو `asyncio` + `websockets`، بلا متصفح وبلا حشو.
 
-هذا يفترض Python 101 مع القليل من اللاasync — لا شيء من تحليل البيانات مطلوب. هذا اختياري وغير مُقيَّم؛ راجع [مشاريع من العالم الحقيقي](/docs/projects) للقائمة الكاملة والنامية.
+هذا يفترض Python 101 مع القليل من اللاasync — لا شيء من تحليل البيانات مطلوب. هذا اختياري وغير مُقيَّم؛ راجع [مشاريع من العالم الحقيقي](/ar/مشاريع) للقائمة الكاملة والنامية.
 
 ## 🎯 ما ستفعله
 

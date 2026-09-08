@@ -21,7 +21,7 @@ learningObjectives:
 
 Les articles ne s'écrivent pas tout seuls — mais la bibliographie peut presque s'en charger. Ce projet construit un petit **gestionnaire de citations** : une bibliothèque d'entrées bibliographiques (clé → auteur/titre/année/revue/type), un formateur qui transforme n'importe quelle entrée en une ligne APA cohérente, une recherche qui fonctionne à travers auteurs, titres et revues, un vérificateur *manquante-et-inutilisée* construit sur la différence d'ensembles qui trouve les erreurs de liste de références avant qu'un relecteur ne le fasse, une détection de quasi-doublons qui attrape le même livre saisi deux fois avec une casse différente, des comptes par type, et un générateur final qui trie toute la bibliothèque par année-et-auteur et écrit une section `References` plus une sauvegarde JSON. Tout est déterministe — de petites données choisies à la main, aucun aléatoire, uniquement la bibliothèque standard.
 
-Cela suppose les dicts imbriqués, les ensembles, les compréhensions et le JSON de base. C'est un projet facultatif et non noté — consulte [Projets du monde réel](/docs/projects) pour la liste complète et grandissante. Un seul fichier, uniquement la bibliothèque standard.
+Cela suppose les dicts imbriqués, les ensembles, les compréhensions et le JSON de base. C'est un projet facultatif et non noté — consulte [Projets du monde réel](/fr/projets) pour la liste complète et grandissante. Un seul fichier, uniquement la bibliothèque standard.
 
 ## 🎯 Ce que tu vas faire
 

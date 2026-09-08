@@ -20,7 +20,7 @@ prerequisites:
 
 Nadie sabe a dónde va un día de trabajo hasta que lo registra. Este proyecto construye un rastreador de tiempo diminuto: inicia una sesión, trabaja, detenla y los minutos aterrizan en un CSV; añade una entrada perdida a mano, luego extrae reportes diarios y semanales y un resumen de "top 3 tareas". Es solo biblioteca estándar — dataclasses, `csv` y `datetime` — así que aprenderás el ritmo de cargar/añadir/guardar y matemática real de marcas de tiempo, y terminarás con una herramienta para responder "¿a dónde va realmente mi tiempo?"
 
-Esto asume Python 101 y comodidad con los fundamentos de `datetime` — no se requiere nada más allá de eso. Es opcional y no se califica; consulta [Proyectos del Mundo Real](/docs/projects) para ver la lista completa y en crecimiento.
+Esto asume Python 101 y comodidad con los fundamentos de `datetime` — no se requiere nada más allá de eso. Es opcional y no se califica; consulta [Proyectos del Mundo Real](/es/proyectos) para ver la lista completa y en crecimiento.
 
 ## 🎯 Lo que harás
 

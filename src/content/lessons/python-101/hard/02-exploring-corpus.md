@@ -1,6 +1,5 @@
 ---
 
-
 title: "Exploring the Corpus"
 description: "Compute row counts, column names, and preview sample text to understand your dataset before processing."
 module: "loading-corpus"
@@ -166,11 +165,3 @@ def corpus_quality(path):
         "max_length": max(lengths) if lengths else 0,
     }
 ```
-
-## Projects You Can Build
-
-Here are a few real-world projects that reinforce these concepts:
-
-- 🕷️ **Scrape and Analyze** - Profile and clean scraped text data before analysis
-- 🤖 **Chatbot Builder** - Prepare training text corpora with quality checks and deduplication
-- 📊 **Sentiment Dashboard** - Validate and profile text data for sentiment analysis

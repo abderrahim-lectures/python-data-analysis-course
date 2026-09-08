@@ -21,7 +21,7 @@ learningObjectives:
 
 Every analyst has met the same dataset: duplicate rows, blank cells, a `price` column where one value is `"2.5 USD"` and another is `2.5`, and an order date where some rows say `2024-01-05` and some say `05/01/2024`. These problems hide real signal and crash downstream tools in confusing ways. This project builds a command-line data cleaner that takes a messy CSV, finds those problems automatically, applies the right fix per column, and — the part that makes it trustworthy — records every change it makes into an audit trail you can read like a receipt.
 
-This assumes Python 101 and the Data Analysis module's pandas basics — nothing beyond. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python 101 and the Data Analysis module's pandas basics — nothing beyond. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 
@@ -524,7 +524,7 @@ A working data-cleaner CLI: it loads a genuinely messy CSV, reports what's wrong
 
 - Turn the `stuck` list into a decision point: a `--strict` flag that *refuses to write output* while any value is unrecoverable, so the pipeline can't ship a file it didn't fully understand.
 - Add full-window whitespace and mixed-encoding handling with the argparse `--encoding` option, and normalize UTF-8 BOM files that pandas silently misreads.
-- Feed the audit trail into the course's [Data Visualization](/docs/projects) module: render a bar chart of issues by column and strategy so a human can approve fills at a glance.
+- Feed the audit trail into the course's [Data Visualization](/projects) module: render a bar chart of issues by column and strategy so a human can approve fills at a glance.
 - Point the pipeline at the API from the [Air Quality Dashboard](/projects/air-quality) project and clean `/api` responses before they hit your charts.
 
 ## Share your project with the class

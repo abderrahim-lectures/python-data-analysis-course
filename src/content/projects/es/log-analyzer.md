@@ -16,7 +16,7 @@ prerequisites: ["python-101/file-io", "python-101/strings", "python-101/data-str
 
 Todo servicio en ejecución produce un archivo de log que crece sin piedad — miles de líneas por minuto, la mitad de ellas ruido, hasta que una tarde algo se rompe y necesitas encontrar las tres líneas relevantes entre un millón. Este proyecto construye la primera herramienta a la que recurre un ingeniero real: un CLI que parsea un archivo de log en registros estructurados, filtra por severidad y palabra clave, cuenta los patrones que se repiten y dibuja una línea de tiempo de eventos por hora para que puedas *ver* cuándo las cosas salieron mal.
 
-Esto asume Python 101 — I/O de archivos, cadenas, diccionarios y funciones — además de algo de comodidad leyendo DataFrames de Análisis de Datos. Nada más allá de eso: sin frameworks, sin APIs, sin servicios externos. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa.
+Esto asume Python 101 — I/O de archivos, cadenas, diccionarios y funciones — además de algo de comodidad leyendo DataFrames de Análisis de Datos. Nada más allá de eso: sin frameworks, sin APIs, sin servicios externos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
 
 ## 🎯 Lo que harás
 

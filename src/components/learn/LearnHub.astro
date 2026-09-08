@@ -4,7 +4,7 @@ import {getCollection} from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Icon from '../Icon.astro';
 import {learnHref, type Locale} from '../../lib/routeSegments';
-import {PAGE_STRINGS} from '../../lib/pageStrings';
+import {m} from '../../paraglide/messages.js';
 
 interface Props {
   locale: Locale;
@@ -13,7 +13,6 @@ interface Props {
 const {locale} = Astro.props;
 const base = import.meta.env.BASE_URL;
 const dir = locale === 'ar' ? 'rtl' : 'ltr';
-const s = PAGE_STRINGS[locale];
 const alternates: Record<Locale, string> = {
   en: 'learn',
   ar: 'ar/تعلم',
@@ -22,28 +21,28 @@ const alternates: Record<Locale, string> = {
 };
 
 const sections = [
-  {slug: 'python-101', icon: '🐍', badge: s.track1, name: s.track1Name, desc: s.track1Desc},
-  {slug: 'data-analysis', icon: '📊', badge: s.track2, name: s.track2Name, desc: s.track2Desc},
+  {slug: 'python-101', icon: '🐍', badge: m.track_1(), name: m.track_1_name(), desc: m.track_1_desc()},
+  {slug: 'data-analysis', icon: '📊', badge: m.track_2(), name: m.track_2_name(), desc: m.track_2_desc()},
 ];
 
 const allLessons = await getCollection('lessons');
 const allModules = await getCollection('modules');
 const stats = Object.fromEntries(
   sections.map(({slug}) => {
-    const lessons = allLessons.filter((e) => e.slug.includes(slug));
-    const modules = allModules.filter((e) => e.slug.includes(slug));
+    const lessons = allLessons.filter((e) => e.id.includes(slug));
+    const modules = allModules.filter((e) => e.id.includes(slug));
     const minutes = lessons.reduce((sum, l) => sum + (l.data.estimatedMinutes ?? 15), 0);
     return [slug, {lessons: lessons.length, modules: modules.length, minutes}];
   }),
 );
 ---
 
-<Base title={s.learnHubTitle} description={s.learnHubDescription} lang={locale} dir={dir} alternates={alternates}>
+<Base title={m.learn_hub_title()} description={m.learn_hub_description()} lang={locale} dir={dir} alternates={alternates}>
   <section class="hero">
     <div class="container head">
-      <div class="head__eyebrow"><Icon name="code" size={16} /> {s.learnHubEyebrow}</div>
-      <h1>{s.learnHubH1}</h1>
-      <p>{s.learnHubLead}</p>
+      <div class="head__eyebrow"><Icon name="code" size={16} /> {m.learn_hub_eyebrow()}</div>
+      <h1>{m.learn_hub_h1()}</h1>
+      <p>{m.learn_hub_lead()}</p>
     </div>
   </section>
 
@@ -57,17 +56,17 @@ const stats = Object.fromEntries(
           <p>{desc}</p>
           <div class="sectioncard__meta">
             <span class="badge badge--xp">⚡ {stats[slug].lessons * 100} XP</span>
-            <span class="badge badge--streak">📖 {stats[slug].modules} {s.moduleLabel}</span>
+            <span class="badge badge--streak">📖 {stats[slug].modules} {m.module_label()}</span>
             <span class="badge">⏱ ~{Math.round(stats[slug].minutes / 60)}h</span>
           </div>
           <div class="routes">
-            <span class="routes__label">{s.chooseRoute}</span>
+            <span class="routes__label">{m.choose_route()}</span>
             <div class="routes__pills">
-              <a class="route-pill route-pill--normal" href={learnHref(locale, base, slug, 'normal')}>🌿 {s.normalStart}</a>
-              <a class="route-pill route-pill--hard" href={learnHref(locale, base, slug, 'hard')}>⚡ {s.hardStart}</a>
+              <a class="route-pill route-pill--normal" href={learnHref(locale, base, slug, 'normal')}>🌿 {m.normal_start()}</a>
+              <a class="route-pill route-pill--hard" href={learnHref(locale, base, slug, 'hard')}>⚡ {m.hard_start()}</a>
             </div>
           </div>
-          <a class="sectioncard__all" href={learnHref(locale, base, slug)}>{s.seeAllModules}</a>
+          <a class="sectioncard__all" href={learnHref(locale, base, slug)}>{m.see_all_modules()}</a>
         </div>
       ))}
     </div>
@@ -93,7 +92,7 @@ const stats = Object.fromEntries(
     font-size: .72rem; font-weight: 700; width: fit-content;
     background: var(--accent-soft); color: var(--accent);
   }
-  .sectioncard__badge--streak { background: rgba(255,150,0,.1); color: var(--streak); }
+  .sectioncard__badge--streak { background: rgba(255,150,0,.1); color: var(--streak-text); }
   .sectioncard__icon { font-size: 2rem; }
   .sectioncard h2 { font-size: 1.2rem; margin: 0; }
   .sectioncard p { color: var(--ink-soft); font-size: .9rem; margin: 0; line-height: 1.5; }

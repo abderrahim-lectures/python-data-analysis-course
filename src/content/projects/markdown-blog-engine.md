@@ -16,7 +16,7 @@ prerequisites: ["python-101/file-io", "python-101/strings", "python-101/data-str
 
 The web is built on static sites — a folder of plain-text posts, one render step, and a pile of HTML files that need no server, no database, and no JavaScript framework to serve. This project builds a miniature static site generator: it reads a `posts/` folder of Markdown files, parses each one's YAML frontmatter for title/date/tags, renders the body to HTML, and outputs a complete `site/` with an index page and tag-filtered post listings — the same shape as the engines behind a thousand real blogs.
 
-This assumes Python 101 — file I/O, strings, dictionaries, and functions. Nothing beyond that: no framework, no database, no external services. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full list.
+This assumes Python 101 — file I/O, strings, dictionaries, and functions. Nothing beyond that: no framework, no database, no external services. It's optional and ungraded; see [Real-World Projects](/projects) for the full list.
 
 ## 🎯 What you'll do
 

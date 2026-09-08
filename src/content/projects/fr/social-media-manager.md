@@ -20,7 +20,7 @@ prerequisites:
 
 Publier quand ton audience est réellement réveillée, avec des hashtags que les gens cherchent pour de vrai, c'est l'essentiel du marketing social. Ce projet construit un petit gestionnaire qui étudie les données d'engagement passées avec pandas, apprend la meilleure heure de publication pour chaque plateforme, suggère des hashtags par thème grâce à un petit moteur de notation, planifie une semaine de publications dans un calendrier de contenu, et finit par un rapport analytique matplotlib que tu pourrais injecter directement dans la routine d'une vraie marque.
 
-Cela suppose le Python 101 et une aisance avec le `groupby` de pandas — rien de plus d'Analyse de Données n'est requis. C'est optionnel et non noté ; vois [Projets du monde réel](/docs/projects) pour la liste complète et grandissante.
+Cela suppose le Python 101 et une aisance avec le `groupby` de pandas — rien de plus d'Analyse de Données n'est requis. C'est optionnel et non noté ; vois [Projets du monde réel](/fr/projets) pour la liste complète et grandissante.
 
 ## 🎯 Ce que tu vas faire
 

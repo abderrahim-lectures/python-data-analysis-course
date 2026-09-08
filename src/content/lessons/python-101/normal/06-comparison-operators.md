@@ -126,14 +126,6 @@ Why does `0.1 + 0.2 == 0.3` evaluate to `False`? How would you write a correct f
 - Why does Python forbid `5 < "6"` but allow `5 == "5.0"` to be `False`? What design principle is at work?
 - In what scenarios might `is` be more useful than `==` for checking equality? (Think about singletons like `None`.)
 
-## Projects You Can Build
-
-Here are a few real-world projects that reinforce these concepts:
-
-- 💬 **Trivia Bot** - Use comparison operators to evaluate user answers and determine correct responses
-- 🎮 **Wordle Clone** - Compare guessed letters against target word to generate color-coded feedback
-- 🎓 **Quiz Engine** - Implement answer validation and scoring logic using comparison operators
-
 ## ✅ Quick check
 
 <div class="quiz" data-quiz="python-101-comparison">

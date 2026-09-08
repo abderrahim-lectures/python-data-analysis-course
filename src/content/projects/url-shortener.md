@@ -20,7 +20,7 @@ prerequisites:
 
 Every link you share in a chat is a short string that hides a longer one — and a redirect that tells whoever owns it exactly how often, from where, and on which day it gets clicked. This project builds that service end to end: base62 short codes stored in SQLite, a click recorded on every redirect, analytics you can query, and finally a real FastAPI layer so you can `curl` your own shortener. It's a small but complete database-backed API — the shape behind many production services.
 
-This assumes Python 101 and a light touch with REST APIs and `curl` — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python 101 and a light touch with REST APIs and `curl` — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

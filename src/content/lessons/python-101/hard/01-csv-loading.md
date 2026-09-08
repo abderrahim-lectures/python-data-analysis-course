@@ -1,6 +1,5 @@
 ---
 
-
 title: "Loading CSV Corpus"
 description: "Open, parse, and verify the structure of slm-corpus.csv using Python's csv module."
 module: "loading-corpus"
@@ -162,11 +161,3 @@ def load_corpus(path):
         print(f"File not found: {path}")
         return []
 ```
-
-## Projects You Can Build
-
-Here are a few real-world projects that reinforce these concepts:
-
-- 🕷️ **Scrape and Analyze** - Load scraped web data from CSV files for analysis and reporting
-- 📊 **Spreadsheet Tool** - Build a CSV parser that handles different delimiters and encoding issues
-- 🎓 **Gradebook** - Import student grades from CSV files and generate summary reports

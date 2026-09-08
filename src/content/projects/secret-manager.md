@@ -16,7 +16,7 @@ prerequisites: ["python-101/file-io", "python-101/dictionaries", "python-101/fun
 
 A "secret manager" sounds exotic — vaults, hardware modules, government acronyms. Strip the marketing and it's a boast: encrypt a password or API key so an attacker holding your *entire storage medium* (a breached server, a stolen backup) still can't read the secret; decrypt it only when something legitimately asks; and keep an audit log of every time anything asked. This project builds the honest core of that promise with Python's `cryptography` library, AES-256-GCM, and a JSON vault on disk — a CLI that encrypts a secret, stores it, decrypts it back, logs every access, and *proves* it noticed tampering by refusing to decrypt anything that's been altered. No cloud, no onboarding, no compliance — but every mechanism you touch is the real mechanic used by real secret stores.
 
-This assumes Python 101 — file I/O, dictionaries, functions. No prior crypto background needed. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full list.
+This assumes Python 101 — file I/O, dictionaries, functions. No prior crypto background needed. It's optional and ungraded; see [Real-World Projects](/projects) for the full list.
 
 ## 🎯 What you'll do
 

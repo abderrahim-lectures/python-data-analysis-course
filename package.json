@@ -14,14 +14,16 @@
     "test:e2e": "node tests/e2e/smoke.mjs",
     "test:contrast": "node tests/e2e/contrast.mjs",
     "test:responsive": "node tests/e2e/responsive.mjs",
-    "test:all": "npm run test && npm run test:e2e && npm run test:a11y && npm run test:contrast && npm run test:responsive",
-    "test:a11y": "node tests/e2e/a11y.mjs"
+    "test:all": "npm run test && npm run test:e2e && npm run test:a11y && npm run test:hreflang && npm run test:contrast && npm run test:responsive",
+    "test:a11y": "node tests/e2e/a11y.mjs",
+    "test:hreflang": "node tests/e2e/hreflang.mjs"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.0",
-    "@astrojs/sitemap": "^3.7.3",
-    "@supabase/supabase-js": "^2.115.0",
-    "astro": "^5.0.0",
+    "@astrojs/check": "^0.9.10",
+    "@astrojs/markdown-remark": "^7.3.0",
+    "@astrojs/sitemap": "^3.7.4",
+    "@inlang/paraglide-js": "^2.25.0",
+    "astro": "^7.3.1",
     "hast-util-to-string": "^3.0.1",
     "hastscript": "^9.0.1",
     "katex": "^0.18.4",

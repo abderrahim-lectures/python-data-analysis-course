@@ -16,7 +16,7 @@ prerequisites: ["Python 101", "Data Analysis"]
 
 Chaque course de covoiturage, chaque livraison, chaque relevé de station météo est un point sur le globe décrit par deux nombres : latitude et longitude. Ce projet construit un outil d'analyse géospatiale qui prend des données de coordonnées brutes et répond à de vraies questions : où sont les grappes d'activité, à quelle distance deux lieux sont-ils l'un de l'autre, et à quoi ressemble la densité de points sur une carte. Tu utiliseras DBSCAN pour le regroupement spatial, la formule de Haversine pour les calculs de distance réels et Folium pour les visualisations cartographiques interactives — le tout ancré dans de véritables données géographiques.
 
-Ceci suppose Python 101 et une aisance avec pandas de Data Analysis — rien de plus. Optionnel et non noté ; voir [Real-World Projects](/docs/projects) pour la liste complète.
+Ceci suppose Python 101 et une aisance avec pandas de Data Analysis — rien de plus. Optionnel et non noté ; voir [Real-World Projects](/fr/projets) pour la liste complète.
 
 ## 🎯 Ce que tu vas faire
 

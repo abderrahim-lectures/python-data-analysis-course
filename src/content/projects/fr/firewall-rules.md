@@ -16,7 +16,7 @@ prerequisites: ["Python 101"]
 
 Les règles de pare-feu sont les garde-fous de la sécurité réseau — une seule règle mal configurée peut ouvrir un port sur internet ou bloquer silencieusement du trafic légitime. Ce projet construit un outil CLI qui gère un ensemble de règles comme des données structurées : tu écris les règles en Python, tu les valides pour détecter les conflits, tu simules comment le trafic réel circulerait à travers les règles, et tu déploies les changements comme un diff contre l'état courant avec un retour arrière en une commande. L'objectif est un outil qui rend la gestion du pare-feu auditable et réversible au lieu d'effrayante et mystérieuse.
 
-Ceci suppose Python 101 — rien venant d'Analyse de données n'est requis. Facultatif et non noté ; consulte [Real-World Projects](/docs/projects) pour la liste complète.
+Ceci suppose Python 101 — rien venant d'Analyse de données n'est requis. Facultatif et non noté ; consulte [Real-World Projects](/fr/projets) pour la liste complète.
 
 ## 🎯 Ce que tu vas faire
 

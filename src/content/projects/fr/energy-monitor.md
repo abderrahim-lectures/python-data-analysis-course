@@ -19,7 +19,7 @@ learningObjectives:
 
 Ta facture d'électricité est une boîte noire : un seul nombre chaque mois et un haussement d'épaules. Ce projet la brise. Tu liras de vrais nombres d'appareils — watts, heures par jour — depuis un CSV, calculeras l'énergie dans l'unité que les services publics facturent réellement (kWh), classeras les appareils par leur part du total, tariferas un tarif *progressif* (le dépassement coûte plus cher), auditeras ce que les appareils consomment juste en veille, et évalueras en dollars un scénario « et si j'utilisais moins le chauffage ». Les maths sont quatre formules arithmétiques ; la compétence consiste à transformer des évaluations éparses en un rapport honnête et prêt à décider.
 
-Ce projet suppose que tu maîtrises Python 101 — listes, dictionnaires, boucles, fonctions — plus une lecture aisée du `csv`. Rien ici n'a besoin de pandas. Il est facultatif et non noté ; consulte [Real-World Projects](/docs/projects) pour la liste complète, qui ne cesse de s'allonger.
+Ce projet suppose que tu maîtrises Python 101 — listes, dictionnaires, boucles, fonctions — plus une lecture aisée du `csv`. Rien ici n'a besoin de pandas. Il est facultatif et non noté ; consulte [Real-World Projects](/fr/projets) pour la liste complète, qui ne cesse de s'allonger.
 
 ## 🎯 Ce que tu vas faire
 

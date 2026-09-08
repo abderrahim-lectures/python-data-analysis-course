@@ -7,7 +7,7 @@ description: "Refina prompts automáticamente usando pruebas A/B, ejemplos few-s
 
 Un prompt mediocre obtiene respuestas mediocres. Los ingenieros a menudo ajustan los prompts a mano por prueba y error, pero eso es lento e irrepetible. Este proyecto construye una herramienta CLI que toma un prompt crudo, genera varias variantes estructuradas (few-shot, cadena de pensamiento, basada en roles), las puntúa contra un conjunto de respuestas dorado y reporta qué variante rinde mejor.
 
-Esto asume Python 101 y comodidad con pandas de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa.
+Esto asume Python 101 y comodidad con pandas de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
 
 ## 🎯 Lo que harás
 

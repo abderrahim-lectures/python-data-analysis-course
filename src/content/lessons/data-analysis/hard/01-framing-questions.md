@@ -1,6 +1,5 @@
 ---
 
-
 title: "Framing EDA Questions"
 description: "Translate vague business problems into structured, testable analytical questions that guide your entire analysis."
 module: "eda-framework"
@@ -214,11 +213,3 @@ for key, value in eda_framework.items():
 
 </div>
 </details>
-
-## Projects You Can Build
-
-Here are a few real-world projects that reinforce these concepts:
-
-- 🧠 **ML Classifier** - Frame analytical questions before building predictive models
-- 🕷️ **Scrape and Analyze** - Design question-driven analysis for any scraped dataset
-- 📊 **Anomaly Detector** - Formulate hypotheses about data quality and outliers

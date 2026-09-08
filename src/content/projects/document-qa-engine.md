@@ -19,7 +19,7 @@ learningObjectives:
 
 In the pre-LLM world — and in every edge environment where an LLM is too heavy, too slow, or too unaffordable — "ask questions of your documents" is a *search problem with nice formatting*. The machinery is honest and teaches you more than the chat wrapper: break the corpus into chunks, index every term to the chunks it appears in, score chunks for a query, pick the sentence that best answers it, and cite where it came from. This project builds all five layers in pure Python, and you'll see a real engine do a real thing: nobody's guesswork, every answer carries the file it came from.
 
-This assumes Python 101 plus comfortable `re` and `pathlib`. Nothing from the Data Analysis module is required. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python 101 plus comfortable `re` and `pathlib`. Nothing from the Data Analysis module is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

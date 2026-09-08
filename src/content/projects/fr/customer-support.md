@@ -18,7 +18,7 @@ learningObjectives:
 
 La réalité d'une équipe de support arrive comme un flux d'événements *non ordonnés* — une plainte de facturation affolée, une demande assoupie « comment je réinitialise mon mot de passe », un souhait de fonctionnalité — et tout l'art de l'outillage de support consiste à imposer de l'ordre à ce flux : quel ticket reçoit un agent en premier, quel agent est même *capable* de le traiter, si l'équipe répond dans les limites de sa promesse de délai, et si les clients sont réellement satisfaits. Ce projet construit le moteur derrière un tableau de bord de support — une file de priorité pour les tickets, un routage basé sur la compétence et la charge, une détection de rupture SLA mesurée en heures depuis un vrai fichier de log, et un résumé CSAT, le tout rendu dans un seul rapport terminal.
 
-Ceci suppose Python 101 — fonctions, dictionnaires, listes et l'import du module standard `csv`. Rien de l'Analyse de Données n'est nécessaire. C'est facultatif et non noté ; voir [Projets du monde réel](/docs/projects) pour la liste complète et croissante.
+Ceci suppose Python 101 — fonctions, dictionnaires, listes et l'import du module standard `csv`. Rien de l'Analyse de Données n'est nécessaire. C'est facultatif et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 

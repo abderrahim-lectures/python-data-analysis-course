@@ -18,7 +18,7 @@ learningObjectives:
 
 La realidad de un equipo de soporte llega como un flujo de eventos *desordenados* — una queja de facturación frenética, un soñoliento "¿cómo restablezco mi contraseña?", un deseo de funcionalidad — y todo el arte de las herramientas de soporte es imponer orden a ese flujo: qué ticket recibe un agente primero, qué agente es siquiera *capaz* de manejarlo, si el equipo está respondiendo dentro de su promesa de tiempo de respuesta, y si los clientes están realmente satisfechos. Este proyecto construye el motor detrás de un panel de soporte — una cola de prioridad para tickets, enrutamiento por habilidad y carga, detección de violaciones de SLA medida en horas desde un archivo de registro real, y un resumen de CSAT, todo renderizado en un informe de terminal único.
 
-Esto asume Python 101 — funciones, diccionarios, listas e importar el módulo estándar `csv`. No se requiere nada de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa, en crecimiento.
+Esto asume Python 101 — funciones, diccionarios, listas e importar el módulo estándar `csv`. No se requiere nada de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa, en crecimiento.
 
 ## 🎯 Lo que harás
 

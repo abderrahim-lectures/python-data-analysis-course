@@ -23,7 +23,7 @@ Tu adores raconter des histoires, mais parfois la page blanche gagne. Dans ce pr
 
 Ce projet suppose seulement des bases de niveau Python 101 — fonctions, listes, dictionnaires, boucles, classes et mise en forme de chaînes. Pas de frameworks, pas de bases de données, pas de services cloud. Tout ce dont tu as besoin vient de la bibliothèque standard.
 
-C'est optionnel et non noté. Voir [Projets du monde réel](/docs/projects) pour la liste complète.
+C'est optionnel et non noté. Voir [Projets du monde réel](/fr/projets) pour la liste complète.
 
 ## 🎯 Ce que tu vas faire
 

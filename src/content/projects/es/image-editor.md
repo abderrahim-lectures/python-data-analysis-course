@@ -19,7 +19,7 @@ prerequisites:
 
 Todos los dispositivos se llenan de fotos que necesitan el mismo tratamiento — un redimensionado aquí, una marca de agua allá, un aumento de brillo en todas partes. Este proyecto construye un kit de procesamiento de imágenes con Pillow que puede cargar e inspeccionar imágenes, aplicar filtros y mejoras de color, recortar y redimensionar sin distorsión, añadir marcas de agua transparentes y procesar una carpeta entera de imágenes en una sola pasada.
 
-Esto asume Python 101 y comodidad básica con archivos y carpetas — no se requiere nada de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa y creciente.
+Esto asume Python 101 y comodidad básica con archivos y carpetas — no se requiere nada de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 ## 🎯 Lo que harás
 

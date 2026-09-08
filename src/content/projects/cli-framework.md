@@ -12,7 +12,7 @@ prerequisites: ["Python basics (variables, loops, functions, classes)", "Familia
 
 Every serious Python tool lives on the command line. In this project you will build a reusable CLI framework from scratch — a task manager with subcommands for adding, listing, removing, and searching tasks. Along the way you will learn how `argparse` parses arguments, how to route subcommands, how to color terminal output, how to validate input, how to load settings from a JSON file, and how to show progress bars for slow operations. No third-party frameworks like Click or Typer — just Python's standard library and a few lines of careful design.
 
-This project assumes you know Python basics: variables, loops, functions, classes, and dictionaries. You should also be comfortable opening a terminal and running Python scripts from the command line. This is optional and ungraded. See [Real-World Projects](/docs/projects) for the full list.
+This project assumes you know Python basics: variables, loops, functions, classes, and dictionaries. You should also be comfortable opening a terminal and running Python scripts from the command line. This is optional and ungraded. See [Real-World Projects](/projects) for the full list.
 
 ## What you'll do
 

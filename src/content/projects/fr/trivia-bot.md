@@ -8,9 +8,9 @@ description: "Construis un bot `discord.py` qui organise des manches de trivia d
 
 Un bot `discord.py` en direct qui organise des manches de trivia dans un serveur : poste une question, recueille les réponses dans un délai, révèle qui a trouvé la bonne réponse, et garde un classement persistant à travers les manches. La plupart des bots de trivia s'arrêtent à une banque de questions fixe — celui-ci ajoute une touche qui convient à un cours de Python : il peut aussi générer une question inédite sur n'importe quel sujet à la volée avec un LLM de niveau gratuit, au lieu de toujours puiser dans une liste préfabriquée.
 
-Cela suppose du Python de niveau Python 101. Aucun autre Projet du Monde Réel n'est requis au préalable, même si tu as déjà construit [Construire une App RAG](/docs/projects/rag-notes), la configuration du LLM de niveau gratuit ci-dessous te semblera familière.
+Cela suppose du Python de niveau Python 101. Aucun autre Projet du Monde Réel n'est requis au préalable, même si tu as déjà construit [Construire une App RAG](/fr/projets/rag-notes), la configuration du LLM de niveau gratuit ci-dessous te semblera familière.
 
-C'est optionnel et non noté. Voir [Projets du monde réel](/docs/projects) pour la liste complète et croissante.
+C'est optionnel et non noté. Voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 

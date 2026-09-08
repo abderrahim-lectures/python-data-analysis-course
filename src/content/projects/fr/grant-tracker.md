@@ -18,7 +18,7 @@ prerequisites:
 
 Les bureaux de recherche jonglent avec des dizaines de propositions à la fois, chacune avec un financeur, une date limite stricte, un budget, une équipe et un historique de dépenses. Ce projet construit un suiveur de subventions en ligne de commande qui modélise chaque demande comme un dictionnaire imbriqué, surveille les dépenses par rapport au budget, trie les échéances à venir et sauvegarde tout sur disque pour que ton travail survive d'une session à l'autre.
 
-Ce projet suppose que tu maîtrises Python 101 et que tu es à l'aise avec les dictionnaires et les listes — rien de la formation Data Analysis n'est requis. Il est facultatif et non noté ; consulte [Real-World Projects](/docs/projects) pour la liste complète, qui ne cesse de s'allonger.
+Ce projet suppose que tu maîtrises Python 101 et que tu es à l'aise avec les dictionnaires et les listes — rien de la formation Data Analysis n'est requis. Il est facultatif et non noté ; consulte [Real-World Projects](/fr/projets) pour la liste complète, qui ne cesse de s'allonger.
 
 ## 🎯 Ce que tu vas faire
 

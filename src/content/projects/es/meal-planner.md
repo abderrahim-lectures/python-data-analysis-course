@@ -16,7 +16,7 @@ prerequisites: ["python-101/data-structures", "python-101/reading-files", "pytho
 
 La planificación de comidas parece simple en papel — decidir siete cenas, escribir una lista de compras — pero la aritmética es exactamente donde se desmorona: tres recetas comparten arroz, dos comparten pollo, y la columna de calorías se queda silenciosamente sin revisar. Este proyecto construye un CLI que hace la contabilidad: una base de datos de recetas, un plan de comidas de una semana, totales diarios de calorías y macros, y una lista de compras que fusiona los ingredientes compartidos en un resumen consolidado en lugar de siete listas superpuestas.
 
-Esto asume Python 101 — listas, dicts, leer archivos y funciones. Nada más allá de eso: sin base de datos, sin web, sin servicios externos. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa.
+Esto asume Python 101 — listas, dicts, leer archivos y funciones. Nada más allá de eso: sin base de datos, sin web, sin servicios externos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
 
 ## 🎯 Lo que harás
 

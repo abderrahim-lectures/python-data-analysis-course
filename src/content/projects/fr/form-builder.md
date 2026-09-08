@@ -16,7 +16,7 @@ prerequisites: ["Python 101"]
 
 Chaque formulaire web est fondamentalement la même chose : une liste de champs, chacun avec un type, un libellé, des règles de validation et éventuellement une condition qui détermine quand il apparaît. Ce projet construit un constructeur de formulaires Python qui prend une définition de formulaire déclarative et produit un schéma JSON — le même format utilisé par React JSON Schema Form, JSON Editor et des dizaines d'autres bibliothèques de rendu. Tu définis le formulaire une fois en Python, et n'importe quel frontend peut le rendre.
 
-Ceci suppose Python 101 — rien de Data Analysis n'est requis. Optionnel et non noté ; voir [Real-World Projects](/docs/projects) pour la liste complète.
+Ceci suppose Python 101 — rien de Data Analysis n'est requis. Optionnel et non noté ; voir [Real-World Projects](/fr/projets) pour la liste complète.
 
 ## 🎯 Ce que tu vas faire
 

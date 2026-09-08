@@ -110,33 +110,33 @@ describe('projects collection', () => {
   });
 });
 
-// ── config.ts schema definitions ────────────────────────────────────
+// ── content.config.ts schema definitions ────────────────────────────
 describe('content config', () => {
-  const config = readFileSync('src/content/config.ts', 'utf8');
+  const config = readFileSync('src/content.config.ts', 'utf8');
 
   test('defines lessons collection', () => {
-    expect(config).toContain('lessonsCollection');
-    expect(config).toMatch(/lessons:\s*lessonsCollection/);
+    expect(config).toContain('const lessons = defineCollection');
+    expect(config).toMatch(/collections\s*=\s*\{[\s\S]*?lessons/);
   });
 
   test('defines modules collection', () => {
-    expect(config).toContain('modulesCollection');
-    expect(config).toMatch(/modules:\s*modulesCollection/);
+    expect(config).toContain('const modules = defineCollection');
+    expect(config).toMatch(/collections\s*=\s*\{[\s\S]*?modules/);
   });
 
   test('lessons schema has module field', () => {
-    expect(config).toMatch(/lessonsCollection[\s\S]*?module:\s*z/);
+    expect(config).toMatch(/const lessons = defineCollection[\s\S]*?module:\s*z/);
   });
 
   test('lessons schema has order field', () => {
-    expect(config).toMatch(/lessonsCollection[\s\S]*?order:\s*z/);
+    expect(config).toMatch(/const lessons = defineCollection[\s\S]*?order:\s*z/);
   });
 
   test('modules schema has icon field', () => {
-    expect(config).toMatch(/modulesCollection[\s\S]*?icon:\s*z/);
+    expect(config).toMatch(/const modules = defineCollection[\s\S]*?icon:\s*z/);
   });
 
   test('modules schema has order field', () => {
-    expect(config).toMatch(/modulesCollection[\s\S]*?order:\s*z/);
+    expect(config).toMatch(/const modules = defineCollection[\s\S]*?order:\s*z/);
   });
 });

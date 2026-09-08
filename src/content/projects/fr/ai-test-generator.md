@@ -21,7 +21,7 @@ learningObjectives:
 
 Écrire des tests à la main donne l'impression de retaper la fonction que tu viens d'écrire, mais plus lentement. Ce projet construit l'inverse : un générateur qui *lit* une fonction cible — sa signature, ses valeurs par défaut et son comportement — et produit une suite pytest qui exerce de vraies valeurs limites, de vraies propriétés (comme l'idempotence), et un filet de sécurité pour les arguments inversés. Une couche LLM optionnelle rédige des « tests d'intention » qui capturent ce que la fonction est *censée* faire, et la suite complète s'exécute comme sous-processus pour que ton outil rende son verdict en une seule ligne. La fonction cible est un minuscule `clamp`, donc chaque test généré est facile à relire à l'œil — la machinerie, pas les maths, est le sujet.
 
-Ceci suppose une bonne maîtrise des valeurs par défaut de fonctions et de la compréhension de listes ; rien ici n'est noté, c'est optionnel et non noté — voir [Projets du monde réel](/docs/projects) pour la liste complète et croissante.
+Ceci suppose une bonne maîtrise des valeurs par défaut de fonctions et de la compréhension de listes ; rien ici n'est noté, c'est optionnel et non noté — voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 

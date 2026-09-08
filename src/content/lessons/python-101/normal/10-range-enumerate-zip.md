@@ -120,19 +120,6 @@ Given `keys = ["a", "b"]` and `values = [1, 2]`, use `zip` to create a dictionar
 
 </section>
 
-<section class="lesson-section lesson-section--projects">
-<h2 id="-projects-you-can-build">Projects You Can Build</h2>
-
-<p>Here are a few real-world projects that reinforce these concepts:</p>
-
-<ul>
-  <li>🎮 <strong>Wordle Clone</strong> - Use enumerate to track attempt numbers and zip to compare guessed vs target letters</li>
-  <li>💰 <strong>Expense Tracker</strong> - Iterate through transactions with enumerate for indexing and zip for pairing categories with amounts</li>
-  <li>✅ <strong>Note-Taking App</strong> - Use enumerate for numbered lists and zip for matching timestamps with note content</li>
-</ul>
-
-</section>
-
 <section class="lesson-section lesson-section--quiz">
 <h2 id="-quick-check">✅ Quick check</h2>
 

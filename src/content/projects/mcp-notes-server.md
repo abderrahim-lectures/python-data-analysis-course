@@ -5,7 +5,7 @@ description: "Index a real folder of Markdown notes and expose it to Claude Desk
 
 # 🔌 Build an MCP Server for Your Notes
 
-This assumes Python 101 and comfort writing plain functions -- and it helps a lot to have already built the [Build an MCP Server](/docs/projects/mcp-server) project first, since this one reuses the same `FastMCP` decorator pattern and only adds real content to search over instead of two toy tools. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python 101 and comfort writing plain functions -- and it helps a lot to have already built the [Build an MCP Server](/projects/mcp-server) project first, since this one reuses the same `FastMCP` decorator pattern and only adds real content to search over instead of two toy tools. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 If you keep notes in Obsidian, Notion, or just a plain folder of Markdown files, this project turns that folder into something an AI assistant can actually search and read from directly -- not by pasting note contents into a chat window, but by giving Claude Desktop real tools: search your notes by keyword, pull up one note in full by title, or list what you've touched most recently. It's the same Model Context Protocol idea as the earlier MCP project, aimed at something you'll plausibly keep using afterward.
 

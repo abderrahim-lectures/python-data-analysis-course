@@ -21,7 +21,7 @@ learningObjectives:
 
 A monitoring system doesn't fail because a threshold exists; it fails because one spike becomes 500 identical alerts. This project builds the small, honest engine behind that judgment: a `Rule` class that watches a **rolling window** of samples, fires an alert only when a threshold genuinely holds, and then goes quiet during a **cooldown** so one ongoing incident is reported once instead of every second. State serializes to JSON so the engine survives a restart mid-incident, and it all runs on a deterministic synthetic feed you can reproduce exactly. The engine produces exactly two real alerts from a scripted eight-sample feed — no more, no less — and you'll know why.
 
-This assumes classes, methods, and slicing plus a comfort with JSON-as-data. Nothing here is graded — it's optional and ungraded — see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes classes, methods, and slicing plus a comfort with JSON-as-data. Nothing here is graded — it's optional and ungraded — see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

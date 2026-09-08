@@ -20,7 +20,7 @@ prerequisites:
 
 Symptom checkers have a bad reputation for good reasons: they mix real triage rules with a homepage full of worst-case outcomes. The version you build here sidesteps the drama by doing the part an engine can do *honestly* — matching symptoms to conditions with weighted overlap, scoring an urgency band from severity and duration, and turning that band into plain-language next steps. It is a rule engine over a small, curated knowledge base, and it says so: no AI, no diagnosis, and a disclaimer standing at every exit.
 
-This assumes Python 101 plus basic dictionaries and sets — nothing beyond that is required, and no external packages. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python 101 plus basic dictionaries and sets — nothing beyond that is required, and no external packages. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 > **Educational purposes only.** This project's output is not medical advice, cannot diagnose, and must always point at a real clinician. The build teaches domain modeling and tiered rules — the medical claims stop where this disclaimer starts.
 

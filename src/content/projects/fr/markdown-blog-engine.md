@@ -16,7 +16,7 @@ prerequisites: ["python-101/file-io", "python-101/strings", "python-101/data-str
 
 Le web est construit sur les sites statiques — un dossier d'articles en texte brut, une étape de rendu, et un amoncellement de fichiers HTML qui n'ont besoin ni de serveur, ni de base de données, ni de framework JavaScript pour être servis. Ce projet construit un générateur de site statique miniature : il lit un dossier `posts/` de fichiers Markdown, analyse le frontmatter YAML de chacun pour le titre/date/tags, rend le corps en HTML et produit un `site/` complet avec une page d'index et des listes d'articles filtrés par tag — la même forme que les moteurs derrière mille vrais blogs.
 
-Cela suppose Python 101 — entrées-sorties de fichiers, chaînes, dictionnaires et fonctions. Rien de plus : pas de framework, pas de base de données, pas de services externes. C'est optionnel et non noté ; voir [Projets du monde réel](/docs/projects) pour la liste complète.
+Cela suppose Python 101 — entrées-sorties de fichiers, chaînes, dictionnaires et fonctions. Rien de plus : pas de framework, pas de base de données, pas de services externes. C'est optionnel et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète.
 
 ## 🎯 Ce que tu vas faire
 

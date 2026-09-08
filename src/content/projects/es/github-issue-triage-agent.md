@@ -8,7 +8,7 @@ description: "Gradúate del playground del navegador a Python real: obtén issue
 
 Cada repositorio de código abierto con algo de tráfico acumula un backlog de issues sin triar — reportes de bugs, solicitudes de características, preguntas, y duplicados, todos sentados ahí sin etiquetar hasta que un mantenedor tiene tiempo de ordenarlos a mano. Este proyecto construye un pequeño script que hace la primera pasada por ellos: obtiene los issues ABIERTOS de un repositorio público real directamente de la propia API de GitHub, envía cada uno a un LLM de nivel gratuito, e imprime un reporte sugiriendo una etiqueta de triaje y una justificación de una oración para cada issue — el tipo de cosa que un mantenedor podría hojear en un minuto en lugar de leer cada issue desde cero.
 
-Esto asume Python 101 — no se requiere nada de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa y creciente.
+Esto asume Python 101 — no se requiere nada de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 ## 🎯 Lo que harás
 
@@ -263,7 +263,7 @@ def suggest_triage(issue: dict) -> dict:
     reply = call_llm(build_triage_prompt(issue))
     return parse_triage_reply(reply)
 ```
-No olvides `from dotenv import load_dotenv` más `load_dotenv()` cerca de la parte superior del archivo, para que `os.environ["GITHUB_TOKEN"]` realmente encuentre la clave de tu archivo `.env` — mismo patrón que el [proyecto de Agente de IA](/docs/projects/ai-agent).
+No olvides `from dotenv import load_dotenv` más `load_dotenv()` cerca de la parte superior del archivo, para que `os.environ["GITHUB_TOKEN"]` realmente encuentre la clave de tu archivo `.env` — mismo patrón que el [proyecto de Agente de IA](/es/proyectos/ai-agent).
 `parse_triage_reply` deliberadamente recurre a `label="other"` y la respuesta cruda como justificación si el modelo no sigue el formato de dos líneas solicitado exactamente — los modelos de nivel gratuito ocasionalmente añaden texto perdido o se saltan una línea, y un *borrador* de triaje ligeramente malformado sigue siendo más útil impreso para que un humano lo hojee que descartado silenciosamente por un error de análisis.
 
 **🎯 Resultado esperado :**
@@ -375,7 +375,7 @@ Un pipeline real de obtener → prompt → sugerir → reportar contra un reposi
 
 - **Realmente aplicar etiquetas — con cuidado, una vez que confíes en las sugerencias.** El [CLI `gh`](https://cli.github.com/) (`gh issue edit 123 --add-label bug`) o el propio endpoint de edición de issues de la API de GitHub puede agregar una etiqueta de verdad. Si construyes esto, mantén un humano explícitamente en el ciclo — ej. imprime las sugerencias primero, pide confirmación por issue (o por lote) antes de llamar a la API, y nunca apliques automáticamente una etiqueta directamente de la primera pasada de un modelo. Trata el acceso de escritura a los issues del repositorio de otra persona con cuidado real, especialmente uno que no mantienes tú mismo.
 - **Agrupa múltiples issues en una sola llamada al LLM** en lugar de una llamada por issue — menos viajes de ida y vuelta, pero un prompt más complejo y un problema de análisis más difícil (el modo estructurado de salida/JSON vale la pena explorarlo aquí).
-- **Añade una verificación de "posible duplicado"** haciendo embedding de los títulos de issues (mira el [proyecto RAG](/docs/projects/rag-notes) para el patrón de embeddings) y marcando pares que son sospechosamente similares, en lugar de depender de que el LLM recuerde cada otro issue abierto por sí solo.
+- **Añade una verificación de "posible duplicado"** haciendo embedding de los títulos de issues (mira el [proyecto RAG](/es/proyectos/rag-notes) para el patrón de embeddings) y marcando pares que son sospechosamente similares, en lugar de depender de que el LLM recuerde cada otro issue abierto por sí solo.
 - **Cachea resultados** para que volver a ejecutar el script no vuelva a triar issues que ya has revisado — un archivo JSON simple indexado por número de issue, verificado antes de cada llamada al LLM, es suficiente para una primera versión.
 
 :::tip[Ejecuta una versión más completa sin configuración local]

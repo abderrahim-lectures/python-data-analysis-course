@@ -13,7 +13,7 @@ prerequisites:
   - Python a nivel intermedio
   - Conocimientos básicos de NLP
   - familiaridad con ChromaDB o bases de datos vectoriales
-  - Terminal y编辑or de código
+  - Terminal yeditor de código
 ---
 
 ## 🎯 Lo que harás

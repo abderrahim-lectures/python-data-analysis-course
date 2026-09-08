@@ -8,7 +8,7 @@ description: "Pasa del playground dentro del navegador al Python real: construye
 
 Todo en el curso hasta ahora corrió en un playground sandbox, dentro del navegador — para que pudieras empezar a escribir Python desde el día uno con cero configuración. Este proyecto es el paso de graduación: instala Python de verdad en tu propia máquina, y luego úsalo para construir una herramienta que podrías seguir usando de verdad para una clase completamente distinta — una app de cuestionario que lee tus propias notas de estudio, escribe preguntas fundamentadas en lo que realmente está en ellas (no trivia genérica), te examina una pregunta a la vez en la terminal, y tiene un modelo de lenguaje que juzga si tu respuesta escrita se acerca lo suficiente, con retroalimentación breve en cualquier caso.
 
-Esto es opcional y no calificado — una buena opción una vez que hayas terminado Python 101; nada de Data Analysis es requerido. Consulta [Proyectos del mundo real](/docs/projects) para la lista completa y creciente.
+Esto es opcional y no calificado — una buena opción una vez que hayas terminado Python 101; nada de Data Analysis es requerido. Consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 ## 🎯 Lo que harás
 
@@ -91,7 +91,7 @@ Sea cual sea que elijas, el proceso es el mismo:
 GITHUB_TOKEN=your-key-here
 ```
 
-`python-dotenv` lee este archivo hacia `os.environ` automáticamente, el mismo patrón usado a lo largo de los proyectos [de Agente de IA](/docs/projects/ai-agent) y [de App RAG](/docs/projects/rag-notes) si has hecho alguno de esos. Una clave de API es un secreto, exactamente como una contraseña — cualquiera que la tenga puede usar la cuota de tu cuenta.
+`python-dotenv` lee este archivo hacia `os.environ` automáticamente, el mismo patrón usado a lo largo de los proyectos [de Agente de IA](/es/proyectos/ai-agent) y [de App RAG](/es/proyectos/rag-notes) si has hecho alguno de esos. Una clave de API es un secreto, exactamente como una contraseña — cualquiera que la tenga puede usar la cuota de tu cuenta.
 
 :::tip[Un archivo `.env` es a menudo más conveniente que export]
 En lugar de hacer `export` de una clave en cada nueva sesión de terminal, ponla en un archivo `.env` en tu carpeta de proyecto (ver el `.env.example` del ejemplo del repo) y cárgala con `load_dotenv()`, llamada una vez cerca de la parte superior de tu script.
@@ -104,7 +104,7 @@ Con `uv`, `openai`, `python-dotenv`, y una clave en `.env`, la configuración es
 
 **👟 Pista inicial :**
 
-Pon un archivo `.txt` o `.md` de tus propias notas de estudio en algún lugar de tu proyecto — una carpeta `notes/`, misma convención que el [proyecto RAG](/docs/projects/rag-notes), es un lugar razonable. Leerlo no es nada nuevo:
+Pon un archivo `.txt` o `.md` de tus propias notas de estudio en algún lugar de tu proyecto — una carpeta `notes/`, misma convención que el [proyecto RAG](/es/proyectos/rag-notes), es un lugar razonable. Leerlo no es nada nuevo:
 
 ```python
 from pathlib import Path
@@ -113,7 +113,7 @@ notes_text = Path("notes/cell-biology.txt").read_text(encoding="utf-8")
 ```
 Aquí está la decisión de diseño que este proyecto te pide tomar explícitamente, en lugar de saltártela: **¿cuánto de tus notas debería ver el modelo realmente?**
 - **Opción A — alimenta el archivo completo como contexto.** El enfoque más simple posible: lee un archivo, entrega su texto completo al modelo en el prompt, listo. Esto funciona genial siempre que un solo archivo quepa cómodamente en la ventana de contexto del modelo — unas pocas miles de palabras no es ningún problema para cualquier modelo gratuito moderno.
-- **Opción B — fragmentar, incrustar y recuperar**, exactamente como hace el [proyecto RAG](/docs/projects/rag-notes): divide tus notas en piezas pequeñas, incrústalas localmente, y recupera solo las más relevantes para cada pregunta. Esto escala a una carpeta de notas con docenas de archivos largos que nunca cabrían en un solo prompt.
+- **Opción B — fragmentar, incrustar y recuperar**, exactamente como hace el [proyecto RAG](/es/proyectos/rag-notes): divide tus notas en piezas pequeñas, incrústalas localmente, y recupera solo las más relevantes para cada pregunta. Esto escala a una carpeta de notas con docenas de archivos largos que nunca cabrían en un solo prompt.
 **Esta lección elige la Opción A** y es explícita sobre la compensación: es menos escalable, pero es una lección completa más simple de escribir, leer y depurar — sin modelo de embedding, sin búsqueda vectorial, sin paso separado de construcción de índice, solo una cadena. Esa compensación vale la pena nombrarla en voz alta, el mismo principio de fundamentación que el proyecto RAG de cualquier manera: una buena pregunta de cuestionario tiene que venir de texto que el modelo realmente recibió, no texto que está adivinando que podría ser relevante de los datos de entrenamiento. Si tus propias notas superan un solo archivo, no reinventes la recuperación — reutiliza `retrieve.py` del ejemplo del proyecto RAG y cambia el prompt del Paso 2 para usar fragmentos recuperados en lugar de un archivo completo.
 
 **🎯 Resultado esperado :**
@@ -347,7 +347,7 @@ Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
 
 - **Notas delgadas producen preguntas delgadas.** Si tu archivo de notas es solo unos pocos puntos cortos, el modelo tiene muy poco en qué fundamentar cinco preguntas distintas, y obtendrás repetitivas o demasiado fáciles ("¿Cuál es el nombre de...?"). Notas más detalladas, de estilo prosa, producen preguntas notablemente mejores — esto refleja la lección de fragmentación del proyecto RAG: mejor texto de entrada significa mejor resultado, no un prompt más inteligente.
 - **El juez puede ser demasiado estricto o demasiado indulgente.** Un modelo pequeño de nivel gratuito calificando respuestas de texto libre no es un instrumento preciso — puede marcar una respuesta correcta pero extrañamente redactada como incorrecta, o dejar pasar una respuesta que en realidad está perdiendo un detalle clave. Si notas un sesgo consistente, aprieta la redacción de `JUDGE_PROMPT_TEMPLATE` (p. ej. "el crédito parcial solo cuenta si al menos un hecho específico es correcto") en lugar de intentar sortearlo en Python.
-- **Límites de tasa por dos llamadas por pregunta.** A diferencia de una respuesta RAG de un solo disparo, este script hace *dos* llamadas al modelo por pregunta para cuando terminas un cuestionario — una para generación (una vez, por cuestionario) y una para juzgar (una vez, por pregunta). Un cuestionario de 5 preguntas son 6 llamadas en total; ejecuta varios cuestionarios consecutivos en un nivel gratuito y podrías golpear un error de límite de tasa 429. Esto no es un bug — mira el [proyecto de Agente de IA](/docs/projects/ai-agent#manejar-límites-de-tasa) para el mismo patrón y un enfoque de reintento que puedes copiar.
+- **Límites de tasa por dos llamadas por pregunta.** A diferencia de una respuesta RAG de un solo disparo, este script hace *dos* llamadas al modelo por pregunta para cuando terminas un cuestionario — una para generación (una vez, por cuestionario) y una para juzgar (una vez, por pregunta). Un cuestionario de 5 preguntas son 6 llamadas en total; ejecuta varios cuestionarios consecutivos en un nivel gratuito y podrías golpear un error de límite de tasa 429. Esto no es un bug — mira el [proyecto de Agente de IA](/es/proyectos/ai-agent#manejar-límites-de-tasa) para el mismo patrón y un enfoque de reintento que puedes copiar.
 - **JSON malformado del modelo rompe `json.loads`.** Incluso con una instrucción explícita de "responde solo con JSON", un modelo ocasionalmente añade una frase suelta antes o después del JSON, o deja una coma final. Si golpeas un `JSONDecodeError`, imprime la respuesta cruda antes de parsearla — casi siempre es suficiente para ver exactamente qué salió mal y ajustar el prompt.
 
 ## Lo que acabas de construir
@@ -356,7 +356,7 @@ Un pipeline pequeño pero completo de "generar, luego interactuar, luego calific
 
 ## A dónde ir desde aquí
 
-- Una vez que un solo archivo de notas deja de ser suficiente — un semestre completo de notas en muchos archivos — reutiliza el pipeline `prepare_notes.py`/`build_index.py`/`retrieve.py` del [proyecto RAG](/docs/projects/rag-notes): recupera los fragmentos más relevantes para un *tema* sobre el que quieras ser examinado, y aliméntalos a `generate_questions` en lugar de un archivo completo.
+- Una vez que un solo archivo de notas deja de ser suficiente — un semestre completo de notas en muchos archivos — reutiliza el pipeline `prepare_notes.py`/`build_index.py`/`retrieve.py` del [proyecto RAG](/es/proyectos/rag-notes): recupera los fragmentos más relevantes para un *tema* sobre el que quieras ser examinado, y aliméntalos a `generate_questions` en lugar de un archivo completo.
 - Lleva un registro de las preguntas falladas a través de ejecuciones (escríbelas en un pequeño archivo JSON) y construye un modo "revisa mis puntos débiles" que te vuelva a examinar específicamente sobre los temas que fallaste antes.
 - Añade un ajuste de dificultad a `GENERATE_PROMPT_TEMPLATE` ("preguntas fáciles de recordar" vs. "preguntas que requieren conectar dos ideas de las notas") y compara cuánto más difícil se siente realmente el modo más difícil.
 - Revisita el contenido extra de `try`/`except` de Python 101 — envolver `judge_answer` para que una respuesta malformada no termine todo el cuestionario (ver la pregunta socrática del Paso 4) es exactamente ese patrón.

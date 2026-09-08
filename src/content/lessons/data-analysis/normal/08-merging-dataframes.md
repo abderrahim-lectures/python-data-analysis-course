@@ -231,11 +231,3 @@ print(pd.concat([df1, df2], ignore_index=True))
 ## Practice Challenge
 
 From the Titanic dataset, create a summary DataFrame grouped by Pclass with columns: Pclass, avg_fare, survival_rate, passenger_count. Then create another summary grouped by Embarked. Merge these two summaries on Pclass using a left join. What information is lost or gained?
-
-## Projects You Can Build
-
-Here are a few real-world projects that reinforce these concepts:
-
-- 🕷️ **Scrape and Analyze** - Merge multiple scraped datasets for comprehensive analysis
-- 💰 **Expense Tracker** - Combine transaction data with category and account information
-- 📊 **Gradebook** - Merge student records with grades from multiple sources

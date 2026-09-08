@@ -7,7 +7,7 @@ description: "Count objects live from a webcam feed with OpenCV and a pretrained
 
 This project assumes you're comfortable with Python 101 — functions, loops, and installing packages — and needs no prior data-analysis or machine-learning background. It's this course's first foray into computer vision: instead of loading a pretrained model that reads text or tabular rows, you'll load one that reads pixels, and use it to answer a genuinely practical question in real time — "how many of *this* are in front of the camera right now?"
 
-This is optional and ungraded. See [Real-World Projects](/docs/projects) for the full, growing list.
+This is optional and ungraded. See [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 
@@ -311,7 +311,7 @@ Everything here — a pretrained detector, a loop over frames, a running count �
 
 - **Object tracking, not just detection.** Step 3's Socratic question points at the real gap: this project counts objects *per frame*, not distinct objects *across* a video. Libraries like `ultralytics`'s own built-in tracking mode (`model.track(...)`, using algorithms like ByteTrack) assign a persistent ID to each object across frames, so "how many distinct people crossed the frame" becomes answerable instead of just "how many are in frame right now."
 - **A bigger, more accurate model.** `yolo11n.pt` ("n" for nano) trades some accuracy for speed and size. `ultralytics` ships larger checkpoints (`yolo11s.pt`, `yolo11m.pt`, and up) that detect more reliably, especially on small or partially obscured objects, at the cost of needing more compute per frame — worth trying if Step 4's live counts feel unreliable on your particular setup.
-- **A custom class, not just COCO's 80.** YOLO11n only recognizes what it was trained on. Fine-tuning a YOLO model on your own labeled images (a much smaller version of the same idea as the [Fine-tune a Small Language Model project](/docs/projects/finetune-llm-unsloth)) lets you count something COCO never included — a specific product on a shelf, a specific tool, anything you can label a few hundred examples of.
+- **A custom class, not just COCO's 80.** YOLO11n only recognizes what it was trained on. Fine-tuning a YOLO model on your own labeled images (a much smaller version of the same idea as the [Fine-tune a Small Language Model project](/projects/finetune-llm-unsloth)) lets you count something COCO never included — a specific product on a shelf, a specific tool, anything you can label a few hundred examples of.
 
 ## Share your project with the class
 

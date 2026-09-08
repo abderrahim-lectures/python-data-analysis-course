@@ -218,11 +218,3 @@ print(df.isna().sum())
 ## Practice Challenge
 
 Load the Titanic dataset and create a cleaned version: drop Cabin, fill Age with median, fill Embarked with mode. Then compare the survival rate before and after cleaning. Did cleaning change the overall survival rate? Why or why not?
-
-## Projects You Can Build
-
-Here are a few real-world projects that reinforce these concepts:
-
-- 🧠 **ML Classifier** - Handle missing values in training data before model building
-- 🕷️ **Scrape and Analyze** - Clean incomplete scraped data with appropriate filling strategies
-- 💰 **Expense Tracker** - Address missing transaction data for accurate financial summaries

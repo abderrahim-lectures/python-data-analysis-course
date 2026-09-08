@@ -16,7 +16,7 @@ prerequisites: ["python-101/strings", "python-101/file-io", "python-101/loops", 
 
 Chaque réunion se termine de la même manière : quelqu'un se porte volontaire pour écrire les notes, oublie qui possédait quoi, et les tâches à faire s'évaporent d'ici lundi. Ce projet construit la moitié résumeur d'un vrai pipeline de réunion — il prend une *transcription* de réunion (le texte que produit ton outil de conversion voix-vers-texte) et la transforme en le rapport que les humains veulent vraiment : une répartition par locuteur montrant qui a dominé, chaque décision qui a été prise, et une liste par personne de tâches à faire extraites automatiquement des verbes et des noms des responsables dans la transcription.
 
-Ceci suppose Python 101 — chaînes, entrées-sorties de fichiers, boucles et fonctions. Rien au-delà : pas de ML, pas de traitement audio, pas d'API externes pour le pipeline central (la vraie reconnaissance vocale a besoin d'une clé, et il y a une étape optionnelle pour cela). C'est optionnel et non noté ; voir [Projets du monde réel](/docs/projects) pour la liste complète.
+Ceci suppose Python 101 — chaînes, entrées-sorties de fichiers, boucles et fonctions. Rien au-delà : pas de ML, pas de traitement audio, pas d'API externes pour le pipeline central (la vraie reconnaissance vocale a besoin d'une clé, et il y a une étape optionnelle pour cela). C'est optionnel et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète.
 
 ## 🎯 Ce que tu vas faire
 

@@ -8,7 +8,7 @@ description: "Passe du bac à sable dans le navigateur au vrai Python : analyse 
 
 Chaque autre projet de cette section finit par recourir à une clé API, une inscription gratuite, ou un site web en direct. Celui-ci n'a besoin de rien de tout ça. Tu vas écrire un outil qui lit le code source Python de la même façon que l'interpréteur lui-même — en l'analysant en un **AST** (arbre syntaxique abstrait) avec le module `ast` intégré de la bibliothèque standard — puis transforme ce qu'il trouve en un **graphe** : fichiers, fonctions et classes comme nœuds, relations « importe »/« appelle »/« défini dans » comme arêtes. C'est un exemple réel et fonctionnel d'une structure de données vue bien plus tôt dans le cours apparaissant dans un outil authentiquement utile, pas un exercice de classe : un graphe n'est que des nœuds et des arêtes, et la structure propre d'une base de code s'avère déjà en être un.
 
-Cela suppose Python 101 et de l'aisance avec les fonctions et les imports — rien de Analyse de Données n'est requis, et rien ici ne fait appel à un modèle d'IA ou un service web. C'est optionnel et non noté ; voir [Projets du monde réel](/docs/projects) pour la liste complète et croissante.
+Cela suppose Python 101 et de l'aisance avec les fonctions et les imports — rien de Analyse de Données n'est requis, et rien ici ne fait appel à un modèle d'IA ou un service web. C'est optionnel et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 

@@ -16,7 +16,7 @@ prerequisites: ["python-101/loops", "python-101/functions", "python-101/file-io"
 
 Sitting for a timed meditation has one problem no app in the world is allowed to fix — the phone buzzing, the ads, the streak nagging *before* you even close your eyes. A terminal timer has none of that: a plain prompt, a countdown, a soft bell, repeat. This project builds a small CLI that counts down a session, chimes at each interval (so you're not checking the clock), guides a 4-4-4-4 box-breathing cycle, and quietly logs every session so you can see your streak grow with zero judgment about rest days.
 
-This assumes Python 101 — loops, functions, reading and writing files, and basic date handling. Nothing beyond that: no GUI, no web, no external services. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full list.
+This assumes Python 101 — loops, functions, reading and writing files, and basic date handling. Nothing beyond that: no GUI, no web, no external services. It's optional and ungraded; see [Real-World Projects](/projects) for the full list.
 
 ## 🎯 What you'll do
 

@@ -20,7 +20,7 @@ prerequisites:
 
 Une tâche qui ne vit nulle part n'est pas faite. Ce projet construit le plus petit gestionnaire de tâches réellement utile : un outil en ligne de commande qui stocke les tâches dans un fichier JSON, te permet de les ajouter avec une priorité, un projet et une date limite, de les lister et de les filtrer, de les marquer comme faites, et de rendre tout le backlog comme un tableau style kanban directement dans le terminal. C'est uniquement de la bibliothèque standard — tu apprendras les dataclasses, la persistance JSON et un peu de calcul de dates, et tu finiras avec un outil que tu utiliseras réellement au quotidien.
 
-Cela suppose Python 101 et une aisance à exécuter des scripts depuis un terminal — rien au-delà n'est requis. C'est optionnel et non noté ; voir [Projets du monde réel](/docs/projects) pour la liste complète et croissante.
+Cela suppose Python 101 et une aisance à exécuter des scripts depuis un terminal — rien au-delà n'est requis. C'est optionnel et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 

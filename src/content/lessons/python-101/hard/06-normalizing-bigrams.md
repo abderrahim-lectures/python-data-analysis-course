@@ -1,6 +1,5 @@
 ---
 
-
 title: "Normalizing Bigram Counts"
 description: "Convert raw bigram counts into probability distributions that sum to 1.0 for each word."
 module: "bigram-tables"
@@ -173,11 +172,3 @@ def bigram_stats(model, top_n=10):
         best = max(followers, key=followers.get)
         print(f"'{word}': {len(followers)} followers, best=''{best}'' ({followers[best]:.3f})")
 ```
-
-## Projects You Can Build
-
-Here are a few real-world projects that reinforce these concepts:
-
-- 🎨 **AI Story Writer** - Normalize bigram probabilities for coherent text generation
-- 🤖 **Chatbot Builder** - Apply probability normalization for response selection
-- 📝 **Sentiment Dashboard** - Normalize word frequencies for comparative analysis

@@ -18,7 +18,7 @@ learningObjectives:
 
 A course is, under the surface, just structured data: modules made of lessons, lessons with content, and students with a set of completed checkpoints. This project builds the engine behind an online course platform — a set of Python classes and functions that load a course from JSON, track a real student's progress through it, score their quizzes against an answer key, print a progress dashboard, and finally issue a completion certificate when — and *only* when — the course is actually finished. No browser, no database: just the data model and the rules that live on top of it.
 
-This assumes Python 101 — functions, dictionaries, and a comfortable `json` import. Nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python 101 — functions, dictionaries, and a comfortable `json` import. Nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

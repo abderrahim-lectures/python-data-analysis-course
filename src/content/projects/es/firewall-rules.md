@@ -16,7 +16,7 @@ prerequisites: ["Python 101"]
 
 Las reglas de firewall son las barreras de seguridad de la red — una sola regla mal configurada puede abrir un puerto a internet o bloquear tráfico legítimo en silencio. Este proyecto construye una herramienta CLI que gestiona un conjunto de reglas como datos estructurados: escribes reglas en Python, las validas por conflictos, simulas cómo fluiría el tráfico real a través de las reglas, y despliegas cambios como un diff contra el estado actual con reversión de un comando. La meta es una herramienta que haga la gestión del firewall auditable y reversible en lugar de aterradora y misteriosa.
 
-Esto asume Python 101 — no se requiere nada de Análisis de Datos. Opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa.
+Esto asume Python 101 — no se requiere nada de Análisis de Datos. Opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
 
 ## 🎯 Lo que harás
 

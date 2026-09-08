@@ -7,7 +7,7 @@ description: "Graduate from the in-browser playground to real Python: transcribe
 
 Everything in the course so far ran in a sandboxed, in-browser playground — so you could start writing Python on day one with zero setup. This project is the graduation step: install Python for real on your own machine, then use it to build something genuinely useful — a small pipeline that takes a rambling voice memo and turns it into a short, structured task list, without you having to type or organize any of it by hand. This assumes Python 101; nothing from Data Analysis is required.
 
-This is optional and ungraded. See [Real-World Projects](/docs/projects) for the full, growing list.
+This is optional and ungraded. See [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 
@@ -90,7 +90,7 @@ Whichever you pick, the process is the same:
 GITHUB_TOKEN=your-key-here
 ```
 
-An API key is a secret, exactly like a password — anyone with it can use your account's quota. Treating it as an environment variable rather than a hardcoded string is the standard practice for exactly this reason, and it's the same habit built in the [AI Agent project](/docs/projects/ai-agent) if you've done that one.
+An API key is a secret, exactly like a password — anyone with it can use your account's quota. Treating it as an environment variable rather than a hardcoded string is the standard practice for exactly this reason, and it's the same habit built in the [AI Agent project](/projects/ai-agent) if you've done that one.
 
 :::tip[A .env file is often more convenient than export]
 Instead of `export`-ing a key in every new terminal session, a `.env` file in your project folder, loaded automatically with `python-dotenv`, persists across sessions without you having to remember it. See the repo example's `.env.example` for the full list of variable names, one per provider.
@@ -237,12 +237,12 @@ print(extract_action_items(transcript))
 "
 ```
 
-The prompt is doing the real work here: it tells the model exactly what shape to return (a JSON object with a `"tasks"` list, not free-form prose), and gives explicit rules for the tricky parts — don't invent a due date that was never said, don't guess a priority that isn't actually implied. This is the same idea as the [RAG project's](/docs/projects/rag-notes) prompt telling the model to answer *only* from retrieved context: a clear, specific instruction narrows what the model does, instead of hoping it infers the right shape on its own.
+The prompt is doing the real work here: it tells the model exactly what shape to return (a JSON object with a `"tasks"` list, not free-form prose), and gives explicit rules for the tricky parts — don't invent a due date that was never said, don't guess a priority that isn't actually implied. This is the same idea as the [RAG project's](/projects/rag-notes) prompt telling the model to answer *only* from retrieved context: a clear, specific instruction narrows what the model does, instead of hoping it infers the right shape on its own.
 
 `json.loads(...)["tasks"]` assumes the model actually followed the instruction and returned clean JSON — free-tier models occasionally don't (a stray sentence before the JSON, a markdown fence around it despite being told not to). The fuller version in [`examples/voice-to-task-agent/voice_to_tasks.py`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/voice-to-task-agent) strips a code fence if one shows up and raises a clear error instead of a confusing traceback if the JSON still won't parse — worth copying if you plan to run this on more than a couple of memos.
 
 :::tip[Using a different provider?]
-Everything above already works for all six providers in the table — just set `LLM_PROVIDER` in your `.env` (or pass a provider name straight to `extract_action_items`). This works because GitHub Models, Gemini, Groq, Mistral, Cerebras, and OpenRouter all expose an OpenAI-compatible endpoint; unlike the [AI Agent project](/docs/projects/ai-agent), you don't need a different client library per provider here, since this script isn't using LangChain.
+Everything above already works for all six providers in the table — just set `LLM_PROVIDER` in your `.env` (or pass a provider name straight to `extract_action_items`). This works because GitHub Models, Gemini, Groq, Mistral, Cerebras, and OpenRouter all expose an OpenAI-compatible endpoint; unlike the [AI Agent project](/projects/ai-agent), you don't need a different client library per provider here, since this script isn't using LangChain.
 :::
 
 ### 2.2 Verify the extracted tasks
@@ -332,7 +332,7 @@ Try all three sample clips, and — if you have a way to record one — your own
 - **Confusing open-source Whisper with the paid Whisper API.** `openai-whisper` (this project) runs entirely on your own machine, for free, with no API key — it is not the same thing as `client.audio.transcriptions.create(...)`, OpenAI's *hosted*, paid transcription endpoint. Both are named "Whisper" and both come from OpenAI, which is exactly why it's worth being explicit about which one any given piece of code is using.
 - **A very long first run, mistaken for a hang.** The first call to `whisper.load_model(...)` downloads model weights (see the Setup tip) — on a slow connection this can take a while with no progress bar in older versions. Let it finish once; every run after that is fast.
 - **The LLM's JSON reply isn't quite valid JSON.** Free-tier models occasionally wrap their answer in a markdown code fence, or add a stray sentence, despite an explicit instruction not to. Treat `json.loads(...)` failing here as an expected, occasional occurrence — not a sign your prompt is fundamentally broken — and see the fuller example's `_parse_tasks_response` for a fence-stripping fix.
-- **Rate limits on the free LLM tier.** Transcription (Step 1) is local and unlimited; only Step 2's extraction call counts against your provider's free-tier quota. A 429 error there is the provider telling you to slow down, not a bug — see the [AI Agent project](/docs/projects/ai-agent#handling-rate-limits) for the same pattern and a retry approach you can copy.
+- **Rate limits on the free LLM tier.** Transcription (Step 1) is local and unlimited; only Step 2's extraction call counts against your provider's free-tier quota. A 429 error there is the provider telling you to slow down, not a bug — see the [AI Agent project](/projects/ai-agent#handling-rate-limits) for the same pattern and a retry approach you can copy.
 
 ## What you just built
 

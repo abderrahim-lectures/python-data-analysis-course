@@ -16,7 +16,7 @@ prerequisites: ["Python 101", "Data Analysis"]
 
 Un sistema IoT sin panel es como un coche sin velocímetro — los datos existen, pero nadie puede verlos. Este proyecto construye un panel de monitoreo en tiempo real con Dash y Plotly: simulas flujos de datos de sensores, renderizas medidores en vivo que se actualizan cada segundo, graficas las tendencias históricas como gráficos de series temporales y agrupas los dispositivos por tipo o ubicación. El panel se ejecuta en tu navegador y se actualiza automáticamente.
 
-Esto asume Python 101 y comodidad con pandas de Análisis de Datos — nada más. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa.
+Esto asume Python 101 y comodidad con pandas de Análisis de Datos — nada más. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
 
 ## 🎯 Lo que harás
 

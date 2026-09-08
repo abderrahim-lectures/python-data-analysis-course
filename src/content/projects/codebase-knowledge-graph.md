@@ -7,7 +7,7 @@ description: "Graduate from the in-browser playground to real Python: parse a re
 
 Every other project in this section eventually reaches for an API key, a free-tier signup, or a live website. This one doesn't need any of that. You'll write a tool that reads Python source code the way the interpreter itself does — by parsing it into an **AST** (abstract syntax tree) with the standard library's built-in `ast` module — then turns what it finds into a **graph**: files, functions, and classes as nodes, "imports"/"calls"/"defined in" relationships as edges. That's a real, working example of a data structure from way back in the course showing up in a genuinely useful tool, not a classroom exercise: a graph is just nodes and edges, and a codebase's own structure turns out to already be one.
 
-This assumes Python 101 and comfort with functions and imports — nothing from Data Analysis is required, and nothing here calls out to any AI model or web service. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python 101 and comfort with functions and imports — nothing from Data Analysis is required, and nothing here calls out to any AI model or web service. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

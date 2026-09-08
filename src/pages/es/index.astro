@@ -1,13 +1,15 @@
 ---
 import Base from '../../layouts/Base.astro';
+import {m} from '../../paraglide/messages.js';
 import Icon from '../../components/Icon.astro';
 import SceneBg from '../../components/SceneBg.astro';
-import {PAGE_STRINGS} from '../../lib/pageStrings';
+
 import {PROJECT_TAGS, projectArtEmoji} from '../../lib/projectArt.ts';
+import {learnHref, progressHref, playgroundHref, projectsHref} from '../../lib/routeSegments';
 
 const locale = 'es' as const;
 const base = import.meta.env.BASE_URL;
-const s = PAGE_STRINGS[locale];
+
 
 const sampleTags = [...new Set(Object.values(PROJECT_TAGS).flat())].slice(0, 6);
 const tagEmoji: Record<string, string> = {};
@@ -22,7 +24,7 @@ const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Course',
   name: 'PyDA Course',
-  description: s.homeDescription,
+  description: m.home_description(),
   provider: {
     '@type': 'Organization',
     name: 'PyDA Course',
@@ -38,14 +40,14 @@ const jsonLd = {
 };
 ---
 
-<Base title={s.homeTitle} description={s.homeDescription} lang={locale} dir="ltr" alternates={alternates} jsonLd={jsonLd}>
+<Base title={m.home_title()} description={m.home_description()} lang={locale} dir="ltr" alternates={alternates} jsonLd={jsonLd}>
   <section class="hero">
     <div class="hero__bg" aria-hidden="true"></div>
     <div class="hero__grid">
       <div class="hero__copy">
-        <span class="hero__eyebrow">{s.homeEyebrow}</span>
-        <h1 class="hero__title">{s.homeH1}</h1>
-        <p class="hero__lead">{s.homeLead}</p>
+        <span class="hero__eyebrow">{m.home_eyebrow()}</span>
+        <h1 class="hero__title">{m.home_h1()}</h1>
+        <p class="hero__lead">{m.home_lead()}</p>
 
         <div class="player-card" id="player-card">
           <div class="player-card__left">
@@ -56,38 +58,38 @@ const jsonLd = {
             </div>
           </div>
           <div class="player-card__xp">
-            <div class="player-card__xpbar" role="progressbar" aria-label={s.homeXpAriaLabel}>
+            <div class="player-card__xpbar" role="progressbar" aria-label={m.home_xp_aria_label()}>
               <div class="player-card__xpfill" id="player-xpfill" style="width:0%"></div>
             </div>
-            <div class="player-card__xptext"><span id="player-xp">0</span> XP · <span id="player-xpnext">100</span> {s.homeXpToNext}</div>
+            <div class="player-card__xptext"><span id="player-xp">0</span> XP · <span id="player-xpnext">100</span> {m.home_xp_to_next()}</div>
           </div>
           <div class="player-card__actions">
-            <a class="btn btn-xp btn-sm" href={`${base}${s.pathLearn}`}><Icon name="play" size={14} /> {s.homeQuestLabel}</a>
-            <a class="btn btn-streak btn-sm" href={`${base}${s.pathProgress}`}><Icon name="trophy" size={14} /> {s.homeProfileLabel}</a>
+            <a class="btn btn-xp btn-sm" href={learnHref(locale, base)}><Icon name="play" size={14} /> {m.home_quest_label()}</a>
+            <a class="btn btn-streak btn-sm" href={progressHref(locale, base)}><Icon name="trophy" size={14} /> {m.home_profile_label()}</a>
           </div>
         </div>
 
         <div class="hero__actions">
-          <a class="btn btn-primary btn-lg" href={`${base}${s.pathPlayground}`}><Icon name="play" size={16} /> {s.homeHeroCta}</a>
-          <button class="btn btn-ghost btn-lg install-btn" id="install-btn" hidden><Icon name="code" size={16} /> {s.homeInstall}</button>
+          <a class="btn btn-primary btn-lg" href={playgroundHref(locale, base)}><Icon name="play" size={16} /> {m.home_hero_cta()}</a>
+          <button type="button" class="btn btn-ghost btn-lg install-btn" id="install-btn" hidden><Icon name="code" size={16} /> {m.home_install()}</button>
         </div>
         <div class="hero__features">
-          <span class="hero__feature"><Icon name="play" size={14} /> {s.homeHeroFeature1}</span>
-          <span class="hero__feature"><Icon name="code" size={14} /> {s.homeHeroFeature2}</span>
-          <span class="hero__feature">{s.homeHeroFeature3}</span>
+          <span class="hero__feature"><Icon name="play" size={14} /> {m.home_hero_feature_1()}</span>
+          <span class="hero__feature"><Icon name="code" size={14} /> {m.home_hero_feature_2()}</span>
+          <span class="hero__feature">{m.home_hero_feature_3()}</span>
         </div>
       </div>
       <div class="hero__art" aria-hidden="true">
-        <div class="hero__bracket">{s.homeTerminalBracket}</div>
+        <div class="hero__bracket">{m.home_terminal_bracket()}</div>
         <div class="hero__terminal">
           <div class="hero__termbar"><span></span><span></span><span></span></div>
           <div class="hero__termbody">
-            <span class="t-soft">{s.homeTerminalLine1}</span>
-            <span class="t-prompt">&gt;&gt;&gt; </span><span class="t-code">{s.homeTerminalLine2}</span>
-            <span class="t-out">{s.homeTerminalLine3}</span>
-            <span class="t-soft">{s.homeTerminalLine4}</span>
-            <span class="t-soft">{s.homeTerminalLine5}</span>
-            <span class="t-soft">{s.homeTerminalLine6}</span>
+            <span class="t-soft">{m.home_terminal_line_1()}</span>
+            <span class="t-prompt">&gt;&gt;&gt; </span><span class="t-code">{m.home_terminal_line_2()}</span>
+            <span class="t-out">{m.home_terminal_line_3()}</span>
+            <span class="t-soft">{m.home_terminal_line_4()}</span>
+            <span class="t-soft">{m.home_terminal_line_5()}</span>
+            <span class="t-soft">{m.home_terminal_line_6()}</span>
           </div>
         </div>
       </div>
@@ -99,50 +101,50 @@ const jsonLd = {
       <div class="gamestrip__item" id="gs-xp">
         <span class="gamestrip__icon">⚡</span>
         <span class="gamestrip__val" id="gs-xp-val">0</span>
-        <span class="gamestrip__label">{s.homeStatXP}</span>
+        <span class="gamestrip__label">{m.home_stat_xp()}</span>
       </div>
       <div class="gamestrip__item" id="gs-streak">
         <span class="gamestrip__icon">🔥</span>
         <span class="gamestrip__val" id="gs-streak-val">0</span>
-        <span class="gamestrip__label">{s.homeStatStreak}</span>
+        <span class="gamestrip__label">{m.home_stat_streak()}</span>
       </div>
       <div class="gamestrip__item" id="gs-badges">
         <span class="gamestrip__icon">🏅</span>
         <span class="gamestrip__val" id="gs-badges-val">0</span>
-        <span class="gamestrip__label">{s.homeStatBadges}</span>
+        <span class="gamestrip__label">{m.home_stat_badges()}</span>
       </div>
       <div class="gamestrip__item" id="gs-level">
         <span class="gamestrip__icon">⬆️</span>
         <span class="gamestrip__val" id="gs-level-val">1</span>
-        <span class="gamestrip__label">{s.homeStatLevel}</span>
+        <span class="gamestrip__label">{m.home_stat_level()}</span>
       </div>
     </div>
   </section>
 
   <section class="container">
     <div class="rewards">
-      <h2 class="rewards__title">{s.homeRewardsTitle} <span class="text-gradient">{s.homeRewardsGradient}</span></h2>
-      <p class="rewards__sub">{s.homeRewardsSub}</p>
+      <h2 class="rewards__title">{m.home_rewards_title()} <span class="text-gradient">{m.home_rewards_gradient()}</span></h2>
+      <p class="rewards__sub">{m.home_rewards_sub()}</p>
       <div class="rewards__grid">
         <div class="reward">
           <div class="reward__icon">⚡</div>
-          <h3>{s.homeReward1Title}</h3>
-          <p>{s.homeReward1Desc}</p>
+          <h3>{m.home_reward_1_title()}</h3>
+          <p>{m.home_reward_1_desc()}</p>
         </div>
         <div class="reward">
           <div class="reward__icon">🔥</div>
-          <h3>{s.homeReward2Title}</h3>
-          <p>{s.homeReward2Desc}</p>
+          <h3>{m.home_reward_2_title()}</h3>
+          <p>{m.home_reward_2_desc()}</p>
         </div>
         <div class="reward">
           <div class="reward__icon">🏅</div>
-          <h3>{s.homeReward3Title}</h3>
-          <p>{s.homeReward3Desc}</p>
+          <h3>{m.home_reward_3_title()}</h3>
+          <p>{m.home_reward_3_desc()}</p>
         </div>
         <div class="reward">
           <div class="reward__icon">👑</div>
-          <h3>{s.homeReward4Title}</h3>
-          <p>{s.homeReward4Desc}</p>
+          <h3>{m.home_reward_4_title()}</h3>
+          <p>{m.home_reward_4_desc()}</p>
         </div>
       </div>
     </div>
@@ -150,45 +152,45 @@ const jsonLd = {
 
   <section class="container">
     <div class="hub">
-      <a class="hub__card" href={`${base}${s.pathLearn}/python-101`}>
+      <a class="hub__card" href={learnHref(locale, base, 'python-101')}>
         <SceneBg scene="forest" height={140} particles={false}>
           <span class="hub__icon">🐍</span>
         </SceneBg>
-        <div class="hub__badge" style="color:var(--accent)">{s.homeHubTrack1}</div>
+        <div class="hub__badge" style="color:var(--accent)">{m.home_hub_track_1()}</div>
         <div class="hub__inner">
-          <div class="hub__meta">{s.homeHubTrack1Meta}</div>
-          <h2>{s.homeHubTrack1Name}</h2>
-          <p>{s.homeHubTrack1Desc}</p>
+          <div class="hub__meta">{m.home_hub_track_1_meta()}</div>
+          <h2>{m.home_hub_track_1_name()}</h2>
+          <p>{m.home_hub_track_1_desc()}</p>
           <div class="hub__progress"><div class="hub__progress-fill" id="hub-python" style="width:0%"></div></div>
-          <span class="btn btn-primary hub__cta">{s.homeHubTrack1CTA} <Icon name="play" size={14} /></span>
+          <span class="btn btn-primary hub__cta">{m.home_hub_track_1_cta()} <Icon name="play" size={14} /></span>
         </div>
       </a>
-      <a class="hub__card" href={`${base}${s.pathLearn}/data-analysis`}>
+      <a class="hub__card" href={learnHref(locale, base, 'data-analysis')}>
         <SceneBg scene="city" height={140} particles={false}>
           <span class="hub__icon">📊</span>
         </SceneBg>
-        <div class="hub__badge" style="color:var(--streak)">{s.homeHubTrack2}</div>
+        <div class="hub__badge" style="color:var(--streak-text)">{m.home_hub_track_2()}</div>
         <div class="hub__inner">
-          <div class="hub__meta">{s.homeHubTrack2Meta}</div>
-          <h2>{s.homeHubTrack2Name}</h2>
-          <p>{s.homeHubTrack2Desc}</p>
+          <div class="hub__meta">{m.home_hub_track_2_meta()}</div>
+          <h2>{m.home_hub_track_2_name()}</h2>
+          <p>{m.home_hub_track_2_desc()}</p>
           <div class="hub__progress"><div class="hub__progress-fill hub__progress-fill--streak" id="hub-data" style="width:0%"></div></div>
-          <span class="btn btn-streak hub__cta">{s.homeHubTrack2CTA} <Icon name="play" size={14} /></span>
+          <span class="btn btn-streak hub__cta">{m.home_hub_track_2_cta()} <Icon name="play" size={14} /></span>
         </div>
       </a>
-      <a class="hub__card" href={`${base}${s.pathProjects}`}>
+      <a class="hub__card" href={projectsHref(locale, base)}>
         <SceneBg scene="library" height={140} particles={false}>
           <span class="hub__icon">🚀</span>
         </SceneBg>
-        <div class="hub__badge" style="color:var(--warn)">{s.homeHubProjects}</div>
+        <div class="hub__badge" style="color:var(--warn)">{m.home_hub_projects()}</div>
         <div class="hub__inner">
-          <div class="hub__meta">{s.homeHubProjectsMeta}</div>
-          <h2>{s.homeHubProjectsName}</h2>
-          <p>{s.homeHubProjectsDesc}</p>
+          <div class="hub__meta">{m.home_hub_projects_meta()}</div>
+          <h2>{m.home_hub_projects_name()}</h2>
+          <p>{m.home_hub_projects_desc()}</p>
           <div class="hub__tags">
             {sampleTags.map((t) => <span class="chip">{tagEmoji[t] ?? ''} {t}</span>)}
           </div>
-          <span class="btn btn-xp hub__cta">{s.homeHubProjectsCTA}</span>
+          <span class="btn btn-xp hub__cta">{m.home_hub_projects_cta()}</span>
         </div>
       </a>
     </div>

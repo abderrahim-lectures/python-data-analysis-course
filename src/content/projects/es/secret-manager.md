@@ -16,7 +16,7 @@ prerequisites: ["python-101/file-io", "python-101/dictionaries", "python-101/fun
 
 Un "gestor de secretos" suena exótico — vaults, módulos de hardware, acrónimos gubernamentales. Quita el marketing y es una promesa: cifra una contraseña o API key para que un atacante que tenga *todo tu medio de almacenamiento* (un servidor comprometido, un backup robado) aún no pueda leer el secreto; descifralo solo cuando algo legítimamente pregunte; y mantén un registro de auditoría de cada vez que algo preguntó. Este proyecto construye el núcleo honesto de esa promesa con la librería `cryptography` de Python, AES-256-GCM y un vault JSON en disco — un CLI que cifra un secreto, lo almacena, lo descifra de vuelta, registra cada acceso y *prueba* que notó una manipulación al rehusarse a descifrar cualquier cosa que haya sido alterada. Sin nube, sin incorporación, sin cumplimiento — pero cada mecanismo que tocas es el mecanismo real que usan los almacenes de secretos reales.
 
-Esto asume Python 101 — E/S de archivos, diccionarios, funciones. No se requiere experiencia previa en criptografía. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa.
+Esto asume Python 101 — E/S de archivos, diccionarios, funciones. No se requiere experiencia previa en criptografía. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
 
 ## 🎯 Lo que harás
 

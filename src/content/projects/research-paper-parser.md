@@ -16,7 +16,7 @@ prerequisites: ["python-101/file-io", "python-101/strings", "python-101/function
 
 Reading a paper is one thing; *indexing* a corpus of them is another. A literature review, a reference manager, a review-generation tool — all of them start with the same unglamorous job: turn a wall of prose into a structure with sections, citations, and a bibliography a machine can work with. This project builds that parser from the ground up in pure Python. You'll take a real academic paper's plain text, detect its section headings by their shape, split the body into structured parts, extract `[1]`, `[2, 3]` style citations and the references they point at, then build a small ranked search over the parsed content. PDF decoding is out of scope and deliberately so — the interesting engineering is the text the moment it's already on your disk: shape recognition, regex, and data structures, none of which needs a PDF library.
 
-This assumes Python 101 — file I/O, strings, functions, and dictionaries. Optional and ungraded; see [Real-World Projects](/docs/projects) for the full list.
+This assumes Python 101 — file I/O, strings, functions, and dictionaries. Optional and ungraded; see [Real-World Projects](/projects) for the full list.
 
 ## 🎯 What you'll do
 

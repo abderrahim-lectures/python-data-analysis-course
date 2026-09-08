@@ -22,7 +22,7 @@ learningObjectives:
 
 Los valores atípicos se esconden en cada conjunto de datos — un pico de un sensor, una transacción fraudulenta, un error de medición. Encontrarlos importa porque pueden distorsionar el análisis o revelar algo importante. Este proyecto te enseña dos técnicas estadísticas clásicas para identificar anomalías (z-score e IQR) y te muestra cómo visualizar los resultados para que los valores atípicos sobresalgan en los gráficos.
 
-Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/docs/projects) para la lista completa.
+Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
 
 ## 🎯 Lo que harás
 

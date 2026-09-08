@@ -2,6 +2,8 @@
 // Single source of truth for XP, lessons, projects, streaks, quizzes,
 // quests, badges, and the full activity log for transparent progress tracking.
 
+import {xpProgressFor} from './levelMath';
+
 export interface LessonRecord { completed: boolean; firstRunAt?: string }
 
 export interface ActivityEntry {
@@ -417,18 +419,9 @@ export function streakProgress(): { current: number; best: number; target: numbe
 }
 
 // ── XP & Level ──────────────────────────────────────────────────────
-// Curved level formula: levels feel rewarding at every stage.
-// Level 10 ~ 1500 XP, Level 20 ~ 4500 XP, Level 30 ~ 8500 XP
 export function xpProgress(): { xp: number; level: number; toNext: number; pct: number } {
   const s = read();
-  const level = Math.max(1, 1 + Math.floor(Math.pow(s.xp / 50, 0.6)));
-  // XP needed for next level: invert the formula
-  const nextLevelXp = Math.pow(level, 1 / 0.6) * 50;
-  const prevLevelXp = Math.pow(level - 1, 1 / 0.6) * 50;
-  const toNext = Math.max(0, Math.ceil(nextLevelXp - s.xp));
-  const span = nextLevelXp - prevLevelXp;
-  const pct = span > 0 ? Math.min(100, Math.round(((s.xp - prevLevelXp) / span) * 100)) : 0;
-  return { xp: s.xp, level, toNext, pct };
+  return xpProgressFor(s.xp);
 }
 
 // ── Track Progress ──────────────────────────────────────────────────

@@ -16,7 +16,7 @@ prerequisites: ["python-101/strings", "python-101/file-io", "python-101/sets", "
 
 Podcasts produce hours of audio and almost no structure. Whether you're a fan deciding which episode to skip or a show runner who wants a data read on their own episodes, the useful artifact is the same: an episode *fact sheet* — who the guests were, what topics genuinely dominated the conversation, and what phrases recurred. This project builds a CLI that produces that fact sheet from a transcript: it parses the speaker turns, splits hosts from guests, scores the words against topic keyword sets, and writes a one-file summary plus a machine-readable CSV. No audio, no ML, no API keys.
 
-This assumes Python 101 — strings, sets, file I/O, and functions. Nothing beyond that. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full list.
+This assumes Python 101 — strings, sets, file I/O, and functions. Nothing beyond that. It's optional and ungraded; see [Real-World Projects](/projects) for the full list.
 
 ## 🎯 What you'll do
 

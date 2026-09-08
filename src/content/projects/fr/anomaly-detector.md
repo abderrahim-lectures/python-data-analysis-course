@@ -8,7 +8,7 @@ difficulty: intermediate
 
 Des valeurs aberrantes se cachent dans chaque jeu de données — un pic de capteur, une transaction frauduleuse, une erreur de mesure. Les trouver est important car elles peuvent fausser l'analyse ou révéler quelque chose d'important. Ce projet enseigne deux techniques statistiques classiques pour signaler des anomalies (z-score et IQR) et montre comment visualiser les résultats pour que les valeurs aberrantes ressortent sur les graphiques.
 
-Ceci est optionnel et non noté. Voir [Projets concrets](/docs/projects) pour la liste complète.
+Ceci est optionnel et non noté. Voir [Projets concrets](/fr/projets) pour la liste complète.
 
 ## Ce que tu vas faire
 

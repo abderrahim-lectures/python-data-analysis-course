@@ -5,9 +5,9 @@ description: "Build a multi-document RAG app over a folder of PDFs, with local e
 
 # 📚 Chat with Your PDFs
 
-The [RAG App project](/docs/projects/rag-notes) chats with a folder of plain-text notes. This project takes the same idea somewhere more useful: a folder of real PDFs — reports, guides, handbooks, papers — with answers that cite exactly which document and which page a fact came from, the way a research assistant would. This assumes Python 101; it also helps a lot to have already built the RAG App project, since this one reuses its whole architecture and only changes how the source documents are read and cited, but it isn't a strict requirement if you're comfortable with the concepts.
+The [RAG App project](/projects/rag-notes) chats with a folder of plain-text notes. This project takes the same idea somewhere more useful: a folder of real PDFs — reports, guides, handbooks, papers — with answers that cite exactly which document and which page a fact came from, the way a research assistant would. This assumes Python 101; it also helps a lot to have already built the RAG App project, since this one reuses its whole architecture and only changes how the source documents are read and cited, but it isn't a strict requirement if you're comfortable with the concepts.
 
-This is optional and ungraded. See [Real-World Projects](/docs/projects) for the full, growing list.
+This is optional and ungraded. See [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 
@@ -89,7 +89,7 @@ Whichever you pick, the process is the same:
 GITHUB_TOKEN=your-key-here
 ```
 
-`python-dotenv` (installed above) reads this file into `os.environ` automatically, the same pattern used in the [RAG App project](/docs/projects/rag-notes) and the [AI Agent project](/docs/projects/ai-agent) if you've done either of those — GitHub Models happens to expose an OpenAI-compatible API, so the plain `openai` client library works for it without any extra package:
+`python-dotenv` (installed above) reads this file into `os.environ` automatically, the same pattern used in the [RAG App project](/projects/rag-notes) and the [AI Agent project](/projects/ai-agent) if you've done either of those — GitHub Models happens to expose an OpenAI-compatible API, so the plain `openai` client library works for it without any extra package:
 
 ```bash
 uv add openai
@@ -437,7 +437,7 @@ uv run python ask.py "How many days of paid time off do employees get?"
 ```
 
 :::tip[Using a different provider?]
-Swap the `OpenAI(...)` block for your provider's own client, following the same pattern as the [RAG App project](/docs/projects/rag-notes) and the [AI Agent project](/docs/projects/ai-agent) — e.g. Google's `google-genai` package for Gemini, or `groq`'s own client for Groq. Cerebras and OpenRouter are also OpenAI-compatible, so the `openai` package works for them too, just with a different `base_url`.
+Swap the `OpenAI(...)` block for your provider's own client, following the same pattern as the [RAG App project](/projects/rag-notes) and the [AI Agent project](/projects/ai-agent) — e.g. Google's `google-genai` package for Gemini, or `groq`'s own client for Groq. Cerebras and OpenRouter are also OpenAI-compatible, so the `openai` package works for them too, just with a different `base_url`.
 :::
 
 **🎯 Expected output:** `uv run python ask.py "How many days of paid time off do employees get?"` prints an answer, not a traceback — and every factual claim in it carries a `(source, page N)` citation.
@@ -522,7 +522,7 @@ There's no server, no framework, no UI toolkit here — a `while True` loop arou
 - **Chunks too large or too small.** Same tradeoff as the RAG App project: too large and retrieval gets blurry, too small and a chunk loses the surrounding context the model needs to answer well. If answers feel off, try a different `TARGET_CHUNK_SIZE` and re-run `build_index.py`.
 - **Forgetting to rebuild the index after changing `pdfs/`.** `build_index.py` only runs when you run it — add, remove, or edit a PDF, and `retrieve()` won't reflect the change until you re-run `uv run python build_index.py`.
 - **Trusting a citation without checking it.** The prompt *asks* the model to cite only what's actually in the retrieved context, and in practice it does this reliably — but nothing here mathematically guarantees it. Spot-check a few citations against the actual PDF pages, especially before relying on this for anything that matters.
-- **Rate limits on the free LLM tier.** Extraction, chunking, embedding, and retrieval are all local and unlimited; only `ask()`'s LLM call counts against your provider's free-tier quota. A 429 error there is the provider telling you to slow down, not a bug — see the [AI Agent project](/docs/projects/ai-agent) for the same pattern and a retry approach you can copy.
+- **Rate limits on the free LLM tier.** Extraction, chunking, embedding, and retrieval are all local and unlimited; only `ask()`'s LLM call counts against your provider's free-tier quota. A 429 error there is the provider telling you to slow down, not a bug — see the [AI Agent project](/projects/ai-agent) for the same pattern and a retry approach you can copy.
 
 ## What you just built
 

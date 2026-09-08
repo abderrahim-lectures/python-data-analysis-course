@@ -22,7 +22,7 @@ learningObjectives:
 
 Track your spending, stick to budgets, and visualize where your money goes — all from the command line. This project takes you from raw Python dictionaries through pandas analysis to matplotlib charts, building a practical tool you can actually use to manage your finances.
 
-This is optional and ungraded. See [Real-World Projects](/docs/projects) for the full list.
+This is optional and ungraded. See [Real-World Projects](/projects) for the full list.
 
 ## What you'll do
 

@@ -19,7 +19,7 @@ prerequisites:
 
 Business reporting is a loop that never changes shape: take raw data, summarize it, show it, and share it. This project builds that loop with pandas and matplotlib — load a sales CSV, compute the totals a manager actually asks for, draw a bar, line, pie, and scatter chart, format everything into a clean table, and assemble it all into one report file.
 
-This assumes Python 101 and comfort with basic functions and lists — nothing beyond that is required. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python 101 and comfort with basic functions and lists — nothing beyond that is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

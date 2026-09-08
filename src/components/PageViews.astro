@@ -1,0 +1,48 @@
+---
+// PageViews.astro — anonymous page-view logging to Supabase.
+// Renders no visible markup; the inline script POSTs one row to the
+// `pageviews` table on every page load. Credentials come from the
+// PUBLIC_SUPABASE_* env vars (optional — the script no-ops without them).
+interface Props {
+  supabaseUrl?: string;
+  supabaseKey?: string;
+  locale?: string;
+}
+const {supabaseUrl = '', supabaseKey = '', locale = 'en'} = Astro.props;
+---
+
+{
+  supabaseUrl && supabaseKey && (
+    <script is:inline define:vars={{supabaseUrl, supabaseKey, viewLocale: locale}}>
+      (function () {
+        if (window.__pydaPageViewSent) return;
+        try {
+          window.__pydaPageViewSent = true;
+        } catch (e) {}
+        const body = JSON.stringify({
+          path: window.location.pathname,
+          locale: viewLocale,
+          referrer: (document.referrer || '').slice(0, 500),
+        });
+        try {
+          navigator.sendBeacon(
+            `${supabaseUrl}/rest/v1/pageviews`,
+            new Blob([body], {type: 'application/json'}),
+          );
+        } catch (e) {
+          fetch(`${supabaseUrl}/rest/v1/pageviews`, {
+            method: 'POST',
+            headers: {
+              apikey: supabaseKey,
+              Authorization: `Bearer ${supabaseKey}`,
+              'Content-Type': 'application/json',
+              Prefer: 'return=minimal',
+            },
+            body,
+            keepalive: true,
+          });
+        }
+      })();
+    </script>
+  )
+}

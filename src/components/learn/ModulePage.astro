@@ -4,8 +4,7 @@ import {getCollection, type CollectionEntry} from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import ModuleNav from '../ModuleNav.astro';
 import {learnHref, lessonHref, NAV_WORDS, type Locale} from '../../lib/routeSegments';
-import {PAGE_STRINGS} from '../../lib/pageStrings';
-import {UI_STRINGS} from '../../lib/uiStrings';
+import {m} from '../../paraglide/messages.js';
 import {sectionName} from '../../lib/sections';
 
 interface Props {
@@ -19,21 +18,19 @@ const {locale, section, track, entry} = Astro.props;
 const {title, description, order, difficulty, estimatedHours, tags, icon} = entry.data;
 const base = import.meta.env.BASE_URL;
 const dir = locale === 'ar' ? 'rtl' : 'ltr';
-const ps = PAGE_STRINGS[locale];
-const t = UI_STRINGS[locale];
 
 const trackPath = `${section}/${track}`;
-const moduleSlug = entry.slug.split('/').pop()!.replace(/^module-\d+-/, '');
+const moduleSlug = entry.id.split('/').pop()!.replace(/^module-\d+-/, '');
 const allLessons = await getCollection('lessons');
 const moduleLessons = allLessons
-  .filter((e) => e.slug.includes(trackPath) && e.data.module === moduleSlug)
+  .filter((e) => e.id.includes(trackPath) && e.data.module === moduleSlug)
   .sort((a, b) => a.data.order - b.data.order);
 
 const allModules = await getCollection('modules');
 const sortedModules = allModules
-  .filter((e) => e.slug.includes(trackPath))
+  .filter((e) => e.id.includes(trackPath))
   .sort((a, b) => a.data.order - b.data.order);
-const moduleIdx = sortedModules.findIndex((e) => e.slug === entry.slug);
+const moduleIdx = sortedModules.findIndex((e) => e.id === entry.id);
 const prevModule = moduleIdx > 0 ? sortedModules[moduleIdx - 1] : null;
 const nextModule = moduleIdx >= 0 && moduleIdx < sortedModules.length - 1 ? sortedModules[moduleIdx + 1] : null;
 
@@ -45,7 +42,7 @@ const arrow = locale === 'ar' ? '←' : '→';
 
 <Base title={`${title} — PyDA Course`} description={description} lang={locale} dir={dir}>
   <nav class="crumb container">
-    <a href={learnHref(locale, base)}>{t.nav.learn}</a> <span>/</span>
+    <a href={learnHref(locale, base)}>{m.nav_learn()}</a> <span>/</span>
     <a href={learnHref(locale, base, section)}>{sectionName(locale, section)}</a> <span>/</span>
     <span class="crumb__here">{title}</span>
   </nav>
@@ -56,9 +53,9 @@ const arrow = locale === 'ar' ? '←' : '→';
       <div class="module-head__meta">
         <span class="module-head__diff" style={`color:${diffColor}`}>{difficulty}</span>
         <span class="module-head__time">⏱ {estimatedHours}h ({totalMinutes} min)</span>
-        <span class="module-head__count">📖 {moduleLessons.length} {ps.moduleLessonsLabel}</span>
+        <span class="module-head__count">📖 {moduleLessons.length} {m.module_lessons_label()}</span>
       </div>
-      <h1>{ps.moduleLabel} {order}: {title}</h1>
+      <h1>{m.module_label()} {order}: {title}</h1>
       <p>{description}</p>
       {tags.length > 0 && (
         <div class="module-head__tags">
@@ -69,13 +66,13 @@ const arrow = locale === 'ar' ? '←' : '→';
   </section>
 
   <section class="container lessons-list">
-    <h2>{ps.moduleLessonsLabel}</h2>
+    <h2>{m.module_lessons_label()}</h2>
     <div class="lessons-grid">
       {moduleLessons.map((lesson, i) => {
         const lDiff = lesson.data.difficulty ?? 'beginner';
-        const lDiffColor = lDiff === 'beginner' ? 'var(--success)' : lDiff === 'intermediate' ? 'var(--streak)' : 'var(--bad)';
+        const lDiffColor = lDiff === 'beginner' ? 'var(--success)' : lDiff === 'intermediate' ? 'var(--streak-text)' : 'var(--bad)';
         return (
-          <a class="lesson-card" href={lessonHref(locale, base, section, track, lesson.slug.split('/').pop()!)}>
+          <a class="lesson-card" href={lessonHref(locale, base, section, track, lesson.id.split('/').pop()!)}>
             <span class="lesson-card__num">{i + 1}</span>
             <div class="lesson-card__body">
               <span class="lesson-card__title">{lesson.data.title}</span>

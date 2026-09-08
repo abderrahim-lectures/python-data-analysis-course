@@ -19,7 +19,7 @@ learningObjectives:
 
 Your electricity bill is a black box: a single number each month and a shrug. This project breaks it open. You'll read real appliance numbers — watts, hours per day — from a CSV, compute energy in the unit utilities actually bill (kWh), rank devices by their share of the total, price a *tiered* tariff (overage costs more), audit what devices burn while just sitting in standby, and score a "what if I use the heater less" scenario in dollars. The math is four arithmetic formulas; the skill is turning scattered ratings into an honest, decision-ready report.
 
-This assumes Python 101 — lists, dictionaries, loops, functions — plus comfortable `csv` reading. Nothing here needs pandas. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python 101 — lists, dictionaries, loops, functions — plus comfortable `csv` reading. Nothing here needs pandas. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

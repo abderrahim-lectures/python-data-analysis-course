@@ -16,7 +16,7 @@ prerequisites: ["Python 101", "Data Analysis"]
 
 Every warehouse, every retail store, every e-commerce seller faces the same problem: knowing what's in stock, what's running low, and where everything is. This project builds an inventory management system in Python with a SQLite backend: you track stock levels across multiple warehouses, simulate barcode scans for fast updates, get alerts when items hit reorder thresholds, transfer stock between locations, and forecast future needs from historical data. The system runs as a CLI, but the architecture is the same one that powers real inventory platforms.
 
-This assumes Python 101 and basic comfort with pandas from Data Analysis — nothing beyond. Optional and ungraded; see [Real-World Projects](/docs/projects) for the full list.
+This assumes Python 101 and basic comfort with pandas from Data Analysis — nothing beyond. Optional and ungraded; see [Real-World Projects](/projects) for the full list.
 
 ## 🎯 What you'll do
 

@@ -7,7 +7,7 @@ description: "Build a real CLI tool that reads a pyproject.toml, checks PyPI for
 
 Every real Python project accumulates dependencies, and every dependency eventually falls behind — a security fix ships, a bug gets patched, a new feature lands, and your `pyproject.toml` just... doesn't know. This project builds the tool that tells you: a real CLI that reads a `pyproject.toml`, asks PyPI's public API what the current version of each dependency actually is, and reports which ones you're behind on — the same category of tool as `pip list --outdated`, but one you understand completely because you built it yourself.
 
-This is optional and ungraded — a good fit once you've finished Python 101 (no Data Analysis or API-key experience needed, this project uses no paid or gated service at all). See [Real-World Projects](/docs/projects) for the full, growing list.
+This is optional and ungraded — a good fit once you've finished Python 101 (no Data Analysis or API-key experience needed, this project uses no paid or gated service at all). See [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

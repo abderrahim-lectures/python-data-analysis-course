@@ -7,7 +7,7 @@ description: "Graduate from the in-browser playground to real Python: build a re
 
 Everything in the course so far ran in a sandboxed, in-browser playground — so you could start writing Python on day one with zero setup. This project is the graduation step: install Python for real on your own machine, then use it to build a tool you might actually keep using — an app that answers questions about a folder of your own notes, by searching them first and only then asking a language model to answer using what it found. This assumes Python 101; nothing from Data Analysis is required, though it helps if `numpy` arrays already feel familiar.
 
-This is optional and ungraded. See [Real-World Projects](/docs/projects) for the full, growing list.
+This is optional and ungraded. See [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 
@@ -89,7 +89,7 @@ Whichever you pick, the process is the same:
 GITHUB_TOKEN=your-key-here
 ```
 
-`python-dotenv` (installed above) reads this file into `os.environ` automatically, the same pattern used throughout the [AI Agent project](/docs/projects/ai-agent) if you've done that one — GitHub Models happens to expose an OpenAI-compatible API, so the plain `openai` client library works for it without any extra package:
+`python-dotenv` (installed above) reads this file into `os.environ` automatically, the same pattern used throughout the [AI Agent project](/projects/ai-agent) if you've done that one — GitHub Models happens to expose an OpenAI-compatible API, so the plain `openai` client library works for it without any extra package:
 
 ```bash
 uv add openai
@@ -423,7 +423,7 @@ uv run python ask.py "What is this course about?"
 `build_prompt` is the whole idea of RAG in one function: it doesn't ask the model to answer from what it already knows, it hands the model the *actual retrieved text* and asks it to answer from that — which is why a RAG app can correctly answer questions about notes the underlying model has never seen before, written yesterday, on your own machine.
 
 :::tip[Using a different provider?]
-Swap the `OpenAI(...)` block for your provider's own client, following the same pattern as the [AI Agent project](/docs/projects/ai-agent#step-1-write-your-first-agent) — e.g. Google's `google-genai` package for Gemini, or `groq`'s own client for Groq. Cerebras and OpenRouter are also OpenAI-compatible, so the `openai` package works for them too, just with a different `base_url`.
+Swap the `OpenAI(...)` block for your provider's own client, following the same pattern as the [AI Agent project](/projects/ai-agent#step-1-write-your-first-agent) — e.g. Google's `google-genai` package for Gemini, or `groq`'s own client for Groq. Cerebras and OpenRouter are also OpenAI-compatible, so the `openai` package works for them too, just with a different `base_url`.
 :::
 
 **🎯 Expected output:** `uv run python ask.py "a real question about your notes"` prints an answer, not a traceback — and the answer reflects the content of your notes, not generic knowledge the model already had.
@@ -448,7 +448,7 @@ Swap the `OpenAI(...)` block for your provider's own client, following the same 
 - **Chunks too large or too small.** Too large and retrieval gets blurry (Step 1); too small and a chunk loses the surrounding context the model needs to answer well. If answers feel off, try a different `TARGET_CHUNK_SIZE` and re-run `build_index.py`.
 - **Forgetting to rebuild the index after editing `notes/`.** `build_index.py` only runs when you run it — add a new note, and `retrieve()` won't find anything in it until you re-run `uv run python build_index.py`. There's no file-watcher here; this is a manual step by design, so you always know exactly what's indexed.
 - **Embedding the question with a different model than the one used to build the index.** `retrieve.py` and `build_index.py` both hardcode `MODEL_NAME = "all-MiniLM-L6-v2"` on purpose — vectors from two different embedding models aren't comparable to each other at all, even if both are "384-dimensional." Change the model in one file and you must change it in both, then rebuild the index.
-- **Rate limits on the free LLM tier.** Retrieval (Steps 2-3) is local and unlimited; only Step 4's `ask()` call counts against your provider's free-tier quota. A 429 error there is the provider telling you to slow down, not a bug — see the [AI Agent project](/docs/projects/ai-agent#handling-rate-limits) for the same pattern and a retry approach you can copy.
+- **Rate limits on the free LLM tier.** Retrieval (Steps 2-3) is local and unlimited; only Step 4's `ask()` call counts against your provider's free-tier quota. A 429 error there is the provider telling you to slow down, not a bug — see the [AI Agent project](/projects/ai-agent#handling-rate-limits) for the same pattern and a retry approach you can copy.
 
 ## What you just built
 

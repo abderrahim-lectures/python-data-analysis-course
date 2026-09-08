@@ -8,7 +8,7 @@ description: "Graduéate del playground en el navegador al Python real: construy
 
 Escribes una lista de ingredientes que de hecho tienes a la mano — digamos, huevos, tomates, ajo y pan — y un agente sugiere 2-3 comidas reales que podrías hacer con ellos, luego arma una lista de compras de lo que falta para la mejor opción. El giro que hace de esto un agente genuinamente útil, no solo un chatbot: nunca inventa una receta. Llama a una herramienta que busca en una base de datos de recetas local real y solo puede sugerir lo que esa herramienta realmente devuelve — la misma idea de anclaje detrás de sistemas mucho más serios de "no dejes que el modelo invente cosas", reducida a algo que puedes construir en una tarde.
 
-Esto asume Python a nivel 101. Haber hecho el [proyecto de Agente de IA](/docs/projects/ai-agent) primero es una ayuda real, no un requisito duro — este proyecto reutiliza el mismo framework `deepagents` y el mismo patrón de llamada a herramientas, solo con una herramienta más estructurada y con forma del mundo real. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa y creciente.
+Esto asume Python a nivel 101. Haber hecho el [proyecto de Agente de IA](/es/proyectos/ai-agent) primero es una ayuda real, no un requisito duro — este proyecto reutiliza el mismo framework `deepagents` y el mismo patrón de llamada a herramientas, solo con una herramienta más estructurada y con forma del mundo real. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 ## 🎯 Lo que harás
 
@@ -87,7 +87,7 @@ cd recipe-planner-agent
 uv add deepagents langchain-openai python-dotenv
 ```
 
-`uv init` crea un pequeño proyecto (un `pyproject.toml` que rastrea tus dependencias) y `uv add` instala paquetes en un entorno aislado para ese proyecto automáticamente, sin configuración manual de entorno virtual. `deepagents` es el framework de LangChain para construir agentes con uso de herramientas incorporado — el mismo usado en el [proyecto de Agente de IA](/docs/projects/ai-agent); `langchain-openai` es el paquete de integración que usa este ejemplo para hablar con GitHub Models (su API es compatible con OpenAI, así que el paquete de integración de OpenAI funciona para él también — mira el consejo abajo si elegiste un proveedor distinto); `python-dotenv` te permite mantener tu clave de API en un archivo `.env` local.
+`uv init` crea un pequeño proyecto (un `pyproject.toml` que rastrea tus dependencias) y `uv add` instala paquetes en un entorno aislado para ese proyecto automáticamente, sin configuración manual de entorno virtual. `deepagents` es el framework de LangChain para construir agentes con uso de herramientas incorporado — el mismo usado en el [proyecto de Agente de IA](/es/proyectos/ai-agent); `langchain-openai` es el paquete de integración que usa este ejemplo para hablar con GitHub Models (su API es compatible con OpenAI, así que el paquete de integración de OpenAI funciona para él también — mira el consejo abajo si elegiste un proveedor distinto); `python-dotenv` te permite mantener tu clave de API en un archivo `.env` local.
 
 Si elegiste un proveedor distinto arriba, cambia `langchain-openai` por el paquete de ese proveedor — `langchain-google-genai` (Gemini), `langchain-groq` (Groq), o `langchain-mistralai` (Mistral). Cerebras y OpenRouter también son compatibles con OpenAI, así que usan `langchain-openai` también, solo con un `base_url` diferente.
 

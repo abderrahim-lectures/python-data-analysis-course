@@ -138,19 +138,6 @@ Write a function `fizzbuzz(n)` that returns a list from 1 to n, but replaces mul
 
 </section>
 
-<section class="lesson-section lesson-section--projects">
-<h2 id="-projects-you-can-build">Projects You Can Build</h2>
-
-<p>Here are a few real-world projects that reinforce these concepts:</p>
-
-<ul>
-  <li>🛠️ <strong>CLI Framework</strong> - Build reusable functions for argument parsing, help generation, and command routing</li>
-  <li>🧰 <strong>Document Converter</strong> - Create functions for reading, transforming, and writing different file formats</li>
-  <li>💰 <strong>Expense Tracker</strong> - Design functions for adding, categorizing, and summarizing expenses</li>
-</ul>
-
-</section>
-
 <section class="lesson-section lesson-section--quiz">
 <h2 id="-quick-check">✅ Quick check</h2>
 

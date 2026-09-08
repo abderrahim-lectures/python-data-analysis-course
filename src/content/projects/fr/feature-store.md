@@ -16,7 +16,7 @@ prerequisites: ["Python 101", "Data Analysis"]
 
 Les modèles de machine learning cassent quand le code qui calcule les features pendant l'entraînement dérive du code qui les calcule en production. Un magasin de features corrige cela en calculant les features une fois, en les versionnant, et en servant les mêmes valeurs que tu ajustes un modèle ou que tu scores une requête. Ce projet construit un magasin de features léger, adossé à des fichiers, avec une CLI : tu enregistres des définitions de features, tu les calcules à partir de données brutes, et tu les récupères par clé d'entité avec une exactitude à un instant donné.
 
-Ceci suppose Python 101 et une aisance avec pandas acquise en Analyse de données — rien au-delà. Facultatif et non noté ; consulte [Real-World Projects](/docs/projects) pour la liste complète.
+Ceci suppose Python 101 et une aisance avec pandas acquise en Analyse de données — rien au-delà. Facultatif et non noté ; consulte [Real-World Projects](/fr/projets) pour la liste complète.
 
 ## 🎯 Ce que tu vas faire
 

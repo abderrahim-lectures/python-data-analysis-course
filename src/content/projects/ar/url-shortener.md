@@ -5,11 +5,11 @@ difficulty: "intermediate"
 estimatedMinutes: 70
 tags: ["api", "database", "sqlite"]
 learningObjectives:
-  - Model links and clicks in a SQLite schema
-  - "Generate collision-free short codes with base62"
-  - Resolve codes to URLs and record click events
-  - "Query click analytics: totals, referrers, and day series"
-  - Expose a FastAPI layer with shorten, redirect, and analytics routes
+  - نموذج الروابط والنقرات في مخطط SQLite
+  - "ولّد رموزًا قصيرة بلا تعارض باستخدام base62"
+  - فكّ الرموز إلى عناوين وسجّل أحداث النقر
+  - "استعلم عن تحليلات النقر: الإجماليات والمصادر والسلاسل اليومية"
+  - وفّر طبقة FastAPI بمسارات للاختصار وإعادة التوجيه والتحليلات
 prerequisites:
   - "Python basics (functions, dictionaries, exceptions)"
   - "REST API basics: routes, status codes, JSON"
@@ -20,7 +20,7 @@ prerequisites:
 
 كل رابط تشاركه في محادثة سلسلة قصيرة تخفي سلسلة أطول — وإعادة توجيه تخبر مالكه بالضبط كم مرة، ومن أين، وفي أي يوم نُقر. يبني هذا المشروع الخدمة من النهاية إلى النهاية: أكواد قصيرة base62 مخزنة في SQLite، ونقرة تُسجَّل عند كل إعادة توجيه، وتحليلات يمكنك الاستعلام عنها، وأخيرًا طبقة FastAPI حقيقية لتتمكن من `curl` مختصرك. إنها خدمة صغيرة لكنها مكتملة مدعومة بقاعدة بيانات — الشكل الكامن خلف خدمات إنتاج كثيرة.
 
-يُفترض أساسيات بايثون ولمسة خفيفة من REST APIs و`curl` — لا شيء من مادة تحليل البيانات مطلوب. هذا اختياري وغير مُقيَّم؛ راجع [المشاريع الواقعية](/docs/projects) للقائمة الكاملة المتنامية.
+يُفترض أساسيات بايثون ولمسة خفيفة من REST APIs و`curl` — لا شيء من مادة تحليل البيانات مطلوب. هذا اختياري وغير مُقيَّم؛ راجع [المشاريع الواقعية](/ar/مشاريع) للقائمة الكاملة المتنامية.
 
 ## 🎯 ما ستفعله
 

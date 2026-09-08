@@ -1,6 +1,5 @@
 ---
 
-
 title: "Temperature Tuning"
 description: "Modify sampling probabilities with a temperature parameter to control how creative or conservative the model's output is."
 module: "cli-text-generator"
@@ -182,11 +181,3 @@ def compare_temperatures(model, word, temps=[0.3, 0.7, 1.0, 1.5], length=15):
         text = generate_text(model, word, length=length, temperature=temp)
         print(f"  T={temp:.1f}: {text}")
 ```
-
-## Projects You Can Build
-
-Here are a few real-world projects that reinforce these concepts:
-
-- 🎨 **AI Story Writer** - Add temperature control for creative text generation with adjustable creativity
-- 🤖 **Chatbot Builder** - Use temperature tuning to balance between safe and creative responses
-- 🧠 **ML Classifier** - Apply temperature scaling concepts for model output calibration

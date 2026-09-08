@@ -1,6 +1,5 @@
 ---
 
-
 title: "CLI Text Generator"
 description: "Wire all pipeline stages into a single command-line script with argparse for user-friendly text generation."
 module: "cli-text-generator"
@@ -256,11 +255,3 @@ if args.interactive:
         text = generate_text(model, word, args.words, temp)
         print(f"\n{text}\n")
 ```
-
-## Projects You Can Build
-
-Here are a few real-world projects that reinforce these concepts:
-
-- 🎨 **AI Story Writer** - Build a complete CLI text generation tool with temperature and seed controls
-- 🤖 **Chatbot Builder** - Package your chatbot as a command-line interface with interactive mode
-- 🛠️ **CLI Framework** - Use argparse to build reusable command-line tools with proper argument parsing

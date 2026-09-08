@@ -16,7 +16,7 @@ prerequisites: ["python-101/strings", "python-101/file-io", "python-101/loops", 
 
 Cada reunión termina igual: alguien se ofrece a escribir las notas, olvida quién era responsable de qué, y los elementos de acción se evaporan para el lunes. Este proyecto construye la mitad resumidora de una canalización real de reuniones — toma una *transcripción* de reunión (el texto que produce tu herramienta de voz a texto) y la convierte en el informe que los humanos realmente quieren: un desglose de hablantes que muestra quién dominó, cada decisión que se tomó, y una lista por persona de elementos de acción extraídos automáticamente de los verbos y nombres de responsables en la transcripción.
 
-Esto asume Python 101 — cadenas, I/O de archivos, bucles y funciones. Nada más allá de eso: sin ML, sin procesamiento de audio, sin APIs externas para la canalización central (el reconocimiento de voz real necesita una llave, y hay un paso opcional para eso). Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa.
+Esto asume Python 101 — cadenas, I/O de archivos, bucles y funciones. Nada más allá de eso: sin ML, sin procesamiento de audio, sin APIs externas para la canalización central (el reconocimiento de voz real necesita una llave, y hay un paso opcional para eso). Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
 
 ## 🎯 Lo que harás
 

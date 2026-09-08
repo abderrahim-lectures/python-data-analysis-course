@@ -17,7 +17,7 @@ prerequisites: ["Les bases de Python", "L'entrée/sortie de fichiers"]
 
 Chaque épisode de podcast, sonnerie et effet sonore de jeu vidéo est passé par le même pipeline : quelqu'un a découpé les bonnes parties, fondu les bords pour que rien ne claque, ajusté le volume, et cousu les morceaux ensemble. Les studios professionnels font cela dans des applications lourdes ; ce projet construit un petit éditeur audio en ligne de commande en Python qui fait tout cela sur de vrais fichiers audio avec `pydub` — découpage à la milliseconde, fondus, normalisation du volume, conversion de format, assemblage de clips, et une image de forme d'onde pour que tu puisses *voir* exactement ce que tu as changé.
 
-Cela suppose Python 101 et de l'entrée/sortie de fichiers de base — rien de l'Analyse de Données n'est requis. C'est facultatif et non noté — consulte [Projets du monde réel](/docs/projects) pour la liste complète et grandissante.
+Cela suppose Python 101 et de l'entrée/sortie de fichiers de base — rien de l'Analyse de Données n'est requis. C'est facultatif et non noté — consulte [Projets du monde réel](/fr/projets) pour la liste complète et grandissante.
 
 ## 🎯 Ce que tu vas faire
 

@@ -16,7 +16,7 @@ prerequisites: ["python-101/strings", "python-101/sets", "python-101/loops", "py
 
 Every assignment platform zeroes in on one number: how much of this essay was copied. Behind that number is a surprisingly simple and honest algorithm — the **shingle**. A document is chopped into overlapping word-sequences of length N, and two documents are compared by how many of those sequences they share. This project builds a CLI that scores an essay against a whole corpus of source documents — turning raw text into token sets, computing a Jaccard similarity for every pair, and printing a ranked report with the suspicious pairs up top. No ML, no API, no magic.
 
-This assumes Python 101 — strings, sets, loops, and functions. Nothing beyond that. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full list.
+This assumes Python 101 — strings, sets, loops, and functions. Nothing beyond that. It's optional and ungraded; see [Real-World Projects](/projects) for the full list.
 
 ## 🎯 What you'll do
 

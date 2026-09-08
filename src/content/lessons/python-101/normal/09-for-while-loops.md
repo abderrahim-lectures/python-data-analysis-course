@@ -125,19 +125,6 @@ Write a `while` loop that repeatedly asks for input (simulate with a list) and s
 
 </section>
 
-<section class="lesson-section lesson-section--projects">
-<h2 id="-projects-you-can-build">Projects You Can Build</h2>
-
-<p>Here are a few real-world projects that reinforce these concepts:</p>
-
-<ul>
-  <li>🎮 <strong>Wordle Clone</strong> - Use loops to iterate through attempts and check each letter position</li>
-  <li>💬 <strong>Trivia Bot</strong> - Loop through questions, collect answers, and track score across rounds</li>
-  <li>🎓 <strong>Quiz Engine</strong> - Implement game loops with for/while to manage question flow and user attempts</li>
-</ul>
-
-</section>
-
 <section class="lesson-section lesson-section--quiz">
 <h2 id="-quick-check">✅ Quick check</h2>
 

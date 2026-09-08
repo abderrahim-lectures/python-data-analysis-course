@@ -1,8 +1,3 @@
-// Cheatsheet page copy. Like lesson bodies, the reference content is authored
-// once in English (the code snippets are locale-neutral anyway); the page
-// chrome (title/intro) is translated per locale — same split as the lessons.
-import type {Locale} from './routeSegments';
-
 export interface CheatCard {
   title: string;
   code: string;
@@ -15,41 +10,19 @@ export interface CheatSection {
   cards: CheatCard[];
 }
 
-export interface CheatsheetsChrome {
-  title: string;
-  description: string;
-  heading: string;
-  intro: string;
-}
-
-export const CHEATSHEETS_CHROME: Record<Locale, CheatsheetsChrome> = {
-  en: {
-    title: 'Cheatsheets — PyDA Course',
-    description: 'Quick Python reference for every lesson: syntax, snippets, and gotchas at a glance.',
-    heading: 'Python cheatsheets',
-    intro: 'The snippets you will reach for every single lesson. Code runs in the cells above; these are the patterns to copy.',
-  },
-  ar: {
-    title: 'ملخصات — دورة بايثون وتحليل البيانات',
-    description: 'مرجع بايثون السريع لكل درس: صيغ ومقتطفات وأخطاء شائعة في لمحة.',
-    heading: 'ملخصات بايثون',
-    intro: 'المقتطفات التي ستلجأ إليها في كل درس. الكود أعلاه يعمل في الخلايا؛ هذه هي الأنماط الجاهزة للنسخ.',
-  },
-  es: {
-    title: 'Referencias — Curso PyDA',
-    description: 'Referencia rápida de Python para cada lección: sintaxis, fragmentos y errores comunes de un vistazo.',
-    heading: 'Referencias de Python',
-    intro: 'Los fragmentos a los que recurrirás en cada lección. El código corre en las celdas de arriba; estos son los patrones para copiar.',
-  },
-  fr: {
-    title: 'Antisèches — Cours PyDA',
-    description: 'Référence Python rapide pour chaque leçon : syntaxe, extraits et pièges en un coup d’œil.',
-    heading: 'Antisèches Python',
-    intro: 'Les extraits auxquels vous reviendrez à chaque leçon. Le code s’exécute dans les cellules ci-dessus ; voici les motifs à copier.',
-  },
-};
-
 export const CHEAT_SECTIONS: CheatSection[] = [
+  {
+    icon: '📦',
+    title: 'Variables',
+    cards: [
+      {title: 'Assign & read', code: 'x = 5\nx = x + 1   # 6\nprint(x)    # 6',
+       note: '= stores a value under a name. Reassigning just points the name at the new value.'},
+      {title: 'Naming rules', code: 'score = 10      # snake_case ✅\nage_2 = 3       # digits ok after first char\nage 2 = 3       # ❌ space & leading digit\nScore = 10      # works, but remember: case-sensitive',
+       note: 'Names are case-sensitive. Use snake_case, descriptive names, and avoid built-in words like print.'},
+      {title: 'Swap & unpack', code: 'a, b = 1, 2\na, b = b, a   # swap in one line\nfirst, *rest = [1, 2, 3]  # first=1, rest=[2, 3]',
+       note: 'Python assigns several names at once — the cleanest swap there is.'},
+    ],
+  },
   {
     icon: '🖨️',
     title: 'Output',
@@ -58,6 +31,16 @@ export const CHEAT_SECTIONS: CheatSection[] = [
        note: 'The one function you will use in every single lesson.'},
       {title: 'No trailing comma', code: "print('a', 'b', sep='-')   # a-b",
        note: 'sep controls the separator; the default is a space.'},
+    ],
+  },
+  {
+    icon: '⌨️',
+    title: 'Input',
+    cards: [
+      {title: 'Read the prompt', code: "name = input('Your name: ')\nprint('Hi', name)",
+       note: 'input() pauses and waits; it ALWAYS returns a string.'},
+      {title: 'Convert it', code: "age = int(input('Age: '))\nprice = float(input('Price: '))",
+       note: 'Convert at the read with int()/float(), or every math step after will fail.'},
     ],
   },
   {
@@ -82,6 +65,10 @@ export const CHEAT_SECTIONS: CheatSection[] = [
        note: 'Methods return a NEW string — strings are immutable.'},
       {title: 'Slicing', code: "word = 'python'\nword[0]    # 'p'\nword[-1]   # 'n'\nword[1:4]  # 'yth'",
        note: 'start inclusive, end exclusive. Negative indexes count from the end.'},
+      {title: 'Combine, repeat, search', code: "'py' + 'thon'    # 'python'\n'ha' * 3        # 'hahaha'\n'py' in 'python'  # True\nlen('abc')        # 3",
+       note: '+ glues strings, * repeats them, in tests for a substring, len() counts characters.'},
+      {title: 'Backslash escapes', code: "print('she\\'s fine')   # she's fine\nprint('line1\\nline2')  # two lines\nprint('tab\\there')      # tab       here",
+       note: "\\' is a quote, \\n a new line, \\t a tab. Use raw strings r\"…\" when a path has too many backslashes."},
     ],
   },
   {
@@ -94,6 +81,24 @@ export const CHEAT_SECTIONS: CheatSection[] = [
        note: 'in / not in are the membership checks.'},
       {title: 'Looping', code: 'for n in nums:\n    print(n * 2)',
        note: 'The for loop reaches for each element one at a time.'},
+      {title: 'Sort & copy', code: 'nums.sort()          # in place\nsorted(nums)         # NEW sorted list\ncopy = nums[:]       # real copy, not the same list',
+       note: 'sort() changes the list and returns None; sorted() returns a new one. Use nums[:] to work on a copy.'},
+      {title: 'Slice tricks', code: 'nums = [0, 1, 2, 3, 4]\nnums[1:]    # [1, 2, 3, 4]  drop the head\nnums[:-1]   # [0, 1, 2, 3]  drop the tail\nnums[::-1]  # [4, 3, 2, 1, 0]  reversed',
+       note: 'The [start:end:step] form is list surgery — dropping, copying, and reversing in one line.'},
+    ],
+  },
+  {
+    icon: '🏷️',
+    title: 'Tuples & Sets',
+    cards: [
+      {title: 'Tuples', code: "t = (1, 2, 3)\nt[0]        # 1\nx, y = t        # unpack\n# t[0] = 9      # ❌ tuples can't change",
+       note: 'A fixed list — use it when the shape should not change: coordinates, config pairs, read-only data.'},
+      {title: 'Sets', code: "s = {1, 2, 2, 3}   # {1, 2, 3} — duplicates dropped\ns.add(4)\n4 in s        # True\ns.remove(4)",
+       note: 'An unordered bag of unique items — perfect for de-duplication and fast membership checks.'},
+      {title: 'Set operations', code: "a = {1, 2, 3}\nb = {3, 4}\na | b       # {1, 2, 3, 4}  union\na & b       # {3}           intersection\na - b       # {1, 2}        difference\na ^ b       # {1, 2, 4}     symmetric",
+       note: '| , & , - , ^ turn sets into one-line math — compare groups without nested loops.'},
+      {title: 'Which container?', code: 'list    # ordered, editable, keeps order\ntuple   # ordered, read-only\nset     # unordered, unique, fast in\ndict    # key → value lookup',
+       note: 'Pick by what the code needs: order, uniqueness, or finding things by name.'},
     ],
   },
   {
@@ -118,6 +123,10 @@ export const CHEAT_SECTIONS: CheatSection[] = [
        note: '== tests equality; = assigns. Remembering this fixes most beginner "why is it True" bugs.'},
       {title: 'Boolean operators', code: 'a and b    # both truthy\na or b     # at least one\na and not b',
        note: 'and / or / not — the plain words, not && and ! like other languages.'},
+      {title: 'Truthiness', code: "if x:             # 'is x non-empty?'\n    print(x)\n# Falsy: 0, 0.0, '', [], {}, None\n# Everything else is truthy",
+       note: '"if x:" is the idiomatic "is x there?" check — empty containers and 0 fail, everything else passes.'},
+      {title: 'Ternary one-liner', code: "'pass' if score >= 50 else 'fail'",
+       note: 'A compact if/else that returns a value — great inside f-strings and print().'},
     ],
   },
   {
@@ -128,8 +137,12 @@ export const CHEAT_SECTIONS: CheatSection[] = [
        note: 'range stops before the second number — same end-exclusive rule as slicing.'},
       {title: 'enumerate / zip', code: "for i, item in enumerate(['a','b']):\n    print(i, item)\nfor x, y in zip([1,2],[3,4]):\n    print(x, y)",
        note: 'enumerate adds a counter; zip pairs two sequences element-wise.'},
+      {title: 'break / continue', code: 'for n in range(10):\n    if n == 3:\n        break      # stop the loop\nfor n in range(10):\n    if n % 2:\n        continue   # skip this one\n    print(n)',
+       note: 'break leaves the loop entirely; continue jumps to the next iteration.'},
       {title: 'while', code: 'n = 3\nwhile n > 0:\n    print(n)\n    n -= 1   # don\'t forget: while needs progress',
        note: 'while repeats until its condition becomes False — a loop that never updates its condition never ends.'},
+      {title: 'Loop else (optional)', code: 'for n in nums:\n    if n == target:\n        break\nelse:\n    print("not found")',
+       note: 'The else block runs only if the loop finished without a break — a built-in "was it found?" flag.'},
     ],
   },
   {
@@ -140,6 +153,10 @@ export const CHEAT_SECTIONS: CheatSection[] = [
        note: 'def … body must be indented. return hands a value back; without it you get None.'},
       {title: 'Defaults & keywords', code: 'def greet(name, exclaim=True):\n    s = f"Hello {name}"\n    return s + ("!" if exclaim else "")\n\ngreet("ada")        # Hello ada!\ngreet("ada", False) # Hello ada',
        note: 'Parameters with = get defaults; callers can pass by keyword.'},
+      {title: 'Return multiple values', code: 'def minmax(nums):\n    return min(nums), max(nums)\n\nlo, hi = minmax([3, 1, 4])  # lo=1, hi=4',
+       note: 'A function can return a tuple and callers unpack it into several names at once.'},
+      {title: 'Scope & print vs return', code: 'x = 10            # global\n\ndef show(y):\n    x = 5         # local — different x!\n    print(x, y)   # side effect, returns None\n\nresult = show(1)  # result is None',
+       note: 'print shows a value in the console; return actually hands it back. Assigning inside a function shadows the global.'},
       {title: 'Lambda (short forms)', code: 'double = lambda x: x * 2\nsorted(nums, key=lambda n: -n)',
        note: 'Use lambdas for one-line throwaway functions passed to sort/max/map.'},
     ],

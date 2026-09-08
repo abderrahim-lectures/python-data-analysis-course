@@ -6,7 +6,7 @@ description: "Extract entities and relationships from text to build interactive 
 
 A knowledge graph turns unstructured text into a network of connected facts: "Ada Lovelace" and "analytic engine" become nodes, and "designed" becomes the edge between them. This project builds a pipeline that extracts named entities from sentences, detects relationships between them, and renders the whole thing as an interactive graph you can explore and query.
 
-This assumes Python 101 and comfort with pandas from Data Analysis. Optional and ungraded; see [Real-World Projects](/docs/projects) for the full list.
+This assumes Python 101 and comfort with pandas from Data Analysis. Optional and ungraded; see [Real-World Projects](/projects) for the full list.
 
 ## 🎯 What you'll do
 

@@ -19,7 +19,7 @@ learningObjectives:
 
 « Quel modèle a gagné ? » est la question récurrente de tout projet qui entraîne des modèles — et un simple `results.txt` ne peut pas y répondre : même nom d'exécution, relancée deux fois, des colonnes modifiées, et la réponse dérive avec ce que quelqu'un a tapé en dernier. Ce projet construit l'honnête alternative : un journal `runs.jsonl` où chaque exécution est une dataclass (modèle, métrique, valeur, chemin d'artefact), les IDs dupliqués sont refusés à la porte, la meilleure exécution par métrique vient d'une table de direction (« rmse plus bas est mieux, accuracy plus élevé est mieux »), les artefacts reçoivent une empreinte SHA-256 que tu peux vérifier plus tard, et une CLI à cinq commandes (`add`, `list`, `best`) donne à l'ensemble l'allure d'un vrai outil. Tout est standard library et basé sur des fichiers — pas de base de données, pas de bibliothèque ML requise.
 
-Ceci suppose Python 101 — listes, dicts, fonctions — plus les dataclasses (`from dataclasses import dataclass`) et la manipulation aisée de fichiers. C'est facultatif et non noté ; consulte [Real-World Projects](/docs/projects) pour la liste complète et grandissante.
+Ceci suppose Python 101 — listes, dicts, fonctions — plus les dataclasses (`from dataclasses import dataclass`) et la manipulation aisée de fichiers. C'est facultatif et non noté ; consulte [Real-World Projects](/fr/projets) pour la liste complète et grandissante.
 
 ## 🎯 Ce que tu vas faire
 

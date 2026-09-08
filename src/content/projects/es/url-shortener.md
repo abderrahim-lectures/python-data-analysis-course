@@ -20,7 +20,7 @@ prerequisites:
 
 Cada enlace que compartes en un chat es una cadena corta que esconde una más larga — y una redirección que le dice a quien la posee exactamente con qué frecuencia, de dónde y en qué día se hace clic. Este proyecto construye ese servicio de extremo a extremo: códigos cortos base62 almacenados en SQLite, un clic registrado en cada redirección, analítica que puedes consultar y, finalmente, una capa FastAPI real para que puedas `curl` tu propio acortador. Es una API pequeña pero completa respaldada por base de datos — la forma detrás de muchos servicios de producción.
 
-Esto asume Python 101 y un toque ligero con API REST y `curl` — no se requiere nada de Análisis de Datos. Es opcional y no se califica; consulta [Proyectos del Mundo Real](/docs/projects) para ver la lista completa y en crecimiento.
+Esto asume Python 101 y un toque ligero con API REST y `curl` — no se requiere nada de Análisis de Datos. Es opcional y no se califica; consulta [Proyectos del Mundo Real](/es/proyectos) para ver la lista completa y en crecimiento.
 
 ## 🎯 Lo que harás
 

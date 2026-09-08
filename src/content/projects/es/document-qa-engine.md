@@ -19,7 +19,7 @@ learningObjectives:
 
 En el mundo previo a los LLM — y en cada entorno de borde donde un LLM es demasiado pesado, demasiado lento o demasiado caro — "haz preguntas a tus documentos" es un *problema de búsqueda con formato bonito*. La maquinaria es honesta y te enseña más que el wrapper de chat: divide el corpus en chunks, indexa cada término a los chunks en los que aparece, puntúa chunks para una consulta, elige la oración que mejor la responde, y cita de dónde salió. Este proyecto construye las cinco capas en Python puro, y verás a un motor real hacer algo real: nadie adivinando, cada respuesta lleva el archivo del que vino.
 
-Esto asume Python 101 más `re` y `pathlib` cómodos. No se requiere nada del módulo de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa, en crecimiento.
+Esto asume Python 101 más `re` y `pathlib` cómodos. No se requiere nada del módulo de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa, en crecimiento.
 
 ## 🎯 Lo que harás
 

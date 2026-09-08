@@ -8,7 +8,7 @@ description: "Passe du bac à sable dans le navigateur au vrai Python : construi
 
 Tout dans le cours jusqu'ici tournait dans un bac à sable isolé, dans le navigateur — pour que tu puisses commencer à écrire du Python dès le premier jour sans aucune configuration. Ce projet est l'étape de remise de diplôme : installe Python pour de vrai sur ta propre machine, puis utilise-le pour construire quelque chose d'authentiquement utile — un agent qui lit un lot d'e-mails, te dit lesquels comptent vraiment, et rédige une réponse suggérée pour ceux qui en ont besoin. Cela suppose Python 101 ; rien de Analyse de Données n'est requis.
 
-C'est optionnel et non noté. Voir [Projets du monde réel](/docs/projects) pour la liste complète et croissante.
+C'est optionnel et non noté. Voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 
@@ -98,7 +98,7 @@ GITHUB_TOKEN=ta-clé-ici
 Plutôt que de faire `export` d'une clé à chaque nouvelle session de terminal, `python-dotenv` lit `.env` automatiquement dès que ton script appelle `load_dotenv()` — pas de configuration par session, et c'est déjà exclu de git via `.gitignore` donc tu ne peux pas accidentellement commiter une vraie clé.
 :::
 
-Une clé API est un secret, exactement comme un mot de passe — quiconque la possède peut utiliser le quota de ton compte. La traiter comme une variable d'environnement plutôt qu'une chaîne codée en dur est la pratique standard exactement pour cette raison, et c'est la même habitude de sécurité du monde réel enseignée dans le [projet Agent IA](/docs/projects/ai-agent).
+Une clé API est un secret, exactement comme un mot de passe — quiconque la possède peut utiliser le quota de ton compte. La traiter comme une variable d'environnement plutôt qu'une chaîne codée en dur est la pratique standard exactement pour cette raison, et c'est la même habitude de sécurité du monde réel enseignée dans le [projet Agent IA](/fr/projets/ai-agent).
 
 Avec `uv` installé, le projet configuré, et `.env` rempli, tu es prêt à construire — chaque étape à partir d'ici suppose que tout ceci est déjà fait.
 
@@ -523,7 +523,7 @@ Un mot de passe d'application limité seulement à « Mail », que tu peux révo
 
 - **Le modèle ne retourne pas de JSON valide.** Malgré l'instruction « SEULEMENT un objet JSON » du prompt, un modèle peut occasionnellement ajouter une phrase égarée ou envelopper la sortie dans un bloc de code. Si `json.loads` lève une exception, affiche d'abord la chaîne `content` brute pour voir exactement ce qui est revenu avant de supposer que ton code est en cause.
 - **Confondre « rédigé » avec « envoyé ».** Un fichier sauvegardé dans `drafts/` n'est pas un e-mail envoyé — rien n'est encore allé nulle part. Si tu veux réellement répondre, ouvre ton vrai client e-mail et copie le brouillon toi-même ; c'est la conception, pas une étape manquante.
-- **Limites de débit sur le niveau LLM gratuit.** Six e-mails représentent deux appels LLM chacun (tri, plus un brouillon pour tout ce qui nécessite une réponse) — suffisant pour occasionnellement atteindre un 429 sur un niveau gratuit. Ce n'est pas un bug ; voir la section « Gérer les limites de débit » du [projet Agent IA](/docs/projects/ai-agent) pour le même pattern et une approche de nouvelle tentative que tu peux copier.
+- **Limites de débit sur le niveau LLM gratuit.** Six e-mails représentent deux appels LLM chacun (tri, plus un brouillon pour tout ce qui nécessite une réponse) — suffisant pour occasionnellement atteindre un 429 sur un niveau gratuit. Ce n'est pas un bug ; voir la section « Gérer les limites de débit » du [projet Agent IA](/fr/projets/ai-agent) pour le même pattern et une approche de nouvelle tentative que tu peux copier.
 - **Traiter les étiquettes de catégorie/priorité comme une vérité absolue.** Le verdict `"urgent"` ou `"spam-ish"` du modèle est une suggestion, pas un fait — il peut mal juger un message concis mais authentiquement urgent comme basse priorité, ou une liste de diffusion légitime comme spam. Survole la catégorisation toi-même avant de lui faire aveuglément confiance, surtout au début.
 
 ## Ce que tu viens de construire
@@ -534,7 +534,7 @@ Un pipeline de tri petit mais complet : analyser, catégoriser avec un LLM, réd
 
 - Ajoute plus de catégories ou une échelle de priorité plus fine, et vois comment le prompt doit changer pour garder le modèle cohérent à mesure que l'ensemble d'étiquettes grandit.
 - Étends `parse_email` pour gérer de vrais fichiers `.eml` (le module intégré `email` de Python les analyse correctement, y compris les pièces jointes et les corps multipart) au lieu du format texte brut simplifié utilisé ici.
-- Essaie un second appel LLM qui révise le brouillon du *premier* modèle avant de le sauvegarder — un simple pattern en deux passes « rédiger, puis critiquer », et un premier goût en douceur des pipelines d'agents multi-étapes comme ceux du [projet Agent IA](/docs/projects/ai-agent).
+- Essaie un second appel LLM qui révise le brouillon du *premier* modèle avant de le sauvegarder — un simple pattern en deux passes « rédiger, puis critiquer », et un premier goût en douceur des pipelines d'agents multi-étapes comme ceux du [projet Agent IA](/fr/projets/ai-agent).
 
 ## Partage ton projet avec la classe
 

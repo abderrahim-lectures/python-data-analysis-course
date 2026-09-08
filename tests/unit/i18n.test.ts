@@ -1,45 +1,75 @@
 import {describe, expect, test} from 'vitest';
-import {readFileSync} from 'node:fs';
-import {PAGE_STRINGS} from '../../src/lib/pageStrings.ts';
-import {UI_STRINGS} from '../../src/lib/uiStrings.ts';
+import {readdirSync, readFileSync, statSync} from 'node:fs';
+import {join} from 'node:path';
 
-const LOCALES = ['en', 'ar', 'es', 'fr'] as const;
-
-describe('every locale defines every string', () => {
-  const pageKeys = Object.keys(PAGE_STRINGS.en);
-  const uiKeys = Object.keys(UI_STRINGS.en);
-
-  test.each(LOCALES)('%s has all page strings', (loc) => {
-    expect(Object.keys(PAGE_STRINGS[loc]).sort()).toEqual(pageKeys.sort());
-  });
-
-  test.each(LOCALES)('%s has all UI strings', (loc) => {
-    expect(Object.keys(UI_STRINGS[loc]).sort()).toEqual(uiKeys.sort());
-  });
-
-  test.each(LOCALES)('%s leaves no page string empty', (loc) => {
-    for (const [k, v] of Object.entries(PAGE_STRINGS[loc])) {
-      expect(typeof v === 'string' && v.trim().length > 0, `${loc}.${k}`).toBe(true);
+function walkSrc(): string[] {
+  const out: string[] = [];
+  const rec = (dir: string) => {
+    for (const name of readdirSync(dir)) {
+      const p = join(dir, name);
+      const st = statSync(p);
+      if (st.isDirectory()) {
+        if (name === 'paraglide') continue;
+        rec(p);
+      } else if (p.endsWith('.astro') || p.endsWith('.ts')) {
+        out.push(p);
+      }
     }
+  };
+  rec('src');
+  return out;
+}
+
+describe('string packs are gone', () => {
+  const PACKS = ['pageStrings', 'uiStrings', 'creditsStrings', 'cheatsheetsStrings'];
+
+  test.each(PACKS)('no source file imports %s', (pack) => {
+    const files = walkSrc();
+    const offenders = files.filter((f) => readFileSync(f, 'utf8').includes(`lib/${pack}`));
+    expect(offenders).toEqual([]);
+  });
+
+  test.each(PACKS)('%s.ts no longer exists', (pack) => {
+    expect(() => readFileSync(`src/lib/${pack}.ts`, 'utf8')).toThrow();
   });
 });
 
-describe('non-English locales are actually translated', () => {
-  // Guards the bug where locale pages shipped hardcoded English copy: the
-  // Arabic learn hub rendered English track descriptions, which also flipped
-  // the sentence punctuation to the wrong side under RTL.
-  const shared = new Set(['track1Name', 'homeTerminalLine1', 'homeHubTrack1Name', 'homeStatBadges', 'trackNormalLabel', 'trackHardLabel', 'moduleLabel']); // proper nouns, shell commands, brand terms, track labels, and the French 'Module' that stay the same
+describe('message files stay complete and translated', () => {
+  const LOCALES = ['en', 'ar', 'es', 'fr'] as const;
+  const EN = JSON.parse(readFileSync('messages/en.json', 'utf8')) as Record<string, string>;
+  const ALL: Record<string, Record<string, string>> = Object.fromEntries(
+    LOCALES.map((l) => [l, JSON.parse(readFileSync(`messages/${l}.json`, 'utf8')) as Record<string, string>])
+  );
+  // Keys that intentionally read the same in every locale: brand names
+  // (Pyodide, "Python 101", GitHub, "Students Performance in Exams"),
+  // shell/commands, the shared "Changelog"/"Module"/"Site"/"Playground"/
+  // "Normal"/"XP" labels, and the message-format schema field. Reviewed
+  // 2026-09-08: "Changelog"/"Playground" could legitimately be translated
+  // (es "Registro de cambios", fr "Terrain de jeu") — flagged for the
+  // translation backlog rather than force-changed mid-migration.
+  const SHARED = new Set([
+    '$schema', 'credits_entry_1_name', 'credits_entry_3_name',
+    'footer_changelog', 'footer_github', 'footer_python_101', 'footer_site_col',
+    'home_hub_track_1_name', 'home_terminal_line_1', 'mobile_nav_playground',
+    'module_label', 'nav_playground', 'playground_title',
+    'track_1_name', 'track_normal_label', 'ui_changelog', 'xp_toast',
+  ]);
 
-  test.each(LOCALES.filter((l) => l !== 'en'))('%s differs from English', (loc) => {
-    const identical = Object.entries(PAGE_STRINGS[loc])
-      .filter(([k, v]) => !shared.has(k) && v === (PAGE_STRINGS.en as Record<string, string>)[k])
-      .map(([k]) => k);
-
-    expect(identical).toEqual([]);
+  test.each(LOCALES)('%s has every message key (parity with en)', (loc) => {
+    const keys = Object.keys(ALL[loc]).sort();
+    expect(keys).toEqual(Object.keys(EN).sort());
   });
 
-  test.each(LOCALES.filter((l) => l !== 'en'))('%s has a translated footer tagline', (loc) => {
-    expect(UI_STRINGS[loc].footer.tagline).not.toBe(UI_STRINGS.en.footer.tagline);
+  test.each(LOCALES)('%s leaves no message empty', (loc) => {
+    const empty = Object.entries(ALL[loc]).filter(([, v]) => !v.trim()).map(([k]) => k);
+    expect(empty).toEqual([]);
+  });
+
+  test.each(LOCALES.filter((l) => l !== 'en'))('%s is actually translated, not English copy', (loc) => {
+    // Guards the regression where an Arabic hub rendered English track text.
+    const identical = Object.keys(ALL[loc])
+      .filter((k) => !SHARED.has(k) && ALL[loc][k] === EN[k]);
+    expect(identical).toEqual([]);
   });
 });
 
@@ -66,8 +96,8 @@ describe('locale hub templates render strings, not literals', () => {
 describe('shared layout', () => {
   const src = readFileSync('src/layouts/Base.astro', 'utf8');
 
-  test('the footer tagline comes from the locale pack', () => {
-    expect(src).toContain('{t.footer.tagline}');
+  test('the footer tagline comes from the paraglide message layer', () => {
+    expect(src).toContain('{m.footer_tagline()}');
     expect(src).not.toContain('Zero installs, zero boring.</p>');
   });
 

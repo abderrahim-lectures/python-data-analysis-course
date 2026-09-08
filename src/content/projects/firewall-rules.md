@@ -16,7 +16,7 @@ prerequisites: ["Python 101"]
 
 Firewall rules are the guardrails of network security — a single misconfigured rule can open a port to the internet or block legitimate traffic silently. This project builds a CLI tool that manages a rule set as structured data: you write rules in Python, validate them for conflicts, simulate how real traffic would flow through the rules, and deploy changes as a diff against the current state with one-command rollback. The goal is a tool that makes firewall management auditable and reversible instead of scary and mysterious.
 
-This assumes Python 101 — nothing from Data Analysis is required. Optional and ungraded; see [Real-World Projects](/docs/projects) for the full list.
+This assumes Python 101 — nothing from Data Analysis is required. Optional and ungraded; see [Real-World Projects](/projects) for the full list.
 
 ## 🎯 What you'll do
 

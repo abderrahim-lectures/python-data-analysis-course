@@ -21,7 +21,7 @@ learningObjectives:
 
 La calidad del aire es un problema de cálculo numérico escondido tras un flujo de sensores. Este proyecto toma una semana de lecturas de PM2.5 — pequeñas partículas en suspensión que son el contaminante urbano más común — convierte cada concentración por hora en un valor de Índice de Calidad del Aire (AQI) de la EPA, agrupa esos valores en categorías de salud y produce las dos cosas que un ciudadano preocupado realmente quiere: un informe en lenguaje sencillo ("el martes en la noche fue el peor tramo") y una gráfica que muestra la semana de un vistazo. Los datos son reales en forma y honestos en origen: el proyecto intenta obtener lecturas en vivo de una API pública y, si falla, usa una muestra determinista que puedes reproducir hasta el decimal, así que tus números reportados siempre son verificables.
 
-Esto asume conocimientos básicos de datos ordenados y nada de esto es calificado; es opcional y no calificado — consulta [Proyectos del mundo real](/docs/projects) para la lista completa y creciente.
+Esto asume conocimientos básicos de datos ordenados y nada de esto es calificado; es opcional y no calificado — consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 ## 🎯 Lo que harás
 

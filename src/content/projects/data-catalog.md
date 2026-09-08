@@ -19,7 +19,7 @@ learningObjectives:
 
 Before anyone can use data, someone has to be able to *find* it, trust what it is, and know where it came from. That's the job of a data catalog — an organization's index of its own datasets. This project builds a real, small one: it scans CSV files and records their schema (columns, inferred types, row counts) into a persistent JSON index, answers free-text searches across dataset and column names, and tracks *lineage* — which dataset feeds which transformation, so you can answer "what breaks if this CSV changes?" with a traversal instead of a guess.
 
-This assumes Python 101 plus comfortable `csv` reading — collections, dicts, and functions. Nothing from the Data Analysis module is required. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python 101 plus comfortable `csv` reading — collections, dicts, and functions. Nothing from the Data Analysis module is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

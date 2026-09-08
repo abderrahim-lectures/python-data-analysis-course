@@ -1,6 +1,5 @@
 ---
 
-
 title: "Dataset Profiling"
 description: "Systematically assess structure, types, missingness, cardinality, and data quality issues before any analysis."
 module: "eda-framework"
@@ -292,11 +291,3 @@ for key, value in report.items():
 
 </div>
 </details>
-
-## Projects You Can Build
-
-Here are a few real-world projects that reinforce these concepts:
-
-- 🕷️ **Scrape and Analyze** - Build automated profiling for any scraped dataset
-- 🧠 **ML Classifier** - Profile datasets before feature engineering and model training
-- 📊 **Anomaly Detector** - Use profiling to identify data quality issues and outliers

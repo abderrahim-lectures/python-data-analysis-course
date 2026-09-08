@@ -16,7 +16,7 @@ prerequisites: ["python-101/file-io", "python-101/strings", "python-101/function
 
 Un código QR es la pieza de software menos glamorosa que jamás enviarás, y la más duradera: impreso en un póster o un boleto, debe sobrevivir al desenfoque, la suciedad y un teléfono sostenido en un ángulo poco favorecedor. Una herramienta QR real tiene que manejar tres cosas a la vez — cuántos datos empaques, cuánto daño sobrevive y si parece una marca en lugar de un cuadrado negro. Este proyecto construye un pequeño estudio que hace las tres: generar un código a partir de texto, recolorearlo, estampar un logotipo en su centro y producir por lotes una carpeta completa desde una fila de hoja de cálculo por código — luego verifica el lote leyendo cada matriz de vuelta desde el disco y comprobando que coincide con lo que pediste.
 
-Esto asume Python 101 — E/S de archivos, strings y funciones. Nada más allá de eso: sin web, sin cámara, sin APIs. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa.
+Esto asume Python 101 — E/S de archivos, strings y funciones. Nada más allá de eso: sin web, sin cámara, sin APIs. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
 
 ## 🎯 Lo que harás
 

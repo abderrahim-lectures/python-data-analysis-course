@@ -8,7 +8,7 @@ description: "Graduado del playground en el navegador a Python real: construye u
 
 Cada uno de los otros proyectos de esta sección construye un *cliente* de algún tipo — un script o agente que llama a la API de otra persona. Este lo invierte: tú construyes la API. Este proyecto levanta un servicio real de [FastAPI](https://fastapi.tiangolo.com/) que envuelve un conjunto de datos de unos cientos de citas y chistes que viene incluido con el proyecto, con las dos cosas que toda API pública real necesita y que los ejemplos de juguete suelen omitir — autenticación por clave de API y limitación de tasa — construidas a mano, no importadas de una biblioteca. Asume Python a nivel 101; no se requiere nada de Análisis de Datos.
 
-Esto es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para ver la lista completa y creciente.
+Esto es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para ver la lista completa y creciente.
 
 ## 🎯 Lo que harás
 

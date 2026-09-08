@@ -266,11 +266,3 @@ print(df.groupby("Group")["Survived"].agg(["mean", "count"]))
 ## Practice Challenge
 
 Conduct your own mini-EDA on the Titanic dataset. Choose one question not covered above (for example: "Did passengers with titles like 'Dr' or 'Rev' have different survival rates?") and answer it using the pandas skills from this course. Write your findings in 3-5 sentences.
-
-## Projects You Can Build
-
-Here are a few real-world projects that reinforce these concepts:
-
-- 🧠 **ML Classifier** - Apply the full EDA pipeline to prepare data for machine learning models
-- 🕷️ **Scrape and Analyze** - Conduct structured analysis on any scraped dataset
-- 📊 **Anomaly Detector** - Use profiling and grouping to identify outliers and anomalies

@@ -1,6 +1,5 @@
 ---
 
-
 title: "Tokenization Basics"
 description: "Build a tokenize() function that splits raw text into clean word tokens using only string methods."
 module: "tokenization-frequency"
@@ -164,11 +163,3 @@ sample = "I have 3 cats and 2 dogs in year 2024"
 print(tokenize(sample))
 # ['i', 'have', 'cats', 'and', 'dogs', 'in', 'year']
 ```
-
-## Projects You Can Build
-
-Here are a few real-world projects that reinforce these concepts:
-
-- 🎨 **AI Story Writer** - Implement text tokenization for word count analysis and text processing
-- 🤖 **Chatbot Builder** - Tokenize user input to understand intent and extract keywords
-- 📝 **Sentiment Dashboard** - Tokenize review text for sentiment analysis preprocessing

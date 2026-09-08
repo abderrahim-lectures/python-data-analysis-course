@@ -1,6 +1,5 @@
 ---
 
-
 title: "Advanced Plot Types"
 description: "Build faceted grids, pair grids, multi-panel figures, and combined plot types for complex multivariate views."
 module: "storytelling-viz"
@@ -362,11 +361,3 @@ plt.show()
 
 </div>
 </details>
-
-## Projects You Can Build
-
-Here are a few real-world projects that reinforce these concepts:
-
-- 📈 **Data Visualization** - Build multi-panel dashboards with complex plot layouts
-- 📊 **Sentiment Dashboard** - Create combined visualizations for text analysis results
-- ⚡ **Weather Dashboard** - Build dual-axis charts for temperature and precipitation data

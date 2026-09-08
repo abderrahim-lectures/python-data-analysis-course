@@ -1,6 +1,5 @@
 ---
 
-
 title: "Univariate Numerical Analysis"
 description: "Analyze distributions, central tendency, spread, and shape of numerical variables using histograms, KDE plots, and box plots."
 module: "univariate-analysis"
@@ -286,11 +285,3 @@ plt.show()
 
 </div>
 </details>
-
-## Projects You Can Build
-
-Here are a few real-world projects that reinforce these concepts:
-
-- 📈 **Data Visualization** - Create distribution plots and summary statistics for any dataset
-- 🧠 **ML Classifier** - Analyze feature distributions before model training
-- 📊 **Anomaly Detector** - Use box plots and statistics to identify outliers

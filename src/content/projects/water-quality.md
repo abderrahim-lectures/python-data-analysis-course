@@ -20,7 +20,7 @@ prerequisites:
 
 Fresh-water monitoring is a data pipeline in a cool box: a sensor (your sample log) produces time-stamped readings, a spec (safe ranges per parameter) decides pass/fail, trends decide "getting worse", and an alert list decides attention. This project builds the whole loop with a plain CSV as the sensor: define parameters and their safe ranges, log readings, validate each sample, compute rolling means and drift, emit severity-ranked alerts, and finish with a matplotlib chart whose red dashed lines are the safe-range boundaries.
 
-This assumes Python 101 plus a taste of matplotlib — nothing else is required. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python 101 plus a taste of matplotlib — nothing else is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

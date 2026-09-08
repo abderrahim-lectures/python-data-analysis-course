@@ -1,6 +1,5 @@
 ---
 
-
 title: "Students Performance Profiling"
 description: "Load the Students Performance dataset, profile it thoroughly, and formulate EDA questions for the final report."
 module: "students-performance-eda"
@@ -316,11 +315,3 @@ for key, value in summary.items():
 
 </div>
 </details>
-
-## Projects You Can Build
-
-Here are a few real-world projects that reinforce these concepts:
-
-- 🕷️ **Scrape and Analyze** - Build complete profiling pipelines for any scraped dataset
-- 🧠 **ML Classifier** - Profile datasets before feature engineering and model training
-- 📊 **Anomaly Detector** - Use profiling to identify data quality issues and patterns

@@ -21,7 +21,7 @@ learningObjectives:
 
 Your daily choices emit carbon: driving 10 km is not the same as riding 10 km or taking the train 10 km, and eating meat is not the same as eating plants. This project builds a small, honest **carbon tracker** in the terminal — a single Python script that knows how many kg of CO2-equivalent each activity costs, works through one sample week of transport/food/electricity entries, totals everything per day and per category, draws an ASCII bar chart, checks the week against a budget, saves everything to a CSV, and finally becomes a real command with `add`, `report`, and `reset` subcommands. It uses only the standard library — no installs, no randomness, so the numbers you see here are exactly the numbers you'll see.
 
-This assumes Python lists, dictionaries, `for` loops, and basic terminal usage. It is an optional, ungraded project — see [Real-World Projects](/docs/projects) for the full, growing list. Every piece runs on a basic Python install (3.10+).
+This assumes Python lists, dictionaries, `for` loops, and basic terminal usage. It is an optional, ungraded project — see [Real-World Projects](/projects) for the full, growing list. Every piece runs on a basic Python install (3.10+).
 
 ## 🎯 What you'll do
 

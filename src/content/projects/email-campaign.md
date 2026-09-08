@@ -19,7 +19,7 @@ learningObjectives:
 
 Sending a real newsletter means managing a mess of small workflows: a template with `{{first_name}}` that actually fills in, a subscriber list with a garbage row that must not crash the send, an outbox record of *what* went out, open and click rates computed from a tracking log, and — the part every marketer asks first — which of two subject lines people actually opened. This project builds the whole pipeline in pure Python. No send, no server, no SMTP: the "delivery" is writing an outbox log, and the numbers are every bit as real as a hosted tool's.
 
-This assumes Python 101 — lists, dictionaries, loops, functions — plus comfortable `csv`/`json`. Nothing from the Data Analysis module is required. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python 101 — lists, dictionaries, loops, functions — plus comfortable `csv`/`json`. Nothing from the Data Analysis module is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

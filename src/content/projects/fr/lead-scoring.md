@@ -7,7 +7,7 @@ description: "Classez et priorisez les leads commerciaux selon l'engagement, la 
 
 Les équipes commerciales sont submergées par les leads. Un moteur de scoring de leads les classe selon la probabilité que chacun se convertisse, pour que l'équipe appelle d'abord les plus chauds. Ce projet construit un modèle de scoring qui combine les signaux d'engagement, de démographie et de comportement, puis priorise le pipeline et teste en A/B différents schémas de scoring.
 
-Cela suppose Python 101 et l'aisance avec pandas issu de Analyse de Données. C'est optionnel et non noté ; voir [Projets du monde réel](/docs/projects) pour la liste complète.
+Cela suppose Python 101 et l'aisance avec pandas issu de Analyse de Données. C'est optionnel et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète.
 
 ## 🎯 Ce que tu vas faire
 

@@ -16,7 +16,7 @@ prerequisites: ["python-101/functions", "python-101/data-structures", "python-10
 
 Every serious Python project runs a linter before it merges, and the linter's first job is not rocket science — it's *reading the code's shape*. Python ships a standard-library module called `ast` that parses a `.py` file into a tree of nodes — imports, function definitions, calls, exceptions — that you can walk and inspect. This project builds a working linter on top of it: parse a file, walk the tree, and report three real problems — unused imports, bare `except:` clauses, and functions longer than a line-count limit — with a severity grade per finding and an exit code that lets a CI script fail on them. You're building the engine, and it's small enough to understand every line.
 
-This assumes Python 101 — functions, dicts, file I/O, and a feel for variable scope. Nothing beyond that: no packages, no framework, no external services. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full list.
+This assumes Python 101 — functions, dicts, file I/O, and a feel for variable scope. Nothing beyond that: no packages, no framework, no external services. It's optional and ungraded; see [Real-World Projects](/projects) for the full list.
 
 ## 🎯 What you'll do
 

@@ -7,7 +7,7 @@ description: "Affine automatiquement les prompts en utilisant des tests A/B, des
 
 Un prompt médiocre produit des réponses médiocres. Les ingénieurs ajustent souvent les prompts à la main par essais et erreurs, mais c'est lent et non reproductible. Ce projet construit un outil CLI qui prend un prompt brut, génère plusieurs variantes structurées (few-shot, chaîne de pensée, basé sur un rôle), les note contre un ensemble de réponses de référence et rapporte quelle variante performe le mieux.
 
-Cela suppose Python 101 et l'aisance avec pandas issu de Analyse de Données. C'est optionnel et non noté ; voir [Projets du monde réel](/docs/projects) pour la liste complète.
+Cela suppose Python 101 et l'aisance avec pandas issu de Analyse de Données. C'est optionnel et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète.
 
 ## 🎯 Ce que tu vas faire
 

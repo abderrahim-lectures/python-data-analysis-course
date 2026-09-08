@@ -20,7 +20,7 @@ prerequisites:
 
 The web is mostly HTML served to humans, but every "dataset" you can't download started as someone scraping it. This project builds a small, responsible scraping API against [books.toscrape.com](https://books.toscrape.com/) — a site built *for* practicing this — with a rate-limited HTTP client that retries politely, a BeautifulSoup parser that turns HTML into structured records, a pagination crawler, and a single reusable function that returns clean JSON. The result is your own little read API over a public website.
 
-This assumes Python 101 and enough HTML to recognize a heading, a link, and a `div` — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python 101 and enough HTML to recognize a heading, a link, and a `div` — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

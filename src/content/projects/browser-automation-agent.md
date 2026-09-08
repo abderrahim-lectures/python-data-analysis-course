@@ -8,11 +8,11 @@ description: "Combine Playwright browser automation with a free-tier LLM tool-ca
 Every other project in this section either talks to an API or reads local files. This one drives an
 actual browser — clicking, typing, and reading a real page — and then hands that control to an LLM
 agent, so it can decide *which* field to fill with *what*, instead of you hardcoding every selector by
-hand. Assumed background: Python 101, plus having already built the [AI Agent project](/docs/projects/ai-agent)
+hand. Assumed background: Python 101, plus having already built the [AI Agent project](/projects/ai-agent)
 — this one reuses its tool-calling pattern (`deepagents`, a free-tier API key) and adds real browser
 control on top, so it isn't the place to start with agents from scratch.
 
-This is optional and ungraded. See [Real-World Projects](/docs/projects) for the full, growing list.
+This is optional and ungraded. See [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 
@@ -39,7 +39,7 @@ machine, headless mode doesn't need a real display either way.
 **Google Colab, Kaggle Notebooks, or Binder are a poor fit for this particular project**, and this page
 deliberately skips a notebook version rather than force one — a real Playwright browser needs a real
 browser binary plus a persistent process it controls step by step, which doesn't map cleanly onto a
-notebook's stateless-cell, no-local-browser-window model the way, say, the [scrape-and-analyze project](/docs/projects/scrape-analyze)'s
+notebook's stateless-cell, no-local-browser-window model the way, say, the [scrape-and-analyze project](/projects/scrape-analyze)'s
 `requests` calls do. If you want to experiment in a notebook anyway, the honest version of that is
 **not** real browser control at all: mock a fake "page" as a plain Python dict of field names and
 types, hand the agent tools that read/write that dict instead of a real Playwright page, and use it to
@@ -423,7 +423,7 @@ which is exactly the shape of most genuinely useful automation agents.
   the very end.
 - Try a form with more field types — a `<select>` dropdown, a multi-page form, a field with real-time
   client-side validation — and see which of Step 2's tools need to grow to handle it.
-- Compare this to the [AI Agent project](/docs/projects/ai-agent): that one's tools only ever return
+- Compare this to the [AI Agent project](/projects/ai-agent): that one's tools only ever return
   text; these tools change real browser state. Think through what that difference means for how
   carefully you'd want to test an agent's tool set before trusting it unattended.
 

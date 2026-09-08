@@ -6,7 +6,7 @@ description: "Score and prioritize sales leads based on engagement, demographics
 
 Sales teams drown in leads. A lead scoring engine ranks them by how likely each is to convert, so the team calls the hot ones first. This project builds a scoring model that combines engagement, demographic, and behavior signals, then prioritizes the pipeline and A/B-tests different scoring schemes.
 
-This assumes Python 101 and comfort with pandas from Data Analysis. Optional and ungraded; see [Real-World Projects](/docs/projects) for the full list.
+This assumes Python 101 and comfort with pandas from Data Analysis. Optional and ungraded; see [Real-World Projects](/projects) for the full list.
 
 ## 🎯 What you'll do
 

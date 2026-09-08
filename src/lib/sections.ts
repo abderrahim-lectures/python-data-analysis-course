@@ -1,19 +1,17 @@
 import type {Locale} from './routeSegments';
-import {PAGE_STRINGS} from './pageStrings';
+import {m} from '../paraglide/messages.js';
 
 export const SECTION_ICONS: Record<string, string> = {'python-101': '🐍', 'data-analysis': '📊'};
 export const TRACK_ICONS: Record<'normal' | 'hard', string> = {normal: '🌿', hard: '⚡'};
 
-/** Localized name for a section slug (python-101 → track1Name, else track2Name). */
-export function sectionName(locale: Locale, section: string): string {
-  const ps = PAGE_STRINGS[locale];
-  return section === 'python-101' ? ps.track1Name : ps.track2Name;
+/** Localized name for a section slug (python-101 → track_1_name, else track_2_name). */
+export function sectionName(_locale: Locale, section: string): string {
+  return section === 'python-101' ? m.track_1_name() : m.track_2_name();
 }
 
 /** Localized description for a section slug. */
-export function sectionDescription(locale: Locale, section: string): string {
-  const ps = PAGE_STRINGS[locale];
-  return section === 'python-101' ? ps.track1Desc : ps.track2Desc;
+export function sectionDescription(_locale: Locale, section: string): string {
+  return section === 'python-101' ? m.track_1_desc() : m.track_2_desc();
 }
 
 export function sectionIcon(section: string): string {
@@ -21,7 +19,6 @@ export function sectionIcon(section: string): string {
 }
 
 /** Localized name for a track ('normal' | 'hard'). */
-export function trackName(locale: Locale, track: 'normal' | 'hard'): string {
-  const ps = PAGE_STRINGS[locale];
-  return track === 'normal' ? ps.trackNormalLabel : ps.trackHardLabel;
+export function trackName(_locale: Locale, track: 'normal' | 'hard'): string {
+  return track === 'normal' ? m.track_normal_label() : m.track_hard_label();
 }

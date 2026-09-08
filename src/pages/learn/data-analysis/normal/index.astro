@@ -1,34 +1,33 @@
 ---
 import {getCollection} from 'astro:content';
 import Base from '../../../../layouts/Base.astro';
-import {PAGE_STRINGS} from '../../../../lib/pageStrings';
+import {m} from '../../../../paraglide/messages';
 import {detectLocale} from '../../../../lib/routeSegments';
 
 const base = import.meta.env.BASE_URL;
 const locale = detectLocale(Astro.url.pathname);
 const dir = locale === 'ar' ? 'rtl' : 'ltr';
-const ps = PAGE_STRINGS[locale];
 
 const modules = (await getCollection('modules'))
-  .filter((e) => e.slug.includes('data-analysis/normal'))
+  .filter((e) => e.id.includes('data-analysis/normal'))
   .sort((a, b) => a.data.order - b.data.order);
 
 const allLessons = await getCollection('lessons');
 const moduleLessonCounts = new Map<string, number>();
 for (const m of modules) {
-  const slug = m.slug.split('/').pop()!;
+  const slug = m.id.split('/').pop()!;
   const moduleKey = slug.replace(/^module-\d+-/, '');
-  const count = allLessons.filter((l) => l.slug.includes('data-analysis/normal') && l.data.module === moduleKey).length;
+  const count = allLessons.filter((l) => l.id.includes('data-analysis/normal') && l.data.module === moduleKey).length;
   moduleLessonCounts.set(slug, count);
 }
 
-const totalLessons = allLessons.filter((l) => l.slug.includes('data-analysis/normal')).length;
+const totalLessons = allLessons.filter((l) => l.id.includes('data-analysis/normal')).length;
 const totalMinutes = allLessons
-  .filter((l) => l.slug.includes('data-analysis/normal'))
+  .filter((l) => l.id.includes('data-analysis/normal'))
   .reduce((sum, l) => sum + (l.data.estimatedMinutes ?? 15), 0);
 const totalHours = Math.round(totalMinutes / 60);
 
-const diffColor = (d: string) => d === 'beginner' ? 'var(--success)' : d === 'intermediate' ? 'var(--streak)' : 'var(--bad)';
+const diffColor = (d: string) => d === 'beginner' ? 'var(--success)' : d === 'intermediate' ? 'var(--streak-text)' : 'var(--bad)';
 ---
 
 <Base title="Data Analysis Normal Track — PyDA Course" description="Learn pandas, data cleaning, and exploratory data analysis." lang={locale} dir={dir}>
@@ -52,11 +51,11 @@ const diffColor = (d: string) => d === 'beginner' ? 'var(--success)' : d === 'in
 
   <section class="container modules-grid">
     {modules.map((m) => {
-      const slug = m.slug.split('/').pop()!;
+      const slug = m.id.split('/').pop()!;
       const moduleKey = slug.replace(/^module-\d+-/, '');
       const lessonCount = moduleLessonCounts.get(slug) ?? 0;
       const totalMin = allLessons
-        .filter((l) => l.slug.includes('data-analysis/normal') && l.data.module === moduleKey)
+        .filter((l) => l.id.includes('data-analysis/normal') && l.data.module === moduleKey)
         .reduce((sum, l) => sum + (l.data.estimatedMinutes ?? 15), 0);
       return (
         <a class="module-card" href={`${base}learn/data-analysis/normal/modules/${slug}`}>

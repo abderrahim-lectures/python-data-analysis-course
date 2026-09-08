@@ -19,7 +19,7 @@ learningObjectives:
 
 Avant que quiconque puisse utiliser des données, quelqu'un doit être capable de les *trouver*, de faire confiance à ce qu'elles sont, et de savoir d'où elles viennent. C'est le travail d'un catalogue de données — l'index d'une organisation sur ses propres jeux de données. Ce projet construit un vrai catalogue, petit : il scanne des fichiers CSV et enregistre leur schéma (colonnes, types inférés, comptes de lignes) dans un index JSON persistant, répond à des recherches en texte libre sur les noms de jeux de données et de colonnes, et suit la *lignée* — quel jeu de données alimente quelle transformation, pour que tu puisses répondre à « qu'est-ce qui casse si ce CSV change ? » par un parcours au lieu d'une supposition.
 
-Ceci suppose Python 101 plus une lecture de `csv` aisée — collections, dicts et fonctions. Rien du module Analyse de Données n'est nécessaire. C'est facultatif et non noté ; voir [Projets du monde réel](/docs/projects) pour la liste complète et croissante.
+Ceci suppose Python 101 plus une lecture de `csv` aisée — collections, dicts et fonctions. Rien du module Analyse de Données n'est nécessaire. C'est facultatif et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 

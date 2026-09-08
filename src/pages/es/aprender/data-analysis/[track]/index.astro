@@ -8,8 +8,8 @@ export async function getStaticPaths() {
   const modules = await getCollection('modules');
   const tracks = [...new Set(
     modules
-      .filter((m) => m.slug.startsWith('data-analysis/'))
-      .map((m) => m.slug.split('/')[1] as 'normal' | 'hard'),
+      .filter((m) => m.id.startsWith('data-analysis/'))
+      .map((m) => m.id.split('/')[1] as 'normal' | 'hard'),
   )];
   return tracks.map((track) => ({params: {track}, props: {track}}));
 }

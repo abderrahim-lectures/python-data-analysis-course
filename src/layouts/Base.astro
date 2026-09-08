@@ -4,8 +4,9 @@ import '../styles/global.css';
 import 'katex/dist/katex.min.css';
 import Icon from '../components/Icon.astro';
 import LearnerActivity from '../components/LearnerActivity.astro';
+import PageViews from '../components/PageViews.astro';
 import pkg from '../../package.json';
-import {UI_STRINGS, resolveLocale} from '../lib/uiStrings';
+import {m} from '../paraglide/messages.js';
 import {NAV_WORDS, localeBase, type Locale as RouteLocale} from '../lib/routeSegments';
 
 interface Props {
@@ -26,13 +27,13 @@ interface Props {
 
 const {
   title = 'PyDA Course',
-  description = 'Learn Python and data analysis in your browser — run real code, earn XP, build streaks. Zero installs, zero boring.',
   lang = 'en',
   dir = 'ltr',
   image,
   alternates,
   jsonLd,
 } = Astro.props;
+const description = Astro.props.description ?? m.home_description();
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const ogImage = image ? new URL(image, Astro.site) : new URL('og-default.png', Astro.site);
 const jsonLdBlocks = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
@@ -44,21 +45,26 @@ const defaultAlternates: Record<RouteLocale, string> = {
   fr: 'fr',
 };
 const alt: Record<RouteLocale, string> = {...defaultAlternates, ...alternates};
+const OG_LOCALE: Record<string, string> = {
+  en: 'en_US',
+  ar: 'ar_MA',
+  es: 'es_ES',
+  fr: 'fr_FR',
+};
 const locales = [
   {code: 'en', label: 'EN', href: () => `${base}${alt.en}`},
   {code: 'ar', label: 'عربي', href: () => `${base}${alt.ar}`},
   {code: 'es', label: 'ES', href: () => `${base}${alt.es}`},
   {code: 'fr', label: 'FR', href: () => `${base}${alt.fr}`},
 ];
-const t = UI_STRINGS[resolveLocale(lang)];
-const navLocale = resolveLocale(lang) as RouteLocale;
+const navLocale = (lang === 'ar' || lang === 'es' || lang === 'fr' ? lang : 'en') as RouteLocale;
 const nav = NAV_WORDS[navLocale];
 const locBase = localeBase(navLocale, base);
 const siteJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
   name: 'PyDA Course',
-  description: t.footer.tagline,
+  description: m.footer_tagline(),
   url: String(new URL(import.meta.env.BASE_URL, Astro.site)),
 };
 const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
@@ -117,6 +123,11 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:image" content={ogImage} />
+    <meta property="og:site_name" content="PyDA Course" />
+    <meta property="og:locale" content={OG_LOCALE[navLocale]} />
+    {locales.filter((l) => l.code !== navLocale).map((l) => (
+      <meta property="og:locale:alternate" content={OG_LOCALE[l.code]} />
+    ))}
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
@@ -160,19 +171,20 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
     </script>
   </head>
   <body>
-    <a class="skip-link" href="#main">{t.skipToContent}</a>
+    <a class="skip-link" href="#main">{m.skip_to_content()}</a>
     <header class="topnav">
       <div class="container topnav__inner">
         <a class="topnav__brand" href={locBase}>
           <span class="topnav__logo" aria-hidden="true"><Icon name="code" size={16} /></span>
           <span class="topnav__name">PyDA Course</span>
         </a>
-        <nav class="topnav__right" aria-label="Primary">
-          <a class="topnav__link" href={`${locBase}${nav.learn}`}><Icon name="code" size={15} /> {t.nav.learn}</a>
-          <a class="topnav__link" href={`${locBase}${nav.projects}`}><Icon name="globe" size={15} /> {t.nav.projects}</a>
-          <a class="topnav__link" href={`${locBase}${nav.progress}`}><Icon name="trail" size={15} /> {t.nav.progress}</a>
+        <nav class="topnav__right" aria-label={m.aria_label_primary()}>
+          <a class="topnav__link" href={`${locBase}${nav.learn}`}><Icon name="code" size={15} /> {m.nav_learn()}</a>
+          <a class="topnav__link" href={`${locBase}${nav.projects}`}><Icon name="globe" size={15} /> {m.nav_projects()}</a>
+          <a class="topnav__link" href={`${locBase}${nav.cheatsheets}`}><Icon name="chart" size={15} /> {m.nav_cheatsheets()}</a>
+          <a class="topnav__link" href={`${locBase}${nav.progress}`}><Icon name="trail" size={15} /> {m.nav_progress()}</a>
           <div class="topnav__xp" id="xp-bar"></div>
-          <div class="topnav__group" aria-label="Language">
+          <div class="topnav__group" aria-label={m.switch_locale()}>
             {locales.map((l) => (
               <a
                 class:list={['topnav__lang', l.code === lang && 'topnav__lang--active']}
@@ -181,7 +193,7 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
               >{l.label}</a>
             ))}
           </div>
-          <button class="topnav__btn" data-theme-toggle aria-label={t.themeToggleLabel}><Icon name="sun" size={16} /></button>
+          <button type="button" class="topnav__btn" data-theme-toggle aria-label={m.theme_toggle_label()}><Icon name="sun" size={16} /></button>
         </nav>
       </div>
     </header>
@@ -196,15 +208,15 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
       aria-labelledby="onboarding-title" aria-describedby="onboarding-sub">
       <div class="onboarding__card">
         <div class="onboarding__emoji" aria-hidden="true">🚀</div>
-        <h2 class="onboarding__title" id="onboarding-title">{t.onboarding.title}</h2>
-        <p class="onboarding__sub" id="onboarding-sub">{t.onboarding.sub}</p>
+        <h2 class="onboarding__title" id="onboarding-title">{m.onboarding_title()}</h2>
+        <p class="onboarding__sub" id="onboarding-sub">{m.onboarding_sub()}</p>
         <ol class="onboarding__steps">
-          {t.onboarding.steps.map((step, i) => (
+          {[m.onboarding_step_1(), m.onboarding_step_2(), m.onboarding_step_3()].map((step, i) => (
             <li class="onboarding__step"><span class="onboarding__step-num" aria-hidden="true">{i + 1}</span> {step}</li>
           ))}
         </ol>
-        <button class="onboarding__cta btn btn-primary" id="onboarding-start">{t.onboarding.cta}</button>
-        <button class="onboarding__skip" id="onboarding-skip">{t.onboarding.skip}</button>
+        <button type="button" class="onboarding__cta btn btn-primary" id="onboarding-start">{m.onboarding_cta()}</button>
+        <button type="button" class="onboarding__skip" id="onboarding-skip">{m.onboarding_skip()}</button>
       </div>
     </div>
 
@@ -215,42 +227,44 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
             <span class="footer__logo" aria-hidden="true"><Icon name="code" size={16} /></span>
             <span>PyDA Course</span>
           </a>
-          <p class="footer__tagline">{t.footer.tagline}</p>
+          <p class="footer__tagline">{m.footer_tagline()}</p>
         </div>
         <div class="footer__col">
-          <h3><Icon name="code" size={13} /> {t.footer.courseCol}</h3>
-          <a href={`${locBase}${nav.learn}/python-101`}>{t.footer.python101}</a>
-          <a href={`${locBase}${nav.learn}/data-analysis`}>{t.footer.dataAnalysis}</a>
-          <a href={`${locBase}${nav.projects}`}>{t.footer.projects}</a>
+          <h3><Icon name="code" size={13} /> {m.footer_course_col()}</h3>
+          <a href={`${locBase}${nav.learn}/python-101`}>{m.footer_python_101()}</a>
+          <a href={`${locBase}${nav.learn}/data-analysis`}>{m.footer_data_analysis()}</a>
+          <a href={`${locBase}${nav.projects}`}>{m.footer_projects()}</a>
+          <a href={`${locBase}${nav.cheatsheets}`}>{m.footer_cheatsheets()}</a>
         </div>
         <div class="footer__col">
-          <h3><Icon name="chart" size={13} /> {t.footer.siteCol}</h3>
-          <a href={`${locBase}${nav.progress}`}>{t.footer.myProgress}</a>
+          <h3><Icon name="chart" size={13} /> {m.footer_site_col()}</h3>
+          <a href={`${locBase}${nav.progress}`}>{m.footer_my_progress()}</a>
         </div>
         <div class="footer__col">
-          <h3><Icon name="globe" size={13} /> {t.footer.moreCol}</h3>
-          <a href="https://github.com/abderrahim-lectures/python-data-analysis-course" target="_blank" rel="noopener noreferrer">{t.footer.github}</a>
-          <a href="https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/CHANGELOG.md" target="_blank" rel="noopener noreferrer">{t.footer.changelog}</a>
+          <h3><Icon name="globe" size={13} /> {m.footer_more_col()}</h3>
+          <a href="https://github.com/abderrahim-lectures/python-data-analysis-course" target="_blank" rel="noopener noreferrer">{m.footer_github()}</a>
+          <a href="https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/CHANGELOG.md" target="_blank" rel="noopener noreferrer">{m.footer_changelog()}</a>
         </div>
       </div>
       <div class="container footer__bottom">
-        <p>{t.footer.copyright(new Date().getFullYear(), pkg.version)}</p>
+        <p>{m.footer_copyright({year: new Date().getFullYear(), version: pkg.version})}</p>
       </div>
     </footer>
 
-    <nav class="mobilenav" aria-label="Mobile">
-      <a class="mobilenav__item" href={locBase}><Icon name="home" size={18} /> <span>{t.mobileNav.home}</span></a>
-      <a class="mobilenav__item" href={`${locBase}${nav.learn}`}><Icon name="code" size={18} /> <span>{t.mobileNav.learn}</span></a>
-      <a class="mobilenav__item" href={`${locBase}${nav.projects}`}><Icon name="globe" size={18} /> <span>{t.mobileNav.projects}</span></a>
-      <a class="mobilenav__item" href={`${locBase}${nav.progress}`}><Icon name="trail" size={18} /> <span>{t.mobileNav.progress}</span></a>
+    <nav class="mobilenav" aria-label={m.aria_label_mobile()}>
+      <a class="mobilenav__item" href={locBase}><Icon name="home" size={18} /> <span>{m.mobile_nav_home()}</span></a>
+      <a class="mobilenav__item" href={`${locBase}${nav.learn}`}><Icon name="code" size={18} /> <span>{m.mobile_nav_learn()}</span></a>
+      <a class="mobilenav__item" href={`${locBase}${nav.projects}`}><Icon name="globe" size={18} /> <span>{m.mobile_nav_projects()}</span></a>
+      <a class="mobilenav__item" href={`${locBase}${nav.cheatsheets}`}><Icon name="chart" size={18} /> <span>{m.mobile_nav_cheatsheets()}</span></a>
+      <a class="mobilenav__item" href={`${locBase}${nav.progress}`}><Icon name="trail" size={18} /> <span>{m.mobile_nav_progress()}</span></a>
     </nav>
 
-    <div class="xp-toast-container" id="xp-toast-container"></div>
+    <div class="xp-toast-container" id="xp-toast-container" role="status" aria-live="polite" aria-atomic={false}></div>
 
     <!-- Level-up celebration overlay -->
-    <div class="lvlup" id="lvlup" hidden>
+    <div class="lvlup" id="lvlup" role="status" aria-live="polite" hidden>
       <div class="lvlup__bg"></div>
-      <div class="lvlup__text">{t.lvlUpText}</div>
+      <div class="lvlup__text">{m.lvl_up_text()}</div>
       <div class="lvlup__sub" id="lvlup-sub"></div>
     </div>
 
@@ -261,16 +275,14 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
 
     <script>
       // @ts-nocheck
+      import {xpProgressFor} from '../lib/levelMath';
+      import {m} from '../paraglide/messages.js';
       const STORAGE_KEY = 'pda:state';
       function readState() {
         try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch { return {}; }
       }
       function xpProgress(s) {
-        const xp = s.xp || 0;
-        const level = Math.floor(xp / 100) + 1;
-        const pct = xp % 100;
-        const toNext = 100 - pct;
-        return { xp, level, pct, toNext };
+        return xpProgressFor(s.xp || 0);
       }
       function streakEmoji(streak) {
         if (streak >= 14) return '🔥🔥🔥';
@@ -287,7 +299,7 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
         const prevLevel = parseInt(bar.dataset.level || '0');
         bar.dataset.level = String(level);
         bar.innerHTML = `
-          <div class="xp-bar" title="Level ${level} · ${xp} XP · ${streakEmoji(streak)}">
+          <div class="xp-bar" title="${m.level_label()} ${level} · ${xp} XP · ${streakEmoji(streak)}">
             <span class="xp-bar__level">Lv.${level}</span>
             <div class="xp-bar__track"><div class="xp-bar__fill" style="width:${pct}%"></div></div>
             <span class="xp-bar__streak">${streakEmoji(streak)}</span>
@@ -302,7 +314,7 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
         if (!overlay) return;
         const subEl = document.getElementById('lvlup-sub');
         const newBadges = (badges || []).slice(-3);
-        if (subEl) subEl.textContent = newBadges.length ? `Unlocked: ${newBadges.join(', ')}` : `${xp} total XP`;
+        if (subEl) subEl.textContent = newBadges.length ? `${m.unlocked_prefix()}${newBadges.join(', ')}` : `${xp} ${m.total_xp_label()}`;
         overlay.hidden = false;
         overlay.classList.remove('lvlup--hide');
         overlay.classList.add('lvlup--show');
@@ -384,7 +396,7 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
           toast.className = 'floating-xp';
           const gained = xp - lastXP;
           lastXP = xp;
-          toast.innerHTML = `⚡ +${gained} XP`;
+          toast.innerHTML = `${m.xp_toast({amount: gained})}`;
           container.appendChild(toast);
           setTimeout(() => toast.remove(), 3000);
         });
@@ -402,6 +414,7 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
       });
     </script>
     <LearnerActivity locale={lang} supabaseUrl={import.meta.env.PUBLIC_SUPABASE_URL || ''} supabaseKey={import.meta.env.PUBLIC_SUPABASE_KEY || ''} />
+    <PageViews locale={lang} supabaseUrl={import.meta.env.PUBLIC_SUPABASE_URL || ''} supabaseKey={import.meta.env.PUBLIC_SUPABASE_KEY || ''} />
     <script is:inline>
     (function() {
       var bar = document.getElementById('learner-bar');
@@ -440,10 +453,9 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
       async function refresh() {
         var n = await count();
         var r = await recent();
-        console.log('[learner-bar] active='+n, r);
         var ce=document.getElementById('learner-count'),le=document.getElementById('learner-label'),re=document.getElementById('learner-recent');
         if(ce)ce.textContent=n;if(le)le.textContent=n===1?'learner online':'learners online';
-        if(re&&r)re.textContent=lbl(r.slug)+' · '+ago(r.created_at);
+        if(re&&r)re.textContent=lbl(r.id)+' · '+ago(r.created_at);
         bar.style.display=n>0?'flex':'none';
       }
       async function clean() {
@@ -458,7 +470,6 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
       beat(); clean(); refresh();
       setInterval(beat,30000); setInterval(refresh,30000);
       window.__supabaseLogCompletion = logComp;
-      console.log('[learner-bar] initialized');
     })();
     </script>
   </body>

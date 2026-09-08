@@ -121,14 +121,6 @@ Without running it, compute `15 // 4` and `15 % 4` by hand. Then verify: does `4
 - If you want to convert `"3.14"` to an integer, why does `int("3.14")` fail but `int(float("3.14"))` work? What's the intermediate step doing?
 - Python has `math.floor()` and `math.ceil()`. How do they differ from `int()` for negative numbers? When would you choose one over the other?
 
-## Projects You Can Build
-
-Here are a few real-world projects that reinforce these concepts:
-
-- 💰 **Expense Tracker** - Convert user input strings to floats for calculations and format results back to strings
-- 🎮 **Wordle Clone** - Convert attempt numbers to strings for display and handle type mismatches in user input
-- 🔒 **Password Generator** - Convert random character selections and validate input types for length parameters
-
 ## ✅ Quick check
 
 <div class="quiz" data-quiz="python-101-conversion">

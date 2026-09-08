@@ -22,7 +22,7 @@ learningObjectives:
 
 Outliers hide in every dataset — a sensor spike, a fraudulent transaction, a measurement error. Finding them matters because they can distort analysis or reveal something important. This project teaches you two classic statistical techniques for flagging anomalies (z-score and IQR) and shows you how to visualize the results so the outliers stand out on charts.
 
-This is optional and ungraded. See [Real-World Projects](/docs/projects) for the full list.
+This is optional and ungraded. See [Real-World Projects](/projects) for the full list.
 
 ## What you'll do
 

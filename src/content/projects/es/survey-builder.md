@@ -19,7 +19,7 @@ prerequisites:
 
 Las encuestas están en todas partes — formularios de retroalimentación, investigación de mercado, evaluaciones de curso — y detrás de cada una hay un motor estructurado: tipos de pregunta, validación, ramificación condicional y análisis. Este proyecto construye ese motor desde cero: un conjunto de clases de Python que modelan diferentes tipos de pregunta (opción múltiple, escalas de calificación, texto abierto), un ejecutor que secuencia las preguntas con lógica de ramificación y un pipeline de pandas que convierte las respuestas crudas en gráficos de frecuencia y tabulaciones cruzadas.
 
-Esto asume fundamentos de Python incluyendo clases, listas y dicts, y comodidad con `input()` — nada más allá. Es opcional y no se califica; consulta [Proyectos del Mundo Real](/docs/projects) para ver la lista completa y en crecimiento.
+Esto asume fundamentos de Python incluyendo clases, listas y dicts, y comodidad con `input()` — nada más allá. Es opcional y no se califica; consulta [Proyectos del Mundo Real](/es/proyectos) para ver la lista completa y en crecimiento.
 
 ## 🎯 Lo que harás
 

@@ -54,3 +54,51 @@ create policy "completions_delete_own" on completions
 
 create policy "learners_delete_own" on learners
   for delete using (true);
+
+-- ── pageviews ─────────────────────────────────────────────────
+-- Anonymous page-view logging for site-wide stats (popular pages,
+-- counting). One row per page load, written by the client from the
+-- PUBLIC_SUPABASE_* env vars in Base.astro. No RLS restrictions on
+-- insert (anyone may report a view) or select (the popularity widget
+-- aggregates as anon). No update/delete for anon.
+
+create table if not exists pageviews (
+  id          uuid primary key default gen_random_uuid(),
+  path        text not null,
+  locale      text not null default 'en',
+  referrer    text,
+  created_at  timestamptz not null default now()
+);
+
+create index if not exists pageviews_path_idx on pageviews(path);
+create index if not exists pageviews_created_idx on pageviews(created_at);
+
+alter table pageviews enable row level security;
+
+create policy "pageviews_insert_anon" on pageviews
+  for insert with check (true);
+
+create policy "pageviews_select_anon" on pageviews
+  for select using (true);
+
+-- ── popular_pages RPC ─────────────────────────────────────────
+-- Aggregate page views into a top-N ranking over the last N days.
+-- Callable as anon via PostgREST: GET /rest/v1/rpc/popular_pages?days=30
+
+create or replace function popular_pages(days int default 30)
+returns table (path text, views bigint, last_seen timestamptz)
+language sql stable security invoker set search_path = public
+as $$
+  select pageviews.path,
+         count(*)::bigint as views,
+         max(pageviews.created_at) as last_seen
+    from pageviews
+   where pageviews.created_at > now() - make_interval(days => days)
+   group by pageviews.path
+   order by views desc
+   limit 10;
+$$;
+
+-- anon may execute the RPC (default is granted to public; kept explicit)
+revoke all on function popular_pages(int) from anon;
+grant execute on function popular_pages(int) to anon;

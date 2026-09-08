@@ -19,7 +19,7 @@ prerequisites:
 
 Cada sitio web tiene señales SEO invisibles — meta descripciones, jerarquía de encabezados, tags de Open Graph — que determinan si los buscadores lo clasifican bien o lo entierran. Este proyecto construye un kit de herramientas que obtiene cualquier URL, extrae esas señales, las puntúa contra mejores prácticas y genera un informe estructurado que puedes comparar entre múltiples páginas, todo con librerías de Python puro que corren en cualquier lugar.
 
-Esto asume conceptos básicos de Python, conceptos básicos de HTML y la librería `requests` (cubierta en Configuración) — nada de Análisis de Datos se requiere. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa y creciente.
+Esto asume conceptos básicos de Python, conceptos básicos de HTML y la librería `requests` (cubierta en Configuración) — nada de Análisis de Datos se requiere. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 ## 🎯 Lo que harás
 

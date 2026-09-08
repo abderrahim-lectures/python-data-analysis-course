@@ -13,7 +13,7 @@ prerequisites:
   - Python a nivel intermedio
   - Conocimientos básicos de machine learning
   - familiaridad con pandas y scikit-learn
-  - Terminal y编辑or de código
+  - Terminal yeditor de código
 ---
 
 ## 🎯 Lo que harás

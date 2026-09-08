@@ -5,10 +5,10 @@ difficulty: "advanced"
 estimatedMinutes: 90
 tags: ["cli", "ast", "static-analysis", "tooling"]
 learningObjectives:
-  - "Parse Python source into an abstract syntax tree with the ast module"
-  - "Traverse the tree with an ast.NodeVisitor and collect nodes by type"
-  - "Dot-map imported names to their uses to detect unused imports"
-  - "Grade findings by severity and emit an exit-code report for CI"
+  - "Analizar código fuente de Python en un árbol de sintaxis abstracta con el módulo ast"
+  - "Recorrer el árbol con un ast.NodeVisitor y recolectar nodos por tipo"
+  - "Mapear nombres importados a sus usos para detectar importaciones sin usar"
+  - "Calificar hallazgos por severidad y emitir un informe de código de salida para CI"
 prerequisites: ["python-101/functions", "python-101/data-structures", "python-101/file-io", "python-101/scope-and-lambdas"]
 ---
 
@@ -16,7 +16,7 @@ prerequisites: ["python-101/functions", "python-101/data-structures", "python-10
 
 Todo proyecto serio de Python ejecuta un linter antes de hacer merge, y el primer trabajo del linter no es ciencia espacial — es *leer la forma del código*. Python incluye un módulo de la biblioteca estándar llamado `ast` que analiza un archivo `.py` en un árbol de nodos — imports, definiciones de funciones, llamadas, excepciones — que puedes recorrer e inspeccionar. Este proyecto construye un linter funcional encima de él: analiza un archivo, recorre el árbol e informa tres problemas reales — imports sin usar, cláusulas `except:` desnudas y funciones más largas que un límite de líneas — con un grado de severidad por hallazgo y un código de salida que permite que un script de CI falle por ellos. Estás construyendo el motor, y es lo suficientemente pequeño como para entender cada línea.
 
-Esto asume Python 101 — funciones, dicts, E/S de archivos y una sensación del ámbito de variables. Nada más allá de eso: sin paquetes, sin framework, sin servicios externos. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa.
+Esto asume Python 101 — funciones, dicts, E/S de archivos y una sensación del ámbito de variables. Nada más allá de eso: sin paquetes, sin framework, sin servicios externos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
 
 ## 🎯 Lo que harás
 

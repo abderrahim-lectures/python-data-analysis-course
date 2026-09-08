@@ -6,9 +6,13 @@
 // `${section}/${track}/week-${n}`), and progress is shared across locales
 // for the same lesson. Renaming those would require decoupling the URL
 // slug from the progress-tracking key, which is a separate, larger task.
+//
+// The builders keep these slug tables as the source of truth for interior
+// URL words (localizeHref only rewrites the locale *prefix*, never slugs —
+// verified in the i18n PoC), and delegate the prefix swap to localizeHref.
+import {localizeHref} from '../paraglide/runtime.js';
 export type Locale = 'en' | 'ar' | 'es' | 'fr';
 
-export const LOCALES: Locale[] = ['ar', 'es', 'fr'];
 export const ALL_LOCALES: Locale[] = ['en', 'ar', 'es', 'fr'];
 
 /** Detect locale from a URL pathname. Checks locale prefixes first,
@@ -65,32 +69,51 @@ export function localeBase(locale: Locale, base: string): string {
   return locale === 'en' ? base : `${base}${locale}/`;
 }
 
+/** Root-absolute path (leading `/`) via localizeHref's prefix swap.
+    Interior words come from the slug tables — localizeHref never rewrites
+    slugs, it only adds/replaces the `/locale/` segment (or none for EN). */
+function localizedPath(parts: string[], locale: Locale): string {
+  return localizeHref(`/${parts.filter(Boolean).join('/')}`, {locale});
+}
+
+/** localizeHref returns a root-absolute path; re-apply an Astro subpath
+    base (normally `/` or `''`, where the path is already correct). */
+function withBase(path: string, base: string): string {
+  if (base === '/' || base === '') return path;
+  return `${base}${path.replace(/^\//, '')}`;
+}
+
 export function learnHref(locale: Locale, base: string, ...parts: string[]): string {
-  const segs = [NAV_WORDS[locale].learn, ...parts].filter(Boolean);
-  return `${localeBase(locale, base)}${segs.join('/')}`;
+  return withBase(localizedPath([NAV_WORDS[locale].learn, ...parts], locale), base);
 }
 
 export function projectsHref(locale: Locale, base: string, ...parts: string[]): string {
-  const segs = [NAV_WORDS[locale].projects, ...parts].filter(Boolean);
-  return `${localeBase(locale, base)}${segs.join('/')}`;
+  return withBase(localizedPath([NAV_WORDS[locale].projects, ...parts], locale), base);
 }
 
+/** Top-level `/progress` / `/progreso` / … link (player card on the home page). */
 export function progressHref(locale: Locale, base: string): string {
-  return `${localeBase(locale, base)}${NAV_WORDS[locale].progress}`;
+  return withBase(localizedPath([NAV_WORDS[locale].progress], locale), base);
+}
+
+/** Top-level `/playground` link. The playground route keeps its EN word in
+    every locale (like `modules`/`lessons` interior words). */
+export function playgroundHref(locale: Locale, base: string): string {
+  return withBase(localizedPath(['playground'], locale), base);
+}
+
+/** Top-level `/credits`/`/creditos`/… link. */
+export function creditsHref(locale: Locale, base: string): string {
+  return withBase(localizedPath([NAV_WORDS[locale].credits], locale), base);
+}
+
+/** Top-level `/cheatsheets`/`/referencias`/… link. */
+export function cheatsheetsHref(locale: Locale, base: string): string {
+  return withBase(localizedPath([NAV_WORDS[locale].cheatsheets], locale), base);
 }
 
 export function weekHref(locale: Locale, base: string, section: string, track: 'normal' | 'hard', week: number): string {
   return learnHref(locale, base, section, track, `week-${week}`);
-}
-
-/** `/credits`, `/ar/المصادر`, ... */
-export function creditsHref(locale: Locale, base: string): string {
-  return `${localeBase(locale, base)}${NAV_WORDS[locale].credits}`;
-}
-
-/** `/cheatsheets`, `/ar/ملخصات`, ... */
-export function cheatsheetsHref(locale: Locale, base: string): string {
-  return `${localeBase(locale, base)}${NAV_WORDS[locale].cheatsheets}`;
 }
 
 /** Build a module href. Track words stay untranslated in URLs — only the

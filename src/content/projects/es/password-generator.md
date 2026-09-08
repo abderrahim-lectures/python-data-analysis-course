@@ -6,13 +6,13 @@ estimatedMinutes: 45
 tags: ["security", "cryptography", "cli", "hashing"]
 xpReward: 50
 learningObjectives:
-  - Generate cryptographically secure random passwords with customizable character sets
-  - Calculate password entropy and assign strength labels
-  - Check passwords against the Have I Been Pwned breach database using k-anonymity
-  - Store and retrieve credentials in an AES-encrypted vault file
-  - Build a command-line interface with argparse
-  - Track password age and flag expired entries
-  - Produce colored, formatted terminal reports
+  - Genera contraseñas aleatorias seguras criptográficamente con conjuntos de caracteres personalizables
+  - Calcula la entropía de la contraseña y asigna etiquetas de fortaleza
+  - Verifica contraseñas contra la base de datos de filtraciones Have I Been Pwned usando k-anonimato
+  - Almacena y recupera credenciales en un archivo de bóveda cifrado con AES
+  - Construye una interfaz de línea de comandos con argparse
+  - Rastrea la antigüedad de las contraseñas y marca las entradas vencidas
+  - Genera informes de terminal con formato y colores
 prerequisites:
   - Basic Python strings and functions
   - Understanding of lists and loops
@@ -25,7 +25,7 @@ Reutilizas la misma contraseña en todas partes porque inventar una nueva cada v
 
 Este proyecto solo asume conceptos básicos de nivel Python 101 — funciones, listas, diccionarios, bucles y formato de cadenas. Sin frameworks, sin bases de datos, sin servicios en la nube. Todo lo que necesitas proviene de la biblioteca estándar más un pequeño paquete de cifrado.
 
-Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/docs/projects) para la lista completa.
+Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
 
 ## 🎯 Lo que harás
 

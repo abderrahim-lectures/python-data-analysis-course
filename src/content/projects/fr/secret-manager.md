@@ -16,7 +16,7 @@ prerequisites: ["python-101/file-io", "python-101/dictionaries", "python-101/fun
 
 Un « gestionnaire de secrets » semble exotique — coffres, modules matériels, acronymes gouvernementaux. Retire le marketing et c'est une promesse : chiffrer un mot de passe ou une clé API pour qu'un attaquant tenant *tout ton support de stockage* (un serveur compromis, une sauvegarde volée) ne puisse toujours pas lire le secret ; le déchiffrer seulement quand quelque chose le demande légitimement ; et garder un journal d'audit de chaque fois que quoi que ce soit l'a demandé. Ce projet construit le cœur honnête de cette promesse avec la bibliothèque `cryptography` de Python, AES-256-GCM et un coffre JSON sur disque — un CLI qui chiffre un secret, le stocke, le déchiffre, journalise chaque accès et *prouve* qu'il a remarqué la falsification en refusant de déchiffrer tout ce qui a été altéré. Pas de cloud, pas d'inscription, pas de conformité — mais chaque mécanisme que tu touches est le vrai mécanisme utilisé par les vrais stores de secrets.
 
-Cela suppose le Python 101 — entrées-sorties de fichiers, dictionnaires, fonctions. Aucune expérience en crypto requise. C'est optionnel et non noté ; vois [Projets du monde réel](/docs/projects) pour la liste complète.
+Cela suppose le Python 101 — entrées-sorties de fichiers, dictionnaires, fonctions. Aucune expérience en crypto requise. C'est optionnel et non noté ; vois [Projets du monde réel](/fr/projets) pour la liste complète.
 
 ## 🎯 Ce que tu vas faire
 

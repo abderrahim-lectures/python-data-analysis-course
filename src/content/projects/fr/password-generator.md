@@ -25,7 +25,7 @@ Tu utilises le même mot de passe partout, parce qu'en inventer un nouveau à ch
 
 Ce projet ne suppose que les bases de niveau « Python 101 » — fonctions, listes, dictionnaires, boucles et formatage de chaînes. Pas de frameworks, pas de bases de données, pas de services cloud. Tout ce dont tu as besoin provient de la bibliothèque standard plus un petit paquet de chiffrement.
 
-C'est optionnel et non noté. Vois [Projets du monde réel](/docs/projects) pour la liste complète.
+C'est optionnel et non noté. Vois [Projets du monde réel](/fr/projets) pour la liste complète.
 
 ## 🎯 Ce que tu vas faire
 

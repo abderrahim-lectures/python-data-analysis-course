@@ -17,7 +17,7 @@ prerequisites: ["python-101/file-io", "python-101/strings", "python-101/function
 
 Presentations are edited in one tool and delivered in another, and the round trip is where slides die: fonts change, layouts break, and a bullet-heavy keynote fights you for every pixel. A Markdown-first builder skips all of that — you write slides as plain text with `---` between them, and a command turns that into one self-contained HTML file that opens anywhere, in any browser, with no app required. This project builds that builder: it parses a markdown deck, renders each slide, applies a theme, lifts out your speaker notes, and ships a single `deck.html`.
 
-This assumes Python 101 — file I/O, strings, and functions. Nothing beyond that: no JavaScript framework, no database, no build tool. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full list.
+This assumes Python 101 — file I/O, strings, and functions. Nothing beyond that: no JavaScript framework, no database, no build tool. It's optional and ungraded; see [Real-World Projects](/projects) for the full list.
 
 ## 🎯 What you'll do
 

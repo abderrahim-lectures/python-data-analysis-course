@@ -1,6 +1,5 @@
 ---
 
-
 title: "Word Frequency Counting"
 description: "Tally tokens into a frequency dict, extract vocabulary stats, and identify the most and least common words."
 module: "tokenization-frequency"
@@ -157,11 +156,3 @@ Write a function `top_n(freq, n)` that returns the top N most frequent words as 
 def top_n(freq, n):
     return sorted(freq.items(), key=lambda item: item[1], reverse=True)[:n]
 ```
-
-## Projects You Can Build
-
-Here are a few real-world projects that reinforce these concepts:
-
-- 🎨 **AI Story Writer** - Analyze word frequencies to guide text generation and style matching
-- 🤖 **Chatbot Builder** - Use word frequency to prioritize common responses and keywords
-- 📝 **Sentiment Dashboard** - Compute word frequencies for keyword-based sentiment analysis

@@ -19,7 +19,7 @@ learningObjectives:
 
 A fleet of connected devices is a growing pile of small problems until someone tracks it: sensors report a heartbeat and then go quiet, `cam-01` has been silent for six days, two of your three `temp-hum` sensors are a firmware release behind, and the garage sensor should alert at −5 °C while the rest warn at 28. A device manager turns those scattered facts into a registry you can sort, a health verdict per device, an update queue, a resolved config per device, and a one-screen fleet report — all from JSON and a little `datetime` math, no networking needed.
 
-This assumes Python 101 — lists, dictionaries, loops, functions — plus comfort opening files. Nothing from the Data Analysis module is required. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python 101 — lists, dictionaries, loops, functions — plus comfort opening files. Nothing from the Data Analysis module is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

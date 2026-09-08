@@ -21,7 +21,7 @@ learningObjectives:
 
 Escribir pruebas a mano se siente como volver a teclear la función que acabas de escribir, solo que más lento. Este proyecto construye el inverso: un generador que *lee* una función objetivo — su firma, sus valores por defecto y su comportamiento — y produce una suite de pytest que ejercita fronteras reales, propiedades reales (como la idempotencia) y una red de seguridad de argumentos intercambiados. Una capa opcional de LLM redacta "pruebas de intención" que capturan lo que se *supone* que hace la función, y toda la suite se ejecuta como subproceso para que tu herramienta reporte el veredicto en una línea. La función objetivo es un `clamp` diminuto, así que cada prueba generada es fácil de revisar de un vistazo — el mecanismo, no la matemática, es el punto.
 
-Esto asume soltura con los valores por defecto de funciones y las comprensiones de listas; nada de esto es calificado, es opcional y no calificado — consulta [Proyectos del mundo real](/docs/projects) para la lista completa y creciente.
+Esto asume soltura con los valores por defecto de funciones y las comprensiones de listas; nada de esto es calificado, es opcional y no calificado — consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 ## 🎯 Lo que harás
 

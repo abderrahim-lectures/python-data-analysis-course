@@ -7,9 +7,9 @@ description: "Build a discord.py bot that runs trivia rounds in a server, tracks
 
 A live `discord.py` bot that runs trivia rounds in a server: post a question, collect answers within a time limit, reveal who got it right, and keep a persistent leaderboard across rounds. Most trivia bots stop at a fixed question bank — this one adds a twist that fits a Python course: it can also generate a fresh question on any topic on the spot with a free-tier LLM, instead of only ever asking from a canned list.
 
-This assumes Python 101. No other Real-World Project is required first, though if you've built [Build a RAG App](/docs/projects/rag-notes) already, the free-tier LLM setup below will feel familiar.
+This assumes Python 101. No other Real-World Project is required first, though if you've built [Build a RAG App](/projects/rag-notes) already, the free-tier LLM setup below will feel familiar.
 
-This is optional and ungraded. See [Real-World Projects](/docs/projects) for the full, growing list.
+This is optional and ungraded. See [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

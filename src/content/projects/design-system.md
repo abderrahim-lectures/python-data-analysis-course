@@ -20,7 +20,7 @@ prerequisites:
 
 Every design system starts from the same place: someone picks one brand color and then asks, "what does the whole palette look like?" This project builds that answer in Python — you'll derive a full palette in one color family, verify every pairing you'd actually use against WCAG contrast rules, build a typographic and spacing scale that stays mathematically consistent, and export everything as CSS custom properties ready to drop into a real stylesheet.
 
-This assumes Python 101 and a rough sense of what a hex color string is — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python 101 and a rough sense of what a hex color string is — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

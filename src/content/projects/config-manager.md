@@ -18,7 +18,7 @@ learningObjectives:
 
 Every real application has configuration that should never be hardcoded: which port to bind, which log level to use, which API keys to trust. The standard way to organize it is *layered* — sensible defaults, overridden by a config file per environment, overridden by environment variables — so that "run it locally" and "run it in production" differ without anyone editing code. This project builds exactly that loader: a small library that merges defaults, JSON, and TOML with environment-variable overrides, validates the result against a schema, and — crucially — never prints a secret.
 
-This assumes Python 101 (dictionaries, functions, and `json` at the `import` level) — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python 101 (dictionaries, functions, and `json` at the `import` level) — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

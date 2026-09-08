@@ -18,7 +18,7 @@ learningObjectives:
 
 Picking colors that actually go together is the difference between a professional-looking app and a clown-car one, yet "harmonious" is usually a vibe, not a formula. It turns out matters less than it feels like it should: the color **wheel** gives you precise rules — complementary colors sit 180° apart, triadic ones 120°, analogous neighbors 30°. This project builds a tool that applies those rules to *any* base color, then checks each candidate against the WCAG contrast guidelines so you never hand someone a palette where the text vanishes into the background.
 
-This assumes Python 101 — variables, loops, functions, and basic `print` — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python 101 — variables, loops, functions, and basic `print` — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

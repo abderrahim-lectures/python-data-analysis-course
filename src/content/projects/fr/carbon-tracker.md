@@ -21,7 +21,7 @@ learningObjectives:
 
 Tes choix quotidiens émettent du carbone : conduire 10 km n'est pas la même chose que pédaler 10 km ou prendre le train 10 km, et manger de la viande n'est pas la même chose que manger des végétaux. Ce projet construit un petit **suivi d'empreinte carbone** honnête dans le terminal — un unique script Python qui sait combien de kg d'équivalent CO2 chaque activité coûte, travaille sur une semaine d'exemple d'entrées transports/alimentation/électricité, totalise tout par jour et par catégorie, dessine un diagramme à barres ASCII, vérifie la semaine contre un budget, sauvegarde tout dans un CSV et devient finalement une vraie commande avec les sous-commandes `add`, `report` et `reset`. Il n'utilise que la bibliothèque standard — pas d'installations, pas d'aléatoire, donc les nombres que tu vois ici sont exactement ceux que tu verras.
 
-Cela suppose les listes, dicts et boucles `for` de Python, et une utilisation basique du terminal. C'est un projet facultatif et non noté — consulte [Projets du monde réel](/docs/projects) pour la liste complète et grandissante. Chaque brique tourne sur une installation Python de base (3.10+).
+Cela suppose les listes, dicts et boucles `for` de Python, et une utilisation basique du terminal. C'est un projet facultatif et non noté — consulte [Projets du monde réel](/fr/projets) pour la liste complète et grandissante. Chaque brique tourne sur une installation Python de base (3.10+).
 
 ## 🎯 Ce que tu vas faire
 

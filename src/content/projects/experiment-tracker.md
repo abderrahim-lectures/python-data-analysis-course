@@ -19,7 +19,7 @@ learningObjectives:
 
 "Which model won?" is the recurring question of any project that trains models — and a plain `results.txt` can't answer it: same run name, rerun twice, edited columns, and the answer drifts with whatever someone typed last. This project builds the honest alternron: a `runs.jsonl` log where each run is a dataclass (model, metric, value, artifact path), duplicate IDs are refused at the door, the best run per metric comes from a direction table ("lower rmse is better, higher accuracy is better"), artifacts get a SHA-256 fingerprint you can verify later, and a five-command CLI (`add`, `list`, `best`) makes the whole thing feel like a real tool. Everything is standard library and file-based — no database, no ML library required.
 
-This assumes Python 101 — lists, dicts, functions — plus dataclasses (`from dataclasses import dataclass`) and comfortable file handling. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python 101 — lists, dicts, functions — plus dataclasses (`from dataclasses import dataclass`) and comfortable file handling. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

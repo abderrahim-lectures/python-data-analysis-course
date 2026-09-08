@@ -16,7 +16,7 @@ prerequisites: ["Python 101"]
 
 Chaque photo sur le web a besoin d'une description textuelle — pour l'accessibilité, pour les moteurs de recherche, pour les personnes qui ne peuvent pas charger l'image. Écrire les descriptions à la main est lent ; un modèle vision-langage peut les générer en quelques secondes. Ce projet construit un outil CLI qui prend une image (depuis un chemin de fichier ou une URL) et produit une description lisible par l'humain en utilisant une API de vision gratuite. Tu géreras le prétraitement des images, les appels API, le traitement par lots avec suivi de progression, et même l'écriture des descriptions dans les métadonnées des images.
 
-Cela suppose Python 101 — rien de Analyse de Données n'est requis. C'est optionnel et non noté ; voir [Projets du monde réel](/docs/projects) pour la liste complète.
+Cela suppose Python 101 — rien de Analyse de Données n'est requis. C'est optionnel et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète.
 
 ## 🎯 Ce que tu vas faire
 

@@ -20,7 +20,7 @@ prerequisites:
 
 Una app de chat es la introducción más suave posible a las redes: los mensajes salen por un socket, entran los mensajes, repetir. Casi toda experiencia "en vivo" — multijugador, notificaciones, cursores colaborativos — es este bucle con otras ropas. Este proyecto construye uno de verdad: un manejador de eco, luego difusión por salas, luego historial y reproducción de presencia para cualquiera que llegue tarde, y finalmente un cliente de terminal con el que puedes chatear de verdad entre dos terminales. Todo es asyncio + `websockets`, sin navegador y sin relleno.
 
-Esto asume Python 101 más un poco de async — no se requiere nada de Análisis de Datos. Es opcional y no se califica; consulta [Proyectos del Mundo Real](/docs/projects) para ver la lista completa y en crecimiento.
+Esto asume Python 101 más un poco de async — no se requiere nada de Análisis de Datos. Es opcional y no se califica; consulta [Proyectos del Mundo Real](/es/proyectos) para ver la lista completa y en crecimiento.
 
 ## 🎯 Lo que harás
 

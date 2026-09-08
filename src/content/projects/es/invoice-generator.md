@@ -16,7 +16,7 @@ prerequisites: ["Python 101"]
 
 Todo freelancer y pequeña empresa se enfrenta tarde o temprano a la misma tarea: convertir una hoja de cálculo del trabajo realizado en una factura profesional. Este proyecto construye una herramienta en Python que toma datos estructurados de factura — información del cliente, partidas con cantidades y tarifas, porcentajes de impuesto — y genera un PDF pulido con totales calculados, números de factura y fechas de vencimiento. Modelarás los datos, construirás el renderizador de PDF y harás seguimiento del estado de pago, todo desde la línea de comandos.
 
-Esto asume Python 101 — no se requiere nada de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa.
+Esto asume Python 101 — no se requiere nada de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
 
 ## 🎯 Lo que harás
 

@@ -8,7 +8,7 @@ description: "Construye una herramienta CLI que lee un git diff staged real vía
 
 "wip", "arreglar cosas", "asdf" — todo desarrollador ha escrito un mensaje de commit perezoso a las 6pm de un viernes. Este proyecto construye una herramienta CLI que elimina la excusa: captura tu `git diff` **staged** real con el módulo `subprocess` de Python, se lo entrega a un modelo de lenguaje de nivel gratuito con un system prompt diseñado específicamente para escribir mensajes estilo Conventional Commits, y te muestra un borrador que puedes aceptar, editar, o descartar — antes de que se confirme nada. La herramienta nunca hace commit por sí sola; un humano siempre confirma el mensaje final primero.
 
-Esto asume Python 101 y suficiente comodidad con git para saber qué hacen `git add` y `git commit` — no se requiere nada de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa y creciente.
+Esto asume Python 101 y suficiente comodidad con git para saber qué hacen `git add` y `git commit` — no se requiere nada de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 ## 🎯 Lo que harás
 

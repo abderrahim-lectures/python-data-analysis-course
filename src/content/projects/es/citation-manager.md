@@ -21,7 +21,7 @@ learningObjectives:
 
 Los papers no se escriben solos — pero la bibliografía casi puede hacerlo. Este proyecto construye un pequeño **gestor de citas**: un almacén de entradas bibliográficas (clave → autor/título/año/publicación/tipo), un formateador que convierte cualquier entrada en una línea consistente estilo APA, una búsqueda que trabaja entre autores, títulos y publicaciones, un verificador de *faltantes-y-sin-usar* construido sobre la diferencia de conjuntos que encuentra errores de lista de referencias antes de que lo haga un revisor, detección de casi-duplicados que atrapa el mismo libro ingresado dos veces con mayúsculas diferentes, conteos por tipo, y un generador final que ordena toda la biblioteca por año-y-autor y escribe una sección de `References` más una copia de seguridad en JSON. Todo es determinista — datos pequeños y curados a mano, sin aleatoriedad, solo biblioteca estándar pura.
 
-Esto asume dicts anidados, conjuntos, comprensiones y JSON básico. Es un proyecto opcional y no calificado — consulta [Proyectos del mundo real](/docs/projects) para la lista completa y creciente. Un archivo, solo biblioteca estándar.
+Esto asume dicts anidados, conjuntos, comprensiones y JSON básico. Es un proyecto opcional y no calificado — consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente. Un archivo, solo biblioteca estándar.
 
 ## 🎯 Lo que harás
 

@@ -21,7 +21,7 @@ learningObjectives:
 
 Ecologists don't watch every individual — they watch *signals*. A decline of 30% or more in observed birds across a season is a survey trigger; a wobble near the baseline is worth watching; a steady count is "leave it alone". This project builds that decision loop as a small **survey agent**: it holds a season-long observation log (synthetic, so it's reproducible), computes each species' baseline and recent window, applies a threshold rule to flag `SURVEY` / `WATCH` / `OK`, ingests new weekly batches and logs every decision to a CSV, then renders an ASCII bar chart of species totals and prints a prioritized survey queue. Everything runs in pandas and the standard library, with a fixed seed — the same run flags the same species every time, on any machine.
 
-This assumes pandas `groupby`, filtering, and merging. It is an optional, ungraded project — see [Real-World Projects](/docs/projects) for the full, growing list. One install: `pandas`.
+This assumes pandas `groupby`, filtering, and merging. It is an optional, ungraded project — see [Real-World Projects](/projects) for the full, growing list. One install: `pandas`.
 
 ## 🎯 What you'll do
 

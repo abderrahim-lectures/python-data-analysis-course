@@ -16,7 +16,7 @@ prerequisites: ["Python 101", "Análisis de Datos"]
 
 Los modelos de machine learning se rompen cuando el código que calcula features durante el entrenamiento se desvía del código que las calcula en producción. Un almacén de features arregla esto calculando las features una vez, versionándolas, y sirviendo los mismos valores ya sea que estés ajustando un modelo o puntuando una solicitud. Este proyecto construye un almacén de features ligero y respaldado por archivos con una CLI: registras definiciones de features, las calculas desde datos crudos, y las obtienes por clave de entidad con corrección en el tiempo.
 
-Esto asume Python 101 y comodidad con pandas de Análisis de Datos — nada más allá. Opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa.
+Esto asume Python 101 y comodidad con pandas de Análisis de Datos — nada más allá. Opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
 
 ## 🎯 Lo que harás
 

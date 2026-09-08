@@ -16,7 +16,7 @@ prerequisites: ["Python 101", "Data Analysis"]
 
 Cada almacén, cada tienda minorista, cada vendedor de e-commerce se enfrenta al mismo problema: saber qué hay en stock, qué se está agotando y dónde está todo. Este proyecto construye un sistema de gestión de inventario en Python con backend SQLite: haces seguimiento de los niveles de stock en múltiples almacenes, simulas escaneos de códigos de barras para actualizaciones rápidas, recibes alertas cuando los artículos alcanzan los umbrales de reorden, transfieres stock entre ubicaciones y prevés las necesidades futuras a partir de datos históricos. El sistema se ejecuta como CLI, pero la arquitectura es la misma que impulsa las plataformas de inventario reales.
 
-Esto asume Python 101 y comodidad básica con pandas de Análisis de Datos — nada más. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa.
+Esto asume Python 101 y comodidad básica con pandas de Análisis de Datos — nada más. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
 
 ## 🎯 Lo que harás
 

@@ -21,7 +21,7 @@ learningObjectives:
 
 El "aprendizaje automático automatizado" de los tutoriales vive en un servidor que rentas. Este proyecto corre la misma idea en tu laptop: un pequeño autopiloto que toma filas crudas, las limpia con un pipeline encadenado, hace competir un puñado de modelos con validación cruzada adecuada, ajusta los prometedores con una búsqueda de cuadrícula y exporta un ganador serializado que puedes recargar en cualquier lugar. En el camino enseña la disciplina que las bibliotecas de ML reales codifican: **la división entrenamiento/prueba se decide antes de cualquier ajuste**, el **imputador y el escalador aprenden solo de los datos de entrenamiento**, y una **búsqueda de cuadrícula ajustada en CV puede discrepar del conjunto de prueba** — este proyecto hace observables las tres con datos pequeños generados a mano. El dataset es sintético (estadísticas de tráfico de red que se correlacionan con un estado sano/no sano), así que cada número de esta guía es reproducible desde una semilla fija.
 
-Esto asume pandas, sklearn básico y algo de numpy. Es un proyecto opcional y no calificado — consulta [Proyectos del mundo real](/docs/projects) para la lista completa y creciente. Instala dos paquetes (`pandas`, `scikit-learn` en esta guía, `joblib` estándar) — `uv` hace esto indoloro.
+Esto asume pandas, sklearn básico y algo de numpy. Es un proyecto opcional y no calificado — consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente. Instala dos paquetes (`pandas`, `scikit-learn` en esta guía, `joblib` estándar) — `uv` hace esto indoloro.
 
 ## 🎯 Lo que harás
 

@@ -19,7 +19,7 @@ prerequisites:
 
 Chaque appareil se remplit de photos qui méritent toutes le même traitement — un redimensionnement ici, un filigrane là, un coup de luminosité partout. Ce projet construit une boîte à outils de traitement d'images avec Pillow qui sait charger et inspecter des images, appliquer des filtres et des améliorations de couleurs, recadrer et redimensionner sans déformer, ajouter des filigranes transparents et traiter un dossier entier d'images en une seule passe.
 
-Cela suppose Python 101 et une aisance de base avec les fichiers et les dossiers — rien de Analyse de Données n'est requis. C'est optionnel et non noté ; voir [Projets du monde réel](/docs/projects) pour la liste complète et croissante.
+Cela suppose Python 101 et une aisance de base avec les fichiers et les dossiers — rien de Analyse de Données n'est requis. C'est optionnel et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 

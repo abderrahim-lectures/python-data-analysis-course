@@ -21,7 +21,7 @@ learningObjectives:
 
 Numbers buried in tables are hard to act on. Charts make patterns, outliers, and trends jump out immediately. This project takes you from basic matplotlib plots through seaborn statistical visuals to interactive plotly dashboards — building a toolkit you can reuse on any dataset you encounter.
 
-This is optional and ungraded. See [Real-World Projects](/docs/projects) for the full list.
+This is optional and ungraded. See [Real-World Projects](/projects) for the full list.
 
 ## What you'll do
 

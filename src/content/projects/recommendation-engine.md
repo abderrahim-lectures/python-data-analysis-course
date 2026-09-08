@@ -16,7 +16,7 @@ prerequisites: ["python-101/libraries", "data-analysis/pandas", "data-analysis/g
 
 A recommendation engine is the quiet engine of the internet economy: Netflix's "You watched two episodes, here's a series you'll finish this weekend," Amazon's "Customers like you also bought," YouTube's autoplay. Under the hood it's startlingly unglamorous — a matrix of users by items, most cells empty, and the whole trick is to fill the gaps plausibly with a math called *similarity*. The same linear algebra that powers the course's pandas work scales up into the two big families you'll build here: **collaborative filtering** (derive taste from other users' ratings) and **content-based filtering** (match new items against the profiles of things you already rated). By the end you'll have a working hybrid that makes genuinely sensible recommendations on a real 100k-rating dataset.
 
-This assumes Python 101 plus a working knowledge of `pandas` and NumPy array math — the course's data-analysis modules. No deep learning, no industrial-scale systems. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full list.
+This assumes Python 101 plus a working knowledge of `pandas` and NumPy array math — the course's data-analysis modules. No deep learning, no industrial-scale systems. It's optional and ungraded; see [Real-World Projects](/projects) for the full list.
 
 ## 🎯 What you'll do
 

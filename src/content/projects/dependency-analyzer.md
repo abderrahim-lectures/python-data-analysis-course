@@ -19,7 +19,7 @@ learningObjectives:
 
 A `requirements.txt` says a team *intends* to use five packages. The files that were really written say which packages are *actually* imported. The difference between the two is where the waste and the risk live: unused pins bloat installs to this day, and a pinned `numpy==1.26.0` can sit two minor releases behind the security minimum with nobody noticing until a bot scans the manifest. This project builds the little analyzer that closes the gap — parse the manifest, scan the imports, and report what the two disagree on, all with the standard library.
 
-This assumes Python 101 plus comfortable `pathlib` and `re`. Nothing from the Data Analysis module is required. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python 101 plus comfortable `pathlib` and `re`. Nothing from the Data Analysis module is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

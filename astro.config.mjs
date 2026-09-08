@@ -1,6 +1,8 @@
 // @ts-check
 import {defineConfig} from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import {paraglideVitePlugin} from '@inlang/paraglide-js';
+import {unified} from '@astrojs/markdown-remark';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import remarkAdmonitions from './src/lib/remark-admonitions.mjs';
@@ -13,17 +15,35 @@ export default defineConfig({
   output: 'static',
   site: process.env.ASTRO_SITE ?? 'https://pyda-course.online/',
   base: process.env.ASTRO_BASE ?? '/',
+  i18n: {
+    defaultLocale: 'en',
+    locales: ['en', 'ar', 'es', 'fr'],
+    routing: {prefixDefaultLocale: false},
+  },
+  vite: {
+    plugins: [
+      paraglideVitePlugin({
+        project: './project.inlang',
+        outdir: './src/paraglide',
+        emitTsDeclarations: true,
+        strategy: ['url', 'globalVariable', 'baseLocale'],
+      }),
+    ],
+  },
   build: {inlineStylesheets: 'auto'},
+  compressHTML: true,
   markdown: {
     shikiConfig: {theme: 'github-dark-default'},
-    remarkPlugins: [remarkAdmonitions, remarkMath],
-    rehypePlugins: [
-      rehypeFixDocsLinks,
-      rehypeDropLeadingH1,
-      [rehypeKatex, {strict: false}],
-      rehypeRunnablePython,
-      rehypeSectionBlocks,
-    ],
+    processor: unified({
+      remarkPlugins: [remarkAdmonitions, remarkMath],
+      rehypePlugins: [
+        rehypeFixDocsLinks,
+        rehypeDropLeadingH1,
+        [rehypeKatex, {strict: false}],
+        rehypeRunnablePython,
+        rehypeSectionBlocks,
+      ],
+    }),
   },
   integrations: [sitemap()],
 });

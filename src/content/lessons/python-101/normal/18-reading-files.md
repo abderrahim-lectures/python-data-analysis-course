@@ -130,19 +130,6 @@ Use `pathlib` to list all `.txt` files in a directory.
 
 </section>
 
-<section class="lesson-section lesson-section--projects">
-<h2 id="-projects-you-can-build">Projects You Can Build</h2>
-
-<p>Here are a few real-world projects that reinforce these concepts:</p>
-
-<ul>
-  <li>💰 <strong>Expense Tracker</strong> - Read expense data from CSV files and load saved transaction history</li>
-  <li>🎓 <strong>Gradebook</strong> - Import student grades from text files and parse assignment data</li>
-  <li>📊 <strong>Spreadsheet Tool</strong> - Read and parse delimited data files for processing</li>
-</ul>
-
-</section>
-
 <section class="lesson-section lesson-section--quiz">
 <h2 id="-quick-check">✅ Quick check</h2>
 

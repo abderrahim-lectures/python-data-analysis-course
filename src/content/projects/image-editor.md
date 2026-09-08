@@ -19,7 +19,7 @@ prerequisites:
 
 Every device fills up with photos that all need the same treatment — a resize here, a watermark there, a brightness bump everywhere. This project builds an image-processing toolkit with Pillow that can load and inspect images, apply filters and color enhancements, crop and resize without distortion, add transparent watermarks, and process an entire folder of images in a single pass.
 
-This assumes Python 101 and basic comfort with files and folders — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python 101 and basic comfort with files and folders — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

@@ -19,7 +19,7 @@ prerequisites:
 
 Les sondages sont partout — formulaires de retour, études de marché, évaluations de cours — et derrière chacun se cache un moteur structuré : types de questions, validation, branchement conditionnel et analyse. Ce projet construit ce moteur à partir de zéro : un ensemble de classes Python qui modélisent différents types de questions (choix multiple, échelles de notation, texte libre), un exécuteur qui enchaîne les questions avec une logique de branchement, et un pipeline pandas qui convertit les réponses brutes en graphiques de fréquence et tableaux croisés.
 
-Cela suppose les bases de Python, y compris les classes, les listes et les dicts, ainsi qu'une aisance avec `input()` — rien au-delà. C'est optionnel et non noté ; voir [Projets du monde réel](/docs/projects) pour la liste complète et croissante.
+Cela suppose les bases de Python, y compris les classes, les listes et les dicts, ainsi qu'une aisance avec `input()` — rien au-delà. C'est optionnel et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 

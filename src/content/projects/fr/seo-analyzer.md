@@ -19,7 +19,7 @@ prerequisites:
 
 Chaque site web a des signaux SEO invisibles — descriptions méta, hiérarchie des en-têtes, balises Open Graph — qui déterminent si les moteurs de recherche le classent bien ou l'enterrent. Ce projet construit une boîte à outils qui récupère n'importe quelle URL, extrait ces signaux, les score contre les meilleures pratiques, et génère un rapport structuré que tu peux comparer à travers plusieurs pages, le tout avec des bibliothèques Python pures qui tournent n'importe où.
 
-Cela suppose les bases de Python, les bases de HTML, et la bibliothèque `requests` (couverte dans la Configuration) — rien de l'Analyse de Données n'est requis. C'est optionnel et non noté ; vois [Projets du monde réel](/docs/projects) pour la liste complète, et grandissante.
+Cela suppose les bases de Python, les bases de HTML, et la bibliothèque `requests` (couverte dans la Configuration) — rien de l'Analyse de Données n'est requis. C'est optionnel et non noté ; vois [Projets du monde réel](/fr/projets) pour la liste complète, et grandissante.
 
 ## 🎯 Ce que tu vas faire
 

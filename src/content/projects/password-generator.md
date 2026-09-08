@@ -25,7 +25,7 @@ You reuse the same password everywhere because inventing a new one every time is
 
 This project only assumes Python 101-level basics — functions, lists, dictionaries, loops, and string formatting. No frameworks, no databases, no cloud services. Everything you need comes from the standard library plus one small encryption package.
 
-This is optional and ungraded. See [Real-World Projects](/docs/projects) for the full list.
+This is optional and ungraded. See [Real-World Projects](/projects) for the full list.
 
 ## What you'll do
 

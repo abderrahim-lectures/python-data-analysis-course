@@ -21,7 +21,7 @@ learningObjectives:
 
 Le vrai code arrive en désordre : des espaces de fin en bout de ligne, des `#comment` sans espace, deux lignes vides là où une seule convient, et une indentation qui a sauté la règle des 4 espaces. Ce projet construit un **formatteur de code** — un petit outil de terminal qui lit un fichier Python, n'applique que des normalisations *sûres* d'espacement et de commentaires, réduit les suites de lignes vides, vérifie l'indentation, affiche un rapport de ce qui a changé exactement, et écrit la copie nettoyée dans `formatted.py`. Il se limite délibérément à l'espacement et à l'espacement des commentaires (il ne renomme ni ne réordonne jamais le code), donc l'exécuter ne peut pas casser le programme. Bibliothèque standard pure, déterministe, et il devient une vraie commande : `python3 code_formatter.py messy.py`.
 
-Cela suppose que tu sais lire et écrire des fichiers et utiliser les méthodes de chaînes de base. C'est un projet optionnel et non noté — vois [Projets du monde réel](/docs/projects) pour la liste complète et croissante.
+Cela suppose que tu sais lire et écrire des fichiers et utiliser les méthodes de chaînes de base. C'est un projet optionnel et non noté — vois [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 

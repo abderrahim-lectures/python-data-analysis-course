@@ -19,7 +19,7 @@ learningObjectives:
 
 "No envíes datos que no hayas verificado" solo funciona si la verificación es barata y repetible. Este proyecto construye la herramienta que la hace barata: un archivo de reglas escrito en JSON, un motor que convierte cada regla en una lista de filas violatorias, una puntuación que resume todo el archivo, una comparación de deriva que hace sonar una campana cuando una columna empeora silenciosamente entre instantáneas, y una CLI cuyo código de salida un script de build puede realmente aprovechar. Todo es `csv`, `dataclasses` y `json` — sin framework, sin base de datos, solo tus reglas ejecutadas contra tus datos.
 
-Esto asume Python 101 más `dataclasses` y `csv`. No se requiere nada del módulo de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa, en crecimiento.
+Esto asume Python 101 más `dataclasses` y `csv`. No se requiere nada del módulo de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa, en crecimiento.
 
 ## 🎯 Lo que harás
 

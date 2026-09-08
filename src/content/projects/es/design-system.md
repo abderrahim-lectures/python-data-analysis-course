@@ -20,7 +20,7 @@ learningObjectives:
 
 Todos los sistemas de diseño arrancan desde el mismo lugar: alguien elige un color de marca y luego pregunta "¿qué aspecto tiene toda la paleta?". Este proyecto construye esa respuesta en Python — derivarás una paleta completa en una familia de color, verificarás cada emparejamiento que realmente usarías contra las reglas de contraste WCAG, construirás una escala tipográfica y de espaciado que se mantiene matemáticamente consistente, y exportarás todo como propiedades CSS personalizadas listas para colocar en una hoja de estilos real.
 
-Esto asume Python 101 y una noción general de qué es una cadena de color hex — no se requiere nada de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa, en crecimiento.
+Esto asume Python 101 y una noción general de qué es una cadena de color hex — no se requiere nada de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa, en crecimiento.
 
 ## 🎯 Lo que harás
 

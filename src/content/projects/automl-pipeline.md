@@ -21,7 +21,7 @@ learningObjectives:
 
 "Automated machine learning" in the tutorials lives on a server you rent. This project runs the same idea on your laptop: a small auto-pilot that takes raw rows, cleans them with a chained pipeline, races a handful of models with proper cross-validation, tunes the promising ones with a grid search, and exports a serialized winner you can reload anywhere. Along the way it teaches the discipline real ML libraries encode: **the train/test split is decided before any tuning**, the **imputer and scaler learn from training data only**, and a **grid search tuned on CV can still disagree with the test set** — this project makes all three observable with small, hand-generated data. The dataset is synthetic (network traffic stats that correlate with a healthy/unhealthy status), so every number in this guide is reproducible from a fixed seed.
 
-This assumes pandas, basic sklearn, and some numpy. It is an optional, ungraded project — see [Real-World Projects](/docs/projects) for the full, growing list. Installs two packages (`pandas`, `scikit-learn`) — `uv` makes this painless.
+This assumes pandas, basic sklearn, and some numpy. It is an optional, ungraded project — see [Real-World Projects](/projects) for the full, growing list. Installs two packages (`pandas`, `scikit-learn`) — `uv` makes this painless.
 
 ## 🎯 What you'll do
 

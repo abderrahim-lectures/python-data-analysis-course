@@ -146,19 +146,6 @@ Read a CSV of student grades and print the average score.
 
 </section>
 
-<section class="lesson-section lesson-section--projects">
-<h2 id="-projects-you-can-build">Projects You Can Build</h2>
-
-<p>Here are a few real-world projects that reinforce these concepts:</p>
-
-<ul>
-  <li>💰 <strong>Expense Tracker</strong> - Save expenses to CSV files and export monthly reports</li>
-  <li>🎓 <strong>Gradebook</strong> - Write student grades to CSV for sharing with teachers and parents</li>
-  <li>📊 <strong>Spreadsheet Tool</strong> - Generate CSV output from processed data for import into Excel</li>
-</ul>
-
-</section>
-
 <section class="lesson-section lesson-section--quiz">
 <h2 id="-quick-check">✅ Quick check</h2>
 

@@ -19,7 +19,7 @@ prerequisites:
 
 Le reporting d'entreprise est une boucle qui ne change jamais de forme : prends des données brutes, résume-les, montre-les, et partage-les. Ce projet construit cette boucle avec pandas et matplotlib — charge un CSV de ventes, calcule les totaux qu'un manager demande vraiment, dessine un graphique à barres, en lignes, en secteurs et en dispersion, formate le tout dans un tableau propre, et assemble le tout dans un seul fichier de rapport.
 
-Cela suppose le Python 101 et l'aisance avec les fonctions et les listes de base — rien au-delà n'est requis. C'est optionnel et non noté ; vois [Projets du monde réel](/docs/projects) pour la liste complète, et grandissante.
+Cela suppose le Python 101 et l'aisance avec les fonctions et les listes de base — rien au-delà n'est requis. C'est optionnel et non noté ; vois [Projets du monde réel](/fr/projets) pour la liste complète, et grandissante.
 
 ## 🎯 Ce que tu vas faire
 

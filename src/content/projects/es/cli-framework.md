@@ -19,7 +19,7 @@ learningObjectives:
 
 Toda herramienta Python seria vive en la línea de comandos. En este proyecto construirás desde cero un framework CLI reutilizable — un gestor de tareas con subcomandos para añadir, listar, eliminar y buscar tareas. En el camino aprenderás cómo `argparse` parsea argumentos, cómo enrutar subcomandos, cómo colorear la salida del terminal, cómo validar entrada, cómo cargar ajustes desde un archivo JSON y cómo mostrar barras de progreso para operaciones lentas. Sin frameworks de terceros como Click o Typer — solo la biblioteca estándar de Python y unas pocas líneas de diseño cuidadoso.
 
-Este proyecto asume que conoces lo básico de Python: variables, bucles, funciones, clases y diccionarios. También deberías sentirte cómodo abriendo un terminal y ejecutando scripts de Python desde la línea de comandos. Es opcional y no calificado. Consulta [Proyectos del mundo real](/docs/projects) para la lista completa.
+Este proyecto asume que conoces lo básico de Python: variables, bucles, funciones, clases y diccionarios. También deberías sentirte cómodo abriendo un terminal y ejecutando scripts de Python desde la línea de comandos. Es opcional y no calificado. Consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
 
 ## 🎯 Lo que harás
 

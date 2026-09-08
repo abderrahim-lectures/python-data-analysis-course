@@ -18,7 +18,7 @@ learningObjectives:
 
 Toda aplicación real tiene configuración que nunca debería ir hardcodeada: qué puerto vincular, qué nivel de log usar, qué claves de API confiar. La forma estándar de organizarla es *en capas* — valores predeterminados sensatos, reemplazados por un archivo de config por entorno, reemplazados por variables de entorno — así que "ejecutarlo localmente" y "ejecutarlo en producción" difieren sin que nadie edite código. Este proyecto construye exactamente ese cargador: una pequeña librería que fusiona valores predeterminados, JSON y TOML con reemplazos de variables de entorno, valida el resultado contra un esquema y — lo crucial — nunca imprime un secreto.
 
-Esto asume Python 101 (diccionarios, funciones y `json` a nivel `import`) — no se requiere nada de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa, en crecimiento.
+Esto asume Python 101 (diccionarios, funciones y `json` a nivel `import`) — no se requiere nada de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa, en crecimiento.
 
 ## 🎯 Lo que harás
 

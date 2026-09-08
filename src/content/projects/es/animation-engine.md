@@ -21,7 +21,7 @@ learningObjectives:
 
 La animación parece magia porque cada fotograma es simple; la magia está en la *matemática de backstage* que conecta fotograma con fotograma. Este proyecto construye ese backstage en Python puro: easing `smoothstep` entre dos números, sprites que portan velocidad y rebotan contra las paredes de un lienzo de 30×10, un motor de timestep fijo que avanza toda la escena cada fotograma, trayectorias con keyframes e interpolación con easing, y fotogramas exportados como archivos de texto que puedes reproducir. El motor corre de manera determinista — los mismos puntos caen en las mismas celdas cada vez — así que puedes verificar cada afirmación de esta guía antes de hacer bailar a los puntos. Es un motor que prioriza el texto: el "video" es una pila de fotogramas `.txt` que puedes pegar en cualquier lugar.
 
-Esto asume clases y métodos más aritmética básica con flotantes. Es un proyecto opcional y no calificado — consulta [Proyectos del mundo real](/docs/projects) para la lista completa y creciente.
+Esto asume clases y métodos más aritmética básica con flotantes. Es un proyecto opcional y no calificado — consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 ## 🎯 Lo que harás
 

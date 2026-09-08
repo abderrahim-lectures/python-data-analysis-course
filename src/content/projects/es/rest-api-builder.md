@@ -19,7 +19,7 @@ prerequisites:
 
 La mayoría de las APIs del mundo real siguen el mismo patrón: recursos con endpoints CRUD, autenticación, validación y documentación. Escribir cada una a mano se vuelve tedioso rápido — este proyecto construye un generador de código que lee un esquema YAML y produce una aplicación FastAPI completa con autenticación JWT, validación Pydantic y documentación OpenAPI autogenerada, para que definas tu API una vez en YAML y obtengas un servidor funcional.
 
-Esto asume conceptos básicos de Python, POO intermedia y suficiente conocimiento de HTTP para saber qué hace una solicitud POST — nada de Análisis de Datos se requiere. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa y creciente.
+Esto asume conceptos básicos de Python, POO intermedia y suficiente conocimiento de HTTP para saber qué hace una solicitud POST — nada de Análisis de Datos se requiere. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 ## 🎯 Lo que harás
 

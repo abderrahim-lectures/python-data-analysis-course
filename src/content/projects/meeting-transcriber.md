@@ -16,7 +16,7 @@ prerequisites: ["python-101/strings", "python-101/file-io", "python-101/loops", 
 
 Every meeting ends the same way: someone volunteers to write the notes, forgets who owned what, and the action items evaporate by Monday. This project builds the summarizer half of a real meeting pipeline — it takes a meeting *transcript* (the text your voice-to-text tool produces) and turns it into the report humans actually want: a speaker breakdown showing who dominated, every decision that was made, and a per-person list of action items extracted automatically from the verbs and owner names in the transcript.
 
-This assumes Python 101 — strings, file I/O, loops, and functions. Nothing beyond that: no ML, no audio processing, no external APIs for the core pipeline (real speech-to-text needs a key, and there's an optional step for it). It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full list.
+This assumes Python 101 — strings, file I/O, loops, and functions. Nothing beyond that: no ML, no audio processing, no external APIs for the core pipeline (real speech-to-text needs a key, and there's an optional step for it). It's optional and ungraded; see [Real-World Projects](/projects) for the full list.
 
 ## 🎯 What you'll do
 

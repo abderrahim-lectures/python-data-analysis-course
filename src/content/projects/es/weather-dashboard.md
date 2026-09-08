@@ -13,7 +13,7 @@ prerequisites:
   - Python a nivel intermedio
   - Conocimientos básicos de APIs REST
   - familiaridad con pandas y visualización
-  - Terminal y编辑or de código
+  - Terminal yeditor de código
 ---
 
 ## 🎯 Lo que harás

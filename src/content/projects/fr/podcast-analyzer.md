@@ -16,7 +16,7 @@ prerequisites: ["python-101/strings", "python-101/file-io", "python-101/sets", "
 
 Les podcasts produisent des heures d'audio et presque aucune structure. Que tu sois un fan qui décide quel épisode sauter ou un producteur qui veut une lecture de données sur ses propres épisodes, l'élément utile est le même : une *fiche* d'épisode — qui étaient les invités, quels sujets ont vraiment dominé la conversation, et quelles phrases se sont répétées. Ce projet construit un CLI qui produit cette fiche à partir d'une transcription : il analyse les tours de parole des intervenants, distingue les animateurs des invités, note les mots contre des ensembles de mots-clés de sujets, et écrit un résumé en un fichier plus un CSV lisible par machine. Pas d'audio, pas de ML, pas de clés API.
 
-Cela suppose le Python 101 — chaînes, ensembles, entrées-sorties de fichiers et fonctions. Rien au-delà de cela. C'est optionnel et non noté ; vois [Projets du monde réel](/docs/projects) pour la liste complète.
+Cela suppose le Python 101 — chaînes, ensembles, entrées-sorties de fichiers et fonctions. Rien au-delà de cela. C'est optionnel et non noté ; vois [Projets du monde réel](/fr/projets) pour la liste complète.
 
 ## 🎯 Ce que tu vas faire
 

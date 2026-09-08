@@ -8,7 +8,7 @@ tags: ["cli", "data-pipeline", "developer-tools"]
 
 Any developer who works with JSON has a dozen small operations: format this file, validate that one, extract this field, convert to YAML. This project builds a single Click CLI that handles all of them. It's the kind of tool that saves minutes every day and pays for itself in a week.
 
-This assumes Python 101 and comfort with CLI workflows from [Developer Tools](/docs/projects). Optional and ungraded; see [Real-World Projects](/docs/projects) for the full list.
+This assumes Python 101 and comfort with CLI workflows from [Developer Tools](/projects). Optional and ungraded; see [Real-World Projects](/projects) for the full list.
 
 ## 🎯 What you'll do
 

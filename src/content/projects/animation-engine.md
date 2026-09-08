@@ -21,7 +21,7 @@ learningObjectives:
 
 Animation looks like magic because each frame is simple; the magic is the *backstage math* connecting frame to frame. This project builds that backstage in pure Python: `smoothstep` easing between two numbers, sprites carrying velocity and bouncing off walls of a 30×10 canvas, a fixed-timestep engine that steps the whole scene each frame, keyframed paths with eased interpolation, and frames exported as text files you can replay. The engine runs deterministically — the same dots land in the same cells every time — so you can verify every claim in this guide before you make the dots dance. It is a text-first engine: the "video" is a stack of `.txt` frames you can paste anywhere.
 
-This assumes classes and methods plus basic arithmetic with floats. It is an optional, ungraded project — see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes classes and methods plus basic arithmetic with floats. It is an optional, ungraded project — see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

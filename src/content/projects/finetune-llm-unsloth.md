@@ -7,7 +7,7 @@ description: "Graduate from the in-browser playground to real Python: fine-tune 
 
 Back in Python 101's Hard track, you built a tiny language model completely from scratch — word counts, bigram probability tables, weighted sampling. This project picks up that exact thread: instead of building a language model's math from nothing, you'll take a real, pretrained open-source model and specialize it for a task of your choosing by *fine-tuning* it — nudging its existing weights with a small amount of your own data, using [Unsloth](https://unsloth.ai), a library built specifically to make this fast and (importantly) free.
 
-This is optional and ungraded — a good fit once you've finished Python 101's Hard track (the from-scratch language model gives you the intuition this project builds on). See [Real-World Projects](/docs/projects) for the full, growing list, including the [AI Agent project](/docs/projects/ai-agent).
+This is optional and ungraded — a good fit once you've finished Python 101's Hard track (the from-scratch language model gives you the intuition this project builds on). See [Real-World Projects](/projects) for the full, growing list, including the [AI Agent project](/projects/ai-agent).
 
 :::tip[One honest difference from the AI Agent project]
 The AI Agent project runs entirely on your own machine. This one can't, fully — fine-tuning a language model, even a small one, needs a GPU, and most personal laptops don't have one suited to the job. So this project splits the work: project setup, data prep, and running your *finished* model happen locally with `uv`, same as the AI Agent project; the actual fine-tuning step runs on a free hosted GPU (Google Colab or Kaggle) instead. That's not a shortcut — it's the honest, standard way to do this without spending money.
@@ -230,7 +230,7 @@ You didn't train a language model from zero — that's what Python 101's Hard tr
 
 - Try a genuinely different task for your next fine-tune — a fixed output format, a specific tone, or a narrow domain (e.g. only answering questions about one topic) tends to show clearer, more convincing before/after differences than a broad, general-purpose change.
 - Read Unsloth's own documentation on **quantization** — the free-tier notebooks already use 4-bit quantization to fit training into limited GPU memory; understanding what that trades away (a small amount of precision) for what it buys (fitting a model that wouldn't otherwise fit) is worth knowing before you rely on it for anything beyond a course project.
-- Compare this to the [AI Agent project](/docs/projects/ai-agent): that one changes a model's *behavior* by giving it tools and instructions at request time (no training involved); this one changes the model's actual weights ahead of time. Both are real, current approaches to building with language models — knowing when you'd reach for one over the other is a genuinely useful thing to have felt firsthand, not just read about.
+- Compare this to the [AI Agent project](/projects/ai-agent): that one changes a model's *behavior* by giving it tools and instructions at request time (no training involved); this one changes the model's actual weights ahead of time. Both are real, current approaches to building with language models — knowing when you'd reach for one over the other is a genuinely useful thing to have felt firsthand, not just read about.
 
 ## Share your project with the class
 

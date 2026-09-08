@@ -1,34 +1,33 @@
 ---
 import {getCollection} from 'astro:content';
 import Base from '../../../layouts/Base.astro';
-import {PAGE_STRINGS} from '../../../lib/pageStrings';
+import {m} from '../../../paraglide/messages';
 import {detectLocale} from '../../../lib/routeSegments';
 
 const base = import.meta.env.BASE_URL;
 const locale = detectLocale(Astro.url.pathname);
 const dir = locale === 'ar' ? 'rtl' : 'ltr';
-const ps = PAGE_STRINGS[locale];
 
 const allModules = await getCollection('modules');
-const normalModules = allModules.filter((e) => e.slug.includes('data-analysis/normal')).sort((a, b) => a.data.order - b.data.order);
-const hardModules = allModules.filter((e) => e.slug.includes('data-analysis/hard')).sort((a, b) => a.data.order - b.data.order);
+const normalModules = allModules.filter((e) => e.id.includes('data-analysis/normal')).sort((a, b) => a.data.order - b.data.order);
+const hardModules = allModules.filter((e) => e.id.includes('data-analysis/hard')).sort((a, b) => a.data.order - b.data.order);
 
 const allLessons = await getCollection('lessons');
-const normalLessons = allLessons.filter((l) => l.slug.includes('data-analysis/normal'));
-const hardLessons = allLessons.filter((l) => l.slug.includes('data-analysis/hard'));
+const normalLessons = allLessons.filter((l) => l.id.includes('data-analysis/normal'));
+const hardLessons = allLessons.filter((l) => l.id.includes('data-analysis/hard'));
 const totalXp = [...normalLessons, ...hardLessons].reduce((s, l) => s + (l.data.xpReward ?? 100), 0);
 const totalMinutes = [...normalLessons, ...hardLessons].reduce((sum, l) => sum + (l.data.estimatedMinutes ?? 15), 0);
 const totalHours = Math.round(totalMinutes / 60);
 
-const diffColor = (d: string) => d === 'beginner' ? 'var(--success)' : d === 'intermediate' ? 'var(--streak)' : 'var(--bad)';
+const diffColor = (d: string) => d === 'beginner' ? 'var(--success)' : d === 'intermediate' ? 'var(--streak-text)' : 'var(--bad)';
 
 const getModuleLessonCount = (slug: string, track: string) => {
   const moduleKey = slug.replace(/^module-\d+-/, '');
-  return allLessons.filter((l) => l.slug.includes(`data-analysis/${track}`) && l.data.module === moduleKey).length;
+  return allLessons.filter((l) => l.id.includes(`data-analysis/${track}`) && l.data.module === moduleKey).length;
 };
 const getModuleMinutes = (slug: string, track: string) => {
   const moduleKey = slug.replace(/^module-\d+-/, '');
-  return allLessons.filter((l) => l.slug.includes(`data-analysis/${track}`) && l.data.module === moduleKey).reduce((sum, l) => sum + (l.data.estimatedMinutes ?? 15), 0);
+  return allLessons.filter((l) => l.id.includes(`data-analysis/${track}`) && l.data.module === moduleKey).reduce((sum, l) => sum + (l.data.estimatedMinutes ?? 15), 0);
 };
 ---
 
@@ -52,10 +51,10 @@ const getModuleMinutes = (slug: string, track: string) => {
 
   <section class="container track-section">
     <h2>🌿 Normal Track</h2>
-    <p class="track-desc">{ps.track1Desc}</p>
+    <p class="track-desc">{m.track_1_desc()}</p>
     <div class="modules-grid">
       {normalModules.map((m) => {
-        const slug = m.slug.split('/').pop()!;
+        const slug = m.id.split('/').pop()!;
         const lessonCount = getModuleLessonCount(slug, 'normal');
         const totalMin = getModuleMinutes(slug, 'normal');
         return (
@@ -80,10 +79,10 @@ const getModuleMinutes = (slug: string, track: string) => {
 
   <section class="container track-section">
     <h2>⚡ Hard Track</h2>
-    <p class="track-desc">{ps.track2Desc}</p>
+    <p class="track-desc">{m.track_2_desc()}</p>
     <div class="modules-grid">
       {hardModules.map((m) => {
-        const slug = m.slug.split('/').pop()!;
+        const slug = m.id.split('/').pop()!;
         const lessonCount = getModuleLessonCount(slug, 'hard');
         const totalMin = getModuleMinutes(slug, 'hard');
         return (

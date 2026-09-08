@@ -20,7 +20,7 @@ prerequisites:
 
 El monitoreo de agua dulce es un pipeline de datos en una caja fría: un sensor (tu registro de muestras) produce lecturas con marca de tiempo, una especificación (rangos seguros por parámetro) decide aprobar/fallar, las tendencias deciden "empeorando" y una lista de alertas decide la atención. Este proyecto construye todo el bucle con un CSV simple como sensor: define parámetros y sus rangos seguros, registra lecturas, valida cada muestra, calcula medias móviles y deriva, emite alertas clasificadas por severidad y termina con un gráfico matplotlib cuyas líneas discontinuas rojas son los límites del rango seguro.
 
-Esto asume Python 101 más un toque de matplotlib — no se requiere nada más. Es opcional y no se califica; consulta [Proyectos del Mundo Real](/docs/projects) para ver la lista completa y en crecimiento.
+Esto asume Python 101 más un toque de matplotlib — no se requiere nada más. Es opcional y no se califica; consulta [Proyectos del Mundo Real](/es/proyectos) para ver la lista completa y en crecimiento.
 
 ## 🎯 Lo que harás
 

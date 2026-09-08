@@ -2,11 +2,15 @@
 // Credits page — ported from the Docusaurus-era src/pages/credits.tsx that was
 // dropped in the Astro migration, leaving 8 lesson pages linking to a 404.
 import Base from '../../layouts/Base.astro';
-import {CREDITS} from '../../lib/creditsStrings';
+import {m} from '../../paraglide/messages';
 import {NAV_WORDS} from '../../lib/routeSegments';
 
 const locale = 'fr' as const;
-const c = CREDITS[locale];
+const entries = [
+  {href: 'https://pyodide.org', name: m.credits_entry_1_name(), note: m.credits_entry_1_note()},
+  {href: 'https://www.kaggle.com/c/titanic', name: m.credits_entry_2_name(), note: m.credits_entry_2_note()},
+  {href: 'https://www.kaggle.com/datasets/spscientist/students-performance-in-exams', name: m.credits_entry_3_name(), note: m.credits_entry_3_note()},
+];
 const alternates = {
   en: NAV_WORDS.en.credits,
   ar: `ar/${NAV_WORDS.ar.credits}`,
@@ -15,12 +19,12 @@ const alternates = {
 };
 ---
 
-<Base title={c.title} description={c.description} lang={locale} dir="ltr" alternates={alternates}>
+<Base title={m.credits_title()} description={m.credits_description()} lang={locale} dir="ltr" alternates={alternates}>
   <section class="container credits">
-    <h1>{c.heading}</h1>
-    <p class="credits__intro">{c.intro}</p>
+    <h1>{m.credits_heading()}</h1>
+    <p class="credits__intro">{m.credits_intro()}</p>
     <ul class="credits__list">
-      {c.entries.map((e) => (
+      {entries.map((e) => (
         <li class="credits__item">
           <a href={e.href} target="_blank" rel="noopener noreferrer">{e.name}</a>
           <span class="credits__note">{e.note}</span>

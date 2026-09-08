@@ -21,7 +21,7 @@ learningObjectives:
 
 Los bots de revisión leen cada pull request para que los humanos no tengan que hacerlo — y antes de que intervenga cualquier LLM, un bot de revisión es mayormente *reglas*. Este proyecto construye uno: un **agente de revisión de código** determinista que toma un diff de PR simulado (`payment.py`), aplica un registro de reglas (longitud de línea, espacios finales, `except` desnudo, `print` de depuración, `TODO` sin resolver, docstrings faltantes), adjunta un comentario por línea para cada acierto, los agrega por severidad, decide `REJECT` cuando existe un problema mayor, exporta toda la revisión como un payload JSON, y luego re-revisa el diff *corregido* para ver el veredicto pasar a `APPROVE`. Sin red, sin aleatoriedad — el mismo diff siempre produce la misma revisión, que es exactamente lo que hace auditable a un bot de reglas: cada comentario es trazable hasta una prueba.
 
-Esto asume funciones, colecciones, E/S de archivos y JSON. Es un proyecto opcional y no calificado — consulta [Proyectos del mundo real](/docs/projects) para la lista completa, en crecimiento.
+Esto asume funciones, colecciones, E/S de archivos y JSON. Es un proyecto opcional y no calificado — consulta [Proyectos del mundo real](/es/proyectos) para la lista completa, en crecimiento.
 
 ## 🎯 Lo que harás
 

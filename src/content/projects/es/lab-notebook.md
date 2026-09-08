@@ -7,7 +7,7 @@ description: "Registra experimentos con datos estructurados, cálculos y pipelin
 
 Los científicos registran experimentos, hipótesis y resultados con versiones. Un cuaderno de laboratorio digital hace lo mismo pero de forma estructural: cada experimento obtiene una plantilla, las mediciones alimentan los cálculos y los resultados se exportan como informes reproducibles. Este proyecto construye exactamente eso.
 
-Esto asume Python 101 y comodidad con pandas de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa.
+Esto asume Python 101 y comodidad con pandas de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
 
 ## 🎯 Lo que harás
 

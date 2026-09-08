@@ -3,6 +3,7 @@
 // view, so the two entry points render structurally identical — same
 // element order, same positions — and only the copy differs.
 import Icon from './Icon.astro';
+import {m} from '../paraglide/messages.js';
 interface Props {
   eyebrow: string;
   lead: string;
@@ -11,9 +12,9 @@ const {eyebrow, lead} = Astro.props;
 ---
 
 <div class="head__eyebrow"><Icon name="expand" size={16} /> {eyebrow}</div>
-<h1>Playground</h1>
+<h1>{m.playground_title()}</h1>
 <p>{lead}</p>
-<a class="pg-back" id="pg-back" href="/" hidden>&larr; Back to the lesson</a>
+<a class="pg-back" id="pg-back" href="/" hidden>{m.back_to_lesson()}</a>
 
 <style>
   .head__eyebrow { color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: .08em; font-size: .76rem; display: inline-flex; align-items: center; gap: .3rem; }

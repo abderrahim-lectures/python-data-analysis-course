@@ -19,7 +19,7 @@ learningObjectives:
 
 "¿Qué modelo ganó?" es la pregunta recurrente de cualquier proyecto que entrena modelos — y un `results.txt` simple no puede responderla: el mismo nombre de ejecución, reejecutado dos veces, columnas editadas, y la respuesta se desvía según lo que alguien escribió al final. Este proyecto construye la alternativa honesta: un registro `runs.jsonl` donde cada ejecución es un dataclass (modelo, métrica, valor, ruta del artefacto), los IDs duplicados son rechazados en la puerta, la mejor ejecución por métrica viene de una tabla de dirección ("un rmse menor es mejor, una precisión mayor es mejor"), los artefactos obtienen una huella SHA-256 que puedes verificar más tarde, y una CLI de cinco comandos (`add`, `list`, `best`) hace que todo se sienta como una herramienta real. Todo es de la biblioteca estándar y basado en archivos — sin base de datos, sin biblioteca de ML requerida.
 
-Esto asume Python 101 — listas, dicts, funciones — más dataclasses (`from dataclasses import dataclass`) y manejo cómodo de archivos. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa y creciente.
+Esto asume Python 101 — listas, dicts, funciones — más dataclasses (`from dataclasses import dataclass`) y manejo cómodo de archivos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 ## 🎯 Lo que harás
 

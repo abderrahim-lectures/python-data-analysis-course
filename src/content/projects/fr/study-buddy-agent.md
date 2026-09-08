@@ -8,7 +8,7 @@ description: "Passe du playground intégré au navigateur au vrai Python : const
 
 Tout dans le cours jusqu'à présent s'est exécuté dans un playground en bac à sable, intégré au navigateur — pour que tu puisses commencer à écrire du Python dès le premier jour avec zéro configuration. Ce projet est l'étape de la graduation : installe le vrai Python sur ta propre machine, puis utilise-le pour construire un outil que tu pourrais réellement continuer à utiliser pour une toute autre classe — une app de quiz qui lit tes propres notes d'étude, écrit des questions ancrées dans ce qui s'y trouve réellement (pas des trivia génériques), t'interroge une question à la fois dans le terminal, et fait juger par un modèle de langage si ta réponse tapée est assez proche, avec un retour bref dans les deux cas.
 
-C'est optionnel et non noté — un bon choix une fois que tu as terminé Python 101 ; rien de Data Analysis n'est requis. Voir [Projets du monde réel](/docs/projects) pour la liste complète et croissante.
+C'est optionnel et non noté — un bon choix une fois que tu as terminé Python 101 ; rien de Data Analysis n'est requis. Voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 
@@ -91,7 +91,7 @@ Quel que soit ton choix, le processus est le même :
 GITHUB_TOKEN=your-key-here
 ```
 
-`python-dotenv` lit ce fichier vers `os.environ` automatiquement, le même pattern utilisé tout au long des projets [Agent IA](/docs/projects/ai-agent) et [Appli RAG](/docs/projects/rag-notes) si tu as fait l'un ou l'autre. Une clé API est un secret, exactement comme un mot de passe — quiconque la possède peut utiliser le quota de ton compte.
+`python-dotenv` lit ce fichier vers `os.environ` automatiquement, le même pattern utilisé tout au long des projets [Agent IA](/fr/projets/ai-agent) et [Appli RAG](/fr/projets/rag-notes) si tu as fait l'un ou l'autre. Une clé API est un secret, exactement comme un mot de passe — quiconque la possède peut utiliser le quota de ton compte.
 
 :::tip[Un fichier `.env` est souvent plus pratique que export]
 Au lieu de faire `export` d'une clé dans chaque nouvelle session de terminal, mets-la dans un fichier `.env` dans ton dossier de projet (voir le `.env.example` de l'exemple du dépôt) et charge-la avec `load_dotenv()`, appelée une fois près du haut de ton script.
@@ -104,7 +104,7 @@ Avec `uv`, `openai`, `python-dotenv`, et une clé dans `.env`, la configuration 
 
 **👟 Indice de départ :**
 
-Mets un fichier `.txt` ou `.md` de tes propres notes d'étude quelque part dans ton projet — un dossier `notes/`, même convention que le [projet RAG](/docs/projects/rag-notes), est un endroit raisonnable. Le lire n'a rien de nouveau :
+Mets un fichier `.txt` ou `.md` de tes propres notes d'étude quelque part dans ton projet — un dossier `notes/`, même convention que le [projet RAG](/fr/projets/rag-notes), est un endroit raisonnable. Le lire n'a rien de nouveau :
 
 ```python
 from pathlib import Path
@@ -113,7 +113,7 @@ notes_text = Path("notes/cell-biology.txt").read_text(encoding="utf-8")
 ```
 Voici la décision de conception que ce projet te demande de prendre explicitement, plutôt que de passer outre : **quelle part de tes notes le modèle devrait-il réellement voir ?**
 - **Option A — donne le fichier entier comme contexte.** L'approche la plus simple possible : lis un fichier, remets son texte entier au modèle dans le prompt, terminé. Cela fonctionne très bien tant qu'un seul fichier tient confortablement dans la fenêtre de contexte du modèle — quelques milliers de mots ne posent aucun problème pour n'importe quel modèle gratuit moderne.
-- **Option B — découper, embedder, et récupérer**, exactement comme le fait le [projet RAG](/docs/projects/rag-notes) : divise tes notes en petits morceaux, embedde-les localement, et ne récupère que les plus pertinents pour chaque question. Cela passe à l'échelle pour un dossier de notes avec des dizaines de fichiers longs qui ne tiendraient jamais dans un seul prompt.
+- **Option B — découper, embedder, et récupérer**, exactement comme le fait le [projet RAG](/fr/projets/rag-notes) : divise tes notes en petits morceaux, embedde-les localement, et ne récupère que les plus pertinents pour chaque question. Cela passe à l'échelle pour un dossier de notes avec des dizaines de fichiers longs qui ne tiendraient jamais dans un seul prompt.
 **Cette leçon choisit l'Option A** et est explicite sur le compromis : c'est moins évolutif, mais c'est une leçon entière plus simple à écrire, lire et déboguer — pas de modèle d'embedding, pas de recherche vectorielle, pas d'étape séparée de construction d'index, juste une chaîne. Ce compromis mérite d'être nommé à voix haute, le même principe d'ancrage que le projet RAG de toute façon : une bonne question de quiz doit venir de texte que le modèle a réellement reçu, pas de texte dont il devine qu'il pourrait être pertinent à partir des données d'entraînement. Si tes propres notes dépassent un seul fichier, ne réinvente pas la récupération — réutilise `retrieve.py` de l'exemple du projet RAG et remplace le prompt de l'étape 2 pour utiliser des morceaux récupérés au lieu d'un fichier entier.
 
 **🎯 Résultat attendu :**
@@ -347,7 +347,7 @@ Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
 
 - **Des notes maigres produisent des questions maigres.** Si ton fichier de notes n'est que quelques courts points, le modèle a très peu sur quoi ancrer cinq questions distinctes, et tu obtiendras des questions répétitives ou trop faciles (« Quel est le nom de... ? »). Des notes plus détaillées, de style prose, produisent des questions nettement meilleures — cela reflète la leçon de découpage du projet RAG : un meilleur texte d'entrée signifie un meilleur résultat, pas un prompt plus malin.
 - **Le juge peut être trop strict ou trop indulgent.** Un petit modèle de niveau gratuit notant des réponses en texte libre n'est pas un instrument précis — il peut marquer une réponse correcte mais bizarrement formulée comme fausse, ou laisser passer une réponse qui manque en réalité un détail clé. Si tu remarques un biais constant, resserre le libellé de `JUDGE_PROMPT_TEMPLATE` (ex. « le crédit partiel ne compte que si au moins un fait spécifique est correct ») plutôt que d'essayer de le contourner en Python.
-- **Limites de débit de deux appels par question.** Contrairement à une réponse RAG en un seul coup, ce script fait *deux* appels de modèle par question à la fin d'un quiz — un pour la génération (une fois, par quiz) et un pour le jugement (une fois, par question). Un quiz de 5 questions, c'est 6 appels au total ; exécute plusieurs quiz à la suite sur un niveau gratuit et tu peux heurter une erreur de limite de débit 429. Ce n'est pas un bug — voir le [projet Agent IA](/docs/projects/ai-agent#gérer-les-limites-de-débit) pour le même pattern et une approche de nouvelle tentative que tu peux copier.
+- **Limites de débit de deux appels par question.** Contrairement à une réponse RAG en un seul coup, ce script fait *deux* appels de modèle par question à la fin d'un quiz — un pour la génération (une fois, par quiz) et un pour le jugement (une fois, par question). Un quiz de 5 questions, c'est 6 appels au total ; exécute plusieurs quiz à la suite sur un niveau gratuit et tu peux heurter une erreur de limite de débit 429. Ce n'est pas un bug — voir le [projet Agent IA](/fr/projets/ai-agent#gérer-les-limites-de-débit) pour le même pattern et une approche de nouvelle tentative que tu peux copier.
 - **Un JSON malformé du modèle casse `json.loads`.** Même avec une instruction explicite « réponds uniquement avec du JSON », un modèle ajoute parfois une phrase parasite avant ou après le JSON, ou laisse une virgule finale. Si tu heurtes un `JSONDecodeError`, imprime la réponse brute avant de la parser — c'est presque toujours suffisant pour voir exactement ce qui n'a pas marché et ajuster le prompt.
 
 ## Ce que tu viens de construire
@@ -356,7 +356,7 @@ Un petit pipeline mais complet « générer, puis interagir, puis noter » : un 
 
 ## Où aller à partir d'ici
 
-- Une fois qu'un seul fichier de notes ne suffit plus — un semestre complet de notes réparties sur de nombreux fichiers — réutilise le pipeline `prepare_notes.py`/`build_index.py`/`retrieve.py` du [projet RAG](/docs/projects/rag-notes) : récupère les morceaux les plus pertinents pour un *sujet* sur lequel tu veux être interrogé, et nourris-en `generate_questions` au lieu d'un fichier entier.
+- Une fois qu'un seul fichier de notes ne suffit plus — un semestre complet de notes réparties sur de nombreux fichiers — réutilise le pipeline `prepare_notes.py`/`build_index.py`/`retrieve.py` du [projet RAG](/fr/projets/rag-notes) : récupère les morceaux les plus pertinents pour un *sujet* sur lequel tu veux être interrogé, et nourris-en `generate_questions` au lieu d'un fichier entier.
 - Suis les questions manquées à travers les exécutions (écris-les dans un petit fichier JSON) et construis un mode « révise mes points faibles » qui te re-questionne spécifiquement sur les sujets que tu as ratés auparavant.
 - Ajoute un réglage de difficulté à `GENERATE_PROMPT_TEMPLATE` (« questions de rappel faciles » vs « questions exigeant de relier deux idées des notes ») et compare combien le mode plus difficile se ressent réellement plus dur.
 - Revisite le contenu bonus `try`/`except` de Python 101 — envelopper `judge_answer` pour qu'une réponse malformée ne termine pas tout le quiz (voir la question socratique de l'étape 4) est exactement ce pattern.

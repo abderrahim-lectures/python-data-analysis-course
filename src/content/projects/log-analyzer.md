@@ -16,7 +16,7 @@ prerequisites: ["python-101/file-io", "python-101/strings", "python-101/data-str
 
 Every running service produces a log file that grows without mercy — thousands of lines a minute, half of them noise, until one afternoon something breaks and you need to find the three relevant lines in a million. This project builds the first tool a real engineer reaches for: a CLI that parses a log file into structured records, filters by severity and keyword, counts the patterns that repeat, and draws a timeline of events per hour so you can *see* when things went wrong.
 
-This assumes Python 101 — file I/O, strings, dictionaries, and functions — plus a little comfort reading DataFrames from Data Analysis. Nothing beyond that: no frameworks, no APIs, no external services. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full list.
+This assumes Python 101 — file I/O, strings, dictionaries, and functions — plus a little comfort reading DataFrames from Data Analysis. Nothing beyond that: no frameworks, no APIs, no external services. It's optional and ungraded; see [Real-World Projects](/projects) for the full list.
 
 ## 🎯 What you'll do
 

@@ -71,7 +71,7 @@ df.describe()
 
 ## Step 2: Preprocess Features
 
-Separate the input features (the measurements) from the target (the species label). Every column going into the model must be numeric —幸运ly, the Iris features already are, so no encoding is needed.
+Separate the input features (the measurements) from the target (the species label). Every column going into the model must be numeric —Luckily, the Iris features already are, so no encoding is needed.
 
 ```python
 X = df.drop(columns=["species", "species_name"])

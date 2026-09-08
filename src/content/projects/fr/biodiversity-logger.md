@@ -21,7 +21,7 @@ learningObjectives:
 
 Les écologues ne surveillent pas chaque individu — ils surveillent des *signaux*. Un déclin de 30 % ou plus des oiseaux observés sur une saison est un déclencheur de recensement ; un vacillement près de la base de référence mérite d'être surveillé ; un décompte stable signifie « laisse-le tranquille ». Ce projet construit cette boucle de décision comme un petit **agent de recensement** : il détient un journal d'observations long d'une saison (synthétique, donc reproductible), calcule la base de référence et la fenêtre récente de chaque espèce, applique une règle de seuil pour marquer `SURVEY` / `WATCH` / `OK`, ingère les nouveaux lots hebdomadaires et journalise chaque décision dans un CSV, puis rend un diagramme à barres ASCII des totaux d'espèces et affiche une file de recensement priorisée. Tout tourne dans pandas et la bibliothèque standard, avec une graine fixe — la même exécution signale les mêmes espèces à chaque fois, sur n'importe quelle machine.
 
-Cela suppose le `groupby`, le filtrage et la fusion de pandas. C'est un projet facultatif et non noté — consulte [Projets du monde réel](/docs/projects) pour la liste complète et grandissante. Une installation : `pandas`.
+Cela suppose le `groupby`, le filtrage et la fusion de pandas. C'est un projet facultatif et non noté — consulte [Projets du monde réel](/fr/projets) pour la liste complète et grandissante. Une installation : `pandas`.
 
 ## 🎯 Ce que tu vas faire
 

@@ -6,7 +6,7 @@ description: "Benchmark and compare LLM performance across accuracy, speed, cost
 
 Every LLM looks impressive in demo videos. Choosing one for production needs hard numbers: accuracy on your task, latency under load, cost per call, and whether it emits harmful output. This project builds a standard evaluation suite that runs a set of test cases across multiple models and scores them on accuracy, latency, cost, and safety.
 
-This assumes Python 101 and comfort with pandas from Data Analysis. Optional and ungraded; see [Real-World Projects](/docs/projects) for the full list.
+This assumes Python 101 and comfort with pandas from Data Analysis. Optional and ungraded; see [Real-World Projects](/projects) for the full list.
 
 ## 🎯 What you'll do
 

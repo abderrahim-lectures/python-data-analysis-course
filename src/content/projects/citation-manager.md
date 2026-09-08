@@ -21,7 +21,7 @@ learningObjectives:
 
 Papers don't write themselves — but the bibliography can almost do it. This project builds a small **citation manager**: a store of bibliographic entries (key → author/title/year/venue/type), a formatter that turns any entry into one consistent APA-ish line, a search that works across authors, titles, and venues, a *missing-and-unused* checker built on set difference that finds reference-list mistakes before a reviewer does, near-duplicate detection that catches the same book entered twice with different casing, type counts, and a final generator that sorts the whole library by year-and-author and writes a `References` section plus a JSON backup. Everything is deterministic — small, hand-curated data, no randomness, pure standard library.
 
-This assumes nested dicts, sets, comprehensions, and basic JSON. It is an optional, ungraded project — see [Real-World Projects](/docs/projects) for the full, growing list. One file, standard-library only.
+This assumes nested dicts, sets, comprehensions, and basic JSON. It is an optional, ungraded project — see [Real-World Projects](/projects) for the full, growing list. One file, standard-library only.
 
 ## 🎯 What you'll do
 

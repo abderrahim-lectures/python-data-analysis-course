@@ -16,7 +16,7 @@ prerequisites: ["python-101/file-io", "python-101/strings", "python-101/datetime
 
 Every sleep tracker at its core is a small spreadsheet with judgment: log when you went to bed and when you woke up, subtract to get duration, compare it to a target, and watch whether your average is creeping toward or away from healthy over a week. This project builds that — a CLI that records a night, catches the classic bedtime-past-midnight trap, scores each night on duration and consistency, and reads the whole history back to compare week over week. No wearable, no EEG: the "sensor" is you typing two times, and the analysis is pure Python `datetime` and arithmetic. It's the smallest thing in this course that still feels like a real tool you'd actually use.
 
-This assumes Python 101 — strings, datetime, file I/O, functions. Optional and ungraded; see [Real-World Projects](/docs/projects) for the full list.
+This assumes Python 101 — strings, datetime, file I/O, functions. Optional and ungraded; see [Real-World Projects](/projects) for the full list.
 
 ## 🎯 What you'll do
 

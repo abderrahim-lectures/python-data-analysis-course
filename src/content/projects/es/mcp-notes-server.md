@@ -6,7 +6,7 @@ description: "Indexa una carpeta real de notas Markdown y expónla a Claude Desk
 
 # 🔌 Construye un Servidor MCP para tus Notas
 
-Esto asume Python 101 y comodidad escribiendo funciones simples -- y ayuda mucho haber construido ya el proyecto [Construye un Servidor MCP](/docs/projects/mcp-server) primero, ya que este reutiliza el mismo patrón de decorador `FastMCP` y solo añade contenido real sobre el cual buscar en lugar de dos herramientas de juguete. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa y creciente.
+Esto asume Python 101 y comodidad escribiendo funciones simples -- y ayuda mucho haber construido ya el proyecto [Construye un Servidor MCP](/es/proyectos/mcp-server) primero, ya que este reutiliza el mismo patrón de decorador `FastMCP` y solo añade contenido real sobre el cual buscar en lugar de dos herramientas de juguete. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 Si mantienes notas en Obsidian, Notion, o simplemente una carpeta simple de archivos Markdown, este proyecto convierte esa carpeta en algo que un asistente de IA realmente puede buscar y leer directamente -- no pegando contenido de notas en una ventana de chat, sino dándole a Claude Desktop herramientas reales: buscar tus notas por palabra clave, extraer una nota completa por título, o listar lo que has tocado más recientemente. Es la misma idea de Model Context Protocol que el proyecto MCP anterior, dirigida a algo que probablemente seguirás usando después.
 

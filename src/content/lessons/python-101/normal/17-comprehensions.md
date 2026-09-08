@@ -125,19 +125,6 @@ Use a dict comprehension to map words to their lengths: `["hi", "hello", "hey"]`
 
 </section>
 
-<section class="lesson-section lesson-section--projects">
-<h2 id="-projects-you-can-build">Projects You Can Build</h2>
-
-<p>Here are a few real-world projects that reinforce these concepts:</p>
-
-<ul>
-  <li>💰 <strong>Expense Tracker</strong> - Use comprehensions to filter expenses, calculate totals, and generate summaries</li>
-  <li>📊 <strong>Spreadsheet Tool</strong> - Apply list/dict comprehensions for data transformation and aggregation</li>
-  <li>🎓 <strong>Gradebook</strong> - Use comprehensions to compute averages, filter grades, and generate reports</li>
-</ul>
-
-</section>
-
 <section class="lesson-section lesson-section--quiz">
 <h2 id="-quick-check">✅ Quick check</h2>
 

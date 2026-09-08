@@ -16,7 +16,7 @@ prerequisites: ["python-101/libraries", "numpy-101/arrays", "data-analysis/panda
 
 La recherche par mots-clés est littérale : tape « moteur de voiture » et le système cherche ces deux jetons exacts. La recherche sémantique est *paresseuse avec le langage* : tape « moteur de véhicule » et elle devrait quand même trouver le paragraphe sur les moteurs, parce qu'elle représente le sens comme un vecteur dans un espace de haute dimension où les idées similaires se tiennent proches. En 2026, ce truc tourne sur de petits modèles transformers que tu peux exécuter dans un notebook, donc tout le pipeline tient dans tes mains : intègre une collection de documents en vecteurs denses, garde-les dans une matrice NumPy, puis réponds à une requête en langage naturel en calculant quels paragraphes intégrés sont les plus proches en distance cosinus. Ce projet construit ce moteur de bout en bout, puis confronte la limite honnête — quand l'éclat sémantique échoue et qu'une simple correspondance de mots-clés gagne sur un nom propre — et te montre comment un hybride sonde dans quel régime tu te trouves.
 
-Cela suppose le Python 101 plus les modules NumPy et pandas du cours. C'est optionnel et non noté ; vois [Projets du monde réel](/docs/projects) pour la liste complète.
+Cela suppose le Python 101 plus les modules NumPy et pandas du cours. C'est optionnel et non noté ; vois [Projets du monde réel](/fr/projets) pour la liste complète.
 
 ## 🎯 Ce que tu vas faire
 

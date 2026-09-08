@@ -8,9 +8,9 @@ description: "Construye un bot de `discord.py` que ejecuta rondas de trivia en u
 
 Un bot `discord.py` en vivo que ejecuta rondas de trivia en un servidor: publica una pregunta, recoge respuestas dentro de un límite de tiempo, revela quién acertó, y mantiene una tabla de clasificación persistente a lo largo de las rondas. La mayoría de los bots de trivia se detienen en un banco de preguntas fijo — este añade un giro que encaja con un curso de Python: también puede generar una pregunta nueva sobre cualquier tema en el momento con un LLM de nivel gratuito, en lugar de solo preguntar siempre desde una lista preparada.
 
-Esto asume Python 101. No se requiere ningún otro Proyecto del Mundo Real primero, aunque si ya has construido [Construye una App de RAG](/docs/projects/rag-notes), la configuración del LLM de nivel gratuito de abajo te resultará familiar.
+Esto asume Python 101. No se requiere ningún otro Proyecto del Mundo Real primero, aunque si ya has construido [Construye una App de RAG](/es/proyectos/rag-notes), la configuración del LLM de nivel gratuito de abajo te resultará familiar.
 
-Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/docs/projects) para la lista completa y creciente.
+Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 ## 🎯 Lo que harás
 

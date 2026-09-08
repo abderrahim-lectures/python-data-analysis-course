@@ -19,7 +19,7 @@ learningObjectives:
 
 Un `requirements.txt` dice que un equipo *tiene la intención* de usar cinco paquetes. Los archivos que realmente se escribieron dicen qué paquetes se importan *de verdad*. La diferencia entre los dos es donde viven el desperdicio y el riesgo: los pins no utilizados inflan las instalaciones hasta hoy, y un `numpy==1.26.0` fijado puede quedarse dos releases menores detrás del mínimo de seguridad sin que nadie lo note hasta que un bot escanea el manifiesto. Este proyecto construye el pequeño analizador que cierra la brecha — analiza el manifiesto, escanea los imports y reporta en qué difieren los dos, todo con la biblioteca estándar.
 
-Esto asume Python 101 más `pathlib` y `re` cómodos. No se requiere nada del módulo de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa, en crecimiento.
+Esto asume Python 101 más `pathlib` y `re` cómodos. No se requiere nada del módulo de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa, en crecimiento.
 
 ## 🎯 Lo que harás
 

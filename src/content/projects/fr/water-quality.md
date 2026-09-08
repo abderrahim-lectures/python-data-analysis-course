@@ -20,7 +20,7 @@ prerequisites:
 
 La surveillance de l'eau douce est un pipeline de données dans une boîte froide : un capteur (ton journal d'échantillons) produit des relevés horodatés, une spécification (plages sûres par paramètre) décide du passage/échec, les tendances décident du « ça empire », et une liste d'alertes décide de l'attention. Ce projet construit toute la boucle avec un simple CSV comme capteur : définis les paramètres et leurs plages sûres, journalise les relevés, valide chaque échantillon, calcule les moyennes mobiles et la dérive, émet des alertes classées par sévérité, et termine avec un graphique matplotlib dont les lignes rouges en pointillés sont les limites de plages sûres.
 
-Cela suppose Python 101 plus un peu de matplotlib — rien d'autre n'est requis. C'est optionnel et non noté ; voir [Projets du monde réel](/docs/projects) pour la liste complète et croissante.
+Cela suppose Python 101 plus un peu de matplotlib — rien d'autre n'est requis. C'est optionnel et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 

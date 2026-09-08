@@ -1,6 +1,5 @@
 ---
 
-
 title: "Univariate Categorical Analysis"
 description: "Analyze frequency distributions, proportions, and patterns in categorical variables with count plots and bar charts."
 module: "univariate-analysis"
@@ -318,11 +317,3 @@ print(df.groupby("lunch")["test preparation course"].value_counts(normalize=True
 
 </div>
 </details>
-
-## Projects You Can Build
-
-Here are a few real-world projects that reinforce these concepts:
-
-- 📈 **Data Visualization** - Create annotated bar charts and proportion plots for categorical data
-- 🧠 **ML Classifier** - Analyze categorical feature distributions for encoding decisions
-- 📊 **Anomaly Detector** - Identify rare categories and data quality issues

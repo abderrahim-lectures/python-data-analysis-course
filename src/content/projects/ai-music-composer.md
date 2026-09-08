@@ -20,7 +20,7 @@ learningObjectives:
 
 Composing a melody from nothing is a blank-page problem; composing a *variation* of a melody you already like is a statistics problem. This project builds the second kind of composer: it reads a short seed melody, learns how each note tends to follow the previous one, then generates new melodies from that learned model, stacks chords underneath, and exports the result as a genuine MIDI file — a song file you can open in any player or digital audio workstation. The "AI" here is elegant and honest: a Markov chain, which is nothing more than "based on what I've heard so far, which note typically comes next?"
 
-This assumes Python 101 and nothing from Data Analysis — and it requires zero music theory to get a playable result, though the Harmony step will make far more sense if you hum along. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python 101 and nothing from Data Analysis — and it requires zero music theory to get a playable result, though the Harmony step will make far more sense if you hum along. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

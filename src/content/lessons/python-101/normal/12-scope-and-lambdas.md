@@ -147,19 +147,6 @@ Use `filter` with a lambda to extract all words longer than 3 characters from `[
 
 </section>
 
-<section class="lesson-section lesson-section--projects">
-<h2 id="-projects-you-can-build">Projects You Can Build</h2>
-
-<p>Here are a few real-world projects that reinforce these concepts:</p>
-
-<ul>
-  <li>🛠️ <strong>CLI Framework</strong> - Use closures for command handlers and lambdas for sorting options</li>
-  <li>🧰 <strong>Document Converter</strong> - Apply map/filter with lambdas for text transformations</li>
-  <li>💰 <strong>Expense Tracker</strong> - Use lambdas for sorting expenses and closures for category filters</li>
-</ul>
-
-</section>
-
 <section class="lesson-section lesson-section--quiz">
 <h2 id="-quick-check">✅ Quick check</h2>
 

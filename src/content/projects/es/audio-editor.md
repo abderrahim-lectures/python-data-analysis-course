@@ -17,7 +17,7 @@ prerequisites: ["Conceptos básicos de Python", "E/S de archivos"]
 
 Cada episodio de podcast, tono de llamada y efecto de sonido de videojuego pasó por el mismo pipeline: alguien recortó las partes buenas, fundió los bordes para que nada haga clic, ajustó el volumen y cosió las piezas. Los estudios profesionales hacen esto en apps pesadas; este proyecto construye un pequeño editor de audio de línea de comandos en Python que hace todo eso con archivos de audio reales usando `pydub` — recorte con precisión de milisegundos, fundidos, normalización de volumen, conversión de formato, empalme de clips y una imagen de forma de onda para que puedas *ver* exactamente lo que cambiaste.
 
-Esto asume Python 101 y E/S básica de archivos — nada de Análisis de Datos es requerido. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa y creciente.
+Esto asume Python 101 y E/S básica de archivos — nada de Análisis de Datos es requerido. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 ## 🎯 Lo que harás
 

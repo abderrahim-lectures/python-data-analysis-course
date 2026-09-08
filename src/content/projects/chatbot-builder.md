@@ -20,7 +20,7 @@ learningObjectives:
 
 Build a rule-based chatbot that recognises greetings, questions, and commands — and responds with personality, not just data. This project walks through regex pattern matching, response generation, conversation context, and a clean CLI loop, all from the standard library.
 
-This is optional and ungraded. See [Real-World Projects](/docs/projects) for the full list.
+This is optional and ungraded. See [Real-World Projects](/projects) for the full list.
 
 ## What you'll do
 

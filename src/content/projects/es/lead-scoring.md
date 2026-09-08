@@ -7,7 +7,7 @@ description: "Puntúa y prioriza leads de ventas según participación, demograf
 
 Los equipos de ventas se ahogan en leads. Un motor de puntuación de leads los clasifica según la probabilidad de que cada uno convierta, para que el equipo llame primero a los calientes. Este proyecto construye un modelo de puntuación que combina señales de participación, demográficas y de comportamiento, luego prioriza el pipeline y hace pruebas A/B de diferentes esquemas de puntuación.
 
-Esto asume Python 101 y comodidad con pandas de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa.
+Esto asume Python 101 y comodidad con pandas de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
 
 ## 🎯 Lo que harás
 

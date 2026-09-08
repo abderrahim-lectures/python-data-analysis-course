@@ -19,7 +19,7 @@ prerequisites:
 
 El reporting empresarial es un bucle que nunca cambia de forma: toma datos crudos, resúmelos, muéstralos y compártelos. Este proyecto construye ese bucle con pandas y matplotlib — carga un CSV de ventas, calcula los totales que un gerente pide de verdad, dibuja un gráfico de barras, de líneas, circular y de dispersión, formatea todo en una tabla limpia y lo ensambla todo en un solo archivo de informe.
 
-Esto asume Python 101 y comodidad con funciones básicas y listas — nada más allá de eso se requiere. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa y creciente.
+Esto asume Python 101 y comodidad con funciones básicas y listas — nada más allá de eso se requiere. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 ## 🎯 Lo que harás
 

@@ -16,7 +16,7 @@ prerequisites: ["python-101/file-io", "python-101/dictionaries", "python-101/fun
 
 Step into a room and a thermostat reads 21.4 °C; a motion detector blinks every time someone crosses; a humidity chip measures a damp corner. An *IoT sensor hub* is the thing that collects all those readings from every sensor, normalizes them into one stream, flags the ones out of a safe range, and stores them so you can look back at a chart. The physical sensors are optional — this project simulates them honestly with a configurable tick loop, so the entire hub (aggregation, alerting, persistence, and a Matplotlib dashboard) runs on pure Python with no hardware and no network. Everything you build is the same shape a real MQTT-backed hub takes; only the "sensor" source is faked, and you'll know it, because replacing the simulator with a real stream is a documented swap.
 
-This assumes Python 101 plus the course's Matplotlib module. Optional and ungraded; see [Real-World Projects](/docs/projects) for the full list.
+This assumes Python 101 plus the course's Matplotlib module. Optional and ungraded; see [Real-World Projects](/projects) for the full list.
 
 ## 🎯 What you'll do
 

@@ -20,7 +20,7 @@ prerequisites:
 
 Nobody knows where a workday goes until they record it. This project builds a tiny time tracker: start a session, work, stop it, and the minutes land in a CSV; add a missed entry by hand, then pull daily and weekly reports and a "top 3 tasks" summary. It's standard-library only — dataclasses, `csv`, and `datetime` — so you'll learn the load/append/save rhythm and real timestamp math, and end up with a tool for an answer to "where does my time actually go?"
 
-This assumes Python 101 and comfort with `datetime` basics — nothing beyond that is required. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python 101 and comfort with `datetime` basics — nothing beyond that is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

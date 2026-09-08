@@ -21,7 +21,7 @@ learningObjectives:
 
 Un tuteur qui ne connaît que la bonne réponse n'est qu'une app de quiz. Ce projet construit l'autre genre : un tuteur à répétition espacée qui *se souvient de tes points faibles*, allonge l'intervalle entre les révisions quand tu réussis et le raccourcit quand tu échoues. Le moteur de planification est une réimplémentation propre de SM-2 — un algorithme largement utilisé qui ne dépend que de `interval` (jours depuis la dernière révision) et d'un score de `quality` (0–5) que tu fournis après chaque tentative. Une couche de persistance enregistre l'état complet du deck en JSON pour que la progression survive aux sessions, et une couche LLM optionnelle rédige un « indice de tuteur » d'une phrase qui aiguille sans révéler la réponse. Le cœur est du Python pur ; la couche LLM est authentique mais optionnelle — le tuteur fonctionne parfaitement sans la moindre clé API.
 
-Ceci suppose une bonne aisance avec les dicts et les listes, du JSON basique, et aucun bagage en apprentissage automatique ; rien ici n'est noté — c'est optionnel et non noté — voir [Projets du monde réel](/docs/projects) pour la liste complète et croissante.
+Ceci suppose une bonne aisance avec les dicts et les listes, du JSON basique, et aucun bagage en apprentissage automatique ; rien ici n'est noté — c'est optionnel et non noté — voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 

@@ -1,6 +1,5 @@
 ---
 
-
 title: "Building Bigram Tables"
 description: "Count consecutive word pairs into a nested dictionary that maps each word to its follower distribution."
 module: "bigram-tables"
@@ -184,11 +183,3 @@ def most_common_bigram(bigrams):
                 best_count = count
     return best, best_count
 ```
-
-## Projects You Can Build
-
-Here are a few real-world projects that reinforce these concepts:
-
-- 🎨 **AI Story Writer** - Build bigram frequency tables for predictive text generation
-- 🤖 **Chatbot Builder** - Use bigrams to generate contextually relevant responses
-- 📝 **Sentiment Dashboard** - Analyze word co-occurrence patterns for topic detection

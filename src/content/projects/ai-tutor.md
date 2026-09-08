@@ -21,7 +21,7 @@ learningObjectives:
 
 A tutor that only knows the correct answer is just a quiz app. This project builds the other kind: a spaced-repetition tutor that *remembers what you're weak on*, grows the interval between reviews when you're doing well, and shortens it when you're not. The scheduling engine is a clean re-implementation of SM-2 — a widely used algorithm that depends only on `interval` (days since last review) and a `quality` score (0–5) you supply after each attempt. A persistence layer saves the full deck state to JSON so progress survives across sessions, and an optional LLM layer drafts a one-sentence "tutor hint" that nudges without revealing the answer. The core is pure Python; the LLM layer is genuine but optional — the tutor is fully functional with no API key at all.
 
-This assumes dict-and-list fluency, basic JSON, and no machine-learning background; nothing here is graded — it's optional and ungraded — see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes dict-and-list fluency, basic JSON, and no machine-learning background; nothing here is graded — it's optional and ungraded — see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

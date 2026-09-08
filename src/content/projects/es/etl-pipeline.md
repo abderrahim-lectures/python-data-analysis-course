@@ -19,7 +19,7 @@ learningObjectives:
 
 Todo trabajo de datos real se ve así: toma pedidos de un CSV y clientes de un JSON, únelos, descarta las filas que no pertenecen, suma las cosas, y escribe el resultado en algún lugar que una herramienta pueda consultar. Ese patrón — **Extraer, Transformar, Cargar** — es lo que este proyecto construye con nada más que la biblioteca estándar: un extractor CSV, un extractor JSON, una transformación que limpia y une con cada omisión reportada, una agregación que responde "ingresos por ciudad", y una carga SQLite que es *idempotente*: ejecútala cinco veces, siguen siendo exactamente cuatro filas. El paso final endurece todo contra su fallo de producción más común — un archivo fuente faltante — sin dejar el almacén a medio escribir. Sin pandas. Sin framework. Solo `csv`, `json` y `sqlite3` haciendo un trabajo real.
 
-Esto asume Python 101 — listas, dicts, bucles, funciones — además de lectura cómoda de archivos y una terminal. Nada aquí necesita numpy o pandas. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa y creciente.
+Esto asume Python 101 — listas, dicts, bucles, funciones — además de lectura cómoda de archivos y una terminal. Nada aquí necesita numpy o pandas. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 ## 🎯 Lo que harás
 

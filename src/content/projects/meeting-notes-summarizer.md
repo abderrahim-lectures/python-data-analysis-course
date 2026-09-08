@@ -7,7 +7,7 @@ description: "Graduate from the in-browser playground to real Python: write a sc
 
 Everything in the course so far ran in a sandboxed, in-browser playground — so you could start writing Python on day one with zero setup. This project is the graduation step: install Python for real on your own machine, then use it to build a tool that solves a genuinely annoying real-world problem — turning a wall of raw meeting-transcript text into a short, structured summary: what got decided, who owes what, and what's still unresolved. This assumes Python 101; nothing from Data Analysis is required.
 
-This is optional and ungraded. See [Real-World Projects](/docs/projects) for the full, growing list.
+This is optional and ungraded. See [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 
@@ -529,7 +529,7 @@ uv run python summarize.py transcripts/incident_review.txt
 Run it on all three sample transcripts (or the repo's fuller [`examples/meeting-notes-summarizer/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/meeting-notes-summarizer) version, which ships all three ready to go) and compare the outputs: a standup, a planning meeting, and an incident review each stress the schema differently — the incident review, for instance, tends to produce far more open questions than action items.
 
 :::tip[Rate limits are expected, not a bug]
-Every free tier caps requests per minute or per day, and each call to `summarize()` is exactly one API call — so running this across several transcripts back to back can occasionally hit a `429` error. That's the provider telling you to slow down, not a sign anything is broken; wait the suggested number of seconds and re-run. See the [AI Agent project](/docs/projects/ai-agent#handling-rate-limits) for a `try`/`except`-with-retry pattern you can copy directly if you want this to recover automatically.
+Every free tier caps requests per minute or per day, and each call to `summarize()` is exactly one API call — so running this across several transcripts back to back can occasionally hit a `429` error. That's the provider telling you to slow down, not a sign anything is broken; wait the suggested number of seconds and re-run. See the [AI Agent project](/projects/ai-agent#handling-rate-limits) for a `try`/`except`-with-retry pattern you can copy directly if you want this to recover automatically.
 :::
 
 **🎯 Expected output:** Each transcript produces its own `.json` and `.md` file, and the incident review visibly yields more open questions than action items — each file reflecting *that* transcript's content, not a copy of the first run's output.
@@ -547,7 +547,7 @@ Every free tier caps requests per minute or per day, and each call to `summarize
 **🤔 Socratic Question(s)**
 
 - If a teammate handed you a transcript with no clear decisions at all — just open-ended brainstorming — what would you expect `decisions` to look like, and does your prompt's wording actually guarantee that?
-- What would break if you ran this on a two-hour, 15,000-word transcript instead of these short samples? At what point would you need a strategy like the chunking approach from the [RAG project](/docs/projects/rag-notes) instead of sending the whole thing in one prompt?
+- What would break if you ran this on a two-hour, 15,000-word transcript instead of these short samples? At what point would you need a strategy like the chunking approach from the [RAG project](/projects/rag-notes) instead of sending the whole thing in one prompt?
 
 ## ⚠️ Common pitfalls
 
@@ -565,7 +565,7 @@ A small, complete structured-extraction pipeline: load raw text, design a prompt
 - Extend the schema with a `sentiment` or `meeting_type` field, or a `priority` on each action item — the pattern (describe the field in the prompt, validate it after parsing) is identical to what you already built.
 - Try feeding the model a transcript in a completely different format (a chat export, a raw closed-caption `.vtt` file) and see how much cleanup `load_transcript` needs before the results stay good.
 - Look into a schema-validation library like `pydantic` for a much stricter version of `parse_summary` — instead of hand-checking keys, define a `Summary` model once and let it validate (and even coerce) types for you, raising a structured error on anything that doesn't fit.
-- Combine this with the [AI Agent project](/docs/projects/ai-agent): give an agent a tool that calls `summarize()` on a transcript file, so it can decide *when* to summarize as part of a larger task instead of you always running the script by hand.
+- Combine this with the [AI Agent project](/projects/ai-agent): give an agent a tool that calls `summarize()` on a transcript file, so it can decide *when* to summarize as part of a larger task instead of you always running the script by hand.
 
 ## Share your project with the class
 

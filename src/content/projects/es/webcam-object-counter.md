@@ -8,7 +8,7 @@ description: "Cuenta objetos en vivo desde el feed de una cámara web con OpenCV
 
 Este proyecto asume que te sientes cómodo con Python 101 — funciones, bucles e instalación de paquetes — y no necesita ningún conocimiento previo de análisis de datos o aprendizaje automático. Es la primera incursión de este curso en la visión por computadora: en lugar de cargar un modelo preentrenado que lee texto o filas tabulares, cargarás uno que lee píxeles, y lo usarás para responder una pregunta genuinamente práctica en tiempo real — "¿cuántos de *esto* hay frente a la cámara ahora mismo?"
 
-Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/docs/projects) para la lista completa y creciente.
+Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 ## 🎯 Lo que harás
 
@@ -376,7 +376,7 @@ Todo aquí — un detector preentrenado, un bucle sobre cuadros, un conteo en ej
 
 - **Seguimiento de objetos, no solo detección.** La pregunta socrática del Paso 3 apunta al vacío real: este proyecto cuenta objetos *por cuadro*, no objetos distintos *a través* de un video. Librerías como el modo de seguimiento integrado del propio `ultralytics` (`model.track(...)`, usando algoritmos como ByteTrack) asignan un ID persistente a cada objeto a través de los cuadros, así que "cuántas personas *distintas* cruzaron el cuadro" se vuelve respondible en lugar de solo "cuántas están en el cuadro ahora mismo".
 - **Un modelo más grande y más preciso.** `yolo11n.pt` ("n" de nano) intercambia algo de precisión por velocidad y tamaño. `ultralytics` trae puntos de control más grandes (`yolo11s.pt`, `yolo11m.pt` y más) que detectan más confiablemente, especialmente en objetos pequeños o parcialmente ocultos, al costo de necesitar más cómputo por cuadro — vale la pena probarlos si los conteos en vivo del Paso 4 se sienten poco confiables en tu configuración particular.
-- **Una clase personalizada, no solo las 80 de COCO.** YOLO11n solo reconoce lo que fue entrenado para reconocer. El ajuste fino de un modelo YOLO en tus propias imágenes etiquetadas (una versión mucho más pequeña de la misma idea que el [proyecto Fine-tune a Small Language Model](/docs/projects/finetune-llm-unsloth)) te permite contar algo que COCO nunca incluyó — un producto específico en un estante, una herramienta específica, cualquier cosa de la que puedas etiquetar unos cientos de ejemplos.
+- **Una clase personalizada, no solo las 80 de COCO.** YOLO11n solo reconoce lo que fue entrenado para reconocer. El ajuste fino de un modelo YOLO en tus propias imágenes etiquetadas (una versión mucho más pequeña de la misma idea que el [proyecto Fine-tune a Small Language Model](/es/proyectos/finetune-llm-unsloth)) te permite contar algo que COCO nunca incluyó — un producto específico en un estante, una herramienta específica, cualquier cosa de la que puedas etiquetar unos cientos de ejemplos.
 
 ## Comparte tu proyecto con la clase
 

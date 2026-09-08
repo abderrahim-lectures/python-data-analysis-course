@@ -208,7 +208,7 @@ print(forecast[["date", "temp_max", "temp_max_f", "temp_max_k"]].to_string(index
 
 **Objectif :** Calculer des statistiques de résumé pour pouvoir décrire une prévision en une phrase.
 
-**Concept :** Pandas a des méthodes d'agrégation intégrées : `.min()`, `.max()`, `.mean()`. Nous combinons celles-ci en une seule ligne de statistiques. Nous映射 aussi les codes météo en descriptions lisibles par un humain.
+**Concept :** Pandas a des méthodes d'agrégation intégrées : `.min()`, `.max()`, `.mean()`. Nous combinons celles-ci en une seule ligne de statistiques. Nous mappons aussi les codes météo en descriptions lisibles par un humain.
 
 ```python
 WEATHER_CODES = {
@@ -343,7 +343,7 @@ Deux fichiers de graphiques sauvegardés sur le disque et affichés si exécuté
 
 **Objectif :** Combiner le tout en un résumé texte formaté que tu peux lire en un coup d'œil.
 
-**Concept :** Nous itérons sur chaque jour,映射 le code météo à une description, et formatons les températures avec alignement. Cela transforme des données brutes en quelque chose qu'un humain lirait réellement.
+**Concept :** Nous itérons sur chaque jour, en mappant le code météo à une description, et formatons les températures avec alignement. Cela transforme des données brutes en quelque chose qu'un humain lirait réellement.
 
 ```python
 def format_daily_bar(temp_min, temp_max, bar_width=30):

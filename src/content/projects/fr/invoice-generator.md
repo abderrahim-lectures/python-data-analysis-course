@@ -16,7 +16,7 @@ prerequisites: ["Python 101"]
 
 Chaque indépendant et chaque petite entreprise finit par faire face à la même tâche : transformer une feuille de calcul du travail effectué en une facture professionnelle. Ce projet construit un outil Python qui prend des données de facture structurées — informations client, lignes avec quantités et tarifs, pourcentages de taxe — et génère un PDF soigné avec des totaux calculés, des numéros de facture et des dates d'échéance. Tu modéliseras les données, construirás le rendu PDF et suivraás le statut de paiement, tout depuis la ligne de commande.
 
-Cela suppose Python 101 — rien de Analyse de Données n'est requis. C'est optionnel et non noté ; voir [Projets du monde réel](/docs/projects) pour la liste complète.
+Cela suppose Python 101 — rien de Analyse de Données n'est requis. C'est optionnel et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète.
 
 ## 🎯 Ce que tu vas faire
 

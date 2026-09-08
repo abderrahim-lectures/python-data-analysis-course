@@ -21,7 +21,7 @@ learningObjectives:
 
 Every real app is eventually blocked on a backend that isn't ready — a payment service with no sandbox, a weather feed that's down, a colleague's API still in design. A *mock server* is the honest substitute: it runs on your machine, speaks HTTP on localhost, and answers the same paths your real backend will, so your frontend, tests, and demo never wait on someone else's deploy. This project builds that server from scratch: route templates like `/users/<id>` become dispatchers that extract parameters, query strings and JSON bodies reflect back for inspection, a flaky route fails on a schedule, and a built-in recorder replays every call to catch regressions before production exists. It runs on the standard library. Every example in this guide is deterministic — the same dispatch returns the same JSON every time — so you can verify each claim as you build.
 
-This assumes functions, classes, and JSON handling. It is an optional, ungraded project — see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes functions, classes, and JSON handling. It is an optional, ungraded project — see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

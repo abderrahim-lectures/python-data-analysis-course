@@ -19,7 +19,7 @@ learningObjectives:
 
 « Ne livre pas des données que tu n'as pas vérifiées » ne fonctionne que si vérifier est bon marché et répétable. Ce projet construit l'outil qui rend cela bon marché : un fichier de règles écrit en JSON, un moteur qui transforme chaque règle en une liste de lignes en violation, un score qui résume tout le fichier, une comparaison de dérive qui sonne l'alerte quand une colonne empire silencieusement entre les instantanés, et une CLI dont un script de build peut réellement agir sur le code de sortie. Le tout est `csv`, `dataclasses`, et `json` — pas de framework, pas de base de données, juste tes règles exécutées contre tes données.
 
-Ceci suppose Python 101 plus les `dataclasses` et `csv`. Rien du module Analyse de Données n'est nécessaire. C'est facultatif et non noté ; voir [Projets du monde réel](/docs/projects) pour la liste complète et croissante.
+Ceci suppose Python 101 plus les `dataclasses` et `csv`. Rien du module Analyse de Données n'est nécessaire. C'est facultatif et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 

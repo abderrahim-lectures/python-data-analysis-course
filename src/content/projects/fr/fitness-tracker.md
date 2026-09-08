@@ -17,7 +17,7 @@ prerequisites: ["Les bases de Python (classes, dictionnaires, listes)", "pip ins
 
 Un journal d'entraînement est le projet d'analyse de données le plus simple qui soit : tu collectes des nombres chaque jour, et la partie intéressante est de les regarder changer au fil du temps. Ce projet construit cette boucle à partir de zéro — tu modéliseras les exercices et les repas comme des dataclasses typées, tu enregistreras les séances et calculeras le volume d'entraînement, tu suivras les macros et les pourcentages de calories, tu rouleras le tout dans un DataFrame pandas et tu traceras côte à côte les tendances de poids et de force avec matplotlib. Aucune clé API, aucun identifiant, aucun service externe : juste tes propres données structurées et une séquence de questions de plus en plus intelligentes à leur sujet.
 
-Ce projet suppose que tu maîtrises Python 101 et que tu as une familiarité de base avec les listes et les dicts — rien de la formation Data Analysis n'est requis. Il est facultatif et non noté ; consulte [Real-World Projects](/docs/projects) pour la liste complète, qui ne cesse de s'allonger.
+Ce projet suppose que tu maîtrises Python 101 et que tu as une familiarité de base avec les listes et les dicts — rien de la formation Data Analysis n'est requis. Il est facultatif et non noté ; consulte [Real-World Projects](/fr/projets) pour la liste complète, qui ne cesse de s'allonger.
 
 ## 🎯 Ce que tu vas faire
 

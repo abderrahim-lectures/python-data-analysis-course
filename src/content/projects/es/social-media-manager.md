@@ -20,7 +20,7 @@ prerequisites:
 
 Publicar cuando tu audiencia está realmente despierta, con hashtags que la gente genuinamente busca, es la mayor parte del marketing social. Este proyecto construye un pequeño gestor que estudia datos de engagement pasados con pandas, aprende el mejor momento de publicación para cada plataforma, sugiere hashtags por tema a través de un pequeño motor de puntuación, planifica una semana de publicaciones en un calendario de contenido y cierra con un informe de analíticas de matplotlib que podrías rotar directamente en la rutina de una marca real.
 
-Esto asume Python 101 y comodidad con el `groupby` de pandas — nada de Análisis de Datos más allá de eso se requiere. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa y creciente.
+Esto asume Python 101 y comodidad con el `groupby` de pandas — nada de Análisis de Datos más allá de eso se requiere. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 ## 🎯 Lo que harás
 

@@ -20,7 +20,7 @@ learningObjectives:
 
 Construye un chatbot basado en reglas que reconoce saludos, preguntas y comandos — y responde con personalidad, no solo con datos. Este proyecto recorre la coincidencia de patrones con regex, la generación de respuestas, el contexto de conversación y un bucle CLI limpio, todo desde la biblioteca estándar.
 
-Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/docs/projects) para la lista completa.
+Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
 
 ## Lo que harás
 

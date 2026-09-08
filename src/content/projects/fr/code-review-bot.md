@@ -21,7 +21,7 @@ learningObjectives:
 
 Les bots de revue lisent chaque pull request pour que les humains n'aient pas à le faire — et avant qu'un LLM ne soit impliqué, un bot de revue est surtout fait de *règles*. Ce projet en construit un : un **agent de revue de code** déterministe qui prend un diff de PR simulé (`payment.py`), applique un registre de règles (longueur de ligne, espaces de fin, `except` nu, `print` de débogage, `TODO` non résolu, docstrings manquantes), attache un commentaire par ligne pour chaque correspondance, les agrège par sévérité, décide `REJECT` quand un problème majeur existe, exporte toute la revue comme payload JSON, puis relit le diff *corrigé* pour voir le verdict basculer vers `APPROVE`. Pas de réseau, pas d'aléatoire — le même diff produit toujours la même revue, ce qui rend justement les bots à règles auditable : chaque commentaire est retraçable jusqu'à un test.
 
-Cela suppose fonctions, collections, entrées-sorties de fichiers et JSON. C'est un projet optionnel et non noté — vois [Projets du monde réel](/docs/projects) pour la liste complète et croissante.
+Cela suppose fonctions, collections, entrées-sorties de fichiers et JSON. C'est un projet optionnel et non noté — vois [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 

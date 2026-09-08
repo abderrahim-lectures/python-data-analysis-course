@@ -16,7 +16,7 @@ prerequisites: ["python-101/libraries", "numpy-101/arrays", "data-analysis/panda
 
 Keyword search is literal: type "car engine" and the system looks for those two exact tokens. Semantic search is *lazy with language*: type "vehicle motor" and it should still find the paragraph about engines, because it represents meaning as a vector in a high-dimensional space where similar ideas sit close together. In 2026 that trick runs on small transformer models you can run in a notebook, so the whole pipeline fits in your hands: embed a document collection into dense vectors, keep them in a NumPy matrix, then answer a natural-language query by computing which embedded paragraphs are closest in cosine distance. This project builds that engine end to end, then confronts the honest limit — when semantic shine fails and a plain keyword match wins on a proper noun — and shows you how a hybrid probes which regime you're in.
 
-This assumes Python 101 plus the course's NumPy and pandas modules. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full list.
+This assumes Python 101 plus the course's NumPy and pandas modules. It's optional and ungraded; see [Real-World Projects](/projects) for the full list.
 
 ## 🎯 What you'll do
 

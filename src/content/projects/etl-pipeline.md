@@ -19,7 +19,7 @@ learningObjectives:
 
 Every real data job looks like this: take orders from a CSV and customers from a JSON, join them, drop the rows that don't belong, sum things up, and write the result somewhere a tool can query. That pattern — **Extract, Transform, Load** — is what this project builds with nothing but the standard library: a CSV extractor, a JSON extractor, a transform that cleans and joins with every skip reported, aggregation that answers "revenue by city", and a SQLite load that is *idempotent*: run it five times, still exactly four rows. The final step hardens the whole thing against its most common production failure — a missing source file — without leaving the warehouse in a half-written state. No pandas. No framework. Just `csv`, `json`, and `sqlite3` doing a real job.
 
-This assumes Python 101 — lists, dicts, loops, functions — plus comfortable file reading and a terminal. Nothing here needs numpy or pandas. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python 101 — lists, dicts, loops, functions — plus comfortable file reading and a terminal. Nothing here needs numpy or pandas. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

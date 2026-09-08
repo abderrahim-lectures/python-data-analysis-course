@@ -19,7 +19,7 @@ learningObjectives:
 
 Copying real customer data into a development database, a bug report, or a demo is how sensitive information leaks — and the fix is the discipline of *masking*: replacing real values with fake-but-plausible ones before data goes anywhere it shouldn't. The craft is in the details: an email must keep its domain (so test code still routes), a phone number should stay phone-shaped, a numeric field like salary must keep its *distribution* (so test analytics don't collapse). This project builds a masker that detects sensitive columns, applies the right strategy per column, preserves what should be preserved, and writes an audit log of every operation.
 
-This assumes Python 101 plus comfortable `csv` and `re` — functions, lists, sets. Nothing from the Data Analysis module is required. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python 101 plus comfortable `csv` and `re` — functions, lists, sets. Nothing from the Data Analysis module is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

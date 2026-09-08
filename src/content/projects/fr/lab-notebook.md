@@ -7,7 +7,7 @@ description: "Enregistrez des expériences avec des données structurées, des c
 
 Les scientifiques suivent les expériences, les hypothèses et les résultats versionnés. Un cahier de laboratoire numérique fait la même chose mais de façon structurée : chaque expérience reçoit un modèle, les mesures alimentent les calculs et les résultats s'exportent comme des rapports reproductibles. Ce projet construit exactement cela.
 
-Cela suppose Python 101 et l'aisance avec pandas issu de Analyse de Données. C'est optionnel et non noté ; voir [Projets du monde réel](/docs/projects) pour la liste complète.
+Cela suppose Python 101 et l'aisance avec pandas issu de Analyse de Données. C'est optionnel et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète.
 
 ## 🎯 Ce que tu vas faire
 

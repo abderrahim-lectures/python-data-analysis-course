@@ -22,7 +22,7 @@ learningObjectives:
 
 Tout analyste a déjà rencontré le même jeu de données : des lignes en double, des cellules vides, une colonne `price` où une valeur vaut `"2.5 USD"` et une autre vaut `2.5`, et une date de commande où certaines lignes disent `2024-01-05` et certaines disent `05/01/2024`. Ces problèmes cachent du vrai signal et cassent les outils en aval de façon confuse. Ce projet construit un nettoyeur de données en ligne de commande qui prend un CSV en désordre, trouve ces problèmes automatiquement, applique la bonne correction par colonne et — la partie qui le rend digne de confiance — enregistre chaque changement dans une trace d'audit que tu peux lire comme un reçu.
 
-Cela suppose Python 101 et les bases de pandas du module Analyse de Données — rien au-delà. C'est optionnel et non noté ; voir [Projets du monde réel](/docs/projects) pour la liste complète et croissante.
+Cela suppose Python 101 et les bases de pandas du module Analyse de Données — rien au-delà. C'est optionnel et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 
@@ -525,7 +525,7 @@ Un CLI de nettoyage de données fonctionnel : il charge un CSV vraiment en déso
 
 - Transforme la liste `stuck` en point de décision : un drapeau `--strict` qui *refuse d'écrire la sortie* tant que toute valeur est irrécupérable, pour que le pipeline ne puisse pas livrer un fichier qu'il n'a pas entièrement compris.
 - Ajoute la gestion des espaces en fenêtre entière et des encodages mixtes avec l'option argparse `--encoding`, et normalise les fichiers UTF-8 BOM que pandas lit mal silencieusement.
-- Alimente la trace d'audit dans le module [Visualisation de Données](/docs/projects) du cours : rends un graphique à barres des problèmes par colonne et stratégie pour qu'un humain puisse approuver les remplissages d'un coup d'œil.
+- Alimente la trace d'audit dans le module [Visualisation de Données](/fr/projets) du cours : rends un graphique à barres des problèmes par colonne et stratégie pour qu'un humain puisse approuver les remplissages d'un coup d'œil.
 - Pointe le pipeline vers l'API du projet [Tableau de Bord de Qualité de l'Air](/projects/air-quality) et nettoie les réponses `/api` avant qu'elles n'atteignent tes graphiques.
 
 ## Partage ton projet avec la classe

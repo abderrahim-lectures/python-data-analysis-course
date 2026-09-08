@@ -5,11 +5,11 @@ difficulty: "intermediate"
 estimatedMinutes: 90
 tags: ["requests", "beautifulsoup", "web-scraping", "html-parsing", "api"]
 learningObjectives:
-  - Fetch pages with requests and handle HTTP errors gracefully
-  - Parse HTML with BeautifulSoup using CSS selectors
-  - Rate-limit and retry to crawl responsibly
-  - Crawl paginated sites into one dataset
-  - Wrap the pipeline in one reusable function returning structured JSON
+  - اجلب الصفحات باستخدام requests وتعامل مع أخطاء HTTP بأناقة
+  - افحص HTML باستخدام BeautifulSoup ومحددات CSS
+  - حدّد معدل الطلبات وأعد المحاولة للزحف بمسؤولية
+  - ازحف عبر المواقع متعددة الصفحات إلى مجموعة بيانات واحدة
+  - غلّف خط الأنابيب في دالة واحدة قابلة لإعادة الاستخدام تُرجع JSON منظمًا
 prerequisites:
   - "Python basics (functions, loops, dictionaries)"
   - "Understanding of HTTP and basic HTML structure"
@@ -20,7 +20,7 @@ prerequisites:
 
 الويب في الغالب HTML يُقدَّم للبشر، لكن كل "مجموعة بيانات" لا يمكنك تنزيلها بدأت كنظام كشّطها شخصٌ ما. يبني هذا المشروع API كشط صغيرًا ومسؤولًا ضد [books.toscrape.com](https://books.toscrape.com/) — موقع *مبني* للتدرب على هذا — بعميل HTTP محدود المعدل يعيد المحاولة بأدب، ومحلل BeautifulSoup يحوّل HTML إلى سجلات منظمة، وزاحف ترقيم صفحات، ودالة واحدة قابلة لإعادة الاستخدام تُعيد JSON نظيفًا. النتيجة واجهة قراءة صغيرة خاصة بك فوق موقع ويب عام.
 
-هذا يفترض Python 101 وما يكفي من HTML لتمييز عنوان ورابط و`div` — لا شيء من تحليل البيانات مطلوب. هذا اختياري وغير مُقيَّم؛ راجع [مشاريع من العالم الحقيقي](/docs/projects) للقائمة الكاملة والنامية.
+هذا يفترض Python 101 وما يكفي من HTML لتمييز عنوان ورابط و`div` — لا شيء من تحليل البيانات مطلوب. هذا اختياري وغير مُقيَّم؛ راجع [مشاريع من العالم الحقيقي](/ar/مشاريع) للقائمة الكاملة والنامية.
 
 ## 🎯 ما ستفعله
 

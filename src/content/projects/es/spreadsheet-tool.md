@@ -13,7 +13,7 @@ prerequisites:
   - Python a nivel intermedio
   - Conocimientos básicos de pandas
   - familiaridad con CSV y formatos de datos
-  - Terminal y编辑or de código
+  - Terminal yeditor de código
 ---
 
 ## 🎯 Lo que harás

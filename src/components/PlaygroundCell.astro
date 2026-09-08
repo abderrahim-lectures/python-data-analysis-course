@@ -4,6 +4,7 @@
 // for why a static site needs a 404 handler for a "dynamic" route). Line
 // numbers are injected client-side by runnable-cell.client.ts, same as
 // every other code cell site-wide — see .cell__gutter in global.css.
+import {m} from '../paraglide/messages.js';
 interface Props {
   starter: string;
 }
@@ -12,14 +13,14 @@ const {starter} = Astro.props;
 
 <div class="cell cell--big" data-runnable>
   <div class="cell__actions">
-    <button class="btn btn-primary cell__run" data-run aria-label="Run this Python code">▶ Run</button>
-    <button class="btn btn-ghost btn-sm" id="pg-reset">Reset</button>
+    <button type="button" class="btn btn-primary cell__run" data-run aria-label={m.run_aria()}>{m.run_button()}</button>
+    <button type="button" class="btn btn-ghost btn-sm" id="pg-reset">{m.reset_button()}</button>
     <span class="cell__lang">python</span>
   </div>
   <pre class="cell__code"><code id="pg-code">{starter}</code></pre>
   <div class="cell__output" data-output hidden>
     <div class="cell__lines" data-lines></div>
-    <button class="cell__clear" data-clear hidden>Clear</button>
+    <button type="button" class="cell__clear" data-clear hidden>{m.clear_button()}</button>
   </div>
 </div>
 

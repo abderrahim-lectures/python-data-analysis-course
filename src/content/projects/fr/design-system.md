@@ -20,7 +20,7 @@ prerequisites:
 
 Chaque système de design commence au même endroit : quelqu'un choisit une couleur de marque puis demande, « à quoi ressemble la palette entière ? » Ce projet construit cette réponse en Python — tu dériveras une palette complète dans une seule famille de couleurs, vérifieras chaque paire que tu utiliserais vraiment contre les règles de contraste WCAG, construiras une échelle typographique et d'espacement qui reste mathématiquement cohérente, et exporteras tout comme des propriétés CSS personnalisées prêtes à être jetées dans une vraie feuille de style.
 
-Ceci suppose Python 101 et une vague idée de ce qu'est une chaîne de couleur hex — rien de l'Analyse de Données n'est requis. C'est facultatif et non noté ; voir [Projets du monde réel](/docs/projects) pour la liste complète et croissante.
+Ceci suppose Python 101 et une vague idée de ce qu'est une chaîne de couleur hex — rien de l'Analyse de Données n'est requis. C'est facultatif et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 

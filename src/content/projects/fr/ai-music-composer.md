@@ -21,7 +21,7 @@ learningObjectives:
 
 Composer une mélodie de rien est un problème de page blanche ; composer une *variation* d'une mélodie que tu aimes déjà est un problème statistique. Ce projet construit le deuxième type de compositeur : il lit une courte mélodie de départ, apprend comment chaque note a tendance à suivre la précédente, puis génère de nouvelles mélodies à partir de ce modèle appris, empile des accords en dessous, et exporte le résultat comme un vrai fichier MIDI — un fichier de chanson que tu peux ouvrir dans n'importe quel lecteur ou station de travail audio numérique. L'« IA » ici est élégante et honnête : une chaîne de Markov, qui n'est rien de plus que « d'après ce que j'ai entendu jusqu'ici, quelle note vient typiquement après ? ».
 
-Cela suppose Python 101 et rien de l'Analyse de Données — et cela ne requiert aucune théorie musicale pour obtenir un résultat jouable, même si l'étape Harmonie aura bien plus de sens si tu fredonnes en même temps. C'est optionnel et non noté ; voir [Projets du monde réel](/docs/projects) pour la liste complète et croissante.
+Cela suppose Python 101 et rien de l'Analyse de Données — et cela ne requiert aucune théorie musicale pour obtenir un résultat jouable, même si l'étape Harmonie aura bien plus de sens si tu fredonnes en même temps. C'est optionnel et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 

@@ -21,7 +21,7 @@ learningObjectives:
 
 Real code arrives messy: trailing spaces at line ends, `#comment` with no space, two blank lines where one belongs, and indentation that skipped the 4-space rule. This project builds a **code formatter** — a small terminal tool that reads a Python file, applies only *safe* whitespace-and-comment normalizations, collapses blank-line runs, checks indentation, prints a report of exactly what changed, and writes the cleaned copy to `formatted.py`. It deliberately limits itself to whitespace and comment spacing (never renames or reorders code), so running it can't break the program. Pure standard library, deterministic, and it becomes a real command: `python3 code_formatter.py messy.py`.
 
-This assumes file I/O and basic string methods. It is an optional, ungraded project — see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes file I/O and basic string methods. It is an optional, ungraded project — see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

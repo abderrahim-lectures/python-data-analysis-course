@@ -19,7 +19,7 @@ prerequisites:
 
 Most real-world APIs follow the same pattern: resources with CRUD endpoints, authentication, validation, and docs. Writing each one by hand gets tedious fast — this project builds a code generator that reads a YAML schema and produces a complete FastAPI application with JWT authentication, Pydantic validation, and auto-generated OpenAPI docs, so you define your API once in YAML and get a working server.
 
-This assumes Python basics, intermediate OOP, and enough HTTP knowledge to know what a POST request does — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python basics, intermediate OOP, and enough HTTP knowledge to know what a POST request does — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

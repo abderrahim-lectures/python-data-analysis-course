@@ -20,7 +20,7 @@ prerequisites:
 
 Les tableaux de bord qui affichent « utilisateurs actifs en ce moment » ne recalculent pas toute la base de données à chaque instant — ils consomment un flux sans fin d'événements et gardent une petite fenêtre constamment mise à jour de ce qui vient de se passer. Ce projet construit ce moteur en Python pur : un générateur qui émet un flux d'événements réaliste, une fenêtre glissante qui maintient les moyennes à jour, la détection de pics par rapport à une ligne de base glissante, une jointure qui corrèle les achats aux pages vues qui les ont précédés, et enfin un tampon borné pour qu'une rafale d'événements ralentisse le pipeline au lieu de faire exploser sa mémoire.
 
-Cela suppose Python 101 et une certaine aisance avec les générateurs — aucun paquet externe ni rien d'Analyse de Données n'est requis. C'est optionnel et non noté ; voir [Projets du monde réel](/docs/projects) pour la liste complète et croissante.
+Cela suppose Python 101 et une certaine aisance avec les générateurs — aucun paquet externe ni rien d'Analyse de Données n'est requis. C'est optionnel et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 

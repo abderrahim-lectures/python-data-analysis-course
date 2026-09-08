@@ -16,7 +16,7 @@ prerequisites: ["python-101/file-io", "python-101/strings", "python-101/data-str
 
 Chaque service en fonctionnement produit un fichier de log qui grandit sans pitié — des milliers de lignes par minute, la moitié du bruit, jusqu'à ce qu'un après-midi quelque chose casse et que tu aies besoin de trouver les trois lignes pertinentes dans un million. Ce projet construit le premier outil qu'un vrai ingénieur saisit : un CLI qui analyse un fichier de log en enregistrements structurés, filtre par sévérité et mot-clé, compte les schémas qui se répètent et dessine une chronologie des événements par heure pour que tu puisses *voir* quand les choses ont mal tourné.
 
-Cela suppose Python 101 — entrées-sorties de fichiers, chaînes, dictionnaires et fonctions — plus un peu d'aisance à lire des DataFrames depuis Analyse de Données. Rien de plus : pas de frameworks, pas d'API, pas de services externes. C'est optionnel et non noté ; voir [Projets du monde réel](/docs/projects) pour la liste complète.
+Cela suppose Python 101 — entrées-sorties de fichiers, chaînes, dictionnaires et fonctions — plus un peu d'aisance à lire des DataFrames depuis Analyse de Données. Rien de plus : pas de frameworks, pas d'API, pas de services externes. C'est optionnel et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète.
 
 ## 🎯 Ce que tu vas faire
 

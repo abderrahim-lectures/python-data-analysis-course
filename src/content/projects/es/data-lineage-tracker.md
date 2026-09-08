@@ -19,7 +19,7 @@ learningObjectives:
 
 Cada conjunto de datos llega de algún lugar y fluye a otro — un CSV se limpia, la tabla limpia alimenta un agregado, el agregado alimenta un dashboard, y el dashboard alimenta una decisión. Cuando alguien cambia el esquema fuente, la pregunta "¿qué está afectado?" es urgente y, sin herramientas, aterradora. Un rastreador de linaje la responde haciendo del pipeline un grafo que puedes *recorrer*: los nodos son conjuntos de datos, las aristas son transformaciones, y el análisis de impacto es una expansión amplitud-primero desde cualquier nodo del grafo. Este proyecto construye ese rastreador desde primeros principios — grafo, cargadores, recorridos, rutas de impacto y dos renderizadores — con cero dependencias.
 
-Esto asume Python 101 más imports cómodos de `csv` y `json` — conjuntos y bucles en casa. No se requiere nada del módulo de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa, en crecimiento.
+Esto asume Python 101 más imports cómodos de `csv` y `json` — conjuntos y bucles en casa. No se requiere nada del módulo de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa, en crecimiento.
 
 ## 🎯 Lo que harás
 

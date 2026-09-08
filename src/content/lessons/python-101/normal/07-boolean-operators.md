@@ -139,14 +139,6 @@ Write a condition that checks whether a year is a leap year: divisible by 4, exc
 - If `or` returns the first truthy value, what does `"hello" or "world"` return? What about `"" or "world"`?
 - Why does Python use words (`and`, `or`, `not`) instead of symbols (`&&`, `||`, `!`)? What benefit does this provide for readability?
 
-## Projects You Can Build
-
-Here are a few real-world projects that reinforce these concepts:
-
-- 💬 **Trivia Bot** - Combine boolean logic to evaluate complex answer conditions and game states
-- 🎮 **Wordle Clone** - Use boolean operators to check win conditions and validate user input
-- 🎓 **Quiz Engine** - Implement scoring logic with boolean conditions for correct/incorrect answers
-
 ## ✅ Quick check
 
 <div class="quiz" data-quiz="python-101-boolean">

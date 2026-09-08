@@ -16,7 +16,7 @@ prerequisites: ["Python 101", "Analyse de Données"]
 
 Un système IoT sans tableau de bord, c'est comme une voiture sans compteur de vitesse — les données existent, mais personne ne peut les voir. Ce projet construit un tableau de bord de surveillance en temps réel avec Dash et Plotly : tu simules des flux de données de capteurs, tu rends des jauges en direct qui se mettent à jour chaque seconde, tu traces les tendances historiques comme graphiques de séries temporelles et tu groupes les appareils par type ou emplacement. Le tableau de bord s'exécute dans ton navigateur et se rafraîchit automatiquement.
 
-Cela suppose Python 101 et l'aisance avec pandas issu de Analyse de Données — rien de plus. C'est optionnel et non noté ; voir [Projets du monde réel](/docs/projects) pour la liste complète.
+Cela suppose Python 101 et l'aisance avec pandas issu de Analyse de Données — rien de plus. C'est optionnel et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète.
 
 ## 🎯 Ce que tu vas faire
 

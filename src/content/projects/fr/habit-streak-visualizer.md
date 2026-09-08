@@ -8,7 +8,7 @@ description: "Suis les pointages quotidiens d'habitudes en local et affiche une 
 
 Ce projet suppose que tu es à l'aise avec Python 101 — variables, fonctions, lecture et écriture de fichiers, boucles basiques. Un peu de pandas et matplotlib de Analyse de Données (`DataFrame`s, `.groupby()`, tracer un graphique simple) rendra quelques étapes familières, mais rien ici n'a besoin de plus que ça : pas de machine learning, pas d'API externe, et aucun jeu de données à télécharger. Tu apportes tes propres données, un jour à la fois.
 
-C'est optionnel et non noté. Voir [Projets du monde réel](/docs/projects) pour la liste complète et croissante.
+C'est optionnel et non noté. Voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 

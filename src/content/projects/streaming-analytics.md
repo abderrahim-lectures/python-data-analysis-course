@@ -20,7 +20,7 @@ prerequisites:
 
 Dashboards that show "active users right now" don't recompute the whole database on every tick — they consume an endless stream of events and keep a small, constantly-updated window of what just happened. This project builds that engine in pure Python: a generator that emits a realistic event stream, a sliding window that keeps averages up to date, spike detection against a rolling baseline, a join that correlates purchases back to the page views that preceded them, and finally a bounded buffer so a burst of events slows the pipeline down instead of blowing its memory up.
 
-This assumes Python 101 and comfort with generators — no external packages and nothing from Data Analysis beyond that is required. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python 101 and comfort with generators — no external packages and nothing from Data Analysis beyond that is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

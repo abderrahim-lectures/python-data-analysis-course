@@ -16,7 +16,7 @@ prerequisites: ["python-101/loops", "python-101/functions", "python-101/file-io"
 
 Sentarse en una meditación cronometrada tiene un problema que ninguna app del mundo está autorizada a arreglar — el teléfono vibrando, los anuncios, la insistencia de la racha *antes* de que siquiera cierres los ojos. Un temporizador de terminal no tiene nada de eso: un prompt simple, una cuenta regresiva, una campana suave, repetir. Este proyecto construye un pequeño CLI que cuenta una sesión, repica en cada intervalo (para que no estés mirando el reloj), guía un ciclo de respiración de caja 4-4-4-4 y registra silenciosamente cada sesión para que puedas ver crecer tu racha con cero juicio sobre los días de descanso.
 
-Esto asume Python 101 — bucles, funciones, leer y escribir archivos, y manejo básico de fechas. Nada más allá de eso: sin GUI, sin web, sin servicios externos. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa.
+Esto asume Python 101 — bucles, funciones, leer y escribir archivos, y manejo básico de fechas. Nada más allá de eso: sin GUI, sin web, sin servicios externos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
 
 ## 🎯 Lo que harás
 

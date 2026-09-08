@@ -4,6 +4,7 @@ import {highlightPython} from './pyHighlight.ts';
 // <RunnableCell> or generated from ```python fences by rehype-runnable-python)
 // with a Pyodide-backed Run button. Loaded once per page from Base.astro.
 import {usesJsBridge} from './pythonGuard.ts';
+import {m} from '../paraglide/messages.js';
 
 const PYODIDE_VERSION = '0.26.4';
 const INDEX = `https://cdn.jsdelivr.net/pyodide/v${PYODIDE_VERSION}/full/`;
@@ -146,6 +147,14 @@ function initCell(cell: Element) {
   const codeEl = cell.querySelector('code');
   if (!run || !out || !lines || !clear || !codeEl) return;
 
+  // Cells emitted by the markdown rehype plugin share one EN render across all
+  // locale trees (the lesson body itself is EN content), so their Run/Clear
+  // chrome is baked as EN. Localize it here — idempotent for cells authored via
+  // the components, which are already SSG-localized.
+  run.textContent = m.run_button();
+  run.setAttribute('aria-label', m.run_aria());
+  clear.textContent = m.clear_button();
+
   const appendLine = (kind: string, text: string) => {
     const d = document.createElement('div');
     d.className = `o-line o-line--${kind}`;
@@ -161,10 +170,10 @@ function initCell(cell: Element) {
     lines.innerHTML = '';
     appendLine('cmd', '$ python');
     run.disabled = true;
-    run.textContent = '⟳ Loading…';
+    run.textContent = m.run_loading();
     run.classList.add('cell__run--loading');
     const engine = await py();
-    run.textContent = '▶ Run';
+    run.textContent = m.run_button();
     run.disabled = false;
     run.classList.remove('cell__run--loading');
     await mountDatasets(engine);
@@ -173,7 +182,7 @@ function initCell(cell: Element) {
     engine.setStdin({stdin: () => window.prompt('') ?? ''});
     try {
       if (usesJsBridge(src)) {
-        appendLine('err', "Blocked: the 'js' and 'pyodide' bridge modules are disabled here.");
+        appendLine('err', m.blocked_bridge());
         return;
       }
       await engine.loadPackagesFromImports(src);
@@ -198,6 +207,7 @@ function initCell(cell: Element) {
           document.head.appendChild(style);
           const toast = document.createElement('div');
           toast.className = 'firstsuccess-toast';
+          toast.setAttribute('role', 'status');
           toast.textContent = '🎉 First success! You just ran Python in the browser.';
           document.body.appendChild(toast);
           requestAnimationFrame(() => toast.classList.add('firstsuccess-toast--visible'));

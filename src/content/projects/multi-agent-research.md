@@ -7,9 +7,9 @@ description: "Graduate from the in-browser playground to real Python: build a sm
 
 A single agent with a pile of tools and one long system prompt works fine for small tasks, but it starts to strain once a task has genuinely different *phases* that call for different instructions — planning what to look into, actually looking into each piece, then writing it all up. This project splits that work across three small, narrowly-instructed agents instead of one big one: a **planner** that breaks a research question into a handful of sub-questions, a **researcher** that answers each sub-question on its own, and a **writer** that synthesizes everything into one final report — coordinated with LangChain's `deepagents` sub-agent feature.
 
-This assumes Python 101, and it builds directly on the [AI Agent project](/docs/projects/ai-agent) — same `deepagents` library, same free-tier API setup, same idea of a model deciding what to call and when, just applied to delegating whole sub-tasks instead of calling individual tools. Doing that project first isn't strictly required, but it's a much smoother on-ramp than starting here cold.
+This assumes Python 101, and it builds directly on the [AI Agent project](/projects/ai-agent) — same `deepagents` library, same free-tier API setup, same idea of a model deciding what to call and when, just applied to delegating whole sub-tasks instead of calling individual tools. Doing that project first isn't strictly required, but it's a much smoother on-ramp than starting here cold.
 
-This is optional and ungraded. See [Real-World Projects](/docs/projects) for the full, growing list.
+This is optional and ungraded. See [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

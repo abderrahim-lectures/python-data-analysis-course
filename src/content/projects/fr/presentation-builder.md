@@ -17,7 +17,7 @@ prerequisites: ["python-101/file-io", "python-101/strings", "python-101/function
 
 Les présentations sont éditées dans un outil et présentées dans un autre, et c'est dans l'aller-retour que les diapositives meurent : les polices changent, les mises en page cassent, et un keynote chargé de puces te dispute chaque pixel. Un constructeur Markdown-first évite tout cela — tu écris les diapositives en texte brut avec `---` entre elles, et une commande transforme cela en un fichier HTML autonome qui s'ouvre partout, dans n'importe quel navigateur, sans application requise. Ce projet construit ce constructeur : il analyse un deck markdown, rend chaque diapositive, applique un thème, extrait tes notes de présentateur, et livre un unique `deck.html`.
 
-Cela suppose le Python 101 — entrées-sorties de fichiers, chaînes et fonctions. Rien au-delà de cela : pas de framework JavaScript, pas de base de données, pas d'outil de build. C'est optionnel et non noté ; vois [Projets du monde réel](/docs/projects) pour la liste complète.
+Cela suppose le Python 101 — entrées-sorties de fichiers, chaînes et fonctions. Rien au-delà de cela : pas de framework JavaScript, pas de base de données, pas d'outil de build. C'est optionnel et non noté ; vois [Projets du monde réel](/fr/projets) pour la liste complète.
 
 ## 🎯 Ce que tu vas faire
 

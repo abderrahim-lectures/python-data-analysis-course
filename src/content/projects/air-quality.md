@@ -21,7 +21,7 @@ learningObjectives:
 
 Air quality is a number crunching problem hiding inside a sensor feed. This project takes a week of PM2.5 readings — tiny airborne particles that are the most common urban pollutant — converts each hourly concentration into an EPA Air Quality Index (AQI) value, buckets those values into health categories, and produces the two things a concerned citizen actually wants: a plain-language report ("Tuesday evening was the worst stretch") and a chart that shows the week at a glance. The data is real-shaped but honest: the project tries to fetch live readings from a public API and falls back to a deterministic sample you can reproduce to the decimal, so your reported numbers are always checkable.
 
-This assumes basic tidy data work and none of it is graded; it's optional and ungraded — see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes basic tidy data work and none of it is graded; it's optional and ungraded — see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

@@ -16,7 +16,7 @@ prerequisites: ["python-101/file-io", "python-101/strings", "python-101/function
 
 Lire un article est une chose ; *indexer* un corpus en est une autre. Une revue de littérature, un gestionnaire de références, un outil de génération de revue — tous commencent par le même travail sans glamour : transformer un mur de prose en une structure avec des sections, des citations et une bibliographie qu'une machine peut manipuler. Ce projet construit cet analyseur de zéro en Python pur. Tu prendras le texte brut d'un véritable article académique, tu détecteras ses en-têtes de sections par leur forme, tu diviseras le corps en parties structurées, tu extrairas les citations de style `[1]`, `[2, 3]` et les références qu'elles pointent, puis tu construiras une petite recherche classée sur le contenu parsé. Le décodage PDF est hors de portée et délibérément — l'ingénierie intéressante, c'est le texte à l'instant où il est déjà sur ton disque : reconnaissance de forme, regex et structures de données, dont aucune n'a besoin d'une bibliothèque PDF.
 
-Cela suppose le Python 101 — entrées-sorties de fichiers, chaînes, fonctions et dictionnaires. Optionnel et non noté ; vois [Projets du monde réel](/docs/projects) pour la liste complète.
+Cela suppose le Python 101 — entrées-sorties de fichiers, chaînes, fonctions et dictionnaires. Optionnel et non noté ; vois [Projets du monde réel](/fr/projets) pour la liste complète.
 
 ## 🎯 Ce que tu vas faire
 

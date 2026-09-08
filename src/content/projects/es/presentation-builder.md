@@ -5,11 +5,11 @@ difficulty: "beginner"
 estimatedMinutes: 60
 tags: ["cli", "frontend", "file-io"]
 learningObjectives:
-  - "Split a Markdown deck into slides, separated by --- lines"
-  - "Derive the slide title from the first heading and render the body to HTML"
-  - "Apply a theme by swapping one CSS string into the page"
-  - "Lift speaker notes out of the visible slides with a comment convention"
-  - "Assemble a complete self-contained HTML file you can open in any browser"
+  - "Dividir una presentación Markdown en diapositivas, separadas por líneas ---"
+  - "Derivar el título de la diapositiva del primer encabezado y renderizar el cuerpo a HTML"
+  - "Aplicar un tema intercambiando una sola cadena CSS en la página"
+  - "Extraer las notas del presentador de las diapositivas visibles con una convención de comentarios"
+  - "Ensamblar un archivo HTML completo y autocontenido que se abra en cualquier navegador"
 prerequisites: ["python-101/file-io", "python-101/strings", "python-101/functions"]
 ---
 
@@ -17,7 +17,7 @@ prerequisites: ["python-101/file-io", "python-101/strings", "python-101/function
 
 Las presentaciones se editan en una herramienta y se entregan en otra, y el viaje de ida y vuelta es donde mueren las diapositivas: cambian las fuentes, se rompen los diseños, y un keynote cargado de viñetas pelea contigo por cada píxel. Un constructor de prioridad Markdown se salta todo eso — escribes las diapositivas como texto plano con `---` entre ellas, y un comando convierte eso en un archivo HTML autocontenido que se abre en cualquier sitio, en cualquier navegador, sin necesidad de ninguna app. Este proyecto construye ese constructor: analiza un mazo en Markdown, renderiza cada diapositiva, aplica un tema, extrae tus notas del presentador y envía un único `deck.html`.
 
-Esto asume Python 101 — E/S de archivos, cadenas y funciones. Nada más allá de eso: sin framework de JavaScript, sin base de datos, sin herramienta de build. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa.
+Esto asume Python 101 — E/S de archivos, cadenas y funciones. Nada más allá de eso: sin framework de JavaScript, sin base de datos, sin herramienta de build. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
 
 ## 🎯 Lo que harás
 

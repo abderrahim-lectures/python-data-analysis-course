@@ -20,7 +20,7 @@ prerequisites:
 
 Una tarea que no vive en ningún lado no se hace. Este proyecto construye el gestor de tareas más pequeño y genuinamente útil: una herramienta de línea de comandos que almacena tareas en un archivo JSON, te deja añadirlas con una prioridad, un proyecto y una fecha límite, listarlas y filtrarlas, marcarlas como hechas y renderizar todo el backlog como un tablero estilo kanban justo en la terminal. Es biblioteca estándar pura — aprenderás dataclasses, persistencia JSON y un poco de matemáticas de fechas, y terminarás con una herramienta que realmente ejecutarás a diario.
 
-Esto asume Python 101 y comodidad ejecutando scripts desde una terminal — no se requiere nada más allá de eso. Es opcional y no se califica; consulta [Proyectos del Mundo Real](/docs/projects) para ver la lista completa y en crecimiento.
+Esto asume Python 101 y comodidad ejecutando scripts desde una terminal — no se requiere nada más allá de eso. Es opcional y no se califica; consulta [Proyectos del Mundo Real](/es/proyectos) para ver la lista completa y en crecimiento.
 
 ## 🎯 Lo que harás
 

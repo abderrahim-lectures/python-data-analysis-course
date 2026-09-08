@@ -19,7 +19,7 @@ learningObjectives:
 
 Envoyer une vraie newsletter signifie gérer un fouillis de petits flux de travail : un modèle avec `{{first_name}}` qui se remplit réellement, une liste d'abonnés avec une ligne poubelle qui ne doit pas faire planter l'envoi, un enregistrement de boîte d'envoi sur *ce qui* est parti, des taux d'ouverture et de clics calculés à partir d'un journal de suivi, et — la partie que tout marketeur demande en premier — laquelle de deux lignes d'objet les gens ont réellement ouverte. Ce projet construit tout le pipeline en pur Python. Aucun envoi, aucun serveur, aucun SMTP : la « livraison » consiste à écrire un journal de boîte d'envoi, et les nombres sont tout aussi réels que ceux d'un outil hébergé.
 
-Ce projet suppose que tu maîtrises Python 101 — listes, dictionnaires, boucles, fonctions — plus une aisance avec `csv`/`json`. Rien du module Data Analysis n'est requis. Il est facultatif et non noté ; consulte [Real-World Projects](/docs/projects) pour la liste complète, qui ne cesse de s'allonger.
+Ce projet suppose que tu maîtrises Python 101 — listes, dictionnaires, boucles, fonctions — plus une aisance avec `csv`/`json`. Rien du module Data Analysis n'est requis. Il est facultatif et non noté ; consulte [Real-World Projects](/fr/projets) pour la liste complète, qui ne cesse de s'allonger.
 
 ## 🎯 Ce que tu vas faire
 

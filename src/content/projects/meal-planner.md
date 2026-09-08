@@ -16,7 +16,7 @@ prerequisites: ["python-101/data-structures", "python-101/reading-files", "pytho
 
 Meal planning looks simple on paper — decide seven dinners, write a grocery list — but the arithmetic is exactly where it falls apart: three recipes share rice, two share chicken, and the calories column quietly goes unchecked. This project builds a CLI that does the bookkeeping: a recipe database, a week-of-meals plan, per-day calorie and macro totals, and a grocery list that merges the shared ingredients into one consolidated summary instead of seven overlapping lists.
 
-This assumes Python 101 — lists, dicts, reading files, and functions. Nothing beyond that: no database, no web, no external services. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full list.
+This assumes Python 101 — lists, dicts, reading files, and functions. Nothing beyond that: no database, no web, no external services. It's optional and ungraded; see [Real-World Projects](/projects) for the full list.
 
 ## 🎯 What you'll do
 

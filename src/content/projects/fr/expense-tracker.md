@@ -22,7 +22,7 @@ learningObjectives:
 
 Suis tes dépenses, tiens-toi aux budgets et visualise où va ton argent — tout depuis la ligne de commande. Ce projet te fait passer des dictionnaires Python bruts à l'analyse pandas puis aux graphiques matplotlib, en construisant un outil pratique que tu peux réellement utiliser pour gérer tes finances.
 
-Ceci est facultatif et non noté. Consulte [Real-World Projects](/docs/projects) pour la liste complète.
+Ceci est facultatif et non noté. Consulte [Real-World Projects](/fr/projets) pour la liste complète.
 
 ## 🎯 Ce que tu vas faire
 

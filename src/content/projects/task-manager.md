@@ -20,7 +20,7 @@ prerequisites:
 
 A task that lives nowhere doesn't get done. This project builds the smallest genuinely useful task manager: a command-line tool that stores tasks in a JSON file, lets you add them with a priority, a project, and a deadline, list and filter them, mark them done, and render the whole backlog as a kanban-style board right in the terminal. It's pure standard library — you'll learn dataclasses, JSON persistence, and a little date math, and end up with a tool you'll actually run daily.
 
-This assumes Python 101 and comfort running scripts from a terminal — nothing beyond that is required. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python 101 and comfort running scripts from a terminal — nothing beyond that is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

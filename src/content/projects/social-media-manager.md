@@ -20,7 +20,7 @@ prerequisites:
 
 Posting when your audience is actually awake, with hashtags people genuinely search, is most of social marketing. This project builds a small manager that studies past engagement data with pandas, learns the best posting time for each platform, suggests hashtags per topic through a small scoring engine, plans a week of posts into a content calendar, and closes with a matplotlib analytics report you could rotate straight into a real brand's routine.
 
-This assumes Python 101 and comfort with pandas `groupby` — nothing from Data Analysis beyond that is required. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python 101 and comfort with pandas `groupby` — nothing from Data Analysis beyond that is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

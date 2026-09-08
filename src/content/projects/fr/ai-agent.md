@@ -9,7 +9,7 @@ difficulty: intermediate
 
 Tout jusqu'ici tournait dans un bac à sable isolé, dans le navigateur — pour que vous puissiez commencer à écrire du Python dès le premier jour sans aucune configuration. Ce projet est l'étape de remise de diplôme : installez Python pour de vrai sur votre propre machine, puis utilisez-le pour construire quelque chose que le bac à sable n'a jamais pu exécuter — un agent IA avec sa propre clé API, appelant un vrai modèle de langage.
 
-Ceci est optionnel et non noté — un bon choix une fois que vous avez terminé Python 101 (les bases de manipulation de données de Data Analysis sont un plus, pas un prérequis). Voir [Projets concrets](/docs/projects) pour la liste complète, qui s'enrichit au fil du temps.
+Ceci est optionnel et non noté — un bon choix une fois que vous avez terminé Python 101 (les bases de manipulation de données de Data Analysis sont un plus, pas un prérequis). Voir [Projets concrets](/fr/projets) pour la liste complète, qui s'enrichit au fil du temps.
 
 ## 🎯 Ce que tu vas faire
 
@@ -289,7 +289,7 @@ print(answer)
 
 **🎯 Résultat attendu :** La même réponse que l'Étape 1, mais si tu touches une limite de débit, la fonction affiche un message « Rate limited — waiting 30s... » et réessaie silencieusement.
 
-**🩹 Si ça ne marche pas :** Si tu vois le message de réessai mais que la réponse finale est encore une erreur de limite de débit, `max_retries` n'est pas assez élevé ou le temps d'attente est trop court — essaie d'augmenter les deux. Si des erreurs qui ne sont pas des limites de débit sont avalées, le vérificateur `if "RESOURCE_EXHAUSTED"` ne捕获 pas la bonne chaîne — affiche `error_str` pour voir le message d'erreur exact que ton fournisseur retourne.
+**🩹 Si ça ne marche pas :** Si tu vois le message de réessai mais que la réponse finale est encore une erreur de limite de débit, `max_retries` n'est pas assez élevé ou le temps d'attente est trop court — essaie d'augmenter les deux. Si des erreurs qui ne sont pas des limites de débit sont avalées, le vérificateur `if "RESOURCE_EXHAUSTED"` ne capture pas la bonne chaîne — affiche `error_str` pour voir le message d'erreur exact que ton fournisseur retourne.
 
 ### 3.2 Vérifie le gestionnaire de réessai
 

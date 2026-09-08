@@ -21,7 +21,7 @@ learningObjectives:
 
 Writing tests by hand feels like re-typing the function you just wrote, only slower. This project builds the inverse: a generator that *reads* a target function — its signature, defaults, and behavior — and produces a pytest suite that exercises real boundaries, real properties (like idempotence), and a swapped-arguments safety net. An optional LLM layer drafts "intent tests" that capture what the function is *supposed* to do, and the whole suite runs as a subprocess so your tool reports the verdict in one line. The target function is a tiny `clamp`, so every generated test is easy to eyeball — the machinery, not the math, is the point.
 
-This assumes solid function defaults and list comprehension fluency; nothing here is graded, it's optional and ungraded — see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes solid function defaults and list comprehension fluency; nothing here is graded, it's optional and ungraded — see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

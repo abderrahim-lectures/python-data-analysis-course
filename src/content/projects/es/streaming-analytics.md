@@ -20,7 +20,7 @@ prerequisites:
 
 Los paneles que muestran "usuarios activos ahora mismo" no recalculan toda la base de datos en cada tic — consumen un flujo interminable de eventos y mantienen una pequeña ventana, actualizada constantemente, de lo que acaba de suceder. Este proyecto construye ese motor en Python puro: un generador que emite un flujo de eventos realista, una ventana deslizante que mantiene los promedios al día, detección de picos frente a una línea base móvil, un join que correlaciona las compras con las vistas de página que las precedieron y, por último, un buffer limitado para que un estallido de eventos ralentice el pipeline en lugar de reventar su memoria.
 
-Esto asume Python 101 y comodidad con los generadores — no se requieren paquetes externos ni nada de Análisis de Datos más allá de eso. Es opcional y no se califica; consulta [Proyectos del Mundo Real](/docs/projects) para ver la lista completa y en crecimiento.
+Esto asume Python 101 y comodidad con los generadores — no se requieren paquetes externos ni nada de Análisis de Datos más allá de eso. Es opcional y no se califica; consulta [Proyectos del Mundo Real](/es/proyectos) para ver la lista completa y en crecimiento.
 
 ## 🎯 Lo que harás
 

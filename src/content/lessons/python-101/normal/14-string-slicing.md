@@ -119,19 +119,6 @@ Given `"abcdefghij"`, extract every 3rd character: `a`, `d`, `g`, `j`.
 
 </section>
 
-<section class="lesson-section lesson-section--projects">
-<h2 id="-projects-you-can-build">Projects You Can Build</h2>
-
-<p>Here are a few real-world projects that reinforce these concepts:</p>
-
-<ul>
-  <li>🎮 <strong>Wordle Clone</strong> - Use slicing to extract letters and compare slices for color-coded feedback</li>
-  <li>🎨 <strong>AI Story Writer</strong> - Apply slicing for text manipulation and paragraph extraction</li>
-  <li>✅ <strong>Note-Taking App</strong> - Use slicing for preview generation and text truncation</li>
-</ul>
-
-</section>
-
 <section class="lesson-section lesson-section--quiz">
 <h2 id="-quick-check">✅ Quick check</h2>
 

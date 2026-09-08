@@ -1,6 +1,6 @@
 ---
 title: "محرك الاختبارات"
-description: "ابنِ منصة اختبارات مع بنوك أسئلة، اختبارات محددة الوقت، Hệ thống نقاط، وتحليلات الأداء."
+description: "ابنِ منصة اختبارات مع بنوك أسئلة، اختبارات محددة الوقت، نظام نقاط، وتحليلات الأداء."
 difficulty: "beginner"
 estimatedMinutes: 50
 tags: ["classes", "random", "pandas", "matplotlib"]

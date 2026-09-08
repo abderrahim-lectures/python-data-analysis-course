@@ -12,7 +12,7 @@ prerequisites: ["Bases de Python (variables, boucles, fonctions, classes)", "Fam
 
 Chaque outil Python sérieux vit sur la ligne de commande. Dans ce projet, tu construiras un framework CLI réutilisable de zéro — un gestionnaire de tâches avec des sous-commandes pour ajouter, lister, supprimer et rechercher des tâches. En chemin, tu apprendras comment `argparse` analyse les arguments, comment router les sous-commandes, comment colorer la sortie du terminal, comment valider les entrées, comment charger des paramètres depuis un fichier JSON, et comment afficher des barres de progression pour les opérations lentes. Pas de frameworks tiers comme Click ou Typer — juste la bibliothèque standard de Python et quelques lignes de conception soignée.
 
-Ce projet suppose que tu connais les bases de Python : variables, boucles, fonctions, classes et dictionnaires. Tu devrais aussi être à l'aise pour ouvrir un terminal et exécuter des scripts Python depuis la ligne de commande. C'est optionnel et non noté. Vois [Projets du monde réel](/docs/projects) pour la liste complète.
+Ce projet suppose que tu connais les bases de Python : variables, boucles, fonctions, classes et dictionnaires. Tu devrais aussi être à l'aise pour ouvrir un terminal et exécuter des scripts Python depuis la ligne de commande. C'est optionnel et non noté. Vois [Projets du monde réel](/fr/projets) pour la liste complète.
 
 ## Ce que tu vas faire
 

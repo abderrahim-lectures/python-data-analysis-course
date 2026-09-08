@@ -1,6 +1,5 @@
 ---
 
-
 title: "Sampling the Next Word"
 description: "Use random.choices() to pick the next word from a probability distribution weighted by bigram probabilities."
 module: "generate-text"
@@ -176,11 +175,3 @@ def sample_n(model, word, n=100):
     from collections import Counter
     return Counter(results).most_common()
 ```
-
-## Projects You Can Build
-
-Here are a few real-world projects that reinforce these concepts:
-
-- 🎨 **AI Story Writer** - Implement weighted random sampling for text generation with temperature control
-- 🤖 **Chatbot Builder** - Use probability sampling to select varied responses from candidate lists
-- 🎮 **Wordle Clone** - Apply random sampling for hint generation and letter frequency analysis

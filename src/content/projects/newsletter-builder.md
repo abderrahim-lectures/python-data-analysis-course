@@ -19,7 +19,7 @@ prerequisites:
 
 Every email list faces the same pipeline: take a template, fill it in for each subscriber, track who opened and clicked, and figure out what subject line actually works. This project builds that pipeline in Python — a regex template engine, a CSV subscriber list with tags, an open/click tracker that computes honest rates, an A/B test for subject lines, and a final step that renders a personalized issue for every subscriber in a segment.
 
-This assumes Python 101 and comfort with functions, dictionaries, and lists — you'll meet pandas in one step, but nothing beyond that is required. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python 101 and comfort with functions, dictionaries, and lists — you'll meet pandas in one step, but nothing beyond that is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

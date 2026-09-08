@@ -19,7 +19,7 @@ prerequisites:
 
 Un registro de entrenamientos es el proyecto de análisis de datos más simple que existe: recolectas números todos los días, y la parte interesante es verlos cambiar con el tiempo. Este proyecto construye ese ciclo desde cero — modelarás ejercicios y comidas como dataclasses tipadas, registrarás sesiones y calcularás volumen de entrenamiento, rastrearás macros y porcentajes de calorías, convertirás todo en un DataFrame de pandas, y graficarás tendencias de peso y fuerza lado a lado con matplotlib. Sin claves de API, sin credenciales, sin servicios externos: solo tus propios datos estructurados y una secuencia de preguntas progresivamente más inteligentes sobre ellos.
 
-Esto asume Python 101 y familiaridad básica con listas y dicts — no se requiere nada de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa y creciente.
+Esto asume Python 101 y familiaridad básica con listas y dicts — no se requiere nada de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 ## 🎯 Lo que harás
 

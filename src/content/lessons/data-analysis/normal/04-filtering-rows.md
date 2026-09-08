@@ -191,11 +191,3 @@ print(f"Passengers with title Mrs: {len(mrs)}")
 ## Practice Challenge
 
 From the Titanic dataset, find all passengers who: (1) were male, (2) were in second or third class, (3) were between 18 and 35 years old, and (4) survived. How many passengers match all four conditions?
-
-## Projects You Can Build
-
-Here are a few real-world projects that reinforce these concepts:
-
-- 🧠 **ML Classifier** - Filter training data by labels and features for model building
-- 🕷️ **Scrape and Analyze** - Apply row filters to extract specific subsets from scraped data
-- 📈 **Data Visualization** - Filter data for targeted visualizations and comparisons

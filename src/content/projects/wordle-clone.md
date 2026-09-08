@@ -7,7 +7,7 @@ description: "Build a real terminal Wordle game from scratch: correct green/yell
 
 This project only assumes Python 101-level basics — functions, lists, dictionaries, loops, reading and writing a file. No pandas, no API key, no GPU, no external service of any kind — just a terminal, a word list, and some logic that's trickier to get right than it looks. That makes this a great *earlier* Real-World Project to try, even before some of the pandas- or AI-flavored ones: everything you need is stuff Python 101 already gave you, applied to something genuinely fun to play afterward.
 
-This is optional and ungraded. See [Real-World Projects](/docs/projects) for the full, growing list.
+This is optional and ungraded. See [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

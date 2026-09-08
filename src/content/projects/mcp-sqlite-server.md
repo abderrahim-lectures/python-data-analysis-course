@@ -7,7 +7,7 @@ description: "Build an MCP server that exposes a local SQLite database, then wat
 
 Databases are usually behind a wall of SQL that only the people who wrote it can query comfortably. MCP changes that shape: instead of teaching everyone SQL, you expose a database through a handful of well-described tools, and let an LLM client write and run the SQL itself, on your behalf, one question at a time. This project builds exactly that — a small local SQLite database (a neighborhood library: books, authors, members, loans) and an MCP server that lets an AI assistant list its tables, inspect a table's schema, and run **read-only** queries against it, so you can ask something like "which books has the library not gotten back yet?" in plain English and watch it get answered correctly.
 
-This assumes Python 101, ideally Data Analysis too (comfort with tables, columns, and querying structured data will make the SQL side click faster), and having already built the [Build an MCP Server](/docs/projects/mcp-server) project — this one reuses that project's `FastMCP` setup and doesn't re-explain it from scratch. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python 101, ideally Data Analysis too (comfort with tables, columns, and querying structured data will make the SQL side click faster), and having already built the [Build an MCP Server](/projects/mcp-server) project — this one reuses that project's `FastMCP` setup and doesn't re-explain it from scratch. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

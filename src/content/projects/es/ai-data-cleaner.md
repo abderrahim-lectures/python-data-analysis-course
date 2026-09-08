@@ -21,7 +21,7 @@ learningObjectives:
 
 Todo analista ha conocido el mismo dataset: filas duplicadas, celdas en blanco, una columna `price` donde un valor es `"2.5 USD"` y otro es `2.5`, y una fecha de pedido donde unas filas dicen `2024-01-05` y otras `05/01/2024`. Estos problemas ocultan señal real y rompen las herramientas posteriores de formas confusas. Este proyecto construye un limpiador de datos de línea de comandos que toma un CSV desordenado, encuentra esos problemas automáticamente, aplica la corrección adecuada por columna y — la parte que lo hace confiable — registra cada cambio que hace en un registro de auditoría que puedes leer como un recibo.
 
-Esto asume Python 101 y los fundamentos de pandas del módulo de Análisis de Datos — nada más allá. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa y creciente.
+Esto asume Python 101 y los fundamentos de pandas del módulo de Análisis de Datos — nada más allá. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 ## 🎯 Lo que harás
 
@@ -524,7 +524,7 @@ Un CLI de limpieza de datos funcional: carga un CSV genuinamente desordenado, re
 
 - Convierte la lista `stuck` en un punto de decisión: una bandera `--strict` que *se niegue a escribir salida* mientras haya algún valor irrecuperable, para que el pipeline no pueda entregar un archivo que no entendió por completo.
 - Agrega manejo de espacios en blanco de ventana completa y codificaciones mixtas con la opción `--encoding` de argparse, y normaliza archivos UTF-8 BOM que pandas lee mal en silencio.
-- Alimenta el registro de auditoría al módulo de [Visualización de Datos](/docs/projects) del curso: renderiza un gráfico de barras de issues por columna y estrategia para que un humano pueda aprobar los rellenos de un vistazo.
+- Alimenta el registro de auditoría al módulo de [Visualización de Datos](/es/proyectos) del curso: renderiza un gráfico de barras de issues por columna y estrategia para que un humano pueda aprobar los rellenos de un vistazo.
 - Apunta el pipeline a la API del proyecto [Panel de Calidad del Aire](/projects/air-quality) y limpia las respuestas de `/api` antes de que lleguen a tus gráficos.
 
 ## Comparte tu proyecto con la clase

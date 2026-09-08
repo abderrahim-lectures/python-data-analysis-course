@@ -20,7 +20,7 @@ prerequisites:
 
 Un CRM est la source de vérité partagée d'une équipe commerciale : chaque contact, chaque deal, chaque appel et email vit au même endroit pour que rien ne passe entre les mailles. Ce projet construit un CRM léger de zéro — tu modéliseras contacts, deals et activités comme des dataclasses Python typées, concevras un schéma SQLite avec de vraies clés étrangères, écriras des requêtes paramétrées pour la recherche et le filtrage, pousseras les deals à travers un pipeline validé, reconstruiras la ligne du temps d'un contact, et sortiras le tout en sortie `rich` en tableaux propres.
 
-Ceci suppose Python 101 et assez d'aisance en SQL pour lire un SELECT — rien de l'Analyse de Données n'est nécessaire. C'est facultatif et non noté ; voir [Projets du monde réel](/docs/projects) pour la liste complète et croissante.
+Ceci suppose Python 101 et assez d'aisance en SQL pour lire un SELECT — rien de l'Analyse de Données n'est nécessaire. C'est facultatif et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 

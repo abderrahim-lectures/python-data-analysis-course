@@ -7,7 +7,7 @@ description: "Graduate from the in-browser playground to real Python: build a te
 
 Everything in the course so far ran in a sandboxed, in-browser playground — so you could start writing Python on day one with zero setup. This project is the graduation step: install Python for real on your own machine, then use it to build a tool you might actually keep using for a different class entirely — a quiz app that reads your own study notes, writes questions grounded in what's actually in them (not generic trivia), quizzes you one question at a time in the terminal, and has a language model judge whether your typed answer is close enough, with brief feedback either way.
 
-This is optional and ungraded — a good fit once you've finished Python 101; nothing from Data Analysis is required. See [Real-World Projects](/docs/projects) for the full, growing list.
+This is optional and ungraded — a good fit once you've finished Python 101; nothing from Data Analysis is required. See [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 
@@ -90,7 +90,7 @@ Whichever you pick, the process is the same:
 GITHUB_TOKEN=your-key-here
 ```
 
-`python-dotenv` reads this file into `os.environ` automatically, the same pattern used throughout the [AI Agent](/docs/projects/ai-agent) and [RAG](/docs/projects/rag-notes) projects if you've done either of those. An API key is a secret, exactly like a password — anyone with it can use your account's quota.
+`python-dotenv` reads this file into `os.environ` automatically, the same pattern used throughout the [AI Agent](/projects/ai-agent) and [RAG](/projects/rag-notes) projects if you've done either of those. An API key is a secret, exactly like a password — anyone with it can use your account's quota.
 
 :::tip[A .env file is often more convenient than export]
 Instead of `export`-ing a key in every new terminal session, put it in a `.env` file in your project folder (see the repo example's `.env.example`) and load it with `load_dotenv()`, called once near the top of your script.
@@ -100,7 +100,7 @@ With `uv`, `openai`, `python-dotenv`, and a key in `.env`, setup is done — eve
 
 ## Step 1: Load your notes and choose a context strategy
 
-Put a `.txt` or `.md` file of your own study notes somewhere in your project — a `notes/` folder, same convention as the [RAG project](/docs/projects/rag-notes), is a reasonable place. Reading it is nothing new. Take this step in two small sub-steps: load the file, then choose your context strategy.
+Put a `.txt` or `.md` file of your own study notes somewhere in your project — a `notes/` folder, same convention as the [RAG project](/projects/rag-notes), is a reasonable place. Reading it is nothing new. Take this step in two small sub-steps: load the file, then choose your context strategy.
 
 ### 1.1 Load the notes file
 
@@ -123,7 +123,7 @@ Here's the design decision this project asks you to make explicitly, rather than
 **👟 Starter hint:** Read the two options below and decide which fits your notes file. For a single file under a few thousand words, Option A is simpler and recommended. If your notes are already a folder of many long files, Option B is the path — but that's a full RAG pipeline.
 
 - **Option A — feed the whole file as context.** Simplest possible approach: read one file, hand its entire text to the model in the prompt, done. This works great as long as a single file comfortably fits in the model's context window — a few thousand words is no problem at all for any modern free-tier model.
-- **Option B — chunk, embed, and retrieve**, exactly like the [RAG project](/docs/projects/rag-notes) does: split your notes into small pieces, embed them locally, and retrieve only the most relevant ones for each question. This scales to a notes folder with dozens of long files that would never fit in one prompt.
+- **Option B — chunk, embed, and retrieve**, exactly like the [RAG project](/projects/rag-notes) does: split your notes into small pieces, embed them locally, and retrieve only the most relevant ones for each question. This scales to a notes folder with dozens of long files that would never fit in one prompt.
 
 **This lesson picks Option A** and is explicit about the tradeoff: it's less scalable, but it's a full lesson simpler to write, read, and debug — no embedding model, no vector search, no separate index-building step, just a string. That tradeoff is worth naming out loud, the same grounding principle as the RAG project either way: a good quiz question has to come from text the model was actually given, not text it's guessing might be relevant from training data. If your own notes outgrow a single file, don't reinvent retrieval — reuse `retrieve.py` from the RAG project's example and swap Step 2's prompt to use retrieved chunks instead of a whole file.
 
@@ -364,7 +364,7 @@ uv run python study_buddy.py
 
 - **Thin notes produce thin questions.** If your notes file is just a few short bullet points, the model has very little to ground five distinct questions in, and you'll get repetitive or overly easy ones ("What is the name of...?"). More detailed, prose-style notes produce noticeably better questions — this mirrors the RAG project's chunking lesson: better input text means a better result, not a smarter prompt.
 - **The judge can be too strict or too lenient.** A small free-tier model grading free-text answers is not a precise instrument — it may mark a correct-but-oddly-phrased answer wrong, or wave through an answer that's actually missing a key detail. If you notice a consistent bias, tighten the `JUDGE_PROMPT_TEMPLATE` wording (e.g. "partial credit only counts if at least one specific fact is correct") rather than trying to work around it in Python.
-- **Rate limits from two calls per question.** Unlike a single-shot RAG answer, this script makes *two* model calls per question by the time you finish a quiz — one for generation (once, per quiz) and one for judging (once, per question). A 5-question quiz is 6 calls total; run several quizzes back to back on a free tier and you may hit a 429 rate-limit error. This isn't a bug — see the [AI Agent project](/docs/projects/ai-agent#handling-rate-limits) for the same pattern and a retry approach you can copy.
+- **Rate limits from two calls per question.** Unlike a single-shot RAG answer, this script makes *two* model calls per question by the time you finish a quiz — one for generation (once, per quiz) and one for judging (once, per question). A 5-question quiz is 6 calls total; run several quizzes back to back on a free tier and you may hit a 429 rate-limit error. This isn't a bug — see the [AI Agent project](/projects/ai-agent#handling-rate-limits) for the same pattern and a retry approach you can copy.
 - **Malformed JSON from the model breaks `json.loads`.** Even with an explicit "reply with ONLY JSON" instruction, a model occasionally adds a stray sentence before or after the JSON, or leaves a trailing comma. If you hit a `JSONDecodeError`, print the raw response before parsing it — that's almost always enough to see exactly what went wrong and adjust the prompt.
 
 ## What you just built
@@ -373,7 +373,7 @@ A small but complete "generate, then interact, then grade" pipeline: one LLM cal
 
 ## Where to go from here
 
-- Once a single notes file stops being enough — a full semester's worth of notes across many files — reuse the [RAG project's](/docs/projects/rag-notes) `prepare_notes.py`/`build_index.py`/`retrieve.py` pipeline: retrieve the most relevant chunks for a *topic* you want to be quizzed on, and feed those to `generate_questions` instead of one whole file.
+- Once a single notes file stops being enough — a full semester's worth of notes across many files — reuse the [RAG project's](/projects/rag-notes) `prepare_notes.py`/`build_index.py`/`retrieve.py` pipeline: retrieve the most relevant chunks for a *topic* you want to be quizzed on, and feed those to `generate_questions` instead of one whole file.
 - Track missed questions across runs (write them to a small JSON file) and build a "review my weak spots" mode that re-quizzes you specifically on topics you got wrong before.
 - Add a difficulty setting to `GENERATE_PROMPT_TEMPLATE` ("easy recall questions" vs. "questions requiring you to connect two ideas from the notes") and compare how much harder the harder mode actually feels.
 - Revisit the bonus `try`/`except` content from Python 101 — wrapping `judge_answer` so one malformed response doesn't end the whole quiz (see the Socratic question in Step 4) is exactly that pattern.

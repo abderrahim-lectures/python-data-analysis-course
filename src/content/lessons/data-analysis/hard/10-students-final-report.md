@@ -1,6 +1,5 @@
 ---
 
-
 title: "Final EDA Report"
 description: "Complete the full EDA pipeline on the Students Performance dataset and produce a polished, narrative-driven final report."
 module: "students-performance-eda"
@@ -394,11 +393,3 @@ print("Report saved as eda_report.png")
 
 </div>
 </details>
-
-## Projects You Can Build
-
-Here are a few real-world projects that reinforce these concepts:
-
-- 🧠 **ML Classifier** - Build a complete EDA report before developing predictive models
-- 📈 **Data Visualization** - Create publication-quality visualizations with annotations and insights
-- 📊 **Anomaly Detector** - Produce comprehensive data reports that identify patterns and anomalies

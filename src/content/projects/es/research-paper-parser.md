@@ -16,7 +16,7 @@ prerequisites: ["python-101/file-io", "python-101/strings", "python-101/function
 
 Leer un artículo es una cosa; *indexar* un corpus de ellos es otra. Una revisión de literatura, un gestor de referencias, una herramienta de generación de revisiones — todos empiezan con el mismo trabajo poco glamoroso: convertir un muro de prosa en una estructura con secciones, citas y una bibliografía con la que una máquina pueda trabajar. Este proyecto construye ese analizador desde cero en Python puro. Tomarás el texto plano de un artículo académico real, detectarás sus encabezados de sección por su forma, dividirás el cuerpo en partes estructuradas, extraerás citas estilo `[1]`, `[2, 3]` y las referencias a las que apuntan, y luego construirás una pequeña búsqueda rankeada sobre el contenido analizado. La decodificación de PDF está fuera de alcance y deliberadamente lo está — la ingeniería interesante es el texto en el momento en que ya está en tu disco: reconocimiento de formas, regex y estructuras de datos, ninguna de las cuales necesita una librería de PDF.
 
-Esto asume Python 101 — E/S de archivos, strings, funciones y diccionarios. Opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa.
+Esto asume Python 101 — E/S de archivos, strings, funciones y diccionarios. Opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
 
 ## 🎯 Lo que harás
 

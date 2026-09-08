@@ -21,7 +21,7 @@ learningObjectives:
 
 Tus elecciones diarias emiten carbono: conducir 10 km no es lo mismo que andar 10 km o tomar el tren 10 km, y comer carne no es lo mismo que comer plantas. Este proyecto construye un pequeño y honesto **rastreador de carbono** en la terminal — un único script de Python que sabe cuántos kg de CO2-equivalente cuesta cada actividad, trabaja una semana de muestra de entradas de transporte/comida/electricidad, totaliza todo por día y por categoría, dibuja un gráfico de barras ASCII, verifica la semana contra un presupuesto, guarda todo en un CSV y finalmente se convierte en un comando real con los subcomandos `add`, `report` y `reset`. Usa solo la biblioteca estándar — sin instalaciones, sin aleatoriedad, así que los números que ves aquí son exactamente los números que verás.
 
-Esto asume listas, diccionarios, bucles `for` de Python y uso básico de terminal. Es un proyecto opcional y no calificado — consulta [Proyectos del mundo real](/docs/projects) para la lista completa y creciente. Cada pieza corre en una instalación básica de Python (3.10+).
+Esto asume listas, diccionarios, bucles `for` de Python y uso básico de terminal. Es un proyecto opcional y no calificado — consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente. Cada pieza corre en una instalación básica de Python (3.10+).
 
 ## 🎯 Lo que harás
 

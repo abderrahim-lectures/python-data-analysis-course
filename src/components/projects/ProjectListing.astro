@@ -7,7 +7,7 @@ import Base from '../../layouts/Base.astro';
 import Icon from '../Icon.astro';
 import ProjectCard from './ProjectCard.astro';
 import {PROJECT_TAGS, projectArtEmoji} from '../../lib/projectArt';
-import {PAGE_STRINGS} from '../../lib/pageStrings';
+import {m} from '../../paraglide/messages.js';
 import type {Locale} from '../../lib/routeSegments';
 import '../../styles/projects.css';
 
@@ -33,19 +33,18 @@ interface Props {
 }
 
 const {locale, projects: rawProjects, filterStrings: fs} = Astro.props;
-const s = PAGE_STRINGS[locale];
 const localeProjects = rawProjects.filter((p) => {
-  if (locale === 'en') return !/^(ar|es|fr)\//.test(p.slug);
-  return p.slug.startsWith(`${locale}/`);
+  if (locale === 'en') return !/^(ar|es|fr)\//.test(p.id);
+  return p.id.startsWith(`${locale}/`);
 });
 const projectCount = localeProjects.length;
 const searchPlaceholder = fs.searchPlaceholder.replace('{n}', String(projectCount));
 
 const projects = localeProjects
-  .map((p) => ({...p, slug: p.slug.replace(/^(ar|es|fr)\//, '').replace(/^\/?projects\//, '')}))
+  .map((p) => ({...p, slug: p.id.replace(/^(ar|es|fr)\//, '').replace(/^\/?projects\//, '')}))
   .sort((a, b) => a.data.title.localeCompare(b.data.title));
 
-const allTags = [...new Set(projects.flatMap((p) => PROJECT_TAGS[p.slug] ?? []))].sort();
+const allTags = [...new Set(projects.flatMap((p) => PROJECT_TAGS[p.id] ?? []))].sort();
 const tagIcon: Record<string, string> = {};
 for (const [, tags] of Object.entries(PROJECT_TAGS)) {
   for (const t of tags) {
@@ -60,12 +59,12 @@ const alternates = {
 };
 ---
 
-<Base title={s.projectsTitle} description={s.projectsDescription} lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'} alternates={alternates}>
+<Base title={m.projects_title()} description={m.projects_description()} lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'} alternates={alternates}>
   <section class="hero">
     <div class="container head">
-      <div class="head__eyebrow"><Icon name="code" size={16} /> {s.projectsEyebrow}</div>
-      <h1>{s.projectsH1}</h1>
-      <p>{s.projectsLead}</p>
+      <div class="head__eyebrow"><Icon name="code" size={16} /> {m.projects_eyebrow()}</div>
+      <h1>{m.projects_h1()}</h1>
+      <p>{m.projects_lead()}</p>
     </div>
   </section>
 
@@ -83,25 +82,25 @@ const alternates = {
       </div>
       <div class="finder__actions">
         <div class="finder__tags" role="group" aria-label={fs.filterTagAria}>
-          <button class="tag-pill tag-pill--all is-active" data-tag="">
+          <button type="button" class="tag-pill tag-pill--all is-active" data-tag="">
             <span class="tag-pill__icon">🏷️</span>{fs.tagAll}
           </button>
           {allTags.map((tag) => (
-            <button class="tag-pill" data-tag={tag}>
+            <button type="button" class="tag-pill" data-tag={tag}>
               <span class="tag-pill__icon">{tagIcon[tag] ?? '🏷️'}</span>{tag}
             </button>
           ))}
         </div>
         <div style="display:flex; gap:1rem; align-items:center; flex-wrap:wrap;">
           <div class="finder__difficulty" role="group" aria-label={fs.filterDiffAria}>
-            <button class="diff-pill is-active" data-diff="">{fs.diffAll}</button>
-            <button class="diff-pill" data-diff="beginner">🌱 {fs.diffBeginner}</button>
-            <button class="diff-pill" data-diff="intermediate">⚡ {fs.diffIntermediate}</button>
-            <button class="diff-pill" data-diff="advanced">🔥 {fs.diffAdvanced}</button>
+            <button type="button" class="diff-pill is-active" data-diff="">{fs.diffAll}</button>
+            <button type="button" class="diff-pill" data-diff="beginner">🌱 {fs.diffBeginner}</button>
+            <button type="button" class="diff-pill" data-diff="intermediate">⚡ {fs.diffIntermediate}</button>
+            <button type="button" class="diff-pill" data-diff="advanced">🔥 {fs.diffAdvanced}</button>
           </div>
           <div class="finder__view" role="group" aria-label={fs.viewAria}>
-            <button class="view-btn view-btn--list is-active" data-view="list" aria-label={fs.viewListAria}><Icon name="list" size={16} /></button>
-            <button class="view-btn view-btn--grid" data-view="grid" aria-label={fs.viewGridAria}><Icon name="grid" size={16} /></button>
+            <button type="button" class="view-btn view-btn--list is-active" data-view="list" aria-label={fs.viewListAria}><Icon name="list" size={16} /></button>
+            <button type="button" class="view-btn view-btn--grid" data-view="grid" aria-label={fs.viewGridAria}><Icon name="grid" size={16} /></button>
           </div>
         </div>
       </div>
@@ -110,7 +109,7 @@ const alternates = {
 
     <div class="list" id="project-grid">
       {projects.map((p) => (
-        <ProjectCard slug={p.slug} title={p.data.title} description={p.data.description} locale={locale} />
+        <ProjectCard slug={p.id} title={p.data.title} description={p.data.description} locale={locale} />
       ))}
     </div>
 

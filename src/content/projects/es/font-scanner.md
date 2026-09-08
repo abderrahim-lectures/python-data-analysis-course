@@ -19,7 +19,7 @@ prerequisites:
 
 La tipografía es la decisión de diseño más visible en cualquier página web, y emparejar bien dos fuentes — una para encabezados, otra para el texto del cuerpo — es una habilidad respaldada por un pequeño número de reglas concretas: contraste en categoría (serif vs. sans-serif) y contraste en peso (encabezado en negrita, cuerpo regular). Este proyecto construye una herramienta que aplica esas reglas mecánicamente: escanea los archivos de fuentes realmente instalados en tu sistema, clasifica cada una, puntúa cada par posible, clasifica los mejores, renderiza una imagen de vista previa mostrando el emparejamiento y exporta una pila `font-family` CSS lista para producción con respaldos multiplataforma.
 
-Esto asume Python 101 y familiaridad básica con PIL/Pillow — no se requiere nada de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa y creciente.
+Esto asume Python 101 y familiaridad básica con PIL/Pillow — no se requiere nada de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 ## 🎯 Lo que harás
 

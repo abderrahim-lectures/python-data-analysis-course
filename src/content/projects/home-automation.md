@@ -16,7 +16,7 @@ prerequisites: ["Python 101"]
 
 Your smart home is only as smart as the rules that connect its devices — a motion sensor that turns on a light, a thermostat that adjusts when you leave, a door lock that engages at bedtime. This project builds a rule-based home automation engine in Python: you define devices (lights, thermostats, locks), write if-this-then-that rules, schedule time-based triggers, and detect presence from network pings. The engine runs locally, processes events, and executes actions — no cloud service required.
 
-This assumes Python 101 — nothing from Data Analysis is required. Optional and ungraded; see [Real-World Projects](/docs/projects) for the full list.
+This assumes Python 101 — nothing from Data Analysis is required. Optional and ungraded; see [Real-World Projects](/projects) for the full list.
 
 ## 🎯 What you'll do
 

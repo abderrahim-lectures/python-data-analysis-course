@@ -7,7 +7,7 @@ description: "Graduate from the in-browser playground to real Python: fetch open
 
 Every open-source repo with any traffic accumulates a backlog of untriaged issues — bug reports, feature requests, questions, and duplicates, all sitting there unlabeled until a maintainer has time to sort through them by hand. This project builds a small script that does the first pass for them: it fetches a real public repo's OPEN issues straight from GitHub's own API, sends each one to a free-tier LLM, and prints a report suggesting a triage label and a one-sentence rationale for each issue — the kind of thing a maintainer could skim in a minute instead of reading every issue from scratch.
 
-This assumes Python 101 — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python 101 — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 
@@ -248,7 +248,7 @@ def suggest_triage(issue: dict) -> dict:
     return parse_triage_reply(reply)
 ```
 
-Don't forget `from dotenv import load_dotenv` plus `load_dotenv()` near the top of the file, so `os.environ["GITHUB_TOKEN"]` actually finds the key from your `.env` file — same pattern as the [AI Agent project](/docs/projects/ai-agent).
+Don't forget `from dotenv import load_dotenv` plus `load_dotenv()` near the top of the file, so `os.environ["GITHUB_TOKEN"]` actually finds the key from your `.env` file — same pattern as the [AI Agent project](/projects/ai-agent).
 
 `parse_triage_reply` deliberately falls back to `label="other"` and the raw reply as the rationale if the model doesn't follow the requested two-line format exactly — free-tier models occasionally add stray text or skip a line, and a slightly malformed triage *draft* is still more useful printed for a human to skim than dropped silently on a parsing error.
 
@@ -341,7 +341,7 @@ A real fetch → prompt → suggest → report pipeline against a live, public G
 
 - **Actually apply labels — carefully, once you trust the suggestions.** The [`gh` CLI](https://cli.github.com/) (`gh issue edit 123 --add-label bug`) or the GitHub API's own issues-edit endpoint can add a label for real. If you build this, keep a human explicitly in the loop — e.g. print the suggestions first, prompt for confirmation per issue (or per batch) before calling the API, and never auto-apply a label straight from a model's first pass. Treat write access to someone else's repo's issues with real caution, especially one you don't maintain yourself.
 - **Batch multiple issues into one LLM call** instead of one call per issue — fewer round trips, but a more complex prompt and a harder parsing problem (structured output/JSON mode is worth exploring here).
-- **Add a "possible duplicate" check** by embedding issue titles (see the [RAG project](/docs/projects/rag-notes) for the embeddings pattern) and flagging pairs that are suspiciously similar, instead of relying on the LLM to remember every other open issue on its own.
+- **Add a "possible duplicate" check** by embedding issue titles (see the [RAG project](/projects/rag-notes) for the embeddings pattern) and flagging pairs that are suspiciously similar, instead of relying on the LLM to remember every other open issue on its own.
 - **Cache results** so re-running the script doesn't re-triage issues you've already reviewed — a simple JSON file keyed by issue number, checked before each LLM call, is enough for a first version.
 
 :::tip[Run a fuller version without any local setup]

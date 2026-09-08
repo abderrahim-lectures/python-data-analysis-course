@@ -17,7 +17,7 @@ prerequisites: ["Python basics (classes, dictionaries, lists)", "pip install pan
 
 A workout log is the simplest data-analysis project there is: you collect numbers every day, and the interesting part is watching them change over time. This project builds that loop from scratch — you'll model exercises and meals as typed dataclasses, log sessions and compute training volume, track macros and calorie percentages, roll everything into a pandas DataFrame, and plot weight and strength trends side by side with matplotlib. No API keys, no credentials, no external services: just your own structured data and a sequence of progressively smarter questions about it.
 
-This assumes Python 101 and basic familiarity with lists and dicts — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python 101 and basic familiarity with lists and dicts — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

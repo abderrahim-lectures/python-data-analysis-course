@@ -19,7 +19,7 @@ learningObjectives:
 
 Copiar datos reales de clientes hacia una base de datos de desarrollo, un informe de bug o una demo es así como se filtran los datos sensibles — y la solución es la disciplina del *enmascaramiento*: reemplazar valores reales por versiones falsas pero plausibles antes de que los datos vayan a cualquier lugar a donde no deberían. El oficio está en los detalles: un correo debe conservar su dominio (para que el código de pruebas siga enrutando), un número de teléfono debería seguir teniendo forma de teléfono, un campo numérico como el salario debe conservar su *distribución* (para que la analítica de pruebas no colapse). Este proyecto construye un enmascarador que detecta columnas sensibles, aplica la estrategia correcta por columna, preserva lo que debe preservarse y escribe un registro de auditoría de cada operación.
 
-Esto asume Python 101 más lectura cómoda de `csv` y `re` — funciones, listas, conjuntos. No se requiere nada del módulo de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa, en crecimiento.
+Esto asume Python 101 más lectura cómoda de `csv` y `re` — funciones, listas, conjuntos. No se requiere nada del módulo de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa, en crecimiento.
 
 ## 🎯 Lo que harás
 

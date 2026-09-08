@@ -16,7 +16,7 @@ prerequisites: ["Python 101"]
 
 Every freelancer and small business eventually faces the same task: turn a spreadsheet of work done into a professional invoice. This project builds a Python tool that takes structured invoice data — client info, line items with quantities and rates, tax percentages — and generates a polished PDF with calculated totals, invoice numbers, and due dates. You'll model the data, build the PDF renderer, and track payment status, all from the command line.
 
-This assumes Python 101 — nothing from Data Analysis is required. Optional and ungraded; see [Real-World Projects](/docs/projects) for the full list.
+This assumes Python 101 — nothing from Data Analysis is required. Optional and ungraded; see [Real-World Projects](/projects) for the full list.
 
 ## 🎯 What you'll do
 

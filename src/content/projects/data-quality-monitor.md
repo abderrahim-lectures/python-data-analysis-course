@@ -19,7 +19,7 @@ learningObjectives:
 
 "Don't ship data you haven't checked" only works if checking is cheap and repeatable. This project builds the tool that makes it cheap: a rule file written in JSON, an engine that turns each rule into a list of violating rows, a score that summarizes the whole file, a drift comparison that rings a bell when a column quietly gets worse between snapshots, and a CLI whose exit code a build script can actually act on. The whole thing is `csv`, `dataclasses`, and `json` — no framework, no database, just your rules run against your data.
 
-This assumes Python 101 plus `dataclasses` and `csv`. Nothing from the Data Analysis module is required. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python 101 plus `dataclasses` and `csv`. Nothing from the Data Analysis module is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

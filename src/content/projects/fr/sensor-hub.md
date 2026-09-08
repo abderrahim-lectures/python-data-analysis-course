@@ -16,7 +16,7 @@ prerequisites: ["python-101/file-io", "python-101/dictionaries", "python-101/fun
 
 Entre dans une pièce et un thermostat lit 21,4 °C ; un détecteur de mouvement clignote à chaque fois que quelqu'un traverse ; une puce d'humidité mesure un coin humide. Un *hub de capteurs IoT* est la chose qui collecte toutes ces lectures de chaque capteur, les normalise en un seul flux, signale celles hors d'une plage sûre, et les stocke pour que tu puisses revenir sur un graphique. Les capteurs physiques sont optionnels — ce projet les simule honnêtement avec une boucle de tick configurable, donc tout le hub (agrégation, alertes, persistance et un tableau de bord Matplotlib) tourne sur du Python pur sans matériel et sans réseau. Tout ce que tu construis a la même forme qu'un vrai hub basé sur MQTT ; seule la source « capteur » est truquée, et tu le sauras, parce que remplacer le simulateur par un vrai flux est un échange documenté.
 
-Cela suppose le Python 101 plus le module Matplotlib du cours. Optionnel et non noté ; vois [Projets du monde réel](/docs/projects) pour la liste complète.
+Cela suppose le Python 101 plus le module Matplotlib du cours. Optionnel et non noté ; vois [Projets du monde réel](/fr/projets) pour la liste complète.
 
 ## 🎯 Ce que tu vas faire
 

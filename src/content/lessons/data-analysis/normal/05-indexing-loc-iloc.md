@@ -214,11 +214,3 @@ print(df.loc[0, "Age"])
 ## Practice Challenge
 
 From the Titanic dataset, use `iloc` to extract rows 100-109 and columns 2-5 (Pclass through Age). Then use `loc` to find the names of all passengers with index labels 0, 50, 100, and 500. Finally, use `loc` to change the Fare of passenger at index 7 to 999 and verify the change.
-
-## Projects You Can Build
-
-Here are a few real-world projects that reinforce these concepts:
-
-- 🧠 **ML Classifier** - Use loc/iloc to split data into training sets and extract features
-- 💰 **Expense Tracker** - Apply targeted indexing to update specific transactions and summaries
-- 📈 **Data Visualization** - Select specific data ranges for focused chart creation

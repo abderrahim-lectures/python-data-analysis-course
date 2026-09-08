@@ -8,9 +8,9 @@ description: "Da el salto del playground en el navegador a Python real: construy
 
 Un único agente con una pila de herramientas y un largo prompt de sistema funciona bien para tareas pequeñas, pero empieza a flaquear una vez que una tarea tiene *fases* genuinamente distintas que piden instrucciones diferentes — planificar en qué indagar, investigar de verdad cada pieza, y luego escribir todo. Este proyecto divide ese trabajo entre tres agentes pequeños y con instrucciones estrechas en lugar de uno grande: un **planificador** que descompone una pregunta de investigación en un puñado de sub-preguntas, un **investigador** que responde cada sub-pregunta por su cuenta, y un **escritor** que sintetiza todo en un informe final — coordinados con la función de sub-agentes `deepagents` de LangChain.
 
-Esto asume Python 101, y se construye directamente sobre el [proyecto Agente de IA](/docs/projects/ai-agent) — misma librería `deepagents`, misma configuración de API de nivel gratuito, misma idea de un modelo decidiendo qué llamar y cuándo, solo que aplicada a delegar sub-tareas completas en lugar de llamar herramientas individuales. Hacer ese proyecto primero no es estrictamente requerido, pero es una vía de entrada mucho más suave que empezar aquí en frío.
+Esto asume Python 101, y se construye directamente sobre el [proyecto Agente de IA](/es/proyectos/ai-agent) — misma librería `deepagents`, misma configuración de API de nivel gratuito, misma idea de un modelo decidiendo qué llamar y cuándo, solo que aplicada a delegar sub-tareas completas en lugar de llamar herramientas individuales. Hacer ese proyecto primero no es estrictamente requerido, pero es una vía de entrada mucho más suave que empezar aquí en frío.
 
-Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/docs/projects) para la lista completa y creciente.
+Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 ## 🎯 Lo que harás
 

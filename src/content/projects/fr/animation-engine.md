@@ -21,7 +21,7 @@ learningObjectives:
 
 L'animation ressemble à de la magie parce que chaque frame est simple ; la magie est la *mathématique dans les coulisses* qui relie frame à frame. Ce projet construit ces coulisses en Python pur : un easing `smoothstep` entre deux nombres, des sprites portant une vitesse et rebondissant sur les murs d'un canevas de 30×10, un moteur à pas de temps fixe qui avance toute la scène à chaque frame, des chemins keyframés avec interpolation adoucie, et des frames exportées comme fichiers texte que tu peux rejouer. Le moteur tourne de façon déterministe — les mêmes points atterrissent dans les mêmes cellules à chaque fois — donc tu peux vérifier chaque affirmation de ce guide avant de faire danser les points. C'est un moteur texte d'abord : la « vidéo » est une pile de frames `.txt` que tu peux coller n'importe où.
 
-Cela suppose classes et méthodes plus une arithmétique de base avec des flottants. C'est un projet facultatif et non noté — consulte [Projets du monde réel](/docs/projects) pour la liste complète et grandissante.
+Cela suppose classes et méthodes plus une arithmétique de base avec des flottants. C'est un projet facultatif et non noté — consulte [Projets du monde réel](/fr/projets) pour la liste complète et grandissante.
 
 ## 🎯 Ce que tu vas faire
 

@@ -17,7 +17,7 @@ prerequisites: ["Python basics", "Pillow basics"]
 
 Typography is the most visible design decision on any web page, and pairing two fonts well — one for headings, one for body text — is a skill backed by a small number of concrete rules: contrast in category (serif vs. sans-serif) and contrast in weight (bold heading, regular body). This project builds a tool that applies those rules mechanically: it scans the font files actually installed on your system, classifies each one, scores every possible pair, ranks the best, renders a preview image showing the pairing, and exports a production-ready CSS `font-family` stack with cross-platform fallbacks.
 
-This assumes Python 101 and a basic familiarity with PIL/Pillow — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python 101 and a basic familiarity with PIL/Pillow — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

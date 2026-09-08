@@ -26,8 +26,8 @@ if (wanted.length) {
   const all = await getCollection('projects', ({data}) => Boolean(data.title));
   const byBareSlug = new Map<string, CollectionEntry<'projects'>>();
   for (const p of all) {
-    const bare = p.slug.replace(/^(ar|es|fr)\//, '').replace(/^\/?projects?\//, '');
-    if ((locale === 'en' ? !/^(ar|es|fr)\//.test(p.slug) : p.slug.startsWith(`${locale}/`)) && !byBareSlug.has(bare)) {
+    const bare = p.id.replace(/^(ar|es|fr)\//, '').replace(/^\/?projects?\//, '');
+    if ((locale === 'en' ? !/^(ar|es|fr)\//.test(p.id) : p.id.startsWith(`${locale}/`)) && !byBareSlug.has(bare)) {
       byBareSlug.set(bare, p);
     }
   }
@@ -35,7 +35,7 @@ if (wanted.length) {
     .map((slug) => byBareSlug.get(slug))
     .filter((p): p is CollectionEntry<'projects'> => Boolean(p))
     .map((p) => ({
-      slug: p.slug.replace(/^(ar|es|fr)\//, '').replace(/^\/?projects?\//, ''),
+      slug: p.id.replace(/^(ar|es|fr)\//, '').replace(/^\/?projects?\//, ''),
       title: p.data.title,
       description: p.data.description,
     }));

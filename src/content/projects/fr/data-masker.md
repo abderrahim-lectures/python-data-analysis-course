@@ -19,7 +19,7 @@ learningObjectives:
 
 Copier de vraies données clients dans une base de développement, un rapport de bug, ou une démo est ainsi que la donnée sensible fuit — et la correction est la discipline du *masquage* : remplacer les vraies valeurs par des fausses mais plausibles avant que la donnée n'aille où elle ne devrait pas. Le savoir-faire est dans les détails : un email doit garder son domaine (pour que le code de test route encore), un numéro de téléphone doit rester en forme de téléphone, un champ numérique comme le salaire doit garder sa *distribution* (pour que les analyses de test ne s'effondrent pas). Ce projet construit un masqueur qui détecte les colonnes sensibles, applique la bonne stratégie par colonne, préserve ce qui doit être préservé, et écrit un journal d'audit de chaque opération.
 
-Ceci suppose Python 101 plus une lecture confortable de `csv` et `re` — fonctions, listes, ensembles. Rien du module Analyse de Données n'est nécessaire. C'est facultatif et non noté ; voir [Projets du monde réel](/docs/projects) pour la liste complète et croissante.
+Ceci suppose Python 101 plus une lecture confortable de `csv` et `re` — fonctions, listes, ensembles. Rien du module Analyse de Données n'est nécessaire. C'est facultatif et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 

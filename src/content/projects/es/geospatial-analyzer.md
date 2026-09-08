@@ -18,7 +18,7 @@ prerequisites:
 
 Cada viaje de rideshare, cada entrega, cada lectura de estación meteorológica es un punto en el globo descrito por dos números: latitud y longitud. Este proyecto construye una herramienta de análisis geoespacial que toma datos crudos de coordenadas y responde preguntas reales: dónde están los clústeres de actividad, qué tan separados están dos puntos y cómo se ve la densidad de puntos en un mapa. Usarás DBSCAN para el agrupamiento espacial, la fórmula de Haversine para cálculos de distancia reales y Folium para visualizaciones de mapas interactivas — todo anclado en datos geográficos reales.
 
-Esto asume Python 101 y comodidad con pandas de Análisis de Datos — nada más allá. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa.
+Esto asume Python 101 y comodidad con pandas de Análisis de Datos — nada más allá. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
 
 ## 🎯 Lo que harás
 

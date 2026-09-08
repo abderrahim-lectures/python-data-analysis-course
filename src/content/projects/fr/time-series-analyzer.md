@@ -20,7 +20,7 @@ prerequisites:
 
 Les relevés de température, la charge serveur, le trafic web — presque tout ce qui est réel arrive comme une séquence dans le temps, et les analystes passent leurs journées à séparer ce qu'une série *fait* en trois signaux : la dérive lente (tendance), le rythme répétitif (saisonnalité) et le bruit restant (résidu). Ce projet construit cette décomposition à partir de zéro avec pandas, puis utilise les pièces : il prévoit la semaine prochaine avec un modèle tendance-plus-saison, note la prévision contre un vrai holdout, signale les dates qui ne correspondent pas au motif, et corrèle deux séries dans un graphique que tu peux réellement sauvegarder.
 
-Cela suppose Python 101 et une aisance avec les Series pandas — rien d'Analyse de Données au-delà n'est requis. C'est optionnel et non noté ; voir [Projets du monde réel](/docs/projects) pour la liste complète et croissante.
+Cela suppose Python 101 et une aisance avec les Series pandas — rien d'Analyse de Données au-delà n'est requis. C'est optionnel et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 

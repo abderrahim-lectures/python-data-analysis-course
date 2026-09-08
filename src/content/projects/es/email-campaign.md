@@ -19,7 +19,7 @@ learningObjectives:
 
 Enviar un boletín real significa gestionar un montón de pequeños flujos de trabajo: una plantilla con `{{first_name}}` que de verdad se llena, una lista de suscriptores con una fila basura que no debe tumbar el envío, un registro de outbox de *qué* se envió, tasas de apertura y de clics calculadas a partir de un registro de seguimiento, y —la parte que todo marketer pregunta primero— cuál de dos líneas de asunto la gente de verdad abrió. Este proyecto construye todo ese pipeline en Python puro. Sin envío, sin servidor, sin SMTP: la "entrega" es escribir un registro de outbox, y los números son tan reales como los de una herramienta alojada.
 
-Esto asume Python 101 — listas, diccionarios, bucles, funciones — además de comodidad con `csv`/`json`. No se requiere nada del módulo de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa y creciente.
+Esto asume Python 101 — listas, diccionarios, bucles, funciones — además de comodidad con `csv`/`json`. No se requiere nada del módulo de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 ## 🎯 Lo que harás
 

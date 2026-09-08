@@ -16,7 +16,7 @@ prerequisites: ["python-101/libraries", "numpy-101/arrays", "data-analysis/panda
 
 La búsqueda por palabras clave es literal: escribe "motor de auto" y el sistema busca esos dos tokens exactos. La búsqueda semántica es *perezosa con el lenguaje*: escribe "máquina de vehículo" y debería encontrar igualmente el párrafo sobre motores, porque representa el significado como un vector en un espacio de alta dimensión donde las ideas similares se sientan cerca. En 2026 ese truco corre en modelos transformer pequeños que puedes ejecutar en un notebook, así que todo el pipeline cabe en tus manos: integra una colección de documentos en vectores densos, consérvalos en una matriz NumPy y luego responde una consulta en lenguaje natural calculando qué párrafos integrados están más cerca en distancia coseno. Este proyecto construye ese motor de punta a punta, luego confronta el límite honesto — cuando el brillo semántico falla y una coincidencia de palabras clave simple gana en un nombre propio — y te muestra cómo una sonda híbrida detecta en qué régimen estás.
 
-Esto asume Python 101 más los módulos del curso de NumPy y pandas. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa.
+Esto asume Python 101 más los módulos del curso de NumPy y pandas. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
 
 ## 🎯 Lo que harás
 

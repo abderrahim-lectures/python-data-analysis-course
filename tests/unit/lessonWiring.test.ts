@@ -20,7 +20,7 @@ describe.each(LESSON_TEMPLATES)('%s', (path) => {
   });
 
   test('builds the lesson id from canonical section/track', () => {
-    expect(src).toMatch(/const lessonId = `[^`]*\$\{entry\.slug/);
+    expect(src).toMatch(/const lessonId = `[^`]*\$\{entry\.id/);
   });
 
   test('reflects already-saved completion when the page loads', () => {
@@ -28,8 +28,8 @@ describe.each(LESSON_TEMPLATES)('%s', (path) => {
   });
 
   test('uses localized completion labels', () => {
-    expect(src).toContain('ps.markComplete');
-    expect(src).toContain('ps.completed');
+    expect(src).toContain('m.mark_complete()');
+    expect(src).toContain('m.completed()');
   });
 });
 

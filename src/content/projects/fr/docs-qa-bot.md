@@ -6,11 +6,11 @@ description: "Passe du bac à sable dans le navigateur au vrai Python : envelopp
 
 # 📚 Construire un Bot Discord de Questions-Réponses Adossé au RAG
 
-Ce projet reprend le pipeline de génération augmentée par récupération du [projet Appli RAG](/docs/projects/rag-notes) — embeddings locaux, recherche de similarité cosinus avec NumPy, un LLM gratuit pour la réponse finale — et lui met un front-end différent : au lieu d'un script que tu exécutes depuis un terminal une question à la fois, le même pipeline répond aux questions en direct, dans un serveur Discord, chaque fois que quelqu'un mentionne le bot. Rien sur *comment* il récupère ou génère ne change ; seule l'interface change.
+Ce projet reprend le pipeline de génération augmentée par récupération du [projet Appli RAG](/fr/projets/rag-notes) — embeddings locaux, recherche de similarité cosinus avec NumPy, un LLM gratuit pour la réponse finale — et lui met un front-end différent : au lieu d'un script que tu exécutes depuis un terminal une question à la fois, le même pipeline répond aux questions en direct, dans un serveur Discord, chaque fois que quelqu'un mentionne le bot. Rien sur *comment* il récupère ou génère ne change ; seule l'interface change.
 
-Cela suppose Python 101. Avoir déjà construit le [projet Appli RAG](/docs/projects/rag-notes) est fortement recommandé — ce projet réutilise directement son code d'embedding/récupération et passe rapidement sur les parties déjà expliquées en profondeur.
+Cela suppose Python 101. Avoir déjà construit le [projet Appli RAG](/fr/projets/rag-notes) est fortement recommandé — ce projet réutilise directement son code d'embedding/récupération et passe rapidement sur les parties déjà expliquées en profondeur.
 
-C'est optionnel et non noté. Voir [Projets du monde réel](/docs/projects) pour la liste complète et croissante.
+C'est optionnel et non noté. Voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 
@@ -70,12 +70,12 @@ Le [Portail Développeur](https://discord.com/developers/applications) de Discor
 4. Sur le même onglet **Bot**, fais défiler jusqu'à **Privileged Gateway Intents** et active **Message Content**. C'est requis pour que le bot voie réellement le texte des messages dans lesquels il est mentionné — sans ça, `discord.py` reçoit une chaîne vide pour le contenu de chaque message peu importe le code que tu écris.
 
 :::tip[Un jeton de bot est un secret, exactement comme une clé API]
-Tout ce que le [projet Appli RAG](/docs/projects/rag-notes) a enseigné sur la gestion des clés API LLM s'applique ici aussi, pour un deuxième secret : ne code jamais en dur le jeton du bot, ne le commite jamais, et garde-le dans un fichier `.env` local (ci-dessous) à la place.
+Tout ce que le [projet Appli RAG](/fr/projets/rag-notes) a enseigné sur la gestion des clés API LLM s'applique ici aussi, pour un deuxième secret : ne code jamais en dur le jeton du bot, ne le commite jamais, et garde-le dans un fichier `.env` local (ci-dessous) à la place.
 :::
 
 ### Obtiens une clé API LLM gratuite
 
-La moitié génération de ce pipeline a besoin du même genre de clé LLM gratuite que le [projet Appli RAG](/docs/projects/rag-notes) — **choisis le fournisseur que tu préfères**, aucun ne nécessite de carte de crédit au moment de l'écriture :
+La moitié génération de ce pipeline a besoin du même genre de clé LLM gratuite que le [projet Appli RAG](/fr/projets/rag-notes) — **choisis le fournisseur que tu préfères**, aucun ne nécessite de carte de crédit au moment de l'écriture :
 
 | Fournisseur | Où obtenir une clé | Pourquoi le choisir |
 |---|---|---|
@@ -331,7 +331,7 @@ Exécutez le code ci-dessous et confirmez qu'il fonctionne.
 ```bash
 uv run python retrieve.py
 ```
-Si ça semble aller trop vite, c'est délibéré — le [projet Appli RAG](/docs/projects/rag-notes#step-4-retrieve-relevant-chunks) couvre exactement pourquoi la similarité cosinus fonctionne ainsi, ce que la normalisation t'apporte, et comment les maths se connectent à une multiplication matrice-vecteur, avec bien plus de profondeur que ce que le répéter ici apporterait.
+Si ça semble aller trop vite, c'est délibéré — le [projet Appli RAG](/fr/projets/rag-notes#step-4-retrieve-relevant-chunks) couvre exactement pourquoi la similarité cosinus fonctionne ainsi, ce que la normalisation t'apporte, et comment les maths se connectent à une multiplication matrice-vecteur, avec bien plus de profondeur que ce que le répéter ici apporterait.
 :::tip[Teste la récupération avant de toucher à Discord du tout]
 Fais en sorte que `retrieve.py` retourne des fragments authentiquement pertinents pour quelques questions de test *avant* d'écrire du code de bot. Si la récupération est mauvaise, un bot enroulé autour d'elle livrera simplement des réponses erronées avec confiance dans un canal Discord — bien plus difficile à déboguer en direct qu'un script de terminal silencieux.
 :::
@@ -525,19 +525,19 @@ Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
 ## ⚠️ Pièges courants
 
 - **Oublier l'intent privilégié « Message Content ».** Ça doit être activé en *deux* endroits — `intents.message_content = True` dans le code, **et** l'interrupteur sous Bot → Privileged Gateway Intents dans le Portail Développeur. Rate l'interrupteur du portail et `message.content` est silencieusement une chaîne vide pour chaque message, sans aucune erreur pour te dire pourquoi.
-- **Limites de débit sur le niveau LLM gratuit, aggravées par le vrai trafic du bot.** Un script CLI comme le `ask.py` du projet Appli RAG n'appelle le LLM que quand tu l'exécutes ; un bot en direct peut recevoir plusieurs questions en succession rapide de différentes personnes dans un serveur actif, et chacune est un appel séparé contre le quota de niveau gratuit de ton fournisseur. Une erreur 429 sous charge n'est pas un bug — voir les [pièges du projet Appli RAG](/docs/projects/rag-notes#️-common-pitfalls) pour le même pattern de limite de débit et comment ajouter une nouvelle tentative.
+- **Limites de débit sur le niveau LLM gratuit, aggravées par le vrai trafic du bot.** Un script CLI comme le `ask.py` du projet Appli RAG n'appelle le LLM que quand tu l'exécutes ; un bot en direct peut recevoir plusieurs questions en succession rapide de différentes personnes dans un serveur actif, et chacune est un appel séparé contre le quota de niveau gratuit de ton fournisseur. Une erreur 429 sous charge n'est pas un bug — voir les [pièges du projet Appli RAG](/fr/projets/rag-notes#️-common-pitfalls) pour le même pattern de limite de débit et comment ajouter une nouvelle tentative.
 - **Ne pas reconstruire l'index après avoir modifié `docs/`.** Exactement comme le projet Appli RAG : `build_index.py` ne tourne que quand tu l'exécutes. Ajoute ou modifie un doc et le bot continue de répondre depuis l'*ancien* index jusqu'à ce que tu relances `uv run python build_index.py` et redémarres le bot.
 - **Exécuter le bot avec un jeton obsolète ou incorrect après l'avoir régénéré.** Cliquer sur « Reset Token » dans le Portail Développeur invalide immédiatement l'ancien jeton — si `.env` a toujours l'ancienne valeur, `client.run(...)` échoue à se connecter. Mets à jour `.env` chaque fois que tu réinitialises le jeton, et ne suppose jamais que la valeur que tu as copiée une fois est toujours valide.
 
 ## Ce que tu viens de construire
 
-Un bot Discord en direct qui répond à de vraies questions à partir de vraie documentation, ancré dans du texte récupéré plutôt que dans la connaissance générale du modèle — exactement le même pipeline RAG que le [projet Appli RAG](/docs/projects/rag-notes), avec une boucle d'événements `discord.py` remplaçant un script CLI comme interface. Le code de récupération et de génération n'a pas changé de façon significative ; seule la façon dont une question entre et une réponse sort a changé. C'est une chose utile à remarquer en général : la logique centrale d'un pipeline RAG est indépendante de l'interface, et la même paire `retrieve()`/`answer()` ici pourrait tout aussi facilement se trouver derrière un bot Slack, un formulaire web, ou un endpoint API à la place.
+Un bot Discord en direct qui répond à de vraies questions à partir de vraie documentation, ancré dans du texte récupéré plutôt que dans la connaissance générale du modèle — exactement le même pipeline RAG que le [projet Appli RAG](/fr/projets/rag-notes), avec une boucle d'événements `discord.py` remplaçant un script CLI comme interface. Le code de récupération et de génération n'a pas changé de façon significative ; seule la façon dont une question entre et une réponse sort a changé. C'est une chose utile à remarquer en général : la logique centrale d'un pipeline RAG est indépendante de l'interface, et la même paire `retrieve()`/`answer()` ici pourrait tout aussi facilement se trouver derrière un bot Slack, un formulaire web, ou un endpoint API à la place.
 
 ## Où aller à partir d'ici
 
 - Ajoute une **commande slash** (`/ask <question>`) en utilisant les `app_commands` de `discord.py` en plus, ou à la place, des réponses basées sur mention — les commandes slash apparaissent dans l'UI de Discord avec autocomplétion et ne nécessitent pas de taper une `@mention`, au prix d'une petite quantité de code d'enregistrement supplémentaire.
 - Suis quelle source `docs/` chaque réponse a réellement citée, et fais en sorte que le bot inclue une ligne « Source : fichier.md » dans sa réponse — une petite mais réelle fonctionnalité de renforcement de confiance pour quiconque lit la réponse.
-- Une fois que ton dossier de documentation dépasse ce qui tient confortablement en mémoire, regarde une vraie base de données vectorielle comme [ChromaDB](https://www.trychroma.com/), exactement comme suggéré dans le [« Où aller à partir d'ici » du projet Appli RAG](/docs/projects/rag-notes#where-to-go-from-here) — rien sur la couche Discord n'a besoin de changer pour le supporter.
+- Une fois que ton dossier de documentation dépasse ce qui tient confortablement en mémoire, regarde une vraie base de données vectorielle comme [ChromaDB](https://www.trychroma.com/), exactement comme suggéré dans le [« Où aller à partir d'ici » du projet Appli RAG](/fr/projets/rag-notes#where-to-go-from-here) — rien sur la couche Discord n'a besoin de changer pour le supporter.
 - Déploie le bot quelque part qui reste actif sans que ton propre ordinateur portable tourne — une petite VM toujours active, ou un niveau gratuit sur une plateforme comme Railway ou Fly.io — pour qu'il continue de répondre aux questions même quand tu n'es pas à ta machine.
 
 ## Partage ton projet avec la classe

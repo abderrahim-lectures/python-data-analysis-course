@@ -18,7 +18,7 @@ learningObjectives:
 
 Choisir des couleurs qui vont réellement ensemble fait la différence entre une application à l'allure professionnelle et un cirque à roulettes, et pourtant « harmonieux » est d'habitude un ressenti, pas une formule. Il se trouve que la **roue chromatique** vous donne des règles précises : les couleurs complémentaires sont à 180° l'une de l'autre, les triadiques à 120°, les voisines analogues à 30°. Ce projet construit un outil qui applique ces règles à *n'importe quelle* couleur de base, puis vérifie chaque candidat selon les directives de contraste WCAG pour que vous ne donniez jamais à personne une palette où le texte disparaît dans l'arrière-plan.
 
-Ceci suppose Python 101 — variables, boucles, fonctions et `print` de base — rien de l'Analyse de Données n'est nécessaire. C'est facultatif et non noté ; voir [Projets du monde réel](/docs/projects) pour la liste complète et croissante.
+Ceci suppose Python 101 — variables, boucles, fonctions et `print` de base — rien de l'Analyse de Données n'est nécessaire. C'est facultatif et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 

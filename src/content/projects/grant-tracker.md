@@ -18,7 +18,7 @@ prerequisites:
 
 Research offices juggle dozens of proposals at once, each with a funder, a hard deadline, a budget, a team, and a trail of expenses. This project builds a command-line grant tracker that models each application as a nested dictionary, watches spending against its budget, sorts upcoming deadlines, and saves everything to disk so your work survives between sessions.
 
-This assumes Python 101 and comfort with dictionaries and lists — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python 101 and comfort with dictionaries and lists — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

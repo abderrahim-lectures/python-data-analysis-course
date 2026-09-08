@@ -197,11 +197,3 @@ print(employees[["Name", "Salary"]])
 ## Practice Challenge
 
 Load the Titanic dataset from the URL above. How many rows and columns does it have? What are the column names? How many columns have missing values? Use `info()` to find out.
-
-## Projects You Can Build
-
-Here are a few real-world projects that reinforce these concepts:
-
-- 🕷️ **Scrape and Analyze** - Load scraped data into DataFrames for analysis and reporting
-- 💰 **Expense Tracker** - Create DataFrames from CSV exports for financial analysis
-- 📊 **Spreadsheet Tool** - Build DataFrames from various data sources for manipulation

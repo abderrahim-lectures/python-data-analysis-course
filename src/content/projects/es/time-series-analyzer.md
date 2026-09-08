@@ -20,7 +20,7 @@ prerequisites:
 
 Registros de temperatura, carga de servidores, tráfico web — casi todo lo real llega como una secuencia a lo largo del tiempo, y los analistas pasan sus días separando lo que una serie *hace* en tres señales: la deriva lenta (tendencia), el ritmo repetitivo (estacionalidad) y el ruido sobrante (residuo). Este proyecto construye esa descomposición desde cero con pandas, y luego usa las piezas: pronostica la próxima semana con un modelo de tendencia-más-estación, puntúa el pronóstico contra un holdout real, marca las fechas que no encajan en el patrón y correlaciona dos series en un gráfico que puedes guardar de verdad.
 
-Esto asume Python 101 y comodidad con las Series de pandas — no se requiere nada de Análisis de Datos más allá de eso. Es opcional y no se califica; consulta [Proyectos del Mundo Real](/docs/projects) para ver la lista completa y en crecimiento.
+Esto asume Python 101 y comodidad con las Series de pandas — no se requiere nada de Análisis de Datos más allá de eso. Es opcional y no se califica; consulta [Proyectos del Mundo Real](/es/proyectos) para ver la lista completa y en crecimiento.
 
 ## 🎯 Lo que harás
 

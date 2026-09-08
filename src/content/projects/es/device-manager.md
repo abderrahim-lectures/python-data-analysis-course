@@ -19,7 +19,7 @@ learningObjectives:
 
 Una flota de dispositivos conectados es una pila creciente de problemas pequeños hasta que alguien la rastrea: los sensores reportan un heartbeat y luego se callan, `cam-01` lleva seis días en silencio, dos de tus tres sensores `temp-hum` van un release de firmware atrás, y el sensor del garaje debería alertar a −5 °C mientras el resto advierte a 28. Un gestor de dispositivos convierte esos hechos dispersos en un registro que puedes ordenar, un veredicto de salud por dispositivo, una cola de actualización, una configuración resuelta por dispositivo y un informe de flota en una sola pantalla — todo desde JSON y un poco de aritmética de `datetime`, sin necesidad de red.
 
-Esto asume Python 101 — listas, diccionarios, bucles, funciones — además de comodidad para abrir archivos. No se requiere nada del módulo de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa, en crecimiento.
+Esto asume Python 101 — listas, diccionarios, bucles, funciones — además de comodidad para abrir archivos. No se requiere nada del módulo de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa, en crecimiento.
 
 ## 🎯 Lo que harás
 

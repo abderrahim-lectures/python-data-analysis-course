@@ -16,7 +16,7 @@ prerequisites: ["Python 101"]
 
 Ta maison intelligente n'est aussi intelligente que les règles qui relient ses appareils — un détecteur de mouvement qui allume une lumière, un thermostat qui s'ajuste quand tu pars, une serrure de porte qui s'engage au coucher. Ce projet construit un moteur d'automatisation domotique basé sur des règles en Python : tu définis des appareils (lumières, thermostats, serrures), tu écris des règles si-alors, tu planifies des déclencheurs temporels et tu détectes la présence à partir de pings réseau. Le moteur s'exécute localement, traite les événements et exécute les actions — sans service cloud requis.
 
-Ceci suppose Python 101 — rien de Data Analysis n'est requis. Optionnel et non noté ; voir [Real-World Projects](/docs/projects) pour la liste complète.
+Ceci suppose Python 101 — rien de Data Analysis n'est requis. Optionnel et non noté ; voir [Real-World Projects](/fr/projets) pour la liste complète.
 
 ## 🎯 Ce que tu vas faire
 

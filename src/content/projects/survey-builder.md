@@ -19,7 +19,7 @@ prerequisites:
 
 Surveys are everywhere — feedback forms, market research, course evaluations — and behind every one is a structured engine: question types, validation, conditional branching, and analysis. This project builds that engine from scratch: a set of Python classes that model different question types (multiple choice, rating scales, open text), a runner that sequences questions with branching logic, and a pandas pipeline that converts raw responses into frequency charts and cross-tabulations.
 
-This assumes Python basics including classes, lists, and dicts, and comfort with `input()` — nothing beyond. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python basics including classes, lists, and dicts, and comfort with `input()` — nothing beyond. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

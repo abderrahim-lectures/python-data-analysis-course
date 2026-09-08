@@ -1,6 +1,5 @@
 ---
 
-
 title: "Bivariate Numerical Analysis"
 description: "Explore relationships between two numerical variables with scatter plots, regression lines, and grouped comparisons."
 module: "bivariate-analysis"
@@ -300,11 +299,3 @@ plt.show()
 
 </div>
 </details>
-
-## Projects You Can Build
-
-Here are a few real-world projects that reinforce these concepts:
-
-- 📈 **Data Visualization** - Create scatter plots and regression visualizations for data relationships
-- 🧠 **ML Classifier** - Analyze feature relationships and interactions before model building
-- 📊 **Anomaly Detector** - Use scatter plots to identify outliers and clusters

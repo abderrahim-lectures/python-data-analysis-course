@@ -7,7 +7,7 @@ description: "Extrayez des entités et des relations du texte pour construire de
 
 Un graphe de connaissances transforme du texte non structuré en un réseau de faits connectés : « Ada Lovelace » et « machine analytique » deviennent des nœuds, et « a conçu » devient l'arête qui les relie. Ce projet construit un pipeline qui extrait les entités nommées des phrases, détecte les relations entre elles et rend l'ensemble comme un graphe interactif que tu peux explorer et interroger.
 
-Cela suppose Python 101 et l'aisance avec pandas issu de Analyse de Données. C'est optionnel et non noté ; voir [Projets du monde réel](/docs/projects) pour la liste complète.
+Cela suppose Python 101 et l'aisance avec pandas issu de Analyse de Données. C'est optionnel et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète.
 
 ## 🎯 Ce que tu vas faire
 

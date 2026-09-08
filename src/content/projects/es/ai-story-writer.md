@@ -23,7 +23,7 @@ Te encanta contar historias, pero a veces la página en blanco gana. En este pro
 
 Este proyecto solo asume fundamentos de nivel Python 101 — funciones, listas, diccionarios, bucles, clases y formato de cadenas. Sin frameworks, sin bases de datos, sin servicios en la nube. Todo lo que necesitas viene de la biblioteca estándar.
 
-Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/docs/projects) para la lista completa.
+Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
 
 ## 🎯 Lo que harás
 

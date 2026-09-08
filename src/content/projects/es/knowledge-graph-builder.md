@@ -7,7 +7,7 @@ description: "Extrae entidades y relaciones de texto para construir grafos de co
 
 Un grafo de conocimiento convierte el texto no estructurado en una red de hechos conectados: "Ada Lovelace" y "analytical engine" se convierten en nodos, y "diseñó" se convierte en la arista entre ellos. Este proyecto construye una canalización que extrae entidades nombradas de las oraciones, detecta las relaciones entre ellas y renderiza todo como un grafo interactivo que puedes explorar y consultar.
 
-Esto asume Python 101 y comodidad con pandas de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa.
+Esto asume Python 101 y comodidad con pandas de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
 
 ## 🎯 Lo que harás
 

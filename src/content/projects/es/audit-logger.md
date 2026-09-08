@@ -21,7 +21,7 @@ learningObjectives:
 
 Un registro de auditoría es el documento que le muestras al investigador *después* de que algo salió mal: quién hizo qué, en qué orden y — de manera crítica — si algo de eso fue alterado en silencio después. Un archivo de registro de líneas de texto no prueba nada por sí mismo; una edición de texto plano se ve idéntica a un evento real. Este proyecto construye la estructura que hace detectable la reescritura: un registro solo de adición donde cada entrada lleva un hash SHA-256 de su propio contenido **más** el hash de la entrada anterior, formando una cadena. Altera una línea en cualquier parte y cada eslabón subsecuente se rompe; una sola pasada de `verify()` reporta exactamente qué entrada fue tocada. Alrededor de ese núcleo agregarás consultas por severidad y fuente, una poda de retención que mantiene la cadena válida y una exportación JSONL para dashboards y herramientas de cumplimiento. Todo corre en la biblioteca estándar y es determinista — los mismos dieciséis eventos verifican de la misma manera cada vez.
 
-Esto asume clases, métodos, E/S de archivos y una primera mirada a `hashlib.sha256`. Es un proyecto opcional y no calificado — consulta [Proyectos del mundo real](/docs/projects) para la lista completa y creciente.
+Esto asume clases, métodos, E/S de archivos y una primera mirada a `hashlib.sha256`. Es un proyecto opcional y no calificado — consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 ## 🎯 Lo que harás
 

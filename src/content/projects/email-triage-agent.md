@@ -7,7 +7,7 @@ description: "Graduate from the in-browser playground to real Python: build an a
 
 Everything in the course so far ran in a sandboxed, in-browser playground — so you could start writing Python on day one with zero setup. This project is the graduation step: install Python for real on your own machine, then use it to build something genuinely useful — an agent that reads a batch of emails, tells you which ones actually matter, and drafts a suggested reply for the ones that need one. This assumes Python 101; nothing from Data Analysis is required.
 
-This is optional and ungraded. See [Real-World Projects](/docs/projects) for the full, growing list.
+This is optional and ungraded. See [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 
@@ -97,7 +97,7 @@ GITHUB_TOKEN=your-key-here
 Instead of `export`-ing a key in every new terminal session, `python-dotenv` reads `.env` automatically the moment your script calls `load_dotenv()` — no per-session setup, and it's already excluded from git via `.gitignore` so you can't accidentally commit a real key.
 :::
 
-An API key is a secret, exactly like a password — anyone with it can use your account's quota. Treating it as an environment variable rather than a hardcoded string is the standard practice for exactly this reason, and it's the same real-world security habit taught in the [AI Agent project](/docs/projects/ai-agent).
+An API key is a secret, exactly like a password — anyone with it can use your account's quota. Treating it as an environment variable rather than a hardcoded string is the standard practice for exactly this reason, and it's the same real-world security habit taught in the [AI Agent project](/projects/ai-agent).
 
 With `uv` installed, the project set up, and `.env` filled in, you're ready to build — every step from here on assumes this is already done.
 
@@ -463,7 +463,7 @@ An app password scoped to "Mail" only, that you can revoke at any time without t
 
 - **The model doesn't return valid JSON.** Despite the prompt's "ONLY a JSON object" instruction, a model can still occasionally add a stray sentence or wrap the output in a code fence. If `json.loads` raises, print the raw `content` string first to see exactly what came back before assuming your code is at fault.
 - **Confusing "drafted" with "sent."** A saved file in `drafts/` is not a sent email — nothing has gone anywhere yet. If you want to actually reply, open your real email client and copy the draft in yourself; that's the design, not a missing step.
-- **Rate limits on the free LLM tier.** Six emails is two LLM calls each (triage, plus a draft for anything needing a reply) — enough to occasionally hit a 429 on a free tier. This isn't a bug; see the [AI Agent project](/docs/projects/ai-agent)'s "Handling rate limits" section for the same pattern and a retry approach you can copy.
+- **Rate limits on the free LLM tier.** Six emails is two LLM calls each (triage, plus a draft for anything needing a reply) — enough to occasionally hit a 429 on a free tier. This isn't a bug; see the [AI Agent project](/projects/ai-agent)'s "Handling rate limits" section for the same pattern and a retry approach you can copy.
 - **Treating the category/priority labels as ground truth.** The model's `"urgent"` or `"spam-ish"` verdict is a suggestion, not a fact — it can misjudge a terse but genuinely urgent message as low priority, or a legitimate mailing list as spam. Skim the categorization yourself before trusting it blindly, especially early on.
 
 ## What you just built
@@ -474,7 +474,7 @@ A small but complete triage pipeline: parse, categorize with an LLM, draft with 
 
 - Add more categories or a finer priority scale, and see how the prompt needs to change to keep the model consistent as the label set grows.
 - Extend `parse_email` to handle real `.eml` files (Python's built-in `email` module parses these properly, including attachments and multipart bodies) instead of the simplified plain-text format used here.
-- Try a second LLM call that reviews the *first* model's draft before saving it — a simple two-pass "draft, then critique" pattern, and a gentle first taste of multi-step agent pipelines like the ones in the [AI Agent project](/docs/projects/ai-agent).
+- Try a second LLM call that reviews the *first* model's draft before saving it — a simple two-pass "draft, then critique" pattern, and a gentle first taste of multi-step agent pipelines like the ones in the [AI Agent project](/projects/ai-agent).
 
 ## Share your project with the class
 

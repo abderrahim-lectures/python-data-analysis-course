@@ -8,7 +8,7 @@ description: "Construis un vrai jeu Wordle de terminal de zéro : un retour corr
 
 Ce projet ne suppose que les bases de niveau Python 101 — fonctions, listes, dictionnaires, boucles, lire et écrire un fichier. Pas de pandas, pas de clé API, pas de GPU, aucun service externe d'aucune sorte — juste un terminal, une liste de mots, et une logique qui est plus délicate à bien faire qu'elle n'en a l'air. C'est ce qui en fait un excellent Projet du Monde Réel *plus précoce* à essayer, même avant certains de ceux orientés pandas ou IA : tout ce dont tu as besoin, c'est de ce que Python 101 t'a déjà donné, appliqué à quelque chose de réellement amusant à jouer ensuite.
 
-C'est optionnel et non noté. Voir [Projets du monde réel](/docs/projects) pour la liste complète et croissante.
+C'est optionnel et non noté. Voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 

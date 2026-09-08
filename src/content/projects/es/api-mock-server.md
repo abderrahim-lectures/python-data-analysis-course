@@ -21,7 +21,7 @@ learningObjectives:
 
 Toda app real eventualmente se bloquea en un backend que no está listo — un servicio de pagos sin sandbox, un feed de clima caído, una API de una colega aún en diseño. Un *servidor mock* es el sustituto honesto: corre en tu máquina, habla HTTP en localhost y responde las mismas rutas que tu backend real, así tu frontend, tus pruebas y tus demos nunca esperan el deploy de alguien más. Este proyecto construye ese servidor desde cero: plantillas de ruta como `/users/<id>` se vuelven despachadores que extraen parámetros, las cadenas de consulta y los cuerpos JSON se reflejan de vuelta para inspección, una ruta flaky falla según un cronograma, y un grabador integrado reproduce cada llamada para atrapar regresiones antes de que exista producción. Corre en la biblioteca estándar. Cada ejemplo de esta guía es determinista — el mismo despacho devuelve el mismo JSON cada vez — así que puedes verificar cada afirmación mientras construyes.
 
-Esto asume funciones, clases y manejo de JSON. Es un proyecto opcional y no calificado — consulta [Proyectos del mundo real](/docs/projects) para la lista completa y creciente.
+Esto asume funciones, clases y manejo de JSON. Es un proyecto opcional y no calificado — consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 ## 🎯 Lo que harás
 

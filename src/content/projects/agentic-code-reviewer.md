@@ -7,7 +7,7 @@ description: "Graduate from the in-browser playground to real Python: build a CL
 
 Every pull request eventually gets read by a human reviewer looking for bugs, style problems, missing tests, and confusing names — before that, though, it's just text: the output of `git diff`. This project builds a CLI tool that does that first pass automatically: it captures a real diff with Python's `subprocess` module, hands it to a free-tier language model with a carefully-designed reviewer system prompt, and prints back structured, actionable feedback — not a vague "looks good," but specific issues with a file, a category, a severity, and a suggested fix.
 
-This assumes Python 101 and enough comfort with git to know what `git diff` shows you — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python 101 and enough comfort with git to know what `git diff` shows you — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

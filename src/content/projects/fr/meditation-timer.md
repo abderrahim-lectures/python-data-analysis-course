@@ -16,7 +16,7 @@ prerequisites: ["python-101/loops", "python-101/functions", "python-101/file-io"
 
 S'asseoir pour une méditation minutée a un problème qu'aucune application au monde n'est autorisée à régler — le téléphone qui bourdonne, les publicités, la séance de culpabilisation sur la série *avant* même que tu closes les yeux. Un minuteur de terminal n'a rien de tout cela : une invite simple, un compte à rebours, une cloche douce, on répète. Ce projet construit un petit CLI qui compte à rebours une session, sonne à chaque intervalle (pour que tu n'aies pas à vérifier l'horloge), guide un cycle de respiration en boîte 4-4-4-4, et journalise discrètement chaque session pour que tu puisses voir ta série grandir sans aucun jugement sur les jours de repos.
 
-Ceci suppose Python 101 — boucles, fonctions, lecture et écriture de fichiers, et la gestion de base des dates. Rien au-delà : pas d'interface graphique, pas de web, pas de services externes. C'est optionnel et non noté ; voir [Projets du monde réel](/docs/projects) pour la liste complète.
+Ceci suppose Python 101 — boucles, fonctions, lecture et écriture de fichiers, et la gestion de base des dates. Rien au-delà : pas d'interface graphique, pas de web, pas de services externes. C'est optionnel et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète.
 
 ## 🎯 Ce que tu vas faire
 

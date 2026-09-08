@@ -95,14 +95,6 @@ Given `temperature = 23.7891`, print it as `"Today: 23.8°C"` (one decimal place
 - `print("A", "B", "C")` prints `A B C` with spaces. How could you print them with no spaces? With commas between them?
 - If `x = 3.14`, what does `f"{x}"` produce? What about `f"{x:.0f}"`? Explain the difference.
 
-## Projects You Can Build
-
-Here are a few real-world projects that reinforce these concepts:
-
-- 🎮 **Wordle Clone** - Build a terminal Wordle game using print() for prompts, f-strings for formatted feedback, and string formatting for colored output
-- 🔒 **Password Generator** - Create a secure password generator with formatted output showing character types and strength indicators
-- ✅ **Note-Taking App** - Build a simple CLI note-taker with formatted menus, timestamps, and organized output
-
 ## ✅ Quick check
 
 <div class="quiz" data-quiz="python-101-printing">

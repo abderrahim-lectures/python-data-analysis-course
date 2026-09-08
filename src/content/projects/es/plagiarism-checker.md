@@ -5,10 +5,10 @@ difficulty: "intermediate"
 estimatedMinutes: 90
 tags: ["cli", "text-processing", "algorithm", "csv"]
 learningObjectives:
-  - "Normalize text by casing and word tokenization"
-  - "Build a shingle (n-gram) set for a document"
-  - "Score pairwise similarity with Jaccard overlap between shingle sets"
-  - "Run a batch report across a corpus and flag high-similarity pairs"
+  - "Normalizar el texto por mayúsculas/minúsculas y tokenización de palabras"
+  - "Construir un conjunto de shingles (n-gramas) para un documento"
+  - "Puntuar la similitud por pares con la intersección de Jaccard entre conjuntos de shingles"
+  - "Ejecutar un informe por lotes sobre un corpus y marcar pares de alta similitud"
 prerequisites: ["python-101/strings", "python-101/sets", "python-101/loops", "python-101/functions"]
 ---
 
@@ -16,7 +16,7 @@ prerequisites: ["python-101/strings", "python-101/sets", "python-101/loops", "py
 
 Cada plataforma de tareas se centra en un solo número: cuánto de este ensayo se copió. Detrás de ese número hay un algoritmo sorprendentemente simple y honesto — el **shingle**. Un documento se trocea en secuencias de palabras superpuestas de longitud N, y dos documentos se comparan por cuántas de esas secuencias comparten. Este proyecto construye un CLI que puntúa un ensayo contra todo un corpus de documentos fuente — convirtiendo texto crudo en conjuntos de tokens, calculando una similitud de Jaccard para cada par e imprimiendo un informe ordenado con los pares sospechosos arriba. Sin ML, sin API, sin magia.
 
-Esto asume Python 101 — cadenas, conjuntos, bucles y funciones. Nada más allá de eso. Es opcional y no calificado; consulta [Proyectos del mundo real](/docs/projects) para la lista completa.
+Esto asume Python 101 — cadenas, conjuntos, bucles y funciones. Nada más allá de eso. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
 
 ## 🎯 Lo que harás
 

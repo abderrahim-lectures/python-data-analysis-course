@@ -104,14 +104,6 @@ Which of these are valid variable names? Explain why the invalid ones fail: `_co
 - `x += 1` and `x = x + 1` produce the same result for numbers. Can you think of a reason a language might still provide both forms?
 - If variables are "labels, not boxes," what happens when you write `a = [1, 2, 3]` then `b = a` then `b.append(4)`? Does `a` see the `4`? (Try it — this previews mutable objects, covered later.)
 
-## Projects You Can Build
-
-Here are a few real-world projects that reinforce these concepts:
-
-- 🎮 **Wordle Clone** - Track game state with variables for current guess, target word, and attempt count
-- ✅ **Note-Taking App** - Use variables to store note titles, content, timestamps, and sort order
-- 🔒 **Password Generator** - Store length, character sets, and generated passwords in descriptive variables
-
 ## ✅ Quick check
 
 <div class="quiz" data-quiz="python-101-variables">

@@ -117,14 +117,6 @@ Predict `bool(0)`, `bool(0.0)`, `bool("")`, and `bool("0")`. Which are truthy an
 - Python has `isinstance(42, int)` which returns `True`. Would `isinstance` be more reliable than `type(x) == int` for checking types? Why or why not?
 - Why does Python use `True` and `False` (capitalized) instead of `true` and `false`? What other capitalized words does Python reserve?
 
-## Projects You Can Build
-
-Here are a few real-world projects that reinforce these concepts:
-
-- 💰 **Expense Tracker** - Work with numeric types for amounts, strings for descriptions, and booleans for category flags
-- 🎮 **Wordle Clone** - Use different data types to track game state: strings for guesses, integers for attempt counts, booleans for win status
-- ✅ **Note-Taking App** - Combine strings for content, lists for tags, and dictionaries for metadata
-
 ## ✅ Quick check
 
 <div class="quiz" data-quiz="python-101-types">

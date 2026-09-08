@@ -154,19 +154,6 @@ Given `text = "Hello, World!"`, write a check that prints `"uppercase"` if the t
 
 </section>
 
-<section class="lesson-section lesson-section--projects">
-<h2 id="-projects-you-can-build">Projects You Can Build</h2>
-
-<p>Here are a few real-world projects that reinforce these concepts:</p>
-
-<ul>
-  <li>🎮 <strong>Wordle Clone</strong> - Implement game logic with if/elif/else to check letter positions and generate color feedback</li>
-  <li>💬 <strong>Trivia Bot</strong> - Use conditional branches to handle different question types, scores, and game states</li>
-  <li>🎓 <strong>Quiz Engine</strong> - Build adaptive quiz logic with conditionals for difficulty levels and answer validation</li>
-</ul>
-
-</section>
-
 <section class="lesson-section lesson-section--quiz">
 <h2 id="-quick-check">✅ Quick check</h2>
 

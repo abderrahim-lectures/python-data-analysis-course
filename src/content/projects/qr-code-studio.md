@@ -16,7 +16,7 @@ prerequisites: ["python-101/file-io", "python-101/strings", "python-101/function
 
 A QR code is the least glamorous piece of software you'll ever ship, and the most durable: printed on a poster or a ticket, it must survive blur, dirt, and a phone held at an unflattering angle. Real QR tooling has to juggle three things at once — how much data it packs in, how much damage it survives, and whether it looks like a brand instead of a black square. This project builds a small studio that does all three: generate a code from text, recolor it, stamp a logo into its center, and batch-produce a whole folder from a spreadsheet row per code — then verify the batch by reading every matrix back from disk and checking it matches what you asked for.
 
-This assumes Python 101 — file I/O, strings, and functions. Nothing beyond that: no web, no camera, no APIs. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full list.
+This assumes Python 101 — file I/O, strings, and functions. Nothing beyond that: no web, no camera, no APIs. It's optional and ungraded; see [Real-World Projects](/projects) for the full list.
 
 ## 🎯 What you'll do
 

@@ -19,7 +19,7 @@ learningObjectives:
 
 Un `requirements.txt` dit qu'une équipe a *l'intention* d'utiliser cinq paquets. Les fichiers réellement écrits disent quels paquets sont *réellement* importés. La différence entre les deux est là où vivent le gaspillage et le risque : des pins inutilisés gonflent les installations à ce jour, et un `numpy==1.26.0` épinglé peut s'asseoir deux versions mineures derrière le minimum de sécurité sans que personne ne le remarque jusqu'à ce qu'un bot scanne le manifeste. Ce projet construit le petit analyseur qui referme l'écart — analyse le manifeste, scanne les imports, et rapporte ce sur quoi les deux divergent, tout avec la bibliothèque standard.
 
-Ceci suppose Python 101 plus une lecture confortable de `pathlib` et `re`. Rien du module Analyse de Données n'est nécessaire. C'est facultatif et non noté ; voir [Projets du monde réel](/docs/projects) pour la liste complète et croissante.
+Ceci suppose Python 101 plus une lecture confortable de `pathlib` et `re`. Rien du module Analyse de Données n'est nécessaire. C'est facultatif et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 

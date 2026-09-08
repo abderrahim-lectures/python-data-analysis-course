@@ -18,7 +18,7 @@ prerequisites: ["Python basics (classes, functions, dicts)", "pip install rich"]
 
 A CRM is the shared source of truth for a sales team: every contact, every deal, every call and email lives in one place so nothing slips through. This project builds a lightweight CRM from scratch — you'll model contacts, deals, and activities as typed Python dataclasses, design a SQLite schema with real foreign keys, write parameterized queries for search and filtering, push deals through a validated pipeline, reconstruct a contact's timeline, and surface it all in clean `rich` table output.
 
-This assumes Python 101 and enough comfort with SQL to read a SELECT — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python 101 and enough comfort with SQL to read a SELECT — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

@@ -20,7 +20,7 @@ prerequisites:
 
 A wiki is *pages on disk plus three indexes*. The pages are Markdown files; the indexes are backlinks (which pages point here?), history (what did this page used to say?), and search (which pages mention these words?). This project builds all three from scratch with the standard library: a slug naming scheme, a tiny Markdown-lite renderer, append-only version history with diffs, a `[[Page]]` backlink map, and a tokenizing search that ranks by term frequency. When you're done you can turn your own notes into a wiki.
 
-This assumes Python 101 plus a little regex — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python 101 plus a little regex — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

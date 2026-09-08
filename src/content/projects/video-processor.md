@@ -19,7 +19,7 @@ prerequisites:
 
 Video editing is traditionally point-and-click, but every operation — trimming, overlaying text, extracting audio, converting formats — is actually a deterministic function applied to frames and time ranges. This project builds a toolkit that wraps MoviePy (which wraps ffmpeg) in clean Python functions, so you can script video processing tasks the same way you'd script any other data transformation: load, operate, save.
 
-This assumes Python basics and a working ffmpeg installation (covered in Setup). It's optional and ungraded; see [Real-World Projects](/docs/projects) for the full, growing list.
+This assumes Python basics and a working ffmpeg installation (covered in Setup). It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 

@@ -126,19 +126,6 @@ Given `"one,two,,three"`, write code that splits on commas and removes empty str
 
 </section>
 
-<section class="lesson-section lesson-section--projects">
-<h2 id="-projects-you-can-build">Projects You Can Build</h2>
-
-<p>Here are a few real-world projects that reinforce these concepts:</p>
-
-<ul>
-  <li>🎮 <strong>Wordle Clone</strong> - Use string methods for case normalization, letter extraction, and feedback formatting</li>
-  <li>🎨 <strong>AI Story Writer</strong> - Apply string methods for text cleaning, formatting, and output presentation</li>
-  <li>✅ <strong>Note-Taking App</strong> - Use split/join for parsing tags and format/strip for cleaning user input</li>
-</ul>
-
-</section>
-
 <section class="lesson-section lesson-section--quiz">
 <h2 id="-quick-check">✅ Quick check</h2>
 
