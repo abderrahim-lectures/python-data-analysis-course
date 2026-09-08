@@ -438,7 +438,7 @@ export function trackProgress(trackId: string, totalLessons: number): { done: nu
   return { done, total: totalLessons, pct: Math.round((done / totalLessons) * 100) };
 }
 
-export function isWeekComplete(section: string, week: number): boolean {
+export function isWeekComplete(section: string, _week: number): boolean {
   const s = read();
   // Legacy function - now checks if any lesson in the section is complete
   return Object.keys(s.lessonsCompleted).some(k => k.startsWith(`${section}/`));

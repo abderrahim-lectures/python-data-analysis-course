@@ -6,8 +6,8 @@
 //
 // Output: notebooks/<section>/<track>/<lesson-slug>.ipynb (committed so
 // Colab/nbviewer/Binder/Deepnote can open them from GitHub by URL).
-import {readdirSync, readFileSync, mkdirSync, writeFileSync, existsSync} from 'node:fs';
-import {join, dirname} from 'node:path';
+import {readdirSync, readFileSync, mkdirSync, writeFileSync} from 'node:fs';
+import {join} from 'node:path';
 
 const REPO = 'abderrahim-lectures/python-data-analysis-course';
 const BRANCH = 'main';

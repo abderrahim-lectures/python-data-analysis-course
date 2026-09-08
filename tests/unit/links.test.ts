@@ -140,7 +140,6 @@ describe('EN-only project alternate fallback (i18n route helper)', () => {
   };
 
   test('EN-only projects exist (and the fallback path has something to catch)', () => {
-    const by = setByLocale();
     const enOnly = PROJECTS.filter((f) => !/^(ar|es|fr)\//.test(f)).filter((slug) => !hasAllTwins(slug));
     // data-visualization is EN-only until its twins land (translation backlog).
     expect(enOnly.includes('data-visualization')).toBe(true);

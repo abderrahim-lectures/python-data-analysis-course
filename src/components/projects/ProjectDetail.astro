@@ -46,7 +46,6 @@ const xpAward = XP.PROJECT_COMPLETE;
 const rawSlug = entry.id.replace(/^(ar|es|fr)\//, '');
 const slug = rawSlug.replace(/^\/?projects\//, '');
 const diff = difficulty ?? projectDifficulty(slug);
-const diffColor = DIFFICULTY_COLORS[diff] ?? DIFFICULTY_COLORS.beginner;
 const diffLabel = `difficulty_${diff}` as 'difficulty_beginner' | 'difficulty_intermediate' | 'difficulty_advanced';
 const diffText = diff === 'beginner' ? 'var(--success-text)' : diff === 'intermediate' ? 'var(--streak-text)' : 'var(--bad-text)';
 const projectTags = (tags?.length ? tags : PROJECT_TAGS[slug] ?? []) as string[];

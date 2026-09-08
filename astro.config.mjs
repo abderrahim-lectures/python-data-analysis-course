@@ -45,5 +45,12 @@ export default defineConfig({
       ],
     }),
   },
-  integrations: [sitemap()],
+  integrations: [
+    // No sitemap-level x-default/hreflang here: the @astrojs/sitemap
+    // integration cannot derive alternates across the translated URL
+    // segments (تعلم vs learn etc.), and a self-referential x-default
+    // is a wrong signal. The pages' <head> tags carry the correct
+    // alternates (verified by tests/e2e/hreflang.mjs).
+    sitemap(),
+  ],
 });
