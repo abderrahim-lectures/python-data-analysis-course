@@ -76,7 +76,7 @@ export function computeGameStats(): GameStats {
   const deaths = Math.max(0, quiz.total - quiz.correct);
   const assists = lessonsDone;
   const ratio = deaths > 0 ? +((kills + assists) / deaths).toFixed(2) : (kills + assists);
-  const kdaLabel = ratio >= 5 ? 'Frag God' : ratio >= 2.5 ? 'On Fire' : ratio >= 1 ? 'Steady' : 'Grinding';
+  const kdaLabel = ratio >= 5 ? 'Legend' : ratio >= 2.5 ? 'On Fire' : ratio >= 1 ? 'Steady' : 'Grinding';
 
   const completedFraction = lessonsTotal > 0 ? lessonsDone / lessonsTotal : 0;
   const nGainEquivalent = Math.min(0.9, completedFraction * 0.7 + (winRate / 100) * 0.3);

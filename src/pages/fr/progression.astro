@@ -1,13 +1,6 @@
 ---
-import Base from '../../layouts/Base.astro';
-const base = import.meta.env.BASE_URL;
+import ProgressPage from '../../components/ProgressPage.astro';
+
+const locale = 'fr' as const;
 ---
-<Base title="Ma Progression — PyDA Course" lang="fr" dir="ltr">
-  <section class="hero">
-    <div class="container head">
-      <h1>Suis ta progression</h1>
-      <p>Chaque leçon illumine une étape. XP, séries et badges t'accompagnent.</p>
-      <a class="btn btn-primary" href={`${base}progress`} style="margin-top:1rem">Ouvrir la progression →</a>
-    </div>
-  </section>
-</Base>
+<ProgressPage locale={locale} />

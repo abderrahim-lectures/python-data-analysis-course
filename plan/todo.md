@@ -1699,3 +1699,9 @@ Follow-up pass on the brutal review's action items. All gates re-verified.
   - `npm test` → 10 files / **1086 tests** pass (incl. rewritten `contentSchema.test.ts` walker for the `{locale}/{section}/{track}` tree, `cheatsheetContent.test.ts`).
   - `test:e2e` smoke → **40/40** · `test:hreflang` → **40 alternate links across 8 pages all resolve** (EN lesson URLs unchanged) · `test:a11y` → 0 · `test:contrast` → 0 · `test:responsive` → no overflow.
 - Committed as-flagged; push remains blocked (workflow-scope OAuth). Open/backlog items unchanged: week/`pda:state` product call, `data-visualization` note, sitemap `x-default`.
+
+## (opencode) — progress page localized + 116 keys added to messages
+
+- [x] **Claude-owned surface flag (collab protocol):** added **116 keys per locale** to `messages/{en,ar,es,fr}.json` (285 total now), all `progress_*` (chrome ~58, quests 32, ranks 7, k/d/a 5, activity-type + quiz variants 13, time-ago, footnote parts). Four keys allowlisted as intentionally identical across locales in `tests/unit/i18n.test.ts` SHARED set: `progress_xp_unit`, `progress_report_lede_study`, `progress_kpi_kda`, `progress_rank_bronze` (fr). Do not re-translate these.
+- `progress_report_lede` was split into `progress_report_lede_pre`/`_end` so the study anchor stays in markup.
+- New `src/components/ProgressPage.astro` (parameterized by `locale`, thin Base wrappers); old inline EN now localizes quests/kda/ranks/activity log via `define:vars`.

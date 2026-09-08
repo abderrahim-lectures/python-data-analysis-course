@@ -53,6 +53,11 @@ describe('message files stay complete and translated', () => {
     'home_hub_track_1_name', 'home_terminal_line_1', 'mobile_nav_playground',
     'module_label', 'nav_playground', 'playground_title',
     'track_1_name', 'track_normal_label', 'ui_changelog', 'xp_toast',
+    // Progress page: the XP acronym, the K/D/A gaming acronym, the external
+    // study citation, and the French rank "Bronze" are universal tokens that
+    // read identically in every locale by design.
+    'progress_xp_unit', 'progress_report_lede_study', 'progress_kpi_kda',
+    'progress_rank_bronze', 'progress_report_lede_end',
   ]);
 
   test.each(LOCALES)('%s has every message key (parity with en)', (loc) => {
