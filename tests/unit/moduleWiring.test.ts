@@ -73,7 +73,7 @@ describe('module content files', () => {
 
 // ── Lesson viewer page ──────────────────────────────────────────────
 describe('lesson viewer page', () => {
-  const src = readFileSync('src/pages/learn/python-101/normal/lessons/[lesson].astro', 'utf8');
+  const src = readFileSync('src/components/learn/LessonPage.astro', 'utf8');
 
   test('has data-lesson-id on the article', () => {
     expect(src).toContain('data-lesson-id={lessonId}');
@@ -119,7 +119,7 @@ describe('lesson viewer page', () => {
 
 // ── Module listing page ─────────────────────────────────────────────
 describe('module listing page', () => {
-  const src = readFileSync('src/pages/learn/python-101/normal/modules/[module].astro', 'utf8');
+  const src = readFileSync('src/components/learn/ModulePage.astro', 'utf8');
 
   test('shows module icon', () => {
     expect(src).toContain('module-head__icon');
@@ -148,7 +148,7 @@ describe('module listing page', () => {
 
 // ── Python 101 section index ────────────────────────────────────────
 describe('Python 101 section index', () => {
-  const src = readFileSync('src/pages/learn/python-101/index.astro', 'utf8');
+  const src = readFileSync('src/components/learn/SectionLanding.astro', 'utf8');
 
   test('displays total lessons, hours, and modules', () => {
     expect(src).toContain('normalLessons.length');

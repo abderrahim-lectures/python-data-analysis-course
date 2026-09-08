@@ -5,11 +5,11 @@ import {readFileSync} from 'node:fs';
 // the completion button existed on only the last week of a track, and the
 // lesson id never reached the code cells that award XP.
 
+// All four legacy static lesson templates were deleted in the redesign; every
+// locale's lesson route (learn/, ar/تعلم/, es/aprender/, fr/apprendre) is now a
+// thin wrapper over this one shared component, so the guards live here.
 const LESSON_TEMPLATES = [
-  'src/pages/learn/python-101/normal/lessons/[lesson].astro',
-  'src/pages/learn/python-101/hard/lessons/[lesson].astro',
-  'src/pages/learn/data-analysis/normal/lessons/[lesson].astro',
-  'src/pages/learn/data-analysis/hard/lessons/[lesson].astro',
+  'src/components/learn/LessonPage.astro',
 ];
 
 describe.each(LESSON_TEMPLATES)('%s', (path) => {
@@ -20,7 +20,7 @@ describe.each(LESSON_TEMPLATES)('%s', (path) => {
   });
 
   test('builds the lesson id from canonical section/track', () => {
-    expect(src).toMatch(/const lessonId = `[^`]*\$\{entry\.id/);
+    expect(src).toMatch(/const lessonId = `\$\{section\}\/\$\{track\}\/\$\{slug\}`/);
   });
 
   test('reflects already-saved completion when the page loads', () => {

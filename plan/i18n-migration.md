@@ -184,3 +184,31 @@ bounds the migration to components, not 537 content files.
   (current), `/fr/...`, and unprefixed EN — all via `localizeHref`.
 - ES homepage renders Spanish nav message `switch_locale` → `Idioma`; EN →
   `Language`.
+## 6. Status after adoption + brutal review (2026-09-08)
+- **Durable lix patch**: the fresh-project import workaround is now repo-owned
+  — `scripts/apply-lix-patch.cjs` (idempotent, failure-loud) runs automatically
+  via `prebuild`/`predev`. Previously required re-applying
+  `/tmp/opencode/patch-importfiles.cjs` by hand after every `npm ci`; the new
+  script is trigger-free and CI/deploy build paths apply it implicitly.
+  Reference: lix issue #422, `@lix-js/sdk@0.15.1` no released fix. Option for
+  killing the patch entirely: commit `project.inlang/` (drop
+  `cache/paraglide-js/*` from `.gitignore`) so new and CI checkouts share the
+  imported DB — proposed, not executed (product/repo decision).
+- **EN learn tree consolidated**: the 14 static EN learn templates
+  (`/learn/python-101|data-analysis/*`) were replaced by the same shared
+  component wrappers the locale trees use (SectionLanding / TrackHub /
+  ModulePage / LessonPage, `locale='en'`). Public URLs unchanged; the four
+  unit-test files that asserted against the 14 templates were re-pointed at
+  the shared components. Lesson and module ID wiring, JSON-LD, completion
+  labels all covered by the same guards as before.
+- **Coverage truth**: UI chrome is en/ar/es/fr; lesson + module *body*
+  content stays EN-only (backlog below). README now states this directly.
+- **Gate**: build 874 pages · astro check 0 errors (Quiz.astro cast fix) ·
+  486 unit tests · smoke 40/40 · hreflang 40/40 · a11y/contrast/responsive
+  clean. CI gained the vitest unit step + a self-contained smoke step and a
+  hreflang job.
+- **Remaining translation backlog (locale CONTENT)**: 49 lessons + 22 modules
+  ar/es/fr · `data-visualization` ar/es/fr twins · es/fr cross-locale link
+  sweep · frontmatter drift (es 10, fr 5) · `pda:state` namespace product
+  call · EN-held message labels to review (Changelog, Playground, Module fr,
+  Students Performance in Exams, Site fr).

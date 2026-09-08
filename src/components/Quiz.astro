@@ -127,7 +127,7 @@ const {title = m.quiz_title(), questions, xp = 10, lessonId = ''} = Astro.props;
             opt.classList.remove('quiz-q__opt--correct', 'quiz-q__opt--wrong', 'quiz-q__opt--selected');
             (opt.querySelector('input') as HTMLInputElement).checked = false;
           });
-          const explain = q.querySelector('[data-explain]');
+          const explain = q.querySelector('[data-explain]') as HTMLElement | null;
           if (explain) explain.hidden = true;
         });
         scoreEl.hidden = true;

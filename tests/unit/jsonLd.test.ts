@@ -35,11 +35,10 @@ describe('JSON-LD structured data', () => {
   });
 
   test('every lesson page passes a LearningResource schema to Base', () => {
+    // The 14 legacy static lesson templates were replaced by one shared
+    // LessonPage component backing every locale's lesson route.
     const templates = [
-      'src/pages/learn/python-101/normal/lessons/[lesson].astro',
-      'src/pages/learn/python-101/hard/lessons/[lesson].astro',
-      'src/pages/learn/data-analysis/normal/lessons/[lesson].astro',
-      'src/pages/learn/data-analysis/hard/lessons/[lesson].astro',
+      'src/components/learn/LessonPage.astro',
     ];
     for (const path of templates) {
       const src = readFileSync(path, 'utf8');

@@ -4,6 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "prebuild": "node scripts/apply-lix-patch.cjs",
+    "predev": "node scripts/apply-lix-patch.cjs",
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
@@ -18,7 +20,8 @@
     "test:a11y": "node tests/e2e/a11y.mjs",
     "test:hreflang": "node tests/e2e/hreflang.mjs"
   },
-  "dependencies": {
+  "dependencies": {},
+  "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "@astrojs/markdown-remark": "^7.3.0",
     "@astrojs/sitemap": "^3.7.4",
@@ -29,9 +32,7 @@
     "katex": "^0.18.4",
     "rehype-katex": "^7.0.1",
     "remark-math": "^6.0.0",
-    "typescript": "^5.6.0"
-  },
-  "devDependencies": {
+    "typescript": "^5.6.0",
     "vitest": "^4.1.11"
   }
 }

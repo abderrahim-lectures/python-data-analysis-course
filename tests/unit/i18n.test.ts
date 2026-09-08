@@ -113,11 +113,10 @@ describe('shared layout', () => {
 });
 
 describe('module pages have proper structure', () => {
+  // Legacy static module templates were deleted in the redesign; the shared
+  // ModulePage component backs the lesson-class templates for every locale.
   const MODULE_TEMPLATES = [
-    'src/pages/learn/python-101/normal/modules/[module].astro',
-    'src/pages/learn/python-101/hard/modules/[module].astro',
-    'src/pages/learn/data-analysis/normal/modules/[module].astro',
-    'src/pages/learn/data-analysis/hard/modules/[module].astro',
+    'src/components/learn/ModulePage.astro',
   ];
 
   test.each(MODULE_TEMPLATES)('%s lists lessons for the module', (path) => {
