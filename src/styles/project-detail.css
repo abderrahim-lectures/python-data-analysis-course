@@ -13,7 +13,7 @@
 .project-content :global(h2) { margin-top: 2.2rem; }
 .project-content :global(h3) { margin-top: 1.5rem; font-size: 1.1rem; }
 .project-content :global(.step-objective) {
-  background: var(--accent-soft); border-left: 4px solid var(--accent);
+  background: var(--accent-soft); border-inline-start: 4px solid var(--accent);
   padding: .7rem 1rem; border-radius: var(--radius-md); margin: 1rem 0;
   font-weight: 600; font-size: .92rem;
 }
@@ -25,7 +25,7 @@
 }
 .project-content :global(.expected-output::before) { content: '🎯 Expected output: '; font-weight: 700; }
 .project-content :global(.troubleshoot) {
-  background: rgba(251,191,36,.08); border-left: 3px solid var(--streak);
+  background: rgba(251,191,36,.08); border-inline-start: 3px solid var(--streak);
   padding: .6rem 1rem; border-radius: var(--radius-md); margin: .75rem 0;
   font-size: .88rem;
 }

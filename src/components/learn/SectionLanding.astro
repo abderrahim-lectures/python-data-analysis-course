@@ -75,7 +75,7 @@ const totalHours = Math.round(totalMinutes / 60);
                   <h3>{mod.data.title}</h3>
                   <p>{mod.data.description}</p>
                   <div class="module-card__meta">
-                    <span style={`color:${diffColor(mod.data.difficulty)}`}>{mod.data.difficulty}</span>
+                    <span style={`color:${diffColor(mod.data.difficulty)}`}>{m[`difficulty_${mod.data.difficulty}`]()}</span>
                     <span>📖 {lessonCount}</span>
                     <span>⏱ ~{Math.round(totalMin / 60)}h</span>
                   </div>

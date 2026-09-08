@@ -82,7 +82,7 @@
 
 /* Grid view: keep the difficulty badge from overlapping the icon by giving
    it its own line when the card is too narrow to fit both nowrap items. */
-.grid .card__badge { margin-left: auto; }
+.grid .card__badge { margin-inline-start: auto; }
 .card__icon { font-size: 1.8rem; line-height: 1; }
 .card__badge {
   font-size: .65rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em;
@@ -122,7 +122,7 @@
 .list .card[data-diff="intermediate"]::before { background: #fbbf24; }
 .list .card[data-diff="advanced"]::before { background: #f87171; }
 
-.tag-pill__icon { margin-right: .2rem; }
+.tag-pill__icon { margin-inline-end: .2rem; }
 .empty { text-align: center; color: var(--ink-soft); padding: 2.5rem 1rem; margin: 0 0 3rem; }
 
 /* ── Card entrance animation ──────────────────────────────────── */

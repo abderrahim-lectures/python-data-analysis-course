@@ -51,7 +51,7 @@ const arrow = locale === 'ar' ? '←' : '→';
     <div class="module-head__icon">{icon}</div>
     <div class="module-head__info">
       <div class="module-head__meta">
-        <span class="module-head__diff" style={`color:${diffColor}`}>{difficulty}</span>
+        <span class="module-head__diff" style={`color:${diffColor}`}>{m[`difficulty_${difficulty}`]()}</span>
         <span class="module-head__time">⏱ {estimatedHours}h ({totalMinutes} min)</span>
         <span class="module-head__count">📖 {moduleLessons.length} {m.module_lessons_label()}</span>
       </div>

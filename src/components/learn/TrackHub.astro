@@ -76,7 +76,7 @@ const arrow = locale === 'ar' ? '←' : '→';
             <h2>{mod.data.title}</h2>
             <p>{mod.data.description}</p>
             <div class="module-card__meta">
-              <span style={`color:${diffColor(mod.data.difficulty)}`}>{mod.data.difficulty}</span>
+              <span style={`color:${diffColor(mod.data.difficulty)}`}>{m[`difficulty_${mod.data.difficulty}`]()}</span>
               <span>📖 {lessonCount}</span>
               <span>⏱ ~{Math.round(totalMin / 60)}h</span>
             </div>

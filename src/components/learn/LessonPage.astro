@@ -4,7 +4,7 @@ import {getCollection, render, type CollectionEntry} from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Quiz from '../Quiz.astro';
 import RelatedProjects from './RelatedProjects.astro';
-import {lessonHref, learnHref, moduleHref, idInLocale, type Locale} from '../../lib/routeSegments';
+import {lessonHref, learnHref, moduleHref, idInLocale, trackWord, type Locale} from '../../lib/routeSegments';
 import {NOTEBOOK_OPENERS} from '../../lib/notebookLinks';
 import {m} from '../../paraglide/messages.js';
 import {TRACK_ICONS, sectionName} from '../../lib/sections';
@@ -74,7 +74,7 @@ const jsonLd = {
     <header class="lesson-head">
       <div class="lesson-head__meta">
         <span class="lesson-head__tag">📖 {m.lesson_label()} {order}</span>
-        <span class="lesson-head__diff" style={`color:${diffColor}`}>{difficulty}</span>
+        <span class="lesson-head__diff" style={`color:${diffColor}`}>{m[`difficulty_${difficulty}`]()}</span>
         <span class="lesson-head__time">⏱ {estimatedMinutes} min</span>
         <span class="lesson-head__xp">⚡ +{xpReward} XP</span>
         <span class="lesson-head__openers" aria-label="Open this lesson as a notebook">
@@ -133,7 +133,7 @@ const jsonLd = {
     </div>
 
     <div class="route">
-      <a class="route__card" href={learnHref(locale, base, section, otherTrack)}>
+      <a class="route__card" href={learnHref(locale, base, section, trackWord(locale, otherTrack))}>
         <span class="route__icon">{TRACK_ICONS[otherTrack]}</span>
         <strong>{m.switch_to()} {track === 'normal' ? m.track_hard_label() : m.track_normal_label()}</strong>
         <small>{track === 'normal' ? m.same_week_steep() : m.same_week_calm()}</small>
@@ -187,9 +187,9 @@ const jsonLd = {
   .lesson-head__tags { font-style: italic; }
   .lesson-head h1 { font-size: clamp(1.8rem, 4vw, 2.6rem); margin: .3rem 0; text-wrap: balance; }
   .lesson-head__sub { color: var(--ink-soft); font-size: 1.05rem; }
-  .lesson-head__objectives { margin-top: 1rem; padding: 1rem; background: var(--accent-soft); border-radius: var(--radius-md); border-left: 4px solid var(--accent); }
+  .lesson-head__objectives { margin-top: 1rem; padding: 1rem; background: var(--accent-soft); border-radius: var(--radius-md); border-inline-start: 4px solid var(--accent); }
   .lesson-head__objectives strong { display: block; margin-bottom: .4rem; }
-  .lesson-head__objectives ul { margin: 0; padding-left: 1.2rem; }
+  .lesson-head__objectives ul { margin: 0; padding-inline-start: 1.2rem; }
   .lesson-head__objectives li { margin: .2rem 0; font-size: .92rem; }
   .lesson-content :global(h2) { margin-top: 2.2rem; }
   .lesson-content :global(.gamified-flourish) { display: block; background: var(--accent-soft); color: var(--accent-text); border-radius: var(--radius-md); padding: .8rem 1rem; margin: 1rem 0; font-weight: 600; }
