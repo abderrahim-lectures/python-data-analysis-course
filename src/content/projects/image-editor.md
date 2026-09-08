@@ -1,6 +1,5 @@
 ---
 title: "Build an Image Editor Toolkit"
-slug: /projects/image-editor
 description: "Process real images with Pillow: load and inspect, apply filters, crop and resize without distortion, watermark for branding, and batch-process an entire folder in one pass."
 difficulty: "intermediate"
 estimatedMinutes: 60

@@ -1,6 +1,5 @@
 ---
 title: "Build a Discord Trivia Bot"
-slug: /projects/trivia-bot
 description: "Build a discord.py bot that runs trivia rounds in a server, tracks scores on a persistent leaderboard, and can generate fresh questions on any topic with a free-tier LLM."
 ---
 

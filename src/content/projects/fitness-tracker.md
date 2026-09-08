@@ -1,6 +1,5 @@
 ---
 title: "Build a Fitness Tracker"
-slug: /projects/fitness-tracker
 description: "Log workouts and meals, compute training volume and macro percentages, roll your history into pandas, and visualize weight and strength trends over time."
 difficulty: "beginner"
 estimatedMinutes: 60

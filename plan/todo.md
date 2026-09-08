@@ -1192,3 +1192,35 @@ Made all 116 project files (29 EN + 29 ES + 29 AR + 29 FR) properly listed, filt
 
 ### ⚠️ Handed back to Claude (their surface — not fixed forward)
 - **Contrast FAIL on `/projects/wordle-clone` (light theme)**: `.project-head__diff` pill text `rgb(167,243,208)` on the near-white card background = 1.22:1. Root cause: `DIFFICULTY_COLORS` in `src/lib/projectArt.ts:398` sets `text:'#a7f3d0'` for a dark-green pill *bg* `'#065f46'`, but `ProjectDetail.astro:83` applies only `color:` — never the pill `bg`. So the light text floats on white. Suggested fix: apply the `bg` from `DIFFICULTY_COLORS` to `.project-head__diff` (or switch `text` to a dark-on-white color) in `src/styles/project-detail.css:7`. Pre-existing (present at HEAD), only shows on project detail pages in light theme.
+
+## Session 2026-09-08b (opencode) — fixed: project locale collision in content routing
+
+### Background
+- Reported: `/projects/finetune-llm-unsloth` served the **Arabic** entry on the EN
+  route. Also flagged "no XP bar on EN home" — investigated and ruled out as an
+  i18n bug (the XP bar renders identically in all 4 locales at desktop width; the
+  `display:none` is the shared `@media (max-width:900px)` mobile rule).
+- Root cause: 55 project files carried a legacy Docusaurus `slug: /projects/<name>`
+  frontmatter. Astro 5 uses that value as the content **entry id**, so every locale
+  file for one project collapsed to a single id — build warned "Duplicate id
+  /projects/<name> … later items will overwrite earlier ones" and Arabic (last in
+  the walk order) won on the EN/AR/ES/FR routes alike. 2 more files
+  (`fr/note-taking-app.md`, `fr/sentiment-dashboard.md`) had a unique slug on a
+  locale file, so their id lost the `fr/` prefix and the FR route's
+  `slug.split('/')[0]==='fr'` filter dropped them entirely (404).
+
+### Fix
+- Removed the `slug:` line from all 55 project frontmatters (44 EN-only unique
+  slugs were harmless but carried the same trap). Nothing reads `data.slug`;
+  routes already normalize a `projects/` prefix, so behavior is unchanged for the
+  unaffected set.
+- Build: 874 pages (was 865) — +2 FR orphans restored, +7 locale collisions
+  restored (finetune-llm-unsloth, mcp-server, ml-classifier, rag-notes,
+  scrape-analyze). Zero "Duplicate id" warnings.
+- Verified per-locale content on the previously broken routes; `astro check` still
+  only the pre-existing `Quiz.astro:129`; `vitest` 498/498.
+
+### Handoff note (not committed)
+- Working-tree change: 55 one-line deletions under `src/content/projects/`. These
+  are content files both agents touch; flagged here before commit/push per the
+  append-only handshake.

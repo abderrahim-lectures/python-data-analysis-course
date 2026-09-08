@@ -1,6 +1,5 @@
 ---
 title: "Data Visualization Explorer"
-slug: /projects/data-visualization
 description: "Create interactive charts and dashboards with matplotlib, seaborn, and plotly."
 difficulty: "beginner"
 estimatedMinutes: 50

@@ -1,6 +1,5 @@
 ---
 title: "Build an MCP Server for Your Notes"
-slug: /projects/mcp-notes-server
 description: "Index a real folder of Markdown notes and expose it to Claude Desktop as searchable tools with the Model Context Protocol -- a genuinely useful personal-knowledge-base MCP server, not a toy."
 ---
 

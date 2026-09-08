@@ -1,6 +1,5 @@
 ---
 title: "Build a Habit-Streak Visualizer"
-slug: /projects/habit-streak-visualizer
 description: "Track daily habit check-ins locally and render a GitHub-contributions-graph-style calendar heatmap, with pandas and matplotlib — no ML, no API key."
 ---
 

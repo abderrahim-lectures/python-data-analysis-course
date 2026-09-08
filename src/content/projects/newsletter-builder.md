@@ -1,6 +1,5 @@
 ---
 title: "Build a Newsletter Builder"
-slug: /projects/newsletter-builder
 description: "Turn a Markdown template into personalized issues for real subscribers: render with regex, manage a CSV list with tags, track opens and clicks, A/B-test subject lines, and ship a personalized issue to one segment."
 difficulty: "intermediate"
 estimatedMinutes: 60

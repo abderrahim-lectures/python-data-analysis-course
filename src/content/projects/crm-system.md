@@ -1,6 +1,5 @@
 ---
 title: "Build a CRM System"
-slug: /projects/crm-system
 description: "Build a lightweight command-line CRM with persistent SQLite storage, typed data models, pipeline tracking, and a polished rich table interface."
 difficulty: "intermediate"
 estimatedMinutes: 90

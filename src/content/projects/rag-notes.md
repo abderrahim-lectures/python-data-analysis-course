@@ -1,6 +1,5 @@
 ---
 title: "Build a RAG App Over Your Own Notes"
-slug: /projects/rag-notes
 description: "Graduate from the in-browser playground to real Python: build a retrieval-augmented generation app that lets you chat with your own notes, with local embeddings and a free-tier LLM."
 ---
 

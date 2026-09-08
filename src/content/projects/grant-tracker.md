@@ -1,6 +1,5 @@
 ---
 title: "Build a Grant Application Tracker"
-slug: /projects/grant-tracker
 description: "Manage grant applications end to end: model them as nested dictionaries, guard budgets, watch deadlines with datetime, persist everything to JSON and CSV, and drive the whole thing from a menu-driven CLI."
 difficulty: "intermediate"
 estimatedMinutes: 90

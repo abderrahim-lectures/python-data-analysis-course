@@ -1,6 +1,5 @@
 ---
 title: "Fine-tune a Small Language Model with Unsloth"
-slug: /projects/finetune-llm-unsloth
 description: "Graduate from the in-browser playground to real Python: fine-tune a small open-source language model with LoRA using Unsloth, on a free GPU."
 ---
 

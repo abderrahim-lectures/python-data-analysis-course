@@ -1,6 +1,5 @@
 ---
 title: "Build a Personal Finance Agent"
-slug: /projects/finance-agent
 description: "Categorize a bank CSV export and flag spending anomalies, combining pandas data-wrangling with an LLM tool-calling agent for smart categorization."
 ---
 

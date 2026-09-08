@@ -1,6 +1,5 @@
 ---
 title: "Password Generator"
-slug: /projects/password-generator
 description: "Build a CLI password generator with entropy analysis, breach detection via HIBP, an encrypted credential vault, and a colored terminal report — all in pure Python."
 difficulty: "beginner"
 estimatedMinutes: 45

@@ -1,6 +1,5 @@
 ---
 title: "Build a Design System Generator"
-slug: /projects/design-system
 description: "Generate a complete design system from one brand color: a cohesive palette, WCAG contrast checks, a typographic scale, and exportable CSS custom properties."
 difficulty: "beginner"
 estimatedMinutes: 40

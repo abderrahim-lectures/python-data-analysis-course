@@ -1,6 +1,5 @@
 ---
 title: "Chat with Your PDFs"
-slug: /projects/chat-with-pdfs
 description: "Build a multi-document RAG app over a folder of PDFs, with local embeddings, a free-tier LLM, and page-number citations in every answer."
 ---
 

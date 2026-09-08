@@ -1,6 +1,5 @@
 ---
 title: "Récupérer et analyser un site web en direct"
-slug: /projects/scrape-analyze
 description: "Récupérez de vraies données web, nettoyez-les avec pandas, et produisez des graphiques — aucune clé API requise."
 difficulty: "intermediate"
 estimatedMinutes: 60

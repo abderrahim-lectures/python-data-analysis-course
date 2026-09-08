@@ -1,6 +1,5 @@
 ---
 title: "Build a Web Scraper API"
-slug: /projects/web-scraper-api
 description: "Fetch pages responsibly with rate limiting and retries, parse them into structured records with BeautifulSoup, crawl pagination, and wrap the whole pipeline in one reusable JSON-producing function."
 difficulty: "intermediate"
 estimatedMinutes: 90

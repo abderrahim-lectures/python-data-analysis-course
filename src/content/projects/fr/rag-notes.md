@@ -1,6 +1,5 @@
 ---
 title: "Construire une application RAG sur vos propres notes"
-slug: /projects/rag-notes
 description: "Passez du bac à sable dans le navigateur à du vrai Python : construisez une application de génération augmentée par récupération qui vous permet de discuter avec vos propres notes, avec des embeddings locaux et un LLM gratuit."
 ---
 

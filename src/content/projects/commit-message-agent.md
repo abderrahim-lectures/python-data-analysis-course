@@ -1,6 +1,5 @@
 ---
 title: "Build a Git Commit-Message Generator"
-slug: /projects/commit-message-agent
 description: "Build a CLI tool that reads a real staged git diff via subprocess, drafts a Conventional-Commits-style message with a free-tier LLM, and only commits it after you explicitly confirm."
 ---
 

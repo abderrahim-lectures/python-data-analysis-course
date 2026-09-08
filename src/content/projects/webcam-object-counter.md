@@ -1,6 +1,5 @@
 ---
 title: "Count Objects in Real Time with a Webcam"
-slug: /projects/webcam-object-counter
 description: "Count objects live from a webcam feed with OpenCV and a pretrained YOLO11n model — or run the same detection on a bundled sample image or video with no camera at all."
 ---
 

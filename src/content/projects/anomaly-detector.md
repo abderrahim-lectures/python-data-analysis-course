@@ -1,6 +1,5 @@
 ---
 title: "Anomaly Detector"
-slug: /projects/anomaly-detector
 description: "Detect outliers in data using statistical methods and visualization techniques."
 difficulty: "intermediate"
 estimatedMinutes: 50

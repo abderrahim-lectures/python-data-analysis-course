@@ -1,6 +1,5 @@
 ---
 title: "درّب أول نموذج تعلّم آلي لك"
-slug: /projects/ml-classifier
 description: "ابنِ ودرّب وقيّم مصنِّف scikit-learn ببيانات حقيقية — لا حاجة لخلفية في تعلّم الآلة."
 difficulty: "intermediate"
 estimatedMinutes: 60

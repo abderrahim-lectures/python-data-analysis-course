@@ -1,6 +1,5 @@
 ---
 title: "Build a Report Builder"
-slug: /projects/report-builder
 description: "Turn a CSV of sales into a polished report: clean it with pandas, draw bar, line, pie, and scatter charts with matplotlib, format summary tables, and assemble it all into a single report file."
 difficulty: "beginner"
 estimatedMinutes: 50

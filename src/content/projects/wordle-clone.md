@@ -1,6 +1,5 @@
 ---
 title: "Build a Wordle Clone"
-slug: /projects/wordle-clone
 description: "Build a real terminal Wordle game from scratch: correct green/yellow/gray guess feedback (including the classic repeated-letter bug), a custom word list, and persistent stats tracking across sessions."
 ---
 

@@ -1,6 +1,5 @@
 ---
 title: "Build a Font Pairing Tool"
-slug: /projects/font-scanner
 description: "Scan system fonts with Pillow, score and rank pairings by contrast and weight balance, render preview images, and generate CSS font-family fallback chains."
 difficulty: "beginner"
 estimatedMinutes: 40

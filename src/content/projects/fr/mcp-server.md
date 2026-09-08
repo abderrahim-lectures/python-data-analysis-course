@@ -1,6 +1,5 @@
 ---
 title: "Construire un serveur MCP"
-slug: /projects/mcp-server
 description: "Passez du bac à sable dans le navigateur à du vrai Python : construisez un serveur Model Context Protocol exposant vos propres outils, et connectez-le à un vrai client IA comme Claude Desktop."
 ---
 

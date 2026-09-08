@@ -1,6 +1,5 @@
 ---
 title: "AI Story Writer"
-slug: /projects/ai-story-writer
 description: "Generate creative stories with Markov chains, template systems, and character development."
 difficulty: "beginner"
 estimatedMinutes: 45

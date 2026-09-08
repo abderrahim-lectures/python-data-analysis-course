@@ -1,6 +1,5 @@
 ---
 title: "Entraînez votre premier modèle de machine learning"
-slug: /projects/ml-classifier
 description: "Construisez, entraînez, et évaluez un classificateur scikit-learn avec de vraies données — aucune expérience en ML requise."
 difficulty: "intermediate"
 estimatedMinutes: 60

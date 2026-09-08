@@ -1,6 +1,5 @@
 ---
 title: "Expense Tracker"
-slug: /projects/expense-tracker
 description: "Build a command-line expense tracker that logs spending, analyzes categories with pandas, monitors budgets with threshold alerts, and generates charts with matplotlib."
 difficulty: "beginner"
 estimatedMinutes: 50

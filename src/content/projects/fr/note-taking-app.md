@@ -1,6 +1,5 @@
 ---
 title: "Application de prise de notes en Markdown"
-slug: /projects/note-taking-app
 description: "Une application de prise de notes en terminal avec recherche plein texte, tags, et export Markdown."
 difficulty: "beginner"
 estimatedMinutes: 45

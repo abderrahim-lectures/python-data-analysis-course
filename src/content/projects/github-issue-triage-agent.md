@@ -1,6 +1,5 @@
 ---
 title: "Build a GitHub Issue Triage Agent"
-slug: /projects/github-issue-triage-agent
 description: "Graduate from the in-browser playground to real Python: fetch open issues from a real public GitHub repo and use a free-tier LLM to draft triage-label suggestions for a human maintainer to review."
 ---
 

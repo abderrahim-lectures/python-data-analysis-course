@@ -1,6 +1,5 @@
 ---
 title: "Train Your First Machine Learning Model"
-slug: /projects/ml-classifier
 description: "Build, train, and evaluate a scikit-learn classifier with real data — no ML background needed."
 difficulty: "intermediate"
 estimatedMinutes: 60

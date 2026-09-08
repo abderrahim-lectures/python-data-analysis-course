@@ -1,6 +1,5 @@
 ---
 title: "Build an Agentic Code Reviewer"
-slug: /projects/agentic-code-reviewer
 description: "Graduate from the in-browser playground to real Python: build a CLI tool that reads a real git diff via subprocess and asks a free-tier LLM to review it like a human would."
 ---
 

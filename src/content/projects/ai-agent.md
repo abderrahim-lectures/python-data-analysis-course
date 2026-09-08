@@ -1,6 +1,5 @@
 ---
 title: "Build an AI Agent"
-slug: /projects/ai-agent
 description: "Graduate from the in-browser playground to real Python: install Python locally and build your first AI agent with LangChain's deepagents."
 ---
 

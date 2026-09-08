@@ -1,6 +1,5 @@
 ---
 title: "Tableau de bord d'analyse de sentiment"
-slug: /projects/sentiment-dashboard
 description: "Analysez le sentiment de textes avec TextBlob et construisez un tableau de bord en temps réel avec matplotlib."
 difficulty: "intermediate"
 estimatedMinutes: 55

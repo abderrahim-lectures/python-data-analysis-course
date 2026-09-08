@@ -1,6 +1,5 @@
 ---
 title: "استخلاص وتحليل موقع ويب حي"
-slug: /projects/scrape-analyze
 description: "استخلص بيانات ويب حقيقية، نظّفها بـ pandas، وأنتج رسومًا بيانية — دون الحاجة لأي مفتاح API."
 difficulty: "intermediate"
 estimatedMinutes: 60

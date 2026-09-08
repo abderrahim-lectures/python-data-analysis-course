@@ -1,6 +1,5 @@
 ---
 title: "Build a Browser-Automation Agent"
-slug: /projects/browser-automation-agent
 description: "Combine Playwright browser automation with a free-tier LLM tool-calling agent that fills out a real practice web form on its own."
 ---
 

@@ -1,6 +1,5 @@
 ---
 title: "Build an Audio Editor"
-slug: /projects/audio-editor
 description: "Build a command-line audio editor in Python: synthesize a test tone, trim and fade clips with millisecond precision, convert formats, splice montages, and render waveforms."
 difficulty: "intermediate"
 estimatedMinutes: 50

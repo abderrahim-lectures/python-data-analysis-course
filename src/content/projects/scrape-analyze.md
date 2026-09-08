@@ -1,6 +1,5 @@
 ---
 title: "Scrape and Analyze a Live Website"
-slug: /projects/scrape-analyze
 description: "Scrape real web data, clean it with pandas, and produce charts — no API key needed."
 difficulty: "intermediate"
 estimatedMinutes: 60

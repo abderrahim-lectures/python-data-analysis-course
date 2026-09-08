@@ -1,6 +1,5 @@
 ---
 title: "Build a Voice-to-Task Agent"
-slug: /projects/voice-to-task-agent
 description: "Graduate from the in-browser playground to real Python: transcribe a voice memo locally and for free with OpenAI's open-source Whisper model, then use a free-tier LLM to turn it into a structured task list."
 ---
 

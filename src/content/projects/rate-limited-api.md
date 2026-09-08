@@ -1,6 +1,5 @@
 ---
 title: "Build a Rate-Limited API Service"
-slug: /projects/rate-limited-api
 description: "Graduate from the in-browser playground to real Python: build a FastAPI service wrapping your own dataset, with genuine API-key auth and a rate limiter you build from scratch."
 ---
 
