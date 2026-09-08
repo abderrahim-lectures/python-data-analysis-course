@@ -2,13 +2,15 @@
 // EN track hub: /learn/data-analysis/[track]. Thin wrapper — all markup lives in TrackHub.
 import {getCollection} from 'astro:content';
 import TrackHub from '../../../../components/learn/TrackHub.astro';
+import {idInLocale} from '../../../../lib/routeSegments';
 const locale = 'en' as const;
 
 export async function getStaticPaths() {
+  const locale = 'en' as const;
   const modules = await getCollection('modules');
   const tracks = [...new Set(
     modules
-      .filter((m) => m.id.startsWith('data-analysis/'))
+      .filter((m) => idInLocale(locale, m.id) && m.id.split('/')[0] === 'data-analysis')
       .map((m) => m.id.split('/')[1] as 'normal' | 'hard'),
   )];
   return tracks.map((track) => ({params: {track}, props: {track}}));

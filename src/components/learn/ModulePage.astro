@@ -3,7 +3,7 @@
 import {getCollection, type CollectionEntry} from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import ModuleNav from '../ModuleNav.astro';
-import {learnHref, lessonHref, NAV_WORDS, type Locale} from '../../lib/routeSegments';
+import {learnHref, lessonHref, MODULE_WORDS, trackWord, idInLocale, type Locale} from '../../lib/routeSegments';
 import {m} from '../../paraglide/messages.js';
 import {sectionName} from '../../lib/sections';
 
@@ -23,12 +23,12 @@ const trackPath = `${section}/${track}`;
 const moduleSlug = entry.id.split('/').pop()!.replace(/^module-\d+-/, '');
 const allLessons = await getCollection('lessons');
 const moduleLessons = allLessons
-  .filter((e) => e.id.includes(trackPath) && e.data.module === moduleSlug)
+  .filter((e) => idInLocale(locale, e.id) && e.id.includes(trackPath) && e.data.module === moduleSlug)
   .sort((a, b) => a.data.order - b.data.order);
 
 const allModules = await getCollection('modules');
 const sortedModules = allModules
-  .filter((e) => e.id.includes(trackPath))
+  .filter((e) => idInLocale(locale, e.id) && e.id.includes(trackPath))
   .sort((a, b) => a.data.order - b.data.order);
 const moduleIdx = sortedModules.findIndex((e) => e.id === entry.id);
 const prevModule = moduleIdx > 0 ? sortedModules[moduleIdx - 1] : null;
@@ -36,7 +36,7 @@ const nextModule = moduleIdx >= 0 && moduleIdx < sortedModules.length - 1 ? sort
 
 const totalMinutes = moduleLessons.reduce((sum, l) => sum + (l.data.estimatedMinutes ?? 15), 0);
 const diffColor = difficulty === 'beginner' ? 'var(--success-text)' : difficulty === 'intermediate' ? 'var(--streak-text)' : 'var(--bad-text)';
-const modulesPath = `${locale === 'en' ? '' : locale + '/'}${NAV_WORDS[locale].learn}/${section}/${track}/modules`;
+const modulesPath = learnHref(locale, base, section, trackWord(locale, track), MODULE_WORDS[locale], '').replace(/^\/+/, '').replace(/\/$/, '');
 const arrow = locale === 'ar' ? '←' : '→';
 ---
 

@@ -2,11 +2,17 @@
 // Locale section landing: /fr/apprendre/[section]. Thin wrapper — all markup lives in SectionLanding.
 import {getCollection} from 'astro:content';
 import SectionLanding from '../../../../components/learn/SectionLanding.astro';
+import {bareId, idInLocale} from '../../../../lib/routeSegments';
 const locale = 'fr' as const;
 
 export async function getStaticPaths() {
+  const locale = 'fr' as const;
   const modules = await getCollection('modules');
-  const sections = [...new Set(modules.map((m) => m.id.split('/')[0]))].sort();
+  const sections = [...new Set(
+    modules
+      .filter((m) => idInLocale(locale, m.id))
+      .map((m) => bareId(m.id).split('/')[0]),
+  )].sort();
   return sections.map((section) => ({params: {section}, props: {section}}));
 }
 ---

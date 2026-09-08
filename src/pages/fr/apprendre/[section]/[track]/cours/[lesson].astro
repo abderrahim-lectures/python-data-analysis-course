@@ -1,0 +1,23 @@
+---
+// Lesson template: /fr/apprendre/[section]/[track]/cours/[lesson].
+// Thin wrapper — all markup lives in the shared LessonPage component.
+import {getCollection} from 'astro:content';
+import LessonPage from '../../../../../../components/learn/LessonPage.astro';
+import {bareId, idInLocale, trackWord} from '../../../../../../lib/routeSegments';
+const locale = 'fr' as const;
+
+export async function getStaticPaths() {
+  const locale = 'fr' as const;
+  const entries = await getCollection('lessons');
+  return entries
+    .filter((e) => idInLocale(locale, e.id))
+    .map((entry) => {
+      const [section, track] = bareId(entry.id).split('/') as [string, 'normal' | 'hard'];
+      return {
+        params: {section, track: trackWord(locale, track), lesson: entry.id.split('/').pop()!},
+        props: {section, track, entry},
+      };
+    });
+}
+---
+<LessonPage locale={locale} section={Astro.props.section} track={Astro.props.track} entry={Astro.props.entry} />

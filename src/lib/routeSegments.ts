@@ -1,15 +1,15 @@
 // Per-locale translations for the *navigational* URL segments (learn,
-// projects, progress) and track words (normal, hard). Content identity
-// slugs (python-101, data-analysis, individual project slugs) are
-// deliberately NOT translated here — they're stable identifiers baked into
-// gameState's localStorage/XP keys (see gameState.ts's lessonId shape,
-// `${section}/${track}/week-${n}`), and progress is shared across locales
-// for the same lesson. Renaming those would require decoupling the URL
-// slug from the progress-tracking key, which is a separate, larger task.
+// projects, progress), track words (normal/hard), and the interior
+// lessons/modules words. Content identity slugs (python-101,
+// data-analysis, individual project/lesson/module slugs) stay untranslated
+// — they're stable identifiers baked into gameState's localStorage/XP keys
+// (lessonId shape `${section}/${track}/${slug}`), so progress stays shared
+// across locales for the same lesson. The route [track] param carries the
+// localized track word in the URL while components keep the canonical
+// ('normal'|'hard') track via props — the two never mix.
 //
-// The builders keep these slug tables as the source of truth for interior
-// URL words (localizeHref only rewrites the locale *prefix*, never slugs —
-// verified in the i18n PoC), and delegate the prefix swap to localizeHref.
+// localizeHref only rewrites the locale *prefix*, never the interior words,
+// so these builders feed it fully-localized paths.
 import {localizeHref} from '../paraglide/runtime.js';
 export type Locale = 'en' | 'ar' | 'es' | 'fr';
 
@@ -69,6 +69,20 @@ export function localeBase(locale: Locale, base: string): string {
   return locale === 'en' ? base : `${base}${locale}/`;
 }
 
+/** True when a content entry id belongs to the given locale. EN ids are
+    unprefixed (`python-101/normal/01-printing`); locale ids carry the
+    locale prefix (`ar/python-101/...`, `es/...`, `fr/...`). */
+export function idInLocale(locale: Locale, id: string): boolean {
+  if (locale === 'en') return !/^(ar|es|fr)\//.test(id);
+  return id.startsWith(`${locale}/`);
+}
+
+/** Strip the locale prefix from a content entry id, returning the EN-style
+    canonical id (`ar/python-101/normal/01-printing` → `python-101/normal/01-printing`). */
+export function bareId(id: string): string {
+  return id.replace(/^(ar|es|fr)\//, '');
+}
+
 /** Root-absolute path (leading `/`) via localizeHref's prefix swap.
     Interior words come from the slug tables — localizeHref never rewrites
     slugs, it only adds/replaces the `/locale/` segment (or none for EN). */
@@ -113,18 +127,21 @@ export function cheatsheetsHref(locale: Locale, base: string): string {
 }
 
 export function weekHref(locale: Locale, base: string, section: string, track: 'normal' | 'hard', week: number): string {
-  return learnHref(locale, base, section, track, `week-${week}`);
+  return learnHref(locale, base, section, trackWord(locale, track), `week-${week}`);
 }
 
-/** Build a module href. Track words stay untranslated in URLs — only the
-    learn nav word is localized (see NAV_WORDS). */
+/** Build a module href with the localized track word and modules word. */
 export function moduleHref(locale: Locale, base: string, section: string, track: 'normal' | 'hard', moduleSlug: string): string {
-  return learnHref(locale, base, section, track, 'modules', moduleSlug);
+  return learnHref(locale, base, section, trackWord(locale, track), MODULE_WORDS[locale], moduleSlug);
 }
 
-/** Build a lesson href. Track words stay untranslated in URLs — only the
-    learn nav word is localized (see NAV_WORDS). */
+/** Build a lesson href with the localized track word and lessons word. */
 export function lessonHref(locale: Locale, base: string, section: string, track: 'normal' | 'hard', lessonSlug: string): string {
-  return learnHref(locale, base, section, track, 'lessons', lessonSlug);
+  return learnHref(locale, base, section, trackWord(locale, track), LESSON_WORDS[locale], lessonSlug);
+}
+
+/** Localized track word for a URL segment, e.g. 'عادي' (ar normal), 'dificil' (es hard). */
+export function trackWord(locale: Locale, track: 'normal' | 'hard'): string {
+  return TRACK_WORDS[locale][track];
 }
 

@@ -3,7 +3,7 @@ import {getCollection} from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Icon from '../../components/Icon.astro';
 import {m} from '../../paraglide/messages.js';
-import {detectLocale} from '../../lib/routeSegments';
+import {detectLocale, idInLocale} from '../../lib/routeSegments';
 const base = import.meta.env.BASE_URL;
 const locale = detectLocale(Astro.url.pathname);
 const dir = locale === 'ar' ? 'rtl' : 'ltr';
@@ -16,12 +16,12 @@ const alternates = {
 
 const allLessons = await getCollection('lessons');
 const allModules = await getCollection('modules');
-const py101Lessons = allLessons.filter(e => e.id.includes('python-101')).length;
-const py101Modules = allModules.filter(e => e.id.includes('python-101')).length;
-const daLessons = allLessons.filter(e => e.id.includes('data-analysis')).length;
-const daModules = allModules.filter(e => e.id.includes('data-analysis')).length;
-const py101Minutes = allLessons.filter(e => e.id.includes('python-101')).reduce((s, l) => s + (l.data.estimatedMinutes ?? 15), 0);
-const daMinutes = allLessons.filter(e => e.id.includes('data-analysis')).reduce((s, l) => s + (l.data.estimatedMinutes ?? 15), 0);
+const py101Lessons = allLessons.filter(e => idInLocale(locale, e.id) && e.id.includes('python-101')).length;
+const py101Modules = allModules.filter(e => idInLocale(locale, e.id) && e.id.includes('python-101')).length;
+const daLessons = allLessons.filter(e => idInLocale(locale, e.id) && e.id.includes('data-analysis')).length;
+const daModules = allModules.filter(e => idInLocale(locale, e.id) && e.id.includes('data-analysis')).length;
+const py101Minutes = allLessons.filter(e => idInLocale(locale, e.id) && e.id.includes('python-101')).reduce((s, l) => s + (l.data.estimatedMinutes ?? 15), 0);
+const daMinutes = allLessons.filter(e => idInLocale(locale, e.id) && e.id.includes('data-analysis')).reduce((s, l) => s + (l.data.estimatedMinutes ?? 15), 0);
 ---
 
 <Base title={m.learn_hub_title()} description={m.learn_hub_description()} lang={locale} dir={dir} alternates={alternates}>

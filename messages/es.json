@@ -167,7 +167,5 @@
   "ui_changelog": "Changelog",
   "unlocked_prefix": "Desbloqueado: ",
   "week_label": "Semana",
-  "xp_toast": "⚡ +{amount} XP",
-  "cheatsheets_en_content_note": "El contenido de las tarjetas de abajo está escrito en inglés.",
-  "lesson_en_content_note": "El contenido de esta lección está escrito en inglés."
+  "xp_toast": "⚡ +{amount} XP"
 }

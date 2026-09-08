@@ -3,7 +3,7 @@
 // All markup lives here; each locale page is a thin <Cheatsheets locale="…"/> wrapper.
 import Base from '../layouts/Base.astro';
 import {m} from '../paraglide/messages';
-import {CHEAT_SECTIONS} from '../lib/cheatsheetContent';
+import {cheatSections} from '../lib/cheatsheetContent';
 import {NAV_WORDS, type Locale} from '../lib/routeSegments';
 
 interface Props {
@@ -26,13 +26,12 @@ const alternates = {
       <div class="head__eyebrow">📋 {m.cheatsheets_heading()}</div>
       <h1>{m.cheatsheets_heading()}</h1>
       <p>{m.cheatsheets_intro()}</p>
-      {locale !== 'en' && <p class="cheats__lang-note">🌐 {m.cheatsheets_en_content_note()}</p>}
     </div>
   </section>
 
   <section class="container cheats">
     <ul class="cheats__list">
-      {CHEAT_SECTIONS.map((section) => (
+      {cheatSections(locale).map((section) => (
         <li class="cheats__section">
           <h2 class="cheats__title"><span aria-hidden="true">{section.icon}</span> {section.title}</h2>
           <ul class="cheats__cards">
@@ -52,7 +51,6 @@ const alternates = {
 
 <style>
   .cheats { padding: 0 0 3rem; }
-  .cheats__lang-note { margin: .9rem 0 0; font-size: .85rem; color: var(--ink-soft); background: var(--surface); border: 1px dashed var(--line); border-radius: var(--radius-md); padding: .45rem .7rem; }
   .cheats__list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 1.75rem; }
   .cheats__title { font-size: 1.25rem; margin: 0 0 .75rem; display: flex; align-items: center; gap: .5rem; }
   .cheats__cards { list-style: none; padding: 0; margin: 0; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }

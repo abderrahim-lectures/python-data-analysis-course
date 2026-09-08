@@ -3,7 +3,7 @@
 import {getCollection} from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Icon from '../Icon.astro';
-import {learnHref, type Locale} from '../../lib/routeSegments';
+import {learnHref, trackWord, idInLocale, type Locale} from '../../lib/routeSegments';
 import {m} from '../../paraglide/messages.js';
 
 interface Props {
@@ -29,8 +29,8 @@ const allLessons = await getCollection('lessons');
 const allModules = await getCollection('modules');
 const stats = Object.fromEntries(
   sections.map(({slug}) => {
-    const lessons = allLessons.filter((e) => e.id.includes(slug));
-    const modules = allModules.filter((e) => e.id.includes(slug));
+    const lessons = allLessons.filter((e) => idInLocale(locale, e.id) && e.id.includes(slug));
+    const modules = allModules.filter((e) => idInLocale(locale, e.id) && e.id.includes(slug));
     const minutes = lessons.reduce((sum, l) => sum + (l.data.estimatedMinutes ?? 15), 0);
     return [slug, {lessons: lessons.length, modules: modules.length, minutes}];
   }),
@@ -62,8 +62,8 @@ const stats = Object.fromEntries(
           <div class="routes">
             <span class="routes__label">{m.choose_route()}</span>
             <div class="routes__pills">
-              <a class="route-pill route-pill--normal" href={learnHref(locale, base, slug, 'normal')}>🌿 {m.normal_start()}</a>
-              <a class="route-pill route-pill--hard" href={learnHref(locale, base, slug, 'hard')}>⚡ {m.hard_start()}</a>
+              <a class="route-pill route-pill--normal" href={learnHref(locale, base, slug, trackWord(locale, 'normal'))}>🌿 {m.normal_start()}</a>
+              <a class="route-pill route-pill--hard" href={learnHref(locale, base, slug, trackWord(locale, 'hard'))}>⚡ {m.hard_start()}</a>
             </div>
           </div>
           <a class="sectioncard__all" href={learnHref(locale, base, slug)}>{m.see_all_modules()}</a>

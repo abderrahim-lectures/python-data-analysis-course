@@ -167,7 +167,5 @@
   "ui_changelog": "Changelog",
   "unlocked_prefix": "مفتوح: ",
   "week_label": "الأسبوع",
-  "xp_toast": "⚡ +{amount} نقطة خبرة",
-  "cheatsheets_en_content_note": "المحتوى في البطاقات أدناه مكتوب بالإنجليزية.",
-  "lesson_en_content_note": "محتوى هذا الدرس مكتوب بالإنجليزية."
+  "xp_toast": "⚡ +{amount} نقطة خبرة"
 }

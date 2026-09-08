@@ -1,3 +1,8 @@
+import type {Locale} from './routeSegments';
+import {CHEAT_SECTIONS as CHEAT_SECTIONS_AR} from './cheatsheet.ar';
+import {CHEAT_SECTIONS as CHEAT_SECTIONS_ES} from './cheatsheet.es';
+import {CHEAT_SECTIONS as CHEAT_SECTIONS_FR} from './cheatsheet.fr';
+
 export interface CheatCard {
   title: string;
   code: string;
@@ -8,6 +13,15 @@ export interface CheatSection {
   icon: string;
   title: string;
   cards: CheatCard[];
+}
+
+export function cheatSections(locale: Locale): CheatSection[] {
+  switch (locale) {
+    case 'ar': return CHEAT_SECTIONS_AR;
+    case 'es': return CHEAT_SECTIONS_ES;
+    case 'fr': return CHEAT_SECTIONS_FR;
+    default: return CHEAT_SECTIONS;
+  }
 }
 
 export const CHEAT_SECTIONS: CheatSection[] = [

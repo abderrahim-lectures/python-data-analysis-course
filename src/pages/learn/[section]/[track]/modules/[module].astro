@@ -3,12 +3,14 @@
 // Thin wrapper — all markup lives in the shared ModulePage component.
 import {getCollection} from 'astro:content';
 import ModulePage from '../../../../../components/learn/ModulePage.astro';
+import {idInLocale} from '../../../../../lib/routeSegments';
 const locale = 'en' as const;
 
 export async function getStaticPaths() {
+  const locale = 'en' as const;
   const modules = await getCollection('modules');
   return modules
-    .filter((m) => m.id.includes('/'))
+    .filter((m) => idInLocale(locale, m.id))
     .map((m) => {
       const [section, track] = m.id.split('/') as [string, 'normal' | 'hard'];
       return {
