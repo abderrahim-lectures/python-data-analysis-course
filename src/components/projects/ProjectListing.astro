@@ -44,7 +44,7 @@ const projects = localeProjects
   .map((p) => ({...p, slug: p.id.replace(/^(ar|es|fr)\//, '').replace(/^\/?projects\//, '')}))
   .sort((a, b) => a.data.title.localeCompare(b.data.title));
 
-const allTags = [...new Set(projects.flatMap((p) => PROJECT_TAGS[p.id] ?? []))].sort();
+const allTags = [...new Set(projects.flatMap((p) => PROJECT_TAGS[p.slug] ?? []))].sort();
 const tagIcon: Record<string, string> = {};
 for (const [, tags] of Object.entries(PROJECT_TAGS)) {
   for (const t of tags) {
@@ -109,7 +109,7 @@ const alternates = {
 
     <div class="list" id="project-grid">
       {projects.map((p) => (
-        <ProjectCard slug={p.id} title={p.data.title} description={p.data.description} locale={locale} />
+        <ProjectCard slug={p.slug} title={p.data.title} description={p.data.description} locale={locale} />
       ))}
     </div>
 
