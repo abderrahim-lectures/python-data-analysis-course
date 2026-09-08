@@ -3,6 +3,7 @@
   "include": [".astro/types.d.ts", "**/*"],
   "exclude": [
     "dist",
+    "project.inlang/cache",
     "jupyterlite-config/_output",
     "jupyterlite-config/.jupyterlite.doit.db"
   ]

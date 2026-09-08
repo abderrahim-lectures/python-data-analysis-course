@@ -36,7 +36,7 @@ jobs:
         env:
           BASE_URL: http://127.0.0.1:4321
         run: |
-          export CHROME_BIN="$(find "$HOME/.cache/ms-playwright" -path '*chrome-linux/chrome' -type f | head -1)"
+          export CHROME_BIN="$(find "$HOME/.cache/ms-playwright" -path '*/chrome-linux*/chrome' -type f | head -1)"
           echo "using chrome: $CHROME_BIN"
           npm run preview -- --port 4321 >/dev/null 2>&1 &
           PID=$!

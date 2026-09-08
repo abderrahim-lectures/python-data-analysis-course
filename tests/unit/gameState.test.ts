@@ -30,14 +30,6 @@ async function seed(patch: Record<string, unknown>) {
   return gs;
 }
 
-// Helper: complete a lesson in a fresh state, return final XP.
-// Milestones may add bonus XP, so we test relative values.
-async function xpAfterLesson(lessonId = 'python-101/normal/01-printing') {
-  const gs = await fresh();
-  gs.completeLesson(lessonId);
-  return gs.xpProgress().xp;
-}
-
 describe('completeLesson', () => {
   test('marks the lesson complete and awards base XP', async () => {
     const gs = await fresh();

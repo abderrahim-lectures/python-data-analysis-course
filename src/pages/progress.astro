@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
-import { xpProgress, trackProgress, questsToShow, streakProgress, getActivityLog, getActivityStats, projectStats } from '../lib/gameState.ts';
+import { xpProgress, trackProgress, questsToShow, streakProgress, getActivityStats } from '../lib/gameState.ts';
 import { emptyStats } from '../lib/gamestats.ts';
 const base = import.meta.env.BASE_URL;
 const gs = emptyStats();
@@ -12,7 +12,6 @@ const da = trackProgress('data-analysis', 5);
 const quests = questsToShow();
 const sp = streakProgress();
 const actStats = getActivityStats();
-const projStats = projectStats();
 
 const pyModules = [1,2,3,4,5,6,7].map((w) => {
   const done = w <= py.done;
@@ -287,7 +286,7 @@ const daModules = [1,2,3,4,5].map((w) => {
   </section>
 
   <script>
-    import {xpProgress, questsToShow, streakProgress, isWeekComplete, rankFor, RANK_EMOJIS, getActivityLog, getActivityStats, projectStats} from '../lib/gameState.ts';
+    import {xpProgress, questsToShow, streakProgress, isWeekComplete, rankFor, RANK_EMOJIS, getActivityLog} from '../lib/gameState.ts';
     import {computeGameStats} from '../lib/gamestats.ts';
 
     const ACT_ICONS: Record<string, string> = {

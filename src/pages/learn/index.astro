@@ -3,11 +3,10 @@ import {getCollection} from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Icon from '../../components/Icon.astro';
 import {m} from '../../paraglide/messages.js';
-import {detectLocale, learnHref, localeBase, TRACK_WORDS} from '../../lib/routeSegments';
+import {detectLocale} from '../../lib/routeSegments';
 const base = import.meta.env.BASE_URL;
 const locale = detectLocale(Astro.url.pathname);
 const dir = locale === 'ar' ? 'rtl' : 'ltr';
-const t = TRACK_WORDS[locale];
 const alternates = {
   en: 'learn',
   ar: 'ar/تعلم',
@@ -61,7 +60,7 @@ const daMinutes = allLessons.filter(e => e.id.includes('data-analysis')).reduce(
             <a class="route-pill route-pill--hard" href={`${base}learn/python-101/hard`}>⚡ {m.hard_start()}</a>
           </div>
         </div>
-        <a class="sectioncard__all" href={`${base}learn/python-101`}>{m.see_all_modules()} →</a>
+        <a class="sectioncard__all" href={`${base}learn/python-101`}>{m.see_all_modules()} {locale === 'ar' ? '←' : '→'}</a>
       </div>
       <div class="sectioncard">
         <div class="sectioncard__badge sectioncard__badge--streak">📊 {m.track_2()}</div>
@@ -80,7 +79,7 @@ const daMinutes = allLessons.filter(e => e.id.includes('data-analysis')).reduce(
             <a class="route-pill route-pill--hard" href={`${base}learn/data-analysis/hard`}>⚡ {m.hard_start()}</a>
           </div>
         </div>
-        <a class="sectioncard__all" href={`${base}learn/data-analysis`}>{m.see_all_modules()} →</a>
+        <a class="sectioncard__all" href={`${base}learn/data-analysis`}>{m.see_all_modules()} {locale === 'ar' ? '←' : '→'}</a>
       </div>
     </div>
 
