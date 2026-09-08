@@ -38,7 +38,6 @@ export default function rehypeRunnablePython() {
       parent.children[index] = h('div.cell', {dataRunnable: ''}, [
         h('div.cell__actions', [
           h('button.btn.btn-primary.cell__run', {dataRun: '', ariaLabel: 'Run this Python code'}, '▶ Run'),
-          h('button.btn.btn-ghost.btn-sm.cell__expand', {dataExpand: '', ariaLabel: 'Open in full-screen editor'}, '⛶'),
           h('span.cell__lang', 'python'),
         ]),
         highlightedPre,

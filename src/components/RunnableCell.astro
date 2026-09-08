@@ -7,7 +7,6 @@ const {code, lessonId} = Astro.props;
 <div class="cell" data-runnable data-lesson={lessonId ?? ''}>
   <div class="cell__actions">
     <button class="btn btn-primary cell__run" data-run aria-label="Run this Python code">▶ Run</button>
-    <button class="btn btn-ghost btn-sm cell__expand" data-expand aria-label="Open in full-screen editor">⛶</button>
     <span class="cell__lang">python</span>
   </div>
   <pre class="cell__code"><code>{code}</code></pre>

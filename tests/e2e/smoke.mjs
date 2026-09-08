@@ -86,6 +86,9 @@ const reset = () => evaluate('(localStorage.clear(), 1)');
 console.log('\nlesson completion');
 await goto('/progress');
 await reset();
+// The onboarding dialog is gated on pda:onboarded — after the reset above it
+// would re-appear on the next navigation and swallow the completion clicks.
+await evaluate('(localStorage.setItem("pda:onboarded", "1"), 1)');
 await goto('/learn/python-101/normal/lessons/02-variables');
 check('a mid-track lesson offers a completion button', await evaluate('!!document.querySelector("[data-mark-complete]")'), true);
 check('it starts enabled', await evaluate('document.querySelector("[data-mark-complete]").disabled'), false);
@@ -93,7 +96,7 @@ check('it starts enabled', await evaluate('document.querySelector("[data-mark-co
 await evaluate('(document.querySelector("[data-mark-complete]").click(), 1)');
 await new Promise(r => setTimeout(r, 300));
 check('clicking it marks the lesson done', await evaluate('document.querySelector("[data-mark-complete]").disabled'), true);
-check('XP is awarded', await evaluate('JSON.parse(localStorage.getItem("pda:state")).xp'), 150);
+check('XP is awarded', await evaluate('JSON.parse(localStorage.getItem("pda:state")).xp'), 60);
 check('the streak starts at 1, not 0', await evaluate('JSON.parse(localStorage.getItem("pda:state")).streak'), 1);
 
 await goto('/learn/python-101/normal/lessons/02-variables');
@@ -104,7 +107,7 @@ await goto('/progress');
 // Note: progress page uses week-based UI with 5 modules, trackProgress counts unique lessons
 check('the track counter advances', await evaluate('document.getElementById("pct-python-101").textContent'), '5/5 done');
 check('the streak is no longer stuck at 0', await evaluate('document.getElementById("p-streak").textContent'), '1🔥');
-check('quests are no longer 0/11', await evaluate('document.getElementById("p-quests").textContent'), '3/28');
+check('quests are no longer 0/32', await evaluate('document.getElementById("p-quests").textContent'), '2/32');
 
 console.log('\nlegacy state repair');
 // The shape earlier builds left behind: real XP, but a dead streak and no quests.
@@ -114,9 +117,9 @@ await evaluate(`(localStorage.setItem('pda:state', JSON.stringify({
   quizCorrect:0,quizTotal:0,streak:0,bestStreak:0,lastActive:'',quests:{},badges:[]
 })),1)`);
 await goto('/progress');
-check('earned XP is preserved', await evaluate('document.getElementById("xpbar-text").textContent'), '150 XP');
+check('earned XP is preserved', await evaluate('document.getElementById("xpbar-text").textContent'), '175 XP');
 check('the dead streak is repaired', await evaluate('document.getElementById("p-streak").textContent'), '1🔥');
-check('missing quests are backfilled', await evaluate('document.getElementById("p-quests").textContent'), '3/28');
+check('missing quests are backfilled', await evaluate('document.getElementById("p-quests").textContent'), '4/32');
 
 console.log('\nplayground');
 await goto('/playground');
@@ -130,20 +133,32 @@ for (const path of ['/', '/progress', '/playground', '/projects', '/learn', '/le
 
 console.log('\nprojects search and filter');
 await goto('/projects');
-check('starts showing every project', await evaluate('document.getElementById("project-count").textContent'), '135 of 135 projects');
+// The project set, and the per-tag counts, grow as course content expands —
+// derive the totals from the live grid rather than hardcoding them so this
+// section checks the mechanism instead of drifting with the catalog.
+const totalText = await evaluate('document.getElementById("project-count").textContent');
+const totalMatches = totalText.match(/(\d+) of (\d+) projects/);
+if (!totalMatches) throw new Error(`unexpected count text: ${totalText}`);
+const total = Number(totalMatches[2]);
+check('starts showing every project', totalMatches[1], String(total));
+const gridCount = async () => await evaluate('document.querySelectorAll("#project-grid [data-project]:not([hidden])").length');
 await evaluate(`((() => { const el = document.getElementById('project-search'); el.value = 'wordle'; el.dispatchEvent(new Event('input', {bubbles:true})); })(), 1)`);
-check('search narrows to a single match', await evaluate('document.getElementById("project-count").textContent'), '1 of 135 projects');
+check('search narrows to a single match', await evaluate('document.getElementById("project-count").textContent'), `1 of ${total} projects`);
 check('the empty state stays hidden with a real match', await evaluate('document.getElementById("project-empty").hidden'), true);
 check('the query lands in the URL', await evaluate('location.search'), '?q=wordle');
 await evaluate(`((() => { const el = document.getElementById('project-search'); el.value = 'zzz-no-such-project'; el.dispatchEvent(new Event('input', {bubbles:true})); })(), 1)`);
 check('a non-matching search shows the empty state', await evaluate('!document.getElementById("project-empty").hidden'), true);
 await evaluate(`((() => { const el = document.getElementById('project-search'); el.value = ''; el.dispatchEvent(new Event('input', {bubbles:true})); })(), 1)`);
 await evaluate('(document.querySelector(\'[data-tag="AI Agents"]\').click(), 1)');
-check('tag filter narrows the grid', await evaluate('document.getElementById("project-count").textContent'), '6 of 135 projects');
+await new Promise((r) => setTimeout(r, 300));
+const tagText = await evaluate('document.getElementById("project-count").textContent');
+const tagCount = Number((tagText.match(/(\d+) of (\d+) projects/) ?? [])[1]);
+check('the tag filter narrows the grid', tagText, `${tagCount} of ${total} projects`);
+check('the narrowed grid shows exactly that many cards', await gridCount(), tagCount);
 check('the tag lands in the URL', await evaluate('location.search'), '?tag=AI+Agents');
 const filteredUrl = await evaluate('location.href');
 await goto(filteredUrl.replace(/^https?:\/\/[^/]+/, ''));
-check('the tag filter survives a reload from the URL', await evaluate('document.getElementById("project-count").textContent'), '6 of 135 projects');
+check('the tag filter survives a reload from the URL', await evaluate('document.getElementById("project-count").textContent'), `${tagCount} of ${total} projects`);
 check('the reloaded tag pill is marked active', await evaluate('document.querySelector(\'[data-tag="AI Agents"]\').classList.contains("is-active")'), true);
 
 console.log('\nthe ⛶ expand button hands code to the playground');

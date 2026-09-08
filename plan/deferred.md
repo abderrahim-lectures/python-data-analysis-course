@@ -1,3 +1,4 @@
 # Deliberately deferred (flagged, not built in this pass)
-- **Real push notifications while away from the site** (Duolingo-style) — would need a minimal server component (scheduled job + Web Push/VAPID) that this plan's fully-static architecture deliberately doesn't include; `WelcomeBackBanner`'s on-visit nudge is the chosen no-infrastructure alternative.
-- **Docusaurus versioned docs** if the course gets re-run for a future cohort and old content needs to stay addressable — not needed for a first run.
+- **Real push notifications while away from the site** (Duolingo-style) — would need a minimal server component (scheduled job + Web Push/VAPID) that this fully-static architecture deliberately doesn't include; the on-visit streaks/progress nudge is the chosen no-infrastructure alternative.
+- **Running Python offline from a cold start** — Pyodide is loaded from the CDN at runtime, so a first-run lesson page with no network can't execute cells (see [`pwa.md`](./pwa.md)). Pre-building/vendoring Pyodide wheels into the deploy (`public/pyodide/`) would close this; deferred because it roughly doubles the shipped bundle.
+- **Versioned course content** if the course gets re-run for a future cohort and old content needs to stay addressable — not needed for a first run.

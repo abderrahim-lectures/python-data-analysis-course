@@ -2,9 +2,10 @@
 // Shared lesson page for locale learn trees, e.g. /ar/تعلم/python-101/hard/lessons/[lesson].
 import {getCollection, type CollectionEntry} from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import InteractiveChallenge from '../InteractiveChallenge.astro';
 import Quiz from '../Quiz.astro';
+import RelatedProjects from './RelatedProjects.astro';
 import {lessonHref, learnHref, NAV_WORDS, type Locale} from '../../lib/routeSegments';
+import {NOTEBOOK_OPENERS} from '../../lib/notebookLinks';
 import {PAGE_STRINGS} from '../../lib/pageStrings';
 import {UI_STRINGS} from '../../lib/uiStrings';
 import {TRACK_ICONS, sectionName} from '../../lib/sections';
@@ -79,6 +80,11 @@ const jsonLd = {
         <span class="lesson-head__diff" style={`color:${diffColor}`}>{difficulty}</span>
         <span class="lesson-head__time">⏱ {estimatedMinutes} min</span>
         <span class="lesson-head__xp">⚡ +{xpReward} XP</span>
+        <span class="lesson-head__openers" aria-label="Open this lesson as a notebook">
+          {NOTEBOOK_OPENERS.map((o) => (
+            <a class="lesson-head__open" href={o.href(section, track, slug)} target="_blank" rel="noopener noreferrer">{o.label}</a>
+          ))}
+        </span>
         {tags.length > 0 && <span class="lesson-head__tags">{tags.join(' · ')}</span>}
       </div>
       <h1>{title}</h1>
@@ -98,17 +104,12 @@ const jsonLd = {
     </div>
 
     {hasChallenge && (
-      <>
-        <h2>🧩 {ps.practice}</h2>
-        <InteractiveChallenge
-          title={ps.practice}
-          code={`# Write your code here\nprint("Hello, World!")`}
-          expected="Hello, World!"
-          hint="Use print() to display text."
-          xp={5}
-          lessonId={lessonId}
-        />
-      </>
+      <RelatedProjects
+        locale={locale}
+        section={section}
+        track={track}
+        lessonSlug={entry.slug.split('/').pop() ?? ''}
+      />
     )}
 
     {hasQuiz && quiz.length > 0 && (
@@ -175,6 +176,15 @@ const jsonLd = {
   .lesson-head__tag { color: var(--accent); font-weight: 800; letter-spacing: .04em; text-transform: uppercase; font-size: .8rem; }
   .lesson-head__diff { font-weight: 800; text-transform: uppercase; font-size: .78rem; letter-spacing: .04em; }
   .lesson-head__time, .lesson-head__xp, .lesson-head__tags { font-size: .82rem; color: var(--ink-soft); font-weight: 600; }
+  .lesson-head__openers { display: inline-flex; gap: .3rem; flex-wrap: wrap; }
+  .lesson-head__open {
+    font-size: .78rem; font-weight: 700; text-decoration: none;
+    padding: .15rem .55rem; border-radius: var(--radius-pill);
+    background: var(--surface-2); color: var(--accent-text);
+    border: 1px solid var(--line); transition: border-color .15s ease, background .15s ease;
+    white-space: nowrap;
+  }
+  .lesson-head__open:hover { border-color: var(--accent); background: var(--accent-soft); }
   .lesson-head__tags { font-style: italic; }
   .lesson-head h1 { font-size: clamp(1.8rem, 4vw, 2.6rem); margin: .3rem 0; text-wrap: balance; }
   .lesson-head__sub { color: var(--ink-soft); font-size: 1.05rem; }

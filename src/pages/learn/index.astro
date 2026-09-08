@@ -39,6 +39,7 @@ const daMinutes = allLessons.filter(e => e.slug.includes('data-analysis')).reduc
     <div class="note">
       A <strong>module</strong> is your path through the course. Each module has lessons — finish them to earn <span class="text-gradient">+100 XP</span>.
       You can switch routes at any time. Keep your streak alive for bonus XP.
+      <span class="note__extra"><a href={`${base}cheatsheets`}>📋 Python cheatsheets</a> — the patterns to copy in every lesson.</span>
     </div>
   </section>
 
@@ -117,6 +118,10 @@ const daMinutes = allLessons.filter(e => e.slug.includes('data-analysis')).reduc
   .head__eyebrow { color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: .08em; font-size: .76rem; display: inline-flex; align-items: center; gap: .3rem; }
   .head h1 { font-size: clamp(2rem, 4vw, 2.8rem); margin: .4rem 0 .2rem; }
   .head p { color: var(--ink-soft); }
+
+  .note__extra { display: block; margin-top: .6rem; padding-top: .6rem; border-top: 1px solid rgba(124, 58, 237, 0.2); }
+  .note__extra a { color: var(--accent); font-weight: 600; text-decoration: none; }
+  .note__extra a:hover { text-decoration: underline; }
 
   .sections { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 1.25rem; margin: 1.5rem 0 2rem; }
   .sectioncard {

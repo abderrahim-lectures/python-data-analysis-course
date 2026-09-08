@@ -94,7 +94,6 @@ export const PAGE_STRINGS: Record<Locale, {
   prevLesson: string;
   nextLesson: string;
   objectives: string;
-  practice: string;
   trackNormalLabel: string;
   trackHardLabel: string;
   switchTo: string;
@@ -182,7 +181,7 @@ export const PAGE_STRINGS: Record<Locale, {
     track1Desc: 'The fundamentals: variables, types, control flow, functions — then a tiny language model.',
     track2Name: 'Pandas & Data',
     track2Desc: 'Ship a real notebook: pandas the way a data analyst actually uses it.',
-    markComplete: 'Mark complete ✓',
+    markComplete: 'Mark complete',
     completed: 'Completed ✓',
     projectMarkDone: 'Mark project as done ✓',
     projectDoneHint: 'Finish every step, then mark this project complete to claim its XP.',
@@ -194,7 +193,6 @@ export const PAGE_STRINGS: Record<Locale, {
     prevLesson: '← Previous',
     nextLesson: 'Next →',
     objectives: "What you'll learn:",
-    practice: 'Practice',
     trackNormalLabel: 'Normal',
     trackHardLabel: 'Hard',
     switchTo: 'Switch to',
@@ -282,7 +280,7 @@ export const PAGE_STRINGS: Record<Locale, {
     track1Desc: 'الأساسيات: المتغيّرات، الأنواع، التحكّم بالتدفّق، الدوال — ثم نموذج لغوي مصغّر.',
     track2Name: 'بانداس والبيانات',
     track2Desc: 'أنجز دفتر عمل حقيقي: بانداس كما يستخدمها محلّل البيانات فعليًا.',
-    markComplete: 'تحديد كمكتمل ✓',
+    markComplete: 'تحديد كمكتمل',
     completed: 'مكتمل ✓',
     projectMarkDone: 'حدد المشروع كمكتمل ✓',
     projectDoneHint: 'أكمل كل خطوة ثم حدد المشروع كمكتمل لجمع نقاطه.',
@@ -294,7 +292,6 @@ export const PAGE_STRINGS: Record<Locale, {
     prevLesson: '← السابق',
     nextLesson: 'التالي ←',
     objectives: 'ماذا ستتعلم:',
-    practice: 'تدريب',
     trackNormalLabel: 'عادي',
     trackHardLabel: 'صعب',
     switchTo: 'انتقل إلى',
@@ -382,7 +379,7 @@ export const PAGE_STRINGS: Record<Locale, {
     track1Desc: 'Los fundamentos: variables, tipos, control de flujo, funciones — y luego un pequeño modelo de lenguaje.',
     track2Name: 'Pandas y Datos',
     track2Desc: 'Publica un notebook real: pandas tal como lo usa de verdad un analista de datos.',
-    markComplete: 'Marcar como completado ✓',
+    markComplete: 'Marcar como completado',
     completed: 'Completado ✓',
     projectMarkDone: 'Marcar proyecto como terminado ✓',
     projectDoneHint: 'Termina todos los pasos y luego marca este proyecto como completo para ganar su XP.',
@@ -394,7 +391,6 @@ export const PAGE_STRINGS: Record<Locale, {
     prevLesson: '← Anterior',
     nextLesson: 'Siguiente →',
     objectives: 'Lo que aprenderás:',
-    practice: 'Practica',
     trackNormalLabel: 'Normal',
     trackHardLabel: 'Difícil',
     switchTo: 'Cambiar a',
@@ -482,7 +478,7 @@ export const PAGE_STRINGS: Record<Locale, {
     track1Desc: 'Les fondamentaux : variables, types, structures de contrôle, fonctions — puis un mini modèle de langage.',
     track2Name: 'Pandas & Données',
     track2Desc: 'Réalisez un vrai notebook : pandas tel qu’un analyste de données l’utilise vraiment.',
-    markComplete: 'Marquer comme terminé ✓',
+    markComplete: 'Marquer comme terminé',
     completed: 'Terminé ✓',
     projectMarkDone: 'Marquer ce projet comme terminé ✓',
     projectDoneHint: 'Terminez chaque étape puis marquez ce projet comme terminé pour gagner ses points.',
@@ -494,7 +490,6 @@ export const PAGE_STRINGS: Record<Locale, {
     prevLesson: '← Précédent',
     nextLesson: 'Suivant →',
     objectives: 'Ce que vous apprendrez :',
-    practice: 'Pratique',
     trackNormalLabel: 'Normal',
     trackHardLabel: 'Difficile',
     switchTo: 'Passer à',

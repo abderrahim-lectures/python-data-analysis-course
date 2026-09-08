@@ -1,0 +1,70 @@
+---
+// Shared cheatsheets page: /cheatsheets, /ar/ملخصات, /es/referencias, /fr/antiseche.
+// All markup lives here; each locale page is a thin <Cheatsheets locale="…"/> wrapper.
+import Base from '../layouts/Base.astro';
+import {CHEATSHEETS_CHROME, CHEAT_SECTIONS} from '../lib/cheatsheetsStrings';
+import {NAV_WORDS, type Locale} from '../lib/routeSegments';
+
+interface Props {
+  locale: Locale;
+}
+
+const {locale} = Astro.props;
+const c = CHEATSHEETS_CHROME[locale];
+const dir = locale === 'ar' ? 'rtl' : 'ltr';
+const alternates = {
+  en: NAV_WORDS.en.cheatsheets,
+  ar: `ar/${NAV_WORDS.ar.cheatsheets}`,
+  es: `es/${NAV_WORDS.es.cheatsheets}`,
+  fr: `fr/${NAV_WORDS.fr.cheatsheets}`,
+};
+---
+
+<Base title={c.title} description={c.description} lang={locale} dir={dir} alternates={alternates}>
+  <section class="hero">
+    <div class="container head">
+      <div class="head__eyebrow">📋 {c.heading}</div>
+      <h1>{c.heading}</h1>
+      <p>{c.intro}</p>
+    </div>
+  </section>
+
+  <section class="container cheats">
+    <ul class="cheats__list">
+      {CHEAT_SECTIONS.map((section) => (
+        <li class="cheats__section">
+          <h2 class="cheats__title"><span aria-hidden="true">{section.icon}</span> {section.title}</h2>
+          <ul class="cheats__cards">
+            {section.cards.map((card) => (
+              <li class="cheats__card">
+                <h3 class="cheats__card-title">{card.title}</h3>
+                <pre class="cheats__code" dir="ltr"><code>{card.code}</code></pre>
+                <p class="cheats__note">{card.note}</p>
+              </li>
+            ))}
+          </ul>
+        </li>
+      ))}
+    </ul>
+  </section>
+</Base>
+
+<style>
+  .cheats { padding: 0 0 3rem; }
+  .cheats__list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 1.75rem; }
+  .cheats__title { font-size: 1.25rem; margin: 0 0 .75rem; display: flex; align-items: center; gap: .5rem; }
+  .cheats__cards { list-style: none; padding: 0; margin: 0; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+  .cheats__card {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius-lg); padding: 1rem 1.15rem 1.1rem;
+    box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: .5rem;
+  }
+  .cheats__card-title { font-size: .95rem; margin: 0; color: var(--ink); }
+  .cheats__code {
+    background: var(--code-bg, #0b0a13); color: #e5e4f0;
+    border-radius: var(--radius-md); padding: .7rem .8rem; margin: 0;
+    font-size: .8rem; line-height: 1.5; overflow-x: auto;
+    white-space: pre; direction: ltr; text-align: left;
+  }
+  .cheats__note { color: var(--ink-soft); font-size: .85rem; line-height: 1.5; margin: 0; }
+</style>

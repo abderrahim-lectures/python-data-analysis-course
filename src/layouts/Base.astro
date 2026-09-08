@@ -142,19 +142,21 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
       <script type="application/ld+json" set:html={JSON.stringify(block)} />
     ))}
     <script is:inline>
-      // Persisted theme
+      // Persisted theme — must run before first paint to avoid a flash.
       const t = localStorage.getItem('pda:theme');
       if (t) document.documentElement.dataset.theme = t;
-      // Pyodide loading bar
-      const bar = document.createElement('div');
-      bar.className = 'pyodide-bar';
-      document.body.appendChild(bar);
-      window.addEventListener('pyodide:loading', () => bar.classList.add('pyodide-bar--active'));
-      window.addEventListener('pyodide:ready', () => bar.classList.remove('pyodide-bar--active'));
-      // Register PWA service worker
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js').catch(() => {});
-      }
+      document.addEventListener('DOMContentLoaded', () => {
+        // Pyodide loading bar
+        const bar = document.createElement('div');
+        bar.className = 'pyodide-bar';
+        document.body?.appendChild(bar);
+        window.addEventListener('pyodide:loading', () => bar.classList.add('pyodide-bar--active'));
+        window.addEventListener('pyodide:ready', () => bar.classList.remove('pyodide-bar--active'));
+        // Register PWA service worker
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('/sw.js').catch(() => {});
+        }
+      });
     </script>
   </head>
   <body>
@@ -168,7 +170,6 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
         <nav class="topnav__right" aria-label="Primary">
           <a class="topnav__link" href={`${locBase}${nav.learn}`}><Icon name="code" size={15} /> {t.nav.learn}</a>
           <a class="topnav__link" href={`${locBase}${nav.projects}`}><Icon name="globe" size={15} /> {t.nav.projects}</a>
-          <a class="topnav__link" href={`${locBase}playground`}><Icon name="expand" size={15} /> {t.nav.playground}</a>
           <a class="topnav__link" href={`${locBase}${nav.progress}`}><Icon name="trail" size={15} /> {t.nav.progress}</a>
           <div class="topnav__xp" id="xp-bar"></div>
           <div class="topnav__group" aria-label="Language">
@@ -225,7 +226,6 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
         <div class="footer__col">
           <h3><Icon name="chart" size={13} /> {t.footer.siteCol}</h3>
           <a href={`${locBase}${nav.progress}`}>{t.footer.myProgress}</a>
-          <a href={`${locBase}playground`}>{t.nav.playground}</a>
         </div>
         <div class="footer__col">
           <h3><Icon name="globe" size={13} /> {t.footer.moreCol}</h3>
@@ -242,7 +242,6 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
       <a class="mobilenav__item" href={locBase}><Icon name="home" size={18} /> <span>{t.mobileNav.home}</span></a>
       <a class="mobilenav__item" href={`${locBase}${nav.learn}`}><Icon name="code" size={18} /> <span>{t.mobileNav.learn}</span></a>
       <a class="mobilenav__item" href={`${locBase}${nav.projects}`}><Icon name="globe" size={18} /> <span>{t.mobileNav.projects}</span></a>
-      <a class="mobilenav__item" href={`${locBase}playground`}><Icon name="expand" size={18} /> <span>{t.mobileNav.playground}</span></a>
       <a class="mobilenav__item" href={`${locBase}${nav.progress}`}><Icon name="trail" size={18} /> <span>{t.mobileNav.progress}</span></a>
     </nav>
 

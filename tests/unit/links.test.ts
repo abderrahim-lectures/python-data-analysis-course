@@ -38,15 +38,16 @@ describe('course datasets are shipped', () => {
     expect(lines[0].trim().length).toBeGreaterThan(0);
   });
 
-  test('every dataset referenced in content is actually present', () => {
-    const referenced = new Set<string>();
-    for (const f of CONTENT) {
-      for (const m of readFileSync(f, 'utf8').matchAll(/\/datasets\/([\w.-]+\.csv)/g)) {
-        referenced.add(m[1]);
-      }
-    }
-    expect(referenced.size).toBeGreaterThan(0);
-    const missing = [...referenced].filter((n) => !existsSync(join('public/datasets', n)));
+  test('every manifest entry maps to a real shipped file', () => {
+    // Bare-filename references (open("slm-corpus.csv") / pd.read_csv(...))
+    // resolve through this manifest at runtime (runnable-cell.client.ts).
+    // The explicit /datasets/<name>.csv URL form the old test checked no
+    // longer exists in content — git history shows those links 404'd, which
+    // is exactly why bare-filename + manifest resolution replaced them.
+    const manifest = JSON.parse(readFileSync('public/datasets/index.json', 'utf8')) as Record<string, string>;
+    const entries = Object.entries(manifest);
+    expect(entries.length).toBeGreaterThan(0);
+    const missing = entries.filter(([, shipped]) => !existsSync(join('public/datasets', shipped)));
     expect(missing).toEqual([]);
   });
 });

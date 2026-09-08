@@ -1156,3 +1156,39 @@ Made all 116 project files (29 EN + 29 ES + 29 AR + 29 FR) properly listed, filt
 ### State of play (session end)
 - EN projects 100% tiered (123 gold / 12 owned by other agent / 0 pitch); all 96 notebook + README shipped; build clean; 510/510 tests.
 - Queued beyond translation: cite the new gold projects in python-101/data-analysis learn content (needs a handshake so learner links don't collide with the other agent's lesson edits).
+
+## Session 2026-09-07 (opencode) — README + CHANGELOG + full plan-doc refresh
+
+### Done
+- `README.md`: replaced the JupyterLite/FAB intro with the Astro reality — inline Pyodide cells + `/playground` + 49 notebook companions + datasets manifest + PWA. Development section now shows `npm run check / test / test:e2e / test:contrast / test:responsive / test:a11y` (uv/JupyterLite build instructions removed). Examples links fixed (`/projects/<slug>/`). Contributing flow updated (astro check + CDP suites, content lives in `src/content/lessons` + projects), translations bullet corrected (UI chrome + project pages translated; lesson body EN shared).
+- `CHANGELOG.md`: added `[2.0.0] — 2026-09-07` (Astro migration, 137-project catalog, notebooks 49, print-wrapping, i18n pageStrings/routeSegments, FAB/JupyterLite removed, 861-page build, test suites).
+- Rewrote for the post-migration architecture: `plan/README.md`, `plan/context.md`, `plan/playground.md`, `plan/site-structure.md`, `plan/i18n.md`, `plan/testing-and-verification.md`, `plan/deployment.md`, `plan/persistence.md`, `plan/pwa.md`, `plan/seo.md`, `plan/deferred.md`, `plan/section-1-python-101.md`, `plan/section-2-data-analysis.md`, `plan/sharing-progress.md` (feature dropped → scoped-back note), `plan/gamification.md` (no mode toggle), `plan/capstones.md` (content-collection catalog), `plan/development-workflow.md`, `plan/learning-path-flow.md` (no placement quiz/welcome-back), `plan/content-pattern.md`, `plan/code-organization.md`.
+- `plan/improvement-plan.md`: added a status note clarifying it describes the Docusaurus era (redesign superseded most items).
+- Updated `plan/README.md` index blurbs for every rewritten file.
+- i18n audit earlier this session concluded: EN `home*` "gaps" were a false positive (regex indentation artifact); `i18n.test.ts` enforces key parity and passes.
+
+### Verified
+- `vitest run tests/unit`: 498/498 pass (re-ran at end of docs batch).
+- `astro build`: 861 pages (unchanged since prior session).
+- Deploy workflow `deploy.yml` still builds JupyterLite + merges to `build/lite` — flagged in `plan/deployment.md` as vestigial to remove on next CI touch (workflow file is Claude-owned; not edited here).
+
+### Notes / for next work
+- `public/sw.js` precaches `/`, `/playground`, `/progress`, `/projects`; no install button in the Astro build (Docusaurus `InstallPwaButton` not carried over) — documented in `plan/pwa.md`.
+- `public/robots.txt` carries a stale `Disallow: /share` line (no `/share` route anymore) — flagged in `plan/sharing-progress.md`.
+- `public/llms.txt` still absent — noted in `plan/discoverability.md` as pending.
+- Cheatsheets decision (earlier this session, still open): build minimal cheatsheets now — add `cheatsheets` NAV_WORDS key (en/ar/es/fr) in `routeSegments.ts`, mirror hub pattern, 4 locale pages.
+- The 12 partial EN projects, locale 134-count parity (Bug C), and `main` merge for notebook opener URLs remain open from earlier sessions (other agent's surface).
+
+## Session 2026-09-08 (opencode) — cheatsheets page shipped + commit/push
+
+### Done
+- Built the minimal cheatsheets page (the open handoff item from 09-07): `cheatsheets` NAV_WORDS key (en `cheatsheets` / ar `ملخصات` / es `referencias` / fr `antiseche`, fixes the pre-existing `projets:`→`projects:` typo), `cheatsheetsHref()` in `src/lib/routeSegments.ts`, `CHEATSHEETS_CHROME` (4 locales) + `CHEAT_SECTIONS` (12 EN reference sections) in `src/lib/cheatsheetsStrings.ts`, shared `src/components/Cheatsheets.astro`, and 4 thin locale wrappers (`cheatsheets`, `ar/ملخصات`, `es/referencias`, `fr/antiseche`).
+- Discoverability in the opencode-owned EN hub only (`src/pages/learn/index.astro` note): added a `.note__extra` link to `/cheatsheets`. Nav/footer + locale-hub linking left for Claude (Base.astro + locale LearnHub are their surface).
+- Fixed import-depth bugs in the wrappers/component that a fresh `astro check` caught (`../../` vs `../../..` from `src/pages/[locale]/`).
+
+### Verified
+- `vitest run tests/unit` 498/498 (9 files), `astro check` clean at committed baseline except pre-existing `Quiz.astro:129` only, `astro build` 865 pages (was 861; +4 cheatsheets), smoke 40/40, responsive + a11y clean.
+- Committed + pushed on `redesign/astro-visual-novel` along with the 09-07 docs batch.
+
+### ⚠️ Handed back to Claude (their surface — not fixed forward)
+- **Contrast FAIL on `/projects/wordle-clone` (light theme)**: `.project-head__diff` pill text `rgb(167,243,208)` on the near-white card background = 1.22:1. Root cause: `DIFFICULTY_COLORS` in `src/lib/projectArt.ts:398` sets `text:'#a7f3d0'` for a dark-green pill *bg* `'#065f46'`, but `ProjectDetail.astro:83` applies only `color:` — never the pill `bg`. So the light text floats on white. Suggested fix: apply the `bg` from `DIFFICULTY_COLORS` to `.project-head__diff` (or switch `text` to a dark-on-white color) in `src/styles/project-detail.css:7`. Pre-existing (present at HEAD), only shows on project detail pages in light theme.

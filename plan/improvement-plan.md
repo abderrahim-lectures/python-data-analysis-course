@@ -1,5 +1,7 @@
 # Professional Course Improvement Plan
 
+> **Status:** this is the original improvement plan that motivated the redesign. It describes the *Docusaurus-era* site (Monaco inline editor + JupyterLite FAB) as "current". The redesign moved the site to **Astro with inline Pyodide runnable cells** — see [`astro-rebuild.md`](./astro-rebuild.md) for the current architecture and what superseded each item below (most of the editor/playground gaps it catalogs were resolved by the inline-cell runtime + `/playground` page).
+
 > **Pattern sources:** This plan draws on patterns from the `research-ideas` repo's skill system — particularly `conceptual-framework-design` (framework rigor), `lifelong-learning` (mistake memory + strategy capture), `adversarial-review` (honest review gates), `grilling` (pre-commitment stress-testing), and `wait-what` (plain-language re-explanation). These are adapted from research/workflow skills into course-design improvements.
 
 ## Executive Summary

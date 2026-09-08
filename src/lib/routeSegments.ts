@@ -24,11 +24,11 @@ export function detectLocale(pathname: string): Locale {
   return 'en';
 }
 
-export const NAV_WORDS: Record<Locale, {learn: string; projects: string; progress: string; credits: string}> = {
-  en: {learn: 'learn', projects: 'projects', progress: 'progress', credits: 'credits'},
-  ar: {learn: 'تعلم', projects: 'مشاريع', progress: 'تقدم', credits: 'المصادر'},
-  es: {learn: 'aprender', projects: 'proyectos', progress: 'progreso', credits: 'creditos'},
-  fr: {learn: 'apprendre', projects: 'projets', progress: 'progression', credits: 'credits'},
+export const NAV_WORDS: Record<Locale, {learn: string; projects: string; progress: string; credits: string; cheatsheets: string}> = {
+  en: {learn: 'learn', projects: 'projects', progress: 'progress', credits: 'credits', cheatsheets: 'cheatsheets'},
+  ar: {learn: 'تعلم', projects: 'مشاريع', progress: 'تقدم', credits: 'المصادر', cheatsheets: 'ملخصات'},
+  es: {learn: 'aprender', projects: 'proyectos', progress: 'progreso', credits: 'creditos', cheatsheets: 'referencias'},
+  fr: {learn: 'apprendre', projects: 'projets', progress: 'progression', credits: 'credits', cheatsheets: 'antiseche'},
 };
 
 export const TRACK_WORDS: Record<Locale, {normal: string; hard: string}> = {
@@ -88,6 +88,11 @@ export function creditsHref(locale: Locale, base: string): string {
   return `${localeBase(locale, base)}${NAV_WORDS[locale].credits}`;
 }
 
+/** `/cheatsheets`, `/ar/ملخصات`, ... */
+export function cheatsheetsHref(locale: Locale, base: string): string {
+  return `${localeBase(locale, base)}${NAV_WORDS[locale].cheatsheets}`;
+}
+
 /** Build a module href. Track words stay untranslated in URLs — only the
     learn nav word is localized (see NAV_WORDS). */
 export function moduleHref(locale: Locale, base: string, section: string, track: 'normal' | 'hard', moduleSlug: string): string {
@@ -99,3 +104,4 @@ export function moduleHref(locale: Locale, base: string, section: string, track:
 export function lessonHref(locale: Locale, base: string, section: string, track: 'normal' | 'hard', lessonSlug: string): string {
   return learnHref(locale, base, section, track, 'lessons', lessonSlug);
 }
+

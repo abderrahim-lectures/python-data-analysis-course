@@ -79,8 +79,8 @@ describe('lesson viewer page', () => {
     expect(src).toContain('data-lesson-id={lessonId}');
   });
 
-  test('imports InteractiveChallenge', () => {
-    expect(src).toContain('InteractiveChallenge');
+  test('imports RelatedProjects', () => {
+    expect(src).toContain('RelatedProjects');
   });
 
   test('has mark complete button', () => {
@@ -167,62 +167,6 @@ describe('Python 101 section index', () => {
   });
 });
 
-// ── InteractiveChallenge component ───────────────────────────────────
-describe('InteractiveChallenge component', () => {
-  const src = readFileSync('src/components/InteractiveChallenge.astro', 'utf8');
-
-  test('has contenteditable code area', () => {
-    expect(src).toContain('contenteditable="true"');
-  });
-
-  test('has Run and Check buttons', () => {
-    expect(src).toContain('data-run');
-    expect(src).toContain('data-check');
-  });
-
-  test('loads Pyodide via CDN singleton', () => {
-    expect(src).toContain('cdn.jsdelivr.net/pyodide');
-    expect(src).toContain('loadPyodide');
-  });
-
-  test('captures stdout for comparison', () => {
-    expect(src).toContain('setStdout');
-  });
-
-  test('calls recordChallenge for XP', () => {
-    expect(src).toContain('recordChallenge');
-  });
-
-  test('does not use addXP for challenges', () => {
-    expect(src).not.toContain('m.addXP');
-  });
-
-  test('awards XP only once per challenge', () => {
-    expect(src).toContain('awarded');
-  });
-
-  test('blocks js/pyodide bridge imports', () => {
-    expect(src).toContain('usesJsBridge');
-  });
-
-  test('sets stdin to prevent hanging on input()', () => {
-    expect(src).toContain('setStdin');
-  });
-
-  test('disables Check button during execution', () => {
-    expect(src).toContain('checkBtn.disabled = true');
-    expect(src).toContain('checkBtn.disabled = false');
-  });
-
-  test('has hint section', () => {
-    expect(src).toContain('Need a hint?');
-  });
-
-  test('shows XP badge in header', () => {
-    expect(src).toContain('ichallenge__xp');
-  });
-});
-
 // ── NotebookCell component ──────────────────────────────────────────
 describe('NotebookCell component', () => {
   const src = readFileSync('src/components/NotebookCell.astro', 'utf8');
@@ -239,8 +183,8 @@ describe('NotebookCell component', () => {
     expect(src).toContain('data-run');
   });
 
-  test('has expand/playground link', () => {
-    expect(src).toContain('data-expand');
+  test('no expand/playground link', () => {
+    expect(src).not.toContain('data-expand');
   });
 
   test('uses slot for markdown content', () => {
