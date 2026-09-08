@@ -21,7 +21,7 @@ const alternates = {
 const gs = emptyStats();
 
 const xp = xpProgress();
-const py = trackProgress('python-101', 5);
+const py = trackProgress('python-101', 7);
 const da = trackProgress('data-analysis', 5);
 const quests = questsToShow();
 const sp = streakProgress();
@@ -397,7 +397,7 @@ const i18nData = {
 
   <div id="progress-i18n" hidden>{JSON.stringify(i18nData).replace(/</g, '\u003c')}</div>
   <script>
-    import {xpProgress, questsToShow, streakProgress, isWeekComplete, rankFor, RANK_EMOJIS, getActivityLog} from '../lib/gameState.ts';
+    import {xpProgress, questsToShow, streakProgress, trackProgress, rankFor, RANK_EMOJIS, getActivityLog} from '../lib/gameState.ts';
     import {computeGameStats} from '../lib/gamestats.ts';
 
     const I18N = JSON.parse(document.getElementById('progress-i18n')?.textContent ?? '{}');
@@ -501,18 +501,18 @@ const i18nData = {
       set('xpbar-text', `${xp.xp} ${T.xpUnit}`);
 
       // Tracks: mark each station done/undone, update the "done" and
-      // "+N XP earned" text per track.
-      for (const [section, weeks] of [['python-101', [1, 2, 3, 4, 5]], ['data-analysis', [6, 7, 8, 9, 10]]] as const) {
+      // "+N XP earned" text per track. Week numbering matches the module
+      // count per track and trackProgress on the server (w <= done).
+      for (const [section, weeks] of [['python-101', [1, 2, 3, 4, 5, 6, 7]], ['data-analysis', [1, 2, 3, 4, 5]]] as const) {
         const list = document.querySelector(`.stations[data-track="${section}"]`);
-        let done = 0;
+        const tp = trackProgress(section, weeks.length);
         weeks.forEach((w) => {
-          const complete = isWeekComplete(section, w);
-          if (complete) done++;
+          const complete = w <= tp.done;
           const li = list?.querySelector(`li[data-week="${w}"]`);
           li?.classList.toggle('station--done', complete);
         });
-        set(`pct-${section}`, fmt(T.pctDone, {done, total: weeks.length}));
-        set(`xp-${section}`, fmt(T.xpEarned, {n: done * 100}));
+        set(`pct-${section}`, fmt(T.pctDone, {done: tp.done, total: weeks.length}));
+        set(`xp-${section}`, fmt(T.xpEarned, {n: tp.done * 100}));
       }
 
       // Quests grid + milestones preview.

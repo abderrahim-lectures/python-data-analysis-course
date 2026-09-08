@@ -104,8 +104,8 @@ check('completion survives a reload', await evaluate('document.querySelector("[d
 
 console.log('\nprogress page reflects it');
 await goto('/progress');
-// Note: progress page uses week-based UI with 5 modules, trackProgress counts unique lessons
-check('the track counter advances', await evaluate('document.getElementById("pct-python-101").textContent'), '5/5 done');
+// Note: python-101 has 7 modules, trackProgress counts unique lessons
+check('the track counter advances', await evaluate('document.getElementById("pct-python-101").textContent'), '1/7 done');
 check('the streak is no longer stuck at 0', await evaluate('document.getElementById("p-streak").textContent'), '1🔥');
 check('quests are no longer 0/32', await evaluate('document.getElementById("p-quests").textContent'), '2/32');
 
@@ -120,6 +120,39 @@ await goto('/progress');
 check('earned XP is preserved', await evaluate('document.getElementById("xpbar-text").textContent'), '175 XP');
 check('the dead streak is repaired', await evaluate('document.getElementById("p-streak").textContent'), '1🔥');
 check('missing quests are backfilled', await evaluate('document.getElementById("p-quests").textContent'), '4/32');
+
+console.log('\nweek-model parity');
+// Complete all 7 python lessons + 2 data lessons: python stations 1-7 must
+// light (previously capped at 5) and data must count 2/5, with per-station
+// done state matching trackProgress on both server and client.
+const fullState = JSON.stringify({
+  xp: 700,
+  lessonsCompleted: {
+    'python-101/normal/01-printing': true, 'python-101/normal/02-variables': true,
+    'python-101/normal/03-control-flow': true, 'python-101/normal/04-functions': true,
+    'python-101/normal/05-strings': true, 'python-101/normal/06-data-structures': true,
+    'python-101/normal/07-file-io': true,
+    'data-analysis/normal/05-titanic-eda': true,
+    'data-analysis/normal/04-groupby-aggregation': true,
+  },
+  lessonsRun: {
+    'python-101/normal/01-printing': true, 'python-101/normal/02-variables': true,
+    'python-101/normal/03-control-flow': true, 'python-101/normal/04-functions': true,
+    'python-101/normal/05-strings': true, 'python-101/normal/06-data-structures': true,
+    'python-101/normal/07-file-io': true,
+    'data-analysis/normal/05-titanic-eda': true,
+    'data-analysis/normal/04-groupby-aggregation': true,
+  },
+  quizCorrect: 0, quizTotal: 0, streak: 3, bestStreak: 3, lastActive: '',
+  quests: {}, badges: [],
+});
+await evaluate(`(localStorage.setItem('pda:state', '${fullState}'), 1)`);
+await goto('/progress');
+check('all 7 python stations light', await evaluate('document.querySelector(".stations[data-track=\'python-101\'] li[data-week=\'7\']").classList.contains("station--done")'), true);
+check('python track reports 7/7 done', await evaluate('document.getElementById("pct-python-101").textContent'), '7/7 done');
+check('data track counts progressive done', await evaluate('document.getElementById("pct-data-analysis").textContent'), '2/5 done');
+check('data stations beyond done stay dim', await evaluate('document.querySelector(".stations[data-track=\'data-analysis\'] li[data-week=\'3\']").classList.contains("station--done")'), false);
+await evaluate('(localStorage.setItem("pda:state", JSON.stringify({xp:0,lessonsCompleted:{},lessonsRun:{},quizCorrect:0,quizTotal:0,streak:0,bestStreak:0,lastActive:\'\',quests:{},badges:[]})),1)');
 
 console.log('\nplayground');
 await goto('/playground');

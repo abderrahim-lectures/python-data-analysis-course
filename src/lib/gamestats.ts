@@ -44,7 +44,7 @@ export interface Diagnostics {
 }
 
 const TRACKS = [
-  { id: 'python-101', label: 'Python 101', total: 5 },
+  { id: 'python-101', label: 'Python 101', total: 7 },
   { id: 'data-analysis', label: 'Pandas & Data', total: 5 },
 ];
 
@@ -131,7 +131,7 @@ export function emptyStats(): GameStats {
     level: 1, rank: 'Bronze', xp: 0, xpToNext: 100,
     lanes: TRACKS.map(t => ({ ...t, done: 0, pct: 0 })),
     quiz: { correct: 0, total: 0, winRate: 0 },
-    lessonsDone: 0, lessonsTotal: 10, streak: 0, bestStreak: 0,
+    lessonsDone: 0, lessonsTotal: TRACKS.reduce((a, t) => a + t.total, 0), streak: 0, bestStreak: 0,
     kda: { kills: 0, deaths: 0, assists: 0, ratio: 0, label: 'Rookie' },
     diagnostics: { improvementPct: 0, nGainEquivalent: 0, acceptancePct: 0, usefulnessPct: 0, learningExperiencePct: 0 },
     badges: [], questsDone: 0, questsTotal: 11,
