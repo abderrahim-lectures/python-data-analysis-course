@@ -19,7 +19,8 @@
     "test:responsive": "node tests/e2e/responsive.mjs",
     "test:all": "npm run test && npm run test:e2e && npm run test:a11y && npm run test:hreflang && npm run test:contrast && npm run test:responsive",
     "test:a11y": "node tests/e2e/a11y.mjs",
-    "test:hreflang": "node tests/e2e/hreflang.mjs"
+    "test:hreflang": "node tests/e2e/hreflang.mjs",
+    "test:lesson": "node tests/e2e/lesson-runtime.mjs"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
