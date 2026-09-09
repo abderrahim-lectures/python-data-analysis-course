@@ -71,6 +71,47 @@ def _wrap_bare_expr(src):
     return src[:start_off] + 'print(repr(\\n' + expr + '\\n))' + src[end_off:]
 `;
 
+// Run a cell against a Pyodide model and route script stdout/stderr to the
+// output lines, restoring notebook-style `print(repr(...))` for trailing bare
+// expressions. Exported for unit tests; initCell wires it to the DOM.
+export interface CellRuntime {
+  appendLine(kind: 'out' | 'err', text: string): void;
+  engine: {
+    setStdout(cb: {batched: (s: string) => void}): void;
+    setStderr(cb: {batched: (s: string) => void}): void;
+    setStdin(cb: {stdin: () => string}): void;
+    loadPackagesFromImports(src: string): Promise<unknown>;
+    runPython(src: string): Promise<(src: string) => string>;
+    runPythonAsync(src: string): Promise<unknown>;
+  };
+}
+export async function runCellCode(code: string, rt: CellRuntime): Promise<void> {
+  rt.engine.setStdout({batched: (s: string) => rt.appendLine('out', s)});
+  rt.engine.setStderr({batched: (s: string) => rt.appendLine('err', s)});
+  rt.engine.setStdin({stdin: () => window.prompt('') ?? ''});
+  try {
+    if (usesJsBridge(code)) {
+      rt.appendLine('err', m.blocked_bridge());
+      return;
+    }
+    await rt.engine.loadPackagesFromImports(code);
+    const toRun = await rt.engine.runPython(WRAP_EXPR_SRC + '_wrap_bare_expr');
+    await rt.engine.runPythonAsync(toRun(code));
+  } catch (e) {
+    const raw = e instanceof Error ? e.message : String(e);
+    rt.appendLine('err', friendlyError(raw));
+  }
+}
+
+// Award XP for completing a lesson run and report how much was gained and the
+// pre-award balance (the first-success toast keys off xpBefore === 0).
+export async function awardLessonXp(lessonId: string): Promise<{gained: number; xpBefore: number}> {
+  const gs = await import('./gameState.ts');
+  const xpBefore = gs.loadState().xp;
+  gs.addXP(lessonId);
+  return {gained: gs.loadState().xp - xpBefore, xpBefore};
+}
+
 const mountedDatasets = new Set<string>();
 async function mountDatasets(engine: any): Promise<void> {
   const manifest = await getDatasetManifest();
@@ -147,31 +188,13 @@ function initCell(cell: Element): void {
     run.disabled = false;
     run.classList.remove('cell__run--loading');
     await mountDatasets(engine);
-    engine.setStdout({batched: (s: string) => appendLine('out', s)});
-    engine.setStderr({batched: (s: string) => appendLine('err', s)});
-    engine.setStdin({stdin: () => window.prompt('') ?? ''});
-    try {
-      if (usesJsBridge(src)) {
-        appendLine('err', m.blocked_bridge());
-        return;
-      }
-      await engine.loadPackagesFromImports(src);
-      const toRun = await engine.runPython(WRAP_EXPR_SRC + '_wrap_bare_expr');
-      await engine.runPythonAsync(toRun(src));
-    } catch (e) {
-      const raw = e instanceof Error ? e.message : String(e);
-      const friendly = friendlyError(raw);
-      appendLine('err', friendly);
-    }
+    await runCellCode(src, {appendLine, engine});
     if (!awarded && lessonId) {
       awarded = true;
       try {
-        const gs = await import('./gameState.ts');
-        const prevXp = gs.loadState().xp;
-        gs.addXP(lessonId);
-        const gained = gs.loadState().xp - prevXp;
+        const {gained, xpBefore} = await awardLessonXp(lessonId);
         cell.dispatchEvent(new CustomEvent('lesson:complete', {bubbles: true, detail: {lessonId, xp: gained}}));
-        if (prevXp === 0) {
+        if (xpBefore === 0) {
           const style = document.createElement('style');
           style.textContent = `.firstsuccess-toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--accent);color:var(--accent-contrast);padding:.85rem 1.5rem;border-radius:var(--radius-lg);font-weight:700;font-size:.9rem;box-shadow:var(--shadow-md);opacity:0;transition:all .4s cubic-bezier(.4,0,.2,1);z-index:9999;pointer-events:none;white-space:nowrap}.firstsuccess-toast--visible{opacity:1;transform:translateX(-50%) translateY(0)}`;
           document.head.appendChild(style);

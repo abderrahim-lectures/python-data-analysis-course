@@ -43,8 +43,12 @@ describe('runnable cells', () => {
   });
 
   test('screens code through the bridge guard before executing', () => {
-    expect(src).toContain('usesJsBridge(src)');
-    expect(src.indexOf('usesJsBridge(src)')).toBeLessThan(src.indexOf('runPythonAsync'));
+    // The guard runs inside the extracted runCellCode helper, which every Run
+    // handler delegates to — the check must precede any engine execution.
+    const guardIdx = src.indexOf('usesJsBridge(code)');
+    expect(guardIdx).toBeGreaterThan(-1);
+    // Guard runs before any engine execution at the runCellCode call site.
+    expect(guardIdx).toBeLessThan(src.indexOf('rt.engine.runPythonAsync('));
   });
 });
 

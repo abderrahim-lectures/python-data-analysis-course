@@ -76,6 +76,7 @@ const TAG_EMOJI: Array<[string, string]> = [
   ['data-visualization', '📊'],
   ['developer-tools', '🛠️'],
   ['utility', '🧰'],
+  ['Utility', '🧰'],
 ];
 
 const FALLBACK_EMOJI = '💻';

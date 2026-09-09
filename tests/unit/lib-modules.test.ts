@@ -119,6 +119,7 @@ describe('routeSegments', () => {
     expect(detectLocale('/learn/...')).toBe('en');
     expect(detectLocale('/ar/')).toBe('ar');
     expect(detectLocale('/fr/learn/aprender')).toBe('fr');
+    expect(detectLocale('/learn/es/titanic')).toBe('es');
   });
 
   test('trackFromWord maps words per locale and rejects strangers', () => {

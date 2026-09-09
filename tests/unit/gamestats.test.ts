@@ -131,6 +131,37 @@ describe('computeGameStats', () => {
     expect(r.engagement.longestSession).toBeLessThanOrEqual(5);
   });
 
+  test('KDA label buckets Legend and On Fire', async () => {
+    const {gs, state} = await fresh();
+    let s = state.loadState();
+    s.quizCorrect = 5;
+    s.quizTotal = 5;
+    state.saveState(s);
+    expect(gs.computeGameStats().kda.label).toBe('Legend');
+
+    s = state.loadState();
+    s.quizCorrect = 3;
+    s.quizTotal = 4;
+    state.saveState(s);
+    expect(gs.computeGameStats().kda.label).toBe('On Fire');
+  });
+
+  test('returnRate counts returning days when activity spans multiple days', async () => {
+    const {gs, state} = await fresh();
+    const s = state.loadState();
+    s.lessonsCompleted = {
+      'python-101/normal/01-printing': true,
+      'python-101/normal/02-variables': true,
+      'python-101/normal/03-strings': true,
+    };
+    s.lastActive = '2026-09-07';
+    state.saveState(s);
+
+    const r = gs.computeGameStats();
+    expect(r.activity.daysActive).toBeGreaterThan(1);
+    expect(r.engagement.returnRate).toBe(100);
+  });
+
   test('zero XP on a day with no activity keeps daysActive at 0', async () => {
     const {gs} = await fresh();
     const r = gs.computeGameStats();
