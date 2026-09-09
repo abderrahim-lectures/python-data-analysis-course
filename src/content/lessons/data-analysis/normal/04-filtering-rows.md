@@ -50,8 +50,8 @@ Filtering is how you focus on the subset of data that matters. You create a **bo
 ```python
 import pandas as pd
 
-url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
-df = pd.read_csv(url)
+# titanic.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("titanic.csv")
 
 # Filter passengers older than 30
 older = df[df["Age"] > 30]
@@ -168,8 +168,8 @@ From the Titanic dataset, filter to find:
 ```python
 import pandas as pd
 
-url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
-df = pd.read_csv(url)
+# titanic.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("titanic.csv")
 
 high_fare = df[df["Fare"] > 100]
 print(f"High fare passengers: {len(high_fare)}")

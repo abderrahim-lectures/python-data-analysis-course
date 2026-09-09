@@ -7,7 +7,7 @@ order: 9
 difficulty: "intermediate"
 estimatedMinutes: 30
 learningObjectives:
-  - "Load the Titanic dataset from a URL"
+  - "Load the Titanic dataset and inspect its structure"
   - "Inspect the dataset structure with head(), info(), describe(), and value_counts()"
   - "Identify data quality issues: missing values, wrong types, inconsistencies"
   - "Document initial observations before cleaning"
@@ -52,8 +52,8 @@ The RMS Titanic sank on April 15, 1912, after hitting an iceberg. This dataset c
 ```python
 import pandas as pd
 
-url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
-df = pd.read_csv(url)
+# titanic.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("titanic.csv")
 ```
 
 ## First look at the data
@@ -206,8 +206,8 @@ Load the Titanic dataset and answer these questions:
 ```python
 import pandas as pd
 
-url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
-df = pd.read_csv(url)
+# titanic.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("titanic.csv")
 
 alone = ((df["SibSp"] == 0) & (df["Parch"] == 0)).sum()
 print(f"Traveling alone: {alone}")

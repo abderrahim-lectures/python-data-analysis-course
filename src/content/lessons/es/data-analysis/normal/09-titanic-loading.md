@@ -7,7 +7,7 @@ order: 9
 difficulty: "intermediate"
 estimatedMinutes: 30
 learningObjectives:
-  - "Cargar el conjunto de datos del Titanic desde una URL"
+  - "Cargar el conjunto de datos del Titanic e inspeccionar su estructura"
   - "Inspeccionar la estructura del conjunto de datos con head(), info(), describe() y value_counts()"
   - "Identificar problemas de calidad de datos: valores faltantes, tipos incorrectos, inconsistencias"
   - "Documentar las observaciones iniciales antes de limpiar"
@@ -52,8 +52,8 @@ El RMS Titanic se hundió el 15 de abril de 1912 después de chocar con un icebe
 ```python
 import pandas as pd
 
-url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
-df = pd.read_csv(url)
+# titanic.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("titanic.csv")
 ```
 
 ## Primer vistazo a los datos
@@ -206,8 +206,8 @@ Carga el conjunto de datos del Titanic y responde estas preguntas:
 ```python
 import pandas as pd
 
-url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
-df = pd.read_csv(url)
+# titanic.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("titanic.csv")
 
 alone = ((df["SibSp"] == 0) & (df["Parch"] == 0)).sum()
 print(f"Traveling alone: {alone}")

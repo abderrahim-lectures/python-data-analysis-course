@@ -50,8 +50,8 @@ Cette leçon rassemble tout ce que vous avez appris dans les modules précédent
 ```python
 import pandas as pd
 
-url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
-df = pd.read_csv(url)
+# titanic.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("titanic.csv")
 ```
 
 ## Étape 1 : Nettoyer les données
@@ -247,8 +247,8 @@ Reproduisez cette analyse avec une question différente : le fait d'avoir un com
 ```python
 import pandas as pd
 
-url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
-df = pd.read_csv(url)
+# titanic.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("titanic.csv")
 
 df["FamilySize"] = df["SibSp"] + df["Parch"] + 1
 df["Group"] = pd.cut(df["FamilySize"], bins=[0, 1, 4, 20], labels=["Solo", "Small", "Large"])

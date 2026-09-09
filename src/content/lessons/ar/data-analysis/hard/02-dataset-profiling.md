@@ -53,7 +53,7 @@ quiz:
 ```python
 import pandas as pd
 
-df = pd.read_csv("StudentsPerformance.csv")
+df = pd.read_csv("students-performance.csv")
 
 # 1. Shape — how much data do we have?
 print(f"Rows: {df.shape[0]}, Columns: {df.shape[1]}")
@@ -215,9 +215,8 @@ def profile_dataset(df, name="Dataset"):
 ```python
 import pandas as pd
 
-# Load the dataset (adjust path as needed)
-url = "https://raw.githubusercontent.com/rashida048/Datasets/master/StudentsPerformance.csv"
-df = pd.read_csv(url)
+# students-performance.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("students-performance.csv")
 
 # Quick profile
 print("Shape:", df.shape)
@@ -274,8 +273,8 @@ def quick_profile(df):
         },
     }
 
-url = "https://raw.githubusercontent.com/rashida048/Datasets/master/StudentsPerformance.csv"
-df = pd.read_csv(url)
+# students-performance.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("students-performance.csv")
 report = quick_profile(df)
 
 for key, value in report.items():

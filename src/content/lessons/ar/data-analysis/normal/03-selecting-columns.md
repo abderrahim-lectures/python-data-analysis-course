@@ -52,8 +52,8 @@ quiz:
 ```python
 import pandas as pd
 
-url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
-df = pd.read_csv(url)
+# titanic.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("titanic.csv")
 ```
 
 ## تحديد عمود واحد
@@ -152,8 +152,8 @@ age_cols = [col for col in df.columns if "age" in col.lower()]
 ```python
 import pandas as pd
 
-url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
-df = pd.read_csv(url)
+# titanic.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("titanic.csv")
 
 subset = df[["Name", "Pclass", "Fare"]]
 print(subset.head())

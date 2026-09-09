@@ -73,8 +73,8 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-url = "https://raw.githubusercontent.com/rashida048/Datasets/master/StudentsPerformance.csv"
-df = pd.read_csv(url)
+# students-performance.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("students-performance.csv")
 
 fig, ax = plt.subplots(figsize=(10, 6))
 
@@ -255,8 +255,8 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-url = "https://raw.githubusercontent.com/rashida048/Datasets/master/StudentsPerformance.csv"
-df = pd.read_csv(url)
+# students-performance.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("students-performance.csv")
 
 # Story: Test preparation closes the gap
 fig, axes = plt.subplots(1, 2, figsize=(14, 6))
@@ -306,8 +306,8 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 
-url = "https://raw.githubusercontent.com/rashida048/Datasets/master/StudentsPerformance.csv"
-df = pd.read_csv(url)
+# students-performance.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("students-performance.csv")
 
 fig = plt.figure(figsize=(16, 10))
 gs = gridspec.GridSpec(2, 2, hspace=0.35, wspace=0.3, height_ratios=[1.5, 1])

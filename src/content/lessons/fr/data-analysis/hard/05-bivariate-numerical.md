@@ -56,8 +56,8 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-url = "https://raw.githubusercontent.com/rashida048/Datasets/master/StudentsPerformance.csv"
-df = pd.read_csv(url)
+# students-performance.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("students-performance.csv")
 
 fig, ax = plt.subplots(figsize=(8, 6))
 ax.scatter(df["math score"], df["reading score"], alpha=0.5, edgecolors="black", linewidth=0.5)
@@ -218,8 +218,8 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-url = "https://raw.githubusercontent.com/rashida048/Datasets/master/StudentsPerformance.csv"
-df = pd.read_csv(url)
+# students-performance.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("students-performance.csv")
 
 # Scatter with regression
 fig, axes = plt.subplots(1, 2, figsize=(14, 6))
@@ -265,8 +265,8 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-url = "https://raw.githubusercontent.com/rashida048/Datasets/master/StudentsPerformance.csv"
-df = pd.read_csv(url)
+# students-performance.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("students-performance.csv")
 
 fig, axes = plt.subplots(2, 2, figsize=(14, 12))
 fig.suptitle("Math vs Writing Scores — Four Views", fontsize=14, fontweight="bold")

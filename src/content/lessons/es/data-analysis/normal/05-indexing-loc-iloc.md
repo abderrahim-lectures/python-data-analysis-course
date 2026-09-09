@@ -50,8 +50,8 @@ La indexación básica por corchetes `df[mask]` funciona para filtrar filas y `d
 ```python
 import pandas as pd
 
-url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
-df = pd.read_csv(url)
+# titanic.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("titanic.csv")
 ```
 
 ## loc: selección basada en etiquetas
@@ -190,8 +190,8 @@ Del conjunto de datos del Titanic:
 ```python
 import pandas as pd
 
-url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
-df = pd.read_csv(url)
+# titanic.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("titanic.csv")
 
 # First 3 rows, first 4 columns
 print(df.iloc[0:3, 0:4])

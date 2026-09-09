@@ -54,8 +54,8 @@ GroupBy est l'une des fonctionnalités les plus puissantes de pandas. Il suit un
 ```python
 import pandas as pd
 
-url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
-df = pd.read_csv(url)
+# titanic.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("titanic.csv")
 ```
 
 ## Grouper par une colonne unique
@@ -182,8 +182,8 @@ print(large_groups["Pclass"].value_counts())
 ```python
 import pandas as pd
 
-url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
-df = pd.read_csv(url)
+# titanic.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("titanic.csv")
 
 print("Average fare by port:")
 print(df.groupby("Embarked")["Fare"].mean())

@@ -50,8 +50,8 @@ Basic bracket indexing `df[mask]` works for row filtering and `df["col"]` for co
 ```python
 import pandas as pd
 
-url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
-df = pd.read_csv(url)
+# titanic.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("titanic.csv")
 ```
 
 ## loc: label-based selection
@@ -190,8 +190,8 @@ From the Titanic dataset:
 ```python
 import pandas as pd
 
-url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
-df = pd.read_csv(url)
+# titanic.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("titanic.csv")
 
 # First 3 rows, first 4 columns
 print(df.iloc[0:3, 0:4])

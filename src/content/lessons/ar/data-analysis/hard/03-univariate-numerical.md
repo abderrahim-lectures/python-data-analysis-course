@@ -54,8 +54,8 @@ quiz:
 import pandas as pd
 import numpy as np
 
-url = "https://raw.githubusercontent.com/rashida048/Datasets/master/StudentsPerformance.csv"
-df = pd.read_csv(url)
+# students-performance.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("students-performance.csv")
 
 scores = df["math score"]
 
@@ -197,8 +197,8 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-url = "https://raw.githubusercontent.com/rashida048/Datasets/master/StudentsPerformance.csv"
-df = pd.read_csv(url)
+# students-performance.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("students-performance.csv")
 
 reading = df["reading score"]
 
@@ -246,8 +246,8 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-url = "https://raw.githubusercontent.com/rashida048/Datasets/master/StudentsPerformance.csv"
-df = pd.read_csv(url)
+# students-performance.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("students-performance.csv")
 
 math = df["math score"]
 mean_val = math.mean()

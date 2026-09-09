@@ -188,8 +188,8 @@ combined = pd.concat([df_a, df_b], axis=1)
 ## Ejemplo práctico: datos del Titanic
 
 ```python
-url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
-titanic = pd.read_csv(url)
+# titanic.csv ships with the course — load it from the browser file system.
+titanic = pd.read_csv("titanic.csv")
 
 # Create a summary DataFrame
 class_stats = titanic.groupby("Pclass").agg(

@@ -57,9 +57,8 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-# Load directly from URL
-url = "https://raw.githubusercontent.com/rashida048/Datasets/master/StudentsPerformance.csv"
-df = pd.read_csv(url)
+# students-performance.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("students-performance.csv")
 
 print(f"Dataset loaded: {df.shape[0]} rows, {df.shape[1]} columns")
 print(f"\nColumns: {list(df.columns)}")
@@ -278,8 +277,8 @@ for q, a in answers.items():
 ```python
 import pandas as pd
 
-url = "https://raw.githubusercontent.com/rashida048/Datasets/master/StudentsPerformance.csv"
-df = pd.read_csv(url)
+# students-performance.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("students-performance.csv")
 
 score_cols = ["math score", "reading score", "writing score"]
 cat_cols = ["gender", "race/ethnicity", "parental level of education",

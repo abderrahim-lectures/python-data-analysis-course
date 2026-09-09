@@ -7,7 +7,7 @@ order: 9
 difficulty: "intermediate"
 estimatedMinutes: 30
 learningObjectives:
-  - "Charger le jeu de données Titanic depuis une URL"
+  - "Charger le jeu de données Titanic et inspecter sa structure"
   - "Inspecter la structure du jeu de données avec head(), info(), describe() et value_counts()"
   - "Identifier les problèmes de qualité des données : valeurs manquantes, types erronés, incohérences"
   - "Documenter les observations initiales avant le nettoyage"
@@ -52,8 +52,8 @@ Le RMS Titanic a coulé le 15 avril 1912 après avoir heurté un iceberg. Ce jeu
 ```python
 import pandas as pd
 
-url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
-df = pd.read_csv(url)
+# titanic.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("titanic.csv")
 ```
 
 ## Premier aperçu des données
@@ -206,8 +206,8 @@ Chargez le jeu de données Titanic et répondez à ces questions :
 ```python
 import pandas as pd
 
-url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
-df = pd.read_csv(url)
+# titanic.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("titanic.csv")
 
 alone = ((df["SibSp"] == 0) & (df["Parch"] == 0)).sum()
 print(f"Traveling alone: {alone}")

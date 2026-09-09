@@ -121,8 +121,8 @@ df = pd.read_csv(
 For this course we will use the Titanic dataset, which is available at:
 
 ```python
-url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
-df = pd.read_csv(url)
+# titanic.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("titanic.csv")
 ```
 
 ## Inspecting your data

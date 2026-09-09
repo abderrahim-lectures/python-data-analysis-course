@@ -55,8 +55,8 @@ La corrélation de Pearson (r) mesure l'association linéaire entre deux variabl
 import pandas as pd
 import numpy as np
 
-url = "https://raw.githubusercontent.com/rashida048/Datasets/master/StudentsPerformance.csv"
-df = pd.read_csv(url)
+# students-performance.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("students-performance.csv")
 
 # Compute Pearson correlation between two variables
 r = df["math score"].corr(df["reading score"], method="pearson")
@@ -225,8 +225,8 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-url = "https://raw.githubusercontent.com/rashida048/Datasets/master/StudentsPerformance.csv"
-df = pd.read_csv(url)
+# students-performance.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("students-performance.csv")
 
 num_cols = df.select_dtypes(include="number")
 corr = num_cols.corr()
@@ -275,8 +275,8 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-url = "https://raw.githubusercontent.com/rashida048/Datasets/master/StudentsPerformance.csv"
-df = pd.read_csv(url)
+# students-performance.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("students-performance.csv")
 
 scores = df[["math score", "reading score", "writing score"]]
 

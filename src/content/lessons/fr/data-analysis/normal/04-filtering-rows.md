@@ -50,8 +50,8 @@ Le filtrage vous permet de vous concentrer sur le sous-ensemble de données qui 
 ```python
 import pandas as pd
 
-url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
-df = pd.read_csv(url)
+# titanic.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("titanic.csv")
 
 # Filter passengers older than 30
 older = df[df["Age"] > 30]
@@ -168,8 +168,8 @@ Cette approche rend votre code beaucoup plus facile à lire et à déboguer.
 ```python
 import pandas as pd
 
-url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
-df = pd.read_csv(url)
+# titanic.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("titanic.csv")
 
 high_fare = df[df["Fare"] > 100]
 print(f"High fare passengers: {len(high_fare)}")

@@ -55,8 +55,8 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-url = "https://raw.githubusercontent.com/rashida048/Datasets/master/StudentsPerformance.csv"
-df = pd.read_csv(url)
+# students-performance.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("students-performance.csv")
 
 # Single faceting variable
 g = sns.FacetGrid(df, col="gender", row="lunch", height=4, aspect=1.2)
@@ -245,8 +245,8 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 
-url = "https://raw.githubusercontent.com/rashida048/Datasets/master/StudentsPerformance.csv"
-df = pd.read_csv(url)
+# students-performance.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("students-performance.csv")
 
 fig = plt.figure(figsize=(16, 12))
 gs = gridspec.GridSpec(2, 3, hspace=0.35, wspace=0.3)
@@ -314,8 +314,8 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 
-url = "https://raw.githubusercontent.com/rashida048/Datasets/master/StudentsPerformance.csv"
-df = pd.read_csv(url)
+# students-performance.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("students-performance.csv")
 
 fig = plt.figure(figsize=(16, 14))
 gs = gridspec.GridSpec(2, 2, hspace=0.35, wspace=0.3)

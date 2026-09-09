@@ -50,8 +50,8 @@ Casi todos los conjuntos de datos reales tienen valores faltantes. Si los ignora
 ```python
 import pandas as pd
 
-url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
-df = pd.read_csv(url)
+# titanic.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("titanic.csv")
 ```
 
 ## Detectando valores faltantes
@@ -196,8 +196,8 @@ Del conjunto de datos del Titanic:
 ```python
 import pandas as pd
 
-url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
-df = pd.read_csv(url)
+# titanic.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("titanic.csv")
 
 print((df.isna().sum() / len(df) * 100).round(1))
 

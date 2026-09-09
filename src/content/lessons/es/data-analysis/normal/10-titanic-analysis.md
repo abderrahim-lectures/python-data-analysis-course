@@ -50,8 +50,8 @@ Esta lección une todo lo aprendido en los módulos anteriores. Cargaremos, limp
 ```python
 import pandas as pd
 
-url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
-df = pd.read_csv(url)
+# titanic.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("titanic.csv")
 ```
 
 ## Paso 1: Limpia los datos
@@ -247,8 +247,8 @@ Replica este análisis con una pregunta diferente: ¿Viajar con un acompañante 
 ```python
 import pandas as pd
 
-url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
-df = pd.read_csv(url)
+# titanic.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("titanic.csv")
 
 df["FamilySize"] = df["SibSp"] + df["Parch"] + 1
 df["Group"] = pd.cut(df["FamilySize"], bins=[0, 1, 4, 20], labels=["Solo", "Small", "Large"])

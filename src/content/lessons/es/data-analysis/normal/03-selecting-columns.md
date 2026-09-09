@@ -52,8 +52,8 @@ Usaremos el conjunto de datos del Titanic a lo largo de esta lección:
 ```python
 import pandas as pd
 
-url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
-df = pd.read_csv(url)
+# titanic.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("titanic.csv")
 ```
 
 ## Seleccionando una sola columna
@@ -152,8 +152,8 @@ Del conjunto de datos del Titanic, selecciona solo las columnas `Name`, `Pclass`
 ```python
 import pandas as pd
 
-url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
-df = pd.read_csv(url)
+# titanic.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("titanic.csv")
 
 subset = df[["Name", "Pclass", "Fare"]]
 print(subset.head())

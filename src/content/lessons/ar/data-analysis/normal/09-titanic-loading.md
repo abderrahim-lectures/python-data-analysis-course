@@ -7,7 +7,7 @@ order: 9
 difficulty: "intermediate"
 estimatedMinutes: 30
 learningObjectives:
-  - "تحميل مجموعة بيانات تيتانيك من عنوان URL"
+  - "تحميل مجموعة بيانات تيتانيك وفحص بنيتها"
   - "فحص بنية مجموعة البيانات باستخدام head() و info() و describe() و value_counts()"
   - "تحديد مشاكل جودة البيانات: القيم المفقودة والأنواع الخاطئة والتناقضات"
   - "توثيق الملاحظات الأولية قبل التنظيف"
@@ -52,8 +52,8 @@ quiz:
 ```python
 import pandas as pd
 
-url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
-df = pd.read_csv(url)
+# titanic.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("titanic.csv")
 ```
 
 ## أول نظرة على البيانات
@@ -206,8 +206,8 @@ Embarked    2      0.2
 ```python
 import pandas as pd
 
-url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
-df = pd.read_csv(url)
+# titanic.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("titanic.csv")
 
 alone = ((df["SibSp"] == 0) & (df["Parch"] == 0)).sum()
 print(f"Traveling alone: {alone}")

@@ -7,7 +7,7 @@ order: 9
 difficulty: "advanced"
 estimatedMinutes: 30
 learningObjectives:
-  - "Cargar el conjunto de datos Students Performance desde la URL y verificar la integridad de los datos"
+  - "Cargar el conjunto de datos Students Performance incluido y verificar la integridad de los datos"
   - "Perfilar el conjunto de datos usando el flujo de trabajo completo del Módulo 1"
   - "Formular las preguntas de EDA primarias, secundarias y terciarias para el informe final"
   - "Identificar los problemas de calidad de datos y planificar la estrategia de análisis"
@@ -56,9 +56,8 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-# Load directly from URL
-url = "https://raw.githubusercontent.com/rashida048/Datasets/master/StudentsPerformance.csv"
-df = pd.read_csv(url)
+# students-performance.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("students-performance.csv")
 
 print(f"Dataset loaded: {df.shape[0]} rows, {df.shape[1]} columns")
 print(f"\nColumns: {list(df.columns)}")
@@ -277,8 +276,8 @@ Escribe un script de Python que cargue el conjunto de datos, lo perfiles y gener
 ```python
 import pandas as pd
 
-url = "https://raw.githubusercontent.com/rashida048/Datasets/master/StudentsPerformance.csv"
-df = pd.read_csv(url)
+# students-performance.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("students-performance.csv")
 
 score_cols = ["math score", "reading score", "writing score"]
 cat_cols = ["gender", "race/ethnicity", "parental level of education",

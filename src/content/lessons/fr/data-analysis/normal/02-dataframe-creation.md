@@ -121,8 +121,8 @@ df = pd.read_csv(
 Pour ce cours, nous utiliserons le jeu de données Titanic, disponible à l'adresse suivante :
 
 ```python
-url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
-df = pd.read_csv(url)
+# titanic.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("titanic.csv")
 ```
 
 ## Inspecter vos données

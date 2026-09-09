@@ -54,8 +54,8 @@ Le fondement de l'analyse catégorielle est la table de fréquences :
 ```python
 import pandas as pd
 
-url = "https://raw.githubusercontent.com/rashida048/Datasets/master/StudentsPerformance.csv"
-df = pd.read_csv(url)
+# students-performance.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("students-performance.csv")
 
 # Absolute frequencies
 print("Gender counts:")
@@ -245,8 +245,8 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-url = "https://raw.githubusercontent.com/rashida048/Datasets/master/StudentsPerformance.csv"
-df = pd.read_csv(url)
+# students-performance.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("students-performance.csv")
 
 cat_cols = ["gender", "race/ethnicity", "parental level of education",
             "lunch", "test preparation course"]
@@ -294,8 +294,8 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-url = "https://raw.githubusercontent.com/rashida048/Datasets/master/StudentsPerformance.csv"
-df = pd.read_csv(url)
+# students-performance.csv ships with the course — load it from the browser file system.
+df = pd.read_csv("students-performance.csv")
 
 fig, ax = plt.subplots(figsize=(8, 6))
 sns.countplot(data=df, x="lunch", hue="test preparation course", ax=ax, palette="Set1")
