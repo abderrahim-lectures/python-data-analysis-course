@@ -107,16 +107,19 @@
 
 /* List view card layout */
 .list .card { flex-direction: row; align-items: stretch; }
-.list .card__header { flex-direction: row; align-items: center; justify-content: flex-start; gap: .5rem; padding: .75rem 0 0 1.25rem; flex-shrink: 0; }
+.list .card__header { flex-direction: row; align-items: center; justify-content: flex-start; gap: .5rem; padding-block-start: .75rem; padding-inline-end: 0; padding-inline-start: 1.25rem; flex-shrink: 0; }
 .list .card__badge { position: static; white-space: nowrap; }
 .list .card__icon { font-size: 1.5rem; }
-.list .card__body { padding: .8rem 1.2rem .8rem .25rem; }
+.list .card__body { padding-block: .8rem; padding-inline-start: .25rem; padding-inline-end: 1.2rem; }
 .list .card p { -webkit-line-clamp: 1; }
 
 /* List view: replace the top accent stripe with a vertical ribbon on the
-   left edge of the card, colored by difficulty. */
+   inline-start edge of the card (left in LTR, right in RTL), colored by
+   difficulty. */
 .list .card::before {
-  top: 0; left: 0; right: auto; bottom: 0; height: auto; width: 6px; opacity: 1;
+  top: 0; bottom: 0; height: auto;
+  inset-inline-start: 0; inset-inline-end: auto;
+  width: 6px; opacity: 1;
 }
 .list .card[data-diff="beginner"]::before { background: #34d399; }
 .list .card[data-diff="intermediate"]::before { background: #fbbf24; }
