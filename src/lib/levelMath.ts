@@ -3,7 +3,7 @@
 // Curved level formula: levels feel rewarding at every stage.
 // Level 10 ~ 1500 XP, Level 20 ~ 4500 XP, Level 30 ~ 8500 XP
 export function levelForXp(xp: number): number {
-  return Math.max(1, 1 + Math.floor(Math.pow(xp / 50, 0.6)));
+  return Math.max(1, 1 + Math.floor(Math.pow(Math.max(0, xp) / 50, 0.6)));
 }
 
 export function xpProgressFor(xp: number): { xp: number; level: number; toNext: number; pct: number } {

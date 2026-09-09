@@ -13,6 +13,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run tests/unit",
     "test:watch": "vitest tests/unit",
+    "test:coverage": "vitest run tests/unit --coverage",
     "test:e2e": "node tests/e2e/smoke.mjs",
     "test:contrast": "node tests/e2e/contrast.mjs",
     "test:responsive": "node tests/e2e/responsive.mjs",
@@ -20,12 +21,12 @@
     "test:a11y": "node tests/e2e/a11y.mjs",
     "test:hreflang": "node tests/e2e/hreflang.mjs"
   },
-  "dependencies": {},
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "@astrojs/markdown-remark": "^7.3.0",
     "@astrojs/sitemap": "^3.7.4",
     "@inlang/paraglide-js": "^2.25.0",
+    "@vitest/coverage-v8": "^4.1.11",
     "astro": "^7.3.1",
     "hast-util-to-string": "^3.0.1",
     "hastscript": "^9.0.1",

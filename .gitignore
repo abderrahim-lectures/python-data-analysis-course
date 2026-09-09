@@ -5,6 +5,9 @@
 /dist
 /.astro
 
+# Vitest coverage report
+/coverage
+
 # Generated files
 .cache-loader
 

@@ -43,7 +43,7 @@ export interface Diagnostics {
   learningExperiencePct: number;
 }
 
-const TRACKS = [
+export const TRACKS = [
   { id: 'python-101', label: 'Python 101', total: 7 },
   { id: 'data-analysis', label: 'Pandas & Data', total: 5 },
 ];
