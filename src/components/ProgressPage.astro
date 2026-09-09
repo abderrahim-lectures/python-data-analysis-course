@@ -1,8 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
-import { xpProgress, trackProgress, questsToShow, streakProgress, getActivityStats, rankFor, RANK_EMOJIS } from '../lib/gameState.ts';
+import { xpProgress, loadState, questsToShow, streakProgress, getActivityStats, getActivityLog, rankFor, RANK_EMOJIS } from '../lib/gameState.ts';
 import { emptyStats } from '../lib/gamestats.ts';
+import { getCollection } from 'astro:content';
 import {m} from '../paraglide/messages.js';
 import {learnHref, trackWord, type Locale} from '../lib/routeSegments';
 
@@ -19,13 +20,49 @@ const alternates = {
   fr: 'fr/progression',
 };
 const gs = emptyStats();
+const st = loadState();
 
 const xp = xpProgress();
-const py = trackProgress('python-101', 7);
-const da = trackProgress('data-analysis', 5);
 const quests = questsToShow();
 const sp = streakProgress();
 const actStats = getActivityStats();
+
+const mods = await getCollection('modules');
+const lessons = await getCollection('lessons');
+const MODULES = moduleMap(mods, lessons);
+// Stations are modules. A module counts as reached once any single lesson in
+// it is complete, so a second lesson in the same module doesn't inflate the
+// trail, and my trail is no longer conflated with my lesson count.
+const py = modulesReached('python-101', st);
+const da = modulesReached('data-analysis', st);
+
+function moduleMap(modEntries: typeof mods, lessonEntries: typeof lessons): Record<string, {lessons: string[]}[]> {
+  const out: Record<string, {lessons: string[]}[]> = {};
+  for (const section of ['python-101', 'data-analysis'] as const) {
+    out[section] = modEntries
+      .filter((m) => m.id.startsWith(`${section}/normal/`))
+      .sort((a, b) => a.data.order - b.data.order)
+      .map((m) => {
+        const key = String(m.id.split('/').pop()).replace(/^module-\d+-/, '');
+        return {
+          lessons: lessonEntries
+            .filter((l) => l.id.startsWith(`${section}/`) && l.data.module === key)
+            .map((l) => l.id),
+        };
+      });
+  }
+  return out;
+}
+function modulesReached(section: string, s: {lessonsCompleted: Record<string, boolean>}): {done: number; total: number} {
+  const list = MODULES[section] ?? [];
+  const done = list.filter((m) => m.lessons.some((id) => s.lessonsCompleted[id])).length;
+  return {done, total: list.length};
+}
+function xpEarnedOn(section: string): number {
+  return getActivityLog(500)
+    .filter((e) => (e.meta ?? '').startsWith(`${section}/`))
+    .reduce((sum, e) => sum + (e.xp ?? 0), 0);
+}
 
 const pyModules = [1,2,3,4,5,6,7].map((w) => {
   const done = w <= py.done;
@@ -104,6 +141,7 @@ const i18nData = {
   TO_NEXT: m.progress_to_next(),
   PCT_DONE: m.progress_pct_done({done: '{done}', total: '{total}'}),
   XP_EARNED: m.progress_xp_earned({n: '{n}'}),
+  ACTIONS: m.progress_actlog_actions({n: '{n}'}),
   CORRECT_COUNT: m.progress_correct_count({correct: '{correct}', total: '{total}'}),
   RATIO: m.progress_kpi_ratio({n: '{n}'}),
   STREAK_DAYS: m.progress_eng_streak_days({n: '{n}'}),
@@ -116,6 +154,7 @@ const i18nData = {
   QUEST_EN2LC: questEn2Lc,
   RANK_NAMES: rankNames,
   KDA_NAMES: kdaNames,
+  MODULES,
   ACT_TYPES: {
     'lesson-run': m.progress_acttype_lesson_run(),
     'lesson-complete': m.progress_acttype_lesson_complete(),
@@ -211,7 +250,7 @@ const i18nData = {
             </li>
           ))}
         </ol>
-        <div class="trail__xp" id="xp-python-101">{m.progress_xp_earned({n: py.done * 100})}</div>
+        <div class="trail__xp" id="xp-python-101">{m.progress_xp_earned({n: xpEarnedOn('python-101')})}</div>
       </div>
 
       <div class="trail">
@@ -233,7 +272,7 @@ const i18nData = {
             </li>
           ))}
         </ol>
-        <div class="trail__xp trail__xp--streak" id="xp-data-analysis">{m.progress_xp_earned({n: da.done * 100})}</div>
+        <div class="trail__xp trail__xp--streak" id="xp-data-analysis">{m.progress_xp_earned({n: xpEarnedOn('data-analysis')})}</div>
       </div>
     </div>
   </section>
@@ -397,11 +436,11 @@ const i18nData = {
 
   <div id="progress-i18n" hidden>{JSON.stringify(i18nData).replace(/</g, '\u003c')}</div>
   <script>
-    import {xpProgress, questsToShow, streakProgress, trackProgress, rankFor, RANK_EMOJIS, getActivityLog} from '../lib/gameState.ts';
+    import {xpProgress, questsToShow, streakProgress, rankFor, RANK_EMOJIS, getActivityLog, getActivityStats, loadState} from '../lib/gameState.ts';
     import {computeGameStats} from '../lib/gamestats.ts';
 
     const I18N = JSON.parse(document.getElementById('progress-i18n')?.textContent ?? '{}');
-    const {XP_UNIT, TO_NEXT, PCT_DONE, XP_EARNED, CORRECT_COUNT, RATIO, STREAK_DAYS, SESSION_LESSONS, TIME_JUST_NOW, TIME_MIN, TIME_HOUR, TIME_DAY, QUEST_LABELS, QUEST_EN2LC, RANK_NAMES, KDA_NAMES, ACT_TYPES, ACT_QUIZ} = I18N;
+    const {XP_UNIT, TO_NEXT, PCT_DONE, XP_EARNED, ACTIONS, CORRECT_COUNT, RATIO, STREAK_DAYS, SESSION_LESSONS, TIME_JUST_NOW, TIME_MIN, TIME_HOUR, TIME_DAY, QUEST_LABELS, QUEST_EN2LC, RANK_NAMES, KDA_NAMES, ACT_TYPES, ACT_QUIZ, MODULES} = I18N;
 
     const ACT_ICONS: Record<string, string> = {
       'lesson-run': '▶️',
@@ -414,7 +453,7 @@ const i18nData = {
       'milestone': '🎖️',
     };
 
-    const T = {xpUnit: XP_UNIT, toNext: TO_NEXT, pctDone: PCT_DONE, xpEarned: XP_EARNED, correctCount: CORRECT_COUNT, ratio: RATIO, streakDays: STREAK_DAYS, sessionLessons: SESSION_LESSONS};
+    const T = {xpUnit: XP_UNIT, toNext: TO_NEXT, pctDone: PCT_DONE, xpEarned: XP_EARNED, actlogActions: ACTIONS, correctCount: CORRECT_COUNT, ratio: RATIO, streakDays: STREAK_DAYS, sessionLessons: SESSION_LESSONS};
 
     function fmt(tpl: string, vars: Record<string, string | number>): string {
       return tpl.replace(/\{(\w+)\}/g, (_, k: string) => String(vars[k] ?? ''));
@@ -500,19 +539,25 @@ const i18nData = {
       if (xpbarFill) xpbarFill.style.width = xp.pct + '%';
       set('xpbar-text', `${xp.xp} ${T.xpUnit}`);
 
-      // Tracks: mark each station done/undone, update the "done" and
-      // "+N XP earned" text per track. Week numbering matches the module
-      // count per track and trackProgress on the server (w <= done).
-      for (const [section, weeks] of [['python-101', [1, 2, 3, 4, 5, 6, 7]], ['data-analysis', [1, 2, 3, 4, 5]]] as const) {
+      // Tracks: stations are modules. A module counts as reached once any
+      // lesson in it is complete; the "+N XP earned" line reports the real
+      // XP logged under each track instead of a fake done*100 estimate.
+      const st = loadState();
+      for (const section of ['python-101', 'data-analysis'] as const) {
         const list = document.querySelector(`.stations[data-track="${section}"]`);
-        const tp = trackProgress(section, weeks.length);
-        weeks.forEach((w) => {
-          const complete = w <= tp.done;
-          const li = list?.querySelector(`li[data-week="${w}"]`);
-          li?.classList.toggle('station--done', complete);
+        const mods = (MODULES[section] as {lessons: string[]}[] | undefined) ?? [];
+        const done = mods.filter((m) => m.lessons.some((id) => st.lessonsCompleted[id])).length;
+        const total = mods.length;
+        mods.forEach((_, i) => {
+          const w = i + 1;
+          const complete = w <= done;
+          list?.querySelector(`li[data-week="${w}"]`)?.classList.toggle('station--done', complete);
         });
-        set(`pct-${section}`, fmt(T.pctDone, {done: tp.done, total: weeks.length}));
-        set(`xp-${section}`, fmt(T.xpEarned, {n: tp.done * 100}));
+        set(`pct-${section}`, fmt(T.pctDone, {done, total}));
+        const earned = getActivityLog(500)
+          .filter((e) => (e.meta ?? '').startsWith(`${section}/`))
+          .reduce((sum, e) => sum + (e.xp ?? 0), 0);
+        set(`xp-${section}`, fmt(T.xpEarned, {n: earned}));
       }
 
       // Quests grid + milestones preview.
@@ -579,6 +624,8 @@ const i18nData = {
       set('r-longest-session', fmt(T.sessionLessons, {n: gs.engagement.longestSession}));
 
       // Activity log
+      const actStats = getActivityStats();
+      set('actlog-total', fmt(T.actlogActions, {n: actStats.totalActions}));
       renderActivityLog();
     }
     render();

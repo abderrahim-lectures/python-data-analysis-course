@@ -6,6 +6,7 @@
 // current locale's tree (collection slugs are `ar/…`, `es/…`, `fr/…`).
 import type {CollectionEntry} from 'astro:content';
 import {getCollection} from 'astro:content';
+import {m} from '../../paraglide/messages.js';
 import {projectsHref, type Locale} from '../../lib/routeSegments';
 import {relatedProjectSlugs} from '../../lib/relatedProjects';
 import {projectArtEmoji} from '../../lib/projectArt';
@@ -44,9 +45,9 @@ if (wanted.length) {
 ---
 
 {related.length > 0 && (
-  <section class="related-projects" aria-label="Related projects">
-    <h2 class="related-projects__title">🚀 Keep building</h2>
-    <p class="related-projects__lead">Put this lesson's skills to work in a guided project:</p>
+  <section class="related-projects" aria-label={m.related_aria_label()}>
+    <h2 class="related-projects__title">{m.related_title()}</h2>
+    <p class="related-projects__lead">{m.related_lead()}</p>
     <div class="related-projects__grid">
       {related.map((p) => (
         <a class="related-projects__card" href={projectsHref(locale, base, p.slug)}>

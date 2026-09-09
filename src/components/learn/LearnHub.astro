@@ -32,7 +32,8 @@ const stats = Object.fromEntries(
     const lessons = allLessons.filter((e) => idInLocale(locale, e.id) && e.id.includes(slug));
     const modules = allModules.filter((e) => idInLocale(locale, e.id) && e.id.includes(slug));
     const minutes = lessons.reduce((sum, l) => sum + (l.data.estimatedMinutes ?? 15), 0);
-    return [slug, {lessons: lessons.length, modules: modules.length, minutes}];
+    const xp = lessons.reduce((sum, l) => sum + (l.data.xpReward ?? 0), 0);
+    return [slug, {lessons: lessons.length, modules: modules.length, minutes, xp}];
   }),
 );
 ---
@@ -55,7 +56,7 @@ const stats = Object.fromEntries(
           <h2>{name}</h2>
           <p>{desc}</p>
           <div class="sectioncard__meta">
-            <span class="badge badge--xp">⚡ {stats[slug].lessons * 100} XP</span>
+            <span class="badge badge--xp">⚡ {stats[slug].xp} XP</span>
             <span class="badge badge--streak">📖 {stats[slug].modules} {m.module_label()}</span>
             <span class="badge">⏱ ~{Math.round(stats[slug].minutes / 60)}h</span>
           </div>

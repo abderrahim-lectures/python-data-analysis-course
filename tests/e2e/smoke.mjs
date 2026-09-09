@@ -104,7 +104,7 @@ check('completion survives a reload', await evaluate('document.querySelector("[d
 
 console.log('\nprogress page reflects it');
 await goto('/progress');
-// Note: python-101 has 7 modules, trackProgress counts unique lessons
+// python-101 has 7 modules; the counter counts modules with ≥1 complete lesson
 check('the track counter advances', await evaluate('document.getElementById("pct-python-101").textContent'), '1/7 done');
 check('the streak is no longer stuck at 0', await evaluate('document.getElementById("p-streak").textContent'), '1🔥');
 check('quests are no longer 0/32', await evaluate('document.getElementById("p-quests").textContent'), '2/32');
@@ -122,26 +122,26 @@ check('the dead streak is repaired', await evaluate('document.getElementById("p-
 check('missing quests are backfilled', await evaluate('document.getElementById("p-quests").textContent'), '4/32');
 
 console.log('\nweek-model parity');
-// Complete all 7 python lessons + 2 data lessons: python stations 1-7 must
-// light (previously capped at 5) and data must count 2/5, with per-station
-// done state matching trackProgress on both server and client.
+// Complete one lesson in each of the 7 python modules + one in each of 2 data
+// modules: python stations 1-7 must light, data must count 2/5, and per-station
+// done state must match module-reached semantics on server and client.
 const fullState = JSON.stringify({
   xp: 700,
   lessonsCompleted: {
-    'python-101/normal/01-printing': true, 'python-101/normal/02-variables': true,
-    'python-101/normal/03-control-flow': true, 'python-101/normal/04-functions': true,
-    'python-101/normal/05-strings': true, 'python-101/normal/06-data-structures': true,
-    'python-101/normal/07-file-io': true,
-    'data-analysis/normal/05-titanic-eda': true,
-    'data-analysis/normal/04-groupby-aggregation': true,
+    'python-101/normal/01-printing': true, 'python-101/normal/05-arithmetic': true,
+    'python-101/normal/08-if-elif-else': true, 'python-101/normal/11-defining-functions': true,
+    'python-101/normal/13-string-methods': true, 'python-101/normal/15-lists-and-tuples': true,
+    'python-101/normal/18-reading-files': true,
+    'data-analysis/normal/01-series-basics': true,
+    'data-analysis/normal/07-groupby-basics': true,
   },
   lessonsRun: {
-    'python-101/normal/01-printing': true, 'python-101/normal/02-variables': true,
-    'python-101/normal/03-control-flow': true, 'python-101/normal/04-functions': true,
-    'python-101/normal/05-strings': true, 'python-101/normal/06-data-structures': true,
-    'python-101/normal/07-file-io': true,
-    'data-analysis/normal/05-titanic-eda': true,
-    'data-analysis/normal/04-groupby-aggregation': true,
+    'python-101/normal/01-printing': true, 'python-101/normal/05-arithmetic': true,
+    'python-101/normal/08-if-elif-else': true, 'python-101/normal/11-defining-functions': true,
+    'python-101/normal/13-string-methods': true, 'python-101/normal/15-lists-and-tuples': true,
+    'python-101/normal/18-reading-files': true,
+    'data-analysis/normal/01-series-basics': true,
+    'data-analysis/normal/07-groupby-basics': true,
   },
   quizCorrect: 0, quizTotal: 0, streak: 3, bestStreak: 3, lastActive: '',
   quests: {}, badges: [],

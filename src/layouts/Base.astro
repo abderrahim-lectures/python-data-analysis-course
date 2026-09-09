@@ -422,7 +422,16 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
       var LOCALE = bar.getAttribute('data-locale') || 'en';
       var URL = bar.getAttribute('data-url') || '';
       var KEY = bar.getAttribute('data-key') || '';
+      var NOW = bar.getAttribute('data-now') || 'learning now';
+      var ONE = bar.getAttribute('data-online-one') || 'learner online';
+      var MANY = bar.getAttribute('data-online-many') || 'learners online';
+      try { if (localStorage.getItem('pda:learner-dismissed')) return; } catch(e) {}
       if (!URL || !KEY) { console.warn('[learner-bar] Supabase credentials not configured'); return; }
+      var closeBtn = document.getElementById('learner-close');
+      if (closeBtn) closeBtn.addEventListener('click', function() {
+        bar.style.display = 'none';
+        try { localStorage.setItem('pda:learner-dismissed', '1'); } catch(e) {}
+      });
       var HDR = {apikey: KEY, Authorization: 'Bearer ' + KEY, 'Content-Type': 'application/json'};
       var lid;
       try { lid = localStorage.getItem('pda:learner-id'); } catch(e) {}
@@ -454,7 +463,7 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
         var n = await count();
         var r = await recent();
         var ce=document.getElementById('learner-count'),le=document.getElementById('learner-label'),re=document.getElementById('learner-recent');
-        if(ce)ce.textContent=n;if(le)le.textContent=n===1?'learner online':'learners online';
+        if(ce)ce.textContent=n;if(le)le.textContent = n===1?ONE:MANY;
         if(re&&r)re.textContent=lbl(r.id)+' · '+ago(r.created_at);
         bar.style.display=n>0?'flex':'none';
       }

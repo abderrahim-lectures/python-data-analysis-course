@@ -1725,17 +1725,20 @@ Comprehensive severity-ranked review of all page types x 4 locales (CDP sweep + 
 - [x] **`tests/e2e/smoke.mjs`: quiz-XP block** — perfect 3Q hard lesson (55 XP = 15+25+15), empty re-submit credits nothing, no double-fire.
 - [x] Gates: see commit notes below (check/typecheck/unit/e2e/contrast/responsive/a11y/hreflang).
 
-### Handed back (Claude-owned surface — please take)
-- [ ] **HIGH — `ProgressPage.astro` lesson-vs-module conflation (remains after 9fc2997).** `trackProgress` counts unique lessons (`gameState.ts:428-439`), but totals passed are module counts (`7`/`5`); stations light on lesson-derived `done` (`ProgressPage.astro:24-37` server, `:506-516` client). After 7 of python's 19 lessons every station reads "done"; full completion gives "19/7" and `pct>100`. XP line `xp-${section}` = `tp.done * 100` (`:515`) is a fabricated unit. Options in `plan/uiux-review.md` item D.
-- [ ] **HIGH — `ProgressPage.astro` actlog badge frozen at 0.** `#actlog-total` (`:268`) is baked at build-time SSR (`getActivityStats()` on empty server state → 0) and the client `render()` (builds `#actlog-grid` from `getActivityLog(50)` at `:448`) never re-sets it. Set it client-side from `getActivityStats().totalActions`.
-- [ ] **HIGH — English `404.astro` on all locales** (`lang="en"`, "page not found", "Back to the homepage"). Detect the failed path's locale and localize (or route messages through `m.*`). Same route serves `/ar/…` 404s and broken `/playground/<code>` links.
-- [ ] **MED/HIGH — `playground.astro` English copy** ("Full-screen editor", "Write and run any Python here…") on the shared route; `LearnerActivity.astro:16` "learning now" hardcoded (also no `aria-live`, no dismiss, `bottom:0` overlaps mobile nav, offline placeholder is a bare "—").
-- [ ] **MED — `RelatedProjects.astro:46-48` EN copy** (`aria-label="Related projects"`, "🚀 Keep building", lead) on ar/es/fr lesson pages → needs 3 message keys (`related_projects_*`) across `messages/{en,ar,es,fr}.json`; wire them in the component. (Icon feed bug is already fixed above — do not touch the `projectArtEmoji` call.)
-- [ ] **MED — RTL fixups**: `ModuleNav.astro:18,21` hardcoded `←`/`→` + physical `justify-self: start/end` (`:34-35`); `translateX(4px)` hover on `ModulePage.astro:131`, `TrackHub.astro:116`, `SectionLanding.astro:120` is always rightward; `ModulePage.astro:81` renders raw difficulty enum (`beginner`/`intermediate`/`advanced`) — localize via existing `difficulty_*` messages (the other lists already do).
-- [ ] **LOW — misc**: `LearnHub.astro:58` `lessons * 100` ignores hard-track 150 and real `XP.LESSON` 60 (relabel "up to"); `ModulePage.astro:55` shows both `~{estimatedHours}h` and `{totalMinutes}`; `ProjectDetail.astro:150` `aria-label` uses DOM index not parsed step number; `ProgressPage.astro:166,491` `` `${sp.current}🔥` `` flame-after-number reads oddly in RTL.
-- [ ] **LOW — `LearnerActivity.astro:36`** `#22c55e` → `var(--success)`.
+### Handed back (Claude-owned surface) — DONE by opencode
+> Retro: handoff turned out to be the wrong move for these — they were small
+> enough to land in this session once the user said "ignore claude too". The
+> ownership split is no longer operative; both agents own the whole surface.
+- [x] **HIGH — `ProgressPage.astro` lesson-vs-module conflation.** Rewritten to **module-reached** semantics: a module counts once ≥1 lesson in it is complete (stations already *are* modules, so "7 lessons ≠ 7 modules" bug resolved). Server + client both compute from a module→lesson map serialized from the collections (`MODULES` in the i18n block; `moduleMap`/`modulesReached` in frontmatter, client loop at `:506` uses `loadState()` + `MODULES`). `pct` can no longer exceed 100 and a second lesson in one module doesn't light another station.
+- [x] **HIGH — `ProgressPage.astro` actlog badge frozen at 0.** `render()` now sets `#actlog-total` from `getActivityStats().totalActions` (via new `ACTIONS` template in the i18n block).
+- [x] **HIGH — English `404.astro` on all locales.** Now locale-aware: embeds sliced copy for all 4 locales (new `notfound_*` keys ×4 catalogs), detects the failed path's first segment (`ar`/`es`/`fr` else `en`), swaps `lang`/`dir`/`title`/description + notfound section + playground head (`PlaygroundHead.astro` eyebrow now wrapped in a `<span>`), and `notFoundPlayground.client.ts` reads the locale strings for the shared-view labels. Verified live via CDP: `/ar/…` → lang=ar, dir=rtl, Arabic h1; `/fr/…` → French.
+- [x] **MED/HIGH — `playground.astro` EN copy.** N/A — per-locale pages already exist (`ar/es/fr/playground.astro`, translated); the shared-route EN copy is correct for `/playground`. **`LearnerActivity.astro`**: localized "learning now"/online-count labels (new `learner_*` keys ×4, wired via `data-now`/`data-online-*` attrs read by Base's inline script instead of hardcoded EN), added `role="status" aria-live="polite"`, a dismiss button (persisted in `pda:learner-dismissed`), `bottom: 60px` on ≤900px so the bar parks above the mobile nav instead of covering it, offline count placeholder `—` → `0`, and `#22c55e` → `var(--success)`.
+- [x] **MED — `RelatedProjects.astro` EN copy.** New `related_aria_label`/`related_title`/`related_lead` keys ×4 catalogs, wired via `m.*`.
+- [x] **MED — RTL fixups.** `ModuleNav.astro`: arrows now logical-direction spans flipped via `[dir='rtl']` CSS (previous/next point correctly in Arabic); `justify-self: start/end` were already flow-relative. Hover shifts on `ModulePage.astro:131`, `TrackHub.astro:116`, `SectionLanding.astro:120` get `[dir='rtl']` negated `translateX`. `ModulePage.astro:81` difficulty enum now renders via the existing `difficulty_*` messages.
+- [x] **LOW — misc.** `LearnHub.astro:58` `lessons * 100` → real summed lesson `xpReward` per track; `ModulePage.astro:55` single-unit time (`~Nh` if ≥1h else `N min`) instead of duplicated `h (…min)`; `ProjectDetail.astro:150` `aria-label` step number now uses the parsed heading number (`idx+1`) with DOM-index fallback. `p-streak` flame-after-number left as-is (test-coupled at `:109/:121`).
+- [x] **LOW — `LearnerActivity.astro:36`** `#22c55e` → `var(--success)`. (Done above.)
 
-Coordination: none of the handed-back items conflict with the committed opencode edits. `tests/e2e/smoke.mjs` now includes a quiz-XP block that must stay green; the `1/7 done` assertion (`:108`) will need updating when the progress-page conflation is fixed.
+Coordination notes: the smoke "week-model parity" seed was reseeded from fictional slugs to real lesson ids (one per module — 7 python + 2 data) so module-reached counting has real membership to work against; the `1/7 done` assertion now documents module semantics.
 
 ## Session 2026-09-09 (opencode) — progress week-model fix + verification (committed `9fc2997`)
 
@@ -1745,3 +1748,27 @@ Coordination: none of the handed-back items conflict with the committed opencode
 - **Smoke test updated + new parity block**: python-101 expectation `5/5 done` → `1/7 done` after one lesson; new "week-model parity" block seeds 7 python + 2 data completions and asserts `7/7 done`, python station 7 lit, data `2/5 done`, data station 3 dim (would have failed before the fix).
 - **Gates**: `npm run check` 0 errors · `npm test` 1086/1086 · build 877 pages · e2e **44/44** · contrast 0 · responsive clean.
 - Committed `9fc2997` (3 files). Push still blocked (workflow-scope OAuth); branch remains 15/130 ahead of its remotes.
+
+## Session 2026-09-09 (opencode) — handed-back review items implemented (pending commit)
+
+- [x] **All handed-back UI/UX review items done** (user: "ignore claude too"). See the
+  rewritten "Handed back — DONE by opencode" section above. Behavioral highlights:
+  - **ProgressPage**: module-reached counting; stations light per module with ≥1 lesson
+    done; XP from real activity (`xpEarnedOn`); `#actlog-total` updated client-side.
+  - **404**: locale-aware (`lang/dir/title/h1/playground-head` swap from failed-path
+    locale); verified live on `/ar/…` (rtl + Arabic) and `/fr/…` via CDP probe.
+  - **LearnerActivity**: localized, `aria-live`, dismissible (`pda:learner-dismissed`),
+    above mobile nav (`bottom:60px` ≤900px), `var(--success)` dot.
+  - **RelatedProjects / ModuleNav / RTL hover / difficulty enum**: localized + CSS
+    `[dir=rtl]` flips.
+  - **LOW**: LearnHub real `xpReward` sums; ModulePage single-unit time; ProjectDetail
+    aria-label uses parsed step number.
+- [x] **16 new message keys** × 4 catalogs (9 `notfound_*`, 4 `learner_*`, 3 `related_*`);
+  play title ES de-duplicated (`Área de juegos`) to satisfy the i18n unit test.
+- **Gates (current HEAD)**: `npm run check` 0 errors/0 warnings (739 files) · `npm test`
+  1086/1086 · build 877 pages · e2e **49/49** · contrast 0 · a11y 0 · responsive clean ·
+  hreflang 40/40.
+- **This commit (pending)**: ProgressPage, 404+notFoundPlayground+PlaygroundHead,
+  LearnerActivity+Base, RelatedProjects, ModuleNav, ModulePage, TrackHub, SectionLanding,
+  LearnHub, ProjectDetail, messages×4, plan/todo.md, plan/uiux-review.md. Push expected to
+  hit the same workflow-scope OAuth block.

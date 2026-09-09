@@ -52,7 +52,7 @@ const arrow = locale === 'ar' ? '←' : '→';
     <div class="module-head__info">
       <div class="module-head__meta">
         <span class="module-head__diff" style={`color:${diffColor}`}>{m[`difficulty_${difficulty}`]()}</span>
-        <span class="module-head__time">⏱ {estimatedHours}h ({totalMinutes} min)</span>
+        <span class="module-head__time">⏱ {totalMinutes >= 60 ? `~${Math.round(totalMinutes / 60)}h` : `${totalMinutes} min`}</span>
         <span class="module-head__count">📖 {moduleLessons.length} {m.module_lessons_label()}</span>
       </div>
       <h1>{m.module_label()} {order}: {title}</h1>
@@ -78,7 +78,7 @@ const arrow = locale === 'ar' ? '←' : '→';
               <span class="lesson-card__title">{lesson.data.title}</span>
               <span class="lesson-card__desc">{lesson.data.description}</span>
               <div class="lesson-card__meta">
-                <span style={`color:${lDiffColor}`}>{lDiff}</span>
+                <span style={`color:${lDiffColor}`}>{({beginner: m.difficulty_beginner(), intermediate: m.difficulty_intermediate(), advanced: m.difficulty_advanced()})[lDiff] ?? lDiff}</span>
                 <span>⏱ {lesson.data.estimatedMinutes} min</span>
                 <span>⚡ +{lesson.data.xpReward} XP</span>
               </div>
@@ -129,4 +129,5 @@ const arrow = locale === 'ar' ? '←' : '→';
   .lesson-card__meta { display: flex; gap: .6rem; font-size: .74rem; font-weight: 600; color: var(--ink-soft); }
   .lesson-card__arrow { font-size: 1.1rem; color: var(--ink-soft); transition: transform .15s ease; }
   .lesson-card:hover .lesson-card__arrow { transform: translateX(3px); color: var(--accent); }
+  [dir='rtl'] .lesson-card:hover .lesson-card__arrow { transform: translateX(-3px); }
 </style>

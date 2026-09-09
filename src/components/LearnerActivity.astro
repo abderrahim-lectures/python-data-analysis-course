@@ -1,6 +1,7 @@
 ---
 // LearnerActivity.astro — subtle bottom bar showing live learner presence.
 // Uses Supabase for real-time heartbeat + recent completions.
+import {m} from '../paraglide/messages.js';
 interface Props {
   locale?: string;
   supabaseUrl?: string;
@@ -9,13 +10,16 @@ interface Props {
 const {locale = 'en', supabaseUrl = '', supabaseKey = ''} = Astro.props;
 ---
 
-<div class="learner-bar" id="learner-bar" data-locale={locale} data-url={supabaseUrl} data-key={supabaseKey} style="display:none">
+<div class="learner-bar" id="learner-bar" data-locale={locale} data-url={supabaseUrl} data-key={supabaseKey}
+  data-now={m.learner_learning_now()} data-online-one={m.learner_online_one()} data-online-many={m.learner_online_many()}
+  role="status" aria-live="polite" style="display:none">
   <div class="learner-bar__inner">
     <span class="learner-bar__dot" aria-hidden="true"></span>
-    <span class="learner-bar__count" id="learner-count">—</span>
-    <span class="learner-bar__label" id="learner-label">learning now</span>
+    <span class="learner-bar__count" id="learner-count">0</span>
+    <span class="learner-bar__label" id="learner-label">{m.learner_learning_now()}</span>
     <span class="learner-bar__sep" aria-hidden="true">·</span>
     <span class="learner-bar__recent" id="learner-recent"></span>
+    <button type="button" class="learner-bar__close" id="learner-close" aria-label={m.learner_close()}>✕</button>
   </div>
 </div>
 
@@ -33,16 +37,27 @@ const {locale = 'en', supabaseUrl = '', supabaseKey = ''} = Astro.props;
     font-size: .76rem; color: var(--ink-soft); max-width: 600px;
   }
   .learner-bar__dot {
-    width: 7px; height: 7px; border-radius: 50%; background: #22c55e;
+    width: 7px; height: 7px; border-radius: 50%; background: var(--success);
     animation: pulse-dot 2s ease-in-out infinite; flex-shrink: 0;
   }
   .learner-bar__count { font-weight: 700; color: var(--ink); }
   .learner-bar__label { color: var(--ink-soft); }
   .learner-bar__sep { color: var(--line); }
   .learner-bar__recent { color: var(--ink-faint); font-style: italic; }
+  .learner-bar__close {
+    border: none; background: transparent; color: var(--ink-faint);
+    font-size: .7rem; padding: .2rem .35rem; border-radius: var(--radius-sm);
+    cursor: pointer; line-height: 1;
+  }
+  .learner-bar__close:hover { color: var(--ink); background: var(--surface-2); }
+  .learner-bar__close:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
   @keyframes pulse-dot {
     0%, 100% { opacity: 1; }
     50% { opacity: .4; }
+  }
+  @media (max-width: 900px) {
+    /* Park the bar above the fixed mobile nav instead of covering it. */
+    .learner-bar { bottom: 60px; }
   }
   @media (max-width: 600px) {
     .learner-bar__inner { font-size: .7rem; }

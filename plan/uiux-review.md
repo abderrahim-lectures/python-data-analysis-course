@@ -255,24 +255,24 @@ existing Supabase `PopularPages`/`PageViews` plumbing) rather than only page vie
 | 1 | Quiz never awards XP (recordQuiz/Perfect dead) | HIGH | Quiz.astro | **fixed** (this review) |
 | 2 | Quiz radios `display:none` (keyboard-inaccessible) | HIGH | Quiz.astro | **fixed** |
 | 3 | Quiz retry double-fires + XP over-credit | HIGH | Quiz.astro | **fixed** |
-| 4 | Progress bars: lesson/module conflation, pct>100, fake XP | HIGH | ProgressPage.astro | handed back (Claude) |
-| 5 | Activity-log total frozen at 0 | HIGH | ProgressPage.astro | handed back (Claude) |
-| 6 | Untranslated 404 / playground / LearnerActivity | HIGH | 404, playground, LearnerActivity | handed back |
-| 7 | RelatedProjects EN copy + wrong icon feed | MED | RelatedProjects.astro | copy: handed back; icon: **fixed** |
-| 8 | RTL arrows/hover + raw difficulty enum | MED | ModuleNav/ModulePage/TrackHub/SectionLanding | handed back |
-| 9 | Token drift (Quiz, projects.css, LearnerActivity, ProjectDetail) | MED | multiple | Quiz + projects.css **fixed**; rest handed back |
-| 10 | XP/copy accuracy (LearnHub, ModulePage minutes) | LOW | LearnHub/ModulePage | handed back |
-| 11 | Step aria-label index vs parsed number | LOW | ProjectDetail.astro | opencode |
+| 4 | Progress bars: lesson/module conflation, pct>100, fake XP | HIGH | ProgressPage.astro | **fixed** (module-reached counting, real xpEarnedOn) |
+| 5 | Activity-log total frozen at 0 | HIGH | ProgressPage.astro | **fixed** (client `#actlog-total` from `getActivityStats`) |
+| 6 | Untranslated 404 / playground / LearnerActivity | HIGH | 404, playground, LearnerActivity | **fixed** (404 locale-aware; playground N/A — per-locale pages exist; LearnerActivity localized+dismissed) |
+| 7 | RelatedProjects EN copy + wrong icon feed | MED | RelatedProjects.astro | **fixed** (3 new `related_*` keys; icon was fixed earlier) |
+| 8 | RTL arrows/hover + raw difficulty enum | MED | ModuleNav/ModulePage/TrackHub/SectionLanding | **fixed** (CSS `[dir=rtl]` flips; `difficulty_*` messages) |
+| 9 | Token drift (Quiz, projects.css, LearnerActivity, ProjectDetail) | MED | multiple | **fixed** (Quiz + projects.css earlier; LearnerActivity `var(--success)`; ProjectDetail success-soft earlier) |
+| 10 | XP/copy accuracy (LearnHub, ModulePage minutes) | LOW | LearnHub/ModulePage | **fixed** (summed `xpReward`; single-unit time) |
+| 11 | Step aria-label index vs parsed number | LOW | ProjectDetail.astro | **fixed** (parsed `idx+1`, DOM fallback) |
 
 ## Gates
-Rerun after the in-scope fixes: `astro check` (0 errors), `npm test` (1086),
-`test:e2e` (44), `test:a11y`, `test:contrast` (0), `test:responsive` (0),
-`test:hreflang`. See commit(s) for the exact changed set.
+All green at current HEAD: `astro check` 0 errors · `npm test` 1086/1086 · build 877
+pages · `test:e2e` 49/49 · `test:a11y` 0 · `test:contrast` 0 · `test:responsive` 0 ·
+`test:hreflang` 40/40.
 
 ## Notes for the other agent (Claude)
-- The four mutually-confirmed HIGH correctness/a11y bugs in the shared components
-  (Quiz) are fixed here because Quiz.astro is opencode surface (not in your list).
-- Items 4, 5, 6, 8, 9(partial), 10 are in your surface (progress page, 404 route
-  language handling, LearnerActivity, global.css tokens, message catalog additions
-  for RelatedProjects). Handed back with refs in `plan/todo.md` — please do not
-  re-implement the Quiz fixes.
+- Per user directive ("ignore claude too"), all previously handed-back items were
+  implemented by opencode in this session (items 4–11 above). No handoff remains;
+  both agents own the full surface. Do not re-implement any of these fixes.
+- Remaining open items from section J (inline progress in nav, progressive
+  disclosure, touch-target audit, per-question quiz feedback) are enhancement
+  ideas, not bugs — no code change yet.

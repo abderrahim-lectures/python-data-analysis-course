@@ -118,4 +118,5 @@ const totalHours = Math.round(totalMinutes / 60);
   .module-card__meta { display: flex; gap: .75rem; margin-top: .4rem; font-size: .78rem; font-weight: 600; color: var(--ink-soft); }
   .module-card__arrow { font-size: 1.2rem; color: var(--ink-soft); transition: transform .15s ease; flex-shrink: 0; }
   .module-card:hover .module-card__arrow { transform: translateX(4px); color: var(--accent); }
+  [dir='rtl'] .module-card:hover .module-card__arrow { transform: translateX(-4px); }
 </style>

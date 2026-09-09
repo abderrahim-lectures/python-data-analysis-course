@@ -13,19 +13,64 @@ import Base from '../layouts/Base.astro';
 import PlaygroundHead from '../components/PlaygroundHead.astro';
 import PlaygroundCell from '../components/PlaygroundCell.astro';
 import {PLAYGROUND_STARTER} from '../lib/playgroundStarter.ts';
+import en from '../../messages/en.json';
+import ar from '../../messages/ar.json';
+import es from '../../messages/es.json';
+import fr from '../../messages/fr.json';
 
 const base = import.meta.env.BASE_URL;
+
+// 404.html is served for every missed path on static hosts, so it can't be
+// built once per locale like normal pages. Slice the localized copy for all
+// four locales into a small block the client hands to whichever one matches
+// the failed path's first segment (ar|es|fr → that locale, else en).
+const LOCALES = {en, ar, es, fr};
+const KEYS = [
+  'notfound_title', 'notfound_description', 'notfound_h1', 'notfound_p', 'notfound_cta',
+  'notfound_play_title', 'notfound_play_eyebrow', 'notfound_play_lead', 'notfound_browse_lessons',
+  'playground_title', 'back_to_lesson',
+] as const;
+const I18N = Object.fromEntries(
+  (['en', 'ar', 'es', 'fr'] as const).map((lc) => [
+    lc,
+    Object.fromEntries(KEYS.map((k) => [k, LOCALES[lc][k] ?? ''])),
+  ]),
+);
+const notfoundTitle = I18N.en.notfound_title;
+const notfoundDescription = I18N.en.notfound_description;
 ---
 
 <script>
   import '../lib/notFoundPlayground.client.ts';
 </script>
 
-<Base title="Not found — PyDA Course" description="That page doesn't exist." lang="en" dir="ltr">
+<script is:inline define:vars={{I18N}}>
+  (function () {
+    function go() {
+      var first = (location.pathname.replace(/^\//, '').split('/')[0] || '').toLowerCase();
+      var LC = first === 'ar' || first === 'es' || first === 'fr' ? first : 'en';
+      var T = I18N[LC] || I18N.en;
+      window.__PDA404_LOCALE__ = LC;
+      window.__PDA404_I18N__ = T;
+      document.documentElement.lang = LC;
+      document.documentElement.dir = LC === 'ar' ? 'rtl' : 'ltr';
+      document.title = T.notfound_title;
+      var desc = document.querySelector('meta[name="description"]');
+      if (desc) desc.setAttribute('content', T.notfound_description);
+      var h1 = document.getElementById('nf-h1'); if (h1) h1.textContent = T.notfound_h1;
+      var p = document.getElementById('nf-p'); if (p) p.textContent = T.notfound_p;
+      var cta = document.getElementById('nf-cta'); if (cta) cta.textContent = T.notfound_cta;
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', go);
+    else go();
+  })();
+</script>
+
+<Base title={notfoundTitle} description={notfoundDescription} lang="en" dir="ltr">
   <section class="container notfound" id="notfound">
-    <h1>404 — page not found</h1>
-    <p>That page doesn't exist. Maybe it moved, or the link was mistyped.</p>
-    <a class="btn btn-primary" href={base}>Back to the homepage</a>
+    <h1 id="nf-h1">404 — page not found</h1>
+    <p id="nf-p">That page doesn't exist. Maybe it moved, or the link was mistyped.</p>
+    <a class="btn btn-primary" id="nf-cta" href={base}>Back to the homepage</a>
   </section>
 
   <section class="container head" id="pg-head" hidden>

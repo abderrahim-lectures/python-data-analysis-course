@@ -147,7 +147,7 @@ const jsonLd = {
     btn.className = 'step-clear';
     btn.textContent = stepLabel;
     btn.setAttribute('aria-pressed', String(done));
-    btn.setAttribute('aria-label', `${stepLabel} (${i + 1})`);
+    btn.setAttribute('aria-label', `${stepLabel} (${idx >= 0 ? idx + 1 : i + 1})`);
     btn.addEventListener('click', (e) => { e.stopPropagation(); clearStep(h); });
     h.appendChild(btn);
   });

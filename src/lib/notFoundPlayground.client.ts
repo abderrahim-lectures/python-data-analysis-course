@@ -20,6 +20,10 @@ async function init() {
   const base = import.meta.env.BASE_URL;
   const prefix = `${base}playground/`;
   const path = location.pathname;
+  // Locale-aware copy: 404.astro embeds `window.__PDA404_LOCALE__` (from the
+  // failed path's first segment) and the matching strings in `__PDA404_I18N__`.
+  const w = window as unknown as {__PDA404_I18N__?: Record<string, string>; __PDA404_LOCALE__?: string};
+  const t: Record<string, string> = w.__PDA404_I18N__ ?? {};
   if (!path.startsWith(prefix) || path.length <= prefix.length) return;
 
   const segment = decodeURIComponent(path.slice(prefix.length).replace(/\/$/, ''));
@@ -30,7 +34,16 @@ async function init() {
     document.getElementById('notfound')?.setAttribute('hidden', '');
     document.getElementById('pg-head')?.removeAttribute('hidden');
     document.getElementById('pg-section')?.removeAttribute('hidden');
-    document.title = 'Playground — PyDA Course';
+    document.title = t.notfound_play_title ?? 'Playground — PyDA Course';
+    const head = document.getElementById('pg-head');
+    if (head) {
+      const eyebrow = head.querySelector('.head__eyebrow span');
+      if (eyebrow) eyebrow.textContent = t.notfound_play_eyebrow ?? '';
+      const h1 = head.querySelector('h1');
+      if (h1) h1.textContent = t.playground_title ?? 'Playground';
+      const lead = head.querySelector('p');
+      if (lead) lead.textContent = t.notfound_play_lead ?? '';
+    }
     const codeEl = document.getElementById('pg-code');
     if (codeEl) {
       codeEl.textContent = code;
@@ -44,7 +57,9 @@ async function init() {
     if (back) {
       const fromThisSite = document.referrer && new URL(document.referrer).origin === location.origin;
       back.setAttribute('href', fromThisSite ? document.referrer : `${base}learn`);
-      back.textContent = fromThisSite ? '← Back to the lesson' : '← Browse lessons';
+      back.textContent = fromThisSite
+        ? t.back_to_lesson ?? '← Back to the lesson'
+        : t.notfound_browse_lessons ?? '← Browse lessons';
       back.removeAttribute('hidden');
     }
   } catch {

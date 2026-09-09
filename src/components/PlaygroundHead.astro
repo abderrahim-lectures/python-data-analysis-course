@@ -11,7 +11,7 @@ interface Props {
 const {eyebrow, lead} = Astro.props;
 ---
 
-<div class="head__eyebrow"><Icon name="expand" size={16} /> {eyebrow}</div>
+<div class="head__eyebrow"><Icon name="expand" size={16} /> <span>{eyebrow}</span></div>
 <h1>{m.playground_title()}</h1>
 <p>{lead}</p>
 <a class="pg-back" id="pg-back" href="/" hidden>{m.back_to_lesson()}</a>
