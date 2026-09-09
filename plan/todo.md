@@ -1772,3 +1772,36 @@ Coordination notes: the smoke "week-model parity" seed was reseeded from fiction
   LearnerActivity+Base, RelatedProjects, ModuleNav, ModulePage, TrackHub, SectionLanding,
   LearnHub, ProjectDetail, messages×4, plan/todo.md, plan/uiux-review.md. Push expected to
   hit the same workflow-scope OAuth block.
+
+## Session 2026-09-09 (opencode) — lesson cells now execute in the browser (done + pushed)
+
+- [x] **User answers**: "update modules" = update lesson code so it actually executes in the
+  inline Pyodide runner; "change pyodide by jupyterlite" = keep inline cells on Pyodide
+  (recommended) — no JupyterLite host change.
+- [x] **Root cause**: lessons taught `pd.read_csv(<GitHub raw URL>)` — `urllib` in Pyodide
+  can't open `https`, cells died with `URLError: unknown url type: https` (also seen by the
+  user in playground as `urllib.error.URLError`).
+- [x] **Fix**: replaced every remote URL load (`titanic.csv` ×64, `StudentsPerformance.csv`
+  ×96, plus 4 direct `read_csv("StudentsPerformance.csv")`) in **all 72 lesson files across
+  all 4 locales** with bare-filename reads of the shipped `public/datasets/*` files, which
+  `runnable-cell.client.ts` mounts into the Pyodide VFS (manifest normalizes
+  `StudentsPerformance.csv` → `students-performance.csv`). Stale `# Load the dataset (adjust
+  path as needed)`-style comments stripped; LHS variable names + trailing lines preserved.
+- [x] **Learning objectives** updated (en/ar/es/fr where they mentioned a URL) in
+  `09-titanic-loading` and `09-students-profiling`; teaching takeaways about reproducible
+  sources left as-is (still valid for cloud).
+- [x] **Notebooks regenerated** (`node scripts/generate-notebooks.mjs`): committed EN
+  notebooks now reference bundled filenames and gain the dataset-prep cell, so Colab/Binder
+  still work. Locale notebooks (ar/es/fr) regenerated but stay untracked (repo convention is
+  EN-only notebooks).
+- [x] **Live-verified in headless Chrome (CDP probe)**: loaded
+  `/learn/data-analysis/normal/lessons/09-titanic-loading`, Pyodide 0.26.4 loads, dataset
+  mounts, `df = pd.read_csv("titanic.csv")` succeeds, cell 1 `print(df.head(10))` renders the
+  real DataFrame (PassengerId 1, Fare 123.18). Only visible cosmetic is pandas' pre-existing
+  pyarrow DeprecationWarning as an `err`-styled line.
+- **Gates (at 7959a81)**: `npm run check` 0 errors/0 warnings · `npm test` 1086/1086 ·
+  build 877 pages · e2e 49/49 · contrast 0 · a11y 0 · responsive clean · hreflang 40/40.
+- **Committed `7959a81`** (122 files: 72 lessons + 49 notebooks + datasets index).
+- **Push**: done via the temp-workflow-match workaround (OAuth token still lacks `workflow`
+  scope) — remote `redesign/astro-visual-novel` HEAD `fca5126`; local HEAD `900e1e5`
+  (1 ahead: real ci.yml/deploy.yml restore, unpushable).
