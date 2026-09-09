@@ -300,5 +300,8 @@
   "progress_quest_all_python": "أكملت مسار بايثون 101",
   "progress_quest_all_data": "أكملت مسار تحليل البيانات",
   "progress_report_lede_pre": "كيف تتقدّم مقارنةً بمعيار راسخ في علوم التعلّم (",
-  "progress_report_lede_end": ")."
+  "progress_report_lede_end": ").",
+  "project_xp_per_step": "＋{n} نقطة لكل خطوة",
+  "project_step_cleared": "مُنجَز",
+  "minutes_label": "⏱ {n} دقيقة"
 }

@@ -300,5 +300,8 @@
   "progress_quest_all_python": "Python 101 done",
   "progress_quest_all_data": "Data Analysis done",
   "progress_report_lede_pre": "How you're climbing vs. a proven learning-science benchmark (",
-  "progress_report_lede_end": ")."
+  "progress_report_lede_end": ").",
+  "project_xp_per_step": "＋{n} XP per step",
+  "project_step_cleared": "cleared",
+  "minutes_label": "⏱ {n} min"
 }

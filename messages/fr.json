@@ -300,5 +300,8 @@
   "progress_quest_all_python": "Python 101 terminé",
   "progress_quest_all_data": "Analyse de données terminée",
   "progress_report_lede_pre": "Comment tu progresses par rapport à une référence éprouvée de la science de l'apprentissage (",
-  "progress_report_lede_end": ")."
+  "progress_report_lede_end": ").",
+  "project_xp_per_step": "＋{n} XP par étape",
+  "project_step_cleared": "terminé",
+  "minutes_label": "⏱ {n} minutes"
 }

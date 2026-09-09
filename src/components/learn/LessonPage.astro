@@ -75,7 +75,7 @@ const jsonLd = {
       <div class="lesson-head__meta">
         <span class="lesson-head__tag">📖 {m.lesson_label()} {order}</span>
         <span class="lesson-head__diff" style={`color:${diffColor}`}>{m[`difficulty_${difficulty}`]()}</span>
-        <span class="lesson-head__time">⏱ {estimatedMinutes} min</span>
+        <span class="lesson-head__time">{m.minutes_label({n: estimatedMinutes})}</span>
         <span class="lesson-head__xp">⚡ +{xpReward} XP</span>
         <span class="lesson-head__openers" aria-label="Open this lesson as a notebook">
           {NOTEBOOK_OPENERS.map((o) => (

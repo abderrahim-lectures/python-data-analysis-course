@@ -82,13 +82,13 @@ const jsonLd = {
     <ProjectArt slug={slug} class="hero-art" />
   </div>
 
-  <article class="container lesson-content project-article" data-project-slug={slug} data-step-label={m.mark_complete()}>
+  <article class="container lesson-content project-article" data-project-slug={slug} data-step-label={m.mark_complete()} data-cleared={m.project_step_cleared()} data-step-xp={String(XP.PROJECT_STEP)}>
     <header class="project-head">
       <div class="project-head__meta">
         <span class="project-head__diff" style={`color:${diffText}`}>{m[diffLabel]()}</span>
-        {estimatedMinutes && <span class="project-head__time">⏱ {estimatedMinutes} min</span>}
+        {estimatedMinutes && <span class="project-head__time">{m.minutes_label({n: estimatedMinutes})}</span>}
         <span class="project-head__xp">⚡ +{xpAward} XP</span>
-        <span class="project-head__xp project-head__xp--step">＋{XP.PROJECT_STEP} XP per step</span>
+        <span class="project-head__xp project-head__xp--step">{m.project_xp_per_step({n: XP.PROJECT_STEP})}</span>
       </div>
       <h1 class="project-title">{title}</h1>
       {projectTags.length > 0 && (
@@ -141,6 +141,8 @@ const jsonLd = {
     const idx = parseInt(h.textContent?.match(STEP_RE)?.[1] ?? '0', 10) - 1;
     const done = slug ? isProjectStepDone(slug.replace(/.*\//, ''), idx) : false;
     if (done) h.classList.add('is-step-done');
+    h.dataset.stepCleared = article?.getAttribute('data-cleared') ?? 'cleared';
+    h.dataset.stepXp = article?.getAttribute('data-step-xp') ?? '15';
     const stepLabel = article?.getAttribute('data-step-label') ?? 'Mark complete';
     const btn = document.createElement('button');
     btn.type = 'button';
@@ -176,7 +178,7 @@ const jsonLd = {
   .project-head__xp--step { opacity: .75; }
   .project-content :global(h2.is-step-done) { color: var(--success-text); position: relative; }
   .project-content :global(h2.is-step-done::after) {
-    content: '✅ cleared · +15 XP'; font-size: .72rem; font-weight: 700;
+    content: '✅ ' attr(data-step-cleared) ' · +' attr(data-step-xp) ' XP'; font-size: .72rem; font-weight: 700;
     margin-inline-start: .5rem; color: var(--success-text); vertical-align: middle;
   }
   .project-content :global(.step-clear) {

@@ -15,7 +15,7 @@ interface Props {
 }
 
 const {locale, section, track, entry} = Astro.props;
-const {title, description, order, difficulty, estimatedHours, tags, icon} = entry.data;
+const {title, description, order, difficulty, tags, icon} = entry.data;
 const base = import.meta.env.BASE_URL;
 const dir = locale === 'ar' ? 'rtl' : 'ltr';
 
@@ -52,7 +52,7 @@ const arrow = locale === 'ar' ? '←' : '→';
     <div class="module-head__info">
       <div class="module-head__meta">
         <span class="module-head__diff" style={`color:${diffColor}`}>{m[`difficulty_${difficulty}`]()}</span>
-        <span class="module-head__time">⏱ {totalMinutes >= 60 ? `~${Math.round(totalMinutes / 60)}h` : `${totalMinutes} min`}</span>
+        <span class="module-head__time">{totalMinutes >= 60 ? `~${Math.round(totalMinutes / 60)}h` : m.minutes_label({n: totalMinutes})}</span>
         <span class="module-head__count">📖 {moduleLessons.length} {m.module_lessons_label()}</span>
       </div>
       <h1>{m.module_label()} {order}: {title}</h1>
@@ -79,7 +79,7 @@ const arrow = locale === 'ar' ? '←' : '→';
               <span class="lesson-card__desc">{lesson.data.description}</span>
               <div class="lesson-card__meta">
                 <span style={`color:${lDiffColor}`}>{({beginner: m.difficulty_beginner(), intermediate: m.difficulty_intermediate(), advanced: m.difficulty_advanced()})[lDiff] ?? lDiff}</span>
-                <span>⏱ {lesson.data.estimatedMinutes} min</span>
+                <span>{m.minutes_label({n: lesson.data.estimatedMinutes})}</span>
                 <span>⚡ +{lesson.data.xpReward} XP</span>
               </div>
             </div>
