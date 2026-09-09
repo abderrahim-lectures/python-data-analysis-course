@@ -6,15 +6,24 @@ export interface FakeEl {
   style: Record<string, string>;
   classSet: Set<string>;
   classList: { add(c: string): void; remove(c: string): void; contains(c: string): boolean; has(c: string): boolean; toggle(c: string, force?: boolean): boolean };
+  className: string;
   textContent: string;
   innerHTML: string;
   hidden: boolean;
   value: string;
+  disabled: boolean;
+  children: FakeEl[];
+  parentElement: FakeEl | null;
   listeners: Record<string, (ev?: any) => void>;
+  allListeners: Record<string, Array<(ev?: any) => void>>;
   querySelectorAllFor: Record<string, FakeEl[]>;
   querySelectorFor: Record<string, FakeEl>;
   addEventListener(kind: string, fn: (ev?: any) => void): void;
   dispatchEvent(ev: any): void;
+  click(): void;
+  appendChild(child: FakeEl): void;
+  insertBefore(child: FakeEl, ref: FakeEl | null): void;
+  remove(): void;
   querySelectorAll(sel: string): FakeEl[];
   querySelector(sel: string): FakeEl | null;
   hasAttribute(k: string): boolean;
@@ -25,16 +34,22 @@ export interface FakeEl {
 
 export function fakeEl(id?: string): FakeEl {
   const classSet = new Set<string>();
-  return {
+  const children: FakeEl[] = [];
+  const el: FakeEl = {
     id: id ?? '',
     dataset: {},
     style: {},
     classSet,
+    className: '',
     textContent: '',
     innerHTML: '',
     hidden: false,
     value: '',
+    disabled: false,
+    children,
+    parentElement: null,
     listeners: {},
+    allListeners: {},
     querySelectorAllFor: {},
     classList: {
       add: (c: string) => { classSet.add(c); },
@@ -47,23 +62,57 @@ export function fakeEl(id?: string): FakeEl {
         return on;
       },
     },
-    addEventListener(kind, fn) { this.listeners[kind] = fn; },
-    dispatchEvent() {},
-    querySelectorAll(sel) { return this.querySelectorAllFor[sel] ?? []; },
+    addEventListener(kind: string, fn: (ev?: any) => void) {
+      this.listeners[kind] = fn;
+      (this.allListeners[kind] ??= []).push(fn);
+    },
+    dispatchEvent(ev: any) {
+      const kind = ev?.type;
+      for (const fn of this.allListeners[kind] ?? []) fn(ev);
+    },
+    click() { this.dispatchEvent({type: 'click'}); },
+    appendChild(child: FakeEl) {
+      children.push(child);
+      child.parentElement = this;
+    },
+    insertBefore(child: FakeEl, _ref: FakeEl | null) {
+      children.push(child);
+      child.parentElement = this;
+    },
+    remove() {},
+    querySelectorAll(sel: string) { return this.querySelectorAllFor[sel] ?? []; },
     querySelectorFor: {},
     querySelector(sel: string) { return this.querySelectorFor[sel] ?? null; },
     hasAttribute(k: string) { return k in this.dataset; },
-    setAttribute(k, v) { this.dataset[k] = v; },
-    getAttribute(k) { return this.dataset[k] ?? null; },
-    removeAttribute(k) { delete this.dataset[k]; },
+    setAttribute(k: string, v: string) { this.dataset[k] = v; },
+    getAttribute(k: string) { return this.dataset[k] ?? null; },
+    removeAttribute(k: string) { delete this.dataset[k]; },
   };
+  // `className` is a live view of the class list (initCell and friends set
+  // className, other modules read classList).
+  Object.defineProperty(el, 'className', {
+    get: () => Array.from(classSet).join(' '),
+    set: (v: string) => {
+      classSet.clear();
+      for (const c of String(v).split(/\s+/).filter(Boolean)) classSet.add(c);
+    },
+  });
+  // Setting innerHTML replaces the child subtree, like the real DOM (the
+  // output pane is emptied with `lines.innerHTML = ''`). textContent stays an
+  // independent property so source-code edits survive re-highlighting.
+  let markup = '';
+  Object.defineProperty(el, 'innerHTML', {
+    get: () => markup,
+    set: (v: string) => { markup = v; children.length = 0; },
+  });
+  return el;
 }
 
 export interface DomStub {
   elements: Map<string, FakeEl>;
   queryAll: Record<string, FakeEl[]>;
   listeners: Record<string, (ev?: any) => void>;
-  restore(): void;
+  restore(): Record<string, any>;
 }
 
 // Stub the document surface these client modules use (getElementById,

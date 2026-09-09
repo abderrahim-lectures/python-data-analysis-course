@@ -1,7 +1,7 @@
 import {afterEach, beforeEach, describe, expect, test, vi} from 'vitest';
-import {stubDom} from './_domstub.ts';
-import {awardLessonXp, initRunnableCells, runCellCode} from '../../src/lib/runnable-cell.client';
-import type {CellRuntime} from '../../src/lib/runnable-cell.client';
+import {fakeEl, stubDom, type FakeEl} from './_domstub.ts';
+import {awardLessonXp, initCell, initRunnableCells, runCellCode} from '../../src/lib/runnable-cell.client';
+import {type CellRuntime, type InitCellDeps, type PyodideModel} from '../../src/lib/runnable-cell.client';
 
 type Recorded = Array<{kind: string; text: string}>;
 
@@ -34,6 +34,7 @@ function makeEngine() {
     runPythonAsync: async (src: string) => {
       calls.ran.push(src);
     },
+    FS: {writeFile: (_path: string, _data: Uint8Array) => {}},
   };
   return {engine, calls};
 }
@@ -152,6 +153,254 @@ describe('initRunnableCells bootstrapping', () => {
     (stub.restore() as any).readyState = 'loading';
     await import('../../src/lib/runnable-cell.client.ts');
     expect(stub.listeners['DOMContentLoaded']).toBeDefined();
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+});
+
+describe('initCell DOM wiring', () => {
+  function memoryStorage(initial?: Record<string, string>): Storage {
+    const map = new Map(Object.entries(initial ?? {}));
+    return {
+      getItem: (k: string) => map.get(k) ?? null,
+      setItem: (k: string, v: string) => void map.set(k, v),
+      removeItem: (k: string) => void map.delete(k),
+      clear: () => map.clear(),
+      key: () => '',
+      length: map.size,
+    } as Storage;
+  }
+
+  interface Fixture {
+    stub: ReturnType<typeof stubDom>;
+    cell: FakeEl;
+    pre: FakeEl;
+    run: FakeEl;
+    clear: FakeEl;
+    lines: FakeEl;
+    out: FakeEl;
+    actions: FakeEl;
+    code: FakeEl;
+    engine: PyodideModel;
+    calls: ReturnType<typeof makeEngine>['calls'];
+    loadEngine: () => Promise<PyodideModel>;
+  }
+
+  function buildFixture(src = 'print("hi")'): Fixture {
+    const stub = stubDom();
+    const cell = fakeEl('cell');
+    const actions = fakeEl('actions');
+    const run = fakeEl('run');
+    const lang = fakeEl('lang');
+    const pre = fakeEl('pre');
+    const code = fakeEl('code');
+    const out = fakeEl('out');
+    const lines = fakeEl('lines');
+    const clear = fakeEl('clear');
+    cell.appendChild(actions);
+    actions.appendChild(run);
+    actions.appendChild(lang);
+    cell.appendChild(pre);
+    pre.appendChild(code);
+    cell.appendChild(out);
+    out.appendChild(lines);
+    out.appendChild(clear);
+    actions.classList.add('cell__actions');
+    pre.classList.add('cell__code');
+    run.classList.add('cell__run');
+    out.classList.add('cell__output');
+    lines.classList.add('cell__lines');
+    clear.classList.add('cell__clear');
+    code.textContent = src;
+    run.disabled = false;
+    out.hidden = true;
+    clear.hidden = true;
+    cell.querySelectorFor = {
+      '[data-run]': run,
+      '[data-output]': out,
+      '[data-lines]': lines,
+      '[data-clear]': clear,
+      '.cell__actions': actions,
+      'code': code,
+    };
+    const {engine, calls} = makeEngine();
+    vi.stubGlobal('window', {prompt: () => '', getSelection: () => null, location: {href: 'https://example.com/lessons/python-101'}});
+    vi.stubGlobal('navigator', {clipboard: {writeText: vi.fn().mockResolvedValue(undefined)}});
+    vi.stubGlobal('requestAnimationFrame', (cb: () => void) => { cb(); return 0; });
+    const loadEngine = async () => engine;
+    return {stub, cell, pre, run, clear, lines, out, actions, code, engine, calls, loadEngine};
+  }
+
+  const flush = () => new Promise((r) => setTimeout(r, 10));
+  const asElement = (el: FakeEl) => el as unknown as Element;
+  const gutterOf = (pre: FakeEl) => pre.children.find((c) => c.classSet.has('cell__gutter'));
+
+  test('localizes chrome, paints a gutter, and makes the code editable', () => {
+    const fixture = buildFixture('line1\nline2\nline3');
+    const {stub, cell, run, clear, code, pre} = fixture;
+    vi.stubGlobal('localStorage', memoryStorage());
+    initCell(asElement(cell), {loadEngine: fixture.loadEngine} as InitCellDeps);
+
+    expect(run.textContent.length).toBeGreaterThan(0);
+    expect(run.getAttribute('aria-label')).toBeTruthy();
+    expect(clear.textContent.length).toBeGreaterThan(0);
+    expect(code.getAttribute('contenteditable')).toBe('plaintext-only');
+    expect(pre.children.map((c) => c.classSet.has('cell__gutter'))).toContain(true);
+    expect(gutterOf(pre)?.textContent).toBe('1\n2\n3\n');
+    expect(stub.restore().head.children.length).toBeGreaterThan(0);
+
+    initCell(asElement(cell), {loadEngine: fixture.loadEngine} as InitCellDeps);
+    expect(pre.children.length).toBe(2);
+  });
+
+  test('clicking Run disables the button, runs the engine, awards XP, fires lesson:complete and toasts first success', async () => {
+    const f = buildFixture('print("hi")');
+    const {cell, run, lines, out} = f;
+    cell.dataset.lesson = 'titanic';
+    vi.stubGlobal('localStorage', memoryStorage());
+    const completeSpy = vi.fn();
+    initCell(asElement(cell), {loadEngine: f.loadEngine});
+    cell.addEventListener('lesson:complete', completeSpy);
+
+    await (run.listeners['click']() as unknown as Promise<unknown>);
+
+    expect(f.calls.ran).toHaveLength(1);
+    expect(run.disabled).toBe(false);
+    expect(out.hidden).toBe(false);
+    expect(lines.children[0].textContent).toBe('$ python');
+    f.calls.stdout?.batched('hi\n');
+    expect(lines.children[lines.children.length - 1].textContent).toBe('hi\n');
+    expect(completeSpy).toHaveBeenCalledTimes(1);
+    expect(completeSpy.mock.calls[0][0].detail).toEqual({lessonId: 'titanic', xp: 65});
+    const body = f.stub.restore().body as unknown as FakeEl;
+    expect(body.children.some((c) => c.classSet.has('firstsuccess-toast'))).toBe(true);
+  });
+
+  test('a cell without data-lesson falls back to the page data-lesson-id', async () => {
+    const f = buildFixture('print("hi")');
+    const {cell, run} = f;
+    const doc = f.stub.restore() as Record<string, any>;
+    doc.querySelector = (sel: string) =>
+      sel === '[data-lesson-id]' ? {getAttribute: () => 'python-101/normal/01-printing'} : null;
+    vi.stubGlobal('localStorage', memoryStorage());
+    const completeSpy = vi.fn();
+    initCell(asElement(cell), {loadEngine: f.loadEngine});
+    cell.addEventListener('lesson:complete', completeSpy);
+
+await (run.listeners['click']() as unknown as Promise<unknown>);
+    expect(completeSpy.mock.calls[0][0].detail.lessonId).toBe('python-101/normal/01-printing');
+  });
+
+  test('mounts datasets referenced by the code before running', async () => {
+    const f = buildFixture('open("titanic.csv")');
+    const {cell, run, engine, code} = f;
+    f.stub.queryAll['[data-runnable] code'] = [code];
+    cell.dataset.lesson = 'titanic';
+    vi.stubGlobal(
+      'fetch',
+      vi.fn()
+        .mockResolvedValueOnce({ok: true, json: async () => ({titaniccsv: 'Titanic.csv'})})
+        .mockResolvedValueOnce({ok: true, arrayBuffer: async () => new ArrayBuffer(8)}),
+    );
+    vi.stubGlobal('localStorage', memoryStorage());
+    const writeFile = vi.spyOn(engine.FS, 'writeFile');
+    initCell(asElement(cell), {loadEngine: f.loadEngine});
+
+    await (run.listeners['click']() as unknown as Promise<unknown>);
+
+    expect(fetch).toHaveBeenCalledWith(expect.stringContaining('datasets/index.json'));
+    expect(fetch).toHaveBeenCalledWith(expect.stringContaining('datasets/Titanic.csv'));
+    const written = writeFile.mock.calls.map((c) => c[0]);
+    expect(written).toContain('/home/pyodide/Titanic.csv');
+    expect(written).toContain('/Titanic.csv');
+    expect(written).toContain('/home/pyodide/titanic.csv');
+    expect(written).toContain('/titanic.csv');
+
+    writeFile.mockClear();
+    await (run.listeners['click']() as unknown as Promise<unknown>);
+    expect(fetch).toHaveBeenCalledTimes(2);
+    expect(writeFile).not.toHaveBeenCalled();
+  });
+
+  test('refuses the js bridge, shows the friendly line, and awards nothing', async () => {
+    const f = buildFixture('import js');
+    const {cell, run, lines} = f;
+    cell.dataset.lesson = 'titanic';
+    vi.stubGlobal('localStorage', memoryStorage());
+    const completeSpy = vi.fn();
+    initCell(asElement(cell), {loadEngine: f.loadEngine});
+    cell.addEventListener('lesson:complete', completeSpy);
+
+    await (run.listeners['click']() as unknown as Promise<unknown>);
+
+    expect(f.calls.ran).toHaveLength(0);
+    const last = lines.children[lines.children.length - 1];
+    expect(last.classSet.has('o-line--err')).toBe(true);
+    expect(last.textContent).toContain('Blocked');
+    expect(completeSpy).not.toHaveBeenCalled();
+  });
+
+  test('Clear wipes the lines and hides the output', () => {
+    const f = buildFixture();
+    const {cell, clear, lines, out} = f;
+    vi.stubGlobal('localStorage', memoryStorage());
+    initCell(asElement(cell), {loadEngine: f.loadEngine});
+    lines.appendChild(fakeEl('d'));
+    out.hidden = false;
+    clear.hidden = false;
+
+    clear.listeners['click']();
+
+    expect(lines.children.length).toBe(0);
+    expect(out.hidden).toBe(true);
+    expect(clear.hidden).toBe(true);
+  });
+
+  test('Copy writes the output text to the clipboard', async () => {
+    const f = buildFixture();
+    const {cell, lines, actions} = f;
+    vi.stubGlobal('localStorage', memoryStorage());
+    initCell(asElement(cell), {loadEngine: f.loadEngine});
+    lines.textContent = 'hello\n';
+
+    const copy = actions.children.find((c) => c.classSet.has('cell__copy'));
+    expect(copy).toBeDefined();
+    copy?.listeners['click']();
+
+    await flush();
+    const nav = navigator as unknown as {clipboard: {writeText: ReturnType<typeof vi.fn>}};
+    expect(nav.clipboard.writeText).toHaveBeenCalledWith('hello\n');
+  });
+
+  test('Tab inserts four spaces via execCommand and Ctrl+Enter triggers Run', () => {
+    const f = buildFixture();
+    const {cell, run, code} = f;
+    vi.stubGlobal('localStorage', memoryStorage());
+    initCell(asElement(cell), {loadEngine: f.loadEngine});
+    const doc = f.stub.restore() as {execCommand: ReturnType<typeof vi.fn>};
+
+    for (const fn of code.allListeners['keydown'] ?? []) fn({key: 'Tab', preventDefault: vi.fn()});
+    expect(doc.execCommand).toHaveBeenCalledWith('insertText', false, '    ');
+
+    const clicks = vi.fn();
+    run.addEventListener('click', clicks);
+    for (const fn of code.allListeners['keydown'] ?? []) fn({key: 'Enter', ctrlKey: true, preventDefault: vi.fn()});
+    expect(clicks).toHaveBeenCalledTimes(1);
+  });
+
+  test('edits re-highlight the code and renumber the gutter', () => {
+    const f = buildFixture('a = 1\nb = 2');
+    const {cell, code, pre} = f;
+    vi.stubGlobal('localStorage', memoryStorage());
+    initCell(asElement(cell), {loadEngine: f.loadEngine});
+    expect(code.innerHTML).toContain('tok-num');
+
+    code.textContent = 'x\n0.5\n3';
+    code.listeners['input']();
+
+    expect(gutterOf(pre)?.textContent).toBe('1\n2\n3\n');
   });
 
   afterEach(() => {

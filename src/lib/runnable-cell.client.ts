@@ -9,11 +9,27 @@ import {friendlyError} from './friendlyError.ts';
 
 const PYODIDE_VERSION = '0.26.4';
 const INDEX = `https://cdn.jsdelivr.net/pyodide/v${PYODIDE_VERSION}/full/`;
-let pyPromise: Promise<any> | null = null;
 
-async function py(): Promise<any> {
+// Minimal structural typing for the subset of the Pyodide runtime this module
+// touches (stdout/stderr/stdin wiring, package loading, script execution, and
+// the virtual filesystem used to pre-mount datasets). Keeps the CDN import
+// (`loadPyodide`) and the DOM wiring fully typed instead of `any`.
+export interface PyodideModel {
+  setStdout(cb: {batched: (s: string) => void}): void;
+  setStderr(cb: {batched: (s: string) => void}): void;
+  setStdin(cb: {stdin: () => string}): void;
+  loadPackagesFromImports(src: string): Promise<unknown>;
+  runPython(src: string): Promise<(src: string) => string>;
+  runPythonAsync(src: string): Promise<unknown>;
+  FS: {writeFile(path: string, data: Uint8Array): void};
+}
+
+type PyodideModule = {loadPyodide: (opts: {indexURL: string}) => Promise<PyodideModel>};
+let pyPromise: Promise<PyodideModel> | null = null;
+
+async function py(): Promise<PyodideModel> {
   if (!pyPromise) {
-    const mod = await import(/* @vite-ignore */ `${INDEX}pyodide.mjs`);
+    const mod = (await import(/* @vite-ignore */ `${INDEX}pyodide.mjs`)) as PyodideModule;
     pyPromise = mod.loadPyodide({indexURL: INDEX});
   }
   return pyPromise;
@@ -71,29 +87,24 @@ def _wrap_bare_expr(src):
     return src[:start_off] + 'print(repr(\\n' + expr + '\\n))' + src[end_off:]
 `;
 
-// Run a cell against a Pyodide model and route script stdout/stderr to the
-// output lines, restoring notebook-style `print(repr(...))` for trailing bare
-// expressions. Exported for unit tests; initCell wires it to the DOM.
+// Run a cell against a Pyodide model, route script stdout/stderr to the
+// output lines, and restore notebook-style `print(repr(...))` for trailing bare
+// expressions. Resolves false when the code was refused (js/pyodide bridge) so
+// callers can skip XP awards — a refused cell never ran, so it earns nothing.
+// Exported for unit tests; initCell wires it to the DOM.
 export interface CellRuntime {
   appendLine(kind: 'out' | 'err', text: string): void;
-  engine: {
-    setStdout(cb: {batched: (s: string) => void}): void;
-    setStderr(cb: {batched: (s: string) => void}): void;
-    setStdin(cb: {stdin: () => string}): void;
-    loadPackagesFromImports(src: string): Promise<unknown>;
-    runPython(src: string): Promise<(src: string) => string>;
-    runPythonAsync(src: string): Promise<unknown>;
-  };
+  engine: PyodideModel;
 }
-export async function runCellCode(code: string, rt: CellRuntime): Promise<void> {
+export async function runCellCode(code: string, rt: CellRuntime): Promise<boolean> {
   rt.engine.setStdout({batched: (s: string) => rt.appendLine('out', s)});
   rt.engine.setStderr({batched: (s: string) => rt.appendLine('err', s)});
   rt.engine.setStdin({stdin: () => window.prompt('') ?? ''});
+  if (usesJsBridge(code)) {
+    rt.appendLine('err', m.blocked_bridge());
+    return false;
+  }
   try {
-    if (usesJsBridge(code)) {
-      rt.appendLine('err', m.blocked_bridge());
-      return;
-    }
     await rt.engine.loadPackagesFromImports(code);
     const toRun = await rt.engine.runPython(WRAP_EXPR_SRC + '_wrap_bare_expr');
     await rt.engine.runPythonAsync(toRun(code));
@@ -101,6 +112,7 @@ export async function runCellCode(code: string, rt: CellRuntime): Promise<void> 
     const raw = e instanceof Error ? e.message : String(e);
     rt.appendLine('err', friendlyError(raw));
   }
+  return true;
 }
 
 // Award XP for completing a lesson run and report how much was gained and the
@@ -113,7 +125,7 @@ export async function awardLessonXp(lessonId: string): Promise<{gained: number; 
 }
 
 const mountedDatasets = new Set<string>();
-async function mountDatasets(engine: any): Promise<void> {
+async function mountDatasets(engine: PyodideModel): Promise<void> {
   const manifest = await getDatasetManifest();
   if (!manifest) return;
   const source = Array.from(document.querySelectorAll('[data-runnable] code'))
@@ -141,7 +153,14 @@ async function mountDatasets(engine: any): Promise<void> {
   }
 }
 
-function initCell(cell: Element): void {
+export interface InitCellDeps {
+  loadEngine?: () => Promise<PyodideModel>;
+}
+
+// Hydrate one `.cell[data-runnable]` (localized chrome, Run/Clear/Copy wiring,
+// edit + re-highlight, line gutter). The engine loader is injectable so the
+// DOM wiring is unit-testable without touching the Pyodide CDN download.
+export function initCell(cell: Element, deps: InitCellDeps = {}): void {
   if (cell.hasAttribute('data-hydrated')) return;
   cell.setAttribute('data-hydrated', '1');
   // Cells generated from markdown ```python fences carry no data-lesson, so
@@ -183,13 +202,13 @@ function initCell(cell: Element): void {
     run.disabled = true;
     run.textContent = m.run_loading();
     run.classList.add('cell__run--loading');
-    const engine = await py();
+    const engine = await (deps.loadEngine ?? py)();
     run.textContent = m.run_button();
     run.disabled = false;
     run.classList.remove('cell__run--loading');
     await mountDatasets(engine);
-    await runCellCode(src, {appendLine, engine});
-    if (!awarded && lessonId) {
+    const executed = await runCellCode(src, {appendLine, engine});
+    if (executed && !awarded && lessonId) {
       awarded = true;
       try {
         const {gained, xpBefore} = await awardLessonXp(lessonId);
@@ -318,7 +337,7 @@ function initCell(cell: Element): void {
 }
 
 export function initRunnableCells(root: ParentNode = document): void {
-  root.querySelectorAll('[data-runnable]').forEach(initCell);
+  root.querySelectorAll('[data-runnable]').forEach((cell) => initCell(cell));
 }
 
 if (typeof document !== 'undefined') {
