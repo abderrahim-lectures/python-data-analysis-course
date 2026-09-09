@@ -21,7 +21,7 @@ const {locale, section, track, lessonSlug} = Astro.props;
 const base = import.meta.env.BASE_URL;
 const wanted = relatedProjectSlugs(section, track, lessonSlug);
 
-let related: {slug: string; title: string; description: string}[] = [];
+let related: {slug: string; title: string; description: string; tags: string[]}[] = [];
 if (wanted.length) {
   const all = await getCollection('projects', ({data}) => Boolean(data.title));
   const byBareSlug = new Map<string, CollectionEntry<'projects'>>();
@@ -38,6 +38,7 @@ if (wanted.length) {
       slug: p.id.replace(/^(ar|es|fr)\//, '').replace(/^\/?projects?\//, ''),
       title: p.data.title,
       description: p.data.description,
+      tags: p.data.tags ?? [],
     }));
 }
 ---
@@ -49,7 +50,7 @@ if (wanted.length) {
     <div class="related-projects__grid">
       {related.map((p) => (
         <a class="related-projects__card" href={projectsHref(locale, base, p.slug)}>
-          <span class="related-projects__icon">{projectArtEmoji([p.slug])}</span>
+          <span class="related-projects__icon">{projectArtEmoji(p.tags)}</span>
           <span class="related-projects__body">
             <strong>{p.title}</strong>
             <small>{p.description}</small>

@@ -1712,6 +1712,31 @@ Follow-up pass on the brutal review's action items. All gates re-verified.
 - **`src/lib/gamestats.ts` kda label changed: `'Frag God'` → `'Legend'`** (student-appropriate; removed all god/religion/adult wording). The ProgressPage `kdaNames` map key and `progress_kda_frag` messages follow. Home-page rank badge unaffected.
 - SHARED allowlist now has **5** keys: added `progress_report_lede_end` (value `).` is punctuation, identical in all locales).
 
+## Session 2026-09-09 (opencode) — UI/UX deep review + opencode-surface fixes (see plan/uiux-review.md)
+
+Comprehensive severity-ranked review of all page types x 4 locales (CDP sweep + source audit + web research) written to `plan/uiux-review.md`. **Do not re-implement the fixes below** — they are committed on the opencode surface.
+
+### Fixed here (opencode surface, committed)
+- [x] **`Quiz.astro`: dead XP economy wired.** `recordQuiz`(+5/answer) and `recordQuizPerfect`(+25 perfect) now called on check; `recordChallenge` kept. Unanswered-submit credits nothing. (WeeklyQuiz path via `quiz.client.ts` already credited — this closes the `Quiz.astro` gap only.)
+- [x] **`Quiz.astro`: radios were `display:none`** (out of tab order + a11y tree). Now visually-hidden, native radios keyboard-focusable, `:has(input:focus-visible)` ring, checked state driven by `:checked` rather than a class.
+- [x] **`Quiz.astro`: retry double-fire** — the `{once:true}` retry listener stacked on each check. Now a single guarded state machine (`state: 'check'|'retry'`); empty re-submit credits no XP (e2e-asserted).
+- [x] **`Quiz.astro` + `ProjectDetail.astro` + `styles/projects.css`: token drift** — `#22c55e`/`#ef4444`/`#16a34a`/`#d97706`/`#dc2626`/violet rgba/`#5b21b6` → `var(--success[-soft])`, `var(--bad[-soft])`, `var(--warn[-soft])`, `var(--accent[-soft|-contrast])`, `color-mix`.
+- [x] **`RelatedProjects.astro`: icon feed bug** — `projectArtEmoji([p.slug])` fed the slug where tags are expected; now carries `p.data.tags`.
+- [x] **`tests/e2e/smoke.mjs`: quiz-XP block** — perfect 3Q hard lesson (55 XP = 15+25+15), empty re-submit credits nothing, no double-fire.
+- [x] Gates: see commit notes below (check/typecheck/unit/e2e/contrast/responsive/a11y/hreflang).
+
+### Handed back (Claude-owned surface — please take)
+- [ ] **HIGH — `ProgressPage.astro` lesson-vs-module conflation (remains after 9fc2997).** `trackProgress` counts unique lessons (`gameState.ts:428-439`), but totals passed are module counts (`7`/`5`); stations light on lesson-derived `done` (`ProgressPage.astro:24-37` server, `:506-516` client). After 7 of python's 19 lessons every station reads "done"; full completion gives "19/7" and `pct>100`. XP line `xp-${section}` = `tp.done * 100` (`:515`) is a fabricated unit. Options in `plan/uiux-review.md` item D.
+- [ ] **HIGH — `ProgressPage.astro` actlog badge frozen at 0.** `#actlog-total` (`:268`) is baked at build-time SSR (`getActivityStats()` on empty server state → 0) and the client `render()` (builds `#actlog-grid` from `getActivityLog(50)` at `:448`) never re-sets it. Set it client-side from `getActivityStats().totalActions`.
+- [ ] **HIGH — English `404.astro` on all locales** (`lang="en"`, "page not found", "Back to the homepage"). Detect the failed path's locale and localize (or route messages through `m.*`). Same route serves `/ar/…` 404s and broken `/playground/<code>` links.
+- [ ] **MED/HIGH — `playground.astro` English copy** ("Full-screen editor", "Write and run any Python here…") on the shared route; `LearnerActivity.astro:16` "learning now" hardcoded (also no `aria-live`, no dismiss, `bottom:0` overlaps mobile nav, offline placeholder is a bare "—").
+- [ ] **MED — `RelatedProjects.astro:46-48` EN copy** (`aria-label="Related projects"`, "🚀 Keep building", lead) on ar/es/fr lesson pages → needs 3 message keys (`related_projects_*`) across `messages/{en,ar,es,fr}.json`; wire them in the component. (Icon feed bug is already fixed above — do not touch the `projectArtEmoji` call.)
+- [ ] **MED — RTL fixups**: `ModuleNav.astro:18,21` hardcoded `←`/`→` + physical `justify-self: start/end` (`:34-35`); `translateX(4px)` hover on `ModulePage.astro:131`, `TrackHub.astro:116`, `SectionLanding.astro:120` is always rightward; `ModulePage.astro:81` renders raw difficulty enum (`beginner`/`intermediate`/`advanced`) — localize via existing `difficulty_*` messages (the other lists already do).
+- [ ] **LOW — misc**: `LearnHub.astro:58` `lessons * 100` ignores hard-track 150 and real `XP.LESSON` 60 (relabel "up to"); `ModulePage.astro:55` shows both `~{estimatedHours}h` and `{totalMinutes}`; `ProjectDetail.astro:150` `aria-label` uses DOM index not parsed step number; `ProgressPage.astro:166,491` `` `${sp.current}🔥` `` flame-after-number reads oddly in RTL.
+- [ ] **LOW — `LearnerActivity.astro:36`** `#22c55e` → `var(--success)`.
+
+Coordination: none of the handed-back items conflict with the committed opencode edits. `tests/e2e/smoke.mjs` now includes a quiz-XP block that must stay green; the `1/7 done` assertion (`:108`) will need updating when the progress-page conflation is fixed.
+
 ## Session 2026-09-09 (opencode) — progress week-model fix + verification (committed `9fc2997`)
 
 - [x] **Week-model bug fixed** (`ProgressPage.astro` + `tests/e2e/smoke.mjs`). Ground truth: python-101 has **7** normal modules, data-analysis **5**. The page rendered python stations 1-7 but `trackProgress('python-101', 5)` capped `done` at 5 (stations 6-7 could never light) and the client loop toggled python weeks `[1..5]` / data weeks `[6..10]` (data stations 1-5 never got client updates). The legacy `isWeekComplete(section, _week)` ignores the week entirely ("any lesson complete") so its counting ("5/5" after one lesson) was wrong too.

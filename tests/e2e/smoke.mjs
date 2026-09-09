@@ -154,6 +154,31 @@ check('data track counts progressive done', await evaluate('document.getElementB
 check('data stations beyond done stay dim', await evaluate('document.querySelector(".stations[data-track=\'data-analysis\'] li[data-week=\'3\']").classList.contains("station--done")'), false);
 await evaluate('(localStorage.setItem("pda:state", JSON.stringify({xp:0,lessonsCompleted:{},lessonsRun:{},quizCorrect:0,quizTotal:0,streak:0,bestStreak:0,lastActive:\'\',quests:{},badges:[]})),1)');
 
+console.log('\nquiz XP is real (recordQuiz/recordQuizPerfect wired)');
+await goto('/learn/python-101/hard/lessons/01-csv-loading');
+await evaluate('(localStorage.setItem("pda:onboarded", "1"), 1)');
+await goto('/learn/python-101/hard/lessons/01-csv-loading');
+check('the hard lesson renders the Quiz component', await evaluate('!!document.querySelector("[data-quiz][data-lesson]")'), true);
+// Answer every question correctly (correct indices: q0->1, q1->2, q2->1).
+await evaluate(`(() => {
+  document.querySelector('[data-quiz] input[name="q0"][value="1"]').checked = true;
+  document.querySelector('[data-quiz] input[name="q1"][value="2"]').checked = true;
+  document.querySelector('[data-quiz] input[name="q2"][value="1"]').checked = true;
+  document.querySelector('[data-quiz-check]').click();
+})(), 1`);
+await waitFor(() => evaluate('!document.querySelector("[data-quiz-feedback]").hidden'), 'quiz feedback');
+check('a perfect attempt shows the +XP reward', await evaluate('!!document.querySelector("[data-quiz-feedback].quiz__feedback--correct")'), true);
+await new Promise(r => setTimeout(r, 600));
+const quizState = await evaluate('JSON.parse(localStorage.getItem("pda:state"))');
+check('per-question XP is credited (5 x 3 correct)', quizState.quizCorrect === 3 && quizState.quizTotal === 3, true);
+check('the perfect bonus is credited (+25) and the challenge (+15)', quizState.xp, 55);
+// An unanswered re-submit must not over-credit, and the button must not double-fire.
+await evaluate('(document.querySelector("[data-quiz-check]").click(), 1)'); // retry
+await evaluate('(document.querySelector("[data-quiz-check]").click(), 1)'); // check w/ nothing selected
+await new Promise(r => setTimeout(r, 600));
+const afterEmpty = await evaluate('JSON.parse(localStorage.getItem("pda:state"))');
+check('an empty re-submit does not over-credit XP', afterEmpty.xp, 55);
+
 console.log('\nplayground');
 await goto('/playground');
 check('Run is enabled with the starter code', await evaluate('document.querySelector("[data-run]").disabled'), false);

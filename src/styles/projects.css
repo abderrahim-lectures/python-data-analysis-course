@@ -46,7 +46,7 @@
 }
 .diff-pill:hover { border-color: var(--accent); color: var(--accent); }
 .diff-pill.is-active { color: #fff; }
-.diff-pill[data-diff=""].is-active { background: #5b21b6; border-color: #5b21b6; }
+.diff-pill[data-diff=""].is-active { background: var(--accent); border-color: var(--accent); color: var(--accent-contrast); }
 .diff-pill[data-diff="beginner"].is-active { background: #065f46; border-color: #065f46; }
 .diff-pill[data-diff="intermediate"].is-active { background: #92400e; border-color: #92400e; }
 .diff-pill[data-diff="advanced"].is-active { background: #7f1d1d; border-color: #7f1d1d; }

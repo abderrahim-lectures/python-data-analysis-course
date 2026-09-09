@@ -66,14 +66,20 @@ const {title = m.quiz_title(), questions, xp = 10, lessonId = ''} = Astro.props;
     const total = Number((el as HTMLElement).dataset.total) || 0;
     const lessonId = (el as HTMLElement).dataset.lesson ?? '';
 
-    checkBtn?.addEventListener('click', () => {
+    // Single guarded handler replaces the stacked {once} retry listeners that
+    // previously re-graded (and could over-credit) on every retry click.
+    let state: 'check' | 'retry' = 'check';
+
+    const grade = () => {
       const questions = el.querySelectorAll('.quiz-q');
       let correct = 0;
+      let answered = false;
 
       questions.forEach((q) => {
         const opts = q.querySelectorAll('.quiz-q__opt');
         const explain = q.querySelector('[data-explain]') as HTMLElement;
         let userCorrect = false;
+        let qAnswered = false;
 
         opts.forEach((opt) => {
           const radio = opt.querySelector('input') as HTMLInputElement;
@@ -82,6 +88,7 @@ const {title = m.quiz_title(), questions, xp = 10, lessonId = ''} = Astro.props;
           opt.classList.remove('quiz-q__opt--correct', 'quiz-q__opt--wrong', 'quiz-q__opt--selected');
 
           if (radio.checked) {
+            qAnswered = true;
             opt.classList.add('quiz-q__opt--selected');
             if (isCorrect) {
               opt.classList.add('quiz-q__opt--correct');
@@ -94,6 +101,13 @@ const {title = m.quiz_title(), questions, xp = 10, lessonId = ''} = Astro.props;
           }
         });
 
+        // Credit XP once per fresh attempt, only for actually-answered questions.
+        if (qAnswered) {
+          answered = true;
+          try {
+            import('../lib/gameState.ts').then((gs) => gs.recordQuiz(userCorrect));
+          } catch {}
+        }
         if (userCorrect) correct++;
         if (explain) explain.hidden = false;
       });
@@ -101,15 +115,22 @@ const {title = m.quiz_title(), questions, xp = 10, lessonId = ''} = Astro.props;
       scoreEl.hidden = false;
       scoreEl.textContent = m.quiz_correct({correct, total});
 
+      if (!answered) {
+        state = 'retry';
+        checkBtn.textContent = m.quiz_retry();
+        return;
+      }
+
       if (correct === total) {
+        try {
+          import('../lib/gameState.ts').then((gs) => {
+            gs.recordQuizPerfect();
+            if (lessonId) gs.recordChallenge(lessonId);
+          });
+        } catch {}
         feedback.hidden = false;
         feedback.textContent = m.quiz_perfect({xp});
         feedback.className = 'quiz__feedback quiz__feedback--correct';
-        try {
-          import('../lib/gameState.ts').then((m) => {
-            if (lessonId) m.recordChallenge(lessonId);
-          });
-        } catch {}
       } else if (correct > 0) {
         feedback.hidden = false;
         feedback.textContent = m.quiz_partial({correct, total});
@@ -119,21 +140,28 @@ const {title = m.quiz_title(), questions, xp = 10, lessonId = ''} = Astro.props;
         feedback.textContent = m.quiz_wrong({total});
         feedback.className = 'quiz__feedback quiz__feedback--wrong';
       }
-
+      state = 'retry';
       checkBtn.textContent = m.quiz_retry();
-      checkBtn.addEventListener('click', () => {
-        questions.forEach((q) => {
-          q.querySelectorAll('.quiz-q__opt').forEach((opt) => {
-            opt.classList.remove('quiz-q__opt--correct', 'quiz-q__opt--wrong', 'quiz-q__opt--selected');
-            (opt.querySelector('input') as HTMLInputElement).checked = false;
-          });
-          const explain = q.querySelector('[data-explain]') as HTMLElement | null;
-          if (explain) explain.hidden = true;
+    };
+
+    const reset = () => {
+      el.querySelectorAll('.quiz-q').forEach((q) => {
+        q.querySelectorAll('.quiz-q__opt').forEach((opt) => {
+          opt.classList.remove('quiz-q__opt--correct', 'quiz-q__opt--wrong', 'quiz-q__opt--selected');
+          (opt.querySelector('input') as HTMLInputElement).checked = false;
         });
-        scoreEl.hidden = true;
-        feedback.hidden = true;
-        checkBtn.textContent = m.quiz_check();
-      }, {once: true});
+        const explain = q.querySelector('[data-explain]') as HTMLElement | null;
+        if (explain) explain.hidden = true;
+      });
+      scoreEl.hidden = true;
+      feedback.hidden = true;
+      state = 'check';
+      checkBtn.textContent = m.quiz_check();
+    };
+
+    checkBtn?.addEventListener('click', () => {
+      if (state === 'check') grade();
+      else reset();
     });
   });
 </script>
@@ -152,14 +180,14 @@ const {title = m.quiz_title(), questions, xp = 10, lessonId = ''} = Astro.props;
   .quiz__head {
     display: flex; align-items: center; gap: .6rem;
     padding: .7rem 1rem;
-    background: linear-gradient(135deg, var(--accent-soft), rgba(124,58,237,.06));
+    background: linear-gradient(135deg, var(--accent-soft), color-mix(in srgb, var(--accent-soft) 70%, transparent));
     border-bottom: 1px solid var(--line);
   }
   .quiz__icon { font-size: 1.2rem; }
   .quiz__title { font-weight: 700; font-size: .92rem; color: var(--ink); flex: 1; }
   .quiz__xp {
     font-size: .76rem; font-weight: 800; color: var(--accent);
-    background: rgba(124,58,237,.15); padding: .2rem .6rem;
+    background: var(--accent-soft); padding: .2rem .6rem;
     border-radius: var(--radius-pill);
   }
   .quiz__body { padding: .8rem 1rem; }
@@ -176,8 +204,14 @@ const {title = m.quiz_title(), questions, xp = 10, lessonId = ''} = Astro.props;
     transition: all .15s ease;
     font-size: .9rem;
   }
-  .quiz-q__opt:hover { border-color: var(--accent); background: rgba(124,58,237,.04); }
-  .quiz-q__opt input { display: none; }
+  .quiz-q__opt:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .quiz-q__opt input {
+    position: absolute; width: 1px; height: 1px; margin: -1px;
+    padding: 0; overflow: hidden; clip: rect(0 0 0 0);
+    white-space: nowrap; border: 0;
+  }
+  .quiz-q__opt:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .quiz-q__opt:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
   .quiz-q__radio {
     width: 16px; height: 16px;
     border: 2px solid var(--line);
@@ -186,33 +220,33 @@ const {title = m.quiz_title(), questions, xp = 10, lessonId = ''} = Astro.props;
     transition: all .15s ease;
     position: relative;
   }
-  .quiz-q__opt--selected .quiz-q__radio {
+  .quiz-q__opt:has(input:checked) .quiz-q__radio {
     border-color: var(--accent);
     background: var(--accent);
   }
-  .quiz-q__opt--selected .quiz-q__radio::after {
+  .quiz-q__opt:has(input:checked) .quiz-q__radio::after {
     content: '';
     position: absolute;
     top: 3px; left: 3px;
     width: 6px; height: 6px;
-    background: #fff;
+    background: var(--accent-contrast);
     border-radius: 50%;
   }
   .quiz-q__opt--correct {
-    border-color: #22c55e;
-    background: rgba(34,197,94,.08);
+    border-color: var(--success);
+    background: var(--success-soft);
   }
   .quiz-q__opt--correct .quiz-q__radio {
-    border-color: #22c55e;
-    background: #22c55e;
+    border-color: var(--success);
+    background: var(--success);
   }
   .quiz-q__opt--wrong {
-    border-color: #ef4444;
-    background: rgba(239,68,68,.08);
+    border-color: var(--bad);
+    background: var(--bad-soft);
   }
   .quiz-q__opt--wrong .quiz-q__radio {
-    border-color: #ef4444;
-    background: #ef4444;
+    border-color: var(--bad);
+    background: var(--bad);
   }
   .quiz-q__explain {
     margin-top: .4rem;
@@ -242,9 +276,9 @@ const {title = m.quiz_title(), questions, xp = 10, lessonId = ''} = Astro.props;
     font-size: .88rem;
     border-top: 1px solid var(--line);
   }
-  .quiz__feedback--correct { background: linear-gradient(135deg, rgba(34,197,94,.1), rgba(34,197,94,.05)); color: #16a34a; }
-  .quiz__feedback--partial { background: linear-gradient(135deg, rgba(251,191,36,.12), rgba(251,191,36,.05)); color: #d97706; }
-  .quiz__feedback--wrong { background: linear-gradient(135deg, rgba(239,68,68,.1), rgba(239,68,68,.05)); color: #dc2626; }
-  [data-theme='dark'] .quiz__check { background: #7c3aed; color: #fff; border-color: #7c3aed; }
-  [data-theme='dark'] .quiz__check:hover { background: #6d28d9; }
+  .quiz__feedback--correct { background: linear-gradient(135deg, var(--success-soft), color-mix(in srgb, var(--success-soft) 60%, transparent)); color: var(--success-text); }
+  .quiz__feedback--partial { background: linear-gradient(135deg, var(--warn-soft), color-mix(in srgb, var(--warn-soft) 60%, transparent)); color: var(--warn); }
+  .quiz__feedback--wrong { background: linear-gradient(135deg, var(--bad-soft), color-mix(in srgb, var(--bad-soft) 60%, transparent)); color: var(--bad-text); }
+  [data-theme='dark'] .quiz__check { background: var(--accent); border-color: var(--accent); }
+  [data-theme='dark'] .quiz__check:hover { background: var(--accent-strong); }
 </style>
