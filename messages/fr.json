@@ -24,6 +24,7 @@
   "cheatsheets_heading": "Antisèches Python",
   "cheatsheets_intro": "Les extraits auxquels vous reviendrez à chaque leçon. Le code s’exécute dans les cellules ci-dessus ; voici les motifs à copier.",
   "cheatsheets_title": "Antisèches — Cours PyDA",
+  "cell_load_dataset_first": "Cette cellule nécessite de charger d'abord les données — exécutez la cellule qui les charge (celle qui appelle pd.read_csv) avant celle-ci.",
   "choose_route": "Choisis ta route :",
   "clear_button": "Effacer",
   "completed": "Terminé ✓",

@@ -97,6 +97,10 @@ def _wrap_bare_expr(src):
 export interface CellRuntime {
   appendLine(kind: 'out' | 'err', text: string): void;
   engine: PyodideModel;
+  /** Concatenated source of every other runnable cell on the page, so a
+   *  NameError can be distinguished from "that dataset was never loaded".
+   *  Optional so unit tests can omit it. */
+  otherCellSources?: string;
 }
 export async function runCellCode(code: string, rt: CellRuntime): Promise<boolean> {
   rt.engine.setStdout({batched: (s: string) => rt.appendLine('out', s)});
@@ -112,7 +116,13 @@ export async function runCellCode(code: string, rt: CellRuntime): Promise<boolea
     await rt.engine.runPythonAsync(toRun(code));
   } catch (e) {
     const raw = e instanceof Error ? e.message : String(e);
-    rt.appendLine('err', friendlyError(raw));
+    let hint = friendlyError(raw);
+    // A name that should exist but hasn't been created yet most often means the
+    // dataset-loading cell at the top of the page hasn't been run. Point them there.
+    if (raw.includes('NameError: name') && rt.otherCellSources?.match(/pd\.read_csv\s*\(|open\s*\(\s*['"][^'"]+\.csv/) && !code.match(/pd\.read_csv\s*\(|open\s*\(\s*['"][^'"]+\.csv/)) {
+      hint += ` ${m.cell_load_dataset_first()}`;
+    }
+    rt.appendLine('err', hint);
   }
   return true;
 }
@@ -221,7 +231,11 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
     run.disabled = false;
     run.classList.remove('cell__run--loading');
     await mountDatasets(engine);
-    const executed = await runCellCode(src, {appendLine, engine});
+    const otherCellSources = Array.from(document.querySelectorAll('[data-runnable] code'))
+      .filter((el) => el !== codeEl)
+      .map((el) => el.textContent ?? '')
+      .join('\n');
+    const executed = await runCellCode(src, {appendLine, engine, otherCellSources});
     if (executed && !awarded && lessonId) {
       awarded = true;
       try {

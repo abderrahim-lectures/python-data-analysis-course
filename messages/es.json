@@ -24,6 +24,7 @@
   "cheatsheets_heading": "Referencias de Python",
   "cheatsheets_intro": "Los fragmentos a los que recurrirás en cada lección. El código corre en las celdas de arriba; estos son los patrones para copiar.",
   "cheatsheets_title": "Referencias — Curso PyDA",
+  "cell_load_dataset_first": "Esta celda necesita que se carguen los datos primero — ejecuta la celda que los carga (la que llama a pd.read_csv) antes de ejecutar esta.",
   "choose_route": "Elige tu ruta:",
   "clear_button": "Limpiar",
   "completed": "Completado ✓",

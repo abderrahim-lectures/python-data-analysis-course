@@ -92,12 +92,30 @@ describe('runCellCode', () => {
   test('maps runtime failures to friendly errors on the err line', async () => {
     vi.stubGlobal('window', {prompt: () => ''});
     mock.engine.runPythonAsync = async () => {
-      throw new Error("NameError: name 'x' is not defined");
+      throw new Error("NameError: name 'y' is not defined");
     };
     await runCellCode('x', makeRuntime(mock.engine, out));
     expect(out).toHaveLength(1);
     expect(out[0].kind).toBe('err');
     expect(out[0].text).toContain('recognize');
+    expect(out[0].text).not.toContain('dataset');
+  });
+
+  test('a NameError with a dataset-loading sibling cell hints to load the dataset first', async () => {
+    vi.stubGlobal('window', {prompt: () => ''});
+    mock.engine.runPythonAsync = async () => {
+      throw new Error("NameError: name 'df' is not defined");
+    };
+    const rt: CellRuntime = {
+      appendLine: (kind, text) => out.push({kind, text}),
+      engine: mock.engine,
+      otherCellSources: 'pd.read_csv("titanic.csv")\ndf.head()',
+    };
+    await runCellCode('df.head()', rt);
+    expect(out).toHaveLength(1);
+    expect(out[0].kind).toBe('err');
+    expect(out[0].text).toContain('recognize');
+    expect(out[0].text).toContain('pd.read_csv');
   });
 
   afterEach(() => {
