@@ -154,7 +154,11 @@ describe('computeGameStats', () => {
       'python-101/normal/02-variables': true,
       'python-101/normal/03-strings': true,
     };
-    s.lastActive = '2026-09-07';
+    // Two calendar days before the current UTC date: daysSinceStart is 3 at
+    // any time of day (ceil topology), keeping returnRate deterministic and
+    // independent of when the suite runs.
+    const twoDaysAgoIso = new Date(Date.now() - 2 * 86400000).toISOString().slice(0, 10);
+    s.lastActive = twoDaysAgoIso;
     state.saveState(s);
 
     const r = gs.computeGameStats();
