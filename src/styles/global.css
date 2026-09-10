@@ -484,6 +484,10 @@ button { font-family: inherit; cursor: pointer; }
 .o-line--cmd { color: #8f86c9; }
 .o-line--out { color: #d8d0ff; }
 .o-line--err { color: #ff8fa3; }
+/* Matplotlib figures rendered from `plt.show()` (drained as base64 PNG after a
+   successful cell run). Block-level so an <img> doesn't sit inline with text,
+   sized to the output panel; RTL pages keep figures LTR via the .o-line rule. */
+.o-line--fig { display: block; max-width: 100%; height: auto; border-radius: var(--radius-md); margin: .35rem 0; }
 .cell__clear { margin-top: .5rem; background: transparent; border: 1px solid var(--line); color: var(--ink-soft); border-radius: 999px; padding: .2rem .8rem; cursor: pointer; font-size: .8rem; }
 
 /* === Generic (non-runnable) fenced code blocks, e.g. shell/output snippets === */

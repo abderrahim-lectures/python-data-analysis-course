@@ -7,7 +7,7 @@
 //   opaque responses have no cacheable content.
 // Bump the cache name below when you want to force a clean re-precache.
 
-const CACHE_NAME = 'pda-2026-09-08';
+const CACHE_NAME = 'pda-2026-09-10';
 const PRECACHE_URLS = ['/', '/learn', '/playground', '/progress', '/projects'];
 
 self.addEventListener('install', (event) => {
@@ -40,6 +40,26 @@ self.addEventListener('fetch', (event) => {
           return response;
         })
         .catch(() => caches.match(request).then((cached) => cached || caches.match('/')))
+    );
+    return;
+  }
+
+  // Datasets are course content, and their column names change between
+  // releases (the students-performance.csv header was spaced after launch).
+  // Serving a stale-while-revalidate copy to returning visitors shows the
+  // old schema to the Pyodide cells, so datasets are network-first with the
+  // cache as an offline fallback only.
+  if (url.pathname.startsWith('/datasets/')) {
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          if (response.ok) {
+            const clone = response.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
+          }
+          return response;
+        })
+        .catch(() => caches.match(request))
     );
     return;
   }

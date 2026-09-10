@@ -99,7 +99,13 @@ def _wrap_bare_expr(src):
     if not isinstance(node, ast.Expr):
         return src
     value = node.value
-    if isinstance(value, ast.Call) and isinstance(value.func, ast.Name) and value.func.id in ('print', 'display'):
+    if (
+        isinstance(value, ast.Call)
+        and (
+            (isinstance(value.func, ast.Name) and value.func.id in ('print', 'display'))
+            or (isinstance(value.func, ast.Attribute) and value.func.attr in ('show', 'display'))
+        )
+    ):
         return src
     # Mirror how a Jupyter/Colab cell echoes its last expression: rerun the
     # cell but replace that trailing expression with print(repr(<expr>)).
@@ -114,6 +120,50 @@ def _wrap_bare_expr(src):
     return src[:start_off] + 'print(repr(\\n' + expr + '\\n))' + src[end_off:]
 `;
 
+// Pyodide ships matplotlib with a canvas backend (matplotlib-pyodide) that, on
+// a real browser, renders `plt.show()` by appending a canvas to the bottom of
+// the document — then closes the figure. That places the plot at the page
+// bottom instead of in the cell, and closes figures before we can read them.
+// Before each run we force matplotlib onto the compiled Agg backend: plt.show()
+// becomes a no-op, no canvas reaches the page body, and every figure stays in
+// the Gcf manager where the post-run drain collects it as an inline PNG.
+const FIG_SHOW_PATCH_SRC = `
+try:
+    import matplotlib as _mpl
+    try:
+        _mpl.use('Agg')
+    except Exception:
+        pass
+except Exception:
+    pass
+`;
+
+// After a cell run, collect every matplotlib figure the cell left open (Agg's
+// plt.show() is a no-op, so figures stay managed) as base64 PNGs for JS to
+// render inline. The figures are detached from the Gcf manager here so a
+// re-run doesn't accumulate stale figures. Returns a JSON string (a PyProxy
+// list does not survive the runPythonAsync boundary as a JS array).
+const FIG_DRAIN_SRC = `
+import sys as _sys
+import io as _io
+import base64 as _b64
+def _drain_figs():
+    _out = []
+    _plt = _sys.modules.get('matplotlib.pyplot')
+    if _plt is None:
+        return '[]'
+    import matplotlib._pylab_helpers as _gcf
+    for _num in list(_plt.get_fignums()):
+        _fig = _plt.figure(_num)
+        _buf = _io.BytesIO()
+        _fig.savefig(_buf, format='png', dpi=110, bbox_inches='tight')
+        _out.append(_b64.b64encode(_buf.getvalue()).decode('ascii'))
+        _gcf.Gcf.figs.pop(_num, None)
+    import json as _dj
+    return _dj.dumps(_out)
+_drain_figs()
+`;
+
 // Run a cell against a Pyodide model, route script stdout/stderr to the
 // output lines, and restore notebook-style `print(repr(...))` for trailing bare
 // expressions. Resolves false when the code was refused (js/pyodide bridge) so
@@ -121,6 +171,10 @@ def _wrap_bare_expr(src):
 // Exported for unit tests; initCell wires it to the DOM.
 export interface CellRuntime {
   appendLine(kind: 'out' | 'err', text: string): void;
+  /** Render a matplotlib figure captured after a successful cell run into the
+   *  output panel. Optional so callers that only route text (unit tests) can
+   *  omit it. */
+  appendFigure?(pngB64: string): void;
   engine: PyodideModel;
   /** Concatenated source of every other runnable cell on the page, so a
    *  NameError can be distinguished from "that dataset was never loaded".
@@ -161,14 +215,36 @@ export async function runCellCode(code: string, rt: CellRuntime): Promise<boolea
     const pageSource = rt.otherCellSources ?? '';
     await ensureExtraPackages(rt.engine, code, pageSource);
     await rt.engine.loadPackagesFromImports(code);
+    // Force matplotlib onto the compiled Agg backend *before* the cell's code
+    // runs. matplotlib-pyodide's default canvas backend appends a <canvas> to
+    // the bottom of the page on plt.show() and then closes the figure, so
+    // without this the plots land at the page bottom and can't be drained.
+    // Under Agg, plt.show() is a silent no-op and figures stay in the manager.
+    await rt.engine.runPythonAsync(FIG_SHOW_PATCH_SRC);
     const toRun = await rt.engine.runPython(WRAP_EXPR_SRC + '_wrap_bare_expr');
     await rt.engine.runPythonAsync(toRun(code));
+    // Drain every figure the cell left open, render each inline in the output
+    // panel. Skipped on error — a failed cell renders its traceback, not
+    // half-drawn figures.
+    const pngsJson = (await rt.engine.runPythonAsync(FIG_DRAIN_SRC)) as string | undefined;
+    const pngs = typeof pngsJson === 'string' ? (JSON.parse(pngsJson) as string[]) : undefined;
+    if (Array.isArray(pngs) && pngs.length && rt.appendFigure) {
+      for (const png of pngs) rt.appendFigure(png);
+    }
   } catch (e) {
     const raw = e instanceof Error ? e.message : String(e);
     let hint = friendlyError(raw);
     // A name that should exist but hasn't been created yet most often means the
-    // dataset-loading cell at the top of the page hasn't been run. Point them there.
-    if (raw.includes('NameError: name') && rt.otherCellSources?.match(/pd\.read_csv\s*\(|open\s*\(\s*['"][^'"]+\.csv/) && !code.match(/pd\.read_csv\s*\(|open\s*\(\s*['"][^'"]+\.csv/)) {
+    // dataset-loading cell at the top of the page hasn't been run. Point them
+    // there only when the missing name is literally assigned by that cell —
+    // `df = pd.read_csv(...)` — not for e.g. `np` or `plt` imports.
+    const missing = raw.match(/NameError: name '([^']+)' is not defined/)?.[1];
+    if (
+      missing &&
+      rt.otherCellSources &&
+      new RegExp(`\\b${missing}\\s*=\\s*(?:pd\\.read_csv|open\\s*\\(\\s*['"][^'"]+\\.csv)`).test(rt.otherCellSources) &&
+      !code.match(/pd\.read_csv\s*\(|open\s*\(\s*['"][^'"]+\.csv/)
+    ) {
       hint += ` ${m.cell_load_dataset_first()}`;
     }
     rt.appendLine('err', hint);
@@ -255,6 +331,15 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
     lines.appendChild(d);
   };
 
+  const appendFigure = (pngB64: string) => {
+    const img = document.createElement('img');
+    img.className = 'o-line--fig';
+    img.src = `data:image/png;base64,${pngB64}`;
+    img.alt = '';
+    img.loading = 'lazy';
+    lines.appendChild(img);
+  };
+
   run.addEventListener('click', async () => {
     if (run.disabled) return;
     const src = codeEl.textContent ?? '';
@@ -284,7 +369,7 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
       .filter((el) => el !== codeEl)
       .map((el) => el.textContent ?? '')
       .join('\n');
-    const executed = await runCellCode(src, {appendLine, engine, otherCellSources});
+    const executed = await runCellCode(src, {appendLine, appendFigure, engine, otherCellSources});
     if (executed && !awarded && lessonId) {
       awarded = true;
       try {

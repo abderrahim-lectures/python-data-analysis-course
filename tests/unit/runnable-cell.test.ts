@@ -31,8 +31,9 @@ function makeEngine() {
       calls.wrapped.push(src);
       return (code: string) => `W(${code})`;
     },
-    runPythonAsync: async (src: string) => {
+    runPythonAsync: async (src: string): Promise<unknown> => {
       calls.ran.push(src);
+      return undefined;
     },
     FS: {writeFile: (_path: string, _data: Uint8Array) => {}},
   };
@@ -77,17 +78,47 @@ describe('runCellCode', () => {
     await runCellCode('print(1)', makeRuntime(mock.engine, out));
     expect(mock.calls.loaded).toEqual(['print(1)']);
     expect(mock.calls.wrapped).toEqual([expect.stringContaining('_wrap_bare_expr')]);
-    expect(mock.calls.ran).toEqual(['W(print(1))']);
+    // Three ran calls: the Agg backend prep, the wrapped code, then the drain.
+    expect(mock.calls.ran[0]).toContain("use('Agg')");
+    expect(mock.calls.ran[1]).toBe('W(print(1))');
+    expect(mock.calls.ran[2]).toContain('_drain_figs');
     expect(out).toEqual([]);
+  });
+
+  test('renders matplotlib figures drained after a successful run', async () => {
+    // The fake engine yields a base64 PNG as JSON from the figure-drain
+    // snippet; the runtime's appendFigure callback must receive it.
+    mock.engine.runPythonAsync = async (src: string) => {
+      mock.calls.ran.push(src);
+      return src.includes('_drain_figs') ? '["UE5H"]' : undefined;
+    };
+    const rt = makeRuntime(mock.engine, out);
+    rt.appendFigure = (pngB64) => out.push({kind: 'fig', text: pngB64});
+    await runCellCode('import matplotlib.pyplot as plt\nplt.plot([1, 2]); plt.show()', rt);
+    expect(mock.calls.ran.some((s) => s.includes('_drain_figs'))).toBe(true);
+    expect(out).toEqual([{kind: 'fig', text: 'UE5H'}]);
+  });
+
+  test('a failed cell skips the figure drain', async () => {
+    vi.stubGlobal('window', {prompt: () => ''});
+    mock.engine.runPythonAsync = async () => {
+      throw new Error("NameError: name 'z' is not defined");
+    };
+    await runCellCode('z', makeRuntime(mock.engine, out));
+    expect(mock.calls.ran).toEqual([]);
+    expect(out.some((l) => l.kind === 'fig')).toBe(false);
   });
 
   test('pre-installs a vendored wheel (seaborn) once before running code that imports it', async () => {
     await runCellCode('import seaborn as sns', makeRuntime(mock.engine, out));
     // First load call pulls the Pyodide-index deps seaborn needs at import time.
     expect(mock.calls.loaded[0]).toContain('import micropip, numpy, pandas, matplotlib, scipy, statsmodels');
-    // The run first installs the wheel from our own origin, then executes.
+    // The run first installs the wheel from our own origin, then runs the show
+    // patch, then executes the wrapped code. The patch and drain are separate
+    // calls between the install and the code.
     expect(mock.calls.ran[0]).toContain('await micropip.install');
-    expect(mock.calls.ran[1]).toBe('W(import seaborn as sns)');
+    expect(mock.calls.ran[1]).toContain("use('Agg')");
+    expect(mock.calls.ran[2]).toBe('W(import seaborn as sns)');
     // A second seaborn cell skips the install: wheel installed exactly once.
     await runCellCode('import seaborn as sns; sns.histplot([1, 2])', makeRuntime(mock.engine, out));
     expect(mock.calls.ran.filter((s: string) => s.includes('micropip.install'))).toHaveLength(1);
@@ -137,13 +168,29 @@ describe('runCellCode', () => {
     const rt: CellRuntime = {
       appendLine: (kind, text) => out.push({kind, text}),
       engine: mock.engine,
-      otherCellSources: 'pd.read_csv("titanic.csv")\ndf.head()',
+      otherCellSources: 'df = pd.read_csv("titanic.csv")\ndf.head()',
     };
     await runCellCode('df.head()', rt);
     expect(out).toHaveLength(1);
     expect(out[0].kind).toBe('err');
     expect(out[0].text).toContain('recognize');
     expect(out[0].text).toContain('pd.read_csv');
+  });
+
+  test('an unrelated NameError in a lesson that loads a dataset does not hint the dataset', async () => {
+    vi.stubGlobal('window', {prompt: () => ''});
+    mock.engine.runPythonAsync = async () => {
+      throw new Error("NameError: name 'np' is not defined");
+    };
+    const rt: CellRuntime = {
+      appendLine: (kind, text) => out.push({kind, text}),
+      engine: mock.engine,
+      otherCellSources: 'df = pd.read_csv("titanic.csv")\ndf.head()',
+    };
+    await runCellCode('z = np.polyfit(...)', rt);
+    expect(out).toHaveLength(1);
+    expect(out[0].text).toContain('recognize');
+    expect(out[0].text).not.toContain('pd.read_csv');
   });
 
   afterEach(() => {
@@ -312,7 +359,10 @@ describe('initCell DOM wiring', () => {
 
     await (run.listeners['click']() as unknown as Promise<unknown>);
 
-    expect(f.calls.ran).toHaveLength(1);
+    expect(f.calls.ran).toHaveLength(3);
+    expect(f.calls.ran[0]).toContain("use('Agg')");
+    expect(f.calls.ran[1]).toBe('W(print("hi"))');
+    expect(f.calls.ran[2]).toContain('_drain_figs');
     expect(run.disabled).toBe(false);
     expect(out.hidden).toBe(false);
     expect(lines.children[0].textContent).toBe('$ python');
