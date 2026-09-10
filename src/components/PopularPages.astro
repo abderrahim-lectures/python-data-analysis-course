@@ -34,18 +34,34 @@ const {supabaseUrl = '', supabaseKey = ''} = Astro.props;
             const rows = await res.json();
             if (!Array.isArray(rows) || rows.length === 0) return;
             const frag = document.createDocumentFragment();
+            // `path` is anon-writable, so it must never become a live link:
+            // only same-origin http(s) paths survive, and only as a pathname.
+            const origin = location.origin;
+            const MAX_PATH = 200;
             for (const row of rows) {
+              if (typeof row !== 'object' || row === null) continue;
+              const raw = String(row.path ?? '');
+              if (raw.length > MAX_PATH) continue;
+              let path;
+              try {
+                const url = new URL(raw, origin);
+                if (url.origin !== origin) continue;
+                if (url.protocol !== 'http:' && url.protocol !== 'https:') continue;
+                path = url.pathname;
+              } catch {
+                continue;
+              }
               const li = document.createElement('li');
               const a = document.createElement('a');
-              a.href = row.path;
-              a.textContent = row.path.replace(/-/g, ' ').replace(/\//g, ' › ');
+              a.href = path;
+              a.textContent = path.replace(/-/g, ' ').replace(/\//g, ' › ');
               const views = document.createElement('span');
               views.className = 'popular-pages__views';
               views.textContent = String(row.views);
               li.append(a, views);
               frag.appendChild(li);
             }
-            list.appendChild(frag);
+            if (frag.childNodes.length) list.appendChild(frag);
           } catch (e) {
             // stats are progressive enhancement; fail silently
           }

@@ -45,13 +45,15 @@ jobs:
         run: npm run build
 
       - name: Merge JupyterLite build into the site output
-        run: cp -r jupyterlite-config/_output build/lite
+        # Astro writes its build to dist/; JupyterLite is served from /lite/
+        # inside it. Uploading `dist` is what actually ships the course site.
+        run: cp -r jupyterlite-config/_output dist/lite
 
       - uses: actions/configure-pages@v5
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: build
+          path: dist
 
   deploy:
     needs: build

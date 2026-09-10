@@ -95,15 +95,30 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
       })();
     </script>
     {import.meta.env.PUBLIC_GA_ID && (
-      <>
-        <script is:inline>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', import.meta.env.PUBLIC_GA_ID);
-        </script>
-        <script async src={`https://www.googletagmanager.com/gtag/js?id=${import.meta.env.PUBLIC_GA_ID}`}></script>
-      </>
+      <script is:inline>
+        // Consent-gated GA, default off. No banner exists on this site, so
+        // gtag only loads once a visitor has opted in (localStorage
+        // "pda:analytics-consent" = "1", set by future settings UI). This
+        // keeps EU visitors un-tracked by default — wire an opt-in control
+        // before flipping PUBLIC_GA_ID on.
+        (function () {
+          function loadGtag(id) {
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag('js', new Date());
+            gtag('config', id);
+            var s = document.createElement('script');
+            s.async = true;
+            s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(id);
+            document.head.appendChild(s);
+          }
+          try {
+            if (localStorage.getItem('pda:analytics-consent') === '1') {
+              loadGtag('{import.meta.env.PUBLIC_GA_ID}');
+            }
+          } catch (e) { /* private mode: stay off */ }
+        })();
+      </script>
     )}
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
@@ -271,147 +286,7 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
     <script>
       import '../lib/runnable-cell.client.ts';
       import '../lib/quiz.client.ts';
-    </script>
-
-    <script>
-      // @ts-nocheck
-      import {xpProgressFor} from '../lib/levelMath';
-      import {m} from '../paraglide/messages.js';
-      const STORAGE_KEY = 'pda:state';
-      function readState() {
-        try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch { return {}; }
-      }
-      function xpProgress(s) {
-        return xpProgressFor(s.xp || 0);
-      }
-      function streakEmoji(streak) {
-        if (streak >= 14) return '🔥🔥🔥';
-        if (streak >= 7) return '🔥🔥';
-        if (streak >= 3) return '🔥';
-        return '';
-      }
-      function renderXPBar() {
-        const bar = document.getElementById('xp-bar');
-        if (!bar) return;
-        const s = readState();
-        const { xp, level, pct, toNext } = xpProgress(s);
-        const streak = s.streak || 0;
-        const prevLevel = parseInt(bar.dataset.level || '0');
-        bar.dataset.level = String(level);
-        bar.innerHTML = `
-          <div class="xp-bar" title="${m.level_label()} ${level} · ${xp} XP · ${streakEmoji(streak)}">
-            <span class="xp-bar__level">Lv.${level}</span>
-            <div class="xp-bar__track"><div class="xp-bar__fill" style="width:${pct}%"></div></div>
-            <span class="xp-bar__streak">${streakEmoji(streak)}</span>
-            ${toNext <= 20 && xp > 0 ? `<span class="xp-bar__milestone">${toNext} XP!</span>` : ''}
-          </div>`;
-        if (prevLevel && level > prevLevel) {
-          showLevelUp(level, xp, (s.badges || []));
-        }
-      }
-      function showLevelUp(level, xp, badges) {
-        const overlay = document.getElementById('lvlup');
-        if (!overlay) return;
-        const subEl = document.getElementById('lvlup-sub');
-        const newBadges = (badges || []).slice(-3);
-        if (subEl) subEl.textContent = newBadges.length ? `${m.unlocked_prefix()}${newBadges.join(', ')}` : `${xp} ${m.total_xp_label()}`;
-        overlay.hidden = false;
-        overlay.classList.remove('lvlup--hide');
-        overlay.classList.add('lvlup--show');
-        spawnParticles();
-        setTimeout(() => {
-          overlay.classList.remove('lvlup--show');
-          overlay.classList.add('lvlup--hide');
-          setTimeout(() => { overlay.hidden = true; }, 600);
-        }, 2200);
-      }
-      function spawnParticles() {
-        const container = document.getElementById('lvlup');
-        if (!container) return;
-        const colors = ['#5b21b6','#4c1d95','#8b5cf6','#a78bfa','#fbbf24','#34d399'];
-        for (let i = 0; i < 24; i++) {
-          const p = document.createElement('div');
-          p.className = 'particle';
-          const dx = (Math.random() - .5) * 160;
-          const dy = -(40 + Math.random() * 120);
-          p.style.left = Math.random() * 100 + '%';
-          p.style.top = Math.random() * 100 + '%';
-          p.style.setProperty('--c', colors[Math.floor(Math.random() * colors.length)]);
-          p.style.setProperty('--dx', dx + 'px');
-          p.style.setProperty('--dy', dy + 'px');
-          p.style.animationDelay = Math.random() * .4 + 's';
-          container.appendChild(p);
-        }
-      }
-      function initOnboarding() {
-        const overlay = document.getElementById('onboarding');
-        if (!overlay) return;
-
-        // A blocked/absent localStorage must not take the rest of init down
-        // with it, and must not trap the visitor behind an undismissable modal.
-        let seen = true;
-        try {
-          seen = !!localStorage.getItem('pda:onboarded');
-        } catch { seen = true; }
-        if (seen || new URLSearchParams(location.search).has('onboarded')) return;
-
-        const opener = document.activeElement;
-        const dismiss = () => {
-          try { localStorage.setItem('pda:onboarded', '1'); } catch { /* private mode */ }
-          overlay.hidden = true;
-          document.removeEventListener('keydown', onKey);
-          if (opener instanceof HTMLElement) opener.focus();
-        };
-        const focusable = () => Array.from(
-          overlay.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')
-        );
-        function onKey(e) {
-          if (e.key === 'Escape') { dismiss(); return; }
-          if (e.key !== 'Tab') return;
-          // Keep focus inside the dialog while it is open.
-          const items = focusable();
-          if (items.length === 0) return;
-          const first = items[0];
-          const last = items[items.length - 1];
-          if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-          else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
-        }
-
-        overlay.hidden = false;
-        document.addEventListener('keydown', onKey);
-        overlay.addEventListener('click', (e) => { if (e.target === overlay) dismiss(); });
-        document.getElementById('onboarding-start')?.addEventListener('click', dismiss);
-        document.getElementById('onboarding-skip')?.addEventListener('click', dismiss);
-        focusable()[0]?.focus();
-      }
-      let lastXP = readState().xp || 0;
-      function initXPToastListener() {
-        document.addEventListener('lesson:complete', () => {
-          const s = readState();
-          const { xp } = xpProgress(s);
-          renderXPBar();
-          const container = document.getElementById('xp-toast-container');
-          if (!container) return;
-          const toast = document.createElement('div');
-          toast.className = 'floating-xp';
-          const gained = xp - lastXP;
-          lastXP = xp;
-          toast.innerHTML = `${m.xp_toast({amount: gained})}`;
-          container.appendChild(toast);
-          setTimeout(() => toast.remove(), 3000);
-        });
-      }
-      renderXPBar();
-      initOnboarding();
-      initXPToastListener();
-      const btn = document.querySelector('[data-theme-toggle]');
-      btn?.addEventListener('click', () => {
-        const el = document.documentElement;
-        const next = el.dataset.theme === 'dark' ? 'light' : 'dark';
-        el.dataset.theme = next;
-        localStorage.setItem('pda:theme', next);
-        renderXPBar();
-      });
+      import '../lib/gamestrip.client.ts';
     </script>
     <LearnerActivity locale={lang} supabaseUrl={import.meta.env.PUBLIC_SUPABASE_URL || ''} supabaseKey={import.meta.env.PUBLIC_SUPABASE_KEY || ''} />
     <PageViews locale={lang} supabaseUrl={import.meta.env.PUBLIC_SUPABASE_URL || ''} supabaseKey={import.meta.env.PUBLIC_SUPABASE_KEY || ''} />
@@ -454,9 +329,15 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
           return Array.isArray(d)&&d.length ? d[0] : null;
         } catch(e) { return null; }
       }
-      function ago(iso) {
-        var s=Math.floor((Date.now()-new Date(iso).getTime())/1000);
-        if(s<60)return 'just now';if(s<3600)return Math.floor(s/60)+'m ago';if(s<86400)return Math.floor(s/3600)+'h ago';return Math.floor(s/86400)+'d ago';
+      function ago(iso, locale) {
+        try {
+          var rtf = new Intl.RelativeTimeFormat(locale, {numeric: 'auto'});
+          var secs = Math.round((new Date(iso).getTime() - Date.now()) / 1000);
+          if (Math.abs(secs) < 60) return rtf.format(0, 'second');
+          if (Math.abs(secs) < 3600) return rtf.format(Math.round(secs / 60), 'minute');
+          if (Math.abs(secs) < 86400) return rtf.format(Math.round(secs / 3600), 'hour');
+          return rtf.format(Math.round(secs / 86400), 'day');
+        } catch (e) { return ''; }
       }
       function lbl(slug) { var p=slug.split('/'); return p.length>=3?p[0].replace(/-/g,' ')+' W'+p[2].replace('week-',''):slug.replace(/-/g,' '); }
       async function refresh() {
@@ -464,19 +345,13 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
         var r = await recent();
         var ce=document.getElementById('learner-count'),le=document.getElementById('learner-label'),re=document.getElementById('learner-recent');
         if(ce)ce.textContent=n;if(le)le.textContent = n===1?ONE:MANY;
-        if(re&&r)re.textContent=lbl(r.id)+' · '+ago(r.created_at);
+        if(re&&r)re.textContent=lbl(r.slug)+' · '+ago(r.created_at, LOCALE);
         bar.style.display=n>0?'flex':'none';
-      }
-      async function clean() {
-        try{if(sessionStorage.getItem('pda:cleaned'))return;sessionStorage.setItem('pda:cleaned','1')}catch(e){return}
-        var d=new Date(Date.now()-86400000).toISOString(),w=new Date(Date.now()-604800000).toISOString();
-        try{await fetch(URL+'/rest/v1/learners?last_seen=lt.'+encodeURIComponent(d)+'&id=eq.'+encodeURIComponent(lid),{method:'DELETE',headers:HDR})}catch(e){}
-        try{await fetch(URL+'/rest/v1/completions?created_at=lt.'+encodeURIComponent(w)+'&learner_id=eq.'+encodeURIComponent(lid),{method:'DELETE',headers:HDR})}catch(e){}
       }
       async function logComp(type,slug,track) {
         try{await fetch(URL+'/rest/v1/completions',{method:'POST',headers:{...HDR,'Prefer':'return=minimal'},body:JSON.stringify({learner_id:lid,type,slug,track:track||'',locale:LOCALE})})}catch(e){}
       }
-      beat(); clean(); refresh();
+      beat(); refresh();
       setInterval(beat,30000); setInterval(refresh,30000);
       window.__supabaseLogCompletion = logComp;
     })();

@@ -1,8 +1,9 @@
-// @ts-nocheck
 // Hydrates `.quiz[data-quiz]` blocks (rendered from recovered WeeklyQuiz
 // data — see plan/astro-rebuild.md) with click-to-answer feedback, wired
 // into gameState.recordQuiz() so the "quiz accuracy" stat on /progress becomes
 // real instead of permanently 0%. Loaded once from Base.astro.
+import {m} from '../paraglide/messages.js';
+
 function initQuiz(quiz: Element) {
   if (quiz.hasAttribute('data-hydrated')) return;
   quiz.setAttribute('data-hydrated', '1');
@@ -24,21 +25,23 @@ function initQuiz(quiz: Element) {
         if (!isCorrect) options[answerIdx]?.classList.add('quiz-q__opt--correct');
         if (feedback) {
           feedback.hidden = false;
-          feedback.textContent = isCorrect ? '✅ Correct!' : '❌ Not quite — the right answer is highlighted.';
+          feedback.textContent = isCorrect ? m.quiz_feedback_correct() : m.quiz_feedback_wrong();
           feedback.classList.toggle('quiz-q__feedback--correct', isCorrect);
         }
         answered++;
         if (isCorrect) correct++;
         try {
-          const m = await import('./gameState.ts');
-          m.recordQuiz(isCorrect);
-        } catch { /* offline: skip */ }
+          const gs = await import('./gameState.ts');
+          gs.recordQuiz(isCorrect);
+        } catch {
+          // offline: skip
+        }
 
         if (answered === questions.length) {
           const summary = quiz.querySelector('[data-quiz-summary]') as HTMLElement | null;
           if (summary) {
             summary.hidden = false;
-            summary.textContent = `You got ${correct}/${questions.length} right.`;
+            summary.textContent = m.quiz_summary({correct, total: questions.length});
           }
         }
       });

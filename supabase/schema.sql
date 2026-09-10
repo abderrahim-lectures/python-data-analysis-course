@@ -24,36 +24,37 @@ create index if not exists completions_learner_idx on completions(learner_id);
 create index if not exists completions_created_idx on completions(created_at);
 
 -- ── Row Level Security ──────────────────────────────────────────────
--- The anon key (PUBLIC_SUPABASE_KEY) can only read/write its own learner
--- row and completion rows. Without RLS, the anon key has full access.
+-- Honest read: RLS here is coarse. There is no Supabase Auth in the static
+-- site — "learner" identity is a client-generated UUID kept in localStorage,
+-- which RLS cannot verify, so the open `select true` / `with check (true)`
+-- policies keep the social-proof widgets working at the cost of any anon
+-- client reading all rows. What we can remove cheaply is the destructive
+-- surface: no anon UPDATE or DELETE on either table. (The live "learning
+-- now" heartbeat needs the learners UPDATE, which leaks only last_seen /
+-- locale / track; the durable fix is Supabase anonymous Auth + policies
+-- keyed on auth.uid().)
 
 alter table learners enable row level security;
 alter table completions enable row level security;
 
--- Learners: each anon user can read/write only their own row (by UUID in localStorage)
-create policy "learners_select_own" on learners
+-- Learners: anyone can register a learner; anyone can bump last_seen
+-- (upsert heartbeat — requires UPDATE) and count active learners.
+create policy "learners_select_social" on learners
   for select using (true);  -- anyone can count active learners (social proof)
 
-create policy "learners_insert_own" on learners
+create policy "learners_insert_social" on learners
   for insert with check (true);  -- anyone can register a new learner
 
-create policy "learners_update_own" on learners
-  for update using (true);  -- anyone can update their own last_seen
+create policy "learners_update_heartbeat" on learners
+  for update using (true);  -- upsert heartbeat updates last_seen/locale/track
 
--- Completions: each anon user can read/write only their own rows
-create policy "completions_select_own" on completions
+-- Completions: append-only. Anyone can log one and read them (social
+-- proof); nobody can update or delete rows anon.
+create policy "completions_select_social" on completions
   for select using (true);  -- recent completions shown to all (social proof)
 
-create policy "completions_insert_own" on completions
+create policy "completions_insert_social" on completions
   for insert with check (true);  -- anyone can log a completion
-
--- Cleanup: only the learner's own old records can be deleted
--- (The client-side clean() function filters by learner_id in the query.)
-create policy "completions_delete_own" on completions
-  for delete using (true);
-
-create policy "learners_delete_own" on learners
-  for delete using (true);
 
 -- ── pageviews ─────────────────────────────────────────────────
 -- Anonymous page-view logging for site-wide stats (popular pages,

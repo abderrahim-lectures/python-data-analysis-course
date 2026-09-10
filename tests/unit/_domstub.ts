@@ -35,10 +35,17 @@ export interface FakeEl {
 export function fakeEl(id?: string): FakeEl {
   const classSet = new Set<string>();
   const children: FakeEl[] = [];
+  const style: Record<string, string> = {};
+  // setProperty is what CSS custom properties (`--dx`, `--particle`) need;
+  // adding it via defineProperty keeps `style` a plain string map for TS.
+  Object.defineProperty(style, 'setProperty', {
+    value(key: string, val: string) { (this as Record<string, string>)[key] = val; },
+    enumerable: false,
+  });
   const el: FakeEl = {
     id: id ?? '',
     dataset: {},
-    style: {},
+    style,
     classSet,
     className: '',
     textContent: '',
@@ -127,6 +134,7 @@ export function stubDom(): DomStub {
     querySelector: () => null,
     createElement: () => fakeEl(),
     addEventListener: (kind: string, fn: (ev?: any) => void) => { listeners[kind] = fn; },
+    removeEventListener: (kind: string, _fn?: (ev?: any) => void) => { delete listeners[kind]; },
     readyState: 'complete',
     body: fakeEl('body'),
     head: fakeEl('head'),

@@ -220,7 +220,7 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
           const toast = document.createElement('div');
           toast.className = 'firstsuccess-toast';
           toast.setAttribute('role', 'status');
-          toast.textContent = '🎉 First success! You just ran Python in the browser.';
+          toast.textContent = m.first_success_toast();
           document.body.appendChild(toast);
           requestAnimationFrame(() => toast.classList.add('firstsuccess-toast--visible'));
           setTimeout(() => { toast.classList.remove('firstsuccess-toast--visible'); setTimeout(() => toast.remove(), 400); }, 3000);
@@ -234,13 +234,37 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
   // Copy output button.
   const copyBtn = document.createElement('button');
   copyBtn.className = 'btn btn-ghost btn-sm cell__copy';
-  copyBtn.textContent = '📋 Copy';
-  copyBtn.addEventListener('click', () => {
+  const setCopyLabel = (state: 'idle' | 'done') => {
+    copyBtn.textContent = state === 'done' ? m.copied_button() : m.copy_button();
+  };
+  setCopyLabel('idle');
+  copyBtn.addEventListener('click', async () => {
     const text = lines.textContent ?? '';
-    navigator.clipboard.writeText(text).then(() => {
-      copyBtn.textContent = '✓ Copied!';
-      setTimeout(() => { copyBtn.textContent = '📋 Copy'; }, 1500);
-    }).catch(() => {});
+    let ok = false;
+    try {
+      await navigator.clipboard.writeText(text);
+      ok = true;
+    } catch {
+      // The async Clipboard API can be blocked (permissions, private mode);
+      // fall back to the legacy selection-based copy before giving up.
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        ok = document.execCommand('copy');
+        ta.remove();
+      } catch {
+        ok = false;
+      }
+    }
+    if (ok) {
+      setCopyLabel('done');
+      setTimeout(() => setCopyLabel('idle'), 1500);
+    }
   });
   cell.querySelector('.cell__actions')?.appendChild(copyBtn);
 
