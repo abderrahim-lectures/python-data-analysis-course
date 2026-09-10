@@ -46,6 +46,31 @@ Contar palabras
 
 Una vez que tienes tokens, el siguiente paso es contar con qué frecuencia aparece cada palabra. Estos recuentos de frecuencia le dicen al modelo de lenguaje qué palabras son comunes (probables de aparecer en cualquier parte) y cuáles son raras (predictivas cuando aparecen).
 
+Las celdas siguientes reutilizan las funciones `load_corpus` y `tokenize` de las lecciones 01 y 03. Cada página de lección inicia una sesión de Python nueva, así que ejecuta primero esta celda de configuración:
+
+```python
+import csv
+import string
+
+with open("slm-corpus.csv", newline="") as f:
+    reader = csv.DictReader(f)
+    texts = [row["text"] for row in reader]
+
+def load_corpus(path):
+    with open(path, newline="") as f:
+        reader = csv.DictReader(f)
+        return [row["text"] for row in reader]
+
+def tokenize(text):
+    text = text.lower()
+    for char in string.punctuation:
+        text = text.replace(char, " ")
+    return text.split()
+
+full_text = " ".join(texts)
+tokens = tokenize(full_text)
+```
+
 ## Conceptos clave
 
 ### Construir un dict de frecuencia

@@ -46,6 +46,31 @@ quiz:
 
 بمجرد حصولك على الرموز، تكون الخطوة التالية هي عدّ عدد مرات ظهور كل كلمة. تخبر أعداد التكرارات هذه النموذج اللغوي بالكلمات الشائعة (المرجّحة بالظهور في أي مكان) والكلمات النادرة (التنبؤية عند ظهورها فعلًا).
 
+تستخدم الخلايا أدناه الدالتين `load_corpus` و`tokenize` من الدرسين 01 و03. كل صفحة درس تبدأ جلسة بايثون جديدة، لذا شغّل خلية الإعداد هذه أولًا:
+
+```python
+import csv
+import string
+
+with open("slm-corpus.csv", newline="") as f:
+    reader = csv.DictReader(f)
+    texts = [row["text"] for row in reader]
+
+def load_corpus(path):
+    with open(path, newline="") as f:
+        reader = csv.DictReader(f)
+        return [row["text"] for row in reader]
+
+def tokenize(text):
+    text = text.lower()
+    for char in string.punctuation:
+        text = text.replace(char, " ")
+    return text.split()
+
+full_text = " ".join(texts)
+tokens = tokenize(full_text)
+```
+
 ## المفاهيم الأساسية
 
 ### بناء قاموس التكرارات

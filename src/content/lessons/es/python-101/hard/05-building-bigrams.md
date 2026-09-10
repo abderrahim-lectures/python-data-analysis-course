@@ -46,6 +46,30 @@ De los recuentos de palabras a las transiciones de palabras
 
 La frecuencia de palabras te dice *qué* palabras aparecen. Los bigramas te dicen *qué sigue a qué*. "The cat" es mucho más común que "the refrigerator" — una tabla de bigramas captura esa relación. Es la forma más simple de un modelo de lenguaje: dada una palabra, ¿qué palabras tienden a venir después?
 
+Las celdas siguientes reutilizan las funciones `load_corpus` y `tokenize` de las lecciones 01 y 03. Cada página de lección inicia una sesión de Python nueva, así que ejecuta primero esta celda de configuración:
+
+```python
+import csv
+import string
+
+with open("slm-corpus.csv", newline="") as f:
+    reader = csv.DictReader(f)
+    texts = [row["text"] for row in reader]
+
+def load_corpus(path):
+    with open(path, newline="") as f:
+        reader = csv.DictReader(f)
+        return [row["text"] for row in reader]
+
+def tokenize(text):
+    text = text.lower()
+    for char in string.punctuation:
+        text = text.replace(char, " ")
+    return text.split()
+
+tokens = tokenize(" ".join(texts))
+```
+
 ## Conceptos clave
 
 ### ¿Qué es un bigrama?

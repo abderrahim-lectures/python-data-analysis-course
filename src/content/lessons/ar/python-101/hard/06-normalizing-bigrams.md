@@ -46,6 +46,35 @@ quiz:
 
 تخبرك الأعداد الخام أن "the" → "cat" ظهرت 15 مرة و"the" → "dog" ظهرت 5 مرات. لكن لأخذ **عيّنة** من الكلمة التالية، تحتاج إلى احتمالات: يجب اختيار "cat" في 75% من الوقت و"dog" في 25%. يحوّل التطبيع الأعداد إلى توزيع تجمع فيه كل التوابع إلى 1.0.
 
+تستخدم الخلايا أدناه الدوال `load_corpus` و`tokenize` و`build_bigrams` من الدروس 01 إلى 05. كل صفحة درس تبدأ جلسة بايثون جديدة، لذا شغّل خلية الإعداد هذه أولًا:
+
+```python
+import csv
+import string
+from collections import defaultdict
+
+with open("slm-corpus.csv", newline="") as f:
+    reader = csv.DictReader(f)
+    texts = [row["text"] for row in reader]
+
+def load_corpus(path):
+    with open(path, newline="") as f:
+        reader = csv.DictReader(f)
+        return [row["text"] for row in reader]
+
+def tokenize(text):
+    text = text.lower()
+    for char in string.punctuation:
+        text = text.replace(char, " ")
+    return text.split()
+
+def build_bigrams(tokens):
+    bigrams = defaultdict(lambda: defaultdict(int))
+    for i in range(len(tokens) - 1):
+        bigrams[tokens[i]][tokens[i + 1]] += 1
+    return dict(bigrams)
+```
+
 ## المفاهيم الأساسية
 
 ### التطبيع بحلقة

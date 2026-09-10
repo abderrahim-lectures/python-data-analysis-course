@@ -46,6 +46,30 @@ Des comptes de mots aux transitions de mots
 
 La fréquence des mots vous dit *quels* mots apparaissent. Les bigrammes vous disent *ce qui suit quoi*. « The cat » est bien plus courant que « the refrigerator » — une table de bigrammes capture cette relation. C'est la forme la plus simple d'un modèle de langue : étant donné un mot, quels mots ont tendance à venir ensuite ?
 
+Les cellules ci-dessous réutilisent les fonctions `load_corpus` et `tokenize` des leçons 01 et 03. Chaque page de leçon démarre une session Python vierge, alors exécutez d'abord cette cellule de mise en place :
+
+```python
+import csv
+import string
+
+with open("slm-corpus.csv", newline="") as f:
+    reader = csv.DictReader(f)
+    texts = [row["text"] for row in reader]
+
+def load_corpus(path):
+    with open(path, newline="") as f:
+        reader = csv.DictReader(f)
+        return [row["text"] for row in reader]
+
+def tokenize(text):
+    text = text.lower()
+    for char in string.punctuation:
+        text = text.replace(char, " ")
+    return text.split()
+
+tokens = tokenize(" ".join(texts))
+```
+
 ## Concepts clés
 
 ### Qu'est-ce qu'un bigramme ?

@@ -46,6 +46,30 @@ quiz:
 
 يخبرك تكرار الكلمات *بأي كلمات* تظهر. تخبرك أزواج الكلمات *بماذا يتبع ماذا*. "The cat" أكثر شيوعًا بكثير من "the refrigerator" — يلتقط جدول أزواج الكلمات هذه العلاقة. وهو أبسط شكل لنموذج لغوي: بالنظر إلى كلمة، ما الكلمات التي تميل إلى المجيء بعدها؟
 
+تستخدم الخلايا أدناه الدالتين `load_corpus` و`tokenize` من الدرسين 01 و03. كل صفحة درس تبدأ جلسة بايثون جديدة، لذا شغّل خلية الإعداد هذه أولًا:
+
+```python
+import csv
+import string
+
+with open("slm-corpus.csv", newline="") as f:
+    reader = csv.DictReader(f)
+    texts = [row["text"] for row in reader]
+
+def load_corpus(path):
+    with open(path, newline="") as f:
+        reader = csv.DictReader(f)
+        return [row["text"] for row in reader]
+
+def tokenize(text):
+    text = text.lower()
+    for char in string.punctuation:
+        text = text.replace(char, " ")
+    return text.split()
+
+tokens = tokenize(" ".join(texts))
+```
+
 ## المفاهيم الأساسية
 
 ### ما هو زوج الكلمات؟

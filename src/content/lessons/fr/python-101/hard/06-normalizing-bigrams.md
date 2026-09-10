@@ -46,6 +46,35 @@ Des comptes aux probabilités
 
 Les comptes bruts vous disent que « the » → « cat » est apparu 15 fois et « the » → « dog » 5 fois. Mais pour **échantillonner** le mot suivant, vous avez besoin de probabilités : « cat » devrait être choisi 75 % du temps et « dog » 25 %. La normalisation convertit les comptes en une distribution où tous les mots suivants somment à 1,0.
 
+Les cellules ci-dessous réutilisent les fonctions `load_corpus`, `tokenize` et `build_bigrams` des leçons 01 à 05. Chaque page de leçon démarre une session Python vierge, alors exécutez d'abord cette cellule de mise en place :
+
+```python
+import csv
+import string
+from collections import defaultdict
+
+with open("slm-corpus.csv", newline="") as f:
+    reader = csv.DictReader(f)
+    texts = [row["text"] for row in reader]
+
+def load_corpus(path):
+    with open(path, newline="") as f:
+        reader = csv.DictReader(f)
+        return [row["text"] for row in reader]
+
+def tokenize(text):
+    text = text.lower()
+    for char in string.punctuation:
+        text = text.replace(char, " ")
+    return text.split()
+
+def build_bigrams(tokens):
+    bigrams = defaultdict(lambda: defaultdict(int))
+    for i in range(len(tokens) - 1):
+        bigrams[tokens[i]][tokens[i + 1]] += 1
+    return dict(bigrams)
+```
+
 ## Concepts clés
 
 ### Normaliser avec une boucle

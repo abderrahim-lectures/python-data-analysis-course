@@ -46,6 +46,30 @@ From word counts to word transitions
 
 Word frequency tells you *what* words appear. Bigrams tell you *what follows what*. "The cat" is far more common than "the refrigerator" — a bigram table captures that relationship. It's the simplest form of a language model: given a word, what words tend to come next?
 
+The cells below reuse the `load_corpus` and `tokenize` helpers from lessons 01 and 03. Every lesson page starts with a fresh Python session, so run this setup cell first:
+
+```python
+import csv
+import string
+
+with open("slm-corpus.csv", newline="") as f:
+    reader = csv.DictReader(f)
+    texts = [row["text"] for row in reader]
+
+def load_corpus(path):
+    with open(path, newline="") as f:
+        reader = csv.DictReader(f)
+        return [row["text"] for row in reader]
+
+def tokenize(text):
+    text = text.lower()
+    for char in string.punctuation:
+        text = text.replace(char, " ")
+    return text.split()
+
+tokens = tokenize(" ".join(texts))
+```
+
 ## Key Concepts
 
 ### What is a bigram?

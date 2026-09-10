@@ -46,6 +46,31 @@ Compter les mots
 
 Une fois que vous avez des jetons, l'étape suivante consiste à compter combien de fois chaque mot apparaît. Ces comptes de fréquence disent au modèle de langue quels mots sont courants (susceptibles d'apparaître n'importe où) et lesquels sont rares (prédictifs quand ils apparaissent).
 
+Les cellules ci-dessous réutilisent les fonctions `load_corpus` et `tokenize` des leçons 01 et 03. Chaque page de leçon démarre une session Python vierge, alors exécutez d'abord cette cellule de mise en place :
+
+```python
+import csv
+import string
+
+with open("slm-corpus.csv", newline="") as f:
+    reader = csv.DictReader(f)
+    texts = [row["text"] for row in reader]
+
+def load_corpus(path):
+    with open(path, newline="") as f:
+        reader = csv.DictReader(f)
+        return [row["text"] for row in reader]
+
+def tokenize(text):
+    text = text.lower()
+    for char in string.punctuation:
+        text = text.replace(char, " ")
+    return text.split()
+
+full_text = " ".join(texts)
+tokens = tokenize(full_text)
+```
+
 ## Concepts clés
 
 ### Construire un dict de fréquence

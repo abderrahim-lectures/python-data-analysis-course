@@ -46,6 +46,31 @@ Counting words
 
 Once you have tokens, the next step is counting how often each word appears. These frequency counts tell the language model which words are common (likely to appear anywhere) and which are rare (predictive when they do appear).
 
+The cells below reuse the `load_corpus` and `tokenize` helpers from lessons 01 and 03. Every lesson page starts with a fresh Python session, so run this setup cell first:
+
+```python
+import csv
+import string
+
+with open("slm-corpus.csv", newline="") as f:
+    reader = csv.DictReader(f)
+    texts = [row["text"] for row in reader]
+
+def load_corpus(path):
+    with open(path, newline="") as f:
+        reader = csv.DictReader(f)
+        return [row["text"] for row in reader]
+
+def tokenize(text):
+    text = text.lower()
+    for char in string.punctuation:
+        text = text.replace(char, " ")
+    return text.split()
+
+full_text = " ".join(texts)
+tokens = tokenize(full_text)
+```
+
 ## Key Concepts
 
 ### Building a frequency dict

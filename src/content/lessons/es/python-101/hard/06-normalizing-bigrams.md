@@ -46,6 +46,35 @@ De recuentos a probabilidades
 
 Los recuentos crudos te dicen que "the" → "cat" apareció 15 veces y "the" → "dog" apareció 5 veces. Pero para **muestrear** la siguiente palabra, necesitas probabilidades: "cat" debería elegirse el 75 % de las veces y "dog" el 25 %. Normalizar convierte los recuentos en una distribución donde todos los seguidores suman 1.0.
 
+Las celdas siguientes reutilizan las funciones `load_corpus`, `tokenize` y `build_bigrams` de las lecciones 01 a 05. Cada página de lección inicia una sesión de Python nueva, así que ejecuta primero esta celda de configuración:
+
+```python
+import csv
+import string
+from collections import defaultdict
+
+with open("slm-corpus.csv", newline="") as f:
+    reader = csv.DictReader(f)
+    texts = [row["text"] for row in reader]
+
+def load_corpus(path):
+    with open(path, newline="") as f:
+        reader = csv.DictReader(f)
+        return [row["text"] for row in reader]
+
+def tokenize(text):
+    text = text.lower()
+    for char in string.punctuation:
+        text = text.replace(char, " ")
+    return text.split()
+
+def build_bigrams(tokens):
+    bigrams = defaultdict(lambda: defaultdict(int))
+    for i in range(len(tokens) - 1):
+        bigrams[tokens[i]][tokens[i + 1]] += 1
+    return dict(bigrams)
+```
+
 ## Conceptos clave
 
 ### Normalizar con un bucle

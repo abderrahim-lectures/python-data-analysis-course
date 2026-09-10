@@ -46,6 +46,35 @@ From counts to probabilities
 
 Raw counts tell you that "the" → "cat" appeared 15 times and "the" → "dog" appeared 5 times. But to **sample** the next word, you need probabilities: "cat" should be chosen 75% of the time and "dog" 25%. Normalizing converts counts into a distribution where all followers sum to 1.0.
 
+The cells below reuse the `load_corpus`, `tokenize`, and `build_bigrams` helpers from lessons 01–05. Every lesson page starts with a fresh Python session, so run this setup cell first:
+
+```python
+import csv
+import string
+from collections import defaultdict
+
+with open("slm-corpus.csv", newline="") as f:
+    reader = csv.DictReader(f)
+    texts = [row["text"] for row in reader]
+
+def load_corpus(path):
+    with open(path, newline="") as f:
+        reader = csv.DictReader(f)
+        return [row["text"] for row in reader]
+
+def tokenize(text):
+    text = text.lower()
+    for char in string.punctuation:
+        text = text.replace(char, " ")
+    return text.split()
+
+def build_bigrams(tokens):
+    bigrams = defaultdict(lambda: defaultdict(int))
+    for i in range(len(tokens) - 1):
+        bigrams[tokens[i]][tokens[i + 1]] += 1
+    return dict(bigrams)
+```
+
 ## Key Concepts
 
 ### Normalizing with a loop
