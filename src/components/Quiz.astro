@@ -106,7 +106,9 @@ const {title = m.quiz_title(), questions, xp = 10, lessonId = ''} = Astro.props;
           answered = true;
           try {
             import('../lib/gameState.ts').then((gs) => gs.recordQuiz(userCorrect));
-          } catch {}
+          } catch (e) {
+            console.warn('[quiz] failed to record quiz', e);
+          }
         }
         if (userCorrect) correct++;
         if (explain) explain.hidden = false;
@@ -127,7 +129,9 @@ const {title = m.quiz_title(), questions, xp = 10, lessonId = ''} = Astro.props;
             gs.recordQuizPerfect();
             if (lessonId) gs.recordChallenge(lessonId);
           });
-        } catch {}
+        } catch (e) {
+          console.warn('[quiz] failed to record perfect quiz', e);
+        }
         feedback.hidden = false;
         feedback.textContent = m.quiz_perfect({xp});
         feedback.className = 'quiz__feedback quiz__feedback--correct';

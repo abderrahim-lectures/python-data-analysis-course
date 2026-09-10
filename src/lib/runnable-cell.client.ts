@@ -47,7 +47,9 @@ async function getDatasetManifest(): Promise<Record<string, string> | null> {
     const res = await fetch(`${import.meta.env.BASE_URL}datasets/index.json`);
     if (!res.ok) return null;
     datasetManifest = (await res.json()) as Record<string, string>;
-  } catch {}
+  } catch (e) {
+    console.warn('[datasetMount] failed to load manifest', e);
+  }
   return datasetManifest;
 }
 
@@ -149,7 +151,9 @@ async function mountDatasets(engine: PyodideModel): Promise<void> {
         engine.FS.writeFile(`/${ref}`, data);
       }
       mountedDatasets.add(shipped);
-    } catch {}
+    } catch (e) {
+      console.warn('[datasetMount] failed to mount', shipped, e);
+    }
   }
 }
 
@@ -202,7 +206,17 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
     run.disabled = true;
     run.textContent = m.run_loading();
     run.classList.add('cell__run--loading');
-    const engine = await (deps.loadEngine ?? py)();
+    let engine: PyodideModel;
+    try {
+      engine = await (deps.loadEngine ?? py)();
+    } catch (e) {
+      console.warn('[runnable-cell] failed to load Pyodide', e);
+      appendLine('err', 'Failed to load Python engine. Check your connection and try again.');
+      run.textContent = m.run_button();
+      run.disabled = false;
+      run.classList.remove('cell__run--loading');
+      return;
+    }
     run.textContent = m.run_button();
     run.disabled = false;
     run.classList.remove('cell__run--loading');

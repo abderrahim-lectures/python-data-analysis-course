@@ -58,6 +58,8 @@ describe('message files stay complete and translated', () => {
     // read identically in every locale by design.
     'progress_xp_unit', 'progress_report_lede_study', 'progress_kpi_kda',
     'progress_rank_bronze', 'progress_report_lede_end',
+    // Learn hub: "modules" and "lessons" are the same word in French.
+    'learn_hub_modules', 'learn_hub_lessons',
   ]);
 
   test.each(LOCALES)('%s has every message key (parity with en)', (loc) => {

@@ -75,6 +75,7 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://www.google-analytics.com; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'" />
     <script is:inline>
       (function() {
         var KEY = 'pda:locale-redirected';
@@ -148,6 +149,7 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <!-- Pyodide loads lazily on the first "Run" click (see runnable-cell.client.ts),
          never on page load -- this just warms the DNS/TLS handshake early so

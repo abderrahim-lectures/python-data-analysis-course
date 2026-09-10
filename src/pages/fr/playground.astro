@@ -3,18 +3,19 @@ import Base from '../../layouts/Base.astro';
 import PlaygroundHead from '../../components/PlaygroundHead.astro';
 import PlaygroundCell from '../../components/PlaygroundCell.astro';
 import {PLAYGROUND_STARTER} from '../../lib/playgroundStarter.ts';
+import * as m from '../../paraglide/messages.js';
 ---
 
 <Base
-  title="Bac à sable — PyDA Course"
-  description="Éditeur Python libre — exécutez n'importe quel code dans votre navigateur."
+  title={m.playground_title() + ' — PyDA Course'}
+  description={m.playground_lead()}
   lang="fr"
   dir="ltr"
 >
   <section class="container head">
     <PlaygroundHead
-      eyebrow="Éditeur plein écran"
-      lead="Écrivez et exécutez n'importe quel Python ici — rien n'est noté, rien n'est sauvegardé quand vous partez."
+      eyebrow={m.playground_eyebrow()}
+      lead={m.playground_lead()}
     />
   </section>
 

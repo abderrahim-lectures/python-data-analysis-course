@@ -2,24 +2,25 @@
 // EN project index — thin wrapper over the shared ProjectListing component.
 import {getCollection} from 'astro:content';
 import ProjectListing from '../../components/projects/ProjectListing.astro';
+import * as m from '../../paraglide/messages.js';
 
 const projects = await getCollection('projects');
 
 const filterStrings = {
-  searchPlaceholder: 'Search all {n} projects…',
-  searchAria: 'Search projects by title or description',
-  filterTagAria: 'Filter by tag',
-  tagAll: 'All',
-  filterDiffAria: 'Filter by difficulty',
-  diffAll: 'All Levels',
-  diffBeginner: 'Beginner',
-  diffIntermediate: 'Intermediate',
-  diffAdvanced: 'Advanced',
-  viewAria: 'View mode',
-  viewListAria: 'List view',
-  viewGridAria: 'Grid view',
-  noMatchPrefix: 'No projects match',
-  trySearch: 'Try a different search or tag.',
+  searchPlaceholder: m.filter_search_placeholder(),
+  searchAria: m.filter_search_aria(),
+  filterTagAria: m.filter_tag_aria(),
+  tagAll: m.filter_tag_all(),
+  filterDiffAria: m.filter_diff_aria(),
+  diffAll: m.filter_diff_all(),
+  diffBeginner: m.filter_diff_beginner(),
+  diffIntermediate: m.filter_diff_intermediate(),
+  diffAdvanced: m.filter_diff_advanced(),
+  viewAria: m.filter_view_aria(),
+  viewListAria: m.filter_view_list(),
+  viewGridAria: m.filter_view_grid(),
+  noMatchPrefix: m.filter_no_match(),
+  trySearch: m.filter_try_search(),
 };
 ---
 

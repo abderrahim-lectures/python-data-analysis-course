@@ -808,3 +808,27 @@ main:focus { outline: none; }
   .gamestrip { grid-template-columns: 1fr; }
   .gamestrip__item--blazing { grid-column: span 1; }
 }
+
+/* === Respect reduced motion preference === */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .particle { display: none !important; }
+  .lvlup { display: none !important; }
+  .floating-xp { animation: none !important; opacity: 1 !important; }
+}
+
+/* === Mobile touch target minimum (44×44px WCAG 2.5.8) === */
+@media (pointer: coarse) {
+  button, a, input, select, textarea, [role="button"], [role="tab"], [role="option"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  .topnav__lang { padding: .4rem .65rem; }
+  .topnav__btn { padding: .5rem; }
+  .quiz-q__opt { padding: .75rem 1rem; }
+}

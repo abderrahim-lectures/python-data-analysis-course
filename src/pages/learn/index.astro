@@ -35,9 +35,9 @@ const daMinutes = allLessons.filter(e => idInLocale(locale, e.id) && e.id.includ
 
   <section class="container">
     <div class="note">
-      A <strong>module</strong> is your path through the course. Each module has lessons — finish them to earn <span class="text-gradient">+100 XP</span>.
-      You can switch routes at any time. Keep your streak alive for bonus XP.
-      <span class="note__extra"><a href={`${base}cheatsheets`}>📋 Python cheatsheets</a> — the patterns to copy in every lesson.</span>
+      <Fragment set:html={m.learn_hub_module_explanation()} />
+      {m.learn_hub_switch_routes()}
+      <span class="note__extra"><Fragment set:html={m.learn_hub_cheatsheets_hint()} /></span>
     </div>
   </section>
 
@@ -50,7 +50,7 @@ const daMinutes = allLessons.filter(e => idInLocale(locale, e.id) && e.id.includ
         <p>{m.track_1_desc()}</p>
         <div class="sectioncard__meta">
           <span class="badge badge--xp">⚡ {py101Lessons * 100} XP</span>
-          <span class="badge badge--streak">📖 {py101Modules} modules · {py101Lessons} lessons</span>
+          <span class="badge badge--streak">📖 {py101Modules} {m.learn_hub_modules()} · {py101Lessons} {m.learn_hub_lessons()}</span>
           <span class="badge">⏱ ~{Math.round(py101Minutes / 60)}h</span>
         </div>
         <div class="routes">
@@ -69,7 +69,7 @@ const daMinutes = allLessons.filter(e => idInLocale(locale, e.id) && e.id.includ
         <p>{m.track_2_desc()}</p>
         <div class="sectioncard__meta">
           <span class="badge badge--xp">⚡ {daLessons * 100} XP</span>
-          <span class="badge badge--streak">📖 {daModules} modules · {daLessons} lessons</span>
+          <span class="badge badge--streak">📖 {daModules} {m.learn_hub_modules()} · {daLessons} {m.learn_hub_lessons()}</span>
           <span class="badge">⏱ ~{Math.round(daMinutes / 60)}h</span>
         </div>
         <div class="routes">

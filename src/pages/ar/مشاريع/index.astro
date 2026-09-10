@@ -2,24 +2,25 @@
 // AR project index — thin wrapper over the shared ProjectListing component.
 import {getCollection} from 'astro:content';
 import ProjectListing from '../../../components/projects/ProjectListing.astro';
+import * as m from '../../../paraglide/messages.js';
 
 const projects = await getCollection('projects');
 
 const filterStrings = {
-  searchPlaceholder: 'ابحث بين {n} مشروعاً…',
-  searchAria: 'ابحث عن المشاريع',
-  filterTagAria: 'تصفية حسب الموضوع',
-  tagAll: 'الكل',
-  filterDiffAria: 'تصفية حسب المستوى',
-  diffAll: 'جميع المستويات',
-  diffBeginner: 'مبتدئ',
-  diffIntermediate: 'متوسط',
-  diffAdvanced: 'متقدم',
-  viewAria: 'طريقة العرض',
-  viewListAria: 'عرض القائمة',
-  viewGridAria: 'عرض الشبكة',
-  noMatchPrefix: 'لا توجد مشاريع تطابق',
-  trySearch: 'جرّب بحثاً أو وصفاً مختلفاً.',
+  searchPlaceholder: m.filter_search_placeholder(),
+  searchAria: m.filter_search_aria(),
+  filterTagAria: m.filter_tag_aria(),
+  tagAll: m.filter_tag_all(),
+  filterDiffAria: m.filter_diff_aria(),
+  diffAll: m.filter_diff_all(),
+  diffBeginner: m.filter_diff_beginner(),
+  diffIntermediate: m.filter_diff_intermediate(),
+  diffAdvanced: m.filter_diff_advanced(),
+  viewAria: m.filter_view_aria(),
+  viewListAria: m.filter_view_list(),
+  viewGridAria: m.filter_view_grid(),
+  noMatchPrefix: m.filter_no_match(),
+  trySearch: m.filter_try_search(),
 };
 ---
 
