@@ -46,6 +46,55 @@ Rassemblons tout
 
 Vous savez charger des données, tokeniser, compter les mots, construire des bigrammes, normaliser les probabilités et échantillonner le mot suivant. Vous combinez maintenant cela dans une seule fonction qui génère du texte : choisissez un mot de départ, échantillonnez le mot suivant, renvoyez-le en entrée, et répétez jusqu'à avoir produit assez de mots.
 
+Les cellules ci-dessous réutilisent les fonctions `load_corpus`, `tokenize`, `build_bigrams` et `normalize_bigrams` des leçons 01 à 06 et la fonction `sample_next` de la leçon 07. Chaque page de leçon démarre une session Python vierge, alors exécutez d'abord cette cellule de mise en place :
+
+```python
+import csv
+import string
+import random
+from collections import defaultdict
+
+with open("slm-corpus.csv", newline="") as f:
+    reader = csv.DictReader(f)
+    texts = [row["text"] for row in reader]
+
+def load_corpus(path):
+    with open(path, newline="") as f:
+        reader = csv.DictReader(f)
+        return [row["text"] for row in reader]
+
+def tokenize(text):
+    text = text.lower()
+    for char in string.punctuation:
+        text = text.replace(char, " ")
+    return text.split()
+
+def build_bigrams(tokens):
+    bigrams = defaultdict(lambda: defaultdict(int))
+    for i in range(len(tokens) - 1):
+        bigrams[tokens[i]][tokens[i + 1]] += 1
+    return dict(bigrams)
+
+def normalize_bigrams(bigrams):
+    normalized = {}
+    for word, followers in bigrams.items():
+        if not followers:
+            continue
+        total = sum(followers.values())
+        normalized[word] = {w: c / total for w, c in followers.items()}
+    return normalized
+
+def sample_next(model, current_word):
+    if current_word not in model:
+        return None
+    followers = model[current_word]
+    words = list(followers.keys())
+    weights = list(followers.values())
+    return random.choices(words, weights=weights, k=1)[0]
+
+model = normalize_bigrams(build_bigrams(tokenize(" ".join(texts))))
+```
+
 ## Concepts clés
 
 ### La boucle de génération
@@ -76,15 +125,37 @@ Commencez avec `start_word`, échantillonnez le mot suivant, ajoutez-le au résu
 Quand `sample_next()` renvoie `None` (le mot courant n'a pas de mots suivants connus), vous avez trois options. La plus simple est de s'arrêter :
 
 ```python
-if next_word is None:
-    break
+import random
+random.seed(7)
+
+word = "the"
+result = [word]
+for _ in range(10):
+    next_word = sample_next(model, word)
+    if next_word is None:
+        break  # dead end — stop
+    result.append(next_word)
+    word = next_word
+
+print(" ".join(result))
 ```
 
 Cela produit une sortie plus courte mais dont l'exactitude est garantie. Pour une sortie plus longue, redémarrez depuis un mot courant :
 
 ```python
-if next_word is None:
-    next_word = random.choice(["the", "and", "to", "of", "a"])
+import random
+random.seed(7)
+
+word = "the"
+result = [word]
+for _ in range(10):
+    next_word = sample_next(model, word)
+    if next_word is None:
+        next_word = random.choice(["the", "and", "to", "of", "a"])  # restart
+    result.append(next_word)
+    word = next_word
+
+print(" ".join(result))
 ```
 
 ### Choisir un mot de départ

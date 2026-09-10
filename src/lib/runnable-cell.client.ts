@@ -10,6 +10,24 @@ import {friendlyError} from './friendlyError.ts';
 const PYODIDE_VERSION = '0.26.4';
 const INDEX = `https://cdn.jsdelivr.net/pyodide/v${PYODIDE_VERSION}/full/`;
 
+// Pure-Python packages the lessons use that are NOT part of the Pyodide wheel
+// set. seaborn is the only one today; its runtime deps (numpy, pandas,
+// matplotlib, scipy, statsmodels) are all Pyodide packages, so we preload
+// those from the regular index and then install the vendored wheel from our
+// own origin (`public/`), which the site CSP's connect-src 'self' allows.
+type ExtraPackages = {imports: string; wheel: string};
+const EXTRA_PACKAGES: Record<string, string> = {
+  seaborn: `${import.meta.env.BASE_URL}pyodide/seaborn-0.13.2-py3-none-any.whl`,
+};
+const EXTRA_PACKAGE_IMPORTS = 'micropip, numpy, pandas, matplotlib, scipy, statsmodels';
+const extraPackagesInstalled = new Set<string>();
+
+// Unit tests reset the per-install cache between cases (it is per-page-load in
+// the browser, but module-scoped in a single vitest process).
+export function resetExtraPackagesCache(): void {
+  extraPackagesInstalled.clear();
+}
+
 // Minimal structural typing for the subset of the Pyodide runtime this module
 // touches (stdout/stderr/stdin wiring, package loading, script execution, and
 // the virtual filesystem used to pre-mount datasets). Keeps the CDN import
@@ -30,7 +48,14 @@ let pyPromise: Promise<PyodideModel> | null = null;
 async function py(): Promise<PyodideModel> {
   if (!pyPromise) {
     const mod = (await import(/* @vite-ignore */ `${INDEX}pyodide.mjs`)) as PyodideModule;
-    pyPromise = mod.loadPyodide({indexURL: INDEX});
+    pyPromise = mod.loadPyodide({indexURL: INDEX}).then(async (engine) => {
+      // Deprecation/Future warnings from third-party stack (Pyarrow becoming a
+      // pandas requirement, seaborn's `palette`-without-`hue` deprecation) are
+      // noise for learners — they'd render as red error lines. Filter them so
+      // a successful cell shows clean stdout-only output.
+      await engine.runPython('import warnings; warnings.filterwarnings("ignore")');
+      return engine;
+    });
   }
   return pyPromise;
 }
@@ -102,6 +127,28 @@ export interface CellRuntime {
    *  Optional so unit tests can omit it. */
   otherCellSources?: string;
 }
+
+// Some lesson cells `import seaborn`, which is not a Pyodide wheel. seaborn is
+// pure Python, so instead of rewriting the lessons we preload its Pyodide deps
+// (numpy/pandas/matplotlib/scipy/statsmodels are all in the index) and install
+// the vendored wheel from our own origin via micropip. scipy is also required
+// at runtime, not just at import time: pandas' `corr(method="spearman")`
+// imports it internally, so the deps are loaded once per page whenever ANY
+// cell on the page needs the seaborn stack — not only the cell that imports it.
+async function ensureExtraPackages(
+  engine: PyodideModel,
+  code: string,
+  pageSource: string = '',
+): Promise<void> {
+  const source = pageSource ? `${pageSource}\n${code}` : code;
+  for (const [pkg, wheelUrl] of Object.entries(EXTRA_PACKAGES)) {
+    if (extraPackagesInstalled.has(pkg)) continue;
+    if (!new RegExp(`import ${pkg}|from ${pkg}`).test(source)) continue;
+    await engine.loadPackagesFromImports(`import ${EXTRA_PACKAGE_IMPORTS}`);
+    await engine.runPythonAsync(`import micropip; await micropip.install(${JSON.stringify(wheelUrl)}, deps=False)`);
+    extraPackagesInstalled.add(pkg);
+  }
+}
 export async function runCellCode(code: string, rt: CellRuntime): Promise<boolean> {
   rt.engine.setStdout({batched: (s: string) => rt.appendLine('out', s)});
   rt.engine.setStderr({batched: (s: string) => rt.appendLine('err', s)});
@@ -111,6 +158,8 @@ export async function runCellCode(code: string, rt: CellRuntime): Promise<boolea
     return false;
   }
   try {
+    const pageSource = rt.otherCellSources ?? '';
+    await ensureExtraPackages(rt.engine, code, pageSource);
     await rt.engine.loadPackagesFromImports(code);
     const toRun = await rt.engine.runPython(WRAP_EXPR_SRC + '_wrap_bare_expr');
     await rt.engine.runPythonAsync(toRun(code));
@@ -259,7 +308,7 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
   });
   clear.addEventListener('click', () => { lines.innerHTML = ''; out.hidden = true; clear.hidden = true; });
 
-  // Copy output button.
+  // Copy source code button.
   const copyBtn = document.createElement('button');
   copyBtn.className = 'btn btn-ghost btn-sm cell__copy';
   const setCopyLabel = (state: 'idle' | 'done') => {
@@ -267,7 +316,7 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
   };
   setCopyLabel('idle');
   copyBtn.addEventListener('click', async () => {
-    const text = lines.textContent ?? '';
+    const text = codeEl.textContent ?? '';
     let ok = false;
     try {
       await navigator.clipboard.writeText(text);

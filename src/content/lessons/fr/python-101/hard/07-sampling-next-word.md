@@ -46,6 +46,47 @@ Le moteur de la génération de texte
 
 La génération de texte est, au fond, un problème d'échantillonnage. Étant donné un mot courant, vous devez choisir le mot suivant dans une distribution de possibilités — certains mots sont probables, d'autres rares, mais tous sont possibles. `random.choices()` fait exactement cela.
 
+Les cellules ci-dessous réutilisent les fonctions `load_corpus`, `tokenize`, `build_bigrams` et `normalize_bigrams` des leçons 01 à 06. Chaque page de leçon démarre une session Python vierge, alors exécutez d'abord cette cellule de mise en place pour reconstruire le modèle de bigrammes :
+
+```python
+import csv
+import string
+import random
+from collections import defaultdict
+
+with open("slm-corpus.csv", newline="") as f:
+    reader = csv.DictReader(f)
+    texts = [row["text"] for row in reader]
+
+def load_corpus(path):
+    with open(path, newline="") as f:
+        reader = csv.DictReader(f)
+        return [row["text"] for row in reader]
+
+def tokenize(text):
+    text = text.lower()
+    for char in string.punctuation:
+        text = text.replace(char, " ")
+    return text.split()
+
+def build_bigrams(tokens):
+    bigrams = defaultdict(lambda: defaultdict(int))
+    for i in range(len(tokens) - 1):
+        bigrams[tokens[i]][tokens[i + 1]] += 1
+    return dict(bigrams)
+
+def normalize_bigrams(bigrams):
+    normalized = {}
+    for word, followers in bigrams.items():
+        if not followers:
+            continue
+        total = sum(followers.values())
+        normalized[word] = {w: c / total for w, c in followers.items()}
+    return normalized
+
+model = normalize_bigrams(build_bigrams(tokenize(" ".join(texts))))
+```
+
 ## Concepts clés
 
 ### Les bases de random.choices()
@@ -147,7 +188,8 @@ Chargez le modèle de bigrammes normalisé et échantillonnez le mot suivant 10 
 
 ```python
 random.seed(42)
-model = load_model("bigram_model.json")  # from previous lesson
+tokens = tokenize(" ".join(load_corpus("slm-corpus.csv")))
+model = normalize_bigrams(build_bigrams(tokens))
 
 for _ in range(10):
     next_word = sample_next(model, "the")

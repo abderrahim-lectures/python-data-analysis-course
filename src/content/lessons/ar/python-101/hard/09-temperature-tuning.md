@@ -46,6 +46,77 @@ quiz:
 
 نموذج لغوي باحتمالات ثابتة يُنشئ دائمًا النوع نفسه من المخرج — يتبع المتن حرفيًا. لكن أحيانًا تريد نصًا أكثر إبداعًا ومفاجأةً، وأحيانًا تريد المخرج الأكثر قابلية للتنبؤ وأمانًا. **درجة الحرارة** هي المقبض الذي يتحكم في هذه المفاضلة.
 
+تستخدم الخلايا أدناه الدوال `load_corpus` و`tokenize` و`build_bigrams` و`normalize_bigrams` من الدروس 01 إلى 06، ودالة `sample_next` من الدرس 07، ودالة `generate_text` الحساسة لدرجة الحرارة (نفس التنفيذ الذي ستراه مجمّعًا في الدرس 10). كل صفحة درس تبدأ جلسة بايثون جديدة، لذا شغّل خلية الإعداد هذه أولًا:
+
+```python
+import csv
+import string
+import random
+import math
+from collections import defaultdict
+
+with open("slm-corpus.csv", newline="") as f:
+    reader = csv.DictReader(f)
+    texts = [row["text"] for row in reader]
+
+def load_corpus(path):
+    with open(path, newline="") as f:
+        reader = csv.DictReader(f)
+        return [row["text"] for row in reader]
+
+def tokenize(text):
+    text = text.lower()
+    for char in string.punctuation:
+        text = text.replace(char, " ")
+    return text.split()
+
+def build_bigrams(tokens):
+    bigrams = defaultdict(lambda: defaultdict(int))
+    for i in range(len(tokens) - 1):
+        bigrams[tokens[i]][tokens[i + 1]] += 1
+    return dict(bigrams)
+
+def normalize_bigrams(bigrams):
+    normalized = {}
+    for word, followers in bigrams.items():
+        if not followers:
+            continue
+        total = sum(followers.values())
+        normalized[word] = {w: c / total for w, c in followers.items()}
+    return normalized
+
+def apply_temperature(probs, temperature):
+    log_probs = [math.log(p + 1e-10) for p in probs]
+    scaled = [lp / temperature for lp in log_probs]
+    max_s = max(scaled)
+    exp_s = [math.exp(s - max_s) for s in scaled]
+    total = sum(exp_s)
+    return [e / total for e in exp_s]
+
+def sample_next(model, current_word, temperature=1.0):
+    if current_word not in model:
+        return None
+    followers = model[current_word]
+    words = list(followers.keys())
+    probs = list(followers.values())
+    if temperature != 1.0:
+        probs = apply_temperature(probs, temperature)
+    return random.choices(words, weights=probs, k=1)[0]
+
+def generate_text(model, start_word, length=20, temperature=1.0):
+    word = start_word
+    result = [word]
+    for _ in range(length - 1):
+        next_word = sample_next(model, word, temperature)
+        if next_word is None:
+            next_word = random.choice(["the", "and", "to", "of", "a"])
+        result.append(next_word)
+        word = next_word
+    return " ".join(result)
+
+model = normalize_bigrams(build_bigrams(tokenize(" ".join(texts))))
+```
+
 ## المفاهيم الأساسية
 
 ### ما هي درجة الحرارة؟

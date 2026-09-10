@@ -259,7 +259,7 @@ import matplotlib.pyplot as plt
 df = pd.read_csv("students-performance.csv")
 
 # Story: Test preparation closes the gap
-fig, axes = plt.subplots(1, 2, figsize=(14, 6))
+fig, axes = plt.subplots(1, 3, figsize=(14, 6))
 fig.suptitle("Test Preparation Impact Across Subjects", fontsize=16, fontweight="bold")
 
 for i, subject in enumerate(["math score", "reading score", "writing score"]):

@@ -1,6 +1,6 @@
 import {afterEach, beforeEach, describe, expect, test, vi} from 'vitest';
 import {fakeEl, stubDom, type FakeEl} from './_domstub.ts';
-import {awardLessonXp, initCell, initRunnableCells, runCellCode} from '../../src/lib/runnable-cell.client';
+import {awardLessonXp, initCell, initRunnableCells, resetExtraPackagesCache, runCellCode} from '../../src/lib/runnable-cell.client';
 import {type CellRuntime, type InitCellDeps, type PyodideModel} from '../../src/lib/runnable-cell.client';
 
 type Recorded = Array<{kind: string; text: string}>;
@@ -58,6 +58,7 @@ describe('runCellCode', () => {
     out = [];
     mock = makeEngine();
     win();
+    resetExtraPackagesCache();
   });
 
   test('routes stdout, stderr and reads stdin via prompt', async () => {
@@ -77,6 +78,33 @@ describe('runCellCode', () => {
     expect(mock.calls.loaded).toEqual(['print(1)']);
     expect(mock.calls.wrapped).toEqual([expect.stringContaining('_wrap_bare_expr')]);
     expect(mock.calls.ran).toEqual(['W(print(1))']);
+    expect(out).toEqual([]);
+  });
+
+  test('pre-installs a vendored wheel (seaborn) once before running code that imports it', async () => {
+    await runCellCode('import seaborn as sns', makeRuntime(mock.engine, out));
+    // First load call pulls the Pyodide-index deps seaborn needs at import time.
+    expect(mock.calls.loaded[0]).toContain('import micropip, numpy, pandas, matplotlib, scipy, statsmodels');
+    // The run first installs the wheel from our own origin, then executes.
+    expect(mock.calls.ran[0]).toContain('await micropip.install');
+    expect(mock.calls.ran[1]).toBe('W(import seaborn as sns)');
+    // A second seaborn cell skips the install: wheel installed exactly once.
+    await runCellCode('import seaborn as sns; sns.histplot([1, 2])', makeRuntime(mock.engine, out));
+    expect(mock.calls.ran.filter((s: string) => s.includes('micropip.install'))).toHaveLength(1);
+  });
+
+  test('preloads the seaborn stack when the page uses seaborn but this cell does not', async () => {
+    // Lesson 06 cell 1 calls df["math score"].corr(df["reading score"], method="spearman"),
+    // which imports scipy inside pandas. scipy comes along with the seaborn stack, and another
+    // cell on the page imports seaborn — so the deps must be ready before this cell runs.
+    const rt: CellRuntime = {
+      appendLine: (kind, text) => out.push({kind, text}),
+      engine: mock.engine,
+      otherCellSources: 'import seaborn as sns\nsns.histplot(df["math score"])',
+    };
+    await runCellCode('rho = df["math score"].corr(df["reading score"], method="spearman")', rt);
+    expect(mock.calls.loaded[0]).toContain('import micropip, numpy, pandas, matplotlib, scipy, statsmodels');
+    expect(mock.calls.ran[0]).toContain('await micropip.install');
     expect(out).toEqual([]);
   });
 
@@ -376,12 +404,12 @@ await (run.listeners['click']() as unknown as Promise<unknown>);
     expect(clear.hidden).toBe(true);
   });
 
-  test('Copy writes the output text to the clipboard', async () => {
-    const f = buildFixture();
-    const {cell, lines, actions} = f;
+  test('Copy writes the source code to the clipboard', async () => {
+    const f = buildFixture('print("copy this")');
+    const {cell, code, actions} = f;
     vi.stubGlobal('localStorage', memoryStorage());
     initCell(asElement(cell), {loadEngine: f.loadEngine});
-    lines.textContent = 'hello\n';
+    code.textContent = 'print("copy this")';
 
     const copy = actions.children.find((c) => c.classSet.has('cell__copy'));
     expect(copy).toBeDefined();
@@ -389,7 +417,7 @@ await (run.listeners['click']() as unknown as Promise<unknown>);
 
     await flush();
     const nav = navigator as unknown as {clipboard: {writeText: ReturnType<typeof vi.fn>}};
-    expect(nav.clipboard.writeText).toHaveBeenCalledWith('hello\n');
+    expect(nav.clipboard.writeText).toHaveBeenCalledWith('print("copy this")');
   });
 
   test('Tab inserts four spaces via execCommand and Ctrl+Enter triggers Run', () => {

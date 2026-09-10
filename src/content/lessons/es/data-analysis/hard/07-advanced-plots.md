@@ -52,6 +52,7 @@ FacetGrid divide los datos por una o más variables categóricas y crea un panel
 
 ```python
 import pandas as pd
+import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 

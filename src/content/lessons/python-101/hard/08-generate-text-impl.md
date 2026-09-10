@@ -46,6 +46,55 @@ Putting it all together
 
 You can load data, tokenize, count words, build bigrams, normalize probabilities, and sample the next word. Now you combine these into a single function that generates text: pick a starting word, sample the next word, feed it back in, and repeat until you've produced enough words.
 
+The cells below reuse the `load_corpus`, `tokenize`, `build_bigrams`, and `normalize_bigrams` helpers from lessons 01–06 and the `sample_next` helper from lesson 07. Every lesson page starts with a fresh Python session, so run this setup cell first:
+
+```python
+import csv
+import string
+import random
+from collections import defaultdict
+
+with open("slm-corpus.csv", newline="") as f:
+    reader = csv.DictReader(f)
+    texts = [row["text"] for row in reader]
+
+def load_corpus(path):
+    with open(path, newline="") as f:
+        reader = csv.DictReader(f)
+        return [row["text"] for row in reader]
+
+def tokenize(text):
+    text = text.lower()
+    for char in string.punctuation:
+        text = text.replace(char, " ")
+    return text.split()
+
+def build_bigrams(tokens):
+    bigrams = defaultdict(lambda: defaultdict(int))
+    for i in range(len(tokens) - 1):
+        bigrams[tokens[i]][tokens[i + 1]] += 1
+    return dict(bigrams)
+
+def normalize_bigrams(bigrams):
+    normalized = {}
+    for word, followers in bigrams.items():
+        if not followers:
+            continue
+        total = sum(followers.values())
+        normalized[word] = {w: c / total for w, c in followers.items()}
+    return normalized
+
+def sample_next(model, current_word):
+    if current_word not in model:
+        return None
+    followers = model[current_word]
+    words = list(followers.keys())
+    weights = list(followers.values())
+    return random.choices(words, weights=weights, k=1)[0]
+
+model = normalize_bigrams(build_bigrams(tokenize(" ".join(texts))))
+```
+
 ## Key Concepts
 
 ### The generation loop
@@ -76,15 +125,37 @@ Start with `start_word`, sample the next word, append it to the result, and set 
 When `sample_next()` returns `None` (the current word has no known followers), you have three options. The simplest is to stop:
 
 ```python
-if next_word is None:
-    break
+import random
+random.seed(7)
+
+word = "the"
+result = [word]
+for _ in range(10):
+    next_word = sample_next(model, word)
+    if next_word is None:
+        break  # dead end — stop
+    result.append(next_word)
+    word = next_word
+
+print(" ".join(result))
 ```
 
 This produces shorter output but is guaranteed to be correct. For longer output, restart from a common word:
 
 ```python
-if next_word is None:
-    next_word = random.choice(["the", "and", "to", "of", "a"])
+import random
+random.seed(7)
+
+word = "the"
+result = [word]
+for _ in range(10):
+    next_word = sample_next(model, word)
+    if next_word is None:
+        next_word = random.choice(["the", "and", "to", "of", "a"])  # restart
+    result.append(next_word)
+    word = next_word
+
+print(" ".join(result))
 ```
 
 ### Choosing a starting word

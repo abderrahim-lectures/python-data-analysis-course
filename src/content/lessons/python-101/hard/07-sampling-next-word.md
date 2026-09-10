@@ -46,6 +46,47 @@ The engine of text generation
 
 Text generation is, at its core, a sampling problem. Given a current word, you need to pick the next word from a distribution of possibilities — some words are likely, others are rare, but all are possible. `random.choices()` does exactly this.
 
+The cells below reuse the `load_corpus`, `tokenize`, `build_bigrams`, and `normalize_bigrams` helpers from lessons 01–06. Every lesson page starts with a fresh Python session, so run this setup cell first to rebuild the bigram model:
+
+```python
+import csv
+import string
+import random
+from collections import defaultdict
+
+with open("slm-corpus.csv", newline="") as f:
+    reader = csv.DictReader(f)
+    texts = [row["text"] for row in reader]
+
+def load_corpus(path):
+    with open(path, newline="") as f:
+        reader = csv.DictReader(f)
+        return [row["text"] for row in reader]
+
+def tokenize(text):
+    text = text.lower()
+    for char in string.punctuation:
+        text = text.replace(char, " ")
+    return text.split()
+
+def build_bigrams(tokens):
+    bigrams = defaultdict(lambda: defaultdict(int))
+    for i in range(len(tokens) - 1):
+        bigrams[tokens[i]][tokens[i + 1]] += 1
+    return dict(bigrams)
+
+def normalize_bigrams(bigrams):
+    normalized = {}
+    for word, followers in bigrams.items():
+        if not followers:
+            continue
+        total = sum(followers.values())
+        normalized[word] = {w: c / total for w, c in followers.items()}
+    return normalized
+
+model = normalize_bigrams(build_bigrams(tokenize(" ".join(texts))))
+```
+
 ## Key Concepts
 
 ### random.choices() basics
@@ -147,7 +188,8 @@ Load the normalized bigram model and sample the next word 10 times after "the":
 
 ```python
 random.seed(42)
-model = load_model("bigram_model.json")  # from previous lesson
+tokens = tokenize(" ".join(load_corpus("slm-corpus.csv")))
+model = normalize_bigrams(build_bigrams(tokens))
 
 for _ in range(10):
     next_word = sample_next(model, "the")

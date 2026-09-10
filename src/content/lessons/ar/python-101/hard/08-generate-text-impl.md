@@ -46,6 +46,55 @@ quiz:
 
 يمكنك تحميل البيانات وترميزها وعدّ الكلمات وبناء أزواج الكلمات وتطبيع الاحتمالات وأخذ عينة من الكلمة التالية. الآن تجمعها في دالة واحدة تولّد النص: اختر كلمة بداية، وخذ عينة من الكلمة التالية، وأعدها كمدخل، وكرر حتى تتنج عددًا كافيًا من الكلمات.
 
+تستخدم الخلايا أدناه الدوال `load_corpus` و`tokenize` و`build_bigrams` و`normalize_bigrams` من الدروس 01 إلى 06 ودالة `sample_next` من الدرس 07. كل صفحة درس تبدأ جلسة بايثون جديدة، لذا شغّل خلية الإعداد هذه أولًا:
+
+```python
+import csv
+import string
+import random
+from collections import defaultdict
+
+with open("slm-corpus.csv", newline="") as f:
+    reader = csv.DictReader(f)
+    texts = [row["text"] for row in reader]
+
+def load_corpus(path):
+    with open(path, newline="") as f:
+        reader = csv.DictReader(f)
+        return [row["text"] for row in reader]
+
+def tokenize(text):
+    text = text.lower()
+    for char in string.punctuation:
+        text = text.replace(char, " ")
+    return text.split()
+
+def build_bigrams(tokens):
+    bigrams = defaultdict(lambda: defaultdict(int))
+    for i in range(len(tokens) - 1):
+        bigrams[tokens[i]][tokens[i + 1]] += 1
+    return dict(bigrams)
+
+def normalize_bigrams(bigrams):
+    normalized = {}
+    for word, followers in bigrams.items():
+        if not followers:
+            continue
+        total = sum(followers.values())
+        normalized[word] = {w: c / total for w, c in followers.items()}
+    return normalized
+
+def sample_next(model, current_word):
+    if current_word not in model:
+        return None
+    followers = model[current_word]
+    words = list(followers.keys())
+    weights = list(followers.values())
+    return random.choices(words, weights=weights, k=1)[0]
+
+model = normalize_bigrams(build_bigrams(tokenize(" ".join(texts))))
+```
+
 ## المفاهيم الأساسية
 
 ### حلقة التوليد
@@ -76,15 +125,37 @@ def generate_text(model, start_word, length=20):
 عندما يُرجع `sample_next()` قيمة `None` (لا توابع معروفة للكلمة الحالية)، لديك ثلاثة خيارات. أبسطها هو التوقف:
 
 ```python
-if next_word is None:
-    break
+import random
+random.seed(7)
+
+word = "the"
+result = [word]
+for _ in range(10):
+    next_word = sample_next(model, word)
+    if next_word is None:
+        break  # dead end — stop
+    result.append(next_word)
+    word = next_word
+
+print(" ".join(result))
 ```
 
 يُنتج هذا مخرجًا أقصر لكنه مضمون الصحة. لمخرج أطول، أعد البدء من كلمة شائعة:
 
 ```python
-if next_word is None:
-    next_word = random.choice(["the", "and", "to", "of", "a"])
+import random
+random.seed(7)
+
+word = "the"
+result = [word]
+for _ in range(10):
+    next_word = sample_next(model, word)
+    if next_word is None:
+        next_word = random.choice(["the", "and", "to", "of", "a"])  # restart
+    result.append(next_word)
+    word = next_word
+
+print(" ".join(result))
 ```
 
 ### اختيار كلمة البداية

@@ -46,6 +46,55 @@ Ponlo todo junto
 
 Ya puedes cargar datos, tokenizar, contar palabras, construir bigramas, normalizar probabilidades y muestrear la siguiente palabra. Ahora combina todo esto en una función única que genera texto: elige una palabra inicial, muestrea la siguiente palabra, vuelve a alimentarla y repite hasta haber producido suficientes palabras.
 
+Las celdas siguientes reutilizan las funciones `load_corpus`, `tokenize`, `build_bigrams` y `normalize_bigrams` de las lecciones 01 a 06 y la función `sample_next` de la lección 07. Cada página de lección inicia una sesión de Python nueva, así que ejecuta primero esta celda de configuración:
+
+```python
+import csv
+import string
+import random
+from collections import defaultdict
+
+with open("slm-corpus.csv", newline="") as f:
+    reader = csv.DictReader(f)
+    texts = [row["text"] for row in reader]
+
+def load_corpus(path):
+    with open(path, newline="") as f:
+        reader = csv.DictReader(f)
+        return [row["text"] for row in reader]
+
+def tokenize(text):
+    text = text.lower()
+    for char in string.punctuation:
+        text = text.replace(char, " ")
+    return text.split()
+
+def build_bigrams(tokens):
+    bigrams = defaultdict(lambda: defaultdict(int))
+    for i in range(len(tokens) - 1):
+        bigrams[tokens[i]][tokens[i + 1]] += 1
+    return dict(bigrams)
+
+def normalize_bigrams(bigrams):
+    normalized = {}
+    for word, followers in bigrams.items():
+        if not followers:
+            continue
+        total = sum(followers.values())
+        normalized[word] = {w: c / total for w, c in followers.items()}
+    return normalized
+
+def sample_next(model, current_word):
+    if current_word not in model:
+        return None
+    followers = model[current_word]
+    words = list(followers.keys())
+    weights = list(followers.values())
+    return random.choices(words, weights=weights, k=1)[0]
+
+model = normalize_bigrams(build_bigrams(tokenize(" ".join(texts))))
+```
+
 ## Conceptos clave
 
 ### El bucle de generación
@@ -76,15 +125,37 @@ Empieza con `start_word`, muestrea la siguiente palabra, agrégala al resultado 
 Cuando `sample_next()` devuelve `None` (la palabra actual no tiene seguidores conocidos), tienes tres opciones. La más simple es detenerse:
 
 ```python
-if next_word is None:
-    break
+import random
+random.seed(7)
+
+word = "the"
+result = [word]
+for _ in range(10):
+    next_word = sample_next(model, word)
+    if next_word is None:
+        break  # dead end — stop
+    result.append(next_word)
+    word = next_word
+
+print(" ".join(result))
 ```
 
 Esto produce una salida más corta pero garantiza la corrección. Para una salida más larga, reinicia desde una palabra común:
 
 ```python
-if next_word is None:
-    next_word = random.choice(["the", "and", "to", "of", "a"])
+import random
+random.seed(7)
+
+word = "the"
+result = [word]
+for _ in range(10):
+    next_word = sample_next(model, word)
+    if next_word is None:
+        next_word = random.choice(["the", "and", "to", "of", "a"])  # restart
+    result.append(next_word)
+    word = next_word
+
+print(" ".join(result))
 ```
 
 ### Elegir una palabra inicial
