@@ -221,7 +221,7 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
       engine = await (deps.loadEngine ?? py)();
     } catch (e) {
       console.warn('[runnable-cell] failed to load Pyodide', e);
-      appendLine('err', 'Failed to load Python engine. Check your connection and try again.');
+      appendLine('err', m.cell_engine_load_failed());
       run.textContent = m.run_button();
       run.disabled = false;
       run.classList.remove('cell__run--loading');

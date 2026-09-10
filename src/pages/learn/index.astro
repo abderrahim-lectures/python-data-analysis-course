@@ -22,6 +22,8 @@ const daLessons = allLessons.filter(e => idInLocale(locale, e.id) && e.id.includ
 const daModules = allModules.filter(e => idInLocale(locale, e.id) && e.id.includes('data-analysis')).length;
 const py101Minutes = allLessons.filter(e => idInLocale(locale, e.id) && e.id.includes('python-101')).reduce((s, l) => s + (l.data.estimatedMinutes ?? 15), 0);
 const daMinutes = allLessons.filter(e => idInLocale(locale, e.id) && e.id.includes('data-analysis')).reduce((s, l) => s + (l.data.estimatedMinutes ?? 15), 0);
+const py101Xp = allLessons.filter(e => idInLocale(locale, e.id) && e.id.includes('python-101')).reduce((s, l) => s + (l.data.xpReward ?? 0), 0);
+const daXp = allLessons.filter(e => idInLocale(locale, e.id) && e.id.includes('data-analysis')).reduce((s, l) => s + (l.data.xpReward ?? 0), 0);
 ---
 
 <Base title={m.learn_hub_title()} description={m.learn_hub_description()} lang={locale} dir={dir} alternates={alternates}>
@@ -49,7 +51,7 @@ const daMinutes = allLessons.filter(e => idInLocale(locale, e.id) && e.id.includ
         <h2>{m.track_1_name()}</h2>
         <p>{m.track_1_desc()}</p>
         <div class="sectioncard__meta">
-          <span class="badge badge--xp">⚡ {py101Lessons * 100} XP</span>
+          <span class="badge badge--xp">⚡ {py101Xp} XP</span>
           <span class="badge badge--streak">📖 {py101Modules} {m.learn_hub_modules()} · {py101Lessons} {m.learn_hub_lessons()}</span>
           <span class="badge">⏱ ~{Math.round(py101Minutes / 60)}h</span>
         </div>
@@ -68,7 +70,7 @@ const daMinutes = allLessons.filter(e => idInLocale(locale, e.id) && e.id.includ
         <h2>{m.track_2_name()}</h2>
         <p>{m.track_2_desc()}</p>
         <div class="sectioncard__meta">
-          <span class="badge badge--xp">⚡ {daLessons * 100} XP</span>
+          <span class="badge badge--xp">⚡ {daXp} XP</span>
           <span class="badge badge--streak">📖 {daModules} {m.learn_hub_modules()} · {daLessons} {m.learn_hub_lessons()}</span>
           <span class="badge">⏱ ~{Math.round(daMinutes / 60)}h</span>
         </div>
@@ -84,27 +86,27 @@ const daMinutes = allLessons.filter(e => idInLocale(locale, e.id) && e.id.includ
     </div>
 
     <div class="rewards-preview">
-      <h3>What you'll earn <span class="text-gradient">along the way</span></h3>
+      <h3>{m.learn_hub_what_you_earn()} <span class="text-gradient">{m.learn_hub_along_the_way()}</span></h3>
       <div class="rewards-preview__grid">
         <div class="rpv">
           <span class="rpv__icon">⚡</span>
-          <span class="rpv__val">{(py101Lessons + daLessons) * 100}</span>
-          <span class="rpv__label">total lesson XP</span>
+          <span class="rpv__val">{py101Xp + daXp}</span>
+          <span class="rpv__label">{m.learn_hub_total_xp()}</span>
         </div>
         <div class="rpv">
           <span class="rpv__icon">📖</span>
           <span class="rpv__val">{py101Lessons + daLessons}</span>
-          <span class="rpv__label">lessons</span>
+          <span class="rpv__label">{m.learn_hub_lessons()}</span>
         </div>
         <div class="rpv">
           <span class="rpv__icon">📦</span>
           <span class="rpv__val">{py101Modules + daModules}</span>
-          <span class="rpv__label">modules</span>
+          <span class="rpv__label">{m.learn_hub_modules()}</span>
         </div>
         <div class="rpv">
           <span class="rpv__icon">⏱</span>
           <span class="rpv__val">~{Math.round((py101Minutes + daMinutes) / 60)}h</span>
-          <span class="rpv__label">of content</span>
+          <span class="rpv__label">{m.learn_hub_of_content()}</span>
         </div>
       </div>
     </div>

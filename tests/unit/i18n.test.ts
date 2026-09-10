@@ -58,8 +58,9 @@ describe('message files stay complete and translated', () => {
     // read identically in every locale by design.
     'progress_xp_unit', 'progress_report_lede_study', 'progress_kpi_kda',
     'progress_rank_bronze', 'progress_report_lede_end',
-    // Learn hub: "modules" and "lessons" are the same word in French.
-    'learn_hub_modules', 'learn_hub_lessons',
+    // Learn hub: "modules" is the same word in French; "lessons" is genuinely
+    // translated everywhere (leçons, lecciones, دروس).
+    'learn_hub_modules',
   ]);
 
   test.each(LOCALES)('%s has every message key (parity with en)', (loc) => {
@@ -92,6 +93,18 @@ describe('locale hub templates render strings, not literals', () => {
     expect(src).not.toContain('<h2>Pandas &amp; Data</h2>');
     expect(src).not.toContain('Choose your route:');
     expect(src).not.toContain('— start here<');
+    expect(src).not.toContain('What you\'ll earn');
+    expect(src).not.toContain('along the way');
+    expect(src).not.toContain('total lesson XP');
+    expect(src).not.toContain('of content');
+  });
+
+  test.each(HUBS)('%s renders the module-explanation note via paraglide', (path) => {
+    const src = readFileSync(path, 'utf8');
+    expect(src).toContain('learn_hub_module_explanation');
+    expect(src).toContain('learn_hub_switch_routes');
+    expect(src).toContain('learn_hub_cheatsheets_hint');
+    expect(src).not.toContain('A <strong>module</strong> is your path');
   });
 
   test.each(HUBS)('%s collapses its grid responsively rather than at a fixed breakpoint', (path) => {

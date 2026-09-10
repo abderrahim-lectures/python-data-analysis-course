@@ -36,6 +36,10 @@ const stats = Object.fromEntries(
     return [slug, {lessons: lessons.length, modules: modules.length, minutes, xp}];
   }),
 );
+const totalLessons = sections.reduce((sum, {slug}) => sum + stats[slug].lessons, 0);
+const totalModules = sections.reduce((sum, {slug}) => sum + stats[slug].modules, 0);
+const totalMinutes = sections.reduce((sum, {slug}) => sum + stats[slug].minutes, 0);
+const totalXp = sections.reduce((sum, {slug}) => sum + stats[slug].xp, 0);
 ---
 
 <Base title={m.learn_hub_title()} description={m.learn_hub_description()} lang={locale} dir={dir} alternates={alternates}>
@@ -44,6 +48,14 @@ const stats = Object.fromEntries(
       <div class="head__eyebrow"><Icon name="code" size={16} /> {m.learn_hub_eyebrow()}</div>
       <h1>{m.learn_hub_h1()}</h1>
       <p>{m.learn_hub_lead()}</p>
+    </div>
+  </section>
+
+  <section class="container">
+    <div class="note">
+      <Fragment set:html={m.learn_hub_module_explanation()} />
+      {m.learn_hub_switch_routes()}
+      <span class="note__extra"><Fragment set:html={m.learn_hub_cheatsheets_hint()} /></span>
     </div>
   </section>
 
@@ -57,7 +69,7 @@ const stats = Object.fromEntries(
           <p>{desc}</p>
           <div class="sectioncard__meta">
             <span class="badge badge--xp">⚡ {stats[slug].xp} XP</span>
-            <span class="badge badge--streak">📖 {stats[slug].modules} {m.module_label()}</span>
+            <span class="badge badge--streak">📖 {stats[slug].modules} {m.learn_hub_modules()} · {stats[slug].lessons} {m.learn_hub_lessons()}</span>
             <span class="badge">⏱ ~{Math.round(stats[slug].minutes / 60)}h</span>
           </div>
           <div class="routes">
@@ -72,6 +84,34 @@ const stats = Object.fromEntries(
       ))}
     </div>
   </section>
+
+  <section class="container rewards">
+    <div class="rewards-preview">
+      <h3>{m.learn_hub_what_you_earn()} <span class="text-gradient">{m.learn_hub_along_the_way()}</span></h3>
+      <div class="rewards-preview__grid">
+        <div class="rpv">
+          <span class="rpv__icon">⚡</span>
+          <span class="rpv__val">{totalXp}</span>
+          <span class="rpv__label">{m.learn_hub_total_xp()}</span>
+        </div>
+        <div class="rpv">
+          <span class="rpv__icon">📖</span>
+          <span class="rpv__val">{totalLessons}</span>
+          <span class="rpv__label">{m.learn_hub_lessons()}</span>
+        </div>
+        <div class="rpv">
+          <span class="rpv__icon">📦</span>
+          <span class="rpv__val">{totalModules}</span>
+          <span class="rpv__label">{m.learn_hub_modules()}</span>
+        </div>
+        <div class="rpv">
+          <span class="rpv__icon">⏱</span>
+          <span class="rpv__val">~{Math.round(totalMinutes / 60)}h</span>
+          <span class="rpv__label">{m.learn_hub_of_content()}</span>
+        </div>
+      </div>
+    </div>
+  </section>
 </Base>
 
 <style>
@@ -79,7 +119,12 @@ const stats = Object.fromEntries(
   .head__eyebrow { color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: .08em; font-size: .76rem; display: inline-flex; align-items: center; gap: .3rem; }
   .head h1 { font-size: clamp(2rem, 4vw, 2.8rem); margin: .4rem 0 .2rem; }
   .head p { color: var(--ink-soft); }
-  .sections { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 1.25rem; margin: 1.5rem 0 3rem; }
+
+  .note__extra { display: block; margin-top: .6rem; padding-top: .6rem; border-top: 1px solid rgba(124, 58, 237, 0.2); }
+  .note__extra a { color: var(--accent); font-weight: 600; text-decoration: none; }
+  .note__extra a:hover { text-decoration: underline; }
+
+  .sections { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 1.25rem; margin: 1.5rem 0 2rem; }
   .sectioncard {
     background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg);
     padding: 1.5rem; display: flex; flex-direction: column; gap: .75rem;
@@ -117,5 +162,22 @@ const stats = Object.fromEntries(
   .route-pill--hard:active { box-shadow: 0 1px 0 #c81e3f, 0 2px 8px rgba(244,63,94,.15); }
   .sectioncard__all { align-self: flex-start; font-size: .82rem; font-weight: 700; color: var(--ink-soft); text-decoration: none; }
   .sectioncard__all:hover { color: var(--accent); }
-  @media (max-width: 720px) { .sections { grid-template-columns: 1fr; } }
+
+  .rewards-preview { padding: 1.5rem 0 2rem; }
+  .rewards-preview h3 { font-size: 1.2rem; margin-bottom: .75rem; }
+  .rewards-preview__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: .75rem; }
+  .rpv {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg);
+    padding: 1rem; text-align: center; box-shadow: var(--shadow-sm);
+    display: flex; flex-direction: column; align-items: center; gap: .2rem;
+    transition: all var(--transition-smooth);
+  }
+  .rpv:hover { box-shadow: var(--shadow-sm); }
+  .rpv__icon { font-size: 1.25rem; }
+  .rpv__val { font-family: var(--font-display); font-weight: 800; font-size: 1.4rem; color: var(--ink-hi); }
+  .rpv__label { font-size: .72rem; font-weight: 700; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .03em; }
+
+  .rewards { margin-bottom: 2rem; }
+
+  @media (max-width: 720px) { .sections { grid-template-columns: 1fr; } .rewards-preview__grid { grid-template-columns: repeat(2, 1fr); } }
 </style>
