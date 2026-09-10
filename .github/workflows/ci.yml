@@ -12,7 +12,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       - name: Install dependencies
@@ -21,14 +21,57 @@ jobs:
       - name: Type check
         run: npm run typecheck
 
+      - name: Unit tests
+        run: npm run test
+
       - name: Build site
         run: npm run build
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
-      - name: Run smoke tests
-        run: npm run test:e2e
+      - name: Smoke tests against a built preview
+        # GitHub Actions kills background processes at the end of each step,
+        # so the preview server and the test that talks to it share one shell.
+        env:
+          BASE_URL: http://127.0.0.1:4321
+        run: |
+          export CHROME_BIN="$(find "$HOME/.cache/ms-playwright" -path '*/chrome-linux*/chrome' -type f | head -1)"
+          echo "using chrome: $CHROME_BIN"
+          npm run preview -- --port 4321 >/dev/null 2>&1 &
+          PID=$!
+          sleep 3
+          npm run test:e2e
+          STATUS=$?
+          kill $PID 2>/dev/null || true
+          exit $STATUS
+
+      - name: Hreflang alternates resolve on a built preview
+        env:
+          BASE_URL: http://127.0.0.1:4321
+        run: |
+          npm run preview -- --port 4321 >/dev/null 2>&1 &
+          PID=$!
+          sleep 3
+          npm run test:hreflang
+          STATUS=$?
+          kill $PID 2>/dev/null || true
+          exit $STATUS
+
+      - name: Lesson runtime over real Pyodide
+        # Downloads Pyodide from the CDN on first run, so give it room to finish.
+        env:
+          BASE_URL: http://127.0.0.1:4321
+        run: |
+          export CHROME_BIN="$(find "$HOME/.cache/ms-playwright" -path '*/chrome-linux*/chrome' -type f | head -1)"
+          echo "using chrome: $CHROME_BIN"
+          npm run preview -- --port 4321 >/dev/null 2>&1 &
+          PID=$!
+          sleep 3
+          npm run test:lesson
+          STATUS=$?
+          kill $PID 2>/dev/null || true
+          exit $STATUS
 
       - uses: actions/upload-artifact@v4
         if: failure()
