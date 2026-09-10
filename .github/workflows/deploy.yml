@@ -35,7 +35,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 20
           cache: npm
 
       - name: Install dependencies
@@ -45,15 +45,13 @@ jobs:
         run: npm run build
 
       - name: Merge JupyterLite build into the site output
-        # Astro writes its build to dist/; JupyterLite is served from /lite/
-        # inside it. Uploading `dist` is what actually ships the course site.
-        run: cp -r jupyterlite-config/_output dist/lite
+        run: cp -r jupyterlite-config/_output build/lite
 
       - uses: actions/configure-pages@v5
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: build
 
   deploy:
     needs: build
