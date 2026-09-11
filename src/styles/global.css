@@ -489,6 +489,19 @@ button { font-family: inherit; cursor: pointer; }
    sized to the output panel; RTL pages keep figures LTR via the .o-line rule. */
 .o-line--fig { display: block; max-width: 100%; height: auto; border-radius: var(--radius-md); margin: .35rem 0; }
 .cell__clear { margin-top: .5rem; background: transparent; border: 1px solid var(--line); color: var(--ink-soft); border-radius: 999px; padding: .2rem .8rem; cursor: pointer; font-size: .8rem; }
+/* Run button while the cell executes. The .btn base is inline-flex with a gap,
+   so the ::before ring sits ahead of the "Executing…" label; .cell__run--loading
+   is added client-side in runnable-cell.client.ts for the duration of the run. */
+.cell__run--loading { opacity: .82; }
+.cell__run--loading::before {
+  content: ''; width: .95em; height: .95em; flex: none;
+  border: 2px solid currentColor; border-top-color: transparent;
+  border-radius: 50%; animation: cell-run-spin .75s linear infinite;
+}
+@keyframes cell-run-spin { to { transform: rotate(360deg); } }
+/* Copy button sits right of Run in the action bar; the class is assigned
+   client-side, so it's styled here with the rest of the cell chrome. */
+.cell__copy { margin-left: .5rem; }
 
 /* === Generic (non-runnable) fenced code blocks, e.g. shell/output snippets === */
 .lesson-content pre:not(.cell__code):not([data-runnable] pre) {

@@ -361,15 +361,15 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
       run.classList.remove('cell__run--loading');
       return;
     }
-    run.textContent = m.run_button();
-    run.disabled = false;
-    run.classList.remove('cell__run--loading');
     await mountDatasets(engine);
     const otherCellSources = Array.from(document.querySelectorAll('[data-runnable] code'))
       .filter((el) => el !== codeEl)
       .map((el) => el.textContent ?? '')
       .join('\n');
     const executed = await runCellCode(src, {appendLine, appendFigure, engine, otherCellSources});
+    run.textContent = m.run_button();
+    run.disabled = false;
+    run.classList.remove('cell__run--loading');
     if (executed && !awarded && lessonId) {
       awarded = true;
       try {
@@ -447,11 +447,6 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
       run.click();
     }
   });
-
-  // Loading spinner styles.
-  const spinnerStyle = document.createElement('style');
-  spinnerStyle.textContent = `.cell__run--loading{opacity:.7;cursor:wait}.cell__run--loading::after{content:' ⟳';animation:spin 1s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.cell__copy{margin-left:.5rem!important}`;
-  document.head.appendChild(spinnerStyle);
 
   // Lesson cells arrive pre-highlighted by Shiki at build time; the
   // playground and any ?code= handoff arrive as plain text. Paint those on

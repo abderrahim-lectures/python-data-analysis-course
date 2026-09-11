@@ -7,7 +7,7 @@
 //   opaque responses have no cacheable content.
 // Bump the cache name below when you want to force a clean re-precache.
 
-const CACHE_NAME = 'pda-2026-09-10';
+const CACHE_NAME = 'pda-2026-09-11';
 const PRECACHE_URLS = ['/', '/learn', '/playground', '/progress', '/projects'];
 
 self.addEventListener('install', (event) => {

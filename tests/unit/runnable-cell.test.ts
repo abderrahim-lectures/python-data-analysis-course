@@ -332,7 +332,7 @@ describe('initCell DOM wiring', () => {
 
   test('localizes chrome, paints a gutter, and makes the code editable', () => {
     const fixture = buildFixture('line1\nline2\nline3');
-    const {stub, cell, run, clear, code, pre} = fixture;
+    const {stub, cell, run, clear, code, pre, actions} = fixture;
     vi.stubGlobal('localStorage', memoryStorage());
     initCell(asElement(cell), {loadEngine: fixture.loadEngine} as InitCellDeps);
 
@@ -342,7 +342,7 @@ describe('initCell DOM wiring', () => {
     expect(code.getAttribute('contenteditable')).toBe('plaintext-only');
     expect(pre.children.map((c) => c.classSet.has('cell__gutter'))).toContain(true);
     expect(gutterOf(pre)?.textContent).toBe('1\n2\n3\n');
-    expect(stub.restore().head.children.length).toBeGreaterThan(0);
+    expect(actions.children.some((c) => c.classSet.has('cell__copy'))).toBe(true);
 
     initCell(asElement(cell), {loadEngine: fixture.loadEngine} as InitCellDeps);
     expect(pre.children.length).toBe(2);

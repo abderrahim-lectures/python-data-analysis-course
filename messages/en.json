@@ -197,7 +197,7 @@
   "reset_button": "Reset",
   "run_aria": "Run this Python code",
   "run_button": "▶ Run",
-  "run_loading": "⟳ Loading…",
+  "run_loading": "Executing…",
   "same_week_calm": "Same week, gentler pace.",
   "same_week_steep": "Same week, steeper climb.",
   "see_all_modules": "See all modules",
