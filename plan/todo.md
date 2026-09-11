@@ -8,9 +8,9 @@ status log once done, don't duplicate here.
       from `/ar/learn` → `/ar/تعلم`, `/es/learn` → `/es/aprender`,
       `/fr/learn` → `/fr/apprendre`, and `/projects` → `/مشاريع`/
       `/proyectos`/`/projets`. Track words in the URL too (`normal`/`hard`
-      → `عادي`/`صعب`, `dificil`, `difficile`). Content slugs (`python-101`,
-      `data-analysis`, project slugs) stay untranslated — gameState/XP keys
-      shared across locales. Added `src/lib/routeSegments.ts` (word map +
+      → `عادي`/`صعب`, `dificil`, `difficile`). Lesson/module slugs stay
+      untranslated — gameState/XP keys shared across locales. Added
+      `src/lib/routeSegments.ts` (word map +
       href builders) and `src/lib/pageStrings.ts` (localized titles/copy
       for the learn hub + projects index, the two pages whose text was
       hardcoded English rather than pulled from content). Added `hreflang`
@@ -21,6 +21,20 @@ status log once done, don't duplicate here.
       (`تعلّم — PyDA`/`Aprender — PyDA`/`Apprendre — PyDA`).
       Old `/ar/learn` etc. URLs are gone with no redirect (site isn't
       indexed yet — same call as the earlier `/stats` removal).
+- [x] **Project URL slugs localized per locale** — done @opencode (2026-09-11).
+      Each non-EN locale now serves projects under a slug derived from its
+      localized title (e.g. `/ar/مشاريع/كتالوج-البيانات`,
+      `/es/proyectos/catalogo-de-datos`, `/fr/projets/catalogue-de-donnees`).
+      English-slug URLs still resolve (emitted as alias routes with
+      `rel=canonical` → localized URL; sitemap filter in `astro.config.mjs`
+      excludes aliases). gameState/content keys stay English — only the URL
+      changes. Generator: `scripts/generate-project-slugs.cjs` →
+      `src/lib/projectSlugs.data.{ts,json}`; helper `localizedProjectSlug`
+      in `src/lib/projectSlugs.ts`; hrefs via `projectsHref`/routeSegments.
+      Supersedes the "project slugs stay untranslated" line above.
+      Verified: build 1282 pages, hreflang 40/40, unit 1224, e2e 49/49,
+      lesson 9/9, a11y/contrast/responsive clean, CDP click-through lands
+      on localized routes with English `data-project-slug` intact.
 - [x] **Custom domain / base path fix**: discovered mid-session that
       production is `https://pyda-course.online/` (custom domain), not
       `github.io/python-data-analysis-course/`. `astro.config.mjs` was

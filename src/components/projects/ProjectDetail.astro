@@ -12,7 +12,8 @@ import {render, type CollectionEntry} from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import ProjectArt from '../ProjectArt.astro';
 import {m} from '../../paraglide/messages.js';
-import {detectLocale, projectsHref, type Locale} from '../../lib/routeSegments';
+import {detectLocale, projectsHref, NAV_WORDS, type Locale} from '../../lib/routeSegments';
+import {localizedProjectSlug} from '../../lib/projectSlugs';
 import {PROJECT_TAGS, projectDifficulty, DIFFICULTY_COLORS} from '../../lib/projectArt';
 import {XP} from '../../lib/gameState';
 import '../../styles/project-detail.css';
@@ -51,9 +52,21 @@ const diffText = diff === 'beginner' ? 'var(--success-text)' : diff === 'interme
 const projectTags = (tags?.length ? tags : PROJECT_TAGS[slug] ?? []) as string[];
 
 const enUrl = `projects/${slug}`;
+// Every locale links to its own localized slug route (falling back to the
+// English slug for untranslated projects). EN stays the English slug.
 const alternates: Record<Locale, string> = hasAlternates
-  ? {en: enUrl, ar: `ar/مشاريع/${slug}`, es: `es/proyectos/${slug}`, fr: `fr/projets/${slug}`}
+  ? {
+      en: enUrl,
+      ar: `ar/${NAV_WORDS.ar.projects}/${localizedProjectSlug('ar', slug)}`,
+      es: `es/${NAV_WORDS.es.projects}/${localizedProjectSlug('es', slug)}`,
+      fr: `fr/${NAV_WORDS.fr.projects}/${localizedProjectSlug('fr', slug)}`,
+    }
   : {en: enUrl, ar: enUrl, es: enUrl, fr: enUrl};
+
+// The canonical URL is always the *localized-slug* route, even when this page
+// was reached via the English-slug alias — so search engines converge on one
+// URL per (project, locale) instead of two.
+const canonicalPath = projectsHref(locale, base, slug);
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -73,7 +86,7 @@ const jsonLd = {
 };
 ---
 
-<Base title={`${title} — PyDA Course`} description={description} lang={locale} dir={dir} alternates={alternates} jsonLd={jsonLd}>
+<Base title={`${title} — PyDA Course`} description={description} lang={locale} dir={dir} alternates={alternates} canonicalPath={canonicalPath} jsonLd={jsonLd}>
   <nav class="crumb container">
     <a href={projectsHref(locale, base)}>{m.projects_eyebrow()}</a> <span>/</span> <span class="crumb__here">{title}</span>
   </nav>

@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "prebuild": "node scripts/apply-lix-patch.cjs",
-    "predev": "node scripts/apply-lix-patch.cjs",
+    "prebuild": "node scripts/apply-lix-patch.cjs && node scripts/generate-project-slugs.cjs",
+    "predev": "node scripts/apply-lix-patch.cjs && node scripts/generate-project-slugs.cjs",
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",

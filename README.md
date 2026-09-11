@@ -109,7 +109,7 @@ Found a typo or a broken example while going through a lesson? Lesson content li
 
 **Ways to contribute:**
 - **Content**: write or improve a week's lesson, challenges, or socratic questions — see [`plan/content-pattern.md`](./plan/content-pattern.md) and [`plan/content-style-guide.md`](./plan/content-style-guide.md) for the expected structure and tone.
-- **Translations**: UI chrome and Real-World Project pages are fully translated for Arabic, Spanish, and French (UI strings live in `src/lib/pageStrings.ts`, route segments in `src/lib/routeSegments.ts`, translated project content under `src/content/projects/<locale>/`); weekly lesson content is authored once in English and shared — a `type:i18n` PR fixing or improving an existing translation is welcome.
+- **Translations**: UI chrome and Real-World Project pages are fully translated for Arabic, Spanish, and French (UI strings live in `src/lib/pageStrings.ts`, route segments in `src/lib/routeSegments.ts`, translated project content under `src/content/projects/<locale>/`); weekly lesson content is authored once in English and shared. Project URLs are localized per locale (e.g. `/es/proyectos/catalogo-de-datos`) — the English slug still resolves as a canonical alias. A `type:i18n` PR fixing or improving an existing translation is welcome.
 - **Components/infra**: bug fixes, accessibility improvements, and performance work on the playground, gamification, or sharing features.
 
 Please don't open a PR without a linked issue first for anything non-trivial — it avoids duplicated or conflicting work.

@@ -1,17 +1,23 @@
 ---
 // ES project detail — thin wrapper over the shared ProjectDetail component,
 // which serves the markdown, step-clearing and mark-done gamification.
+// getStaticPaths emits BOTH the localized slug (canonical, e.g. /es/proyectos/construye-un-agente-ia)
+// and the English slug (alias — old links/bookmarks keep resolving, but the
+// page's rel=canonical points at the localized route).
 import {getCollection} from 'astro:content';
 import ProjectDetail from '../../../components/projects/ProjectDetail.astro';
+import {localizedProjectSlug} from '../../../lib/projectSlugs';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects');
-  return projects
-    .filter((p) => p.id.split('/')[0] === 'es')
-    .map((entry) => {
-      const slug = entry.id.slice('es'.length + 1);
-      return {params: {slug}, props: {entry}};
-    });
+  const paths = [];
+  for (const entry of projects.filter((p) => p.id.split('/')[0] === 'es')) {
+    const enSlug = entry.id.slice('es'.length + 1);
+    const localized = localizedProjectSlug('es', enSlug);
+    paths.push({params: {slug: localized}, props: {entry}});
+    if (localized !== enSlug) paths.push({params: {slug: enSlug}, props: {entry}});
+  }
+  return paths;
 }
 
 const {entry} = Astro.props;

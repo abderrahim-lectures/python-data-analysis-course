@@ -11,6 +11,7 @@
 // localizeHref only rewrites the locale *prefix*, never the interior words,
 // so these builders feed it fully-localized paths.
 import {localizeHref} from '../paraglide/runtime.js';
+import {localizedProjectSlug} from './projectSlugs';
 export type Locale = 'en' | 'ar' | 'es' | 'fr';
 
 export const ALL_LOCALES: Locale[] = ['en', 'ar', 'es', 'fr'];
@@ -102,7 +103,12 @@ export function learnHref(locale: Locale, base: string, ...parts: string[]): str
 }
 
 export function projectsHref(locale: Locale, base: string, ...parts: string[]): string {
-  return withBase(localizedPath([NAV_WORDS[locale].projects, ...parts], locale), base);
+  // parts[0] is the project slug (English canonical). Translate it to the
+  // locale's URL slug so every card/nav/related/JSON-LD link points at the
+  // localized route; EN stays the English slug.
+  const [slug, ...rest] = parts;
+  const translated: string[] = slug ? [localizedProjectSlug(locale, slug)] : [];
+  return withBase(localizedPath([NAV_WORDS[locale].projects, ...translated, ...rest], locale), base);
 }
 
 /** Top-level `/progress` / `/progreso` / … link (player card on the home page). */

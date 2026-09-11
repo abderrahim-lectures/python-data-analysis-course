@@ -15,8 +15,11 @@ against the current source. Clean working tree at review time (commit `c9d2f1f`)
 - **Exactly one `<h1>` and one `<main>`** per page; `dir`/`lang` are correct on
   every audited page (ar pages `dir="rtl" lang="ar"`, es/fr `ltr`).
 - **Full 4-locale content parity**: lesson/module/project trees are 1:1 across
-  locales (135 projects, 19 normal python lessons, etc.), slugs stay untranslated
-  as designed (stable identity keys), navigational words localize via paraglide.
+  locales (135 projects, 19 normal python lessons, etc.). Lesson/module slugs
+  stay untranslated as designed (stable identity keys); project *URL* slugs
+  are localized per locale (2026-09-11) with the English slug kept as an
+  alias route pointing `rel=canonical` at the localized URL, navigational
+  words localize via paraglide.
 - **Localization catalogs are complete and correct**: sampled `project_completed`,
   `project_done_hint`, `project_mark_done`, `quiz_*` across ar/es/fr.
 - Test suites already cover EN journeys: `test:a11y`, `test:contrast`,

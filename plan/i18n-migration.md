@@ -55,16 +55,29 @@ slugs. If one locale's content uses a different slug (`leer-archivos` vs
 `reading-files`), the alternate URL breaks. Verified in PoC.
 
 On main: project/lesson files are identical slugs per locale (verified).
-So prefix-swap alone is sufficient. Two exceptions to keep mapped in the
-route helper:
+So prefix-swap alone is sufficient for lessons. Two exceptions to keep mapped
+in the route helper:
 - `data-visualization` exists as EN-only (8 references) — its
   ar/es/fr alternates must fall back to the EN page until twins exist
   (content task, on the backlog).
 - ESL (English second language) lessons that exist only in EN — same
   fallback rule.
 
+**Projects break parity by design (2026-09-11).** The localized project
+routes serve a *localized slug* derived from each locale's `title`
+frontmatter (via `scripts/generate-project-slugs.cjs` → `src/lib/projectSlugs.data.*`),
+e.g. `/ar/مشاريع/كتالوج-البيانات` for `data-catalog`. Consumers therefore
+must use `localizedProjectSlug(locale, englishSlug)` (in `projectSlugs.ts`)
+or `projectsHref`/`routeSegments` rather than interpolating the English slug
+by hand. The localized `[...slug].astro` pages also emit the English slug as
+an alias route (old links keep resolving; `rel=canonical` points at the
+localized URL, and the sitemap filter drops the aliases). The English slug
+remains the gameState/projectArt/art lookup key, so progress and metadata
+stay shared across locales — only the URL changes.
+
 Design: keep the existing `routeSegments.ts` slug tables as the canonical
-slug map; only replace its *href builders* with `localizeHref`.
+slug map; only replace its *href builders* with `localizeHref`, and route
+project hrefs through `localizedProjectSlug`.
 
 ### 2.3 Build-time locale resolution (SSG)
 No `paraglideMiddleware()` — that's for SSR. Instead:
@@ -169,9 +182,7 @@ bounds the migration to components, not 537 content files.
 ## 5. Explicit non-goals in the PoC
 - No server adapter (`output: 'server'` is the *other* Paraglide path).
 - No `paraglideMiddleware`. Static rendering + build-time `setLocale` only.
-- No per-locale URL slug translation (matches current behavior — slugs are
-  shared identifiers; only "track words" like `normal/hard` are localized,
-  handled by the existing routeSegments module).
+- ~~No per-locale URL slug translation~~ — **overturned for projects (2026-09-11)**: project slugs are now localized per locale (URL only); lesson/module/`normal|hard` slugs stay shared English. The English slug remains the canonical content/gameState identifier; `localizedProjectSlug` (see §2.2) maps it to each locale's URL slug, and the old English-slug routes still render as canonical-aliases.
 
 ## Appendix: PoC validation evidence
 - Files built: `/` (en), `/es/`, `/ar/`, `/fr/`, `/lessons/reading-files`,
