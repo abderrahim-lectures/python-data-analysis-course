@@ -25,11 +25,11 @@ Ceci est optionnel et non noté — un bon choix une fois que vous avez terminé
 
 **GitHub Codespaces** est une alternative sans configuration si tu préfères ne rien installer localement pour l'instant : ouvre [tout le dépôt du cours dans un Codespace gratuit](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python et `uv` sont déjà installés, selon le `.devcontainer/devcontainer.json` du dépôt) et exécute exactement les mêmes commandes `uv` depuis un terminal dans l'onglet de ton navigateur.
 
-**Google Colab, Kaggle Notebooks, ou Binder** fonctionnent aussi, puisque ce projet n'a pas besoin de GPU — une version réelle et exécutable en notebook de l'agent de ce projet (les mêmes outils jouets et la même configuration `create_deep_agent` qu'à l'Étape 1 ci-dessous) se trouve dans [`examples/ai-agent/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-agent/notebook.ipynb). Clique sur un badge pour le lancer directement, sans aucune installation locale :
+**Google Colab, Kaggle Notebooks, ou Binder** fonctionnent aussi, puisque ce projet n'a pas besoin de GPU — une version réelle et exécutable en notebook de l'agent de ce projet (les mêmes outils jouets et la même configuration `create_deep_agent` qu'à l'Étape 1 ci-dessous) se trouve dans [`examples/ai-agent/notebook.fr.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-agent/notebook.fr.ipynb). Clique sur un badge pour le lancer directement, sans aucune installation locale :
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-agent/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-agent/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fai-agent%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-agent/notebook.fr.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-agent/notebook.fr.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fai-agent%2Fnotebook.fr.ipynb)
 
 Sois honnête avec toi-même sur le compromis, cependant : c'est une façon moins fidèle de vivre le projet qu'un vrai projet `uv` local — pas de fichiers séparés, pas de vraie structure de projet, juste des cellules dans un notebook. Traite-le comme un moyen rapide d'expérimenter, pas comme le chemin principal.
 

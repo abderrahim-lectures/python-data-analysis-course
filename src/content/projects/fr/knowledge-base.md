@@ -8,6 +8,11 @@ difficulty: beginner
 
 Construis une base de connaissances personnelle qui stocke des notes avec des métadonnées riches, te permet de chercher dans tout instantanément, organise les idées avec des tags, affiche le contenu avec Markdown, et exporte le tout en un site HTML statique. Ce projet assemble des dictionnaires, des entrées/sorties fichiers, du traitement de chaînes, et de la génération de templates en un outil que tu peux réellement utiliser.
 
+- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt — ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/knowledge-base/notebook.fr.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/knowledge-base/notebook.fr.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fknowledge-base%2Fnotebook.fr.ipynb)
+
 ## Ce que tu vas apprendre
 
 1. Concevoir un schéma pour le stockage de connaissances avec des dictionnaires et JSON

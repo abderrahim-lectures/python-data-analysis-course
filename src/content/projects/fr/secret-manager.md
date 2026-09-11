@@ -34,9 +34,9 @@ Cela suppose le Python 101 — entrées-sorties de fichiers, dictionnaires, fonc
 
 **Google Colab, les Notebooks Kaggle et Binder exécutent tout le pipeline honnêtement** — AES-256-GCM est de la cryptographie locale sans clés ni réseau, donc chiffrer, stocker, déchiffrer, auditer, faire tourner la clé et détecter la falsification fonctionnent tous dans un notebook exactement comme dans un shell. La seule réserve est philosophique : le chiffrement ne vaut que ce que vaut la *gestion* des clés, et la place honnête du notebook est « apprends la primitive et la discipline d'audit » — la leçon que la clé-sur-disque-à-côté-des-données est du théâtre, que tu dois vivre en lisant le code, pas en faisant confiance à un badge.
 
-[![Ouvrir dans Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/secret-manager/notebook.ipynb)
-[![Ouvrir dans Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/secret-manager/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsecret-manager%2Fnotebook.ipynb)
+[![Ouvrir dans Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/secret-manager/notebook.fr.ipynb)
+[![Ouvrir dans Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/secret-manager/notebook.fr.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsecret-manager%2Fnotebook.fr.ipynb)
 
 ## Configuration
 

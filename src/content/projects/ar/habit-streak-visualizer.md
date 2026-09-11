@@ -25,9 +25,9 @@ description: "تتبّع تسجيلات دخول عادات يومية محلي�
 - **GitHub Codespaces.** افتح [codespaces.new/abderrahim-lectures/python-data-analysis-course](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) للحصول على بيئة تطوير سحابية بـNode وPython وuv مثبّتة بالفعل (انظر [`.devcontainer/devcontainer.json`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/.devcontainer/devcontainer.json)) — نفس الأوامر بالضبط أدناه تعمل من تبويب متصفح، بلا تثبيت محلي على الإطلاق.
 - **Google Colab وKaggle Notebooks أو Binder.** ملاءمة جيدة فعليًا: لا شيء هنا يحتاج GPU أو مفتاح API، وخط الأنابيب بأكمله (تحميل سجل، حساب سلاسل، بناء شبكة، عرض خريطة حرارية) يناسب براحة بضع خلايا دفتر ملاحظات مقابل بيانات العينة المُرفَقة بالدورة.
 
-  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/habit-streak-visualizer/notebook.ipynb)
-  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/habit-streak-visualizer/notebook.ipynb)
-  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fhabit-streak-visualizer%2Fnotebook.ipynb)
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/habit-streak-visualizer/notebook.ar.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/habit-streak-visualizer/notebook.ar.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fhabit-streak-visualizer%2Fnotebook.ar.ipynb)
 
   كن صادقًا مع نفسك بشأن المقايضة، مع ذلك: دفتر الملاحظات طريقة أقل دقة لتجربة هذا المشروع من مشروع `uv` محلي فعلي بملف `checkins.csv` خاص به تضيف إليه يومًا بعد يوم — عامِله كطريقة سريعة لاستكشاف الكود، لا المسار الأساسي.
 

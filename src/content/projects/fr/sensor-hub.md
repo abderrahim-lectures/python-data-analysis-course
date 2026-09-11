@@ -34,9 +34,9 @@ Cela suppose le Python 101 plus le module Matplotlib du cours. Optionnel et non 
 
 **Google Colab, les Notebooks Kaggle et Binder exécutent le pipeline honnêtement** — le hub est de la pure simulation et du calcul sans NumPy, et Matplotlib rend le graphique *en ligne* dans le notebook, donc `dashboard.png` devient une sortie de cellule en direct plutôt qu'un fichier. La seule chose qu'un notebook ne peut pas faire est de défiler en *temps d'horloge réel* comme le fait une boucle locale — mais la simulation est sous ton contrôle, donc « 1 seconde par tick » et « avance rapide de 100 ticks » fonctionnent tous deux, et c'est la place honnête où le notebook brille vraiment (tu obtiens tout le flux plus les graphiques dans un seul artefact).
 
-[![Ouvrir dans Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/sensor-hub/notebook.ipynb)
-[![Ouvrir dans Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/sensor-hub/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsensor-hub%2Fnotebook.ipynb)
+[![Ouvrir dans Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/sensor-hub/notebook.fr.ipynb)
+[![Ouvrir dans Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/sensor-hub/notebook.fr.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsensor-hub%2Fnotebook.fr.ipynb)
 
 ## Configuration
 

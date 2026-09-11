@@ -36,9 +36,9 @@ prerequisites: ["python-101/loops", "python-101/functions", "python-101/file-io"
 
 **Google Colab وKaggle Notebooks وBinder طريقة معقولة *لرؤية الكود يعمل* — منطق العدّ التنازلي ودورة التنفس وسجل CSV وحساب السلسلة كلها تتنفذ فعليًا** — لكن الدفتر يشغّل كل خطوة كلقطة مرئية سريعة بدلًا من تجربة زمن حقيقي منقضٍ (خلية `time.sleep` في عشر دقائق تأمل رديء). استخدم الدفتر لتعلم الآلية؛ وشغّل الأمر فعلًا عندما تريد للمؤقت أن يوقّت شيئًا.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/meditation-timer/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/meditation-timer/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fmeditation-timer%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/meditation-timer/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/meditation-timer/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fmeditation-timer%2Fnotebook.ar.ipynb)
 
 ## الإعداد
 

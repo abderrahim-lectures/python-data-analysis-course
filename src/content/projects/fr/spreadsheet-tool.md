@@ -19,6 +19,11 @@ prerequisites:
 
 # Processeur de Tableurs
 
+- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt — ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/spreadsheet-tool/notebook.fr.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/spreadsheet-tool/notebook.fr.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fspreadsheet-tool%2Fnotebook.fr.ipynb)
+
 ## 🎯 Ce que tu vas faire
 
 Un outil en ligne de commande qui lit les fichiers CSV et Excel, explore et transforme les données, et exporte les résultats. En chemin, tu apprendras le workflow pandas de base qui sous-tend presque toutes les tâches d'analyse de données.

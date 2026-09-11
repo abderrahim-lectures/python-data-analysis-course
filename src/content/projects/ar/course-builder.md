@@ -34,11 +34,11 @@ learningObjectives:
 
 **GitHub Codespaces** بديل بلا إعداد: افتح [مستودع الدورة كاملًا في Codespace مجاني](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node وPython مثبّتة بالفعل) وشغّل نفس الأوامر من طرفية متصفح.
 
-**Google Colab أو Kaggle Notebooks أو Binder** تعمل جيدًا لنصف نمذجة البيانات من هذا المشروع — دفتر الملاحظات في [`examples/course-builder/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/course-builder/notebook.ipynb) يشغّل كل خطوة على دورة عينات مرفقة. الملاحظة الصادقة: ملفات الشهادات (`certificate.txt`) تُحفظ نظيفة في دفتر الملاحظات، لكن الكود متطابق في الحالتين.
+**Google Colab أو Kaggle Notebooks أو Binder** تعمل جيدًا لنصف نمذجة البيانات من هذا المشروع — دفتر الملاحظات في [`examples/course-builder/notebook.ar.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/course-builder/notebook.ar.ipynb) يشغّل كل خطوة على دورة عينات مرفقة. الملاحظة الصادقة: ملفات الشهادات (`certificate.txt`) تُحفظ نظيفة في دفتر الملاحظات، لكن الكود متطابق في الحالتين.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/course-builder/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/course-builder/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fcourse-builder%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/course-builder/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/course-builder/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fcourse-builder%2Fnotebook.ar.ipynb)
 
 ## الإعداد
 

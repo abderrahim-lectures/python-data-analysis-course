@@ -26,9 +26,9 @@ description: "تخرّج من بيئة البرمجة في المتصفح إلى
 
 **Google Colab وKaggle Notebooks وBinder طريقة معقولة *لتجربة* الأداة، لكن ليست لتشغيلها فعليًا.** لا يوفر أي منها افتراضيًا مستودع git محلي حقيقي بتاريخ التزامات، وفكرة هذه الأداة بأكملها هي مراجعة عملك الخاص *الجاري* — نظام الملفات المؤقت في دفتر الملاحظات لا يملك شيئًا من ذلك. يتجاوز دفتر الملاحظات أدناه هذا بصدق، بدلًا من التظاهر بأن الفجوة غير موجودة: فهو يستنسخ (`!git clone`) مستودع هذه الدورة نفسه داخل دفتر الملاحظات ويراجع التزامًا تاريخيًا صغيرًا وحقيقيًا منه باستخدام `git show`، لذا كل جزء من الأداة (التقاط الفرق عبر `subprocess`، وsystem prompt، واستدعاء النموذج اللغوي، والمخرجات المنظَّمة) لا يزال يعمل مقابل مخرجات حقيقية وواقعية المظهر — الفرق فقط أنه يراجع التزامًا مثاليًا ثابتًا بدلًا من شيء كتبته أنت شخصيًا. استخدمه لرؤية الأداة تعمل من البداية للنهاية دون أي إعداد؛ وانتقل إلى `uv` محليًا أو إلى Codespace عندما تريد توجيهها إلى تغييراتك الفعلية الخاصة.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/agentic-code-reviewer/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/agentic-code-reviewer/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fagentic-code-reviewer%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/agentic-code-reviewer/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/agentic-code-reviewer/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fagentic-code-reviewer%2Fnotebook.ar.ipynb)
 
 ## الإعداد
 

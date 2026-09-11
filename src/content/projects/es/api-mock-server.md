@@ -37,9 +37,9 @@ Esto asume funciones, clases y manejo de JSON. Es un proyecto opcional y no cali
 
 **Google Colab, Kaggle Notebooks y Binder** ejecutan cada paso sin modificar. La red de los notebooks es suficientemente permisiva para las partes del despachador en proceso; el bloque final opcional de cableado en vivo también funciona en Binder y localmente — mantenlo efímero (puerto `0`) para que nunca choque con otro proceso.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/api-mock-server/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/api-mock-server/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fapi-mock-server%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/api-mock-server/notebook.es.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/api-mock-server/notebook.es.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fapi-mock-server%2Fnotebook.es.ipynb)
 
 ## Configuración
 

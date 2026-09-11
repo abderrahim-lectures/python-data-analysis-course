@@ -35,11 +35,11 @@ learningObjectives:
 
 **GitHub Codespaces** بديل بلا إعداد: افتح [مستودع الدورة كاملًا في Codespace مجاني](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node وPython مثبّتان بالفعل) وشغّل الأوامر نفسها من طرفية في المتصفح.
 
-**Google Colab أو Kaggle Notebooks أو Binder** تعمل — الدفتر في [`examples/energy-monitor/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/energy-monitor/notebook.ipynb) يشغّل التقرير نفسه على أجهزة العينة المرفقة في الذاكرة.
+**Google Colab أو Kaggle Notebooks أو Binder** تعمل — الدفتر في [`examples/energy-monitor/notebook.ar.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/energy-monitor/notebook.ar.ipynb) يشغّل التقرير نفسه على أجهزة العينة المرفقة في الذاكرة.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/energy-monitor/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/energy-monitor/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fenergy-monitor%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/energy-monitor/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/energy-monitor/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fenergy-monitor%2Fnotebook.ar.ipynb)
 
 ## الإعداد
 

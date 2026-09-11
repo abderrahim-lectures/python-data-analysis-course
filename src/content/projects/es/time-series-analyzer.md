@@ -36,9 +36,9 @@ Esto asume Python 101 y comodidad con las Series de pandas — no se requiere na
 
 **Google Colab, Kaggle Notebooks y Binder** ejecutan cada paso de forma idéntica — las tres bibliotecas están preinstaladas ahí. La salvedad honesta es la habitual para los proyectos de visualización de datos: el sistema de archivos de un notebook es efímero, así que el PNG guardado y cualquier CSV que escribas pueden no sobrevivir a un reinicio de sesión. Trátalos como caminos de prueba y cambia a `uv` local cuando los artefactos necesiten persistir.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/time-series-analyzer/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/time-series-analyzer/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Ftime-series-analyzer%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/time-series-analyzer/notebook.es.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/time-series-analyzer/notebook.es.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Ftime-series-analyzer%2Fnotebook.es.ipynb)
 
 ## Configuración
 

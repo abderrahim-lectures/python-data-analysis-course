@@ -35,9 +35,9 @@ prerequisites: ["أساسيات Python (الصفوف، القواميس، الق
 
 **Google Colab وKaggle Notebooks وBinder مناسبة فعلًا لهذا المشروع** — لا شيء هنا يعتمد على خطوط نظام أو ملفات ثنائية خارجية أو نظام ملفات محلي. يستخدم الدفتر أدناه نفس أسبوع البيانات الاصطناعي الذي تبني نحوه الخطوات، فتُعرض إطارات pandas ورسوم matplotlib مضمنةً دون أي إعداد. هذا أحد المشاريع التي تتناسب فعلًا مع نموذج الدفتر بسلاسة، من البداية إلى النهاية.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/fitness-tracker/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/fitness-tracker/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Ffitness-tracker%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/fitness-tracker/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/fitness-tracker/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Ffitness-tracker%2Fnotebook.ar.ipynb)
 
 ## الإعداد
 

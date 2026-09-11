@@ -34,9 +34,9 @@ Esto asume Python 101 — I/O de archivos, cadenas, diccionarios y funciones. Na
 
 **Google Colab, Kaggle Notebooks y Binder son una forma decente de *ver la maquinaria funcionar*, pero débiles para la recompensa.** El notebook de abajo genera una carpeta `posts/` falsa en memoria y renderiza el sitio completo a un directorio que puedes inspeccionar celda por celda — así que el parseo, las plantillas y el ensamblaje se ejecutan honestamente. Lo que no puede hacer bien es el bucle real de *tú escribiendo tu propio post.md y refrescando la página*; eso es un ejercicio de sistema de archivos más navegador, que es lo que te dan el camino local o el de Codespace. Usa el notebook para aprender los pasos; cambia a `uv` cuando quieras publicar.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/markdown-blog-engine/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/markdown-blog-engine/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fmarkdown-blog-engine%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/markdown-blog-engine/notebook.es.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/markdown-blog-engine/notebook.es.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fmarkdown-blog-engine%2Fnotebook.es.ipynb)
 
 ## Configuración
 

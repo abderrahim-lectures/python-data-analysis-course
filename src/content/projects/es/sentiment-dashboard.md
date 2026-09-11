@@ -16,6 +16,11 @@ prerequisites:
   - Terminal yeditor de código
 ---
 
+- **Ejecútalo en el navegador.** Hay un cuaderno interactivo listo — ábrelo en Colab, Kaggle o Binder y sigue los pasos en orden.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/sentiment-dashboard/notebook.es.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/sentiment-dashboard/notebook.es.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsentiment-dashboard%2Fnotebook.es.ipynb)
+
 ## 🎯 Lo que harás
 
 Vas a construir un dashboard interactivo que analice sentimientos en textos y visualice tendencias emocionales en tiempo real. El sistema procesará texto, clasificará sentimientos y mostrará estadísticas en un dashboard web.

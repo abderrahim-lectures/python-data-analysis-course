@@ -24,11 +24,11 @@ Cela suppose du Python de niveau Python 101. Avoir fait le [projet Agent IA](/fr
 
 **GitHub Codespaces** fonctionne tout aussi bien : ouvre [tout le dépôt du cours dans un Codespace gratuit](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python et `uv` sont déjà installés, selon le `.devcontainer/devcontainer.json` du dépôt) et exécute exactement les mêmes commandes `uv` depuis un terminal dans ton onglet de navigateur.
 
-**Google Colab, Kaggle Notebooks, ou Binder** conviennent aussi — c'est un script léger qui appelle juste une API, pas de GPU ni d'installation lourde. Une version notebook prête à exécuter de ce projet ([`examples/recipe-planner-agent/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/recipe-planner-agent/notebook.ipynb)) est à un clic :
+**Google Colab, Kaggle Notebooks, ou Binder** conviennent aussi — c'est un script léger qui appelle juste une API, pas de GPU ni d'installation lourde. Une version notebook prête à exécuter de ce projet ([`examples/recipe-planner-agent/notebook.fr.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/recipe-planner-agent/notebook.fr.ipynb)) est à un clic :
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/recipe-planner-agent/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/recipe-planner-agent/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Frecipe-planner-agent%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/recipe-planner-agent/notebook.fr.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/recipe-planner-agent/notebook.fr.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Frecipe-planner-agent%2Fnotebook.fr.ipynb)
 
 C'est une façon de moindre fidélité de vivre le projet qu'un vrai projet `uv` local — pas de fichiers séparés, pas de vraie structure de projet — mais parfaitement faisable pour tester l'idée. Définis ta clé API avec `os.environ["GITHUB_TOKEN"] = "..."` dans la cellule getpass (ou utilise le panneau Secrets de Colab).
 

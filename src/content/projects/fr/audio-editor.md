@@ -35,9 +35,9 @@ Cela suppose Python 101 et de l'entrée/sortie de fichiers de base — rien de l
 
 **Google Colab, Kaggle Notebooks et Binder sont une vraie façon de faire tourner ceci presque de bout en bout** — plus honnête que la plupart des projets, parce que rien ici ne dépend de ton historique git local. L'avertissement honnête, c'est l'entrée audio : un notebook n'a aucun de tes fichiers audio, donc le notebook ci-dessous *synthétise la même tonalité de test* que tu construis à l'Étape 1 et travaille avec ça. Il peut aussi installer un binaire `ffmpeg` pour l'étape de conversion de format, donc même la conversion MP3/OGG fonctionne — c'est juste convertir une tonalité que personne n'a enregistrée, plutôt qu'un clip qui te tient à cœur. Utilise-le pour voir tout le pipeline tourner avec zéro configuration ; passe à `uv` local ou à un Codespace une fois que tu veux le pointer sur tes propres enregistrements.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/audio-editor/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/audio-editor/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Faudio-editor%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/audio-editor/notebook.fr.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/audio-editor/notebook.fr.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Faudio-editor%2Fnotebook.fr.ipynb)
 
 ## Configuration
 

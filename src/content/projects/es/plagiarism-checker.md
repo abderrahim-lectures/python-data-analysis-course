@@ -34,9 +34,9 @@ Esto asume Python 101 — cadenas, conjuntos, bucles y funciones. Nada más all�
 
 **Google Colab, Kaggle Notebooks y Binder ejecutan todo el pipeline con honestidad** — normalización, shingling, puntuación de Jaccard, informes — contra el corpus de muestra incluido en el curso, porque nada aquí necesita una GPU, una clave o un archivo grande. La salvedad honesta es el alcance: el notebook puntúa los ensayos de muestra fijos en lugar de tu propia carpeta de presentaciones, así que piensa en él como la pista de pruebas del algoritmo, y pasa a local cuando quieras ejecutarlo sobre documentos reales.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/plagiarism-checker/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/plagiarism-checker/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fplagiarism-checker%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/plagiarism-checker/notebook.es.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/plagiarism-checker/notebook.es.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fplagiarism-checker%2Fnotebook.es.ipynb)
 
 ## Configuración
 

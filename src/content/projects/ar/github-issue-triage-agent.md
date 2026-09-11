@@ -24,11 +24,11 @@ description: "تخرّج من بيئة البرمجة في المتصفح إلى
 
 **GitHub Codespaces** يعمل بنفس الجودة، ومريح بشكل ملحوظ لهذا المشروع بالتحديد: افتح [مستودع الدورة كاملًا في Codespace مجاني](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node وPython وuv مثبّتة بالفعل، وفق `.devcontainer/devcontainer.json` الخاص بالمستودع) وأنت بالفعل جالس داخل بيئة واعية بـ`git`/`gh` بهوية GitHub حقيقية مرفَقة — ملاءمة طبيعية لمشروع يدور بأكمله حول مستودعات وissues GitHub.
 
-**Google Colab أو Kaggle Notebooks** جيدان أيضًا هنا — هذا سكربت خفيف يستدعي واجهة برمجية بلا خادم ملفات محلي أو عملية طويلة التشغيل لإدارتها، لذا `!pip install requests python-dotenv openai` في خلية متبوعة بلصق الكود كخلايا دفتر ملاحظات يعمل دون تكييف كبير. نسخة دفتر ملاحظات جاهزة موجودة في [`examples/github-issue-triage-agent/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/github-issue-triage-agent/notebook.ipynb) إن كنت تفضّل عدم لصق الكود بنفسك:
+**Google Colab أو Kaggle Notebooks** جيدان أيضًا هنا — هذا سكربت خفيف يستدعي واجهة برمجية بلا خادم ملفات محلي أو عملية طويلة التشغيل لإدارتها، لذا `!pip install requests python-dotenv openai` في خلية متبوعة بلصق الكود كخلايا دفتر ملاحظات يعمل دون تكييف كبير. نسخة دفتر ملاحظات جاهزة موجودة في [`examples/github-issue-triage-agent/notebook.ar.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/github-issue-triage-agent/notebook.ar.ipynb) إن كنت تفضّل عدم لصق الكود بنفسك:
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/github-issue-triage-agent/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/github-issue-triage-agent/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fgithub-issue-triage-agent%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/github-issue-triage-agent/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/github-issue-triage-agent/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fgithub-issue-triage-agent%2Fnotebook.ar.ipynb)
 
 ## الإعداد
 

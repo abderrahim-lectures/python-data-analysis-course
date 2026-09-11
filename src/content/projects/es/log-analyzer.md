@@ -34,9 +34,9 @@ Esto asume Python 101 — I/O de archivos, cadenas, diccionarios y funciones —
 
 **Google Colab, Kaggle Notebooks y Binder son una buena forma de *probar* la maquinaria de parseo y conteo, pero el Paso 1 centrado en archivos (`pathlib` + I/O real) brilla menos en un notebook efímero.** El notebook de abajo refleja los pasos con un log de muestra incluido para que todo — parsear, filtrar, contar, graficar — se ejecute de principio a fin con cero configuración. Úsalo para ver funcionar la canalización; cambia a `uv` local o a un Codespace cuando quieras apuntar la herramienta a logs que realmente sean tuyos.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/log-analyzer/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/log-analyzer/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Flog-analyzer%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/log-analyzer/notebook.es.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/log-analyzer/notebook.es.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Flog-analyzer%2Fnotebook.es.ipynb)
 
 ## Configuración
 

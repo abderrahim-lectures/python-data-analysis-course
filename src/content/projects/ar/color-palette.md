@@ -34,11 +34,11 @@ learningObjectives:
 
 **GitHub Codespaces** بديل بلا تثبيت: افتح [مستودع الدورة كاملًا في Codespace مجاني](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node وPython مثبّتان بالفعل) وشغّل نفس الأوامر من طرفية في تبويب متصفحك.
 
-**Google Colab أو Kaggle Notebooks أو Binder** طريقة ممتازة *للتلاعب* بحسابات الألوان، لأنها لا تحتاج مفاتيح API أو GPU — يوجد دفتر ملاحظات قابل للتشغيل في [`examples/color-palette/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/color-palette/notebook.ipynb). انقر شارة لتشغيله دون أي إعداد محلي:
+**Google Colab أو Kaggle Notebooks أو Binder** طريقة ممتازة *للتلاعب* بحسابات الألوان، لأنها لا تحتاج مفاتيح API أو GPU — يوجد دفتر ملاحظات قابل للتشغيل في [`examples/color-palette/notebook.ar.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/color-palette/notebook.ar.ipynb). انقر شارة لتشغيله دون أي إعداد محلي:
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/color-palette/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/color-palette/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fcolor-palette%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/color-palette/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/color-palette/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fcolor-palette%2Fnotebook.ar.ipynb)
 
 كن صادقًا بشأن المفاضلة رغمًا عن ذلك: دفتر الملاحظات يشغّل *نفس* اللوحة النموذجية في كل مرة. الـ CLI المحلي هو حيث تكتب لون علامتك التجارية وتحصل على تقرير حقيقي.
 

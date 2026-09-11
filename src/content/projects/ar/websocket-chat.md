@@ -36,9 +36,9 @@ prerequisites:
 
 **Google Colab وKaggle Notebooks وBinder** تشغّل كل عرض داخل-العملية تمامًا كما كُتب: الخادم في سياق كوروتين واحد، والعملاء الافتراضيون في آخر، كل ذلك داخل `asyncio.run` واحد. التحفظ الصادق: لا يستطيع دفتر أن يبقي *طرفيتين* مفتوحتين، فيبقى عرض "اكتب من الطرفية B" الأخير محليًا. استخدم الشارات لترى حلقة الرسائل؛ واستخدم طرفية للمحادثة الحقيقية.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/websocket-chat/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/websocket-chat/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fwebsocket-chat%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/websocket-chat/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/websocket-chat/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fwebsocket-chat%2Fnotebook.ar.ipynb)
 
 ## الإعداد
 

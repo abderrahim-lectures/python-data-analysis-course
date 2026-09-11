@@ -43,6 +43,11 @@ prerequisites:
 - **ملاعب JupyterLite.** الصق كتل التعليمات البرمجية في خلايا وشغّلها في المتصفح. خطوة فحص الاختراقات تحتاج إلى اتصال بالشبكة؛ وخطوة الخزنة تُنشئ ملفات في التخزين المؤقت للمتصفح.
 - **Google Colab.** انقر على شارة Colab في صفحة المشروع للتشغيل في دفتر ملاحظات سحابي. لاحظ أن ملفات الخزنة التي تُنشأ في Colab لا تبقى بين الجلسات.
 
+- **شغّله في المتصفح.** هناك دفتر ملاحظات تفاعلي جاهز — افتحه على Colab أو Kaggle أو Binder وتابع خطوة بخطوة.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/password-generator/notebook.ar.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/password-generator/notebook.ar.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fpassword-generator%2Fnotebook.ar.ipynb)
+
 ## الإعداد
 
 `uv` أداة واحدة تحل محل السلسلة المعتادة "ثبّت Python، ثم ثبّت pip، ثم ثبّت بيئة افتراضية، ثم ثبّت الحزم" — تدير إصدارات Python وتبعيات المشروع معًا.

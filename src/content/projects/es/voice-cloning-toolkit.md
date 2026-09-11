@@ -38,9 +38,9 @@ Esto asume Python 101, comodidad con numpy y una familiaridad pasajera con la ta
 
 **Google Colab, Kaggle Notebooks y Binder** ejecutan cada paso de forma idéntica — numpy está preinstalado y la matemática de punto flotante es la misma en todos lados. La salvedad honesta: un notebook no tiene *los propios archivos de un hablante* por defecto, así que el notebook de ejemplo sintetiza clips de seno y estilo formante para demostrar la extracción de características (como hace esta guía abajo), en lugar de fingir clonar una grabación real. Usa las insignias para ver las características y los perfiles calculados de extremo a extremo; cambia a `uv` local cuando quieras apuntar el kit a audio real y éticamente propio.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/voice-cloning-toolkit/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/voice-cloning-toolkit/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fvoice-cloning-toolkit%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/voice-cloning-toolkit/notebook.es.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/voice-cloning-toolkit/notebook.es.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fvoice-cloning-toolkit%2Fnotebook.es.ipynb)
 
 ## Configuración
 

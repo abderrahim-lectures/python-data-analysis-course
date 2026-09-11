@@ -47,6 +47,11 @@ Un framework CLI que:
 - **Google Colab.** Limitado — puedes probar funciones individuales, pero la experiencia CLI completa requiere un terminal local.
 - **JupyterLite.** No es adecuado para la ejecución de CLI.
 
+- **Ejecútalo en el navegador.** Hay un cuaderno interactivo listo — ábrelo en Colab, Kaggle o Binder y sigue los pasos en orden.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/cli-framework/notebook.es.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/cli-framework/notebook.es.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fcli-framework%2Fnotebook.es.ipynb)
+
 ## Configuración
 
 `uv` es una sola herramienta que reemplaza la cadena habitual de "instala Python, luego pip, luego un entorno virtual" — gestiona versiones de Python y dependencias juntas.

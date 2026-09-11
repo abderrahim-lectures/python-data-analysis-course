@@ -34,9 +34,9 @@ Esto asume Python 101 más el módulo del curso de Matplotlib. Opcional y no cal
 
 **Google Colab, Kaggle Notebooks y Binder ejecutan el pipeline honestamente** — el hub es simulación pura y matemática sin NumPy, y Matplotlib renderiza el gráfico *en línea* en el notebook, así que `dashboard.png` se vuelve una salida de celda en vivo en lugar de un archivo. Lo único que un notebook no puede hacer es ticar en *reloj de pared real* como lo hace un bucle local — pero la simulación está bajo tu control, así que tanto "1 segundo por tick" como "avance rápido 100 ticks" funcionan, y ese es el lugar honesto donde el notebook realmente brilla (obtienes toda la transmisión más gráficos en un solo artefacto).
 
-[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/sensor-hub/notebook.ipynb)
-[![Abrir en Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/sensor-hub/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsensor-hub%2Fnotebook.ipynb)
+[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/sensor-hub/notebook.es.ipynb)
+[![Abrir en Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/sensor-hub/notebook.es.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsensor-hub%2Fnotebook.es.ipynb)
 
 ## Configuración
 

@@ -34,9 +34,9 @@ Cela suppose le Python 101 plus une connaissance pratique de `pandas` et du calc
 
 **Google Colab, les notebooks Kaggle et Binder exécutent honnêtement le pipeline de calcul** — la matrice de notations est ~100k vraies notations qui tiennent confortablement en mémoire, la similarité cosinus est de l'algèbre linéaire, et le jeu de données est le même fichier MovieLens public que les étudiants utilisent toujours, donc les nombres dans ton notebook correspondent aux nombres dans ta tête. Pas de clés API, pas de GPU. La seule chose que tu ne peux pas faire dans un notebook, c'est importer ton propre agencement de fichiers — et dès l'instant où tu veux un service qui sert des recommandations sur HTTP, ce pic est local.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/recommendation-engine/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/recommendation-engine/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Frecommendation-engine%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/recommendation-engine/notebook.fr.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/recommendation-engine/notebook.fr.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Frecommendation-engine%2Fnotebook.fr.ipynb)
 
 ## Configuration
 

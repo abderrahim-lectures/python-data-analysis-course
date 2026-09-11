@@ -38,9 +38,9 @@ Cela suppose les bases du travail avec des données ordonnées et rien de tout c
 
 **Google Colab, Kaggle Notebooks et Binder** sont tous de première classe ici — pandas et matplotlib sont préinstallés dans chacun, `!pip install requests` couvre l'enveloppe de récupération en direct, et `matplotlib.use("Agg")` à l'Étape 5 garde les tracés compatibles sans interface graphique dans chaque environnement. Les notebooks sont un excellent choix si ta machine de cours manque d'un Python local ; souviens-toi juste que toute donnée d'API en direct changera entre les sessions, ce qui est exactement le but de l'échantillon déterministe.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/air-quality/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/air-quality/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fair-quality%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/air-quality/notebook.fr.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/air-quality/notebook.fr.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fair-quality%2Fnotebook.fr.ipynb)
 
 ## Configuration
 

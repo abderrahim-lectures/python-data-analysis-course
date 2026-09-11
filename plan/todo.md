@@ -1819,3 +1819,30 @@ Coordination notes: the smoke "week-model parity" seed was reseeded from fiction
 - **Push**: done via the temp-workflow-match workaround (OAuth token still lacks `workflow`
   scope) — remote `redesign/astro-visual-novel` HEAD `fca5126`; local HEAD `900e1e5`
   (1 ahead: real ci.yml/deploy.yml restore, unpushable).
+
+## Session 2026-09-11 (opencode) — per-locale project notebooks + badge retarget
+
+- [x] **Scope confirmed**: per-locale notebooks for ALL 135 projects; EN keeps 124
+  hand-authored `notebook.ipynb` untouched; generated EN only for 11 missing gaps.
+- [x] **Extended `scripts/generate-notebooks.mjs`**: added `PROJECTS_ROOT`,
+  `PROJECT_OUT_ROOT`, `PROJECT_LOCALES = ['ar','es','fr']`, `IMPORT_TO_PIP` curated
+  mapping, `projectDeps()`, `projectDepsCell()`, `buildProject(filePath, slug, locale)`.
+  Build logic: prose → markdown cells, python fences → code cells, other fences (bash/
+  powershell/empty) → markdown cells; header code cell + optional dependency install cell
+  (from `IMPORT_TO_PIP`) + end cell. Rerun-safe: EN notebook written only when missing;
+  ar/es/fr always regenerated.
+- [x] **Generated 416 project notebooks**: 135 `notebook.ar.ipynb`, 135
+  `notebook.es.ipynb`, 135 `notebook.fr.ipynb`, 11 `notebook.ipynb` (the missing EN
+  projects). Lesson notebooks unchanged (196). `public/datasets/index.json` rewritten.
+- [x] **Badge retarget + insertion** (`scripts/link-project-notebooks.mjs`): retargeted
+  existing badges in all ar/es/fr project copies from `notebook.ipynb` →
+  `notebook.{locale}.ipynb` (333 files); inserted badge blocks (Colab + Kaggle + Binder)
+  into 23 badgeless projects in all 4 locales + es-only badge block for mcp-server,
+  rag-notes, ai-agent (95 files). Badge lead-ins localized per house style; prose link
+  labels updated to match localized filenames. Idempotent: rerun produces 0 changes.
+- [x] **Verified**: all 540 project/locale combos resolve to real notebook files; 124
+  tracked EN originals untouched; 416 generated files all code-first cells; zero
+  cross-project locale notebook refs remain bare.
+- **Gates (at commit)**: `npm run typecheck` 0 errors · `npm test` 1224/1224 ·
+  hreflang 40/40 · e2e 49/49 · a11y 0 · contrast 0 · responsive clean ·
+  lesson 9/9 · build 1282 pages.

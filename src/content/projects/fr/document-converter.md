@@ -12,6 +12,11 @@ prerequisites: ["Bases de Python (variables, boucles, fonctions, chaînes)", "En
 
 Les documents existent sous de nombreux formats — Markdown pour l'écriture, HTML pour le web, texte brut pour les partages rapides. Les convertir manuellement entre ces formats est fastidieux et sujet aux erreurs. Dans ce projet, tu construiras un outil Python qui lit les fichiers Markdown, les convertit en HTML ou en texte brut, extrait les métadonnées des en-têtes de document, et traite des répertoires entiers en une seule commande.
 
+- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt — ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/document-converter/notebook.fr.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/document-converter/notebook.fr.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fdocument-converter%2Fnotebook.fr.ipynb)
+
 ## Ce que tu vas faire
 
 1. Analyser la syntaxe Markdown en données structurées

@@ -25,6 +25,11 @@ Ceci est optionnel et non noté. Voir [Projets concrets](/fr/projets) pour la li
 - **Bac à sable JupyterLite.** Colle les cellules de code directement dans un notebook — fonctionne bien pour explorer les étapes d'analyse, bien que la fonction de rapport finale soit conçue pour un vrai terminal.
 - **Google Colab.** Ouvre un nouveau notebook et colle les cellules. Même réserve que pour JupyterLite : les fonctions CLI fonctionnent mieux dans un vrai terminal.
 
+- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt — ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/anomaly-detector/notebook.fr.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/anomaly-detector/notebook.fr.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fanomaly-detector%2Fnotebook.fr.ipynb)
+
 ## Configuration
 
 `uv` est un seul outil qui remplace la chaîne habituelle « installe Python, puis pip, puis un environnement virtuel » — il peut installer et gérer les versions de Python lui-même, en plus des dépendances de ton projet.

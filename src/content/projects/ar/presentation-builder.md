@@ -35,9 +35,9 @@ prerequisites: ["python-101/file-io", "python-101/strings", "python-101/function
 
 **Google Colab وKaggle Notebooks وBinder يشغّلون خط أنابيب التحليل والعرض بالكامل فعليًا** — لا يحتاج شيء هنا مفتاحًا أو GPU. التحفظ الصادق في الميل الأخير: يطبع الدفتر HTML المولّد ويمكنه إغراقه في ملف للتنزيل، لكن *حلقة تحديث نافذة المتصفح* هي حيث يستحق باني شرائح مكانته، وهي تجربة ملفات محلية. استخدم الدفتر لتعلم الآلية؛ وابنِ عرضك الفعلي محليًا.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/presentation-builder/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/presentation-builder/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fpresentation-builder%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/presentation-builder/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/presentation-builder/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fpresentation-builder%2Fnotebook.ar.ipynb)
 
 ## الإعداد
 

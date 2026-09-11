@@ -39,6 +39,11 @@ Ce projet tourne presque partout — pandas et matplotlib sont du Python pur, et
 
 **En local avec `uv`** est le chemin recommandé pour exécuter la vraie boucle de sondage interactive (Étape 2) où `input()` te demande question par question — suis la section Configuration ci-dessous.
 
+- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt — ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/survey-builder/notebook.fr.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/survey-builder/notebook.fr.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsurvey-builder%2Fnotebook.fr.ipynb)
+
 ## Configuration
 
 Tout ce dont tu as besoin avant d'écrire une question de sondage.

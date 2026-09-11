@@ -34,9 +34,9 @@ Esto asume Python 101 más los módulos del curso de NumPy y pandas. Es opcional
 
 **Google Colab, Kaggle Notebooks y Binder manejan este proyecto mejor que cualquier otro del curso** — un transformer pequeño corre feliz en la CPU gratuita de Colab/Kaggle (a veces CUDA), el modelo clase-`all-MiniLM-L6-v2` se descarga automáticamente y el bucle completo integrar→buscar se renderiza en línea con los vectores visibles. La única advertencia honesta: descargas los pesos en la primera ejecución (unos pocos cientos de MB), y si estás sin conexión, el modelo no cargará — así que las partes de *matemática vectorial pura* siguen funcionando con `numpy` que hayas precalculado, pero el paso de integración en vivo necesita un alcance de red hasta Hugging Face.
 
-[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/semantic-search-engine/notebook.ipynb)
-[![Abrir en Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/semantic-search-engine/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsemantic-search-engine%2Fnotebook.ipynb)
+[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/semantic-search-engine/notebook.es.ipynb)
+[![Abrir en Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/semantic-search-engine/notebook.es.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsemantic-search-engine%2Fnotebook.es.ipynb)
 
 ## Configuración
 

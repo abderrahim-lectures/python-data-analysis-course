@@ -34,9 +34,9 @@ Esto asume Python 101 — E/S de archivos, strings y funciones. Nada más allá 
 
 **Google Colab, Kaggle Notebooks y Binder ejecutan el pipeline entero con honestidad** — generación de código, recoloreado, estampado de logotipos y validación por lotes son toda matemática de imágenes local sin claves ni GPU — y el notebook puede incluso mostrar el PNG generado en línea para que *veas* la matriz antes de siquiera guardarla. Lo único que no puede pasar en un notebook es que sostengas tu teléfono frente a la pantalla — que es exactamente la comprobación de escaneo que querrás hacer localmente en cuanto los archivos aterricen.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/qr-code-studio/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/qr-code-studio/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fqr-code-studio%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/qr-code-studio/notebook.es.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/qr-code-studio/notebook.es.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fqr-code-studio%2Fnotebook.es.ipynb)
 
 ## Configuración
 

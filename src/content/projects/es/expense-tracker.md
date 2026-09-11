@@ -40,6 +40,11 @@ Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/es/proyec
 - **Playground de JupyterLite.** Pega las celdas de código directamente en un notebook — funciona bien para explorar los pasos de análisis (2–5), aunque el menú CLI (Paso 7) está diseñado para una terminal real.
 - **Google Colab.** Abre un notebook nuevo y pega las celdas. Misma advertencia que JupyterLite: la CLI interactiva funciona mejor en una terminal real.
 
+- **Ejecútalo en el navegador.** Hay un cuaderno interactivo listo — ábrelo en Colab, Kaggle o Binder y sigue los pasos en orden.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/expense-tracker/notebook.es.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/expense-tracker/notebook.es.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fexpense-tracker%2Fnotebook.es.ipynb)
+
 ## Configuración
 
 `uv` es una sola herramienta que reemplaza la cadena habitual de "instala Python, luego pip, luego un entorno virtual" — puede instalar y gestionar versiones de Python junto con las dependencias de tu proyecto.

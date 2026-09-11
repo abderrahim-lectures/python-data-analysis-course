@@ -34,11 +34,11 @@ Ceci suppose Python 101 — variables, boucles, fonctions et `print` de base —
 
 **GitHub Codespaces** est une alternative sans installation : ouvre [tout le dépôt du cours dans un Codespace gratuit](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node et Python sont déjà installés) et exécute les mêmes commandes depuis un terminal dans ton onglet de navigateur.
 
-**Google Colab, Kaggle Notebooks ou Binder** sont un bon moyen de *jouer* avec les calculs colorimétriques, car ils ne requièrent ni clés API ni GPU — un notebook exécutable se trouve dans [`examples/color-palette/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/color-palette/notebook.ipynb). Clique sur un badge pour le lancer sans aucune configuration locale :
+**Google Colab, Kaggle Notebooks ou Binder** sont un bon moyen de *jouer* avec les calculs colorimétriques, car ils ne requièrent ni clés API ni GPU — un notebook exécutable se trouve dans [`examples/color-palette/notebook.fr.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/color-palette/notebook.fr.ipynb). Clique sur un badge pour le lancer sans aucune configuration locale :
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/color-palette/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/color-palette/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fcolor-palette%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/color-palette/notebook.fr.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/color-palette/notebook.fr.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fcolor-palette%2Fnotebook.fr.ipynb)
 
 Sois honnête sur le compromis, cependant : un notebook exécute la *même* palette d'exemple à chaque fois. La CLI locale est là où tu tapes ta propre couleur de marque et obtiens un vrai rapport en retour.
 

@@ -35,6 +35,11 @@ prerequisites: ["أساسيات Python (الصفوف، القواميس، الق
 - **Google Colab أو Kaggle Notebooks.** الصق خلايا الكود مباشرة في دفتر. تُعرض المخططات inline، ويعمل `input()` لموجّهات الاختبار.
 - **ملعب JupyterLite.** الصق خلايا الكود مباشرة في دفتر — لاحظ أن إدخال/إخراج الملفات (الخطوة 5) يعمل بشكل مختلف في المتصفح؛ أستبقاء JSON يعمل محليًّا فقط.
 
+- **شغّله في المتصفح.** هناك دفتر ملاحظات تفاعلي جاهز — افتحه على Colab أو Kaggle أو Binder وتابع خطوة بخطوة.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/quiz-engine/notebook.ar.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/quiz-engine/notebook.ar.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fquiz-engine%2Fnotebook.ar.ipynb)
+
 ## الإعداد
 
 ```bash

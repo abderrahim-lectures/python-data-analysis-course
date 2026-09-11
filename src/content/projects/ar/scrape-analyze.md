@@ -12,6 +12,11 @@ prerequisites: ["أساسيات Python", "أساسيات pandas", "أساسيا�
 
 كل مجموعة بيانات حتى الآن وصلت كملف CSV جاهز. التحليل الحقيقي نادرًا ما يبدأ من هناك. يعلّمك هذا المشروع جلب صفحة ويب حية عبر HTTP، وتحليل HTML إلى صفوف مُهيكلة، وتنظيف النتيجة بـ pandas، وإنتاج رسوم بيانية — لا مفتاح API، لا خدمة خارجية، فقط سكربتك وخادم.
 
+- **شغّله في المتصفح.** هناك دفتر ملاحظات تفاعلي جاهز — افتحه على Colab أو Kaggle أو Binder وتابع خطوة بخطوة.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/scrape-analyze/notebook.ar.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/scrape-analyze/notebook.ar.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fscrape-analyze%2Fnotebook.ar.ipynb)
+
 ## ما ستتعلمه
 
 1. جلب صفحات الويب بـ `requests`

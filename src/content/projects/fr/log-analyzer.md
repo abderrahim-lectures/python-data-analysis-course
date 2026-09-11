@@ -34,9 +34,9 @@ Cela suppose Python 101 — entrées-sorties de fichiers, chaînes, dictionnaire
 
 **Google Colab, Kaggle Notebooks et Binder sont un bon moyen d'*essayer* la mécanique d'analyse et de comptage, mais l'étape 1 riche en fichiers (`pathlib` + vraies entrées-sorties) brille moins dans un notebook éphémère.** Le notebook ci-dessous reflète les étapes avec un log d'exemple intégré pour que tout — analyse, filtre, comptage, graphique — tourne de bout en bout sans aucune configuration. Utilise-le pour voir le pipeline fonctionner ; passe au `uv` local ou à un Codespace quand tu veux pointer l'outil sur des logs qui sont réellement les tiens.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/log-analyzer/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/log-analyzer/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Flog-analyzer%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/log-analyzer/notebook.fr.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/log-analyzer/notebook.fr.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Flog-analyzer%2Fnotebook.fr.ipynb)
 
 ## Configuration
 

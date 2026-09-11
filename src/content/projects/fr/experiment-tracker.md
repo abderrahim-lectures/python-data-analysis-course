@@ -35,11 +35,11 @@ Ceci suppose Python 101 — listes, dicts, fonctions — plus les dataclasses (`
 
 **GitHub Codespaces** est une alternative sans configuration : ouvre [tout le dépôt du cours dans un Codespace gratuit](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node et Python sont déjà installés) et exécute les mêmes commandes depuis un terminal de navigateur.
 
-**Google Colab, Kaggle Notebooks, ou Binder** fonctionnent — le notebook à [`examples/experiment-tracker/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/experiment-tracker/notebook.ipynb) exécute le suiveur sur des enregistrements de type `runs.jsonl` en mémoire, de même forme.
+**Google Colab, Kaggle Notebooks, ou Binder** fonctionnent — le notebook à [`examples/experiment-tracker/notebook.fr.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/experiment-tracker/notebook.fr.ipynb) exécute le suiveur sur des enregistrements de type `runs.jsonl` en mémoire, de même forme.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/experiment-tracker/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/experiment-tracker/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fexperiment-tracker%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/experiment-tracker/notebook.fr.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/experiment-tracker/notebook.fr.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fexperiment-tracker%2Fnotebook.fr.ipynb)
 
 ## Configuration
 

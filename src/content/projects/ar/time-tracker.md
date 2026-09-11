@@ -36,9 +36,9 @@ prerequisites:
 
 **Google Colab و Kaggle Notebooks و Binder** تشغّل كل خلايا الكود جيدًا (مكتبة معيارية نقية)، والدفتر يُكرّر كل خطوة بمثال مُخمّل. التنبيه الصادق: نظام ملفات الدفتر المؤقت وساعة الحُجر يُagnانه مسار جرّب — ملف `*sessions*` لن ي survives، و `datetime.now()` في الدفتر لا يزال ساعة حقيقية إذا أردت. استخدم الشارات لرؤية المنطق، وانتقل إلى `uv` المحلي للأداة التي تثق بها لأسبوعك.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/time-tracker/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/time-tracker/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Ftime-tracker%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/time-tracker/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/time-tracker/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Ftime-tracker%2Fnotebook.ar.ipynb)
 
 ## الإعداد
 

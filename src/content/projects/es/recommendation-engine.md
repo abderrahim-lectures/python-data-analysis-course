@@ -34,9 +34,9 @@ Esto asume Python 101 más un conocimiento práctico de `pandas` y la matemátic
 
 **Google Colab, Kaggle Notebooks y Binder ejecutan el pipeline de cómputo con honestidad** — la matriz de calificaciones tiene ~100k calificaciones reales que caben cómodamente en memoria, la similitud de coseno es álgebra lineal, y el conjunto de datos es el mismo archivo MovieLens público que los estudiantes siempre usan, así que los números de tu notebook coinciden con los números de tu cabeza. Sin claves de API, sin GPU. Lo único que no puedes hacer en un notebook es importar tu propio diseño de archivo — y en el momento en que quieras un servicio que sirva recomendaciones sobre HTTP, ese pico es local.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/recommendation-engine/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/recommendation-engine/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Frecommendation-engine%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/recommendation-engine/notebook.es.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/recommendation-engine/notebook.es.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Frecommendation-engine%2Fnotebook.es.ipynb)
 
 ## Configuración
 

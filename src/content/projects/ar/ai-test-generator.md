@@ -37,9 +37,9 @@ learningObjectives:
 
 **Google Colab وKaggle Notebooks وBinder** ستشغّل كل خطوة: `!pip install pytest` ثم `import pytest` — يكتب المولّد ملف `test_*.py` في مجلد عمل الدفتر, وتشغّله عملية `subprocess` في البيئة نفسها. الدفاتر مكان مناسب; الشيء الوحيد الذي لا تستطيع منحك إياه هو `test_clamp_simple.py` دائمًا بعد انتهاء الجلسة.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-test-generator/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-test-generator/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fai-test-generator%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-test-generator/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-test-generator/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fai-test-generator%2Fnotebook.ar.ipynb)
 
 ## الإعداد
 

@@ -37,9 +37,9 @@ Esto asume Python 101 y familiaridad básica con listas y dicts — no se requie
 
 **Google Colab, Kaggle Notebooks y Binder están genuinamente bien adaptados para este proyecto** — nada aquí depende de fuentes del sistema, binarios externos ni un sistema de archivos local. El notebook de abajo usa la misma semana sintética de datos hacia la que construyen los pasos, así que los DataFrames de `pandas` y los gráficos de matplotlib se renderizan en línea con configuración cero. Este es uno de los proyectos que de verdad encajan limpiamente en el modelo de notebook, de principio a fin.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/fitness-tracker/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/fitness-tracker/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Ffitness-tracker%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/fitness-tracker/notebook.es.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/fitness-tracker/notebook.es.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Ffitness-tracker%2Fnotebook.es.ipynb)
 
 ## Configuración
 

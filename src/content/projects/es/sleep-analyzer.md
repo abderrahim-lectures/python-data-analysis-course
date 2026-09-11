@@ -34,9 +34,9 @@ Esto asume Python 101 — strings, datetime, E/S de archivos, funciones. Opciona
 
 **Google Colab, Kaggle Notebooks y Binder manejan el *análisis* honestamente** — la matemática de duración, la puntuación de calidad y el promediado CSV son Python puro y corren de forma idéntica en un notebook, donde el gráfico de tendencia o la tabla de promedios se renderiza como salida de celda. Lo único que un notebook no puede hacer es *preguntar interactivamente* como lo hace una terminal — así que en un notebook alimentarías una lista de entradas codificada a mano o escrita a mano (o cargada del CSV) en lugar de `input()`. Ambos son el mismo motor; solo la fuente de entrada difiere.
 
-[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/sleep-analyzer/notebook.ipynb)
-[![Abrir en Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/sleep-analyzer/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsleep-analyzer%2Fnotebook.ipynb)
+[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/sleep-analyzer/notebook.es.ipynb)
+[![Abrir en Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/sleep-analyzer/notebook.es.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsleep-analyzer%2Fnotebook.es.ipynb)
 
 ## Configuración
 

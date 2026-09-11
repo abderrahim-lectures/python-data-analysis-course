@@ -34,9 +34,9 @@ Ceci suppose Python 101 — listes, dicts, lecture de fichiers et fonctions. Rie
 
 **Google Colab, Kaggle Notebooks et Binder peuvent *exécuter* chaque fonction, et pour un projet purement données comme celui-ci ils sont tout à fait corrects** — pas de secrets, pas de GPU, pas de fichiers géants. La seule chose qui ne passe pas, c'est « les fichiers de ta session sont éphémères », ce qui compte surtout si tu voulais que ton CSV personnel de recettes survive. Le notebook ci-dessous inclut une base de démarrage pour que tout le pipeline plan → totaux → courses tourne de bout en bout sans aucune configuration. Essaie-le là d'abord, puis passe en local quand tu as tes propres recettes.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/meal-planner/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/meal-planner/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fmeal-planner%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/meal-planner/notebook.fr.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/meal-planner/notebook.fr.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fmeal-planner%2Fnotebook.fr.ipynb)
 
 ## Configuration
 

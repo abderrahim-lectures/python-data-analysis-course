@@ -14,6 +14,11 @@ prerequisites:
 
 Chaque enseignant a besoin d'un moyen de suivre la performance des étudiants, de calculer des moyennes pondérées et de transformer des scores bruts en bulletins significatifs. Dans ce projet, tu construiras un système de carnet de notes complet en Python qui gère les dossiers étudiants, le calcul du GPA pondéré, les statistiques de classe, la persistance CSV et même la visualisation de base. Tu pratiqueras l'utilisation de classes pour modéliser des entités du monde réel, de pandas pour la manipulation de données et des statistiques pour l'analyse.
 
+- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt — ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/gradebook/notebook.fr.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/gradebook/notebook.fr.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fgradebook%2Fnotebook.fr.ipynb)
+
 ## 🎯 Ce que tu vas apprendre
 
 1. **Modélisation de données avec des classes** — Représenter des étudiants, des notes et des catégories comme des objets avec des responsabilités claires

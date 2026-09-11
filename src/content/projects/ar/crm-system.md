@@ -37,9 +37,9 @@ prerequisites: ["أساسيات Python (فئات، دوال، قواميس)", "p
 
 **Google Colab وKaggle Notebooks** طريقة حقيقية لتشغيل هذا — يعمل SQLite في الذاكرة (`:memory:`)، وكود Python متوافق تمامًا. التحفظ الصادق هو `rich`: خلايا دفاتر الملاحظات تعرض الجداول بنص عادي (تختفي الألوان)، ولا توجد بيانات دائمة بين الجلسات. يستخدم دفتر الملاحظات أدناه قاعدة بيانات في الذاكرة مزروعة بجهتي اتصال عيّنتين وصفقاتهما، لذا كل استعلام يرجع نتائج تبدو حقيقية حتى لو لم يبقَ شيء بعد إعادة تشغيل النواة. استخدمه لرؤية المخطط والاستعلامات تعمل من البداية للنهاية؛ انتقل إلى `uv` محلي أو Codespace متى أردت بياناتك الخاصة أن تبقى.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/crm-system/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/crm-system/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fcrm-system%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/crm-system/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/crm-system/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fcrm-system%2Fnotebook.ar.ipynb)
 
 ## الإعداد
 

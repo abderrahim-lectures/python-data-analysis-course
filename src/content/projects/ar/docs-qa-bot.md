@@ -30,9 +30,9 @@ description: "تخرّج من بيئة البرمجة في المتصفح إلى
 
 مع ذلك، خط أنابيب RAG *تحت* البوت — التقسيم، والتضمين، والاسترجاع، والتوليد — مجرد كود عادي يعمل خلية في كل مرة، وهذا بالضبط ما تُجيد فيه دفاتر الملاحظات. تفتح الشارات أدناه دفتر ملاحظات يستعرض ذلك خط الأنابيب الأساسي مقابل وثائق العينة الخاصة بالمشروع ويطبع إجابات حقيقية مُسترجَعة ومُولَّدة، لكي تراه يعمل دون تثبيت أي شيء محليًا. يتوقف عمدًا قبل طبقة Discord — لذلك، عد إلى هنا وشغّل `bot.py` محليًا أو في Codespaces كما هو موصوف أعلاه.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/docs-qa-bot/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/docs-qa-bot/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fdocs-qa-bot%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/docs-qa-bot/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/docs-qa-bot/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fdocs-qa-bot%2Fnotebook.ar.ipynb)
 
 ## الإعداد
 

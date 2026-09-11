@@ -34,11 +34,11 @@ Ceci suppose Python 101 (dictionnaires, fonctions et `json` au niveau `import`) 
 
 **GitHub Codespaces** est une alternative sans configuration : ouvre [tout le dépôt du cours dans un Codespace gratuit](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python et `uv` sont déjà installés) et exécute les mêmes commandes depuis un terminal de navigateur.
 
-**Google Colab, Kaggle Notebooks ou Binder** sont un bon moyen d'*apprendre les concepts* — la version notebook dans [`examples/config-manager/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/config-manager/notebook.ipynb) exécute chaque fonction avec des fichiers d'exemple fournis. La limite honnête : un notebook ne peut pas voir les variables d'environnement de ta propre machine, donc la couche variables d'environnement est démontrée avec une surcharge simulée à la place.
+**Google Colab, Kaggle Notebooks ou Binder** sont un bon moyen d'*apprendre les concepts* — la version notebook dans [`examples/config-manager/notebook.fr.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/config-manager/notebook.fr.ipynb) exécute chaque fonction avec des fichiers d'exemple fournis. La limite honnête : un notebook ne peut pas voir les variables d'environnement de ta propre machine, donc la couche variables d'environnement est démontrée avec une surcharge simulée à la place.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/config-manager/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/config-manager/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fconfig-manager%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/config-manager/notebook.fr.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/config-manager/notebook.fr.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fconfig-manager%2Fnotebook.fr.ipynb)
 
 ## Configuration
 

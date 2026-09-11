@@ -34,9 +34,9 @@ prerequisites: ["python-101/file-io", "python-101/dictionaries", "python-101/fun
 
 **يشغّل Google Colab وKaggle Notebooks وBinder خط الأنابيب كله بأمانة** — AES-256-GCM تشفير محلي بلا مفاتيح أو شبكة، لذا تعمل عمليات التشفير والتخزين وفك التشفير والتدقيق والتدوير وكشف العبث في دفتر مليغ نفس الطريقة في الصدفة. التحفظ الوحيد فلسفي: التشفير جيد بقدر حسن *التعامل مع المفاتيح*، ومكان دفتر الملاحظات الصادق هو «تعلّم الأساسية وانضباط التدقيق» — الدرس أن مفتاحًا على القرص بجوار البيانات مسرح، ويجب أن تختبره بقراءة الكود لا بالثقة في شارة.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/secret-manager/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/secret-manager/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsecret-manager%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/secret-manager/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/secret-manager/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsecret-manager%2Fnotebook.ar.ipynb)
 
 ## الإعداد
 

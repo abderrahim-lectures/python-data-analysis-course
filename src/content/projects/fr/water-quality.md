@@ -37,9 +37,9 @@ Cela suppose Python 101 plus un peu de matplotlib — rien d'autre n'est requis.
 
 **Google Colab, Kaggle Notebooks et Binder** exécutent les six étapes de manière identique (aucune donnée externe — le CSV est ensemencé par ton propre script), avec le graphique en ligne à la fin. L'honnêteté impose de préciser : les graphiques en ligne sont parfaits pour explorer, mais un outil de surveillance veut le fichier sur le disque pour qu'un opérateur puisse le regarder plus tard. Utilise les badges pour explorer ; utilise l'exécution locale pour le sentiment de « vrai appareil ».
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/water-quality/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/water-quality/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fwater-quality%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/water-quality/notebook.fr.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/water-quality/notebook.fr.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fwater-quality%2Fnotebook.fr.ipynb)
 
 ## Configuration
 

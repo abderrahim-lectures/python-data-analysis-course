@@ -25,6 +25,11 @@ Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/es/proyec
 
 **Google Colab, Kaggle Notebooks o Binder son un mal ajuste para este proyecto en particular**, y esta página deliberadamente omite una versión de notebook en lugar de forzar una — un navegador Playwright real necesita un binario de navegador real más un proceso persistente que controla paso a paso, lo cual no se traduce limpiamente al modelo de celdas sin estado y sin ventana de navegador local de un notebook, como sí lo hacen las llamadas `requests` del [proyecto scrape-analyze](/es/proyectos/scrape-analyze). Si quieres experimentar en un notebook de todas formas, la versión honesta de eso es **no** tener control real de navegador en absoluto: simula una "página" falsa como un diccionario Python simple de nombres de campo y tipos, dale al agente herramientas que lean/escriban ese diccionario en lugar de una página real de Playwright, y úsalo para demostrar solo la *toma de decisiones* del agente — qué campo cree que corresponde a qué pieza de información — sin ningún navegador real abierto en ningún lugar. Esa es una forma legítima de explorar el razonamiento del Paso 3 de forma aislada, pero no es este proyecto; trátalo como un juguete, no como un sustituto de la Configuración de abajo.
 
+- **Ejecútalo en el navegador.** Hay un cuaderno interactivo listo — ábrelo en Colab, Kaggle o Binder y sigue los pasos en orden.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/browser-automation-agent/notebook.es.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/browser-automation-agent/notebook.es.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fbrowser-automation-agent%2Fnotebook.es.ipynb)
+
 ## Configuración
 
 ### Instala `uv`

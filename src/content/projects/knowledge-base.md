@@ -12,6 +12,11 @@ prerequisites: ["Python basics (variables, loops, functions, dictionaries)", "Ba
 
 Build a personal knowledge base that stores notes with rich metadata, lets you search across everything instantly, organizes ideas with tags, renders content with Markdown, and exports the whole thing to a static HTML site. This project puts together dictionaries, file I/O, string processing, and template generation into a tool you can actually use.
 
+- **Run it in your browser.** An interactive companion notebook is ready — open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/knowledge-base/notebook.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/knowledge-base/notebook.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fknowledge-base%2Fnotebook.ipynb)
+
 ## What You'll Learn
 
 1. Design a schema for knowledge storage with dictionaries and JSON

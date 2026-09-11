@@ -39,6 +39,11 @@ This project runs almost anywhere — pandas and matplotlib are pure Python, and
 
 **Locally with `uv`** is the recommended path for running the real interactive survey loop (Step 2) where `input()` prompts you question by question — follow the Setup section below.
 
+- **Run it in your browser.** An interactive companion notebook is ready — open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/survey-builder/notebook.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/survey-builder/notebook.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsurvey-builder%2Fnotebook.ipynb)
+
 ## Setup
 
 Everything you need before writing a survey question.

@@ -6,7 +6,13 @@
 //
 // Output: notebooks/<section>/<track>/<lesson-slug>.ipynb (committed so
 // Colab/nbviewer/Binder/Deepnote can open them from GitHub by URL).
-import {readdirSync, readFileSync, mkdirSync, writeFileSync} from 'node:fs';
+//
+// It also generates per-locale project notebooks from the project markdown
+// into examples/<slug>/notebook.{locale}.ipynb so each locale's Colab/Kaggle
+// badges point at a notebook whose prose matches the reader's language
+// (code cells stay Python). English projects keep their hand-authored
+// examples/<slug>/notebook.ipynb; only missing ones are generated.
+import {readdirSync, readFileSync, mkdirSync, writeFileSync, existsSync} from 'node:fs';
 import {join} from 'node:path';
 
 const REPO = 'abderrahim-lectures/python-data-analysis-course';
@@ -15,6 +21,9 @@ const DATASETS_DIR = new URL('../public/datasets', import.meta.url).pathname;
 const DATASETS_INDEX = DATASETS_DIR + '/index.json';
 const LESSONS_ROOT = new URL('../src/content/lessons', import.meta.url).pathname;
 const OUT_ROOT = new URL('../notebooks', import.meta.url).pathname;
+const PROJECTS_ROOT = new URL('../src/content/projects', import.meta.url).pathname;
+const PROJECT_OUT_ROOT = new URL('../examples', import.meta.url).pathname;
+const PROJECT_LOCALES = ['ar', 'es', 'fr'];
 
 const LANG_INFO = {
   name: 'python',
@@ -133,6 +142,122 @@ function datasetPrepCell(datasets) {
   return code(lines.join('\n'));
 }
 
+// Curated import name -> pip package, for the install prep cell of generated
+// project notebooks. Only packages that are known-good on PyPI are listed;
+// anything not in this map is treated as stdlib or a project-local module
+// (e.g. patterns.py) and left alone.
+const IMPORT_TO_PIP = {
+  pandas: 'pandas',
+  numpy: 'numpy',
+  matplotlib: 'matplotlib',
+  seaborn: 'seaborn',
+  plotly: 'plotly',
+  requests: 'requests',
+  httpx: 'httpx',
+  dotenv: 'python-dotenv',
+  yaml: 'pyyaml',
+  tomli_w: 'tomli-w',
+  openpyxl: 'openpyxl',
+  bs4: 'beautifulsoup4',
+  bleach: 'bleach',
+  sklearn: 'scikit-learn',
+  joblib: 'joblib',
+  PIL: 'pillow',
+  cv2: 'opencv-python',
+  openai: 'openai',
+  langchain_openai: 'langchain-openai',
+  deepagents: 'deepagents',
+  sentence_transformers: 'sentence-transformers',
+  transformers: 'transformers',
+  peft: 'peft',
+  spacy: 'spacy',
+  textblob: 'textblob',
+  folium: 'folium',
+  networkx: 'networkx',
+  fastapi: 'fastapi',
+  uvicorn: 'uvicorn',
+  websockets: 'websockets',
+  pydantic: 'pydantic',
+  markdown: 'Markdown',
+  qrcode: 'qrcode',
+  piexif: 'piexif',
+  pypdf: 'pypdf',
+  moviepy: 'moviepy',
+  pydub: 'pydub',
+  midiutil: 'MIDIUtil',
+  whisper: 'openai-whisper',
+  ultralytics: 'ultralytics',
+  discord: 'discord.py',
+  strawberry: 'strawberry-graphql',
+  dash: 'dash',
+  dash_bootstrap_components: 'dash-bootstrap-components',
+  click: 'click',
+  jose: 'python-jose',
+};
+
+function projectDeps(blocks) {
+  const deps = new Set();
+  for (const b of blocks) {
+    if (b.kind !== 'code' || b.lang !== 'python') continue;
+    for (const m of b.content.matchAll(/^import (\w+)|^from (\w+) import/gm)) {
+      const mod = m[1] || m[2];
+      const pip = IMPORT_TO_PIP[mod];
+      if (pip) deps.add(pip);
+    }
+  }
+  return [...deps];
+}
+
+function projectDepsCell(deps) {
+  const lines = [
+    '# 📦 Install third-party libraries used by this project',
+    '# Colab/Kaggle ship most common data-science packages, but not all;',
+    '# this installs the ones this project imports (safe to re-run).',
+    'import sys',
+    'sub = lambda cmd: __import__("subprocess").check_call(["pip", "install", "-q"] + cmd)',
+    `sub(${JSON.stringify(deps)})`,
+  ];
+  return code(lines.join('\n'));
+}
+
+// Build a notebook for a project page. Projects differ from lessons: prose
+// becomes markdown cells, ```python fences become code cells, and everything
+// else (bash/powershell setup, unlabelled demo output) becomes markdown cells
+// so the notebook tells the full story without executing shell snippets.
+function buildProject(filePath, slug, locale) {
+  const raw = readFileSync(filePath, 'utf8');
+  const body = stripFrontmatter(raw);
+  const blockRe = /^```(\w*)\s*\n([\s\S]*?)^```\s*$/gm;
+  const blocks = [];
+  let last = 0;
+  for (const m of body.matchAll(blockRe)) {
+    const head = body.slice(last, m.index).replace(/\n{3,}/g, '\n\n').trim();
+    if (head) blocks.push({kind: 'md', content: head});
+    const lang = m[1] || 'bash';
+    blocks.push(lang === 'python' ? {kind: 'code', lang, content: m[2].replace(/\s+$/, '')} : {kind: 'md', content: '```' + lang + '\n' + m[2].replace(/\s+$/, '') + '\n```'});
+    last = m.index + m[0].length;
+  }
+  const tail = body.slice(last).replace(/\n{3,}/g, '\n\n').trim();
+  if (tail) blocks.push({kind: 'md', content: tail});
+
+  const cells = [];
+  const localeTag = locale === 'en' ? '' : ` (${locale})`;
+  cells.push(code([
+    '# ' + slug + localeTag,
+    '# Generated companion notebook for the PyDA course project page.',
+    '# Run cells top-to-bottom to build the project step by step.',
+    '',
+    'print("PyDA — ready 🚀")',
+  ].join('\n')));
+  const deps = projectDeps(blocks);
+  if (deps.length) cells.push(projectDepsCell(deps));
+  for (const b of blocks) {
+    cells.push(b.kind === 'code' ? code(b.content) : md(b.content));
+  }
+  cells.push(code('# The end. Practice on your own — each cell is a minimal, runnable chunk.'));
+  return notebook(cells);
+}
+
 function buildLesson(filePath, relPath) {
   const raw = readFileSync(filePath, 'utf8');
   const body = stripFrontmatter(raw);
@@ -176,7 +301,37 @@ walk(LESSONS_ROOT, (filePath) => {
   writeFileSync(join(outDir, `${slug}.ipynb`), JSON.stringify(nb, null, 1) + '\n');
   count++;
 });
-console.log(`generated ${count} notebooks`);
+console.log(`generated ${count} lesson notebooks`);
+
+// Per-locale project notebooks into examples/<slug>/notebook.{locale}.ipynb.
+// English keeps its hand-authored examples/<slug>/notebook.ipynb (written by
+// hand for 124 projects); only missing ones get generated. For ar/es/fr every
+// project gets a generated notebook so its badges can point at a localized
+// version, and code cells stay Python (translations never translate code).
+let projectCount = 0;
+for (const name of readdirSync(PROJECTS_ROOT, {withFileTypes: true})) {
+  if (!name.isFile() || !name.name.endsWith('.md')) continue;
+  const slug = name.name.replace(/\.md$/, '');
+  const enPath = join(PROJECTS_ROOT, name.name);
+  const enOut = join(PROJECT_OUT_ROOT, slug, 'notebook.ipynb');
+  if (!existsSync(enOut)) {
+    mkdirSync(join(PROJECT_OUT_ROOT, slug), {recursive: true});
+    writeFileSync(enOut, JSON.stringify(buildProject(enPath, slug, 'en'), null, 1) + '\n');
+    projectCount++;
+  }
+  for (const loc of PROJECT_LOCALES) {
+    const locPath = join(PROJECTS_ROOT, loc, name.name);
+    if (!existsSync(locPath)) {
+      console.warn(`SKIP ${loc}/${name.name}: no localized project page`);
+      continue;
+    }
+    const out = join(PROJECT_OUT_ROOT, slug, `notebook.${loc}.ipynb`);
+    mkdirSync(join(PROJECT_OUT_ROOT, slug), {recursive: true});
+    writeFileSync(out, JSON.stringify(buildProject(locPath, slug, loc), null, 1) + '\n');
+    projectCount++;
+  }
+}
+console.log(`generated ${projectCount} project notebooks (EN only where missing)`);
 
 // Emit a datasets index the browser runtime fetches so normalized name
 // lookups (StudentsPerformance.csv -> students-performance.csv) work on

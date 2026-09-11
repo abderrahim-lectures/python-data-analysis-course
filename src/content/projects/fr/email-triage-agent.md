@@ -26,9 +26,9 @@ C'est optionnel et non noté. Voir [Projets du monde réel](/fr/projets) pour la
 
 **Google Colab, Kaggle Notebooks, ou Binder** fonctionnent aussi pour la leçon centrale — zéro installation, directement dans ton navigateur. Le dépôt fournit un notebook prêt à l'emploi qui reflète exactement les étapes de cette leçon :
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/email-triage-agent/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/email-triage-agent/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Femail-triage-agent%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/email-triage-agent/notebook.fr.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/email-triage-agent/notebook.fr.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Femail-triage-agent%2Fnotebook.fr.ipynb)
 
 Clique sur un badge, exécute les cellules de haut en bas, et colle une clé API gratuite quand demandé. C'est une façon de moindre fidélité de vivre le projet qu'un vrai projet `uv` local (pas de fichiers séparés, pas de vraie structure de projet), donc traite-le comme une façon rapide d'expérimenter plutôt que le chemin principal.
 

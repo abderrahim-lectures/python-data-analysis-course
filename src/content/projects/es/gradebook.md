@@ -14,6 +14,11 @@ prerequisites:
 
 Todo maestro necesita una forma de dar seguimiento al desempeño de sus estudiantes, calcular promedios ponderados y convertir los puntajes crudos en boletas de calificaciones significativas. En este proyecto construirás un sistema completo de libreta de calificaciones en Python que maneja registros de estudiantes, cálculo de GPA ponderado, estadísticas de clase, persistencia en CSV e incluso visualización básica. Practicarás el uso de clases para modelar entidades del mundo real, pandas para manipulación de datos y estadística para el análisis.
 
+- **Ejecútalo en el navegador.** Hay un cuaderno interactivo listo — ábrelo en Colab, Kaggle o Binder y sigue los pasos en orden.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/gradebook/notebook.es.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/gradebook/notebook.es.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fgradebook%2Fnotebook.es.ipynb)
+
 ## 🎯 Lo que aprenderás
 
 1. **Modelado de datos con clases** — Representa estudiantes, calificaciones y categorías como objetos con responsabilidades claras

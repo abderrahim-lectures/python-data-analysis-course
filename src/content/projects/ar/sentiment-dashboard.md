@@ -12,6 +12,11 @@ prerequisites: ["أساسيات بايثون", "أساسيات pandas", "أسا�
 
 النصوص في كل مكان — المراجعات والتغريدات وتذاكر الدعم وردود الاستبيانات. معرفة ما إذا كان ذلك النص إيجابيًا أو سلبيًا أو محايدًا يساعدك على اتخاذ القرارات بسرعة. في هذا المشروع ستبني خط أنابيب لتحليل المشاعر باستخدام TextBlob وتصوّر النتائج في لوحة معلومات فورية بـ matplotlib تتحدّث مع وصول بيانات جديدة.
 
+- **شغّله في المتصفح.** هناك دفتر ملاحظات تفاعلي جاهز — افتحه على Colab أو Kaggle أو Binder وتابع خطوة بخطوة.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/sentiment-dashboard/notebook.ar.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/sentiment-dashboard/notebook.ar.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsentiment-dashboard%2Fnotebook.ar.ipynb)
+
 ## ما ستتعلمه
 
 1. تحليل مشاعر النصوص باستخدام TextBlob

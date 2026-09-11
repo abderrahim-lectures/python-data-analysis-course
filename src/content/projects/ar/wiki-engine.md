@@ -37,9 +37,9 @@ prerequisites:
 
 **Google Colab وKaggle Notebooks وBinder** تشغّل الخطوات الست كلها دون تعديل — تنشئ الخلايا مجلد `wiki/` وتفحصه أثناء سيرها، فيُظهِر الدفتر *المحرك* وهو يعمل على صفحاته الخاصة. التحفظ الصادق: أنظمة ملفات السحابة سريعة الزوال، فويكي تحتفظ به فعلًا يسكن محليًا. استخدم الشارات لترى المحرك يعمل؛ واستخدم `uv` حيث تعيش ملاحظاتك.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/wiki-engine/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/wiki-engine/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fwiki-engine%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/wiki-engine/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/wiki-engine/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fwiki-engine%2Fnotebook.ar.ipynb)
 
 ## الإعداد
 

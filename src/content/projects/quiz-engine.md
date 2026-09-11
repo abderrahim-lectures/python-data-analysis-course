@@ -35,6 +35,11 @@ Build a quiz platform with randomised questions, timed sessions, automatic scori
 - **Google Colab or Kaggle Notebooks.** Paste the code cells directly into a notebook. Charts render inline, and `input()` works for quiz prompts.
 - **JupyterLite playground.** Paste the code cells directly into a notebook — note that file I/O (Step 5) works differently in the browser; the JSON persistence will only work locally.
 
+- **Run it in your browser.** An interactive companion notebook is ready — open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/quiz-engine/notebook.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/quiz-engine/notebook.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fquiz-engine%2Fnotebook.ipynb)
+
 ## Setup
 
 ```bash

@@ -16,6 +16,11 @@ prerequisites:
   - Terminal yeditor de código
 ---
 
+- **Ejecútalo en el navegador.** Hay un cuaderno interactivo listo — ábrelo en Colab, Kaggle o Binder y sigue los pasos en orden.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/spreadsheet-tool/notebook.es.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/spreadsheet-tool/notebook.es.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fspreadsheet-tool%2Fnotebook.es.ipynb)
+
 ## 🎯 Lo que harás
 
 Vas a construir una herramienta completa de procesamiento de hojas de cálculo que pueda leer datos de CSV y Excel, aplicar transformaciones, ejecutar fórmulas y exportar resultados con gráficos.

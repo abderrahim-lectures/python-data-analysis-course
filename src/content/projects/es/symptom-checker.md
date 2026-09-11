@@ -38,9 +38,9 @@ Esto asume Python 101 más diccionarios y conjuntos básicos — no se requiere 
 
 **Google Colab, Kaggle Notebooks y Binder** ejecutan el motor de puntuación de forma idéntica — los cuatro pasos de puntuación son funciones simples sobre datos simples. La salvedad honesta: la interacción impulsada por `input()` es incómoda en un notebook, así que esos caminos ejecutan el modo *demo* sembrado (el predeterminado del Paso 5) en lugar de un Q&A en vivo. Usa las insignias para ver el motor funcionar de extremo a extremo, y cambia a `uv` local para la experiencia interactiva completa.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/symptom-checker/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/symptom-checker/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsymptom-checker%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/symptom-checker/notebook.es.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/symptom-checker/notebook.es.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsymptom-checker%2Fnotebook.es.ipynb)
 
 ## Configuración
 

@@ -12,6 +12,11 @@ prerequisites: ["Python basics", "Basic pandas", "Basic matplotlib"]
 
 Le texte est partout — avis, tweets, tickets de support, réponses à des sondages. Savoir si ce texte est positif, négatif, ou neutre vous aide à prendre des décisions rapidement. Dans ce projet, vous construirez un pipeline d'analyse de sentiment avec TextBlob et visualiserez les résultats dans un tableau de bord matplotlib en temps réel qui se met à jour à mesure que de nouvelles données arrivent.
 
+- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt — ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/sentiment-dashboard/notebook.fr.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/sentiment-dashboard/notebook.fr.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsentiment-dashboard%2Fnotebook.fr.ipynb)
+
 ## 🎯 Ce que vous allez faire
 
 1. Analyser le sentiment de textes avec TextBlob.

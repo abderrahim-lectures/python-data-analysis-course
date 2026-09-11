@@ -38,9 +38,9 @@ Cela suppose Python 101 plus les dictionnaires et ensembles de base — rien au-
 
 **Google Colab, Kaggle Notebooks et Binder** exécutent le moteur de notation à l'identique — les quatre étapes de notation sont de simples fonctions sur des données simples. L'honnêteté impose de préciser : l'interaction pilotée par `input()` est maladroite dans un notebook, donc ces chemins exécutent le mode *démo* seedé (la valeur par défaut de l'Étape 5) plutôt qu'un Q&R en direct. Utilise les badges pour voir le moteur fonctionner de bout en bout, et passe au `uv` local pour l'expérience interactive complète.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/symptom-checker/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/symptom-checker/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsymptom-checker%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/symptom-checker/notebook.fr.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/symptom-checker/notebook.fr.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsymptom-checker%2Fnotebook.fr.ipynb)
 
 ## Configuration
 

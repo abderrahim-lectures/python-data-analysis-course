@@ -24,11 +24,11 @@ description: "انتقل من ساحة اللعب داخل المتصفح إلى
 
 **GitHub Codespaces** بديل بلا إعداد إذا كنت تفضّل عدم تثبيت أي شيء محليًا بعد: افتح [مستودع الدورة كاملًا في Codespace مجاني](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node وPython و`uv` مثبّتة بالفعل، وفق `.devcontainer/devcontainer.json` الخاص بالمستودع) وشغّل نفس أوامر `uv` تمامًا من طرفية في تبويب متصفحك.
 
-**Google Colab وKaggle Notebooks أو Binder** تعمل جيدًا أيضًا — هذا المشروع مجرد سكربت طرفية يستدعي واجهة برمجية مستضافة، لا GPU ولا حزمة محلية ثقيلة مشتركة. نسخة دفتر ملاحظات جاهزة للتشغيل موجودة في [`examples/study-buddy-agent/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/study-buddy-agent/notebook.ipynb) — تعكس نفس منطق `generate_questions()` / `judge_answer()` / `run_quiz()`، وتستخدم `input()` في خلية بنفس الطريقة التي ستستخدمها في طرفية، وتضمّن أحد ملفات الملاحظات النموذجية مباشرةً لذا تعمل دون حاجة إلى رفع ملف. أطلقها بأحد الشارات أدناه:
+**Google Colab وKaggle Notebooks أو Binder** تعمل جيدًا أيضًا — هذا المشروع مجرد سكربت طرفية يستدعي واجهة برمجية مستضافة، لا GPU ولا حزمة محلية ثقيلة مشتركة. نسخة دفتر ملاحظات جاهزة للتشغيل موجودة في [`examples/study-buddy-agent/notebook.ar.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/study-buddy-agent/notebook.ar.ipynb) — تعكس نفس منطق `generate_questions()` / `judge_answer()` / `run_quiz()`، وتستخدم `input()` في خلية بنفس الطريقة التي ستستخدمها في طرفية، وتضمّن أحد ملفات الملاحظات النموذجية مباشرةً لذا تعمل دون حاجة إلى رفع ملف. أطلقها بأحد الشارات أدناه:
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/study-buddy-agent/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/study-buddy-agent/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fstudy-buddy-agent%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/study-buddy-agent/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/study-buddy-agent/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fstudy-buddy-agent%2Fnotebook.ar.ipynb)
 
 إنها طريقة أقل دقة لتجربة الأمر من مشروع محلي فعلي (لا بنية ملفات حقيقية، لا ملفات `.py` منفصلة)، لكنها طريقة معقولة لتجربة الفكرة بسرعة.
 

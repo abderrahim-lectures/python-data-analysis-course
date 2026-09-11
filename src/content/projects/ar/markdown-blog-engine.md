@@ -35,9 +35,9 @@ prerequisites: ["python-101/file-io", "python-101/strings", "python-101/data-str
 
 **Google Colab وKaggle Notebooks وBinder طريقة مناسبة *لرؤية الآلية تعمل*، لكنها ضعيفة في المردود.** يولّد الدفتر أدناه مجلد `posts/` افتراضيًا في الذاكرة ويصيغ الموقع كاملًا إلى دليل يمكنك فحصه خلية بخلية — بحيث يعمل التحليل والقولبة والتجميع كلها بأمانة. ما لا يستطيع فعله جيدًا هو الحلقة الحقيقية المتمثلة في *كتابتك post.md الخاص بك وتحديث الصفحة*؛ تلك تمرين نظام ملفات زائد متصفح، وهو ما يمنحك إياه المسار المحلي أو مسار Codespace. استخدم الدفتر لتعلم الخطوات؛ وانتقل إلى `uv` عندما تريد النشر.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/markdown-blog-engine/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/markdown-blog-engine/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fmarkdown-blog-engine%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/markdown-blog-engine/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/markdown-blog-engine/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fmarkdown-blog-engine%2Fnotebook.ar.ipynb)
 
 ## الإعداد
 

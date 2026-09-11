@@ -39,9 +39,9 @@ Ceci suppose Python 101 et assez d'aisance en SQL pour lire un SELECT — rien d
 
 **Google Colab et Kaggle Notebooks** sont un moyen authentique d'exécuter ceci — SQLite fonctionne en mémoire (`:memory:`), et le code Python est entièrement compatible. L'avertissement honnête concerne `rich` : les cellules de notebook rendent les tableaux en texte brut (les couleurs disparaissent), et il n'y a pas de données persistantes entre les sessions. Le notebook ci-dessous utilise une base de données en mémoire peuplée de deux contacts d'exemple et leurs deals, donc chaque requête retourne des résultats d'allure réelle même si rien ne persiste après le redémarrage du noyau. Utilise-le pour voir le schéma et les requêtes fonctionner de bout en bout ; passe à `uv` local ou à un Codespace dès que tu veux que tes propres données restent en place.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/crm-system/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/crm-system/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fcrm-system%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/crm-system/notebook.fr.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/crm-system/notebook.fr.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fcrm-system%2Fnotebook.fr.ipynb)
 
 ## Configuration
 

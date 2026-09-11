@@ -23,6 +23,11 @@ Les nombres enfouis dans des tableaux sont difficiles à exploiter. Les graphiqu
 
 C'est optionnel et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète.
 
+- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt — ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-visualization/notebook.fr.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-visualization/notebook.fr.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fdata-visualization%2Fnotebook.fr.ipynb)
+
 ## Ce que vous ferez
 
 1. Créer des diagrammes en barres, des courbes et des nuages de points avec matplotlib

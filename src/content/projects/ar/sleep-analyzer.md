@@ -34,9 +34,9 @@ prerequisites: ["python-101/file-io", "python-101/strings", "python-101/datetime
 
 **تعالج Google Colab ودفاتر Kaggle وBinder *التحليل* بأمانة** — حسابات المدة وتقييم الجودة ومتوسطات CSV هي بايثون خالصة وتعمل بشكل مماثل في دفتر، حيث يُعرض رسم الاتجاه أو جدول المتوسطات كنتاج خلية. الشيء الوحيد الذي لا يستطيع الدفتر فعله هو *طلب المدخلات تفاعليًا* بالطريقة التي تفعلها المحطة الطرفية — لذلك في دفتر ستُغذّي قائمة إدخالات مكتوبة أو محمّلة من CSV بدلًا من `input()`. كلاهما نفس المحرك؛ يختلف مصدر الإدخال فقط.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/sleep-analyzer/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/sleep-analyzer/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsleep-analyzer%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/sleep-analyzer/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/sleep-analyzer/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsleep-analyzer%2Fnotebook.ar.ipynb)
 
 ## الإعداد
 

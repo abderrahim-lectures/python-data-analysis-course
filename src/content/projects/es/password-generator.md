@@ -43,6 +43,11 @@ Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/es/proyec
 - **Playground de JupyterLite.** Pega los bloques de código en celdas y ejecútalos en el navegador. El paso de verificación de brechas necesita una conexión de red; el paso de la bóveda crea archivos en el almacenamiento efímero del navegador.
 - **Google Colab.** Haz clic en la insignia de Colab en la página del proyecto para ejecutarlo en un notebook en la nube. Ten en cuenta que los archivos de la bóveda creados en Colab no sobreviven entre sesiones.
 
+- **Ejecútalo en el navegador.** Hay un cuaderno interactivo listo — ábrelo en Colab, Kaggle o Binder y sigue los pasos en orden.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/password-generator/notebook.es.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/password-generator/notebook.es.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fpassword-generator%2Fnotebook.es.ipynb)
+
 ## Configuración
 
 `uv` es una sola herramienta que reemplaza la cadena habitual de "instala Python, luego pip, luego un entorno virtual, luego paquetes" — gestiona versiones de Python y dependencias juntas.

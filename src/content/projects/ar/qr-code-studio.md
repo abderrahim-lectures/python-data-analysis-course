@@ -34,9 +34,9 @@ prerequisites: ["python-101/file-io", "python-101/strings", "python-101/function
 
 **Google Colab وKaggle Notebooks وBinder يشغّلون خط الأنابيب كله بأمانة** — توليد الكود، وإعادة التلوين، ودمغ الشعار، والتحقق المجمع كلها حسابات صور محلية بلا مفاتيح ولا GPU — ويمكن للدفتر حتى عرض PNG المولّد بسطر inline فترى *المصفوفة* قبل أن تحفظها يومًا. الشيء الوحيد الذي لا يحدث في دفتر أن ترفع هاتفك إلى الشاشة — وهو تحديدًا فحص المسح الذي سترغب في فعله محليًا لحظة هبوط الملفات.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/qr-code-studio/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/qr-code-studio/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fqr-code-studio%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/qr-code-studio/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/qr-code-studio/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fqr-code-studio%2Fnotebook.ar.ipynb)
 
 ## الإعداد
 

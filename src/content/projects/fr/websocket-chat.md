@@ -36,9 +36,9 @@ Cela suppose Python 101 plus un peu d'async — rien d'Analyse de Données n'est
 
 **Google Colab, Kaggle Notebooks et Binder** exécutent chaque démo in-process exactement comme écrit — serveur dans un contexte de coroutine, clients virtuels dans un autre, tout à l'intérieur d'un seul `asyncio.run`. L'honnêteté impose de préciser : un notebook ne peut pas tenir deux *terminaux* ouverts, donc la démo finale « tape depuis le terminal B » reste locale. Utilise les badges pour voir la boucle de messages ; utilise un terminal pour la vraie conversation.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/websocket-chat/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/websocket-chat/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fwebsocket-chat%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/websocket-chat/notebook.fr.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/websocket-chat/notebook.fr.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fwebsocket-chat%2Fnotebook.fr.ipynb)
 
 ## Configuration
 

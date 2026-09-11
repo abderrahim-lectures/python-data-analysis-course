@@ -26,9 +26,9 @@ Esto asume Python 101 y suficiente comodidad con git para saber qué muestra `gi
 
 **Google Colab, Kaggle Notebooks y Binder son una forma razonable de *probar* la herramienta, pero no de ejecutarla de verdad.** Ninguno te da un repositorio git local real con historial de commits por defecto, y la premisa completa de esta herramienta es revisar *tu propio* trabajo en progreso — el sistema de archivos efímero de un notebook no tiene nada de eso. El notebook de abajo sortea esto honestamente, en lugar de fingir que la brecha no existe: hace `!git clone` del propio repositorio de este curso dentro del notebook y revisa un commit histórico real y pequeño de él con `git show`, así que cada pieza de la herramienta (la captura de diff con `subprocess`, el system prompt, la llamada al LLM, la salida estructurada) sigue ejecutándose contra una salida real y con apariencia real — solo que está revisando un commit de ejemplo fijo en lugar de algo que tú escribiste personalmente. Úsalo para ver la herramienta funcionar de principio a fin sin ninguna configuración; cambia a `uv` local o a un Codespace cuando quieras apuntarla a tus propios cambios reales.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/agentic-code-reviewer/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/agentic-code-reviewer/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fagentic-code-reviewer%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/agentic-code-reviewer/notebook.es.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/agentic-code-reviewer/notebook.es.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fagentic-code-reviewer%2Fnotebook.es.ipynb)
 
 ## Configuración
 

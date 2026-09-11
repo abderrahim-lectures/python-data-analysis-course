@@ -35,11 +35,11 @@ learningObjectives:
 
 **GitHub Codespaces** بديل بلا إعداد: افتح [مستودع الدورة كاملًا في Codespace مجاني](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node وPython و`uv` مثبّتة بالفعل) وشغّل نفس الأوامر — هناك الكثير من ملفات CSV داخل `examples/` لتوجيهها إليها.
 
-**Google Colab أو Kaggle Notebooks أو Binder** تعمل جيدًا لنصف *منطق البحث* من هذا المشروع — دفتر الملاحظات في [`examples/data-catalog/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-catalog/notebook.ipynb) يشغّل كل خطوة على مجموعات بيانات عينات مرفقة. الملاحظة الصادقة: ملفات CSV العينات في دفتر الملاحظات ثابتة، لذا سحر "افحص *مجلدي*" تجربة `uv` محلية.
+**Google Colab أو Kaggle Notebooks أو Binder** تعمل جيدًا لنصف *منطق البحث* من هذا المشروع — دفتر الملاحظات في [`examples/data-catalog/notebook.ar.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-catalog/notebook.ar.ipynb) يشغّل كل خطوة على مجموعات بيانات عينات مرفقة. الملاحظة الصادقة: ملفات CSV العينات في دفتر الملاحظات ثابتة، لذا سحر "افحص *مجلدي*" تجربة `uv` محلية.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-catalog/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-catalog/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fdata-catalog%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-catalog/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-catalog/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fdata-catalog%2Fnotebook.ar.ipynb)
 
 ## الإعداد
 

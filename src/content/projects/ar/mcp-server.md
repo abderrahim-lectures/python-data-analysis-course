@@ -28,8 +28,8 @@ MCP هو أحد الأنماط الأكثر تبنّيًا حاليًا لتوس
 
 ومع ذلك، إذا أردت فقط التفاعل مع `search_course_topics` و`count_words` كـ Python عادي — بدون بروتوكول MCP وبدون عملية خادم وبدون Claude Desktop — يوجد دفتر أضيق لهذا بالضبط:
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/mcp-server/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/mcp-server/notebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/mcp-server/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/mcp-server/notebook.ar.ipynb)
 
 يستدعي نفس منطق الأدوات مباشرة كدوال عادية، بدون مزخرف وبدون خادم وبدون اتصال عميل — مفيد لتجربة الكود، لكنه ليس بديلاً عن المشروع الفعلي أعلاه.
 

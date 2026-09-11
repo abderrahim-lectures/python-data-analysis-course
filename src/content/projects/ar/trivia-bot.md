@@ -32,8 +32,8 @@ description: "ابنِ بوتًا بـ`discord.py` يشغّل جولات Trivia 
 
 مع ذلك، فإن توليد الأسئلة والتسجيل *أسفل* البوت هما مجرد دوال عادية تشغّل خلية واحدة في كل مرة، وهو بالضبط ما تجيده دفاتر الملاحظات. تفتح الشارات أدناه دفتر ملاحظات يولّد أسئلة LLM حقيقية حول بضعة مواضيع نموذجية ويشغّل بضعة "لاعبين" وهميين عبر منطق التسجيل، لترى كليهما يعمل دون تثبيت أي شيء محليًا. إنه يتوقف عمدًا قبل طبقة Discord — من أجل ذلك، عُد إلى هنا وشغّل `bot.py` محليًا أو في Codespaces كما هو موصوف أعلاه.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/trivia-bot/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/trivia-bot/notebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/trivia-bot/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/trivia-bot/notebook.ar.ipynb)
 
 ## الإعداد
 

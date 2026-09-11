@@ -14,6 +14,11 @@ prerequisites:
 
 Los documentos vienen en muchos formatos: Markdown para escribir, HTML para la web, texto plano para compartir rápido. Convertir entre ellos manualmente es tedioso y propenso a errores. En este proyecto, construirás una herramienta de Python que lee archivos de Markdown, los convierte a HTML o texto plano, extrae metadatos de los encabezados de los documentos y procesa directorios completos con un solo comando.
 
+- **Ejecútalo en el navegador.** Hay un cuaderno interactivo listo — ábrelo en Colab, Kaggle o Binder y sigue los pasos en orden.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/document-converter/notebook.es.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/document-converter/notebook.es.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fdocument-converter%2Fnotebook.es.ipynb)
+
 ## 🎯 Lo que harás
 
 1. Analizar la sintaxis de Markdown en datos estructurados

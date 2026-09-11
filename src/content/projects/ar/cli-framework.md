@@ -40,6 +40,11 @@ prerequisites: ["أساسيات Python (متغيّرات، حلقات، دوال
 - **Google Colab.** محدود — يمكنك اختبار دوال فردية، لكن تجربة CLI الكاملة تتطلب طرفية محلية.
 - **JupyterLite.** غير مناسب لتنفيذ CLI.
 
+- **شغّله في المتصفح.** هناك دفتر ملاحظات تفاعلي جاهز — افتحه على Colab أو Kaggle أو Binder وتابع خطوة بخطوة.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/cli-framework/notebook.ar.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/cli-framework/notebook.ar.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fcli-framework%2Fnotebook.ar.ipynb)
+
 ## الإعداد
 
 `uv` أداة واحدة تحل محل السلسلة المعتادة "ثبّت Python، ثم pip، ثم بيئة افتراضية" — فهي تدير إصدارات Python والتبعيات معًا.

@@ -29,6 +29,11 @@ Le machine learning semble intimidant, mais l'idée centrale est simple : montre
 
 **Google Colab et les notebooks Kaggle** sont d'excellents choix ici — entraîner un arbre de décision sur un jeu de données aussi petit ne nécessite aucun GPU, donc un environnement de notebook gratuit est amplement suffisant. Exécutez `!pip install scikit-learn pandas matplotlib` dans une cellule, puis collez et adaptez le code des étapes ci-dessous.
 
+- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt — ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ml-classifier/notebook.fr.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ml-classifier/notebook.fr.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fml-classifier%2Fnotebook.fr.ipynb)
+
 ## Setup
 
 ```bash

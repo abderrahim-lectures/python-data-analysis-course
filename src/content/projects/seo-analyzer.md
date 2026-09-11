@@ -41,6 +41,11 @@ This project works almost anywhere — `requests`, `BeautifulSoup`, and `pandas`
 
 **Binder and Kaggle Notebooks** also work, since no GPU or native dependencies are needed.
 
+- **Run it in your browser.** An interactive companion notebook is ready — open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/seo-analyzer/notebook.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/seo-analyzer/notebook.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fseo-analyzer%2Fnotebook.ipynb)
+
 ## Setup
 
 Everything you need before writing a line of analysis.

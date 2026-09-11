@@ -35,6 +35,11 @@ A terminal flashcard app that:
 - **Google Colab or Kaggle Notebooks.** Paste the code cells directly into a notebook. The `input()` calls work for study prompts, but file I/O (Step 6) works differently in the browser.
 - **JupyterLite playground.** Paste the code cells directly into a notebook — note that file persistence (Step 6) only works locally.
 
+- **Run it in your browser.** An interactive companion notebook is ready — open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/flashcard-app/notebook.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/flashcard-app/notebook.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fflashcard-app%2Fnotebook.ipynb)
+
 ## Setup
 
 ```bash

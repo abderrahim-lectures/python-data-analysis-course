@@ -37,9 +37,9 @@ Esto asume Python 101 y familiaridad básica con PIL/Pillow — no se requiere n
 
 **Google Colab y Kaggle Notebooks** son una forma genuina de ejecutar esto — un notebook tiene un pequeño conjunto de fuentes incluidas en su imagen Linux. La salvedad honesta es que el escaneo de fuentes devolverá menos resultados que un escritorio con un DE completo instalado, lo cual en realidad es *útil*: te deja ver cómo se comporta la herramienta cuando las fuentes son escasas, y el paso de vista previa/renderización sigue funcionando con lo que haya disponible. El notebook de abajo usa las fuentes del propio sistema del notebook, así que cada pieza de la herramienta corre sobre archivos reales. Úsalo para ver el pipeline funcionar de principio a fin; cambia a `uv` local o a un Codespace cuando quieras un escaneo más rico.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/font-scanner/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/font-scanner/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Ffont-scanner%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/font-scanner/notebook.es.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/font-scanner/notebook.es.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Ffont-scanner%2Fnotebook.es.ipynb)
 
 ## Configuración
 

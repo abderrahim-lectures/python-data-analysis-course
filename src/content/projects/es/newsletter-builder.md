@@ -35,9 +35,9 @@ Esto asume Python 101 y comodidad con funciones, diccionarios y listas — conoc
 
 **Google Colab, Binder y Kaggle Notebooks** ejecutan todo el asunto de forma idéntica: `!pip install pandas` una vez, luego cada paso de abajo, con el notebook devolviendo los mismos números renderizados y tablas de analíticas. **JupyterLite** puede ejecutar los pasos de plantilla y suscriptores en el navegador, y pandas también está disponible allí — la salvedad honesta es la misma que en toda esta serie: los archivos creados en el navegador viven en un sistema de archivos virtual efímero, así que trátalo como un camino de pruébalo-y-ve y usa `uv` local cuando quieras que `subscribers.csv` e `issues/` persistan de verdad.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/newsletter-builder/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/newsletter-builder/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fnewsletter-builder%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/newsletter-builder/notebook.es.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/newsletter-builder/notebook.es.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fnewsletter-builder%2Fnotebook.es.ipynb)
 
 ## Configuración
 

@@ -38,9 +38,9 @@ prerequisites:
 
 **Google Colab و Kaggle Notebooks و Binder** تشغّل محرك التقييم بشكل متماثل — خطوات التقييم كلها دوال بسيطة على بيانات بسيطة. التنبيه الصادق: التفاعلية المدفوعة بـ `input()` غير مريحة في الدفتر، فيشغّل تلك المسارات وضع العرض المُخمّل (الافتراضي في الخطوة 5) بدلاً من الأسئلة والأجوبة المباشرة. استخدم الشارات لرؤية المحرك من البداية إلى النهاية، وانتقل إلى `uv` المحلي للتجربة التفاعلية الكاملة.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/symptom-checker/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/symptom-checker/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsymptom-checker%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/symptom-checker/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/symptom-checker/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsymptom-checker%2Fnotebook.ar.ipynb)
 
 ## الإعداد
 

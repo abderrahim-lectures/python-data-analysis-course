@@ -35,9 +35,9 @@ Ceci suppose Python 101 — boucles, fonctions, lecture et écriture de fichiers
 
 **Google Colab, Kaggle Notebooks et Binder sont une façon raisonnable de *voir le code s'exécuter* — la logique de compte à rebours, le cycle de respiration, le journal CSV et les maths de série s'exécutent tous pour de vrai** — mais le notebook exécute chaque étape comme un instantané rapide et visible plutôt que comme une expérience réelle de temps qui s'écoule (une cellule `time.sleep` de 10 minutes est une mauvaise méditation). Utilise le notebook pour apprendre la mécanique ; lance la commande pour de vrai quand tu veux que le minuteur chronomètre réellement quelque chose.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/meditation-timer/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/meditation-timer/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fmeditation-timer%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/meditation-timer/notebook.fr.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/meditation-timer/notebook.fr.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fmeditation-timer%2Fnotebook.fr.ipynb)
 
 ## Configuration
 

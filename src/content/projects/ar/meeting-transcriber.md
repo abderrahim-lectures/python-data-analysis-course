@@ -35,9 +35,9 @@ prerequisites: ["python-101/strings", "python-101/file-io", "python-101/loops", 
 
 **Google Colab وKaggle Notebooks وBinder ملائمة فعلًا لكل خطوة أدناه** — لا أسرار ولا GPU، وخط الأنابيب كله بضع خلايا تعمل فوق نص الاجتماع العينة المرافق للدورة (وهو اجتماع واقعي مكتوب باليد). التحفظ الصادق: يستخدم الدفتر نص المثال الثابت ذلك بدلًا من صوت تسجله. تحويل الكلام الحقيقي إلى نص سيحتاج مفتاح API مجانيًا، وتُغطّى تلك الخلية بخطوة اختيارية — أما *الملخص نفسه*، فيشغّله دفتر فعليًا.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/meeting-transcriber/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/meeting-transcriber/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fmeeting-transcriber%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/meeting-transcriber/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/meeting-transcriber/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fmeeting-transcriber%2Fnotebook.ar.ipynb)
 
 ## الإعداد
 

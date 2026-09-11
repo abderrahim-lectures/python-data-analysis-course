@@ -23,11 +23,11 @@ description: "عُدّ الأشياء مباشرة من بثّ كاميرا وي
 **محليًا بـ`uv` هو السبيل الوحيد لتجربة كاميرا الويب الحية الكاملة.** كاميرا ويب فيزيائية موصولة بجهازك هي عتاد — لا يوجد طريق من تبويب متصفح يعمل في السحابة إلى كاميرا على مكتبك. تفترض الخطوات 1–5 أدناه هذا المسار، والخطوة 5 تحديدًا لن تعمل ببساطة في أي مكان آخر.
 
 - **GitHub Codespaces** يمنحك بيئة تطوير سحابية بدون أي إعداد (Node، وPython، و`uv` مثبَّتة بالفعل — انظر [`.devcontainer/devcontainer.json`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/.devcontainer/devcontainer.json))، والخطوات 1–4 (الصورة النموذجية، والعدّ، والفيديو النموذجي) تعمل بشكل جيد هناك. الخطوة 5 لن — فمساحة Codespace تعمل على خادم بعيد دون وصول إلى كاميرا ويب المحلية لديك أيضًا.
-- **Google Colab أو Kaggle Notebooks أو Binder** مناسبة لنسخة **الصورة-النموذجية-فقط** من هذا المشروع، لا كاميرا الويب الحية. دفتر ملاحظات حقيقي وقابل للتشغيل يحمّل الصور النموذجية المرفقة ويشغّل كود الكشف نفسه موجود في [`examples/webcam-object-counter/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/webcam-object-counter/notebook.ipynb) (سيشير إلى `main` بمجرد الدمج). انقر على شارة لتشغيله مباشرة:
+- **Google Colab أو Kaggle Notebooks أو Binder** مناسبة لنسخة **الصورة-النموذجية-فقط** من هذا المشروع، لا كاميرا الويب الحية. دفتر ملاحظات حقيقي وقابل للتشغيل يحمّل الصور النموذجية المرفقة ويشغّل كود الكشف نفسه موجود في [`examples/webcam-object-counter/notebook.ar.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/webcam-object-counter/notebook.ar.ipynb) (سيشير إلى `main` بمجرد الدمج). انقر على شارة لتشغيله مباشرة:
 
-  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/webcam-object-counter/notebook.ipynb)
-  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/webcam-object-counter/notebook.ipynb)
-  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fwebcam-object-counter%2Fnotebook.ipynb)
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/webcam-object-counter/notebook.ar.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/webcam-object-counter/notebook.ar.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fwebcam-object-counter%2Fnotebook.ar.ipynb)
 
   كن صادقًا مع نفسك حول ما يمنحك إياه هذا: كشف الصور النموذجية فقط، لا بثّ كاميرا حي. إنها طريقة جيدة حقًا لرؤية النموذج يعمل دون أي تثبيت، لكنها ليست نفس مشروع الخطوة 5.
 

@@ -26,11 +26,11 @@ description: "تخرّج من بيئة اللعب داخل المتصفح إلى
 
 **GitHub Codespaces** بديل بلا أي إعداد إن كنت تفضّل عدم تثبيت أي شيء محليًا الآن: افتح [مستودع الدورة كاملاً في Codespace مجاني](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node وPython وuv مثبّتة مسبقًا، حسب ملف `.devcontainer/devcontainer.json` الخاص بالمستودع) وشغّل نفس أوامر `uv` تمامًا من طرفية في تبويب متصفحك.
 
-**Google Colab أو Kaggle Notebooks أو Binder** تعمل أيضًا، لأن لا شيء هنا يحتاج GPU — كل خطوة مجرد استدعاء API لنموذج لغوي من المستوى المجاني. نسخة دفتر ملاحظات حقيقية وقابلة للتشغيل من هذا المشروع موجودة في المستودع في [`examples/multi-agent-research/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/multi-agent-research/notebook.ipynb) — انقر على شارة أدناه لتشغيلها بلا أي إعداد محلي، وبلا حاجة لملف `.env` (يطلب مفتاح API الخاص بك تفاعليًا بـ`getpass` بدلًا من ذلك):
+**Google Colab أو Kaggle Notebooks أو Binder** تعمل أيضًا، لأن لا شيء هنا يحتاج GPU — كل خطوة مجرد استدعاء API لنموذج لغوي من المستوى المجاني. نسخة دفتر ملاحظات حقيقية وقابلة للتشغيل من هذا المشروع موجودة في المستودع في [`examples/multi-agent-research/notebook.ar.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/multi-agent-research/notebook.ar.ipynb) — انقر على شارة أدناه لتشغيلها بلا أي إعداد محلي، وبلا حاجة لملف `.env` (يطلب مفتاح API الخاص بك تفاعليًا بـ`getpass` بدلًا من ذلك):
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/multi-agent-research/notebook.ipynb)
-[![Open in Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/multi-agent-research/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fmulti-agent-research%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/multi-agent-research/notebook.ar.ipynb)
+[![Open in Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/multi-agent-research/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fmulti-agent-research%2Fnotebook.ar.ipynb)
 
 إنها طريقة أقل دقة لتجربة المشروع مقارنة بمشروع `uv` محلي حقيقي، لكنها قابلة للتشغيل تمامًا لتجربة الفكرة بسرعة.
 

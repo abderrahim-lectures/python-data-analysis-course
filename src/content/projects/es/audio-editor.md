@@ -35,9 +35,9 @@ Esto asume Python 101 y E/S básica de archivos — nada de Análisis de Datos e
 
 **Google Colab, Kaggle Notebooks y Binder son una forma genuina de ejecutar esto casi de extremo a extremo** — más honesto que la mayoría de los proyectos, porque nada aquí depende de tu historial git local. La salvedad honesta es la entrada de audio: un notebook no tiene ninguno de tus archivos de audio, así que el notebook de abajo *sintetiza el mismo tono de prueba* que construyes en el paso 1 y trabaja con ese. También puede instalar un binario `ffmpeg` para el paso de conversión de formato, así que incluso la conversión a MP3/OGG funciona — solo está convirtiendo un tono que nadie grabó, en lugar de un clip que te importa. Úsalo para ver correr todo el pipeline con cero configuración; cambia a `uv` local o a un Codespace una vez que quieras apuntarlo a tus propias grabaciones.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/audio-editor/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/audio-editor/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Faudio-editor%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/audio-editor/notebook.es.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/audio-editor/notebook.es.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Faudio-editor%2Fnotebook.es.ipynb)
 
 ## Configuración
 

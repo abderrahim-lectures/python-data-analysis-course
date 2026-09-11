@@ -35,9 +35,9 @@ Esto asume Python 101 — bucles, funciones, leer y escribir archivos, y manejo 
 
 **Google Colab, Kaggle Notebooks y Binder son una forma razonable de *ver el código funcionar* — la lógica de la cuenta regresiva, el ciclo de respiración, el registro CSV y la matemática de rachas se ejecutan de verdad** — pero el notebook ejecuta cada paso como una instantánea rápida y visible en lugar de como una experiencia real de reloj de pared (una celda de `time.sleep` de 10 minutos es una mala meditación). Usa el notebook para aprender la maquinaria; ejecuta el comando de verdad cuando quieras que el temporizador realmente cronometre algo.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/meditation-timer/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/meditation-timer/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fmeditation-timer%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/meditation-timer/notebook.es.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/meditation-timer/notebook.es.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fmeditation-timer%2Fnotebook.es.ipynb)
 
 ## Configuración
 

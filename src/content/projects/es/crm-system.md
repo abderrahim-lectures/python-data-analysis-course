@@ -37,9 +37,9 @@ Esto asume Python 101 y suficiente comodidad con SQL para leer un SELECT — no 
 
 **Google Colab y Kaggle Notebooks** son una forma genuina de ejecutar esto — SQLite funciona en memoria (`:memory:`), y el código Python es totalmente compatible. La advertencia honesta es `rich`: las celdas de notebook renderizan tablas en texto plano (los colores desaparecen), y no hay datos persistentes entre sesiones. El notebook de abajo usa una base de datos en memoria sembrada con dos contactos de muestra y sus negocios, así que cada consulta devuelve resultados de aspecto real aunque nada persista después de que el kernel se reinicie. Úsalo para ver que el esquema y las consultas funcionan de extremo a extremo; cambia a `uv` local o a un Codespace una vez que quieras que tus propios datos se queden.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/crm-system/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/crm-system/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fcrm-system%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/crm-system/notebook.es.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/crm-system/notebook.es.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fcrm-system%2Fnotebook.es.ipynb)
 
 ## Configuración
 

@@ -32,9 +32,9 @@ prerequisites: ["أساسيات Python (الدوال، الحلقات، القو
 
 **تشغيلات Google Colab وBinder notebook** تعمل بنفس الطريقة — ثبّت الزوج مع سطر `!pip install pandas matplotlib` واحد، والدفتر يعكس كل خطوة مع رسوم محفوظة في بيئة الدفتر. **JupyterLite** يمكنه تشغيل أجزاء pandas في المتصفح، لكنه الأضعف بين الثلاثة لهذا المشروع: يعمل فيه matplotlib، مع أن حفظ ملفات رسوم PNG *على قرص حقيقي* أمر محرج، لذا تعامل معه كمسار للتجربة واستخدم شارات الدفتر أو `uv` المحلي عندما تريد بقاء أصول التقرير.
 
-[![فُتح في Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/report-builder/notebook.ipynb)
-[![فُتح في Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/report-builder/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Freport-builder%2Fnotebook.ipynb)
+[![فُتح في Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/report-builder/notebook.ar.ipynb)
+[![فُتح في Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/report-builder/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Freport-builder%2Fnotebook.ar.ipynb)
 
 ## الإعداد
 

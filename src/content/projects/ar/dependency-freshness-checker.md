@@ -23,11 +23,11 @@ description: "ابنِ أداة CLI حقيقية تقرأ pyproject.toml، وت�
 
 **GitHub Codespaces** بديل بلا إعداد إذا كنت تفضّل عدم تثبيت أي شيء محليًا بعد: افتح [مستودع الدورة كاملًا في Codespace مجاني](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node وPython وuv مثبّتة بالفعل) وشغّل نفس أوامر `uv` تمامًا من طرفية في تبويب متصفحك — بالإضافة إلى أن لديك الكثير من ملفات `pyproject.toml` الحقيقية قريبة لتوجيه الأداة إليها.
 
-**Google Colab وKaggle Notebooks أو Binder** تعمل أيضًا، لأن هذا المشروع لا يحتاج مفتاح API ولا GPU — نسخة دفتر ملاحظات حقيقية وقابلة للتشغيل موجودة في [`examples/dependency-freshness-checker/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/dependency-freshness-checker/notebook.ipynb). انقر على شارة لتشغيله مباشرة، دون أي تثبيت محلي على الإطلاق:
+**Google Colab وKaggle Notebooks أو Binder** تعمل أيضًا، لأن هذا المشروع لا يحتاج مفتاح API ولا GPU — نسخة دفتر ملاحظات حقيقية وقابلة للتشغيل موجودة في [`examples/dependency-freshness-checker/notebook.ar.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/dependency-freshness-checker/notebook.ar.ipynb). انقر على شارة لتشغيله مباشرة، دون أي تثبيت محلي على الإطلاق:
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/dependency-freshness-checker/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/dependency-freshness-checker/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fdependency-freshness-checker%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/dependency-freshness-checker/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/dependency-freshness-checker/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fdependency-freshness-checker%2Fnotebook.ar.ipynb)
 
 كن صادقًا مع نفسك بشأن المقايضة، مع ذلك: يمكن لدفتر الملاحظات التحقق فقط من محتوى `pyproject.toml` النموذجي الذي تلصقه فيه، لا التوجه إلى مجلد مشروع حقيقي على القرص كما يمكن لـCLI المحلي.
 

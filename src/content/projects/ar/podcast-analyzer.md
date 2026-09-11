@@ -34,9 +34,9 @@ prerequisites: ["python-101/strings", "python-101/file-io", "python-101/sets", "
 
 **Google Colab وKaggle Notebooks وBinder يشغّلون كل خطوة بأمانة** — لا GPU ولا أسرار ولا ملفات ضخمة — مقابل نص حلقة العينة المرافق للدورة (محادثة مزيفة واقعية مكتوبة يدويًا). التحفظ الصادق: يحلل الدفتر النص المرافق بدلًا من صوت تسجّله أنت. تحويل الكلام إلى نص فعلي لتسجيلاتك الخاصة يحتاج أداة منفصلة؛ كل ما بعد *النص* هو بالضبط ما يشغّله الدفتر فعليًا.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/podcast-analyzer/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/podcast-analyzer/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fpodcast-analyzer%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/podcast-analyzer/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/podcast-analyzer/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fpodcast-analyzer%2Fnotebook.ar.ipynb)
 
 ## الإعداد
 

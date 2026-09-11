@@ -38,6 +38,11 @@ learningObjectives:
 - **مكتبة JupyterLite التفاعلية.** الصق خلايا الكود مباشرة في دفتر ملاحظات — تعمل جيدًا لاستكشاف خطوات التحليل (1–5)، وإن كانت لوحة التحكم (الخطوة 5) تستفيد من طرفية حقيقية لحفظ الملفات.
 - **Google Colab.** افتح دفترًا جديدًا والصق الخلايا. نفس التحفظ كما في JupyterLite: حفظ الملفات يعمل أفضل في طرفية حقيقية.
 
+- **شغّله في المتصفح.** هناك دفتر ملاحظات تفاعلي جاهز — افتحه على Colab أو Kaggle أو Binder وتابع خطوة بخطوة.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-visualization/notebook.ar.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-visualization/notebook.ar.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fdata-visualization%2Fnotebook.ar.ipynb)
+
 ## الإعداد
 
 `uv` أداة واحدة تحل محل سلسلة "ثبّت بايثون، ثم pip، ثم بيئة افتراضية" المعتادة — إذ يمكنها تثبيت Python وإدارة إصداراته إلى جانب تبعيات مشروعك.

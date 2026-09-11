@@ -26,9 +26,9 @@ description: "تخرّج من بيئة البرمجة في المتصفح إلى
 
 **Google Colab وKaggle Notebooks أو Binder** تعمل أيضًا للدرس الأساسي — بلا تثبيت، مباشرة في متصفحك. يشحن المستودع دفتر ملاحظات جاهزًا للتشغيل يعكس تمامًا خطوات هذا الدرس:
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/email-triage-agent/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/email-triage-agent/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Femail-triage-agent%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/email-triage-agent/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/email-triage-agent/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Femail-triage-agent%2Fnotebook.ar.ipynb)
 
 انقر على شارة، شغّل الخلايا من الأعلى للأسفل، والصق مفتاح API من مستوى مجاني عند الطلب. هذه طريقة أقل دقة لتجربة المشروع من مشروع `uv` محلي فعلي (بلا ملفات منفصلة، بلا بنية مشروع حقيقية)، لذا عاملها كطريقة سريعة للتجربة بدلًا من المسار الأساسي.
 

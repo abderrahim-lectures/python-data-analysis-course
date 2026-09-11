@@ -38,9 +38,9 @@ prerequisites:
 
 **Google Colab وKaggle Notebooks وBinder** تشغّل كل خطوة بشكل متطابق — numpy مثبّت مسبقًا والحساب بالأعداد العائمة نفسه في كل مكان. التحفظ الصادق: لا يملك دفتر الملاحظات *ملفات المتحدث نفسه* افتراضيًا، لذا يركّب دفتر الملاحظات المثال نغمات جيبية ومقاطع بأسلوب الصيغ لتوضيح استخراج الميزات (كما يفعل هذا الدليل أدناه)، بدلًا من التظاهر باستنساخ تسجيل حقيقي. استخدم الشارات لرؤية الميزات وملفات التعريف محسوبة من البداية للنهاية؛ وانتقل إلى `uv` المحلي عندما تريد توجيه الأدوات إلى صوت حقيقي مملوك أخلاقيًا.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/voice-cloning-toolkit/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/voice-cloning-toolkit/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fvoice-cloning-toolkit%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/voice-cloning-toolkit/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/voice-cloning-toolkit/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fvoice-cloning-toolkit%2Fnotebook.ar.ipynb)
 
 ## الإعداد
 

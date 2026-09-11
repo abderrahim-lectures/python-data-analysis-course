@@ -23,11 +23,11 @@ Esto es opcional y no calificado — un buen ajuste una vez que hayas terminado 
 
 **GitHub Codespaces** es una alternativa de configuración cero si prefieres no instalar nada localmente todavía: abre [todo el repositorio del curso en un Codespace gratuito](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python y `uv` ya están instalados) y ejecuta los mismos comandos `uv` exactos desde una terminal en tu pestaña del navegador — además tendrás muchos archivos `pyproject.toml` reales cerca para apuntar la herramienta.
 
-**Google Colab, Kaggle Notebooks, o Binder** también funcionan, ya que este proyecto no necesita clave de API ni GPU — una versión real y ejecutable en notebook vive en [`examples/dependency-freshness-checker/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/dependency-freshness-checker/notebook.ipynb). Haz clic en una insignia para lanzarlo directamente, sin instalación local en absoluto:
+**Google Colab, Kaggle Notebooks, o Binder** también funcionan, ya que este proyecto no necesita clave de API ni GPU — una versión real y ejecutable en notebook vive en [`examples/dependency-freshness-checker/notebook.es.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/dependency-freshness-checker/notebook.es.ipynb). Haz clic en una insignia para lanzarlo directamente, sin instalación local en absoluto:
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/dependency-freshness-checker/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/dependency-freshness-checker/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fdependency-freshness-checker%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/dependency-freshness-checker/notebook.es.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/dependency-freshness-checker/notebook.es.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fdependency-freshness-checker%2Fnotebook.es.ipynb)
 
 Sé honesto contigo mismo sobre la compensación, sin embargo: un notebook solo puede verificar cualquier contenido de `pyproject.toml` de ejemplo que pegues en él, no apuntar a una carpeta de proyecto real en disco como puede hacerlo el CLI local.
 

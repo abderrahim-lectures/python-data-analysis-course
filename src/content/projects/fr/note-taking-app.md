@@ -28,6 +28,11 @@ Construisez une application de prise de notes en terminal qui stocke les notes a
 
 **Google Colab et les notebooks Kaggle** ne conviennent pas à ce projet — c'est une application CLI interactive qui nécessite un terminal persistant. Considérez-les comme inadaptés ici.
 
+- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt — ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/note-taking-app/notebook.fr.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/note-taking-app/notebook.fr.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fnote-taking-app%2Fnotebook.fr.ipynb)
+
 ## Setup
 
 ```bash

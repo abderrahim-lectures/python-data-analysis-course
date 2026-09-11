@@ -27,8 +27,8 @@ Si tu gardes des notes dans Obsidian, Notion, ou juste un simple dossier de fich
 
 Cela dit, si tu veux juste explorer les fonctions de recherche et de consultation en Python simple -- sans protocole MCP, sans processus serveur, sans Claude Desktop -- un notebook plus restreint existe exactement pour ça. Il démontre les fonctions de recherche/consultation sous-jacentes isolément, pas le serveur MCP en direct :
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/mcp-notes-server/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/mcp-notes-server/notebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/mcp-notes-server/notebook.fr.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/mcp-notes-server/notebook.fr.ipynb)
 
 Il appelle la même logique d'outils directement comme des fonctions ordinaires, sans décorateur, sans serveur, et sans connexion client -- utile pour expérimenter avec le code, pas un substitut au vrai projet ci-dessous.
 

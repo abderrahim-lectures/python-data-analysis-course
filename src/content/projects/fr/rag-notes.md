@@ -24,9 +24,9 @@ Ceci est optionnel et non noté. Voir [Projets concrets](/fr/projets) pour la li
 
 **Google Colab, les notebooks Kaggle, ou Binder** fonctionnent aussi, puisque ce projet — contrairement à celui du fine-tuning — ne nécessite aucun GPU. Un notebook prêt à l'emploi avec les exemples de notes déjà intégrés est inclus dans le dépôt, pour que vous n'ayez pas à copier-coller les cellules à la main :
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/rag-notes/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/rag-notes/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Frag-notes%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/rag-notes/notebook.fr.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/rag-notes/notebook.fr.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Frag-notes%2Fnotebook.fr.ipynb)
 
 Cliquez sur un badge, exécutez les cellules de haut en bas, et collez une clé API LLM gratuite quand c'est demandé. Soyez honnête avec vous-même sur le compromis : c'est une façon moins fidèle de vivre le projet qu'un vrai projet local `uv` — pas de fichiers séparés, pas de vraie structure de projet, juste des cellules dans un notebook. Traitez-le comme un moyen rapide d'expérimenter, pas comme le chemin principal.
 

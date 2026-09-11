@@ -29,6 +29,11 @@ Cada conjunto de datos hasta ahora llegó como un CSV listo. El análisis real r
 
 **Google Colab** puede funcionar para probar partes individuales del pipeline, pero la configuración local es más confiable para el flujo completo de trabajo.
 
+- **Ejecútalo en el navegador.** Hay un cuaderno interactivo listo — ábrelo en Colab, Kaggle o Binder y sigue los pasos en orden.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/scrape-analyze/notebook.es.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/scrape-analyze/notebook.es.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fscrape-analyze%2Fnotebook.es.ipynb)
+
 ## Configuración
 
 ### Instala `uv`

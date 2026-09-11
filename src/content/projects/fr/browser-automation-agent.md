@@ -25,6 +25,11 @@ C'est optionnel et non noté. Voir [Projets du monde réel](/fr/projets) pour la
 
 **Google Colab, Kaggle Notebooks ou Binder sont mal adaptés à ce projet en particulier**, et cette page saute délibérément une version notebook plutôt que d'en forcer une — un vrai navigateur Playwright a besoin d'un vrai binaire de navigateur plus un processus persistant qu'il contrôle étape par étape, ce qui ne correspond pas proprement au modèle de cellules sans état et sans fenêtre de navigateur local d'un notebook, contrairement aux appels `requests` du [projet scrape-analyze](/fr/projets/scrape-analyze). Si tu veux quand même expérimenter dans un notebook, la version honnête de cela n'est **pas** un vrai contrôle de navigateur du tout : simule une fausse « page » comme un simple dictionnaire Python de noms de champs et de types, donne à l'agent des outils qui lisent/écrivent ce dictionnaire au lieu d'une vraie page Playwright, et utilise-le pour démontrer seulement la *prise de décision* de l'agent — quel champ il pense correspondre à quelle information — sans qu'aucun vrai navigateur ne soit ouvert nulle part. C'est une façon légitime d'explorer le raisonnement de l'Étape 3 isolément, mais ce n'est pas ce projet ; traite-le comme un jouet, pas comme un substitut à la Configuration ci-dessous.
 
+- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt — ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/browser-automation-agent/notebook.fr.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/browser-automation-agent/notebook.fr.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fbrowser-automation-agent%2Fnotebook.fr.ipynb)
+
 ## Configuration
 
 ### Installe `uv`

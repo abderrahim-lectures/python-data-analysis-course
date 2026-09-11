@@ -39,9 +39,9 @@ Cela suppose Python 101 et rien de l'Analyse de Données — et cela ne requiert
 
 **Google Colab, Kaggle Notebooks et Binder sont un moyen authentique d'exécuter chaque étape**, parce que le générateur lui-même est du Python pur plus une bibliothèque installable par pip (`!pip install midiutil`). L'avertissement honnête : le système de fichiers du notebook est éphémère, donc le `.mid` que tu exportes y vit — télécharge-le avant que la session ne se ferme. Il n'y a aussi aucune sortie audio dans un notebook, donc tu voudras quand même tirer le fichier en local pour réellement *entendre* le résultat.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-music-composer/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-music-composer/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fai-music-composer%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-music-composer/notebook.fr.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-music-composer/notebook.fr.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fai-music-composer%2Fnotebook.fr.ipynb)
 
 ## Configuration
 

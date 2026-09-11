@@ -25,6 +25,11 @@ description: "ادمج أتمتة متصفح Playwright مع وكيل نموذج
 
 **Google Colab وKaggle Notebooks وBinder غير مناسبة لهذا المشروع بالتحديد**، وتتخطى هذه الصفحة عمدًا نسخة دفتر ملاحظات بدلًا من فرض واحدة — يحتاج متصفح Playwright الفعلي إلى ثنائي متصفح حقيقي بالإضافة إلى عملية مستمرة يتحكم بها خطوة بخطوة، وهذا لا يتوافق بسلاسة مع نموذج خلايا دفتر الملاحظات عديمة الحالة وبلا نافذة متصفح محلية، كما تفعل استدعاءات `requests` في [مشروع scrape-analyze](/ar/مشاريع/scrape-analyze). إذا أردت التجربة في دفتر ملاحظات على أي حال، فالنسخة الصادقة من ذلك **ليست** تحكمًا فعليًا بمتصفح على الإطلاق: حاكِ "صفحة" وهمية كقاموس Python بسيط لأسماء الحقول وأنواعها، وأعطِ الوكيل أدوات تقرأ/تكتب ذلك القاموس بدلًا من صفحة Playwright فعلية، واستخدمه لعرض *اتخاذ القرار* الخاص بالوكيل فقط — أي حقل يعتقد أنه يطابق أي معلومة — دون فتح أي متصفح فعلي في أي مكان. هذه طريقة مشروعة لاستكشاف منطق الخطوة 3 بمعزل، لكنها ليست هذا المشروع؛ عاملها كلعبة، لا كبديل عن الإعداد أدناه.
 
+- **شغّله في المتصفح.** هناك دفتر ملاحظات تفاعلي جاهز — افتحه على Colab أو Kaggle أو Binder وتابع خطوة بخطوة.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/browser-automation-agent/notebook.ar.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/browser-automation-agent/notebook.ar.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fbrowser-automation-agent%2Fnotebook.ar.ipynb)
+
 ## الإعداد
 
 ### ثبّت `uv`

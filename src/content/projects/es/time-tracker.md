@@ -36,9 +36,9 @@ Esto asume Python 101 y comodidad con los fundamentos de `datetime` — no se re
 
 **Google Colab, Kaggle Notebooks y Binder** ejecutan cada celda de código perfectamente bien (biblioteca estándar pura), y el notebook refleja cada paso con un ejemplo sembrado. La salvedad honesta: el sistema de archivos efímero y el reloj en sandbox de un notebook lo convierten en un camino de prueba — el `.csv` de *tus sesiones* no sobrevivirá, y `datetime.now()` en un notebook sigue siendo un reloj real si lo quieres. Usa las insignias para ver la lógica y cambia a `uv` local para la herramienta a la que confías tu semana.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/time-tracker/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/time-tracker/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Ftime-tracker%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/time-tracker/notebook.es.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/time-tracker/notebook.es.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Ftime-tracker%2Fnotebook.es.ipynb)
 
 ## Configuración
 

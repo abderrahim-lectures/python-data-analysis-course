@@ -24,11 +24,11 @@ Esto asume Python 101 — no se requiere nada de Análisis de Datos. Es opcional
 
 **GitHub Codespaces** funciona igual de bien, y es notablemente conveniente para este proyecto en particular: abre [todo el repositorio del curso en un Codespace gratuito](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python y `uv` ya están instalados, según el `.devcontainer/devcontainer.json` del repositorio) y ya estás sentado dentro de un entorno consciente de `git`/`gh` con una identidad real de GitHub adjunta — un ajuste natural para un proyecto que trata completamente sobre repositorios e issues de GitHub.
 
-**Google Colab o Kaggle Notebooks** también están bien aquí — este es un script ligero que llama a APIs sin servidor de archivos local ni proceso de larga duración que gestionar, así que `!pip install requests python-dotenv openai` en una celda seguido de pegar el código como celdas de notebook funciona sin mucha adaptación. Una versión de notebook lista está en [`examples/github-issue-triage-agent/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/github-issue-triage-agent/notebook.ipynb) si prefieres no pegar el código tú mismo:
+**Google Colab o Kaggle Notebooks** también están bien aquí — este es un script ligero que llama a APIs sin servidor de archivos local ni proceso de larga duración que gestionar, así que `!pip install requests python-dotenv openai` en una celda seguido de pegar el código como celdas de notebook funciona sin mucha adaptación. Una versión de notebook lista está en [`examples/github-issue-triage-agent/notebook.es.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/github-issue-triage-agent/notebook.es.ipynb) si prefieres no pegar el código tú mismo:
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/github-issue-triage-agent/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/github-issue-triage-agent/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fgithub-issue-triage-agent%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/github-issue-triage-agent/notebook.es.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/github-issue-triage-agent/notebook.es.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fgithub-issue-triage-agent%2Fnotebook.es.ipynb)
 
 ## Configuración
 

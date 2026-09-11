@@ -12,6 +12,11 @@ prerequisites: ["Python basics (variables, loops, functions, dictionaries)", "Ba
 
 Build a terminal-based note-taking application that stores notes as JSON, supports full-text search, tag-based organization, and exports to clean Markdown files. This project reinforces dictionary manipulation, file I/O, string processing, and building a user-facing CLI from scratch.
 
+- **Run it in your browser.** An interactive companion notebook is ready — open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/note-taking-app/notebook.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/note-taking-app/notebook.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fnote-taking-app%2Fnotebook.ipynb)
+
 ## What You'll Learn
 
 1. Design a data model for notes using dictionaries and JSON serialization

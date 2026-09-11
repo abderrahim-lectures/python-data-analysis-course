@@ -36,9 +36,9 @@ Cela suppose Python 101 et une certaine aisance avec les générateurs — aucun
 
 **Google Colab, Kaggle Notebooks et Binder** exécutent chaque étape à l'identique, car il n'y a aucune dépendance externe à installer ni fichier à conserver entre les cellules. L'honnêteté impose de préciser : les cellules d'un notebook remplacent la *sortie terminal* de ce moteur par la sortie du notebook, donc ce que tu perds, c'est le ressenti « relance le flux et regarde-le changer ». Utilise les badges pour voir tout le pipeline en un clic, et passe au `uv` local une fois que tu veux pointer le générateur vers un vrai fichier ou une vraie socket.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/streaming-analytics/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/streaming-analytics/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fstreaming-analytics%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/streaming-analytics/notebook.fr.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/streaming-analytics/notebook.fr.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fstreaming-analytics%2Fnotebook.fr.ipynb)
 
 ## Configuration
 

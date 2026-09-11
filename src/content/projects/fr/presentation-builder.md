@@ -35,9 +35,9 @@ Cela suppose le Python 101 — entrées-sorties de fichiers, chaînes et fonctio
 
 **Google Colab, les notebooks Kaggle et Binder exécutent tout le pipeline d'analyse-et-rendu pour de vrai** — rien ici n'a besoin d'une clé ou d'un GPU. La réserve honnête concerne le dernier kilomètre : le notebook affiche le HTML généré et peut le déverser dans un fichier à télécharger, mais la *boucle de rafraîchissement d'onglet de navigateur* est là où un constructeur de diapositives gagne sa vie, et c'est une expérience de fichier local. Utilise le notebook pour apprendre la machinerie ; construis ton vrai deck en local.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/presentation-builder/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/presentation-builder/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fpresentation-builder%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/presentation-builder/notebook.fr.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/presentation-builder/notebook.fr.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fpresentation-builder%2Fnotebook.fr.ipynb)
 
 ## Configuration
 

@@ -28,8 +28,8 @@ MCP est l'un des motifs les plus activement adoptés en ce moment pour étendre 
 
 Cela dit, si vous voulez juste examiner `search_course_topics` et `count_words` en tant que Python ordinaire — pas de protocole MCP, pas de processus serveur, pas de Claude Desktop — un notebook plus restreint existe exactement pour ça :
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/mcp-server/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/mcp-server/notebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/mcp-server/notebook.fr.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/mcp-server/notebook.fr.ipynb)
 
 Il appelle la même logique d'outils directement en tant que fonctions ordinaires, sans décorateur, sans serveur, et sans connexion client — utile pour expérimenter avec le code, pas un substitut au vrai projet ci-dessus.
 

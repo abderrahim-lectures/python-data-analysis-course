@@ -36,9 +36,9 @@ prerequisites:
 
 **Google Colab و Kaggle Notebooks و Binder** تشغّل المحرك كله (يعيش SQLite بسعادة في دفتر، والدفتر المثالي حتى يمرّن الـ API عبر `TestClient` الخاص بـ FastAPI دون ربط منفذ). التنبيه الصادق: الدفتر مسار تجربة لـ*الخدمة* — لن تترك خادمًا يعمل طويلًا هناك، وملف SQLite مؤقت. استخدم الشارات لتجربة المحرك + test-client، وشغّل `uvicorn` محليًا عندما تريد الشيء الحقيقي.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/url-shortener/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/url-shortener/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Furl-shortener%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/url-shortener/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/url-shortener/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Furl-shortener%2Fnotebook.ar.ipynb)
 
 ## الإعداد
 

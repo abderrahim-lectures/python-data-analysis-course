@@ -27,8 +27,8 @@ description: "فهرس مجلد Markdown حقيقي لملاحظات واعرض�
 
 مع ذلك، إن أردت فقط استكشاف دوال البحث والاستعلام كبايثون بسيط -- بلا بروتوكول MCP، بلا عملية خادم، بلا Claude Desktop -- يوجد دفتر ملاحظات أضيق لذلك بالضبط. يعرض دوال البحث/الاستعلام الأساسية بمعزل، لا خادم MCP الحي:
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/mcp-notes-server/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/mcp-notes-server/notebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/mcp-notes-server/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/mcp-notes-server/notebook.ar.ipynb)
 
 يستدعي نفس منطق الأدوات مباشرة كدوال عادية، بلا زخرفة، بلا خادم، وبلا اتصال عميل -- مفيد للتجريب مع الكود، لا بديل عن المشروع الفعلي أدناه.
 

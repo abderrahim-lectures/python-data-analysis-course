@@ -23,11 +23,11 @@ description: "استخرج بيانات من مصادر متعددة بأسلو�
 
 **GitHub Codespaces** بديل بلا إعداد إذا كنت تفضّل عدم تثبيت أي شيء محليًا بعد: افتح [مستودع الدورة كاملًا في Codespace مجاني](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node وPython وuv مثبّتة بالفعل، وفق `.devcontainer/devcontainer.json` الخاص بالمستودع) وشغّل نفس أوامر `uv` تمامًا من طرفية في تبويب متصفحك.
 
-**Google Colab وKaggle Notebooks أو Binder** ملاءمة جيدة فعليًا لهذا المشروع بالتحديد — بلا GPU، بلا مفتاح API، بلا عملية طويلة التشغيل لإدارتها، ويناسب خط الأنابيب بأكمله براحة حفنة من الخلايا. نسخة دفتر ملاحظات حقيقية وقابلة للتشغيل (نفس المحلِّلات، ومفتاح إزالة التكرار، ومرشِّح الكلمات المفتاحية كما في الخطوات أدناه) موجودة في [`examples/job-aggregator/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/job-aggregator/notebook.ipynb). انقر على شارة لتشغيله مباشرة، دون أي تثبيت محلي على الإطلاق:
+**Google Colab وKaggle Notebooks أو Binder** ملاءمة جيدة فعليًا لهذا المشروع بالتحديد — بلا GPU، بلا مفتاح API، بلا عملية طويلة التشغيل لإدارتها، ويناسب خط الأنابيب بأكمله براحة حفنة من الخلايا. نسخة دفتر ملاحظات حقيقية وقابلة للتشغيل (نفس المحلِّلات، ومفتاح إزالة التكرار، ومرشِّح الكلمات المفتاحية كما في الخطوات أدناه) موجودة في [`examples/job-aggregator/notebook.ar.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/job-aggregator/notebook.ar.ipynb). انقر على شارة لتشغيله مباشرة، دون أي تثبيت محلي على الإطلاق:
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/job-aggregator/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/job-aggregator/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fjob-aggregator%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/job-aggregator/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/job-aggregator/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fjob-aggregator%2Fnotebook.ar.ipynb)
 
 كن صادقًا مع نفسك بشأن المقايضة، مع ذلك: هذه طريقة أقل دقة لتجربة المشروع من مشروع `uv` محلي فعلي — بلا ملفات منفصلة، بلا بنية مشروع حقيقية، مجرد خلايا في دفتر ملاحظات. عامِلها كطريقة سريعة للتجربة، لا المسار الأساسي.
 

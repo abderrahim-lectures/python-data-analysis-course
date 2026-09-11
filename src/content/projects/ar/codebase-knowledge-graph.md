@@ -27,11 +27,11 @@ description: "تخرّج من بيئة البرمجة في المتصفح إلى
 
 **Google Colab أو Kaggle Notebooks** خيار سهل فعلًا أيضًا، لا مجرد بديل احتياطي — هذا المشروع لا يحتاج GPU، ولا عملية خادم طويلة التشغيل، ولا مفتاح API، فقط `pip install` وحساب بحت. نفّذ `!pip install networkx pyvis` في خلية، ثم إما `!git clone` لمستودع عام لتحليله أو ارفع مجلدًا صغيرًا من ملفات `.py`، وبقية الكود أدناه يعمل دون تغيير أساسًا (يمكن حتى عرض مخرجات HTML الخاصة بـpyvis مضمَّنة في خلية دفتر ملاحظات).
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/codebase-knowledge-graph/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/codebase-knowledge-graph/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fcodebase-knowledge-graph%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/codebase-knowledge-graph/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/codebase-knowledge-graph/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fcodebase-knowledge-graph%2Fnotebook.ar.ipynb)
 
-دفتر ملاحظات جاهز بكل الكود أدناه — بما في ذلك ملفات `sample_repo/` التجريبية مكتوبة مضمَّنة، لذا لا شيء لرفعه أو استنساخه — موجود في [`examples/codebase-knowledge-graph/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/codebase-knowledge-graph/notebook.ipynb). انقر على شارة أعلاه لتشغيله مباشرة.
+دفتر ملاحظات جاهز بكل الكود أدناه — بما في ذلك ملفات `sample_repo/` التجريبية مكتوبة مضمَّنة، لذا لا شيء لرفعه أو استنساخه — موجود في [`examples/codebase-knowledge-graph/notebook.ar.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/codebase-knowledge-graph/notebook.ar.ipynb). انقر على شارة أعلاه لتشغيله مباشرة.
 
 ## الإعداد
 

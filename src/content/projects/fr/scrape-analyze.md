@@ -12,6 +12,11 @@ prerequisites: ["Python basics", "Basic pandas", "Basic matplotlib"]
 
 Jusqu'à présent, chaque jeu de données est arrivé sous forme de CSV prêt à l'emploi. La vraie analyse commence rarement là. Ce projet vous apprend à récupérer une page web en direct via HTTP, à analyser le HTML en lignes structurées, à nettoyer le résultat avec pandas, et à produire des graphiques — aucune clé API, aucun service externe, juste votre script et un serveur.
 
+- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt — ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/scrape-analyze/notebook.fr.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/scrape-analyze/notebook.fr.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fscrape-analyze%2Fnotebook.fr.ipynb)
+
 ## 🎯 Ce que vous allez apprendre
 
 1. Récupérer des pages web avec `requests`.

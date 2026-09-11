@@ -34,9 +34,9 @@ Esto asume Python 101 — cadenas, I/O de archivos, bucles y funciones. Nada má
 
 **Google Colab, Kaggle Notebooks y Binder son una opción genuinamente buena para cada paso de abajo** — no hay secretos, ni GPU, y toda la canalización son unas pocas celdas corriendo sobre la transcripción de muestra incluida en el curso (que es una reunión realista escrita a mano). La salvedad honesta: el notebook usa esa transcripción de ejemplo fija en lugar de audio que grabes. El reconocimiento de voz real necesitaría una llave de API gratuita, y esa parte la cubre un paso opcional — para *el resumidor en sí*, un notebook lo ejecuta de verdad.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/meeting-transcriber/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/meeting-transcriber/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fmeeting-transcriber%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/meeting-transcriber/notebook.es.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/meeting-transcriber/notebook.es.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fmeeting-transcriber%2Fnotebook.es.ipynb)
 
 ## Configuración
 

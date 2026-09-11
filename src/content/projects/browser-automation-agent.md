@@ -47,6 +47,11 @@ demo only the agent's *decision-making* — which field it thinks matches which 
 with no actual browser opened anywhere. That's a legitimate way to explore Step 3's reasoning in
 isolation, but it is not this project; treat it as a toy, not a substitute for Setup below.
 
+- **Run it in your browser.** An interactive companion notebook is ready — open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/browser-automation-agent/notebook.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/browser-automation-agent/notebook.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fbrowser-automation-agent%2Fnotebook.ipynb)
+
 ## Setup
 
 ### Install `uv`

@@ -36,9 +36,9 @@ Cela suppose le Python 101 et une aisance avec le `groupby` de pandas — rien d
 
 **Google Colab, les Notebooks Kaggle et Binder** sont des moyens raisonnables d'*essayer* la construction complète — pandas et matplotlib y tournent tous deux d'emblée. La limite honnête est que le système de fichiers éphémère d'un notebook ne conserve pas ton `posts.csv` ni ton rapport sauvegardé d'une session à l'autre, donc traite-les comme des chemins d'essai et passe au `uv` local quand tu veux que le calendrier et les artefacts du rapport persistent.
 
-[![Ouvrir dans Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/social-media-manager/notebook.ipynb)
-[![Ouvrir dans Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/social-media-manager/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsocial-media-manager%2Fnotebook.ipynb)
+[![Ouvrir dans Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/social-media-manager/notebook.fr.ipynb)
+[![Ouvrir dans Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/social-media-manager/notebook.fr.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsocial-media-manager%2Fnotebook.fr.ipynb)
 
 ## Configuration
 

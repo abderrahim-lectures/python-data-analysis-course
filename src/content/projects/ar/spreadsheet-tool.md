@@ -10,6 +10,11 @@ prerequisites: ["أساسيات بايثون (المتغيرات، الحلقا�
 
 # معالج الجداول الإلكترونية
 
+- **شغّله في المتصفح.** هناك دفتر ملاحظات تفاعلي جاهز — افتحه على Colab أو Kaggle أو Binder وتابع خطوة بخطوة.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/spreadsheet-tool/notebook.ar.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/spreadsheet-tool/notebook.ar.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fspreadsheet-tool%2Fnotebook.ar.ipynb)
+
 ## ما ستبنيه
 
 أداة سطر أوامر تقرأ ملفات CSV و Excel وتستكشف البيانات وتحولها وتصدّر النتائج. على طول الطريق، ستتعلّم سير عمل pandas الأساسي الذي يدعم تقريبًا كل مهمة تحليل بيانات.

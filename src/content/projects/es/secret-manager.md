@@ -34,9 +34,9 @@ Esto asume Python 101 — E/S de archivos, diccionarios, funciones. No se requie
 
 **Google Colab, Kaggle Notebooks y Binder ejecutan el pipeline completo honestamente** — AES-256-GCM es criptografía local sin claves ni red, así que cifrar, almacenar, descifrar, auditar, rotar y detectar manipulaciones funcionan en un notebook igual que en una shell. La única advertencia es filosófica: el cifrado solo es tan bueno como el *manejo* de claves, y el lugar honesto del notebook es "aprende el primitivo y la disciplina de auditoría" — la lección de que clave-en-disco-junto-a-datos es teatro, que debes experimentar leyendo el código, no confiando en una insignia.
 
-[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/secret-manager/notebook.ipynb)
-[![Abrir en Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/secret-manager/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsecret-manager%2Fnotebook.ipynb)
+[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/secret-manager/notebook.es.ipynb)
+[![Abrir en Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/secret-manager/notebook.es.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsecret-manager%2Fnotebook.es.ipynb)
 
 ## Configuración
 

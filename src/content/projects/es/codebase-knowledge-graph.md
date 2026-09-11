@@ -27,11 +27,11 @@ Esto asume Python 101 y comodidad con funciones e imports — no se requiere nad
 
 **Google Colab o Kaggle Notebooks** son una opción genuinamente fácil también, no solo un respaldo — este proyecto no necesita GPU, ni un proceso de servidor de larga duración, ni clave de API, solo `pip install`s y computación pura. Haz `!pip install networkx pyvis` en una celda, luego ya sea `!git clone` de un repositorio público para analizar o sube una pequeña carpeta de archivos `.py`, y el resto del código de abajo funciona esencialmente sin cambios (la salida HTML de pyvis incluso puede mostrarse en línea en una celda de notebook).
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/codebase-knowledge-graph/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/codebase-knowledge-graph/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fcodebase-knowledge-graph%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/codebase-knowledge-graph/notebook.es.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/codebase-knowledge-graph/notebook.es.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fcodebase-knowledge-graph%2Fnotebook.es.ipynb)
 
-Un notebook listo con todo el código de abajo — incluyendo los archivos de juguete `sample_repo/` escritos en línea, así que no hay nada que subir o clonar — está en [`examples/codebase-knowledge-graph/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/codebase-knowledge-graph/notebook.ipynb). Haz clic en una insignia de arriba para lanzarlo directamente.
+Un notebook listo con todo el código de abajo — incluyendo los archivos de juguete `sample_repo/` escritos en línea, así que no hay nada que subir o clonar — está en [`examples/codebase-knowledge-graph/notebook.es.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/codebase-knowledge-graph/notebook.es.ipynb). Haz clic en una insignia de arriba para lanzarlo directamente.
 
 ## Configuración
 

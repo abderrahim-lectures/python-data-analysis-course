@@ -12,6 +12,11 @@ prerequisites: ["أساسيات بايثون (المتغيرات، الحلقا�
 
 ابنِ تطبيق أخذ ملاحظات قائمًا على الطرفية يخزّن الملاحظات بصيغة JSON، ويدعم البحث كامل النص، والتنظيم بالعلامات، والتصدير إلى ملفات Markdown نظيفة. يعزّز هذا المشروع التلاعب بالقواميس وقراءة/كتابة الملفات ومعالجة النصوص وبناء واجهة CLI موجّهة للمستخدم من الصفر.
 
+- **شغّله في المتصفح.** هناك دفتر ملاحظات تفاعلي جاهز — افتحه على Colab أو Kaggle أو Binder وتابع خطوة بخطوة.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/note-taking-app/notebook.ar.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/note-taking-app/notebook.ar.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fnote-taking-app%2Fnotebook.ar.ipynb)
+
 ## ما ستتعلمه
 
 1. تصميم نموذج بيانات للملاحظات باستخدام القواميس وتسلسل JSON

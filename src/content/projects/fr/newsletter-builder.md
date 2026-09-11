@@ -35,9 +35,9 @@ Ceci suppose Python 101 et l'aisance avec les fonctions, les dictionnaires et le
 
 **Google Colab, Binder et Kaggle Notebooks** exécutent le tout à l'identique : `!pip install pandas` une fois, puis chaque étape ci-dessous, le notebook renvoyant les mêmes éditions rendues et tableaux d'analytique. **JupyterLite** peut exécuter les étapes de modèles et d'abonnés dans le navigateur, et pandas y est aussi disponible — l'avertissement honnête est le même que partout dans cette série : les fichiers créés dans le navigateur vivent sur un système de fichiers virtuel éphémère, donc considère-le comme un chemin d'essai et utilise `uv` en local quand tu veux que `subscribers.csv` et `issues/` persistent réellement.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/newsletter-builder/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/newsletter-builder/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fnewsletter-builder%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/newsletter-builder/notebook.fr.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/newsletter-builder/notebook.fr.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fnewsletter-builder%2Fnotebook.fr.ipynb)
 
 ## Configuration
 

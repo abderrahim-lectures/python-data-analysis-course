@@ -36,9 +36,9 @@ prerequisites:
 
 **Google Colab و Kaggle Notebooks و Binder** تشغّل كل الخطوات بشكل متماثل، لأن لا تبعيّات خارجية للتثبيت ولا ملفات تحتاج أن تبقى بين الخلايا. التنبيه الصادق: خلايا الدفتر تستبدل *مخرجات الطرفية* للمحرك بمخرجات الدفتر، فما تفقده هو إحساس "أعد تشغيل التدفق وشاهد التغيّر". استخدم الشارات لرؤية خط التدفق الكامل بنقرة واحدة، وانتقل إلى `uv` المحلي حين تريد توجيه المولّد إلى ملف أو مأخذ حقيقي.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/streaming-analytics/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/streaming-analytics/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fstreaming-analytics%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/streaming-analytics/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/streaming-analytics/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fstreaming-analytics%2Fnotebook.ar.ipynb)
 
 ## الإعداد
 

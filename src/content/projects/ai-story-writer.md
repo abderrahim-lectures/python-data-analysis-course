@@ -41,6 +41,11 @@ This is optional and ungraded. See [Real-World Projects](/projects) for the full
 - **Google Colab or Kaggle Notebooks.** Paste the code cells directly into a notebook.
 - **JupyterLite playground.** Paste the code cells directly into a notebook — file I/O is not required, so everything works in the browser.
 
+- **Run it in your browser.** An interactive companion notebook is ready — open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-story-writer/notebook.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-story-writer/notebook.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fai-story-writer%2Fnotebook.ipynb)
+
 ## Setup
 
 `uv` is a single tool that replaces the usual "install Python, then pip, then a virtual environment, then packages" chain — it manages Python versions and dependencies together.

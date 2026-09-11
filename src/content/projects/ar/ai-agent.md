@@ -24,11 +24,11 @@ description: "تخرّج من بيئة اللعب داخل المتصفح إلى
 
 **GitHub Codespaces** بديل بلا أي إعداد إن كنت تفضّل عدم تثبيت أي شيء محليًا الآن: افتح [مستودع الدورة كاملاً في Codespace مجاني](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node وPython وuv مثبّتة مسبقًا، حسب ملف `.devcontainer/devcontainer.json` الخاص بالمستودع) وشغّل نفس أوامر `uv` تمامًا من طرفية في تبويب متصفحك.
 
-**Google Colab أو Kaggle Notebooks أو Binder** تعمل أيضًا، لأن هذا المشروع لا يحتاج GPU — نسخة دفتر ملاحظات حقيقية وقابلة للتشغيل من وكيل هذا المشروع (نفس الأدوات التجريبية وإعداد `create_deep_agent` كما في الخطوة 1 أدناه) موجودة في [`examples/ai-agent/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-agent/notebook.ipynb). انقر على شارة لتشغيله مباشرة، دون أي تثبيت محلي على الإطلاق:
+**Google Colab أو Kaggle Notebooks أو Binder** تعمل أيضًا، لأن هذا المشروع لا يحتاج GPU — نسخة دفتر ملاحظات حقيقية وقابلة للتشغيل من وكيل هذا المشروع (نفس الأدوات التجريبية وإعداد `create_deep_agent` كما في الخطوة 1 أدناه) موجودة في [`examples/ai-agent/notebook.ar.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-agent/notebook.ar.ipynb). انقر على شارة لتشغيله مباشرة، دون أي تثبيت محلي على الإطلاق:
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-agent/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-agent/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fai-agent%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-agent/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-agent/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fai-agent%2Fnotebook.ar.ipynb)
 
 كن صريحًا مع نفسك بشأن المقايضة رغم ذلك: هذه طريقة أقل دقة لتجربة المشروع مقارنة بمشروع `uv` محلي حقيقي — لا ملفات منفصلة، لا بنية مشروع حقيقية، مجرد خلايا في دفتر ملاحظات. تعامل معها كطريقة سريعة للتجربة، لا كالمسار الأساسي.
 

@@ -23,10 +23,10 @@ description: "ابنِ خادم MCP يعرض قاعدة بيانات SQLite مح
 
 **GitHub Codespaces** يعمل لبناء قاعدة البيانات وكتابة دوال الأدوات والخادم نفسه: افتح [مستودع الدورة بالكامل في Codespace مجاني](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node وPython وuv مثبتة مسبقًا)، واكتب `seed.py` و`db_tools.py` و`server.py`، واختبر باستخدام MCP Inspector عبر المنفذ المُحوَّل الخاص بـ Codespace. ما لا يمكن أن يكونه هو نقطة الاتصال النهائية مع Claude Desktop، لنفس السبب في مشروع MCP السابق.
 
-**Google Colab وKaggle أيضًا لا يمكنهما تشغيل الخادم الحقيقي** — نفس المنطق كما في بناء خادم MCP، فخلية دفتر الملاحظات لا يمكن أن تكون عملية محلية دائمة يتصل بها عميل سطح مكتب. ما يمكن لدفتر الملاحظات فعله هنا هو عرض دوال الاستعلام وفحص المخطط الأساسية بمعزل، عبر استدعاءات دوال بسيطة ودون أي بروتوكول MCP على الإطلاق — لهذا وُجد [`examples/mcp-sqlite-server/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/mcp-sqlite-server/notebook.ipynb). انقر على شارة لتشغيله مباشرةً، دون أي تثبيت محلي على الإطلاق:
+**Google Colab وKaggle أيضًا لا يمكنهما تشغيل الخادم الحقيقي** — نفس المنطق كما في بناء خادم MCP، فخلية دفتر الملاحظات لا يمكن أن تكون عملية محلية دائمة يتصل بها عميل سطح مكتب. ما يمكن لدفتر الملاحظات فعله هنا هو عرض دوال الاستعلام وفحص المخطط الأساسية بمعزل، عبر استدعاءات دوال بسيطة ودون أي بروتوكول MCP على الإطلاق — لهذا وُجد [`examples/mcp-sqlite-server/notebook.ar.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/mcp-sqlite-server/notebook.ar.ipynb). انقر على شارة لتشغيله مباشرةً، دون أي تثبيت محلي على الإطلاق:
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/mcp-sqlite-server/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/mcp-sqlite-server/notebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/mcp-sqlite-server/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/mcp-sqlite-server/notebook.ar.ipynb)
 
 ## الإعداد
 

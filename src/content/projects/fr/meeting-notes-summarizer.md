@@ -28,9 +28,9 @@ Ceci est optionnel et non noté. Voir [Projets du monde réel](/fr/projets) pour
 **Google Colab, Kaggle Notebooks, ou Binder** fonctionnent bien aussi, et sont de bonnes options ici — ce projet est un script léger qui effectue une poignée d'appels API, pas quelque chose qui a besoin d'un GPU ou d'une vraie structure de projet pour être utile. Une version notebook prête à l'emploi est fournie avec ce projet — clique sur un badge ci-dessous pour l'ouvrir, aucune configuration locale requise — ou crée ton propre notebook, exécute `!pip install openai python-dotenv` dans une cellule, colle les scripts ci-dessous en tant que cellules, et définis ta clé API avec un secret de notebook (Colab) ou une variable d'environnement au lieu d'un fichier `.env`.
 
 {/* TODO: update these badge links to point at main once this PR merges */}
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/meeting-notes-summarizer/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/meeting-notes-summarizer/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fmeeting-notes-summarizer%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/meeting-notes-summarizer/notebook.fr.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/meeting-notes-summarizer/notebook.fr.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fmeeting-notes-summarizer%2Fnotebook.fr.ipynb)
 
 ## Configuration
 

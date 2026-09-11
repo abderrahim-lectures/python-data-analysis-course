@@ -34,9 +34,9 @@ Cela suppose le Python 101 — entrées-sorties de fichiers, chaînes, et foncti
 
 **Google Colab, les notebooks Kaggle et Binder exécutent honnêtement tout le pipeline** — génération de code, recoloration, tampon de logo, et validation de lot sont toutes des mathématiques d'image locales sans clés ni GPU — et le notebook peut même afficher le PNG généré intégré pour que tu *voies* la matrice avant de jamais l'enregistrer. La seule chose qui ne peut pas arriver dans un notebook, c'est toi tenant ton téléphone contre l'écran — ce qui est exactement la vérification de scan que tu voudras faire en local dès que les fichiers atterrissent.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/qr-code-studio/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/qr-code-studio/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fqr-code-studio%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/qr-code-studio/notebook.fr.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/qr-code-studio/notebook.fr.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fqr-code-studio%2Fnotebook.fr.ipynb)
 
 ## Configuration
 

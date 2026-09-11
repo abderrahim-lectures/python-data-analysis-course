@@ -43,6 +43,11 @@ C'est optionnel et non noté. Vois [Projets du monde réel](/fr/projets) pour la
 - **Playground JupyterLite.** Colle les blocs de code dans des cellules et exécute-les dans le navigateur. L'étape de vérification des fuites a besoin d'une connexion réseau ; l'étape du coffre-fort crée des fichiers dans le stockage éphémère du navigateur.
 - **Google Colab.** Clique sur le badge Colab sur la page du projet pour l'exécuter dans un notebook cloud. Note que les fichiers de coffre-fort créés dans Colab ne survivent pas entre deux sessions.
 
+- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt — ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/password-generator/notebook.fr.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/password-generator/notebook.fr.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fpassword-generator%2Fnotebook.fr.ipynb)
+
 ## Configuration
 
 `uv` est un outil unique qui remplace la chaîne habituelle « installe Python, puis pip, puis un environnement virtuel, puis les paquets » — il gère ensemble les versions de Python et les dépendances.

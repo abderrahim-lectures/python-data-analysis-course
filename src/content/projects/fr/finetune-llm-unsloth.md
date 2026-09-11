@@ -27,8 +27,8 @@ Le projet Agent IA tourne entièrement sur ta propre machine. Celui-ci ne le peu
 
 Si tu préfères essayer les étapes de préparation de données et d'inférence locales dans un notebook hébergé au lieu d'utiliser `uv`, il y a un notebook compagnon fait pour cela :
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/finetune-llm-unsloth/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/finetune-llm-unsloth/notebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/finetune-llm-unsloth/notebook.fr.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/finetune-llm-unsloth/notebook.fr.ipynb)
 
 Ce badge couvre seulement les étapes **locales** (préparation des données et inférence) — l'étape d'affinage elle-même utilise encore le notebook officiel de Unsloth, lié séparément dans l'Étape 2.
 

@@ -37,6 +37,11 @@ Cela suppose les bases de Python, la POO intermédiaire, et assez de connaissanc
 
 **Google Colab** peut tester des points de terminaison individuels avec `nest_asyncio`, mais c'est un contournement, pas une approche naturelle — aucun serveur persistant, aucun vrai système de fichiers pour ton projet. Utilise-le pour essayer des choses, pas pour construire.
 
+- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt — ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/rest-api-builder/notebook.fr.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/rest-api-builder/notebook.fr.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Frest-api-builder%2Fnotebook.fr.ipynb)
+
 ## Configuration
 
 Tout ce dont tu as besoin avant d'écrire une ligne de l'API elle-même : un vrai Python, les bons paquets, et un dossier de projet fonctionnel.

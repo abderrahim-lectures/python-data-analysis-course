@@ -38,9 +38,9 @@ Cela suppose Python 101, l'aisance avec numpy et une familiarité passagère ave
 
 **Google Colab, Kaggle Notebooks et Binder** exécutent chaque étape de manière identique — numpy est pré-installé et les calculs en virgule flottante sont les mêmes partout. L'honnêteté impose de préciser : un notebook n'a par défaut aucun *fichier du locuteur*, donc le notebook d'exemple synthétise des clips de style sinusoïdal et formantique pour démontrer l'extraction de caractéristiques (comme ce guide le fait ci-dessous), plutôt que de prétendre cloner un vrai enregistrement. Utilise les badges pour voir les caractéristiques et les profils calculés de bout en bout ; passe au `uv` local quand tu veux pointer la boîte à outils sur un vrai audio, possédé éthiquement.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/voice-cloning-toolkit/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/voice-cloning-toolkit/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fvoice-cloning-toolkit%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/voice-cloning-toolkit/notebook.fr.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/voice-cloning-toolkit/notebook.fr.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fvoice-cloning-toolkit%2Fnotebook.fr.ipynb)
 
 ## Configuration
 

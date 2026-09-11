@@ -36,9 +36,9 @@ prerequisites:
 
 **Google Colab و Kaggle Notebooks و Binder** يمكنها تشغيل خلايا الكود بشكل جيد — كلها تملك بايثون والمكتبة المعيارية. التنبيه الصادق: نظام ملفات الدفتر مؤقت، ف `tasks.json` قد لا ي survives عبر الجلسات، فتعامل تلك المسارات كـ "شاهد المنطق يعمل مرة واحدة" بدلاً من "احتفظ بمهامي الحقيقية". استخدم الشارات لتجربة الكود، وانتقل إلى `uv` المحلي للأداة التي تعتمد عليها فعلًا.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/task-manager/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/task-manager/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Ftask-manager%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/task-manager/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/task-manager/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Ftask-manager%2Fnotebook.ar.ipynb)
 
 ## الإعداد
 

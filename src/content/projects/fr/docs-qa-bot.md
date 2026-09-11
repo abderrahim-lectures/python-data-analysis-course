@@ -30,9 +30,9 @@ C'est optionnel et non noté. Voir [Projets du monde réel](/fr/projets) pour la
 
 Cela dit, le pipeline RAG *sous-jacent* au bot — découpage, embedding, récupération, et génération — n'est que du code normal qui s'exécute une cellule à la fois, ce en quoi les notebooks excellent justement. Les badges ci-dessous ouvrent un notebook qui parcourt ce pipeline central contre la documentation d'exemple du projet et affiche de vraies réponses récupérées-et-générées, pour que tu puisses le voir fonctionner sans rien installer localement. Il s'arrête délibérément avant la couche Discord — pour ça, reviens ici et exécute `bot.py` en local ou dans Codespaces comme décrit ci-dessus.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/docs-qa-bot/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/docs-qa-bot/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fdocs-qa-bot%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/docs-qa-bot/notebook.fr.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/docs-qa-bot/notebook.fr.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fdocs-qa-bot%2Fnotebook.fr.ipynb)
 
 ## Configuration
 

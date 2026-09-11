@@ -21,6 +21,11 @@ prerequisites:
 
 Construis un tableau de bord terminal qui récupère des données météo en temps réel depuis l'API Open-Meteo, les traite avec pandas, dessine des graphiques avec matplotlib et affiche un résumé hebdomadaire coloré. Chaque étape te fournit du code fonctionnel que tu peux exécuter immédiatement.
 
+- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt — ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/weather-dashboard/notebook.fr.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/weather-dashboard/notebook.fr.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fweather-dashboard%2Fnotebook.fr.ipynb)
+
 ## 🎯 Ce que tu vas faire
 
 Un script Python qui :

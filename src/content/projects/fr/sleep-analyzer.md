@@ -34,9 +34,9 @@ Cela suppose le Python 101 — chaînes, datetime, entrées-sorties de fichiers,
 
 **Google Colab, les Notebooks Kaggle et Binder gèrent l'*analyse* honnêtement** — le calcul de durée, la notation de qualité et la moyenne CSV sont du Python pur et s'exécutent à l'identique dans un notebook, où le graphique de tendance ou le tableau de moyennes se rend comme une sortie de cellule. La seule chose qu'un notebook ne peut pas faire est de *demander en interactif* comme le fait un terminal — donc dans un notebook tu nourrirais une liste d'entrées codées en dur ou saisies durement (ou chargées depuis le CSV) plutôt que `input()`. Les deux sont le même moteur ; seule la source d'entrée diffère.
 
-[![Ouvrir dans Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/sleep-analyzer/notebook.ipynb)
-[![Ouvrir dans Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/sleep-analyzer/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsleep-analyzer%2Fnotebook.ipynb)
+[![Ouvrir dans Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/sleep-analyzer/notebook.fr.ipynb)
+[![Ouvrir dans Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/sleep-analyzer/notebook.fr.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsleep-analyzer%2Fnotebook.fr.ipynb)
 
 ## Configuration
 

@@ -34,9 +34,9 @@ prerequisites: ["python-101/functions", "python-101/data-structures", "python-10
 
 **Google Colab وKaggle Notebooks وBinder يشغّلون كل خطوة من المحرك بأمانة** — `ast` مكتبة قياسية خالصة، بلا GPU ولا مفاتيح — لكن *المنتج* هنا CLI فوق ملفات، والدفاتر الركيزة الخطأ لـ"شغّل هذا على مجلد مشروعي كله". يفحص الدفتر ملفه الخام المرافق فترى المحرك يعمل من البداية للنهاية؛ وبدّل إلى المحلي لحالة الاستخدام الفعلية بنمط `python -m pylint`.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/python-linter/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/python-linter/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fpython-linter%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/python-linter/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/python-linter/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fpython-linter%2Fnotebook.ar.ipynb)
 
 ## الإعداد
 

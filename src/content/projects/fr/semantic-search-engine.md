@@ -34,9 +34,9 @@ Cela suppose le Python 101 plus les modules NumPy et pandas du cours. C'est opti
 
 **Google Colab, les Notebooks Kaggle et Binder gèrent ce projet mieux que tout autre dans le cours** — un petit transformer tourne à l'aise sur le CPU gratuit de Colab/Kaggle (parfois CUDA), le modèle de la classe `all-MiniLM-L6-v2` se télécharge automatiquement, et toute la boucle intègre→cherche s'affiche en ligne avec les vecteurs visibles. La seule réserve honnête : tu télécharges les poids à la première exécution (quelques centaines de Mo), et si tu es hors ligne, le modèle ne se chargera pas — donc les parties de *pur calcul vectoriel* fonctionnent toujours avec `numpy` que tu as précalculé, mais l'étape d'intégration en direct a besoin d'un accès réseau vers Hugging Face.
 
-[![Ouvrir dans Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/semantic-search-engine/notebook.ipynb)
-[![Ouvrir dans Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/semantic-search-engine/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsemantic-search-engine%2Fnotebook.ipynb)
+[![Ouvrir dans Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/semantic-search-engine/notebook.fr.ipynb)
+[![Ouvrir dans Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/semantic-search-engine/notebook.fr.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsemantic-search-engine%2Fnotebook.fr.ipynb)
 
 ## Configuration
 

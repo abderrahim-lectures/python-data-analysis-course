@@ -36,9 +36,9 @@ Esto asume Python 101 y suficiente HTML para reconocer un encabezado, un enlace 
 
 **Google Colab y ejecuciones de notebook Binder** también funcionan — ambos tienen acceso de red, y el notebook refleja cada paso con un `!pip install` y solicitudes en vivo a books.toscrape.com. **JupyterLite** es genuinamente inadecuado: ejecuta Python en un sandbox de navegador sin red saliente general, así que un `requests.get` no tiene nada a lo que llegar. Usa las insignias de notebook o una ejecución local para este, honestamente.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/web-scraper-api/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/web-scraper-api/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fweb-scraper-api%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/web-scraper-api/notebook.es.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/web-scraper-api/notebook.es.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fweb-scraper-api%2Fnotebook.es.ipynb)
 
 ## Configuración
 

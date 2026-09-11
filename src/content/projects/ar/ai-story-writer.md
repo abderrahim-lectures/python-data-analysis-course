@@ -41,6 +41,11 @@ prerequisites:
 - **Google Colab أو Kaggle Notebooks.** الصق خلايا الكود مباشرة في دفتر ملاحظات.
 - **JupyterLite playground.** الصق خلايا الكود مباشرة في دفتر ملاحظات — لا يُطلب إدخال/إخراج ملفات، فيعمل كل شيء في المتصفح.
 
+- **شغّله في المتصفح.** هناك دفتر ملاحظات تفاعلي جاهز — افتحه على Colab أو Kaggle أو Binder وتابع خطوة بخطوة.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-story-writer/notebook.ar.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-story-writer/notebook.ar.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fai-story-writer%2Fnotebook.ar.ipynb)
+
 ## الإعداد
 
 `uv` أداة واحدة تستبدل سلسلة «ثبّت Python, ثم pip, ثم بيئة افتراضية, ثم حزم» المعتادة — فهي تدير إصدارات Python والاعتماديات معًا.

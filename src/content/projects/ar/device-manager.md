@@ -35,11 +35,11 @@ learningObjectives:
 
 **GitHub Codespaces** بديل بلا إعداد: افتح [مستودع المقرر كاملًا في Codespace مجاني](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node وPython مثبتان مسبقًا) وشغّل الأوامر نفسها من طرفية متصفح.
 
-**Google Colab وKaggle Notebooks أو Binder** تعمل مع كل خطوة — يشغّل الدفتر في [`examples/device-manager/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/device-manager/notebook.ipynb) منطق الأسطول نفسه على سجل الأجهزة الأربعة المرفق في الذاكرة. المفاضلة الصريحة: لا يستطيع الدفتر إبقاء ملف مُحدَّث كما تفعل CLI.
+**Google Colab وKaggle Notebooks أو Binder** تعمل مع كل خطوة — يشغّل الدفتر في [`examples/device-manager/notebook.ar.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/device-manager/notebook.ar.ipynb) منطق الأسطول نفسه على سجل الأجهزة الأربعة المرفق في الذاكرة. المفاضلة الصريحة: لا يستطيع الدفتر إبقاء ملف مُحدَّث كما تفعل CLI.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/device-manager/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/device-manager/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fdevice-manager%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/device-manager/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/device-manager/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fdevice-manager%2Fnotebook.ar.ipynb)
 
 ## الإعداد
 

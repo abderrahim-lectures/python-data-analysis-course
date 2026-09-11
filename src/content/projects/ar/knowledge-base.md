@@ -12,6 +12,11 @@ prerequisites: ["أساسيات بايثون (المتغيرات، الحلقا�
 
 ابنِ قاعدة معرفة شخصية تخزّن الملاحظات مع بيانات وصفية غنية، وتسمح لك بالبحث في كل شيء فورًا، وتنظّم الأفكار بالعلامات، وتعرض المحتوى بصيغة Markdown، وتصدّر كل ذلك إلى موقع HTML ثابت. يجمع هذا المشروع بين القواميس وقراءة/كتابة الملفات ومعالجة النصوص وتوليد القوالب في أداة يمكنك استخدامها فعلًا.
 
+- **شغّله في المتصفح.** هناك دفتر ملاحظات تفاعلي جاهز — افتحه على Colab أو Kaggle أو Binder وتابع خطوة بخطوة.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/knowledge-base/notebook.ar.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/knowledge-base/notebook.ar.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fknowledge-base%2Fnotebook.ar.ipynb)
+
 ## ما ستتعلمه
 
 1. تصميم مخطط لتخزين المعرفة باستخدام القواميس وJSON

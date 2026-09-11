@@ -34,11 +34,11 @@ learningObjectives:
 
 **GitHub Codespaces** بديل بلا إعداد: افتح [مستودع الدورة كاملًا في Codespace مجاني](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node وPython مثبّتة بالفعل) وشغّل نفس الأوامر من طرفية متصفح.
 
-**Google Colab أو Kaggle Notebooks أو Binder** تعمل جيدًا لمنطق الطابور والتوجيه — دفتر الملاحظات في [`examples/customer-support/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/customer-support/notebook.ipynb) يشغّل كل دالة على ملفات CSV عينات مرفقة. القيد الصادق: ملفات CSV في دفتر الملاحظات عينات ثابتة، بينما النسخة المحلية تتيح لك تغذيتها *بسجلات دعمك*.
+**Google Colab أو Kaggle Notebooks أو Binder** تعمل جيدًا لمنطق الطابور والتوجيه — دفتر الملاحظات في [`examples/customer-support/notebook.ar.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/customer-support/notebook.ar.ipynb) يشغّل كل دالة على ملفات CSV عينات مرفقة. القيد الصادق: ملفات CSV في دفتر الملاحظات عينات ثابتة، بينما النسخة المحلية تتيح لك تغذيتها *بسجلات دعمك*.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/customer-support/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/customer-support/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fcustomer-support%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/customer-support/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/customer-support/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fcustomer-support%2Fnotebook.ar.ipynb)
 
 ## الإعداد
 

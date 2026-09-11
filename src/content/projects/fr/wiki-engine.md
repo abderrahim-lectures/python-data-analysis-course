@@ -37,9 +37,9 @@ Cela suppose Python 101 plus un peu de regex — rien d'Analyse de Données n'es
 
 **Google Colab, Kaggle Notebooks et Binder** exécutent les six étapes sans modification — les cellules créent un répertoire `wiki/` et l'inspectent au fur et à mesure, donc le notebook *démontre* le moteur contre ses propres pages. L'honnêteté impose de préciser : les systèmes de fichiers du cloud sont éphémères, donc un wiki que tu conserves réellement vit en local. Utilise les badges pour regarder le moteur travailler ; utilise `uv` là où vivent tes notes.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/wiki-engine/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/wiki-engine/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fwiki-engine%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/wiki-engine/notebook.fr.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/wiki-engine/notebook.fr.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fwiki-engine%2Fnotebook.fr.ipynb)
 
 ## Configuration
 

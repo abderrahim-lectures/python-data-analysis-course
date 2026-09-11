@@ -148,25 +148,37 @@ bounds the migration to components, not 537 content files.
      stays EN — it is engine-error copy, near-identical across locales, and
      the design list did not include it.
 5. **String packs deleted** — remove `pageStrings.ts`/`uiStrings.ts`/
-    `creditsStrings.ts`/`cheatsheetsStrings.ts` when all consumers are on
-    messages. Add unit test asserting no `import` of the removed modules.
-    **DONE** (2026-09-08): migrated the last 14 legacy EN learn pages off
-    `PAGE_STRINGS` (2 section indexes `ps.track1Desc`/`track2Desc` →
-    `m.track_1_desc()`/`m.track_2_desc()`; 4 lesson templates
-    `ps.completed`/`courseDescription`/`markComplete` → `m.*()`;
-    8 track/module pages had dead imports, dropped). Credits entries
-    (names/notes) were already message keys; their hrefs are hardcoded URLs
-    in the 4 credits pages. Rewrote `links.test.ts` credits tests to read
-    `messages/*.json` + page source, `lessonWiring.test.ts` to assert
-    `m.*()`, and `i18n.test.ts` to keep a no-import/gone guard for the 4
-    packs. Deleted the 4 packs + the one-time `scripts/gen-messages.mjs`
-    bootstrap (it read the packs; untracked, unwired). Gate: paraglide
-    compile OK, build 874 pages, astro check back to baseline 1 error/136
-    hints, unit 501/501 (pack-parity describes replaced with message-level
-    guards over `messages/*.json`: key-set parity per locale, no-empty, and
-    "non-EN locales actually translated" with a whitelist of intentional
-    EN-held labels). E2E gate green too: smoke 40/40, a11y 0,
-    contrast 0, responsive clean, hreflang 40 links all resolve.
+     `creditsStrings.ts`/`cheatsheetsStrings.ts` when all consumers are on
+     messages. Add unit test asserting no `import` of the removed modules.
+     **DONE** (2026-09-08): migrated the last 14 legacy EN learn pages off
+     `PAGE_STRINGS` (2 section indexes `ps.track1Desc`/`track2Desc` →
+     `m.track_1_desc()`/`m.track_2_desc()`; 4 lesson templates
+     `ps.completed`/`courseDescription`/`markComplete` → `m.*()`;
+     8 track/module pages had dead imports, dropped). Credits entries
+     (names/notes) were already message keys; their hrefs are hardcoded URLs
+     in the 4 credits pages. Rewrote `links.test.ts` credits tests to read
+     `messages/*.json` + page source, `lessonWiring.test.ts` to assert
+     `m.*()`, and `i18n.test.ts` to keep a no-import/gone guard for the 4
+     packs. Deleted the 4 packs + the one-time `scripts/gen-messages.mjs`
+     bootstrap (it read the packs; untracked, unwired). Gate: paraglide
+     compile OK, build 874 pages, astro check back to baseline 1 error/136
+     hints, unit 501/501 (pack-parity describes replaced with message-level
+     guards over `messages/*.json`: key-set parity per locale, no-empty, and
+     "non-EN locales actually translated" with a whitelist of intentional
+     EN-held labels). E2E gate green too: smoke 40/40, a11y 0,
+     contrast 0, responsive clean, hreflang 40 links all resolve.
+ 6. **Per-locale project notebooks + badges** — every project page in a
+    locale links its Colab/Kaggle/Binder badges to a notebook generated from
+    that same locale's markdown. **DONE** (2026-09-11): generated
+    `examples/<slug>/notebook.{ar,es,fr}.ipynb` for all 135 projects (prose
+    cells translated, code cells English) + `notebook.ipynb` for the 11 EN
+    gaps; hand-authored EN notebooks untouched. Retargeted existing locale
+    badges (`scripts/link-project-notebooks.mjs`, idempotent) and inserted
+    badge blocks into the 23 badgeless projects in all 4 locales + the 3
+    es-only gaps (mcp-server, rag-notes, ai-agent). Gate: all 540
+    project/locale badge targets resolve to real files; lesson notebooks
+    unchanged; build 1282; unit 1224/1224; hreflang 40/40; e2e 49/49;
+    a11y/contrast 0; lesson 9/9.
 
 ## 4. What stays manual (flagged)
 - **`pda:state` locale namespace** — localStorage key is not locale-scoped

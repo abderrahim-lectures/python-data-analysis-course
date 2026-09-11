@@ -12,6 +12,11 @@ prerequisites: ["Python basics", "Basic pandas", "Basic matplotlib"]
 
 Machine learning sounds intimidating, but the core idea is simple: show a computer examples of input/output pairs, and it learns a pattern it can apply to new, unseen data. In this project you'll do exactly that — load a classic dataset, train a decision tree classifier, and evaluate how well it predicts. No math background required.
 
+- **Run it in your browser.** An interactive companion notebook is ready — open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ml-classifier/notebook.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ml-classifier/notebook.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fml-classifier%2Fnotebook.ipynb)
+
 ## What You'll Learn
 
 1. Load and explore a real dataset

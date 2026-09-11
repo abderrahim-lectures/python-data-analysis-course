@@ -34,9 +34,9 @@ Cela suppose Python 101 — entrées-sorties de fichiers, chaînes, dictionnaire
 
 **Google Colab, Kaggle Notebooks et Binder sont un moyen correct de *voir la mécanique tourner*, mais faibles pour la récompense.** Le notebook ci-dessous génère un faux dossier `posts/` en mémoire et rend le site complet vers un répertoire que tu peux inspecter cellule par cellule — donc l'analyse, le templating et l'assemblage tournent tous honnêtement. Ce qu'il ne fait pas bien, c'est la vraie boucle de *toi qui écris ton propre post.md et qui actualises la page* ; c'est un exercice système-de-fichiers-plus-navigateur, ce que le chemin local ou Codespace te donne. Utilise le notebook pour apprendre les étapes ; passe à `uv` quand tu veux publier.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/markdown-blog-engine/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/markdown-blog-engine/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fmarkdown-blog-engine%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/markdown-blog-engine/notebook.fr.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/markdown-blog-engine/notebook.fr.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fmarkdown-blog-engine%2Fnotebook.fr.ipynb)
 
 ## Configuration
 

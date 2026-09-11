@@ -35,9 +35,9 @@ learningObjectives:
 
 **Google Colab وKaggle Notebooks وBinder طريق حقيقي لتشغيل هذا شبه من طرف إلى طرف** — أصدق من معظم المشاريع, لأن شيئًا هنا لا يعتمد على تاريخ git المحلي. التحفظ الصادق هو مدخل الصوت: الدفتر لا يملك أيًّا من ملفاتك الصوتية, فالدفتر أدناه *يولِّف نفس نغمة الاختبار التي* تبنيها في الخطوة 1 ويعمل بها. كما يستطيع تثبيت ثنائي `ffmpeg` لخطوة تحويل الصيغ, حتى تحويل MP3/OGG يعمل — إنه مجرد تحويل نغمة لم يسجّلها أحد, لا مقطعًا يهمك. استخدمه لرؤية المسار كله يعمل بصفر إعداد; وانتقل إلى `uv` محلي أو Codespace حين تريد توجيهه إلى تسجيلاتك.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/audio-editor/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/audio-editor/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Faudio-editor%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/audio-editor/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/audio-editor/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Faudio-editor%2Fnotebook.ar.ipynb)
 
 ## الإعداد
 

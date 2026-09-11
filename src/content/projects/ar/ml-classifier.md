@@ -12,6 +12,11 @@ prerequisites: ["أساسيات بايثون", "أساسيات pandas", "أسا�
 
 يبدو التعلّم الآلي مخيفًا، لكن الفكرة الجوهرية بسيطة: أظهر للكمبيوتر أمثلة من أزواج المدخلات/المخرجات، فيتعلم نمطًا يمكنه تطبيقه على بيانات جديدة غير مسبوقة. في هذا المشروع ستفعل ذلك بالضبط — تحميل مجموعة بيانات كلاسيكية، وتدريب مصنِّف شجرة قرار، وتقييم مدى جودة توقعاته. لا حاجة لخلفية رياضية.
 
+- **شغّله في المتصفح.** هناك دفتر ملاحظات تفاعلي جاهز — افتحه على Colab أو Kaggle أو Binder وتابع خطوة بخطوة.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ml-classifier/notebook.ar.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ml-classifier/notebook.ar.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fml-classifier%2Fnotebook.ar.ipynb)
+
 ## ما ستتعلمه
 
 1. تحميل واستكشاف مجموعة بيانات حقيقية

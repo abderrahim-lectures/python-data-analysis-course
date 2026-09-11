@@ -34,9 +34,9 @@ Ce projet suppose que tu maîtrises Python 101 et que tu es à l'aise avec les d
 
 **Google Colab, Binder et Kaggle Notebooks** l'exécutent aussi confortablement — le notebook reflète chaque étape ci-dessous et, comme aucune installation de paquet n'est nécessaire, le parcours navigateur est en pleine fidélité plutôt qu'en simulation dégradée. **JupyterLite**, l'aire de jeu dans le navigateur, exécutera aussi les étapes du modèle de données et du tableau de bord, car rien ici ne nécessite de bibliothèques natives. Un avertissement honnête : le fichier JSON que tu sauvegardes vit sur le système de fichiers éphémère du notebook dans le navigateur, donc considère ce parcours comme un essai et utilise un dossier local lorsque tu veux que les données persistent réellement entre les sessions.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/grant-tracker/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/grant-tracker/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fgrant-tracker%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/grant-tracker/notebook.fr.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/grant-tracker/notebook.fr.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fgrant-tracker%2Fnotebook.fr.ipynb)
 
 ## Configuration
 

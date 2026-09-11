@@ -35,9 +35,9 @@ Cela suppose le Python 101 et l'aisance avec les fonctions et les listes de base
 
 **Google Colab et les exécutions notebook Binder** fonctionnent de la même manière — installe la paire avec une ligne `!pip install pandas matplotlib`, et le notebook reflète chaque étape avec des graphiques enregistrés dans l'environnement du notebook. **JupyterLite** peut exécuter les portions pandas dans le navigateur, mais c'est le plus faible des trois pour ce projet : matplotlib y tourne, pourtant enregistrer des *fichiers* PNG de graphiques sur un vrai disque est maladroit, donc traite-le comme un chemin « essaie-le » et utilise les badges de notebook ou `uv` local quand tu veux que les artefacts du rapport persistent.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/report-builder/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/report-builder/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Freport-builder%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/report-builder/notebook.fr.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/report-builder/notebook.fr.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Freport-builder%2Fnotebook.fr.ipynb)
 
 ## Configuration
 

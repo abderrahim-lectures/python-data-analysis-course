@@ -26,8 +26,8 @@ El proyecto AI Agent se ejecuta completamente en tu propia máquina. Este no pue
 
 Si prefieres probar los pasos de preparación local del conjunto de datos e inferencia en un notebook alojado en lugar de con `uv`, hay un notebook complementario exactamente para eso:
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/finetune-llm-unsloth/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/finetune-llm-unsloth/notebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/finetune-llm-unsloth/notebook.es.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/finetune-llm-unsloth/notebook.es.ipynb)
 
 Este badge cubre solo los pasos **locales** (preparación del conjunto de datos e inferencia) — el paso de fine-tuning en sí sigue usando el notebook oficial de Unsloth, enlazado por separado en el Paso 2.
 

@@ -34,9 +34,9 @@ prerequisites: ["python-101/strings", "python-101/sets", "python-101/loops", "py
 
 **Google Colab وKaggle Notebooks وBinder تشغّل خط الأنابيب بأكمله بأمانة** — التطبيع، والتقطيع، وتقييم Jaccard، والتقارير — مقابل مجموعة العينات المرفقة بالدورة، لأن لا شيء هنا يحتاج GPU أو مفتاحًا أو ملفًا ضخمًا. التحفظ الصادق في النطاق: الدفتر يُقيّم المقالات النموذجية الثابتة بدلًا من مجلد تقديماتك الخاص، فاعتبرها مضمار اختبارٍ للخوارزمية، وانتقل إلى التشغيل المحلي عندما تريد تشغيلها على مستندات حقيقية.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/plagiarism-checker/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/plagiarism-checker/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fplagiarism-checker%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/plagiarism-checker/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/plagiarism-checker/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fplagiarism-checker%2Fnotebook.ar.ipynb)
 
 ## الإعداد
 

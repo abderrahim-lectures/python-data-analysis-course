@@ -21,6 +21,11 @@ prerequisites:
 
 ابنِ لوحة طرفية تجلب بيانات الطقس الحية من واجهة برمجة Open-Meteo، وتحسب الأرقام باستخدام pandas، وترسم الرسوم البيانية باستخدام matplotlib، وتطبع ملخصًا أسبوعيًا ملونًا. كل خطوة تمنحك كودًا عمليًا يمكنك تشغيله فورًا.
 
+- **شغّله في المتصفح.** هناك دفتر ملاحظات تفاعلي جاهز — افتحه على Colab أو Kaggle أو Binder وتابع خطوة بخطوة.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/weather-dashboard/notebook.ar.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/weather-dashboard/notebook.ar.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fweather-dashboard%2Fnotebook.ar.ipynb)
+
 ## ما ستبنيه
 
 نص Python يقوم بما يلي:

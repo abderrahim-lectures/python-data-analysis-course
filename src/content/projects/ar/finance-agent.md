@@ -23,11 +23,11 @@ description: "صنّف ملف CSV مصرفي مُصدَّر وحدد الإنف�
 
 **GitHub Codespaces** بديل بلا إعداد: افتح [مستودع الدورة كاملًا في Codespace مجاني](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node وPython وuv مثبّتة بالفعل، وفق `.devcontainer/devcontainer.json` الخاص بالمستودع) وشغّل نفس أوامر `uv` تمامًا من طرفية في تبويب متصفحك.
 
-**Google Colab وKaggle Notebooks أو Binder** تعمل أيضًا — لا يحتاج هذا المشروع GPU، فقط pandas واستدعاء واحد لواجهة برمجية للنموذج اللغوي لكل معاملة غامضة. نسخة دفتر ملاحظات حقيقية وقابلة للتشغيل (نفس خط الأنابيب من الخطوات أدناه، تعمل على نفس ملف CSV النموذجي الاصطناعي) موجودة في [`examples/finance-agent/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/finance-agent/notebook.ipynb). انقر على شارة لتشغيله مباشرة، دون أي تثبيت محلي على الإطلاق:
+**Google Colab وKaggle Notebooks أو Binder** تعمل أيضًا — لا يحتاج هذا المشروع GPU، فقط pandas واستدعاء واحد لواجهة برمجية للنموذج اللغوي لكل معاملة غامضة. نسخة دفتر ملاحظات حقيقية وقابلة للتشغيل (نفس خط الأنابيب من الخطوات أدناه، تعمل على نفس ملف CSV النموذجي الاصطناعي) موجودة في [`examples/finance-agent/notebook.ar.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/finance-agent/notebook.ar.ipynb). انقر على شارة لتشغيله مباشرة، دون أي تثبيت محلي على الإطلاق:
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/finance-agent/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/finance-agent/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Ffinance-agent%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/finance-agent/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/finance-agent/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Ffinance-agent%2Fnotebook.ar.ipynb)
 
 كن صادقًا مع نفسك بشأن المقايضة، مع ذلك: هذه طريقة أقل دقة لتجربة المشروع من مشروع `uv` محلي فعلي — بلا ملفات منفصلة، بلا بنية مشروع حقيقية، مجرد خلايا في دفتر ملاحظات. عامِلها كطريقة سريعة للتجربة، لا المسار الأساسي.
 

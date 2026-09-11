@@ -12,6 +12,11 @@ prerequisites: ["Python basics", "Basic pandas", "Basic matplotlib"]
 
 Every dataset so far arrived as a ready-made CSV. Real analysis rarely starts there. This project teaches you to fetch a live web page over HTTP, parse the HTML into structured rows, clean the result with pandas, and produce charts — no API key, no external service, just your script and a server.
 
+- **Run it in your browser.** An interactive companion notebook is ready — open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/scrape-analyze/notebook.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/scrape-analyze/notebook.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fscrape-analyze%2Fnotebook.ipynb)
+
 ## What You'll Learn
 
 1. Fetch web pages with `requests`

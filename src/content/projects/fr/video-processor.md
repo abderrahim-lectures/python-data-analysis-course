@@ -39,6 +39,11 @@ Cela suppose les bases de Python et une installation fonctionnelle de ffmpeg (co
 
 **Binder** peut fonctionner si ffmpeg est disponible dans l'image de l'environnement d'exécution, mais est lent et peu fiable pour l'entrée/sortie vidéo. Tiens-toi-en à local ou à Colab.
 
+- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt — ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/video-processor/notebook.fr.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/video-processor/notebook.fr.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fvideo-processor%2Fnotebook.fr.ipynb)
+
 ## Configuration
 
 Tout ce dont tu as besoin avant d'écrire une ligne de traitement vidéo : Python, ffmpeg et MoviePy.

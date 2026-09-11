@@ -40,9 +40,9 @@ Esto asume Python 101 y los fundamentos de pandas del módulo de Análisis de Da
 
 **Google Colab, Kaggle Notebooks y Binder son una forma genuinamente buena de ejecutar esto** — a diferencia de los proyectos que necesitan un repositorio git local o un estado real del sistema de archivos, un limpiador de datos solo necesita un CSV en memoria. El notebook de abajo construye un pequeño DataFrame intencionalmente desordenado para que cada detección y corrección se ejecute de verdad; usa un notebook para experimentar rápido, y luego cambia al `uv` local cuando quieras apuntar la herramienta a archivos `.csv` reales en tu máquina.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-data-cleaner/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-data-cleaner/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fai-data-cleaner%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-data-cleaner/notebook.es.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-data-cleaner/notebook.es.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fai-data-cleaner%2Fnotebook.es.ipynb)
 
 ## Configuración
 

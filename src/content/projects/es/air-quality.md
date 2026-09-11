@@ -37,9 +37,9 @@ Esto asume conocimientos básicos de datos ordenados y nada de esto es calificad
 
 **Google Colab, Kaggle Notebooks y Binder** son de primera clase aquí — pandas y matplotlib vienen preinstalados en cada uno, `!pip install requests` cubre el envoltorio de la obtención en vivo y `matplotlib.use("Agg")` del Paso 5 mantiene el graficado compatible con entornos sin pantalla. Los notebooks encajan muy bien si tu máquina del curso no tiene Python local; solo recuerda que cualquier dato de API en vivo cambiará entre sesiones, que es exactamente para lo que sirve la muestra determinista.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/air-quality/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/air-quality/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fair-quality%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/air-quality/notebook.es.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/air-quality/notebook.es.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fair-quality%2Fnotebook.es.ipynb)
 
 ## Configuración
 

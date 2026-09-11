@@ -37,6 +37,11 @@ This assumes Python basics, intermediate OOP, and enough HTTP knowledge to know 
 
 **Google Colab** can test individual endpoints with `nest_asyncio`, but it's a workaround, not a natural fit — no persistent server, no real file system for your project. Use it to try things, not to build.
 
+- **Run it in your browser.** An interactive companion notebook is ready — open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/rest-api-builder/notebook.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/rest-api-builder/notebook.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Frest-api-builder%2Fnotebook.ipynb)
+
 ## Setup
 
 Everything you need before writing a line of the API itself: a real Python, the right packages, and a working project folder.

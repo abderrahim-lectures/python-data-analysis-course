@@ -34,9 +34,9 @@ Cela suppose le Python 101 — fonctions, dicts, entrées-sorties de fichiers, e
 
 **Google Colab, les notebooks Kaggle et Binder exécutent honnêtement chaque étape du moteur** — `ast` est de la pure stdlib, pas de GPU, pas de clés — mais le *produit* ici est un CLI sur des fichiers, et les notebooks sont le mauvais support pour « exécute ceci sur tout mon dossier de projet ». Le notebook linter son propre fichier brouillon fourni pour que tu puisses voir le moteur fonctionner de bout en bout ; passe en local pour le vrai cas d'usage façon `python -m pylint`.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/python-linter/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/python-linter/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fpython-linter%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/python-linter/notebook.fr.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/python-linter/notebook.fr.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fpython-linter%2Fnotebook.fr.ipynb)
 
 ## Configuration
 

@@ -34,9 +34,9 @@ prerequisites: ["python-101/file-io", "python-101/strings", "python-101/function
 
 **تتعامل Google Colab وKaggle Notebooks وBinder مع التحليل بأمانة** — تعمل Python الخالصة في أي مكان، وورقة نصية قصيرة تُلصق أو تُرفع في الدفتر تُحلل تمامًا كما محليًّا. بل يمكن للدفتر توليد *ورقة عينة* فورًا ليكون لديك بيانات حتمية قبل جلب ورقة حقيقية. الشيء الوحيد الذي لا يستطيع دفتر إعادة إنتاجه هو بهجة "التقط `.txt` حقيقيًا من arXiv وحلله" — هذا السحب عادة محلية/طرفية.
 
-[![فُتح في Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/research-paper-parser/notebook.ipynb)
-[![فُتح في Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/research-paper-parser/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fresearch-paper-parser%2Fnotebook.ipynb)
+[![فُتح في Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/research-paper-parser/notebook.ar.ipynb)
+[![فُتح في Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/research-paper-parser/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fresearch-paper-parser%2Fnotebook.ar.ipynb)
 
 ## الإعداد
 

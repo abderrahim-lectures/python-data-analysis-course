@@ -35,11 +35,11 @@ Ceci suppose Python 101 plus une lecture confortable de `csv` et `re` — foncti
 
 **GitHub Codespaces** est une alternative sans configuration : ouvre [tout le dépôt du cours dans un Codespace gratuit](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node et Python sont déjà installés) et exécute les mêmes commandes depuis un terminal navigateur.
 
-**Google Colab, Kaggle Notebooks ou Binder** fonctionnent bien pour la moitié stratégies-et-plan — le notebook dans [`examples/data-masker/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-masker/notebook.ipynb) exécute chaque étape sur des lignes d'échantillon fournies. La note honnête : le notebook traite des données d'échantillon fixes, tandis que la CLI locale peut être pointée sur un vrai CSV que tu possèdes réellement.
+**Google Colab, Kaggle Notebooks ou Binder** fonctionnent bien pour la moitié stratégies-et-plan — le notebook dans [`examples/data-masker/notebook.fr.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-masker/notebook.fr.ipynb) exécute chaque étape sur des lignes d'échantillon fournies. La note honnête : le notebook traite des données d'échantillon fixes, tandis que la CLI locale peut être pointée sur un vrai CSV que tu possèdes réellement.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-masker/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-masker/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fdata-masker%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-masker/notebook.fr.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-masker/notebook.fr.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fdata-masker%2Fnotebook.fr.ipynb)
 
 ## Configuration
 

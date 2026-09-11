@@ -34,9 +34,9 @@ prerequisites: ["python-101/libraries", "numpy-101/arrays", "data-analysis/panda
 
 **يتولى Google Colab وKaggle Notebooks وBinder هذا المشروع أفضل من أي مشروع آخر في المساق** — يعمل تحويل صغير بسعادة على CPU المجاني في Colab/Kaggle (وأحيانًا CUDA)، والنموذج من صنف `all-MiniLM-L6-v2` ينزّل تلقائيًّا، وحلقة التضمين→البحث كلها تظهر داخليًّا مع المتجهات مرئية. التحفظ الصادق الوحيد: تنزّل الأوزان عند أول تشغيل (بضع مئات ميغابايت)، وإذا كنت دون اتصال فلن يُحمَّل النموذج — لذا أجزاء *حساب المتجهات الخالص* ما تزال تعمل بـ`numpy` الذي حسبته مسبقًا، لكن خطوة التضمين الحية تحتاج وصولًا شبكيًّا إلى Hugging Face.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/semantic-search-engine/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/semantic-search-engine/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsemantic-search-engine%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/semantic-search-engine/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/semantic-search-engine/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsemantic-search-engine%2Fnotebook.ar.ipynb)
 
 ## الإعداد
 

@@ -34,9 +34,9 @@ Cela suppose le Python 101 — chaînes, ensembles, entrées-sorties de fichiers
 
 **Google Colab, les notebooks Kaggle et Binder exécutent honnêtement chaque étape** — pas de GPU, pas de secrets, pas de gros fichiers — contre la transcription d'épisode d'exemple fournie avec le cours (une fausse conversation réaliste écrite à la main). La réserve honnête : le notebook analyse la transcription fournie plutôt que de l'audio que tu enregistres. La vraie conversion parole-en-texte pour tes propres enregistrements a besoin d'un outil séparé ; tout ce qui *suit* la transcription est exactement ce que le notebook exécute pour de vrai.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/podcast-analyzer/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/podcast-analyzer/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fpodcast-analyzer%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/podcast-analyzer/notebook.fr.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/podcast-analyzer/notebook.fr.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fpodcast-analyzer%2Fnotebook.fr.ipynb)
 
 ## Configuration
 

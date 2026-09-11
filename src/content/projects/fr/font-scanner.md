@@ -35,9 +35,9 @@ Ce projet suppose que tu maîtrises Python 101 et que tu as une familiarité de 
 
 **Google Colab et Kaggle Notebooks** sont un vrai moyen d'exécuter ceci — un notebook a un petit ensemble de polices fournies avec son image Linux. L'avertissement honnête est que l'analyse de polices renverra moins de résultats qu'un bureau avec un DE complet installé, ce qui est en fait *utile* : cela te permet de voir comment l'outil se comporte quand les polices sont rares, et l'étape d'aperçu/rendu fonctionne toujours avec ce qui est disponible. Le notebook ci-dessous utilise les polices système du notebook lui-même pour que chaque pièce de l'outil s'exécute sur de vrais fichiers. Utilise-le pour voir le pipeline fonctionner de bout en bout ; passe au `uv` local ou à un Codespace une fois que tu veux une analyse plus riche.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/font-scanner/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/font-scanner/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Ffont-scanner%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/font-scanner/notebook.fr.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/font-scanner/notebook.fr.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Ffont-scanner%2Fnotebook.fr.ipynb)
 
 ## Configuration
 

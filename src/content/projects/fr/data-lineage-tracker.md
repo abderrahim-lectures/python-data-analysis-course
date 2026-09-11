@@ -35,11 +35,11 @@ Ceci suppose Python 101 plus une lecture confortable des imports `csv` et `json`
 
 **GitHub Codespaces** est une alternative sans configuration : ouvre [tout le dépôt du cours dans un Codespace gratuit](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python et `uv` sont déjà installés) et exécute les mêmes commandes depuis un terminal navigateur.
 
-**Google Colab, Kaggle Notebooks ou Binder** fonctionnent bien pour la moitié parcours-de-graphe — le notebook dans [`examples/data-lineage-tracker/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-lineage-tracker/notebook.ipynb) exécute chaque étape sur un pipeline d'exemple fourni et affiche les mêmes arbres. La note honnête : il ne peut pas surveiller les vrais fichiers de *ton* pipeline comme la CLI locale.
+**Google Colab, Kaggle Notebooks ou Binder** fonctionnent bien pour la moitié parcours-de-graphe — le notebook dans [`examples/data-lineage-tracker/notebook.fr.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-lineage-tracker/notebook.fr.ipynb) exécute chaque étape sur un pipeline d'exemple fourni et affiche les mêmes arbres. La note honnête : il ne peut pas surveiller les vrais fichiers de *ton* pipeline comme la CLI locale.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-lineage-tracker/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-lineage-tracker/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fdata-lineage-tracker%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-lineage-tracker/notebook.fr.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-lineage-tracker/notebook.fr.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fdata-lineage-tracker%2Fnotebook.fr.ipynb)
 
 ## Configuration
 

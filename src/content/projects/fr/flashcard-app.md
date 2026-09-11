@@ -37,6 +37,11 @@ Une application de cartes flash en terminal qui :
 - **Google Colab ou Kaggle Notebooks.** Colle les cellules de code directement dans un notebook. Les appels `input()` fonctionnent pour les invites d'étude, mais l'entrée/sortie de fichiers (étape 6) fonctionne différemment dans le navigateur.
 - **JupyterLite playground.** Colle les cellules de code directement dans un notebook — note que la persistance des fichiers (étape 6) fonctionne uniquement en local.
 
+- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt — ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/flashcard-app/notebook.fr.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/flashcard-app/notebook.fr.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fflashcard-app%2Fnotebook.fr.ipynb)
+
 ## Configuration
 
 ```bash

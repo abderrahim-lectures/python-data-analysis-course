@@ -37,9 +37,9 @@ prerequisites:
 
 **Google Colab وKaggle Notebooks وBinder** تشغّل الخطوات الست كلها بشكل متطابق (لا بيانات خارجية — CSV تُزرَع بسكربتك نفسه)، مع الرسم الداخلي في النهاية. التحفظ الصادق: الرسوم الداخلية رائعة للاستكشاف، لكن أداة المراقبة تريد الملف على القرص ليمكن لمشغّل النظر إليه لاحقًا. استخدم الشارات للاستكشاف؛ واستخدم التشغيل المحلي للإحساس "بالجهاز الحقيقي".
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/water-quality/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/water-quality/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fwater-quality%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/water-quality/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/water-quality/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fwater-quality%2Fnotebook.ar.ipynb)
 
 ## الإعداد
 

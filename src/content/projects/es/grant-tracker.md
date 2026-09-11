@@ -34,9 +34,9 @@ Esto asume Python 101 y comodidad con diccionarios y listas — no se requiere n
 
 **Google Colab, Binder y Kaggle Notebooks** también lo ejecutan cómodamente — el notebook refleja cada paso de abajo, y como no hace falta instalar paquetes, el camino del navegador tiene fidelidad completa en lugar de ser una simulación degradada. **JupyterLite**, el playground en el navegador, también ejecutará los pasos de modelo de datos y panel, ya que nada aquí necesita bibliotecas nativas. Una advertencia honesta: el archivo JSON que guardes vive en el sistema de archivos efímero del notebook en el navegador, así que trátalo como un camino de prueba y usa una carpeta local cuando quieras que los datos persistan de verdad entre sesiones reales.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/grant-tracker/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/grant-tracker/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fgrant-tracker%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/grant-tracker/notebook.es.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/grant-tracker/notebook.es.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fgrant-tracker%2Fnotebook.es.ipynb)
 
 ## Configuración
 

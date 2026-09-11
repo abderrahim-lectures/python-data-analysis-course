@@ -26,9 +26,9 @@ Cela suppose Python 101 et assez d'aisance avec git pour savoir ce que montre `g
 
 **Google Colab, Kaggle Notebooks et Binder sont une façon raisonnable d'*essayer* l'outil, mais pas de l'exécuter pour de vrai.** Aucun ne te donne par défaut un vrai dépôt git local avec un historique de commits, et la prémisse entière de cet outil est de relire *ton propre* travail en cours — le système de fichiers éphémère d'un notebook n'a rien de tout ça. Le notebook ci-dessous contourne cela honnêtement, plutôt que de prétendre que l'écart n'existe pas : il fait un `!git clone` du dépôt de ce cours lui-même dans le notebook et relit un vrai petit commit historique de celui-ci avec `git show`, donc chaque partie de l'outil (la capture de diff via `subprocess`, le system prompt, l'appel au LLM, la sortie structurée) s'exécute toujours contre une sortie réelle et d'apparence réelle — c'est juste qu'il relit un commit d'exemple fixe plutôt que quelque chose que tu as écrit personnellement. Utilise-le pour voir l'outil fonctionner de bout en bout sans aucune configuration ; passe à `uv` en local ou à un Codespace une fois que tu veux le pointer vers tes propres changements réels.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/agentic-code-reviewer/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/agentic-code-reviewer/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fagentic-code-reviewer%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/agentic-code-reviewer/notebook.fr.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/agentic-code-reviewer/notebook.fr.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fagentic-code-reviewer%2Fnotebook.fr.ipynb)
 
 ## Configuration
 

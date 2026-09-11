@@ -40,9 +40,9 @@ learningObjectives:
 
 **Google Colab وKaggle Notebooks وBinder طريقة جيدة حقًا لتشغيل هذا** — على خلاف المشاريع التي تحتاج مستودع git محليًا أو حالة نظام ملفات حقيقية، يحتاج منظّف البيانات إلى CSV في الذاكرة فقط. يبني دفتر الملاحظات أدناه DataFrame فوضويًا عمدًا وصغيرًا حتى يعمل كل اكتشاف وإصلاح فعليًا؛ استخدم دفتر ملاحظات للتجربة السريعة، ثم انتقل إلى `uv` المحلي عندما تريد توجيه الأداة إلى ملفات `.csv` فعلية على جهازك.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-data-cleaner/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-data-cleaner/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fai-data-cleaner%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-data-cleaner/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-data-cleaner/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fai-data-cleaner%2Fnotebook.ar.ipynb)
 
 ## الإعداد
 

@@ -28,9 +28,9 @@ description: "تخرَّج من بيئة اللعب داخل المتصفح إل
 **Google Colab وKaggle Notebooks أو Binder** تعمل جيدًا أيضًا، وهي خيارات جيدة فعلًا هنا — هذا المشروع سكربت خفيف يُطلق حفنة من استدعاءات واجهة برمجية، لا شيء يحتاج GPU أو بنية مشروع حقيقية ليكون مفيدًا. نسخة دفتر ملاحظات جاهزة للتشغيل تُشحن مع هذا المشروع — انقر على شارة أدناه لفتحها، بلا أي إعداد محلي — أو أنشئ دفتر ملاحظاتك الخاص، وشغّل `!pip install openai python-dotenv` في خلية، والصق السكربتات أدناه كخلايا، واضبط مفتاح API الخاص بك بسر دفتر ملاحظات (Colab) أو متغيّر بيئة بدلًا من ملف `.env`.
 
 {/* TODO: update these badge links to point at main once this PR merges */}
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/meeting-notes-summarizer/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/meeting-notes-summarizer/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fmeeting-notes-summarizer%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/meeting-notes-summarizer/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/meeting-notes-summarizer/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fmeeting-notes-summarizer%2Fnotebook.ar.ipynb)
 
 ## الإعداد
 

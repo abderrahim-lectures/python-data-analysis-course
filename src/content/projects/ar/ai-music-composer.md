@@ -38,9 +38,9 @@ learningObjectives:
 
 **Google Colab وKaggle Notebooks وBinder طريقة حقيقية لتشغيل كل خطوة**, لأن المولّد نفسه Python خالص زائد مكتبة واحدة قابلة للتثبيت عبر pip (`!pip install midiutil`). التحفظ الصادق: نظام ملفات دفتر الملاحظات مؤقت، فالملف `.mid` الذي تصدّره يعيش هناك — نزّله قبل إغلاق الجلسة. وليس هناك مخرجات صوتية في دفتر ملاحظات، لذا ستريد مع ذلك سحب الملف محليًا لتسمع النتيجة فعلًا.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-music-composer/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-music-composer/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fai-music-composer%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-music-composer/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-music-composer/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fai-music-composer%2Fnotebook.ar.ipynb)
 
 ## الإعداد
 

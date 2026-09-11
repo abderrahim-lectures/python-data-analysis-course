@@ -12,6 +12,11 @@ prerequisites: ["Python basics (variables, loops, functions, strings)", "Basic f
 
 Documents come in many formats—Markdown for writing, HTML for the web, plain text for quick sharing. Manually converting between them is tedious and error-prone. In this project, you will build a Python tool that reads Markdown files, converts them to HTML or plain text, extracts metadata from document headers, and processes entire directories in one command.
 
+- **Run it in your browser.** An interactive companion notebook is ready — open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/document-converter/notebook.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/document-converter/notebook.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fdocument-converter%2Fnotebook.ipynb)
+
 ## What You'll Learn
 
 1. Parse Markdown syntax into structured data

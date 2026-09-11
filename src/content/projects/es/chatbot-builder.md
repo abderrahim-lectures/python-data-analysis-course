@@ -37,6 +37,11 @@ Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/es/proyec
 - **Google Colab o Kaggle Notebooks.** Pega las celdas de código directamente en un notebook. `input()` funciona para los avisos de chat, aunque el bucle funciona mejor en una terminal real.
 - **Playground de JupyterLite.** Pegar las celdas de código directamente en un notebook — el bucle de chat funciona, pero mantén las sesiones cortas ya que no hay terminal persistente.
 
+- **Ejecútalo en el navegador.** Hay un cuaderno interactivo listo — ábrelo en Colab, Kaggle o Binder y sigue los pasos en orden.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/chatbot-builder/notebook.es.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/chatbot-builder/notebook.es.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fchatbot-builder%2Fnotebook.es.ipynb)
+
 ## Configuración
 
 `uv` es una sola herramienta que reemplaza la cadena habitual de "instalar Python, luego pip, luego un entorno virtual" — puede instalar y gestionar versiones de Python junto con las dependencias de tu proyecto.

@@ -39,9 +39,9 @@ learningObjectives:
 
 **Google Colab وKaggle Notebooks وBinder طريقة معقولة *لتجربة* خط الأنابيب الأساسي.** Pillow مثبّتة مسبقًا في Colab وKaggle، ويولّد دفتر الملاحظات أدناه صورته النموذجية الخاصة فيعمل كل خطوة فعلًا. التحفظ الصادق: رفع صورك *الخاصة* إلى دفتر ملاحظات احتكاك أكبر من توجيه CLI إلى مجلد محلي، فعامل مسار دفتر الملاحظات كصندوق رمل، و`uv` المحلي كسير العمل الحقيقي.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-image-editor/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-image-editor/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fai-image-editor%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-image-editor/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-image-editor/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fai-image-editor%2Fnotebook.ar.ipynb)
 
 ## الإعداد
 

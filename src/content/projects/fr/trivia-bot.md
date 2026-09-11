@@ -32,8 +32,8 @@ C'est optionnel et non noté. Voir [Projets du monde réel](/fr/projets) pour la
 
 Cela dit, la génération de questions et le scoring *sous* le bot ne sont que des fonctions normales qui exécutent une cellule à la fois, ce qui est exactement ce pour quoi les notebooks sont bons. Les badges ci-dessous ouvrent un notebook qui génère de vraies questions LLM sur quelques sujets d'exemple et fait passer quelques « joueurs » factices à travers la logique de scoring, pour que tu puisses voir les deux fonctionner sans rien installer localement. Il s'arrête délibérément avant la couche Discord — pour cela, reviens ici et exécute `bot.py` en local ou dans Codespaces comme décrit ci-dessus.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/trivia-bot/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/trivia-bot/notebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/trivia-bot/notebook.fr.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/trivia-bot/notebook.fr.ipynb)
 
 ## Configuration
 

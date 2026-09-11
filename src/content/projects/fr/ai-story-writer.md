@@ -41,6 +41,11 @@ C'est optionnel et non noté. Voir [Projets du monde réel](/fr/projets) pour la
 - **Google Colab ou Kaggle Notebooks.** Colle les cellules de code directement dans un notebook.
 - **Aire de jeux JupyterLite.** Colle les cellules de code directement dans un notebook — aucune lecture/écriture de fichier n'est requise, donc tout fonctionne dans le navigateur.
 
+- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt — ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-story-writer/notebook.fr.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-story-writer/notebook.fr.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fai-story-writer%2Fnotebook.fr.ipynb)
+
 ## Configuration
 
 `uv` est un outil unique qui remplace la chaîne habituelle « installe Python, puis pip, puis un environnement virtuel, puis les paquets » — il gère ensemble les versions de Python et les dépendances.

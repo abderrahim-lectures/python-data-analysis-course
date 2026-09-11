@@ -36,9 +36,9 @@ Esto asume Python 101 y comodidad con el `groupby` de pandas — nada de Anális
 
 **Google Colab, Kaggle Notebooks y Binder** son formas razonables de *probar* la construcción completa — pandas y matplotlib ambos corren ahí de fábrica. La advertencia honesta es que el sistema de archivos efímero de un notebook no conserva tu `posts.csv` ni tu informe guardado entre sesiones, así que trátalos como caminos de prueba y cambia a `uv` local cuando quieras que el calendario y los artefactos del informe persistan.
 
-[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/social-media-manager/notebook.ipynb)
-[![Abrir en Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/social-media-manager/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsocial-media-manager%2Fnotebook.ipynb)
+[![Abrir en Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/social-media-manager/notebook.es.ipynb)
+[![Abrir en Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/social-media-manager/notebook.es.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsocial-media-manager%2Fnotebook.es.ipynb)
 
 ## Configuración
 

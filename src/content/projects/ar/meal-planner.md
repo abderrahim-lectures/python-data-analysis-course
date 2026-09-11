@@ -35,9 +35,9 @@ prerequisites: ["python-101/data-structures", "python-101/reading-files", "pytho
 
 **Google Colab وKaggle Notebooks وBinder يمكنها *تشغيل* كل دالة، وبالنسبة لمشروع بيانات نقي كهذا فهي جيدة فعلًا** — لا أسرار ولا GPU ولا ملفات ضخمة. الشيء الوحيد الذي لا ينتقل هو «ملفات جلستك مؤقتة»، وهو ما يهم غالبًا فقط لو أردت لملف وصفاتك الشخصي البقاء. يضمّن الدفتر أدناه قاعدة بيانات مبتدئة بحيث يعمل خط الأنابيب كاملًا من الخطة → الإجماليات → قائمة المشتريات من البداية للنهاية دون أي إعداد. جرّبه هناك أولًا، ثم اذهب محليًا عندما يكون لديك وصفات خاصة بك.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/meal-planner/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/meal-planner/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fmeal-planner%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/meal-planner/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/meal-planner/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fmeal-planner%2Fnotebook.ar.ipynb)
 
 ## الإعداد
 

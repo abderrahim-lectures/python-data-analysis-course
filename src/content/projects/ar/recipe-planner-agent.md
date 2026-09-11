@@ -24,11 +24,11 @@ description: "انتقل من الملعب داخل المتصفح إلى Python
 
 **GitHub Codespaces** يعمل بنفس الجودة: افتح [مستودع الدورة كاملًا في Codespace مجاني](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node وPython وuv مثبّتة بالفعل، وفق `.devcontainer/devcontainer.json` الخاص بالمستودع) ونفّذ نفس أوامر `uv` تمامًا من طرفية في تبويب متصفحك.
 
-**Google Colab وKaggle Notebooks أو Binder** جيدة أيضًا — هذا سكربت خفيف يستدعي API فقط، بلا GPU أو تثبيت ثقيل. نسخة دفتر ملاحظات جاهزة للتشغيل من هذا المشروع ([`examples/recipe-planner-agent/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/recipe-planner-agent/notebook.ipynb)) على بُعد نقرة واحدة:
+**Google Colab وKaggle Notebooks أو Binder** جيدة أيضًا — هذا سكربت خفيف يستدعي API فقط، بلا GPU أو تثبيت ثقيل. نسخة دفتر ملاحظات جاهزة للتشغيل من هذا المشروع ([`examples/recipe-planner-agent/notebook.ar.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/recipe-planner-agent/notebook.ar.ipynb)) على بُعد نقرة واحدة:
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/recipe-planner-agent/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/recipe-planner-agent/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Frecipe-planner-agent%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/recipe-planner-agent/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/recipe-planner-agent/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Frecipe-planner-agent%2Fnotebook.ar.ipynb)
 
 إنها طريقة أقل دقة لتجربة المشروع من مشروع `uv` محلي فعلي — بلا ملفات منفصلة، بلا بنية مشروع حقيقية — لكنها قابلة للعمل تمامًا لتجربة الفكرة. اضبط مفتاح API خاصتك بـ`os.environ["GITHUB_TOKEN"] = "..."` في خلية getpass (أو استخدم لوحة Secrets في Colab).
 

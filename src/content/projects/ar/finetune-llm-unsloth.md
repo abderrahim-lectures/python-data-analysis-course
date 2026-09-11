@@ -26,8 +26,8 @@ description: "تخرّج من بيئة البرمجة في المتصفح إلى
 
 إذا كنت تفضل تجربة خطوات حضّر البيانات المحلية والاستدلال في دفتر مستضاف بدلًا من استخدام `uv`، فهناك دفتر مصاحب لذلك بالضبط:
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/finetune-llm-unsloth/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/finetune-llm-unsloth/notebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/finetune-llm-unsloth/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/finetune-llm-unsloth/notebook.ar.ipynb)
 
 تغطي هذه الشارة الخطوات **المحلية** فقط (حضّر البيانات والاستدلال) — أما خطوة الضبط الدقيق نفسها فما تزال تستخدم دفتر Unsloth الرسمي الخاص به، المُشار إليه بشكل منفصل في الخطوة 2.
 

@@ -39,6 +39,11 @@ learningObjectives:
 - **بيئة JupyterLite.** ألصق خلايا الكود مباشرة في دفتر ملاحظات — تعمل جيدًا لاستكشاف خطوات التحليل، رغم أن دالة التقارير النهائية صُمّمت لطرفية حقيقية.
 - **Google Colab.** افتح دفتر ملاحظات جديدًا وألصق الخلايا. نفس التحفظ كما في JupyterLite: دوال CLI تعمل بشكل أفضل في طرفية حقيقية.
 
+- **شغّله في المتصفح.** هناك دفتر ملاحظات تفاعلي جاهز — افتحه على Colab أو Kaggle أو Binder وتابع خطوة بخطوة.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/anomaly-detector/notebook.ar.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/anomaly-detector/notebook.ar.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fanomaly-detector%2Fnotebook.ar.ipynb)
+
 ## الإعداد
 
 `uv` أداة واحدة تحل محل السلسلة المعتادة "ثبّت Python، ثم pip، ثم بيئة افتراضية" — يمكنها تثبيت وإدارة إصدارات Python إلى جانب تبعيات مشروعك.

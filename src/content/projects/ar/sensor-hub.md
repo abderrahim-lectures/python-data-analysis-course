@@ -34,9 +34,9 @@ prerequisites: ["python-101/file-io", "python-101/dictionaries", "python-101/fun
 
 **يشغّل Google Colab وKaggle Notebooks وBinder خط الأنابيب بأمانة** — المركز محاكاة خالصة وحساب بلا NumPy، ويرسم Matplotlib الرسم البياني *داخليًّا* في الدفتر، فيصبح `dashboard.png` مخرج خلية حيًّا لا ملفًا. الشيء الوحيد الذي لا يستطيع الدفتر فعله هو النبض في *وقت حائطي حقيقي* كما تفعل حلقة محلية — لكن المحاكاة تحت سيطرتك، فيعمل «ثانية واحدة لكل نبضة» و«تقديم سريع 100 نبضة» معًا، وهذا هو المكان الصادق الذي يتألق فيه الدفتر فعلًا (تحصل على التيار كله والرسوم البيانية في أثر واحد).
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/sensor-hub/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/sensor-hub/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsensor-hub%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/sensor-hub/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/sensor-hub/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsensor-hub%2Fnotebook.ar.ipynb)
 
 ## الإعداد
 

@@ -39,6 +39,11 @@ Este proyecto corre casi en cualquier lugar — pandas y matplotlib son Python p
 
 **Localmente con `uv`** es la ruta recomendada para ejecutar el bucle de encuesta interactivo real (Paso 2) donde `input()` te pregunta pregunta por pregunta — sigue la sección de Configuración de abajo.
 
+- **Ejecútalo en el navegador.** Hay un cuaderno interactivo listo — ábrelo en Colab, Kaggle o Binder y sigue los pasos en orden.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/survey-builder/notebook.es.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/survey-builder/notebook.es.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsurvey-builder%2Fnotebook.es.ipynb)
+
 ## Configuración
 
 Todo lo que necesitas antes de escribir una pregunta de encuesta.

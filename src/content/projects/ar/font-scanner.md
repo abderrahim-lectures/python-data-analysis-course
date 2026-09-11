@@ -37,9 +37,9 @@ learningObjectives:
 
 **Google Colab وKaggle Notebooks** طريقة حقيقية لتشغيل هذا — يملك الدفتر مجموعة صغيرة من الخطوط مرفقة مع صورته المبنية على Linux. التحفظ الصادق أن فحص الخطوط سيعيد نتائج أقل من سطح مكتب ممتلئ ببيئة سطح مكتب كاملة، وهذا في الواقع *مفيد*: يتيح لك رؤية سلوك الأداة عندما تكون الخطوط متفرّقة، ولا تزال خطوة المعاينة/العرض تعمل مع أي شيء متاح. يستخدم الدفتر أدناه خطوط نظام الدفتر نفسها فيعمل كل جزء من الأداة على ملفات حقيقية. استخدمه لرؤية خط الأنابيب يعمل من طرف إلى طرف؛ وانتقل إلى `uv` محلي أو Codespace متى أردت فحصًا أكثر ثراءً.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/font-scanner/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/font-scanner/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Ffont-scanner%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/font-scanner/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/font-scanner/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Ffont-scanner%2Fnotebook.ar.ipynb)
 
 ## الإعداد
 

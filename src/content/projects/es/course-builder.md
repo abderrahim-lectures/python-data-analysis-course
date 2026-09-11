@@ -34,11 +34,11 @@ Esto asume Python 101 — funciones, diccionarios y un `json` import cómodo. No
 
 **GitHub Codespaces** es una alternativa sin setup: abre [todo el repositorio del curso en un Codespace gratuito](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node y Python ya están instalados) y ejecuta los mismos comandos desde una terminal del navegador.
 
-**Google Colab, Kaggle Notebooks o Binder** funcionan bien para la mitad de modelado de datos de este proyecto — el notebook de [`examples/course-builder/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/course-builder/notebook.ipynb) ejecuta cada paso sobre un curso de muestra incluido. La nota honesta: los archivos de certificado (`certificate.txt`) se guardan limpiamente en un notebook, pero el código es idéntico de cualquier manera.
+**Google Colab, Kaggle Notebooks o Binder** funcionan bien para la mitad de modelado de datos de este proyecto — el notebook de [`examples/course-builder/notebook.es.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/course-builder/notebook.es.ipynb) ejecuta cada paso sobre un curso de muestra incluido. La nota honesta: los archivos de certificado (`certificate.txt`) se guardan limpiamente en un notebook, pero el código es idéntico de cualquier manera.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/course-builder/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/course-builder/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fcourse-builder%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/course-builder/notebook.es.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/course-builder/notebook.es.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fcourse-builder%2Fnotebook.es.ipynb)
 
 ## Configuración
 

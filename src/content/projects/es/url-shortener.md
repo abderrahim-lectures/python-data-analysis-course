@@ -36,9 +36,9 @@ Esto asume Python 101 y un toque ligero con API REST y `curl` — no se requiere
 
 **Google Colab, Kaggle Notebooks y Binder** ejecutan todo el motor (SQLite vive feliz en un notebook, y el notebook de ejemplo incluso ejercita la API a través del `TestClient` de FastAPI sin enlazar un puerto). La salvedad honesta: un notebook es un camino de prueba para la parte de *servicio* — no dejarás un servidor de larga duración corriendo ahí, y el archivo SQLite es efímero. Usa las insignias para la experiencia del motor + test-client, y ejecuta `uvicorn` localmente cuando quieras lo real.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/url-shortener/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/url-shortener/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Furl-shortener%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/url-shortener/notebook.es.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/url-shortener/notebook.es.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Furl-shortener%2Fnotebook.es.ipynb)
 
 ## Configuración
 

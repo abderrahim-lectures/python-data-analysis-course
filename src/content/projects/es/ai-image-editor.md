@@ -39,9 +39,9 @@ Esto asume Python 101 y comodidad ejecutando librerías de terceros — no se re
 
 **Google Colab, Kaggle Notebooks y Binder son una forma decente de *probar* el pipeline central.** Pillow está preinstalado en Colab y Kaggle, y el notebook de abajo genera su propia imagen de muestra para que cada paso se ejecute de verdad. La advertencia honesta: subir tus *propias* fotos a un notebook es más fricción que apuntar el CLI a una carpeta local, así que trata el camino del notebook como el arenero y el `uv` local como el flujo de trabajo real.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-image-editor/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-image-editor/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fai-image-editor%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-image-editor/notebook.es.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-image-editor/notebook.es.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fai-image-editor%2Fnotebook.es.ipynb)
 
 ## Configuración
 

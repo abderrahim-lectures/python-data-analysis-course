@@ -36,9 +36,9 @@ Cela suppose Python 101 et une aisance à exécuter des scripts depuis un termin
 
 **Google Colab, Kaggle Notebooks et Binder** peuvent chacun exécuter les cellules de code parfaitement — ils ont tous Python et la bibliothèque standard. L'honnêteté impose de préciser que le système de fichiers d'un notebook est éphémère : ton `tasks.json` peut ne pas survivre entre les sessions, donc traite ces chemins comme « voir la logique s'exécuter une fois » plutôt que « garder mes vraies tâches ». Utilise les badges pour essayer le code, et passe au `uv` local pour l'outil sur lequel tu comptes vraiment.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/task-manager/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/task-manager/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Ftask-manager%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/task-manager/notebook.fr.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/task-manager/notebook.fr.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Ftask-manager%2Fnotebook.fr.ipynb)
 
 ## Configuration
 

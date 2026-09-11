@@ -34,11 +34,11 @@ learningObjectives:
 
 **GitHub Codespaces** بديل بلا إعداد: افتح [مستودع الدورة كاملًا في Codespace مجاني](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node وPython و`uv` مثبّتة بالفعل) وشغّل نفس الأوامر من طرفية متصفح.
 
-**Google Colab أو Kaggle Notebooks أو Binder** طريقة جيدة *لتعلم المفاهيم* — نسخة دفتر الملاحظات في [`examples/config-manager/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/config-manager/notebook.ipynb) تشغّل كل دالة مع ملفات عينات مرفقة. القيد الصادق: لا يمكن لدفتر الملاحظات رؤية متغيّرات بيئة جهازك، لذا تُوضَّح طبقة متغيّرات البيئة بتجاوز محاكى بدلًا من ذلك.
+**Google Colab أو Kaggle Notebooks أو Binder** طريقة جيدة *لتعلم المفاهيم* — نسخة دفتر الملاحظات في [`examples/config-manager/notebook.ar.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/config-manager/notebook.ar.ipynb) تشغّل كل دالة مع ملفات عينات مرفقة. القيد الصادق: لا يمكن لدفتر الملاحظات رؤية متغيّرات بيئة جهازك، لذا تُوضَّح طبقة متغيّرات البيئة بتجاوز محاكى بدلًا من ذلك.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/config-manager/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/config-manager/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fconfig-manager%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/config-manager/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/config-manager/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fconfig-manager%2Fnotebook.ar.ipynb)
 
 ## الإعداد
 

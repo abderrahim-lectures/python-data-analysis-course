@@ -34,9 +34,9 @@ Esto asume Python 101 — cadenas, conjuntos, E/S de archivos y funciones. Nada 
 
 **Google Colab, Kaggle Notebooks y Binder ejecutan cada paso con honestidad** — sin GPU, sin secretos, sin archivos grandes — contra la transcripción de episodio de muestra incluida en el curso (una conversación falsa realista escrita a mano). La salvedad honesta: el notebook analiza la transcripción incluida en lugar de audio que tú grabes. El reconocimiento de voz real para tus propias grabaciones necesita una herramienta separada; todo lo *posterior* a la transcripción es exactamente lo que el notebook ejecuta de verdad.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/podcast-analyzer/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/podcast-analyzer/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fpodcast-analyzer%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/podcast-analyzer/notebook.es.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/podcast-analyzer/notebook.es.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fpodcast-analyzer%2Fnotebook.es.ipynb)
 
 ## Configuración
 

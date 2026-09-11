@@ -37,6 +37,11 @@ Una aplicación de tarjetas de estudio en la terminal que:
 - **Google Colab o Kaggle Notebooks.** Pega las celdas de código directamente en un notebook. Las llamadas a `input()` funcionan para los avisos de estudio, pero la E/S de archivos (Paso 6) funciona de manera distinta en el navegador.
 - **Playground de JupyterLite.** Pega las celdas de código directamente en un notebook — ten en cuenta que la persistencia de archivos (Paso 6) solo funciona localmente.
 
+- **Ejecútalo en el navegador.** Hay un cuaderno interactivo listo — ábrelo en Colab, Kaggle o Binder y sigue los pasos en orden.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/flashcard-app/notebook.es.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/flashcard-app/notebook.es.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fflashcard-app%2Fnotebook.es.ipynb)
+
 ## Configuración
 
 ```bash

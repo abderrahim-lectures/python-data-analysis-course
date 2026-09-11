@@ -34,6 +34,11 @@ Construis une plateforme de quiz avec des questions aléatoires, des sessions ch
 - **Google Colab ou les notebooks Kaggle.** Colle les cellules de code directement dans un notebook. Les graphiques se rendent en intégré, et `input()` fonctionne pour les invites de quiz.
 - **Terrain de jeu JupyterLite.** Colle les cellules de code directement dans un notebook — à noter que les entrées-sorties de fichiers (Étape 5) fonctionnent différemment dans le navigateur ; la persistance JSON ne fonctionnera qu'en local.
 
+- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt — ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/quiz-engine/notebook.fr.ipynb)
+  [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/quiz-engine/notebook.fr.ipynb)
+  [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fquiz-engine%2Fnotebook.fr.ipynb)
+
 ## Configuration
 
 ```bash

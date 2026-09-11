@@ -26,8 +26,8 @@ description: "ابنِ أداة CLI تقرأ فرق git diff staged حقيقيً
 
 **Google Colab وKaggle Notebooks طريقة معقولة *لتجربة* منطق الصياغة، لكن ليست لتشغيل الأداة فعليًا.** لا يوفر أي منهما افتراضيًا مستودع git محلي حقيقي بتغييرات staged، وفكرة هذه الأداة بأكملها هي صياغة رسالة لعملك الخاص *الجاري* — نظام الملفات المؤقت في دفتر الملاحظات لا يملك شيئًا من ذلك، ولا يوجد شيء منطقي لتثبيته فعليًا. يتجاوز دفتر الملاحظات أدناه هذا بصدق، بدلًا من التظاهر بأن الفجوة غير موجودة: فهو يستنسخ (`!git clone`) مستودع هذه الدورة نفسه داخل دفتر الملاحظات ويصيغ رسالة لالتزام تاريخي صغير وحقيقي منه باستخدام `git show`، لذا التقاط الفرق، وsystem prompt، واستدعاء النموذج اللغوي كلها تعمل مقابل مخرجات حقيقية وواقعية المظهر — الفرق فقط أنه يصيغ لالتزام مثالي ثابت، ويتوقف عند ذلك؛ **لا** يعرض الحلقة التفاعلية للقبول/التعديل/الالتزام، بما أن الالتزام له معنى فقط مقابل مستودع تعمل فيه فعليًا. استخدمه لرؤية منطق الصياغة يعمل من البداية للنهاية دون أي إعداد؛ وانتقل إلى `uv` محليًا أو إلى Codespace عندما تريد الأداة التفاعلية الكاملة موجَّهة إلى تغييراتك الفعلية الخاصة.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/commit-message-agent/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/commit-message-agent/notebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/commit-message-agent/notebook.ar.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/commit-message-agent/notebook.ar.ipynb)
 
 ## الإعداد
 

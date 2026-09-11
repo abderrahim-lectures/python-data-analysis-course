@@ -35,9 +35,9 @@ Cela suppose Python 101 et une aisance de base avec les fichiers et les dossiers
 
 **Les notebooks Google Colab et Binder** fonctionnent bien aussi : le notebook reproduit chaque étape, Pillow s'installe avec un simple `!pip install Pillow`, et tu peux téléverser une photo ou utiliser les mêmes images de test déterministes que la configuration génère. **JupyterLite** est le seul chemin à éviter : il exécute Python dans le navigateur sans couche de paquets native, donc Pillow ne peut pas s'y installer — utilise les badges de notebook ci-dessous ou le chemin local à la place.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/image-editor/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/image-editor/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fimage-editor%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/image-editor/notebook.fr.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/image-editor/notebook.fr.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fimage-editor%2Fnotebook.fr.ipynb)
 
 ## Configuration
 

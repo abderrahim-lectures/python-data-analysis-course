@@ -52,6 +52,16 @@ filter in `astro.config.mjs` drops alias URLs, `ProjectDetail.astro` needs
 `localizedProjectSlug` (`src/lib/projectSlugs.ts`) — never interpolate the
 English slug. The English slug stays the gameState content key.
 
+**Per-locale project notebooks (2026-09-11, coordinated):** every project has
+`examples/<slug>/notebook.{ar,es,fr}.ipynb` generated from that locale's
+project markdown (prose translated, code cells English) by
+`scripts/generate-notebooks.mjs`; the 124 hand-authored EN `notebook.ipynb`
+files are committed and must NOT be regenerated or reformatted. Each locale's
+Colab/Kaggle/Binder badges in `src/content/projects/{ar,es,fr}/*.md` point at
+its own `notebook.{locale}.ipynb`; if locale notebook paths or badge targets
+drift, fix with `scripts/link-project-notebooks.mjs` (idempotent) then re-run
+the full gate suite.
+
 **opencode owns**:
 - Build/typecheck health: `tsconfig.json` includes, `npx astro check` at 0 errors.
 - `tests/e2e/smoke.mjs` (CDP suite, no Playwright dep).

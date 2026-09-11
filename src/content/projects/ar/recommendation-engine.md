@@ -34,9 +34,9 @@ prerequisites: ["python-101/libraries", "data-analysis/pandas", "data-analysis/g
 
 **Google Colab وKaggle Notebooks وBinder تشغّل خط أنابيب الحوسبة بأمانة** — مصفوفة التقييمات هي ~100 ألف تقييم حقيقي تناسب الذاكرة براحة، وتشابه جيب التمام جبر خطي، ومجموعة البيانات هي نفس ملف MovieLens العام الذي يستخدمه الطلاب دائمًا، لذا تطابق الأرقام في دفترك الأرقام في رأسك. لا مفاتيح API، لا GPU. الشيء الوحيد الذي لا يمكنك فعله في دفتر هو استيراد تخطيط ملفاتك الخاص — ولحظة رغبتك في خدمة تقدم توصيات عبر HTTP، تكون تلك القمة محلية.
 
-[![فُتح في Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/recommendation-engine/notebook.ipynb)
-[![فُتح في Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/recommendation-engine/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Frecommendation-engine%2Fnotebook.ipynb)
+[![فُتح في Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/recommendation-engine/notebook.ar.ipynb)
+[![فُتح في Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/recommendation-engine/notebook.ar.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Frecommendation-engine%2Fnotebook.ar.ipynb)
 
 ## الإعداد
 

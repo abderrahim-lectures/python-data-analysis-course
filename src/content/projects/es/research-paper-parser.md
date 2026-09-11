@@ -34,9 +34,9 @@ Esto asume Python 101 — E/S de archivos, strings, funciones y diccionarios. Op
 
 **Google Colab, Kaggle Notebooks y Binder manejan el análisis con honestidad** — Python puro corre en cualquier lugar, y un artículo corto de texto plano pegado o subido al notebook se analiza exactamente como localmente. El notebook puede incluso generar un *artículo de muestra* sobre la marcha para que tengas datos deterministas antes de obtener uno real. Lo único que un notebook no puede reproducir es la alegría de "agarra un `.txt` real de arXiv y analízalo" — ese tirón es un hábito local/de terminal.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/research-paper-parser/notebook.ipynb)
-[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/research-paper-parser/notebook.ipynb)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fresearch-paper-parser%2Fnotebook.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/research-paper-parser/notebook.es.ipynb)
+[![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/research-paper-parser/notebook.es.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fresearch-paper-parser%2Fnotebook.es.ipynb)
 
 ## Configuración
 
