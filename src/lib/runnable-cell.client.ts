@@ -128,12 +128,22 @@ def _wrap_bare_expr(src):
 // becomes a no-op, no canvas reaches the page body, and every figure stays in
 // the Gcf manager where the post-run drain collects it as an inline PNG.
 const FIG_SHOW_PATCH_SRC = `
+import sys as _sys
 try:
     import matplotlib as _mpl
     try:
         _mpl.use('Agg')
     except Exception:
         pass
+    # A previous cell may have died mid-figure (a NameError after
+    # plt.subplots() leaves the figure in the Gcf manager; the failed run's
+    # drain never runs). Detach those orphaned figures so THIS cell's drain
+    # renders only the figures this cell actually created.
+    _plt = _sys.modules.get('matplotlib.pyplot')
+    if _plt is not None:
+        import matplotlib._pylab_helpers as _gcf
+        for _num in list(_plt.get_fignums()):
+            _gcf.Gcf.figs.pop(_num, None)
 except Exception:
     pass
 `;
