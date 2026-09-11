@@ -2,7 +2,7 @@
 // Shared track landing for locale pages, e.g. /ar/تعلم/python-101/hard.
 import {getCollection} from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import {learnHref, moduleHref, idInLocale, type Locale} from '../../lib/routeSegments';
+import {learnHref, moduleHref, learnAlternates, idInLocale, type Locale} from '../../lib/routeSegments';
 import {m} from '../../paraglide/messages.js';
 import {TRACK_ICONS, sectionName, sectionDescription, trackName} from '../../lib/sections';
 
@@ -41,7 +41,7 @@ const diffColor = (d: string) => d === 'beginner' ? 'var(--success)' : d === 'in
 const arrow = locale === 'ar' ? '←' : '→';
 ---
 
-<Base title={`${sectionName(locale, section)} ${trackName(locale, track)} Track — PyDA Course`} description={sectionDescription(locale, section)} lang={locale} dir={dir}>
+<Base title={`${sectionName(locale, section)} ${trackName(locale, track)} Track — PyDA Course`} description={sectionDescription(locale, section)} lang={locale} dir={dir} alternates={learnAlternates(section, track, 'track')}>
   <nav class="crumb container">
     <a href={learnHref(locale, base)}>{m.nav_learn()}</a> <span>/</span>
     <a href={learnHref(locale, base, section)}>{sectionName(locale, section)}</a> <span>/</span>

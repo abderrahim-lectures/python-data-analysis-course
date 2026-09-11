@@ -3,7 +3,7 @@
 import {getCollection, type CollectionEntry} from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import ModuleNav from '../ModuleNav.astro';
-import {learnHref, lessonHref, MODULE_WORDS, trackWord, idInLocale, type Locale} from '../../lib/routeSegments';
+import {learnHref, lessonHref, MODULE_WORDS, trackWord, learnAlternates, idInLocale, type Locale} from '../../lib/routeSegments';
 import {m} from '../../paraglide/messages.js';
 import {sectionName} from '../../lib/sections';
 
@@ -40,7 +40,7 @@ const modulesPath = learnHref(locale, base, section, trackWord(locale, track), M
 const arrow = locale === 'ar' ? '←' : '→';
 ---
 
-<Base title={`${title} — PyDA Course`} description={description} lang={locale} dir={dir}>
+<Base title={`${title} — PyDA Course`} description={description} lang={locale} dir={dir} alternates={learnAlternates(section, track, 'module', entry.id.split('/').pop()!)}>
   <nav class="crumb container">
     <a href={learnHref(locale, base)}>{m.nav_learn()}</a> <span>/</span>
     <a href={learnHref(locale, base, section)}>{sectionName(locale, section)}</a> <span>/</span>

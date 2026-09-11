@@ -156,3 +156,27 @@ export function trackWord(locale: Locale, track: 'normal' | 'hard'): string {
   return TRACK_WORDS[locale][track];
 }
 
+/** hreflang/switcher alternates for a learn-tree page, keyed by locale.
+    `kind` selects the URL shape: 'section' = /[nav]/[section],
+    'track' = .../[track], 'lesson'/'module' add their word + slug. */
+export function learnAlternates(
+  section: string,
+  track: 'normal' | 'hard',
+  kind: 'section' | 'track' | 'lesson' | 'module',
+  slug = '',
+): Record<Locale, string> {
+  const strip = (p: string) => p.replace(/^\//, '');
+  return Object.fromEntries(
+    ALL_LOCALES.map((locale) => [
+      locale,
+      kind === 'lesson'
+        ? strip(lessonHref(locale, '', section, track, slug))
+        : kind === 'module'
+          ? strip(moduleHref(locale, '', section, track, slug))
+          : kind === 'track'
+            ? strip(learnHref(locale, '', section, trackWord(locale, track)))
+            : strip(learnHref(locale, '', section)),
+    ]),
+  ) as Record<Locale, string>;
+}
+

@@ -4,7 +4,7 @@ import {getCollection, render, type CollectionEntry} from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Quiz from '../Quiz.astro';
 import RelatedProjects from './RelatedProjects.astro';
-import {lessonHref, learnHref, moduleHref, idInLocale, trackWord, type Locale} from '../../lib/routeSegments';
+import {lessonHref, learnHref, moduleHref, idInLocale, trackWord, learnAlternates, type Locale} from '../../lib/routeSegments';
 import {NOTEBOOK_OPENERS} from '../../lib/notebookLinks';
 import {m} from '../../paraglide/messages.js';
 import {TRACK_ICONS, sectionName} from '../../lib/sections';
@@ -87,7 +87,7 @@ const jsonLd = [
 ];
 ---
 
-<Base title={`${title} — PyDA Course`} description={description} lang={locale} dir={dir} jsonLd={jsonLd}>
+<Base title={`${title} — PyDA Course`} description={description} lang={locale} dir={dir} jsonLd={jsonLd} alternates={learnAlternates(section, track, 'lesson', slug)}>
   <nav class="crumb container">
     <a href={learnHref(locale, base)}>{m.nav_learn()}</a> <span>/</span>
     <a href={learnHref(locale, base, section)}>{sectionName(locale, section)}</a> <span>/</span>
@@ -168,7 +168,7 @@ const jsonLd = [
 </Base>
 
 <script>
-  import {completeLesson, isLessonComplete} from '../../lib/gameState';
+  import {completeLesson, isLessonComplete, loadState} from '../../lib/gameState';
   const article = document.querySelector('[data-lesson-id]');
   const id = article?.getAttribute('data-lesson-id');
   const btn = document.querySelector('[data-mark-complete]') as HTMLButtonElement | null;
@@ -185,9 +185,11 @@ const jsonLd = [
   btn?.addEventListener('click', (e) => {
     e.preventDefault();
     if (!id) return;
+    const xpBefore = loadState().xp ?? 0;
     completeLesson(id);
     markDone();
-    document.dispatchEvent(new CustomEvent('lesson:complete'));
+    const gained = (loadState().xp ?? 0) - xpBefore;
+    document.dispatchEvent(new CustomEvent('lesson:complete', {detail: {xp: gained}}));
   });
 </script>
 

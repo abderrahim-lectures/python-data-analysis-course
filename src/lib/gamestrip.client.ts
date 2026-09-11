@@ -144,20 +144,16 @@ function initOnboarding() {
   focusable()[0]?.focus();
 }
 
-let lastXP = readState().xp || 0;
-
 function initXPToastListener() {
   document.addEventListener('lesson:complete', (e) => {
-    const s = readState();
-    const {xp} = xpProgress(s);
     renderXPBar();
     const container = document.getElementById('xp-toast-container');
     if (!container) return;
     const toast = document.createElement('div');
     toast.className = 'floating-xp';
-    const detail = (e as CustomEvent<{xp?: number}>).detail;
-    const gained = typeof detail?.xp === 'number' ? detail.xp : xp - lastXP;
-    lastXP = detail?.xp === undefined ? xp : lastXP + gained;
+    // Every dispatcher sends the exact amount it awarded (state delta), so the
+    // toast never leaks unrelated XP. Missing detail = silent.
+    const gained = (e as CustomEvent<{xp?: number}>).detail?.xp ?? 0;
     if (gained <= 0) return;
     toast.textContent = m.xp_toast({amount: gained});
     container.appendChild(toast);

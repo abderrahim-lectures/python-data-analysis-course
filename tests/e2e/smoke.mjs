@@ -98,6 +98,7 @@ await new Promise(r => setTimeout(r, 300));
 check('clicking it marks the lesson done', await evaluate('document.querySelector("[data-mark-complete]").disabled'), true);
 check('XP is awarded', await evaluate('JSON.parse(localStorage.getItem("pda:state")).xp'), 60);
 check('the streak starts at 1, not 0', await evaluate('JSON.parse(localStorage.getItem("pda:state")).streak'), 1);
+check('a toast shows the exact XP gained', await evaluate('document.querySelector(".floating-xp")?.textContent?.includes("60") ?? false'), true);
 
 await goto('/learn/python-101/normal/lessons/02-variables');
 check('completion survives a reload', await evaluate('document.querySelector("[data-mark-complete]").disabled'), true);

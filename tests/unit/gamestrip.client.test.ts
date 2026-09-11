@@ -77,10 +77,24 @@ describe('gamestrip.client.ts', () => {
     await import('../../src/lib/gamestrip.client.ts');
 
     seedLocalStorage({xp: 40, streak: 0, badges: []});
-    stub.listeners['lesson:complete']?.({});
+    stub.listeners['lesson:complete']?.({detail: {xp: 40}});
     expect(bar.dataset.level).toBe('1');
     expect(container.children.length).toBe(1);
     expect(container.children[0].textContent).toContain('40');
+  });
+
+  test('stays silent when lesson:complete carries no xp detail', async () => {
+    const stub = setupDom();
+    const bar = fakeEl('xp-bar');
+    stub.elements.set('xp-bar', bar);
+    const container = fakeEl('xp-toast-container');
+    stub.elements.set('xp-toast-container', container);
+
+    vi.resetModules();
+    await import('../../src/lib/gamestrip.client.ts');
+
+    stub.listeners['lesson:complete']?.({});
+    expect(container.children.length).toBe(0);
   });
 
   test('shows onboarding when not yet seen and dismisses it', async () => {

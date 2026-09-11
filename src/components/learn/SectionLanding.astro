@@ -2,7 +2,7 @@
 // Shared section landing for locale pages, e.g. /ar/تعلم/python-101.
 import {getCollection} from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import {learnHref, moduleHref, idInLocale, type Locale} from '../../lib/routeSegments';
+import {learnHref, moduleHref, learnAlternates, idInLocale, type Locale} from '../../lib/routeSegments';
 import {m} from '../../paraglide/messages.js';
 import {TRACK_ICONS, sectionIcon, sectionName, sectionDescription} from '../../lib/sections';
 
@@ -39,7 +39,7 @@ const totalMinutes = [...normalLessons, ...hardLessons].reduce((sum, l) => sum +
 const totalHours = Math.round(totalMinutes / 60);
 ---
 
-<Base title={`${sectionName(locale, section)} — PyDA Course`} description={sectionDescription(locale, section)} lang={locale} dir={dir}>
+<Base title={`${sectionName(locale, section)} — PyDA Course`} description={sectionDescription(locale, section)} lang={locale} dir={dir} alternates={learnAlternates(section, 'normal', 'section')}>
   <nav class="crumb container">
     <a href={learnHref(locale, base)}>{m.nav_learn()}</a> <span>/</span>
     <span class="crumb__here">{sectionName(locale, section)}</span>

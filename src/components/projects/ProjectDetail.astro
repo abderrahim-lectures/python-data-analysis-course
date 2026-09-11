@@ -125,7 +125,7 @@ const jsonLd = {
 </Base>
 
 <script>
-  import {viewProject, completeProject, isProjectComplete, recordProjectStep, isProjectStepDone, XP} from '../../lib/gameState.ts';
+  import {viewProject, completeProject, isProjectComplete, recordProjectStep, isProjectStepDone, loadState, XP} from '../../lib/gameState.ts';
 
   const article = document.querySelector('[data-project-slug]');
   const slug = article?.getAttribute('data-project-slug') ?? '';
@@ -141,12 +141,22 @@ const jsonLd = {
     ? Array.from(content.querySelectorAll('h2')).filter((h) => STEP_RE.test(h.textContent ?? ''))
     : [];
 
+  // Step buttons live in different places depending on whether the step has a
+  // checklist: gated steps get their button in a `.step-actions` row after the
+  // `<ul>` (so `h.querySelector('.step-clear')` can't see it), ungated steps
+  // keep it in the heading. Keep a per-index map so clearStep can always reach it.
+  const rowButtons = new Map<number, HTMLButtonElement>();
+
   const clearStep = (h: HTMLHeadingElement): void => {
     const idx = parseInt(h.textContent?.match(STEP_RE)?.[1] ?? '0', 10) - 1;
-    if (idx < 0 || !slug) return;
-    recordProjectStep(slug.replace(/.*\//, ''), idx);
+    const stepSlug = slug.replace(/.*\//, '');
+    if (idx < 0 || !slug || isProjectStepDone(stepSlug, idx)) return;
+    recordProjectStep(stepSlug, idx);
     h.classList.add('is-step-done');
-    h.querySelector<HTMLButtonElement>('.step-clear')?.setAttribute('aria-pressed', 'true');
+    const button = rowButtons.get(idx);
+    button?.setAttribute('aria-pressed', 'true');
+    button?.setAttribute('aria-label', `${button.getAttribute('aria-label') ?? 'Mark complete'} — done`);
+    button?.setAttribute('disabled', '');
     document.dispatchEvent(new CustomEvent('lesson:complete', {detail: {xp: XP.PROJECT_STEP}}));
   };
 
@@ -180,6 +190,7 @@ const jsonLd = {
     btn.textContent = stepLabel;
     btn.setAttribute('aria-pressed', String(done));
     btn.setAttribute('aria-label', `${stepLabel} (${idx >= 0 ? idx + 1 : i + 1})`);
+    rowButtons.set(idx >= 0 ? idx : i, btn);
     btn.addEventListener('click', (e) => { e.stopPropagation(); clearStep(h); });
 
     // Collect the `- ✅ …` checklist items scoped to this step (from this h2
@@ -262,9 +273,11 @@ const jsonLd = {
   if (slug && isProjectComplete(slug)) markDone();
   btn?.addEventListener('click', () => {
     if (!slug) return;
+    const xpBefore = loadState().xp ?? 0;
     completeProject(slug);
     markDone();
-    document.dispatchEvent(new CustomEvent('lesson:complete', {detail: {xp: XP.PROJECT_COMPLETE}}));
+    const gained = (loadState().xp ?? 0) - xpBefore;
+    document.dispatchEvent(new CustomEvent('lesson:complete', {detail: {xp: gained}}));
   });
 </script>
 
