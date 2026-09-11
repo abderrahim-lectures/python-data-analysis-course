@@ -147,7 +147,7 @@ function initOnboarding() {
 let lastXP = readState().xp || 0;
 
 function initXPToastListener() {
-  document.addEventListener('lesson:complete', () => {
+  document.addEventListener('lesson:complete', (e) => {
     const s = readState();
     const {xp} = xpProgress(s);
     renderXPBar();
@@ -155,8 +155,10 @@ function initXPToastListener() {
     if (!container) return;
     const toast = document.createElement('div');
     toast.className = 'floating-xp';
-    const gained = xp - lastXP;
-    lastXP = xp;
+    const detail = (e as CustomEvent<{xp?: number}>).detail;
+    const gained = typeof detail?.xp === 'number' ? detail.xp : xp - lastXP;
+    lastXP = detail?.xp === undefined ? xp : lastXP + gained;
+    if (gained <= 0) return;
     toast.textContent = m.xp_toast({amount: gained});
     container.appendChild(toast);
     setTimeout(() => toast.remove(), 3000);

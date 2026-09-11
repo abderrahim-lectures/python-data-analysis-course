@@ -125,7 +125,7 @@ const jsonLd = {
 </Base>
 
 <script>
-  import {viewProject, completeProject, isProjectComplete, recordProjectStep, isProjectStepDone} from '../../lib/gameState.ts';
+  import {viewProject, completeProject, isProjectComplete, recordProjectStep, isProjectStepDone, XP} from '../../lib/gameState.ts';
 
   const article = document.querySelector('[data-project-slug]');
   const slug = article?.getAttribute('data-project-slug') ?? '';
@@ -147,6 +147,7 @@ const jsonLd = {
     recordProjectStep(slug.replace(/.*\//, ''), idx);
     h.classList.add('is-step-done');
     h.querySelector<HTMLButtonElement>('.step-clear')?.setAttribute('aria-pressed', 'true');
+    document.dispatchEvent(new CustomEvent('lesson:complete', {detail: {xp: XP.PROJECT_STEP}}));
   };
 
   // ── checklist gating: `- ✅ …` items inside a step become checkboxes; the
@@ -263,7 +264,7 @@ const jsonLd = {
     if (!slug) return;
     completeProject(slug);
     markDone();
-    document.dispatchEvent(new CustomEvent('lesson:complete'));
+    document.dispatchEvent(new CustomEvent('lesson:complete', {detail: {xp: XP.PROJECT_COMPLETE}}));
   });
 </script>
 
