@@ -29,11 +29,11 @@ export function detectLocale(pathname: string): Locale {
   return 'en';
 }
 
-export const NAV_WORDS: Record<Locale, {learn: string; projects: string; progress: string; credits: string; cheatsheets: string}> = {
-  en: {learn: 'learn', projects: 'projects', progress: 'progress', credits: 'credits', cheatsheets: 'cheatsheets'},
-  ar: {learn: 'تعلم', projects: 'مشاريع', progress: 'تقدم', credits: 'المصادر', cheatsheets: 'ملخصات'},
-  es: {learn: 'aprender', projects: 'proyectos', progress: 'progreso', credits: 'creditos', cheatsheets: 'referencias'},
-  fr: {learn: 'apprendre', projects: 'projets', progress: 'progression', credits: 'credits', cheatsheets: 'antiseche'},
+export const NAV_WORDS: Record<Locale, {learn: string; projects: string; progress: string; credits: string; cheatsheets: string; progressGuide: string}> = {
+  en: {learn: 'learn', projects: 'projects', progress: 'progress', credits: 'credits', cheatsheets: 'cheatsheets', progressGuide: 'progress-guide'},
+  ar: {learn: 'تعلم', projects: 'مشاريع', progress: 'تقدم', credits: 'المصادر', cheatsheets: 'ملخصات', progressGuide: 'دليل-التقدم'},
+  es: {learn: 'aprender', projects: 'proyectos', progress: 'progreso', credits: 'creditos', cheatsheets: 'referencias', progressGuide: 'guia-progreso'},
+  fr: {learn: 'apprendre', projects: 'projets', progress: 'progression', credits: 'credits', cheatsheets: 'antiseche', progressGuide: 'guide-progression'},
 };
 
 export const TRACK_WORDS: Record<Locale, {normal: string; hard: string}> = {
@@ -125,6 +125,11 @@ export function playgroundHref(locale: Locale, base: string): string {
 /** Top-level `/credits`/`/creditos`/… link. */
 export function creditsHref(locale: Locale, base: string): string {
   return withBase(localizedPath([NAV_WORDS[locale].credits], locale), base);
+}
+
+/** Top-level `/progress-guide`/`/guia-progreso`/… link. */
+export function progressGuideHref(locale: Locale, base: string): string {
+  return withBase(localizedPath([NAV_WORDS[locale].progressGuide], locale), base);
 }
 
 /** Top-level `/cheatsheets`/`/referencias`/… link. */

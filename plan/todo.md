@@ -1846,3 +1846,46 @@ Coordination notes: the smoke "week-model parity" seed was reseeded from fiction
 - **Gates (at commit)**: `npm run typecheck` 0 errors · `npm test` 1224/1224 ·
   hreflang 40/40 · e2e 49/49 · a11y 0 · contrast 0 · responsive clean ·
   lesson 9/9 · build 1282 pages.
+
+## Session 2026-09-11 (opencode) — "How your progress is computed" page (4 locales)
+
+- [x] **DOI verified** for the progress-page citation: `https://doi.org/10.58477/dj.v4i1.348`
+  resolves 200 → `https://journal.ypmma.org/index.php/dj/article/view/348`. The link at
+  `src/components/ProgressPage.astro:331` was already correct.
+- [x] **Researched the mechanics** from source (all Claude-owned, read-only): XP economy at
+  `gameState.ts:40-53`; level `1 + ⌊(XP/50)^0.6⌋` at `levelMath.ts:6`; rank thresholds at
+  `gameState.ts:466-474`; streak increment/reset/bonus rules; improvement-report formulas in
+  `gamestats.ts`; localStorage `pda:state` + 200-entry activity log.
+- [x] **User decision**: build the static page now (standalone); the discoverability link
+  (nav / progress page) is **deferred to Claude** — see handoff note below.
+- [x] **`src/lib/routeSegments.ts`**: added `progressGuide` to `NAV_WORDS` (en
+  `progress-guide`, ar `دليل-التقدم`, es `guia-progreso`, fr `guide-progression`) +
+  `progressGuideHref(locale, base)`.
+- [x] **Messages**: `progress_guide_*` key block added to all 4 `messages/*.json`
+  (409 keys/locale, exact parity kept). `tests/unit/i18n.test.ts` SHARED set extended with
+  `progress_guide_report_kda`, `progress_guide_report_study_link` (same universal K/D/A +
+  citation tokens as `progress_kpi_kda`/`progress_report_lede_study`) and
+  `progress_guide_report_engagement` ("Engagement" is French by the `learn_hub_modules`
+  precedent).
+- [x] **Page**: shared `src/components/ProgressGuide.astro` (credits.astro card pattern —
+  XP table, level formula, rank list, streaks, quests, improvement report with DOI link,
+  storage note, back-to-progress link) + 4 thin wrappers: `progress-guide.astro`,
+  `ar/دليل-التقدم.astro`, `es/guia-progreso.astro`, `fr/guide-progression.astro`.
+- [x] **Gates**: `npm run typecheck` 0 errors · `npm test` 1224/1224 · hreflang 40/40 ·
+  e2e smoke 49/49 · `npm run build` 1286 pages · all 4 routes render with correct hreflang
+  alternates + `dir="rtl"` for ar + working back links per locale + DOI link present.
+  `npm run check`: still exactly the 4 pre-existing errors on Claude-owned locale project
+  index pages (commit `a28b723a`), none new.
+- **Status**: NOT yet committed — working tree has messages×4, routeSegments.ts, i18n.test.ts
+  + 5 new files staged as pending.
+
+## HANDOFF → Claude (discoverability)
+
+The standalone "How your progress is computed" page is built and gate-clean at
+`/progress-guide`, `/ar/دليل-التقدم`, `/es/guia-progreso`, `/fr/guide-progression`
+(hreflang cluster wired via `NAV_WORDS[].progressGuide` / `progressGuideHref`). Per user
+decision, adding it to the **product chrome is yours**: a nav/footer/Base.astro link or a
+link card on the progress page (`ProgressPage.astro`) pointing to the guide. Content is
+source-derived (XP/level/rank/streak/quest/report math) so it stays truthful if the XLS
+economy changes — please re-verify if you touch `gameState.ts` constants. DOI citation
+(`10.58477/dj.v4i1.348`) is already on both this page and `ProgressPage.astro:331`.

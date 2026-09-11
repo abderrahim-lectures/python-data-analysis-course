@@ -58,9 +58,15 @@ describe('message files stay complete and translated', () => {
     // read identically in every locale by design.
     'progress_xp_unit', 'progress_report_lede_study', 'progress_kpi_kda',
     'progress_rank_bronze', 'progress_report_lede_end',
+    // Progress guide: same K/D/A acronym and same study citation token as
+    // above; the guide repeats them verbatim on its own page.
+    'progress_guide_report_kda', 'progress_guide_report_study_link',
     // Learn hub: "modules" is the same word in French; "lessons" is genuinely
     // translated everywhere (leçons, lecciones, دروس).
     'learn_hub_modules',
+    // Progress guide: "Engagement" is the same word in French, matching the
+    // learn-hub "modules" precedent.
+    'progress_guide_report_engagement',
   ]);
 
   test.each(LOCALES)('%s has every message key (parity with en)', (loc) => {
