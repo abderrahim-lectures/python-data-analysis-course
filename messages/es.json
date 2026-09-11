@@ -407,5 +407,9 @@
   "progress_guide_report_study_link": "Prayoga et al., 2026",
   "progress_guide_report_study_post": ", un curso de informática tipo novela visual medido con N-Gain 0.61 y aceptación del 87.6%.",
   "progress_guide_report_footnote": "Tu informe nombra una banda diagnóstica (Novato → Leyenda) a partir de tu ratio K/D/A, y solo aparece tras tu primera lección completada. Todo se calcula desde tu propia actividad.",
-  "progress_guide_back": "Volver a tu progreso"
+  "progress_guide_back": "Volver a tu progreso",
+  "progress_guide_link_heading": "Cómo se calcula el progreso",
+  "progress_guide_link_lede": "Cada regla de XP, fórmula de nivel, rango, racha, misión y métrica del informe — documentado desde el código.",
+  "progress_guide_link_cta": "Lee cómo funciona el progreso",
+  "project_checklist_hint": "Completa cada elemento de la lista para marcar este paso como hecho y ganar +{n} XP."
 }

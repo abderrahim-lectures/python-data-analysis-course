@@ -407,5 +407,9 @@
   "progress_guide_report_study_link": "Prayoga et al., 2026",
   "progress_guide_report_study_post": ", a visual-novel-based computing course measured with N-Gain 0.61 and 87.6% acceptance.",
   "progress_guide_report_footnote": "Your report labels a diagnostic band (Rookie → Legend) from your K/D/A ratio, and is gated: it only appears after your first completed lesson. Everything is computed from your own activity.",
-  "progress_guide_back": "Back to your progress"
+  "progress_guide_back": "Back to your progress",
+  "progress_guide_link_heading": "How progress is computed",
+  "progress_guide_link_lede": "Every XP rule, level formula, rank, streak, quest, and report metric — documented from the code.",
+  "progress_guide_link_cta": "Read how progress works",
+  "project_checklist_hint": "Complete every checklist item to mark this step done and earn +{n} XP."
 }

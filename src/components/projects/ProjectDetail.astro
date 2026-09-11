@@ -95,7 +95,7 @@ const jsonLd = {
     <ProjectArt slug={slug} class="hero-art" />
   </div>
 
-  <article class="container lesson-content project-article" data-project-slug={slug} data-step-label={m.mark_complete()} data-cleared={m.project_step_cleared()} data-step-xp={String(XP.PROJECT_STEP)}>
+  <article class="container lesson-content project-article" data-project-slug={slug} data-step-label={m.mark_complete()} data-cleared={m.project_step_cleared()} data-step-xp={String(XP.PROJECT_STEP)} data-step-check-hint={m.project_checklist_hint({n: XP.PROJECT_STEP})}>
     <header class="project-head">
       <div class="project-head__meta">
         <span class="project-head__diff" style={`color:${diffText}`}>{m[diffLabel]()}</span>
@@ -149,10 +149,26 @@ const jsonLd = {
     h.querySelector<HTMLButtonElement>('.step-clear')?.setAttribute('aria-pressed', 'true');
   };
 
+  // ── checklist gating: `- ✅ …` items inside a step become checkboxes; the
+  // step's "Mark complete" button stays disabled until every item is checked.
+  // Persisted per (project, step, item) so a reload keeps the ticks.
+  const cleanSlug = slug.replace(/.*\//, '');
+  const doneHint = article?.getAttribute('data-step-check-hint') ?? 'Complete every checklist item to mark this step done.';
+  const checkState = (() => {
+    try {
+      return JSON.parse(localStorage.getItem(`pda.steps.${cleanSlug}`) ?? '{}') as Record<string, boolean[]>;
+    } catch {
+      return {};
+    }
+  })();
+  const persistChecks = () => {
+    try { localStorage.setItem(`pda.steps.${cleanSlug}`, JSON.stringify(checkState)); } catch { /* ignore */ }
+  };
+
   steps.forEach((h, i) => {
     h.classList.remove('is-step-done');
     const idx = parseInt(h.textContent?.match(STEP_RE)?.[1] ?? '0', 10) - 1;
-    const done = slug ? isProjectStepDone(slug.replace(/.*\//, ''), idx) : false;
+    const done = slug ? isProjectStepDone(cleanSlug, idx) : false;
     if (done) h.classList.add('is-step-done');
     h.dataset.stepCleared = article?.getAttribute('data-cleared') ?? 'cleared';
     h.dataset.stepXp = article?.getAttribute('data-step-xp') ?? '15';
@@ -164,7 +180,74 @@ const jsonLd = {
     btn.setAttribute('aria-pressed', String(done));
     btn.setAttribute('aria-label', `${stepLabel} (${idx >= 0 ? idx + 1 : i + 1})`);
     btn.addEventListener('click', (e) => { e.stopPropagation(); clearStep(h); });
-    h.appendChild(btn);
+
+    // Collect the `- ✅ …` checklist items scoped to this step (from this h2
+    // up to the next step h2 or the end of the article's content).
+    const items: HTMLLIElement[] = [];
+    let node: Element | null = h.nextElementSibling;
+    while (node) {
+      if (node.tagName === 'H2' && STEP_RE.test(node.textContent ?? '')) break;
+      if (node.tagName === 'UL') {
+        Array.from(node.children).forEach((li) => {
+          if (li.tagName === 'LI' && /^\s*✅/.test(li.textContent ?? '')) items.push(li as HTMLLIElement);
+        });
+      }
+      node = node.nextElementSibling;
+    }
+    if (items.length === 0) {
+      // Step has no checklist: keep the button on the heading, never gated.
+      h.appendChild(btn);
+      return;
+    }
+
+    const key = String(idx);
+    checkState[key] = checkState[key] ?? items.map(() => done);
+    const ul = items[0].parentElement as HTMLUListElement | null;
+    const checkboxes: HTMLInputElement[] = [];
+
+    items.forEach((li, j) => {
+      const label = document.createElement('label');
+      label.className = 'step-check';
+      const box = document.createElement('input');
+      box.type = 'checkbox';
+      box.checked = !!checkState[key][j];
+      const span = document.createElement('span');
+      Array.from(li.childNodes).forEach((child) => {
+        if (child.nodeType === Node.TEXT_NODE && /^\s*✅/.test(child.textContent ?? '')) {
+          const rest = (child.textContent ?? '').replace(/^\s*✅\s*/, '');
+          if (rest) span.appendChild(document.createTextNode(rest));
+        } else {
+          span.appendChild(child);
+        }
+      });
+      label.replaceChildren(box, span);
+      li.replaceWith(label);
+      box.addEventListener('change', () => {
+        checkState[key][j] = box.checked;
+        persistChecks();
+        btn.disabled = !checkState[key].every(Boolean);
+        if (!btn.disabled) btn.title = '';
+      });
+      checkboxes.push(box);
+    });
+
+    const row = document.createElement('div');
+    row.className = 'step-actions';
+    const note = document.createElement('p');
+    note.className = 'step-check-hint';
+    note.textContent = doneHint;
+    row.appendChild(note);
+    row.appendChild(btn);
+    ul?.insertAdjacentElement('afterend', row);
+
+    if (done) {
+      checkboxes.forEach((box) => box.disabled = true);
+      btn.disabled = true;
+      return;
+    }
+    btn.disabled = !checkState[key].every(Boolean);
+    if (btn.disabled) btn.title = doneHint;
+    btn.addEventListener('click', () => checkboxes.forEach((box) => box.disabled = true));
   });
 
   // ── mark-done ────────────────────────────────────────────────────
@@ -195,9 +278,9 @@ const jsonLd = {
     margin-inline-start: .5rem; color: var(--success-text); vertical-align: middle;
   }
   .project-content :global(.step-clear) {
-    margin-inline-start: .6rem; padding: .2rem .7rem; border: 1px solid var(--line);
+    padding: .45rem 1rem; border: 1px solid var(--line);
     border-radius: 999px; background: var(--bg-soft); color: var(--ink-soft);
-    font-size: .72rem; font-weight: 700; vertical-align: middle; cursor: pointer;
+    font-size: .8rem; font-weight: 700; cursor: pointer;
   }
   .project-content :global(.step-clear:hover),
   .project-content :global(.step-clear:focus-visible) {
@@ -205,5 +288,29 @@ const jsonLd = {
   }
   .project-content :global(h2.is-step-done .step-clear) {
     border-color: var(--success); color: var(--success-text); background: var(--success-soft);
+  }
+  .project-content :global(.step-actions) {
+    display: flex; align-items: center; gap: .9rem; flex-wrap: wrap; margin: .5rem 0 1.2rem;
+  }
+  .project-content :global(.step-actions .step-clear) {
+    margin-inline-start: 0; flex: none; padding: .55rem 1.15rem;
+    background: var(--accent-soft); color: var(--accent-strong); border-color: var(--accent);
+    font-size: .88rem;
+  }
+  .project-content :global(.step-actions .step-clear:disabled) {
+    background: var(--bg-soft); color: var(--ink-soft); border-color: var(--line);
+  }
+  .project-content :global(.step-check) {
+    display: flex; gap: .5rem; align-items: flex-start; padding: .3rem 0; font-size: .9rem; cursor: pointer;
+  }
+  .project-content :global(.step-check input[type="checkbox"]) {
+    accent-color: var(--success); margin-top: .22rem; flex: none; cursor: pointer;
+  }
+  .project-content :global(.step-check:has(input:checked) span) {
+    color: var(--ink-soft);
+  }
+  .project-content :global(.step-check input:disabled) { cursor: not-allowed; }
+  .project-content :global(.step-check-hint) {
+    color: var(--ink-soft); font-size: .78rem; font-style: italic; margin: 0;
   }
 </style>

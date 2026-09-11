@@ -5,7 +5,7 @@ import { xpProgress, loadState, questsToShow, streakProgress, getActivityStats, 
 import { emptyStats } from '../lib/gamestats.ts';
 import { getCollection } from 'astro:content';
 import {m} from '../paraglide/messages.js';
-import {learnHref, trackWord, type Locale} from '../lib/routeSegments';
+import {learnHref, progressGuideHref, trackWord, type Locale} from '../lib/routeSegments';
 
 interface Props {
   locale: Locale;
@@ -434,6 +434,18 @@ const i18nData = {
     </div>
   </section>
 
+  <!-- How progress is computed -->
+  <section class="container">
+    <a class="guide-link" href={progressGuideHref(locale, base)}>
+      <span class="guide-link__icon" aria-hidden="true">🧮</span>
+      <span class="guide-link__body">
+        <span class="guide-link__heading">{m.progress_guide_link_heading()}</span>
+        <span class="guide-link__lede">{m.progress_guide_link_lede()}</span>
+      </span>
+      <span class="guide-link__cta">{m.progress_guide_link_cta()} →</span>
+    </a>
+  </section>
+
   <div id="progress-i18n" hidden>{JSON.stringify(i18nData).replace(/</g, '\u003c')}</div>
   <script>
     import {xpProgress, questsToShow, streakProgress, rankFor, RANK_EMOJIS, getActivityLog, getActivityStats, loadState} from '../lib/gameState.ts';
@@ -731,6 +743,20 @@ const i18nData = {
   .report__empty h2 { margin: 0 0 .35rem; font-size: 1.25rem; }
   .report__empty p { color: var(--ink-soft); margin: 0 auto 1rem; max-width: 46ch; font-size: .9rem; }
   .report__footnote { color: var(--ink-soft); font-size: .82rem; border-top: 1px dashed var(--line); padding-top: .8rem; margin-top: 1rem; }
+  .guide-link {
+    display: flex; align-items: center; gap: .9rem; text-decoration: none;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius-lg); padding: 1.1rem 1.25rem; margin-bottom: 3rem;
+    box-shadow: var(--shadow-sm); transition: border-color .15s ease, box-shadow .15s ease;
+  }
+  .guide-link:hover, .guide-link:focus-visible {
+    border-color: var(--accent); box-shadow: var(--shadow-md); outline: none;
+  }
+  .guide-link__icon { font-size: 1.4rem; }
+  .guide-link__body { display: flex; flex-direction: column; gap: .15rem; min-width: 0; }
+  .guide-link__heading { font-weight: 700; color: var(--ink); }
+  .guide-link__lede { color: var(--ink-soft); font-size: .85rem; line-height: 1.5; }
+  .guide-link__cta { margin-inline-start: auto; color: var(--accent); font-weight: 700; font-size: .9rem; white-space: nowrap; }
   .kpi { position: relative; }
   .kpi__hint {
     position: absolute; top: .4rem; right: .4rem; width: 16px; height: 16px; border-radius: 50%;

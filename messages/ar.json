@@ -407,5 +407,9 @@
   "progress_guide_report_study_link": "Prayoga وآخرون، 2026",
   "progress_guide_report_study_post": "، وهي دورة حوسبة بأسلوب الرواية البصرية قُيست بمقياس N-Gain قدره 0.61 وقبول 87.6%.",
   "progress_guide_report_footnote": "تقريرك يسمّي نطاقاً تشخيصياً (مبتدئ ← أسطورة) من نسبة K/D/A، ولا يظهر إلا بعد إكمال أول درس. كل شيء محسوب من نشاطك أنت.",
-  "progress_guide_back": "العودة إلى تقدمك"
+  "progress_guide_back": "العودة إلى تقدمك",
+  "progress_guide_link_heading": "كيف يُحسب التقدم",
+  "progress_guide_link_lede": "كل قاعدة نقاط، ومعادلة مستوى، ورتبة، وسلسلة، ومهمة، ومقياس تقرير — موثقة من الكود.",
+  "progress_guide_link_cta": "اقرأ كيف يعمل التقدم",
+  "project_checklist_hint": "أكمل كل عنصر في قائمة التحقق لتحديد هذه الخطوة كمكتملة وكسب +{n} XP."
 }

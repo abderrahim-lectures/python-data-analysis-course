@@ -407,5 +407,9 @@
   "progress_guide_report_study_link": "Prayoga et al., 2026",
   "progress_guide_report_study_post": ", un cours d'informatique type roman visuel mesuré avec N-Gain 0.61 et 87,6 % d'acceptation.",
   "progress_guide_report_footnote": "Votre rapport nomme une bande diagnostique (Débutant → Légende) à partir de votre ratio K/D/A, et n'apparaît qu'après votre première leçon terminée. Tout est calculé depuis votre propre activité.",
-  "progress_guide_back": "Retour à votre progression"
+  "progress_guide_back": "Retour à votre progression",
+  "progress_guide_link_heading": "Comment la progression est calculée",
+  "progress_guide_link_lede": "Chaque règle d'XP, formule de niveau, rang, série, quête et métrique du rapport — documentés depuis le code.",
+  "progress_guide_link_cta": "Lire comment la progression fonctionne",
+  "project_checklist_hint": "Cochez chaque élément de la liste pour terminer cette étape et gagner +{n} XP."
 }
