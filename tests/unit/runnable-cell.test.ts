@@ -332,7 +332,7 @@ describe('initCell DOM wiring', () => {
 
   test('localizes chrome, paints a gutter, and makes the code editable', () => {
     const fixture = buildFixture('line1\nline2\nline3');
-    const {stub, cell, run, clear, code, pre, actions} = fixture;
+    const {cell, run, clear, code, pre, actions} = fixture;
     vi.stubGlobal('localStorage', memoryStorage());
     initCell(asElement(cell), {loadEngine: fixture.loadEngine} as InitCellDeps);
 

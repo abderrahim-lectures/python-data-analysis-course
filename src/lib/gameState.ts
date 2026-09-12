@@ -4,8 +4,6 @@
 
 import {xpProgressFor} from './levelMath';
 
-export interface LessonRecord { completed: boolean; firstRunAt?: string }
-
 export interface ActivityEntry {
   ts: number;          // epoch ms
   type: string;        // 'lesson-run' | 'lesson-complete' | 'quiz' | 'project-view' | 'project-complete' | 'daily-login' | 'streak' | 'milestone'

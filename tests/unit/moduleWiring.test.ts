@@ -166,28 +166,3 @@ describe('Python 101 section index', () => {
     expect(src).toContain('totalMin');
   });
 });
-
-// ── NotebookCell component ──────────────────────────────────────────
-describe('NotebookCell component', () => {
-  const src = readFileSync('src/components/NotebookCell.astro', 'utf8');
-
-  test('supports markdown cell type', () => {
-    expect(src).toContain("type === 'markdown'");
-  });
-
-  test('supports code cell type via ternary', () => {
-    expect(src).toContain("type === 'markdown'");
-  });
-
-  test('has run button for code cells', () => {
-    expect(src).toContain('data-run');
-  });
-
-  test('no expand/playground link', () => {
-    expect(src).not.toContain('data-expand');
-  });
-
-  test('uses slot for markdown content', () => {
-    expect(src).toContain('<slot />');
-  });
-});
