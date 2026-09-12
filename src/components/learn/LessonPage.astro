@@ -104,7 +104,7 @@ const jsonLd = [
         <span class="lesson-head__xp">⚡ +{xpReward} XP</span>
         <span class="lesson-head__openers" aria-label={m.open_notebook_aria()}>
           {NOTEBOOK_OPENERS.map((o) => (
-            <a class="lesson-head__open" href={o.href(section, track, slug)} target="_blank" rel="noopener noreferrer">{o.label}</a>
+            <a class="lesson-head__open" href={o.href(locale, section, track, slug)} target="_blank" rel="noopener noreferrer">{o.label}</a>
           ))}
         </span>
         {tags.length > 0 && <span class="lesson-head__tags">{tags.join(' · ')}</span>}

@@ -92,7 +92,7 @@ describe('codeShare gzip+base64url', () => {
 });
 
 describe('notebookLinks', () => {
-  const a = ['data-analysis', 'normal', '09-titanic-loading'] as const;
+  const a = ['en', 'data-analysis', 'normal', '09-titanic-loading'] as const;
   test('github blob + raw embed owner/repo/branch', () => {
     expect(notebookGitHubUrl(...a)).toContain('github.com/abderrahim-lectures/python-data-analysis-course/blob/main/notebooks/data-analysis/normal/09-titanic-loading.ipynb');
     expect(notebookRawUrl(...a)).toContain('raw.githubusercontent.com/abderrahim-lectures/python-data-analysis-course/main/notebooks/');
@@ -103,6 +103,12 @@ describe('notebookLinks', () => {
     expect(notebookNbviewerUrl(...a)).toMatch(/^https:\/\/nbviewer\.org\/urls\//);
     expect(notebookBinderUrl(...a)).toContain('mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/HEAD');
     expect(notebookDeepnoteUrl(...a)).toMatch(/^https:\/\/deepnote\.com\/launch\?url=/);
+  });
+
+  test('localized locales point at their own notebook tree', () => {
+    expect(notebookColabUrl('ar', 'python-101', 'hard', '08-generate-text-impl')).toContain('blob/main/notebooks/ar/python-101/hard-08-generate-text-impl.ipynb');
+    expect(notebookBinderUrl('es', 'data-analysis', 'normal', '01-framing-questions')).toContain('filepath=notebooks%2Fes%2Fdata-analysis%2Fnormal-01-framing-questions.ipynb');
+    expect(notebookRawUrl('fr', 'python-101', 'normal', '01-hello')).toContain('/main/notebooks/fr/python-101/normal-01-hello.ipynb');
   });
 
   test('NOTEBOOK_OPENERS references every provider', () => {
