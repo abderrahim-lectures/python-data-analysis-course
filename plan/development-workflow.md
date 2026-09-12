@@ -18,6 +18,6 @@ Prerequisites already satisfied (all done during the Astro migration):
 - `LICENSE` present (MIT for code; course content distinction is flagged on the `/credits` page).
 - The label set (`type:*`, `area:*`) and a project board exist for navigability.
 
-Collaboration note (pairing with a Claude-agent on this same repo): the work is split — Claude owns `src/styles/global.css`, `Base.astro`, locale index pages, `gameState.ts`, `package.json`, and `.github/workflows/`; opencode owns `plan/todo.md`, `plan/astro-rebuild.md`, `tests/e2e/smoke.mjs`, and astro-check health. See the `claude-collab` skill for the coordination protocol.
+
 
 **Verification before merge** (all local, scriptable): `npm run check` (astro check + typecheck), `npm run test` (vitest suites, currently 9 files / ~498 assertions), `npm run build` (~861 pages), then `tests/e2e/smoke.mjs` + the CDP contrast/responsive/a11y suites against `npm run preview` — see [`testing-and-verification.md`](./testing-and-verification.md).
