@@ -30,6 +30,9 @@ jobs:
 
       - name: Build site
         run: npm run build
+        env:
+          PUBLIC_SUPABASE_URL: ${{ secrets.PUBLIC_SUPABASE_URL }}
+          PUBLIC_SUPABASE_KEY: ${{ secrets.PUBLIC_SUPABASE_KEY }}
 
       - uses: actions/configure-pages@v5
 
