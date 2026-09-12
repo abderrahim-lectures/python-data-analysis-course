@@ -54,6 +54,15 @@ async function worker() {
   }
 }
 await Promise.all(Array.from({ length: CONCURRENCY }, worker));
-const totalMB = (fs.readdirSync(TARGET.pathname)
-  .reduce((n, f) => n + fs.statSync(path.join(TARGET.pathname, f)).size, 0) / 1048576).toFixed(0);
+const sizeOf = (name) => fs.statSync(path.join(TARGET.pathname, name)).size;
+const totalBytes = fs.readdirSync(TARGET.pathname)
+  .reduce((n, f) => n + fs.statSync(path.join(TARGET.pathname, f)).size, 0);
+// coreBytes covers only the files every page load must fetch (the runtime
+// itself, before any lesson-specific package wheel) -- the browser uses it
+// to show an accurate download-percent for that unavoidable first chunk
+// (see runnable-cell.client.ts). Package wheels are fetched on demand and
+// vary per lesson, so they're shown as an indeterminate step instead.
+const coreBytes = CORE.reduce((n, f) => n + sizeOf(f), 0);
+fs.writeFileSync(path.join(TARGET.pathname, 'manifest.json'), JSON.stringify({version: VERSION, totalBytes, coreBytes}));
+const totalMB = (totalBytes / 1048576).toFixed(0);
 console.log(`[vendor-pyodide] v${VERSION}: ${down} downloaded, ${skipped} up-to-date (${files.length} files, ~${totalMB} MB in ${TARGET.pathname})`);

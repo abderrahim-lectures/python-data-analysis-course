@@ -208,7 +208,11 @@ const jsonLd = [
     .lesson-head { margin: 1rem 0 .8rem; }
     .lesson-head__meta { gap: .4rem .7rem; }
     .lesson-head h1 { font-size: clamp(1.5rem, 5vw, 2rem); }
-    .lesson-head__openers { width: 100%; }
+    .lesson-head__openers {
+      width: 100%; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none;
+      -webkit-overflow-scrolling: touch; padding-block-end: .15rem;
+    }
+    .lesson-head__openers::-webkit-scrollbar { display: none; }
     .lesson-head__open { padding: .45rem .7rem; font-size: .8rem; }
   }
   .lesson-head { margin: 1.5rem 0 1rem; }

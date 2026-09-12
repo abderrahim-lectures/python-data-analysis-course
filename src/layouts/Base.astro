@@ -168,6 +168,8 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
       .app-busy--active { opacity: 1; pointer-events: auto; }
       .app-busy__spinner { width: 3rem; height: 3rem; border: 4px solid var(--line); border-top-color: var(--accent); border-radius: 50%; will-change: transform; animation: slow-spin .9s linear infinite; }
       @keyframes slow-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+      .app-busy__inner { display: grid; justify-items: center; gap: .6rem; }
+      .app-busy__label { font-size: .85rem; font-weight: 600; color: var(--ink-soft); min-height: 1.2em; }
     </style>
     {allJsonLdBlocks.map((block) => (
       <script type="application/ld+json" set:html={JSON.stringify(block)} />
@@ -183,21 +185,40 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
         const busy = document.createElement('div');
         busy.className = 'app-busy';
         busy.setAttribute('aria-hidden', 'true');
+        const inner = document.createElement('div');
+        inner.className = 'app-busy__inner';
         const spinner = document.createElement('div');
         spinner.className = 'app-busy__spinner';
-        busy.appendChild(spinner);
+        const label = document.createElement('div');
+        label.className = 'app-busy__label';
+        label.setAttribute('role', 'status');
+        label.setAttribute('aria-live', 'polite');
+        inner.appendChild(spinner);
+        inner.appendChild(label);
+        busy.appendChild(inner);
         document.body.appendChild(busy);
         const setBusy = (on) => {
           busy.classList.toggle('app-busy--active', on);
           busy.setAttribute('aria-hidden', String(!on));
+          if (!on) label.textContent = '';
         };
         const hideFirst = () => busy.classList.remove('app-busy--first');
         if (document.readyState !== 'complete') {
           busy.classList.add('app-busy--first');
+          label.textContent = {JSON.stringify(m.pyodide_loading_first())};
           window.addEventListener('load', hideFirst);
           setTimeout(hideFirst, 1200); // safety net for slow third-party fonts
         }
-        window.addEventListener('pyodide:loading', () => setBusy(true));
+        const pyodideLoadingIndeterminate = {JSON.stringify(m.pyodide_loading_engine_indeterminate())};
+        const pyodideLoadingTemplate = {JSON.stringify(m.pyodide_loading_engine({pct: '__PCT__'}))};
+        window.addEventListener('pyodide:loading', () => {
+          label.textContent = pyodideLoadingIndeterminate;
+          setBusy(true);
+        });
+        window.addEventListener('pyodide:progress', (e) => {
+          const pct = e.detail && e.detail.pct;
+          if (typeof pct === 'number') label.textContent = pyodideLoadingTemplate.replace('__PCT__', String(pct));
+        });
         window.addEventListener('pyodide:ready', () => setBusy(false));
         // Pyodide loading bar (top edge)
         const bar = document.createElement('div');

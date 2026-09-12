@@ -45,17 +45,68 @@ export interface PyodideModel {
 type PyodideModule = {loadPyodide: (opts: {indexURL: string}) => Promise<PyodideModel>};
 let pyPromise: Promise<PyodideModel> | null = null;
 
+// Wraps window.fetch for the duration of the engine download so Base.astro's
+// busy overlay can show a real download percent instead of a bare spinner.
+// Pyodide fetches its own wasm/zip files internally (no progress callback in
+// its public API), so the only hook available is intercepting fetch itself:
+// each response's body is re-read chunk-by-chunk (then reassembled into an
+// equivalent Response) purely to count bytes as they arrive. `coreBytes` is
+// the known size of the always-fetched runtime files (see vendor-pyodide.mjs
+// manifest.json); it excludes package wheels, which are fetched later,
+// per-lesson, and shown as an indeterminate step instead.
+function trackEngineDownload(coreBytes: number, onProgress: (pct: number) => void): () => void {
+  const originalFetch = window.fetch.bind(window);
+  let loaded = 0;
+  window.fetch = async (input: RequestInfo | URL, init?: RequestInit) => {
+    const url = input instanceof Request ? input.url : String(input);
+    const res = await originalFetch(input, init);
+    if (!url.startsWith(INDEX) || !res.body || coreBytes <= 0) return res;
+    const reader = res.body.getReader();
+    const chunks: BlobPart[] = [];
+    for (;;) {
+      const {done, value} = await reader.read();
+      if (done) break;
+      chunks.push(value as BlobPart);
+      loaded += value.byteLength;
+      onProgress(Math.min(99, Math.round((loaded / coreBytes) * 100)));
+    }
+    return new Response(new Blob(chunks), {headers: res.headers, status: res.status, statusText: res.statusText});
+  };
+  return () => { window.fetch = originalFetch; };
+}
+
+async function getCoreBytes(): Promise<number> {
+  try {
+    const res = await fetch(`${INDEX}manifest.json`);
+    if (!res.ok) return 0;
+    const manifest = (await res.json()) as {coreBytes?: number};
+    return manifest.coreBytes ?? 0;
+  } catch {
+    return 0;
+  }
+}
+
 async function py(): Promise<PyodideModel> {
   if (!pyPromise) {
-    const mod = (await import(/* @vite-ignore */ `${INDEX}pyodide.mjs`)) as PyodideModule;
-    pyPromise = mod.loadPyodide({indexURL: INDEX}).then(async (engine) => {
+    pyPromise = (async () => {
+      const coreBytes = await getCoreBytes();
+      const restoreFetch = trackEngineDownload(coreBytes, (pct) => {
+        window.dispatchEvent(new CustomEvent('pyodide:progress', {detail: {pct}}));
+      });
+      let engine: PyodideModel;
+      try {
+        const mod = (await import(/* @vite-ignore */ `${INDEX}pyodide.mjs`)) as PyodideModule;
+        engine = await mod.loadPyodide({indexURL: INDEX});
+      } finally {
+        restoreFetch();
+      }
       // Deprecation/Future warnings from third-party stack (Pyarrow becoming a
       // pandas requirement, seaborn's `palette`-without-`hue` deprecation) are
       // noise for learners — they'd render as red error lines. Filter them so
       // a successful cell shows clean stdout-only output.
       await engine.runPython('import warnings; warnings.filterwarnings("ignore")');
       return engine;
-    });
+    })();
   }
   return pyPromise;
 }
@@ -190,6 +241,10 @@ export interface CellRuntime {
    *  NameError can be distinguished from "that dataset was never loaded".
    *  Optional so unit tests can omit it. */
   otherCellSources?: string;
+  /** Reports which step is running so the Run button's label can say why it's
+   *  spinning ("Loading libraries…" vs "Running…") instead of a bare spinner.
+   *  Optional so unit tests can omit it. */
+  onPhase?(phase: 'packages' | 'running'): void;
 }
 
 // Some lesson cells `import seaborn`, which is not a Pyodide wheel. seaborn is
@@ -223,8 +278,10 @@ export async function runCellCode(code: string, rt: CellRuntime): Promise<boolea
   }
   try {
     const pageSource = rt.otherCellSources ?? '';
+    rt.onPhase?.('packages');
     await ensureExtraPackages(rt.engine, code, pageSource);
     await rt.engine.loadPackagesFromImports(code);
+    rt.onPhase?.('running');
     // Force matplotlib onto the compiled Agg backend *before* the cell's code
     // runs. matplotlib-pyodide's default canvas backend appends a <canvas> to
     // the bottom of the page on plt.show() and then closes the figure, so
@@ -380,7 +437,13 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
       .filter((el) => el !== codeEl)
       .map((el) => el.textContent ?? '')
       .join('\n');
-    const executed = await runCellCode(src, {appendLine, appendFigure, engine, otherCellSources});
+    const executed = await runCellCode(src, {
+      appendLine,
+      appendFigure,
+      engine,
+      otherCellSources,
+      onPhase: (phase) => { run.textContent = phase === 'packages' ? m.run_loading_packages() : m.run_loading(); },
+    });
     run.textContent = m.run_button();
     run.disabled = false;
     run.classList.remove('cell__run--loading');
