@@ -27,7 +27,7 @@
   "cell_engine_load_failed": "Failed to load the Python engine. Check your connection and try again.",
   "pyodide_loading_first": "Starting up…",
   "pyodide_loading_engine": "Downloading Python engine ({pct}%)…",
-  "pyodide_loading_engine_indeterminate": "Downloading Python engine…",
+  "pyodide_loading_engine_indeterminate": "Starting Python…",
   "cell_load_dataset_first": "This cell needs a dataset loaded first, run the cell that loads it (the one that calls pd.read_csv) before running this one.",
   "choose_route": "Choose your route:",
   "clear_button": "Clear",

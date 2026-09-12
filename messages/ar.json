@@ -27,7 +27,7 @@
   "cell_engine_load_failed": "تعذّر تحميل محرّك بايثون. تحقّق من اتصالك وحاول مجددًا.",
   "pyodide_loading_first": "جارٍ البدء…",
   "pyodide_loading_engine": "جارٍ تنزيل محرّك بايثون ({pct}%)…",
-  "pyodide_loading_engine_indeterminate": "جارٍ تنزيل محرّك بايثون…",
+  "pyodide_loading_engine_indeterminate": "جارٍ تشغيل بايثون…",
   "cell_load_dataset_first": "تحتاج هذه الخلية إلى تحميل البيانات أولاً, شغّل الخلية التي تحمّلها (تلك التي تستدعي pd.read_csv) قبل تشغيل هذه.",
   "choose_route": "اختر طريقك:",
   "clear_button": "مسح",

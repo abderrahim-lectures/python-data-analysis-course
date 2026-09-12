@@ -139,6 +139,12 @@ export function stubDom(): DomStub {
     body: fakeEl('body'),
     head: fakeEl('head'),
     execCommand: vi.fn(),
+    // paraglide's locale resolver reads document.cookie unconditionally
+    // (src/paraglide/runtime.js -> extractLocaleFromCookie); without this
+    // it's `undefined` and `.match()` throws, which only surfaced as
+    // flaky failures depending on whether an earlier test's real jsdom
+    // `document` had already warmed that module's locale cache first.
+    cookie: '',
   };
   vi.stubGlobal('document', doc);
   return {

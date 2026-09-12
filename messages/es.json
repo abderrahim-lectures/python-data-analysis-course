@@ -27,7 +27,7 @@
   "cell_engine_load_failed": "No se pudo cargar el motor de Python. Comprueba tu conexión e inténtalo de nuevo.",
   "pyodide_loading_first": "Iniciando…",
   "pyodide_loading_engine": "Descargando el motor de Python ({pct}%)…",
-  "pyodide_loading_engine_indeterminate": "Descargando el motor de Python…",
+  "pyodide_loading_engine_indeterminate": "Iniciando Python…",
   "cell_load_dataset_first": "Esta celda necesita que se carguen los datos primero, ejecuta la celda que los carga (la que llama a pd.read_csv) antes de ejecutar esta.",
   "choose_route": "Elige tu ruta:",
   "clear_button": "Limpiar",

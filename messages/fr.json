@@ -27,7 +27,7 @@
   "cell_engine_load_failed": "Impossible de charger le moteur Python. Vérifiez votre connexion et réessayez.",
   "pyodide_loading_first": "Démarrage…",
   "pyodide_loading_engine": "Téléchargement du moteur Python ({pct} %)…",
-  "pyodide_loading_engine_indeterminate": "Téléchargement du moteur Python…",
+  "pyodide_loading_engine_indeterminate": "Démarrage de Python…",
   "cell_load_dataset_first": "Cette cellule nécessite de charger d'abord les données, exécutez la cellule qui les charge (celle qui appelle pd.read_csv) avant celle-ci.",
   "choose_route": "Choisis ta route :",
   "clear_button": "Effacer",

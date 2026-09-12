@@ -85,8 +85,10 @@ function ensurePyodideCache(): void {
       cache = await caches.open(PYODIDE_CACHE_NAME);
       const cached = await cache.match(url);
       if (cached) {
-        const len = Number(cached.headers.get('content-length') ?? 0);
-        if (len > 0) onPyodideBytes?.(len);
+        // No onPyodideBytes report here: a cache hit resolves near-instantly
+        // and isn't a download in progress, so it shouldn't move a "download
+        // percent" the visitor would read as network activity that isn't
+        // actually happening (only a real fetch below does that).
         return cached;
       }
     } catch {
