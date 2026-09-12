@@ -40,9 +40,9 @@ By the end of the course, a student can:
 - **Math-first framing.** The audience is math/data-analysis students, so new concepts are introduced in the notation they already know — a `for` loop via summation notation before syntax, a function as $f(x)$ before `def`, list comprehensions via set-builder notation — before showing the Python code.
 - **Build, don't just read.** Both Hard tracks are project-based: a tiny language model built from nothing but the standard library, and a full EDA report on a real-shaped dataset. Struggling with plain Python's speed limits in Week 5 of Python 101 is the intentional setup for *why* pandas exists in Section 2.
 - **Challenge + Socratic pattern, every week.** Each lesson pairs 🧩 **Challenges** (a concrete task with a collapsible answer you can self-check) with 🤔 **Socratic Questions** (open-ended, no answer provided — designed to make you reason about edge cases and *why*, not just *how*).
-- **Optional gamification, not required motivation.** Badges, unlock toasts, and quiz-gated bonus content (try/except, classes) are all opt-in — a Classical mode renders the exact same underlying progress as a plain checklist, and switching between modes any time never loses data.
-- **Honest, not hyped.** The EDA track explicitly teaches correlation-vs-causation and chart-honesty practices (truncated axes, cherry-picked ranges) as core material, not a footnote — and the completion certificate is labeled a lightweight spot-check, not a verifiable credential, because that's actually true of a backend-free static site.
-- **Zero-install first, real install as a reward.** Every core week runs in-browser (JupyterLite via Pyodide). Installing Python for real is saved for the real-world projects, once fundamentals are solid enough to make that step feel like graduation rather than a chore.
+- **Always-on progress, never a wall.** A single gamified layer (XP, levels, streaks, quests, badges, activity log — all in one `localStorage` blob) marks progress as you go, but it never gates access: every lesson, challenge answer, and project is free to read. There is no mode toggle and no hidden unlock; what the progress page shows in your browser is the whole picture.
+- **Honest, not hyped.** The EDA track explicitly teaches correlation-vs-causation and chart-honesty practices (truncated axes, cherry-picked ranges) as core material, not a footnote. With no backend, progress lives in your own browser and there is no certificate — the shareable unit is the content itself (permanent URLs, notebook badges), not a per-student snapshot.
+- **Zero-install first, real install as a reward.** Every core week runs in-browser via Pyodide (Python compiled to WebAssembly). Installing Python for real is saved for the real-world projects, once fundamentals are solid enough to make that step feel like graduation rather than a chore.
 
 ## Development
 
@@ -51,7 +51,7 @@ npm install
 npm run dev       # local dev server
 npm run build     # production build
 npm run preview   # preview the production build
-npm run check     # astro check (typecheck) — must be 0 errors
+npm run check     # astro check — reserves a fresh content cache first; must be 0 errors
 npm run typecheck # tsc --noEmit
 npm run test          # unit tests (vitest, tests/unit)
 npm run test:e2e      # CDP smoke suite (tests/e2e/smoke.mjs, run against the built site)
@@ -71,7 +71,7 @@ Content coverage: project write-ups, lesson/module body content (49 lessons + 22
 
 ### Building from a clean checkout
 
-`npm run build`/`npm run dev` run `scripts/apply-lix-patch.cjs` first (`prebuild`/`predev`). That script guards a known upstream defect: on a fresh project the inlang compiler writes ~500 entities in one database transaction and the commit fails (lix issue #422, no released fix at `@lix-js/sdk@0.15.1`). The script splits the fresh import into chunked commits and is a no-op when already patched. If the installed SDK changes shape and the patch no longer applies, the build fails loudly instead of producing a half-written project — port the patch to the new layout rather than deleting the guard.
+`npm run build`/`npm run dev` run the `prebuild`/`predev` hooks first, in order: `scripts/reset-astro-cache.cjs` (clears the stale content-collection cache that can silently omit recent edits), `scripts/apply-lix-patch.cjs`, and `scripts/generate-project-slugs.cjs`. The lix patch guards a known upstream defect: on a fresh project the inlang compiler writes ~500 entities in one database transaction and the commit fails (lix issue #422, no released fix at `@lix-js/sdk@0.15.1`). The script splits the fresh import into chunked commits and is a no-op when already patched. If the installed SDK changes shape and the patch no longer applies, the build fails loudly instead of producing a half-written project — port the patch to the new layout rather than deleting the guard.
 
 ### Codespaces
 
@@ -109,7 +109,7 @@ Found a typo or a broken example while going through a lesson? Lesson content li
 
 **Ways to contribute:**
 - **Content**: write or improve a week's lesson, challenges, or socratic questions — see [`plan/content-pattern.md`](./plan/content-pattern.md) and [`plan/content-style-guide.md`](./plan/content-style-guide.md) for the expected structure and tone.
-- **Translations**: UI chrome and Real-World Project pages are fully translated for Arabic, Spanish, and French (UI strings live in `src/lib/pageStrings.ts`, route segments in `src/lib/routeSegments.ts`, translated project content under `src/content/projects/<locale>/`); weekly lesson content is authored once in English and shared. Project URLs are localized per locale (e.g. `/es/proyectos/catalogo-de-datos`) — the English slug still resolves as a canonical alias. A `type:i18n` PR fixing or improving an existing translation is welcome.
+- **Translations**: the whole surface — UI chrome plus lesson, module, project, and cheatsheet body content — is translated for Arabic, Spanish, and French. UI strings live in `messages/{en,ar,es,fr}.json` (compiled by [Paraglide](https://inlang.com/m/gerre34r/library-inlang-paraglideJs) into `src/paraglide/`), route segments in `src/lib/routeSegments.ts`, translated project content under `src/content/projects/<locale>/`. Project URLs are localized per locale (e.g. `/es/proyectos/catalogo-de-datos`) — the English slug still resolves as a canonical alias. A `type:i18n` PR fixing or improving an existing translation is welcome.
 - **Components/infra**: bug fixes, accessibility improvements, and performance work on the playground, gamification, or sharing features.
 
 Please don't open a PR without a linked issue first for anything non-trivial — it avoids duplicated or conflicting work.

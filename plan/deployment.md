@@ -15,3 +15,7 @@
 push.
 - **Unblock needed (credential, not code)**: the developer must re-authenticate GitHub with the `workflow` scope (e.g. `gh auth refresh -s workflow` or a PAT with `workflow`). Everything else for shipping is code-complete and gate-clean (astro check 0 errors, 1086 unit tests, 44/44 smoke, contrast/responsive clean, 877 pages).
 - **Deploy hygiene, carried**: `deploy.yml` still contains the vestigial `jupyterlite-config` build + `/lite/` merge steps (see above); remove them on the next CI touch (workflow file is Claude-owned; opencode did not edit it).
+
+### Status update (2026-09-12)
+
+- **The branch is now pushed**: `origin/redesign/astro-visual-novel` exists (the earlier `workflow`-scope push block only applied to commits that touch `.github/workflows/*`; feature commits push fine). The redesign is still **not merged** to `main` (~184 commits ahead), so `pyda-course.online` continues to serve the Docusaurus-era site. The path forward stands: open the PR from `redesign/astro-visual-novel` → `main`, merge, let `deploy.yml` build the Astro output and deploy. The vestigial JupyterLite step (above) should be dropped in that same merge, since nothing on the redesign references `/lite/`.

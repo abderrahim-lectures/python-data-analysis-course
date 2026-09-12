@@ -13,8 +13,8 @@ The design plan and rationale behind every major decision in this course, split 
 - [`visual-design-ux.md`](./visual-design-ux.md) — design system, dark mode, accessibility, and mobile-first requirements.
 - [`i18n.md`](./i18n.md) — the Astro i18n setup: per-locale UI string dictionaries and translated route segments.
 - [`content-pattern.md`](./content-pattern.md) — the five-part skeleton every weekly lesson page follows.
-- [`gamification.md`](./gamification.md) — badges, quiz-gated bonus content, and the Gamified/Classical mode toggle.
-- [`sharing-progress.md`](./sharing-progress.md) — the no-backend shareable progress link and downloadable completion certificate.
+- [`gamification.md`](./gamification.md) — the always-on XP/streak/quest/badge layer over one `pda:state` blob (no mode toggle, no unlock gating).
+- [`sharing-progress.md`](./sharing-progress.md) — why the Docusaurus-era share-link/certificate design was dropped, and how progress sharing actually works (permanent content URLs, local-only progress page).
 - [`capstones.md`](./capstones.md) — the Real-World Projects architecture: an open, ongoing series (no completion gate, no year prefix), per-project completion tracking.
 - [`section-1-python-101.md`](./section-1-python-101.md) — the Python 101 syllabus (both tracks, weeks 1–5).
 - [`section-2-data-analysis.md`](./section-2-data-analysis.md) — the Data Analysis syllabus (both tracks, weeks 6–10).

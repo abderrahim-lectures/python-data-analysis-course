@@ -235,3 +235,8 @@ bounds the migration to components, not 537 content files.
   sweep · frontmatter drift (es 10, fr 5) · `pda:state` namespace product
   call · EN-held message labels to review (Changelog, Playground, Module fr,
   Students Performance in Exams, Site fr).
+
+### Resolved (2026-09-12)
+- **Content backlog is now fully shipped**: all 49 lessons and 22 modules are
+  translated into ar/es/fr, and the `data-visualization` project has its
+  ar/es/fr twins. `README.md`'s Content coverage note reflects this.

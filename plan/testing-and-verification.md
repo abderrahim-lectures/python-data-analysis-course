@@ -4,14 +4,14 @@ Verification is layered: typecheck, unit tests, CDP smoke/visual suites, and CI.
 
 ## Typecheck & build
 
-- `npm run check` — `astro check` (tsc over `.astro` + TS); must be 0 errors. Covers content-collection schemas, `pageStrings.ts`/`routeSegments.ts` shape, and component props.
-- `npm run build` — clean static build (~860 pages). If `astro check` reports a phantom error on a file that "looks right", it is usually the incremental `.astro/` cache — run `rm -rf .astro && npx astro check` before assuming a real break.
+- `npm run check` — `astro check` (tsc over `.astro` + TS); must be 0 errors. Covers content-collection schemas, Paraglide message types + `routeSegments.ts` shape, and component props.
+- `npm run build` — clean static build (~1,280 pages). If `astro check` reports a phantom error on a file that "looks right", it is usually the stale content/`.astro/` cache — `npm run check` (and `prebuild`/`predev`) run `scripts/reset-astro-cache.cjs` first for exactly this reason; only bypass it deliberately.
 
 ## Unit tests — `tests/unit/` (vitest, `npm run test`)
 
-Nine small, fast suites (498 tests, run in CI):
+Twenty-two fast suites (~1,219 tests, run in CI):
 
-- `i18n.test.ts` — every locale defines exactly the same `PAGE_STRINGS`/`UI_STRINGS` keys as EN (a missing key fails, not silently undefined), no locale key is empty, non-English locales actually differ from EN (guards hardcoded-English bugs), hub templates render strings not literals, and the shared layout (footer tagline from locale pack, onboarding dialog hidden + labeled) is correct.
+- `i18n.test.ts` — every locale defines exactly the same `messages/*.json` keys as EN (a missing key fails, not silently undefined), no locale key is empty, non-English locales actually differ from EN (guards hardcoded-English bugs), hub templates render messages not literals, and the shared layout (footer tagline from locale pack, onboarding dialog hidden + labeled) is correct.
 - `links.test.ts` — every `public/datasets/index.json` manifest entry maps to a real shipped CSV file.
 - `lessonWiring.test.ts`, `moduleWiring.test.ts`, `contentSchema.test.ts` — content-collection wiring and schema compliance across lessons/modules/projects.
 - `gameState.test.ts` — XP economy, quest/badge thresholds, streak/legacy-repair math.
@@ -22,7 +22,7 @@ Nine small, fast suites (498 tests, run in CI):
 
 Headless-Chrome via the CDP helper in the smoke scripts. Each runs against the built site (build + serve first):
 
-- `npm run test:e2e` (`smoke.mjs`, **40 checks**) — per-page console/error monitoring; game-state reset; clicking through a lesson to an exact "Mark complete"; XP/level/XP-bar and quest counts reflecting the rebalanced economy (lesson complete 60 XP, milestone 25 XP, 32 quests, legacy repair → 175 XP); streak tracking; project-grid card count consistency with the live DOM (`[data-project]:not([hidden])`, since projects render card count from a hidden filter pass); linked lessons/projects resolve; and a locale/hub round-trip. Onboarding is suppressed in tests via `pda:onboarded` so the dialog doesn't swallow completion clicks.
+- `npm run test:e2e` (`smoke.mjs`, **40 checks**) — per-page console/error monitoring; game-state reset; clicking through a lesson to an exact "Mark complete"; XP/level/XP-bar and quest counts reflecting the rebalanced economy (lesson complete 60 XP, milestone 25 XP, 31 quests, legacy repair → 175 XP); streak tracking; project-grid card count consistency with the live DOM (`[data-project]:not([hidden])`, since projects render card count from a hidden filter pass); linked lessons/projects resolve; and a locale/hub round-trip. Onboarding is suppressed in tests via `pda:onboarded` so the dialog doesn't swallow completion clicks.
 - `npm run test:contrast` (`contrast.mjs`) — automated WCAG-ish contrast scan over key pages.
 - `npm run test:responsive` (`responsive.mjs`) — phone-viewport rendering checks across key pages.
 - `npm run test:a11y` (`a11y.mjs`) — accessibility smoke (roles/landmarks/labels on the riskiest interactive components).

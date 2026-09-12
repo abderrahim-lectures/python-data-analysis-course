@@ -14,8 +14,9 @@ pyda-course/
 ├── src/
 │   ├── content/
 │   │   ├── config.ts          # content-collection schemas (lessons, projects)
-│   │   ├── lessons/           # weekly lesson markdown, authored once in English
+│   │   ├── lessons/           # lesson markdown, fully translated per locale
 │   │   │   ├── python-101/{normal,hard}/, data-analysis/{normal,hard}/
+│   │   │   └── ar/ es/ fr/    # per-locale lesson copies (49 lessons × 4)
 │   │   └── projects/          # Real-World Project pages
 │   │       ├── <slug>.md      # English
 │   │       ├── ar/ es/ fr/    # per-locale translations
@@ -34,11 +35,11 @@ pyda-course/
 │   │   ├── RunnableCell.astro, NotebookCell.astro, PlaygroundCell.astro, PlaygroundHead.astro
 │   │   ├── projects/          # ProjectArt.astro + project listing/filter components
 │   │   ├── Quiz.astro, Toast.astro, LearnerActivity.astro, SceneBg.astro, ModuleNav.astro
-│   │   └── (gamified: xp-bar, quests — markup inline in Base.astro + pageStrings)
+│   │   └── (gamified: xp-bar, quests — markup inline in Base.astro + messages)
 │   ├── lib/
 │   │   ├── gameState.ts       # single pda:state localStorage key: XP/lessons/projects/quests/badges
-│   │   ├── pageStrings.ts     # per-locale UI string dictionaries (EN/AR/ES/FR)
 │   │   ├── routeSegments.ts   # NAV_WORDS + detectLocale + translated URL segments + href builders
+│   │   ├── projectSlugs.ts    # localizedProjectSlug: per-locale project URL slug map
 │   │   ├── runnable-cell.client.ts  # Pyodide engine, print-wrapping, mountDatasets, friendly errors
 │   │   ├── notebookLinks.ts   # Colab/Kaggle/nbviewer/Binder/Deepnote/GitHub URLs from notebooks/
 │   │   ├── relatedProjects.ts # lesson -> related-project mapping

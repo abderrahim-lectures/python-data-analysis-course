@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /share
 
 Sitemap: https://pyda-course.online/sitemap-index.xml
