@@ -92,6 +92,12 @@ const {supabaseUrl = '', supabaseKey = ''} = Astro.props;
     background: var(--surface);
     box-shadow: var(--shadow-sm);
   }
+  @media (max-width: 640px) {
+    .popular-pages {
+      margin-block: 1.25rem;
+      padding: 1.25rem 1rem;
+    }
+  }
   .popular-pages__title {
     margin: 0 0 1rem;
     font-size: 1.05rem;

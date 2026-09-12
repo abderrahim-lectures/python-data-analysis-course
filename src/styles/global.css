@@ -191,7 +191,8 @@ button { font-family: inherit; cursor: pointer; }
 .topnav__link--active { color: var(--accent); background: var(--accent-soft); }
 .topnav__group {
   display: flex; align-items: center; gap: .15rem; border: 1px solid var(--line-strong);
-  padding: .2rem; background: var(--surface); border-radius: var(--radius-sm);
+  height: 36px; padding: 0 .2rem; box-sizing: border-box;
+  background: var(--surface); border-radius: var(--radius-sm);
 }
 .topnav__lang {
   display: inline-flex; align-items: center; line-height: 1;

@@ -4,6 +4,7 @@ import {m} from '../../paraglide/messages.js';
 import Icon from '../../components/Icon.astro';
 import SceneBg from '../../components/SceneBg.astro';
 import PopularPages from '../../components/PopularPages.astro';
+import LearnerActivity from '../../components/LearnerActivity.astro';
 
 import {PROJECT_TAGS, projectArtEmoji} from '../../lib/projectArt.ts';
 import {learnHref, progressHref, playgroundHref, projectsHref} from '../../lib/routeSegments';
@@ -191,6 +192,7 @@ const jsonLd = {
     </div>
   </section>
   <PopularPages locale={locale} supabaseUrl={import.meta.env.PUBLIC_SUPABASE_URL || ''} supabaseKey={import.meta.env.PUBLIC_SUPABASE_KEY || ''} />
+  <LearnerActivity locale={locale} supabaseUrl={import.meta.env.PUBLIC_SUPABASE_URL || ''} supabaseKey={import.meta.env.PUBLIC_SUPABASE_KEY || ''} />
 </Base>
 
 <script>

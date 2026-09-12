@@ -42,7 +42,7 @@ const totalHours = Math.round(totalMinutes / 60);
 
 <Base title={`${sectionName(section)}, PyDA Course`} description={sectionDescription(section)} lang={locale} dir={dir} alternates={learnAlternates(section, 'normal', 'section')}>
   <nav class="crumb container">
-    <a href={learnHref(locale, base)}>{m.nav_learn()}</a> <span>/</span>
+    <a href={learnHref(locale, base)}>{m.nav_learn()}</a>
     <span class="crumb__here">{sectionName(section)}</span>
   </nav>
 
@@ -95,6 +95,7 @@ const totalHours = Math.round(totalMinutes / 60);
   .crumb { display: flex; gap: .5rem; padding-top: 1.2rem; color: var(--ink-soft); font-size: .88rem; align-items: center; }
   .crumb a { color: var(--ink-soft); text-decoration: none; }
   .crumb__here { font-weight: 700; color: var(--ink); }
+  .crumb > *:not(:first-child)::before { content: '/'; margin-inline-end: .5rem; color: var(--ink-faint); }
   .hero-section { padding: 2rem 0 1.5rem; text-align: center; }
   .hero-icon { font-size: 4rem; margin-bottom: .5rem; }
   .hero-section h1 { font-size: clamp(2rem, 4vw, 2.8rem); margin: .3rem 0; }

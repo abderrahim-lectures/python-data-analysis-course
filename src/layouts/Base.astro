@@ -3,7 +3,6 @@
 import '../styles/global.css';
 import 'katex/dist/katex.min.css';
 import Icon from '../components/Icon.astro';
-import LearnerActivity from '../components/LearnerActivity.astro';
 import PageViews from '../components/PageViews.astro';
 import pkg from '../../package.json';
 import {m} from '../paraglide/messages.js';
@@ -307,77 +306,7 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
       import '../lib/quiz.client.ts';
       import '../lib/gamestrip.client.ts';
     </script>
-    <LearnerActivity locale={lang} supabaseUrl={import.meta.env.PUBLIC_SUPABASE_URL || ''} supabaseKey={import.meta.env.PUBLIC_SUPABASE_KEY || ''} />
     <PageViews locale={lang} supabaseUrl={import.meta.env.PUBLIC_SUPABASE_URL || ''} supabaseKey={import.meta.env.PUBLIC_SUPABASE_KEY || ''} />
-    <script is:inline>
-    (function() {
-      var bar = document.getElementById('learner-bar');
-      if (!bar) { console.warn('[learner-bar] element not found'); return; }
-      var LOCALE = bar.getAttribute('data-locale') || 'en';
-      var URL = bar.getAttribute('data-url') || '';
-      var KEY = bar.getAttribute('data-key') || '';
-      var NOW = bar.getAttribute('data-now') || 'learning now';
-      var ONE = bar.getAttribute('data-online-one') || 'learner online';
-      var MANY = bar.getAttribute('data-online-many') || 'learners online';
-      // Anonymous analytics only: default on (opt-out). No consent key stored or
-      // explicit opt-out ('0') = no learner id, no heartbeat, no completions writes.
-      try { if (localStorage.getItem('pda:analytics-consent') === '0') { return; } } catch(e) { return; }
-      try { if (localStorage.getItem('pda:learner-dismissed')) return; } catch(e) {}
-      if (!URL || !KEY) { console.warn('[learner-bar] Supabase credentials not configured'); return; }
-      var closeBtn = document.getElementById('learner-close');
-      if (closeBtn) closeBtn.addEventListener('click', function() {
-        bar.style.display = 'none';
-        try { localStorage.setItem('pda:learner-dismissed', '1'); } catch(e) {}
-      });
-      var HDR = {apikey: KEY, Authorization: 'Bearer ' + KEY, 'Content-Type': 'application/json'};
-      var lid;
-      try { lid = localStorage.getItem('pda:learner-id'); } catch(e) {}
-      if (!lid) { lid = crypto.randomUUID ? crypto.randomUUID() : 'x'+Math.random().toString(36).slice(2); try{localStorage.setItem('pda:learner-id',lid)}catch(e){} }
-      async function beat() {
-        try { await fetch(URL+'/rest/v1/learners',{method:'POST',headers:{...HDR,'Prefer':'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({id:lid,last_seen:new Date().toISOString(),locale:LOCALE,track:''})}); } catch(e) { console.warn('[learner-bar] beat failed', e); }
-      }
-      async function count() {
-        try {
-          var c = new Date(Date.now()-60000).toISOString();
-          var r = await fetch(URL+'/rest/v1/learners?last_seen=gt.'+encodeURIComponent(c)+'&select=id',{headers:HDR});
-          var d = await r.json();
-          return Array.isArray(d) ? d.length : 0;
-        } catch(e) { console.warn('[learner-bar] count failed', e); return 0; }
-      }
-      async function recent() {
-        try {
-          var r = await fetch(URL+'/rest/v1/completions?order=created_at.desc&limit=1&select=type,slug,created_at',{headers:HDR});
-          var d = await r.json();
-          return Array.isArray(d)&&d.length ? d[0] : null;
-        } catch(e) { return null; }
-      }
-      function ago(iso, locale) {
-        try {
-          var rtf = new Intl.RelativeTimeFormat(locale, {numeric: 'auto'});
-          var secs = Math.round((new Date(iso).getTime() - Date.now()) / 1000);
-          if (Math.abs(secs) < 60) return rtf.format(0, 'second');
-          if (Math.abs(secs) < 3600) return rtf.format(Math.round(secs / 60), 'minute');
-          if (Math.abs(secs) < 86400) return rtf.format(Math.round(secs / 3600), 'hour');
-          return rtf.format(Math.round(secs / 86400), 'day');
-        } catch (e) { return ''; }
-      }
-      function lbl(slug) { var p=slug.split('/'); return p.length>=3?p[0].replace(/-/g,' ')+' W'+p[2].replace('week-',''):slug.replace(/-/g,' '); }
-      async function refresh() {
-        var n = await count();
-        var r = await recent();
-        var ce=document.getElementById('learner-count'),le=document.getElementById('learner-label'),re=document.getElementById('learner-recent');
-        if(ce)ce.textContent=n;if(le)le.textContent = n===1?ONE:MANY;
-        if(re&&r)re.textContent=lbl(r.slug)+' · '+ago(r.created_at, LOCALE);
-        bar.style.display=n>0?'flex':'none';
-      }
-      async function logComp(type,slug,track) {
-        try{await fetch(URL+'/rest/v1/completions',{method:'POST',headers:{...HDR,'Prefer':'return=minimal'},body:JSON.stringify({learner_id:lid,type,slug,track:track||'',locale:LOCALE})})}catch(e){}
-      }
-      beat(); refresh();
-      setInterval(beat,30000); setInterval(refresh,30000);
-      window.__supabaseLogCompletion = logComp;
-    })();
-</script>
     <script is:inline>
       (function () {
         var t = document.getElementById('consent-toggle');

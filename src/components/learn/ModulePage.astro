@@ -52,8 +52,8 @@ const prereqMapOf = (prereqs: string[]): Record<string, string> => {
 
 <Base title={`${title}, PyDA Course`} description={description} lang={locale} dir={dir} alternates={learnAlternates(section, track, 'module', entry.id.split('/').pop()!)}>
   <nav class="crumb container">
-    <a href={learnHref(locale, base)}>{m.nav_learn()}</a> <span>/</span>
-    <a href={learnHref(locale, base, section)}>{sectionName(section)}</a> <span>/</span>
+    <a href={learnHref(locale, base)}>{m.nav_learn()}</a>
+    <a href={learnHref(locale, base, section)}>{sectionName(section)}</a>
     <span class="crumb__here">{title}</span>
   </nav>
 
@@ -150,6 +150,7 @@ const prereqMapOf = (prereqs: string[]): Record<string, string> => {
   .crumb { display: flex; gap: .5rem; padding-top: 1.2rem; color: var(--ink-soft); font-size: .88rem; align-items: center; flex-wrap: wrap; }
   .crumb a { color: var(--ink-soft); text-decoration: none; }
   .crumb__here { font-weight: 700; color: var(--ink); }
+  .crumb > *:not(:first-child)::before { content: '/'; margin-inline-end: .5rem; color: var(--ink-faint); }
   .module-head { padding: 1.5rem 0 1rem; display: flex; gap: 1.25rem; align-items: flex-start; }
   .module-head__icon { font-size: 3rem; line-height: 1; }
   .module-head__info { flex: 1; }

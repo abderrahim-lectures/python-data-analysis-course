@@ -89,9 +89,9 @@ const jsonLd = [
 
 <Base title={`${title}, PyDA Course`} description={description} lang={locale} dir={dir} jsonLd={jsonLd} alternates={learnAlternates(section, track, 'lesson', slug)}>
   <nav class="crumb container">
-    <a href={learnHref(locale, base)}>{m.nav_learn()}</a> <span>/</span>
-    <a href={learnHref(locale, base, section)}>{sectionName(section)}</a> <span>/</span>
-    {(() => { const mod = sortedModules.find(x => x.id.split('/').pop()!.replace(/^module-\d+-/, '') === moduleId); return mod ? <a href={moduleHref(locale, base, section, track, mod.id.split('/').pop()!)}>{mod.data.title}</a> : <span>{moduleId}</span>; })()} <span>/</span>
+    <a href={learnHref(locale, base)}>{m.nav_learn()}</a>
+    <a href={learnHref(locale, base, section)}>{sectionName(section)}</a>
+    {(() => { const mod = sortedModules.find(x => x.id.split('/').pop()!.replace(/^module-\d+-/, '') === moduleId); return mod ? <a href={moduleHref(locale, base, section, track, mod.id.split('/').pop()!)}>{mod.data.title}</a> : <span>{moduleId}</span>; })()}
     <span class="crumb__here">{title}</span>
   </nav>
 
@@ -198,6 +198,10 @@ const jsonLd = [
   .crumb { display: flex; gap: .5rem; padding-top: 1.2rem; color: var(--ink-soft); font-size: .88rem; align-items: center; flex-wrap: wrap; }
   .crumb a { color: var(--ink-soft); text-decoration: none; }
   .crumb__here { font-weight: 700; color: var(--ink); }
+  /* Separators are pseudo-content on each item (not standalone flex
+     children) so a wrap always breaks between whole "/ Item" units,
+     never stranding a bare "/" alone on the previous line. */
+  .crumb > *:not(:first-child)::before { content: '/'; margin-inline-end: .5rem; color: var(--ink-faint); }
   .lesson-head { margin: 1.5rem 0 1rem; }
   .lesson-head__meta { display: flex; gap: .75rem; align-items: center; margin-bottom: .5rem; flex-wrap: wrap; }
   .lesson-head__tag { color: var(--accent); font-weight: 800; letter-spacing: .04em; text-transform: uppercase; font-size: .8rem; }
