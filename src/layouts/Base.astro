@@ -102,11 +102,10 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
     </script>
     {import.meta.env.PUBLIC_GA_ID && (
       <script is:inline>
-        // Consent-gated GA, default off. No banner exists on this site, so
-        // gtag only loads once a visitor has opted in (localStorage
-        // "pda:analytics-consent" = "1", set by future settings UI). This
-        // keeps EU visitors un-tracked by default — wire an opt-in control
-        // before flipping PUBLIC_GA_ID on.
+        // Consent-gated GA, default off. gtag loads only once a visitor has
+        // opted in via the footer analytics toggle (localStorage
+        // "pda:analytics-consent" = "1"). Keeps EU visitors un-tracked by
+        // default. The same consent key gates pageviews and the learner bar.
         (function () {
           function loadGtag(id) {
             window.dataLayer = window.dataLayer || [];
@@ -272,6 +271,11 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
       </div>
       <div class="container footer__bottom">
         <p>{m.footer_copyright({year: new Date().getFullYear(), version: pkg.version})}</p>
+        <label class="consent-toggle" for="consent-toggle">
+          <input type="checkbox" id="consent-toggle" />
+          <span>{m.consent_label()}</span>
+        </label>
+        <p class="consent-desc">{m.consent_desc()}</p>
       </div>
     </footer>
 
@@ -309,6 +313,9 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
       var NOW = bar.getAttribute('data-now') || 'learning now';
       var ONE = bar.getAttribute('data-online-one') || 'learner online';
       var MANY = bar.getAttribute('data-online-many') || 'learners online';
+      // Anonymous analytics only: default off. No consent = no learner id, no
+      // heartbeat, no completions writes.
+      try { if (localStorage.getItem('pda:analytics-consent') !== '1') { return; } } catch(e) { return; }
       try { if (localStorage.getItem('pda:learner-dismissed')) return; } catch(e) {}
       if (!URL || !KEY) { console.warn('[learner-bar] Supabase credentials not configured'); return; }
       var closeBtn = document.getElementById('learner-close');
@@ -364,6 +371,17 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
       setInterval(beat,30000); setInterval(refresh,30000);
       window.__supabaseLogCompletion = logComp;
     })();
+</script>
+    <script is:inline>
+      (function () {
+        var t = document.getElementById('consent-toggle');
+        if (!t) return;
+        try { t.checked = localStorage.getItem('pda:analytics-consent') === '1'; } catch (e) {}
+        t.addEventListener('change', function () {
+          try { localStorage.setItem('pda:analytics-consent', t.checked ? '1' : '0'); } catch (e) {}
+          location.reload();
+        });
+      })();
     </script>
   </body>
 </html>

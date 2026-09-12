@@ -480,5 +480,12 @@
   "pedagogy_guide_link": "Nuestro enfoque pedagógico",
   "pedagogy_guide_link_lede": "Por qué las lecciones son cortas, el bucle de la lección y la lógica tras la capa de juego.",
   "pedagogy_guide_link_cta": "Lee cómo enseñamos",
-  "pedagogy_ecology_ref": "Mira la charla: Daniel Coyle sobre la práctica profunda y la ecología del talento (Big Think)"
+  "pedagogy_ecology_ref": "Mira la charla: Daniel Coyle sobre la práctica profunda y la ecología del talento (Big Think)",
+  "consent_col": "Privacidad",
+  "consent_label": "Analítica anónima",
+  "consent_desc": "Ayuda a saber qué páginas resultan útiles. No sale ningún dato personal de este sitio.",
+  "progress_badge_login": "Inicio de sesión diario",
+  "progress_badge_lesson": "Lección completada",
+  "progress_badge_track": "Progreso del itinerario",
+  "progress_badge_quiz": "Cuestionario perfecto"
 }

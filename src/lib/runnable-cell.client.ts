@@ -264,10 +264,10 @@ export async function runCellCode(code: string, rt: CellRuntime): Promise<boolea
 
 // Award XP for completing a lesson run and report how much was gained and the
 // pre-award balance (the first-success toast keys off xpBefore === 0).
-export async function awardLessonXp(lessonId: string): Promise<{gained: number; xpBefore: number}> {
+export async function awardLessonXp(lessonId: string, reward?: number): Promise<{gained: number; xpBefore: number}> {
   const gs = await import('./gameState.ts');
   const xpBefore = gs.loadState().xp;
-  gs.addXP(lessonId);
+  gs.addXP(lessonId, reward);
   return {gained: gs.loadState().xp - xpBefore, xpBefore};
 }
 
@@ -318,6 +318,7 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
   const lessonId = (cell as HTMLElement).dataset.lesson
     || document.querySelector('[data-lesson-id]')?.getAttribute('data-lesson-id')
     || '';
+  const lessonReward = Number(document.querySelector('[data-lesson-xp]')?.getAttribute('data-lesson-xp') || 0) || undefined;
   let awarded = false;
   const run = cell.querySelector('[data-run]') as HTMLButtonElement | null;
   const out = cell.querySelector('[data-output]') as HTMLElement | null;
@@ -383,7 +384,7 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
     if (executed && !awarded && lessonId) {
       awarded = true;
       try {
-        const {gained, xpBefore} = await awardLessonXp(lessonId);
+        const {gained, xpBefore} = await awardLessonXp(lessonId, lessonReward);
         cell.dispatchEvent(new CustomEvent('lesson:complete', {bubbles: true, detail: {lessonId, xp: gained}}));
         if (xpBefore === 0) {
           const style = document.createElement('style');

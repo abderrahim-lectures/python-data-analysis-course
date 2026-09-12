@@ -95,7 +95,7 @@ const jsonLd = [
     <span class="crumb__here">{title}</span>
   </nav>
 
-  <article class="container lesson-body" data-lesson-id={lessonId}>
+  <article class="container lesson-body" data-lesson-id={lessonId} data-lesson-xp={xpReward}>
     <header class="lesson-head">
       <div class="lesson-head__meta">
         <span class="lesson-head__tag">📖 {m.lesson_label()} {order}</span>
@@ -171,6 +171,7 @@ const jsonLd = [
   import {completeLesson, isLessonComplete, loadState} from '../../lib/gameState';
   const article = document.querySelector('[data-lesson-id]');
   const id = article?.getAttribute('data-lesson-id');
+  const reward = Number(article?.getAttribute('data-lesson-xp') || 0) || undefined;
   const btn = document.querySelector('[data-mark-complete]') as HTMLButtonElement | null;
 
   const markDone = () => {
@@ -186,7 +187,7 @@ const jsonLd = [
     e.preventDefault();
     if (!id) return;
     const xpBefore = loadState().xp ?? 0;
-    completeLesson(id);
+    completeLesson(id, reward);
     markDone();
     const gained = (loadState().xp ?? 0) - xpBefore;
     document.dispatchEvent(new CustomEvent('lesson:complete', {detail: {xp: gained}}));

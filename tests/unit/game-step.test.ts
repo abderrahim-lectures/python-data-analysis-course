@@ -46,7 +46,7 @@ describe('recordProjectStep', () => {
     expect(gained).toBe(15);
     const s = loadState();
     expect(s.quests['first-project-step']).toBe(true);
-    expect(s.badges).toContain('Step by Step');
+    expect(s.badges).toContain('first-project-step');
     expect(isProjectStepDone('street-fighter-cid', 0)).toBe(true);
   });
 
@@ -64,7 +64,7 @@ describe('recordProjectStep', () => {
     recordProjectStep('street-fighter-cid', 9);
     const s = loadState();
     expect(s.quests['project-steps-10']).toBe(true);
-    expect(s.badges).toContain('10 Steps');
+    expect(s.badges).toContain('project-steps-10');
   });
 
   test('isProjectStepDone reflects recorded steps only', () => {

@@ -3,6 +3,8 @@
 // under the strict tsconfig (no @ts-nocheck). Runs once as a deferred module.
 import {xpProgressFor} from './levelMath.ts';
 import type {PDAState} from './gameState.ts';
+import {awardDailyLogin} from './gameState.ts';
+import {badgeLabel} from './badgeLabel.ts';
 import {m} from '../paraglide/messages.js';
 
 const STORAGE_KEY = 'pda:state';
@@ -52,7 +54,7 @@ function showLevelUp(level: number, xp: number, badges: string[]) {
   const overlay = document.getElementById('lvlup');
   if (!overlay) return;
   const subEl = document.getElementById('lvlup-sub');
-  const newBadges = badges.slice(-3);
+  const newBadges = badges.slice(-3).map(badgeLabel);
   if (subEl) subEl.textContent = newBadges.length ? `${m.unlocked_prefix()}${newBadges.join(', ')}` : `${xp} ${m.total_xp_label()}`;
   overlay.hidden = false;
   overlay.classList.remove('lvlup--hide');
@@ -177,4 +179,7 @@ if (typeof document !== 'undefined') {
   initOnboarding();
   initXPToastListener();
   initThemeToggle();
+  // Daily login: awards 5 XP and bumps the streak once per day (idempotent).
+  awardDailyLogin();
+  renderXPBar();
 }

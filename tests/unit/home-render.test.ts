@@ -27,6 +27,13 @@ function withState(xp: number, streak: number, pythonDone: string[], dataDone: s
   s.streak = streak;
   s.bestStreak = streak;
   s.lessonsCompleted = Object.fromEntries([...pythonDone, ...dataDone].map((k) => [k, true]));
+  // Streak milestones are claimed as they happen, so a state this far into a
+  // streak already holds its quest flags (otherwise repair would pay them now).
+  s.quests = {};
+  if (streak >= 3) s.quests['streak-3'] = true;
+  if (streak >= 7) s.quests['streak-7'] = true;
+  if (streak >= 14) s.quests['streak-14'] = true;
+  if (streak >= 30) s.quests['streak-30'] = true;
   saveState(s);
 }
 

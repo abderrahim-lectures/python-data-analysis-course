@@ -23,7 +23,7 @@ See [`plan/`](./plan/README.md) for the full design plan and rationale behind ev
 
 | Homepage | Lesson + playground | Progress & badges | Mobile |
 |---|---|---|---|
-| ![Homepage](./static/img/screenshots/homepage.webp) | ![Lesson page with the playground open](./static/img/screenshots/lesson-page.webp) | ![Progress page with badges](./static/img/screenshots/progress-page.webp) | ![Mobile lesson view](./static/img/screenshots/mobile-lesson.webp) |
+| ![Homepage](./static/img/screenshots/homepage.png) | ![Lesson page with the playground open](./static/img/screenshots/lesson-page.png) | ![Progress page with badges](./static/img/screenshots/progress-page.png) | ![Mobile lesson view](./static/img/screenshots/mobile-lesson.png) |
 
 ## Learning objectives
 

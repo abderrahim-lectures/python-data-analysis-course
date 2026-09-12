@@ -119,8 +119,8 @@ describe('streaks', () => {
     const gs = await seed({streak: 2, bestStreak: 2, lastActive: daysAgo(1)});
     gs.completeLesson('python-101/normal/01-printing');
 
-    // 60 base + 15 streak bonus = 75 (xp-100 milestone not reached)
-    expect(gs.xpProgress().xp).toBe(75);
+    // 60 (lesson) + 15 (streak bonus) + 30 (streak-3 milestone) + 25 (xp-100 milestone)
+    expect(gs.xpProgress().xp).toBe(130);
   });
 });
 
@@ -586,8 +586,8 @@ describe('project milestones', () => {
     const gs = await seed({streak: 3, bestStreak: 3, lastActive: daysAgo(1)});
     gs.completeProject('proj-1');
 
-    // 100 base + 15 streak bonus = 115 → crosses xp-100 milestone (+25) = 140
-    expect(gs.xpProgress().xp).toBe(140);
+    // 100 base + 15 streak bonus + 30 streak-3 milestone (unlocked by streak) + 25 xp-100 = 170
+    expect(gs.xpProgress().xp).toBe(170);
   });
 
   test('viewing a project unlocks the first-project quest', async () => {

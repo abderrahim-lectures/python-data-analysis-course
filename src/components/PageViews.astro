@@ -1,7 +1,8 @@
 ---
 // PageViews.astro, anonymous page-view logging to Supabase.
 // Renders no visible markup; the inline script POSTs one row to the
-// `pageviews` table on every page load. Credentials come from the
+// `pageviews` table on page load, but only after the visitor opts in via the
+// footer analytics toggle (default off). Credentials come from the
 // PUBLIC_SUPABASE_* env vars (optional, the script no-ops without them).
 //
 // Uses fetch(keepalive) rather than sendBeacon: Supabase PostgREST requires
@@ -25,10 +26,13 @@ const {supabaseUrl = '', supabaseKey = '', locale = 'en'} = Astro.props;
         try {
           window.__pydaPageViewSent = true;
         } catch (e) {}
+        // Anonymous analytics only: default off (no consent = no tracking).
+        try {
+          if (localStorage.getItem('pda:analytics-consent') !== '1') return;
+        } catch (e) { return; }
         const body = JSON.stringify({
           path: window.location.pathname,
           locale: viewLocale,
-          referrer: (document.referrer || '').slice(0, 500),
         });
         fetch(`${supabaseUrl}/rest/v1/pageviews`, {
           method: 'POST',

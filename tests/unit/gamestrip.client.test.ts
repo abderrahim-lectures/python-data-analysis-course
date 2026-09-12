@@ -31,7 +31,8 @@ beforeEach(() => {
 
 describe('gamestrip.client.ts', () => {
   test('renders the XP bar from stored state on import', async () => {
-    seedLocalStorage({xp: 60, streak: 8, badges: ['x', 'y']});
+    // lastActive = yesterday, so daily-login bumps 8→9 instead of resetting 1
+    seedLocalStorage({xp: 60, streak: 8, lastActive: new Date(Date.now() - 86400000).toISOString().slice(0, 10), badges: ['x', 'y']});
     const stub = setupDom();
     const bar = fakeEl('xp-bar');
     bar.dataset.level = '0';

@@ -129,10 +129,10 @@ function addLog(s: PDAState, type: string, label: string, xp: number, meta?: str
   if (s.activityLog.length > 200) s.activityLog = s.activityLog.slice(-200);
 }
 
-function markQuest(s: PDAState, id: string, label: string): void {
+function markQuest(s: PDAState, id: string, _label: string): void {
   if (s.quests[id]) return;
   s.quests[id] = true;
-  s.badges = [...s.badges, label];
+  s.badges = [...s.badges, id];
 }
 
 export function loadState(): PDAState { return read(); }
@@ -168,11 +168,11 @@ export function awardDailyLogin(): number {
 }
 
 // ── Lessons ─────────────────────────────────────────────────────────
-function awardLessonComplete(s: PDAState, lessonId: string): void {
+function awardLessonComplete(s: PDAState, lessonId: string, reward?: number): void {
   if (s.lessonsCompleted[lessonId]) return;
   s.lessonsCompleted[lessonId] = true;
   const streakBonus = s.streak >= 3 ? XP.STREAK_BONUS : 0;
-  const earned = XP.LESSON_COMPLETE + streakBonus;
+  const earned = (reward ?? XP.LESSON_COMPLETE) + streakBonus;
   s.xp += earned;
   markQuest(s, 'first-lesson', 'First Step');
   markQuest(s, `completed-${lessonId}`, 'Lesson complete');
@@ -180,23 +180,23 @@ function awardLessonComplete(s: PDAState, lessonId: string): void {
   addLog(s, 'lesson-complete', `Completed lesson`, earned, lessonId);
 }
 
-export function addXP(lessonId: string): number {
+export function addXP(lessonId: string, reward?: number): number {
   const s = read();
   bumpStreak(s);
   markQuest(s, 'first-run', 'First Run');
   s.xp += XP.LESSON_RUN;
   addLog(s, 'lesson-run', 'Ran code', XP.LESSON_RUN, lessonId);
-  awardLessonComplete(s, lessonId);
+  awardLessonComplete(s, lessonId, reward);
   s.lessonsRun[lessonId] = true;
   evaluateMilestones(s);
   write(s);
   return s.xp;
 }
 
-export function completeLesson(lessonId: string): number {
+export function completeLesson(lessonId: string, reward?: number): number {
   const s = read();
   bumpStreak(s);
-  awardLessonComplete(s, lessonId);
+  awardLessonComplete(s, lessonId, reward);
   evaluateMilestones(s);
   write(s);
   return s.xp;
@@ -348,10 +348,20 @@ export function isChallengeComplete(challengeId: string): boolean {
 
 // ── Milestones ──────────────────────────────────────────────────────
 function evaluateMilestones(s: PDAState): void {
-  if (s.streak >= 3) markQuest(s, 'streak-3', '3-day streak');
-  if (s.streak >= 7) markQuest(s, 'streak-7', '7-day streak');
-  if (s.streak >= 14) markQuest(s, 'streak-14', '14-day streak');
-  if (s.streak >= 30) markQuest(s, 'streak-30', '30-day streak');
+  // Streak milestones pay a bonus the first time each target is hit.
+  const streakMilestones = [
+    {d: 3, id: 'streak-3'},
+    {d: 7, id: 'streak-7'},
+    {d: 14, id: 'streak-14'},
+    {d: 30, id: 'streak-30'},
+  ];
+  for (const m of streakMilestones) {
+    if (s.streak >= m.d && !s.quests[m.id]) {
+      markQuest(s, m.id, '');
+      s.xp += XP.STREAK_MILESTONE;
+      addLog(s, 'streak', `Streak ${m.d} days`, XP.STREAK_MILESTONE);
+    }
+  }
 
   // XP milestones (progressive rewards)
   const xpMilestones = [

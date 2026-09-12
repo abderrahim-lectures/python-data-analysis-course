@@ -480,5 +480,12 @@
   "pedagogy_guide_link": "منهجنا التعليمي",
   "pedagogy_guide_link_lede": "لماذا الدروسُ قصيرةٌ، وحلقةُ الدرس، والمنطقُ خلفَ طبقةِ اللعب.",
   "pedagogy_guide_link_cta": "اقرأ كيف نعلّم",
-  "pedagogy_ecology_ref": "شاهد المحاضرة: دانيال كويل حول الممارسة العميقة وبيئة الموهبة (Big Think)"
+  "pedagogy_ecology_ref": "شاهد المحاضرة: دانيال كويل حول الممارسة العميقة وبيئة الموهبة (Big Think)",
+  "consent_col": "الخصوصية",
+  "consent_label": "تحليلات مجهولة الهوية",
+  "consent_desc": "تساعد في معرفة الصفحات الأكثر فائدة للمتعلمين. لا تغادر أي بيانات شخصية هذا الموقع.",
+  "progress_badge_login": "تسجيل دخول يومي",
+  "progress_badge_lesson": "إتمام الدرس",
+  "progress_badge_track": "تقدّم المسار",
+  "progress_badge_quiz": "اختبار مثالي"
 }

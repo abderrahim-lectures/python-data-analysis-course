@@ -480,5 +480,12 @@
   "pedagogy_guide_link": "Our teaching approach",
   "pedagogy_guide_link_lede": "Why lessons are short, the lesson loop, and the thinking behind the game layer.",
   "pedagogy_guide_link_cta": "Read how we teach",
-  "pedagogy_ecology_ref": "Watch the talk: Daniel Coyle on deep practice and the ecology of talent (Big Think)"
+  "pedagogy_ecology_ref": "Watch the talk: Daniel Coyle on deep practice and the ecology of talent (Big Think)",
+  "consent_col": "Privacy",
+  "consent_label": "Anonymous analytics",
+  "consent_desc": "Helps show which pages learners find useful. No personal data leaves this site.",
+  "progress_badge_login": "Daily login",
+  "progress_badge_lesson": "Lesson complete",
+  "progress_badge_track": "Track progress",
+  "progress_badge_quiz": "Perfect quiz"
 }
