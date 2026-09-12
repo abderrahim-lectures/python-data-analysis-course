@@ -160,15 +160,16 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
          that first click doesn't also pay for connection setup. -->
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
-    <link rel="manifest" href="/manifest.json" />
     <meta name="theme-color" content="#5b21b6" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="PyDA" />
     <style is:global>
       .pyodide-bar { position: fixed; top: 0; left: 0; height: 3px; background: var(--accent); z-index: 99999; transition: width .3s ease; width: 0; }
       .pyodide-bar--active { width: 70%; animation: pyodide-pulse 1.5s ease-in-out infinite; }
       @keyframes pyodide-pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+      .app-busy { position: fixed; inset: 0; display: grid; place-items: center; z-index: 99998; opacity: 0; pointer-events: none; transition: opacity .2s ease; background: color-mix(in srgb, var(--surface) 72%, transparent); backdrop-filter: blur(2px); }
+      .app-busy--first { opacity: 1; pointer-events: auto; background: var(--surface); }
+      .app-busy--active { opacity: 1; pointer-events: auto; }
+      .app-busy__spinner { width: 3rem; height: 3rem; border: 4px solid var(--line); border-top-color: var(--accent); border-radius: 50%; animation: slow-spin .9s linear infinite; }
+      @keyframes slow-spin { to { transform: rotate(360deg); } }
     </style>
     {allJsonLdBlocks.map((block) => (
       <script type="application/ld+json" set:html={JSON.stringify(block)} />
@@ -178,16 +179,34 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
       const t = localStorage.getItem('pda:theme');
       if (t) document.documentElement.dataset.theme = t;
       document.addEventListener('DOMContentLoaded', () => {
-        // Pyodide loading bar
+        // Busy overlay: shown while the page's scripts hydrate after load
+        // ("first" mode) and while Pyodide boots on the first Run click
+        // ("active" mode), so clicks never feel frozen without feedback.
+        const busy = document.createElement('div');
+        busy.className = 'app-busy';
+        busy.setAttribute('aria-hidden', 'true');
+        const spinner = document.createElement('div');
+        spinner.className = 'app-busy__spinner';
+        busy.appendChild(spinner);
+        document.body.appendChild(busy);
+        const setBusy = (on) => {
+          busy.classList.toggle('app-busy--active', on);
+          busy.setAttribute('aria-hidden', String(!on));
+        };
+        const hideFirst = () => busy.classList.remove('app-busy--first');
+        if (document.readyState !== 'complete') {
+          busy.classList.add('app-busy--first');
+          window.addEventListener('load', hideFirst);
+          setTimeout(hideFirst, 1200); // safety net for slow third-party fonts
+        }
+        window.addEventListener('pyodide:loading', () => setBusy(true));
+        window.addEventListener('pyodide:ready', () => setBusy(false));
+        // Pyodide loading bar (top edge)
         const bar = document.createElement('div');
         bar.className = 'pyodide-bar';
         document.body?.appendChild(bar);
         window.addEventListener('pyodide:loading', () => bar.classList.add('pyodide-bar--active'));
         window.addEventListener('pyodide:ready', () => bar.classList.remove('pyodide-bar--active'));
-        // Register PWA service worker
-        if ('serviceWorker' in navigator) {
-          navigator.serviceWorker.register('/sw.js').catch(() => {});
-        }
       });
     </script>
   </head>

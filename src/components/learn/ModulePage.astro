@@ -151,6 +151,12 @@ const prereqMapOf = (prereqs: string[]): Record<string, string> => {
   .crumb a { color: var(--ink-soft); text-decoration: none; }
   .crumb__here { font-weight: 700; color: var(--ink); }
   .crumb > *:not(:first-child)::before { content: '/'; margin-inline-end: .5rem; color: var(--ink-faint); }
+  @media (max-width: 640px) {
+    .crumb { gap: .3rem .5rem; font-size: .8rem; align-items: flex-start; padding-top: .9rem; }
+    .crumb__here { overflow-wrap: anywhere; }
+    .module-head { padding: 1rem 0 .9rem; gap: .8rem; }
+    .module-head h1 { overflow-wrap: anywhere; }
+  }
   .module-head { padding: 1.5rem 0 1rem; display: flex; gap: 1.25rem; align-items: flex-start; }
   .module-head__icon { font-size: 3rem; line-height: 1; }
   .module-head__info { flex: 1; }

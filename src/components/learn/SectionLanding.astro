@@ -92,10 +92,16 @@ const totalHours = Math.round(totalMinutes / 60);
 </Base>
 
 <style>
-  .crumb { display: flex; gap: .5rem; padding-top: 1.2rem; color: var(--ink-soft); font-size: .88rem; align-items: center; }
+  .crumb { display: flex; gap: .5rem; padding-top: 1.2rem; color: var(--ink-soft); font-size: .88rem; align-items: center; flex-wrap: wrap; }
   .crumb a { color: var(--ink-soft); text-decoration: none; }
   .crumb__here { font-weight: 700; color: var(--ink); }
   .crumb > *:not(:first-child)::before { content: '/'; margin-inline-end: .5rem; color: var(--ink-faint); }
+  @media (max-width: 640px) {
+    .crumb { gap: .3rem .5rem; font-size: .8rem; align-items: flex-start; padding-top: .9rem; }
+    .crumb__here { overflow-wrap: anywhere; }
+    .hero-section { padding: 1.25rem 0 1rem; }
+    .hero-section h1 { font-size: clamp(1.6rem, 6vw, 2rem); overflow-wrap: anywhere; }
+  }
   .hero-section { padding: 2rem 0 1.5rem; text-align: center; }
   .hero-icon { font-size: 4rem; margin-bottom: .5rem; }
   .hero-section h1 { font-size: clamp(2rem, 4vw, 2.8rem); margin: .3rem 0; }

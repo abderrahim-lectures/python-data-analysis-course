@@ -11,7 +11,9 @@
 .project-title { font-size: clamp(1.8rem, 4vw, 2.6rem); margin: .3rem 0; text-wrap: balance; }
 .project-content { padding-bottom: 3rem; }
 @media (max-width: 640px) {
-  .crumb { padding-top: .8rem; }
+  .crumb { padding-top: .8rem; gap: .3rem .5rem; font-size: .8rem; align-items: flex-start; }
+  .crumb__here { overflow-wrap: anywhere; }
+  .project-head { margin: 1rem 0 .8rem; }
   .project-content { padding-bottom: 2rem; }
 }
 .project-content :global(h2) { margin-top: 2.2rem; }

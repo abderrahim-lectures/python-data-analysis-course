@@ -362,9 +362,12 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
     run.textContent = m.run_loading();
     run.classList.add('cell__run--loading');
     let engine: PyodideModel;
+    window.dispatchEvent?.(new CustomEvent('pyodide:loading'));
     try {
       engine = await (deps.loadEngine ?? py)();
+      window.dispatchEvent?.(new CustomEvent('pyodide:ready'));
     } catch (e) {
+      window.dispatchEvent?.(new CustomEvent('pyodide:ready'));
       console.warn('[runnable-cell] failed to load Pyodide', e);
       appendLine('err', m.cell_engine_load_failed());
       run.textContent = m.run_button();
