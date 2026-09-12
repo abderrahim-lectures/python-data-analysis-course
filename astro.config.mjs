@@ -58,6 +58,7 @@ export default defineConfig({
   },
   build: {inlineStylesheets: 'auto'},
   compressHTML: true,
+  prefetch: {defaultStrategy: 'hover', prefetchAll: true},
   markdown: {
     shikiConfig: {theme: 'github-dark-default'},
     processor: unified({
