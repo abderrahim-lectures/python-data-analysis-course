@@ -190,10 +190,11 @@ button { font-family: inherit; cursor: pointer; }
 .topnav__link:hover { color: var(--accent); background: var(--accent-soft); }
 .topnav__link--active { color: var(--accent); background: var(--accent-soft); }
 .topnav__group {
-  display: flex; gap: .15rem; border: 1px solid var(--line-strong);
+  display: flex; align-items: center; gap: .15rem; border: 1px solid var(--line-strong);
   padding: .2rem; background: var(--surface); border-radius: var(--radius-sm);
 }
 .topnav__lang {
+  display: inline-flex; align-items: center; line-height: 1;
   padding: .2rem .55rem; color: var(--ink-soft); text-decoration: none;
   font-size: .75rem; font-weight: 700; border-radius: 5px; transition: all var(--transition-fast);
 }

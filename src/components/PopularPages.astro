@@ -51,6 +51,10 @@ const {supabaseUrl = '', supabaseKey = ''} = Astro.props;
               } catch {
                 continue;
               }
+              const trimmed = path.replace(/^\/+|\/+$/g, '');
+              // Skip bare locale-root paths ("/", "/ar/", "/es/", "/fr/"):
+              // just a language code isn't a meaningful "page" for this list.
+              if (!trimmed || /^(ar|es|fr)$/.test(trimmed)) continue;
               const li = document.createElement('li');
               li.className = 'popular-pages__item';
               const rank = document.createElement('span');
@@ -59,10 +63,7 @@ const {supabaseUrl = '', supabaseKey = ''} = Astro.props;
               const a = document.createElement('a');
               a.className = 'popular-pages__link';
               a.href = path;
-              const trimmed = path.replace(/^\/+|\/+$/g, '');
-              a.textContent = trimmed
-                ? trimmed.replace(/-/g, ' ').replace(/\//g, ' › ')
-                : '/';
+              a.textContent = trimmed.replace(/-/g, ' ').replace(/\//g, ' › ');
               const views = document.createElement('span');
               views.className = 'popular-pages__views';
               views.textContent = String(row.views);
