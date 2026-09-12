@@ -500,20 +500,20 @@ describe('quiz tracking', () => {
   });
 });
 
-describe('XP cap', () => {
-  test('XP never exceeds 9999', async () => {
+describe('XP is uncapped', () => {
+  test('XP grows beyond 9999', async () => {
     const gs = await seed({xp: 9998});
-    gs.recordChallenge('ch-1'); // +10 → would be 10008
+    gs.recordChallenge('ch-1'); // +15 (+ milestone bonuses)
 
-    expect(gs.xpProgress().xp).toBe(9999);
+    expect(gs.xpProgress().xp).toBeGreaterThan(9999);
   });
 
-  test('XP milestone bonus respects the cap', async () => {
+  test('no final xp-max milestone exists above 9999', async () => {
     const gs = await seed({xp: 9990});
-    // Completing a lesson gives 100 XP → capped at 9999, then milestone
-    gs.completeLesson('python-101/normal/01-printing');
+    gs.completeLesson('python-101/normal/01-printing'); // +60
 
-    expect(gs.xpProgress().xp).toBe(9999);
+    expect(gs.xpProgress().xp).toBeGreaterThan(9999);
+    expect(gs.questsToShow().find((q) => q.id === 'xp-max')).toBeUndefined();
   });
 });
 

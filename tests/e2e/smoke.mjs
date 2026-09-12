@@ -108,7 +108,7 @@ await goto('/progress');
 // python-101 has 7 modules; the counter counts modules with ≥1 complete lesson
 check('the track counter advances', await evaluate('document.getElementById("pct-python-101").textContent'), '1/7 done');
 check('the streak is no longer stuck at 0', await evaluate('document.getElementById("p-streak").textContent'), '1🔥');
-check('quests are no longer 0/32', await evaluate('document.getElementById("p-quests").textContent'), '2/32');
+check('quests are no longer 0/31', await evaluate('document.getElementById("p-quests").textContent'), '2/31');
 
 console.log('\nlegacy state repair');
 // The shape earlier builds left behind: real XP, but a dead streak and no quests.
@@ -120,7 +120,7 @@ await evaluate(`(localStorage.setItem('pda:state', JSON.stringify({
 await goto('/progress');
 check('earned XP is preserved', await evaluate('document.getElementById("xpbar-text").textContent'), '175 XP');
 check('the dead streak is repaired', await evaluate('document.getElementById("p-streak").textContent'), '1🔥');
-check('missing quests are backfilled', await evaluate('document.getElementById("p-quests").textContent'), '4/32');
+check('missing quests are backfilled', await evaluate('document.getElementById("p-quests").textContent'), '4/31');
 
 console.log('\nweek-model parity');
 // Complete one lesson in each of the 7 python modules + one in each of 2 data

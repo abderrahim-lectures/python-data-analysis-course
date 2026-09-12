@@ -121,7 +121,7 @@ describe('track and challenge quests', () => {
   test('xp milestone quests unlock up to the ceiling', () => {
     seedState({xp: 9999, lessonsCompleted: {'python-101/normal/01-printing': true}});
     const s = loadState();
-    for (const id of ['xp-100', 'xp-500', 'xp-1000', 'xp-2000', 'xp-3000', 'xp-5000', 'xp-7500', 'xp-max']) {
+    for (const id of ['xp-100', 'xp-500', 'xp-1000', 'xp-2000', 'xp-3000', 'xp-5000', 'xp-7500']) {
       expect(s.quests[id]).toBe(true);
     }
   });

@@ -5,6 +5,7 @@ import Base from '../../layouts/Base.astro';
 import {learnHref, moduleHref, learnAlternates, idInLocale, type Locale} from '../../lib/routeSegments';
 import {m} from '../../paraglide/messages.js';
 import {TRACK_ICONS, sectionIcon, sectionName, sectionDescription} from '../../lib/sections';
+import {XP} from '../../lib/gameState';
 
 interface Props {
   locale: Locale;
@@ -34,7 +35,7 @@ const normalModules = allModules.filter((e) => idInLocale(locale, e.id) && e.id.
 const hardModules = allModules.filter((e) => idInLocale(locale, e.id) && e.id.includes(`${section}/hard`)).sort((a, b) => a.data.order - b.data.order);
 const normalLessons = allLessons.filter((l) => idInLocale(locale, l.id) && l.id.includes(`${section}/normal`));
 const hardLessons = allLessons.filter((l) => idInLocale(locale, l.id) && l.id.includes(`${section}/hard`));
-const totalXp = [...normalLessons, ...hardLessons].reduce((s, l) => s + (l.data.xpReward ?? 100), 0);
+const totalXp = [...normalLessons, ...hardLessons].length * XP.LESSON_COMPLETE;
 const totalMinutes = [...normalLessons, ...hardLessons].reduce((sum, l) => sum + (l.data.estimatedMinutes ?? 15), 0);
 const totalHours = Math.round(totalMinutes / 60);
 ---

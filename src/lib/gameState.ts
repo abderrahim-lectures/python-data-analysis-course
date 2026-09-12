@@ -40,7 +40,7 @@ export interface PDAState {
 
 const STORAGE_KEY = 'pda:state';
 
-// ── XP Economy (max 9999) ──────────────────────────────────────────
+// ── XP Economy ─────────────────────────────────────────────────────
 // Balanced so that finishing a whole guided project rewards more than a
 // single lesson, and each project step pays meaningfully toward it.
 export const XP = {
@@ -57,8 +57,6 @@ export const XP = {
   MILESTONE_XP:       25,   // XP milestone rewards
   CHALLENGE_COMPLETE: 15,   // solved an interactive challenge
 } as const;
-
-const MAX_XP = 9999;
 
 function today(): string { return new Date().toISOString().slice(0, 10); }
 
@@ -131,10 +129,6 @@ function addLog(s: PDAState, type: string, label: string, xp: number, meta?: str
   if (s.activityLog.length > 200) s.activityLog = s.activityLog.slice(-200);
 }
 
-function clampXp(s: PDAState): void {
-  if (s.xp > MAX_XP) s.xp = MAX_XP;
-}
-
 function markQuest(s: PDAState, id: string, label: string): void {
   if (s.quests[id]) return;
   s.quests[id] = true;
@@ -166,7 +160,6 @@ export function awardDailyLogin(): number {
   if (s.quests[key]) return s.xp; // already awarded today
   bumpStreak(s);
   s.xp += XP.DAILY_LOGIN;
-  clampXp(s);
   markQuest(s, key, 'Daily login');
   addLog(s, 'daily-login', 'Daily login', XP.DAILY_LOGIN);
   evaluateMilestones(s);
@@ -181,7 +174,6 @@ function awardLessonComplete(s: PDAState, lessonId: string): void {
   const streakBonus = s.streak >= 3 ? XP.STREAK_BONUS : 0;
   const earned = XP.LESSON_COMPLETE + streakBonus;
   s.xp += earned;
-  clampXp(s);
   markQuest(s, 'first-lesson', 'First Step');
   markQuest(s, `completed-${lessonId}`, 'Lesson complete');
   markQuest(s, `track-${lessonId.split('/')[0]}`, 'Track starter');
@@ -193,7 +185,6 @@ export function addXP(lessonId: string): number {
   bumpStreak(s);
   markQuest(s, 'first-run', 'First Run');
   s.xp += XP.LESSON_RUN;
-  clampXp(s);
   addLog(s, 'lesson-run', 'Ran code', XP.LESSON_RUN, lessonId);
   awardLessonComplete(s, lessonId);
   s.lessonsRun[lessonId] = true;
@@ -218,7 +209,6 @@ export function viewProject(slug: string): number {
   if (!s.projectsViewed[slug]) {
     s.projectsViewed[slug] = true;
     s.xp += XP.PROJECT_VIEW;
-    clampXp(s);
     addLog(s, 'project-view', 'Viewed project', XP.PROJECT_VIEW, slug);
     markQuest(s, 'first-project', 'Explorer');
   }
@@ -236,7 +226,6 @@ export function completeProject(slug: string): number {
     const streakBonus = s.streak >= 3 ? XP.STREAK_BONUS : 0;
     const earned = XP.PROJECT_COMPLETE + streakBonus;
     s.xp += earned;
-    clampXp(s);
     addLog(s, 'project-complete', 'Completed project', earned, slug);
     markQuest(s, 'first-project-done', 'Builder');
     const count = Object.keys(s.projectsCompleted).length;
@@ -265,7 +254,6 @@ export function recordProjectStep(projectSlug: string, stepIdx: number): number 
   if (!s.projectsSteps[key]) {
     s.projectsSteps[key] = true;
     s.xp += XP.PROJECT_STEP;
-    clampXp(s);
     addLog(s, 'project-step', `Project step ${stepIdx + 1}`, XP.PROJECT_STEP, projectSlug);
     markQuest(s, 'first-project-step', 'Step by Step');
     const stepCount = Object.keys(s.projectsSteps).filter(k => k.startsWith(`${projectSlug}:step:`)).length;
@@ -291,7 +279,6 @@ export function recordQuiz(correct: boolean, lessonId?: string): void {
   if (correct) {
     s.quizCorrect += 1;
     s.xp += XP.QUIZ_CORRECT;
-    clampXp(s);
     addLog(s, 'quiz', 'Quiz correct', XP.QUIZ_CORRECT);
   } else {
     addLog(s, 'quiz', 'Quiz attempt', 0);
@@ -321,7 +308,6 @@ export function recordQuizPerfect(): void {
   const key = 'quiz-perfect-' + today();
   if (s.quests[key]) return;
   s.xp += XP.QUIZ_PERFECT;
-  clampXp(s);
   markQuest(s, key, 'Perfect quiz!');
   addLog(s, 'quiz', 'Perfect quiz!', XP.QUIZ_PERFECT);
   evaluateMilestones(s);
@@ -344,7 +330,6 @@ export function recordChallenge(challengeId: string): number {
   if (!s.challengesCompleted[challengeId]) {
     s.challengesCompleted[challengeId] = true;
     s.xp += XP.CHALLENGE_COMPLETE;
-    clampXp(s);
     addLog(s, 'challenge', 'Solved challenge', XP.CHALLENGE_COMPLETE, challengeId);
     markQuest(s, 'first-challenge', 'Problem Solver');
     const count = Object.keys(s.challengesCompleted).length;
@@ -377,13 +362,11 @@ function evaluateMilestones(s: PDAState): void {
     {xp: 3000, id: 'xp-3000', label: '3K XP'},
     {xp: 5000, id: 'xp-5000', label: '5K XP'},
     {xp: 7500, id: 'xp-7500', label: '7.5K XP'},
-    {xp: 9999, id: 'xp-max', label: 'MAX XP'},
   ];
   for (const m of xpMilestones) {
     if (s.xp >= m.xp && !s.quests[m.id]) {
       markQuest(s, m.id, m.label);
       s.xp += XP.MILESTONE_XP;
-      clampXp(s);
       addLog(s, 'milestone', `Milestone: ${m.label}`, XP.MILESTONE_XP);
     }
   }
@@ -420,7 +403,6 @@ export function questsToShow(): { id: string; label: string; done: boolean }[] {
     { id: 'xp-3000', label: '3K XP' },
     { id: 'xp-5000', label: '5K XP' },
     { id: 'xp-7500', label: '7.5K XP' },
-    { id: 'xp-max', label: 'MAX XP' },
     { id: 'projects-5', label: '5 Projects' },
     { id: 'projects-10', label: '10 Projects' },
     { id: 'projects-25', label: '25 Projects' },
@@ -479,7 +461,7 @@ export function getActivityStats(): { totalActions: number; byType: Record<strin
 // ── Ranks ───────────────────────────────────────────────────────────
 export const RANKS = ['Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond', 'Master', 'Grandmaster'] as const;
 export const RANK_EMOJIS: Record<string, string> = { Bronze: '🌱', Silver: '⚙️', Gold: '🥇', Platinum: '💠', Diamond: '💎', Master: '🔥', Grandmaster: '👑' };
-// Scaled for 9999 max XP
+// Rank tiers, Grandmaster at 9999 XP
 const RANK_THRESHOLDS: Record<string, number> = {
   Bronze: 0,
   Silver: 500,
