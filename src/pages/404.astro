@@ -44,6 +44,39 @@ const notfoundDescription = I18N.en.notfound_description;
   import '../lib/notFoundPlayground.client.ts';
 </script>
 
+<script is:inline>
+  (function () {
+    // Some external tools (chat apps, browser address bars) re-percent-encode
+    // a UTF-8 URL that was already percent-encoded once, e.g. "%D8%AA" (ت)
+    // becomes "%C3%98%C2%AA". Detect that shape and redirect to the correctly
+    // decoded path instead of showing a real 404.
+    try {
+      var raw = location.pathname;
+      if (/%25|%C3%[0-9A-F]{2}%C2%[0-9A-F]{2}/i.test(raw) || /%[0-9A-F]{2}/i.test(raw)) {
+        var once = decodeURIComponent(raw);
+        // Re-interpret the once-decoded string as Latin-1 bytes of UTF-8 text.
+        var bytes = [];
+        for (var i = 0; i < once.length; i++) {
+          var code = once.charCodeAt(i);
+          if (code > 0xff) { bytes = null; break; }
+          bytes.push(code);
+        }
+        if (bytes) {
+          var twice;
+          try {
+            twice = decodeURIComponent(escape(String.fromCharCode.apply(null, bytes)));
+          } catch (e) { twice = null; }
+          if (twice && twice !== once && twice !== raw) {
+            location.replace(twice + location.search + location.hash);
+            return;
+          }
+        }
+      }
+    } catch (e) { /* fall through to normal 404 */ }
+    go();
+  })();
+</script>
+
 <script is:inline define:vars={{I18N}}>
   (function () {
     function go() {
