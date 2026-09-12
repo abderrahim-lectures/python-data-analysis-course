@@ -20,9 +20,25 @@ section: "python-101"
 track: "normal"
 ---
 
-## Instrucciones if
+## De la condición a la decisión
 
-Un bloque `if` ejecuta su cuerpo solo cuando la condición es `True`:
+La aritmética evalúa; la comparación decide; pero un programa que solo evalúa recorre una línea recta de arriba abajo. La vida no es una línea recta. Una nota es una *función a trozos*: su fórmula cambia en ciertos umbrales. En matemáticas escribes
+
+$$
+\mathrm{grade}(s) =
+\begin{cases}
+A & s \geq 90,\\
+B & s \geq 80,\\
+C & s \geq 70,\\
+F & \text{en otro caso}.
+\end{cases}
+$$
+
+El `if`/`elif`/`else` de Python es la transcripción de una fórmula a trozos. Cada pieza custodia su rango, y exactamente una pieza se dispara.
+
+## La horquilla simple
+
+La rama más sencilla ejecuta su cuerpo solo cuando la condición es `True`:
 
 ```python
 score = 85
@@ -30,9 +46,11 @@ if score >= 60:
     print("Passing!")
 ```
 
-## Añadir else
+La sentencia comienza con `if`, luego la condición, luego dos puntos — los dos puntos son lo que le dice a Python que viene un bloque. Todo lo indentado bajo ellos pertenece a esa rama y corre solo si la condición se cumplió.
 
-`else` captura todo lo que el `if` no encontró:
+## La horquilla doble
+
+`else` atrapa todo lo que el `if` no:
 
 ```python
 score = 45
@@ -42,9 +60,11 @@ else:
     print("Needs more work")
 ```
 
-## Elif para múltiples ramas
+Una rama doble es una partición de los resultados: la condición divide el espacio de valores en dos mitades, y cada caso aterriza en exactamente una.
 
-`elif` (abreviatura de "else if") comprueba las condiciones en orden, deteniéndose en la primera coincidencia:
+## La horquilla múltiple: elif
+
+Las fórmulas a trozos reales tienen más de dos piezas. `elif` — una contracción de "else if" — añade más condiciones, comprobadas en orden y deteniéndose en la primera que sea `True`:
 
 ```python
 score = 78
@@ -59,27 +79,27 @@ else:
 print(grade)  # B
 ```
 
-Solo se ejecuta una rama: la primera condición que sea `True`.
+Observa la economía: cada condición `elif` solo necesita una cota inferior, porque los casos de arriba ya están decididos. Con $s = 85$, la primera pieza falla y la segunda acierta — las ramas posteriores nunca corren. Solo **una** rama puede dispararse, lo que la convierte en una función de verdad.
 
-## Valores truthy y falsy
+## Verosimilitud: valores como condiciones
 
-Python trata algunos valores como `True` y otros como `False` en un contexto booleano:
+La condición tras `if` no tiene por qué ser una comparación. Python pregunta: *"¿este valor es verdadero o falso?"* — y la respuesta es uniforme:
 
 ```python
-# These are all "falsy":
+# Todos estos son falsy — se comportan como False en una condición:
 bool(0)       # False
 bool(0.0)     # False
 bool("")      # False
 bool([])      # False
 bool(None)    # False
 
-# Everything else is "truthy":
+# Todo lo demás es truthy — se comporta como True:
 bool(1)       # True
 bool("hello") # True
 bool([1, 2])  # True
 ```
 
-Esto significa que puedes escribir condiciones limpias sin comparaciones explícitas:
+La colección de valores falsy es deliberadamente pequeña: cero, texto vacío, contenedores vacíos y `None`. Todo lo demás cuenta. Eso compra condiciones concisas que se leen como una comprobación en lenguaje natural:
 
 ```python
 name = ""
@@ -91,9 +111,11 @@ if items:
     print("We have items")
 ```
 
-## Anidamiento
+Una cadena vacía es falsy, así que `not name` es `True`; una lista no vacía es truthy, así que `if items` dispara. Te ahorras el explícito `== ""` y `!= []` — la comprobación es el vacío mismo.
 
-Puedes poner bloques `if` dentro de otros bloques `if`, pero mantén el anidamiento poco profundo para la legibilidad:
+## Anidar: cuando una pregunta depende de otra
+
+Algunas decisiones son secuenciales: *primero*, ¿eres mayor de edad?; *luego*, ¿llevas identificación? Eso anida:
 
 ```python
 age = 25
@@ -108,54 +130,64 @@ else:
     print("Too young")
 ```
 
+Anidar funciona, pero cada nivel duplica los caminos que el lector debe sostener en la cabeza. Las cadenas `elif` planas se leen como la propia fórmula a trozos; recurre a ellas primero y reserva el anidamiento para preguntas de verdad dependientes.
+
+## Un ejemplo resuelto: el termostato
+
+Un termostato es una función por tramos con tres tramos. La cadena la transcribe directamente:
+
+```python
+temperature = 22
+
+if temperature <= 10:
+    state = "heating"
+elif temperature >= 30:
+    state = "cooling"
+else:
+    state = "steady"
+print(state)  # steady
+```
+
+Se lee como la fórmula que es. El orden de los tramos importa: cada `elif` supone que los de arriba fallaron, así que dispara exactamente una rama y se imprime exactamente un estado.
+
 ## Errores comunes
 
-- **Olvidar los dos puntos** después de `if`, `elif` o `else`
-- **Usar `=` en lugar de `==`** en las condiciones (`=` asigna, `==` compara)
-- **Anidar en exceso** cuando `elif` o un `return` temprano serían más limpios
+- **Olvidar los dos puntos** tras `if`, `elif` o `else` — sin ellos, el bloque nunca empieza.
+- **`=` en lugar de `==`.** `if score = 60` es un error de sintaxis, a propósito.
+- **Sobre-anidar** cuando una cadena `elif` (o un retorno temprano) expondría la forma de la fórmula de un solo vistazo.
+- **Gana el primer `True`, no la coincidencia más específica.** En `if x > 5: ... elif x > 3: ...`, un `x = 4` entra en la segunda rama solo porque la primera falló, y cualquier cosa menor a 3 cae al `else`. Ordenar los tramos de estrecho a ancho mantiene correcta la fórmula.
 
-<section class="lesson-section lesson-section--challenges">
-<h2 id="-challenges">🧩 Retos</h2>
+## 🧩 Desafíos
 
 <details class="challenge">
-<summary>Reto — piensa primero, luego revela</summary>
+<summary>🧩 Desafío — piensa primero, luego revela</summary>
 <div class="challenge__body">
 
-Escribe una función `classify_temp(temp)` que devuelva:
-- `"freezing"` si temp < 0
-- `"cold"` si 0 <= temp < 15
-- `"warm"` si 15 <= temp < 30
-- `"hot"` si temp >= 30
+Escribe `classify_temp(temp)` que devuelva `"freezing"` bajo $0$, `"cold"` en $[0,15)$, `"warm"` en $[15,30)$ y `"hot"` desde $30$.
 
-<p class="challenge__answer">💡 <strong>Respuesta:</strong> Usa una cadena de <code>elif</code>: <code>if temp &lt; 0: return "freezing" elif temp &lt; 15: return "cold" elif temp &lt; 30: return "warm" else: return "hot"</code></p>
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> Una cadena <code>elif</code>, aprovechando que cada comprobación posterior asume que las anteriores fallaron: <code>if temp &lt; 0: return "freezing" elif temp &lt; 15: return "cold" elif temp &lt; 30: return "warm" else: return "hot"</code>.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>Reto — piensa primero, luego revela</summary>
+<summary>🧩 Desafío — piensa primero, luego revela</summary>
 <div class="challenge__body">
 
-Dado `text = "Hello, World!"`, escribe una comprobación que imprima `"uppercase"` si el texto está todo en mayúsculas, `"lowercase"` si está todo en minúsculas, o `"mixed"` en caso contrario.
+Con `text = "Hello, World!"`, imprime `"uppercase"` si el texto está todo en mayúsculas, `"lowercase"` si todo en minúsculas, `"mixed"` de lo contrario.
 
-<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>if text.isupper(): print("uppercase") elif text.islower(): print("lowercase") else: print("mixed")</code></p>
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>if text.isupper(): print("uppercase") elif text.islower(): print("lowercase") else: print("mixed")</code> — el conjunto completo de condiciones forma una partición.</p>
 
 </div>
 </details>
 
-</section>
+## 🤔 Preguntas socráticas
 
-<section class="lesson-section lesson-section--socratic">
-<h2 id="-socratic-questions">🤔 Preguntas socráticas</h2>
+- ¿Por qué `elif` y no `else if`? ¿Qué haría Python con las dos palabras apareciendo lado a lado?
+- Con $s = 85$, ¿cuántas condiciones evalúa la cadena de notas antes de entrar en una rama? (Pista: ¿qué pieza falla y cuál acierta?)
+- ¿Cuál es la diferencia entre `if x:` e `if x is not None:`? ¿Cuándo importa cada una?
 
-- ¿Por qué Python usa `elif` en lugar de `else if`? ¿Qué ocurriría si escribieras `else if`?
-- Si `score = 85`, ¿cuántas condiciones evalúa `if score >= 90: ... elif score >= 80: ... elif score >= 70: ...` antes de entrar en una rama?
-- ¿Cuál es la diferencia entre `if x:` y `if x is not None:`? ¿Cuándo importa cada una?
-
-</section>
-
-<section class="lesson-section lesson-section--quiz">
-<h2 id="-quick-check">✅ Comprobación rápida</h2>
+## ✅ Comprobación rápida
 
 <div class="quiz" data-quiz="python-101-control-flow">
   <div class="quiz-q" data-answer="2">
@@ -175,9 +207,8 @@ Dado `text = "Hello, World!"`, escribe una comprobación que imprima `"uppercase
       <button class="quiz-q__opt" data-idx="0">x > 10</button>
       <button class="quiz-q__opt" data-idx="1">x > 5</button>
       <button class="quiz-q__opt" data-idx="2">x > 3</button>
-      <button class="quiz-q__opt" data-idx="3">Se ejecutan en paralelo</button>
+      <button class="quiz-q__opt" data-idx="3">Corren en paralelo</button>
     </div>
     <p class="quiz-q__feedback" hidden></p>
   </div>
 </div>
-</section>

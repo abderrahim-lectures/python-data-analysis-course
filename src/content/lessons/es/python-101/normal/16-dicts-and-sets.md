@@ -20,17 +20,19 @@ section: "python-101"
 track: "normal"
 ---
 
-## Diccionarios
+## El mapeo
 
-Los dicts asignan claves a valores — como un diccionario real asigna palabras a definiciones:
+Los matemáticos llaman *función* a una tabla que empareja cada entrada con una única salida; Python la llama **dict**. Las claves apuntan a valores, exactamente como un diccionario de palabras apunta a sus definiciones:
 
 ```python
 scores = {"Alice": 85, "Bob": 92, "Charlie": 78}
 print(scores["Alice"])       # 85
-print(scores.get("Dave", 0)) # 0 (default if key missing)
+print(scores.get("Dave", 0)) # 0 (valor por defecto si falta la clave)
 ```
 
-## Métodos de dict
+Indexar con `[]` es la búsqueda impaciente: exige que la clave exista. `.get(clave, defecto)` es la variante cortés: si la clave falta, devuelve el plan B en lugar de lanzar `KeyError`. La distinción es la diferencia entre una reclamación y una pregunta.
+
+## El arsenal del dict
 
 ```python
 scores = {"Alice": 85, "Bob": 92}
@@ -39,100 +41,128 @@ scores.keys()         # dict_keys(['Alice', 'Bob'])
 scores.values()       # dict_values([85, 92])
 scores.items()        # dict_items([('Alice', 85), ('Bob', 92)])
 
-scores["Dave"] = 78   # add new pair
-del scores["Bob"]     # remove by key
-scores.pop("Alice")   # remove and return value
+scores["Dave"] = 78   # añade un par nuevo
+del scores["Bob"]     # elimina por clave
+scores.pop("Alice")   # elimina y devuelve el valor
 
-scores.update({"Eve": 95, "Frank": 88})  # merge
-scores.setdefault("Grace", 0)  # set only if key missing
+scores.update({"Eve": 95, "Frank": 88})  # fusiona
+scores.setdefault("Grace", 0)  # asigna solo si falta la clave
 ```
 
-## Iterar sobre dicts
+`keys`, `values` y `items` son tres vistas de la misma relación — el dominio, el rango y la gráfica. `update` fusiona un segundo dict; `setdefault` escribe solo cuando la clave está ausente, la asignación condicional que no necesita `if`.
+
+## Caminar sobre el mapeo
+
+La iteración sobre un dict recorre el dominio por defecto; para ver las dos mitades, pide `items`:
 
 ```python
-for name in scores:           # keys
+for name in scores:           # claves
     print(name)
 
-for name, score in scores.items():  # key-value pairs
+for name, score in scores.items():  # pares clave-valor
     print(f"{name}: {score}")
 ```
 
-## Conjuntos
+`items` te entrega el par directamente — sin indexar a mano — porque desempaquetar una entrada en `name, score` es la lectura natural de una fila.
 
-Los sets almacenan valores **únicos** y sin orden:
+## Sets: el conjunto matemático
+
+Un **set** es un conjunto en el sentido matemático: una colección sin orden y sin duplicados. La repetición se disuelve a la entrada:
 
 ```python
 colors = {"red", "blue", "green", "red"}
-print(colors)  # {'red', 'blue', 'green'}  (duplicates removed)
+print(colors)  # {'red', 'blue', 'green'}  (duplicados eliminados)
 ```
 
+La unicidad se aplica estructuralmente — no hay segunda copia esperando a contaminar una comprobación de pertenencia. La pertenencia a un set es $x \in S$ exactamente: un elemento está dentro o fuera, sin términos medios ni asomos.
+
 ## Operaciones de conjuntos
+
+El álgebra de conjuntos está deletreada directamente. Con $A = \{1, 2, 3, 4\}$ y $B = \{3, 4, 5, 6\}$:
 
 ```python
 a = {1, 2, 3, 4}
 b = {3, 4, 5, 6}
 
-a | b    # {1, 2, 3, 4, 5, 6}  (union)
-a & b    # {3, 4}              (intersection)
-a - b    # {1, 2}              (difference)
-a ^ b    # {1, 2, 5, 6}       (symmetric difference)
+a | b    # {1, 2, 3, 4, 5, 6}  (unión)
+a & b    # {3, 4}              (intersección)
+a - b    # {1, 2}              (diferencia)
+a ^ b    # {1, 2, 5, 6}       (diferencia simétrica)
 ```
 
-Los sets son rápidos para probar la pertenencia: `x in my_set` es O(1) frente a O(n) para las listas.
+$$
+A \cup B = \{1, 2, 3, 4, 5, 6\}, \quad A \cap B = \{3, 4\}, \quad A \setminus B = \{1, 2\}, \quad A \mathbin{\triangle} B = \{1, 2, 5, 6\}.
+$$
 
-## Requisito de hash
+Los operadores son la notación que ya conoces. Y donde la teoría promete velocidad, la implementación cumple: probar la pertenencia a un set corre en $O(1)$ frente a los $O(n)$ de una lista, porque un set almacena elementos por una huella calculada, no por posición.
 
-Las claves de dict y los elementos de set deben ser **hashables** (inmutables): las cadenas, los números y las tuplas funcionan. Las listas y otros dicts no:
+## El requisito del hash
+
+Las huellas exigen estabilidad. Las claves de dict y los elementos de set deben ser **hashables** — en la práctica, inmutables — para que sus cálculos sigan siendo reproducibles. Las cadenas, los números y las tuplas cumplen; las listas y los demás dicts no:
 
 ```python
 {[1, 2]: "bad"}   # TypeError: unhashable type: 'list'
-{(1, 2): "good"}  # Works — tuple is hashable
+{(1, 2): "good"}  # Funciona — la tupla es hasheable
 ```
+
+Una lista no podría ser una clave fiable ni aunque se le permitiera: su hash cambiaría en el instante en que cambiara su contenido, convirtiendo el mapeo en un campo de minas de búsquedas caducas.
+
+## Un ejemplo resuelto: la libreta de notas
+
+La relación, el dominio y el rango — una sola tabla recorrida en tres posturas:
+
+```python
+scores = {"Alice": 85, "Bob": 92, "Charlie": 78}
+
+for name, score in scores.items():
+    print(f"{name}: {score}")
+
+print(scores.get("Dave", "absent"))   # absent — sin KeyError
+
+roles = {"student", "teacher", "admin"}
+print("student" in roles)             # True — pertenencia O(1)
+```
+
+`items` camina el grafo entero, `.get` pregunta con cortesía cuando no sabes si la clave existe, y el `in` sobre un conjunto es la pertenencia $x \in S$ — tres preguntas que las estructuras de la lección responden directas.
 
 ## Errores comunes
 
-- **Acceder a claves faltantes**: usa `.get()` o `in` para evitar un `KeyError`
-- **Orden de los dicts**: Python 3.7+ conserva el orden de inserción, pero no confíes en él para la igualdad
-- **Los sets pierden el orden**: nunca dependas del orden de iteración de un set
+- **Acceder a claves ausentes.** `.get()` o un chequeo con `in` te ahorran un `KeyError`.
+- **Confiarte del orden del dict.** Python 3.7+ conserva el orden de inserción, pero trátalo como una conveniencia, no como un contrato.
+- **Confiar en el orden de un set.** Un set no guarda orden alguno; jamás conviertas el orden de iteración en una dependencia.
+- **`{}` es un dict vacío; `set()` es el conjunto vacío.** `{}` no es un conjunto. Escribe `set()` para el vacío y `{"a", "b"}` para un literal — un símbolo, dos significados.
 
-<section class="lesson-section lesson-section--challenges">
-<h2 id="-challenges">🧩 Retos</h2>
+## 🧩 Desafíos
 
 <details class="challenge">
-<summary>Reto — piensa primero, luego revela</summary>
+<summary>🧩 Desafío — piensa primero, luego revela</summary>
 <div class="challenge__body">
 
-Cuenta la frecuencia de cada carácter en `"hello world"` usando un dict.
+Cuenta la frecuencia de cada carácter de `"hello world"` con un dict.
 
-<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>freq = {}; for c in "hello world": freq[c] = freq.get(c, 0) + 1</code></p>
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>freq = {}; for c in "hello world": freq[c] = freq.get(c, 0) + 1</code> — el plan B de <code>.get</code> con $0$ convierte la primera aparición en un incremento desde cero.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>Reto — piensa primero, luego revela</summary>
+<summary>🧩 Desafío — piensa primero, luego revela</summary>
 <div class="challenge__body">
 
-Dadas dos listas, encuentra los elementos que aparecen en ambas usando un set.
+Dadas dos listas, encuentra los elementos que aparecen en ambas usando sets.
 
-<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>set(a) & set(b)</code> o <code>set(a).intersection(b)</code></p>
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>set(a) & set(b)</code> o <code>set(a).intersection(b)</code> — la intersección es $A \cap B$, y la maquinaria de conjuntos hace el trabajo.</p>
 
 </div>
 </details>
 
-</section>
+## 🤔 Preguntas socráticas
 
-<section class="lesson-section lesson-section--socratic">
-<h2 id="-socratic-questions">🤔 Preguntas socráticas</h2>
+- ¿Por qué una lista no puede servir de clave de dict? ¿Qué propiedad debe portar una clave?
+- ¿Cuándo supera un set a una lista — qué pierdes y qué ganas?
+- ¿Cómo difiere `dict.get(clave, defecto)` de `dict[clave]`, y cuándo prefieres cada uno?
 
-- ¿Por qué no puedes usar una lista como clave de dict? ¿Qué propiedad necesita tener una clave?
-- ¿Cuándo usarías un set en lugar de una lista? ¿Qué pierdes y qué ganas?
-- ¿En qué se diferencia `dict.get(clave, predeterminado)` de `dict[clave]`? ¿Cuándo preferirías uno?
-
-</section>
-
-<section class="lesson-section lesson-section--quiz">
-<h2 id="-quick-check">✅ Comprobación rápida</h2>
+## ✅ Comprobación rápida
 
 <div class="quiz" data-quiz="python-101-dicts-sets">
   <div class="quiz-q" data-answer="0">
@@ -157,4 +187,3 @@ Dadas dos listas, encuentra los elementos que aparecen en ambas usando un set.
     <p class="quiz-q__feedback" hidden></p>
   </div>
 </div>
-</section>

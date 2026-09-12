@@ -20,18 +20,26 @@ section: "python-101"
 track: "normal"
 ---
 
-## Todo valor tiene un tipo
+## El conjunto al que pertenece un número
 
-Un tipo es el conjunto al que pertenece un valor — como en matemáticas, donde distingues enteros de reales:
+Responde dos preguntas: tienes $7$ manzanas y partes una por la mitad. ¿Sostienes ahora $7 + \frac{1}{2}$ manzanas *en el mismo sentido* que sostenías $7$? Media manzana no es un número entero de manzanas — el $7$ vive en $\mathbb{Z}$, y el $7\frac{1}{2}$ vive en $\mathbb{Q}$.
 
-| Tipo | Analogía matemática | Ejemplo |
+Un matemático responde preguntándose a qué **conjunto** pertenece un valor. La misma distinción persigue a todo programa: la máquina almacena $42$ de forma distinta a $42.5$, y $42$ de forma distinta a `"42"`. La palabra que Python usa para "en qué conjunto vive este valor" es **tipo**.
+
+Entonces: ¿cuántos conjuntos merece la pena distinguir? Cuatro, al principio.
+
+| Tipo | Qué es, matemáticamente | Ejemplos |
 |---|---|---|
-| `int` | $\mathbb{Z}$ (enteros) | `42`, `-7` |
-| `float` | $\mathbb{R}$ (reales, aproximados) | `3.14`, `-0.5` |
+| `int` | $\mathbb{Z}$ — los enteros, guardados con exactitud | `42`, `-7` |
+| `float` | $\mathbb{R}$, aproximado con un número fijo de dígitos binarios | `3.14`, `-0.5` |
 | `str` | una secuencia finita de caracteres | `"hello"` |
 | `bool` | $\{\text{True}, \text{False}\}$ | `True`, `False` |
 
-Comprueba el tipo de un valor con `type(...)`:
+La fila de `float` tiene una reserva deliberada — *aproximado*. Un entero se guarda exacto, siempre. Un número real casi nunca: ¿cómo guardarías $1/3 = 0.333\ldots$ con un número finito de dígitos? No puedes, así que Python mantiene una aproximación finita y las cuentas divergen en los últimos dígitos. Ese único hecho explica una sorpresa famosa que verás enseguida.
+
+## Preguntar a qué conjunto pertenece
+
+Dada una valor, puedes preguntar su tipo directamente:
 
 ```python
 type(42)      # <class 'int'>
@@ -40,9 +48,11 @@ type("hi")    # <class 'str'>
 type(True)    # <class 'bool'>
 ```
 
-## Tipado dinámico
+Dos notas de notación. Primera, `type(...)` *es* una función — le entregas un valor y te devuelve el *objeto de tipo* al que pertenece ese valor. Segunda, la respuesta imprime `<class 'int'>`; la palabra `class` es el término de Python para tipo, y la palabra entre comillas es el nombre del conjunto. Lee `<class 'float'>` como *"pertenece al conjunto float"*.
 
-Python está **tipado dinámicamente**: un nombre no está atado permanentemente a un solo tipo. `x = 5` y luego `x = "five"` es legal — `x` simplemente apunta a algo nuevo:
+## Un nombre no se compromete con un conjunto
+
+Aquí empiezan los beneficios. En un lenguaje de tipado estático declararías por adelantado: *x es un entero*. Python, en cambio, deja que un nombre apunte donde quiera:
 
 ```python
 x = 5
@@ -51,71 +61,88 @@ x = "hello"
 print(type(x))    # <class 'str'>
 ```
 
-Esto es práctico, pero también significa que el *tipo* de un nombre solo se puede conocer mirando a qué apunta actualmente, no declarándolo de antemano.
+Redirigir un nombre a otro conjunto es legal, así que el tipo de `x` no se lee de ninguna declaración — solo preguntando a qué apunta ahora. Esto es el **tipado dinámico**. Es cómodo, y es también la razón por la que tu programa puede, en silencio, entregar una cadena a una función que espera números: nada lo impide hasta que la propia operación falla.
 
-## Valores truthy y falsy
+## ¿Qué valores actúan como True?
 
-`bool()` convierte cualquier valor en `True` o `False`. La regla es simple:
+Todo valor es **truthy** o **falsy** — o bien se comporta como `True` en una condición, o bien como `False`. La regla es compacta y merece la pena verificarla:
 
-- **Falsy**: `0`, `0.0`, `""` (cadena vacía), `None`
+- **Falsy**: el $0$, el $0.0$, la cadena vacía `""` y `None`
 - **Truthy**: todo lo demás
 
 ```python
 bool(0)         # False
 bool(1)         # True
-bool(-1)        # True  — any nonzero number is truthy
+bool(-1)        # True   — cualquier número no nulo es truthy
 bool("")        # False
-bool("hello")   # True  — any non-empty string is truthy
+bool("hello")   # True   — cualquier cadena no vacía es truthy
 ```
 
-Esto importa cuando escribas condiciones más adelante: `if score:` significa "si score no es cero".
+Fíjate en lo que está en la lista y en lo que queda fuera. `-1` es True; `0` no. La cadena `"0"` es True — es no vacía, y para las cadenas el criterio es la vacuidad, no el valor de su contenido. Esta regla se paga sola en cuanto escribes tu primer `if`: `if score:` significa *si score no es cero*.
+
+## Un ejemplo resuelto: auditar una expresión
+
+Los conjuntos pagan en cuanto una expresión los mezcla. Lee el recibo línea a línea y pregunta el conjunto de cada resultado:
+
+```python
+unit_price = 4.75
+quantity = 4
+bill = unit_price * quantity     # float: el float absorbe al int
+type(bill)                       # <class 'float'>
+bool(bill)                       # True — todo lo distinto de cero es truthy
+
+type(10 / 2)                     # <class 'float'> — la división real nunca da int
+```
+
+Lee `bill` como el producto de dos conjuntos distintos. Los conjuntos no se "mezclan" — gana el `float`, porque la proporción no es un número entero de ninguna escala y el conjunto más ancho debe contenerla. La costumbre de auditoría es preguntar al conjunto directamente: `type(...)` confirma lo que sospechabas en vez de apostar a la suerte.
 
 ## Errores comunes
 
-- **`4 / 2` es `2.0`, no `2`.** La división verdadera (`/`) siempre devuelve un `float` en Python 3. Usa `4 // 2` para la división entera.
-- **`True + True` es `2`.** Los booleanos son subclases de `int` en Python — `True` se comporta como `1` y `False` como `0` en la aritmética.
-- **`type()` da el tipo concreto.** `type(True)` es `bool`, no `int`, aunque `True` funcione como `1` en matemáticas.
+- **`4 / 2` es `2.0`, no `2`.** La división real (`/`) siempre devuelve un `float` en Python 3 — incluso cuando la división es exacta. Para un resultado entero pide división entera: `4 // 2` → `2`.
+- **`True + True` es `2`.** `bool` es una subclase de `int` en Python: `True` se comporta como $1$ y `False` como $0$ en aritmética. Los dos conjuntos se solapan, pero `type(True)` sigue respondiendo `bool`.
+- **`type()` informa el tipo concreto.** `type(True)` es `bool`, no `int`, por mucho que `True` colabore en las sumas.
+- **`type()` describe el resultado, no los operandos.** `type(2 * 3.0)` es `float` — un `int` multiplicado por un `float` vive en el conjunto `float`. No lo predigas de las piezas; pregúntale a la respuesta.
 
-## 🧩 Retos
+## 🧩 Desafíos
 
 <details class="challenge">
-<summary>🧩 Reto — piensa primero, luego revela</summary>
+<summary>🧩 Desafío — piensa primero, luego revela</summary>
 <div class="challenge__body">
 
-¿Qué es `type(7 / 2)`? Predícelo antes de ejecutarlo y luego compruébalo.
+Predice `type(7 / 2)` y luego compruébalo.
 
-<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>type(7 / 2)</code> es <code>float</code> — la división verdadera (<code>/</code>) siempre produce un float en Python 3, incluso cuando ambos operandos son enteros y el resultado es un número entero.</p>
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>type(7 / 2)</code> es <code>float</code> — la división real (<code>/</code>) siempre produce un float en Python 3, incluso cuando ambos operandos son enteros y el cociente es un número entero.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Reto — piensa primero, luego revela</summary>
+<summary>🧩 Desafío — piensa primero, luego revela</summary>
 <div class="challenge__body">
 
 Predice `bool(0)`, `bool(0.0)`, `bool("")` y `bool("0")`. ¿Cuáles son truthy y cuáles falsy?
 
-<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>bool(0)</code> → False, <code>bool(0.0)</code> → False, <code>bool("")</code> → False (cadena vacía), <code>bool("0")</code> → True (cadena no vacía, aunque contenga el carácter "0").</p>
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>bool(0)</code> → False, <code>bool(0.0)</code> → False, <code>bool("")</code> → False (cadena vacía), <code>bool("0")</code> → True (cadena no vacía, aunque su contenido sea el carácter "0").</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Reto — piensa primero, luego revela</summary>
+<summary>🧩 Desafío — piensa primero, luego revela</summary>
 <div class="challenge__body">
 
-`0.1 + 0.2` en Python **no** es exactamente igual a `0.3`. Pruébalo. ¿Por qué un `float` — que aproxima $\mathbb{R}$ usando dígitos binarios finitos — podría no representar exactamente $0.1$?
+En Python, `0.1 + 0.2` **no** es igual a `0.3`. Aquí está el mismo problema en papel: ¿qué ocurre al representar $1/3 = 0.333\ldots$ con dos dígitos decimales? Ahora explica por qué un `float` — que aproxima $\mathbb{R}$ con finitos dígitos binarios — no puede representar $0.1$ exactamente.
 
-<p class="challenge__answer">💡 <strong>Respuesta:</strong> 0.1 no tiene una representación exacta en binario (igual que 1/3 no tiene una representación decimal exacta). Los floats usan fracciones binarias finitas, así que 0.1 + 0.2 acumula un pequeño error de redondeo: 0.30000000000000004, no 0.3. Esta es una limitación fundamental de la aritmética de punto flotante, no un error de Python.</p>
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> Con dos dígitos, el $1/3$ debe convertirse en $0.33$ — una pérdida ya cometida antes de cualquier operación. Igualmente, el $0.1$ no tiene forma binaria exacta; el float guarda un valor cercano, y sumar dos de esos valores arrastra errores diminutos: <code>0.1 + 0.2</code> da <code>0.30000000000000004</code>, no <code>0.3</code>. Precisión finita, no un error de Python.</p>
 
 </div>
 </details>
 
 ## 🤔 Preguntas socráticas
 
-- Si `bool(-1)` es `True`, ¿qué regla única explica por qué `-1` es truthy pero `0` es falsy?
-- Python tiene `isinstance(42, int)` que devuelve `True`. ¿Sería `isinstance` más fiable que `type(x) == int` para comprobar tipos? ¿Por qué o por qué no?
-- ¿Por qué Python usa `True` y `False` (con mayúscula inicial) en lugar de `true` y `false`? ¿Qué otras palabras capitalizadas reserva Python?
+- Si `bool(-1)` es `True`, ¿qué regla única explica que $-1$ sea truthy pero el $0$ sea falsy? ¿Se generaliza la regla de los números a las cadenas?
+- Python tiene `isinstance(42, int)` que devuelve `True`. ¿Sería `isinstance` más fiable que `type(x) == int` para comprobar tipos? ¿Por qué?
+- ¿Por qué Python escribe `True` y `False` en mayúsculas en lugar de `true` y `false`? ¿Qué otras palabras capitalizadas reserva Python?
 
 ## ✅ Comprobación rápida
 

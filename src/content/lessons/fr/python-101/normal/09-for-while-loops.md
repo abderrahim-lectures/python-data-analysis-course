@@ -20,9 +20,19 @@ section: "python-101"
 track: "normal"
 ---
 
-## Boucles for
+## Les deux machines qui répètent
 
-Une boucle `for` itère sur chaque élément d'une séquence :
+Écrivez un programme pour additionner les cent premiers entiers et vos mains s'engourdissent. Les mathématiciens ont abstrait la répétition en un symbole bien avant l'existence des ordinateurs :
+
+$$
+\sum_{i=1}^{100} i = 1 + 2 + \cdots + 100
+$$
+
+Le signe $\sum$ est une instruction de répéter. Une boucle est le $\sum$ de l'ordinateur — et Python scinde l'idée en deux machines pour deux sortes de répétition. `for` répète sur une *séquence connue*. `while` répète *jusqu'à ce qu'une condition cesse d'être vraie*.
+
+## For : une répétition sur une séquence
+
+Une boucle `for` visite chaque élément d'une séquence, un par tour :
 
 ```python
 for fruit in ["apple", "banana", "cherry"]:
@@ -32,16 +42,38 @@ for fruit in ["apple", "banana", "cherry"]:
 # cherry
 ```
 
-Cela fonctionne aussi avec les chaînes — elle itère sur les caractères :
+Lisez-la comme elle s'exécute : *« pour chaque fruit **dans** la liste, fais ceci. »* La variable de boucle, `fruit`, prend une nouvelle valeur à chaque tour jusqu'à épuiser la liste.
+
+Les chaînes sont aussi des séquences — les éléments sont des caractères :
 
 ```python
 for letter in "Python":
     print(letter)
 ```
 
-## Boucles while
+Puisqu'un caractère est un élément unique, la mathématique et la machine s'accordent : itérer sur une chaîne de longueur $n$ exécute exactement $n$ tours.
 
-Une boucle `while` s'exécute tant que sa condition est `True` :
+## La séquence numérique : range
+
+La plupart des sommes portent sur des nombres, donc Python fournit `range` — une séquence que vous pouvez parcourir à pas :
+
+```python
+for n in range(5):
+    print(n)   # 0 1 2 3 4
+```
+
+`range(5)` produit la progression arithmétique $0, 1, 2, 3, 4$, comme l'ensemble des indices de $\sum_{i=0}^{4} a_i$. Deux arguments de plus lui donnent la forme voulue : `range(start, stop, step)` marche depuis `start`, par pas de `step`, s'arrêtant avant `stop` :
+
+```python
+for n in range(10, 0, -2):
+    print(n)   # 10 8 6 4 2
+```
+
+La règle d'arrêt mérite un énoncé exact : $n$ voyage tant que $n < \text{stop}$ (ou $n > \text{stop}$ avec un pas négatif), comme un intervalle semi-ouvert $[\text{start}, \text{stop})$.
+
+## While : une répétition jusqu'à une condition
+
+Certaines tâches ne peuvent pas énumérer leurs tours à l'avance — on continue jusqu'à ce qu'une condition bascule. L'approximation de Newton est le prototype : on raffine jusqu'à ce que le changement tombe sous une tolérance. C'est une boucle `while` :
 
 ```python
 count = 0
@@ -51,29 +83,35 @@ while count < 5:
 # 0 1 2 3 4
 ```
 
-**Assurez-vous toujours que la condition finit par devenir `False`**, sinon vous créez une boucle infinie.
+La condition est en haut et se revérifie à chaque tour. **Assurez-vous qu'elle finisse par devenir `False`** — si rien dans le corps ne change les variables que la condition lit, la boucle ne finit jamais. Une somme qui se doit de terminer s'écrit en `for` ; une recherche qui ne finit qu'en trouvant sa réponse s'écrit en `while`.
 
 ## Break et continue
 
-`break` quitte la boucle immédiatement. `continue` passe à l'itération suivante :
+Deux mots-clés ajustent le flux depuis l'intérieur.
+
+`break` abandonne la boucle immédiatement, quel que soit le nombre de tours restants :
 
 ```python
-# break — stop at the first even number
 for n in [1, 3, 4, 7, 8]:
     if n % 2 == 0:
         print(f"Found even: {n}")
         break
+```
 
-# continue — skip odd numbers
+`continue` n'abandonne que *ce* tour, sautant au suivant :
+
+```python
 for n in range(6):
     if n % 2 != 0:
         continue
     print(n)  # 0 2 4
 ```
 
-## Pass
+Entre eux, les concepts épousent la droite numérique : `break` tranche la queue $\{n \in \mathbb{Z} : n \geq m\}$ ; `continue` excave un sous-ensemble de tours, comme filtrer une progression avec un crible.
 
-`pass` est un espace réservé qui ne fait rien. Utilisez-le quand vous avez besoin d'un bloc syntaxiquement valide :
+## Pass : un marqueur vide
+
+Tout corps de `if`, `for`, `while` et de fonction doit contenir au moins une instruction, mais parfois vous ne l'avez pas encore écrite. `pass` est le no-op qui occupe la place :
 
 ```python
 for n in range(10):
@@ -83,54 +121,65 @@ for n in range(10):
         print(n)
 ```
 
+Il ne fait rien — ce qui est précisément son rôle : garder le bloc syntaxiquement valide pendant que la vraie instruction est en cours de rédaction.
+
+## Un exemple travaillé : la machine Σ au travail
+
+Les outils de cette leçon se composent dans le symbole de sommation de l'ouverture :
+
+```python
+total = 0
+for n in range(1, 11):
+    if n % 2 != 0:
+        continue          # pairs seulement
+    total += n
+print(total)              # 2 + 4 + 6 + 8 + 10 = 30
+```
+
+La boucle est $\sum$ mécanisé : chaque tour additionne un terme, `continue` tamise les tours impairs, et `total` s'accumule comme le total cumulé de la leçon 02.
+
 ## Pièges courants
 
-- **Boucles `while` infinies** : oublier de mettre à jour la variable de condition
-- **Modifier une liste pendant l'itération** : utilisez plutôt une copie ou une compréhension de liste
-- **`for` avec `range(len(...))`** : le code pythonique itère généralement directement sur la séquence
+- **Boucles `while` infinies.** Oubliez de mettre à jour la variable lue par la condition et la boucle tournera à jamais. Vérifiez que le corps fait avancer l'état vers `False`.
+- **Modifier une liste pendant qu'on l'itère.** Trancher ou supprimer des éléments en cours de route déplace les indices sous vos pieds. Itérez sur une copie, ou construisez une nouvelle liste.
+- **`for i in range(len(items))`.** Sauf si vous avez besoin de l'indice lui-même, itérez directement sur la séquence — `for fruit in fruits` dit ce que vous voulez.
+- **`continue` saute le tour ; `break` abandonne la boucle.** `continue` ne saute que l'itération actuelle ; `break` termine la boucle entière. Les confondre, c'est ainsi qu'une boucle qui devait s'arrêter continue de tourner.
 
-<section class="lesson-section lesson-section--challenges">
-<h2 id="-challenges">🧩 Défis</h2>
+## 🧩 Défis
 
 <details class="challenge">
-<summary>Défi — réfléchissez d'abord, puis découvrez</summary>
+<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
-Écrivez une boucle `for` qui affiche les 10 premiers nombres divisibles par 3 (3, 6, 9, ..., 30).
+Écrivez une boucle `for` qui imprime les dix premiers multiples de 3 : $3, 6, 9, \ldots, 30$.
 
-<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>for i in range(3, 31, 3): print(i)</code> — <code>range(3, 31, 3)</code> commence à 3, va jusqu'à 30, en avançant par pas de 3.</p>
+<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>for i in range(3, 31, 3): print(i)</code> — <code>range(3, 31, 3)</code> commence à 3, avance de 3 en 3 et s'arrête avant 31, tombant exactement sur $3, 6, \ldots, 30$.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>Défi — réfléchissez d'abord, puis découvrez</summary>
+<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
-Écrivez une boucle `while` qui demande une entrée en répétition (simulez avec une liste) et qui s'arrête quand elle voit `"quit"`. Affichez chaque entrée.
+Écrivez une boucle `while` qui parcourt une file d'attente (simulez-la avec une liste) et s'arrête à l'élément `"quit"`, en imprimant chaque élément qu'elle franchit.
 
-<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>inputs = ["hello", "world", "quit"]; i = 0; while i < len(inputs) and inputs[i] != "quit": print(inputs[i]); i += 1</code></p>
+<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>inputs = ["hello", "world", "quit"]; i = 0; while inputs[i] != "quit": print(inputs[i]); i += 1</code> — la condition garde le sentinelle et l'indice fait avancer l'état vers lui.</p>
 
 </div>
 </details>
 
-</section>
+## 🤔 Questions socratiques
 
-<section class="lesson-section lesson-section--socratic">
-<h2 id="-socratic-questions">🤔 Questions socratiques</h2>
+- Quand tendez-vous vers `while` plutôt que `for` ? Donnez une vraie tâche pour chacun — une qui se compte à l'avance, une qui ne se compte pas.
+- Qu'arrive-t-il à une liste que vous modifiez pendant qu'une boucle `for` la parcourt ? Comment l'éviter ?
+- Python n'a pas de `do…while` comme C. Comment écrivez-vous un corps qui doit s'exécuter au moins une fois avant toute vérification de condition ?
 
-- Quand choisiriez-vous `while` plutôt que `for` ? Donnez un exemple réel de chacun.
-- Que se passe-t-il si vous modifiez une liste dans une boucle `for` qui itère dessus ? Comment éviteriez-vous le problème ?
-- Pourquoi Python n'a-t-il pas de boucle `do...while` comme C ou JavaScript ? Comment simule-t-on une telle boucle ?
-
-</section>
-
-<section class="lesson-section lesson-section--quiz">
-<h2 id="-quick-check">✅ Vérification rapide</h2>
+## ✅ Vérification rapide
 
 <div class="quiz" data-quiz="python-101-loops">
   <div class="quiz-q" data-answer="1">
-    <p class="quiz-q__prompt">1. Qu'affiche <code>for i in range(0, 10, 3): print(i, end=" ")</code> ?</p>
+    <p class="quiz-q__prompt">1. Qu'imprime <code>for i in range(0, 10, 3): print(i, end=" ")</code> ?</p>
     <div class="quiz-q__options">
       <button class="quiz-q__opt" data-idx="0">0 1 2 3 4 5 6 7 8 9</button>
       <button class="quiz-q__opt" data-idx="1">0 3 6 9</button>
@@ -141,7 +190,7 @@ for n in range(10):
   </div>
 
   <div class="quiz-q" data-answer="2">
-    <p class="quiz-q__prompt">2. Quel mot-clé saute le reste de l'itération de boucle en cours ?</p>
+    <p class="quiz-q__prompt">2. Quel mot-clé saute le reste de l'itération actuelle de la boucle ?</p>
     <div class="quiz-q__options">
       <button class="quiz-q__opt" data-idx="0">break</button>
       <button class="quiz-q__opt" data-idx="1">pass</button>
@@ -151,4 +200,3 @@ for n in range(10):
     <p class="quiz-q__feedback" hidden></p>
   </div>
 </div>
-</section>

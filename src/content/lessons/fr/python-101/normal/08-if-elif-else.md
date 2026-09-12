@@ -20,9 +20,25 @@ section: "python-101"
 track: "normal"
 ---
 
-## Instructions if
+## De la condition à la décision
 
-Un bloc `if` exécute son corps seulement quand la condition est `True` :
+L'arithmétique évalue ; la comparaison décide ; mais un programme qui ne fait qu'évaluer parcourt une ligne droite de haut en bas. La vie n'est pas une ligne droite. Une note est une *fonction par morceaux* : sa formule change à certains seuils. En mathématiques vous écrivez
+
+$$
+\mathrm{grade}(s) =
+\begin{cases}
+A & s \geq 90,\\
+B & s \geq 80,\\
+C & s \geq 70,\\
+F & \text{sinon}.
+\end{cases}
+$$
+
+Le `if`/`elif`/`else` de Python est la transcription d'une formule par morceaux. Chaque morceau garde sa plage, et exactement un morceau se déclenche.
+
+## La fourche simple
+
+La branche la plus simple exécute son corps seulement quand la condition est `True` :
 
 ```python
 score = 85
@@ -30,9 +46,11 @@ if score >= 60:
     print("Passing!")
 ```
 
-## Ajouter else
+La déclaration commence par `if`, puis la condition, puis les deux points — les deux points disent à Python qu'un bloc arrive. Tout ce qui est indenté en dessous appartient à cette branche et ne s'exécute que si la condition tenait.
 
-`else` rattrape tout ce que le `if` n'a pas pris :
+## La fourche double
+
+`else` attrape tout ce que le `if` n'a pas :
 
 ```python
 score = 45
@@ -42,9 +60,11 @@ else:
     print("Needs more work")
 ```
 
-## Elif pour plusieurs branches
+Une branche double est une partition des issues : la condition divise l'espace des valeurs en deux moitiés, et chaque cas atterrit dans exactement une.
 
-`elif` (abréviation de « else if ») vérifie les conditions dans l'ordre et s'arrête à la première correspondance :
+## La fourche multiple : elif
+
+Les formules par morceaux réelles ont plus de deux morceaux. `elif` — contraction de « else if » — ajoute d'autres conditions, vérifiées dans l'ordre, s'arrêtant à la première qui est `True` :
 
 ```python
 score = 78
@@ -59,27 +79,27 @@ else:
 print(grade)  # B
 ```
 
-Une seule branche s'exécute — la première condition qui vaut `True`.
+Remarquez l'économie : chaque condition `elif` n'a besoin que d'une borne inférieure, car les cas au-dessus sont déjà tranchés. Avec $s = 85$, le premier morceau échoue et le second réussit — les branches suivantes ne s'exécutent jamais. Une seule **branche** peut se déclencher, ce qui en fait une vraie fonction.
 
-## Valeurs vraies et fausses
+## Véracité : des valeurs comme conditions
 
-Python traite certaines valeurs comme `True` et d'autres comme `False` dans un contexte booléen :
+La condition après `if` n'a pas besoin d'être une comparaison. Python demande : *« cette valeur est-elle vraie ou fausse ? »* — et la réponse est uniforme :
 
 ```python
-# These are all "falsy":
+# Tous ces éléments sont falsy — ils se comportent comme False dans une condition :
 bool(0)       # False
 bool(0.0)     # False
 bool("")      # False
 bool([])      # False
 bool(None)    # False
 
-# Everything else is "truthy":
+# Tout le reste est truthy — il se comporte comme True :
 bool(1)       # True
 bool("hello") # True
 bool([1, 2])  # True
 ```
 
-Cela signifie que vous pouvez écrire des conditions propres sans comparaisons explicites :
+La collection des valeurs falsy est délibérément petite : zéro, texte vide, conteneurs vides et `None`. Tout le reste compte. Cela achète des conditions concises qui se lisent comme une vérification en langage naturel :
 
 ```python
 name = ""
@@ -91,9 +111,11 @@ if items:
     print("We have items")
 ```
 
-## Imbrication
+Une chaîne vide est falsy, donc `not name` vaut `True` ; une liste non vide est truthy, donc `if items` se déclenche. Vous sautez le `== ""` et le `!= []` explicites — la vérification est le vide lui-même.
 
-Vous pouvez placer des blocs `if` dans d'autres blocs `if`, mais gardez l'imbrication peu profonde pour la lisibilité :
+## Imbriquer : quand une question dépend d'une autre
+
+Certaines décisions sont séquentielles : *d'abord*, êtes-vous majeur ? ; *ensuite*, portez-vous une pièce d'identité ? Cela s'imbrique :
 
 ```python
 age = 25
@@ -108,58 +130,68 @@ else:
     print("Too young")
 ```
 
+L'imbrication fonctionne, mais chaque niveau double les chemins qu'un lecteur doit tenir en tête. Les chaînes `elif` plates se lisent comme la formule par morceaux elle-même ; prenez-les d'abord, et réservez l'imbrication aux questions réellement dépendantes.
+
+## Un exemple travaillé : le thermostat
+
+Un thermostat est une fonction par morceaux à trois morceaux. La chaîne la transcrit directement :
+
+```python
+temperature = 22
+
+if temperature <= 10:
+    state = "heating"
+elif temperature >= 30:
+    state = "cooling"
+else:
+    state = "steady"
+print(state)  # steady
+```
+
+Il se lit comme la formule qu'il est. L'ordre des morceaux compte : chaque `elif` suppose que ceux au-dessus ont échoué, si bien qu'exactement une branche se déclenche et qu'exactement un état s'imprime.
+
 ## Pièges courants
 
-- **Oublier les deux points** après `if`, `elif` ou `else`
-- **Utiliser `=` au lieu de `==`** dans les conditions (`=` affecte, `==` compare)
-- **Sur-imbriquer** quand un `elif` ou un `return` précoce serait plus propre
+- **Oublier les deux points** après `if`, `elif` ou `else` — sans eux, le bloc ne commence jamais.
+- **`=` au lieu de `==`.** `if score = 60` est une erreur de syntaxe, exprès.
+- **Sur-imbriquer** quand une chaîne `elif` (ou un retour anticipé) exposerait la forme de la formule d'un seul regard.
+- **Le premier `True` gagne, pas la correspondance la plus spécifique.** Dans `if x > 5: ... elif x > 3: ...`, un `x = 4` entre dans la deuxième branche seulement si la première a déjà échoué — et une valeur sous 3 tombe dans `else`. Ordonner les morceaux du plus étroit au plus large est ce qui garde la formule correcte.
 
-<section class="lesson-section lesson-section--challenges">
-<h2 id="-challenges">🧩 Défis</h2>
+## 🧩 Défis
 
 <details class="challenge">
-<summary>Défi — réfléchissez d'abord, puis découvrez</summary>
+<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
-Écrivez une fonction `classify_temp(temp)` qui renvoie :
-- `"freezing"` si temp < 0
-- `"cold"` si 0 <= temp < 15
-- `"warm"` si 15 <= temp < 30
-- `"hot"` si temp >= 30
+Écrivez `classify_temp(temp)` qui renvoie `"freezing"` sous $0$, `"cold"` dans $[0,15)$, `"warm"` dans $[15,30)$ et `"hot"` à partir de $30$.
 
-<p class="challenge__answer">💡 <strong>Réponse :</strong> Utilisez une chaîne <code>elif</code> : <code>if temp &lt; 0: return "freezing" elif temp &lt; 15: return "cold" elif temp &lt; 30: return "warm" else: return "hot"</code></p>
+<p class="challenge__answer">💡 <strong>Réponse :</strong> Une chaîne <code>elif</code>, en profitant du fait que chaque vérification suivante suppose que les précédentes ont échoué : <code>if temp &lt; 0: return "freezing" elif temp &lt; 15: return "cold" elif temp &lt; 30: return "warm" else: return "hot"</code>.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>Défi — réfléchissez d'abord, puis découvrez</summary>
+<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
-Étant donné `text = "Hello, World!"`, écrivez une vérification qui affiche `"uppercase"` si le texte est tout en majuscules, `"lowercase"` si tout en minuscules, ou `"mixed"` sinon.
+Avec `text = "Hello, World!"`, imprimez `"uppercase"` si le texte est tout en majuscules, `"lowercase"` si tout en minuscules, `"mixed"` sinon.
 
-<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>if text.isupper(): print("uppercase") elif text.islower(): print("lowercase") else: print("mixed")</code></p>
+<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>if text.isupper(): print("uppercase") elif text.islower(): print("lowercase") else: print("mixed")</code> — l'ensemble complet des conditions forme une partition.</p>
 
 </div>
 </details>
 
-</section>
+## 🤔 Questions socratiques
 
-<section class="lesson-section lesson-section--socratic">
-<h2 id="-socratic-questions">🤔 Questions socratiques</h2>
+- Pourquoi `elif` et pas `else if` ? Que ferait Python des deux mots apparaissant côte à côte ?
+- Avec $s = 85$, combien de conditions la chaîne de notes évalue-t-elle avant d'entrer dans une branche ? (Indice : quel morceau échoue, et lequel se déclenche ?)
+- Quelle est la différence entre `if x:` et `if x is not None:` ? Quand chacun importe-t-il ?
 
-- Pourquoi Python utilise-t-il `elif` au lieu de `else if` ? Que se passerait-il si vous écriviez `else if` ?
-- Si `score = 85`, combien de conditions `if score >= 90: ... elif score >= 80: ... elif score >= 70: ...` évalue-t-il avant d'entrer dans une branche ?
-- Quelle est la différence entre `if x:` et `if x is not None:` ? Quand chacune compte-t-elle ?
-
-</section>
-
-<section class="lesson-section lesson-section--quiz">
-<h2 id="-quick-check">✅ Vérification rapide</h2>
+## ✅ Vérification rapide
 
 <div class="quiz" data-quiz="python-101-control-flow">
   <div class="quiz-q" data-answer="2">
-    <p class="quiz-q__prompt">1. Qu'est-ce que ceci affiche ? <code>x = 0; if x: print("yes") else: print("no")</code></p>
+    <p class="quiz-q__prompt">1. Qu'est-ce que cela imprime ? <code>x = 0; if x: print("yes") else: print("no")</code></p>
     <div class="quiz-q__options">
       <button class="quiz-q__opt" data-idx="0">yes</button>
       <button class="quiz-q__opt" data-idx="1">Error</button>
@@ -175,9 +207,8 @@ else:
       <button class="quiz-q__opt" data-idx="0">x > 10</button>
       <button class="quiz-q__opt" data-idx="1">x > 5</button>
       <button class="quiz-q__opt" data-idx="2">x > 3</button>
-      <button class="quiz-q__opt" data-idx="3">Ils s'exécutent en parallèle</button>
+      <button class="quiz-q__opt" data-idx="3">Elles tournent en parallèle</button>
     </div>
     <p class="quiz-q__feedback" hidden></p>
   </div>
 </div>
-</section>

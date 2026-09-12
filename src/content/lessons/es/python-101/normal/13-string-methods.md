@@ -20,20 +20,22 @@ section: "python-101"
 track: "normal"
 ---
 
-## Las cadenas son inmutables
+## La cadena inmutable
 
-Todo método de cadenas devuelve una cadena **nueva** — la original nunca se modifica:
+Una cadena termina en el instante de su creación. Todo método que parece editarla en realidad devuelve una cadena **nueva**, dejando la original intacta:
 
 ```python
 name = "alice"
 upper = name.upper()
-print(name)    # alice  (unchanged)
+print(name)    # alice  (sin cambios)
 print(upper)   # ALICE
 ```
 
+Merece la pena interiorizarlo como ley: los métodos de cadenas nunca mutan; entregan copias recién construidas. Una vez que esperas cadenas nuevas, el arsenal se vuelve predecible — y el ocasional bucle `while` que parece no hacer nada se colapsa en una reasignación.
+
 ## Dividir y unir
 
-Convierte entre cadenas y listas:
+Las dos operaciones más portátiles son inversas exactas. Dividir rompe una cadena por un delimitador; unir pega una secuencia de vuelta con un delimitador:
 
 ```python
 sentence = "hello world python"
@@ -44,90 +46,115 @@ csv_line = "apple,banana,cherry"
 fruits = csv_line.split(",")   # ['apple', 'banana', 'cherry']
 ```
 
-## Buscar y comprobar
+Escritas como ecuaciones, se deshacen mutuamente:
+
+$$
+\text{split}(s, \text{sep}) = [w_1, w_2, \ldots, w_n] \qquad \text{join}(\text{sep}, [w_1, \ldots, w_n]) = w_1 + \text{sep} + w_2 + \cdots + w_n.
+$$
+
+Nota la asimetría: `split()` sin argumento divide en tramos de espacio en blanco — varios espacios colapsan —, mientras que un espacio en minúscula es tu delimitador en `" ".join(words)`. El delimitador de join es lo que quieres *entre* piezas; por eso `","`, y no `""`.
+
+## Buscar y probar
 
 ```python
 text = "Hello, World!"
 
 text.startswith("Hello")   # True
 text.endswith("!")         # True
-text.find("World")         # 7  (index of first match, -1 if not found)
+text.find("World")         # 7  (índice de la primera coincidencia, -1 si no está)
 text.count("l")            # 3
 text.replace("World", "Python")  # 'Hello, Python!'
 ```
 
-## Mayúsculas y espacios en blanco
+`startswith` y `endswith` son preguntas de sí/no sobre los bordes de la cadena — guardias baratos que sustituyen a las rebanadas. `find` responde *dónde*, devolviendo el índice donde comienza la subcadena, o $-1$ cuando la búsqueda fracasa. `count` enumera las apariciones no solapadas; `replace` canjea cada coincidencia por un sustituto.
+
+## Mayúsculas/minúsculas y espacios
 
 ```python
 "hello".upper()        # 'HELLO'
 "HELLO".lower()        # 'hello'
-"  hi  ".strip()       # 'hi'  (removes leading/trailing whitespace)
-"  hi  ".lstrip()      # 'hi ' (left only)
-"  hi  ".rstrip()      # '  hi' (right only)
+"  hi  ".strip()       # 'hi'  (elimina los espacios de los bordes)
+"  hi  ".lstrip()      # 'hi ' (solo izquierda)
+"  hi  ".rstrip()      # '  hi' (solo derecha)
 "hello world".title()  # 'Hello World'
 ```
 
+`strip` recorta el relleno que añade la contaminación — los espacios sueltos alrededor de un texto pegado. `title` capitaliza la primera letra de cada palabra, el disfraz suburbano para la desidia al introducir datos. Cada una es una transformación con un propósito, a la que se llega por su nombre más que memorizándola.
+
 ## Formato avanzado de f-strings
+
+El f-string es una función de maquetación: columnas declarativas y precisión. Alineación con una anchura, y formato de números con una especificación:
 
 ```python
 price = 19.999
 name = "Widget"
 
-# Width and alignment
-print(f"|{name:<15}|")   # |Widget          |  (left-align, width 15)
-print(f"|{name:>15}|")   # |          Widget|  (right-align)
-print(f"|{name:^15}|")   # |     Widget     |  (center)
+# Anchura y alineación
+print(f"|{name:<15}|")   # |Widget          |  (izquierda, anchura 15)
+print(f"|{name:>15}|")   # |          Widget|  (derecha)
+print(f"|{name:^15}|")   # |     Widget     |  (centro)
 
-# Number formatting
+# Formato de números
 print(f"{price:.2f}")     # 20.00
-print(f"{42:05d}")        # 00042  (zero-padded)
-print(f"{0.857:.1%}")     # 85.7%  (percentage)
+print(f"{42:05d}")        # 00042  (relleno con ceros)
+print(f"{0.857:.1%}")     # 85.7%  (porcentaje)
 ```
+
+La especificación `%` es una pequeña multiplicación por $100$ con un signo: $\{0.857 \mapsto 85.7\%\}$. `.2f` redondea a dos decimales en la pantalla mientras el número subyacente queda entero. La alineación convierte una columna irregular de valores en una tabla con nombre — presentación sin aritmética en el cuerpo.
+
+## Un ejemplo resuelto: limpiar la línea pegada
+
+Las herramientas se ensamblan en un circuito para la entrada más sucia del mundo real — una línea pegada desde una tabla:
+
+```python
+raw = "  apple, banana, cherry  "
+cleaned = raw.strip()
+fruits = cleaned.split(", ")
+print(fruits)          # ['apple', 'banana', 'cherry']
+back = ", ".join(fruits)
+print(back)            # 'apple, banana, cherry'
+```
+
+Tres gestos, un circuito: `strip` pela el padding que trae el pegado, `split` corta en piezas, `join` vuelve a pegar con el separador elegido. La dupla inversa `split`/`join` es el puente entre texto y lista — la misma relación que la ecuación de la apertura.
 
 ## Errores comunes
 
-- **Olvidar que split() sin argumentos** divide por espacios en blanco, no por la cadena vacía
-- **Esperar que find() lance un error** — devuelve -1 en su lugar
-- **Intentar modificar una cadena en su lugar** — reasigna siempre el resultado
+- **Olvidar qué es `split()` sin argumento.** Divide en tramos de espacios; pedirle que divida por la cadena vacía no es una opción que ofrezca.
+- **Esperar que `find()` lance un error ante subcadenas ausentes.** Devuelve $-1$. Comprueba antes de rebanar sobre él.
+- **Intentar modificar una cadena en su sitio.** No existe la edición en el sitio; reasigna el resultado.
+- **`join` se sienta sobre el delimitador, `split` sobre la cadena.** `" ".join(words)`, no `words.join(" ")` — el separador es dueño del método, y olvidar cuál es cuál te da un `AttributeError`.
 
-<section class="lesson-section lesson-section--challenges">
-<h2 id="-challenges">🧩 Retos</h2>
+## 🧩 Desafíos
 
 <details class="challenge">
-<summary>Reto — piensa primero, luego revela</summary>
+<summary>🧩 Desafío — piensa primero, luego revela</summary>
 <div class="challenge__body">
 
-Escribe una función `title_case(s)` que capitalice la primera letra de cada palabra: `title_case("hello world")` → `"Hello World"`.
+Escribe `title_case(s)` que capitalice la primera letra de cada palabra: `title_case("hello world")` → `"Hello World"`.
 
-<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>return s.title()</code> — el método integrado de Python hace exactamente esto.</p>
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>return s.title()</code> — el método incorporado de Python hace exactamente esto; a veces una línea es la solución entera.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>Reto — piensa primero, luego revela</summary>
+<summary>🧩 Desafío — piensa primero, luego revela</summary>
 <div class="challenge__body">
 
-Dado `"one,two,,three"`, escribe código que divida por comas y elimine las cadenas vacías.
+Dado `"one,two,,three"`, divide por comas y descarta las cadenas vacías.
 
-<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>[x for x in s.split(",") if x]</code> o <code>list(filter(None, s.split(",")))</code></p>
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>[x for x in s.split(",") if x]</code> o <code>list(filter(None, s.split(",")))</code> — la cadena vacía es falsy, así que el filtro de veracidad la descarta sin comprobar la longitud.</p>
 
 </div>
 </details>
 
-</section>
+## 🤔 Preguntas socráticas
 
-<section class="lesson-section lesson-section--socratic">
-<h2 id="-socratic-questions">🤔 Preguntas socráticas</h2>
+- ¿Por qué `find()` devuelve $-1$ en lugar de lanzar un error? ¿Qué cuesta cada elección?
+- ¿Cómo inviertes una cadena? ¿Existe un método para ello, o la respuesta vive en otra parte?
+- ¿Cuándo es `str.replace()` la herramienta equivocada — y qué encaja para una sustitución más delicada?
 
-- ¿Por qué `find()` devuelve -1 en lugar de lanzar un error? ¿Cuál es el equilibrio entre ambas opciones?
-- ¿Cómo invertirías una cadena en Python? ¿Existe un método para eso, o necesitas un enfoque distinto?
-- ¿Cuándo es `str.replace()` la herramienta equivocada? ¿Qué usarías en su lugar?
-
-</section>
-
-<section class="lesson-section lesson-section--quiz">
-<h2 id="-quick-check">✅ Comprobación rápida</h2>
+## ✅ Comprobación rápida
 
 <div class="quiz" data-quiz="python-101-string-methods">
   <div class="quiz-q" data-answer="1">
@@ -152,4 +179,3 @@ Dado `"one,two,,three"`, escribe código que divida por comas y elimine las cade
     <p class="quiz-q__feedback" hidden></p>
   </div>
 </div>
-</section>

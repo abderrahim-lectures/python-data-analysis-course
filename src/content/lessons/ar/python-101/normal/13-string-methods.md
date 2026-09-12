@@ -20,20 +20,22 @@ section: "python-101"
 track: "normal"
 ---
 
-## السلاسل غير قابلة للتعديل
+## السلسلة غير القابلة للتغيير
 
-لا تغيّر طرق السلاسل السلسلة الأصلية — فهي تُرجع نسخة جديدة:
+تكتمل السلسلةُ في لحظةِ إنشائها. وكل طريقةٍ تبدو أنها تعدّلها إنما ترجع في الحقيقة سلسلةً **جديدة**، تاركةً الأصلَ دون مساس:
 
 ```python
 name = "alice"
 upper = name.upper()
-print(name)    # alice  (unchanged)
+print(name)    # alice  (لم تتغير)
 print(upper)   # ALICE
 ```
 
-## التقسيم والضمّ
+جديرٌ بأن يُتشرّب كقانون: طرقُ السلاسل لا تُحدث تغييرًا قط؛ إنما تسلّم نسخًا مبنيةً من جديد. وحين تتوقع سلاسلَ جديدة، يصبح العتاد المحمول قابلاً للتنبؤ — ويتقفّع حلقةُ `while` العرضيةُ التي تبدو لا تفعل شيئًا في إعادة تعيينٍ.
 
-حوّل بين السلاسل والقوائم:
+## التقسيم والضم
+
+أكثرُ العمليتين قابليةً للنقل هما معكوسانِ تمامًا. يقسّم التقسيم سلسلةً عند فاصلٍ؛ ويُعيد الضمُّ تسلسلًا متماسكًا بفاصل:
 
 ```python
 sentence = "hello world python"
@@ -44,114 +46,136 @@ csv_line = "apple,banana,cherry"
 fruits = csv_line.split(",")   # ['apple', 'banana', 'cherry']
 ```
 
-## البحث والفحص
+مكتوبتين كمعادلتين، تلغيان بعضَهما:
+
+$$
+\text{split}(s, \text{sep}) = [w_1, w_2, \ldots, w_n] \qquad \text{join}(\text{sep}, [w_1, \ldots, w_n]) = w_1 + \text{sep} + w_2 + \cdots + w_n.
+$$
+
+لاحظ التفاوت: `split()` بلا وسيطٍ يقسم على جرى مسافات البياض — فتنطبق مسافاتٌ متعددةٌ —، بينما المسافةُ الصغيرةُ هي فاصلك في `" ".join(words)`. فاصلُ الضم هو ما تريده *بين* القطع؛ لذلك `","` لا `""`.
+
+## البحث والاختبار
 
 ```python
 text = "Hello, World!"
 
 text.startswith("Hello")   # True
 text.endswith("!")         # True
-text.find("World")         # 7  (index of first match, -1 if not found)
+text.find("World")         # 7  (مؤشر أول تطابق، -1 إذا لم يوجد)
 text.count("l")            # 3
 text.replace("World", "Python")  # 'Hello, Python!'
 ```
 
-## حالة الأحرف والفراغات
+سؤاال `startswith` و`endswith` سؤالا نعم/لا عن حافّتَي السلسلة — حرّاسٌ رخيصةٌ تغني عن الشرائح. يجيب `find` عن *الأين*، راجعًا المؤشرَ حيث تبدأ السلسلةُ الفرعية، أو $-1$ حين تفشل الحملة. يعدّ `count` ظهوراتٍ لا تتداخل؛ ويستبدل `replace` كل مطابقةٍ ببديلٍ.
 
-يزيل `strip()` الفراغات (أو أحرفًا معينة) من الأطراف:
+## الأحرف والمسافات
 
 ```python
 "hello".upper()        # 'HELLO'
 "HELLO".lower()        # 'hello'
-"  hi  ".strip()       # 'hi'  (removes leading/trailing whitespace)
-"  hi  ".lstrip()      # 'hi ' (left only)
-"  hi  ".rstrip()      # '  hi' (right only)
+"  hi  ".strip()       # 'hi'  (يزيل مسافات الطرفين)
+"  hi  ".lstrip()      # 'hi ' (اليسرى فقط)
+"  hi  ".rstrip()      # '  hi' (اليمنى فقط)
 "hello world".title()  # 'Hello World'
 ```
 
+يقتصّ `strip` الحشوَ الذي تضيفه الملوثات — المسافاتِ الشائعةَ حول نصٍّ ملصوق. ويحوّل `title` الحرفَ الأولَ من كل كلمةٍ إلى حرفٍ كبير، وهو التنكرُ الضاحي لإهمالَ الإدخال. كلٌّ منها تحويلٌ لهدفٍ واحد، يُبلغ إليه باسمه لا باستظهاره.
+
 ## التنسيق المتقدم بـ f-string
+
+إنّ f-string دالةُ تخطيط: أعمدةٌ تصريحيةٌ ودقةٌ. اصطفافٌ بعرضٍ، وتنسيقُ أعدادٍ بمواصفٍ:
 
 ```python
 price = 19.999
 name = "Widget"
 
-# Width and alignment
-print(f"|{name:<15}|")   # |Widget          |  (left-align, width 15)
-print(f"|{name:>15}|")   # |          Widget|  (right-align)
-print(f"|{name:^15}|")   # |     Widget     |  (center)
+# العرض والاصطفاف
+print(f"|{name:<15}|")   # |Widget          |  (يسار، عرض 15)
+print(f"|{name:>15}|")   # |          Widget|  (يمين)
+print(f"|{name:^15}|")   # |     Widget     |  (وسط)
 
-# Number formatting
+# تنسيق الأعداد
 print(f"{price:.2f}")     # 20.00
-print(f"{42:05d}")        # 00042  (zero-padded)
-print(f"{0.857:.1%}")     # 85.7%  (percentage)
+print(f"{42:05d}")        # 00042  (حشو بالأصفار)
+print(f"{0.857:.1%}")     # 85.7%  (نسبة مئوية)
 ```
 
-## المزالق الشائعة
+مواصفُ `%` ضربٌ صغيرٌ في $100$ مع علامة: $\{0.857 \mapsto 85.7\%\}$. ويقرّب `.2f` إلى منزلتين عشريتين في العرضِ بينما يبقى العددُ الكامنُ سليمًا. والاصطفافُ يحوّل عمودَ قيمٍ متعرّجًا إلى جدولٍ موسوم — عرضٌ بلا حسابٍ في الجسم.
 
-- **نسيان أن الطرق تُرجع قيمًا** — `text.upper()` وحدها لا تعدّل `text`
-- **خلط `find` مع `index`** — يفشل `index` بالرفع، عندما تُفضّل تفادي رفع خطأ
-- **الاستدعاء على متغيّر متوسط** — يمكن استدعاء الطرق مباشرة على القيم الحرفية: `"  x  ".strip()`
+## مثالٌ محلول: تنظيفُ السطرِ الملصوق
 
-<section class="lesson-section lesson-section--challenges">
-<h2 id="-challenges">🧩 التحديات</h2>
+تتجمّعُ الأدواتُ في دائرةٍ لأقذرِ مدخلٍ في العالمِ الحقيقي — سطرٌ لُصِقَ من جدولٍ:
+
+```python
+raw = "  apple, banana, cherry  "
+cleaned = raw.strip()
+fruits = cleaned.split(", ")
+print(fruits)          # ['apple', 'banana', 'cherry']
+back = ", ".join(fruits)
+print(back)            # 'apple, banana, cherry'
+```
+
+ثلاثُ إيماءاتٍ ودائرةٌ واحدةٌ: يقشّرُ `strip` الحشوَ الذي يأتي به اللصقُ، ويقطعُ `split` إلى قطعٍ، ويعيدُ `join` اللصقَ بالفاصلِ المختار. والزوجُ المعكوسُ `split`/`join` هو الجسرُ بين النصِّ والقائمةِ — العلاقةُ نفسُها التي في معادلةِ الافتتاح.
+
+## أخطاء شائعة
+
+- **نسيان ما هو `split()` بلا وسيط.** يقسم على جرى مسافاتٍ؛ وسؤاله القسمةَ على السلسلةِ الفارغةِ ليس خيارًا يعرضه.
+- **توقع أن يرمي `find()` خطأً عند غياب سلاسلَ فرعية.** يرجع $-1$. تأكّد قبل أن تشتري على أساسه.
+- **محاولة تعديل سلسلةٍ في موضعها.** لا يوجد تعديلٌ في الموضع؛ أعدِ تعيينَ النتيجة.
+- **يجلسُ `join` على الفاصلِ، و`split` على النصِّ.** `" ".join(words)` لا `words.join(" ")` — الفاصلُ هو مالكُ الطريقةِ، ونسيانُ أيُّهما يُطلقُ `AttributeError`.
+
+## 🧩 تحديات
 
 <details class="challenge">
-<summary>التحدي — فكّر أولًا، ثم اكشف</summary>
+<summary>🧩 تحدٍّ — فكّر أولًا ثم أظهر</summary>
 <div class="challenge__body">
 
-اكتب تعبيرًا واحدًا يحوّل `"  Hello  World  "` إلى `"hello-world"` (أزل الفراغات، وخُفِّض الحالة، وحوّل المسافات إلى شرطات).
+اكتب `title_case(s)` التي تكبّر الحرفَ الأولَ من كل كلمة: `title_case("hello world")` ← `"Hello World"`.
 
-<p class="challenge__answer">💡 <strong>الإجابة:</strong> <code>"  Hello  World  ".strip().lower().replace(" ", "-")</code> — التقطيع ثم التخفيض ثم قابلية الاستبدال القابلة للتطويع.</p>
+<p class="challenge__answer">💡 <strong>الجواب:</strong> <code>return s.title()</code> — الطريقةُ المضمّنةُ في بايثون تفعل هذا بالضبط؛ وأحيانًا يكون السطرُ الواحدُ الحلَّ كلَّه.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>التحدي — فكّر أولًا، ثم اكشف</summary>
+<summary>🧩 تحدٍّ — فكّر أولًا ثم أظهر</summary>
 <div class="challenge__body">
 
-بالنظر إلى `data = "feat: add dark mode"`، استخرج الجزء بعد `": "` وتحقق أنه يبدأ بحرف `a`.
+بمعطى `"one,two,,three"`، قسّم على الفواصلِ وأسقط السلاسلَ الفارغةَ.
 
-<p class="challenge__answer">💡 <strong>الإجابة:</strong> <code>description = data.split(": ", 1)[1]</code> ثم <code>description.startswith("a")</code> → True.</p>
+<p class="challenge__answer">💡 <strong>الجواب:</strong> <code>[x for x in s.split(",") if x]</code> أو <code>list(filter(None, s.split(",")))</code> — السلسلةُ الفارغةُ زائفةُ الحقيقة، فيُسقطها فلترُ الصدقِ دون أن يفحص الطول.</p>
 
 </div>
 </details>
 
-</section>
+## 🤔 أسئلة سقراطية
 
-<section class="lesson-section lesson-section--socratic">
-<h2 id="-socratic-questions">🤔 أسئلة سقراطية</h2>
+- لماذا يرجع `find()` $-1$ بدلًا من رمي خطأٍ؟ وماذا يكلف كل اختيارٍ؟
+- كيف تعكس سلسلةً؟ هل توجد طريقةٌ لذلك أم يقطن الجواب في مكانٍ آخر؟
+- متى يكون `str.replace()` الأداةَ الخطأ — وماذا يلائم استبدالًا أدق؟
 
-- لماذا تجعل بايثون السلاسل غير قابلة للتعديل عندما يراها المبتدئون أسهل كتعديلية؟ وما الأخطاء التي تمنعها؟
-- متى تختار `replace` متسلسلة بدلًا من `split` ثم `join`؟
-- لماذا تستخدم بايثون `find` منذ البداية؟ ومتى تختار `index` بدلًا منها، ولماذا؟
-
-</section>
-
-<section class="lesson-section lesson-section--quiz">
-<h2 id="-quick-check">✅ مراجعة سريعة</h2>
+## ✅ فحص سريع
 
 <div class="quiz" data-quiz="python-101-string-methods">
   <div class="quiz-q" data-answer="1">
-    <p class="quiz-q__prompt">1. ماذا تُرجع <code>"Hello  World".replace(" ", "-")</code>؟</p>
+    <p class="quiz-q__prompt">١. ماذا ترجع <code>"a,b,c".split(",")</code>؟</p>
     <div class="quiz-q__options">
-      <button class="quiz-q__opt" data-idx="0">"Hello-World"</button>
-      <button class="quiz-q__opt" data-idx="1">"Hello--World"</button>
-      <button class="quiz-q__opt" data-idx="2">"Hello-World"</button>
-      <button class="quiz-q__opt" data-idx="3">"hello-world"</button>
+      <button class="quiz-q__opt" data-idx="0">['abc']</button>
+      <button class="quiz-q__opt" data-idx="1">['a', 'b', 'c']</button>
+      <button class="quiz-q__opt" data-idx="2">'abc'</button>
+      <button class="quiz-q__opt" data-idx="3">Error</button>
     </div>
     <p class="quiz-q__feedback" hidden></p>
   </div>
 
   <div class="quiz-q" data-answer="2">
-    <p class="quiz-q__prompt">2. أي تعبير يفحص كل أحرف فراغ أسفل السطر؟</p>
+    <p class="quiz-q__prompt">٢. ماذا ترجع <code>"hello".find("xyz")</code>؟</p>
     <div class="quiz-q__options">
-      <button class="quiz-q__opt" data-idx="0">"  ".isalpha()</button>
-      <button class="quiz-q__opt" data-idx="1">"  ".isspace()</button>
-      <button class="quiz-q__opt" data-idx="2">"  ".isspace()</button>
-      <button class="quiz-q__opt" data-idx="3">"  ".isalnum()</button>
+      <button class="quiz-q__opt" data-idx="0">0</button>
+      <button class="quiz-q__opt" data-idx="1">None</button>
+      <button class="quiz-q__opt" data-idx="2">-1</button>
+      <button class="quiz-q__opt" data-idx="3">Error</button>
     </div>
     <p class="quiz-q__feedback" hidden></p>
   </div>
 </div>
-</section>

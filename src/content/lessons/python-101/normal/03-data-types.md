@@ -20,18 +20,26 @@ section: "python-101"
 track: "normal"
 ---
 
-## Every value has a type
+## The set a number belongs to
 
-A type is the set a value belongs to — like in math where you distinguish integers from reals:
+Answer two questions: you have $7$ apples and you cut one of them in half. Are you now holding $7 + \frac{1}{2}$ apples *in the same sense* as you held $7$? Half an apple is not a whole number of apples — $7$ lives in $\mathbb{Z}$, and $7\frac{1}{2}$ lives in $\mathbb{Q}$.
 
-| Type | Math analogy | Example |
+A mathematician answers by asking which **set** a value belongs to. The same distinction haunts every program: the machine stores $42$ differently from $42.5$, and $42$ differently from `"42"`. The word Python uses for "which set this value lives in" is **type**.
+
+So: how many sets are worth distinguishing? Four, at first.
+
+| Type | What it is, mathematically | Examples |
 |---|---|---|
-| `int` | $\mathbb{Z}$ (integers) | `42`, `-7` |
-| `float` | $\mathbb{R}$ (reals, approximated) | `3.14`, `-0.5` |
+| `int` | $\mathbb{Z}$ — the integers, stored exactly | `42`, `-7` |
+| `float` | $\mathbb{R}$, approximated with a fixed number of binary digits | `3.14`, `-0.5` |
 | `str` | a finite sequence of characters | `"hello"` |
 | `bool` | $\{\text{True}, \text{False}\}$ | `True`, `False` |
 
-Check a value's type with `type(...)`:
+The `float` row has a deliberate hedge in it — *approximated*. An integer is stored exactly, every time. A real number almost never is: how would you store $1/3 = 0.333\ldots$ with a finite number of digits? You cannot, so Python keeps a finite approximation and the accounts differ in the trailing digits. That single fact explains a famous surprise you will meet shortly.
+
+## Asking which set
+
+Given a value, you can ask its type directly:
 
 ```python
 type(42)      # <class 'int'>
@@ -40,9 +48,11 @@ type("hi")    # <class 'str'>
 type(True)    # <class 'bool'>
 ```
 
-## Dynamic typing
+Two notational notes. First, `type(...)` *is* a function — you hand it a value and it returns the *type object* that value belongs to. Second, the answer prints as `<class 'int'>`; the word `class` is Python's term for a type, and the word in quotes is the set's name. Read `<class 'float'>` as *"belongs to the set float"*.
 
-Python is **dynamically typed**: a name isn't permanently tied to one type. `x = 5` then `x = "five"` is legal — `x` just points somewhere new:
+## A name does not commit to a set
+
+Now the payoffs begin. In a language with static types you would declare up front: *x is an integer*. Python instead lets a name point wherever it likes:
 
 ```python
 x = 5
@@ -51,30 +61,47 @@ x = "hello"
 print(type(x))    # <class 'str'>
 ```
 
-This is convenient, but it also means the *type* of a name can only be known by looking at what it currently points to, not by declaring it up front.
+Re-pointing a name to a different set is legal, so the type of `x` cannot be read from any declaration — only by asking what it currently points at. This is **dynamic typing**. It is convenient, and it is also the reason your program can silently hand a string to a function that expects numbers: nothing stops it until the operation itself fails.
 
-## Truthy and falsy values
+## Which values act like True?
 
-`bool()` converts any value to `True` or `False`. The rule is simple:
+Every value is either **truthy** or **falsy** — either it behaves as `True` in a condition or as `False`. The rule is compact, and it is worth verifying:
 
-- **Falsy**: `0`, `0.0`, `""` (empty string), `None`
+- **Falsy**: $0$, $0.0$, the empty string `""`, and `None`
 - **Truthy**: everything else
 
 ```python
 bool(0)         # False
 bool(1)         # True
-bool(-1)        # True  — any nonzero number is truthy
+bool(-1)        # True   — any nonzero number is truthy
 bool("")        # False
-bool("hello")   # True  — any non-empty string is truthy
+bool("hello")   # True   — any non-empty string is truthy
 ```
 
-This matters when you write conditions later: `if score:` means "if score is not zero."
+Notice what is in the list and what is left out. `-1` is True; `0` is not. The string `"0"` is True — it is non-empty, and emptiness is the criterion for strings, not the value of its content. This rule pays for itself the moment you write your first `if`: `if score:` means *if score is not zero*.
+
+## A worked example: auditing an expression
+
+The sets pay for themselves the moment an expression mixes them. Read the receipt line by line and ask the set of each result:
+
+```python
+unit_price = 4.75
+quantity = 4
+bill = unit_price * quantity     # float: the float absorbed the int
+type(bill)                       # <class 'float'>
+bool(bill)                       # True — any nonzero is truthy
+
+type(10 / 2)                     # <class 'float'> — true division never returns int
+```
+
+Read `bill` as the product of two different sets. The sets do not "mix" — the `float` wins, because the proportion is not a whole number of any scale and the wider set must hold it. The audit habit is to ask the set directly: `type(...)` confirms what you suspected instead of betting on luck.
 
 ## Common pitfalls
 
-- **`4 / 2` is `2.0`, not `2`.** True division (`/`) always returns a `float` in Python 3. Use `4 // 2` for integer division.
-- **`True + True` is `2`.** Booleans are subclasses of `int` in Python — `True` behaves like `1` and `False` like `0` in arithmetic.
-- **`type()` gives the concrete type.** `type(True)` is `bool`, not `int`, even though `True` acts like `1` in math.
+- **`4 / 2` is `2.0`, not `2`.** True division (`/`) always returns a `float` in Python 3 — even when the division is exact. For an integer result, ask for floor division: `4 // 2` → `2`.
+- **`True + True` is `2`.** `bool` is a subclass of `int` in Python: `True` behaves as $1$ and `False` as $0$ in arithmetic. The two sets overlap, but `type(True)` still answers `bool`.
+- **`type()` tells the concrete type.** `type(True)` is `bool`, not `int`, no matter how comfortably `True` plays along in sums.
+- **`type()` describes the result, not the operands.** `type(2 * 3.0)` is `float` — an `int` times a `float` lives in the `float` set. Do not predict from the pieces; ask the answer.
 
 ## 🧩 Challenges
 
@@ -82,20 +109,9 @@ This matters when you write conditions later: `if score:` means "if score is not
 <summary>🧩 Challenge — think first, then reveal</summary>
 <div class="challenge__body">
 
-What is `type(7 / 2)`? Predict it before running it, then check.
+Predict `type(7 / 2)`, then check.
 
-<p class="challenge__answer">💡 <strong>Answer:</strong> <code>type(7 / 2)</code> is <code>float</code> — true division (<code>/</code>) always produces a float in Python 3, even when both operands are ints and the result is a whole number.</p>
-
-</div>
-</details>
-
-<details class="challenge">
-<summary>🧩 Challenge — think first, then reveal</summary>
-<div class="challenge__body">
-
-Predict `bool(0)`, `bool(0.0)`, `bool("")`, and `bool("0")`. Which are truthy and which are falsy?
-
-<p class="challenge__answer">💡 <strong>Answer:</strong> <code>bool(0)</code> → False, <code>bool(0.0)</code> → False, <code>bool("")</code> → False (empty string), <code>bool("0")</code> → True (non-empty string, even though it contains the character "0").</p>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>type(7 / 2)</code> is <code>float</code> — true division (<code>/</code>) always produces a float in Python 3, even when both operands are ints and the quotient is a whole number.</p>
 
 </div>
 </details>
@@ -104,18 +120,29 @@ Predict `bool(0)`, `bool(0.0)`, `bool("")`, and `bool("0")`. Which are truthy an
 <summary>🧩 Challenge — think first, then reveal</summary>
 <div class="challenge__body">
 
-`0.1 + 0.2` in Python does **not** equal exactly `0.3`. Try it. Why might a `float` — which approximates $\mathbb{R}$ using finite binary digits — not represent $0.1$ exactly?
+Predict `bool(0)`, `bool(0.0)`, `bool("")`, and `bool("0")`. Which are truthy, which falsy?
 
-<p class="challenge__answer">💡 <strong>Answer:</strong> 0.1 has no exact representation in binary (just like 1/3 has no exact decimal). Floats use finite binary fractions, so 0.1 + 0.2 accumulates a tiny rounding error: 0.30000000000000004, not 0.3. This is a fundamental limitation of floating-point arithmetic, not a Python bug.</p>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>bool(0)</code> → False, <code>bool(0.0)</code> → False, <code>bool("")</code> → False (empty string), <code>bool("0")</code> → True (non-empty string, even though its content is the character "0").</p>
+
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
+
+In Python, `0.1 + 0.2` does **not** equal `0.3`. Here is the same problem on paper: what happens when you represent $1/3 = 0.333\ldots$ with two decimal digits? Now explain why a `float` — which approximates $\mathbb{R}$ with finitely many binary digits — cannot represent $0.1$ exactly.
+
+<p class="challenge__answer">💡 <strong>Answer:</strong> With two digits, $1/3$ must become $0.33$ — a loss already made before any arithmetic. Likewise $0.1$ has no exact binary form; the float stores a nearby value, and adding two of these involves minuscule errors: <code>0.1 + 0.2</code> yields <code>0.30000000000000004</code>, not <code>0.3</code>. Finite precision, not a Python bug.</p>
 
 </div>
 </details>
 
 ## 🤔 Socratic Questions
 
-- If `bool(-1)` is `True`, what single rule explains why `-1` is truthy but `0` is falsy?
-- Python has `isinstance(42, int)` which returns `True`. Would `isinstance` be more reliable than `type(x) == int` for checking types? Why or why not?
-- Why does Python use `True` and `False` (capitalized) instead of `true` and `false`? What other capitalized words does Python reserve?
+- If `bool(-1)` is `True`, what single rule explains why $-1$ is truthy but $0$ is falsy? Does the rule generalize from numbers to strings?
+- Python has `isinstance(42, int)` which returns `True`. Would `isinstance` be more reliable than `type(x) == int` for checking types? Why?
+- Why does Python write `True` and `False` capitalized instead of `true` and `false`? What other capitalized words does Python reserve?
 
 ## ✅ Quick check
 

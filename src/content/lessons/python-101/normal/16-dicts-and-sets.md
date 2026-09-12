@@ -20,9 +20,9 @@ section: "python-101"
 track: "normal"
 ---
 
-## Dictionaries
+## The mapping
 
-Dicts map keys to values — like a real dictionary maps words to definitions:
+Mathematicians call a table that pairs each input to one output a *function*; Python calls it a **dict**. Keys point to values, exactly as a dictionary of words points to their definitions:
 
 ```python
 scores = {"Alice": 85, "Bob": 92, "Charlie": 78}
@@ -30,7 +30,9 @@ print(scores["Alice"])       # 85
 print(scores.get("Dave", 0)) # 0 (default if key missing)
 ```
 
-## Dict methods
+Indexing with `[]` is the eager lookup: it demands the key exist. `.get(key, default)` is the courteous variant: if the key is missing, return the fallback instead of raising `KeyError`. The distinction is the difference between a claim and a question.
+
+## The dict's toolkit
 
 ```python
 scores = {"Alice": 85, "Bob": 92}
@@ -47,7 +49,11 @@ scores.update({"Eve": 95, "Frank": 88})  # merge
 scores.setdefault("Grace", 0)  # set only if key missing
 ```
 
-## Iterating over dicts
+`keys`, `values`, and `items` are three views of the same relation — the domain, the range, and the graph. `update` merges a second dict in; `setdefault` writes only when the key is absent, the conditional assignment that needs no `if`.
+
+## Walking the mapping
+
+Iteration over a dict walks the domain by default; to see both halves, ask for `items`:
 
 ```python
 for name in scores:           # keys
@@ -57,16 +63,22 @@ for name, score in scores.items():  # key-value pairs
     print(f"{name}: {score}")
 ```
 
-## Sets
+`items` hands you the pair directly — no manual indexing — because unpacking an entry into `name, score` is the natural reading of a row.
 
-Sets store **unique**, unordered values:
+## Sets: the mathematical set
+
+A **set** is a set in the mathematical sense: an unordered collection with no duplicates. Repetition dissolves on entry:
 
 ```python
 colors = {"red", "blue", "green", "red"}
 print(colors)  # {'red', 'blue', 'green'}  (duplicates removed)
 ```
 
+Uniqueness is enforced structurally — there is no second copy waiting to pollute a membership check. Membership in a set is $x \in S$ exactly: an element is in or out, with no in-between and no earlobing.
+
 ## Set operations
+
+The algebra of sets is spelled directly. With $A = \{1, 2, 3, 4\}$ and $B = \{3, 4, 5, 6\}$:
 
 ```python
 a = {1, 2, 3, 4}
@@ -78,61 +90,79 @@ a - b    # {1, 2}              (difference)
 a ^ b    # {1, 2, 5, 6}       (symmetric difference)
 ```
 
-Sets are fast for membership testing: `x in my_set` is O(1) vs O(n) for lists.
+$$
+A \cup B = \{1, 2, 3, 4, 5, 6\}, \quad A \cap B = \{3, 4\}, \quad A \setminus B = \{1, 2\}, \quad A \mathbin{\triangle} B = \{1, 2, 5, 6\}.
+$$
 
-## Hashing requirement
+The operators are the notation you already know. And where the theory promises speed, implementation delivers: membership testing on a set runs in $O(1)$ against a list's $O(n)$, because a set stores elements by a computed fingerprint, not by position.
 
-Dict keys and set elements must be **hashable** (immutable): strings, numbers, tuples work. Lists and other dicts don't:
+## The hashing requirement
+
+Fingerprints require stability. Dict keys and set elements must be **hashable** — effectively immutable — so their computes stay reproducible. Strings, numbers, and tuples qualify; lists and dicts do not:
 
 ```python
 {[1, 2]: "bad"}   # TypeError: unhashable type: 'list'
 {(1, 2): "good"}  # Works — tuple is hashable
 ```
 
+A list could not be a reliable key even if allowed: its hash would change the moment its contents do, turning the mapping into a minefield of stale lookups.
+
+## A worked example: the grade book
+
+The relation, the domain, and the range — one table walked in three postures:
+
+```python
+scores = {"Alice": 85, "Bob": 92, "Charlie": 78}
+
+for name, score in scores.items():
+    print(f"{name}: {score}")
+
+print(scores.get("Dave", "absent"))   # absent — no KeyError
+
+roles = {"student", "teacher", "admin"}
+print("student" in roles)             # True — O(1) membership
+```
+
+`items` walks the whole graph, `.get` asks courteously when you do not know the key exists, and `in` on a set is the membership $x \in S$ — three questions the lesson's structures answer directly.
+
 ## Common pitfalls
 
-- **Accessing missing keys**: use `.get()` or `in` to avoid `KeyError`
-- **Dict ordering**: Python 3.7+ preserves insertion order, but don't rely on it for equality
-- **Sets lose order**: never depend on iteration order in a set
+- **Accessing missing keys.** `.get()` or a check with `in` spares you a `KeyError`.
+- **Relying on dict order.** Python 3.7+ preserves insertion order, but treat it as a convenience, not a contract.
+- **Trusting set order.** A set keeps no order whatsoever; never make iteration order a dependency.
+- **`{}` is an empty dict; `set()` is the empty set.** `{}` is not a set. Write `set()` for the empty one and `{"a", "b"}` for a literal — one symbol, two meanings.
 
-<section class="lesson-section lesson-section--challenges">
-<h2 id="-challenges">🧩 Challenges</h2>
+## 🧩 Challenges
 
 <details class="challenge">
-<summary>Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge — think first, then reveal</summary>
 <div class="challenge__body">
 
-Count the frequency of each character in `"hello world"` using a dict.
+Count the frequency of each character in `"hello world"` with a dict.
 
-<p class="challenge__answer">💡 <strong>Answer:</strong> <code>freq = {}; for c in "hello world": freq[c] = freq.get(c, 0) + 1</code></p>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>freq = {}; for c in "hello world": freq[c] = freq.get(c, 0) + 1</code> — the <code>.get</code> fallback of $0$ turns the first sighting into an increment from zero.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge — think first, then reveal</summary>
 <div class="challenge__body">
 
-Given two lists, find the elements that appear in both using a set.
+Given two lists, find the elements appearing in both, using sets.
 
-<p class="challenge__answer">💡 <strong>Answer:</strong> <code>set(a) & set(b)</code> or <code>set(a).intersection(b)</code></p>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>set(a) & set(b)</code> or <code>set(a).intersection(b)</code> — the intersection is $A \cap B$, and the set machinery does the work.</p>
 
 </div>
 </details>
 
-</section>
+## 🤔 Socratic Questions
 
-<section class="lesson-section lesson-section--socratic">
-<h2 id="-socratic-questions">🤔 Socratic Questions</h2>
+- Why can't a list serve as a dict key? What property must a key carry?
+- When does a set beat a list — what do you lose, and what do you gain?
+- How does `dict.get(key, default)` differ from `dict[key]`, and when do you prefer one?
 
-- Why can't you use a list as a dict key? What property does a key need to have?
-- When would you use a set instead of a list? What do you lose and what do you gain?
-- How does `dict.get(key, default)` differ from `dict[key]`? When would you prefer one?
-
-</section>
-
-<section class="lesson-section lesson-section--quiz">
-<h2 id="-quick-check">✅ Quick check</h2>
+## ✅ Quick check
 
 <div class="quiz" data-quiz="python-101-dicts-sets">
   <div class="quiz-q" data-answer="0">
@@ -157,4 +187,3 @@ Given two lists, find the elements that appear in both using a set.
     <p class="quiz-q__feedback" hidden></p>
   </div>
 </div>
-</section>

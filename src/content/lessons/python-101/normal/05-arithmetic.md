@@ -20,70 +20,106 @@ section: "python-101"
 track: "normal"
 ---
 
-## The eight arithmetic operators
+## The operators a machine must steal from a mathematician
 
-Python has the standard four plus four extras:
+You have written helper functions in earlier lessons: store a value, print a value, change its type. None of that is useful until a program can *do something* to numbers. So pause and take stock: a computer exists to evaluate expressions, and every expression is built from **operators** joining values. You already know the arithmetic ones from paper — but the machine splits two of them in half.
+
+## The operators and their meanings
+
+Python provides eight. The first four are exactly what you expect:
 
 ```python
 7 + 2    # 9   — addition
 7 - 2    # 5   — subtraction
 7 * 2    # 14  — multiplication
-7 / 2    # 3.5 — true division (always returns float)
-7 // 2   # 3   — floor division (rounds toward -∞)
-7 % 2    # 1   — modulo (remainder)
+7 / 2    # 3.5 — true division (always returns a float)
+```
+
+Then come three that answer questions you only ever asked in homework:
+
+```python
+7 // 2   # 3   — floor division (rounds toward −∞)
+7 % 2    # 1   — modulo (the remainder)
 7 ** 2   # 49  — exponentiation (7²)
 ```
 
-## Floor division vs true division
+`**` is Python's writing of a power: $7^2 = 49$. The two newcomers are `//` and `%`, and they are not variations — they are two halves of one legal question.
 
-`/` always gives a `float`, even when both operands are ints and the result is a whole number:
+## Two halves of one division
 
-```python
-4 / 2    # 2.0  — float, not int
-```
+Ask a real question: *how many whole groups of 4 fit into 15, and what is left over?*
 
-`//` gives the **floored** quotient — always rounds toward negative infinity:
+$$
+15 = 4 \cdot 3 + 3.
+$$
 
-```python
-7 // 2    # 3   — floor(3.5)
--7 // 2   # -4  — floor(-3.5) = -4, not -3
-```
+The answer has two parts — the quotient $3$ and the remainder $3$. Python's `//` answers the first part and `%` answers the second:
 
-That last line is a common surprise. Floor division follows the mathematical floor function $\lfloor x \rfloor$, which rounds *down* (toward $-\infty$), not toward zero.
-
-## Modulo: the remainder
-
-`%` gives the remainder after floor division. The key identity:
-
-```
-a == (a // b) * b + (a % b)
-```
+$$
+a = (a \mathbin{//} b) \cdot b + (a \mathbin{\%} b)
+$$
 
 ```python
-15 % 4    # 3   — since 15 = 4×3 + 3
-15 // 4   # 3
-4 * 3 + 3 # 15  ✓
+15 // 4   # 3   — how many groups of 4
+15 % 4    # 3   — what's left over
+4 * 3 + 3 # 15  ✓ the identity holds
 ```
 
-## Operator precedence
+That identity is not decoration — it is the definition of both operators, and it cannot fail while the two parts are calculated by the same machine.
 
-Python follows PEMDAS — same order you know from math:
+There is one wrinkle. Which quotient does Python report for $-7 \div 2$? Write it as a grouping question:
 
-1. `**` first (exponentiation)
-2. `*`, `/`, `//`, `%` (left to right)
-3. `+`, `-` (left to right)
+$$
+-7 = 2 \cdot ? + ?.
+$$
+
+The options are $2 \cdot (-3) + (-1)$ or $2 \cdot (-4) + 1$. Python floors, like the mathematical function $\lfloor x \rfloor$:
+
+```python
+-7 // 2   # -4 — floor(-3.5) = -4, not -3
+-7 % 2    # 1  — consistent with the floor: -7 = 2·(-4) + 1
+```
+
+The two operators stay honest to each other — the identity $a = (a//b)\cdot b + (a\%b)$ holds with no exceptions, and that is worth more than "the intuitive answer."
+
+## The order of operations, settled
+
+Expressions containing several operators need a fixed sequencing, or every reader would compute a different value for $2 + 3 \cdot 4$. Python adopts the order you learned as PEMDAS:
+
+- `**` first (exponentiation)
+- then `*`, `/`, `//`, `%` (left to right)
+- then `+`, `-` (left to right)
 
 ```python
 2 + 3 * 4      # 14, not 20
 (2 + 3) * 4    # 20 — parentheses override
-2 ** 3 ** 2     # 512, not 64 — ** is right-associative: 2 ** (3 ** 2) = 2 ** 9
+2 ** 3 ** 2    # 512, not 64
 ```
+
+That last one is a genuine surprise. `**` is **right-associative**, so `2 ** 3 ** 2` reads as $2^{(3^2)} = 2^9 = 512$, matching the stacked notation where powers climb upward in one direction. When in doubt, spell parentheses out — a reader who does not see them will not guess your intent.
+
+## A worked example: change for the reading plan
+
+The quotient/remainder pair runs a reading plan:
+
+```python
+pages = 301
+per_day = 30
+days = pages // per_day      # 10 — whole days of reading
+leftover = pages % per_day   # 1  — the 11th day's remnant
+
+print(f"{days} full days, {leftover} leftover")
+days * per_day + leftover    # 301 — the identity holds
+```
+
+The division identity $a = (a \mathbin{//} b) \cdot b + (a \mathbin{\%} b)$ becomes a ledger: `days` and `leftover` are its two columns, and the identity is the receipt that proves nothing was lost.
 
 ## Common pitfalls
 
-- **`/` vs `//`.** `7 / 2` is `3.5` (float), `7 // 2` is `3` (int). Use `//` when you want an integer result.
-- **Floor division with negatives.** `-7 // 2` is `-4`, not `-3`. This follows the mathematical floor, not truncation.
-- **`%` with floats.** `7.5 % 2` is `1.5` — modulo works with floats too, not just ints.
+- **`/` vs `//`.** `7 / 2` is `3.5` (a float); `7 // 2` is `3` (an int). Reach for `//` only when the whole-quotient is what the problem needs.
+- **Floor division with negatives.** `-7 // 2` is `-4`, not `-3`. The floor goes toward $-\infty$, not toward zero.
+- **`%` works on floats too.** `7.5 % 2` is `1.5` — the identity above holds for reals as well as integers.
+- **`**` binds tighter than `*`.** `2 * 3 ** 2` is `18`, not `36` — the power is computed first. Parenthesize when you mean `(2 * 3) ** 2` = 36.
 
 ## 🧩 Challenges
 
@@ -91,20 +127,9 @@ Python follows PEMDAS — same order you know from math:
 <summary>🧩 Challenge — think first, then reveal</summary>
 <div class="challenge__body">
 
-Without running it, compute `15 // 4` and `15 % 4` by hand. Then verify: does `4 * (15 // 4) + (15 % 4)` equal `15`?
+Without running it, compute `15 // 4` and `15 % 4` by hand, then verify that $4 \cdot (15 // 4) + (15 \% 4)$ reproduces $15$.
 
-<p class="challenge__answer">💡 <strong>Answer:</strong> 15 // 4 is 3 (floor of 3.75), and 15 % 4 is 3 (since 15 = 4·3 + 3). Together: 4 × 3 + 3 = 15. This is the division algorithm identity.</p>
-
-</div>
-</details>
-
-<details class="challenge">
-<summary>🧩 Challenge — think first, then reveal</summary>
-<div class="challenge__body">
-
-How would you extract the hundreds digit of a number? For example, given `n = 4567`, extract `5` using arithmetic only (no strings).
-
-<p class="challenge__answer">💡 <strong>Answer:</strong> <code>(n // 100) % 10</code> — first divide by 100 to shift right (4567 → 45), then modulo 10 to get the last digit (45 → 5).</p>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>15 // 4</code> is <code>3</code> (the floor of $3.75$), and <code>15 % 4</code> is <code>3</code>, since $15 = 4\cdot 3 + 3$. Together <code>4 * 3 + 3 = 15</code> — the division identity, verified.</p>
 
 </div>
 </details>
@@ -113,18 +138,29 @@ How would you extract the hundreds digit of a number? For example, given `n = 45
 <summary>🧩 Challenge — think first, then reveal</summary>
 <div class="challenge__body">
 
-Why does Python use `**` for exponentiation instead of `^`? What does `^` actually do in Python? (Hint: it's not exponentiation.)
+How would you extract the hundreds digit of any number? Given `n = 4567`, get `5` using arithmetic only, no strings.
 
-<p class="challenge__answer">💡 <strong>Answer:</strong> <code>^</code> is the bitwise XOR operator in Python, not exponentiation. Python uses <code>**</code> to avoid ambiguity with C-style languages where <code>^</code> means XOR.</p>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>(n // 100) % 10</code> — first divide by 100 to shift the digit right (<code>4567 → 45</code>), then modulo 10 to keep only the last digit (<code>45 → 5</code>).</p>
+
+</div>
+</details>
+
+<details class="challenge">
+<summary>🧩 Challenge — think first, then reveal</summary>
+<div class="challenge__body">
+
+Why does Python use `**` for exponentiation instead of `^`? What does `^` actually do in Python?
+
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>^</code> is the bitwise XOR operator in Python, not exponentiation. Python uses <code>**</code> to avoid clashing with the convention of languages where <code>^</code> means XOR.</p>
 
 </div>
 </details>
 
 ## 🤔 Socratic Questions
 
-- Why does Python's floor division round toward negative infinity instead of toward zero? What practical benefit does this give you (hint: think about how `divmod()` works)?
+- Why does floor division round toward negative infinity rather than toward zero? What practical benefit falls out of that choice (hint: think of `divmod()` returning a consistent pair)?
 - `2 ** 3 ** 2` is `512`, not `64`. Why is `**` right-associative when `+` and `*` are left-associative?
-- Can you think of a real-world scenario where modulo arithmetic is essential? (Think about clocks, calendar days, or array indexing.)
+- Where does modulo arithmetic earn its keep in real life? Think of clocks, calendar days, or array indices.
 
 ## ✅ Quick check
 

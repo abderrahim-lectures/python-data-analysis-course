@@ -20,9 +20,9 @@ section: "python-101"
 track: "normal"
 ---
 
-## Opening files
+## The bridge to disk
 
-Use `open()` to get a file object:
+Programs that only compute with what the user types are caged in memory. Files open the door: a file is a sequence of lines, and reading it is walking that sequence. The first step is `open()`, which returns a file object attached to the door:
 
 ```python
 f = open("data.txt", "r")  # read mode
@@ -30,9 +30,11 @@ content = f.read()
 f.close()  # always close when done!
 ```
 
-## The with statement
+`"r"` means read-only. And the discipline is heavy: `close()` must run when you are finished, or the handle leaks — the file stays held open long after you stopped needing it. Forgetting it is the first generation of file bugs.
 
-`with` automatically closes the file, even if an error occurs:
+## The with statement: closing as a promise
+
+`with` makes the closing automatic, even when an error bursts through the middle:
 
 ```python
 with open("data.txt") as f:
@@ -40,9 +42,11 @@ with open("data.txt") as f:
 # file is closed here
 ```
 
-**Always use `with`** — it's safer and cleaner.
+The `with` block declares a contract: open it here, and it will be closed when this block ends — normally or by exception. The handle's lifetime is boxed into the block, so there is nothing left to forget.
 
 ## Reading strategies
+
+The one file, three appetites:
 
 ```python
 # Read entire file as one string
@@ -59,9 +63,11 @@ with open("data.txt") as f:
     lines = f.readlines()  # includes \n in each string
 ```
 
-## Pathlib (modern approach)
+`f.read()` takes everything at once; `readlines()` splits into a list; and iterating `for line in f` steps through the file one line at a time, holding only the current line in memory. The last is the prescription for a file too large to fit: process each line and move on, never gathering the whole.
 
-`pathlib` provides object-oriented paths — more readable than string concatenation:
+## Pathlib: paths with a vocabulary
+
+String path concatenation with `+` reads like archaeology. `pathlib` hands you a `Path` whose methods *say* what they do:
 
 ```python
 from pathlib import Path
@@ -76,62 +82,75 @@ p.suffix     # '.txt'
 p.stem       # 'scores'
 ```
 
-## Encoding
+The `/` joins parts into a path the way a filesystem joins directories; `exists`, `is_file`, `suffix`, and `stem` query what the path *is*. Paths become data with answers rather than strings to be peeled apart.
 
-Always specify encoding for portability:
+## Encoding: the letters' contract
+
+Text is bytes until a convention interprets them. Pin that convention down for portability across machines:
 
 ```python
 with open("data.txt", encoding="utf-8") as f:
     text = f.read()
 ```
 
-Without `encoding`, Python uses the system default, which varies across platforms.
+Without `encoding`, Python falls back to the system's default, which differs by platform — the same file, garbled on a Windows box and clean on Linux. Stating `utf-8` makes the bytes mean the same letters everywhere.
+
+## A worked example: the score file, line by line
+
+The memory-safe walk — accumulate without ever holding the whole file:
+
+```python
+with open("scores.txt", encoding="utf-8") as f:
+    total = 0
+    count = 0
+    for line in f:
+        total += int(line.strip())
+        count += 1
+
+print(f"Avg: {total / count}")
+```
+
+Each line is read, stripped of its newline, converted, and dropped before the next arrives — the file flows through, never gathering the whole. The `with` promise closes the file as the block ends, normally or by exception.
 
 ## Common pitfalls
 
-- **Forgetting `with`**: file handles leak if you don't close them
-- **Reading huge files into memory**: use `for line in f` instead of `f.read()`
-- **Ignoring encoding**: garbled text on non-ASCII files
-- **Hardcoded paths**: use `pathlib.Path` for cross-platform compatibility
+- **Forgetting `with`.** Handles leak when nothing closes them; let the block own the file's life.
+- **Swallowing huge files.** `f.read()` on a giant file can exhaust memory — iterate `for line in f` instead.
+- **Ignoring encoding.** Non-ASCII letters turn to gibberish when the convention is left to chance.
+- **Hardcoded paths.** `pathlib.Path` makes the same code walk on every operating system.
+- **A consumed file reads empty.** After `f.read()`, the position sits at the end; a second read returns `''` and `readlines()` returns `[]`. Read once, or reopen.
 
-<section class="lesson-section lesson-section--challenges">
-<h2 id="-challenges">🧩 Challenges</h2>
+## 🧩 Challenges
 
 <details class="challenge">
-<summary>Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge — think first, then reveal</summary>
 <div class="challenge__body">
 
-Write code that counts the number of lines in a file without loading it all into memory.
+Count the lines of a file without loading it into memory.
 
-<p class="challenge__answer">💡 <strong>Answer:</strong> <code>count = 0; with open("file.txt") as f: for line in f: count += 1</code> or simply <code>sum(1 for _ in open("file.txt"))</code></p>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>count = 0; with open("file.txt") as f: for line in f: count += 1</code> or the compact <code>sum(1 for _ in open("file.txt"))</code> — a line at a time, never the whole.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge — think first, then reveal</summary>
 <div class="challenge__body">
 
-Use `pathlib` to list all `.txt` files in a directory.
+List every `.txt` file in a directory with `pathlib`.
 
-<p class="challenge__answer">💡 <strong>Answer:</strong> <code>list(Path(".").glob("*.txt"))</code></p>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>list(Path(".").glob("*.txt"))</code> — a single glob walks the matching names for you.</p>
 
 </div>
 </details>
 
-</section>
+## 🤔 Socratic Questions
 
-<section class="lesson-section lesson-section--socratic">
-<h2 id="-socratic-questions">🤔 Socratic Questions</h2>
+- Does `for line in f` include the trailing `\n`? Why does the loop look as it does — and how do you strip the newline?
+- What happens when you read a file that doesn't exist? How does `with` fare against the exception?
+- When does `f.read()` beat iterating line by line?
 
-- Why does `for line in f` not include the trailing `\n`? Or does it? How would you strip it?
-- What happens if you try to read a file that doesn't exist? How does `with` handle exceptions?
-- When would you prefer `f.read()` over iterating line by line?
-
-</section>
-
-<section class="lesson-section lesson-section--quiz">
-<h2 id="-quick-check">✅ Quick check</h2>
+## ✅ Quick check
 
 <div class="quiz" data-quiz="python-101-file-reading">
   <div class="quiz-q" data-answer="1">
@@ -156,4 +175,3 @@ Use `pathlib` to list all `.txt` files in a directory.
     <p class="quiz-q__feedback" hidden></p>
   </div>
 </div>
-</section>

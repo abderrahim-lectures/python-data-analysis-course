@@ -19,102 +19,155 @@ section: "python-101"
 track: "normal"
 ---
 
-## Imprimer des valeurs
+## Une réponse enfermée dans la machine
 
-`print()` envoie une sortie à l'écran. Passez-lui n'importe quelle valeur et Python la convertit en texte :
+Essayez de calculer
+
+$$
+\frac{17 \cdot 3 + 4^2}{5}.
+$$
+
+À la main, vous écririez les étapes et la réponse sur le papier :
+
+$$
+17 \cdot 3 + 4^2 = 51 + 16 = 67, \qquad \frac{67}{5} = 13{,}4.
+$$
+
+Obtenir la réponse n'est que la moitié d'un problème — l'autre moitié consiste à **la communiquer**. Confiez maintenant cette même expression à un ordinateur. Il calcule $13{,}4$ en un clin d'œil — puis oublie aussitôt de vous le dire. La valeur demeure silencieusement enfermée dans la machine, et à moins que vous n'exigiez qu'elle en sorte, vous ne la verrez jamais.
+
+Ce calcul invisible est le problème fondamental que cette leçon résout. Un programme a besoin d'une façon d'*écrire ses résultats là où un être humain peut les lire* — en Python, cette instruction s'appelle `print()`.
+
+## `print()` — révéler une valeur
+
+`print()` prend une valeur et l'envoie à l'écran. N'importe quelle valeur convient : Python la convertit d'abord en texte.
 
 ```python
-print(42)         # 42
-print(3.14)       # 3.14
-print("hello")    # hello
+print(13.4)        # 13.4
+print(42)          # 42
+print("hello")     # hello
 ```
 
-Plusieurs arguments sont combinés avec une espace :
+Inutile d'imprimer un nombre fini — `print()` accepte n'importe quelle expression et l'évalue d'abord :
+
+```python
+print((17 * 3 + 4**2) / 5)    # 13.4
+```
+
+Le schéma à retenir : **calculez quelque chose, puis confiez-le à `print()`. Une valeur n'a aucun moyen de sortir d'un programme par elle-même ; l'impression est la sortie.**
+
+## Un nombre, et son étiquette
+
+Un nombre nu a rarement du sens. Sur le papier, vous n'écririez pas $13{,}4$ tout seul — vous écririez « Score : 13,4 ». Donnez plusieurs arguments à `print()` et il insère un espace entre eux :
 
 ```python
 print("Score:", 87)    # Score: 87
 ```
 
-## F-strings : sortie formatée
+Le premier argument est l'étiquette ; le second, la valeur. Vous pouvez en empiler autant que vous voulez, et `print()` les sépare pour vous.
 
-Préfixez une chaîne avec `f` et placez des expressions entre `{ }` :
+## Afficher exactement les chiffres que vous voulez
 
-```python
-name = "Amina"
-score = 87.5
-print(f"{name} scored {score}%")    # Amina scored 87.5%
-```
+C'est là que les difficultés commencent : la valeur
 
-Les spécificateurs de format contrôlent la précision et l'alignement :
+$$
+\pi = 3.14159\ldots
+$$
+
+porte tous ses chiffres avec elle en permanence. Mais un tableau a besoin de $\pi \approx 3.14$, une ligne météo de `23.8°C`, pas de `23.7891°C`. Le nombre de chiffres affichés est *un choix de présentation* du nombre — il ne doit pas modifier la valeur stockée, sinon vous perdez la précision pour toujours.
+
+L'arrondi doit donc vivre dans l'impression, pas dans le calcul. Une **f-string** vous permet de décider au moment d'imprimer : écrivez `f"..."`, placez l'expression entre `{...}` et ajoutez un spécificateur de format après les deux points :
 
 ```python
 price = 19.999
-print(f"Total: ${price:.2f}")       # Total: $20.00 — rounds to 2 decimal places
-print(f"Double: {price * 2}")       # any expression works inside { }
+print(f"Total: ${price:.2f}")        # Total: $20.00   (affiché arrondi)
+print(price)                          # 19.999          (valeur intacte)
+print(f"Double: {price * 2}")         # 39.998          (toute expression fonctionne)
 ```
 
-Même les conditions fonctionnent en ligne :
+Il vaut la peine de disséquer ce qui se passe dans `{price:.2f}` :
+
+- `{price}` signifie *mets la valeur ici* — la f-string fait la conversion en texte pour vous.
+- `:.2f` signifie *affiche-la en virgule fixe avec 2 chiffres après la décimale* — l'arrondi ne se produit que dans la forme affichée.
+
+Les spécificateurs font plus qu'arrondir : ils alignent aussi. Une colonne de `7.5`, `8.5`, `87.5` paraît irrégulière ; donnez à chaque entrée la même largeur et la colonne s'aligne :
 
 ```python
-passing = "yes" if score >= 60 else "no"
-print(f"Passing? {passing}")
+print(f"{7.5:>6}")     # "    7.5"   aligné à droite sur une largeur de 6
+print(f"{87.5:>6}")    # "   87.5"
 ```
+
+## Un exemple travaillé : la colonne des prix
+
+Un reçu de magasin veut les étiquettes à gauche et les nombres alignés sur leurs décimales. Deux directions de format font les deux choses :
+
+```python
+print(f"{'item':<10}{'price':>7}")
+print(f"{'coffee':<10}{3.5:>7.2f}")
+print(f"{'croissant':<10}{2.95:>7.2f}")
+
+# item       price
+# coffee      3.50
+# croissant   2.95
+```
+
+`<10` aligne l'étiquette à gauche sur dix colonnes ; `>7.2f` aligne le nombre à droite sur sept, en gardant deux décimales. L'alignement n'est que du format dans l'autre direction — le même `{valeur:spécification}` que vous connaissez déjà, la flèche disant de quel côté penche le texte. C'est la graine de tout tableau que le cours construira : étiquettes d'un côté, nombres de l'autre.
 
 ## Pièges courants
 
-- **Oublier que `print()` n'a pas de valeur de retour.** `print("hi")` affiche du texte, mais l'expression s'évalue à `None` — vous ne pouvez pas récupérer son résultat.
-- **Mélanger les types dans une concaténation.** `print("Score: " + 87)` lève une `TypeError`. Utilisez plutôt les f-strings : `print(f"Score: {87}")`.
+- **`print()` n'a pas de valeur de retour.** `print("hi")` affiche du texte mais vaut `None` — vous ne pouvez pas récupérer ce qu'il imprime dans une variable. L'impression est la *fin* d'une opération, jamais une étape à l'intérieur.
+- **Mélanger les types avec `+`.** `print("Score: " + 87)` lève une `TypeError`, car une chaîne et un nombre ne peuvent pas être additionnés. Les f-strings existent précisément pour associer une étiquette à une valeur : `print(f"Score: {87}")`.
+- **Une `{` littérale dans un f-string demande `{{`.** `f"{{x}}"` affiche `{x}` ; une `{` seule se lit comme le début d'une expression. Doubler est l'échappatoire.
 
 ## 🧩 Défis
 
 <details class="challenge">
-<summary>🧩 Défi — réfléchissez d'abord, puis découvrez</summary>
+<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
-Affichez votre nom, votre âge et un nombre favori, chacun sur sa propre ligne, avec trois appels distincts à `print()`. Faites ensuite la même chose avec une seule f-string contenant des retours à la ligne (`\n`).
+Calculez $\dfrac{2^5 + 9}{5}$ sur le papier, puis imprimez-la *sans* taper vous-même la réponse — laissez l'ordinateur calculer et imprimer en une seule étape.
 
-<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>print(f"Name: {name}\nAge: {age}\nFavorite: {num}")</code> — le <code>\n</code> dans la f-string produit un retour à la ligne.</p>
+<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>print((2**5 + 9) / 5)</code> → <code>8.2</code>. Une seule expression, confiée directement à <code>print()</code> : la machine l'évalue et écrit le résultat.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Défi — réfléchissez d'abord, puis découvrez</summary>
+<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
-Étant donné `temperature = 23.7891`, affichez-la sous la forme `"Today: 23.8°C"` (une décimale).
+Avec `temperature = 23.7891`, imprimez `"Today: 23.8°C"` (une décimale) sans toucher à la valeur stockée.
 
-<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>print(f"Today: {temperature:.1f}°C")</code> — le spécificateur de format <code>:.1f</code> arrondit à une décimale.</p>
+<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>print(f"Today: {temperature:.1f}°C")</code> → <code>Today: 23.8°C</code>. Le spécificateur <code>:.1f</code> arrondit <em>uniquement à l'affichage</em> ; <code>temperature</code> reste égal à <code>23.7891</code>.</p>
 
 </div>
 </details>
 
 ## 🤔 Questions socratiques
 
-- Pourquoi Python utilise-t-il `print()` comme une fonction (avec des parenthèses) plutôt que comme une instruction ? Quel avantage cela vous procure-t-il ?
-- `print("A", "B", "C")` affiche `A B C` avec des espaces. Comment pourriez-vous les afficher sans espace ? Avec des virgules entre eux ?
-- Si `x = 3.14`, que produit `f"{x}"` ? Et `f"{x:.0f}"` ? Expliquez la différence.
+- Pourquoi Python utilise-t-il `print()` comme fonction (avec des parenthèses) plutôt que comme instruction ? Quel avantage cela vous donne-t-il ?
+- `print("A", "B", "C")` affiche `A B C` avec des espaces. Comment les imprimer sans espace ? Avec des virgules entre eux ?
+- Si `x = 3.14`, que produit `f"{x}"` ? Et `f"{x:.0f}"` ? Expliquez la différence en termes de valeur et de représentation.
 
 ## ✅ Vérification rapide
 
 <div class="quiz" data-quiz="python-101-printing">
   <div class="quiz-q" data-answer="1">
-    <p class="quiz-q__prompt">1. Qu'affiche print(f"{'yes' if 5 > 3 else 'no'}") ?</p>
+    <p class="quiz-q__prompt">1. Votre formule est calculée, mais le programme n'affiche rien. Pourquoi ?</p>
     <div class="quiz-q__options">
-      <button class="quiz-q__opt" data-idx="0">5 > 3</button>
-      <button class="quiz-q__opt" data-idx="1">yes</button>
-      <button class="quiz-q__opt" data-idx="2">no</button>
-      <button class="quiz-q__opt" data-idx="3">Error</button>
+      <button class="quiz-q__opt" data-idx="0">La valeur a été mal calculée.</button>
+      <button class="quiz-q__opt" data-idx="1">Le résultat n'a jamais été confié à print().</button>
+      <button class="quiz-q__opt" data-idx="2">Python jette les valeurs dont il n'a plus besoin.</button>
+      <button class="quiz-q__opt" data-idx="3">print() exige au moins deux arguments.</button>
     </div>
     <p class="quiz-q__feedback" hidden></p>
   </div>
-  <div class="quiz-q" data-answer="2">
-    <p class="quiz-q__prompt">2. Comment imprimer 3.14159 sous la forme 3.14 (deux décimales) ?</p>
+  <div class="quiz-q" data-answer="1">
+    <p class="quiz-q__prompt">2. Comment imprimer 3.14159 en affichant deux décimales, sans arrondir la valeur stockée ?</p>
     <div class="quiz-q__options">
       <button class="quiz-q__opt" data-idx="0">f"{x:2f}"</button>
       <button class="quiz-q__opt" data-idx="1">f"{x:.2f}"</button>
-      <button class="quiz-q__opt" data-idx="2">f"{x:.2f}"</button>
-      <button class="quiz-q__opt" data-idx="3">f"{x:2.0f}"</button>
+      <button class="quiz-q__opt" data-idx="2">f"{x:.2d}"</button>
+      <button class="quiz-q__opt" data-idx="3">print(x, 2)</button>
     </div>
     <p class="quiz-q__feedback" hidden></p>
   </div>

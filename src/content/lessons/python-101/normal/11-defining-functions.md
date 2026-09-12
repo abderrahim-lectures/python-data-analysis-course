@@ -20,9 +20,28 @@ section: "python-101"
 track: "normal"
 ---
 
-## Defining a function
+## From formula to named machine
 
-Use `def` followed by a name, parentheses, and a colon:
+Mathematics abhors repetition. You learned $f(x) = x^2 - 5x + 6$ as a *rule* — one definition, used a thousand times, on a thousand different inputs:
+
+$$
+f(x) = x^2 - 5x + 6, \qquad f(2) = 0.
+$$
+
+Python's `def` is the same move: bind a name to a computation, so that any caller can apply it. The function is a machine with labeled input slots and one output door:
+
+```python
+def add(a, b):
+    return a + b
+
+result = add(3, 5)  # 8
+```
+
+The name, the parentheses holding the parameters $a, b$, the colon starting the recipe — this is the definition. The call `add(3, 5)` is applying the rule at $a=3$, $b=5$, exactly as $f(2)$ applies a rule at $x=2$.
+
+## Defining and calling
+
+The first function you write changes the world a greeting at a time:
 
 ```python
 def greet(name):
@@ -32,20 +51,25 @@ def greet(name):
 greet("Alice")  # Hello, Alice!
 ```
 
-## Parameters and arguments
+Three parts deserve names. The **parameters** are the variables in the definition — the input slots $x$. The **arguments** are the concrete values supplied at the call site — the input $2$. And the triple-quoted line inside is the **docstring**: documentation living next to the code, so `help(greet)` can answer what the function does.
 
-Parameters are variables listed in the function definition. Arguments are the values you pass when calling it.
+## Return: the output door
+
+`print` sends text to the screen; `return` hands a value back to the caller. The distinction is subtle and decisive:
 
 ```python
 def add(a, b):
     return a + b
 
-result = add(3, 5)  # 8
+result = add(3, 5)          # result == 8
+printed = print("8")        # printed is None — print returns nothing
 ```
+
+A function without `return` quietly returns `None` — the machine produces no output. When you want the arithmetic result of your function to flow onward, remember: `return`, not `print`.
 
 ## Default parameters
 
-Give parameters a default value — callers can optionally override it:
+Some parameters have a natural setting most calls will keep. Give them a default, and callers may override:
 
 ```python
 def greet(name, greeting="Hello"):
@@ -55,11 +79,11 @@ print(greet("Alice"))              # Hello, Alice!
 print(greet("Bob", "Hey"))         # Hey, Bob!
 ```
 
-**Rule**: default parameters must come after non-default parameters.
+The rule for ordering is rigid: **default parameters come after non-default ones.** `def f(x, y=5)` is legal; `def f(x=1, y)` is a syntax error, because Python resolves arguments by position from the left, and a gap would be ambiguous.
 
 ## Keyword arguments
 
-Call functions by parameter name for clarity:
+Arguments can also arrive named, which buys clarity when the parameter set grows:
 
 ```python
 def create_user(name, age, role="student"):
@@ -68,9 +92,11 @@ def create_user(name, age, role="student"):
 user = create_user(age=25, name="Alice", role="admin")
 ```
 
+Named arguments may be given in any order — the parameter name is the label on each package. A call that names its inputs reads like a sentence instead of a code in need of decoding.
+
 ## *args and **kwargs
 
-Accept any number of positional or keyword arguments:
+What if the number of inputs is unknown in advance? A sum doesn't know how many addends it will receive. `*args` collects any number of positional arguments into one tuple; `**kwargs` collects named arguments into one dict:
 
 ```python
 def total(*args):
@@ -85,9 +111,11 @@ def print_info(**kwargs):
 print_info(name="Alice", age=25)
 ```
 
-## Early returns
+The star is the gesture: `*` unfolds the argument list into a bundle. This is the difference between a sum with a fixed signature and a sum that accepts $\sum_{i=1}^{n} a_i$ for any $n$.
 
-Return early for guard clauses — reduces nesting:
+## Early return as a guard
+
+Some code starts by checking for the one case that must not proceed. Reasons of the form *"unless you are $b=0$"* are stated as a guard at the top, returning immediately:
 
 ```python
 def divide(a, b):
@@ -96,50 +124,62 @@ def divide(a, b):
     return a / b
 ```
 
+A guard clause collapses an `if/else` pair into a straight line: the failure case exits early, and the honest path runs un-nested.
+
+## A worked example: the machine f
+
+The quadratic that opened the lesson becomes three `return` statements:
+
+```python
+def quad(x):
+    """Return x² − 5x + 6."""
+    return x * x - 5 * x + 6
+
+quad(2)    # 0
+quad(3)    # 0
+quad(1)    # 2
+```
+
+The same rule, three inputs. The formula $f(x) = x^2 - 5x + 6$ turns into a reusable machine: define once, apply a thousand times, and the docstring records which rule it encloses.
+
 ## Common pitfalls
 
-- **Mutable default arguments**: `def f(items=[])` shares the same list across calls. Use `None` instead: `def f(items=None): items = items or []`
-- **Forgetting to return**: a function without `return` yields `None`
-- **Too many parameters** (4+): consider using a dictionary or dataclass
+- **Mutable default arguments.** `def f(items=[])` creates *one* list shared across every call — items pile up between calls. Default to `None` and build the list inside.
+- **Forgetting `return`.** A function without it returns `None`; you asked for a value and got a shadow.
+- **Too many parameters.** Past three or four, the slots turn into a puzzle. Group related arguments in a dict or dataclass.
+- **Calling a function defined later.** Python executes top to bottom; calling `f()` before `def f` reaches the interpreter raises a `NameError`. Define before you call.
 
-<section class="lesson-section lesson-section--challenges">
-<h2 id="-challenges">🧩 Challenges</h2>
+## 🧩 Challenges
 
 <details class="challenge">
-<summary>Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge — think first, then reveal</summary>
 <div class="challenge__body">
 
-Write a function `is_palindrome(text)` that returns `True` if the string reads the same forwards and backwards (ignore case).
+Write `is_palindrome(text)` returning `True` when the string reads the same forwards and backwards; ignore letter case.
 
-<p class="challenge__answer">💡 <strong>Answer:</strong> <code>def is_palindrome(text): return text.lower() == text.lower()[::-1]</code></p>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>def is_palindrome(text): return text.lower() == text.lower()[::-1]</code> — lowercasing symmetrizes the comparison, and the reversed slice <code>[::-1]</code> is the mirror image.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge — think first, then reveal</summary>
 <div class="challenge__body">
 
-Write a function `fizzbuzz(n)` that returns a list from 1 to n, but replaces multiples of 3 with "Fizz", multiples of 5 with "Buzz", and multiples of both with "FizzBuzz".
+Write `fizzbuzz(n)` returning a list from 1 to $n$, replacing multiples of 3 with `"Fizz"`, multiples of 5 with `"Buzz"`, and multiples of both with `"FizzBuzz"`.
 
-<p class="challenge__answer">💡 <strong>Answer:</strong> <code>["FizzBuzz" if i % 15 == 0 else "Fizz" if i % 3 == 0 else "Buzz" if i % 5 == 0 else i for i in range(1, n+1)]</code></p>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Multiples of both are multiples of $\mathrm{lcm}(3,5) = 15$, so test that case first: <code>["FizzBuzz" if i % 15 == 0 else "Fizz" if i % 3 == 0 else "Buzz" if i % 5 == 0 else i for i in range(1, n+1)]</code>.</p>
 
 </div>
 </details>
 
-</section>
+## 🤔 Socratic Questions
 
-<section class="lesson-section lesson-section--socratic">
-<h2 id="-socratic-questions">🤔 Socratic Questions</h2>
+- Why must default parameters trail non-default ones? What would go wrong if the rule were reversed?
+- What does `*args` give you that a single list parameter does not? When would you reach for one over the other?
+- How does Python decide which definition applies when both `def f(x)` and `def f(x, y=5)` exist?
 
-- Why does Python require default parameters after non-default ones? What would happen if the rule were reversed?
-- What problem does `*args` solve that a list parameter doesn't? When would you prefer one over the other?
-- How does Python decide which function to call when you have both `def f(x)` and `def f(x, y=5)`?
-
-</section>
-
-<section class="lesson-section lesson-section--quiz">
-<h2 id="-quick-check">✅ Quick check</h2>
+## ✅ Quick check
 
 <div class="quiz" data-quiz="python-101-functions">
   <div class="quiz-q" data-answer="1">
@@ -153,7 +193,7 @@ Write a function `fizzbuzz(n)` that returns a list from 1 to n, but replaces mul
     <p class="quiz-q__feedback" hidden></p>
   </div>
 
-  <div class="quiz-q" data-answer="2">
+  <div class="quiz-q" data-answer="1">
     <p class="quiz-q__prompt">2. What is the output? <code>def f(a, b=[]): b.append(a); return b; print(f(1)); print(f(2))</code></p>
     <div class="quiz-q__options">
       <button class="quiz-q__opt" data-idx="0">[1] then [2]</button>
@@ -164,4 +204,3 @@ Write a function `fizzbuzz(n)` that returns a list from 1 to n, but replaces mul
     <p class="quiz-q__feedback" hidden></p>
   </div>
 </div>
-</section>

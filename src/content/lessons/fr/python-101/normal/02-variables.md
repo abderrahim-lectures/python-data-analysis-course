@@ -20,100 +20,161 @@ section: "python-101"
 track: "normal"
 ---
 
-## Les variables, des noms pour des valeurs
+## Pourquoi une valeur a-t-elle besoin d'un nom ?
 
-En mathématiques, « soit $x = 5$ » associe un nom à une valeur. Python fait exactement cela :
+Écrivez un programme qui calcule la moyenne de trois notes d'interrogation :
+
+$$
+\bar{x} = \frac{7.5 + 8.5 + 9.0}{3} = \frac{25.0}{3} \approx 8,33.
+$$
+
+Supposez maintenant que les notes changent — le professeur veut la moyenne de $9.5, 8.5, 10.0$. Sans noms, l'expression de la moyenne apparaît à plusieurs endroits et vous devez en localiser et en modifier chacun à la main. C'est une recette pour en oublier un.
+
+Un mathématicien résout cela en *nommant les quantités* : écrivez $x_1, x_2, x_3$ une fois, puis référez-vous-y pour toujours. Un programme a le même besoin : les valeurs apparaissent sans cesse, et la machine doit retrouver la valeur actuelle à chaque fois. La réponse de Python est la **variable** — un nom qui pointe vers une valeur. Dès que `score1` nomme le $7.5$, vous pouvez écrire `score1` autant de fois que vous voulez, et Python cherche sa valeur actuelle à chaque fois.
+
+## `=` relie un nom à une valeur
+
+En mathématiques, « soit $x = 5$ » fixe le symbole $x$ au nombre $5$. Python fait la même chose avec exactement le même symbole :
+
+```python
+score1 = 7.5
+score2 = 8.5
+score3 = 9.0
+
+average = (score1 + score2 + score3) / 3
+print(f"{average:.2f}")    # 8.33
+```
+
+Le membre de droite est évalué *d'abord*, et seulement ensuite le nom de gauche commence à pointer vers le résultat. Si vous changez les notes et relancez le fichier, le même calcul utilisera les nouvelles valeurs — les noms donnent à la machine un endroit où chercher « la valeur actuelle de $7.5$ ».
+
+## Les noms peuvent être redirigés
+
+C'est ici qu'une variable ne ressemble *pas* à un symbole mathématique. En mathématiques, $x = x + 1$ est une affirmation sans solution. En Python, c'est une instruction parfaitement ordinaire, qui se lit de droite à gauche :
+
+$$
+x_{n+1} = x_n + 1
+$$
+
+signifie « la valeur suivante de $x$ est la valeur actuelle, plus un ». Dès que vous voyez cela en Python, vous comptez :
+
+```python
+count = 0
+count = count + 1    # l'ancienne valeur 0 a été lue, 1 a été calculé, le nom pointe maintenant vers 1
+count = count + 1    # désormais count nomme 2
+```
+
+Réaffecter consiste à *rediriger une étiquette*, pas à remplir une boîte. L'ancienne valeur n'est ni « modifiée » ni « remplacée » — le nom regarde simplement une autre valeur.
+
+## Lire-modifier-stocker en un seul geste : `+=`
+
+Le schéma ci-dessus — lire `count`, ajouter `1`, faire pointer `count` vers le résultat — est si répandu que Python offre un raccourci. Disons que le pas vaut $h$ et que vous parcourez une suite générique :
+
+$$
+x_{n+1} = x_n + h.
+$$
+
+Écrite, la mise à jour se lit `x = x + h`. Python fusionne la lecture et le stockage en un seul opérateur :
 
 ```python
 x = 5
+x += 1     # identique à x = x + 1   -> 6
+x -= 2     # identique à x = x - 2   -> 4
+x *= 3     # identique à x = x * 3   -> 12
+x /= 4     # identique à x = x / 4   -> 3.0
 ```
 
-Le côté droit est d'abord évalué (`5`), puis le nom `x` est pointé vers cette valeur. Contrairement aux mathématiques, `x` peut être **réaffectée** :
+Lisez `x += h` à voix haute comme *« avance x de h »* — un seul mouvement, comme le fait la récurrence.
+
+## Un nom que l'on peut prononcer
+
+Presque n'importe quel mot peut servir de nom, mais *être valide* n'est pas la même chose qu'*être bon*. Qu'est-ce qui est le plus instructif en relisant un script de notes ?
 
 ```python
-x = 5
-x = x + 1  # x now names 6
+x = 87.5                 # nomme un nombre, rien de plus
+quiz_score = 87.5        # nomme la grandeur
 ```
 
-Lisez `x = x + 1` comme « la nouvelle valeur de $x$ est l'ancienne valeur de $x$ plus un » — de la même façon que vous liriez une relation de récurrence $x_{n+1} = x_n + 1$.
+Quelques règles et une habitude :
 
-## Affectation augmentée
+- Un nom commence par une lettre ou un tiret bas et ne peut contenir ensuite que des lettres, des chiffres et des tirets bas — `second_score` ✓, `2nd_score` ✗.
+- La convention de Python est le **snake_case** : des mots en minuscules reliés par `_`, donc `student_name`, pas `studentName`. Cela correspond à la lecture à voix haute : `quiz_score`, c'est la note de l'interrogation.
+- Un petit ensemble de mots est **réservé** — `if`, `for`, `class`, `True`, `False` — et ne peut pas servir de nom.
 
-Le schéma lire-calculer-réenregistrer est si courant que Python fournit un raccourci :
+Vous relirez votre propre code plus souvent que vous ne l'écrivez ; le nom que vous choisissez en écrivant est ce qui fera ressortir le sens quand vous lirez plus tard.
+
+## Un exemple travaillé : le total cumulé
+
+Réassigner paie dès qu'une quantité doit se construire pas à pas — la récurrence $x_{n+1} = x_n + h$ avec la somme en cours comme $x_n$ :
 
 ```python
-x = 5
-x += 1     # same as x = x + 1  -> 6
-x -= 2     # same as x = x - 2  -> 4
-x *= 3     # same as x = x * 3  -> 12
-x /= 4     # same as x = x / 4  -> 3.0
+total = 0
+total += 8.5     # total devient 8.5
+total += 9.0     # puis 17.5
+total += 10.0    # puis 27.5
+average = total / 3
+print(f"{average:.2f}")   # 9.17
 ```
 
-## Conventions de nommage
-
-Un nom (**identifiant**) doit commencer par une lettre ou un tiret bas, et ne peut contenir ensuite que des lettres, des chiffres et des tirets bas — `2nd_score` est invalide, `second_score` est correct.
-
-La convention Python est le `snake_case` : des mots en minuscules séparés par des tirets bas (`student_name`, `total_score`), plutôt que `studentName` ou `TotalScore`. Quelques mots sont **réservés** par le langage (`if`, `for`, `class`, `True`, etc.) et ne peuvent pas être utilisés comme noms de variables.
-
-Les noms doivent décrire *ce qu'une valeur signifie*. `x = 87.5` n'apprend rien au lecteur ; `quiz_score = 87.5` lui apprend tout. C'est plus important qu'il n'y paraît — vous relirez votre propre code bien plus souvent que vous ne l'écrirez.
+Chaque `+=` avance d'un pas : lire la valeur actuelle, additionner, re-pointer le nom vers le résultat. Les noms `total` et `average` maintiennent les deux quantités distinctes, si bien que la recette se lit comme ce qu'elle fait.
 
 ## Pièges courants
 
 - **Utiliser un mot réservé comme nom.** `class = "Math"` lève une `SyntaxError` — `class` est réservé.
 - **Commencer par un chiffre.** `2nd_place = "B"` est invalide ; `second_place = "B"` est correct.
-- **Confondre `=` et `==`.** `=` affecte ; `==` teste l'égalité. Tout le monde trébuche au moins une fois.
+- **Confondre `=` et `==`.** `=` fait pointer un nom vers une valeur ; `==` demande si deux valeurs sont égales. Un glissement d'un caractère transforme une affirmation en question.
+- **`+=` écrit sur un nom qui doit déjà exister.** `total += 1` sur un nom jamais assigné lève une `NameError`. Le geste lit d'abord la valeur actuelle ; un nom sans valeur n'a rien à lire.
 
 ## 🧩 Défis
 
 <details class="challenge">
-<summary>🧩 Défi — réfléchissez d'abord, puis découvrez</summary>
+<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
-Si `x = 5`, puis `y = x`, puis `x = 10`, que vaut `y` ? Expliquez pourquoi en termes de « les noms pointent vers des valeurs » plutôt que « les boîtes contiennent des valeurs ».
+Si `x = 5`, puis `y = x`, puis `x = 10`, que vaut `y` ? Expliquez pourquoi en termes de « les noms pointent vers des valeurs » et non « les boîtes contiennent des valeurs ».
 
-<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>y</code> vaut encore <code>5</code>. Quand <code>y = x</code> s'est exécuté, les deux noms pointaient vers la valeur <code>5</code>. Réaffecter <code>x</code> à <code>10</code> déplace le pointeur de <code>x</code> ; <code>y</code> pointe toujours vers <code>5</code>. Les noms sont des étiquettes, pas des boîtes.</p>
+<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>y</code> vaut toujours <code>5</code>. Quand <code>y = x</code> s'est exécuté, les deux noms pointaient vers <code>5</code>. Rediriger <code>x</code> vers <code>10</code> déplace l'étiquette de <code>x</code> ; <code>y</code> pointe toujours vers <code>5</code>. Les étiquettes pointent ; rien n'est « copié dans une boîte ».</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Défi — réfléchissez d'abord, puis découvrez</summary>
+<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
-Écrivez un court programme qui échange deux variables : `a = 7`, `b = 3`. Après l'échange, `a` doit valoir `3` et `b` doit valoir `7`. Faites-le sans variable temporaire (Python a une astuce élégante pour cela).
+Écrivez un programme qui échange deux variables : `a = 7`, `b = 3`. Après l'échange, `a` doit valoir `3` et `b` doit valoir `7`. Faites-le sans variable temporaire (Python a un petit truc élégant).
 
-<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>a, b = b, a</code> — Python évalue d'abord le côté droit, puis dépaquète dans le côté gauche. Aucune variable temporaire n'est nécessaire.</p>
+<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>a, b = b, a</code> — Python évalue d'abord le membre de droite (les deux anciennes valeurs), puis fait pointer les noms de gauche vers elles. Pas de variable temporaire.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Défi — réfléchissez d'abord, puis découvrez</summary>
+<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
-Lesquels de ces noms de variables sont valides ? Expliquez pourquoi les autres échouent : `_count`, `2nd`, `my-name`, `total`, `class`.
+Lesquels de ces noms de variable sont valides, et pourquoi les invalides échouent-ils : `_count`, `2nd`, `my-name`, `total`, `class` ?
 
-<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>_count</code> ✓ (commencer par un tiret bas est permis), <code>2nd</code> ✗ (commence par un chiffre), <code>my-name</code> ✗ (le trait d'union est interdit — c'est l'opérateur moins), <code>total</code> ✓, <code>class</code> ✗ (mot-clé réservé).</p>
+<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>_count</code> ✓ (commencer par un tiret bas est permis), <code>2nd</code> ✗ (commence par un chiffre), <code>my-name</code> ✗ (le trait d'union est l'opérateur de soustraction, interdit dans un nom), <code>total</code> ✓, <code>class</code> ✗ (mot réservé).</p>
 
 </div>
 </details>
 
 ## 🤔 Questions socratiques
 
-- Pourquoi Python utilise-t-il le `snake_case` plutôt que le `camelCase` ? Que suggère la métaphore visuelle du tiret bas sur la façon de lire les noms de variables ?
-- `x += 1` et `x = x + 1` produisent le même résultat pour les nombres. Pouvez-vous imaginer une raison pour laquelle un langage fournirait quand même les deux formes ?
-- Si les variables sont « des étiquettes, pas des boîtes », que se passe-t-il quand vous écrivez `a = [1, 2, 3]`, puis `b = a`, puis `b.append(4)` ? `a` voit-elle le `4` ? (Essayez — cela préfigure les objets mutables, vus plus loin.)
+- Pourquoi Python choisit-il le `snake_case` plutôt que le `camelCase` ? Que suggère la métaphore visuelle du tiret bas sur la façon de lire les noms de variables ?
+- `x += 1` et `x = x + 1` donnent le même résultat pour les nombres. Pouvez-vous imaginer une raison pour laquelle un langage offrirait quand même les deux formes ?
+- Si les variables sont des *étiquettes, pas des boîtes*, que se produit-il avec `a = [1, 2, 3]`, puis `b = a`, puis `b.append(4)` ? Est-ce que `a` voit le `4` ? (Essayez — cela annonce les objets mutables, vus bien plus tard.)
 
 ## ✅ Vérification rapide
 
 <div class="quiz" data-quiz="python-101-variables">
   <div class="quiz-q" data-answer="2">
-    <p class="quiz-q__prompt">1. Quelle est la valeur de y après : x = 10; y = x; x = 20 ?</p>
+    <p class="quiz-q__prompt">1. Que vaut y après : x = 10; y = x; x = 20 ?</p>
     <div class="quiz-q__options">
       <button class="quiz-q__opt" data-idx="0">20</button>
-      <button class="quiz-q__opt" data-idx="1">10 and 20</button>
+      <button class="quiz-q__opt" data-idx="1">10 et 20</button>
       <button class="quiz-q__opt" data-idx="2">10</button>
-      <button class="quiz-q__opt" data-idx="3">Error</button>
+      <button class="quiz-q__opt" data-idx="3">Erreur</button>
     </div>
     <p class="quiz-q__feedback" hidden></p>
   </div>

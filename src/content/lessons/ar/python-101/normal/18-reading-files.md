@@ -20,55 +20,61 @@ section: "python-101"
 track: "normal"
 ---
 
-## فتح الملفات
+## الجسرُ نحو القرص
 
-استخدم `open()` للحصول على كائن ملف:
+البرامجُ التي لا تحسب إلا بما يكتبه المستخدمُ محبوسةٌ في الذاكرة. والملفاتُ تفتح الباب: الملفُ تسلسلُ أسطرٍ، وقراءتُه تَمشٍّ على ذلك التسلسل. أولُ خطوةٍ هي `open()`، التي ترجع كائنَ ملفٍ ملصوقًا بالباب:
 
 ```python
-f = open("data.txt", "r")  # read mode
+f = open("data.txt", "r")  # وضعُ القراءة
 content = f.read()
-f.close()  # always close when done!
+f.close()  # أغلق دائمًا عند الانتهاء!
 ```
 
-## جملة with
+تعني `"r"` القراءةَ فقط. والانضباطُ ثقيل: يجب أن تجري `close()` حين تنتهي، وإلا تسرّب المعالجُ — يبقى الملفُ محتجزًا زمنًا طويلًا بعد أن كففتَ عن حاجته. ونسيانُه هو جيلُ الأخطاءِ الأولُ في عالم الملفات.
 
-يغلق `with` الملف تلقائيًا حتى لو حدث خطأ:
+## جملة with: الإغلاقُ وعدًا
+
+تجعل `with` الإغلاقَ تلقائيًّا، حتى إذا اقتحم خطأٌ المتبانةَ من وسطها:
 
 ```python
 with open("data.txt") as f:
     content = f.read()
-# file is closed here
+# يُغلق الملف هنا
 ```
 
-**استخدم `with` دائمًا** — إنه أأمن وأنظف.
+تُعلن كتلةُ `with` عقدًا: افتحْه هنا، وسيُغلق عندما تنتهي هذه الكتلة — بصورةٍ عاديةٍ أو استثناءٍ. حياةُ المعالجِ مؤطَّرةٌ في الكتلة، فلا يبقى ما يُنسى.
 
-## استراتيجيات القراءة
+## استراتيجياتُ القراءة
+
+الملفُ الواحدُ بثلاثِ شهواتٍ:
 
 ```python
-# Read entire file as one string
+# قراءة الملف بكامله كسلسلةٍ واحدة
 with open("data.txt") as f:
     text = f.read()
 
-# Read line by line (memory-efficient for large files)
+# قراءة سطرٍ بسطرٍ (موفّرةٍ للذاكرة مع الملفات الكبيرة)
 with open("data.txt") as f:
     for line in f:
-        print(line.rstrip())  # strip trailing newline
+        print(line.rstrip())  # يُزيل السطر الجديد في النهاية
 
-# Read all lines into a list
+# قراءة كل الأسطر في قائمة
 with open("data.txt") as f:
-    lines = f.readlines()  # includes \n in each string
+    lines = f.readlines()  # تتضمن \n في كل سلسلة
 ```
 
-## Pathlib (النهج الحديث)
+يأخذ `f.read()` كلَّ شيءٍ دفعةً واحدةً؛ ويفرّق `readlines()` إلى قائمةٍ؛ والتكرارُ بـ `for line in f` يتمشّى في الملفِ سطرًا سطرًا، محتفظًا فقط بالسطرِ الحالي في الذاكرة. وآخرُها وصفةُ ملفٍ أضخمَ من أن يتّسع: عالجْ كلَّ سطرٍ ثم تقدم، دون أن تجمع الكلَّ أبدًا.
 
-يوفر `pathlib` مسارات كائنية التوجه — أكثر وضوحًا من ربط السلاسل:
+## Pathlib: مساراتٌ بمفرداتٍ
+
+قراءةُ دمجِ المساراتِ بـ `+` قراءةٌ أثريّة. يُسلّمك `pathlib` كائنَ `Path` وطرقُه *تقول* ما تفعل:
 
 ```python
 from pathlib import Path
 
 p = Path("data") / "scores.txt"    # Path('data/scores.txt')
-text = p.read_text()               # read the whole file
-lines = p.read_text().splitlines() # lines without \n
+text = p.read_text()               # يقرأ الملف كله
+lines = p.read_text().splitlines() # الأسطر بلا \n
 
 p.exists()   # True/False
 p.is_file()  # True/False
@@ -76,83 +82,96 @@ p.suffix     # '.txt'
 p.stem       # 'scores'
 ```
 
-## الترميز
+تربط `الـ /` الأجزاءَ في مسارٍ كما يربط نظامُ الملفاتِ المجلداتِ؛ وتستجوب `exists` و`is_file` و`suffix` و`stem` ما *هو* المسار. تصير المساراتُ بياناتٍ بأجوبةٍ لا سلاسلَ تُشَرَّح.
 
-حدد الترميز دائمًا لضمان قابلية النقل:
+## الترميز: عقدُ الحروف
+
+النصُّ بايتاتٌ حتى تُفسّرها اصطلاحٌ. ثبّت ذلك الاصطلاحَ لضمانِ قابليةِ الحمل بين الآلات:
 
 ```python
 with open("data.txt", encoding="utf-8") as f:
     text = f.read()
 ```
 
-بدون `encoding`، يستخدم بايثون الافتراضي للنظام، والذي يختلف بين المنصات.
+وبلا `encoding`، تسقط بايثون إلى افتراضِ النظامِ، الذي يختلف حسب المنصة — الملفُ نفسُه مشوَّشٌ على آلةٍ ويندوزَ ونقيٌّ على لينكس. وذكرُ `utf-8` يجعل البايتاتِ تعني الحروفَ نفسها في كل مكانٍ.
 
-## المزالق الشائعة
+## مثالٌ محلول: ملفُّ الدرجاتِ سطرًا سطرًا
 
-- **النسيان أن القراءة سطرًا تتضمن `\n`** — استخدم `line.strip()` أو ضرورة التجزئة
-- **فتح ملف للكتابة دون قصد** يمحو ما فيه — تحقق من الوضع قبل الكتابة
-- **الأنسب**: `with open(...)` لضمان الإغلاق التلقائي. تجنّب `open()` بدونه.
+المشيُ الآمنُ في الذاكرةِ — تجميعٌ دونَ أن تحملَ الملفَّ كلَّهُ:
 
-<section class="lesson-section lesson-section--challenges">
-<h2 id="-challenges">🧩 التحديات</h2>
+```python
+with open("scores.txt", encoding="utf-8") as f:
+    total = 0
+    count = 0
+    for line in f:
+        total += int(line.strip())
+        count += 1
+
+print(f"Avg: {total / count}")
+```
+
+تُقرأ كلُّ سطرٍ ويُقشَرُ سطرُه الجديدُ ويُحوَّلُ ويُفلَتُ قبلَ وصولِ التالي — يتدفقُ الملفُّ دونَ أن يتجمعَ كلَّهُ. ويعدُ `with` بإغلاقِ الملفِّ حين تنتهي الكتلةُ، عاديًّا أو باستثناءٍ.
+
+## أخطاء شائعة
+
+- **نسيان `with`.** تتسرّب المعالجاتُ حين لا يغلقها شيءٌ؛ دع الكتلةَ تملك حياةَ الملف.
+- **ابتلاعُ ملفاتٍ هائلة.** قد يُنهك `f.read()` ذاكرةً أمام ملفٍ عملاقٍ — كرّرْ بـ `for line in f` بدلًا منه.
+- **تجاهلُ الترميز.** تتحوّل الحروفُ غير اللاتينيةِ إلى رموزٍ مبهمةٍ حين يترك الاصطلاحُ للصدفة.
+- **المساراتُ المقحَمة.** يجعل `pathlib.Path` الكودَ نفسَه يتمشّى على كل نظامِ تشغيلٍ.
+- **ملفٌّ مُستهلكٌ يُقرأ فارغًا.** بعد `f.read()` تستقرُّ الموضعُ في النهاية؛ تُعيدُ قراءةٌ ثانيةٌ `''` ويُعيدُ `readlines()` القائمةَ الفارغةَ. اقرأ مرةً، أو أعدِ الفتحَ.
+
+## 🧩 تحديات
 
 <details class="challenge">
-<summary>التحدي — فكّر أولًا، ثم اكشف</summary>
+<summary>🧩 تحدٍّ — فكّر أولًا ثم أظهر</summary>
 <div class="challenge__body">
 
-افتح ملفًا يحتوي على رقم واحد في كل سطر، واحسب المجموع. تعامل مع ملف يمكن أن يكون غير موجود.
+عُدّ أسطرَ ملفٍ دون تحميله في الذاكرة.
 
-<p class="challenge__answer">💡 <strong>الإجابة:</strong> <code>try: with open("nums.txt") as f: total = sum(int(line) for line in f) except FileNotFoundError: total = 0</code>.</p>
+<p class="challenge__answer">💡 <strong>الجواب:</strong> <code>count = 0; with open("file.txt") as f: for line in f: count += 1</code> أو المقتضبُ <code>sum(1 for _ in open("file.txt"))</code> — سطرٌ واحدٌ كلَّ مرةٍ، لا الكلُّ أبدًا.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>التحدي — فكّر أولًا، ثم اكشف</summary>
+<summary>🧩 تحدٍّ — فكّر أولًا ثم أظهر</summary>
 <div class="challenge__body">
 
-قرأ ملف سجلات بأرقام معقّدة بأنماط مختلطة. صمّم كودًا يقرأ سطرًا بسطر ويطبع عدد الأسطر فقط — دون تحميل الملف في الذاكرة كاملة.
+اسرد كلَّ ملفٍ ذي لاحقةِ `.txt` في مجلدٍ باستخدامِ `pathlib`.
 
-<p class="challenge__answer">💡 <strong>الإجابة:</strong> <code>count = sum(1 for _ in open("log.txt"))</code> — يكبح حجم الذاكرة بثبات لعدد الأسطر.</p>
+<p class="challenge__answer">💡 <strong>الجواب:</strong> <code>list(Path(".").glob("*.txt"))</code> — مستقبلُ باسمٍ عامٍّ يجوب لك الأسماءَ المطابقةَ.</p>
 
 </div>
 </details>
 
-</section>
+## 🤔 أسئلة سقراطية
 
-<section class="lesson-section lesson-section--socratic">
-<h2 id="-socratic-questions">🤔 أسئلة سقراطية</h2>
+- هل يتضمّن `for line in f` الـ `\n` الختاميَّ؟ ولماذا تبدو الحلقةُ بهذه الهيئة — وكيف تُزيل السطرَ الجديدَ؟
+- ماذا يحدثُ عند قراءةِ ملفٍ غيرِ موجودٍ؟ كيف يُصاول `with` الاستثناءَ؟
+- متى يسبق `f.read()` التكرارَ سطرًا بسطرٍ؟
 
-- لماذا تحتاج `with open(...)`؟ وماذا يحدث إذا نسيته وأخفق الاستثناء؟
-- متى تختار `read()` بكامل الفهم بينما تجيد `for line in f` قراءة الملف شريطًا؟ أين حدود الذاكرة؟
-- ما الفرق بين الترميز الافتراضي والتفصيلي عندما تتعامل مع ملفات أنشأها Windows؟
+## ✅ فحص سريع
 
-</section>
-
-<section class="lesson-section lesson-section--quiz">
-<h2 id="-quick-check">✅ مراجعة سريعة</h2>
-
-<div class="quiz" data-quiz="python-101-reading-files">
-  <div class="quiz-q" data-answer="2">
-    <p class="quiz-q__prompt">1. أي وضع يمسح ملفًا مكتوبًا فيه؟</p>
-    <div class="quiz-q__options">
-      <button class="quiz-q__opt" data-idx="0">"r"</button>
-      <button class="quiz-q__opt" data-idx="1">"a"</button>
-      <button class="quiz-q__opt" data-idx="2">"w"</button>
-      <button class="quiz-q__opt" data-idx="3">"r+"</button>
-    </div>
-    <p class="quiz-q__feedback" hidden></p>
-  </div>
-
+<div class="quiz" data-quiz="python-101-file-reading">
   <div class="quiz-q" data-answer="1">
-    <p class="quiz-q__prompt">2. ماذا تفعل المعلمة <code>encoding="utf-8"</code> في <code>open(...)</code>؟</p>
+    <p class="quiz-q__prompt">١. ماذا يفعل <code>line.rstrip()</code> في حلقةِ ملفٍ؟</p>
     <div class="quiz-q__options">
-      <button class="quiz-q__opt" data-idx="0">تسريع القراءة</button>
-      <button class="quiz-q__opt" data-idx="1">تضبط فك ترميز البايت إلى نص</button>
-      <button class="quiz-q__opt" data-idx="2">تضيف رأس BOM</button>
-      <button class="quiz-q__opt" data-idx="3">لا تفعل شيئًا</button>
+      <button class="quiz-q__opt" data-idx="0">يزيل كل مسافاتٍ</button>
+      <button class="quiz-q__opt" data-idx="1">يزيل السطرَ الجديدَ في النهاية (والمسافات)</button>
+      <button class="quiz-q__opt" data-idx="2">يزيل السطرَ الجديدَ في البداية</button>
+      <button class="quiz-q__opt" data-idx="3">يرجع طولَ السطرِ</button>
+    </div>
+    <p class="quiz-q__feedback" hidden></p>
+  </div>
+
+  <div class="quiz-q" data-answer="2">
+    <p class="quiz-q__prompt">٢. ما الطريقةُ الصحيحةُ لقراءةِ ملفٍ؟</p>
+    <div class="quiz-q__options">
+      <button class="quiz-q__opt" data-idx="0">f = open("x.txt"); f.read()</button>
+      <button class="quiz-q__opt" data-idx="1">read("x.txt")</button>
+      <button class="quiz-q__opt" data-idx="2">with open("x.txt") as f: content = f.read()</button>
+      <button class="quiz-q__opt" data-idx="3">File.read("x.txt")</button>
     </div>
     <p class="quiz-q__feedback" hidden></p>
   </div>
 </div>
-</section>

@@ -20,48 +20,109 @@ section: "python-101"
 track: "normal"
 ---
 
-## Variables as names for values
+## Why does a value need a name?
 
-In math, "let $x = 5$" binds a name to a value. Python does exactly this:
+Write a program that computes the average of three quiz scores:
+
+$$
+\bar{x} = \frac{7.5 + 8.5 + 9.0}{3} = \frac{25.0}{3} \approx 8.33.
+$$
+
+Now suppose the scores change — the teacher wants the average of $9.5, 8.5, 10.0$ instead. Without names, the average expression appears in several places and you must find every one of them and edit it by hand. That is a recipe for missing one.
+
+A mathematician solves this by *naming quantities*: write $x_1, x_2, x_3$ once, then refer to them forever after. A program has the same need: values appear again and again, and the machine must find the current one every time. Python's answer is the **variable** — a name that points at a value. Once `score1` names $7.5$, you can write `score1` any number of times and Python looks up its current value each time.
+
+## `=` binds a name to a value
+
+In math, "let $x = 5$" pins the symbol $x$ to the number $5$. Python does the same thing with exactly the same symbol:
+
+```python
+score1 = 7.5
+score2 = 8.5
+score3 = 9.0
+
+average = (score1 + score2 + score3) / 3
+print(f"{average:.2f}")    # 8.33
+```
+
+The right-hand side is evaluated *first*, and only then does the name on the left start pointing at the result. If you changed the scores and ran the file again, the same computation would use the new values — the names give the machine a place to look up "the current value of $7.5$".
+
+## Names can be re-pointed
+
+Here is where a variable is *not* like a math symbol. In math, $x = x + 1$ is a statement with no solution. In Python it is a perfectly ordinary instruction, read right to left:
+
+$$
+x_{n+1} = x_n + 1
+$$
+
+says "the next value of $x$ is the current one, plus one." The instant you see this in Python, you are counting:
+
+```python
+count = 0
+count = count + 1    # old value 0 was read, 1 was computed, the name now points at 1
+count = count + 1    # now count names 2
+```
+
+Reassignment is *re-pointing a label*, not filling a box. The old value is not "changed" or "replaced" — the name simply looks at a different value now.
+
+## Reading-updating-storing is one gesture: `+=`
+
+The pattern above — read `count`, add `1`, point `count` at the result — is so common that Python has a shorthand. Say the step size is $h$ and you are moving through a sequence generically:
+
+$$
+x_{n+1} = x_n + h.
+$$
+
+Printed out, the update reads `x = x + h`. Python merges the read and the store into one operator:
 
 ```python
 x = 5
+x += 1     # same as x = x + 1   -> 6
+x -= 2     # same as x = x - 2   -> 4
+x *= 3     # same as x = x * 3   -> 12
+x /= 4     # same as x = x / 4   -> 3.0
 ```
 
-The right-hand side is evaluated first (`5`), then the name `x` is pointed at it. Unlike math, `x` can be **reassigned**:
+Read `x += h` aloud as *"advance x by h"* — a single motion, the way the recurrence does.
+
+## A name you can say out loud
+
+Almost any word works as a name, but almost anything being *correct* is not the same as being *good*. Which is more informative in a reading of a report script?
 
 ```python
-x = 5
-x = x + 1  # x now names 6
+x = 87.5                 # names a number, nothing more
+quiz_score = 87.5        # names the quantity
 ```
 
-Read `x = x + 1` as "the new value of $x$ is the old value of $x$ plus one" — the same way you'd read a recurrence relation $x_{n+1} = x_n + 1$.
+A few rules and one habit:
 
-## Augmented assignment
+- A name starts with a letter or underscore and may only contain letters, digits, underscores — `second_score` ✓, `2nd_score` ✗.
+- Python's convention is **snake_case**: lowercase words joined by `_`, so `student_name`, not `studentName`. It matches how the names read aloud: `quiz_score` is the quiz score.
+- A small set of words is **reserved** — `if`, `for`, `class`, `True`, `False` — and cannot be names.
 
-The read-compute-store-back pattern is so common that Python provides shorthand:
+You will reread your own code more often than you write it; the name you choose while writing is what pulls meaning back out later.
+
+## A worked example: the running tally
+
+Reassigning pays off the moment a quantity must be built step by step — the recurrence $x_{n+1} = x_n + h$ with the running sum as $x_n$:
 
 ```python
-x = 5
-x += 1     # same as x = x + 1  -> 6
-x -= 2     # same as x = x - 2  -> 4
-x *= 3     # same as x = x * 3  -> 12
-x /= 4     # same as x = x / 4  -> 3.0
+total = 0
+total += 8.5     # total becomes 8.5
+total += 9.0     # then 17.5
+total += 10.0    # then 27.5
+average = total / 3
+print(f"{average:.2f}")   # 9.17
 ```
 
-## Naming conventions
-
-A name (**identifier**) must start with a letter or underscore, and can only contain letters, digits, and underscores after that — `2nd_score` is invalid, `second_score` is fine.
-
-Python convention is `snake_case`: lowercase words separated by underscores (`student_name`, `total_score`), not `studentName` or `TotalScore`. A handful of words are **reserved** by the language (`if`, `for`, `class`, `True`, etc.) and can't be used as variable names.
-
-Names should describe *what a value means*. `x = 87.5` tells a reader nothing; `quiz_score = 87.5` tells them everything. This matters more than it might seem — you will reread your own code far more often than you write it.
+Each `+=` advances one step: read the current value, add, point the name at the result. The names `total` and `average` keep the two quantities distinct, so the recipe reads as what it does.
 
 ## Common pitfalls
 
 - **Using a reserved word as a name.** `class = "Math"` raises a `SyntaxError` — `class` is reserved.
 - **Starting with a digit.** `2nd_place = "B"` is invalid; `second_place = "B"` is fine.
-- **Confusing `=` and `==`.** `=` assigns; `==` tests equality. This trips everyone up at least once.
+- **Confusing `=` and `==`.** `=` points a name at a value; `==` asks whether two values are equal. The one-character slip changes a statement into a question.
+- **`+=` writes to a name that must already exist.** `total += 1` on a name never assigned raises a `NameError`. The gesture reads the current value first; a name with nothing to read has no current value.
 
 ## 🧩 Challenges
 
@@ -71,7 +132,7 @@ Names should describe *what a value means*. `x = 87.5` tells a reader nothing; `
 
 If `x = 5` and then `y = x`, and then `x = 10`, what is `y`? Explain why in terms of "names point to values" rather than "boxes contain values."
 
-<p class="challenge__answer">💡 <strong>Answer:</strong> <code>y</code> is still <code>5</code>. When <code>y = x</code> executed, both names pointed at the value <code>5</code>. Reassigning <code>x</code> to <code>10</code> moves <code>x</code>'s pointer; <code>y</code> still points at <code>5</code>. Names are labels, not boxes.</p>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>y</code> is still <code>5</code>. When <code>y = x</code> ran, both names pointed at <code>5</code>. Re-pointing <code>x</code> at <code>10</code> moves <code>x</code>'s label; <code>y</code> still points at <code>5</code>. Labels point; nothing is "copied into a box".</p>
 
 </div>
 </details>
@@ -80,9 +141,9 @@ If `x = 5` and then `y = x`, and then `x = 10`, what is `y`? Explain why in term
 <summary>🧩 Challenge — think first, then reveal</summary>
 <div class="challenge__body">
 
-Write a short program that swaps two variables: `a = 7`, `b = 3`. After swapping, `a` should be `3` and `b` should be `7`. Do it without a temporary variable (Python has a neat trick for this).
+Write a program that swaps two variables: `a = 7`, `b = 3`. After the swap, `a` should be `3` and `b` should be `7`. Do it without a temporary variable (Python has a neat trick).
 
-<p class="challenge__answer">💡 <strong>Answer:</strong> <code>a, b = b, a</code> — Python evaluates the right side first, then unpacks into the left side. No temp variable needed.</p>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>a, b = b, a</code> — Python evaluates the right side first (both old values), then points the left-hand names at them. No temp variable needed.</p>
 
 </div>
 </details>
@@ -91,18 +152,18 @@ Write a short program that swaps two variables: `a = 7`, `b = 3`. After swapping
 <summary>🧩 Challenge — think first, then reveal</summary>
 <div class="challenge__body">
 
-Which of these are valid variable names? Explain why the invalid ones fail: `_count`, `2nd`, `my-name`, `total`, `class`.
+Which of these are valid variable names, and why do the invalid ones fail: `_count`, `2nd`, `my-name`, `total`, `class`?
 
-<p class="challenge__answer">💡 <strong>Answer:</strong> <code>_count</code> ✓ (underscore start is fine), <code>2nd</code> ✗ (starts with digit), <code>my-name</code> ✗ (hyphen is not allowed — it's the minus operator), <code>total</code> ✓, <code>class</code> ✗ (reserved keyword).</p>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>_count</code> ✓ (underscore start is fine), <code>2nd</code> ✗ (starts with a digit), <code>my-name</code> ✗ (the hyphen is the minus operator, not allowed in a name), <code>total</code> ✓, <code>class</code> ✗ (reserved keyword).</p>
 
 </div>
 </details>
 
 ## 🤔 Socratic Questions
 
-- Why does Python use `snake_case` instead of `camelCase`? What does the underscore visual metaphor suggest about how to read variable names?
-- `x += 1` and `x = x + 1` produce the same result for numbers. Can you think of a reason a language might still provide both forms?
-- If variables are "labels, not boxes," what happens when you write `a = [1, 2, 3]` then `b = a` then `b.append(4)`? Does `a` see the `4`? (Try it — this previews mutable objects, covered later.)
+- Why does Python choose `snake_case` over `camelCase`? What does the underscore visual metaphor suggest about how to read variable names?
+- `x += 1` and `x = x + 1` give the same result for numbers. Can you think of a reason a language might still offer both forms?
+- If variables are *labels, not boxes*, what happens when you write `a = [1, 2, 3]` then `b = a` then `b.append(4)`? Does `a` see the `4`? (Try it — this previews mutable objects, covered much later.)
 
 ## ✅ Quick check
 

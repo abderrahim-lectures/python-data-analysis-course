@@ -20,50 +20,58 @@ section: "python-101"
 track: "normal"
 ---
 
-## Range
+## Trois outils qui supplantent le comptage manuel
 
-`range()` génère une séquence d'entiers — utile pour répéter du code un nombre précis de fois :
+Les boucles vous ont donné la répétition ; cette leçon vous remet les trois aides qui vous ôtent le comptage des mains. Chacun remplace une habitude qu'on vous a apprise à la main, et chacun répond à une irritation récurrente : générer des nombres, avoir besoin de la position d'un élément, et apparier deux listes. Ensemble, ils font la différence entre une boucle qui tape et une boucle qui se lit.
+
+## Range : la séquence arithmétique, paresseuse
+
+Dans la leçon précédente vous avez sommée avec `range(5)`. Cet outil mérite un regard attentif — c'est l'outil classique du *« fais ceci un nombre connu de fois »* :
 
 ```python
 for i in range(5):
     print(i)  # 0 1 2 3 4
 ```
 
-Trois formes :
+`range` a trois formes, miroir de la progression arithmétique $a, a+d, a+2d, \ldots$ :
 
 ```python
-range(5)       # 0, 1, 2, 3, 4
-range(2, 8)    # 2, 3, 4, 5, 6, 7
+range(5)        # 0, 1, 2, 3, 4
+range(2, 8)     # 2, 3, 4, 5, 6, 7
 range(0, 20, 3) # 0, 3, 6, 9, 12, 15, 18
 ```
 
-`range` est paresseuse — elle ne crée pas tous les nombres d'un coup. C'est ce qui la rend économe en mémoire pour les grandes séquences.
+Un argument donne $0, 1, \ldots, n-1$ ; deux donnent l'intervalle semi-ouvert $[\text{start}, \text{stop})$ ; trois ajoutent la différence commune $d$. Surtout, `range` est **paresseux** : il enregistre les paramètres et calcule chaque valeur seulement quand la boucle la demande. Demander un million de pas ne coûte pas plus de mémoire que d'en demander cinq — la séquence n'est jamais matérialisée.
 
-## Enumerate
+## Enumerate : la position, sans le compteur
 
-`enumerate()` ajoute un compteur à n'importe quel itérable, pour que vous n'ayez pas besoin de variables d'indice manuelles :
+Vous voulez la position de chaque élément ? L'instinct de débutant est un compteur manuel :
 
 ```python
 fruits = ["apple", "banana", "cherry"]
 
-# Clunky:
 i = 0
 for fruit in fruits:
     print(f"{i}: {fruit}")
     i += 1
+```
 
-# Pythonic:
+Le `i += 1` est une tentation à se désynchroniser : oubliez-en un, et les étiquettes de position s'embrouillent. `enumerate` produit les deux moitiés en une étape — l'indice et l'élément — de sorte qu'il n'y a rien à synchroniser :
+
+```python
 for i, fruit in enumerate(fruits):
     print(f"{i}: {fruit}")
 
-# Start counting from 1:
+# Les sondeurs numérotent les gens à partir de 1 :
 for i, fruit in enumerate(fruits, start=1):
     print(f"{i}: {fruit}")
 ```
 
-## Zip
+Là où un mathématicien écrit $b_i = a_i + i$ pour attacher la position à la valeur, `enumerate` remet la paire $(i, a_i)$ directement au corps de la boucle.
 
-`zip()` combine plusieurs itérables en appariant les éléments par position :
+## Zip : un alignement par position
+
+Deux listes parallèles — noms et scores — réclament d'être lues ensemble. `zip` les aligne élément par élément :
 
 ```python
 names = ["Alice", "Bob", "Charlie"]
@@ -76,52 +84,71 @@ for name, score in zip(names, scores):
 # Charlie: 78
 ```
 
-Il s'arrête à l'itérable le plus court par défaut, ou utilisez `itertools.zip_longest` pour aller jusqu'au plus long.
+L'appariement est le truc cartésien de courir le long des deux listes avec un seul curseur, formant les tuples $(n_0, s_0), (n_1, s_1), \ldots$. Quand les listes diffèrent en longueur, l'appariement s'arrête à la plus courte, si bien que rien n'est jamais à demi apparié. S'il vous faut aussi la queue tordue, `itertools.zip_longest` la comble :
+
+```python
+import itertools
+for pair in itertools.zip_longest([1, 2], [3, 4, 5], fillvalue=0):
+    print(pair)  # (1, 3), (2, 4), (0, 5) — aucune valeur n'est perdue
+```
+
+## Un exemple travaillé : le registre de la classe
+
+Voyez les trois outils composer ensemble. Un enseignant tient une liste de noms et une liste parallèle de notes, et veut un rapport numéroté :
+
+```python
+names = ["Dina", "Omar", "Sara"]
+scores = [78, 91, 85]
+
+for i, (name, score) in enumerate(zip(names, scores), start=1):
+    print(f"#{i} {name}: {score}")
+# #1 Dina: 78
+# #2 Omar: 91
+# #3 Sara: 85
+
+print(f"Top score: {max(scores)}")   # Top score: 91
+```
+
+Lisez l'en-tête de boucle de l'intérieur vers l'extérieur : `zip` apparie chaque nom à sa note ; les parenthèses `(name, score)` déballent cette paire ; `enumerate` numérote les paires à partir de un. Quatre gestes qui vous auraient coûté un compteur écrit à la main se lisent désormais comme la phrase qu'ils décrivent — la position s'attache à la valeur, paire par paire, exactement comme $b_i = a_i + i$ attache un indice à chaque terme.
 
 ## Pièges courants
 
-- **Oublier que `range` est exclusive** à l'extrémité supérieure : `range(5)` donne 0-4, pas 0-5
-- **Utiliser `enumerate` sur un `dict`** — itérer sur un dict donne les clés par défaut ; utilisez `.items()` pour les paires clé-valeur
-- **Assembler des longueurs inégales** — vous perdez silencieusement des éléments ; envisagez `zip_longest` avec une valeur de remplissage
+- **`range` est exclusif en haut.** `range(5)` produit $0, 1, 2, 3, 4$ — cinq nombres, aucun égal à $5$. Pensez intervalle semi-ouvert, $[0, 5)$.
+- **`enumerate` sur un dict.** Itérer un dict donne ses clés ; `enumerate` numéroterait les clés, pas les paires. Utilisez `dict.items()` pour la clé et la valeur.
+- **`zip` avec des longueurs inégales.** Les éléments au-delà de l'entrée courte s'évanouissent en silence. Notez la perte, ou comblez avec `zip_longest`.
+- **`zip` est un itérateur à usage unique.** En Python 3, `p = zip(a, b)` vous tend un itérateur, pas une liste : `list(p)` le consomme, et un second `list(p)` est vide. Convertissez sans tarder avec `list(zip(a, b))` quand vous revisiterez les paires.
 
-<section class="lesson-section lesson-section--challenges">
-<h2 id="-challenges">🧩 Défis</h2>
+## 🧩 Défis
 
 <details class="challenge">
-<summary>Défi — réfléchissez d'abord, puis découvrez</summary>
+<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
-Utilisez `enumerate` pour afficher chaque élément de `colors = ["red", "green", "blue"]` avec sa position en commençant à 1.
+Utilisez `enumerate` pour imprimer chaque couleur de `colors = ["red", "green", "blue"]` avec sa position commençant à 1.
 
-<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>for i, color in enumerate(colors, 1): print(f"{i}. {color}")</code></p>
+<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>for i, color in enumerate(colors, 1): print(f"{i}. {color}")</code> — l'argument <code>start</code> renumérote les paires à partir de un.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>Défi — réfléchissez d'abord, puis découvrez</summary>
+<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
-Étant donné `keys = ["a", "b"]` et `values = [1, 2]`, utilisez `zip` pour créer un dictionnaire.
+Avec `keys = ["a", "b"]` et `values = [1, 2]`, utilisez `zip` pour construire un dictionnaire.
 
-<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>dict(zip(keys, values))</code> → <code>{"a": 1, "b": 2}</code></p>
+<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>dict(zip(keys, values))</code> → <code>{"a": 1, "b": 2}</code> — les paires alignées deviennent les entrées du mapping.</p>
 
 </div>
 </details>
 
-</section>
+## 🤔 Questions socratiques
 
-<section class="lesson-section lesson-section--socratic">
-<h2 id="-socratic-questions">🤔 Questions socratiques</h2>
+- Pourquoi préférer `range` à écrire la liste `[0, 1, 2, 3, 4]` ? Qu'est-ce qui change si la liste devait contenir un million de nombres ?
+- Puisque `zip` s'arrête à l'entrée la plus courte, comment détecteriez-vous quel côté était le court ? Quand cette distinction importe-t-elle ?
+- `enumerate` peut-il parcourir un dict ? Que numérotent exactement les indices ?
 
-- Pourquoi `range` est-elle préférée à la création d'une liste `[0, 1, 2, 3, 4]` ? Que se passe-t-il quand vous avez besoin d'un million de nombres ?
-- Si `zip` s'arrête à l'itérable le plus court, comment détecteriez-vous quelles entrées étaient plus courtes ? Quand cela aurait-il de l'importance ?
-- Pouvez-vous `enumerate` un `dict` ? Que représentent les indices ?
-
-</section>
-
-<section class="lesson-section lesson-section--quiz">
-<h2 id="-quick-check">✅ Vérification rapide</h2>
+## ✅ Vérification rapide
 
 <div class="quiz" data-quiz="python-101-range-enumerate-zip">
   <div class="quiz-q" data-answer="1">
@@ -146,4 +173,3 @@ Utilisez `enumerate` pour afficher chaque élément de `colors = ["red", "green"
     <p class="quiz-q__feedback" hidden></p>
   </div>
 </div>
-</section>

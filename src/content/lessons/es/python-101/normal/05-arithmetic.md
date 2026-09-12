@@ -20,117 +20,153 @@ section: "python-101"
 track: "normal"
 ---
 
-## Los ocho operadores aritméticos
+## Los operadores que una máquina toma prestados de la matemática
 
-Python tiene los cuatro estándar más cuatro adicionales:
+Ya escribiste funciones auxiliares en lecciones anteriores: guardar un valor, imprimirlo, cambiarle el tipo. Nada de eso sirve hasta que un programa pueda *hacer algo* con los números. Así que haz una pausa y observa: una computadora existe para evaluar expresiones, y toda expresión se construye con **operadores** que unen valores. Ya conoces los de aritmética del papel — pero la máquina corta dos de ellos por la mitad.
 
-```python
-7 + 2    # 9   — addition
-7 - 2    # 5   — subtraction
-7 * 2    # 14  — multiplication
-7 / 2    # 3.5 — true division (always returns float)
-7 // 2   # 3   — floor division (rounds toward -∞)
-7 % 2    # 1   — modulo (remainder)
-7 ** 2   # 49  — exponentiation (7²)
-```
+## Los operadores y sus significados
 
-## División de piso frente a división verdadera
-
-`/` siempre da un `float`, incluso cuando ambos operandos son enteros y el resultado es un número entero:
+Python ofrece ocho. Los primeros cuatro son exactamente lo que esperas:
 
 ```python
-4 / 2    # 2.0  — float, not int
+7 + 2    # 9   — suma
+7 - 2    # 5   — resta
+7 * 2    # 14  — multiplicación
+7 / 2    # 3.5 — división verdadera (siempre devuelve un float)
 ```
 
-`//` da el cociente **con piso** — siempre redondea hacia el infinito negativo:
+Después vienen tres que responden a preguntas que solo hiciste en los deberes:
 
 ```python
-7 // 2    # 3   — floor(3.5)
--7 // 2   # -4  — floor(-3.5) = -4, not -3
+7 // 2   # 3   — división de piso (redondea hacia −∞)
+7 % 2    # 1   — módulo (el resto)
+7 ** 2   # 49  — potenciación (7²)
 ```
 
-Esa última línea suele sorprender. La división de piso sigue la función de piso matemática $\lfloor x \rfloor$, que redondea *hacia abajo* (hacia $-\infty$), no hacia cero.
+`**` es cómo Python escribe la potencia: $7^2 = 49$. Los dos recién llegados son `//` y `%`, y no son variaciones — son las dos mitades de una misma pregunta legítima.
 
-## Módulo: el residuo
+## Dos mitades de una misma división
 
-`%` da el residuo después de la división de piso. La identidad clave:
+Haz una pregunta real: *¿cuántos grupos enteros de 4 caben en 15, y cuánto sobra?*
 
-```
-a == (a // b) * b + (a % b)
-```
+$$
+15 = 4 \cdot 3 + 3.
+$$
+
+La respuesta tiene dos partes — el cociente $3$ y el resto $3$. El `//` de Python responde la primera parte y el `%` responde la segunda:
+
+$$
+a = (a \mathbin{//} b) \cdot b + (a \mathbin{\%} b)
+$$
 
 ```python
-15 % 4    # 3   — since 15 = 4×3 + 3
-15 // 4   # 3
-4 * 3 + 3 # 15  ✓
+15 // 4   # 3   — cuántos grupos de 4
+15 % 4    # 3   — cuánto sobra
+4 * 3 + 3 # 15  ✓ la identidad se cumple
 ```
 
-## Precedencia de operadores
+Esa identidad no es decoración — es la definición de ambos operadores, y no puede fallar mientras las dos partes las calcule la misma máquina.
 
-Python sigue PEMDAS — el mismo orden que conoces de las matemáticas:
+Hay un pliegue. ¿Qué cociente da Python para $-7 \div 2$? Escríbelo como pregunta de agrupación:
 
-1. `**` primero (exponenciación)
-2. `*`, `/`, `//`, `%` (de izquierda a derecha)
-3. `+`, `-` (de izquierda a derecha)
+$$
+-7 = 2 \cdot ? + ?.
+$$
+
+Las opciones son $2 \cdot (-3) + (-1)$ o $2 \cdot (-4) + 1$. Python toma el piso, como la función matemática $\lfloor x \rfloor$:
 
 ```python
-2 + 3 * 4      # 14, not 20
-(2 + 3) * 4    # 20 — parentheses override
-2 ** 3 ** 2     # 512, not 64 — ** is right-associative: 2 ** (3 ** 2) = 2 ** 9
+-7 // 2   # -4 — floor(-3.5) = -4, no -3
+-7 % 2    # 1  — coherente con el piso: -7 = 2·(-4) + 1
 ```
+
+Los dos operadores se mantienen fieles entre sí: la identidad $a = (a//b)\cdot b + (a\%b)$ se cumple sin excepciones, y eso vale más que "la respuesta intuitiva".
+
+## El orden de las operaciones, zanjado
+
+Si una expresión contiene varios operadores, hace falta una secuencia fija, o cada lector calcularía un valor distinto para $2 + 3 \cdot 4$. Python adopta el orden que aprendiste como PEMDAS:
+
+- `**` primero (potenciación)
+- luego `*`, `/`, `//`, `%` (de izquierda a derecha)
+- luego `+`, `-` (de izquierda a derecha)
+
+```python
+2 + 3 * 4      # 14, no 20
+(2 + 3) * 4    # 20 — los paréntesis anulan
+2 ** 3 ** 2    # 512, no 64
+```
+
+Ese último es una auténtica sorpresa. `**` es **asociativo a la derecha**, así que `2 ** 3 ** 2` se lee como $2^{(3^2)} = 2^9 = 512$, igual que en la notación apilada donde las potencias escalan en una sola dirección. Ante la duda, escribe los paréntesis — un lector que no los ve no adivinará tu intención.
+
+## Un ejemplo resuelto: el cambio del plan de lectura
+
+El par cociente/resto administra un plan de lectura:
+
+```python
+pages = 301
+per_day = 30
+days = pages // per_day      # 10 — días enteros de lectura
+leftover = pages % per_day   # 1  — el resto del undécimo día
+
+print(f"{days} full days, {leftover} leftover")
+days * per_day + leftover    # 301 — la identidad se cumple
+```
+
+La identidad de la división $a = (a \mathbin{//} b) \cdot b + (a \mathbin{\%} b)$ se vuelve un libro mayor: `days` y `leftover` son sus dos columnas, y la identidad es el recibo que prueba que nada se perdió.
 
 ## Errores comunes
 
-- **`/` frente a `//`.** `7 / 2` es `3.5` (float), `7 // 2` es `3` (entero). Usa `//` cuando quieras un resultado entero.
-- **División de piso con negativos.** `-7 // 2` es `-4`, no `-3`. Esto sigue el piso matemático, no el truncamiento.
-- **`%` con floats.** `7.5 % 2` es `1.5` — el módulo también funciona con floats, no solo con enteros.
+- **`/` frente a `//`.** `7 / 2` es `3.5` (un float); `7 // 2` es `3` (un int). Recurre a `//` solo cuando el cociente entero sea lo que pide el problema.
+- **División de piso con negativos.** `-7 // 2` es `-4`, no `-3`. El piso va hacia $-\infty$, no hacia cero.
+- **El `%` también funciona con floats.** `7.5 % 2` es `1.5` — la identidad de arriba vale para reales tanto como para enteros.
+- **`**` enlaza más fuerte que `*`.** `2 * 3 ** 2` es `18`, no `36` — la potencia se calcula primero. Pon paréntesis cuando quieras decir `(2 * 3) ** 2` = 36.
 
-## 🧩 Retos
+## 🧩 Desafíos
 
 <details class="challenge">
-<summary>🧩 Reto — piensa primero, luego revela</summary>
+<summary>🧩 Desafío — piensa primero, luego revela</summary>
 <div class="challenge__body">
 
-Sin ejecutarlo, calcula `15 // 4` y `15 % 4` a mano. Luego verifica: ¿`4 * (15 // 4) + (15 % 4)` es igual a `15`?
+Sin ejecutarlo, calcula `15 // 4` y `15 % 4` a mano y luego verifica que $4 \cdot (15 // 4) + (15 \% 4)$ reproduce $15$.
 
-<p class="challenge__answer">💡 <strong>Respuesta:</strong> 15 // 4 es 3 (el piso de 3.75), y 15 % 4 es 3 (ya que 15 = 4·3 + 3). Juntos: 4 × 3 + 3 = 15. Esta es la identidad del algoritmo de división.</p>
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>15 // 4</code> es <code>3</code> (el piso de $3.75$), y <code>15 % 4</code> es <code>3</code>, ya que $15 = 4\cdot 3 + 3$. Juntos, <code>4 * 3 + 3 = 15</code> — la identidad de la división, verificada.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Reto — piensa primero, luego revela</summary>
+<summary>🧩 Desafío — piensa primero, luego revela</summary>
 <div class="challenge__body">
 
-¿Cómo extraerías el dígito de las centenas de un número? Por ejemplo, dado `n = 4567`, extrae `5` usando solo aritmética (sin cadenas).
+¿Cómo extraerías la cifra de las centenas de cualquier número? Dado `n = 4567`, obtén `5` usando solo aritmética, sin cadenas.
 
-<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>(n // 100) % 10</code> — primero divide por 100 para desplazarlo a la derecha (4567 → 45), luego aplica módulo 10 para obtener el último dígito (45 → 5).</p>
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>(n // 100) % 10</code> — primero divide por 100 para desplazar la cifra a la derecha (<code>4567 → 45</code>), luego módulo 10 para quedarte solo con la última (<code>45 → 5</code>).</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Reto — piensa primero, luego revela</summary>
+<summary>🧩 Desafío — piensa primero, luego revela</summary>
 <div class="challenge__body">
 
-¿Por qué Python usa `**` para la exponenciación en lugar de `^`? ¿Qué hace realmente `^` en Python? (Pista: no es exponenciación.)
+¿Por qué Python usa `**` para la potenciación en lugar de `^`? ¿Qué hace `^` en realidad en Python?
 
-<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>^</code> es el operador XOR bit a bit en Python, no exponenciación. Python usa <code>**</code> para evitar ambigüedades con los lenguajes de estilo C, donde <code>^</code> significa XOR.</p>
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>^</code> es el operador XOR bit a bit en Python, no la potenciación. Python usa <code>**</code> para evitar chocar con la convención de los lenguajes donde <code>^</code> significa XOR.</p>
 
 </div>
 </details>
 
 ## 🤔 Preguntas socráticas
 
-- ¿Por qué la división de piso de Python redondea hacia el infinito negativo en lugar de hacia cero? ¿Qué beneficio práctico te da (pista: piensa en cómo funciona `divmod()`)?
-- `2 ** 3 ** 2` es `512`, no `64`. ¿Por qué `**` es asociativo por la derecha cuando `+` y `*` son asociativos por la izquierda?
-- ¿Se te ocurre un escenario real donde la aritmética de módulo sea esencial? (Piensa en relojes, días del calendario o indexación de arreglos.)
+- ¿Por qué la división de piso redondea hacia menos infinito y no hacia cero? ¿Qué beneficio práctico se desprende de esa elección (pista: piensa en `divmod()` devolviendo un par coherente)?
+- `2 ** 3 ** 2` es `512`, no `64`. ¿Por qué `**` es asociativo a la derecha cuando `+` y `*` lo son a la izquierda?
+- ¿Dónde gana el pan la aritmética modular en la vida real? Piensa en relojes, días del calendario o índices de un arreglo.
 
 ## ✅ Comprobación rápida
 
 <div class="quiz" data-quiz="python-101-arithmetic">
   <div class="quiz-q" data-answer="2">
-    <p class="quiz-q__prompt">1. ¿Qué es -7 // 2?</p>
+    <p class="quiz-q__prompt">1. ¿Cuánto es -7 // 2?</p>
     <div class="quiz-q__options">
       <button class="quiz-q__opt" data-idx="0">-3</button>
       <button class="quiz-q__opt" data-idx="1">3</button>
@@ -150,7 +186,7 @@ Sin ejecutarlo, calcula `15 // 4` y `15 % 4` a mano. Luego verifica: ¿`4 * (15 
     <p class="quiz-q__feedback" hidden></p>
   </div>
   <div class="quiz-q" data-answer="1">
-    <p class="quiz-q__prompt">3. ¿Qué es 7 % 3?</p>
+    <p class="quiz-q__prompt">3. ¿Cuánto es 7 % 3?</p>
     <div class="quiz-q__options">
       <button class="quiz-q__opt" data-idx="0">2</button>
       <button class="quiz-q__opt" data-idx="1">1</button>

@@ -20,24 +20,32 @@ section: "python-101"
 track: "normal"
 ---
 
-## Comprensiones de lista
+## La notación de construcción de conjuntos, hecha código
 
-Una forma concisa de crear listas a partir de iterables:
+Las matemáticas tienen una forma compacta de describir una colección construida desde otra: el constructor de conjuntos. La comprensión es esa notación, tecleada directamente:
+
+$$
+\{x^2 \mid x \in \{0, 1, \ldots, 5\}\} = \{0, 1, 4, 9, 16, 25\}.
+$$
+
+Lee *"el conjunto de $x^2$, para cada $x$ en esta fuente"* — y el Python es la misma frase invertida en código:
 
 ```python
-# Regular loop
+# Bucle normal
 squares = []
 for x in range(6):
     squares.append(x ** 2)
 
-# Comprehension
+# Comprensión
 squares = [x ** 2 for x in range(6)]
 # [0, 1, 4, 9, 16, 25]
 ```
 
+El bucle deletrea tres movimientos — empezar vacío, añadir, repetir; la comprensión enuncia toda la colección en una línea que refleja la anatomía del constructor: la expresión al frente, la variable recorrida detrás.
+
 ## Filtrar con condiciones
 
-Añade una cláusula `if` para filtrar elementos:
+La notación de construcción también lleva pruebas de pertenencia. $\{w \in words \mid |w| > 2\}$ se vuelve un `if` final:
 
 ```python
 evens = [x for x in range(10) if x % 2 == 0]
@@ -47,35 +55,49 @@ long_words = [w.upper() for w in ["hi", "hello", "hey"] if len(w) > 2]
 # ['HELLO', 'HEY']
 ```
 
-## If/else en comprensiones
+Un `if` al final es un *filtro*: solo los elementos que lo superan llegan a la expresión. El elemento viaja expresión → filtro → lista, en el orden en que la frase se lee.
 
-Usa `if...else` **antes** del `for` (es una expresión, no un filtro):
+## If/else como expresión
+
+El `if...else` que ya conoces es una *expresión* — produce un valor. Pegar uno *antes* del `for` lo planta en la línea de construcción, eligiendo por elemento en lugar de filtrar por elemento:
 
 ```python
 labels = ["even" if x % 2 == 0 else "odd" for x in range(5)]
 # ['even', 'odd', 'even', 'odd', 'even']
 ```
 
+Las dos posiciones son una bifurcación con trabajos distintos: después del `for`, la cláusula *vota* sobre los elementos; antes del `for`, los *etiqueta*. Uno descarta, el otro transforma.
+
 ## Comprensiones de dict
+
+La misma forma construye mapeos — la expresión a la izquierda de los dos puntos se vuelve la clave, y la de la derecha el valor:
 
 ```python
 squares_dict = {x: x**2 for x in range(6)}
 # {0: 0, 1: 1, 2: 4, 3: 9, 4: 16, 5: 25}
 
-# Invert a dict
+# Invierte un dict
 original = {"a": 1, "b": 2}
 inverted = {v: k for k, v in original.items()}
 # {1: 'a', 2: 'b'}
 ```
 
+La inversión es el clásico elegante: recorre `items()` e intercambia qué mitad de cada par pasa a ser la clave.
+
 ## Comprensiones de set
+
+Las llaves con una comprensión producen un set — unicidad aplicada automáticamente:
 
 ```python
 lengths = {len(word) for word in ["hello", "hi", "hey"]}
-# {2, 3, 5}  (unique lengths)
+# {2, 3, 5}  (longitudes únicas)
 ```
 
-## Comprensiones anidadas
+Tres longitudes colapsan a un conjunto de valores, dejando caer el duplicado como un set debe.
+
+## Comprensiones anidadas: la aplanadora
+
+Una matriz es una lista de filas, y aplanarla son dos bucles en una expresión — lee las cláusulas `for` de izquierda a derecha, la exterior primero:
 
 ```python
 matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
@@ -83,50 +105,63 @@ flat = [num for row in matrix for num in row]
 # [1, 2, 3, 4, 5, 6, 7, 8, 9]
 ```
 
+Cada `for` desenvuelve un nivel: `row` recorre la lista exterior, `num` recorre cada fila, y el orden de la colección sigue a los bucles exactamente.
+
+## Un ejemplo resuelto: tres líneas desde el constructor de conjuntos
+
+Los tres movimientos de la lección — construir, filtrar, etiquetar — una línea cada uno:
+
+```python
+squares = [x ** 2 for x in range(2, 9)]
+# [4, 9, 16, 25, 36, 49, 64]
+
+numbers = [x for x in range(1, 11) if x % 3 == 0]
+# [3, 6, 9]
+
+labels = ["even" if x % 2 == 0 else "odd" for x in numbers]
+# ['odd', 'even', 'odd']
+```
+
+El primero es $\{x^2 \mid x \in [2, 9)\}$, tipeado a secas; el segundo filtra los divisores de $3$; el tercero etiqueta a cada sobreviviente. Lo que el constructor de conjuntos dice de un aliento, la comprensión lo deletrea en una línea.
+
 ## Cuándo NO usar comprensiones
 
-- Cuando la lógica es compleja — un bucle `for` normal es más legible
-- Cuando necesitas `try/except` dentro del bucle
-- Cuando los efectos secundarios importan (imprimir, escribir archivos)
+- Cuando la lógica se anuda — un bucle `for` normal se gana su legibilidad.
+- Cuando el cuerpo necesita `try/except` — las comprensiones no tienen sitio para él.
+- Cuando importan los efectos secundarios — imprimir o escribir archivos deben ser sentencias deliberadas, no expresiones silenciosas.
+- **Poner `if` antes del `for` etiqueta en vez de filtrar.** `[x if x % 2 == 0 else 'odd' for x in ...]` conserva todo elemento, apenas renombrado; solo un `if` después del `for` descarta. Mal ubicado, los rechazados se quedan callados.
 
-<section class="lesson-section lesson-section--challenges">
-<h2 id="-challenges">🧩 Retos</h2>
+## 🧩 Desafíos
 
 <details class="challenge">
-<summary>Reto — piensa primero, luego revela</summary>
+<summary>🧩 Desafío — piensa primero, luego revela</summary>
 <div class="challenge__body">
 
-Usa una comprensión de lista para aplanar `[[1, 2], [3, 4], [5, 6]]` en `[1, 2, 3, 4, 5, 6]`.
+Aplana `[[1, 2], [3, 4], [5, 6]]` hasta `[1, 2, 3, 4, 5, 6]` con una comprensión.
 
-<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>[num for row in matrix for num in row]</code></p>
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>[num for row in matrix for num in row]</code> — el <code>for</code> exterior abre cada fila, el interior la extiende.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>Reto — piensa primero, luego revela</summary>
+<summary>🧩 Desafío — piensa primero, luego revela</summary>
 <div class="challenge__body">
 
-Usa una comprensión de dict para asignar palabras a sus longitudes: `["hi", "hello", "hey"]` → `{"hi": 2, "hello": 5, "hey": 3}`.
+Mapea palabras a sus longitudes con una comprensión de dict: `["hi", "hello", "hey"]` → `{"hi": 2, "hello": 5, "hey": 3}`.
 
-<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>{w: len(w) for w in words}</code></p>
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>{w: len(w) for w in words}</code> — la palabra es la clave y su longitud el valor, un par por entrada.</p>
 
 </div>
 </details>
 
-</section>
+## 🤔 Preguntas socráticas
 
-<section class="lesson-section lesson-section--socratic">
-<h2 id="-socratic-questions">🤔 Preguntas socráticas</h2>
+- ¿Por qué va `if...else` antes del `for` en una comprensión mientras que el `if` de filtro va detrás?
+- ¿Dónde cruza una comprensión la línea hacia una lectura más dura que un bucle? ¿Dónde la trazas?
+- ¿Puede aparecer `await` dentro de una comprensión — y qué sintaxis hace posible toda una versión asíncrona?
 
-- ¿Por qué `if...else` va antes del `for` en una comprensión pero después del `for` en un bucle normal?
-- ¿Cuándo una comprensión se vuelve más difícil de leer que un bucle normal? ¿Dónde trazas la línea?
-- ¿Puedes usar `await` dentro de una comprensión? ¿Qué sintaxis especial necesitas?
-
-</section>
-
-<section class="lesson-section lesson-section--quiz">
-<h2 id="-quick-check">✅ Comprobación rápida</h2>
+## ✅ Comprobación rápida
 
 <div class="quiz" data-quiz="python-101-comprehensions">
   <div class="quiz-q" data-answer="2">
@@ -151,4 +186,3 @@ Usa una comprensión de dict para asignar palabras a sus longitudes: `["hi", "he
     <p class="quiz-q__feedback" hidden></p>
   </div>
 </div>
-</section>

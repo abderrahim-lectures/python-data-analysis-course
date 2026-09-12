@@ -20,9 +20,13 @@ section: "python-101"
 track: "normal"
 ---
 
-## Six comparison operators
+## The computer, asked to decide
 
-Comparison operators produce a `bool` — `True` or `False`:
+An evaluation `2 + 3` produces a number. But most of what a program needs to know is not a number — it is a *decision*. Is the score passing? Is the username taken? Is the temperature within range? Comparison operators are the branch of the arithmetical family that produces an answer out of the set $\{\mathrm{True}, \mathrm{False}\}$ instead of out of $\mathbb{R}$.
+
+## The six comparison operators
+
+Each compares two values and yields a `bool`:
 
 ```python
 5 == 5      # True   — equal
@@ -33,67 +37,82 @@ Comparison operators produce a `bool` — `True` or `False`:
 5 >= 5      # True   — greater than or equal
 ```
 
-## Chained comparisons
+In mathematics you would write these as $\leq$, $\geq$, $\neq$; Python opts for the ASCII-friendly `<=`, `>=`, `!=`. The meaning is unchanged. The double-equals `==` requires a deliberate pause: it is the question *"are these equal?"*, while a single `=` is an order to assign. The doubled sign is what prevents them from ever colliding.
 
-Python lets you chain comparisons the way you would in math:
+## Chain comparisons like a mathematician
+
+Suppose $x$ belongs to the interval $[0, 10)$. On paper you write the three-part condition in one breath, $0 \leq x < 10$. Python lets you write it exactly that way:
 
 ```python
 x = 5
 0 <= x < 10    # True — both conditions hold
-0 <= x < 3     # False — x < 3 fails
+0 <= x < 3     # False — the second fails
 ```
 
-This is evaluated as a single expression, not two separate ones joined by `and`. It's equivalent to `0 <= x and x < 10`, but reads more naturally.
+This is a single expression, evaluated by the same pairing you would read: $0 \leq x$ and then $x < 10$, except the middle value is computed only once. Chained comparison is the same as $0 \leq x$ `and` $x < 10$ — but the chained form reads like the mathematics it came from.
 
-## `==` vs `is`
+## `==` asks about content; `is` asks about identity
 
-`==` tests **value equality** — do these two things have the same content?
-`is` tests **identity** — are these the exact same object in memory?
+Two questions sound alike and answer differently:
 
 ```python
 a = [1, 2, 3]
 b = [1, 2, 3]
 a == b    # True  — same content
-a is b    # False — different objects
+a is b    # False — different objects in memory
 
 c = a
-a is c    # True  — same object
+a is c    # True  — the same object
 ```
 
-**Rule of thumb:** always use `==` for value comparison. Only use `is` when checking for `None`:
+`==` compares the values carried; `is` compares the memory locations. There are several boxes that happen to hold the same list; there is only one object. The two coincide for small things (like Python's cached small integers) and diverge for everything else, so the rule of thumb is steady: use `==` for content, and reserve `is` for the single singleton which has no content to compare — `None`:
 
 ```python
 if x is None:    # correct
-if x == None:    # works but non-idiomatic
+if x == None:    # works, but you are asking the wrong question
 ```
 
-## Comparing different types
+## Comparing across types
 
-Python allows comparing values of different types, but the result may be surprising:
+Bringing values of different sets into a comparison — $\mathbb{Z}$ versus $\mathbb{S}$ — follows a fixed policy:
 
 ```python
-5 == 5.0      # True  — int and float compared numerically
-"5" == 5      # False — string and int are never equal
+5 == 5.0      # True  — numeric equality is type-ignorant
+"5" == 5      # False — a string and an int are never equal
 "5" < 6       # TypeError: '<' not supported between str and int
 ```
 
-In Python 3, ordering comparisons (`<`, `>`) between incompatible types raise a `TypeError`. Only `==` and `!=` work across types.
+Two rules fall out. For equality, numeric values compare by worth, not by type, while values of unrelated kinds are simply never equal. For ordering, Python refuses to guess: there is no total order that makes sense between a string and an integer, so it raises `TypeError` rather than invent one.
+
+## A worked example: the receipt's tolerance
+
+The float-noise pitfall has a constructive answer. Compare within a tolerance the way a physicist would, or switch to exact whole units:
+
+```python
+expected = 0.3
+price = 0.1 + 0.2                    # 0.30000000000000004
+price == expected                    # False — float noise
+abs(price - expected) < 1e-9         # True — within tolerance
+```
+
+The pattern is a pair of questions and a decision: are they exactly equal? `False`. Are they within a reasonable proximity? `True`. The second question is the one the real world usually means.
 
 ## Common pitfalls
 
-- **`=` vs `==`.** `if score = 60:` is a syntax error — Python won't let you assign inside a condition by accident. Use `==`.
-- **Floating-point comparison.** `0.1 + 0.2 == 0.3` is `False` due to floating-point imprecision. Use `abs((0.1 + 0.2) - 0.3) < 1e-10` instead.
-- **`==` with `None`.** `x == None` works but `x is None` is the Pythonic way.
+- **`=` vs `==`.** `if score = 60:` is a syntax error — Python will not let you assign inside a condition by accident. The doubled sign is a guardrail, not a formality.
+- **Floating-point equality.** `0.1 + 0.2 == 0.3` is `False`. The binary representation of $0.1$ is infinite, so the sum lands at $0.30000000000000004$. Compare within a tolerance instead: `abs((0.1 + 0.2) - 0.3) < 1e-10`.
+- **`==` with `None`.** `x == None` happens to work; `x is None` is the question you actually mean.
+- **Float equality needs a tolerance; money needs whole units.** `0.1 + 0.2 == 0.3` fails (`False`), so either compare within `abs(a - b) < 1e-9` or count in cents — `120 == 12 * 10` is exact.
 
 ## 🧩 Challenges
 
 <details class="challenge">
 <summary>🧩 Challenge — think first, then reveal</summary>
-<div class="challenge__body>
+<div class="challenge__body">
 
-Predict the result of each without running: `5 == 5.0`, `"5" == 5`, `5 < "6"`.
+Predict each result without running: `5 == 5.0`, `"5" == 5`, `5 < "6"`.
 
-<p class="challenge__answer">💡 <strong>Answer:</strong> <code>5 == 5.0</code> → True (numeric equality), <code>"5" == 5</code> → False (different types), <code>5 < "6"</code> → TypeError (ordering between int and str is not allowed in Python 3).</p>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>5 == 5.0</code> → True (numeric equality across types), <code>"5" == 5</code> → False (a string is never equal to an int), <code>5 < "6"</code> → TypeError (ordering is not defined between int and str in Python 3).</p>
 
 </div>
 </details>
@@ -102,9 +121,9 @@ Predict the result of each without running: `5 == 5.0`, `"5" == 5`, `5 < "6"`.
 <summary>🧩 Challenge — think first, then reveal</summary>
 <div class="challenge__body">
 
-Write a chained comparison that checks whether a number `n` is between 1 and 100 inclusive, using a single expression (no `and`).
+Write a single chained comparison that checks whether a number $n$ lies in $[1, 100]$, without using `and`.
 
-<p class="challenge__answer">💡 <strong>Answer:</strong> <code>1 <= n <= 100</code> — Python's chained comparison makes this read like mathematical notation.</p>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>1 <= n <= 100</code> — the chained form reads exactly like the mathematical interval $1 \leq n \leq 100$.</p>
 
 </div>
 </details>
@@ -115,16 +134,16 @@ Write a chained comparison that checks whether a number `n` is between 1 and 100
 
 Why does `0.1 + 0.2 == 0.3` evaluate to `False`? How would you write a correct floating-point equality test?
 
-<p class="challenge__answer">💡 <strong>Answer:</strong> 0.1 and 0.2 have no exact binary representation, so their sum is 0.30000000000000004, not exactly 0.3. Correct test: <code>abs((0.1 + 0.2) - 0.3) < 1e-10</code> — check if the difference is within a tiny tolerance.</p>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Neither $0.1$ nor $0.2$ has an exact binary representation, so their sum is $0.30000000000000004$, not exactly $0.3$. Test within a tolerance: <code>abs((0.1 + 0.2) - 0.3) &lt; 1e-10</code>.</p>
 
 </div>
 </details>
 
 ## 🤔 Socratic Questions
 
-- If `a == b` is `True`, does that mean `a is b` must also be `True`? Under what circumstances can two objects be equal but not identical?
-- Why does Python forbid `5 < "6"` but allow `5 == "5.0"` to be `False`? What design principle is at work?
-- In what scenarios might `is` be more useful than `==` for checking equality? (Think about singletons like `None`.)
+- If `a == b` is `True`, must `a is b` be `True` too? In what circumstances can two objects be equal in content yet distinct in identity?
+- Why does Python forbid `5 < "6"` yet allow `5 == "5"` to be `False`? What design principle keeps both behaviors consistent?
+- When is `is` genuinely the right tool for equality? Think about the singleton `None`, and why comparing content there is meaningless.
 
 ## ✅ Quick check
 

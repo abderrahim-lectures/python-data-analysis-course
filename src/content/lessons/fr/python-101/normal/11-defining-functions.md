@@ -20,9 +20,28 @@ section: "python-101"
 track: "normal"
 ---
 
-## Définir une fonction
+## De la formule à la machine nommée
 
-Utilisez `def` suivi d'un nom, de parenthèses et de deux points :
+Les mathématiques abhorrent la répétition. Vous avez appris $f(x) = x^2 - 5x + 6$ comme une *règle* — une définition, employée mille fois, sur mille entrées différentes :
+
+$$
+f(x) = x^2 - 5x + 6, \qquad f(2) = 0.
+$$
+
+Le `def` de Python est le même geste : lier un nom à un calcul, pour que n'importe quel appelant puisse l'appliquer. La fonction est une machine avec des fentes d'entrée étiquetées et une porte de sortie :
+
+```python
+def add(a, b):
+    return a + b
+
+result = add(3, 5)  # 8
+```
+
+Le nom, les parenthèses tenant les paramètres $a, b$, les deux points qui amorcent la recette — voilà la définition. L'appel `add(3, 5)` consiste à appliquer la règle en $a=3$, $b=5$, exactement comme $f(2)$ applique une règle en $x=2$.
+
+## Définir et appeler
+
+La première fonction que vous écrivez change le monde un salut à la fois :
 
 ```python
 def greet(name):
@@ -32,20 +51,25 @@ def greet(name):
 greet("Alice")  # Hello, Alice!
 ```
 
-## Paramètres et arguments
+Trois parties méritent un nom. Les **paramètres** sont les variables de la définition — les fentes d'entrée $x$. Les **arguments** sont les valeurs concrètes fournies au site d'appel — l'entrée $2$. Et la ligne entre triples guillemets à l'intérieur est la **docstring** : de la documentation vivant à côté du code, pour que `help(greet)` puisse répondre ce que fait la fonction.
 
-Les paramètres sont les variables listées dans la définition de la fonction. Les arguments sont les valeurs que vous passez en l'appelant.
+## Return : la porte de sortie
+
+`print` envoie du texte à l'écran ; `return` rend une valeur à l'appelant. La distinction est subtile et décisive :
 
 ```python
 def add(a, b):
     return a + b
 
-result = add(3, 5)  # 8
+result = add(3, 5)          # result == 8
+printed = print("8")        # printed est None — print ne renvoie rien
 ```
+
+Une fonction sans `return` renvoie silencieusement `None` — la machine ne produit aucune sortie. Quand vous voulez que le résultat arithmétique de votre fonction continue de circuler, souvenez-vous : `return`, pas `print`.
 
 ## Paramètres par défaut
 
-Donnez une valeur par défaut aux paramètres — les appelants peuvent la remplacer optionnellement :
+Certains paramètres ont un réglage naturel que la plupart des appels garderont. Donnez-leur une valeur par défaut, et les appelants pourront la remplacer :
 
 ```python
 def greet(name, greeting="Hello"):
@@ -55,11 +79,11 @@ print(greet("Alice"))              # Hello, Alice!
 print(greet("Bob", "Hey"))         # Hey, Bob!
 ```
 
-**Règle** : les paramètres par défaut doivent venir après les paramètres sans défaut.
+La règle d'ordre est rigide : **les paramètres par défaut viennent après les autres.** `def f(x, y=5)` est légal ; `def f(x=1, y)` est une erreur de syntaxe, car Python résout les arguments par position depuis la gauche et un trou serait ambigu.
 
 ## Arguments nommés
 
-Appelez les fonctions par nom de paramètre pour plus de clarté :
+Les arguments peuvent aussi arriver nommés, ce qui achète de la clarté quand l'ensemble des paramètres grandit :
 
 ```python
 def create_user(name, age, role="student"):
@@ -68,9 +92,11 @@ def create_user(name, age, role="student"):
 user = create_user(age=25, name="Alice", role="admin")
 ```
 
+Les arguments nommés peuvent venir dans n'importe quel ordre — le nom du paramètre est l'étiquette de chaque paquet. Un appel qui nomme ses entrées se lit comme une phrase au lieu d'un code à décoder.
+
 ## *args et **kwargs
 
-Acceptez tout nombre d'arguments positionnels ou nommés :
+Et si le nombre d'entrées est inconnu d'avance ? Une somme ne sait pas combien de termes elle recevra. `*args` recueille tout nombre d'arguments positionnels dans un tuple ; `**kwargs` recueille les arguments nommés dans un dict :
 
 ```python
 def total(*args):
@@ -85,9 +111,11 @@ def print_info(**kwargs):
 print_info(name="Alice", age=25)
 ```
 
-## Retours précoces
+L'étoile est le geste : `*` déplie la liste d'arguments en un faisceau. C'est la différence entre une somme à signature fixe et une somme qui accepte $\sum_{i=1}^{n} a_i$ pour tout $n$.
 
-Renvoyez tôt pour les clauses de garde — cela réduit l'imbrication :
+## Le retour anticipé comme garde
+
+Certains codes commencent par vérifier l'unique cas qui ne doit pas aller plus loin. Les raisonnements de la forme *« sauf si $b=0$ »* s'énoncent comme une garde en haut, rendant immédiatement :
 
 ```python
 def divide(a, b):
@@ -96,50 +124,62 @@ def divide(a, b):
     return a / b
 ```
 
+Une clause de garde aplatit une paire `if/else` en ligne droite : le cas d'échec sort tôt et le chemin honnête s'exécute sans imbrication.
+
+## Un exemple travaillé : la machine f
+
+La quadratique qui a ouvert la leçon devient trois instructions `return` :
+
+```python
+def quad(x):
+    """Renvoie x² − 5x + 6."""
+    return x * x - 5 * x + 6
+
+quad(2)    # 0
+quad(3)    # 0
+quad(1)    # 2
+```
+
+La même règle, trois entrées. La formule $f(x) = x^2 - 5x + 6$ devient une machine réutilisable : on la définit une fois, on l'applique mille fois, et la docstring laisse écrit quelle règle elle enferme.
+
 ## Pièges courants
 
-- **Arguments par défaut mutables** : `def f(items=[])` partage la même liste entre les appels. Utilisez `None` à la place : `def f(items=None): items = items or []`
-- **Oublier le `return`** : une fonction sans `return` produit `None`
-- **Trop de paramètres** (4+) : envisagez d'utiliser un dictionnaire ou une dataclass
+- **Arguments par défaut mutables.** `def f(items=[])` crée *une* liste partagée entre tous les appels — les éléments s'empilent d'un appel à l'autre. Mettez `None` par défaut et construisez la liste à l'intérieur.
+- **Oublier `return`.** Une fonction sans retour rend `None` ; vous demandiez une valeur et avez reçu une ombre.
+- **Trop de paramètres.** Passé trois ou quatre, les fentes deviennent un casse-tête. Regroupez les arguments affines dans un dict ou un dataclass.
+- **Appeler une fonction définie plus bas.** Python exécute de haut en bas ; appeler `f()` avant que le `def f` n'atteigne l'interpréteur lève une `NameError`. Définissez avant d'appeler.
 
-<section class="lesson-section lesson-section--challenges">
-<h2 id="-challenges">🧩 Défis</h2>
+## 🧩 Défis
 
 <details class="challenge">
-<summary>Défi — réfléchissez d'abord, puis découvrez</summary>
+<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
-Écrivez une fonction `is_palindrome(text)` qui renvoie `True` si la chaîne se lit de la même façon dans les deux sens (ignorer la casse).
+Écrivez `is_palindrome(text)` qui renvoie `True` quand la chaîne se lit pareil dans les deux sens ; ignorez la casse.
 
-<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>def is_palindrome(text): return text.lower() == text.lower()[::-1]</code></p>
+<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>def is_palindrome(text): return text.lower() == text.lower()[::-1]</code> — la mise en minuscules symétrise la comparaison, et la tranche inversée <code>[::-1]</code> est l'image miroir.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>Défi — réfléchissez d'abord, puis découvrez</summary>
+<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
-Écrivez une fonction `fizzbuzz(n)` qui renvoie une liste de 1 à n, en remplaçant les multiples de 3 par "Fizz", les multiples de 5 par "Buzz" et les multiples des deux par "FizzBuzz".
+Écrivez `fizzbuzz(n)` qui renvoie une liste de 1 à $n$, remplaçant les multiples de 3 par `"Fizz"`, les multiples de 5 par `"Buzz"` et les multiples des deux par `"FizzBuzz"`.
 
-<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>["FizzBuzz" if i % 15 == 0 else "Fizz" if i % 3 == 0 else "Buzz" if i % 5 == 0 else i for i in range(1, n+1)]</code></p>
+<p class="challenge__answer">💡 <strong>Réponse :</strong> Les multiples des deux sont des multiples de $\mathrm{lcm}(3,5) = 15$, alors testez ce cas d'abord : <code>["FizzBuzz" if i % 15 == 0 else "Fizz" if i % 3 == 0 else "Buzz" if i % 5 == 0 else i for i in range(1, n+1)]</code>.</p>
 
 </div>
 </details>
 
-</section>
+## 🤔 Questions socratiques
 
-<section class="lesson-section lesson-section--socratic">
-<h2 id="-socratic-questions">🤔 Questions socratiques</h2>
+- Pourquoi les paramètres par défaut doivent-ils suivre les autres ? Que se casserait-il si la règle était inversée ?
+- Que vous donne `*args` qu'un unique paramètre liste ne donne pas ? Quand préférez-vous l'un à l'autre ?
+- Comment Python décide-t-il quelle définition appliquer quand coexistent `def f(x)` et `def f(x, y=5)` ?
 
-- Pourquoi Python exige-t-il que les paramètres par défaut viennent après les paramètres sans défaut ? Que se passerait-il si la règle était inversée ?
-- Quel problème `*args` résout-il qu'un paramètre de liste ne résout pas ? Quand préféreriez-vous l'un à l'autre ?
-- Comment Python décide-t-il quelle fonction appeler quand vous avez à la fois `def f(x)` et `def f(x, y=5)` ?
-
-</section>
-
-<section class="lesson-section lesson-section--quiz">
-<h2 id="-quick-check">✅ Vérification rapide</h2>
+## ✅ Vérification rapide
 
 <div class="quiz" data-quiz="python-101-functions">
   <div class="quiz-q" data-answer="1">
@@ -153,15 +193,14 @@ def divide(a, b):
     <p class="quiz-q__feedback" hidden></p>
   </div>
 
-  <div class="quiz-q" data-answer="2">
+  <div class="quiz-q" data-answer="1">
     <p class="quiz-q__prompt">2. Quelle est la sortie ? <code>def f(a, b=[]): b.append(a); return b; print(f(1)); print(f(2))</code></p>
     <div class="quiz-q__options">
-      <button class="quiz-q__opt" data-idx="0">[1] then [2]</button>
-      <button class="quiz-q__opt" data-idx="1">[1] then [1, 2]</button>
-      <button class="quiz-q__opt" data-idx="2">[1, 2] then [1, 2]</button>
+      <button class="quiz-q__opt" data-idx="0">[1] puis [2]</button>
+      <button class="quiz-q__opt" data-idx="1">[1] puis [1, 2]</button>
+      <button class="quiz-q__opt" data-idx="2">[1, 2] puis [1, 2]</button>
       <button class="quiz-q__opt" data-idx="3">Error</button>
     </div>
     <p class="quiz-q__feedback" hidden></p>
   </div>
 </div>
-</section>

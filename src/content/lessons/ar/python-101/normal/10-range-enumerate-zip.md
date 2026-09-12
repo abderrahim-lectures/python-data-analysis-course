@@ -20,50 +20,58 @@ section: "python-101"
 track: "normal"
 ---
 
-## Range
+## أدواتٌ ثلاثٌ تُغني عن العدّ اليدوي
 
-يولّد `range()` متتالية من الأعداد الصحيحة — مفيد لتكرار الكود عددًا محددًا من المرات:
+منحتك الحلقاتُ التكرارَ؛ وهذه الدرسُ يسلمك الأدواتَ الثلاث التي تُخرج العدّ من يديك. كل أداةٍ تستبدل عادةً عُلّمت كتابتَها يدويًّا، وكلٌّ منها جوابٌ لانزعاجٍ متكرر: توليد الأعداد، والحاجة إلى موضع عنصرٍ، وزدوج قائمتين. وهي معًا الفرق بين حلقةٍ تطبع وحلقةٍ تُقرأ.
+
+## Range: المتتالية الحسابية، كسَلًا
+
+جمعت في الدرس السابق بـ `range(5)`. هي تستحق نظرةً عن قرب — إنها الأداة الكلاسيكية لـ «افعل هذا عددًا معلومًا من المرات»:
 
 ```python
 for i in range(5):
     print(i)  # 0 1 2 3 4
 ```
 
-ثلاث صيغ:
+لـ `range` ثلاث صيغٍ، تطابقُ المتتاليةَ الحسابية $a, a+d, a+2d, \ldots$:
 
 ```python
-range(5)       # 0, 1, 2, 3, 4
-range(2, 8)    # 2, 3, 4, 5, 6, 7
+range(5)        # 0, 1, 2, 3, 4
+range(2, 8)     # 2, 3, 4, 5, 6, 7
 range(0, 20, 3) # 0, 3, 6, 9, 12, 15, 18
 ```
 
-`range` كسول — لا ينشئ كل الأعداد دفعة واحدة. هذا يجعله فعّالًا من حيث الذاكرة للمتتاليات الكبيرة.
+وسيطٌ واحد يعطي $0, 1, \ldots, n-1$؛ ووسيطان يعطيان الفترة شبه المفتوحة $[\text{start}, \text{stop})$؛ وثلاثةٌ تضيفان الفرقَ المشترك $d$. والأهم أن `range` **كسولة**: تسجّل المعاملات وتحسب كل قيمةٍ فقط حين تطلبها الحلقة. سؤالُ مليون خطوةٍ لا يكلف ذاكرةً أكثر من سؤال خمسٍ — فالمتتالية لا تُجسَّد أبدًا.
 
-## Enumerate
+## Enumerate: الموضع دون العدّاد
 
-يضيف `enumerate()` عدادًا إلى أي كائن قابل للتكرار، فلا تحتاج إلى متغيرات مؤشر يدوية:
+تريد موضع كل عنصر؟ غريزة المبتدئ عدّادٌ يدوي:
 
 ```python
 fruits = ["apple", "banana", "cherry"]
 
-# Clunky:
 i = 0
 for fruit in fruits:
     print(f"{i}: {fruit}")
     i += 1
+```
 
-# Pythonic:
+إنّ `i += 1` إغراءٌ بالخلل: انسَ واحدًا وتختلط تسميات المواضع. تنتج `enumerate` النصفين في خطوةٍ واحدة — المؤشر والعنصر — فلا يبقى شيءٌ تُبقي على اطراده:
+
+```python
 for i, fruit in enumerate(fruits):
     print(f"{i}: {fruit}")
 
-# Start counting from 1:
+# مُحصو الكلام الذين يُرقمون الناس من 1:
 for i, fruit in enumerate(fruits, start=1):
     print(f"{i}: {fruit}")
 ```
 
-## Zip
+حيث يكتب الرياضي $b_i = a_i + i$ ليلصق الموضع بالقيمة، تُسلّم `enumerate` الزوجَ $(i, a_i)$ لجسم الحلقة مباشرة.
 
-يجمع `zip()` بين كائنات متعددة قابلة للتكرار، مزاوجًا العناصر حسب الموضع:
+## Zip: اصطفافٌ بالموقع
+
+قائمتان متوازيتان — أسماء ودرجات — تصرخان أن تُقرآ معًا. تصطفّ `zip` بينهما عنصرًا بعنصر:
 
 ```python
 names = ["Alice", "Bob", "Charlie"]
@@ -76,56 +84,75 @@ for name, score in zip(names, scores):
 # Charlie: 78
 ```
 
-يتوقف عند أقصر كائن قابل للتكرار افتراضيًا، أو استخدم `itertools.zip_longest` للاستمرار إلى الأطول.
+الاقتران هو الحيلةَ الديكارتية: تركض عبر القائمتين بمشبكٍ واحد مكوّنةً الأزواج $(n_0, s_0), (n_1, s_1), \ldots$. وإذا اختلفت القائمتان طولًا، يتوقف الاقتران عند الأقصر، فلا يُزدوج شيءٌ منقوصًا أبدًا. وإن احتجت الذيل المائل أيضًا، فيملؤه `itertools.zip_longest`:
 
-## المزالق الشائعة
+```python
+import itertools
+for pair in itertools.zip_longest([1, 2], [3, 4, 5], fillvalue=0):
+    print(pair)  # (1, 3), (2, 4), (0, 5) — لا تضيع قيمة
+```
 
-- **نسيان أن `range` حصري** عند الطرف الأعلى: `range(5)` يعطي 0–4 وليس 0–5
-- **استخدام `enumerate` على `dict`** — التكرار على dict يعطي المفاتيح افتراضيًا؛ استخدم `.items()` لأزواج المفتاح-القيمة
-- **مزاوجة أطوال غير متساوية** — تفقد عناصر بصمت؛ فكّر في `zip_longest` بقيمة تعبئة
+## مثالٌ محلول: سجلُّ الصفِّ
 
-<section class="lesson-section lesson-section--challenges">
-<h2 id="-challenges">🧩 التحديات</h2>
+شاهدِ الأدواتِ الثلاثَ تعملُ معًا. تحفظُ معلمةٌ قائمةَ أسماءٍ وقائمةً موازيةً من الدرجاتِ، وتريدُ تقريرًا مرقّمًا:
+
+```python
+names = ["Dina", "Omar", "Sara"]
+scores = [78, 91, 85]
+
+for i, (name, score) in enumerate(zip(names, scores), start=1):
+    print(f"#{i} {name}: {score}")
+# #1 Dina: 78
+# #2 Omar: 91
+# #3 Sara: 85
+
+print(f"Top score: {max(scores)}")   # Top score: 91
+```
+
+اقرأ رأسَ الحلقةِ من الداخلِ إلى الخارج: يزاوجُ `zip` كلَّ اسمٍ بدرجتِه؛ وتفكّكُ الأقواسُ `(name, score)` ذلك الزوجَ؛ ويُرقّم `enumerate` الأزواجَ بدءًا من واحدٍ. أربعةُ إيماءاتٍ كانت ستكلّفك عَدَّادًا مكتوبًا باليدِ تُقرأ الآن كالجملةِ التي تصفها — يلتصقُ الموضعُ بالقيمةِ زوجًا زوجًا، تمامًا كما يُلصق $b_i = a_i + i$ مؤشرًا بكلِّ حدٍّ.
+
+## أخطاء شائعة
+
+- **`range` مستبعِدةٌ في الأعلى.** تنتج `range(5)` الأعدادَ $0, 1, 2, 3, 4$ — خمسة أعدادٍ لا يساوي أحدُها $5$. فكّر كفترةٍ شبه مفتوحة، $[0, 5)$.
+- **`enumerate` فوق قاموس.** تكرارُ القاموس يعطي مفاتيحه؛ وسترقم `enumerate` المفاتيح لا الأزواج. استخدم `dict.items()` حين تريد المفتاح والقيمة.
+- **`zip` بأطوالٍ غير متساوية.** العناصرُ بعد المدخل الأقصر تتلاشى بصمت. انتبه للفقدان، أو عبّئ بـ `zip_longest`.
+- **`zip` مكرِّرٌ ذو استخدامٍ واحد.** يسلّمك `p = zip(a, b)` في بايثونِ 3 مكرِّرًا لا قائمةً: يستهلكه `list(p)`، فيكونَ `list(p)` الثاني فارغًا. حوّله مبكرًا بـ `list(zip(a, b))` متى ستعودُ لزيارةِ الأزواجِ.
+
+## 🧩 تحديات
 
 <details class="challenge">
-<summary>التحدي — فكّر أولًا، ثم اكشف</summary>
+<summary>🧩 تحدٍّ — فكّر أولًا ثم أظهر</summary>
 <div class="challenge__body">
 
-استخدم `enumerate` لطباعة كل عنصر في `colors = ["red", "green", "blue"]` مع موضعه بدءًا من 1.
+استخدم `enumerate` لتطبع كل لونٍ في `colors = ["red", "green", "blue"]` مع موضعه بدءًا من 1.
 
-<p class="challenge__answer">💡 <strong>الإجابة:</strong> <code>for i, color in enumerate(colors, 1): print(f"{i}. {color}")</code></p>
+<p class="challenge__answer">💡 <strong>الجواب:</strong> <code>for i, color in enumerate(colors, 1): print(f"{i}. {color}")</code> — يعيد وسيطُ <code>start</code> ترقيمَ الأزواج من واحدٍ.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>التحدي — فكّر أولًا، ثم اكشف</summary>
+<summary>🧩 تحدٍّ — فكّر أولًا ثم أظهر</summary>
 <div class="challenge__body">
 
-بالنظر إلى `keys = ["a", "b"]` و`values = [1, 2]`، استخدم `zip` لإنشاء قاموس.
+مع `keys = ["a", "b"]` و`values = [1, 2]`، استخدم `zip` لبناء قاموسٍ.
 
-<p class="challenge__answer">💡 <strong>الإجابة:</strong> <code>dict(zip(keys, values))</code> → <code>{"a": 1, "b": 2}</code></p>
+<p class="challenge__answer">💡 <strong>الجواب:</strong> <code>dict(zip(keys, values))</code> ← <code>{"a": 1, "b": 2}</code> — تصير الأزواجُ المصطفّةُ مداخلَ الخريطة.</p>
 
 </div>
 </details>
 
-</section>
+## 🤔 أسئلة سقراطية
 
-<section class="lesson-section lesson-section--socratic">
-<h2 id="-socratic-questions">🤔 أسئلة سقراطية</h2>
+- لماذا تفضّل `range` على كتابة القائمة `[0, 1, 2, 3, 4]`؟ وماذا يتغير لو حملت القائمة مليونَ عددٍ؟
+- ما دام `zip` يتوقف عند المدخل الأقصر، فكيف تكشف أيَّ الجانبين كان أقصر؟ ومتى تهمّ تلك التفرقة؟
+- هل يستطيع `enumerate` أن يتمشى فوق قاموس؟ وما الذي ترقّمه المؤشرات بالضبط؟
 
-- لماذا يُفضَّل `range` على إنشاء قائمة `[0, 1, 2, 3, 4]`؟ وماذا يحدث عندما تحتاج إلى مليون رقم؟
-- إذا كان `zip` يتوقف عند أقصر كائن قابل للتكرار، فكيف تكشف أي مدخلات كانت أقصر؟ ومتى يهمّ ذلك؟
-- هل يمكنك استخدام `enumerate` على `dict`؟ وماذا تمثّل المؤشرات؟
-
-</section>
-
-<section class="lesson-section lesson-section--quiz">
-<h2 id="-quick-check">✅ مراجعة سريعة</h2>
+## ✅ فحص سريع
 
 <div class="quiz" data-quiz="python-101-range-enumerate-zip">
   <div class="quiz-q" data-answer="1">
-    <p class="quiz-q__prompt">1. ما هي <code>list(range(1, 10, 2))</code>؟</p>
+    <p class="quiz-q__prompt">١. ما ناتج <code>list(range(1, 10, 2))</code>؟</p>
     <div class="quiz-q__options">
       <button class="quiz-q__opt" data-idx="0">[1, 2, 3, 4, 5, 6, 7, 8, 9]</button>
       <button class="quiz-q__opt" data-idx="1">[1, 3, 5, 7, 9]</button>
@@ -136,7 +163,7 @@ for name, score in zip(names, scores):
   </div>
 
   <div class="quiz-q" data-answer="2">
-    <p class="quiz-q__prompt">2. ماذا تُرجع <code>list(zip([1, 2], [3, 4, 5]))</code>؟</p>
+    <p class="quiz-q__prompt">٢. ماذا ترجع <code>list(zip([1, 2], [3, 4, 5]))</code>؟</p>
     <div class="quiz-q__options">
       <button class="quiz-q__opt" data-idx="0">[(1, 3), (2, 4), (5,)]</button>
       <button class="quiz-q__opt" data-idx="1">[(1, 3, 5), (2, 4)]</button>
@@ -146,4 +173,3 @@ for name, score in zip(names, scores):
     <p class="quiz-q__feedback" hidden></p>
   </div>
 </div>
-</section>

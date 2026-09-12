@@ -20,56 +20,68 @@ section: "python-101"
 track: "normal"
 ---
 
-## التقسيم الأساسي
+## لغةُ النوافذ
 
-النحو هو `string[start:stop:step]` — `start` شامل، و`stop` حصري:
+السلسلةُ تسلسلٌ، وشخصياتُها تقف في مراكزَ $0, 1, 2, \ldots, n-1$. والشريحةُ طلبُ النافذة بين حدّين. العلامةُ `string[start:stop:step]` — والاختلالُ الوحيدُ الذي يجب حفظُه أن **`start` مشمولٌ و`stop` مستبعدٌ**، القاعدةُ شبهُ المفتوحةِ التي علّمك إياها `range`:
+
+$$
+s[a:b] = s_a s_{a+1} \cdots s_{b-1}, \qquad |s[a:b]| = \max(0, b - a).
+$$
 
 ```python
 text = "Python"
 text[0:3]    # 'Pyt'
 text[2:5]    # 'tho'
-text[:4]     # 'Pyth'  (start defaults to 0)
-text[3:]     # 'hon'   (stop defaults to end)
-text[:]      # 'Python' (full copy)
+text[:4]     # 'Pyth'  (البداية الافتراضية 0)
+text[3:]     # 'hon'   (النهاية الافتراضية آخر السلسلة)
+text[:]      # 'Python' (نسخة كاملة)
 ```
 
-## المؤشرات السالبة
+إغفالُ حدٍّ يرسله إلى افتراضه: `start` إلى البداية، و`stop` إلى النهاية. ويأخذ `text[:]` كلَّ شيء، فيخدمَ أيضًا النسخةَ الكلاسيكيةَ بمفتاحٍ واحد.
 
-تُعدّ المؤشرات السالبة من النهاية:
+## المؤشرات السالبة: العدُّ من النهاية
+
+ترقّم الرياضياتُ من صفرٍ عند المقدمة. وتضيف بايثون مسطرةً ثانية، تعدّ عكسيًّا من آخر حرفٍ بأعدادٍ سالبة:
 
 ```python
 text = "Python"
-text[-1]     # 'n'  (last character)
-text[-3:]    # 'hon' (last 3 characters)
-text[:-2]    # 'Pyth' (all except last 2)
+text[-1]     # 'n'  (آخر حرف)
+text[-3:]    # 'hon' (آخر 3 أحرف)
+text[:-2]    # 'Pyth' (كل ما عدا آخر 2)
 text[-4:-1]  # 'tho'
 ```
 
-## الخطوة
+المركزُ $-k$ هو الحرفُ ذو الرقم $n - k$ من المقدمة. وطلبُ آخرِ ثلاثةِ أحرفٍ هو `text[-3:]` — إيماءةٌ ذهنيةٌ صغيرةٌ تُقرأ بطلاقة: *الثلاثةُ الأخيرة*.
 
-تتحكم المعلمة الثالثة في حجم الخطوة:
+## الخطوة: الخطوةُ الوثّابة
+
+بارامترٌ ثالثٌ يضبط كم مركزًا تتخطّى بين انتقاءين:
 
 ```python
 text = "abcdefghij"
-text[::2]    # 'acegi'   (every 2nd character)
-text[1::2]   # 'bdfhj'   (every 2nd, starting at index 1)
-text[::-1]   # 'jihgfedcba'  (reversed!)
-text[::-2]   # 'jhfdb'   (every 2nd, reversed)
+text[::2]    # 'acegi'   (كل حرفٍ ثانٍ)
+text[1::2]   # 'bdfhj'   (كل حرفٍ ثانٍ ابتداءً من المركز 1)
+text[::-1]   # 'jihgfedcba'  (معكوسة!)
+text[::-2]   # 'jhfdb'   (كل حرفٍ ثانٍ معكوسًا)
 ```
 
-## التقسيم لا يرفع أخطاء أبدًا
+خطوةٌ سالبةٌ تعكس اتجاهَ السير — إنها حسابُ $a, a+d, a+2d, \ldots$ بقوةِ $d$ سالبة. والانعكاسُ المقدَّسُ `[::-1]` يستحق حفظًا واحدًا ثابتًا، لأنّ كل ما هو أدقّ بعده تنويعٌ.
 
-على عكس الفهرسة، لا يرفع التقسيم `IndexError` أبدًا — بل يُرجع ما في وسعه:
+## الشريحة لا ترمي خطأً قط
+
+فهرسةُ مركزٍ غيرِ موجودٍ ترمي `IndexError`. أمّا الشريحةُ فألطفُ — تنكمش على المدى المتاح وتُرجع الموجودَ دون أن تطلب شيئًا في الطريق:
 
 ```python
 text = "hi"
-text[0:100]   # 'hi'  (no error, just stops at end)
-text[100:200] # ''    (empty string)
+text[0:100]   # 'hi'  (لا خطأ، تتوقف فقط عند النهاية)
+text[100:200] # ''    (سلسلة فارغة)
 ```
 
-## التقسيم يعمل على القوائم أيضًا
+هذا كرمٌ متعمّد: نافذةٌ تمتد وراءَ النهاية تنكمش ببساطةٍ. وحيث تكون الفهرسةُ دعوى، تكون الشريحةُ التماسًا.
 
-يعمل النحو نفسه على أي متتالية:
+## الآلةُ نفسها تعزف القوائم
+
+الشريحةُ ليست اختصاصَ السلاسل؛ إنها علامةُ التسلسلات. وتجيب القوائمُ على النداءات نفسها:
 
 ```python
 nums = [0, 1, 2, 3, 4, 5]
@@ -77,72 +89,87 @@ nums[1:4]     # [1, 2, 3]
 nums[::-1]    # [5, 4, 3, 2, 1, 0]
 ```
 
-## المزالق الشائعة
+كل ما تعلمته عن الحروف ينتقل إلى أيِّ مجموعةٍ مرتَّبةٍ — وبعيدًا عن القراءة، تقبل القوائمُ إسنادَ شرائحَ حيث ترفضه السلاسل: يستبدل `nums[1:3] = [9, 9]` نافذةً في موضعها.
 
-- **الحصر من الأعلى**: `s[0:3]` يعطي 3 أحرف (0, 1, 2)، وليست 4
-- **التقفّي بالأطراف**: البداية والنهاية الافتراضية دائمًا آمنة — لم تعد خارج النطاق
-- **خلط الحصر من الأعلى مع الخطوة السالبة**: المؤشرات تغير معناه عند التقسيم بعكس الاتجاه
+## مثالٌ محلول: تشريحُ اسمِ ملفٍ
 
-<section class="lesson-section lesson-section--challenges">
-<h2 id="-challenges">🧩 التحديات</h2>
+تعيشُ البرامجُ بين أسماءِ ملفاتٍ مثل `"report_2026_summary.txt"`، والتقطيعُ طريقةُ قراءتِها أجزاءً. الامتدادُ هو الأحرفُ الثلاثةُ الأخيرةُ:
+
+```python
+filename = "report_2026_summary.txt"
+extension = filename[-3:]     # 'txt'
+stem      = filename[:-4]     # 'report_2026_summary'
+print(stem, extension)        # report_2026_summary txt
+```
+
+يقرأ `[-3:]` *من ثلاثِ مواضعَ قبلَ النهايةِ إلى النهاية* — آخرَ ثلاثةِ أحرفٍ. ويقرأ `[:-4]` *من البدايةِ حتى أربعةِ مواضعَ قبلَ النهاية*، وهو كلُّ ما قبلَ النقطةِ. وتظهر قاعدةُ الفترةِ شبهِ المفتوحةِ من جديد: يستبعد `[:-4]` الموضعَ $n - 4$، أي النقطةَ نفسَها، فلا يتسرّبَ ذيلُ `.txt` إلى الجذرِ أبدًا. قاعدةٌ واحدةٌ، كلا الطرفينِ.
+
+وعكسُ قراءةِ الأجزاءِ قراءةُ الكلِّ: فحصُ المتناظرةِ سطرٌ واحدٌ من الأداةِ نفسِها:
+
+```python
+word = "radar"
+print(word == word[::-1])     # True
+```
+
+## أخطاء شائعة
+
+- **الخلط بين الفهرسة والشريحة.** `text[3]` حرفٌ واحدٌ دعوى؛ و`text[3:4]` حرفٌ واحدٌ التماسٌ — وسلسلةٌ جديدة.
+- **اعتبارُ `stop` مشمولًا.** يسلّم `text[0:3]` أحرفَ المراكزِ $0, 1, 2$؛ والمركزُ 3 هو حيث تُغلق النافذة.
+- **إسنادُ شرائحَ فوق السلاسل.** ترفضها السلاسل — فذاك الامتدادُ امتيازُ القوائم.
+- **يجب أن توافقَ إشارةُ الخطوةِ الاتجاهَ.** `"abcdef"[0:5:-1]` فارغةٌ — نافذةٌ تمشي يمينًا وخطوةٌ تشيرُ يسارًا لا تلتقيانِ في مكانٍ ما. أبقِ البدايةَ والنهايةَ والخطوةَ جميعُها في الاتجاهِ نفسه.
+
+## 🧩 تحديات
 
 <details class="challenge">
-<summary>التحدي — فكّر أولًا، ثم اكشف</summary>
+<summary>🧩 تحدٍّ — فكّر أولًا ثم أظهر</summary>
 <div class="challenge__body">
 
-بدون تنفيذها، توقّع ناتج `"Python"[::-1]` و`"Python"[-2:]` و`"Python"[1:3]`.
+اعكس السلسلةَ `"racecar"` بشريحةٍ.
 
-<p class="challenge__answer">💡 <strong>الإجابة:</strong> <code>"nohtyP"</code> — عكس كامل، و<code>"on"</code> — آخر حرفين، و<code>"yt"</code> — الحرفان الأول والثاني (المؤشران 1 و2).</p>
+<p class="challenge__answer">💡 <strong>الجواب:</strong> <code>"racecar"[::-1]</code> ← <code>"racecar"</code> — تُقرأ نفسها من الوجهين، وهو بالضبط سببُ نجاةِ متناظرِ الحروفِ من انعكاسِه.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>التحدي — فكّر أولًا، ثم اكشف</summary>
+<summary>🧩 تحدٍّ — فكّر أولًا ثم أظهر</summary>
 <div class="challenge__body">
 
-اكتب تعبيرًا يستخرج كل حرف ثالث بدءًا من الحرف الثاني: من `"abcdefghij"`.
+من `"abcdefghij"`، استخرج كلَّ حرفٍ ثالثٍ: `a`، `d`، `g`، `j`.
 
-<p class="challenge__answer">💡 <strong>الإجابة:</strong> <code>"abcdefghij"[1::3]</code> → <code>"beh"</code> — يبدأ من المؤشر 1 ويصعد خطوة 3.</p>
+<p class="challenge__answer">💡 <strong>الجواب:</strong> <code>"abcdefghij"[::3]</code> ← <code>"adgj"</code> — البدايةُ الافتراضيةُ تثبّتك عند المركز 0، والخطوةُ 3 تزحف بك عبر المتتاليةِ الحسابية.</p>
 
 </div>
 </details>
 
-</section>
+## 🤔 أسئلة سقراطية
 
-<section class="lesson-section lesson-section--socratic">
-<h2 id="-socratic-questions">🤔 أسئلة سقراطية</h2>
+- لماذا لا ترمي الشريحةُ خطأً قط حيث ترميه الفهرسة؟ وأيُّ موقفٍ يفصل بينهما؟
+- بإسنادِ شريحةٍ فقط، كيف تبادل عنصرينِ من قائمةٍ؟
+- إذا كانت `text[::-1]` تعكس، فأيُّ سطرٍ يخبرك هل السلسلةُ متناظرةُ الحروف؟
 
-- لماذا تُستخدم نهايات حصرية في بايثون بدلًا من الشاملة؟ (فكّر في كيف يُقسَّم `range` والسلاسل بشكل متسق.)
-- متى تُحدّد خطوة سالبة مع إغفال البداية والنهاية؟ وما القواعد التي تسيطر على الاتجاه؟
-- كيف تستخدم المؤشرات السالبة والخطوات السالبة معًا دون الالتباس؟
-
-</section>
-
-<section class="lesson-section lesson-section--quiz">
-<h2 id="-quick-check">✅ مراجعة سريعة</h2>
+## ✅ فحص سريع
 
 <div class="quiz" data-quiz="python-101-string-slicing">
-  <div class="quiz-q" data-answer="1">
-    <p class="quiz-q__prompt">1. ماذا تُرجع <code>"goodbye"[-3:]</code>؟</p>
+  <div class="quiz-q" data-answer="0">
+    <p class="quiz-q__prompt">١. ماذا ترجع <code>"Python"[1:4]</code>؟</p>
     <div class="quiz-q__options">
-      <button class="quiz-q__opt" data-idx="0">"bye"</button>
-      <button class="quiz-q__opt" data-idx="1">"bye"</button>
-      <button class="quiz-q__opt" data-idx="2">"oodbye"</button>
-      <button class="quiz-q__opt" data-idx="3">"good"</button>
+      <button class="quiz-q__opt" data-idx="0">'yth'</button>
+      <button class="quiz-q__opt" data-idx="1">'Pyt'</button>
+      <button class="quiz-q__opt" data-idx="2">'ytho'</button>
+      <button class="quiz-q__opt" data-idx="3">'Pyth'</button>
     </div>
     <p class="quiz-q__feedback" hidden></p>
   </div>
 
-  <div class="quiz-q" data-answer="0">
-    <p class="quiz-q__prompt">2. ماذا تُرجع <code>"abcdef"[::2]</code>؟</p>
+  <div class="quiz-q" data-answer="2">
+    <p class="quiz-q__prompt">٢. كيف تعكس سلسلةً <code>s</code>؟</p>
     <div class="quiz-q__options">
-      <button class="quiz-q__opt" data-idx="0">"ace"</button>
-      <button class="quiz-q__opt" data-idx="1">"bdf"</button>
-      <button class="quiz-q__opt" data-idx="2">"abcdef"</button>
-      <button class="quiz-q__opt" data-idx="3">"fedcba"</button>
+      <button class="quiz-q__opt" data-idx="0">s.reverse()</button>
+      <button class="quiz-q__opt" data-idx="1">s[::-0]</button>
+      <button class="quiz-q__opt" data-idx="2">s[::-1]</button>
+      <button class="quiz-q__opt" data-idx="3">s[::1]</button>
     </div>
     <p class="quiz-q__feedback" hidden></p>
   </div>
 </div>
-</section>

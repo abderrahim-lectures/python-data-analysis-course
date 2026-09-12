@@ -20,117 +20,136 @@ section: "python-101"
 track: "normal"
 ---
 
-## Seis operadores de comparación
+## La computadora, puesta a decidir
 
-Los operadores de comparación producen un `bool` — `True` o `False`:
+Una evaluación `2 + 3` produce un número. Pero la mayor parte de lo que un programa necesita saber no es un número — es una *decisión*. ¿La nota aprueba? ¿El nombre de usuario está tomado? ¿La temperatura está dentro del rango? Los operadores de comparación son la rama de la familia aritmética que produce una respuesta del conjunto $\{\mathrm{True}, \mathrm{False}\}$ en lugar de $\mathbb{R}$.
+
+## Los seis operadores de comparación
+
+Cada uno compara dos valores y produce un `bool`:
 
 ```python
-5 == 5      # True   — equal
-5 != 3      # True   — not equal
-5 < 10      # True   — less than
-5 <= 5      # True   — less than or equal
-5 > 10      # False  — greater than
-5 >= 5      # True   — greater than or equal
+5 == 5      # True   — igual
+5 != 3      # True   — distinto
+5 < 10      # True   — menor que
+5 <= 5      # True   — menor o igual
+5 > 10      # False  — mayor que
+5 >= 5      # True   — mayor o igual
 ```
 
-## Comparaciones encadenadas
+En matemáticas escribirías $\leq$, $\geq$, $\neq$; Python opta por el `<=`, `>=`, `!=` amigable con teclado. El significado no cambia. El doble igual `==` exige una pausa deliberada: es la pregunta *"¿son iguales?"*, mientras que un solo `=` es una orden de asignación. El signo duplicado evita que jamás colisionen.
 
-Python te permite encadenar comparaciones como lo harías en matemáticas:
+## Encadena comparaciones como un matemático
+
+Supón que $x$ pertenece al intervalo $[0, 10)$. En papel escribes la condición de tres partes de un tirón, $0 \leq x < 10$. Python te deja escribirlo exactamente así:
 
 ```python
 x = 5
-0 <= x < 10    # True — both conditions hold
-0 <= x < 3     # False — x < 3 fails
+0 <= x < 10    # True — se cumplen ambas condiciones
+0 <= x < 3     # False — falla la segunda
 ```
 
-Esto se evalúa como una sola expresión, no como dos separadas unidas por `and`. Es equivalente a `0 <= x and x < 10`, pero se lee de forma más natural.
+Es una sola expresión, evaluada con el mismo emparejamiento que leerías: $0 \leq x$ y después $x < 10$, con el valor del medio calculado una sola vez. La comparación encadenada equivale a $0 \leq x$ `and` $x < 10$ — pero la forma encadenada se lee como la matemática de la que salió.
 
-## `==` frente a `is`
+## `==` pregunta por el contenido; `is` pregunta por la identidad
 
-`==` comprueba la **igualdad de valor** — ¿estas dos cosas tienen el mismo contenido?
-`is` comprueba la **identidad** — ¿son exactamente el mismo objeto en memoria?
+Dos preguntas suenan parecido y responden distinto:
 
 ```python
 a = [1, 2, 3]
 b = [1, 2, 3]
-a == b    # True  — same content
-a is b    # False — different objects
+a == b    # True  — mismo contenido
+a is b    # False — objetos distintos en memoria
 
 c = a
-a is c    # True  — same object
+a is c    # True  — el mismo objeto
 ```
 
-**Regla práctica:** usa siempre `==` para la comparación de valores. Solo usa `is` cuando compruebes `None`:
+`==` compara los valores que se llevan; `is` compara las direcciones de memoria. Varias cajas pueden por casualidad tener la misma lista; solo hay un objeto. Los dos coinciden para cosas pequeñas (como los enteros pequeños que Python cachea) y divergen para todo lo demás, así que la regla es firme: usa `==` para contenido y reserva `is` para el único singleton que no tiene contenido que comparar — `None`:
 
 ```python
-if x is None:    # correct
-if x == None:    # works but non-idiomatic
+if x is None:    # correcto
+if x == None:    # funciona, pero te haces la pregunta equivocada
 ```
 
-## Comparar tipos distintos
+## Comparar entre tipos
 
-Python permite comparar valores de tipos distintos, pero el resultado puede sorprender:
+Traer valores de conjuntos distintos a una comparación — $\mathbb{Z}$ frente a $\mathbb{S}$ — sigue una política fija:
 
 ```python
-5 == 5.0      # True  — int and float compared numerically
-"5" == 5      # False — string and int are never equal
+5 == 5.0      # True  — la igualdad numérica ignora el tipo
+"5" == 5      # False — una cadena y un int nunca son iguales
 "5" < 6       # TypeError: '<' not supported between str and int
 ```
 
-En Python 3, las comparaciones de orden (`<`, `>`) entre tipos incompatibles lanzan un `TypeError`. Solo `==` y `!=` funcionan entre tipos.
+Salen dos reglas. Para la igualdad, los valores numéricos se comparan por valor, no por tipo, mientras que valores de clases ajenas simplemente nunca son iguales. Para el orden, Python se niega a adivinar: no hay orden total que tenga sentido entre una cadena y un entero, así que lanza `TypeError` en lugar de inventar uno.
+
+## Un ejemplo resuelto: la tolerancia del recibo
+
+La trampa del ruido de floats tiene respuesta constructiva. Compara con tolerancia como haría un físico, o cambia a unidades enteras exactas:
+
+```python
+expected = 0.3
+price = 0.1 + 0.2                    # 0.30000000000000004
+price == expected                    # False — ruido del float
+abs(price - expected) < 1e-9         # True — dentro de la tolerancia
+```
+
+El patrón es un par de preguntas y una decisión: ¿son exactamente iguales? `False`. ¿Y dentro de una proximidad razonable? `True`. La segunda pregunta es la que el mundo real suele significar.
 
 ## Errores comunes
 
-- **`=` frente a `==`.** `if score = 60:` es un error de sintaxis — Python no te deja asignar dentro de una condición por accidente. Usa `==`.
-- **Comparación de punto flotante.** `0.1 + 0.2 == 0.3` es `False` por la imprecisión del punto flotante. Usa `abs((0.1 + 0.2) - 0.3) < 1e-10` en su lugar.
-- **`==` con `None`.** `x == None` funciona, pero `x is None` es la forma pitónica.
+- **`=` frente a `==`.** `if score = 60:` es un error de sintaxis — Python no te deja asignar dentro de una condición por accidente. El signo duplicado es una barandilla, no una formalidad.
+- **Igualdad de punto flotante.** `0.1 + 0.2 == 0.3` es `False`. La representación binaria de $0.1$ es infinita, así que la suma cae en $0.30000000000000004$. Compara dentro de una tolerancia en su lugar: `abs((0.1 + 0.2) - 0.3) < 1e-10`.
+- **`==` con `None`.** `x == None` funciona de casualidad; `x is None` es la pregunta que de verdad quieres hacer.
+- **La igualdad de floats necesita tolerancia; el dinero necesita unidades enteras.** `0.1 + 0.2 == 0.3` falla (`False`), así que compara dentro de `abs(a - b) < 1e-9` o cuenta en centavos — `120 == 12 * 10` es exacto.
 
-## 🧩 Retos
+## 🧩 Desafíos
 
 <details class="challenge">
-<summary>🧩 Reto — piensa primero, luego revela</summary>
+<summary>🧩 Desafío — piensa primero, luego revela</summary>
 <div class="challenge__body">
 
-Predice el resultado de cada uno sin ejecutarlos: `5 == 5.0`, `"5" == 5`, `5 < "6"`.
+Predice cada resultado sin ejecutar: `5 == 5.0`, `"5" == 5`, `5 < "6"`.
 
-<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>5 == 5.0</code> → True (igualdad numérica), <code>"5" == 5</code> → False (tipos distintos), <code>5 < "6"</code> → TypeError (la comparación de orden entre int y str no está permitida en Python 3).</p>
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>5 == 5.0</code> → True (igualdad numérica entre tipos), <code>"5" == 5</code> → False (una cadena nunca es igual a un int), <code>5 &lt; "6"</code> → TypeError (el orden no está definido entre int y str en Python 3).</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Reto — piensa primero, luego revela</summary>
+<summary>🧩 Desafío — piensa primero, luego revela</summary>
 <div class="challenge__body">
 
-Escribe una comparación encadenada que compruebe si un número `n` está entre 1 y 100 inclusive, usando una sola expresión (sin `and`).
+Escribe una sola comparación encadenada que compruebe si un número $n$ está en $[1, 100]$, sin usar `and`.
 
-<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>1 <= n <= 100</code> — la comparación encadenada de Python hace que esto se lea como notación matemática.</p>
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>1 &lt;= n &lt;= 100</code> — la forma encadenada se lee exactamente como el intervalo $1 \leq n \leq 100$.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Reto — piensa primero, luego revela</summary>
+<summary>🧩 Desafío — piensa primero, luego revela</summary>
 <div class="challenge__body">
 
-¿Por qué `0.1 + 0.2 == 0.3` evalúa a `False`? ¿Cómo escribirías una comprobación correcta de igualdad de punto flotante?
+¿Por qué `0.1 + 0.2 == 0.3` da `False`? ¿Cómo escribirías una prueba de igualdad de punto flotante correcta?
 
-<p class="challenge__answer">💡 <strong>Respuesta:</strong> 0.1 y 0.2 no tienen representación binaria exacta, así que su suma es 0.30000000000000004, no exactamente 0.3. Comprobación correcta: <code>abs((0.1 + 0.2) - 0.3) < 1e-10</code> — verifica si la diferencia está dentro de una tolerancia mínima.</p>
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> Ni $0.1$ ni $0.2$ tienen representación binaria exacta, así que su suma es $0.30000000000000004$, no exactamente $0.3$. Prueba dentro de una tolerancia: <code>abs((0.1 + 0.2) - 0.3) &lt; 1e-10</code>.</p>
 
 </div>
 </details>
 
 ## 🤔 Preguntas socráticas
 
-- Si `a == b` es `True`, ¿significa eso que `a is b` también debe ser `True`? ¿Bajo qué circunstancias pueden dos objetos ser iguales pero no idénticos?
-- ¿Por qué Python prohíbe `5 < "6"` pero permite que `5 == "5.0"` sea `False`? ¿Qué principio de diseño está en juego?
-- ¿En qué escenarios podría `is` ser más útil que `==` para comprobar la igualdad? (Piensa en singletons como `None`.)
+- Si `a == b` es `True`, ¿debe ser `a is b` también `True`? ¿En qué circunstancias dos objetos pueden ser iguales en contenido y distintos en identidad?
+- ¿Por qué Python prohíbe `5 < "6"` y a la vez permite que `5 == "5"` sea `False`? ¿Qué principio de diseño mantiene ambos comportamientos coherentes?
+- ¿Cuándo es `is` de verdad la herramienta adecuada para la igualdad? Piensa en el singleton `None`, y por qué comparar contenido ahí no tiene sentido.
 
 ## ✅ Comprobación rápida
 
 <div class="quiz" data-quiz="python-101-comparison">
   <div class="quiz-q" data-answer="0">
-    <p class="quiz-q__prompt">1. ¿Qué es 5 == 5.0?</p>
+    <p class="quiz-q__prompt">1. ¿Cuánto es 5 == 5.0?</p>
     <div class="quiz-q__options">
       <button class="quiz-q__opt" data-idx="0">True</button>
       <button class="quiz-q__opt" data-idx="1">False</button>

@@ -20,75 +20,118 @@ section: "python-101"
 track: "normal"
 ---
 
-## Explicit conversion functions
+## Why would a value need to change set?
 
-Python provides `int(...)`, `float(...)`, `str(...)`, and `bool(...)` to convert between types:
+You type a birth year into a form. Python's `input()` hands you back a **string** — `"2004"`. But `"2004"` is not a number in any arithmetic sense: try `"2004" + 26` and Python answers `"200426"`, because to a string `+` means *join*, not *add*.
 
-```python
-int("42")       # 42        — str -> int
-int(3.9)        # 3         — float -> int, truncates (does NOT round!)
-float("3.14")   # 3.14      — str -> float
-str(42)         # "42"      — int -> str
-bool(0)         # False     — 0 (and 0.0, and "") are "falsy"
-bool(1)         # True      — any nonzero number (and non-empty string) is "truthy"
-```
+You hold the digits of a number without the number. The set it belongs to is wrong. A value that crossed from the keyboard into a program arrives as text, and text cannot do arithmetic.
 
-## Truncation vs rounding
+So a program constantly needs to **convert** a value from one set to another: from `str` to `int` before computing a year, from `int` to `str` before printing alongside a label. Python gives you four functions for this, one per target set.
 
-`int(3.9)` gives `3`, not `4` — conversion to `int` always **truncates toward zero** (chops off the decimal part). It never rounds:
+## Four conversion functions
+
+Each is named after the set it produces:
 
 ```python
-int(3.9)        # 3  — truncates
-int(-3.9)       # -3 — truncates toward zero, not toward negative infinity
-round(3.9)      # 4  — this is rounding
+int("42")       # 42     — str -> int   "42" was digits, now it's a number
+float("3.14")   # 3.14   — str -> float
+str(42)         # "42"   — int -> str    the number becomes text
+bool(0)         # False  — number -> truth value
 ```
 
-The distinction matters for negative numbers: `int(-3.9)` is `-3` (toward zero), while `math.floor(-3.9)` is `-4` (toward negative infinity).
+Reading these out loud says what they are: `str(42)` is "give me the string version of $42$". The function name is the name of the target set, and the parentheses are the conversion machine itself.
 
-## When conversions fail
+## Conversion does not round — it truncates
 
-Not every conversion is possible:
+Now a subtlety that costs beginners real bugs. You want the whole part of $3.9$. What should the answer be?
+
+$$
+3.9 = 3 + 0.9
+$$
+
+The natural instinct is to round: $4$. Python's `int(3.9)` instead returns **$3$**:
+
+```python
+int(3.9)        # 3   — the decimal part is chopped off, not rounded
+round(3.9)      # 4   — this is rounding
+```
+
+`int()` **truncates**: it discards the fractional part and keeps what remains, moving **toward zero**. The difference shows up once numbers go negative:
+
+```python
+int(-3.9)       # -3  — toward zero
+import math
+math.floor(-3.9)  # -4 — toward negative infinity
+```
+
+The number line settles it: truncation walks toward $0$, `math.floor` walks down (toward $-\infty$), and `round` walks to the nearest integer. Choose the one that matches what *you* meant by "the whole part".
+
+## Some conversions must fail
+
+Crossing from one set to another is not always possible. Which of these can you picture working?
 
 ```python
 int("hello")    # ValueError: invalid literal for int()
-int("3.14")     # ValueError: invalid literal for int() — use float() first
+int("3.14")     # ValueError: invalid literal for int()  ("3.14" is digits with a dot)
 float("hello")  # ValueError: could not convert string to float
 ```
 
-Python fails loudly here rather than silently guessing — a design choice you'll come to appreciate once you're debugging real data.
-
-## The input() gotcha
-
-`input()` **always returns a `str`**, even if the user typed a number:
+`"hello"` contains no digits at all — nothing to convert, so Python refuses. `int("3.14")` is trickier: it *has* digits, but the conversion function `int` accepts only a whole literal, and `3.14` is not whole. You must pass through `float` if you want to shrink it:
 
 ```python
-age_text = input("How old are you? ")   # always a string
-age = int(age_text)                      # convert explicitly
-print(f"In 10 years you'll be {age + 10}")
+int(float("3.14"))   # 3  — parse 3.14, truncate to 3
 ```
 
-Forgetting this conversion is one of the most common early bugs:
+Notice the philosophy: Python fails loudly rather than guessing what you meant. A silent guess would corrupt your data; a loud error stops the program so *you* decide.
+
+## The daily trap: `input()` returns a string
+
+Every single time, `input()` returns a `str` — even when the user types `2004`. The number you wanted is still on the other side of a conversion:
+
+```python
+year_text = input("Birth year? ")   # str, always
+year = int(year_text)                # now it can do arithmetic
+print(f"About {2026 - year} years old")
+```
+
+Forgetting the conversion is one of the most common early bugs, and here is exactly what forgetting looks like:
 
 ```python
 age = input("Age? ")
 print(age + 1)    # TypeError: can only concatenate str (not "int") to str
 ```
 
+The error is the machine being honest: `age` sits in $\mathbb{S}$ (strings), and `+` with a string does not mean addition. The lesson is a habit: *if a value came from the outside, convert it before doing math with it.*
+
+## A worked example: the cut-off measurement
+
+A sensor reports `"3.9"` as text, and a display shows whole units only. Two conversions, one intention each:
+
+```python
+raw = "3.9"
+numeric = float(raw)     # 3.9 — parse the real number
+whole = int(numeric)     # 3   — truncate toward zero
+print(f"{whole} units")  # 3 units — the .9 is chopped, not rounded
+```
+
+The funnel matters because each step is a different promise: `float(...)` turns text into a real value, `int(...)` then chops toward zero, and you never ask one function to do both. Say which promise you mean and the conversion stops surprising you.
+
 ## Common pitfalls
 
-- **`int("3.14")` raises an error.** You can't parse a float string directly with `int()`. Use `int(float("3.14"))` or `round(float("3.14"))`.
-- **`int()` truncates, not rounds.** `int(4.7)` is `4`, not `5`. Use `round()` when rounding is what you want.
-- **`float("inf")` is valid.** Python represents infinity as `float('inf')` — useful in some algorithms, but can surprise you.
+- **`int("3.14")` raises an error.** You cannot parse a float string straight into `int()`. Shrink it by hand: `int(float("3.14"))`, or `round(float("3.14"))`.
+- **`int()` truncates, `round()` rounds.** `int(4.7)` is `4`, not `5`. Ask yourself which operation you actually describe when you say "convert this to an integer."
+- **`float("inf")` is valid.** Python knows infinity: `float('inf')`. Handy in optimization algorithms, startling when it slips into a result you expected to be finite.
+- **`int()` and `bool()` truncate and reinterpret silently.** `int(3.9)` quietly chops the fraction; `bool("")` quietly returns `False`. Parsing text fails loudly (`ValueError`), but number-to-number conversions are quiet — those are the ones to double-check.
 
 ## 🧩 Challenges
 
 <details class="challenge">
 <summary>🧩 Challenge — think first, then reveal</summary>
-<div class="challenge__body>
+<div class="challenge__body">
 
 Predict `int(-7.9)` and `-7.9 // 1`. Are they the same? Explain any difference.
 
-<p class="challenge__answer">💡 <strong>Answer:</strong> <code>int(-7.9)</code> is <code>-7</code> (truncates toward zero — chops off the decimal part), while <code>-7.9 // 1</code> is <code>-8.0</code> (floors toward negative infinity). They agree for positive numbers but disagree for negative ones.</p>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>int(-7.9)</code> is <code>-7</code> (truncates toward zero — chops the decimal part), while <code>-7.9 // 1</code> is <code>-8.0</code> (floors toward negative infinity). They agree for positive numbers and differ for negative ones.</p>
 
 </div>
 </details>
@@ -99,27 +142,27 @@ Predict `int(-7.9)` and `-7.9 // 1`. Are they the same? Explain any difference.
 
 Write a program that asks for a name and a birth year (two separate `input()` prompts), computes an approximate age, and prints a sentence like `"Amina, you are about 21 years old."`
 
-<p class="challenge__answer">💡 <strong>Answer:</strong> Read name and birth year with two <code>input()</code> calls, convert the year to <code>int</code>, subtract from the current year (e.g. <code>2026</code>), and print with an f-string: <code>print(f"{name}, you are about {2026 - year} years old.")</code>.</p>
+<p class="challenge__answer">💡 <strong>Answer:</strong> Read name and birth year with two <code>input()</code> calls, convert the year with <code>int()</code>, subtract from the current year (e.g. <code>2026</code>), and print with an f-string: <code>print(f"{name}, you are about {2026 - year} years old.")</code>.</p>
 
 </div>
 </details>
 
 <details class="challenge">
 <summary>🧩 Challenge — think first, then reveal</summary>
-<div class="challenge__body>
+<div class="challenge__body">
 
-Without running it, compute `15 // 4` and `15 % 4` by hand. Then verify: does `4 * (15 // 4) + (15 % 4)` equal `15`?
+Without running it, compute `15 // 4` and `15 % 4` by hand, then verify whether $4 \cdot (15 // 4) + (15 \% 4)$ reproduces $15$.
 
-<p class="challenge__answer">💡 <strong>Answer:</strong> 15 // 4 is 3 (floor of 3.75), and 15 % 4 is 3 (since 15 = 4·3 + 3). Together: 4 × 3 + 3 = 15. This is the division algorithm identity.</p>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>15 // 4</code> is <code>3</code> (the floor of $3.75$), and <code>15 % 4</code> is <code>3</code>, since $15 = 4 \cdot 3 + 3$. Together <code>4 * 3 + 3 = 15</code> — the division identity $\text{dividend} = \text{divisor} \cdot \text{quotient} + \text{remainder}$.</p>
 
 </div>
 </details>
 
 ## 🤔 Socratic Questions
 
-- `input()` always returns a `str`. What would go wrong if you tried `age + 10` without first converting `age = int(input(...))`? What does the error message actually tell you?
-- If you want to convert `"3.14"` to an integer, why does `int("3.14")` fail but `int(float("3.14"))` work? What's the intermediate step doing?
-- Python has `math.floor()` and `math.ceil()`. How do they differ from `int()` for negative numbers? When would you choose one over the other?
+- `input()` always returns a `str`. What goes wrong with `age + 10` if you skip converting first? What does the error message actually tell you?
+- To convert `"3.14"` to an integer, why does `int("3.14")` fail but `int(float("3.14"))` work? What is the intermediate step doing?
+- Python has `math.floor()` and `math.ceil()`. How do they differ from `int()` for negative numbers? When would you pick one over the others?
 
 ## ✅ Quick check
 

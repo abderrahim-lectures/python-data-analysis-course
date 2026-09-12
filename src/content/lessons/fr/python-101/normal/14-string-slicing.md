@@ -20,56 +20,68 @@ section: "python-101"
 track: "normal"
 ---
 
-## Tranchage de base
+## Le langage des fenêtres
 
-La syntaxe est `string[start:stop:step]` — `start` est inclusif, `stop` est exclusif :
+Une chaîne est une séquence, et ses caractères se tiennent aux positions $0, 1, 2, \ldots, n-1$. Le tranchage demande la fenêtre entre deux frontières. La notation est `string[start:stop:step]` — et la seule asymétrie à mémoriser est que **`start` est inclus et `stop` exclu**, la même règle semi-ouverte que `range` vous a apprise :
+
+$$
+s[a:b] = s_a s_{a+1} \cdots s_{b-1}, \qquad |s[a:b]| = \max(0, b - a).
+$$
 
 ```python
 text = "Python"
 text[0:3]    # 'Pyt'
 text[2:5]    # 'tho'
-text[:4]     # 'Pyth'  (start defaults to 0)
-text[3:]     # 'hon'   (stop defaults to end)
-text[:]      # 'Python' (full copy)
+text[:4]     # 'Pyth'  (start par défaut 0)
+text[3:]     # 'hon'   (stop par défaut la fin)
+text[:]      # 'Python' (copie entière)
 ```
 
-## Indices négatifs
+Omette une frontière et elle part vers son défaut : `start` vers le début, `stop` vers la fin. `text[:]` prend tout, ce qui double la copie classique en une seule touche.
 
-Comptez depuis la fin avec des nombres négatifs :
+## Indices négatifs : compter depuis la fin
+
+Les mathématiques indexent depuis zéro à l'avant. Python ajoute une seconde règle, comptant à rebours depuis le dernier caractère avec des nombres négatifs :
 
 ```python
 text = "Python"
-text[-1]     # 'n'  (last character)
-text[-3:]    # 'hon' (last 3 characters)
-text[:-2]    # 'Pyth' (all except last 2)
+text[-1]     # 'n'  (dernier caractère)
+text[-3:]    # 'hon' (les 3 derniers caractères)
+text[:-2]    # 'Pyth' (tout sauf les 2 derniers)
 text[-4:-1]  # 'tho'
 ```
 
-## Step
+La position $-k$ est le caractère $n - k$ depuis l'avant. Demander les trois derniers est `text[-3:]` — un petit geste mental qui se lit naturellement : *les trois finaux*.
 
-Le troisième paramètre contrôle le pas :
+## Step : l'enjambée
+
+Un troisième paramètre contrôle combien de positions vous sautez entre sélections :
 
 ```python
 text = "abcdefghij"
-text[::2]    # 'acegi'   (every 2nd character)
-text[1::2]   # 'bdfhj'   (every 2nd, starting at index 1)
-text[::-1]   # 'jihgfedcba'  (reversed!)
-text[::-2]   # 'jhfdb'   (every 2nd, reversed)
+text[::2]    # 'acegi'   (chaque 2e caractère)
+text[1::2]   # 'bdfhj'   (chaque 2e, en partant de l'indice 1)
+text[::-1]   # 'jihgfedcba'  (inversé !)
+text[::-2]   # 'jhfdb'   (chaque 2e, inversé)
 ```
+
+Un step négatif inverse le sens du voyage — c'est l'arithmétique de $a, a+d, a+2d, \ldots$ avec $d$ négatif. L'inversion canonique `[::-1]` vaut une seule mémorisation ferme, car d'elle tout ce qui est plus fin est une variation.
 
 ## Le tranchage ne lève jamais d'erreur
 
-Contrairement à l'indexation, le tranchage ne lève jamais d'`IndexError` — il renvoie simplement ce qu'il peut :
+Indexer une position inexistante lève `IndexError`. Le tranchage est plus doux — il se rabat sur la plage disponible et renvoie ce qui existe, sans rien demander au passage :
 
 ```python
 text = "hi"
-text[0:100]   # 'hi'  (no error, just stops at end)
-text[100:200] # ''    (empty string)
+text[0:100]   # 'hi'  (pas d'erreur, s'arrête juste à la fin)
+text[100:200] # ''    (chaîne vide)
 ```
 
-## Le tranchage fonctionne aussi sur les listes
+C'est une générosité délibérée : une fenêtre qui dépasse la fin se rétrécit simplement. Là où indexer est une revendication, trancher est une requête.
 
-La même syntaxe fonctionne pour toute séquence :
+## Le même instrument joue des listes
+
+Le tranchage n'est pas une spécialité des chaînes ; c'est la notation des séquences. Les listes répondent aux mêmes appels :
 
 ```python
 nums = [0, 1, 2, 3, 4, 5]
@@ -77,50 +89,66 @@ nums[1:4]     # [1, 2, 3]
 nums[::-1]    # [5, 4, 3, 2, 1, 0]
 ```
 
+Ce que vous avez appris sur les caractères se transfère à toute collection ordonnée — et au-delà de la lecture, les listes acceptent l'affectation par tranche là où les chaînes non : `nums[1:3] = [9, 9]` remplace une fenêtre sur place.
+
+## Un exemple travaillé : disséquer un nom de fichier
+
+Les programmes vivent parmi des noms de fichiers comme `"report_2026_summary.txt"`, et le tranchage est la façon de les lire en morceaux. L'extension est constituée des trois derniers caractères :
+
+```python
+filename = "report_2026_summary.txt"
+extension = filename[-3:]     # 'txt'
+stem      = filename[:-4]     # 'report_2026_summary'
+print(stem, extension)        # report_2026_summary txt
+```
+
+`[-3:]` lit *de trois positions avant la fin, jusqu'à la fin* — les trois derniers caractères. `[:-4]` lit *du début, jusqu'à quatre positions avant la fin*, c'est-à-dire tout ce qui précède le point. La règle du demi-intervalle réapparaît : `[:-4]` exclut la position $n - 4$, le point lui-même, si bien que la queue `.txt` ne fuit jamais dans le radical. Une règle, les deux bouts.
+
+Et l'inverse de lire en morceaux, c'est lire en entier : le test du palindrome tient en une ligne du même instrument :
+
+```python
+word = "radar"
+print(word == word[::-1])     # True
+```
+
 ## Pièges courants
 
-- **Confondre `text[3]` (indexation, un caractère) avec `text[3:4]` (tranchage, toujours un caractère mais une nouvelle chaîne)**
-- **Supposer que `stop` est inclusif** — `text[0:3]` donne les caractères en 0, 1, 2
-- **Utiliser l'affectation de tranche sur des chaînes** — les chaînes ne la supportent pas (les listes le font : `nums[1:3] = [9, 9]`)
+- **Confondre indexation et tranchage.** `text[3]` est un caractère, une revendication ; `text[3:4]` est un caractère, une requête — et une nouvelle chaîne.
+- **Supposer `stop` inclus.** `text[0:3]` livre les caractères aux positions $0, 1, 2$ ; la position $3$ est là où la fenêtre se ferme.
+- **Affectation par tranche sur les chaînes.** Les chaînes refusent — cette mutabilité est un privilège des listes.
+- **Le signe du pas doit concorder avec la direction.** `"abcdef"[0:5:-1]` est vide — une fenêtre qui marche à droite et un pas qui pointe à gauche ne se rencontrent nulle part. Gardez début, fin et pas alignés dans la même direction.
 
-<section class="lesson-section lesson-section--challenges">
-<h2 id="-challenges">🧩 Défis</h2>
+## 🧩 Défis
 
 <details class="challenge">
-<summary>Défi — réfléchissez d'abord, puis découvrez</summary>
+<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
-Inversez la chaîne `"racecar"` avec le tranchage.
+Inversez la chaîne `"racecar"` par tranchage.
 
-<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>"racecar"[::-1]</code> → <code>"racecar"</code> (c'est un palindrome !)</p>
+<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>"racecar"[::-1]</code> → <code>"racecar"</code> — elle se lit pareil dans les deux sens, ce qui est précisément pourquoi un palindrome survit à sa propre inversion.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>Défi — réfléchissez d'abord, puis découvrez</summary>
+<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
-Étant donné `"abcdefghij"`, extrayez chaque 3e caractère : `a`, `d`, `g`, `j`.
+Depuis `"abcdefghij"`, extrayez chaque troisième caractère : `a`, `d`, `g`, `j`.
 
-<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>"abcdefghij"[::3]</code> → <code>"adgj"</code></p>
+<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>"abcdefghij"[::3]</code> → <code>"adgj"</code> — le start par défaut vous épingle à l'indice 0 et l'enjambée 3 vous fait traverser la progression arithmétique.</p>
 
 </div>
 </details>
 
-</section>
+## 🤔 Questions socratiques
 
-<section class="lesson-section lesson-section--socratic">
-<h2 id="-socratic-questions">🤔 Questions socratiques</h2>
+- Pourquoi le tranchage ne lève-t-il jamais d'erreur là où l'indexation en lève ? Quelle attitude sépare les deux ?
+- En n'utilisant que l'affectation par tranche, comment échangeriez-vous deux éléments d'une liste ?
+- Si `text[::-1]` inverse, quelle ligne vous dit si une chaîne est un palindrome ?
 
-- Pourquoi le tranchage ne lève-t-il jamais d'erreur alors que l'indexation en lève ? Quelle philosophie de conception cela reflète-t-il ?
-- Comment échangeriez-vous deux éléments dans une liste en utilisant uniquement l'affectation de tranche ?
-- Si `text[::-1]` inverse une chaîne, comment vérifieriez-vous si une chaîne est un palindrome en une ligne ?
-
-</section>
-
-<section class="lesson-section lesson-section--quiz">
-<h2 id="-quick-check">✅ Vérification rapide</h2>
+## ✅ Vérification rapide
 
 <div class="quiz" data-quiz="python-101-string-slicing">
   <div class="quiz-q" data-answer="0">
@@ -145,4 +173,3 @@ Inversez la chaîne `"racecar"` avec le tranchage.
     <p class="quiz-q__feedback" hidden></p>
   </div>
 </div>
-</section>

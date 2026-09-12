@@ -20,9 +20,25 @@ section: "python-101"
 track: "normal"
 ---
 
-## If statements
+## From condition to decision
 
-An `if` block runs its body only when the condition is `True`:
+Arithmetic evaluates; comparisons decide; but a program that only evaluates runs one straight line from top to bottom. Life is not a straight line. A letter grade is a *piecewise function*: its formula changes at thresholds. Mathematically you write
+
+$$
+\mathrm{grade}(s) =
+\begin{cases}
+A & s \geq 90,\\
+B & s \geq 80,\\
+C & s \geq 70,\\
+F & \text{otherwise}.
+\end{cases}
+$$
+
+Python's `if`/`elif`/`else` is the transcription of a piecewise formula. Each piece guards its range, and exactly one piece fires.
+
+## The single fork
+
+The simplest branch runs its body only when the condition is `True`:
 
 ```python
 score = 85
@@ -30,9 +46,11 @@ if score >= 60:
     print("Passing!")
 ```
 
-## Adding else
+The statement begins with `if`, then the condition, then a colon — the colon is what tells Python a block is coming. Everything indented under it belongs to that branch and runs only if the condition held.
 
-`else` catches everything the `if` didn't match:
+## The two-way fork
+
+`else` catches everything the `if` did not:
 
 ```python
 score = 45
@@ -42,9 +60,11 @@ else:
     print("Needs more work")
 ```
 
-## Elif for multiple branches
+A two-way branch is a partition of the outcomes: the condition divides the value space into two halves, and every case lands in exactly one.
 
-`elif` (short for "else if") checks conditions in order, stopping at the first match:
+## The many-way fork: elif
+
+Real piecewise formulas have more than two pieces. `elif` — a contraction of "else if" — appends further conditions, checked in order, stopping at the first that is `True`:
 
 ```python
 score = 78
@@ -59,27 +79,27 @@ else:
 print(grade)  # B
 ```
 
-Only one branch runs — the first condition that's `True`.
+Notice the economy: each `elif` condition needs only a lower bound, because the cases above have already been decided. With $s = 85$, the first piece fails and the second matches — later branches never run. Only **one** branch can fire, which is what makes this a true function.
 
-## Truthiness and falsy values
+## Truthiness: values as conditions
 
-Python treats some values as `True` and others as `False` in boolean context:
+The condition after `if` need not be a comparison at all. Python asks, *"is this value truthy or falsy?"* — and the answer is uniform:
 
 ```python
-# These are all "falsy":
+# These are all falsy — they behave like False in a condition:
 bool(0)       # False
 bool(0.0)     # False
 bool("")      # False
 bool([])      # False
 bool(None)    # False
 
-# Everything else is "truthy":
+# Everything else is truthy — it behaves like True:
 bool(1)       # True
 bool("hello") # True
 bool([1, 2])  # True
 ```
 
-This means you can write clean conditions without explicit comparisons:
+The collection of falsy values is deliberately small: zero, empty text, empty containers, and `None`. Everything else counts. That buys terse conditions that read like a natural-language check:
 
 ```python
 name = ""
@@ -91,9 +111,11 @@ if items:
     print("We have items")
 ```
 
-## Nesting
+An empty string is falsy, so `not name` is `True`; a non-empty list is truthy, so `if items` fires. You skip the explicit `== ""` and `!= []` — the check is the emptiness itself.
 
-You can put `if` blocks inside other `if` blocks, but keep nesting shallow for readability:
+## Nesting: when one question depends on another
+
+Some decisions are sequential: *first*, are you of age; *then*, do you carry identification? Those nest:
 
 ```python
 age = 25
@@ -108,54 +130,64 @@ else:
     print("Too young")
 ```
 
+Nesting works, but each level doubles the paths a reader must hold in their head. Flat `elif` chains read like the piecewise formula itself; reach for those first, and reserve nesting for genuinely dependent questions.
+
+## A worked example: the thermostat
+
+A thermostat is a piecewise function with three pieces. The chain transcribes it directly:
+
+```python
+temperature = 22
+
+if temperature <= 10:
+    state = "heating"
+elif temperature >= 30:
+    state = "cooling"
+else:
+    state = "steady"
+print(state)  # steady
+```
+
+It reads like the formula it is. The order of the pieces matters: each `elif` assumes the ones above failed, so exactly one branch fires and exactly one state prints.
+
 ## Common pitfalls
 
-- **Forgetting the colon** after `if`, `elif`, or `else`
-- **Using `=` instead of `==`** in conditions (`=` assigns, `==` compares)
-- **Over-nesting** when `elif` or early `return` would be cleaner
+- **Forgetting the colon** after `if`, `elif`, or `else` — without it, the block never begins.
+- **`=` instead of `==`.** `if score = 60` is a syntax error, on purpose.
+- **Over-nesting** when an `elif` chain (or an early `return`) would state the shape of the formula in one pass.
+- **The first `True` wins, not the most specific match.** In `if x > 5: ... elif x > 3: ...`, an `x = 4` enters the second branch only if the first already failed — and a value below 3 falls to `else`. Ordering the pieces from narrow to wide is what keeps the formula correct.
 
-<section class="lesson-section lesson-section--challenges">
-<h2 id="-challenges">🧩 Challenges</h2>
+## 🧩 Challenges
 
 <details class="challenge">
-<summary>Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge — think first, then reveal</summary>
 <div class="challenge__body">
 
-Write a function `classify_temp(temp)` that returns:
-- `"freezing"` if temp < 0
-- `"cold"` if 0 <= temp < 15
-- `"warm"` if 15 <= temp < 30
-- `"hot"` if temp >= 30
+Write `classify_temp(temp)` returning `"freezing"` under $0$, `"cold"` in $[0,15)$, `"warm"` in $[15,30)$, and `"hot"` from $30$ up.
 
-<p class="challenge__answer">💡 <strong>Answer:</strong> Use <code>elif</code> chain: <code>if temp &lt; 0: return "freezing" elif temp &lt; 15: return "cold" elif temp &lt; 30: return "warm" else: return "hot"</code></p>
+<p class="challenge__answer">💡 <strong>Answer:</strong> An <code>elif</code> chain, using the fact that each later check assumes the earlier ones failed: <code>if temp &lt; 0: return "freezing" elif temp &lt; 15: return "cold" elif temp &lt; 30: return "warm" else: return "hot"</code>.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge — think first, then reveal</summary>
 <div class="challenge__body">
 
-Given `text = "Hello, World!"`, write a check that prints `"uppercase"` if the text is all uppercase, `"lowercase"` if all lowercase, or `"mixed"` otherwise.
+Given `text = "Hello, World!"`, print `"uppercase"` if the text is all caps, `"lowercase"` if all lower, `"mixed"` otherwise.
 
-<p class="challenge__answer">💡 <strong>Answer:</strong> <code>if text.isupper(): print("uppercase") elif text.islower(): print("lowercase") else: print("mixed")</code></p>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>if text.isupper(): print("uppercase") elif text.islower(): print("lowercase") else: print("mixed")</code> — the whole condition set forms a partition.</p>
 
 </div>
 </details>
 
-</section>
+## 🤔 Socratic Questions
 
-<section class="lesson-section lesson-section--socratic">
-<h2 id="-socratic-questions">🤔 Socratic Questions</h2>
+- Why `elif` and not `else if`? What would Python make of the two words appearing side by side?
+- With `s = 85`, how many conditions does the grade chain evaluate before entering a branch? (Hint: which piece fails, and which fires?)
+- What is the difference between `if x:` and `if x is not None:`? When does each one matter?
 
-- Why does Python use `elif` instead of `else if`? What would happen if you wrote `else if`?
-- If `score = 85`, how many conditions does `if score >= 90: ... elif score >= 80: ... elif score >= 70: ...` evaluate before entering a branch?
-- What's the difference between `if x:` and `if x is not None:`? When does each matter?
-
-</section>
-
-<section class="lesson-section lesson-section--quiz">
-<h2 id="-quick-check">✅ Quick check</h2>
+## ✅ Quick check
 
 <div class="quiz" data-quiz="python-101-control-flow">
   <div class="quiz-q" data-answer="2">
@@ -180,4 +212,3 @@ Given `text = "Hello, World!"`, write a check that prints `"uppercase"` if the t
     <p class="quiz-q__feedback" hidden></p>
   </div>
 </div>
-</section>
