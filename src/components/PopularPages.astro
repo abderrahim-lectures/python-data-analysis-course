@@ -15,7 +15,7 @@ const {supabaseUrl = '', supabaseKey = ''} = Astro.props;
 
 {
   supabaseUrl && supabaseKey && (
-    <section class="popular-pages" aria-label={m.popular_pages_label()}>
+    <section class="container popular-pages" aria-label={m.popular_pages_label()}>
       <h2 class="popular-pages__title">{m.popular_pages_title()}</h2>
       <ol class="popular-pages__list" id="popular-pages-list"></ol>
       <script is:inline define:vars={{supabaseUrl, supabaseKey}}>
@@ -52,13 +52,21 @@ const {supabaseUrl = '', supabaseKey = ''} = Astro.props;
                 continue;
               }
               const li = document.createElement('li');
+              li.className = 'popular-pages__item';
+              const rank = document.createElement('span');
+              rank.className = 'popular-pages__rank';
+              rank.textContent = String(frag.childNodes.length + 1);
               const a = document.createElement('a');
+              a.className = 'popular-pages__link';
               a.href = path;
-              a.textContent = path.replace(/-/g, ' ').replace(/\//g, ' › ');
+              const trimmed = path.replace(/^\/+|\/+$/g, '');
+              a.textContent = trimmed
+                ? trimmed.replace(/-/g, ' ').replace(/\//g, ' › ')
+                : '/';
               const views = document.createElement('span');
               views.className = 'popular-pages__views';
               views.textContent = String(row.views);
-              li.append(a, views);
+              li.append(rank, a, views);
               frag.appendChild(li);
             }
             if (frag.childNodes.length) list.appendChild(frag);
@@ -71,39 +79,66 @@ const {supabaseUrl = '', supabaseKey = ''} = Astro.props;
   )
 }
 
-<style>
+<style is:global>
+  /* Global: the list items below are built with document.createElement in
+     the inline script, so they never receive Astro's scoped data-astro-cid
+     attribute — scoped styles would silently not match them at all. */
   .popular-pages {
-    margin: 2rem 0;
-    padding: 1.25rem 1.5rem;
+    margin-block: 2rem;
+    padding: 1.5rem 1.75rem;
     border: 1px solid var(--line);
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     background: var(--surface);
+    box-shadow: var(--shadow-sm);
   }
   .popular-pages__title {
-    margin: 0 0 .75rem;
+    margin: 0 0 1rem;
     font-size: 1.05rem;
+    font-weight: 700;
   }
   .popular-pages__list {
     list-style: none;
     margin: 0;
     padding: 0;
     display: grid;
-    gap: .35rem;
+    gap: .25rem;
   }
-  .popular-pages__list a {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
+  .popular-pages__item {
+    display: grid;
+    grid-template-columns: 1.5rem 1fr auto;
+    align-items: center;
+    gap: .75rem;
+    padding: .1rem .5rem;
+    border-radius: var(--radius-md);
+    transition: background .15s ease;
+  }
+  .popular-pages__item:hover {
+    background: var(--surface-2);
+  }
+  .popular-pages__rank {
+    color: var(--ink-faint);
+    font-size: .78em;
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+  }
+  .popular-pages__link {
+    display: block;
+    padding: .55rem 0;
     text-decoration: none;
     color: var(--ink);
     text-transform: capitalize;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
-  .popular-pages__list a:hover {
+  .popular-pages__item:hover .popular-pages__link {
     color: var(--accent);
   }
   .popular-pages__views {
     color: var(--ink-faint);
     font-variant-numeric: tabular-nums;
     font-size: .85em;
+    font-weight: 600;
+    white-space: nowrap;
   }
 </style>
