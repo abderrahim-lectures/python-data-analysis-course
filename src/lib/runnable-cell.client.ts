@@ -437,13 +437,29 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
       .filter((el) => el !== codeEl)
       .map((el) => el.textContent ?? '')
       .join('\n');
+    // Installing a lesson's Python packages (numpy/pandas/matplotlib/... via
+    // Pyodide, seaborn via micropip) can take several seconds of wasm
+    // compilation with no visible progress otherwise, which reads as a
+    // frozen page -- so it gets the same full-page busy overlay as the
+    // one-time engine download, not just the button's own label.
+    let loadingPackages = false;
     const executed = await runCellCode(src, {
       appendLine,
       appendFigure,
       engine,
       otherCellSources,
-      onPhase: (phase) => { run.textContent = phase === 'packages' ? m.run_loading_packages() : m.run_loading(); },
+      onPhase: (phase) => {
+        if (phase === 'packages') {
+          loadingPackages = true;
+          run.textContent = m.run_loading_packages();
+          window.dispatchEvent?.(new CustomEvent('pyodide:loading', {detail: {phase: 'packages'}}));
+        } else {
+          if (loadingPackages) { window.dispatchEvent?.(new CustomEvent('pyodide:ready')); loadingPackages = false; }
+          run.textContent = m.run_loading();
+        }
+      },
     });
+    if (loadingPackages) window.dispatchEvent?.(new CustomEvent('pyodide:ready')); // safety net: packages install failed before the 'running' phase
     run.textContent = m.run_button();
     run.disabled = false;
     run.classList.remove('cell__run--loading');

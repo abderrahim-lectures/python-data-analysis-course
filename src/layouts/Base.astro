@@ -178,6 +178,7 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
       first: m.pyodide_loading_first(),
       indeterminate: m.pyodide_loading_engine_indeterminate(),
       template: m.pyodide_loading_engine({pct: '__PCT__'}),
+      packages: m.run_loading_packages(),
     })} />
     <script is:inline>
       // Persisted theme — must run before first paint to avoid a flash.
@@ -215,8 +216,9 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
           window.addEventListener('load', hideFirst);
           setTimeout(hideFirst, 1200); // safety net for slow third-party fonts
         }
-        window.addEventListener('pyodide:loading', () => {
-          label.textContent = i18n.indeterminate;
+        window.addEventListener('pyodide:loading', (e) => {
+          const phase = e.detail && e.detail.phase;
+          label.textContent = phase === 'packages' ? i18n.packages : i18n.indeterminate;
           setBusy(true);
         });
         window.addEventListener('pyodide:progress', (e) => {
