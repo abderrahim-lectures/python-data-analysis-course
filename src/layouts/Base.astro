@@ -102,10 +102,10 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
     </script>
     {import.meta.env.PUBLIC_GA_ID && (
       <script is:inline>
-        // Consent-gated GA, default off. gtag loads only once a visitor has
-        // opted in via the footer analytics toggle (localStorage
-        // "pda:analytics-consent" = "1"). Keeps EU visitors un-tracked by
-        // default. The same consent key gates pageviews and the learner bar.
+        // Consent-gated GA, default on. gtag loads unless a visitor explicitly
+        // opted out via the footer analytics toggle (localStorage
+        // "pda:analytics-consent" = "0"). The same key gates pageviews,
+        // the learner bar, and gtag.
         (function () {
           function loadGtag(id) {
             window.dataLayer = window.dataLayer || [];
@@ -118,7 +118,7 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
             document.head.appendChild(s);
           }
           try {
-            if (localStorage.getItem('pda:analytics-consent') === '1') {
+            if (localStorage.getItem('pda:analytics-consent') !== '0') {
               loadGtag('{import.meta.env.PUBLIC_GA_ID}');
             }
           } catch (e) { /* private mode: stay off */ }
@@ -271,11 +271,16 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
       </div>
       <div class="container footer__bottom">
         <p>{m.footer_copyright({year: new Date().getFullYear(), version: pkg.version})}</p>
-        <label class="consent-toggle" for="consent-toggle">
-          <input type="checkbox" id="consent-toggle" />
-          <span>{m.consent_label()}</span>
-        </label>
-        <p class="consent-desc">{m.consent_desc()}</p>
+        <div class="consent-card">
+          <div class="consent-card__text">
+            <span><Icon name="chart" size={14} /> {m.consent_label()}</span>
+            <p>{m.consent_desc()}</p>
+          </div>
+          <label class="switch" for="consent-toggle" title={m.consent_label()}>
+            <input type="checkbox" id="consent-toggle" />
+            <span class="switch__track" aria-hidden="true"><span class="switch__thumb"></span></span>
+          </label>
+        </div>
       </div>
     </footer>
 
@@ -313,9 +318,9 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
       var NOW = bar.getAttribute('data-now') || 'learning now';
       var ONE = bar.getAttribute('data-online-one') || 'learner online';
       var MANY = bar.getAttribute('data-online-many') || 'learners online';
-      // Anonymous analytics only: default off. No consent = no learner id, no
-      // heartbeat, no completions writes.
-      try { if (localStorage.getItem('pda:analytics-consent') !== '1') { return; } } catch(e) { return; }
+      // Anonymous analytics only: default on (opt-out). No consent key stored or
+      // explicit opt-out ('0') = no learner id, no heartbeat, no completions writes.
+      try { if (localStorage.getItem('pda:analytics-consent') === '0') { return; } } catch(e) { return; }
       try { if (localStorage.getItem('pda:learner-dismissed')) return; } catch(e) {}
       if (!URL || !KEY) { console.warn('[learner-bar] Supabase credentials not configured'); return; }
       var closeBtn = document.getElementById('learner-close');
@@ -376,14 +381,52 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
       (function () {
         var t = document.getElementById('consent-toggle');
         if (!t) return;
-        try { t.checked = localStorage.getItem('pda:analytics-consent') === '1'; } catch (e) {}
+        try { t.checked = localStorage.getItem('pda:analytics-consent') !== '0'; } catch (e) {}
         t.addEventListener('change', function () {
           try { localStorage.setItem('pda:analytics-consent', t.checked ? '1' : '0'); } catch (e) {}
           location.reload();
         });
       })();
     </script>
+    <script is:inline>
+      // RTL bidi fix: isolate LTR code tokens (e.g. generate_text()) in
+      // Arabic headings/titles so trailing () , : do not mirror or reorder.
+      (function () {
+        if (!document.documentElement || document.documentElement.dir !== 'rtl') return;
+        var RE = /[A-Za-z][A-Za-z0-9_.]*\([^()]*(?:\([^()]*\)[^()]*)*\)/g;
+        var t = document.title;
+        if (t) document.title = t.replace(RE, function (m) { return '\u2066' + m + '\u2069'; });
+        function fix(root) {
+          var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+            acceptNode: function (n) {
+              var tag = n.parentNode ? n.parentNode.tagName : '';
+              return /^(CODE|PRE|SCRIPT|STYLE|BDI)$/.test(tag) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT;
+            }
+          });
+          var nodes = [];
+          for (var n = walker.nextNode(); n; n = walker.nextNode()) nodes.push(n);
+          for (var i = 0; i < nodes.length; i++) {
+            var node = nodes[i];
+            if (!RE.test(node.nodeValue)) continue;
+            var frag = document.createDocumentFragment();
+            var rest = node.nodeValue, last = 0, m;
+            RE.lastIndex = 0;
+            while ((m = RE.exec(rest))) {
+              frag.appendChild(document.createTextNode(rest.slice(last, m.index)));
+              var b = document.createElement('bdi');
+              b.dir = 'ltr';
+              b.textContent = m[0];
+              frag.appendChild(b);
+              last = m.index + m[0].length;
+            }
+            if (last < rest.length) frag.appendChild(document.createTextNode(rest.slice(last)));
+            node.parentNode.replaceChild(frag, node);
+          }
+        }
+        fix(document.body);
+      })();
+    </script>
   </body>
-</html>
+  </html>
 
 

@@ -26,9 +26,9 @@ const {supabaseUrl = '', supabaseKey = '', locale = 'en'} = Astro.props;
         try {
           window.__pydaPageViewSent = true;
         } catch (e) {}
-        // Anonymous analytics only: default off (no consent = no tracking).
+        // Anonymous analytics only: default on (opt-out).
         try {
-          if (localStorage.getItem('pda:analytics-consent') !== '1') return;
+          if (localStorage.getItem('pda:analytics-consent') === '0') return;
         } catch (e) { return; }
         const body = JSON.stringify({
           path: window.location.pathname,
