@@ -143,7 +143,7 @@ plt.show()
 ```
 
 Reading a box plot:
-- **Box**: Interquartile range (IQR) — the middle 50% of data
+- **Box**: Interquartile range (IQR), the middle 50% of data
 - **Line inside box**: Median
 - **Whiskers**: 1.5 × IQR from Q1 and Q3
 - **Points beyond whiskers**: Outliers (typically > 1.5 × IQR)
@@ -227,7 +227,7 @@ plt.show()
 
 ## Key Takeaways
 
-- Always compute summary statistics before plotting — they tell you what to look for in the visual
+- Always compute summary statistics before plotting, they tell you what to look for in the visual
 - Histograms show frequency; KDE plots show density; box plots show summary statistics; violin plots combine both
 - Skewness and kurtosis quantify distribution shape in numbers
 - Box plots make outliers obvious; histograms reveal modality (unimodal vs bimodal)
@@ -238,7 +238,7 @@ plt.show()
 Create a single figure with four subplots showing the distribution of `math score` using: (1) a histogram, (2) a KDE plot, (3) a box plot, and (4) a violin plot. Add a vertical line at the mean on each plot. Set the figure title to "Math Score Distribution Analysis".
 
 <details class="challenge">
-<summary>🧩 Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge, think first, then reveal</summary>
 <div class="challenge__body">
 
 ```python

@@ -42,7 +42,7 @@ quiz:
       - text: "La mayor cantidad posible de puntos de datos"
       - text: "Números crudos en una tabla"
 ---
-Este es tu entregable del proyecto final. Todo lo que has aprendido — perfilado, análisis univariado, análisis bivariado, correlación, gráficos avanzados y narración — confluye aquí. Producirás un informe de EDA completo y pulido sobre el conjunto de datos Students Performance in Exams que cuente una historia clara y respaldada por los datos.
+Este es tu entregable del proyecto final. Todo lo que has aprendido, perfilado, análisis univariado, análisis bivariado, correlación, gráficos avanzados y narración, confluye aquí. Producirás un informe de EDA completo y pulido sobre el conjunto de datos Students Performance in Exams que cuente una historia clara y respaldada por los datos.
 
 ## Conceptos clave
 
@@ -50,13 +50,13 @@ Este es tu entregable del proyecto final. Todo lo que has aprendido — perfilad
 
 Un informe de EDA profesional sigue esta estructura:
 
-1. **Resumen ejecutivo** — hallazgos clave en 3-4 viñetas
-2. **Panorama de los datos** — descripción del conjunto de datos, perfilado, evaluación de calidad
-3. **Análisis univariado** — distribuciones de cada variable
-4. **Análisis bivariado** — relaciones entre variables
-5. **Análisis multivariado** — interacciones y factores de confusión
-6. **Hallazgos clave** — lo que revelan los datos
-7. **Recomendaciones** — próximos pasos accionables
+1. **Resumen ejecutivo**, hallazgos clave en 3-4 viñetas
+2. **Panorama de los datos**, descripción del conjunto de datos, perfilado, evaluación de calidad
+3. **Análisis univariado**, distribuciones de cada variable
+4. **Análisis bivariado**, relaciones entre variables
+5. **Análisis multivariado**, interacciones y factores de confusión
+6. **Hallazgos clave**, lo que revelan los datos
+7. **Recomendaciones**, próximos pasos accionables
 
 ### Flujo completo de EDA
 
@@ -310,14 +310,14 @@ print(executive_summary)
 - El proyecto final integra cada habilidad del curso: perfilado, análisis, visualización y narración
 - Las figuras multipanel anotadas comunican hallazgos complejos de forma eficiente
 - Los hallazgos deben ser específicos (con números) y accionables (con recomendaciones)
-- Los mejores informes de EDA son reproducibles — cualquiera puede volver a ejecutar el notebook y obtener los mismos resultados
+- Los mejores informes de EDA son reproducibles, cualquiera puede volver a ejecutar el notebook y obtener los mismos resultados
 
 ## Desafío de práctica
 
 Crea un script de Python autocontenido que cargue el conjunto de datos Students Performance, ejecute el flujo completo de EDA y genere una figura de resumen de 4 paneles con: (1) distribuciones de puntajes, (2) comparación de preparación para el examen, (3) mapa de calor de correlación y (4) un banner de hallazgos. Guarda la figura como `eda_report.png`.
 
 <details class="challenge">
-<summary>🧩 Desafío — piensa primero, luego revela</summary>
+<summary>🧩 Desafío, piensa primero, luego revela</summary>
 <div class="challenge__body">
 
 ```python

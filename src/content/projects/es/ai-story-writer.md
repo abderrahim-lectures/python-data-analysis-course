@@ -21,7 +21,7 @@ learningObjectives:
 
 Te encanta contar historias, pero a veces la página en blanco gana. En este proyecto construirás una herramienta que aprende patrones de escritura a partir de texto de muestra y genera historias nuevas combinando la generación de texto con cadenas de Markov con plantillas estructuradas y perfiles de personajes. El resultado es un generador de historias que produce relatos de varios párrafos con personajes consistentes, tramas variadas y estilo controlable.
 
-Este proyecto solo asume fundamentos de nivel Python 101 — funciones, listas, diccionarios, bucles, clases y formato de cadenas. Sin frameworks, sin bases de datos, sin servicios en la nube. Todo lo que necesitas viene de la biblioteca estándar.
+Este proyecto solo asume fundamentos de nivel Python 101, funciones, listas, diccionarios, bucles, clases y formato de cadenas. Sin frameworks, sin bases de datos, sin servicios en la nube. Todo lo que necesitas viene de la biblioteca estándar.
 
 Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
 
@@ -37,18 +37,18 @@ Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/es/proyec
 
 ## Dónde ejecutar esto
 
-- **Localmente con `uv` (recomendado).** Este proyecto solo usa la biblioteca estándar de Python — no se necesitan paquetes de terceros. La sección de Configuración de abajo lo explica paso a paso.
+- **Localmente con `uv` (recomendado).** Este proyecto solo usa la biblioteca estándar de Python, no se necesitan paquetes de terceros. La sección de Configuración de abajo lo explica paso a paso.
 - **Google Colab o Kaggle Notebooks.** Pega las celdas de código directamente en un notebook.
-- **Playground de JupyterLite.** Pega las celdas de código directamente en un notebook — no se requiere entrada/salida de archivos, así que todo funciona en el navegador.
+- **Playground de JupyterLite.** Pega las celdas de código directamente en un notebook, no se requiere entrada/salida de archivos, así que todo funciona en el navegador.
 
-- **Ejecútalo en el navegador.** Hay un cuaderno interactivo listo — ábrelo en Colab, Kaggle o Binder y sigue los pasos en orden.
+- **Ejecútalo en el navegador.** Hay un cuaderno interactivo listo, ábrelo en Colab, Kaggle o Binder y sigue los pasos en orden.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-story-writer/notebook.es.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-story-writer/notebook.es.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fai-story-writer%2Fnotebook.es.ipynb)
 
 ## Configuración
 
-`uv` es una herramienta única que reemplaza la cadena habitual de "instalar Python, luego pip, luego un entorno virtual, luego los paquetes" — administra las versiones de Python y las dependencias juntas.
+`uv` es una herramienta única que reemplaza la cadena habitual de "instalar Python, luego pip, luego un entorno virtual, luego los paquetes", administra las versiones de Python y las dependencias juntas.
 
 **macOS / Linux** (terminal):
 
@@ -75,11 +75,11 @@ uv init ai-story-writer
 cd ai-story-writer
 ```
 
-Sin paquetes extra — la biblioteca estándar tiene todo lo que necesitamos (`random`, `dataclasses`, `abc`, `json`, `textwrap`).
+Sin paquetes extra, la biblioteca estándar tiene todo lo que necesitamos (`random`, `dataclasses`, `abc`, `json`, `textwrap`).
 
 ## Paso 1: Fundamentos de las cadenas de Markov
 
-Una cadena de Markov es un modelo simple que predice el siguiente elemento basándose solo en el elemento actual — no tiene memoria de lo que vino antes. Aplicada al texto, una cadena de Markov de primer orden observa la palabra actual y elige la siguiente palabra a partir de una distribución de probabilidades construida con texto real. La cadena aprende qué palabras tienden a seguir a qué otras palabras, y luego genera secuencias nuevas que imitan los patrones estadísticos del texto de entrenamiento.
+Una cadena de Markov es un modelo simple que predice el siguiente elemento basándose solo en el elemento actual, no tiene memoria de lo que vino antes. Aplicada al texto, una cadena de Markov de primer orden observa la palabra actual y elige la siguiente palabra a partir de una distribución de probabilidades construida con texto real. La cadena aprende qué palabras tienden a seguir a qué otras palabras, y luego genera secuencias nuevas que imitan los patrones estadísticos del texto de entrenamiento.
 
 ### 1.1 Construye la estructura de datos de la cadena
 
@@ -118,7 +118,7 @@ print(dict(chain))
 {'the': ['cat', 'mat', 'cat'], 'cat': ['sat', 'sat'], 'sat': ['on', None], 'on': ['the'], 'mat': ['the']}
 ```
 
-(Nota: la última palabra "sat" no tiene sucesor — se omitirá de la cadena porque el bucle se detiene en `len(words) - 1`.)
+(Nota: la última palabra "sat" no tiene sucesor, se omitirá de la cadena porque el bucle se detiene en `len(words) - 1`.)
 
 **🩹 Si sale mal :** Si tu cadena está vacía, la cadena de entrada podría no tener espacios. Verifica que `text.split()` produzca una lista con al menos dos palabras. Si obtienes un `KeyError` al buscar una palabra, recuerda que la cadena solo almacena palabras que tienen al menos un sucesor.
 
@@ -182,7 +182,7 @@ Con una semilla de 42 y un texto de entrenamiento corto, la cadena recorre el mi
 
 ## Paso 2: Entrena sobre texto de muestra
 
-Una cadena de Markov solo es tan buena como sus datos de entrenamiento. Aliméntala con un párrafo de cuentos de hadas y escribe cuentos de hadas. Aliméntala con ciencia ficción y escribe ciencia ficción. La idea clave es que necesitas suficiente texto para que la cadena aprenda patrones reales de transición de palabras — una sola oración es demasiado pequeña, pero una novela completa es excesiva.
+Una cadena de Markov solo es tan buena como sus datos de entrenamiento. Aliméntala con un párrafo de cuentos de hadas y escribe cuentos de hadas. Aliméntala con ciencia ficción y escribe ciencia ficción. La idea clave es que necesitas suficiente texto para que la cadena aprenda patrones reales de transición de palabras, una sola oración es demasiado pequeña, pero una novela completa es excesiva.
 
 ### 2.1 Usa un corpus de entrenamiento incorporado
 
@@ -265,7 +265,7 @@ for i in range(3):
   [2] She found a secret door hidden behind a waterfall behind the door
 ```
 
-**🩹 Si sale mal :** Si la salida es mayormente repeticiones de una sola palabra, tu texto de entrenamiento es demasiado corto o demasiado repetitivo. Agrega oraciones más diversas. Si obtienes `KeyError`, a tu cadena le falta una palabra — verifica que `build_chain` convierta a minúsculas tanto la palabra actual como la siguiente.
+**🩹 Si sale mal :** Si la salida es mayormente repeticiones de una sola palabra, tu texto de entrenamiento es demasiado corto o demasiado repetitivo. Agrega oraciones más diversas. Si obtienes `KeyError`, a tu cadena le falta una palabra, verifica que `build_chain` convierta a minúsculas tanto la palabra actual como la siguiente.
 
 ### 2.3 Confirma que la cadena funciona
 
@@ -313,7 +313,7 @@ Template: hero (fantasy) — 4 paragraphs
 
 ### 3.2 Construye una biblioteca de plantillas
 
-**👟 Pista inicial :** Crea una lista de plantillas predefinidas, cada una con un género, una descripción de estructura y una lista de "avances" de párrafo — descripciones cortas de lo que debe contener cada párrafo. Estos avances guían la generación.
+**👟 Pista inicial :** Crea una lista de plantillas predefinidas, cada una con un género, una descripción de estructura y una lista de "avances" de párrafo, descripciones cortas de lo que debe contener cada párrafo. Estos avances guían la generación.
 
 ```python
 TEMPLATES = [
@@ -413,7 +413,7 @@ Available templates:
 
 ## Paso 4: Desarrollo de personajes
 
-Los personajes hacen que las historias valgan la pena. Un perfil de personaje es una bolsa de atributos — nombre, rasgos de personalidad, metas, historia de fondo — de la que el generador se sirve al llenar las ranuras de la plantilla. La meta es hacer que los personajes se sientan consistentes dentro de una sola historia sin codificar rígidamente cada detalle.
+Los personajes hacen que las historias valgan la pena. Un perfil de personaje es una bolsa de atributos, nombre, rasgos de personalidad, metas, historia de fondo, de la que el generador se sirve al llenar las ranuras de la plantilla. La meta es hacer que los personajes se sientan consistentes dentro de una sola historia sin codificar rígidamente cada detalle.
 
 ### 4.1 Diseña la clase Character
 
@@ -711,7 +711,7 @@ The princess set out on her journey with a gentle kiss and the ship drifted thro
 The princess set out on her journey the kingdom crossed out with black ink the only entry that remained unmarked was a meeting at the harbour morgan drove to the harbour and found a boat with the engine running on the
 ```
 
-La temperatura baja produce texto repetitivo y predecible. La temperatura media mezcla los corpus de entrenamiento de forma natural. La temperatura alta atrae combinaciones de palabras inesperadas a través de los géneros — a veces creativas, a veces sin sentido.
+La temperatura baja produce texto repetitivo y predecible. La temperatura media mezcla los corpus de entrenamiento de forma natural. La temperatura alta atrae combinaciones de palabras inesperadas a través de los géneros, a veces creativas, a veces sin sentido.
 
 ### 6.2 Integra la temperatura en el generador de historias
 
@@ -781,7 +781,7 @@ La salida debe leerse como una historia corta coherente con el nombre, los rasgo
 
 ## Paso 7: Menú CLI
 
-Un menú CLI te permite ejecutar el generador de historias de forma interactiva — elige un género, crea un personaje, ajusta la temperatura y lee tu historia en la terminal.
+Un menú CLI te permite ejecutar el generador de historias de forma interactiva, elige un género, crea un personaje, ajusta la temperatura y lee tu historia en la terminal.
 
 ### 7.1 Construye el bucle del menú
 
@@ -913,9 +913,9 @@ The princess set out on her journey with a gentle kiss and they returned to the 
 
 ## Lo que aprendiste
 
-1. **Cadenas de Markov** — cómo las probabilidades de transición de palabras modelan los patrones estadísticos del texto natural.
-2. **Datos de entrenamiento** — cómo el tamaño y el género del corpus afectan la calidad de la generación.
-3. **Plantillas** — cómo los marcadores de posición estructurados convierten texto aleatorio en historias coherentes.
-4. **Perfiles de personajes** — cómo atributos como rasgos, metas e historias de fondo dan consistencia a las historias.
-5. **Temperatura** — cómo un único parámetro controla el equilibrio entre la previsibilidad y la creatividad.
-6. **Generación de historias** — cómo combinar todas estas piezas en una herramienta CLI funcional.
+1. **Cadenas de Markov**, cómo las probabilidades de transición de palabras modelan los patrones estadísticos del texto natural.
+2. **Datos de entrenamiento**, cómo el tamaño y el género del corpus afectan la calidad de la generación.
+3. **Plantillas**, cómo los marcadores de posición estructurados convierten texto aleatorio en historias coherentes.
+4. **Perfiles de personajes**, cómo atributos como rasgos, metas e historias de fondo dan consistencia a las historias.
+5. **Temperatura**, cómo un único parámetro controla el equilibrio entre la previsibilidad y la creatividad.
+6. **Generación de historias**, cómo combinar todas estas piezas en una herramienta CLI funcional.

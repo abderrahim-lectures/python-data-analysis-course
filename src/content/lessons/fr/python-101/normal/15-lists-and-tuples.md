@@ -1,6 +1,6 @@
 ---
 title: "Listes et tuples"
-description: "Maîtrisez les séquences ordonnées de Python — les listes mutables et les tuples immuables."
+description: "Maîtrisez les séquences ordonnées de Python, les listes mutables et les tuples immuables."
 module: "data-structures"
 order: 15
 difficulty: "beginner"
@@ -31,7 +31,7 @@ print(fruits[-1])      # cherry
 print(fruits[0:2])     # ['apple', 'banana']
 ```
 
-Indexer depuis $0$, indices négatifs comptant en arrière, tranches prenant des fenêtres — les trois mêmes compétences, désormais braquées sur une collection d'objets quelconques. Là où une chaîne était figée, la liste est de l'argile.
+Indexer depuis $0$, indices négatifs comptant en arrière, tranches prenant des fenêtres, les trois mêmes compétences, désormais braquées sur une collection d'objets quelconques. Là où une chaîne était figée, la liste est de l'argile.
 
 ## La boîte à outils de la liste
 
@@ -49,11 +49,11 @@ nums.reverse()       # inverse sur place
 len(nums)            # longueur actuelle
 ```
 
-`append` ajoute un élément à la fin ; `extend` verse toute une séquence ; `insert` en glisse un à une position choisie. `pop` retire de la fin (ou d'un indice donné) et vous tend la valeur retirée ; `remove` supprime le premier élément correspondant. La liste est le cousin mutable de chevaux de trait comme le développement décimal de $\pi$ — une corde croissante de valeurs que vous ne cessez d'éditer.
+`append` ajoute un élément à la fin ; `extend` verse toute une séquence ; `insert` en glisse un à une position choisie. `pop` retire de la fin (ou d'un indice donné) et vous tend la valeur retirée ; `remove` supprime le premier élément correspondant. La liste est le cousin mutable de chevaux de trait comme le développement décimal de $\pi$, une corde croissante de valeurs que vous ne cessez d'éditer.
 
 ## Listes de listes : tableaux et matrices
 
-Les éléments d'une liste peuvent eux-mêmes être des listes, ce qui transforme une séquence plate en tableau — une matrice est une liste de lignes, et chaque ligne est une liste de nombres :
+Les éléments d'une liste peuvent eux-mêmes être des listes, ce qui transforme une séquence plate en tableau, une matrice est une liste de lignes, et chaque ligne est une liste de nombres :
 
 ```python
 matrix = [
@@ -77,11 +77,11 @@ result = nums.sort()   # result est None ! nums est désormais [1, 2, 3]
 result = sorted(nums)  # result est [1, 2, 3], nums inchangée
 ```
 
-`nums.sort()` réordonne sur place et ne renvoie rien — la valeur de votre expression est `None`. `sorted(nums)` calcule une nouvelle liste ordonnée et laisse `nums` intacte. Le nom est le signal : les verbes comme `sort` et `reverse` touchent l'objet ; `sorted` et `list.copy()` produisent une copie pour un nouveau possesseur.
+`nums.sort()` réordonne sur place et ne renvoie rien, la valeur de votre expression est `None`. `sorted(nums)` calcule une nouvelle liste ordonnée et laisse `nums` intacte. Le nom est le signal : les verbes comme `sort` et `reverse` touchent l'objet ; `sorted` et `list.copy()` produisent une copie pour un nouveau possesseur.
 
 ## Tuples : la séquence gelée
 
-Un tuple est une séquence ordonnée, **immuable** — une liste qui a perdu ses outils d'édition :
+Un tuple est une séquence ordonnée, **immuable**, une liste qui a perdu ses outils d'édition :
 
 ```python
 point = (3, 4)
@@ -89,7 +89,7 @@ print(point[0])   # 3
 # point[0] = 5   # TypeError !
 ```
 
-L'immuabilité n'est pas un handicap ; c'est une promesse. Le point $(3, 4)$ est un unique objet mathématique qui ne doit pas changer sous vos pieds. Les coordonnées, les couleurs RGB, les lignes de base de données — des données *fixées par définition* appartiennent aux tuples, où la réassignation accidentelle devient une exception au lieu d'une corruption silencieuse.
+L'immuabilité n'est pas un handicap ; c'est une promesse. Le point $(3, 4)$ est un unique objet mathématique qui ne doit pas changer sous vos pieds. Les coordonnées, les couleurs RGB, les lignes de base de données, des données *fixées par définition* appartiennent aux tuples, où la réassignation accidentelle devient une exception au lieu d'une corruption silencieuse.
 
 ## Déballage : une ligne, beaucoup de noms
 
@@ -101,11 +101,11 @@ a, b, *rest = [1, 2, 3, 4, 5]  # a=1, b=2, rest=[3, 4, 5]
 first, *_, last = (1, 2, 3, 4)  # first=1, last=4
 ```
 
-`*rest` avale tout ce qui se trouve entre les fentes nommées ; `*_` est le même geste portant le nom conventionnel de « jette ceci ». C'est la version liste d'évaluer une fonction en un point — les entrées et les sorties s'alignent par position.
+`*rest` avale tout ce qui se trouve entre les fentes nommées ; `*_` est le même geste portant le nom conventionnel de « jette ceci ». C'est la version liste d'évaluer une fonction en un point, les entrées et les sorties s'alignent par position.
 
 ## Un exemple travaillé : le carnet de notes
 
-Voyez la boîte à outils à l'œuvre sur une tâche réelle — les notes d'un contrôle du groupe :
+Voyez la boîte à outils à l'œuvre sur une tâche réelle, les notes d'un contrôle du groupe :
 
 ```python
 scores = []
@@ -122,7 +122,7 @@ print(average)            # 8.0
 print(best)               # 10
 ```
 
-Collectez avec `append`/`extend`, puis lisez avec `sum`, `max` et `len`. Remarquez la division : `total / count` est la moyenne arithmétique — le même $\frac{\text{somme}}{\text{nombre}}$ que vous connaissez en maths, désormais en une ligne de code. Une liste est un lieu pour *accumuler* des données, et la boucle entre la faire grandir et la lire est le motif que répète tout programme réel.
+Collectez avec `append`/`extend`, puis lisez avec `sum`, `max` et `len`. Remarquez la division : `total / count` est la moyenne arithmétique, le même $\frac{\text{somme}}{\text{nombre}}$ que vous connaissez en maths, désormais en une ligne de code. Une liste est un lieu pour *accumuler* des données, et la boucle entre la faire grandir et la lire est le motif que répète tout programme réel.
 
 ## Pièges courants
 
@@ -135,23 +135,23 @@ Collectez avec `append`/`extend`, puis lisez avec `sum`, `max` et `len`. Remarqu
 ## 🧩 Défis
 
 <details class="challenge">
-<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
+<summary>🧩 Défi, réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
 Supprimez les doublons en conservant l'ordre : `[1, 3, 2, 3, 1, 4, 2]` → `[1, 3, 2, 4]`.
 
-<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>list(dict.fromkeys(nums))</code> — un dict garde l'ordre d'insertion (depuis 3.7+), et les clés dupliquées s'effondrent sur leur première position.</p>
+<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>list(dict.fromkeys(nums))</code>, un dict garde l'ordre d'insertion (depuis 3.7+), et les clés dupliquées s'effondrent sur leur première position.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
+<summary>🧩 Défi, réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
 Échangez deux variables sans variable temporaire, grâce au déballage de tuples.
 
-<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>a, b = b, a</code> — le côté droit est évalué en tuple d'abord, donc l'échange est simultané, non séquentiel.</p>
+<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>a, b = b, a</code>, le côté droit est évalué en tuple d'abord, donc l'échange est simultané, non séquentiel.</p>
 
 </div>
 </details>
@@ -159,7 +159,7 @@ Supprimez les doublons en conservant l'ordre : `[1, 3, 2, 3, 1, 4, 2]` → `[1, 
 ## 🤔 Questions socratiques
 
 - Quand atteindre un tuple plutôt qu'une liste, et que vous achète l'immuabilité ?
-- Pourquoi `sort()` mute là où `sorted()` renvoie du neuf — et quand préférez-vous chacun ?
+- Pourquoi `sort()` mute là où `sorted()` renvoie du neuf, et quand préférez-vous chacun ?
 - Comment `*rest` recueille-t-il le surplus ? `*_` peut-il tenir lieu de rejet nommé ?
 
 ## ✅ Vérification rapide

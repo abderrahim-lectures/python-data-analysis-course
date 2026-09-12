@@ -20,7 +20,7 @@ learningObjectives:
 
 # 💰 Rastreador de Gastos
 
-Controla tu gasto, cíñete a los presupuestos y visualiza a dónde va tu dinero — todo desde la línea de comandos. Este proyecto te lleva de diccionarios Python crudos a través del análisis con pandas hasta los gráficos de matplotlib, construyendo una herramienta práctica que de verdad puedes usar para gestionar tus finanzas.
+Controla tu gasto, cíñete a los presupuestos y visualiza a dónde va tu dinero, todo desde la línea de comandos. Este proyecto te lleva de diccionarios Python crudos a través del análisis con pandas hasta los gráficos de matplotlib, construyendo una herramienta práctica que de verdad puedes usar para gestionar tus finanzas.
 
 Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
 
@@ -37,17 +37,17 @@ Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/es/proyec
 ## Dónde ejecutar esto
 
 - **Localmente con `uv` (recomendado).** Este proyecto usa `pandas` y `matplotlib`, de modo que una instalación local es el camino más fluido. La sección Configuración de abajo lo recorre.
-- **Playground de JupyterLite.** Pega las celdas de código directamente en un notebook — funciona bien para explorar los pasos de análisis (2–5), aunque el menú CLI (Paso 7) está diseñado para una terminal real.
+- **Playground de JupyterLite.** Pega las celdas de código directamente en un notebook, funciona bien para explorar los pasos de análisis (2–5), aunque el menú CLI (Paso 7) está diseñado para una terminal real.
 - **Google Colab.** Abre un notebook nuevo y pega las celdas. Misma advertencia que JupyterLite: la CLI interactiva funciona mejor en una terminal real.
 
-- **Ejecútalo en el navegador.** Hay un cuaderno interactivo listo — ábrelo en Colab, Kaggle o Binder y sigue los pasos en orden.
+- **Ejecútalo en el navegador.** Hay un cuaderno interactivo listo, ábrelo en Colab, Kaggle o Binder y sigue los pasos en orden.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/expense-tracker/notebook.es.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/expense-tracker/notebook.es.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fexpense-tracker%2Fnotebook.es.ipynb)
 
 ## Configuración
 
-`uv` es una sola herramienta que reemplaza la cadena habitual de "instala Python, luego pip, luego un entorno virtual" — puede instalar y gestionar versiones de Python junto con las dependencias de tu proyecto.
+`uv` es una sola herramienta que reemplaza la cadena habitual de "instala Python, luego pip, luego un entorno virtual", puede instalar y gestionar versiones de Python junto con las dependencias de tu proyecto.
 
 **macOS / Linux** (terminal):
 
@@ -79,7 +79,7 @@ uv add pandas matplotlib
 
 ## Paso 1: Define el modelo de datos
 
-Antes de escribir cualquier función, decide cómo viven los gastos y presupuestos en memoria. Cada gasto es un diccionario con cuatro campos — fecha, monto, categoría y descripción. Una lista contiene todos los gastos. Un diccionario separado mapea cada categoría a su límite de presupuesto mensual.
+Antes de escribir cualquier función, decide cómo viven los gastos y presupuestos en memoria. Cada gasto es un diccionario con cuatro campos, fecha, monto, categoría y descripción. Una lista contiene todos los gastos. Un diccionario separado mapea cada categoría a su límite de presupuesto mensual.
 
 ### 1.1 Crea los contenedores vacíos
 
@@ -98,7 +98,7 @@ budgets = {
 }
 ```
 
-**🎯 Resultado esperado :** Aún no hay salida visible — acabas de crear dos contenedores vacíos. Ejecutar `print(expenses)` da `[]` y `print(budgets)` muestra las cuatro categorías con sus límites.
+**🎯 Resultado esperado :** Aún no hay salida visible, acabas de crear dos contenedores vacíos. Ejecutar `print(expenses)` da `[]` y `print(budgets)` muestra las cuatro categorías con sus límites.
 
 **🩹 Si sale mal :** Si obtienes un `NameError` en `pd`, asegúrate de que `import pandas as pd` está en la parte superior de la celda o del script. Si `budgets` muestra un diccionario vacío, verifica que incluiste los dos puntos entre los nombres de categoría y los montos.
 
@@ -166,7 +166,7 @@ Added: $55.00 in groceries
 
 Imprimir `expenses` muestra una lista de cuatro diccionarios, cada uno con las claves `date`, `amount`, `category` y `description`.
 
-**🩹 Si sale mal :** Si la categoría no aparece en minúsculas en la salida, asegúrate de llamar `.lower()` sobre la entrada — esto evita que `"Groceries"` y `"groceries"` se conviertan en categorías separadas. Si la fecha muestra la fecha de hoy aunque entraste una distinta, eso es esperado: la función siempre estampa la fecha actual.
+**🩹 Si sale mal :** Si la categoría no aparece en minúsculas en la salida, asegúrate de llamar `.lower()` sobre la entrada, esto evita que `"Groceries"` y `"groceries"` se conviertan en categorías separadas. Si la fecha muestra la fecha de hoy aunque entraste una distinta, eso es esperado: la función siempre estampa la fecha actual.
 
 ### 2.3 Verifica los datos
 
@@ -189,7 +189,7 @@ Las listas crudas de diccionarios están bien para registrar, pero el análisis 
 
 ### 3.1 Construye el DataFrame
 
-**👟 Pista inicial :** Pasa la lista `expenses` directamente a `pd.DataFrame()`. Imprime el resultado con `to_string(index=False)` para una salida limpia — sin números de fila que ensucien la vista.
+**👟 Pista inicial :** Pasa la lista `expenses` directamente a `pd.DataFrame()`. Imprime el resultado con `to_string(index=False)` para una salida limpia, sin números de fila que ensucien la vista.
 
 ```python
 df = pd.DataFrame(expenses)
@@ -208,7 +208,7 @@ All expenses:
  2026-09-06   55.00   groceries          Pantry restock
 ```
 
-**🩹 Si sale mal :** Si ves un DataFrame vacío con `RangeIndex(start=0, stop=0, step=0)`, la lista `expenses` está vacía — aún no has llamado `add_expense` en esta sesión. Si los nombres de columna se ven mal, verifica que tus diccionarios de gasto usen exactamente `"date"`, `"amount"`, `"category"` y `"description"` como claves.
+**🩹 Si sale mal :** Si ves un DataFrame vacío con `RangeIndex(start=0, stop=0, step=0)`, la lista `expenses` está vacía, aún no has llamado `add_expense` en esta sesión. Si los nombres de columna se ven mal, verifica que tus diccionarios de gasto usen exactamente `"date"`, `"amount"`, `"category"` y `"description"` como claves.
 
 ### 3.2 Calcula totales por categoría
 
@@ -230,7 +230,7 @@ dining        28.00
 transport     15.00
 ```
 
-**🩹 Si sale mal :** Si obtienes un `KeyError`, el nombre de la columna no coincide — verifica errores tipográficos como `"cat"` en lugar de `"category"`. Si los totales se ven mal, verifica que pasaste `["amount"]` antes de `.sum()` — sin él, intentarías sumar cada columna numérica, lo que podría incluir datos inesperados.
+**🩹 Si sale mal :** Si obtienes un `KeyError`, el nombre de la columna no coincide, verifica errores tipográficos como `"cat"` en lugar de `"category"`. Si los totales se ven mal, verifica que pasaste `["amount"]` antes de `.sum()`, sin él, intentarías sumar cada columna numérica, lo que podría incluir datos inesperados.
 
 ### 3.3 Agrega resúmenes mensuales
 
@@ -251,7 +251,7 @@ date
 2026-09    140.5
 ```
 
-**🩹 Si sale mal :** Un `TypeError` en `pd.to_datetime` significa que las cadenas de fecha no están en un formato reconocible — vuelve a `add_expense` y confirma que estás usando `date.today().isoformat()`. Si las fechas de meses distintos no aparecen por separado, tus datos de prueba son todos del mismo mes — agrega un gasto con una fecha distinta para probar.
+**🩹 Si sale mal :** Un `TypeError` en `pd.to_datetime` significa que las cadenas de fecha no están en un formato reconocible, vuelve a `add_expense` y confirma que estás usando `date.today().isoformat()`. Si las fechas de meses distintos no aparecen por separado, tus datos de prueba son todos del mismo mes, agrega un gasto con una fecha distinta para probar.
 
 ### 3.4 Verifica el análisis
 
@@ -320,7 +320,7 @@ check_budgets(
 
 Ahora groceries muestra un WARNING al 90% ($547 / $500). Excede el límite e imprime OVER BUDGET.
 
-**🩹 Si sale mal :** Si todas las categorías muestran `OK` incluso con gasto fuerte, verifica que estás pasando el dict de totales *sumados*, no la lista de gastos cruda. Si obtienes un `ZeroDivisionError`, uno de tus límites de presupuesto es cero — cada categoría en `budgets` necesita un límite positivo.
+**🩹 Si sale mal :** Si todas las categorías muestran `OK` incluso con gasto fuerte, verifica que estás pasando el dict de totales *sumados*, no la lista de gastos cruda. Si obtienes un `ZeroDivisionError`, uno de tus límites de presupuesto es cero, cada categoría en `budgets` necesita un límite positivo.
 
 ### 4.3 Prueba el umbral
 
@@ -339,7 +339,7 @@ Ahora groceries muestra un WARNING al 90% ($547 / $500). Excede el límite e imp
 
 ## Paso 5: Visualiza el gasto
 
-Los números en una tabla son útiles, pero los gráficos hacen obvios los patrones de gasto de inmediato. Construye un gráfico de barras para los totales por categoría y un gráfico de pastel para las proporciones — lado a lado en una sola figura.
+Los números en una tabla son útiles, pero los gráficos hacen obvios los patrones de gasto de inmediato. Construye un gráfico de barras para los totales por categoría y un gráfico de pastel para las proporciones, lado a lado en una sola figura.
 
 ### 5.1 Crea los gráficos lado a lado
 
@@ -370,7 +370,7 @@ print("Chart saved to spending_report.png")
 
 **🎯 Resultado esperado :** Se abre una ventana (o una imagen en línea en un notebook) que muestra dos gráficos: un gráfico de barras a la izquierda con una barra por categoría, y un gráfico de pastel a la derecha que muestra desgloses porcentuales. Un archivo llamado `spending_report.png` aparece en tu directorio de trabajo.
 
-**🩹 Si sale mal :** Si el gráfico de pastel muestra etiquetas superpuestas, aumenta `figsize` a `(14, 6)` o reduce el tamaño de fuente con `plt.rcParams["font.size"] = 10` antes de dibujar. Si `savefig` guarda una imagen en blanco, asegúrate de que `plt.show()` viene *después* de `savefig` — algunos backends limpian la figura en `show()`. Si obtienes un `IndexError` en `colors[:len(category_totals)]`, tus datos de gasto tienen más categorías que colores — agrega más códigos hex a la lista.
+**🩹 Si sale mal :** Si el gráfico de pastel muestra etiquetas superpuestas, aumenta `figsize` a `(14, 6)` o reduce el tamaño de fuente con `plt.rcParams["font.size"] = 10` antes de dibujar. Si `savefig` guarda una imagen en blanco, asegúrate de que `plt.show()` viene *después* de `savefig`, algunos backends limpian la figura en `show()`. Si obtienes un `IndexError` en `colors[:len(category_totals)]`, tus datos de gasto tienen más categorías que colores, agrega más códigos hex a la lista.
 
 ### 5.2 Personaliza la apariencia
 
@@ -390,11 +390,11 @@ plt.show()
 - ✅ El gráfico de barras tiene una barra por categoría con etiquetas en el eje x.
 - ✅ El gráfico de pastel muestra etiquetas de porcentaje (ej., "69.4%") en cada rebanada.
 - ✅ Se guarda un archivo PNG en disco y no está vacío.
-- ✅ Los gráficos son legibles — sin texto superpuesto ni etiquetas recortadas.
+- ✅ Los gráficos son legibles, sin texto superpuesto ni etiquetas recortadas.
 
 **🤔 Pregunta(s) socrática(s)**
 
-¿Cuándo sería más útil un gráfico de barras que uno de pastel, y viceversa? ¿Qué pasa con el gráfico de pastel si una categoría domina al 95% del gasto — puedes aún leer las rebanadas más pequeñas?
+¿Cuándo sería más útil un gráfico de barras que uno de pastel, y viceversa? ¿Qué pasa con el gráfico de pastel si una categoría domina al 95% del gasto, puedes aún leer las rebanadas más pequeñas?
 
 ---
 
@@ -431,9 +431,9 @@ def load_expenses(filename: str = "expenses.csv") -> pd.DataFrame:
     return df
 ```
 
-**🎯 Resultado esperado :** En la primera ejecución (sin CSV aún): `No existing data found — starting fresh.` En ejecuciones posteriores: `Loaded 4 expenses from expenses.csv`.
+**🎯 Resultado esperado :** En la primera ejecución (sin CSV aún): `No existing data found, starting fresh.` En ejecuciones posteriores: `Loaded 4 expenses from expenses.csv`.
 
-**🩹 Si sale mal :** Si obtienes un `ParserError` en `pd.read_csv`, el CSV tiene filas malformadas — ábrelo en un editor de texto para revisar comas sueltas o comillas rotas. Si las fechas aparecen como cadenas en lugar de objetos datetime, asegúrate de incluir `parse_dates=["date"]`. Si el archivo existe pero `load_expenses` devuelve un DataFrame vacío, la ruta del archivo está mal — ejecuta tu script desde el mismo directorio donde guardaste el CSV.
+**🩹 Si sale mal :** Si obtienes un `ParserError` en `pd.read_csv`, el CSV tiene filas malformadas, ábrelo en un editor de texto para revisar comas sueltas o comillas rotas. Si las fechas aparecen como cadenas en lugar de objetos datetime, asegúrate de incluir `parse_dates=["date"]`. Si el archivo existe pero `load_expenses` devuelve un DataFrame vacío, la ruta del archivo está mal, ejecuta tu script desde el mismo directorio donde guardaste el CSV.
 
 ### 6.3 Verifica la persistencia
 
@@ -441,7 +441,7 @@ def load_expenses(filename: str = "expenses.csv") -> pd.DataFrame:
 
 - ✅ Tras guardar, `expenses.csv` existe y contiene la fila de encabezado más las filas de datos.
 - ✅ Tras cargar, el DataFrame tiene los mismos datos que guardaste.
-- ✅ Que falte el archivo CSV no tumba el programa — arranca desde cero con elegancia.
+- ✅ Que falte el archivo CSV no tumba el programa, arranca desde cero con elegancia.
 - ✅ Las fechas se parsean como objetos datetime tras cargar, no como cadenas simples.
 
 ---
@@ -601,7 +601,7 @@ if __name__ == "__main__":
 
 ## ⚠️ Errores comunes
 
-- **Olvidar guardar tras los cambios.** Si modificas `expenses` o `df` pero no llamas `save_expenses`, el CSV queda obsoleto. Guarda siempre justo después de una operación que cambie datos — no solo al salir del programa — de modo que un crash o un Ctrl+C solo pierda la acción actual.
+- **Olvidar guardar tras los cambios.** Si modificas `expenses` o `df` pero no llamas `save_expenses`, el CSV queda obsoleto. Guarda siempre justo después de una operación que cambie datos, no solo al salir del programa, de modo que un crash o un Ctrl+C solo pierda la acción actual.
 - **Confusión entre cadena de fecha y datetime.** Cargar desde CSV sin `parse_dates=["date"]` te da cadenas como `"2026-09-06"` en lugar de objetos datetime. La llamada `.dt.to_period("M")` en el resumen mensual se estrellará con un `TypeError` sobre cadenas.
 - **Mayúsculas inconsistentes en la categoría.** Si `"Groceries"` y `"groceries"` aparecen ambas en los datos, `groupby` las trata como categorías separadas. Pon siempre la categoría en minúsculas dentro de `add_expense`, no en el sitio de llamada.
 - **Gráfico de pastel con demasiadas categorías.** Con 10+ categorías, el gráfico de pastel se vuelve ilegible. Considera filtrar a las 5 principales y agrupar el resto en "other" para el pastel, mientras mantienes el gráfico de barras completo.
@@ -609,7 +609,7 @@ if __name__ == "__main__":
 
 ## Lo que acabas de construir
 
-Un rastreador de gastos de línea de comandos funcional que registra gasto, lo analiza con pandas, monitorea presupuestos con alertas de umbral, genera gráficos con matplotlib y persiste todo a un archivo CSV. Modelaste datos financieros con diccionarios Python simples, los convertiste a DataFrames para análisis, construiste pipelines de agregación con `groupby`, implementaste lógica de alertas basada en umbrales y creaste gráficos de calidad de publicación — todas habilidades prácticas que se transfieren directamente al trabajo real de análisis financiero.
+Un rastreador de gastos de línea de comandos funcional que registra gasto, lo analiza con pandas, monitorea presupuestos con alertas de umbral, genera gráficos con matplotlib y persiste todo a un archivo CSV. Modelaste datos financieros con diccionarios Python simples, los convertiste a DataFrames para análisis, construiste pipelines de agregación con `groupby`, implementaste lógica de alertas basada en umbrales y creaste gráficos de calidad de publicación, todas habilidades prácticas que se transfieren directamente al trabajo real de análisis financiero.
 
 ## A dónde ir desde aquí
 
@@ -621,6 +621,6 @@ Un rastreador de gastos de línea de comandos funcional que registra gasto, lo a
 
 ## Comparte tu proyecto con la clase
 
-¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado — y su README tiene un recorrido completo y amigable para principiantes sobre cómo agregar el tuyo vía un **pull request**, incluso si nunca has usado git antes: hacer fork del repositorio, crear una rama, confirmar tus archivos y abrir el PR, un paso a la vez. No se asume experiencia previa con git.
+¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado, y su README tiene un recorrido completo y amigable para principiantes sobre cómo agregar el tuyo vía un **pull request**, incluso si nunca has usado git antes: hacer fork del repositorio, crear una rama, confirmar tus archivos y abrir el PR, un paso a la vez. No se asume experiencia previa con git.
 
 Bienvenido a escribir Python fuera del navegador. 🎓

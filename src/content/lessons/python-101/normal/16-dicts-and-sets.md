@@ -49,7 +49,7 @@ scores.update({"Eve": 95, "Frank": 88})  # merge
 scores.setdefault("Grace", 0)  # set only if key missing
 ```
 
-`keys`, `values`, and `items` are three views of the same relation — the domain, the range, and the graph. `update` merges a second dict in; `setdefault` writes only when the key is absent, the conditional assignment that needs no `if`.
+`keys`, `values`, and `items` are three views of the same relation, the domain, the range, and the graph. `update` merges a second dict in; `setdefault` writes only when the key is absent, the conditional assignment that needs no `if`.
 
 ## Walking the mapping
 
@@ -63,7 +63,7 @@ for name, score in scores.items():  # key-value pairs
     print(f"{name}: {score}")
 ```
 
-`items` hands you the pair directly — no manual indexing — because unpacking an entry into `name, score` is the natural reading of a row.
+`items` hands you the pair directly, no manual indexing, because unpacking an entry into `name, score` is the natural reading of a row.
 
 ## Sets: the mathematical set
 
@@ -74,7 +74,7 @@ colors = {"red", "blue", "green", "red"}
 print(colors)  # {'red', 'blue', 'green'}  (duplicates removed)
 ```
 
-Uniqueness is enforced structurally — there is no second copy waiting to pollute a membership check. Membership in a set is $x \in S$ exactly: an element is in or out, with no in-between and no earlobing.
+Uniqueness is enforced structurally, there is no second copy waiting to pollute a membership check. Membership in a set is $x \in S$ exactly: an element is in or out, with no in-between and no earlobing.
 
 ## Set operations
 
@@ -98,7 +98,7 @@ The operators are the notation you already know. And where the theory promises s
 
 ## The hashing requirement
 
-Fingerprints require stability. Dict keys and set elements must be **hashable** — effectively immutable — so their computes stay reproducible. Strings, numbers, and tuples qualify; lists and dicts do not:
+Fingerprints require stability. Dict keys and set elements must be **hashable**, effectively immutable, so their computes stay reproducible. Strings, numbers, and tuples qualify; lists and dicts do not:
 
 ```python
 {[1, 2]: "bad"}   # TypeError: unhashable type: 'list'
@@ -109,7 +109,7 @@ A list could not be a reliable key even if allowed: its hash would change the mo
 
 ## A worked example: the grade book
 
-The relation, the domain, and the range — one table walked in three postures:
+The relation, the domain, and the range, one table walked in three postures:
 
 ```python
 scores = {"Alice": 85, "Bob": 92, "Charlie": 78}
@@ -123,35 +123,35 @@ roles = {"student", "teacher", "admin"}
 print("student" in roles)             # True — O(1) membership
 ```
 
-`items` walks the whole graph, `.get` asks courteously when you do not know the key exists, and `in` on a set is the membership $x \in S$ — three questions the lesson's structures answer directly.
+`items` walks the whole graph, `.get` asks courteously when you do not know the key exists, and `in` on a set is the membership $x \in S$, three questions the lesson's structures answer directly.
 
 ## Common pitfalls
 
 - **Accessing missing keys.** `.get()` or a check with `in` spares you a `KeyError`.
 - **Relying on dict order.** Python 3.7+ preserves insertion order, but treat it as a convenience, not a contract.
 - **Trusting set order.** A set keeps no order whatsoever; never make iteration order a dependency.
-- **`{}` is an empty dict; `set()` is the empty set.** `{}` is not a set. Write `set()` for the empty one and `{"a", "b"}` for a literal — one symbol, two meanings.
+- **`{}` is an empty dict; `set()` is the empty set.** `{}` is not a set. Write `set()` for the empty one and `{"a", "b"}` for a literal, one symbol, two meanings.
 
 ## 🧩 Challenges
 
 <details class="challenge">
-<summary>🧩 Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge, think first, then reveal</summary>
 <div class="challenge__body">
 
 Count the frequency of each character in `"hello world"` with a dict.
 
-<p class="challenge__answer">💡 <strong>Answer:</strong> <code>freq = {}; for c in "hello world": freq[c] = freq.get(c, 0) + 1</code> — the <code>.get</code> fallback of $0$ turns the first sighting into an increment from zero.</p>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>freq = {}; for c in "hello world": freq[c] = freq.get(c, 0) + 1</code>, the <code>.get</code> fallback of $0$ turns the first sighting into an increment from zero.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge, think first, then reveal</summary>
 <div class="challenge__body">
 
 Given two lists, find the elements appearing in both, using sets.
 
-<p class="challenge__answer">💡 <strong>Answer:</strong> <code>set(a) & set(b)</code> or <code>set(a).intersection(b)</code> — the intersection is $A \cap B$, and the set machinery does the work.</p>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>set(a) & set(b)</code> or <code>set(a).intersection(b)</code>, the intersection is $A \cap B$, and the set machinery does the work.</p>
 
 </div>
 </details>
@@ -159,7 +159,7 @@ Given two lists, find the elements appearing in both, using sets.
 ## 🤔 Socratic Questions
 
 - Why can't a list serve as a dict key? What property must a key carry?
-- When does a set beat a list — what do you lose, and what do you gain?
+- When does a set beat a list, what do you lose, and what do you gain?
 - How does `dict.get(key, default)` differ from `dict[key]`, and when do you prefer one?
 
 ## ✅ Quick check

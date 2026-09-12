@@ -14,9 +14,9 @@ prerequisites: ["Python 101", "Data Analysis"]
 
 # 📊 Construye un Panel de IoT
 
-Un sistema IoT sin panel es como un coche sin velocímetro — los datos existen, pero nadie puede verlos. Este proyecto construye un panel de monitoreo en tiempo real con Dash y Plotly: simulas flujos de datos de sensores, renderizas medidores en vivo que se actualizan cada segundo, graficas las tendencias históricas como gráficos de series temporales y agrupas los dispositivos por tipo o ubicación. El panel se ejecuta en tu navegador y se actualiza automáticamente.
+Un sistema IoT sin panel es como un coche sin velocímetro, los datos existen, pero nadie puede verlos. Este proyecto construye un panel de monitoreo en tiempo real con Dash y Plotly: simulas flujos de datos de sensores, renderizas medidores en vivo que se actualizan cada segundo, graficas las tendencias históricas como gráficos de series temporales y agrupas los dispositivos por tipo o ubicación. El panel se ejecuta en tu navegador y se actualiza automáticamente.
 
-Esto asume Python 101 y comodidad con pandas de Análisis de Datos — nada más. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
+Esto asume Python 101 y comodidad con pandas de Análisis de Datos, nada más. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
 
 ## 🎯 Lo que harás
 
@@ -29,7 +29,7 @@ Esto asume Python 101 y comodidad con pandas de Análisis de Datos — nada más
 
 ## Dónde ejecutar esto
 
-**Localmente con `uv`** es el camino principal — este es un servidor web que se ejecuta en `localhost` y se abre en tu navegador.
+**Localmente con `uv`** es el camino principal, este es un servidor web que se ejecuta en `localhost` y se abre en tu navegador.
 
 **Google Colab, Kaggle Notebooks y Binder** pueden ejecutar el servidor para probarlo, pero la URL del panel no será accesible desde fuera del notebook.
 
@@ -353,14 +353,14 @@ if __name__ == "__main__":
 ## ⚠️ Errores comunes
 
 - **IDs de callback que no coinciden.** Cada ID de `Input`/`Output` debe coincidir exactamente con la propiedad `id` de un componente. Un error tipográfico desactiva el callback en silencio.
-- **Importar módulos obsoletos.** `dash_core_components` y `dash_html_components` ahora están dentro de `dash` — importa desde `dash` directamente.
+- **Importar módulos obsoletos.** `dash_core_components` y `dash_html_components` ahora están dentro de `dash`, importa desde `dash` directamente.
 - **Crecimiento de memoria sin límite.** El `DataBuffer` recorta los datos antiguos a `max_points`. Sin el recorte, la memoria del panel crecería para siempre.
 - **Bloquear el hilo principal.** Los callbacks de Dash se ejecutan de forma síncrona. Un callback lento (como una consulta de base de datos) congela todo el panel. Usa `dcc.Interval` con criterio y mantén los callbacks rápidos.
-- **Olvidar `debug=True` durante el desarrollo.** Sin él, los errores de los callbacks son silenciosos — el panel simplemente deja de actualizarse. Desarrolla siempre con el modo de depuración activado.
+- **Olvidar `debug=True` durante el desarrollo.** Sin él, los errores de los callbacks son silenciosos, el panel simplemente deja de actualizarse. Desarrolla siempre con el modo de depuración activado.
 
 ## Lo que acabas de construir
 
-Un panel de monitoreo IoT en tiempo real: un simulador de sensores que produce patrones de datos realistas, medidores de Plotly con actualización en vivo, un gráfico de series temporales histórico con ejes duales y filtrado por ubicación. La arquitectura de callbacks de Dash — donde cada interacción del usuario dispara una función que devuelve figuras actualizadas — es el mismo patrón que se usa en los paneles de producción para monitoreo, análisis y sistemas de control.
+Un panel de monitoreo IoT en tiempo real: un simulador de sensores que produce patrones de datos realistas, medidores de Plotly con actualización en vivo, un gráfico de series temporales histórico con ejes duales y filtrado por ubicación. La arquitectura de callbacks de Dash, donde cada interacción del usuario dispara una función que devuelve figuras actualizadas, es el mismo patrón que se usa en los paneles de producción para monitoreo, análisis y sistemas de control.
 
 :::tip[Ejecuta una versión más completa sin configuración local]
 [`examples/iot-dashboard/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/iot-dashboard) en el repositorio del curso tiene una versión más rica con más tipos de sensores, indicadores de alerta y el CLI conectado de principio a fin. Clónalo, o abre el repositorio completo en un [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), y ejecútalo desde allí.
@@ -374,6 +374,6 @@ Un panel de monitoreo IoT en tiempo real: un simulador de sensores que produce p
 
 ## Comparte tu proyecto con la clase
 
-¿Construiste algo de lo que te sientas orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado — y su README tiene una guía completa y apta para principiantes sobre cómo añadir el tuyo mediante una **pull request**, incluso si nunca has usado git: hacer un fork del repositorio, crear una rama, hacer commit de tus archivos y abrir la PR, paso a paso. No se asume ninguna experiencia previa con git.
+¿Construiste algo de lo que te sientas orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado, y su README tiene una guía completa y apta para principiantes sobre cómo añadir el tuyo mediante una **pull request**, incluso si nunca has usado git: hacer un fork del repositorio, crear una rama, hacer commit de tus archivos y abrir la PR, paso a paso. No se asume ninguna experiencia previa con git.
 
 Bienvenido a escribir Python fuera del navegador. 🎓

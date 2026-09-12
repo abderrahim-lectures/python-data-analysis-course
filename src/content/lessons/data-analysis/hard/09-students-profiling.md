@@ -261,7 +261,7 @@ for q, a in answers.items():
 
 - Always load data from a reproducible source (URL) so others can replicate your analysis
 - The profiling workflow from Module 1 is your standard starting point for any dataset
-- Formulate questions before analysis — they keep you focused and prevent scope creep
+- Formulate questions before analysis, they keep you focused and prevent scope creep
 - The Students Performance dataset is clean (no missing values) but has interesting categorical variables to explore
 - Your analysis plan should flow logically: univariate → bivariate → multivariate → storytelling
 
@@ -270,7 +270,7 @@ for q, a in answers.items():
 Write a Python script that loads the dataset, profiles it, and generates a summary dictionary with: `row_count`, `column_count`, `missing_columns`, `score_means`, `score_stds`, `categorical_cardinalities`, and `eda_questions`. Print the dictionary formatted.
 
 <details class="challenge">
-<summary>🧩 Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge, think first, then reveal</summary>
 <div class="challenge__body">
 
 ```python

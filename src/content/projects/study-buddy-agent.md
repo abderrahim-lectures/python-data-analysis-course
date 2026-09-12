@@ -6,9 +6,9 @@ difficulty: "intermediate"
 
 # 🎓 Build a Study-Buddy Quiz Agent
 
-Everything in the course so far ran in a sandboxed, in-browser playground — so you could start writing Python on day one with zero setup. This project is the graduation step: install Python for real on your own machine, then use it to build a tool you might actually keep using for a different class entirely — a quiz app that reads your own study notes, writes questions grounded in what's actually in them (not generic trivia), quizzes you one question at a time in the terminal, and has a language model judge whether your typed answer is close enough, with brief feedback either way.
+Everything in the course so far ran in a sandboxed, in-browser playground, so you could start writing Python on day one with zero setup. This project is the graduation step: install Python for real on your own machine, then use it to build a tool you might actually keep using for a different class entirely, a quiz app that reads your own study notes, writes questions grounded in what's actually in them (not generic trivia), quizzes you one question at a time in the terminal, and has a language model judge whether your typed answer is close enough, with brief feedback either way.
 
-This is optional and ungraded — a good fit once you've finished Python 101; nothing from Data Analysis is required. See [Real-World Projects](/projects) for the full, growing list.
+This is optional and ungraded, a good fit once you've finished Python 101; nothing from Data Analysis is required. See [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 
@@ -20,11 +20,11 @@ This is optional and ungraded — a good fit once you've finished Python 101; no
 
 ## Where to run this
 
-**Locally with `uv`** is the path this lesson's steps follow, and the recommended one — it's real Python running on your own machine, the same "graduate to real Python" move as every other project in this section.
+**Locally with `uv`** is the path this lesson's steps follow, and the recommended one, it's real Python running on your own machine, the same "graduate to real Python" move as every other project in this section.
 
 **GitHub Codespaces** is a zero-setup alternative if you'd rather not install anything locally yet: open [the whole course repo in a free Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python, and `uv` are already installed, per the repo's `.devcontainer/devcontainer.json`) and run the exact same `uv` commands from a terminal in your browser tab.
 
-**Google Colab, Kaggle Notebooks, or Binder** work fine too — this project is just a terminal script that calls a hosted API, no GPU or heavy local package involved. A ready-to-run notebook version lives at [`examples/study-buddy-agent/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/study-buddy-agent/notebook.ipynb) — it mirrors the same `generate_questions()` / `judge_answer()` / `run_quiz()` logic, uses `input()` in a cell the same way you would in a terminal, and embeds one of the sample notes files directly so it runs with no file upload needed. Launch it with one of the badges below:
+**Google Colab, Kaggle Notebooks, or Binder** work fine too, this project is just a terminal script that calls a hosted API, no GPU or heavy local package involved. A ready-to-run notebook version lives at [`examples/study-buddy-agent/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/study-buddy-agent/notebook.ipynb), it mirrors the same `generate_questions()` / `judge_answer()` / `run_quiz()` logic, uses `input()` in a cell the same way you would in a terminal, and embeds one of the sample notes files directly so it runs with no file upload needed. Launch it with one of the badges below:
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/study-buddy-agent/notebook.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/study-buddy-agent/notebook.ipynb)
@@ -34,11 +34,11 @@ It's a lower-fidelity way to experience it than a real local project (no real fi
 
 ## Setup
 
-Everything you need before Step 1 — installing `uv`, creating the project, and getting an API key — lives here, all up front, so the steps below can focus purely on the quiz logic.
+Everything you need before Step 1, installing `uv`, creating the project, and getting an API key, lives here, all up front, so the steps below can focus purely on the quiz logic.
 
 ### Install `uv`
 
-`uv` is a single tool that replaces the usual "install Python, then install pip, then install a virtual environment tool, then install packages" chain — it can install and manage Python versions itself, alongside your project's dependencies.
+`uv` is a single tool that replaces the usual "install Python, then install pip, then install a virtual environment tool, then install packages" chain, it can install and manage Python versions itself, alongside your project's dependencies.
 
 **macOS / Linux** (terminal):
 
@@ -66,20 +66,20 @@ cd study-buddy-agent
 uv add openai python-dotenv
 ```
 
-`uv init` creates a small project (a `pyproject.toml` tracking your dependencies) and `uv add` installs packages into an isolated environment for that project — no manual virtual-environment setup. `openai` is the client library this lesson uses (GitHub Models, the suggested default provider below, exposes an OpenAI-compatible API); `python-dotenv` lets you keep your API key in a local `.env` file instead of `export`-ing it every session.
+`uv init` creates a small project (a `pyproject.toml` tracking your dependencies) and `uv add` installs packages into an isolated environment for that project, no manual virtual-environment setup. `openai` is the client library this lesson uses (GitHub Models, the suggested default provider below, exposes an OpenAI-compatible API); `python-dotenv` lets you keep your API key in a local `.env` file instead of `export`-ing it every session.
 
 ### Get a free AI API key
 
-**Pick whichever provider you like** — none of them require a credit card at the time of writing, and this course doesn't favor one over another. The example script in the course repo ([`examples/study-buddy-agent/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/study-buddy-agent)) uses GitHub Models by default; swapping to another provider is a small, well-documented change.
+**Pick whichever provider you like**, none of them require a credit card at the time of writing, and this course doesn't favor one over another. The example script in the course repo ([`examples/study-buddy-agent/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/study-buddy-agent)) uses GitHub Models by default; swapping to another provider is a small, well-documented change.
 
 | Provider | Where to get a key | Why you might pick it |
 |---|---|---|
-| **GitHub Models** *(suggested default)* | [github.com/settings/tokens](https://github.com/settings/tokens) — a personal access token with the `models: read` scope | No separate signup — you already have a GitHub account. More generous free-tier limits than Gemini's. |
+| **GitHub Models** *(suggested default)* | [github.com/settings/tokens](https://github.com/settings/tokens), a personal access token with the `models: read` scope | No separate signup, you already have a GitHub account. More generous free-tier limits than Gemini's. |
 | Gemini | [Google AI Studio](https://aistudio.google.com/) | The most commonly referenced option. |
 | Groq | [console.groq.com/keys](https://console.groq.com/keys) | Fast inference, generous free tier, no card. |
 | Mistral | [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys) | One of the more generous permanent free quotas. |
 | Cerebras | [cloud.cerebras.ai](https://cloud.cerebras.ai/) | High daily token volume, no card. |
-| OpenRouter | [openrouter.ai/keys](https://openrouter.ai/keys) | One API, many free models — good for comparing providers. |
+| OpenRouter | [openrouter.ai/keys](https://openrouter.ai/keys) | One API, many free models, good for comparing providers. |
 
 Whichever you pick, the process is the same:
 
@@ -91,21 +91,21 @@ Whichever you pick, the process is the same:
 GITHUB_TOKEN=your-key-here
 ```
 
-`python-dotenv` reads this file into `os.environ` automatically, the same pattern used throughout the [AI Agent](/projects/ai-agent) and [RAG](/projects/rag-notes) projects if you've done either of those. An API key is a secret, exactly like a password — anyone with it can use your account's quota.
+`python-dotenv` reads this file into `os.environ` automatically, the same pattern used throughout the [AI Agent](/projects/ai-agent) and [RAG](/projects/rag-notes) projects if you've done either of those. An API key is a secret, exactly like a password, anyone with it can use your account's quota.
 
 :::tip[A .env file is often more convenient than export]
 Instead of `export`-ing a key in every new terminal session, put it in a `.env` file in your project folder (see the repo example's `.env.example`) and load it with `load_dotenv()`, called once near the top of your script.
 :::
 
-With `uv`, `openai`, `python-dotenv`, and a key in `.env`, setup is done — everything from here is quiz logic.
+With `uv`, `openai`, `python-dotenv`, and a key in `.env`, setup is done, everything from here is quiz logic.
 
 ## Step 1: Load your notes and choose a context strategy
 
-Put a `.txt` or `.md` file of your own study notes somewhere in your project — a `notes/` folder, same convention as the [RAG project](/projects/rag-notes), is a reasonable place. Reading it is nothing new. Take this step in two small sub-steps: load the file, then choose your context strategy.
+Put a `.txt` or `.md` file of your own study notes somewhere in your project, a `notes/` folder, same convention as the [RAG project](/projects/rag-notes), is a reasonable place. Reading it is nothing new. Take this step in two small sub-steps: load the file, then choose your context strategy.
 
 ### 1.1 Load the notes file
 
-**👟 Starter hint:** `Path(...).read_text(encoding="utf-8")` is the entire "load" step — no chunking, no embedding, just a string. Print `len(notes_text)` after reading it as your one sanity check before moving on:
+**👟 Starter hint:** `Path(...).read_text(encoding="utf-8")` is the entire "load" step, no chunking, no embedding, just a string. Print `len(notes_text)` after reading it as your one sanity check before moving on:
 
 ```python
 from pathlib import Path
@@ -115,20 +115,20 @@ notes_text = Path("notes/cell-biology.txt").read_text(encoding="utf-8")
 
 **🎯 Expected output:** `len(notes_text)` prints a real, nonzero character count matching roughly how long your notes file actually is.
 
-**🩹 If it's off:** A `FileNotFoundError` means the path is relative to wherever you ran `uv run` from, not the script's own location — run from the project root, or use an absolute path while debugging. A suspiciously small count (a handful of characters) usually means you saved an empty file or pointed at the wrong one.
+**🩹 If it's off:** A `FileNotFoundError` means the path is relative to wherever you ran `uv run` from, not the script's own location, run from the project root, or use an absolute path while debugging. A suspiciously small count (a handful of characters) usually means you saved an empty file or pointed at the wrong one.
 
 ### 1.2 Choose your context strategy
 
 Here's the design decision this project asks you to make explicitly, rather than skip past: **how much of your notes should the model actually see?**
 
-**👟 Starter hint:** Read the two options below and decide which fits your notes file. For a single file under a few thousand words, Option A is simpler and recommended. If your notes are already a folder of many long files, Option B is the path — but that's a full RAG pipeline.
+**👟 Starter hint:** Read the two options below and decide which fits your notes file. For a single file under a few thousand words, Option A is simpler and recommended. If your notes are already a folder of many long files, Option B is the path, but that's a full RAG pipeline.
 
-- **Option A — feed the whole file as context.** Simplest possible approach: read one file, hand its entire text to the model in the prompt, done. This works great as long as a single file comfortably fits in the model's context window — a few thousand words is no problem at all for any modern free-tier model.
-- **Option B — chunk, embed, and retrieve**, exactly like the [RAG project](/projects/rag-notes) does: split your notes into small pieces, embed them locally, and retrieve only the most relevant ones for each question. This scales to a notes folder with dozens of long files that would never fit in one prompt.
+- **Option A, feed the whole file as context.** Simplest possible approach: read one file, hand its entire text to the model in the prompt, done. This works great as long as a single file comfortably fits in the model's context window, a few thousand words is no problem at all for any modern free-tier model.
+- **Option B, chunk, embed, and retrieve**, exactly like the [RAG project](/projects/rag-notes) does: split your notes into small pieces, embed them locally, and retrieve only the most relevant ones for each question. This scales to a notes folder with dozens of long files that would never fit in one prompt.
 
-**This lesson picks Option A** and is explicit about the tradeoff: it's less scalable, but it's a full lesson simpler to write, read, and debug — no embedding model, no vector search, no separate index-building step, just a string. That tradeoff is worth naming out loud, the same grounding principle as the RAG project either way: a good quiz question has to come from text the model was actually given, not text it's guessing might be relevant from training data. If your own notes outgrow a single file, don't reinvent retrieval — reuse `retrieve.py` from the RAG project's example and swap Step 2's prompt to use retrieved chunks instead of a whole file.
+**This lesson picks Option A** and is explicit about the tradeoff: it's less scalable, but it's a full lesson simpler to write, read, and debug, no embedding model, no vector search, no separate index-building step, just a string. That tradeoff is worth naming out loud, the same grounding principle as the RAG project either way: a good quiz question has to come from text the model was actually given, not text it's guessing might be relevant from training data. If your own notes outgrow a single file, don't reinvent retrieval, reuse `retrieve.py` from the RAG project's example and swap Step 2's prompt to use retrieved chunks instead of a whole file.
 
-**🩹 If it's off:** If you pick Option A but your file exceeds the model's context window, you'll get a truncated prompt (the model only sees the beginning) and won't know it — the generated questions will miss the later parts of your notes. Option B requires more setup (embeddings, vector search) but scales; if you try Option B without first doing the RAG project, you're building a pipeline you don't yet understand.
+**🩹 If it's off:** If you pick Option A but your file exceeds the model's context window, you'll get a truncated prompt (the model only sees the beginning) and won't know it, the generated questions will miss the later parts of your notes. Option B requires more setup (embeddings, vector search) but scales; if you try Option B without first doing the RAG project, you're building a pipeline you don't yet understand.
 
 ### 1.3 Verify the load + strategy choice
 
@@ -140,12 +140,12 @@ Here's the design decision this project asks you to make explicitly, rather than
 
 **🤔 Socratic Question(s)**
 
-- If your notes file were 50 pages long instead of one page, what specifically would go wrong with Option A first — an error, a truncated prompt, or something more subtle like the model only actually using the beginning of the file?
+- If your notes file were 50 pages long instead of one page, what specifically would go wrong with Option A first, an error, a truncated prompt, or something more subtle like the model only actually using the beginning of the file?
 - The RAG project's chunking step exists to make each embedded piece of text *specific*. Does skipping chunking here lose that specificity, or does handing the model the whole file actually give it *more* to work with? Under what circumstances would each answer be right?
 
 ## Step 2: Generate quiz questions grounded in your notes
 
-Ask the model for a fixed number of questions, each paired with an expected answer — and be explicit in the prompt that both must come from the specific text you're handing it, not general knowledge about the subject. Break this into two focused sub-steps.
+Ask the model for a fixed number of questions, each paired with an expected answer, and be explicit in the prompt that both must come from the specific text you're handing it, not general knowledge about the subject. Break this into two focused sub-steps.
 
 ### 2.1 Write the generation prompt and call the model
 
@@ -180,9 +180,9 @@ def generate_questions(notes_text: str, num_questions: int = 5) -> list[dict]:
     return json.loads(raw)
 ```
 
-**🎯 Expected output:** The function returns a Python list of 5 dicts, each with a `"question"` and `"expected_answer"` key referencing specifics from your actual notes file — not generic textbook trivia.
+**🎯 Expected output:** The function returns a Python list of 5 dicts, each with a `"question"` and `"expected_answer"` key referencing specifics from your actual notes file, not generic textbook trivia.
 
-**🩹 If it's off:** Generic, notes-agnostic questions mean `notes_text` either wasn't actually substituted into the prompt (check the `.format(...)` call) or your notes file itself is too thin to ground five distinct questions in — see the pitfalls section.
+**🩹 If it's off:** Generic, notes-agnostic questions mean `notes_text` either wasn't actually substituted into the prompt (check the `.format(...)` call) or your notes file itself is too thin to ground five distinct questions in, see the pitfalls section.
 
 ### 2.2 Strip fences and parse the JSON response
 
@@ -202,16 +202,16 @@ def generate_questions(notes_text: str, num_questions: int = 5) -> list[dict]:
 
 Two details worth noticing:
 
-- **`expected_answer` is generated now, but never shown to the student before they answer.** The program keeps it in memory (in the dict returned by `generate_questions`) purely so Step 3 has something to judge against later — this is the same "grounded, not guessed" idea as the RAG project's retrieved context, just used to *check* an answer instead of *write* one.
-- **Asking the model to reply with only JSON, then parsing it, is a fragile but common pattern.** Models occasionally wrap their answer in a ` ```json ` code fence even when told not to — the `removeprefix`/`removesuffix` calls above strip that off before `json.loads` runs. If parsing still fails, printing the raw response before parsing is the fastest way to see what actually came back.
+- **`expected_answer` is generated now, but never shown to the student before they answer.** The program keeps it in memory (in the dict returned by `generate_questions`) purely so Step 3 has something to judge against later, this is the same "grounded, not guessed" idea as the RAG project's retrieved context, just used to *check* an answer instead of *write* one.
+- **Asking the model to reply with only JSON, then parsing it, is a fragile but common pattern.** Models occasionally wrap their answer in a ` ```json ` code fence even when told not to, the `removeprefix`/`removesuffix` calls above strip that off before `json.loads` runs. If parsing still fails, printing the raw response before parsing is the fastest way to see what actually came back.
 
 :::tip[Ask for more questions than you need, if quality is inconsistent]
-Small free-tier models occasionally produce a vague or oddly-phrased question. If you notice this on your own notes, a simple fix without any new code is to ask for a few extra questions in the prompt and only keep the first `N` — or just re-run generation, since it's a single API call.
+Small free-tier models occasionally produce a vague or oddly-phrased question. If you notice this on your own notes, a simple fix without any new code is to ask for a few extra questions in the prompt and only keep the first `N`, or just re-run generation, since it's a single API call.
 :::
 
 **🎯 Expected output:** A clean Python list of dicts with no JSON parsing errors.
 
-**🩹 If it's off:** A `JSONDecodeError` means `json.loads` got something that wasn't clean JSON — print `raw` right before that call to see exactly what the model sent back; a stray fence the strip calls didn't catch (e.g. a fence with extra whitespace) is the usual cause.
+**🩹 If it's off:** A `JSONDecodeError` means `json.loads` got something that wasn't clean JSON, print `raw` right before that call to see exactly what the model sent back; a stray fence the strip calls didn't catch (e.g. a fence with extra whitespace) is the usual cause.
 
 ### 2.3 Verify question generation
 
@@ -224,11 +224,11 @@ Small free-tier models occasionally produce a vague or oddly-phrased question. I
 **🤔 Socratic Question(s)**
 
 - If you handed the model a notes file about a topic it already knows extremely well from training (say, basic photosynthesis), how would you tell whether a generated question is actually grounded in *your* notes versus the model's own prior knowledge? Is there a way to test this?
-- What would happen to question quality if `notes_text` were empty or just a single short sentence? Try it — does the model produce a graceful response or something obviously broken?
+- What would happen to question quality if `notes_text` were empty or just a single short sentence? Try it, does the model produce a graceful response or something obviously broken?
 
 ## Step 3: Build the interactive quiz loop
 
-Now the part that makes this a quiz and not just a question generator: ask each question, read the student's typed answer, and have the model judge it — free-text answers won't match the expected answer word-for-word, so an exact string comparison (`==`) would mark almost everything wrong. Break this into two sub-steps.
+Now the part that makes this a quiz and not just a question generator: ask each question, read the student's typed answer, and have the model judge it, free-text answers won't match the expected answer word-for-word, so an exact string comparison (`==`) would mark almost everything wrong. Break this into two sub-steps.
 
 ### 3.1 Write the judge prompt and function
 
@@ -263,11 +263,11 @@ def judge_answer(question: str, expected_answer: str, student_answer: str) -> di
 
 **🎯 Expected output:** `judge_answer(...)` returns a dict with `"verdict"` (one of the three values) and `"feedback"` (a string).
 
-**🩹 If it's off:** If every answer comes back `"incorrect"` regardless of quality, print `result` inside `judge_answer` before it's parsed — the model may be returning a verdict spelled differently than expected (`"Correct"` vs `"correct"`), which `result.get("verdict", "incorrect")`'s exact string match would silently treat as unrecognized. If the script hangs with no prompt visible, check you flushed/printed the question line before the `input()` call — some terminals buffer output differently than expected.
+**🩹 If it's off:** If every answer comes back `"incorrect"` regardless of quality, print `result` inside `judge_answer` before it's parsed, the model may be returning a verdict spelled differently than expected (`"Correct"` vs `"correct"`), which `result.get("verdict", "incorrect")`'s exact string match would silently treat as unrecognized. If the script hangs with no prompt visible, check you flushed/printed the question line before the `input()` call, some terminals buffer output differently than expected.
 
 ### 3.2 Build the run_quiz loop with scoring
 
-**👟 Starter hint:** Loop over `questions`, `input()` the student's typed answer for each, call `judge_answer`, and accumulate `score` based on the returned `"verdict"` — `"correct"` is +1, `"close"` is +0.5, anything else is +0.
+**👟 Starter hint:** Loop over `questions`, `input()` the student's typed answer for each, call `judge_answer`, and accumulate `score` based on the returned `"verdict"`, `"correct"` is +1, `"close"` is +0.5, anything else is +0.
 
 ```python
 def run_quiz(questions: list[dict]) -> None:
@@ -293,13 +293,13 @@ def run_quiz(questions: list[dict]) -> None:
     print(f"\nFinal score: {score}/{len(questions)}")
 ```
 
-A three-way verdict (`correct` / `close` / `incorrect`) is deliberately more forgiving than a binary right/wrong — a student who has the right idea but misses a detail gets partial credit and useful feedback, rather than a flat "wrong" that doesn't say why.
+A three-way verdict (`correct` / `close` / `incorrect`) is deliberately more forgiving than a binary right/wrong, a student who has the right idea but misses a detail gets partial credit and useful feedback, rather than a flat "wrong" that doesn't say why.
 
 :::tip[input() blocks until the student presses Enter]
-`input("Your answer: ")` pauses the whole script at that line until you type something and hit Enter — exactly like `input()` back in Python 101, just now sitting inside a loop that also happens to make network calls before and after. If the terminal seems to hang after a question is printed, that's normal: it's waiting on you, not the API.
+`input("Your answer: ")` pauses the whole script at that line until you type something and hit Enter, exactly like `input()` back in Python 101, just now sitting inside a loop that also happens to make network calls before and after. If the terminal seems to hang after a question is printed, that's normal: it's waiting on you, not the API.
 :::
 
-**🎯 Expected output:** For each question, a prompt, a wait for your typed input, then a ✅/🟡/❌-marked verdict with one brief feedback sentence — and, on an incorrect answer, the expected answer shown underneath.
+**🎯 Expected output:** For each question, a prompt, a wait for your typed input, then a ✅/🟡/❌-marked verdict with one brief feedback sentence, and, on an incorrect answer, the expected answer shown underneath.
 
 **🩹 If it's off:** If the script hangs with no prompt visible, check you flushed/printed the question line before the `input()` call. If verdicts seem inconsistent, print the raw `result` to debug the model's actual output.
 
@@ -314,7 +314,7 @@ A three-way verdict (`correct` / `close` / `incorrect`) is deliberately more for
 **🤔 Socratic Question(s)**
 
 - Why judge with a *second* LLM call per question instead of asking the model to generate the question, expected answer, *and* a verdict all in one call at quiz-generation time? What would that approach get wrong, given that the student hasn't answered yet at generation time?
-- The `"close"` verdict awards half credit. What's a case where a student's answer should clearly be "close" rather than fully correct or fully incorrect — and would your own answer to a real question from your notes land there?
+- The `"close"` verdict awards half credit. What's a case where a student's answer should clearly be "close" rather than fully correct or fully incorrect, and would your own answer to a real question from your notes land there?
 
 ## Step 4: Track the score and run it end to end
 
@@ -322,7 +322,7 @@ A three-way verdict (`correct` / `close` / `incorrect`) is deliberately more for
 
 ### 4.1 Wire main() end to end
 
-**👟 Starter hint:** `main()` is pure plumbing at this point — read the notes, call `generate_questions`, then `run_quiz` on the result. Nothing new to write, just wiring Steps 1–3 together in order:
+**👟 Starter hint:** `main()` is pure plumbing at this point, read the notes, call `generate_questions`, then `run_quiz` on the result. Nothing new to write, just wiring Steps 1–3 together in order:
 
 ```python
 def main() -> None:
@@ -346,7 +346,7 @@ uv run python study_buddy.py
 
 **🎯 Expected output:** A full end-to-end run: generation pause, five questions each with typed input and verdict, ending with `Final score: N/5` where N reflects your actual answers (correct = +1, close = +0.5).
 
-**🩹 If it's off:** If the script crashes partway through instead of finishing, it's almost always a `judge_answer` JSON-parsing failure on one specific question — the Socratic question below is pointing you at the actual fix (a `try`/`except` around that one call). If two full runs on the same notes file somehow produce identical questions every time, double-check `generate_questions` is actually being called fresh each run and its result isn't accidentally cached to a file somewhere.
+**🩹 If it's off:** If the script crashes partway through instead of finishing, it's almost always a `judge_answer` JSON-parsing failure on one specific question, the Socratic question below is pointing you at the actual fix (a `try`/`except` around that one call). If two full runs on the same notes file somehow produce identical questions every time, double-check `generate_questions` is actually being called fresh each run and its result isn't accidentally cached to a file somewhere.
 
 ### 4.2 Verify the full end-to-end run
 
@@ -354,7 +354,7 @@ uv run python study_buddy.py
 
 - ✅ `uv run python study_buddy.py` runs end to end: generation, then all questions, then a final score line.
 - ✅ The final score number matches what you'd expect from your own answers (correct = +1, close = +0.5, incorrect = +0).
-- ✅ Running it again on the same notes file produces a *different* set of questions — confirming generation isn't hardcoded or cached.
+- ✅ Running it again on the same notes file produces a *different* set of questions, confirming generation isn't hardcoded or cached.
 
 **🤔 Socratic Question(s)**
 
@@ -363,24 +363,24 @@ uv run python study_buddy.py
 
 ## ⚠️ Common pitfalls
 
-- **Thin notes produce thin questions.** If your notes file is just a few short bullet points, the model has very little to ground five distinct questions in, and you'll get repetitive or overly easy ones ("What is the name of...?"). More detailed, prose-style notes produce noticeably better questions — this mirrors the RAG project's chunking lesson: better input text means a better result, not a smarter prompt.
-- **The judge can be too strict or too lenient.** A small free-tier model grading free-text answers is not a precise instrument — it may mark a correct-but-oddly-phrased answer wrong, or wave through an answer that's actually missing a key detail. If you notice a consistent bias, tighten the `JUDGE_PROMPT_TEMPLATE` wording (e.g. "partial credit only counts if at least one specific fact is correct") rather than trying to work around it in Python.
-- **Rate limits from two calls per question.** Unlike a single-shot RAG answer, this script makes *two* model calls per question by the time you finish a quiz — one for generation (once, per quiz) and one for judging (once, per question). A 5-question quiz is 6 calls total; run several quizzes back to back on a free tier and you may hit a 429 rate-limit error. This isn't a bug — see the [AI Agent project](/projects/ai-agent#handling-rate-limits) for the same pattern and a retry approach you can copy.
-- **Malformed JSON from the model breaks `json.loads`.** Even with an explicit "reply with ONLY JSON" instruction, a model occasionally adds a stray sentence before or after the JSON, or leaves a trailing comma. If you hit a `JSONDecodeError`, print the raw response before parsing it — that's almost always enough to see exactly what went wrong and adjust the prompt.
+- **Thin notes produce thin questions.** If your notes file is just a few short bullet points, the model has very little to ground five distinct questions in, and you'll get repetitive or overly easy ones ("What is the name of...?"). More detailed, prose-style notes produce noticeably better questions, this mirrors the RAG project's chunking lesson: better input text means a better result, not a smarter prompt.
+- **The judge can be too strict or too lenient.** A small free-tier model grading free-text answers is not a precise instrument, it may mark a correct-but-oddly-phrased answer wrong, or wave through an answer that's actually missing a key detail. If you notice a consistent bias, tighten the `JUDGE_PROMPT_TEMPLATE` wording (e.g. "partial credit only counts if at least one specific fact is correct") rather than trying to work around it in Python.
+- **Rate limits from two calls per question.** Unlike a single-shot RAG answer, this script makes *two* model calls per question by the time you finish a quiz, one for generation (once, per quiz) and one for judging (once, per question). A 5-question quiz is 6 calls total; run several quizzes back to back on a free tier and you may hit a 429 rate-limit error. This isn't a bug, see the [AI Agent project](/projects/ai-agent#handling-rate-limits) for the same pattern and a retry approach you can copy.
+- **Malformed JSON from the model breaks `json.loads`.** Even with an explicit "reply with ONLY JSON" instruction, a model occasionally adds a stray sentence before or after the JSON, or leaves a trailing comma. If you hit a `JSONDecodeError`, print the raw response before parsing it, that's almost always enough to see exactly what went wrong and adjust the prompt.
 
 ## What you just built
 
-A small but complete "generate, then interact, then grade" pipeline: one LLM call turns your own notes into grounded questions with answers only the program can see, a loop collects your typed responses, and a second LLM call judges each one on meaning rather than exact wording, with a running score tallied across the whole session. Nothing here was faked into a toy that doesn't generalize — point it at a genuinely useful notes file for another class you're taking, and it's a real study tool, not just a course exercise.
+A small but complete "generate, then interact, then grade" pipeline: one LLM call turns your own notes into grounded questions with answers only the program can see, a loop collects your typed responses, and a second LLM call judges each one on meaning rather than exact wording, with a running score tallied across the whole session. Nothing here was faked into a toy that doesn't generalize, point it at a genuinely useful notes file for another class you're taking, and it's a real study tool, not just a course exercise.
 
 ## Where to go from here
 
-- Once a single notes file stops being enough — a full semester's worth of notes across many files — reuse the [RAG project's](/projects/rag-notes) `prepare_notes.py`/`build_index.py`/`retrieve.py` pipeline: retrieve the most relevant chunks for a *topic* you want to be quizzed on, and feed those to `generate_questions` instead of one whole file.
+- Once a single notes file stops being enough, a full semester's worth of notes across many files, reuse the [RAG project's](/projects/rag-notes) `prepare_notes.py`/`build_index.py`/`retrieve.py` pipeline: retrieve the most relevant chunks for a *topic* you want to be quizzed on, and feed those to `generate_questions` instead of one whole file.
 - Track missed questions across runs (write them to a small JSON file) and build a "review my weak spots" mode that re-quizzes you specifically on topics you got wrong before.
 - Add a difficulty setting to `GENERATE_PROMPT_TEMPLATE` ("easy recall questions" vs. "questions requiring you to connect two ideas from the notes") and compare how much harder the harder mode actually feels.
-- Revisit the bonus `try`/`except` content from Python 101 — wrapping `judge_answer` so one malformed response doesn't end the whole quiz (see the Socratic question in Step 4) is exactly that pattern.
+- Revisit the bonus `try`/`except` content from Python 101, wrapping `judge_answer` so one malformed response doesn't end the whole quiz (see the Socratic question in Step 4) is exactly that pattern.
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

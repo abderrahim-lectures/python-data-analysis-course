@@ -6,11 +6,11 @@ difficulty: "intermediate"
 
 # 🔌 Build an MCP Server
 
-The [Model Context Protocol](https://modelcontextprotocol.io) (MCP) is a standard way for an AI assistant to call code, tools, and data that live outside of it. An MCP *server* is a small program you write that exposes a handful of tools; an MCP *client* — Claude Desktop, for instance — connects to that server and lets the model call those tools on your behalf, the same way a web browser is a client that talks to a web server. This project builds the server side: your own Python functions, registered as MCP tools, callable by a real AI assistant running on your own machine.
+The [Model Context Protocol](https://modelcontextprotocol.io) (MCP) is a standard way for an AI assistant to call code, tools, and data that live outside of it. An MCP *server* is a small program you write that exposes a handful of tools; an MCP *client*, Claude Desktop, for instance, connects to that server and lets the model call those tools on your behalf, the same way a web browser is a client that talks to a web server. This project builds the server side: your own Python functions, registered as MCP tools, callable by a real AI assistant running on your own machine.
 
-This assumes Python 101 and comfort writing plain functions — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list. It pairs naturally with the [AI Agent project](/projects/ai-agent) — same underlying idea, giving an AI tools it can call, approached from the opposite side: there you built the agent that calls tools directly, in the same Python process; here you build a standalone server that *any* MCP-compatible client can plug into, without that client needing to know anything about your code beyond the protocol.
+This assumes Python 101 and comfort writing plain functions, nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list. It pairs naturally with the [AI Agent project](/projects/ai-agent), same underlying idea, giving an AI tools it can call, approached from the opposite side: there you built the agent that calls tools directly, in the same Python process; here you build a standalone server that *any* MCP-compatible client can plug into, without that client needing to know anything about your code beyond the protocol.
 
-MCP is one of the more actively adopted patterns for extending AI assistants right now — worth having built once, even a minimal version, while it's still this current.
+MCP is one of the more actively adopted patterns for extending AI assistants right now, worth having built once, even a minimal version, while it's still this current.
 
 ## 🎯 What you'll do
 
@@ -21,22 +21,22 @@ MCP is one of the more actively adopted patterns for extending AI assistants rig
 
 ## Where to run this
 
-**Locally with `uv`** is the primary, recommended path for this one, more so than most other projects in this series — the whole point is connecting your server to Claude Desktop, and Claude Desktop is an app installed on your own machine. There's no way around doing at least the last step locally.
+**Locally with `uv`** is the primary, recommended path for this one, more so than most other projects in this series, the whole point is connecting your server to Claude Desktop, and Claude Desktop is an app installed on your own machine. There's no way around doing at least the last step locally.
 
-**GitHub Codespaces** is a reasonable place to write and test the *tool logic itself*: open [the whole course repo in a free Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python, and `uv` are already installed, per the repo's `.devcontainer/devcontainer.json`), write `server.py`, and call your tool functions directly in a Python shell, or even run `mcp dev server.py` and use the Inspector through the Codespace's forwarded port. What a Codespace *can't* be is your final Claude Desktop connection point — Claude Desktop runs on your own desktop and needs to launch a local process it can talk to directly; reaching into a Codespace from it would need extra tunneling that's out of scope for this project. Treat Codespaces as good for Steps 1–2, and do Step 3 locally.
+**GitHub Codespaces** is a reasonable place to write and test the *tool logic itself*: open [the whole course repo in a free Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python, and `uv` are already installed, per the repo's `.devcontainer/devcontainer.json`), write `server.py`, and call your tool functions directly in a Python shell, or even run `mcp dev server.py` and use the Inspector through the Codespace's forwarded port. What a Codespace *can't* be is your final Claude Desktop connection point, Claude Desktop runs on your own desktop and needs to launch a local process it can talk to directly; reaching into a Codespace from it would need extra tunneling that's out of scope for this project. Treat Codespaces as good for Steps 1–2, and do Step 3 locally.
 
-**Google Colab and Kaggle are not a good fit for this project**, unlike most others in this series — skip them here. Neither gives you a persistent local process a desktop AI client can connect to; a notebook cell that "runs a server" in Colab isn't reachable by Claude Desktop on your own machine at all.
+**Google Colab and Kaggle are not a good fit for this project**, unlike most others in this series, skip them here. Neither gives you a persistent local process a desktop AI client can connect to; a notebook cell that "runs a server" in Colab isn't reachable by Claude Desktop on your own machine at all.
 
-That said, if you just want to poke at `search_course_topics` and `count_words` as plain Python — no MCP protocol, no server process, no Claude Desktop — a narrower notebook exists for exactly that:
+That said, if you just want to poke at `search_course_topics` and `count_words` as plain Python, no MCP protocol, no server process, no Claude Desktop, a narrower notebook exists for exactly that:
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/mcp-server/notebook.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/mcp-server/notebook.ipynb)
 
-It calls the same tool logic directly as ordinary functions, with no decorator, no server, and no client connection — useful for experimenting with the code, not a substitute for the actual project above.
+It calls the same tool logic directly as ordinary functions, with no decorator, no server, and no client connection, useful for experimenting with the code, not a substitute for the actual project above.
 
 ## Setup
 
-`uv` is a single tool that replaces the usual "install Python, then install pip, then install a virtual environment tool, then install packages" chain — it can install and manage Python versions itself, alongside your project's dependencies.
+`uv` is a single tool that replaces the usual "install Python, then install pip, then install a virtual environment tool, then install packages" chain, it can install and manage Python versions itself, alongside your project's dependencies.
 
 **macOS / Linux** (terminal):
 
@@ -66,11 +66,11 @@ uv add "mcp[cli]"
 
 ## Step 1: Write your first MCP server
 
-The SDK's high-level API, `FastMCP`, turns an ordinary Python function into an MCP tool with one decorator — no protocol-level code to write by hand. Create `server.py`:
+The SDK's high-level API, `FastMCP`, turns an ordinary Python function into an MCP tool with one decorator, no protocol-level code to write by hand. Create `server.py`:
 
 ### 1.1 Write the server
 
-**👟 Starter hint:** Instantiate `FastMCP("course-tools")`, then write two ordinary Python functions with type hints and a docstring, each decorated with `@mcp.tool()` — the decorator is what turns a plain function into something an MCP client can discover and call:
+**👟 Starter hint:** Instantiate `FastMCP("course-tools")`, then write two ordinary Python functions with type hints and a docstring, each decorated with `@mcp.tool()`, the decorator is what turns a plain function into something an MCP client can discover and call:
 
 ```python
 # server.py
@@ -110,24 +110,24 @@ if __name__ == "__main__":
     mcp.run()
 ```
 
-`@mcp.tool()` is doing all the registration work here: it inspects the function's name, its type-hinted parameters, and its docstring, and builds an MCP tool definition from them automatically — you never hand-write a schema. This is the same idea the [AI Agent project](/projects/ai-agent) teaches for LangChain tools: **the model reads your docstring, not your code, to decide when a tool matches a request.** A vague docstring gives the model nothing to go on; a docstring that says plainly what the tool does and when to call it is what actually makes tool selection work.
+`@mcp.tool()` is doing all the registration work here: it inspects the function's name, its type-hinted parameters, and its docstring, and builds an MCP tool definition from them automatically, you never hand-write a schema. This is the same idea the [AI Agent project](/projects/ai-agent) teaches for LangChain tools: **the model reads your docstring, not your code, to decide when a tool matches a request.** A vague docstring gives the model nothing to go on; a docstring that says plainly what the tool does and when to call it is what actually makes tool selection work.
 
-`search_course_topics` is deliberately the same idea as the toy tool from the AI Agent project — searching this course's own files for a topic — but exposed through MCP's tool decorator instead of passed straight into an agent's `tools=[...]` list. `count_words` is a smaller, standalone utility, included to show a server exposing more than one tool at once — an MCP client sees both and picks whichever one fits a given question.
+`search_course_topics` is deliberately the same idea as the toy tool from the AI Agent project, searching this course's own files for a topic, but exposed through MCP's tool decorator instead of passed straight into an agent's `tools=[...]` list. `count_words` is a smaller, standalone utility, included to show a server exposing more than one tool at once, an MCP client sees both and picks whichever one fits a given question.
 
 :::tip[Check the MCP SDK's current docs before relying on this]
-MCP is a young, fast-moving spec — the protocol itself, and the Python SDK's own API, have both changed since early releases. `FastMCP`'s decorator-based style has been stable for a while, but before building anything beyond this lesson, skim the [SDK's own README and docs](https://github.com/modelcontextprotocol/python-sdk) rather than assuming this snippet's specifics still match exactly.
+MCP is a young, fast-moving spec, the protocol itself, and the Python SDK's own API, have both changed since early releases. `FastMCP`'s decorator-based style has been stable for a while, but before building anything beyond this lesson, skim the [SDK's own README and docs](https://github.com/modelcontextprotocol/python-sdk) rather than assuming this snippet's specifics still match exactly.
 :::
 
-**🎯 Expected output:** No output yet — `server.py` on its own just defines the two tools; there's nothing to run until Step 2. The signal at this stage is that it *imports* cleanly: `uv run python -c "import server"` should produce no traceback.
+**🎯 Expected output:** No output yet, `server.py` on its own just defines the two tools; there's nothing to run until Step 2. The signal at this stage is that it *imports* cleanly: `uv run python -c "import server"` should produce no traceback.
 
-**🩹 If it's off:** A `ModuleNotFoundError: No module named 'mcp'` means the `uv add "mcp[cli]"` from Setup didn't run in this project folder — confirm you're inside the `mcp-server` directory `uv init` created. If `DOCS_DIR` doesn't point at a real folder on your machine, `search_course_topics` won't error yet (that only shows up when you actually call it in Step 2) — fix the path now while it's fresh.
+**🩹 If it's off:** A `ModuleNotFoundError: No module named 'mcp'` means the `uv add "mcp[cli]"` from Setup didn't run in this project folder, confirm you're inside the `mcp-server` directory `uv init` created. If `DOCS_DIR` doesn't point at a real folder on your machine, `search_course_topics` won't error yet (that only shows up when you actually call it in Step 2), fix the path now while it's fresh.
 
 ### 1.2 Verify it imports cleanly
 
 **✅ Checklist**
 
 - ✅ `server.py` saves without syntax errors and defines both `search_course_topics` and `count_words`.
-- ✅ Each tool has a real, plain-English docstring — not a placeholder.
+- ✅ Each tool has a real, plain-English docstring, not a placeholder.
 - ✅ `DOCS_DIR` points at a real `docs/` folder that actually exists on your machine.
 
 **🤔 Socratic Question(s)**
@@ -147,9 +147,9 @@ Before wiring this up to any real AI client, run it on its own and confirm the t
 uv run mcp dev server.py
 ```
 
-This starts your server and opens the **MCP Inspector** — a free, browser-based tool that lets you call `search_course_topics` and `count_words` by hand, pass in test arguments, and see the real return values, with no AI model involved at all. (The first run may prompt you to install a small `npx`-based proxy package the Inspector uses; accept it.)
+This starts your server and opens the **MCP Inspector**, a free, browser-based tool that lets you call `search_course_topics` and `count_words` by hand, pass in test arguments, and see the real return values, with no AI model involved at all. (The first run may prompt you to install a small `npx`-based proxy package the Inspector uses; accept it.)
 
-Test both tools here before moving on: call `search_course_topics` with a query you know appears in `docs/` (e.g. `"groupby"`), and `count_words` with a short sentence. If either misbehaves, you're looking at a bug in your Python function — fix it here, where the only moving part is your own code, rather than debugging it later with Claude Desktop in the loop, where a wrong result could just as easily be a connection problem, a config typo, or the model picking the wrong tool.
+Test both tools here before moving on: call `search_course_topics` with a query you know appears in `docs/` (e.g. `"groupby"`), and `count_words` with a short sentence. If either misbehaves, you're looking at a bug in your Python function, fix it here, where the only moving part is your own code, rather than debugging it later with Claude Desktop in the loop, where a wrong result could just as easily be a connection problem, a config typo, or the model picking the wrong tool.
 
 You can also just run the server directly, without the Inspector, to confirm it starts cleanly:
 
@@ -157,15 +157,15 @@ You can also just run the server directly, without the Inspector, to confirm it 
 uv run python server.py
 ```
 
-It won't print anything on its own — an MCP server sits and waits for a client to connect over stdio. Silence here is expected, not a bug; `Ctrl+C` to stop it.
+It won't print anything on its own, an MCP server sits and waits for a client to connect over stdio. Silence here is expected, not a bug; `Ctrl+C` to stop it.
 
 :::tip[Test with the Inspector before touching a real client]
-It's tempting to skip straight to Claude Desktop. Resist that — the Inspector isolates your tool code from everything else that can go wrong in a real client connection (config paths, restarts, the model's own tool-picking). Get both tools working there first.
+It's tempting to skip straight to Claude Desktop. Resist that, the Inspector isolates your tool code from everything else that can go wrong in a real client connection (config paths, restarts, the model's own tool-picking). Get both tools working there first.
 :::
 
 **🎯 Expected output:** The Inspector's tool list shows `search_course_topics` and `count_words` with their parameter forms auto-generated from your type hints. Calling `search_course_topics` with `"groupby"` returns a real `Found in: ...` string with matching filenames; calling `count_words` with a short sentence returns the correct integer.
 
-**🩹 If it's off:** If `search_course_topics` returns `No lesson pages mention '...'` for a query you know is covered, `DOCS_DIR` almost certainly still points at the placeholder path from Step 1 — fix it and restart the dev server (it doesn't hot-reload). If the Inspector tab never opens, check the terminal for an `npx` install prompt it may be waiting on.
+**🩹 If it's off:** If `search_course_topics` returns `No lesson pages mention '...'` for a query you know is covered, `DOCS_DIR` almost certainly still points at the placeholder path from Step 1, fix it and restart the dev server (it doesn't hot-reload). If the Inspector tab never opens, check the terminal for an `npx` install prompt it may be waiting on.
 
 ### 2.2 Call both tools by hand
 
@@ -173,7 +173,7 @@ It's tempting to skip straight to Claude Desktop. Resist that — the Inspector 
 
 - ✅ `uv run mcp dev server.py` starts without errors and opens the Inspector in your browser.
 - ✅ The Inspector lists both `search_course_topics` and `count_words`.
-- ✅ Calling each tool by hand in the Inspector returns a real, correct result — not an error.
+- ✅ Calling each tool by hand in the Inspector returns a real, correct result, not an error.
 
 **🤔 Socratic Question(s)**
 
@@ -191,7 +191,7 @@ If the file doesn't exist yet, create it. Add your server, using an **absolute**
 
 ### 3.1 Edit the config file
 
-**👟 Starter hint:** Copy the JSON below into that config file, then replace `/absolute/path/to/mcp-server` with the real, full path to your project folder — `pwd` (macOS/Linux) or `cd` with no arguments (Windows) from inside it will print exactly that:
+**👟 Starter hint:** Copy the JSON below into that config file, then replace `/absolute/path/to/mcp-server` with the real, full path to your project folder, `pwd` (macOS/Linux) or `cd` with no arguments (Windows) from inside it will print exactly that:
 
 ```json
 {
@@ -204,17 +204,17 @@ If the file doesn't exist yet, create it. Add your server, using an **absolute**
 }
 ```
 
-`command` and `args` describe exactly the process Claude Desktop will launch to talk to your server — the same `uv run` invocation you already tested in Step 2, just started by Claude Desktop instead of by you. Using `uv run` (rather than a bare `python`) matters here: Claude Desktop launches this command in its own environment, with no guarantee your project's virtual environment is already active, and `uv run` finds and uses the right one on its own.
+`command` and `args` describe exactly the process Claude Desktop will launch to talk to your server, the same `uv run` invocation you already tested in Step 2, just started by Claude Desktop instead of by you. Using `uv run` (rather than a bare `python`) matters here: Claude Desktop launches this command in its own environment, with no guarantee your project's virtual environment is already active, and `uv run` finds and uses the right one on its own.
 
-**Fully quit and restart Claude Desktop** — a running instance doesn't re-read this file on its own. Once it restarts, your server should show up in its tool/connector list (usually behind a small icon near the message box). Ask it something that should trigger a tool call, e.g.:
+**Fully quit and restart Claude Desktop**, a running instance doesn't re-read this file on its own. Once it restarts, your server should show up in its tool/connector list (usually behind a small icon near the message box). Ask it something that should trigger a tool call, e.g.:
 
 > Does the Python course cover groupby? Use the course-tools search if you have it.
 
-Claude Desktop should show it calling `search_course_topics` (often as a small collapsible "used a tool" block in the conversation, with the arguments and result visible if you expand it), then answer using the real result your function returned — not a guess from the model's training data.
+Claude Desktop should show it calling `search_course_topics` (often as a small collapsible "used a tool" block in the conversation, with the arguments and result visible if you expand it), then answer using the real result your function returned, not a guess from the model's training data.
 
 **🎯 Expected output:** A visible "used a tool" block in Claude Desktop's reply showing `search_course_topics` was called, with the same result you already saw in the Inspector, followed by Claude's answer built from that result.
 
-**🩹 If it's off:** If `course-tools` never appears in the connector list, the config file's JSON has a syntax error (a trailing comma is the classic one) or you skipped the *full* quit-and-restart — closing the window alone doesn't reload it. If it appears but Claude answers without calling the tool, try rephrasing the question to more explicitly reference "the course-tools search" the way the example question does — the model decides on its own whether a tool is relevant, and a vague question gives it less reason to.
+**🩹 If it's off:** If `course-tools` never appears in the connector list, the config file's JSON has a syntax error (a trailing comma is the classic one) or you skipped the *full* quit-and-restart, closing the window alone doesn't reload it. If it appears but Claude answers without calling the tool, try rephrasing the question to more explicitly reference "the course-tools search" the way the example question does, the model decides on its own whether a tool is relevant, and a vague question gives it less reason to.
 
 ### 3.2 Restart Claude Desktop and verify it calls your tool
 
@@ -231,27 +231,27 @@ Claude Desktop should show it calling `search_course_topics` (often as a small c
 
 ## ⚠️ Common pitfalls
 
-- **A relative or wrong path in the config file.** `claude_desktop_config.json` needs an absolute path to your project folder — a relative one has no consistent "current directory" to resolve against when Claude Desktop launches your server, and will just fail to start it.
-- **Forgetting to fully restart Claude Desktop after editing the config.** Saving the JSON file alone does nothing — the app only reads it on startup, so closing and reopening a window isn't enough either; quit the app completely first.
-- **A docstring too vague for the model to pick the right tool.** `"""Does stuff with text."""` gives the model nothing to match against a real question. Say plainly what the tool does and, ideally, when to call it — exactly like `search_course_topics`'s docstring above.
+- **A relative or wrong path in the config file.** `claude_desktop_config.json` needs an absolute path to your project folder, a relative one has no consistent "current directory" to resolve against when Claude Desktop launches your server, and will just fail to start it.
+- **Forgetting to fully restart Claude Desktop after editing the config.** Saving the JSON file alone does nothing, the app only reads it on startup, so closing and reopening a window isn't enough either; quit the app completely first.
+- **A docstring too vague for the model to pick the right tool.** `"""Does stuff with text."""` gives the model nothing to match against a real question. Say plainly what the tool does and, ideally, when to call it, exactly like `search_course_topics`'s docstring above.
 - **Running the server with plain `python server.py` instead of `uv run python server.py`.** Without `uv run`, the interpreter that starts may not be the one `uv add` installed `mcp` into, and you'll get a `ModuleNotFoundError` for `mcp` even though `uv add` clearly said it installed successfully.
 
 ## What you just built
 
-Two small tools is a toy example, but the shape is real: a standalone process that exposes Python functions through a standard protocol, connectable to any MCP-compatible client without that client knowing anything about your code beyond the tool names, arguments, and docstrings. That's the actual point of MCP — the same server you just built would work unmodified with a different MCP client entirely, which isn't true of the tightly-coupled `tools=[...]` list from the AI Agent project.
+Two small tools is a toy example, but the shape is real: a standalone process that exposes Python functions through a standard protocol, connectable to any MCP-compatible client without that client knowing anything about your code beyond the tool names, arguments, and docstrings. That's the actual point of MCP, the same server you just built would work unmodified with a different MCP client entirely, which isn't true of the tightly-coupled `tools=[...]` list from the AI Agent project.
 
 ## Where to go from here
 
-- Give `search_course_topics` (or a new tool) access to something more genuinely useful than lesson text — a small local file, a real dataset, a script that runs a calculation you actually need.
-- Read about MCP **resources** and **prompts** — this lesson only covers *tools*, but the protocol also defines ways to expose readable data (resources) and reusable prompt templates (prompts) to a client. The [SDK's own docs](https://github.com/modelcontextprotocol/python-sdk) cover both, with the same `FastMCP` decorator style.
-- Since the spec is actively evolving, periodically re-check the [official MCP documentation](https://modelcontextprotocol.io) for anything that's changed since you built this — new transport options and client capabilities have been landing at a steady pace.
+- Give `search_course_topics` (or a new tool) access to something more genuinely useful than lesson text, a small local file, a real dataset, a script that runs a calculation you actually need.
+- Read about MCP **resources** and **prompts**, this lesson only covers *tools*, but the protocol also defines ways to expose readable data (resources) and reusable prompt templates (prompts) to a client. The [SDK's own docs](https://github.com/modelcontextprotocol/python-sdk) cover both, with the same `FastMCP` decorator style.
+- Since the spec is actively evolving, periodically re-check the [official MCP documentation](https://modelcontextprotocol.io) for anything that's changed since you built this, new transport options and client capabilities have been landing at a steady pace.
 
-:::tip[Run a fuller version without any local setup — for the tool logic, at least]
-[`examples/mcp-server/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/mcp-server) in the course repo is a slightly fuller version of the code above, with `search_course_topics` wired to the real `docs/` folder of the repo it's running in (no path to edit by hand). Clone it, or open the whole repo in a [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), to try both tools with `uv run mcp dev server.py` — remembering that the actual Claude Desktop connection still needs to happen locally, per "Where to run this" above.
+:::tip[Run a fuller version without any local setup, for the tool logic, at least]
+[`examples/mcp-server/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/mcp-server) in the course repo is a slightly fuller version of the code above, with `search_course_topics` wired to the real `docs/` folder of the repo it's running in (no path to edit by hand). Clone it, or open the whole repo in a [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), to try both tools with `uv run mcp dev server.py`, remembering that the actual Claude Desktop connection still needs to happen locally, per "Where to run this" above.
 :::
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

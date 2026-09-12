@@ -56,7 +56,7 @@ df = pd.read_csv("titanic.csv")
 
 ## loc : sélection basée sur les étiquettes
 
-`loc` sélectionne par **étiquette** — les étiquettes de l'index des lignes et les noms des colonnes :
+`loc` sélectionne par **étiquette**, les étiquettes de l'index des lignes et les noms des colonnes :
 
 ```python
 # Select row at index label 0, columns "Name" and "Age"
@@ -71,7 +71,7 @@ Age                        22.0
 Name: 0, dtype: object
 ```
 
-**Découpe par étiquette** — l'extrémité est incluse (contrairement au découpage Python) :
+**Découpe par étiquette**, l'extrémité est incluse (contrairement au découpage Python) :
 
 ```python
 # Rows 0 through 4, columns Name through Age
@@ -92,7 +92,7 @@ print(df.loc[[0, 5, 10]])
 
 ## iloc : sélection basée sur les positions
 
-`iloc` sélectionne par **position entière** — le numéro de ligne/colonne en commençant par 0 :
+`iloc` sélectionne par **position entière**, le numéro de ligne/colonne en commençant par 0 :
 
 ```python
 # First row, first three columns
@@ -108,7 +108,7 @@ Pclass                                 3
 Name: 0, dtype: object
 ```
 
-**Découpe par position** — l'extrémité est exclue (comportement Python standard) :
+**Découpe par position**, l'extrémité est exclue (comportement Python standard) :
 
 ```python
 # Rows 0-4 (5 rows), columns 0-2 (3 columns)
@@ -139,7 +139,7 @@ df.iloc[0:5]      # rows at positions 0 through 4 (exclusive) — 5 rows
 
 ## Utiliser loc pour l'affectation
 
-`loc` n'est pas réservé à la lecture — vous pouvez l'utiliser pour **modifier** des cellules spécifiques :
+`loc` n'est pas réservé à la lecture, vous pouvez l'utiliser pour **modifier** des cellules spécifiques :
 
 ```python
 # Set Age to 0 for the first passenger

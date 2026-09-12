@@ -49,7 +49,7 @@ scores.update({"Eve": 95, "Frank": 88})  # fusiona
 scores.setdefault("Grace", 0)  # asigna solo si falta la clave
 ```
 
-`keys`, `values` y `items` son tres vistas de la misma relación — el dominio, el rango y la gráfica. `update` fusiona un segundo dict; `setdefault` escribe solo cuando la clave está ausente, la asignación condicional que no necesita `if`.
+`keys`, `values` y `items` son tres vistas de la misma relación, el dominio, el rango y la gráfica. `update` fusiona un segundo dict; `setdefault` escribe solo cuando la clave está ausente, la asignación condicional que no necesita `if`.
 
 ## Caminar sobre el mapeo
 
@@ -63,7 +63,7 @@ for name, score in scores.items():  # pares clave-valor
     print(f"{name}: {score}")
 ```
 
-`items` te entrega el par directamente — sin indexar a mano — porque desempaquetar una entrada en `name, score` es la lectura natural de una fila.
+`items` te entrega el par directamente, sin indexar a mano, porque desempaquetar una entrada en `name, score` es la lectura natural de una fila.
 
 ## Sets: el conjunto matemático
 
@@ -74,7 +74,7 @@ colors = {"red", "blue", "green", "red"}
 print(colors)  # {'red', 'blue', 'green'}  (duplicados eliminados)
 ```
 
-La unicidad se aplica estructuralmente — no hay segunda copia esperando a contaminar una comprobación de pertenencia. La pertenencia a un set es $x \in S$ exactamente: un elemento está dentro o fuera, sin términos medios ni asomos.
+La unicidad se aplica estructuralmente, no hay segunda copia esperando a contaminar una comprobación de pertenencia. La pertenencia a un set es $x \in S$ exactamente: un elemento está dentro o fuera, sin términos medios ni asomos.
 
 ## Operaciones de conjuntos
 
@@ -98,7 +98,7 @@ Los operadores son la notación que ya conoces. Y donde la teoría promete veloc
 
 ## El requisito del hash
 
-Las huellas exigen estabilidad. Las claves de dict y los elementos de set deben ser **hashables** — en la práctica, inmutables — para que sus cálculos sigan siendo reproducibles. Las cadenas, los números y las tuplas cumplen; las listas y los demás dicts no:
+Las huellas exigen estabilidad. Las claves de dict y los elementos de set deben ser **hashables**, en la práctica, inmutables, para que sus cálculos sigan siendo reproducibles. Las cadenas, los números y las tuplas cumplen; las listas y los demás dicts no:
 
 ```python
 {[1, 2]: "bad"}   # TypeError: unhashable type: 'list'
@@ -109,7 +109,7 @@ Una lista no podría ser una clave fiable ni aunque se le permitiera: su hash ca
 
 ## Un ejemplo resuelto: la libreta de notas
 
-La relación, el dominio y el rango — una sola tabla recorrida en tres posturas:
+La relación, el dominio y el rango, una sola tabla recorrida en tres posturas:
 
 ```python
 scores = {"Alice": 85, "Bob": 92, "Charlie": 78}
@@ -123,35 +123,35 @@ roles = {"student", "teacher", "admin"}
 print("student" in roles)             # True — pertenencia O(1)
 ```
 
-`items` camina el grafo entero, `.get` pregunta con cortesía cuando no sabes si la clave existe, y el `in` sobre un conjunto es la pertenencia $x \in S$ — tres preguntas que las estructuras de la lección responden directas.
+`items` camina el grafo entero, `.get` pregunta con cortesía cuando no sabes si la clave existe, y el `in` sobre un conjunto es la pertenencia $x \in S$, tres preguntas que las estructuras de la lección responden directas.
 
 ## Errores comunes
 
 - **Acceder a claves ausentes.** `.get()` o un chequeo con `in` te ahorran un `KeyError`.
 - **Confiarte del orden del dict.** Python 3.7+ conserva el orden de inserción, pero trátalo como una conveniencia, no como un contrato.
 - **Confiar en el orden de un set.** Un set no guarda orden alguno; jamás conviertas el orden de iteración en una dependencia.
-- **`{}` es un dict vacío; `set()` es el conjunto vacío.** `{}` no es un conjunto. Escribe `set()` para el vacío y `{"a", "b"}` para un literal — un símbolo, dos significados.
+- **`{}` es un dict vacío; `set()` es el conjunto vacío.** `{}` no es un conjunto. Escribe `set()` para el vacío y `{"a", "b"}` para un literal, un símbolo, dos significados.
 
 ## 🧩 Desafíos
 
 <details class="challenge">
-<summary>🧩 Desafío — piensa primero, luego revela</summary>
+<summary>🧩 Desafío, piensa primero, luego revela</summary>
 <div class="challenge__body">
 
 Cuenta la frecuencia de cada carácter de `"hello world"` con un dict.
 
-<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>freq = {}; for c in "hello world": freq[c] = freq.get(c, 0) + 1</code> — el plan B de <code>.get</code> con $0$ convierte la primera aparición en un incremento desde cero.</p>
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>freq = {}; for c in "hello world": freq[c] = freq.get(c, 0) + 1</code>, el plan B de <code>.get</code> con $0$ convierte la primera aparición en un incremento desde cero.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Desafío — piensa primero, luego revela</summary>
+<summary>🧩 Desafío, piensa primero, luego revela</summary>
 <div class="challenge__body">
 
 Dadas dos listas, encuentra los elementos que aparecen en ambas usando sets.
 
-<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>set(a) & set(b)</code> o <code>set(a).intersection(b)</code> — la intersección es $A \cap B$, y la maquinaria de conjuntos hace el trabajo.</p>
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>set(a) & set(b)</code> o <code>set(a).intersection(b)</code>, la intersección es $A \cap B$, y la maquinaria de conjuntos hace el trabajo.</p>
 
 </div>
 </details>
@@ -159,7 +159,7 @@ Dadas dos listas, encuentra los elementos que aparecen en ambas usando sets.
 ## 🤔 Preguntas socráticas
 
 - ¿Por qué una lista no puede servir de clave de dict? ¿Qué propiedad debe portar una clave?
-- ¿Cuándo supera un set a una lista — qué pierdes y qué ganas?
+- ¿Cuándo supera un set a una lista, qué pierdes y qué ganas?
 - ¿Cómo difiere `dict.get(clave, defecto)` de `dict[clave]`, y cuándo prefieres cada uno?
 
 ## ✅ Comprobación rápida

@@ -1,6 +1,6 @@
 ---
 title: "Operadores aritméticos"
-description: "Suma, resta, multiplica, divide, división de piso, módulo y exponente — los ocho operadores aritméticos."
+description: "Suma, resta, multiplica, divide, división de piso, módulo y exponente, los ocho operadores aritméticos."
 module: "operators"
 order: 5
 difficulty: "beginner"
@@ -22,7 +22,7 @@ track: "normal"
 
 ## Los operadores que una máquina toma prestados de la matemática
 
-Ya escribiste funciones auxiliares en lecciones anteriores: guardar un valor, imprimirlo, cambiarle el tipo. Nada de eso sirve hasta que un programa pueda *hacer algo* con los números. Así que haz una pausa y observa: una computadora existe para evaluar expresiones, y toda expresión se construye con **operadores** que unen valores. Ya conoces los de aritmética del papel — pero la máquina corta dos de ellos por la mitad.
+Ya escribiste funciones auxiliares en lecciones anteriores: guardar un valor, imprimirlo, cambiarle el tipo. Nada de eso sirve hasta que un programa pueda *hacer algo* con los números. Así que haz una pausa y observa: una computadora existe para evaluar expresiones, y toda expresión se construye con **operadores** que unen valores. Ya conoces los de aritmética del papel, pero la máquina corta dos de ellos por la mitad.
 
 ## Los operadores y sus significados
 
@@ -43,7 +43,7 @@ Después vienen tres que responden a preguntas que solo hiciste en los deberes:
 7 ** 2   # 49  — potenciación (7²)
 ```
 
-`**` es cómo Python escribe la potencia: $7^2 = 49$. Los dos recién llegados son `//` y `%`, y no son variaciones — son las dos mitades de una misma pregunta legítima.
+`**` es cómo Python escribe la potencia: $7^2 = 49$. Los dos recién llegados son `//` y `%`, y no son variaciones, son las dos mitades de una misma pregunta legítima.
 
 ## Dos mitades de una misma división
 
@@ -53,7 +53,7 @@ $$
 15 = 4 \cdot 3 + 3.
 $$
 
-La respuesta tiene dos partes — el cociente $3$ y el resto $3$. El `//` de Python responde la primera parte y el `%` responde la segunda:
+La respuesta tiene dos partes, el cociente $3$ y el resto $3$. El `//` de Python responde la primera parte y el `%` responde la segunda:
 
 $$
 a = (a \mathbin{//} b) \cdot b + (a \mathbin{\%} b)
@@ -65,7 +65,7 @@ $$
 4 * 3 + 3 # 15  ✓ la identidad se cumple
 ```
 
-Esa identidad no es decoración — es la definición de ambos operadores, y no puede fallar mientras las dos partes las calcule la misma máquina.
+Esa identidad no es decoración, es la definición de ambos operadores, y no puede fallar mientras las dos partes las calcule la misma máquina.
 
 Hay un pliegue. ¿Qué cociente da Python para $-7 \div 2$? Escríbelo como pregunta de agrupación:
 
@@ -96,7 +96,7 @@ Si una expresión contiene varios operadores, hace falta una secuencia fija, o c
 2 ** 3 ** 2    # 512, no 64
 ```
 
-Ese último es una auténtica sorpresa. `**` es **asociativo a la derecha**, así que `2 ** 3 ** 2` se lee como $2^{(3^2)} = 2^9 = 512$, igual que en la notación apilada donde las potencias escalan en una sola dirección. Ante la duda, escribe los paréntesis — un lector que no los ve no adivinará tu intención.
+Ese último es una auténtica sorpresa. `**` es **asociativo a la derecha**, así que `2 ** 3 ** 2` se lee como $2^{(3^2)} = 2^9 = 512$, igual que en la notación apilada donde las potencias escalan en una sola dirección. Ante la duda, escribe los paréntesis, un lector que no los ve no adivinará tu intención.
 
 ## Un ejemplo resuelto: el cambio del plan de lectura
 
@@ -118,35 +118,35 @@ La identidad de la división $a = (a \mathbin{//} b) \cdot b + (a \mathbin{\%} b
 
 - **`/` frente a `//`.** `7 / 2` es `3.5` (un float); `7 // 2` es `3` (un int). Recurre a `//` solo cuando el cociente entero sea lo que pide el problema.
 - **División de piso con negativos.** `-7 // 2` es `-4`, no `-3`. El piso va hacia $-\infty$, no hacia cero.
-- **El `%` también funciona con floats.** `7.5 % 2` es `1.5` — la identidad de arriba vale para reales tanto como para enteros.
-- **`**` enlaza más fuerte que `*`.** `2 * 3 ** 2` es `18`, no `36` — la potencia se calcula primero. Pon paréntesis cuando quieras decir `(2 * 3) ** 2` = 36.
+- **El `%` también funciona con floats.** `7.5 % 2` es `1.5`, la identidad de arriba vale para reales tanto como para enteros.
+- **`**` enlaza más fuerte que `*`.** `2 * 3 ** 2` es `18`, no `36`, la potencia se calcula primero. Pon paréntesis cuando quieras decir `(2 * 3) ** 2` = 36.
 
 ## 🧩 Desafíos
 
 <details class="challenge">
-<summary>🧩 Desafío — piensa primero, luego revela</summary>
+<summary>🧩 Desafío, piensa primero, luego revela</summary>
 <div class="challenge__body">
 
 Sin ejecutarlo, calcula `15 // 4` y `15 % 4` a mano y luego verifica que $4 \cdot (15 // 4) + (15 \% 4)$ reproduce $15$.
 
-<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>15 // 4</code> es <code>3</code> (el piso de $3.75$), y <code>15 % 4</code> es <code>3</code>, ya que $15 = 4\cdot 3 + 3$. Juntos, <code>4 * 3 + 3 = 15</code> — la identidad de la división, verificada.</p>
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>15 // 4</code> es <code>3</code> (el piso de $3.75$), y <code>15 % 4</code> es <code>3</code>, ya que $15 = 4\cdot 3 + 3$. Juntos, <code>4 * 3 + 3 = 15</code>, la identidad de la división, verificada.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Desafío — piensa primero, luego revela</summary>
+<summary>🧩 Desafío, piensa primero, luego revela</summary>
 <div class="challenge__body">
 
 ¿Cómo extraerías la cifra de las centenas de cualquier número? Dado `n = 4567`, obtén `5` usando solo aritmética, sin cadenas.
 
-<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>(n // 100) % 10</code> — primero divide por 100 para desplazar la cifra a la derecha (<code>4567 → 45</code>), luego módulo 10 para quedarte solo con la última (<code>45 → 5</code>).</p>
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>(n // 100) % 10</code>, primero divide por 100 para desplazar la cifra a la derecha (<code>4567 → 45</code>), luego módulo 10 para quedarte solo con la última (<code>45 → 5</code>).</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Desafío — piensa primero, luego revela</summary>
+<summary>🧩 Desafío, piensa primero, luego revela</summary>
 <div class="challenge__body">
 
 ¿Por qué Python usa `**` para la potenciación en lugar de `^`? ¿Qué hace `^` en realidad en Python?

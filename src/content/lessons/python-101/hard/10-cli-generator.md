@@ -44,7 +44,7 @@ quiz:
 ---
 The final assembly
 
-Every piece is built and tested individually. Now you wire them into a single script that a user can run from the command line. This is the culmination of the entire project — a tiny language model that reads a CSV corpus and generates new text.
+Every piece is built and tested individually. Now you wire them into a single script that a user can run from the command line. This is the culmination of the entire project, a tiny language model that reads a CSV corpus and generates new text.
 
 ## Key Concepts
 
@@ -216,7 +216,7 @@ In five weeks, you've constructed a complete NLP pipeline from scratch:
 4. **Week 4**: Implemented weighted random sampling for text generation
 5. **Week 5**: Assembled everything into a CLI tool with temperature control
 
-This is the same fundamental pipeline used in production language models — just with bigger data, more parameters, and neural networks instead of bigram tables. The core ideas (tokenization → counting → probability → sampling) are identical.
+This is the same fundamental pipeline used in production language models, just with bigger data, more parameters, and neural networks instead of bigram tables. The core ideas (tokenization → counting → probability → sampling) are identical.
 
 ## Try It
 

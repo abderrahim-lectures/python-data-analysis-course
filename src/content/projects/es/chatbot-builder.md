@@ -18,7 +18,7 @@ learningObjectives:
 
 # Constructor de Chatbots
 
-Construye un chatbot basado en reglas que reconoce saludos, preguntas y comandos — y responde con personalidad, no solo con datos. Este proyecto recorre la coincidencia de patrones con regex, la generación de respuestas, el contexto de conversación y un bucle CLI limpio, todo desde la biblioteca estándar.
+Construye un chatbot basado en reglas que reconoce saludos, preguntas y comandos, y responde con personalidad, no solo con datos. Este proyecto recorre la coincidencia de patrones con regex, la generación de respuestas, el contexto de conversación y un bucle CLI limpio, todo desde la biblioteca estándar.
 
 Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
 
@@ -33,18 +33,18 @@ Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/es/proyec
 
 ## Dónde ejecutar esto
 
-- **Localmente con `uv` (recomendado).** Este proyecto usa solo la biblioteca estándar — sin paquetes de terceros — pero `uv` mantiene la estructura del proyecto limpia. La sección de Configuración a continuación lo recorre.
+- **Localmente con `uv` (recomendado).** Este proyecto usa solo la biblioteca estándar, sin paquetes de terceros, pero `uv` mantiene la estructura del proyecto limpia. La sección de Configuración a continuación lo recorre.
 - **Google Colab o Kaggle Notebooks.** Pega las celdas de código directamente en un notebook. `input()` funciona para los avisos de chat, aunque el bucle funciona mejor en una terminal real.
-- **Playground de JupyterLite.** Pegar las celdas de código directamente en un notebook — el bucle de chat funciona, pero mantén las sesiones cortas ya que no hay terminal persistente.
+- **Playground de JupyterLite.** Pegar las celdas de código directamente en un notebook, el bucle de chat funciona, pero mantén las sesiones cortas ya que no hay terminal persistente.
 
-- **Ejecútalo en el navegador.** Hay un cuaderno interactivo listo — ábrelo en Colab, Kaggle o Binder y sigue los pasos en orden.
+- **Ejecútalo en el navegador.** Hay un cuaderno interactivo listo, ábrelo en Colab, Kaggle o Binder y sigue los pasos en orden.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/chatbot-builder/notebook.es.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/chatbot-builder/notebook.es.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fchatbot-builder%2Fnotebook.es.ipynb)
 
 ## Configuración
 
-`uv` es una sola herramienta que reemplaza la cadena habitual de "instalar Python, luego pip, luego un entorno virtual" — puede instalar y gestionar versiones de Python junto con las dependencias de tu proyecto.
+`uv` es una sola herramienta que reemplaza la cadena habitual de "instalar Python, luego pip, luego un entorno virtual", puede instalar y gestionar versiones de Python junto con las dependencias de tu proyecto.
 
 **macOS / Linux** (terminal):
 
@@ -71,11 +71,11 @@ uv init chatbot
 cd chatbot
 ```
 
-Sin paquetes que agregar — el chatbot usa solo la biblioteca estándar de Python (`re`, `random`, `dataclasses`, `collections`).
+Sin paquetes que agregar, el chatbot usa solo la biblioteca estándar de Python (`re`, `random`, `dataclasses`, `collections`).
 
-## Paso 1 — Compara la entrada del usuario con regex
+## Paso 1, Compara la entrada del usuario con regex
 
-La coincidencia de patrones es cómo el bot descubre lo que el usuario quiere decir. Un usuario puede escribir "Hello!", "hi", "hey there" o "good morning" — pero la intención detrás de todos es un saludo. Regex nos permite colapsarlos en un solo patrón.
+La coincidencia de patrones es cómo el bot descubre lo que el usuario quiere decir. Un usuario puede escribir "Hello!", "hi", "hey there" o "good morning", pero la intención detrás de todos es un saludo. Regex nos permite colapsarlos en un solo patrón.
 
 ### 1.1 Define los patrones de intención
 
@@ -160,7 +160,7 @@ time
 None
 ```
 
-**🩹 Si sale mal :** Si cada entrada devuelve `None`, olvidaste `re.IGNORECASE` — "Hello" no coincidirá con `r"\bhi\b"` cuando el regex distingue mayúsculas y el usuario capitaliza la primera letra. Si `greeting` coincide con "good morning" pero no con "goodnight", revisa que `goodnight` no esté en tu lista de despedidas o en un patrón de saludo — no es un substring del patrón `good\s*(morning|afternoon|evening)`.
+**🩹 Si sale mal :** Si cada entrada devuelve `None`, olvidaste `re.IGNORECASE`, "Hello" no coincidirá con `r"\bhi\b"` cuando el regex distingue mayúsculas y el usuario capitaliza la primera letra. Si `greeting` coincide con "good morning" pero no con "goodnight", revisa que `goodnight` no esté en tu lista de despedidas o en un patrón de saludo, no es un substring del patrón `good\s*(morning|afternoon|evening)`.
 
 ### 1.2 Maneja los grupos de regex para datos extraídos
 
@@ -208,7 +208,7 @@ greeting good evening ('evening',)
 name what's your name ()
 ```
 
-**🩹 Si sale mal :** Si `groups` es `()` cuando esperas una captura, los paréntesis en tu regex son grupos no capturantes — usa `(...)` no `(?:...)` para los grupos que quieres extraer. Si `matched_text` está vacío, `re.search` encontró una coincidencia en la posición 0 pero el límite de palabra `\b` podría estar recortando la coincidencia — intenta quitar los anclajes `\b` del patrón específico.
+**🩹 Si sale mal :** Si `groups` es `()` cuando esperas una captura, los paréntesis en tu regex son grupos no capturantes, usa `(...)` no `(?:...)` para los grupos que quieres extraer. Si `matched_text` está vacío, `re.search` encontró una coincidencia en la posición 0 pero el límite de palabra `\b` podría estar recortando la coincidencia, intenta quitar los anclajes `\b` del patrón específico.
 
 ### 1.3 Verifica el clasificador
 
@@ -225,7 +225,7 @@ name what's your name ()
 - ¿Por qué cada intención se mapea a una *lista* de patrones en lugar de un solo patrón? ¿Qué pasa cuando un usuario escribe "hey" en lugar de "good afternoon"?
 - ¿Cuál es la diferencia entre `re.search` y `re.match` aquí? ¿Rompería algo cambiar a `re.match`?
 
-## Paso 2 — Genera respuestas desde plantillas
+## Paso 2, Genera respuestas desde plantillas
 
 Ahora que el bot sabe *qué* quiere decir el usuario, necesita decir algo de vuelta. Un sistema de respuestas construido con plantillas y elecciones aleatorias evita que el bot suene robótico.
 
@@ -317,11 +317,11 @@ Hey there! How can I help?
 Hi! Ready to chat.
 ```
 
-**🩹 Si sale mal :** Si obtienes una cadena vacía, el nombre de la intención no coincide con ninguna clave de `RESPONSES` — revisa errores tipográficos como `"Greeting"` (G mayúscula) frente a `"greeting"`. Si la misma respuesta aparece cada vez, olvidaste `random.choice` y estás usando el índice `[0]` o una entrada fija.
+**🩹 Si sale mal :** Si obtienes una cadena vacía, el nombre de la intención no coincide con ninguna clave de `RESPONSES`, revisa errores tipográficos como `"Greeting"` (G mayúscula) frente a `"greeting"`. Si la misma respuesta aparece cada vez, olvidaste `random.choice` y estás usando el índice `[0]` o una entrada fija.
 
 ### 2.2 Agrega respuestas dinámicas con f-strings
 
-Algunas respuestas necesitan datos en vivo — la hora y la fecha cambian cada segundo. Usar f-strings en los strings de plantilla se evaluaría en el momento de importar, congelando los valores. En su lugar, usa respuestas invocables.
+Algunas respuestas necesitan datos en vivo, la hora y la fecha cambian cada segundo. Usar f-strings en los strings de plantilla se evaluaría en el momento de importar, congelando los valores. En su lugar, usa respuestas invocables.
 
 **👟 Pista inicial :** Reemplaza los strings estáticos con lambdas para las intenciones que necesitan datos dinámicos:
 
@@ -359,9 +359,9 @@ time.sleep(2)
 print(get_response("time"))
 ```
 
-Ambas imprimen la misma hora (solo 2 segundos de diferencia), pero si esperas un minuto completo entre llamadas, las horas diferirán — prueba de que el lambda se evalúa en cada llamada, no una vez en la importación.
+Ambas imprimen la misma hora (solo 2 segundos de diferencia), pero si esperas un minuto completo entre llamadas, las horas diferirán, prueba de que el lambda se evalúa en cada llamada, no una vez en la importación.
 
-**🩹 Si sale mal :** Si `callable(choice)` devuelve `False` para un lambda, revisa que el lambda esté definido correctamente — `lambda: f"..."` no `f"..."` (un f-string desnudo es un string, no una función). Si obtienes `TypeError: 'str' object is not callable`, un string estático se mezcló en una lista que ahora se está llamando — asegúrate de que solo las entradas de lambda estén en las listas dinámicas.
+**🩹 Si sale mal :** Si `callable(choice)` devuelve `False` para un lambda, revisa que el lambda esté definido correctamente, `lambda: f"..."` no `f"..."` (un f-string desnudo es un string, no una función). Si obtienes `TypeError: 'str' object is not callable`, un string estático se mezcló en una lista que ahora se está llamando, asegúrate de que solo las entradas de lambda estén en las listas dinámicas.
 
 ### 2.3 Verifica la generación de respuestas
 
@@ -377,9 +377,9 @@ Ambas imprimen la misma hora (solo 2 segundos de diferencia), pero si esperas un
 - ¿Por qué usar `callable()` para revisar cada respuesta en lugar de poner todas las respuestas dinámicas en un diccionario separado? ¿Cuál es la ventaja de mezclar strings y lambdas en una sola lista?
 - Si quisieras que el bot recordara *qué* preguntó el usuario (no solo la intención), ¿dónde almacenarías esa información?
 
-## Paso 3 — Sigue el contexto de la conversación
+## Paso 3, Sigue el contexto de la conversación
 
-Un chatbot que solo mira el mensaje actual es olvidadizo. El seguimiento de contexto deja que el bot recuerde lo que el usuario dijo antes — para que preguntas de seguimiento como "¿y mañana?" o "¿y tú?" tengan sentido.
+Un chatbot que solo mira el mensaje actual es olvidadizo. El seguimiento de contexto deja que el bot recuerde lo que el usuario dijo antes, para que preguntas de seguimiento como "¿y mañana?" o "¿y tú?" tengan sentido.
 
 ### 3.1 Define la clase de contexto de conversación
 
@@ -457,7 +457,7 @@ Recent intents: ['greeting', 'time', 'mood']
 Was recent greeting? True
 ```
 
-**🩹 Si sale mal :** Si `turn_count` siempre es 1, olvidaste llamar a `update()` — no se incrementa automáticamente. Si `message_history` es más larga que 10 entradas, el límite `deque(maxlen=10)` no está funcionando — revisa que estés pasando `maxlen=10` en el `default_factory`, no en el cuerpo de la clase como valor por defecto.
+**🩹 Si sale mal :** Si `turn_count` siempre es 1, olvidaste llamar a `update()`, no se incrementa automáticamente. Si `message_history` es más larga que 10 entradas, el límite `deque(maxlen=10)` no está funcionando, revisa que estés pasando `maxlen=10` en el `default_factory`, no en el cuerpo de la clase como valor por defecto.
 
 ### 3.2 Usa el contexto para mejorar las respuestas
 
@@ -494,7 +494,7 @@ Debe imprimir:
 date
 ```
 
-**🩹 Si sale mal :** Si la intención ajustada sigue siendo `"question"` cuando esperas `"date"`, revisa `context.last_intent` — debe ser `"time"` para que se dispare la primera rama. Si `user_message.lower()` no contiene "tomorrow", la verificación de substring no coincidirá — asegúrate de que la entrada del usuario realmente contenga la palabra.
+**🩹 Si sale mal :** Si la intención ajustada sigue siendo `"question"` cuando esperas `"date"`, revisa `context.last_intent`, debe ser `"time"` para que se dispare la primera rama. Si `user_message.lower()` no contiene "tomorrow", la verificación de substring no coincidirá, asegúrate de que la entrada del usuario realmente contenga la palabra.
 
 ### 3.3 Verifica el seguimiento de contexto
 
@@ -511,9 +511,9 @@ date
 - ¿Por qué limitar `message_history` a 10 entradas con un `deque`? ¿Qué pasa con el uso de memoria si almacenas cada mensaje en una lista regular durante una conversación larga?
 - `context_adjusted_intent` solo revisa `last_intent`. ¿Qué cambiaría si quisieras considerar las últimas *tres* intenciones en lugar de solo una?
 
-## Paso 4 — Agrega personalidad
+## Paso 4, Agrega personalidad
 
-Un bot que responde cada pregunta con una declaración plana se siente sin vida. La personalidad viene de rasgos consistentes — un nombre, un tono, hábitos de pequeña charla y un seguimiento del estado de ánimo que cambia a lo largo de la conversación.
+Un bot que responde cada pregunta con una declaración plana se siente sin vida. La personalidad viene de rasgos consistentes, un nombre, un tono, hábitos de pequeña charla y un seguimiento del estado de ánimo que cambia a lo largo de la conversación.
 
 ### 4.1 Crea una clase de personalidad
 
@@ -594,7 +594,7 @@ I'm in a great mood! Ready to help.
 After shift: curious
 ```
 
-**🩹 Si sale mal :** Si el segundo saludo es idéntico al primero, `greeting_count` no se está incrementando — asegúrate de que `self.greeting_count += 1` esté dentro del método, no a nivel de módulo. Si `shift_mood` nunca produce "excited", su peso de 1 lo hace raro — ejecuta el cambio unas cuantas veces y aparecerá eventualmente.
+**🩹 Si sale mal :** Si el segundo saludo es idéntico al primero, `greeting_count` no se está incrementando, asegúrate de que `self.greeting_count += 1` esté dentro del método, no a nivel de módulo. Si `shift_mood` nunca produce "excited", su peso de 1 lo hace raro, ejecuta el cambio unas cuantas veces y aparecerá eventualmente.
 
 ### 4.2 Combina la personalidad con las respuestas
 
@@ -662,7 +662,7 @@ We meet again! I'm Chatbot, remember?
 Hey again! Back for more? I'm Chatbot.
 ```
 
-**🩹 Si sale mal :** Si los prefijos de estado de ánimo nunca aparecen, `random.random() < 0.3` significa que solo aparecen el 30% de las veces — ejecútalo más a menudo. Si los saludos devuelven la plantilla estática en lugar de `personality.greet()`, olvidaste la rama `if intent == "greeting": return personality.greet()` en el `get_response` actualizado.
+**🩹 Si sale mal :** Si los prefijos de estado de ánimo nunca aparecen, `random.random() < 0.3` significa que solo aparecen el 30% de las veces, ejecútalo más a menudo. Si los saludos devuelven la plantilla estática en lugar de `personality.greet()`, olvidaste la rama `if intent == "greeting": return personality.greet()` en el `get_response` actualizado.
 
 ### 4.3 Verifica la personalidad
 
@@ -676,15 +676,15 @@ Hey again! Back for more? I'm Chatbot.
 **🤔 Pregunta(s) socrática(s)**
 
 - ¿Por qué usar elecciones aleatorias ponderadas para `shift_mood` en lugar de una elección aleatoria uniforme? ¿Qué modela eso sobre la personalidad real?
-- Si quisieras que el bot recordara el nombre de un usuario de antes en la conversación, ¿dónde lo almacenarías — en `Personality` o en `ChatContext`? ¿Por qué?
+- Si quisieras que el bot recordara el nombre de un usuario de antes en la conversación, ¿dónde lo almacenarías, en `Personality` o en `ChatContext`? ¿Por qué?
 
-## Paso 5 — Maneja los respaldos
+## Paso 5, Maneja los respaldos
 
 Ningún patrón cubrirá jamás cada entrada posible. Un bot que se bloquea o responde con nada ante una entrada inesperada se siente roto. Los respaldos elegantes mantienen la conversación en marcha.
 
 ### 5.1 Construye un sistema de respuestas de respaldo
 
-**👟 Pista inicial :** Crea un módulo `fallback.py` que genere respuestas útiles para entrada no coincidente. Sigue cuántos respaldos ocurren seguidos — si el bot falla en entender demasiadas veces seguidas, ofrece ayuda más directamente.
+**👟 Pista inicial :** Crea un módulo `fallback.py` que genere respuestas útiles para entrada no coincidente. Sigue cuántos respaldos ocurren seguidos, si el bot falla en entender demasiadas veces seguidas, ofrece ayuda más directamente.
 
 ```python
 # fallback.py
@@ -757,7 +757,7 @@ It seems like we're having trouble connecting. Would you like me to list what I 
 {'consecutive': 3, 'total': 3}
 ```
 
-**🩹 Si sale mal :** Si la respuesta de ofrecer ayuda nunca aparece, revisa que `consecutive_fallbacks` se esté incrementando — si se llama a `record_success()` entre respaldos, el contador se reinicia. Si las estadísticas muestran `consecutive: 3` pero solo llamaste a `record_fallback` dos veces, revisa que `record_success` no se esté llamando cuando no debería.
+**🩹 Si sale mal :** Si la respuesta de ofrecer ayuda nunca aparece, revisa que `consecutive_fallbacks` se esté incrementando, si se llama a `record_success()` entre respaldos, el contador se reinicia. Si las estadísticas muestran `consecutive: 3` pero solo llamaste a `record_fallback` dos veces, revisa que `record_success` no se esté llamando cuando no debería.
 
 ### 5.2 Combina los respaldos con el clasificador principal
 
@@ -790,7 +790,7 @@ def respond(user_input: str, context: ChatContext,
     return response
 ```
 
-Espera — eso reinicia el rastreador en el *éxito*, pero el rastreador de respaldo debería reiniciarse en el éxito, no en el fallo. Arreglemos eso:
+Espera, eso reinicia el rastreador en el *éxito*, pero el rastreador de respaldo debería reiniciarse en el éxito, no en el fallo. Arreglemos eso:
 
 ```python
 def respond(user_input: str, context: ChatContext,
@@ -822,9 +822,9 @@ You: hello
 Bot: Hi! I'm Chatbot. Nice to meet you!
 ```
 
-Después del "hello" exitoso, el contador consecutivo se reinicia — la siguiente entrada desconocida arranca de nuevo desde el primer mensaje de respaldo.
+Después del "hello" exitoso, el contador consecutivo se reinicia, la siguiente entrada desconocida arranca de nuevo desde el primer mensaje de respaldo.
 
-**🩹 Si sale mal :** Si el contador de respaldos nunca se reinicia después de una entrada exitosa, `tracker.record_success()` no se está llamando — asegúrate de que la rama `if match is None: ... else: tracker.record_success()` sea correcta. Si el bot responde con un string vacío para entrada desconocida, `record_fallback()` del rastreador de respaldos no está devolviendo un string — revisa el import.
+**🩹 Si sale mal :** Si el contador de respaldos nunca se reinicia después de una entrada exitosa, `tracker.record_success()` no se está llamando, asegúrate de que la rama `if match is None: ... else: tracker.record_success()` sea correcta. Si el bot responde con un string vacío para entrada desconocida, `record_fallback()` del rastreador de respaldos no está devolviendo un string, revisa el import.
 
 ### 5.3 Verifica el manejo de respaldos
 
@@ -838,9 +838,9 @@ Después del "hello" exitoso, el contador consecutivo se reinicia — la siguien
 **🤔 Pregunta(s) socrática(s)**
 
 - ¿Por qué seguir los respaldos consecutivos en lugar de solo los totales? ¿Qué pasaría si el bot ofreciera ayuda después de cada entrada desconocida?
-- Si quisieras que el bot registrara qué entradas dispararon respaldos (para un análisis posterior), ¿dónde almacenarías ese registro — en `FallbackTracker`, `ChatContext` o un módulo separado?
+- Si quisieras que el bot registrara qué entradas dispararon respaldos (para un análisis posterior), ¿dónde almacenarías ese registro, en `FallbackTracker`, `ChatContext` o un módulo separado?
 
-## Paso 6 — Construye el bucle de chat
+## Paso 6, Construye el bucle de chat
 
 Todas las piezas están listas. Este paso las conecta en una sola función `main()` con un bucle REPL limpio, validación de entrada y una salida elegante.
 
@@ -958,11 +958,11 @@ Fallbacks: 1
 Final mood: curious
 ```
 
-**🩹 Si sale mal :** Si `main.py` se bloquea con `ModuleNotFoundError`, los otros módulos (`patterns.py`, `responses.py`, `context.py`, `personality.py`, `fallback.py`) no están en el mismo directorio — mantén todos los archivos en la raíz del proyecto. Si el REPL sale inmediatamente, `input()` está lanzando `EOFError` — esto pasa en algunos entornos de notebook; ejecútalo en una terminal real en su lugar.
+**🩹 Si sale mal :** Si `main.py` se bloquea con `ModuleNotFoundError`, los otros módulos (`patterns.py`, `responses.py`, `context.py`, `personality.py`, `fallback.py`) no están en el mismo directorio, mantén todos los archivos en la raíz del proyecto. Si el REPL sale inmediatamente, `input()` está lanzando `EOFError`, esto pasa en algunos entornos de notebook; ejecútalo en una terminal real en su lugar.
 
 ### 6.2 Agrega validación de entrada y casos límite
 
-**👟 Pista inicial :** Protégete contra errores comunes del usuario — entrada vacía, mensajes extremadamente largos y caracteres de control:
+**👟 Pista inicial :** Protégete contra errores comunes del usuario, entrada vacía, mensajes extremadamente largos y caracteres de control:
 
 ```python
 def validate_input(text: str) -> str | None:
@@ -998,7 +998,7 @@ while True:
 
 **🎯 Resultado esperado :** Presionar Enter sin escribir nada continúa el bucle en silencio. Escribir 600 caracteres trunca a 500. Los caracteres de control se eliminan.
 
-**🩹 Si sale mal :** Si presionar Enter hace que el bot responda con un respaldo, la verificación de string vacío está después de `validate_input` en lugar de antes — asegúrate de que `validate_input` devuelva `None` para strings vacíos y de que el bucle principal omita los valores `None`.
+**🩹 Si sale mal :** Si presionar Enter hace que el bot responda con un respaldo, la verificación de string vacío está después de `validate_input` en lugar de antes, asegúrate de que `validate_input` devuelva `None` para strings vacíos y de que el bucle principal omita los valores `None`.
 
 ### 6.3 Verifica el chatbot completo
 
@@ -1016,24 +1016,24 @@ while True:
 
 - **Olvidar `re.IGNORECASE`.** Sin él, "Hello" no coincidirá con `r"\bhi\b"` porque el regex distingue mayúsculas por defecto. Cada llamada a `re.search` y `re.match` en el clasificador necesita esta bandera.
 - **Mezclar f-strings y lambdas en las plantillas de respuesta.** Un f-string como `f"The time is {datetime.now()}"` se evalúa *una vez en el momento de la importación*, congelando el valor. Usa `lambda: f"..."` en su lugar para que evalue en cada llamada.
-- **El contador de respaldos se reinicia demasiado a menudo.** `record_success()` reinicia el contador consecutivo — si lo llamas para cada entrada (incluyendo los respaldos), el umbral de "3 seguidos" nunca se dispara. Solo llámalo cuando el clasificador coincida de verdad.
+- **El contador de respaldos se reinicia demasiado a menudo.** `record_success()` reinicia el contador consecutivo, si lo llamas para cada entrada (incluyendo los respaldos), el umbral de "3 seguidos" nunca se dispara. Solo llámalo cuando el clasificador coincida de verdad.
 - **`deque(maxlen=10)` no funciona.** El `maxlen` debe pasarse al lambda del `default_factory`, no como valor por defecto a nivel de clase: `field(default_factory=lambda: deque(maxlen=10))`, no `deque: deque = deque(maxlen=10)`.
-- **REX en notebooks.** `input()` en Colab/Kaggle funciona, pero el bucle de chat no sale limpiamente con `Ctrl+C` — lanza `KeyboardInterrupt` que necesitas capturar. El `try/except (EOFError, KeyboardInterrupt)` en `main.py` maneja esto.
+- **REX en notebooks.** `input()` en Colab/Kaggle funciona, pero el bucle de chat no sale limpiamente con `Ctrl+C`, lanza `KeyboardInterrupt` que necesitas capturar. El `try/except (EOFError, KeyboardInterrupt)` en `main.py` maneja esto.
 
 ## Lo que acabas de construir
 
-Un chatbot basado en reglas construido enteramente con la biblioteca estándar de Python: coincidencia de patrones con regex para la clasificación de intenciones, generación de respuestas basada en plantillas con datos dinámicos, seguimiento del contexto de conversación a través de turnos, personalidad con cambios de estado de ánimo, y un sistema de respaldo que escala el ofrecimiento de ayuda después de fallos repetidos. Cinco módulos — `patterns.py`, `responses.py`, `context.py`, `personality.py`, `fallback.py` — cada uno probado de forma independiente antes de conectarse en `main.py`. El chatbot reconoce saludos, preguntas sobre hora/fecha/nombre/estado de ánimo, solicitudes de ayuda y despedidas, y responde con variación impulsada por la personalidad en lugar de strings fijos.
+Un chatbot basado en reglas construido enteramente con la biblioteca estándar de Python: coincidencia de patrones con regex para la clasificación de intenciones, generación de respuestas basada en plantillas con datos dinámicos, seguimiento del contexto de conversación a través de turnos, personalidad con cambios de estado de ánimo, y un sistema de respaldo que escala el ofrecimiento de ayuda después de fallos repetidos. Cinco módulos, `patterns.py`, `responses.py`, `context.py`, `personality.py`, `fallback.py`, cada uno probado de forma independiente antes de conectarse en `main.py`. El chatbot reconoce saludos, preguntas sobre hora/fecha/nombre/estado de ánimo, solicitudes de ayuda y despedidas, y responde con variación impulsada por la personalidad en lugar de strings fijos.
 
 ## A dónde ir desde aquí
 
-- **Agrega una base de conocimiento simple.** Almacena hechos que el bot pueda consultar — "Python fue creado por Guido van Rossum" — y responde a las intenciones `question` buscando en la base de conocimiento en lugar de dar un genérico "no lo sé".
+- **Agrega una base de conocimiento simple.** Almacena hechos que el bot pueda consultar, "Python fue creado por Guido van Rossum", y responde a las intenciones `question` buscando en la base de conocimiento en lugar de dar un genérico "no lo sé".
 - **Historial de conversación persistente.** Guarda el registro del chat en un archivo JSON para poder revisar conversaciones pasadas, o carga el contexto de una sesión previa cuando el bot se reinicia.
-- **Soporte multi-usuario.** Clave el `ChatContext` por ID de usuario en lugar de tener un contexto global — usuarios distintos obtienen historiales de conversación independientes.
+- **Soporte multi-usuario.** Clave el `ChatContext` por ID de usuario en lugar de tener un contexto global, usuarios distintos obtienen historiales de conversación independientes.
 - **Mejoras de regex.** Usa el modo `re.VERBOSE` para escribir patrones más legibles con comentarios, o compila patrones con `re.compile` para un mejor rendimiento en listas de patrones grandes.
-- **Respaldo con LLM.** Cuando el clasificador de regex devuelva `None`, pasa la entrada a un LLM de nivel gratuito en lugar de una respuesta de respaldo estática — lo mejor de ambos mundos: coincidencia de patrones rápida para casos comunes, IA flexible para todo lo demás.
+- **Respaldo con LLM.** Cuando el clasificador de regex devuelva `None`, pasa la entrada a un LLM de nivel gratuito en lugar de una respuesta de respaldo estática, lo mejor de ambos mundos: coincidencia de patrones rápida para casos comunes, IA flexible para todo lo demás.
 
 ## Comparte tu proyecto con la clase
 
-¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado — y su README tiene un recorrido completo y amigable para principiantes sobre cómo agregar el tuyo vía un **pull request**, incluso si nunca has usado git antes: hacer fork del repositorio, crear una rama, confirmar tus archivos y abrir el PR, un paso a la vez. No se asume experiencia previa con git.
+¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado, y su README tiene un recorrido completo y amigable para principiantes sobre cómo agregar el tuyo vía un **pull request**, incluso si nunca has usado git antes: hacer fork del repositorio, crear una rama, confirmar tus archivos y abrir el PR, un paso a la vez. No se asume experiencia previa con git.
 
 Bienvenido a escribir Python fuera del navegador. 🎓

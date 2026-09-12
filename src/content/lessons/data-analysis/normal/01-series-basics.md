@@ -45,7 +45,7 @@ quiz:
 
 ## What is a Series?
 
-A pandas **Series** is a one-dimensional labeled array. Think of it as a single column from a spreadsheet — each value has a label (the index) and the data can be any type: integers, floats, strings, or even Python objects.
+A pandas **Series** is a one-dimensional labeled array. Think of it as a single column from a spreadsheet, each value has a label (the index) and the data can be any type: integers, floats, strings, or even Python objects.
 
 ```python
 import pandas as pd
@@ -68,14 +68,14 @@ The left column is the **index** (0, 1, 2, 3 by default). The right column is th
 
 ## Creating Series from different sources
 
-**From a list** — the index defaults to a range of integers:
+**From a list**, the index defaults to a range of integers:
 
 ```python
 temperatures = pd.Series([22.5, 24.1, 19.8, 26.3])
 print(temperatures)
 ```
 
-**From a dictionary** — the keys become the index:
+**From a dictionary**, the keys become the index:
 
 ```python
 population = pd.Series({
@@ -95,7 +95,7 @@ Johannesburg     5600000
 dtype: int64
 ```
 
-**From a scalar** — a single value is repeated to fill the index:
+**From a scalar**, a single value is repeated to fill the index:
 
 ```python
 zeros = pd.Series(0, index=["a", "b", "c", "d"])
@@ -185,7 +185,7 @@ print(grades > 85)
 
 ## Key Takeaways
 
-- A Series is a one-dimensional labeled array — the foundation of pandas
+- A Series is a one-dimensional labeled array, the foundation of pandas
 - The index provides labels for accessing and slicing data
 - Vectorized operations let you transform entire columns without loops
 - Dictionaries are a natural source for Series with meaningful labels

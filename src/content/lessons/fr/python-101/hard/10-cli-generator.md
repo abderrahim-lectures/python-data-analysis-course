@@ -44,7 +44,7 @@ quiz:
 ---
 L'assemblage final
 
-Chaque pièce est construite et testée individuellement. Vous les branchez maintenant dans un seul script qu'un utilisateur peut exécuter depuis la ligne de commande. C'est l'aboutissement de tout le projet — un petit modèle de langue qui lit un corpus CSV et génère du nouveau texte.
+Chaque pièce est construite et testée individuellement. Vous les branchez maintenant dans un seul script qu'un utilisateur peut exécuter depuis la ligne de commande. C'est l'aboutissement de tout le projet, un petit modèle de langue qui lit un corpus CSV et génère du nouveau texte.
 
 ## Concepts clés
 
@@ -216,7 +216,7 @@ En cinq semaines, vous avez construit un pipeline NLP complet à partir de zéro
 4. **Semaine 4** : Implémenté l'échantillonnage aléatoire pondéré pour la génération de texte
 5. **Semaine 5** : Assemblé le tout dans un outil en ligne de commande avec contrôle de la température
 
-C'est le même pipeline fondamental que celui utilisé dans les modèles de langue de production — juste avec plus de données, plus de paramètres et des réseaux de neurones au lieu de tables de bigrammes. Les idées centrales (tokenisation → comptage → probabilité → échantillonnage) sont identiques.
+C'est le même pipeline fondamental que celui utilisé dans les modèles de langue de production, juste avec plus de données, plus de paramètres et des réseaux de neurones au lieu de tables de bigrammes. Les idées centrales (tokenisation → comptage → probabilité → échantillonnage) sont identiques.
 
 ## Essayez
 

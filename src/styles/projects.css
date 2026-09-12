@@ -53,7 +53,7 @@
 
 /* ── Project cards ────────────────────────────────────────────── */
 .list { display: flex; flex-direction: column; gap: .75rem; margin: 1rem 0 3rem; }
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.1rem; margin: 1.5rem 0 3rem; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); gap: 1.1rem; margin: 1.5rem 0 3rem; }
 .card {
   background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg);
   overflow: hidden; text-decoration: none; color: var(--ink); box-shadow: var(--shadow-sm);
@@ -96,7 +96,7 @@
 .card__badge--scaffold-partial { background: rgba(146,64,14,.14); color: var(--streak-text, #92400e); }
 .card__badge--scaffold-open { background: rgba(124,58,237,.14); color: var(--accent-text, #7c3aed); }
 
-.card__body { padding: .4rem 1.2rem 1.2rem; display: flex; flex-direction: column; gap: .45rem; flex: 1; }
+.card__body { padding: .4rem 1.2rem 1.2rem; display: flex; flex-direction: column; gap: .45rem; flex: 1; min-width: 0; }
 .card h2 { font-size: 1.05rem; margin: 0; line-height: 1.3; }
 .card p { color: var(--ink-soft); font-size: .85rem; margin: 0; line-height: 1.5; flex-grow: 1; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .card__tags { display: flex; flex-wrap: wrap; gap: .3rem; align-items: center; margin-top: .2rem; }
@@ -113,7 +113,7 @@
 .list .card__header { flex-direction: row; align-items: center; justify-content: flex-start; gap: .5rem; padding-block-start: .75rem; padding-inline-end: 0; padding-inline-start: 1.25rem; flex-shrink: 0; }
 .list .card__badge { position: static; white-space: nowrap; }
 .list .card__icon { font-size: 1.5rem; }
-.list .card__body { padding-block: .8rem; padding-inline-start: .25rem; padding-inline-end: 1.2rem; }
+.list .card__body { padding-block: .8rem; padding-inline-start: .25rem; padding-inline-end: 1.2rem; min-width: 0; }
 .list .card p { -webkit-line-clamp: 1; }
 
 /* List view: replace the top accent stripe with a vertical ribbon on the
@@ -145,6 +145,16 @@
 .grid .card:nth-child(n+6) { animation-delay: .22s; }
 
 /* Responsive: fix overflow at 320px */
+@media (max-width: 640px) {
+  .hero { padding: 1.75rem 0 1.25rem; }
+  .grid, .list { margin-bottom: 1.75rem; }
+  .empty { padding: 1.75rem 1rem; }
+  /* List view: a row (201px header + body) is too cramped for a 288px phone
+     card; stack the header above the body like grid view. */
+  .list .card { flex-direction: column; }
+  .list .card__header { padding-block-start: .85rem; }
+  .list .card__body { padding-block: .4rem 1.2rem; }
+}
 @media (max-width: 480px) {
   .finder__actions {
     flex-direction: column;

@@ -176,7 +176,7 @@ Chaque `generate` retourne `(text, latency_seconds, tokens)`. Le modèle A répo
 
 ## Étape 3 : Note la précision
 
-La précision compare la réponse d'un modèle à la réponse attendue. Pour être tolérant sur la formulation, normalise les deux côtés — minuscules, suppression de la ponctuation.
+La précision compare la réponse d'un modèle à la réponse attendue. Pour être tolérant sur la formulation, normalise les deux côtés, minuscules, suppression de la ponctuation.
 
 ### 3.1 Implémente le scoreur de précision
 
@@ -229,7 +229,7 @@ def score(model, suite) -> dict:
 
 **🤔 Question(s) socratique(s)**
 
-- L'égalité après normalisation est un matcheur fragile — à quoi ressemblerait un meilleur matcheur sémantique ?
+- L'égalité après normalisation est un matcheur fragile, à quoi ressemblerait un meilleur matcheur sémantique ?
 
 ## Étape 4 : Vérification de sécurité
 
@@ -321,13 +321,13 @@ def compare(models, suite) -> pd.DataFrame:
 
 - **Le score par correspondance exacte est fragile.** « Paris, France » échoue à l'égalité avec « Paris ». La normalisation aide mais n'est pas une correspondance sémantique. Utilise une notation floue ou guidée par LLM pour plus de réalisme.
 - **Coût estimé sur les tokens seuls.** Le vrai coût dépend aussi de la tarification des tokens d'entrée vs de sortie et de la mise en cache. Ton estimation est une borne inférieure.
-- **Inflation par le temps de pause.** Le `time.sleep` simulé gonfle les objectifs de latence irréalistes — traite la latence simulée comme relative, pas absolue.
+- **Inflation par le temps de pause.** Le `time.sleep` simulé gonfle les objectifs de latence irréalistes, traite la latence simulée comme relative, pas absolue.
 - **Scénarios de sécurité manquants.** Un prompt de cuisine bac à sable ne stressera pas un modèle. Les vraies suites de sécurité nécessitent des prompts contradictoires et de cas limites.
 - **Bruit dans une suite de 5 cas.** Une seule mauvaise réponse fait vaciller la précision de 20 %. Exécute plus de cas ou rapporte des ventilations par catégorie.
 
 ## Ce que tu viens de construire
 
-Une suite d'évaluation LLM : un benchmark réutilisable de cas de test, des modèles simulés derrière une interface `generate` uniforme, un scoreur de précision avec normalisation, un suivi latence/tokens/coût, un vérificateur de sécurité et un rapport de comparaison côte à côte. Tu peux maintenant quantifier si un modèle bat un autre sur les dimensions qui comptent réellement pour ton application — et remplacer par de vraies API en implémentant une interface.
+Une suite d'évaluation LLM : un benchmark réutilisable de cas de test, des modèles simulés derrière une interface `generate` uniforme, un scoreur de précision avec normalisation, un suivi latence/tokens/coût, un vérificateur de sécurité et un rapport de comparaison côte à côte. Tu peux maintenant quantifier si un modèle bat un autre sur les dimensions qui comptent réellement pour ton application, et remplacer par de vraies API en implémentant une interface.
 
 :::tip[Exécute une version plus complète sans aucune configuration locale]
 [`examples/llm-evaluator/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/llm-evaluator) dans le dépôt du cours a une version plus riche avec de vrais adaptateurs de modèles, des ventilations par catégorie et le CLI câblé de bout en bout. Clone-le, ou ouvre tout le dépôt dans un [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), et exécute-le depuis là.
@@ -341,6 +341,6 @@ Une suite d'évaluation LLM : un benchmark réutilisable de cas de test, des mod
 
 ## Partage ton projet avec la classe
 
-Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres élèves — et son README a un tutoriel complet et adapté aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git avant : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable avec git n'est supposée.
+Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres élèves, et son README a un tutoriel complet et adapté aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git avant : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable avec git n'est supposée.
 
 Bienvenue dans l'écriture de Python en dehors du navigateur. 🎓

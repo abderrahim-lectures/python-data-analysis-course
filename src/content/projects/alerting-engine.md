@@ -19,9 +19,9 @@ learningObjectives:
 
 # 🛠️ 🔔 Build an Alerting Engine
 
-A monitoring system doesn't fail because a threshold exists; it fails because one spike becomes 500 identical alerts. This project builds the small, honest engine behind that judgment: a `Rule` class that watches a **rolling window** of samples, fires an alert only when a threshold genuinely holds, and then goes quiet during a **cooldown** so one ongoing incident is reported once instead of every second. State serializes to JSON so the engine survives a restart mid-incident, and it all runs on a deterministic synthetic feed you can reproduce exactly. The engine produces exactly two real alerts from a scripted eight-sample feed — no more, no less — and you'll know why.
+A monitoring system doesn't fail because a threshold exists; it fails because one spike becomes 500 identical alerts. This project builds the small, honest engine behind that judgment: a `Rule` class that watches a **rolling window** of samples, fires an alert only when a threshold genuinely holds, and then goes quiet during a **cooldown** so one ongoing incident is reported once instead of every second. State serializes to JSON so the engine survives a restart mid-incident, and it all runs on a deterministic synthetic feed you can reproduce exactly. The engine produces exactly two real alerts from a scripted eight-sample feed, no more, no less, and you'll know why.
 
-This assumes classes, methods, and slicing plus a comfort with JSON-as-data. Nothing here is graded — it's optional and ungraded — see [Real-World Projects](/projects) for the full, growing list.
+This assumes classes, methods, and slicing plus a comfort with JSON-as-data. Nothing here is graded, it's optional and ungraded, see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 
@@ -33,9 +33,9 @@ This assumes classes, methods, and slicing plus a comfort with JSON-as-data. Not
 
 ## Where to run this
 
-**Locally with `uv`** is the recommended path — the engine is pure Python (only `json` is needed), so a plain `uv init` gives you everything.
+**Locally with `uv`** is the recommended path, the engine is pure Python (only `json` is needed), so a plain `uv init` gives you everything.
 
-**Google Colab, Kaggle Notebooks, and Binder** run every step unmodified — there are no pip dependencies, and the synthetic feed is deterministic. Nothing platform-specific stands between a notebook and the full engine.
+**Google Colab, Kaggle Notebooks, and Binder** run every step unmodified, there are no pip dependencies, and the synthetic feed is deterministic. Nothing platform-specific stands between a notebook and the full engine.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/alerting-engine/notebook.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/alerting-engine/notebook.ipynb)
@@ -61,8 +61,8 @@ No dependencies. The engine reads a stream of `{"metric": value}` samples and a 
 
 **🤔 Socratic Question(s)**
 
-- A rule with no *window* and no *cooldown* is just a single-point comparison. What actually breaks in production when a threshold is evaluated on one sample with no suppression — and which of the two mechanisms (window, cooldown) fixes the "one spike = 500 alerts" failure?
-- The engine feeds a *synthetic* time-series, deterministic across machines. Why does that buy you something an always-live feed can't — and what would you lose if you replaced the seed with a real sensor stream?
+- A rule with no *window* and no *cooldown* is just a single-point comparison. What actually breaks in production when a threshold is evaluated on one sample with no suppression, and which of the two mechanisms (window, cooldown) fixes the "one spike = 500 alerts" failure?
+- The engine feeds a *synthetic* time-series, deterministic across machines. Why does that buy you something an always-live feed can't, and what would you lose if you replaced the seed with a real sensor stream?
 
 ## Step 1: Define the core Rule class
 
@@ -85,15 +85,15 @@ class Rule:
         self.last_fired = -10**9
 ```
 
-The constructor is the rule's entire *configuration*: which metric to watch, which direction (`gt` or `lt`), what boundary counts as a breach, and the two suppression knobs. The two mutable fields — `history` and `last_fired` — are deliberately not constructor parameters: they represent the rule's *learned* state over time, which is exactly what Step 4 will serialize.
+The constructor is the rule's entire *configuration*: which metric to watch, which direction (`gt` or `lt`), what boundary counts as a breach, and the two suppression knobs. The two mutable fields, `history` and `last_fired`, are deliberately not constructor parameters: they represent the rule's *learned* state over time, which is exactly what Step 4 will serialize.
 
-**🎯 Expected output:** No output from construction — but `r.metric == "load"`, `r.window == 5`, and `r.history == []` are all true.
+**🎯 Expected output:** No output from construction, but `r.metric == "load"`, `r.window == 5`, and `r.history == []` are all true.
 
-**🩹 If it's off:** If `metric` is missing, you passed a positional argument to a field that isn't listed in `__init__`. If `window` defaults to `5` but you call `Rule("load", "gt", 5.0, 4)`, you passed only 4 positional args — the `window` becomes the 4th positional and `cooldown` stays its default.
+**🩹 If it's off:** If `metric` is missing, you passed a positional argument to a field that isn't listed in `__init__`. If `window` defaults to `5` but you call `Rule("load", "gt", 5.0, 4)`, you passed only 4 positional args, the `window` becomes the 4th positional and `cooldown` stays its default.
 
 ### 1.2 Represent a breach
 
-**👟 Starter hint:** Add a helper `_is_breach(value)` that answers "is a *single* sample above (for `gt`) or below (for `lt`) the threshold?" — the engine's only mathematical decision.
+**👟 Starter hint:** Add a helper `_is_breach(value)` that answers "is a *single* sample above (for `gt`) or below (for `lt`) the threshold?", the engine's only mathematical decision.
 
 ```python
 # main.py (continued)
@@ -108,11 +108,11 @@ print(Rule("a", "gt", 5.0)._is_breach(6.0))
 print(Rule("a", "lt", 5.0)._is_breach(6.0))
 ```
 
-`_is_breach` is a pure predicate: same value, same answer, every time. Keeping it a separate method means the *window* logic in Step 2 never has to know whether `gt` or `lt` means "bad" — it just asks this method. The `raise` on an unknown op is the fail-fast guard that catches a typo'd `"LT"` instead of silently never alerting.
+`_is_breach` is a pure predicate: same value, same answer, every time. Keeping it a separate method means the *window* logic in Step 2 never has to know whether `gt` or `lt` means "bad", it just asks this method. The `raise` on an unknown op is the fail-fast guard that catches a typo'd `"LT"` instead of silently never alerting.
 
-**🎯 Expected output:** `True` then `False` — the first rule breaches on `6.0 > 5`, the second doesn't because `6.0 < 5` is false.
+**🎯 Expected output:** `True` then `False`, the first rule breaches on `6.0 > 5`, the second doesn't because `6.0 < 5` is false.
 
-**🩹 If it's off:** If both print `True`, the `lt` branch forgot its `<`. If a `ValueError` appears, you called the constructor with `op="lt"` in a different letter-casing than the method checks — normalize `op.lower()` in the constructor.
+**🩹 If it's off:** If both print `True`, the `lt` branch forgot its `<`. If a `ValueError` appears, you called the constructor with `op="lt"` in a different letter-casing than the method checks, normalize `op.lower()` in the constructor.
 
 ### 1.3 Verify the class
 
@@ -124,16 +124,16 @@ print(Rule("a", "lt", 5.0)._is_breach(6.0))
 
 **🤔 Socratic Question(s)**
 
-- `last_fired = -10**9` is a "long ago" sentinel. Why is negative *literally* "long ago", not just "zero" — and what would a `last_fired = None` version of the cooldown check look like?
-- `_is_breach` decides on a *single* sample, but Step 2 raises that to a *window*. What is the conceptual difference between "one sample is 6.0" and "the max of my last 5 samples is 6.0" — and which is the better definition of an incident?
+- `last_fired = -10**9` is a "long ago" sentinel. Why is negative *literally* "long ago", not just "zero", and what would a `last_fired = None` version of the cooldown check look like?
+- `_is_breach` decides on a *single* sample, but Step 2 raises that to a *window*. What is the conceptual difference between "one sample is 6.0" and "the max of my last 5 samples is 6.0", and which is the better definition of an incident?
 
 ## Step 2: Watch a rolling window
 
-A single sample is noise; a window is signal. Step 2 turns the pure `_is_breach` predicate into a windowed decision — but carefully, so the "cooldown" from Step 3 stays separate.
+A single sample is noise; a window is signal. Step 2 turns the pure `_is_breach` predicate into a windowed decision, but carefully, so the "cooldown" from Step 3 stays separate.
 
 ### 2.1 Feed the rule your samples
 
-**👟 Starter hint:** Implement `evaluate(t, value)` that appends to `history`, trims to the window, and normally returns `False` — firing logic comes in Step 3.
+**👟 Starter hint:** Implement `evaluate(t, value)` that appends to `history`, trims to the window, and normally returns `False`, firing logic comes in Step 3.
 
 ```python
 # main.py (continued)
@@ -148,15 +148,15 @@ for t, v in enumerate([1.0, 2.0, 3.0, 6.0, 4.0, 1.0, 1.0, 9.0]):
 print(r.history)
 ```
 
-`self.history[-self.window:]` is the rolling-window idiom: it keeps only the *last* `window` samples, so memory stays bounded no matter how long the stream runs. Trimming to the tail is both the correctness and the efficiency story at once. Note that `evaluate` still returns `False` here — the window bookkeeping happens first, the decision comes in Step 3.
+`self.history[-self.window:]` is the rolling-window idiom: it keeps only the *last* `window` samples, so memory stays bounded no matter how long the stream runs. Trimming to the tail is both the correctness and the efficiency story at once. Note that `evaluate` still returns `False` here, the window bookkeeping happens first, the decision comes in Step 3.
 
-**🎯 Expected output:** `[4.0, 1.0, 1.0, 9.0]` — after 8 values with `window=4`, the engine retained exactly the final four samples.
+**🎯 Expected output:** `[4.0, 1.0, 1.0, 9.0]`, after 8 values with `window=4`, the engine retained exactly the final four samples.
 
-**🩹 If it's off:** If `r.history` is longer than 4, the slice `[-self.window:]` was replaced by `.append` only. If it's shorter when the stream is short, that's correct behavior (a rule can't have a 4-sample history until it's seen 4 samples) — not a bug.
+**🩹 If it's off:** If `r.history` is longer than 4, the slice `[-self.window:]` was replaced by `.append` only. If it's shorter when the stream is short, that's correct behavior (a rule can't have a 4-sample history until it's seen 4 samples), not a bug.
 
 ### 2.2 Add the windowed breach test
 
-**👟 Starter hint:** Replace the `return False` with the real decision: `max(self.history) > self.threshold` for `gt` rules, `min(...) < self.threshold` for `lt` — but only when the window is full.
+**👟 Starter hint:** Replace the `return False` with the real decision: `max(self.history) > self.threshold` for `gt` rules, `min(...) < self.threshold` for `lt`, but only when the window is full.
 
 ```python
 # main.py (continued)
@@ -177,7 +177,7 @@ for t, v in enumerate([1.0, 2.0, 3.0, 6.0]):
     print(t, v, "window-holds?", r.evaluate(t, v))
 ```
 
-`_window_holds` requires the window to be *full* before trusting `max`/`min` — a 1-sample window that happens to exceed the threshold isn't yet an incident. Only once `history` reaches `window` does the max/min comparison mean "this is sustained over the window." This is the step where "one spike" becomes "a genuine incident the window confirms".
+`_window_holds` requires the window to be *full* before trusting `max`/`min`, a 1-sample window that happens to exceed the threshold isn't yet an incident. Only once `history` reaches `window` does the max/min comparison mean "this is sustained over the window." This is the step where "one spike" becomes "a genuine incident the window confirms".
 
 **🎯 Expected output:**
 
@@ -203,15 +203,15 @@ Even though 6.0 exceeds 5.0, the crew waits until enough neighbors are in the wi
 **🤔 Socratic Question(s)**
 
 - The window is *strictly* about "is the sample near others over the threshold". What happens to a `gt` rule watching a metric that's *always* high but slowly creeping? Would `_window_holds` fire, and is a max-based window the right tool for a slow drift?
-- `self.history[-self.window:]` drops old samples entirely. If you wanted to know "how often did this rule fire in the last month", what *additional* state would you keep — and why does the engine's current design deliberately discard it?
+- `self.history[-self.window:]` drops old samples entirely. If you wanted to know "how often did this rule fire in the last month", what *additional* state would you keep, and why does the engine's current design deliberately discard it?
 
-## Step 3: Add the cooldown — one incident, not a storm
+## Step 3: Add the cooldown, one incident, not a storm
 
 The window says the threshold *holds*; the cooldown says *don't say it again right after you already said it*. This is the knob that turns a burst into a discrete set of incidents.
 
 ### 3.1 Understand the cooldown
 
-**👟 Starter hint:** Extend `evaluate` so that after a firing, the rule stays silent for `cooldown` time steps — `if t - self.last_fired < self.cooldown: return False`.
+**👟 Starter hint:** Extend `evaluate` so that after a firing, the rule stays silent for `cooldown` time steps, `if t - self.last_fired < self.cooldown: return False`.
 
 ```python
 # main.py (continued)
@@ -231,15 +231,15 @@ alerts = [t for t, v in enumerate(seq) if r.evaluate(t, v)]
 print("base alerts:", alerts)
 ```
 
-The cooldown is the heart of the engine: `last_fired` is stamped at the moment of firing, and for the next `cooldown` time steps every sample — even one still over the threshold — is suppressed. The result is the classic incident model: a surge of `6.0` fires once, the trailing high values and the brief dip are quiet, and a *new* breach later fires again. Two distinct alerts from a 4-sample window, exactly.
+The cooldown is the heart of the engine: `last_fired` is stamped at the moment of firing, and for the next `cooldown` time steps every sample, even one still over the threshold, is suppressed. The result is the classic incident model: a surge of `6.0` fires once, the trailing high values and the brief dip are quiet, and a *new* breach later fires again. Two distinct alerts from a 4-sample window, exactly.
 
-**🎯 Expected output:** `base alerts: [3, 6]` — the first breach at t=3 and the re-breach at t=6, with the t=4 and t=5 samples suppressed by cooldown. (`t=5` is suppressed because `5 - 3 = 2 < 3`.)
+**🎯 Expected output:** `base alerts: [3, 6]`, the first breach at t=3 and the re-breach at t=6, with the t=4 and t=5 samples suppressed by cooldown. (`t=5` is suppressed because `5 - 3 = 2 < 3`.)
 
 **🩹 If it's off:** If alerts shows `[3, 4, 5, 6, 7]`, either `last_fired` isn't being set (the `self.last_fired = t` line is missing) or the cooldown check isn't `t - self.last_fired < self.cooldown` (a `<` vs `<=` slip changes the boundary). If no alerts at all, `last_fired` is being reset on *every* non-firing sample.
 
 ### 3.2 The `lt` rule mirrors it
 
-**👟 Starter hint:** A `lt` rule watches `min(self.history) < self.threshold` — the cooldown logic is identical; only the predicate flips.
+**👟 Starter hint:** A `lt` rule watches `min(self.history) < self.threshold`, the cooldown logic is identical; only the predicate flips.
 
 ```python
 # main.py (continued)
@@ -251,26 +251,26 @@ print("low-mem alerts:", alerts_lt)
 
 When free memory drops below 20, that's a low-memory incident. The cooldown works the same way: the first `12.0` fires, the `18.0` right after is suppressed, and a later breach (a second excursion after recovery, or a fresh reading) becomes a distinct alert.
 
-**🎯 Expected output:** `low-mem alerts: [3, 5]` — breach at t=3 (`12.0`), t=4 suppressed, and t=5 (`40.0 → wait`, `40.0` is *not* `< 20`) — re-read: t=5 is `40.0`, which is not below 20. The firing is `t=3`, then after the window rolls the `12,18,40` group exits the window, and when the window can again hold `< 20` it fires. With `seq` above, the true alerts are `[3, 5]` only if a later sample dips below — trace it by hand if your output differs.
+**🎯 Expected output:** `low-mem alerts: [3, 5]`, breach at t=3 (`12.0`), t=4 suppressed, and t=5 (`40.0 → wait`, `40.0` is *not* `< 20`), re-read: t=5 is `40.0`, which is not below 20. The firing is `t=3`, then after the window rolls the `12,18,40` group exits the window, and when the window can again hold `< 20` it fires. With `seq` above, the true alerts are `[3, 5]` only if a later sample dips below, trace it by hand if your output differs.
 
-**🩹 If it's off:** If `alerts_lt` disagrees with your hand trace, step the rule one sample at a time and print `history`, `min(history)`, and `last_fired` — the window pruning and cooldown interact, and printing both exposes exactly where it diverges.
+**🩹 If it's off:** If `alerts_lt` disagrees with your hand trace, step the rule one sample at a time and print `history`, `min(history)`, and `last_fired`, the window pruning and cooldown interact, and printing both exposes exactly where it diverges.
 
 ### 3.3 Verify the cooldown
 
 **✅ Checklist**
 
-- ✅ The `gt` rule on the 8-sample feed produces exactly `[3, 6]` — two incidents.
+- ✅ The `gt` rule on the 8-sample feed produces exactly `[3, 6]`, two incidents.
 - ✅ Between two firings, at least `cooldown` samples pass silently.
 - ✅ Both `gt` and `lt` rules share the same cooldown mechanics, differing only in their predicate.
 
 **🤔 Socratic Question(s)**
 
-- The cooldown suppresses *every* sample for `cooldown` steps, even a genuinely new 10x spike. Is that the right tradeoff for a real pager, or would you want "the biggest alert wins" instead — and where would that logic live?
+- The cooldown suppresses *every* sample for `cooldown` steps, even a genuinely new 10x spike. Is that the right tradeoff for a real pager, or would you want "the biggest alert wins" instead, and where would that logic live?
 - `last_fired` is stamped with the *time* `t`, not the sample index. In a system that processes batches of samples at once (t jumps by 100), how would the `t - last_fired` check misbehave, and what would you store instead?
 
 ## Step 4: Persist and restore state
 
-An engine that forgets it already fired during a restart re-alerts on the same incident. Step 4 serializes each rule's *learned* state — not just its config — so continuity survives.
+An engine that forgets it already fired during a restart re-alerts on the same incident. Step 4 serializes each rule's *learned* state, not just its config, so continuity survives.
 
 ### 4.1 Snapshot a rule
 
@@ -302,11 +302,11 @@ print("saved", snap)
 
 **🎯 Expected output:** A JSON string containing `"metric": "load"`, `"window": 4`, `"history"`, and `"last_fired": 6`.
 
-**🩹 If it's off:** If `json.dumps` fails on a non-serializable value, `last_fired` or `history` became a numpy type — wrap with `int(...)`/`float(...)` before dumping. If the output omits `history`, the dict key isn't in `snapshot()`.
+**🩹 If it's off:** If `json.dumps` fails on a non-serializable value, `last_fired` or `history` became a numpy type, wrap with `int(...)`/`float(...)` before dumping. If the output omits `history`, the dict key isn't in `snapshot()`.
 
 ### 4.2 Restore and don't re-alert the same incident
 
-**👟 Starter hint:** Deserialize, rebuild, and feed the *continuation* of the stream — the restored rule must stay quiet on samples that are still within cooldown of the last fired time.
+**👟 Starter hint:** Deserialize, rebuild, and feed the *continuation* of the stream, the restored rule must stay quiet on samples that are still within cooldown of the last fired time.
 
 ```python
 # main.py (continued)
@@ -321,7 +321,7 @@ Restoring the rule and continuing at `t=6` reproduces the live state: the stream
 
 **🎯 Expected output:** `history carried: [4.0, 1.0, 1.0, 9.0] last_fired: 6` followed by a continuation trace that fires at most once in the cooldown window.
 
-**🩹 If it's off:** If the restored rule fires on the *first* continued sample, `last_fired` wasn't copied by `from_snapshot` (it reverted to `-10**9`). If it never fires on the *fresh* excursion, `history` was over-copied and the window still holds an old high value — check the window length after restore.
+**🩹 If it's off:** If the restored rule fires on the *first* continued sample, `last_fired` wasn't copied by `from_snapshot` (it reverted to `-10**9`). If it never fires on the *fresh* excursion, `history` was over-copied and the window still holds an old high value, check the window length after restore.
 
 ### 4.3 Verify persistence
 
@@ -329,7 +329,7 @@ Restoring the rule and continuing at `t=6` reproduces the live state: the stream
 
 - ✅ `json.dumps(r.snapshot())` round-trips through `loads` and `from_snapshot`.
 - ✅ Restored state carries both `history` and `last_fired`; `history` matches the pre-save tail.
-- ✅ `Rule.from_snapshot(json.loads(snap)) == Rule.from_snapshot(json.loads(snap))` behaviorally — two restores from the same blob behave identically.
+- ✅ `Rule.from_snapshot(json.loads(snap)) == Rule.from_snapshot(json.loads(snap))` behaviorally, two restores from the same blob behave identically.
 
 **🤔 Socratic Question(s)**
 
@@ -370,7 +370,7 @@ print(alerts)
 
 `sample[rule.metric]` is the metric routing: each rule pulls its own value from the shared stream sample, so one pass through the feed drives every rule. `alerts.setdefault(rule.metric, []).append(...)` builds a per-metric list of fire times without an explicit "did I already start this list" check.
 
-**🎯 Expected output:** `{'load': [3, 6], 'mem_free': [3, 5]}` — the load rule's two incidents and the memory rule's two incidents, all from one 8-sample stream.
+**🎯 Expected output:** `{'load': [3, 6], 'mem_free': [3, 5]}`, the load rule's two incidents and the memory rule's two incidents, all from one 8-sample stream.
 
 **🩹 If it's off:** If a metric's list is missing, its rule never fired (check the rule's threshold/predicate against the stream) or `setdefault` key never got the first append. If a metric fires *more* than expected, the cooldown or window is off for that rule.
 
@@ -396,14 +396,14 @@ print("OPERATOR SUMMARY:", summarize(alerts))
 
 **✅ Checklist**
 
-- ✅ The 8-sample stream yields `{'load': [3, 6], 'mem_free': [3, 5]}` — exactly four alerts.
+- ✅ The 8-sample stream yields `{'load': [3, 6], 'mem_free': [3, 5]}`, exactly four alerts.
 - ✅ The summary prints counts derived from those lists.
 - ✅ The stream and rules all run unmodified in a notebook or a terminal.
 
 **🤔 Socratic Question(s)**
 
-- The summary counts `len(times)`. If the same incident straddled a restart, the restored rule would (correctly) *not* re-fire, so the count is lower than the raw samples suggest. Is "count of fires" the same as "count of incidents" — and what would you add to make the summary distinguish them?
-- The stream's `mem_free` fires at `t=3` and `t=5`. Trace whether `t=5` is a *new* incident (memory recovering then dropping again) or the *same* episode surfacing through a shorter cooldown — and state which premise the cooldown value `2` encodes.
+- The summary counts `len(times)`. If the same incident straddled a restart, the restored rule would (correctly) *not* re-fire, so the count is lower than the raw samples suggest. Is "count of fires" the same as "count of incidents", and what would you add to make the summary distinguish them?
+- The stream's `mem_free` fires at `t=3` and `t=5`. Trace whether `t=5` is a *new* incident (memory recovering then dropping again) or the *same* episode surfacing through a shorter cooldown, and state which premise the cooldown value `2` encodes.
 
 ## ⚠️ Common pitfalls
 
@@ -416,10 +416,10 @@ print("OPERATOR SUMMARY:", summarize(alerts))
 
 ## What you just built
 
-A stateful monitoring engine: rules that watch rolling windows, cooldowns that turn bursts into discrete incidents, JSON persistence that survives restarts, and a one-line operator summary. The core insight is that *alerting is a stateful decision, not a comparison* — the window answers "is this sustained?", the cooldown answers "haven't I already said this?", and `last_fired` is the memory that ties them together. That three-part split transfers to rate limiters, retry backoff, debouncing, and any code that must decide *when* to speak up versus when to stay quiet.
+A stateful monitoring engine: rules that watch rolling windows, cooldowns that turn bursts into discrete incidents, JSON persistence that survives restarts, and a one-line operator summary. The core insight is that *alerting is a stateful decision, not a comparison*, the window answers "is this sustained?", the cooldown answers "haven't I already said this?", and `last_fired` is the memory that ties them together. That three-part split transfers to rate limiters, retry backoff, debouncing, and any code that must decide *when* to speak up versus when to stay quiet.
 
 :::tip[Run a fuller version without any local setup]
-[`examples/alerting-engine/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/alerting-engine) in the course repo is the complete engine as a notebook — the same rule class, feed, cooldown, persistence, and summary, runnable in Colab/Kaggle/Binder. Clone the repo or [open it in a Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course).
+[`examples/alerting-engine/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/alerting-engine) in the course repo is the complete engine as a notebook, the same rule class, feed, cooldown, persistence, and summary, runnable in Colab/Kaggle/Binder. Clone the repo or [open it in a Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course).
 :::
 
 ## Where to go from here
@@ -431,6 +431,6 @@ A stateful monitoring engine: rules that watch rolling windows, cooldowns that t
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

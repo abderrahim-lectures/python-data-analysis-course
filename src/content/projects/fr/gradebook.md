@@ -14,18 +14,18 @@ prerequisites:
 
 Chaque enseignant a besoin d'un moyen de suivre la performance des étudiants, de calculer des moyennes pondérées et de transformer des scores bruts en bulletins significatifs. Dans ce projet, tu construiras un système de carnet de notes complet en Python qui gère les dossiers étudiants, le calcul du GPA pondéré, les statistiques de classe, la persistance CSV et même la visualisation de base. Tu pratiqueras l'utilisation de classes pour modéliser des entités du monde réel, de pandas pour la manipulation de données et des statistiques pour l'analyse.
 
-- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt — ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
+- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt, ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/gradebook/notebook.fr.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/gradebook/notebook.fr.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fgradebook%2Fnotebook.fr.ipynb)
 
 ## 🎯 Ce que tu vas apprendre
 
-1. **Modélisation de données avec des classes** — Représenter des étudiants, des notes et des catégories comme des objets avec des responsabilités claires
-2. **Calcul de moyenne pondérée** — Calculer des GPA qui respectent les pondérations des catégories de devoirs
-3. **Analyse statistique** — Trouver les moyennes, médianes et distributions de notes de la classe
-4. **Persistance CSV** — Enregistrer et charger les données du carnet de notes pour qu'elles survivent entre les sessions
-5. **Visualisation** — Générer des diagrammes en barres pour les distributions de notes avec matplotlib
+1. **Modélisation de données avec des classes**, Représenter des étudiants, des notes et des catégories comme des objets avec des responsabilités claires
+2. **Calcul de moyenne pondérée**, Calculer des GPA qui respectent les pondérations des catégories de devoirs
+3. **Analyse statistique**, Trouver les moyennes, médianes et distributions de notes de la classe
+4. **Persistance CSV**, Enregistrer et charger les données du carnet de notes pour qu'elles survivent entre les sessions
+5. **Visualisation**, Générer des diagrammes en barres pour les distributions de notes avec matplotlib
 
 ## Ce que tu vas construire
 
@@ -43,9 +43,9 @@ touch gradebook.py
 
 La fondation de tout carnet de notes est son modèle de données. Nous devons représenter trois concepts centraux :
 
-- **Étudiant** — une personne avec un nom et une collection de notes
-- **Note** — un score unique lié à une catégorie et une pondération
-- **Catégorie** — un groupement nommé (comme « devoirs » ou « examen ») avec une pondération vers la note finale
+- **Étudiant**, une personne avec un nom et une collection de notes
+- **Note**, un score unique lié à une catégorie et une pondération
+- **Catégorie**, un groupement nommé (comme « devoirs » ou « examen ») avec une pondération vers la note finale
 
 Utiliser des classes garde cela organisé et rend chaque pièce facile à tester et à étendre.
 
@@ -76,7 +76,7 @@ Grade(category='homework', score=95, weight=0.3)
 
 **🩹 Si ça ne marche pas :**
 - Assure-toi que `weight` est un nombre décimal (0,3 pour 30 %), pas un pourcentage (30)
-- La méthode `__repr__` utilise des guillemets simples dans le f-string — assure-toi qu'ils correspondent
+- La méthode `__repr__` utilise des guillemets simples dans le f-string, assure-toi qu'ils correspondent
 
 ### 1.2 Créer la classe Student
 
@@ -110,7 +110,7 @@ Student(name='Alice', grades=2)
 
 **🩹 Si ça ne marche pas :**
 - La méthode `add_grade` devrait créer un nouvel objet `Grade` et l'ajouter à `self.grades`
-- N'oublie pas `self.grades = []` dans `__init__` — sans cela, tous les étudiants partageraient la même liste
+- N'oublie pas `self.grades = []` dans `__init__`, sans cela, tous les étudiants partageraient la même liste
 
 **✅ Liste de vérification**
 - ✅ `Grade` stocke la catégorie, le score et la pondération
@@ -227,8 +227,8 @@ def weighted_average(grades):
 
 **🩹 Si ça ne marche pas :**
 - Vérifie que tu utilises `g.weight` et pas `g.score` comme diviseur
-- Assure-toi de gérer le cas de liste vide — la division par zéro fera planter le programme
-- La pondération totale ici est 1,3 (0,3 + 0,7 + 0,3), pas 1,0 — c'est correct car les devoirs apparaissent deux fois
+- Assure-toi de gérer le cas de liste vide, la division par zéro fera planter le programme
+- La pondération totale ici est 1,3 (0,3 + 0,7 + 0,3), pas 1,0, c'est correct car les devoirs apparaissent deux fois
 
 ### 3.2 GPA cumulatif sur tous les étudiants
 
@@ -253,7 +253,7 @@ def class_average(self):
 ```
 
 **🩹 Si ça ne marche pas :**
-- Filtre les étudiants sans notes — une liste de notes vide ne devrait pas compter dans la moyenne
+- Filtre les étudiants sans notes, une liste de notes vide ne devrait pas compter dans la moyenne
 - La moyenne de classe est la moyenne des moyennes des étudiants, pas la moyenne de toutes les notes individuelles
 
 **✅ Liste de vérification**
@@ -558,7 +558,7 @@ def load(cls, filename):
 
 **🩹 Si ça ne marche pas :**
 - Utilise `csv.DictReader` pour pouvoir accéder aux colonnes par nom (`row["student"]`) plutôt que par index
-- Convertis `score` et `weight` en `float` — le CSV lit tout comme des chaînes
+- Convertis `score` et `weight` en `float`, le CSV lit tout comme des chaînes
 - Utilise un `@classmethod` pour pouvoir appeler `Gradebook.load(...)` sans avoir d'instance existante
 
 **✅ Liste de vérification**
@@ -692,7 +692,7 @@ Un diagramme en barres horizontal montrant le GPA de chaque étudiant avec un co
 
 **🩹 Si ça ne marche pas :**
 - Si les barres sont trop fines, augmente le paramètre `height` dans `barh`
-- Les couleurs sont déterminées par la plage de GPA — vérifie la compréhension de liste conditionnelle
+- Les couleurs sont déterminées par la plage de GPA, vérifie la compréhension de liste conditionnelle
 - Si les noms se chevauchent, augmente la hauteur de la figure selon le nombre d'étudiants
 
 **✅ Liste de vérification**
@@ -710,21 +710,21 @@ Un diagramme en barres horizontal montrant le GPA de chaque étudiant avec un co
 
 Prêt à aller plus loin ? Essaie ceci :
 
-1. **Validation des pondérations** — Assure-toi que les pondérations des catégories totalisent 1,0 pour chaque étudiant. Si elles ne le font pas, préviens l'utilisateur et liste le total.
+1. **Validation des pondérations**, Assure-toi que les pondérations des catégories totalisent 1,0 pour chaque étudiant. Si elles ne le font pas, préviens l'utilisateur et liste le total.
 
-2. **Configuration des pondérations de catégories** — Permets à l'enseignant de définir des pondérations de catégories par défaut (par ex. devoirs = 30 %, examen = 70 %) pour ne pas avoir à spécifier la pondération à chaque fois qu'il ajoute une note.
+2. **Configuration des pondérations de catégories**, Permets à l'enseignant de définir des pondérations de catégories par défaut (par ex. devoirs = 30 %, examen = 70 %) pour ne pas avoir à spécifier la pondération à chaque fois qu'il ajoute une note.
 
-3. **Export en HTML** — Génère un bulletin HTML imprimable avec des tableaux stylisés et des couleurs pour les notes lettrées. Utilise le formatage de chaîne de Python pour construire le HTML, puis ouvre-le dans un navigateur avec `webbrowser.open`.
+3. **Export en HTML**, Génère un bulletin HTML imprimable avec des tableaux stylisés et des couleurs pour les notes lettrées. Utilise le formatage de chaîne de Python pour construire le HTML, puis ouvre-le dans un navigateur avec `webbrowser.open`.
 
 ---
 
 ## Ce que tu as appris
 
-- **Modélisation de données par classes** — Représenté les étudiants, les notes et le carnet de notes lui-même comme des classes Python avec des méthodes claires
-- **Moyennes pondérées** — Calculé des GPA qui respectent les pondérations de catégories, en gérant les cas limites comme les listes de notes vides
-- **Analyse statistique** — Utilisé le module `statistics` de Python pour la moyenne et la médiane, et construit un compteur de distribution de notes personnalisé
-- **Persistance CSV** — Enregistré et chargé les données du carnet de notes avec `csv.DictReader` et `csv.writer`
-- **Visualisation de données** — Créé des diagrammes en barres avec matplotlib pour les distributions de notes et les comparaisons d'étudiants
-- **Génération de bulletins** — Construit des bulletins texte formatés avec des notes groupées et des statistiques de synthèse
+- **Modélisation de données par classes**, Représenté les étudiants, les notes et le carnet de notes lui-même comme des classes Python avec des méthodes claires
+- **Moyennes pondérées**, Calculé des GPA qui respectent les pondérations de catégories, en gérant les cas limites comme les listes de notes vides
+- **Analyse statistique**, Utilisé le module `statistics` de Python pour la moyenne et la médiane, et construit un compteur de distribution de notes personnalisé
+- **Persistance CSV**, Enregistré et chargé les données du carnet de notes avec `csv.DictReader` et `csv.writer`
+- **Visualisation de données**, Créé des diagrammes en barres avec matplotlib pour les distributions de notes et les comparaisons d'étudiants
+- **Génération de bulletins**, Construit des bulletins texte formatés avec des notes groupées et des statistiques de synthèse
 
 Tu as maintenant un carnet de notes pleinement fonctionnel que tu peux étendre avec des fonctionnalités comme des notifications par email, la gestion des courbes ou une interface web. L'architecture basée sur les classes rend chaque pièce facile à tester, modifier et réutiliser.

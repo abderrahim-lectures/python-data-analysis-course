@@ -28,7 +28,7 @@ $$
 \{x^2 \mid x \in \{0, 1, \ldots, 5\}\} = \{0, 1, 4, 9, 16, 25\}.
 $$
 
-Read *"the set of $x^2$, for each $x$ in this source"* — and the Python is the same sentence reversed into code:
+Read *"the set of $x^2$, for each $x$ in this source"*, and the Python is the same sentence reversed into code:
 
 ```python
 # Regular loop
@@ -41,7 +41,7 @@ squares = [x ** 2 for x in range(6)]
 # [0, 1, 4, 9, 16, 25]
 ```
 
-The loop spells out three moves — start empty, append, repeat; the comprehension states the whole collection in one line that mirrors the set-builder's anatomy: the expression up front, the ranged variable behind it.
+The loop spells out three moves, start empty, append, repeat; the comprehension states the whole collection in one line that mirrors the set-builder's anatomy: the expression up front, the ranged variable behind it.
 
 ## Filtering with conditions
 
@@ -59,7 +59,7 @@ An `if` at the end is a *filter*: only the elements that pass it reach the expre
 
 ## If/else as an expression
 
-The `if...else` you already know is an *expression* — it produces a value. Sticking one *before* the `for` plants it in the build line, choosing per element rather than filtering per element:
+The `if...else` you already know is an *expression*, it produces a value. Sticking one *before* the `for` plants it in the build line, choosing per element rather than filtering per element:
 
 ```python
 labels = ["even" if x % 2 == 0 else "odd" for x in range(5)]
@@ -70,7 +70,7 @@ The two positions are a fork with distinct jobs: after the `for`, the clause *vo
 
 ## Dict comprehensions
 
-The same shape builds mappings — expression on the left of the colon becomes the key, expression on the right the value:
+The same shape builds mappings, expression on the left of the colon becomes the key, expression on the right the value:
 
 ```python
 squares_dict = {x: x**2 for x in range(6)}
@@ -86,7 +86,7 @@ The inversion is the elegant classic: walk `items()`, and swap which half of eac
 
 ## Set comprehensions
 
-Braces with a comprehension yield a set — uniqueness applied automatically:
+Braces with a comprehension yield a set, uniqueness applied automatically:
 
 ```python
 lengths = {len(word) for word in ["hello", "hi", "hey"]}
@@ -97,7 +97,7 @@ Three lengths collapse to a set of values, dropping the duplicate as a set must.
 
 ## Nested comprehensions: flattener
 
-A matrix is a list of rows, and flattening it is two loops in one expression — read the `for` clauses left to right, outer first:
+A matrix is a list of rows, and flattening it is two loops in one expression, read the `for` clauses left to right, outer first:
 
 ```python
 matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
@@ -109,7 +109,7 @@ Each `for` unwraps one level: `row` iterates the outer list, `num` iterates each
 
 ## A worked example: three lines from the set-builder
 
-The lesson's three moves — build, filter, label — one line each:
+The lesson's three moves, build, filter, label, one line each:
 
 ```python
 squares = [x ** 2 for x in range(2, 9)]
@@ -126,31 +126,31 @@ The first is $\{x^2 \mid x \in [2, 9)\}$ typed directly; the second filters the 
 
 ## When NOT to use comprehensions
 
-- When the logic turns knotty — a regular `for` loop earns its readability.
-- When the body needs `try/except` — comprehensions have no room for it.
-- When side effects matter — printing or writing files should be deliberate statements, not silent expressions.
+- When the logic turns knotty, a regular `for` loop earns its readability.
+- When the body needs `try/except`, comprehensions have no room for it.
+- When side effects matter, printing or writing files should be deliberate statements, not silent expressions.
 - **Putting `if` before the `for` labels instead of filtering.** `[x if x % 2 == 0 else 'odd' for x in ...]` keeps every element, merely relabeled; only an `if` after the `for` discards. Slot it wrong and the rejects silently stay.
 
 ## 🧩 Challenges
 
 <details class="challenge">
-<summary>🧩 Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge, think first, then reveal</summary>
 <div class="challenge__body">
 
 Flatten `[[1, 2], [3, 4], [5, 6]]` into `[1, 2, 3, 4, 5, 6]` with a comprehension.
 
-<p class="challenge__answer">💡 <strong>Answer:</strong> <code>[num for row in matrix for num in row]</code> — the outer <code>for</code> opens each row, the inner one unrolls it.</p>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>[num for row in matrix for num in row]</code>, the outer <code>for</code> opens each row, the inner one unrolls it.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge, think first, then reveal</summary>
 <div class="challenge__body">
 
 Map words to their lengths with a dict comprehension: `["hi", "hello", "hey"]` → `{"hi": 2, "hello": 5, "hey": 3}`.
 
-<p class="challenge__answer">💡 <strong>Answer:</strong> <code>{w: len(w) for w in words}</code> — the word is the key and its length the value, one pair per entry.</p>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>{w: len(w) for w in words}</code>, the word is the key and its length the value, one pair per entry.</p>
 
 </div>
 </details>
@@ -159,7 +159,7 @@ Map words to their lengths with a dict comprehension: `["hi", "hello", "hey"]` �
 
 - Why does `if...else` stand before the `for` in a comprehension while the filter `if` trails after it?
 - Where does a comprehension cross the line into harder reading than a loop? Where do you draw it?
-- Can `await` appear inside a comprehension — and what syntax makes a whole async version possible?
+- Can `await` appear inside a comprehension, and what syntax makes a whole async version possible?
 
 ## ✅ Quick check
 

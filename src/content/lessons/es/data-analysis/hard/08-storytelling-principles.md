@@ -105,7 +105,7 @@ plt.show()
 
 ### Elección de paletas de colores
 
-El color no es decoración — es comunicación. Elige las paletas según el tipo de datos:
+El color no es decoración, es comunicación. Elige las paletas según el tipo de datos:
 
 ```python
 # Sequential: for ordered data (low to high)
@@ -139,7 +139,7 @@ Reglas de color:
 - **Secuencial** para valores numéricos (más oscuro = más alto)
 - **Divergente** al comparar con un punto medio (rojo = malo, azul = bueno)
 - **Cualitativa** para categorías (colores distintos, sin orden inherente)
-- **Nunca uses el color como única codificación** — añade siempre etiquetas o patrones para la accesibilidad de las personas con daltonismo
+- **Nunca uses el color como única codificación**, añade siempre etiquetas o patrones para la accesibilidad de las personas con daltonismo
 
 ### Diseño de título y subtítulo
 
@@ -285,18 +285,18 @@ plt.show()
 ## Conclusiones clave
 
 - Sigue el arco narrativo: situación → complicación → resolución
-- Anota los gráficos directamente — el gráfico debe explicarse solo sin un título
+- Anota los gráficos directamente, el gráfico debe explicarse solo sin un título
 - Elige las paletas de colores según el tipo de datos: secuencial para lo ordenado, divergente para comparaciones con punto medio, cualitativa para categorías
 - Los títulos deben enunciar el hallazgo, no el tipo de gráfico
 - Estructura los dashboards como historias: titular → evidencia → conclusión
-- Diseña para tu público — los ejecutivos quieren hallazgos, los analistas quieren metodología
+- Diseña para tu público, los ejecutivos quieren hallazgos, los analistas quieren metodología
 
 ## Desafío de práctica
 
 Crea un dashboard de 3 paneles que cuente una historia sobre la brecha de género en los puntajes de los exámenes: (1) un gráfico de barras agrupado de los puntajes medios por género y asignatura, (2) un diagrama de caja de la brecha (matemáticas menos escritura) por género, y (3) un banner de hallazgos que resuma la conclusión. Usa anotaciones en cada gráfico.
 
 <details class="challenge">
-<summary>🧩 Desafío — piensa primero, luego revela</summary>
+<summary>🧩 Desafío, piensa primero, luego revela</summary>
 <div class="challenge__body">
 
 ```python

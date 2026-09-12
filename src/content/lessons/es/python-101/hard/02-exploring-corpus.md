@@ -75,7 +75,7 @@ print(f"Total characters: {total_chars:,}")
 print(f"Average row length: {avg_len:.0f} characters")
 ```
 
-Un corpus con un promedio de 10 caracteres por fila es demasiado corto — el modelo no tendrá suficiente contexto para aprender secuencias de palabras.
+Un corpus con un promedio de 10 caracteres por fila es demasiado corto, el modelo no tendrá suficiente contexto para aprender secuencias de palabras.
 
 ### Previsualizar texto de muestra
 
@@ -137,7 +137,7 @@ Ejecuta `corpus_summary("slm-corpus.csv")` y anota:
 
 ## Conclusiones clave
 
-- Explora siempre tus datos antes de procesarlos — comprueba recuentos, longitudes y duplicados
+- Explora siempre tus datos antes de procesarlos, comprueba recuentos, longitudes y duplicados
 - Las filas cortas o vacías añaden ruido; fíltralas según un recuento mínimo de palabras
 - Las filas duplicadas inflan los recuentos de frecuencia sin añadir patrones nuevos
 - Una función de resumen rápida ahorra tiempo en todos los proyectos

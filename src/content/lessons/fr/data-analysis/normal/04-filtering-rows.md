@@ -45,7 +45,7 @@ quiz:
 
 ## Filtrer avec des conditions booléennes
 
-Le filtrage vous permet de vous concentrer sur le sous-ensemble de données qui compte. Vous créez un **masque booléen** — une Series de valeurs True/False — et vous l'utilisez pour sélectionner des lignes.
+Le filtrage vous permet de vous concentrer sur le sous-ensemble de données qui compte. Vous créez un **masque booléen**, une Series de valeurs True/False, et vous l'utilisez pour sélectionner des lignes.
 
 ```python
 import pandas as pd
@@ -129,7 +129,7 @@ print(masters.shape)
 a_tickets = df[df["Ticket"].str.startswith("A", na=False)]
 ```
 
-Le paramètre `na=False` gère les valeurs manquantes avec élégance — sans lui, les entrées NaN provoqueraient des erreurs.
+Le paramètre `na=False` gère les valeurs manquantes avec élégance, sans lui, les entrées NaN provoqueraient des erreurs.
 
 ## Filtrer avec .query()
 
@@ -184,9 +184,9 @@ print(f"Passengers with title Mrs: {len(mrs)}")
 ## Points clés à retenir
 
 - L'indexation booléenne `df[mask]` est le principal mécanisme de filtrage dans pandas
-- Utilisez `&` pour ET, `|` pour OU — entourez toujours les conditions individuelles de parenthèses
+- Utilisez `&` pour ET, `|` pour OU, entourez toujours les conditions individuelles de parenthèses
 - `.isin()` compare une liste ; `.between()` gère proprement les plages
-- `.str.contains()` filtre par correspondance de sous-chaîne — utilisez `na=False` par sécurité
+- `.str.contains()` filtre par correspondance de sous-chaîne, utilisez `na=False` par sécurité
 
 ## Défi pratique
 

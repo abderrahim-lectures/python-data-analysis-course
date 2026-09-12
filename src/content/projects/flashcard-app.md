@@ -33,9 +33,9 @@ A terminal flashcard app that:
 
 - **Locally with `uv` (recommended).** This project uses only the standard library, so it runs anywhere Python runs. The Setup section below walks through it.
 - **Google Colab or Kaggle Notebooks.** Paste the code cells directly into a notebook. The `input()` calls work for study prompts, but file I/O (Step 6) works differently in the browser.
-- **JupyterLite playground.** Paste the code cells directly into a notebook — note that file persistence (Step 6) only works locally.
+- **JupyterLite playground.** Paste the code cells directly into a notebook, note that file persistence (Step 6) only works locally.
 
-- **Run it in your browser.** An interactive companion notebook is ready — open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
+- **Run it in your browser.** An interactive companion notebook is ready, open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/flashcard-app/notebook.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/flashcard-app/notebook.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fflashcard-app%2Fnotebook.ipynb)
@@ -49,7 +49,7 @@ cd flashcard-app
 
 ## Step 1: Define the Data Model
 
-Before building any features, decide how a flashcard lives in memory. Each card is a dictionary with fields for its content, metadata, and spaced repetition state. A list holds all cards in a deck. This flat structure keeps things simple — no classes needed yet.
+Before building any features, decide how a flashcard lives in memory. Each card is a dictionary with fields for its content, metadata, and spaced repetition state. A list holds all cards in a deck. This flat structure keeps things simple, no classes needed yet.
 
 ### 1.1 Create the card structure
 
@@ -87,7 +87,7 @@ def create_card(front: str, back: str, tags: list[str] | None = None) -> dict:
 []
 ```
 
-**🩹 If it's off:** If you get a `TypeError`, make sure `datetime.now().isoformat()` is called with parentheses — `datetime.now().isoformat()` is correct, `datetime.now.isoformat` (without parens) references the method without calling it. If tags default to a shared mutable list, you used `tags or []` incorrectly — make sure the `or` is inside the function body, not in the default argument.
+**🩹 If it's off:** If you get a `TypeError`, make sure `datetime.now().isoformat()` is called with parentheses, `datetime.now().isoformat()` is correct, `datetime.now.isoformat` (without parens) references the method without calling it. If tags default to a shared mutable list, you used `tags or []` incorrectly, make sure the `or` is inside the function body, not in the default argument.
 
 ### 1.2 Create the deck structure
 
@@ -137,7 +137,7 @@ Added: What is a list?
 2
 ```
 
-**🩹 If it's off:** If the card doesn't appear in the deck, check that you're appending to `deck["cards"]`, not a local variable. If two cards share the same data, you're reusing the same dict reference — make sure `create_card` returns a new dict each time.
+**🩹 If it's off:** If the card doesn't appear in the deck, check that you're appending to `deck["cards"]`, not a local variable. If two cards share the same data, you're reusing the same dict reference, make sure `create_card` returns a new dict each time.
 
 ### 1.4 Verify the data model
 
@@ -151,7 +151,7 @@ Added: What is a list?
 
 **🤔 Socratic Question(s)**
 
-Why store `next_review` as an ISO string instead of a datetime object? What tradeoff does JSON serialization impose — and what would you lose if you stored a unix timestamp instead?
+Why store `next_review` as an ISO string instead of a datetime object? What tradeoff does JSON serialization impose, and what would you lose if you stored a unix timestamp instead?
 
 ---
 
@@ -299,7 +299,7 @@ def study_session(deck: dict) -> list[dict]:
 
 ### 3.2 Get quality rating from user
 
-**👟 Starter hint:** Prompt the user for a rating from 0 to 5. Validate the input — reject anything that isn't a number in range. Re-prompt on bad input.
+**👟 Starter hint:** Prompt the user for a rating from 0 to 5. Validate the input, reject anything that isn't a number in range. Re-prompt on bad input.
 
 ```python
 def get_quality_rating() -> int:
@@ -333,7 +333,7 @@ def get_quality_rating() -> int:
   Rating (0-5): 4
 ```
 
-**🩹 If it's off:** If the loop never exits, you're not returning from inside the `while True` — make sure `return rating` is inside the `if 0 <= rating <= 5` block. If entering "abc" crashes, you forgot the `try/except ValueError`.
+**🩹 If it's off:** If the loop never exits, you're not returning from inside the `while True`, make sure `return rating` is inside the `if 0 <= rating <= 5` block. If entering "abc" crashes, you forgot the `try/except ValueError`.
 
 ### 3.3 Verify study mode
 
@@ -357,7 +357,7 @@ The SM-2 algorithm is the engine that makes this more than a simple flashcard ap
 
 ### 4.1 Implement the SM-2 update
 
-**👟 Starter hint:** The algorithm modifies three fields on the card: `repetitions`, `interval`, and `ease_factor`. If quality >= 3 (correct), increment repetitions and grow the interval. If quality < 3 (forgot), reset repetitions to 0 and set interval back to 1. The ease factor adjusts based on quality — it goes up for easy answers and down for hard ones.
+**👟 Starter hint:** The algorithm modifies three fields on the card: `repetitions`, `interval`, and `ease_factor`. If quality >= 3 (correct), increment repetitions and grow the interval. If quality < 3 (forgot), reset repetitions to 0 and set interval back to 1. The ease factor adjusts based on quality, it goes up for easy answers and down for hard ones.
 
 ```python
 def update_card_sm2(card: dict, quality: int) -> dict:
@@ -415,7 +415,7 @@ def update_card_sm2(card: dict, quality: int) -> dict:
 1
 ```
 
-**🩹 If it's off:** If the interval doesn't grow after the third review, check that you have the `elif card["repetitions"] == 1` branch returning 6 — without it, the formula `round(interval * ease_factor)` gives `round(1 * 2.5) = 2` instead of 6 for the second correct answer. If `ease_factor` drops below 1.3, the `max(1.3, ...)` clamp isn't there.
+**🩹 If it's off:** If the interval doesn't grow after the third review, check that you have the `elif card["repetitions"] == 1` branch returning 6, without it, the formula `round(interval * ease_factor)` gives `round(1 * 2.5) = 2` instead of 6 for the second correct answer. If `ease_factor` drops below 1.3, the `max(1.3, ...)` clamp isn't there.
 
 ### 4.2 Apply SM-2 after each review
 
@@ -463,7 +463,7 @@ def study_session(deck: dict) -> list[dict]:
 
 Cards rated 0–2 appear again tomorrow; cards rated 3–5 get pushed out based on the SM-2 schedule.
 
-**🩹 If it's off:** If the next review date is always tomorrow regardless of rating, `update_card_sm2` isn't modifying the card's `interval` — make sure you're modifying `card["interval"]` in place, not creating a local variable. If the date is in the past, you forgot to add `timedelta(days=card["interval"])` to `datetime.now()`.
+**🩹 If it's off:** If the next review date is always tomorrow regardless of rating, `update_card_sm2` isn't modifying the card's `interval`, make sure you're modifying `card["interval"]` in place, not creating a local variable. If the date is in the past, you forgot to add `timedelta(days=card["interval"])` to `datetime.now()`.
 
 ### 4.3 Verify SM-2
 
@@ -527,9 +527,9 @@ def deck_stats(deck: dict) -> dict:
 {'total': 6, 'mastered': 0, 'learning': 0, 'new': 6, 'due': 6, 'avg_ease': 2.5}
 ```
 
-After a study session, the numbers shift — mastered and learning go up, new goes down, due drops.
+After a study session, the numbers shift, mastered and learning go up, new goes down, due drops.
 
-**🩹 If it's off:** If `due` is always 0 after studying, `get_due_cards` compares strings instead of datetimes — make sure you call `datetime.fromisoformat()` on the `next_review` string. If `avg_ease` is wrong, you're dividing by the wrong count — use `len(cards)`, not `sum(...)`.
+**🩹 If it's off:** If `due` is always 0 after studying, `get_due_cards` compares strings instead of datetimes, make sure you call `datetime.fromisoformat()` on the `next_review` string. If `avg_ease` is wrong, you're dividing by the wrong count, use `len(cards)`, not `sum(...)`.
 
 ### 5.2 Display statistics as a progress bar
 
@@ -579,7 +579,7 @@ def show_stats(deck: dict) -> None:
 
 After studying all cards and rating 4–5 on each, the progress bar fills up.
 
-**🩹 If it's off:** If the progress bar overflows past 30 characters, `filled` exceeds `bar_len` — add `min(filled, bar_len)` as a safety clamp. If percentages don't add up, check that `mastered + learning + new == total`.
+**🩹 If it's off:** If the progress bar overflows past 30 characters, `filled` exceeds `bar_len`, add `min(filled, bar_len)` as a safety clamp. If percentages don't add up, check that `mastered + learning + new == total`.
 
 ### 5.3 Verify progress tracking
 
@@ -587,7 +587,7 @@ After studying all cards and rating 4–5 on each, the progress bar fills up.
 
 - ✅ `deck_stats` returns total, mastered, learning, new, due, and avg_ease.
 - ✅ `show_stats` prints a formatted summary with a progress bar.
-- ✅ Empty decks don't crash — they show all zeros.
+- ✅ Empty decks don't crash, they show all zeros.
 - ✅ After a study session, the stats reflect the updated card states.
 
 **🤔 Socratic Question(s)**
@@ -624,11 +624,11 @@ Saved 6 cards to deck.json
 
 The file `deck.json` now contains the full deck as readable JSON.
 
-**🩹 If it's off:** If you get `TypeError: Object of type datetime is not JSON serializable`, you stored a `datetime` object directly instead of calling `.isoformat()` — go back to `create_card` and make sure the timestamp is a string. If the file is empty, you opened it with `"w"` mode (which truncates) before calling `json.dump`.
+**🩹 If it's off:** If you get `TypeError: Object of type datetime is not JSON serializable`, you stored a `datetime` object directly instead of calling `.isoformat()`, go back to `create_card` and make sure the timestamp is a string. If the file is empty, you opened it with `"w"` mode (which truncates) before calling `json.dump`.
 
 ### 6.2 Load deck from JSON
 
-**👟 Starter hint:** Use `json.load` to read the file back. Handle the case where the file doesn't exist — start with an empty deck in that case.
+**👟 Starter hint:** Use `json.load` to read the file back. Handle the case where the file doesn't exist, start with an empty deck in that case.
 
 ```python
 def load_deck(filename: str = "deck.json") -> dict:
@@ -642,9 +642,9 @@ def load_deck(filename: str = "deck.json") -> dict:
     return deck
 ```
 
-**🎯 Expected output:** On first run (no file): `No saved deck found — starting fresh.` On subsequent runs: `Loaded 6 cards from deck.json`.
+**🎯 Expected output:** On first run (no file): `No saved deck found, starting fresh.` On subsequent runs: `Loaded 6 cards from deck.json`.
 
-**🩹 If it's off:** If you get `FileNotFoundError`, you're not checking `path.exists()` before opening. If the loaded deck has `None` for `cards`, the JSON file is malformed — open it in a text editor to check.
+**🩹 If it's off:** If you get `FileNotFoundError`, you're not checking `path.exists()` before opening. If the loaded deck has `None` for `cards`, the JSON file is malformed, open it in a text editor to check.
 
 ### 6.3 Verify persistence
 
@@ -652,7 +652,7 @@ def load_deck(filename: str = "deck.json") -> dict:
 
 - ✅ After saving, `deck.json` exists and contains valid JSON with all card fields.
 - ✅ After loading, the deck has the same cards, tags, and SM-2 state.
-- ✅ Missing the JSON file doesn't crash — it starts with an empty deck.
+- ✅ Missing the JSON file doesn't crash, it starts with an empty deck.
 - ✅ The saved file is human-readable with `indent=2`.
 
 **🤔 Socratic Question(s)**
@@ -741,7 +741,7 @@ No cards due for review! Great job.
 ...
 ```
 
-**🩹 If it's off:** If you get `UnboundLocalError`, the `deck` variable isn't defined before the `while True` loop — make sure `deck = load_deck()` runs first. If cards aren't saved after studying, you forgot `save_deck(deck)` inside the `"1"` branch.
+**🩹 If it's off:** If you get `UnboundLocalError`, the `deck` variable isn't defined before the `while True` loop, make sure `deck = load_deck()` runs first. If cards aren't saved after studying, you forgot `save_deck(deck)` inside the `"1"` branch.
 
 ### 7.2 Add coloured feedback
 
@@ -758,7 +758,7 @@ def coloured(text: str, color: str) -> str:
     return f"{color}{text}{RESET}"
 ```
 
-**🎯 Expected output:** After rating a card, the feedback appears in colour — green for high ratings (4–5), yellow for medium (3), red for low (0–2).
+**🎯 Expected output:** After rating a card, the feedback appears in colour, green for high ratings (4–5), yellow for medium (3), red for low (0–2).
 
 **🩹 If it's off:** If you see raw escape codes like `[92m` instead of colours, most modern terminals support ANSI codes, but Windows Command Prompt may need `os.system("")` called once at startup to enable them.
 
@@ -789,25 +789,25 @@ def coloured(text: str, color: str) -> str:
 
 Ready to push further? Try these:
 
-1. **Tag filtering** — Add a command to study only cards with a specific tag. Filter `get_due_cards` by checking if the tag is in `card["tags"]`.
+1. **Tag filtering**, Add a command to study only cards with a specific tag. Filter `get_due_cards` by checking if the tag is in `card["tags"]`.
 
-2. **Deck import/export** — Let users export a deck as a plain-text file (one card per line, front|back format) and import it back. This makes decks shareable without JSON.
+2. **Deck import/export**, Let users export a deck as a plain-text file (one card per line, front|back format) and import it back. This makes decks shareable without JSON.
 
-3. **Session history** — Track how many cards you reviewed each day, your average rating, and accuracy. Store the history in a separate JSON file and show a weekly summary.
+3. **Session history**, Track how many cards you reviewed each day, your average rating, and accuracy. Store the history in a separate JSON file and show a weekly summary.
 
 ## What You Learned
 
-- **Dictionary-based data modeling** — Represented cards and decks as plain Python dicts with clear field names and defaults.
-- **SM-2 spaced repetition** — Implemented the algorithm that adjusts review intervals based on how well you know each card.
-- **User interaction** — Built a study session with flip-to-reveal, input validation, and quality ratings.
-- **Progress tracking** — Computed mastery statistics and visualized progress with a terminal progress bar.
-- **JSON persistence** — Saved and loaded deck data across sessions using `json.dump` and `json.load`.
-- **CLI design** — Built a menu-driven interface with input validation, coloured feedback, and automatic saves.
+- **Dictionary-based data modeling**, Represented cards and decks as plain Python dicts with clear field names and defaults.
+- **SM-2 spaced repetition**, Implemented the algorithm that adjusts review intervals based on how well you know each card.
+- **User interaction**, Built a study session with flip-to-reveal, input validation, and quality ratings.
+- **Progress tracking**, Computed mastery statistics and visualized progress with a terminal progress bar.
+- **JSON persistence**, Saved and loaded deck data across sessions using `json.dump` and `json.load`.
+- **CLI design**, Built a menu-driven interface with input validation, coloured feedback, and automatic saves.
 
-You now have a fully functional flashcard app. The dictionary-based architecture makes it easy to extend — add images by storing URLs in a `"image"` field, implement Leitner boxes by adding a `"box"` field, or build a shared deck system by reading JSON from a URL.
+You now have a fully functional flashcard app. The dictionary-based architecture makes it easy to extend, add images by storing URLs in a `"image"` field, implement Leitner boxes by adding a `"box"` field, or build a shared deck system by reading JSON from a URL.
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

@@ -19,9 +19,9 @@ learningObjectives:
 
 # 🛠️ 🎛️ Construire un Serveur Mock API
 
-Chaque vraie application finit tôt ou tard bloquée sur un backend qui n'est pas prêt — un service de paiement sans sandbox, un flux météo en panne, une API de collègue encore en conception. Un *mock server* est le substitut honnête : il tourne sur ta machine, parle HTTP sur localhost, et répond aux mêmes chemins que ton vrai backend répondra, pour que ton frontend, tes tests et ta démo n'attendent jamais le déploiement de quelqu'un d'autre. Ce projet construit ce serveur de zéro : des templates de routes comme `/users/<id>` deviennent des dispatchers qui extraient les paramètres, les chaînes de requête et les corps JSON se reflètent pour inspection, une route instable échoue selon un calendrier, et un enregistreur intégré rejoue chaque appel pour attraper les régressions avant que la production n'existe. Il tourne sur la bibliothèque standard. Chaque exemple de ce guide est déterministe — le même dispatch renvoie le même JSON à chaque fois — donc tu peux vérifier chaque affirmation au fur et à mesure que tu construis.
+Chaque vraie application finit tôt ou tard bloquée sur un backend qui n'est pas prêt, un service de paiement sans sandbox, un flux météo en panne, une API de collègue encore en conception. Un *mock server* est le substitut honnête : il tourne sur ta machine, parle HTTP sur localhost, et répond aux mêmes chemins que ton vrai backend répondra, pour que ton frontend, tes tests et ta démo n'attendent jamais le déploiement de quelqu'un d'autre. Ce projet construit ce serveur de zéro : des templates de routes comme `/users/<id>` deviennent des dispatchers qui extraient les paramètres, les chaînes de requête et les corps JSON se reflètent pour inspection, une route instable échoue selon un calendrier, et un enregistreur intégré rejoue chaque appel pour attraper les régressions avant que la production n'existe. Il tourne sur la bibliothèque standard. Chaque exemple de ce guide est déterministe, le même dispatch renvoie le même JSON à chaque fois, donc tu peux vérifier chaque affirmation au fur et à mesure que tu construis.
 
-Cela suppose des fonctions, des classes et la gestion du JSON. C'est un projet facultatif et non noté — consulte [Projets du monde réel](/fr/projets) pour la liste complète et grandissante.
+Cela suppose des fonctions, des classes et la gestion du JSON. C'est un projet facultatif et non noté, consulte [Projets du monde réel](/fr/projets) pour la liste complète et grandissante.
 
 ## 🎯 Ce que tu vas faire
 
@@ -33,9 +33,9 @@ Cela suppose des fonctions, des classes et la gestion du JSON. C'est un projet f
 
 ## Où exécuter ceci
 
-**Localement avec `uv`** est le chemin recommandé — le mock server est pur bibliothèque standard (`http.server`, `http.client`, `urllib.parse`, `json`), donc un `uv init` est tout ce qu'il te faut.
+**Localement avec `uv`** est le chemin recommandé, le mock server est pur bibliothèque standard (`http.server`, `http.client`, `urllib.parse`, `json`), donc un `uv init` est tout ce qu'il te faut.
 
-**Google Colab, Kaggle Notebooks et Binder** exécutent chaque étape sans modification. Le réseau de notebook est assez permissif pour les parties dispatcher en processus ; le bloc optionnel de câblage en direct à la fin fonctionne aussi sur Binder et en local — garde-le éphémère (port `0`) pour qu'il ne heurte jamais un autre processus.
+**Google Colab, Kaggle Notebooks et Binder** exécutent chaque étape sans modification. Le réseau de notebook est assez permissif pour les parties dispatcher en processus ; le bloc optionnel de câblage en direct à la fin fonctionne aussi sur Binder et en local, garde-le éphémère (port `0`) pour qu'il ne heurte jamais un autre processus.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/api-mock-server/notebook.fr.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/api-mock-server/notebook.fr.ipynb)
@@ -57,12 +57,12 @@ Pas de dépendances. Les pièces : une table de routes (méthode + template + fa
 **✅ Liste de vérification**
 
 - ✅ `uv init api-mock-server` crée le projet et un `main.py`.
-- ✅ `uv run python3 -c "import json, re, http.server"` réussit — tout est bibliothèque standard.
+- ✅ `uv run python3 -c "import json, re, http.server"` réussit, tout est bibliothèque standard.
 
 **🤔 Question(s) socratique(s)**
 
-- Un mock server renvoie des données *fausses* par définition. Qu'est-ce qui lui donne quand même de l'intégrité — la forme de la réponse, les codes de statut, la latence, ou la *promesse qu'il est déterministe* ? Lequel de ces éléments peut t'endormir dans une livraison qui casse contre le vrai backend ?
-- Le mock annonce `{"status": "ok"}` sur une route que la vraie API n'a pas encore construite. Si ton frontend passe les tests contre le mock, quelle seule propriété du *vrai* backend pourrait encore le casser — et où un champ `version` aiderait-il ?
+- Un mock server renvoie des données *fausses* par définition. Qu'est-ce qui lui donne quand même de l'intégrité, la forme de la réponse, les codes de statut, la latence, ou la *promesse qu'il est déterministe* ? Lequel de ces éléments peut t'endormir dans une livraison qui casse contre le vrai backend ?
+- Le mock annonce `{"status": "ok"}` sur une route que la vraie API n'a pas encore construite. Si ton frontend passe les tests contre le mock, quelle seule propriété du *vrai* backend pourrait encore le casser, et où un champ `version` aiderait-il ?
 
 ## Étape 1 : Les routes comme templates
 
@@ -89,7 +89,7 @@ print(m.groupdict())
 
 **🎯 Résultat attendu :** `{'uid': '42'}`.
 
-**🩹 Si ça ne marche pas :** Si la sortie est vide ou `{}`, `.match` est ancré à une position incompatible — vérifie le `^` initial. Si un `re.error` apparaît, les crochets du template ne sont pas équilibrés ou un nom de capture contient un caractère non mot.
+**🩹 Si ça ne marche pas :** Si la sortie est vide ou `{}`, `.match` est ancré à une position incompatible, vérifie le `^` initial. Si un `re.error` apparaît, les crochets du template ne sont pas équilibrés ou un nom de capture contient un caractère non mot.
 
 ### 1.2 Enregistre la route de santé
 
@@ -115,11 +115,11 @@ api.add("GET", "/health", lambda **kwargs: {"healthy": True, "version": "1.0.0"}
 print(len(api.routes), "route registered")
 ```
 
-La table de routes est juste une liste de dicts — une configuration comme données. Chaque entrée associe un verbe HTTP au matcher compilé pour le chemin *préfixé* (`/api/v1` + `/health`), et une fonction qui construira la charge utile plus tard. Les lambdas gardent les définitions de routes sur une ligne ; une fonction nommée fonctionne à l'identique.
+La table de routes est juste une liste de dicts, une configuration comme données. Chaque entrée associe un verbe HTTP au matcher compilé pour le chemin *préfixé* (`/api/v1` + `/health`), et une fonction qui construira la charge utile plus tard. Les lambdas gardent les définitions de routes sur une ligne ; une fonction nommée fonctionne à l'identique.
 
 **🎯 Résultat attendu :** `1 route registered`.
 
-**🩹 Si ça ne marche pas :** Si `len(api.routes)` vaut 0, `add` a oublié `self.routes.append(...)` ou a retourné avant le append. S'il affiche `2 routes`, une copie de la liste a fuité — vérifie un alias accidentel `routes = self.routes`.
+**🩹 Si ça ne marche pas :** Si `len(api.routes)` vaut 0, `add` a oublié `self.routes.append(...)` ou a retourné avant le append. S'il affiche `2 routes`, une copie de la liste a fuité, vérifie un alias accidentel `routes = self.routes`.
 
 ### 1.3 Vérifie la couche template
 
@@ -131,8 +131,8 @@ La table de routes est juste une liste de dicts — une configuration comme donn
 
 **🤔 Question(s) socratique(s)**
 
-- Pourquoi une *regex* plutôt que `path.split("/")` ? Convertis `/users/<uid>/orders/<oid>` en une recherche basée sur split dans ta tête — qu'est-ce qui casse sur des segments de longueur variable et sur les chaînes de requête ? La regex est la réponse compacte à « n'importe quel nombre de segments, avec des noms ».
-- Les templates `/users/<uid>` et `/users/search` commencent tous deux par `/users/`. Si tu as enregistré `<uid>` d'abord, à laquelle une requête vers `/users/search` aboutirait-elle — et quelle règle la décide ?
+- Pourquoi une *regex* plutôt que `path.split("/")` ? Convertis `/users/<uid>/orders/<oid>` en une recherche basée sur split dans ta tête, qu'est-ce qui casse sur des segments de longueur variable et sur les chaînes de requête ? La regex est la réponse compacte à « n'importe quel nombre de segments, avec des noms ».
+- Les templates `/users/<uid>` et `/users/search` commencent tous deux par `/users/`. Si tu as enregistré `<uid>` d'abord, à laquelle une requête vers `/users/search` aboutirait-elle, et quelle règle la décide ?
 
 ## Étape 2 : Le dispatcher
 
@@ -161,7 +161,7 @@ print(api.dispatch("GET", "/api/v1/missing"))
 print(api.dispatch("POST", "/api/v1/health"))
 ```
 
-`dispatch` est un balayage linéaire : deux filtres bon marché (`method ==`, matcher) avant l'appel coûteux. La première route correspondante gagne, donc l'ordre d'enregistrement est le bris d'égalité (voir la Socratic de l'Étape 1). Une requête entièrement manquée retourne une **charge utile** `404` — pas une exception — donc chaque appel a une réponse `(statut, charge utile)` définie.
+`dispatch` est un balayage linéaire : deux filtres bon marché (`method ==`, matcher) avant l'appel coûteux. La première route correspondante gagne, donc l'ordre d'enregistrement est le bris d'égalité (voir la Socratic de l'Étape 1). Une requête entièrement manquée retourne une **charge utile** `404`, pas une exception, donc chaque appel a une réponse `(statut, charge utile)` définie.
 
 **🎯 Résultat attendu :**
 
@@ -172,7 +172,7 @@ print(api.dispatch("POST", "/api/v1/health"))
 (404, {'error': 'not found'})
 ```
 
-**🩹 Si ça ne marche pas :** Si la mauvaise route répond, l'ordre de première correspondance a choisi la mauvaise entrée — réordonne l'enregistrement. Si `/missing` lève au lieu de retourner `(404, …)`, la boucle est retombée sur un `routes[0]` non gardé.
+**🩹 Si ça ne marche pas :** Si la mauvaise route répond, l'ordre de première correspondance a choisi la mauvaise entrée, réordonne l'enregistrement. Si `/missing` lève au lieu de retourner `(404, …)`, la boucle est retombée sur un `routes[0]` non gardé.
 
 ### 2.2 Paramètres de chemin et chaînes de requête
 
@@ -215,7 +215,7 @@ print(api.dispatch("GET", "/api/v1/search"))
 (200, {'query': '', 'results': ['result-1']})
 ```
 
-**🩹 Si ça ne marche pas :** Si `uid` manque dans la réponse, `**kwargs` ne l'incluait pas — vérifie que le matcher a capturé `uid` (Étape 1.1). Si `limit=3` retourne 1 résultat, `parse_qs` a donné des listes et la fabrique a indexé une liste au lieu d'une chaîne — confirme le déballage `v[0]`.
+**🩹 Si ça ne marche pas :** Si `uid` manque dans la réponse, `**kwargs` ne l'incluait pas, vérifie que le matcher a capturé `uid` (Étape 1.1). Si `limit=3` retourne 1 résultat, `parse_qs` a donné des listes et la fabrique a indexé une liste au lieu d'une chaîne, confirme le déballage `v[0]`.
 
 ### 2.3 Vérifie le dispatcher
 
@@ -223,7 +223,7 @@ print(api.dispatch("GET", "/api/v1/search"))
 
 - ✅ `dispatch` retourne `(200, charge utile)` pour les GET enregistrés et `(404, {"error": "not found"})` pour le reste, en faisant correspondre aussi la méthode.
 - ✅ `/users/<uid>` et `/search` se résolvent tous deux, avec les paramètres de chemin dans `kwargs` et les paramètres de requête dans `params`.
-- ✅ Le même dispatcher répond de façon répétée — aucun état n'est consommé par un appel.
+- ✅ Le même dispatcher répond de façon répétée, aucun état n'est consommé par un appel.
 
 **🤔 Question(s) socratique(s)**
 
@@ -276,7 +276,7 @@ print(api.dispatch("GET", "/api/v1/flaky"))
 print(api.dispatch("GET", "/api/v1/flaky"))
 ```
 
-`_counter` compte les hits *par chemin* (`setdefault(path, 0)`), donc une route instable échoue aux hits 3, 6, 9 — un calendrier déterministe que tes tests peuvent asserter. Les deux appels sains réussissent, puis le troisième échoue avec une charge utile d'erreur nette. C'est ainsi que tu testes une boucle de nouvelle tentative : donne-lui un rythme « réussit deux fois, échoue une fois ».
+`_counter` compte les hits *par chemin* (`setdefault(path, 0)`), donc une route instable échoue aux hits 3, 6, 9, un calendrier déterministe que tes tests peuvent asserter. Les deux appels sains réussissent, puis le troisième échoue avec une charge utile d'erreur nette. C'est ainsi que tu testes une boucle de nouvelle tentative : donne-lui un rythme « réussit deux fois, échoue une fois ».
 
 **🎯 Résultat attendu :**
 
@@ -286,7 +286,7 @@ print(api.dispatch("GET", "/api/v1/flaky"))
 (500, {'error': 'Simulated outage'})
 ```
 
-**🩹 Si ça ne marche pas :** Si les trois échouent, `every` vaut `1` (ou le modulo est inversé — `n % every == 0` ne se déclenche que sur des multiples exacts). Si aucun n'échoue, la branche `flaky` ne tourne jamais parce que `add` n'a pas été appelé avec `flaky=` comme mot-clé.
+**🩹 Si ça ne marche pas :** Si les trois échouent, `every` vaut `1` (ou le modulo est inversé, `n % every == 0` ne se déclenche que sur des multiples exacts). Si aucun n'échoue, la branche `flaky` ne tourne jamais parce que `add` n'a pas été appelé avec `flaky=` comme mot-clé.
 
 ### 3.2 Une mauvaise entrée est un 4xx, pas un crash
 
@@ -321,7 +321,7 @@ print(api.dispatch("GET", "/api/v1/divide?by=2"))
 print(api.dispatch("GET", "/api/v1/divide?by=0"))
 ```
 
-Le try/except trace une ligne dure : le *mock* a un bug ou l'appelant a envoyé des bêtises, et dans les deux cas la réponse est un JSON structuré avec le statut `422` — un client peut brancher dessus. Sans le garde, un mauvais `by=0` propagerait une `ZeroDivisionError` et ferait planter tout le thread du serveur.
+Le try/except trace une ligne dure : le *mock* a un bug ou l'appelant a envoyé des bêtises, et dans les deux cas la réponse est un JSON structuré avec le statut `422`, un client peut brancher dessus. Sans le garde, un mauvais `by=0` propagerait une `ZeroDivisionError` et ferait planter tout le thread du serveur.
 
 **🎯 Résultat attendu :**
 
@@ -336,18 +336,18 @@ Le try/except trace une ligne dure : le *mock* a un bug ou l'appelant a envoyé 
 
 **✅ Liste de vérification**
 
-- ✅ Une route instable échoue exactement quand `n % every == 0` — le hit 3 d'un calendrier de 3 échoue.
+- ✅ Une route instable échoue exactement quand `n % every == 0`, le hit 3 d'un calendrier de 3 échoue.
 - ✅ Les fabriques en échec retournent `(422, {"error": ...})` ; les chemins sans correspondance retournent `(404, ...)`.
 - ✅ Tous les échecs simulés sont des données, jamais des exceptions levées.
 
 **🤔 Question(s) socratique(s)**
 
-- Le compteur d'instabilité est *par chemin*, pas par règle. Deux appelants qui frappent `/api/v1/flaky` partagent le compte. Voudrais-tu plutôt un compteur par *appelant* en mockant un système distribué — et sur quoi te baserais-tu pour dire quel appelant est lequel ?
-- 422 vs 500 : l'un dit « la requête était fausse », l'autre « le serveur a échoué ». Quand tu **mockes**, tu contrôles les deux côtés — pourquoi alors s'embêter à les distinguer ?
+- Le compteur d'instabilité est *par chemin*, pas par règle. Deux appelants qui frappent `/api/v1/flaky` partagent le compte. Voudrais-tu plutôt un compteur par *appelant* en mockant un système distribué, et sur quoi te baserais-tu pour dire quel appelant est lequel ?
+- 422 vs 500 : l'un dit « la requête était fausse », l'autre « le serveur a échoué ». Quand tu **mockes**, tu contrôles les deux côtés, pourquoi alors s'embêter à les distinguer ?
 
 ## Étape 4 : Lire et renvoyer un corps JSON
 
-Les GET portent leurs paramètres dans l'URL. Les POST portent un corps JSON. L'Étape 4 rend le mock conscient du corps : le lire, le refléter, et retourner l'objet — tout l'aller-retour dont un frontend a besoin pour se développer contre.
+Les GET portent leurs paramètres dans l'URL. Les POST portent un corps JSON. L'Étape 4 rend le mock conscient du corps : le lire, le refléter, et retourner l'objet, tout l'aller-retour dont un frontend a besoin pour se développer contre.
 
 ### 4.1 Renvoie un corps POST
 
@@ -362,7 +362,7 @@ print(api.dispatch("POST", "/api/v1/echo", body='{"name": "Grace"}'))
 print(api.dispatch("POST", "/api/v1/echo", body=""))
 ```
 
-`body` entre dans `dispatch` comme une chaîne brute (la couche HTTP la lit depuis la requête à l'Étape 5) ; `json.loads` la transforme en objet Python pour la réponse d'écho. Un corps manquant devient `{}` — toujours un écho valide, pas une exception.
+`body` entre dans `dispatch` comme une chaîne brute (la couche HTTP la lit depuis la requête à l'Étape 5) ; `json.loads` la transforme en objet Python pour la réponse d'écho. Un corps manquant devient `{}`, toujours un écho valide, pas une exception.
 
 **🎯 Résultat attendu :**
 
@@ -388,7 +388,7 @@ print(api.dispatch("POST", "/api/v1/users/7/notes?tag=idea",
                    body='{"text": "ship by Friday"}'))
 ```
 
-Une route exerce maintenant chaque canal d'entrée à la fois — le nom du chemin, une étiquette de requête et le corps JSON — exactement la forme qu'un vrai endpoint `/users/<id>/notes` a. Lire les trois dans une seule réponse prouve que le dispatcher porte chaque canal indépendamment.
+Une route exerce maintenant chaque canal d'entrée à la fois, le nom du chemin, une étiquette de requête et le corps JSON, exactement la forme qu'un vrai endpoint `/users/<id>/notes` a. Lire les trois dans une seule réponse prouve que le dispatcher porte chaque canal indépendamment.
 
 **🎯 Résultat attendu :**
 
@@ -408,12 +408,12 @@ Une route exerce maintenant chaque canal d'entrée à la fois — le nom du chem
 
 **🤔 Question(s) socratique(s)**
 
-- La route d'écho *fait confiance* à `json.loads`. Si un client envoie `{"text": "ship by Friday"}` mais que la vraie API attend `{"content": ...}`, un écho mock de la mauvaise forme passe les tests en silence. Où placerais-tu une *vérification de schéma* — dans la fabrique de la route, ou dans le dispatcher — et pourquoi ?
+- La route d'écho *fait confiance* à `json.loads`. Si un client envoie `{"text": "ship by Friday"}` mais que la vraie API attend `{"content": ...}`, un écho mock de la mauvaise forme passe les tests en silence. Où placerais-tu une *vérification de schéma*, dans la fabrique de la route, ou dans le dispatcher, et pourquoi ?
 - `json.loads(kw["body"])` retourne n'importe quel type JSON : liste, nombre, null. Si tu voulais que `/echo` *n'accepte que* des objets, quel changement d'une ligne rejetterait le reste ?
 
 ## Étape 5 : Enregistrer et rejouer
 
-Un mock qui répond mais oublie ne peut pas vérifier. L'Étape 5 enregistre chaque appel dans une transcription, puis la rejoue — ré-exécuter exactement les requêtes et asserter que les réponses n'ont pas dérivé. C'est un test de régression né d'un mock.
+Un mock qui répond mais oublie ne peut pas vérifier. L'Étape 5 enregistre chaque appel dans une transcription, puis la rejoue, ré-exécuter exactement les requêtes et asserter que les réponses n'ont pas dérivé. C'est un test de régression né d'un mock.
 
 ### 5.1 Enregistre la transcription
 
@@ -442,7 +442,7 @@ print("calls recorded so far:", len(api.transcript()))
 print(api.transcript()[0])
 ```
 
-Enregistrer la *requête* (méthode, chemin, corps) à côté de la *réponse* (statut, charge utile) fait de la transcription une trace véridique — tu peux rejouer n'importe quelle entrée plus tard sans deviner ce qu'elle a envoyé. Une copie profonde via `json.dumps(json.loads(...))` garde la transcription retournée isolée de toute mutation ultérieure. (Pour que les comptages ci-dessous correspondent, fais que `dispatch` termine chaque chemin — correspondant ou 404 — par `return self._finish(method, path, body, status, payload)`, retournant directement soit `(status, payload)`.)
+Enregistrer la *requête* (méthode, chemin, corps) à côté de la *réponse* (statut, charge utile) fait de la transcription une trace véridique, tu peux rejouer n'importe quelle entrée plus tard sans deviner ce qu'elle a envoyé. Une copie profonde via `json.dumps(json.loads(...))` garde la transcription retournée isolée de toute mutation ultérieure. (Pour que les comptages ci-dessous correspondent, fais que `dispatch` termine chaque chemin, correspondant ou 404, par `return self._finish(method, path, body, status, payload)`, retournant directement soit `(status, payload)`.)
 
 **🎯 Résultat attendu :**
 
@@ -484,15 +484,15 @@ fresh.dispatch("GET", "/api/v1/users/7")
 print("replay:", fresh.replay())
 ```
 
-`replay` renvoie chaque *requête* enregistrée (avec son corps exact) et compare la réponse fraîche à celle enregistrée. Zéro écart signifie « le serveur se comporte toujours exactement comme pendant l'exécution » — ton test de régression bon marché et déterministe. (Une route instable bascule sur un compteur, donc rejoue-la sur une instance fraîche ou redémarre le compteur — cette non-déterminance est le but d'un test séparé.)
+`replay` renvoie chaque *requête* enregistrée (avec son corps exact) et compare la réponse fraîche à celle enregistrée. Zéro écart signifie « le serveur se comporte toujours exactement comme pendant l'exécution », ton test de régression bon marché et déterministe. (Une route instable bascule sur un compteur, donc rejoue-la sur une instance fraîche ou redémarre le compteur, cette non-déterminance est le but d'un test séparé.)
 
 **🎯 Résultat attendu :** `replay: []`.
 
-**🩹 Si ça ne marche pas :** Si un appel `search` diverge, les chaînes `limit` de la requête ne font pas l'aller-retour (int vs str). Si `users/7` diverge, la réponse dépend du temps réel ou d'un global — gèle-la.
+**🩹 Si ça ne marche pas :** Si un appel `search` diverge, les chaînes `limit` de la requête ne font pas l'aller-retour (int vs str). Si `users/7` diverge, la réponse dépend du temps réel ou d'un global, gèle-la.
 
 ### 5.3 Câble-le en direct (optionnel)
 
-**👟 Indice de départ :** Branche le dispatcher dans `http.server` : un `BaseHTTPRequestHandler` lit le corps, appelle `dispatch`, et écrit le statut + le JSON — servi sur un port éphémère pour qu'il ne heurte jamais rien.
+**👟 Indice de départ :** Branche le dispatcher dans `http.server` : un `BaseHTTPRequestHandler` lit le corps, appelle `dispatch`, et écrit le statut + le JSON, servi sur un port éphémère pour qu'il ne heurte jamais rien.
 
 ```python
 # main.py (continued)
@@ -532,7 +532,7 @@ print("POST /echo  ->", r.status, _json.loads(r.read()))
 server.shutdown()
 ```
 
-Le port `0` demande un port libre à l'OS, donc `serve_forever` ne se bat jamais avec un processus existant. Le handler reflète le contrat de `dispatch` — lire le corps, dispatcher, encoder la charge utile en JSON — donc le serveur en direct et le dispatcher en processus répondent à l'identique. `log_message` est réduit au silence pour que la console reste propre.
+Le port `0` demande un port libre à l'OS, donc `serve_forever` ne se bat jamais avec un processus existant. Le handler reflète le contrat de `dispatch`, lire le corps, dispatcher, encoder la charge utile en JSON, donc le serveur en direct et le dispatcher en processus répondent à l'identique. `log_message` est réduit au silence pour que la console reste propre.
 
 **🎯 Résultat attendu :**
 
@@ -541,7 +541,7 @@ GET /health -> 200 {'healthy': True, 'version': '1.0.0'}
 POST /echo  -> 200 {'echo': {'name': 'Grace'}}
 ```
 
-**🩹 Si ça ne marche pas :** Si une `ConnectionRefusedError`, le thread du serveur est mort (une exception à l'intérieur de `serve_forever`) ou `shutdown()` a tourné trop tôt. Si le corps d'un POST est vide, l'en-tête `Content-Length` n'a pas atteint le handler — la plupart des clients l'envoient, certains outils ad hoc non.
+**🩹 Si ça ne marche pas :** Si une `ConnectionRefusedError`, le thread du serveur est mort (une exception à l'intérieur de `serve_forever`) ou `shutdown()` a tourné trop tôt. Si le corps d'un POST est vide, l'en-tête `Content-Length` n'a pas atteint le handler, la plupart des clients l'envoient, certains outils ad hoc non.
 
 ### 5.4 Vérifie l'enregistreur
 
@@ -553,35 +553,35 @@ POST /echo  -> 200 {'echo': {'name': 'Grace'}}
 
 **🤔 Question(s) socratique(s)**
 
-- Le replay répond à « est-ce que la réponse a changé ? » mais pas à « est-ce que la réponse est *correcte* ? ». Qu'est-ce qu'une transcription livrée comme données dorées permet à un futur test d'asserter qu'un mock en direct seul ne peut jamais — et quel est le risque que les données dorées soient périmées ?
-- Le handler en direct relit `self.rfile` par requête. `ThreadingHTTPServer` sert chaque connexion sur son propre thread — qu'est-ce qui casse si deux appels de replay se disputent `self._counter`, et l'état par instance de `BaseHTTPRequestHandler` survivrait-il proprement à cela ?
+- Le replay répond à « est-ce que la réponse a changé ? » mais pas à « est-ce que la réponse est *correcte* ? ». Qu'est-ce qu'une transcription livrée comme données dorées permet à un futur test d'asserter qu'un mock en direct seul ne peut jamais, et quel est le risque que les données dorées soient périmées ?
+- Le handler en direct relit `self.rfile` par requête. `ThreadingHTTPServer` sert chaque connexion sur son propre thread, qu'est-ce qui casse si deux appels de replay se disputent `self._counter`, et l'état par instance de `BaseHTTPRequestHandler` survivrait-il proprement à cela ?
 
 ## ⚠️ Pièges courants
 
 - **Des regex de routes non ancrées.** `/users/<uid>` correspondant sans `^…$` correspond aussi à `/api/v1/users/42/orders` et produit une requête à moitié capturée. Ancre toujours le motif compilé.
 - **La méthode oubliée.** Ne faire correspondre que le chemin laisse un `POST /health` frapper la route `GET /health`. Filtre sur `route["method"] == method` *avant* la correspondance regex.
 - **`parse_qs` retourne des listes.** `parse_qs("?limit=3")["limit"]` est `["3"]`, pas `"3"`. Ouvre avec `{k: v[0] …}` ou l'indexation casse chaque analyse à valeurs multiples.
-- **Des fausses pannes qui plantent.** Une `ZeroDivisionError` non gardée à l'intérieur d'une route plante le thread du handler. Laisse le try/except mapper les exceptions vers une charge utile `422` — c'est le travail du mock.
+- **Des fausses pannes qui plantent.** Une `ZeroDivisionError` non gardée à l'intérieur d'une route plante le thread du handler. Laisse le try/except mapper les exceptions vers une charge utile `422`, c'est le travail du mock.
 - **Un état partagé dans le replay.** Le compteur d'instabilité est par chemin et monotone ; un `replay()` qui renvoie le 3ᵉ appel instable reçoit un 500 frais. Teste les routes instables sur une instance fraîche.
 - **Des charges utiles non sérialisables.** `json.dumps` dans `transcript()` et le handler en direct s'étouffent tous deux sur un `datetime` ou un int numpy. Garde les charges utiles dans des types Python simples.
 
 ## Ce que tu viens de construire
 
-Un serveur API local, déterministe, en bibliothèque standard : des templates de routes compilés en dispatchers regex, les paramètres de chemin et de requête qui coulent dans les fabriques de réponses, des échecs simulés selon un calendrier, des corps JSON renvoyés en écho, et une transcription complète de requêtes qui se rejoue comme vérification de régression. L'idée centrale est que *un mock remplace un système externe par une promesse que tu contrôles* — chaque `(statut, charge utile)` est une donnée, jamais une exception surprise, pour que ton code puisse être développé, démontré et testé en régression longtemps avant que le vrai backend n'existe. Échange la table de routes contre la vraie URL de base plus tard et le même client continue de fonctionner, ce qui est précisément la couture qu'un mock est censé tenir.
+Un serveur API local, déterministe, en bibliothèque standard : des templates de routes compilés en dispatchers regex, les paramètres de chemin et de requête qui coulent dans les fabriques de réponses, des échecs simulés selon un calendrier, des corps JSON renvoyés en écho, et une transcription complète de requêtes qui se rejoue comme vérification de régression. L'idée centrale est que *un mock remplace un système externe par une promesse que tu contrôles*, chaque `(statut, charge utile)` est une donnée, jamais une exception surprise, pour que ton code puisse être développé, démontré et testé en régression longtemps avant que le vrai backend n'existe. Échange la table de routes contre la vraie URL de base plus tard et le même client continue de fonctionner, ce qui est précisément la couture qu'un mock est censé tenir.
 
 :::tip[Exécute une version plus complète sans configuration locale]
-[`examples/api-mock-server/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/api-mock-server) dans le dépôt du cours est le serveur complet en notebook — le templating de routes, les échecs instables, l'endpoint d'écho, le replay de transcription et le handler optionnel câblé en direct, exécutables dans Colab/Kaggle/Binder. Clone le dépôt ou [ouvre-le dans un Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course).
+[`examples/api-mock-server/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/api-mock-server) dans le dépôt du cours est le serveur complet en notebook, le templating de routes, les échecs instables, l'endpoint d'écho, le replay de transcription et le handler optionnel câblé en direct, exécutables dans Colab/Kaggle/Binder. Clone le dépôt ou [ouvre-le dans un Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course).
 :::
 
 ## Où aller à partir d'ici
 
-- Ajoute `latency_ms` aux routes et fais dormir le dispatcher avant de répondre, pour que les tests de nouvelle tentative exercent de vrais timeouts — puis enregistre les latences mesurées dans la transcription à côté du statut et de la charge utile.
+- Ajoute `latency_ms` aux routes et fais dormir le dispatcher avant de répondre, pour que les tests de nouvelle tentative exercent de vrais timeouts, puis enregistre les latences mesurées dans la transcription à côté du statut et de la charge utile.
 - Implémente une vérification `Content-Type` dans `dispatch` qui rejette les corps non JSON avec 415 au lieu de laisser `json.loads` lever.
 - Persiste la transcription dans un fichier JSON avec `json.dump` à l'arrêt et charge-la au démarrage, pour que l'enregistreur devienne des données de régression qui survivent aux redémarrages.
-- Ajoute un mode `record = True/False` pour qu'une exécution d'enregistrement capture de vrais appels API (via `http.client`) et les rejoue comme mock plus tard — le classique proxy enregistre-et-rejoue.
+- Ajoute un mode `record = True/False` pour qu'une exécution d'enregistrement capture de vrais appels API (via `http.client`) et les rejoue comme mock plus tard, le classique proxy enregistre-et-rejoue.
 
 ## Partage ton projet avec la classe
 
-Tu as construit quelque chose dont tu es fier·e ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets que d'autres étudiants ont soumis — et son README contient un tutoriel complet, accessible aux débutants, pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, étape par étape. Aucune expérience git préalable n'est requise.
+Tu as construit quelque chose dont tu es fier·e ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets que d'autres étudiants ont soumis, et son README contient un tutoriel complet, accessible aux débutants, pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, étape par étape. Aucune expérience git préalable n'est requise.
 
 Bienvenue dans l'écriture de Python hors du navigateur. 🎓

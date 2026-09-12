@@ -17,13 +17,13 @@ learningObjectives:
 
 # 🗂️ Build a Data Catalog
 
-Before anyone can use data, someone has to be able to *find* it, trust what it is, and know where it came from. That's the job of a data catalog — an organization's index of its own datasets. This project builds a real, small one: it scans CSV files and records their schema (columns, inferred types, row counts) into a persistent JSON index, answers free-text searches across dataset and column names, and tracks *lineage* — which dataset feeds which transformation, so you can answer "what breaks if this CSV changes?" with a traversal instead of a guess.
+Before anyone can use data, someone has to be able to *find* it, trust what it is, and know where it came from. That's the job of a data catalog, an organization's index of its own datasets. This project builds a real, small one: it scans CSV files and records their schema (columns, inferred types, row counts) into a persistent JSON index, answers free-text searches across dataset and column names, and tracks *lineage*, which dataset feeds which transformation, so you can answer "what breaks if this CSV changes?" with a traversal instead of a guess.
 
-This assumes Python 101 plus comfortable `csv` reading — collections, dicts, and functions. Nothing from the Data Analysis module is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
+This assumes Python 101 plus comfortable `csv` reading, collections, dicts, and functions. Nothing from the Data Analysis module is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 
-1. Write a metadata extractor that turns a CSV file into a catalog entry — column names, inferred types, row count.
+1. Write a metadata extractor that turns a CSV file into a catalog entry, column names, inferred types, row count.
 2. Build a persistent `CatalogIndex` that saves and reloads itself as JSON.
 3. Implement a scored full-text search over dataset names and column names.
 4. Record lineage edges and walk dependency chains both forwards and backwards.
@@ -31,11 +31,11 @@ This assumes Python 101 plus comfortable `csv` reading — collections, dicts, a
 
 ## Where to run this
 
-**Locally with `uv`** is the recommended path — a catalog is about *your* folders of CSVs on disk, and the CLI's whole point is being pointed at real files. Setup is standard-library-only (plus `tomllib`-free, so a plain recent Python suffices).
+**Locally with `uv`** is the recommended path, a catalog is about *your* folders of CSVs on disk, and the CLI's whole point is being pointed at real files. Setup is standard-library-only (plus `tomllib`-free, so a plain recent Python suffices).
 
-**GitHub Codespaces** is a zero-setup alternative: open [the whole course repo in a free Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python, and `uv` are already installed) and run the same commands — there are plenty of CSVs inside `examples/` to point it at.
+**GitHub Codespaces** is a zero-setup alternative: open [the whole course repo in a free Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python, and `uv` are already installed) and run the same commands, there are plenty of CSVs inside `examples/` to point it at.
 
-**Google Colab, Kaggle Notebooks, or Binder** work well for the *search logic* half of this project — the notebook at [`examples/data-catalog/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-catalog/notebook.ipynb) runs every step on bundled sample datasets. The honest note: a notebook's sample CSVs are fixed, so the "scan *my* folder" magic is a local-`uv` experience.
+**Google Colab, Kaggle Notebooks, or Binder** work well for the *search logic* half of this project, the notebook at [`examples/data-catalog/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-catalog/notebook.ipynb) runs every step on bundled sample datasets. The honest note: a notebook's sample CSVs are fixed, so the "scan *my* folder" magic is a local-`uv` experience.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-catalog/notebook.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-catalog/notebook.ipynb)
@@ -43,7 +43,7 @@ This assumes Python 101 plus comfortable `csv` reading — collections, dicts, a
 
 ## Setup
 
-`uv` is a single tool that replaces the "install Python, then pip, then a virtual environment tool" chain — and nothing in this project needs a third-party package.
+`uv` is a single tool that replaces the "install Python, then pip, then a virtual environment tool" chain, and nothing in this project needs a third-party package.
 
 **macOS / Linux** (terminal):
 
@@ -74,11 +74,11 @@ cd data-catalog
 
 - ✅ `uv --version` prints a version number.
 - ✅ `data-catalog/` exists with a `pyproject.toml`.
-- ✅ `python -c "import csv, json"` succeeds — no third-party packages.
+- ✅ `python -c "import csv, json"` succeeds, no third-party packages.
 
 ## Step 1: Extract schema metadata from CSVs
 
-A catalog entry is the *description of a dataset*, not the data itself: which columns exist, what kind of values each holds, how many rows. Extracting that is the moment a raw file becomes a findable asset — and the trickiest part is *inferring a type* from a column's values without being lied to by one stray number.
+A catalog entry is the *description of a dataset*, not the data itself: which columns exist, what kind of values each holds, how many rows. Extracting that is the moment a raw file becomes a findable asset, and the trickiest part is *inferring a type* from a column's values without being lied to by one stray number.
 
 ### 1.1 Write the extractor and an inference helper
 
@@ -142,7 +142,7 @@ if __name__ == "__main__":
             print(f"  {col}: {dtype}")
 ```
 
-The order of checks in `_infer_type` is a small decision tree: booleans are a *subset* of things you could call numeric (`"true"` isn't a float, actually — the `try float` guards that), so boolean is checked first, and the `"empty"` case returns early so an all-blank column never scores as oddly-numeric. `reader.fieldnames or []` is a quiet defense: an empty file has `None` fieldnames, and every later loop assumes a list.
+The order of checks in `_infer_type` is a small decision tree: booleans are a *subset* of things you could call numeric (`"true"` isn't a float, actually, the `try float` guards that), so boolean is checked first, and the `"empty"` case returns early so an all-blank column never scores as oddly-numeric. `reader.fieldnames or []` is a quiet defense: an empty file has `None` fieldnames, and every later loop assumes a list.
 
 **🎯 Expected output:**
 
@@ -159,7 +159,7 @@ customers: 2 rows
   region: text
 ```
 
-**🩹 If it's off:** If `price` infers as `text`, a cell somewhere holds a value like `"49,99"` or `"$49.99"` that `float()` rejects — clean the data or accept "text" as the honest answer. If `active` infers as `text`, one value isn't `true`/`false` — check for a literal `"1"` mixed in with booleans.
+**🩹 If it's off:** If `price` infers as `text`, a cell somewhere holds a value like `"49,99"` or `"$49.99"` that `float()` rejects, clean the data or accept "text" as the honest answer. If `active` infers as `text`, one value isn't `true`/`false`, check for a literal `"1"` mixed in with booleans.
 
 ### 1.2 Verify extraction
 
@@ -171,12 +171,12 @@ customers: 2 rows
 
 **🤔 Socratic Question(s)**
 
-- An "all numeric" verdict comes from *one* `float(...)` succeeding for every value. What does an `id` column of `["001", "002"]` get classified as — and why is that arguably *wrong* for a catalog where IDs are meant to be opaque labels, not arithmetic?
+- An "all numeric" verdict comes from *one* `float(...)` succeeding for every value. What does an `id` column of `["001", "002"]` get classified as, and why is that arguably *wrong* for a catalog where IDs are meant to be opaque labels, not arithmetic?
 - The extractor loads every row into memory (`rows = list(reader)`). What part of the code would need to change to catalog a 50 GB CSV, and which parts (headers, dtypes) survive unchanged?
 
 ## Step 2: Persist a searchable index
 
-An in-memory dict of entries evaporates when the process ends, which makes it useless as an *organization's* catalog. The fix is a `CatalogIndex` that serializes itself to JSON on every change and reloads on startup — the same durability trick real catalogs get from databases, scaled down to a file.
+An in-memory dict of entries evaporates when the process ends, which makes it useless as an *organization's* catalog. The fix is a `CatalogIndex` that serializes itself to JSON on every change and reloads on startup, the same durability trick real catalogs get from databases, scaled down to a file.
 
 ### 2.1 Write the JSON-backed index
 
@@ -225,7 +225,7 @@ if __name__ == "__main__":
         print(f"{name}: {entry.columns}")
 ```
 
-`entry.__dict__` is the low-effort serialization trick: dataclass instances store their fields in a plain `__dict__`, so `json.dumps` of a dict-of-`__dict__` needs no custom encoder, and `CatalogEntry(**payload)` on the way back in rehydrates it with the exact keys. The JSON file becomes the *source of trust* across runs — close the terminal, reopen it, and `CatalogIndex()` rebuilds the same dict.
+`entry.__dict__` is the low-effort serialization trick: dataclass instances store their fields in a plain `__dict__`, so `json.dumps` of a dict-of-`__dict__` needs no custom encoder, and `CatalogEntry(**payload)` on the way back in rehydrates it with the exact keys. The JSON file becomes the *source of trust* across runs, close the terminal, reopen it, and `CatalogIndex()` rebuilds the same dict.
 
 **🎯 Expected output:**
 
@@ -233,7 +233,7 @@ if __name__ == "__main__":
 products: ['id', 'name', 'price', 'stock', 'active']
 ```
 
-**🩹 If it's off:** If a `TypeError: __init__() got an unexpected keyword argument` appears on reload, `catalog.json` holds a key the dataclass doesn't define — delete the stale file or rename the field to match. If `catalog.json` never appears on disk, `_save()` isn't being called from `add` — every mutation path must persist, or "saved" state is a lie.
+**🩹 If it's off:** If a `TypeError: __init__() got an unexpected keyword argument` appears on reload, `catalog.json` holds a key the dataclass doesn't define, delete the stale file or rename the field to match. If `catalog.json` never appears on disk, `_save()` isn't being called from `add`, every mutation path must persist, or "saved" state is a lie.
 
 ### 2.2 Verify persistence
 
@@ -245,8 +245,8 @@ products: ['id', 'name', 'price', 'stock', 'active']
 
 **🤔 Socratic Question(s)**
 
-- Adding and removing both call `_save`. Why is per-mutation saving the honest default for a small tool, and at what scale would it become wasteful enough to justify a "save on exit" instead — and what does *that* lose on a crash?
-- The index maps `name → CatalogEntry`, so a second CSV whose filename collides overwrites the first silently. Should `add` refuse on collision, or is overwrite the right behavior — and who should decide?
+- Adding and removing both call `_save`. Why is per-mutation saving the honest default for a small tool, and at what scale would it become wasteful enough to justify a "save on exit" instead, and what does *that* lose on a crash?
+- The index maps `name → CatalogEntry`, so a second CSV whose filename collides overwrites the first silently. Should `add` refuse on collision, or is overwrite the right behavior, and who should decide?
 
 ## Step 3: Search with scoring
 
@@ -277,7 +277,7 @@ if __name__ == "__main__":
         print(f"{query!r}: {results if results else 'no matches'}")
 ```
 
-The single lowercase `haystack = " ".join([name, *entry.columns])` is the whole engine: search scores against *both* the dataset name and its schema, which is what lets `"region"` find `customers` without the word appearing in the filename at all — the column surface is indexable metadata. `haystack.count(term)` is deliberately liberal (counts overlapped matches) rather than token-aware, because for a catalog of a few hundred entries the extra precision isn't worth the tokenizer.
+The single lowercase `haystack = " ".join([name, *entry.columns])` is the whole engine: search scores against *both* the dataset name and its schema, which is what lets `"region"` find `customers` without the word appearing in the filename at all, the column surface is indexable metadata. `haystack.count(term)` is deliberately liberal (counts overlapped matches) rather than token-aware, because for a catalog of a few hundred entries the extra precision isn't worth the tokenizer.
 
 **🎯 Expected output:**
 
@@ -287,7 +287,7 @@ The single lowercase `haystack = " ".join([name, *entry.columns])` is the whole 
 'id price': [('products', 2)]
 ```
 
-**🩹 If it's off:** If mult-word queries score oddly, remember the sum counts each term *separately* — `'id price'` finds 1 + 1 in `products`. If a query matches nothing that should match, check whether a term contains uppercase or punctuation (e.g. `"Price"` lowercasing both sides is handled — but `"price,"` with a comma is not).
+**🩹 If it's off:** If mult-word queries score oddly, remember the sum counts each term *separately*, `'id price'` finds 1 + 1 in `products`. If a query matches nothing that should match, check whether a term contains uppercase or punctuation (e.g. `"Price"` lowercasing both sides is handled, but `"price,"` with a comma is not).
 
 ### 3.2 Verify search
 
@@ -299,12 +299,12 @@ The single lowercase `haystack = " ".join([name, *entry.columns])` is the whole 
 
 **🤔 Socratic Question(s)**
 
-- Counting *occurrences* rewards columns that repeat a term. What definition of "relevant" does that miss — and what would a `count` that penalized longer haystacks (dividing by dataset size, a mini-tf-idf) change about the ranking?
+- Counting *occurrences* rewards columns that repeat a term. What definition of "relevant" does that miss, and what would a `count` that penalized longer haystacks (dividing by dataset size, a mini-tf-idf) change about the ranking?
 - Search is limited to name + columns. What metadata *you've already computed* in Step 1 (dtypes, row_count) would you want searchable, and what query would it answer that this version can't?
 
 ## Step 4: Track data lineage
 
-Knowing *what a dataset is* is half the job; knowing *where it came from and what it feeds* is the part that saves migrations. Lineage is a directed graph — `source → transform → derived` — and the operations it needs are the two graph walks: downstream ("what breaks if `products.csv` changes?") and upstream ("what does this dashboard's table depend on?").
+Knowing *what a dataset is* is half the job; knowing *where it came from and what it feeds* is the part that saves migrations. Lineage is a directed graph, `source → transform → derived`, and the operations it needs are the two graph walks: downstream ("what breaks if `products.csv` changes?") and upstream ("what does this dashboard's table depend on?").
 
 ### 4.1 Write the lineage store and both walks
 
@@ -360,7 +360,7 @@ if __name__ == "__main__":
     print("upstream of revenue_by_category:", sorted(lineage.upstream("revenue_by_category")))
 ```
 
-The `while frontier:` loop is a genuine graph traversal (BFS-style) hiding in plain Python: each polled node adds its unseen neighbors to both `seen` (so they're reported) and `frontier` (so they're explored), which is exactly how "what depends on `products.csv`" discovers the *transitive* answer — `revenue_by_category` is downstream even though nothing points directly at it. The `seen` set doubling as cycle-guard means a mis-declared loop in lineage data terminates instead of hanging your report.
+The `while frontier:` loop is a genuine graph traversal (BFS-style) hiding in plain Python: each polled node adds its unseen neighbors to both `seen` (so they're reported) and `frontier` (so they're explored), which is exactly how "what depends on `products.csv`" discovers the *transitive* answer, `revenue_by_category` is downstream even though nothing points directly at it. The `seen` set doubling as cycle-guard means a mis-declared loop in lineage data terminates instead of hanging your report.
 
 **🎯 Expected output:**
 
@@ -369,7 +369,7 @@ downstream of products.csv: ['products_clean', 'revenue_by_category']
 upstream of revenue_by_category: ['products.csv', 'products_clean']
 ```
 
-**🩹 If it's off:** If downstream returns *only* `products_clean`, the frontier loop isn't revisiting newly-added nodes — confirm `frontier.add(derived)` exists inside the loop, not just `seen.add`. If the demo re-adds edges on every run, the `lineage.edges = []` reset line is doing real work — a persistent store that never resets grows unboundedly.
+**🩹 If it's off:** If downstream returns *only* `products_clean`, the frontier loop isn't revisiting newly-added nodes, confirm `frontier.add(derived)` exists inside the loop, not just `seen.add`. If the demo re-adds edges on every run, the `lineage.edges = []` reset line is doing real work, a persistent store that never resets grows unboundedly.
 
 ### 4.2 Verify lineage
 
@@ -381,12 +381,12 @@ upstream of revenue_by_category: ['products.csv', 'products_clean']
 
 **🤔 Socratic Question(s)**
 
-- The walk is *breadth-first via a set*. What would change if you wanted the *shortest dependency path* from `products.csv` to `revenue_by_category` — the set intentionally discards which information, and what structure would preserve it?
-- Both walks live in one class over the same edges. Where does `upstream` use `derived == current` while `downstream` uses `src == current` — and how would you explain "reverse the comparison, reuse all the plumbing" to a junior teammate?
+- The walk is *breadth-first via a set*. What would change if you wanted the *shortest dependency path* from `products.csv` to `revenue_by_category`, the set intentionally discards which information, and what structure would preserve it?
+- Both walks live in one class over the same edges. Where does `upstream` use `derived == current` while `downstream` uses `src == current`, and how would you explain "reverse the comparison, reuse all the plumbing" to a junior teammate?
 
 ## Step 5: The catalog CLI
 
-The library is done; the *tool* needs to be a command someone can type. `argparse` subcommands turn the whole project into three verbs — `add`, `search`, `lineage` — each reusing exactly one function from the steps above.
+The library is done; the *tool* needs to be a command someone can type. `argparse` subcommands turn the whole project into three verbs, `add`, `search`, `lineage`, each reusing exactly one function from the steps above.
 
 ### 5.1 Wire up the subcommands
 
@@ -443,11 +443,11 @@ uv run python catalog.py search price
 uv run python catalog.py lineage products.csv --direction downstream
 ```
 
-The pattern to internalize: each subcommand *composes* the earlier library functions rather than re-implementing them — `add` is `extract_metadata` + `index.add`, `search` is one function call, `lineage` is one class call. The `required=True` on `add_subparsers` is the difference between `catalog.py` with no verb printing a helpful usage list versus silently doing nothing.
+The pattern to internalize: each subcommand *composes* the earlier library functions rather than re-implementing them, `add` is `extract_metadata` + `index.add`, `search` is one function call, `lineage` is one class call. The `required=True` on `add_subparsers` is the difference between `catalog.py` with no verb printing a helpful usage list versus silently doing nothing.
 
 **🎯 Expected output:** `added products: 5 cols, 2 rows`, then `products  (score 1)`, then `downstream of products.csv: ['products_clean', 'revenue_by_category']`.
 
-**🩹 If it's off:** If running `add` twice on the same file prints the same line twice, that's *correct* — `add` overwrites the same catalog key. If `--direction upstream` returns nothing, the edges under `lineage.json` were recorded with `derived`/`source` roles you expect the other way — the walk follows the recorded direction, so re-check the `record` calls.
+**🩹 If it's off:** If running `add` twice on the same file prints the same line twice, that's *correct*, `add` overwrites the same catalog key. If `--direction upstream` returns nothing, the edges under `lineage.json` were recorded with `derived`/`source` roles you expect the other way, the walk follows the recorded direction, so re-check the `record` calls.
 
 ### 5.2 Verify the CLI
 
@@ -459,20 +459,20 @@ The pattern to internalize: each subcommand *composes* the earlier library funct
 
 **🤔 Socratic Question(s)**
 
-- `search` on an empty catalog prints a hint, while `lineage` on an empty file quietly reports "nothing". Why is the empty case genuinely *different* for the two commands — what's the asymmetry between "no data to search" and "no lineage recorded"?
-- Each command builds its own `CatalogIndex()`/`Lineage()`. When would sharing one instance matter — and for a CLI where every run is one command, why is per-command state the *right* default here?
+- `search` on an empty catalog prints a hint, while `lineage` on an empty file quietly reports "nothing". Why is the empty case genuinely *different* for the two commands, what's the asymmetry between "no data to search" and "no lineage recorded"?
+- Each command builds its own `CatalogIndex()`/`Lineage()`. When would sharing one instance matter, and for a CLI where every run is one command, why is per-command state the *right* default here?
 
 ## ⚠️ Common pitfalls
 
-- **Labeling columns numeric because *some* values are numbers.** One `"42"` doesn't make a column numeric; every non-empty value must parse. An `id` column of `["001", "002"]` is likely a *text* identifier in disguise — infer carefully or let the catalog say "text" honestly.
+- **Labeling columns numeric because *some* values are numbers.** One `"42"` doesn't make a column numeric; every non-empty value must parse. An `id` column of `["001", "002"]` is likely a *text* identifier in disguise, infer carefully or let the catalog say "text" honestly.
 - **Calling `_save` anywhere but on mutation.** A search that "forgets" to persist or a load that never writes both create a catalog whose disk state disagrees with its memory state. Save on every mutation, load on every start.
 - **Searching case-sensitively.** `Price` vs `price` is one forgotten `.lower()` away from "empty results". Lowercase the haystack and the query together.
-- **Graph walks without a `seen` set.** Every BFS/DFS over a graph with any cycle — real lineage occasionally loops — hangs forever without dedup. The `seen`/`frontier` split is not optional.
+- **Graph walks without a `seen` set.** Every BFS/DFS over a graph with any cycle, real lineage occasionally loops, hangs forever without dedup. The `seen`/`frontier` split is not optional.
 - **Recording lineage but never replaying it.** A `record` API with no `downstream`/`upstream` consumers produces a JSON file nobody reads. Build the walk in the same step as the store, as done here.
 
 ## What you just built
 
-A real data catalog: CSV files scanned into structured, typed metadata entries; a persistent JSON index that survives restarts; a scoring search over names *and* schemas; and a lineage graph traversed both directions so you can answer "what breaks if I change this?" with evidence — all standard library, all exposed as three CLI verbs. The transferable skill is the catalog architecture itself: descriptors (metadata) kept separate from data, persisted indexes with a query layer, and *explicit provenance edges* that turn "I think this is connected" into a graph walk anyone can audit.
+A real data catalog: CSV files scanned into structured, typed metadata entries; a persistent JSON index that survives restarts; a scoring search over names *and* schemas; and a lineage graph traversed both directions so you can answer "what breaks if I change this?" with evidence, all standard library, all exposed as three CLI verbs. The transferable skill is the catalog architecture itself: descriptors (metadata) kept separate from data, persisted indexes with a query layer, and *explicit provenance edges* that turn "I think this is connected" into a graph walk anyone can audit.
 
 :::tip[Run a fuller version without any local setup]
 [`examples/data-catalog/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/data-catalog) in the course repo has these complete scripts plus sample CSVs and a pre-seeded index. Or open the whole repo in a [GitHub Codespaces](https://codespaces.new/abderrahim-lectures/python-data-analysis-course).
@@ -480,13 +480,13 @@ A real data catalog: CSV files scanned into structured, typed metadata entries; 
 
 ## Where to go from here
 
-- Add a `refresh` subcommand that re-scans every `source` path stored in the index and updates row counts/dtypes — drift detection over your catalog with one walk over `entry.source`.
-- Upgrade `_infer_type` with a `date` verdict (parse with `datetime.fromisoformat`) so catalogs distinguish real dates from text — a three-line change to the decision tree.
+- Add a `refresh` subcommand that re-scans every `source` path stored in the index and updates row counts/dtypes, drift detection over your catalog with one walk over `entry.source`.
+- Upgrade `_infer_type` with a `date` verdict (parse with `datetime.fromisoformat`) so catalogs distinguish real dates from text, a three-line change to the decision tree.
 - Invert the search scorer toward **tf-idf** (divide term counts by how many datasets contain the term) so generic column names like `id` stop dominating results.
 - Render lineage as a **Mermaid `graph TD`** block (one line per edge) so `catalog.py lineage --format mermaid` produces a diagram any GitHub issue can embed.
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

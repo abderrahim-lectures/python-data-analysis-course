@@ -221,7 +221,7 @@ Podría producir algo así:
 the old man had been a good teacher and he had a
 ```
 
-La salida no será gramaticalmente perfecta — este es un modelo diminuto con solo contexto de bigramas. Pero captura secuencias reales de palabras en inglés porque las probabilidades de los bigramas provienen de texto real.
+La salida no será gramaticalmente perfecta, este es un modelo diminuto con solo contexto de bigramas. Pero captura secuencias reales de palabras en inglés porque las probabilidades de los bigramas provienen de texto real.
 
 ## Inténtalo
 
@@ -238,7 +238,7 @@ for word in starts:
 ## Conclusiones clave
 
 - `generate_text()` encadena llamadas a `sample_next()` en un bucle para construir secuencias de palabras
-- Los caminos sin salida ocurren cuando una palabra no tiene seguidores conocidos — se maneja deteniéndose o reiniciando
+- Los caminos sin salida ocurren cuando una palabra no tiene seguidores conocidos, se maneja deteniéndose o reiniciando
 - La selección de la palabra inicial afecta drásticamente la calidad de la salida
 - Usa `random.seed()` y `verbose=True` para depurar
 

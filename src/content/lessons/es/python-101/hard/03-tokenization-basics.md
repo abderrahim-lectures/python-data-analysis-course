@@ -44,7 +44,7 @@ quiz:
 ---
 Del texto crudo a los tokens
 
-El texto crudo es solo una cadena de caracteres. Para construir un modelo de lenguaje, necesitas dividirlo en unidades discretas — **tokens** — que el modelo pueda contar y predecir. Por simplicidad, usaremos palabras como tokens. Los modelos más avanzados usan tokens de subpalabras (BPE, SentencePiece), pero la tokenización a nivel de palabra basta para demostrar las ideas centrales.
+El texto crudo es solo una cadena de caracteres. Para construir un modelo de lenguaje, necesitas dividirlo en unidades discretas, **tokens**, que el modelo pueda contar y predecir. Por simplicidad, usaremos palabras como tokens. Los modelos más avanzados usan tokens de subpalabras (BPE, SentencePiece), pero la tokenización a nivel de palabra basta para demostrar las ideas centrales.
 
 ## Conceptos clave
 
@@ -74,7 +74,7 @@ Ahora "The" y "Mat" corresponden a los mismos tokens que "the" y "mat" en cualqu
 
 ### Eliminar la puntuación
 
-La puntuación unida a las palabras crea tokens falsos — "hola," y "hola" se convierten en palabras distintas. Elimínala antes de dividir:
+La puntuación unida a las palabras crea tokens falsos, "hola," y "hola" se convierten en palabras distintas. Elimínala antes de dividir:
 
 ```python
 import string
@@ -90,7 +90,7 @@ print(clean.lower().split())
 # ['hello', 'world', 'how', 's', 'it', 'going']
 ```
 
-Cada carácter de puntuación se reemplaza con un espacio, y luego dividir da tokens limpios. Observa que "How's" se convierte en dos tokens: "how" y "s". Esta es una desventaja conocida de la tokenización simple — las herramientas más avanzadas manejan las contracciones de otra manera.
+Cada carácter de puntuación se reemplaza con un espacio, y luego dividir da tokens limpios. Observa que "How's" se convierte en dos tokens: "how" y "s". Esta es una desventaja conocida de la tokenización simple, las herramientas más avanzadas manejan las contracciones de otra manera.
 
 ### Combinar en una función tokenize()
 
@@ -123,7 +123,7 @@ Las diferentes estrategias de tokenización producen vocabularios diferentes y c
 | "can't" | ["can't"] | ["can't"] |
 | "hello,world" | ["hello,world"] | ["hello,world"] |
 
-El último ejemplo muestra un problema: sin eliminar primero la puntuación, "hello,world" permanece como un solo token. Nuestro paso `strip_punctuation` se encarga de esto. No existe una única tokenización "correcta" — depende de lo que tu modelo necesite aprender.
+El último ejemplo muestra un problema: sin eliminar primero la puntuación, "hello,world" permanece como un solo token. Nuestro paso `strip_punctuation` se encarga de esto. No existe una única tokenización "correcta", depende de lo que tu modelo necesite aprender.
 
 ## Inténtalo
 
@@ -140,10 +140,10 @@ print(f"Count: {len(tokens)}")
 
 ## Conclusiones clave
 
-- `str.split()` divide por espacios en blanco — el tokenizador más simple
+- `str.split()` divide por espacios en blanco, el tokenizador más simple
 - Pasar a minúsculas fusiona las variantes con mayúsculas, así que "The" y "the" cuentan como un solo token
 - Eliminar la puntuación evita que tokens como "hello," y "hello" sean diferentes
-- La tokenización es una decisión de diseño — no hay una única respuesta correcta para todos los modelos
+- La tokenización es una decisión de diseño, no hay una única respuesta correcta para todos los modelos
 
 ## Reto de práctica
 

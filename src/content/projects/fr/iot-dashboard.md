@@ -14,9 +14,9 @@ prerequisites: ["Python 101", "Analyse de Données"]
 
 # 📊 Construire un Tableau de Bord IoT
 
-Un système IoT sans tableau de bord, c'est comme une voiture sans compteur de vitesse — les données existent, mais personne ne peut les voir. Ce projet construit un tableau de bord de surveillance en temps réel avec Dash et Plotly : tu simules des flux de données de capteurs, tu rends des jauges en direct qui se mettent à jour chaque seconde, tu traces les tendances historiques comme graphiques de séries temporelles et tu groupes les appareils par type ou emplacement. Le tableau de bord s'exécute dans ton navigateur et se rafraîchit automatiquement.
+Un système IoT sans tableau de bord, c'est comme une voiture sans compteur de vitesse, les données existent, mais personne ne peut les voir. Ce projet construit un tableau de bord de surveillance en temps réel avec Dash et Plotly : tu simules des flux de données de capteurs, tu rends des jauges en direct qui se mettent à jour chaque seconde, tu traces les tendances historiques comme graphiques de séries temporelles et tu groupes les appareils par type ou emplacement. Le tableau de bord s'exécute dans ton navigateur et se rafraîchit automatiquement.
 
-Cela suppose Python 101 et l'aisance avec pandas issu de Analyse de Données — rien de plus. C'est optionnel et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète.
+Cela suppose Python 101 et l'aisance avec pandas issu de Analyse de Données, rien de plus. C'est optionnel et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète.
 
 ## 🎯 Ce que tu vas faire
 
@@ -29,7 +29,7 @@ Cela suppose Python 101 et l'aisance avec pandas issu de Analyse de Données —
 
 ## Où exécuter ceci
 
-**En local avec `uv`** est le chemin principal — c'est un serveur web qui tourne sur `localhost` et s'ouvre dans ton navigateur.
+**En local avec `uv`** est le chemin principal, c'est un serveur web qui tourne sur `localhost` et s'ouvre dans ton navigateur.
 
 **Google Colab, Kaggle Notebooks et Binder** peuvent exécuter le serveur pour des tests, mais l'URL du tableau de bord ne sera pas accessible depuis l'extérieur du notebook.
 
@@ -353,14 +353,14 @@ if __name__ == "__main__":
 ## ⚠️ Pièges courants
 
 - **Inadéquation des IDs de callbacks.** Chaque ID `Input`/`Output` doit correspondre exactement à la propriété `id` d'un composant. Une faute de frappe désactive silencieusement le callback.
-- **Importer des modules obsolètes.** `dash_core_components` et `dash_html_components` sont maintenant dans `dash` — importe depuis `dash` directement.
+- **Importer des modules obsolètes.** `dash_core_components` et `dash_html_components` sont maintenant dans `dash`, importe depuis `dash` directement.
 - **Croissance mémoire illimitée.** Le `DataBuffer` rogne les anciennes données à `max_points`. Sans rognage, la mémoire du tableau de bord ne cesse de croître.
 - **Bloquer le thread principal.** Les callbacks Dash s'exécutent de façon synchrone. Un callback lent (comme une requête de base de données) fige tout le tableau de bord. Utilise `dcc.Interval` judicieusement et garde les callbacks rapides.
-- **Oublier `debug=True` pendant le développement.** Sans lui, les erreurs de callbacks sont silencieuses — le tableau de bord cesse simplement de se mettre à jour. Développe toujours avec le mode debug activé.
+- **Oublier `debug=True` pendant le développement.** Sans lui, les erreurs de callbacks sont silencieuses, le tableau de bord cesse simplement de se mettre à jour. Développe toujours avec le mode debug activé.
 
 ## Ce que tu viens de construire
 
-Un tableau de bord de surveillance IoT en temps réel : un simulateur de capteurs qui produit des schémas de données réalistes, des jauges Plotly à mise à jour en direct, un graphique de séries temporelles historiques à axes doubles et un filtrage par emplacement. L'architecture de callbacks Dash — où chaque interaction utilisateur déclenche une fonction qui retourne des figures mises à jour — est le même schéma utilisé dans les tableaux de bord de production pour la surveillance, l'analytique et les systèmes de contrôle.
+Un tableau de bord de surveillance IoT en temps réel : un simulateur de capteurs qui produit des schémas de données réalistes, des jauges Plotly à mise à jour en direct, un graphique de séries temporelles historiques à axes doubles et un filtrage par emplacement. L'architecture de callbacks Dash, où chaque interaction utilisateur déclenche une fonction qui retourne des figures mises à jour, est le même schéma utilisé dans les tableaux de bord de production pour la surveillance, l'analytique et les systèmes de contrôle.
 
 :::tip[Exécute une version plus complète sans aucune configuration locale]
 [`examples/iot-dashboard/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/iot-dashboard) dans le dépôt du cours a une version plus riche avec plus de types de capteurs, des indicateurs d'alerte et le CLI câblé de bout en bout. Clone-le, ou ouvre tout le dépôt dans un [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), et exécute-le depuis là.
@@ -374,6 +374,6 @@ Un tableau de bord de surveillance IoT en temps réel : un simulateur de capteur
 
 ## Partage ton projet avec la classe
 
-Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres élèves — et son README a un tutoriel complet et adapté aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git avant : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable avec git n'est supposée.
+Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres élèves, et son README a un tutoriel complet et adapté aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git avant : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable avec git n'est supposée.
 
 Bienvenue dans l'écriture de Python en dehors du navigateur. 🎓

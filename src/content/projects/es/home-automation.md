@@ -15,9 +15,9 @@ prerequisites:
 
 # 🏠 Hub de Automatización del Hogar
 
-Tu hogar inteligente es tan inteligente como las reglas que conectan sus dispositivos — un sensor de movimiento que enciende una luz, un termostato que se ajusta cuando sales, una cerradura de puerta que se activa a la hora de dormir. Este proyecto construye un motor de automatización del hogar basado en reglas en Python: defines dispositivos (luces, termostatos, cerraduras), escribes reglas si-esto-entonces-aquello, programas activadores basados en tiempo y detectas presencia a partir de pings de red. El motor se ejecuta localmente, procesa eventos y ejecuta acciones — no se requiere ningún servicio en la nube.
+Tu hogar inteligente es tan inteligente como las reglas que conectan sus dispositivos, un sensor de movimiento que enciende una luz, un termostato que se ajusta cuando sales, una cerradura de puerta que se activa a la hora de dormir. Este proyecto construye un motor de automatización del hogar basado en reglas en Python: defines dispositivos (luces, termostatos, cerraduras), escribes reglas si-esto-entonces-aquello, programas activadores basados en tiempo y detectas presencia a partir de pings de red. El motor se ejecuta localmente, procesa eventos y ejecuta acciones, no se requiere ningún servicio en la nube.
 
-Esto asume Python 101 — no se requiere nada de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
+Esto asume Python 101, no se requiere nada de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
 
 ## 🎯 Lo que harás
 
@@ -30,7 +30,7 @@ Esto asume Python 101 — no se requiere nada de Análisis de Datos. Es opcional
 
 ## Dónde ejecutar esto
 
-**Localmente con `uv`** es el camino principal — este proyecto simula pings de red y ejecuta un motor de reglas que procesa eventos en un bucle. Está diseñado para ejecutarse en una máquina conectada a tu red doméstica.
+**Localmente con `uv`** es el camino principal, este proyecto simula pings de red y ejecuta un motor de reglas que procesa eventos en un bucle. Está diseñado para ejecutarse en una máquina conectada a tu red doméstica.
 
 **Google Colab, Kaggle Notebooks y Binder** funcionan para probar la herramienta. El notebook usa estados de dispositivos simulados y pings falsos en lugar de tráfico de red real.
 
@@ -276,7 +276,7 @@ def evaluate_rules(
     return results
 ```
 
-La función `evaluate_condition` lee un atributo de dispositivo (`is_on`, `temperature`) y lo compara contra el valor de la condición usando el operador especificado. `evaluate_rules` ejecuta todas las reglas habilitadas y recolecta las que tienen todas sus condiciones cumplidas — la comprobación de "todas las condiciones" significa que cada condición de una regla debe ser verdadera para que la regla se active. Cuando una regla se activa, ejecuta cada acción llamando al método nombrado en el dispositivo objetivo.
+La función `evaluate_condition` lee un atributo de dispositivo (`is_on`, `temperature`) y lo compara contra el valor de la condición usando el operador especificado. `evaluate_rules` ejecuta todas las reglas habilitadas y recolecta las que tienen todas sus condiciones cumplidas, la comprobación de "todas las condiciones" significa que cada condición de una regla debe ser verdadera para que la regla se active. Cuando una regla se activa, ejecuta cada acción llamando al método nombrado en el dispositivo objetivo.
 
 **🎯 Resultado esperado :** Una regla con la condición `thermostat.temperature < 68` dispara `light.turn_on()` cuando el termostato marca 65 grados.
 
@@ -308,7 +308,7 @@ assert light.is_on
 
 **🎯 Resultado esperado :** La aserción pasa; la luz está encendida después de la evaluación de la regla.
 
-**🩹 Si sale mal :** Si la luz no se encendió, la comparación de la condición `less_than` puede estar comparando cadenas en lugar de flotantes — revisa el cast `float()` en `evaluate_condition`.
+**🩹 Si sale mal :** Si la luz no se encendió, la comparación de la condición `less_than` puede estar comparando cadenas en lugar de flotantes, revisa el cast `float()` en `evaluate_condition`.
 
 ### 2.3 Verifica el motor de reglas
 
@@ -320,12 +320,12 @@ assert light.is_on
 
 **🤔 Pregunta(s) socrática(s)**
 
-- Las reglas evalúan todas las condiciones cada vez que ocurre un cambio de estado. Para una casa con 50 dispositivos y 20 reglas, eso son 1,000 comprobaciones de condiciones por evento. ¿Cómo lo optimizarías — reevaluando solo las reglas cuyas condiciones hacen referencia al dispositivo que cambió?
+- Las reglas evalúan todas las condiciones cada vez que ocurre un cambio de estado. Para una casa con 50 dispositivos y 20 reglas, eso son 1,000 comprobaciones de condiciones por evento. ¿Cómo lo optimizarías, reevaluando solo las reglas cuyas condiciones hacen referencia al dispositivo que cambió?
 - ¿Qué pasa si dos reglas intentan establecer el mismo dispositivo en estados conflictivos? ¿Cómo añadirías prioridad u orden para resolver conflictos?
 
 ## Paso 3: Implementa la programación basada en tiempo
 
-Algunas automatizaciones no las activa el estado de los dispositivos — se ejecutan con un horario. "Apaga todas las luces a medianoche", "baja el termostato a las 10 PM", "cierra las puertas a la hora de dormir". Este paso usa la biblioteca `schedule` para ejecutar reglas en momentos específicos.
+Algunas automatizaciones no las activa el estado de los dispositivos, se ejecutan con un horario. "Apaga todas las luces a medianoche", "baja el termostato a las 10 PM", "cierra las puertas a la hora de dormir". Este paso usa la biblioteca `schedule` para ejecutar reglas en momentos específicos.
 
 ### 3.1 Construye el programador
 
@@ -361,11 +361,11 @@ class AutomationScheduler:
         schedule.clear()
 ```
 
-La biblioteca `schedule` maneja el momento — solo registras una función para que se ejecute a una hora específica cada día. `run_pending()` se llama en un bucle para verificar si algún trabajo programado está pendiente. El cierre `job` captura la regla y el registro, así que cuando llega la hora programada, evalúa la regla contra el estado actual del dispositivo y ejecuta cualquier acción que coincida.
+La biblioteca `schedule` maneja el momento, solo registras una función para que se ejecute a una hora específica cada día. `run_pending()` se llama en un bucle para verificar si algún trabajo programado está pendiente. El cierre `job` captura la regla y el registro, así que cuando llega la hora programada, evalúa la regla contra el estado actual del dispositivo y ejecuta cualquier acción que coincida.
 
 **🎯 Resultado esperado :** `scheduler.schedule_rule(rule, "22:00")` imprime "Scheduled 'Warm up' at 22:00" y registra el trabajo.
 
-**🩹 Si sale mal :** Si el trabajo nunca se ejecuta, `run_pending()` no se está llamando en un bucle. Si el formato de hora es incorrecto, `schedule` lanza un `ValueError` — usa el formato `HH:MM` de 24 horas.
+**🩹 Si sale mal :** Si el trabajo nunca se ejecuta, `run_pending()` no se está llamando en un bucle. Si el formato de hora es incorrecto, `schedule` lanza un `ValueError`, usa el formato `HH:MM` de 24 horas.
 
 ### 3.2 Prueba con tiempo simulado
 
@@ -395,7 +395,7 @@ schedule.run_pending()
 
 **🎯 Resultado esperado :** `schedule.run_pending()` imprime "ACTION: l1.turn_off({})" inmediatamente (ya que el trabajo está pendiente a las 22:00 y lo estamos llamando en una prueba).
 
-**🩹 Si sale mal :** Si no se imprime nada, la hora programada aún no ha llegado en la prueba — `schedule.run_pending()` solo ejecuta trabajos cuya hora ha pasado desde la última llamada.
+**🩹 Si sale mal :** Si no se imprime nada, la hora programada aún no ha llegado en la prueba, `schedule.run_pending()` solo ejecuta trabajos cuya hora ha pasado desde la última llamada.
 
 ### 3.3 Verifica la programación
 
@@ -453,7 +453,7 @@ class PresenceDetector:
         return any(self.status.values())
 ```
 
-La función `ping` usa `subprocess.run` para ejecutar un ping real del sistema — el mismo comando que escribirías en una terminal. `check_all` itera sobre todos los dispositivos registrados y actualiza su estado. `anyone_home` es una propiedad de conveniencia que devuelve `True` si cualquier dispositivo es alcanzable. En producción, harías polling de esto periódicamente (cada 30 segundos o un minuto) y dispararías reglas cuando el estado cambie.
+La función `ping` usa `subprocess.run` para ejecutar un ping real del sistema, el mismo comando que escribirías en una terminal. `check_all` itera sobre todos los dispositivos registrados y actualiza su estado. `anyone_home` es una propiedad de conveniencia que devuelve `True` si cualquier dispositivo es alcanzable. En producción, harías polling de esto periódicamente (cada 30 segundos o un minuto) y dispararías reglas cuando el estado cambie.
 
 **🎯 Resultado esperado :** `detector.ping("127.0.0.1")` devuelve `True` (localhost siempre es alcanzable). `detector.ping("192.0.2.1")` devuelve `False` (una dirección TEST-NET que no debería responder).
 
@@ -482,7 +482,7 @@ class PresenceRuleEvaluator:
         return results
 ```
 
-El `PresenceRuleEvaluator` solo activa reglas cuando la presencia *cambia* — no en cada polling. Esto evita que las reglas se activen repetidamente mientras alguien está en casa. El seguimiento de `prev_home` es la clave: cuando el estado cambia de `True` a `False` (todos se fueron), las reglas con condiciones de presencia se activan una vez.
+El `PresenceRuleEvaluator` solo activa reglas cuando la presencia *cambia*, no en cada polling. Esto evita que las reglas se activen repetidamente mientras alguien está en casa. El seguimiento de `prev_home` es la clave: cuando el estado cambia de `True` a `False` (todos se fueron), las reglas con condiciones de presencia se activan una vez.
 
 **🎯 Resultado esperado :** `evaluate_on_change` devuelve reglas cuando la presencia transiciona de en casa a fuera (o viceversa), y devuelve una lista vacía cuando nada cambió.
 
@@ -578,11 +578,11 @@ if __name__ == "__main__":
     cli()
 ```
 
-El comando `demo` es el más útil para aprender — configura un escenario completo con tres dispositivos, dos reglas y las evalúa de una sola vez. Los comandos `add_device` y `status` son esqueletos para extender el sistema. La CLI mantiene la lógica de automatización testeable sin ejecutar un bucle de eventos continuo.
+El comando `demo` es el más útil para aprender, configura un escenario completo con tres dispositivos, dos reglas y las evalúa de una sola vez. Los comandos `add_device` y `status` son esqueletos para extender el sistema. La CLI mantiene la lógica de automatización testeable sin ejecutar un bucle de eventos continuo.
 
 **🎯 Resultado esperado :** `uv run python -m hub.cli demo` imprime "Rule 'Cold turns on light' fired" y muestra que la luz está encendida y la puerta cerrada.
 
-**🩹 Si sale mal :** Si ninguna regla se activa, la temperatura del termostato (65.0) puede no estar comparándose correctamente contra "68" — revisa el cast `float()` en el evaluador de condiciones.
+**🩹 Si sale mal :** Si ninguna regla se activa, la temperatura del termostato (65.0) puede no estar comparándose correctamente contra "68", revisa el cast `float()` en el evaluador de condiciones.
 
 ### 5.2 Prueba de humo de extremo a extremo
 
@@ -615,14 +615,14 @@ assert light.is_on
 
 **🎯 Resultado esperado :** La aserción pasa; solo se activa la regla "Cold", y la luz está encendida.
 
-**🩹 Si sale mal :** Si ambas reglas se activan, la condición `greater_than 80` de "Away lock" se está comparando incorrectamente — revisa la conversión a flotante.
+**🩹 Si sale mal :** Si ambas reglas se activan, la condición `greater_than 80` de "Away lock" se está comparando incorrectamente, revisa la conversión a flotante.
 
 ### 5.3 Verifica el pipeline de la CLI
 
 **✅ Lista de verificación**
 
 - ✅ `uv run python -m hub.cli demo` ejecuta un escenario completo con dispositivos, reglas y acciones.
-- ✅ Las reglas se activan según el estado actual de los dispositivos — no según lo que la regla espera.
+- ✅ Las reglas se activan según el estado actual de los dispositivos, no según lo que la regla espera.
 - ✅ La CLI imprime una salida clara que muestra qué reglas se activaron y qué acciones se tomaron.
 
 **🤔 Pregunta(s) socrática(s)**
@@ -632,7 +632,7 @@ assert light.is_on
 
 ## ⚠️ Errores comunes
 
-- **Reglas que se activan en cada polling en lugar de en un cambio de estado.** Si tu motor re-evalúa todas las reglas cada vez que un sensor reporta (incluso cuando nada cambió), obtendrás acciones repetidas y notificaciones innecesarias. El patrón `PresenceRuleEvaluator` — rastrear `prev_home` y solo activar en transiciones — previene esto.
+- **Reglas que se activan en cada polling en lugar de en un cambio de estado.** Si tu motor re-evalúa todas las reglas cada vez que un sensor reporta (incluso cuando nada cambió), obtendrás acciones repetidas y notificaciones innecesarias. El patrón `PresenceRuleEvaluator`, rastrear `prev_home` y solo activar en transiciones, previene esto.
 - **Comparaciones de cadenas vs. numéricas en las condiciones.** Una condición como `temperature > 68` debe comparar flotantes, no cadenas. La función `evaluate_condition` convierte valores con `float()` para los operadores numéricos, pero es fácil olvidarlo al añadir operadores nuevos.
 - **Acciones que llaman métodos que no existen.** Si `action.method` es `"turn_on"` pero la clase del dispositivo lo escribe como `"TurnOn"`, `getattr` devuelve `None` y la acción falla en silencio. Siempre valida que el método exista antes de llamarlo.
 - **Programación con bucles bloqueantes.** La biblioteca `schedule` usa `time.sleep(1)` internamente, que bloquea todo el hilo. Para un hub real que también maneja conexiones WebSocket o solicitudes HTTP, necesitarías programación asíncrona (como `APScheduler`) en su lugar.
@@ -640,7 +640,7 @@ assert light.is_on
 
 ## Lo que acabas de construir
 
-Un motor de automatización del hogar basado en reglas: dispositivos con estado y métodos, un motor de reglas activador-acción que evalúa condiciones contra el estado de los dispositivos en vivo, programación basada en tiempo para automatizaciones recurrentes y detección de presencia a partir de pings de red. La arquitectura — dispositivos, reglas, programador, presencia — refleja cómo funcionan las plataformas de automatización del hogar como Home Assistant y Hubitat, solo que más pequeña y ejecutándose enteramente en Python.
+Un motor de automatización del hogar basado en reglas: dispositivos con estado y métodos, un motor de reglas activador-acción que evalúa condiciones contra el estado de los dispositivos en vivo, programación basada en tiempo para automatizaciones recurrentes y detección de presencia a partir de pings de red. La arquitectura, dispositivos, reglas, programador, presencia, refleja cómo funcionan las plataformas de automatización del hogar como Home Assistant y Hubitat, solo que más pequeña y ejecutándose enteramente en Python.
 
 :::tip[Ejecuta una versión más completa sin configuración local]
 [`examples/home-automation/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/home-automation) en el repositorio del curso tiene una versión más rica con más tipos de dispositivos, un panel web y el programador conectado de extremo a extremo. Clónalo, o abre todo el repositorio en un [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), y ejecútalo desde ahí.
@@ -654,6 +654,6 @@ Un motor de automatización del hogar basado en reglas: dispositivos con estado 
 
 ## Comparte tu proyecto con la clase
 
-¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado — y su README tiene un recorrido completo y amigable para principiantes sobre cómo agregar el tuyo vía un **pull request**, incluso si nunca has usado git antes: hacer fork del repositorio, crear una rama, confirmar tus archivos y abrir el PR, un paso a la vez. No se asume experiencia previa con git.
+¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado, y su README tiene un recorrido completo y amigable para principiantes sobre cómo agregar el tuyo vía un **pull request**, incluso si nunca has usado git antes: hacer fork del repositorio, crear una rama, confirmar tus archivos y abrir el PR, un paso a la vez. No se asume experiencia previa con git.
 
 Bienvenido a escribir Python fuera del navegador. 🎓

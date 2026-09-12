@@ -43,7 +43,7 @@ quiz:
       - text: "Un graphique en barres"
 ---
 
-La corrélation mesure la force et la direction d'une relation linéaire entre deux variables numériques. Cette leçon couvre les corrélations de Pearson et de Spearman, la construction et la lecture des heatmaps de corrélation, et la détection de la multicolinéarité — le destructeur silencieux des modèles de régression.
+La corrélation mesure la force et la direction d'une relation linéaire entre deux variables numériques. Cette leçon couvre les corrélations de Pearson et de Spearman, la construction et la lecture des heatmaps de corrélation, et la détection de la multicolinéarité, le destructeur silencieux des modèles de régression.
 
 ## Concepts clés
 
@@ -66,17 +66,17 @@ print(f"Pearson r (math vs reading): {r:.4f}")
 Interprétation de r :
 | Plage | Force | Direction |
 |-------|----------|-----------|
-| 0,00 – 0,19 | Très faible | — |
-| 0,20 – 0,39 | Faible | — |
-| 0,40 – 0,59 | Modérée | — |
-| 0,60 – 0,79 | Forte | — |
-| 0,80 – 1,00 | Très forte | — |
+| 0,00 – 0,19 | Très faible |, |
+| 0,20 – 0,39 | Faible |, |
+| 0,40 – 0,59 | Modérée |, |
+| 0,60 – 0,79 | Forte |, |
+| 0,80 – 1,00 | Très forte |, |
 
 Le signe indique la direction : positive (les deux augmentent ensemble) ou négative (l'une augmente quand l'autre diminue).
 
 ### Corrélation de Spearman
 
-La corrélation de Spearman (ρ) mesure les relations monotones — elle fonctionne avec les données ordinales et est robuste aux valeurs aberrantes :
+La corrélation de Spearman (ρ) mesure les relations monotones, elle fonctionne avec les données ordinales et est robuste aux valeurs aberrantes :
 
 ```python
 rho = df["math score"].corr(df["reading score"], method="spearman")
@@ -131,7 +131,7 @@ plt.show()
 
 ### Heatmap triangulaire (supprimer la redondance)
 
-La matrice complète est symétrique — le triangle supérieur répète le triangle inférieur. Supprimez-le :
+La matrice complète est symétrique, le triangle supérieur répète le triangle inférieur. Supprimez-le :
 
 ```python
 import numpy as np
@@ -195,8 +195,8 @@ for gender in df["gender"].unique():
 Lorsque deux caractéristiques ou plus d'un modèle de régression sont fortement corrélées, la multicolinéarité gonfle les erreurs types et rend les estimations de coefficients instables.
 
 Règles empiriques :
-- |r| > 0,7 : à investiguer — il faudra peut-être supprimer une variable
-- |r| > 0,9 : multicolinéarité sérieuse — supprimer ou combiner
+- |r| > 0,7 : à investiguer, il faudra peut-être supprimer une variable
+- |r| > 0,9 : multicolinéarité sérieuse, supprimer ou combiner
 
 ```python
 # Find highly correlated pairs
@@ -255,10 +255,10 @@ for i in range(len(corr.columns)):
 
 ## Points clés à retenir
 
-- Pearson mesure la corrélation linéaire ; Spearman mesure la corrélation monotone — utilisez les deux quand la relation peut être non linéaire
+- Pearson mesure la corrélation linéaire ; Spearman mesure la corrélation monotone, utilisez les deux quand la relation peut être non linéaire
 - Les heatmaps rendent les matrices de corrélation visuelles ; les heatmaps triangulaires suppriment les informations redondantes
 - Les pair plots donnent un aperçu multivarié complet avec les distributions marginales
-- Une corrélation n'implique jamais la causalité — variables de confusion, causalité inversée et corrélations fortuites sont toujours possibles
+- Une corrélation n'implique jamais la causalité, variables de confusion, causalité inversée et corrélations fortuites sont toujours possibles
 - La multicolinéarité (|r| > 0,7) gonfle les erreurs types des modèles de régression et doit être traitée
 
 ## Défi pratique
@@ -266,7 +266,7 @@ for i in range(len(corr.columns)):
 Calculez les corrélations de Pearson et de Spearman pour toutes les paires de notes. Créez une figure avec deux heatmaps côte à côte (une pour chaque méthode). Annotez les paires ayant le plus grand écart entre Pearson et Spearman, et expliquez ce que cet écart signifie.
 
 <details class="challenge">
-<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
+<summary>🧩 Défi, réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
 ```python

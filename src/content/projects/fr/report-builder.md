@@ -17,9 +17,9 @@ prerequisites:
 
 # 🛠️ 📊 Construire un Constructeur de Rapports
 
-Le reporting d'entreprise est une boucle qui ne change jamais de forme : prends des données brutes, résume-les, montre-les, et partage-les. Ce projet construit cette boucle avec pandas et matplotlib — charge un CSV de ventes, calcule les totaux qu'un manager demande vraiment, dessine un graphique à barres, en lignes, en secteurs et en dispersion, formate le tout dans un tableau propre, et assemble le tout dans un seul fichier de rapport.
+Le reporting d'entreprise est une boucle qui ne change jamais de forme : prends des données brutes, résume-les, montre-les, et partage-les. Ce projet construit cette boucle avec pandas et matplotlib, charge un CSV de ventes, calcule les totaux qu'un manager demande vraiment, dessine un graphique à barres, en lignes, en secteurs et en dispersion, formate le tout dans un tableau propre, et assemble le tout dans un seul fichier de rapport.
 
-Cela suppose le Python 101 et l'aisance avec les fonctions et les listes de base — rien au-delà n'est requis. C'est optionnel et non noté ; vois [Projets du monde réel](/fr/projets) pour la liste complète, et grandissante.
+Cela suppose le Python 101 et l'aisance avec les fonctions et les listes de base, rien au-delà n'est requis. C'est optionnel et non noté ; vois [Projets du monde réel](/fr/projets) pour la liste complète, et grandissante.
 
 ## 🎯 Ce que tu vas faire
 
@@ -33,7 +33,7 @@ Cela suppose le Python 101 et l'aisance avec les fonctions et les listes de base
 
 **En local avec `uv`** est le chemin principal. `pandas` et `matplotlib` s'installent proprement, le backend non interactif `Agg` de matplotlib (utilisé à l'Étape 2) signifie que les graphiques se rendent même sur une machine sans écran, et les fichiers de rapport atterrissent réellement dans ton dossier de projet.
 
-**Google Colab et les exécutions notebook Binder** fonctionnent de la même manière — installe la paire avec une ligne `!pip install pandas matplotlib`, et le notebook reflète chaque étape avec des graphiques enregistrés dans l'environnement du notebook. **JupyterLite** peut exécuter les portions pandas dans le navigateur, mais c'est le plus faible des trois pour ce projet : matplotlib y tourne, pourtant enregistrer des *fichiers* PNG de graphiques sur un vrai disque est maladroit, donc traite-le comme un chemin « essaie-le » et utilise les badges de notebook ou `uv` local quand tu veux que les artefacts du rapport persistent.
+**Google Colab et les exécutions notebook Binder** fonctionnent de la même manière, installe la paire avec une ligne `!pip install pandas matplotlib`, et le notebook reflète chaque étape avec des graphiques enregistrés dans l'environnement du notebook. **JupyterLite** peut exécuter les portions pandas dans le navigateur, mais c'est le plus faible des trois pour ce projet : matplotlib y tourne, pourtant enregistrer des *fichiers* PNG de graphiques sur un vrai disque est maladroit, donc traite-le comme un chemin « essaie-le » et utilise les badges de notebook ou `uv` local quand tu veux que les artefacts du rapport persistent.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/report-builder/notebook.fr.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/report-builder/notebook.fr.ipynb)
@@ -53,7 +53,7 @@ uv add pandas matplotlib
 uv run python -c "import pandas, matplotlib; print('ok')"
 ```
 
-`pandas` est la couche de données — charger, agréger, filtrer — et `matplotlib` est la couche de dessin qui transforme les agrégats en graphiques. Commencer avec les deux installés signifie que chaque étape ci-dessous parle des *idées de reporting* plutôt que de se battre avec les dépendances.
+`pandas` est la couche de données, charger, agréger, filtrer, et `matplotlib` est la couche de dessin qui transforme les agrégats en graphiques. Commencer avec les deux installés signifie que chaque étape ci-dessous parle des *idées de reporting* plutôt que de se battre avec les dépendances.
 
 **✅ Liste de vérification**
 
@@ -62,7 +62,7 @@ uv run python -c "import pandas, matplotlib; print('ok')"
 
 ## Étape 1 : Charge et prépare les données
 
-Chaque rapport commence par des données qui peuvent ou non exister encore. Cette étape construit un chargeur qui génère un CSV de ventes réaliste quand aucun n'est présent — pour que le projet tourne dès la sortie de la boîte — et parse les dates pour que le reporting basé sur le temps fonctionne plus tard.
+Chaque rapport commence par des données qui peuvent ou non exister encore. Cette étape construit un chargeur qui génère un CSV de ventes réaliste quand aucun n'est présent, pour que le projet tourne dès la sortie de la boîte, et parse les dates pour que le reporting basé sur le temps fonctionne plus tard.
 
 ### 1.1 Écris le générateur de données et le chargeur
 
@@ -105,11 +105,11 @@ df = load_data()
 print(df.head(10).to_string(index=False))
 ```
 
-`random.seed(42)` est ce qui rend les données d'échantillon *reproductibles* : la même graine donne la même variation « aléatoire » à chaque exécution, donc les graphiques et totaux que tu produis sont les graphiques et totaux des résultats attendus, pas un rapport différent à chaque fois. `parse_dates=["date"]` dit à pandas de décoder la colonne de date en vrais objets `datetime` au chargement — c'est ce qui rend « le revenu quotidien moyen » et la plage de dates du rapport de l'Étape 5 calculables plutôt que triés comme des chaînes. `index=False` sur `to_csv` garde une colonne d'index parasite hors du fichier, donc le rechargement produit à nouveau un DataFrame propre.
+`random.seed(42)` est ce qui rend les données d'échantillon *reproductibles* : la même graine donne la même variation « aléatoire » à chaque exécution, donc les graphiques et totaux que tu produis sont les graphiques et totaux des résultats attendus, pas un rapport différent à chaque fois. `parse_dates=["date"]` dit à pandas de décoder la colonne de date en vrais objets `datetime` au chargement, c'est ce qui rend « le revenu quotidien moyen » et la plage de dates du rapport de l'Étape 5 calculables plutôt que triés comme des chaînes. `index=False` sur `to_csv` garde une colonne d'index parasite hors du fichier, donc le rechargement produit à nouveau un DataFrame propre.
 
-**🎯 Résultat attendu :** `Sample data saved to sales_data.csv (100 rows)` — ou, à une seconde exécution avec le fichier présent, `Loaded 100 rows from sales_data.csv`. Puis un aperçu de 10 lignes avec les colonnes `date`, `category`, `revenue`, `units_sold`.
+**🎯 Résultat attendu :** `Sample data saved to sales_data.csv (100 rows)`, ou, à une seconde exécution avec le fichier présent, `Loaded 100 rows from sales_data.csv`. Puis un aperçu de 10 lignes avec les colonnes `date`, `category`, `revenue`, `units_sold`.
 
-**🩹 Si ça ne marche pas :** Si le fichier est régénéré à chaque exécution, `os.path.exists` vérifie un chemin différent de celui utilisé par le générateur — passe le même défaut `filepath` aux deux. Si `df["date"]` s'imprime sous forme de chaînes comme `2024-01-01` sans `T`, ce n'est pas réellement parsé — confirme avec `df.dtypes` (`date` devrait être `datetime64[ns]`). Si chaque valeur de revenu est identique, la multiplication `random.seed(42)` n'a pas été appliquée à la liste.
+**🩹 Si ça ne marche pas :** Si le fichier est régénéré à chaque exécution, `os.path.exists` vérifie un chemin différent de celui utilisé par le générateur, passe le même défaut `filepath` aux deux. Si `df["date"]` s'imprime sous forme de chaînes comme `2024-01-01` sans `T`, ce n'est pas réellement parsé, confirme avec `df.dtypes` (`date` devrait être `datetime64[ns]`). Si chaque valeur de revenu est identique, la multiplication `random.seed(42)` n'a pas été appliquée à la liste.
 
 ### 1.2 Vérifie ce avec quoi tu travailles
 
@@ -121,11 +121,11 @@ print(f"Rows: {len(df)}, Columns: {list(df.columns)}")
 print(df.groupby("category")["revenue"].count())
 ```
 
-`df.groupby("category")["revenue"].count()` est ton premier réel agrégat : `groupby("category")` divise le cadre en un groupe par catégorie, le `["revenue"]` choisit une colonne à mesurer, et `.count()` totalise les entrées non nulles par groupe. C'est la même forme d'expression que tu utiliseras à l'Étape 2 pour *sommer* le revenu par catégorie — la seule différence est la méthode finale.
+`df.groupby("category")["revenue"].count()` est ton premier réel agrégat : `groupby("category")` divise le cadre en un groupe par catégorie, le `["revenue"]` choisit une colonne à mesurer, et `.count()` totalise les entrées non nulles par groupe. C'est la même forme d'expression que tu utiliseras à l'Étape 2 pour *sommer* le revenu par catégorie, la seule différence est la méthode finale.
 
 **🎯 Résultat attendu :** `Rows: 100, Columns: ['date', 'category', 'revenue', 'units_sold']`, puis un compte par catégorie de `25` pour chacune des quatre catégories.
 
-**🩹 Si ça ne marche pas :** Si un compte n'est pas 25, le motif en tuiles `* 25` dans le générateur n'a pas produit un jeu de données équilibré — vérifie la longueur de la liste d'origine. Si `groupby` fait une erreur, le nom de colonne `category` est mal orthographié ou manquant dans le CSV.
+**🩹 Si ça ne marche pas :** Si un compte n'est pas 25, le motif en tuiles `* 25` dans le générateur n'a pas produit un jeu de données équilibré, vérifie la longueur de la liste d'origine. Si `groupby` fait une erreur, le nom de colonne `category` est mal orthographié ou manquant dans le CSV.
 
 ### 1.3 Vérifie la couche de données
 
@@ -137,12 +137,12 @@ print(df.groupby("category")["revenue"].count())
 
 **🤔 Question(s) socratique(s)**
 
-- Les données d'échantillon utilisent un `random.seed(42)` fixe. Que *sacrifierais-tu* si tu retirais la graine — et dans quel workflow réel (une démo, une piste d'audit, un tableau de bord en direct) voudrais-tu réellement une variation non ensemencée ?
-- Les dates sont parsées avec `parse_dates=["date"]`. Quel genre de bug un rapport rencontrerait-il si la colonne de date restait en chaînes — choisis une opération concrète (tri, trouver la date min, tracer une série temporelle) et dis comment elle casse.
+- Les données d'échantillon utilisent un `random.seed(42)` fixe. Que *sacrifierais-tu* si tu retirais la graine, et dans quel workflow réel (une démo, une piste d'audit, un tableau de bord en direct) voudrais-tu réellement une variation non ensemencée ?
+- Les dates sont parsées avec `parse_dates=["date"]`. Quel genre de bug un rapport rencontrerait-il si la colonne de date restait en chaînes, choisis une opération concrète (tri, trouver la date min, tracer une série temporelle) et dis comment elle casse.
 
 ## Étape 2 : Dessine ton premier graphique
 
-Un graphique est un résumé que tu peux voir. Cette étape dessine la première des quatre figures — un graphique à barres horizontales du revenu par catégorie — et établit le motif que suit chaque graphique ultérieur : construire une `figure` et des `axes`, tracer, étiqueter, enregistrer, fermer.
+Un graphique est un résumé que tu peux voir. Cette étape dessine la première des quatre figures, un graphique à barres horizontales du revenu par catégorie, et établit le motif que suit chaque graphique ultérieur : construire une `figure` et des `axes`, tracer, étiqueter, enregistrer, fermer.
 
 ### 2.1 Enregistre un graphique à barres revenu-par-catégorie
 
@@ -172,19 +172,19 @@ def chart_revenue_by_category(df: pd.DataFrame, output: str = "chart_bar.png"):
 chart_revenue_by_category(df)
 ```
 
-L'appel `matplotlib.use("Agg")`, placé **avant** l'import de `pyplot`, est ce qui fait tourner ce projet sur un serveur ou dans la CI sans affichage : `Agg` est le backend purement raster qui rend directement vers des fichiers. `groupby("category")["revenue"].sum().sort_values()` combine l'agrégation et l'ordre, donc le graphique à barres se rend *trié* — le plus petit en bas avec `barh`, ce qui se lit naturellement. `plt.savefig(output, dpi=150)` écrit un fichier plutôt que de faire apparaître une fenêtre, et le `plt.close()` discipliné libère la mémoire de la figure pour qu'une boucle longue de graphiques ne fuie pas.
+L'appel `matplotlib.use("Agg")`, placé **avant** l'import de `pyplot`, est ce qui fait tourner ce projet sur un serveur ou dans la CI sans affichage : `Agg` est le backend purement raster qui rend directement vers des fichiers. `groupby("category")["revenue"].sum().sort_values()` combine l'agrégation et l'ordre, donc le graphique à barres se rend *trié*, le plus petit en bas avec `barh`, ce qui se lit naturellement. `plt.savefig(output, dpi=150)` écrit un fichier plutôt que de faire apparaître une fenêtre, et le `plt.close()` discipliné libère la mémoire de la figure pour qu'une boucle longue de graphiques ne fuie pas.
 
 **🎯 Résultat attendu :** Un fichier `chart_bar.png`, plus l'impression `Bar chart saved to chart_bar.png`. Ouvre l'image : quatre barres horizontales, une par catégorie, triées en ordre croissant.
 
-**🩹 Si ça ne marche pas :** Si tu obtiens `UserWarning: Starting a Matplotlib GUI outside of the main thread` ou un `TclError` à propos de l'absence d'affichage, `matplotlib.use("Agg")` s'exécute *après* que `pyplot` est déjà importé — le `use` doit précéder chaque import de pyplot. Si le fichier est vide, `savefig` a été appelé avant que quoi que ce soit ne soit tracé. Si les couleurs ne correspondent pas aux catégories, la tranche `colors[:len(summary)]` et la série triée doivent avoir la même longueur et le même ordre.
+**🩹 Si ça ne marche pas :** Si tu obtiens `UserWarning: Starting a Matplotlib GUI outside of the main thread` ou un `TclError` à propos de l'absence d'affichage, `matplotlib.use("Agg")` s'exécute *après* que `pyplot` est déjà importé, le `use` doit précéder chaque import de pyplot. Si le fichier est vide, `savefig` a été appelé avant que quoi que ce soit ne soit tracé. Si les couleurs ne correspondent pas aux catégories, la tranche `colors[:len(summary)]` et la série triée doivent avoir la même longueur et le même ordre.
 
 ### 2.2 Vérifie le motif de graphique répétable
 
-**👟 Indice de départ :** Ré-exécute la fonction et confirme que le fichier est reconstruit à l'identique — une sortie idempotente (même entrée → même PNG) est ce qui rend le reporting par lots digne de confiance.
+**👟 Indice de départ :** Ré-exécute la fonction et confirme que le fichier est reconstruit à l'identique, une sortie idempotente (même entrée → même PNG) est ce qui rend le reporting par lots digne de confiance.
 
-**🎯 Résultat attendu :** Re-exécuter le bloc écrase `chart_bar.png` avec le même graphique et imprime à nouveau `Bar chart saved to chart_bar.png` — aucune erreur, aucune fenêtre qui apparaît.
+**🎯 Résultat attendu :** Re-exécuter le bloc écrase `chart_bar.png` avec le même graphique et imprime à nouveau `Bar chart saved to chart_bar.png`, aucune erreur, aucune fenêtre qui apparaît.
 
-**🩹 Si ça ne marche pas :** Si la deuxième exécution fait apparaître une fenêtre ou fait une erreur à propos d'un affichage, la ligne du backend `Agg` a dérivé sous l'import de pyplot lors d'un re-collage. Si `FileNotFoundError` apparaît à l'enregistrement, le répertoire de sortie n'existe pas — `savefig` ne crée pas de dossiers, donc `os.makedirs` (ou l'étape de rapport) doit le faire.
+**🩹 Si ça ne marche pas :** Si la deuxième exécution fait apparaître une fenêtre ou fait une erreur à propos d'un affichage, la ligne du backend `Agg` a dérivé sous l'import de pyplot lors d'un re-collage. Si `FileNotFoundError` apparaît à l'enregistrement, le répertoire de sortie n'existe pas, `savefig` ne crée pas de dossiers, donc `os.makedirs` (ou l'étape de rapport) doit le faire.
 
 **✅ Liste de vérification**
 
@@ -194,8 +194,8 @@ L'appel `matplotlib.use("Agg")`, placé **avant** l'import de `pyplot`, est ce q
 
 **🤔 Question(s) socratique(s)**
 
-- Le graphique trie en ordre croissant et utilise `barh`. Qu'est-ce qui change dans la lecture d'un spectateur des mêmes données si tu traçais la série *non triée* en barres verticales à la place — y a-t-il un cas où le « mauvais » ordre est l'honnête ?
-- `plt.close()` termine cette fonction, mais les initiales `fig, ax = plt.subplots(...)` relient une paire d'objets. Que se passerait-il si tu oubliais la fermeture dans une boucle construisant 200 graphiques — et pourquoi cet échec apparaît-il généralement tard, pas immédiatement ?
+- Le graphique trie en ordre croissant et utilise `barh`. Qu'est-ce qui change dans la lecture d'un spectateur des mêmes données si tu traçais la série *non triée* en barres verticales à la place, y a-t-il un cas où le « mauvais » ordre est l'honnête ?
+- `plt.close()` termine cette fonction, mais les initiales `fig, ax = plt.subplots(...)` relient une paire d'objets. Que se passerait-il si tu oubliais la fermeture dans une boucle construisant 200 graphiques, et pourquoi cet échec apparaît-il généralement tard, pas immédiatement ?
 
 ## Étape 3 : Ajoute les trois autres types de graphiques
 
@@ -226,11 +226,11 @@ def chart_revenue_trend(df: pd.DataFrame, output: str = "chart_line.png"):
 chart_revenue_trend(df)
 ```
 
-`daily = df.groupby("date")["revenue"].sum()` réduit le cadre à un point par date — parce que `groupby` groupe les *valeurs de date uniques*, et que chaque date apparaît dans les données exactement une fois, c'est effectivement une série temporelle pleine résolution. `ax.plot(daily.index, daily.values, ...)` est la façon non-nativement-pandas de tracer (nous avons extrait le résumé du DataFrame), ce qui te permet de passer l'index de dates directement à matplotlib. `fill_between` avec un faible `alpha=0.1` teinte la zone sous la ligne — un gain de lisibilité bon marché qui transforme une ligne en une forme.
+`daily = df.groupby("date")["revenue"].sum()` réduit le cadre à un point par date, parce que `groupby` groupe les *valeurs de date uniques*, et que chaque date apparaît dans les données exactement une fois, c'est effectivement une série temporelle pleine résolution. `ax.plot(daily.index, daily.values, ...)` est la façon non-nativement-pandas de tracer (nous avons extrait le résumé du DataFrame), ce qui te permet de passer l'index de dates directement à matplotlib. `fill_between` avec un faible `alpha=0.1` teinte la zone sous la ligne, un gain de lisibilité bon marché qui transforme une ligne en une forme.
 
 **🎯 Résultat attendu :** Un `chart_line.png` montrant une ligne de revenu quotidien sur la plage de 100 jours, avec un remplissage bleu clair en dessous et des étiquettes de dates pivotées le long de l'axe des abscisses.
 
-**🩹 Si ça ne marche pas :** Si les étiquettes de l'axe des abscisses se chevauchent en une traînée, `rotation=45, ha="right"` a été laissé de côté. Si matplotlib trace un index d'entiers bruts au lieu de dates, le `parse_dates` de l'Étape 1 n'a pas été appliqué. Si la ligne est complètement plate, `groupby("date")` peut ne pas sommer — vérifie `daily.describe()` pour la variance.
+**🩹 Si ça ne marche pas :** Si les étiquettes de l'axe des abscisses se chevauchent en une traînée, `rotation=45, ha="right"` a été laissé de côté. Si matplotlib trace un index d'entiers bruts au lieu de dates, le `parse_dates` de l'Étape 1 n'a pas été appliqué. Si la ligne est complètement plate, `groupby("date")` peut ne pas sommer, vérifie `daily.describe()` pour la variance.
 
 ### 3.2 Ajoute le secteur et la dispersion
 
@@ -274,11 +274,11 @@ chart_category_distribution(df)
 chart_price_vs_units(df)
 ```
 
-L'`autopct="%1.1f%%"` du secteur est un mini spécificateur de format — matplotlib appelle cette chaîne avec le pourcentage de chaque tranche et elle rend une décimale plus un `%` littéral, donc une tranche de `0.27` devient `27.0%` (le `%%` doublé échappe le `%` unique). La boucle `for cat, color in zip(...)` de la dispersion divise le cadre par catégorie et dessine chacune comme sa propre série colorée, donc une légende peut distinguer quatre groupes — et `alpha=0.6` rend les points qui se chevauchent visibles plutôt que des pâtés solides. Les deux fonctions gardent la discipline de l'Étape 2 : entrée idempotente, un PNG en sortie.
+L'`autopct="%1.1f%%"` du secteur est un mini spécificateur de format, matplotlib appelle cette chaîne avec le pourcentage de chaque tranche et elle rend une décimale plus un `%` littéral, donc une tranche de `0.27` devient `27.0%` (le `%%` doublé échappe le `%` unique). La boucle `for cat, color in zip(...)` de la dispersion divise le cadre par catégorie et dessine chacune comme sa propre série colorée, donc une légende peut distinguer quatre groupes, et `alpha=0.6` rend les points qui se chevauchent visibles plutôt que des pâtés solides. Les deux fonctions gardent la discipline de l'Étape 2 : entrée idempotente, un PNG en sortie.
 
 **🎯 Résultat attendu :** `chart_pie.png` montrant les parts d'unités des quatre catégories avec des étiquettes de pourcentage, et `chart_scatter.png` avec quatre séries colorées, des étiquettes d'axes et une légende.
 
-**🩹 Si ça ne marche pas :** Si les étiquettes du secteur se chevauchent ou disparaissent, il y a trop de tranches ou des tranches trop similaires pour une étiquette propre — `autopct` ne retire pas les petites tranches, il les étiquette juste. Si la dispersion montre une seule couleur ou une légende vide, l'appairage `zip(categories, colors)` a mal correspondi — les deux séquences doivent avoir le même ordre. Si `%1.1f%%` imprime un `1.1f` littéral, il manque à la chaîne de format l'échappement de l'opérateur `%`.
+**🩹 Si ça ne marche pas :** Si les étiquettes du secteur se chevauchent ou disparaissent, il y a trop de tranches ou des tranches trop similaires pour une étiquette propre, `autopct` ne retire pas les petites tranches, il les étiquette juste. Si la dispersion montre une seule couleur ou une légende vide, l'appairage `zip(categories, colors)` a mal correspondi, les deux séquences doivent avoir le même ordre. Si `%1.1f%%` imprime un `1.1f` littéral, il manque à la chaîne de format l'échappement de l'opérateur `%`.
 
 ### 3.3 Vérifie les quatre graphiques
 
@@ -290,12 +290,12 @@ L'`autopct="%1.1f%%"` du secteur est un mini spécificateur de format — matplo
 
 **🤔 Question(s) socratique(s)**
 
-- Le secteur et la barre montrent tous deux des résumés par catégorie, depuis les mêmes données. Quand un graphique en secteurs est-il réellement le mauvais choix pour une comparaison de catégories, même s'il s'affiche très bien — et que *perd* un lecteur qu'une barre transmet ?
-- Chaque fonction de graphique code en dur son propre titre. Si un rapport avait besoin de thème sur chaque graphique (même police, même format d'en-tête), qu'est-ce qui changerait structurellement — et pourquoi le motif `fig, ax = plt.subplots(...)` rend-il cela plus facile que de tracer sur une figure implicite globale ?
+- Le secteur et la barre montrent tous deux des résumés par catégorie, depuis les mêmes données. Quand un graphique en secteurs est-il réellement le mauvais choix pour une comparaison de catégories, même s'il s'affiche très bien, et que *perd* un lecteur qu'une barre transmet ?
+- Chaque fonction de graphique code en dur son propre titre. Si un rapport avait besoin de thème sur chaque graphique (même police, même format d'en-tête), qu'est-ce qui changerait structurellement, et pourquoi le motif `fig, ax = plt.subplots(...)` rend-il cela plus facile que de tracer sur une figure implicite globale ?
 
 ## Étape 4 : Formate un tableau récapitulatif
 
-Les graphiques répondent « que disent les nombres d'un coup d'œil » ; un tableau répond « que sont-ils exactement ». Cette étape construit un tableau texte avec des colonnes alignées, des totaux et un formatage de dollars — une sortie prête à glisser dans un rapport, un email ou un terminal.
+Les graphiques répondent « que disent les nombres d'un coup d'œil » ; un tableau répond « que sont-ils exactement ». Cette étape construit un tableau texte avec des colonnes alignées, des totaux et un formatage de dollars, une sortie prête à glisser dans un rapport, un email ou un terminal.
 
 ### 4.1 Agrége et aligne le tableau
 
@@ -333,11 +333,11 @@ table = format_summary_table(df)
 print(table)
 ```
 
-`df.groupby("category").agg(...)` exécute *quatre* agrégations en une passe — chaque entrée nomme une colonne de sortie et la paire `(colonne_source, opération)` pour la produire, ce qui est nettement plus prêt que quatre appels `groupby` séparés. Les largeurs de f-string font un vrai travail de disposition : `:>12` aligne à droite le revenu sur 12 caractères et le `,` dans `:>10,.2f` ajoute des séparateurs de milliers, donc `2984.5` devient `  $2,984.50` et chaque ligne s'aligne à la même colonne. La ligne finale `TOTAL` réutilise les mêmes spécificateurs de largeur avec une chaîne de remplissage vide pour que le pied de page s'aligne avec les lignes de données au-dessus.
+`df.groupby("category").agg(...)` exécute *quatre* agrégations en une passe, chaque entrée nomme une colonne de sortie et la paire `(colonne_source, opération)` pour la produire, ce qui est nettement plus prêt que quatre appels `groupby` séparés. Les largeurs de f-string font un vrai travail de disposition : `:>12` aligne à droite le revenu sur 12 caractères et le `,` dans `:>10,.2f` ajoute des séparateurs de milliers, donc `2984.5` devient `  $2,984.50` et chaque ligne s'aligne à la même colonne. La ligne finale `TOTAL` réutilise les mêmes spécificateurs de largeur avec une chaîne de remplissage vide pour que le pied de page s'aligne avec les lignes de données au-dessus.
 
-**🎯 Résultat attendu :** Un en-tête de cinq lignes, puis quatre lignes de données (une par catégorie) se terminant par une ligne `TOTAL` — chaque colonne alignée verticalement et les valeurs en dollars formatées avec des virgules.
+**🎯 Résultat attendu :** Un en-tête de cinq lignes, puis quatre lignes de données (une par catégorie) se terminant par une ligne `TOTAL`, chaque colonne alignée verticalement et les valeurs en dollars formatées avec des virgules.
 
-**🩹 Si ça ne marche pas :** Si les colonnes se désalignent visiblement, les nombres de largeur dans l'en-tête et les lignes du corps sont en désaccord — les deux doivent utiliser les mêmes spécificateurs. Si `TOTAL` dérive à droite, son champ de remplissage vide a une largeur différente de la colonne `Avg Sale`. Si les valeurs apparaissent comme `2984.5` sans virgules, il manque le drapeau `,` au format `.2f`.
+**🩹 Si ça ne marche pas :** Si les colonnes se désalignent visiblement, les nombres de largeur dans l'en-tête et les lignes du corps sont en désaccord, les deux doivent utiliser les mêmes spécificateurs. Si `TOTAL` dérive à droite, son champ de remplissage vide a une largeur différente de la colonne `Avg Sale`. Si les valeurs apparaissent comme `2984.5` sans virgules, il manque le drapeau `,` au format `.2f`.
 
 ### 4.2 Vérifie le tableau
 
@@ -349,12 +349,12 @@ print(table)
 
 **🤔 Question(s) socratique(s)**
 
-- Le tableau est construit avec des f-strings à largeur fixe, ce qui fonctionne parce que les *noms* de colonnes tiennent dans ces largeurs. Qu'est-ce qui brise l'alignement si un nom de catégorie fait 30 caractères — et quelles sont les deux ou trois options (tronquer, largeur dynamique, une bibliothèque) quand de vraies données dépassent tes colonnes ?
+- Le tableau est construit avec des f-strings à largeur fixe, ce qui fonctionne parce que les *noms* de colonnes tiennent dans ces largeurs. Qu'est-ce qui brise l'alignement si un nom de catégorie fait 30 caractères, et quelles sont les deux ou trois options (tronquer, largeur dynamique, une bibliothèque) quand de vraies données dépassent tes colonnes ?
 - `int(row['total_units'])` arrondit délibérément vers le bas les comptages fractionnaires d'unités. Le `.round(2)` ci-dessus arrondit d'abord les moyennes. Pourquoi arrondir indépendamment les valeurs *d'affichage*, plutôt que l'agrégat sous-jacent, est-il généralement le choix de reporting le plus sûr ?
 
 ## Étape 5 : Assemble le rapport
 
-L'étape finale est le gain : exécuter les quatre graphiques et le tableau dans un seul fichier de rapport — complet avec un horodatage généré et la plage de dates couverte — pour qu'un manager puisse ouvrir un dossier et voir toute l'histoire.
+L'étape finale est le gain : exécuter les quatre graphiques et le tableau dans un seul fichier de rapport, complet avec un horodatage généré et la plage de dates couverte, pour qu'un manager puisse ouvrir un dossier et voir toute l'histoire.
 
 ### 5.1 Génère le dossier de rapport
 
@@ -414,11 +414,11 @@ def generate_report(df: pd.DataFrame, output_dir: str = "report"):
 generate_report(df)
 ```
 
-Deux choix de design font de ceci un véritable outil de rapport plutôt qu'une démo. Il est *régénérable* : l'assembleur recrée chaque artefact dans son propre répertoire, donc la même commande sur des données mises à jour produit un rapport mis à jour, et le répertoire contient toujours exactement l'ensemble courant. Il porte *des métadonnées* : `datetime.now()` tamponne quand il a tourné et `df['date'].min() ... max()` enregistre la période couverte, pour qu'un lecteur (ou un destinataire d'email) puisse dire d'un coup d'œil si le rapport est actuel ou périmé. Chaque fonction que ce projet a construite est maintenant assemblée à un seul endroit — tout le pipeline de l'Étape 1 → 4, invoqué par un seul appel.
+Deux choix de design font de ceci un véritable outil de rapport plutôt qu'une démo. Il est *régénérable* : l'assembleur recrée chaque artefact dans son propre répertoire, donc la même commande sur des données mises à jour produit un rapport mis à jour, et le répertoire contient toujours exactement l'ensemble courant. Il porte *des métadonnées* : `datetime.now()` tamponne quand il a tourné et `df['date'].min() ... max()` enregistre la période couverte, pour qu'un lecteur (ou un destinataire d'email) puisse dire d'un coup d'œil si le rapport est actuel ou périmé. Chaque fonction que ce projet a construite est maintenant assemblée à un seul endroit, tout le pipeline de l'Étape 1 → 4, invoqué par un seul appel.
 
 **🎯 Résultat attendu :** Un dossier `report/` contenant `report.txt` et les quatre PNG de graphiques. Le rapport texte s'ouvre avec l'en-tête horodaté, les statistiques récapitulatives, le tableau de catégories aligné et un manifeste des graphiques.
 
-**🩹 Si ça ne marche pas :** Si l'en-tête imprime `Period: NaT to NaT`, les dates n'ont pas été parsées au chargement (le `parse_dates` de l'Étape 1 manque). Si des graphiques manquent dans le dossier, une des quatre fonctions de graphiques a échoué avant l'enregistrement — exécute le « si ça ne marche pas » de chaque fonction indépendamment. Si `report.txt` est rejeté par un système d'email pour des caractères bizarres, vérifie si les f-strings ont inséré un champ parasite ; une ré-exécution devrait être atomique.
+**🩹 Si ça ne marche pas :** Si l'en-tête imprime `Period: NaT to NaT`, les dates n'ont pas été parsées au chargement (le `parse_dates` de l'Étape 1 manque). Si des graphiques manquent dans le dossier, une des quatre fonctions de graphiques a échoué avant l'enregistrement, exécute le « si ça ne marche pas » de chaque fonction indépendamment. Si `report.txt` est rejeté par un système d'email pour des caractères bizarres, vérifie si les f-strings ont inséré un champ parasite ; une ré-exécution devrait être atomique.
 
 ### 5.2 Vérifie le rapport assemblé
 
@@ -430,20 +430,20 @@ Deux choix de design font de ceci un véritable outil de rapport plutôt qu'une 
 
 **🤔 Question(s) socratique(s)**
 
-- Le rapport écrit graphiques et texte *ensemble* à chaque exécution. Que laisse-t-elle sur disque une exécution cassée — disons, une exception à mi-chemin de la section des graphiques — et quels deux petits changements (répertoire temporaire + renommage, ou try/finally) rendraient la régénération atomique ?
+- Le rapport écrit graphiques et texte *ensemble* à chaque exécution. Que laisse-t-elle sur disque une exécution cassée, disons, une exception à mi-chemin de la section des graphiques, et quels deux petits changements (répertoire temporaire + renommage, ou try/finally) rendraient la régénération atomique ?
 - L'horodatage est le signal de fraîcheur du rapport. Si le rapport tournait selon un calendrier chaque lundi, `Generated:` seul dirait-il à un lecteur si les *données* étaient actuelles ? Quel second champ ajouterais-tu pour séparer « quand le rapport a été fait » de « l'âge des données » ?
 
 ## ⚠️ Pièges courants
 
-- **Ordre d'import `Agg`.** `matplotlib.use("Agg")` doit s'exécuter *avant* `import matplotlib.pyplot as plt`, sinon le backend GUI gagne et les exécutions sans écran plantent avec une erreur « no display ». Correction : garde la ligne `use` physiquement au-dessus de l'import de pyplot — le bloc d'import du fichier le fait délibérément.
+- **Ordre d'import `Agg`.** `matplotlib.use("Agg")` doit s'exécuter *avant* `import matplotlib.pyplot as plt`, sinon le backend GUI gagne et les exécutions sans écran plantent avec une erreur « no display ». Correction : garde la ligne `use` physiquement au-dessus de l'import de pyplot, le bloc d'import du fichier le fait délibérément.
 - **Dates non parsées.** Sans `parse_dates=["date"]`, la colonne de date reste en chaînes, donc `df['date'].min()` trie textuellement et les graphiques en lignes mettent d'étranges graduations sur l'axe. Correction : parse au chargement (Étape 1) et confirme avec `df.dtypes`.
-- **Exécuter des graphiques sans affichage.** Le backend `Agg` rend vers des fichiers — c'est toute la raison pour laquelle il est activé ici. Correction : ne retire jamais la ligne `use` pour ce projet ; les graphiques sont enregistrés, non affichés.
+- **Exécuter des graphiques sans affichage.** Le backend `Agg` rend vers des fichiers, c'est toute la raison pour laquelle il est activé ici. Correction : ne retire jamais la ligne `use` pour ce projet ; les graphiques sont enregistrés, non affichés.
 - **Tableaux désalignés.** Mélanger les largeurs d'en-tête et les largeurs de corps casse silencieusement l'alignement des colonnes. Correction : garde les chaînes de format identiques pour l'en-tête et les lignes de données, et laisse la ligne `TOTAL` les réutiliser.
 - **Colonnes supplémentaires venant d'un index.** `df.to_csv(...)` sans `index=False` écrit une colonne d'index sans nom qui se recharge comme du bruit. Correction : passe toujours `index=False`, comme le fait le générateur.
 
 ## Ce que tu viens de construire
 
-Un générateur de rapports qui prend un CSV de ventes brut et produit un paquet complet : un DataFrame nettoyé, quatre types de graphiques intentionnels, un tableau récapitulatif prêt pour la publication, et un fichier de rapport horodaté qui nomme chaque artefact. La compétence transférable est la *boucle donnée-vers-livrable* — charger, agréger, visualiser, assembler — qui est le squelette identique derrière les tableaux de bord, les résumés exécutifs et toute automatisation « envoie-moi les chiffres de la semaine » que tu rencontreras dans un emploi.
+Un générateur de rapports qui prend un CSV de ventes brut et produit un paquet complet : un DataFrame nettoyé, quatre types de graphiques intentionnels, un tableau récapitulatif prêt pour la publication, et un fichier de rapport horodaté qui nomme chaque artefact. La compétence transférable est la *boucle donnée-vers-livrable*, charger, agréger, visualiser, assembler, qui est le squelette identique derrière les tableaux de bord, les résumés exécutifs et toute automatisation « envoie-moi les chiffres de la semaine » que tu rencontreras dans un emploi.
 
 :::tip[Exécute une version plus complète sans aucune configuration locale]
 [`examples/report-builder/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/report-builder) dans le dépôt du cours livre l'assembleur complet plus un export PDF basé sur `reportlab` et un filtrage par plage de dates. Clone-le, ou ouvre tout le dépôt dans un [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), et exécute-le depuis là.
@@ -451,13 +451,13 @@ Un générateur de rapports qui prend un CSV de ventes brut et produit un paquet
 
 ## Où aller à partir d'ici
 
-- Ajoute un **export PDF** avec `reportlab` — le résumé sur la première page et un graphique par page. Le petit indice : `uv add reportlab` et `from reportlab.platypus import SimpleDocTemplate, Paragraph, Image` couvre ~90 % de ce dont tu as besoin.
-- Donne à `generate_report` un **filtrage par dates** — accepte `start_date`/`end_date` et découpe `df` avant de tracer, pour qu'une seule fonction produise des rapports hebdomadaires, mensuels ou trimestriels depuis la même source.
-- Ajoute une **section trimestre-sur-trimestre** : agrège le revenu en deux trimestres et imprime le pourcentage de croissance plus une flèche haut/bas — un ajout de six lignes au jumeau de `format_summary_table`.
-- Programme-la avec le paquet `schedule` pour que le `generate_report(df)` du lundi s'exécute tout seul — puis déplace le chemin du rapport texte dans un email via `smtplib` et tu as construit le pipeline classique « rapport auto-envoyé aux parties prenantes ».
+- Ajoute un **export PDF** avec `reportlab`, le résumé sur la première page et un graphique par page. Le petit indice : `uv add reportlab` et `from reportlab.platypus import SimpleDocTemplate, Paragraph, Image` couvre ~90 % de ce dont tu as besoin.
+- Donne à `generate_report` un **filtrage par dates**, accepte `start_date`/`end_date` et découpe `df` avant de tracer, pour qu'une seule fonction produise des rapports hebdomadaires, mensuels ou trimestriels depuis la même source.
+- Ajoute une **section trimestre-sur-trimestre** : agrège le revenu en deux trimestres et imprime le pourcentage de croissance plus une flèche haut/bas, un ajout de six lignes au jumeau de `format_summary_table`.
+- Programme-la avec le paquet `schedule` pour que le `generate_report(df)` du lundi s'exécute tout seul, puis déplace le chemin du rapport texte dans un email via `smtplib` et tu as construit le pipeline classique « rapport auto-envoyé aux parties prenantes ».
 
 ## Partage ton projet avec la classe
 
-Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres élèves — et son README contient un parcours complet, adapté aux débutants, pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git : forker le dépôt, créer une branche, commiter tes fichiers et ouvrir la PR, étape par étape. Aucune expérience préalable avec git n'est supposée.
+Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres élèves, et son README contient un parcours complet, adapté aux débutants, pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git : forker le dépôt, créer une branche, commiter tes fichiers et ouvrir la PR, étape par étape. Aucune expérience préalable avec git n'est supposée.
 
 Bienvenue dans la transformation des feuilles de calcul en histoires. 🎓

@@ -6,13 +6,13 @@ difficulty: "intermediate"
 
 # 🌐 Build a Rate-Limited API Service
 
-Every other project in this section builds a *client* of some kind — a script or agent that calls somebody else's API. This one flips that around: you build the API. This project stands up a real [FastAPI](https://fastapi.tiangolo.com/) service wrapping a dataset of a few hundred quotes and jokes that ships with the project, with the two things every real public API needs and toy examples usually skip — API-key authentication and rate limiting — built by hand, not imported from a library. It assumes Python 101; nothing from Data Analysis is required.
+Every other project in this section builds a *client* of some kind, a script or agent that calls somebody else's API. This one flips that around: you build the API. This project stands up a real [FastAPI](https://fastapi.tiangolo.com/) service wrapping a dataset of a few hundred quotes and jokes that ships with the project, with the two things every real public API needs and toy examples usually skip, API-key authentication and rate limiting, built by hand, not imported from a library. It assumes Python 101; nothing from Data Analysis is required.
 
 This is optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 
-1. Install `uv` and set up a local FastAPI project — no external API key needed, since this project ships its own dataset.
+1. Install `uv` and set up a local FastAPI project, no external API key needed, since this project ships its own dataset.
 2. Bundle a dataset and build paginated `list`/`get` endpoints over it.
 3. Add filtering by category and author with query parameters.
 4. Build real API-key issuance and a dependency that validates a key on protected endpoints.
@@ -20,21 +20,21 @@ This is optional and ungraded; see [Real-World Projects](/projects) for the full
 
 ## Where to run this
 
-**Locally with `uv`** is the primary, recommended path — this project's whole point is running a real, long-lived server process and hitting it with real HTTP requests, the same way any production API works.
+**Locally with `uv`** is the primary, recommended path, this project's whole point is running a real, long-lived server process and hitting it with real HTTP requests, the same way any production API works.
 
-**GitHub Codespaces** works well too: open [the whole course repo in a free Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python, and `uv` are already installed, per the repo's `.devcontainer/devcontainer.json`), run the server the same way you would locally, and forward the port — Codespaces usually prompts to do this automatically the moment `uvicorn` starts listening. Once forwarded, you can `curl` it from your own machine's terminal, or open the forwarded URL's `/docs` page in a browser, exactly as if it were running locally.
+**GitHub Codespaces** works well too: open [the whole course repo in a free Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python, and `uv` are already installed, per the repo's `.devcontainer/devcontainer.json`), run the server the same way you would locally, and forward the port, Codespaces usually prompts to do this automatically the moment `uvicorn` starts listening. Once forwarded, you can `curl` it from your own machine's terminal, or open the forwarded URL's `/docs` page in a browser, exactly as if it were running locally.
 
-**Notebooks are a genuinely good fit here, unlike most other long-running-server projects in this series** — with a catch. A notebook cell can't hold open a real listening port the way Colab, Kaggle, and Binder sandbox networking, so it's a poor fit for *actually running* `uvicorn` and hitting it over real HTTP. But FastAPI ships a `TestClient` that talks to your `app` object directly, in-process, with no socket or port involved at all — the exact same routes, status codes, and headers, just invoked as Python function calls instead of network requests. That's a legitimately good notebook demo of the pagination, filtering, auth, and rate-limiting logic, and [`examples/rate-limited-api/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/rate-limited-api/notebook.ipynb) does exactly that:
+**Notebooks are a genuinely good fit here, unlike most other long-running-server projects in this series**, with a catch. A notebook cell can't hold open a real listening port the way Colab, Kaggle, and Binder sandbox networking, so it's a poor fit for *actually running* `uvicorn` and hitting it over real HTTP. But FastAPI ships a `TestClient` that talks to your `app` object directly, in-process, with no socket or port involved at all, the exact same routes, status codes, and headers, just invoked as Python function calls instead of network requests. That's a legitimately good notebook demo of the pagination, filtering, auth, and rate-limiting logic, and [`examples/rate-limited-api/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/rate-limited-api/notebook.ipynb) does exactly that:
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/rate-limited-api/notebook.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/rate-limited-api/notebook.ipynb)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Frate-limited-api%2Fnotebook.ipynb)
 
-Treat the notebook as a way to *see* the API's behavior quickly, not a replacement for actually running `uvicorn` locally and firing real requests at it — the steps below do the real thing.
+Treat the notebook as a way to *see* the API's behavior quickly, not a replacement for actually running `uvicorn` locally and firing real requests at it, the steps below do the real thing.
 
 ## Setup
 
-`uv` is a single tool that replaces the usual "install Python, then install pip, then install a virtual environment tool, then install packages" chain — it can install and manage Python versions itself, alongside your project's dependencies.
+`uv` is a single tool that replaces the usual "install Python, then install pip, then install a virtual environment tool, then install packages" chain, it can install and manage Python versions itself, alongside your project's dependencies.
 
 **macOS / Linux** (terminal):
 
@@ -62,7 +62,7 @@ cd rate-limited-api
 uv add fastapi "uvicorn[standard]"
 ```
 
-Notice what's *not* here: no API key to request, no free-tier signup, nothing to configure before your first request. This project ships its own dataset and issues its own keys — you're building the thing other projects in this series consume.
+Notice what's *not* here: no API key to request, no free-tier signup, nothing to configure before your first request. This project ships its own dataset and issues its own keys, you're building the thing other projects in this series consume.
 
 ## Step 1: Bundle the dataset and build basic endpoints
 
@@ -70,7 +70,7 @@ Real APIs serve real data. Two small sub-steps: create the dataset and the app, 
 
 ### 1.1 Create the dataset and the first endpoints
 
-**👟 Starter hint:** Create `quotes_data.py` with a small, hand-written dataset — a plain Python list of dicts is enough; no database needed yet:
+**👟 Starter hint:** Create `quotes_data.py` with a small, hand-written dataset, a plain Python list of dicts is enough; no database needed yet:
 
 ```python
 # quotes_data.py
@@ -90,7 +90,7 @@ QUOTES = [
 CATEGORIES = sorted({q["category"] for q in QUOTES})
 ```
 
-Write your own — a few dozen is enough to start, aim for a couple hundred by the time you're done, spanning at least three or four categories. Then create `main.py` with the app and two read endpoints:
+Write your own, a few dozen is enough to start, aim for a couple hundred by the time you're done, spanning at least three or four categories. Then create `main.py` with the app and two read endpoints:
 
 ```python
 # main.py
@@ -131,7 +131,7 @@ def get_quote(quote_id: int) -> QuoteOut:
 
 **🎯 Expected output:** Two files (a non-empty `QUOTES` list and a `main.py` defining `app`) that Python can import without errors. Run `uv run python -c "from quotes_data import QUOTES; print(len(QUOTES))"` to confirm your dataset loads.
 
-**🩹 If it's off:** An `ImportError` usually means the file isn't on the path you're importing from — both files must live in the same folder as the app. If `len(QUOTES)` is 0, your `_RAW_QUOTES` list is empty — make sure you actually populated it before running the list comprehension.
+**🩹 If it's off:** An `ImportError` usually means the file isn't on the path you're importing from, both files must live in the same folder as the app. If `len(QUOTES)` is 0, your `_RAW_QUOTES` list is empty, make sure you actually populated it before running the list comprehension.
 
 ### 1.2 Run the server and hit the endpoints
 
@@ -151,9 +151,9 @@ curl -i "http://127.0.0.1:8000/quotes/99999"   # a real 404
 
 **🎯 Expected output:** The first command returns a JSON page with 3 items and a `total` matching your full dataset size; the second returns that quote; the third returns a clear `404` with FastAPI's default error body.
 
-**🩹 If it's off:** A connection refused error means the server isn't listening — check `uvicorn` is still running in its own terminal (a syntax error in `main.py` crashes it on startup with `--reload`). If the `99999` request returns `500` instead of `404`, the `get_quote` path isn't reaching its `HTTPException` — re-check the return/raise flow inside the loop.
+**🩹 If it's off:** A connection refused error means the server isn't listening, check `uvicorn` is still running in its own terminal (a syntax error in `main.py` crashes it on startup with `--reload`). If the `99999` request returns `500` instead of `404`, the `get_quote` path isn't reaching its `HTTPException`, re-check the return/raise flow inside the loop.
 
-`limit`/`offset` pagination is the same pattern behind almost every public REST API's list endpoint — it caps how much data one response can return (`le=100` here), and lets a client walk the full dataset page by page using `total` to know when to stop.
+`limit`/`offset` pagination is the same pattern behind almost every public REST API's list endpoint, it caps how much data one response can return (`le=100` here), and lets a client walk the full dataset page by page using `total` to know when to stop.
 
 ### 1.3 Verify
 
@@ -174,7 +174,7 @@ Two small sub-steps: extend `list_quotes` with the filter parameters, then confi
 
 ### 2.1 Extend `list_quotes` with category and author filters
 
-**👟 Starter hint:** Add a `list_categories` endpoint for the available category names, and give `list_quotes` two optional query params — an exact `category` match and a case-insensitive `author` substring — that narrow `filtered` before pagination:
+**👟 Starter hint:** Add a `list_categories` endpoint for the available category names, and give `list_quotes` two optional query params, an exact `category` match and a case-insensitive `author` substring, that narrow `filtered` before pagination:
 
 ```python
 @app.get("/categories", response_model=list[str])
@@ -200,9 +200,9 @@ def list_quotes(
     return QuotesPage(items=[QuoteOut(**q) for q in page], total=len(filtered), limit=limit, offset=offset)
 ```
 
-**🎯 Expected output:** The server reloads cleanly with the new endpoints and query params — no startup error. `GET /quotes?category=science&limit=5` returns only category-`science` items.
+**🎯 Expected output:** The server reloads cleanly with the new endpoints and query params, no startup error. `GET /quotes?category=science&limit=5` returns only category-`science` items.
 
-**🩹 If it's off:** If the filter returns everything, the `if category is not None:` guard is filtering nothing — check you filtered `filtered`, not `QUOTES` ignoring the guard, and that the pagination slices `filtered` (not the original `QUOTES`). A `422` response means one of your query params isn't typed correctly (e.g. a `list` where FastAPI expects a scalar).
+**🩹 If it's off:** If the filter returns everything, the `if category is not None:` guard is filtering nothing, check you filtered `filtered`, not `QUOTES` ignoring the guard, and that the pagination slices `filtered` (not the original `QUOTES`). A `422` response means one of your query params isn't typed correctly (e.g. a `list` where FastAPI expects a scalar).
 
 ### 2.2 Test the filters
 
@@ -216,9 +216,9 @@ curl "http://127.0.0.1:8000/categories"
 
 **🎯 Expected output:** The `author=sagan` request matches authors case-insensitively (e.g. `Carl Sagan`), combining both filters narrows results further, and each response's `total` reflects the *filtered* count, not the full dataset.
 
-**🩹 If it's off:** If `author=sagan` returns nothing, the case-insensitive `needle in q["author"].lower()` isn't matching — you're comparing the needle against the original-case author. If combining filters returns as many rows as one filter alone, one of the two `if` blocks is being skipped.
+**🩹 If it's off:** If `author=sagan` returns nothing, the case-insensitive `needle in q["author"].lower()` isn't matching, you're comparing the needle against the original-case author. If combining filters returns as many rows as one filter alone, one of the two `if` blocks is being skipped.
 
-`total` in the response reflects the *filtered* count, not the whole dataset — that matters for a client trying to paginate through only the science quotes, which would otherwise think there are far more pages left than there actually are.
+`total` in the response reflects the *filtered* count, not the whole dataset, that matters for a client trying to paginate through only the science quotes, which would otherwise think there are far more pages left than there actually are.
 
 ### 2.3 Verify
 
@@ -230,7 +230,7 @@ curl "http://127.0.0.1:8000/categories"
 
 **🤔 Socratic Question(s)**
 
-- What should `GET /quotes?category=nonexistent` return — an empty list with `total: 0`, or a `404`? Which did you build, and why is that the more RESTful choice for a *collection* endpoint versus the single-item `GET /quotes/{id}`?
+- What should `GET /quotes?category=nonexistent` return, an empty list with `total: 0`, or a `404`? Which did you build, and why is that the more RESTful choice for a *collection* endpoint versus the single-item `GET /quotes/{id}`?
 - If you added a second filter that also needs "any of several values" (e.g. multiple categories at once), how would you extend the query parameter to accept a list?
 
 ## Step 3: API-key issuance and validation
@@ -269,9 +269,9 @@ def whoami(api_key: str = Depends(require_api_key)) -> dict:
 
 **🎯 Expected output:** The server reloads with three new routes. `POST /keys` returns a fresh `{"api_key": ...}` each call, and `GET /me` without a key returns `401`.
 
-**🩹 If it's off:** If `GET /me` succeeds with no header, `require_api_key` isn't being applied — check `api_key: str = Depends(require_api_key)` is on the route, and that `_VALID_KEYS` and `require_api_key` are defined before the route uses them.
+**🩹 If it's off:** If `GET /me` succeeds with no header, `require_api_key` isn't being applied, check `api_key: str = Depends(require_api_key)` is on the route, and that `_VALID_KEYS` and `require_api_key` are defined before the route uses them.
 
-`secrets.token_urlsafe` — not `random`, which isn't cryptographically secure — generates a key nobody can guess. `Depends(require_api_key)` is FastAPI's dependency-injection system: any route that takes `api_key: str = Depends(require_api_key)` as a parameter runs `require_api_key` first, and only proceeds if it returns successfully instead of raising.
+`secrets.token_urlsafe`, not `random`, which isn't cryptographically secure, generates a key nobody can guess. `Depends(require_api_key)` is FastAPI's dependency-injection system: any route that takes `api_key: str = Depends(require_api_key)` as a parameter runs `require_api_key` first, and only proceeds if it returns successfully instead of raising.
 
 ### 3.2 Test the auth path
 
@@ -285,10 +285,10 @@ curl -i -H "X-API-Key: <your-key>" "http://127.0.0.1:8000/me"        # 200
 
 **🎯 Expected output:** The first request returns `401` with a body explaining how to get a key; the second returns a new key; the third returns `200` with your key echoed back.
 
-**🩹 If it's off:** If a valid key still gets `401`, you may have pasted the key with extra whitespace from the terminal — copy it exactly, or the `--reload` restart wiped the in-memory `_VALID_KEYS` and you need a fresh `POST /keys`.
+**🩹 If it's off:** If a valid key still gets `401`, you may have pasted the key with extra whitespace from the terminal, copy it exactly, or the `--reload` restart wiped the in-memory `_VALID_KEYS` and you need a fresh `POST /keys`.
 
 :::tip[This in-memory key store forgets everything on restart, and that's fine here]
-`_VALID_KEYS` lives in a plain Python `set` in this process's memory — restart the server and every previously issued key stops working. A real product would persist keys in a database (and store a *hash* of each key, not the raw value, the same way passwords are hashed — so a database leak doesn't leak usable keys directly). For a local learning project, the in-memory version is honest and sufficient; just don't be surprised when your key stops working after `--reload` restarts the process.
+`_VALID_KEYS` lives in a plain Python `set` in this process's memory, restart the server and every previously issued key stops working. A real product would persist keys in a database (and store a *hash* of each key, not the raw value, the same way passwords are hashed, so a database leak doesn't leak usable keys directly). For a local learning project, the in-memory version is honest and sufficient; just don't be surprised when your key stops working after `--reload` restarts the process.
 :::
 
 ### 3.3 Verify
@@ -310,7 +310,7 @@ This is the actual point of the project. Two sub-steps: build the sliding-window
 
 ### 4.1 Build the sliding-window rate limiter
 
-**👟 Starter hint:** Track each key's recent request timestamps in its own `deque`, drop anything older than the window on each check, and only reject once the surviving count hits the cap — returning a `retry_after` so callers know how long to wait:
+**👟 Starter hint:** Track each key's recent request timestamps in its own `deque`, drop anything older than the window on each check, and only reject once the surviving count hits the cap, returning a `retry_after` so callers know how long to wait:
 
 ```python
 # rate_limit.py
@@ -341,9 +341,9 @@ class SlidingWindowRateLimiter:
 
 **🎯 Expected output:** Import the class and construct `SlidingWindowRateLimiter(5, 10.0)` without error; calling `.check("k")` five times inside a short window returns `(True, 0.0)` each time, then the sixth returns `(False, retry>`0)`.
 
-**🩹 If it's off:** If calling `.check` many times never rejects, the window or the cap is mis-set — confirm `max_requests` is your intended cap and that `time.monotonic()` is being used for `now`. A wrong `retry_after` (e.g. always 0) usually means you're computing it from the wrong history entry — it should come from the *oldest* timestamp still in the window.
+**🩹 If it's off:** If calling `.check` many times never rejects, the window or the cap is mis-set, confirm `max_requests` is your intended cap and that `time.monotonic()` is being used for `now`. A wrong `retry_after` (e.g. always 0) usually means you're computing it from the wrong history entry, it should come from the *oldest* timestamp still in the window.
 
-Each key gets its own `deque` of timestamps, oldest first. On every check, timestamps older than `window_seconds` are dropped from the left before counting what's left — this is an **exact** sliding window, not a bucketed approximation that resets on a fixed clock boundary. That distinction matters: a *fixed*-window limiter (say, "reset the counter every 10 seconds on the clock") lets a client burst its full quota right at the end of one window and its full quota again right at the start of the next, getting up to 2x its intended rate in a couple of real seconds. Tracking actual timestamps avoids that.
+Each key gets its own `deque` of timestamps, oldest first. On every check, timestamps older than `window_seconds` are dropped from the left before counting what's left, this is an **exact** sliding window, not a bucketed approximation that resets on a fixed clock boundary. That distinction matters: a *fixed*-window limiter (say, "reset the counter every 10 seconds on the clock") lets a client burst its full quota right at the end of one window and its full quota again right at the start of the next, getting up to 2x its intended rate in a couple of real seconds. Tracking actual timestamps avoids that.
 
 ### 4.2 Wire it into a dependency and confirm the `429`
 
@@ -373,16 +373,16 @@ def whoami(api_key: str = Depends(enforce_rate_limit)) -> dict:
     return {"api_key": api_key}
 ```
 
-Notice the headers are set two different ways depending on the outcome — that's not a stylistic choice, it's required. Fire six requests in quick succession with the same key:
+Notice the headers are set two different ways depending on the outcome, that's not a stylistic choice, it's required. Fire six requests in quick succession with the same key:
 
 ```bash
 KEY=$(curl -s -X POST "http://127.0.0.1:8000/keys" | python3 -c "import sys,json;print(json.load(sys.stdin)['api_key'])")
 for i in 1 2 3 4 5 6; do curl -s -o /dev/null -w "%{http_code}\n" -H "X-API-Key: $KEY" "http://127.0.0.1:8000/me"; done
 ```
 
-**🎯 Expected output:** The five-loop prints `200` for the first five requests and `429` for the sixth — then the header check below confirms that `429` actually carries `Retry-After`.
+**🎯 Expected output:** The five-loop prints `200` for the first five requests and `429` for the sixth, then the header check below confirms that `429` actually carries `Retry-After`.
 
-**🩹 If it's off:** If all six print `200`, the limiter's cap isn't being enforced — confirm `enforce_rate_limit` is actually the dependency on `/me` (not the plain `require_api_key`), and that `limiter.check` returns `False` on the over-budget request. If all six print `429`, every request is failing auth first — you're still using the broken/in-memory key store, so issue a fresh key.
+**🩹 If it's off:** If all six print `200`, the limiter's cap isn't being enforced, confirm `enforce_rate_limit` is actually the dependency on `/me` (not the plain `require_api_key`), and that `limiter.check` returns `False` on the over-budget request. If all six print `429`, every request is failing auth first, you're still using the broken/in-memory key store, so issue a fresh key.
 
 The first five should print `200`; the sixth should print `429`. Check the headers on that last one:
 
@@ -391,7 +391,7 @@ curl -i -H "X-API-Key: $KEY" "http://127.0.0.1:8000/me"
 ```
 
 :::tip[HTTPException headers, not `response.headers`, on the error path]
-It's tempting to set `response.headers["Retry-After"] = ...` right before raising `HTTPException`, the same way the success path sets `X-RateLimit-Limit`. Don't — when FastAPI turns a raised `HTTPException` into an actual HTTP response, it builds a **fresh** response object from the exception, discarding whatever was written to the injected `response` parameter along the way. Any header that needs to appear on an error response has to be passed to `HTTPException(..., headers={...})` directly, or it silently never reaches the client. This bit the very first version of this lesson's own example code — verify your `429` actually carries `Retry-After` with `curl -i`, don't just trust that setting `response.headers` worked.
+It's tempting to set `response.headers["Retry-After"] = ...` right before raising `HTTPException`, the same way the success path sets `X-RateLimit-Limit`. Don't, when FastAPI turns a raised `HTTPException` into an actual HTTP response, it builds a **fresh** response object from the exception, discarding whatever was written to the injected `response` parameter along the way. Any header that needs to appear on an error response has to be passed to `HTTPException(..., headers={...})` directly, or it silently never reaches the client. This bit the very first version of this lesson's own example code, verify your `429` actually carries `Retry-After` with `curl -i`, don't just trust that setting `response.headers` worked.
 :::
 
 ### 4.3 Verify
@@ -400,38 +400,38 @@ It's tempting to set `response.headers["Retry-After"] = ...` right before raisin
 
 - ✅ The first `RATE_LIMIT_MAX_REQUESTS` requests from one key within the window succeed with `200`.
 - ✅ The next request from that same key, still inside the window, returns a real `429`.
-- ✅ The `429` response actually carries a `Retry-After` header — verified with `curl -i`, not assumed.
+- ✅ The `429` response actually carries a `Retry-After` header, verified with `curl -i`, not assumed.
 - ✅ Waiting past the window and retrying succeeds again (the limit isn't permanent).
 
 **🤔 Socratic Question(s)**
 
 - Why key the rate limiter's history by API key rather than by IP address? What would change (for better or worse) if you keyed it by IP instead, especially for clients behind a shared corporate NAT?
-- The limiter's `check` method takes `now` as an optional parameter instead of always calling `time.monotonic()` internally. What does that buy you when writing a test for it — try writing one that fakes time passing without an actual `time.sleep()`.
+- The limiter's `check` method takes `now` as an optional parameter instead of always calling `time.monotonic()` internally. What does that buy you when writing a test for it, try writing one that fakes time passing without an actual `time.sleep()`.
 
-:::tip[This is a toy-scale limiter on purpose — production has a real answer]
-`SlidingWindowRateLimiter` is genuinely correct, but it's also genuinely single-process: state lives in one Python dict, in one `uvicorn` worker. Run this behind two workers, or two server replicas behind a load balancer, and each one tracks its own independent count for the same key — a client could get up to N-times-instances the intended rate through. Production rate limiting for a multi-instance service almost always moves this state into something shared, like Redis (`INCR` with a `TTL` is a common building block), so every instance sees the same count. Libraries like [`slowapi`](https://github.com/laurentS/slowapi) exist specifically to wrap that pattern into a decorator — worth knowing about, even though this lesson deliberately built the interesting part by hand instead of importing it.
+:::tip[This is a toy-scale limiter on purpose, production has a real answer]
+`SlidingWindowRateLimiter` is genuinely correct, but it's also genuinely single-process: state lives in one Python dict, in one `uvicorn` worker. Run this behind two workers, or two server replicas behind a load balancer, and each one tracks its own independent count for the same key, a client could get up to N-times-instances the intended rate through. Production rate limiting for a multi-instance service almost always moves this state into something shared, like Redis (`INCR` with a `TTL` is a common building block), so every instance sees the same count. Libraries like [`slowapi`](https://github.com/laurentS/slowapi) exist specifically to wrap that pattern into a decorator, worth knowing about, even though this lesson deliberately built the interesting part by hand instead of importing it.
 :::
 
 ## ⚠️ Common pitfalls
 
-- **Setting headers on `response` before raising an `HTTPException`.** As covered above — they get discarded. Pass them to `HTTPException(headers={...})` instead.
-- **Forgetting `raise_for_status`-style checks nowhere apply here — this project is the server, not the client.** It's easy to reflexively add error handling for *calling* an API when this project's whole point is *being* one; the errors that matter here are the ones your own endpoints return to callers (`401`, `404`, `429`), not ones you receive.
-- **Using `random` instead of `secrets` for API keys.** `random` is not cryptographically secure and its output can, in principle, be predicted — `secrets.token_urlsafe()` is built specifically for security-sensitive tokens like this.
-- **Testing rate limiting with requests spaced a second or more apart by hand.** Typing `curl` commands one at a time, waiting for each result, easily takes longer than a short rate-limit window — the window keeps sliding and you'll never see a `429`. Fire several requests back-to-back (a shell loop, or a short Python script) instead.
+- **Setting headers on `response` before raising an `HTTPException`.** As covered above, they get discarded. Pass them to `HTTPException(headers={...})` instead.
+- **Forgetting `raise_for_status`-style checks nowhere apply here, this project is the server, not the client.** It's easy to reflexively add error handling for *calling* an API when this project's whole point is *being* one; the errors that matter here are the ones your own endpoints return to callers (`401`, `404`, `429`), not ones you receive.
+- **Using `random` instead of `secrets` for API keys.** `random` is not cryptographically secure and its output can, in principle, be predicted, `secrets.token_urlsafe()` is built specifically for security-sensitive tokens like this.
+- **Testing rate limiting with requests spaced a second or more apart by hand.** Typing `curl` commands one at a time, waiting for each result, easily takes longer than a short rate-limit window, the window keeps sliding and you'll never see a `429`. Fire several requests back-to-back (a shell loop, or a short Python script) instead.
 - **A rate limit so low it blocks normal browsing of `/quotes` while testing.** This lesson deliberately puts the rate limiter only on `/me`, not on the open `/quotes` endpoints, so you can browse the dataset freely while testing auth and limiting separately. Keep that separation in mind if you extend it.
 
 ## What you just built
 
-A real REST API: paginated, filterable list and detail endpoints over a dataset you wrote yourself, self-service API-key issuance, a dependency that actually enforces auth, and a rate limiter you built line-by-line instead of importing — sliding-window logic, `429` responses, and a correct `Retry-After` header included. That's the same shape of API-key-plus-rate-limit design used by real public APIs everywhere, just without a third-party service standing behind it.
+A real REST API: paginated, filterable list and detail endpoints over a dataset you wrote yourself, self-service API-key issuance, a dependency that actually enforces auth, and a rate limiter you built line-by-line instead of importing, sliding-window logic, `429` responses, and a correct `Retry-After` header included. That's the same shape of API-key-plus-rate-limit design used by real public APIs everywhere, just without a third-party service standing behind it.
 
 ## Where to go from here
 
-- Persist API keys (hashed, not raw) and rate-limit counters in a real datastore — SQLite for keys, Redis for the rate-limit counters — so both survive a restart and work correctly across more than one server process.
+- Persist API keys (hashed, not raw) and rate-limit counters in a real datastore, SQLite for keys, Redis for the rate-limit counters, so both survive a restart and work correctly across more than one server process.
 - Add per-key rate-limit tiers (a "free" key gets 5 requests per 10 seconds, a "pro" key gets 50) by storing a tier alongside each issued key and looking it up inside `enforce_rate_limit`.
-- Actually deploy this somewhere reachable from outside your own machine (a small always-on host, or a serverless platform that supports ASGI apps) and hit it from a phone or a friend's machine — a project like this one is complete only once something other than `localhost` can call it.
+- Actually deploy this somewhere reachable from outside your own machine (a small always-on host, or a serverless platform that supports ASGI apps) and hit it from a phone or a friend's machine, a project like this one is complete only once something other than `localhost` can call it.
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

@@ -6,7 +6,7 @@ difficulty: "beginner"
 
 # 💬 Build a Discord Trivia Bot
 
-A live `discord.py` bot that runs trivia rounds in a server: post a question, collect answers within a time limit, reveal who got it right, and keep a persistent leaderboard across rounds. Most trivia bots stop at a fixed question bank — this one adds a twist that fits a Python course: it can also generate a fresh question on any topic on the spot with a free-tier LLM, instead of only ever asking from a canned list.
+A live `discord.py` bot that runs trivia rounds in a server: post a question, collect answers within a time limit, reveal who got it right, and keep a persistent leaderboard across rounds. Most trivia bots stop at a fixed question bank, this one adds a twist that fits a Python course: it can also generate a fresh question on any topic on the spot with a free-tier LLM, instead of only ever asking from a canned list.
 
 This assumes Python 101. No other Real-World Project is required first, though if you've built [Build a RAG App](/projects/rag-notes) already, the free-tier LLM setup below will feel familiar.
 
@@ -19,18 +19,18 @@ This is optional and ungraded. See [Real-World Projects](/projects) for the full
 3. Build a fixed trivia question bank and a basic Discord slash command that posts one.
 4. Add a persistent per-player leaderboard, stored across restarts.
 5. Add an LLM-generated question mode: give the bot a topic, get back a fresh question.
-6. Wire it all into a full round loop — post a question, collect answers within a time limit, reveal the answer, update the leaderboard.
+6. Wire it all into a full round loop, post a question, collect answers within a time limit, reveal the answer, update the leaderboard.
 7. Invite the bot to a test server and run real rounds, end to end.
 
 ## Where to run this
 
-**Locally with `uv`** is really the only practical option here, more so than for most other projects in this series. A Discord bot isn't a script that runs once and exits — it holds an open connection to Discord and needs to keep running for as long as you want it to respond to `/trivia` and collect answers, which means a real, long-running local (or hosted) process, not a one-off command.
+**Locally with `uv`** is really the only practical option here, more so than for most other projects in this series. A Discord bot isn't a script that runs once and exits, it holds an open connection to Discord and needs to keep running for as long as you want it to respond to `/trivia` and collect answers, which means a real, long-running local (or hosted) process, not a one-off command.
 
-**GitHub Codespaces** works too, and is a reasonable substitute if you'd rather not install anything locally: open [the whole course repo in a free Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python, and `uv` are already installed, per the repo's `.devcontainer/devcontainer.json`) and run `uv run python bot.py` in a terminal there — it stays running for as long as that terminal (and the Codespace) stays open, the same "long-running process" requirement as running it locally.
+**GitHub Codespaces** works too, and is a reasonable substitute if you'd rather not install anything locally: open [the whole course repo in a free Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python, and `uv` are already installed, per the repo's `.devcontainer/devcontainer.json`) and run `uv run python bot.py` in a terminal there, it stays running for as long as that terminal (and the Codespace) stays open, the same "long-running process" requirement as running it locally.
 
-**Google Colab and Kaggle Notebooks are a poor fit for the actual bot** — be honest with yourself about that rather than fighting it. Notebooks are built around running a cell, getting output, and moving to the next cell; they aren't meant for a background process that sits and waits for events indefinitely. You *can* start a bot's event loop in a notebook cell, but the moment the notebook's runtime recycles, disconnects, or you close the tab, the bot goes down with it — skip Colab/Kaggle for the live bot and use a real local process or Codespaces instead.
+**Google Colab and Kaggle Notebooks are a poor fit for the actual bot**, be honest with yourself about that rather than fighting it. Notebooks are built around running a cell, getting output, and moving to the next cell; they aren't meant for a background process that sits and waits for events indefinitely. You *can* start a bot's event loop in a notebook cell, but the moment the notebook's runtime recycles, disconnects, or you close the tab, the bot goes down with it, skip Colab/Kaggle for the live bot and use a real local process or Codespaces instead.
 
-That said, question generation and scoring *underneath* the bot are just regular functions that run a cell at a time, which is exactly what notebooks are good at. The badges below open a notebook that generates real LLM questions on a few sample topics and runs a few fake "players" through the scoring logic, so you can see both work without installing anything locally. It deliberately stops short of the Discord layer — for that, come back here and run `bot.py` locally or in Codespaces as described above.
+That said, question generation and scoring *underneath* the bot are just regular functions that run a cell at a time, which is exactly what notebooks are good at. The badges below open a notebook that generates real LLM questions on a few sample topics and runs a few fake "players" through the scoring logic, so you can see both work without installing anything locally. It deliberately stops short of the Discord layer, for that, come back here and run `bot.py` locally or in Codespaces as described above.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/trivia-bot/notebook.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/trivia-bot/notebook.ipynb)
@@ -41,7 +41,7 @@ Everything in this section only needs to happen once, before you write a line of
 
 ### Install `uv`
 
-`uv` is a single tool that replaces the usual "install Python, then install pip, then install a virtual environment tool, then install packages" chain — it can install and manage Python versions itself, alongside your project's dependencies.
+`uv` is a single tool that replaces the usual "install Python, then install pip, then install a virtual environment tool, then install packages" chain, it can install and manage Python versions itself, alongside your project's dependencies.
 
 **macOS / Linux** (terminal):
 
@@ -67,28 +67,28 @@ Discord's [Developer Portal](https://discord.com/developers/applications) is fre
 
 1. Sign in and click **New Application**, give it a name (e.g. "trivia-bot"), and create it.
 2. Open the **Bot** tab on the left. Discord adds a bot user to your application automatically.
-3. Click **Reset Token** (or **View Token** if this is the first time) and copy it. This token is exactly like a password — anyone with it can control your bot — so treat it the same way you'd treat an LLM API key: never paste it into code, never commit it.
-4. On the same **Bot** tab, scroll to **Privileged Gateway Intents** and turn on **Message Content**. This is required for the bot to actually read the letter a player replies with — without it, `discord.py` receives an empty string for every message's content no matter what code you write.
-5. Open **OAuth2 → URL Generator**. Under **Scopes**, check both `bot` and `applications.commands` (slash commands need the second one specifically); under **Bot Permissions**, check at least **Send Messages** and **Read Message History**. Keep the generated URL handy — you'll use it in the last step to actually invite the bot to a server.
+3. Click **Reset Token** (or **View Token** if this is the first time) and copy it. This token is exactly like a password, anyone with it can control your bot, so treat it the same way you'd treat an LLM API key: never paste it into code, never commit it.
+4. On the same **Bot** tab, scroll to **Privileged Gateway Intents** and turn on **Message Content**. This is required for the bot to actually read the letter a player replies with, without it, `discord.py` receives an empty string for every message's content no matter what code you write.
+5. Open **OAuth2 → URL Generator**. Under **Scopes**, check both `bot` and `applications.commands` (slash commands need the second one specifically); under **Bot Permissions**, check at least **Send Messages** and **Read Message History**. Keep the generated URL handy, you'll use it in the last step to actually invite the bot to a server.
 
 :::tip[A bot token is a secret, exactly like an API key]
-Never hardcode the bot token, never commit it, and keep it in a local `.env` file (below) instead — a leaked bot token lets anyone impersonate your bot in every server it's in, exactly like a leaked LLM key lets anyone spend your quota.
+Never hardcode the bot token, never commit it, and keep it in a local `.env` file (below) instead, a leaked bot token lets anyone impersonate your bot in every server it's in, exactly like a leaked LLM key lets anyone spend your quota.
 :::
 
 ### Get a free LLM API key
 
-The question-generation mode needs a free-tier LLM key — **pick whichever provider you like**, none require a credit card at the time of writing:
+The question-generation mode needs a free-tier LLM key, **pick whichever provider you like**, none require a credit card at the time of writing:
 
 | Provider | Where to get a key | Why you might pick it |
 |---|---|---|
-| **GitHub Models** *(suggested default)* | [github.com/settings/tokens](https://github.com/settings/tokens) — a personal access token with the `models: read` scope | No separate signup — you already have a GitHub account. More generous free-tier limits than Gemini's. |
+| **GitHub Models** *(suggested default)* | [github.com/settings/tokens](https://github.com/settings/tokens), a personal access token with the `models: read` scope | No separate signup, you already have a GitHub account. More generous free-tier limits than Gemini's. |
 | Gemini | [Google AI Studio](https://aistudio.google.com/) | The most commonly referenced option. |
 | Groq | [console.groq.com/keys](https://console.groq.com/keys) | Fast inference, generous free tier, no card. |
 | Mistral | [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys) | One of the more generous permanent free quotas. |
 | Cerebras | [cloud.cerebras.ai](https://cloud.cerebras.ai/) | High daily token volume, no card. |
-| OpenRouter | [openrouter.ai/keys](https://openrouter.ai/keys) | One API, many free models — good for comparing providers. |
+| OpenRouter | [openrouter.ai/keys](https://openrouter.ai/keys) | One API, many free models, good for comparing providers. |
 
-The fixed question bank (Step 1) needs no LLM key at all — you only need one once you get to Step 3's topic-based question generation.
+The fixed question bank (Step 1) needs no LLM key at all, you only need one once you get to Step 3's topic-based question generation.
 
 ### Set up the project
 
@@ -98,7 +98,7 @@ cd trivia-bot
 uv add discord.py openai python-dotenv
 ```
 
-`discord.py` is the library that talks to Discord — connecting to its Gateway, registering slash commands, and receiving/sending messages. `openai` talks to GitHub Models' OpenAI-compatible endpoint for the default provider above; swap it for your provider's own package if you picked a different one. `python-dotenv` loads secrets from a local `.env` file.
+`discord.py` is the library that talks to Discord, connecting to its Gateway, registering slash commands, and receiving/sending messages. `openai` talks to GitHub Models' OpenAI-compatible endpoint for the default provider above; swap it for your provider's own package if you picked a different one. `python-dotenv` loads secrets from a local `.env` file.
 
 Create a `.env` file in the project folder (never commit this) with **both** secrets from this section:
 
@@ -122,11 +122,11 @@ GITHUB_TOKEN=your-llm-key-here
 
 ## Step 1: A fixed question bank and a basic slash command
 
-Start with the simplest possible question source — a plain Python list of dicts — and just enough Discord wiring to post one. Take it in three small sub-steps: build the bank, register the command, then verify.
+Start with the simplest possible question source, a plain Python list of dicts, and just enough Discord wiring to post one. Take it in three small sub-steps: build the bank, register the command, then verify.
 
 ### 1.1 Build the fixed question bank
 
-**👟 Starter hint:** Every question source in this project — the fixed bank now, the LLM generator in Step 3 — produces the same shape: `{"question": str, "options": list[str], "answer_index": int}`. Start by creating `questions.py` with a `QUESTION_BANK` list and a `random_question()` that returns one entry at random:
+**👟 Starter hint:** Every question source in this project, the fixed bank now, the LLM generator in Step 3, produces the same shape: `{"question": str, "options": list[str], "answer_index": int}`. Start by creating `questions.py` with a `QUESTION_BANK` list and a `random_question()` that returns one entry at random:
 
 ```python
 # questions.py
@@ -154,9 +154,9 @@ def random_question() -> dict:
     return random.choice(QUESTION_BANK)
 ```
 
-**🎯 Expected output:** `random_question()` returns one of the bank's dicts each call — run it a few times with `from questions import random_question; print(random_question())` and you should get different questions, not the same one every time.
+**🎯 Expected output:** `random_question()` returns one of the bank's dicts each call, run it a few times with `from questions import random_question; print(random_question())` and you should get different questions, not the same one every time.
 
-**🩹 If it's off:** A `NameError` means you forgot `import random` at the top of the file. If a question prints with a wrong or missing answer, check the shape: `answer_index` is zero-based and points *into* `options`, so "the answer" is `options[answer_index]` — a bank entry hand-written so the index doesn't match the right option looks perfectly fine while being permanently unanswerable.
+**🩹 If it's off:** A `NameError` means you forgot `import random` at the top of the file. If a question prints with a wrong or missing answer, check the shape: `answer_index` is zero-based and points *into* `options`, so "the answer" is `options[answer_index]`, a bank entry hand-written so the index doesn't match the right option looks perfectly fine while being permanently unanswerable.
 
 ### 1.2 Register a /trivia slash command
 
@@ -197,10 +197,10 @@ if __name__ == "__main__":
     client.run(os.environ["DISCORD_BOT_TOKEN"])
 ```
 
-`tree.sync()` is what actually publishes `/trivia` to Discord so it shows up when someone types `/` in your server — skip it and the command exists in your code but nowhere Discord's UI can find it.
+`tree.sync()` is what actually publishes `/trivia` to Discord so it shows up when someone types `/` in your server, skip it and the command exists in your code but nowhere Discord's UI can find it.
 
 :::tip[Slash commands need a second OAuth2 scope]
-A regular bot invite only needs the `bot` scope. Slash commands specifically need `applications.commands` too — if you generated your invite URL before adding `/trivia`, regenerate it with both scopes checked (see Setup above) or the command will silently never appear in your server.
+A regular bot invite only needs the `bot` scope. Slash commands specifically need `applications.commands` too, if you generated your invite URL before adding `/trivia`, regenerate it with both scopes checked (see Setup above) or the command will silently never appear in your server.
 :::
 
 **🎯 Expected output:** `uv run python bot.py` connects, prints `Logged in as trivia-bot#1234 -- ready in 1 server(s).`, and typing `/` in your server autocompletes `/trivia`. Sending it posts the question with its `A) ... B) ...` options.
@@ -263,13 +263,13 @@ def leaderboard_text(scores: dict, top_n: int = 10) -> str:
     return "\n".join(lines)
 ```
 
-**🎯 Expected output:** Calling `award_point(scores, ...)` twice for the same user id, then `leaderboard_text(scores)`, prints `1. <name> — 2`-style lines ordered by score, highest first.
+**🎯 Expected output:** Calling `award_point(scores, ...)` twice for the same user id, then `leaderboard_text(scores)`, prints `1. <name>, 2`-style lines ordered by score, highest first.
 
-**🩹 If it's off:** `award_point` returns the mutated dict precisely because `scores.get(key, default)` hands back the *default* entry without inserting it — if you forget to use the return value, `scores` never changes and the file never updates. And note why scores are keyed by `str(user_id)` rather than the display name: a nickname change shouldn't silently reset someone's score, which is exactly what a name-keyed dict would do.
+**🩹 If it's off:** `award_point` returns the mutated dict precisely because `scores.get(key, default)` hands back the *default* entry without inserting it, if you forget to use the return value, `scores` never changes and the file never updates. And note why scores are keyed by `str(user_id)` rather than the display name: a nickname change shouldn't silently reset someone's score, which is exactly what a name-keyed dict would do.
 
 ### 2.2 Test the storage standalone
 
-**👟 Starter hint:** Prove the piece works on its own first, before it's anywhere near `bot.py` — the same "test each module independently" pattern as every multi-part project:
+**👟 Starter hint:** Prove the piece works on its own first, before it's anywhere near `bot.py`, the same "test each module independently" pattern as every multi-part project:
 
 ```bash
 uv run python -c "
@@ -282,13 +282,13 @@ print(leaderboard_text(s))
 "
 ```
 
-**🎯 Expected output:** The snippet prints a leaderboard with Alice ranked above Bob — `1. Alice — 2`, `2. Bob — 1` — and a `scores.json` file appears in the project folder.
+**🎯 Expected output:** The snippet prints a leaderboard with Alice ranked above Bob, `1. Alice, 2`, `2. Bob, 1`, and a `scores.json` file appears in the project folder.
 
-**🩹 If it's off:** If it prints `No scores yet`, the `s = award_point(...)` return values are being dropped — reassign the returned dict each time. If it's a `KeyError` or the file lands somewhere unexpected, check `SCORES_PATH` resolves to the folder you're running from, so `scores.json` goes where `load_scores()` will later look for it.
+**🩹 If it's off:** If it prints `No scores yet`, the `s = award_point(...)` return values are being dropped, reassign the returned dict each time. If it's a `KeyError` or the file lands somewhere unexpected, check `SCORES_PATH` resolves to the folder you're running from, so `scores.json` goes where `load_scores()` will later look for it.
 
 ### 2.3 Add a /leaderboard slash command
 
-**👟 Starter hint:** Wire in a second slash command that just reads the file and posts the ranked text — no scoring yet, only the read path:
+**👟 Starter hint:** Wire in a second slash command that just reads the file and posts the ranked text, no scoring yet, only the read path:
 
 ```python
 @tree.command(name="leaderboard", description="Show the trivia leaderboard")
@@ -297,11 +297,11 @@ async def leaderboard_command(interaction: discord.Interaction) -> None:
     await interaction.response.send_message(f"**Leaderboard:**\n{leaderboard_text(scores)}")
 ```
 
-Nothing awards a point yet — `trivia_command` from Step 1 doesn't check answers at all — that's what Step 4's round loop adds. This step is deliberately just the storage half, tested and working on its own first.
+Nothing awards a point yet, `trivia_command` from Step 1 doesn't check answers at all, that's what Step 4's round loop adds. This step is deliberately just the storage half, tested and working on its own first.
 
 **🎯 Expected output:** `/leaderboard` replies with `No scores yet -- play a round with /trivia!` (nobody has scored anything yet), confirming the read path into `scores.json` works.
 
-**🩹 If it's off:** If the command errors instead, the `load_scores`/`leaderboard_text` import is missing or `scores.py` isn't on the same path as `bot.py` — keep both files in the project folder and import the functions by name at the top of `bot.py`.
+**🩹 If it's off:** If the command errors instead, the `load_scores`/`leaderboard_text` import is missing or `scores.py` isn't on the same path as `bot.py`, keep both files in the project folder and import the functions by name at the top of `bot.py`.
 
 ### 2.4 Verify score tracking
 
@@ -314,7 +314,7 @@ Nothing awards a point yet — `trivia_command` from Step 1 doesn't check answer
 **🤔 Socratic Question(s)**
 
 - Scores are keyed by `str(user_id)` rather than by the player's display name. What real scenario would break a name-keyed leaderboard that a user-id-keyed one survives?
-- `save_scores()` rewrites the entire file on every single point. For a small single-server bot this is fine — at what point would that stop being fine, and what would you reach for instead?
+- `save_scores()` rewrites the entire file on every single point. For a small single-server bot this is fine, at what point would that stop being fine, and what would you reach for instead?
 
 ## Step 3: Generate a fresh question on any topic with an LLM
 
@@ -322,7 +322,7 @@ The fixed bank in Step 1 only ever asks from the same handful of questions. This
 
 ### 3.1 Build the LLM question generator
 
-**👟 Starter hint:** Create `generate.py` using the `openai` client pointed at a free-tier provider's OpenAI-compatible endpoint. Ask for strict JSON in exactly the bank's shape — `{"question", "options", "answer_index"}` — then validate the structure before returning anything:
+**👟 Starter hint:** Create `generate.py` using the `openai` client pointed at a free-tier provider's OpenAI-compatible endpoint. Ask for strict JSON in exactly the bank's shape, `{"question", "options", "answer_index"}`, then validate the structure before returning anything:
 
 ```python
 # generate.py
@@ -368,15 +368,15 @@ def generate_question(topic: str) -> dict:
     return question
 ```
 
-The explicit shape check after parsing matters: `response_format={"type": "json_object"}` guarantees the LLM's output is *valid JSON*, not that it's the *right* JSON — it could still hand back three options instead of four, or omit `answer_index` entirely. Catching that here, with a clear error, beats discovering it later as a confusing Discord message with a missing option D.
+The explicit shape check after parsing matters: `response_format={"type": "json_object"}` guarantees the LLM's output is *valid JSON*, not that it's the *right* JSON, it could still hand back three options instead of four, or omit `answer_index` entirely. Catching that here, with a clear error, beats discovering it later as a confusing Discord message with a missing option D.
 
-**🎯 Expected output:** `uv run python -c "from generate import generate_question; print(generate_question('classic video games'))"` prints a dict with exactly 4 options and an `answer_index` in `0..3` — or raises a clear `ValueError`, never returning malformed data silently.
+**🎯 Expected output:** `uv run python -c "from generate import generate_question; print(generate_question('classic video games'))"` prints a dict with exactly 4 options and an `answer_index` in `0..3`, or raises a clear `ValueError`, never returning malformed data silently.
 
-**🩹 If it's off:** A `ValueError` here is the guard working — the model handed back the wrong shape (three options, or an out-of-range index) — so read the printed `question!r` and decide whether it's a one-off or a sign the prompt template needs tightening. A `json.decoder.JSONDecodeError` instead means the provider returned non-JSON despite `response_format` — some providers ignore that parameter, and you'd need to retry or parse more defensively.
+**🩹 If it's off:** A `ValueError` here is the guard working, the model handed back the wrong shape (three options, or an out-of-range index), so read the printed `question!r` and decide whether it's a one-off or a sign the prompt template needs tightening. A `json.decoder.JSONDecodeError` instead means the provider returned non-JSON despite `response_format`, some providers ignore that parameter, and you'd need to retry or parse more defensively.
 
 ### 3.2 Wire a topic through a shared pick_question
 
-**👟 Starter hint:** Rather than making `trivia_command` know about both sources, put a tiny `pick_question(topic)` in a new `round.py` that draws from the bank when no topic is given and calls the generator otherwise — one decision point shared by `bot.py` and the notebook:
+**👟 Starter hint:** Rather than making `trivia_command` know about both sources, put a tiny `pick_question(topic)` in a new `round.py` that draws from the bank when no topic is given and calls the generator otherwise, one decision point shared by `bot.py` and the notebook:
 
 ```python
 from round import pick_question  # combines random_question() and generate_question()
@@ -410,14 +410,14 @@ uv run python -c "from round import pick_question; print(pick_question())"
 uv run python -c "from round import pick_question; print(pick_question('classic video games'))"
 ```
 
-**🎯 Expected output:** The first command prints a question from the fixed bank; the second prints a freshly generated one about the topic you named — proof `topic` actually changes the source.
+**🎯 Expected output:** The first command prints a question from the fixed bank; the second prints a freshly generated one about the topic you named, proof `topic` actually changes the source.
 
-**🩹 If it's off:** If the no-topic call still hits the LLM, check the truthiness in `pick_question` — `if topic:` treats an empty string as "no topic", so keep the default as `None`, not the string `"None"`. If it works in the terminal but errors in Discord, the bot is still running the old `trivia_command` signature — restart it so the new `topic` parameter registers.
+**🩹 If it's off:** If the no-topic call still hits the LLM, check the truthiness in `pick_question`, `if topic:` treats an empty string as "no topic", so keep the default as `None`, not the string `"None"`. If it works in the terminal but errors in Discord, the bot is still running the old `trivia_command` signature, restart it so the new `topic` parameter registers.
 
 ### 3.3 Verify LLM question generation
 
 :::tip[Validate LLM-generated content before it reaches a live channel]
-An LLM asked for a trivia question can still get facts wrong, especially on obscure topics — there's no `try`/`except` that catches "confidently incorrect." The shape validation in `generate_question()` only guards against malformed *structure*; for a public server, skim a handful of generated questions on topics you actually know before trusting the mode on topics you don't.
+An LLM asked for a trivia question can still get facts wrong, especially on obscure topics, there's no `try`/`except` that catches "confidently incorrect." The shape validation in `generate_question()` only guards against malformed *structure*; for a public server, skim a handful of generated questions on topics you actually know before trusting the mode on topics you don't.
 :::
 
 **✅ Checklist**
@@ -433,7 +433,7 @@ An LLM asked for a trivia question can still get facts wrong, especially on obsc
 
 ## Step 4: A full trivia round loop
 
-Everything so far has been pieces tested in isolation: a question source, score storage, generation. This step wires them into what a round actually looks like live — post a question, wait for the first correct answer within a time limit, reveal it, update the leaderboard. Two sub-steps: `run_round`, then a thin command wrapper.
+Everything so far has been pieces tested in isolation: a question source, score storage, generation. This step wires them into what a round actually looks like live, post a question, wait for the first correct answer within a time limit, reveal it, update the leaderboard. Two sub-steps: `run_round`, then a thin command wrapper.
 
 ### 4.1 Write the round loop
 
@@ -493,17 +493,17 @@ async def run_round(channel: discord.abc.Messageable, topic: str | None = None) 
         await channel.send(f"⏰ Time's up! Nobody got it. The answer was **{correct_letter}) {correct_text}**.")
 ```
 
-`client.wait_for("message", check=..., timeout=...)` is `discord.py`'s way of pausing an `async` function until a specific kind of event happens — here, any message in the same channel whose content is exactly one of the valid answer letters. The `while` loop re-calls it with a shrinking `remaining` timeout so the round's *total* time budget is `ROUND_TIME_LIMIT`, not `ROUND_TIME_LIMIT` per wrong guess — without recalculating `remaining`, a channel full of eager wrong guesses could keep the round open indefinitely.
+`client.wait_for("message", check=..., timeout=...)` is `discord.py`'s way of pausing an `async` function until a specific kind of event happens, here, any message in the same channel whose content is exactly one of the valid answer letters. The `while` loop re-calls it with a shrinking `remaining` timeout so the round's *total* time budget is `ROUND_TIME_LIMIT`, not `ROUND_TIME_LIMIT` per wrong guess, without recalculating `remaining`, a channel full of eager wrong guesses could keep the round open indefinitely.
 
-Only the *first* correct answer scores; `break` as soon as `winner` is set. Wrong guesses get a ❌ reaction instead of an error message — free feedback without spamming the channel with replies.
+Only the *first* correct answer scores; `break` as soon as `winner` is set. Wrong guesses get a ❌ reaction instead of an error message, free feedback without spamming the channel with replies.
 
-**🎯 Expected output:** A round posts a question, the first correct letter reply wins and gets a point via `award_point()`, and letting the timer run out reveals the answer without crashing — with `ROUND_TIME_LIMIT` set small while you test.
+**🎯 Expected output:** A round posts a question, the first correct letter reply wins and gets a point via `award_point()`, and letting the timer run out reveals the answer without crashing, with `ROUND_TIME_LIMIT` set small while you test.
 
-**🩹 If it's off:** If the round never ends (or runs far past the limit), you're passing the fixed `ROUND_TIME_LIMIT` to `wait_for(...)` instead of the shrinking `remaining` value — every wrong guess restarts the full clock. If answers from other channels are stealing the round, the `message.channel == channel` check in `is_candidate_answer` is missing. If `check_answer` always returns False, verify the letter comparison normalizes case and that `answer_index` actually matches the question you posted.
+**🩹 If it's off:** If the round never ends (or runs far past the limit), you're passing the fixed `ROUND_TIME_LIMIT` to `wait_for(...)` instead of the shrinking `remaining` value, every wrong guess restarts the full clock. If answers from other channels are stealing the round, the `message.channel == channel` check in `is_candidate_answer` is missing. If `check_answer` always returns False, verify the letter comparison normalizes case and that `answer_index` actually matches the question you posted.
 
 ### 4.2 Make /trivia a thin wrapper
 
-**👟 Starter hint:** Turn `trivia_command` from Step 1 into a thin wrapper around `run_round` — an immediate "starting" message, then the round, wrapped so one failing round can't kill the whole bot:
+**👟 Starter hint:** Turn `trivia_command` from Step 1 into a thin wrapper around `run_round`, an immediate "starting" message, then the round, wrapped so one failing round can't kill the whole bot:
 
 ```python
 @tree.command(name="trivia", description="Start a trivia round, optionally on a topic")
@@ -518,9 +518,9 @@ async def trivia_command(interaction: discord.Interaction, topic: str | None = N
         await interaction.channel.send("Something went wrong running that round -- see the bot's console log.")
 ```
 
-**🎯 Expected output:** `/trivia` posts a `🎲 Starting a round...` message, then the question follows, the round resolves, and the leaderboard updates — and the bot stays connected even if that particular round throws.
+**🎯 Expected output:** `/trivia` posts a `🎲 Starting a round...` message, then the question follows, the round resolves, and the leaderboard updates, and the bot stays connected even if that particular round throws.
 
-**🩹 If it's off:** If the starting message appears but no question ever posts, `run_round` is being called but not *awaited* — a plain `run_round(...)` returns a coroutine that never runs. If one bad round takes the whole bot down with a traceback, the `try`/`except` around the call got dropped — but keep the `print`, so a swallowed error isn't silent either.
+**🩹 If it's off:** If the starting message appears but no question ever posts, `run_round` is being called but not *awaited*, a plain `run_round(...)` returns a coroutine that never runs. If one bad round takes the whole bot down with a traceback, the `try`/`except` around the call got dropped, but keep the `print`, so a swallowed error isn't silent either.
 
 ### 4.3 Verify the round loop
 
@@ -542,35 +542,35 @@ Set `ROUND_TIME_LIMIT = 5` while you're getting the loop right, so you're not wa
 
 ## Invite the bot and play a real round
 
-Using the OAuth2 URL you generated back in Setup (with both `bot` and `applications.commands` scopes), open it in a browser and pick a server you control — create a free test server if you don't already have one.
+Using the OAuth2 URL you generated back in Setup (with both `bot` and `applications.commands` scopes), open it in a browser and pick a server you control, create a free test server if you don't already have one.
 
 ```bash
 uv run python bot.py
 ```
 
-You should see `Logged in as trivia-bot#1234 -- ready in 1 server(s).` printed. In the test server, type `/trivia` and pick it from Discord's autocomplete menu — with or without a `topic`. Within a few seconds you should see the question posted, and after answering correctly (or letting the timer run out) the answer revealed and the leaderboard updated. Run `/leaderboard` any time to check scores without starting a new round.
+You should see `Logged in as trivia-bot#1234 -- ready in 1 server(s).` printed. In the test server, type `/trivia` and pick it from Discord's autocomplete menu, with or without a `topic`. Within a few seconds you should see the question posted, and after answering correctly (or letting the timer run out) the answer revealed and the leaderboard updated. Run `/leaderboard` any time to check scores without starting a new round.
 
 ## ⚠️ Common pitfalls
 
-- **Forgetting the "Message Content" privileged intent.** This has to be enabled in *two* places — `intents.message_content = True` in code, **and** the toggle under Bot → Privileged Gateway Intents in the Developer Portal. Miss the portal toggle and `message.content` is silently an empty string for every message, so `is_candidate_answer` never matches any reply no matter how it's typed.
+- **Forgetting the "Message Content" privileged intent.** This has to be enabled in *two* places, `intents.message_content = True` in code, **and** the toggle under Bot → Privileged Gateway Intents in the Developer Portal. Miss the portal toggle and `message.content` is silently an empty string for every message, so `is_candidate_answer` never matches any reply no matter how it's typed.
 - **Confusing the bot token with the OAuth2 client secret.** The Developer Portal shows both on different tabs. The bot token (Bot tab) is what `client.run(...)` needs; the client secret (OAuth2 tab) is for a completely different auth flow this project never uses. Pasting the client secret into `DISCORD_BOT_TOKEN` fails to log in with a confusing error.
 - **`/trivia` never showing up in Discord's UI.** Usually one of two causes: `tree.sync()` was never called (or wasn't awaited) in `on_ready`, or the bot's invite URL was generated before adding the `applications.commands` scope. Regenerate the invite URL with both scopes and re-invite the bot if the second one is the issue.
-- **Rate limits on the free LLM tier, worse with several rounds in a row.** Each `/trivia <topic>` call is a separate LLM request against your provider's free-tier quota, and a busy server running several rounds back-to-back can hit it faster than you'd expect from testing alone. A 429 error isn't a bug — add a short retry-with-backoff around `generate_question()`, or fall back to the fixed bank when generation fails.
-- **A round that never ends because `remaining` isn't recalculated.** If you copy the round loop but call `client.wait_for(..., timeout=ROUND_TIME_LIMIT)` (the fixed constant) instead of the shrinking `remaining` value, every wrong guess effectively restarts the clock — the round can run far longer than `ROUND_TIME_LIMIT` actually promises.
+- **Rate limits on the free LLM tier, worse with several rounds in a row.** Each `/trivia <topic>` call is a separate LLM request against your provider's free-tier quota, and a busy server running several rounds back-to-back can hit it faster than you'd expect from testing alone. A 429 error isn't a bug, add a short retry-with-backoff around `generate_question()`, or fall back to the fixed bank when generation fails.
+- **A round that never ends because `remaining` isn't recalculated.** If you copy the round loop but call `client.wait_for(..., timeout=ROUND_TIME_LIMIT)` (the fixed constant) instead of the shrinking `remaining` value, every wrong guess effectively restarts the clock, the round can run far longer than `ROUND_TIME_LIMIT` actually promises.
 
 ## What you just built
 
-A live Discord trivia bot with two question sources — a fixed bank and free-tier LLM generation on any topic — a full round loop with real timing, and a persistent per-player leaderboard that survives restarts. The question source, scoring, and round logic (`questions.py`, `generate.py`, `scores.py`, `round.py`) are all plain, `discord`-free Python, tested independently before ever touching a live channel; only `bot.py` knows Discord exists at all. That split is worth keeping in mind generally: the same four modules could sit behind a Slack bot, a web form, or a CLI game instead, with zero changes to any of them.
+A live Discord trivia bot with two question sources, a fixed bank and free-tier LLM generation on any topic, a full round loop with real timing, and a persistent per-player leaderboard that survives restarts. The question source, scoring, and round logic (`questions.py`, `generate.py`, `scores.py`, `round.py`) are all plain, `discord`-free Python, tested independently before ever touching a live channel; only `bot.py` knows Discord exists at all. That split is worth keeping in mind generally: the same four modules could sit behind a Slack bot, a web form, or a CLI game instead, with zero changes to any of them.
 
 ## Where to go from here
 
-- Add a **multi-round game mode** — `/trivia rounds:5` that plays several questions back-to-back and announces an overall winner at the end, instead of one question per command.
+- Add a **multi-round game mode**, `/trivia rounds:5` that plays several questions back-to-back and announces an overall winner at the end, instead of one question per command.
 - Track **difficulty or category tags** on generated questions (ask the LLM to include one in its JSON response) and let players pick a category with `/trivia topic:... difficulty:hard`.
-- Add a **per-server leaderboard** instead of one global `scores.json` — key `scores.json` by `(guild_id, user_id)` instead of just `user_id`, so two different Discord servers running this bot don't share a leaderboard.
-- Deploy the bot somewhere that stays up without your own laptop running — a small always-on VM, or a free tier on a platform like Railway or Fly.io — so it keeps hosting trivia nights even when you're not at your machine.
+- Add a **per-server leaderboard** instead of one global `scores.json`, key `scores.json` by `(guild_id, user_id)` instead of just `user_id`, so two different Discord servers running this bot don't share a leaderboard.
+- Deploy the bot somewhere that stays up without your own laptop running, a small always-on VM, or a free tier on a platform like Railway or Fly.io, so it keeps hosting trivia nights even when you're not at your machine.
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

@@ -14,9 +14,9 @@ prerequisites: ["Python 101"]
 
 # 🧾 Build an Invoice Generator
 
-Every freelancer and small business eventually faces the same task: turn a spreadsheet of work done into a professional invoice. This project builds a Python tool that takes structured invoice data — client info, line items with quantities and rates, tax percentages — and generates a polished PDF with calculated totals, invoice numbers, and due dates. You'll model the data, build the PDF renderer, and track payment status, all from the command line.
+Every freelancer and small business eventually faces the same task: turn a spreadsheet of work done into a professional invoice. This project builds a Python tool that takes structured invoice data, client info, line items with quantities and rates, tax percentages, and generates a polished PDF with calculated totals, invoice numbers, and due dates. You'll model the data, build the PDF renderer, and track payment status, all from the command line.
 
-This assumes Python 101 — nothing from Data Analysis is required. Optional and ungraded; see [Real-World Projects](/projects) for the full list.
+This assumes Python 101, nothing from Data Analysis is required. Optional and ungraded; see [Real-World Projects](/projects) for the full list.
 
 ## 🎯 What you'll do
 
@@ -29,7 +29,7 @@ This assumes Python 101 — nothing from Data Analysis is required. Optional and
 
 ## Where to run this
 
-**Locally with `uv`** is the primary path — this tool writes PDF files to disk, which requires a local filesystem.
+**Locally with `uv`** is the primary path, this tool writes PDF files to disk, which requires a local filesystem.
 
 **Google Colab, Kaggle Notebooks, and Binder** work for trying the tool. The notebook installs the same packages and generates sample invoices in the session.
 
@@ -143,7 +143,7 @@ class Invoice:
         return self.status == InvoiceStatus.SENT and date.today() > self.due_date
 ```
 
-The `@property` decorators make calculations feel like attributes — `invoice.total` instead of `invoice.calculate_total()`. The `is_overdue` property combines status and date: an invoice is only overdue if it's been sent and the due date has passed. A draft invoice can't be overdue because it hasn't been sent yet.
+The `@property` decorators make calculations feel like attributes, `invoice.total` instead of `invoice.calculate_total()`. The `is_overdue` property combines status and date: an invoice is only overdue if it's been sent and the due date has passed. A draft invoice can't be overdue because it hasn't been sent yet.
 
 **🎯 Expected output:** `LineItem("Consulting", 10, 150.0).total` returns `1500.0`. A `LineItem` with quantity 0 has total 0.
 
@@ -288,7 +288,7 @@ assert os.path.getsize("/tmp/test_invoice.pdf") > 1000  # non-trivial size
 
 **🎯 Expected output:** Both assertions pass; the PDF exists and is larger than 1 KB.
 
-**🩹 If it's off:** If the file is 0 bytes, `doc.build(elements)` may have failed silently — check for import errors.
+**🩹 If it's off:** If the file is 0 bytes, `doc.build(elements)` may have failed silently, check for import errors.
 
 ### 2.3 Verify PDF rendering
 
@@ -364,7 +364,7 @@ The JSON storage is simple but effective: each invoice is a file named `{invoice
 
 **🎯 Expected output:** `save_invoice(invoice)` creates `invoices/INV-001.json`. `load_invoice("INV-001")` returns an identical `Invoice` object.
 
-**🩹 If it's off:** If `load_invoice` fails with a `KeyError`, the JSON structure doesn't match the reconstruction code — check field names.
+**🩹 If it's off:** If `load_invoice` fails with a `KeyError`, the JSON structure doesn't match the reconstruction code, check field names.
 
 ### 3.2 Verify the tracker
 
@@ -486,11 +486,11 @@ if __name__ == "__main__":
     cli()
 ```
 
-The `create` command accepts items as a JSON string — compact for the command line but flexible for complex invoices. The `list` command shows a table of all invoices with overdue items marked with `*`. The `report` command aggregates totals by status.
+The `create` command accepts items as a JSON string, compact for the command line but flexible for complex invoices. The `list` command shows a table of all invoices with overdue items marked with `*`. The `report` command aggregates totals by status.
 
 **🎯 Expected output:** `uv run python -m invoicer.cli create --number INV-001 --client "Acme" --items '[{"desc":"Work","qty":10,"rate":150}]' --tax 0.1` creates a PDF and saves the invoice data.
 
-**🩹 If it's off:** If the JSON parsing fails, the items string isn't valid JSON — use double quotes for keys and values.
+**🩹 If it's off:** If the JSON parsing fails, the items string isn't valid JSON, use double quotes for keys and values.
 
 ### 4.2 End-to-end smoke test
 
@@ -556,6 +556,6 @@ An invoice generator that models invoice data as validated Python objects, rende
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

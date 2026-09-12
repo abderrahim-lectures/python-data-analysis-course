@@ -1,12 +1,12 @@
 ---
 title: "Construye un Visualizador de Rachas de Hábitos"
-description: "Rastrea check-ins diarios de hábitos localmente y renderiza un mapa de calor de calendario estilo grafo de contribuciones de GitHub, con pandas y matplotlib — sin ML, sin clave de API."
+description: "Rastrea check-ins diarios de hábitos localmente y renderiza un mapa de calor de calendario estilo grafo de contribuciones de GitHub, con pandas y matplotlib, sin ML, sin clave de API."
 ---
 
 
 # 📈 Construye un Visualizador de Rachas de Hábitos
 
-Este proyecto asume que te sientes cómodo con Python 101 — variables, funciones, leer y escribir archivos, bucles básicos. Algo de pandas y matplotlib de Análisis de Datos (`DataFrame`s, `.groupby()`, graficar un gráfico simple) hará que algunos pasos se sientan familiares, pero nada aquí necesita más que eso: no hay machine learning, ninguna API externa, y ningún dataset que descargar. Traes tus propios datos, un día a la vez.
+Este proyecto asume que te sientes cómodo con Python 101, variables, funciones, leer y escribir archivos, bucles básicos. Algo de pandas y matplotlib de Análisis de Datos (`DataFrame`s, `.groupby()`, graficar un gráfico simple) hará que algunos pasos se sientan familiares, pero nada aquí necesita más que eso: no hay machine learning, ninguna API externa, y ningún dataset que descargar. Traes tus propios datos, un día a la vez.
 
 Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
@@ -19,21 +19,21 @@ Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/es/proyec
 
 ## Dónde ejecutar esto
 
-Tres formas razonables de hacer este proyecto — elige la que se ajuste a tu configuración:
+Tres formas razonables de hacer este proyecto, elige la que se ajuste a tu configuración:
 
-- **Localmente con `uv` (recomendado).** Este proyecto tiene cero dependencias externas más allá de `pandas` y `matplotlib`, sin clave de API, sin GPU — tan libre de fricción como puede llegar a ser "un proyecto Python real en tu propia máquina". Los Pasos 1–4 de abajo asumen este camino, y tu registro de check-ins vive como un archivo CSV simple al que sigues añadiendo con el tiempo.
-- **GitHub Codespaces.** Abre [codespaces.new/abderrahim-lectures/python-data-analysis-course](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) para obtener un entorno de desarrollo en la nube con Node, Python, y `uv` ya instalados (mira [`.devcontainer/devcontainer.json`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/.devcontainer/devcontainer.json)) — exactamente los mismos comandos de abajo funcionan desde una pestaña del navegador, sin instalación local en absoluto.
+- **Localmente con `uv` (recomendado).** Este proyecto tiene cero dependencias externas más allá de `pandas` y `matplotlib`, sin clave de API, sin GPU, tan libre de fricción como puede llegar a ser "un proyecto Python real en tu propia máquina". Los Pasos 1–4 de abajo asumen este camino, y tu registro de check-ins vive como un archivo CSV simple al que sigues añadiendo con el tiempo.
+- **GitHub Codespaces.** Abre [codespaces.new/abderrahim-lectures/python-data-analysis-course](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) para obtener un entorno de desarrollo en la nube con Node, Python, y `uv` ya instalados (mira [`.devcontainer/devcontainer.json`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/.devcontainer/devcontainer.json)), exactamente los mismos comandos de abajo funcionan desde una pestaña del navegador, sin instalación local en absoluto.
 - **Google Colab, Kaggle Notebooks, o Binder.** Un ajuste genuinamente bueno: nada aquí necesita GPU ni clave de API, y todo el pipeline (cargar un registro, calcular rachas, construir una cuadrícula, renderizar un mapa de calor) cabe cómodamente en unas pocas celdas de notebook contra los datos de muestra incluidos del curso.
 
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/habit-streak-visualizer/notebook.es.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/habit-streak-visualizer/notebook.es.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fhabit-streak-visualizer%2Fnotebook.es.ipynb)
 
-  Sé honesto contigo mismo sobre la compensación, sin embargo: un notebook es una forma de menor fidelidad de experimentar este proyecto que un proyecto `uv` local real con su propio `checkins.csv` al que añades día tras día — trátalo como una forma rápida de explorar el código, no el camino principal.
+  Sé honesto contigo mismo sobre la compensación, sin embargo: un notebook es una forma de menor fidelidad de experimentar este proyecto que un proyecto `uv` local real con su propio `checkins.csv` al que añades día tras día, trátalo como una forma rápida de explorar el código, no el camino principal.
 
 ## Configuración
 
-`uv` es una sola herramienta que reemplaza la cadena habitual de "instala Python, luego instala pip, luego instala una herramienta de entorno virtual, luego instala paquetes" — puede instalar y gestionar versiones de Python por sí misma, junto con las dependencias de tu proyecto.
+`uv` es una sola herramienta que reemplaza la cadena habitual de "instala Python, luego instala pip, luego instala una herramienta de entorno virtual, luego instala paquetes", puede instalar y gestionar versiones de Python por sí misma, junto con las dependencias de tu proyecto.
 
 **macOS / Linux** (terminal):
 
@@ -61,14 +61,14 @@ cd habit-streak-visualizer
 uv add pandas matplotlib
 ```
 
-No se necesita ninguna clave de API en ningún lugar de este proyecto — todo corre sobre datos que viven completamente en tu propia máquina.
+No se necesita ninguna clave de API en ningún lugar de este proyecto, todo corre sobre datos que viven completamente en tu propia máquina.
 
 ## Paso 1: Diseña el registro de check-ins y un CLI para escribirlo
 ### 1.1 El registro es un CSV simple con tres columnas: `date`, `habit`, `done`. Una fila por check-...
 
 **👟 Pista inicial :**
 
-El registro es un CSV simple con tres columnas: `date`, `habit`, `done`. Una fila por check-in. Un archivo plano como este — en lugar de, digamos, un archivo separado por hábito — significa que varios hábitos pueden compartir un registro y aún así filtrarse independientemente con indexado booleano ordinario de pandas más adelante.
+El registro es un CSV simple con tres columnas: `date`, `habit`, `done`. Una fila por check-in. Un archivo plano como este, en lugar de, digamos, un archivo separado por hábito, significa que varios hábitos pueden compartir un registro y aún así filtrarse independientemente con indexado booleano ordinario de pandas más adelante.
 
 ```python
 # log.py
@@ -154,7 +154,7 @@ Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
 
 **✅ Lista de verificación**
 
-- ✅ Ejecutar `checkin.py` dos veces para el mismo hábito y fecha, una vez "y" y una vez "n", deja el registro con ambas filas — necesitarás decidir (siguiente paso) cuál gana.
+- ✅ Ejecutar `checkin.py` dos veces para el mismo hábito y fecha, una vez "y" y una vez "n", deja el registro con ambas filas, necesitarás decidir (siguiente paso) cuál gana.
 - ✅ Abrir `checkins.csv` en un editor de texto muestra exactamente tres columnas, una fila por check-in, legible por humanos.
 - ✅ Puedes registrar un check-in para una fecha pasada con `--date` y `--done`, sin el prompt interactivo.
 
@@ -167,8 +167,8 @@ Si registras el mismo hábito dos veces para la misma fecha (una vez por error, 
 
 **👟 Pista inicial :**
 
-Una racha es una serie de *días calendario consecutivos* registrados como hechos, sin brecha. La decisión de diseño importante: un día que nunca se registró en absoluto se trata exactamente igual que un día explícitamente registrado como "n" — ambos rompen la racha. Eso es más simple que añadir un tercer estado "desconocido", al costo de castigar el olvido de registrar de la misma forma que realmente saltarse el hábito.
-Leer un registro disperso (solo los días que alguien se molestó en registrar) tiene que convertirse en una serie *densa* día a día antes de que las rachas tengan sentido — de lo contrario, una brecha en el registro se ve idéntica a una ruptura genuina, pero no puedes saber en qué día ocurrió sin un calendario completo contra el cual comparar:
+Una racha es una serie de *días calendario consecutivos* registrados como hechos, sin brecha. La decisión de diseño importante: un día que nunca se registró en absoluto se trata exactamente igual que un día explícitamente registrado como "n", ambos rompen la racha. Eso es más simple que añadir un tercer estado "desconocido", al costo de castigar el olvido de registrar de la misma forma que realmente saltarse el hábito.
+Leer un registro disperso (solo los días que alguien se molestó en registrar) tiene que convertirse en una serie *densa* día a día antes de que las rachas tengan sentido, de lo contrario, una brecha en el registro se ve idéntica a una ruptura genuina, pero no puedes saber en qué día ocurrió sin un calendario completo contra el cual comparar:
 
 ```python
 import pandas as pd
@@ -211,7 +211,7 @@ def compute_streaks(daily: pd.Series) -> dict:
         "total_days": len(daily),
     }
 ```
-`current_streak` es la serie que termina en el *último* día de la serie (hoy, si tu registro está actualizado) — se resetea a 0 en el momento en que revisas el día después de una falla. `longest_streak` es la mejor serie en cualquier parte de todo el historial, que obviamente puede ser mucho más grande, y nunca se encoge.
+`current_streak` es la serie que termina en el *último* día de la serie (hoy, si tu registro está actualizado), se resetea a 0 en el momento en que revisas el día después de una falla. `longest_streak` es la mejor serie en cualquier parte de todo el historial, que obviamente puede ser mucho más grande, y nunca se encoge.
 :::tip[`current_streak` necesita un registro actualizado para significar algo]
 Si aún no has registrado hoy, el último día de `daily` es `False` por defecto (del relleno de `reindex`), así que `current_streak` reporta 0 incluso si ayer extendió una racha real. O registra cada día antes de revisar tu racha, o calcula `current_streak` contra ayer en lugar de "la última fila en la serie" si quieres que tolere que hoy aún no esté registrado.
 :::
@@ -228,7 +228,7 @@ Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
 
 **✅ Lista de verificación**
 
-- ✅ `daily.index` contiene cada día calendario entre tu primera y última entrada de registro, sin brechas — `len(daily)` coincide exactamente con ese conteo de días.
+- ✅ `daily.index` contiene cada día calendario entre tu primera y última entrada de registro, sin brechas, `len(daily)` coincide exactamente con ese conteo de días.
 - ✅ Contar manualmente una serie conocida de días "y" consecutivos en tu registro de prueba coincide con lo que `compute_streaks` reporta para `longest_streak`.
 - ✅ Registrar un "n" (o saltarse un día) resetea `current_streak` a 0 la próxima vez que lo calculas.
 
@@ -243,7 +243,7 @@ Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
 
 Este es el verdadero momento educativo del proyecto. Un grafo de contribuciones de GitHub es una cuadrícula: siete filas (una por día de la semana) por las columnas que un año necesite (aproximadamente 52-53), leídas de arriba a abajo y luego de izquierda a derecha. Convertir una lista simple de fechas en ese diseño 2D toma dos piezas de aritmética de fechas:
 **La fila** es solo el día de la semana: `date.weekday()` devuelve 0 para lunes hasta 6 para domingo, directamente usable como índice de fila.
-**La columna** es la parte complicada. El atajo tentador es `date.isocalendar()[1]`, el número de semana ISO — pero los números de semana ISO se resetean a 1 cada enero. Un registro de hábito que abarca un límite de año (digamos, diciembre a enero) tendría fechas de finales de diciembre y principios de enero cayendo en los *mismos números de semana bajos*, revolviendo la cuadrícula en columnas superpuestas en lugar de una línea de tiempo limpia de izquierda a derecha. La solución: elige una fecha de anclaje fija — el lunes en o antes del primer día registrado — y calcula cada columna como un desplazamiento de días simple desde ese ancla:
+**La columna** es la parte complicada. El atajo tentador es `date.isocalendar()[1]`, el número de semana ISO, pero los números de semana ISO se resetean a 1 cada enero. Un registro de hábito que abarca un límite de año (digamos, diciembre a enero) tendría fechas de finales de diciembre y principios de enero cayendo en los *mismos números de semana bajos*, revolviendo la cuadrícula en columnas superpuestas en lugar de una línea de tiempo limpia de izquierda a derecha. La solución: elige una fecha de anclaje fija, el lunes en o antes del primer día registrado, y calcula cada columna como un desplazamiento de días simple desde ese ancla:
 
 ```python
 import numpy as np
@@ -261,7 +261,7 @@ def build_grid(daily: pd.Series):
 
     return grid, dates
 ```
-`(dates - anchor).days // 7` solo aumenta — no le importa si el registro abarca uno o cinco años. Las celdas que caen fuera del rango de registro real (porque el primer día registrado no es necesariamente un lunes, o el último no es necesariamente un domingo) se dejan como `NaN`, para que puedan dibujarse de forma diferente a un día genuinamente "perdido" en el siguiente paso.
+`(dates - anchor).days // 7` solo aumenta, no le importa si el registro abarca uno o cinco años. Las celdas que caen fuera del rango de registro real (porque el primer día registrado no es necesariamente un lunes, o el último no es necesariamente un domingo) se dejan como `NaN`, para que puedan dibujarse de forma diferente a un día genuinamente "perdido" en el siguiente paso.
 
 **🎯 Resultado esperado :**
 
@@ -276,19 +276,19 @@ Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
 **✅ Lista de verificación**
 
 - ✅ `grid.shape[0]` es exactamente 7 (una fila por día de la semana), sin importar cuán largo sea el rango de fechas.
-- ✅ Alimentar a `build_grid` un rango de fechas que cruza un 1 de enero *no* produce dos grupos de columnas con números de semana bajos — las columnas aumentan de forma constante a través del límite.
+- ✅ Alimentar a `build_grid` un rango de fechas que cruza un 1 de enero *no* produce dos grupos de columnas con números de semana bajos, las columnas aumentan de forma constante a través del límite.
 - ✅ Las primeras y últimas pocas celdas en la cuadrícula (antes del primer día registrado, después del último) son `NaN`, no `0`.
 
 **🤔 Pregunta(s) socrática(s)**
 
-El propio grafo de contribuciones de GitHub comienza las semanas en domingo, no lunes. ¿Qué necesitarías cambiar en `build_grid` para coincidir con esa convención — y cambiaría en qué *columna* cae una fecha dada, en qué *fila*, o ambas?
+El propio grafo de contribuciones de GitHub comienza las semanas en domingo, no lunes. ¿Qué necesitarías cambiar en `build_grid` para coincidir con esa convención, y cambiaría en qué *columna* cae una fecha dada, en qué *fila*, o ambas?
 
 ## Paso 4: Renderízalo como un mapa de calor
-### 4.1 La intensidad del color no debería ser solo binaria (hecho/no hecho) — un día que es el núme...
+### 4.1 La intensidad del color no debería ser solo binaria (hecho/no hecho), un día que es el núme...
 
 **👟 Pista inicial :**
 
-La intensidad del color no debería ser solo binaria (hecho/no hecho) — un día que es el número 15 en una fila de una racha debería leerse como visualmente diferente del primer día de una nueva racha, aunque ambos sean "hecho." Calcula la intensidad como una función de la longitud de la racha *actual* en cada día, limitada para que no siga oscureciéndose para siempre:
+La intensidad del color no debería ser solo binaria (hecho/no hecho), un día que es el número 15 en una fila de una racha debería leerse como visualmente diferente del primer día de una nueva racha, aunque ambos sean "hecho." Calcula la intensidad como una función de la longitud de la racha *actual* en cada día, limitada para que no siga oscureciéndose para siempre:
 
 ```python
 def streak_intensity(daily: pd.Series, cap: int = 10) -> list[float]:
@@ -311,7 +311,7 @@ Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
 
 **👟 Pista inicial :**
 
-Alimenta eso a `build_grid` en lugar del relleno simple de 0/1, luego renderiza con matplotlib — una rampa secuencial de un solo matiz (azul claro a oscuro), no un arcoíris, ya que esto es una magnitud continua, no varias categorías:
+Alimenta eso a `build_grid` en lugar del relleno simple de 0/1, luego renderiza con matplotlib, una rampa secuencial de un solo matiz (azul claro a oscuro), no un arcoíris, ya que esto es una magnitud continua, no varias categorías:
 
 ```python
 import matplotlib.pyplot as plt
@@ -341,11 +341,11 @@ Deberías ver la salida esperada sin errores.
 
 Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
 
-### 4.3 La versión completa — con etiquetas de mes a lo largo del eje x y líneas de cuadrícula entre...
+### 4.3 La versión completa, con etiquetas de mes a lo largo del eje x y líneas de cuadrícula entre...
 
 **👟 Pista inicial :**
 
-La versión completa — con etiquetas de mes a lo largo del eje x y líneas de cuadrícula entre celdas — vive en [`examples/habit-streak-visualizer/heatmap.py`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/habit-streak-visualizer/heatmap.py). Ejecútala contra los datos de muestra incluidos (varios meses, dos hábitos, rachas reales y una caída real) para ver la imagen completa inmediatamente, sin registrar nada a mano primero:
+La versión completa, con etiquetas de mes a lo largo del eje x y líneas de cuadrícula entre celdas, vive en [`examples/habit-streak-visualizer/heatmap.py`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/habit-streak-visualizer/heatmap.py). Ejecútala contra los datos de muestra incluidos (varios meses, dos hábitos, rachas reales y una caída real) para ver la imagen completa inmediatamente, sin registrar nada a mano primero:
 
 ```bash
 uv run python visualize.py --habit "Exercise"
@@ -378,26 +378,26 @@ Si rastrearas dos hábitos y quisieras compararlos uno al lado del otro, ¿prefe
 
 - **Errores de desfase por uno en día de la semana/fecha.** `date.weekday()` está indexado desde 0 empezando el lunes; `date.isoweekday()` está indexado desde 1 empezando el lunes; `date.strftime("%w")` está indexado desde 0 empezando el *domingo*. Confundir estos es la forma más fácil de terminar con una cuadrícula sutilmente desplazada por una fila.
 - **Problemas de zona horaria de `datetime.now()`.** Si tu CLI calcula "hoy" con `datetime.now()` en lugar de `date.today()`, un check-in registrado tarde en la noche puede caer en el día calendario equivocado dependiendo de la zona horaria de la máquina, especialmente si alguna vez ejecutas el script desde una zona horaria diferente (o un notebook en la nube, que muy probablemente es UTC). Quédate con objetos `date` simples para cualquier cosa que se supone que represente un día calendario en lugar de un momento en el tiempo.
-- **Errores de límite de año en el diseño de la cuadrícula**, cubiertos en el Paso 3 — usar el número de semana de `isocalendar()` directamente como una columna de cuadrícula en lugar de un desplazamiento de día de anclaje fijo. Prueba esto explícitamente con un rango de fechas que cruce un 1 de enero, ya que es fácil escribir código que se vea correcto contra un solo año de datos de muestra y solo se rompe una vez que el rango abarca dos.
-- **Olvidar `drop_duplicates(..., keep="last")`** al cargar el registro — si un hábito/fecha se registra dos veces (una corrección genuina, o una ejecución doble accidental del CLI), dejar ambas filas significa que un `.groupby()` o reindex posterior puede elegir silenciosamente cualquiera que haya llegado primero, no la respuesta final pretendida.
+- **Errores de límite de año en el diseño de la cuadrícula**, cubiertos en el Paso 3, usar el número de semana de `isocalendar()` directamente como una columna de cuadrícula en lugar de un desplazamiento de día de anclaje fijo. Prueba esto explícitamente con un rango de fechas que cruce un 1 de enero, ya que es fácil escribir código que se vea correcto contra un solo año de datos de muestra y solo se rompe una vez que el rango abarca dos.
+- **Olvidar `drop_duplicates(..., keep="last")`** al cargar el registro, si un hábito/fecha se registra dos veces (una corrección genuina, o una ejecución doble accidental del CLI), dejar ambas filas significa que un `.groupby()` o reindex posterior puede elegir silenciosamente cualquiera que haya llegado primero, no la respuesta final pretendida.
 
 ## Lo que acabas de construir
 
-Una pequeña herramienta local con dos piezas reales y separables: una capa de persistencia de datos (CSV de solo añadir, deduplicado al cargar) y una visualización de cuadrícula de calendario desde cero, del tipo que normalmente está oculto detrás de una llamada a librería. Construir el diseño de la cuadrícula tú mismo — en lugar de importar un paquete de "mapa de calor de GitHub" ya hecho — es lo que hace que la aritmética de fechas del Paso 3 realmente se quede: la diferencia entre un número de semana ISO y un desplazamiento de día de anclaje fijo es un bug real con el que te encontrarías en cualquier proyecto que distribuya datos de series temporales en un calendario, no solo este.
+Una pequeña herramienta local con dos piezas reales y separables: una capa de persistencia de datos (CSV de solo añadir, deduplicado al cargar) y una visualización de cuadrícula de calendario desde cero, del tipo que normalmente está oculto detrás de una llamada a librería. Construir el diseño de la cuadrícula tú mismo, en lugar de importar un paquete de "mapa de calor de GitHub" ya hecho, es lo que hace que la aritmética de fechas del Paso 3 realmente se quede: la diferencia entre un número de semana ISO y un desplazamiento de día de anclaje fijo es un bug real con el que te encontrarías en cualquier proyecto que distribuya datos de series temporales en un calendario, no solo este.
 
 :::tip[Este mismo formato de registro escala a más que un mapa de calor]
-Nada sobre `checkins.csv` es específico de mapa de calor — es solo un registro de eventos con fecha. El mismo archivo podría alimentar un gráfico de barras de tasa de finalización semanal, un resumen mensual con `.groupby(df["date"].dt.month)`, o una cuenta regresiva simple de "cuántos días hasta que supere mi racha más larga". El mapa de calor es una vista sobre datos que son útiles en bastantes otras formas también.
+Nada sobre `checkins.csv` es específico de mapa de calor, es solo un registro de eventos con fecha. El mismo archivo podría alimentar un gráfico de barras de tasa de finalización semanal, un resumen mensual con `.groupby(df["date"].dt.month)`, o una cuenta regresiva simple de "cuántos días hasta que supere mi racha más larga". El mapa de calor es una vista sobre datos que son útiles en bastantes otras formas también.
 :::
 
 ## A dónde ir desde aquí
 
 - **Múltiples hábitos lado a lado.** Extiende `visualize.py` para renderizar un mapa de calor por hábito, apilados en una sola figura con `plt.subplots(nrows=...)`, para que puedas comparar la consistencia entre hábitos de un vistazo.
-- **Una versión ASCII solo de terminal.** Salta matplotlib por completo e imprime la cuadrícula como bloques Unicode coloreados (`░▒▓█` o colores de fondo ANSI) directamente a la terminal — exactamente la misma lógica de diseño de cuadrícula del Paso 3, solo un renderizador diferente, y una buena forma de revisar tu racha sin abrir una imagen.
+- **Una versión ASCII solo de terminal.** Salta matplotlib por completo e imprime la cuadrícula como bloques Unicode coloreados (`░▒▓█` o colores de fondo ANSI) directamente a la terminal, exactamente la misma lógica de diseño de cuadrícula del Paso 3, solo un renderizador diferente, y una buena forma de revisar tu racha sin abrir una imagen.
 - **Exportar como una imagen compartible.** `fig.savefig(..., dpi=300)` para un PNG nítido, o conecta un pequeño script que regenere el mapa de calor automáticamente después de cada ejecución de `checkin.py`, para que siempre haya una imagen actualizada lista para compartir.
 
 ## Comparte tu proyecto con la clase
 
-¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado — y su README tiene un recorrido completo y amigable para principiantes sobre cómo agregar el tuyo vía un **pull request**, incluso si nunca has usado git antes: hacer fork del repositorio, crear una rama, confirmar tus archivos, y abrir el PR, un paso a la vez. No se asume experiencia previa con git.
+¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado, y su README tiene un recorrido completo y amigable para principiantes sobre cómo agregar el tuyo vía un **pull request**, incluso si nunca has usado git antes: hacer fork del repositorio, crear una rama, confirmar tus archivos, y abrir el PR, un paso a la vez. No se asume experiencia previa con git.
 
 Bienvenido a escribir Python fuera del navegador. 🎓
 

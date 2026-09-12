@@ -31,7 +31,7 @@ open("file.txt", "a")   # ajout (ajoute à la fin)
 open("file.txt", "x")   # création (erreur si le fichier existe)
 ```
 
-`"w"` jette l'ancien contenu à l'instant où il ouvre ; `"a"` le garde et raccroche à la fin ; `"x"` refuse de toucher un fichier qui existe déjà. Choisissez le mode qui énonce ce que vous voulez vraiment — le fichier est détruit ou préservé selon ce choix.
+`"w"` jette l'ancien contenu à l'instant où il ouvre ; `"a"` le garde et raccroche à la fin ; `"x"` refuse de toucher un fichier qui existe déjà. Choisissez le mode qui énonce ce que vous voulez vraiment, le fichier est détruit ou préservé selon ce choix.
 
 ## Écrire des fichiers texte
 
@@ -47,7 +47,7 @@ with open("output.txt", "w") as f:
     f.writelines(lines)
 ```
 
-`write` livre une chaîne à la fois ; `writelines` livre toute une liste en un appel. Les deux respectent le même contrat `with` que vous connaissez déjà — quand le bloc se termine, le fichier est vidé et fermé. Remarquez le `\n` qui se glisse dans chaque chaîne écrite — le saut de ligne n'est pas ajouté pour vous, seulement stocké.
+`write` livre une chaîne à la fois ; `writelines` livre toute une liste en un appel. Les deux respectent le même contrat `with` que vous connaissez déjà, quand le bloc se termine, le fichier est vidé et fermé. Remarquez le `\n` qui se glisse dans chaque chaîne écrite, le saut de ligne n'est pas ajouté pour vous, seulement stocké.
 
 ## Ajouter
 
@@ -62,7 +62,7 @@ Le mode ajout fait du fichier un accumulateur : chaque exécution ajoute une lig
 
 ## Travailler avec CSV
 
-Un CSV est une table sur un fil : lignes séparées par des sauts de ligne, cellules séparées par des virgules. Le module `csv` possède les parties délicates — guillemets, échappement des délimiteurs, fins de ligne :
+Un CSV est une table sur un fil : lignes séparées par des sauts de ligne, cellules séparées par des virgules. Le module `csv` possède les parties délicates, guillemets, échappement des délimiteurs, fins de ligne :
 
 ```python
 import csv
@@ -82,7 +82,7 @@ with open("data.csv") as f:
         print(f"{row[0]}: {row[1]}")
 ```
 
-L'écrivain accepte une liste par ligne et insère les virgules ; le lecteur reparse chaque ligne en une liste. `next(reader)` enlève la ligne d'en-tête, et l'itération continue avec les données — la même marche que vous connaissez, sur un fichier dont les lignes sont des structures.
+L'écrivain accepte une liste par ligne et insère les virgules ; le lecteur reparse chaque ligne en une liste. `next(reader)` enlève la ligne d'en-tête, et l'itération continue avec les données, la même marche que vous connaissez, sur un fichier dont les lignes sont des structures.
 
 ## DictReader et DictWriter
 
@@ -104,7 +104,7 @@ with open("output.csv", "w", newline="") as f:
     writer.writerow({"Name": "Charlie", "Score": 88})
 ```
 
-`DictReader` lit l'en-tête et transforme chaque ligne suivante en un dict indexé par elle ; `DictWriter` fait l'inverse — déclarez les `fieldnames`, écrivez l'en-tête, puis nourrissez-le de dicts dont les valeurs atterrissent sous leurs colonnes nommées.
+`DictReader` lit l'en-tête et transforme chaque ligne suivante en un dict indexé par elle ; `DictWriter` fait l'inverse, déclarez les `fieldnames`, écrivez l'en-tête, puis nourrissez-le de dicts dont les valeurs atterrissent sous leurs colonnes nommées.
 
 ## Pathlib pour écrire
 
@@ -124,7 +124,7 @@ Path("data/logs").mkdir(parents=True, exist_ok=True)
 
 ## Un exemple travaillé : le carnet de notes, versé en CSV
 
-La correspondance va au disque comme un tableau — l'en-tête d'abord, puis une ligne par entrée :
+La correspondance va au disque comme un tableau, l'en-tête d'abord, puis une ligne par entrée :
 
 ```python
 import csv
@@ -144,24 +144,24 @@ Les `items()` du dict deviennent les lignes ; l'en-tête nomme les colonnes. `ne
 
 - **`"w"` écrase en silence.** L'ancien fichier est parti à l'instant où le mode ouvre. Si le passé compte, choisissez `"a"`.
 - **Oublier `newline=""` en CSV.** Sur Windows l'écrivain double les fins de ligne sauf si vous épinglez `newline=""` ; des lignes vides apparaissent entre les données.
-- **Sauter `writeheader()`.** Un `DictWriter` nourri de dicts n'écrit aucune ligne d'en-tête si vous ne l'appelez pas — les lecteurs perdent leurs clés.
-- **`writerow` prend une séquence — et une chaîne est une séquence de caractères.** `writer.writerow("Alice")` éparpille `A,l,i,c,e` dans cinq cellules. Enveloppez la valeur dans une liste quand le champ est une seule chaîne.
+- **Sauter `writeheader()`.** Un `DictWriter` nourri de dicts n'écrit aucune ligne d'en-tête si vous ne l'appelez pas, les lecteurs perdent leurs clés.
+- **`writerow` prend une séquence, et une chaîne est une séquence de caractères.** `writer.writerow("Alice")` éparpille `A,l,i,c,e` dans cinq cellules. Enveloppez la valeur dans une liste quand le champ est une seule chaîne.
 
 ## 🧩 Défis
 
 <details class="challenge">
-<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
+<summary>🧩 Défi, réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
 Écrivez une fonction qui prend une liste de nombres et les écrit dans un fichier, un par ligne.
 
-<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>with open("nums.txt", "w") as f: for n in nums: f.write(f"{n}\n")</code> — une chaîne par nombre, chacune finissant par son saut de ligne.</p>
+<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>with open("nums.txt", "w") as f: for n in nums: f.write(f"{n}\n")</code>, une chaîne par nombre, chacune finissant par son saut de ligne.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
+<summary>🧩 Défi, réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
 Lisez un CSV de notes d'étudiants et imprimez la moyenne.
@@ -174,7 +174,7 @@ Lisez un CSV de notes d'étudiants et imprimez la moyenne.
 ## 🤔 Questions socratiques
 
 - Pourquoi l'écriture CSV a-t-elle besoin de `newline=""` sous Windows mais pas sous Linux ? Que se passe-t-il sous le capot ?
-- Où gît la différence entre `csv.writer` et `csv.DictWriter` — et quand tendez-vous la main vers chacun ?
+- Où gît la différence entre `csv.writer` et `csv.DictWriter`, et quand tendez-vous la main vers chacun ?
 - Si le CSV sera ouvert dans Excel, quelles précautions supplémentaires devriez-vous prendre ?
 
 ## ✅ Vérification rapide

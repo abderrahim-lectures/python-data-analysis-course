@@ -1,6 +1,6 @@
 ---
 title: "Listas y tuplas"
-description: "Domina las secuencias ordenadas de Python — listas mutables y tuplas inmutables."
+description: "Domina las secuencias ordenadas de Python, listas mutables y tuplas inmutables."
 module: "data-structures"
 order: 15
 difficulty: "beginner"
@@ -31,7 +31,7 @@ print(fruits[-1])      # cherry
 print(fruits[0:2])     # ['apple', 'banana']
 ```
 
-Indexar desde $0$, índices negativos contando hacia atrás, rebanadas tomando ventanas — las mismas tres habilidades, ahora apuntadas a una colección de objetos cualesquiera. Donde una cadena estaba congelada, la lista es arcilla.
+Indexar desde $0$, índices negativos contando hacia atrás, rebanadas tomando ventanas, las mismas tres habilidades, ahora apuntadas a una colección de objetos cualesquiera. Donde una cadena estaba congelada, la lista es arcilla.
 
 ## El arsenal de la lista
 
@@ -49,11 +49,11 @@ nums.reverse()       # invierte en su sitio
 len(nums)            # longitud actual
 ```
 
-`append` añade un ítem al final; `extend` vierte una secuencia entera; `insert` desliza uno en una posición elegida. `pop` retira del final (o de un índice dado) y te entrega el valor retirado; `remove` borra el primer ítem coincidente. La lista es el primo mutable de caballos de trabajo como la expansión decimal de $\pi$ — una cuerda creciente de valores que sigues editando.
+`append` añade un ítem al final; `extend` vierte una secuencia entera; `insert` desliza uno en una posición elegida. `pop` retira del final (o de un índice dado) y te entrega el valor retirado; `remove` borra el primer ítem coincidente. La lista es el primo mutable de caballos de trabajo como la expansión decimal de $\pi$, una cuerda creciente de valores que sigues editando.
 
 ## Listas de listas: tablas y matrices
 
-Los elementos de una lista pueden ser a su vez listas, lo que convierte una secuencia plana en una tabla — una matriz es una lista de filas, y cada fila es una lista de números:
+Los elementos de una lista pueden ser a su vez listas, lo que convierte una secuencia plana en una tabla, una matriz es una lista de filas, y cada fila es una lista de números:
 
 ```python
 matrix = [
@@ -77,11 +77,11 @@ result = nums.sort()   # ¡result es None! nums ahora es [1, 2, 3]
 result = sorted(nums)  # result es [1, 2, 3], nums sin cambios
 ```
 
-`nums.sort()` reordena en su sitio y no devuelve nada — el valor de tu expresión es `None`. `sorted(nums)` calcula una lista nueva y ordenada y deja `nums` intacta. El nombre es la señal: verbos como `sort` y `reverse` tocan el objeto; `sorted` y `list.copy()` producen una copia para un nuevo dueño.
+`nums.sort()` reordena en su sitio y no devuelve nada, el valor de tu expresión es `None`. `sorted(nums)` calcula una lista nueva y ordenada y deja `nums` intacta. El nombre es la señal: verbos como `sort` y `reverse` tocan el objeto; `sorted` y `list.copy()` producen una copia para un nuevo dueño.
 
 ## Tuplas: la secuencia congelada
 
-Una tupla es una secuencia ordenada, **inmutable** — una lista que perdió sus herramientas de edición:
+Una tupla es una secuencia ordenada, **inmutable**, una lista que perdió sus herramientas de edición:
 
 ```python
 point = (3, 4)
@@ -89,7 +89,7 @@ print(point[0])   # 3
 # point[0] = 5   # TypeError!
 ```
 
-La inmutabilidad no es una desventaja; es una promesa. El punto $(3, 4)$ es un único objeto matemático que no debe cambiar bajo tus pies. Coordenadas, colores RGB, filas de base de datos — datos que son *fijos por definición* pertenecen a las tuplas, donde la reasignación accidental se vuelve una excepción en lugar de una corrupción silenciosa.
+La inmutabilidad no es una desventaja; es una promesa. El punto $(3, 4)$ es un único objeto matemático que no debe cambiar bajo tus pies. Coordenadas, colores RGB, filas de base de datos, datos que son *fijos por definición* pertenecen a las tuplas, donde la reasignación accidental se vuelve una excepción en lugar de una corrupción silenciosa.
 
 ## Desempaquetado: una línea, muchos nombres
 
@@ -101,11 +101,11 @@ a, b, *rest = [1, 2, 3, 4, 5]  # a=1, b=2, rest=[3, 4, 5]
 first, *_, last = (1, 2, 3, 4)  # first=1, last=4
 ```
 
-`*rest` traga todo lo que hay entre las ranuras nombradas; `*_` es el mismo gesto luciendo el nombre convencional de "descarta esto". Es la versión de lista de evaluar una función en un punto — entradas y salidas se alinean por posición.
+`*rest` traga todo lo que hay entre las ranuras nombradas; `*_` es el mismo gesto luciendo el nombre convencional de "descarta esto". Es la versión de lista de evaluar una función en un punto, entradas y salidas se alinean por posición.
 
 ## Un ejemplo resuelto: la libreta de notas
 
-Observa el arsenal trabajando en una tarea real — las notas de un examen del grupo:
+Observa el arsenal trabajando en una tarea real, las notas de un examen del grupo:
 
 ```python
 scores = []
@@ -122,7 +122,7 @@ print(average)            # 8.0
 print(best)               # 10
 ```
 
-Recoge con `append`/`extend` y luego lee con `sum`, `max` y `len`. Fíjate en la división: `total / count` es la media aritmética — el mismo $\frac{\text{suma}}{\text{recuento}}$ que conoces de las matemáticas, ahora en una línea de código. Una lista es un lugar para *acumular* datos, y el bucle entre hacerla crecer y leerla es el patrón que repite todo programa real.
+Recoge con `append`/`extend` y luego lee con `sum`, `max` y `len`. Fíjate en la división: `total / count` es la media aritmética, el mismo $\frac{\text{suma}}{\text{recuento}}$ que conoces de las matemáticas, ahora en una línea de código. Una lista es un lugar para *acumular* datos, y el bucle entre hacerla crecer y leerla es el patrón que repite todo programa real.
 
 ## Errores comunes
 
@@ -135,23 +135,23 @@ Recoge con `append`/`extend` y luego lee con `sum`, `max` y `len`. Fíjate en la
 ## 🧩 Desafíos
 
 <details class="challenge">
-<summary>🧩 Desafío — piensa primero, luego revela</summary>
+<summary>🧩 Desafío, piensa primero, luego revela</summary>
 <div class="challenge__body">
 
 Elimina los duplicados conservando el orden: `[1, 3, 2, 3, 1, 4, 2]` → `[1, 3, 2, 4]`.
 
-<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>list(dict.fromkeys(nums))</code> — un dict mantiene el orden de inserción (desde 3.7+), y las claves duplicadas colapsan a su primera posición.</p>
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>list(dict.fromkeys(nums))</code>, un dict mantiene el orden de inserción (desde 3.7+), y las claves duplicadas colapsan a su primera posición.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Desafío — piensa primero, luego revela</summary>
+<summary>🧩 Desafío, piensa primero, luego revela</summary>
 <div class="challenge__body">
 
 Intercambia dos variables sin variable temporal, usando desempaquetado de tuplas.
 
-<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>a, b = b, a</code> — el lado derecho se evalúa como tupla primero, así que el canje es simultáneo, no secuencial.</p>
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>a, b = b, a</code>, el lado derecho se evalúa como tupla primero, así que el canje es simultáneo, no secuencial.</p>
 
 </div>
 </details>
@@ -159,7 +159,7 @@ Intercambia dos variables sin variable temporal, usando desempaquetado de tuplas
 ## 🤔 Preguntas socráticas
 
 - ¿Cuándo recurres a una tupla en vez de a una lista, y qué te compra la inmutabilidad?
-- ¿Por qué `sort()` muta donde `sorted()` devuelve algo nuevo — y cuándo prefieres cada uno?
+- ¿Por qué `sort()` muta donde `sorted()` devuelve algo nuevo, y cuándo prefieres cada uno?
 - ¿Cómo recoge `*rest` el sobrante? ¿Puede `*_` hacer de descarte nombrado?
 
 ## ✅ Comprobación rápida

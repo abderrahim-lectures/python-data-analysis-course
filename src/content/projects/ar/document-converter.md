@@ -10,9 +10,9 @@ prerequisites: ["أساسيات بايثون (متغيرات، حلقات، دو
 
 # محوّل المستندات
 
-تأتي المستندات بصيغ كثيرة — Markdown للكتابة، وHTML للويب، ونص عادي للمشاركة السريعة. التحويل اليدوي بينها مملّ وعرضة للخطأ. في هذا المشروع ستبني أداة بايثون تقرأ ملفات Markdown، وتحوّلها إلى HTML أو نص عادي، وتستخرج البيانات الوصفية من ترويسات المستندات، وتعالج أدلة كاملة في أمر واحد.
+تأتي المستندات بصيغ كثيرة ، Markdown للكتابة، وHTML للويب، ونص عادي للمشاركة السريعة. التحويل اليدوي بينها مملّ وعرضة للخطأ. في هذا المشروع ستبني أداة بايثون تقرأ ملفات Markdown، وتحوّلها إلى HTML أو نص عادي، وتستخرج البيانات الوصفية من ترويسات المستندات، وتعالج أدلة كاملة في أمر واحد.
 
-- **شغّله في المتصفح.** هناك دفتر ملاحظات تفاعلي جاهز — افتحه على Colab أو Kaggle أو Binder وتابع خطوة بخطوة.
+- **شغّله في المتصفح.** هناك دفتر ملاحظات تفاعلي جاهز ، افتحه على Colab أو Kaggle أو Binder وتابع خطوة بخطوة.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/document-converter/notebook.ar.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/document-converter/notebook.ar.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fdocument-converter%2Fnotebook.ar.ipynb)
@@ -226,7 +226,7 @@ if __name__ == "__main__":
 
 - **العريض لا يُحوَّل**: تأكد من معالجة أنماط `**` قبل أنماط `*`. وإلا سيطابق تعبير المائل أول `*` من `**` ويكسّر نمط العريض.
 - **كتل الأكواد تلتهم المحتوى**: علامة `re.DOTALL` تسمح لـ `.` بمطابقة الأسطر الجديدة داخل كتلة الأكواد. دونها يطابق التعبير كتل الأكواد أحادية السطر فقط.
-- **القوائم لا تُغلَّف**: يعتمد محلل القوائم على أسطر متتالية تبدأ بـ `- `. الأسطر الفارغة بين البنود تكسّر المجموعة. هذا مقبول لهذا المشروع — تُعالَج كل كتلة قائمة على حدة.
+- **القوائم لا تُغلَّف**: يعتمد محلل القوائم على أسطر متتالية تبدأ بـ `- `. الأسطر الفارغة بين البنود تكسّر المجموعة. هذا مقبول لهذا المشروع ، تُعالَج كل كتلة قائمة على حدة.
 
 ### قائمة التحقق
 

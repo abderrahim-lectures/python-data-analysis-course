@@ -30,7 +30,7 @@ content = f.read()
 f.close()  # fermez toujours quand c'est fini !
 ```
 
-`"r"` veut dire lecture seule. Et la discipline est lourde : `close()` doit courir quand vous avez fini, sinon le descripteur fuit — le fichier reste tenu longtemps après que vous avez cessé d'en avoir besoin. L'oublier, c'est la première génération de bugs de fichiers.
+`"r"` veut dire lecture seule. Et la discipline est lourde : `close()` doit courir quand vous avez fini, sinon le descripteur fuit, le fichier reste tenu longtemps après que vous avez cessé d'en avoir besoin. L'oublier, c'est la première génération de bugs de fichiers.
 
 ## L'instruction with : fermer comme une promesse
 
@@ -42,7 +42,7 @@ with open("data.txt") as f:
 # le fichier est fermé ici
 ```
 
-Le bloc `with` déclare un contrat : ouvrez-le ici, et il sera fermé quand ce bloc se terminera — normalement ou par exception. La vie du descripteur est encadrée dans le bloc, donc il ne reste rien à oublier.
+Le bloc `with` déclare un contrat : ouvrez-le ici, et il sera fermé quand ce bloc se terminera, normalement ou par exception. La vie du descripteur est encadrée dans le bloc, donc il ne reste rien à oublier.
 
 ## Stratégies de lecture
 
@@ -93,11 +93,11 @@ with open("data.txt", encoding="utf-8") as f:
     text = f.read()
 ```
 
-Sans `encoding`, Python retombe sur le défaut du système, qui varie selon la plateforme — le même fichier, illisible sur une machine Windows et propre sur Linux. Déclarer `utf-8` fait signifier aux octets les mêmes lettres partout.
+Sans `encoding`, Python retombe sur le défaut du système, qui varie selon la plateforme, le même fichier, illisible sur une machine Windows et propre sur Linux. Déclarer `utf-8` fait signifier aux octets les mêmes lettres partout.
 
 ## Un exemple travaillé : le fichier de notes, ligne par ligne
 
-La marche sûre en mémoire — accumuler sans jamais tenir le fichier entier :
+La marche sûre en mémoire, accumuler sans jamais tenir le fichier entier :
 
 ```python
 with open("scores.txt", encoding="utf-8") as f:
@@ -110,12 +110,12 @@ with open("scores.txt", encoding="utf-8") as f:
 print(f"Avg: {total / count}")
 ```
 
-Chaque ligne est lue, débarrassée de son saut de ligne, convertie et lâchée avant l'arrivée de la suivante — le fichier s'écoule sans jamais se rassembler entier. La promesse de `with` ferme le fichier quand le bloc se termine, normalement ou par exception.
+Chaque ligne est lue, débarrassée de son saut de ligne, convertie et lâchée avant l'arrivée de la suivante, le fichier s'écoule sans jamais se rassembler entier. La promesse de `with` ferme le fichier quand le bloc se termine, normalement ou par exception.
 
 ## Pièges courants
 
 - **Oublier `with`.** Les descripteurs fuient quand rien ne les ferme ; laissez le bloc posséder la vie du fichier.
-- **Avaler des fichiers énormes.** `f.read()` sur un gros fichier peut épuiser la mémoire — itérez `for line in f` à la place.
+- **Avaler des fichiers énormes.** `f.read()` sur un gros fichier peut épuiser la mémoire, itérez `for line in f` à la place.
 - **Ignorer l'encodage.** Les lettres non-ASCII deviennent des hiéroglyphes quand la convention est laissée au hasard.
 - **Chemins codés en dur.** `pathlib.Path` fait marcher le même code sur chaque système d'exploitation.
 - **Un fichier consommé se lit vide.** Après `f.read()`, la position est à la fin ; une deuxième lecture renvoie `''` et `readlines()` renvoie `[]`. Lisez une fois, ou rouvrez.
@@ -123,30 +123,30 @@ Chaque ligne est lue, débarrassée de son saut de ligne, convertie et lâchée 
 ## 🧩 Défis
 
 <details class="challenge">
-<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
+<summary>🧩 Défi, réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
 Comptez les lignes d'un fichier sans le charger en mémoire.
 
-<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>count = 0; with open("file.txt") as f: for line in f: count += 1</code> ou le compact <code>sum(1 for _ in open("file.txt"))</code> — une ligne à la fois, jamais le tout.</p>
+<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>count = 0; with open("file.txt") as f: for line in f: count += 1</code> ou le compact <code>sum(1 for _ in open("file.txt"))</code>, une ligne à la fois, jamais le tout.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
+<summary>🧩 Défi, réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
 Listez tous les fichiers `.txt` d'un répertoire avec `pathlib`.
 
-<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>list(Path(".").glob("*.txt"))</code> — un unique glob parcourt pour vous les noms correspondants.</p>
+<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>list(Path(".").glob("*.txt"))</code>, un unique glob parcourt pour vous les noms correspondants.</p>
 
 </div>
 </details>
 
 ## 🤔 Questions socratiques
 
-- `for line in f` inclut-il le `\n` final ? Pourquoi la boucle a-t-elle cette allure — et comment retirez-vous le saut de ligne ?
+- `for line in f` inclut-il le `\n` final ? Pourquoi la boucle a-t-elle cette allure, et comment retirez-vous le saut de ligne ?
 - Que se passe-t-il quand vous lisez un fichier inexistant ? Comment `with` s'en sort-il contre l'exception ?
 - Quand `f.read()` bat-il l'itération ligne par ligne ?
 

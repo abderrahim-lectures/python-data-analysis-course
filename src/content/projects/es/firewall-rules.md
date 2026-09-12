@@ -14,9 +14,9 @@ prerequisites: ["Python 101"]
 
 # 🔥 Gestor de Reglas de Firewall
 
-Las reglas de firewall son las barreras de seguridad de la red — una sola regla mal configurada puede abrir un puerto a internet o bloquear tráfico legítimo en silencio. Este proyecto construye una herramienta CLI que gestiona un conjunto de reglas como datos estructurados: escribes reglas en Python, las validas por conflictos, simulas cómo fluiría el tráfico real a través de las reglas, y despliegas cambios como un diff contra el estado actual con reversión de un comando. La meta es una herramienta que haga la gestión del firewall auditable y reversible en lugar de aterradora y misteriosa.
+Las reglas de firewall son las barreras de seguridad de la red, una sola regla mal configurada puede abrir un puerto a internet o bloquear tráfico legítimo en silencio. Este proyecto construye una herramienta CLI que gestiona un conjunto de reglas como datos estructurados: escribes reglas en Python, las validas por conflictos, simulas cómo fluiría el tráfico real a través de las reglas, y despliegas cambios como un diff contra el estado actual con reversión de un comando. La meta es una herramienta que haga la gestión del firewall auditable y reversible en lugar de aterradora y misteriosa.
 
-Esto asume Python 101 — no se requiere nada de Análisis de Datos. Opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
+Esto asume Python 101, no se requiere nada de Análisis de Datos. Opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
 
 ## 🎯 Lo que harás
 
@@ -29,7 +29,7 @@ Esto asume Python 101 — no se requiere nada de Análisis de Datos. Opcional y 
 
 ## Dónde ejecutar esto
 
-**Localmente con `uv`** es el camino principal — esta es una herramienta CLI que lee y escribe archivos de reglas en disco y simula patrones de tráfico.
+**Localmente con `uv`** es el camino principal, esta es una herramienta CLI que lee y escribe archivos de reglas en disco y simula patrones de tráfico.
 
 **Google Colab, Kaggle Notebooks y Binder** funcionan para probar la herramienta. El notebook instala los mismos paquetes y usa el mismo código; usa reglas de muestra y tráfico simulado en lugar de tocar configuraciones reales de firewall.
 
@@ -78,7 +78,7 @@ touch fw/__init__.py fw/rules.py fw/validate.py fw/simulate.py fw/deploy.py fw/c
 
 ## Paso 1: Modela reglas de firewall como datos
 
-Toda regla de firewall tiene la misma forma: una acción (allow o deny), un protocolo (TCP, UDP o ICMP), un rango de puertos y una fuente IP opcional o bloque CIDR. Modelar esto como un modelo de Pydantic te da validación automática — una regla con el puerto `99999` o una acción de `"maybe"` falla de inmediato en lugar de corromper silenciosamente el conjunto de reglas.
+Toda regla de firewall tiene la misma forma: una acción (allow o deny), un protocolo (TCP, UDP o ICMP), un rango de puertos y una fuente IP opcional o bloque CIDR. Modelar esto como un modelo de Pydantic te da validación automática, una regla con el puerto `99999` o una acción de `"maybe"` falla de inmediato en lugar de corromper silenciosamente el conjunto de reglas.
 
 ### 1.1 Define el esquema de la regla
 
@@ -122,11 +122,11 @@ class FirewallRule(BaseModel):
         ip_network(self.source, strict=False)  # validates CIDR syntax
 ```
 
-Pydantic atrapa datos malos en el momento de la construcción — `port_start > port_end`, bloques CIDR inválidos o protocolos no reconocidos lanzan todos `ValueError` con un mensaje claro. El campo `source` tiene por defecto `0.0.0.0/0` (cualquier IP), que es el caso común para la mayoría de las reglas.
+Pydantic atrapa datos malos en el momento de la construcción, `port_start > port_end`, bloques CIDR inválidos o protocolos no reconocidos lanzan todos `ValueError` con un mensaje claro. El campo `source` tiene por defecto `0.0.0.0/0` (cualquier IP), que es el caso común para la mayoría de las reglas.
 
 **🎯 Resultado esperado :** `FirewallRule(name="web", action="allow", protocol="tcp", port_start=80, port_end=443)` crea una regla válida. `FirewallRule(name="bad", action="allow", protocol="tcp", port_start=99999, port_end=99999)` lanza un `ValidationError`.
 
-**🩹 Si sale mal :** Si `ip_network` no atrapa un CIDR malo, puede que estés importando del módulo equivocado — usa `from ipaddress import ip_network`. Si Pydantic no ejecuta el validador de puertos, asegúrate de que el decorador `@field_validator` está presente.
+**🩹 Si sale mal :** Si `ip_network` no atrapa un CIDR malo, puede que estés importando del módulo equivocado, usa `from ipaddress import ip_network`. Si Pydantic no ejecuta el validador de puertos, asegúrate de que el decorador `@field_validator` está presente.
 
 ### 1.2 Verifica la creación de reglas
 
@@ -144,7 +144,7 @@ El modelo hace un round-trip limpio: crea una regla, accede a sus campos y seria
 
 **🎯 Resultado esperado :** La aserción pasa; `model_dump()` imprime un diccionario con todos los campos.
 
-**🩹 Si sale mal :** Si `model_dump()` no existe, estás en una versión vieja de Pydantic — usa `.dict()` en su lugar.
+**🩹 Si sale mal :** Si `model_dump()` no existe, estás en una versión vieja de Pydantic, usa `.dict()` en su lugar.
 
 ### 1.3 Verifica el modelo de regla
 
@@ -161,7 +161,7 @@ El modelo hace un round-trip limpio: crea una regla, accede a sus campos y seria
 
 ## Paso 2: Detecta conflictos de reglas
 
-Un conjunto de reglas solo es útil si sus reglas no se contradicen. Dos reglas que coinciden con el mismo tráfico con acciones distintas crean ambigüedad — la mayoría de los firewalls manejan esto con un orden de "primera coincidencia gana", pero de todos modos necesitas advertir al usuario.
+Un conjunto de reglas solo es útil si sus reglas no se contradicen. Dos reglas que coinciden con el mismo tráfico con acciones distintas crean ambigüedad, la mayoría de los firewalls manejan esto con un orden de "primera coincidencia gana", pero de todos modos necesitas advertir al usuario.
 
 ### 2.1 Escribe el detector de conflictos
 
@@ -208,7 +208,7 @@ def validate_ruleset(rules: list[FirewallRule]) -> dict:
 
 **🎯 Resultado esperado :** Un conjunto de reglas sin superposiciones devuelve `{"valid": True, "issues": [], "rule_count": N}`. Un conjunto conflictivo devuelve `{"valid": False, "issues": [...], ...}` con descripciones de conflicto legibles para humanos.
 
-**🩹 Si sale mal :** Si el resumen siempre muestra `"valid": True`, la lista de issues no se está poblando — verifica que `find_conflicts` devuelve las tuplas correctas.
+**🩹 Si sale mal :** Si el resumen siempre muestra `"valid": True`, la lista de issues no se está poblando, verifica que `find_conflicts` devuelve las tuplas correctas.
 
 ### 2.3 Verifica la detección de conflictos
 
@@ -220,7 +220,7 @@ def validate_ruleset(rules: list[FirewallRule]) -> dict:
 
 **🤔 Pregunta(s) socrática(s)**
 
-- La mayoría de los firewalls reales usan el orden de "primera coincidencia gana". ¿Cómo cambiaría agregar prioridad de reglas a la lógica de detección de conflictos — las reglas superpuestas seguirían siendo conflictos, o solo preocupaciones de ordenamiento?
+- La mayoría de los firewalls reales usan el orden de "primera coincidencia gana". ¿Cómo cambiaría agregar prioridad de reglas a la lógica de detección de conflictos, las reglas superpuestas seguirían siendo conflictos, o solo preocupaciones de ordenamiento?
 - ¿Qué pasa si un conjunto de reglas tiene una regla `deny all` en el medio? ¿Tu validador marcaría las reglas debajo de ella como redundantes?
 
 ## Paso 3: Simula tráfico contra el conjunto de reglas
@@ -254,11 +254,11 @@ def simulate_packet(
     return "deny", None  # default: deny if no rule matches
 ```
 
-Recorrer las reglas en orden y devolver en la primera coincidencia es como funcionan la mayoría de los firewalls reales. Si ninguna regla coincide, la acción por defecto es deny — este es el valor por defecto seguro. El módulo `ipaddress` maneja la coincidencia CIDR correctamente, incluyendo casos límite como `192.168.1.0/24`.
+Recorrer las reglas en orden y devolver en la primera coincidencia es como funcionan la mayoría de los firewalls reales. Si ninguna regla coincide, la acción por defecto es deny, este es el valor por defecto seguro. El módulo `ipaddress` maneja la coincidencia CIDR correctamente, incluyendo casos límite como `192.168.1.0/24`.
 
 **🎯 Resultado esperado :** Un conjunto de reglas con `allow tcp 80-80` y `deny tcp 1-1023` produce `("allow", rule)` para un paquete al puerto 80 desde cualquier fuente, y `("deny", rule)` para el puerto 22 desde cualquier fuente.
 
-**🩹 Si sale mal :** Si el puerto 80 devuelve `deny`, las reglas no están ordenadas correctamente — la primera coincidencia importa. Si la coincidencia CIDR no funciona, verifica que usas `ip_network` con `strict=False`.
+**🩹 Si sale mal :** Si el puerto 80 devuelve `deny`, las reglas no están ordenadas correctamente, la primera coincidencia importa. Si la coincidencia CIDR no funciona, verifica que usas `ip_network` con `strict=False`.
 
 ### 3.2 Agrega simulación por lotes
 
@@ -292,7 +292,7 @@ def simulate_traffic(rules: list[FirewallRule], packets: list[dict]) -> list[dic
 **🤔 Pregunta(s) socrática(s)**
 
 - Si invirtieras el orden de las reglas, ¿qué paquetes cambiarían su resultado? ¿Eso te dice algo sobre por qué el orden de las reglas importa en los firewalls reales?
-- ¿Qué haría falta para agregar registro — registrar *qué* reglas se verificaron pero no coincidieron — para que puedas depurar un paquete denegado después del hecho?
+- ¿Qué haría falta para agregar registro, registrar *qué* reglas se verificaron pero no coincidieron, para que puedas depurar un paquete denegado después del hecho?
 
 ## Paso 4: Despliegue basado en diff con reversión
 
@@ -355,11 +355,11 @@ def deploy(new_rules: list[FirewallRule]) -> dict:
     }
 ```
 
-La función deploy hace el snapshot primero, luego calcula, luego aplica — este orden garantiza que siempre tengas un punto de reversión incluso si las reglas nuevas están malformadas. El reporte de diff le dice al operador exactamente qué cambió: qué reglas son nuevas, cuáles se fueron y cuáles fueron modificadas.
+La función deploy hace el snapshot primero, luego calcula, luego aplica, este orden garantiza que siempre tengas un punto de reversión incluso si las reglas nuevas están malformadas. El reporte de diff le dice al operador exactamente qué cambió: qué reglas son nuevas, cuáles se fueron y cuáles fueron modificadas.
 
 **🎯 Resultado esperado :** Desplegar reglas que agregan una, eliminan una y modifican una produce un dict de diff con `added: ["new_rule"]`, `removed: ["old_rule"]`, `changed: ["modified_rule"]`.
 
-**🩹 Si sale mal :** Si el archivo de snapshot no se crea, `HISTORY_DIR.mkdir()` no se llama antes de escribir. Si el diff muestra todo como agregado, `old_rules` se cargó como una lista vacía — verifica que `rules.json` existe antes del deploy.
+**🩹 Si sale mal :** Si el archivo de snapshot no se crea, `HISTORY_DIR.mkdir()` no se llama antes de escribir. Si el diff muestra todo como agregado, `old_rules` se cargó como una lista vacía, verifica que `rules.json` existe antes del deploy.
 
 ### 4.2 Agrega la reversión
 
@@ -383,7 +383,7 @@ La reversión lee el snapshot más reciente y lo escribe de vuelta en `rules.jso
 
 **🎯 Resultado esperado :** Llamar a `rollback()` después de un deploy revierte `rules.json` a la versión anterior y devuelve el nombre del snapshot.
 
-**🩹 Si sale mal :** Si la reversión devuelve "No snapshots found", el directorio `rule_history/` está vacío — el deploy debe ejecutarse antes de la reversión. Si las reglas restauradas están mal, la nomenclatura de snapshots no está ordenada cronológicamente.
+**🩹 Si sale mal :** Si la reversión devuelve "No snapshots found", el directorio `rule_history/` está vacío, el deploy debe ejecutarse antes de la reversión. Si las reglas restauradas están mal, la nomenclatura de snapshots no está ordenada cronológicamente.
 
 ### 4.3 Verifica el despliegue
 
@@ -457,11 +457,11 @@ if __name__ == "__main__":
     cli()
 ```
 
-La CLI es delgada — cada comando son unas pocas líneas que parsean entrada, llaman a la función de la biblioteca e imprimen el resultado. Esta separación significa que el código de la biblioteca (`rules.py`, `validate.py`, `simulate.py`, `deploy.py`) es testeable sin la CLI, y la CLI es trivial de extender con comandos nuevos.
+La CLI es delgada, cada comando son unas pocas líneas que parsean entrada, llaman a la función de la biblioteca e imprimen el resultado. Esta separación significa que el código de la biblioteca (`rules.py`, `validate.py`, `simulate.py`, `deploy.py`) es testeable sin la CLI, y la CLI es trivial de extender con comandos nuevos.
 
 **🎯 Resultado esperado :** `uv run python -m fw.cli validate rules.json` imprime "Valid: N rules, no conflicts" para un conjunto limpio, o lista los conflictos y sale con código 1.
 
-**🩹 Si sale mal :** Si la CLI no puede encontrar `click`, verifica que `click` está en `pyproject.toml`. Si `validate` siempre muestra válido, las reglas no se están cargando desde el archivo — verifica la ruta de lectura del archivo.
+**🩹 Si sale mal :** Si la CLI no puede encontrar `click`, verifica que `click` está en `pyproject.toml`. Si `validate` siempre muestra válido, las reglas no se están cargando desde el archivo, verifica la ruta de lectura del archivo.
 
 ### 5.2 Prueba de humo de punta a punta
 
@@ -521,13 +521,13 @@ Esto ejecuta el pipeline completo: validar, simular, desplegar. Cada pieza se pr
 
 - **Olvidar que el orden de las reglas importa.** El simulador recorre las reglas de arriba hacia abajo y devuelve en la primera coincidencia. Una regla `deny all` sobre una regla `allow http` bloquea el tráfico HTTP. Pon siempre las reglas allow específicas antes de las reglas deny amplias.
 - **Rangos de puertos que se envuelven en silencio.** Una regla con `port_start=80` y `port_end=80` es correcta; `port_start=443` y `port_end=80` debería fallar la validación pero no lo hará si falta la verificación del rango. Valida siempre `port_start <= port_end`.
-- **No hacer snapshot antes del deploy.** Si aplicas reglas nuevas sin guardar primero las viejas, no hay punto de reversión. La función deploy siempre hace el snapshot primero — no omitas ese paso.
+- **No hacer snapshot antes del deploy.** Si aplicas reglas nuevas sin guardar primero las viejas, no hay punto de reversión. La función deploy siempre hace el snapshot primero, no omitas ese paso.
 - **Coincidencia CIDR sin `strict=False`.** `ip_network("192.168.1.1/24")` lanza un `ValueError` porque los bits de host están configurados. Usar `strict=False` enmascara silenciosamente los bits de host, que es el comportamiento correcto para la coincidencia de fuente del firewall.
 - **Tratar la validación como despliegue.** Un conjunto de reglas que pasa la validación aún puede causar problemas en producción (orden incorrecto, valores por defecto faltantes). La validación atrapa conflictos; la simulación atrapa errores lógicos. Ejecuta ambas antes de desplegar.
 
 ## Lo que acabas de construir
 
-Una herramienta de gestión de reglas de firewall que modela reglas como objetos Python validados, detecta conflictos antes de que lleguen a producción, simula tráfico real contra el conjunto de reglas, y despliega cambios con un flujo de trabajo de snapshot-y-diff que hace cada cambio auditable y reversible. La arquitectura — modelar, validar, simular, desplegar — es el mismo patrón usado en herramientas de infraestructura como código como Terraform y Pulumi.
+Una herramienta de gestión de reglas de firewall que modela reglas como objetos Python validados, detecta conflictos antes de que lleguen a producción, simula tráfico real contra el conjunto de reglas, y despliega cambios con un flujo de trabajo de snapshot-y-diff que hace cada cambio auditable y reversible. La arquitectura, modelar, validar, simular, desplegar, es el mismo patrón usado en herramientas de infraestructura como código como Terraform y Pulumi.
 
 :::tip[Ejecuta una versión más completa sin configuración local]
 [`examples/firewall-rules/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/firewall-rules) en el repositorio del curso tiene una versión más rica con más tipos de reglas, un CSV de tráfico para simulación por lotes y archivos de reglas de muestra. Clónalo, o abre todo el repositorio en un [GitHub Codespaces](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), y ejecútalo desde ahí.
@@ -541,6 +541,6 @@ Una herramienta de gestión de reglas de firewall que modela reglas como objetos
 
 ## Comparte tu proyecto con la clase
 
-¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado — y su README tiene un recorrido completo y amigable para principiantes sobre cómo agregar el tuyo vía un **pull request**, incluso si nunca has usado git antes: hacer fork del repositorio, crear una rama, confirmar tus archivos y abrir el PR, un paso a la vez. No se asume experiencia previa con git.
+¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado, y su README tiene un recorrido completo y amigable para principiantes sobre cómo agregar el tuyo vía un **pull request**, incluso si nunca has usado git antes: hacer fork del repositorio, crear una rama, confirmar tus archivos y abrir el PR, un paso a la vez. No se asume experiencia previa con git.
 
 Bienvenido a escribir Python fuera del navegador. 🎓

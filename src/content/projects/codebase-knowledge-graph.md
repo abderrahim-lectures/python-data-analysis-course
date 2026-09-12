@@ -1,37 +1,37 @@
 ---
 title: "Turn a Codebase into a Knowledge Graph"
-description: "Graduate from the in-browser playground to real Python: parse a real codebase's Python files with the ast module, build a graph of its structure with networkx, and visualize and query it — no API key, no network access needed."
+description: "Graduate from the in-browser playground to real Python: parse a real codebase's Python files with the ast module, build a graph of its structure with networkx, and visualize and query it, no API key, no network access needed."
 difficulty: "intermediate"
 ---
 
 # 🕸️ Turn a Codebase into a Knowledge Graph
 
-Every other project in this section eventually reaches for an API key, a free-tier signup, or a live website. This one doesn't need any of that. You'll write a tool that reads Python source code the way the interpreter itself does — by parsing it into an **AST** (abstract syntax tree) with the standard library's built-in `ast` module — then turns what it finds into a **graph**: files, functions, and classes as nodes, "imports"/"calls"/"defined in" relationships as edges. That's a real, working example of a data structure from way back in the course showing up in a genuinely useful tool, not a classroom exercise: a graph is just nodes and edges, and a codebase's own structure turns out to already be one.
+Every other project in this section eventually reaches for an API key, a free-tier signup, or a live website. This one doesn't need any of that. You'll write a tool that reads Python source code the way the interpreter itself does, by parsing it into an **AST** (abstract syntax tree) with the standard library's built-in `ast` module, then turns what it finds into a **graph**: files, functions, and classes as nodes, "imports"/"calls"/"defined in" relationships as edges. That's a real, working example of a data structure from way back in the course showing up in a genuinely useful tool, not a classroom exercise: a graph is just nodes and edges, and a codebase's own structure turns out to already be one.
 
-This assumes Python 101 and comfort with functions and imports — nothing from Data Analysis is required, and nothing here calls out to any AI model or web service. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
+This assumes Python 101 and comfort with functions and imports, nothing from Data Analysis is required, and nothing here calls out to any AI model or web service. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 
-1. Install `uv` and set up a small project with `networkx` and `pyvis` — no API key, no signup, nothing to configure.
+1. Install `uv` and set up a small project with `networkx` and `pyvis`, no API key, no signup, nothing to configure.
 2. Parse a single Python file's AST to find its function definitions, class definitions, and imports.
 3. Walk an entire repository and build a graph out of everything you find, using `networkx`.
 4. Add edges for **import** and **call** relationships, so the graph captures how the pieces actually connect, not just what exists.
 5. Visualize the graph as an interactive HTML page with `pyvis` (and, optionally, a static image with `matplotlib`).
-6. Write a small query function — "what does this function call?", "what imports this module?" — and run the whole thing against a real repository.
+6. Write a small query function, "what does this function call?", "what imports this module?", and run the whole thing against a real repository.
 
 ## Where to run this
 
-**Locally with `uv`** is the primary, recommended path — real Python, on your own machine, reading real files from a real folder on disk.
+**Locally with `uv`** is the primary, recommended path, real Python, on your own machine, reading real files from a real folder on disk.
 
-**GitHub Codespaces** works great here too: open [the whole course repo in a free Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python, and `uv` are already installed, per the repo's `.devcontainer/devcontainer.json`) and run the exact same `uv` commands from a terminal in your browser tab — and you've already got a real repository sitting right there to point the tool at.
+**GitHub Codespaces** works great here too: open [the whole course repo in a free Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python, and `uv` are already installed, per the repo's `.devcontainer/devcontainer.json`) and run the exact same `uv` commands from a terminal in your browser tab, and you've already got a real repository sitting right there to point the tool at.
 
-**Google Colab or Kaggle Notebooks** are a genuinely easy option too, not just a fallback — this project needs no GPU, no long-running server process, and no API key, just `pip install`s and pure computation. `!pip install networkx pyvis` in a cell, then either `!git clone` a public repo to analyze or upload a small folder of `.py` files, and the rest of the code below works essentially unchanged (pyvis's HTML output can even be displayed inline in a notebook cell).
+**Google Colab or Kaggle Notebooks** are a genuinely easy option too, not just a fallback, this project needs no GPU, no long-running server process, and no API key, just `pip install`s and pure computation. `!pip install networkx pyvis` in a cell, then either `!git clone` a public repo to analyze or upload a small folder of `.py` files, and the rest of the code below works essentially unchanged (pyvis's HTML output can even be displayed inline in a notebook cell).
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/codebase-knowledge-graph/notebook.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/codebase-knowledge-graph/notebook.ipynb)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fcodebase-knowledge-graph%2Fnotebook.ipynb)
 
-A ready-made notebook with all of the code below — including the toy `sample_repo/` files written out inline, so there's nothing to upload or clone — is at [`examples/codebase-knowledge-graph/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/codebase-knowledge-graph/notebook.ipynb). Click a badge above to launch it directly.
+A ready-made notebook with all of the code below, including the toy `sample_repo/` files written out inline, so there's nothing to upload or clone, is at [`examples/codebase-knowledge-graph/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/codebase-knowledge-graph/notebook.ipynb). Click a badge above to launch it directly.
 
 ## Setup
 
@@ -65,17 +65,17 @@ cd codebase-graph
 uv add networkx pyvis matplotlib
 ```
 
-`networkx` is a free, pure-Python graph library — it handles the actual graph data structure (nodes, edges, traversal) so you don't have to write one from scratch. `pyvis` turns a `networkx` graph into an interactive HTML page you can drag around and zoom in a browser. `matplotlib` is optional, used for a static image alternative in Step 5.
+`networkx` is a free, pure-Python graph library, it handles the actual graph data structure (nodes, edges, traversal) so you don't have to write one from scratch. `pyvis` turns a `networkx` graph into an interactive HTML page you can drag around and zoom in a browser. `matplotlib` is optional, used for a static image alternative in Step 5.
 
-That's the whole setup. **No API key, no `.env` file, no free-tier signup, no environment variable to configure** — every step from here on reads local files and runs local computation.
+That's the whole setup. **No API key, no `.env` file, no free-tier signup, no environment variable to configure**, every step from here on reads local files and runs local computation.
 
 :::tip[No internet access needed after installation]
-Once `uv add` finishes downloading these three packages, the entire rest of this project can run with your network disconnected. That's worth noticing: everything else in this section of the course revolves around calling a remote model or a remote website, and it's easy to start assuming every "real" Python project needs a network call somewhere. This one is a useful counterexample — static analysis and graph theory are entirely offline.
+Once `uv add` finishes downloading these three packages, the entire rest of this project can run with your network disconnected. That's worth noticing: everything else in this section of the course revolves around calling a remote model or a remote website, and it's easy to start assuming every "real" Python project needs a network call somewhere. This one is a useful counterexample, static analysis and graph theory are entirely offline.
 :::
 
 ## Step 1: Parse a single file's AST
 
-Before parsing an entire repository, get one file working. Python's built-in `ast` module turns source code into a tree of objects describing its structure — the same representation the interpreter itself builds before running your code. `ast.parse` gives you the root of that tree; `ast.walk` lets you visit every node in it.
+Before parsing an entire repository, get one file working. Python's built-in `ast` module turns source code into a tree of objects describing its structure, the same representation the interpreter itself builds before running your code. `ast.parse` gives you the root of that tree; `ast.walk` lets you visit every node in it.
 
 Create a small test file, `sample.py`:
 
@@ -122,22 +122,22 @@ for node in ast.walk(tree):
 uv run python explore_ast.py
 ```
 
-You should see `function: greet`, `class: Greeter`, and `import: os` printed — plus `function: greet_twice`, since `ast.walk` visits *every* node in the tree, including a method definition nested inside a class. That nesting matters for Step 2: a function found this way could be a genuine top-level function, or it could be a method that only makes sense attached to its class, and the graph needs to keep that distinction rather than flattening everything into one undifferentiated pile of "functions."
+You should see `function: greet`, `class: Greeter`, and `import: os` printed, plus `function: greet_twice`, since `ast.walk` visits *every* node in the tree, including a method definition nested inside a class. That nesting matters for Step 2: a function found this way could be a genuine top-level function, or it could be a method that only makes sense attached to its class, and the graph needs to keep that distinction rather than flattening everything into one undifferentiated pile of "functions."
 
-:::tip[ast.parse can fail — and that's expected, not a bug in your code]
-Not every `.py` file in a real repository parses cleanly: a file might be Python 2 code left over in an old repo, a template file with a `.py` extension that isn't valid Python at all, or genuinely have a syntax error someone forgot to fix. `ast.parse` raises `SyntaxError` in exactly this case. Wrapping it in `try`/`except SyntaxError` and skipping the file with a warning — rather than letting the whole tool crash on file one of two thousand — is standard practice for any tool that walks a real codebase, and it's built into the version in Step 2.
+:::tip[ast.parse can fail, and that's expected, not a bug in your code]
+Not every `.py` file in a real repository parses cleanly: a file might be Python 2 code left over in an old repo, a template file with a `.py` extension that isn't valid Python at all, or genuinely have a syntax error someone forgot to fix. `ast.parse` raises `SyntaxError` in exactly this case. Wrapping it in `try`/`except SyntaxError` and skipping the file with a warning, rather than letting the whole tool crash on file one of two thousand, is standard practice for any tool that walks a real codebase, and it's built into the version in Step 2.
 :::
 
 ### 1.2 Verify the nested method shows up too
 
-**🎯 Expected output:** `function: greet`, `class: Greeter`, `import: os`, and — importantly — `function: greet_twice`, even though it's nested inside `Greeter`.
+**🎯 Expected output:** `function: greet`, `class: Greeter`, `import: os`, and, importantly, `function: greet_twice`, even though it's nested inside `Greeter`.
 
-**🩹 If it's off:** If `greet_twice` never prints, you're iterating `tree.body` (top-level only) instead of `ast.walk(tree)` (every node, at every depth) — that's the exact distinction the first Socratic question below is pointing at. A blank result entirely usually means `sample.py` wasn't saved in the same folder you're running the script from.
+**🩹 If it's off:** If `greet_twice` never prints, you're iterating `tree.body` (top-level only) instead of `ast.walk(tree)` (every node, at every depth), that's the exact distinction the first Socratic question below is pointing at. A blank result entirely usually means `sample.py` wasn't saved in the same folder you're running the script from.
 
 **✅ Checklist**
 
 - ✅ `uv run python explore_ast.py` runs without errors and prints `function: greet`, `class: Greeter`, and `import: os`.
-- ✅ `function: greet_twice` also gets printed, even though it's nested inside `Greeter` — confirming `ast.walk` visits every node, not just top-level ones.
+- ✅ `function: greet_twice` also gets printed, even though it's nested inside `Greeter`, confirming `ast.walk` visits every node, not just top-level ones.
 - ✅ You can explain, in one sentence, the difference between `ast.Import` (`import os`) and `ast.ImportFrom` (`from x import y`).
 
 **🤔 Socratic Question(s)**
@@ -147,11 +147,11 @@ Not every `.py` file in a real repository parses cleanly: a file might be Python
 
 ## Step 2: Walk a whole repo and build the graph
 
-A single file's structure is a start; a whole repository's worth of files, functions, classes, and their relationships is what makes this a genuine *knowledge graph* instead of a list. `networkx.DiGraph` (directed graph — edges have a direction, since "file A imports module B" isn't the same claim as "module B imports file A") is the data structure that holds all of it. Two sub-steps: a fail-safe per-file parser, then the walk that builds the graph.
+A single file's structure is a start; a whole repository's worth of files, functions, classes, and their relationships is what makes this a genuine *knowledge graph* instead of a list. `networkx.DiGraph` (directed graph, edges have a direction, since "file A imports module B" isn't the same claim as "module B imports file A") is the data structure that holds all of it. Two sub-steps: a fail-safe per-file parser, then the walk that builds the graph.
 
 ### 2.1 Write a parser that skips bad files instead of crashing
 
-**👟 Starter hint:** Wrap `ast.parse` in `try`/`except SyntaxError`, print a warning naming the file and line, and return `None` — the caller then just `continue`s past it, exactly like Step 1's tip described:
+**👟 Starter hint:** Wrap `ast.parse` in `try`/`except SyntaxError`, print a warning naming the file and line, and return `None`, the caller then just `continue`s past it, exactly like Step 1's tip described:
 
 ```python
 # build_graph.py (excerpt -- Step 2)

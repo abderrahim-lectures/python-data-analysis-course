@@ -18,11 +18,11 @@ prerequisites:
 
 # 🛠️ 🩺 Build a Symptom Checker
 
-Symptom checkers have a bad reputation for good reasons: they mix real triage rules with a homepage full of worst-case outcomes. The version you build here sidesteps the drama by doing the part an engine can do *honestly* — matching symptoms to conditions with weighted overlap, scoring an urgency band from severity and duration, and turning that band into plain-language next steps. It is a rule engine over a small, curated knowledge base, and it says so: no AI, no diagnosis, and a disclaimer standing at every exit.
+Symptom checkers have a bad reputation for good reasons: they mix real triage rules with a homepage full of worst-case outcomes. The version you build here sidesteps the drama by doing the part an engine can do *honestly*, matching symptoms to conditions with weighted overlap, scoring an urgency band from severity and duration, and turning that band into plain-language next steps. It is a rule engine over a small, curated knowledge base, and it says so: no AI, no diagnosis, and a disclaimer standing at every exit.
 
-This assumes Python 101 plus basic dictionaries and sets — nothing beyond that is required, and no external packages. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
+This assumes Python 101 plus basic dictionaries and sets, nothing beyond that is required, and no external packages. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
-> **Educational purposes only.** This project's output is not medical advice, cannot diagnose, and must always point at a real clinician. The build teaches domain modeling and tiered rules — the medical claims stop where this disclaimer starts.
+> **Educational purposes only.** This project's output is not medical advice, cannot diagnose, and must always point at a real clinician. The build teaches domain modeling and tiered rules, the medical claims stop where this disclaimer starts.
 
 ## 🎯 What you'll do
 
@@ -36,7 +36,7 @@ This assumes Python 101 plus basic dictionaries and sets — nothing beyond that
 
 **Locally with `uv`** is the primary path. The engine is pure standard library, so `uv init` gets you running immediately, and the interactive `cli` mode needs a real terminal (a script you run, not a cell you execute) to read `input()`.
 
-**Google Colab, Kaggle Notebooks, and Binder** run the scoring engine identically — all four scoring steps are plain functions on plain data. The honest caveat: `input()`-driven interaction is awkward in a notebook, so those paths run the seeded *demo* mode (Step 5's default) rather than a live Q&A. Use the badges to see the engine work end to end, and switch to local `uv` for the full interactive experience.
+**Google Colab, Kaggle Notebooks, and Binder** run the scoring engine identically, all four scoring steps are plain functions on plain data. The honest caveat: `input()`-driven interaction is awkward in a notebook, so those paths run the seeded *demo* mode (Step 5's default) rather than a live Q&A. Use the badges to see the engine work end to end, and switch to local `uv` for the full interactive experience.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/symptom-checker/notebook.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/symptom-checker/notebook.ipynb)
@@ -60,11 +60,11 @@ uv run python -c "import sys, typing; print('ok')"
 **✅ Checklist**
 
 - ✅ `uv init symptom-checker` created a folder with a `pyproject.toml`.
-- ✅ `uv run python -c "import sys, typing"` prints `ok` — zero packages added.
+- ✅ `uv run python -c "import sys, typing"` prints `ok`, zero packages added.
 
 ## Step 1: Model the symptom-condition knowledge base
 
-Everything this checker "knows" lives in one dictionary. Keeping the medical facts as *data* rather than `if` statements is what lets the scoring logic stay generic — add a condition later and the engine scores it with zero code changes.
+Everything this checker "knows" lives in one dictionary. Keeping the medical facts as *data* rather than `if` statements is what lets the scoring logic stay generic, add a condition later and the engine scores it with zero code changes.
 
 ### 1.1 Encode conditions and their weighted symptoms
 
@@ -98,11 +98,11 @@ ALL_SYMPTOMS = {s for weights in KNOWLEDGE.values() for s in weights}
 print(f"conditions: {len(KNOWLEDGE)}  distinct symptoms: {len(ALL_SYMPTOMS)}")
 ```
 
-Two data shapes do the real work. The `weight` per symptom (1–3) encodes *how strongly* a symptom points at a condition — a 3 means "so typical it's near-defining", a 1 means "appears but non-specific" — so a cough alone nudges flu less than fever does. `SYMPTOM_LABELS` keeps one stable machine key (`"burning_urination"`) mapped to one human phrase, which means the CLI in Step 5 can print and accept symptoms without ever string-matching the words people might type. `ALL_SYMPTOMS` is derived from the knowledge base itself rather than maintained by hand, so it can't drift from the data.
+Two data shapes do the real work. The `weight` per symptom (1–3) encodes *how strongly* a symptom points at a condition, a 3 means "so typical it's near-defining", a 1 means "appears but non-specific", so a cough alone nudges flu less than fever does. `SYMPTOM_LABELS` keeps one stable machine key (`"burning_urination"`) mapped to one human phrase, which means the CLI in Step 5 can print and accept symptoms without ever string-matching the words people might type. `ALL_SYMPTOMS` is derived from the knowledge base itself rather than maintained by hand, so it can't drift from the data.
 
 **🎯 Expected output:** `conditions: 8  distinct symptoms: 19`.
 
-**🩹 If it's off:** If the count is lower, a condition dict is missing or two condition keys collide (space vs underscore). If `ALL_SYMPTOMS` errors, a value in `KNOWLEDGE` isn't a dict — check a stray string in one condition. If counts are higher, a condition contains a symptom key that isn't in `SYMPTOM_LABELS`, which Step 5's CLI will refuse to print.
+**🩹 If it's off:** If the count is lower, a condition dict is missing or two condition keys collide (space vs underscore). If `ALL_SYMPTOMS` errors, a value in `KNOWLEDGE` isn't a dict, check a stray string in one condition. If counts are higher, a condition contains a symptom key that isn't in `SYMPTOM_LABELS`, which Step 5's CLI will refuse to print.
 
 ### 1.2 Verify the model
 
@@ -114,7 +114,7 @@ Two data shapes do the real work. The `weight` per symptom (1–3) encodes *how 
 
 **🤔 Socratic Question(s)**
 
-- A sneeze points at allergies and cold roughly equally. Both are scored 3 above — what modeling change would express "appears in both, but doesn't disambiguate them"?
+- A sneeze points at allergies and cold roughly equally. Both are scored 3 above, what modeling change would express "appears in both, but doesn't disambiguate them"?
 - The weights are integers. What does using 1–3 gain over a simple binary yes/no symptom list, and what *problem* does an expert-curated weight table like this create for a real medical product when new evidence arrives?
 
 ## Step 2: Score conditions by weighted overlap
@@ -123,7 +123,7 @@ Now the engine decides: given a small set of present symptoms, which conditions 
 
 ### 2.1 Rank conditions by matched evidence
 
-**👟 Starter hint:** For each condition, sum the weights of the symptoms the user has, divide by the condition's total weight, and sort descending — one comprehension, no branchy logic.
+**👟 Starter hint:** For each condition, sum the weights of the symptoms the user has, divide by the condition's total weight, and sort descending, one comprehension, no branchy logic.
 
 ```python
 # checker.py (continued)
@@ -142,11 +142,11 @@ for condition, ratio in score_conditions(demo):
     print(f"{ratio:>4.2f}  {condition}")
 ```
 
-The ratio is the whole algorithm. `covered` counts the weights of *matched* symptoms, `total` is the condition's full signature, so a user matching every weighted symptom of a condition scores exactly `1.0` and a partial match lands between. That normalization is the key decision: a condition with a big signature (flu) is judged by how much of *its own* evidence appears, not by raw symptom count — otherwise the condition with the most listed symptoms would always win. `sorted(... reverse=True)` turns the scored pairs into a rank list the rest of the pipeline consumes.
+The ratio is the whole algorithm. `covered` counts the weights of *matched* symptoms, `total` is the condition's full signature, so a user matching every weighted symptom of a condition scores exactly `1.0` and a partial match lands between. That normalization is the key decision: a condition with a big signature (flu) is judged by how much of *its own* evidence appears, not by raw symptom count, otherwise the condition with the most listed symptoms would always win. `sorted(... reverse=True)` turns the scored pairs into a rank list the rest of the pipeline consumes.
 
 **🎯 Expected output:** `Flu` first at `1.00` (fever, body aches, fatigue, cough are exactly its top-four), `Common cold` second, the rest below.
 
-**🩹 If it's off:** If flu doesn't rank first for that exact set, a weight in the flu dict is mistyped (e.g. `cough` accidentally 1). If *everything* scores `1.00`, `s in present` is matching wrongly because `present` holds labels while `KNOWLEDGE` keys are machine keys — keep `demo` in machine keys. If scores look tiny, you divided by the wrong total and `covered`/`total` are swapped.
+**🩹 If it's off:** If flu doesn't rank first for that exact set, a weight in the flu dict is mistyped (e.g. `cough` accidentally 1). If *everything* scores `1.00`, `s in present` is matching wrongly because `present` holds labels while `KNOWLEDGE` keys are machine keys, keep `demo` in machine keys. If scores look tiny, you divided by the wrong total and `covered`/`total` are swapped.
 
 ### 2.2 Verify scoring
 
@@ -158,16 +158,16 @@ The ratio is the whole algorithm. `covered` counts the weights of *matched* symp
 
 **🤔 Socratic Question(s)**
 
-- `{"runny_nose", "sneezing", "itchy_eyes"}` should rank allergies above the cold, which shares two of those symptoms. Work through the ratio math and say where the two conditions diverge — and why a *shorter* signature can outrank a longer one.
+- `{"runny_nose", "sneezing", "itchy_eyes"}` should rank allergies above the cold, which shares two of those symptoms. Work through the ratio math and say where the two conditions diverge, and why a *shorter* signature can outrank a longer one.
 - This scoring ignores how long symptoms have lasted. What kind of wrong call does a duration-blind ranker make, and is that a scoring problem or a scoring-plus-urgency problem?
 
 ## Step 3: Compute a bounded urgency score
 
-Reaching a rank list is not reaching a triage decision. This step adds the two columns a real assessment needs — how severe each symptom feels and how long it has lasted — and collapses everything into one bounded 0–10 urgency score the recommendation bands in Step 4 can act on.
+Reaching a rank list is not reaching a triage decision. This step adds the two columns a real assessment needs, how severe each symptom feels and how long it has lasted, and collapses everything into one bounded 0–10 urgency score the recommendation bands in Step 4 can act on.
 
 ### 3.1 Blend severity and duration into a number
 
-**👟 Starter hint:** Start from the top ratio, add small penalties for severe symptoms and for symptoms lasting past a week, and cap the result at 10 — keep each contribution small enough that high severity alone never overrides everything else.
+**👟 Starter hint:** Start from the top ratio, add small penalties for severe symptoms and for symptoms lasting past a week, and cap the result at 10, keep each contribution small enough that high severity alone never overrides everything else.
 
 ```python
 # checker.py (continued)
@@ -188,11 +188,11 @@ print("urgency:", urgency_score({"fever", "cough", "body_aches", "fatigue"},
                                 demo_sev, demo_dur))
 ```
 
-Each term earns its keep through its pairs. `base` scales with how strongly the evidence matches (the Step 2 ratio × 5, so a perfect match starts at 5); `severe_bonus` and `chronic_bonus` add small increments for symptoms flagged `severe` or lasting past a week — deliberate and modest so they nudge, not dominate; and `warning_bonus` is big (4 points) because the four `WARNING_SYMPTOMS` translate to "seek urgent care" independently of any condition match. The `min(10, …)` cap is what makes the output a *bounded* score bands can trust. Notice `present & WARNING_SYMPTOMS` reuses set intersection — no loop needed to ask "do we have any red-flag symptom?"
+Each term earns its keep through its pairs. `base` scales with how strongly the evidence matches (the Step 2 ratio × 5, so a perfect match starts at 5); `severe_bonus` and `chronic_bonus` add small increments for symptoms flagged `severe` or lasting past a week, deliberate and modest so they nudge, not dominate; and `warning_bonus` is big (4 points) because the four `WARNING_SYMPTOMS` translate to "seek urgent care" independently of any condition match. The `min(10, …)` cap is what makes the output a *bounded* score bands can trust. Notice `present & WARNING_SYMPTOMS` reuses set intersection, no loop needed to ask "do we have any red-flag symptom?"
 
-**🎯 Expected output:** A single score between 0 and 10 — for the demo above, around `7.0–8.0`, since a perfect flu match plus two severe/red-flag-adjacent signs lands in the high band.
+**🎯 Expected output:** A single score between 0 and 10, for the demo above, around `7.0–8.0`, since a perfect flu match plus two severe/red-flag-adjacent signs lands in the high band.
 
-**🩹 If it's off:** If the score exceeds 10, the `min(10, …)` cap is missing. If it stays tiny despite `severe` symptoms, `severities.get(s)` is looking up symptom *labels* while `present` holds machine keys. If a *chronic but mild* case (one symptom for 12 days) outranks an urgent one, `warning_bonus` isn't being added — check that `WARNING_SYMPTOMS` keys match real machine keys.
+**🩹 If it's off:** If the score exceeds 10, the `min(10, …)` cap is missing. If it stays tiny despite `severe` symptoms, `severities.get(s)` is looking up symptom *labels* while `present` holds machine keys. If a *chronic but mild* case (one symptom for 12 days) outranks an urgent one, `warning_bonus` isn't being added, check that `WARNING_SYMPTOMS` keys match real machine keys.
 
 ### 3.2 Verify the urgency score
 
@@ -246,11 +246,11 @@ def summarize(present: set[str], severities: dict[str, str],
 print(summarize(demo, demo_sev, demo_dur))
 ```
 
-The banding keeps medical caution *in the data*, not scattered through `if`s. Each band declares a lower cutoff and an action; `for` walks the list in descending order and the first cutoff the score clears wins — so 9.5 hits urgent care, 4.2 hits "within 24 hours", and 2.5 lands in monitor/self-care. The closing disclaimer line in `summarize` is deliberate, not decorative: every path out of this engine — high band or low — carries it, because the rule engine that ranked the conditions has exactly zero medical authority.
+The banding keeps medical caution *in the data*, not scattered through `if`s. Each band declares a lower cutoff and an action; `for` walks the list in descending order and the first cutoff the score clears wins, so 9.5 hits urgent care, 4.2 hits "within 24 hours", and 2.5 lands in monitor/self-care. The closing disclaimer line in `summarize` is deliberate, not decorative: every path out of this engine, high band or low, carries it, because the rule engine that ranked the conditions has exactly zero medical authority.
 
 **🎯 Expected output:** A 4-line block naming `Flu`, a score out of 10, a single matching band message, and the consultation disclaimer.
 
-**🩹 If it's off:** If a 9.9 score routes to "self-care", the `BANDS` list is ordered ascending and `score >= cutoff` hits the low cutoff first. If the score shows but the message says `None`, `recommendation` fell through without a return — check the loop covers every possible score, with the `(0.0, …)` last line as the floor. If the top condition looks wrong, `ranked[0]` is unpacking a non-sorted list.
+**🩹 If it's off:** If a 9.9 score routes to "self-care", the `BANDS` list is ordered ascending and `score >= cutoff` hits the low cutoff first. If the score shows but the message says `None`, `recommendation` fell through without a return, check the loop covers every possible score, with the `(0.0, …)` last line as the floor. If the top condition looks wrong, `ranked[0]` is unpacking a non-sorted list.
 
 ### 4.2 Verify the banding
 
@@ -262,7 +262,7 @@ The banding keeps medical caution *in the data*, not scattered through `if`s. Ea
 
 **🤔 Socratic Question(s)**
 
-- The bands have crisp cutoffs, so 4.9 says "book an appointment" and 5.0 says the same — but 5.0 also triggers the *same* text as 7.9. What information do those two users actually need to differ on, and would one more band fix it?
+- The bands have crisp cutoffs, so 4.9 says "book an appointment" and 5.0 says the same, but 5.0 also triggers the *same* text as 7.9. What information do those two users actually need to differ on, and would one more band fix it?
 - Real triage systems use `AND`/`OR` combinations (fever AND rash) rather than pure scores. Where in this pipeline would you insert a rule that *overrides* the score, and why should top-level medical logic live outside the numeric banding?
 
 ## Step 5: Build the interactive CLI
@@ -318,11 +318,11 @@ if __name__ == "__main__":
         run_demo()
 ```
 
-The menu does input *sanitization* in three deliberate spots: `int(x.strip())` converts typed numbers and ignores whitespace, `if 1 <= p <= len(order)` silently drops out-of-range picks instead of crashing, and bad severity/duration answers fall back to recorded defaults (`moderate`, `1 day`) rather than aborting the session. The `demo` path exists because a notebook, CI run, or a first-time read needs a zero-input way to exercise the whole pipeline — the interactive `cli` mode needs a real human at a real keyboard.
+The menu does input *sanitization* in three deliberate spots: `int(x.strip())` converts typed numbers and ignores whitespace, `if 1 <= p <= len(order)` silently drops out-of-range picks instead of crashing, and bad severity/duration answers fall back to recorded defaults (`moderate`, `1 day`) rather than aborting the session. The `demo` path exists because a notebook, CI run, or a first-time read needs a zero-input way to exercise the whole pipeline, the interactive `cli` mode needs a real human at a real keyboard.
 
 **🎯 Expected output:** Running `uv run python checker.py` prints the demo summary (no input needed). Running `uv run python checker.py cli` shows the numbered menu, collects your answers, and prints a summary for the symptoms you picked.
 
-**🩹 If it's off:** If `cli` mode crashes on a non-numeric pick, the `except ValueError` guard around the list comprehension is missing. If the menu keys don't match scored symptoms, `order` (from `SYMPTOM_LABELS`) and `KNOWLEDGE` machine keys disagree — the Step 1 check should have caught it. If `input()` blocks forever in a notebook, you're in the interactive path without a keyboard — stick to the no-argument demo there.
+**🩹 If it's off:** If `cli` mode crashes on a non-numeric pick, the `except ValueError` guard around the list comprehension is missing. If the menu keys don't match scored symptoms, `order` (from `SYMPTOM_LABELS`) and `KNOWLEDGE` machine keys disagree, the Step 1 check should have caught it. If `input()` blocks forever in a notebook, you're in the interactive path without a keyboard, stick to the no-argument demo there.
 
 ### 5.2 Verify the CLI end to end
 
@@ -330,25 +330,25 @@ The menu does input *sanitization* in three deliberate spots: `int(x.strip())` c
 
 - ✅ `uv run python checker.py` prints the demo summary without any input.
 - ✅ `uv run python checker.py cli` lists a numbered menu, accepts comma-separated picks, and prints a summary.
-- ✅ Garbage input like `abc` or `99` doesn't crash the CLI — it warns and carries on.
+- ✅ Garbage input like `abc` or `99` doesn't crash the CLI, it warns and carries on.
 - ✅ Running both modes ends with the consultation disclaimer.
 
 **🤔 Socratic Question(s)**
 
-- Users will type the same symptom as "sore throat", "Sore Throat", and "throat". The menu sidesteps this with numbers — what is the cost of that cleanup, and how would a fuzzy-text matcher introduce *new* risks here that numbers don't have?
-- The demo path is default and the interactive path is opt-in. In a safety-adjacent tool, why is defaulting to the least-interactive, deterministic path the defensible choice — and what would tempt you to invert it?
+- Users will type the same symptom as "sore throat", "Sore Throat", and "throat". The menu sidesteps this with numbers, what is the cost of that cleanup, and how would a fuzzy-text matcher introduce *new* risks here that numbers don't have?
+- The demo path is default and the interactive path is opt-in. In a safety-adjacent tool, why is defaulting to the least-interactive, deterministic path the defensible choice, and what would tempt you to invert it?
 
 ## ⚠️ Common pitfalls
 
 - **Mixing human labels and machine keys.** Users type "itchy eyes", the knowledge base stores `itchy_eyes`; matching `s in present` against one and printing the other yields silent no-matches. Fix: keep `SYMPTOM_LABELS` as the only human↔machine translation and never hand raw user text to scoring.
 - **Scores that exceed 10 or drift without bound.** Each term in `urgency_score` must be repaid by a `min(10, …)` cap, or a long-duration + severe case blows past the banding's designed range and a 12.4 "score" silently matches the urgent band.
-- **A rank that ignores duration.** A `{"headache"}` for 9 days ranks like a fresh `{"headache"}` — the score can't explain chronic *anything*. The `chronic_bonus` term exists precisely so "lasts past a week" moves the score.
+- **A rank that ignores duration.** A `{"headache"}` for 9 days ranks like a fresh `{"headache"}`, the score can't explain chronic *anything*. The `chronic_bonus` term exists precisely so "lasts past a week" moves the score.
 - **Band cutoffs ordered wrong.** If `BANDS` is ascending, a high score hits the wrong (first) band. Keep them descending and let the first `score >= cutoff` win, as in Step 4.
 - **Treating the top ratio as a diagnosis.** The engine matches symptoms to known patterns; overlap does not equal causation, and the disclaimer line must survive every code path. Remove it from any one summary and you've overstepped what a rule engine can claim.
 
 ## What you just built
 
-A working symptom triage engine with a real data model — a weighed knowledge base, normalized matching scores, a bounded urgency score blending severity and duration, four care bands, and a sanitized interactive CLI, all in pure Python with a disclaimer standing behind every recommendation. The transferable skill is *turning domain knowledge into scored data structures*: the same weighted-overlap-and-band pattern generalizes to job matching, quiz grading, feature gating, and any place a product must rank options against partial evidence.
+A working symptom triage engine with a real data model, a weighed knowledge base, normalized matching scores, a bounded urgency score blending severity and duration, four care bands, and a sanitized interactive CLI, all in pure Python with a disclaimer standing behind every recommendation. The transferable skill is *turning domain knowledge into scored data structures*: the same weighted-overlap-and-band pattern generalizes to job matching, quiz grading, feature gating, and any place a product must rank options against partial evidence.
 
 :::tip[Run a fuller version without any local setup]
 [`examples/symptom-checker/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/symptom-checker) in the course repo is a fuller version of the code above, with a richer symptom catalog and the CLI demo pre-run in the notebook. Clone it, or open the whole repo in a [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), and run it from there.
@@ -357,12 +357,12 @@ A working symptom triage engine with a real data model — a weighed knowledge b
 ## Where to go from here
 
 - Add a symptom *history* tab: track the user's scores over the last week of answers and surface "getting better / getting worse" as a band on its own.
-- Let users type a body location (head, throat, gut) and filter the menu to symptoms in that area — a simple category field on each condition.
+- Let users type a body location (head, throat, gut) and filter the menu to symptoms in that area, a simple category field on each condition.
 - Persist conditions to a separate `conditions.json` the engine loads at startup, so adding a condition never requires editing scoring code.
 - Write a small `test_checker.py` pinning the score for five hand-picked cases (including the two examples from Step 3's questions), so a future refactor can't silently change triage results.
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

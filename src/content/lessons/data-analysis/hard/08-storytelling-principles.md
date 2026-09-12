@@ -105,7 +105,7 @@ plt.show()
 
 ### Color palette choices
 
-Color is not decoration — it is communication. Choose palettes based on your data type:
+Color is not decoration, it is communication. Choose palettes based on your data type:
 
 ```python
 # Sequential: for ordered data (low to high)
@@ -139,7 +139,7 @@ Color rules:
 - **Sequential** for numerical values (darker = higher)
 - **Diverging** when comparing to a midpoint (red = bad, blue = good)
 - **Qualitative** for categories (distinct colors, no inherent order)
-- **Never use color as the only encoding** — always add labels or patterns for colorblind accessibility
+- **Never use color as the only encoding**, always add labels or patterns for colorblind accessibility
 
 ### Title and subtitle design
 
@@ -285,18 +285,18 @@ plt.show()
 ## Key Takeaways
 
 - Follow the narrative arc: situation → complication → resolution
-- Annotate charts directly — the chart should explain itself without a caption
+- Annotate charts directly, the chart should explain itself without a caption
 - Choose color palettes based on data type: sequential for ordered, diverging for midpoint comparison, qualitative for categories
 - Titles should state the insight, not the chart type
 - Structure dashboards like stories: headline → evidence → conclusion
-- Design for your audience — executives want insights, analysts want methodology
+- Design for your audience, executives want insights, analysts want methodology
 
 ## Practice Challenge
 
 Create a 3-panel dashboard telling a story about the gender gap in exam scores: (1) grouped bar chart of mean scores by gender and subject, (2) box plot of the score gap (math minus writing) by gender, and (3) an insight banner summarizing the finding. Use annotations on each chart.
 
 <details class="challenge">
-<summary>🧩 Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge, think first, then reveal</summary>
 <div class="challenge__body">
 
 ```python

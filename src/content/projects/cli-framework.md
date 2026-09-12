@@ -10,7 +10,7 @@ prerequisites: ["Python basics (variables, loops, functions, classes)", "Familia
 
 # CLI Framework
 
-Every serious Python tool lives on the command line. In this project you will build a reusable CLI framework from scratch — a task manager with subcommands for adding, listing, removing, and searching tasks. Along the way you will learn how `argparse` parses arguments, how to route subcommands, how to color terminal output, how to validate input, how to load settings from a JSON file, and how to show progress bars for slow operations. No third-party frameworks like Click or Typer — just Python's standard library and a few lines of careful design.
+Every serious Python tool lives on the command line. In this project you will build a reusable CLI framework from scratch, a task manager with subcommands for adding, listing, removing, and searching tasks. Along the way you will learn how `argparse` parses arguments, how to route subcommands, how to color terminal output, how to validate input, how to load settings from a JSON file, and how to show progress bars for slow operations. No third-party frameworks like Click or Typer, just Python's standard library and a few lines of careful design.
 
 This project assumes you know Python basics: variables, loops, functions, classes, and dictionaries. You should also be comfortable opening a terminal and running Python scripts from the command line. This is optional and ungraded. See [Real-World Projects](/projects) for the full list.
 
@@ -36,18 +36,18 @@ A CLI framework that:
 
 ## Where to run this
 
-- **Locally with `uv` (recommended).** CLI tools need a real terminal — this project does not work in notebooks.
-- **Google Colab.** Limited — you can test individual functions, but the full CLI experience requires a local terminal.
+- **Locally with `uv` (recommended).** CLI tools need a real terminal, this project does not work in notebooks.
+- **Google Colab.** Limited, you can test individual functions, but the full CLI experience requires a local terminal.
 - **JupyterLite.** Not suitable for CLI execution.
 
-- **Run it in your browser.** An interactive companion notebook is ready — open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
+- **Run it in your browser.** An interactive companion notebook is ready, open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/cli-framework/notebook.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/cli-framework/notebook.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fcli-framework%2Fnotebook.ipynb)
 
 ## Setup
 
-`uv` is a single tool that replaces the usual "install Python, then pip, then a virtual environment" chain — it manages Python versions and dependencies together.
+`uv` is a single tool that replaces the usual "install Python, then pip, then a virtual environment" chain, it manages Python versions and dependencies together.
 
 **macOS / Linux** (terminal):
 
@@ -74,7 +74,7 @@ uv init cli-framework
 cd cli-framework
 ```
 
-No third-party packages are needed — everything in this project uses Python's standard library.
+No third-party packages are needed, everything in this project uses Python's standard library.
 
 ## Step 1: Parse arguments with argparse
 
@@ -84,7 +84,7 @@ Learn how `argparse` reads the command line and converts raw strings into a stru
 
 ### Explanation
 
-When you type `python task.py add "Buy milk" --priority high`, Python sees `sys.argv` as the list `["task.py", "add", "Buy milk", "--priority", "high"]`. `argparse` turns that list into a named object where you can access `args.command == "add"`, `args.title == "Buy milk"`, and `args.priority == "high"` — no manual string splitting, no index errors.
+When you type `python task.py add "Buy milk" --priority high`, Python sees `sys.argv` as the list `["task.py", "add", "Buy milk", "--priority", "high"]`. `argparse` turns that list into a named object where you can access `args.command == "add"`, `args.title == "Buy milk"`, and `args.priority == "high"`, no manual string splitting, no index errors.
 
 The two key concepts are **positional arguments** (required, identified by position) and **optional arguments** (flags like `--priority` that have defaults).
 
@@ -221,7 +221,7 @@ Why does `argparse` handle the `--help` flag automatically? What would you have 
 
 ### Objective
 
-Extend the parser to support multiple commands — `add`, `list`, `remove`, `search` — each with its own arguments, all routed through one entry point.
+Extend the parser to support multiple commands, `add`, `list`, `remove`, `search`, each with its own arguments, all routed through one entry point.
 
 ### Explanation
 
@@ -484,21 +484,21 @@ python task.py list
 - `python task.py remove 1` removes the first task and confirms the title.
 - `python task.py remove 99` prints a clear out-of-range error.
 - `python task.py search keyword` finds tasks with matching titles.
-- Tasks persist across commands — add three, list, and all three appear.
+- Tasks persist across commands, add three, list, and all three appear.
 
 ### Socratic question
 
-Why does the `load_tasks` function return an empty list on `FileNotFoundError` instead of crashing? What design pattern does this represent — and how does it change the user experience when they run the tool for the first time?
+Why does the `load_tasks` function return an empty list on `FileNotFoundError` instead of crashing? What design pattern does this represent, and how does it change the user experience when they run the tool for the first time?
 
 ## Step 3: Add colored output
 
 ### Objective
 
-Make the terminal output visually distinct by wrapping text in ANSI color codes — so priorities, statuses, and errors are instantly recognizable.
+Make the terminal output visually distinct by wrapping text in ANSI color codes, so priorities, statuses, and errors are instantly recognizable.
 
 ### Explanation
 
-Terminals interpret special escape sequences as color commands. The sequence `\033[91m` tells the terminal to switch to red text, and `\033[0m` resets to the default. By wrapping output in these codes, you make high-priority tasks red, low-priority tasks dim, and success messages green — without any third-party libraries.
+Terminals interpret special escape sequences as color commands. The sequence `\033[91m` tells the terminal to switch to red text, and `\033[0m` resets to the default. By wrapping output in these codes, you make high-priority tasks red, low-priority tasks dim, and success messages green, without any third-party libraries.
 
 ### Starter hint
 
@@ -650,7 +650,7 @@ On a terminal that supports ANSI colors, "high" appears in red, "low" is dimmed,
 
 ### Troubleshooting
 
-**Colors appear as raw escape codes like `[91m`.** Your terminal does not interpret ANSI codes. Try `export TERM=xterm-256color` before running. On Windows, use Windows Terminal or PowerShell 7+ — the old `cmd.exe` does not support ANSI by default.
+**Colors appear as raw escape codes like `[91m`.** Your terminal does not interpret ANSI codes. Try `export TERM=xterm-256color` before running. On Windows, use Windows Terminal or PowerShell 7+, the old `cmd.exe` does not support ANSI by default.
 
 **Colors appear in files but not in terminal.** You might be piping output to a file (`python task.py list > output.txt`). ANSI codes are for interactive terminals only. If you need to write to files, strip the codes or use a flag like `--no-color`.
 
@@ -666,7 +666,7 @@ On a terminal that supports ANSI colors, "high" appears in red, "low" is dimmed,
 - The `-` remove confirmation is red.
 - The table header row is bold.
 - The "open" status label is cyan.
-- Running `python task.py list > out.txt` produces a file without escape sequences if piped through a tool that strips them, or with escape sequences if the pipe preserves them — either way, the tool does not crash.
+- Running `python task.py list > out.txt` produces a file without escape sequences if piped through a tool that strips them, or with escape sequences if the pipe preserves them, either way, the tool does not crash.
 
 ### Socratic question
 
@@ -680,7 +680,7 @@ Reject bad input early with clear, actionable error messages instead of letting 
 
 ### Explanation
 
-Input validation is the boundary between user error and program failure. A task with an empty title, a priority outside the allowed set, or a category with special characters should be caught *before* it is saved. The goal is to produce error messages that tell the user exactly what is wrong and how to fix it — no tracebacks, no silent corruption.
+Input validation is the boundary between user error and program failure. A task with an empty title, a priority outside the allowed set, or a category with special characters should be caught *before* it is saved. The goal is to produce error messages that tell the user exactly what is wrong and how to fix it, no tracebacks, no silent corruption.
 
 ### Starter hint
 
@@ -823,7 +823,7 @@ python task.py add "Write documentation" --priority medium --category work
 
 **Validation passes but data is corrupt.** Make sure `validate_task_input` is called *before* the task is appended to the list. If you validate after appending, the bad data is already saved.
 
-**Error message is cut off.** If the title is very long, the error message includes the character count. This is intentional — it tells the user exactly how much they need to shorten it.
+**Error message is cut off.** If the title is very long, the error message includes the character count. This is intentional, it tells the user exactly how much they need to shorten it.
 
 **`strip()` removes useful whitespace.** If a user intentionally enters a title with leading spaces, `strip()` removes them. This is usually the right behavior for a task title, but if you need to preserve whitespace, remove the `.strip()` calls and document the policy.
 
@@ -848,7 +848,7 @@ Why is it better to validate input at the boundary (when the user provides it) r
 
 ### Objective
 
-Let users customize default behavior — default priority, default category, color preferences — by loading settings from a JSON file.
+Let users customize default behavior, default priority, default category, color preferences, by loading settings from a JSON file.
 
 ### Explanation
 
@@ -1103,7 +1103,7 @@ python task.py config --show
 
 **Config file not found on Windows.** `Path.home()` returns `C:\Users\YourName` on Windows. The path `~/.taskconfig.json` translates correctly, but if you are running in a container or WSL, the home directory might differ. Print `config.path` to see the actual path.
 
-**Type coercion fails.** If you set `default_priority` to `3` (a string), it stays a string instead of becoming an integer. The coercion logic checks the type of the *default* value — if the default is a string, the new value stays a string. This is intentional: you cannot change a string setting to an int through `--set`.
+**Type coercion fails.** If you set `default_priority` to `3` (a string), it stays a string instead of becoming an integer. The coercion logic checks the type of the *default* value, if the default is a string, the new value stays a string. This is intentional: you cannot change a string setting to an int through `--set`.
 
 **Config file is overwritten on every save.** The `save` method writes the entire settings dict. If you add custom keys manually, they will be lost on the next save. Only keys in `DEFAULT_SETTINGS` are preserved.
 
@@ -1127,7 +1127,7 @@ Why does the config loader fall back to defaults instead of requiring the user t
 
 ### Objective
 
-Show a progress bar for operations that take time — loading, filtering, or simulating work — so the user knows the tool is doing something, not stuck.
+Show a progress bar for operations that take time, loading, filtering, or simulating work, so the user knows the tool is doing something, not stuck.
 
 ### Explanation
 
@@ -1412,20 +1412,20 @@ Override `argparse`'s default help formatter to produce colored help text. Subco
 
 ## What you just built
 
-A reusable CLI framework in pure Python: subcommand routing with `argparse`, colored terminal output using ANSI codes, input validation with clear error messages, JSON configuration file support, and a progress bar for bulk operations. Every piece uses only the standard library — no Click, no Typer, no third-party dependencies.
+A reusable CLI framework in pure Python: subcommand routing with `argparse`, colored terminal output using ANSI codes, input validation with clear error messages, JSON configuration file support, and a progress bar for bulk operations. Every piece uses only the standard library, no Click, no Typer, no third-party dependencies.
 
-The patterns here scale directly to production tools. `argparse` subcommands are how `pip`, `git`, and `docker` structure their CLIs. Input validation at the boundary prevents bad data from reaching your storage layer. Configuration files separate user preferences from code. Progress indicators turn opaque operations into transparent ones. Understanding these building blocks means you can build any CLI tool — and know *why* each part exists.
+The patterns here scale directly to production tools. `argparse` subcommands are how `pip`, `git`, and `docker` structure their CLIs. Input validation at the boundary prevents bad data from reaching your storage layer. Configuration files separate user preferences from code. Progress indicators turn opaque operations into transparent ones. Understanding these building blocks means you can build any CLI tool, and know *why* each part exists.
 
 ## Where to go from here
 
 - **Switch to Click or Typer.** Now that you understand the raw mechanics, explore how higher-level frameworks automate argument parsing, validation, and help generation. You will appreciate what they do because you have built it by hand.
 - **Add a database backend.** Replace the JSON file with SQLite for concurrent access, queries, and better performance on large task lists.
 - **Build a plugin system.** Load additional subcommands from Python files in a `plugins/` directory, similar to the original version of this project.
-- **Add interactive mode.** A `task interactive` command that reads commands in a loop — like a REPL — without re-launching the process each time.
+- **Add interactive mode.** A `task interactive` command that reads commands in a loop, like a REPL, without re-launching the process each time.
 - **Write tests.** Use `unittest` or `pytest` to test each subcommand by calling the handler functions directly with mocked `argparse` namespaces.
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser.

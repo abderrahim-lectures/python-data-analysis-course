@@ -56,7 +56,7 @@ df = pd.read_csv("titanic.csv")
 
 ## loc: selección basada en etiquetas
 
-`loc` selecciona por **etiqueta** — las etiquetas del índice de filas y los nombres de las columnas:
+`loc` selecciona por **etiqueta**, las etiquetas del índice de filas y los nombres de las columnas:
 
 ```python
 # Select row at index label 0, columns "Name" and "Age"
@@ -71,7 +71,7 @@ Age                        22.0
 Name: 0, dtype: object
 ```
 
-**Corte (slice) por etiqueta** — el punto final es inclusivo (a diferencia del slicing de Python):
+**Corte (slice) por etiqueta**, el punto final es inclusivo (a diferencia del slicing de Python):
 
 ```python
 # Rows 0 through 4, columns Name through Age
@@ -92,7 +92,7 @@ print(df.loc[[0, 5, 10]])
 
 ## iloc: selección basada en posiciones
 
-`iloc` selecciona por **posición entera** — el número de fila/columna comenzando desde 0:
+`iloc` selecciona por **posición entera**, el número de fila/columna comenzando desde 0:
 
 ```python
 # First row, first three columns
@@ -108,7 +108,7 @@ Pclass                                 3
 Name: 0, dtype: object
 ```
 
-**Corte por posición** — el punto final es exclusivo (comportamiento estándar de Python):
+**Corte por posición**, el punto final es exclusivo (comportamiento estándar de Python):
 
 ```python
 # Rows 0-4 (5 rows), columns 0-2 (3 columns)
@@ -139,7 +139,7 @@ df.iloc[0:5]      # rows at positions 0 through 4 (exclusive) — 5 rows
 
 ## Usando loc para asignaciones
 
-`loc` no es solo para leer — puedes usarlo para **editar** celdas específicas:
+`loc` no es solo para leer, puedes usarlo para **editar** celdas específicas:
 
 ```python
 # Set Age to 0 for the first passenger

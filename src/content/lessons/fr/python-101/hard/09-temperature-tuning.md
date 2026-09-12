@@ -44,7 +44,7 @@ quiz:
 ---
 Contrôler la créativité
 
-Un modèle de langue à probabilités fixes produit toujours le même genre de sortie — il suit le corpus exactement. Mais parfois vous voulez un texte plus créatif et surprenant, et parfois vous voulez la sortie la plus prévisible et sûre. La **température** est le bouton qui contrôle ce compromis.
+Un modèle de langue à probabilités fixes produit toujours le même genre de sortie, il suit le corpus exactement. Mais parfois vous voulez un texte plus créatif et surprenant, et parfois vous voulez la sortie la plus prévisible et sûre. La **température** est le bouton qui contrôle ce compromis.
 
 Les cellules ci-dessous réutilisent les fonctions `load_corpus`, `tokenize`, `build_bigrams` et `normalize_bigrams` des leçons 01 à 06, la fonction `sample_next` de la leçon 07 et un `generate_text` sensible à la température (la même implémentation que vous verrez assemblée dans la leçon 10). Chaque page de leçon démarre une session Python vierge, alors exécutez d'abord cette cellule de mise en place :
 
@@ -123,9 +123,9 @@ model = normalize_bigrams(build_bigrams(tokenize(" ".join(texts))))
 
 La température est un nombre (généralement entre 0,1 et 2,0) qui met à l'échelle la distribution de probabilité du modèle avant l'échantillonnage :
 
-- **Température basse** (par ex., 0,2) : Aiguise la distribution — le mot le plus probable devient encore plus probable, et les mots rares deviennent presque impossibles. La sortie est répétitive et prévisible.
-- **Température 1,0** : Aucun changement — les probabilités d'origine sont utilisées telles quelles.
-- **Température élevée** (par ex., 1,5) : Aplatit la distribution — tous les mots deviennent plus également probables. La sortie est plus aléatoire, créative et potentiellement insensée.
+- **Température basse** (par ex., 0,2) : Aiguise la distribution, le mot le plus probable devient encore plus probable, et les mots rares deviennent presque impossibles. La sortie est répétitive et prévisible.
+- **Température 1,0** : Aucun changement, les probabilités d'origine sont utilisées telles quelles.
+- **Température élevée** (par ex., 1,5) : Aplatit la distribution, tous les mots deviennent plus également probables. La sortie est plus aléatoire, créative et potentiellement insensée.
 
 ### Les mathématiques : mise à l'échelle des log-probabilités
 
@@ -150,7 +150,7 @@ def apply_temperature(probabilities, temperature):
     return [e / total for e in exp_scaled]
 ```
 
-L'astuce `math.exp(s - max_scaled)` empêche le dépassement numérique — sans soustraire le maximum, les exponentielles pourraient être astronomiquement grandes.
+L'astuce `math.exp(s - max_scaled)` empêche le dépassement numérique, sans soustraire le maximum, les exponentielles pourraient être astronomiquement grandes.
 
 ### Exemple : distribution à trois mots
 

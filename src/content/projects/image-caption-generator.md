@@ -14,9 +14,9 @@ prerequisites: ["Python 101"]
 
 # 🖼️ Build an Image Caption Generator
 
-Every photo on the web needs a text description — for accessibility, for search engines, for people who can't load the image. Writing captions by hand is slow; a vision-language model can generate them in seconds. This project builds a CLI tool that takes an image (from a file path or URL) and produces a human-readable caption using a free-tier vision API. You'll handle image preprocessing, API calls, batch processing with progress tracking, and even write captions back into image metadata.
+Every photo on the web needs a text description, for accessibility, for search engines, for people who can't load the image. Writing captions by hand is slow; a vision-language model can generate them in seconds. This project builds a CLI tool that takes an image (from a file path or URL) and produces a human-readable caption using a free-tier vision API. You'll handle image preprocessing, API calls, batch processing with progress tracking, and even write captions back into image metadata.
 
-This assumes Python 101 — nothing from Data Analysis is required. Optional and ungraded; see [Real-World Projects](/projects) for the full list.
+This assumes Python 101, nothing from Data Analysis is required. Optional and ungraded; see [Real-World Projects](/projects) for the full list.
 
 ## 🎯 What you'll do
 
@@ -29,7 +29,7 @@ This assumes Python 101 — nothing from Data Analysis is required. Optional and
 
 ## Where to run this
 
-**Locally with `uv`** is the primary path — this tool reads image files from disk and writes modified images with embedded metadata.
+**Locally with `uv`** is the primary path, this tool reads image files from disk and writes modified images with embedded metadata.
 
 **Google Colab, Kaggle Notebooks, and Binder** work for trying the tool. The notebook uses the same code and includes sample images for testing. You'll need a free-tier API key (GitHub Models, Gemini, or Groq) set as an environment variable.
 
@@ -81,11 +81,11 @@ GITHUB_TOKEN=your-key-here
 
 - ✅ `uv --version` prints a version number.
 - ✅ `image-caption-generator/` exists with a `pyproject.toml`, and `Pillow`, `requests`, `click`, and `python-dotenv` are installed.
-- ✅ You have a `.env` file with a valid API key — not pasted into any script.
+- ✅ You have a `.env` file with a valid API key, not pasted into any script.
 
 ## Step 1: Load and preprocess images
 
-Vision APIs have size limits — sending a 20 MB raw photo wastes bandwidth and may be rejected. Preprocessing loads the image, resizes it to a reasonable dimension, and converts it to a format the API accepts (base64-encoded JPEG or PNG).
+Vision APIs have size limits, sending a 20 MB raw photo wastes bandwidth and may be rejected. Preprocessing loads the image, resizes it to a reasonable dimension, and converts it to a format the API accepts (base64-encoded JPEG or PNG).
 
 ### 1.1 Load and resize an image
 
@@ -113,11 +113,11 @@ def image_to_base64(img: Image.Image, format: str = "JPEG") -> str:
     return base64.b64encode(buffer.getvalue()).decode("utf-8")
 ```
 
-The `thumbnail` method resizes the image while preserving its aspect ratio — a 4000×3000 photo becomes 1024×768, not a distorted 1024×1024. The `convert("RGB")` call ensures the image is in a format JPEG can encode, even if the original was RGBA (transparent PNG) or grayscale. The base64 string is what the API expects in the request body.
+The `thumbnail` method resizes the image while preserving its aspect ratio, a 4000×3000 photo becomes 1024×768, not a distorted 1024×1024. The `convert("RGB")` call ensures the image is in a format JPEG can encode, even if the original was RGBA (transparent PNG) or grayscale. The base64 string is what the API expects in the request body.
 
 **🎯 Expected output:** `load_and_resize("photo.jpg")` returns a PIL Image with both dimensions ≤ 1024. `image_to_base64(img)` returns a long string of characters (A-Z, a-z, 0-9, +, /).
 
-**🩹 If it's off:** If `thumbnail` doesn't resize, the image is already smaller than the max — that's correct behavior, not a bug. If `base64` encoding fails, the image format may not be supported by PIL.
+**🩹 If it's off:** If `thumbnail` doesn't resize, the image is already smaller than the max, that's correct behavior, not a bug. If `base64` encoding fails, the image format may not be supported by PIL.
 
 ### 1.2 Verify preprocessing
 
@@ -141,7 +141,7 @@ assert len(b64) > 100  # base64 string is non-trivial
 
 **🎯 Expected output:** All assertions pass; the resized image fits within 1024×1024 and the base64 string is non-empty.
 
-**🩹 If it's off:** If the width or height is still above 1024, `thumbnail` isn't being called — check that the method is chained on the `img` object.
+**🩹 If it's off:** If the width or height is still above 1024, `thumbnail` isn't being called, check that the method is chained on the `img` object.
 
 ### 1.3 Verify image preprocessing
 
@@ -195,11 +195,11 @@ def caption_image(client: OpenAI, image_b64: str, prompt: str = "Describe this i
     return response.choices[0].message.content.strip()
 ```
 
-The `data:image/jpeg;base64,{image_b64}` format is how vision APIs accept inline images — the model receives the raw pixel data encoded as text, not a URL it needs to fetch. The `max_tokens=200` keeps captions concise. The prompt is configurable so you can ask for different caption styles ("one sentence," "detailed paragraph," "alt text for screen readers").
+The `data:image/jpeg;base64,{image_b64}` format is how vision APIs accept inline images, the model receives the raw pixel data encoded as text, not a URL it needs to fetch. The `max_tokens=200` keeps captions concise. The prompt is configurable so you can ask for different caption styles ("one sentence," "detailed paragraph," "alt text for screen readers").
 
 **🎯 Expected output:** `caption_image(client, base64_string)` returns a string like "A red bicycle parked against a brick wall on a sunny afternoon."
 
-**🩹 If it's off:** If the API returns an error, check that the `GITHUB_TOKEN` environment variable is set. If the response is empty, the model may not support vision — try a different model name.
+**🩹 If it's off:** If the API returns an error, check that the `GITHUB_TOKEN` environment variable is set. If the response is empty, the model may not support vision, try a different model name.
 
 ### 2.2 Handle errors gracefully
 
@@ -271,7 +271,7 @@ def caption_directory(
     return results
 ```
 
-The function walks the directory, filters by image extension, and processes each file with a progress counter. The `end=" "` and `flush=True` on the print keep the progress on one line. Each result is a dictionary with the path, caption, and error (if any) — this makes it easy to filter successes from failures afterward.
+The function walks the directory, filters by image extension, and processes each file with a progress counter. The `end=" "` and `flush=True` on the print keep the progress on one line. Each result is a dictionary with the path, caption, and error (if any), this makes it easy to filter successes from failures afterward.
 
 **🎯 Expected output:** For a directory with 5 images, the output shows `[1/5] photo1.jpg... OK` through `[5/5] photo5.jpg... OK`, ending with "Done: 5/5 succeeded".
 
@@ -316,7 +316,7 @@ Free-tier API providers often have rate limits (requests per minute). The `time.
 
 **🎯 Expected output:** The batch processor pauses briefly between each image, and all requests succeed without 429 (rate limit) errors.
 
-**🩹 If it's off:** If you still hit rate limits, increase the delay. If the batch is too slow, decrease it — but monitor for errors.
+**🩹 If it's off:** If you still hit rate limits, increase the delay. If the batch is too slow, decrease it, but monitor for errors.
 
 ### 3.3 Verify batch processing
 
@@ -333,7 +333,7 @@ Free-tier API providers often have rate limits (requests per minute). The `time.
 
 ## Step 4: Embed captions into image EXIF metadata
 
-Storing captions as separate text files is fragile — the caption gets separated from the image. EXIF metadata is embedded in the image file itself, so the caption travels with the image wherever it goes.
+Storing captions as separate text files is fragile, the caption gets separated from the image. EXIF metadata is embedded in the image file itself, so the caption travels with the image wherever it goes.
 
 ### 4.1 Write EXIF metadata
 
@@ -366,7 +366,7 @@ The EXIF `UserComment` tag (0x9286) is the standard field for arbitrary text met
 
 **🎯 Expected output:** `write_caption_to_exif("photo.jpg", "A sunset over the ocean")` saves the image with the caption embedded in its EXIF data.
 
-**🩹 If it's off:** If `piexif` isn't installed, add it: `uv add piexif`. If the EXIF data is lost after saving, the quality parameter may be causing re-encoding — try `quality=100`.
+**🩹 If it's off:** If `piexif` isn't installed, add it: `uv add piexif`. If the EXIF data is lost after saving, the quality parameter may be causing re-encoding, try `quality=100`.
 
 ### 4.2 Read EXIF captions
 
@@ -386,7 +386,7 @@ def read_caption_from_exif(image_path: str) -> str | None:
 
 **🎯 Expected output:** Reading the caption back returns the exact string that was written.
 
-**🩹 If it's off:** If the read returns `None` after writing, the EXIF tag number may not match — check `piexif.ExifIFD.UserComment`.
+**🩹 If it's off:** If the read returns `None` after writing, the EXIF tag number may not match, check `piexif.ExifIFD.UserComment`.
 
 ### 4.3 Verify EXIF embedding
 
@@ -513,7 +513,7 @@ This tests the full pipeline: create, preprocess, encode, embed, read back. Each
 
 ## What you just built
 
-An image caption generator that takes any image and produces a human-readable description using a free-tier vision model. The pipeline — preprocess, encode, caption, embed metadata — handles the full lifecycle of AI-generated alt text. The batch processor turns a folder of hundreds of images into a JSON file of captions in minutes, and the EXIF embedding ensures captions stay attached to their images.
+An image caption generator that takes any image and produces a human-readable description using a free-tier vision model. The pipeline, preprocess, encode, caption, embed metadata, handles the full lifecycle of AI-generated alt text. The batch processor turns a folder of hundreds of images into a JSON file of captions in minutes, and the EXIF embedding ensures captions stay attached to their images.
 
 :::tip[Run a fuller version without any local setup]
 [`examples/image-caption-generator/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/image-caption-generator) in the course repo has a richer version with multiple provider support, sample images, and the CLI wired up end to end. Clone it, or open the whole repo in a [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), and run it from there.
@@ -527,6 +527,6 @@ An image caption generator that takes any image and produces a human-readable de
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

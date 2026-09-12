@@ -138,8 +138,8 @@ dtypes: float64(2), int64(5), object(5)
 
 Key observations:
 - **Age**: 177 missing values (20%)
-- **Cabin**: 687 missing values (77%) — too much to fill
-- **Embarked**: only 2 missing values — easy to fix
+- **Cabin**: 687 missing values (77%), too much to fill
+- **Embarked**: only 2 missing values, easy to fix
 
 ## Statistical summary
 
@@ -148,9 +148,9 @@ print(df.describe())
 ```
 
 This shows count, mean, std, min, quartiles, and max for all numeric columns. Notice:
-- `Fare` has a wide range (0 to 512) with a high max — likely outliers
+- `Fare` has a wide range (0 to 512) with a high max, likely outliers
 - `Age` ranges from 0.42 (infant) to 80 years
-- `Survived` is binary — mean of 0.38 means 38% survived
+- `Survived` is binary, mean of 0.38 means 38% survived
 
 ## Categorical distributions
 
@@ -190,11 +190,11 @@ Embarked    2      0.2
 ## Initial observations
 
 Before any analysis, note these patterns:
-1. **Class survival gap** — first class likely had higher survival rates
-2. **Gender bias** — "women and children first" policy may show in the data
-3. **Missing Age** — 20% missing, needs a filling strategy
-4. **Cabin useless** — 77% missing, probably should be dropped
-5. **Fare outliers** — some passengers paid vastly more than others
+1. **Class survival gap**, first class likely had higher survival rates
+2. **Gender bias**, "women and children first" policy may show in the data
+3. **Missing Age**, 20% missing, needs a filling strategy
+4. **Cabin useless**, 77% missing, probably should be dropped
+5. **Fare outliers**, some passengers paid vastly more than others
 
 ## Try It
 
@@ -222,7 +222,7 @@ print(df.groupby("Embarked")["Survived"].mean())
 - Always start EDA with `head()`, `info()`, and `describe()` to understand structure
 - `value_counts()` reveals the distribution of categorical columns
 - Missing value analysis should happen before any cleaning decisions
-- Document observations — they guide your entire analysis plan
+- Document observations, they guide your entire analysis plan
 
 ## Practice Challenge
 

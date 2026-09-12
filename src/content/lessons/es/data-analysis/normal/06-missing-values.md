@@ -101,7 +101,7 @@ Embarked        0.2%
 ...
 ```
 
-Cabin falta en un 77% — demasiado para rellenarlo de forma significativa. Age falta en un 20% — vale la pena intentar rellenarla. Embarked tiene solo 2 faltantes — fácil de manejar.
+Cabin falta en un 77%, demasiado para rellenarlo de forma significativa. Age falta en un 20%, vale la pena intentar rellenarla. Embarked tiene solo 2 faltantes, fácil de manejar.
 
 ## Eliminando valores faltantes
 
@@ -149,7 +149,7 @@ df["Embarked"] = df["Embarked"].fillna("S")   # most common port
 df["Age"] = df["Age"].fillna(df["Age"].median())
 ```
 
-**Rellenar hacia adelante o hacia atrás** — útil para series de tiempo:
+**Rellenar hacia adelante o hacia atrás**, útil para series de tiempo:
 
 ```python
 # Use the previous valid value to fill gaps
@@ -178,11 +178,11 @@ df = df.fillna(fill_values)
 
 ## Errores comunes
 
-**Rellenar antes de dividir en entrenamiento/prueba** — esto filtra información. Calcula los valores de relleno solo con los datos de entrenamiento y luego aplícalos a ambos.
+**Rellenar antes de dividir en entrenamiento/prueba**, esto filtra información. Calcula los valores de relleno solo con los datos de entrenamiento y luego aplícalos a ambos.
 
-**Eliminar demasiado agresivamente** — verifica siempre cuántas filas pierdes. `dropna()` sin argumentos suele eliminar mucho más de lo esperado.
+**Eliminar demasiado agresivamente**, verifica siempre cuántas filas pierdes. `dropna()` sin argumentos suele eliminar mucho más de lo esperado.
 
-**Olvidar verificar** — ejecuta siempre `df.isna().sum()` después de rellenar para confirmar que no queden valores NaN.
+**Olvidar verificar**, ejecuta siempre `df.isna().sum()` después de rellenar para confirmar que no queden valores NaN.
 
 ## Inténtalo
 

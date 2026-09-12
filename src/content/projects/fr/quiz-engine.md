@@ -20,7 +20,7 @@ Construis une plateforme de quiz avec des questions aléatoires, des sessions ch
 
 ## 🎯 Ce que tu vas faire
 
-1. Modéliser trois types de questions — choix multiple, vrai/faux et texte à trous — en utilisant des classes abstraites et des dataclasses.
+1. Modéliser trois types de questions, choix multiple, vrai/faux et texte à trous, en utilisant des classes abstraites et des dataclasses.
 2. Construire un moteur de quiz qui gère une banque de questions, sélectionne des questions aléatoires et exécute des sessions chronométrées.
 3. Noter les réponses automatiquement avec des ventilations par catégorie et des pourcentages de précision.
 4. Visualiser les performances avec des diagrammes en barres et en secteurs en utilisant matplotlib.
@@ -30,11 +30,11 @@ Construis une plateforme de quiz avec des questions aléatoires, des sessions ch
 
 ## Où exécuter ceci
 
-- **En local avec `uv` (recommandé).** Ce projet a besoin de pandas et matplotlib — un bon candidat pour tourner sur ta propre machine. La section Configuration ci-dessous explique comment.
+- **En local avec `uv` (recommandé).** Ce projet a besoin de pandas et matplotlib, un bon candidat pour tourner sur ta propre machine. La section Configuration ci-dessous explique comment.
 - **Google Colab ou les notebooks Kaggle.** Colle les cellules de code directement dans un notebook. Les graphiques se rendent en intégré, et `input()` fonctionne pour les invites de quiz.
-- **Terrain de jeu JupyterLite.** Colle les cellules de code directement dans un notebook — à noter que les entrées-sorties de fichiers (Étape 5) fonctionnent différemment dans le navigateur ; la persistance JSON ne fonctionnera qu'en local.
+- **Terrain de jeu JupyterLite.** Colle les cellules de code directement dans un notebook, à noter que les entrées-sorties de fichiers (Étape 5) fonctionnent différemment dans le navigateur ; la persistance JSON ne fonctionnera qu'en local.
 
-- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt — ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
+- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt, ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/quiz-engine/notebook.fr.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/quiz-engine/notebook.fr.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fquiz-engine%2Fnotebook.fr.ipynb)
@@ -76,7 +76,7 @@ class Question(ABC):
         ...
 ```
 
-**🎯 Résultat attendu :** Définir cette classe ne devrait pas produire de sortie visible — c'est un plan. Tu peux vérifier qu'elle fonctionne en définissant une sous-classe concrète minimale et en l'instanciant (sous-étape suivante).
+**🎯 Résultat attendu :** Définir cette classe ne devrait pas produire de sortie visible, c'est un plan. Tu peux vérifier qu'elle fonctionne en définissant une sous-classe concrète minimale et en l'instanciant (sous-étape suivante).
 
 **🩹 Si ça ne marche pas :** Si tu obtiens `TypeError: Can't instantiate abstract class`, tu as oublié d'implémenter `check` ou `display` dans ta sous-classe concrète. Si tu vois `TypeError: __init__() missing required arguments`, revérifie que les champs de ta dataclass ont des valeurs par défaut là où c'est nécessaire.
 
@@ -124,7 +124,7 @@ Devrait imprimer :
 Correct: True, Points: 10
 ```
 
-**🩹 Si ça ne marche pas :** Si `check("4")` retourne `False`, tu compares la chaîne brute — assure-toi d'appeler `int(answer)` avant de comparer à `correct_index + 1` (le +1 tient compte de la numérotation d'affichage basée sur 1).
+**🩹 Si ça ne marche pas :** Si `check("4")` retourne `False`, tu compares la chaîne brute, assure-toi d'appeler `int(answer)` avant de comparer à `correct_index + 1` (le +1 tient compte de la numérotation d'affichage basée sur 1).
 
 ### 1.3 Implémente TrueFalse et FillInBlank
 
@@ -182,7 +182,7 @@ Devrait imprimer :
   Correct: True, Points: 10
 ```
 
-**🩹 Si ça ne marche pas :** Si `TrueFalse` accepte une entrée « yes »/« no », tu as oublié de restreindre à l'ensemble `("true", "t", "false", "f")` — un « yes » contournerait ta vérification et marquerait silencieusement faux. Si `FillInBlank` est sensible à la casse, assure-toi d'appeler `.lower()` des deux côtés de la comparaison.
+**🩹 Si ça ne marche pas :** Si `TrueFalse` accepte une entrée « yes »/« no », tu as oublié de restreindre à l'ensemble `("true", "t", "false", "f")`, un « yes » contournerait ta vérification et marquerait silencieusement faux. Si `FillInBlank` est sensible à la casse, assure-toi d'appeler `.lower()` des deux côtés de la comparaison.
 
 ### 1.4 Vérifie les trois types
 
@@ -191,7 +191,7 @@ Devrait imprimer :
 - ✅ `MultipleChoice` affiche des options numérotées et accepte une chaîne numérique comme entrée.
 - ✅ `TrueFalse` accepte « true »/« t »/« false »/« f » (insensible à la casse) et rejette les autres entrées.
 - ✅ `FillInBlank` accepte n'importe laquelle des réponses de la liste `accepted_answers`, insensiblement à la casse.
-- ✅ Les trois retournent `(bool, int)` depuis `check()` — `True` avec pleins points pour correct, `False` avec 0 pour faux.
+- ✅ Les trois retournent `(bool, int)` depuis `check()`, `True` avec pleins points pour correct, `False` avec 0 pour faux.
 - ✅ Chacun affiche le texte de la question et la valeur en points avant de demander une réponse.
 
 **🤔 Question(s) socratique(s)**
@@ -243,7 +243,7 @@ for q in quiz:
     q.display()
 ```
 
-**🩹 Si ça ne marche pas :** Si tu obtiens `ValueError: Only N questions available in pool, need M`, tu demandes plus de questions qu'il n'en existe dans le pool filtré — soit ajoute plus de questions, soit réduis `num_questions`. Si la même question apparaît deux fois, tu utilises `random.choices` (avec remplacement) au lieu de `random.sample` (sans remplacement).
+**🩹 Si ça ne marche pas :** Si tu obtiens `ValueError: Only N questions available in pool, need M`, tu demandes plus de questions qu'il n'en existe dans le pool filtré, soit ajoute plus de questions, soit réduis `num_questions`. Si la même question apparaît deux fois, tu utilises `random.choices` (avec remplacement) au lieu de `random.sample` (sans remplacement).
 
 ### 2.2 Exécute une session de quiz chronométrée
 
@@ -285,7 +285,7 @@ def run_quiz(engine: QuizEngine, questions: list[Question],
 
 **🎯 Résultat attendu :** Exécuter un quiz imprime chaque question, accepte une entrée, et imprime correct/faux après chaque réponse. Quand la minuterie expire, il imprime `TIME'S UP!` et s'arrête. La liste de dicts retournée a une entrée par question répondue.
 
-**🩹 Si ça ne marche pas :** Si la minuterie n'arrête pas le quiz, vérifie que `remaining <= 0` utilise `time.time() - start` (écoulé), pas `start - time.time()`. Si le quiz s'arrête toujours à la première question, ton calcul de `remaining` est faux — assure-toi de calculer `time_limit - (time.time() - start)`, pas juste `time.time() - start`.
+**🩹 Si ça ne marche pas :** Si la minuterie n'arrête pas le quiz, vérifie que `remaining <= 0` utilise `time.time() - start` (écoulé), pas `start - time.time()`. Si le quiz s'arrête toujours à la première question, ton calcul de `remaining` est faux, assure-toi de calculer `time_limit - (time.time() - start)`, pas juste `time.time() - start`.
 
 ### 2.3 Vérifie le moteur
 
@@ -368,7 +368,7 @@ Devrait imprimer :
   python: 1/1 correct (100%) — Strong
 ```
 
-**🩹 Si ça ne marche pas :** Si la précision est 0 alors que tu avais des bonnes réponses, vérifie que `"points"` et `"max_points"` sont les clés de tes dicts de résultats — une faute de frappe comme `"max_point"` donne silencieusement 0 via `sum`. Si des catégories manquent, ta boucle `for r in results` n'initialise pas les nouvelles entrées de catégorie à la première rencontre.
+**🩹 Si ça ne marche pas :** Si la précision est 0 alors que tu avais des bonnes réponses, vérifie que `"points"` et `"max_points"` sont les clés de tes dicts de résultats, une faute de frappe comme `"max_point"` donne silencieusement 0 via `sum`. Si des catégories manquent, ta boucle `for r in results` n'initialise pas les nouvelles entrées de catégorie à la première rencontre.
 
 ### 3.2 Convertis en un DataFrame pandas pour une analyse plus profonde
 
@@ -410,7 +410,7 @@ print(category_breakdown(df))
 2   python                1                1            10          10         100.0        Strong
 ```
 
-**🩹 Si ça ne marche pas :** Si `correct_answers` montre des flottants (comme `1.0` au lieu de `1`), c'est une coercition d'entier pandas normale avec NaN — cela n'affectera pas les calculs. Si tu obtiens un `KeyError`, le nom de colonne dans ton DataFrame ne correspond pas à ce que `groupby` attend — vérifie les clés exactes dans tes dicts de résultats.
+**🩹 Si ça ne marche pas :** Si `correct_answers` montre des flottants (comme `1.0` au lieu de `1`), c'est une coercition d'entier pandas normale avec NaN, cela n'affectera pas les calculs. Si tu obtiens un `KeyError`, le nom de colonne dans ton DataFrame ne correspond pas à ce que `groupby` attend, vérifie les clés exactes dans tes dicts de résultats.
 
 ## Étape 4 : Visualise les performances
 
@@ -448,7 +448,7 @@ def plot_category_bars(summary: dict) -> None:
 
 **🎯 Résultat attendu :** Un diagramme en barres horizontales avec les noms de catégories sur l'axe des ordonnées, les pourcentages de précision sur l'axe des abscisses, des barres vertes pour les catégories ≥70 %, des barres rouges en dessous, et une ligne grise en pointillés à 70 %.
 
-**🩹 Si ça ne marche pas :** Si le diagramme est vide, tu appelles probablement `plt.show()` avant d'ajouter des données — assure-toi de créer la figure et les axes d'abord. Si les barres sont verticales au lieu d'horizontales, tu as utilisé `bar` au lieu de `barh`. Si l'axe des abscisses dépasse 100, ajoute `ax.set_xlim(0, 100)`.
+**🩹 Si ça ne marche pas :** Si le diagramme est vide, tu appelles probablement `plt.show()` avant d'ajouter des données, assure-toi de créer la figure et les axes d'abord. Si les barres sont verticales au lieu d'horizontales, tu as utilisé `bar` au lieu de `barh`. Si l'axe des abscisses dépasse 100, ajoute `ax.set_xlim(0, 100)`.
 
 ### 4.2 Construis le diagramme en secteurs
 
@@ -474,9 +474,9 @@ def plot_overall_pie(summary: dict) -> None:
     plt.show()
 ```
 
-**🎯 Résultat attendu :** Un diagramme en secteurs avec deux tranches — verte pour correct, rouge pour faux — avec des étiquettes de pourcentage et la précision globale dans le titre.
+**🎯 Résultat attendu :** Un diagramme en secteurs avec deux tranches, verte pour correct, rouge pour faux, avec des étiquettes de pourcentage et la précision globale dans le titre.
 
-**🩹 Si ça ne marche pas :** Si `total_wrong` est négatif, ton compte de `questions_answered` est faux — assure-toi de compter `len(results)`, pas seulement les bonnes. Si le diagramme en secteurs n'a pas d'étiquettes, vérifie que tu as bien passé le paramètre `labels` à `plt.pie`.
+**🩹 Si ça ne marche pas :** Si `total_wrong` est négatif, ton compte de `questions_answered` est faux, assure-toi de compter `len(results)`, pas seulement les bonnes. Si le diagramme en secteurs n'a pas d'étiquettes, vérifie que tu as bien passé le paramètre `labels` à `plt.pie`.
 
 ### 4.3 Combine les deux diagrammes
 
@@ -515,7 +515,7 @@ def plot_results(summary: dict) -> None:
 
 **🎯 Résultat attendu :** Une seule figure avec un diagramme en barres horizontales à gauche et un diagramme en secteurs à droite, enregistrée sous `quiz_results.png`.
 
-**🩹 Si ça ne marche pas :** Si un seul diagramme apparaît, l'autre axe est peut-être caché — vérifie que tu indexes `axes[0]` et `axes[1]`, pas `axes` directement. Si la figure est écrasée, augmente la largeur de `figsize` (par ex. `(14, 5)`).
+**🩹 Si ça ne marche pas :** Si un seul diagramme apparaît, l'autre axe est peut-être caché, vérifie que tu indexes `axes[0]` et `axes[1]`, pas `axes` directement. Si la figure est écrasée, augmente la largeur de `figsize` (par ex. `(14, 5)`).
 
 ## Étape 5 : Enregistre les résultats en JSON
 
@@ -569,11 +569,11 @@ print(f"Saved {len(history.sessions)} session(s)")
 print(f"File exists: {HISTORY_FILE.exists()}")
 ```
 
-**🩹 Si ça ne marche pas :** Si tu obtiens `TypeError: Object of type datetime is not JSON serializable`, tu stockes directement l'objet datetime — convertis-le en chaîne avec `.isoformat()` d'abord. Si le fichier est vide après l'enregistrement, tu appelles `save()` avant `add_session()`, ou `self.sessions` est réassigné au lieu d'être ajouté par append.
+**🩹 Si ça ne marche pas :** Si tu obtiens `TypeError: Object of type datetime is not JSON serializable`, tu stockes directement l'objet datetime, convertis-le en chaîne avec `.isoformat()` d'abord. Si le fichier est vide après l'enregistrement, tu appelles `save()` avant `add_session()`, ou `self.sessions` est réassigné au lieu d'être ajouté par append.
 
 ### 5.2 Charge et affiche les sessions passées
 
-**👟 Indice de départ :** Ajoute une méthode qui imprime un tableau récapitulatif de toutes les sessions passées — horodatage, précision, score — pour que l'étudiant voie sa progression d'un coup d'œil.
+**👟 Indice de départ :** Ajoute une méthode qui imprime un tableau récapitulatif de toutes les sessions passées, horodatage, précision, score, pour que l'étudiant voie sa progression d'un coup d'œil.
 
 ```python
 def show_history(history: HistoryFile) -> None:
@@ -613,7 +613,7 @@ def show_history(history: HistoryFile) -> None:
 - ✅ Après avoir exécuté un quiz et appelé `add_session`, `quiz_history.json` existe sur disque avec du JSON valide.
 - ✅ Redémarrer le programme et créer un nouveau `HistoryFile` charge les sessions précédentes.
 - ✅ `show_history` affiche toutes les sessions passées avec date, score et précision.
-- ✅ Supprimer `quiz_history.json` et réexécuter ne plante pas — il démarre avec une liste vide.
+- ✅ Supprimer `quiz_history.json` et réexécuter ne plante pas, il démarre avec une liste vide.
 
 ## Étape 6 : Interface CLI
 
@@ -682,7 +682,7 @@ def main():
 
 **🎯 Résultat attendu :** Exécuter `main()` montre un menu, te permet de passer un quiz (avec des questions chronométrées, une notation et des graphiques), de voir l'historique passé, ou de quitter. Chaque quiz est enregistré automatiquement.
 
-**🩹 Si ça ne marche pas :** Si le menu boucle à l'infini sans accepter d'entrée, tu utilises `input` dans un `try/except` qui avale `EOFError` — retire l'exception large. Si « Passer un quiz » plante avec un `IndexError`, ton `build_quiz` essaie d'échantillonner plus de questions que la banque n'en contient — le `try/except ValueError` autour devrait l'attraper.
+**🩹 Si ça ne marche pas :** Si le menu boucle à l'infini sans accepter d'entrée, tu utilises `input` dans un `try/except` qui avale `EOFError`, retire l'exception large. Si « Passer un quiz » plante avec un `IndexError`, ton `build_quiz` essaie d'échantillonner plus de questions que la banque n'en contient, le `try/except ValueError` autour devrait l'attraper.
 
 ### 6.2 Ajoute un retour coloré
 
@@ -714,9 +714,9 @@ def print_score_bar(summary: dict) -> None:
     print(f"  Score: {summary['total_score']}/{summary['max_score']}")
 ```
 
-**🎯 Résultat attendu :** Exécuter `print_score_bar({"accuracy": 75.0, "total_score": 30, "max_score": 40})` imprime une barre de progression colorée dans le terminal — verte si ≥70 %, rouge si en dessous.
+**🎯 Résultat attendu :** Exécuter `print_score_bar({"accuracy": 75.0, "total_score": 30, "max_score": 40})` imprime une barre de progression colorée dans le terminal, verte si ≥70 %, rouge si en dessous.
 
-**🩹 Si ça ne marche pas :** Si tu vois des codes d'échappement bruts comme `[92m` au lieu de couleurs, ton terminal ne supporte pas les codes ANSI — la plupart des terminaux modernes le font, mais l'invite de commande Windows peut avoir besoin d'un `os.system("")` appelé une fois au démarrage pour les activer. Si la barre est mal alignée, vérifie que `filled` ne dépasse pas `bar_length`.
+**🩹 Si ça ne marche pas :** Si tu vois des codes d'échappement bruts comme `[92m` au lieu de couleurs, ton terminal ne supporte pas les codes ANSI, la plupart des terminaux modernes le font, mais l'invite de commande Windows peut avoir besoin d'un `os.system("")` appelé une fois au démarrage pour les activer. Si la barre est mal alignée, vérifie que `filled` ne dépasse pas `bar_length`.
 
 ### 6.3 Vérifie l'application complète
 
@@ -731,20 +731,20 @@ def print_score_bar(summary: dict) -> None:
 
 ## ⚠️ Pièges courants
 
-- **Oublier de normaliser l'entrée.** `"True"` et `"true"` sont des chaînes différentes en Python. Chaque méthode `check()` devrait `.strip().lower()` l'entrée utilisateur avant de comparer. Cela s'applique aussi aux réponses à trous — `"def"` et `"Def"` devraient tous deux être acceptés.
+- **Oublier de normaliser l'entrée.** `"True"` et `"true"` sont des chaînes différentes en Python. Chaque méthode `check()` devrait `.strip().lower()` l'entrée utilisateur avant de comparer. Cela s'applique aussi aux réponses à trous, `"def"` et `"Def"` devraient tous deux être acceptés.
 - **Dérive de minuterie.** Si tu calcules `time.time() - start` seulement au début de chaque question (pas avant chaque réponse), la minuterie ne tiendra pas compte du temps que l'utilisateur met à taper. Appelle `remaining = time_limit - (time.time() - start)` juste avant chaque invite.
 - **Muter la liste par défaut.** Si `build_quiz` modifie `self.questions` au lieu de filtrer dans une nouvelle liste `pool`, tu retireras définitivement des questions de la banque. Utilise toujours une compréhension de liste pour créer une copie filtrée.
-- **N'enregistrer qu'à la sortie.** Si tu n'écris `quiz_history.json` que lorsque l'utilisateur quitte, un plantage ou un `Ctrl+C` perd toute la session. Appelle `history.save()` dans `add_session`, immédiatement après l'append — le même principe que le motif de statistiques Wordle.
+- **N'enregistrer qu'à la sortie.** Si tu n'écris `quiz_history.json` que lorsque l'utilisateur quitte, un plantage ou un `Ctrl+C` perd toute la session. Appelle `history.save()` dans `add_session`, immédiatement après l'append, le même principe que le motif de statistiques Wordle.
 - **`random.sample` contre `random.choices`.** `sample` choisit sans remplacement (chaque question apparaît au plus une fois). `choices` choisit avec remplacement (la même question peut apparaître deux fois dans un quiz). Utilise `sample` sauf si tu veux explicitement des répétitions.
 
 ## Ce que tu viens de construire
 
-Une plateforme de quiz complète : trois types de questions soutenus par des classes abstraites, un moteur de quiz avec sélection aléatoire et sessions chronométrées, une notation automatique avec ventilations par catégorie, des visualisations matplotlib, une persistance JSON entre les sessions, et un menu CLI coloré qui relie tout ensemble. Chaque pièce repose sur le Python de base — classes, dictionnaires, listes, `random`, `time`, `json` — plus pandas et matplotlib pour la couche d'analyse et de visualisation.
+Une plateforme de quiz complète : trois types de questions soutenus par des classes abstraites, un moteur de quiz avec sélection aléatoire et sessions chronométrées, une notation automatique avec ventilations par catégorie, des visualisations matplotlib, une persistance JSON entre les sessions, et un menu CLI coloré qui relie tout ensemble. Chaque pièce repose sur le Python de base, classes, dictionnaires, listes, `random`, `time`, `json`, plus pandas et matplotlib pour la couche d'analyse et de visualisation.
 
 ## Où aller à partir d'ici
 
 - **Niveaux de difficulté.** Ajoute un attribut `difficulty` aux questions (facile/moyen/difficile) et filtre à la fois par catégorie et difficulté lors de la construction d'un quiz.
 - **Répétition espacée.** Suis les questions mal répondues et augmente leur probabilité d'apparaître dans les futurs quiz en utilisant un échantillonnage aléatoire pondéré.
 - **Import/export de questions.** Laisse les utilisateurs écrire des banques de questions sous forme de fichiers CSV ou JSON et les charger au démarrage, pour que les quiz puissent être partagés entre les étudiants.
-- **Quiz adaptatifs.** Commence par des questions faciles, et ne progresse vers des plus difficiles qu'une fois que l'étudiant a prouvé sa maîtrise — une forme simple de tests adaptatifs par ordinateur.
-- **GUI avec Streamlit.** Remplace le CLI par une interface web avec Streamlit — la même logique de backend fonctionne, remplace juste `input()` par des widgets Streamlit.
+- **Quiz adaptatifs.** Commence par des questions faciles, et ne progresse vers des plus difficiles qu'une fois que l'étudiant a prouvé sa maîtrise, une forme simple de tests adaptatifs par ordinateur.
+- **GUI avec Streamlit.** Remplace le CLI par une interface web avec Streamlit, la même logique de backend fonctionne, remplace juste `input()` par des widgets Streamlit.

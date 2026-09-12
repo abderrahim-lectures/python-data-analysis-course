@@ -6,9 +6,9 @@ difficulty: "intermediate"
 
 # 📚 Build a RAG-Backed Docs Q&A Discord Bot
 
-This project takes the retrieval-augmented generation pipeline from [Build a RAG App](/projects/rag-notes) — local embeddings, NumPy cosine-similarity search, a free-tier LLM for the final answer — and puts a different front end on it: instead of a script you run from a terminal one question at a time, the same pipeline answers questions live, inside a Discord server, whenever someone mentions the bot. Nothing about *how* it retrieves or generates changes; only the interface does.
+This project takes the retrieval-augmented generation pipeline from [Build a RAG App](/projects/rag-notes), local embeddings, NumPy cosine-similarity search, a free-tier LLM for the final answer, and puts a different front end on it: instead of a script you run from a terminal one question at a time, the same pipeline answers questions live, inside a Discord server, whenever someone mentions the bot. Nothing about *how* it retrieves or generates changes; only the interface does.
 
-This assumes Python 101. Having built [Build a RAG App](/projects/rag-notes) first is strongly recommended — this project reuses its embedding/retrieval code directly and moves quickly past the parts it already explained in depth.
+This assumes Python 101. Having built [Build a RAG App](/projects/rag-notes) first is strongly recommended, this project reuses its embedding/retrieval code directly and moves quickly past the parts it already explained in depth.
 
 This is optional and ungraded. See [Real-World Projects](/projects) for the full, growing list.
 
@@ -22,13 +22,13 @@ This is optional and ungraded. See [Real-World Projects](/projects) for the full
 
 ## Where to run this
 
-**Locally with `uv`** is really the only practical option here, more so than for most other projects in this series. A Discord bot isn't a script that runs once and exits — it holds an open connection to Discord and needs to keep running for as long as you want the bot to respond, which means a real, long-running local (or hosted) process, not a one-off command.
+**Locally with `uv`** is really the only practical option here, more so than for most other projects in this series. A Discord bot isn't a script that runs once and exits, it holds an open connection to Discord and needs to keep running for as long as you want the bot to respond, which means a real, long-running local (or hosted) process, not a one-off command.
 
-**GitHub Codespaces** works too, and is a reasonable substitute if you'd rather not install anything locally: open [the whole course repo in a free Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python, and `uv` are already installed, per the repo's `.devcontainer/devcontainer.json`) and run `uv run python bot.py` in a terminal there — it stays running for as long as that terminal (and the Codespace) stays open, the same "long-running process" requirement as running it locally.
+**GitHub Codespaces** works too, and is a reasonable substitute if you'd rather not install anything locally: open [the whole course repo in a free Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python, and `uv` are already installed, per the repo's `.devcontainer/devcontainer.json`) and run `uv run python bot.py` in a terminal there, it stays running for as long as that terminal (and the Codespace) stays open, the same "long-running process" requirement as running it locally.
 
-**Google Colab, Kaggle Notebooks, and Binder are a poor fit for the actual bot** — be honest with yourself about that rather than fighting it. Notebooks are built around running a cell, getting output, and moving to the next cell; they aren't meant for a background process that sits and waits for events indefinitely. You *can* start a bot's event loop in a notebook cell, but the moment the notebook's runtime recycles, disconnects, or you close the tab, the bot goes down with it — skip Colab/Kaggle/Binder for the live bot and use a real local process or Codespaces instead.
+**Google Colab, Kaggle Notebooks, and Binder are a poor fit for the actual bot**, be honest with yourself about that rather than fighting it. Notebooks are built around running a cell, getting output, and moving to the next cell; they aren't meant for a background process that sits and waits for events indefinitely. You *can* start a bot's event loop in a notebook cell, but the moment the notebook's runtime recycles, disconnects, or you close the tab, the bot goes down with it, skip Colab/Kaggle/Binder for the live bot and use a real local process or Codespaces instead.
 
-That said, the RAG pipeline *underneath* the bot — chunking, embedding, retrieval, and generation — is just regular code that runs a cell at a time, which is exactly what notebooks are good at. The badges below open a notebook that walks through that core pipeline against the project's sample docs and prints real retrieved-and-generated answers, so you can see it work without installing anything locally. It deliberately stops short of the Discord layer — for that, come back here and run `bot.py` locally or in Codespaces as described above.
+That said, the RAG pipeline *underneath* the bot, chunking, embedding, retrieval, and generation, is just regular code that runs a cell at a time, which is exactly what notebooks are good at. The badges below open a notebook that walks through that core pipeline against the project's sample docs and prints real retrieved-and-generated answers, so you can see it work without installing anything locally. It deliberately stops short of the Discord layer, for that, come back here and run `bot.py` locally or in Codespaces as described above.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/docs-qa-bot/notebook.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/docs-qa-bot/notebook.ipynb)
@@ -40,7 +40,7 @@ Everything in this section only needs to happen once, before you write a line of
 
 ### Install `uv`
 
-`uv` is a single tool that replaces the usual "install Python, then install pip, then install a virtual environment tool, then install packages" chain — it can install and manage Python versions itself, alongside your project's dependencies.
+`uv` is a single tool that replaces the usual "install Python, then install pip, then install a virtual environment tool, then install packages" chain, it can install and manage Python versions itself, alongside your project's dependencies.
 
 **macOS / Linux** (terminal):
 
@@ -66,8 +66,8 @@ Discord's [Developer Portal](https://discord.com/developers/applications) is fre
 
 1. Sign in and click **New Application**, give it a name (e.g. "docs-qa-bot"), and create it.
 2. Open the **Bot** tab on the left. Discord adds a bot user to your application automatically.
-3. Click **Reset Token** (or **View Token** if this is the first time) and copy it. This token is exactly like a password — anyone with it can control your bot — so treat it the same way you already treat an LLM API key: never paste it into code, never commit it.
-4. On the same **Bot** tab, scroll to **Privileged Gateway Intents** and turn on **Message Content**. This is required for the bot to actually see the text of messages it's mentioned in — without it, `discord.py` receives an empty string for every message's content no matter what code you write.
+3. Click **Reset Token** (or **View Token** if this is the first time) and copy it. This token is exactly like a password, anyone with it can control your bot, so treat it the same way you already treat an LLM API key: never paste it into code, never commit it.
+4. On the same **Bot** tab, scroll to **Privileged Gateway Intents** and turn on **Message Content**. This is required for the bot to actually see the text of messages it's mentioned in, without it, `discord.py` receives an empty string for every message's content no matter what code you write.
 
 :::tip[A bot token is a secret, exactly like an API key]
 Everything the [RAG App project](/projects/rag-notes) taught about handling LLM API keys applies here too, for a second secret: never hardcode the bot token, never commit it, and keep it in a local `.env` file (below) instead.
@@ -75,18 +75,18 @@ Everything the [RAG App project](/projects/rag-notes) taught about handling LLM 
 
 ### Get a free LLM API key
 
-The generation half of this pipeline needs the same kind of free-tier LLM key as the [RAG App project](/projects/rag-notes) — **pick whichever provider you like**, none require a credit card at the time of writing:
+The generation half of this pipeline needs the same kind of free-tier LLM key as the [RAG App project](/projects/rag-notes), **pick whichever provider you like**, none require a credit card at the time of writing:
 
 | Provider | Where to get a key | Why you might pick it |
 |---|---|---|
-| **GitHub Models** *(suggested default)* | [github.com/settings/tokens](https://github.com/settings/tokens) — a personal access token with the `models: read` scope | No separate signup — you already have a GitHub account. More generous free-tier limits than Gemini's. |
+| **GitHub Models** *(suggested default)* | [github.com/settings/tokens](https://github.com/settings/tokens), a personal access token with the `models: read` scope | No separate signup, you already have a GitHub account. More generous free-tier limits than Gemini's. |
 | Gemini | [Google AI Studio](https://aistudio.google.com/) | The most commonly referenced option. |
 | Groq | [console.groq.com/keys](https://console.groq.com/keys) | Fast inference, generous free tier, no card. |
 | Mistral | [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys) | One of the more generous permanent free quotas. |
 | Cerebras | [cloud.cerebras.ai](https://cloud.cerebras.ai/) | High daily token volume, no card. |
-| OpenRouter | [openrouter.ai/keys](https://openrouter.ai/keys) | One API, many free models — good for comparing providers. |
+| OpenRouter | [openrouter.ai/keys](https://openrouter.ai/keys) | One API, many free models, good for comparing providers. |
 
-If you already have a key from doing the RAG App project, the same one works here — no need to generate a second one.
+If you already have a key from doing the RAG App project, the same one works here, no need to generate a second one.
 
 ### Set up the project
 
@@ -96,7 +96,7 @@ cd docs-qa-bot
 uv add discord.py sentence-transformers numpy python-dotenv openai
 ```
 
-`discord.py` is the library that actually talks to Discord — connecting to its Gateway, receiving message events, and sending replies. `sentence-transformers` and `numpy` are the same retrieval libraries from the RAG App project, doing the same job here: local embeddings and cosine-similarity search, just over documentation instead of notes. `openai` talks to GitHub Models' OpenAI-compatible endpoint for the default provider above; swap it for your provider's own package if you picked a different one, exactly as the RAG App project describes.
+`discord.py` is the library that actually talks to Discord, connecting to its Gateway, receiving message events, and sending replies. `sentence-transformers` and `numpy` are the same retrieval libraries from the RAG App project, doing the same job here: local embeddings and cosine-similarity search, just over documentation instead of notes. `openai` talks to GitHub Models' OpenAI-compatible endpoint for the default provider above; swap it for your provider's own package if you picked a different one, exactly as the RAG App project describes.
 
 Create a `.env` file in the project folder (never commit this) with **both** secrets from this section:
 
@@ -170,15 +170,15 @@ if __name__ == "__main__":
     print(f"Loaded {len(chunks)} chunks from {DOCS_DIR}/")
 ```
 
-**👟 Starter hint:** Create `prepare_docs.py` — `load_chunks()` scans `docs/` for `.md`/`.txt` files, splits each into paragraphs, merges short ones up to ~500 characters, and tags every chunk with its source filename.
+**👟 Starter hint:** Create `prepare_docs.py`, `load_chunks()` scans `docs/` for `.md`/`.txt` files, splits each into paragraphs, merges short ones up to ~500 characters, and tags every chunk with its source filename.
 
 **🎯 Expected output:** `uv run python prepare_docs.py` prints a nonzero chunk count for whatever documentation you added.
 
-**🩹 If it's off:** An empty folder prints `0 chunks` — make sure `docs/` exists with real `.md`/`.txt` files in it. If one giant file produces a single oversized chunk, that file has no blank lines to split on; chunking quality depends on your source formatting.
+**🩹 If it's off:** An empty folder prints `0 chunks`, make sure `docs/` exists with real `.md`/`.txt` files in it. If one giant file produces a single oversized chunk, that file has no blank lines to split on; chunking quality depends on your source formatting.
 
 ### 1.2 Build the embedding index
 
-Put whatever documentation you want the bot to answer from into a `docs/` folder as `.md`/`.txt` files — a project's README and wiki pages, a team's internal runbook, this course's own lesson files, anything real. Then embed it, reusing the RAG App project's `build_index.py` verbatim (only the import changes, from `prepare_notes` to `prepare_docs`):
+Put whatever documentation you want the bot to answer from into a `docs/` folder as `.md`/`.txt` files, a project's README and wiki pages, a team's internal runbook, this course's own lesson files, anything real. Then embed it, reusing the RAG App project's `build_index.py` verbatim (only the import changes, from `prepare_notes` to `prepare_docs`):
 
 ```python
 # build_index.py
@@ -228,7 +228,7 @@ uv run python build_index.py
 
 **🎯 Expected output:** `uv run python build_index.py` reports a nonzero chunk count and creates both `index.npy` and `chunks.json` in the project folder.
 
-**🩹 If it's off:** If it prints "No chunks found", your `docs/` folder is empty or uses extensions outside `.md`/`.txt`. Remember: nothing rebuilds the index automatically — after any edit to `docs/`, you must re-run `build_index.py` or the bot keeps answering from the old index.
+**🩹 If it's off:** If it prints "No chunks found", your `docs/` folder is empty or uses extensions outside `.md`/`.txt`. Remember: nothing rebuilds the index automatically, after any edit to `docs/`, you must re-run `build_index.py` or the bot keeps answering from the old index.
 
 ### 1.3 Verify the docs index
 
@@ -245,7 +245,7 @@ uv run python build_index.py
 
 ## Step 2: Retrieve relevant chunks
 
-Retrieval is also unchanged from the RAG App project — embed the question with the same model, then rank every chunk by cosine similarity, which collapses to a plain dot product since every vector was already normalized to length 1 at embedding time.
+Retrieval is also unchanged from the RAG App project, embed the question with the same model, then rank every chunk by cosine similarity, which collapses to a plain dot product since every vector was already normalized to length 1 at embedding time.
 
 ### 2.1 Write the retrieval function
 
@@ -292,11 +292,11 @@ if __name__ == "__main__":
         print(f"{r['score']:.3f}  [{r['source']}]  {r['text'][:80]}...")
 ```
 
-**👟 Starter hint:** Create `retrieve.py` — `retrieve(question, top_k=3)` embeds the question, takes the dot product against every stored vector (valid because each was normalized), and returns the top `top_k` chunks with their scores. Note how `get_model()` builds the model once and caches it, since a bot will call retrieval many times.
+**👟 Starter hint:** Create `retrieve.py`, `retrieve(question, top_k=3)` embeds the question, takes the dot product against every stored vector (valid because each was normalized), and returns the top `top_k` chunks with their scores. Note how `get_model()` builds the model once and caches it, since a bot will call retrieval many times.
 
 **🎯 Expected output:** `uv run python retrieve.py` prints ranked results with real similarity scores for the test question.
 
-**🩹 If it's off:** If it errors on `np.load`/`json.load`, `index.npy`/`chunks.json` don't exist — you skipped Step 1. If scores look identical or meaningless, double-check you normalized the question vector, matching how the index was built.
+**🩹 If it's off:** If it errors on `np.load`/`json.load`, `index.npy`/`chunks.json` don't exist, you skipped Step 1. If scores look identical or meaningless, double-check you normalized the question vector, matching how the index was built.
 
 ### 2.2 Test retrieval before touching Discord
 
@@ -304,17 +304,17 @@ if __name__ == "__main__":
 uv run python retrieve.py
 ```
 
-If this feels too fast, that's deliberate — the [RAG App project](/projects/rag-notes#step-4-retrieve-relevant-chunks) covers exactly why cosine similarity works this way, what normalization buys you, and how the math connects to a matrix-vector multiply, in much more depth than repeating it here would add.
+If this feels too fast, that's deliberate, the [RAG App project](/projects/rag-notes#step-4-retrieve-relevant-chunks) covers exactly why cosine similarity works this way, what normalization buys you, and how the math connects to a matrix-vector multiply, in much more depth than repeating it here would add.
 
 :::tip[Test retrieval before touching Discord at all]
-Get `retrieve.py` returning genuinely relevant chunks for a few test questions *before* writing any bot code. If retrieval is wrong, a bot wrapped around it will just confidently deliver wrong answers in a Discord channel — much harder to debug live than a quiet terminal script.
+Get `retrieve.py` returning genuinely relevant chunks for a few test questions *before* writing any bot code. If retrieval is wrong, a bot wrapped around it will just confidently deliver wrong answers in a Discord channel, much harder to debug live than a quiet terminal script.
 :::
 
 **👟 Starter hint:** Run `retrieve.py` on a few questions you expect your docs to answer, and deliberately try one your docs clearly don't cover.
 
 **🎯 Expected output:** The top result for an easy test question actually looks relevant when you read it, and a question your docs don't cover yields a noticeably lower top score.
 
-**🩹 If it's off:** If a clearly-docs-covered question returns irrelevant chunks, your docs are too sparse or the question wording differs too much from the index — tighten the docs or the question. Confirming the "uncovered question scores lower" case early is what tells you the ranking actually works.
+**🩹 If it's off:** If a clearly-docs-covered question returns irrelevant chunks, your docs are too sparse or the question wording differs too much from the index, tighten the docs or the question. Confirming the "uncovered question scores lower" case early is what tells you the ranking actually works.
 
 ### 2.3 Verify retrieval
 
@@ -333,11 +333,11 @@ Get `retrieve.py` returning genuinely relevant chunks for a few test questions *
 
 This is the actual new part of this project: a `discord.py` event handler that calls `retrieve()`, builds the same "answer using only this context" prompt as the RAG App project, and replies with the model's answer.
 
-`discord.py`'s core pattern is an event loop: you create a `Client` with a set of `intents` (which categories of events it's allowed to receive), then register `async def` functions decorated with `@client.event` for the events you care about — most commonly `on_ready` (fires once, when the connection is established) and `on_message` (fires for every message the bot can see).
+`discord.py`'s core pattern is an event loop: you create a `Client` with a set of `intents` (which categories of events it's allowed to receive), then register `async def` functions decorated with `@client.event` for the events you care about, most commonly `on_ready` (fires once, when the connection is established) and `on_message` (fires for every message the bot can see).
 
 ### 3.1 Write the prompt and `answer` helper
 
-**👟 Starter hint:** Start `bot.py` with the setup that runs once at startup — the prompt template, the `discord.Client` with `message_content` intent, the LLM client, and an `answer(question)` that calls `retrieve()`, builds the prompt, and returns the model's reply as a string.
+**👟 Starter hint:** Start `bot.py` with the setup that runs once at startup, the prompt template, the `discord.Client` with `message_content` intent, the LLM client, and an `answer(question)` that calls `retrieve()`, builds the prompt, and returns the model's reply as a string.
 
 ```python
 # bot.py
@@ -387,15 +387,15 @@ def answer(question: str, top_k: int = 3) -> str:
     return response.choices[0].message.content
 ```
 
-`answer()` is line-for-line the same idea as the RAG App project's `ask()` — retrieve, build a prompt, call the LLM — just returning a string instead of printing it, so `on_message` can hand that string to `message.reply(...)`. Everything above `on_ready`/`on_message` runs once at startup; everything inside those two functions runs once per event, for as long as `client.run(...)` keeps the connection alive.
+`answer()` is line-for-line the same idea as the RAG App project's `ask()`, retrieve, build a prompt, call the LLM, just returning a string instead of printing it, so `on_message` can hand that string to `message.reply(...)`. Everything above `on_ready`/`on_message` runs once at startup; everything inside those two functions runs once per event, for as long as `client.run(...)` keeps the connection alive.
 
-**🎯 Expected output:** `answer("how do I enable the message content intent?")` returns a string grounded in your docs — test this as a plain function call before worrying about Discord.
+**🎯 Expected output:** `answer("how do I enable the message content intent?")` returns a string grounded in your docs, test this as a plain function call before worrying about Discord.
 
-**🩹 If it's off:** If `answer` crashes on a missing key, `load_dotenv()`/`GITHUB_TOKEN` isn't set up (see Setup). If it answers from memory rather than your docs, the prompt template probably isn't instructing the model to use only the context — keep that "Using ONLY the context" wording.
+**🩹 If it's off:** If `answer` crashes on a missing key, `load_dotenv()`/`GITHUB_TOKEN` isn't set up (see Setup). If it answers from memory rather than your docs, the prompt template probably isn't instructing the model to use only the context, keep that "Using ONLY the context" wording.
 
 ### 3.2 Write the event handlers
 
-**👟 Starter hint:** Add the two `@client.event` handlers and the run entry point. `on_message` should skip the bot's own messages, only act when mentioned, strip the mention out to get the question, show a typing indicator, and reply — guarding against over-long replies.
+**👟 Starter hint:** Add the two `@client.event` handlers and the run entry point. `on_message` should skip the bot's own messages, only act when mentioned, strip the mention out to get the question, show a typing indicator, and reply, guarding against over-long replies.
 
 ```python
 if __name__ == "__main__":
@@ -432,21 +432,21 @@ async def on_message(message: discord.Message):
     await message.reply(reply)
 ```
 
-The `if message.author == client.user: return` guard matters more than it might look: without it, if the bot's own reply happened to mention itself (it won't here, but it's an easy mistake in general), it would trigger `on_message` again on its own output — an infinite loop of a bot replying to itself.
+The `if message.author == client.user: return` guard matters more than it might look: without it, if the bot's own reply happened to mention itself (it won't here, but it's an easy mistake in general), it would trigger `on_message` again on its own output, an infinite loop of a bot replying to itself.
 
 **🎯 Expected output:** `bot.py` starts cleanly (no `SyntaxError` from a missing `async`/`await`), and you can read the handler as: skip self, require a mention, extract the question, answer, reply.
 
-**🩹 If it's off:** If `SyntaxError` appears, you left `async` off a handler or `await` off a call (see the tip in 3.3). If the bot replies to everything, you're missing the two early `return` guards — the self-check and the mention check must come first.
+**🩹 If it's off:** If `SyntaxError` appears, you left `async` off a handler or `await` off a call (see the tip in 3.3). If the bot replies to everything, you're missing the two early `return` guards, the self-check and the mention check must come first.
 
 ### 3.3 Understand why `async def` and `await` are required
 
 :::tip[async def and await aren't optional here]
-`discord.py` is built entirely on Python's `asyncio` — every event handler must be declared `async def`, and any call that waits on the network (sending a message, fetching data) must be `await`-ed. Forgetting either one is one of the most common first bugs: leaving off `async` on `on_message` raises an error immediately, and forgetting `await` on `message.reply(...)` silently does nothing at all, since it just creates an un-awaited coroutine instead of actually running it.
+`discord.py` is built entirely on Python's `asyncio`, every event handler must be declared `async def`, and any call that waits on the network (sending a message, fetching data) must be `await`-ed. Forgetting either one is one of the most common first bugs: leaving off `async` on `on_message` raises an error immediately, and forgetting `await` on `message.reply(...)` silently does nothing at all, since it just creates an un-awaited coroutine instead of actually running it.
 :::
 
 **🎯 Expected output:** You can now explain why `on_message` is `async def`, why `await message.reply(...)` is non-negotiable, and what an un-awaited coroutine would do.
 
-**🩹 If it's off:** If a reply silently never sends, you almost certainly wrote `message.reply(...)` without `await` — it created a coroutine that was never run. Add the `await` and the reply fires.
+**🩹 If it's off:** If a reply silently never sends, you almost certainly wrote `message.reply(...)` without `await`, it created a coroutine that was never run. Add the `await` and the reply fires.
 
 ### 3.4 Verify the handler
 
@@ -481,19 +481,19 @@ Run it:
 uv run python bot.py
 ```
 
-You should see `Logged in as docs-qa-bot#1234 -- ready in 1 server(s).` printed — silence after that is normal; the process is just sitting and waiting on Discord's Gateway for events, the same "no output means it's working" idea as an MCP server waiting on stdio. In the test server, mention the bot with a real question about whatever's in your `docs/` folder:
+You should see `Logged in as docs-qa-bot#1234 -- ready in 1 server(s).` printed, silence after that is normal; the process is just sitting and waiting on Discord's Gateway for events, the same "no output means it's working" idea as an MCP server waiting on stdio. In the test server, mention the bot with a real question about whatever's in your `docs/` folder:
 
 ```
 @docs-qa-bot how do I enable the message content intent?
 ```
 
-Within a few seconds you should see a typing indicator, then a reply grounded in your actual documentation — not a guess from the model's general training data.
+Within a few seconds you should see a typing indicator, then a reply grounded in your actual documentation, not a guess from the model's general training data.
 
 **👟 Starter hint:** Keep `bot.py` running in one terminal, then mention the bot in Discord with a question your docs actually answer.
 
 **🎯 Expected output:** The bot reports ready, and a mention triggers a typing indicator followed by a reply grounded in your docs folder.
 
-**🩹 If it's off:** If the bot never logs in, either `client.run` is failing to authenticate (stale `DISCORD_BOT_TOKEN` — reset it in the portal and update `.env`) or the "Message Content" toggle from Setup is off, making `message.content` silently empty. If it replies from memory instead of your docs, run `retrieve.py` in isolation (Step 2) to confirm retrieval — not the Discord wiring — is the problem.
+**🩹 If it's off:** If the bot never logs in, either `client.run` is failing to authenticate (stale `DISCORD_BOT_TOKEN`, reset it in the portal and update `.env`) or the "Message Content" toggle from Setup is off, making `message.content` silently empty. If it replies from memory instead of your docs, run `retrieve.py` in isolation (Step 2) to confirm retrieval, not the Discord wiring, is the problem.
 
 ### 4.3 Verify the end-to-end flow
 
@@ -510,24 +510,24 @@ Within a few seconds you should see a typing indicator, then a reply grounded in
 
 ## ⚠️ Common pitfalls
 
-- **Forgetting the "Message Content" privileged intent.** This has to be enabled in *two* places — `intents.message_content = True` in code, **and** the toggle under Bot → Privileged Gateway Intents in the Developer Portal. Miss the portal toggle and `message.content` is silently an empty string for every message, with no error telling you why.
-- **Rate limits on the free LLM tier, made worse by real bot traffic.** A CLI script like the RAG App project's `ask.py` only calls the LLM when you run it; a live bot can get several questions in quick succession from different people in a busy server, and each one is a separate call against your provider's free-tier quota. A 429 error under load isn't a bug — see the [RAG App project's pitfalls](/projects/rag-notes#️-common-pitfalls) for the same rate-limit pattern and how to add a retry.
+- **Forgetting the "Message Content" privileged intent.** This has to be enabled in *two* places, `intents.message_content = True` in code, **and** the toggle under Bot → Privileged Gateway Intents in the Developer Portal. Miss the portal toggle and `message.content` is silently an empty string for every message, with no error telling you why.
+- **Rate limits on the free LLM tier, made worse by real bot traffic.** A CLI script like the RAG App project's `ask.py` only calls the LLM when you run it; a live bot can get several questions in quick succession from different people in a busy server, and each one is a separate call against your provider's free-tier quota. A 429 error under load isn't a bug, see the [RAG App project's pitfalls](/projects/rag-notes#️-common-pitfalls) for the same rate-limit pattern and how to add a retry.
 - **Not rebuilding the index after changing `docs/`.** Exactly like the RAG App project: `build_index.py` only runs when you run it. Add or edit a doc and the bot keeps answering from the *old* index until you re-run `uv run python build_index.py` and restart the bot.
-- **Running the bot with a stale or wrong token after regenerating it.** Clicking "Reset Token" in the Developer Portal invalidates the old token immediately — if `.env` still has the old value, `client.run(...)` fails to log in. Update `.env` every time you reset the token, and never assume the value you copied once is still valid.
+- **Running the bot with a stale or wrong token after regenerating it.** Clicking "Reset Token" in the Developer Portal invalidates the old token immediately, if `.env` still has the old value, `client.run(...)` fails to log in. Update `.env` every time you reset the token, and never assume the value you copied once is still valid.
 
 ## What you just built
 
-A live Discord bot that answers real questions from real documentation, grounded in retrieved text rather than the model's general knowledge — the exact same RAG pipeline as the [RAG App project](/projects/rag-notes), with a `discord.py` event loop standing in for a CLI script as the interface. The retrieval and generation code didn't change in any meaningful way; only how a question gets in and an answer gets out did. That's a useful thing to notice generally: a RAG pipeline's core logic is interface-agnostic, and the same `retrieve()`/`answer()` pair here could just as easily sit behind a Slack bot, a web form, or an API endpoint instead.
+A live Discord bot that answers real questions from real documentation, grounded in retrieved text rather than the model's general knowledge, the exact same RAG pipeline as the [RAG App project](/projects/rag-notes), with a `discord.py` event loop standing in for a CLI script as the interface. The retrieval and generation code didn't change in any meaningful way; only how a question gets in and an answer gets out did. That's a useful thing to notice generally: a RAG pipeline's core logic is interface-agnostic, and the same `retrieve()`/`answer()` pair here could just as easily sit behind a Slack bot, a web form, or an API endpoint instead.
 
 ## Where to go from here
 
-- Add a **slash command** (`/ask <question>`) using `discord.py`'s `app_commands` alongside, or instead of, mention-based replies — slash commands show up in Discord's UI with autocomplete and don't require typing an `@mention`, at the cost of a small amount of extra registration code.
-- Track which `docs/` source each answer actually cited, and have the bot include a "Source: filename.md" line in its reply — a small but real trust-building feature for anyone reading the answer.
-- Once your docs folder outgrows what comfortably fits in memory, look at a real vector database like [ChromaDB](https://www.trychroma.com/), exactly as suggested in the [RAG App project's "Where to go from here"](/projects/rag-notes#where-to-go-from-here) — nothing about the Discord layer needs to change to support it.
-- Deploy the bot somewhere that stays up without your own laptop running — a small always-on VM, or a free tier on a platform like Railway or Fly.io — so it keeps answering questions even when you're not at your machine.
+- Add a **slash command** (`/ask <question>`) using `discord.py`'s `app_commands` alongside, or instead of, mention-based replies, slash commands show up in Discord's UI with autocomplete and don't require typing an `@mention`, at the cost of a small amount of extra registration code.
+- Track which `docs/` source each answer actually cited, and have the bot include a "Source: filename.md" line in its reply, a small but real trust-building feature for anyone reading the answer.
+- Once your docs folder outgrows what comfortably fits in memory, look at a real vector database like [ChromaDB](https://www.trychroma.com/), exactly as suggested in the [RAG App project's "Where to go from here"](/projects/rag-notes#where-to-go-from-here), nothing about the Discord layer needs to change to support it.
+- Deploy the bot somewhere that stays up without your own laptop running, a small always-on VM, or a free tier on a platform like Railway or Fly.io, so it keeps answering questions even when you're not at your machine.
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

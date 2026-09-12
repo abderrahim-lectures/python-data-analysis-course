@@ -44,7 +44,7 @@ quiz:
 ---
 El ensamblaje final
 
-Cada pieza está construida y probada individualmente. Ahora las conectas en un solo script que una persona pueda ejecutar desde la línea de comandos. Este es el punto culminante de todo el proyecto — un modelo de lenguaje diminuto que lee un corpus CSV y genera texto nuevo.
+Cada pieza está construida y probada individualmente. Ahora las conectas en un solo script que una persona pueda ejecutar desde la línea de comandos. Este es el punto culminante de todo el proyecto, un modelo de lenguaje diminuto que lee un corpus CSV y genera texto nuevo.
 
 ## Conceptos clave
 
@@ -216,7 +216,7 @@ En cinco semanas, has construido un pipeline completo de PLN desde cero:
 4. **Semana 4**: Implementaste muestreo aleatorio ponderado para la generación de texto
 5. **Semana 5**: Ensamblaste todo en una herramienta CLI con control de temperatura
 
-Este es el mismo pipeline fundamental que se usa en los modelos de lenguaje de producción — solo que con más datos, más parámetros y redes neuronales en lugar de tablas de bigramas. Las ideas centrales (tokenizar → contar → probabilidad → muestrear) son idénticas.
+Este es el mismo pipeline fundamental que se usa en los modelos de lenguaje de producción, solo que con más datos, más parámetros y redes neuronales en lugar de tablas de bigramas. Las ideas centrales (tokenizar → contar → probabilidad → muestrear) son idénticas.
 
 ## Inténtalo
 

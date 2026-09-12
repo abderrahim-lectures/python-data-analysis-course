@@ -1,6 +1,6 @@
 ---
 title: "Build a Code Formatter"
-description: "A Python code tidy-up tool: trims trailing whitespace, normalizes comments to a space after every #, collapses blank-line runs, checks indentation in 4-space steps, reports what changed, and writes formatted.py — wrapped in a one-argument CLI."
+description: "A Python code tidy-up tool: trims trailing whitespace, normalizes comments to a space after every #, collapses blank-line runs, checks indentation in 4-space steps, reports what changed, and writes formatted.py, wrapped in a one-argument CLI."
 difficulty: "beginner"
 estimatedMinutes: 60
 xpReward: 100
@@ -19,9 +19,9 @@ learningObjectives:
 
 # 🛠️ 🧹 Build a Code Formatter
 
-Real code arrives messy: trailing spaces at line ends, `#comment` with no space, two blank lines where one belongs, and indentation that skipped the 4-space rule. This project builds a **code formatter** — a small terminal tool that reads a Python file, applies only *safe* whitespace-and-comment normalizations, collapses blank-line runs, checks indentation, prints a report of exactly what changed, and writes the cleaned copy to `formatted.py`. It deliberately limits itself to whitespace and comment spacing (never renames or reorders code), so running it can't break the program. Pure standard library, deterministic, and it becomes a real command: `python3 code_formatter.py messy.py`.
+Real code arrives messy: trailing spaces at line ends, `#comment` with no space, two blank lines where one belongs, and indentation that skipped the 4-space rule. This project builds a **code formatter**, a small terminal tool that reads a Python file, applies only *safe* whitespace-and-comment normalizations, collapses blank-line runs, checks indentation, prints a report of exactly what changed, and writes the cleaned copy to `formatted.py`. It deliberately limits itself to whitespace and comment spacing (never renames or reorders code), so running it can't break the program. Pure standard library, deterministic, and it becomes a real command: `python3 code_formatter.py messy.py`.
 
-This assumes file I/O and basic string methods. It is an optional, ungraded project — see [Real-World Projects](/projects) for the full, growing list.
+This assumes file I/O and basic string methods. It is an optional, ungraded project, see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 
@@ -33,7 +33,7 @@ This assumes file I/O and basic string methods. It is an optional, ungraded proj
 
 ## Where to run this
 
-**Locally** is the natural home — the tool types at a file in your own directory.
+**Locally** is the natural home, the tool types at a file in your own directory.
 
 ```bash
 mkdir code-formatter && cd code-formatter
@@ -57,7 +57,7 @@ mkdir code-formatter && cd code-formatter
 touch code_formatter.py
 ```
 
-Copy this file as `messy.py`. The trailing spaces exist on purpose — don't let your editor trim them before the experiment:
+Copy this file as `messy.py`. The trailing spaces exist on purpose, don't let your editor trim them before the experiment:
 
 ```python
 #sum module
@@ -78,7 +78,7 @@ def greet(name):
 
 **🤔 Socratic Question(s)**
 
-- Some transformations are *safe* (removing trailing spaces never changes what a program does) and some are not (reordering code). Why is "safe only" a good first formatter — and what would a file full of comments *between* functions break if you reordered lines?
+- Some transformations are *safe* (removing trailing spaces never changes what a program does) and some are not (reordering code). Why is "safe only" a good first formatter, and what would a file full of comments *between* functions break if you reordered lines?
 - The sample's line `   return msg   #too much indent` is guilty of three crimes at once. Before writing code, name all three from memory.
 
 ## Step 1: Read and inspect the file
@@ -87,7 +87,7 @@ First you must *see* the mess. Step 1 reads `messy.py` and reports where it's di
 
 ### 1.1 Read all lines
 
-**👟 Starter hint:** `open(...).read().splitlines()` — lines without the trailing `\n`, so each entry is pure content.
+**👟 Starter hint:** `open(...).read().splitlines()`, lines without the trailing `\n`, so each entry is pure content.
 
 ```python
 # code_formatter.py
@@ -103,7 +103,7 @@ for i, ln in enumerate(lines, 1):
     print(f"{i:>2} |{ln}|")
 ```
 
-`splitlines()` keeps every line's *content* but drops the newline, so the report can show a line's exact characters — trailing spaces become visible in the `|…|` wrappers. The `|` bars matter: they make invisible whitespace legible.
+`splitlines()` keeps every line's *content* but drops the newline, so the report can show a line's exact characters, trailing spaces become visible in the `|…|` wrappers. The `|` bars matter: they make invisible whitespace legible.
 
 **🎯 Expected output:**
 
@@ -121,7 +121,7 @@ lines: 10
 10 |   return msg   #too much indent|
 ```
 
-**🩹 If it's off:** If line 1 shows `#sum module` without trailing spaces, your editor auto-trimmed — recreate `messy.py` with a plain `echo`/paste. If line 7 shows nothing inside `|   |`, the whitespace-only line survived — good.
+**🩹 If it's off:** If line 1 shows `#sum module` without trailing spaces, your editor auto-trimmed, recreate `messy.py` with a plain `echo`/paste. If line 7 shows nothing inside `|   |`, the whitespace-only line survived, good.
 
 ### 1.2 Find the dirty marks
 
@@ -146,7 +146,7 @@ for i, ln in enumerate(lines, 1):
 print("indent warnings:", indent_bad)
 ```
 
-`ln != ln.rstrip()` is the trailing-space test — `rstrip` removes spaces from the *end* only, so any difference is trailing junk. Indentation is measured by *counting* leading spaces: the `lstrip(" ")` gives the body, and `len(ln) - len(body)` is the lead — flagged when it isn't a multiple of 4.
+`ln != ln.rstrip()` is the trailing-space test, `rstrip` removes spaces from the *end* only, so any difference is trailing junk. Indentation is measured by *counting* leading spaces: the `lstrip(" ")` gives the body, and `len(ln) - len(body)` is the lead, flagged when it isn't a multiple of 4.
 
 **🎯 Expected output:**
 
@@ -163,8 +163,8 @@ indent warnings: [(9, 2), (10, 3)]
 **✅ Checklist**
 
 - ✅ 10 lines read; trailing whitespace on 1, 2, 5, 7 (line 7 is whitespace-only).
-- ✅ Comments exist on 1, 2, 10 — all three glued to text with no space after `#`.
-- ✅ Indent warnings at (9, 2) and (10, 3) — running a warning *without* silently rewriting keeps the tool honest.
+- ✅ Comments exist on 1, 2, 10, all three glued to text with no space after `#`.
+- ✅ Indent warnings at (9, 2) and (10, 3), running a warning *without* silently rewriting keeps the tool honest.
 
 **🤔 Socratic Question(s)**
 
@@ -194,9 +194,9 @@ def fix_line(ln):
     return pre.rstrip() + "  # " + comment
 ```
 
-The `partition("#")` split keeps the left side (code) separate from the comment, so each side normalizes independently. Comment-at-column-0 → `# sum module`; inline comment → code, two spaces, `# comment`. `#!` (a shebang script header) is left individually alone — it has its own convention.
+The `partition("#")` split keeps the left side (code) separate from the comment, so each side normalizes independently. Comment-at-column-0 → `# sum module`; inline comment → code, two spaces, `# comment`. `#!` (a shebang script header) is left individually alone, it has its own convention.
 
-**🎯 Expected output:** A function, not output yet — but reason through what it does to line 10: `   return msg   #too much indent` → `   return msg  # too much indent`.
+**🎯 Expected output:** A function, not output yet, but reason through what it does to line 10: `   return msg   #too much indent` → `   return msg  # too much indent`.
 
 ### 2.2 Apply it to the whole file
 
@@ -224,7 +224,7 @@ for i, ln in enumerate(fixed, 1):
 10 |   return msg  # too much indent|
 ```
 
-**🩹 If it's off:** If line 1 became `  # sum module`, the column-0 branch (`pre.strip() == ""`) didn't run — check you *partitioned* before inspecting `pre`. If `#` still touches text, `comment.strip()` was skipped and the space never inserted.
+**🩹 If it's off:** If line 1 became `  # sum module`, the column-0 branch (`pre.strip() == ""`) didn't run, check you *partitioned* before inspecting `pre`. If `#` still touches text, `comment.strip()` was skipped and the space never inserted.
 
 ### 2.3 Verify the cleanup
 
@@ -232,11 +232,11 @@ for i, ln in enumerate(fixed, 1):
 
 - ✅ Trailing spaces gone from 1, 2, 5, 7.
 - ✅ `#sum module` → `# sum module`; `#add two numbers` → `# add two numbers`; `#too much indent` → `# too much indent`.
-- ✅ Code and comment keep exactly two spaces between them — the `pre.rstrip() + "  # "` contract.
+- ✅ Code and comment keep exactly two spaces between them, the `pre.rstrip() + "  # "` contract.
 
 **🤔 Socratic Question(s)**
 
-- `fix_line` treats the *left* side as code. What would happen to a Python *string* containing `#` (`s = "color #ff00aa"`)? Is a string-aware formatter even worth the complexity for a first tool — and what does that say about the "safe subset" boundary?
+- `fix_line` treats the *left* side as code. What would happen to a Python *string* containing `#` (`s = "color #ff00aa"`)? Is a string-aware formatter even worth the complexity for a first tool, and what does that say about the "safe subset" boundary?
 - `#!` is excluded by a special case. Bash-line comments (`#!`, `##`), docstrings (`"""`), and inline strings all overload `#`. Which single rule of thumb keeps a beginner formatter from corrupting valid files?
 
 ## Step 3: Collapse blank runs and force a final newline
@@ -264,7 +264,7 @@ for i, ln in enumerate(collapsed, 1):
     print(f"{i:>2} |{ln}|")
 ```
 
-`strip() == ""` calls a blank *whether* it's a truly empty line or a whitespace-only line (`   `) — both are layout, neither carries content. The `out and out[-1].strip() == ""` guard keeps only the *first* of a run, so 2+ blanks collapse to 1 everywhere in one pass.
+`strip() == ""` calls a blank *whether* it's a truly empty line or a whitespace-only line (`   `), both are layout, neither carries content. The `out and out[-1].strip() == ""` guard keeps only the *first* of a run, so 2+ blanks collapse to 1 everywhere in one pass.
 
 **🎯 Expected output:**
 
@@ -281,7 +281,7 @@ lines after collapse: 9
  9 |   return msg  # too much indent|
 ```
 
-**🩹 If it's off:** If line 7 still prints as blank, the whitespace-only line wasn't blanked by `strip() == ""` — it was, unless the line holds non-space invisible chars. If a *run of three* leaves two blanks, the guard checked the raw `ln` instead of the last appended line.
+**🩹 If it's off:** If line 7 still prints as blank, the whitespace-only line wasn't blanked by `strip() == ""`, it was, unless the line holds non-space invisible chars. If a *run of three* leaves two blanks, the guard checked the raw `ln` instead of the last appended line.
 
 ### 3.2 The final newline
 
@@ -298,7 +298,7 @@ print("input bytes:", len(open("messy.py").read().encode()),
       "output bytes:", len(text.encode()))
 ```
 
-A file's last line should end with a newline — the POSIX convention, and the thing `join + "\n"` guarantees even when the source forgot. Byte counts are a quick health check: the cleanup *shrinks* the file (177 → 166 bytes) because junk whitespace is real bytes.
+A file's last line should end with a newline, the POSIX convention, and the thing `join + "\n"` guarantees even when the source forgot. Byte counts are a quick health check: the cleanup *shrinks* the file (177 → 166 bytes) because junk whitespace is real bytes.
 
 **🎯 Expected output:**
 
@@ -307,7 +307,7 @@ ends with newline: True
 input bytes: 177 output bytes: 166
 ```
 
-**🩹 If it's off:** If `ends with newline: False`, the `+ "\n"` landed before the `join`. If output bytes are *larger*, comment normalization added spaces faster than trailing-trim removed them — measure honestly, that's the tool's verdict.
+**🩹 If it's off:** If `ends with newline: False`, the `+ "\n"` landed before the `join`. If output bytes are *larger*, comment normalization added spaces faster than trailing-trim removed them, measure honestly, that's the tool's verdict.
 
 ### 3.3 Verify the collapse
 
@@ -319,8 +319,8 @@ input bytes: 177 output bytes: 166
 
 **🤔 Socratic Question(s)**
 
-- `build_text` adds one `\n` for the whole file. Why is that the *only* newline that count needs — and what would `"\n".join(lines)` *without* the trailing newline do to `splitlines()` on the next read?
-- Blank-line collapse is idempotent (running it twice changes nothing the second time). Why is idempotence a *nice property* for a formatter — and which transform in this project is *not* idempotent?
+- `build_text` adds one `\n` for the whole file. Why is that the *only* newline that count needs, and what would `"\n".join(lines)` *without* the trailing newline do to `splitlines()` on the next read?
+- Blank-line collapse is idempotent (running it twice changes nothing the second time). Why is idempotence a *nice property* for a formatter, and which transform in this project is *not* idempotent?
 
 ## Step 4: Indentation diagnostics
 
@@ -341,7 +341,7 @@ for i, ln in enumerate(collapsed, 1):
             print(f"  line {i}: {lead} spaces (should be a multiple of 4)")
 ```
 
-The formatter refuses to *guess* the fix — `2` spaces on line 8 and `3` on line 9 are ambiguous (`2` belongs under the `def`, but the tool can't know context), so it surfaces them for the developer's eye.
+The formatter refuses to *guess* the fix, `2` spaces on line 8 and `3` on line 9 are ambiguous (`2` belongs under the `def`, but the tool can't know context), so it surfaces them for the developer's eye.
 
 **🎯 Expected output:**
 
@@ -351,7 +351,7 @@ INDENT WARNINGS
   line 9: 3 spaces (should be a multiple of 4)
 ```
 
-**🩹 If it's off:** If the warnings name different lines, the collapsed list has different positions than `messy.py` — the report is about the *current* text. If nothing prints, `lstrip(" ")` on a tab-indented line hides the lead (see the Socratic below).
+**🩹 If it's off:** If the warnings name different lines, the collapsed list has different positions than `messy.py`, the report is about the *current* text. If nothing prints, `lstrip(" ")` on a tab-indented line hides the lead (see the Socratic below).
 
 ### 4.2 The tab contract
 
@@ -363,24 +363,24 @@ has_tabs = any("\t" in ln for ln in collapsed)
 print("tabs found in source:", has_tabs)
 ```
 
-`\t` is banned in the sample (and usually in Python source by PEP 8). The check is one `any(...)` over lines; if found, `.expandtabs(4)` would rewrite them — but since `messy.py` has none, the printed answer is `False`, and the tab story stays a documented contract rather than a hidden mutation.
+`\t` is banned in the sample (and usually in Python source by PEP 8). The check is one `any(...)` over lines; if found, `.expandtabs(4)` would rewrite them, but since `messy.py` has none, the printed answer is `False`, and the tab story stays a documented contract rather than a hidden mutation.
 
 **🎯 Expected output:** `tabs found in source: False`
 
-**🩹 If it's off:** If `True` prints, your copy gained a tab somewhere — decide: keep it diagnostic (report the line) or expand it with `.expandtabs(4)`, replacing later whitespace accounting.
+**🩹 If it's off:** If `True` prints, your copy gained a tab somewhere, decide: keep it diagnostic (report the line) or expand it with `.expandtabs(4)`, replacing later whitespace accounting.
 
 ### 4.3 Verify the diagnostics
 
 **✅ Checklist**
 
-- ✅ Warnings name lines 8 (2 spaces) and 9 (3 spaces) — both statements, not comments.
+- ✅ Warnings name lines 8 (2 spaces) and 9 (3 spaces), both statements, not comments.
 - ✅ `tabs found in source: False`.
-- ✅ Nothing was *written* in this step — diagnosis is read-only by design.
+- ✅ Nothing was *written* in this step, diagnosis is read-only by design.
 
 **🤔 Socratic Question(s)**
 
-- A line indented with a *tab* silently fails `lstrip(" ")` (its lead is invisible). What single change makes the diagnostic also catch tabs — and which tab width (4 vs 8) would the `% 4` rule assume?
-- `def` is at column 0, its body at 4, nested bodies at 8. Given those three facts, is there *any* unambiguous rule for "fix" an indented line's leading spaces — or is the warning the correct product here?
+- A line indented with a *tab* silently fails `lstrip(" ")` (its lead is invisible). What single change makes the diagnostic also catch tabs, and which tab width (4 vs 8) would the `% 4` rule assume?
+- `def` is at column 0, its body at 4, nested bodies at 8. Given those three facts, is there *any* unambiguous rule for "fix" an indented line's leading spaces, or is the warning the correct product here?
 
 ## Step 5: Save the result and make it a CLI
 
@@ -400,7 +400,7 @@ print("formatted.py lines:", len(again.splitlines()))
 print("round-trip identical:", again == text)
 ```
 
-Persisting the result makes the tool *useful* — `messy.py` stays as the specimen, `formatted.py` is the clean copy. Re-reading and comparing `== text` is the same lossless round-trip discipline you'd use in any pipeline: write, read back, assert equal.
+Persisting the result makes the tool *useful*, `messy.py` stays as the specimen, `formatted.py` is the clean copy. Re-reading and comparing `== text` is the same lossless round-trip discipline you'd use in any pipeline: write, read back, assert equal.
 
 **🎯 Expected output:**
 
@@ -409,7 +409,7 @@ formatted.py lines: 9
 round-trip identical: True
 ```
 
-**🩹 If it's off:** If the round-trip says `False`, the extra `"\n"` handling or trailing spaces changed — compare with `repr(text)` vs `repr(again)`.
+**🩹 If it's off:** If the round-trip says `False`, the extra `"\n"` handling or trailing spaces changed, compare with `repr(text)` vs `repr(again)`.
 
 ### 5.2 The dispatcher
 
@@ -433,7 +433,7 @@ if __name__ == "__main__":
     format_file(sys.argv[1])
 ```
 
-The whole pipeline — read, fix, collapse, join, write, summarize — is now *one* function of a file path. `sys.argv[1]` makes it a CLI: type `python3 code_formatter.py messy.py` and the tool edits from the command line.
+The whole pipeline, read, fix, collapse, join, write, summarize, is now *one* function of a file path. `sys.argv[1]` makes it a CLI: type `python3 code_formatter.py messy.py` and the tool edits from the command line.
 
 **🎯 Let's run it:**
 
@@ -447,7 +447,7 @@ python3 code_formatter.py messy.py
 messy.py: 10 -> 9 lines; 4 trailing-whitespace fixes; see formatted.py
 ```
 
-**🩹 If it's off:** If an `IndexError` appears, `sys.argv[1]` was missing (run it *with* the file name). If the counts are off from 10→9 and 4, `format_file` re-read a `formatted.py` that already existed — always operate on the specimen file.
+**🩹 If it's off:** If an `IndexError` appears, `sys.argv[1]` was missing (run it *with* the file name). If the counts are off from 10→9 and 4, `format_file` re-read a `formatted.py` that already existed, always operate on the specimen file.
 
 ### 5.3 Verify the CLI
 
@@ -455,20 +455,20 @@ messy.py: 10 -> 9 lines; 4 trailing-whitespace fixes; see formatted.py
 
 - ✅ `python3 code_formatter.py messy.py` writes `formatted.py` (9 lines) and prints the summary.
 - ✅ Summary numbers agree with the earlier steps: 10→9 lines, 4 trailing fixes.
-- ✅ `messy.py` is untouched (read-only input) — the tool never rewrites the source.
+- ✅ `messy.py` is untouched (read-only input), the tool never rewrites the source.
 
 **🤔 Socratic Question(s)**
 
-- `format_file` writes to a *fixed* name `formatted.py`. Second run overwrites the first output. Would you prefer `f"formatted_{path}"` or an `--out` flag — and what's the argument for *not* overwriting the source file directly?
-- This formatter is whitespace-only today. If you added one more transform (e.g. blank line after each function `def`), what test would prove it *never* breaks `messy.py`'s meaning — and what does "never changes meaning" even mean for indentation-critical Python?
+- `format_file` writes to a *fixed* name `formatted.py`. Second run overwrites the first output. Would you prefer `f"formatted_{path}"` or an `--out` flag, and what's the argument for *not* overwriting the source file directly?
+- This formatter is whitespace-only today. If you added one more transform (e.g. blank line after each function `def`), what test would prove it *never* breaks `messy.py`'s meaning, and what does "never changes meaning" even mean for indentation-critical Python?
 
 ## ⚠️ Common pitfalls
 
-- **`splitlines` vs `read().split("\n")`.** `splitlines()` ignores the final empty element that a naive `"\n"` split produces — ending up with a spurious blank last line.
+- **`splitlines` vs `read().split("\n")`.** `splitlines()` ignores the final empty element that a naive `"\n"` split produces, ending up with a spurious blank last line.
 - **`lstrip()` strips tabs too.** Counting indent with `len(ln) - len(ln.lstrip())` counts spaces *and* tabs as one char each; use `lstrip(" ")` or a tab-aware pass. (This project checks for tabs separately.)
 - **Blank collapse over the wrong list.** Collapsing before trimming means a whitespace-only line (`   `) behaves as *content* and never merges with the blank above it. Order: trim → fix → collapse.
 - **`partition` vs `split`.** `partition("#")` keeps all three pieces (pre, "#", post); `split("#")` would mis-handle a comment containing `#` or destroy the limit on the first separator.
-- **Comment spacing on strings.** `s = "#ff00aa"` contains a `#` *inside a string literal* — a whitespace-only formatter happily rewrites it. The "safe subset" boundary is your shield; document it.
+- **Comment spacing on strings.** `s = "#ff00aa"` contains a `#` *inside a string literal*, a whitespace-only formatter happily rewrites it. The "safe subset" boundary is your shield; document it.
 - **Overwriting the specimen.** Writing `messy.py` back destroys the thing you're measuring. Output to `formatted.py`; keep input read-only.
 
 ## What you just built
@@ -476,7 +476,7 @@ messy.py: 10 -> 9 lines; 4 trailing-whitespace fixes; see formatted.py
 A working code formatter with a real CLI: line inspection with visible `|…|` bars, trailing-whitespace trimming and `#`-comment spacing via string built-ins, blank-run collapse with an idempotent one-pass sweep, a final-newline guarantee with byte-count proof, read-only indentation diagnostics in 4-space steps, a tab contract check, and a `formatted.py` writer that round-trips byte-identical. Underneath, the patterns are reusable anywhere: **measure the dirty spots before normalizing**, **apply only safe, reversible transforms**, **make blank detection whitespace-aware (`strip() == ""`)**, **diagnose rather than guess when a fix is ambiguous**, and **keep input read-only while shipping output separately**.
 
 :::tip[Run a fuller version without any local setup]
-[`examples/code-formatter/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/code-formatter) in the course repo holds the complete formatter as a notebook — inspection, fixes, collapse, diagnostics, and CLI, runnable in Colab/Kaggle/Binder. Clone the repo or [open it in a Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course).
+[`examples/code-formatter/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/code-formatter) in the course repo holds the complete formatter as a notebook, inspection, fixes, collapse, diagnostics, and CLI, runnable in Colab/Kaggle/Binder. Clone the repo or [open it in a Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course).
 :::
 
 ## Where to go from here
@@ -484,10 +484,10 @@ A working code formatter with a real CLI: line inspection with visible `|…|` b
 - Run it on a real file of *yours*: `python3 code_formatter.py some_script.py` and read what it reports.
 - Add `.expandtabs(4)` handling so tab-indented files are converted in the same run, with a `Tabs converted: N` line.
 - Make output naming smart: `formatted_<basename>` rather than a fixed name, or an `--check` flag that only prints the report without writing a file (CI-friendly).
-- Compare against the real thing: run Black (`pip install black`) on the same specimen and diff `formatted.py` vs Black's output — a humbling lesson in how much deeper a *real* formatter goes.
+- Compare against the real thing: run Black (`pip install black`) on the same specimen and diff `formatted.py` vs Black's output, a humbling lesson in how much deeper a *real* formatter goes.
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

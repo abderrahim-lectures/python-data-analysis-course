@@ -44,7 +44,7 @@ quiz:
 ---
 From raw text to tokens
 
-Raw text is just a string of characters. To build a language model, you need to split it into discrete units — **tokens** — that the model can count and predict. For simplicity, we'll use words as tokens. More advanced models use subword tokens (BPE, SentencePiece), but word-level tokenization is enough to demonstrate the core ideas.
+Raw text is just a string of characters. To build a language model, you need to split it into discrete units, **tokens**, that the model can count and predict. For simplicity, we'll use words as tokens. More advanced models use subword tokens (BPE, SentencePiece), but word-level tokenization is enough to demonstrate the core ideas.
 
 ## Key Concepts
 
@@ -74,7 +74,7 @@ Now "The" and "mat" map to the same tokens as "the" and "Mat" elsewhere in the c
 
 ### Stripping punctuation
 
-Punctuation attached to words creates false tokens — "hello," and "hello" become different words. Strip it before splitting:
+Punctuation attached to words creates false tokens, "hello," and "hello" become different words. Strip it before splitting:
 
 ```python
 import string
@@ -90,7 +90,7 @@ print(clean.lower().split())
 # ['hello', 'world', 'how', 's', 'it', 'going']
 ```
 
-Each punctuation character is replaced with a space, then splitting gives clean tokens. Note that "How's" becomes two tokens: "how" and "s". This is a known trade-off of simple tokenization — more advanced tools handle contractions differently.
+Each punctuation character is replaced with a space, then splitting gives clean tokens. Note that "How's" becomes two tokens: "how" and "s". This is a known trade-off of simple tokenization, more advanced tools handle contractions differently.
 
 ### Combining into a tokenize() function
 
@@ -123,7 +123,7 @@ Different tokenization strategies produce different vocabularies and different m
 | "can't" | ["can't"] | ["can't"] |
 | "hello,world" | ["hello,world"] | ["hello,world"] |
 
-The last example shows a problem: without stripping punctuation first, "hello,world" stays as one token. Our `strip_punctuation` step handles this. There's no single "right" tokenization — it depends on what your model needs to learn.
+The last example shows a problem: without stripping punctuation first, "hello,world" stays as one token. Our `strip_punctuation` step handles this. There's no single "right" tokenization, it depends on what your model needs to learn.
 
 ## Try It
 
@@ -140,10 +140,10 @@ How many unique tokens do you get? Which word appears most often?
 
 ## Key Takeaways
 
-- `str.split()` splits on whitespace — the simplest tokenizer
+- `str.split()` splits on whitespace, the simplest tokenizer
 - Lowercasing merges case variants so "The" and "the" count as one token
 - Punctuation stripping prevents tokens like "hello," and "hello" from being different
-- Tokenization is a design choice — there's no single right answer for all models
+- Tokenization is a design choice, there's no single right answer for all models
 
 ## Practice Challenge
 

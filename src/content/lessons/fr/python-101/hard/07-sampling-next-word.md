@@ -44,7 +44,7 @@ quiz:
 ---
 Le moteur de la génération de texte
 
-La génération de texte est, au fond, un problème d'échantillonnage. Étant donné un mot courant, vous devez choisir le mot suivant dans une distribution de possibilités — certains mots sont probables, d'autres rares, mais tous sont possibles. `random.choices()` fait exactement cela.
+La génération de texte est, au fond, un problème d'échantillonnage. Étant donné un mot courant, vous devez choisir le mot suivant dans une distribution de possibilités, certains mots sont probables, d'autres rares, mais tous sont possibles. `random.choices()` fait exactement cela.
 
 Les cellules ci-dessous réutilisent les fonctions `load_corpus`, `tokenize`, `build_bigrams` et `normalize_bigrams` des leçons 01 à 06. Chaque page de leçon démarre une session Python vierge, alors exécutez d'abord cette cellule de mise en place pour reconstruire le modèle de bigrammes :
 
@@ -146,11 +146,11 @@ next_word = sample_next(model, current)
 print(f"After '{current}' comes '{next_word}'")
 ```
 
-Si le mot courant n'est pas dans le modèle (il n'a pas de mots suivants connus), renvoyez `None`. L'appelant doit gérer ce cas — soit arrêter la génération, soit choisir un mot aléatoire pour continuer.
+Si le mot courant n'est pas dans le modèle (il n'a pas de mots suivants connus), renvoyez `None`. L'appelant doit gérer ce cas, soit arrêter la génération, soit choisir un mot aléatoire pour continuer.
 
 ### Reproductibilité avec les graines
 
-`random.choices()` utilise l'état aléatoire global de Python. Définir une graine rend la sortie reproductible — utile pour le débogage et les tests :
+`random.choices()` utilise l'état aléatoire global de Python. Définir une graine rend la sortie reproductible, utile pour le débogage et les tests :
 
 ```python
 random.seed(42)
@@ -164,9 +164,9 @@ print(sample_next(model, "the"))  # might be different
 
 Certains mots n'apparaissent qu'à la fin du corpus et n'ont pas de mots suivants connus. Quand `sample_next` renvoie `None`, vous avez des options :
 
-1. **Arrêter la génération** — le choix le plus conservateur
-2. **Redémarrer depuis un mot aléatoire** — maintient la sortie en cours
-3. **Redémarrer depuis un mot courant** — choisissez parmi les N mots les plus fréquents
+1. **Arrêter la génération**, le choix le plus conservateur
+2. **Redémarrer depuis un mot aléatoire**, maintient la sortie en cours
+3. **Redémarrer depuis un mot courant**, choisissez parmi les N mots les plus fréquents
 
 L'option 3 produit généralement les meilleurs résultats :
 
@@ -196,7 +196,7 @@ for _ in range(10):
     print(f"the → {next_word}")
 ```
 
-À quel point les résultats sont-ils cohérents ? Essayez de changer la graine — obtenez-vous des mots différents ?
+À quel point les résultats sont-ils cohérents ? Essayez de changer la graine, obtenez-vous des mots différents ?
 
 ## Points clés
 

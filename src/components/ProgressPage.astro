@@ -491,7 +491,7 @@ const i18nData = {
         return `${ACT_TYPES['milestone']}: ${QUEST_EN2LC[rest] ?? rest}`;
       }
       const base = ACT_TYPES[e.type] ?? label;
-      return e.meta ? `${base} — ${e.meta}` : base;
+      return e.meta ? `${base}, ${e.meta}` : base;
     }
 
     function renderActivityLog() {
@@ -808,4 +808,5 @@ const i18nData = {
   .actlog__time { color: var(--ink-soft); font-size: .72rem; font-variant-numeric: tabular-nums; }
   .actlog__empty { color: var(--ink-soft); text-align: center; padding: 1.5rem 1rem; font-size: .9rem; }
   .actlog__empty[hidden] { display: none; }
+  @media (max-width: 640px) { .hero { padding: 1.75rem 0 1rem; } }
 </style>

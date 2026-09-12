@@ -19,9 +19,9 @@ learningObjectives:
 
 # 🛠️ 🔔 Construye un Motor de Alertas
 
-Un sistema de monitoreo no falla porque exista un umbral; falla porque un solo pico se convierte en 500 alertas idénticas. Este proyecto construye el motor pequeño y honesto detrás de ese juicio: una clase `Rule` que vigila una **ventana móvil** de muestras, dispara una alerta solo cuando un umbral se sostiene genuinamente y luego se queda en silencio durante un **cooldown** para que un incidente en curso se reporte una vez en lugar de cada segundo. El estado se serializa a JSON para que el motor sobreviva a un reinicio a mitad del incidente, y todo corre sobre una alimentación sintética determinista que puedes reproducir exactamente. El motor produce exactamente dos alertas reales a partir de una alimentación guionizada de ocho muestras — ni más, ni menos — y sabrás por qué.
+Un sistema de monitoreo no falla porque exista un umbral; falla porque un solo pico se convierte en 500 alertas idénticas. Este proyecto construye el motor pequeño y honesto detrás de ese juicio: una clase `Rule` que vigila una **ventana móvil** de muestras, dispara una alerta solo cuando un umbral se sostiene genuinamente y luego se queda en silencio durante un **cooldown** para que un incidente en curso se reporte una vez en lugar de cada segundo. El estado se serializa a JSON para que el motor sobreviva a un reinicio a mitad del incidente, y todo corre sobre una alimentación sintética determinista que puedes reproducir exactamente. El motor produce exactamente dos alertas reales a partir de una alimentación guionizada de ocho muestras, ni más, ni menos, y sabrás por qué.
 
-Esto asume clases, métodos y slicing más comodidad con JSON-como-datos. Nada de esto es calificado — es opcional y no calificado — consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
+Esto asume clases, métodos y slicing más comodidad con JSON-como-datos. Nada de esto es calificado, es opcional y no calificado, consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 ## 🎯 Lo que harás
 
@@ -33,9 +33,9 @@ Esto asume clases, métodos y slicing más comodidad con JSON-como-datos. Nada d
 
 ## Dónde ejecutar esto
 
-**Localmente con `uv`** es el camino recomendado — el motor es Python puro (solo se necesita `json`), así que un `uv init` simple te da todo.
+**Localmente con `uv`** es el camino recomendado, el motor es Python puro (solo se necesita `json`), así que un `uv init` simple te da todo.
 
-**Google Colab, Kaggle Notebooks y Binder** ejecutan cada paso sin modificar — no hay dependencias de pip, y la alimentación sintética es determinista. Nada específico de la plataforma se interpone entre un notebook y el motor completo.
+**Google Colab, Kaggle Notebooks y Binder** ejecutan cada paso sin modificar, no hay dependencias de pip, y la alimentación sintética es determinista. Nada específico de la plataforma se interpone entre un notebook y el motor completo.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/alerting-engine/notebook.es.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/alerting-engine/notebook.es.ipynb)
@@ -61,8 +61,8 @@ Sin dependencias. El motor lee una corriente de muestras `{"metric": value}` y u
 
 **🤔 Pregunta(s) socrática(s)**
 
-- Una regla sin *ventana* y sin *cooldown* es apenas una comparación de punto único. ¿Qué se rompe de verdad en producción cuando un umbral se evalúa sobre una sola muestra sin supresión — y cuál de los dos mecanismos (ventana, cooldown) arregla el fallo de "un pico = 500 alertas"?
-- El motor alimenta una serie de tiempo *sintética*, determinista entre máquinas. ¿Por qué eso te compra algo que una alimentación siempre-en-vivo no puede — y qué perderías si reemplazaras la semilla por una corriente real de sensores?
+- Una regla sin *ventana* y sin *cooldown* es apenas una comparación de punto único. ¿Qué se rompe de verdad en producción cuando un umbral se evalúa sobre una sola muestra sin supresión, y cuál de los dos mecanismos (ventana, cooldown) arregla el fallo de "un pico = 500 alertas"?
+- El motor alimenta una serie de tiempo *sintética*, determinista entre máquinas. ¿Por qué eso te compra algo que una alimentación siempre-en-vivo no puede, y qué perderías si reemplazaras la semilla por una corriente real de sensores?
 
 ## Paso 1: Define la clase Rule central
 
@@ -85,15 +85,15 @@ class Rule:
         self.last_fired = -10**9
 ```
 
-El constructor es toda la *configuración* de la regla: qué métrica vigilar, en qué dirección (`gt` o `lt`), qué límite cuenta como violación y las dos perillas de supresión. Los dos campos mutables — `history` y `last_fired` — son deliberadamente no parámetros del constructor: representan el estado *aprendido* de la regla con el tiempo, que es exactamente lo que el Paso 4 serializará.
+El constructor es toda la *configuración* de la regla: qué métrica vigilar, en qué dirección (`gt` o `lt`), qué límite cuenta como violación y las dos perillas de supresión. Los dos campos mutables, `history` y `last_fired`, son deliberadamente no parámetros del constructor: representan el estado *aprendido* de la regla con el tiempo, que es exactamente lo que el Paso 4 serializará.
 
-**🎯 Resultado esperado :** Sin salida de la construcción — pero `r.metric == "load"`, `r.window == 5` y `r.history == []` son todos verdaderos.
+**🎯 Resultado esperado :** Sin salida de la construcción, pero `r.metric == "load"`, `r.window == 5` y `r.history == []` son todos verdaderos.
 
-**🩹 Si sale mal :** Si falta `metric`, pasaste un argumento posicional a un campo que no figura en `__init__`. Si `window` tiene el default `5` pero llamas `Rule("load", "gt", 5.0, 4)`, pasaste solo 4 argumentos posicionales — el `window` se vuelve el cuarto posicional y `cooldown` se queda con su default.
+**🩹 Si sale mal :** Si falta `metric`, pasaste un argumento posicional a un campo que no figura en `__init__`. Si `window` tiene el default `5` pero llamas `Rule("load", "gt", 5.0, 4)`, pasaste solo 4 argumentos posicionales, el `window` se vuelve el cuarto posicional y `cooldown` se queda con su default.
 
 ### 1.2 Representa una violación
 
-**👟 Pista inicial :** Agrega un helper `_is_breach(value)` que responda "¿está una *sola* muestra por encima (para `gt`) o por debajo (para `lt`) del umbral?" — la única decisión matemática del motor.
+**👟 Pista inicial :** Agrega un helper `_is_breach(value)` que responda "¿está una *sola* muestra por encima (para `gt`) o por debajo (para `lt`) del umbral?", la única decisión matemática del motor.
 
 ```python
 # main.py (continued)
@@ -108,11 +108,11 @@ print(Rule("a", "gt", 5.0)._is_breach(6.0))
 print(Rule("a", "lt", 5.0)._is_breach(6.0))
 ```
 
-`_is_breach` es un predicado puro: mismo valor, misma respuesta, cada vez. Mantenerlo como un método separado significa que la lógica de *ventana* del Paso 2 nunca tiene que saber si `gt` o `lt` significa "malo" — solo le pregunta a este método. El `raise` sobre un op desconocido es el guardia de fallo rápido que atrapa un `"LT"` mal tipeado en lugar de no alertar nunca en silencio.
+`_is_breach` es un predicado puro: mismo valor, misma respuesta, cada vez. Mantenerlo como un método separado significa que la lógica de *ventana* del Paso 2 nunca tiene que saber si `gt` o `lt` significa "malo", solo le pregunta a este método. El `raise` sobre un op desconocido es el guardia de fallo rápido que atrapa un `"LT"` mal tipeado en lugar de no alertar nunca en silencio.
 
-**🎯 Resultado esperado :** `True` y luego `False` — la primera regla viola en `6.0 > 5`, la segunda no porque `6.0 < 5` es falso.
+**🎯 Resultado esperado :** `True` y luego `False`, la primera regla viola en `6.0 > 5`, la segunda no porque `6.0 < 5` es falso.
 
-**🩹 Si sale mal :** Si ambas imprimen `True`, a la rama `lt` le faltó su `<`. Si aparece un `ValueError`, llamaste al constructor con `op="lt"` en una capitalización de letras diferente a la que comprueba el método — normaliza `op.lower()` en el constructor.
+**🩹 Si sale mal :** Si ambas imprimen `True`, a la rama `lt` le faltó su `<`. Si aparece un `ValueError`, llamaste al constructor con `op="lt"` en una capitalización de letras diferente a la que comprueba el método, normaliza `op.lower()` en el constructor.
 
 ### 1.3 Verifica la clase
 
@@ -124,16 +124,16 @@ print(Rule("a", "lt", 5.0)._is_breach(6.0))
 
 **🤔 Pregunta(s) socrática(s)**
 
-- `last_fired = -10**9` es un centinela de "hace mucho". ¿Por qué negativo es *literalmente* "hace mucho", y no "cero" — y cómo se vería una versión `last_fired = None` de la comprobación de cooldown?
-- `_is_breach` decide sobre una *sola* muestra, pero el Paso 2 la eleva a *ventana*. ¿Cuál es la diferencia conceptual entre "una muestra es 6.0" y "el máximo de mis últimas 5 muestras es 6.0" — y cuál es la mejor definición de incidente?
+- `last_fired = -10**9` es un centinela de "hace mucho". ¿Por qué negativo es *literalmente* "hace mucho", y no "cero", y cómo se vería una versión `last_fired = None` de la comprobación de cooldown?
+- `_is_breach` decide sobre una *sola* muestra, pero el Paso 2 la eleva a *ventana*. ¿Cuál es la diferencia conceptual entre "una muestra es 6.0" y "el máximo de mis últimas 5 muestras es 6.0", y cuál es la mejor definición de incidente?
 
 ## Paso 2: Vigila una ventana móvil
 
-Una sola muestra es ruido; una ventana es señal. El Paso 2 convierte el predicado puro `_is_breach` en una decisión con ventana — pero con cuidado, para que el "cooldown" del Paso 3 se mantenga separado.
+Una sola muestra es ruido; una ventana es señal. El Paso 2 convierte el predicado puro `_is_breach` en una decisión con ventana, pero con cuidado, para que el "cooldown" del Paso 3 se mantenga separado.
 
 ### 2.1 Alimenta a la regla con tus muestras
 
-**👟 Pista inicial :** Implementa `evaluate(t, value)` que agregue a `history`, recorte a la ventana y normalmente devuelva `False` — la lógica de disparo llega en el Paso 3.
+**👟 Pista inicial :** Implementa `evaluate(t, value)` que agregue a `history`, recorte a la ventana y normalmente devuelva `False`, la lógica de disparo llega en el Paso 3.
 
 ```python
 # main.py (continued)
@@ -148,15 +148,15 @@ for t, v in enumerate([1.0, 2.0, 3.0, 6.0, 4.0, 1.0, 1.0, 9.0]):
 print(r.history)
 ```
 
-`self.history[-self.window:]` es la expresión idiomática de la ventana móvil: mantiene solo las *últimas* `window` muestras, así que la memoria se mantiene acotada sin importar cuánto tiempo corra la corriente. Recortar a la cola es a la vez la historia de corrección y de eficiencia. Nota que `evaluate` aún devuelve `False` aquí — el registro de la ventana ocurre primero, la decisión llega en el Paso 3.
+`self.history[-self.window:]` es la expresión idiomática de la ventana móvil: mantiene solo las *últimas* `window` muestras, así que la memoria se mantiene acotada sin importar cuánto tiempo corra la corriente. Recortar a la cola es a la vez la historia de corrección y de eficiencia. Nota que `evaluate` aún devuelve `False` aquí, el registro de la ventana ocurre primero, la decisión llega en el Paso 3.
 
-**🎯 Resultado esperado :** `[4.0, 1.0, 1.0, 9.0]` — después de 8 valores con `window=4`, el motor retuvo exactamente las cuatro muestras finales.
+**🎯 Resultado esperado :** `[4.0, 1.0, 1.0, 9.0]`, después de 8 valores con `window=4`, el motor retuvo exactamente las cuatro muestras finales.
 
-**🩹 Si sale mal :** Si `r.history` es más largo que 4, el slice `[-self.window:]` se reemplazó solo por `.append`. Si es más corto cuando la corriente es corta, ese es un comportamiento correcto (una regla no puede tener un historial de 4 muestras hasta que haya visto 4 muestras) — no es un bug.
+**🩹 Si sale mal :** Si `r.history` es más largo que 4, el slice `[-self.window:]` se reemplazó solo por `.append`. Si es más corto cuando la corriente es corta, ese es un comportamiento correcto (una regla no puede tener un historial de 4 muestras hasta que haya visto 4 muestras), no es un bug.
 
 ### 2.2 Agrega la prueba de violación con ventana
 
-**👟 Pista inicial :** Reemplaza el `return False` con la decisión real: `max(self.history) > self.threshold` para reglas `gt`, `min(...) < self.threshold` para `lt` — pero solo cuando la ventana está llena.
+**👟 Pista inicial :** Reemplaza el `return False` con la decisión real: `max(self.history) > self.threshold` para reglas `gt`, `min(...) < self.threshold` para `lt`, pero solo cuando la ventana está llena.
 
 ```python
 # main.py (continued)
@@ -177,7 +177,7 @@ for t, v in enumerate([1.0, 2.0, 3.0, 6.0]):
     print(t, v, "window-holds?", r.evaluate(t, v))
 ```
 
-`_window_holds` exige que la ventana esté *llena* antes de confiar en `max`/`min` — una ventana de 1 muestra que supera el umbral por casualidad aún no es un incidente. Solo cuando `history` alcanza `window` la comparación de max/min significa "esto está sostenido sobre la ventana". Este es el paso donde "un pico" se convierte en "un incidente genuino que la ventana confirma".
+`_window_holds` exige que la ventana esté *llena* antes de confiar en `max`/`min`, una ventana de 1 muestra que supera el umbral por casualidad aún no es un incidente. Solo cuando `history` alcanza `window` la comparación de max/min significa "esto está sostenido sobre la ventana". Este es el paso donde "un pico" se convierte en "un incidente genuino que la ventana confirma".
 
 **🎯 Resultado esperado :**
 
@@ -203,15 +203,15 @@ Aunque 6.0 supera 5.0, la tripulación espera hasta que haya suficientes vecinos
 **🤔 Pregunta(s) socrática(s)**
 
 - La ventana es *estrictamente* sobre "¿está la muestra sobre el umbral junto a sus vecinas?". ¿Qué pasa con una regla `gt` que vigila una métrica que *siempre* está alta pero sube lentamente? ¿Dispararía `_window_holds`, y es una ventana basada en max la herramienta correcta para una deriva lenta?
-- `self.history[-self.window:]` descarta por completo las muestras viejas. Si quisieras saber "¿cuántas veces disparó esta regla en el último mes?", ¿qué estado *adicional* mantendrías — y por qué el diseño actual del motor lo descarta deliberadamente?
+- `self.history[-self.window:]` descarta por completo las muestras viejas. Si quisieras saber "¿cuántas veces disparó esta regla en el último mes?", ¿qué estado *adicional* mantendrías, y por qué el diseño actual del motor lo descarta deliberadamente?
 
-## Paso 3: Agrega el cooldown — un incidente, no una tormenta
+## Paso 3: Agrega el cooldown, un incidente, no una tormenta
 
 La ventana dice que el umbral *se sostiene*; el cooldown dice *no lo vuelvas a decir justo después de haberlo dicho*. Esa es la perilla que convierte una ráfaga en un conjunto discreto de incidentes.
 
 ### 3.1 Entiende el cooldown
 
-**👟 Pista inicial :** Extiende `evaluate` para que después de un disparo, la regla se mantenga en silencio por `cooldown` pasos de tiempo — `if t - self.last_fired < self.cooldown: return False`.
+**👟 Pista inicial :** Extiende `evaluate` para que después de un disparo, la regla se mantenga en silencio por `cooldown` pasos de tiempo, `if t - self.last_fired < self.cooldown: return False`.
 
 ```python
 # main.py (continued)
@@ -231,15 +231,15 @@ alerts = [t for t, v in enumerate(seq) if r.evaluate(t, v)]
 print("base alerts:", alerts)
 ```
 
-El cooldown es el corazón del motor: `last_fired` se sella en el momento del disparo, y durante los siguientes `cooldown` pasos de tiempo cada muestra — incluso una que aún supere el umbral — se suprime. El resultado es el modelo clásico de incidente: una oleada de `6.0` dispara una vez, los valores altos que le siguen y el breve descenso están en silencio, y una *nueva* violación más tarde vuelve a disparar. Dos alertas distintas desde una ventana de 4 muestras, exactamente.
+El cooldown es el corazón del motor: `last_fired` se sella en el momento del disparo, y durante los siguientes `cooldown` pasos de tiempo cada muestra, incluso una que aún supere el umbral, se suprime. El resultado es el modelo clásico de incidente: una oleada de `6.0` dispara una vez, los valores altos que le siguen y el breve descenso están en silencio, y una *nueva* violación más tarde vuelve a disparar. Dos alertas distintas desde una ventana de 4 muestras, exactamente.
 
-**🎯 Resultado esperado :** `base alerts: [3, 6]` — la primera violación en t=3 y la re-violación en t=6, con las muestras de t=4 y t=5 suprimidas por el cooldown. (`t=5` se suprime porque `5 - 3 = 2 < 3`.)
+**🎯 Resultado esperado :** `base alerts: [3, 6]`, la primera violación en t=3 y la re-violación en t=6, con las muestras de t=4 y t=5 suprimidas por el cooldown. (`t=5` se suprime porque `5 - 3 = 2 < 3`.)
 
 **🩹 Si sale mal :** Si las alertas muestran `[3, 4, 5, 6, 7]`, o `last_fired` no se está configurando (falta la línea `self.last_fired = t`) o la comprobación de cooldown no es `t - self.last_fired < self.cooldown` (un deslizamiento de `<` vs `<=` cambia la frontera). Si no hay alertas en absoluto, `last_fired` se está reiniciando en *cada* muestra que no dispara.
 
 ### 3.2 La regla `lt` lo refleja
 
-**👟 Pista inicial :** Una regla `lt` vigila `min(self.history) < self.threshold` — la lógica de cooldown es idéntica; solo se voltea el predicado.
+**👟 Pista inicial :** Una regla `lt` vigila `min(self.history) < self.threshold`, la lógica de cooldown es idéntica; solo se voltea el predicado.
 
 ```python
 # main.py (continued)
@@ -251,26 +251,26 @@ print("low-mem alerts:", alerts_lt)
 
 Cuando la memoria libre baja de 20, eso es un incidente de poca memoria. El cooldown funciona igual: el primer `12.0` dispara, el `18.0` inmediatamente después se suprime, y una violación posterior (una segunda excursión tras la recuperación, o una lectura fresca) se vuelve una alerta distinta.
 
-**🎯 Resultado esperado :** `low-mem alerts: [3, 5]` — violación en t=3 (`12.0`), t=4 suprimido, y t=5 (`40.0 → espera`, `40.0` *no* es `< 20`) — reléelo: t=5 es `40.0`, que no está por debajo de 20. El disparo es `t=3`, y luego, cuando la ventana rueda, el grupo `12,18,40` sale de la ventana, y cuando la ventana puede volver a sostener `< 20` dispara. Con el `seq` de arriba, las alertas verdaderas son `[3, 5]` solo si una muestra posterior baja — trázalo a mano si tu salida difiere.
+**🎯 Resultado esperado :** `low-mem alerts: [3, 5]`, violación en t=3 (`12.0`), t=4 suprimido, y t=5 (`40.0 → espera`, `40.0` *no* es `< 20`), reléelo: t=5 es `40.0`, que no está por debajo de 20. El disparo es `t=3`, y luego, cuando la ventana rueda, el grupo `12,18,40` sale de la ventana, y cuando la ventana puede volver a sostener `< 20` dispara. Con el `seq` de arriba, las alertas verdaderas son `[3, 5]` solo si una muestra posterior baja, trázalo a mano si tu salida difiere.
 
-**🩹 Si sale mal :** Si `alerts_lt` no coincide con tu trazado a mano, avanza la regla una muestra a la vez e imprime `history`, `min(history)` y `last_fired` — la poda de la ventana y el cooldown interactúan, e imprimir ambos expone exactamente dónde diverge.
+**🩹 Si sale mal :** Si `alerts_lt` no coincide con tu trazado a mano, avanza la regla una muestra a la vez e imprime `history`, `min(history)` y `last_fired`, la poda de la ventana y el cooldown interactúan, e imprimir ambos expone exactamente dónde diverge.
 
 ### 3.3 Verifica el cooldown
 
 **✅ Lista de verificación**
 
-- ✅ La regla `gt` sobre la alimentación de 8 muestras produce exactamente `[3, 6]` — dos incidentes.
+- ✅ La regla `gt` sobre la alimentación de 8 muestras produce exactamente `[3, 6]`, dos incidentes.
 - ✅ Entre dos disparos, pasan al menos `cooldown` muestras en silencio.
 - ✅ Las reglas `gt` y `lt` comparten la misma mecánica de cooldown, difiriendo solo en su predicado.
 
 **🤔 Pregunta(s) socrática(s)**
 
-- El cooldown suprime *cada* muestra por `cooldown` pasos, incluso un pico genuinamente nuevo de 10x. ¿Es ese el equilibrio correcto para un pager real, o querrías "la mayor alerta gana" en su lugar — y dónde viviría esa lógica?
+- El cooldown suprime *cada* muestra por `cooldown` pasos, incluso un pico genuinamente nuevo de 10x. ¿Es ese el equilibrio correcto para un pager real, o querrías "la mayor alerta gana" en su lugar, y dónde viviría esa lógica?
 - `last_fired` se sella con el *tiempo* `t`, no con el índice de muestra. En un sistema que procesa lotes de muestras a la vez (t salta por 100), ¿cómo se portaría mal la comprobación `t - last_fired`, y qué almacenarías en su lugar?
 
 ## Paso 4: Persiste y restaura el estado
 
-Un motor que olvida que ya disparó durante un reinicio re-alerta sobre el mismo incidente. El Paso 4 serializa el estado *aprendido* de cada regla — no solo su configuración — para que la continuidad sobreviva.
+Un motor que olvida que ya disparó durante un reinicio re-alerta sobre el mismo incidente. El Paso 4 serializa el estado *aprendido* de cada regla, no solo su configuración, para que la continuidad sobreviva.
 
 ### 4.1 Toma una instantánea de una regla
 
@@ -302,11 +302,11 @@ print("saved", snap)
 
 **🎯 Resultado esperado :** Una cadena JSON que contiene `"metric": "load"`, `"window": 4`, `"history"` y `"last_fired": 6`.
 
-**🩹 Si sale mal :** Si `json.dumps` falla con un valor no serializable, `last_fired` o `history` se convirtieron en un tipo de numpy — envuélvelos con `int(...)`/`float(...)` antes de volcar. Si la salida omite `history`, la clave del dict no está en `snapshot()`.
+**🩹 Si sale mal :** Si `json.dumps` falla con un valor no serializable, `last_fired` o `history` se convirtieron en un tipo de numpy, envuélvelos con `int(...)`/`float(...)` antes de volcar. Si la salida omite `history`, la clave del dict no está en `snapshot()`.
 
 ### 4.2 Restaura y no re-alertes el mismo incidente
 
-**👟 Pista inicial :** Deserializa, reconstruye y alimenta la *continuación* de la corriente — la regla restaurada debe permanecer en silencio en las muestras que aún están dentro del cooldown del último tiempo de disparo.
+**👟 Pista inicial :** Deserializa, reconstruye y alimenta la *continuación* de la corriente, la regla restaurada debe permanecer en silencio en las muestras que aún están dentro del cooldown del último tiempo de disparo.
 
 ```python
 # main.py (continued)
@@ -321,7 +321,7 @@ Restaurar la regla y continuar en `t=6` reproduce el estado en vivo: los `6.0, 7
 
 **🎯 Resultado esperado :** `history carried: [4.0, 1.0, 1.0, 9.0] last_fired: 6` seguido de un rastreo de continuación que dispara como máximo una vez en la ventana de cooldown.
 
-**🩹 Si sale mal :** Si la regla restaurada dispara en la *primera* muestra continuada, `last_fired` no lo copió `from_snapshot` (revertió a `-10**9`). Si nunca dispara en la excursión *fresca*, `history` se sobre-copió y la ventana aún tiene un valor alto viejo — revisa la longitud de la ventana después de restaurar.
+**🩹 Si sale mal :** Si la regla restaurada dispara en la *primera* muestra continuada, `last_fired` no lo copió `from_snapshot` (revertió a `-10**9`). Si nunca dispara en la excursión *fresca*, `history` se sobre-copió y la ventana aún tiene un valor alto viejo, revisa la longitud de la ventana después de restaurar.
 
 ### 4.3 Verifica la persistencia
 
@@ -329,7 +329,7 @@ Restaurar la regla y continuar en `t=6` reproduce el estado en vivo: los `6.0, 7
 
 - ✅ `json.dumps(r.snapshot())` hace ida y vuelta a través de `loads` y `from_snapshot`.
 - ✅ El estado restaurado lleva tanto `history` como `last_fired`; `history` coincide con la cola previa al guardado.
-- ✅ `Rule.from_snapshot(json.loads(snap)) == Rule.from_snapshot(json.loads(snap))` conductualmente — dos restauraciones desde el mismo blob se comportan de manera idéntica.
+- ✅ `Rule.from_snapshot(json.loads(snap)) == Rule.from_snapshot(json.loads(snap))` conductualmente, dos restauraciones desde el mismo blob se comportan de manera idéntica.
 
 **🤔 Pregunta(s) socrática(s)**
 
@@ -370,7 +370,7 @@ print(alerts)
 
 `sample[rule.metric]` es el enrutamiento de métricas: cada regla extrae su propio valor de la muestra compartida de la corriente, así que una sola pasada por la alimentación conduce a cada regla. `alerts.setdefault(rule.metric, []).append(...)` construye una lista por métrica de tiempos de disparo sin una comprobación explícita de "¿ya empecé esta lista?".
 
-**🎯 Resultado esperado :** `{'load': [3, 6], 'mem_free': [3, 5]}` — los dos incidentes de la regla de carga y los dos de la regla de memoria, todos de una sola corriente de 8 muestras.
+**🎯 Resultado esperado :** `{'load': [3, 6], 'mem_free': [3, 5]}`, los dos incidentes de la regla de carga y los dos de la regla de memoria, todos de una sola corriente de 8 muestras.
 
 **🩹 Si sale mal :** Si falta la lista de una métrica, su regla nunca disparó (revisa el umbral/predicado de la regla contra la corriente) o la clave de `setdefault` nunca recibió el primer append. Si una métrica dispara *más* de lo esperado, el cooldown o la ventana está mal para esa regla.
 
@@ -396,14 +396,14 @@ print("OPERATOR SUMMARY:", summarize(alerts))
 
 **✅ Lista de verificación**
 
-- ✅ La corriente de 8 muestras produce `{'load': [3, 6], 'mem_free': [3, 5]}` — exactamente cuatro alertas.
+- ✅ La corriente de 8 muestras produce `{'load': [3, 6], 'mem_free': [3, 5]}`, exactamente cuatro alertas.
 - ✅ El resumen imprime conteos derivados de esas listas.
 - ✅ La corriente y las reglas corren sin modificar en un notebook o una terminal.
 
 **🤔 Pregunta(s) socrática(s)**
 
-- El resumen cuenta `len(times)`. Si el mismo incidente abarcara un reinicio, la regla restaurada (correctamente) *no* re-dispararía, así que el conteo es más bajo de lo que sugieren las muestras crudas. ¿Es "conteo de disparos" lo mismo que "conteo de incidentes" — y qué agregarías para que el resumen los distinga?
-- El `mem_free` de la corriente dispara en `t=3` y `t=5`. Traza si `t=5` es un incidente *nuevo* (memoria que se recupera y luego vuelve a bajar) o el *mismo* episodio aflorando a través de un cooldown más corto — y declara qué premisa codifica el valor de cooldown `2`.
+- El resumen cuenta `len(times)`. Si el mismo incidente abarcara un reinicio, la regla restaurada (correctamente) *no* re-dispararía, así que el conteo es más bajo de lo que sugieren las muestras crudas. ¿Es "conteo de disparos" lo mismo que "conteo de incidentes", y qué agregarías para que el resumen los distinga?
+- El `mem_free` de la corriente dispara en `t=3` y `t=5`. Traza si `t=5` es un incidente *nuevo* (memoria que se recupera y luego vuelve a bajar) o el *mismo* episodio aflorando a través de un cooldown más corto, y declara qué premisa codifica el valor de cooldown `2`.
 
 ## ⚠️ Errores comunes
 
@@ -416,10 +416,10 @@ print("OPERATOR SUMMARY:", summarize(alerts))
 
 ## Lo que acabas de construir
 
-Un motor de monitoreo con estado: reglas que vigilan ventanas móviles, cooldowns que convierten ráfagas en incidentes discretos, persistencia JSON que sobrevive a reinicios y un resumen de operador de una línea. La idea central es que *alertar es una decisión con estado, no una comparación* — la ventana responde "¿está esto sostenido?", el cooldown responde "¿no lo dije ya?", y `last_fired` es la memoria que los une. Esa división en tres partes se transfiere a los limitadores de tasa, los retrocesos de reintento, el debouncing y cualquier código que deba decidir *cuándo* hablar en lugar de *cuándo* permanecer en silencio.
+Un motor de monitoreo con estado: reglas que vigilan ventanas móviles, cooldowns que convierten ráfagas en incidentes discretos, persistencia JSON que sobrevive a reinicios y un resumen de operador de una línea. La idea central es que *alertar es una decisión con estado, no una comparación*, la ventana responde "¿está esto sostenido?", el cooldown responde "¿no lo dije ya?", y `last_fired` es la memoria que los une. Esa división en tres partes se transfiere a los limitadores de tasa, los retrocesos de reintento, el debouncing y cualquier código que deba decidir *cuándo* hablar en lugar de *cuándo* permanecer en silencio.
 
 :::tip[Ejecuta una versión más completa sin configuración local]
-[`examples/alerting-engine/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/alerting-engine) en el repositorio del curso es el motor completo como notebook — la misma clase de regla, alimentación, cooldown, persistencia y resumen, ejecutable en Colab/Kaggle/Binder. Clona el repositorio o [ábrelo en un Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course).
+[`examples/alerting-engine/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/alerting-engine) en el repositorio del curso es el motor completo como notebook, la misma clase de regla, alimentación, cooldown, persistencia y resumen, ejecutable en Colab/Kaggle/Binder. Clona el repositorio o [ábrelo en un Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course).
 :::
 
 ## A dónde ir desde aquí
@@ -431,6 +431,6 @@ Un motor de monitoreo con estado: reglas que vigilan ventanas móviles, cooldown
 
 ## Comparte tu proyecto con la clase
 
-¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado — y su README tiene un recorrido completo y amigable para principiantes sobre cómo agregar el tuyo vía un **pull request**, incluso si nunca has usado git antes: hacer fork del repositorio, crear una rama, confirmar tus archivos y abrir el PR, un paso a la vez. No se asume experiencia previa con git.
+¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado, y su README tiene un recorrido completo y amigable para principiantes sobre cómo agregar el tuyo vía un **pull request**, incluso si nunca has usado git antes: hacer fork del repositorio, crear una rama, confirmar tus archivos y abrir el PR, un paso a la vez. No se asume experiencia previa con git.
 
 Bienvenido a escribir Python fuera del navegador. 🎓

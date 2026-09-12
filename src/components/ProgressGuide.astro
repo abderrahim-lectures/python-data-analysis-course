@@ -51,7 +51,10 @@ const stretchWords = [m.progress_guide_quest_firsts(), m.progress_guide_quest_st
 <Base title={m.progress_guide_title()} description={m.progress_guide_description()} lang={locale} dir={dir} alternates={alternates}>
   <section class="container guide">
     <h1 class="guide__eyebrow">{m.progress_guide_heading()}</h1>
-    <p class="guide__intro">{m.progress_guide_intro()}</p>
+    <div class="guide__intro">
+      <p>{m.progress_guide_intro_1()}</p>
+      <p>{m.progress_guide_intro_2()}</p>
+    </div>
 
     <div class="guide__grid">
       <article class="guide__card guide__card--wide">
@@ -152,7 +155,9 @@ const stretchWords = [m.progress_guide_quest_firsts(), m.progress_guide_quest_st
   .guide h1 { font-size: clamp(1.8rem, 4vw, 2.6rem); margin: 0 0 .4rem; }
   .guide h2 { font-size: 1.25rem; margin: 0 0 .6rem; }
   .guide__eyebrow { color: var(--accent); font-size: .95rem; letter-spacing: .04em; }
-  .guide__intro { color: var(--ink-soft); margin: 0 0 2rem; line-height: 1.6; }
+  .guide__intro { color: var(--ink-soft); margin: 0 0 2rem; display: flex; flex-direction: column; gap: .7rem; }
+  .guide__intro p:first-child { font-size: 1.12rem; }
+  @media (max-width: 640px) { .guide { padding: 1.75rem 0 2rem; } }
   .guide__grid { display: grid; gap: 1.25rem; margin: 0 0 1.25rem; }
   .guide__card {
     background: var(--surface); border: 1px solid var(--line);

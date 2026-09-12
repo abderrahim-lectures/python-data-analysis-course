@@ -21,7 +21,7 @@ Construye una plataforma de cuestionarios con preguntas aleatorizadas, sesiones 
 
 ## 🎯 Lo que harás
 
-1. Modelar tres tipos de pregunta — opción múltiple, verdadero/falso y completar espacios — usando clases abstractas y dataclasses.
+1. Modelar tres tipos de pregunta, opción múltiple, verdadero/falso y completar espacios, usando clases abstractas y dataclasses.
 2. Construir un motor de cuestionarios que gestiona un banco de preguntas, selecciona preguntas aleatorias y ejecuta sesiones cronometradas.
 3. Puntuar respuestas automáticamente con desgloses por categoría y porcentajes de precisión.
 4. Visualizar el rendimiento con gráficos de barras y gráficos circulares usando matplotlib.
@@ -31,11 +31,11 @@ Construye una plataforma de cuestionarios con preguntas aleatorizadas, sesiones 
 
 ## Dónde ejecutar esto
 
-- **Localmente con `uv` (recomendado).** Este proyecto necesita pandas y matplotlib — un buen candidato para ejecutarlo en tu propia máquina. La sección de Configuración de abajo lo recorre.
+- **Localmente con `uv` (recomendado).** Este proyecto necesita pandas y matplotlib, un buen candidato para ejecutarlo en tu propia máquina. La sección de Configuración de abajo lo recorre.
 - **Google Colab o Kaggle Notebooks.** Pega las celdas de código directamente en un notebook. Los gráficos se renderizan en línea, y `input()` funciona para las indicaciones del cuestionario.
-- **Parque de juegos JupyterLite.** Pega las celdas de código directamente en un notebook — ten en cuenta que la E/S de archivos (Paso 5) funciona de manera diferente en el navegador; la persistencia JSON solo funcionará localmente.
+- **Parque de juegos JupyterLite.** Pega las celdas de código directamente en un notebook, ten en cuenta que la E/S de archivos (Paso 5) funciona de manera diferente en el navegador; la persistencia JSON solo funcionará localmente.
 
-- **Ejecútalo en el navegador.** Hay un cuaderno interactivo listo — ábrelo en Colab, Kaggle o Binder y sigue los pasos en orden.
+- **Ejecútalo en el navegador.** Hay un cuaderno interactivo listo, ábrelo en Colab, Kaggle o Binder y sigue los pasos en orden.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/quiz-engine/notebook.es.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/quiz-engine/notebook.es.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fquiz-engine%2Fnotebook.es.ipynb)
@@ -48,7 +48,7 @@ cd quiz-engine
 uv add pandas matplotlib
 ```
 
-## Paso 1 — Define los tipos de pregunta
+## Paso 1, Define los tipos de pregunta
 
 La base de cualquier motor de cuestionario: cada pregunta conoce su texto, categoría, valor en puntos, cómo mostrarse a sí misma y cómo comprobar una respuesta. Usaremos una clase base abstracta para que cada tipo de pregunta siga la misma interfaz, y luego construiremos tres tipos concretos encima.
 
@@ -77,7 +77,7 @@ class Question(ABC):
         ...
 ```
 
-**🎯 Resultado esperado:** Definir esta clase no debería producir salida visible — es un plano. Puedes verificar que funciona definiendo una subclase concreta mínima e instanciándola (siguiente sub-paso).
+**🎯 Resultado esperado:** Definir esta clase no debería producir salida visible, es un plano. Puedes verificar que funciona definiendo una subclase concreta mínima e instanciándola (siguiente sub-paso).
 
 **🩹 Si sale mal:** Si obtienes `TypeError: Can't instantiate abstract class`, olvidaste implementar `check` o `display` en tu subclase concreta. Si ves `TypeError: __init__() missing required arguments`, vuelve a comprobar que los campos de tu dataclass tienen valores por defecto donde se necesitan.
 
@@ -125,7 +125,7 @@ Debe imprimir:
 Correct: True, Points: 10
 ```
 
-**🩹 Si sale mal:** Si `check("4")` devuelve `False`, estás comparando el string crudo — asegúrate de hacer `int(answer)` antes de comparar con `correct_index + 1` (el +1 da cuenta de la numeración de visualización basada en 1).
+**🩹 Si sale mal:** Si `check("4")` devuelve `False`, estás comparando el string crudo, asegúrate de hacer `int(answer)` antes de comparar con `correct_index + 1` (el +1 da cuenta de la numeración de visualización basada en 1).
 
 ### 1.3 Implementa TrueFalse y FillInBlank
 
@@ -183,7 +183,7 @@ Debe imprimir:
   Correct: True, Points: 10
 ```
 
-**🩹 Si sale mal:** Si `TrueFalse` acepta entrada "yes"/"no", olvidaste restringir al conjunto `("true", "t", "false", "f")` — "yes" eludiría tu comprobación y se marcaría silenciosamente como incorrecto. Si `FillInBlank` distingue mayúsculas, asegúrate de llamar `.lower()` en ambos lados de la comparación.
+**🩹 Si sale mal:** Si `TrueFalse` acepta entrada "yes"/"no", olvidaste restringir al conjunto `("true", "t", "false", "f")`, "yes" eludiría tu comprobación y se marcaría silenciosamente como incorrecto. Si `FillInBlank` distingue mayúsculas, asegúrate de llamar `.lower()` en ambos lados de la comparación.
 
 ### 1.4 Verifica los tres tipos
 
@@ -192,14 +192,14 @@ Debe imprimir:
 - ✅ `MultipleChoice` muestra opciones numeradas y acepta un string numérico como entrada.
 - ✅ `TrueFalse` acepta "true"/"t"/"false"/"f" (insensible a mayúsculas) y rechaza otra entrada.
 - ✅ `FillInBlank` acepta cualquiera de la lista `accepted_answers`, insensible a mayúsculas.
-- ✅ Los tres devuelven `(bool, int)` desde `check()` — `True` con puntos completos para correcto, `False` con 0 para incorrecto.
+- ✅ Los tres devuelven `(bool, int)` desde `check()`, `True` con puntos completos para correcto, `False` con 0 para incorrecto.
 - ✅ Cada uno muestra el texto de la pregunta y el valor en puntos antes de pedir una respuesta.
 
 **🤔 Pregunta(s) socrática(s)**
 
 ¿Por qué `MultipleChoice` almacena `correct_index` como basado en 0 pero suma 1 al comparar la entrada del usuario? ¿Qué se rompería si le pidieras al usuario "0, 1, 2 o 3" en lugar de "1, 2, 3 o 4"?
 
-## Paso 2 — Construye el motor del cuestionario
+## Paso 2, Construye el motor del cuestionario
 
 Ahora que las preguntas saben comprobarse a sí mismas, necesitamos algo que las recoja, elija un subconjunto aleatorio y ejecute una sesión cronometrada. La clase `QuizEngine` une todo.
 
@@ -244,7 +244,7 @@ for q in quiz:
     q.display()
 ```
 
-**🩹 Si sale mal:** Si obtienes `ValueError: Only N questions available in pool, need M`, estás pidiendo más preguntas de las que existen en el grupo filtrado — o añade más preguntas o reduce `num_questions`. Si la misma pregunta aparece dos veces, estás usando `random.choices` (con reemplazo) en lugar de `random.sample` (sin reemplazo).
+**🩹 Si sale mal:** Si obtienes `ValueError: Only N questions available in pool, need M`, estás pidiendo más preguntas de las que existen en el grupo filtrado, o añade más preguntas o reduce `num_questions`. Si la misma pregunta aparece dos veces, estás usando `random.choices` (con reemplazo) en lugar de `random.sample` (sin reemplazo).
 
 ### 2.2 Ejecuta una sesión de cuestionario cronometrada
 
@@ -286,7 +286,7 @@ def run_quiz(engine: QuizEngine, questions: list[Question],
 
 **🎯 Resultado esperado:** Ejecutar un cuestionario imprime cada pregunta, acepta entrada e imprime correcto/incorrecto después de cada respuesta. Cuando el temporizador expira, imprime `TIME'S UP!` y se detiene. La lista devuelta de dicts tiene una entrada por pregunta respondida.
 
-**🩹 Si sale mal:** Si el temporizador no detiene el cuestionario, comprueba que `remaining <= 0` usa `time.time() - start` (transcurrido), no `start - time.time()`. Si el cuestionario siempre se detiene en la primera pregunta, tu cálculo de `remaining` está mal — asegúrate de que estás calculando `time_limit - (time.time() - start)`, no solo `time.time() - start`.
+**🩹 Si sale mal:** Si el temporizador no detiene el cuestionario, comprueba que `remaining <= 0` usa `time.time() - start` (transcurrido), no `start - time.time()`. Si el cuestionario siempre se detiene en la primera pregunta, tu cálculo de `remaining` está mal, asegúrate de que estás calculando `time_limit - (time.time() - start)`, no solo `time.time() - start`.
 
 ### 2.3 Verifica el motor
 
@@ -302,7 +302,7 @@ def run_quiz(engine: QuizEngine, questions: list[Question],
 
 Si llamaras `build_quiz(5)` en un motor con solo 3 preguntas, ¿qué debería pasar? ¿Es lanzar un error la elección correcta, o preferirías devolver silenciosamente las 3? ¿Qué compromisos tiene cada enfoque?
 
-## Paso 3 — Puntúa y analiza los resultados
+## Paso 3, Puntúa y analiza los resultados
 
 Los resultados crudos son solo una lista de dicts. Para convertirlos en algo útil, necesitamos agregar puntuaciones, calcular desgloses por categoría e identificar áreas débiles. Aquí es también donde pandas empieza a ganar su sustento.
 
@@ -369,7 +369,7 @@ Debe imprimir:
   python: 1/1 correct (100%) — Strong
 ```
 
-**🩹 Si sale mal:** Si la precisión es 0 cuando tuviste respuestas correctas, comprueba que `"points"` y `"max_points"` son las claves en tus dicts de resultado — un error tipográfico como `"max_point"` da silenciosamente 0 vía `sum`. Si faltan categorías, tu bucle `for r in results` no está inicializando nuevas entradas de categoría en el primer encuentro.
+**🩹 Si sale mal:** Si la precisión es 0 cuando tuviste respuestas correctas, comprueba que `"points"` y `"max_points"` son las claves en tus dicts de resultado, un error tipográfico como `"max_point"` da silenciosamente 0 vía `sum`. Si faltan categorías, tu bucle `for r in results` no está inicializando nuevas entradas de categoría en el primer encuentro.
 
 ### 3.2 Convierte a un DataFrame de pandas para un análisis más profundo
 
@@ -411,9 +411,9 @@ print(category_breakdown(df))
 2   python                1                1            10          10         100.0        Strong
 ```
 
-**🩹 Si sale mal:** Si `correct_answers` muestra flotantes (como `1.0` en lugar de `1`), eso es una coerción de enteros normal de pandas con NaN — no afecta los cálculos. Si obtienes un `KeyError`, el nombre de columna en tu DataFrame no coincide con lo que `groupby` espera — comprueba las claves exactas en tus dicts de resultado.
+**🩹 Si sale mal:** Si `correct_answers` muestra flotantes (como `1.0` en lugar de `1`), eso es una coerción de enteros normal de pandas con NaN, no afecta los cálculos. Si obtienes un `KeyError`, el nombre de columna en tu DataFrame no coincide con lo que `groupby` espera, comprueba las claves exactas en tus dicts de resultado.
 
-## Paso 4 — Visualiza el rendimiento
+## Paso 4, Visualiza el rendimiento
 
 Los gráficos hacen evidentes los patrones de un vistazo. Construiremos dos: un gráfico de barras horizontal que muestra la precisión por categoría (coloreado de verde para fuerte, de rojo para débil), y un gráfico circular que muestra la división general correcto/incorrecto.
 
@@ -449,7 +449,7 @@ def plot_category_bars(summary: dict) -> None:
 
 **🎯 Resultado esperado:** Un gráfico de barras horizontal con los nombres de categoría en el eje y, porcentajes de precisión en el eje x, barras verdes para categorías ≥70%, barras rojas por debajo, y una línea gris discontinua en el 70%.
 
-**🩹 Si sale mal:** Si el gráfico está en blanco, probablemente estás llamando `plt.show()` antes de añadir cualquier dato — asegúrate de crear la figura y los ejes primero. Si las barras son verticales en lugar de horizontales, usaste `bar` en lugar de `barh`. Si el eje x pasa de 100, añade `ax.set_xlim(0, 100)`.
+**🩹 Si sale mal:** Si el gráfico está en blanco, probablemente estás llamando `plt.show()` antes de añadir cualquier dato, asegúrate de crear la figura y los ejes primero. Si las barras son verticales en lugar de horizontales, usaste `bar` en lugar de `barh`. Si el eje x pasa de 100, añade `ax.set_xlim(0, 100)`.
 
 ### 4.2 Construye el gráfico circular
 
@@ -475,9 +475,9 @@ def plot_overall_pie(summary: dict) -> None:
     plt.show()
 ```
 
-**🎯 Resultado esperado:** Un gráfico circular con dos rebanadas — verde para correcto, roja para incorrecto — con etiquetas de porcentaje y la precisión general en el título.
+**🎯 Resultado esperado:** Un gráfico circular con dos rebanadas, verde para correcto, roja para incorrecto, con etiquetas de porcentaje y la precisión general en el título.
 
-**🩹 Si sale mal:** Si `total_wrong` es negativo, tu conteo de `questions_answered` está mal — asegúrate de contar `len(results)`, no solo los correctos. Si el gráfico circular no tiene etiquetas, comprueba que pasaste el parámetro `labels` a `plt.pie`.
+**🩹 Si sale mal:** Si `total_wrong` es negativo, tu conteo de `questions_answered` está mal, asegúrate de contar `len(results)`, no solo los correctos. Si el gráfico circular no tiene etiquetas, comprueba que pasaste el parámetro `labels` a `plt.pie`.
 
 ### 4.3 Combina ambos gráficos
 
@@ -516,9 +516,9 @@ def plot_results(summary: dict) -> None:
 
 **🎯 Resultado esperado:** Una sola figura con un gráfico de barras horizontal a la izquierda y un gráfico circular a la derecha, guardada como `quiz_results.png`.
 
-**🩹 Si sale mal:** Si solo aparece un gráfico, los otros ejes podrían estar ocultos — comprueba que estás indexando `axes[0]` y `axes[1]`, no usando `axes` directamente. Si la figura está aplastada, aumenta el ancho de `figsize` (p. ej., `(14, 5)`).
+**🩹 Si sale mal:** Si solo aparece un gráfico, los otros ejes podrían estar ocultos, comprueba que estás indexando `axes[0]` y `axes[1]`, no usando `axes` directamente. Si la figura está aplastada, aumenta el ancho de `figsize` (p. ej., `(14, 5)`).
 
-## Paso 5 — Guarda los resultados en JSON
+## Paso 5, Guarda los resultados en JSON
 
 Un cuestionario solo es útil si puedes recordar lo que pasó. Guardar los resultados en un archivo JSON significa que un estudiante puede rastrear su progreso a lo largo de días o semanas.
 
@@ -570,11 +570,11 @@ print(f"Saved {len(history.sessions)} session(s)")
 print(f"File exists: {HISTORY_FILE.exists()}")
 ```
 
-**🩹 Si sale mal:** Si obtienes `TypeError: Object of type datetime is not JSON serializable`, estás almacenando el objeto datetime directamente — conviértelo a un string con `.isoformat()` primero. Si el archivo está vacío después de guardar, estás llamando `save()` antes de `add_session()`, o `self.sessions` se está reasignando en lugar de hacerle append.
+**🩹 Si sale mal:** Si obtienes `TypeError: Object of type datetime is not JSON serializable`, estás almacenando el objeto datetime directamente, conviértelo a un string con `.isoformat()` primero. Si el archivo está vacío después de guardar, estás llamando `save()` antes de `add_session()`, o `self.sessions` se está reasignando en lugar de hacerle append.
 
 ### 5.2 Carga y muestra sesiones pasadas
 
-**👟 Pista inicial:** Añade un método que imprima una tabla resumen de todas las sesiones pasadas — marca de tiempo, precisión, puntuación — para que el estudiante pueda ver su progreso de un vistazo.
+**👟 Pista inicial:** Añade un método que imprima una tabla resumen de todas las sesiones pasadas, marca de tiempo, precisión, puntuación, para que el estudiante pueda ver su progreso de un vistazo.
 
 ```python
 def show_history(history: HistoryFile) -> None:
@@ -614,9 +614,9 @@ def show_history(history: HistoryFile) -> None:
 - ✅ Después de ejecutar un cuestionario y llamar `add_session`, `quiz_history.json` existe en disco con JSON válido.
 - ✅ Reiniciar el programa y crear un nuevo `HistoryFile` carga las sesiones anteriores.
 - ✅ `show_history` muestra todas las sesiones pasadas con fecha, puntuación y precisión.
-- ✅ Eliminar `quiz_history.json` y volver a ejecutar no se bloquea — empieza con una lista vacía.
+- ✅ Eliminar `quiz_history.json` y volver a ejecutar no se bloquea, empieza con una lista vacía.
 
-## Paso 6 — Interfaz CLI
+## Paso 6, Interfaz CLI
 
 La pieza final: un menú que lo une todo para que un estudiante pueda interactuar con el motor de cuestionarios sin editar código.
 
@@ -683,7 +683,7 @@ def main():
 
 **🎯 Resultado esperado:** Ejecutar `main()` muestra un menú, te deja tomar un cuestionario (con preguntas cronometradas, puntuación y gráficos), ver el historial pasado o salir. Cada cuestionario se guarda automáticamente.
 
-**🩹 Si sale mal:** Si el menú hace bucle para siempre sin aceptar entrada, estás usando `input` dentro de un `try/except` que se traga `EOFError` — elimina la excepción amplia. Si "Take a quiz" se bloquea con `IndexError`, tu `build_quiz` está intentando muestrear más preguntas de las que contiene el banco — el `try/except ValueError` que lo rodea debería atraparlo.
+**🩹 Si sale mal:** Si el menú hace bucle para siempre sin aceptar entrada, estás usando `input` dentro de un `try/except` que se traga `EOFError`, elimina la excepción amplia. Si "Take a quiz" se bloquea con `IndexError`, tu `build_quiz` está intentando muestrear más preguntas de las que contiene el banco, el `try/except ValueError` que lo rodea debería atraparlo.
 
 ### 6.2 Añade retroalimentación coloreada
 
@@ -715,9 +715,9 @@ def print_score_bar(summary: dict) -> None:
     print(f"  Score: {summary['total_score']}/{summary['max_score']}")
 ```
 
-**🎯 Resultado esperado:** Ejecutar `print_score_bar({"accuracy": 75.0, "total_score": 30, "max_score": 40})` imprime una barra de progreso coloreada en el terminal — verde si es ≥70%, roja si está por debajo.
+**🎯 Resultado esperado:** Ejecutar `print_score_bar({"accuracy": 75.0, "total_score": 30, "max_score": 40})` imprime una barra de progreso coloreada en el terminal, verde si es ≥70%, roja si está por debajo.
 
-**🩹 Si sale mal:** Si ves códigos de escape crudos como `[92m` en lugar de colores, tu terminal no soporta códigos ANSI — la mayoría de los terminales modernos lo hacen, pero el Símbolo del sistema de Windows puede necesitar `os.system("")` llamado una vez al inicio para habilitarlos. Si la barra está desalineada, comprueba que `filled` no excede `bar_length`.
+**🩹 Si sale mal:** Si ves códigos de escape crudos como `[92m` en lugar de colores, tu terminal no soporta códigos ANSI, la mayoría de los terminales modernos lo hacen, pero el Símbolo del sistema de Windows puede necesitar `os.system("")` llamado una vez al inicio para habilitarlos. Si la barra está desalineada, comprueba que `filled` no excede `bar_length`.
 
 ### 6.3 Verifica la aplicación completa
 
@@ -732,20 +732,20 @@ def print_score_bar(summary: dict) -> None:
 
 ## ⚠️ Errores comunes
 
-- **Olvidar normalizar la entrada.** `"True"` y `"true"` son strings diferentes en Python. Cada método `check()` debería hacer `.strip().lower()` a la entrada del usuario antes de comparar. Lo mismo aplica a las respuestas de completar espacios — `"def"` y `"Def"` deberían aceptarse ambas.
+- **Olvidar normalizar la entrada.** `"True"` y `"true"` son strings diferentes en Python. Cada método `check()` debería hacer `.strip().lower()` a la entrada del usuario antes de comparar. Lo mismo aplica a las respuestas de completar espacios, `"def"` y `"Def"` deberían aceptarse ambas.
 - **Deriva del temporizador.** Si calculas `time.time() - start` solo al inicio de cada pregunta (no antes de cada respuesta), el temporizador no dará cuenta de cuánto tarda el usuario en teclear. Llama `remaining = time_limit - (time.time() - start)` justo antes de cada indicación.
 - **Mutar la lista por defecto.** Si `build_quiz` modifica `self.questions` en lugar de filtrar a una nueva lista `pool`, eliminarás permanentemente preguntas del banco. Usa siempre una comprensión de lista para crear una copia filtrada.
-- **Guardar solo a la salida.** Si solo escribes `quiz_history.json` cuando el usuario sale, un bloqueo o `Ctrl+C` pierde toda la sesión. Llama `history.save()` dentro de `add_session`, inmediatamente después del append — mismo principio que el patrón de estadísticas de Wordle.
+- **Guardar solo a la salida.** Si solo escribes `quiz_history.json` cuando el usuario sale, un bloqueo o `Ctrl+C` pierde toda la sesión. Llama `history.save()` dentro de `add_session`, inmediatamente después del append, mismo principio que el patrón de estadísticas de Wordle.
 - **`random.sample` vs `random.choices`.** `sample` elige sin reemplazo (cada pregunta aparece como máximo una vez). `choices` elige con reemplazo (la misma pregunta puede aparecer dos veces en un cuestionario). Usa `sample` a menos que quieras repetir explícitamente.
 
 ## Lo que acabas de construir
 
-Una plataforma de cuestionarios completa: tres tipos de pregunta respaldados por clases abstractas, un motor de cuestionarios con selección aleatoria y sesiones cronometradas, puntuación automática con desgloses por categoría, visualizaciones matplotlib, persistencia JSON entre sesiones y un menú CLI coloreado que lo une todo. Cada pieza se apoya en Python central — clases, diccionarios, listas, `random`, `time`, `json` — además de pandas y matplotlib para la capa de análisis y visualización.
+Una plataforma de cuestionarios completa: tres tipos de pregunta respaldados por clases abstractas, un motor de cuestionarios con selección aleatoria y sesiones cronometradas, puntuación automática con desgloses por categoría, visualizaciones matplotlib, persistencia JSON entre sesiones y un menú CLI coloreado que lo une todo. Cada pieza se apoya en Python central, clases, diccionarios, listas, `random`, `time`, `json`, además de pandas y matplotlib para la capa de análisis y visualización.
 
 ## A dónde ir desde aquí
 
 - **Niveles de dificultad.** Añade un atributo `difficulty` a las preguntas (fácil/medio/difícil) y filtra por categoría y dificultad al construir un cuestionario.
 - **Repetición espaciada.** Rastrea qué preguntas se respondieron mal y aumenta su probabilidad de aparecer en cuestionarios futuros usando muestreo aleatorio ponderado.
 - **Importación/exportación de preguntas.** Deja que los usuarios escriban bancos de preguntas como archivos CSV o JSON y los carguen al inicio, para que los cuestionarios puedan compartirse entre estudiantes.
-- **Cuestionarios adaptativos.** Empieza con preguntas fáciles, y solo avanza a preguntas más difíciles una vez que el estudiante demuestre dominio — una forma simple de pruebas adaptativas por computadora.
-- **GUI con Streamlit.** Reemplaza el CLI con una interfaz web usando Streamlit — la misma lógica de backend funciona, solo intercambia `input()` por widgets de Streamlit.
+- **Cuestionarios adaptativos.** Empieza con preguntas fáciles, y solo avanza a preguntas más difíciles una vez que el estudiante demuestre dominio, una forma simple de pruebas adaptativas por computadora.
+- **GUI con Streamlit.** Reemplaza el CLI con una interfaz web usando Streamlit, la misma lógica de backend funciona, solo intercambia `input()` por widgets de Streamlit.

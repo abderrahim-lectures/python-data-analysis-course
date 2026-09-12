@@ -28,7 +28,7 @@ $$
 \sum_{i=1}^{100} i = 1 + 2 + \cdots + 100
 $$
 
-The $\sum$ sign is an instruction to repeat. A loop is the computer's $\sum$ — and Python splits the idea into two machines for two different kinds of repetition. `for` repeats over a *known sequence*. `while` repeats *until a condition stops being true*.
+The $\sum$ sign is an instruction to repeat. A loop is the computer's $\sum$, and Python splits the idea into two machines for two different kinds of repetition. `for` repeats over a *known sequence*. `while` repeats *until a condition stops being true*.
 
 ## For: repetition over a sequence
 
@@ -44,7 +44,7 @@ for fruit in ["apple", "banana", "cherry"]:
 
 Read it the way it runs: *"for each fruit **in** the list, do this."* The loop variable, `fruit`, takes a new value every round until the list is exhausted.
 
-Strings are sequences too — the items are characters:
+Strings are sequences too, the items are characters:
 
 ```python
 for letter in "Python":
@@ -55,7 +55,7 @@ Since a character is a single item, the math and the machine agree: iterating ov
 
 ## The numerical sequence: range
 
-Most sums are over numbers, so Python supplies `range` — a sequence you can step across:
+Most sums are over numbers, so Python supplies `range`, a sequence you can step across:
 
 ```python
 for n in range(5):
@@ -73,7 +73,7 @@ The stopping rule is worth stating exactly: $n$ travels while $n < \text{stop}$ 
 
 ## While: repetition until a condition
 
-Some tasks cannot enumerate their rounds in advance — you keep going until some condition flips. Newton's approximation is the prototype: refine until the change shrinks below a tolerance. That is a `while` loop:
+Some tasks cannot enumerate their rounds in advance, you keep going until some condition flips. Newton's approximation is the prototype: refine until the change shrinks below a tolerance. That is a `while` loop:
 
 ```python
 count = 0
@@ -83,7 +83,7 @@ while count < 5:
 # 0 1 2 3 4
 ```
 
-The condition sits at the top and is re-checked every round. **Make sure it eventually turns `False`** — if nothing inside the body changes the variables the condition reads, the loop never ends. A sum that must terminate is written with `for`; a search that ends only when it finds its answer is written with `while`.
+The condition sits at the top and is re-checked every round. **Make sure it eventually turns `False`**, if nothing inside the body changes the variables the condition reads, the loop never ends. A sum that must terminate is written with `for`; a search that ends only when it finds its answer is written with `while`.
 
 ## Break and continue
 
@@ -121,7 +121,7 @@ for n in range(10):
         print(n)
 ```
 
-It does nothing — which is precisely its job: keeping the block syntactically valid while the real statement is being drafted.
+It does nothing, which is precisely its job: keeping the block syntactically valid while the real statement is being drafted.
 
 ## A worked example: the Σ machine at work
 
@@ -142,36 +142,36 @@ The loop is $\sum$ mechanized: each round adds one term, `continue` sieves out t
 
 - **Infinite `while` loops.** Forget to update the variable the condition reads, and the loop spins forever. Verify the body moves the state toward `False`.
 - **Modifying a list while iterating over it.** Slicing or deleting items mid-loop shifts the indices under you. Iterate over a copy, or build a fresh list.
-- **`for i in range(len(items))`.** Unless you need the index itself, iterate over the sequence directly — `for fruit in fruits` says what you mean.
+- **`for i in range(len(items))`.** Unless you need the index itself, iterate over the sequence directly, `for fruit in fruits` says what you mean.
 - **`continue` skips the round; `break` abandons the loop.** `continue` skips only the current iteration; `break` ends the whole loop. Confusing the two is how a loop that was meant to stop keeps spinning.
 
 ## 🧩 Challenges
 
 <details class="challenge">
-<summary>🧩 Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge, think first, then reveal</summary>
 <div class="challenge__body">
 
 Write a `for` loop that prints the first ten multiples of 3: $3, 6, 9, \ldots, 30$.
 
-<p class="challenge__answer">💡 <strong>Answer:</strong> <code>for i in range(3, 31, 3): print(i)</code> — <code>range(3, 31, 3)</code> starts at 3, advances by 3, and stops before 31, so it lands exactly on $3, 6, \ldots, 30$.</p>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>for i in range(3, 31, 3): print(i)</code>, <code>range(3, 31, 3)</code> starts at 3, advances by 3, and stops before 31, so it lands exactly on $3, 6, \ldots, 30$.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge, think first, then reveal</summary>
 <div class="challenge__body">
 
 Write a `while` loop that walks a queue (simulate with a list) and stops at the queued item `"quit"`, printing each item it passes over.
 
-<p class="challenge__answer">💡 <strong>Answer:</strong> <code>inputs = ["hello", "world", "quit"]; i = 0; while inputs[i] != "quit": print(inputs[i]); i += 1</code> — the condition guards the sentinel, and the index moves the state toward it.</p>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>inputs = ["hello", "world", "quit"]; i = 0; while inputs[i] != "quit": print(inputs[i]); i += 1</code>, the condition guards the sentinel, and the index moves the state toward it.</p>
 
 </div>
 </details>
 
 ## 🤔 Socratic Questions
 
-- When do you reach for `while` instead of `for`? Give a real task for each — one you can count in advance, one you cannot.
+- When do you reach for `while` instead of `for`? Give a real task for each, one you can count in advance, one you cannot.
 - What happens to a list you modify while a `for` loop is walking it? How do you sidestep it?
 - Python has no `do…while` like C. How do you write a body that must run at least once before any condition is checked?
 

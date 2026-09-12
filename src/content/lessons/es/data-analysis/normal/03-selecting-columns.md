@@ -58,14 +58,14 @@ df = pd.read_csv("titanic.csv")
 
 ## Seleccionando una sola columna
 
-**Notación de corchetes** — el enfoque más común:
+**Notación de corchetes**, el enfoque más común:
 
 ```python
 ages = df["Age"]
 print(type(ages))   # <class 'pandas.core.series.Series'>
 ```
 
-**Notación con punto** — más corta, pero solo funciona cuando el nombre de la columna no tiene espacios ni caracteres especiales:
+**Notación con punto**, más corta, pero solo funciona cuando el nombre de la columna no tiene espacios ni caracteres especiales:
 
 ```python
 print(df.Age.head())   # first 5 ages
@@ -109,14 +109,14 @@ El `:` significa "todas las filas". La lista de nombres de columnas selecciona c
 
 ## Patrones prácticos
 
-**Renombrar después de seleccionar** — conserva solo lo que necesitas con nombres más claros:
+**Renombrar después de seleccionar**, conserva solo lo que necesitas con nombres más claros:
 
 ```python
 demographics = df[["Name", "Age", "Sex"]].copy()
 demographics.columns = ["passenger", "age", "gender"]
 ```
 
-**Seleccionar columnas por tipo de datos** — útil cuando tienes muchas columnas:
+**Seleccionar columnas por tipo de datos**, útil cuando tienes muchas columnas:
 
 ```python
 numeric_cols = df.select_dtypes(include=["number"])

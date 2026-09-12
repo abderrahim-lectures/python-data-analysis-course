@@ -10,9 +10,9 @@ prerequisites: ["Python basics", "Basic pandas", "Basic matplotlib"]
 
 # 📊 Tableau de bord d'analyse de sentiment
 
-Le texte est partout — avis, tweets, tickets de support, réponses à des sondages. Savoir si ce texte est positif, négatif, ou neutre vous aide à prendre des décisions rapidement. Dans ce projet, vous construirez un pipeline d'analyse de sentiment avec TextBlob et visualiserez les résultats dans un tableau de bord matplotlib en temps réel qui se met à jour à mesure que de nouvelles données arrivent.
+Le texte est partout, avis, tweets, tickets de support, réponses à des sondages. Savoir si ce texte est positif, négatif, ou neutre vous aide à prendre des décisions rapidement. Dans ce projet, vous construirez un pipeline d'analyse de sentiment avec TextBlob et visualiserez les résultats dans un tableau de bord matplotlib en temps réel qui se met à jour à mesure que de nouvelles données arrivent.
 
-- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt — ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
+- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt, ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/sentiment-dashboard/notebook.fr.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/sentiment-dashboard/notebook.fr.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsentiment-dashboard%2Fnotebook.fr.ipynb)
@@ -117,15 +117,15 @@ positive | pol=+0.625 | Best day ever! I'm so happy right now!
 
 **🩹 Si ça ne marche pas :**
 
-- `LookupError: resource not found` — Vous avez sauté le téléchargement des corpus. Exécutez `uv run python -m textblob.download_corpora`.
-- Tous les résultats affichent `neutral` avec `pol=0.0` — TextBlob a besoin du corpus `averaged_perceptron_tagger`. Relancez le téléchargement des corpus.
+- `LookupError: resource not found`, Vous avez sauté le téléchargement des corpus. Exécutez `uv run python -m textblob.download_corpora`.
+- Tous les résultats affichent `neutral` avec `pol=0.0`, TextBlob a besoin du corpus `averaged_perceptron_tagger`. Relancez le téléchargement des corpus.
 
 ### 1.1 Vérifie
 
 **✅ Liste de vérification**
 
 - ✅ Chacune des cinq phrases d'exemple est classifiée avec le bon label (positif, négatif, ou neutre).
-- ✅ Les polarités s'étendent sur les deux côtés de zéro — pas toutes à 0,000.
+- ✅ Les polarités s'étendent sur les deux côtés de zéro, pas toutes à 0,000.
 - ✅ Le script s'exécute sans `LookupError`.
 
 **🤔 Question(s) socratique(s)**
@@ -202,7 +202,7 @@ Exécutez-le :
 uv run python batch.py
 ```
 
-**🎯 Résultat attendu :** `process_texts` retourne un DataFrame avec une ligne par avis, et `summary_stats` affiche le total, les comptages par label, et les moyennes de polarité/subjectivité — tous calculés sur les 10 phrases d'exemple.
+**🎯 Résultat attendu :** `process_texts` retourne un DataFrame avec une ligne par avis, et `summary_stats` affiche le total, les comptages par label, et les moyennes de polarité/subjectivité, tous calculés sur les 10 phrases d'exemple.
 
 **🩹 Si ça ne marche pas :** Si `Summary Stats` affiche un total inférieur à 10, vérifiez que chaque phrase est bien passée par `analyze_sentiment`. Si `avg_polarity` semble absurde, vérifiez que `df["polarity"].mean()` calcule bien sur la colonne numérique, pas sur du texte.
 
@@ -435,7 +435,7 @@ Exécutez-le :
 uv run python realtime.py
 ```
 
-**🎯 Résultat attendu :** Vous verrez `dashboard_live.png` se mettre à jour toutes les 5 secondes avec de nouvelles données ajoutées. Appuyez sur `Ctrl+C` pour arrêter tôt — le récapitulatif final s'affiche quoi qu'il arrive.
+**🎯 Résultat attendu :** Vous verrez `dashboard_live.png` se mettre à jour toutes les 5 secondes avec de nouvelles données ajoutées. Appuyez sur `Ctrl+C` pour arrêter tôt, le récapitulatif final s'affiche quoi qu'il arrive.
 
 **🩹 Si ça ne marche pas :** Si le script se termine immédiatement sans passer de batches, vérifiez la valeur de `duration`. Si `dashboard_live.png` ne semble pas changer entre les batches, vérifiez que `analyze_sentiment` produit réellement des résultats différents selon les phrases de `SAMPLE_FEEDS`.
 

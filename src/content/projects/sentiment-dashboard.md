@@ -10,9 +10,9 @@ prerequisites: ["Python basics", "Basic pandas", "Basic matplotlib"]
 
 # Sentiment Analysis Dashboard
 
-Text is everywhere — reviews, tweets, support tickets, survey responses. Knowing whether that text is positive, negative, or neutral helps you make decisions fast. In this project you will build a sentiment analysis pipeline with TextBlob and visualize results in a real-time matplotlib dashboard that updates as new data arrives.
+Text is everywhere, reviews, tweets, support tickets, survey responses. Knowing whether that text is positive, negative, or neutral helps you make decisions fast. In this project you will build a sentiment analysis pipeline with TextBlob and visualize results in a real-time matplotlib dashboard that updates as new data arrives.
 
-- **Run it in your browser.** An interactive companion notebook is ready — open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
+- **Run it in your browser.** An interactive companion notebook is ready, open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/sentiment-dashboard/notebook.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/sentiment-dashboard/notebook.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsentiment-dashboard%2Fnotebook.ipynb)
@@ -117,8 +117,8 @@ positive | pol=+0.625 | Best day ever! I'm so happy right now!
 
 **Troubleshooting:**
 
-- `LookupError: resource not found` — You skipped the corpora download. Run `uv run python -m textblob.download_corpora`.
-- All results show `neutral` with `pol=0.0` — TextBlob needs the `averaged_perceptron_tagger` corpus. Re-run the corpora download.
+- `LookupError: resource not found`, You skipped the corpora download. Run `uv run python -m textblob.download_corpora`.
+- All results show `neutral` with `pol=0.0`, TextBlob needs the `averaged_perceptron_tagger` corpus. Re-run the corpora download.
 
 ## Step 2: Batch Processing
 
@@ -387,7 +387,7 @@ Run it:
 uv run python realtime.py
 ```
 
-You will see `dashboard_live.png` update every 5 seconds with new data appended. Press `Ctrl+C` to stop early — the final summary prints regardless.
+You will see `dashboard_live.png` update every 5 seconds with new data appended. Press `Ctrl+C` to stop early, the final summary prints regardless.
 
 ## Step 5: Summary Reports
 

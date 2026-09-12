@@ -1,6 +1,6 @@
 ---
 title: "Password Generator"
-description: "Build a CLI password generator with entropy analysis, breach detection via HIBP, an encrypted credential vault, and a colored terminal report — all in pure Python."
+description: "Build a CLI password generator with entropy analysis, breach detection via HIBP, an encrypted credential vault, and a colored terminal report, all in pure Python."
 difficulty: "beginner"
 estimatedMinutes: 45
 tags: ["security", "cryptography", "cli", "hashing"]
@@ -23,14 +23,14 @@ prerequisites:
 
 You reuse the same password everywhere because inventing a new one every time is tedious. In this project you will build a tool that does the tedious part for you: it generates strong passwords, measures how hard they are to crack, checks whether they have already shown up in a data breach, and stores them in an encrypted vault you can unlock with a master password.
 
-This project only assumes Python 101-level basics — functions, lists, dictionaries, loops, and string formatting. No frameworks, no databases, no cloud services. Everything you need comes from the standard library plus one small encryption package.
+This project only assumes Python 101-level basics, functions, lists, dictionaries, loops, and string formatting. No frameworks, no databases, no cloud services. Everything you need comes from the standard library plus one small encryption package.
 
 This is optional and ungraded. See [Real-World Projects](/projects) for the full list.
 
 ## What you'll do
 
 1. Generate cryptographically secure passwords with customizable character sets using the `secrets` module.
-2. Analyze password strength by calculating entropy — the mathematical measure of unpredictability.
+2. Analyze password strength by calculating entropy, the mathematical measure of unpredictability.
 3. Check passwords against the Have I Been Pwned breach database without ever sending the full password (k-anonymity).
 4. Build an encrypted vault that stores credentials protected by a master password using AES-256.
 5. Create a CLI interface with `argparse` so the tool works from the command line.
@@ -39,18 +39,18 @@ This is optional and ungraded. See [Real-World Projects](/projects) for the full
 
 ## Where to run this
 
-- **Locally with `uv` (recommended).** This project needs one third-party package (`cryptography`) for encryption — a good candidate for running Python on your own machine. The Setup section below walks through it.
+- **Locally with `uv` (recommended).** This project needs one third-party package (`cryptography`) for encryption, a good candidate for running Python on your own machine. The Setup section below walks through it.
 - **JupyterLite playground.** Paste code blocks into cells and run them in the browser. The breach-check step needs a network connection; the vault step creates files in the browser's ephemeral storage.
 - **Google Colab.** Click the Colab badge on the project page to run in a cloud notebook. Note that vault files created in Colab don't survive between sessions.
 
-- **Run it in your browser.** An interactive companion notebook is ready — open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
+- **Run it in your browser.** An interactive companion notebook is ready, open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/password-generator/notebook.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/password-generator/notebook.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fpassword-generator%2Fnotebook.ipynb)
 
 ## Setup
 
-`uv` is a single tool that replaces the usual "install Python, then pip, then a virtual environment, then packages" chain — it manages Python versions and dependencies together.
+`uv` is a single tool that replaces the usual "install Python, then pip, then a virtual environment, then packages" chain, it manages Python versions and dependencies together.
 
 **macOS / Linux** (terminal):
 
@@ -82,7 +82,7 @@ The `secrets` module comes with Python and provides cryptographically strong ran
 
 ## Step 1: Generate secure passwords
 
-The first building block: a function that produces a random password with exactly the character types you want. The key insight is *which* random module to use — Python's `random` module is designed for simulations, not security. It's deterministic if you know the seed. The `secrets` module uses the operating system's true random source and is the right choice for anything security-related.
+The first building block: a function that produces a random password with exactly the character types you want. The key insight is *which* random module to use, Python's `random` module is designed for simulations, not security. It's deterministic if you know the seed. The `secrets` module uses the operating system's true random source and is the right choice for anything security-related.
 
 ### 1.1 Build the character pool
 
@@ -149,7 +149,7 @@ Every output should be 20 characters, contain at least one lowercase, one upperc
 
 ### 1.2 Verify the guarantees
 
-**Starter hint:** Write a quick check that asserts each character type is present in the generated password. This is a sanity check, not production code — just confirm your `required` logic works.
+**Starter hint:** Write a quick check that asserts each character type is present in the generated password. This is a sanity check, not production code, just confirm your `required` logic works.
 
 ```python
 def verify_password(pw: str) -> bool:
@@ -169,7 +169,7 @@ for _ in range(100):
 print("All 100 passwords passed verification.")
 ```
 
-**If it's off:** If an assertion fails, the character type pool is probably empty for one of the types. Check that the `if use_*` blocks each append to both `charset` and `required`. If you get `ValueError: At least one character type must be selected`, all four flags are `False` — pass `use_lowercase=True` at minimum.
+**If it's off:** If an assertion fails, the character type pool is probably empty for one of the types. Check that the `if use_*` blocks each append to both `charset` and `required`. If you get `ValueError: At least one character type must be selected`, all four flags are `False`, pass `use_lowercase=True` at minimum.
 
 ### 1.3 Confirm correctness
 
@@ -185,7 +185,7 @@ print("All 100 passwords passed verification.")
 
 ## Step 2: Analyze password strength
 
-A random string is only as strong as the pool it was drawn from. The mathematical measure is **entropy** — the number of bits of information an attacker would need to guess the password. A password drawn from a pool of 70 characters, 16 characters long, has log2(70^16) ≈ 97.4 bits of entropy. That's a useful number because it directly translates to how many tries a brute-force attacker needs.
+A random string is only as strong as the pool it was drawn from. The mathematical measure is **entropy**, the number of bits of information an attacker would need to guess the password. A password drawn from a pool of 70 characters, 16 characters long, has log2(70^16) ≈ 97.4 bits of entropy. That's a useful number because it directly translates to how many tries a brute-force attacker needs.
 
 ### 2.1 Calculate entropy
 
@@ -226,7 +226,7 @@ print(calculate_entropy(generate_password(16)))  # random, full pool
 97.4
 ```
 
-The random 16-character password scores around 97 bits — far above the 80-bit threshold most security guidelines consider "very strong."
+The random 16-character password scores around 97 bits, far above the 80-bit threshold most security guidelines consider "very strong."
 
 ### 2.2 Map entropy to human-readable labels
 
@@ -298,7 +298,7 @@ for pw in ["abc", "password123", generate_password(16), generate_password(24)]:
 
 The bar fills proportionally: one block per ~4 bits of entropy, capped at 30 blocks for the bar width.
 
-**If it's off:** If a clearly random password shows "Weak," check that `calculate_entropy` is detecting all four character pools. A common bug is hardcoding the symbol string instead of reusing the `SYMBOLS` constant — if the hardcoded string differs by even one character, the symbol check silently misses some passwords. If `entropy` is `NaN`, the `charset_size` is zero, which means `calculate_entropy` found none of the four pools — make sure the password isn't empty.
+**If it's off:** If a clearly random password shows "Weak," check that `calculate_entropy` is detecting all four character pools. A common bug is hardcoding the symbol string instead of reusing the `SYMBOLS` constant, if the hardcoded string differs by even one character, the symbol check silently misses some passwords. If `entropy` is `NaN`, the `charset_size` is zero, which means `calculate_entropy` found none of the four pools, make sure the password isn't empty.
 
 ### 2.4 Verify the analysis
 
@@ -314,7 +314,7 @@ The bar fills proportionally: one block per ~4 bits of entropy, capped at 30 blo
 
 ## Step 3: Check against breach databases
 
-Even a high-entropy password is worthless if it already appeared in a data breach. The Have I Been Pwned (HIBP) API lets you check — but you should never send your actual password to a third-party server. The solution is **k-anonymity**: you send only the first 5 characters of the password's SHA-1 hash and receive back a list of matching hash suffixes. Your full password never leaves your machine.
+Even a high-entropy password is worthless if it already appeared in a data breach. The Have I Been Pwned (HIBP) API lets you check, but you should never send your actual password to a third-party server. The solution is **k-anonymity**: you send only the first 5 characters of the password's SHA-1 hash and receive back a list of matching hash suffixes. Your full password never leaves your machine.
 
 ### 3.1 Understand the k-anonymity protocol
 
@@ -324,7 +324,7 @@ The flow works like this:
 2. Send the first 5 characters (`CBFDA`) to `https://api.pwnedpasswords.com/range/CBFDA`
 3. The API responds with thousands of lines, each being a hash suffix and a count: `C6008F9CAB4083784CBD1874F76618D2A97:42`
 4. Search the response for your full hash suffix (`C6008F9CAB4083784CBD1874F76618D2A97`). If found, your password has been in `42` breaches.
-5. The server knows only a 5-character prefix that matches millions of possible passwords — it cannot determine which specific password you're checking.
+5. The server knows only a 5-character prefix that matches millions of possible passwords, it cannot determine which specific password you're checking.
 
 ### 3.2 Implement the breach checker
 
@@ -381,9 +381,9 @@ print(f"Fresh password: breached={is_breached}, count={count}")
 Fresh password: breached=False, count=0
 ```
 
-A freshly generated random password should never appear in the breach database. If it does, the random source is broken — go back to Step 1 and confirm you're using `secrets`, not `random`.
+A freshly generated random password should never appear in the breach database. If it does, the random source is broken, go back to Step 1 and confirm you're using `secrets`, not `random`.
 
-**If it's off:** If you get `Breach check failed: ...`, your network might be blocking the request or the API is temporarily down — the function returns `False, 0` on failure so the tool doesn't crash. If you get `ConnectionError`, check your internet connection. If you get `403`, the API rate-limits requests — wait a moment and try again. If a known-breached password like `"password123"` comes back as not breached, check that the SHA-1 hash is uppercase and the suffix comparison is exact (no extra whitespace, no `.strip()` needed on the right-hand side of the `split(":")`).
+**If it's off:** If you get `Breach check failed: ...`, your network might be blocking the request or the API is temporarily down, the function returns `False, 0` on failure so the tool doesn't crash. If you get `ConnectionError`, check your internet connection. If you get `403`, the API rate-limits requests, wait a moment and try again. If a known-breached password like `"password123"` comes back as not breached, check that the SHA-1 hash is uppercase and the suffix comparison is exact (no extra whitespace, no `.strip()` needed on the right-hand side of the `split(":")`).
 
 ### 3.3 Verify the breach checker
 
@@ -392,14 +392,14 @@ A freshly generated random password should never appear in the breach database. 
 - `"password123"` returns `True` with a count in the millions.
 - `"123456"` returns `True` with a very high count.
 - A freshly generated password from Step 1 returns `False, 0`.
-- The function handles network errors gracefully — no traceback, just a warning and `False, 0`.
+- The function handles network errors gracefully, no traceback, just a warning and `False, 0`.
 - The full password never appears in any print statement or log.
 
 **Socratic question:** The API returns results for millions of password hashes that share the same 5-character prefix. If your password's prefix is `CBFDA`, how many *other* passwords are you leaking information about to the server by making the request? Why is that acceptable in this design?
 
 ## Step 4: Build an encrypted vault
 
-Generating strong passwords is only half the value — you also need to store them somewhere. Writing them to a plain text file defeats the purpose. Instead, we'll encrypt the vault with **AES-256** using the `cryptography` package's Fernet implementation. The vault is decrypted at runtime using a master password you type in once.
+Generating strong passwords is only half the value, you also need to store them somewhere. Writing them to a plain text file defeats the purpose. Instead, we'll encrypt the vault with **AES-256** using the `cryptography` package's Fernet implementation. The vault is decrypted at runtime using a master password you type in once.
 
 ### 4.1 Derive an encryption key from the master password
 
@@ -489,9 +489,9 @@ loaded_bad = load_vault("wrong-password")
 Wrong master password or corrupted vault.
 ```
 
-The wrong password produces an empty dict and a clear error message — no traceback, no crash.
+The wrong password produces an empty dict and a clear error message, no traceback, no crash.
 
-**If it's off:** If you get `InvalidToken` with a traceback instead of the friendly message, the `except Exception` block isn't catching Fernet's error. Check that `from cryptography.fernet import Fernet` is at the top of your file — if the import is missing, `Fernet` is undefined and the `except` block fails before it can handle the error. If the vault file is always empty after reload, the `str(vault)` conversion might be producing something `eval()` can't parse — check that the vault dict contains only strings, not objects or functions.
+**If it's off:** If you get `InvalidToken` with a traceback instead of the friendly message, the `except Exception` block isn't catching Fernet's error. Check that `from cryptography.fernet import Fernet` is at the top of your file, if the import is missing, `Fernet` is undefined and the `except` block fails before it can handle the error. If the vault file is always empty after reload, the `str(vault)` conversion might be producing something `eval()` can't parse, check that the vault dict contains only strings, not objects or functions.
 
 :::warning[eval() is dangerous in production]
 `eval()` executes arbitrary Python code. This is acceptable for a personal learning project where you control the vault file, but in production you should use `json.loads()` instead of `eval()` for deserialization. The vault format would need to use JSON-compatible types (no tuples, no sets, no custom objects).
@@ -515,7 +515,7 @@ The tool works in a Python shell, but real tools live on the command line. We'll
 
 ### 5.1 Set up argparse
 
-**Starter hint:** Use subcommands with `add_subparsers` — one for `generate`, one for `check`, one for `store`, one for `list`. Each subcommand gets its own flags.
+**Starter hint:** Use subcommands with `add_subparsers`, one for `generate`, one for `check`, one for `store`, one for `list`. Each subcommand gets its own flags.
 
 ```python
 import argparse
@@ -639,7 +639,7 @@ python password_generator.py list --master "my-master-password"
   github          alice                     k7G!mP2xQ#nR9wL@jT4f
 ```
 
-**If it's off:** If you get `error: the following arguments are required`, you forgot to pass a required flag (like `--master` or `-u`). If you get `unrecognized arguments`, check the subcommand order — `generate` comes before the flags, not after. If `generate` prints nothing, `--count` might be set to 0. If `list` shows garbled text, your vault was saved with a different Python version's `str()` format — regenerate it.
+**If it's off:** If you get `error: the following arguments are required`, you forgot to pass a required flag (like `--master` or `-u`). If you get `unrecognized arguments`, check the subcommand order, `generate` comes before the flags, not after. If `generate` prints nothing, `--count` might be set to 0. If `list` shows garbled text, your vault was saved with a different Python version's `str()` format, regenerate it.
 
 ### 5.3 Verify the CLI
 
@@ -743,7 +743,7 @@ def list_vault_with_expiry(vault: dict):
   1 password(s) older than 90 days. Rotate them.
 ```
 
-**If it's off:** If all entries show "unknown" age, the `created_at` key wasn't added during storage — go back to the `store_credential` function and make sure it's being called instead of manually building the dict. If the age calculation seems wrong, check that `datetime.now()` and `datetime.fromisoformat()` are using the same timezone awareness (both naive, or both aware — don't mix them).
+**If it's off:** If all entries show "unknown" age, the `created_at` key wasn't added during storage, go back to the `store_credential` function and make sure it's being called instead of manually building the dict. If the age calculation seems wrong, check that `datetime.now()` and `datetime.fromisoformat()` are using the same timezone awareness (both naive, or both aware, don't mix them).
 
 ### 6.4 Verify the expiry tracker
 
@@ -762,7 +762,7 @@ Raw text is functional but hard to scan. Adding color to the terminal output mak
 
 ### 7.1 Add ANSI color codes
 
-**Starter hint:** Define color constants using ANSI escape sequences. Wrap text in them for terminal output only — don't write escape codes to files.
+**Starter hint:** Define color constants using ANSI escape sequences. Wrap text in them for terminal output only, don't write escape codes to files.
 
 ```python
 class Color:
@@ -782,7 +782,7 @@ def colored(text: str, color: str) -> str:
 
 ### 7.2 Color the strength bar
 
-**Starter hint:** Update `analyze_password` to color the bar based on the strength label — red for weak, yellow for moderate, green for strong.
+**Starter hint:** Update `analyze_password` to color the bar based on the strength label, red for weak, yellow for moderate, green for strong.
 
 ```python
 def analyze_password_colored(password: str) -> dict:
@@ -872,7 +872,7 @@ print_report(passwords)
   Total:         5
 ```
 
-**If it's off:** If colors don't appear, your terminal might not support ANSI codes — try `export TERM=xterm-256color` before running. If you see raw escape sequences like `[91m` in the output, the escape characters aren't being interpreted — make sure you're using `\033[` (the actual ESC character), not the literal string backslash-zero-three-three.
+**If it's off:** If colors don't appear, your terminal might not support ANSI codes, try `export TERM=xterm-256color` before running. If you see raw escape sequences like `[91m` in the output, the escape characters aren't being interpreted, make sure you're using `\033[` (the actual ESC character), not the literal string backslash-zero-three-three.
 
 ### 7.5 Verify the polished output
 
@@ -888,29 +888,29 @@ print_report(passwords)
 
 ## Common pitfalls
 
-- **Using `random` instead of `secrets`.** The `random` module is deterministic and predictable. For anything security-related — passwords, tokens, keys — always use `secrets`. This is the single most important decision in this entire project.
+- **Using `random` instead of `secrets`.** The `random` module is deterministic and predictable. For anything security-related, passwords, tokens, keys, always use `secrets`. This is the single most important decision in this entire project.
 - **Forgetting to shuffle the required characters.** If you append required characters first and then fill the rest, the first few characters are always one of each type in a fixed order. A prefix like "aB1!" is a pattern attackers know to check first. Always shuffle.
 - **Sending the full password to the breach API.** The HIBP k-anonymity design exists specifically to avoid this. Only the first 5 characters of the SHA-1 hash should ever leave your machine.
 - **Using `eval()` in production code.** `eval()` executes arbitrary Python. For a personal learning project it's a quick way to deserialize the vault, but in production use `json.loads()` with a JSON-compatible vault format.
-- **Saving the vault only at exit.** If the program crashes mid-session, unsaved changes are lost. Save after every mutation — the `save_vault` call in `store` already does this.
+- **Saving the vault only at exit.** If the program crashes mid-session, unsaved changes are lost. Save after every mutation, the `save_vault` call in `store` already does this.
 - **Mixing timezone-aware and naive datetimes.** `datetime.now()` returns a naive datetime (no timezone). If you compare it against a timezone-aware one from `datetime.now(timezone.utc)`, you'll get a `TypeError`. Keep them consistent.
 
 ## What you just built
 
-A complete password management tool in pure Python: cryptographically secure password generation, entropy-based strength analysis, breach detection against a public database using k-anonymity, an AES-256 encrypted vault, a command-line interface, password expiry tracking, and colored terminal output. Every piece builds on Python 101 fundamentals — strings, lists, dictionaries, loops, functions — applied to a real problem you face every day.
+A complete password management tool in pure Python: cryptographically secure password generation, entropy-based strength analysis, breach detection against a public database using k-anonymity, an AES-256 encrypted vault, a command-line interface, password expiry tracking, and colored terminal output. Every piece builds on Python 101 fundamentals, strings, lists, dictionaries, loops, functions, applied to a real problem you face every day.
 
 The security patterns here apply far beyond passwords: k-anonymity is used in health data and location privacy, AES encryption is the standard for data-at-rest, and entropy calculation is the foundation of all strength metrics. Understanding *why* these work (not just how to call them) is what separates a script from a tool you can trust.
 
 ## Where to go from here
 
-- **Use a real KDF.** Replace the SHA-256 key derivation with PBKDF2 (`cryptography.hazmat.primitives.kdf.pbkdf2`) or argon2 for brute-force resistance. A SHA-256 hash is fast — an attacker can try billions per second. PBKDF2 with 600,000 iterations slows that down by a factor of 600,000.
+- **Use a real KDF.** Replace the SHA-256 key derivation with PBKDF2 (`cryptography.hazmat.primitives.kdf.pbkdf2`) or argon2 for brute-force resistance. A SHA-256 hash is fast, an attacker can try billions per second. PBKDF2 with 600,000 iterations slows that down by a factor of 600,000.
 - **Add a clipboard copy command.** A `copy` subcommand that puts a password on the clipboard and clears it after 30 seconds is more practical than printing to stdout.
-- **Implement password reuse detection.** Before storing a new credential, check if the password already appears in another entry — a reused strong password is still a single point of failure.
+- **Implement password reuse detection.** Before storing a new credential, check if the password already appears in another entry, a reused strong password is still a single point of failure.
 - **Add JSON vault format.** Migrate from `eval()`/`str()` to `json.dumps()`/`json.loads()` for interoperability and safety. JSON doesn't support Python tuples or sets, but the vault only needs strings.
-- **Build a `rotate` command.** Generate a new password for an existing entry, update the timestamp, and optionally copy the new password to the clipboard — all in one command.
+- **Build a `rotate` command.** Generate a new password for an existing entry, update the timestamp, and optionally copy the new password to the clipboard, all in one command.
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser.

@@ -138,8 +138,8 @@ dtypes: float64(2), int64(5), object(5)
 
 Observations clés :
 - **Age** : 177 valeurs manquantes (20 %)
-- **Cabin** : 687 valeurs manquantes (77 %) — trop pour être comblées
-- **Embarked** : seulement 2 valeurs manquantes — facile à corriger
+- **Cabin** : 687 valeurs manquantes (77 %), trop pour être comblées
+- **Embarked** : seulement 2 valeurs manquantes, facile à corriger
 
 ## Résumé statistique
 
@@ -148,9 +148,9 @@ print(df.describe())
 ```
 
 Cela montre le count, la moyenne, l'écart-type, le min, les quartiles et le max pour toutes les colonnes numériques. Remarquez :
-- `Fare` a une large plage (0 à 512) avec un max élevé — probablement des valeurs aberrantes
+- `Fare` a une large plage (0 à 512) avec un max élevé, probablement des valeurs aberrantes
 - `Age` varie de 0,42 (nourrisson) à 80 ans
-- `Survived` est binaire — une moyenne de 0,38 signifie que 38 % ont survécu
+- `Survived` est binaire, une moyenne de 0,38 signifie que 38 % ont survécu
 
 ## Distributions catégorielles
 
@@ -190,11 +190,11 @@ Embarked    2      0.2
 ## Observations initiales
 
 Avant toute analyse, notez ces schémas :
-1. **Écart de survie selon la classe** — la première classe avait probablement des taux de survie plus élevés
-2. **Biais de genre** — la politique « les femmes et les enfants d'abord » pourrait apparaître dans les données
-3. **Age manquant** — 20 % manquant, une stratégie de comblement est nécessaire
-4. **Cabin inutile** — 77 % manquant, cette colonne devrait probablement être supprimée
-5. **Valeurs aberrantes de Fare** — certains passagers ont payé bien plus que d'autres
+1. **Écart de survie selon la classe**, la première classe avait probablement des taux de survie plus élevés
+2. **Biais de genre**, la politique « les femmes et les enfants d'abord » pourrait apparaître dans les données
+3. **Age manquant**, 20 % manquant, une stratégie de comblement est nécessaire
+4. **Cabin inutile**, 77 % manquant, cette colonne devrait probablement être supprimée
+5. **Valeurs aberrantes de Fare**, certains passagers ont payé bien plus que d'autres
 
 ## Essayez-le
 
@@ -222,7 +222,7 @@ print(df.groupby("Embarked")["Survived"].mean())
 - Commencez toujours une EDA par `head()`, `info()` et `describe()` pour comprendre la structure
 - `value_counts()` révèle la distribution des colonnes catégorielles
 - L'analyse des valeurs manquantes doit précéder toute décision de nettoyage
-- Documentez vos observations — elles guident l'ensemble de votre plan d'analyse
+- Documentez vos observations, elles guident l'ensemble de votre plan d'analyse
 
 ## Défi pratique
 

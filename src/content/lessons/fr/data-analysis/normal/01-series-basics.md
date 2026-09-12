@@ -45,7 +45,7 @@ quiz:
 
 ## Qu'est-ce qu'une Series ?
 
-Une **Series** pandas est un tableau unidimensionnel étiqueté. Considérez-la comme une seule colonne d'un tableur — chaque valeur possède une étiquette (l'index) et les données peuvent être de n'importe quel type : entiers, flottants, chaînes de caractères, ou même des objets Python.
+Une **Series** pandas est un tableau unidimensionnel étiqueté. Considérez-la comme une seule colonne d'un tableur, chaque valeur possède une étiquette (l'index) et les données peuvent être de n'importe quel type : entiers, flottants, chaînes de caractères, ou même des objets Python.
 
 ```python
 import pandas as pd
@@ -68,14 +68,14 @@ La colonne de gauche est l'**index** (0, 1, 2, 3 par défaut). La colonne de dro
 
 ## Créer des Series à partir de différentes sources
 
-**À partir d'une liste** — l'index prend par défaut une plage d'entiers :
+**À partir d'une liste**, l'index prend par défaut une plage d'entiers :
 
 ```python
 temperatures = pd.Series([22.5, 24.1, 19.8, 26.3])
 print(temperatures)
 ```
 
-**À partir d'un dictionnaire** — les clés deviennent l'index :
+**À partir d'un dictionnaire**, les clés deviennent l'index :
 
 ```python
 population = pd.Series({
@@ -95,7 +95,7 @@ Johannesburg     5600000
 dtype: int64
 ```
 
-**À partir d'un scalaire** — une valeur unique est répétée pour remplir l'index :
+**À partir d'un scalaire**, une valeur unique est répétée pour remplir l'index :
 
 ```python
 zeros = pd.Series(0, index=["a", "b", "c", "d"])
@@ -185,7 +185,7 @@ print(grades > 85)
 
 ## Points clés à retenir
 
-- Une Series est un tableau unidimensionnel étiqueté — le fondement de pandas
+- Une Series est un tableau unidimensionnel étiqueté, le fondement de pandas
 - L'index fournit des étiquettes pour accéder aux données et les découper
 - Les opérations vectorisées vous permettent de transformer des colonnes entières sans boucles
 - Les dictionnaires sont une source naturelle de Series avec des étiquettes significatives

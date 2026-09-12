@@ -49,7 +49,7 @@ scores.update({"Eve": 95, "Frank": 88})  # fusionne
 scores.setdefault("Grace", 0)  # n'assigne que si la clé manque
 ```
 
-`keys`, `values` et `items` sont trois vues de la même relation — le domaine, l'image et le graphe. `update` fusionne un second dict ; `setdefault` n'écrit que lorsque la clé est absente, l'affectation conditionnelle qui n'a pas besoin de `if`.
+`keys`, `values` et `items` sont trois vues de la même relation, le domaine, l'image et le graphe. `update` fusionne un second dict ; `setdefault` n'écrit que lorsque la clé est absente, l'affectation conditionnelle qui n'a pas besoin de `if`.
 
 ## Marcher sur la correspondance
 
@@ -63,7 +63,7 @@ for name, score in scores.items():  # paires clé-valeur
     print(f"{name}: {score}")
 ```
 
-`items` vous tend la paire directement — sans indexation manuelle — car déballer une entrée en `name, score` est la lecture naturelle d'une ligne.
+`items` vous tend la paire directement, sans indexation manuelle, car déballer une entrée en `name, score` est la lecture naturelle d'une ligne.
 
 ## Sets : l'ensemble mathématique
 
@@ -74,7 +74,7 @@ colors = {"red", "blue", "green", "red"}
 print(colors)  # {'red', 'blue', 'green'}  (doublons supprimés)
 ```
 
-L'unicité est appliquée structurellement — il n'y a pas de seconde copie attendant de polluer un test d'appartenance. L'appartenance à un set est exactement $x \in S$ : un élément est dedans ou dehors, sans degrés intermédiaires.
+L'unicité est appliquée structurellement, il n'y a pas de seconde copie attendant de polluer un test d'appartenance. L'appartenance à un set est exactement $x \in S$ : un élément est dedans ou dehors, sans degrés intermédiaires.
 
 ## Opérations d'ensemble
 
@@ -98,7 +98,7 @@ Les opérateurs sont la notation que vous connaissez déjà. Et là où la théo
 
 ## L'exigence de hachage
 
-Les empreintes exigent la stabilité. Les clés de dict et les éléments de set doivent être **hashables** — en pratique, immuables — pour que leurs calculs restent reproductibles. Les chaînes, les nombres et les tuples passent ; les listes et les autres dicts non :
+Les empreintes exigent la stabilité. Les clés de dict et les éléments de set doivent être **hashables**, en pratique, immuables, pour que leurs calculs restent reproductibles. Les chaînes, les nombres et les tuples passent ; les listes et les autres dicts non :
 
 ```python
 {[1, 2]: "bad"}   # TypeError: unhashable type: 'list'
@@ -109,7 +109,7 @@ Une liste ne pourrait pas être une clé fiable même si on le permettait : son 
 
 ## Un exemple travaillé : le carnet de notes
 
-La relation, le domaine et l'image — un seul tableau parcouru en trois postures :
+La relation, le domaine et l'image, un seul tableau parcouru en trois postures :
 
 ```python
 scores = {"Alice": 85, "Bob": 92, "Charlie": 78}
@@ -123,35 +123,35 @@ roles = {"student", "teacher", "admin"}
 print("student" in roles)             # True — appartenance O(1)
 ```
 
-`items` parcourt le graphe entier, `.get` questionne avec courtoisie quand vous ignorez si la clé existe, et le `in` sur un ensemble est l'appartenance $x \in S$ — trois questions que les structures de la leçon répondent directement.
+`items` parcourt le graphe entier, `.get` questionne avec courtoisie quand vous ignorez si la clé existe, et le `in` sur un ensemble est l'appartenance $x \in S$, trois questions que les structures de la leçon répondent directement.
 
 ## Pièges courants
 
 - **Accéder à des clés absentes.** `.get()` ou une vérification avec `in` vous épargne un `KeyError`.
 - **Se fier à l'ordre du dict.** Python 3.7+ conserve l'ordre d'insertion, mais traitez-le comme une commodité, non comme un contrat.
 - **Se fier à l'ordre d'un set.** Un set ne garde aucun ordre ; ne faites jamais de l'ordre d'itération une dépendance.
-- **`{}` est un dict vide ; `set()` est l'ensemble vide.** `{}` n'est pas un ensemble. Écrivez `set()` pour le vide et `{"a", "b"}` pour un littéral — un symbole, deux sens.
+- **`{}` est un dict vide ; `set()` est l'ensemble vide.** `{}` n'est pas un ensemble. Écrivez `set()` pour le vide et `{"a", "b"}` pour un littéral, un symbole, deux sens.
 
 ## 🧩 Défis
 
 <details class="challenge">
-<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
+<summary>🧩 Défi, réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
 Comptez la fréquence de chaque caractère de `"hello world"` avec un dict.
 
-<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>freq = {}; for c in "hello world": freq[c] = freq.get(c, 0) + 1</code> — le repli de <code>.get</code> sur $0$ transforme la première apparition en incrément depuis zéro.</p>
+<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>freq = {}; for c in "hello world": freq[c] = freq.get(c, 0) + 1</code>, le repli de <code>.get</code> sur $0$ transforme la première apparition en incrément depuis zéro.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
+<summary>🧩 Défi, réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
 Étant donné deux listes, trouvez les éléments présents dans les deux à l'aide de sets.
 
-<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>set(a) & set(b)</code> ou <code>set(a).intersection(b)</code> — l'intersection est $A \cap B$, et la machinerie des ensembles fait le travail.</p>
+<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>set(a) & set(b)</code> ou <code>set(a).intersection(b)</code>, l'intersection est $A \cap B$, et la machinerie des ensembles fait le travail.</p>
 
 </div>
 </details>
@@ -159,7 +159,7 @@ Comptez la fréquence de chaque caractère de `"hello world"` avec un dict.
 ## 🤔 Questions socratiques
 
 - Pourquoi une liste ne peut-elle pas servir de clé de dict ? Quelle propriété une clé doit-elle porter ?
-- Quand un set bat-il une liste — que perdez-vous et que gagnez-vous ?
+- Quand un set bat-il une liste, que perdez-vous et que gagnez-vous ?
 - En quoi `dict.get(clé, défaut)` diffère-t-il de `dict[clé]`, et quand préférez-vous l'un ?
 
 ## ✅ Vérification rapide

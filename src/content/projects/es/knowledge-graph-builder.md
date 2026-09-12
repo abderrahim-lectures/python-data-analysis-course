@@ -103,7 +103,7 @@ class EntityExtractor:
 
 **🎯 Resultado esperado :** `EntityExtractor().extract("Ada Lovelace worked at Babbage's Analytical Engine in London.")` devuelve entidades que incluyen una persona y una ubicación.
 
-**🩹 Si sale mal :** Si no obtienes entidades, el modelo puede no reconocer los nombres propios de tu oración de muestra — prueba con una oración más rica.
+**🩹 Si sale mal :** Si no obtienes entidades, el modelo puede no reconocer los nombres propios de tu oración de muestra, prueba con una oración más rica.
 
 ### 1.2 Verifica la extracción de entidades
 
@@ -158,7 +158,7 @@ class KnowledgeGraph:
 
 **🎯 Resultado esperado :** Añadir unas cuantas entidades y aristas construye un grafo que puedes consultar con `neighbors()`.
 
-**🩹 Si sale mal :** Si `neighbors` devuelve vacío, el texto de la entidad no coincide con ningún nodo — revisa las mayúsculas y la ortografía exacta.
+**🩹 Si sale mal :** Si `neighbors` devuelve vacío, el texto de la entidad no coincide con ningún nodo, revisa las mayúsculas y la ortografía exacta.
 
 ### 2.2 Verifica el grafo
 
@@ -268,14 +268,14 @@ class KnowledgeGraph:
 ## ⚠️ Errores comunes
 
 - **Falta la descarga del modelo.** `spacy.load("en_core_web_sm")` lanza `OSError` si omites `spacy download`. Instala el modelo antes de ejecutar.
-- **Búsquedas sensibles a mayúsculas.** La entidad `"Lovelace"` no coincidirá con `"lovelace"` a menos que normalices las mayúsculas en las búsquedas. El auxiliar `_find` maneja esto — reutilízalo en todas partes.
+- **Búsquedas sensibles a mayúsculas.** La entidad `"Lovelace"` no coincidirá con `"lovelace"` a menos que normalices las mayúsculas en las búsquedas. El auxiliar `_find` maneja esto, reutilízalo en todas partes.
 - **Grafos desconectados.** Las entradas cortas suelen producir nodos aislados sin aristas. Usa un texto con múltiples entidades co-ocurrentes para ver una estructura interesante.
 - **Tamaño del modelo vs precisión.** `en_core_web_sm` es pequeño y rápido pero pierde entidades de nicho. Prueba `en_core_web_md` o `_lg` para mejor recall (recuperación) a costa de memoria.
-- **IDs de entidad duplicados.** `unique_entities` asigna los IDs por llamada. Entre oraciones, la misma persona puede obtener IDs diferentes a menos que elimines los duplicados globalmente — la canalización construye un solo extractor pero los IDs por oración se reinician.
+- **IDs de entidad duplicados.** `unique_entities` asigna los IDs por llamada. Entre oraciones, la misma persona puede obtener IDs diferentes a menos que elimines los duplicados globalmente, la canalización construye un solo extractor pero los IDs por oración se reinician.
 
 ## Lo que acabas de construir
 
-Una canalización de texto-a-grafo: spaCy extrae las entidades nombradas, un divisor de expresiones regulares aísla las oraciones, la co-ocurrencia convierte las oraciones compartidas en aristas ponderadas y NetworkX almacena y matplotlib renderiza el resultado. Ahora puedes tomar cualquier párrafo y convertirlo en una red de hechos conectados explorable — el mismo patrón detrás de los sistemas de respuesta a preguntas y de los motores de recomendación.
+Una canalización de texto-a-grafo: spaCy extrae las entidades nombradas, un divisor de expresiones regulares aísla las oraciones, la co-ocurrencia convierte las oraciones compartidas en aristas ponderadas y NetworkX almacena y matplotlib renderiza el resultado. Ahora puedes tomar cualquier párrafo y convertirlo en una red de hechos conectados explorable, el mismo patrón detrás de los sistemas de respuesta a preguntas y de los motores de recomendación.
 
 :::tip[Ejecuta una versión más completa sin configuración local]
 [`examples/knowledge-graph-builder/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/knowledge-graph-builder) en el repositorio del curso tiene una versión más rica con detección de tipos de relación, detección de comunidades y el CLI conectado de principio a fin. Clónalo, o abre el repositorio completo en un [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), y ejecútalo desde allí.
@@ -289,6 +289,6 @@ Una canalización de texto-a-grafo: spaCy extrae las entidades nombradas, un div
 
 ## Comparte tu proyecto con la clase
 
-¿Construiste algo de lo que te sientas orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado — y su README tiene una guía completa y apta para principiantes sobre cómo añadir el tuyo mediante una **pull request**, incluso si nunca has usado git: hacer un fork del repositorio, crear una rama, hacer commit de tus archivos y abrir la PR, paso a paso. No se asume ninguna experiencia previa con git.
+¿Construiste algo de lo que te sientas orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado, y su README tiene una guía completa y apta para principiantes sobre cómo añadir el tuyo mediante una **pull request**, incluso si nunca has usado git: hacer un fork del repositorio, crear una rama, hacer commit de tus archivos y abrir la PR, paso a paso. No se asume ninguna experiencia previa con git.
 
 Bienvenido a escribir Python fuera del navegador. 🎓

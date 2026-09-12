@@ -1,6 +1,6 @@
 ---
 title: "Build a Time Tracker"
-description: "Track time spent on tasks with start-and-stop sessions, manual entries, daily and weekly reports, and a top-tasks summary — all persisted to CSV with the standard library."
+description: "Track time spent on tasks with start-and-stop sessions, manual entries, daily and weekly reports, and a top-tasks summary, all persisted to CSV with the standard library."
 difficulty: "beginner"
 estimatedMinutes: 45
 tags: ["cli", "csv", "productivity"]
@@ -18,9 +18,9 @@ prerequisites:
 
 # 🛠️ ⏱️ Build a Time Tracker
 
-Nobody knows where a workday goes until they record it. This project builds a tiny time tracker: start a session, work, stop it, and the minutes land in a CSV; add a missed entry by hand, then pull daily and weekly reports and a "top 3 tasks" summary. It's standard-library only — dataclasses, `csv`, and `datetime` — so you'll learn the load/append/save rhythm and real timestamp math, and end up with a tool for an answer to "where does my time actually go?"
+Nobody knows where a workday goes until they record it. This project builds a tiny time tracker: start a session, work, stop it, and the minutes land in a CSV; add a missed entry by hand, then pull daily and weekly reports and a "top 3 tasks" summary. It's standard-library only, dataclasses, `csv`, and `datetime`, so you'll learn the load/append/save rhythm and real timestamp math, and end up with a tool for an answer to "where does my time actually go?"
 
-This assumes Python 101 and comfort with `datetime` basics — nothing beyond that is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
+This assumes Python 101 and comfort with `datetime` basics, nothing beyond that is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 
@@ -32,9 +32,9 @@ This assumes Python 101 and comfort with `datetime` basics — nothing beyond th
 
 ## Where to run this
 
-**Locally with `uv`** is the primary — and honest — path. A time tracker's entire value is *persistence plus your real clock*, both of which need a disk and a `datetime.now()` that means something. Run it on your own machine.
+**Locally with `uv`** is the primary, and honest, path. A time tracker's entire value is *persistence plus your real clock*, both of which need a disk and a `datetime.now()` that means something. Run it on your own machine.
 
-**Google Colab, Kaggle Notebooks, and Binder** run every code cell just fine (pure standard library), and the notebook mirrors each step with a seeded example. The honest caveat: a notebook's ephemeral filesystem and sandboxed clock make it a try-it path — the `.csv` of *your sessions* won't survive, and `datetime.now()` in a notebook is still a real clock if you want it. Use the badges to see the logic, and switch to local `uv` for the tool you trust with your week.
+**Google Colab, Kaggle Notebooks, and Binder** run every code cell just fine (pure standard library), and the notebook mirrors each step with a seeded example. The honest caveat: a notebook's ephemeral filesystem and sandboxed clock make it a try-it path, the `.csv` of *your sessions* won't survive, and `datetime.now()` in a notebook is still a real clock if you want it. Use the badges to see the logic, and switch to local `uv` for the tool you trust with your week.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/time-tracker/notebook.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/time-tracker/notebook.ipynb)
@@ -53,16 +53,16 @@ cd time-tracker
 uv run python -c "import csv, json; from datetime import datetime; print('ok')"
 ```
 
-`csv` is your persistence layer — a human-readable `entries.csv` that Excel or any text editor can open. `json` isn't strictly required here, but it appears in the notebook examples for config-like data, and `datetime` is the module that turns two wall-clock moments into "minutes worked".
+`csv` is your persistence layer, a human-readable `entries.csv` that Excel or any text editor can open. `json` isn't strictly required here, but it appears in the notebook examples for config-like data, and `datetime` is the module that turns two wall-clock moments into "minutes worked".
 
 **✅ Checklist**
 
 - ✅ `uv init time-tracker` created a folder with a `pyproject.toml`.
-- ✅ The import check prints `ok` — zero packages added.
+- ✅ The import check prints `ok`, zero packages added.
 
 ## Step 1: Model a time entry and persist it to CSV
 
-Every command in this tool reads and writes the same store. First you need a shape for an entry — a task, a start moment, an optional end moment, and a computed duration — plus a save/load pair around a CSV file.
+Every command in this tool reads and writes the same store. First you need a shape for an entry, a task, a start moment, an optional end moment, and a computed duration, plus a save/load pair around a CSV file.
 
 ### 1.1 Create the `Entry` dataclass and CSV store
 
@@ -103,11 +103,11 @@ def save_entries(entries: list[Entry]) -> None:
 print(load_entries())
 ```
 
-`csv.DictWriter` with `fieldnames=FIELDS` writes a header row that `csv.DictReader` then maps back onto every future row — so the file itself documents the schema, and `Entry(**row)` reconstructs objects with zero manual string parsing. `asdict(e)` converts each dataclass to a plain dict, which is exactly what `writerows` wants. Storing timestamps as ISO-like strings (`"2026-09-06 09:15"`) keeps the file greppable and sorts lexically by date — chronological order is free until Step 4 needs real parsing.
+`csv.DictWriter` with `fieldnames=FIELDS` writes a header row that `csv.DictReader` then maps back onto every future row, so the file itself documents the schema, and `Entry(**row)` reconstructs objects with zero manual string parsing. `asdict(e)` converts each dataclass to a plain dict, which is exactly what `writerows` wants. Storing timestamps as ISO-like strings (`"2026-09-06 09:15"`) keeps the file greppable and sorts lexically by date, chronological order is free until Step 4 needs real parsing.
 
-**🎯 Expected output:** `[]` on a fresh project — an empty entry list, no crash.
+**🎯 Expected output:** `[]` on a fresh project, an empty entry list, no crash.
 
-**🩹 If it's off:** If `csv.DictReader` returns empty rows, the header row from `writeheader()` is missing so keys don't exist. If `Entry(**row)` raises `TypeError`, a saved row is missing one of the five `FIELDS`. If numbers arrive as strings (`id: "1"`), that's normal for CSV — int conversion can happen at use-site or via an `Entry(**{...cast...})` step.
+**🩹 If it's off:** If `csv.DictReader` returns empty rows, the header row from `writeheader()` is missing so keys don't exist. If `Entry(**row)` raises `TypeError`, a saved row is missing one of the five `FIELDS`. If numbers arrive as strings (`id: "1"`), that's normal for CSV, int conversion can happen at use-site or via an `Entry(**{...cast...})` step.
 
 ### 1.2 Verify the store
 
@@ -161,11 +161,11 @@ def stop_active(entries: list[Entry]) -> None:
 stop_active(load_entries())
 ```
 
-`now_str()` normalizes the wall clock into the same `"%Y-%m-%d %H:%M"` format Step 1 chose, so start and end stamps always parse back. `stop_active` scans the list *reversed* so it grabs the most recent running session first. The money line is `compute_minutes`: `strptime` parses both stamps into real `datetime` objects, subtracting them yields a `timedelta`, and `.total_seconds() // 60` converts to whole minutes — with `max(0, ...)` as a guard so a clock that was manually moved backward can't produce negative time.
+`now_str()` normalizes the wall clock into the same `"%Y-%m-%d %H:%M"` format Step 1 chose, so start and end stamps always parse back. `stop_active` scans the list *reversed* so it grabs the most recent running session first. The money line is `compute_minutes`: `strptime` parses both stamps into real `datetime` objects, subtracting them yields a `timedelta`, and `.total_seconds() // 60` converts to whole minutes, with `max(0, ...)` as a guard so a clock that was manually moved backward can't produce negative time.
 
 **🎯 Expected output:** On a fresh run `nothing is running.` After `start_task(load_entries(), "Learn dataclasses")` then `stop_active(...)`, a `stopped #1: Learn dataclasses (N min)` line where N is the real elapsed minutes.
 
-**🩹 If it's off:** If `strptime` raises `ValueError`, a stored stamp isn't in `%Y-%m-%d %H:%M` form (months vs month names are the classic mismatch). If stopping reports `0 min` even after real time passed, both stamps came from the same `now_str()` call — each stamp must call it separately. If `reverse` scan stops the wrong session, a completed entry's `end` isn't actually `""`; older sessions need clearing or the loop needs to check the *last* entry first.
+**🩹 If it's off:** If `strptime` raises `ValueError`, a stored stamp isn't in `%Y-%m-%d %H:%M` form (months vs month names are the classic mismatch). If stopping reports `0 min` even after real time passed, both stamps came from the same `now_str()` call, each stamp must call it separately. If `reverse` scan stops the wrong session, a completed entry's `end` isn't actually `""`; older sessions need clearing or the loop needs to check the *last* entry first.
 
 ### 2.2 Verify start/stop
 
@@ -177,12 +177,12 @@ stop_active(load_entries())
 
 **🤔 Socratic Question(s)**
 
-- `start_task` refuses nothing — you can start a second session while one runs. What would happen to `stop_active`'s scan if a user started two and stopped once, and what rule would you add at `start` time to prevent it?
-- The duration uses whole minutes, truncating seconds (`// 60`). When a session is 2 minutes 59 seconds, what does the report claim — and is that a rounding bug or a reasonable design for a human tracker?
+- `start_task` refuses nothing, you can start a second session while one runs. What would happen to `stop_active`'s scan if a user started two and stopped once, and what rule would you add at `start` time to prevent it?
+- The duration uses whole minutes, truncating seconds (`// 60`). When a session is 2 minutes 59 seconds, what does the report claim, and is that a rounding bug or a reasonable design for a human tracker?
 
 ## Step 3: Add entries by hand and list them
 
-Sessions get forgotten. This step adds the manual-entry path — `add` lets you log a task and minutes directly, with `start="manual"` — and a `list` view that shows your most recent entries.
+Sessions get forgotten. This step adds the manual-entry path, `add` lets you log a task and minutes directly, with `start="manual"`, and a `list` view that shows your most recent entries.
 
 ### 3.1 Write `add_manual` and `list_entries`
 
@@ -209,11 +209,11 @@ add_manual(load_entries(), "Write tracker docs", 25)
 list_entries(load_entries())
 ```
 
-`start="manual"` is a deliberate sentinel — it marks an entry *without* a real session clock, and Step 4 will branch on it. Storing a plain `minutes` for manual entries is the honest trade: you logged the number directly, so there's no timestamp math to redo. Sorting by `e.id` descending gives newest-first ordering for free (ids are monotonic), and the format column `{e.minutes:>4}` right-aligns the numbers so a mixed list of `running`/`25 min` reads cleanly.
+`start="manual"` is a deliberate sentinel, it marks an entry *without* a real session clock, and Step 4 will branch on it. Storing a plain `minutes` for manual entries is the honest trade: you logged the number directly, so there's no timestamp math to redo. Sorting by `e.id` descending gives newest-first ordering for free (ids are monotonic), and the format column `{e.minutes:>4}` right-aligns the numbers so a mixed list of `running`/`25 min` reads cleanly.
 
 **🎯 Expected output:** `added #1: Write tracker docs (25 min)`, then a `list` output with `25 min` visible and a `manual` marker in the date column.
 
-**🩹 If it's off:** If `int(minutes)` raises on `"25"` vs `25`, the calling code passed a string — cast once at the boundary. If manual entries show `0 min`, the `int` cast ran before the dataclass assignment landed. If the listing isn't newest-first, the `reverse=True` sort key is inverted.
+**🩹 If it's off:** If `int(minutes)` raises on `"25"` vs `25`, the calling code passed a string, cast once at the boundary. If manual entries show `0 min`, the `int` cast ran before the dataclass assignment landed. If the listing isn't newest-first, the `reverse=True` sort key is inverted.
 
 ### 3.2 Verify manual entry and listing
 
@@ -226,11 +226,11 @@ list_entries(load_entries())
 **🤔 Socratic Question(s)**
 
 - A manual entry has no start/end, yet it shares the `Entry` type. What report logic gets *simpler* because manual entries declare themselves with `"manual"`, and what could still go wrong if you never validated that sentinel?
-- `list_entries` shows `running` for minutes==0. Is that marker trustworthy — and when would a legitimate entry also have exactly 0 minutes?
+- `list_entries` shows `running` for minutes==0. Is that marker trustworthy, and when would a legitimate entry also have exactly 0 minutes?
 
 ## Step 4: Report daily and weekly totals
 
-Reports turn raw entries into the summary a time audit actually reads: how many minutes this day, this week. The key discipline — skip `"manual"` entries when splitting by date — is taught head-on because real data won't always be tidy.
+Reports turn raw entries into the summary a time audit actually reads: how many minutes this day, this week. The key discipline, skip `"manual"` entries when splitting by date, is taught head-on because real data won't always be tidy.
 
 ### 4.1 Write the daily and weekly reports
 
@@ -266,11 +266,11 @@ for (y, w), minutes in sorted(weekly_total(load_entries()).items()):
     print(f"{y}-W{w:02d}", minutes, "min")
 ```
 
-The `if e.start == "manual": continue` at the top of both functions is the design: a manual entry's `start` is the sentinel, not a date, so parsing it would raise — skipping it makes the report robust *and* honest (the minutes are still counted elsewhere, in Step 5's task summary). `defaultdict(int)` makes "add minutes to maybe-unseen date" a one-liner instead of a `get` dance. `day.isocalendar()` returns `(ISO-year, ISO-week, weekday)` — grouping on the first two is the standard way to say "this week" across year boundaries.
+The `if e.start == "manual": continue` at the top of both functions is the design: a manual entry's `start` is the sentinel, not a date, so parsing it would raise, skipping it makes the report robust *and* honest (the minutes are still counted elsewhere, in Step 5's task summary). `defaultdict(int)` makes "add minutes to maybe-unseen date" a one-liner instead of a `get` dance. `day.isocalendar()` returns `(ISO-year, ISO-week, weekday)`, grouping on the first two is the standard way to say "this week" across year boundaries.
 
-**🎯 Expected output:** One row per real session date and one per ISO week, minutes summed — with manual entries absent from both tables, and no `ValueError`.
+**🎯 Expected output:** One row per real session date and one per ISO week, minutes summed, with manual entries absent from both tables, and no `ValueError`.
 
-**🩹 If it's off:** If a `Manual` entry crashes the report, the `continue` guard is missing or checking `e.keyword` spelled differently than `"manual"`. If a week's total vanishes on New Year's Eve, `day.isocalendar()`'s `(y, w)` edges don't line up with the calendar year — that's the standard quirk baked into ISO weeks, not a bug. If everything sums into one giant day, `day.isocalendar()` wasn't called and grouping collapsed on the whole `(y, w)` tuple.
+**🩹 If it's off:** If a `Manual` entry crashes the report, the `continue` guard is missing or checking `e.keyword` spelled differently than `"manual"`. If a week's total vanishes on New Year's Eve, `day.isocalendar()`'s `(y, w)` edges don't line up with the calendar year, that's the standard quirk baked into ISO weeks, not a bug. If everything sums into one giant day, `day.isocalendar()` wasn't called and grouping collapsed on the whole `(y, w)` tuple.
 
 ### 4.2 Verify the reports
 
@@ -282,16 +282,16 @@ The `if e.start == "manual": continue` at the top of both functions is the desig
 
 **🤔 Socratic Question(s)**
 
-- These reports keep manual entries out entirely. Why is hiding them a *worse* choice for a real time audit than showing them under an explicit `(manual)` bucket — and what would you print to make the omission visible?
+- These reports keep manual entries out entirely. Why is hiding them a *worse* choice for a real time audit than showing them under an explicit `(manual)` bucket, and what would you print to make the omission visible?
 - A session that starts Monday 23:50 and ends Tuesday 00:40 is split by **start-time into Monday**. Which reports deserve per-minute splitting across days, and why does that only matter at the daily granularity?
 
 ## Step 5: Build the top-tasks summary and CLI router
 
-The last feature answers the question that started the project: *where did my time go?* — plus a tiny command router so every function is reachable from the terminal with one word.
+The last feature answers the question that started the project: *where did my time go?*, plus a tiny command router so every function is reachable from the terminal with one word.
 
 ### 5.1 Write `summarize` and the `main` router
 
-**👟 Starter hint:** Aggregate minutes by task across all entries (manual included — they're real work), and route `start` / `stop` / `add` / `list` / `daily` / `weekly` / `summary` from `sys.argv`.
+**👟 Starter hint:** Aggregate minutes by task across all entries (manual included, they're real work), and route `start` / `stop` / `add` / `list` / `daily` / `weekly` / `summary` from `sys.argv`.
 
 ```python
 # tracker.py (continued)
@@ -333,11 +333,11 @@ if __name__ == "__main__":
     main()
 ```
 
-`summarize` deliberately counts manual entries alongside timed ones — unlike the date reports — because "task took 125 minutes total" is true whether it came from a stopwatch or a note. The router is intentionally thin: each command one line, each reusing the same loaded `entries`. Notice `stop_active(load_entries())` reloads rather than mutating the caller's copy — a deliberate asymmetry so "stop" always sees the freshest disk state, and a good example of why command routers reload at each boundary.
+`summarize` deliberately counts manual entries alongside timed ones, unlike the date reports, because "task took 125 minutes total" is true whether it came from a stopwatch or a note. The router is intentionally thin: each command one line, each reusing the same loaded `entries`. Notice `stop_active(load_entries())` reloads rather than mutating the caller's copy, a deliberate asymmetry so "stop" always sees the freshest disk state, and a good example of why command routers reload at each boundary.
 
 **🎯 Expected output:** `uv run python tracker.py summary` prints top tasks with minutes plus a total; every other command above works identically from a shell.
 
-**🩹 If it's off:** If `summary` shows the empty `TOTAL 0`, the loaded file has no entries or `e.minutes` is being read as a string — CSV strings need an `int()` cast in the summary loop. If `start` with two words like `"Learn dataclasses"` consumes only `args[1]`, you need `" ".join(args[1:])` for multi-word tasks. If `stop` from the CLI doesn't affect the interactive session, the two are holding different lists — reload after any write.
+**🩹 If it's off:** If `summary` shows the empty `TOTAL 0`, the loaded file has no entries or `e.minutes` is being read as a string, CSV strings need an `int()` cast in the summary loop. If `start` with two words like `"Learn dataclasses"` consumes only `args[1]`, you need `" ".join(args[1:])` for multi-word tasks. If `stop` from the CLI doesn't affect the interactive session, the two are holding different lists, reload after any write.
 
 ### 5.2 Verify the finished tracker
 
@@ -351,7 +351,7 @@ if __name__ == "__main__":
 **🤔 Socratic Question(s)**
 
 - The router reloads for every command; `stop` even reloads twice. What **stale-data bug** would appear if the router instead shared one list across two commands (e.g. `add` then immediately `list`), and why is reload-per-command the cheap immunity against it?
-- `summary` ranks tasks by total minutes, so one 5-hour session beats eight 30-minute ones. What would you plot instead to show *consistency* rather than raw mass — and what would change for a user who wants both?
+- `summary` ranks tasks by total minutes, so one 5-hour session beats eight 30-minute ones. What would you plot instead to show *consistency* rather than raw mass, and what would change for a user who wants both?
 
 ## ⚠️ Common pitfalls
 
@@ -363,7 +363,7 @@ if __name__ == "__main__":
 
 ## What you just built
 
-A working, CSV-backed time tracker: start/stop session tracking with real timestamp math, manual entry, daily and ISO-weekly reports, and a top-tasks summary routed entirely through a one-word CLI. The transferable skill is *recording reality rather than guessing it*: the same "stamp a moment, store a row, aggregate groups" pattern powers habit logs, jira worklogs, package delivery histories — any question of the shape "how much, and when, and for what?"
+A working, CSV-backed time tracker: start/stop session tracking with real timestamp math, manual entry, daily and ISO-weekly reports, and a top-tasks summary routed entirely through a one-word CLI. The transferable skill is *recording reality rather than guessing it*: the same "stamp a moment, store a row, aggregate groups" pattern powers habit logs, jira worklogs, package delivery histories, any question of the shape "how much, and when, and for what?"
 
 :::tip[Run a fuller version without any local setup]
 [`examples/time-tracker/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/time-tracker) in the course repo is a fuller version of the code above, with an editable ledger and a day-over-day summary option. Clone it, or open the whole repo in a [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), and run it from there.
@@ -373,11 +373,11 @@ A working, CSV-backed time tracker: start/stop session tracking with real timest
 
 - Add `edit <id> <minutes>` so a forgotten session can be fixed in place, reusing the load-modify-save pattern from Step 1.
 - Render the daily report as a text bar chart (`10 min ██`) so trends are visible at a glance without any plotting library.
-- Split sessions across midnight so a 23:50–00:40 block contributes to both days — the honest fix for Step 4's Socratic question.
+- Split sessions across midnight so a 23:50–00:40 block contributes to both days, the honest fix for Step 4's Socratic question.
 - Write the weekly totals to a `report.csv` your invoicing doc can import, closing the loop the pitch originally promised.
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

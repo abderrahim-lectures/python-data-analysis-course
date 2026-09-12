@@ -14,9 +14,9 @@ prerequisites: ["Python 101", "Data Analysis"]
 
 # 🌍 Construis un Analyseur de Données Géospatiales
 
-Chaque course de covoiturage, chaque livraison, chaque relevé de station météo est un point sur le globe décrit par deux nombres : latitude et longitude. Ce projet construit un outil d'analyse géospatiale qui prend des données de coordonnées brutes et répond à de vraies questions : où sont les grappes d'activité, à quelle distance deux lieux sont-ils l'un de l'autre, et à quoi ressemble la densité de points sur une carte. Tu utiliseras DBSCAN pour le regroupement spatial, la formule de Haversine pour les calculs de distance réels et Folium pour les visualisations cartographiques interactives — le tout ancré dans de véritables données géographiques.
+Chaque course de covoiturage, chaque livraison, chaque relevé de station météo est un point sur le globe décrit par deux nombres : latitude et longitude. Ce projet construit un outil d'analyse géospatiale qui prend des données de coordonnées brutes et répond à de vraies questions : où sont les grappes d'activité, à quelle distance deux lieux sont-ils l'un de l'autre, et à quoi ressemble la densité de points sur une carte. Tu utiliseras DBSCAN pour le regroupement spatial, la formule de Haversine pour les calculs de distance réels et Folium pour les visualisations cartographiques interactives, le tout ancré dans de véritables données géographiques.
 
-Ceci suppose Python 101 et une aisance avec pandas de Data Analysis — rien de plus. Optionnel et non noté ; voir [Real-World Projects](/fr/projets) pour la liste complète.
+Ceci suppose Python 101 et une aisance avec pandas de Data Analysis, rien de plus. Optionnel et non noté ; voir [Real-World Projects](/fr/projets) pour la liste complète.
 
 ## 🎯 Ce que tu vas faire
 
@@ -29,7 +29,7 @@ Ceci suppose Python 101 et une aisance avec pandas de Data Analysis — rien de 
 
 ## Où exécuter ceci
 
-**Localement avec `uv`** est la voie principale — la carte interactive Folium se rend dans ton navigateur, ce qui est plus fiable que le panneau de sortie d'un notebook.
+**Localement avec `uv`** est la voie principale, la carte interactive Folium se rend dans ton navigateur, ce qui est plus fiable que le panneau de sortie d'un notebook.
 
 **Google Colab, Kaggle Notebooks et Binder** fonctionnent bien pour essayer l'outil. Le notebook installe les mêmes packages et utilise le même code ; les cartes Folium se rendent en ligne dans Colab et Kaggle.
 
@@ -61,7 +61,7 @@ cd geospatial-analyzer
 uv add pandas scikit-learn folium numpy
 ```
 
-`pandas` gère les données, `scikit-learn` fournit le regroupement DBSCAN, `folium` rend les cartes interactives, et `numpy` est nécessaire pour les calculs Haversine. Aucune clé API externe requise — tout s'exécute en local.
+`pandas` gère les données, `scikit-learn` fournit le regroupement DBSCAN, `folium` rend les cartes interactives, et `numpy` est nécessaire pour les calculs Haversine. Aucune clé API externe requise, tout s'exécute en local.
 
 ### Créer la structure du projet
 
@@ -78,7 +78,7 @@ touch geo/__init__.py geo/load.py geo/cluster.py geo/distance.py geo/visualize.p
 
 ## Étape 1 : Charger et nettoyer les données de coordonnées
 
-Les données géographiques se présentent sous de nombreuses formes — fichiers CSV, API JSON, extractions de bases de données — mais pour l'analyse, elles finissent toujours par être un DataFrame avec au moins deux colonnes : `latitude` et `longitude`. Cette étape charge des données d'exemple et valide que les coordonnées sont réalistes.
+Les données géographiques se présentent sous de nombreuses formes, fichiers CSV, API JSON, extractions de bases de données, mais pour l'analyse, elles finissent toujours par être un DataFrame avec au moins deux colonnes : `latitude` et `longitude`. Cette étape charge des données d'exemple et valide que les coordonnées sont réalistes.
 
 ### 1.1 Charger des données d'exemple
 
@@ -111,7 +111,7 @@ def validate_coordinates(df: pd.DataFrame) -> pd.DataFrame:
     return df.reset_index(drop=True)
 ```
 
-La fonction `generate_sample_locations` crée des points regroupés autour de trois lieux réels de la Bay Area — cela rend les résultats de regroupement significatifs et les cartes reconnaissables. `validate_coordinates` filtre les coordonnées impossibles (latitude hors de -90 à 90, longitude hors de -180 à 180) avec un compte de ce qui a été retiré.
+La fonction `generate_sample_locations` crée des points regroupés autour de trois lieux réels de la Bay Area, cela rend les résultats de regroupement significatifs et les cartes reconnaissables. `validate_coordinates` filtre les coordonnées impossibles (latitude hors de -90 à 90, longitude hors de -180 à 180) avec un compte de ce qui a été retiré.
 
 **🎯 Résultat attendu :** `generate_sample_locations(50)` renvoie un DataFrame avec 50 lignes et les colonnes `latitude`, `longitude`, `label`. `validate_coordinates` retire 0 ligne pour des données valides.
 
@@ -143,13 +143,13 @@ print(df.head())
 **🤔 Question(s) socratique(s)**
 
 - Les données géographiques réelles ont souvent des valeurs manquantes, des points dupliqués ou des coordonnées à (0, 0). Comment étendrais-tu `validate_coordinates` pour attraper ces cas ?
-- Si tu analyses des itinéraires de livraison, l'ordre des points compte — pourquoi l'ordre n'a-t-il pas d'importance pour l'étape de regroupement ?
+- Si tu analyses des itinéraires de livraison, l'ordre des points compte, pourquoi l'ordre n'a-t-il pas d'importance pour l'étape de regroupement ?
 
 ---
 
 ## Étape 2 : Regrouper les points avec DBSCAN
 
-DBSCAN regroupe les points qui sont proches et marque les points isolés comme du bruit — parfait pour les données spatiales où les grappes ont des formes irrégulières et où tu ne connais pas le nombre de grappes à l'avance. L'idée clé est que DBSCAN travaille sur la *distance*, pas seulement sur les coordonnées brutes, donc tu dois d'abord convertir lat/lon en kilomètres.
+DBSCAN regroupe les points qui sont proches et marque les points isolés comme du bruit, parfait pour les données spatiales où les grappes ont des formes irrégulières et où tu ne connais pas le nombre de grappes à l'avance. L'idée clé est que DBSCAN travaille sur la *distance*, pas seulement sur les coordonnées brutes, donc tu dois d'abord convertir lat/lon en kilomètres.
 
 ### 2.1 Convertir les coordonnées en radians et regrouper
 
@@ -182,11 +182,11 @@ def cluster_locations(
     return labels
 ```
 
-La conversion de kilomètres en radians (`eps_km / 6371.0`) est cruciale — la métrique haversine de DBSCAN attend des radians, pas des degrés. Un degré de latitude fait environ 111 km à l'équateur, mais la formule de Haversine gère la courbure correctement. Les points étiquetés `-1` sont du bruit (n'appartenant à aucune grappe), et les grappes commencent à `0`.
+La conversion de kilomètres en radians (`eps_km / 6371.0`) est cruciale, la métrique haversine de DBSCAN attend des radians, pas des degrés. Un degré de latitude fait environ 111 km à l'équateur, mais la formule de Haversine gère la courbure correctement. Les points étiquetés `-1` sont du bruit (n'appartenant à aucune grappe), et les grappes commencent à `0`.
 
 **🎯 Résultat attendu :** `cluster_locations(df, eps_km=1.0, min_samples=5)` renvoie un tableau d'entiers où `-1` marque les points de bruit et `0, 1, 2, ...` marquent les affectations de grappes.
 
-**🩹 Si ça ne marche pas :** Si chaque point est du bruit (`-1`), `eps_km` est trop petit — essaie de l'augmenter. Si tout est une gigantesque grappe, `eps_km` est trop grand ou `min_samples` est trop petit.
+**🩹 Si ça ne marche pas :** Si chaque point est du bruit (`-1`), `eps_km` est trop petit, essaie de l'augmenter. Si tout est une gigantesque grappe, `eps_km` est trop grand ou `min_samples` est trop petit.
 
 ### 2.2 Attacher les étiquettes au DataFrame
 
@@ -204,7 +204,7 @@ def add_cluster_labels(df, labels: np.ndarray):
 
 **🎯 Résultat attendu :** Le résumé imprimé montre 3 grappes (correspondant aux trois centres des données d'exemple) et un petit nombre de points de bruit.
 
-**🩹 Si ça ne marche pas :** Si le compte de grappes est faux, les paramètres `eps_km` ou `min_samples` ont besoin d'ajustement — le regroupement spatial exige toujours une exploration des paramètres.
+**🩹 Si ça ne marche pas :** Si le compte de grappes est faux, les paramètres `eps_km` ou `min_samples` ont besoin d'ajustement, le regroupement spatial exige toujours une exploration des paramètres.
 
 ### 2.3 Vérifier le regroupement
 
@@ -223,7 +223,7 @@ def add_cluster_labels(df, labels: np.ndarray):
 
 ## Étape 3 : Calculer les distances avec la formule de Haversine
 
-La formule de Haversine calcule la distance de grand cercle entre deux points sur une sphère — la distance la plus courte à la surface de la Terre, pas une approximation en ligne droite. C'est essentiel pour l'analyse géographique car une approximation en terre plate (distance euclidienne sur les coordonnées brutes) donne des résultats très faux à plus grande échelle.
+La formule de Haversine calcule la distance de grand cercle entre deux points sur une sphère, la distance la plus courte à la surface de la Terre, pas une approximation en ligne droite. C'est essentiel pour l'analyse géographique car une approximation en terre plate (distance euclidienne sur les coordonnées brutes) donne des résultats très faux à plus grande échelle.
 
 ### 3.1 Implémenter la formule de Haversine
 
@@ -254,9 +254,9 @@ def distance_matrix(df) -> np.ndarray:
     return EARTH_RADIUS_KM * 2 * np.arcsin(np.sqrt(np.clip(a, 0, 1)))
 ```
 
-La fonction `haversine` est la brique de base — elle convertit les degrés en radians, applique la formule et renvoie des kilomètres. La fonction `distance_matrix` vectorise cela avec la diffusion NumPy pour calculer toutes les distances par paires à la fois, ce qui est des ordres de grandeur plus rapide que de boucler en Python. `np.clip(a, 0, 1)` empêche l'arrondi en virgule flottante de pousser des valeurs légèrement au-dessus de 1 dans le domaine de `arcsin`.
+La fonction `haversine` est la brique de base, elle convertit les degrés en radians, applique la formule et renvoie des kilomètres. La fonction `distance_matrix` vectorise cela avec la diffusion NumPy pour calculer toutes les distances par paires à la fois, ce qui est des ordres de grandeur plus rapide que de boucler en Python. `np.clip(a, 0, 1)` empêche l'arrondi en virgule flottante de pousser des valeurs légèrement au-dessus de 1 dans le domaine de `arcsin`.
 
-**🎯 Résultat attendu :** `haversine(37.7749, -122.4194, 37.8044, -122.2712)` renvoie environ `13.5` km — la distance réelle entre le centre-ville de San Francisco et Oakland.
+**🎯 Résultat attendu :** `haversine(37.7749, -122.4194, 37.8044, -122.2712)` renvoie environ `13.5` km, la distance réelle entre le centre-ville de San Francisco et Oakland.
 
 **🩹 Si ça ne marche pas :** Si la distance est très fausse (des milliers de km pour des points proches), tu as oublié de convertir les degrés en radians. Si la matrice a des valeurs négatives, le `np.clip` manque.
 
@@ -281,7 +281,7 @@ def nearest_neighbors(df, k: int = 5) -> list[dict]:
 
 **🎯 Résultat attendu :** `nearest_neighbors(df, k=3)` renvoie une liste de dictionnaires, chacun avec un nom `point` et une liste `neighbors` de 3 points les plus proches avec leurs distances.
 
-**🩹 Si ça ne marche pas :** Si le premier voisin a une distance de 0, tu t'inclus toi-même dans les résultats — la note `skip self` dans le code gère cela avec `[1:k+1]`.
+**🩹 Si ça ne marche pas :** Si le premier voisin a une distance de 0, tu t'inclus toi-même dans les résultats, la note `skip self` dans le code gère cela avec `[1:k+1]`.
 
 ### 3.3 Vérifier les calculs de distance
 
@@ -300,7 +300,7 @@ def nearest_neighbors(df, k: int = 5) -> list[dict]:
 
 ## Étape 4 : Générer une carte de chaleur sur une carte interactive
 
-Une superposition de carte de chaleur sur une vraie carte rend la densité de points immédiatement visible — les zones denses brillent, les zones éparses s'estompent. Folium génère un fichier HTML avec une carte interactive Leaflet.js que tu peux zoomer, faire défiler et cliquer.
+Une superposition de carte de chaleur sur une vraie carte rend la densité de points immédiatement visible, les zones denses brillent, les zones éparses s'estompent. Folium génère un fichier HTML avec une carte interactive Leaflet.js que tu peux zoomer, faire défiler et cliquer.
 
 ### 4.1 Construire la carte de chaleur
 
@@ -324,9 +324,9 @@ def create_heatmap(df, output: str = "heatmap.html", zoom_start: int = 12):
     return output
 ```
 
-La carte se centre sur la moyenne de toutes les coordonnées, qui est le centre naturel du jeu de données. `radius` et `blur` contrôlent l'apparence visuelle de la carte de chaleur — un rayon plus grand étend plus loin l'influence de chaque point, un flou plus grand adoucit les bords. La sortie est un fichier HTML autonome que tu peux ouvrir dans n'importe quel navigateur.
+La carte se centre sur la moyenne de toutes les coordonnées, qui est le centre naturel du jeu de données. `radius` et `blur` contrôlent l'apparence visuelle de la carte de chaleur, un rayon plus grand étend plus loin l'influence de chaque point, un flou plus grand adoucit les bords. La sortie est un fichier HTML autonome que tu peux ouvrir dans n'importe quel navigateur.
 
-**🎯 Résultat attendu :** `create_heatmap(df)` crée `heatmap.html` — un fichier que tu peux ouvrir dans un navigateur montrant une carte interactive avec une superposition de chaleur centrée sur le centroïde des données.
+**🎯 Résultat attendu :** `create_heatmap(df)` crée `heatmap.html`, un fichier que tu peux ouvrir dans un navigateur montrant une carte interactive avec une superposition de chaleur centrée sur le centroïde des données.
 
 **🩹 Si ça ne marche pas :** Si la carte est vide, les coordonnées sont peut-être dans le mauvais ordre (Folium attend `[lat, lon]`). Si la carte de chaleur est invisible, essaie d'augmenter `radius` ou `blur`.
 
@@ -359,9 +359,9 @@ def create_cluster_map(df, output: str = "clusters.html", zoom_start: int = 12):
 
 Chaque grappe reçoit une couleur distincte ; les points de bruit (`-1`) sont gris. Le `popup` de chaque marqueur montre l'étiquette du point au clic. Cela te donne deux vues des mêmes données : la carte de chaleur montre la densité, et la carte des grappes montre le regroupement.
 
-**🎯 Résultat attendu :** `create_cluster_map(df)` crée `clusters.html` avec des marqueurs colorés — trois couleurs distinctes pour trois grappes, gris pour le bruit.
+**🎯 Résultat attendu :** `create_cluster_map(df)` crée `clusters.html` avec des marqueurs colorés, trois couleurs distinctes pour trois grappes, gris pour le bruit.
 
-**🩹 Si ça ne marche pas :** Si tous les marqueurs sont de la même couleur, la colonne `cluster` n'est pas dans le DataFrame — exécute `add_cluster_labels` d'abord. Si le popup est vide, la colonne `label` manque.
+**🩹 Si ça ne marche pas :** Si tous les marqueurs sont de la même couleur, la colonne `cluster` n'est pas dans le DataFrame, exécute `add_cluster_labels` d'abord. Si le popup est vide, la colonne `label` manque.
 
 ### 4.3 Vérifier les visualisations
 
@@ -380,7 +380,7 @@ Chaque grappe reçoit une couleur distincte ; les points de bruit (`-1`) sont gr
 
 ## Étape 5 : Trouver l'itinéraire optimal à travers les points de passage
 
-L'optimisation d'itinéraires — trouver le chemin le plus court qui visite tous les points de passage — est un problème classique. Pour un petit nombre de points de passage, tu peux essayer toutes les permutations. Pour des ensembles plus grands, tu as besoin d'une heuristique. Cette étape implémente les deux.
+L'optimisation d'itinéraires, trouver le chemin le plus court qui visite tous les points de passage, est un problème classique. Pour un petit nombre de points de passage, tu peux essayer toutes les permutations. Pour des ensembles plus grands, tu as besoin d'une heuristique. Cette étape implémente les deux.
 
 ### 5.1 Implémenter l'itinéraire en force brute et plus proche voisin
 
@@ -429,11 +429,11 @@ def nearest_neighbor_route(df, start: int = 0) -> tuple[list[int], float]:
     return visited, route_distance(df, visited)
 ```
 
-L'approche par force brute essaie chaque permutation — pour 10 points de passage, c'est 3,6 millions de permutations, ce qui prend quelques secondes. L'heuristique du plus proche voisin choisit le point non visité le plus proche à chaque étape — elle est en `O(n^2)` et passe à l'échelle des milliers de points de passage, mais ne garantit pas l'itinéraire optimal. Pour la planification d'itinéraires réelle, tu utiliserais un algorithme plus sophistiqué (Christofides, ou OR-Tools), mais ces deux-là te donnent l'idée clé : les solutions exactes sont exponentielles, les heuristiques sont polynomiales, et l'écart entre elles est le prix de la scalabilité.
+L'approche par force brute essaie chaque permutation, pour 10 points de passage, c'est 3,6 millions de permutations, ce qui prend quelques secondes. L'heuristique du plus proche voisin choisit le point non visité le plus proche à chaque étape, elle est en `O(n^2)` et passe à l'échelle des milliers de points de passage, mais ne garantit pas l'itinéraire optimal. Pour la planification d'itinéraires réelle, tu utiliserais un algorithme plus sophistiqué (Christofides, ou OR-Tools), mais ces deux-là te donnent l'idée clé : les solutions exactes sont exponentielles, les heuristiques sont polynomiales, et l'écart entre elles est le prix de la scalabilité.
 
 **🎯 Résultat attendu :** Pour 8 points de passage, `optimal_route_bruteforce` renvoie l'itinéraire le plus court possible et sa distance totale en km. `nearest_neighbor_route` renvoie un itinéraire légèrement plus long en une fraction du temps.
 
-**🩹 Si ça ne marche pas :** Si la distance en force brute est 0, les points de passage sont tous le même point. Si le plus proche voisin renvoie un itinéraire beaucoup plus long, le point de départ est peut-être un mauvais choix — essaie différents départs.
+**🩹 Si ça ne marche pas :** Si la distance en force brute est 0, les points de passage sont tous le même point. Si le plus proche voisin renvoie un itinéraire beaucoup plus long, le point de départ est peut-être un mauvais choix, essaie différents départs.
 
 ### 5.2 Visualiser l'itinéraire
 
@@ -462,7 +462,7 @@ def visualize_route(df, order: list[int], output: str = "route.html"):
 
 **🎯 Résultat attendu :** `visualize_route(df, order)` crée `route.html` avec une polyligne bleue reliant tous les points de passage dans l'ordre, avec des marqueurs numérotés à chaque arrêt.
 
-**🩹 Si ça ne marche pas :** Si la polyligne zigzague sauvagement, l'ordre de l'itinéraire est faux — vérifie que les indices `order` correspondent aux lignes du DataFrame.
+**🩹 Si ça ne marche pas :** Si la polyligne zigzague sauvagement, l'ordre de l'itinéraire est faux, vérifie que les indices `order` correspondent aux lignes du DataFrame.
 
 ### 5.3 Vérifier l'itinéraire
 
@@ -474,7 +474,7 @@ def visualize_route(df, order: list[int], output: str = "route.html"):
 
 **🤔 Question(s) socratique(s)**
 
-- Pour 20 points de passage, `factorial(20) ≈ 2,4 × 10^18` permutations — la force brute est impossible. À partir de quel nombre de points de passage l'approximation du plus proche voisin devient-elle « assez bonne » pour ton cas d'usage, et comment mesurerais-tu l'écart ?
+- Pour 20 points de passage, `factorial(20) ≈ 2,4 × 10^18` permutations, la force brute est impossible. À partir de quel nombre de points de passage l'approximation du plus proche voisin devient-elle « assez bonne » pour ton cas d'usage, et comment mesurerais-tu l'écart ?
 - Les itinéraires de livraison réels ont des fenêtres de temps, du trafic et des capacités de véhicules. Comment étendrais-tu ce modèle pour gérer des contraintes au-delà de la seule distance ?
 
 ---
@@ -483,13 +483,13 @@ def visualize_route(df, order: list[int], output: str = "route.html"):
 
 - **Confondre degrés et radians dans les calculs de distance.** La formule de Haversine exige des radians. Une erreur courante est de passer les degrés bruts de latitude/longitude à `np.sin`/`np.cos`, ce qui produit des résultats dénués de sens. Convertis toujours avec `np.radians` d'abord.
 - **Utiliser la distance euclidienne sur des coordonnées brutes.** À l'échelle d'une ville, la distance euclidienne sur les degrés est approximativement correcte. À l'échelle d'un pays ou d'un continent, elle est très fausse car un degré de longitude rétrécit à mesure qu'on se rapproche des pôles. Utilise Haversine pour tout ce qui dépasse quelques kilomètres.
-- **Ajustement des paramètres DBSCAN sans visualisation.** Choisir `eps_km` au hasard n'est pas fiable. Trace la distribution des distances (graphe k-distance) et cherche le « coude » où les distances sautent — c'est une bonne valeur de départ pour `eps`.
-- **Cartes de chaleur qui ne se rendent pas dans les notebooks.** Les cartes Folium sont des objets HTML — elles s'affichent en ligne dans Colab et Kaggle mais peuvent nécessiter `display(m)` dans certains environnements de notebook. Si la carte est vide, essaie `m._repr_html_()` ou enregistre dans un fichier et ouvre.
+- **Ajustement des paramètres DBSCAN sans visualisation.** Choisir `eps_km` au hasard n'est pas fiable. Trace la distribution des distances (graphe k-distance) et cherche le « coude » où les distances sautent, c'est une bonne valeur de départ pour `eps`.
+- **Cartes de chaleur qui ne se rendent pas dans les notebooks.** Les cartes Folium sont des objets HTML, elles s'affichent en ligne dans Colab et Kaggle mais peuvent nécessiter `display(m)` dans certains environnements de notebook. Si la carte est vide, essaie `m._repr_html_()` ou enregistre dans un fichier et ouvre.
 - **Oublier que l'optimisation d'itinéraires est NP-difficile.** La force brute fonctionne pour 8–10 points. Au-delà, tu as besoin du plus proche voisin, du recuit simulé ou d'une bibliothèque de solveurs. Ne laisse pas la solution en force brute te bercer en pensant que l'itinéraire est toujours rapide.
 
 ## Ce que tu viens de construire
 
-Une boîte à outils d'analyse géospatiale qui charge des données de coordonnées, regroupe des points avec DBSCAN, calcule des distances réelles avec la formule de Haversine, génère des cartes de chaleur et des cartes de grappes interactives, et optimise des itinéraires à travers plusieurs points de passage. L'idée clé à travers les cinq étapes est que les données géographiques ont des contraintes uniques — la Terre est courbe, les distances ne sont pas euclidiennes, et la structure spatiale compte — et les bonnes formules et algorithmes font la différence entre le non-sens et la perspicacité.
+Une boîte à outils d'analyse géospatiale qui charge des données de coordonnées, regroupe des points avec DBSCAN, calcule des distances réelles avec la formule de Haversine, génère des cartes de chaleur et des cartes de grappes interactives, et optimise des itinéraires à travers plusieurs points de passage. L'idée clé à travers les cinq étapes est que les données géographiques ont des contraintes uniques, la Terre est courbe, les distances ne sont pas euclidiennes, et la structure spatiale compte, et les bonnes formules et algorithmes font la différence entre le non-sens et la perspicacité.
 
 :::tip[Exécute une version plus complète sans configuration locale]
 [`examples/geospatial-analyzer/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/geospatial-analyzer) dans le dépôt du cours a une version plus riche avec des données d'exemple du monde réel, des types de visualisation supplémentaires et la CLI câblée de bout en bout. Clone-le, ou ouvre tout le dépôt dans un [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), et lance-le depuis là.
@@ -503,6 +503,6 @@ Une boîte à outils d'analyse géospatiale qui charge des données de coordonn�
 
 ## Partage ton projet avec la classe
 
-Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres étudiants — et son README contient un parcours complet et accessible aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git auparavant : forker le dépôt, créer une branche, commiter tes fichiers et ouvrir la PR, une étape à la fois. Aucune expérience préalable de git n'est supposée.
+Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres étudiants, et son README contient un parcours complet et accessible aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git auparavant : forker le dépôt, créer une branche, commiter tes fichiers et ouvrir la PR, une étape à la fois. Aucune expérience préalable de git n'est supposée.
 
 Bienvenue dans l'écriture de Python en dehors du navigateur. 🎓

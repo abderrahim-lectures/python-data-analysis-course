@@ -45,7 +45,7 @@ quiz:
 
 ## Why merge?
 
-Real analyses often require data from multiple sources. Merging combines two DataFrames based on a shared key — like a SQL JOIN or a VLOOKUP in Excel.
+Real analyses often require data from multiple sources. Merging combines two DataFrames based on a shared key, like a SQL JOIN or a VLOOKUP in Excel.
 
 ```python
 import pandas as pd
@@ -80,17 +80,17 @@ Output:
 2             3  Carol      2   26.0        S
 ```
 
-Only passengers 1, 2, and 3 appear — this is an **inner join** (the default). Passenger 4 and 5 have no ticket data; passenger 6 has no passenger data.
+Only passengers 1, 2, and 3 appear, this is an **inner join** (the default). Passenger 4 and 5 have no ticket data; passenger 6 has no passenger data.
 
 ## Join types
 
-**Inner join** (default) — only matching rows from both sides:
+**Inner join** (default), only matching rows from both sides:
 
 ```python
 pd.merge(passengers, tickets, on="passenger_id")
 ```
 
-**Left join** — keep all rows from the left DataFrame:
+**Left join**, keep all rows from the left DataFrame:
 
 ```python
 pd.merge(passengers, tickets, on="passenger_id", how="left")
@@ -107,13 +107,13 @@ Output:
 4             5    Eve      1    NaN      NaN
 ```
 
-**Right join** — keep all rows from the right DataFrame:
+**Right join**, keep all rows from the right DataFrame:
 
 ```python
 pd.merge(passengers, tickets, on="passenger_id", how="right")
 ```
 
-**Outer join** — keep all rows from both sides:
+**Outer join**, keep all rows from both sides:
 
 ```python
 pd.merge(passengers, tickets, on="passenger_id", how="outer")

@@ -42,7 +42,7 @@ quiz:
       - text: "As many data points as possible"
       - text: "Raw numbers in a table"
 ---
-This is your capstone deliverable. Everything you have learned — profiling, univariate analysis, bivariate analysis, correlation, advanced plots, and storytelling — comes together here. You will produce a complete, polished EDA report on the Students Performance in Exams dataset that tells a clear, data-backed story.
+This is your capstone deliverable. Everything you have learned, profiling, univariate analysis, bivariate analysis, correlation, advanced plots, and storytelling, comes together here. You will produce a complete, polished EDA report on the Students Performance in Exams dataset that tells a clear, data-backed story.
 
 ## Key Concepts
 
@@ -50,13 +50,13 @@ This is your capstone deliverable. Everything you have learned — profiling, un
 
 A professional EDA report follows this structure:
 
-1. **Executive Summary** — key findings in 3-4 bullet points
-2. **Data Overview** — dataset description, profiling, quality assessment
-3. **Univariate Analysis** — distributions of each variable
-4. **Bivariate Analysis** — relationships between variables
-5. **Multivariate Analysis** — interactions and confounders
-6. **Key Findings** — what the data reveals
-7. **Recommendations** — actionable next steps
+1. **Executive Summary**, key findings in 3-4 bullet points
+2. **Data Overview**, dataset description, profiling, quality assessment
+3. **Univariate Analysis**, distributions of each variable
+4. **Bivariate Analysis**, relationships between variables
+5. **Multivariate Analysis**, interactions and confounders
+6. **Key Findings**, what the data reveals
+7. **Recommendations**, actionable next steps
 
 ### Complete EDA pipeline
 
@@ -310,14 +310,14 @@ print(executive_summary)
 - The capstone integrates every skill from the course: profiling, analysis, visualization, and storytelling
 - Annotated, multi-panel figures communicate complex findings efficiently
 - Findings should be specific (with numbers) and actionable (with recommendations)
-- The best EDA reports are reproducible — anyone can rerun the notebook and get the same results
+- The best EDA reports are reproducible, anyone can rerun the notebook and get the same results
 
 ## Practice Challenge
 
 Create a self-contained Python script that loads the Students Performance dataset, runs the complete EDA pipeline, and generates a 4-panel summary figure with: (1) score distributions, (2) test prep comparison, (3) correlation heatmap, and (4) an insight banner. Save the figure as `eda_report.png`.
 
 <details class="challenge">
-<summary>🧩 Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge, think first, then reveal</summary>
 <div class="challenge__body">
 
 ```python

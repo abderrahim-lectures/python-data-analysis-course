@@ -90,7 +90,7 @@ def normalize_bigrams(bigrams):
     return normalized
 ```
 
-Maintenant, `normalized["the"]["cat"]` renvoie un float entre 0 et 1 — la probabilité que « cat » suive « the ».
+Maintenant, `normalized["the"]["cat"]` renvoie un float entre 0 et 1, la probabilité que « cat » suive « the ».
 
 ### Exemple
 
@@ -109,7 +109,7 @@ print(sum(norm["the"].values()))  # 1.0
 
 ### Pourquoi la normalisation compte pour l'échantillonnage
 
-`random.choices()` a besoin de poids qui représentent une vraisemblance relative. Si vous passez des comptes bruts (15, 5, 10), cela fonctionne — mais avoir de vraies probabilités (0,5, 0,167, 0,333) rend le modèle portable et comparable entre différentes tailles de corpus.
+`random.choices()` a besoin de poids qui représentent une vraisemblance relative. Si vous passez des comptes bruts (15, 5, 10), cela fonctionne, mais avoir de vraies probabilités (0,5, 0,167, 0,333) rend le modèle portable et comparable entre différentes tailles de corpus.
 
 ```python
 import random

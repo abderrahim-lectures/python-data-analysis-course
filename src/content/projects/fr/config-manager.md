@@ -16,9 +16,9 @@ learningObjectives:
 
 # ⚙️ Construire un Gestionnaire de Configuration
 
-Toute application réelle a une configuration qui ne devrait jamais être codée en dur : sur quel port se lier, quel niveau de log utiliser, quelles clés API faire confiance. La façon standard de l'organiser est *par couches* — des valeurs par défaut sensées, surchargées par un fichier de config par environnement, surchargées par les variables d'environnement — pour que « lancer en local » et « lancer en production » diffèrent sans que personne ne modifie du code. Ce projet construit exactement ce chargeur : une petite bibliothèque qui fusionne valeurs par défaut, JSON et TOML avec des surcharges de variables d'environnement, valide le résultat selon un schéma et — crucialement — n'affiche jamais un secret.
+Toute application réelle a une configuration qui ne devrait jamais être codée en dur : sur quel port se lier, quel niveau de log utiliser, quelles clés API faire confiance. La façon standard de l'organiser est *par couches*, des valeurs par défaut sensées, surchargées par un fichier de config par environnement, surchargées par les variables d'environnement, pour que « lancer en local » et « lancer en production » diffèrent sans que personne ne modifie du code. Ce projet construit exactement ce chargeur : une petite bibliothèque qui fusionne valeurs par défaut, JSON et TOML avec des surcharges de variables d'environnement, valide le résultat selon un schéma et, crucialement, n'affiche jamais un secret.
 
-Ceci suppose Python 101 (dictionnaires, fonctions et `json` au niveau `import`) — rien de l'Analyse de Données n'est nécessaire. C'est facultatif et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
+Ceci suppose Python 101 (dictionnaires, fonctions et `json` au niveau `import`), rien de l'Analyse de Données n'est nécessaire. C'est facultatif et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 
@@ -30,11 +30,11 @@ Ceci suppose Python 101 (dictionnaires, fonctions et `json` au niveau `import`) 
 
 ## Où exécuter ceci
 
-**En local avec `uv`** est le chemin recommandé — la version « réelle » de ce projet lit de vrais fichiers depuis le disque et de vraies variables d'environnement, ce qui est exactement ce qu'un notebook n'a pas, donc la CLI locale est son foyer honnête. La configuration est brève car tout le projet utilise la bibliothèque standard de Python (plus `tomllib`, fourni depuis Python 3.11).
+**En local avec `uv`** est le chemin recommandé, la version « réelle » de ce projet lit de vrais fichiers depuis le disque et de vraies variables d'environnement, ce qui est exactement ce qu'un notebook n'a pas, donc la CLI locale est son foyer honnête. La configuration est brève car tout le projet utilise la bibliothèque standard de Python (plus `tomllib`, fourni depuis Python 3.11).
 
 **GitHub Codespaces** est une alternative sans configuration : ouvre [tout le dépôt du cours dans un Codespace gratuit](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python et `uv` sont déjà installés) et exécute les mêmes commandes depuis un terminal de navigateur.
 
-**Google Colab, Kaggle Notebooks ou Binder** sont un bon moyen d'*apprendre les concepts* — la version notebook dans [`examples/config-manager/notebook.fr.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/config-manager/notebook.fr.ipynb) exécute chaque fonction avec des fichiers d'exemple fournis. La limite honnête : un notebook ne peut pas voir les variables d'environnement de ta propre machine, donc la couche variables d'environnement est démontrée avec une surcharge simulée à la place.
+**Google Colab, Kaggle Notebooks ou Binder** sont un bon moyen d'*apprendre les concepts*, la version notebook dans [`examples/config-manager/notebook.fr.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/config-manager/notebook.fr.ipynb) exécute chaque fonction avec des fichiers d'exemple fournis. La limite honnête : un notebook ne peut pas voir les variables d'environnement de ta propre machine, donc la couche variables d'environnement est démontrée avec une surcharge simulée à la place.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/config-manager/notebook.fr.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/config-manager/notebook.fr.ipynb)
@@ -42,7 +42,7 @@ Ceci suppose Python 101 (dictionnaires, fonctions et `json` au niveau `import`) 
 
 ## Configuration
 
-`uv` est un outil unique qui remplace toute la chaîne « install Python, puis pip, puis un outil d'environnement virtuel » — et ce projet n'a aucun paquet tiers, donc une fois que tu as un Python tu es réellement prêt.
+`uv` est un outil unique qui remplace toute la chaîne « install Python, puis pip, puis un outil d'environnement virtuel », et ce projet n'a aucun paquet tiers, donc une fois que tu as un Python tu es réellement prêt.
 
 **macOS / Linux** (terminal) :
 
@@ -80,11 +80,11 @@ uv python pin 3.12
 
 ## Étape 1 : Fusionner la configuration par couches
 
-Les systèmes de config sont presque toujours un *pipeline de surcharges* : commence par `DEFAULTS`, superpose un fichier propre à chaque environnement, puis laisse les variables d'environnement gagner. La fusion est le cœur du système — et la subtilité est que la config est *imbriquée*, donc `{"app": {"port": 9000}}` doit mettre à jour `{"app": {"name": "demo", "port": 8000}}` sans écraser `name`.
+Les systèmes de config sont presque toujours un *pipeline de surcharges* : commence par `DEFAULTS`, superpose un fichier propre à chaque environnement, puis laisse les variables d'environnement gagner. La fusion est le cœur du système, et la subtilité est que la config est *imbriquée*, donc `{"app": {"port": 9000}}` doit mettre à jour `{"app": {"name": "demo", "port": 8000}}` sans écraser `name`.
 
 ### 1.1 Écris une fusion profonde et les deux premières couches
 
-**👟 Indice de départ :** Écris `deep_merge` — en ne récursant que lorsque *les deux* côtés sont des dicts, sinon en remplaçant, ce qui préserve les clés non touchées — puis combine-la avec un fichier JSON et des variables d'environnement converties :
+**👟 Indice de départ :** Écris `deep_merge`, en ne récursant que lorsque *les deux* côtés sont des dicts, sinon en remplaçant, ce qui préserve les clés non touchées, puis combine-la avec un fichier JSON et des variables d'environnement converties :
 
 ```python
 # layers.py
@@ -138,7 +138,7 @@ if __name__ == "__main__":
     print(config)
 ```
 
-La ligne `dict(base)` en haut de `deep_merge` est ce qui rend cette fonction *pure* : les appelants gardent leurs valeurs par défaut intactes et reçoivent un nouveau dict en retour, donc « exécuter une fois avec un mauvais fichier, recharger, réécrire à nouveau » est toujours sûr. La couche variables d'environnement démontre le cheval noir de la conception de config — *tout est une chaîne dans l'environnement* — d'où `_coerce` qui transforme `"9000"` en `9000` et `"true"` en `True` avant qu'ils n'atterrissent dans le dict.
+La ligne `dict(base)` en haut de `deep_merge` est ce qui rend cette fonction *pure* : les appelants gardent leurs valeurs par défaut intactes et reçoivent un nouveau dict en retour, donc « exécuter une fois avec un mauvais fichier, recharger, réécrire à nouveau » est toujours sûr. La couche variables d'environnement démontre le cheval noir de la conception de config, *tout est une chaîne dans l'environnement*, d'où `_coerce` qui transforme `"9000"` en `9000` et `"true"` en `True` avant qu'ils n'atterrissent dans le dict.
 
 **🎯 Résultat attendu :**
 
@@ -146,7 +146,7 @@ La ligne `dict(base)` en haut de `deep_merge` est ce qui rend cette fonction *pu
 {'app': {'name': 'api', 'port': 8000}, 'logging': {'level': 'DEBUG'}}
 ```
 
-**🩹 Si ça ne marche pas :** Si `app` n'a pas de `port`, ton `deep_merge` a aplati au lieu de récurser — vérifie la branche `isinstance(value, dict)`. Si la sortie *remplace* entièrement `logging`, tu as inversé l'ordre de fusion ; `deep_merge(base, override)` garde tout ce qui est dans `base` et que `override` ne touche pas.
+**🩹 Si ça ne marche pas :** Si `app` n'a pas de `port`, ton `deep_merge` a aplati au lieu de récurser, vérifie la branche `isinstance(value, dict)`. Si la sortie *remplace* entièrement `logging`, tu as inversé l'ordre de fusion ; `deep_merge(base, override)` garde tout ce qui est dans `base` et que `override` ne touche pas.
 
 ### 1.2 Essaie la surcharge par variables d'environnement
 
@@ -156,9 +156,9 @@ APP_PORT=9000 APP_LOGGING__LEVEL=WARN uv run python layers.py
 
 **👟 Indice de départ :** Relance avec deux variables d'environnement définies sur la ligne de commande et observe le port et le niveau de log changer, avec `app.name` non dérangé.
 
-**🎯 Résultat attendu :** `{'app': {'name': 'api', 'port': 9000}, 'logging': {'level': 'WARN'}}` — les deux variables d'environnement surchargent exactement leurs clés, rien d'autre.
+**🎯 Résultat attendu :** `{'app': {'name': 'api', 'port': 9000}, 'logging': {'level': 'WARN'}}`, les deux variables d'environnement surchargent exactement leurs clés, rien d'autre.
 
-**🩹 Si ça ne marche pas :** Si rien ne change, le filtre de préfixe `APP_` ne correspond pas — confirme que les variables sont définies *dans la même commande* (`APP_PORT=9000 uv run ...`, pas un `export` séparé dans une autre fenêtre). Si `APP_LOGGING__LEVEL` atterrit comme une *nouvelle* clé de premier niveau au lieu de s'imbriquer sous `logging`, la boucle de transformation `__` → chemin pointé ne fractionne pas.
+**🩹 Si ça ne marche pas :** Si rien ne change, le filtre de préfixe `APP_` ne correspond pas, confirme que les variables sont définies *dans la même commande* (`APP_PORT=9000 uv run ...`, pas un `export` séparé dans une autre fenêtre). Si `APP_LOGGING__LEVEL` atterrit comme une *nouvelle* clé de premier niveau au lieu de s'imbriquer sous `logging`, la boucle de transformation `__` → chemin pointé ne fractionne pas.
 
 ### 1.3 Vérifie
 
@@ -175,7 +175,7 @@ APP_PORT=9000 APP_LOGGING__LEVEL=WARN uv run python layers.py
 
 ## Étape 2 : Lire des fichiers de config TOML
 
-Le JSON souffre d'un problème pratique comme format de config : pas de commentaires, ce qui fait que les fichiers de config se lisent comme des dumps de données plutôt que comme des instructions. TOML — utilisé par `pyproject.toml`, Cargo et de nombreux outils modernes — ajoute des commentaires, des types conviviaux et la même structure imbriquée. Python 3.11+ le lit avec `tomllib`, de la même façon que `json` lit le JSON.
+Le JSON souffre d'un problème pratique comme format de config : pas de commentaires, ce qui fait que les fichiers de config se lisent comme des dumps de données plutôt que comme des instructions. TOML, utilisé par `pyproject.toml`, Cargo et de nombreux outils modernes, ajoute des commentaires, des types conviviaux et la même structure imbriquée. Python 3.11+ le lit avec `tomllib`, de la même façon que `json` lit le JSON.
 
 ### 2.1 Écris la couche TOML
 
@@ -208,7 +208,7 @@ level = "PROD"
     print(config)
 ```
 
-Le motif `deep_merge(dict(DEFAULTS), layer)` est délibérément identique à la fusion JSON de l'Étape 1 — une fois la fonction de fusion existante, chaque nouvelle source est les mêmes deux lignes. Deux petites choses sont faciles à rater : `tomllib.load` exige le mode *binaire* (`Path.open("rb")`), une particularité partagée avec aucun autre format populaire, et les en-têtes `[logging]` de TOML produisent les mêmes dicts imbriqués que ton `deep_merge` gère déjà.
+Le motif `deep_merge(dict(DEFAULTS), layer)` est délibérément identique à la fusion JSON de l'Étape 1, une fois la fonction de fusion existante, chaque nouvelle source est les mêmes deux lignes. Deux petites choses sont faciles à rater : `tomllib.load` exige le mode *binaire* (`Path.open("rb")`), une particularité partagée avec aucun autre format populaire, et les en-têtes `[logging]` de TOML produisent les mêmes dicts imbriqués que ton `deep_merge` gère déjà.
 
 **🎯 Résultat attendu :**
 
@@ -216,7 +216,7 @@ Le motif `deep_merge(dict(DEFAULTS), layer)` est délibérément identique à la
 {'app': {'name': 'prod-api', 'port': 8080}, 'logging': {'level': 'PROD'}}
 ```
 
-**🩹 Si ça ne marche pas :** Une `TypeError: File must be opened in binary mode` signifie que tu as ouvert avec `"r"` au lieu de `"rb"`. Une `TOMLDecodeError` pointe d'habitude vers la ligne exacte — les virgules de fin *sont* autorisées en TOML, mais une seconde section `[app]` ou un `=` égaré est une erreur dure à l'analyse.
+**🩹 Si ça ne marche pas :** Une `TypeError: File must be opened in binary mode` signifie que tu as ouvert avec `"r"` au lieu de `"rb"`. Une `TOMLDecodeError` pointe d'habitude vers la ligne exacte, les virgules de fin *sont* autorisées en TOML, mais une seconde section `[app]` ou un `=` égaré est une erreur dure à l'analyse.
 
 ### 2.2 Vérifie
 
@@ -228,12 +228,12 @@ Le motif `deep_merge(dict(DEFAULTS), layer)` est délibérément identique à la
 
 **🤔 Question(s) socratique(s)**
 
-- TOML te permet d'écrire `port = 8080` (un entier, sans guillemets). Comment le *type* de `port` changerait-il si le fichier disait `port = "8080"`, et où cette différence ferait-elle surface — cassant silencieusement quoi plus tard ? (Indice : repense au chemin sans validation de l'étape 1.)
-- La fusion traite la couche TOML et la couche JSON comme interchangeables. Que devrais-tu changer si tu voulais « TOML bat toujours JSON, peu importe l'ordre de chargement » — et est-ce que l'intégrer en dur est une bonne idée ou un piège de maintenabilité ?
+- TOML te permet d'écrire `port = 8080` (un entier, sans guillemets). Comment le *type* de `port` changerait-il si le fichier disait `port = "8080"`, et où cette différence ferait-elle surface, cassant silencieusement quoi plus tard ? (Indice : repense au chemin sans validation de l'étape 1.)
+- La fusion traite la couche TOML et la couche JSON comme interchangeables. Que devrais-tu changer si tu voulais « TOML bat toujours JSON, peu importe l'ordre de chargement », et est-ce que l'intégrer en dur est une bonne idée ou un piège de maintenabilité ?
 
 ## Étape 3 : Valider la config fusionnée
 
-Une fois que trois sources alimentent un seul dict, la fusion peut silencieusement produire une config avec une *clé manquante* ou une *valeur au mauvais type* — et celles-ci échouent plus tard, loin de la config, de façons déroutantes. La validation déplace l'échec au début : vérifie la config fusionnée contre un schéma et lève une liste d'erreurs lisible par un humain avant que quoi que ce soit ne s'exécute.
+Une fois que trois sources alimentent un seul dict, la fusion peut silencieusement produire une config avec une *clé manquante* ou une *valeur au mauvais type*, et celles-ci échouent plus tard, loin de la config, de façons déroutantes. La validation déplace l'échec au début : vérifie la config fusionnée contre un schéma et lève une liste d'erreurs lisible par un humain avant que quoi que ce soit ne s'exécute.
 
 ### 3.1 Écris l'aplatissement et le vérificateur
 
@@ -275,7 +275,7 @@ if __name__ == "__main__":
         print(error)
 ```
 
-`flatten` est le cheval de trait silencieux : il convertit « où est le problème ? » d'un labyrinthe de recherches imbriquées en une seule liste plate, et il réutilise le même parcours dans `secrets.py` (Étape 4) — un parcours, deux consommateurs. `isinstance(flat[path], wanted)` attrape les pièges de *type* dont la config est célèbre, comme un port en chaîne qui explosera dans une liaison de socket : `ValueError` plus tard au lieu d'une phrase claire maintenant.
+`flatten` est le cheval de trait silencieux : il convertit « où est le problème ? » d'un labyrinthe de recherches imbriquées en une seule liste plate, et il réutilise le même parcours dans `secrets.py` (Étape 4), un parcours, deux consommateurs. `isinstance(flat[path], wanted)` attrape les pièges de *type* dont la config est célèbre, comme un port en chaîne qui explosera dans une liaison de socket : `ValueError` plus tard au lieu d'une phrase claire maintenant.
 
 **🎯 Résultat attendu :**
 
@@ -283,7 +283,7 @@ if __name__ == "__main__":
 app.port should be int, got str
 ```
 
-**🩹 Si ça ne marche pas :** Si rien n'est signalé pour le dict cassé, ton schéma `REQUIRED` épelle le chemin différemment de ce que `flatten` produit — vérifie qu'un décalage `logging.level` vs `logging__level` (le style variable d'environnement) ne fuit pas dans le schéma. Si tu obtiens `should be type, got str`, regarde si `got {type(...).__name__}` dans le f-string imprime le nom hérité d'une valeur sous-classée.
+**🩹 Si ça ne marche pas :** Si rien n'est signalé pour le dict cassé, ton schéma `REQUIRED` épelle le chemin différemment de ce que `flatten` produit, vérifie qu'un décalage `logging.level` vs `logging__level` (le style variable d'environnement) ne fuit pas dans le schéma. Si tu obtiens `should be type, got str`, regarde si `got {type(...).__name__}` dans le f-string imprime le nom hérité d'une valeur sous-classée.
 
 ### 3.2 Vérifie
 
@@ -295,8 +295,8 @@ app.port should be int, got str
 
 **🤔 Question(s) socratique(s)**
 
-- `flatten` est partagé par la validation et (étape suivante) le masquage des secrets. Quel est l'argument de responsabilité unique pour un parcours — et qu'aurait-il fallu dupliquer si tu avais inliné le parcours deux fois ?
-- Le schéma vérifie les *types*, pas les *plages*. Quel échec un `port` de `-1` ou `65536` traverserait-il quand même — et une vérification de plage vaut-elle d'être ajoutée au schéma ou est-ce la mauvaise couche pour cela ?
+- `flatten` est partagé par la validation et (étape suivante) le masquage des secrets. Quel est l'argument de responsabilité unique pour un parcours, et qu'aurait-il fallu dupliquer si tu avais inliné le parcours deux fois ?
+- Le schéma vérifie les *types*, pas les *plages*. Quel échec un `port` de `-1` ou `65536` traverserait-il quand même, et une vérification de plage vaut-elle d'être ajoutée au schéma ou est-ce la mauvaise couche pour cela ?
 
 ## Étape 4 : Masquer les secrets avant d'imprimer
 
@@ -304,7 +304,7 @@ Une config qui *contient* un secret est normale ; une config qui en *imprime* un
 
 ### 4.1 Écris le détecteur et le masqueur
 
-**👟 Indice de départ :** Utilise une regex compilée insensible à la casse sur les *noms* de clés (pas les valeurs — comparer les valeurs serait un jeu de devinettes), puis `flatten` + reconstruction comme chemins dotés masqués :
+**👟 Indice de départ :** Utilise une regex compilée insensible à la casse sur les *noms* de clés (pas les valeurs, comparer les valeurs serait un jeu de devinettes), puis `flatten` + reconstruction comme chemins dotés masqués :
 
 ```python
 # secrets.py
@@ -330,7 +330,7 @@ if __name__ == "__main__":
         print(f"{path} = {value}")
 ```
 
-La regex est délibérément ancrée de la façon dure mais sûre : elle correspond aux *sous-chaînes* d'un chemin (`database.password` contient `password`), ce qui attrape `db_password`, `github_token` et `api_key` sans exiger une taxonomie de chaque nom possible. Et parce que le masquage se fait sur la *clé*, pas la valeur, elle n'a jamais besoin de deviner à quoi ressemble un secret — une valeur de `"sk-…"` ou `"hunter2"` est masquée de façon identique en se basant purement sur l'endroit où elle vit.
+La regex est délibérément ancrée de la façon dure mais sûre : elle correspond aux *sous-chaînes* d'un chemin (`database.password` contient `password`), ce qui attrape `db_password`, `github_token` et `api_key` sans exiger une taxonomie de chaque nom possible. Et parce que le masquage se fait sur la *clé*, pas la valeur, elle n'a jamais besoin de deviner à quoi ressemble un secret, une valeur de `"sk-…"` ou `"hunter2"` est masquée de façon identique en se basant purement sur l'endroit où elle vit.
 
 **🎯 Résultat attendu :**
 
@@ -342,7 +342,7 @@ database.host = db.internal
 database.password = ***
 ```
 
-**🩹 Si ça ne marche pas :** Si `api_key` s'imprime non masqué, ta regex utilisait l'ancrage `$` ou une frontière de mot que l'alternative `api[_-]?key` ne satisfait pas — `api_key` a un underscore, donc le motif doit le permettre (`[_-]?`). Si `host` est masqué, le motif est trop lâche — une alternative `key` nue correspond à la fin de `monkey` ; resserre-le aux formes de style `api[_-]?key` uniquement.
+**🩹 Si ça ne marche pas :** Si `api_key` s'imprime non masqué, ta regex utilisait l'ancrage `$` ou une frontière de mot que l'alternative `api[_-]?key` ne satisfait pas, `api_key` a un underscore, donc le motif doit le permettre (`[_-]?`). Si `host` est masqué, le motif est trop lâche, une alternative `key` nue correspond à la fin de `monkey` ; resserre-le aux formes de style `api[_-]?key` uniquement.
 
 ### 4.2 Vérifie
 
@@ -350,7 +350,7 @@ database.password = ***
 
 - ✅ `database.password` et `app.api_key` s'impriment comme `***`.
 - ✅ `app.name`, `app.port` et `database.host` impriment leurs vraies valeurs.
-- ✅ Une valeur en forme de secret stockée sous une clé *non secrète* (ex. `app.notes = "contains sk-abc"`) n'est pas masquée — le masquage est basé sur la clé.
+- ✅ Une valeur en forme de secret stockée sous une clé *non secrète* (ex. `app.notes = "contains sk-abc"`) n'est pas masquée, le masquage est basé sur la clé.
 
 **🤔 Question(s) socratique(s)**
 
@@ -363,7 +363,7 @@ Chaque fonction jusqu'ici est une bibliothèque ; cette étape les transforme en
 
 ### 5.1 Construis `load_config` et la gestion des arguments
 
-**👟 Indice de départ :** Compose le pipeline en une fonction — valeurs par défaut → JSON → TOML → variables d'environnement — puis câble `--check` et `--show` via `argparse` :
+**👟 Indice de départ :** Compose le pipeline en une fonction, valeurs par défaut → JSON → TOML → variables d'environnement, puis câble `--check` et `--show` via `argparse` :
 
 ```python
 # config.py
@@ -397,36 +397,36 @@ if __name__ == "__main__":
 uv run python config.py --show
 ```
 
-Chaque drapeau ré-exécute `load_config()` de façon indépendante — peu coûteux ici, et cela signifie que `--show` n'imprime jamais un état périmé d'un passage `--check`. L'ordre de composition est le comportement entier du système dans une chaîne d'appels de fonction : `DEFAULTS < JSON < TOML < env`, donc la source de plus haute priorité est toujours la dernière fusion.
+Chaque drapeau ré-exécute `load_config()` de façon indépendante, peu coûteux ici, et cela signifie que `--show` n'imprime jamais un état périmé d'un passage `--check`. L'ordre de composition est le comportement entier du système dans une chaîne d'appels de fonction : `DEFAULTS < JSON < TOML < env`, donc la source de plus haute priorité est toujours la dernière fusion.
 
 **🎯 Résultat attendu :** `app.name = prod-api`, `app.port = 8080`, `logging.level = PROD` (plus toute clé que tu ajoutes dont le nom correspond à un motif sensible imprimée comme `***`).
 
-**🩹 Si ça ne marche pas :** Une `FileNotFoundError` pour `config.json` ou `config.toml` signifie que tu t'exécutes depuis le mauvais dossier — les fichiers sont dans le dossier où les Étapes 1–2 les ont écrits, donc lance la CLI depuis là-bas, ou passe le chemin. Si `--show` et `--check` ensemble impriment la config validée *et* le masquage ensemble, souviens-toi que les drapeaux `action="store_true"` sont indépendants — combine-les avec `&&`, ou ajoute un `--show` implicite quand `--check` passe.
+**🩹 Si ça ne marche pas :** Une `FileNotFoundError` pour `config.json` ou `config.toml` signifie que tu t'exécutes depuis le mauvais dossier, les fichiers sont dans le dossier où les Étapes 1–2 les ont écrits, donc lance la CLI depuis là-bas, ou passe le chemin. Si `--show` et `--check` ensemble impriment la config validée *et* le masquage ensemble, souviens-toi que les drapeaux `action="store_true"` sont indépendants, combine-les avec `&&`, ou ajoute un `--show` implicite quand `--check` passe.
 
 ### 5.2 Vérifie
 
 **✅ Liste de vérification**
 
 - ✅ `uv run python config.py --show` imprime uniquement des valeurs masquées-et-fusionnées, avec toute clé sensible masquée.
-- ✅ `uv run python config.py --check` imprime `config OK` pour une config valide — ou une ligne `path should be…` par champ cassé.
+- ✅ `uv run python config.py --check` imprime `config OK` pour une config valide, ou une ligne `path should be…` par champ cassé.
 - ✅ `uv run python config.py --help` liste les deux drapeaux et la description de l'outil.
 
 **🤔 Question(s) socratique(s)**
 
-- `--show` ré-exécute `load_config()` plutôt que de partager un objet config avec `--check`. Quand ce choix mordrait-il — qu'est-ce qui pourrait différer entre les deux exécutions dans un déploiement *réel* (indice : pense aux variables d'environnement qui changent en cours de processus) ?
+- `--show` ré-exécute `load_config()` plutôt que de partager un objet config avec `--check`. Quand ce choix mordrait-il, qu'est-ce qui pourrait différer entre les deux exécutions dans un déploiement *réel* (indice : pense aux variables d'environnement qui changent en cours de processus) ?
 - La CLI n'imprime les secrets que **comme** `***`. Si tu ajoutais un drapeau `--reveal` pour afficher les vraies valeurs, quelle garde voudrais-tu autour pour que personne ne vide par accident des identifiants de production dans les logs CI ?
 
 ## ⚠️ Pièges courants
 
-- **Fusionner superficiellement et perdre les clés sœurs.** `dict(base) | override` (ou `base.update(override)`) remplace des dicts imbriqués entiers, écrasant `app.name` le moment où `app.port` surcharge. Fusionne toujours récursivement — la branche `isinstance(value, dict)` de l'Étape 1 n'est pas facultative.
+- **Fusionner superficiellement et perdre les clés sœurs.** `dict(base) | override` (ou `base.update(override)`) remplace des dicts imbriqués entiers, écrasant `app.name` le moment où `app.port` surcharge. Fusionne toujours récursivement, la branche `isinstance(value, dict)` de l'Étape 1 n'est pas facultative.
 - **Oublier que `tomllib` veut le mode binaire.** `tomllib.load(open("config.toml"))` échoue avec une `TypeError` ; le descripteur de fichier doit s'ouvrir en `"rb"`. C'est le seul chargeur de format de la bibliothèque standard avec cette particularité.
-- **Codifier des secrets en dur dans le code « juste pour l'instant ».** Une `API_KEY` dans `DEFAULTS` est exactement la valeur que l'Étape 4 masquerait — ce qui est l'outil qui te dit qu'elle ne devrait pas être dans le code. Déplace-la vers une variable d'environnement avant que le masquage ne la cache de toute façon à ton propre débogage.
+- **Codifier des secrets en dur dans le code « juste pour l'instant ».** Une `API_KEY` dans `DEFAULTS` est exactement la valeur que l'Étape 4 masquerait, ce qui est l'outil qui te dit qu'elle ne devrait pas être dans le code. Déplace-la vers une variable d'environnement avant que le masquage ne la cache de toute façon à ton propre débogage.
 - **Valider après la première utilisation.** Si tu fais `socket.bind((host, port))` avant de vérifier `isinstance(port, int)`, un port en chaîne échoue trois fichiers plus loin dans ton programme. La validation appartient à la *frontière* de la config, pas après que les cent premières lignes ont tourné.
 - **Détecter les secrets par la forme de la valeur.** Comparer les valeurs (regexer pour `sk-…`) a l'air malin et trompe : les vraies valeurs te surprennent constamment, et les noms de clés sont déjà la seule chose stable. Compare les noms.
 
 ## Ce que tu viens de construire
 
-Un vrai système de config par couches — valeurs par défaut, JSON, TOML et variables d'environnement fusionnés dans le bon ordre de priorité, validés contre un schéma et rendus avec les secrets sûrement masqués — tout en Python de bibliothèque standard pur plus `tomllib`. La compétence transférable est l'architecture elle-même : un *pipeline de surcharges finissant à l'environnement*, la forme derrière les systèmes de config, des réglages de Django aux outils de déploiement, et une règle défendable qui vaut la peine d'être volée entière : les secrets ne s'impriment que lorsque le cœur du métier de l'outil est de les révéler.
+Un vrai système de config par couches, valeurs par défaut, JSON, TOML et variables d'environnement fusionnés dans le bon ordre de priorité, validés contre un schéma et rendus avec les secrets sûrement masqués, tout en Python de bibliothèque standard pur plus `tomllib`. La compétence transférable est l'architecture elle-même : un *pipeline de surcharges finissant à l'environnement*, la forme derrière les systèmes de config, des réglages de Django aux outils de déploiement, et une règle défendable qui vaut la peine d'être volée entière : les secrets ne s'impriment que lorsque le cœur du métier de l'outil est de les révéler.
 
 :::tip[Exécute une version plus complète sans aucune configuration locale]
 [`examples/config-manager/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/config-manager) dans le dépôt du cours contient ces scripts complets plus des fichiers d'exemple `config.json`/`config.toml`, exécutables de bout en bout. Ou ouvre tout le dépôt dans un [GitHub Codespaces](https://codespaces.new/abderrahim-lectures/python-data-analysis-course).
@@ -434,13 +434,13 @@ Un vrai système de config par couches — valeurs par défaut, JSON, TOML et va
 
 ## Où aller à partir d'ici
 
-- Ajoute un drapeau `--env prod` qui charge `config.prod.toml` au lieu du fichier par défaut — les surcharges spécifiques à un environnement comme une sélection, pas un hack — et regarde le pipeline de fusion rester inchangé.
-- Prends en charge une clé `include = ["shared.toml"]` pour qu'un fichier de config puisse en importer d'autres — ton `deep_merge` compose les inclus gratuitement.
-- Émets la config fusionnée comme un **fichier `key=value` aplati unique** pour un outil de style 12 facteurs qui consomme des points, pas de l'imbrication — `flatten` de l'Étape 3 est ton point de départ.
-- Écris le verdict du masquage comme un test `pytest` affirmant que `redact` ne retourne jamais une valeur contenant `sk-` — la même garantie que les systèmes CI exécutent maintenant sur le vrai scan de secrets.
+- Ajoute un drapeau `--env prod` qui charge `config.prod.toml` au lieu du fichier par défaut, les surcharges spécifiques à un environnement comme une sélection, pas un hack, et regarde le pipeline de fusion rester inchangé.
+- Prends en charge une clé `include = ["shared.toml"]` pour qu'un fichier de config puisse en importer d'autres, ton `deep_merge` compose les inclus gratuitement.
+- Émets la config fusionnée comme un **fichier `key=value` aplati unique** pour un outil de style 12 facteurs qui consomme des points, pas de l'imbrication, `flatten` de l'Étape 3 est ton point de départ.
+- Écris le verdict du masquage comme un test `pytest` affirmant que `redact` ne retourne jamais une valeur contenant `sk-`, la même garantie que les systèmes CI exécutent maintenant sur le vrai scan de secrets.
 
 ## Partage ton projet avec la classe
 
-Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres élèves — et son README a un tutoriel complet et adapté aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git avant : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable avec git n'est supposée.
+Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres élèves, et son README a un tutoriel complet et adapté aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git avant : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable avec git n'est supposée.
 
 Bienvenue dans l'écriture de Python en dehors du navigateur. 🎓

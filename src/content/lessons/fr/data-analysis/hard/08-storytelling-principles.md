@@ -33,14 +33,14 @@ quiz:
         correct: true
       - text: "À l'auditoire technique, qui préfère les graphiques denses"
       - text: "Aux deux de manière égale"
-      - text: "À aucun — les tables sont toujours pires que les graphiques"
+      - text: "À aucun, les tables sont toujours pires que les graphiques"
   - question: "Savez-vous écrire un constat exploitable ?"
     options:
-      - text: "Oui — un constat exploitable répond au « et alors » avec une action possible du décideur"
+      - text: "Oui, un constat exploitable répond au « et alors » avec une action possible du décideur"
         correct: true
-      - text: "Oui — il suffit de réciter les nombres de l'analyse"
-      - text: "Oui — un constat exploitable décrit les variables en valeurs exactes"
-      - text: "Non — les constats ne servent qu'à la compréhension du code"
+      - text: "Oui, il suffit de réciter les nombres de l'analyse"
+      - text: "Oui, un constat exploitable décrit les variables en valeurs exactes"
+      - text: "Non, les constats ne servent qu'à la compréhension du code"
 ---
 
 Un graphique que personne ne lit est pire que pas de graphique du tout. La narration de données est la compétence qui transforme une analyse en idée qui change les décisions. Cette leçon couvre la structure narrative, les techniques d'annotation, les choix de couleurs et les principes de conception de tableaux de bord qui rendent vos visualisations convaincantes.
@@ -106,7 +106,7 @@ plt.show()
 
 ### Choix des palettes de couleurs
 
-La couleur n'est pas de la décoration — c'est de la communication. Choisissez les palettes selon le type de vos données :
+La couleur n'est pas de la décoration, c'est de la communication. Choisissez les palettes selon le type de vos données :
 
 ```python
 # Sequential: for ordered data (low to high)
@@ -140,7 +140,7 @@ Règles de couleur :
 - **Séquentielle** pour les valeurs numériques (plus foncé = plus élevé)
 - **Divergente** lorsqu'on compare à un point médian (rouge = mauvais, bleu = bon)
 - **Qualitative** pour les catégories (couleurs distinctes, sans ordre inhérent)
-- **N'utilisez jamais la couleur comme seule encodage** — ajoutez toujours des étiquettes ou des motifs pour l'accessibilité aux personnes daltoniennes
+- **N'utilisez jamais la couleur comme seule encodage**, ajoutez toujours des étiquettes ou des motifs pour l'accessibilité aux personnes daltoniennes
 
 ### Conception des titres et sous-titres
 
@@ -286,18 +286,18 @@ plt.show()
 ## Points clés à retenir
 
 - Suivez l'arc narratif : situation → complication → résolution
-- Annotez directement les graphiques — le graphique doit s'expliquer de lui-même sans légende
+- Annotez directement les graphiques, le graphique doit s'expliquer de lui-même sans légende
 - Choisissez les palettes de couleurs selon le type de données : séquentielle pour les données ordonnées, divergente pour la comparaison au point médian, qualitative pour les catégories
 - Les titres doivent énoncer l'idée, pas le type de graphique
 - Structurez les tableaux de bord comme des histoires : gros titre → preuves → conclusion
-- Concevez pour votre auditoire — les dirigeants veulent des idées, les analystes veulent une méthodologie
+- Concevez pour votre auditoire, les dirigeants veulent des idées, les analystes veulent une méthodologie
 
 ## Défi pratique
 
 Créez un tableau de bord à 3 panneaux qui raconte une histoire sur l'écart de genre dans les notes d'examen : (1) un graphique en barres groupées des notes moyennes par genre et par matière, (2) un box plot de l'écart de notes (maths moins rédaction) par genre et (3) une bande d'idée clé résumant le constat. Utilisez des annotations sur chaque graphique.
 
 <details class="challenge">
-<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
+<summary>🧩 Défi, réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
 ```python

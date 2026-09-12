@@ -44,7 +44,7 @@ quiz:
 ---
 Des comptes de mots aux transitions de mots
 
-La fréquence des mots vous dit *quels* mots apparaissent. Les bigrammes vous disent *ce qui suit quoi*. « The cat » est bien plus courant que « the refrigerator » — une table de bigrammes capture cette relation. C'est la forme la plus simple d'un modèle de langue : étant donné un mot, quels mots ont tendance à venir ensuite ?
+La fréquence des mots vous dit *quels* mots apparaissent. Les bigrammes vous disent *ce qui suit quoi*. « The cat » est bien plus courant que « the refrigerator », une table de bigrammes capture cette relation. C'est la forme la plus simple d'un modèle de langue : étant donné un mot, quels mots ont tendance à venir ensuite ?
 
 Les cellules ci-dessous réutilisent les fonctions `load_corpus` et `tokenize` des leçons 01 et 03. Chaque page de leçon démarre une session Python vierge, alors exécutez d'abord cette cellule de mise en place :
 
@@ -152,7 +152,7 @@ print(f"  Followers: {bigrams[top_word]}")
 
 ### Frontières de phrase
 
-En construisant des bigrammes à partir de plusieurs phrases, le dernier mot d'une phrase et le premier mot de la suivante deviennent un bigramme. C'est généralement acceptable pour un petit modèle — le modèle ne connaît pas la structure de phrase de toute façon. Mais si vous voulez des résultats plus propres, vous pouvez ajouter des marqueurs de frontière de phrase :
+En construisant des bigrammes à partir de plusieurs phrases, le dernier mot d'une phrase et le premier mot de la suivante deviennent un bigramme. C'est généralement acceptable pour un petit modèle, le modèle ne connaît pas la structure de phrase de toute façon. Mais si vous voulez des résultats plus propres, vous pouvez ajouter des marqueurs de frontière de phrase :
 
 ```python
 def build_bigrams(tokens, add_boundaries=True):
@@ -187,7 +187,7 @@ print(f"Unique bigram pairs: {total_pairs}")
 
 ## Points clés
 
-- Un bigramme est une paire de mots consécutifs — le modèle de séquence le plus simple
+- Un bigramme est une paire de mots consécutifs, le modèle de séquence le plus simple
 - La table de bigrammes est un dict imbriqué : `bigrams[word] = {follower: count}`
 - `defaultdict(lambda: defaultdict(int))` simplifie le comptage imbriqué
 - Les frontières de phrase peuvent être suivies avec des jetons spéciaux comme `<END>`

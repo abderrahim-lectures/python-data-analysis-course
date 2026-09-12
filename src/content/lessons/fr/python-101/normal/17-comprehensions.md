@@ -28,7 +28,7 @@ $$
 \{x^2 \mid x \in \{0, 1, \ldots, 5\}\} = \{0, 1, 4, 9, 16, 25\}.
 $$
 
-Lisez *« l'ensemble des $x^2$, pour chaque $x$ dans cette source »* — et le Python est la même phrase inversée en code :
+Lisez *« l'ensemble des $x^2$, pour chaque $x$ dans cette source »*, et le Python est la même phrase inversée en code :
 
 ```python
 # Boucle normale
@@ -41,7 +41,7 @@ squares = [x ** 2 for x in range(6)]
 # [0, 1, 4, 9, 16, 25]
 ```
 
-La boucle épelle trois mouvements — démarrer vide, ajouter, répéter ; la compréhension énonce toute la collection en une ligne qui reflète l'anatomie du constructeur : l'expression en tête, la variable parcourue derrière.
+La boucle épelle trois mouvements, démarrer vide, ajouter, répéter ; la compréhension énonce toute la collection en une ligne qui reflète l'anatomie du constructeur : l'expression en tête, la variable parcourue derrière.
 
 ## Filtrer avec des conditions
 
@@ -59,7 +59,7 @@ Un `if` à la fin est un *filtre* : seuls les éléments qui le passent parvienn
 
 ## If/else comme expression
 
-Le `if...else` que vous connaissez déjà est une *expression* — il produit une valeur. En coller un *avant* le `for` le plante dans la ligne de construction, choisissant par élément plutôt que filtrant par élément :
+Le `if...else` que vous connaissez déjà est une *expression*, il produit une valeur. En coller un *avant* le `for` le plante dans la ligne de construction, choisissant par élément plutôt que filtrant par élément :
 
 ```python
 labels = ["even" if x % 2 == 0 else "odd" for x in range(5)]
@@ -70,7 +70,7 @@ Les deux positions sont une fourche aux emplois distincts : après le `for`, la 
 
 ## Compréhensions de dict
 
-La même forme construit des correspondances — l'expression à gauche des deux points devient la clé, celle de droite la valeur :
+La même forme construit des correspondances, l'expression à gauche des deux points devient la clé, celle de droite la valeur :
 
 ```python
 squares_dict = {x: x**2 for x in range(6)}
@@ -86,7 +86,7 @@ L'inversion est le classique élégant : parcourez `items()` et échangez quelle
 
 ## Compréhensions de set
 
-Les accolades avec une compréhension donnent un set — l'unicité appliquée automatiquement :
+Les accolades avec une compréhension donnent un set, l'unicité appliquée automatiquement :
 
 ```python
 lengths = {len(word) for word in ["hello", "hi", "hey"]}
@@ -97,7 +97,7 @@ Trois longueurs s'effondrent en un ensemble de valeurs, laissant tomber le doubl
 
 ## Compréhensions imbriquées : l'aplatisseur
 
-Une matrice est une liste de lignes, et l'aplatir fait tenir deux boucles en une expression — lisez les clauses `for` de gauche à droite, l'extérieure d'abord :
+Une matrice est une liste de lignes, et l'aplatir fait tenir deux boucles en une expression, lisez les clauses `for` de gauche à droite, l'extérieure d'abord :
 
 ```python
 matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
@@ -109,7 +109,7 @@ Chaque `for` déballe un niveau : `row` parcourt la liste extérieure, `num` par
 
 ## Un exemple travaillé : trois lignes depuis le constructeur d'ensembles
 
-Les trois mouvements de la leçon — construire, filtrer, étiqueter — une ligne chacun :
+Les trois mouvements de la leçon, construire, filtrer, étiqueter, une ligne chacun :
 
 ```python
 squares = [x ** 2 for x in range(2, 9)]
@@ -126,31 +126,31 @@ Le premier est $\{x^2 \mid x \in [2, 9)\}$, tapé tel quel ; le second filtre le
 
 ## Quand NE PAS utiliser de compréhension
 
-- Quand la logique devient nouée — une boucle `for` normale gagne sa lisibilité.
-- Quand le corps a besoin de `try/except` — les compréhensions n'ont pas la place pour cela.
-- Quand les effets de bord comptent — imprimer ou écrire des fichiers doit être des déclarations délibérées, pas des expressions silencieuses.
+- Quand la logique devient nouée, une boucle `for` normale gagne sa lisibilité.
+- Quand le corps a besoin de `try/except`, les compréhensions n'ont pas la place pour cela.
+- Quand les effets de bord comptent, imprimer ou écrire des fichiers doit être des déclarations délibérées, pas des expressions silencieuses.
 - **Mettre `if` avant le `for` étiquette au lieu de filtrer.** `[x if x % 2 == 0 else 'odd' for x in ...]` garde chaque élément, à peine renommé ; seul un `if` après le `for` élimine. Mis à la mauvaise place, les rejetés restent silencieusement.
 
 ## 🧩 Défis
 
 <details class="challenge">
-<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
+<summary>🧩 Défi, réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
 Aplatissez `[[1, 2], [3, 4], [5, 6]]` en `[1, 2, 3, 4, 5, 6]` avec une compréhension.
 
-<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>[num for row in matrix for num in row]</code> — le <code>for</code> extérieur ouvre chaque ligne, l'intérieur la déroule.</p>
+<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>[num for row in matrix for num in row]</code>, le <code>for</code> extérieur ouvre chaque ligne, l'intérieur la déroule.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
+<summary>🧩 Défi, réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
 Reliez des mots à leurs longueurs avec une compréhension de dict : `["hi", "hello", "hey"]` → `{"hi": 2, "hello": 5, "hey": 3}`.
 
-<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>{w: len(w) for w in words}</code> — le mot est la clé et sa longueur la valeur, une paire par entrée.</p>
+<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>{w: len(w) for w in words}</code>, le mot est la clé et sa longueur la valeur, une paire par entrée.</p>
 
 </div>
 </details>
@@ -159,7 +159,7 @@ Reliez des mots à leurs longueurs avec une compréhension de dict : `["hi", "he
 
 - Pourquoi `if...else` se tient-il avant le `for` dans une compréhension tandis que le `if` de filtre se traîne après ?
 - Où une compréhension franchit-elle la ligne vers une lecture plus dure qu'une boucle ? Où la tirez-vous ?
-- `await` peut-il apparaître dans une compréhension — et quelle syntaxe rend possible toute une version asynchrone ?
+- `await` peut-il apparaître dans une compréhension, et quelle syntaxe rend possible toute une version asynchrone ?
 
 ## ✅ Vérification rapide
 

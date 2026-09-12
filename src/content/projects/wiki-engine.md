@@ -1,6 +1,6 @@
 ---
 title: "Build a Wiki Engine"
-description: "Store Markdown pages on disk, render them to HTML, keep version-history diffs, compute [[backlink]] maps, and rank full-text search results — pure standard library."
+description: "Store Markdown pages on disk, render them to HTML, keep version-history diffs, compute [[backlink]] maps, and rank full-text search results, pure standard library."
 difficulty: "intermediate"
 estimatedMinutes: 60
 tags: ["markdown", "cli", "automation"]
@@ -20,7 +20,7 @@ prerequisites:
 
 A wiki is *pages on disk plus three indexes*. The pages are Markdown files; the indexes are backlinks (which pages point here?), history (what did this page used to say?), and search (which pages mention these words?). This project builds all three from scratch with the standard library: a slug naming scheme, a tiny Markdown-lite renderer, append-only version history with diffs, a `[[Page]]` backlink map, and a tokenizing search that ranks by term frequency. When you're done you can turn your own notes into a wiki.
 
-This assumes Python 101 plus a little regex — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
+This assumes Python 101 plus a little regex, nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 
@@ -33,9 +33,9 @@ This assumes Python 101 plus a little regex — nothing from Data Analysis is re
 
 ## Where to run this
 
-**Locally with `uv`** is the primary home — a wiki is files on disk, and this engine's whole point is round-tripping through a `wiki/` folder you can open in any editor. The engine is pure standard library, so every cell runs identically in the cloud too.
+**Locally with `uv`** is the primary home, a wiki is files on disk, and this engine's whole point is round-tripping through a `wiki/` folder you can open in any editor. The engine is pure standard library, so every cell runs identically in the cloud too.
 
-**Google Colab, Kaggle Notebooks, and Binder** run all six steps unmodified — the cells create a `wiki/` directory and inspect it as they go, so the notebook *demonstrates* the engine against its own pages. The honest caveat: cloud filesystems are ephemeral, so a wiki you actually keep lives local. Use the badges to watch the engine work; use `uv` where your notes live.
+**Google Colab, Kaggle Notebooks, and Binder** run all six steps unmodified, the cells create a `wiki/` directory and inspect it as they go, so the notebook *demonstrates* the engine against its own pages. The honest caveat: cloud filesystems are ephemeral, so a wiki you actually keep lives local. Use the badges to watch the engine work; use `uv` where your notes live.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/wiki-engine/notebook.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/wiki-engine/notebook.ipynb)
@@ -43,7 +43,7 @@ This assumes Python 101 plus a little regex — nothing from Data Analysis is re
 
 ## Setup
 
-Create the project. The engine uses the standard library only — `re` for slugging/parsing, `json` for history, `difflib` for diffs, and `pathlib` for the file tree. No packages to install.
+Create the project. The engine uses the standard library only, `re` for slugging/parsing, `json` for history, `difflib` for diffs, and `pathlib` for the file tree. No packages to install.
 
 ```bash
 uv init wiki-engine
@@ -54,16 +54,16 @@ cd wiki-engine
 uv run python -c "import re, json, difflib; from pathlib import Path; print('stdlib ok')"
 ```
 
-Seriously, that's the whole dependency list. `difflib` gives you `unified_diff` for free — the same output `git diff` shows — `re` carves slugs and `[[links]]` out of text, and `pathlib` makes "list every `.md` file" a one-liner. The `wiki/` directory you'll create in Step 1 is the database.
+Seriously, that's the whole dependency list. `difflib` gives you `unified_diff` for free, the same output `git diff` shows, `re` carves slugs and `[[links]]` out of text, and `pathlib` makes "list every `.md` file" a one-liner. The `wiki/` directory you'll create in Step 1 is the database.
 
 **✅ Checklist**
 
 - ✅ `uv init wiki-engine` created a project with a `pyproject.toml`.
-- ✅ The import check printed `stdlib ok` — no packages added.
+- ✅ The import check printed `stdlib ok`, no packages added.
 
 ## Step 1: Model a page and slugify its name
 
-A wiki's simplest truth is one file per page. This step defines the `Page` dataclass (`slug`, `title`, `body`), decides where files live (`wiki/<slug>.md`), and writes the slugifier — the function that turns "Data Analysis" into a URL-safe, unique `data-analysis`.
+A wiki's simplest truth is one file per page. This step defines the `Page` dataclass (`slug`, `title`, `body`), decides where files live (`wiki/<slug>.md`), and writes the slugifier, the function that turns "Data Analysis" into a URL-safe, unique `data-analysis`.
 
 ### 1.1 Write `Page`, `slugify`, and `page_path`
 
@@ -95,11 +95,11 @@ for title in ["Data Analysis", "Sci-kit & Tools!", "  Pandas  "]:
     print(f"{title!r:26} -> {slugify(title)}")
 ```
 
-The slug is the wiki's *identity*: it's what filenames, `[[links]]`, and search results all key on, so making it deterministic ("Data Analysis" and "data analysis" land on the same file) prevents duplicate pages for the same idea. `re.sub(r"[^a-z0-9]+", "-", ...)` collapses spaces, punctuation, and even multiple separators into one hyphen, and the trailing `.strip("-")` keeps edges clean. Nesting `WIKI_DIR / f"{slug}.md"` inside `page_path` funnels every file write through one convention — no page can escape the wiki folder.
+The slug is the wiki's *identity*: it's what filenames, `[[links]]`, and search results all key on, so making it deterministic ("Data Analysis" and "data analysis" land on the same file) prevents duplicate pages for the same idea. `re.sub(r"[^a-z0-9]+", "-", ...)` collapses spaces, punctuation, and even multiple separators into one hyphen, and the trailing `.strip("-")` keeps edges clean. Nesting `WIKI_DIR / f"{slug}.md"` inside `page_path` funnels every file write through one convention, no page can escape the wiki folder.
 
 **🎯 Expected output:** `'Data Analysis'            -> data-analysis`, `'Sci-kit & Tools!'         -> sci-kit-tools`, `'  Pandas  '               -> pandas`.
 
-**🩹 If it's off:** If slug gaps stay as spaces, the `strip("-")` edge-trim ran but the collapse regex didn't — check the `+` quantifier. If `Sci-kit & Tools!` renders as `sci-kit--tools`, a double hyphen wasn't merged — again the `+`. If a slug is empty, the title was all non-ASCII/emoji; decide a fallback (`"page"`) before pages start colliding.
+**🩹 If it's off:** If slug gaps stay as spaces, the `strip("-")` edge-trim ran but the collapse regex didn't, check the `+` quantifier. If `Sci-kit & Tools!` renders as `sci-kit--tools`, a double hyphen wasn't merged, again the `+`. If a slug is empty, the title was all non-ASCII/emoji; decide a fallback (`"page"`) before pages start colliding.
 
 ### 1.2 Verify slugging
 
@@ -111,7 +111,7 @@ The slug is the wiki's *identity*: it's what filenames, `[[links]]`, and search 
 
 **🤔 Socratic Question(s)**
 
-- Two real pages "Plotting" and "Plotting & Plots" slug into the same file — one clobbers the other silently. What would a *collision check* look like at save time, and is failing loudly better than overwriting?
+- Two real pages "Plotting" and "Plotting & Plots" slug into the same file, one clobbers the other silently. What would a *collision check* look like at save time, and is failing loudly better than overwriting?
 - Slugs are derived from titles here. If a user renames "Data Analysis" to "Analysis", what happens to every file and every `[[Data Analysis]]` link? Where does that argue for an *immutable* slug that outlives title edits?
 
 ## Step 2: Read, write, and render pages
@@ -150,19 +150,19 @@ save_page(demo)
 print(render_html(load_page("welcome")))
 ```
 
-The `# Title`-first-line convention means the file is both a spec and a page: any editor can open `wiki/welcome.md`, change text under the heading, and the wiki picks it up — no hidden database schema. `render_html` deliberately converts *exactly* `**bold**` and `[[wiki-links]]` and wraps everything else in `<p>`; a teacher-aware subset beats a half-baked full Markdown parser, and the two regexes are the whole "renderer". `load_page` round-trips body as-is, so edits made in a text editor survive guessing.
+The `# Title`-first-line convention means the file is both a spec and a page: any editor can open `wiki/welcome.md`, change text under the heading, and the wiki picks it up, no hidden database schema. `render_html` deliberately converts *exactly* `**bold**` and `[[wiki-links]]` and wraps everything else in `<p>`; a teacher-aware subset beats a half-baked full Markdown parser, and the two regexes are the whole "renderer". `load_page` round-trips body as-is, so edits made in a text editor survive guessing.
 
-**🎯 Expected output:** `<h1>Welcome</h1>\n<p>This wiki covers <strong>Python</strong>. See <a href="/Data Analysis">Data Analysis</a>.</p>` — note the link targets the raw title; link-resolution to *slugs* comes in Step 5.
+**🎯 Expected output:** `<h1>Welcome</h1>\n<p>This wiki covers <strong>Python</strong>. See <a href="/Data Analysis">Data Analysis</a>.</p>`, note the link targets the raw title; link-resolution to *slugs* comes in Step 5.
 
-**🩹 If it's off:** If the title leaks into the body, the `lines[2:]` slice assumed a blank line after `# Title` when there is none. If nothing renders bold, the `\*\*(.+?)\*\*` regex is missing the `?` (greedy) and spans whole paragraphs. If `save_page` raised `FileNotFoundError`, `WIKI_DIR.mkdir` never ran — create the folder once up front.
+**🩹 If it's off:** If the title leaks into the body, the `lines[2:]` slice assumed a blank line after `# Title` when there is none. If nothing renders bold, the `\*\*(.+?)\*\*` regex is missing the `?` (greedy) and spans whole paragraphs. If `save_page` raised `FileNotFoundError`, `WIKI_DIR.mkdir` never ran, create the folder once up front.
 
 ### 2.2 Verify the round trip
 
 **✅ Checklist**
 
 - ✅ `render_html(load_page("welcome"))` matches the output above verbatim.
-- ✅ Editing `wiki/welcome.md` in any text editor and re-loading shows the edit — files are the source of truth, not Python.
-- ✅ A page with no links renders as plain `<p>` paragraphs — no link regex crash on absence.
+- ✅ Editing `wiki/welcome.md` in any text editor and re-loading shows the edit, files are the source of truth, not Python.
+- ✅ A page with no links renders as plain `<p>` paragraphs, no link regex crash on absence.
 
 **🤔 Socratic Question(s)**
 
@@ -200,11 +200,11 @@ def diff_versions(slug: str, index: int = -1) -> str:
         entry["before"].splitlines(), entry["after"].splitlines(), lineterm=""))
 ```
 
-The *append* in `history.setdefault(...).append(...)` is the discipline that makes history trustworthy: older versions are never edited, only added to, so the log is an audit trail rather than a cache. `difflib.unified_diff` is exactly the algorithm `git diff` uses; returning it as a string keeps formatting out of the data layer. Writing the whole JSON on every save is fine at wiki scale and makes the file inspectable by hand — a trade-off any big version store has already made differently, which the question below pokes at.
+The *append* in `history.setdefault(...).append(...)` is the discipline that makes history trustworthy: older versions are never edited, only added to, so the log is an audit trail rather than a cache. `difflib.unified_diff` is exactly the algorithm `git diff` uses; returning it as a string keeps formatting out of the data layer. Writing the whole JSON on every save is fine at wiki scale and makes the file inspectable by hand, a trade-off any big version store has already made differently, which the question below pokes at.
 
 **🎯 Expected output:** After two edits, `history_for("welcome")` has two entries, and `print(diff_versions("welcome", -1))` shows `-` and `+` lines marking exactly what changed.
 
-**🩹 If it's off:** If history never grows beyond one entry, `log_version` is being called with the *same* `before` on every save (the old text was captured too late). If `diff_versions(-1)` shows a full-file rewrite, the `after` was saved as an empty body (caption the non-empty case). If JSON gets written mangled, a body containing raw `\n` wasn't `json.dumps`-escaped — it always is by `write_text(json.dumps(...))`, so suspect manual edits to `history.json`.
+**🩹 If it's off:** If history never grows beyond one entry, `log_version` is being called with the *same* `before` on every save (the old text was captured too late). If `diff_versions(-1)` shows a full-file rewrite, the `after` was saved as an empty body (caption the non-empty case). If JSON gets written mangled, a body containing raw `\n` wasn't `json.dumps`-escaped, it always is by `write_text(json.dumps(...))`, so suspect manual edits to `history.json`.
 
 ### 3.2 Verify history
 
@@ -217,9 +217,9 @@ The *append* in `history.setdefault(...).append(...)` is the discipline that mak
 **🤔 Socratic Question(s)**
 
 - History stores full `before`/`after` snapshots. For a large wiki that's O(file × edits) disk. What does storing *deltas* (only the changed regions per version) save, and what does reconstruction cost at read time?
-- This history records page *text* but not *who* edited or *when*. Which of those two latents — author or timestamp — would you add first, and where does a wiki's history stop being a safety net and start being a governance record?
+- This history records page *text* but not *who* edited or *when*. Which of those two latents, author or timestamp, would you add first, and where does a wiki's history stop being a safety net and start being a governance record?
 
-## Step 4: Backlinks — the reverse page map
+## Step 4: Backlinks, the reverse page map
 
 Links are only half a wiki; the *backlink* (who points at me?) is the other half, and it's what turns pages into a navigable web. This step scans every page body for `[[Target]]` and builds the reverse map `target -> [pages that link to it]`.
 
@@ -246,11 +246,11 @@ for slug, source in sorted(backlink_index().items()):
     print(f"{slug:16} <- {', '.join(source)}")
 ```
 
-`outbound_links` answers "where does this page point?" and `backlink_index` inverts it into "what points here?" — the standard index inversion, one file-glob and one `setdefault` at a time. Keying by `slugify(target)` is the payoff of Step 1's deterministic slugs: a body saying `[[Data Analysis]]` and one saying `[[data-analysis]]` both register under `data-analysis`, so the index survives naming variance. Walking `WIKI_DIR.glob("*.md")` means the file tree *is* the page list — no separate registry to keep in sync.
+`outbound_links` answers "where does this page point?" and `backlink_index` inverts it into "what points here?", the standard index inversion, one file-glob and one `setdefault` at a time. Keying by `slugify(target)` is the payoff of Step 1's deterministic slugs: a body saying `[[Data Analysis]]` and one saying `[[data-analysis]]` both register under `data-analysis`, so the index survives naming variance. Walking `WIKI_DIR.glob("*.md")` means the file tree *is* the page list, no separate registry to keep in sync.
 
 **🎯 Expected output:** With the `welcome` page ("See [[Data Analysis]]") and a matching `data-analysis` page, the printout shows `data-analysis     <- welcome`.
 
-**🩹 If it's off:** If a target maps to the empty list, backlinked pages exist but the target-scan found no source — check the regex targets came from body text. If backlinks list the page itself, `findall` is reading the *title* line (links live in bodies only; `[[self]]` is honestly self-referential — decide whether it counts). If a slug tuple-but-scrambled list appears, multiple sources link one target and that's correct — the ordering is just glob order.
+**🩹 If it's off:** If a target maps to the empty list, backlinked pages exist but the target-scan found no source, check the regex targets came from body text. If backlinks list the page itself, `findall` is reading the *title* line (links live in bodies only; `[[self]]` is honestly self-referential, decide whether it counts). If a slug tuple-but-scrambled list appears, multiple sources link one target and that's correct, the ordering is just glob order.
 
 ### 4.2 Verify backlinks
 
@@ -263,7 +263,7 @@ for slug, source in sorted(backlink_index().items()):
 **🤔 Socratic Question(s)**
 
 - A link to `[[Missing Page]]` registers a backlink entry for a page that doesn't exist. What would your engine report for "orphan" targets, and why does a dead-link report matter more in a wiki than in a book?
-- Backlinks here are computed on every call. If a wiki grows to thousands of pages, what would you *cache* — and what event would invalidate that cache so it never serves stale links?
+- Backlinks here are computed on every call. If a wiki grows to thousands of pages, what would you *cache*, and what event would invalidate that cache so it never serves stale links?
 
 ## Step 5: Full-text search
 
@@ -299,11 +299,11 @@ for slug, score in search("pandas grouping"):
     print(f"{score:3}  {slug}")
 ```
 
-Tokenizing title *and* body means a page whose title says "Pandas" ranks for a "pandas" query even if the body never spells it — pages advertise themselves. Dropping stopwords ("this", "see") is the cheapest precision win a search engine makes: `[[see]]` isn't something anyone searches for. Scoring by raw term count is deliberately naive — the question below points at why "Pandas" appearing twice in the *title* over-trusts a ten-word page — but it's a complete, honest ranking where more mentions beats fewer.
+Tokenizing title *and* body means a page whose title says "Pandas" ranks for a "pandas" query even if the body never spells it, pages advertise themselves. Dropping stopwords ("this", "see") is the cheapest precision win a search engine makes: `[[see]]` isn't something anyone searches for. Scoring by raw term count is deliberately naive, the question below points at why "Pandas" appearing twice in the *title* over-trusts a ten-word page, but it's a complete, honest ranking where more mentions beats fewer.
 
 **🎯 Expected output:** `search("pandas")` ranks a page whose title/body mentions `pandas` (score 1+) above any page that never uses the word; `search("pandas grouping")` scores the `data-analysis` page at 2 (one hit for each query term) while the `welcome` page scores 0.
 
-**🩹 If it's off:** If a one-character word like `R` (the language!) vanishes, `len(word) > 1` filtered it — that's a stopword-policy leak, remove the length gate for real use. If nothing ever matches, `tokenize` got a non-string (title `None`) or the regex class was `.`, matching punctuation. If results return in glob order regardless of score, the `key=lambda item: -item[1]` sort is missing.
+**🩹 If it's off:** If a one-character word like `R` (the language!) vanishes, `len(word) > 1` filtered it, that's a stopword-policy leak, remove the length gate for real use. If nothing ever matches, `tokenize` got a non-string (title `None`) or the regex class was `.`, matching punctuation. If results return in glob order regardless of score, the `key=lambda item: -item[1]` sort is missing.
 
 ### 5.2 Verify search
 
@@ -328,7 +328,7 @@ Tokenizing title *and* body means a page whose title says "Pandas" ranks for a "
 
 ## What you just built
 
-A complete, dependency-free wiki engine: slugified pages on disk, a Markdown-lite renderer, append-only version history with git-style diffs, a reverse `[[link]]` index, and ranked full-text search. The transferable lesson is that *a wiki is three indexes over a file tree* — same-file scan for backlinks, a log for history, a token counter for search — and that indexing is simply "precompute the answers nobody wants to recompute". Every static-site generator you've ever used is this same loop wearing a front end.
+A complete, dependency-free wiki engine: slugified pages on disk, a Markdown-lite renderer, append-only version history with git-style diffs, a reverse `[[link]]` index, and ranked full-text search. The transferable lesson is that *a wiki is three indexes over a file tree*, same-file scan for backlinks, a log for history, a token counter for search, and that indexing is simply "precompute the answers nobody wants to recompute". Every static-site generator you've ever used is this same loop wearing a front end.
 
 :::tip[Run a fuller version without any local setup]
 [`examples/wiki-engine/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/wiki-engine) in the course repo is a fuller version of the code above, with a Markdown-lite renderer that resolves links to slugs and a page-count dashboard. Clone it, or open the whole repo in a [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), and run it from there.
@@ -337,12 +337,12 @@ A complete, dependency-free wiki engine: slugified pages on disk, a Markdown-lit
 ## Where to go from here
 
 - Resolve `[[links]]` to *slugs* in the renderer (Step 2's question), so hits never render as `href="/Data Analysis"` but as `href="/data-analysis"`.
-- Add a `broken_links()` report that flags `[[Target]]` where `page_path(slugify(Target))` doesn't exist — the wiki's own dead-link scanner.
-- Store deltas instead of full snapshots in history, reconstructing a body on demand — the Step 3 question's upgrade made real.
+- Add a `broken_links()` report that flags `[[Target]]` where `page_path(slugify(Target))` doesn't exist, the wiki's own dead-link scanner.
+- Store deltas instead of full snapshots in history, reconstructing a body on demand, the Step 3 question's upgrade made real.
 - Build a precomputed inverted index for search (term → slugs), rebuild it on save, and let titles outrank body text.
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

@@ -221,7 +221,7 @@ Might produce something like:
 the old man had been a good teacher and he had a
 ```
 
-The output won't be grammatically perfect — this is a tiny model with only bigram context. But it captures real English word sequences because the bigram probabilities come from actual text.
+The output won't be grammatically perfect, this is a tiny model with only bigram context. But it captures real English word sequences because the bigram probabilities come from actual text.
 
 ## Try It
 
@@ -238,7 +238,7 @@ for word in starts:
 ## Key Takeaways
 
 - `generate_text()` chains `sample_next()` calls in a loop to build word sequences
-- Dead ends occur when a word has no known followers — handle by stopping or restarting
+- Dead ends occur when a word has no known followers, handle by stopping or restarting
 - Starting word selection dramatically affects output quality
 - Use `random.seed()` and `verbose=True` for debugging
 

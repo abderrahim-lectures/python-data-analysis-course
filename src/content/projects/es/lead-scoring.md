@@ -191,7 +191,7 @@ def conversion_by_tier(df: pd.DataFrame) -> pd.DataFrame:
 
 **🎯 Resultado esperado :** `prioritize(df)` ordena primero los leads calientes; `conversion_by_tier` muestra que los leads calientes convierten a una tasa más alta.
 
-**🩹 Si sale mal :** Si las tasas de conversión son planas entre los niveles, los pesos de la puntuación no discriminan — apriétalos.
+**🩹 Si sale mal :** Si las tasas de conversión son planas entre los niveles, los pesos de la puntuación no discriminan, apriétalos.
 
 ### 3.2 Verifica la priorización
 
@@ -314,7 +314,7 @@ def by_source(df: pd.DataFrame) -> pd.DataFrame:
 
 ## Lo que acabas de construir
 
-Un motor de puntuación de leads: un conjunto de datos de leads generado, un modelo de puntuación ponderado multifactor que clasifica los leads en niveles cold/warm/hot, ordenación priorizada del pipeline, una comparación A/B de dos esquemas de puntuación y un resumen de salud del pipeline basado en pandas. Este es el núcleo analítico de un equipo de operaciones de ventas — decidir a quién llamar, en qué orden y si el modelo actual está funcionando.
+Un motor de puntuación de leads: un conjunto de datos de leads generado, un modelo de puntuación ponderado multifactor que clasifica los leads en niveles cold/warm/hot, ordenación priorizada del pipeline, una comparación A/B de dos esquemas de puntuación y un resumen de salud del pipeline basado en pandas. Este es el núcleo analítico de un equipo de operaciones de ventas, decidir a quién llamar, en qué orden y si el modelo actual está funcionando.
 
 :::tip[Ejecuta una versión más completa sin configuración local]
 [`examples/lead-scoring/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/lead-scoring) en el repositorio del curso tiene una versión más rica con puntuación basada en ML, enrutamiento automático de leads y el CLI conectado de principio a fin. Clónalo, o abre el repositorio completo en un [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), y ejecútalo desde allí.
@@ -328,6 +328,6 @@ Un motor de puntuación de leads: un conjunto de datos de leads generado, un mod
 
 ## Comparte tu proyecto con la clase
 
-¿Construiste algo de lo que te sientas orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado — y su README tiene una guía completa y apta para principiantes sobre cómo añadir el tuyo mediante una **pull request**, incluso si nunca has usado git: hacer un fork del repositorio, crear una rama, hacer commit de tus archivos y abrir la PR, paso a paso. No se asume ninguna experiencia previa con git.
+¿Construiste algo de lo que te sientas orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado, y su README tiene una guía completa y apta para principiantes sobre cómo añadir el tuyo mediante una **pull request**, incluso si nunca has usado git: hacer un fork del repositorio, crear una rama, hacer commit de tus archivos y abrir la PR, paso a paso. No se asume ninguna experiencia previa con git.
 
 Bienvenido a escribir Python fuera del navegador. 🎓

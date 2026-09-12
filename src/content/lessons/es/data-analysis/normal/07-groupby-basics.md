@@ -47,9 +47,9 @@ quiz:
 
 GroupBy es una de las características más potentes de pandas. Sigue un patrón de tres pasos:
 
-1. **Dividir** — divide el DataFrame en grupos según una o más columnas
-2. **Aplicar** — calcula una función en cada grupo de forma independiente
-3. **Combinar** — une los resultados de nuevo en un solo DataFrame
+1. **Dividir**, divide el DataFrame en grupos según una o más columnas
+2. **Aplicar**, calcula una función en cada grupo de forma independiente
+3. **Combinar**, une los resultados de nuevo en un solo DataFrame
 
 ```python
 import pandas as pd

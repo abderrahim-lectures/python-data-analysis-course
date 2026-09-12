@@ -19,9 +19,9 @@ learningObjectives:
 
 # 🛠️ 🧹 Construir un Formateador de Código
 
-El código real llega desordenado: espacios al final de las líneas, `#comentario` sin espacio, dos líneas en blanco donde solo va una, e indentación que se saltó la regla de 4 espacios. Este proyecto construye un **formateador de código** — una pequeña herramienta de terminal que lee un archivo de Python, aplica solo normalizaciones *seguras* de espacios y comentarios, compacta corridas de líneas en blanco, verifica la indentación, imprime un reporte de exactamente qué cambió y escribe la copia limpia en `formatted.py`. Se limita deliberadamente a espacios y separación de comentarios (nunca renombra ni reordena código), así que ejecutarla no puede romper el programa. Solo librería estándar, determinista, y se convierte en un comando real: `python3 code_formatter.py messy.py`.
+El código real llega desordenado: espacios al final de las líneas, `#comentario` sin espacio, dos líneas en blanco donde solo va una, e indentación que se saltó la regla de 4 espacios. Este proyecto construye un **formateador de código**, una pequeña herramienta de terminal que lee un archivo de Python, aplica solo normalizaciones *seguras* de espacios y comentarios, compacta corridas de líneas en blanco, verifica la indentación, imprime un reporte de exactamente qué cambió y escribe la copia limpia en `formatted.py`. Se limita deliberadamente a espacios y separación de comentarios (nunca renombra ni reordena código), así que ejecutarla no puede romper el programa. Solo librería estándar, determinista, y se convierte en un comando real: `python3 code_formatter.py messy.py`.
 
-Esto asume manejo de archivos y métodos básicos de strings. Es un proyecto opcional y no calificado — consulta [Proyectos del mundo real](/es/proyectos) para la lista completa, en crecimiento.
+Esto asume manejo de archivos y métodos básicos de strings. Es un proyecto opcional y no calificado, consulta [Proyectos del mundo real](/es/proyectos) para la lista completa, en crecimiento.
 
 ## 🎯 Lo que harás
 
@@ -33,7 +33,7 @@ Esto asume manejo de archivos y métodos básicos de strings. Es un proyecto opc
 
 ## Dónde ejecutar esto
 
-**Localmente** es el hogar natural — la herramienta trabaja sobre un archivo en tu propio directorio.
+**Localmente** es el hogar natural, la herramienta trabaja sobre un archivo en tu propio directorio.
 
 ```bash
 mkdir code-formatter && cd code-formatter
@@ -57,7 +57,7 @@ mkdir code-formatter && cd code-formatter
 touch code_formatter.py
 ```
 
-Copia este archivo como `messy.py`. Los espacios finales existen a propósito — no dejes que tu editor los recorte antes del experimento:
+Copia este archivo como `messy.py`. Los espacios finales existen a propósito, no dejes que tu editor los recorte antes del experimento:
 
 ```python
 #sum module
@@ -78,7 +78,7 @@ def greet(name):
 
 **🤔 Pregunta(s) socrática(s)**
 
-- Algunas transformaciones son *seguras* (eliminar espacios finales nunca cambia lo que hace un programa) y otras no (reordenar código). ¿Por qué "solo seguro" es un buen primer formateador — y qué rompería en un archivo lleno de comentarios *entre* funciones si reordenaras líneas?
+- Algunas transformaciones son *seguras* (eliminar espacios finales nunca cambia lo que hace un programa) y otras no (reordenar código). ¿Por qué "solo seguro" es un buen primer formateador, y qué rompería en un archivo lleno de comentarios *entre* funciones si reordenaras líneas?
 - La línea de la muestra `   return msg   #too much indent` comete tres crímenes a la vez. Antes de escribir código, nombra los tres de memoria.
 
 ## Paso 1: Leer e inspeccionar el archivo
@@ -87,7 +87,7 @@ Primero debes *ver* el desastre. El Paso 1 lee `messy.py` e informa dónde está
 
 ### 1.1 Leer todas las líneas
 
-**👟 Pista inicial :** `open(...).read().splitlines()` — líneas sin el `\n` final, así cada entrada es contenido puro.
+**👟 Pista inicial :** `open(...).read().splitlines()`, líneas sin el `\n` final, así cada entrada es contenido puro.
 
 ```python
 # code_formatter.py
@@ -103,7 +103,7 @@ for i, ln in enumerate(lines, 1):
     print(f"{i:>2} |{ln}|")
 ```
 
-`splitlines()` conserva el *contenido* de cada línea pero descarta el salto de línea, así el reporte puede mostrar los caracteres exactos de una línea — los espacios finales se vuelven visibles dentro de los delimitadores `|…|`. Las barras `|` importan: hacen legible el espacio invisible.
+`splitlines()` conserva el *contenido* de cada línea pero descarta el salto de línea, así el reporte puede mostrar los caracteres exactos de una línea, los espacios finales se vuelven visibles dentro de los delimitadores `|…|`. Las barras `|` importan: hacen legible el espacio invisible.
 
 **🎯 Resultado esperado :**
 
@@ -121,7 +121,7 @@ lines: 10
 10 |   return msg   #too much indent|
 ```
 
-**🩹 Si sale mal :** Si la línea 1 muestra `#sum module` sin espacios finales, tu editor recortó automáticamente — vuelve a crear `messy.py` con un `echo`/pegado simple. Si la línea 7 no muestra nada dentro de `|   |`, la línea de solo espacios sobrevivió — bien.
+**🩹 Si sale mal :** Si la línea 1 muestra `#sum module` sin espacios finales, tu editor recortó automáticamente, vuelve a crear `messy.py` con un `echo`/pegado simple. Si la línea 7 no muestra nada dentro de `|   |`, la línea de solo espacios sobrevivió, bien.
 
 ### 1.2 Encontrar las marcas de suciedad
 
@@ -146,7 +146,7 @@ for i, ln in enumerate(lines, 1):
 print("indent warnings:", indent_bad)
 ```
 
-`ln != ln.rstrip()` es la prueba de espacios finales — `rstrip` elimina espacios solo del *final*, así que cualquier diferencia es basura final. La indentación se mide *contando* los espacios iniciales: `lstrip(" ")` da el cuerpo, y `len(ln) - len(body)` es el sangrado inicial — se marca cuando no es un múltiplo de 4.
+`ln != ln.rstrip()` es la prueba de espacios finales, `rstrip` elimina espacios solo del *final*, así que cualquier diferencia es basura final. La indentación se mide *contando* los espacios iniciales: `lstrip(" ")` da el cuerpo, y `len(ln) - len(body)` es el sangrado inicial, se marca cuando no es un múltiplo de 4.
 
 **🎯 Resultado esperado :**
 
@@ -163,8 +163,8 @@ indent warnings: [(9, 2), (10, 3)]
 **✅ Lista de verificación**
 
 - ✅ Se leyeron 10 líneas; espacios finales en 1, 2, 5, 7 (la línea 7 es de solo espacios).
-- ✅ Hay comentarios en 1, 2, 10 — los tres pegados al texto sin espacio después de `#`.
-- ✅ Advertencias de indentación en (9, 2) y (10, 3) — emitir una advertencia *sin* reescribir en silencio mantiene la herramienta honesta.
+- ✅ Hay comentarios en 1, 2, 10, los tres pegados al texto sin espacio después de `#`.
+- ✅ Advertencias de indentación en (9, 2) y (10, 3), emitir una advertencia *sin* reescribir en silencio mantiene la herramienta honesta.
 
 **🤔 Pregunta(s) socrática(s)**
 
@@ -194,9 +194,9 @@ def fix_line(ln):
     return pre.rstrip() + "  # " + comment
 ```
 
-El corte `partition("#")` mantiene el lado izquierdo (código) separado del comentario, así cada lado se normaliza de forma independiente. Comentario en la columna 0 → `# sum module`; comentario en línea → código, dos espacios, `# comentario`. `#!` (un encabezado de script shebang) se deja solo — tiene su propia convención.
+El corte `partition("#")` mantiene el lado izquierdo (código) separado del comentario, así cada lado se normaliza de forma independiente. Comentario en la columna 0 → `# sum module`; comentario en línea → código, dos espacios, `# comentario`. `#!` (un encabezado de script shebang) se deja solo, tiene su propia convención.
 
-**🎯 Resultado esperado :** Una función, todavía sin salida — pero razona qué hace con la línea 10: `   return msg   #too much indent` → `   return msg  # too much indent`.
+**🎯 Resultado esperado :** Una función, todavía sin salida, pero razona qué hace con la línea 10: `   return msg   #too much indent` → `   return msg  # too much indent`.
 
 ### 2.2 Aplicarlo a todo el archivo
 
@@ -224,7 +224,7 @@ for i, ln in enumerate(fixed, 1):
 10 |   return msg  # too much indent|
 ```
 
-**🩹 Si sale mal :** Si la línea 1 se volvió `  # sum module`, la rama de columna 0 (`pre.strip() == ""`) no se ejecutó — verifica que *particionaste* antes de inspeccionar `pre`. Si `#` todavía toca el texto, se omitió `comment.strip()` y el espacio nunca se insertó.
+**🩹 Si sale mal :** Si la línea 1 se volvió `  # sum module`, la rama de columna 0 (`pre.strip() == ""`) no se ejecutó, verifica que *particionaste* antes de inspeccionar `pre`. Si `#` todavía toca el texto, se omitió `comment.strip()` y el espacio nunca se insertó.
 
 ### 2.3 Verifica la limpieza
 
@@ -232,11 +232,11 @@ for i, ln in enumerate(fixed, 1):
 
 - ✅ Espacios finales eliminados de 1, 2, 5, 7.
 - ✅ `#sum module` → `# sum module`; `#add two numbers` → `# add two numbers`; `#too much indent` → `# too much indent`.
-- ✅ El código y el comentario mantienen exactamente dos espacios entre ellos — el contrato `pre.rstrip() + "  # "`.
+- ✅ El código y el comentario mantienen exactamente dos espacios entre ellos, el contrato `pre.rstrip() + "  # "`.
 
 **🤔 Pregunta(s) socrática(s)**
 
-- `fix_line` trata el lado *izquierdo* como código. ¿Qué pasaría con un *string* de Python que contenga `#` (`s = "color #ff00aa"`)? ¿Vale la pena un formateador consciente de strings para una primera herramienta — y qué dice eso sobre el límite del "subconjunto seguro"?
+- `fix_line` trata el lado *izquierdo* como código. ¿Qué pasaría con un *string* de Python que contenga `#` (`s = "color #ff00aa"`)? ¿Vale la pena un formateador consciente de strings para una primera herramienta, y qué dice eso sobre el límite del "subconjunto seguro"?
 - `#!` se excluye con un caso especial. Los comentarios de línea bash (`#!`, `##`), los docstrings (`"""`) y los strings en línea sobrecargan `#`. ¿Qué única regla de oro evita que un formateador principiante corrompa archivos válidos?
 
 ## Paso 3: Compactar corridas en blanco y forzar una nueva línea final
@@ -264,7 +264,7 @@ for i, ln in enumerate(collapsed, 1):
     print(f"{i:>2} |{ln}|")
 ```
 
-`strip() == ""` llama en blanco a una línea *tanto* si es una línea realmente vacía como si es una línea de solo espacios (`   `) — ambas son maquetación, ninguna lleva contenido. La protección `out and out[-1].strip() == ""` conserva solo la *primera* de una corrida, así 2+ blancos se compactan a 1 en todas partes en una sola pasada.
+`strip() == ""` llama en blanco a una línea *tanto* si es una línea realmente vacía como si es una línea de solo espacios (`   `), ambas son maquetación, ninguna lleva contenido. La protección `out and out[-1].strip() == ""` conserva solo la *primera* de una corrida, así 2+ blancos se compactan a 1 en todas partes en una sola pasada.
 
 **🎯 Resultado esperado :**
 
@@ -281,7 +281,7 @@ lines after collapse: 9
  9 |   return msg  # too much indent|
 ```
 
-**🩹 Si sale mal :** Si la línea 7 todavía se imprime como en blanco, la línea de solo espacios no se volvió en blanco con `strip() == ""` — sí lo hizo, salvo que la línea contenga caracteres invisibles que no son espacios. Si una *corrida de tres* deja dos blancos, la protección revisó el `ln` crudo en lugar de la última línea añadida.
+**🩹 Si sale mal :** Si la línea 7 todavía se imprime como en blanco, la línea de solo espacios no se volvió en blanco con `strip() == ""`, sí lo hizo, salvo que la línea contenga caracteres invisibles que no son espacios. Si una *corrida de tres* deja dos blancos, la protección revisó el `ln` crudo en lugar de la última línea añadida.
 
 ### 3.2 La nueva línea final
 
@@ -298,7 +298,7 @@ print("input bytes:", len(open("messy.py").read().encode()),
       "output bytes:", len(text.encode()))
 ```
 
-La última línea de un archivo debe terminar con una nueva línea — la convención POSIX, y lo que `join + "\n"` garantiza incluso cuando la fuente lo olvidó. Los conteos de bytes son una prueba rápida de salud: la limpieza *encoge* el archivo (177 → 166 bytes) porque el espacio basura son bytes reales.
+La última línea de un archivo debe terminar con una nueva línea, la convención POSIX, y lo que `join + "\n"` garantiza incluso cuando la fuente lo olvidó. Los conteos de bytes son una prueba rápida de salud: la limpieza *encoge* el archivo (177 → 166 bytes) porque el espacio basura son bytes reales.
 
 **🎯 Resultado esperado :**
 
@@ -307,7 +307,7 @@ ends with newline: True
 input bytes: 177 output bytes: 166
 ```
 
-**🩹 Si sale mal :** Si `ends with newline: False`, el `+ "\n"` quedó antes del `join`. Si los bytes de salida son *mayores*, la normalización de comentarios agregó espacios más rápido de lo que el recorte final los eliminó — mide con honestidad, ese es el veredicto de la herramienta.
+**🩹 Si sale mal :** Si `ends with newline: False`, el `+ "\n"` quedó antes del `join`. Si los bytes de salida son *mayores*, la normalización de comentarios agregó espacios más rápido de lo que el recorte final los eliminó, mide con honestidad, ese es el veredicto de la herramienta.
 
 ### 3.3 Verifica la compactación
 
@@ -319,8 +319,8 @@ input bytes: 177 output bytes: 166
 
 **🤔 Pregunta(s) socrática(s)**
 
-- `build_text` agrega un `\n` para todo el archivo. ¿Por qué ese es el *único* salto de línea que ese conteo necesita — y qué haría `"\n".join(lines)` *sin* la nueva línea final a `splitlines()` en la siguiente lectura?
-- La compactación de líneas en blanco es idempotente (ejecutarla dos veces no cambia nada la segunda). ¿Por qué la idempotencia es una *buena propiedad* para un formateador — y qué transformación de este proyecto *no* es idempotente?
+- `build_text` agrega un `\n` para todo el archivo. ¿Por qué ese es el *único* salto de línea que ese conteo necesita, y qué haría `"\n".join(lines)` *sin* la nueva línea final a `splitlines()` en la siguiente lectura?
+- La compactación de líneas en blanco es idempotente (ejecutarla dos veces no cambia nada la segunda). ¿Por qué la idempotencia es una *buena propiedad* para un formateador, y qué transformación de este proyecto *no* es idempotente?
 
 ## Paso 4: Diagnóstico de indentación
 
@@ -341,7 +341,7 @@ for i, ln in enumerate(collapsed, 1):
             print(f"  line {i}: {lead} spaces (should be a multiple of 4)")
 ```
 
-El formateador se niega a *adivinar* el arreglo — `2` espacios en la línea 8 y `3` en la 9 son ambiguos (`2` pertenece bajo el `def`, pero la herramienta no puede saber el contexto), así que los expone ante el ojo del desarrollador.
+El formateador se niega a *adivinar* el arreglo, `2` espacios en la línea 8 y `3` en la 9 son ambiguos (`2` pertenece bajo el `def`, pero la herramienta no puede saber el contexto), así que los expone ante el ojo del desarrollador.
 
 **🎯 Resultado esperado :**
 
@@ -351,7 +351,7 @@ INDENT WARNINGS
   line 9: 3 spaces (should be a multiple of 4)
 ```
 
-**🩹 Si sale mal :** Si las advertencias nombran líneas distintas, la lista compactada tiene posiciones diferentes que `messy.py` — el reporte habla del texto *actual*. Si no se imprime nada, `lstrip(" ")` sobre una línea indentada con tab oculta el sangrado (ver la pregunta socrática abajo).
+**🩹 Si sale mal :** Si las advertencias nombran líneas distintas, la lista compactada tiene posiciones diferentes que `messy.py`, el reporte habla del texto *actual*. Si no se imprime nada, `lstrip(" ")` sobre una línea indentada con tab oculta el sangrado (ver la pregunta socrática abajo).
 
 ### 4.2 El contrato de tabs
 
@@ -363,24 +363,24 @@ has_tabs = any("\t" in ln for ln in collapsed)
 print("tabs found in source:", has_tabs)
 ```
 
-`\t` está prohibido en la muestra (y normalmente en código Python según PEP 8). La verificación es un solo `any(...)` sobre las líneas; si se encuentra, `.expandtabs(4)` las reescribiría — pero como `messy.py` no tiene ninguno, la respuesta impresa es `False`, y la historia del tab queda como un contrato documentado en lugar de una mutación oculta.
+`\t` está prohibido en la muestra (y normalmente en código Python según PEP 8). La verificación es un solo `any(...)` sobre las líneas; si se encuentra, `.expandtabs(4)` las reescribiría, pero como `messy.py` no tiene ninguno, la respuesta impresa es `False`, y la historia del tab queda como un contrato documentado en lugar de una mutación oculta.
 
 **🎯 Resultado esperado :** `tabs found in source: False`
 
-**🩹 Si sale mal :** Si se imprime `True`, tu copia ganó un tab en algún lugar — decide: mantenlo como diagnóstico (reporta la línea) o expándelo con `.expandtabs(4)`, reemplazando la contabilidad posterior de espacios.
+**🩹 Si sale mal :** Si se imprime `True`, tu copia ganó un tab en algún lugar, decide: mantenlo como diagnóstico (reporta la línea) o expándelo con `.expandtabs(4)`, reemplazando la contabilidad posterior de espacios.
 
 ### 4.3 Verifica los diagnósticos
 
 **✅ Lista de verificación**
 
-- ✅ Las advertencias nombran las líneas 8 (2 espacios) y 9 (3 espacios) — ambas sentencias, no comentarios.
+- ✅ Las advertencias nombran las líneas 8 (2 espacios) y 9 (3 espacios), ambas sentencias, no comentarios.
 - ✅ `tabs found in source: False`.
-- ✅ En este paso no se *escribió* nada — el diagnóstico es de solo lectura por diseño.
+- ✅ En este paso no se *escribió* nada, el diagnóstico es de solo lectura por diseño.
 
 **🤔 Pregunta(s) socrática(s)**
 
-- Una línea indentada con un *tab* falla silenciosamente `lstrip(" ")` (su sangrado es invisible). ¿Qué único cambio hace que el diagnóstico también capture tabs — y qué ancho de tab (4 vs 8) asumiría la regla `% 4`?
-- `def` está en la columna 0, su cuerpo en 4, los cuerpos anidados en 8. Dados esos tres hechos, ¿existe *alguna* regla inequívoca para "arreglar" los espacios iniciales de una línea indentada — o la advertencia es el producto correcto aquí?
+- Una línea indentada con un *tab* falla silenciosamente `lstrip(" ")` (su sangrado es invisible). ¿Qué único cambio hace que el diagnóstico también capture tabs, y qué ancho de tab (4 vs 8) asumiría la regla `% 4`?
+- `def` está en la columna 0, su cuerpo en 4, los cuerpos anidados en 8. Dados esos tres hechos, ¿existe *alguna* regla inequívoca para "arreglar" los espacios iniciales de una línea indentada, o la advertencia es el producto correcto aquí?
 
 ## Paso 5: Guardar el resultado y convertirlo en un CLI
 
@@ -400,7 +400,7 @@ print("formatted.py lines:", len(again.splitlines()))
 print("round-trip identical:", again == text)
 ```
 
-Persistir el resultado hace que la herramienta sea *útil* — `messy.py` queda como el espécimen, `formatted.py` es la copia limpia. Releer y comparar `== text` es la misma disciplina de round-trip sin pérdidas que usarías en cualquier pipeline: escribir, leer de vuelta, verificar igualdad.
+Persistir el resultado hace que la herramienta sea *útil*, `messy.py` queda como el espécimen, `formatted.py` es la copia limpia. Releer y comparar `== text` es la misma disciplina de round-trip sin pérdidas que usarías en cualquier pipeline: escribir, leer de vuelta, verificar igualdad.
 
 **🎯 Resultado esperado :**
 
@@ -409,7 +409,7 @@ formatted.py lines: 9
 round-trip identical: True
 ```
 
-**🩹 Si sale mal :** Si el round-trip dice `False`, el manejo extra de `"\n"` o los espacios finales cambiaron — compara `repr(text)` contra `repr(again)`.
+**🩹 Si sale mal :** Si el round-trip dice `False`, el manejo extra de `"\n"` o los espacios finales cambiaron, compara `repr(text)` contra `repr(again)`.
 
 ### 5.2 El despachador
 
@@ -433,7 +433,7 @@ if __name__ == "__main__":
     format_file(sys.argv[1])
 ```
 
-Todo el pipeline — leer, arreglar, compactar, unir, escribir, resumir — es ahora *una* función de una ruta de archivo. `sys.argv[1]` lo convierte en un CLI: escribe `python3 code_formatter.py messy.py` y la herramienta edita desde la línea de comandos.
+Todo el pipeline, leer, arreglar, compactar, unir, escribir, resumir, es ahora *una* función de una ruta de archivo. `sys.argv[1]` lo convierte en un CLI: escribe `python3 code_formatter.py messy.py` y la herramienta edita desde la línea de comandos.
 
 **🎯 Vamos a ejecutarlo :**
 
@@ -447,7 +447,7 @@ python3 code_formatter.py messy.py
 messy.py: 10 -> 9 lines; 4 trailing-whitespace fixes; see formatted.py
 ```
 
-**🩹 Si sale mal :** Si aparece un `IndexError`, faltó `sys.argv[1]` (ejecútalo *con* el nombre del archivo). Si los conteos no dan 10→9 y 4, `format_file` releyó un `formatted.py` que ya existía — siempre opera sobre el archivo espécimen.
+**🩹 Si sale mal :** Si aparece un `IndexError`, faltó `sys.argv[1]` (ejecútalo *con* el nombre del archivo). Si los conteos no dan 10→9 y 4, `format_file` releyó un `formatted.py` que ya existía, siempre opera sobre el archivo espécimen.
 
 ### 5.3 Verifica el CLI
 
@@ -455,20 +455,20 @@ messy.py: 10 -> 9 lines; 4 trailing-whitespace fixes; see formatted.py
 
 - ✅ `python3 code_formatter.py messy.py` escribe `formatted.py` (9 líneas) e imprime el resumen.
 - ✅ Los números del resumen coinciden con los pasos anteriores: 10→9 líneas, 4 arreglos de espacios finales.
-- ✅ `messy.py` no se toca (entrada de solo lectura) — la herramienta nunca reescribe la fuente.
+- ✅ `messy.py` no se toca (entrada de solo lectura), la herramienta nunca reescribe la fuente.
 
 **🤔 Pregunta(s) socrática(s)**
 
-- `format_file` escribe a un nombre *fijo* `formatted.py`. La segunda ejecución sobrescribe la primera salida. ¿Preferirías `f"formatted_{path}"` o una bandera `--out` — y cuál es el argumento para *no* sobrescribir el archivo fuente directamente?
-- Este formateador hoy es de solo espacios. Si añadieras una transformación más (p. ej. una línea en blanco después de cada función `def`), ¿qué prueba demostraría que *nunca* rompe el significado de `messy.py` — y qué significa "no cambiar nunca el significado" para Python, donde la indentación es crítica?
+- `format_file` escribe a un nombre *fijo* `formatted.py`. La segunda ejecución sobrescribe la primera salida. ¿Preferirías `f"formatted_{path}"` o una bandera `--out`, y cuál es el argumento para *no* sobrescribir el archivo fuente directamente?
+- Este formateador hoy es de solo espacios. Si añadieras una transformación más (p. ej. una línea en blanco después de cada función `def`), ¿qué prueba demostraría que *nunca* rompe el significado de `messy.py`, y qué significa "no cambiar nunca el significado" para Python, donde la indentación es crítica?
 
 ## ⚠️ Errores comunes
 
-- **`splitlines` vs `read().split("\n")`.** `splitlines()` ignora el elemento final vacío que un `"\n"` split ingenuo produce — terminando con una línea en blanco espuria al final.
+- **`splitlines` vs `read().split("\n")`.** `splitlines()` ignora el elemento final vacío que un `"\n"` split ingenuo produce, terminando con una línea en blanco espuria al final.
 - **`lstrip()` también elimina tabs.** Contar la indentación con `len(ln) - len(ln.lstrip())` cuenta espacios *y* tabs como un carácter cada uno; usa `lstrip(" ")` o una pasada consciente de tabs. (Este proyecto verifica tabs por separado.)
 - **Compactar blancos sobre la lista equivocada.** Compactar antes de recortar significa que una línea de solo espacios (`   `) se comporta como *contenido* y nunca se fusiona con el blanco de arriba. Orden: recortar → arreglar → compactar.
 - **`partition` vs `split`.** `partition("#")` conserva las tres partes (pre, "#", post); `split("#")` manejaría mal un comentario que contenga `#` o destruiría el límite en el primer separador.
-- **Separación de comentarios en strings.** `s = "#ff00aa"` contiene un `#` *dentro de un literal de string* — un formateador de solo espacios lo reescribiría felizmente. El límite del "subconjunto seguro" es tu escudo; documéntalo.
+- **Separación de comentarios en strings.** `s = "#ff00aa"` contiene un `#` *dentro de un literal de string*, un formateador de solo espacios lo reescribiría felizmente. El límite del "subconjunto seguro" es tu escudo; documéntalo.
 - **Sobrescribir el espécimen.** Escribir `messy.py` de vuelta destruye lo que estás midiendo. Escribe a `formatted.py`; mantén la entrada de solo lectura.
 
 ## Lo que acabas de construir
@@ -476,7 +476,7 @@ messy.py: 10 -> 9 lines; 4 trailing-whitespace fixes; see formatted.py
 Un formateador de código funcional con un CLI real: inspección de líneas con barras `|…|` visibles, recorte de espacios finales y separación de comentarios `#` con builtins de strings, compactación de corridas en blanco con un barrido idempotente de una pasada, una garantía de nueva línea final con prueba de conteo de bytes, diagnósticos de indentación de solo lectura en pasos de 4, una verificación del contrato de tabs y un escritor de `formatted.py` que hace round-trip byte idéntico. Debajo, los patrones son reutilizables en cualquier lugar: **mide los puntos sucios antes de normalizar**, **aplica solo transformaciones seguras y reversibles**, **haz la detección de blancos consciente de espacios (`strip() == "")**, **diagnostica en lugar de adivinar cuando un arreglo es ambiguo** y **mantén la entrada de solo lectura mientras envías la salida por separado**.
 
 :::tip[Ejecuta una versión más completa sin configuración local]
-[`examples/code-formatter/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/code-formatter) en el repositorio del curso contiene el formateador completo como un notebook — inspección, arreglos, compactación, diagnósticos y CLI, ejecutable en Colab/Kaggle/Binder. Clona el repositorio o [ábrelo en un Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course).
+[`examples/code-formatter/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/code-formatter) en el repositorio del curso contiene el formateador completo como un notebook, inspección, arreglos, compactación, diagnósticos y CLI, ejecutable en Colab/Kaggle/Binder. Clona el repositorio o [ábrelo en un Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course).
 :::
 
 ## A dónde ir desde aquí
@@ -484,10 +484,10 @@ Un formateador de código funcional con un CLI real: inspección de líneas con 
 - Ejecútalo sobre un archivo real *tuyo*: `python3 code_formatter.py some_script.py` y lee lo que reporta.
 - Agrega el manejo `.expandtabs(4)` para que los archivos indentados con tabs se conviertan en la misma corrida, con una línea `Tabs converted: N`.
 - Haz inteligente el nombre de la salida: `formatted_<basename>` en lugar de un nombre fijo, o una bandera `--check` que solo imprime el reporte sin escribir un archivo (amigable con CI).
-- Compáralo contra el real: ejecuta Black (`pip install black`) sobre el mismo espécimen y haz un diff de `formatted.py` contra la salida de Black — una lección humilde de cuánto más profundo llega un formateador *real*.
+- Compáralo contra el real: ejecuta Black (`pip install black`) sobre el mismo espécimen y haz un diff de `formatted.py` contra la salida de Black, una lección humilde de cuánto más profundo llega un formateador *real*.
 
 ## Comparte tu proyecto con la clase
 
-¿Construiste algo de lo que te sientes orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado — y su README tiene una guía completa, amigable para principiantes, para agregar el tuyo mediante un **pull request**, incluso si nunca has usado git: hacer fork del repositorio, crear una rama, confirmar tus archivos y abrir el PR, paso a paso. No se asume experiencia previa en git.
+¿Construiste algo de lo que te sientes orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado, y su README tiene una guía completa, amigable para principiantes, para agregar el tuyo mediante un **pull request**, incluso si nunca has usado git: hacer fork del repositorio, crear una rama, confirmar tus archivos y abrir el PR, paso a paso. No se asume experiencia previa en git.
 
 Bienvenido a escribir Python fuera del navegador. 🎓

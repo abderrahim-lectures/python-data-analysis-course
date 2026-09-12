@@ -1,7 +1,7 @@
 ---
 
 title: "Rapport final : Students Performance"
-description: "Combiner toutes les techniques d'analyse pour produire un rapport complet — structuré, soigné et reproductible — sur le jeu de données Students Performance."
+description: "Combiner toutes les techniques d'analyse pour produire un rapport complet, structuré, soigné et reproductible, sur le jeu de données Students Performance."
 module: "students-performance-eda"
 order: 10
 difficulty: "advanced"
@@ -43,7 +43,7 @@ quiz:
       - text: "Uniquement si le lecteur le demande explicitement"
 ---
 
-C'est votre livrable de synthèse. Tout ce que vous avez appris — profilage, analyse univariée, analyse bivariée, corrélation, graphiques avancés et narration — se réunit ici. Vous allez produire un rapport d'analyse exploratoire (EDA) complet et soigné sur le jeu de données Students Performance in Exams qui raconte une histoire claire et fondée sur les données.
+C'est votre livrable de synthèse. Tout ce que vous avez appris, profilage, analyse univariée, analyse bivariée, corrélation, graphiques avancés et narration, se réunit ici. Vous allez produire un rapport d'analyse exploratoire (EDA) complet et soigné sur le jeu de données Students Performance in Exams qui raconte une histoire claire et fondée sur les données.
 
 ## Concepts clés
 
@@ -51,13 +51,13 @@ C'est votre livrable de synthèse. Tout ce que vous avez appris — profilage, a
 
 Un rapport d'analyse exploratoire professionnel suit cette structure :
 
-1. **Résumé exécutif** — principaux constats en 3-4 puces
-2. **Vue d'ensemble des données** — description du jeu de données, profilage, évaluation de la qualité
-3. **Analyse univariée** — distributions de chaque variable
-4. **Analyse bivariée** — relations entre variables
-5. **Analyse multivariée** — interactions et facteurs de confusion
-6. **Constats clés** — ce que révèlent les données
-7. **Recommandations** — prochaines étapes actionnables
+1. **Résumé exécutif**, principaux constats en 3-4 puces
+2. **Vue d'ensemble des données**, description du jeu de données, profilage, évaluation de la qualité
+3. **Analyse univariée**, distributions de chaque variable
+4. **Analyse bivariée**, relations entre variables
+5. **Analyse multivariée**, interactions et facteurs de confusion
+6. **Constats clés**, ce que révèlent les données
+7. **Recommandations**, prochaines étapes actionnables
 
 ### Pipeline d'analyse exploratoire complet
 
@@ -311,14 +311,14 @@ print(executive_summary)
 - Le projet de synthèse intègre chaque compétence du cours : profilage, analyse, visualisation et narration
 - Les figures annotées à plusieurs panneaux communiquent efficacement les constats complexes
 - Les constats doivent être précis (avec des nombres) et actionnables (avec des recommandations)
-- Les meilleurs rapports d'analyse exploratoire sont reproductibles — n'importe qui peut relancer le notebook et obtenir les mêmes résultats
+- Les meilleurs rapports d'analyse exploratoire sont reproductibles, n'importe qui peut relancer le notebook et obtenir les mêmes résultats
 
 ## Défi pratique
 
 Créez un script Python autonome qui charge le jeu de données Students Performance, exécute le pipeline d'analyse exploratoire complet et génère une figure récapitulative à 4 panneaux : (1) les distributions des notes, (2) la comparaison de la préparation aux tests, (3) la heatmap de corrélation et (4) une bande d'idées clés. Enregistrez la figure sous `eda_report.png`.
 
 <details class="challenge">
-<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
+<summary>🧩 Défi, réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
 ```python

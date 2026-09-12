@@ -21,7 +21,7 @@ This assumes Python 101 and comfort with CLI workflows from [Developer Tools](/p
 
 ## Where to run this
 
-**Locally with `uv`** is the primary path — this is a CLI tool that reads and writes files.
+**Locally with `uv`** is the primary path, this is a CLI tool that reads and writes files.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/json-swiss-army-knife/notebook.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/json-swiss-army-knife/notebook.ipynb)
@@ -256,7 +256,7 @@ def convert_from_json(data: dict, to_format: str) -> str:
 
 ## What you just built
 
-A single CLI tool that handles the four most common JSON operations: formatting, validation, querying, and format conversion. The dot-notation query engine recursively walks nested structures and expands wildcards. Format conversion bridges JSON, YAML, and TOML for data pipeline workflows. This tool solves real developer pain — every team has someone who keeps running `python -m json.tool` and wishing it did more.
+A single CLI tool that handles the four most common JSON operations: formatting, validation, querying, and format conversion. The dot-notation query engine recursively walks nested structures and expands wildcards. Format conversion bridges JSON, YAML, and TOML for data pipeline workflows. This tool solves real developer pain, every team has someone who keeps running `python -m json.tool` and wishing it did more.
 
 :::tip[Run a fuller version without any local setup]
 [`examples/json-swiss-army-knife/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/json-swiss-army-knife) in the course repo has a richer version with streaming queries, JSON diff, schema validation, and the CLI wired up end to end. Clone it, or open the whole repo in a [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), and run it from there.
@@ -270,6 +270,6 @@ A single CLI tool that handles the four most common JSON operations: formatting,
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

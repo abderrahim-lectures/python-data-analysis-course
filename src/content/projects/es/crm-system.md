@@ -16,9 +16,9 @@ prerequisites: ["Fundamentos de Python (clases, funciones, dicts)", "pip install
 
 # 🛠️ 🤝 Construir un Sistema CRM
 
-Un CRM es la fuente de verdad compartida de un equipo de ventas: cada contacto, cada negocio, cada llamada y correo viven en un solo lugar para que nada se escape. Este proyecto construye un CRM ligero desde cero — modelarás contactos, negocios y actividades como dataclasses tipadas de Python, diseñarás un esquema SQLite con claves foráneas reales, escribirás consultas parametrizadas para búsqueda y filtrado, empujarás negocios por un pipeline validado, reconstruirás la línea de tiempo de un contacto y lo mostrarás todo en salidas limpia de tablas `rich`.
+Un CRM es la fuente de verdad compartida de un equipo de ventas: cada contacto, cada negocio, cada llamada y correo viven en un solo lugar para que nada se escape. Este proyecto construye un CRM ligero desde cero, modelarás contactos, negocios y actividades como dataclasses tipadas de Python, diseñarás un esquema SQLite con claves foráneas reales, escribirás consultas parametrizadas para búsqueda y filtrado, empujarás negocios por un pipeline validado, reconstruirás la línea de tiempo de un contacto y lo mostrarás todo en salidas limpia de tablas `rich`.
 
-Esto asume Python 101 y suficiente comodidad con SQL para leer un SELECT — no se requiere nada de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa, en crecimiento.
+Esto asume Python 101 y suficiente comodidad con SQL para leer un SELECT, no se requiere nada de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa, en crecimiento.
 
 ## 🎯 Lo que harás
 
@@ -31,11 +31,11 @@ Esto asume Python 101 y suficiente comodidad con SQL para leer un SELECT — no 
 
 ## Dónde ejecutar esto
 
-**Localmente con `uv`** es el camino principal, recomendado — SQLite escribe al disco cuando eliges una ruta de archivo, y `rich` renderiza tablas a todo color solo en una terminal real (las celdas de los notebooks las truncan).
+**Localmente con `uv`** es el camino principal, recomendado, SQLite escribe al disco cuando eliges una ruta de archivo, y `rich` renderiza tablas a todo color solo en una terminal real (las celdas de los notebooks las truncan).
 
 **GitHub Codespaces** funciona perfectamente también: abre [el repositorio del curso en un Codespace gratuito](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) y ejecuta desde ahí. Una terminal real con soporte de color real.
 
-**Google Colab y Kaggle Notebooks** son una forma genuina de ejecutar esto — SQLite funciona en memoria (`:memory:`), y el código Python es totalmente compatible. La advertencia honesta es `rich`: las celdas de notebook renderizan tablas en texto plano (los colores desaparecen), y no hay datos persistentes entre sesiones. El notebook de abajo usa una base de datos en memoria sembrada con dos contactos de muestra y sus negocios, así que cada consulta devuelve resultados de aspecto real aunque nada persista después de que el kernel se reinicie. Úsalo para ver que el esquema y las consultas funcionan de extremo a extremo; cambia a `uv` local o a un Codespace una vez que quieras que tus propios datos se queden.
+**Google Colab y Kaggle Notebooks** son una forma genuina de ejecutar esto, SQLite funciona en memoria (`:memory:`), y el código Python es totalmente compatible. La advertencia honesta es `rich`: las celdas de notebook renderizan tablas en texto plano (los colores desaparecen), y no hay datos persistentes entre sesiones. El notebook de abajo usa una base de datos en memoria sembrada con dos contactos de muestra y sus negocios, así que cada consulta devuelve resultados de aspecto real aunque nada persista después de que el kernel se reinicie. Úsalo para ver que el esquema y las consultas funcionan de extremo a extremo; cambia a `uv` local o a un Codespace una vez que quieras que tus propios datos se queden.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/crm-system/notebook.es.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/crm-system/notebook.es.ipynb)
@@ -47,7 +47,7 @@ Todo lo que necesitas vive en dos paquetes: una librería de PyPI para la UI de 
 
 ### Instalar `uv`
 
-`uv` es una sola herramienta que reemplaza la cadena usual "instalar Python, luego instalar pip, luego instalar una herramienta de entorno virtual, luego instalar paquetes" — puede instalar y gestionar versiones de Python por sí misma, junto con las dependencias de tu proyecto.
+`uv` es una sola herramienta que reemplaza la cadena usual "instalar Python, luego instalar pip, luego instalar una herramienta de entorno virtual, luego instalar paquetes", puede instalar y gestionar versiones de Python por sí misma, junto con las dependencias de tu proyecto.
 
 **macOS / Linux** (terminal):
 
@@ -75,7 +75,7 @@ cd crm-system
 uv add rich
 ```
 
-`rich` hace que las tablas y paneles de la terminal luzcan como una aplicación real — colores, bordes, columnas alineadas. `sqlite3` viaja con Python; no se necesita instalación extra. Los datos de tu CRM viven en un archivo `.db` al que apuntas al script, o en memoria si no especificas una ruta.
+`rich` hace que las tablas y paneles de la terminal luzcan como una aplicación real, colores, bordes, columnas alineadas. `sqlite3` viaja con Python; no se necesita instalación extra. Los datos de tu CRM viven en un archivo `.db` al que apuntas al script, o en memoria si no especificas una ruta.
 
 **✅ Lista de verificación**
 
@@ -84,7 +84,7 @@ uv add rich
 
 ## Paso 1: Modelar los datos con dataclasses
 
-Cada registro en un CRM tiene una forma rígida — un contacto siempre tiene nombre y correo; un negocio siempre tiene un valor y una etapa. `@dataclass` impone esa forma en tiempo de definición, previene la deriva accidental de atributos y te da un `repr` legible y serialización a dict gratis. El campo `id` `Optional[int]` permanece `None` hasta que un registro se inserta y la base de datos le asigna uno.
+Cada registro en un CRM tiene una forma rígida, un contacto siempre tiene nombre y correo; un negocio siempre tiene un valor y una etapa. `@dataclass` impone esa forma en tiempo de definición, previene la deriva accidental de atributos y te da un `repr` legible y serialización a dict gratis. El campo `id` `Optional[int]` permanece `None` hasta que un registro se inserta y la base de datos le asigna uno.
 
 ### 1.1 Definir Contact, Deal y Activity
 
@@ -132,11 +132,11 @@ a = Activity(contact_id=1, deal_id=1, kind="meeting", summary="Discussed pricing
 print(f"Contact: {c.name} | Deal: {d.title} (${d.value:,.0f})")
 ```
 
-El `__post_init__` en `Activity` es la única parte no trivial: auto-rellena la fecha con el string ISO de hoy cuando la olvidas, así cada actividad obtiene una marca de tiempo válida incluso en una corrida de prueba rápida. `Deal.STAGES` es una constante a nivel de clase — no un atributo de instancia — lo que significa que `Deal.STAGES` se lee limpiamente sin construir un `Deal`, y cada instancia conoce implícitamente la progresión permitida.
+El `__post_init__` en `Activity` es la única parte no trivial: auto-rellena la fecha con el string ISO de hoy cuando la olvidas, así cada actividad obtiene una marca de tiempo válida incluso en una corrida de prueba rápida. `Deal.STAGES` es una constante a nivel de clase, no un atributo de instancia, lo que significa que `Deal.STAGES` se lee limpiamente sin construir un `Deal`, y cada instancia conoce implícitamente la progresión permitida.
 
 **🎯 Resultado esperado :** Imprime `Contact: Alice Chen | Deal: Enterprise License ($12,000)`.
 
-**🩹 Si sale mal :** Si `Optional` de `typing` no se reconoce, tu Python es <3.10 — usa `from __future__ import annotations` al inicio, o `Optional[int]` sigue siendo válido de cualquier manera. Si `__post_init__` no se ejecuta, verifica que esté indentado bajo `Activity`, no como una función independiente — es un método mágico de dataclass, no un método regular.
+**🩹 Si sale mal :** Si `Optional` de `typing` no se reconoce, tu Python es <3.10, usa `from __future__ import annotations` al inicio, o `Optional[int]` sigue siendo válido de cualquier manera. Si `__post_init__` no se ejecuta, verifica que esté indentado bajo `Activity`, no como una función independiente, es un método mágico de dataclass, no un método regular.
 
 ### 1.2 Verifica los modelos
 
@@ -152,7 +152,7 @@ El `__post_init__` en `Activity` es la única parte no trivial: auto-rellena la 
 
 ## Paso 2: Diseñar el esquema SQLite e insertar contactos
 
-`sqlite3` es la base de datos confiable más pequeña que existe — sin instalación, sin daemon, sin archivo de config — y está en la stdlib de Python. El esquema refleja tus dataclasses exactamente: tres tablas con una clave foránea de `deals` y `activities` hacia `contacts`, así que la base de datos misma impone la relación de la que depende tu código.
+`sqlite3` es la base de datos confiable más pequeña que existe, sin instalación, sin daemon, sin archivo de config, y está en la stdlib de Python. El esquema refleja tus dataclasses exactamente: tres tablas con una clave foránea de `deals` y `activities` hacia `contacts`, así que la base de datos misma impone la relación de la que depende tu código.
 
 ### 2.1 Crear la base de datos y el esquema
 
@@ -197,15 +197,15 @@ def init_db(db_path: str = ":memory:") -> sqlite3.Connection:
 conn = init_db()
 ```
 
-`"references contacts(id)"` es una declaración de clave foránea, pero SQLite solo la impone si ejecutas `PRAGMA foreign_keys = ON` — y deliberadamente, no hacemos eso aquí. La imposición total de FKs es el default de producción correcto, pero para un CRM de enseñanza donde podrías insertar temporalmente un negocio antes de que exista su contacto, la elección pragmática es dejar que el código Python posea la restricción. `conn.row_factory = sqlite3.Row` significa que cada fila obtenida se comporta tanto como un dict como un objeto — puedes usar `row["name"]` y `row.name` indistintamente, que es la característica de `sqlite3` más útil de todas.
+`"references contacts(id)"` es una declaración de clave foránea, pero SQLite solo la impone si ejecutas `PRAGMA foreign_keys = ON`, y deliberadamente, no hacemos eso aquí. La imposición total de FKs es el default de producción correcto, pero para un CRM de enseñanza donde podrías insertar temporalmente un negocio antes de que exista su contacto, la elección pragmática es dejar que el código Python posea la restricción. `conn.row_factory = sqlite3.Row` significa que cada fila obtenida se comporta tanto como un dict como un objeto, puedes usar `row["name"]` y `row.name` indistintamente, que es la característica de `sqlite3` más útil de todas.
 
 **🎯 Resultado esperado :** `init_db()` devuelve una `sqlite3.Connection` viva sin errores; llamar a `conn.execute("SELECT name FROM sqlite_master WHERE type='table'").fetchall()` imprime los tres nombres de tabla.
 
-**🩹 Si sale mal :** Si `executescript` lanza `ProgrammingError`, olvidaste `conn.commit()` — las escrituras del esquema son transacciones, y sin commit son invisibles para las consultas posteriores. Si una tabla ya existe de una corrida anterior contra un archivo (no `:memory:`), `CREATE TABLE IF NOT EXISTS` silenciosamente no hace nada — elimina el archivo o la tabla si necesitas un esquema nuevo.
+**🩹 Si sale mal :** Si `executescript` lanza `ProgrammingError`, olvidaste `conn.commit()`, las escrituras del esquema son transacciones, y sin commit son invisibles para las consultas posteriores. Si una tabla ya existe de una corrida anterior contra un archivo (no `:memory:`), `CREATE TABLE IF NOT EXISTS` silenciosamente no hace nada, elimina el archivo o la tabla si necesitas un esquema nuevo.
 
 ### 2.2 Insertar y buscar contactos
 
-**👟 Pista inicial :** Escribe `add_contact` y `search_contacts` como funciones puras de la conexión — nunca de una variable global — para que sean trivialmente testeables y componibles.
+**👟 Pista inicial :** Escribe `add_contact` y `search_contacts` como funciones puras de la conexión, nunca de una variable global, para que sean trivialmente testeables y componibles.
 
 ```python
 # crm_system.py (continued)
@@ -232,11 +232,11 @@ print(f"Added contacts: IDs {alice_id}, {bob_id}")
 print(search_contacts(conn, "acme"))
 ```
 
-Los placeholders `?` en el string SQL son todo el punto de las consultas parametrizadas: la base de datos nunca interpreta tus valores de string como fragmentos SQL, lo que es a la vez una regla de seguridad (sin inyección) y una regla de corrección (sin bugs de escape). `cur.lastrowid` es la clave primaria entera que la base de datos acaba de asignar — es el valor de clave foránea que tus negocios y actividades necesitan en los siguientes pasos, así que `add_contact` devolverlo es una elección de diseño deliberada.
+Los placeholders `?` en el string SQL son todo el punto de las consultas parametrizadas: la base de datos nunca interpreta tus valores de string como fragmentos SQL, lo que es a la vez una regla de seguridad (sin inyección) y una regla de corrección (sin bugs de escape). `cur.lastrowid` es la clave primaria entera que la base de datos acaba de asignar, es el valor de clave foránea que tus negocios y actividades necesitan en los siguientes pasos, así que `add_contact` devolverlo es una elección de diseño deliberada.
 
 **🎯 Resultado esperado :** Imprime `Added contacts: IDs 1, 2` seguido de una lista que contiene un dict para Alice Chen.
 
-**🩹 Si sale mal :** Si `search_contacts(conn, "acme")` devuelve una lista vacía a pesar de que Alice fue insertada, verifica que ambas llamadas a `add_contact` corrieron antes de la consulta — si falta `conn.commit()` dentro de `add_contact`, los inserts son invisibles para las lecturas posteriores. Si obtienes `ProgrammingError: wrong number of arguments`, el string de consulta tiene un número de placeholders `?` distinto de los valores de la tupla — cuéntalos.
+**🩹 Si sale mal :** Si `search_contacts(conn, "acme")` devuelve una lista vacía a pesar de que Alice fue insertada, verifica que ambas llamadas a `add_contact` corrieron antes de la consulta, si falta `conn.commit()` dentro de `add_contact`, los inserts son invisibles para las lecturas posteriores. Si obtienes `ProgrammingError: wrong number of arguments`, el string de consulta tiene un número de placeholders `?` distinto de los valores de la tupla, cuéntalos.
 
 ### 2.3 Verifica el esquema y el insert
 
@@ -247,16 +247,16 @@ Los placeholders `?` en el string SQL son todo el punto de las consultas paramet
 
 **🤔 Pregunta(s) socrática(s)**
 
-- `search_contacts` devuelve `[dict(r) for r in rows]`, convirtiendo cada `sqlite3.Row` en un dict plano. ¿Qué cambiaría si devolvieras los objetos `Row` directamente — hay un caso donde eso es mejor, y un caso donde rompe algo?
+- `search_contacts` devuelve `[dict(r) for r in rows]`, convirtiendo cada `sqlite3.Row` en un dict plano. ¿Qué cambiaría si devolvieras los objetos `Row` directamente, hay un caso donde eso es mejor, y un caso donde rompe algo?
 - Una colega junior sugiere guardar la empresa como una clave foránea entera a una tabla `companies` "por normalización". ¿Cuáles son los trade-offs en un CRM pequeño donde un nombre de empresa es realmente solo una etiqueta?
 
 ## Paso 3: Buscar y filtrar con joins
 
-Un CRM no es útil hasta que puedes hacer preguntas relacionales: "¿qué negocios están en la etapa de propuesta?" "¿qué contactos están asociados con un negocio de más de $5K?" Estos son JOINs — extraer filas de dos tablas usando la clave foránea que las conecta — y son el patrón de consulta que hace a una base de datos genuinamente más poderosa que un archivo plano.
+Un CRM no es útil hasta que puedes hacer preguntas relacionales: "¿qué negocios están en la etapa de propuesta?" "¿qué contactos están asociados con un negocio de más de $5K?" Estos son JOINs, extraer filas de dos tablas usando la clave foránea que las conecta, y son el patrón de consulta que hace a una base de datos genuinamente más poderosa que un archivo plano.
 
 ### 3.1 Escribir consultas de negocios filtradas
 
-**👟 Pista inicial :** Escribe una función que cuente contactos por empresa (un GROUP BY simple), y una función que liste negocios filtrados por etapa — ambas usando valores parametrizados.
+**👟 Pista inicial :** Escribe una función que cuente contactos por empresa (un GROUP BY simple), y una función que liste negocios filtrados por etapa, ambas usando valores parametrizados.
 
 ```python
 # crm_system.py (continued)
@@ -282,9 +282,9 @@ print("Acme contacts:", contacts_by_company(conn, "Acme"))
 # (deals_by_stage will return [] until Step 4 inserts deals)
 ```
 
-El `JOIN contacts c ON d.contact_id = c.id` es la línea clave: empareja cada negocio con el contacto que lo posee por clave foránea entera, y `c.name AS contact_name` trae el nombre al resultado para que tu lógica de visualización no necesite una segunda consulta. Ordenar por `value DESC` es un sesgo intencional hacia la información que querrías primero al escanear un pipeline — los números más grandes arriba.
+El `JOIN contacts c ON d.contact_id = c.id` es la línea clave: empareja cada negocio con el contacto que lo posee por clave foránea entera, y `c.name AS contact_name` trae el nombre al resultado para que tu lógica de visualización no necesite una segunda consulta. Ordenar por `value DESC` es un sesgo intencional hacia la información que querrías primero al escanear un pipeline, los números más grandes arriba.
 
-**🎯 Resultado esperado :** `Acme contacts: [{'id': 1, 'name': 'Alice Chen', ...}]`; `deals_by_stage(conn, "proposal")` devuelve una lista vacía (los negocios todavía no existen — llegan en el Paso 4).
+**🎯 Resultado esperado :** `Acme contacts: [{'id': 1, 'name': 'Alice Chen', ...}]`; `deals_by_stage(conn, "proposal")` devuelve una lista vacía (los negocios todavía no existen, llegan en el Paso 4).
 
 **🩹 Si sale mal :** Si `contacts_by_company` devuelve un desajuste sensible a mayúsculas (p. ej., buscar "ACME" por "Acme"), el `LIKE` de SQLite solo ignora mayúsculas para caracteres ASCII; usa `LOWER()` en la consulta si trabajas con entrada mixta. Si `deals_by_stage` lanza `OperationalError: no such column`, el alias de columna en tu JOIN no coincide con la lista SELECT.
 
@@ -293,11 +293,11 @@ El `JOIN contacts c ON d.contact_id = c.id` es la línea clave: empareja cada ne
 **✅ Lista de verificación**
 
 - ✅ `contacts_by_company(conn, "Globex")` devuelve exactamente a Bob, y `contacts_by_company(conn, "Nonexistent")` devuelve `[]`.
-- ✅ `deals_by_stage` devuelve una lista vacía antes de que se inserten negocios — confirmando que no está reutilizando silenciosamente datos obsoletos.
+- ✅ `deals_by_stage` devuelve una lista vacía antes de que se inserten negocios, confirmando que no está reutilizando silenciosamente datos obsoletos.
 
 **🤔 Pregunta(s) socrática(s)**
 
-- Tanto `search_contacts` como `contacts_by_company` filtran con un patrón `LIKE ?`. ¿Por qué no escribir simplemente una función con una cláusula `WHERE` que verifique cada columna con `OR` — hay una razón para mantenerlas separadas, o es solo estilo de código?
+- Tanto `search_contacts` como `contacts_by_company` filtran con un patrón `LIKE ?`. ¿Por qué no escribir simplemente una función con una cláusula `WHERE` que verifique cada columna con `OR`, hay una razón para mantenerlas separadas, o es solo estilo de código?
 - `deals_by_stage` hace join pero `contacts_by_company` no. ¿Cuándo funciona una consulta de una sola tabla, y cuándo omitir el JOIN te da silenciosamente la respuesta equivocada?
 
 ## Paso 4: Registrar negocios a través del pipeline
@@ -306,7 +306,7 @@ La *etapa* de un negocio es su posición en el pipeline de ventas, y moverla hac
 
 ### 4.1 Insertar negocios y moverlos por el pipeline
 
-**👟 Pista inicial :** `add_deal` y `move_deal` deben vivir sobre las constantes de clase de `Deal` — `deal_id` y `new_stage` son argumentos, no atributos — y `move_deal` debe rechazar etapas inválidas *antes* de que corra el UPDATE.
+**👟 Pista inicial :** `add_deal` y `move_deal` deben vivir sobre las constantes de clase de `Deal`, `deal_id` y `new_stage` son argumentos, no atributos, y `move_deal` debe rechazar etapas inválidas *antes* de que corra el UPDATE.
 
 ```python
 # crm_system.py (continued)
@@ -329,11 +329,11 @@ deal2_id = add_deal(conn, Deal(contact_id=bob_id, title="Consulting Package", va
 move_deal(conn, deal1_id, "negotiation")
 ```
 
-La verificación de validación — `if new_stage not in Deal.STAGES` — corre como una protección a nivel de Python, no una restricción de base de datos, porque SQLite no tiene restricciones `CHECK` en `DEFAULT`. Este es el trade-off deliberado: obtienes un `ValueError` claro con las opciones válidas impresas, en lugar de un `UPDATE` silencioso que escribe un string sin sentido y rompe la vista del pipeline más tarde.
+La verificación de validación, `if new_stage not in Deal.STAGES`, corre como una protección a nivel de Python, no una restricción de base de datos, porque SQLite no tiene restricciones `CHECK` en `DEFAULT`. Este es el trade-off deliberado: obtienes un `ValueError` claro con las opciones válidas impresas, en lugar de un `UPDATE` silencioso que escribe un string sin sentido y rompe la vista del pipeline más tarde.
 
 **🎯 Resultado esperado :** Existen dos negocios; deal1 está ahora en `"negotiation"` después del movimiento; deal2 permanece en `"lead"`.
 
-**🩹 Si sale mal :** Si `move_deal` lanza `ValueError` para una etapa válida, el string tiene un typo — las mayúsculas importan exactamente como se listan en `Deal.STAGES`. Si el UPDATE corre pero `deals_by_stage` aún muestra el negocio en su etapa anterior, olvidaste `conn.commit()` — la escritura pasó en memoria pero no se persistió.
+**🩹 Si sale mal :** Si `move_deal` lanza `ValueError` para una etapa válida, el string tiene un typo, las mayúsculas importan exactamente como se listan en `Deal.STAGES`. Si el UPDATE corre pero `deals_by_stage` aún muestra el negocio en su etapa anterior, olvidaste `conn.commit()`, la escritura pasó en memoria pero no se persistió.
 
 ### 4.2 Leer de vuelta el resumen del pipeline
 
@@ -353,11 +353,11 @@ for stage, info in pipeline_summary(conn).items():
     print(f"  {stage:<15} {info['count']} deals  ${info['value']:>10,.0f}")
 ```
 
-`r["total"] or 0.0` maneja el caso donde una etapa no tiene ningún negocio — `SUM` devuelve `NULL` en un grupo vacío, y el `or` de Python lo captura. Ordenar por `stage` alfabéticamente es una simplificación para el pipeline de enseñanza; un CRM de producción definiría un orden explícito vía `CASE WHEN stage = 'lead' THEN 1 ...`.
+`r["total"] or 0.0` maneja el caso donde una etapa no tiene ningún negocio, `SUM` devuelve `NULL` en un grupo vacío, y el `or` de Python lo captura. Ordenar por `stage` alfabéticamente es una simplificación para el pipeline de enseñanza; un CRM de producción definiría un orden explícito vía `CASE WHEN stage = 'lead' THEN 1 ...`.
 
-**🎯 Resultado esperado :** Imprime cada etapa con su conteo de negocios y valor total — `negotiation` muestra 1 negocio ($12,000), `lead` muestra 1 negocio ($5,000), y todas las demás etapas muestran 0 negocios y $0.
+**🎯 Resultado esperado :** Imprime cada etapa con su conteo de negocios y valor total, `negotiation` muestra 1 negocio ($12,000), `lead` muestra 1 negocio ($5,000), y todas las demás etapas muestran 0 negocios y $0.
 
-**🩹 Si sale mal :** Si cada etapa muestra 0 negocios a pesar de los inserts, tu `GROUP BY` está trabajando contra una conexión o archivo de base de datos diferente — confirma que estás pasando el mismo objeto `conn`, no re-inicializando desde cero. Si los nombres de etapa no coinciden con la constante `STAGES`, el `SUM` sobre un grupo inexistente no devuelve nada — verifica espacios sueltos en los strings de etapa.
+**🩹 Si sale mal :** Si cada etapa muestra 0 negocios a pesar de los inserts, tu `GROUP BY` está trabajando contra una conexión o archivo de base de datos diferente, confirma que estás pasando el mismo objeto `conn`, no re-inicializando desde cero. Si los nombres de etapa no coinciden con la constante `STAGES`, el `SUM` sobre un grupo inexistente no devuelve nada, verifica espacios sueltos en los strings de etapa.
 
 ### 4.3 Verifica el pipeline
 
@@ -373,11 +373,11 @@ for stage, info in pipeline_summary(conn).items():
 
 ## Paso 5: Registrar actividades y leer de vuelta una línea de tiempo
 
-Un negocio sin contexto es un número; un negocio con una línea de tiempo de llamadas, correos y reuniones es una *historia*. Este paso escribe actividades a la base de datos y reconstruye esa historia para cualquier contacto — ordenada por fecha, así un gerente puede leer el historial de relación sin desplazarse.
+Un negocio sin contexto es un número; un negocio con una línea de tiempo de llamadas, correos y reuniones es una *historia*. Este paso escribe actividades a la base de datos y reconstruye esa historia para cualquier contacto, ordenada por fecha, así un gerente puede leer el historial de relación sin desplazarse.
 
 ### 5.1 Insertar actividades y obtener la línea de tiempo
 
-**👟 Pista inicial :** `add_activity` es casi idéntica en forma a `add_deal` — el patrón es siempre `INSERT con placeholders ?, commit, devolver lastrowid`. Escribe un `timeline_for_contact` que haga join de actividades con contactos y ordene por `activity_date, id`.
+**👟 Pista inicial :** `add_activity` es casi idéntica en forma a `add_deal`, el patrón es siempre `INSERT con placeholders ?, commit, devolver lastrowid`. Escribe un `timeline_for_contact` que haga join de actividades con contactos y ordene por `activity_date, id`.
 
 ```python
 # crm_system.py (continued)
@@ -408,11 +408,11 @@ for a in timeline_for_contact(conn, alice_id):
     print(f"  {a['activity_date']}  [{a['kind']}]  {a['summary']}")
 ```
 
-`ORDER BY activity_date, id` es un orden de dos partes: fechas primero, luego el orden de inserción para actividades del mismo día. Sin el desempate `, id`, las actividades del mismo día aparecen en orden arbitrario, lo que está bien para un juguete pero es confuso en cualquier línea de tiempo real. Que `deal_id` sea `Optional[int]` importa aquí — una actividad puede ser sobre un contacto en general, no atada a un negocio específico.
+`ORDER BY activity_date, id` es un orden de dos partes: fechas primero, luego el orden de inserción para actividades del mismo día. Sin el desempate `, id`, las actividades del mismo día aparecen en orden arbitrario, lo que está bien para un juguete pero es confuso en cualquier línea de tiempo real. Que `deal_id` sea `Optional[int]` importa aquí, una actividad puede ser sobre un contacto en general, no atada a un negocio específico.
 
 **🎯 Resultado esperado :** Imprime la línea de tiempo de Alice: la reunión en la fecha de hoy, luego el correo, ambos listados con la etiqueta de tipo y el resumen.
 
-**🩹 Si sale mal :** Si las actividades de Alice muestran entradas de Bob (o viceversa), el valor `contact_id` pasado a `timeline_for_contact` no coincide — rastrea los IDs devueltos por `add_contact` en el Paso 2. Si la línea de tiempo está vacía a pesar de los inserts, estás consultando una conexión diferente que no ha hecho commit — usa siempre el mismo objeto `conn`.
+**🩹 Si sale mal :** Si las actividades de Alice muestran entradas de Bob (o viceversa), el valor `contact_id` pasado a `timeline_for_contact` no coincide, rastrea los IDs devueltos por `add_contact` en el Paso 2. Si la línea de tiempo está vacía a pesar de los inserts, estás consultando una conexión diferente que no ha hecho commit, usa siempre el mismo objeto `conn`.
 
 ### 5.2 Verifica el registro de actividades
 
@@ -428,7 +428,7 @@ for a in timeline_for_contact(conn, alice_id):
 
 ## Paso 6: Mostrarlo todo con tablas rich
 
-El CRM es funcional — los contactos se guardan, los negocios fluyen por un pipeline, las actividades se registran. Pero toda la salida hasta ahora son sentencias `print()` peladas. `rich` convierte eso en una aplicación de terminal real: tablas con color, columnas alineadas, bordes visibles y encabezados que hacen el escaneo rápido.
+El CRM es funcional, los contactos se guardan, los negocios fluyen por un pipeline, las actividades se registran. Pero toda la salida hasta ahora son sentencias `print()` peladas. `rich` convierte eso en una aplicación de terminal real: tablas con color, columnas alineadas, bordes visibles y encabezados que hacen el escaneo rápido.
 
 ### 6.1 Renderizar contactos y el pipeline como tablas rich
 
@@ -470,17 +470,17 @@ show_contacts(conn)
 show_pipeline(conn)
 ```
 
-`style="cyan"` y `style="green"` son directivas de color de `rich` — añaden significado sin sobrecargar la salida: los IDs son siempre de un color, los nombres de otro, las etapas de un tercero. El `justify="right"` en Value hace que las cantidades de dólares se alineen por decimal, no por primer dígito, que es lo que tu ojo espera de una hoja de cálculo. Una instancia `Console()` compartida por todas las funciones mantiene consistentes las configuraciones de color y ancho.
+`style="cyan"` y `style="green"` son directivas de color de `rich`, añaden significado sin sobrecargar la salida: los IDs son siempre de un color, los nombres de otro, las etapas de un tercero. El `justify="right"` en Value hace que las cantidades de dólares se alineen por decimal, no por primer dígito, que es lo que tu ojo espera de una hoja de cálculo. Una instancia `Console()` compartida por todas las funciones mantiene consistentes las configuraciones de color y ancho.
 
-**🎯 Resultado esperado :** Dos tablas `rich` en la terminal — una listando ambos contactos con columnas de ID/Nombre/Empresa en color, la segunda mostrando ambos negocios con el nombre del contacto unido, los valores en dólares alineados a la derecha y las etapas con código de colores.
+**🎯 Resultado esperado :** Dos tablas `rich` en la terminal, una listando ambos contactos con columnas de ID/Nombre/Empresa en color, la segunda mostrando ambos negocios con el nombre del contacto unido, los valores en dólares alineados a la derecha y las etapas con código de colores.
 
-**🩹 Si sale mal :** Si la salida es texto plano incrustado, estás ejecutando en una celda de notebook en lugar de una terminal real — `rich` detecta salida no-TTY y elimina los colores. Usa una terminal o un Codespace. Si la columna Value tiene decimales desalineados, falta el `justify="right"` o los valores se están formateando como strings antes de la inserción.
+**🩹 Si sale mal :** Si la salida es texto plano incrustado, estás ejecutando en una celda de notebook en lugar de una terminal real, `rich` detecta salida no-TTY y elimina los colores. Usa una terminal o un Codespace. Si la columna Value tiene decimales desalineados, falta el `justify="right"` o los valores se están formateando como strings antes de la inserción.
 
 ### 6.2 Verifica la visualización rich
 
 **✅ Lista de verificación**
 
-- ✅ Dos tablas con estilos se renderizan con color — una para contactos, una para el pipeline de negocios.
+- ✅ Dos tablas con estilos se renderizan con color, una para contactos, una para el pipeline de negocios.
 - ✅ Los valores en dólares de la tabla del pipeline están alineados a la derecha, con comas en los miles.
 
 **🤔 Pregunta(s) socrática(s)**
@@ -490,15 +490,15 @@ show_pipeline(conn)
 
 ## ⚠️ Errores comunes
 
-- **Inyección SQL vía f-strings.** `"SELECT * FROM contacts WHERE name LIKE f'%{query}%'"` es un vector de inyección de libro de texto — usa siempre placeholders `?` con una tupla de parámetros separada. La función `search_contacts` de arriba demuestra la forma correcta; cualquier consulta que interpole entrada de usuario directamente está mal, no importa lo rápido que sea el prototipo.
-- **Olvidar `conn.commit()`.** Cada `INSERT` y `UPDATE` es una transacción; sin un commit, la escritura es invisible para el siguiente `SELECT` y desaparece silenciosamente. El síntoma es "inserté una fila pero la consulta no devuelve nada" — casi siempre es un commit faltante.
-- **Typos en los strings de etapa crean nuevas etapas silenciosamente.** `move_deal` rechaza etapas inválidas en la protección de Python, pero si la omites con un `UPDATE` crudo, SQLite guardará felizmente cualquier string como etapa — y `deals_by_stage` nunca encontrará esas filas bajo el nombre de etapa esperado. Mantén la protección.
-- **Orden alfabético de las etapas del pipeline.** `ORDER BY stage` ordena "lead" antes que "negotiation" — que *por casualidad* coincide con el orden del pipeline en este pequeño ejemplo, pero es frágil. Un CRM de producción necesita un orden de etapas explícito, ya sea vía una expresión `CASE` o una tabla de búsqueda.
+- **Inyección SQL vía f-strings.** `"SELECT * FROM contacts WHERE name LIKE f'%{query}%'"` es un vector de inyección de libro de texto, usa siempre placeholders `?` con una tupla de parámetros separada. La función `search_contacts` de arriba demuestra la forma correcta; cualquier consulta que interpole entrada de usuario directamente está mal, no importa lo rápido que sea el prototipo.
+- **Olvidar `conn.commit()`.** Cada `INSERT` y `UPDATE` es una transacción; sin un commit, la escritura es invisible para el siguiente `SELECT` y desaparece silenciosamente. El síntoma es "inserté una fila pero la consulta no devuelve nada", casi siempre es un commit faltante.
+- **Typos en los strings de etapa crean nuevas etapas silenciosamente.** `move_deal` rechaza etapas inválidas en la protección de Python, pero si la omites con un `UPDATE` crudo, SQLite guardará felizmente cualquier string como etapa, y `deals_by_stage` nunca encontrará esas filas bajo el nombre de etapa esperado. Mantén la protección.
+- **Orden alfabético de las etapas del pipeline.** `ORDER BY stage` ordena "lead" antes que "negotiation", que *por casualidad* coincide con el orden del pipeline en este pequeño ejemplo, pero es frágil. Un CRM de producción necesita un orden de etapas explícito, ya sea vía una expresión `CASE` o una tabla de búsqueda.
 - **`dict(row)` en sqlite3.Row no anida.** Las relaciones de clave foránea (`contact_name` del JOIN) aparecen como claves planas, no una estructura anidada `{"contact": {"name": ...}}`. Cualquier código que espere anidación obtendrá silenciosamente `KeyError`; trabaja con la forma plana del dict o construye la anidación explícitamente.
 
 ## Lo que acabas de construir
 
-Un CRM de línea de comandos funcional: guarda contactos, registra negocios a través de un pipeline validado de seis etapas, registra actividades con fechas, reconstruye líneas de tiempo de contactos y presenta todo a través de tablas `rich` con estilos — todo respaldado por una base de datos SQLite real con consultas parametrizadas y claves foráneas. Apúntalo a tu propio archivo `.db` y los datos persisten entre corridas; sin simulación, sin datos falsos.
+Un CRM de línea de comandos funcional: guarda contactos, registra negocios a través de un pipeline validado de seis etapas, registra actividades con fechas, reconstruye líneas de tiempo de contactos y presenta todo a través de tablas `rich` con estilos, todo respaldado por una base de datos SQLite real con consultas parametrizadas y claves foráneas. Apúntalo a tu propio archivo `.db` y los datos persisten entre corridas; sin simulación, sin datos falsos.
 
 :::tip[Ejecuta una versión más completa sin configuración local]
 [`examples/crm-system/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/crm-system) en el repositorio del curso es una versión de notebook ejecutable: una base de datos SQLite en memoria sembrada con contactos y negocios de muestra, cada consulta y tabla de los Pasos 1–6 ejecutándose de extremo a extremo, y la salida rich renderizada en línea. Clónalo, o abre todo el repositorio en un [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), y ejecútalo desde ahí.
@@ -506,12 +506,12 @@ Un CRM de línea de comandos funcional: guarda contactos, registra negocios a tr
 
 ## A dónde ir desde aquí
 
-- Construye un **panel de reporte de valor del pipeline**: usa `rich.panel.Panel` para imprimir el valor total del pipeline, el conteo de negocios abiertos y el tamaño promedio de negocio — todo desde `pipeline_summary` — dentro de un único panel de color que encaje en la parte superior de cada llamada a `show_pipeline`.
+- Construye un **panel de reporte de valor del pipeline**: usa `rich.panel.Panel` para imprimir el valor total del pipeline, el conteo de negocios abiertos y el tamaño promedio de negocio, todo desde `pipeline_summary`, dentro de un único panel de color que encaje en la parte superior de cada llamada a `show_pipeline`.
 - Añade **reasignación de negocios**: escribe `reassign_deal(conn, deal_id, new_contact_id)` que cambie el contacto, y luego registra la reasignación como una actividad para que la línea de tiempo muestre a quién perteneció el negocio antes y después.
-- Implementa **importación/exportación CSV**: añade `import_csv(conn, path)` usando el `csv.DictReader` de Python para cargar contactos en bloque, y `export_deals(conn, path)` para volcar el pipeline a una hoja de cálculo — el camino más simple de un CRM a una herramienta de reportes.
+- Implementa **importación/exportación CSV**: añade `import_csv(conn, path)` usando el `csv.DictReader` de Python para cargar contactos en bloque, y `export_deals(conn, path)` para volcar el pipeline a una hoja de cálculo, el camino más simple de un CRM a una herramienta de reportes.
 
 ## Comparte tu proyecto con la clase
 
-¿Construiste algo de lo que te sientes orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado — y su README tiene una guía completa, amigable para principiantes, para agregar el tuyo mediante un **pull request**, incluso si nunca has usado git: hacer fork del repositorio, crear una rama, confirmar tus archivos y abrir el PR, paso a paso. No se asume experiencia previa en git.
+¿Construiste algo de lo que te sientes orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado, y su README tiene una guía completa, amigable para principiantes, para agregar el tuyo mediante un **pull request**, incluso si nunca has usado git: hacer fork del repositorio, crear una rama, confirmar tus archivos y abrir el PR, paso a paso. No se asume experiencia previa en git.
 
 Bienvenido a escribir Python que registra relaciones reales. 🎓

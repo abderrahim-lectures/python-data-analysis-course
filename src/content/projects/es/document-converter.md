@@ -14,7 +14,7 @@ prerequisites:
 
 Los documentos vienen en muchos formatos: Markdown para escribir, HTML para la web, texto plano para compartir rápido. Convertir entre ellos manualmente es tedioso y propenso a errores. En este proyecto, construirás una herramienta de Python que lee archivos de Markdown, los convierte a HTML o texto plano, extrae metadatos de los encabezados de los documentos y procesa directorios completos con un solo comando.
 
-- **Ejecútalo en el navegador.** Hay un cuaderno interactivo listo — ábrelo en Colab, Kaggle o Binder y sigue los pasos en orden.
+- **Ejecútalo en el navegador.** Hay un cuaderno interactivo listo, ábrelo en Colab, Kaggle o Binder y sigue los pasos en orden.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/document-converter/notebook.es.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/document-converter/notebook.es.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fdocument-converter%2Fnotebook.es.ipynb)
@@ -228,7 +228,7 @@ if __name__ == "__main__":
 
 - **La negrita no se convierte**: Asegúrate de que los patrones `**` se procesen antes que los patrones `*`. De lo contrario, la regex de cursiva coincidirá el primer `*` de `**` y romperá el patrón de negrita.
 - **Los bloques de código se comen contenido**: La bandera `re.DOTALL` deja que `.` coincida saltos de línea dentro del bloque de código. Sin ella, la regex solo coincide bloques de código de una sola línea.
-- **Las listas no se envuelven**: El analizador de listas depende de líneas consecutivas que empiecen con `- `. Las líneas en blanco entre ítems rompen el grupo. Eso está bien para este proyecto — cada bloque de lista se maneja por separado.
+- **Las listas no se envuelven**: El analizador de listas depende de líneas consecutivas que empiecen con `- `. Las líneas en blanco entre ítems rompen el grupo. Eso está bien para este proyecto, cada bloque de lista se maneja por separado.
 
 **✅ Lista de verificación**
 

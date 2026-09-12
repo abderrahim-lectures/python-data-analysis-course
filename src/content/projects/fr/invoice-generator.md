@@ -14,9 +14,9 @@ prerequisites: ["Python 101"]
 
 # 🧾 Construire un Générateur de Factures
 
-Chaque indépendant et chaque petite entreprise finit par faire face à la même tâche : transformer une feuille de calcul du travail effectué en une facture professionnelle. Ce projet construit un outil Python qui prend des données de facture structurées — informations client, lignes avec quantités et tarifs, pourcentages de taxe — et génère un PDF soigné avec des totaux calculés, des numéros de facture et des dates d'échéance. Tu modéliseras les données, construirás le rendu PDF et suivraás le statut de paiement, tout depuis la ligne de commande.
+Chaque indépendant et chaque petite entreprise finit par faire face à la même tâche : transformer une feuille de calcul du travail effectué en une facture professionnelle. Ce projet construit un outil Python qui prend des données de facture structurées, informations client, lignes avec quantités et tarifs, pourcentages de taxe, et génère un PDF soigné avec des totaux calculés, des numéros de facture et des dates d'échéance. Tu modéliseras les données, construirás le rendu PDF et suivraás le statut de paiement, tout depuis la ligne de commande.
 
-Cela suppose Python 101 — rien de Analyse de Données n'est requis. C'est optionnel et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète.
+Cela suppose Python 101, rien de Analyse de Données n'est requis. C'est optionnel et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète.
 
 ## 🎯 Ce que tu vas faire
 
@@ -29,7 +29,7 @@ Cela suppose Python 101 — rien de Analyse de Données n'est requis. C'est opti
 
 ## Où exécuter ceci
 
-**En local avec `uv`** est le chemin principal — cet outil écrit des fichiers PDF sur le disque, ce qui nécessite un système de fichiers local.
+**En local avec `uv`** est le chemin principal, cet outil écrit des fichiers PDF sur le disque, ce qui nécessite un système de fichiers local.
 
 **Google Colab, Kaggle Notebooks et Binder** fonctionnent pour essayer l'outil. Le notebook installe les mêmes packages et génère des factures d'exemple dans la session.
 
@@ -143,7 +143,7 @@ class Invoice:
         return self.status == InvoiceStatus.SENT and date.today() > self.due_date
 ```
 
-Les décorateurs `@property` font ressembler les calculs à des attributs — `invoice.total` au lieu de `invoice.calculate_total()`. La propriété `is_overdue` combine le statut et la date : une facture n'est en retard que si elle a été envoyée et que la date d'échéance est passée. Une facture en brouillon ne peut pas être en retard parce qu'elle n'a pas encore été envoyée.
+Les décorateurs `@property` font ressembler les calculs à des attributs, `invoice.total` au lieu de `invoice.calculate_total()`. La propriété `is_overdue` combine le statut et la date : une facture n'est en retard que si elle a été envoyée et que la date d'échéance est passée. Une facture en brouillon ne peut pas être en retard parce qu'elle n'a pas encore été envoyée.
 
 **🎯 Résultat attendu :** `LineItem("Consulting", 10, 150.0).total` retourne `1500.0`. Une `LineItem` avec une quantité de 0 a un total de 0.
 
@@ -288,7 +288,7 @@ assert os.path.getsize("/tmp/test_invoice.pdf") > 1000  # non-trivial size
 
 **🎯 Résultat attendu :** Les deux assertions passent ; le PDF existe et fait plus de 1 Ko.
 
-**🩹 Si ça ne marche pas :** Si le fichier fait 0 octet, `doc.build(elements)` a peut-être échoué silencieusement — vérifie les erreurs d'import.
+**🩹 Si ça ne marche pas :** Si le fichier fait 0 octet, `doc.build(elements)` a peut-être échoué silencieusement, vérifie les erreurs d'import.
 
 ### 2.3 Vérifie le rendu PDF
 
@@ -364,7 +364,7 @@ Le stockage JSON est simple mais efficace : chaque facture est un fichier nommé
 
 **🎯 Résultat attendu :** `save_invoice(invoice)` crée `invoices/INV-001.json`. `load_invoice("INV-001")` retourne un objet `Invoice` identique.
 
-**🩹 Si ça ne marche pas :** Si `load_invoice` échoue avec une `KeyError`, la structure JSON ne correspond pas au code de reconstruction — vérifie les noms de champs.
+**🩹 Si ça ne marche pas :** Si `load_invoice` échoue avec une `KeyError`, la structure JSON ne correspond pas au code de reconstruction, vérifie les noms de champs.
 
 ### 3.2 Vérifie le suiveur
 
@@ -486,11 +486,11 @@ if __name__ == "__main__":
     cli()
 ```
 
-La commande `create` accepte les lignes comme chaîne JSON — compacte pour la ligne de commande mais flexible pour les factures complexes. La commande `list` affiche un tableau de toutes les factures avec les articles en retard marqués d'un `*`. La commande `report` agrège les totaux par statut.
+La commande `create` accepte les lignes comme chaîne JSON, compacte pour la ligne de commande mais flexible pour les factures complexes. La commande `list` affiche un tableau de toutes les factures avec les articles en retard marqués d'un `*`. La commande `report` agrège les totaux par statut.
 
 **🎯 Résultat attendu :** `uv run python -m invoicer.cli create --number INV-001 --client "Acme" --items '[{"desc":"Work","qty":10,"rate":150}]' --tax 0.1` crée un PDF et enregistre les données de facture.
 
-**🩹 Si ça ne marche pas :** Si l'analyse JSON échoue, la chaîne d'articles n'est pas un JSON valide — utilise des guillemets doubles pour les clés et les valeurs.
+**🩹 Si ça ne marche pas :** Si l'analyse JSON échoue, la chaîne d'articles n'est pas un JSON valide, utilise des guillemets doubles pour les clés et les valeurs.
 
 ### 4.2 Test de fumée de bout en bout
 
@@ -556,6 +556,6 @@ Un générateur de factures qui modélise les données de facture comme des obje
 
 ## Partage ton projet avec la classe
 
-Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres élèves — et son README a un tutoriel complet et adapté aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git avant : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable avec git n'est supposée.
+Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres élèves, et son README a un tutoriel complet et adapté aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git avant : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable avec git n'est supposée.
 
 Bienvenue dans l'écriture de Python en dehors du navigateur. 🎓

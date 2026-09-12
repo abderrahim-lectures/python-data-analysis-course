@@ -103,7 +103,7 @@ class EntityExtractor:
 
 **🎯 Expected output:** `EntityExtractor().extract("Ada Lovelace worked at Babbage's Analytical Engine in London.")` returns entities including a person and a location.
 
-**🩹 If it's off:** If you get no entities, the model may not recognize proper nouns in your sample sentence — try a richer sentence.
+**🩹 If it's off:** If you get no entities, the model may not recognize proper nouns in your sample sentence, try a richer sentence.
 
 ### 1.2 Verify entity extraction
 
@@ -158,7 +158,7 @@ class KnowledgeGraph:
 
 **🎯 Expected output:** Adding a few entities and edges builds a graph you can query with `neighbors()`.
 
-**🩹 If it's off:** If `neighbors` returns empty, the entity text doesn't match any node — check case and exact spelling.
+**🩹 If it's off:** If `neighbors` returns empty, the entity text doesn't match any node, check case and exact spelling.
 
 ### 2.2 Verify the graph
 
@@ -268,14 +268,14 @@ class KnowledgeGraph:
 ## ⚠️ Common pitfalls
 
 - **Missing model download.** `spacy.load("en_core_web_sm")` raises `OSError` if you skip `spacy download`. Install the model before running.
-- **Case-sensitive lookups.** Entity `"Lovelace"` won't match `"lovelace"` unless you normalize case in lookups. The `_find` helper handles this — reuse it everywhere.
+- **Case-sensitive lookups.** Entity `"Lovelace"` won't match `"lovelace"` unless you normalize case in lookups. The `_find` helper handles this, reuse it everywhere.
 - **Disconnected graphs.** Short inputs often yield isolated nodes with no edges. Use a text with multiple co-occurring entities to see interesting structure.
 - **Model size vs accuracy.** `en_core_web_sm` is small and fast but misses niche entities. Try `en_core_web_md` or `_lg` for better recall at the cost of memory.
-- **Duplicate entity IDs.** `unique_entities` assigns IDs per call. Across sentences the same person may get different IDs unless you dedupe globally — the pipeline builds one extractor but per-sentence IDs reset.
+- **Duplicate entity IDs.** `unique_entities` assigns IDs per call. Across sentences the same person may get different IDs unless you dedupe globally, the pipeline builds one extractor but per-sentence IDs reset.
 
 ## What you just built
 
-A text-to-graph pipeline: spaCy extracts named entities, a regex splitter isolates sentences, co-occurrence turns shared sentences into weighted edges, and NetworkX stores plus matplotlib renders the result. You can now take any paragraph and turn it into an explorable network of connected facts — the same pattern behind question-answering systems and recommendation engines.
+A text-to-graph pipeline: spaCy extracts named entities, a regex splitter isolates sentences, co-occurrence turns shared sentences into weighted edges, and NetworkX stores plus matplotlib renders the result. You can now take any paragraph and turn it into an explorable network of connected facts, the same pattern behind question-answering systems and recommendation engines.
 
 :::tip[Run a fuller version without any local setup]
 [`examples/knowledge-graph-builder/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/knowledge-graph-builder) in the course repo has a richer version with relation-type detection, community finding, and the CLI wired up end to end. Clone it, or open the whole repo in a [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), and run it from there.
@@ -289,6 +289,6 @@ A text-to-graph pipeline: spaCy extracts named entities, a regex splitter isolat
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

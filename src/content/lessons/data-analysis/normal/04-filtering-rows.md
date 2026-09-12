@@ -45,7 +45,7 @@ quiz:
 
 ## Filtering with boolean conditions
 
-Filtering is how you focus on the subset of data that matters. You create a **boolean mask** — a Series of True/False values — and use it to select rows.
+Filtering is how you focus on the subset of data that matters. You create a **boolean mask**, a Series of True/False values, and use it to select rows.
 
 ```python
 import pandas as pd
@@ -129,7 +129,7 @@ print(masters.shape)
 a_tickets = df[df["Ticket"].str.startswith("A", na=False)]
 ```
 
-The `na=False` parameter handles missing values gracefully — without it, NaN entries would cause errors.
+The `na=False` parameter handles missing values gracefully, without it, NaN entries would cause errors.
 
 ## Filtering with .query()
 
@@ -184,9 +184,9 @@ print(f"Passengers with title Mrs: {len(mrs)}")
 ## Key Takeaways
 
 - Boolean indexing `df[mask]` is the primary filtering mechanism in pandas
-- Use `&` for AND, `|` for OR — always wrap individual conditions in parentheses
+- Use `&` for AND, `|` for OR, always wrap individual conditions in parentheses
 - `.isin()` matches against a list; `.between()` handles ranges cleanly
-- `.str.contains()` filters by substring match — use `na=False` for safety
+- `.str.contains()` filters by substring match, use `na=False` for safety
 
 ## Practice Challenge
 

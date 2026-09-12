@@ -103,7 +103,7 @@ class EntityExtractor:
 
 **🎯 Résultat attendu :** `EntityExtractor().extract("Ada Lovelace worked at Babbage's Analytical Engine in London.")` retourne des entités incluant une personne et un lieu.
 
-**🩹 Si ça ne marche pas :** Si tu n'obtiens aucune entité, le modèle ne reconnaît peut-être pas les noms propres de ta phrase d'exemple — essaie une phrase plus riche.
+**🩹 Si ça ne marche pas :** Si tu n'obtiens aucune entité, le modèle ne reconnaît peut-être pas les noms propres de ta phrase d'exemple, essaie une phrase plus riche.
 
 ### 1.2 Vérifie l'extraction d'entités
 
@@ -158,7 +158,7 @@ class KnowledgeGraph:
 
 **🎯 Résultat attendu :** Ajouter quelques entités et arêtes construit un graphe que tu peux interroger avec `neighbors()`.
 
-**🩹 Si ça ne marche pas :** Si `neighbors` retourne vide, le texte de l'entité ne correspond à aucun nœud — vérifie la casse et l'orthographe exacte.
+**🩹 Si ça ne marche pas :** Si `neighbors` retourne vide, le texte de l'entité ne correspond à aucun nœud, vérifie la casse et l'orthographe exacte.
 
 ### 2.2 Vérifie le graphe
 
@@ -268,14 +268,14 @@ class KnowledgeGraph:
 ## ⚠️ Pièges courants
 
 - **Téléchargement du modèle manquant.** `spacy.load("en_core_web_sm")` lève une `OSError` si tu sautes `spacy download`. Installe le modèle avant d'exécuter.
-- **Recherches sensibles à la casse.** L'entité `"Lovelace"` ne correspondra pas à `"lovelace"` sauf si tu normalises la casse dans les recherches. L'aide `_find` gère cela — réutilise-la partout.
+- **Recherches sensibles à la casse.** L'entité `"Lovelace"` ne correspondra pas à `"lovelace"` sauf si tu normalises la casse dans les recherches. L'aide `_find` gère cela, réutilise-la partout.
 - **Graphes déconnectés.** Les entrées courtes produisent souvent des nœuds isolés sans arêtes. Utilise un texte avec plusieurs entités en co-occurrence pour voir une structure intéressante.
 - **Taille du modèle vs précision.** `en_core_web_sm` est petit et rapide mais manque les entités de niche. Essaie `en_core_web_md` ou `_lg` pour un meilleur rappel au prix de la mémoire.
-- **IDs d'entités en double.** `unique_entities` attribue les IDs par appel. À travers les phrases, la même personne peut recevoir des IDs différents sauf si tu dédupliques globalement — le pipeline construit un seul extracteur mais les IDs par phrase se réinitialisent.
+- **IDs d'entités en double.** `unique_entities` attribue les IDs par appel. À travers les phrases, la même personne peut recevoir des IDs différents sauf si tu dédupliques globalement, le pipeline construit un seul extracteur mais les IDs par phrase se réinitialisent.
 
 ## Ce que tu viens de construire
 
-Un pipeline texte-vers-graphe : spaCy extrait les entités nommées, un découpage par expression régulière isole les phrases, la co-occurrence transforme les phrases partagées en arêtes pondérées, et NetworkX stocke plus matplotlib rend le résultat. Tu peux maintenant prendre n'importe quel paragraphe et le transformer en un réseau explorable de faits connectés — le même schéma derrière les systèmes de questions-réponses et les moteurs de recommandation.
+Un pipeline texte-vers-graphe : spaCy extrait les entités nommées, un découpage par expression régulière isole les phrases, la co-occurrence transforme les phrases partagées en arêtes pondérées, et NetworkX stocke plus matplotlib rend le résultat. Tu peux maintenant prendre n'importe quel paragraphe et le transformer en un réseau explorable de faits connectés, le même schéma derrière les systèmes de questions-réponses et les moteurs de recommandation.
 
 :::tip[Exécute une version plus complète sans aucune configuration locale]
 [`examples/knowledge-graph-builder/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/knowledge-graph-builder) dans le dépôt du cours a une version plus riche avec la détection de types de relations, la découverte de communautés et le CLI câblé de bout en bout. Clone-le, ou ouvre tout le dépôt dans un [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), et exécute-le depuis là.
@@ -289,6 +289,6 @@ Un pipeline texte-vers-graphe : spaCy extrait les entités nommées, un découpa
 
 ## Partage ton projet avec la classe
 
-Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres élèves — et son README a un tutoriel complet et adapté aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git avant : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable avec git n'est supposée.
+Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres élèves, et son README a un tutoriel complet et adapté aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git avant : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable avec git n'est supposée.
 
 Bienvenue dans l'écriture de Python en dehors du navigateur. 🎓

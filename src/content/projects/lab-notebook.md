@@ -19,7 +19,7 @@ This assumes Python 101 and comfort with pandas from Data Analysis. Optional and
 
 ## Where to run this
 
-**Locally with `uv`** is the primary path — this is a CLI tool that writes experiment files and PDFs.
+**Locally with `uv`** is the primary path, this is a CLI tool that writes experiment files and PDFs.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/lab-notebook/notebook.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/lab-notebook/notebook.ipynb)
@@ -223,7 +223,7 @@ class NotebookStore:
 
 **🎯 Expected output:** `store.update(exp, hypothesis="New idea")` records the prior state, and `rollback` restores it.
 
-**🩹 If it's off:** If rollback crashes, the snapshot's measurements may not reconstruct cleanly — check the dict keys.
+**🩹 If it's off:** If rollback crashes, the snapshot's measurements may not reconstruct cleanly, check the dict keys.
 
 ### 3.2 Verify versioning
 
@@ -298,7 +298,7 @@ def export_pdf(exp: Experiment, out_path: str):
 
 ## What you just built
 
-A structured lab notebook: typed experiment templates, a statistics engine that computes mean, stdev, and trend lines, snapshot-based versioning with rollback, and a PDF exporter. The result is a reproducible analysis workflow — record, calculate, version, and share — that mirrors how modern research teams actually work.
+A structured lab notebook: typed experiment templates, a statistics engine that computes mean, stdev, and trend lines, snapshot-based versioning with rollback, and a PDF exporter. The result is a reproducible analysis workflow, record, calculate, version, and share, that mirrors how modern research teams actually work.
 
 :::tip[Run a fuller version without any local setup]
 [`examples/lab-notebook/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/lab-notebook) in the course repo has a richer version with chart generation, a searchable record index, and the CLI wired up end to end. Clone it, or open the whole repo in a [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), and run it from there.
@@ -312,6 +312,6 @@ A structured lab notebook: typed experiment templates, a statistics engine that 
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

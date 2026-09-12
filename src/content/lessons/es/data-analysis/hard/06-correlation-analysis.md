@@ -42,7 +42,7 @@ quiz:
       - text: "Reduce el tamaño de la muestra"
       - text: "Causa valores faltantes"
 ---
-La correlación mide la fuerza y la dirección de una relación lineal entre dos variables numéricas. Esta lección cubre la correlación de Pearson y de Spearman, cómo construir y leer mapas de calor de correlación, y cómo detectar la multicolinealidad — el destructor silencioso de los modelos de regresión.
+La correlación mide la fuerza y la dirección de una relación lineal entre dos variables numéricas. Esta lección cubre la correlación de Pearson y de Spearman, cómo construir y leer mapas de calor de correlación, y cómo detectar la multicolinealidad, el destructor silencioso de los modelos de regresión.
 
 ## Conceptos clave
 
@@ -65,17 +65,17 @@ print(f"Pearson r (math vs reading): {r:.4f}")
 Interpretación de r:
 | Rango | Fuerza | Dirección |
 |-------|----------|-----------|
-| 0.00 – 0.19 | Muy débil | — |
-| 0.20 – 0.39 | Débil | — |
-| 0.40 – 0.59 | Moderada | — |
-| 0.60 – 0.79 | Fuerte | — |
-| 0.80 – 1.00 | Muy fuerte | — |
+| 0.00 – 0.19 | Muy débil |, |
+| 0.20 – 0.39 | Débil |, |
+| 0.40 – 0.59 | Moderada |, |
+| 0.60 – 0.79 | Fuerte |, |
+| 0.80 – 1.00 | Muy fuerte |, |
 
 El signo indica la dirección: positiva (ambas aumentan juntas) o negativa (una aumenta mientras la otra disminuye).
 
 ### Correlación de Spearman
 
-La correlación de Spearman (ρ) mide las relaciones monótonas — funciona con datos ordinales y es robusta a los valores atípicos:
+La correlación de Spearman (ρ) mide las relaciones monótonas, funciona con datos ordinales y es robusta a los valores atípicos:
 
 ```python
 rho = df["math score"].corr(df["reading score"], method="spearman")
@@ -130,7 +130,7 @@ plt.show()
 
 ### Mapa de calor triangular (eliminar la redundancia)
 
-La matriz completa es simétrica — el triángulo superior repite el triángulo inferior. Elimínalo:
+La matriz completa es simétrica, el triángulo superior repite el triángulo inferior. Elimínalo:
 
 ```python
 import numpy as np
@@ -194,8 +194,8 @@ for gender in df["gender"].unique():
 Cuando dos o más características de un modelo de regresión están muy correlacionadas, la multicolinealidad infla los errores estándar y vuelve inestables las estimaciones de los coeficientes.
 
 Reglas prácticas:
-- |r| > 0.7: investiga — puede que necesites eliminar una variable
-- |r| > 0.9: multicolinealidad grave — elimina o combina
+- |r| > 0.7: investiga, puede que necesites eliminar una variable
+- |r| > 0.9: multicolinealidad grave, elimina o combina
 
 ```python
 # Find highly correlated pairs
@@ -254,10 +254,10 @@ for i in range(len(corr.columns)):
 
 ## Conclusiones clave
 
-- Pearson mide la correlación lineal; Spearman mide la correlación monótona — usa ambos cuando la relación podría ser no lineal
+- Pearson mide la correlación lineal; Spearman mide la correlación monótona, usa ambos cuando la relación podría ser no lineal
 - Los mapas de calor hacen visuales las matrices de correlación; los mapas de calor triangulares eliminan la información redundante
 - Los gráficos de pares dan un panorama multivariado completo con distribuciones marginales
-- La correlación nunca implica causalidad — los factores de confusión, la causalidad inversa y las correlaciones espurias siempre son posibles
+- La correlación nunca implica causalidad, los factores de confusión, la causalidad inversa y las correlaciones espurias siempre son posibles
 - La multicolinealidad (|r| > 0.7) infla los errores estándar en los modelos de regresión y debe abordarse
 
 ## Desafío de práctica
@@ -265,7 +265,7 @@ for i in range(len(corr.columns)):
 Calcula las correlaciones de Pearson y de Spearman para todos los pares de puntajes. Crea una figura con dos mapas de calor lado a lado (uno para cada método). Anota qué pares tienen la mayor discrepancia entre Pearson y Spearman y explica qué significa esa discrepancia.
 
 <details class="challenge">
-<summary>🧩 Desafío — piensa primero, luego revela</summary>
+<summary>🧩 Desafío, piensa primero, luego revela</summary>
 <div class="challenge__body">
 
 ```python

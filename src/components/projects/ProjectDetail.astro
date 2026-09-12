@@ -68,7 +68,7 @@ const alternates: Record<Locale, string> = hasAlternates
   : {en: enUrl, ar: enUrl, es: enUrl, fr: enUrl};
 
 // The canonical URL is always the *localized-slug* route, even when this page
-// was reached via the English-slug alias — so search engines converge on one
+// was reached via the English-slug alias, so search engines converge on one
 // URL per (project, locale) instead of two.
 const canonicalPath = projectsHref(locale, base, slug);
 
@@ -90,7 +90,7 @@ const jsonLd = {
 };
 ---
 
-<Base title={`${title} — PyDA Course`} description={description} lang={locale} dir={dir} alternates={alternates} canonicalPath={canonicalPath} jsonLd={jsonLd}>
+<Base title={`${title}, PyDA Course`} description={description} lang={locale} dir={dir} alternates={alternates} canonicalPath={canonicalPath} jsonLd={jsonLd}>
   <nav class="crumb container">
     <a href={projectsHref(locale, base)}>{m.projects_eyebrow()}</a> <span>/</span> <span class="crumb__here">{title}</span>
   </nav>
@@ -160,7 +160,7 @@ const jsonLd = {
     h.classList.add('is-step-done');
     const button = rowButtons.get(idx);
     button?.setAttribute('aria-pressed', 'true');
-    button?.setAttribute('aria-label', `${button.getAttribute('aria-label') ?? 'Mark complete'} — done`);
+    button?.setAttribute('aria-label', `${button.getAttribute('aria-label') ?? 'Mark complete'}, done`);
     button?.setAttribute('disabled', '');
     document.dispatchEvent(new CustomEvent('lesson:complete', {detail: {xp: XP.PROJECT_STEP}}));
   };

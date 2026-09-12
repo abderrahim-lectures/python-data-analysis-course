@@ -18,7 +18,7 @@ learningObjectives:
 
 # 🛠️ 🤖 Construire un Constructeur de Chatbots Sans Code
 
-Construis un chatbot basé sur des règles qui reconnaît les salutations, les questions et les commandes — et qui répond avec une personnalité, pas seulement des données. Ce projet parcourt la correspondance de motifs regex, la génération de réponses, le contexte de conversation et une boucle CLI propre, le tout depuis la bibliothèque standard.
+Construis un chatbot basé sur des règles qui reconnaît les salutations, les questions et les commandes, et qui répond avec une personnalité, pas seulement des données. Ce projet parcourt la correspondance de motifs regex, la génération de réponses, le contexte de conversation et une boucle CLI propre, le tout depuis la bibliothèque standard.
 
 Ceci est facultatif et non noté. Consulte [Projets du monde réel](/fr/projets) pour la liste complète.
 
@@ -33,18 +33,18 @@ Ceci est facultatif et non noté. Consulte [Projets du monde réel](/fr/projets)
 
 ## Où exécuter ceci
 
-- **Localement avec `uv` (recommandé).** Ce projet n'utilise que la bibliothèque standard — aucun paquet tiers — mais `uv` garde la structure du projet propre. La section Configuration ci-dessous t'y accompagne.
+- **Localement avec `uv` (recommandé).** Ce projet n'utilise que la bibliothèque standard, aucun paquet tiers, mais `uv` garde la structure du projet propre. La section Configuration ci-dessous t'y accompagne.
 - **Google Colab ou Kaggle Notebooks.** Colle les cellules de code directement dans un notebook. `input()` fonctionne pour les invites de chat, même si la boucle fonctionne mieux dans un vrai terminal.
-- **L'aire de jeux JupyterLite.** Colle les cellules de code directement dans un notebook — la boucle de chat fonctionne, mais garde les sessions courtes car il n'y a pas de terminal persistant.
+- **L'aire de jeux JupyterLite.** Colle les cellules de code directement dans un notebook, la boucle de chat fonctionne, mais garde les sessions courtes car il n'y a pas de terminal persistant.
 
-- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt — ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
+- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt, ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/chatbot-builder/notebook.fr.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/chatbot-builder/notebook.fr.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fchatbot-builder%2Fnotebook.fr.ipynb)
 
 ## Configuration
 
-`uv` est un outil unique qui remplace la chaîne habituelle « installer Python, puis pip, puis un environnement virtuel » — il peut installer et gérer les versions Python aux côtés des dépendances de ton projet.
+`uv` est un outil unique qui remplace la chaîne habituelle « installer Python, puis pip, puis un environnement virtuel », il peut installer et gérer les versions Python aux côtés des dépendances de ton projet.
 
 **macOS / Linux** (terminal) :
 
@@ -71,11 +71,11 @@ uv init chatbot
 cd chatbot
 ```
 
-Aucun paquet à ajouter — le chatbot n'utilise que la bibliothèque standard de Python (`re`, `random`, `dataclasses`, `collections`).
+Aucun paquet à ajouter, le chatbot n'utilise que la bibliothèque standard de Python (`re`, `random`, `dataclasses`, `collections`).
 
 ## Étape 1 : Fais correspondre l'entrée utilisateur avec regex
 
-La correspondance de motifs est la façon dont le bot comprend ce que l'utilisateur veut dire. Un utilisateur peut taper « Hello! », « hi », « hey there » ou « good morning » — mais l'intention derrière tout cela est une salutation. Regex nous laisse réduire tout cela en un seul motif.
+La correspondance de motifs est la façon dont le bot comprend ce que l'utilisateur veut dire. Un utilisateur peut taper « Hello! », « hi », « hey there » ou « good morning », mais l'intention derrière tout cela est une salutation. Regex nous laisse réduire tout cela en un seul motif.
 
 ### 1.1 Définis les motifs d'intention
 
@@ -160,7 +160,7 @@ time
 None
 ```
 
-**🩹 Si ça ne marche pas :** Si chaque entrée retourne `None`, tu as oublié `re.IGNORECASE` — « Hello » ne correspondra pas à `r"\bhi\b"` quand la regex est sensible à la casse et que l'utilisateur capitalise la première lettre. Si `greeting` correspond à « good morning » mais pas à « goodnight », vérifie que `goodnight` n'est pas dans ta liste de farewell ni un motif de greeting — ce n'est pas une sous-chaîne du motif `good\s*(morning|afternoon|evening)`.
+**🩹 Si ça ne marche pas :** Si chaque entrée retourne `None`, tu as oublié `re.IGNORECASE`, « Hello » ne correspondra pas à `r"\bhi\b"` quand la regex est sensible à la casse et que l'utilisateur capitalise la première lettre. Si `greeting` correspond à « good morning » mais pas à « goodnight », vérifie que `goodnight` n'est pas dans ta liste de farewell ni un motif de greeting, ce n'est pas une sous-chaîne du motif `good\s*(morning|afternoon|evening)`.
 
 ### 1.2 Gère les groupes regex pour les données extraites
 
@@ -208,7 +208,7 @@ greeting good evening ('evening',)
 name what's your name ()
 ```
 
-**🩹 Si ça ne marche pas :** Si `groups` est `()` alors que tu attends une capture, les parenthèses dans ta regex sont des groupes non capturants — utilise `(...)` et non `(?:...)` pour les groupes que tu veux extraire. Si `matched_text` est vide, `re.search` a trouvé une correspondance à la position 0 mais la limite de mot `\b` pourrait dépouiller la correspondance — essaie de retirer les ancres `\b` du motif spécifique.
+**🩹 Si ça ne marche pas :** Si `groups` est `()` alors que tu attends une capture, les parenthèses dans ta regex sont des groupes non capturants, utilise `(...)` et non `(?:...)` pour les groupes que tu veux extraire. Si `matched_text` est vide, `re.search` a trouvé une correspondance à la position 0 mais la limite de mot `\b` pourrait dépouiller la correspondance, essaie de retirer les ancres `\b` du motif spécifique.
 
 ### 1.3 Vérifie le classifieur
 
@@ -317,11 +317,11 @@ Hey there! How can I help?
 Hi! Ready to chat.
 ```
 
-**🩹 Si ça ne marche pas :** Si tu obtiens une chaîne vide, le nom d'intention ne correspond à aucune clé de `RESPONSES` — vérifie les coquilles comme `"Greeting"` (G majuscule) contre `"greeting"`. Si la même réponse apparaît à chaque fois, tu as oublié `random.choice` et tu utilises l'index `[0]` ou une entrée fixe à la place.
+**🩹 Si ça ne marche pas :** Si tu obtiens une chaîne vide, le nom d'intention ne correspond à aucune clé de `RESPONSES`, vérifie les coquilles comme `"Greeting"` (G majuscule) contre `"greeting"`. Si la même réponse apparaît à chaque fois, tu as oublié `random.choice` et tu utilises l'index `[0]` ou une entrée fixe à la place.
 
 ### 2.2 Ajoute des réponses dynamiques avec les f-strings
 
-Certaines réponses ont besoin de données en direct — l'heure et la date changent chaque seconde. Utiliser des f-strings dans les chaînes template les évaluerait au moment de l'import, figeant les valeurs. Utilise plutôt des réponses appelables.
+Certaines réponses ont besoin de données en direct, l'heure et la date changent chaque seconde. Utiliser des f-strings dans les chaînes template les évaluerait au moment de l'import, figeant les valeurs. Utilise plutôt des réponses appelables.
 
 **👟 Indice de départ :** Remplace les chaînes statiques par des lambdas pour les intentions qui ont besoin de données dynamiques :
 
@@ -359,9 +359,9 @@ time.sleep(2)
 print(get_response("time"))
 ```
 
-Les deux affichent la même heure (à 2 secondes d'écart seulement), mais si tu attends une minute complète entre deux appels, les heures différeront — la preuve que le lambda est évalué à chaque appel, pas une fois à l'import.
+Les deux affichent la même heure (à 2 secondes d'écart seulement), mais si tu attends une minute complète entre deux appels, les heures différeront, la preuve que le lambda est évalué à chaque appel, pas une fois à l'import.
 
-**🩹 Si ça ne marche pas :** Si `callable(choice)` retourne `False` pour un lambda, vérifie que le lambda est défini correctement — `lambda: f"..."` et non `f"..."` (une f-string nue est une chaîne, pas une fonction). Si tu obtiens `TypeError: 'str' object is not callable`, une chaîne statique s'est glissée dans une liste qui est maintenant appelée — assure-toi que seules des entrées lambda sont dans les listes dynamiques.
+**🩹 Si ça ne marche pas :** Si `callable(choice)` retourne `False` pour un lambda, vérifie que le lambda est défini correctement, `lambda: f"..."` et non `f"..."` (une f-string nue est une chaîne, pas une fonction). Si tu obtiens `TypeError: 'str' object is not callable`, une chaîne statique s'est glissée dans une liste qui est maintenant appelée, assure-toi que seules des entrées lambda sont dans les listes dynamiques.
 
 ### 2.3 Vérifie la génération de réponses
 
@@ -379,7 +379,7 @@ Les deux affichent la même heure (à 2 secondes d'écart seulement), mais si tu
 
 ## Étape 3 : Suis le contexte de conversation
 
-Un chatbot qui ne regarde que le message courant est oublieux. Le suivi de contexte laisse le bot se souvenir de ce que l'utilisateur a dit plus tôt — pour que les questions de suivi comme « et pour demain ? » ou « et toi ? » aient du sens.
+Un chatbot qui ne regarde que le message courant est oublieux. Le suivi de contexte laisse le bot se souvenir de ce que l'utilisateur a dit plus tôt, pour que les questions de suivi comme « et pour demain ? » ou « et toi ? » aient du sens.
 
 ### 3.1 Définis la classe de contexte de conversation
 
@@ -457,7 +457,7 @@ Recent intents: ['greeting', 'time', 'mood']
 Was recent greeting? True
 ```
 
-**🩹 Si ça ne marche pas :** Si `turn_count` est toujours à 1, tu as oublié d'appeler `update()` — il ne s'incrémente pas tout seul. Si `message_history` fait plus de 10 entrées, la limite `deque(maxlen=10)` ne fonctionne pas — vérifie que tu passes `maxlen=10` dans le `default_factory`, pas dans le corps de la classe comme valeur par défaut.
+**🩹 Si ça ne marche pas :** Si `turn_count` est toujours à 1, tu as oublié d'appeler `update()`, il ne s'incrémente pas tout seul. Si `message_history` fait plus de 10 entrées, la limite `deque(maxlen=10)` ne fonctionne pas, vérifie que tu passes `maxlen=10` dans le `default_factory`, pas dans le corps de la classe comme valeur par défaut.
 
 ### 3.2 Utilise le contexte pour améliorer les réponses
 
@@ -494,7 +494,7 @@ Devrait afficher :
 date
 ```
 
-**🩹 Si ça ne marche pas :** Si l'intention ajustée reste `"question"` alors que tu attends `"date"`, vérifie `context.last_intent` — il doit être `"time"` pour que la première branche se déclenche. Si `user_message.lower()` ne contient pas « tomorrow », la vérification de sous-chaîne ne correspondra pas — assure-toi que l'entrée de l'utilisateur contient réellement le mot.
+**🩹 Si ça ne marche pas :** Si l'intention ajustée reste `"question"` alors que tu attends `"date"`, vérifie `context.last_intent`, il doit être `"time"` pour que la première branche se déclenche. Si `user_message.lower()` ne contient pas « tomorrow », la vérification de sous-chaîne ne correspondra pas, assure-toi que l'entrée de l'utilisateur contient réellement le mot.
 
 ### 3.3 Vérifie le suivi de contexte
 
@@ -513,7 +513,7 @@ date
 
 ## Étape 4 : Ajoute une personnalité
 
-Un bot qui répond à chaque question par une déclaration plate semble sans vie. La personnalité vient de traits cohérents — un nom, un ton, des habitudes de petite conversation et un suivi d'humeur qui évolue au fil de la conversation.
+Un bot qui répond à chaque question par une déclaration plate semble sans vie. La personnalité vient de traits cohérents, un nom, un ton, des habitudes de petite conversation et un suivi d'humeur qui évolue au fil de la conversation.
 
 ### 4.1 Crée une classe de personnalité
 
@@ -594,7 +594,7 @@ I'm in a great mood! Ready to help.
 After shift: curious
 ```
 
-**🩹 Si ça ne marche pas :** Si la deuxième salutation est identique à la première, `greeting_count` ne s'incrémente pas — assure-toi que `self.greeting_count += 1` est dans la méthode, pas au niveau du module. Si `shift_mood` ne produit jamais « excited », son poids de 1 le rend rare — lance le décalage plusieurs fois et il finira par apparaître.
+**🩹 Si ça ne marche pas :** Si la deuxième salutation est identique à la première, `greeting_count` ne s'incrémente pas, assure-toi que `self.greeting_count += 1` est dans la méthode, pas au niveau du module. Si `shift_mood` ne produit jamais « excited », son poids de 1 le rend rare, lance le décalage plusieurs fois et il finira par apparaître.
 
 ### 4.2 Combine personnalité et réponses
 
@@ -662,7 +662,7 @@ We meet again! I'm Chatbot, remember?
 Hey again! Back for more? I'm Chatbot.
 ```
 
-**🩹 Si ça ne marche pas :** Si les préfixes d'humeur n'apparaissent jamais, `random.random() < 0.3` signifie qu'ils ne se montrent que 30% du temps — lance-le plus souvent. Si les salutations retournent le template statique au lieu de `personality.greet()`, tu as oublié la branche `if intent == "greeting": return personality.greet()` dans le `get_response` mis à jour.
+**🩹 Si ça ne marche pas :** Si les préfixes d'humeur n'apparaissent jamais, `random.random() < 0.3` signifie qu'ils ne se montrent que 30% du temps, lance-le plus souvent. Si les salutations retournent le template statique au lieu de `personality.greet()`, tu as oublié la branche `if intent == "greeting": return personality.greet()` dans le `get_response` mis à jour.
 
 ### 4.3 Vérifie la personnalité
 
@@ -676,7 +676,7 @@ Hey again! Back for more? I'm Chatbot.
 **🤔 Question(s) socratique(s)**
 
 - Pourquoi utiliser des choix aléatoires pondérés pour `shift_mood` au lieu d'un tirage uniforme ? Qu'est-ce que cela modélise d'une vraie personnalité ?
-- Si tu voulais que le bot se souvienne du nom d'un utilisateur depuis plus tôt dans la conversation, où le stockerais-tu — dans `Personality` ou dans `ChatContext` ? Pourquoi ?
+- Si tu voulais que le bot se souvienne du nom d'un utilisateur depuis plus tôt dans la conversation, où le stockerais-tu, dans `Personality` ou dans `ChatContext` ? Pourquoi ?
 
 ## Étape 5 : Gère les replis
 
@@ -684,7 +684,7 @@ Aucun motif ne couvrira jamais chaque entrée possible. Un bot qui plante ou ne 
 
 ### 5.1 Construis un système de réponses de repli
 
-**👟 Indice de départ :** Crée un module `fallback.py` qui génère des réponses utiles pour les entrées sans correspondance. Suis combien de replis se produisent d'affilée — si le bot échoue à comprendre trop de fois de suite, propose d'aider plus directement.
+**👟 Indice de départ :** Crée un module `fallback.py` qui génère des réponses utiles pour les entrées sans correspondance. Suis combien de replis se produisent d'affilée, si le bot échoue à comprendre trop de fois de suite, propose d'aider plus directement.
 
 ```python
 # fallback.py
@@ -757,7 +757,7 @@ It seems like we're having trouble connecting. Would you like me to list what I 
 {'consecutive': 3, 'total': 3}
 ```
 
-**🩹 Si ça ne marche pas :** Si la réponse de proposition d'aide n'apparaît jamais, vérifie que `consecutive_fallbacks` est bien incrémenté — si `record_success()` est appelé entre les replis, le compteur se réinitialise. Si les statistiques montrent `consecutive: 3` alors que tu n'as appelé `record_fallback` que deux fois, vérifie que `record_success` n'est pas appelé quand il ne devrait pas l'être.
+**🩹 Si ça ne marche pas :** Si la réponse de proposition d'aide n'apparaît jamais, vérifie que `consecutive_fallbacks` est bien incrémenté, si `record_success()` est appelé entre les replis, le compteur se réinitialise. Si les statistiques montrent `consecutive: 3` alors que tu n'as appelé `record_fallback` que deux fois, vérifie que `record_success` n'est pas appelé quand il ne devrait pas l'être.
 
 ### 5.2 Combine les replis avec le classifieur principal
 
@@ -790,7 +790,7 @@ def respond(user_input: str, context: ChatContext,
     return response
 ```
 
-Attends — cela réinitialise le suivi en cas de *succès*, mais le suivi de replis devrait se réinitialiser en cas de succès, pas d'échec. Corrigeons cela :
+Attends, cela réinitialise le suivi en cas de *succès*, mais le suivi de replis devrait se réinitialiser en cas de succès, pas d'échec. Corrigeons cela :
 
 ```python
 def respond(user_input: str, context: ChatContext,
@@ -822,9 +822,9 @@ You: hello
 Bot: Hi! I'm Chatbot. Nice to meet you!
 ```
 
-Après le « hello » réussi, le compteur de consécutifs se réinitialise — l'entrée inconnue suivante repart du premier message de repli.
+Après le « hello » réussi, le compteur de consécutifs se réinitialise, l'entrée inconnue suivante repart du premier message de repli.
 
-**🩹 Si ça ne marche pas :** Si le compteur de replis ne se réinitialise jamais après une entrée réussie, `tracker.record_success()` n'est pas appelé — assure-toi que la branche `if match is None: ... else: tracker.record_success()` est correcte. Si le bot répond par une chaîne vide à une entrée inconnue, `record_fallback()` du suivi de replis ne retourne pas une chaîne — vérifie l'import.
+**🩹 Si ça ne marche pas :** Si le compteur de replis ne se réinitialise jamais après une entrée réussie, `tracker.record_success()` n'est pas appelé, assure-toi que la branche `if match is None: ... else: tracker.record_success()` est correcte. Si le bot répond par une chaîne vide à une entrée inconnue, `record_fallback()` du suivi de replis ne retourne pas une chaîne, vérifie l'import.
 
 ### 5.3 Vérifie la gestion des replis
 
@@ -838,7 +838,7 @@ Après le « hello » réussi, le compteur de consécutifs se réinitialise — 
 **🤔 Question(s) socratique(s)**
 
 - Pourquoi suivre les replis consécutifs au lieu des seuls replis totaux ? Que se passerait-il si le bot proposait de l'aide après chaque entrée inconnue ?
-- Si tu voulais que le bot journalise quelles entrées ont déclenché des replis (pour une analyse ultérieure), où stockerais-tu ce journal — dans `FallbackTracker`, `ChatContext`, ou un module séparé ?
+- Si tu voulais que le bot journalise quelles entrées ont déclenché des replis (pour une analyse ultérieure), où stockerais-tu ce journal, dans `FallbackTracker`, `ChatContext`, ou un module séparé ?
 
 ## Étape 6 : Construis la boucle de chat
 
@@ -958,11 +958,11 @@ Fallbacks: 1
 Final mood: curious
 ```
 
-**🩹 Si ça ne marche pas :** Si `main.py` plante avec `ModuleNotFoundError`, les autres modules (`patterns.py`, `responses.py`, `context.py`, `personality.py`, `fallback.py`) ne sont pas dans le même dossier — garde tous les fichiers à la racine du projet. Si le REPL sort immédiatement, `input()` lève `EOFError` — cela arrive dans certains environnements notebook ; lance-le dans un vrai terminal à la place.
+**🩹 Si ça ne marche pas :** Si `main.py` plante avec `ModuleNotFoundError`, les autres modules (`patterns.py`, `responses.py`, `context.py`, `personality.py`, `fallback.py`) ne sont pas dans le même dossier, garde tous les fichiers à la racine du projet. Si le REPL sort immédiatement, `input()` lève `EOFError`, cela arrive dans certains environnements notebook ; lance-le dans un vrai terminal à la place.
 
 ### 6.2 Ajoute la validation d'entrée et les cas limites
 
-**👟 Indice de départ :** Protège contre les erreurs utilisateur courantes — entrée vide, messages extrêmement longs et caractères de contrôle :
+**👟 Indice de départ :** Protège contre les erreurs utilisateur courantes, entrée vide, messages extrêmement longs et caractères de contrôle :
 
 ```python
 def validate_input(text: str) -> str | None:
@@ -998,7 +998,7 @@ while True:
 
 **🎯 Résultat attendu :** Appuyer sur Entrée sans rien taper continue silencieusement la boucle. Taper 600 caractères tronque à 500. Les caractères de contrôle sont dépouillés.
 
-**🩹 Si ça ne marche pas :** Si appuyer sur Entrée fait répondre le bot par un repli, la vérification de chaîne vide est après `validate_input` au lieu d'avant — assure-toi que `validate_input` retourne `None` pour les chaînes vides et que la boucle principale ignore les valeurs `None`.
+**🩹 Si ça ne marche pas :** Si appuyer sur Entrée fait répondre le bot par un repli, la vérification de chaîne vide est après `validate_input` au lieu d'avant, assure-toi que `validate_input` retourne `None` pour les chaînes vides et que la boucle principale ignore les valeurs `None`.
 
 ### 6.3 Vérifie le chatbot complet
 
@@ -1016,24 +1016,24 @@ while True:
 
 - **Oublier `re.IGNORECASE`.** Sans lui, « Hello » ne correspondra pas à `r"\bhi\b"` car la regex est sensible à la casse par défaut. Chaque appel `re.search` et `re.match` du classifieur a besoin de ce drapeau.
 - **Mélanger f-strings et lambdas dans les templates de réponses.** Une f-string comme `f"The time is {datetime.now()}"` s'évalue *une fois au moment de l'import*, figeant la valeur. Utilise `lambda: f"..."` à la place pour qu'elle s'évalue à chaque appel.
-- **Le compteur de replis qui se réinitialise trop souvent.** `record_success()` réinitialise le compteur de consécutifs — si tu l'appelles pour chaque entrée (replis inclus), le seuil « 3 d'affilée » ne se déclenche jamais. Appelle-le seulement quand le classifieur fait réellement une correspondance.
+- **Le compteur de replis qui se réinitialise trop souvent.** `record_success()` réinitialise le compteur de consécutifs, si tu l'appelles pour chaque entrée (replis inclus), le seuil « 3 d'affilée » ne se déclenche jamais. Appelle-le seulement quand le classifieur fait réellement une correspondance.
 - **`deque(maxlen=10)` qui ne fonctionne pas.** Le `maxlen` doit être passé au lambda `default_factory`, pas comme valeur par défaut au niveau de la classe : `field(default_factory=lambda: deque(maxlen=10))`, et non `deque: deque = deque(maxlen=10)`.
-- **Le REPL dans les notebooks.** `input()` dans Colab/Kaggle fonctionne, mais la boucle de chat ne sort pas proprement sur `Ctrl+C` — elle lève `KeyboardInterrupt` que tu dois attraper. Le `try/except (EOFError, KeyboardInterrupt)` dans `main.py` gère cela.
+- **Le REPL dans les notebooks.** `input()` dans Colab/Kaggle fonctionne, mais la boucle de chat ne sort pas proprement sur `Ctrl+C`, elle lève `KeyboardInterrupt` que tu dois attraper. Le `try/except (EOFError, KeyboardInterrupt)` dans `main.py` gère cela.
 
 ## Ce que tu viens de construire
 
-Un chatbot basé sur des règles construit entièrement depuis la bibliothèque standard de Python : la correspondance de motifs regex pour la classification d'intentions, la génération de réponses par templates avec données dynamiques, le suivi de contexte de conversation à travers les tours, une personnalité avec changements d'humeur, et un système de repli qui intensifie l'aide après des échecs répétés. Cinq modules — `patterns.py`, `responses.py`, `context.py`, `personality.py`, `fallback.py` — chacun testé indépendamment avant d'être câblé dans `main.py`. Le chatbot reconnaît les salutations, les questions sur l'heure/la date/le nom/l'humeur, les demandes d'aide et les adieux, et répond avec des variations guidées par la personnalité au lieu de chaînes fixes.
+Un chatbot basé sur des règles construit entièrement depuis la bibliothèque standard de Python : la correspondance de motifs regex pour la classification d'intentions, la génération de réponses par templates avec données dynamiques, le suivi de contexte de conversation à travers les tours, une personnalité avec changements d'humeur, et un système de repli qui intensifie l'aide après des échecs répétés. Cinq modules, `patterns.py`, `responses.py`, `context.py`, `personality.py`, `fallback.py`, chacun testé indépendamment avant d'être câblé dans `main.py`. Le chatbot reconnaît les salutations, les questions sur l'heure/la date/le nom/l'humeur, les demandes d'aide et les adieux, et répond avec des variations guidées par la personnalité au lieu de chaînes fixes.
 
 ## Où aller à partir d'ici
 
-- **Ajoute une base de connaissances simple.** Stocke des faits que le bot peut rechercher — « Python a été créé par Guido van Rossum » — et répond aux intentions `question` en cherchant dans la base de connaissances au lieu de donner un « je ne sais pas » générique.
+- **Ajoute une base de connaissances simple.** Stocke des faits que le bot peut rechercher, « Python a été créé par Guido van Rossum », et répond aux intentions `question` en cherchant dans la base de connaissances au lieu de donner un « je ne sais pas » générique.
 - **Historique de conversation persistant.** Sauvegarde le journal du chat dans un fichier JSON pour pouvoir revoir les conversations passées, ou charge le contexte d'une session précédente au redémarrage du bot.
-- **Support multi-utilisateurs.** Clé le `ChatContext` par identifiant utilisateur au lieu d'avoir un contexte global — différents utilisateurs obtiennent des historiques de conversation indépendants.
+- **Support multi-utilisateurs.** Clé le `ChatContext` par identifiant utilisateur au lieu d'avoir un contexte global, différents utilisateurs obtiennent des historiques de conversation indépendants.
 - **Améliorations regex.** Utilise le mode `re.VERBOSE` pour écrire des motifs plus lisibles avec des commentaires, ou compile les motifs avec `re.compile` pour de meilleures performances sur de grandes listes de motifs.
-- **Repli LLM.** Quand le classifieur regex retourne `None`, passe l'entrée à un LLM gratuit au lieu d'une réponse de repli statique — le meilleur des deux mondes : une correspondance rapide de motifs pour les cas courants, une IA flexible pour tout le reste.
+- **Repli LLM.** Quand le classifieur regex retourne `None`, passe l'entrée à un LLM gratuit au lieu d'une réponse de repli statique, le meilleur des deux mondes : une correspondance rapide de motifs pour les cas courants, une IA flexible pour tout le reste.
 
 ## Partage ton projet avec la classe
 
-Tu as construit quelque chose dont tu es fier·e ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets que d'autres étudiants ont soumis — et son README contient un tutoriel complet, accessible aux débutants, pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, étape par étape. Aucune expérience git préalable n'est requise.
+Tu as construit quelque chose dont tu es fier·e ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets que d'autres étudiants ont soumis, et son README contient un tutoriel complet, accessible aux débutants, pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, étape par étape. Aucune expérience git préalable n'est requise.
 
 Bienvenue dans l'écriture de Python hors du navigateur. 🎓

@@ -45,7 +45,7 @@ quiz:
 
 ## ¿Qué es un DataFrame?
 
-Un **DataFrame** de pandas es una estructura de datos bidimensional etiquetada — piensa en él como una hoja de cálculo, una tabla SQL o un diccionario de objetos Series. Cada columna es una Series y todas las columnas comparten el mismo índice.
+Un **DataFrame** de pandas es una estructura de datos bidimensional etiquetada, piensa en él como una hoja de cálculo, una tabla SQL o un diccionario de objetos Series. Cada columna es una Series y todas las columnas comparten el mismo índice.
 
 ```python
 import pandas as pd
@@ -69,7 +69,7 @@ Salida:
 
 ## Creando DataFrames desde diferentes fuentes
 
-**Desde un diccionario de listas** — cada clave se convierte en un nombre de columna:
+**Desde un diccionario de listas**, cada clave se convierte en un nombre de columna:
 
 ```python
 df = pd.DataFrame({
@@ -79,7 +79,7 @@ df = pd.DataFrame({
 })
 ```
 
-**Desde una lista de diccionarios** — cada diccionario es una fila:
+**Desde una lista de diccionarios**, cada diccionario es una fila:
 
 ```python
 records = [
@@ -90,7 +90,7 @@ records = [
 df = pd.DataFrame(records)
 ```
 
-**Desde una Series** — varias Series se combinan en columnas:
+**Desde una Series**, varias Series se combinan en columnas:
 
 ```python
 names = pd.Series(["Alice", "Bob", "Carol"])
@@ -137,7 +137,7 @@ df.info()         # column names, non-null counts, dtypes
 df.describe()     # statistical summary of numeric columns
 ```
 
-El método `info()` es particularmente importante — revela valores faltantes y tipos de datos:
+El método `info()` es particularmente importante, revela valores faltantes y tipos de datos:
 
 ```
 <class 'pandas.core.frame.DataFrame'>
@@ -154,7 +154,7 @@ Data columns (total 12 columns):
  ...
 ```
 
-Observa que `Age` tiene 714 valores no nulos de 891 — eso significa 177 valores faltantes. Limpiarlos es una habilidad central que aprenderás más adelante.
+Observa que `Age` tiene 714 valores no nulos de 891, eso significa 177 valores faltantes. Limpiarlos es una habilidad central que aprenderás más adelante.
 
 ## Acceso a columnas
 
@@ -191,7 +191,7 @@ print(employees[["Name", "Salary"]])
 
 - Un DataFrame es una tabla con filas etiquetadas (índice) y columnas etiquetadas
 - Los diccionarios de listas y las listas de diccionarios son los métodos de construcción más comunes
-- `pd.read_csv()` carga datos externos — usa `index_col`, `usecols` y `na_values` para tener control
+- `pd.read_csv()` carga datos externos, usa `index_col`, `usecols` y `na_values` para tener control
 - Inspecciona siempre los datos nuevos con `head()`, `info()` y `describe()` antes de analizarlos
 
 ## Desafío de práctica

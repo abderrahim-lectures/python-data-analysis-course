@@ -6,36 +6,36 @@ description: "Construis une appli RAG multi-documents sur un dossier de PDF, ave
 
 # 📚 Discute avec tes PDF
 
-Le [projet Appli RAG](/fr/projets/rag-notes) discute avec un dossier de notes en texte brut. Ce projet emmène la même idée quelque part de plus utile : un dossier de vrais PDF — rapports, guides, manuels, articles — avec des réponses qui citent exactement de quel document et de quelle page vient un fait, comme le ferait un assistant de recherche. Cela suppose Python 101 ; il aide aussi beaucoup d'avoir déjà construit le projet Appli RAG, puisque celui-ci réutilise toute son architecture et ne change que la façon dont les documents source sont lus et cités, mais ce n'est pas une exigence stricte si tu es à l'aise avec les concepts.
+Le [projet Appli RAG](/fr/projets/rag-notes) discute avec un dossier de notes en texte brut. Ce projet emmène la même idée quelque part de plus utile : un dossier de vrais PDF, rapports, guides, manuels, articles, avec des réponses qui citent exactement de quel document et de quelle page vient un fait, comme le ferait un assistant de recherche. Cela suppose Python 101 ; il aide aussi beaucoup d'avoir déjà construit le projet Appli RAG, puisque celui-ci réutilise toute son architecture et ne change que la façon dont les documents source sont lus et cités, mais ce n'est pas une exigence stricte si tu es à l'aise avec les concepts.
 
 C'est optionnel et non noté. Voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 
-1. Extraire le texte d'un dossier de PDF, page par page, et le découper en petits fragments — en gardant le nom de fichier source et le numéro de page attachés à chaque fragment.
+1. Extraire le texte d'un dossier de PDF, page par page, et le découper en petits fragments, en gardant le nom de fichier source et le numéro de page attachés à chaque fragment.
 2. Transformer chaque fragment en vecteur, entièrement en local, sans clé API et sans coût, avec `sentence-transformers`.
-3. Récupérer les fragments les plus pertinents pour une question à travers *tous* les PDF à la fois, puis demander à un LLM gratuit de répondre en utilisant uniquement ce contexte — avec une citation `(source, page N)` requise pour chaque fait.
+3. Récupérer les fragments les plus pertinents pour une question à travers *tous* les PDF à la fois, puis demander à un LLM gratuit de répondre en utilisant uniquement ce contexte, avec une citation `(source, page N)` requise pour chaque fait.
 4. Envelopper tout cela dans une petite boucle interactive pour pouvoir continuer à poser des questions sans relancer un script à chaque fois.
 
 ## Où exécuter ceci
 
-**En local avec `uv`** est le chemin que suivent les étapes de cette leçon, et le recommandé — c'est du vrai Python tournant sur ta propre machine, le même mouvement « gradue vers du vrai Python » que tout autre projet de cette section. La section Configuration ci-dessous explique comment l'installer.
+**En local avec `uv`** est le chemin que suivent les étapes de cette leçon, et le recommandé, c'est du vrai Python tournant sur ta propre machine, le même mouvement « gradue vers du vrai Python » que tout autre projet de cette section. La section Configuration ci-dessous explique comment l'installer.
 
 **GitHub Codespaces** est une alternative sans configuration si tu préfères ne rien installer localement pour l'instant : ouvre [tout le dépôt du cours dans un Codespace gratuit](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python et `uv` sont déjà installés, selon le `.devcontainer/devcontainer.json` du dépôt) et exécute exactement les mêmes commandes `uv` depuis un terminal dans ton onglet de navigateur.
 
-**Google Colab, Kaggle Notebooks, ou Binder** fonctionnent aussi, puisque ce projet n'a pas besoin de GPU — une version notebook réelle et exécutable du pipeline de ce projet (le même découpage de PDF, embedding local, et génération de réponses citées que les étapes ci-dessous) vit dans [`examples/chat-with-pdfs/notebook.fr.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/chat-with-pdfs/notebook.fr.ipynb). Clique sur un badge pour le lancer directement, sans aucune installation locale :
+**Google Colab, Kaggle Notebooks, ou Binder** fonctionnent aussi, puisque ce projet n'a pas besoin de GPU, une version notebook réelle et exécutable du pipeline de ce projet (le même découpage de PDF, embedding local, et génération de réponses citées que les étapes ci-dessous) vit dans [`examples/chat-with-pdfs/notebook.fr.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/chat-with-pdfs/notebook.fr.ipynb). Clique sur un badge pour le lancer directement, sans aucune installation locale :
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/chat-with-pdfs/notebook.fr.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/chat-with-pdfs/notebook.fr.ipynb)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fchat-with-pdfs%2Fnotebook.fr.ipynb)
 
-Sois honnête avec toi-même sur le compromis, cependant : c'est une façon de moindre fidélité de vivre le projet qu'un vrai projet `uv` local — pas de fichiers séparés, pas de vraie structure de projet, juste des cellules dans un notebook. Traite-le comme une façon rapide d'expérimenter, pas le chemin principal.
+Sois honnête avec toi-même sur le compromis, cependant : c'est une façon de moindre fidélité de vivre le projet qu'un vrai projet `uv` local, pas de fichiers séparés, pas de vraie structure de projet, juste des cellules dans un notebook. Traite-le comme une façon rapide d'expérimenter, pas le chemin principal.
 
 ## Configuration
 
 ### Installe `uv`
 
-`uv` est un seul outil qui remplace la chaîne habituelle « installe Python, puis installe pip, puis installe un outil d'environnement virtuel, puis installe les paquets » — il peut installer et gérer les versions de Python lui-même, en plus des dépendances de ton projet.
+`uv` est un seul outil qui remplace la chaîne habituelle « installe Python, puis installe pip, puis installe un outil d'environnement virtuel, puis installe les paquets », il peut installer et gérer les versions de Python lui-même, en plus des dépendances de ton projet.
 
 **macOS / Linux** (terminal) :
 
@@ -63,22 +63,22 @@ cd chat-with-pdfs
 uv add pypdf sentence-transformers numpy openai python-dotenv
 ```
 
-`pypdf` lit le texte des fichiers PDF. `sentence-transformers` est la bibliothèque qui transforme le texte en vecteurs en local, sur ton propre CPU — pas d'appel API, pas de clé. `numpy` fait les vrais calculs pour comparer les vecteurs. `python-dotenv` te permet de garder ta clé API LLM dans un fichier `.env` local.
+`pypdf` lit le texte des fichiers PDF. `sentence-transformers` est la bibliothèque qui transforme le texte en vecteurs en local, sur ton propre CPU, pas d'appel API, pas de clé. `numpy` fait les vrais calculs pour comparer les vecteurs. `python-dotenv` te permet de garder ta clé API LLM dans un fichier `.env` local.
 
 ### Obtiens une clé API LLM gratuite
 
-La génération (la dernière partie de l'Étape 3) a besoin d'une API LLM gratuite — l'extraction, le découpage, l'embedding et la récupération sont tous entièrement locaux et n'ont besoin d'aucune clé, mais c'est plus simple de configurer cela maintenant, avant de commencer à construire, plutôt que de faire une pause en cours de route.
+La génération (la dernière partie de l'Étape 3) a besoin d'une API LLM gratuite, l'extraction, le découpage, l'embedding et la récupération sont tous entièrement locaux et n'ont besoin d'aucune clé, mais c'est plus simple de configurer cela maintenant, avant de commencer à construire, plutôt que de faire une pause en cours de route.
 
-**Choisis le fournisseur que tu préfères** — aucun ne nécessite de carte de crédit au moment de l'écriture, et ce cours n'en favorise aucun.
+**Choisis le fournisseur que tu préfères**, aucun ne nécessite de carte de crédit au moment de l'écriture, et ce cours n'en favorise aucun.
 
 | Fournisseur | Où obtenir une clé | Pourquoi le choisir |
 |---|---|---|
-| **GitHub Models** *(par défaut suggéré)* | [github.com/settings/tokens](https://github.com/settings/tokens) — un jeton d'accès personnel avec le scope `models: read` | Pas d'inscription séparée — tu as déjà un compte GitHub. Limites de niveau gratuit plus généreuses que Gemini. |
+| **GitHub Models** *(par défaut suggéré)* | [github.com/settings/tokens](https://github.com/settings/tokens), un jeton d'accès personnel avec le scope `models: read` | Pas d'inscription séparée, tu as déjà un compte GitHub. Limites de niveau gratuit plus généreuses que Gemini. |
 | Gemini | [Google AI Studio](https://aistudio.google.com/) | L'option la plus couramment référencée. |
 | Groq | [console.groq.com/keys](https://console.groq.com/keys) | Inférence rapide, niveau gratuit généreux, pas de carte. |
 | Mistral | [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys) | Un des quotas gratuits permanents les plus généreux. |
 | Cerebras | [cloud.cerebras.ai](https://cloud.cerebras.ai/) | Volume quotidien de tokens élevé, pas de carte. |
-| OpenRouter | [openrouter.ai/keys](https://openrouter.ai/keys) | Une API, plusieurs modèles gratuits — bon pour comparer les fournisseurs. |
+| OpenRouter | [openrouter.ai/keys](https://openrouter.ai/keys) | Une API, plusieurs modèles gratuits, bon pour comparer les fournisseurs. |
 
 Quel que soit celui que tu choisis, le processus est le même :
 
@@ -90,7 +90,7 @@ Quel que soit celui que tu choisis, le processus est le même :
 GITHUB_TOKEN=ta-clé-ici
 ```
 
-`python-dotenv` (installé ci-dessus) lit ce fichier vers `os.environ` automatiquement, le même pattern utilisé dans le [projet Appli RAG](/fr/projets/rag-notes) et le [projet Agent IA](/fr/projets/ai-agent) si tu as fait l'un ou l'autre — GitHub Models expose justement une API compatible OpenAI, donc la simple bibliothèque cliente `openai` fonctionne pour cela sans paquet supplémentaire :
+`python-dotenv` (installé ci-dessus) lit ce fichier vers `os.environ` automatiquement, le même pattern utilisé dans le [projet Appli RAG](/fr/projets/rag-notes) et le [projet Agent IA](/fr/projets/ai-agent) si tu as fait l'un ou l'autre, GitHub Models expose justement une API compatible OpenAI, donc la simple bibliothèque cliente `openai` fonctionne pour cela sans paquet supplémentaire :
 
 ```bash
 uv add openai
@@ -100,14 +100,14 @@ Si tu as choisi un fournisseur différent, remplace par le client propre de ce f
 
 ### Récupère quelques PDF
 
-Mets une poignée de vrais PDF — rapports, guides, articles, n'importe quoi avec du vrai texte dedans (pas des images scannées) — dans un dossier `pdfs/` à l'intérieur de ton projet. Si tu n'en as pas sous la main, copie les trois courts PDF d'exemple depuis [`examples/chat-with-pdfs/pdfs/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/chat-with-pdfs/pdfs), ou génère les tiens avec le script [`generate_sample_pdfs.py` de l'exemple](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/chat-with-pdfs/generate_sample_pdfs.py).
+Mets une poignée de vrais PDF, rapports, guides, articles, n'importe quoi avec du vrai texte dedans (pas des images scannées), dans un dossier `pdfs/` à l'intérieur de ton projet. Si tu n'en as pas sous la main, copie les trois courts PDF d'exemple depuis [`examples/chat-with-pdfs/pdfs/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/chat-with-pdfs/pdfs), ou génère les tiens avec le script [`generate_sample_pdfs.py` de l'exemple](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/chat-with-pdfs/generate_sample_pdfs.py).
 
 ## Étape 1 : Charge et découpe tes PDF
 ### 1.1 `pypdf` extrait le texte d'un PDF une page à la fois, ce qui est exactement la granularité d...
 
 **👟 Indice de départ :**
 
-`pypdf` extrait le texte d'un PDF une page à la fois, ce qui est exactement la granularité dont ce projet a besoin — c'est ce qui rend possible de dire *de quelle page* une réponse est venue plus tard. Comme pour le projet Appli RAG, une page entière est généralement encore trop grande et trop peu focalisée pour bien s'embedder, donc chaque page est découpée en fragments plus petits — mais contrairement à ce projet, chaque fragment ici doit aussi se souvenir de quel fichier et quelle page il vient.
+`pypdf` extrait le texte d'un PDF une page à la fois, ce qui est exactement la granularité dont ce projet a besoin, c'est ce qui rend possible de dire *de quelle page* une réponse est venue plus tard. Comme pour le projet Appli RAG, une page entière est généralement encore trop grande et trop peu focalisée pour bien s'embedder, donc chaque page est découpée en fragments plus petits, mais contrairement à ce projet, chaque fragment ici doit aussi se souvenir de quel fichier et quelle page il vient.
 
 ```python
 # load_pdfs.py
@@ -202,7 +202,7 @@ Exécutez le code ci-dessous et confirmez qu'il fonctionne.
 uv run python load_pdfs.py
 ```
 :::tip[Plusieurs documents, un seul pipeline]
-Rien en aval de `load_chunks()` n'a besoin de savoir ou de se soucier du nombre de PDF, ou duquel vient un fragment — chaque fragment porte sa propre `source` et `page`, donc la récupération cherche naturellement à travers *tous* tes PDF à la fois, et la réponse finale peut mélanger des faits de plusieurs documents différents dans une seule réponse, chacun correctement attribué.
+Rien en aval de `load_chunks()` n'a besoin de savoir ou de se soucier du nombre de PDF, ou duquel vient un fragment, chaque fragment porte sa propre `source` et `page`, donc la récupération cherche naturellement à travers *tous* tes PDF à la fois, et la réponse finale peut mélanger des faits de plusieurs documents différents dans une seule réponse, chacun correctement attribué.
 :::
 
 **🎯 Résultat attendu :**
@@ -227,11 +227,11 @@ Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
 - Un PDF scanné (une photo d'un document papier, sans vrai texte intégré) ferait que `page.extract_text()` retournerait une chaîne vide pour chaque page. Comment remarquerais-tu que cela s'est produit, et que devrais-tu ajouter pour gérer ça (indice : cherche « OCR ») ?
 
 ## Étape 2 : Embedde tes fragments en local
-### 2.1 Cette étape est identique en esprit à l'étape d'embedding du projet Appli RAG — le même modè...
+### 2.1 Cette étape est identique en esprit à l'étape d'embedding du projet Appli RAG, le même modè...
 
 **👟 Indice de départ :**
 
-Cette étape est identique en esprit à l'étape d'embedding du projet Appli RAG — le même modèle, le même raisonnement, juste en embeddant des fragments dérivés de PDF au lieu de fragments de notes. `all-MiniLM-L6-v2` mappe chaque fragment à un point dans un espace de 384 dimensions, entraîné pour que des fragments de sens similaire finissent proches les uns des autres. Il est petit (environ 80 Mo), tourne entièrement sur ton CPU en environ une seconde par fragment sur un ordinateur portable typique, n'a besoin d'aucune clé API, et ne coûte rien.
+Cette étape est identique en esprit à l'étape d'embedding du projet Appli RAG, le même modèle, le même raisonnement, juste en embeddant des fragments dérivés de PDF au lieu de fragments de notes. `all-MiniLM-L6-v2` mappe chaque fragment à un point dans un espace de 384 dimensions, entraîné pour que des fragments de sens similaire finissent proches les uns des autres. Il est petit (environ 80 Mo), tourne entièrement sur ton CPU en environ une seconde par fragment sur un ordinateur portable typique, n'a besoin d'aucune clé API, et ne coûte rien.
 
 ```python
 # build_index.py
@@ -294,7 +294,7 @@ Exécutez le code ci-dessous et confirmez qu'il fonctionne.
 ```bash
 uv run python build_index.py
 ```
-Tout comme le projet Appli RAG, cela évite délibérément une base de données vectorielle — pour un dossier personnel de PDF (des dizaines à quelques centaines de documents, pas des millions), un simple tableau NumPy est plus simple, n'a pas de service supplémentaire à installer ou faire tourner, et est totalement transparent. `normalize_embeddings=True` met chaque vecteur à l'échelle de longueur 1, ce qui fait que la similarité cosinus de l'Étape 3 se réduit à un simple produit scalaire.
+Tout comme le projet Appli RAG, cela évite délibérément une base de données vectorielle, pour un dossier personnel de PDF (des dizaines à quelques centaines de documents, pas des millions), un simple tableau NumPy est plus simple, n'a pas de service supplémentaire à installer ou faire tourner, et est totalement transparent. `normalize_embeddings=True` met chaque vecteur à l'échelle de longueur 1, ce qui fait que la similarité cosinus de l'Étape 3 se réduit à un simple produit scalaire.
 
 **🎯 Résultat attendu :**
 
@@ -318,11 +318,11 @@ Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
 - Pourquoi ré-embedder les *fragments* ici mais pas les PDF eux-mêmes ? Que perdrait-on à embedder un PDF entier comme un seul vecteur, comparé à embedder chacun de ses fragments séparément ?
 
 ## Étape 3 : Récupère et génère une réponse citée
-### 3.1 La récupération fonctionne exactement comme le projet Appli RAG — embedde la question, class...
+### 3.1 La récupération fonctionne exactement comme le projet Appli RAG, embedde la question, class...
 
 **👟 Indice de départ :**
 
-La récupération fonctionne exactement comme le projet Appli RAG — embedde la question, classe chaque fragment par similarité cosinus, prends les quelques premiers — sauf que maintenant le classement tourne à travers chaque fragment de chaque PDF à la fois, donc le résultat le plus pertinent pour une question pourrait venir de n'importe lequel de tes documents.
+La récupération fonctionne exactement comme le projet Appli RAG, embedde la question, classe chaque fragment par similarité cosinus, prends les quelques premiers, sauf que maintenant le classement tourne à travers chaque fragment de chaque PDF à la fois, donc le résultat le plus pertinent pour une question pourrait venir de n'importe lequel de tes documents.
 
 ```python
 # retrieve.py
@@ -406,7 +406,7 @@ Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
 
 **👟 Indice de départ :**
 
-Maintenant la génération. Le prompt est toute l'idée du RAG-avec-citations en un seul endroit : il remet au modèle les fragments récupérés *étiquetés avec leur source et leur page*, et exige que chaque fait dans la réponse soit suivi d'une citation `(source, page N)` copiée depuis cette étiquette — le modèle n'invente pas de citations, il répète celles déjà attachées au texte qu'on lui a donné.
+Maintenant la génération. Le prompt est toute l'idée du RAG-avec-citations en un seul endroit : il remet au modèle les fragments récupérés *étiquetés avec leur source et leur page*, et exige que chaque fait dans la réponse soit suivi d'une citation `(source, page N)` copiée depuis cette étiquette, le modèle n'invente pas de citations, il répète celles déjà attachées au texte qu'on lui a donné.
 
 ```python
 # ask.py
@@ -484,7 +484,7 @@ Exécutez le code ci-dessous et confirmez qu'il fonctionne.
 uv run python ask.py "How many days of paid time off do employees get?"
 ```
 :::tip[Tu utilises un fournisseur différent ?]
-Remplace le bloc `OpenAI(...)` par le client propre de ton fournisseur, en suivant le même pattern que le [projet Appli RAG](/fr/projets/rag-notes) et le [projet Agent IA](/fr/projets/ai-agent) — par ex. le paquet `google-genai` de Google pour Gemini, ou le client propre de `groq` pour Groq. Cerebras et OpenRouter sont aussi compatibles OpenAI, donc le paquet `openai` fonctionne pour eux aussi, juste avec une `base_url` différente.
+Remplace le bloc `OpenAI(...)` par le client propre de ton fournisseur, en suivant le même pattern que le [projet Appli RAG](/fr/projets/rag-notes) et le [projet Agent IA](/fr/projets/ai-agent), par ex. le paquet `google-genai` de Google pour Gemini, ou le client propre de `groq` pour Groq. Cerebras et OpenRouter sont aussi compatibles OpenAI, donc le paquet `openai` fonctionne pour eux aussi, juste avec une `base_url` différente.
 :::
 
 **🎯 Résultat attendu :**
@@ -506,7 +506,7 @@ Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
 
 **🤔 Question(s) socratique(s)**
 
-- Le prompt exige une citation pour *chaque* fait. Que t'attends-tu à voir se passer si tu supprimes cette exigence — le modèle aurait-il quand même tendance à répondre avec précision, ou demander des citations change-t-il réellement à quel point il s'en tient soigneusement au contexte ? Essaie les deux et compare.
+- Le prompt exige une citation pour *chaque* fait. Que t'attends-tu à voir se passer si tu supprimes cette exigence, le modèle aurait-il quand même tendance à répondre avec précision, ou demander des citations change-t-il réellement à quel point il s'en tient soigneusement au contexte ? Essaie les deux et compare.
 - Si `retrieve()` extrait le fragment le mieux classé de la bonne page mais du *mauvais* PDF (disons, deux produits différents mentionnent tous les deux « garantie »), le remarquerais-tu juste en lisant la citation ? Qu'est-ce que ça suggère sur le fait de toujours vérifier les citations plutôt que de faire confiance à une réponse juste parce qu'elle en a une ?
 
 ## Étape 4 : Une petite boucle interactive
@@ -559,7 +559,7 @@ Exécutez le code ci-dessous et confirmez qu'il fonctionne.
 uv run python chat.py
 ```
 :::tip[C'est toute l'appli]
-Il n'y a pas de serveur, pas de framework, pas de boîte à outils UI ici — une boucle `while True` autour de `ask()` *est* une appli de chat légitime. Chaque produit « discute avec tes données » que tu as vu est cette même boucle en dessous, avec un frontend web, des réponses en streaming, et un historique de conversation superposés. Aucune de ces couches ne change ce qui se passe réellement : récupérer, puis générer, puis afficher.
+Il n'y a pas de serveur, pas de framework, pas de boîte à outils UI ici, une boucle `while True` autour de `ask()` *est* une appli de chat légitime. Chaque produit « discute avec tes données » que tu as vu est cette même boucle en dessous, avec un frontend web, des réponses en streaming, et un historique de conversation superposés. Aucune de ces couches ne change ce qui se passe réellement : récupérer, puis générer, puis afficher.
 :::
 
 **🎯 Résultat attendu :**
@@ -580,31 +580,31 @@ Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
 
 **🤔 Question(s) socratique(s)**
 
-- Chaque appel à `ask()` recharge `index.npy` et `chunks.json` depuis le disque et recharge le modèle d'embedding. Pour une seule question c'est bien — que changerais-tu dans `chat.py` et `retrieve.py` si tu voulais que la boucle se sente plus réactive après la première question ?
-- Cette boucle n'a aucune mémoire des questions précédentes — chaque appel à `ask()` est indépendant. Qu'est-ce qui casserait si tu posais un suivi comme « et pour le deuxième ? » juste après une autre question ? Que devrais-tu ajouter pour supporter ça ?
+- Chaque appel à `ask()` recharge `index.npy` et `chunks.json` depuis le disque et recharge le modèle d'embedding. Pour une seule question c'est bien, que changerais-tu dans `chat.py` et `retrieve.py` si tu voulais que la boucle se sente plus réactive après la première question ?
+- Cette boucle n'a aucune mémoire des questions précédentes, chaque appel à `ask()` est indépendant. Qu'est-ce qui casserait si tu posais un suivi comme « et pour le deuxième ? » juste après une autre question ? Que devrais-tu ajouter pour supporter ça ?
 
 ## ⚠️ Pièges courants
 
-- **Les PDF scannés, image seule, ne retournent aucun texte.** Le `extract_text()` de `pypdf` ne lit que le texte qui est réellement intégré dans le PDF — un PDF fait de pages photographiées ou scannées n'a aucun texte intégré du tout, donc `load_pdfs.py` produira silencieusement zéro fragment pour ce fichier. Si un document dont tu attends de voir des réponses n'apparaît jamais, vérifie d'abord si tu peux sélectionner/copier son texte dans une visionneuse PDF normale ; si tu ne peux pas, il a besoin d'OCR (hors du périmètre de ce projet) avant que ce pipeline puisse l'utiliser.
+- **Les PDF scannés, image seule, ne retournent aucun texte.** Le `extract_text()` de `pypdf` ne lit que le texte qui est réellement intégré dans le PDF, un PDF fait de pages photographiées ou scannées n'a aucun texte intégré du tout, donc `load_pdfs.py` produira silencieusement zéro fragment pour ce fichier. Si un document dont tu attends de voir des réponses n'apparaît jamais, vérifie d'abord si tu peux sélectionner/copier son texte dans une visionneuse PDF normale ; si tu ne peux pas, il a besoin d'OCR (hors du périmètre de ce projet) avant que ce pipeline puisse l'utiliser.
 - **Fragments trop grands ou trop petits.** Même compromis que le projet Appli RAG : trop grand et la récupération devient floue, trop petit et un fragment perd le contexte environnant dont le modèle a besoin pour bien répondre. Si les réponses semblent bizarres, essaie un `TARGET_CHUNK_SIZE` différent et relance `build_index.py`.
-- **Oublier de reconstruire l'index après avoir modifié `pdfs/`.** `build_index.py` ne tourne que quand tu l'exécutes — ajoute, supprime, ou édite un PDF, et `retrieve()` ne reflétera pas le changement avant que tu relances `uv run python build_index.py`.
-- **Faire confiance à une citation sans la vérifier.** Le prompt *demande* au modèle de ne citer que ce qui est réellement dans le contexte récupéré, et en pratique il le fait de manière fiable — mais rien ici ne le garantit mathématiquement. Vérifie quelques citations par échantillonnage contre les vraies pages du PDF, surtout avant de compter dessus pour quelque chose qui importe.
-- **Limites de débit sur le niveau LLM gratuit.** L'extraction, le découpage, l'embedding et la récupération sont tous locaux et illimités ; seul l'appel LLM de `ask()` compte contre le quota de niveau gratuit de ton fournisseur. Une erreur 429 là-bas est le fournisseur qui te dit de ralentir, pas un bug — voir le [projet Agent IA](/fr/projets/ai-agent) pour le même pattern et une approche de nouvelle tentative que tu peux copier.
+- **Oublier de reconstruire l'index après avoir modifié `pdfs/`.** `build_index.py` ne tourne que quand tu l'exécutes, ajoute, supprime, ou édite un PDF, et `retrieve()` ne reflétera pas le changement avant que tu relances `uv run python build_index.py`.
+- **Faire confiance à une citation sans la vérifier.** Le prompt *demande* au modèle de ne citer que ce qui est réellement dans le contexte récupéré, et en pratique il le fait de manière fiable, mais rien ici ne le garantit mathématiquement. Vérifie quelques citations par échantillonnage contre les vraies pages du PDF, surtout avant de compter dessus pour quelque chose qui importe.
+- **Limites de débit sur le niveau LLM gratuit.** L'extraction, le découpage, l'embedding et la récupération sont tous locaux et illimités ; seul l'appel LLM de `ask()` compte contre le quota de niveau gratuit de ton fournisseur. Une erreur 429 là-bas est le fournisseur qui te dit de ralentir, pas un bug, voir le [projet Agent IA](/fr/projets/ai-agent) pour le même pattern et une approche de nouvelle tentative que tu peux copier.
 
 ## Ce que tu viens de construire
 
-Un pipeline RAG multi-documents avec citations : extraction et découpage de PDF conscients des pages, embedding local, recherche de similarité en mémoire à travers un nombre arbitraire de documents, et une étape de génération finale obligée de pointer exactement vers l'origine de chaque fait — la même forme de système derrière les vrais produits « discute avec tes documents », moins la base de données vectorielle et l'API payante, remplacées par une gratuite et un tableau NumPy plat.
+Un pipeline RAG multi-documents avec citations : extraction et découpage de PDF conscients des pages, embedding local, recherche de similarité en mémoire à travers un nombre arbitraire de documents, et une étape de génération finale obligée de pointer exactement vers l'origine de chaque fait, la même forme de système derrière les vrais produits « discute avec tes documents », moins la base de données vectorielle et l'API payante, remplacées par une gratuite et un tableau NumPy plat.
 
 ## Où aller à partir d'ici
 
-- Une fois que ton dossier de PDF dépasse ce qui tient confortablement en mémoire (des dizaines de milliers de fragments), regarde une vraie base de données vectorielle comme [ChromaDB](https://www.trychroma.com/) — la même recherche des plus proches voisins que `retrieve()` ci-dessus, indexée pour la vitesse à une échelle bien plus grande, avec un filtrage de métadonnées (ex. « ne chercher que les PDF de 2024 ») que cette version en fichier plat n'a pas.
+- Une fois que ton dossier de PDF dépasse ce qui tient confortablement en mémoire (des dizaines de milliers de fragments), regarde une vraie base de données vectorielle comme [ChromaDB](https://www.trychroma.com/), la même recherche des plus proches voisins que `retrieve()` ci-dessus, indexée pour la vitesse à une échelle bien plus grande, avec un filtrage de métadonnées (ex. « ne chercher que les PDF de 2024 ») que cette version en fichier plat n'a pas.
 - Ajoute un **filtre de source** : laisse une question restreindre la récupération à un seul PDF (`retrieve(question, source="warranty.pdf")`), utile une fois que ton dossier contient des documents sur des sujets très différents qui ne devraient pas être mélangés.
 - Essaie l'**OCR** avec une bibliothèque comme `pytesseract` pour les PDF scannés, pour que les documents image seule puissent rejoindre le pipeline plutôt que de contribuer silencieusement zéro fragment.
-- Étends les citations pour inclure un **extrait**, pas juste un numéro de page — retourne la phrase exacte d'où vient le fait à côté de `(source, page N)`, pour pouvoir vérifier une réponse sans ouvrir le PDF toi-même.
+- Étends les citations pour inclure un **extrait**, pas juste un numéro de page, retourne la phrase exacte d'où vient le fait à côté de `(source, page N)`, pour pouvoir vérifier une réponse sans ouvrir le PDF toi-même.
 
 ## Partage ton projet avec la classe
 
-Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres élèves — et son README a un tutoriel complet et adapté aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git avant : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable avec git n'est supposée.
+Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres élèves, et son README a un tutoriel complet et adapté aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git avant : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable avec git n'est supposée.
 
 Bienvenue dans l'écriture de Python en dehors du navigateur. 🎓
 

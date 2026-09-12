@@ -6,25 +6,25 @@ difficulty: "intermediate"
 
 # 🌿 Build a Git Commit-Message Generator
 
-"wip", "fix stuff", "asdf" — every developer has typed a lazy commit message at 6pm on a Friday. This project builds a CLI tool that removes the excuse: it captures your real **staged** `git diff` with Python's `subprocess` module, hands it to a free-tier language model with a system prompt designed specifically for writing Conventional-Commits-style messages, and shows you a draft you can accept, edit, or throw away — before anything is ever committed. The tool never commits on its own; a human always confirms the final message first.
+"wip", "fix stuff", "asdf", every developer has typed a lazy commit message at 6pm on a Friday. This project builds a CLI tool that removes the excuse: it captures your real **staged** `git diff` with Python's `subprocess` module, hands it to a free-tier language model with a system prompt designed specifically for writing Conventional-Commits-style messages, and shows you a draft you can accept, edit, or throw away, before anything is ever committed. The tool never commits on its own; a human always confirms the final message first.
 
-This assumes Python 101 and enough comfort with git to know what `git add` and `git commit` do — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
+This assumes Python 101 and enough comfort with git to know what `git add` and `git commit` do, nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 
-1. Install `uv`, get a free-tier LLM API key, and set up a small project — all in one place, before any building starts.
+1. Install `uv`, get a free-tier LLM API key, and set up a small project, all in one place, before any building starts.
 2. Use Python's `subprocess` module to run `git diff --staged` for real and capture its output as text.
 3. Design a system prompt that turns a general-purpose LLM into a focused Conventional-Commits-style message drafter.
 4. Build an interactive CLI loop: show the draft, let the user accept, edit, or regenerate it.
-5. Wire the loop up to actually run `git commit -m "..."` — but only after the user explicitly confirms.
+5. Wire the loop up to actually run `git commit -m "..."`, but only after the user explicitly confirms.
 
 ## Where to run this
 
-**Locally with `uv`** is the primary, recommended path here, more so than for most other projects in this series — this tool's entire premise is reading `git diff --staged` from a real local git repository and, if you say so, committing to it. That means it needs an actual `.git` folder with staged changes on disk to work against (your own project, or a clone of this course's repo).
+**Locally with `uv`** is the primary, recommended path here, more so than for most other projects in this series, this tool's entire premise is reading `git diff --staged` from a real local git repository and, if you say so, committing to it. That means it needs an actual `.git` folder with staged changes on disk to work against (your own project, or a clone of this course's repo).
 
-**GitHub Codespaces** works well too: open [the whole course repo in a free Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python, `uv`, and git are already installed) — it's a real clone with a real place to stage changes, so every step below works exactly as it does locally.
+**GitHub Codespaces** works well too: open [the whole course repo in a free Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python, `uv`, and git are already installed), it's a real clone with a real place to stage changes, so every step below works exactly as it does locally.
 
-**Google Colab and Kaggle Notebooks are a reasonable way to *try* the drafting logic, but not to run the tool for real.** Neither gives you a real local git repository with staged changes by default, and the whole premise of this tool is drafting a message for *your own* in-progress work — a notebook's ephemeral filesystem has none of that, and there's nothing sensible to actually commit to. The notebook below works around this honestly, rather than pretending the gap doesn't exist: it `!git clone`s this course's own repository into the notebook and drafts a message for one real, small, historical commit from it with `git show`, so the diff capture, the system prompt, and the LLM call all run against real, real-looking output — it's just drafting for a fixed example commit, and it stops there; it does **not** demo the interactive accept/edit/commit loop, since committing only makes sense against a repo you're really working in. Use it to see the drafting logic work end to end with zero setup; switch to local `uv` or a Codespace once you want the full interactive tool pointed at your own actual changes.
+**Google Colab and Kaggle Notebooks are a reasonable way to *try* the drafting logic, but not to run the tool for real.** Neither gives you a real local git repository with staged changes by default, and the whole premise of this tool is drafting a message for *your own* in-progress work, a notebook's ephemeral filesystem has none of that, and there's nothing sensible to actually commit to. The notebook below works around this honestly, rather than pretending the gap doesn't exist: it `!git clone`s this course's own repository into the notebook and drafts a message for one real, small, historical commit from it with `git show`, so the diff capture, the system prompt, and the LLM call all run against real, real-looking output, it's just drafting for a fixed example commit, and it stops there; it does **not** demo the interactive accept/edit/commit loop, since committing only makes sense against a repo you're really working in. Use it to see the drafting logic work end to end with zero setup; switch to local `uv` or a Codespace once you want the full interactive tool pointed at your own actual changes.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/commit-message-agent/notebook.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/commit-message-agent/notebook.ipynb)
@@ -35,7 +35,7 @@ Everything you need before you write a line of the drafter itself: a real Python
 
 ### Install `uv`
 
-`uv` is a single tool that replaces the usual "install Python, then install pip, then install a virtual environment tool, then install packages" chain — it can install and manage Python versions itself, alongside your project's dependencies.
+`uv` is a single tool that replaces the usual "install Python, then install pip, then install a virtual environment tool, then install packages" chain, it can install and manage Python versions itself, alongside your project's dependencies.
 
 **macOS / Linux** (terminal):
 
@@ -63,20 +63,20 @@ cd commit-message-agent
 uv add openai python-dotenv
 ```
 
-`openai`'s client library works here for every provider in the table below, not just OpenAI itself — GitHub Models, Gemini, Groq, Mistral, Cerebras, and OpenRouter all expose an OpenAI-compatible chat endpoint, so one client, pointed at a different `base_url`, is all this project needs. `python-dotenv` lets you keep your API key in a local `.env` file instead of `export`-ing it every session.
+`openai`'s client library works here for every provider in the table below, not just OpenAI itself, GitHub Models, Gemini, Groq, Mistral, Cerebras, and OpenRouter all expose an OpenAI-compatible chat endpoint, so one client, pointed at a different `base_url`, is all this project needs. `python-dotenv` lets you keep your API key in a local `.env` file instead of `export`-ing it every session.
 
 ### Get a free LLM API key
 
-**Pick whichever provider you like** — none of them require a credit card at the time of writing, and this course doesn't favor one over another. The fuller example in the course repo ([`examples/commit-message-agent/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/commit-message-agent)) supports all six out of the box, selected with one setting.
+**Pick whichever provider you like**, none of them require a credit card at the time of writing, and this course doesn't favor one over another. The fuller example in the course repo ([`examples/commit-message-agent/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/commit-message-agent)) supports all six out of the box, selected with one setting.
 
 | Provider | Where to get a key | Why you might pick it |
 |---|---|---|
-| **GitHub Models** *(suggested default)* | [github.com/settings/tokens](https://github.com/settings/tokens) — a personal access token with the `models: read` scope | No separate signup — you already have a GitHub account. More generous free-tier limits than Gemini's. |
+| **GitHub Models** *(suggested default)* | [github.com/settings/tokens](https://github.com/settings/tokens), a personal access token with the `models: read` scope | No separate signup, you already have a GitHub account. More generous free-tier limits than Gemini's. |
 | Gemini | [Google AI Studio](https://aistudio.google.com/) | The most commonly referenced option; also exposes an OpenAI-compatible endpoint, used below. |
 | Groq | [console.groq.com/keys](https://console.groq.com/keys) | Fast inference, generous free tier, no card. |
 | Mistral | [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys) | One of the more generous permanent free quotas. |
 | Cerebras | [cloud.cerebras.ai](https://cloud.cerebras.ai/) | High daily token volume, no card. |
-| OpenRouter | [openrouter.ai/keys](https://openrouter.ai/keys) | One API, many free models — good for comparing providers. |
+| OpenRouter | [openrouter.ai/keys](https://openrouter.ai/keys) | One API, many free models, good for comparing providers. |
 
 Whichever you pick, the process is the same:
 
@@ -89,27 +89,27 @@ LLM_PROVIDER=github
 GITHUB_TOKEN=your-key-here
 ```
 
-An API key is a secret, exactly like a password — anyone with it can use your account's quota. Treating it as an environment variable rather than a hardcoded string is the standard practice for exactly this reason.
+An API key is a secret, exactly like a password, anyone with it can use your account's quota. Treating it as an environment variable rather than a hardcoded string is the standard practice for exactly this reason.
 
 :::tip[A .env file is often more convenient than export]
-Instead of `export`-ing a key in every new terminal session, `python-dotenv` reads a `.env` file in your project folder into `os.environ` automatically, the first time your script runs — see `load_dotenv()` in Step 1 below.
+Instead of `export`-ing a key in every new terminal session, `python-dotenv` reads a `.env` file in your project folder into `os.environ` automatically, the first time your script runs, see `load_dotenv()` in Step 1 below.
 :::
 
 **✅ Checklist**
 
 - ✅ `uv --version` prints a version number.
 - ✅ `commit-message-agent/` exists with a `pyproject.toml`, and `openai` and `python-dotenv` are installed.
-- ✅ You have a real API key from one provider, saved in a `.env` file in your project folder — not pasted into any script.
+- ✅ You have a real API key from one provider, saved in a `.env` file in your project folder, not pasted into any script.
 
 ## Step 1: Capture a staged git diff with `subprocess`
 
-Python's `subprocess` module runs another program and captures its output as text — here, that program is `git diff --staged`, not the plain `git diff` you might reach for first. That's a deliberate choice: a commit message should describe what's actually about to be committed, which is whatever you've staged with `git add`, not every unstaged change sitting in your working tree.
+Python's `subprocess` module runs another program and captures its output as text, here, that program is `git diff --staged`, not the plain `git diff` you might reach for first. That's a deliberate choice: a commit message should describe what's actually about to be committed, which is whatever you've staged with `git add`, not every unstaged change sitting in your working tree.
 
 Create `commit_helper.py`:
 
 ### 1.1 Write `get_diff_staged` and the `subprocess` wrapper
 
-**👟 Starter hint:** `subprocess.run(["git", "diff", "--staged"], capture_output=True, text=True)` is the whole call — pass the command as a list (not a shell string), then check `result.returncode` yourself instead of relying on `check=True`'s generic error:
+**👟 Starter hint:** `subprocess.run(["git", "diff", "--staged"], capture_output=True, text=True)` is the whole call, pass the command as a list (not a shell string), then check `result.returncode` yourself instead of relying on `check=True`'s generic error:
 
 ```python
 # commit_helper.py
@@ -142,21 +142,21 @@ if __name__ == "__main__":
 
 `subprocess.run([...], capture_output=True, text=True)` is the key line: passing the command as a **list** of arguments (`["git", "diff", "--staged"]`) rather than one shell string avoids a whole class of shell-quoting and injection bugs, `capture_output=True` grabs stdout/stderr instead of letting them print directly to your terminal, and `text=True` decodes that output as a string instead of raw bytes. `check=False` plus a manual `if result.returncode != 0` is deliberate here rather than `check=True`: it lets this function raise its *own* clear error message (including git's real stderr) instead of a generic `CalledProcessError`.
 
-Try it against this project itself — edit a file, `git add` it, then run:
+Try it against this project itself, edit a file, `git add` it, then run:
 
 ```bash
 uv run python commit_helper.py
 ```
 
 :::tip[This is the same subprocess pattern as any other CLI wrapper]
-`subprocess.run` doesn't care that the program being run is `git` — it works identically for any command-line tool: `ls`, a shell script, another Python program. Once this pattern clicks, "let Python drive an existing CLI tool and use its output" becomes available for a lot more than just git.
+`subprocess.run` doesn't care that the program being run is `git`, it works identically for any command-line tool: `ls`, a shell script, another Python program. Once this pattern clicks, "let Python drive an existing CLI tool and use its output" becomes available for a lot more than just git.
 :::
 
 ### 1.2 Verify with staged, unstaged, and no changes
 
 **🎯 Expected output:** With a staged change, `get_diff_staged()` prints real unified-diff text (`+`/`-` lines); with nothing staged, it prints the "No staged changes" message instead of an empty blob.
 
-**🩹 If it's off:** If it prints your changes even though nothing is `git add`-ed, you're calling plain `git diff` somewhere instead of `git diff --staged` — double check the `_run_git` call. Running this outside any git repo should raise a clear `RuntimeError` naming git's real stderr, not a raw `FileNotFoundError` — that means the `if result.returncode != 0` check is missing.
+**🩹 If it's off:** If it prints your changes even though nothing is `git add`-ed, you're calling plain `git diff` somewhere instead of `git diff --staged`, double check the `_run_git` call. Running this outside any git repo should raise a clear `RuntimeError` naming git's real stderr, not a raw `FileNotFoundError`, that means the `if result.returncode != 0` check is missing.
 
 **✅ Checklist**
 
@@ -208,19 +208,19 @@ Rules:
 
 Three deliberate design choices worth noticing:
 
-- **A fixed structure (`type(scope): summary`, optional body)** is what makes the output usable as an actual commit message, not a chat reply that happens to describe the diff — [Conventional Commits](https://www.conventionalcommits.org/) is a widely-used convention specifically because tools (changelogs, semantic-release, CI) can parse it reliably.
-- **"Only include a body if it adds real information"** stops the model from padding out a one-line typo fix with three sentences of restated diff content — the same instinct a human reviewer has when they see a bloated commit message for a trivial change.
-- **"Base the message ONLY on what the diff actually changes... do not guess at a ticket number"** exists because models are happy to hallucinate a plausible-looking `JIRA-1234` or issue reference if you don't explicitly forbid it — a fabricated reference in a commit message is worse than no reference at all.
+- **A fixed structure (`type(scope): summary`, optional body)** is what makes the output usable as an actual commit message, not a chat reply that happens to describe the diff, [Conventional Commits](https://www.conventionalcommits.org/) is a widely-used convention specifically because tools (changelogs, semantic-release, CI) can parse it reliably.
+- **"Only include a body if it adds real information"** stops the model from padding out a one-line typo fix with three sentences of restated diff content, the same instinct a human reviewer has when they see a bloated commit message for a trivial change.
+- **"Base the message ONLY on what the diff actually changes... do not guess at a ticket number"** exists because models are happy to hallucinate a plausible-looking `JIRA-1234` or issue reference if you don't explicitly forbid it, a fabricated reference in a commit message is worse than no reference at all.
 
 :::tip[Iterate on the prompt like you would on code]
-Treat this system prompt as a first draft, not a finished spec. Run it against a diff you already know deserves a specific `type` (a pure test addition, a docs-only change, a real bug fix) — if the model picks the wrong type or the summary runs long, tighten the wording and try again.
+Treat this system prompt as a first draft, not a finished spec. Run it against a diff you already know deserves a specific `type` (a pure test addition, a docs-only change, a real bug fix), if the model picks the wrong type or the summary runs long, tighten the wording and try again.
 :::
 
 ### 2.2 Verify it holds up on a diff with a known answer
 
-**🎯 Expected output:** This step has no runnable code on its own (Step 3 wires the prompt to a real call) — the check here is reading the prompt back and confirming it actually forbids everything the design notes above claim it does.
+**🎯 Expected output:** This step has no runnable code on its own (Step 3 wires the prompt to a real call), the check here is reading the prompt back and confirming it actually forbids everything the design notes above claim it does.
 
-**🩹 If it's off:** If, once you test it in Step 3, the model still invents a ticket number or writes a multi-paragraph body for a one-line fix, that's a sign the corresponding rule needs to be stated more forcefully or more specifically, not that prompting doesn't work — see the tip on iterating like code.
+**🩹 If it's off:** If, once you test it in Step 3, the model still invents a ticket number or writes a multi-paragraph body for a one-line fix, that's a sign the corresponding rule needs to be stated more forcefully or more specifically, not that prompting doesn't work, see the tip on iterating like code.
 
 **✅ Checklist**
 
@@ -238,7 +238,7 @@ Wire the diff-capturing code from Step 1 and the system prompt from Step 2 toget
 
 ### 3.1 Write `draft_commit_message`
 
-**👟 Starter hint:** Guard against an empty diff before ever touching the network, truncate an oversized one, then send it as the user message alongside `SYSTEM_PROMPT` and return `response.choices[0].message.content.strip()` — this function's whole job is "diff in, message string out," nothing about terminals or committing:
+**👟 Starter hint:** Guard against an empty diff before ever touching the network, truncate an oversized one, then send it as the user message alongside `SYSTEM_PROMPT` and return `response.choices[0].message.content.strip()`, this function's whole job is "diff in, message string out," nothing about terminals or committing:
 
 ```python
 # commit_helper.py (continued -- add these imports and functions)
@@ -279,13 +279,13 @@ def draft_commit_message(diff: str) -> str:
     return response.choices[0].message.content.strip()
 ```
 
-**🎯 Expected output:** `draft_commit_message(diff)` on a real staged diff returns a plain string shaped like `feat(scope): short summary` — no surrounding quotes, no code fence, no commentary before or after.
+**🎯 Expected output:** `draft_commit_message(diff)` on a real staged diff returns a plain string shaped like `feat(scope): short summary`, no surrounding quotes, no code fence, no commentary before or after.
 
-**🩹 If it's off:** If the returned string still has a ` ```diff ` fence around it despite the prompt saying not to, that's a free-tier model occasionally not following instructions exactly — strip fences defensively the same way the study-buddy and voice-to-task projects do, rather than assuming the prompt alone is airtight. A `KeyError` on `GITHUB_TOKEN` means `.env` isn't being loaded — confirm `load_dotenv()` ran before this function is called.
+**🩹 If it's off:** If the returned string still has a ` ```diff ` fence around it despite the prompt saying not to, that's a free-tier model occasionally not following instructions exactly, strip fences defensively the same way the study-buddy and voice-to-task projects do, rather than assuming the prompt alone is airtight. A `KeyError` on `GITHUB_TOKEN` means `.env` isn't being loaded, confirm `load_dotenv()` ran before this function is called.
 
 ### 3.2 Build the interactive accept/edit/regenerate loop
 
-**👟 Starter hint:** A `while True:` loop that prints the current draft, reads one character of input (`y`/`e`/`r`/`n`), and either returns, replaces `message` with typed text, or calls `draft_commit_message` again — nothing here calls `git commit` yet, that's deliberately deferred to Step 4:
+**👟 Starter hint:** A `while True:` loop that prints the current draft, reads one character of input (`y`/`e`/`r`/`n`), and either returns, replaces `message` with typed text, or calls `draft_commit_message` again, nothing here calls `git commit` yet, that's deliberately deferred to Step 4:
 
 ```python
 def run_interactive_loop(diff: str) -> None:
@@ -324,7 +324,7 @@ if __name__ == "__main__":
     run_interactive_loop(diff)
 ```
 
-`truncate_diff` matters more here than it might first appear — see the pitfalls section below for why a large diff isn't just slow, it can silently fail or produce a shallow, generic message. The loop deliberately does **not** call `git commit` yet — Step 4 adds that as its own small, explicit function, so it's obvious exactly where and how committing happens.
+`truncate_diff` matters more here than it might first appear, see the pitfalls section below for why a large diff isn't just slow, it can silently fail or produce a shallow, generic message. The loop deliberately does **not** call `git commit` yet, Step 4 adds that as its own small, explicit function, so it's obvious exactly where and how committing happens.
 
 Run it:
 
@@ -333,12 +333,12 @@ uv run python commit_helper.py
 ```
 
 :::tip[Using a different provider?]
-Swap the `OpenAI(...)` block for a different `base_url` and key — e.g. `base_url="https://api.groq.com/openai/v1"` with `api_key=os.environ["GROQ_API_KEY"]` for Groq, or `base_url="https://generativelanguage.googleapis.com/v1beta/openai/"` with `api_key=os.environ["GOOGLE_API_KEY"]` for Gemini's OpenAI-compatible endpoint. Everything else in this file stays the same. See [`examples/commit-message-agent/commit_helper.py`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/commit-message-agent/commit_helper.py) in the course repo for all six wired up side by side, selectable with one environment variable.
+Swap the `OpenAI(...)` block for a different `base_url` and key, e.g. `base_url="https://api.groq.com/openai/v1"` with `api_key=os.environ["GROQ_API_KEY"]` for Groq, or `base_url="https://generativelanguage.googleapis.com/v1beta/openai/"` with `api_key=os.environ["GOOGLE_API_KEY"]` for Gemini's OpenAI-compatible endpoint. Everything else in this file stays the same. See [`examples/commit-message-agent/commit_helper.py`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/commit-message-agent/commit_helper.py) in the course repo for all six wired up side by side, selectable with one environment variable.
 :::
 
-**🎯 Expected output:** A draft prints, followed by the `[y]es / [e]dit / [r]egenerate / [n]o` prompt; each option behaves distinctly — `r` calls the model again, `e` waits for typed replacement text, `n` prints "Cancelled" and returns, `y` prints the placeholder commit message (Step 4 makes it real).
+**🎯 Expected output:** A draft prints, followed by the `[y]es / [e]dit / [r]egenerate / [n]o` prompt; each option behaves distinctly, `r` calls the model again, `e` waits for typed replacement text, `n` prints "Cancelled" and returns, `y` prints the placeholder commit message (Step 4 makes it real).
 
-**🩹 If it's off:** If typing `e` then pressing Enter with nothing typed wipes out the draft instead of keeping it, check the `or message` fallback in the `input(...).strip() or message` line — an empty typed string should keep the previous draft, not replace it with an empty one. An input loop that never re-prints the prompt after an invalid answer means the trailing `print("Please answer y, e, r, or n.")` branch isn't being reached — check every `if` above it uses `continue` or `return`, not a silent fallthrough.
+**🩹 If it's off:** If typing `e` then pressing Enter with nothing typed wipes out the draft instead of keeping it, check the `or message` fallback in the `input(...).strip() or message` line, an empty typed string should keep the previous draft, not replace it with an empty one. An input loop that never re-prints the prompt after an invalid answer means the trailing `print("Please answer y, e, r, or n.")` branch isn't being reached, check every `if` above it uses `continue` or `return`, not a silent fallthrough.
 
 **✅ Checklist**
 
@@ -351,13 +351,13 @@ Swap the `OpenAI(...)` block for a different `base_url` and key — e.g. `base_u
 - `draft_commit_message` returns early with an empty string when the diff is empty, before ever building an `OpenAI` client. Why is checking first, calling the API second, worth doing deliberately, rather than just letting an empty prompt go to the model?
 - If two different runs of `draft_commit_message` on the *exact same* staged diff produced two visibly different messages, would that surprise you? What does that suggest about why the `r` (regenerate) option exists at all, rather than trusting the first draft blindly?
 
-## Step 4: Wire it up to actually commit — only on confirmation
+## Step 4: Wire it up to actually commit, only on confirmation
 
-The last piece: replace the "(Would commit here...)" placeholder from Step 3 with a function that actually runs `git commit -m`, called from exactly one place — right after the user types `y`.
+The last piece: replace the "(Would commit here...)" placeholder from Step 3 with a function that actually runs `git commit -m`, called from exactly one place, right after the user types `y`.
 
 ### 4.1 Write `_commit` and wire it into the `y` branch
 
-**👟 Starter hint:** Same `subprocess.run([...], capture_output=True, text=True, check=False)` pattern as Step 1's `_run_git`, just with `["git", "commit", "-m", message]` — then replace Step 3's placeholder print in the `y` branch with a real call to it:
+**👟 Starter hint:** Same `subprocess.run([...], capture_output=True, text=True, check=False)` pattern as Step 1's `_run_git`, just with `["git", "commit", "-m", message]`, then replace Step 3's placeholder print in the `y` branch with a real call to it:
 
 ```python
 # commit_helper.py (continued)
@@ -428,12 +428,12 @@ git log -1
 
 **🎯 Expected output:** After typing `y`, `git commit` output prints followed by `Committed.`, and `git log -1` shows exactly the message you accepted. After typing `n` on a separate run, `git log -1` is unchanged and `git status` still shows your change staged.
 
-**🩹 If it's off:** If `git log -1` doesn't reflect the accepted message, check `_commit` is actually being called from the `y` branch, not still printing the Step 3 placeholder. If `n` somehow still commits, that's a serious bug for this specific tool — re-read the `if choice in ("n", "no"): ... return` branch and confirm it returns before reaching any code path that calls `_commit`.
+**🩹 If it's off:** If `git log -1` doesn't reflect the accepted message, check `_commit` is actually being called from the `y` branch, not still printing the Step 3 placeholder. If `n` somehow still commits, that's a serious bug for this specific tool, re-read the `if choice in ("n", "no"): ... return` branch and confirm it returns before reaching any code path that calls `_commit`.
 
 **✅ Checklist**
 
-- ✅ Typing `y` at the prompt actually creates a real commit — `git log -1` shows the message you accepted.
-- ✅ Typing `n` at the prompt leaves your staged changes staged and uncommitted — nothing happened.
+- ✅ Typing `y` at the prompt actually creates a real commit, `git log -1` shows the message you accepted.
+- ✅ Typing `n` at the prompt leaves your staged changes staged and uncommitted, nothing happened.
 - ✅ You can point to the single line of code where `git commit` is actually invoked, and explain why it's reachable from exactly one place.
 
 **🤔 Socratic Question(s)**
@@ -442,19 +442,19 @@ git log -1
 - Imagine a version of this tool that skips the confirmation prompt and commits automatically whenever the model's draft looks "confident." What's a realistic way that could go wrong on a diff you didn't fully review yourself before staging it?
 
 :::tip[Never let a tool commit without a human confirming the message first]
-This is the single most important lesson in this project, more important than any specific line of code: a tool that *drafts* a commit message is useful; a tool that *commits* one autonomously is a very different, much riskier thing — one bad draft, one truncated diff that hid the real change, or one model having a bad day, and history now has a commit message that doesn't describe what actually happened, with your name on it. `_commit` is the only function here that touches `git commit`, and it's only reachable after an explicit `y`. That's not a missing "auto-commit" feature — it's the design. Keep that boundary if you extend this project yourself.
+This is the single most important lesson in this project, more important than any specific line of code: a tool that *drafts* a commit message is useful; a tool that *commits* one autonomously is a very different, much riskier thing, one bad draft, one truncated diff that hid the real change, or one model having a bad day, and history now has a commit message that doesn't describe what actually happened, with your name on it. `_commit` is the only function here that touches `git commit`, and it's only reachable after an explicit `y`. That's not a missing "auto-commit" feature, it's the design. Keep that boundary if you extend this project yourself.
 :::
 
 ## ⚠️ Common pitfalls
 
-- **Huge diffs blowing past the context window or free-tier token quota.** A multi-thousand-line diff (a big refactor, a vendored dependency bump) can exceed what the model can actually attend to, or simply exceed your free tier's per-request token limit and fail outright. `truncate_diff` in Step 3 caps this, but truncation means the model is drafting from a partial view — for genuinely large changes, stage and commit in smaller, more logical chunks rather than trusting a truncated diff to produce an accurate message.
-- **Staging unrelated changes together.** If `git add` picks up two unrelated fixes at once, no system prompt can produce one honest, focused commit message for both — the model will either pick one to describe and ignore the other, or write a vague message that covers neither well. `git add -p` to stage hunks selectively is worth learning alongside this tool.
-- **Treating the draft as always correct.** The model doesn't know *why* you made a change, only what the diff shows — it can misread intent (calling a deliberate refactor a "fix", for example) in ways a human glancing at the same diff wouldn't. Reading the draft before typing `y`, not just skimming it, is the entire point of the confirmation step.
-- **Committing generated or vendored files by accident.** A diff that touches `uv.lock`, a minified bundle, or an auto-generated file wastes tokens and usually produces a low-quality, generic message — review what's staged (`git status`, `git diff --staged --stat`) before running the drafter, not after.
+- **Huge diffs blowing past the context window or free-tier token quota.** A multi-thousand-line diff (a big refactor, a vendored dependency bump) can exceed what the model can actually attend to, or simply exceed your free tier's per-request token limit and fail outright. `truncate_diff` in Step 3 caps this, but truncation means the model is drafting from a partial view, for genuinely large changes, stage and commit in smaller, more logical chunks rather than trusting a truncated diff to produce an accurate message.
+- **Staging unrelated changes together.** If `git add` picks up two unrelated fixes at once, no system prompt can produce one honest, focused commit message for both, the model will either pick one to describe and ignore the other, or write a vague message that covers neither well. `git add -p` to stage hunks selectively is worth learning alongside this tool.
+- **Treating the draft as always correct.** The model doesn't know *why* you made a change, only what the diff shows, it can misread intent (calling a deliberate refactor a "fix", for example) in ways a human glancing at the same diff wouldn't. Reading the draft before typing `y`, not just skimming it, is the entire point of the confirmation step.
+- **Committing generated or vendored files by accident.** A diff that touches `uv.lock`, a minified bundle, or an auto-generated file wastes tokens and usually produces a low-quality, generic message, review what's staged (`git status`, `git diff --staged --stat`) before running the drafter, not after.
 
 ## What you just built
 
-A real, working commit-message CLI: it captures your actual staged `git diff` via `subprocess`, drafts a Conventional-Commits-style message with a free-tier LLM guided by a prompt engineered specifically for this task, and only ever runs `git commit` after you've read the draft and explicitly said yes. Nothing here is a toy simulation — point it at your own staged work, or a real historical commit from this course's own repository, and it works against the actual text either way.
+A real, working commit-message CLI: it captures your actual staged `git diff` via `subprocess`, drafts a Conventional-Commits-style message with a free-tier LLM guided by a prompt engineered specifically for this task, and only ever runs `git commit` after you've read the draft and explicitly said yes. Nothing here is a toy simulation, point it at your own staged work, or a real historical commit from this course's own repository, and it works against the actual text either way.
 
 :::tip[Run a fuller version without any local setup]
 [`examples/commit-message-agent/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/commit-message-agent) in the course repo is a fuller version of the code above, with all six providers from the table wired up side by side (selected with one `LLM_PROVIDER` setting) and a `--dry-run`/`--commit`/`--stdin` set of CLI options already included. Clone it, or open the whole repo in a [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), and run it from there.
@@ -463,11 +463,11 @@ A real, working commit-message CLI: it captures your actual staged `git diff` vi
 ## Where to go from here
 
 - Wire this up as a real [git alias](https://git-scm.com/book/en/v2/Git-Basics-Git-Aliases) (e.g. `git draft-commit = !uv run --project ~/commit-message-agent python commit_helper.py`) so it's one short command away in any repo, instead of always `cd`-ing into this project's folder.
-- Add it as a prompt inside a [pre-commit](https://pre-commit.com/) hook — rather than replacing `git commit` outright, have the hook print the drafted message as a *suggestion* alongside whatever message the developer already typed, so it stays a second opinion rather than a gate.
-- Try comparing drafts across two different providers on the *same* staged diff — do they pick the same Conventional Commits `type`? Where do they disagree, and what does that tell you about how much to trust any single model's read of "why" a change was made, versus just "what" changed?
+- Add it as a prompt inside a [pre-commit](https://pre-commit.com/) hook, rather than replacing `git commit` outright, have the hook print the drafted message as a *suggestion* alongside whatever message the developer already typed, so it stays a second opinion rather than a gate.
+- Try comparing drafts across two different providers on the *same* staged diff, do they pick the same Conventional Commits `type`? Where do they disagree, and what does that tell you about how much to trust any single model's read of "why" a change was made, versus just "what" changed?
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

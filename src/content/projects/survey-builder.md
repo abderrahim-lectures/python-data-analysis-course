@@ -17,9 +17,9 @@ prerequisites:
 
 # 📋 Build a Survey Builder
 
-Surveys are everywhere — feedback forms, market research, course evaluations — and behind every one is a structured engine: question types, validation, conditional branching, and analysis. This project builds that engine from scratch: a set of Python classes that model different question types (multiple choice, rating scales, open text), a runner that sequences questions with branching logic, and a pandas pipeline that converts raw responses into frequency charts and cross-tabulations.
+Surveys are everywhere, feedback forms, market research, course evaluations, and behind every one is a structured engine: question types, validation, conditional branching, and analysis. This project builds that engine from scratch: a set of Python classes that model different question types (multiple choice, rating scales, open text), a runner that sequences questions with branching logic, and a pandas pipeline that converts raw responses into frequency charts and cross-tabulations.
 
-This assumes Python basics including classes, lists, and dicts, and comfort with `input()` — nothing beyond. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
+This assumes Python basics including classes, lists, and dicts, and comfort with `input()`, nothing beyond. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 
@@ -31,15 +31,15 @@ This assumes Python basics including classes, lists, and dicts, and comfort with
 
 ## Where to run this
 
-This project runs almost anywhere — pandas and matplotlib are pure Python, and the only interactive piece is `input()`, which works in any terminal.
+This project runs almost anywhere, pandas and matplotlib are pure Python, and the only interactive piece is `input()`, which works in any terminal.
 
-**JupyterLite playground** works well — paste the cells directly into a notebook. You'll need to `!pip install pandas matplotlib` in a cell first. Note that `input()` works differently in a notebook than in a terminal — the `simulate_responses()` function in Step 3 exists partly because of this.
+**JupyterLite playground** works well, paste the cells directly into a notebook. You'll need to `!pip install pandas matplotlib` in a cell first. Note that `input()` works differently in a notebook than in a terminal, the `simulate_responses()` function in Step 3 exists partly because of this.
 
-**Google Colab** works out of the box — both libraries are pre-installed, and `input()` works natively in notebooks.
+**Google Colab** works out of the box, both libraries are pre-installed, and `input()` works natively in notebooks.
 
-**Locally with `uv`** is the recommended path for running the real interactive survey loop (Step 2) where `input()` prompts you question by question — follow the Setup section below.
+**Locally with `uv`** is the recommended path for running the real interactive survey loop (Step 2) where `input()` prompts you question by question, follow the Setup section below.
 
-- **Run it in your browser.** An interactive companion notebook is ready — open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
+- **Run it in your browser.** An interactive companion notebook is ready, open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/survey-builder/notebook.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/survey-builder/notebook.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsurvey-builder%2Fnotebook.ipynb)
@@ -50,7 +50,7 @@ Everything you need before writing a survey question.
 
 ### Install `uv`
 
-`uv` is a single tool that replaces the usual "install Python, then install pip, then install a virtual environment tool, then install packages" chain — it can install and manage Python versions itself, alongside your project's dependencies.
+`uv` is a single tool that replaces the usual "install Python, then install pip, then install a virtual environment tool, then install packages" chain, it can install and manage Python versions itself, alongside your project's dependencies.
 
 **macOS / Linux** (terminal):
 
@@ -88,7 +88,7 @@ uv add pandas matplotlib
 
 ## Step 1: Define question types
 
-A survey isn't one form — it's a series of different questions, each with its own input format, validation rules, and branching behavior. Modeling each type as a class lets you share the common parts (display, validation, branching) in a base class while customizing the details per type.
+A survey isn't one form, it's a series of different questions, each with its own input format, validation rules, and branching behavior. Modeling each type as a class lets you share the common parts (display, validation, branching) in a base class while customizing the details per type.
 
 ### 1.1 Create the base `Question` class and two subclasses
 
@@ -147,7 +147,7 @@ rating.display()
 print(f"MC valid '2': {mc.validate('2')} | Rating valid '6': {rating.validate('6')}")
 ```
 
-**👟 Starter hint:** The base `Question` class does only what's common to every question: store the text, validate (trivially, `True`), and look up a branch rule. `MultipleChoice` and `RatingScale` subclass it and override `display()` and `validate()` — exactly the inheritance pattern that lets a `Survey` runner treat every question the same way. Notice `branch_rules` is a dict mapping an answer to the id of the next question.
+**👟 Starter hint:** The base `Question` class does only what's common to every question: store the text, validate (trivially, `True`), and look up a branch rule. `MultipleChoice` and `RatingScale` subclass it and override `display()` and `validate()`, exactly the inheritance pattern that lets a `Survey` runner treat every question the same way. Notice `branch_rules` is a dict mapping an answer to the id of the next question.
 
 **🎯 Expected output:**
 ```
@@ -162,7 +162,7 @@ print(f"MC valid '2': {mc.validate('2')} | Rating valid '6': {rating.validate('6
 MC valid '2': True | Rating valid '6': False
 ```
 
-**🩹 If it's off:** If `MultipleChoice.validate('2')` returns `False`, check that `options` has at least 2 entries — the validation builds `range(1, len(options)+1)`. If `RatingScale.validate('6')` returns `True`, the `scale_max` isn't applied — confirm the `int(answer)` conversion and the `<=` comparison order.
+**🩹 If it's off:** If `MultipleChoice.validate('2')` returns `False`, check that `options` has at least 2 entries, the validation builds `range(1, len(options)+1)`. If `RatingScale.validate('6')` returns `True`, the `scale_max` isn't applied, confirm the `int(answer)` conversion and the `<=` comparison order.
 
 ### 1.2 Verify the question classes
 
@@ -174,8 +174,8 @@ MC valid '2': True | Rating valid '6': False
 
 **🤔 Socratic Question(s)**
 
-- The `RatingScale` class stores `scale_min` and `scale_max` as class attributes with defaults. If you wanted a 1–10 scale, what would you override at instantiation — and would `validate` need to change?
-- `MultipleChoice.validate` builds the valid answer list from `len(self.options)`. What would happen if you had 10 options — would the validation code need to change, or does it scale automatically? Why?
+- The `RatingScale` class stores `scale_min` and `scale_max` as class attributes with defaults. If you wanted a 1–10 scale, what would you override at instantiation, and would `validate` need to change?
+- `MultipleChoice.validate` builds the valid answer list from `len(self.options)`. What would happen if you had 10 options, would the validation code need to change, or does it scale automatically? Why?
 
 ## Step 2: Build the survey runner
 
@@ -230,11 +230,11 @@ class Survey:
         return SurveyResponse(survey_title=self.title, answers=answers)
 ```
 
-**👟 Starter hint:** The `while idx < len(self.order)` loop walks through questions in order. After each answer, it looks up `next_question_id(answer)` — if the branch rules say "answer 2 jumps to question 'followup'", the index jumps there; otherwise it advances by one. `SurveyResponse.__post_init__` stamps a timestamp when one isn't provided — dataclasses run `__post_init__` right after `__init__`, which is the idiomatic place for default-dependent logic.
+**👟 Starter hint:** The `while idx < len(self.order)` loop walks through questions in order. After each answer, it looks up `next_question_id(answer)`, if the branch rules say "answer 2 jumps to question 'followup'", the index jumps there; otherwise it advances by one. `SurveyResponse.__post_init__` stamps a timestamp when one isn't provided, dataclasses run `__post_init__` right after `__init__`, which is the idiomatic place for default-dependent logic.
 
 **🎯 Expected output:** Running `Survey("Health Survey").run()` prompts question by question and returns a `SurveyResponse` with the collected answers and a timestamp.
 
-**🩹 If it's off:** If the runner gets stuck in an infinite loop, `branch` is likely pointing to a question id that isn't in `self.questions` — the `else idx + 1` fallback only runs when the branch is None or not found, so a mistyped id in `branch_rules` causes the loop to repeat the same question. If `input()` immediately errors in a notebook, you're in a non-interactive cell — use the simulation approach from Step 3 instead.
+**🩹 If it's off:** If the runner gets stuck in an infinite loop, `branch` is likely pointing to a question id that isn't in `self.questions`, the `else idx + 1` fallback only runs when the branch is None or not found, so a mistyped id in `branch_rules` causes the loop to repeat the same question. If `input()` immediately errors in a notebook, you're in a non-interactive cell, use the simulation approach from Step 3 instead.
 
 ### 2.2 Verify the survey runner
 
@@ -249,7 +249,7 @@ class Survey:
 - The runner uses a `while idx < len(self.order)` loop, not a `for` loop over `self.order`. Why is a `while` loop necessary when a branch instruction can jump the index forward or backward?
 - If two questions had the same display text but different ids, how would the survey record distinguish them? What does this suggest about why question ids must be unique?
 
-## Step 3: Collect responses — live and simulated
+## Step 3: Collect responses, live and simulated
 
 Real surveys need many responses, but running `input()` 30 times in a terminal is impractical. This step builds both paths: a loop that calls `survey.run()` for live collection, and a `simulate_responses()` function that generates realistic random responses so analysis doesn't depend on someone sitting at a keyboard.
 
@@ -280,14 +280,14 @@ responses = simulate_responses()
 print(f"Collected {len(responses)} simulated responses")
 ```
 
-**👟 Starter hint:** `collect_responses` is the live path — call it with a `Survey` and a count and it runs the survey that many times, each producing a `SurveyResponse`. `simulate_responses` is the automated path — it uses `random` to generate 30 plausible responses with the same keys your survey questions would produce. The keys must match your question ids exactly, or the pandas step below won't find the right columns.
+**👟 Starter hint:** `collect_responses` is the live path, call it with a `Survey` and a count and it runs the survey that many times, each producing a `SurveyResponse`. `simulate_responses` is the automated path, it uses `random` to generate 30 plausible responses with the same keys your survey questions would produce. The keys must match your question ids exactly, or the pandas step below won't find the right columns.
 
 **🎯 Expected output:**
 ```
 Collected 30 simulated responses
 ```
 
-**🩹 If it's off:** If `random.choice([1, 2, 3, 4])` returns a numpy int that breaks downstream code, the values are stored as strings (`str(...)`) — that's deliberate. If you see a `KeyError` when building the DataFrame later, a simulated response is missing a key that your survey questions produce — check that the `simulate_responses` dict keys match your question ids.
+**🩹 If it's off:** If `random.choice([1, 2, 3, 4])` returns a numpy int that breaks downstream code, the values are stored as strings (`str(...)`), that's deliberate. If you see a `KeyError` when building the DataFrame later, a simulated response is missing a key that your survey questions produce, check that the `simulate_responses` dict keys match your question ids.
 
 ### 3.3 Verify response collection
 
@@ -299,12 +299,12 @@ Collected 30 simulated responses
 
 **🤔 Socratic Question(s)**
 
-- Responses are stored as strings (`"2"`, `"4"`) even though they represent numbers. Why does that match reality — what does `input()` return, and how does storing it raw preserve information?
+- Responses are stored as strings (`"2"`, `"4"`) even though they represent numbers. Why does that match reality, what does `input()` return, and how does storing it raw preserve information?
 - `simulate_responses` uses `random.choice` for everything. What would the distribution look like if you used `random.randint(1, 4)` instead of `random.choice([1, 2, 3, 4])`? How would that change the analysis?
 
 ## Step 4: Analyze results with pandas
 
-The data is collected — now it needs to become insight. This step converts the response list to a DataFrame, maps raw numeric answers to readable labels, and computes frequency counts and averages that answer questions like "how often do people exercise?" and "how satisfied are they, on average?"
+The data is collected, now it needs to become insight. This step converts the response list to a DataFrame, maps raw numeric answers to readable labels, and computes frequency counts and averages that answer questions like "how often do people exercise?" and "how satisfied are they, on average?"
 
 ### 4.1 Convert to a DataFrame and compute statistics
 
@@ -323,7 +323,7 @@ print(exercise_counts)
 print(f"\nAverage Satisfaction: {df['satisfaction'].astype(int).mean():.2f}")
 ```
 
-**👟 Starter hint:** `pd.DataFrame(responses)` turns a list of dicts into rows and columns automatically. `.map(freq_map)` converts the raw `"1"` to the readable `"Daily"` string — this is the classic lookup/recode step in survey analysis. `value_counts()` counts how often each value appears, and `df[...].astype(int).mean()` computes the numeric average by converting the string column to integers first.
+**👟 Starter hint:** `pd.DataFrame(responses)` turns a list of dicts into rows and columns automatically. `.map(freq_map)` converts the raw `"1"` to the readable `"Daily"` string, this is the classic lookup/recode step in survey analysis. `value_counts()` counts how often each value appears, and `df[...].astype(int).mean()` computes the numeric average by converting the string column to integers first.
 
 **🎯 Expected output:**
 ```
@@ -337,7 +337,7 @@ Name: exercise_label, dtype: int64
 Average Satisfaction: <number between 1.0 and 5.0>
 ```
 
-**🩹 If it's off:** A `KeyError: 'exercise_freq'` means `responses` doesn't have that column — check that `simulate_responses`' keys match `exercise_freq`, `satisfaction`, etc. exactly. If `exercise_counts` is empty, `value_counts()` found only NaN values — check whether `df["exercise_freq"]` is None or NaN in some rows. If `.astype(int)` fails, a response value isn't a clean integer string — check for whitespace or extra characters.
+**🩹 If it's off:** A `KeyError: 'exercise_freq'` means `responses` doesn't have that column, check that `simulate_responses`' keys match `exercise_freq`, `satisfaction`, etc. exactly. If `exercise_counts` is empty, `value_counts()` found only NaN values, check whether `df["exercise_freq"]` is None or NaN in some rows. If `.astype(int)` fails, a response value isn't a clean integer string, check for whitespace or extra characters.
 
 ### 4.2 Build a cross-tabulation
 
@@ -349,24 +349,24 @@ print(cross_tab)
 
 **🎯 Expected output:** A 4-row by 5-column table where each cell is the count of respondents with that exercise frequency and that satisfaction score.
 
-**🩹 If it's off:** If `pd.crosstab` returns an error about duplicate indices, you may have duplicate exercise labels — unlikely with a clean `map`, but check for typos in `freq_map`. If the table has NaN cells, `pd.crosstab` handles empty combinations as 0 by default — verify you're not looking at missing data instead of an actual zero-count.
+**🩹 If it's off:** If `pd.crosstab` returns an error about duplicate indices, you may have duplicate exercise labels, unlikely with a clean `map`, but check for typos in `freq_map`. If the table has NaN cells, `pd.crosstab` handles empty combinations as 0 by default, verify you're not looking at missing data instead of an actual zero-count.
 
 ### 4.3 Verify the analysis
 
 **✅ Checklist**
 
 - ✅ `pd.DataFrame(responses)` creates a DataFrame with the same keys as columns.
-- ✅ `exercise_counts` shows a frequency distribution across all four labels — no label is ever missing when represented in the data.
+- ✅ `exercise_counts` shows a frequency distribution across all four labels, no label is ever missing when represented in the data.
 - ✅ `pd.crosstab(df["exercise_label"], df["satisfaction"])` produces a non-trivial table (rows > 1).
 
 **🤔 Socratic Question(s)**
 
-- `value_counts()` drops missing values by default, while `crosstab` treats a non-appearing combination as 0. When does that distinction matter — can you think of a case where you'd *want* a missing row to stay missing rather than become 0?
-- If you changed the satisfaction scale from 1–5 to 1–10, what code would break? The `crosstab` will automatically show 10 columns — would any other step need changes?
+- `value_counts()` drops missing values by default, while `crosstab` treats a non-appearing combination as 0. When does that distinction matter, can you think of a case where you'd *want* a missing row to stay missing rather than become 0?
+- If you changed the satisfaction scale from 1–5 to 1–10, what code would break? The `crosstab` will automatically show 10 columns, would any other step need changes?
 
 ## Step 5: Visualize the results
 
-Numbers in a DataFrame are precise but slow to absorb. Two bar charts — one for exercise frequency, one for satisfaction distribution — turn the counts into an at-a-glance picture.
+Numbers in a DataFrame are precise but slow to absorb. Two bar charts, one for exercise frequency, one for satisfaction distribution, turn the counts into an at-a-glance picture.
 
 ### 5.1 Build the charts
 
@@ -391,11 +391,11 @@ plt.savefig("survey_results.png", dpi=150)
 plt.show()
 ```
 
-**👟 Starter hint:** `plt.subplots(1, 2, figsize=(12, 5))` creates a single figure with two side-by-side axes. Each `Series.plot(kind="bar", ax=axes[n])` draws onto a specific subplot; the color arrays are ordered so that low satisfaction is red and high satisfaction is green — an intentional visual choice that matches intuitive "red = bad, green = good" associations. `color=colors_sat[:len(satisfaction_counts)]` slices the palette down to the actual number of rating values present, so a survey where nobody chose 5 doesn't show an empty bar.
+**👟 Starter hint:** `plt.subplots(1, 2, figsize=(12, 5))` creates a single figure with two side-by-side axes. Each `Series.plot(kind="bar", ax=axes[n])` draws onto a specific subplot; the color arrays are ordered so that low satisfaction is red and high satisfaction is green, an intentional visual choice that matches intuitive "red = bad, green = good" associations. `color=colors_sat[:len(satisfaction_counts)]` slices the palette down to the actual number of rating values present, so a survey where nobody chose 5 doesn't show an empty bar.
 
 **🎯 Expected output:** Two bar charts in one figure: exercise frequency on the left (4 colored bars), satisfaction ratings on the right (up to 5 colored bars). The figure saves to `survey_results.png` in your project folder and displays on screen.
 
-**🩹 If it's off:** A blank figure (no bars) means the Series you're plotting is empty — check that `exercise_counts` and `satisfaction_counts` have data. If the satisfaction chart shows only 3 colors but 5 ratings, `satisfaction_counts` has fewer than 5 unique values — that's data, not a bug, and the slice is what keeps the palette aligned. If `plt.show()` shows nothing in a headless environment, the `savefig` still wrote the file — check that one.
+**🩹 If it's off:** A blank figure (no bars) means the Series you're plotting is empty, check that `exercise_counts` and `satisfaction_counts` have data. If the satisfaction chart shows only 3 colors but 5 ratings, `satisfaction_counts` has fewer than 5 unique values, that's data, not a bug, and the slice is what keeps the palette aligned. If `plt.show()` shows nothing in a headless environment, the `savefig` still wrote the file, check that one.
 
 ### 5.2 Verify the visualization
 
@@ -407,14 +407,14 @@ plt.show()
 
 **🤔 Socratic Question(s)**
 
-- The color arrays are hardcoded with five hex codes. What would happen if you ran the survey with a 10-point scale — would the colors still map sensibly, or would you need to generate them programmatically?
+- The color arrays are hardcoded with five hex codes. What would happen if you ran the survey with a 10-point scale, would the colors still map sensibly, or would you need to generate them programmatically?
 - `plt.savefig("survey_results.png")` writes to the current directory. What would break if you ran this script from a different working directory, and what does `Path(__file__).parent` give you instead?
 
 ## ⚠️ Common pitfalls
 
-- **Question ids don't match response keys.** `Survey.run()` stores answers under the question ids you pass to `add_question`, and `simulate_responses()` returns dicts with hardcoded keys. If the id in `add_question` is `"exercise_freq_x"` but the simulation uses `"exercise_freq"`, your DataFrame will be missing a column. Keep the two in sync — or better, drive the simulation keys from the survey itself.
+- **Question ids don't match response keys.** `Survey.run()` stores answers under the question ids you pass to `add_question`, and `simulate_responses()` returns dicts with hardcoded keys. If the id in `add_question` is `"exercise_freq_x"` but the simulation uses `"exercise_freq"`, your DataFrame will be missing a column. Keep the two in sync, or better, drive the simulation keys from the survey itself.
 - **String vs int confusion.** `input()` returns strings, so comments like "`6` isn't in range" are string comparisons. `df["satisfaction"].astype(int).mean()` converts before averaging; a stray non-numeric string (like a blank from an optional question) makes `.astype(int)` throw. Filter or fill NaN before converting.
-- **The branch loop can spin forever.** If `branch_rules` maps an answer to a question id that isn't `in self.questions`, the `else idx + 1` doesn't fire and the runner re-asks the same question. Mistyped ids are the classic cause — keep a single source of truth for question ids.
+- **The branch loop can spin forever.** If `branch_rules` maps an answer to a question id that isn't `in self.questions`, the `else idx + 1` doesn't fire and the runner re-asks the same question. Mistyped ids are the classic cause, keep a single source of truth for question ids.
 - **`value_counts` drops missing vs `crosstab` counting-0 difference.** A respondent who skips an optional question vanishes from `value_counts()` but appears as a 0 count in `crosstab` only if the category exists elsewhere. Know which behavior your analysis needs before interpreting the chart.
 
 ## What you just built
@@ -428,11 +428,11 @@ A complete survey platform: type-safe question classes with validation, a branch
 ## Where to go from here
 
 - Add a cross-tabulation heatmap: use `pd.crosstab` + `matplotlib.imshow` (or Seaborn's `heatmap`) to visualize exercise frequency vs. satisfaction as a color grid instead of a number table.
-- Add response filtering: write a function that returns only the respondents who chose a specific answer (e.g., all Daily exercisers) and compute their average satisfaction — the filter reveals subgroup insight the aggregate misses.
+- Add response filtering: write a function that returns only the respondents who chose a specific answer (e.g., all Daily exercisers) and compute their average satisfaction, the filter reveals subgroup insight the aggregate misses.
 - Extend branching to multi-level: when answer A on question 1 jumps to question X, and answer B on question X jumps to question Y, your `next_question_id` and `order.index(branch)` logic needs to handle chains of branches, not just single jumps.
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

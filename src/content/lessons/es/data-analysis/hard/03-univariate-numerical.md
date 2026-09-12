@@ -143,7 +143,7 @@ plt.show()
 ```
 
 Cómo leer un diagrama de caja:
-- **Caja**: rango intercuartílico (IQR) — el 50% central de los datos
+- **Caja**: rango intercuartílico (IQR), el 50% central de los datos
 - **Línea dentro de la caja**: mediana
 - **Bigotes**: 1.5 × IQR desde Q1 y Q3
 - **Puntos más allá de los bigotes**: valores atípicos (típicamente > 1.5 × IQR)
@@ -227,7 +227,7 @@ plt.show()
 
 ## Conclusiones clave
 
-- Siempre calcula los estadísticos de resumen antes de graficar — te dicen qué buscar en la visualización
+- Siempre calcula los estadísticos de resumen antes de graficar, te dicen qué buscar en la visualización
 - Los histogramas muestran frecuencias; los gráficos KDE muestran densidad; los diagramas de caja muestran estadísticos de resumen; los diagramas de violín combinan ambos
 - La asimetría y la curtosis cuantifican la forma de la distribución en números
 - Los diagramas de caja hacen obvios los valores atípicos; los histogramas revelan la modalidad (unimodal vs bimodal)
@@ -238,7 +238,7 @@ plt.show()
 Crea una sola figura con cuatro subgráficos que muestren la distribución de `math score` usando: (1) un histograma, (2) un gráfico KDE, (3) un diagrama de caja y (4) un diagrama de violín. Añade una línea vertical en la media en cada gráfico. Establece el título de la figura como "Math Score Distribution Analysis".
 
 <details class="challenge">
-<summary>🧩 Desafío — piensa primero, luego revela</summary>
+<summary>🧩 Desafío, piensa primero, luego revela</summary>
 <div class="challenge__body">
 
 ```python

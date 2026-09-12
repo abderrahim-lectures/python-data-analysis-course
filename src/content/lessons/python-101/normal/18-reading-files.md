@@ -30,7 +30,7 @@ content = f.read()
 f.close()  # always close when done!
 ```
 
-`"r"` means read-only. And the discipline is heavy: `close()` must run when you are finished, or the handle leaks — the file stays held open long after you stopped needing it. Forgetting it is the first generation of file bugs.
+`"r"` means read-only. And the discipline is heavy: `close()` must run when you are finished, or the handle leaks, the file stays held open long after you stopped needing it. Forgetting it is the first generation of file bugs.
 
 ## The with statement: closing as a promise
 
@@ -42,7 +42,7 @@ with open("data.txt") as f:
 # file is closed here
 ```
 
-The `with` block declares a contract: open it here, and it will be closed when this block ends — normally or by exception. The handle's lifetime is boxed into the block, so there is nothing left to forget.
+The `with` block declares a contract: open it here, and it will be closed when this block ends, normally or by exception. The handle's lifetime is boxed into the block, so there is nothing left to forget.
 
 ## Reading strategies
 
@@ -93,11 +93,11 @@ with open("data.txt", encoding="utf-8") as f:
     text = f.read()
 ```
 
-Without `encoding`, Python falls back to the system's default, which differs by platform — the same file, garbled on a Windows box and clean on Linux. Stating `utf-8` makes the bytes mean the same letters everywhere.
+Without `encoding`, Python falls back to the system's default, which differs by platform, the same file, garbled on a Windows box and clean on Linux. Stating `utf-8` makes the bytes mean the same letters everywhere.
 
 ## A worked example: the score file, line by line
 
-The memory-safe walk — accumulate without ever holding the whole file:
+The memory-safe walk, accumulate without ever holding the whole file:
 
 ```python
 with open("scores.txt", encoding="utf-8") as f:
@@ -110,12 +110,12 @@ with open("scores.txt", encoding="utf-8") as f:
 print(f"Avg: {total / count}")
 ```
 
-Each line is read, stripped of its newline, converted, and dropped before the next arrives — the file flows through, never gathering the whole. The `with` promise closes the file as the block ends, normally or by exception.
+Each line is read, stripped of its newline, converted, and dropped before the next arrives, the file flows through, never gathering the whole. The `with` promise closes the file as the block ends, normally or by exception.
 
 ## Common pitfalls
 
 - **Forgetting `with`.** Handles leak when nothing closes them; let the block own the file's life.
-- **Swallowing huge files.** `f.read()` on a giant file can exhaust memory — iterate `for line in f` instead.
+- **Swallowing huge files.** `f.read()` on a giant file can exhaust memory, iterate `for line in f` instead.
 - **Ignoring encoding.** Non-ASCII letters turn to gibberish when the convention is left to chance.
 - **Hardcoded paths.** `pathlib.Path` makes the same code walk on every operating system.
 - **A consumed file reads empty.** After `f.read()`, the position sits at the end; a second read returns `''` and `readlines()` returns `[]`. Read once, or reopen.
@@ -123,30 +123,30 @@ Each line is read, stripped of its newline, converted, and dropped before the ne
 ## 🧩 Challenges
 
 <details class="challenge">
-<summary>🧩 Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge, think first, then reveal</summary>
 <div class="challenge__body">
 
 Count the lines of a file without loading it into memory.
 
-<p class="challenge__answer">💡 <strong>Answer:</strong> <code>count = 0; with open("file.txt") as f: for line in f: count += 1</code> or the compact <code>sum(1 for _ in open("file.txt"))</code> — a line at a time, never the whole.</p>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>count = 0; with open("file.txt") as f: for line in f: count += 1</code> or the compact <code>sum(1 for _ in open("file.txt"))</code>, a line at a time, never the whole.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge, think first, then reveal</summary>
 <div class="challenge__body">
 
 List every `.txt` file in a directory with `pathlib`.
 
-<p class="challenge__answer">💡 <strong>Answer:</strong> <code>list(Path(".").glob("*.txt"))</code> — a single glob walks the matching names for you.</p>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>list(Path(".").glob("*.txt"))</code>, a single glob walks the matching names for you.</p>
 
 </div>
 </details>
 
 ## 🤔 Socratic Questions
 
-- Does `for line in f` include the trailing `\n`? Why does the loop look as it does — and how do you strip the newline?
+- Does `for line in f` include the trailing `\n`? Why does the loop look as it does, and how do you strip the newline?
 - What happens when you read a file that doesn't exist? How does `with` fare against the exception?
 - When does `f.read()` beat iterating line by line?
 

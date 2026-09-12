@@ -6,7 +6,7 @@ difficulty: intermediate
 
 # Détecteur d'anomalies
 
-Des valeurs aberrantes se cachent dans chaque jeu de données — un pic de capteur, une transaction frauduleuse, une erreur de mesure. Les trouver est important car elles peuvent fausser l'analyse ou révéler quelque chose d'important. Ce projet enseigne deux techniques statistiques classiques pour signaler des anomalies (z-score et IQR) et montre comment visualiser les résultats pour que les valeurs aberrantes ressortent sur les graphiques.
+Des valeurs aberrantes se cachent dans chaque jeu de données, un pic de capteur, une transaction frauduleuse, une erreur de mesure. Les trouver est important car elles peuvent fausser l'analyse ou révéler quelque chose d'important. Ce projet enseigne deux techniques statistiques classiques pour signaler des anomalies (z-score et IQR) et montre comment visualiser les résultats pour que les valeurs aberrantes ressortent sur les graphiques.
 
 Ceci est optionnel et non noté. Voir [Projets concrets](/fr/projets) pour la liste complète.
 
@@ -22,17 +22,17 @@ Ceci est optionnel et non noté. Voir [Projets concrets](/fr/projets) pour la li
 ## Où exécuter ceci
 
 - **En local avec `uv` (recommandé).** Ce projet utilise `pandas`, `numpy`, et `matplotlib`, donc une installation locale est le chemin le plus fluide. La section Configuration ci-dessous explique comment l'installer.
-- **Bac à sable JupyterLite.** Colle les cellules de code directement dans un notebook — fonctionne bien pour explorer les étapes d'analyse, bien que la fonction de rapport finale soit conçue pour un vrai terminal.
+- **Bac à sable JupyterLite.** Colle les cellules de code directement dans un notebook, fonctionne bien pour explorer les étapes d'analyse, bien que la fonction de rapport finale soit conçue pour un vrai terminal.
 - **Google Colab.** Ouvre un nouveau notebook et colle les cellules. Même réserve que pour JupyterLite : les fonctions CLI fonctionnent mieux dans un vrai terminal.
 
-- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt — ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
+- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt, ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/anomaly-detector/notebook.fr.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/anomaly-detector/notebook.fr.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fanomaly-detector%2Fnotebook.fr.ipynb)
 
 ## Configuration
 
-`uv` est un seul outil qui remplace la chaîne habituelle « installe Python, puis pip, puis un environnement virtuel » — il peut installer et gérer les versions de Python lui-même, en plus des dépendances de ton projet.
+`uv` est un seul outil qui remplace la chaîne habituelle « installe Python, puis pip, puis un environnement virtuel », il peut installer et gérer les versions de Python lui-même, en plus des dépendances de ton projet.
 
 **macOS / Linux** (terminal) :
 
@@ -117,7 +117,7 @@ First 5 rows:
  2026-06-05       214.90       856
 ```
 
-**🩹 Si ça ne marche pas :** Si la moyenne est bien plus élevée que 200, les pics injectés la tirent vers le haut — c'est attendu. Si tu obtiens un `ImportError`, assure-toi que `numpy` est installé : `uv add numpy`.
+**🩹 Si ça ne marche pas :** Si la moyenne est bien plus élevée que 200, les pics injectés la tirent vers le haut, c'est attendu. Si tu obtiens un `ImportError`, assure-toi que `numpy` est installé : `uv add numpy`.
 
 ### 1.2 Inspecte la distribution
 
@@ -154,7 +154,7 @@ Values at those positions:
   Day 81: 547.83 ms
 ```
 
-**🩹 Si ça ne marche pas :** Si l'une des valeurs injectées est inférieure à 400, la plage aléatoire n'est pas assez large — réexécute la cellule. Le `np.random.seed(42)` garantit la reproductibilité, donc les résultats devraient être cohérents.
+**🩹 Si ça ne marche pas :** Si l'une des valeurs injectées est inférieure à 400, la plage aléatoire n'est pas assez large, réexécute la cellule. Le `np.random.seed(42)` garantit la reproductibilité, donc les résultats devraient être cohérents.
 
 ### 1.3 Vérifie la configuration
 
@@ -171,7 +171,7 @@ Values at those positions:
 
 ## Étape 2 : Détection d'anomalies par z-score
 
-Le z-score te dit de combien d'écarts-types un point de données s'écarte de la moyenne. Un z-score supérieur à 3 (ou inférieur à -3) est un seuil courant pour signaler les valeurs aberrantes — cela signifie que le point est extrêmement improbable sous une distribution normale.
+Le z-score te dit de combien d'écarts-types un point de données s'écarte de la moyenne. Un z-score supérieur à 3 (ou inférieur à -3) est un seuil courant pour signaler les valeurs aberrantes, cela signifie que le point est extrêmement improbable sous une distribution normale.
 
 ### 2.1 Calcule les z-scores
 
@@ -213,7 +213,7 @@ Highest z-scores:
  2026-07-28       412.44  4.945678
 ```
 
-**🩹 Si ça ne marche pas :** Si tous les z-scores sont proches de zéro, l'écart-type est très grand par rapport à la moyenne — vérifie que `response_ms` n'est pas stocké en entiers perdant de la précision. Si tu obtiens un `ZeroDivisionError`, l'écart-type est zéro, ce qui signifie que toutes les valeurs sont identiques — génère des données fraîches.
+**🩹 Si ça ne marche pas :** Si tous les z-scores sont proches de zéro, l'écart-type est très grand par rapport à la moyenne, vérifie que `response_ms` n'est pas stocké en entiers perdant de la précision. Si tu obtiens un `ZeroDivisionError`, l'écart-type est zéro, ce qui signifie que toutes les valeurs sont identiques, génère des données fraîches.
 
 ### 2.2 Signale les anomalies avec un seuil configurable
 
@@ -249,7 +249,7 @@ Anomalies detected (z-score, threshold=3.0): 5
  2026-08-21       547.83  8.274567
 ```
 
-**🩹 Si ça ne marche pas :** Si tu détectes plus de 5 anomalies, le seuil est trop bas — augmente-le à 3.0 ou 3.5. Si tu détectes moins de 5, le seuil est trop haut. Joue avec le paramètre `threshold` et observe le nombre changer.
+**🩹 Si ça ne marche pas :** Si tu détectes plus de 5 anomalies, le seuil est trop bas, augmente-le à 3.0 ou 3.5. Si tu détectes moins de 5, le seuil est trop haut. Joue avec le paramètre `threshold` et observe le nombre changer.
 
 ### 2.3 Essaie différents seuils
 
@@ -276,7 +276,7 @@ for t in [2.0, 2.5, 3.0, 3.5, 4.0]:
 **✅ Liste de vérification**
 
 - ✅ `compute_zscores` retourne une Series avec une moyenne proche de 0 et un écart-type proche de 1.
-- ✅ Au seuil de 3.0, exactement 5 anomalies sont signalées — correspondant aux pics injectés.
+- ✅ Au seuil de 3.0, exactement 5 anomalies sont signalées, correspondant aux pics injectés.
 - ✅ Des seuils plus bas captent plus d'anomalies (plus sensible).
 - ✅ Des seuils plus hauts captent moins d'anomalies (plus conservateur).
 
@@ -319,7 +319,7 @@ Lower bound: 161.26 ms
 Upper bound: 238.20 ms
 ```
 
-**🩹 Si ça ne marche pas :** Si l'IQR est très petit (inférieur à 5), tes données sont peut-être trop uniformes — injecte des pics plus larges. Si les bornes semblent trop larges, le multiplicateur est trop élevé.
+**🩹 Si ça ne marche pas :** Si l'IQR est très petit (inférieur à 5), tes données sont peut-être trop uniformes, injecte des pics plus larges. Si les bornes semblent trop larges, le multiplicateur est trop élevé.
 
 ### 3.2 Signale les anomalies avec IQR
 
@@ -355,7 +355,7 @@ Anomalies detected (IQR, multiplier=1.5): 5
  2026-08-21       547.83
 ```
 
-**🩹 Si ça ne marche pas :** Si la méthode IQR capte un nombre d'anomalies différent de la méthode z-score, c'est normal — elles utilisent des principes statistiques différents. Si elle n'en capte aucune, le multiplicateur est trop élevé ; essaie 1.0 au lieu de 1.5.
+**🩹 Si ça ne marche pas :** Si la méthode IQR capte un nombre d'anomalies différent de la méthode z-score, c'est normal, elles utilisent des principes statistiques différents. Si elle n'en capte aucune, le multiplicateur est trop élevé ; essaie 1.0 au lieu de 1.5.
 
 ### 3.3 Compare les résultats z-score vs IQR
 
@@ -391,7 +391,7 @@ Rows flagged by at least one method:
  2026-08-21       547.83  8.274567            True         True
 ```
 
-**🩹 Si ça ne marche pas :** Si les deux méthodes ne sont pas d'accord sur certaines lignes, c'est en fait informatif — ces points limites valent la peine d'être examinés manuellement. Dans ce jeu de données synthétique avec des pics évidents, les deux méthodes sont parfaitement d'accord.
+**🩹 Si ça ne marche pas :** Si les deux méthodes ne sont pas d'accord sur certaines lignes, c'est en fait informatif, ces points limites valent la peine d'être examinés manuellement. Dans ce jeu de données synthétique avec des pics évidents, les deux méthodes sont parfaitement d'accord.
 
 ### 3.4 Vérifie la détection IQR
 
@@ -443,7 +443,7 @@ plot_scatter_with_anomalies(df)
 
 **🎯 Résultat attendu :** Un nuage de points montrant un amas de points bleus groupés autour de 200 ms, avec 5 marqueurs rouges en X clairement séparés au-dessus de 400 ms. La ligne pointillée verte montre la moyenne, et la ligne en pointillés orange montre la limite supérieure IQR. Le graphique est enregistré dans `scatter_anomalies.png`.
 
-**🩹 Si ça ne marche pas :** Si tous les points sont de la même couleur, la colonne booléenne `zscore_anomaly` n'existe peut-être pas encore — exécute d'abord l'étape 2.2. Si les dates se chevauchent et deviennent illisibles, augmente la largeur de la figure avec `figsize=(14, 5)`.
+**🩹 Si ça ne marche pas :** Si tous les points sont de la même couleur, la colonne booléenne `zscore_anomaly` n'existe peut-être pas encore, exécute d'abord l'étape 2.2. Si les dates se chevauchent et deviennent illisibles, augmente la largeur de la figure avec `figsize=(14, 5)`.
 
 ### 4.2 Histogramme avec régions d'anomalies
 
@@ -474,7 +474,7 @@ plot_histogram_with_thresholds(df)
 
 **🎯 Résultat attendu :** Un histogramme avec la plupart des valeurs groupées entre 160 et 240 ms. Deux lignes verticales rouges en pointillés marquent les bornes IQR, et des lignes rouges légères mettent en surbrillance chaque anomalie dans la queue. Le graphique est enregistré dans `histogram_anomalies.png`.
 
-**🩹 Si ça ne marche pas :** Si les barres de l'histogramme sont extrêmement fines, augmente le nombre de bins. Si aucune ligne verticale rouge n'apparaît dans la queue, les anomalies sont en dehors de la plage x visible — ajoute `ax.set_xlim(left=100)` pour étendre l'axe.
+**🩹 Si ça ne marche pas :** Si les barres de l'histogramme sont extrêmement fines, augmente le nombre de bins. Si aucune ligne verticale rouge n'apparaît dans la queue, les anomalies sont en dehors de la plage x visible, ajoute `ax.set_xlim(left=100)` pour étendre l'axe.
 
 ### 4.3 Box plot
 
@@ -503,7 +503,7 @@ plot_boxplot(df)
 
 **🎯 Résultat attendu :** Un box plot avec la boîte centrée autour de 200 ms, les moustaches s'étendant jusqu'aux bornes IQR, et des points rouges au-delà de la moustache supérieure marquant chaque anomalie. Le graphique est enregistré dans `boxplot_anomalies.png`.
 
-**🩹 Si ça ne marche pas :** Si le box plot ne montre aucune valeur aberrante (points rouges), les données ont peut-être besoin d'être régénérées — réexécute l'étape de génération de données. Le box plot utilise la règle par défaut de matplotlib de 1.5*IQR, qui devrait correspondre à ta détection IQR.
+**🩹 Si ça ne marche pas :** Si le box plot ne montre aucune valeur aberrante (points rouges), les données ont peut-être besoin d'être régénérées, réexécute l'étape de génération de données. Le box plot utilise la règle par défaut de matplotlib de 1.5*IQR, qui devrait correspondre à ta détection IQR.
 
 ### 4.4 Vérifie les visualisations
 
@@ -585,7 +585,7 @@ generate_report(df, method="zscore")
 ============================================================
 ```
 
-**🩹 Si ça ne marche pas :** Si tu obtiens un KeyError, la colonne d'anomalies n'a pas encore été créée — exécute d'abord les étapes 2.2 ou 3.2. Si les étiquettes de sévérité disent toutes « MEDIUM », ta moyenne normale est trop proche des valeurs d'anomalie — génère des données fraîches avec des pics plus larges.
+**🩹 Si ça ne marche pas :** Si tu obtiens un KeyError, la colonne d'anomalies n'a pas encore été créée, exécute d'abord les étapes 2.2 ou 3.2. Si les étiquettes de sévérité disent toutes « MEDIUM », ta moyenne normale est trop proche des valeurs d'anomalie, génère des données fraîches avec des pics plus larges.
 
 ### 5.2 Exécute le rapport pour les deux méthodes
 
@@ -640,7 +640,7 @@ Contents of anomalies_zscore.csv:
  2026-08-21       547.83        347.56 CRITICAL
 ```
 
-**🩹 Si ça ne marche pas :** Si le CSV est vide, le filtre booléen exclut tout — vérifie que `zscore_anomaly` est `True` pour au moins quelques lignes. Si `deviation_ms` semble faux, la moyenne normale est peut-être recalculée sur le jeu de données complet au lieu des seules lignes non-anomalies.
+**🩹 Si ça ne marche pas :** Si le CSV est vide, le filtre booléen exclut tout, vérifie que `zscore_anomaly` est `True` pour au moins quelques lignes. Si `deviation_ms` semble faux, la moyenne normale est peut-être recalculée sur le jeu de données complet au lieu des seules lignes non-anomalies.
 
 ### 5.4 Vérifie le rapport
 
@@ -679,7 +679,7 @@ Contents of anomalies_zscore.csv:
 
 ## Ce que tu viens de construire
 
-Un kit de détection d'anomalies réutilisable qui applique deux méthodes statistiques classiques — z-score et IQR — pour signaler les valeurs aberrantes dans les données numériques. Tu as calculé les z-scores par rapport à une moyenne globale, déduit les bornes IQR à partir des plages de quartiles, visualisé les anomalies sur des nuages de points, des histogrammes, et des box plots, et construit un système de rapport automatique qui classe la sévérité et exporte les résultats en CSV. Ces techniques se transfèrent directement à la surveillance en conditions réelles, la détection de fraude, le contrôle qualité, et tout domaine où des valeurs inhabituelles méritent l'attention.
+Un kit de détection d'anomalies réutilisable qui applique deux méthodes statistiques classiques, z-score et IQR, pour signaler les valeurs aberrantes dans les données numériques. Tu as calculé les z-scores par rapport à une moyenne globale, déduit les bornes IQR à partir des plages de quartiles, visualisé les anomalies sur des nuages de points, des histogrammes, et des box plots, et construit un système de rapport automatique qui classe la sévérité et exporte les résultats en CSV. Ces techniques se transfèrent directement à la surveillance en conditions réelles, la détection de fraude, le contrôle qualité, et tout domaine où des valeurs inhabituelles méritent l'attention.
 
 ## Où aller à partir d'ici
 
@@ -691,6 +691,6 @@ Un kit de détection d'anomalies réutilisable qui applique deux méthodes stati
 
 ## Partage ton projet avec la classe
 
-Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets que d'autres étudiants ont soumis — et son README a un guide complet et adapté aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git auparavant : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable de git n'est supposée.
+Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets que d'autres étudiants ont soumis, et son README a un guide complet et adapté aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git auparavant : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable de git n'est supposée.
 
 Bienvenue dans l'écriture de Python en dehors du navigateur. 🎓

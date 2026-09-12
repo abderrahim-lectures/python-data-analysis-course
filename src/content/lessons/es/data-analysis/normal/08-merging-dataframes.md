@@ -45,7 +45,7 @@ quiz:
 
 ## ¿Por qué combinar?
 
-Los análisis reales suelen requerir datos de múltiples fuentes. Combinar une dos DataFrames basándose en una clave compartida — como una JOIN en SQL o un BUSCARV en Excel.
+Los análisis reales suelen requerir datos de múltiples fuentes. Combinar une dos DataFrames basándose en una clave compartida, como una JOIN en SQL o un BUSCARV en Excel.
 
 ```python
 import pandas as pd
@@ -80,17 +80,17 @@ Salida:
 2             3  Carol      2   26.0        S
 ```
 
-Solo aparecen los pasajeros 1, 2 y 3 — esto es una **unión inner** (la predeterminada). Los pasajeros 4 y 5 no tienen datos de boleto; el pasajero 6 no tiene datos de pasajero.
+Solo aparecen los pasajeros 1, 2 y 3, esto es una **unión inner** (la predeterminada). Los pasajeros 4 y 5 no tienen datos de boleto; el pasajero 6 no tiene datos de pasajero.
 
 ## Tipos de unión
 
-**Unión inner** (predeterminada) — solo las filas coincidentes de ambos lados:
+**Unión inner** (predeterminada), solo las filas coincidentes de ambos lados:
 
 ```python
 pd.merge(passengers, tickets, on="passenger_id")
 ```
 
-**Unión left** — conserva todas las filas del DataFrame izquierdo:
+**Unión left**, conserva todas las filas del DataFrame izquierdo:
 
 ```python
 pd.merge(passengers, tickets, on="passenger_id", how="left")
@@ -107,13 +107,13 @@ Salida:
 4             5    Eve      1    NaN      NaN
 ```
 
-**Unión right** — conserva todas las filas del DataFrame derecho:
+**Unión right**, conserva todas las filas del DataFrame derecho:
 
 ```python
 pd.merge(passengers, tickets, on="passenger_id", how="right")
 ```
 
-**Unión outer** — conserva todas las filas de ambos lados:
+**Unión outer**, conserva todas las filas de ambos lados:
 
 ```python
 pd.merge(passengers, tickets, on="passenger_id", how="outer")

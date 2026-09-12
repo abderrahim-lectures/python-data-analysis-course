@@ -14,9 +14,9 @@ prerequisites: ["Python 101", "Data Analysis"]
 
 # 🌍 Build a Geospatial Data Analyzer
 
-Every rideshare trip, every delivery, every weather station reading is a point on the globe described by two numbers: latitude and longitude. This project builds a geospatial analysis tool that takes raw coordinate data and answers real questions: where are the clusters of activity, how far apart are two locations, and what does the density of points look like on a map. You'll use DBSCAN for spatial clustering, the Haversine formula for real distance calculations, and Folium for interactive map visualizations — all grounded in actual geographic data.
+Every rideshare trip, every delivery, every weather station reading is a point on the globe described by two numbers: latitude and longitude. This project builds a geospatial analysis tool that takes raw coordinate data and answers real questions: where are the clusters of activity, how far apart are two locations, and what does the density of points look like on a map. You'll use DBSCAN for spatial clustering, the Haversine formula for real distance calculations, and Folium for interactive map visualizations, all grounded in actual geographic data.
 
-This assumes Python 101 and comfort with pandas from Data Analysis — nothing beyond. Optional and ungraded; see [Real-World Projects](/projects) for the full list.
+This assumes Python 101 and comfort with pandas from Data Analysis, nothing beyond. Optional and ungraded; see [Real-World Projects](/projects) for the full list.
 
 ## 🎯 What you'll do
 
@@ -29,7 +29,7 @@ This assumes Python 101 and comfort with pandas from Data Analysis — nothing b
 
 ## Where to run this
 
-**Locally with `uv`** is the primary path — the interactive Folium map renders in your browser, which is more reliable than a notebook's output pane.
+**Locally with `uv`** is the primary path, the interactive Folium map renders in your browser, which is more reliable than a notebook's output pane.
 
 **Google Colab, Kaggle Notebooks, and Binder** work well for trying the tool. The notebook installs the same packages and uses the same code; Folium maps render inline in Colab and Kaggle.
 
@@ -61,7 +61,7 @@ cd geospatial-analyzer
 uv add pandas scikit-learn folium numpy
 ```
 
-`pandas` handles the data, `scikit-learn` provides DBSCAN clustering, `folium` renders interactive maps, and `numpy` is needed for the Haversine math. No external API keys required — everything runs locally.
+`pandas` handles the data, `scikit-learn` provides DBSCAN clustering, `folium` renders interactive maps, and `numpy` is needed for the Haversine math. No external API keys required, everything runs locally.
 
 ### Create the project structure
 
@@ -78,7 +78,7 @@ touch geo/__init__.py geo/load.py geo/cluster.py geo/distance.py geo/visualize.p
 
 ## Step 1: Load and clean coordinate data
 
-Geographic data comes in many shapes — CSV files, JSON APIs, database dumps — but for analysis it always ends up as a DataFrame with at least two columns: `latitude` and `longitude`. This step loads sample data and validates that the coordinates are realistic.
+Geographic data comes in many shapes, CSV files, JSON APIs, database dumps, but for analysis it always ends up as a DataFrame with at least two columns: `latitude` and `longitude`. This step loads sample data and validates that the coordinates are realistic.
 
 ### 1.1 Load sample data
 
@@ -111,7 +111,7 @@ def validate_coordinates(df: pd.DataFrame) -> pd.DataFrame:
     return df.reset_index(drop=True)
 ```
 
-The `generate_sample_locations` function creates points clustered around three real Bay Area locations — this makes the clustering results meaningful and the maps recognizable. `validate_coordinates` filters out impossible coordinates (latitude outside -90 to 90, longitude outside -180 to 180) with a count of what was removed.
+The `generate_sample_locations` function creates points clustered around three real Bay Area locations, this makes the clustering results meaningful and the maps recognizable. `validate_coordinates` filters out impossible coordinates (latitude outside -90 to 90, longitude outside -180 to 180) with a count of what was removed.
 
 **🎯 Expected output:** `generate_sample_locations(50)` returns a DataFrame with 50 rows and columns `latitude`, `longitude`, `label`. `validate_coordinates` drops 0 rows for valid data.
 
@@ -143,11 +143,11 @@ print(df.head())
 **🤔 Socratic Question(s)**
 
 - Real geographic data often has missing values, duplicate points, or coordinates at (0, 0). How would you extend `validate_coordinates` to catch these cases?
-- If you're analyzing delivery routes, the order of points matters — why doesn't order matter for the clustering step?
+- If you're analyzing delivery routes, the order of points matters, why doesn't order matter for the clustering step?
 
 ## Step 2: Cluster points with DBSCAN
 
-DBSCAN groups points that are close together and marks isolated points as noise — perfect for spatial data where clusters have irregular shapes and you don't know the number of clusters in advance. The key insight is that DBSCAN works on *distance*, not just raw coordinates, so you need to convert lat/lon to kilometers first.
+DBSCAN groups points that are close together and marks isolated points as noise, perfect for spatial data where clusters have irregular shapes and you don't know the number of clusters in advance. The key insight is that DBSCAN works on *distance*, not just raw coordinates, so you need to convert lat/lon to kilometers first.
 
 ### 2.1 Convert coordinates to radians and cluster
 
@@ -180,11 +180,11 @@ def cluster_locations(
     return labels
 ```
 
-The conversion from kilometers to radians (`eps_km / 6371.0`) is critical — DBSCAN's haversine metric expects radians, not degrees. One degree of latitude is about 111 km at the equator, but the haversine formula handles the curvature correctly. Points labeled `-1` are noise (not part of any cluster), and clusters start from `0`.
+The conversion from kilometers to radians (`eps_km / 6371.0`) is critical, DBSCAN's haversine metric expects radians, not degrees. One degree of latitude is about 111 km at the equator, but the haversine formula handles the curvature correctly. Points labeled `-1` are noise (not part of any cluster), and clusters start from `0`.
 
 **🎯 Expected output:** `cluster_locations(df, eps_km=1.0, min_samples=5)` returns an array of integers where `-1` marks noise points and `0, 1, 2, ...` mark cluster assignments.
 
-**🩹 If it's off:** If every point is noise (`-1`), `eps_km` is too small — try increasing it. If everything is one giant cluster, `eps_km` is too large or `min_samples` is too small.
+**🩹 If it's off:** If every point is noise (`-1`), `eps_km` is too small, try increasing it. If everything is one giant cluster, `eps_km` is too large or `min_samples` is too small.
 
 ### 2.2 Attach labels to the DataFrame
 
@@ -202,7 +202,7 @@ def add_cluster_labels(df, labels: np.ndarray):
 
 **🎯 Expected output:** The printed summary shows 3 clusters (matching the three centers in the sample data) and a small number of noise points.
 
-**🩹 If it's off:** If the cluster count is wrong, the `eps_km` or `min_samples` parameters need tuning — spatial clustering always requires parameter exploration.
+**🩹 If it's off:** If the cluster count is wrong, the `eps_km` or `min_samples` parameters need tuning, spatial clustering always requires parameter exploration.
 
 ### 2.3 Verify clustering
 
@@ -219,7 +219,7 @@ def add_cluster_labels(df, labels: np.ndarray):
 
 ## Step 3: Calculate distances with the Haversine formula
 
-The Haversine formula calculates the great-circle distance between two points on a sphere — the shortest distance over the Earth's surface, not a flat-line approximation. This is essential for geographic analysis because a flat-earth approximation (Euclidean distance on raw coordinates) gives wildly wrong results at larger scales.
+The Haversine formula calculates the great-circle distance between two points on a sphere, the shortest distance over the Earth's surface, not a flat-line approximation. This is essential for geographic analysis because a flat-earth approximation (Euclidean distance on raw coordinates) gives wildly wrong results at larger scales.
 
 ### 3.1 Implement the Haversine formula
 
@@ -250,9 +250,9 @@ def distance_matrix(df) -> np.ndarray:
     return EARTH_RADIUS_KM * 2 * np.arcsin(np.sqrt(np.clip(a, 0, 1)))
 ```
 
-The `haversine` function is the building block — it converts degrees to radians, applies the formula, and returns kilometers. The `distance_matrix` function vectorizes this with NumPy broadcasting to compute all pairwise distances at once, which is orders of magnitude faster than looping in Python. `np.clip(a, 0, 1)` prevents floating-point rounding from pushing values slightly above 1 into the domain of `arcsin`.
+The `haversine` function is the building block, it converts degrees to radians, applies the formula, and returns kilometers. The `distance_matrix` function vectorizes this with NumPy broadcasting to compute all pairwise distances at once, which is orders of magnitude faster than looping in Python. `np.clip(a, 0, 1)` prevents floating-point rounding from pushing values slightly above 1 into the domain of `arcsin`.
 
-**🎯 Expected output:** `haversine(37.7749, -122.4194, 37.8044, -122.2712)` returns approximately `13.5` km — the real distance between downtown SF and Oakland.
+**🎯 Expected output:** `haversine(37.7749, -122.4194, 37.8044, -122.2712)` returns approximately `13.5` km, the real distance between downtown SF and Oakland.
 
 **🩹 If it's off:** If the distance is wildly wrong (thousands of km for nearby points), you forgot to convert degrees to radians. If the matrix has negative values, the `np.clip` is missing.
 
@@ -277,7 +277,7 @@ def nearest_neighbors(df, k: int = 5) -> list[dict]:
 
 **🎯 Expected output:** `nearest_neighbors(df, k=3)` returns a list of dictionaries, each with a `point` name and a `neighbors` list of 3 nearest points with distances.
 
-**🩹 If it's off:** If the first neighbor has distance 0, you're including self in the results — the `skip self` comment in the code handles this with `[1:k+1]`.
+**🩹 If it's off:** If the first neighbor has distance 0, you're including self in the results, the `skip self` comment in the code handles this with `[1:k+1]`.
 
 ### 3.3 Verify distance calculations
 
@@ -294,7 +294,7 @@ def nearest_neighbors(df, k: int = 5) -> list[dict]:
 
 ## Step 4: Generate a heatmap on an interactive map
 
-A heatmap overlay on a real map makes point density immediately visible — dense areas glow bright, sparse areas fade. Folium generates an HTML file with an interactive Leaflet.js map that you can zoom, pan, and click.
+A heatmap overlay on a real map makes point density immediately visible, dense areas glow bright, sparse areas fade. Folium generates an HTML file with an interactive Leaflet.js map that you can zoom, pan, and click.
 
 ### 4.1 Build the heatmap
 
@@ -318,9 +318,9 @@ def create_heatmap(df, output: str = "heatmap.html", zoom_start: int = 12):
     return output
 ```
 
-The map centers on the mean of all coordinates, which is the natural center of the dataset. `radius` and `blur` control the heatmap's visual appearance — larger radius spreads each point's influence further, larger blur softens the edges. The output is a standalone HTML file you can open in any browser.
+The map centers on the mean of all coordinates, which is the natural center of the dataset. `radius` and `blur` control the heatmap's visual appearance, larger radius spreads each point's influence further, larger blur softens the edges. The output is a standalone HTML file you can open in any browser.
 
-**🎯 Expected output:** `create_heatmap(df)` creates `heatmap.html` — a file you can open in a browser showing an interactive map with a heat overlay centered on the data's centroid.
+**🎯 Expected output:** `create_heatmap(df)` creates `heatmap.html`, a file you can open in a browser showing an interactive map with a heat overlay centered on the data's centroid.
 
 **🩹 If it's off:** If the map is blank, the coordinates may be in the wrong order (Folium expects `[lat, lon]`). If the heatmap is invisible, try increasing `radius` or `blur`.
 
@@ -353,9 +353,9 @@ def create_cluster_map(df, output: str = "clusters.html", zoom_start: int = 12):
 
 Each cluster gets a distinct color; noise points (`-1`) are gray. The `popup` on each marker shows the point's label when clicked. This gives you two views of the same data: the heatmap shows density, and the cluster map shows grouping.
 
-**🎯 Expected output:** `create_cluster_map(df)` creates `clusters.html` with colored markers — three distinct colors for three clusters, gray for noise.
+**🎯 Expected output:** `create_cluster_map(df)` creates `clusters.html` with colored markers, three distinct colors for three clusters, gray for noise.
 
-**🩹 If it's off:** If all markers are the same color, the `cluster` column isn't in the DataFrame — run `add_cluster_labels` first. If the popup is empty, the `label` column is missing.
+**🩹 If it's off:** If all markers are the same color, the `cluster` column isn't in the DataFrame, run `add_cluster_labels` first. If the popup is empty, the `label` column is missing.
 
 ### 4.3 Verify the visualizations
 
@@ -372,7 +372,7 @@ Each cluster gets a distinct color; noise points (`-1`) are gray. The `popup` on
 
 ## Step 5: Find the optimal route through waypoints
 
-Route optimization — finding the shortest path that visits all waypoints — is a classic problem. For a small number of waypoints, you can try all permutations. For larger sets, you need a heuristic. This step implements both.
+Route optimization, finding the shortest path that visits all waypoints, is a classic problem. For a small number of waypoints, you can try all permutations. For larger sets, you need a heuristic. This step implements both.
 
 ### 5.1 Implement brute-force and nearest-neighbor routing
 
@@ -421,11 +421,11 @@ def nearest_neighbor_route(df, start: int = 0) -> tuple[list[int], float]:
     return visited, route_distance(df, visited)
 ```
 
-The brute-force approach tries every permutation — for 10 waypoints that's 3.6 million permutations, which takes a few seconds. The nearest-neighbor heuristic picks the closest unvisited point at each step — it's `O(n^2)` and scales to thousands of waypoints, but doesn't guarantee the optimal route. For real-world route planning, you'd use a more sophisticated algorithm (Christofides, or OR-Tools), but these two give you the key insight: exact solutions are exponential, heuristics are polynomial, and the gap between them is the price of scalability.
+The brute-force approach tries every permutation, for 10 waypoints that's 3.6 million permutations, which takes a few seconds. The nearest-neighbor heuristic picks the closest unvisited point at each step, it's `O(n^2)` and scales to thousands of waypoints, but doesn't guarantee the optimal route. For real-world route planning, you'd use a more sophisticated algorithm (Christofides, or OR-Tools), but these two give you the key insight: exact solutions are exponential, heuristics are polynomial, and the gap between them is the price of scalability.
 
 **🎯 Expected output:** For 8 waypoints, `optimal_route_bruteforce` returns the shortest possible route and its total distance in km. `nearest_neighbor_route` returns a slightly longer route in a fraction of the time.
 
-**🩹 If it's off:** If the brute-force distance is 0, the waypoints are all the same point. If nearest-neighbor returns a wildly longer route, the starting point may be a poor choice — try different starts.
+**🩹 If it's off:** If the brute-force distance is 0, the waypoints are all the same point. If nearest-neighbor returns a wildly longer route, the starting point may be a poor choice, try different starts.
 
 ### 5.2 Visualize the route
 
@@ -454,7 +454,7 @@ def visualize_route(df, order: list[int], output: str = "route.html"):
 
 **🎯 Expected output:** `visualize_route(df, order)` creates `route.html` with a blue polyline connecting all waypoints in order, numbered markers at each stop.
 
-**🩹 If it's off:** If the polyline zigzags wildly, the route order is wrong — check that `order` indices match the DataFrame rows.
+**🩹 If it's off:** If the polyline zigzags wildly, the route order is wrong, check that `order` indices match the DataFrame rows.
 
 ### 5.3 Verify routing
 
@@ -466,20 +466,20 @@ def visualize_route(df, order: list[int], output: str = "route.html"):
 
 **🤔 Socratic Question(s)**
 
-- For 20 waypoints, `factorial(20) ≈ 2.4 × 10^18` permutations — brute force is impossible. At what waypoint count does nearest-neighbor's approximation become "good enough" for your use case, and how would you measure the gap?
+- For 20 waypoints, `factorial(20) ≈ 2.4 × 10^18` permutations, brute force is impossible. At what waypoint count does nearest-neighbor's approximation become "good enough" for your use case, and how would you measure the gap?
 - Real delivery routes have time windows, traffic, and vehicle capacity. How would you extend this model to handle constraints beyond just distance?
 
 ## ⚠️ Common pitfalls
 
 - **Confusing degrees and radians in distance calculations.** The Haversine formula requires radians. A common mistake is passing raw latitude/longitude degrees to `np.sin`/`np.cos`, which produces meaningless results. Always convert with `np.radians` first.
 - **Using Euclidean distance on raw coordinates.** At the scale of a city, Euclidean distance on degrees is roughly correct. At the scale of a country or continent, it's wildly wrong because a degree of longitude shrinks as you move toward the poles. Use Haversine for anything beyond a few kilometers.
-- **DBSCAN parameter tuning without visualization.** Choosing `eps_km` by guesswork is unreliable. Plot the distance distribution (k-distance graph) and look for the "elbow" where distances jump — that's a good starting value for `eps`.
-- **Heatmaps that don't render in notebooks.** Folium maps are HTML objects — they display inline in Colab and Kaggle but may need `display(m)` in some notebook environments. If the map is blank, try `m._repr_html_()` or save to file and open.
+- **DBSCAN parameter tuning without visualization.** Choosing `eps_km` by guesswork is unreliable. Plot the distance distribution (k-distance graph) and look for the "elbow" where distances jump, that's a good starting value for `eps`.
+- **Heatmaps that don't render in notebooks.** Folium maps are HTML objects, they display inline in Colab and Kaggle but may need `display(m)` in some notebook environments. If the map is blank, try `m._repr_html_()` or save to file and open.
 - **Forgetting that route optimization is NP-hard.** Brute force works for 8–10 points. Beyond that, you need nearest-neighbor, simulated annealing, or a solver library. Don't let the brute-force solution lull you into thinking routing is always fast.
 
 ## What you just built
 
-A geospatial analysis toolkit that loads coordinate data, clusters points with DBSCAN, calculates real-world distances with the Haversine formula, generates interactive heatmap and cluster maps, and optimizes routes through multiple waypoints. The key insight across all five steps is that geographic data has unique constraints — the Earth is curved, distances aren't Euclidean, and spatial structure matters — and the right formulas and algorithms make the difference between nonsense and insight.
+A geospatial analysis toolkit that loads coordinate data, clusters points with DBSCAN, calculates real-world distances with the Haversine formula, generates interactive heatmap and cluster maps, and optimizes routes through multiple waypoints. The key insight across all five steps is that geographic data has unique constraints, the Earth is curved, distances aren't Euclidean, and spatial structure matters, and the right formulas and algorithms make the difference between nonsense and insight.
 
 :::tip[Run a fuller version without any local setup]
 [`examples/geospatial-analyzer/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/geospatial-analyzer) in the course repo has a richer version with real-world sample data, additional visualization types, and the CLI wired up end to end. Clone it, or open the whole repo in a [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), and run it from there.
@@ -493,6 +493,6 @@ A geospatial analysis toolkit that loads coordinate data, clusters points with D
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

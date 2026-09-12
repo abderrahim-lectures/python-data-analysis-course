@@ -12,7 +12,7 @@ prerequisites: ["Python basics (variables, loops, functions, dictionaries)", "Ba
 
 Build a personal knowledge base that stores notes with rich metadata, lets you search across everything instantly, organizes ideas with tags, renders content with Markdown, and exports the whole thing to a static HTML site. This project puts together dictionaries, file I/O, string processing, and template generation into a tool you can actually use.
 
-- **Run it in your browser.** An interactive companion notebook is ready — open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
+- **Run it in your browser.** An interactive companion notebook is ready, open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/knowledge-base/notebook.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/knowledge-base/notebook.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fknowledge-base%2Fnotebook.ipynb)
@@ -33,7 +33,7 @@ A personal knowledge base that lets you:
 - **Full-text search** across all note content with case-insensitive matching
 - **Filter by tags** and date ranges to find exactly what you need
 - **Render Markdown** with syntax highlighting in the terminal
-- **Export to HTML** — a single static site you can open in any browser
+- **Export to HTML**, a single static site you can open in any browser
 
 ## Setup
 
@@ -42,9 +42,9 @@ uv init knowledge-base
 cd knowledge-base
 ```
 
-No external packages needed — the app uses only the Python standard library (`json`, `os`, `datetime`, `pathlib`, `html`).
+No external packages needed, the app uses only the Python standard library (`json`, `os`, `datetime`, `pathlib`, `html`).
 
-## Step 1 — Design the Data Model
+## Step 1, Design the Data Model
 
 Every note needs a consistent shape so the rest of the app can rely on the same fields. We'll store notes as a list of dictionaries in a JSON file. Each note will have an `id`, `title`, `content`, `tags`, `created_at`, and `updated_at` field.
 
@@ -116,7 +116,7 @@ Notes file: data/knowledge.json
 
 ---
 
-## Step 2 — Add and Edit Notes
+## Step 2, Add and Edit Notes
 
 Now that we can load and save, let's build the function that creates a new note. It takes a title, content, and optional tags, assigns an ID and timestamps, and appends it to the list. We'll also add functions to edit and delete notes.
 
@@ -220,7 +220,7 @@ After edit: Git: Rebase vs Merge
 **🩹 If it's off:**
 
 - If IDs aren't sequential, check that `load_notes()` reads the current list before generating the next ID.
-- Tags should be lowercase — if you see mixed case, the list comprehension in `create_note` isn't running.
+- Tags should be lowercase, if you see mixed case, the list comprehension in `create_note` isn't running.
 - If `edit_note` doesn't seem to save, check that you're passing `title=` and `content=` as keyword arguments.
 
 **✅ Checklist**
@@ -237,7 +237,7 @@ After edit: Git: Rebase vs Merge
 
 ---
 
-## Step 3 — Full-Text Search
+## Step 3, Full-Text Search
 
 A knowledge base is useless if you can't find anything. We'll implement full-text search that matches against both titles and content, plus a function to list all notes in a readable format.
 
@@ -337,7 +337,7 @@ display_search_results("docker")
 
 **🩹 If it's off:**
 
-- If search returns nothing for "python", check that `query_lower` is being compared to `note["title"].lower()` — case sensitivity is the usual culprit.
+- If search returns nothing for "python", check that `query_lower` is being compared to `note["title"].lower()`, case sensitivity is the usual culprit.
 - If the table columns are misaligned, make sure the f-string width specifiers (`:<4`, `:<35`, etc.) match the header widths.
 
 **✅ Checklist**
@@ -353,7 +353,7 @@ display_search_results("docker")
 
 ---
 
-## Step 4 — Tag System
+## Step 4, Tag System
 
 Tags let you group notes without rigid categories. We'll add functions to add and remove tags from existing notes, filter by tag, and count tag usage across the whole knowledge base.
 
@@ -489,7 +489,7 @@ Notes created today:
 
 ---
 
-## Step 5 — Markdown Rendering
+## Step 5, Markdown Rendering
 
 Terminal output is fine for quick browsing, but notes often contain Markdown formatting. We'll build a renderer that converts Markdown to terminal-friendly output with bold, italic, and code formatting using ANSI escape codes.
 
@@ -583,9 +583,9 @@ display_note_full(4)
 
 **🩹 If it's off:**
 
-- If ANSI codes appear as raw escape sequences, your terminal might not support them — try `echo $TERM` and ensure it's set to `xterm-256color` or similar.
+- If ANSI codes appear as raw escape sequences, your terminal might not support them, try `echo $TERM` and ensure it's set to `xterm-256color` or similar.
 - If headings aren't highlighted, check that the regex matches `# ` with a space after the hash.
-- The `re.sub` calls process bold before italic — if you swap the order, `**bold**` gets partially consumed by the italic pattern.
+- The `re.sub` calls process bold before italic, if you swap the order, `**bold**` gets partially consumed by the italic pattern.
 
 **✅ Checklist**
 
@@ -601,7 +601,7 @@ display_note_full(4)
 
 ---
 
-## Step 6 — Export to HTML
+## Step 6, Export to HTML
 
 A static HTML site lets you browse your knowledge base in any browser, share it with others, or host it on GitHub Pages. We'll convert all notes to a single HTML file with search, tag filtering, and navigation.
 
@@ -761,8 +761,8 @@ Open `exports/index.html` in your browser to see the full site with:
 
 **🩹 If it's off:**
 
-- If the HTML file is empty, check that `notes_json` is being interpolated correctly — the f-string must use double curly braces `{{` to escape literal braces in the JavaScript.
-- If search doesn't work in the browser, open the browser console (F12) and check for JavaScript errors — the most common issue is a missing closing brace in the `renderNotes` function.
+- If the HTML file is empty, check that `notes_json` is being interpolated correctly, the f-string must use double curly braces `{{` to escape literal braces in the JavaScript.
+- If search doesn't work in the browser, open the browser console (F12) and check for JavaScript errors, the most common issue is a missing closing brace in the `renderNotes` function.
 - If special characters break the HTML, verify that `escapeHtml()` is called on all user-generated content before inserting it into the template.
 
 **✅ Checklist**
@@ -779,7 +779,7 @@ Open `exports/index.html` in your browser to see the full site with:
 
 ---
 
-## Step 7 — CLI Interface
+## Step 7, CLI Interface
 
 The final step ties everything together with a menu-driven interface. We'll add colored output, input validation, and clean error handling.
 
@@ -999,7 +999,7 @@ if __name__ == "__main__":
 
 **🩹 If it's off:**
 
-- If colors don't appear, your terminal might not support ANSI codes — try a different terminal or check `$TERM` is set to `xterm-256color` or similar.
+- If colors don't appear, your terminal might not support ANSI codes, try a different terminal or check `$TERM` is set to `xterm-256color` or similar.
 - If the input loop hangs, check that `handle_create` properly breaks out of the content input loop on two consecutive empty lines.
 - If `Ctrl+C` doesn't exit cleanly, the `except KeyboardInterrupt` block should catch it.
 
@@ -1020,18 +1020,18 @@ if __name__ == "__main__":
 
 ## 🧩 Challenges
 
-**Challenge 1 — Note pinning**
+**Challenge 1, Note pinning**
 Add a `pinned` boolean field to each note. When listing, pinned notes always appear at the top regardless of sort order.
 
-**Challenge 2 — Full-text search with highlighting**
+**Challenge 2, Full-text search with highlighting**
 Extend the search function to highlight matching terms in the results. Wrap matches in a colored marker (e.g., `[MATCH]term[/MATCH]`) so users can see exactly where the query appears.
 
-**Challenge 3 — Backup and restore**
+**Challenge 3, Backup and restore**
 Add a function that creates a timestamped backup of `knowledge.json` (e.g., `data/backup-20260906-143022.json`), and a restore function that loads a backup file back into the knowledge base.
 
 ## Stretch Goals
 
-- [ ] Add note linking — detect `[[Note Title]]` syntax and create clickable references between notes
+- [ ] Add note linking, detect `[[Note Title]]` syntax and create clickable references between notes
 - [ ] Implement fuzzy search using `difflib.SequenceMatcher` for typo-tolerant matching
 - [ ] Add Markdown export (one `.md` file per note) alongside the HTML export
 - [ ] Build a simple web interface with `flask` for browser-based access

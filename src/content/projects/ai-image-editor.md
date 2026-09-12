@@ -19,21 +19,21 @@ learningObjectives:
 
 # 🛠️ 📷 Build an AI Image Editor
 
-Editing images by hand in a paint tool is fine for one photo; it collapses when you need the same fix — brighten, crop, add a border — to a hundred photos that arrive on a schedule. This project builds the thing a human can't do: a Python image editor that reads a plain-English instruction like `crop to 400x300 and brighten 25%`, applies it to any image, and can undo its own work. Pillow does the pixel surgery; the pipeline does the judgment, the undo stack, and the batching.
+Editing images by hand in a paint tool is fine for one photo; it collapses when you need the same fix, brighten, crop, add a border, to a hundred photos that arrive on a schedule. This project builds the thing a human can't do: a Python image editor that reads a plain-English instruction like `crop to 400x300 and brighten 25%`, applies it to any image, and can undo its own work. Pillow does the pixel surgery; the pipeline does the judgment, the undo stack, and the batching.
 
-This assumes Python 101 and comfort running third-party libraries — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
+This assumes Python 101 and comfort running third-party libraries, nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 
 1. Load a real image with Pillow and read its format, size, mode, and pixel extremes before touching anything.
-2. Implement each edit — crop, resize, rotate, brightness — as a pure function that returns a *new* image, never mutating the original.
+2. Implement each edit, crop, resize, rotate, brightness, as a pure function that returns a *new* image, never mutating the original.
 3. Write a parser that turns short English instructions into parameterized edit calls, and behaves predictably when an instruction is unknown.
 4. Build a history stack so every edit can be undone and redone.
 5. Apply one instruction to an entire folder of images and save the results with a manifest of what each file became.
 
 ## Where to run this
 
-**Locally with `uv`** is the recommended path — Pillow works in any real Python, and the batch step's whole point is touching many `.png` files on your own disk, which suits a local project folder perfectly.
+**Locally with `uv`** is the recommended path, Pillow works in any real Python, and the batch step's whole point is touching many `.png` files on your own disk, which suits a local project folder perfectly.
 
 **GitHub Codespaces** works well too: open [the whole course repo in a free Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) and everything below runs unchanged.
 
@@ -55,11 +55,11 @@ cd ai-image-editor
 uv add pillow
 ```
 
-Pillow (PIL) is the industry-standard image library for Python — the same library behind dozens of thumbnail pipelines, and one with no GPU or cloud dependency. `uv add pillow` installs it into the project's own environment.
+Pillow (PIL) is the industry-standard image library for Python, the same library behind dozens of thumbnail pipelines, and one with no GPU or cloud dependency. `uv add pillow` installs it into the project's own environment.
 
 ### Generate a sample image
 
-**👟 Starter hint:** Create `sample.png` with a small script that draws a smooth color gradient — a deterministic test subject, so every edit you apply has a known, checkable outcome.
+**👟 Starter hint:** Create `sample.png` with a small script that draws a smooth color gradient, a deterministic test subject, so every edit you apply has a known, checkable outcome.
 
 ```python
 # make_sample.py
@@ -73,7 +73,7 @@ for y in range(300):
 img.save("sample.png")
 ```
 
-`Image.new("RGB", (400, 300))` sets up an empty canvas and `img.load()` hands back a pixel-access object you can write through with pixel-perfect indexes. Writing one color for every `(x, y)` position produces a gradient whose exact values you can predict in advance — the property that lets every later "Expected output" be a precise number instead of a feeling.
+`Image.new("RGB", (400, 300))` sets up an empty canvas and `img.load()` hands back a pixel-access object you can write through with pixel-perfect indexes. Writing one color for every `(x, y)` position produces a gradient whose exact values you can predict in advance, the property that lets every later "Expected output" be a precise number instead of a feeling.
 
 **✅ Checklist**
 
@@ -82,7 +82,7 @@ img.save("sample.png")
 
 ## Step 1: Look at an image like Python does
 
-An editor can't fix an image it can't describe. This step reads what an image actually *is* — its format as stored on disk, its pixel dimensions, its color mode, and the darkest and brightest pixel values in each channel — before any operation runs. Every later step depends on these four numbers being truthful.
+An editor can't fix an image it can't describe. This step reads what an image actually *is*, its format as stored on disk, its pixel dimensions, its color mode, and the darkest and brightest pixel values in each channel, before any operation runs. Every later step depends on these four numbers being truthful.
 
 ### 1.1 Read the metadata
 
@@ -101,15 +101,15 @@ print("corner (0, 0):", img.getpixel((0, 0)))
 print("corner (399, 299):", img.getpixel((399, 299)))
 ```
 
-`Image.open` reads lazily — nothing is decoded into memory until a pixel operation asks for it — which is a real-world detail worth keeping: opening a 400×400 metadata check doesn't need a full decode. `img.getextrema()` returns the per-channel min/max, and `getpixel` confirms the geometry by hitting one known corner.
+`Image.open` reads lazily, nothing is decoded into memory until a pixel operation asks for it, which is a real-world detail worth keeping: opening a 400×400 metadata check doesn't need a full decode. `img.getextrema()` returns the per-channel min/max, and `getpixel` confirms the geometry by hitting one known corner.
 
 **🎯 Expected output:** `format: PNG`, `size: (400, 300)`, `mode: RGB`, `extrema: ((0, 254), (0, 254), (128, 128))`, and the two corners print `(0, 0, 128)` and `(254, 254, 128)`.
 
-**🩹 If it's off:** If `FileNotFoundError` appears, `sample.png` isn't in the directory the script ran from — check the working directory, not the file. If the corner at `(399, 299)` differs from `(254, 253, 128)`, your gradient writes a different formula — remember the red and green channels both top out at 254 because `(399 * 255) // 400` and `(299 * 255) // 300` floor to 254.
+**🩹 If it's off:** If `FileNotFoundError` appears, `sample.png` isn't in the directory the script ran from, check the working directory, not the file. If the corner at `(399, 299)` differs from `(254, 253, 128)`, your gradient writes a different formula, remember the red and green channels both top out at 254 because `(399 * 255) // 400` and `(299 * 255) // 300` floor to 254.
 
 ### 1.2 Distinguish destructive from non-destructive access
 
-**👟 Starter hint:** Probe the difference between `ImageEnhance` returning a new image versus `getpixel`/`putpixel` mutating the loaded object — this distinction is the seed of the undo stack in Step 4.
+**👟 Starter hint:** Probe the difference between `ImageEnhance` returning a new image versus `getpixel`/`putpixel` mutating the loaded object, this distinction is the seed of the undo stack in Step 4.
 
 ```python
 # editor.py (continued)
@@ -124,11 +124,11 @@ print("original untouched:", img.getpixel((0, 0)))
 print("new is brighter:", brighter.getpixel((0, 0)))
 ```
 
-`ImageEnhance.Brightness(img).enhance(1.5)` returns a *separate* image object; the original `img` still reads its old pixel at `(0, 0)`. That contract — operations return new objects while inputs stay immutable — is exactly what makes an undo stack possible. The moment an operation mutates in place, the "before" state is permanently gone.
+`ImageEnhance.Brightness(img).enhance(1.5)` returns a *separate* image object; the original `img` still reads its old pixel at `(0, 0)`. That contract, operations return new objects while inputs stay immutable, is exactly what makes an undo stack possible. The moment an operation mutates in place, the "before" state is permanently gone.
 
-**🎯 Expected output:** `returns new object: True`, `original untouched: (0, 0, 128)`, and `new is brighter: (0, 0, 192)` — the 128 blue channel scaled by 1.5.
+**🎯 Expected output:** `returns new object: True`, `original untouched: (0, 0, 128)`, and `new is brighter: (0, 0, 192)`, the 128 blue channel scaled by 1.5.
 
-**🩹 If it's off:** If `original untouched` prints a value you didn't set, the sample image was overwritten by a later export — regenerate it with `make_sample.py`. If the image object IDs *are* equal, you called a mutating method like `.resize()` on an `Image` instance directly instead of going through the enhancer.
+**🩹 If it's off:** If `original untouched` prints a value you didn't set, the sample image was overwritten by a later export, regenerate it with `make_sample.py`. If the image object IDs *are* equal, you called a mutating method like `.resize()` on an `Image` instance directly instead of going through the enhancer.
 
 ### 1.3 Verify the image inspection
 
@@ -145,11 +145,11 @@ print("new is brighter:", brighter.getpixel((0, 0)))
 
 ## Step 2: Write edits as pure functions
 
-Each edit operation becomes a tiny function with one discipline: take an image, return a *new* image, never touch the input. Pure functions are what let the pipeline compose operations safely and undo them later — and they make each edit trivially testable in isolation.
+Each edit operation becomes a tiny function with one discipline: take an image, return a *new* image, never touch the input. Pure functions are what let the pipeline compose operations safely and undo them later, and they make each edit trivially testable in isolation.
 
 ### 2.1 The four core operations
 
-**👟 Starter hint:** Implement `crop`, `resized`, `rotated`, and `brightness` — each four lines or fewer, each returning a new `Image`.
+**👟 Starter hint:** Implement `crop`, `resized`, `rotated`, and `brightness`, each four lines or fewer, each returning a new `Image`.
 
 ```python
 # editor.py (continued)
@@ -172,11 +172,11 @@ print("rotate:", rotated(sample, 90).size)
 print("brighten 2x:", brightness(sample, 2.0).getpixel((100, 50)))
 ```
 
-The types are the contract: every function declares `-> Image.Image` and returns a fresh object. `rotate(..., expand=True)` resizes the canvas so a 90° spin of 400×300 becomes 300×400 — the one operation where the size visibly changes, which your expected output should reflect. `brightness` proves the purity claim: it reads `sample` at `(100, 50)` without changing it.
+The types are the contract: every function declares `-> Image.Image` and returns a fresh object. `rotate(..., expand=True)` resizes the canvas so a 90° spin of 400×300 becomes 300×400, the one operation where the size visibly changes, which your expected output should reflect. `brightness` proves the purity claim: it reads `sample` at `(100, 50)` without changing it.
 
-**🎯 Expected output:** The script prints `crop: (200, 150)`, `resize: (100, 100)`, `rotate: (300, 400)`, and `brighten 2x` shows the pixel at `(100, 50)` read as `(126, 84, 255)` — its red `63` doubled to `126` and its blue `128` clamped at `255`.
+**🎯 Expected output:** The script prints `crop: (200, 150)`, `resize: (100, 100)`, `rotate: (300, 400)`, and `brighten 2x` shows the pixel at `(100, 50)` read as `(126, 84, 255)`, its red `63` doubled to `126` and its blue `128` clamped at `255`.
 
-**🩹 If it's off:** If `rotate` prints `(400, 300)`, you dropped `expand=True` and Pillow clipped the spin to the old canvas. If `brighten 2x` reads `255` instead of `127`, the value was clamped because it *already* sat near the top — sample a darker pixel or use your own 400×300 gradient instead of an arbitrary photo.
+**🩹 If it's off:** If `rotate` prints `(400, 300)`, you dropped `expand=True` and Pillow clipped the spin to the old canvas. If `brighten 2x` reads `255` instead of `127`, the value was clamped because it *already* sat near the top, sample a darker pixel or use your own 400×300 gradient instead of an arbitrary photo.
 
 ### 2.2 Chain edits and verify purity end to end
 
@@ -193,11 +193,11 @@ print("source pixel untouched:", sample.getpixel((10, 10)))
 print("edited pixel differs:", result.getpixel((10, 10)))
 ```
 
-Nesting function calls — `resized(rotated(crop(...), 90), 100, 100)` — is read as *inside-out*: crop first, then rotate, then resize. Because each stage returns a fresh object, the chain leaves a trail of intermediate images you can inspect or discard, and the original `sample` still answers unchanged.
+Nesting function calls, `resized(rotated(crop(...), 90), 100, 100)`, is read as *inside-out*: crop first, then rotate, then resize. Because each stage returns a fresh object, the chain leaves a trail of intermediate images you can inspect or discard, and the original `sample` still answers unchanged.
 
 **🎯 Expected output:** `chained size: (100, 100)`, `all objects distinct: True`, `source pixel untouched` matches the original gradient, and the `(10, 10)` pixel of the edited result differs from the source.
 
-**🩹 If it's off:** If `chained size` is wrong, trace the order: the crop shrinks to 200×150, the rotation swaps to 150×200, and the resize forces 100×100. If the final pixel matches the source exactly, the `(10, 10)` you sampled survived all three transforms unchanged by coincidence — sample near a corner where the gradient is steep.
+**🩹 If it's off:** If `chained size` is wrong, trace the order: the crop shrinks to 200×150, the rotation swaps to 150×200, and the resize forces 100×100. If the final pixel matches the source exactly, the `(10, 10)` you sampled survived all three transforms unchanged by coincidence, sample near a corner where the gradient is steep.
 
 ### 2.3 Verify the pure operation set
 
@@ -218,7 +218,7 @@ The pipeline's "AI" surface is a small natural-language parser: it reads a sente
 
 ### 3.1 A command parser producing a stable edit list
 
-**👟 Starter hint:** Write `parse_instruction(text)` that returns an ordered list of `(operation, args)` tuples, so "translate English to edits" is decoupled from "apply edits" — the two can be tested separately.
+**👟 Starter hint:** Write `parse_instruction(text)` that returns an ordered list of `(operation, args)` tuples, so "translate English to edits" is decoupled from "apply edits", the two can be tested separately.
 
 ```python
 # editor.py (continued)
@@ -252,11 +252,11 @@ print(parse_instruction("crop to 200x150 and rotate 90 and brighten 25%"))
 print(parse_instruction("flip horizontally"))
 ```
 
-Each `re.search` looks for one pattern and appends one step, so "crop to 200x150, rotate 90" maps to a two-element list in order. Converting an untranslatable instruction into `ValueError` instead of a silent no-op is a deliberate design choice — a batch pipeline that says nothing about a botched instruction will corrupt a folder while pretending to have succeeded.
+Each `re.search` looks for one pattern and appends one step, so "crop to 200x150, rotate 90" maps to a two-element list in order. Converting an untranslatable instruction into `ValueError` instead of a silent no-op is a deliberate design choice, a batch pipeline that says nothing about a botched instruction will corrupt a folder while pretending to have succeeded.
 
 **🎯 Expected output:** The first print shows `[('crop', (0, 0, 200, 150)), ('rotate', (90.0,)), ('brightness', (1.25,))]`; the second raises `ValueError: No recognised edit in: 'flip horizontally'`.
 
-**🩹 If it's off:** If `flip horizontally` silently returns an empty list, your `if not steps: raise` guard isn't at the end of the function. If `brighten 25%` produces `(1.25,)` but `darken 25%` produces a broken argument order, check the `elif` — `darken` must *subtract*, not pattern-match into brighten's math.
+**🩹 If it's off:** If `flip horizontally` silently returns an empty list, your `if not steps: raise` guard isn't at the end of the function. If `brighten 25%` produces `(1.25,)` but `darken 25%` produces a broken argument order, check the `elif`, `darken` must *subtract*, not pattern-match into brighten's math.
 
 ### 3.2 Apply a parsed instruction to an image
 
@@ -278,11 +278,11 @@ print(final.size)
 print(*log, sep="\n")
 ```
 
-`OPS[name](current, *args)` is the table-driven core: looking up a function by name in a dict converts the parser's output directly into a call without any `if/elif` ladder. Keeping a log of whether each step produced a new object reinforces the purity contract from Step 2 — and gives the manifest a place to record provenance per edit.
+`OPS[name](current, *args)` is the table-driven core: looking up a function by name in a dict converts the parser's output directly into a call without any `if/elif` ladder. Keeping a log of whether each step produced a new object reinforces the purity contract from Step 2, and gives the manifest a place to record provenance per edit.
 
-**🎯 Expected output:** `(300, 200)` — the rotation first makes the canvas 300×400, then the crop trims the width — and the log prints two lines, each reporting `True` for a fresh object creation.
+**🎯 Expected output:** `(300, 200)`, the rotation first makes the canvas 300×400, then the crop trims the width, and the log prints two lines, each reporting `True` for a fresh object creation.
 
-**🩹 If it's off:** If the final size is `(200, 300)`, the steps ran crop-before-rotate (check `parse_instruction` ordering) because the crop grabs the *rotated* canvas's `(0,0,300,200)`. If the log shows `False` for any step, an operation mutated its input — `crop` in `Pillow` actually *slices* lazily, so its output may share memory; use it accordingly.
+**🩹 If it's off:** If the final size is `(200, 300)`, the steps ran crop-before-rotate (check `parse_instruction` ordering) because the crop grabs the *rotated* canvas's `(0,0,300,200)`. If the log shows `False` for any step, an operation mutated its input, `crop` in `Pillow` actually *slices* lazily, so its output may share memory; use it accordingly.
 
 ### 3.3 Verify the instruction layer
 
@@ -294,12 +294,12 @@ print(*log, sep="\n")
 
 **🤔 Socratic Question(s)**
 
-- The parser matches patterns in a fixed order and *appends* every one it finds. What happens to an instruction with two crops in it — `crop to 200x150 and crop to 100x100`? Should the parser error on ambiguity, or apply them sequentially, and why does your choice matter for a batch pipeline?
+- The parser matches patterns in a fixed order and *appends* every one it finds. What happens to an instruction with two crops in it, `crop to 200x150 and crop to 100x100`? Should the parser error on ambiguity, or apply them sequentially, and why does your choice matter for a batch pipeline?
 - `apply_steps` treats `OPS[name](current, *args)` as always valid. What does `dict.get` vs `[]` change about the error your code raises when the parser is later extended with a step name the ops table doesn't have yet?
 
 ## Step 4: Add undo and redo
 
-Pure functions mean every state is a cheap snapshot. This step wraps the pipeline in a `Retoucher` class that stores every image state in a history list, with a cursor that moves backward on undo and forward on redo — the same model a real editor uses, minus the disk thrash.
+Pure functions mean every state is a cheap snapshot. This step wraps the pipeline in a `Retoucher` class that stores every image state in a history list, with a cursor that moves backward on undo and forward on redo, the same model a real editor uses, minus the disk thrash.
 
 ### 4.1 The history stack class
 
@@ -333,11 +333,11 @@ class Retoucher:
         return self.history[self.cursor]
 ```
 
-`self.history = self.history[: self.cursor + 1]` is the line that implements "undo is terminal": once you undo and then make a new edit, the abandoned future is gone and the new path takes over. The cursor always points at the live frame, so `undo`/`redo` are guards around a cursor move — one line each, and the invariant "cursor is always a valid index" holds by construction.
+`self.history = self.history[: self.cursor + 1]` is the line that implements "undo is terminal": once you undo and then make a new edit, the abandoned future is gone and the new path takes over. The cursor always points at the live frame, so `undo`/`redo` are guards around a cursor move, one line each, and the invariant "cursor is always a valid index" holds by construction.
 
 **🎯 Expected output:** `push` after two undos leaves exactly three states in `history`; undo stops moving at index 0; redo stops moving at the last index.
 
-**🩹 If it's off:** If redo resurrects an edit that should be dead, the truncation slice wasn't applied before appending — reorder so `history` is cut *first*. If undo returns the same image forever, the cursor guard `if self.cursor > 0` is missing and you always index `history[0]`.
+**🩹 If it's off:** If redo resurrects an edit that should be dead, the truncation slice wasn't applied before appending, reorder so `history` is cut *first*. If undo returns the same image forever, the cursor guard `if self.cursor > 0` is missing and you always index `history[0]`.
 
 ### 4.2 Drive the stack with real instructions
 
@@ -357,23 +357,23 @@ rt.redo()
 print("forward one:", rt.current.size)
 ```
 
-`rt.current` feeds the next instruction, so the stack's states follow the edit history: 400×300 → 200×150 → 150×200 → back to 200×150. Each state is a full image, which makes `undo` trivially correct — you are walking real frames, not replaying operations that could misfire.
+`rt.current` feeds the next instruction, so the stack's states follow the edit history: 400×300 → 200×150 → 150×200 → back to 200×150. Each state is a full image, which makes `undo` trivially correct, you are walking real frames, not replaying operations that could misfire.
 
-**🎯 Expected output:** `after 2 edits: (150, 200)`, `back one: (200, 150)`, `to origin: (400, 300)`, `forward one: (200, 150)` — exactly the four canonical sizes, in that order.
+**🎯 Expected output:** `after 2 edits: (150, 200)`, `back one: (200, 150)`, `to origin: (400, 300)`, `forward one: (200, 150)`, exactly the four canonical sizes, in that order.
 
-**🩹 If it's off:** If `to origin` reports a non-400-size, the constructor stored a *reference* but something mutated it, because states share objects when you push without a pure rebuild — verify you're pushing `apply_steps` results, not re-using a mutating op. If undo after a new `push` skips a state, check the truncation slice is executed before the append.
+**🩹 If it's off:** If `to origin` reports a non-400-size, the constructor stored a *reference* but something mutated it, because states share objects when you push without a pure rebuild, verify you're pushing `apply_steps` results, not re-using a mutating op. If undo after a new `push` skips a state, check the truncation slice is executed before the append.
 
 ### 4.3 Verify the undo/redo behaviour
 
 **✅ Checklist**
 
 - ✅ After 2 pushes and 2 undos, the stack holds the states you expect and further undo is a no-op.
-- ✅ A push after undo truncates the redo trail — redo can't resurrect a dead edit.
+- ✅ A push after undo truncates the redo trail, redo can't resurrect a dead edit.
 - ✅ You can explain why pure functions from Step 2 make this whole stack one list and a counter.
 
 **🤔 Socratic Question(s)**
 
-- This stack stores the full image at every step. For a gigapixel scan that's idiotic — what would you store instead to make undo cheap, and what information does that version throw away?
+- This stack stores the full image at every step. For a gigapixel scan that's idiotic, what would you store instead to make undo cheap, and what information does that version throw away?
 - `push` truncates the tail by slicing `history[: cursor + 1]`. Describe the exact history contents after the sequence edit, undo, edit, undo, redo, redo. Which redo is a no-op and why?
 
 ## Step 5: Batch-edit a folder with a manifest
@@ -407,15 +407,15 @@ m = batch_edit(".", "crop to 200x150 and brighten 20%")
 print(json.dumps(m, indent=2))
 ```
 
-`Path.glob("*.png")` plus the `"output" in src.parts` guard keeps the batch from ever editing its own previous output. Writing each result under `output/` with a suffix — never back over the source — is the difference between a curator and a data destroyer, and the manifest turns the run into an auditable record: source, destination, final size, and the exact edit log per file.
+`Path.glob("*.png")` plus the `"output" in src.parts` guard keeps the batch from ever editing its own previous output. Writing each result under `output/` with a suffix, never back over the source, is the difference between a curator and a data destroyer, and the manifest turns the run into an auditable record: source, destination, final size, and the exact edit log per file.
 
 **🎯 Expected output:** A `output/` folder appears containing `sample_edited.png`, and the manifest lists one entry with `size: (200, 150)` and an edits log naming the crop and the brightness steps.
 
-**🩹 If it's off:** If `sample_edited.png` appears *twice* in the manifest — the second as `output/sample_edited_edited.png` — the guard missed, meaning you're re-running the batch over a folder that already contains `output/`; delete it first or strengthen the guard with `in src.relative_to(folder).parts`. If the manifest is empty, there are no top-level PNGs — the sample was saved somewhere else than the folder you passed.
+**🩹 If it's off:** If `sample_edited.png` appears *twice* in the manifest, the second as `output/sample_edited_edited.png`, the guard missed, meaning you're re-running the batch over a folder that already contains `output/`; delete it first or strengthen the guard with `in src.relative_to(folder).parts`. If the manifest is empty, there are no top-level PNGs, the sample was saved somewhere else than the folder you passed.
 
 ### 5.2 Wire up the CLI
 
-**👟 Starter hint:** Give the batch real command-line arguments with `argparse` — `--instruction` for the edit, `--folder` for the target, `--suffix` for output naming.
+**👟 Starter hint:** Give the batch real command-line arguments with `argparse`, `--instruction` for the edit, `--folder` for the target, `--suffix` for output naming.
 
 ```python
 # editor.py (continued)
@@ -441,7 +441,7 @@ if __name__ == "__main__":
 
 **🎯 Expected output:** `uv run python editor.py --instruction "rotate 90"` prints a manifest whose entry has `dest: sample_edited.png` and `size: (300, 400)`.
 
-**🩹 If it's off:** If the CLI raises `SystemExit` with the message when you feed a nonsense instruction, that's the desired `parser.error` path — an uncaught traceback means the `try/except` was dropped. If output files are missing, confirm `--folder` points at the folder that actually holds the PNGs.
+**🩹 If it's off:** If the CLI raises `SystemExit` with the message when you feed a nonsense instruction, that's the desired `parser.error` path, an uncaught traceback means the `try/except` was dropped. If output files are missing, confirm `--folder` points at the folder that actually holds the PNGs.
 
 ### 5.3 Verify the batch pipeline
 
@@ -453,34 +453,34 @@ if __name__ == "__main__":
 
 **🤔 Socratic Question(s)**
 
-- The manifest currently records size and edits but not the pixel-mean of each result. What future render bug — undetected by your checks today — would a stored pixel-mean catch, and what does storing it cost?
+- The manifest currently records size and edits but not the pixel-mean of each result. What future render bug, undetected by your checks today, would a stored pixel-mean catch, and what does storing it cost?
 - `--folder` can be `"."` from one directory and an absolute path from another. What happens to the `output/` naming if you run the same batch from two different working directories against the same absolute folder?
 
 ## ⚠️ Common pitfalls
 
 - **Mutating in place, then losing the "before".** Pillow's `.load()`-based `putpixel` and other reuse patterns return or mutate the same object; if any core edit forgets `-> new Image`, the undo stack from Step 4 silently rewrites history.
-- **Forgetting `expand=True` on `rotate`.** Without it the canvas stays the pre-rotation size and the rotated corners are clipped — the classic "my photo got chopped" bug — and it quietly breaks the size math in every later step.
+- **Forgetting `expand=True` on `rotate`.** Without it the canvas stays the pre-rotation size and the rotated corners are clipped, the classic "my photo got chopped" bug, and it quietly breaks the size math in every later step.
 - **Silent no-ops on unknown instructions.** A parser that returns `[]` for "flip horizontally" will happily batch-process a folder doing nothing at all. Raising `ValueError` is the guard that makes the failure visible.
 - **Batch editing its own output.** Without the `"output" in src.parts` guard (or a suffix-based skip), a repeated run re-processes previously-edited files, compounding edits until they're unrecognizable.
-- **Opening images with the wrong expectation of file reference.** `Image.open` is lazy — reading `.size` after the file handle is closed, or reusing a cursor across formats, yields confusing errors; re-open per operation when you need guarantees about the underlying data.
+- **Opening images with the wrong expectation of file reference.** `Image.open` is lazy, reading `.size` after the file handle is closed, or reusing a cursor across formats, yields confusing errors; re-open per operation when you need guarantees about the underlying data.
 
 ## What you just built
 
 A complete instruction-driven image editor: it loads and inspects real images, applies crop/resize/rotate/brightness as pure functions, parses plain-English instructions into ordered edits, supports undo/redo through a history stack, and batch-processes whole folders into `output/` with a per-file manifest. The transferable skill here is the discipline underneath the "AI": parse input into validated data, keep every transformation pure and reversible, and make failures loud instead of silent.
 
 :::tip[Run a fuller version without any local setup]
-[`examples/ai-image-editor/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/ai-image-editor) in the course repo is the whole pipeline as a notebook — sample generation, each step's verified output, and the batch run — ready to hit Run end to end. Clone it, or open the whole repo in a [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course).
+[`examples/ai-image-editor/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/ai-image-editor) in the course repo is the whole pipeline as a notebook, sample generation, each step's verified output, and the batch run, ready to hit Run end to end. Clone it, or open the whole repo in a [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course).
 :::
 
 ## Where to go from here
 
-- Extend the `OPS` table with `grayscale`, `blur`, and `flip` as new pure functions — adding an operation now costs a five-line function and one dict entry, never a new `if` branch.
+- Extend the `OPS` table with `grayscale`, `blur`, and `flip` as new pure functions, adding an operation now costs a five-line function and one dict entry, never a new `if` branch.
 - Swap the regex parser for a free-tier LLM call (see the [Agentic Code Reviewer](/projects/agentic-code-reviewer) project for the provider table) so instructions like "make it look vintage" get translated into parameterized `OPS` calls.
 - Add image *comparison* to the manifest: record each output's perceptual hash, then flag batch runs where similar sources produced dissimilar results.
-- Persist the undo stack to disk as an edit history file per image, so `Retoucher` survives a restart — the first step toward a real non-destructive editor.
+- Persist the undo stack to disk as an edit history file per image, so `Retoucher` survives a restart, the first step toward a real non-destructive editor.
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

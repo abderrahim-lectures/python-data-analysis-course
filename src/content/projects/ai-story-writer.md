@@ -21,7 +21,7 @@ prerequisites:
 
 You love storytelling but sometimes the blank page wins. In this project you will build a tool that learns writing patterns from sample text and generates new stories by combining Markov chain text generation with structured templates and character profiles. The result is a story generator that produces multi-paragraph tales with consistent characters, varied plots, and controllable style.
 
-This project only assumes Python 101-level basics — functions, lists, dictionaries, loops, classes, and string formatting. No frameworks, no databases, no cloud services. Everything you need comes from the standard library.
+This project only assumes Python 101-level basics, functions, lists, dictionaries, loops, classes, and string formatting. No frameworks, no databases, no cloud services. Everything you need comes from the standard library.
 
 This is optional and ungraded. See [Real-World Projects](/projects) for the full list.
 
@@ -37,18 +37,18 @@ This is optional and ungraded. See [Real-World Projects](/projects) for the full
 
 ## Where to run this
 
-- **Locally with `uv` (recommended).** This project uses only the Python standard library — no third-party packages needed. The Setup section below walks through it.
+- **Locally with `uv` (recommended).** This project uses only the Python standard library, no third-party packages needed. The Setup section below walks through it.
 - **Google Colab or Kaggle Notebooks.** Paste the code cells directly into a notebook.
-- **JupyterLite playground.** Paste the code cells directly into a notebook — file I/O is not required, so everything works in the browser.
+- **JupyterLite playground.** Paste the code cells directly into a notebook, file I/O is not required, so everything works in the browser.
 
-- **Run it in your browser.** An interactive companion notebook is ready — open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
+- **Run it in your browser.** An interactive companion notebook is ready, open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-story-writer/notebook.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-story-writer/notebook.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fai-story-writer%2Fnotebook.ipynb)
 
 ## Setup
 
-`uv` is a single tool that replaces the usual "install Python, then pip, then a virtual environment, then packages" chain — it manages Python versions and dependencies together.
+`uv` is a single tool that replaces the usual "install Python, then pip, then a virtual environment, then packages" chain, it manages Python versions and dependencies together.
 
 **macOS / Linux** (terminal):
 
@@ -75,11 +75,11 @@ uv init ai-story-writer
 cd ai-story-writer
 ```
 
-No extra packages — the standard library has everything we need (`random`, `dataclasses`, `abc`, `json`, `textwrap`).
+No extra packages, the standard library has everything we need (`random`, `dataclasses`, `abc`, `json`, `textwrap`).
 
 ## Step 1: Markov chain basics
 
-A Markov chain is a simple model that predicts the next item based only on the current item — it has no memory of what came before. Applied to text, a first-order Markov chain looks at the current word and picks the next word from a probability distribution built from real text. The chain learns which words tend to follow which other words, then generates new sequences that mimic the statistical patterns of the training text.
+A Markov chain is a simple model that predicts the next item based only on the current item, it has no memory of what came before. Applied to text, a first-order Markov chain looks at the current word and picks the next word from a probability distribution built from real text. The chain learns which words tend to follow which other words, then generates new sequences that mimic the statistical patterns of the training text.
 
 ### 1.1 Build the chain data structure
 
@@ -118,7 +118,7 @@ print(dict(chain))
 {'the': ['cat', 'mat', 'cat'], 'cat': ['sat', 'sat'], 'sat': ['on', None], 'on': ['the'], 'mat': ['the']}
 ```
 
-(Note: the last word "sat" has no successor — it will be omitted from the chain since the loop stops at `len(words) - 1`.)
+(Note: the last word "sat" has no successor, it will be omitted from the chain since the loop stops at `len(words) - 1`.)
 
 **If it's off:** If your chain is empty, the input string might have no spaces. Check that `text.split()` produces a list with at least two words. If you get a `KeyError` when looking up a word, remember the chain only stores words that have at least one successor.
 
@@ -182,7 +182,7 @@ With a seed of 42 and a short training text, the chain loops through the same pa
 
 ## Step 2: Train on sample text
 
-A Markov chain is only as good as its training data. Feed it a paragraph of fairy tales and it writes fairy tales. Feed it sci-fi and it writes sci-fi. The key insight is that you need enough text for the chain to learn real word-transition patterns — a single sentence is too small, but a full novel is overkill.
+A Markov chain is only as good as its training data. Feed it a paragraph of fairy tales and it writes fairy tales. Feed it sci-fi and it writes sci-fi. The key insight is that you need enough text for the chain to learn real word-transition patterns, a single sentence is too small, but a full novel is overkill.
 
 ### 2.1 Use a built-in training corpus
 
@@ -265,7 +265,7 @@ for i in range(3):
   [2] She found a secret door hidden behind a waterfall behind the door
 ```
 
-**If it's off:** If the output is mostly single-word repetitions, your training text is too short or too repetitive. Add more diverse sentences. If you get `KeyError`, your chain is missing a word — check that `build_chain` lowers both the current and next word.
+**If it's off:** If the output is mostly single-word repetitions, your training text is too short or too repetitive. Add more diverse sentences. If you get `KeyError`, your chain is missing a word, check that `build_chain` lowers both the current and next word.
 
 ### 2.3 Confirm the chain works
 
@@ -313,7 +313,7 @@ Template: hero (fantasy) — 4 paragraphs
 
 ### 3.2 Build a template library
 
-**Starter hint:** Create a list of predefined templates, each with a genre, a structure description, and a list of paragraph "prompts" — short descriptions of what each paragraph should contain. These prompts guide the generation.
+**Starter hint:** Create a list of predefined templates, each with a genre, a structure description, and a list of paragraph "prompts", short descriptions of what each paragraph should contain. These prompts guide the generation.
 
 ```python
 TEMPLATES = [
@@ -413,7 +413,7 @@ Available templates:
 
 ## Step 4: Character development
 
-Characters make stories worth reading. A character profile is a bag of attributes — name, personality traits, goals, backstory — that the generator draws from when filling template slots. The goal is to make characters feel consistent across a single story without hard-coding every detail.
+Characters make stories worth reading. A character profile is a bag of attributes, name, personality traits, goals, backstory, that the generator draws from when filling template slots. The goal is to make characters feel consistent across a single story without hard-coding every detail.
 
 ### 4.1 Design the Character class
 
@@ -711,7 +711,7 @@ The princess set out on her journey with a gentle kiss and the ship drifted thro
 The princess set out on her journey the kingdom crossed out with black ink the only entry that remained unmarked was a meeting at the harbour morgan drove to the harbour and found a boat with the engine running on the
 ```
 
-Low temperature produces repetitive, predictable text. Medium temperature mixes training corpora naturally. High temperature pulls in unexpected word combinations from across genres — sometimes creative, sometimes nonsensical.
+Low temperature produces repetitive, predictable text. Medium temperature mixes training corpora naturally. High temperature pulls in unexpected word combinations from across genres, sometimes creative, sometimes nonsensical.
 
 ### 6.2 Integrate temperature into the story generator
 
@@ -781,7 +781,7 @@ The output should read as a coherent short story with the character's name, trai
 
 ## Step 7: CLI menu
 
-A CLI menu lets you run the story generator interactively — pick a genre, create a character, adjust temperature, and read your story in the terminal.
+A CLI menu lets you run the story generator interactively, pick a genre, create a character, adjust temperature, and read your story in the terminal.
 
 ### 7.1 Build the menu loop
 
@@ -913,9 +913,9 @@ The princess set out on her journey with a gentle kiss and they returned to the 
 
 ## What you learned
 
-1. **Markov chains** — how word-transition probabilities model the statistical patterns of natural text.
-2. **Training data** — how corpus size and genre affect generation quality.
-3. **Templates** — how structured placeholders turn random text into coherent stories.
-4. **Character profiles** — how attributes like traits, goals, and backstories give stories consistency.
-5. **Temperature** — how a single parameter controls the balance between predictability and creativity.
-6. **Story generation** — how to combine all these pieces into a working CLI tool.
+1. **Markov chains**, how word-transition probabilities model the statistical patterns of natural text.
+2. **Training data**, how corpus size and genre affect generation quality.
+3. **Templates**, how structured placeholders turn random text into coherent stories.
+4. **Character profiles**, how attributes like traits, goals, and backstories give stories consistency.
+5. **Temperature**, how a single parameter controls the balance between predictability and creativity.
+6. **Story generation**, how to combine all these pieces into a working CLI tool.

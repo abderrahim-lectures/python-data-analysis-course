@@ -12,18 +12,18 @@ prerequisites: ["Python basics (variables, loops, functions, dictionaries)", "Ba
 
 Every teacher needs a way to track student performance, calculate weighted averages, and turn raw scores into meaningful report cards. In this project, you'll build a complete gradebook system in Python that handles student records, weighted GPA calculation, class statistics, CSV persistence, and even basic visualization. You'll practice using classes to model real-world entities, pandas for data manipulation, and statistics for analysis.
 
-- **Run it in your browser.** An interactive companion notebook is ready — open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
+- **Run it in your browser.** An interactive companion notebook is ready, open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/gradebook/notebook.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/gradebook/notebook.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fgradebook%2Fnotebook.ipynb)
 
 ## What You'll Learn
 
-1. **Data modeling with classes** — Represent students, grades, and categories as objects with clear responsibilities
-2. **Weighted average calculation** — Compute GPAs that respect assignment category weights
-3. **Statistical analysis** — Find class averages, medians, and grade distributions
-4. **CSV persistence** — Save and load gradebook data so it survives between sessions
-5. **Visualization** — Generate bar charts for grade distributions using matplotlib
+1. **Data modeling with classes**, Represent students, grades, and categories as objects with clear responsibilities
+2. **Weighted average calculation**, Compute GPAs that respect assignment category weights
+3. **Statistical analysis**, Find class averages, medians, and grade distributions
+4. **CSV persistence**, Save and load gradebook data so it survives between sessions
+5. **Visualization**, Generate bar charts for grade distributions using matplotlib
 
 ## What You'll Build
 
@@ -41,9 +41,9 @@ touch gradebook.py
 
 The foundation of any gradebook is its data model. We need to represent three core concepts:
 
-- **Student** — a person with a name and a collection of grades
-- **Grade** — a single score tied to a category and weight
-- **Category** — a named grouping (like "homework" or "exam") with a weight toward the final grade
+- **Student**, a person with a name and a collection of grades
+- **Grade**, a single score tied to a category and weight
+- **Category**, a named grouping (like "homework" or "exam") with a weight toward the final grade
 
 Using classes keeps this organized and makes each piece easy to test and extend.
 
@@ -74,7 +74,7 @@ Grade(category='homework', score=95, weight=0.3)
 
 **🩹 If it's off:**
 - Make sure `weight` is a decimal (0.3 for 30%), not a percentage (30)
-- The `__repr__` method uses single quotes inside the f-string — make sure they match
+- The `__repr__` method uses single quotes inside the f-string, make sure they match
 
 ### 1.2 Create the Student class
 
@@ -108,7 +108,7 @@ Student(name='Alice', grades=2)
 
 **🩹 If it's off:**
 - The `add_grade` method should create a new `Grade` object and append it to `self.grades`
-- Don't forget `self.grades = []` in `__init__` — without it, all students would share the same list
+- Don't forget `self.grades = []` in `__init__`, without it, all students would share the same list
 
 **✅ Checklist**
 - ✅ `Grade` stores category, score, and weight
@@ -225,8 +225,8 @@ def weighted_average(grades):
 
 **🩹 If it's off:**
 - Check that you're using `g.weight` not `g.score` as the divisor
-- Make sure you handle the empty list case — divide-by-zero will crash the program
-- The total weight here is 1.3 (0.3 + 0.7 + 0.3), not 1.0 — that's correct because homework appeared twice
+- Make sure you handle the empty list case, divide-by-zero will crash the program
+- The total weight here is 1.3 (0.3 + 0.7 + 0.3), not 1.0, that's correct because homework appeared twice
 
 ### 3.2 Cumulative GPA across all students
 
@@ -251,7 +251,7 @@ def class_average(self):
 ```
 
 **🩹 If it's off:**
-- Filter out students with no grades — an empty grade list should not count toward the average
+- Filter out students with no grades, an empty grade list should not count toward the average
 - The class average is the average of student averages, not the average of all individual grades
 
 **✅ Checklist**
@@ -556,7 +556,7 @@ def load(cls, filename):
 
 **🩹 If it's off:**
 - Use `csv.DictReader` so you can access columns by name (`row["student"]`) rather than by index
-- Convert `score` and `weight` to `float` — CSV reads everything as strings
+- Convert `score` and `weight` to `float`, CSV reads everything as strings
 - Use a `@classmethod` so you can call `Gradebook.load(...)` without having an existing instance
 
 **✅ Checklist**
@@ -690,7 +690,7 @@ A horizontal bar chart showing each student's GPA with color coding (green for A
 
 **🩹 If it's off:**
 - If bars are too thin, increase the `height` parameter in `barh`
-- Colors are determined by GPA range — check the conditional list comprehension
+- Colors are determined by GPA range, check the conditional list comprehension
 - If names overlap, increase the figure height based on the number of students
 
 **✅ Checklist**
@@ -708,21 +708,21 @@ A horizontal bar chart showing each student's GPA with color coding (green for A
 
 Ready to push further? Try these:
 
-1. **Weight validation** — Make sure category weights sum to 1.0 for each student. If they don't, warn the user and list the total.
+1. **Weight validation**, Make sure category weights sum to 1.0 for each student. If they don't, warn the user and list the total.
 
-2. **Category weights configuration** — Allow the teacher to define default category weights (e.g., homework = 30%, exam = 70%) so they don't have to specify the weight every time they add a grade.
+2. **Category weights configuration**, Allow the teacher to define default category weights (e.g., homework = 30%, exam = 70%) so they don't have to specify the weight every time they add a grade.
 
-3. **Export to HTML** — Generate a printable HTML report card with styled tables and colors for letter grades. Use Python's string formatting to build the HTML, then open it in a browser with `webbrowser.open`.
+3. **Export to HTML**, Generate a printable HTML report card with styled tables and colors for letter grades. Use Python's string formatting to build the HTML, then open it in a browser with `webbrowser.open`.
 
 ---
 
 ## What You Learned
 
-- **Class-based data modeling** — Represented students, grades, and the gradebook itself as Python classes with clear methods
-- **Weighted averages** — Calculated GPAs that respect category weights, handling edge cases like empty grade lists
-- **Statistical analysis** — Used Python's `statistics` module for mean and median, and built a custom grade distribution counter
-- **CSV persistence** — Saved and loaded gradebook data using `csv.DictReader` and `csv.writer`
-- **Data visualization** — Created bar charts with matplotlib for grade distributions and student comparisons
-- **Report generation** — Built formatted text report cards with grouped grades and summary statistics
+- **Class-based data modeling**, Represented students, grades, and the gradebook itself as Python classes with clear methods
+- **Weighted averages**, Calculated GPAs that respect category weights, handling edge cases like empty grade lists
+- **Statistical analysis**, Used Python's `statistics` module for mean and median, and built a custom grade distribution counter
+- **CSV persistence**, Saved and loaded gradebook data using `csv.DictReader` and `csv.writer`
+- **Data visualization**, Created bar charts with matplotlib for grade distributions and student comparisons
+- **Report generation**, Built formatted text report cards with grouped grades and summary statistics
 
 You now have a fully functional gradebook that you can extend with features like email notifications, curve management, or a web interface. The class-based architecture makes each piece easy to test, modify, and reuse.

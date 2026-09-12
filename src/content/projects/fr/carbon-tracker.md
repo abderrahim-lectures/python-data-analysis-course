@@ -19,9 +19,9 @@ learningObjectives:
 
 # 🛠️ 🌍 Construire un Suivi d'Empreinte Carbone
 
-Tes choix quotidiens émettent du carbone : conduire 10 km n'est pas la même chose que pédaler 10 km ou prendre le train 10 km, et manger de la viande n'est pas la même chose que manger des végétaux. Ce projet construit un petit **suivi d'empreinte carbone** honnête dans le terminal — un unique script Python qui sait combien de kg d'équivalent CO2 chaque activité coûte, travaille sur une semaine d'exemple d'entrées transports/alimentation/électricité, totalise tout par jour et par catégorie, dessine un diagramme à barres ASCII, vérifie la semaine contre un budget, sauvegarde tout dans un CSV et devient finalement une vraie commande avec les sous-commandes `add`, `report` et `reset`. Il n'utilise que la bibliothèque standard — pas d'installations, pas d'aléatoire, donc les nombres que tu vois ici sont exactement ceux que tu verras.
+Tes choix quotidiens émettent du carbone : conduire 10 km n'est pas la même chose que pédaler 10 km ou prendre le train 10 km, et manger de la viande n'est pas la même chose que manger des végétaux. Ce projet construit un petit **suivi d'empreinte carbone** honnête dans le terminal, un unique script Python qui sait combien de kg d'équivalent CO2 chaque activité coûte, travaille sur une semaine d'exemple d'entrées transports/alimentation/électricité, totalise tout par jour et par catégorie, dessine un diagramme à barres ASCII, vérifie la semaine contre un budget, sauvegarde tout dans un CSV et devient finalement une vraie commande avec les sous-commandes `add`, `report` et `reset`. Il n'utilise que la bibliothèque standard, pas d'installations, pas d'aléatoire, donc les nombres que tu vois ici sont exactement ceux que tu verras.
 
-Cela suppose les listes, dicts et boucles `for` de Python, et une utilisation basique du terminal. C'est un projet facultatif et non noté — consulte [Projets du monde réel](/fr/projets) pour la liste complète et grandissante. Chaque brique tourne sur une installation Python de base (3.10+).
+Cela suppose les listes, dicts et boucles `for` de Python, et une utilisation basique du terminal. C'est un projet facultatif et non noté, consulte [Projets du monde réel](/fr/projets) pour la liste complète et grandissante. Chaque brique tourne sur une installation Python de base (3.10+).
 
 ## 🎯 Ce que tu vas faire
 
@@ -40,7 +40,7 @@ mkdir carbon-tracker && cd carbon-tracker
 touch carbon_tracker.py
 ```
 
-**Google Colab, Kaggle Notebooks et Binder** fonctionnent aussi — chaque bloc est du Python pur, sans paquets tiers. Une exécution de type terminal (`% python3 carbon_tracker.py …`) n'est pas disponible dans les notebooks ; là-bas tu peux appeler directement les fonctions CLI. Le CSV et les valeurs sont identiques partout.
+**Google Colab, Kaggle Notebooks et Binder** fonctionnent aussi, chaque bloc est du Python pur, sans paquets tiers. Une exécution de type terminal (`% python3 carbon_tracker.py …`) n'est pas disponible dans les notebooks ; là-bas tu peux appeler directement les fonctions CLI. Le CSV et les valeurs sont identiques partout.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/carbon-tracker/notebook.fr.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/carbon-tracker/notebook.fr.ipynb)
@@ -67,7 +67,7 @@ touch carbon_tracker.py
 
 - ✅ `python3 --version` affiche 3.10 ou plus récent.
 - ✅ `carbon_tracker.py` existe dans le dossier `carbon-tracker`.
-- ✅ Aucun `pip install` requis — tout le projet est `import csv`, `import sys` et des builtins Python.
+- ✅ Aucun `pip install` requis, tout le projet est `import csv`, `import sys` et des builtins Python.
 
 **🤔 Question(s) socratique(s)**
 
@@ -80,7 +80,7 @@ Toute l'arithmétique carbone vit dans deux dicts : `emissions` (kg CO2e par *un
 
 ### 1.1 Les facteurs
 
-**👟 Indice de départ :** Un dict mappant chaque activité à des kg de CO2e par unité — km pour le transport, kWh pour l'électricité, par-repas pour l'alimentation.
+**👟 Indice de départ :** Un dict mappant chaque activité à des kg de CO2e par unité, km pour le transport, kWh pour l'électricité, par-repas pour l'alimentation.
 
 ```python
 # carbon_tracker.py
@@ -94,13 +94,13 @@ emissions = {
 }
 ```
 
-Chaque nombre en aval découle de cette table. `bike: 0.0` est le zéro qui rend le reste significatif — les nombres mesurent le carbone *supplémentaire* que chaque choix coûte, pas sa « valeur ».
+Chaque nombre en aval découle de cette table. `bike: 0.0` est le zéro qui rend le reste significatif, les nombres mesurent le carbone *supplémentaire* que chaque choix coûte, pas sa « valeur ».
 
-**🎯 Résultat attendu :** Rien pour l'instant — les facteurs sont juste des données. Vérifie à l'œil : un gros repas `meal_meat` (2.2) coûte presque trois repas végétariens (0.8) ; une heure d'électricité (0.42 par kWh) bat un repas de viande.
+**🎯 Résultat attendu :** Rien pour l'instant, les facteurs sont juste des données. Vérifie à l'œil : un gros repas `meal_meat` (2.2) coûte presque trois repas végétariens (0.8) ; une heure d'électricité (0.42 par kWh) bat un repas de viande.
 
 ### 1.2 La semaine d'exemple
 
-**👟 Indice de départ :** `week` est une liste de tuples `(day, category, amount)` — transport, alimentation et électricité pour sept jours.
+**👟 Indice de départ :** `week` est une liste de tuples `(day, category, amount)`, transport, alimentation et électricité pour sept jours.
 
 ```python
 # carbon_tracker.py (continued)
@@ -117,7 +117,7 @@ week = [
 
 Trois modes de transport (pas encore de vols), quelques repas, quelques kWh. Les nombres restent petits pour que l'arithmétique soit vérifiable à la main.
 
-**🎯 Résultat attendu :** Rien pour l'instant — les données sont définies, pas imprimées.
+**🎯 Résultat attendu :** Rien pour l'instant, les données sont définies, pas imprimées.
 
 ### 1.3 Calcule les lignes de carbone
 
@@ -136,7 +136,7 @@ total = round(sum(r["kg"] for r in rows), 2)
 print("WEEK TOTAL:", total, "kg CO2e")
 ```
 
-Le motif deux-dicts-une-boucle — une *table de faits* de lignes `(day, category, amount, kg)` — est la même forme que `csv` et plus tard `add` utiliseront. Tout en aval (graphiques, budgets, CSV) lit cette liste, pas les tuples bruts.
+Le motif deux-dicts-une-boucle, une *table de faits* de lignes `(day, category, amount, kg)`, est la même forme que `csv` et plus tard `add` utiliseront. Tout en aval (graphiques, budgets, CSV) lit cette liste, pas les tuples bruts.
 
 **🎯 Résultat attendu :**
 
@@ -147,19 +147,19 @@ Le motif deux-dicts-une-boucle — une *table de faits* de lignes `(day, categor
 WEEK TOTAL: 42.44 kg CO2e
 ```
 
-**🩹 Si ça ne marche pas :** Si la `kg` de `car 12` n'est pas `2.16`, la clé facteur a dérivé (`0.18 × 12 = 2.16`). Si le total affiche `84.88`, deux listes `weeks` ont été concaténées — garde exactement 21 tuples.
+**🩹 Si ça ne marche pas :** Si la `kg` de `car 12` n'est pas `2.16`, la clé facteur a dérivé (`0.18 × 12 = 2.16`). Si le total affiche `84.88`, deux listes `weeks` ont été concaténées, garde exactement 21 tuples.
 
 ### 1.4 Vérifie les lignes
 
 **✅ Liste de vérification**
 
 - ✅ Exactement 21 lignes (7 jours × 3 entrées), chacune avec `day`, `category`, `amount`, `kg`.
-- ✅ `WEEK TOTAL: 42.44 kg CO2e` — déterministe, aucun aléatoire nulle part.
+- ✅ `WEEK TOTAL: 42.44 kg CO2e`, déterministe, aucun aléatoire nulle part.
 - ✅ Lundi : 2.16 (voiture) + 4.4 (viande) + 2.52 (électricité) = 9.08.
 
 **🤔 Question(s) socratique(s)**
 
-- Méthode : les facteurs d'émission multiplient des *unités*. Si tu journalises seulement « j'ai conduit » sans les kilomètres, qu'est-ce que tu ne peux pas calculer — et qu'est-ce que cela dit sur le moyen le moins cher d'*améliorer* la qualité des données (plus de colonnes, pas plus de lignes) ?
+- Méthode : les facteurs d'émission multiplient des *unités*. Si tu journalises seulement « j'ai conduit » sans les kilomètres, qu'est-ce que tu ne peux pas calculer, et qu'est-ce que cela dit sur le moyen le moins cher d'*améliorer* la qualité des données (plus de colonnes, pas plus de lignes) ?
 - Les repas de viande du lundi (4.4 kg) coûtent autant que deux journées végétariennes entières combinées. Quand une semaine sans viande rouge émettrait-elle quand même plus qu'une semaine avec ?
 
 ## Étape 2 : Agrège par jour et par catégorie
@@ -194,7 +194,7 @@ Sat   6.48 kg
 Sun   3.28 kg
 ```
 
-**🩹 Si ça ne marche pas :** Si Tue affiche `8.6` au lieu de `4.5`, la sortie à vélo zéro carbone (8 km × 0.0 = 0 kg) a été comptée comme un 8 — vérifie que `bike: 0.0` est dans `emissions`. Si les totaux dérivent de 0.01, arrondir la `kg` de chaque ligne d'abord, puis sommer, diffère de sommer puis arrondir — choisis une règle et garde-la.
+**🩹 Si ça ne marche pas :** Si Tue affiche `8.6` au lieu de `4.5`, la sortie à vélo zéro carbone (8 km × 0.0 = 0 kg) a été comptée comme un 8, vérifie que `bike: 0.0` est dans `emissions`. Si les totaux dérivent de 0.01, arrondir la `kg` de chaque ligne d'abord, puis sommer, diffère de sommer puis arrondir, choisis une règle et garde-la.
 
 ### 2.2 Le diagramme à barres ASCII
 
@@ -208,7 +208,7 @@ for day in ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]:
     print(f"{day}  {daily[day]:>5}  {bar}")
 ```
 
-`v / mx * 40` remet à l'échelle le jour le plus lourd (Mon, 9.08) sur une barre de 40 caractères et tout le reste proportionnellement — un diagramme à barres imprimable sans bibliothèque de tracé. Le but n'est pas la précision ; c'est le motif — Tue à Sun sont visiblement plus minces que la course du lundi.
+`v / mx * 40` remet à l'échelle le jour le plus lourd (Mon, 9.08) sur une barre de 40 caractères et tout le reste proportionnellement, un diagramme à barres imprimable sans bibliothèque de tracé. Le but n'est pas la précision ; c'est le motif, Tue à Sun sont visiblement plus minces que la course du lundi.
 
 **🎯 Résultat attendu :**
 
@@ -222,7 +222,7 @@ Sat   6.48  #############################
 Sun   3.28  ##############
 ```
 
-**🩹 Si ça ne marche pas :** Si la barre de Mon est courte, `max` a été calculé sur les *clés* (noms de jours) au lieu des valeurs. Si des barres ont 0 caractère, `round` sur un petit ratio a touché 0 — ici tous les jours sont non nuls, donc une barre vide signifie un bug de données en amont.
+**🩹 Si ça ne marche pas :** Si la barre de Mon est courte, `max` a été calculé sur les *clés* (noms de jours) au lieu des valeurs. Si des barres ont 0 caractère, `round` sur un petit ratio a touché 0, ici tous les jours sont non nuls, donc une barre vide signifie un bug de données en amont.
 
 ### 2.3 Vérifie les agrégats
 
@@ -230,11 +230,11 @@ Sun   3.28  ##############
 
 - ✅ Les totaux journaliers reproduisent la table ci-dessus (Mon 9.08 … Sun 3.28).
 - ✅ Les barres atteignent 40 `#` pour le max (Mon) et rétrécissent équitablement.
-- ✅ Vérification de bon sens par catégorie : transport `7.9` (4.31+1.0+0.9+3.4… attends — voir le Socratic ci-dessous).
+- ✅ Vérification de bon sens par catégorie : transport `7.9` (4.31+1.0+0.9+3.4… attends, voir le Socratic ci-dessous).
 
 **🤔 Question(s) socratique(s)**
 
-- Approxime les totaux par catégorie à la main : voiture 20 km (`0.18`), bus 9 km (`0.10`), train 85 km (`0.04`), vélos (0), viande 5 repas (`2.2`), végétarien 10 repas (`0.8`), électricité 37 kWh (`0.42`). Est-ce que ça fait 42.44 — et quelle catégorie porte le plus ?
+- Approxime les totaux par catégorie à la main : voiture 20 km (`0.18`), bus 9 km (`0.10`), train 85 km (`0.04`), vélos (0), viande 5 repas (`2.2`), végétarien 10 repas (`0.8`), électricité 37 kWh (`0.42`). Est-ce que ça fait 42.44, et quelle catégorie porte le plus ?
 - Ton graphique échelle vers *lundi*, le jour le plus lourd. Change le dénominateur en *semaine totale* (42.44) au lieu de `max`. Les barres rétrécissent à ~20 `#`. Quel est le compromis entre « montre le motif » et « montre la vraie fraction » ? Quelle échelle montrerais-tu à un camarade ?
 
 ## Étape 3 : Vérifie le budget hebdomadaire
@@ -265,7 +265,7 @@ USED : 42.44 kg  (106% of budget)
 OVER : 2.44 kg
 ```
 
-**🩹 Si ça ne marche pas :** Si tu vois `UNDER: -2.44` le signe a basculé — les branches du ternaire sont sur les mauvais bras. Si cela affiche `105%` après l'arrondi, tu as arrondi `total` à un chiffre quelque part et la comparaison a changé ; calcule `percent` depuis le `total` *non arrondi*.
+**🩹 Si ça ne marche pas :** Si tu vois `UNDER: -2.44` le signe a basculé, les branches du ternaire sont sur les mauvais bras. Si cela affiche `105%` après l'arrondi, tu as arrondi `total` à un chiffre quelque part et la comparaison a changé ; calcule `percent` depuis le `total` *non arrondi*.
 
 ### 3.2 Rend le verdict utile
 
@@ -279,7 +279,7 @@ train_swap = 0.18 - 0.04
 print(f"Ride the train: swap one 10-km car trip and save {round(train_swap * 10, 2)} kg")
 ```
 
-Rapporter le *pourquoi* est la moitié de l'outillage environnemental. Un verdict de budget sans le jour le plus lourd est une note sans feedback. `daily.get` comme argument `key` de `max` sélectionne la *clé à plus haute valeur* — pas la première alphabétiquement — ce qui est l'usage classique de `key=`.
+Rapporter le *pourquoi* est la moitié de l'outillage environnemental. Un verdict de budget sans le jour le plus lourd est une note sans feedback. `daily.get` comme argument `key` de `max` sélectionne la *clé à plus haute valeur*, pas la première alphabétiquement, ce qui est l'usage classique de `key=`.
 
 **🎯 Résultat attendu :**
 
@@ -288,7 +288,7 @@ Biggest day: Mon (9.08 kg)
 Ride the train: swap one 10-km car trip and save 1.4 kg
 ```
 
-**🩹 Si ça ne marche pas :** Si `Biggest day` affiche `Sun`, tu as passé `max(daily)` au lieu de `max(daily, key=daily.get)` — le premier retourne la *chaîne de clé* max. Si l'économie d'échange montre `0.14`, la différence de facteur est `0.18 − 0.04 = 0.14` par km — ×10 km = 1.4 kg ; garde la multiplication sur la même ligne.
+**🩹 Si ça ne marche pas :** Si `Biggest day` affiche `Sun`, tu as passé `max(daily)` au lieu de `max(daily, key=daily.get)`, le premier retourne la *chaîne de clé* max. Si l'économie d'échange montre `0.14`, la différence de facteur est `0.18 − 0.04 = 0.14` par km, ×10 km = 1.4 kg ; garde la multiplication sur la même ligne.
 
 ### 3.3 Vérifie le budget
 
@@ -296,12 +296,12 @@ Ride the train: swap one 10-km car trip and save 1.4 kg
 
 - ✅ 42.44 utilisé contre 40.0 de budget → `OVER : 2.44 kg`, `106%`.
 - ✅ Jour le plus lourd Mon (9.08), correctif de 10 km le moins cher 1.4 kg (train contre voiture).
-- ✅ La vérification de budget est une fonction pure de `total` — change `budget`, obtiens un nouveau verdict, aucun autre code ne bouge.
+- ✅ La vérification de budget est une fonction pure de `total`, change `budget`, obtiens un nouveau verdict, aucun autre code ne bouge.
 
 **🤔 Question(s) socratique(s)**
 
 - 106% signifie « 2.44 kg au-dessus ». Suppose que le budget fût 25 kg. Quel changement unique ramènerait la semaine entière *bien en dessous* ? Serait-ce les repas de viande, la conduite, ou autre chose ?
-- Un budget réglé à 40 kg/semaine cache *qui* émet : ta semaine d'exemple suppose une voiture, un bus, des trains, trois repas de viande. Si tu reconstruisais la semaine avec un vol, le verdict pour le même budget de 40 kg serait absurde — qu'est-ce que cela dit sur le fait de faire correspondre un budget au mode de vie mesuré ?
+- Un budget réglé à 40 kg/semaine cache *qui* émet : ta semaine d'exemple suppose une voiture, un bus, des trains, trois repas de viande. Si tu reconstruisais la semaine avec un vol, le verdict pour le même budget de 40 kg serait absurde, qu'est-ce que cela dit sur le fait de faire correspondre un budget au mode de vie mesuré ?
 
 ## Étape 4 : Sauvegarde et recharge les lignes
 
@@ -322,7 +322,7 @@ print("Saved", len(rows), "rows to activities.csv")
 
 La liste `rows` et le CSV ont les mêmes quatre colonnes, donc `DictWriter` mappe chaque dict directement sur une ligne. `newline=""` évite les lignes vides entre les enregistrements sous Windows.
 
-**🎯 Résultat attendu :** `Saved 21 rows to activities.csv` — et un fichier dont les premières lignes ressemblent à
+**🎯 Résultat attendu :** `Saved 21 rows to activities.csv`, et un fichier dont les premières lignes ressemblent à
 
 ```
 day,category,amount,kg
@@ -345,7 +345,7 @@ reload_total = round(sum(float(r["kg"]) for r in loaded), 2)
 print("Reloaded", len(loaded), "rows, week total", reload_total, "kg")
 ```
 
-L'aller-retour prouve que la sauvegarde est sans perte : les lignes chargées produisent les mêmes 42.44. Note la conversion — le CSV stocke du texte, donc `float(r["kg"])` doit transformer `"2.16"` en nombre avant de sommer.
+L'aller-retour prouve que la sauvegarde est sans perte : les lignes chargées produisent les mêmes 42.44. Note la conversion, le CSV stocke du texte, donc `float(r["kg"])` doit transformer `"2.16"` en nombre avant de sommer.
 
 **🎯 Résultat attendu :** `Reloaded 21 rows, week total 42.44 kg`
 
@@ -357,11 +357,11 @@ L'aller-retour prouve que la sauvegarde est sans perte : les lignes chargées pr
 
 - ✅ `activities.csv` a 4 colonnes × 21 lignes de données + en-tête.
 - ✅ Le rechargement reproduit `WEEK TOTAL: 42.44 kg`.
-- ✅ Le CSV est un livrable lisible par un humain — n'importe qui peut l'ouvrir dans une feuille de calcul.
+- ✅ Le CSV est un livrable lisible par un humain, n'importe qui peut l'ouvrir dans une feuille de calcul.
 
 **🤔 Question(s) socratique(s)**
 
-- Le programme *écrit* actuellement depuis `rows` à chaque exécution, écrasant le fichier. Une fois que le `add` du CLI de l'Étape 5 existe, relancer effacerait les nouvelles entrées. Quand tu y arriveras, quel est le changement minimal — écrire *une fois*, puis ajouter ?
+- Le programme *écrit* actuellement depuis `rows` à chaque exécution, écrasant le fichier. Une fois que le `add` du CLI de l'Étape 5 existe, relancer effacerait les nouvelles entrées. Quand tu y arriveras, quel est le changement minimal, écrire *une fois*, puis ajouter ?
 - `DictReader` retourne des chaînes ; les variantes sont faciles à prendre pour des nombres. Nomme une autre conversion de type de colonne, comme parser des dates, dont une « vraie » app aurait besoin avant que ce CSV devienne fiable.
 
 ## Étape 5 : Transforme-le en CLI
@@ -390,7 +390,7 @@ def report():
         print(f"{day}  {daily.get(day, 0):>5}  {'#' * round(daily.get(day, 0) / mx * 40)}")
 ```
 
-`report()` est le même calcul que les Étapes 2–3, mais il lit depuis le fichier sauvegardé — le CLI et l'analyse sont une seule fonction. `daily.get(day, 0)` rapporte toujours un jour manquant comme 0 kg au lieu de planter.
+`report()` est le même calcul que les Étapes 2–3, mais il lit depuis le fichier sauvegardé, le CLI et l'analyse sont une seule fonction. `daily.get(day, 0)` rapporte toujours un jour manquant comme 0 kg au lieu de planter.
 
 **🎯 Résultat attendu :**
 
@@ -405,7 +405,7 @@ Sat   6.48  #############################
 Sun   3.28  ##############
 ```
 
-**🩹 Si ça ne marche pas :** Si le CLI n'affiche rien, `report()` n'a jamais été *appelé* — la répartition `sys.argv` (5.3) vient plus tard ; pour l'instant, lance `python3 carbon_tracker.py` et ajoute temporairement un appel `report()` en bas du fichier.
+**🩹 Si ça ne marche pas :** Si le CLI n'affiche rien, `report()` n'a jamais été *appelé*, la répartition `sys.argv` (5.3) vient plus tard ; pour l'instant, lance `python3 carbon_tracker.py` et ajoute temporairement un appel `report()` en bas du fichier.
 
 ### 5.2 `add` et `reset`
 
@@ -429,9 +429,9 @@ def reset():
         writer.writerows(rows)
 ```
 
-`add` ouvre en mode ajout (`"a"`) pour ne *pas* écraser le fichier — les nouvelles lignes rejoignent l'historique, et `report()` re-somme depuis le disque. `reset` reconstruit délibérément la semaine d'exemple vierge pour que chaque exemple de classe démarre des mêmes 42.44 de référence.
+`add` ouvre en mode ajout (`"a"`) pour ne *pas* écraser le fichier, les nouvelles lignes rejoignent l'historique, et `report()` re-somme depuis le disque. `reset` reconstruit délibérément la semaine d'exemple vierge pour que chaque exemple de classe démarre des mêmes 42.44 de référence.
 
-**🎯 Résultat attendu :** Rien par eux-mêmes — `add` et `reset` rappellent tous deux `report()` à la fin, donc leur sortie est le graphique que tu as vu en 5.1.
+**🎯 Résultat attendu :** Rien par eux-mêmes, `add` et `reset` rappellent tous deux `report()` à la fin, donc leur sortie est le graphique que tu as vu en 5.1.
 
 ### 5.3 Le répartiteur
 
@@ -487,7 +487,7 @@ Fri   8.84  ####################################
 …
 ```
 
-Attends — un trajet de 5 km après reset change le résultat proprement : `42.44 + 0.90 = 43.34`. Maintenant, le *seul* choix qui compte :
+Attends, un trajet de 5 km après reset change le résultat proprement : `42.44 + 0.90 = 43.34`. Maintenant, le *seul* choix qui compte :
 
 ```bash
 python3 carbon_tracker.py reset
@@ -500,14 +500,14 @@ python3 carbon_tracker.py add Sat flight 450
 WEEK TOTAL: 154.94 kg (387% of budget)
 ```
 
-Un simple vol de 450 km vaut `0.25 × 450 = 112.5 kg` — presque trois fois le budget de toute la semaine, et la barre de 40 `#` du graphique appartient maintenant au samedi. C'est la manchette honnête que l'outil existe pour livrer.
+Un simple vol de 450 km vaut `0.25 × 450 = 112.5 kg`, presque trois fois le budget de toute la semaine, et la barre de 40 `#` du graphique appartient maintenant au samedi. C'est la manchette honnête que l'outil existe pour livrer.
 
-**🩹 Si ça ne marche pas :** Si `add` montre `108%` la première fois et déjà `387%` au second coup, le fichier d'exemple n'a pas été reset entre les exécutions (les ajouts s'accumulent). `reset` d'abord, puis `add` — l'échantillon est ton ancre reproductible.
+**🩹 Si ça ne marche pas :** Si `add` montre `108%` la première fois et déjà `387%` au second coup, le fichier d'exemple n'a pas été reset entre les exécutions (les ajouts s'accumulent). `reset` d'abord, puis `add`, l'échantillon est ton ancre reproductible.
 
 **🤔 Question(s) socratique(s)**
 
-- `add` prend une *étiquette de jour* (`Fri`) — les jours de la semaine d'exemple sont des étiquettes, pas des dates. Qu'est-ce qui changerait si `day` devenait un vrai `YYYY-MM-DD` ? Quelles parties de `report()` (la légende du graphique, la fenêtre hebdomadaire) devraient cesser de coder en dur les sept étiquettes ?
-- Cet outil rapporte des kg par *semaine* pour une personne. Les foyers du Massachusetts émettent de l'ordre de 15 000 kg/an. Environ combien de semaines d'exemple cela fait-il — et qu'est-ce que le ratio entre l'empreinte d'un individu et une *moyenne nationale* te dit sur la mesure de sens des budgets personnels ?
+- `add` prend une *étiquette de jour* (`Fri`), les jours de la semaine d'exemple sont des étiquettes, pas des dates. Qu'est-ce qui changerait si `day` devenait un vrai `YYYY-MM-DD` ? Quelles parties de `report()` (la légende du graphique, la fenêtre hebdomadaire) devraient cesser de coder en dur les sept étiquettes ?
+- Cet outil rapporte des kg par *semaine* pour une personne. Les foyers du Massachusetts émettent de l'ordre de 15 000 kg/an. Environ combien de semaines d'exemple cela fait-il, et qu'est-ce que le ratio entre l'empreinte d'un individu et une *moyenne nationale* te dit sur la mesure de sens des budgets personnels ?
 
 ### 5.4 Vérifie le CLI
 
@@ -521,18 +521,18 @@ Un simple vol de 450 km vaut `0.25 × 450 = 112.5 kg` — presque trois fois le 
 ## ⚠️ Pièges courants
 
 - **`max(daily)` contre `max(daily, key=daily.get)`.** Le premier choisit la *chaîne de clé* la plus grande (« Wed »), le second la *valeur* la plus grande. Les mélanger mal étiquette le jour le plus lourd.
-- **L'ordre d'arrondi.** Arrondir `rows` à 2 décimales, puis sommer, c'est bien — mais arrondir *un autre* intermédiaire (comme le total journalier) avant de comparer honnêtement change la réponse de 0.01. Choisis une politique d'arrondi et garde-la.
-- **Ajout contre écrasement.** `open(..., "w")` opte pour l'écrasement ; `open(..., "a")` ajoute. `reset` doit utiliser `"w"`, `add` doit utiliser `"a"` — échange-les et la démo casse (soit en effaçant l'historique, soit en l'empilant).
+- **L'ordre d'arrondi.** Arrondir `rows` à 2 décimales, puis sommer, c'est bien, mais arrondir *un autre* intermédiaire (comme le total journalier) avant de comparer honnêtement change la réponse de 0.01. Choisis une politique d'arrondi et garde-la.
+- **Ajout contre écrasement.** `open(..., "w")` opte pour l'écrasement ; `open(..., "a")` ajoute. `reset` doit utiliser `"w"`, `add` doit utiliser `"a"`, échange-les et la démo casse (soit en effaçant l'historique, soit en l'empilant).
 - **Oublier la conversion float.** `DictReader` retourne des chaînes ; `sum(float(r["kg"]) for r in loaded)` est requis. Sommer des chaînes plante ou concatène « 2.164.4… ».
-- **Un budget qui ignore la catégorie.** 106% du budget est le verdict — mais la catégorie des flottes (transport) et la catégorie alimentation totalisent plus de la moitié de la semaine ; corriges la mauvaise et le budget est quand même explosé.
-- **Pas de `reset` entre les démos CLI.** Des exécutions `add` répétées font grossir le CSV sans limite. Reset — ou documente la base de référence — ou ta « semaine » devient tranquillement un mois.
+- **Un budget qui ignore la catégorie.** 106% du budget est le verdict, mais la catégorie des flottes (transport) et la catégorie alimentation totalisent plus de la moitié de la semaine ; corriges la mauvaise et le budget est quand même explosé.
+- **Pas de `reset` entre les démos CLI.** Des exécutions `add` répétées font grossir le CSV sans limite. Reset, ou documente la base de référence, ou ta « semaine » devient tranquillement un mois.
 
 ## Ce que tu viens de construire
 
 Un suivi d'empreinte carbone de bout en bout dans le terminal : facteurs d'émission, table de faits de lignes `(day, category, amount, kg)`, agrégation journalière et par catégorie depuis de simples dicts, diagramme à barres ASCII sans dépendances, verdict de budget exprimé en pourcentage, persistance CSV avec aller-retour sans perte, et un CLI à trois commandes sur `sys.argv`. Les idées transférables ici sont le *motif* : une **table d'unités** qui transforme des quantités d'activité arbitraires en un nombre comparable ; **fusionner des lignes étroites en totaux journaliers et par catégorie** avec un dict accumulateur ; **laisser le verdict être un pourcentage**, pas du kg brut ; **faire du CSV le système d'enregistrement** pour que le rapport soit toujours une fonction du fichier ; et **mettre en surface une comparaison dramatique** (le vol de 450 km) parce qu'un outil qui n'imprime que ses totaux oublie ce que les nombres signifient.
 
 :::tip[Exécute une version plus complète sans aucune configuration locale]
-[`examples/carbon-tracker/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/carbon-tracker) dans le dépôt du cours contient l'outil complet comme notebook — facteurs, semaine d'exemple, graphique, budget, aller-retour CSV et CLI add/report/reset, exécutables dans Colab/Kaggle/Binder. Clone le dépôt ou [ouvre-le dans un Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course).
+[`examples/carbon-tracker/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/carbon-tracker) dans le dépôt du cours contient l'outil complet comme notebook, facteurs, semaine d'exemple, graphique, budget, aller-retour CSV et CLI add/report/reset, exécutables dans Colab/Kaggle/Binder. Clone le dépôt ou [ouvre-le dans un Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course).
 :::
 
 ## Où aller à partir d'ici
@@ -544,6 +544,6 @@ Un suivi d'empreinte carbone de bout en bout dans le terminal : facteurs d'émis
 
 ## Partage ton projet avec la classe
 
-Tu as construit quelque chose dont tu es fier·e ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets que d'autres étudiants ont soumis — et son README contient un tutoriel complet, accessible aux débutants, pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, étape par étape. Aucune expérience git préalable n'est requise.
+Tu as construit quelque chose dont tu es fier·e ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets que d'autres étudiants ont soumis, et son README contient un tutoriel complet, accessible aux débutants, pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, étape par étape. Aucune expérience git préalable n'est requise.
 
 Bienvenue dans l'écriture de Python hors du navigateur. 🎓

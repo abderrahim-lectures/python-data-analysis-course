@@ -19,9 +19,9 @@ learningObjectives:
 
 # 🛠️ 🎛️ Construye un Servidor Mock de API
 
-Toda app real eventualmente se bloquea en un backend que no está listo — un servicio de pagos sin sandbox, un feed de clima caído, una API de una colega aún en diseño. Un *servidor mock* es el sustituto honesto: corre en tu máquina, habla HTTP en localhost y responde las mismas rutas que tu backend real, así tu frontend, tus pruebas y tus demos nunca esperan el deploy de alguien más. Este proyecto construye ese servidor desde cero: plantillas de ruta como `/users/<id>` se vuelven despachadores que extraen parámetros, las cadenas de consulta y los cuerpos JSON se reflejan de vuelta para inspección, una ruta flaky falla según un cronograma, y un grabador integrado reproduce cada llamada para atrapar regresiones antes de que exista producción. Corre en la biblioteca estándar. Cada ejemplo de esta guía es determinista — el mismo despacho devuelve el mismo JSON cada vez — así que puedes verificar cada afirmación mientras construyes.
+Toda app real eventualmente se bloquea en un backend que no está listo, un servicio de pagos sin sandbox, un feed de clima caído, una API de una colega aún en diseño. Un *servidor mock* es el sustituto honesto: corre en tu máquina, habla HTTP en localhost y responde las mismas rutas que tu backend real, así tu frontend, tus pruebas y tus demos nunca esperan el deploy de alguien más. Este proyecto construye ese servidor desde cero: plantillas de ruta como `/users/<id>` se vuelven despachadores que extraen parámetros, las cadenas de consulta y los cuerpos JSON se reflejan de vuelta para inspección, una ruta flaky falla según un cronograma, y un grabador integrado reproduce cada llamada para atrapar regresiones antes de que exista producción. Corre en la biblioteca estándar. Cada ejemplo de esta guía es determinista, el mismo despacho devuelve el mismo JSON cada vez, así que puedes verificar cada afirmación mientras construyes.
 
-Esto asume funciones, clases y manejo de JSON. Es un proyecto opcional y no calificado — consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
+Esto asume funciones, clases y manejo de JSON. Es un proyecto opcional y no calificado, consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 ## 🎯 Lo que harás
 
@@ -33,9 +33,9 @@ Esto asume funciones, clases y manejo de JSON. Es un proyecto opcional y no cali
 
 ## Dónde ejecutar esto
 
-**Localmente con `uv`** es el camino recomendado — el servidor mock es biblioteca estándar pura (`http.server`, `http.client`, `urllib.parse`, `json`), así que un `uv init` es todo lo que necesitas.
+**Localmente con `uv`** es el camino recomendado, el servidor mock es biblioteca estándar pura (`http.server`, `http.client`, `urllib.parse`, `json`), así que un `uv init` es todo lo que necesitas.
 
-**Google Colab, Kaggle Notebooks y Binder** ejecutan cada paso sin modificar. La red de los notebooks es suficientemente permisiva para las partes del despachador en proceso; el bloque final opcional de cableado en vivo también funciona en Binder y localmente — mantenlo efímero (puerto `0`) para que nunca choque con otro proceso.
+**Google Colab, Kaggle Notebooks y Binder** ejecutan cada paso sin modificar. La red de los notebooks es suficientemente permisiva para las partes del despachador en proceso; el bloque final opcional de cableado en vivo también funciona en Binder y localmente, mantenlo efímero (puerto `0`) para que nunca choque con otro proceso.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/api-mock-server/notebook.es.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/api-mock-server/notebook.es.ipynb)
@@ -57,12 +57,12 @@ Sin dependencias. Las piezas: una tabla de rutas (método + plantilla + fábrica
 **✅ Lista de verificación**
 
 - ✅ `uv init api-mock-server` crea el proyecto y un `main.py`.
-- ✅ `uv run python3 -c "import json, re, http.server"` tiene éxito — todo es biblioteca estándar.
+- ✅ `uv run python3 -c "import json, re, http.server"` tiene éxito, todo es biblioteca estándar.
 
 **🤔 Pregunta(s) socrática(s)**
 
-- Un servidor mock devuelve *datos falsos* por definición. ¿Qué le da aún integridad — la forma de la respuesta, los códigos de estado, la latencia o la *promesa de que es determinista*? ¿Cuál de esos puede arrullarte para que envíes algo que se rompe contra el backend real?
-- El mock anuncia `{"status": "ok"}` en una ruta que la API real aún no ha construido. Si tu frontend pasa las pruebas contra el mock, ¿qué propiedad única del *backend real* podría seguir rompiéndolo — y dónde ayudaría un campo `version`?
+- Un servidor mock devuelve *datos falsos* por definición. ¿Qué le da aún integridad, la forma de la respuesta, los códigos de estado, la latencia o la *promesa de que es determinista*? ¿Cuál de esos puede arrullarte para que envíes algo que se rompe contra el backend real?
+- El mock anuncia `{"status": "ok"}` en una ruta que la API real aún no ha construido. Si tu frontend pasa las pruebas contra el mock, ¿qué propiedad única del *backend real* podría seguir rompiéndolo, y dónde ayudaría un campo `version`?
 
 ## Paso 1: Rutas como plantillas
 
@@ -89,7 +89,7 @@ print(m.groupdict())
 
 **🎯 Resultado esperado :** `{'uid': '42'}`.
 
-**🩹 Si sale mal :** Si la salida está vacía o es `{}`, `.match` se ancló en una posición incompatible — revisa el `^` inicial. Si aparece un `re.error`, los corchetes de la plantilla están desbalanceados o un nombre de captura contiene un carácter no-palabra.
+**🩹 Si sale mal :** Si la salida está vacía o es `{}`, `.match` se ancló en una posición incompatible, revisa el `^` inicial. Si aparece un `re.error`, los corchetes de la plantilla están desbalanceados o un nombre de captura contiene un carácter no-palabra.
 
 ### 1.2 Registra la ruta de salud
 
@@ -115,11 +115,11 @@ api.add("GET", "/health", lambda **kwargs: {"healthy": True, "version": "1.0.0"}
 print(len(api.routes), "route registered")
 ```
 
-La tabla de rutas es solo una lista de dicts — configuración como datos. Cada entrada empareja un verbo HTTP con el matcher compilado para la ruta *con prefijo* (`/api/v1` + `/health`), y una función que construirá la carga útil después. Las lambdas mantienen las definiciones de ruta en una línea; una función nombrada funciona igual.
+La tabla de rutas es solo una lista de dicts, configuración como datos. Cada entrada empareja un verbo HTTP con el matcher compilado para la ruta *con prefijo* (`/api/v1` + `/health`), y una función que construirá la carga útil después. Las lambdas mantienen las definiciones de ruta en una línea; una función nombrada funciona igual.
 
 **🎯 Resultado esperado :** `1 route registered`.
 
-**🩹 Si sale mal :** Si `len(api.routes)` es 0, `add` olvidó `self.routes.append(...)` o devolvió antes de anexar. Si imprime `2 routes`, una copia de la lista se filtró — revisa si hay un aliasing accidental de `routes = self.routes`.
+**🩹 Si sale mal :** Si `len(api.routes)` es 0, `add` olvidó `self.routes.append(...)` o devolvió antes de anexar. Si imprime `2 routes`, una copia de la lista se filtró, revisa si hay un aliasing accidental de `routes = self.routes`.
 
 ### 1.3 Verifica la capa de plantillas
 
@@ -131,8 +131,8 @@ La tabla de rutas es solo una lista de dicts — configuración como datos. Cada
 
 **🤔 Pregunta(s) socrática(s)**
 
-- ¿Por qué una *regex* en lugar de `path.split("/")`? Convierte `/users/<uid>/orders/<oid>` en una búsqueda basada en split en tu cabeza — ¿qué se rompe con segmentos de longitud variable y con cadenas de consulta? La regex es la respuesta compacta a "cualquier número de segmentos, con nombres".
-- La plantilla `/users/<uid>` y `/users/search` ambas comienzan con `/users/`. Si registraste `<uid>` primero, ¿cuál golpearía una petición a `/users/search` — y qué regla lo decide?
+- ¿Por qué una *regex* en lugar de `path.split("/")`? Convierte `/users/<uid>/orders/<oid>` en una búsqueda basada en split en tu cabeza, ¿qué se rompe con segmentos de longitud variable y con cadenas de consulta? La regex es la respuesta compacta a "cualquier número de segmentos, con nombres".
+- La plantilla `/users/<uid>` y `/users/search` ambas comienzan con `/users/`. Si registraste `<uid>` primero, ¿cuál golpearía una petición a `/users/search`, y qué regla lo decide?
 
 ## Paso 2: El despachador
 
@@ -161,7 +161,7 @@ print(api.dispatch("GET", "/api/v1/missing"))
 print(api.dispatch("POST", "/api/v1/health"))
 ```
 
-`dispatch` es un escaneo lineal: dos filtros baratos (`method ==`, match del matcher) antes de la llamada costosa. La primera ruta que coincide gana, así que el orden de registro es el desempate (ver el Socrático del paso 1). Una petición completamente perdida devuelve un **payload** `404` — no una excepción — así que cada llamada tiene una respuesta `(status, payload)` definitiva.
+`dispatch` es un escaneo lineal: dos filtros baratos (`method ==`, match del matcher) antes de la llamada costosa. La primera ruta que coincide gana, así que el orden de registro es el desempate (ver el Socrático del paso 1). Una petición completamente perdida devuelve un **payload** `404`, no una excepción, así que cada llamada tiene una respuesta `(status, payload)` definitiva.
 
 **🎯 Resultado esperado :**
 
@@ -172,7 +172,7 @@ print(api.dispatch("POST", "/api/v1/health"))
 (404, {'error': 'not found'})
 ```
 
-**🩹 Si sale mal :** Si responde la ruta equivocada, el orden primero-matchea eligió la entrada equivocada — reordena el registro. Si `/missing` lanza en lugar de devolver `(404, …)`, el bucle cayó hasta un `routes[0]` sin guardia.
+**🩹 Si sale mal :** Si responde la ruta equivocada, el orden primero-matchea eligió la entrada equivocada, reordena el registro. Si `/missing` lanza en lugar de devolver `(404, …)`, el bucle cayó hasta un `routes[0]` sin guardia.
 
 ### 2.2 Parámetros de ruta y cadenas de consulta
 
@@ -215,7 +215,7 @@ print(api.dispatch("GET", "/api/v1/search"))
 (200, {'query': '', 'results': ['result-1']})
 ```
 
-**🩹 Si sale mal :** Si `uid` falta en la respuesta, `**kwargs` no lo incluyó — revisa que el matcher capturó `uid` (paso 1.1). Si `limit=3` devuelve 1 resultado, `parse_qs` dio listas y la fábrica indexó una lista en lugar de una cadena — confirma el desenvuelto `v[0]`.
+**🩹 Si sale mal :** Si `uid` falta en la respuesta, `**kwargs` no lo incluyó, revisa que el matcher capturó `uid` (paso 1.1). Si `limit=3` devuelve 1 resultado, `parse_qs` dio listas y la fábrica indexó una lista en lugar de una cadena, confirma el desenvuelto `v[0]`.
 
 ### 2.3 Verifica el despachador
 
@@ -223,7 +223,7 @@ print(api.dispatch("GET", "/api/v1/search"))
 
 - ✅ `dispatch` devuelve `(200, payload)` para los GET registrados y `(404, {"error": "not found"})` para todo lo demás, coincidiendo también por método.
 - ✅ `/users/<uid>` y `/search` resuelven ambos, con params de ruta en `kwargs` y params de consulta en `params`.
-- ✅ El mismo despachador responde repetidamente — una llamada no consume estado.
+- ✅ El mismo despachador responde repetidamente, una llamada no consume estado.
 
 **🤔 Pregunta(s) socrática(s)**
 
@@ -276,7 +276,7 @@ print(api.dispatch("GET", "/api/v1/flaky"))
 print(api.dispatch("GET", "/api/v1/flaky"))
 ```
 
-`_counter` cuenta los golpes *por ruta* (`setdefault(path, 0)`), así que una ruta flaky falla en los golpes 3, 6, 9 — un cronograma determinista que tus pruebas pueden afirmar. Las dos llamadas sanas tienen éxito, luego la tercera falla con un payload de error nítido. Así se prueba un bucle de reintentos: dale un ritmo de "tiene éxito dos veces, falla una".
+`_counter` cuenta los golpes *por ruta* (`setdefault(path, 0)`), así que una ruta flaky falla en los golpes 3, 6, 9, un cronograma determinista que tus pruebas pueden afirmar. Las dos llamadas sanas tienen éxito, luego la tercera falla con un payload de error nítido. Así se prueba un bucle de reintentos: dale un ritmo de "tiene éxito dos veces, falla una".
 
 **🎯 Resultado esperado :**
 
@@ -286,7 +286,7 @@ print(api.dispatch("GET", "/api/v1/flaky"))
 (500, {'error': 'Simulated outage'})
 ```
 
-**🩹 Si sale mal :** Si las tres fallan, `every` es `1` (o el módulo está invertido — `n % every == 0` solo se dispara en múltiplos exactos). Si ninguna falla, la rama `flaky` nunca corre porque `add` no se llamó con `flaky=` como palabra clave.
+**🩹 Si sale mal :** Si las tres fallan, `every` es `1` (o el módulo está invertido, `n % every == 0` solo se dispara en múltiplos exactos). Si ninguna falla, la rama `flaky` nunca corre porque `add` no se llamó con `flaky=` como palabra clave.
 
 ### 3.2 La mala entrada es un 4xx, no un colapso
 
@@ -321,7 +321,7 @@ print(api.dispatch("GET", "/api/v1/divide?by=2"))
 print(api.dispatch("GET", "/api/v1/divide?by=0"))
 ```
 
-El try/except traza una línea dura: el *mock* tiene un bug o el llamador envió disparates, y de cualquier forma la respuesta es JSON estructurado con estado `422` — un cliente puede ramificar sobre él. Sin el guardia, un mal `by=0` propagaría un `ZeroDivisionError` y tumbaría todo el hilo del servidor.
+El try/except traza una línea dura: el *mock* tiene un bug o el llamador envió disparates, y de cualquier forma la respuesta es JSON estructurado con estado `422`, un cliente puede ramificar sobre él. Sin el guardia, un mal `by=0` propagaría un `ZeroDivisionError` y tumbaría todo el hilo del servidor.
 
 **🎯 Resultado esperado :**
 
@@ -336,18 +336,18 @@ El try/except traza una línea dura: el *mock* tiene un bug o el llamador envió
 
 **✅ Lista de verificación**
 
-- ✅ Una ruta flaky falla exactamente cuando `n % every == 0` — el golpe 3 de un cronograma de 3 falla.
+- ✅ Una ruta flaky falla exactamente cuando `n % every == 0`, el golpe 3 de un cronograma de 3 falla.
 - ✅ Las fábricas que fallan devuelven `(422, {"error": ...})`; las rutas sin coincidencia devuelven `(404, ...)`.
 - ✅ Todos los fallos simulados son datos, nunca excepciones lanzadas.
 
 **🤔 Pregunta(s) socrática(s)**
 
-- El contador flaky es *por ruta*, no por regla. Dos llamadores golpeando `/api/v1/flaky` comparten el conteo. ¿Querrías en su lugar un contador por *llamador* al simular un sistema distribuido — y sobre qué te apoyarías para decir qué llamador es cuál?
-- 422 vs 500: uno dice "la petición estaba mal", el otro "el servidor falló". Cuando **simulas**, controlas ambos lados — así que ¿por qué molestarse en distinguirlos?
+- El contador flaky es *por ruta*, no por regla. Dos llamadores golpeando `/api/v1/flaky` comparten el conteo. ¿Querrías en su lugar un contador por *llamador* al simular un sistema distribuido, y sobre qué te apoyarías para decir qué llamador es cuál?
+- 422 vs 500: uno dice "la petición estaba mal", el otro "el servidor falló". Cuando **simulas**, controlas ambos lados, así que ¿por qué molestarse en distinguirlos?
 
 ## Paso 4: Lee y refleja un cuerpo JSON
 
-Los GET llevan params en la URL. Los POST llevan un cuerpo JSON. El paso 4 hace al mock consciente del cuerpo: léelo, refléjalo y devuelve el objeto — el recorrido completo que un frontend necesita para desarrollar contra él.
+Los GET llevan params en la URL. Los POST llevan un cuerpo JSON. El paso 4 hace al mock consciente del cuerpo: léelo, refléjalo y devuelve el objeto, el recorrido completo que un frontend necesita para desarrollar contra él.
 
 ### 4.1 Refleja un cuerpo POST
 
@@ -362,7 +362,7 @@ print(api.dispatch("POST", "/api/v1/echo", body='{"name": "Grace"}'))
 print(api.dispatch("POST", "/api/v1/echo", body=""))
 ```
 
-`body` entra a `dispatch` como una cadena cruda (la capa HTTP la lee de la petición en el paso 5); `json.loads` la convierte en un objeto Python para la respuesta del eco. Un cuerpo faltante se vuelve `{}` — aún un eco válido, no una excepción.
+`body` entra a `dispatch` como una cadena cruda (la capa HTTP la lee de la petición en el paso 5); `json.loads` la convierte en un objeto Python para la respuesta del eco. Un cuerpo faltante se vuelve `{}`, aún un eco válido, no una excepción.
 
 **🎯 Resultado esperado :**
 
@@ -388,7 +388,7 @@ print(api.dispatch("POST", "/api/v1/users/7/notes?tag=idea",
                    body='{"text": "ship by Friday"}'))
 ```
 
-Una ruta ahora ejercita cada canal de entrada a la vez — el nombre de la ruta, una etiqueta de consulta y el cuerpo JSON — que es exactamente la forma que tiene un endpoint real de `/users/<id>/notes`. Leer los tres en una sola respuesta prueba que el despachador transporta cada canal de manera independiente.
+Una ruta ahora ejercita cada canal de entrada a la vez, el nombre de la ruta, una etiqueta de consulta y el cuerpo JSON, que es exactamente la forma que tiene un endpoint real de `/users/<id>/notes`. Leer los tres en una sola respuesta prueba que el despachador transporta cada canal de manera independiente.
 
 **🎯 Resultado esperado :**
 
@@ -408,12 +408,12 @@ Una ruta ahora ejercita cada canal de entrada a la vez — el nombre de la ruta,
 
 **🤔 Pregunta(s) socrática(s)**
 
-- La ruta de eco *confía* en `json.loads`. Si un cliente envía `{"text": "ship by Friday"}` pero la API real espera `{"content": ...}`, un eco mock de la forma equivocada pasa las pruebas en silencio. ¿Dónde pondrías una *comprobación de esquema* — en la fábrica de la ruta o en el despachador — y por qué?
+- La ruta de eco *confía* en `json.loads`. Si un cliente envía `{"text": "ship by Friday"}` pero la API real espera `{"content": ...}`, un eco mock de la forma equivocada pasa las pruebas en silencio. ¿Dónde pondrías una *comprobación de esquema*, en la fábrica de la ruta o en el despachador, y por qué?
 - `json.loads(kw["body"])` devuelve cualquier tipo JSON: lista, número, null. Si quisieras que `/echo` aceptara *solo* objetos, ¿qué cambio de una línea rechazaría el resto?
 
 ## Paso 5: Graba y reproduce
 
-Un mock que responde pero olvida no puede verificar. El paso 5 registra cada llamada en una transcripción y luego la reproduce — re-ejecutando las peticiones exactas y afirmando que las respuestas no derivaron. Esa es una prueba de regresión nacida de un mock.
+Un mock que responde pero olvida no puede verificar. El paso 5 registra cada llamada en una transcripción y luego la reproduce, re-ejecutando las peticiones exactas y afirmando que las respuestas no derivaron. Esa es una prueba de regresión nacida de un mock.
 
 ### 5.1 Graba la transcripción
 
@@ -442,7 +442,7 @@ print("calls recorded so far:", len(api.transcript()))
 print(api.transcript()[0])
 ```
 
-Registrar la *petición* (método, ruta, cuerpo) junto con la *respuesta* (estado, payload) hace de la transcripción un rastro veraz — puedes reproducir cualquier entrada después sin adivinar qué envió. Una copia profunda vía `json.dumps(json.loads(...))` mantiene la transcripción devuelta aislada de mutaciones posteriores. (Para que los conteos de abajo coincidan, haz que `dispatch` termine cada ruta — con match o con 404 — con `return self._finish(method, path, body, status, payload)`, devolviendo cualquier `(status, payload)` directamente.)
+Registrar la *petición* (método, ruta, cuerpo) junto con la *respuesta* (estado, payload) hace de la transcripción un rastro veraz, puedes reproducir cualquier entrada después sin adivinar qué envió. Una copia profunda vía `json.dumps(json.loads(...))` mantiene la transcripción devuelta aislada de mutaciones posteriores. (Para que los conteos de abajo coincidan, haz que `dispatch` termine cada ruta, con match o con 404, con `return self._finish(method, path, body, status, payload)`, devolviendo cualquier `(status, payload)` directamente.)
 
 **🎯 Resultado esperado :**
 
@@ -484,15 +484,15 @@ fresh.dispatch("GET", "/api/v1/users/7")
 print("replay:", fresh.replay())
 ```
 
-`replay` re-envía cada *petición* registrada (con su cuerpo exacto) y compara la respuesta fresca con la registrada. Cero desajustes significa "el servidor aún se comporta exactamente como durante la ejecución" — tu prueba de regresión barata y determinista. (Una ruta flaky se voltea en un contador, así que reprodúcela en una instancia fresca o reinicia el contador — ese no-determinismo es el punto de probarla por separado.)
+`replay` re-envía cada *petición* registrada (con su cuerpo exacto) y compara la respuesta fresca con la registrada. Cero desajustes significa "el servidor aún se comporta exactamente como durante la ejecución", tu prueba de regresión barata y determinista. (Una ruta flaky se voltea en un contador, así que reprodúcela en una instancia fresca o reinicia el contador, ese no-determinismo es el punto de probarla por separado.)
 
 **🎯 Resultado esperado :** `replay: []`.
 
-**🩹 Si sale mal :** Si una llamada de `search` desajusta, las cadenas del `limit` de consulta no están haciendo round-trip (int vs str). Si `users/7` desajusta, la respuesta depende del tiempo en vivo o de un global — congelalo.
+**🩹 Si sale mal :** Si una llamada de `search` desajusta, las cadenas del `limit` de consulta no están haciendo round-trip (int vs str). Si `users/7` desajusta, la respuesta depende del tiempo en vivo o de un global, congelalo.
 
 ### 5.3 Conéctalo en vivo (opcional)
 
-**👟 Pista inicial :** Conecta el despachador a `http.server`: un `BaseHTTPRequestHandler` lee el cuerpo, llama a `dispatch` y escribe estado + JSON — servido en un puerto efímero para que nunca choque.
+**👟 Pista inicial :** Conecta el despachador a `http.server`: un `BaseHTTPRequestHandler` lee el cuerpo, llama a `dispatch` y escribe estado + JSON, servido en un puerto efímero para que nunca choque.
 
 ```python
 # main.py (continued)
@@ -532,7 +532,7 @@ print("POST /echo  ->", r.status, _json.loads(r.read()))
 server.shutdown()
 ```
 
-El puerto `0` le pide al SO un puerto libre, así que `serve_forever` nunca pelea contra un proceso existente. El handler refleja el contrato de `dispatch` — leer cuerpo, despachar, JSON-codificar el payload — así que el servidor en vivo y el despachador en proceso responden de manera idéntica. `log_message` se silencia para que la consola se mantenga limpia.
+El puerto `0` le pide al SO un puerto libre, así que `serve_forever` nunca pelea contra un proceso existente. El handler refleja el contrato de `dispatch`, leer cuerpo, despachar, JSON-codificar el payload, así que el servidor en vivo y el despachador en proceso responden de manera idéntica. `log_message` se silencia para que la consola se mantenga limpia.
 
 **🎯 Resultado esperado :**
 
@@ -541,7 +541,7 @@ GET /health -> 200 {'healthy': True, 'version': '1.0.0'}
 POST /echo  -> 200 {'echo': {'name': 'Grace'}}
 ```
 
-**🩹 Si sale mal :** Si hay `ConnectionRefusedError`, el hilo del servidor murió (una excepción dentro de `serve_forever`) o `shutdown()` corrió temprano. Si el cuerpo de un POST está vacío, el header `Content-Length` no llegó al handler — la mayoría de los clientes lo envían, algunas herramientas ad-hoc no.
+**🩹 Si sale mal :** Si hay `ConnectionRefusedError`, el hilo del servidor murió (una excepción dentro de `serve_forever`) o `shutdown()` corrió temprano. Si el cuerpo de un POST está vacío, el header `Content-Length` no llegó al handler, la mayoría de los clientes lo envían, algunas herramientas ad-hoc no.
 
 ### 5.4 Verifica el grabador
 
@@ -553,35 +553,35 @@ POST /echo  -> 200 {'echo': {'name': 'Grace'}}
 
 **🤔 Pregunta(s) socrática(s)**
 
-- Reproducir responde "¿cambió la respuesta?" pero no "¿es la respuesta *correcta*?". ¿Qué le permite afirmar a una prueba futura una transcripción que se envía como datos dorados, que un mock en vivo solo nunca puede — y cuál es el riesgo de que los datos dorados se vuelvan obsoletos?
-- El handler en vivo re-lee `self.rfile` por petición. `ThreadingHTTPServer` sirve cada conexión en su propio hilo — ¿qué se rompe si dos llamadas de reproducción corren sobre `self._counter`, y sobreviviría limpiamente el estado por instancia de `BaseHTTPRequestHandler`?
+- Reproducir responde "¿cambió la respuesta?" pero no "¿es la respuesta *correcta*?". ¿Qué le permite afirmar a una prueba futura una transcripción que se envía como datos dorados, que un mock en vivo solo nunca puede, y cuál es el riesgo de que los datos dorados se vuelvan obsoletos?
+- El handler en vivo re-lee `self.rfile` por petición. `ThreadingHTTPServer` sirve cada conexión en su propio hilo, ¿qué se rompe si dos llamadas de reproducción corren sobre `self._counter`, y sobreviviría limpiamente el estado por instancia de `BaseHTTPRequestHandler`?
 
 ## ⚠️ Errores comunes
 
 - **Regex de rutas sin anclar.** `/users/<uid>` matcheada sin `^…$` también coincide con `/api/v1/users/42/orders` y produce una petición medio-capturada. Ancla siempre el patrón compilado.
 - **Olvidar el método.** Coincidir solo la ruta deja que un `POST /health` golpee la ruta `GET /health`. Filtra por `route["method"] == method` *antes* del match de regex.
 - **`parse_qs` devuelve listas.** `parse_qs("?limit=3")["limit"]` es `["3"]`, no `"3"`. Abre con `{k: v[0] …}` o el indexado rompe todo parse de múltiples valores.
-- **Fallos falsos que colapsan.** Un `ZeroDivisionError` sin guardia dentro de una ruta tumba el hilo del handler. Deja que el try/except mapee las excepciones a un payload `422` — ese es el trabajo del mock.
+- **Fallos falsos que colapsan.** Un `ZeroDivisionError` sin guardia dentro de una ruta tumba el hilo del handler. Deja que el try/except mapee las excepciones a un payload `422`, ese es el trabajo del mock.
 - **Estado compartido en la reproducción.** El contador flaky es por ruta y monótono; un `replay()` que re-envía la tercera llamada flaky obtiene un 500 fresco. Prueba las rutas flaky en una instancia fresca.
 - **Payloads no serializables.** `json.dumps` en `transcript()` y en el handler en vivo ambos se atragantan con un `datetime` o un int de numpy. Mantén los payloads en tipos Python planos.
 
 ## Lo que acabas de construir
 
-Un servidor API local, determinista y de biblioteca estándar: plantillas de ruta compiladas en despachadores regex, params de ruta y de consulta fluyendo hacia las fábricas de respuesta, fallos simulados según un cronograma, cuerpos JSON reflejados y una transcripción completa de peticiones que se reproduce como comprobación de regresión. La idea central es que *un mock reemplaza un sistema externo con una promesa que tú controlas* — cada `(status, payload)` es dato, nunca una excepción sorpresa, así que tu código puede desarrollarse, demostrarse y probarse en regresión mucho antes de que exista el backend real. Intercambia la tabla de rutas por la URL base real después y el mismo cliente sigue funcionando, que es precisamente la costura que un mock está hecho para sostener.
+Un servidor API local, determinista y de biblioteca estándar: plantillas de ruta compiladas en despachadores regex, params de ruta y de consulta fluyendo hacia las fábricas de respuesta, fallos simulados según un cronograma, cuerpos JSON reflejados y una transcripción completa de peticiones que se reproduce como comprobación de regresión. La idea central es que *un mock reemplaza un sistema externo con una promesa que tú controlas*, cada `(status, payload)` es dato, nunca una excepción sorpresa, así que tu código puede desarrollarse, demostrarse y probarse en regresión mucho antes de que exista el backend real. Intercambia la tabla de rutas por la URL base real después y el mismo cliente sigue funcionando, que es precisamente la costura que un mock está hecho para sostener.
 
 :::tip[Ejecuta una versión más completa sin configuración local]
-[`examples/api-mock-server/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/api-mock-server) en el repositorio del curso es el servidor completo como notebook — plantillas de rutas, fallos flaky, el endpoint de eco, la reproducción de transcripción y el handler de cableado en vivo opcional, ejecutable en Colab/Kaggle/Binder. Clona el repositorio o [ábrelo en un Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course).
+[`examples/api-mock-server/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/api-mock-server) en el repositorio del curso es el servidor completo como notebook, plantillas de rutas, fallos flaky, el endpoint de eco, la reproducción de transcripción y el handler de cableado en vivo opcional, ejecutable en Colab/Kaggle/Binder. Clona el repositorio o [ábrelo en un Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course).
 :::
 
 ## A dónde ir desde aquí
 
-- Agrega `latency_ms` a las rutas y haz que el despachador duerma antes de responder, para que las pruebas de reintento ejerciten tiempos de espera reales — luego registra las latencias medidas en la transcripción junto con el estado y el payload.
+- Agrega `latency_ms` a las rutas y haz que el despachador duerma antes de responder, para que las pruebas de reintento ejerciten tiempos de espera reales, luego registra las latencias medidas en la transcripción junto con el estado y el payload.
 - Implementa una comprobación de `Content-Type` en `dispatch` que rechace cuerpos no-JSON con 415 en lugar de dejar que `json.loads` lance.
 - Persiste la transcripción en un archivo JSON con `json.dump` al apagar y cárgala al arrancar, para que el grabador se vuelva datos de regresión que sobrevivan a los reinicios.
-- Agrega un modo `record = True/False` para que una ejecución de grabación capture llamadas reales de API (vía `http.client`) y las reproduzca como mock después — el clásico proxy de grabar-y-reproducir.
+- Agrega un modo `record = True/False` para que una ejecución de grabación capture llamadas reales de API (vía `http.client`) y las reproduzca como mock después, el clásico proxy de grabar-y-reproducir.
 
 ## Comparte tu proyecto con la clase
 
-¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado — y su README tiene un recorrido completo y amigable para principiantes sobre cómo agregar el tuyo vía un **pull request**, incluso si nunca has usado git antes: hacer fork del repositorio, crear una rama, confirmar tus archivos y abrir el PR, un paso a la vez. No se asume experiencia previa con git.
+¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado, y su README tiene un recorrido completo y amigable para principiantes sobre cómo agregar el tuyo vía un **pull request**, incluso si nunca has usado git antes: hacer fork del repositorio, crear una rama, confirmar tus archivos y abrir el PR, un paso a la vez. No se asume experiencia previa con git.
 
 Bienvenido a escribir Python fuera del navegador. 🎓

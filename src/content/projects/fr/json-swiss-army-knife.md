@@ -20,7 +20,7 @@ Cela suppose Python 101 et l'aisance avec les flux de travail CLI issus de [Outi
 
 ## Où exécuter ceci
 
-**En local avec `uv`** est le chemin principal — c'est un outil CLI qui lit et écrit des fichiers.
+**En local avec `uv`** est le chemin principal, c'est un outil CLI qui lit et écrit des fichiers.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/json-swiss-army-knife/notebook.fr.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/json-swiss-army-knife/notebook.fr.ipynb)
@@ -255,7 +255,7 @@ def convert_from_json(data: dict, to_format: str) -> str:
 
 ## Ce que tu viens de construire
 
-Un seul outil CLI qui gère les quatre opérations JSON les plus courantes : formatage, validation, requêtes et conversion de formats. Le moteur de requêtes en notation point parcourt récursivement les structures imbriquées et étend les jokers. La conversion de formats relie JSON, YAML et TOML pour les flux de travail de pipelines de données. Cet outil résout une vraie douleur de développeur — chaque équipe a quelqu'un qui lance `python -m json.tool` et souhaite que ça en fasse plus.
+Un seul outil CLI qui gère les quatre opérations JSON les plus courantes : formatage, validation, requêtes et conversion de formats. Le moteur de requêtes en notation point parcourt récursivement les structures imbriquées et étend les jokers. La conversion de formats relie JSON, YAML et TOML pour les flux de travail de pipelines de données. Cet outil résout une vraie douleur de développeur, chaque équipe a quelqu'un qui lance `python -m json.tool` et souhaite que ça en fasse plus.
 
 :::tip[Exécute une version plus complète sans aucune configuration locale]
 [`examples/json-swiss-army-knife/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/json-swiss-army-knife) dans le dépôt du cours a une version plus riche avec des requêtes en streaming, un diff JSON, la validation de schéma et le CLI câblé de bout en bout. Clone-le, ou ouvre tout le dépôt dans un [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), et exécute-le depuis là.
@@ -269,6 +269,6 @@ Un seul outil CLI qui gère les quatre opérations JSON les plus courantes : for
 
 ## Partage ton projet avec la classe
 
-Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres élèves — et son README a un tutoriel complet et adapté aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git avant : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable avec git n'est supposée.
+Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres élèves, et son README a un tutoriel complet et adapté aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git avant : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable avec git n'est supposée.
 
 Bienvenue dans l'écriture de Python en dehors du navigateur. 🎓

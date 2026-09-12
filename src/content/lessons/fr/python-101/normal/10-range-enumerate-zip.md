@@ -26,7 +26,7 @@ Les boucles vous ont donné la répétition ; cette leçon vous remet les trois 
 
 ## Range : la séquence arithmétique, paresseuse
 
-Dans la leçon précédente vous avez sommée avec `range(5)`. Cet outil mérite un regard attentif — c'est l'outil classique du *« fais ceci un nombre connu de fois »* :
+Dans la leçon précédente vous avez sommée avec `range(5)`. Cet outil mérite un regard attentif, c'est l'outil classique du *« fais ceci un nombre connu de fois »* :
 
 ```python
 for i in range(5):
@@ -41,7 +41,7 @@ range(2, 8)     # 2, 3, 4, 5, 6, 7
 range(0, 20, 3) # 0, 3, 6, 9, 12, 15, 18
 ```
 
-Un argument donne $0, 1, \ldots, n-1$ ; deux donnent l'intervalle semi-ouvert $[\text{start}, \text{stop})$ ; trois ajoutent la différence commune $d$. Surtout, `range` est **paresseux** : il enregistre les paramètres et calcule chaque valeur seulement quand la boucle la demande. Demander un million de pas ne coûte pas plus de mémoire que d'en demander cinq — la séquence n'est jamais matérialisée.
+Un argument donne $0, 1, \ldots, n-1$ ; deux donnent l'intervalle semi-ouvert $[\text{start}, \text{stop})$ ; trois ajoutent la différence commune $d$. Surtout, `range` est **paresseux** : il enregistre les paramètres et calcule chaque valeur seulement quand la boucle la demande. Demander un million de pas ne coûte pas plus de mémoire que d'en demander cinq, la séquence n'est jamais matérialisée.
 
 ## Enumerate : la position, sans le compteur
 
@@ -56,7 +56,7 @@ for fruit in fruits:
     i += 1
 ```
 
-Le `i += 1` est une tentation à se désynchroniser : oubliez-en un, et les étiquettes de position s'embrouillent. `enumerate` produit les deux moitiés en une étape — l'indice et l'élément — de sorte qu'il n'y a rien à synchroniser :
+Le `i += 1` est une tentation à se désynchroniser : oubliez-en un, et les étiquettes de position s'embrouillent. `enumerate` produit les deux moitiés en une étape, l'indice et l'élément, de sorte qu'il n'y a rien à synchroniser :
 
 ```python
 for i, fruit in enumerate(fruits):
@@ -71,7 +71,7 @@ Là où un mathématicien écrit $b_i = a_i + i$ pour attacher la position à la
 
 ## Zip : un alignement par position
 
-Deux listes parallèles — noms et scores — réclament d'être lues ensemble. `zip` les aligne élément par élément :
+Deux listes parallèles, noms et scores, réclament d'être lues ensemble. `zip` les aligne élément par élément :
 
 ```python
 names = ["Alice", "Bob", "Charlie"]
@@ -109,11 +109,11 @@ for i, (name, score) in enumerate(zip(names, scores), start=1):
 print(f"Top score: {max(scores)}")   # Top score: 91
 ```
 
-Lisez l'en-tête de boucle de l'intérieur vers l'extérieur : `zip` apparie chaque nom à sa note ; les parenthèses `(name, score)` déballent cette paire ; `enumerate` numérote les paires à partir de un. Quatre gestes qui vous auraient coûté un compteur écrit à la main se lisent désormais comme la phrase qu'ils décrivent — la position s'attache à la valeur, paire par paire, exactement comme $b_i = a_i + i$ attache un indice à chaque terme.
+Lisez l'en-tête de boucle de l'intérieur vers l'extérieur : `zip` apparie chaque nom à sa note ; les parenthèses `(name, score)` déballent cette paire ; `enumerate` numérote les paires à partir de un. Quatre gestes qui vous auraient coûté un compteur écrit à la main se lisent désormais comme la phrase qu'ils décrivent, la position s'attache à la valeur, paire par paire, exactement comme $b_i = a_i + i$ attache un indice à chaque terme.
 
 ## Pièges courants
 
-- **`range` est exclusif en haut.** `range(5)` produit $0, 1, 2, 3, 4$ — cinq nombres, aucun égal à $5$. Pensez intervalle semi-ouvert, $[0, 5)$.
+- **`range` est exclusif en haut.** `range(5)` produit $0, 1, 2, 3, 4$, cinq nombres, aucun égal à $5$. Pensez intervalle semi-ouvert, $[0, 5)$.
 - **`enumerate` sur un dict.** Itérer un dict donne ses clés ; `enumerate` numéroterait les clés, pas les paires. Utilisez `dict.items()` pour la clé et la valeur.
 - **`zip` avec des longueurs inégales.** Les éléments au-delà de l'entrée courte s'évanouissent en silence. Notez la perte, ou comblez avec `zip_longest`.
 - **`zip` est un itérateur à usage unique.** En Python 3, `p = zip(a, b)` vous tend un itérateur, pas une liste : `list(p)` le consomme, et un second `list(p)` est vide. Convertissez sans tarder avec `list(zip(a, b))` quand vous revisiterez les paires.
@@ -121,23 +121,23 @@ Lisez l'en-tête de boucle de l'intérieur vers l'extérieur : `zip` apparie cha
 ## 🧩 Défis
 
 <details class="challenge">
-<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
+<summary>🧩 Défi, réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
 Utilisez `enumerate` pour imprimer chaque couleur de `colors = ["red", "green", "blue"]` avec sa position commençant à 1.
 
-<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>for i, color in enumerate(colors, 1): print(f"{i}. {color}")</code> — l'argument <code>start</code> renumérote les paires à partir de un.</p>
+<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>for i, color in enumerate(colors, 1): print(f"{i}. {color}")</code>, l'argument <code>start</code> renumérote les paires à partir de un.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
+<summary>🧩 Défi, réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
 Avec `keys = ["a", "b"]` et `values = [1, 2]`, utilisez `zip` pour construire un dictionnaire.
 
-<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>dict(zip(keys, values))</code> → <code>{"a": 1, "b": 2}</code> — les paires alignées deviennent les entrées du mapping.</p>
+<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>dict(zip(keys, values))</code> → <code>{"a": 1, "b": 2}</code>, les paires alignées deviennent les entrées du mapping.</p>
 
 </div>
 </details>

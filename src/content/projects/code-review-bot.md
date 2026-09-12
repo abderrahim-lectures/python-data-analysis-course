@@ -19,14 +19,14 @@ learningObjectives:
 
 # 🛠️ 🤖 Build a Code Review Bot
 
-Review bots read every pull request so humans don't have to — and before any LLM gets involved, a review bot is mostly *rules*. This project builds one: a deterministic **code review agent** that takes a simulated PR diff (`payment.py`), applies a registry of rules (line length, trailing whitespace, bare `except`, debug `print`, unresolved `TODO`, missing docstrings), attaches a per-line comment for each hit, aggregates them by severity, decides `REJECT` when a major issue exists, exports the whole review as a JSON payload, and then re-reviews the *fixed* diff to watch the verdict flip to `APPROVE`. No network, no randomness — the same diff always produces the same review, which is exactly what makes rule bots auditable: every comment is traceable to a test.
+Review bots read every pull request so humans don't have to, and before any LLM gets involved, a review bot is mostly *rules*. This project builds one: a deterministic **code review agent** that takes a simulated PR diff (`payment.py`), applies a registry of rules (line length, trailing whitespace, bare `except`, debug `print`, unresolved `TODO`, missing docstrings), attaches a per-line comment for each hit, aggregates them by severity, decides `REJECT` when a major issue exists, exports the whole review as a JSON payload, and then re-reviews the *fixed* diff to watch the verdict flip to `APPROVE`. No network, no randomness, the same diff always produces the same review, which is exactly what makes rule bots auditable: every comment is traceable to a test.
 
-This assumes functions, collections, file I/O, and JSON. It is an optional, ungraded project — see [Real-World Projects](/projects) for the full, growing list.
+This assumes functions, collections, file I/O, and JSON. It is an optional, ungraded project, see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 
 1. Model a pull request as a named list of lines.
-2. Write rules as data — a registry the bot loops over.
+2. Write rules as data, a registry the bot loops over.
 3. Review a diff, attach comments, and aggregate by severity.
 4. Compute the verdict and export the report as JSON.
 5. Fix the blockers, re-review, and see `REJECT` → `APPROVE`.
@@ -40,7 +40,7 @@ mkdir code-review-bot && cd code-review-bot
 touch review_bot.py
 ```
 
-**Google Colab, Kaggle Notebooks, and Binder** run everything unchanged — every block is plain Python. The JSON export is still a file you can open.
+**Google Colab, Kaggle Notebooks, and Binder** run everything unchanged, every block is plain Python. The JSON export is still a file you can open.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/code-review-bot/notebook.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/code-review-bot/notebook.ipynb)
@@ -57,7 +57,7 @@ mkdir code-review-bot && cd code-review-bot
 touch review_bot.py
 ```
 
-Save this as `payment.py` — the "PR under review". Note the two trailing-space lines and the `except:` on purpose:
+Save this as `payment.py`, the "PR under review". Note the two trailing-space lines and the `except:` on purpose:
 
 ```python
 def process_payment(total, tax_rate):       
@@ -80,13 +80,13 @@ def apply_coupon(order_total, coupon):
 **✅ Checklist**
 
 - ✅ `payment.py` has **15 lines**; line 1 and line 15 end with trailing spaces (still visible in an editor).
-- ✅ `final` on line 7 — the function that received a docstring — works as the healthy baseline.
+- ✅ `final` on line 7, the function that received a docstring, works as the healthy baseline.
 - ✅ `python3 review_bot.py` runs with no output yet.
 
 **🤔 Socratic Question(s)**
 
 - A smart reviewer *judges*; this bot only *tests*. Where is the boundary between a rule you can encode as `True/False` and a judgment that needs an LLM or a human?
-- The bot's verdict is either `APPROVE` or `REJECT`. What information would a third state (`COMMENT`) add for a merge process where "approve with comments" is a real step — and which of the rules here would ever produce it?
+- The bot's verdict is either `APPROVE` or `REJECT`. What information would a third state (`COMMENT`) add for a merge process where "approve with comments" is a real step, and which of the rules here would ever produce it?
 
 ## Step 1: Model the PR
 
@@ -110,7 +110,7 @@ for i, ln in enumerate(pr["lines"], 1):
     print(f"{i:>2} |{ln}|")
 ```
 
-`splitlines()` drops the `\n`, so `pr["lines"]` is *pure content* — a list whose index (as line number) is what a comment will point at. A dict bundle (file name + lines) is the smallest shape a review tool can hand to a rule engine, and it mirrors how real bots receive a pull request (name, then changed lines).
+`splitlines()` drops the `\n`, so `pr["lines"]` is *pure content*, a list whose index (as line number) is what a comment will point at. A dict bundle (file name + lines) is the smallest shape a review tool can hand to a rule engine, and it mirrors how real bots receive a pull request (name, then changed lines).
 
 **🎯 Expected output:**
 
@@ -133,7 +133,7 @@ file: payment.py | lines: 15
 15 |# This comment is deliberately stretched out far beyond 72 chars to flag long lines. xxxxxxxxxxxxxxxx  |
 ```
 
-**🩹 If it's off:** If `lines` shows 16, a stray trailing newline added an empty element (or your editor appended one) — `splitlines()` handles it, but recount the file. If the `|…|` wrappers lose line 1's trailing spaces, your editor auto-trimmed the specimen (re-paste it).
+**🩹 If it's off:** If `lines` shows 16, a stray trailing newline added an empty element (or your editor appended one), `splitlines()` handles it, but recount the file. If the `|…|` wrappers lose line 1's trailing spaces, your editor auto-trimmed the specimen (re-paste it).
 
 ### 1.2 Verify the model
 
@@ -141,7 +141,7 @@ file: payment.py | lines: 15
 
 - ✅ `pr` is a dict with `file` and `lines`; 15 lines total.
 - ✅ Line 1 and line 15 visually show trailing spaces inside `|…|`.
-- ✅ Indexing matches: `pr["lines"][7]` is the `except:` line (0-based) — rule positions map `i+1`.
+- ✅ Indexing matches: `pr["lines"][7]` is the `except:` line (0-based), rule positions map `i+1`.
 
 **🤔 Socratic Question(s)**
 
@@ -150,7 +150,7 @@ file: payment.py | lines: 15
 
 ## Step 2: Rules as data
 
-The bot's intelligence is a *registry* — rules encoded as data the engine loops over, so adding a rule means adding a dict, not an if-branch.
+The bot's intelligence is a *registry*, rules encoded as data the engine loops over, so adding a rule means adding a dict, not an if-branch.
 
 ### 2.1 The registry
 
@@ -176,13 +176,13 @@ RULES = [
 ]
 ```
 
-Each rule is a plain dict: a name, a severity, and a pure test. The bare-except test is a truthful over-match (`except:`), and `missing-docstring` is deliberately stubbed to `False` until Step 2.2 gives it context. A registry built from data is what makes the bot *maintainable* — you can extend it from a config file later without editing the engine.
+Each rule is a plain dict: a name, a severity, and a pure test. The bare-except test is a truthful over-match (`except:`), and `missing-docstring` is deliberately stubbed to `False` until Step 2.2 gives it context. A registry built from data is what makes the bot *maintainable*, you can extend it from a config file later without editing the engine.
 
-**🎯 Expected output:** None yet — RULES is data. Sanity-check each test by hand: `len("…") > 72` is line-length; `ln != ln.rstrip()` is trailing-space.
+**🎯 Expected output:** None yet, RULES is data. Sanity-check each test by hand: `len("…") > 72` is line-length; `ln != ln.rstrip()` is trailing-space.
 
 ### 2.2 Docstrings need context
 
-**👟 Starter hint:** A docstring test that looks at the few lines *after* a `def` — a function has a docstring if its next non-blank line `startswith('"""')`.
+**👟 Starter hint:** A docstring test that looks at the few lines *after* a `def`, a function has a docstring if its next non-blank line `startswith('"""')`.
 
 ```python
 # review_bot.py (continued)
@@ -198,7 +198,7 @@ RULES.append({"name": "missing-docstring", "severity": "minor",
                                  not has_docstring(pr["lines"], 0)})
 ```
 
-Wait — a lambda can't reach the *current* line index, so this naive wiring will check `pr["lines"][0]` forever. The right shape is a test that takes the *index*, not the line. Rewrite the registry so every test gets `(lines, i)`:
+Wait, a lambda can't reach the *current* line index, so this naive wiring will check `pr["lines"][0]` forever. The right shape is a test that takes the *index*, not the line. Rewrite the registry so every test gets `(lines, i)`:
 
 ```python
 # review_bot.py (continued)
@@ -221,9 +221,9 @@ RULES = [
 ]
 ```
 
-All tests now receive `(lines, i)` — most ignore the index; the docstring rule needs it. That uniformity is the contract that lets the engine (Step 3) stay dumb and correct.
+All tests now receive `(lines, i)`, most ignore the index; the docstring rule needs it. That uniformity is the contract that lets the engine (Step 3) stay dumb and correct.
 
-**🎯 Expected output:** None — but re-reading the list, you can already predict which lines each test will fire on (1 and 15 for trailing-space, 8 for bare-except, 9 for debug-print, 12 for todo, 13 for docstring, 15 for length).
+**🎯 Expected output:** None, but re-reading the list, you can already predict which lines each test will fire on (1 and 15 for trailing-space, 8 for bare-except, 9 for debug-print, 12 for todo, 13 for docstring, 15 for length).
 
 ### 2.3 Verify the registry
 
@@ -235,8 +235,8 @@ All tests now receive `(lines, i)` — most ignore the index; the docstring rule
 
 **🤔 Socratic Question(s)**
 
-- The bare-except test matches `except:` but not `except Exception:` — the latter is *more* specific and, arguably, acceptable. Would you encode `except Exception:` as its own rule or teach the test about `except ValueError:`? What's the one-line upgrade?
-- Rules-as-data means the engine doesn't know what a "rule" means. If a future bot added an *ML* rule (「this line smells like a bug」), how would severity get assigned there — and what makes the deterministic rules here a good *baseline* to hedge an ML rule against?
+- The bare-except test matches `except:` but not `except Exception:`, the latter is *more* specific and, arguably, acceptable. Would you encode `except Exception:` as its own rule or teach the test about `except ValueError:`? What's the one-line upgrade?
+- Rules-as-data means the engine doesn't know what a "rule" means. If a future bot added an *ML* rule (「this line smells like a bug」), how would severity get assigned there, and what makes the deterministic rules here a good *baseline* to hedge an ML rule against?
 
 ## Step 3: Run the review
 
@@ -269,7 +269,7 @@ for c in comments:
     print(f"{c['line']:>2} {c['severity']:<5} {c['rule']:<16} {c['code'][:40]}")
 ```
 
-One nested loop over rules × lines is the whole engine — adding a rule or a line changes nothing here. Each comment carries `file`, 1-based `line`, `rule`, `severity`, and the *stripped* code snippet, so a human can read it without opening the file. `code = lines[i].rstrip()` keeps the message short while `line` pins the exact location.
+One nested loop over rules × lines is the whole engine, adding a rule or a line changes nothing here. Each comment carries `file`, 1-based `line`, `rule`, `severity`, and the *stripped* code snippet, so a human can read it without opening the file. `code = lines[i].rstrip()` keeps the message short while `line` pins the exact location.
 
 **🎯 Expected output:**
 
@@ -284,7 +284,7 @@ comments: 7
 15 minor trailing-space    # This comment is deliberately stretched out far beyond 72 chars to flag long line
 ```
 
-**🩹 If it's off:** If line 15 appears only once, one of its two rules didn't fire (it's *both* long *and* trailing-spaced — two independent tests, two comments). If line 8 is missing, `lstrip().startswith("except:")` tripped on the `  # noqa` suffix — it shouldn't; the rule tests the *start*.
+**🩹 If it's off:** If line 15 appears only once, one of its two rules didn't fire (it's *both* long *and* trailing-spaced, two independent tests, two comments). If line 8 is missing, `lstrip().startswith("except:")` tripped on the `  # noqa` suffix, it shouldn't; the rule tests the *start*.
 
 ### 3.2 Severity summary
 
@@ -300,7 +300,7 @@ verdict = "REJECT" if counts.get("major", 0) else "APPROVE"
 print("VERDICT:", verdict)
 ```
 
-Seven comments is noise; `{major:1, minor:5, info:1}` is the signal. The verdict is one boolean: the bare `except` that swallows every exception type is the blocker — everything else is polish. Severity aggregation is what turns a wall of comments into a merge decision.
+Seven comments is noise; `{major:1, minor:5, info:1}` is the signal. The verdict is one boolean: the bare `except` that swallows every exception type is the blocker, everything else is polish. Severity aggregation is what turns a wall of comments into a merge decision.
 
 **🎯 Expected output:**
 
@@ -309,7 +309,7 @@ BY SEVERITY: {'major': 1, 'minor': 5, 'info': 1}
 VERDICT: REJECT
 ```
 
-**🩹 If it's off:** If `minor` tallies 4, a rule stalled (e.g. `missing-docstring` still on the stub from before Step 2.2 — it adds one). If the verdict reads `APPROVE`, `counts.get("major", 0)` changed to `counts["major"]` and crashed/no-op'd — keep the `.get`.
+**🩹 If it's off:** If `minor` tallies 4, a rule stalled (e.g. `missing-docstring` still on the stub from before Step 2.2, it adds one). If the verdict reads `APPROVE`, `counts.get("major", 0)` changed to `counts["major"]` and crashed/no-op'd, keep the `.get`.
 
 ### 3.3 Verify the run
 
@@ -321,8 +321,8 @@ VERDICT: REJECT
 
 **🤔 Socratic Question(s)**
 
-- Line 15 earned *two* comments from *two* rules. Is there such a thing as too many comments on one line — and what dedupe policy (e.g. one comment per rule per line, or collapse by line) would a human reviewer thank the bot for?
-- The verdict ignores `info` entirely. If the repo policy were "TODOs must be resolved to merge", `todo-marker` would become a *major*. What does that say about whose policy the bot encodes — and how would you parameterize it per-repo without rewriting rules?
+- Line 15 earned *two* comments from *two* rules. Is there such a thing as too many comments on one line, and what dedupe policy (e.g. one comment per rule per line, or collapse by line) would a human reviewer thank the bot for?
+- The verdict ignores `info` entirely. If the repo policy were "TODOs must be resolved to merge", `todo-marker` would become a *major*. What does that say about whose policy the bot encodes, and how would you parameterize it per-repo without rewriting rules?
 
 ## Step 4: Export the report
 
@@ -345,9 +345,9 @@ with open("review.json", "w") as f:
 print("Wrote review.json with", len(comments), "comments")
 ```
 
-`review.json` is the *machine* deliverable — an API-shaped payload (`verdict`, `counts`, `comments`) another tool (a GitHub bot, a CI gate, a notification hook) can consume without re-running Python logic. `indent=2` keeps the file human-readable too.
+`review.json` is the *machine* deliverable, an API-shaped payload (`verdict`, `counts`, `comments`) another tool (a GitHub bot, a CI gate, a notification hook) can consume without re-running Python logic. `indent=2` keeps the file human-readable too.
 
-**🎯 Expected output:** `Wrote review.json with 7 comments` — and the file opens with
+**🎯 Expected output:** `Wrote review.json with 7 comments`, and the file opens with
 
 ```json
 {
@@ -361,7 +361,7 @@ print("Wrote review.json with", len(comments), "comments")
 }
 ```
 
-**🩹 If it's off:** If the JSON is one incompressible line, `indent=2` was dropped. If `report["comments"]` renders as `[]`, you appended each comment dict to a *copy* (e.g. `c = review(pr)` twice) — call `review` once.
+**🩹 If it's off:** If the JSON is one incompressible line, `indent=2` was dropped. If `report["comments"]` renders as `[]`, you appended each comment dict to a *copy* (e.g. `c = review(pr)` twice), call `review` once.
 
 ### 4.2 The human summary
 
@@ -399,7 +399,7 @@ SUMMARY
   todo-marker: lines [12]
 ```
 
-**🩹 If it's off:** If the rule ordering is alphabetical regardless of severity, the `key` mapping lookup is broken — that index dance is fragile; simplify by storing `severity` inside each comment and sorting comments directly (`sorted(comments, key=lambda c: order[c["severity"]])`).
+**🩹 If it's off:** If the rule ordering is alphabetical regardless of severity, the `key` mapping lookup is broken, that index dance is fragile; simplify by storing `severity` inside each comment and sorting comments directly (`sorted(comments, key=lambda c: order[c["severity"]])`).
 
 ### 4.3 Verify the export
 
@@ -407,12 +407,12 @@ SUMMARY
 
 - ✅ `review.json` has verdict, counts, comments; 7 comments inside.
 - ✅ Human summary lists bare-except first (the only major), others grouped by rule with sorted line numbers.
-- ✅ JSON and summary tell the same story — identical counts both places.
+- ✅ JSON and summary tell the same story, identical counts both places.
 
 **🤔 Socratic Question(s)**
 
-- The `comment` dict already carries `severity`, yet the summary re-derives it from `RULES` by name. What bug in that lookup (a renamed rule) reveals about the *duplication* between data-source-of-truth and the report — and what one-line change would make comments self-describing?
-- A real bot posts `review.json` to an API endpoint. What fields would you *add* before shipping it to GitHub's API — e.g. `commit_sha`, `pull_request`, `author` — and why does an audit want them in the payload, not just in the log?
+- The `comment` dict already carries `severity`, yet the summary re-derives it from `RULES` by name. What bug in that lookup (a renamed rule) reveals about the *duplication* between data-source-of-truth and the report, and what one-line change would make comments self-describing?
+- A real bot posts `review.json` to an API endpoint. What fields would you *add* before shipping it to GitHub's API, e.g. `commit_sha`, `pull_request`, `author`, and why does an audit want them in the payload, not just in the log?
 
 ## Step 5: Re-review after fixes
 
@@ -420,7 +420,7 @@ The payoff: a developer fixes the blockers, the bot re-runs, and the verdict fli
 
 ### 5.1 Fix the diff
 
-**👟 Starter hint:** Patch the two `major`-adjacent problems — a specific exception instead of bare `except`, and a sane line 15.
+**👟 Starter hint:** Patch the two `major`-adjacent problems, a specific exception instead of bare `except`, and a sane line 15.
 
 ```python
 # review_bot.py (continued)
@@ -445,7 +445,7 @@ FIXED BY SEVERITY: {'minor': 3, 'info': 1}
 NEW VERDICT: APPROVE
 ```
 
-**🩹 If it's off:** If `major` still equals 1, the replace didn't land on `fixed_lines[7]` (index 7 is line 8 — check 0-based!). If minor is still 5, line 15 wasn't actually shortened to under 72 chars.
+**🩹 If it's off:** If `major` still equals 1, the replace didn't land on `fixed_lines[7]` (index 7 is line 8, check 0-based!). If minor is still 5, line 15 wasn't actually shortened to under 72 chars.
 
 ### 5.2 The full agent loop
 
@@ -468,7 +468,7 @@ print(v1, "->", v2)
 print("comments", len(r1["comments"]), "->", len(r2["comments"]))
 ```
 
-Wrapping the whole pipeline in one `run_review(pr, out=…)` makes the bot *reusable* — review, fix, re-review with two calls. The versioned output file (`review_v2.json`) is the audit trail the loop produces.
+Wrapping the whole pipeline in one `run_review(pr, out=…)` makes the bot *reusable*, review, fix, re-review with two calls. The versioned output file (`review_v2.json`) is the audit trail the loop produces.
 
 **🎯 Expected output:**
 
@@ -485,7 +485,7 @@ comments 7 -> 4
 
 - ✅ First review: 7 comments, `REJECT` (bare-except is major).
 - ✅ After fixing `except:` → `except ValueError:` and shortening line 15: 4 comments, `APPROVE`.
-- ✅ `review.json` and `review_v2.json` both written — the bot's full decision history survives.
+- ✅ `review.json` and `review_v2.json` both written, the bot's full decision history survives.
 
 **🤔 Socratic Question(s)**
 
@@ -497,27 +497,27 @@ comments 7 -> 4
 - **0-based vs 1-based drift.** The engine indexes `lines[i]` 0-based; every *comment* reports `i + 1`. One rule that forgets the `+1` pins its comment one line off forever.
 - **Context rules as lambdas.** `t_missing_docstring` demands `(lines, i)`; a lambda stuck checking `pr["lines"][0]` silently flags every `def` (or, worse, none). Give *all* rules the same `(lines, i)` signature.
 - **Bare-except false negatives.** `except:` is caught; `except Exception:` isn't. Decide the policy and encode the startswith exactly (`except:`), never `"except" in line` (which fires on comments like `# except: …`).
-- **Trailing-space = whitespace-only lines.** A line of three spaces fails `ln != ln.rstrip()` — flagged as trailing-space, which is arguably *blank-line* noise. Dedupe blank runs before the review loop if that offends the report.
-- **Mutating the specimen in place.** `fixed_lines = pr["lines"]` (no copy) would modify the *original* PR while you "fix" it — and `review.json` would silently reflect the edits. Copy before rewriting.
+- **Trailing-space = whitespace-only lines.** A line of three spaces fails `ln != ln.rstrip()`, flagged as trailing-space, which is arguably *blank-line* noise. Dedupe blank runs before the review loop if that offends the report.
+- **Mutating the specimen in place.** `fixed_lines = pr["lines"]` (no copy) would modify the *original* PR while you "fix" it, and `review.json` would silently reflect the edits. Copy before rewriting.
 - **Verifying JSON twice.** Opening `review.json` before `run_review` finished (or re-running `review` twice) gives stale or doubled payloads. One `run_review` call per state, one write.
 
 ## What you just built
 
-A code review bot end to end: a PR modeled as `{file, lines}`, a rules-as-data registry of six deterministic tests, a two-line engine that scores every rule × every line, per-line comments with severity and code snippet, a `REJECT`/`APPROVE` verdict gated on `major`, a JSON payload plus a human summary, and a re-review loop that flipped the verdict once the bare `except` was named. The transferable spine — **rules as data so the engine stays generic**, **comments pinned to 1-based line numbers with a programmatic payload**, **severity aggregation driving one boolean verdict**, **fixed diff re-reviewed to prove the loop** — is exactly how real CI review bots are built before (or alongside) any LLM judgment layer.
+A code review bot end to end: a PR modeled as `{file, lines}`, a rules-as-data registry of six deterministic tests, a two-line engine that scores every rule × every line, per-line comments with severity and code snippet, a `REJECT`/`APPROVE` verdict gated on `major`, a JSON payload plus a human summary, and a re-review loop that flipped the verdict once the bare `except` was named. The transferable spine, **rules as data so the engine stays generic**, **comments pinned to 1-based line numbers with a programmatic payload**, **severity aggregation driving one boolean verdict**, **fixed diff re-reviewed to prove the loop**, is exactly how real CI review bots are built before (or alongside) any LLM judgment layer.
 
 :::tip[Run a fuller version without any local setup]
-[`examples/code-review-bot/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/code-review-bot) in the course repo holds the complete bot as a notebook — PR model, rule registry, engine, JSON export, and the fix-and-re-review loop, runnable in Colab/Kaggle/Binder. Clone the repo or [open it in a Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course).
+[`examples/code-review-bot/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/code-review-bot) in the course repo holds the complete bot as a notebook, PR model, rule registry, engine, JSON export, and the fix-and-re-review loop, runnable in Colab/Kaggle/Binder. Clone the repo or [open it in a Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course).
 :::
 
 ## Where to go from here
 
-- Everything is data — **load rules from JSON** instead of hard coding `RULES`, so `review_bot.py` stays unchanged when a rule changes.
+- Everything is data, **load rules from JSON** instead of hard coding `RULES`, so `review_bot.py` stays unchanged when a rule changes.
 - Make the bot a **CLI**: `python3 review_bot.py payment.py [--out review.json]`, reading `sys.argv` like the earlier projects.
-- Add a **context rule**: flag `try:` blocks whose `except` is *bare* only when the broad width matters — or a rule that checks `return` on every branch of an `if`.
-- Compare against a real reviewer: run **ruff** (`pip install ruff`) on `payment.py` and map each `E…`/`W…` code back to your rules — a honest audit of what hand-written rules miss.
+- Add a **context rule**: flag `try:` blocks whose `except` is *bare* only when the broad width matters, or a rule that checks `return` on every branch of an `if`.
+- Compare against a real reviewer: run **ruff** (`pip install ruff`) on `payment.py` and map each `E…`/`W…` code back to your rules, a honest audit of what hand-written rules miss.
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

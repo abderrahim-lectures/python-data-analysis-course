@@ -17,9 +17,9 @@ prerequisites:
 
 # 🛠️ 🚀 Construye un Constructor de API REST
 
-La mayoría de las APIs del mundo real siguen el mismo patrón: recursos con endpoints CRUD, autenticación, validación y documentación. Escribir cada una a mano se vuelve tedioso rápido — este proyecto construye un generador de código que lee un esquema YAML y produce una aplicación FastAPI completa con autenticación JWT, validación Pydantic y documentación OpenAPI autogenerada, para que definas tu API una vez en YAML y obtengas un servidor funcional.
+La mayoría de las APIs del mundo real siguen el mismo patrón: recursos con endpoints CRUD, autenticación, validación y documentación. Escribir cada una a mano se vuelve tedioso rápido, este proyecto construye un generador de código que lee un esquema YAML y produce una aplicación FastAPI completa con autenticación JWT, validación Pydantic y documentación OpenAPI autogenerada, para que definas tu API una vez en YAML y obtengas un servidor funcional.
 
-Esto asume conceptos básicos de Python, POO intermedia y suficiente conocimiento de HTTP para saber qué hace una solicitud POST — nada de Análisis de Datos se requiere. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
+Esto asume conceptos básicos de Python, POO intermedia y suficiente conocimiento de HTTP para saber qué hace una solicitud POST, nada de Análisis de Datos se requiere. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 ## 🎯 Lo que harás
 
@@ -31,13 +31,13 @@ Esto asume conceptos básicos de Python, POO intermedia y suficiente conocimient
 
 ## Dónde ejecutar esto
 
-**Localmente con `uv`** es el único camino práctico — FastAPI necesita un servidor real (uvicorn) para ejecutarse, lo que significa una terminal real y un sistema de archivos real. Ningún parque de juegos basado en navegador puede alojar un servidor ASGI en ejecución.
+**Localmente con `uv`** es el único camino práctico, FastAPI necesita un servidor real (uvicorn) para ejecutarse, lo que significa una terminal real y un sistema de archivos real. Ningún parque de juegos basado en navegador puede alojar un servidor ASGI en ejecución.
 
 **GitHub Codespaces** funciona bien: abre [todo el repositorio del curso en un Codespace gratuito](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python y `uv` ya están instalados) y ejecuta los mismos comandos exactos de `uv` desde una terminal.
 
-**Google Colab** puede probar endpoints individuales con `nest_asyncio`, pero es una solución improvisada, no un encaje natural — sin servidor persistente, sin sistema de archivos real para tu proyecto. Úsalo para probar cosas, no para construir.
+**Google Colab** puede probar endpoints individuales con `nest_asyncio`, pero es una solución improvisada, no un encaje natural, sin servidor persistente, sin sistema de archivos real para tu proyecto. Úsalo para probar cosas, no para construir.
 
-- **Ejecútalo en el navegador.** Hay un cuaderno interactivo listo — ábrelo en Colab, Kaggle o Binder y sigue los pasos en orden.
+- **Ejecútalo en el navegador.** Hay un cuaderno interactivo listo, ábrelo en Colab, Kaggle o Binder y sigue los pasos en orden.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/rest-api-builder/notebook.es.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/rest-api-builder/notebook.es.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Frest-api-builder%2Fnotebook.es.ipynb)
@@ -48,7 +48,7 @@ Todo lo que necesitas antes de escribir una línea de la propia API: un Python r
 
 ### Instala `uv`
 
-`uv` es una sola herramienta que reemplaza la cadena habitual de "instalar Python, luego instalar pip, luego instalar una herramienta de entorno virtual, luego instalar paquetes" — puede instalar y gestionar versiones de Python por sí misma, junto con las dependencias de tu proyecto.
+`uv` es una sola herramienta que reemplaza la cadena habitual de "instalar Python, luego instalar pip, luego instalar una herramienta de entorno virtual, luego instalar paquetes", puede instalar y gestionar versiones de Python por sí misma, junto con las dependencias de tu proyecto.
 
 **macOS / Linux** (terminal):
 
@@ -86,7 +86,7 @@ uv add fastapi uvicorn pyyaml pydantic python-jose[cryptography] passlib[bcrypt]
 
 ## Paso 1: Analiza un esquema YAML en dataclasses de Python
 
-Toda API empieza con una forma: qué recursos existen, qué campos tiene cada uno y quién puede hacer qué con ellos. Un esquema YAML captura esa forma en una forma legible y editable por humanos — y analizarlo en dataclasses de Python es el puente entre una config de texto plano y el código real que genera rutas.
+Toda API empieza con una forma: qué recursos existen, qué campos tiene cada uno y quién puede hacer qué con ellos. Un esquema YAML captura esa forma en una forma legible y editable por humanos, y analizarlo en dataclasses de Python es el puente entre una config de texto plano y el código real que genera rutas.
 
 ### 1.1 Define y analiza el esquema
 
@@ -162,7 +162,7 @@ for name, res in resources.items():
         print(f"  - {f.name}: {f.field_type} (required={f.required})")
 ```
 
-**👟 Pista inicial:** Pega este bloque tal cual — el string `SCHEMA_YAML` define dos recursos (`user` y `post`) con campos, tipos y reglas de permiso. `yaml.safe_load` analiza el YAML en un dict simple, y las dos dataclasses (`FieldDef`, `ResourceDef`) te dan acceso tipado a cada pieza. El bucle de abajo imprime lo analizado para que puedas verificar que coincide con el YAML.
+**👟 Pista inicial:** Pega este bloque tal cual, el string `SCHEMA_YAML` define dos recursos (`user` y `post`) con campos, tipos y reglas de permiso. `yaml.safe_load` analiza el YAML en un dict simple, y las dos dataclasses (`FieldDef`, `ResourceDef`) te dan acceso tipado a cada pieza. El bucle de abajo imprime lo analizado para que puedas verificar que coincide con el YAML.
 
 **🎯 Resultado esperado:**
 ```
@@ -176,7 +176,7 @@ Resource: post
   - author_id: integer (required=True)
 ```
 
-**🩹 Si sale mal:** Un `yaml.YAMLError` significa que el string YAML tiene un problema de sintaxis — comprueba la indentación y los dos puntos. Un `KeyError: 'resources'` significa que el YAML cargó pero no tenía la clave de nivel superior que tu código espera — verifica que la clave externa `resources:` está presente. Si faltan campos, el valor por defecto `get("fields", {})` está vacío, así que la estructura del YAML importa.
+**🩹 Si sale mal:** Un `yaml.YAMLError` significa que el string YAML tiene un problema de sintaxis, comprueba la indentación y los dos puntos. Un `KeyError: 'resources'` significa que el YAML cargó pero no tenía la clave de nivel superior que tu código espera, verifica que la clave externa `resources:` está presente. Si faltan campos, el valor por defecto `get("fields", {})` está vacío, así que la estructura del YAML importa.
 
 ### 1.2 Verifica el análisis del esquema
 
@@ -188,12 +188,12 @@ Resource: post
 
 **🤔 Pregunta(s) socrática(s)**
 
-- ¿Qué pasaría si añadieras un tercer recurso al YAML (digamos `comment`) y volvieras a ejecutar `parse_schema` — necesitaría cambiar algún código fuera del propio string YAML? ¿Por qué es deseable?
+- ¿Qué pasaría si añadieras un tercer recurso al YAML (digamos `comment`) y volvieras a ejecutar `parse_schema`, necesitaría cambiar algún código fuera del propio string YAML? ¿Por qué es deseable?
 - El YAML usa `unique: true` en `email`. Tu `FieldDef` almacena esto como un bool, pero nada en el código impone la unicidad todavía. ¿Dónde en el pipeline de la API añadirías esa comprobación, y por qué es mejor atraparla ahí que a nivel de la base de datos?
 
 ## Paso 2: Genera modelos Pydantic a partir del esquema
 
-Los modelos Pydantic son lo que FastAPI usa para validar las solicitudes entrantes y las respuestas salientes — convierten JSON suelto en objetos Python tipados y comprobados. Construirlos dinámicamente a partir de tu esquema significa que añadir un nuevo recurso al YAML genera automáticamente la validación correcta sin tocar código Python.
+Los modelos Pydantic son lo que FastAPI usa para validar las solicitudes entrantes y las respuestas salientes, convierten JSON suelto en objetos Python tipados y comprobados. Construirlos dinámicamente a partir de tu esquema significa que añadir un nuevo recurso al YAML genera automáticamente la validación correcta sin tocar código Python.
 
 ### 2.1 Construye el generador de modelos
 
@@ -224,7 +224,7 @@ for name, model in models.items():
     print(f"{name}: {model.__name__} fields = {list(model.model_fields.keys())}")
 ```
 
-**👟 Pista inicial:** La llamada `type(...)` crea una clase de modelo Pydantic dinámicamente — `type("CreateUser", (BaseModel,), {"__annotations__": {...}})` es exactamente lo que hace `class CreateUser(BaseModel): ...`, pero el cuerpo de la clase viene del esquema en lugar de código escrito a mano. Los campos requeridos obtienen `...` (elipsis) como valor por defecto, que Pydantic trata como "este campo es obligatorio".
+**👟 Pista inicial:** La llamada `type(...)` crea una clase de modelo Pydantic dinámicamente, `type("CreateUser", (BaseModel,), {"__annotations__": {...}})` es exactamente lo que hace `class CreateUser(BaseModel): ...`, pero el cuerpo de la clase viene del esquema en lugar de código escrito a mano. Los campos requeridos obtienen `...` (elipsis) como valor por defecto, que Pydantic trata como "este campo es obligatorio".
 
 **🎯 Resultado esperado:**
 ```
@@ -232,7 +232,7 @@ user: CreateUser fields = ['name', 'email', 'role']
 post: CreatePost fields = ['title', 'content', 'author_id']
 ```
 
-**🩹 Si sale mal:** Si a `CreateUser` le faltan campos, la búsqueda en `TYPE_MAP` podría haberse degradado silenciosamente a `str` para un tipo no reconocido. Comprueba los valores `type:` de tu YAML contra el mapa. Si FastAPI se queja de la validación más tarde, la ramificación `(ftype, ...)` vs `(ftype | None, None)` es la parte a inspeccionar — un campo requerido sin `...` se vuelve opcional por accidente.
+**🩹 Si sale mal:** Si a `CreateUser` le faltan campos, la búsqueda en `TYPE_MAP` podría haberse degradado silenciosamente a `str` para un tipo no reconocido. Comprueba los valores `type:` de tu YAML contra el mapa. Si FastAPI se queja de la validación más tarde, la ramificación `(ftype, ...)` vs `(ftype | None, None)` es la parte a inspeccionar, un campo requerido sin `...` se vuelve opcional por accidente.
 
 ### 2.2 Verifica la generación de modelos
 
@@ -280,11 +280,11 @@ def verify_token(
 print(f"SECRET_KEY set (first 8 chars): {SECRET_KEY[:8]}...")
 ```
 
-**👟 Pista inicial:** `create_token` empaqueta un dict (nombre de usuario, rol) en un JWT firmado con un vencimiento de 30 minutos. `verify_token` es una dependencia de FastAPI — `Depends(security)` significa que FastAPI lee el encabezado `Authorization: Bearer <token>` automáticamente y pasa el payload decodificado a cualquier ruta que declare `user=Depends(verify_token)`.
+**👟 Pista inicial:** `create_token` empaqueta un dict (nombre de usuario, rol) en un JWT firmado con un vencimiento de 30 minutos. `verify_token` es una dependencia de FastAPI, `Depends(security)` significa que FastAPI lee el encabezado `Authorization: Bearer <token>` automáticamente y pasa el payload decodificado a cualquier ruta que declare `user=Depends(verify_token)`.
 
 **🎯 Resultado esperado:** `SECRET_KEY` imprime sus primeros 8 caracteres. Crear un token y decodificarlo inmediatamente hace un round-trip sin error.
 
-**🩹 Si sale mal:** Un `jose.JWTError` al decodificar significa que el token se firmó con una clave diferente — `secrets.token_hex(32)` genera una clave nueva cada vez que el módulo carga, así que los tokens de una ejecución anterior no se decodificarán. Un `403` de FastAPI (no `401`) significa que el encabezado `Authorization` falta por completo — el cliente no está enviando ningún token.
+**🩹 Si sale mal:** Un `jose.JWTError` al decodificar significa que el token se firmó con una clave diferente, `secrets.token_hex(32)` genera una clave nueva cada vez que el módulo carga, así que los tokens de una ejecución anterior no se decodificarán. Un `403` de FastAPI (no `401`) significa que el encabezado `Authorization` falta por completo, el cliente no está enviando ningún token.
 
 ### 3.2 Verifica la autenticación
 
@@ -297,7 +297,7 @@ print(f"SECRET_KEY set (first 8 chars): {SECRET_KEY[:8]}...")
 **🤔 Pregunta(s) socrática(s)**
 
 - Los tokens JWT llevan su vencimiento en el propio token (la reclamación `exp`). ¿Qué pasa si el token de un usuario vence a mitad de una solicitud? ¿Es un problema, y cómo lo manejaría una app real?
-- Este proyecto no almacena contraseñas de usuarios — `verify_token` comprueba la firma del token, no una base de datos. ¿Qué necesitarías añadir si quisieras soportar también el inicio de sesión basado en contraseña?
+- Este proyecto no almacena contraseñas de usuarios, `verify_token` comprueba la firma del token, no una base de datos. ¿Qué necesitarías añadir si quisieras soportar también el inicio de sesión basado en contraseña?
 
 ## Paso 4: Construye rutas CRUD con acceso basado en roles
 
@@ -320,11 +320,11 @@ def login(username: str, password: str):
     raise HTTPException(401, "Invalid credentials")
 ```
 
-**👟 Pista inicial:** La ruta de inicio de sesión está codificada a mano para un usuario con fines de demo — en una app real harías hash de las contraseñas con `passlib` y comprobarías contra una base de datos. El punto clave: `/login` devuelve un token JWT, que cada solicitud posterior envía en el encabezado `Authorization`.
+**👟 Pista inicial:** La ruta de inicio de sesión está codificada a mano para un usuario con fines de demo, en una app real harías hash de las contraseñas con `passlib` y comprobarías contra una base de datos. El punto clave: `/login` devuelve un token JWT, que cada solicitud posterior envía en el encabezado `Authorization`.
 
 **🎯 Resultado esperado:** `POST /login?username=admin&password=secret` devuelve `{"access_token": "eyJ..."}`.
 
-**🩹 Si sale mal:** Si el inicio de sesión devuelve `401` para credenciales correctas, comprueba la URL — `username` y `password` son parámetros de consulta aquí, no un cuerpo JSON. Si el token parece truncado, `secrets.token_hex(32)` genera 64 caracteres hexadecimales; el propio JWT será mucho más largo (encabezado + payload + firma).
+**🩹 Si sale mal:** Si el inicio de sesión devuelve `401` para credenciales correctas, comprueba la URL, `username` y `password` son parámetros de consulta aquí, no un cuerpo JSON. Si el token parece truncado, `secrets.token_hex(32)` genera 64 caracteres hexadecimales; el propio JWT será mucho más largo (encabezado + payload + firma).
 
 ### 4.2 Genera rutas CRUD a partir del esquema
 
@@ -366,11 +366,11 @@ for res in resources.values():
     generate_crud_routes(res)
 ```
 
-**👟 Pista inicial:** `generate_crud_routes` es una función que *define y registra* rutas de FastAPI — `@app.post(f"/{name}")` se llama dentro de la función, no en el nivel superior. Esta es la parte de generación dinámica: un bucle sobre `resources.values()` crea todas las rutas POST/GET/DELETE tanto para `user` como para `post`. Cada ruta declara `user=Depends(verify_token)` para que FastAPI ejecute la comprobación de auth antes de ejecutar el cuerpo de la ruta.
+**👟 Pista inicial:** `generate_crud_routes` es una función que *define y registra* rutas de FastAPI, `@app.post(f"/{name}")` se llama dentro de la función, no en el nivel superior. Esta es la parte de generación dinámica: un bucle sobre `resources.values()` crea todas las rutas POST/GET/DELETE tanto para `user` como para `post`. Cada ruta declara `user=Depends(verify_token)` para que FastAPI ejecute la comprobación de auth antes de ejecutar el cuerpo de la ruta.
 
 **🎯 Resultado esperado:** `POST /user` crea un usuario (con un token), `GET /user` lista todos los usuarios, `DELETE /user/1` elimina el usuario con id 1. Una solicitud sin un token válido obtiene un `401`.
 
-**🩹 Si sale mal:** Un `405 Method Not Allowed` significa que la ruta coincide pero el método HTTP no — comprueba si estás enviando GET a un endpoint solo-POST. Un `403 Insufficient permissions` significa que el campo `role` del token no está en la lista de permisos del recurso — comprueba la sección `permissions` del YAML y qué rol lleva tu token. Si el dict `db` está vacío entre solicitudes, estás ejecutando el servidor fuera del proceso de este script — `db` está en memoria y se reinicia cuando el proceso se reinicia.
+**🩹 Si sale mal:** Un `405 Method Not Allowed` significa que la ruta coincide pero el método HTTP no, comprueba si estás enviando GET a un endpoint solo-POST. Un `403 Insufficient permissions` significa que el campo `role` del token no está en la lista de permisos del recurso, comprueba la sección `permissions` del YAML y qué rol lleva tu token. Si el dict `db` está vacío entre solicitudes, estás ejecutando el servidor fuera del proceso de este script, `db` está en memoria y se reinicia cuando el proceso se reinicia.
 
 ### 4.3 Verifica las rutas CRUD
 
@@ -383,12 +383,12 @@ for res in resources.values():
 
 **🤔 Pregunta(s) socrática(s)**
 
-- El dict `db` está en memoria — ¿qué le pasa a tus datos cuando reinicias el servidor? ¿Por qué lo intercambiarías en una aplicación real?
+- El dict `db` está en memoria, ¿qué le pasa a tus datos cuando reinicias el servidor? ¿Por qué lo intercambiarías en una aplicación real?
 - ¿Por qué `generate_crud_routes` toma un objeto `ResourceDef` en lugar de solo un string con el nombre del recurso? ¿Qué información faltaría si solo tuviera el nombre?
 
 ## Paso 5: Prueba la API de punta a punta
 
-El `TestClient` de FastAPI te deja golpear cada endpoint sin iniciar un servidor real — ejecuta la app en-proceso y devuelve objetos de respuesta estilo `httpx`. Esta es la comprobación de "¿de verdad funciona?".
+El `TestClient` de FastAPI te deja golpear cada endpoint sin iniciar un servidor real, ejecuta la app en-proceso y devuelve objetos de respuesta estilo `httpx`. Esta es la comprobación de "¿de verdad funciona?".
 
 ### 5.1 Ejecuta la secuencia de prueba completa
 
@@ -429,7 +429,7 @@ resp = client.get("/user", headers={"Authorization": "Bearer bad_token"})
 print(f"Unauthorized: {resp.status_code}")
 ```
 
-**👟 Pista inicial:** `TestClient(app)` envuelve toda la app FastAPI — puedes hacer `POST` a `/login`, tomar el token y luego golpear cada otro endpoint con ese token en los encabezados. Ejecútalo como un solo script: el inicio de sesión ocurre primero, luego cada prueba se construye sobre la salida de la anterior.
+**👟 Pista inicial:** `TestClient(app)` envuelve toda la app FastAPI, puedes hacer `POST` a `/login`, tomar el token y luego golpear cada otro endpoint con ese token en los encabezados. Ejecútalo como un solo script: el inicio de sesión ocurre primero, luego cada prueba se construye sobre la salida de la anterior.
 
 **🎯 Resultado esperado:**
 ```
@@ -439,7 +439,7 @@ Created post: {'id': 1, 'title': 'Hello World', 'content': 'My first post', 'aut
 Unauthorized: 401
 ```
 
-**🩹 Si sale mal:** Un `422 Unprocessable Entity` significa que la validación automática de FastAPI rechazó el cuerpo de la solicitud — comprueba que las claves JSON coinciden exactamente con los campos del modelo Pydantic. Un `401` en los pasos de crear/listar significa que el token no se pasó correctamente — verifica el formato `Authorization: Bearer <token>`, no solo `Authorization: <token>`. Si `Users` devuelve `[]` en lugar del usuario creado, el dict `db` no se compartió entre las rutas de inicio de sesión y de creación — confirma que todas están en el mismo archivo de script.
+**🩹 Si sale mal:** Un `422 Unprocessable Entity` significa que la validación automática de FastAPI rechazó el cuerpo de la solicitud, comprueba que las claves JSON coinciden exactamente con los campos del modelo Pydantic. Un `401` en los pasos de crear/listar significa que el token no se pasó correctamente, verifica el formato `Authorization: Bearer <token>`, no solo `Authorization: <token>`. Si `Users` devuelve `[]` en lugar del usuario creado, el dict `db` no se compartió entre las rutas de inicio de sesión y de creación, confirma que todas están en el mismo archivo de script.
 
 ### 5.2 Verifica la punta a punta
 
@@ -451,19 +451,19 @@ Unauthorized: 401
 
 **🤔 Pregunta(s) socrática(s)**
 
-- Probaste con un token de admin. ¿Qué cambiaría si crearas un segundo token con `{"role": "viewer"}` e intentaras `POST /user` — qué respuesta esperarías, y por qué es importante probar ambos roles?
+- Probaste con un token de admin. ¿Qué cambiaría si crearas un segundo token con `{"role": "viewer"}` e intentaras `POST /user`, qué respuesta esperarías, y por qué es importante probar ambos roles?
 - `TestClient` se ejecuta en-proceso sin HTTP real. ¿Cuál es una cosa del comportamiento de tu API que esta prueba *no puede* atrapar y que un cliente `httpx` real contra un servidor en ejecución sí podría?
 
 ## ⚠️ Errores comunes
 
-- **`secrets.token_hex(32)` se regenera en cada carga de módulo.** Los tokens firmados con una clave no se decodificarán con la clave de la siguiente ejecución — esto es correcto para desarrollo (te obliga a re-iniciar sesión cada vez) pero se rompería en producción donde la clave debe persistir. Usa un secreto fijo de una variable de entorno para cualquier cosa más allá de las pruebas locales.
-- **`db` en memoria pierde todo al reiniciar.** El dict `db` es una conveniencia de enseñanza, no una solución de almacenamiento. Si estás probando persistencia (p. ej., "crea un usuario, reinicia el servidor, comprueba que se fue"), ese es el comportamiento esperado — no un bug.
-- **Falta `status_code=201` en las rutas POST.** FastAPI se comporta por defecto como `200 OK`. La especificación HTTP dice que `201 Created` es correcto para la creación de recursos — olvidarlo hace que las respuestas de tu API sean técnicamente incorrectas y más difíciles de probar con clientes que comprueban códigos de estado.
-- **Parámetros de consulta vs cuerpo JSON para `/login`.** La demo usa parámetros de consulta (`/login?username=admin&password=secret`) por simplicidad, pero las APIs reales envían las credenciales en un cuerpo JSON. Cambiarlo requiere cambiar la firma de la función para aceptar un modelo Pydantic en su lugar — un ejercicio útil pero un cambio que rompe la secuencia de prueba.
+- **`secrets.token_hex(32)` se regenera en cada carga de módulo.** Los tokens firmados con una clave no se decodificarán con la clave de la siguiente ejecución, esto es correcto para desarrollo (te obliga a re-iniciar sesión cada vez) pero se rompería en producción donde la clave debe persistir. Usa un secreto fijo de una variable de entorno para cualquier cosa más allá de las pruebas locales.
+- **`db` en memoria pierde todo al reiniciar.** El dict `db` es una conveniencia de enseñanza, no una solución de almacenamiento. Si estás probando persistencia (p. ej., "crea un usuario, reinicia el servidor, comprueba que se fue"), ese es el comportamiento esperado, no un bug.
+- **Falta `status_code=201` en las rutas POST.** FastAPI se comporta por defecto como `200 OK`. La especificación HTTP dice que `201 Created` es correcto para la creación de recursos, olvidarlo hace que las respuestas de tu API sean técnicamente incorrectas y más difíciles de probar con clientes que comprueban códigos de estado.
+- **Parámetros de consulta vs cuerpo JSON para `/login`.** La demo usa parámetros de consulta (`/login?username=admin&password=secret`) por simplicidad, pero las APIs reales envían las credenciales en un cuerpo JSON. Cambiarlo requiere cambiar la firma de la función para aceptar un modelo Pydantic en su lugar, un ejercicio útil pero un cambio que rompe la secuencia de prueba.
 
 ## Lo que acabas de construir
 
-Un generador de código que convierte un esquema YAML legible por humanos en una aplicación FastAPI funcional — autenticado con JWT, validado con Pydantic y autodocumentado. No escribiste a mano una sola ruta; el esquema impulsó todo. Este es el mismo patrón detrás de los generadores de API reales: una forma declarativa, un generador de código y la aplicación en tiempo de ejecución de las reglas que declaraste.
+Un generador de código que convierte un esquema YAML legible por humanos en una aplicación FastAPI funcional, autenticado con JWT, validado con Pydantic y autodocumentado. No escribiste a mano una sola ruta; el esquema impulsó todo. Este es el mismo patrón detrás de los generadores de API reales: una forma declarativa, un generador de código y la aplicación en tiempo de ejecución de las reglas que declaraste.
 
 :::tip[Ejecuta una versión más completa sin configuración local]
 [`examples/rest-api-builder/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/rest-api-builder) en el repositorio del curso es una versión más completa del código de arriba, con documentación OpenAPI habilitada, hash de contraseñas con `passlib` y endpoints adicionales para actualizaciones PUT y filtrado por consulta. Clónalo, o abre todo el repositorio en un [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) y ejecútalo desde ahí.
@@ -471,12 +471,12 @@ Un generador de código que convierte un esquema YAML legible por humanos en una
 
 ## A dónde ir desde aquí
 
-- Añade un endpoint `PUT /{resource}/{id}` que valide el cuerpo de la solicitud contra el esquema del recurso y devuelva el elemento actualizado — la función `generate_crud_routes` es exactamente donde va esto.
-- Añade parámetros de consulta al endpoint de lista (`GET /user?role=admin`) para que los usuarios puedan filtrar por cualquier campo sin escribir código nuevo — el esquema ya sabe qué campos existen y sus tipos.
-- Prueba añadir un tercer recurso al YAML (digamos `comment` con `text`, `author_id` y `post_id`) y observa cómo crece la API sin tocar ningún Python — ese es el pago del enfoque impulsado por esquema.
+- Añade un endpoint `PUT /{resource}/{id}` que valide el cuerpo de la solicitud contra el esquema del recurso y devuelva el elemento actualizado, la función `generate_crud_routes` es exactamente donde va esto.
+- Añade parámetros de consulta al endpoint de lista (`GET /user?role=admin`) para que los usuarios puedan filtrar por cualquier campo sin escribir código nuevo, el esquema ya sabe qué campos existen y sus tipos.
+- Prueba añadir un tercer recurso al YAML (digamos `comment` con `text`, `author_id` y `post_id`) y observa cómo crece la API sin tocar ningún Python, ese es el pago del enfoque impulsado por esquema.
 
 ## Comparte tu proyecto con la clase
 
-¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado — y su README tiene un recorrido completo, amigable para principiantes, para agregar el tuyo vía un **pull request**, incluso si nunca usaste git antes: hacer fork del repo, crear una rama, commitear tus archivos y abrir el PR, paso a paso. No se asume experiencia previa con git.
+¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado, y su README tiene un recorrido completo, amigable para principiantes, para agregar el tuyo vía un **pull request**, incluso si nunca usaste git antes: hacer fork del repo, crear una rama, commitear tus archivos y abrir el PR, paso a paso. No se asume experiencia previa con git.
 
 Bienvenido a escribir Python fuera del navegador. 🎓

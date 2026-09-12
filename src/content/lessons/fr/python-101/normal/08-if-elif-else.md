@@ -1,6 +1,6 @@
 ---
 title: "If / Elif / Else"
-description: "Faites bifurquer votre code selon des conditions — le fondement de la prise de décision en Python."
+description: "Faites bifurquer votre code selon des conditions, le fondement de la prise de décision en Python."
 module: "control-flow"
 order: 8
 difficulty: "beginner"
@@ -46,7 +46,7 @@ if score >= 60:
     print("Passing!")
 ```
 
-La déclaration commence par `if`, puis la condition, puis les deux points — les deux points disent à Python qu'un bloc arrive. Tout ce qui est indenté en dessous appartient à cette branche et ne s'exécute que si la condition tenait.
+La déclaration commence par `if`, puis la condition, puis les deux points, les deux points disent à Python qu'un bloc arrive. Tout ce qui est indenté en dessous appartient à cette branche et ne s'exécute que si la condition tenait.
 
 ## La fourche double
 
@@ -64,7 +64,7 @@ Une branche double est une partition des issues : la condition divise l'espace d
 
 ## La fourche multiple : elif
 
-Les formules par morceaux réelles ont plus de deux morceaux. `elif` — contraction de « else if » — ajoute d'autres conditions, vérifiées dans l'ordre, s'arrêtant à la première qui est `True` :
+Les formules par morceaux réelles ont plus de deux morceaux. `elif`, contraction de « else if », ajoute d'autres conditions, vérifiées dans l'ordre, s'arrêtant à la première qui est `True` :
 
 ```python
 score = 78
@@ -79,11 +79,11 @@ else:
 print(grade)  # B
 ```
 
-Remarquez l'économie : chaque condition `elif` n'a besoin que d'une borne inférieure, car les cas au-dessus sont déjà tranchés. Avec $s = 85$, le premier morceau échoue et le second réussit — les branches suivantes ne s'exécutent jamais. Une seule **branche** peut se déclencher, ce qui en fait une vraie fonction.
+Remarquez l'économie : chaque condition `elif` n'a besoin que d'une borne inférieure, car les cas au-dessus sont déjà tranchés. Avec $s = 85$, le premier morceau échoue et le second réussit, les branches suivantes ne s'exécutent jamais. Une seule **branche** peut se déclencher, ce qui en fait une vraie fonction.
 
 ## Véracité : des valeurs comme conditions
 
-La condition après `if` n'a pas besoin d'être une comparaison. Python demande : *« cette valeur est-elle vraie ou fausse ? »* — et la réponse est uniforme :
+La condition après `if` n'a pas besoin d'être une comparaison. Python demande : *« cette valeur est-elle vraie ou fausse ? »*, et la réponse est uniforme :
 
 ```python
 # Tous ces éléments sont falsy — ils se comportent comme False dans une condition :
@@ -111,7 +111,7 @@ if items:
     print("We have items")
 ```
 
-Une chaîne vide est falsy, donc `not name` vaut `True` ; une liste non vide est truthy, donc `if items` se déclenche. Vous sautez le `== ""` et le `!= []` explicites — la vérification est le vide lui-même.
+Une chaîne vide est falsy, donc `not name` vaut `True` ; une liste non vide est truthy, donc `if items` se déclenche. Vous sautez le `== ""` et le `!= []` explicites, la vérification est le vide lui-même.
 
 ## Imbriquer : quand une question dépend d'une autre
 
@@ -152,15 +152,15 @@ Il se lit comme la formule qu'il est. L'ordre des morceaux compte : chaque `elif
 
 ## Pièges courants
 
-- **Oublier les deux points** après `if`, `elif` ou `else` — sans eux, le bloc ne commence jamais.
+- **Oublier les deux points** après `if`, `elif` ou `else`, sans eux, le bloc ne commence jamais.
 - **`=` au lieu de `==`.** `if score = 60` est une erreur de syntaxe, exprès.
 - **Sur-imbriquer** quand une chaîne `elif` (ou un retour anticipé) exposerait la forme de la formule d'un seul regard.
-- **Le premier `True` gagne, pas la correspondance la plus spécifique.** Dans `if x > 5: ... elif x > 3: ...`, un `x = 4` entre dans la deuxième branche seulement si la première a déjà échoué — et une valeur sous 3 tombe dans `else`. Ordonner les morceaux du plus étroit au plus large est ce qui garde la formule correcte.
+- **Le premier `True` gagne, pas la correspondance la plus spécifique.** Dans `if x > 5: ... elif x > 3: ...`, un `x = 4` entre dans la deuxième branche seulement si la première a déjà échoué, et une valeur sous 3 tombe dans `else`. Ordonner les morceaux du plus étroit au plus large est ce qui garde la formule correcte.
 
 ## 🧩 Défis
 
 <details class="challenge">
-<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
+<summary>🧩 Défi, réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
 Écrivez `classify_temp(temp)` qui renvoie `"freezing"` sous $0$, `"cold"` dans $[0,15)$, `"warm"` dans $[15,30)$ et `"hot"` à partir de $30$.
@@ -171,12 +171,12 @@ Il se lit comme la formule qu'il est. L'ordre des morceaux compte : chaque `elif
 </details>
 
 <details class="challenge">
-<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
+<summary>🧩 Défi, réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
 Avec `text = "Hello, World!"`, imprimez `"uppercase"` si le texte est tout en majuscules, `"lowercase"` si tout en minuscules, `"mixed"` sinon.
 
-<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>if text.isupper(): print("uppercase") elif text.islower(): print("lowercase") else: print("mixed")</code> — l'ensemble complet des conditions forme une partition.</p>
+<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>if text.isupper(): print("uppercase") elif text.islower(): print("lowercase") else: print("mixed")</code>, l'ensemble complet des conditions forme une partition.</p>
 
 </div>
 </details>

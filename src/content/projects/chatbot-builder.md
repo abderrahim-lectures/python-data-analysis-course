@@ -18,7 +18,7 @@ learningObjectives:
 
 # Chatbot Builder
 
-Build a rule-based chatbot that recognises greetings, questions, and commands — and responds with personality, not just data. This project walks through regex pattern matching, response generation, conversation context, and a clean CLI loop, all from the standard library.
+Build a rule-based chatbot that recognises greetings, questions, and commands, and responds with personality, not just data. This project walks through regex pattern matching, response generation, conversation context, and a clean CLI loop, all from the standard library.
 
 This is optional and ungraded. See [Real-World Projects](/projects) for the full list.
 
@@ -33,18 +33,18 @@ This is optional and ungraded. See [Real-World Projects](/projects) for the full
 
 ## Where to run this
 
-- **Locally with `uv` (recommended).** This project uses only the standard library — no third-party packages — but `uv` keeps the project structure clean. The Setup section below walks through it.
+- **Locally with `uv` (recommended).** This project uses only the standard library, no third-party packages, but `uv` keeps the project structure clean. The Setup section below walks through it.
 - **Google Colab or Kaggle Notebooks.** Paste the code cells directly into a notebook. `input()` works for chat prompts, though the loop works best in a real terminal.
-- **JupyterLite playground.** Paste the code cells directly into a notebook — the chat loop works, but keep sessions short since there's no persistent terminal.
+- **JupyterLite playground.** Paste the code cells directly into a notebook, the chat loop works, but keep sessions short since there's no persistent terminal.
 
-- **Run it in your browser.** An interactive companion notebook is ready — open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
+- **Run it in your browser.** An interactive companion notebook is ready, open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/chatbot-builder/notebook.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/chatbot-builder/notebook.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fchatbot-builder%2Fnotebook.ipynb)
 
 ## Setup
 
-`uv` is a single tool that replaces the usual "install Python, then pip, then a virtual environment" chain — it can install and manage Python versions alongside your project's dependencies.
+`uv` is a single tool that replaces the usual "install Python, then pip, then a virtual environment" chain, it can install and manage Python versions alongside your project's dependencies.
 
 **macOS / Linux** (terminal):
 
@@ -71,11 +71,11 @@ uv init chatbot
 cd chatbot
 ```
 
-No packages to add — the chatbot uses only the Python standard library (`re`, `random`, `dataclasses`, `collections`).
+No packages to add, the chatbot uses only the Python standard library (`re`, `random`, `dataclasses`, `collections`).
 
-## Step 1 — Match user input with regex
+## Step 1, Match user input with regex
 
-Pattern matching is how the bot figures out what the user means. A user can type "Hello!", "hi", "hey there", or "good morning" — but the intent behind all of them is a greeting. Regex lets us collapse those into one pattern.
+Pattern matching is how the bot figures out what the user means. A user can type "Hello!", "hi", "hey there", or "good morning", but the intent behind all of them is a greeting. Regex lets us collapse those into one pattern.
 
 ### 1.1 Define intent patterns
 
@@ -160,7 +160,7 @@ time
 None
 ```
 
-**🩹 If it's off:** If every input returns `None`, you forgot `re.IGNORECASE` — "Hello" won't match `r"\bhi\b"` when the regex is case-sensitive and the user capitalises the first letter. If `greeting` matches "good morning" but not "goodnight", check that `goodnight` isn't in your farewell list or a greeting pattern — it's not a substring of the pattern `good\s*(morning|afternoon|evening)`.
+**🩹 If it's off:** If every input returns `None`, you forgot `re.IGNORECASE`, "Hello" won't match `r"\bhi\b"` when the regex is case-sensitive and the user capitalises the first letter. If `greeting` matches "good morning" but not "goodnight", check that `goodnight` isn't in your farewell list or a greeting pattern, it's not a substring of the pattern `good\s*(morning|afternoon|evening)`.
 
 ### 1.2 Handle regex groups for extracted data
 
@@ -208,7 +208,7 @@ greeting good evening ('evening',)
 name what's your name ()
 ```
 
-**🩹 If it's off:** If `groups` is `()` when you expect a capture, the parentheses in your regex are non-capturing groups — use `(...)` not `(?:...)` for groups you want to extract. If `matched_text` is empty, `re.search` found a match at position 0 but the `\b` word boundary might be stripping the match — try removing the `\b` anchors from the specific pattern.
+**🩹 If it's off:** If `groups` is `()` when you expect a capture, the parentheses in your regex are non-capturing groups, use `(...)` not `(?:...)` for groups you want to extract. If `matched_text` is empty, `re.search` found a match at position 0 but the `\b` word boundary might be stripping the match, try removing the `\b` anchors from the specific pattern.
 
 ### 1.3 Verify the classifier
 
@@ -225,7 +225,7 @@ name what's your name ()
 - Why does each intent map to a *list* of patterns instead of a single pattern? What happens when a user types "hey" versus "good afternoon"?
 - What's the difference between `re.search` and `re.match` here? Would switching to `re.match` break anything?
 
-## Step 2 — Generate responses from templates
+## Step 2, Generate responses from templates
 
 Now that the bot knows *what* the user means, it needs to say something back. A response system built from templates and random choices keeps the bot from sounding robotic.
 
@@ -317,11 +317,11 @@ Hey there! How can I help?
 Hi! Ready to chat.
 ```
 
-**🩹 If it's off:** If you get an empty string, the intent name doesn't match any key in `RESPONSES` — check for typos like `"Greeting"` (capital G) versus `"greeting"`. If the same response appears every time, you forgot `random.choice` and are using index `[0]` or a fixed entry instead.
+**🩹 If it's off:** If you get an empty string, the intent name doesn't match any key in `RESPONSES`, check for typos like `"Greeting"` (capital G) versus `"greeting"`. If the same response appears every time, you forgot `random.choice` and are using index `[0]` or a fixed entry instead.
 
 ### 2.2 Add dynamic responses with f-strings
 
-Some responses need live data — the time and date change every second. Using f-strings in the template strings would evaluate at import time, freezing the values. Instead, use callable responses.
+Some responses need live data, the time and date change every second. Using f-strings in the template strings would evaluate at import time, freezing the values. Instead, use callable responses.
 
 **👟 Starter hint:** Replace static strings with lambdas for intents that need dynamic data:
 
@@ -359,9 +359,9 @@ time.sleep(2)
 print(get_response("time"))
 ```
 
-Both print the same time (only 2 seconds apart), but if you wait a full minute between calls, the times will differ — proof the lambda is evaluated on each call, not once at import.
+Both print the same time (only 2 seconds apart), but if you wait a full minute between calls, the times will differ, proof the lambda is evaluated on each call, not once at import.
 
-**🩹 If it's off:** If `callable(choice)` returns `False` for a lambda, check that the lambda is defined correctly — `lambda: f"..."` not `f"..."` (a bare f-string is a string, not a function). If you get `TypeError: 'str' object is not callable`, a static string got mixed into a list that's now being called — make sure only lambda entries are in the dynamic lists.
+**🩹 If it's off:** If `callable(choice)` returns `False` for a lambda, check that the lambda is defined correctly, `lambda: f"..."` not `f"..."` (a bare f-string is a string, not a function). If you get `TypeError: 'str' object is not callable`, a static string got mixed into a list that's now being called, make sure only lambda entries are in the dynamic lists.
 
 ### 2.3 Verify response generation
 
@@ -377,9 +377,9 @@ Both print the same time (only 2 seconds apart), but if you wait a full minute b
 - Why use `callable()` to check each response instead of putting all dynamic responses in a separate dictionary? What's the advantage of mixing strings and lambdas in one list?
 - If you wanted the bot to remember *what* the user asked about (not just the intent), where would you store that information?
 
-## Step 3 — Track conversation context
+## Step 3, Track conversation context
 
-A chatbot that only looks at the current message is forgetful. Context tracking lets the bot remember what the user said earlier — so follow-up questions like "what about tomorrow?" or "and you?" make sense.
+A chatbot that only looks at the current message is forgetful. Context tracking lets the bot remember what the user said earlier, so follow-up questions like "what about tomorrow?" or "and you?" make sense.
 
 ### 3.1 Define the conversation context class
 
@@ -457,7 +457,7 @@ Recent intents: ['greeting', 'time', 'mood']
 Was recent greeting? True
 ```
 
-**🩹 If it's off:** If `turn_count` is always 1, you forgot to call `update()` — it doesn't increment automatically. If `message_history` is longer than 10 entries, the `deque(maxlen=10)` limit isn't working — check that you're passing `maxlen=10` in the `default_factory`, not in the class body as a default value.
+**🩹 If it's off:** If `turn_count` is always 1, you forgot to call `update()`, it doesn't increment automatically. If `message_history` is longer than 10 entries, the `deque(maxlen=10)` limit isn't working, check that you're passing `maxlen=10` in the `default_factory`, not in the class body as a default value.
 
 ### 3.2 Use context to improve responses
 
@@ -494,7 +494,7 @@ Should print:
 date
 ```
 
-**🩹 If it's off:** If the adjusted intent is still `"question"` when you expect `"date"`, check the `context.last_intent` — it must be `"time"` for the first branch to trigger. If `user_message.lower()` doesn't contain "tomorrow", the substring check won't match — make sure the user's input actually contains the word.
+**🩹 If it's off:** If the adjusted intent is still `"question"` when you expect `"date"`, check the `context.last_intent`, it must be `"time"` for the first branch to trigger. If `user_message.lower()` doesn't contain "tomorrow", the substring check won't match, make sure the user's input actually contains the word.
 
 ### 3.3 Verify context tracking
 
@@ -511,9 +511,9 @@ date
 - Why cap `message_history` at 10 entries with a `deque`? What happens to memory usage if you store every message in a regular list for a long conversation?
 - `context_adjusted_intent` only checks `last_intent`. What would change if you wanted to consider the last *three* intents instead of just one?
 
-## Step 4 — Add personality
+## Step 4, Add personality
 
-A bot that answers every question with a flat statement feels lifeless. Personality comes from consistent traits — a name, a tone, small talk habits, and mood tracking that shifts over the conversation.
+A bot that answers every question with a flat statement feels lifeless. Personality comes from consistent traits, a name, a tone, small talk habits, and mood tracking that shifts over the conversation.
 
 ### 4.1 Create a personality class
 
@@ -594,7 +594,7 @@ I'm in a great mood! Ready to help.
 After shift: curious
 ```
 
-**🩹 If it's off:** If the second greet is identical to the first, `greeting_count` isn't incrementing — make sure `self.greeting_count += 1` is inside the method, not at module level. If `shift_mood` never produces "excited", its weight of 1 makes it rare — run the shift a few times and it will appear eventually.
+**🩹 If it's off:** If the second greet is identical to the first, `greeting_count` isn't incrementing, make sure `self.greeting_count += 1` is inside the method, not at module level. If `shift_mood` never produces "excited", its weight of 1 makes it rare, run the shift a few times and it will appear eventually.
 
 ### 4.2 Combine personality with responses
 
@@ -662,7 +662,7 @@ We meet again! I'm Chatbot, remember?
 Hey again! Back for more? I'm Chatbot.
 ```
 
-**🩹 If it's off:** If mood prefixes never appear, `random.random() < 0.3` means they only show up 30% of the time — run it more often. If greetings return the static template instead of `personality.greet()`, you forgot the `if intent == "greeting": return personality.greet()` branch in the updated `get_response`.
+**🩹 If it's off:** If mood prefixes never appear, `random.random() < 0.3` means they only show up 30% of the time, run it more often. If greetings return the static template instead of `personality.greet()`, you forgot the `if intent == "greeting": return personality.greet()` branch in the updated `get_response`.
 
 ### 4.3 Verify personality
 
@@ -676,15 +676,15 @@ Hey again! Back for more? I'm Chatbot.
 **🤔 Socratic Question(s)**
 
 - Why use weighted random choices for `shift_mood` instead of a uniform random pick? What does that model about real personality?
-- If you wanted the bot to remember a user's name from earlier in the conversation, where would you store it — in `Personality` or in `ChatContext`? Why?
+- If you wanted the bot to remember a user's name from earlier in the conversation, where would you store it, in `Personality` or in `ChatContext`? Why?
 
-## Step 5 — Handle fallbacks
+## Step 5, Handle fallbacks
 
 No pattern will ever cover every possible input. A bot that crashes or responds with nothing on unexpected input feels broken. Graceful fallbacks keep the conversation going.
 
 ### 5.1 Build a fallback response system
 
-**👟 Starter hint:** Create a `fallback.py` module that generates helpful responses for unmatched input. Track how many fallbacks happen in a row — if the bot fails to understand too many times in a row, offer to help more directly.
+**👟 Starter hint:** Create a `fallback.py` module that generates helpful responses for unmatched input. Track how many fallbacks happen in a row, if the bot fails to understand too many times in a row, offer to help more directly.
 
 ```python
 # fallback.py
@@ -757,7 +757,7 @@ It seems like we're having trouble connecting. Would you like me to list what I 
 {'consecutive': 3, 'total': 3}
 ```
 
-**🩹 If it's off:** If the offer-help response never appears, check that `consecutive_fallbacks` is being incremented — if `record_success()` is called between fallbacks, the counter resets. If the stats show `consecutive: 3` but you only called `record_fallback` twice, check that `record_success` isn't being called when it shouldn't be.
+**🩹 If it's off:** If the offer-help response never appears, check that `consecutive_fallbacks` is being incremented, if `record_success()` is called between fallbacks, the counter resets. If the stats show `consecutive: 3` but you only called `record_fallback` twice, check that `record_success` isn't being called when it shouldn't be.
 
 ### 5.2 Combine fallbacks with the main classifier
 
@@ -790,7 +790,7 @@ def respond(user_input: str, context: ChatContext,
     return response
 ```
 
-Wait — that resets the tracker on *success*, but the fallback tracker should reset on success, not on failure. Let's fix that:
+Wait, that resets the tracker on *success*, but the fallback tracker should reset on success, not on failure. Let's fix that:
 
 ```python
 def respond(user_input: str, context: ChatContext,
@@ -822,9 +822,9 @@ You: hello
 Bot: Hi! I'm Chatbot. Nice to meet you!
 ```
 
-After the successful "hello", the consecutive counter resets — the next unknown input starts from the first fallback message again.
+After the successful "hello", the consecutive counter resets, the next unknown input starts from the first fallback message again.
 
-**🩹 If it's off:** If the fallback counter never resets after a successful input, `tracker.record_success()` isn't being called — make sure the `if match is None: ... else: tracker.record_success()` branch is correct. If the bot responds with an empty string for unknown input, the fallback tracker's `record_fallback()` isn't returning a string — check the import.
+**🩹 If it's off:** If the fallback counter never resets after a successful input, `tracker.record_success()` isn't being called, make sure the `if match is None: ... else: tracker.record_success()` branch is correct. If the bot responds with an empty string for unknown input, the fallback tracker's `record_fallback()` isn't returning a string, check the import.
 
 ### 5.3 Verify fallback handling
 
@@ -838,9 +838,9 @@ After the successful "hello", the consecutive counter resets — the next unknow
 **🤔 Socratic Question(s)**
 
 - Why track consecutive fallbacks instead of just total fallbacks? What would happen if the bot offered help after every single unknown input?
-- If you wanted the bot to log which inputs triggered fallbacks (for later analysis), where would you store that log — in `FallbackTracker`, `ChatContext`, or a separate module?
+- If you wanted the bot to log which inputs triggered fallbacks (for later analysis), where would you store that log, in `FallbackTracker`, `ChatContext`, or a separate module?
 
-## Step 6 — Build the chat loop
+## Step 6, Build the chat loop
 
 All the pieces are ready. This step wires them into a single `main()` function with a clean REPL loop, input validation, and a graceful exit.
 
@@ -958,11 +958,11 @@ Fallbacks: 1
 Final mood: curious
 ```
 
-**🩹 If it's off:** If `main.py` crashes with `ModuleNotFoundError`, the other modules (`patterns.py`, `responses.py`, `context.py`, `personality.py`, `fallback.py`) aren't in the same directory — keep all files in the project root. If the REPL exits immediately, `input()` is raising `EOFError` — this happens in some notebook environments; run it in a real terminal instead.
+**🩹 If it's off:** If `main.py` crashes with `ModuleNotFoundError`, the other modules (`patterns.py`, `responses.py`, `context.py`, `personality.py`, `fallback.py`) aren't in the same directory, keep all files in the project root. If the REPL exits immediately, `input()` is raising `EOFError`, this happens in some notebook environments; run it in a real terminal instead.
 
 ### 6.2 Add input validation and edge cases
 
-**👟 Starter hint:** Guard against common user mistakes — empty input, extremely long messages, and control characters:
+**👟 Starter hint:** Guard against common user mistakes, empty input, extremely long messages, and control characters:
 
 ```python
 def validate_input(text: str) -> str | None:
@@ -998,7 +998,7 @@ while True:
 
 **🎯 Expected output:** Pressing Enter without typing anything silently continues the loop. Typing 600 characters truncates to 500. Control characters are stripped.
 
-**🩹 If it's off:** If pressing Enter causes the bot to respond with a fallback, the empty-string check is after `validate_input` instead of before — make sure `validate_input` returns `None` for empty strings and the main loop skips `None` values.
+**🩹 If it's off:** If pressing Enter causes the bot to respond with a fallback, the empty-string check is after `validate_input` instead of before, make sure `validate_input` returns `None` for empty strings and the main loop skips `None` values.
 
 ### 6.3 Verify the complete chatbot
 
@@ -1016,24 +1016,24 @@ while True:
 
 - **Forgetting `re.IGNORECASE`.** Without it, "Hello" won't match `r"\bhi\b"` because regex is case-sensitive by default. Every `re.search` and `re.match` call in the classifier needs this flag.
 - **Mixing f-strings and lambdas in response templates.** An f-string like `f"The time is {datetime.now()}"` evaluates *once at import time*, freezing the value. Use `lambda: f"..."` instead so it evaluates on each call.
-- **The fallback counter resetting too often.** `record_success()` resets the consecutive counter — if you call it for every input (including fallbacks), the "3 in a row" threshold never triggers. Only call it when the classifier actually matches.
+- **The fallback counter resetting too often.** `record_success()` resets the consecutive counter, if you call it for every input (including fallbacks), the "3 in a row" threshold never triggers. Only call it when the classifier actually matches.
 - **`deque(maxlen=10)` not working.** The `maxlen` must be passed to the `default_factory` lambda, not as a class-level default: `field(default_factory=lambda: deque(maxlen=10))`, not `deque: deque = deque(maxlen=10)`.
-- **REX in notebooks.** `input()` in Colab/Kaggle works, but the chat loop doesn't exit cleanly on `Ctrl+C` — it raises `KeyboardInterrupt` which you need to catch. The `try/except (EOFError, KeyboardInterrupt)` in `main.py` handles this.
+- **REX in notebooks.** `input()` in Colab/Kaggle works, but the chat loop doesn't exit cleanly on `Ctrl+C`, it raises `KeyboardInterrupt` which you need to catch. The `try/except (EOFError, KeyboardInterrupt)` in `main.py` handles this.
 
 ## What you just built
 
-A rule-based chatbot built entirely from the Python standard library: regex pattern matching for intent classification, template-based response generation with dynamic data, conversation context tracking across turns, personality with mood shifts, and a fallback system that escalates help after repeated misses. Five modules — `patterns.py`, `responses.py`, `context.py`, `personality.py`, `fallback.py` — each tested independently before being wired together in `main.py`. The chatbot recognises greetings, questions about time/date/name/mood, help requests, and farewells, and responds with personality-driven variation instead of fixed strings.
+A rule-based chatbot built entirely from the Python standard library: regex pattern matching for intent classification, template-based response generation with dynamic data, conversation context tracking across turns, personality with mood shifts, and a fallback system that escalates help after repeated misses. Five modules, `patterns.py`, `responses.py`, `context.py`, `personality.py`, `fallback.py`, each tested independently before being wired together in `main.py`. The chatbot recognises greetings, questions about time/date/name/mood, help requests, and farewells, and responds with personality-driven variation instead of fixed strings.
 
 ## Where to go from here
 
-- **Add a simple knowledge base.** Store facts the bot can look up — "Python was created by Guido van Rossum" — and respond to `question` intents by searching the knowledge base instead of giving a generic "I don't know."
+- **Add a simple knowledge base.** Store facts the bot can look up, "Python was created by Guido van Rossum", and respond to `question` intents by searching the knowledge base instead of giving a generic "I don't know."
 - **Persistent conversation history.** Save the chat log to a JSON file so you can review past conversations, or load a previous session's context when the bot restarts.
-- **Multi-user support.** Key the `ChatContext` by user ID instead of having one global context — different users get independent conversation histories.
+- **Multi-user support.** Key the `ChatContext` by user ID instead of having one global context, different users get independent conversation histories.
 - **Regex improvements.** Use `re.VERBOSE` mode to write more readable patterns with comments, or compile patterns with `re.compile` for better performance on large pattern lists.
-- **LLM fallback.** When the regex classifier returns `None`, pass the input to a free-tier LLM instead of a static fallback response — the best of both worlds: fast pattern matching for common cases, flexible AI for everything else.
+- **LLM fallback.** When the regex classifier returns `None`, pass the input to a free-tier LLM instead of a static fallback response, the best of both worlds: fast pattern matching for common cases, flexible AI for everything else.
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

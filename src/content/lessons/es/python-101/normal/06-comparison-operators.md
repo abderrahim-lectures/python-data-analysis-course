@@ -1,6 +1,6 @@
 ---
 title: "Operadores de comparación"
-description: "Comprueba igualdad, desigualdad y orden — y encadena comparaciones en una sola expresión."
+description: "Comprueba igualdad, desigualdad y orden, y encadena comparaciones en una sola expresión."
 module: "operators"
 order: 6
 difficulty: "beginner"
@@ -22,7 +22,7 @@ track: "normal"
 
 ## La computadora, puesta a decidir
 
-Una evaluación `2 + 3` produce un número. Pero la mayor parte de lo que un programa necesita saber no es un número — es una *decisión*. ¿La nota aprueba? ¿El nombre de usuario está tomado? ¿La temperatura está dentro del rango? Los operadores de comparación son la rama de la familia aritmética que produce una respuesta del conjunto $\{\mathrm{True}, \mathrm{False}\}$ en lugar de $\mathbb{R}$.
+Una evaluación `2 + 3` produce un número. Pero la mayor parte de lo que un programa necesita saber no es un número, es una *decisión*. ¿La nota aprueba? ¿El nombre de usuario está tomado? ¿La temperatura está dentro del rango? Los operadores de comparación son la rama de la familia aritmética que produce una respuesta del conjunto $\{\mathrm{True}, \mathrm{False}\}$ en lugar de $\mathbb{R}$.
 
 ## Los seis operadores de comparación
 
@@ -49,7 +49,7 @@ x = 5
 0 <= x < 3     # False — falla la segunda
 ```
 
-Es una sola expresión, evaluada con el mismo emparejamiento que leerías: $0 \leq x$ y después $x < 10$, con el valor del medio calculado una sola vez. La comparación encadenada equivale a $0 \leq x$ `and` $x < 10$ — pero la forma encadenada se lee como la matemática de la que salió.
+Es una sola expresión, evaluada con el mismo emparejamiento que leerías: $0 \leq x$ y después $x < 10$, con el valor del medio calculado una sola vez. La comparación encadenada equivale a $0 \leq x$ `and` $x < 10$, pero la forma encadenada se lee como la matemática de la que salió.
 
 ## `==` pregunta por el contenido; `is` pregunta por la identidad
 
@@ -65,7 +65,7 @@ c = a
 a is c    # True  — el mismo objeto
 ```
 
-`==` compara los valores que se llevan; `is` compara las direcciones de memoria. Varias cajas pueden por casualidad tener la misma lista; solo hay un objeto. Los dos coinciden para cosas pequeñas (como los enteros pequeños que Python cachea) y divergen para todo lo demás, así que la regla es firme: usa `==` para contenido y reserva `is` para el único singleton que no tiene contenido que comparar — `None`:
+`==` compara los valores que se llevan; `is` compara las direcciones de memoria. Varias cajas pueden por casualidad tener la misma lista; solo hay un objeto. Los dos coinciden para cosas pequeñas (como los enteros pequeños que Python cachea) y divergen para todo lo demás, así que la regla es firme: usa `==` para contenido y reserva `is` para el único singleton que no tiene contenido que comparar, `None`:
 
 ```python
 if x is None:    # correcto
@@ -74,7 +74,7 @@ if x == None:    # funciona, pero te haces la pregunta equivocada
 
 ## Comparar entre tipos
 
-Traer valores de conjuntos distintos a una comparación — $\mathbb{Z}$ frente a $\mathbb{S}$ — sigue una política fija:
+Traer valores de conjuntos distintos a una comparación, $\mathbb{Z}$ frente a $\mathbb{S}$, sigue una política fija:
 
 ```python
 5 == 5.0      # True  — la igualdad numérica ignora el tipo
@@ -99,15 +99,15 @@ El patrón es un par de preguntas y una decisión: ¿son exactamente iguales? `F
 
 ## Errores comunes
 
-- **`=` frente a `==`.** `if score = 60:` es un error de sintaxis — Python no te deja asignar dentro de una condición por accidente. El signo duplicado es una barandilla, no una formalidad.
+- **`=` frente a `==`.** `if score = 60:` es un error de sintaxis, Python no te deja asignar dentro de una condición por accidente. El signo duplicado es una barandilla, no una formalidad.
 - **Igualdad de punto flotante.** `0.1 + 0.2 == 0.3` es `False`. La representación binaria de $0.1$ es infinita, así que la suma cae en $0.30000000000000004$. Compara dentro de una tolerancia en su lugar: `abs((0.1 + 0.2) - 0.3) < 1e-10`.
 - **`==` con `None`.** `x == None` funciona de casualidad; `x is None` es la pregunta que de verdad quieres hacer.
-- **La igualdad de floats necesita tolerancia; el dinero necesita unidades enteras.** `0.1 + 0.2 == 0.3` falla (`False`), así que compara dentro de `abs(a - b) < 1e-9` o cuenta en centavos — `120 == 12 * 10` es exacto.
+- **La igualdad de floats necesita tolerancia; el dinero necesita unidades enteras.** `0.1 + 0.2 == 0.3` falla (`False`), así que compara dentro de `abs(a - b) < 1e-9` o cuenta en centavos, `120 == 12 * 10` es exacto.
 
 ## 🧩 Desafíos
 
 <details class="challenge">
-<summary>🧩 Desafío — piensa primero, luego revela</summary>
+<summary>🧩 Desafío, piensa primero, luego revela</summary>
 <div class="challenge__body">
 
 Predice cada resultado sin ejecutar: `5 == 5.0`, `"5" == 5`, `5 < "6"`.
@@ -118,18 +118,18 @@ Predice cada resultado sin ejecutar: `5 == 5.0`, `"5" == 5`, `5 < "6"`.
 </details>
 
 <details class="challenge">
-<summary>🧩 Desafío — piensa primero, luego revela</summary>
+<summary>🧩 Desafío, piensa primero, luego revela</summary>
 <div class="challenge__body">
 
 Escribe una sola comparación encadenada que compruebe si un número $n$ está en $[1, 100]$, sin usar `and`.
 
-<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>1 &lt;= n &lt;= 100</code> — la forma encadenada se lee exactamente como el intervalo $1 \leq n \leq 100$.</p>
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>1 &lt;= n &lt;= 100</code>, la forma encadenada se lee exactamente como el intervalo $1 \leq n \leq 100$.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Desafío — piensa primero, luego revela</summary>
+<summary>🧩 Desafío, piensa primero, luego revela</summary>
 <div class="challenge__body">
 
 ¿Por qué `0.1 + 0.2 == 0.3` da `False`? ¿Cómo escribirías una prueba de igualdad de punto flotante correcta?

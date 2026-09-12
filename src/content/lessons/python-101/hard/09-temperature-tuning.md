@@ -44,7 +44,7 @@ quiz:
 ---
 Controlling creativity
 
-A language model with fixed probabilities always makes the same kind of output — it follows the corpus exactly. But sometimes you want more creative, surprising text, and sometimes you want the most predictable, safe output. **Temperature** is the knob that controls this trade-off.
+A language model with fixed probabilities always makes the same kind of output, it follows the corpus exactly. But sometimes you want more creative, surprising text, and sometimes you want the most predictable, safe output. **Temperature** is the knob that controls this trade-off.
 
 The cells below reuse the `load_corpus`, `tokenize`, `build_bigrams`, and `normalize_bigrams` helpers from lessons 01–06, the `sample_next` helper from lesson 07, and a temperature-aware `generate_text` (the same implementation you'll see assembled in lesson 10). Every lesson page starts with a fresh Python session, so run this setup cell first:
 
@@ -123,9 +123,9 @@ model = normalize_bigrams(build_bigrams(tokenize(" ".join(texts))))
 
 Temperature is a number (usually between 0.1 and 2.0) that scales the model's probability distribution before sampling:
 
-- **Low temperature** (e.g., 0.2): Sharpens the distribution — the most probable word becomes even more likely, and rare words become nearly impossible. Output is repetitive and predictable.
-- **Temperature 1.0**: No change — the original probabilities are used as-is.
-- **High temperature** (e.g., 1.5): Flattens the distribution — all words become more equally likely. Output is more random, creative, and potentially nonsensical.
+- **Low temperature** (e.g., 0.2): Sharpens the distribution, the most probable word becomes even more likely, and rare words become nearly impossible. Output is repetitive and predictable.
+- **Temperature 1.0**: No change, the original probabilities are used as-is.
+- **High temperature** (e.g., 1.5): Flattens the distribution, all words become more equally likely. Output is more random, creative, and potentially nonsensical.
 
 ### The math: scaling log-probabilities
 
@@ -150,7 +150,7 @@ def apply_temperature(probabilities, temperature):
     return [e / total for e in exp_scaled]
 ```
 
-The `math.exp(s - max_scaled)` trick prevents overflow — without subtracting the maximum, the exponentials could be astronomically large.
+The `math.exp(s - max_scaled)` trick prevents overflow, without subtracting the maximum, the exponentials could be astronomically large.
 
 ### Example: three-word distribution
 

@@ -19,9 +19,9 @@ learningObjectives:
 
 # 🛠️ 🎬 Construire un Moteur d'Animation
 
-L'animation ressemble à de la magie parce que chaque frame est simple ; la magie est la *mathématique dans les coulisses* qui relie frame à frame. Ce projet construit ces coulisses en Python pur : un easing `smoothstep` entre deux nombres, des sprites portant une vitesse et rebondissant sur les murs d'un canevas de 30×10, un moteur à pas de temps fixe qui avance toute la scène à chaque frame, des chemins keyframés avec interpolation adoucie, et des frames exportées comme fichiers texte que tu peux rejouer. Le moteur tourne de façon déterministe — les mêmes points atterrissent dans les mêmes cellules à chaque fois — donc tu peux vérifier chaque affirmation de ce guide avant de faire danser les points. C'est un moteur texte d'abord : la « vidéo » est une pile de frames `.txt` que tu peux coller n'importe où.
+L'animation ressemble à de la magie parce que chaque frame est simple ; la magie est la *mathématique dans les coulisses* qui relie frame à frame. Ce projet construit ces coulisses en Python pur : un easing `smoothstep` entre deux nombres, des sprites portant une vitesse et rebondissant sur les murs d'un canevas de 30×10, un moteur à pas de temps fixe qui avance toute la scène à chaque frame, des chemins keyframés avec interpolation adoucie, et des frames exportées comme fichiers texte que tu peux rejouer. Le moteur tourne de façon déterministe, les mêmes points atterrissent dans les mêmes cellules à chaque fois, donc tu peux vérifier chaque affirmation de ce guide avant de faire danser les points. C'est un moteur texte d'abord : la « vidéo » est une pile de frames `.txt` que tu peux coller n'importe où.
 
-Cela suppose classes et méthodes plus une arithmétique de base avec des flottants. C'est un projet facultatif et non noté — consulte [Projets du monde réel](/fr/projets) pour la liste complète et grandissante.
+Cela suppose classes et méthodes plus une arithmétique de base avec des flottants. C'est un projet facultatif et non noté, consulte [Projets du monde réel](/fr/projets) pour la liste complète et grandissante.
 
 ## 🎯 Ce que tu vas faire
 
@@ -33,9 +33,9 @@ Cela suppose classes et méthodes plus une arithmétique de base avec des flotta
 
 ## Où exécuter ceci
 
-**Localement avec `uv`** est le chemin recommandé — le moteur est du Python pur (seul `pathlib` est nécessaire), donc `uv init` te donne tout.
+**Localement avec `uv`** est le chemin recommandé, le moteur est du Python pur (seul `pathlib` est nécessaire), donc `uv init` te donne tout.
 
-**Google Colab, Kaggle Notebooks et Binder** exécutent chaque étape sans modification — le canevas et l'easing ne sont que des mathématiques et des chaînes, aucun appel spécifique à une plateforme, et un notebook cellule par cellule convient bien à la conception frame par frame.
+**Google Colab, Kaggle Notebooks et Binder** exécutent chaque étape sans modification, le canevas et l'easing ne sont que des mathématiques et des chaînes, aucun appel spécifique à une plateforme, et un notebook cellule par cellule convient bien à la conception frame par frame.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/animation-engine/notebook.fr.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/animation-engine/notebook.fr.ipynb)
@@ -61,8 +61,8 @@ Aucune dépendance. Le canevas est une grille de chaînes ; l'export écrit de s
 
 **🤔 Question(s) socratique(s)**
 
-- Un canevas de points avec un personnage qui se déplace est ennuyeux — mais chaque moteur de rendu, de celui-ci au film, n'est qu'« une grille, mise à jour à fréquence fixe ». Qu'est-ce qui fait de la *mathématique* entre les mises à jour, pas la grille, le vrai moteur ?
-- Le projet fonctionne dans un notebook, pourtant tu exportes les frames comme fichiers texte. Qu'est-ce qu'un *film* de 10 lignes de points t'apporte qu'une boucle de rendu en direct ne peut pas — et que perdrais-tu en allant dans l'autre direction ?
+- Un canevas de points avec un personnage qui se déplace est ennuyeux, mais chaque moteur de rendu, de celui-ci au film, n'est qu'« une grille, mise à jour à fréquence fixe ». Qu'est-ce qui fait de la *mathématique* entre les mises à jour, pas la grille, le vrai moteur ?
+- Le projet fonctionne dans un notebook, pourtant tu exportes les frames comme fichiers texte. Qu'est-ce qu'un *film* de 10 lignes de points t'apporte qu'une boucle de rendu en direct ne peut pas, et que perdrais-tu en allant dans l'autre direction ?
 
 ## Étape 1 : La mathématique derrière le mouvement
 
@@ -70,7 +70,7 @@ Chaque animation se réduit à de minuscules questions numériques : « déplace
 
 ### 1.1 Clamp, lerp et smoothstep
 
-**👟 Indice de départ :** Écris `clamp(v, lo, hi)`, `lerp(a, b, t)` et `smoothstep(t)` — ce dernier est la fameuse courbe ease-in-out `t²·(3 − 2t)`.
+**👟 Indice de départ :** Écris `clamp(v, lo, hi)`, `lerp(a, b, t)` et `smoothstep(t)`, ce dernier est la fameuse courbe ease-in-out `t²·(3 − 2t)`.
 
 ```python
 # main.py
@@ -90,7 +90,7 @@ print("smoothstep(0, .25, .5, .75, 1):",
       smoothstep(0), smoothstep(0.25), smoothstep(0.5), smoothstep(0.75), smoothstep(1))
 ```
 
-`lerp(a, b, t)` est le cheval de trait : à `t=0` tu es à `a`, à `t=1` à `b`, et linéairement entre les deux. `smoothstep` est la personnalité d'easing : il mappe toujours 0→0 et 1→1, mais il passe le milieu du mouvement *vite* et le tout début et la toute fin *lentement* — `smoothstep(0.5)` retourne exactement `0.5`, pourtant `smoothstep(0.25)` n'est que `0.15625`, donc il s'attarde, puis rattrape. Cette asymétrie est ce qui rend un mouvement adouci vivant au lieu de mécanique.
+`lerp(a, b, t)` est le cheval de trait : à `t=0` tu es à `a`, à `t=1` à `b`, et linéairement entre les deux. `smoothstep` est la personnalité d'easing : il mappe toujours 0→0 et 1→1, mais il passe le milieu du mouvement *vite* et le tout début et la toute fin *lentement*, `smoothstep(0.5)` retourne exactement `0.5`, pourtant `smoothstep(0.25)` n'est que `0.15625`, donc il s'attarde, puis rattrape. Cette asymétrie est ce qui rend un mouvement adouci vivant au lieu de mécanique.
 
 **🎯 Résultat attendu :**
 
@@ -100,7 +100,7 @@ lerp(0, 10, 0.5)   = 5.0
 smoothstep(0, .25, .5, .75, 1): 0.0 0.15625 0.5 0.84375 1.0
 ```
 
-**🩹 Si ça ne marche pas :** Si `smoothstep(0.5)` n'est pas `0.5`, vérifie l'exposant — `t*t*(3-2*t)` pas `t*t*t`. Si les valeurs s'affichent comme `0` sans décimales, les arguments étaient des `int` et une division entière s'est glissée quelque part — fournis des flottants.
+**🩹 Si ça ne marche pas :** Si `smoothstep(0.5)` n'est pas `0.5`, vérifie l'exposant, `t*t*(3-2*t)` pas `t*t*t`. Si les valeurs s'affichent comme `0` sans décimales, les arguments étaient des `int` et une division entière s'est glissée quelque part, fournis des flottants.
 
 ### 1.2 Adoucis toute une trajectoire
 
@@ -136,10 +136,10 @@ eased_lerp(0, 10, .25) = 1.5625
 
 **🤔 Question(s) socratique(s)**
 
-- `smoothstep` est symétrique : `smoothstep(0.25) == 1 - smoothstep(0.75)` (ici `0.84375`). Quel mouvement du monde réel ressemble à cela — accélérer, croiser, ralentir — et quelle courbe choisirais-tu à la place pour un *lancé*, où le début est rapide et l'atterrissage un smash ?
+- `smoothstep` est symétrique : `smoothstep(0.25) == 1 - smoothstep(0.75)` (ici `0.84375`). Quel mouvement du monde réel ressemble à cela, accélérer, croiser, ralentir, et quelle courbe choisirais-tu à la place pour un *lancé*, où le début est rapide et l'atterrissage un smash ?
 - `clamp(t, 0, 1)` à l'intérieur de `smoothstep` corrige silencieusement une entrée hors limites. Pourquoi une correction silencieuse est-elle acceptable pour adoucir un point, mais dangereuse si le même clamp cachait un bug dans, disons, l'animation *d'un cadran critique pour la sécurité* ?
 
-## Étape 2 : Les sprites — les choses qui bougent
+## Étape 2 : Les sprites, les choses qui bougent
 
 La mathématique déplace des nombres ; les sprites déplacent des *choses*. L'Étape 2 donne à chaque chose une position, une vitesse et un caractère, et dit « fais-moi avancer de `dt` secondes ».
 
@@ -165,11 +165,11 @@ for _ in range(5):
 print(round(s.x, 3), round(s.y, 3))
 ```
 
-`x += vx * dt` est l'intégration d'Euler : la position avance de la vitesse multipliée par le temps écoulé. Un petit `dt` = un mouvement fluide ; `dt` est le pas de temps fixe que tu normaliseras à l'Étape 3. La position est gardée comme flottant ici et seulement collée aux cellules de la grille au moment du rendu — ce flottant est la vérité « entre les frames » que la grille ne peut pas tenir.
+`x += vx * dt` est l'intégration d'Euler : la position avance de la vitesse multipliée par le temps écoulé. Un petit `dt` = un mouvement fluide ; `dt` est le pas de temps fixe que tu normaliseras à l'Étape 3. La position est gardée comme flottant ici et seulement collée aux cellules de la grille au moment du rendu, ce flottant est la vérité « entre les frames » que la grille ne peut pas tenir.
 
-**🎯 Résultat attendu :** `2.5 5.0` — cinq pas de `0.125s` à `4 unités/s` parcourent `5 × 0.5 = 2.5` unités, exactement.
+**🎯 Résultat attendu :** `2.5 5.0`, cinq pas de `0.125s` à `4 unités/s` parcourent `5 × 0.5 = 2.5` unités, exactement.
 
-**🩹 Si ça ne marche pas :** Si la sortie est `0.0 5.0`, `update` n'a jamais tourné (boucle mal indentée) ou `vx` n'a jamais été définie. Si `40.0`, `dt` était `1.0` — tu as passé le *nombre* de frames comme temps.
+**🩹 Si ça ne marche pas :** Si la sortie est `0.0 5.0`, `update` n'a jamais tourné (boucle mal indentée) ou `vx` n'a jamais été définie. Si `40.0`, `dt` était `1.0`, tu as passé le *nombre* de frames comme temps.
 
 ### 2.2 Les rebonds sur les murs
 
@@ -211,9 +211,9 @@ step 5 y = 3.25 vy = 2.0
 step 8 y = 4.0 vy = 2.0
 ```
 
-(Le rebond atterrit plus tard dans le déroulement — la scène de l'Étape 3 le montre.)
+(Le rebond atterrit plus tard dans le déroulement, la scène de l'Étape 3 le montre.)
 
-**🩹 Si ça ne marche pas :** Si `y` s'arrête à `9.0` pour toujours, `vy` s'inverse mais se ré-inverse *la frame suivante* — la vérification d'égalité se déclenche à chaque frame pendant que le sprite repose contre le mur. La position doit quitter le mur avant que la vérification ne se réarme (c'est le cas ici, parce que la vitesse s'inverse).
+**🩹 Si ça ne marche pas :** Si `y` s'arrête à `9.0` pour toujours, `vy` s'inverse mais se ré-inverse *la frame suivante*, la vérification d'égalité se déclenche à chaque frame pendant que le sprite repose contre le mur. La position doit quitter le mur avant que la vérification ne se réarme (c'est le cas ici, parce que la vitesse s'inverse).
 
 ### 2.3 Vérifie le sprite
 
@@ -225,8 +225,8 @@ step 8 y = 4.0 vy = 2.0
 
 **🤔 Question(s) socratique(s)**
 
-- Le sprite ne heurte que des murs, pas *d'autres* sprites. Quel test supplémentaire la collision entre deux sprites exige-t-elle que la collision murale n'exige pas — et entre `x == 0` et `abs(x - mur) < eps`, lequel voudrais-tu pour elle ?
-- La position est un flottant ; le rendu colle aux cellules. Si la vitesse est `1` et `dt` est `0.125`, le point semble « sauter » toutes les 8 frames. Est-ce fluide ou saccadé à 8 fps — et quels deux boutons pourrais-tu tourner pour le rendre plus fluide ?
+- Le sprite ne heurte que des murs, pas *d'autres* sprites. Quel test supplémentaire la collision entre deux sprites exige-t-elle que la collision murale n'exige pas, et entre `x == 0` et `abs(x - mur) < eps`, lequel voudrais-tu pour elle ?
+- La position est un flottant ; le rendu colle aux cellules. Si la vitesse est `1` et `dt` est `0.125`, le point semble « sauter » toutes les 8 frames. Est-ce fluide ou saccadé à 8 fps, et quels deux boutons pourrais-tu tourner pour le rendre plus fluide ?
 
 ## Étape 3 : Les scènes et la boucle du moteur
 
@@ -234,7 +234,7 @@ Un sprite est un rebond. Beaucoup de sprites sur une grille, avancés ensemble �
 
 ### 3.1 Rends une scène en texte
 
-**👟 Indice de départ :** Écris `Scene.render()` qui retourne une liste de chaînes — une grille remplie de points avec chaque sprite tamponné à sa cellule (arrondie).
+**👟 Indice de départ :** Écris `Scene.render()` qui retourne une liste de chaînes, une grille remplie de points avec chaque sprite tamponné à sa cellule (arrondie).
 
 ```python
 # main.py (continued)
@@ -281,7 +281,7 @@ o.............................
 ..............................
 ```
 
-**🩹 Si ça ne marche pas :** Si `o` est ailleurs, son `y` n'est pas `5.0`. Si la grille montre 10 lignes de 30 points, la scène va bien — c'est le canevas vide.
+**🩹 Si ça ne marche pas :** Si `o` est ailleurs, son `y` n'est pas `5.0`. Si la grille montre 10 lignes de 30 points, la scène va bien, c'est le canevas vide.
 
 ### 3.2 Le moteur à pas de temps fixe
 
@@ -309,7 +309,7 @@ print("-" * 30)
 print("\n".join(frames[11]))
 ```
 
-`play` est toute la bobine : `fps` fixe `dt`, donc 8 frames = 1 seconde, et la même scène rejouée avec les mêmes paramètres produit les mêmes frames — un déterminisme que tu peux tester. La frame 5 est juste avant et la frame 12 est un moment marquant pour les deux sprites.
+`play` est toute la bobine : `fps` fixe `dt`, donc 8 frames = 1 seconde, et la même scène rejouée avec les mêmes paramètres produit les mêmes frames, un déterminisme que tu peux tester. La frame 5 est juste avant et la frame 12 est un moment marquant pour les deux sprites.
 
 **🎯 Résultat attendu :** la frame 5 (`frames[4]`) montre `o` dans la colonne 3 (après `4 × 0.5 = 2.0 → 2.5 → colle à 3`) et `*` à la ligne 3 ; la frame 12 (`frames[11]`) montre `o` dans la colonne 6 et `*` à la ligne 5.
 
@@ -326,11 +326,11 @@ print("\n".join(frames[11]))
 **🤔 Question(s) socratique(s)**
 
 - `dt` est `1/fps`, mais la boucle avance la scène puis affiche. Une fois avancé, la frame 1 est-elle « l'état après 0.125s » ou « au temps 0 » ? Choisis la sémantique et défends le décalage d'un que tu as choisi.
-- Le moteur retourne les frames comme liste, ne les affichant jamais. Pourquoi la *donnée* (les frames) est-elle le produit ici, et l'*écran* juste un consommateur — que ce découplage te permet-il de remplacer plus tard ?
+- Le moteur retourne les frames comme liste, ne les affichant jamais. Pourquoi la *donnée* (les frames) est-elle le produit ici, et l'*écran* juste un consommateur, que ce découplage te permet-il de remplacer plus tard ?
 
 ## Étape 4 : Les chemins keyframés
 
-La vitesse te donne des lignes droites et des rebonds. Les vraies animations découpent le mouvement en *keyframes* — des poses à des moments choisis — et remplissent l'entre-deux avec une interpolation adoucie. L'Étape 4 ajoute le suiveur de chemin.
+La vitesse te donne des lignes droites et des rebonds. Les vraies animations découpent le mouvement en *keyframes*, des poses à des moments choisis, et remplissent l'entre-deux avec une interpolation adoucie. L'Étape 4 ajoute le suiveur de chemin.
 
 ### 4.1 Échantillonne le long d'un chemin
 
@@ -361,7 +361,7 @@ print("t=1.0 ", node.sample(1.0))
 print("t=2.0 ", node.sample(2.0))
 ```
 
-Le balayage de segments trouve les deux keyframes qui encadrent `t`, remet `t` à l'échelle dans ce segment (`u`), adoucit `u`, et lerpe les deux coordonnées. Un chemin est une *donnée* — une liste de `(temps, position)` — et `sample` est la fonction pure qui transforme le temps en pose. Après `t=1.0`, l'itinéraire vire du déplacement vers la droite au déplacement vers le bas, et `sample` gère la passation.
+Le balayage de segments trouve les deux keyframes qui encadrent `t`, remet `t` à l'échelle dans ce segment (`u`), adoucit `u`, et lerpe les deux coordonnées. Un chemin est une *donnée*, une liste de `(temps, position)`, et `sample` est la fonction pure qui transforme le temps en pose. Après `t=1.0`, l'itinéraire vire du déplacement vers la droite au déplacement vers le bas, et `sample` gère la passation.
 
 **🎯 Résultat attendu :**
 
@@ -371,7 +371,7 @@ t=1.0  (10.0, 2.0)
 t=2.0  (10.0, 8.0)
 ```
 
-**🩹 Si ça ne marche pas :** Si `t=0.5` retourne `(5.0, 0.0)`, le segment `y` a croisé des keyframes trop tôt. Si des échantillons après `t=2.0` échouent, `sample` retombe sur `self.keys[-1][1]` seulement quand la boucle ne trouve aucun segment — confirme que le temps de la dernière keyframe est `2.0`, pas `< 2.0`.
+**🩹 Si ça ne marche pas :** Si `t=0.5` retourne `(5.0, 0.0)`, le segment `y` a croisé des keyframes trop tôt. Si des échantillons après `t=2.0` échouent, `sample` retombe sur `self.keys[-1][1]` seulement quand la boucle ne trouve aucun segment, confirme que le temps de la dernière keyframe est `2.0`, pas `< 2.0`.
 
 ### 4.2 Rends un chemin comme une bobine
 
@@ -401,13 +401,13 @@ La frame 0 est la pose à `t=0` : `A` en haut à gauche. La frame 17 est `t=2.0`
 
 **✅ Liste de vérification**
 
-- ✅ `sample(0.5)` sur le chemin à deux segments retourne `(5.0, 1.0)` — le point médian adouci du segment un.
+- ✅ `sample(0.5)` sur le chemin à deux segments retourne `(5.0, 1.0)`, le point médian adouci du segment un.
 - ✅ `sample(1.5)` se trouve sur le second segment (entre `(10, 2)` et `(10, 8)`).
 - ✅ Échantillonner au-delà de la dernière keyframe retourne la pose finale, sans crash.
 
 **🤔 Question(s) socratique(s)**
 
-- Le chemin n'a pas de vitesses — seulement des temps et des poses. Pourquoi une keyframe pose-uniquement est-elle plus facile à produire qu'une keyframe vitesse-uniquement, et quel est le compromis pour un mouvement où tu *veux* une vitesse d'entrée en vol explicite ?
+- Le chemin n'a pas de vitesses, seulement des temps et des poses. Pourquoi une keyframe pose-uniquement est-elle plus facile à produire qu'une keyframe vitesse-uniquement, et quel est le compromis pour un mouvement où tu *veux* une vitesse d'entrée en vol explicite ?
 - Smoothstep est appliqué par segment, donc le nœud « s'adoucit » aux deux extrémités de tout l'itinéraire. Regarde le coin à `t=1.0` : se déplace-t-il *jamais* à vitesse maximale, et cela correspond-il à la façon dont une vraie caméra coupe entre des plans ?
 
 ## Étape 5 : Exporte la bobine
@@ -443,7 +443,7 @@ wrote 17 files
 [PosixPath('reel/frame_000.txt'), PosixPath('reel/frame_001.txt'), PosixPath('reel/frame_002.txt')]
 ```
 
-**🩹 Si ça ne marche pas :** Si une seconde exécution dit « déjà 17 fichiers », `mkdir(exist_ok=True)` manque (ou d'anciens frames traînent et se doublent). Si le glob est vide, le répertoire de travail actuel diffère d'`outdir` — vérifie dans quel répertoire `save_frames` a réellement écrit.
+**🩹 Si ça ne marche pas :** Si une seconde exécution dit « déjà 17 fichiers », `mkdir(exist_ok=True)` manque (ou d'anciens frames traînent et se doublent). Si le glob est vide, le répertoire de travail actuel diffère d'`outdir`, vérifie dans quel répertoire `save_frames` a réellement écrit.
 
 ### 5.2 Réassemble une pellicule
 
@@ -463,7 +463,7 @@ film = read_reel("reel")
 print("\n".join(film))
 ```
 
-La pellicule transpose les lignes : la ligne du haut de *chaque* frame sur la ligne 1, puis la ligne suivante de chaque frame sur la ligne 2 — donc une bobine de 17 frames se rend comme une large bande que tu peux faire défiler horizontalement et voir le point voyager de gauche à droite. `sorted` sur les noms complétés de zéros garantit l'ordre des frames sans logique de tri de ton cru.
+La pellicule transpose les lignes : la ligne du haut de *chaque* frame sur la ligne 1, puis la ligne suivante de chaque frame sur la ligne 2, donc une bobine de 17 frames se rend comme une large bande que tu peux faire défiler horizontalement et voir le point voyager de gauche à droite. `sorted` sur les noms complétés de zéros garantit l'ordre des frames sans logique de tri de ton cru.
 
 **🎯 Résultat attendu :** Une pellicule de ~510 colonnes sur 10 lignes où un `A` glisse de l'extrême gauche à l'extrême droite à travers les segments, avec des séparateurs de style `.|` gardant les frames distinctes.
 
@@ -479,13 +479,13 @@ La pellicule transpose les lignes : la ligne du haut de *chaque* frame sur la li
 
 **🤔 Question(s) socratique(s)**
 
-- La pellicule est une vue *tranche de temps*. Quelle information te montre-t-elle sur l'animation que l'empilement frame par frame cache — et quel idiome de mouvement (rotation, échelle) une bande 2D ligne-de-temps ne capturerait *jamais* ?
+- La pellicule est une vue *tranche de temps*. Quelle information te montre-t-elle sur l'animation que l'empilement frame par frame cache, et quel idiome de mouvement (rotation, échelle) une bande 2D ligne-de-temps ne capturerait *jamais* ?
 - L'export écrit des fichiers texte que tu pourrais donner à un outil non Python. Quel est l'« format d'échange ouvert » équivalent dans ton outil vidéo préféré, et quelle est la valeur de garder la sortie du moteur dans un format que rien d'autre dans ta pile n'a besoin de traduire ?
 
 ## ⚠️ Pièges courants
 
-- **La division entière dans l'easing.** `t / (t1 - t0)` en Python 3 est flottant — mais `t // (t1 - t0)` ou des arguments tout-entiers tronquent silencieusement et gèlent ta courbe. Fournis des flottants aux fonctions d'aide mathématiques.
-- **Arrondi-demi-vers-le-haut vs arrondi bancaire.** `int(x + 0.5)` arrondit toujours `.5` vers le haut ; `round(x)` en Python arrondit `.5` au pair, donc un sprite à `x=2.5` atterrit à `2` avec `round` et `3` avec `int(x+0.5)` — et la dérive des flottants rend cela non déterministe dans la nature. Choisis-en un et garde-le partout.
+- **La division entière dans l'easing.** `t / (t1 - t0)` en Python 3 est flottant, mais `t // (t1 - t0)` ou des arguments tout-entiers tronquent silencieusement et gèlent ta courbe. Fournis des flottants aux fonctions d'aide mathématiques.
+- **Arrondi-demi-vers-le-haut vs arrondi bancaire.** `int(x + 0.5)` arrondit toujours `.5` vers le haut ; `round(x)` en Python arrondit `.5` au pair, donc un sprite à `x=2.5` atterrit à `2` avec `round` et `3` avec `int(x+0.5)`, et la dérive des flottants rend cela non déterministe dans la nature. Choisis-en un et garde-le partout.
 - **Des serrages de mur dos à dos.** Si la vérification de rebond utilise `>=`/`<=` sur la valeur *bornée* chaque frame, un sprite posé contre un mur inverse sa vitesse à chaque mise à jour et vibre pour toujours. Exige de *franchir* la limite ou vérifie la position avant serrage.
 - **Le décalage d'un dans les frames.** `for f in range(17)` produit 17 frames à travers `t = 16×dt` ; pour couvrir `t=0` jusqu'à `t=2.0` inclus, il te faut 17 *pas*, pas 16. Décide si les frames comptent les pas de temps ou les frames d'horloge murale.
 - **Des exports désordonnés.** Les noms de fichiers non complétés de zéros trient `frame_10` avant `frame_2`. Complète à une largeur fixe (`:03d`) ou la pellicule se mélange.
@@ -493,21 +493,21 @@ La pellicule transpose les lignes : la ligne du haut de *chaque* frame sur la li
 
 ## Ce que tu viens de construire
 
-Un moteur d'animation texte d'abord : des maths d'easing, des sprites pilotés par la vitesse avec des rebonds de mur, une boucle de rendu à pas de temps fixe, des chemins de mouvement keyframés et une bobine basée sur fichiers. L'idée essentielle est que le mouvement est *décidé par de petites fonctions composables* — `clamp` garde les limites, `lerp` voyage, `smoothstep` ajoute la personnalité, et une classe enveloppe chacune comme état. Cadre n'importe quel problème de mouvement comme « quel nombre adoucir, et vers quoi » et ces cinq pièces y répondent — la même forme pilote les transitions CSS, les déplacements de sprites dans les jeux et les travellings de caméra dans la vidéo.
+Un moteur d'animation texte d'abord : des maths d'easing, des sprites pilotés par la vitesse avec des rebonds de mur, une boucle de rendu à pas de temps fixe, des chemins de mouvement keyframés et une bobine basée sur fichiers. L'idée essentielle est que le mouvement est *décidé par de petites fonctions composables*, `clamp` garde les limites, `lerp` voyage, `smoothstep` ajoute la personnalité, et une classe enveloppe chacune comme état. Cadre n'importe quel problème de mouvement comme « quel nombre adoucir, et vers quoi » et ces cinq pièces y répondent, la même forme pilote les transitions CSS, les déplacements de sprites dans les jeux et les travellings de caméra dans la vidéo.
 
 :::tip[Exécute une version plus complète sans configuration locale]
-[`examples/animation-engine/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/animation-engine) dans le dépôt du cours est le moteur complet en notebook — les rebonds de sprites, le chemin keyframé adouci et l'export en pellicule, exécutables dans Colab/Kaggle/Binder. Clone le dépôt ou [ouvre-le dans un Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course).
+[`examples/animation-engine/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/animation-engine) dans le dépôt du cours est le moteur complet en notebook, les rebonds de sprites, le chemin keyframé adouci et l'export en pellicule, exécutables dans Colab/Kaggle/Binder. Clone le dépôt ou [ouvre-le dans un Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course).
 :::
 
 ## Où aller à partir d'ici
 
 - Ajoute une couche `Time Warp` : au lieu d'un `dt` global, donne à chaque sprite son propre multiplicateur `speed` pour qu'un `*` dérive paresseusement pendant qu'un `o` file.
-- Modélise un rebond élastique entre deux sprites — quand les sprites entrent en collision, échange les vitesses et ajoute une oscillation `vx` pour un effet écrasement-étirement.
+- Modélise un rebond élastique entre deux sprites, quand les sprites entrent en collision, échange les vitesses et ajoute une oscillation `vx` pour un effet écrasement-étirement.
 - Étends `Keyframed` pour tenir une fonction d'easing par segment (linéaire pour la première jambe, smoothstep pour la seconde) comme partie des données de keyframe.
 - Écris les frames comme images PPM (P6) et assemble-les en GIF avec un minuscule écrivain Python pur, ou envoie la pellicule dans le scrollback de ton terminal pour un « film ».
 
 ## Partage ton projet avec la classe
 
-Tu as construit quelque chose dont tu es fier·e ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets que d'autres étudiants ont soumis — et son README contient un tutoriel complet, accessible aux débutants, pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, étape par étape. Aucune expérience git préalable n'est requise.
+Tu as construit quelque chose dont tu es fier·e ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets que d'autres étudiants ont soumis, et son README contient un tutoriel complet, accessible aux débutants, pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, étape par étape. Aucune expérience git préalable n'est requise.
 
 Bienvenue dans l'écriture de Python hors du navigateur. 🎓

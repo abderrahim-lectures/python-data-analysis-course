@@ -191,7 +191,7 @@ def conversion_by_tier(df: pd.DataFrame) -> pd.DataFrame:
 
 **🎯 Expected output:** `prioritize(df)` orders hot leads first; `conversion_by_tier` shows hot leads converting at a higher rate.
 
-**🩹 If it's off:** If conversion rates are flat across tiers, the scoring weights don't discriminate — tighten them.
+**🩹 If it's off:** If conversion rates are flat across tiers, the scoring weights don't discriminate, tighten them.
 
 ### 3.2 Verify prioritization
 
@@ -314,7 +314,7 @@ def by_source(df: pd.DataFrame) -> pd.DataFrame:
 
 ## What you just built
 
-A lead scoring engine: a generated lead dataset, a weighted multi-factor scoring model that ranks leads into cold/warm/hot tiers, prioritized pipeline sorting, an A/B comparison of two scoring schemes, and a pandas-based pipeline-health summary. This is the analytics core of a sales operations team — deciding whom to call, in what order, and whether the current model is working.
+A lead scoring engine: a generated lead dataset, a weighted multi-factor scoring model that ranks leads into cold/warm/hot tiers, prioritized pipeline sorting, an A/B comparison of two scoring schemes, and a pandas-based pipeline-health summary. This is the analytics core of a sales operations team, deciding whom to call, in what order, and whether the current model is working.
 
 :::tip[Run a fuller version without any local setup]
 [`examples/lead-scoring/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/lead-scoring) in the course repo has a richer version with ML-based scoring, automated lead routing, and the CLI wired up end to end. Clone it, or open the whole repo in a [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), and run it from there.
@@ -328,6 +328,6 @@ A lead scoring engine: a generated lead dataset, a weighted multi-factor scoring
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

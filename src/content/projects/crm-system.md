@@ -16,9 +16,9 @@ prerequisites: ["Python basics (classes, functions, dicts)", "pip install rich"]
 
 # 🛠️ 🤝 Build a CRM System
 
-A CRM is the shared source of truth for a sales team: every contact, every deal, every call and email lives in one place so nothing slips through. This project builds a lightweight CRM from scratch — you'll model contacts, deals, and activities as typed Python dataclasses, design a SQLite schema with real foreign keys, write parameterized queries for search and filtering, push deals through a validated pipeline, reconstruct a contact's timeline, and surface it all in clean `rich` table output.
+A CRM is the shared source of truth for a sales team: every contact, every deal, every call and email lives in one place so nothing slips through. This project builds a lightweight CRM from scratch, you'll model contacts, deals, and activities as typed Python dataclasses, design a SQLite schema with real foreign keys, write parameterized queries for search and filtering, push deals through a validated pipeline, reconstruct a contact's timeline, and surface it all in clean `rich` table output.
 
-This assumes Python 101 and enough comfort with SQL to read a SELECT — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
+This assumes Python 101 and enough comfort with SQL to read a SELECT, nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 
@@ -31,11 +31,11 @@ This assumes Python 101 and enough comfort with SQL to read a SELECT — nothing
 
 ## Where to run this
 
-**Locally with `uv`** is the primary, recommended path — SQLite writes to disk when you choose a file path, and `rich` renders full-color tables only in a real terminal (notebook cells truncate them).
+**Locally with `uv`** is the primary, recommended path, SQLite writes to disk when you choose a file path, and `rich` renders full-color tables only in a real terminal (notebook cells truncate them).
 
 **GitHub Codespaces** works perfectly too: open [the course repo in a free Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) and run from there. A real terminal with real color support.
 
-**Google Colab and Kaggle Notebooks** are a genuine way to run this — SQLite works in memory (`:memory:`), and the Python code is fully compatible. The honest caveat is `rich`: notebook cells render tables in plain text (the colors vanish), and there's no persistent data between sessions. The notebook below uses an in-memory database seeded with two sample contacts and their deals, so every query returns real-looking results even though nothing persists after the kernel restarts. Use it to see the schema and queries work end to end; switch to local `uv` or a Codespace once you want your own data to stick around.
+**Google Colab and Kaggle Notebooks** are a genuine way to run this, SQLite works in memory (`:memory:`), and the Python code is fully compatible. The honest caveat is `rich`: notebook cells render tables in plain text (the colors vanish), and there's no persistent data between sessions. The notebook below uses an in-memory database seeded with two sample contacts and their deals, so every query returns real-looking results even though nothing persists after the kernel restarts. Use it to see the schema and queries work end to end; switch to local `uv` or a Codespace once you want your own data to stick around.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/crm-system/notebook.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/crm-system/notebook.ipynb)
@@ -47,7 +47,7 @@ Everything you need lives in two packages: one PyPI library for the terminal UI,
 
 ### Install `uv`
 
-`uv` is a single tool that replaces the usual "install Python, then install pip, then install a virtual environment tool, then install packages" chain — it can install and manage Python versions itself, alongside your project's dependencies.
+`uv` is a single tool that replaces the usual "install Python, then install pip, then install a virtual environment tool, then install packages" chain, it can install and manage Python versions itself, alongside your project's dependencies.
 
 **macOS / Linux** (terminal):
 
@@ -75,7 +75,7 @@ cd crm-system
 uv add rich
 ```
 
-`rich` makes terminal tables and panels look like a real application — colors, borders, aligned columns. `sqlite3` ships with Python; no extra install needed. Your CRM data lives in a `.db` file you point the script at, or in memory if you don't specify a path.
+`rich` makes terminal tables and panels look like a real application, colors, borders, aligned columns. `sqlite3` ships with Python; no extra install needed. Your CRM data lives in a `.db` file you point the script at, or in memory if you don't specify a path.
 
 **✅ Checklist**
 
@@ -84,7 +84,7 @@ uv add rich
 
 ## Step 1: Model the data with dataclasses
 
-Every record in a CRM has a rigid shape — a contact always has a name and email; a deal always has a value and a stage. `@dataclass` enforces that shape at definition time, prevents accidental attribute drift, and gives you a readable `repr` and dict serialization for free. The `Optional[int]` id field stays `None` until a record is inserted and the database assigns one.
+Every record in a CRM has a rigid shape, a contact always has a name and email; a deal always has a value and a stage. `@dataclass` enforces that shape at definition time, prevents accidental attribute drift, and gives you a readable `repr` and dict serialization for free. The `Optional[int]` id field stays `None` until a record is inserted and the database assigns one.
 
 ### 1.1 Define Contact, Deal, and Activity
 
@@ -132,11 +132,11 @@ a = Activity(contact_id=1, deal_id=1, kind="meeting", summary="Discussed pricing
 print(f"Contact: {c.name} | Deal: {d.title} (${d.value:,.0f})")
 ```
 
-The `__post_init__` on `Activity` is the only non-trivial bit: it auto-fills the date with today's ISO string when you forget, so every activity gets a valid timestamp even in a quick test run. `Deal.STAGES` is a class-level constant — not an instance attribute — which means `Deal.STAGES` reads cleanly without constructing a `Deal`, and every instance implicitly knows the allowed progression.
+The `__post_init__` on `Activity` is the only non-trivial bit: it auto-fills the date with today's ISO string when you forget, so every activity gets a valid timestamp even in a quick test run. `Deal.STAGES` is a class-level constant, not an instance attribute, which means `Deal.STAGES` reads cleanly without constructing a `Deal`, and every instance implicitly knows the allowed progression.
 
 **🎯 Expected output:** Prints `Contact: Alice Chen | Deal: Enterprise License ($12,000)`.
 
-**🩹 If it's off:** If `Optional` from `typing` isn't recognized, your Python is <3.10 — use `from __future__ import annotations` at the top, or `Optional[int]` remains valid either way. If `__post_init__` isn't running, check it's indented under `Activity`, not a standalone function — it's a dataclass magic method, not a regular method.
+**🩹 If it's off:** If `Optional` from `typing` isn't recognized, your Python is <3.10, use `from __future__ import annotations` at the top, or `Optional[int]` remains valid either way. If `__post_init__` isn't running, check it's indented under `Activity`, not a standalone function, it's a dataclass magic method, not a regular method.
 
 ### 1.2 Verify the models
 
@@ -152,7 +152,7 @@ The `__post_init__` on `Activity` is the only non-trivial bit: it auto-fills the
 
 ## Step 2: Design the SQLite schema and insert contacts
 
-`sqlite3` is the smallest reliable database in existence — no install, no daemon, no config file — and it's in Python's stdlib. The schema mirrors your dataclasses exactly: three tables with a foreign key from `deals` and `activities` to `contacts`, so the database itself enforces the relationship your code depends on.
+`sqlite3` is the smallest reliable database in existence, no install, no daemon, no config file, and it's in Python's stdlib. The schema mirrors your dataclasses exactly: three tables with a foreign key from `deals` and `activities` to `contacts`, so the database itself enforces the relationship your code depends on.
 
 ### 2.1 Create the database and the schema
 
@@ -197,15 +197,15 @@ def init_db(db_path: str = ":memory:") -> sqlite3.Connection:
 conn = init_db()
 ```
 
-`"refereences contacts(id)"` is a foreign key declaration, but SQLite only enforces it if you run `PRAGMA foreign_keys = ON` — and deliberately, we don't do that here. Full FK enforcement is the right production default, but for a teaching CRM where you might temporarily insert a deal before its contact exists, the pragmatic choice is to let the Python code own the constraint. `conn.row_factory = sqlite3.Row` means every fetched row behaves as both a dict and an object — you can use `row["name"]` and `row.name` interchangeably, which is the single most useful `sqlite3` feature.
+`"refereences contacts(id)"` is a foreign key declaration, but SQLite only enforces it if you run `PRAGMA foreign_keys = ON`, and deliberately, we don't do that here. Full FK enforcement is the right production default, but for a teaching CRM where you might temporarily insert a deal before its contact exists, the pragmatic choice is to let the Python code own the constraint. `conn.row_factory = sqlite3.Row` means every fetched row behaves as both a dict and an object, you can use `row["name"]` and `row.name` interchangeably, which is the single most useful `sqlite3` feature.
 
 **🎯 Expected output:** `init_db()` returns a live `sqlite3.Connection` without errors; calling `conn.execute("SELECT name FROM sqlite_master WHERE type='table'").fetchall()` prints the three table names.
 
-**🩹 If it's off:** If `executescript` raises `ProgrammingError`, you forgot to `conn.commit()` — the schema writes are transactions, and without committing they're invisible to subsequent queries. If a table already exists from a previous run against a file (not `:memory:`), `CREATE TABLE IF NOT EXISTS` silently does nothing — drop the file or the table if you need a fresh schema.
+**🩹 If it's off:** If `executescript` raises `ProgrammingError`, you forgot to `conn.commit()`, the schema writes are transactions, and without committing they're invisible to subsequent queries. If a table already exists from a previous run against a file (not `:memory:`), `CREATE TABLE IF NOT EXISTS` silently does nothing, drop the file or the table if you need a fresh schema.
 
 ### 2.2 Insert and search contacts
 
-**👟 Starter hint:** Write `add_contact` and `search_contacts` as pure functions of the connection — never of a global variable — so they're trivially testable and composable.
+**👟 Starter hint:** Write `add_contact` and `search_contacts` as pure functions of the connection, never of a global variable, so they're trivially testable and composable.
 
 ```python
 # crm_system.py (continued)
@@ -232,11 +232,11 @@ print(f"Added contacts: IDs {alice_id}, {bob_id}")
 print(search_contacts(conn, "acme"))
 ```
 
-`?` placeholders in the SQL string are the entire point of parameterized queries: the database never interprets your string values as SQL fragments, which is both a security rule (no injection) and a correctness rule (no escaping bugs). `cur.lastrowid` is the integer primary key the database just assigned — it's the foreign key value your deals and activities need in the next steps, so `add_contact` returning it is a deliberate design choice.
+`?` placeholders in the SQL string are the entire point of parameterized queries: the database never interprets your string values as SQL fragments, which is both a security rule (no injection) and a correctness rule (no escaping bugs). `cur.lastrowid` is the integer primary key the database just assigned, it's the foreign key value your deals and activities need in the next steps, so `add_contact` returning it is a deliberate design choice.
 
 **🎯 Expected output:** Prints `Added contacts: IDs 1, 2` followed by a list containing one dict for Alice Chen.
 
-**🩹 If it's off:** If `search_contacts(conn, "acme")` returns an empty list despite Alice being inserted, check that both `add_contact` calls ran before the query — if `conn.commit()` is missing inside `add_contact`, the inserts are invisible to subsequent reads. If you get `ProgrammingError: wrong number of arguments`, the query string has a different number of `?` placeholders than values in the tuple — count them.
+**🩹 If it's off:** If `search_contacts(conn, "acme")` returns an empty list despite Alice being inserted, check that both `add_contact` calls ran before the query, if `conn.commit()` is missing inside `add_contact`, the inserts are invisible to subsequent reads. If you get `ProgrammingError: wrong number of arguments`, the query string has a different number of `?` placeholders than values in the tuple, count them.
 
 ### 2.3 Verify the schema and insert
 
@@ -247,16 +247,16 @@ print(search_contacts(conn, "acme"))
 
 **🤔 Socratic Question(s)**
 
-- `search_contacts` returns `[dict(r) for r in rows]`, converting each `sqlite3.Row` to a plain dict. What would change if you returned the `Row` objects directly — is there a case where that's better, and a case where it breaks something?
+- `search_contacts` returns `[dict(r) for r in rows]`, converting each `sqlite3.Row` to a plain dict. What would change if you returned the `Row` objects directly, is there a case where that's better, and a case where it breaks something?
 - A junior colleague suggests storing the company as an integer foreign key to a `companies` table "for normalization." What are the trade-offs in a small CRM where a company name is really just a label?
 
 ## Step 3: Search and filter with joins
 
-A CRM isn't useful until you can ask relational questions: "which deals are in the proposal stage?" "which contacts are associated with a deal worth over $5K?" These are JOINs — pulling rows from two tables using the foreign key that connects them — and they're the query pattern that makes a database genuinely more powerful than a flat file.
+A CRM isn't useful until you can ask relational questions: "which deals are in the proposal stage?" "which contacts are associated with a deal worth over $5K?" These are JOINs, pulling rows from two tables using the foreign key that connects them, and they're the query pattern that makes a database genuinely more powerful than a flat file.
 
 ### 3.1 Write filtered deal queries
 
-**👟 Starter hint:** Write a function that counts contacts per company (a simple GROUP BY), and a function that lists deals filtered by stage — both using parameterized values.
+**👟 Starter hint:** Write a function that counts contacts per company (a simple GROUP BY), and a function that lists deals filtered by stage, both using parameterized values.
 
 ```python
 # crm_system.py (continued)
@@ -282,9 +282,9 @@ print("Acme contacts:", contacts_by_company(conn, "Acme"))
 # (deals_by_stage will return [] until Step 4 inserts deals)
 ```
 
-The `JOIN contacts c ON d.contact_id = c.id` is the key line: it matches each deal to the contact who owns it by integer foreign key, and `c.name AS contact_name` brings the name into the result so your display logic doesn't need a second query. Sorting by `value DESC` is an intentional bias toward the information you'd want first when scanning a pipeline — the biggest numbers up top.
+The `JOIN contacts c ON d.contact_id = c.id` is the key line: it matches each deal to the contact who owns it by integer foreign key, and `c.name AS contact_name` brings the name into the result so your display logic doesn't need a second query. Sorting by `value DESC` is an intentional bias toward the information you'd want first when scanning a pipeline, the biggest numbers up top.
 
-**🎯 Expected output:** `Acme contacts: [{'id': 1, 'name': 'Alice Chen', ...}]`; `deals_by_stage(conn, "proposal")` returns an empty list (deals don't exist yet — they come in Step 4).
+**🎯 Expected output:** `Acme contacts: [{'id': 1, 'name': 'Alice Chen', ...}]`; `deals_by_stage(conn, "proposal")` returns an empty list (deals don't exist yet, they come in Step 4).
 
 **🩹 If it's off:** If `contacts_by_company` returns a case-sensitive mismatch (e.g., searching "ACME" for "Acme"), SQLite `LIKE` is case-insensitive only for ASCII characters; use `LOWER()` in the query if you're working with mixed-case input. If `deals_by_stage` raises `OperationalError: no such column`, the column alias in your JOIN doesn't match the SELECT list.
 
@@ -293,11 +293,11 @@ The `JOIN contacts c ON d.contact_id = c.id` is the key line: it matches each de
 **✅ Checklist**
 
 - ✅ `contacts_by_company(conn, "Globex")` returns exactly Bob, and `contacts_by_company(conn, "Nonexistent")` returns `[]`.
-- ✅ `deals_by_stage` returns an empty list before any deals are inserted — confirming it's not silently reusing stale data.
+- ✅ `deals_by_stage` returns an empty list before any deals are inserted, confirming it's not silently reusing stale data.
 
 **🤔 Socratic Question(s)**
 
-- Both `search_contacts` and `contacts_by_company` filter by a `LIKE ?` pattern. Why not just write one function with a `WHERE` clause that checks every column with `OR` — is there a reason to keep the two separate, or is it just code style?
+- Both `search_contacts` and `contacts_by_company` filter by a `LIKE ?` pattern. Why not just write one function with a `WHERE` clause that checks every column with `OR`, is there a reason to keep the two separate, or is it just code style?
 - `deals_by_stage` joins but `contacts_by_company` doesn't. When does a single-table query work, and when does leaving the JOIN out silently give you the wrong answer?
 
 ## Step 4: Track deals through the pipeline
@@ -306,7 +306,7 @@ A deal's *stage* is its position in the sales pipeline, and moving it forward wi
 
 ### 4.1 Insert deals and move them through the pipeline
 
-**👟 Starter hint:** `add_deal` and `move_deal` should live on `Deal`'s class constants — `deal_id` and `new_stage` are arguments, not attributes — and `move_deal` must reject invalid stages *before* the UPDATE runs.
+**👟 Starter hint:** `add_deal` and `move_deal` should live on `Deal`'s class constants, `deal_id` and `new_stage` are arguments, not attributes, and `move_deal` must reject invalid stages *before* the UPDATE runs.
 
 ```python
 # crm_system.py (continued)
@@ -329,11 +329,11 @@ deal2_id = add_deal(conn, Deal(contact_id=bob_id, title="Consulting Package", va
 move_deal(conn, deal1_id, "negotiation")
 ```
 
-The validation check — `if new_stage not in Deal.STAGES` — runs as a Python-level guard, not a database constraint, because SQLite doesn't have `CHECK` constraints in `DEFAULT`. This is the deliberate trade-off: you get a clear `ValueError` with the valid options printed, rather than a silent `UPDATE` that writes a meaningless string and breaks the pipeline view later.
+The validation check, `if new_stage not in Deal.STAGES`, runs as a Python-level guard, not a database constraint, because SQLite doesn't have `CHECK` constraints in `DEFAULT`. This is the deliberate trade-off: you get a clear `ValueError` with the valid options printed, rather than a silent `UPDATE` that writes a meaningless string and breaks the pipeline view later.
 
 **🎯 Expected output:** Two deals exist; deal1 is now at `"negotiation"` after the move; deal2 remains at `"lead"`.
 
-**🩹 If it's off:** If `move_deal` raises `ValueError` for a valid stage, the string has a typo — capitalization matters exactly as listed in `Deal.STAGES`. If the UPDATE runs but `deals_by_stage` still shows the deal at its old stage, you forgot `conn.commit()` — the write happened in memory but wasn't persisted.
+**🩹 If it's off:** If `move_deal` raises `ValueError` for a valid stage, the string has a typo, capitalization matters exactly as listed in `Deal.STAGES`. If the UPDATE runs but `deals_by_stage` still shows the deal at its old stage, you forgot `conn.commit()`, the write happened in memory but wasn't persisted.
 
 ### 4.2 Read back the pipeline summary
 
@@ -353,11 +353,11 @@ for stage, info in pipeline_summary(conn).items():
     print(f"  {stage:<15} {info['count']} deals  ${info['value']:>10,.0f}")
 ```
 
-`r["total"] or 0.0` handles the case where a stage has no deals at all — `SUM` returns `NULL` on an empty group, and Python's `or` catches it. Ordering by `stage` alphabetically is a simplification for the teaching pipeline; a production CRM would define an explicit ordering via `CASE WHEN stage = 'lead' THEN 1 ...`.
+`r["total"] or 0.0` handles the case where a stage has no deals at all, `SUM` returns `NULL` on an empty group, and Python's `or` catches it. Ordering by `stage` alphabetically is a simplification for the teaching pipeline; a production CRM would define an explicit ordering via `CASE WHEN stage = 'lead' THEN 1 ...`.
 
-**🎯 Expected output:** Prints each stage with its deal count and total value — `negotiation` shows 1 deal ($12,000), `lead` shows 1 deal ($5,000), and all other stages show 0 deals and $0.
+**🎯 Expected output:** Prints each stage with its deal count and total value, `negotiation` shows 1 deal ($12,000), `lead` shows 1 deal ($5,000), and all other stages show 0 deals and $0.
 
-**🩹 If it's off:** If every stage shows 0 deals despite inserts, your `GROUP BY` is working against a different connection or database file — confirm you're passing the same `conn` object, not re-initializing from scratch. If the stage names don't match the `STAGES` constant, `SUM` on a non-existent group returns nothing — check for stray whitespace in stage strings.
+**🩹 If it's off:** If every stage shows 0 deals despite inserts, your `GROUP BY` is working against a different connection or database file, confirm you're passing the same `conn` object, not re-initializing from scratch. If the stage names don't match the `STAGES` constant, `SUM` on a non-existent group returns nothing, check for stray whitespace in stage strings.
 
 ### 4.3 Verify the pipeline
 
@@ -373,11 +373,11 @@ for stage, info in pipeline_summary(conn).items():
 
 ## Step 5: Log activities and read back a timeline
 
-A deal without context is a number; a deal with a timeline of calls, emails, and meetings is a *story*. This step writes activities to the database and reconstructs that story for any contact — ordered by date, so a manager can read the relationship history without scrolling.
+A deal without context is a number; a deal with a timeline of calls, emails, and meetings is a *story*. This step writes activities to the database and reconstructs that story for any contact, ordered by date, so a manager can read the relationship history without scrolling.
 
 ### 5.1 Insert activities and fetch the timeline
 
-**👟 Starter hint:** `add_activity` is almost identical in shape to `add_deal` — the pattern is always `INSERT with ? placeholders, commit, return lastrowid`. Write a `timeline_for_contact` that joins activities to contacts and sorts by `activity_date, id`.
+**👟 Starter hint:** `add_activity` is almost identical in shape to `add_deal`, the pattern is always `INSERT with ? placeholders, commit, return lastrowid`. Write a `timeline_for_contact` that joins activities to contacts and sorts by `activity_date, id`.
 
 ```python
 # crm_system.py (continued)
@@ -408,11 +408,11 @@ for a in timeline_for_contact(conn, alice_id):
     print(f"  {a['activity_date']}  [{a['kind']}]  {a['summary']}")
 ```
 
-`ORDER BY activity_date, id` is a two-part sort: dates first, then insertion order for activities on the same day. Without the `, id` tiebreaker, same-day activities appear in arbitrary order, which is fine for a toy but confusing in any real timeline. The `deal_id` being `Optional[int]` matters here — an activity can be about a contact in general, not tied to a specific deal.
+`ORDER BY activity_date, id` is a two-part sort: dates first, then insertion order for activities on the same day. Without the `, id` tiebreaker, same-day activities appear in arbitrary order, which is fine for a toy but confusing in any real timeline. The `deal_id` being `Optional[int]` matters here, an activity can be about a contact in general, not tied to a specific deal.
 
 **🎯 Expected output:** Prints Alice's timeline: the meeting on today's date, then the email, both listed with kind tag and summary.
 
-**🩹 If it's off:** If activities for Alice show Bob's entries (or vice versa), the `contact_id` value passed to `timeline_for_contact` doesn't match — trace back the IDs returned by `add_contact` in Step 2. If the timeline is empty despite inserts, you're querying a different connection that hasn't committed — always use the same `conn` object.
+**🩹 If it's off:** If activities for Alice show Bob's entries (or vice versa), the `contact_id` value passed to `timeline_for_contact` doesn't match, trace back the IDs returned by `add_contact` in Step 2. If the timeline is empty despite inserts, you're querying a different connection that hasn't committed, always use the same `conn` object.
 
 ### 5.2 Verify the activity log
 
@@ -428,7 +428,7 @@ for a in timeline_for_contact(conn, alice_id):
 
 ## Step 6: Surface it all with rich tables
 
-The CRM is functional — contacts are stored, deals flow through a pipeline, activities are logged. But all the output so far is bare `print()` statements. `rich` turns that into a real terminal application: colored tables with aligned columns, visible borders, and headers that make scanning fast.
+The CRM is functional, contacts are stored, deals flow through a pipeline, activities are logged. But all the output so far is bare `print()` statements. `rich` turns that into a real terminal application: colored tables with aligned columns, visible borders, and headers that make scanning fast.
 
 ### 6.1 Render contacts and the pipeline as rich tables
 
@@ -470,17 +470,17 @@ show_contacts(conn)
 show_pipeline(conn)
 ```
 
-`style="cyan"` and `style="green"` are `rich` color directives — they add meaning without overloading the output: IDs are always one color, names another, stages a third. The `justify="right"` on Value makes dollar amounts line up by decimal, not by first digit, which is what your eye expects from a spreadsheet. One `Console()` instance shared by all functions keeps the color and width settings consistent.
+`style="cyan"` and `style="green"` are `rich` color directives, they add meaning without overloading the output: IDs are always one color, names another, stages a third. The `justify="right"` on Value makes dollar amounts line up by decimal, not by first digit, which is what your eye expects from a spreadsheet. One `Console()` instance shared by all functions keeps the color and width settings consistent.
 
-**🎯 Expected output:** Two `rich` tables in the terminal — one listing both contacts with colored ID/Name/Company columns, the second showing both deals with the contact name joined in, dollar values right-aligned, and stages color-coded.
+**🎯 Expected output:** Two `rich` tables in the terminal, one listing both contacts with colored ID/Name/Company columns, the second showing both deals with the contact name joined in, dollar values right-aligned, and stages color-coded.
 
-**🩹 If it's off:** If the output is garbled plain text, you're running in a notebook cell rather than a real terminal — `rich` detects non-TTY output and strips colors. Use a terminal or a Codespace. If the Value column has misaligned decimals, the `justify="right"` is missing or the values are being formatted as strings before insertion.
+**🩹 If it's off:** If the output is garbled plain text, you're running in a notebook cell rather than a real terminal, `rich` detects non-TTY output and strips colors. Use a terminal or a Codespace. If the Value column has misaligned decimals, the `justify="right"` is missing or the values are being formatted as strings before insertion.
 
 ### 6.2 Verify the rich display
 
 **✅ Checklist**
 
-- ✅ Two styled tables render with color — one for contacts, one for the deal pipeline.
+- ✅ Two styled tables render with color, one for contacts, one for the deal pipeline.
 - ✅ Dollar values in the pipeline table are right-aligned, with commas in thousands.
 
 **🤔 Socratic Question(s)**
@@ -490,15 +490,15 @@ show_pipeline(conn)
 
 ## ⚠️ Common pitfalls
 
-- **SQL injection via f-strings.** `"SELECT * FROM contacts WHERE name LIKE f'%{query}%'"` is a textbook injection vector — always use `?` placeholders with a separate parameters tuple. The `search_contacts` function above demonstrates the right shape; any query that interpolates user input directly is wrong, no matter how quick the prototype.
-- **Forgetting `conn.commit()`.** Every `INSERT` and `UPDATE` is a transaction; without a commit, the write is invisible to the next `SELECT` and silently vanishes. The symptom is "I inserted a row but the query returns nothing" — almost always a missing commit.
-- **Stage string typos silently create new stages.** `move_deal` rejects invalid stages in the Python guard, but if you bypass it with a raw `UPDATE`, SQLite will happily store any string as a stage — and `deals_by_stage` will never find those rows under the expected stage name. Keep the guard.
-- **Alphabetical ordering of pipeline stages.** `ORDER BY stage` sorts "lead" before "negotiation" — which *happens* to match the pipeline order in this small example, but is fragile. A production CRM needs an explicit stage ordering, either via a `CASE` expression or a lookup table.
+- **SQL injection via f-strings.** `"SELECT * FROM contacts WHERE name LIKE f'%{query}%'"` is a textbook injection vector, always use `?` placeholders with a separate parameters tuple. The `search_contacts` function above demonstrates the right shape; any query that interpolates user input directly is wrong, no matter how quick the prototype.
+- **Forgetting `conn.commit()`.** Every `INSERT` and `UPDATE` is a transaction; without a commit, the write is invisible to the next `SELECT` and silently vanishes. The symptom is "I inserted a row but the query returns nothing", almost always a missing commit.
+- **Stage string typos silently create new stages.** `move_deal` rejects invalid stages in the Python guard, but if you bypass it with a raw `UPDATE`, SQLite will happily store any string as a stage, and `deals_by_stage` will never find those rows under the expected stage name. Keep the guard.
+- **Alphabetical ordering of pipeline stages.** `ORDER BY stage` sorts "lead" before "negotiation", which *happens* to match the pipeline order in this small example, but is fragile. A production CRM needs an explicit stage ordering, either via a `CASE` expression or a lookup table.
 - **`dict(row)` on sqlite3.Row doesn't nest.** The foreign-key relationships (`contact_name` from the JOIN) appear as flat keys, not a nested `{"contact": {"name": ...}}` structure. Any code that expects nesting will silently get `KeyError`; work with the flat dict shape or build the nesting explicitly.
 
 ## What you just built
 
-A working command-line CRM: it stores contacts, tracks deals through a validated six-stage pipeline, logs activities with dates, reconstructs contact timelines, and presents everything through styled `rich` tables — all backed by a real SQLite database with parameterized queries and foreign keys. Point it at your own `.db` file and the data persists between runs; no simulation, no fake data.
+A working command-line CRM: it stores contacts, tracks deals through a validated six-stage pipeline, logs activities with dates, reconstructs contact timelines, and presents everything through styled `rich` tables, all backed by a real SQLite database with parameterized queries and foreign keys. Point it at your own `.db` file and the data persists between runs; no simulation, no fake data.
 
 :::tip[Run a fuller version without any local setup]
 [`examples/crm-system/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/crm-system) in the course repo is a runnable notebook version: an in-memory SQLite database seeded with sample contacts and deals, every query and table from Steps 1–6 executing end to end, and the rich output rendered inline. Clone it, or open the whole repo in a [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), and run it from there.
@@ -506,12 +506,12 @@ A working command-line CRM: it stores contacts, tracks deals through a validated
 
 ## Where to go from here
 
-- Build a **pipeline value report panel**: use `rich.panel.Panel` to print the total pipeline value, count of open deals, and average deal size — all from `pipeline_summary` — inside a single colored panel that fits at the top of every `show_pipeline` call.
+- Build a **pipeline value report panel**: use `rich.panel.Panel` to print the total pipeline value, count of open deals, and average deal size, all from `pipeline_summary`, inside a single colored panel that fits at the top of every `show_pipeline` call.
 - Add **deal reassignment**: write `reassign_deal(conn, deal_id, new_contact_id)` that changes the contact, then log the reassignment as an activity so the timeline shows who the deal belonged to before and after.
-- Implement **CSV import/export**: add `import_csv(conn, path)` using Python's `csv.DictReader` to bulk-load contacts, and `export_deals(conn, path)` to dump the pipeline to a spreadsheet — the simplest path from a CRM to a reporting tool.
+- Implement **CSV import/export**: add `import_csv(conn, path)` using Python's `csv.DictReader` to bulk-load contacts, and `export_deals(conn, path)` to dump the pipeline to a spreadsheet, the simplest path from a CRM to a reporting tool.
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python that tracks real relationships. 🎓

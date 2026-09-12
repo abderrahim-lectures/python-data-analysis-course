@@ -1,12 +1,12 @@
 ---
 title: "Build a Job-Listing Aggregator"
-description: "Scrape multiple job-board-style sources, dedupe listings across them, and alert on new matches against a keyword filter — with requests/BeautifulSoup and pandas, no API key needed."
+description: "Scrape multiple job-board-style sources, dedupe listings across them, and alert on new matches against a keyword filter, with requests/BeautifulSoup and pandas, no API key needed."
 difficulty: "intermediate"
 ---
 
 # 🕷️ Build a Job-Listing Aggregator
 
-[Scrape and Analyze a Live Website](/projects/scrape-analyze) fetched one site and turned its HTML into a CSV. Real job hunting means watching *several* sources at once, none of which agree on markup, and caring only about what's genuinely new since you last checked. This project builds that: parse listings out of a handful of differently-structured "job board" pages, combine them into one table, dedupe the postings that show up on more than one board, filter to the roles that match a keyword you care about, and alert only on new matches — not the same ten listings every single run. It assumes Python 101-level Python and, for the dedupe/filter step, Data Analysis-level pandas comfort — filtering, `drop_duplicates`, boolean masks.
+[Scrape and Analyze a Live Website](/projects/scrape-analyze) fetched one site and turned its HTML into a CSV. Real job hunting means watching *several* sources at once, none of which agree on markup, and caring only about what's genuinely new since you last checked. This project builds that: parse listings out of a handful of differently-structured "job board" pages, combine them into one table, dedupe the postings that show up on more than one board, filter to the roles that match a keyword you care about, and alert only on new matches, not the same ten listings every single run. It assumes Python 101-level Python and, for the dedupe/filter step, Data Analysis-level pandas comfort, filtering, `drop_duplicates`, boolean masks.
 
 This is optional and ungraded. See [Real-World Projects](/projects) for the full, growing list.
 
@@ -19,21 +19,21 @@ This is optional and ungraded. See [Real-World Projects](/projects) for the full
 
 ## Where to run this
 
-**Locally with `uv`** is the path this lesson's steps follow, and the recommended one — it's real Python running on your own machine, the same "graduate to real Python" move as every other project in this section. The Setup section below walks through installing it.
+**Locally with `uv`** is the path this lesson's steps follow, and the recommended one, it's real Python running on your own machine, the same "graduate to real Python" move as every other project in this section. The Setup section below walks through installing it.
 
 **GitHub Codespaces** is a zero-setup alternative if you'd rather not install anything locally yet: open [the whole course repo in a free Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python, and `uv` are already installed, per the repo's `.devcontainer/devcontainer.json`) and run the exact same `uv` commands from a terminal in your browser tab.
 
-**Google Colab, Kaggle Notebooks, or Binder** are a genuinely good fit for this particular project — no GPU, no API key, no long-running process to manage, and the whole pipeline fits comfortably in a handful of cells. A real, runnable notebook version (the same parsers, dedupe key, and keyword filter as the steps below) lives at [`examples/job-aggregator/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/job-aggregator/notebook.ipynb). Click a badge to launch it directly, no local install at all:
+**Google Colab, Kaggle Notebooks, or Binder** are a genuinely good fit for this particular project, no GPU, no API key, no long-running process to manage, and the whole pipeline fits comfortably in a handful of cells. A real, runnable notebook version (the same parsers, dedupe key, and keyword filter as the steps below) lives at [`examples/job-aggregator/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/job-aggregator/notebook.ipynb). Click a badge to launch it directly, no local install at all:
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/job-aggregator/notebook.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/job-aggregator/notebook.ipynb)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fjob-aggregator%2Fnotebook.ipynb)
 
-Be honest with yourself about the tradeoff, though: this is a lower-fidelity way to experience the project than a real local `uv` project — no separate files, no real project structure, just cells in a notebook. Treat it as a quick way to experiment, not the primary path.
+Be honest with yourself about the tradeoff, though: this is a lower-fidelity way to experience the project than a real local `uv` project, no separate files, no real project structure, just cells in a notebook. Treat it as a quick way to experiment, not the primary path.
 
 ## Setup
 
-`uv` is a single tool that replaces the usual "install Python, then install pip, then install a virtual environment tool, then install packages" chain — it can install and manage Python versions itself, alongside your project's dependencies.
+`uv` is a single tool that replaces the usual "install Python, then install pip, then install a virtual environment tool, then install packages" chain, it can install and manage Python versions itself, alongside your project's dependencies.
 
 **macOS / Linux** (terminal):
 
@@ -65,12 +65,12 @@ No API key, no free-tier signup, nothing to configure before you can run a singl
 
 ## A note on what this project scrapes
 
-Real job boards — LinkedIn, Indeed, and similar sites — explicitly forbid automated scraping in their terms of service, actively fingerprint and block scrapers, and change their markup often enough that any lesson built against them would break within months. None of that is a good foundation for a course project meant to keep working for years.
+Real job boards, LinkedIn, Indeed, and similar sites, explicitly forbid automated scraping in their terms of service, actively fingerprint and block scrapers, and change their markup often enough that any lesson built against them would break within months. None of that is a good foundation for a course project meant to keep working for years.
 
-Instead, this project ships with its own small **bundled sample dataset**: three static HTML files under [`examples/job-aggregator/sample_data/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/job-aggregator/sample_data), each styled like a different toy "job board" (`board_alpha.html`, `board_beta.html`, `board_gamma.html`), each using genuinely different HTML for its listings — a div-and-span card layout, a bulleted list, and a plain `<table>`. Two of the ten listings across them are the same job posted to more than one board, on purpose, so there's something real to dedupe. You're parsing real HTML with real BeautifulSoup calls the entire way through — the only difference from scraping a live site is that `requests.get()` is replaced by reading a local file, so the lesson never depends on some external site's uptime, markup, or tolerance for being scraped.
+Instead, this project ships with its own small **bundled sample dataset**: three static HTML files under [`examples/job-aggregator/sample_data/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/job-aggregator/sample_data), each styled like a different toy "job board" (`board_alpha.html`, `board_beta.html`, `board_gamma.html`), each using genuinely different HTML for its listings, a div-and-span card layout, a bulleted list, and a plain `<table>`. Two of the ten listings across them are the same job posted to more than one board, on purpose, so there's something real to dedupe. You're parsing real HTML with real BeautifulSoup calls the entire way through, the only difference from scraping a live site is that `requests.get()` is replaced by reading a local file, so the lesson never depends on some external site's uptime, markup, or tolerance for being scraped.
 
 :::tip[Always check robots.txt and terms of service before scraping any real site]
-If you extend this project to point at a real, live job board or any other real site, check that site's `robots.txt` (e.g. `https://example.com/robots.txt`) and terms of service first. `robots.txt` states which parts of a site automated tools are and aren't allowed to fetch. Many job boards go further and explicitly prohibit scraping in their terms — read those, not just `robots.txt`, since a site can permit a URL in `robots.txt` while still forbidding automated access in its terms of service.
+If you extend this project to point at a real, live job board or any other real site, check that site's `robots.txt` (e.g. `https://example.com/robots.txt`) and terms of service first. `robots.txt` states which parts of a site automated tools are and aren't allowed to fetch. Many job boards go further and explicitly prohibit scraping in their terms, read those, not just `robots.txt`, since a site can permit a URL in `robots.txt` while still forbidding automated access in its terms of service.
 :::
 
 ## Step 1: Parse a single listing page into structured fields
@@ -79,7 +79,7 @@ Open [`board_alpha.html`](https://github.com/abderrahim-lectures/python-data-ana
 
 ### 1.1 Write the Alpha parser
 
-**👟 Starter hint:** Inspect `board_alpha.html` first to confirm the CSS selectors, then write the loop — for each `div.job-card`, pull the title, company, location, and description with `find(...).get_text(strip=True)` and print one line per listing.
+**👟 Starter hint:** Inspect `board_alpha.html` first to confirm the CSS selectors, then write the loop, for each `div.job-card`, pull the title, company, location, and description with `find(...).get_text(strip=True)` and print one line per listing.
 
 ```python
 # aggregate.py
@@ -104,9 +104,9 @@ uv run python aggregate.py
 
 You should see four printed lines, one per listing on Alpha's board.
 
-**🎯 Expected output:** `uv run python aggregate.py` runs without errors and prints exactly 4 lines, one per listing in `board_alpha.html`, each with a real title, company, and location — not `None` or an empty string.
+**🎯 Expected output:** `uv run python aggregate.py` runs without errors and prints exactly 4 lines, one per listing in `board_alpha.html`, each with a real title, company, and location, not `None` or an empty string.
 
-**🩹 If it's off:** A `NoneType` error on `.get_text(...)` means the selector found no tags — a typo in `class_="job-card"` or the inner selector. If a field prints empty, `.get_text(strip=True)` found the tag but no text — check the HTML actually wraps that value in that tag.
+**🩹 If it's off:** A `NoneType` error on `.get_text(...)` means the selector found no tags, a typo in `class_="job-card"` or the inner selector. If a field prints empty, `.get_text(strip=True)` found the tag but no text, check the HTML actually wraps that value in that tag.
 
 ### 1.2 Verify the single-source parse
 
@@ -114,7 +114,7 @@ You should see four printed lines, one per listing on Alpha's board.
 
 - ✅ `uv run python aggregate.py` runs without errors.
 - ✅ It prints exactly 4 lines, one per listing in `board_alpha.html`.
-- ✅ Each line has a real title, company, and location — not `None` or an empty string.
+- ✅ Each line has a real title, company, and location, not `None` or an empty string.
 
 **🤔 Socratic Question(s)**
 
@@ -123,7 +123,7 @@ You should see four printed lines, one per listing on Alpha's board.
 
 ## Step 2: Parse multiple sources and combine them
 
-`board_beta.html` and `board_gamma.html` hold the same *kind* of data — title, company, location, description — but neither uses Alpha's markup. Beta lists jobs as `<li class="listing">` items with an `<a class="position-title">`; Gamma lists them as `<tr class="job-row">` table rows with plain `<td>` cells. A single "one selector fits all boards" scraper doesn't exist — so build one small parser per source, then combine them.
+`board_beta.html` and `board_gamma.html` hold the same *kind* of data, title, company, location, description, but neither uses Alpha's markup. Beta lists jobs as `<li class="listing">` items with an `<a class="position-title">`; Gamma lists them as `<tr class="job-row">` table rows with plain `<td>` cells. A single "one selector fits all boards" scraper doesn't exist, so build one small parser per source, then combine them.
 
 ### 2.1 Write a parser for each board
 
@@ -145,9 +145,9 @@ def parse_board_beta(html):
     return listings
 ```
 
-**🎯 Expected output:** `parse_board_beta(html)` returns a list of dicts, each with the five keys `title, company, location, description, source` — the exact same shape Alpha's parser produces.
+**🎯 Expected output:** `parse_board_beta(html)` returns a list of dicts, each with the five keys `title, company, location, description, source`, the exact same shape Alpha's parser produces.
 
-**🩹 If it's off:** If you get an `AttributeError: 'NoneType' object has no attribute 'get_text'`, one of your classes is wrong (e.g. Beta uses `class_="employer"`, not `"company"`) — inspect a real Beta row's HTML and correct the selector. Only parsing an empty list usually means `find_all` matched nothing because the class value didn't match exactly.
+**🩹 If it's off:** If you get an `AttributeError: 'NoneType' object has no attribute 'get_text'`, one of your classes is wrong (e.g. Beta uses `class_="employer"`, not `"company"`), inspect a real Beta row's HTML and correct the selector. Only parsing an empty list usually means `find_all` matched nothing because the class value didn't match exactly.
 
 ### 2.2 Parse Gamma (position-based) and combine all boards
 
@@ -190,9 +190,9 @@ if __name__ == "__main__":
 uv run python aggregate.py
 ```
 
-**🎯 Expected output:** You should see 10 raw listings total (4 + 3 + 3) — "raw" because nothing has been deduped yet.
+**🎯 Expected output:** You should see 10 raw listings total (4 + 3 + 3), "raw" because nothing has been deduped yet.
 
-**🩹 If it's off:** If `Gamma`'s parser raises `IndexError`, `cells[0]` or `cells[3]` doesn't exist — a row has fewer than 4 `<td>` cells; print `len(cells)` to see. If the total isn't 10, one parser silently returned `[]` — check each parser against its own file, one at a time, by printing `len(parse_board_X(html))`.
+**🩹 If it's off:** If `Gamma`'s parser raises `IndexError`, `cells[0]` or `cells[3]` doesn't exist, a row has fewer than 4 `<td>` cells; print `len(cells)` to see. If the total isn't 10, one parser silently returned `[]`, check each parser against its own file, one at a time, by printing `len(parse_board_X(html))`.
 
 ### 2.3 Verify the combined parse
 
@@ -209,11 +209,11 @@ uv run python aggregate.py
 
 ## Step 3: Dedupe listings with pandas
 
-Two of the ten listings are the exact same job, posted on two different boards: a "Senior Python Developer" role at Northwind Analytics appears on both Alpha and Beta, and a "Data Analyst" role at Contoso Retail appears on both Alpha and Gamma. Left alone, a downstream alert would report the same opening twice. The fix is a dedupe key — something stable enough to recognize "the same job" across sources even though the wording of the description differs slightly board to board.
+Two of the ten listings are the exact same job, posted on two different boards: a "Senior Python Developer" role at Northwind Analytics appears on both Alpha and Beta, and a "Data Analyst" role at Contoso Retail appears on both Alpha and Gamma. Left alone, a downstream alert would report the same opening twice. The fix is a dedupe key, something stable enough to recognize "the same job" across sources even though the wording of the description differs slightly board to board.
 
 ### 3.1 Build a stable dedupe key
 
-**👟 Starter hint:** Write `dedupe_key(listing)` that normalizes `title + company` (lowercased, whitespace-collapsed) and hashes it — not the whole row. Import `hashlib` and `re`.
+**👟 Starter hint:** Write `dedupe_key(listing)` that normalizes `title + company` (lowercased, whitespace-collapsed) and hashes it, not the whole row. Import `hashlib` and `re`.
 
 ```python
 # aggregate.py (continued)
@@ -231,7 +231,7 @@ def dedupe_key(listing):
 
 **🎯 Expected output:** The Alpha and Beta copies of "Senior Python Developer @ Northwind Analytics" produce the *same* `dedupe_key`, even though their descriptions differ slightly.
 
-**🩹 If it's off (this is the crux):** Do NOT hash the entire listing (including `description`) — Alpha's and Beta's differently-worded descriptions of the same job would then hash to *different* keys, and duplicates would survive deduping. The key must be built from fields that identify *the same job*, not the same words. Normalizing case and collapsing whitespace is what lets `Title ` and `title` match.
+**🩹 If it's off (this is the crux):** Do NOT hash the entire listing (including `description`), Alpha's and Beta's differently-worded descriptions of the same job would then hash to *different* keys, and duplicates would survive deduping. The key must be built from fields that identify *the same job*, not the same words. Normalizing case and collapsing whitespace is what lets `Title ` and `title` match.
 
 ### 3.2 Dedupe with pandas and export the CSV
 
@@ -256,7 +256,7 @@ uv run python aggregate.py
 
 **🎯 Expected output:** You should see "Deduped 10 listings -> 8 unique jobs (2 duplicate posting(s) removed)" and a `listings.csv` with a header plus 8 rows.
 
-**🩹 If it's off:** If nothing gets removed, the two jobs' keys don't match — re-check your normalization (case/whitespace) and that you're keying on `title + company`, not the full row. If `drop_duplicates` errors on a missing column, you forgot to assign `listing["dedupe_key"]` before building the DataFrame. If `0 duplicate posting(s) removed` prints but you expected some, confirm the duplicates really share the same title *and* company strings.
+**🩹 If it's off:** If nothing gets removed, the two jobs' keys don't match, re-check your normalization (case/whitespace) and that you're keying on `title + company`, not the full row. If `drop_duplicates` errors on a missing column, you forgot to assign `listing["dedupe_key"]` before building the DataFrame. If `0 duplicate posting(s) removed` prints but you expected some, confirm the duplicates really share the same title *and* company strings.
 
 ### 3.3 Verify the dedupe
 
@@ -304,9 +304,9 @@ if __name__ == "__main__":
 uv run python filter_alerts.py
 ```
 
-**🎯 Expected output:** The first run reports 6 matching listings — every listing whose title or description mentions "python".
+**🎯 Expected output:** The first run reports 6 matching listings, every listing whose title or description mentions "python".
 
-**🩹 If it's off:** If you get fewer matches than expected, check the `pattern` built from `|`-joined keywords and that `case=False` is set. If `str.contains` raises a `TypeError` or drops rows, a `description` is `NaN` after `pd.read_csv` — that's exactly what `na=False` guards against; without it, missing values turn into `NaN` mask results and silently drop rows.
+**🩹 If it's off:** If you get fewer matches than expected, check the `pattern` built from `|`-joined keywords and that `case=False` is set. If `str.contains` raises a `TypeError` or drops rows, a `description` is `NaN` after `pd.read_csv`, that's exactly what `na=False` guards against; without it, missing values turn into `NaN` mask results and silently drop rows.
 
 ### 4.2 Remember what you've already alerted on
 
@@ -336,12 +336,12 @@ else:
 save_seen(seen | set(matches["dedupe_key"]))
 ```
 
-**🎯 Expected output:** Run it again without changing anything, and it reports zero new matches — `seen.json` remembers what it already alerted on, exactly like a real scheduled aggregator checking in every morning would need to.
+**🎯 Expected output:** Run it again without changing anything, and it reports zero new matches, `seen.json` remembers what it already alerted on, exactly like a real scheduled aggregator checking in every morning would need to.
 
-**🩹 If it's off:** If a second run repeats all 6 matches, `save_seen` isn't being called (or writes before you compute `new_matches`). If it *never* shows new matches even first run, `seen.json` already exists with stale keys — delete it to test from scratch. The subtle rule: always save the full `seen | set(matches["dedupe_key"])` union, so you remember both what you alerted on *and* what you correctly skipped.
+**🩹 If it's off:** If a second run repeats all 6 matches, `save_seen` isn't being called (or writes before you compute `new_matches`). If it *never* shows new matches even first run, `seen.json` already exists with stale keys, delete it to test from scratch. The subtle rule: always save the full `seen | set(matches["dedupe_key"])` union, so you remember both what you alerted on *and* what you correctly skipped.
 
 :::tip[A keyword filter is just the simplest version of "match against what I care about"]
-`str.contains` with a `|`-joined pattern is intentionally the simplest possible filter — good enough to prove the alerting logic works. A more realistic version might match against several keyword *groups* (e.g. "python" OR "django" for backend roles, "remote" as a separate required filter on `location`), or score a match by how many keywords hit rather than treating it as pass/fail. Get the simple version working first; the matching logic is the easiest part to swap out later.
+`str.contains` with a `|`-joined pattern is intentionally the simplest possible filter, good enough to prove the alerting logic works. A more realistic version might match against several keyword *groups* (e.g. "python" OR "django" for backend roles, "remote" as a separate required filter on `location`), or score a match by how many keywords hit rather than treating it as pass/fail. Get the simple version working first; the matching logic is the easiest part to swap out later.
 :::
 
 ### 4.3 Verify the alert loop
@@ -359,22 +359,22 @@ save_seen(seen | set(matches["dedupe_key"]))
 
 ## ⚠️ Common pitfalls
 
-- **Writing one universal parser instead of one per source.** It's tempting to try a single set of selectors that "mostly works" across boards. It won't — Alpha, Beta, and Gamma don't share a single class name. One small function per source, all returning the same dict shape, is less code overall than fighting a one-size-fits-all selector.
+- **Writing one universal parser instead of one per source.** It's tempting to try a single set of selectors that "mostly works" across boards. It won't, Alpha, Beta, and Gamma don't share a single class name. One small function per source, all returning the same dict shape, is less code overall than fighting a one-size-fits-all selector.
 - **Deduping on the wrong key.** Hashing the entire listing (including `description`) means two postings of the same job with slightly different wording never match, defeating the point of deduping at all. Pick a key that's stable across *how* a job is described, not just *whether* it's word-for-word identical.
 - **Losing the "new since last run" state between runs.** Without something like `seen.json` persisted to disk, every run re-reports every match as new, which is exactly the noisy behavior a real alert should avoid. This is also the first place a real cron job or background process differs from a one-off script: state has to survive between invocations, not just live in a variable.
 - **Forgetting `na=False` in a pandas string filter.** `Series.str.contains` on a column with any missing values raises or produces `NaN` results without it, which can silently drop rows out of a boolean mask in ways that are easy to miss.
 
 ## What you just built
 
-A complete parse → combine → dedupe → filter → alert pipeline: real HTML parsing across multiple differently-structured sources, a dedupe strategy that survives near-duplicate wording, and a keyword alert that remembers what it already told you. Point the same four steps at a different set of scraping-friendly sources (after checking their `robots.txt` and terms of service) and the pipeline doesn't change — only the per-source parser functions do.
+A complete parse → combine → dedupe → filter → alert pipeline: real HTML parsing across multiple differently-structured sources, a dedupe strategy that survives near-duplicate wording, and a keyword alert that remembers what it already told you. Point the same four steps at a different set of scraping-friendly sources (after checking their `robots.txt` and terms of service) and the pipeline doesn't change, only the per-source parser functions do.
 
 ## Where to go from here
 
-- Wire up a real notification instead of printing to the terminal — `smtplib` for an email, or a webhook `POST` to a Discord or Slack channel, fired only for `new_matches`.
+- Wire up a real notification instead of printing to the terminal, `smtplib` for an email, or a webhook `POST` to a Discord or Slack channel, fired only for `new_matches`.
 - Schedule the whole pipeline to run periodically (a cron job, GitHub Actions on a schedule, or a simple loop with `time.sleep()`) so it checks for new listings on its own instead of by hand.
-- Score matches instead of treating the keyword filter as pass/fail — e.g. count how many of several keyword groups a listing hits, and sort `new_matches` by that score before alerting.
-- Swap the CSV/JSON files for a small SQLite database (Python's built-in `sqlite3` module) once you're tracking enough history to want to query it — e.g. "how many new Python listings appeared each week this month?"
+- Score matches instead of treating the keyword filter as pass/fail, e.g. count how many of several keyword groups a listing hits, and sort `new_matches` by that score before alerting.
+- Swap the CSV/JSON files for a small SQLite database (Python's built-in `sqlite3` module) once you're tracking enough history to want to query it, e.g. "how many new Python listings appeared each week this month?"
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.

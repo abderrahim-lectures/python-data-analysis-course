@@ -14,18 +14,18 @@ prerequisites:
 
 Todo maestro necesita una forma de dar seguimiento al desempeño de sus estudiantes, calcular promedios ponderados y convertir los puntajes crudos en boletas de calificaciones significativas. En este proyecto construirás un sistema completo de libreta de calificaciones en Python que maneja registros de estudiantes, cálculo de GPA ponderado, estadísticas de clase, persistencia en CSV e incluso visualización básica. Practicarás el uso de clases para modelar entidades del mundo real, pandas para manipulación de datos y estadística para el análisis.
 
-- **Ejecútalo en el navegador.** Hay un cuaderno interactivo listo — ábrelo en Colab, Kaggle o Binder y sigue los pasos en orden.
+- **Ejecútalo en el navegador.** Hay un cuaderno interactivo listo, ábrelo en Colab, Kaggle o Binder y sigue los pasos en orden.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/gradebook/notebook.es.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/gradebook/notebook.es.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fgradebook%2Fnotebook.es.ipynb)
 
 ## 🎯 Lo que aprenderás
 
-1. **Modelado de datos con clases** — Representa estudiantes, calificaciones y categorías como objetos con responsabilidades claras
-2. **Cálculo de promedio ponderado** — Calcula GPA que respetan los pesos de las categorías de tareas
-3. **Análisis estadístico** — Encuentra promedios de clase, medianas y distribuciones de calificaciones
-4. **Persistencia en CSV** — Guarda y carga datos de la libreta para que sobrevivan entre sesiones
-5. **Visualización** — Genera gráficos de barras para distribuciones de calificaciones con matplotlib
+1. **Modelado de datos con clases**, Representa estudiantes, calificaciones y categorías como objetos con responsabilidades claras
+2. **Cálculo de promedio ponderado**, Calcula GPA que respetan los pesos de las categorías de tareas
+3. **Análisis estadístico**, Encuentra promedios de clase, medianas y distribuciones de calificaciones
+4. **Persistencia en CSV**, Guarda y carga datos de la libreta para que sobrevivan entre sesiones
+5. **Visualización**, Genera gráficos de barras para distribuciones de calificaciones con matplotlib
 
 ## 🎯 Lo que construirás
 
@@ -43,9 +43,9 @@ touch gradebook.py
 
 La base de cualquier libreta de calificaciones es su modelo de datos. Necesitamos representar tres conceptos centrales:
 
-- **Student** — una persona con un nombre y una colección de calificaciones
-- **Grade** — un puntaje único ligado a una categoría y un peso
-- **Category** — una agrupación con nombre (como "tarea" o "examen") con un peso hacia la calificación final
+- **Student**, una persona con un nombre y una colección de calificaciones
+- **Grade**, un puntaje único ligado a una categoría y un peso
+- **Category**, una agrupación con nombre (como "tarea" o "examen") con un peso hacia la calificación final
 
 Usar clases mantiene esto organizado y hace que cada pieza sea fácil de probar y extender.
 
@@ -76,7 +76,7 @@ Grade(category='homework', score=95, weight=0.3)
 
 **🩹 Si sale mal :**
 - Asegúrate de que `weight` sea un decimal (0.3 para 30%), no un porcentaje (30)
-- El método `__repr__` usa comillas simples dentro del f-string — asegúrate de que coincidan
+- El método `__repr__` usa comillas simples dentro del f-string, asegúrate de que coincidan
 
 ### 1.2 Crea la clase Student
 
@@ -110,7 +110,7 @@ Student(name='Alice', grades=2)
 
 **🩹 Si sale mal :**
 - El método `add_grade` debe crear un objeto `Grade` nuevo y añadirlo a `self.grades`
-- No olvides `self.grades = []` en `__init__` — sin esto, todos los estudiantes compartirían la misma lista
+- No olvides `self.grades = []` en `__init__`, sin esto, todos los estudiantes compartirían la misma lista
 
 **✅ Lista de verificación**
 - ✅ `Grade` guarda categoría, puntaje y peso
@@ -227,8 +227,8 @@ def weighted_average(grades):
 
 **🩹 Si sale mal :**
 - Revisa que estés usando `g.weight` y no `g.score` como divisor
-- Asegúrate de manejar el caso de la lista vacía — la división entre cero hará que el programa se bloquee
-- El peso total aquí es 1.3 (0.3 + 0.7 + 0.3), no 1.0 — eso es correcto porque la tarea apareció dos veces
+- Asegúrate de manejar el caso de la lista vacía, la división entre cero hará que el programa se bloquee
+- El peso total aquí es 1.3 (0.3 + 0.7 + 0.3), no 1.0, eso es correcto porque la tarea apareció dos veces
 
 ### 3.2 GPA acumulativo en todos los estudiantes
 
@@ -253,7 +253,7 @@ def class_average(self):
 ```
 
 **🩹 Si sale mal :**
-- Filtra a los estudiantes sin calificaciones — una lista de calificaciones vacía no debe contar para el promedio
+- Filtra a los estudiantes sin calificaciones, una lista de calificaciones vacía no debe contar para el promedio
 - El promedio de la clase es el promedio de los promedios de los estudiantes, no el promedio de todas las calificaciones individuales
 
 **✅ Lista de verificación**
@@ -558,7 +558,7 @@ def load(cls, filename):
 
 **🩹 Si sale mal :**
 - Usa `csv.DictReader` para que puedas acceder a las columnas por nombre (`row["student"]`) en lugar de por índice
-- Convierte `score` y `weight` a `float` — CSV lee todo como cadenas
+- Convierte `score` y `weight` a `float`, CSV lee todo como cadenas
 - Usa un `@classmethod` para que puedas llamar a `Gradebook.load(...)` sin tener una instancia existente
 
 **✅ Lista de verificación**
@@ -692,7 +692,7 @@ Un gráfico de barras horizontales que muestra el GPA de cada estudiante con col
 
 **🩹 Si sale mal :**
 - Si las barras son demasiado delgadas, aumenta el parámetro `height` en `barh`
-- Los colores se determinan por el rango del GPA — revisa la comprensión de lista condicional
+- Los colores se determinan por el rango del GPA, revisa la comprensión de lista condicional
 - Si los nombres se superponen, aumenta la altura de la figura según el número de estudiantes
 
 **✅ Lista de verificación**
@@ -710,21 +710,21 @@ Un gráfico de barras horizontales que muestra el GPA de cada estudiante con col
 
 ¿Listo para ir más lejos? Prueba esto:
 
-1. **Validación de pesos** — Asegúrate de que los pesos de las categorías sumen 1.0 para cada estudiante. Si no lo hacen, advierte al usuario y lista el total.
+1. **Validación de pesos**, Asegúrate de que los pesos de las categorías sumen 1.0 para cada estudiante. Si no lo hacen, advierte al usuario y lista el total.
 
-2. **Configuración de pesos por categoría** — Permite que el maestro defina pesos de categoría por defecto (por ejemplo, tarea = 30%, examen = 70%) para que no tenga que especificar el peso cada vez que añade una calificación.
+2. **Configuración de pesos por categoría**, Permite que el maestro defina pesos de categoría por defecto (por ejemplo, tarea = 30%, examen = 70%) para que no tenga que especificar el peso cada vez que añade una calificación.
 
-3. **Exportar a HTML** — Genera una boleta de calificaciones HTML imprimible con tablas estilizadas y colores para las calificaciones por letra. Usa el formateo de cadenas de Python para construir el HTML y luego ábrelo en un navegador con `webbrowser.open`.
+3. **Exportar a HTML**, Genera una boleta de calificaciones HTML imprimible con tablas estilizadas y colores para las calificaciones por letra. Usa el formateo de cadenas de Python para construir el HTML y luego ábrelo en un navegador con `webbrowser.open`.
 
 ---
 
 ## Lo que aprendiste
 
-- **Modelado de datos basado en clases** — Representaste estudiantes, calificaciones y la propia libreta como clases de Python con métodos claros
-- **Promedios ponderados** — Calculaste GPA que respetan los pesos de las categorías, manejando casos límite como listas de calificaciones vacías
-- **Análisis estadístico** — Usaste el módulo `statistics` de Python para la media y la mediana, y construiste un contador personalizado de distribución de calificaciones
-- **Persistencia en CSV** — Guardaste y cargaste datos de la libreta usando `csv.DictReader` y `csv.writer`
-- **Visualización de datos** — Creaste gráficos de barras con matplotlib para distribuciones de calificaciones y comparaciones de estudiantes
-- **Generación de reportes** — Construiste boletas de calificaciones de texto formateadas con calificaciones agrupadas y estadísticas de resumen
+- **Modelado de datos basado en clases**, Representaste estudiantes, calificaciones y la propia libreta como clases de Python con métodos claros
+- **Promedios ponderados**, Calculaste GPA que respetan los pesos de las categorías, manejando casos límite como listas de calificaciones vacías
+- **Análisis estadístico**, Usaste el módulo `statistics` de Python para la media y la mediana, y construiste un contador personalizado de distribución de calificaciones
+- **Persistencia en CSV**, Guardaste y cargaste datos de la libreta usando `csv.DictReader` y `csv.writer`
+- **Visualización de datos**, Creaste gráficos de barras con matplotlib para distribuciones de calificaciones y comparaciones de estudiantes
+- **Generación de reportes**, Construiste boletas de calificaciones de texto formateadas con calificaciones agrupadas y estadísticas de resumen
 
 Ahora tienes una libreta de calificaciones totalmente funcional que puedes extender con características como notificaciones por email, gestión de la curva o una interfaz web. La arquitectura basada en clases hace que cada pieza sea fácil de probar, modificar y reutilizar.

@@ -19,9 +19,9 @@ learningObjectives:
 
 # 🛠️ 🔐 Construye un Registro de Auditoría
 
-Un registro de auditoría es el documento que le muestras al investigador *después* de que algo salió mal: quién hizo qué, en qué orden y — de manera crítica — si algo de eso fue alterado en silencio después. Un archivo de registro de líneas de texto no prueba nada por sí mismo; una edición de texto plano se ve idéntica a un evento real. Este proyecto construye la estructura que hace detectable la reescritura: un registro solo de adición donde cada entrada lleva un hash SHA-256 de su propio contenido **más** el hash de la entrada anterior, formando una cadena. Altera una línea en cualquier parte y cada eslabón subsecuente se rompe; una sola pasada de `verify()` reporta exactamente qué entrada fue tocada. Alrededor de ese núcleo agregarás consultas por severidad y fuente, una poda de retención que mantiene la cadena válida y una exportación JSONL para dashboards y herramientas de cumplimiento. Todo corre en la biblioteca estándar y es determinista — los mismos dieciséis eventos verifican de la misma manera cada vez.
+Un registro de auditoría es el documento que le muestras al investigador *después* de que algo salió mal: quién hizo qué, en qué orden y, de manera crítica, si algo de eso fue alterado en silencio después. Un archivo de registro de líneas de texto no prueba nada por sí mismo; una edición de texto plano se ve idéntica a un evento real. Este proyecto construye la estructura que hace detectable la reescritura: un registro solo de adición donde cada entrada lleva un hash SHA-256 de su propio contenido **más** el hash de la entrada anterior, formando una cadena. Altera una línea en cualquier parte y cada eslabón subsecuente se rompe; una sola pasada de `verify()` reporta exactamente qué entrada fue tocada. Alrededor de ese núcleo agregarás consultas por severidad y fuente, una poda de retención que mantiene la cadena válida y una exportación JSONL para dashboards y herramientas de cumplimiento. Todo corre en la biblioteca estándar y es determinista, los mismos dieciséis eventos verifican de la misma manera cada vez.
 
-Esto asume clases, métodos, E/S de archivos y una primera mirada a `hashlib.sha256`. Es un proyecto opcional y no calificado — consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
+Esto asume clases, métodos, E/S de archivos y una primera mirada a `hashlib.sha256`. Es un proyecto opcional y no calificado, consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 ## 🎯 Lo que harás
 
@@ -33,7 +33,7 @@ Esto asume clases, métodos, E/S de archivos y una primera mirada a `hashlib.sha
 
 ## Dónde ejecutar esto
 
-**Localmente con `uv`** es el camino recomendado — el registrador es biblioteca estándar pura (`hashlib`, `pathlib`, `json`), así que un `uv init` es todo lo que necesitas.
+**Localmente con `uv`** es el camino recomendado, el registrador es biblioteca estándar pura (`hashlib`, `pathlib`, `json`), así que un `uv init` es todo lo que necesitas.
 
 **Google Colab, Kaggle Notebooks y Binder** ejecutan cada paso sin modificar. Usa una ruta local al proyecto (ej. `audit.log`) en lugar de una ruta del sistema; los notebooks y Binder dejan que ese archivo viva junto al código.
 
@@ -57,12 +57,12 @@ Sin dependencias. El registro es un archivo `.txt` con un evento por línea; la 
 **✅ Lista de verificación**
 
 - ✅ `uv init audit-logger` crea el proyecto y un `main.py`.
-- ✅ `uv run python3 -c "import hashlib, pathlib, json"` tiene éxito — todo es biblioteca estándar.
+- ✅ `uv run python3 -c "import hashlib, pathlib, json"` tiene éxito, todo es biblioteca estándar.
 
 **🤔 Pregunta(s) socrática(s)**
 
 - Una línea de registro como `INFO auth login ok` sola no prueba nada sobre su propia autenticidad. ¿Qué dos propiedades debe tener un registro *resistente a la manipulación* más allá de "es un archivo que alguien escribió"?
-- La cadena hashea cada entrada contra su predecesora, así que el *orden* es parte de la evidencia. ¿Por qué importa el orden para un registro de auditoría — qué ocultaría un registro forjado pero re-ordenado?
+- La cadena hashea cada entrada contra su predecesora, así que el *orden* es parte de la evidencia. ¿Por qué importa el orden para un registro de auditoría, qué ocultaría un registro forjado pero re-ordenado?
 
 ## Paso 1: Un registro de eventos solo de adición
 
@@ -70,7 +70,7 @@ Primero, registro honesto ordinario solo de adición: los eventos se vuelven lí
 
 ### 1.1 El helper de resumen
 
-**👟 Pista inicial :** Escribe `digest(*parts)` que une las partes con `|` y devuelve el resumen hex SHA-256 — el pegamento para cada hash que computarás.
+**👟 Pista inicial :** Escribe `digest(*parts)` que une las partes con `|` y devuelve el resumen hex SHA-256, el pegamento para cada hash que computarás.
 
 ```python
 # main.py
@@ -82,11 +82,11 @@ def digest(*parts):
 print(digest("1", "2025-06-01T10:00:00", "INFO", "auth", "login ok"))
 ```
 
-`"|".join(parts)` hace inequívoca la cadena que hasheas: sin un separador, `"a" + "bc"` y `"ab" + "c"` colisionan; con `|`, `("a","bc")` y `("ab","c")` difieren en bytes. El resumen hex es determinista — mismas entradas, misma salida, para siempre — que es la propiedad de la que pende toda la cadena.
+`"|".join(parts)` hace inequívoca la cadena que hasheas: sin un separador, `"a" + "bc"` y `"ab" + "c"` colisionan; con `|`, `("a","bc")` y `("ab","c")` difieren en bytes. El resumen hex es determinista, mismas entradas, misma salida, para siempre, que es la propiedad de la que pende toda la cadena.
 
 **🎯 Resultado esperado :** Una cadena hex de 64 caracteres (ej. `f0c2…`): los resúmenes SHA-256 siempre son 64 caracteres hex sin importar la longitud de la entrada.
 
-**🩹 Si sale mal :** Si la longitud de la salida difiere de 64, no estás llamando `sha256` (`md5` da 32). Si aparece un `TypeError`, se coló una parte no-cadena — codifica/`str()` primero.
+**🩹 Si sale mal :** Si la longitud de la salida difiere de 64, no estás llamando `sha256` (`md5` da 32). Si aparece un `TypeError`, se coló una parte no-cadena, codifica/`str()` primero.
 
 ### 1.2 Añade eventos como líneas
 
@@ -112,7 +112,7 @@ log.append("INFO", "auth", "logout ok", ts="2025-06-01T10:01:00")
 print(log.path.read_text())
 ```
 
-`open("a")` es el *modo* que hace real la promesa de solo de adición: cada llamada escribe al final y nunca reescribe bytes anteriores. El contador `seq` da a los eventos un orden explícito que sobrevive incluso si los timestamps son iguales. El payload unido con pipes es el registro de datos del log — la cadena del paso 2 lo envuelve.
+`open("a")` es el *modo* que hace real la promesa de solo de adición: cada llamada escribe al final y nunca reescribe bytes anteriores. El contador `seq` da a los eventos un orden explícito que sobrevive incluso si los timestamps son iguales. El payload unido con pipes es el registro de datos del log, la cadena del paso 2 lo envuelve.
 
 **🎯 Resultado esperado :**
 
@@ -133,9 +133,9 @@ GENESIS = digest("GENESIS")
 print(GENESIS[:16], "...")
 ```
 
-Toda cadena necesita un predecesor para su primer eslabón. `GENESIS` es ese ancla constante: la entrada 1 apunta *a* ella, y una vez que existe la entrada 1, la cadena referencia solo entradas reales. No hay nada secreto sobre la cadena `"GENESIS"` — su rol es ser un punto de partida **fijo y conocido** contra el que todos verifican.
+Toda cadena necesita un predecesor para su primer eslabón. `GENESIS` es ese ancla constante: la entrada 1 apunta *a* ella, y una vez que existe la entrada 1, la cadena referencia solo entradas reales. No hay nada secreto sobre la cadena `"GENESIS"`, su rol es ser un punto de partida **fijo y conocido** contra el que todos verifican.
 
-**🎯 Resultado esperado :** Dieciséis caracteres hex seguidos de `...` (los 64 completos están en la primera línea de la región del paso 1.1 — mismo helper, misma función).
+**🎯 Resultado esperado :** Dieciséis caracteres hex seguidos de `...` (los 64 completos están en la primera línea de la región del paso 1.1, mismo helper, misma función).
 
 **🩹 Si sale mal :** Si `GENESIS` varía entre ejecuciones, estás hasheando una parte dependiente del tiempo. Debe ser un literal.
 
@@ -145,16 +145,16 @@ Toda cadena necesita un predecesor para su primer eslabón. `GENESIS` es ese anc
 
 - ✅ Dos llamadas a `append` producen exactamente dos líneas unidas con pipes, en orden.
 - ✅ Reabrir la misma ruta de `AuditLog` y añadir escribe la tercera línea al final.
-- ✅ `GENESIS` es una constante — mismo valor en cada ejecución del intérprete.
+- ✅ `GENESIS` es una constante, mismo valor en cada ejecución del intérprete.
 
 **🤔 Pregunta(s) socrática(s)**
 
-- Solo de adición es una *política* aquí (tú controlas el código que lo escribe). ¿Dónde tiene que vivir la prueba real de "nadie reescribió la historia" — en la convención de escritura, o en algo verificable después? Eso verificable es el paso 2.
-- El archivo tiene los eventos en texto claro, legible por cualquiera. ¿Es eso una debilidad para un registro de *auditoría*, y qué agregarías — cifrado, firmas o permisos — sin romper la cadena?
+- Solo de adición es una *política* aquí (tú controlas el código que lo escribe). ¿Dónde tiene que vivir la prueba real de "nadie reescribió la historia", en la convención de escritura, o en algo verificable después? Eso verificable es el paso 2.
+- El archivo tiene los eventos en texto claro, legible por cualquiera. ¿Es eso una debilidad para un registro de *auditoría*, y qué agregarías, cifrado, firmas o permisos, sin romper la cadena?
 
-## Paso 2: La cadena de hash — y la prueba de manipulación
+## Paso 2: La cadena de hash, y la prueba de manipulación
 
-Ahora la recompensa: cada entrada almacena el hash de la entrada anterior, haciendo que cualquier edición rompa la cadena. Luego la verificas — y observas cómo atrapa una edición plantada.
+Ahora la recompensa: cada entrada almacena el hash de la entrada anterior, haciendo que cualquier edición rompa la cadena. Luego la verificas, y observas cómo atrapa una edición plantada.
 
 ### 2.1 Enlaza cada entrada con su predecesora
 
@@ -184,7 +184,7 @@ row = log.rows()[-1]
 print(row)
 ```
 
-Cada línea ahora es siete campos: los cinco campos de datos, el hash anterior y el hash propio de la entrada `digest(*payload, prev)`. El hash *incluye* `prev`, así que el orden es parte de la prueba. La siguiente entrada lee el último hash de esta y lo envuelve hacia adelante — una cadena literal, un eslabón por línea.
+Cada línea ahora es siete campos: los cinco campos de datos, el hash anterior y el hash propio de la entrada `digest(*payload, prev)`. El hash *incluye* `prev`, así que el orden es parte de la prueba. La siguiente entrada lee el último hash de esta y lo envuelve hacia adelante, una cadena literal, un eslabón por línea.
 
 **🎯 Resultado esperado :** Una lista de 7 campos cuyo último campo es un hash de 64 caracteres, ej. `['3', '2025-06-01T10:02:00', 'WARN', 'payments', 'retry #1', '…', '…']`.
 
@@ -218,11 +218,11 @@ print("verify:", log.verify())
 
 **🎯 Resultado esperado :** `verify: (True, 6)`.
 
-**🩹 Si sale mal :** Si `(True, 6)` se imprime como `(False, 0)`, la rebanada de payload en `verify` descartó el campo de mensaje — muchos principiantes usan `row[:4]` y rompen cada hash. Usa `row[:5]` (los cinco campos de datos).
+**🩹 Si sale mal :** Si `(True, 6)` se imprime como `(False, 0)`, la rebanada de payload en `verify` descartó el campo de mensaje, muchos principiantes usan `row[:4]` y rompen cada hash. Usa `row[:5]` (los cinco campos de datos).
 
 ### 2.3 Planta una manipulación y atrápala
 
-**👟 Pista inicial :** Corrompe el mensaje de la fila 4 y verifica de nuevo — la ruptura debe apuntar exactamente a esa entrada.
+**👟 Pista inicial :** Corrompe el mensaje de la fila 4 y verifica de nuevo, la ruptura debe apuntar exactamente a esa entrada.
 
 ```python
 # main.py (continued)
@@ -235,11 +235,11 @@ open("audit.log", "w").write("".join(lines))          # truncate only at the end
 print("after edit:", log.verify())
 ```
 
-Reescribir el archivo no es especial — el punto es que la herramienta *se da cuenta*. El payload de la fila 4 cambió, así que su hash almacenado ya no coincide con `digest(*payload, prev)`, y `verify` reporta la ruptura en el índice de fila 3. Cualquier edición en cualquier parte es atrapada, porque cada eslabón de la cadena subsecuente también estaría en desacuerdo. (Restaura el archivo — reescríbelo desde cero — antes del paso 3.)
+Reescribir el archivo no es especial, el punto es que la herramienta *se da cuenta*. El payload de la fila 4 cambió, así que su hash almacenado ya no coincide con `digest(*payload, prev)`, y `verify` reporta la ruptura en el índice de fila 3. Cualquier edición en cualquier parte es atrapada, porque cada eslabón de la cadena subsecuente también estaría en desacuerdo. (Restaura el archivo, reescríbelo desde cero, antes del paso 3.)
 
-**🎯 Resultado esperado :** `after edit: (False, 3)` — la entrada manipulada es la entrada 4 (índice 3).
+**🎯 Resultado esperado :** `after edit: (False, 3)`, la entrada manipulada es la entrada 4 (índice 3).
 
-**🩹 Si sale mal :** Si la verificación reporta un índice posterior, la edición cambió bytes que alimentan solo un hash almacenado *posterior* — verifica que mutaste el campo de mensaje (índice 4), no el campo de hash (índice 6).
+**🩹 Si sale mal :** Si la verificación reporta un índice posterior, la edición cambió bytes que alimentan solo un hash almacenado *posterior*, verifica que mutaste el campo de mensaje (índice 4), no el campo de hash (índice 6).
 
 ### 2.4 Verifica la cadena
 
@@ -247,12 +247,12 @@ Reescribir el archivo no es especial — el punto es que la herramienta *se da c
 
 - ✅ Seis entradas honestas verifican como `(True, 6)`.
 - ✅ Editar el mensaje de la entrada 4 produce `(False, 3)`.
-- ✅ Editar *cualquier* entrada — mensaje, severidad u orden — se rompe en o después de esa entrada.
+- ✅ Editar *cualquier* entrada, mensaje, severidad u orden, se rompe en o después de esa entrada.
 
 **🤔 Pregunta(s) socrática(s)**
 
 - La cadena atrapa ediciones pero no la *eliminación de todo el archivo* ni una restauración a granel. ¿Qué distingue la resistencia a la manipulación (este paso) de las firmas digitales (tu clave privada), y qué preocupación resuelve cada una?
-- `verify` recomputa desde `GENESIS` cada vez. Si el registro tuviera un millón de entradas, ¿a dónde iría el costo — y qué adición barata (almacenar el último hash, re-verificar desde ahí) mantiene rápidas las comprobaciones puntuales?
+- `verify` recomputa desde `GENESIS` cada vez. Si el registro tuviera un millón de entradas, ¿a dónde iría el costo, y qué adición barata (almacenar el último hash, re-verificar desde ahí) mantiene rápidas las comprobaciones puntuales?
 
 ## Paso 3: Consulta y agrega
 
@@ -290,7 +290,7 @@ print([r[2:4] for r in fresh.select(severity="ERROR")])
 print([r[:2] for r in fresh.select(source="payments")])
 ```
 
-`select` es un filtro puro sobre `rows()`: sin estado, sin mutación — mismas filas adentro, mismas respuestas afuera, de manera determinista. Sostener los campos de *datos* `row[:4]` (dejando fuera los dos hashes) hace legible la lista de resultados y mantiene los hashes visibles en `rows()` cuando necesitas verificar.
+`select` es un filtro puro sobre `rows()`: sin estado, sin mutación, mismas filas adentro, mismas respuestas afuera, de manera determinista. Sostener los campos de *datos* `row[:4]` (dejando fuera los dos hashes) hace legible la lista de resultados y mantiene los hashes visibles en `rows()` cuando necesitas verificar.
 
 **🎯 Resultado esperado :**
 
@@ -319,7 +319,7 @@ print(counts(fresh.rows()))
 
 **🎯 Resultado esperado :** `{'INFO': 2, 'WARN': 2, 'ERROR': 2}`.
 
-**🩹 Si sale mal :** Si una severidad falta en el dict, `Counter` solo clavea lo que contó — una severidad con cero eventos no aparecerá. Si los conteos suman más de seis, el archivo tiene líneas duplicadas sobrantes de la demo de manipulación del paso 2 — empieza fresco con `audit2.log`.
+**🩹 Si sale mal :** Si una severidad falta en el dict, `Counter` solo clavea lo que contó, una severidad con cero eventos no aparecerá. Si los conteos suman más de seis, el archivo tiene líneas duplicadas sobrantes de la demo de manipulación del paso 2, empieza fresco con `audit2.log`.
 
 ### 3.3 Verifica la capa de consulta
 
@@ -331,10 +331,10 @@ print(counts(fresh.rows()))
 
 **🤔 Pregunta(s) socrática(s)**
 
-- `select` devuelve *copias* (`row[:4]`), nunca manejadores a las filas internas. Si un llamador mutara una entrada devuelta (cambiara una severidad), ¿cambiaría también el archivo — y es esa la propiedad que quieres para un registro de auditoría?
+- `select` devuelve *copias* (`row[:4]`), nunca manejadores a las filas internas. Si un llamador mutara una entrada devuelta (cambiara una severidad), ¿cambiaría también el archivo, y es esa la propiedad que quieres para un registro de auditoría?
 - Un dashboard muestra `ERROR: 2`. El mismo archivo en la versión que el paso 2 pudo manipular muestra números diferentes. ¿Qué te compra "verifica el registro *antes* de confiar en los números del dashboard" que el dashboard solo no puede?
 
-## Paso 4: Retención — poda sin romper la cadena
+## Paso 4: Retención, poda sin romper la cadena
 
 Los registros crecen para siempre; las políticas de retención los limitan. El paso 4 recorta las entradas viejas **y** re-ancla la cadena sobreviviente para que un registro podado aún verifique.
 
@@ -361,7 +361,7 @@ print("kept:", fresh.retain(3))
 print(fresh.path.read_text())
 ```
 
-Dejar caer filas que llevaban los eslabones de la cadena vieja huérfiaría los valores `prev` de los sobrevivientes. `retain` arregla eso reiniciando la caminata en `GENESIS` y recomputando el `prev`/hash de cada sobreviviente mientras reescribe — el archivo se encoge, y la cadena se re-ancla a la primera entrada mantenida. La retención es *política* de datos, no magia: mantén las N más nuevas, mantén todo lo posterior a una fecha, mantén solo una severidad — la misma lógica de reescritura lo maneja.
+Dejar caer filas que llevaban los eslabones de la cadena vieja huérfiaría los valores `prev` de los sobrevivientes. `retain` arregla eso reiniciando la caminata en `GENESIS` y recomputando el `prev`/hash de cada sobreviviente mientras reescribe, el archivo se encoge, y la cadena se re-ancla a la primera entrada mantenida. La retención es *política* de datos, no magia: mantén las N más nuevas, mantén todo lo posterior a una fecha, mantén solo una severidad, la misma lógica de reescritura lo maneja.
 
 **🎯 Resultado esperado :**
 
@@ -373,11 +373,11 @@ kept: 4
 6|2025-06-01T10:05:00|WARN|payments|charge recovered|…|…
 ```
 
-**🩹 Si sale mal :** Si `kept` es 0, podaste todo (`since_seq` demasiado alto) — inofensivo pero revisa el conteo. Si el `prev` de los sobrevivientes aún apunta a filas caídas, falta el re-ancla `if prev != expected: prev = expected` y la cadena fallará la verificación.
+**🩹 Si sale mal :** Si `kept` es 0, podaste todo (`since_seq` demasiado alto), inofensivo pero revisa el conteo. Si el `prev` de los sobrevivientes aún apunta a filas caídas, falta el re-ancla `if prev != expected: prev = expected` y la cadena fallará la verificación.
 
 ### 4.2 Re-verifica la cadena podada
 
-**👟 Pista inicial :** Corre `verify()` de nuevo — la cadena retenida debe regresar en verde.
+**👟 Pista inicial :** Corre `verify()` de nuevo, la cadena retenida debe regresar en verde.
 
 ```python
 # main.py (continued)
@@ -407,12 +407,12 @@ post-retention verify: (True, 4)
 
 **🤔 Pregunta(s) socrática(s)**
 
-- La retención mantiene las N entradas más nuevas y se re-ancla a `GENESIS`. Un requisito regulatorio podría querer "guardado por 90 días y luego eliminado" — ¿qué *significa* "eliminado" para una cadena que se supone de solo de adición, y quién recibe una copia antes de que corra la poda?
-- Después de podar, la lista de sobrevivientes comienza en `WARN retry #1` — los eventos `INFO login ok` se fueron también del resumen. ¿Querrías una entrada *marcadora de retención* ("dos eventos INFO podados el 2025-06-08") escrita en el registro, y qué le haría eso a la cadena?
+- La retención mantiene las N entradas más nuevas y se re-ancla a `GENESIS`. Un requisito regulatorio podría querer "guardado por 90 días y luego eliminado", ¿qué *significa* "eliminado" para una cadena que se supone de solo de adición, y quién recibe una copia antes de que corra la poda?
+- Después de podar, la lista de sobrevivientes comienza en `WARN retry #1`, los eventos `INFO login ok` se fueron también del resumen. ¿Querrías una entrada *marcadora de retención* ("dos eventos INFO podados el 2025-06-08") escrita en el registro, y qué le haría eso a la cadena?
 
 ## Paso 5: Exportación de cumplimiento
 
-Los registros de auditoría se consumen — por dashboards, SIEMs, hojas de cálculo. El paso 5 exporta el registro como datos que un consumidor puede usar, más un resumen legible por humanos.
+Los registros de auditoría se consumen, por dashboards, SIEMs, hojas de cálculo. El paso 5 exporta el registro como datos que un consumidor puede usar, más un resumen legible por humanos.
 
 ### 5.1 Exporta JSONL
 
@@ -432,7 +432,7 @@ for line in fresh.export_jsonl():
     print(line)
 ```
 
-JSON Lines (`.jsonl`) es el formato de intercambio que los dashboards y agregadores de registros esperan: un objeto JSON autodescriptivo por línea, cada línea un evento completo. Exportado *después* de la validación (paso 4.2) representa "el contenido en el que confiamos", separado del formato de fila cruda en el que vive la cadena — la exportación es la interfaz, la cadena es el respaldo.
+JSON Lines (`.jsonl`) es el formato de intercambio que los dashboards y agregadores de registros esperan: un objeto JSON autodescriptivo por línea, cada línea un evento completo. Exportado *después* de la validación (paso 4.2) representa "el contenido en el que confiamos", separado del formato de fila cruda en el que vive la cadena, la exportación es la interfaz, la cadena es el respaldo.
 
 **🎯 Resultado esperado :**
 
@@ -443,7 +443,7 @@ JSON Lines (`.jsonl`) es el formato de intercambio que los dashboards y agregado
 {"seq": 6, "ts": "2025-06-01T10:05:00", "severity": "WARN", "source": "payments", "message": "charge recovered"}
 ```
 
-**🩹 Si sale mal :** Si `message` muestra un hash de 64 caracteres en lugar del texto, exportaste `row[5]`/`row[6]` (los campos de la cadena) en lugar de `row[4]`. Si `json.dumps` da error, un campo tiene un no-cadena (todos los campos aquí son cadenas — revisa que `seq` primero se convierta a `int`).
+**🩹 Si sale mal :** Si `message` muestra un hash de 64 caracteres en lugar del texto, exportaste `row[5]`/`row[6]` (los campos de la cadena) en lugar de `row[4]`. Si `json.dumps` da error, un campo tiene un no-cadena (todos los campos aquí son cadenas, revisa que `seq` primero se convierta a `int`).
 
 ### 5.2 El resumen humano
 
@@ -460,11 +460,11 @@ def summary(log):
 print(summary(fresh))
 ```
 
-Una línea que un revisor de cumplimiento puede citar: "verified=True, events=4, severities=…". Atar el *veredicto* a la misma cadena que los conteos evita que el dashboard muestre números que la cadena no respaldaría — la exportación y la declaración de confianza viajan juntas.
+Una línea que un revisor de cumplimiento puede citar: "verified=True, events=4, severities=…". Atar el *veredicto* a la misma cadena que los conteos evita que el dashboard muestre números que la cadena no respaldaría, la exportación y la declaración de confianza viajan juntas.
 
 **🎯 Resultado esperado :** `SIGNALS on audit2.log: verified=True events=4 severities={'WARN': 2, 'ERROR': 2}`.
 
-**🩹 Si sale mal :** Si `verified=False`, la exportación corrió sobre un archivo manipulado/desalineado por retención. Reconstruye el registro (restaura del paso 2.3) y re-ejecuta — el resumen es tan honesto como la cadena.
+**🩹 Si sale mal :** Si `verified=False`, la exportación corrió sobre un archivo manipulado/desalineado por retención. Reconstruye el registro (restaura del paso 2.3) y re-ejecuta, el resumen es tan honesto como la cadena.
 
 ### 5.3 Verifica la exportación
 
@@ -476,7 +476,7 @@ Una línea que un revisor de cumplimiento puede citar: "verified=True, events=4,
 
 **🤔 Pregunta(s) socrática(s)**
 
-- La exportación alimenta un dashboard; la cadena prueba el archivo del que exportó. Un consumidor que solo vio la salida de `export_jsonl()` no tiene cadena — ¿qué enviarías junto al JSONL para que un SIEM descendente lo verifique, sin enviar todo tu código?
+- La exportación alimenta un dashboard; la cadena prueba el archivo del que exportó. Un consumidor que solo vio la salida de `export_jsonl()` no tiene cadena, ¿qué enviarías junto al JSONL para que un SIEM descendente lo verifique, sin enviar todo tu código?
 - `summary` reporta `events=4` y `verified=True` juntos. Si la verificación fallara, ¿preferirías que el resumen imprima `None` para los conteos, los imprima de todas formas con una advertencia o se rehúse a correr? Defiende tu elección con una audiencia de cumplimiento en mente.
 
 ## ⚠️ Errores comunes
@@ -484,27 +484,27 @@ Una línea que un revisor de cumplimiento puede citar: "verified=True, events=4,
 - **Rebanada de payload con off-by-one.** `row[:4]` descarta el mensaje y cada hash recomputado discrepa en silencio con lo que `append` escribió. El payload siempre son cinco campos (`[:5]`); los campos de la cadena son `row[5]` (prev) y `row[6]` (hash).
 - **Modo `"w"` en el registro en vivo.** Una flag equivocada de `open` borra la cadena a mitad de investigación. Reserva `"w"` para `retain` y reconstrucciones; los appends en vivo deben ser `"a"`.
 - **Podar sin re-anclar.** Truncar el archivo pero dejar los `prev` de los sobrevivientes apuntando a filas eliminadas hace que la cadena falle la verificación. Recomputa `prev`/hash desde `GENESIS` mientras reescribes, como hace `retain`.
-- **Hashes que incluyen el tiempo.** `digest(str(time.time()), …)` hace no determinista cada verificación. Los timestamps fijos de la guía mantienen reproducibles las cadenas; si registras tiempos de reloj de pared, deben ser *campos estables* — escritos una vez, hasheados sobre — no recomputados en el momento de verificar.
+- **Hashes que incluyen el tiempo.** `digest(str(time.time()), …)` hace no determinista cada verificación. Los timestamps fijos de la guía mantienen reproducibles las cadenas; si registras tiempos de reloj de pared, deben ser *campos estables*, escritos una vez, hasheados sobre, no recomputados en el momento de verificar.
 - **Consultar los números de campo equivocados.** Los campos son `[0]=seq [1]=ts [2]=severity [3]=source [4]=message [5]=prev [6]=hash`. Filtrar por `row[1]` filtra timestamps, no severidades.
 - **Exportar campos de cadena como datos.** Enviar `row[5]`/`row[6]` a un dashboard filtra hashes a la columna de mensaje. Exporta solo `row[:5]`.
 
 ## Lo que acabas de construir
 
-Un registrador de auditoría resistente a la manipulación, consultable y con retención: filas de eventos solo de adición, una cadena de hash anclada en `GENESIS`, un `verify()` que apunta a la entrada exacta manipulada, filtros más conteos de severidad, una poda de retención que re-ancla la cadena y una exportación de cumplimiento JSONL cuyo resumen lleva el veredicto de verificación. La idea central es que *la integridad de auditoría es una propiedad de diseño, no una actitud*: no prometes no manipular el registro, haces que la manipulación sea **detectable** encadenando cada entrada a su predecesora y recomputando el eslabón a demanda. Ese único truco — un hash por línea, incluyendo el hash anterior — es la misma forma que usan blockchains, git y manifiestos de backup deduplicados, porque el grafo de objetos es pequeño y la prueba es barata.
+Un registrador de auditoría resistente a la manipulación, consultable y con retención: filas de eventos solo de adición, una cadena de hash anclada en `GENESIS`, un `verify()` que apunta a la entrada exacta manipulada, filtros más conteos de severidad, una poda de retención que re-ancla la cadena y una exportación de cumplimiento JSONL cuyo resumen lleva el veredicto de verificación. La idea central es que *la integridad de auditoría es una propiedad de diseño, no una actitud*: no prometes no manipular el registro, haces que la manipulación sea **detectable** encadenando cada entrada a su predecesora y recomputando el eslabón a demanda. Ese único truco, un hash por línea, incluyendo el hash anterior, es la misma forma que usan blockchains, git y manifiestos de backup deduplicados, porque el grafo de objetos es pequeño y la prueba es barata.
 
 :::tip[Ejecuta una versión más completa sin configuración local]
-[`examples/audit-logger/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/audit-logger) en el repositorio del curso es el registrador completo como notebook — append, verificación, demo de manipulación, filtros, retención y la exportación JSONL, ejecutable en Colab/Kaggle/Binder. Clona el repositorio o [ábrelo en un Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course).
+[`examples/audit-logger/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/audit-logger) en el repositorio del curso es el registrador completo como notebook, append, verificación, demo de manipulación, filtros, retención y la exportación JSONL, ejecutable en Colab/Kaggle/Binder. Clona el repositorio o [ábrelo en un Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course).
 :::
 
 ## A dónde ir desde aquí
 
-- Agrega integridad estilo HMAC: firma el hash de cada entrada con una clave secreta (vía `hmac.new`) para que solo los poseedores de la clave puedan crear entradas válidas — así también se atrapa la autoría encubierta por externos, no solo las ediciones accidentales.
+- Agrega integridad estilo HMAC: firma el hash de cada entrada con una clave secreta (vía `hmac.new`) para que solo los poseedores de la clave puedan crear entradas válidas, así también se atrapa la autoría encubierta por externos, no solo las ediciones accidentales.
 - Envía el JSONL a un archivo con `.write_text("\n".join(export_jsonl()))` y un dashboard que lo ingiera, graficando el conteo de `ERROR` por hora a partir del campo `ts`.
-- Implementa `tamper_demo()` como un paso que voltea aleatoriamente un carácter en el registro, re-verifica e imprime qué entrada se rompió — una auto-prueba incorporada para la clase.
+- Implementa `tamper_demo()` como un paso que voltea aleatoriamente un carácter en el registro, re-verifica e imprime qué entrada se rompió, una auto-prueba incorporada para la clase.
 - Ata la retención a una fecha (`retain_since("2025-06-01T10:03:00")`) y registra una entrada marcadora `RETENTION` cada vez que pode, para que la historia eliminada quede ella misma evidenciada.
 
 ## Comparte tu proyecto con la clase
 
-¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado — y su README tiene un recorrido completo y amigable para principiantes sobre cómo agregar el tuyo vía un **pull request**, incluso si nunca has usado git antes: hacer fork del repositorio, crear una rama, confirmar tus archivos y abrir el PR, un paso a la vez. No se asume experiencia previa con git.
+¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado, y su README tiene un recorrido completo y amigable para principiantes sobre cómo agregar el tuyo vía un **pull request**, incluso si nunca has usado git antes: hacer fork del repositorio, crear una rama, confirmar tus archivos y abrir el PR, un paso a la vez. No se asume experiencia previa con git.
 
 Bienvenido a escribir Python fuera del navegador. 🎓

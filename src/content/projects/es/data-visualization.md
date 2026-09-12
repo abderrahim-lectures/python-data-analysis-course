@@ -19,7 +19,7 @@ learningObjectives:
 
 # 📊 Explorador de Visualización de Datos
 
-Los números enterrados en tablas son difíciles de interpretar. Los gráficos hacen que los patrones, los valores atípicos y las tendencias salten a la vista de inmediato. Este proyecto te lleva desde los gráficos básicos con matplotlib, pasando por las visualizaciones estadísticas de seaborn, hasta los paneles interactivos de plotly — construyendo un conjunto de herramientas que puedes reutilizar con cualquier conjunto de datos que encuentres.
+Los números enterrados en tablas son difíciles de interpretar. Los gráficos hacen que los patrones, los valores atípicos y las tendencias salten a la vista de inmediato. Este proyecto te lleva desde los gráficos básicos con matplotlib, pasando por las visualizaciones estadísticas de seaborn, hasta los paneles interactivos de plotly, construyendo un conjunto de herramientas que puedes reutilizar con cualquier conjunto de datos que encuentres.
 
 Esto es opcional y no se califica. Consulta [Proyectos del Mundo Real](/es/proyectos) para ver la lista completa.
 
@@ -35,17 +35,17 @@ Esto es opcional y no se califica. Consulta [Proyectos del Mundo Real](/es/proye
 ## Dónde ejecutarlo
 
 - **Localmente con `uv` (recomendado).** Este proyecto utiliza `matplotlib`, `seaborn` y `plotly`, así que una instalación local es el camino más sencillo. La sección de configuración más abajo te lo explica paso a paso.
-- **Playground de JupyterLite.** Pega las celdas de código directamente en un cuaderno — funciona bien para explorar los pasos de análisis (1–5), aunque el diseño del panel (Paso 5) se beneficia de una terminal real para guardar archivos.
+- **Playground de JupyterLite.** Pega las celdas de código directamente en un cuaderno, funciona bien para explorar los pasos de análisis (1–5), aunque el diseño del panel (Paso 5) se beneficia de una terminal real para guardar archivos.
 - **Google Colab.** Abre un cuaderno nuevo y pega las celdas. Misma advertencia que con JupyterLite: guardar archivos funciona mejor en una terminal real.
 
-- **Ejecútalo en el navegador.** Hay un cuaderno interactivo listo — ábrelo en Colab, Kaggle o Binder y sigue los pasos en orden.
+- **Ejecútalo en el navegador.** Hay un cuaderno interactivo listo, ábrelo en Colab, Kaggle o Binder y sigue los pasos en orden.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-visualization/notebook.es.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-visualization/notebook.es.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fdata-visualization%2Fnotebook.es.ipynb)
 
 ## Configuración
 
-`uv` es una sola herramienta que reemplaza la cadena habitual de "instalar Python, luego pip, luego un entorno virtual" — puede instalar y gestionar versiones de Python junto con las dependencias de tu proyecto.
+`uv` es una sola herramienta que reemplaza la cadena habitual de "instalar Python, luego pip, luego un entorno virtual", puede instalar y gestionar versiones de Python junto con las dependencias de tu proyecto.
 
 **macOS / Linux** (terminal):
 
@@ -77,7 +77,7 @@ uv add matplotlib seaborn plotly pandas
 
 ## Paso 1: Crear datos de muestra y cargarlos
 
-Construye un CSV con datos de ventas multicategoría y cárgalo en un DataFrame. Cada paso posterior utiliza este mismo conjunto de datos — lo bastante variado para mostrar distintos tipos de gráficos, y lo bastante pequeño para leerlo a mano.
+Construye un CSV con datos de ventas multicategoría y cárgalo en un DataFrame. Cada paso posterior utiliza este mismo conjunto de datos, lo bastante variado para mostrar distintos tipos de gráficos, y lo bastante pequeño para leerlo a mano.
 
 ### 1.1 Escribir el CSV y cargarlo
 
@@ -147,13 +147,13 @@ mean   123.888889   41083.333333  24227.777778
 ...
 ```
 
-**🩹 Si algo falla:** Si obtienes `FileNotFoundError`, tu directorio de trabajo es incorrecto — ejecuta `pwd` para comprobarlo. Si la forma muestra `(0, 6)`, la cadena CSV tiene un problema de comillas — asegúrate de que no haya comillas sueltas dentro de las filas de datos. Si `units` muestra `float64` en lugar de `int64`, uno de tus valores podría tener un punto decimal.
+**🩹 Si algo falla:** Si obtienes `FileNotFoundError`, tu directorio de trabajo es incorrecto, ejecuta `pwd` para comprobarlo. Si la forma muestra `(0, 6)`, la cadena CSV tiene un problema de comillas, asegúrate de que no haya comillas sueltas dentro de las filas de datos. Si `units` muestra `float64` en lugar de `int64`, uno de tus valores podría tener un punto decimal.
 
 ### 1.2 Verificar que los datos cargaron correctamente
 
 **✅ Lista de verificación**
 
-- ✅ `df.shape` es `(18, 6)` — 18 filas, 6 columnas.
+- ✅ `df.shape` es `(18, 6)`, 18 filas, 6 columnas.
 - ✅ Aparecen los seis nombres de columna: `month`, `category`, `region`, `units`, `revenue`, `cost`.
 - ✅ `df.dtypes` muestra tres columnas object (texto) y tres columnas int64 (números).
 - ✅ `df.describe()` produce estadísticas para las columnas numéricas sin errores.
@@ -166,7 +166,7 @@ mean   123.888889   41083.333333  24227.777778
 
 ## Paso 2: Gráficos básicos con matplotlib
 
-Matplotlib es la base — toda otra biblioteca de visualización de Python la envuelve o imita su API. Domina aquí los cuatro tipos de gráfico esenciales: barras, líneas, dispersión y pastel.
+Matplotlib es la base, toda otra biblioteca de visualización de Python la envuelve o imita su API. Domina aquí los cuatro tipos de gráfico esenciales: barras, líneas, dispersión y pastel.
 
 ### 2.1 Gráfico de barras: ingresos por categoría
 
@@ -196,7 +196,7 @@ print("Saved: revenue_by_category.png")
 
 **🎯 Salida esperada:** Un gráfico de barras con tres barras (Clothing, Electronics, Home). Electronics es la más alta con aproximadamente 367.500$. Los importes en dólares se sitúan sobre cada barra. Se guarda en disco el archivo `revenue_by_category.png`.
 
-**🩹 Si algo falla:** Si las barras se ven aplastadas, aumenta `figsize` a `(10, 6)`. Si las etiquetas de dólares se superponen a las barras, comprueba que esté `va="bottom"` — esto empuja el texto por encima de la parte superior de la barra. Si `tight_layout()` lanza una advertencia, significa que tus subgráficos tienen tamaños fijos que no pueden ajustarse — es normal, la advertencia es segura de ignorar.
+**🩹 Si algo falla:** Si las barras se ven aplastadas, aumenta `figsize` a `(10, 6)`. Si las etiquetas de dólares se superponen a las barras, comprueba que esté `va="bottom"`, esto empuja el texto por encima de la parte superior de la barra. Si `tight_layout()` lanza una advertencia, significa que tus subgráficos tienen tamaños fijos que no pueden ajustarse, es normal, la advertencia es segura de ignorar.
 
 ### 2.2 Gráfico de líneas: tendencia de ingresos mensuales
 
@@ -222,9 +222,9 @@ plt.show()
 print("Saved: monthly_trend.png")
 ```
 
-**🎯 Salida esperada:** Dos líneas — verde para ingresos y roja para costos — con la brecha sombreada entre ellas representando la ganancia. Los ingresos están por encima de los costos todos los meses. Se guarda el archivo `monthly_trend.png`.
+**🎯 Salida esperada:** Dos líneas, verde para ingresos y roja para costos, con la brecha sombreada entre ellas representando la ganancia. Los ingresos están por encima de los costos todos los meses. Se guarda el archivo `monthly_trend.png`.
 
-**🩹 Si algo falla:** Si las líneas se ven dentadas o desordenadas, tu columna `month` no está ordenada — añade `.sort_index()` después del groupby. Si el área sombreada rellena la región equivocada, comprueba que `fill_between` use `monthly["revenue"]` primero y `monthly["cost"]` segundo — el orden determina qué línea es el límite superior.
+**🩹 Si algo falla:** Si las líneas se ven dentadas o desordenadas, tu columna `month` no está ordenada, añade `.sort_index()` después del groupby. Si el área sombreada rellena la región equivocada, comprueba que `fill_between` use `monthly["revenue"]` primero y `monthly["cost"]` segundo, el orden determina qué línea es el límite superior.
 
 ### 2.3 Gráfico de dispersión: ingresos vs. costos
 
@@ -252,9 +252,9 @@ plt.savefig("revenue_vs_cost.png", dpi=150)
 plt.show()
 ```
 
-**🎯 Salida esperada:** Puntos de colores agrupados por encima de la línea de equilibrio discontinua — significando que cada registro es rentable. Los puntos de Electronics están más lejos de la línea (mayores márgenes). Se guarda el archivo `revenue_vs_cost.png`.
+**🎯 Salida esperada:** Puntos de colores agrupados por encima de la línea de equilibrio discontinua, significando que cada registro es rentable. Los puntos de Electronics están más lejos de la línea (mayores márgenes). Se guarda el archivo `revenue_vs_cost.png`.
 
-**🩹 Si algo falla:** Si los puntos se superponen mucho, aumenta `alpha` a `0.6` para más transparencia o aumenta `s` a `150` para puntos más grandes. Si la línea de equilibrio no aparece diagonal, tus ejes x e y tienen escalas distintas — llama a `ax.set_aspect("equal")` para corregirlo, aunque puede comprimir uno de los ejes.
+**🩹 Si algo falla:** Si los puntos se superponen mucho, aumenta `alpha` a `0.6` para más transparencia o aumenta `s` a `150` para puntos más grandes. Si la línea de equilibrio no aparece diagonal, tus ejes x e y tienen escalas distintas, llama a `ax.set_aspect("equal")` para corregirlo, aunque puede comprimir uno de los ejes.
 
 ### 2.4 Gráfico de pastel: participación por categoría
 
@@ -280,7 +280,7 @@ plt.show()
 
 **🎯 Salida esperada:** Un gráfico de pastel dividido en tres porciones con etiquetas de porcentaje. Electronics domina con aproximadamente 56%, Clothing alrededor del 19% y Home alrededor del 25%.
 
-**🩹 Si algo falla:** Si las etiquetas del pastel se superponen, aumenta `figsize` a `(9, 9)`. Si los porcentajes suman más del 100%, tu groupby no se guardó correctamente — comprueba que llamaste `.sum()` y no `.count()`.
+**🩹 Si algo falla:** Si las etiquetas del pastel se superponen, aumenta `figsize` a `(9, 9)`. Si los porcentajes suman más del 100%, tu groupby no se guardó correctamente, comprueba que llamaste `.sum()` y no `.count()`.
 
 **✅ Lista de verificación**
 
@@ -291,7 +291,7 @@ plt.show()
 
 **🤔 Preguntas socráticas**
 
-¿Cuándo sería un gráfico de barras más informativo que un gráfico de pastel para los mismos datos? ¿Qué le ocurre al gráfico de pastel si tienes diez categorías en lugar de tres — todavía puedes leer las porciones más pequeñas?
+¿Cuándo sería un gráfico de barras más informativo que un gráfico de pastel para los mismos datos? ¿Qué le ocurre al gráfico de pastel si tienes diez categorías en lugar de tres, todavía puedes leer las porciones más pequeñas?
 
 ---
 
@@ -320,7 +320,7 @@ print("Saved: revenue_boxplot.png")
 
 **🎯 Salida esperada:** Tres diagramas de caja y bigotes lado a lado. Electronics tiene el rango más amplio (mayor variabilidad). La línea mediana dentro de cada caja muestra los ingresos típicos por registro. Se guarda el archivo `revenue_boxplot.png`.
 
-**🩹 Si algo falla:** Si las tres cajas se ven idénticas, tus datos podrían tener filas duplicadas — vuelve al Paso 1 y compruébalo. Si las cajas están descentradas, puede que `sns.set_theme(style="whitegrid")` no se haya ejecutado antes del trazado — llámalo de nuevo justo antes de la figura.
+**🩹 Si algo falla:** Si las tres cajas se ven idénticas, tus datos podrían tener filas duplicadas, vuelve al Paso 1 y compruébalo. Si las cajas están descentradas, puede que `sns.set_theme(style="whitegrid")` no se haya ejecutado antes del trazado, llámalo de nuevo justo antes de la figura.
 
 ### 3.2 Mapa de calor: matriz de correlación
 
@@ -340,9 +340,9 @@ plt.show()
 print("Saved: correlation_heatmap.png")
 ```
 
-**🎯 Salida esperada:** Una cuadrícula de colores donde `revenue` y `cost` muestran una fuerte correlación positiva (cerca de 1.0 — mayor costo significa mayor ingreso). `units` se correlaciona con ambos pero con menos fuerza. Se guarda el archivo `correlation_heatmap.png`.
+**🎯 Salida esperada:** Una cuadrícula de colores donde `revenue` y `cost` muestran una fuerte correlación positiva (cerca de 1.0, mayor costo significa mayor ingreso). `units` se correlaciona con ambos pero con menos fuerza. Se guarda el archivo `correlation_heatmap.png`.
 
-**🩹 Si algo falla:** Si el mapa de calor es de un solo color, tu rango `vmin`/`vmax` es demasiado amplio para los valores de correlación reales — prueba `vmin=corr.values.min() - 0.1` y `vmax=corr.values.max() + 0.1`. Si obtienes `ValueError: correlation matrix is not symmetric`, pasaste el DataFrame crudo en lugar del resultado de `.corr()`.
+**🩹 Si algo falla:** Si el mapa de calor es de un solo color, tu rango `vmin`/`vmax` es demasiado amplio para los valores de correlación reales, prueba `vmin=corr.values.min() - 0.1` y `vmax=corr.values.max() + 0.1`. Si obtienes `ValueError: correlation matrix is not symmetric`, pasaste el DataFrame crudo en lugar del resultado de `.corr()`.
 
 ### 3.3 Gráfico de pares: todas las relaciones numéricas
 
@@ -359,7 +359,7 @@ print("Saved: pair_plot.png")
 
 **🎯 Salida esperada:** Una cuadrícula 3x3 de gráficos. Las celdas fuera de la diagonal son gráficos de dispersión que muestran cómo se relacionan `units`, `revenue` y `cost` entre sí. Las celdas diagonales son curvas de densidad (KDE) que muestran la distribución de cada variable, coloreadas por categoría. Se guarda el archivo `pair_plot.png`.
 
-**🩹 Si algo falla:** Si el gráfico de pares es enorme y difícil de leer, tu conjunto de datos tiene demasiadas columnas numéricas — limítalo a 3–4 con `df[["units", "revenue", "cost"]]` antes de pasarlo a `pairplot`. Si los colores no coinciden entre subgráficos, asegúrate de que esté `hue="category"` — sin él, todos los puntos son del mismo color.
+**🩹 Si algo falla:** Si el gráfico de pares es enorme y difícil de leer, tu conjunto de datos tiene demasiadas columnas numéricas, limítalo a 3–4 con `df[["units", "revenue", "cost"]]` antes de pasarlo a `pairplot`. Si los colores no coinciden entre subgráficos, asegúrate de que esté `hue="category"`, sin él, todos los puntos son del mismo color.
 
 **✅ Lista de verificación**
 
@@ -370,7 +370,7 @@ print("Saved: pair_plot.png")
 
 **🤔 Preguntas socráticas**
 
-La matriz de correlación muestra que `revenue` y `cost` están fuertemente correlacionados. ¿Implica correlación causación aquí — gastar más *causa* mayores ingresos, o hay una explicación más simple?
+La matriz de correlación muestra que `revenue` y `cost` están fuertemente correlacionados. ¿Implica correlación causación aquí, gastar más *causa* mayores ingresos, o hay una explicación más simple?
 
 ---
 
@@ -395,13 +395,13 @@ fig.write_html("interactive_bar.html")
 print("Saved: interactive_bar.html")
 ```
 
-**🎯 Salida esperada:** Se abre una ventana del navegador (o una celda de cuaderno) con un gráfico de barras agrupadas. Pasa el cursor sobre cualquier barra para ver el mes, la categoría y el importe de ingresos exactos. Amplía haciendo clic y arrastrando. Se guarda el archivo `interactive_bar.html` — ábrelo en cualquier navegador.
+**🎯 Salida esperada:** Se abre una ventana del navegador (o una celda de cuaderno) con un gráfico de barras agrupadas. Pasa el cursor sobre cualquier barra para ver el mes, la categoría y el importe de ingresos exactos. Amplía haciendo clic y arrastrando. Se guarda el archivo `interactive_bar.html`, ábrelo en cualquier navegador.
 
-**🩹 Si algo falla:** Si las barras se apilan en lugar de agruparse, olvidaste `barmode="group"` — el valor predeterminado es `"relative"`, que apila. Si el archivo HTML se abre pero no muestra nada, tu navegador podría estar bloqueando JavaScript de archivos locales — prueba abrirlo desde un servidor local o usa `fig.show()` en un cuaderno.
+**🩹 Si algo falla:** Si las barras se apilan en lugar de agruparse, olvidaste `barmode="group"`, el valor predeterminado es `"relative"`, que apila. Si el archivo HTML se abre pero no muestra nada, tu navegador podría estar bloqueando JavaScript de archivos locales, prueba abrirlo desde un servidor local o usa `fig.show()` en un cuaderno.
 
 ### 4.2 Gráfico de dispersión interactivo
 
-**👟 Pista inicial:** Usa `px.scatter()` con `x`, `y`, `color` y `size` para codificar cuatro dimensiones a la vez — costo en x, ingresos en y, categoría como color y `units` como tamaño del punto.
+**👟 Pista inicial:** Usa `px.scatter()` con `x`, `y`, `color` y `size` para codificar cuatro dimensiones a la vez, costo en x, ingresos en y, categoría como color y `units` como tamaño del punto.
 
 ```python
 fig = px.scatter(df, x="cost", y="revenue", color="category", size="units",
@@ -417,7 +417,7 @@ print("Saved: interactive_scatter.html")
 
 **🎯 Salida esperada:** Puntos de colores de tamaños variados. Los puntos más grandes significan más unidades vendidas. Pasa el cursor sobre cualquier punto para ver mes, región, costo, ingresos y unidades. Se guarda el archivo `interactive_scatter.html`.
 
-**🩹 Si algo falla:** Si todos los puntos son del mismo tamaño, `size="units"` no se está aplicando — comprueba que `units` es numérico, no una cadena. Si los datos del cursor muestran `NaN`, el nombre de la columna tiene un error de tipeo o la columna no existe.
+**🩹 Si algo falla:** Si todos los puntos son del mismo tamaño, `size="units"` no se está aplicando, comprueba que `units` es numérico, no una cadena. Si los datos del cursor muestran `NaN`, el nombre de la columna tiene un error de tipeo o la columna no existe.
 
 ### 4.3 Gráfico de líneas interactivo con control deslizante de rango
 
@@ -438,7 +438,7 @@ print("Saved: interactive_line.html")
 
 **🎯 Salida esperada:** Dos líneas (ingresos y costos) con un control deslizante de rango arrastrable en la parte inferior. Agarra las asas del control para acercarte a un rango mensual concreto. Se guarda el archivo `interactive_line.html`.
 
-**🩹 Si algo falla:** Si el control deslizante de rango no aparece, podrías estar usando una versión antigua de plotly — ejecuta `uv add --upgrade plotly`. Si la leyenda muestra `variable` como título en lugar de un espacio en blanco, comprueba que esté configurado `legend_title_text=""`.
+**🩹 Si algo falla:** Si el control deslizante de rango no aparece, podrías estar usando una versión antigua de plotly, ejecuta `uv add --upgrade plotly`. Si la leyenda muestra `variable` como título en lugar de un espacio en blanco, comprueba que esté configurado `legend_title_text=""`.
 
 **✅ Lista de verificación**
 
@@ -450,7 +450,7 @@ print("Saved: interactive_line.html")
 
 **🤔 Preguntas socráticas**
 
-¿Cuándo elegirías un gráfico interactivo de plotly sobre un PNG estático de matplotlib? ¿Y cuándo elegirías el PNG estático en su lugar? Piensa en tu audiencia — ¿quién ve el gráfico y cómo lo consume?
+¿Cuándo elegirías un gráfico interactivo de plotly sobre un PNG estático de matplotlib? ¿Y cuándo elegirías el PNG estático en su lugar? Piensa en tu audiencia, ¿quién ve el gráfico y cómo lo consume?
 
 ---
 
@@ -530,7 +530,7 @@ print("Saved: themed_bar.png")
 
 **🎯 Salida esperada:** El mismo gráfico de barras del Paso 2, pero ahora con un fondo gris claro, sin bordes superior/derecho, tamaños de fuente consistentes y la paleta de colores personalizada. Se guarda el archivo `themed_bar.png`.
 
-**🩹 Si algo falla:** Si el fondo sigue siendo blanco, `plt.rcParams.update()` no se ha llamado en esta sesión — vuelve a ejecutar todo el bloque 5.1. Si los colores no coinciden con el tema, estás usando valores hex fijos en lugar del diccionario `CATEGORY_COLORS` — reemplázalos.
+**🩹 Si algo falla:** Si el fondo sigue siendo blanco, `plt.rcParams.update()` no se ha llamado en esta sesión, vuelve a ejecutar todo el bloque 5.1. Si los colores no coinciden con el tema, estás usando valores hex fijos en lugar del diccionario `CATEGORY_COLORS`, reemplázalos.
 
 ### 5.3 Construir un tema de seaborn para los gráficos estadísticos
 
@@ -553,9 +553,9 @@ plt.show()
 print("Saved: seaborn_styled.png")
 ```
 
-**🎯 Salida esperada:** Diagramas de caja y violín lado a lado con el tema whitegrid de seaborn. El gráfico de violín muestra la forma de densidad de la distribución — más ancho donde se agrupan más puntos de datos. Se guarda el archivo `seaborn_styled.png`.
+**🎯 Salida esperada:** Diagramas de caja y violín lado a lado con el tema whitegrid de seaborn. El gráfico de violín muestra la forma de densidad de la distribución, más ancho donde se agrupan más puntos de datos. Se guarda el archivo `seaborn_styled.png`.
 
-**🩹 Si algo falla:** Si el gráfico de violín se ve vacío o colapsado, tus datos podrían tener muy pocos puntos para la estimación de densidad de kernel — prueba `inner="quartile"` para mostrar las líneas de cuartiles dentro del violín, lo que hace más legibles los conjuntos de datos pequeños.
+**🩹 Si algo falla:** Si el gráfico de violín se ve vacío o colapsado, tus datos podrían tener muy pocos puntos para la estimación de densidad de kernel, prueba `inner="quartile"` para mostrar las líneas de cuartiles dentro del violín, lo que hace más legibles los conjuntos de datos pequeños.
 
 **✅ Lista de verificación**
 
@@ -566,7 +566,7 @@ print("Saved: seaborn_styled.png")
 
 **🤔 Preguntas socráticas**
 
-¿Por qué eliminar los bordes superior y derecho (`spines[["top", "right"]].set_visible(False)`) hace que los gráficos sean más legibles? ¿Qué información transmitían alguna vez esos bordes — y valía la pena el desorden visual?
+¿Por qué eliminar los bordes superior y derecho (`spines[["top", "right"]].set_visible(False)`) hace que los gráficos sean más legibles? ¿Qué información transmitían alguna vez esos bordes, y valía la pena el desorden visual?
 
 ---
 
@@ -626,11 +626,11 @@ print("Saved: dashboard.png")
 
 **🎯 Salida esperada:** Una sola figura grande con cuatro gráficos dispuestos en una cuadrícula 2x2. La fila superior tiene un gráfico de barras y uno de líneas. La fila inferior tiene un gráfico de dispersión y uno de pastel. Se guarda el archivo `dashboard.png`.
 
-**🩹 Si algo falla:** Si los gráficos se superponen, `tight_layout()` se llama antes de que todos los ejes estén configurados — muévelo al final. Si `suptitle` se superpone con los gráficos superiores, ajusta `y=1.02` para empujarlo más arriba o usa `plt.subplots_adjust(top=0.93)` en su lugar. Si el pastel se ve aplastado en un óvalo, añade `axes[1, 1].set_aspect("equal")`.
+**🩹 Si algo falla:** Si los gráficos se superponen, `tight_layout()` se llama antes de que todos los ejes estén configurados, muévelo al final. Si `suptitle` se superpone con los gráficos superiores, ajusta `y=1.02` para empujarlo más arriba o usa `plt.subplots_adjust(top=0.93)` en su lugar. Si el pastel se ve aplastado en un óvalo, añade `axes[1, 1].set_aspect("equal")`.
 
 ### 6.2 Construir un panel estilo seaborn con FacetGrid
 
-**👟 Pista inicial:** Usa `sns.FacetGrid()` para crear una cuadrícula de pequeños múltiples — un gráfico de dispersión por región, compartiendo los mismos ejes para comparación directa.
+**👟 Pista inicial:** Usa `sns.FacetGrid()` para crear una cuadrícula de pequeños múltiples, un gráfico de dispersión por región, compartiendo los mismos ejes para comparación directa.
 
 ```python
 g = sns.FacetGrid(df, col="region", hue="category", palette="Set2", height=4, aspect=1.2)
@@ -643,9 +643,9 @@ plt.show()
 print("Saved: facet_dashboard.png")
 ```
 
-**🎯 Salida esperada:** Dos gráficos de dispersión lado a lado — uno para North y otro para South — con la misma escala x/y para compararlos fácilmente. Cada punto está coloreado por categoría. Se guarda el archivo `facet_dashboard.png`.
+**🎯 Salida esperada:** Dos gráficos de dispersión lado a lado, uno para North y otro para South, con la misma escala x/y para compararlos fácilmente. Cada punto está coloreado por categoría. Se guarda el archivo `facet_dashboard.png`.
 
-**🩹 Si algo falla:** Si las columnas de tipo facet tienen diferentes rangos de eje x, `sharex=True` y `sharey=True` no están configurados — son los valores predeterminados de `FacetGrid`, pero si los sobreescribiste, elimina la sobreescritura. Si la leyenda se superpone a un panel facet, usa `g.add_legend(loc="upper right", bbox_to_anchor=(1, 0))`.
+**🩹 Si algo falla:** Si las columnas de tipo facet tienen diferentes rangos de eje x, `sharex=True` y `sharey=True` no están configurados, son los valores predeterminados de `FacetGrid`, pero si los sobreescribiste, elimina la sobreescritura. Si la leyenda se superpone a un panel facet, usa `g.add_legend(loc="upper right", bbox_to_anchor=(1, 0))`.
 
 **✅ Lista de verificación**
 
@@ -698,9 +698,9 @@ Exported to exports/
   revenue_bar.png (45,231 bytes)
 ```
 
-Cada archivo tiene al menos 30KB — los PNG diminutos significan que algo salió mal con el renderizado.
+Cada archivo tiene al menos 30KB, los PNG diminutos significan que algo salió mal con el renderizado.
 
-**🩹 Si algo falla:** Si el PNG tiene menos de 5KB, la figura estaba vacía cuando se ejecutó `savefig` — asegúrate de llamar a `savefig` antes que a `plt.close()`. Si el texto se recorta en los bordes, añade `bbox_inches="tight"` a la llamada de `savefig`.
+**🩹 Si algo falla:** Si el PNG tiene menos de 5KB, la figura estaba vacía cuando se ejecutó `savefig`, asegúrate de llamar a `savefig` antes que a `plt.close()`. Si el texto se recorta en los bordes, añade `bbox_inches="tight"` a la llamada de `savefig`.
 
 ### 7.2 Crear un informe HTML interactivo
 
@@ -738,15 +738,15 @@ with open("dashboard_report.html", "w") as f:
 print("Saved: dashboard_report.html")
 ```
 
-**🎯 Salida esperada:** Un archivo `dashboard_report.html` se abre en tu navegador con una página con estilo que contiene ambos gráficos interactivos — desplázate para verlos, pasa el cursor para inspeccionar valores, amplía con clic-arrastre.
+**🎯 Salida esperada:** Un archivo `dashboard_report.html` se abre en tu navegador con una página con estilo que contiene ambos gráficos interactivos, desplázate para verlos, pasa el cursor para inspeccionar valores, amplía con clic-arrastre.
 
-**🩹 Si algo falla:** Si el archivo HTML muestra código crudo en lugar de gráficos, `pio.to_html()` podría estar devolviendo una página HTML completa en lugar de un fragmento — comprueba que esté `full_html=False`. Si la página se ve sin estilo, el bloque `<style>` tiene un error de sintaxis — comprueba las llaves o etiquetas no cerradas.
+**🩹 Si algo falla:** Si el archivo HTML muestra código crudo en lugar de gráficos, `pio.to_html()` podría estar devolviendo una página HTML completa en lugar de un fragmento, comprueba que esté `full_html=False`. Si la página se ve sin estilo, el bloque `<style>` tiene un error de sintaxis, comprueba las llaves o etiquetas no cerradas.
 
 **✅ Lista de verificación**
 
 - ✅ El directorio `exports/` contiene al menos un archivo PNG superior a 30KB.
 - ✅ `dashboard_report.html` se abre en un navegador con gráficos interactivos funcionales.
-- ✅ Los gráficos se renderizan a 300 DPI — aptos para impresión sin pixelación.
+- ✅ Los gráficos se renderizan a 300 DPI, aptos para impresión sin pixelación.
 - ✅ Sin texto recortado, etiquetas faltantes ni áreas de gráfico en blanco en las exportaciones.
 
 **🤔 Preguntas socráticas**
@@ -794,7 +794,7 @@ plt.show()
 <details>
 <summary><strong>Desafío 3: Panel interactivo con menú desplegable</strong></summary>
 
-Usa `updatemenus` de plotly para añadir un menú desplegable que permita al usuario alternar entre ver ingresos, costos y unidades en el eje y de un solo gráfico — tres vistas en una figura interactiva.
+Usa `updatemenus` de plotly para añadir un menú desplegable que permita al usuario alternar entre ver ingresos, costos y unidades en el eje y de un solo gráfico, tres vistas en una figura interactiva.
 
 ```python
 import plotly.graph_objects as go
@@ -837,13 +837,13 @@ fig.show()
 ## Dónde seguir desde aquí
 
 - **Panel de Streamlit.** Envuelve los mismos gráficos en una aplicación de Streamlit con `st.pyplot()` y `st.plotly_chart()` para un panel web en vivo que se actualiza a medida que los datos cambian.
-- **Animación con matplotlib.** Usa `matplotlib.animation.FuncAnimation` para crear gráficos animados que muestran cómo cambian los datos con el tiempo — excelente para presentaciones.
-- **Altair o Vega-Lite.** Explora visualización declarativa donde describes *qué* trazar en lugar de *cómo* trazarlo — un paradigma distinto del enfoque imperativo de matplotlib.
-- **Datos geográficos.** Usa `plotly.express.choropleth()` o `folium` para mapear datos en regiones geográficas — ventas por país, clima por ciudad, etc.
+- **Animación con matplotlib.** Usa `matplotlib.animation.FuncAnimation` para crear gráficos animados que muestran cómo cambian los datos con el tiempo, excelente para presentaciones.
+- **Altair o Vega-Lite.** Explora visualización declarativa donde describes *qué* trazar en lugar de *cómo* trazarlo, un paradigma distinto del enfoque imperativo de matplotlib.
+- **Datos geográficos.** Usa `plotly.express.choropleth()` o `folium` para mapear datos en regiones geográficas, ventas por país, clima por ciudad, etc.
 - **Datos reales.** Reemplaza el CSV de muestra con conjuntos de datos reales de [Kaggle](https://www.kaggle.com/datasets), [data.gov](https://data.gov) o tus propias hojas de cálculo. El mismo código de gráficos funciona con cualquier dato tabular.
 
 ## Comparte tu proyecto con la clase
 
-¿Construiste algo de lo que estés orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado — y su README tiene una guía completa y amigable para principiantes para añadir el tuyo mediante una **pull request**, incluso si nunca has usado git: forkear el repositorio, crear una rama, confirmar tus archivos y abrir el PR, paso a paso. No se asume experiencia previa con git.
+¿Construiste algo de lo que estés orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado, y su README tiene una guía completa y amigable para principiantes para añadir el tuyo mediante una **pull request**, incluso si nunca has usado git: forkear el repositorio, crear una rama, confirmar tus archivos y abrir el PR, paso a paso. No se asume experiencia previa con git.
 
 Bienvenido a escribir Python fuera del navegador. 🎓

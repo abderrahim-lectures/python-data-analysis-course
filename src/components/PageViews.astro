@@ -1,12 +1,12 @@
 ---
-// PageViews.astro — anonymous page-view logging to Supabase.
+// PageViews.astro, anonymous page-view logging to Supabase.
 // Renders no visible markup; the inline script POSTs one row to the
 // `pageviews` table on every page load. Credentials come from the
-// PUBLIC_SUPABASE_* env vars (optional — the script no-ops without them).
+// PUBLIC_SUPABASE_* env vars (optional, the script no-ops without them).
 //
 // Uses fetch(keepalive) rather than sendBeacon: Supabase PostgREST requires
 // the `apikey` header on every request, which beacons cannot set (so the old
-// sendBeacon path 401'd silently). fetch also lets us observe failures —
+// sendBeacon path 401'd silently). fetch also lets us observe failures,
 // a misconfigured or RLS-blocked table is now visible in the console instead
 // of vanishing.
 interface Props {

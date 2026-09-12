@@ -19,7 +19,7 @@ Cela suppose Python 101 et l'aisance avec pandas issu de Analyse de Données. C'
 
 ## Où exécuter ceci
 
-**En local avec `uv`** est le chemin principal — c'est un outil CLI qui tourne hors ligne contre un modèle simulé.
+**En local avec `uv`** est le chemin principal, c'est un outil CLI qui tourne hors ligne contre un modèle simulé.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/llm-prompt-optimizer/notebook.fr.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/llm-prompt-optimizer/notebook.fr.ipynb)
@@ -145,7 +145,7 @@ def build_role_based() -> PromptVariant:
 
 **🎯 Résultat attendu :** Chaque `build_*` retourne une variante nommée dont `build(prompt)` injecte une structure autour de la question brute.
 
-**🩹 Si ça ne marche pas :** Si les variantes semblent identiques, la structure injectée ne fait rien d'utile — élargis les différences.
+**🩹 Si ça ne marche pas :** Si les variantes semblent identiques, la structure injectée ne fait rien d'utile, élargis les différences.
 
 ### 2.2 Vérifie les variantes
 
@@ -185,7 +185,7 @@ class MockModel:
         return "unknown"
 ```
 
-Le simulé retourne le résultat mathématique quand une expression arithmétique apparaît et les faits depuis une petite table de correspondance. Il est délibérément naïf — c'est suffisant pour démontrer l'optimisation.
+Le simulé retourne le résultat mathématique quand une expression arithmétique apparaît et les faits depuis une petite table de correspondance. Il est délibérément naïf, c'est suffisant pour démontrer l'optimisation.
 
 **🎯 Résultat attendu :** `MockModel().generate("Think step by step. Q: What is 6 * 7? A:")` retourne `"42"`.
 
@@ -241,7 +241,7 @@ def evaluate_all(variants, model, gold: list[Question]) -> pd.DataFrame:
 
 **🎯 Résultat attendu :** `evaluate_all([v1, v2, v3], model, gold_set())` retourne un DataFrame classant les variantes par précision.
 
-**🩹 Si ça ne marche pas :** Si tout obtient le même score, les réponses du simulé ne dépendent pas de la structure du prompt — c'est correct pour la démo, mais ajoute une variante à laquelle le simulé répond différemment.
+**🩹 Si ça ne marche pas :** Si tout obtient le même score, les réponses du simulé ne dépendent pas de la structure du prompt, c'est correct pour la démo, mais ajoute une variante à laquelle le simulé répond différemment.
 
 ### 4.2 Vérifie la notation
 
@@ -316,7 +316,7 @@ def optimize(out: str):
 
 ## Ce que tu viens de construire
 
-Une boucle d'optimisation de prompts : un jeu de données de référence, des générateurs de variantes programmatiques (few-shot, chaîne de pensée, basé sur un rôle), un modèle simulé hors ligne, un scoreur de précision et un CLI qui classe les variantes et exporte la meilleure. C'est la version automatisée de ce que les ingénieurs de prompts font à la main — et cela rend tout le processus reproductible et mesurable.
+Une boucle d'optimisation de prompts : un jeu de données de référence, des générateurs de variantes programmatiques (few-shot, chaîne de pensée, basé sur un rôle), un modèle simulé hors ligne, un scoreur de précision et un CLI qui classe les variantes et exporte la meilleure. C'est la version automatisée de ce que les ingénieurs de prompts font à la main, et cela rend tout le processus reproductible et mesurable.
 
 :::tip[Exécute une version plus complète sans aucune configuration locale]
 [`examples/llm-prompt-optimizer/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/llm-prompt-optimizer) dans le dépôt du cours a une version plus riche avec de vrais adaptateurs de modèles, une notation de l'efficacité des tokens et le CLI câblé de bout en bout. Clone-le, ou ouvre tout le dépôt dans un [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), et exécute-le depuis là.
@@ -330,6 +330,6 @@ Une boucle d'optimisation de prompts : un jeu de données de référence, des g�
 
 ## Partage ton projet avec la classe
 
-Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres élèves — et son README a un tutoriel complet et adapté aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git avant : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable avec git n'est supposée.
+Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres élèves, et son README a un tutoriel complet et adapté aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git avant : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable avec git n'est supposée.
 
 Bienvenue dans l'écriture de Python en dehors du navigateur. 🎓

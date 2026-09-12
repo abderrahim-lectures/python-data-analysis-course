@@ -44,7 +44,7 @@ quiz:
 ---
 Pourquoi commencer par les données ?
 
-Chaque projet d'apprentissage automatique commence par des données. Pour un modèle de langue à base de texte, ces données sont un **corpus** — une collection de texte à partir de laquelle le modèle apprendra des motifs. Notre corpus vit dans `slm-corpus.csv`, un petit fichier CSV fourni avec le cours dans `static/datasets/`.
+Chaque projet d'apprentissage automatique commence par des données. Pour un modèle de langue à base de texte, ces données sont un **corpus**, une collection de texte à partir de laquelle le modèle apprendra des motifs. Notre corpus vit dans `slm-corpus.csv`, un petit fichier CSV fourni avec le cours dans `static/datasets/`.
 
 Avant de pouvoir tokeniser, compter ou générer quoi que ce soit, vous devez charger ce fichier dans Python. Cette leçon couvre deux approches : `csv.reader` pour un accès brut et `csv.DictReader` pour un accès conscient des en-têtes.
 
@@ -63,7 +63,7 @@ with open("slm-corpus.csv", newline="") as f:
     print(header)  # e.g. ['id', 'text']
 ```
 
-L'argument `newline=""` est requis par la documentation du module `csv` — sans lui, vous pouvez obtenir des lignes vides sous Windows ou une sortie à double interligne.
+L'argument `newline=""` est requis par la documentation du module `csv`, sans lui, vous pouvez obtenir des lignes vides sous Windows ou une sortie à double interligne.
 
 ### Lire avec DictReader
 
@@ -78,7 +78,7 @@ with open("slm-corpus.csv", newline="") as f:
         print(row["text"])  # access by column name, not index
 ```
 
-Le premier appel à `next(reader)` est automatique — `DictReader` consomme la ligne d'en-tête lui-même.
+Le premier appel à `next(reader)` est automatique, `DictReader` consomme la ligne d'en-tête lui-même.
 
 ### Extraire le texte complet
 
@@ -116,7 +116,7 @@ print(f"First row: {rows[0]}")
 print(f"Last row:  {rows[-1]}")
 ```
 
-Si le fichier est volumineux, évitez `list(reader)` — cela charge tout en mémoire. Au lieu de cela, itérez et traitez ligne par ligne.
+Si le fichier est volumineux, évitez `list(reader)`, cela charge tout en mémoire. Au lieu de cela, itérez et traitez ligne par ligne.
 
 ## Essayez
 
@@ -148,7 +148,7 @@ print(f"Sample: {rows[0]['text'][:200]}")
 
 ## Défi pratique
 
-Écrivez une fonction `load_corpus(path)` qui prend un chemin de fichier CSV et renvoie une liste de chaînes — une par ligne de la colonne `text`. Gérez le cas où le fichier n'existe pas en affichant un message d'erreur et en renvoyant une liste vide.
+Écrivez une fonction `load_corpus(path)` qui prend un chemin de fichier CSV et renvoie une liste de chaînes, une par ligne de la colonne `text`. Gérez le cas où le fichier n'existe pas en affichant un message d'erreur et en renvoyant une liste vide.
 
 ```python
 def load_corpus(path):

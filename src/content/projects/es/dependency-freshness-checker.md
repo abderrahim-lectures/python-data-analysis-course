@@ -1,29 +1,29 @@
 ---
 title: "Construye un Verificador de Frescura de Dependencias"
-description: "Construye una herramienta CLI real que lee un pyproject.toml, verifica en PyPI versiones más nuevas de cada dependencia, y reporta qué está desactualizado — sin clave de API necesaria."
+description: "Construye una herramienta CLI real que lee un pyproject.toml, verifica en PyPI versiones más nuevas de cada dependencia, y reporta qué está desactualizado, sin clave de API necesaria."
 ---
 
 
 # ⌨️ Construye un Verificador de Frescura de Dependencias
 
-Cada proyecto Python real acumula dependencias, y cada dependencia eventualmente se queda atrás — sale una corrección de seguridad, se parchea un bug, llega una nueva característica, y tu `pyproject.toml` simplemente... no lo sabe. Este proyecto construye la herramienta que te lo dice: un CLI real que lee un `pyproject.toml`, le pregunta a la API pública de PyPI cuál es realmente la versión actual de cada dependencia, y reporta en cuáles estás atrasado — la misma categoría de herramienta que `pip list --outdated`, pero una que entiendes completamente porque la construiste tú mismo.
+Cada proyecto Python real acumula dependencias, y cada dependencia eventualmente se queda atrás, sale una corrección de seguridad, se parchea un bug, llega una nueva característica, y tu `pyproject.toml` simplemente... no lo sabe. Este proyecto construye la herramienta que te lo dice: un CLI real que lee un `pyproject.toml`, le pregunta a la API pública de PyPI cuál es realmente la versión actual de cada dependencia, y reporta en cuáles estás atrasado, la misma categoría de herramienta que `pip list --outdated`, pero una que entiendes completamente porque la construiste tú mismo.
 
-Esto es opcional y no calificado — un buen ajuste una vez que hayas terminado Python 101 (no se necesita experiencia de Análisis de Datos ni de claves de API, este proyecto no usa ningún servicio pagado o restringido en absoluto). Consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
+Esto es opcional y no calificado, un buen ajuste una vez que hayas terminado Python 101 (no se necesita experiencia de Análisis de Datos ni de claves de API, este proyecto no usa ningún servicio pagado o restringido en absoluto). Consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 ## 🎯 Lo que harás
 
 1. Analizar un archivo `pyproject.toml` real y extraer su lista de dependencias.
 2. Consultar la API JSON pública de PyPI para encontrar la versión publicada actual de cada dependencia.
-3. Comparar tu versión fijada/instalada contra la más reciente, usando análisis real de versión semántica — no comparación ingenua de cadenas.
+3. Comparar tu versión fijada/instalada contra la más reciente, usando análisis real de versión semántica, no comparación ingenua de cadenas.
 4. Imprimir un reporte de frescura limpio y categorizado (actualizado / desactualizado / no se pudo verificar).
 
 ## Dónde ejecutar esto
 
-**Localmente con `uv`** es el camino que siguen los pasos de esta lección, y el recomendado — lo apuntarás a un `pyproject.toml` real (el propio repositorio de este curso tiene varios, o usa cualquier proyecto tuyo). La sección de Configuración de abajo explica cómo instalarlo.
+**Localmente con `uv`** es el camino que siguen los pasos de esta lección, y el recomendado, lo apuntarás a un `pyproject.toml` real (el propio repositorio de este curso tiene varios, o usa cualquier proyecto tuyo). La sección de Configuración de abajo explica cómo instalarlo.
 
-**GitHub Codespaces** es una alternativa de configuración cero si prefieres no instalar nada localmente todavía: abre [todo el repositorio del curso en un Codespace gratuito](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python y `uv` ya están instalados) y ejecuta los mismos comandos `uv` exactos desde una terminal en tu pestaña del navegador — además tendrás muchos archivos `pyproject.toml` reales cerca para apuntar la herramienta.
+**GitHub Codespaces** es una alternativa de configuración cero si prefieres no instalar nada localmente todavía: abre [todo el repositorio del curso en un Codespace gratuito](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python y `uv` ya están instalados) y ejecuta los mismos comandos `uv` exactos desde una terminal en tu pestaña del navegador, además tendrás muchos archivos `pyproject.toml` reales cerca para apuntar la herramienta.
 
-**Google Colab, Kaggle Notebooks, o Binder** también funcionan, ya que este proyecto no necesita clave de API ni GPU — una versión real y ejecutable en notebook vive en [`examples/dependency-freshness-checker/notebook.es.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/dependency-freshness-checker/notebook.es.ipynb). Haz clic en una insignia para lanzarlo directamente, sin instalación local en absoluto:
+**Google Colab, Kaggle Notebooks, o Binder** también funcionan, ya que este proyecto no necesita clave de API ni GPU, una versión real y ejecutable en notebook vive en [`examples/dependency-freshness-checker/notebook.es.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/dependency-freshness-checker/notebook.es.ipynb). Haz clic en una insignia para lanzarlo directamente, sin instalación local en absoluto:
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/dependency-freshness-checker/notebook.es.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/dependency-freshness-checker/notebook.es.ipynb)
@@ -33,7 +33,7 @@ Sé honesto contigo mismo sobre la compensación, sin embargo: un notebook solo 
 
 ## Configuración
 
-`uv` es una sola herramienta que reemplaza la cadena habitual de "instala Python, luego instala pip, luego instala una herramienta de entorno virtual, luego instala paquetes" — puede instalar y gestionar versiones de Python por sí misma, junto con las dependencias de tu proyecto.
+`uv` es una sola herramienta que reemplaza la cadena habitual de "instala Python, luego instala pip, luego instala una herramienta de entorno virtual, luego instala paquetes", puede instalar y gestionar versiones de Python por sí misma, junto con las dependencias de tu proyecto.
 
 **macOS / Linux** (terminal):
 
@@ -61,18 +61,18 @@ cd dependency-checker
 uv add requests packaging
 ```
 
-No se necesita ninguna clave de API en ningún lugar de este proyecto — la API JSON de PyPI (`https://pypi.org/pypi/<package>/json`) es pública, gratuita, y no requiere registro ni autenticación. `requests` maneja las llamadas HTTP; `packaging` te da un análisis real y correcto de versión semántica (`packaging.version.Version`) en lugar de comparar cadenas de versión carácter por carácter, lo cual se rompe en el momento en que comparas `"2.9"` contra `"2.10"` como texto plano.
+No se necesita ninguna clave de API en ningún lugar de este proyecto, la API JSON de PyPI (`https://pypi.org/pypi/<package>/json`) es pública, gratuita, y no requiere registro ni autenticación. `requests` maneja las llamadas HTTP; `packaging` te da un análisis real y correcto de versión semántica (`packaging.version.Version`) en lugar de comparar cadenas de versión carácter por carácter, lo cual se rompe en el momento en que comparas `"2.9"` contra `"2.10"` como texto plano.
 
 :::tip[¿Por qué no simplemente comparar las versiones como cadenas?]
-`"2.10.0" > "2.9.0"` es `True` matemáticamente, pero como cadenas simples, `"2.10.0" < "2.9.0"` — porque `"1" < "9"` carácter por carácter, Python nunca llega lo suficientemente lejos como para notar que `10 > 9`. La comparación real de versiones tiene que analizar cada parte como un número primero. La librería `packaging` (la misma que `pip` usa internamente) hace esto correctamente, incluyendo versiones pre-lanzamiento como `2.0.0rc1`.
+`"2.10.0" > "2.9.0"` es `True` matemáticamente, pero como cadenas simples, `"2.10.0" < "2.9.0"`, porque `"1" < "9"` carácter por carácter, Python nunca llega lo suficientemente lejos como para notar que `10 > 9`. La comparación real de versiones tiene que analizar cada parte como un número primero. La librería `packaging` (la misma que `pip` usa internamente) hace esto correctamente, incluyendo versiones pre-lanzamiento como `2.0.0rc1`.
 :::
 
 ## Paso 1: Analiza un `pyproject.toml` real
-### 1.1 Python 3.11+ incluye `tomllib` en la biblioteca estándar — no se necesita instalación para *...
+### 1.1 Python 3.11+ incluye `tomllib` en la biblioteca estándar, no se necesita instalación para *...
 
 **👟 Pista inicial :**
 
-Python 3.11+ incluye `tomllib` en la biblioteca estándar — no se necesita instalación para *leer* TOML (solo haría falta `uv add` de un paquete si necesitaras *escribir* TOML, lo cual este proyecto no hace).
+Python 3.11+ incluye `tomllib` en la biblioteca estándar, no se necesita instalación para *leer* TOML (solo haría falta `uv add` de un paquete si necesitaras *escribir* TOML, lo cual este proyecto no hace).
 
 ```python
 # parse_deps.py
@@ -111,7 +111,7 @@ uv run python parse_deps.py
 ```
   - ✅ Ejecutar esto contra el `pyproject.toml` de tu propio proyecto imprime la cadena de especificador cruda de cada dependencia.
   - ✅ Puedes explicar por qué `tomllib` necesita que el archivo se abra en modo binario (`"rb"`), no en modo texto.
-**🤔 Pregunta(s) socrática(s)**: La lista `dependencies` de un `pyproject.toml` contiene cadenas como `"requests>=2.31"` — no solo nombres de paquete. ¿Cuál es el *nombre* por sí solo, separado de cualquier restricción de versión adjunta? Necesitarás separarlos limpiamente en el siguiente paso, y una cadena de dependencia real puede ser más descuidada de lo que parece (espacios extra, extras como `"requests[socks]>=2.31"`, fijación exacta `==` en lugar de `>=`) — ¿cuáles de esos romperían un `.split(">=")` ingenuo?
+**🤔 Pregunta(s) socrática(s)**: La lista `dependencies` de un `pyproject.toml` contiene cadenas como `"requests>=2.31"`, no solo nombres de paquete. ¿Cuál es el *nombre* por sí solo, separado de cualquier restricción de versión adjunta? Necesitarás separarlos limpiamente en el siguiente paso, y una cadena de dependencia real puede ser más descuidada de lo que parece (espacios extra, extras como `"requests[socks]>=2.31"`, fijación exacta `==` en lugar de `>=`), ¿cuáles de esos romperían un `.split(">=")` ingenuo?
 
 **🎯 Resultado esperado :**
 
@@ -179,10 +179,10 @@ Ejecuta el código de abajo y confirma que funciona.
 ```bash
 uv run python check_pypi.py
 ```
-Nota el `"not-a-real-package-xyz"` deliberadamente roto en la lista de prueba — debería imprimir `latest is None`, no fallar. Una herramienta real tiene que manejar con elegancia un nombre de paquete con typo o privado, no asumir que cada nombre en un `pyproject.toml` se resuelve.
-  - ✅ Los paquetes reales imprimen su versión real y actual de PyPI — puedes verificar cruzadamente uno contra pypi.org en tu navegador.
+Nota el `"not-a-real-package-xyz"` deliberadamente roto en la lista de prueba, debería imprimir `latest is None`, no fallar. Una herramienta real tiene que manejar con elegancia un nombre de paquete con typo o privado, no asumir que cada nombre en un `pyproject.toml` se resuelve.
+  - ✅ Los paquetes reales imprimen su versión real y actual de PyPI, puedes verificar cruzadamente uno contra pypi.org en tu navegador.
   - ✅ El nombre de paquete falso imprime `None` en lugar de fallar el script.
-**🤔 Pregunta(s) socrática(s)**: `response.raise_for_status()` se ejecuta *después* de la verificación explícita de 404 arriba de él — ¿por qué distinguir específicamente el 404 en lugar de dejar que `raise_for_status()` maneje cada estado no-2xx de la misma forma? ¿Qué le pasaría al flujo de control de este script si esa verificación de 404 no estuviera ahí?
+**🤔 Pregunta(s) socrática(s)**: `response.raise_for_status()` se ejecuta *después* de la verificación explícita de 404 arriba de él, ¿por qué distinguir específicamente el 404 en lugar de dejar que `raise_for_status()` maneje cada estado no-2xx de la misma forma? ¿Qué le pasaría al flujo de control de este script si esa verificación de 404 no estuviera ahí?
 
 **🎯 Resultado esperado :**
 
@@ -324,10 +324,10 @@ Ejecuta el código de abajo y confirma que funciona.
 ```bash
 uv run python freshness_report.py pyproject.toml
 ```
-Intenta apuntarlo a un `pyproject.toml` de un proyecto real y más antiguo que tengas por ahí (o los propios archivos `examples/*/pyproject.toml` de este repositorio del curso) — ahí es donde realmente verás el bucket de "desactualizado" poblarse con resultados reales, no solo dependencias actualizadas que añadiste hace cinco minutos.
+Intenta apuntarlo a un `pyproject.toml` de un proyecto real y más antiguo que tengas por ahí (o los propios archivos `examples/*/pyproject.toml` de este repositorio del curso), ahí es donde realmente verás el bucket de "desactualizado" poblarse con resultados reales, no solo dependencias actualizadas que añadiste hace cinco minutos.
   - ✅ Ejecutar el reporte contra el propio `pyproject.toml` de tu proyecto imprime un resumen categorizado ✅/⚠️/❓.
   - ✅ Apuntarlo a un `pyproject.toml` intencionalmente más antiguo muestra al menos una dependencia realmente desactualizada.
-**🤔 Pregunta(s) socrática(s)**: Este script hace una solicitud HTTP por dependencia, una tras otra. Para un `pyproject.toml` con 40 dependencias, ¿cuál es el costo experimentado por el usuario de eso — y cuál sería una forma concreta de acelerarlo (pista: estas solicitudes no dependen en absoluto de los resultados de las demás)?
+**🤔 Pregunta(s) socrática(s)**: Este script hace una solicitud HTTP por dependencia, una tras otra. Para un `pyproject.toml` con 40 dependencias, ¿cuál es el costo experimentado por el usuario de eso, y cuál sería una forma concreta de acelerarlo (pista: estas solicitudes no dependen en absoluto de los resultados de las demás)?
 
 **🎯 Resultado esperado :**
 
@@ -341,25 +341,25 @@ Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
 
 ## ⚠️ Errores comunes
 
-- **Comparación ingenua de versiones como cadenas.** `"2.9" > "2.10"` como cadenas simples — este es el bug único más común en un verificador de versiones hecho a mano. Siempre analiza con `packaging.version.Version`, nunca compares cadenas de versión directamente.
-- **Asumir que cada nombre de dependencia se resuelve en PyPI.** Paquetes privados/internos, typos, y "dependencias" de URL git son todas cosas reales que `pyproject.toml` permite — tu script tiene que degradarse con elegancia (un bucket `None`/"desconocido"), no fallar todo el reporte por una entrada inusual.
-- **Tratar una dependencia sin fijar (`"requests"` sin ninguna versión) como "desactualizada".** No hay nada contra qué comparar — ese es un caso diferente y honesto de "desconocido", no un falso positivo.
-- **Martillar PyPI sin un timeout.** Siempre pasa `timeout=...` a `requests.get()` — una sola solicitud colgada sin uno puede congelar toda la herramienta indefinidamente.
+- **Comparación ingenua de versiones como cadenas.** `"2.9" > "2.10"` como cadenas simples, este es el bug único más común en un verificador de versiones hecho a mano. Siempre analiza con `packaging.version.Version`, nunca compares cadenas de versión directamente.
+- **Asumir que cada nombre de dependencia se resuelve en PyPI.** Paquetes privados/internos, typos, y "dependencias" de URL git son todas cosas reales que `pyproject.toml` permite, tu script tiene que degradarse con elegancia (un bucket `None`/"desconocido"), no fallar todo el reporte por una entrada inusual.
+- **Tratar una dependencia sin fijar (`"requests"` sin ninguna versión) como "desactualizada".** No hay nada contra qué comparar, ese es un caso diferente y honesto de "desconocido", no un falso positivo.
+- **Martillar PyPI sin un timeout.** Siempre pasa `timeout=...` a `requests.get()`, una sola solicitud colgada sin uno puede congelar toda la herramienta indefinidamente.
 
 ## Lo que acabas de construir
 
-Un CLI real de verificación de frescura — la misma idea central detrás de `pip list --outdated`, Dependabot de GitHub, y Renovate, construido desde primeros principios: analizar un manifiesto, consultar una API pública real, comparar versiones *correctamente*, y reportar el resultado claramente. Nada aquí estuvo oculto detrás de una librería que hace la comparación de versiones por ti — ahora sabes exactamente por qué la comparación ingenua de cadenas se rompe y cómo evitarla, un detalle que hace tropezar a bastantes herramientas hechas a mano en la práctica.
+Un CLI real de verificación de frescura, la misma idea central detrás de `pip list --outdated`, Dependabot de GitHub, y Renovate, construido desde primeros principios: analizar un manifiesto, consultar una API pública real, comparar versiones *correctamente*, y reportar el resultado claramente. Nada aquí estuvo oculto detrás de una librería que hace la comparación de versiones por ti, ahora sabes exactamente por qué la comparación ingenua de cadenas se rompe y cómo evitarla, un detalle que hace tropezar a bastantes herramientas hechas a mano en la práctica.
 
 ## A dónde ir desde aquí
 
-- Acelérala con solicitudes concurrentes (`concurrent.futures.ThreadPoolExecutor` o `asyncio` + `httpx`) — la pregunta socrática de arriba es tu punto de partida.
-- Añade un modo `--fix` que reescriba automáticamente las restricciones de versión del `pyproject.toml` a las versiones más recientes (cuidado: siempre muestra un diff o requiere confirmación antes de escribir a un archivo real — el mismo principio de seguridad usado en otros lugares de los proyectos de este curso).
-- Verifica la fecha de lanzamiento de PyPI, no solo el número de versión, y marca cualquier cosa sin tocar por más de un año como posiblemente abandonada — una señal genuinamente diferente y complementaria a "está esto desactualizado".
-- Compara también contra las versiones realmente instaladas de `uv.lock`, no solo los especificadores de `pyproject.toml` — los dos pueden legítimamente discrepar.
+- Acelérala con solicitudes concurrentes (`concurrent.futures.ThreadPoolExecutor` o `asyncio` + `httpx`), la pregunta socrática de arriba es tu punto de partida.
+- Añade un modo `--fix` que reescriba automáticamente las restricciones de versión del `pyproject.toml` a las versiones más recientes (cuidado: siempre muestra un diff o requiere confirmación antes de escribir a un archivo real, el mismo principio de seguridad usado en otros lugares de los proyectos de este curso).
+- Verifica la fecha de lanzamiento de PyPI, no solo el número de versión, y marca cualquier cosa sin tocar por más de un año como posiblemente abandonada, una señal genuinamente diferente y complementaria a "está esto desactualizado".
+- Compara también contra las versiones realmente instaladas de `uv.lock`, no solo los especificadores de `pyproject.toml`, los dos pueden legítimamente discrepar.
 
 ## Comparte tu proyecto con la clase
 
-¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado — y su README tiene un recorrido completo y amigable para principiantes sobre cómo agregar el tuyo vía un **pull request**, incluso si nunca has usado git antes: hacer fork del repositorio, crear una rama, confirmar tus archivos, y abrir el PR, un paso a la vez. No se asume experiencia previa con git.
+¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado, y su README tiene un recorrido completo y amigable para principiantes sobre cómo agregar el tuyo vía un **pull request**, incluso si nunca has usado git antes: hacer fork del repositorio, crear una rama, confirmar tus archivos, y abrir el PR, un paso a la vez. No se asume experiencia previa con git.
 
 Bienvenido a escribir Python fuera del navegador. 🎓
 

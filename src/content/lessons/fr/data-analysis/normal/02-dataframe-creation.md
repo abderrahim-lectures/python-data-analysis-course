@@ -45,7 +45,7 @@ quiz:
 
 ## Qu'est-ce qu'un DataFrame ?
 
-Un **DataFrame** pandas est une structure de données bidimensionnelle étiquetée — pensez à un tableur, à une table SQL ou à un dictionnaire d'objets Series. Chaque colonne est une Series, et toutes les colonnes partagent le même index.
+Un **DataFrame** pandas est une structure de données bidimensionnelle étiquetée, pensez à un tableur, à une table SQL ou à un dictionnaire d'objets Series. Chaque colonne est une Series, et toutes les colonnes partagent le même index.
 
 ```python
 import pandas as pd
@@ -69,7 +69,7 @@ Sortie :
 
 ## Créer des DataFrames à partir de différentes sources
 
-**À partir d'un dictionnaire de listes** — chaque clé devient un nom de colonne :
+**À partir d'un dictionnaire de listes**, chaque clé devient un nom de colonne :
 
 ```python
 df = pd.DataFrame({
@@ -79,7 +79,7 @@ df = pd.DataFrame({
 })
 ```
 
-**À partir d'une liste de dictionnaires** — chaque dictionnaire est une ligne :
+**À partir d'une liste de dictionnaires**, chaque dictionnaire est une ligne :
 
 ```python
 records = [
@@ -90,7 +90,7 @@ records = [
 df = pd.DataFrame(records)
 ```
 
-**À partir d'une Series** — plusieurs Series se combinent en colonnes :
+**À partir d'une Series**, plusieurs Series se combinent en colonnes :
 
 ```python
 names = pd.Series(["Alice", "Bob", "Carol"])
@@ -137,7 +137,7 @@ df.info()         # column names, non-null counts, dtypes
 df.describe()     # statistical summary of numeric columns
 ```
 
-La méthode `info()` est particulièrement importante — elle révèle les valeurs manquantes et les types de données :
+La méthode `info()` est particulièrement importante, elle révèle les valeurs manquantes et les types de données :
 
 ```
 <class 'pandas.core.frame.DataFrame'>
@@ -154,7 +154,7 @@ Data columns (total 12 columns):
  ...
 ```
 
-Remarquez que `Age` n'a que 714 valeurs non-null sur 891 — cela signifie 177 valeurs manquantes. Nettoyer ces données est une compétence essentielle que vous apprendrez plus tard.
+Remarquez que `Age` n'a que 714 valeurs non-null sur 891, cela signifie 177 valeurs manquantes. Nettoyer ces données est une compétence essentielle que vous apprendrez plus tard.
 
 ## Accès aux colonnes
 
@@ -191,7 +191,7 @@ print(employees[["Name", "Salary"]])
 
 - Un DataFrame est une table avec des lignes étiquetées (index) et des colonnes étiquetées
 - Les dictionnaires de listes et les listes de dictionnaires sont les méthodes de construction les plus courantes
-- `pd.read_csv()` charge des données externes — utilisez `index_col`, `usecols` et `na_values` pour un contrôle précis
+- `pd.read_csv()` charge des données externes, utilisez `index_col`, `usecols` et `na_values` pour un contrôle précis
 - Inspectez toujours les nouvelles données avec `head()`, `info()` et `describe()` avant d'analyser
 
 ## Défi pratique

@@ -22,13 +22,13 @@ Construisez une application de prise de notes en terminal qui stocke les notes a
 
 ## Où exécuter ceci
 
-**En local avec `uv`** est le chemin principal recommandé — ce projet n'a besoin d'aucun package externe, donc la configuration est minimaliste. Les étapes 1 à 7 ci-dessous supposent ce chemin.
+**En local avec `uv`** est le chemin principal recommandé, ce projet n'a besoin d'aucun package externe, donc la configuration est minimaliste. Les étapes 1 à 7 ci-dessous supposent ce chemin.
 
 **GitHub Codespaces** fonctionne bien aussi : ouvrez [tout le dépôt du cours dans un Codespace gratuit](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), et les mêmes commandes `uv` fonctionnent depuis un onglet de navigateur.
 
-**Google Colab et les notebooks Kaggle** ne conviennent pas à ce projet — c'est une application CLI interactive qui nécessite un terminal persistant. Considérez-les comme inadaptés ici.
+**Google Colab et les notebooks Kaggle** ne conviennent pas à ce projet, c'est une application CLI interactive qui nécessite un terminal persistant. Considérez-les comme inadaptés ici.
 
-- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt — ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
+- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt, ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/note-taking-app/notebook.fr.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/note-taking-app/notebook.fr.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fnote-taking-app%2Fnotebook.fr.ipynb)
@@ -40,9 +40,9 @@ uv init note-taking-app
 cd note-taking-app
 ```
 
-Aucun package externe n'est requis — l'application utilise uniquement la bibliothèque standard Python (`json`, `os`, `datetime`, `pathlib`).
+Aucun package externe n'est requis, l'application utilise uniquement la bibliothèque standard Python (`json`, `os`, `datetime`, `pathlib`).
 
-## Étape 1 — Mettre en place la structure du projet
+## Étape 1, Mettre en place la structure du projet
 
 Chaque note a besoin d'une forme cohérente pour que le reste de l'application puisse compter sur les mêmes champs. Nous stockerons les notes comme une liste de dictionnaires dans un fichier JSON. Chaque note aura un champ `id`, `title`, `content`, `tags`, `created_at`, et `updated_at`.
 
@@ -114,7 +114,7 @@ Notes file: data/notes.json
 
 ---
 
-## Étape 2 — Créer des notes
+## Étape 2, Créer des notes
 
 Maintenant que nous pouvons charger et sauvegarder, construisons la fonction qui crée une nouvelle note. Elle prend un titre, un contenu, et des tags optionnels, assigne un ID et des horodatages, et l'ajoute à la liste.
 
@@ -170,12 +170,12 @@ Created note 3: Python Virtual Environments
 Total notes: 3
 ```
 
-Après l'exécution, inspectez `data/notes.json` — vous verrez les trois notes stockées avec des IDs, des tags, et des horodatages.
+Après l'exécution, inspectez `data/notes.json`, vous verrez les trois notes stockées avec des IDs, des tags, et des horodatages.
 
 **🩹 Si ça ne marche pas :**
 
 - Si les IDs ne sont pas séquentiels, vérifiez que `load_notes()` lit la liste courante avant de générer le prochain ID.
-- Les tags devraient être en minuscules — si vous voyez de la casse mixte, la compréhension de liste dans `create_note` ne s'exécute pas.
+- Les tags devraient être en minuscules, si vous voyez de la casse mixte, la compréhension de liste dans `create_note` ne s'exécute pas.
 
 **✅ Liste de vérification**
 
@@ -190,7 +190,7 @@ Après l'exécution, inspectez `data/notes.json` — vous verrez les trois notes
 
 ---
 
-## Étape 3 — Lister et rechercher des notes
+## Étape 3, Lister et rechercher des notes
 
 Une application de prise de notes est inutile si vous ne trouvez rien. Nous implémenterons deux choses : lister toutes les notes dans un format lisible, et une recherche plein texte qui correspond à la fois aux titres et au contenu.
 
@@ -290,7 +290,7 @@ display_search_results("docker")
 
 **🩹 Si ça ne marche pas :**
 
-- Si la recherche ne retourne rien pour "python", vérifiez que `query_lower` est comparé à `note["title"].lassement` — la sensibilité à la casse est le coupable habituel.
+- Si la recherche ne retourne rien pour "python", vérifiez que `query_lower` est comparé à `note["title"].lassement`, la sensibilité à la casse est le coupable habituel.
 - Si les colonnes du tableau sont mal alignées, assurez-vous que les spécificateurs de largeur de f-string (`:<4`, `:<35`, etc.) correspondent aux largeurs des en-têtes.
 
 **✅ Liste de vérification**
@@ -306,7 +306,7 @@ display_search_results("docker")
 
 ---
 
-## Étape 4 — Organiser avec des tags
+## Étape 4, Organiser avec des tags
 
 Les tags vous permettent de regrouper des catégories sans catégories rigides. Nous ajouterons des fonctions pour ajouter et supprimer des tags à des notes existantes, et pour filtrer la liste des notes par un tag spécifique.
 
@@ -422,7 +422,7 @@ Tags on note 1 after removal:
 
 ---
 
-## Étape 5 — Modifier et supprimer des notes
+## Étape 5, Modifier et supprimer des notes
 
 Les utilisateurs ont besoin de corriger des erreurs et de supprimer des notes obsolètes. Nous ajouterons des fonctions pour mettre à jour des champs spécifiques d'une note existante et pour supprimer des notes par ID.
 
@@ -509,7 +509,7 @@ After edit:
 
 **🩹 Si ça ne marche pas :**
 
-- Si `edit_note` ne semble pas sauvegarder, vérifiez que vous passez `title=` et `content=` comme arguments de mot-clé — la fonction utilise `None` comme sentinelle pour ignorer les champs inchangés.
+- Si `edit_note` ne semble pas sauvegarder, vérifiez que vous passez `title=` et `content=` comme arguments de mot-clé, la fonction utilise `None` comme sentinelle pour ignorer les champs inchangés.
 - Si `delete_note` dit « not found » mais la note existe, vérifiez que l'ID est un entier, pas une chaîne.
 
 **✅ Liste de vérification**
@@ -525,9 +525,9 @@ After edit:
 
 ---
 
-## Étape 6 — Exporter en Markdown
+## Étape 6, Exporter en Markdown
 
-Les fichiers Markdown sont faciles à partager, à prévisualiser sur GitHub, ou à importer dans d'autres outils. Nous convertirons les notes en fichiers `.md` propres — un fichier par note, ou un seul document combiné.
+Les fichiers Markdown sont faciles à partager, à prévisualiser sur GitHub, ou à importer dans d'autres outils. Nous convertirons les notes en fichiers `.md` propres, un fichier par note, ou un seul document combiné.
 
 Ajoutez ces fonctions à `notes.py` :
 
@@ -631,7 +631,7 @@ Example: [x**2 for x in range(10)]
 
 **🩹 Si ça ne marche pas :**
 
-- Si le fichier exporté est vide, vérifiez que `note["content"]` est une chaîne — une valeur `None` produirait silencieusement aucune sortie.
+- Si le fichier exporté est vide, vérifiez que `note["content"]` est une chaîne, une valeur `None` produirait silencieusement aucune sortie.
 - Si `safe_title` contient des caractères étranges, ajoutez plus de remplacements : `note["title"].replace(":", "").replace("'", "")`.
 
 **✅ Liste de vérification**
@@ -647,7 +647,7 @@ Example: [x**2 for x in range(10)]
 
 ---
 
-## Étape 7 — Peaufiner le CLI
+## Étape 7, Peaufiner le CLI
 
 La dernière étape réunit le tout avec une interface à menu. Nous ajouterons une sortie colorée en utilisant des codes ANSI, de la validation des entrées, et une gestion propre des erreurs pour que l'application soit polie.
 
@@ -857,7 +857,7 @@ if __name__ == "__main__":
 
 **🩹 Si ça ne marche pas :**
 
-- Si les couleurs n'apparaissent pas, votre terminal ne supporte peut-être pas les codes ANSI — essayez un terminal différent ou vérifiez que `$TERM` est défini sur `xterm-256color` ou similaire.
+- Si les couleurs n'apparaissent pas, votre terminal ne supporte peut-être pas les codes ANSI, essayez un terminal différent ou vérifiez que `$TERM` est défini sur `xterm-256color` ou similaire.
 - Si la boucle d'entrée se bloque, vérifiez que `handle_create` sort correctement de la boucle de saisie du contenu sur deux lignes vides consécutives.
 - Si `Ctrl+C` ne quitte pas proprement, le bloc `except KeyboardInterrupt` devrait le capturer.
 
@@ -877,13 +877,13 @@ if __name__ == "__main__":
 
 ## 🧩 Défis
 
-**Défi 1 — Épinglage des notes**
+**Défi 1, Épinglage des notes**
 Ajoutez un champ booléen `pinned` à chaque note. Lors du listage, les notes épinglées apparaissent toujours en haut quel que soit l'ordre de tri.
 
-**Défi 2 — Export complet avec table des matières**
+**Défi 2, Export complet avec table des matières**
 Étendez l'export Markdown combiné pour inclure une table des matières en haut, avec des liens vers chaque en-tête de note en utilisant la syntaxe d'ancre Markdown (par ex. `[Python Basics](#python-basics)`).
 
-**Défi 3 — Recherche par plage de dates**
+**Défi 3, Recherche par plage de dates**
 Ajoutez des filtres `--from` et `--to` à la fonction de recherche pour que les utilisateurs puissent trouver les notes créées ou mises à jour dans une plage de dates spécifique. Analysez les dates avec `datetime.fromisoformat()`.
 
 ## Objectifs avancés

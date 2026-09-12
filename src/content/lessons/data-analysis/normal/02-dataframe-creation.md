@@ -45,7 +45,7 @@ quiz:
 
 ## What is a DataFrame?
 
-A pandas **DataFrame** is a two-dimensional labeled data structure — think of it as a spreadsheet, SQL table, or dictionary of Series objects. Each column is a Series, and all columns share the same index.
+A pandas **DataFrame** is a two-dimensional labeled data structure, think of it as a spreadsheet, SQL table, or dictionary of Series objects. Each column is a Series, and all columns share the same index.
 
 ```python
 import pandas as pd
@@ -69,7 +69,7 @@ Output:
 
 ## Creating DataFrames from different sources
 
-**From a dictionary of lists** — each key becomes a column name:
+**From a dictionary of lists**, each key becomes a column name:
 
 ```python
 df = pd.DataFrame({
@@ -79,7 +79,7 @@ df = pd.DataFrame({
 })
 ```
 
-**From a list of dictionaries** — each dictionary is a row:
+**From a list of dictionaries**, each dictionary is a row:
 
 ```python
 records = [
@@ -90,7 +90,7 @@ records = [
 df = pd.DataFrame(records)
 ```
 
-**From a Series** — multiple Series combine into columns:
+**From a Series**, multiple Series combine into columns:
 
 ```python
 names = pd.Series(["Alice", "Bob", "Carol"])
@@ -137,7 +137,7 @@ df.info()         # column names, non-null counts, dtypes
 df.describe()     # statistical summary of numeric columns
 ```
 
-The `info()` method is particularly important — it reveals missing values and data types:
+The `info()` method is particularly important, it reveals missing values and data types:
 
 ```
 <class 'pandas.core.frame.DataFrame'>
@@ -154,7 +154,7 @@ Data columns (total 12 columns):
  ...
 ```
 
-Notice that `Age` has 714 non-null values out of 891 — that means 177 missing values. Cleaning this up is a core skill you will learn later.
+Notice that `Age` has 714 non-null values out of 891, that means 177 missing values. Cleaning this up is a core skill you will learn later.
 
 ## Column access
 
@@ -191,7 +191,7 @@ print(employees[["Name", "Salary"]])
 
 - A DataFrame is a table with labeled rows (index) and labeled columns
 - Dictionaries of lists and lists of dictionaries are the most common construction methods
-- `pd.read_csv()` loads external data — use `index_col`, `usecols`, and `na_values` for control
+- `pd.read_csv()` loads external data, use `index_col`, `usecols`, and `na_values` for control
 - Always inspect new data with `head()`, `info()`, and `describe()` before analyzing
 
 ## Practice Challenge

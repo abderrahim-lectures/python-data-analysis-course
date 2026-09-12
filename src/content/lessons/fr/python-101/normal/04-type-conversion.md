@@ -1,6 +1,6 @@
 ---
 title: "Conversion de types"
-description: "Convertissez explicitement entre int, float, str et bool — et comprenez quand les conversions échouent."
+description: "Convertissez explicitement entre int, float, str et bool, et comprenez quand les conversions échouent."
 module: "python-basics"
 order: 4
 difficulty: "beginner"
@@ -22,7 +22,7 @@ track: "normal"
 
 ## Pourquoi une valeur devrait-elle changer d'ensemble ?
 
-Vous tapez votre année de naissance dans un formulaire. Le `input()` de Python vous rend une **chaîne** — `"2004"`. Mais `"2004"` n'est pas un nombre au sens arithmétique : essayez `"2004" + 26` et Python répond `"200426"`, car pour une chaîne, `+` veut dire *joindre*, pas *additionner*.
+Vous tapez votre année de naissance dans un formulaire. Le `input()` de Python vous rend une **chaîne**, `"2004"`. Mais `"2004"` n'est pas un nombre au sens arithmétique : essayez `"2004" + 26` et Python répond `"200426"`, car pour une chaîne, `+` veut dire *joindre*, pas *additionner*.
 
 Vous tenez les chiffres d'un nombre sans tenir le nombre. Son ensemble d'appartenance est le mauvais. Une valeur qui traverse le clavier jusqu'à un programme arrive comme texte, et le texte ne sait pas faire de l'arithmétique.
 
@@ -41,7 +41,7 @@ bool(0)         # False  — nombre -> valeur de vérité
 
 Les lire à voix haute dit ce qu'elles sont : `str(42)` signifie « donne-moi la version chaîne de $42$ ». Le nom de la fonction est le nom de l'ensemble de destination, et les parenthèses sont la machine de conversion elle-même.
 
-## Convertir ne consiste pas à arrondir — c'est tronquer
+## Convertir ne consiste pas à arrondir, c'est tronquer
 
 Voici une subtilité qui coûte de vrais bugs aux débutants. Vous voulez la partie entière de $3.9$. Quelle réponse faut-il donner ?
 
@@ -76,7 +76,7 @@ int("3.14")     # ValueError: invalid literal for int()  ("3.14" : des chiffres 
 float("hello")  # ValueError: could not convert string to float
 ```
 
-`"hello"` ne contient aucun chiffre — rien à convertir, donc Python refuse. `int("3.14")` est plus retors : il *contient* des chiffres, mais la fonction `int` n'accepte qu'un littéral entier, or $3.14$ n'est pas entier. Il faut passer par `float` pour le réduire :
+`"hello"` ne contient aucun chiffre, rien à convertir, donc Python refuse. `int("3.14")` est plus retors : il *contient* des chiffres, mais la fonction `int` n'accepte qu'un littéral entier, or $3.14$ n'est pas entier. Il faut passer par `float` pour le réduire :
 
 ```python
 int(float("3.14"))   # 3  — analyse 3.14, tronque à 3
@@ -86,7 +86,7 @@ Remarquez la philosophie : Python échoue bruyamment plutôt que de deviner tout
 
 ## Le piège quotidien : `input()` renvoie une chaîne
 
-À chaque fois, sans exception, `input()` renvoie un `str` — même quand l'utilisateur tape `2004`. Le nombre que vous vouliez est encore de l'autre côté d'une conversion :
+À chaque fois, sans exception, `input()` renvoie un `str`, même quand l'utilisateur tape `2004`. Le nombre que vous vouliez est encore de l'autre côté d'une conversion :
 
 ```python
 year_text = input("Birth year? ")   # str, toujours
@@ -121,23 +121,23 @@ L'entonnoir compte parce que chaque étape est une promesse différente : `float
 - **`int("3.14")` lève une erreur.** Vous ne pouvez pas parser une chaîne décimale directement en `int()`. Réduisez-la à la main : `int(float("3.14"))`, ou `round(float("3.14"))`.
 - **`int()` tronque ; `round()` arrondit.** `int(4.7)` vaut `4`, pas `5`. Demandez-vous quelle opération vous décrivez vraiment en disant « convertis ceci en entier ».
 - **`float("inf")` est valide.** Python connaît l'infini : `float('inf')`. Pratique dans les algorithmes d'optimisation ; troublant lorsqu'il s'invite dans un résultat que vous attendiez fini.
-- **`int()` et `bool()` tronquent et réinterprètent en silence.** `int(3.9)` tranche la fraction en silence ; `bool("")` renvoie `False` en silence. Analyser du texte échoue bruyamment (`ValueError`), mais les conversions nombre-à-nombre sont calmes — ce sont celles à vérifier deux fois.
+- **`int()` et `bool()` tronquent et réinterprètent en silence.** `int(3.9)` tranche la fraction en silence ; `bool("")` renvoie `False` en silence. Analyser du texte échoue bruyamment (`ValueError`), mais les conversions nombre-à-nombre sont calmes, ce sont celles à vérifier deux fois.
 
 ## 🧩 Défis
 
 <details class="challenge">
-<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
+<summary>🧩 Défi, réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
 Prédisez `int(-7.9)` et `-7.9 // 1`. Sont-ils identiques ? Expliquez toute différence.
 
-<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>int(-7.9)</code> vaut <code>-7</code> (tronque vers zéro — coupe la partie décimale), tandis que <code>-7.9 // 1</code> vaut <code>-8.0</code> (plancher vers moins l'infini). Ils concordent pour les positifs et divergent pour les négatifs.</p>
+<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>int(-7.9)</code> vaut <code>-7</code> (tronque vers zéro, coupe la partie décimale), tandis que <code>-7.9 // 1</code> vaut <code>-8.0</code> (plancher vers moins l'infini). Ils concordent pour les positifs et divergent pour les négatifs.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
+<summary>🧩 Défi, réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
 Écrivez un programme qui demande un nom et une année de naissance (deux invites `input()` distinctes), calcule un âge approximatif et affiche une phrase comme `"Amina, you are about 21 years old."`
@@ -148,12 +148,12 @@ Prédisez `int(-7.9)` et `-7.9 // 1`. Sont-ils identiques ? Expliquez toute diff
 </details>
 
 <details class="challenge">
-<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
+<summary>🧩 Défi, réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
 Sans l'exécuter, calculez `15 // 4` et `15 % 4` à la main, puis vérifiez si $4 \cdot (15 // 4) + (15 \% 4)$ reproduit $15$.
 
-<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>15 // 4</code> vaut <code>3</code> (le plancher de $3.75$), et <code>15 % 4</code> vaut <code>3</code>, puisque $15 = 4 \cdot 3 + 3$. Ensemble, <code>4 * 3 + 3 = 15</code> — l'identité de la division $\text{dividende} = \text{diviseur} \cdot \text{quotient} + \text{reste}$.</p>
+<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>15 // 4</code> vaut <code>3</code> (le plancher de $3.75$), et <code>15 % 4</code> vaut <code>3</code>, puisque $15 = 4 \cdot 3 + 3$. Ensemble, <code>4 * 3 + 3 = 15</code>, l'identité de la division $\text{dividende} = \text{diviseur} \cdot \text{quotient} + \text{reste}$.</p>
 
 </div>
 </details>

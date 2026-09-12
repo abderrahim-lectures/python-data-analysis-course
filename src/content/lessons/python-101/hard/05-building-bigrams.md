@@ -44,7 +44,7 @@ quiz:
 ---
 From word counts to word transitions
 
-Word frequency tells you *what* words appear. Bigrams tell you *what follows what*. "The cat" is far more common than "the refrigerator" — a bigram table captures that relationship. It's the simplest form of a language model: given a word, what words tend to come next?
+Word frequency tells you *what* words appear. Bigrams tell you *what follows what*. "The cat" is far more common than "the refrigerator", a bigram table captures that relationship. It's the simplest form of a language model: given a word, what words tend to come next?
 
 The cells below reuse the `load_corpus` and `tokenize` helpers from lessons 01 and 03. Every lesson page starts with a fresh Python session, so run this setup cell first:
 
@@ -152,7 +152,7 @@ print(f"  Followers: {bigrams[top_word]}")
 
 ### Sentence boundaries
 
-When building bigrams from multiple sentences, the last word of one sentence and the first word of the next become a bigram. This is usually fine for a small model — the model doesn't know about sentence structure anyway. But if you want cleaner results, you can add sentence boundary markers:
+When building bigrams from multiple sentences, the last word of one sentence and the first word of the next become a bigram. This is usually fine for a small model, the model doesn't know about sentence structure anyway. But if you want cleaner results, you can add sentence boundary markers:
 
 ```python
 def build_bigrams(tokens, add_boundaries=True):
@@ -187,7 +187,7 @@ print(f"Unique bigram pairs: {total_pairs}")
 
 ## Key Takeaways
 
-- A bigram is a pair of consecutive words — the simplest sequence model
+- A bigram is a pair of consecutive words, the simplest sequence model
 - The bigram table is a nested dict: `bigrams[word] = {follower: count}`
 - `defaultdict(lambda: defaultdict(int))` simplifies nested counting
 - Sentence boundaries can be tracked with special tokens like `<END>`

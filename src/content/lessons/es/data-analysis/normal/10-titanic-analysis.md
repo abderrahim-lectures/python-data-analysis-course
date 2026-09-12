@@ -119,9 +119,9 @@ female  0.742038    314
 male    0.188908    577
 ```
 
-El 74% de las mujeres sobrevivió frente al 19% de los hombres — la política de "mujeres y niños primero" se refleja claramente.
+El 74% de las mujeres sobrevivió frente al 19% de los hombres, la política de "mujeres y niños primero" se refleja claramente.
 
-## Paso 5: Análisis combinado — clase y sexo
+## Paso 5: Análisis combinado, clase y sexo
 
 ```python
 print(df.groupby(["Pclass", "Sex"])["Survived"].mean().unstack())
@@ -215,7 +215,7 @@ Q       0.389610     77
 S       0.368821    646
 ```
 
-Los pasajeros de Cherburgo tuvieron la mayor tasa de supervivencia — probablemente porque allí embarcaron más pasajeros de primera clase.
+Los pasajeros de Cherburgo tuvieron la mayor tasa de supervivencia, probablemente porque allí embarcaron más pasajeros de primera clase.
 
 ## Paso 10: Resumen de hallazgos
 
@@ -233,12 +233,12 @@ print(summary)
 
 ## Conclusiones clave
 
-1. **La clase fue el predictor más fuerte de supervivencia** — los pasajeros de primera clase sobrevivieron al 63% frente al 24% de la tercera clase
-2. **El género fue igualmente poderoso** — el 74% de las mujeres sobrevivió frente al 19% de los hombres
-3. **La combinación importa más** — mujeres de primera clase: 97% de supervivencia; hombres de tercera clase: 14%
-4. **Los niños tuvieron ventaja** — 58% de supervivencia, la más alta de cualquier grupo de edad
-5. **Los tamaños de familia moderados ayudaron** — las familias de 2 a 4 miembros sobrevivieron más que los viajeros solos
-6. **La tarifa pagada se correlacionó con la supervivencia** — los pasajeros que pagaron más sobrevivieron más, probablemente reflejando la clase y la ubicación de la cabina
+1. **La clase fue el predictor más fuerte de supervivencia**, los pasajeros de primera clase sobrevivieron al 63% frente al 24% de la tercera clase
+2. **El género fue igualmente poderoso**, el 74% de las mujeres sobrevivió frente al 19% de los hombres
+3. **La combinación importa más**, mujeres de primera clase: 97% de supervivencia; hombres de tercera clase: 14%
+4. **Los niños tuvieron ventaja**, 58% de supervivencia, la más alta de cualquier grupo de edad
+5. **Los tamaños de familia moderados ayudaron**, las familias de 2 a 4 miembros sobrevivieron más que los viajeros solos
+6. **La tarifa pagada se correlacionó con la supervivencia**, los pasajeros que pagaron más sobrevivieron más, probablemente reflejando la clase y la ubicación de la cabina
 
 ## Inténtalo
 
@@ -259,7 +259,7 @@ print(df.groupby("Group")["Survived"].agg(["mean", "count"]))
 ## Conclusiones clave
 
 - Un EDA completo sigue un proceso: cargar → limpiar → crear características → agrupar → analizar → concluir
-- La limpieza debe ocurrir antes del análisis — los valores faltantes sesgan los resultados de groupby
+- La limpieza debe ocurrir antes del análisis, los valores faltantes sesgan los resultados de groupby
 - La ingeniería de características (grupos de edad, indicadores de viajar solo) revela patrones ocultos en los números crudos
 - Múltiples ángulos de groupby (clase, sexo, edad, familia) construyen una imagen completa
 

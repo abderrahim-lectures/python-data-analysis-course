@@ -56,7 +56,7 @@ df = pd.read_csv("titanic.csv")
 
 ## loc: label-based selection
 
-`loc` selects by **label** — the row index labels and column names:
+`loc` selects by **label**, the row index labels and column names:
 
 ```python
 # Select row at index label 0, columns "Name" and "Age"
@@ -71,7 +71,7 @@ Age                        22.0
 Name: 0, dtype: object
 ```
 
-**Slice by label** — the endpoint is inclusive (unlike Python slicing):
+**Slice by label**, the endpoint is inclusive (unlike Python slicing):
 
 ```python
 # Rows 0 through 4, columns Name through Age
@@ -92,7 +92,7 @@ print(df.loc[[0, 5, 10]])
 
 ## iloc: position-based selection
 
-`iloc` selects by **integer position** — the row/column number starting from 0:
+`iloc` selects by **integer position**, the row/column number starting from 0:
 
 ```python
 # First row, first three columns
@@ -108,7 +108,7 @@ Pclass                                 3
 Name: 0, dtype: object
 ```
 
-**Slice by position** — the endpoint is exclusive (standard Python behavior):
+**Slice by position**, the endpoint is exclusive (standard Python behavior):
 
 ```python
 # Rows 0-4 (5 rows), columns 0-2 (3 columns)
@@ -139,7 +139,7 @@ df.iloc[0:5]      # rows at positions 0 through 4 (exclusive) — 5 rows
 
 ## Using loc for assignment
 
-`loc` is not just for reading — you can use it to **edit** specific cells:
+`loc` is not just for reading, you can use it to **edit** specific cells:
 
 ```python
 # Set Age to 0 for the first passenger

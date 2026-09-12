@@ -16,7 +16,7 @@ prerequisites: ["Python 101", "Data Analysis"]
 
 Les modèles de machine learning cassent quand le code qui calcule les features pendant l'entraînement dérive du code qui les calcule en production. Un magasin de features corrige cela en calculant les features une fois, en les versionnant, et en servant les mêmes valeurs que tu ajustes un modèle ou que tu scores une requête. Ce projet construit un magasin de features léger, adossé à des fichiers, avec une CLI : tu enregistres des définitions de features, tu les calcules à partir de données brutes, et tu les récupères par clé d'entité avec une exactitude à un instant donné.
 
-Ceci suppose Python 101 et une aisance avec pandas acquise en Analyse de données — rien au-delà. Facultatif et non noté ; consulte [Real-World Projects](/fr/projets) pour la liste complète.
+Ceci suppose Python 101 et une aisance avec pandas acquise en Analyse de données, rien au-delà. Facultatif et non noté ; consulte [Real-World Projects](/fr/projets) pour la liste complète.
 
 ## 🎯 Ce que tu vas faire
 
@@ -29,7 +29,7 @@ Ceci suppose Python 101 et une aisance avec pandas acquise en Analyse de donnée
 
 ## Où exécuter ceci
 
-**Localement avec `uv`** est le chemin principal ici — ce projet lit et écrit des fichiers sur disque (instantanés Parquet, registre JSON), ce qui fonctionne le plus naturellement en dehors d'un notebook.
+**Localement avec `uv`** est le chemin principal ici, ce projet lit et écrit des fichiers sur disque (instantanés Parquet, registre JSON), ce qui fonctionne le plus naturellement en dehors d'un notebook.
 
 **Google Colab, Kaggle Notebooks, et Binder** fonctionnent bien pour essayer l'outil. Le notebook installe les mêmes dépendances et utilise le même code ; le stockage sur fichiers fonctionne dans le système de fichiers éphémère d'un notebook pendant la durée de la session.
 
@@ -122,7 +122,7 @@ class Registry:
         self.path.write_text(json.dumps(data, indent=2))
 ```
 
-Le registre est un dictionnaire indexé par nom de feature, adossé à un fichier JSON plat. Chaque `Feature` porte un `version` entier pour pouvoir avancer sans détruire les anciennes définitions. Le champ `entity_key` enregistre quelle colonne sert de clé de recherche — cela compte plus tard pour récupérer des features pour une entité spécifique.
+Le registre est un dictionnaire indexé par nom de feature, adossé à un fichier JSON plat. Chaque `Feature` porte un `version` entier pour pouvoir avancer sans détruire les anciennes définitions. Le champ `entity_key` enregistre quelle colonne sert de clé de recherche, cela compte plus tard pour récupérer des features pour une entité spécifique.
 
 **🎯 Résultat attendu :** `Registry().register("avg_order_value", 1, "Mean order value", "user_id")` crée un fichier `feature_registry.json` contenant une entrée avec les quatre champs.
 
@@ -140,11 +140,11 @@ reg2 = Registry()  # re-load from disk
 assert reg2.features["avg_order_value"].version == 1
 ```
 
-Recharger le registre depuis le disque devrait produire la même `Feature` que tu viens d'enregistrer — cela confirme que l'aller-retour JSON fonctionne de bout en bout.
+Recharger le registre depuis le disque devrait produire la même `Feature` que tu viens d'enregistrer, cela confirme que l'aller-retour JSON fonctionne de bout en bout.
 
 **🎯 Résultat attendu :** L'assertion passe silencieusement ; `feature_registry.json` contient l'entrée enregistrée.
 
-**🩹 Si ça ne marche pas :** Si `reg2` est vide, le chemin `_load()` ne s'exécute pas — vérifie que `self.path.exists()` renvoie `True` au moment du chargement.
+**🩹 Si ça ne marche pas :** Si `reg2` est vide, le chemin `_load()` ne s'exécute pas, vérifie que `self.path.exists()` renvoie `True` au moment du chargement.
 
 ### 1.3 Vérifie le registre
 
@@ -181,7 +181,7 @@ def compute_avg_order_value(transactions: pd.DataFrame) -> pd.DataFrame:
     )
 ```
 
-Le calcul est un simple `groupby` + `mean` pandas — le même schéma que dans toute analyse de données. La fonction renvoie un DataFrame avec exactement deux colonnes : la clé d'entité (`user_id`) et la valeur de la feature (`avg_order_value`). Cette forme à deux colonnes est le format de sortie standard que chaque fonction de calcul devrait suivre.
+Le calcul est un simple `groupby` + `mean` pandas, le même schéma que dans toute analyse de données. La fonction renvoie un DataFrame avec exactement deux colonnes : la clé d'entité (`user_id`) et la valeur de la feature (`avg_order_value`). Cette forme à deux colonnes est le format de sortie standard que chaque fonction de calcul devrait suivre.
 
 **🎯 Résultat attendu :** Étant donné un DataFrame avec les colonnes `user_id` et `amount`, la fonction renvoie un DataFrame avec les colonnes `user_id` et `avg_order_value` où chaque ligne est la moyenne d'un utilisateur.
 
@@ -218,7 +218,7 @@ En ajoutant une seconde fonction tu confirmes le schéma : chaque calcul est une
 **🤔 Question(s) socratique(s)**
 
 - Pourquoi imposer une sortie à deux colonnes (clé d'entité + valeur de feature) plutôt que de renvoyer une Series ou un dict ? Comment cette forme simplifie-t-elle les étapes de stockage et de récupération ?
-- Que se passe-t-il si deux tables brutes différentes partagent la même clé d'entité mais ont des types d'entité différents — disons `user_id` dans les commandes et `product_id` dans l'inventaire ?
+- Que se passe-t-il si deux tables brutes différentes partagent la même clé d'entité mais ont des types d'entité différents, disons `user_id` dans les commandes et `product_id` dans l'inventaire ?
 
 ## Étape 3 : Persister les features en Parquet avec des instantanés versionnés
 
@@ -247,11 +247,11 @@ def load_features(feature_name: str, version: int) -> pd.DataFrame:
     return pd.read_parquet(path)
 ```
 
-La convention de nommage `{name}_v{version}.parquet` est simple et lisible par l'humain. `mkdir(exist_ok=True)` signifie que la fonction fonctionne au premier lancement sans étape de configuration séparée. Écrire avec `index=False` garde le fichier Parquet propre — la clé d'entité est une colonne régulière, pas un index, ce qui simplifie les jointures en aval.
+La convention de nommage `{name}_v{version}.parquet` est simple et lisible par l'humain. `mkdir(exist_ok=True)` signifie que la fonction fonctionne au premier lancement sans étape de configuration séparée. Écrire avec `index=False` garde le fichier Parquet propre, la clé d'entité est une colonne régulière, pas un index, ce qui simplifie les jointures en aval.
 
 **🎯 Résultat attendu :** `save_features("avg_order_value", 1, df)` crée `feature_store_data/avg_order_value_v1.parquet`, et `load_features("avg_order_value", 1)` renvoie un DataFrame identique.
 
-**🩹 Si ça ne marche pas :** Si `load_features` lève une `FileNotFoundError`, le chemin du fichier ne correspond pas — vérifie que `STORE_DIR` et le schéma de nommage sont cohérents entre l'écriture et la lecture. Si le DataFrame chargé a une colonne `__index_level_0__` en trop, tu as enregistré avec `index=True` au lieu de `False`.
+**🩹 Si ça ne marche pas :** Si `load_features` lève une `FileNotFoundError`, le chemin du fichier ne correspond pas, vérifie que `STORE_DIR` et le schéma de nommage sont cohérents entre l'écriture et la lecture. Si le DataFrame chargé a une colonne `__index_level_0__` en trop, tu as enregistré avec `index=True` au lieu de `False`.
 
 ### 3.2 Vérifie l'aller-retour
 
@@ -310,7 +310,7 @@ Le filtre `isin` est la forme la plus simple d'exactitude à un instant donné :
 
 **🎯 Résultat attendu :** `fetch_features("avg_order_value", 1, [1, 3])` renvoie un DataFrame avec uniquement les lignes où `user_id` est 1 ou 3.
 
-**🩹 Si ça ne marche pas :** Si le résultat inclut des clés que tu n'as pas demandées, le nom de la colonne de filtre est faux. Si le résultat est vide, les clés pourraient ne pas exister dans l'instantané stocké — vérifie le numéro de version.
+**🩹 Si ça ne marche pas :** Si le résultat inclut des clés que tu n'as pas demandées, le nom de la colonne de filtre est faux. Si le résultat est vide, les clés pourraient ne pas exister dans l'instantané stocké, vérifie le numéro de version.
 
 ### 4.2 Construis la façade `FeatureStore`
 
@@ -335,11 +335,11 @@ class FeatureStore:
         return fetch_features(name, feat.version, entity_keys, key_column)
 ```
 
-La façade relie les trois couches : `compute_and_store` appelle la fonction de calcul et persiste le résultat sous la version du registre. `get` relit la feature stockée pour des entités spécifiques. Cette séparation calcul/stockage/récupération est la même architecture que celle des magasins de features de production — c'est juste plus petit ici.
+La façade relie les trois couches : `compute_and_store` appelle la fonction de calcul et persiste le résultat sous la version du registre. `get` relit la feature stockée pour des entités spécifiques. Cette séparation calcul/stockage/récupération est la même architecture que celle des magasins de features de production, c'est juste plus petit ici.
 
 **🎯 Résultat attendu :** `store.get("avg_order_value", [1, 2])` renvoie un DataFrame à deux colonnes avec les valeurs de ces deux utilisateurs.
 
-**🩹 Si ça ne marche pas :** Si `get` lève une `KeyError`, la feature n'est pas dans le registre — enregistre-la avant de la récupérer. Si le DataFrame renvoyé a toutes les lignes au lieu des seules clés demandées, vérifie que `fetch_features` filtre, et ne renvoie pas le DataFrame complet.
+**🩹 Si ça ne marche pas :** Si `get` lève une `KeyError`, la feature n'est pas dans le registre, enregistre-la avant de la récupérer. Si le DataFrame renvoyé a toutes les lignes au lieu des seules clés demandées, vérifie que `fetch_features` filtre, et ne renvoie pas le DataFrame complet.
 
 ### 4.3 Vérifie la récupération à un instant donné
 
@@ -419,7 +419,7 @@ if __name__ == "__main__":
     cli()
 ```
 
-Le dictionnaire `COMPUTE_MAP` est la table de distribution : il mappe les noms de features vers leurs fonctions de calcul. Ajouter une nouvelle feature signifie écrire une fonction de calcul et ajouter une ligne à cette table. La CLI est fine — elle analyse les arguments, délègue au code de bibliothèque, et imprime les résultats — ce qui facilite le test indépendant de chaque sous-commande.
+Le dictionnaire `COMPUTE_MAP` est la table de distribution : il mappe les noms de features vers leurs fonctions de calcul. Ajouter une nouvelle feature signifie écrire une fonction de calcul et ajouter une ligne à cette table. La CLI est fine, elle analyse les arguments, délègue au code de bibliothèque, et imprime les résultats, ce qui facilite le test indépendant de chaque sous-commande.
 
 **🎯 Résultat attendu :** `uv run python -m store.cli register --name avg_order_value --version 1 --description "Mean order value" --entity-key user_id` imprime « Registered 'avg_order_value' v1 » et crée le fichier de registre.
 
@@ -476,12 +476,12 @@ Cela exécute le pipeline complet : enregistrer, calculer, stocker, récupérer.
 - **Calculer des features sur le jeu de données complet y compris les lignes futures.** Lors de l'entraînement sur des données historiques, ton DataFrame brut doit être filtré sur la période d'entraînement *avant* de le passer à la fonction de calcul. L'exactitude à un instant donné vit dans les données d'entrée, pas dans la logique de récupération du magasin de features.
 - **Écraser les fichiers de features sans versionner.** Si `save_features` écrit au même chemin à chaque fois, tu perds la capacité de servir les anciennes versions. Inclus toujours le numéro de version dans le nom de fichier et incrémente-le quand la logique de calcul change.
 - **Fuite d'index dans les allers-retours Parquet.** Pandas écrit l'index du DataFrame en Parquet par défaut. Utilise `index=False` à l'enregistrement et `reset_index(drop=True)` à la récupération pour garder la clé d'entité comme une colonne simple, pas un index caché.
-- **Codage en dur du nom de la colonne de clé d'entité.** Différentes features peuvent être indexées sur différentes colonnes (`user_id`, `product_id`, `session_id`). Le paramètre `key_column` existe pour cette raison — ne suppose pas que chaque feature utilise `user_id`.
-- **Oublier d'enregistrer avant de calculer.** `FeatureStore.compute_and_store` lit la version depuis le registre. Si la feature n'est pas enregistrée, tu obtiens une `KeyError` — enregistre toujours d'abord.
+- **Codage en dur du nom de la colonne de clé d'entité.** Différentes features peuvent être indexées sur différentes colonnes (`user_id`, `product_id`, `session_id`). Le paramètre `key_column` existe pour cette raison, ne suppose pas que chaque feature utilise `user_id`.
+- **Oublier d'enregistrer avant de calculer.** `FeatureStore.compute_and_store` lit la version depuis le registre. Si la feature n'est pas enregistrée, tu obtiens une `KeyError`, enregistre toujours d'abord.
 
 ## Ce que tu viens de construire
 
-Un magasin de features léger mais réel : un registre qui catalogue les définitions de features avec versionnage, des fonctions de calcul qui transforment des données brutes en features réutilisables, une persistance Parquet pour les instantanés versionnés, et une CLI qui relie enregistrer-calculer-récupérer en un seul pipeline. L'architecture — séparer métadonnées, calcul, stockage et service — reflète le fonctionnement des magasins de features de production comme Feast et Tecton, juste avec des fichiers au lieu d'une base de données distribuée.
+Un magasin de features léger mais réel : un registre qui catalogue les définitions de features avec versionnage, des fonctions de calcul qui transforment des données brutes en features réutilisables, une persistance Parquet pour les instantanés versionnés, et une CLI qui relie enregistrer-calculer-récupérer en un seul pipeline. L'architecture, séparer métadonnées, calcul, stockage et service, reflète le fonctionnement des magasins de features de production comme Feast et Tecton, juste avec des fichiers au lieu d'une base de données distribuée.
 
 :::tip[Exécute une version plus complète sans aucune configuration locale]
 [`examples/feature-store/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/feature-store) dans le dépôt du cours a une version plus riche avec plus de fonctions de calcul de features, un jeu de données CSV d'échantillon, et la CLI câblée de bout en bout. Clone-le, ou ouvre tout le dépôt dans un [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), et exécute-le depuis là.
@@ -495,6 +495,6 @@ Un magasin de features léger mais réel : un registre qui catalogue les défini
 
 ## Partage ton projet avec la classe
 
-Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres étudiants — et son README contient un parcours complet et accessible aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git auparavant : forker le dépôt, créer une branche, commiter tes fichiers et ouvrir la PR, une étape à la fois. Aucune expérience préalable de git n'est supposée.
+Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres étudiants, et son README contient un parcours complet et accessible aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git auparavant : forker le dépôt, créer une branche, commiter tes fichiers et ouvrir la PR, une étape à la fois. Aucune expérience préalable de git n'est supposée.
 
 Bienvenue dans l'écriture de Python en dehors du navigateur. 🎓

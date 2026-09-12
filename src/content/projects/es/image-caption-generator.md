@@ -14,9 +14,9 @@ prerequisites: ["Python 101"]
 
 # 🖼️ Construye un Generador de Descripciones de Imágenes
 
-Cada foto en la web necesita una descripción de texto — para la accesibilidad, para los motores de búsqueda, para las personas que no pueden cargar la imagen. Escribir descripciones a mano es lento; un modelo de visión y lenguaje puede generarlas en segundos. Este proyecto construye una herramienta CLI que toma una imagen (desde una ruta de archivo o una URL) y produce una descripción legible para humanos usando una API de visión de nivel gratuito. Te encargarás del preprocesamiento de imágenes, las llamadas a la API, el procesamiento por lotes con seguimiento de progreso, e incluso escribirás las descripciones de vuelta en los metadatos de la imagen.
+Cada foto en la web necesita una descripción de texto, para la accesibilidad, para los motores de búsqueda, para las personas que no pueden cargar la imagen. Escribir descripciones a mano es lento; un modelo de visión y lenguaje puede generarlas en segundos. Este proyecto construye una herramienta CLI que toma una imagen (desde una ruta de archivo o una URL) y produce una descripción legible para humanos usando una API de visión de nivel gratuito. Te encargarás del preprocesamiento de imágenes, las llamadas a la API, el procesamiento por lotes con seguimiento de progreso, e incluso escribirás las descripciones de vuelta en los metadatos de la imagen.
 
-Esto asume Python 101 — no se requiere nada de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
+Esto asume Python 101, no se requiere nada de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
 
 ## 🎯 Lo que harás
 
@@ -29,7 +29,7 @@ Esto asume Python 101 — no se requiere nada de Análisis de Datos. Es opcional
 
 ## Dónde ejecutar esto
 
-**Localmente con `uv`** es el camino principal — esta herramienta lee archivos de imagen del disco y escribe imágenes modificadas con metadatos incrustados.
+**Localmente con `uv`** es el camino principal, esta herramienta lee archivos de imagen del disco y escribe imágenes modificadas con metadatos incrustados.
 
 **Google Colab, Kaggle Notebooks y Binder** funcionan para probar la herramienta. El notebook usa el mismo código e incluye imágenes de muestra para las pruebas. Necesitarás una clave de API de nivel gratuito (GitHub Models, Gemini o Groq) configurada como variable de entorno.
 
@@ -81,11 +81,11 @@ GITHUB_TOKEN=your-key-here
 
 - ✅ `uv --version` imprime un número de versión.
 - ✅ `image-caption-generator/` existe con un `pyproject.toml`, y `Pillow`, `requests`, `click` y `python-dotenv` están instalados.
-- ✅ Tienes un archivo `.env` con una clave de API válida — no pegada en ningún script.
+- ✅ Tienes un archivo `.env` con una clave de API válida, no pegada en ningún script.
 
 ## Paso 1: Carga y preprocesa imágenes
 
-Las APIs de visión tienen límites de tamaño — enviar una foto cruda de 20 MB desperdicia ancho de banda y puede ser rechazada. El preprocesamiento carga la imagen, la redimensiona a una dimensión razonable y la convierte a un formato que la API acepta (JPEG o PNG codificado en base64).
+Las APIs de visión tienen límites de tamaño, enviar una foto cruda de 20 MB desperdicia ancho de banda y puede ser rechazada. El preprocesamiento carga la imagen, la redimensiona a una dimensión razonable y la convierte a un formato que la API acepta (JPEG o PNG codificado en base64).
 
 ### 1.1 Carga y redimensiona una imagen
 
@@ -113,11 +113,11 @@ def image_to_base64(img: Image.Image, format: str = "JPEG") -> str:
     return base64.b64encode(buffer.getvalue()).decode("utf-8")
 ```
 
-El método `thumbnail` redimensiona la imagen conservando su relación de aspecto — una foto de 4000×3000 se convierte en 1024×768, no en un 1024×1024 distorsionado. La llamada `convert("RGB")` garantiza que la imagen esté en un formato que JPEG pueda codificar, incluso si el original era RGBA (PNG transparente) o en escala de grises. La cadena base64 es lo que la API espera en el cuerpo de la solicitud.
+El método `thumbnail` redimensiona la imagen conservando su relación de aspecto, una foto de 4000×3000 se convierte en 1024×768, no en un 1024×1024 distorsionado. La llamada `convert("RGB")` garantiza que la imagen esté en un formato que JPEG pueda codificar, incluso si el original era RGBA (PNG transparente) o en escala de grises. La cadena base64 es lo que la API espera en el cuerpo de la solicitud.
 
 **🎯 Resultado esperado :** `load_and_resize("photo.jpg")` devuelve una imagen PIL con ambas dimensiones ≤ 1024. `image_to_base64(img)` devuelve una cadena larga de caracteres (A-Z, a-z, 0-9, +, /).
 
-**🩹 Si sale mal :** Si `thumbnail` no redimensiona, la imagen ya es más pequeña que el máximo — ese es el comportamiento correcto, no un bug. Si la codificación `base64` falla, el formato de la imagen puede no ser compatible con PIL.
+**🩹 Si sale mal :** Si `thumbnail` no redimensiona, la imagen ya es más pequeña que el máximo, ese es el comportamiento correcto, no un bug. Si la codificación `base64` falla, el formato de la imagen puede no ser compatible con PIL.
 
 ### 1.2 Verifica el preprocesamiento
 
@@ -141,7 +141,7 @@ assert len(b64) > 100  # base64 string is non-trivial
 
 **🎯 Resultado esperado :** Todas las afirmaciones (assertions) pasan; la imagen redimensionada cabe dentro de 1024×1024 y la cadena base64 no está vacía.
 
-**🩹 Si sale mal :** Si el ancho o el alto sigue por encima de 1024, `thumbnail` no se está llamando — comprueba que el método esté encadenado al objeto `img`.
+**🩹 Si sale mal :** Si el ancho o el alto sigue por encima de 1024, `thumbnail` no se está llamando, comprueba que el método esté encadenado al objeto `img`.
 
 ### 1.3 Verifica
 
@@ -195,11 +195,11 @@ def caption_image(client: OpenAI, image_b64: str, prompt: str = "Describe this i
     return response.choices[0].message.content.strip()
 ```
 
-El formato `data:image/jpeg;base64,{image_b64}` es como las APIs de visión aceptan imágenes en línea — el modelo recibe los datos de píxeles crudos codificados como texto, no una URL que deba buscar. El `max_tokens=200` mantiene las descripciones concisas. El prompt es configurable para que puedas pedir diferentes estilos de descripción ("una oración", "párrafo detallado", "texto alternativo para lectores de pantalla").
+El formato `data:image/jpeg;base64,{image_b64}` es como las APIs de visión aceptan imágenes en línea, el modelo recibe los datos de píxeles crudos codificados como texto, no una URL que deba buscar. El `max_tokens=200` mantiene las descripciones concisas. El prompt es configurable para que puedas pedir diferentes estilos de descripción ("una oración", "párrafo detallado", "texto alternativo para lectores de pantalla").
 
 **🎯 Resultado esperado :** `caption_image(client, cadena_base64)` devuelve una cadena como "A red bicycle parked against a brick wall on a sunny afternoon."
 
-**🩹 Si sale mal :** Si la API devuelve un error, comprueba que la variable de entorno `GITHUB_TOKEN` esté configurada. Si la respuesta está vacía, el modelo puede no admitir visión — prueba con un nombre de modelo diferente.
+**🩹 Si sale mal :** Si la API devuelve un error, comprueba que la variable de entorno `GITHUB_TOKEN` esté configurada. Si la respuesta está vacía, el modelo puede no admitir visión, prueba con un nombre de modelo diferente.
 
 ### 2.2 Maneja los errores con elegancia
 
@@ -271,7 +271,7 @@ def caption_directory(
     return results
 ```
 
-La función recorre el directorio, filtra por extensión de imagen y procesa cada archivo con un contador de progreso. El `end=" "` y `flush=True` en el print mantienen el progreso en una sola línea. Cada resultado es un diccionario con la ruta, la descripción y el error (si lo hay) — esto facilita filtrar los éxitos de los fallos después.
+La función recorre el directorio, filtra por extensión de imagen y procesa cada archivo con un contador de progreso. El `end=" "` y `flush=True` en el print mantienen el progreso en una sola línea. Cada resultado es un diccionario con la ruta, la descripción y el error (si lo hay), esto facilita filtrar los éxitos de los fallos después.
 
 **🎯 Resultado esperado :** Para un directorio con 5 imágenes, la salida muestra `[1/5] photo1.jpg... OK` hasta `[5/5] photo5.jpg... OK`, terminando con "Done: 5/5 succeeded".
 
@@ -316,7 +316,7 @@ Los proveedores de API de nivel gratuito suelen tener límites de tasa (solicitu
 
 **🎯 Resultado esperado :** El procesador por lotes hace una pausa breve entre cada imagen, y todas las solicitudes tienen éxito sin errores 429 (límite de tasa).
 
-**🩹 Si sale mal :** Si sigues alcanzando los límites de tasa, aumenta el retraso. Si el lote es demasiado lento, dismínyelo — pero vigila los errores.
+**🩹 Si sale mal :** Si sigues alcanzando los límites de tasa, aumenta el retraso. Si el lote es demasiado lento, dismínyelo, pero vigila los errores.
 
 ### 3.3 Verifica
 
@@ -333,7 +333,7 @@ Los proveedores de API de nivel gratuito suelen tener límites de tasa (solicitu
 
 ## Paso 4: Incrusta las descripciones en los metadatos EXIF de las imágenes
 
-Guardar las descripciones como archivos de texto separados es frágil — la descripción se separa de la imagen. Los metadatos EXIF están incrustados en el propio archivo de imagen, así que la descripción viaja con la imagen a dondequiera que vaya.
+Guardar las descripciones como archivos de texto separados es frágil, la descripción se separa de la imagen. Los metadatos EXIF están incrustados en el propio archivo de imagen, así que la descripción viaja con la imagen a dondequiera que vaya.
 
 ### 4.1 Escribe metadatos EXIF
 
@@ -366,7 +366,7 @@ La etiqueta EXIF `UserComment` (0x9286) es el campo estándar para metadatos de 
 
 **🎯 Resultado esperado :** `write_caption_to_exif("photo.jpg", "A sunset over the ocean")` guarda la imagen con la descripción incrustada en sus datos EXIF.
 
-**🩹 Si sale mal :** Si `piexif` no está instalado, añádelo: `uv add piexif`. Si los datos EXIF se pierden después de guardar, el parámetro `quality` puede estar causando una re-codificación — prueba con `quality=100`.
+**🩹 Si sale mal :** Si `piexif` no está instalado, añádelo: `uv add piexif`. Si los datos EXIF se pierden después de guardar, el parámetro `quality` puede estar causando una re-codificación, prueba con `quality=100`.
 
 ### 4.2 Lee las descripciones EXIF
 
@@ -386,7 +386,7 @@ def read_caption_from_exif(image_path: str) -> str | None:
 
 **🎯 Resultado esperado :** Leer la descripción de vuelta devuelve la cadena exacta que se escribió.
 
-**🩹 Si sale mal :** Si la lectura devuelve `None` después de escribir, el número de la etiqueta EXIF puede no coincidir — comprueba `piexif.ExifIFD.UserComment`.
+**🩹 Si sale mal :** Si la lectura devuelve `None` después de escribir, el número de la etiqueta EXIF puede no coincidir, comprueba `piexif.ExifIFD.UserComment`.
 
 ### 4.3 Verifica
 
@@ -513,7 +513,7 @@ Esto prueba el pipeline completo: crear, preprocesar, codificar, incrustar y lee
 
 ## Lo que acabas de construir
 
-Un generador de descripciones de imágenes que toma cualquier imagen y produce una descripción legible para humanos usando un modelo de visión de nivel gratuito. El pipeline — preprocesar, codificar, generar descripción, incrustar metadatos — maneja el ciclo de vida completo del texto alternativo generado por IA. El procesador por lotes convierte una carpeta de cientos de imágenes en un archivo JSON de descripciones en minutos, y la incrustación EXIF garantiza que las descripciones permanezcan unidas a sus imágenes.
+Un generador de descripciones de imágenes que toma cualquier imagen y produce una descripción legible para humanos usando un modelo de visión de nivel gratuito. El pipeline, preprocesar, codificar, generar descripción, incrustar metadatos, maneja el ciclo de vida completo del texto alternativo generado por IA. El procesador por lotes convierte una carpeta de cientos de imágenes en un archivo JSON de descripciones en minutos, y la incrustación EXIF garantiza que las descripciones permanezcan unidas a sus imágenes.
 
 :::tip[Ejecuta una versión más completa sin configuración local]
 [`examples/image-caption-generator/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/image-caption-generator) en el repositorio del curso tiene una versión más rica con soporte de múltiples proveedores, imágenes de muestra y el CLI conectado de punta a punta. Clónalo, o abre todo el repositorio en un [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), y ejecútalo desde ahí.
@@ -527,6 +527,6 @@ Un generador de descripciones de imágenes que toma cualquier imagen y produce u
 
 ## Comparte tu proyecto con la clase
 
-¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado — y su README tiene un recorrido completo y amigable para principiantes sobre cómo agregar el tuyo vía un **pull request**, incluso si nunca has usado git antes: hacer fork del repositorio, crear una rama, confirmar tus archivos y abrir el PR, un paso a la vez. No se asume experiencia previa con git.
+¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado, y su README tiene un recorrido completo y amigable para principiantes sobre cómo agregar el tuyo vía un **pull request**, incluso si nunca has usado git antes: hacer fork del repositorio, crear una rama, confirmar tus archivos y abrir el PR, un paso a la vez. No se asume experiencia previa con git.
 
 Bienvenido a escribir Python fuera del navegador. 🎓

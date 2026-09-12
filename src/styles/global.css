@@ -689,7 +689,7 @@ main:focus { outline: none; }
 .tok-def { color: #dcdcaa; }
 .tok-builtin { color: #4ec9b0; }
 
-/* === General mobile improvements === */
+/* === General mobile improvements (mobile-first: trim the desktop rhythm) === */
 @media (max-width: 640px) {
   .container { padding: 0 1rem; }
   main { padding-bottom: 4rem; }
@@ -697,6 +697,14 @@ main:focus { outline: none; }
   h2 { font-size: clamp(1.2rem, 4vw, 1.5rem); }
   .btn { padding: .55rem 1rem; font-size: .85rem; }
   .btn-lg { padding: .65rem 1.3rem; }
+  /* Cell action bar (Run/Copy/Clear) sat 15px over the right edge at 320px. */
+  .cell__actions { gap: .5rem; padding: .55rem .75rem; flex-wrap: wrap; }
+  .rewards { padding: 1.5rem 0; }
+  .rewards__sub { margin: 0 0 1rem; }
+  .footer__grid { padding: 2rem 0 1.5rem; }
+  .footer__bottom { padding: 1rem 0; }
+  .hub { margin: .75rem 0 2rem; }
+  .gamestrip { margin: 0 0 1.5rem; }
 }
 
 /* === Hero section (shared across all locale pages) === */
@@ -824,6 +832,15 @@ main:focus { outline: none; }
 @media (max-width: 400px) {
   .gamestrip { grid-template-columns: 1fr; }
   .gamestrip__item--blazing { grid-column: span 1; }
+}
+
+/* Mobile hero rhythm + gutter. Declared AFTER the .hero base rules so the
+   overrides actually win the cascade on phones (mobile-first). */
+@media (max-width: 640px) {
+  .hero { padding: 1.75rem 0 1.25rem; }
+  /* Match the .container gutter on phones instead of the 1.25rem desktop one. */
+  .hero__grid { padding: 0 1rem; }
+  .hero__lead { margin: 0 0 1rem; }
 }
 
 /* === Respect reduced motion preference === */

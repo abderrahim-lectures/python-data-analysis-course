@@ -1,6 +1,6 @@
 ---
 title: "Limpiador de Datos con IA"
-description: "Detecta y corrige automáticamente problemas de calidad de datos — valores faltantes, outliers, duplicados y errores de formato."
+description: "Detecta y corrige automáticamente problemas de calidad de datos, valores faltantes, outliers, duplicados y errores de formato."
 difficulty: "intermediate"
 estimatedMinutes: 90
 xpReward: 100
@@ -19,13 +19,13 @@ learningObjectives:
 
 # 🛠️ 🐼 Construye un Limpiador de Datos con IA
 
-Todo analista ha conocido el mismo dataset: filas duplicadas, celdas en blanco, una columna `price` donde un valor es `"2.5 USD"` y otro es `2.5`, y una fecha de pedido donde unas filas dicen `2024-01-05` y otras `05/01/2024`. Estos problemas ocultan señal real y rompen las herramientas posteriores de formas confusas. Este proyecto construye un limpiador de datos de línea de comandos que toma un CSV desordenado, encuentra esos problemas automáticamente, aplica la corrección adecuada por columna y — la parte que lo hace confiable — registra cada cambio que hace en un registro de auditoría que puedes leer como un recibo.
+Todo analista ha conocido el mismo dataset: filas duplicadas, celdas en blanco, una columna `price` donde un valor es `"2.5 USD"` y otro es `2.5`, y una fecha de pedido donde unas filas dicen `2024-01-05` y otras `05/01/2024`. Estos problemas ocultan señal real y rompen las herramientas posteriores de formas confusas. Este proyecto construye un limpiador de datos de línea de comandos que toma un CSV desordenado, encuentra esos problemas automáticamente, aplica la corrección adecuada por columna y, la parte que lo hace confiable, registra cada cambio que hace en un registro de auditoría que puedes leer como un recibo.
 
-Esto asume Python 101 y los fundamentos de pandas del módulo de Análisis de Datos — nada más allá. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
+Esto asume Python 101 y los fundamentos de pandas del módulo de Análisis de Datos, nada más allá. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 ## 🎯 Lo que harás
 
-1. Perfilar un CSV desordenado con pandas y producir un informe de calidad que cubra valores faltantes, duplicados y problemas de tipo — sin modificar los datos.
+1. Perfilar un CSV desordenado con pandas y producir un informe de calidad que cubra valores faltantes, duplicados y problemas de tipo, sin modificar los datos.
 2. Eliminar filas duplicadas y demostrar exactamente cuántas filas desaparecieron.
 3. Rellenar valores faltantes con una estrategia elegida por columna (mediana para números, moda para texto) y registrar la decisión.
 4. Encontrar outliers con la regla del IQR y recortarlos a un corredor razonable.
@@ -34,11 +34,11 @@ Esto asume Python 101 y los fundamentos de pandas del módulo de Análisis de Da
 
 ## Dónde ejecutar esto
 
-**Localmente con `uv`** es el camino recomendado — el limpiador es un script determinista de pandas y el flujo de trabajo principal consiste en ejecutarlo contra archivos CSV en tu propio disco, así que un entorno Python real con pandas instalado es exactamente el hogar adecuado para él. La Configuración de abajo recorre `uv` y un entorno virtual.
+**Localmente con `uv`** es el camino recomendado, el limpiador es un script determinista de pandas y el flujo de trabajo principal consiste en ejecutarlo contra archivos CSV en tu propio disco, así que un entorno Python real con pandas instalado es exactamente el hogar adecuado para él. La Configuración de abajo recorre `uv` y un entorno virtual.
 
-**GitHub Codespaces** también funciona bien: abre [todo el repositorio del curso en un Codespace gratuito](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) — pandas y `uv` ya están instalados, y cada paso de abajo se ejecuta sin cambios.
+**GitHub Codespaces** también funciona bien: abre [todo el repositorio del curso en un Codespace gratuito](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), pandas y `uv` ya están instalados, y cada paso de abajo se ejecuta sin cambios.
 
-**Google Colab, Kaggle Notebooks y Binder son una forma genuinamente buena de ejecutar esto** — a diferencia de los proyectos que necesitan un repositorio git local o un estado real del sistema de archivos, un limpiador de datos solo necesita un CSV en memoria. El notebook de abajo construye un pequeño DataFrame intencionalmente desordenado para que cada detección y corrección se ejecute de verdad; usa un notebook para experimentar rápido, y luego cambia al `uv` local cuando quieras apuntar la herramienta a archivos `.csv` reales en tu máquina.
+**Google Colab, Kaggle Notebooks y Binder son una forma genuinamente buena de ejecutar esto**, a diferencia de los proyectos que necesitan un repositorio git local o un estado real del sistema de archivos, un limpiador de datos solo necesita un CSV en memoria. El notebook de abajo construye un pequeño DataFrame intencionalmente desordenado para que cada detección y corrección se ejecute de verdad; usa un notebook para experimentar rápido, y luego cambia al `uv` local cuando quieras apuntar la herramienta a archivos `.csv` reales en tu máquina.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-data-cleaner/notebook.es.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-data-cleaner/notebook.es.ipynb)
@@ -56,11 +56,11 @@ cd ai-data-cleaner
 uv add pandas
 ```
 
-`uv` instala Python por ti, crea el proyecto y agrega pandas a su entorno virtual — una sola cadena de comandos en lugar del habitual recorrido "instala Python, instala pip, crea un venv, pip install".
+`uv` instala Python por ti, crea el proyecto y agrega pandas a su entorno virtual, una sola cadena de comandos en lugar del habitual recorrido "instala Python, instala pip, crea un venv, pip install".
 
 ### Crea un CSV desordenado para probar
 
-Esboza un archivo pequeño con los problemas que la herramienta existe para detectar — pégalo en `messy.csv`:
+Esboza un archivo pequeño con los problemas que la herramienta existe para detectar, pégalo en `messy.csv`:
 
 ```csv
 order_id,customer,units,price,order_date
@@ -87,11 +87,11 @@ Este único archivo contiene cada modo de falla que el pipeline maneja: dos fila
 
 ## Paso 1: Perfila el dataset sin tocarlo
 
-La primera pasada de cualquier script de limpieza debe ser *de solo lectura* — no puedes confiar en las correcciones de una herramienta hasta que pueda describir qué está mal, y no puedes describir qué está mal en un dataset que ya has mutilado. El perfilado carga el CSV y luego recorre columna por columna haciendo tres preguntas: cuántos valores faltan, cuántas filas son duplicados exactos y qué dtype tiene realmente cada columna.
+La primera pasada de cualquier script de limpieza debe ser *de solo lectura*, no puedes confiar en las correcciones de una herramienta hasta que pueda describir qué está mal, y no puedes describir qué está mal en un dataset que ya has mutilado. El perfilado carga el CSV y luego recorre columna por columna haciendo tres preguntas: cuántos valores faltan, cuántas filas son duplicados exactos y qué dtype tiene realmente cada columna.
 
 ### 1.1 Carga y evalúa los datos
 
-**👟 Pista inicial :** Carga `messy.csv` en `df`, imprime su shape, dtypes, la cantidad de valores faltantes por columna y su cantidad de filas duplicadas — todo lecturas, nada de escrituras.
+**👟 Pista inicial :** Carga `messy.csv` en `df`, imprime su shape, dtypes, la cantidad de valores faltantes por columna y su cantidad de filas duplicadas, todo lecturas, nada de escrituras.
 
 ```python
 # clean.py
@@ -105,11 +105,11 @@ print("\nduplicate rows:", df.duplicated().sum())
 print("\nfirst 3 rows:\n", df.head(3))
 ```
 
-`df.isna().sum()` devuelve un conteo por columna de celdas faltantes y `df.duplicated().sum()` cuenta las filas que repiten exactamente una fila previa — ambas son lecturas puras que producen los números sobre los que actuará el pipeline. El `head(3)` sobre un frame desordenado es el hábito que detecta problemas incluso antes que los números: en este, ya puedes ver que `price` contiene texto y un nombre con espacios iniciales.
+`df.isna().sum()` devuelve un conteo por columna de celdas faltantes y `df.duplicated().sum()` cuenta las filas que repiten exactamente una fila previa, ambas son lecturas puras que producen los números sobre los que actuará el pipeline. El `head(3)` sobre un frame desordenado es el hábito que detecta problemas incluso antes que los números: en este, ya puedes ver que `price` contiene texto y un nombre con espacios iniciales.
 
 **🎯 Resultado esperado :** Un informe impreso que muestre `shape: (12, 5)`, `price` con tipo `object` (no numérico) por la fila `"2.5 USD"`, exactamente dos valores faltantes en `units`, un valor faltante en `price` y `duplicate rows: 2`.
 
-**🩹 Si sale mal :** Si `price` aparece como `int64`/`float64`, alguien editó el CSV a mano y eliminó la fila `"2.5 USD"` de la que depende la sonda. Si `df` falla al cargar por completo, el CSV tiene un comentario `#` o una línea de encabezado extraviada — abre `messy.csv` y verifica que las primeras dos líneas coincidan exactamente con el encabezado esbozado.
+**🩹 Si sale mal :** Si `price` aparece como `int64`/`float64`, alguien editó el CSV a mano y eliminó la fila `"2.5 USD"` de la que depende la sonda. Si `df` falla al cargar por completo, el CSV tiene un comentario `#` o una línea de encabezado extraviada, abre `messy.csv` y verifica que las primeras dos líneas coincidan exactamente con el encabezado esbozado.
 
 ### 1.2 Convierte el perfil en un dict de informe
 
@@ -139,11 +139,11 @@ def profile(df: pd.DataFrame) -> dict[str, dict[str, Any]]:
 print(profile(df))
 ```
 
-El informe deja de describir problemas en prosa y empieza a describirlos como datos — cada función posterior puede consumir `report[col]["missing"]` y decidir qué hacer. La comprobación de espacios en blanco es la sutil: `.str.strip().ne(itself)` es verdadera para cualquier valor que cambia cuando se eliminan los espacios circundantes.
+El informe deja de describir problemas en prosa y empieza a describirlos como datos, cada función posterior puede consumir `report[col]["missing"]` y decidir qué hacer. La comprobación de espacios en blanco es la sutil: `.str.strip().ne(itself)` es verdadera para cualquier valor que cambia cuando se eliminan los espacios circundantes.
 
 **🎯 Resultado esperado :** `profile(df)` devuelve un dict en el que `price` figura con `dtype: object`, `units` figura con `missing: 2` y `customer` lista `leading/trailing whitespace` en su lista de issues.
 
-**🩹 Si sale mal :** Si ninguna columna reporta espacios en blanco, el CSV fue vuelto a guardar con comillas incrustadas alrededor de los valores y los espacios finales pasaron a ser parte del texto — comprueba los valores de `df["customer"]` directamente con `.repr()`. Si una columna numérica aparece como `object`, al menos una celda contiene una cadena; la corrección correcta es decidir qué hacer con esa cadena, no forzar el cast aún.
+**🩹 Si sale mal :** Si ninguna columna reporta espacios en blanco, el CSV fue vuelto a guardar con comillas incrustadas alrededor de los valores y los espacios finales pasaron a ser parte del texto, comprueba los valores de `df["customer"]` directamente con `.repr()`. Si una columna numérica aparece como `object`, al menos una celda contiene una cadena; la corrección correcta es decidir qué hacer con esa cadena, no forzar el cast aún.
 
 ### 1.3 Verifica el perfil
 
@@ -152,16 +152,16 @@ El informe deja de describir problemas en prosa y empieza a describirlos como da
 - ✅ `df.shape` lee `(12, 5)` y `df.duplicated().sum()` lee `2`.
 - ✅ `units` reporta dos valores faltantes, `price` reporta un valor faltante y un dtype `object`.
 - ✅ `profile(df)` devuelve sus hallazgos como un diccionario que el código posterior puede leer.
-- ✅ No aparece ninguna advertencia de pandas sobre `mixed types` al cargar — esa es tu primera señal de deriva.
+- ✅ No aparece ninguna advertencia de pandas sobre `mixed types` al cargar, esa es tu primera señal de deriva.
 
 **🤔 Pregunta(s) socrática(s)**
 
 - ¿Por qué empezar deliberadamente con un perfil de solo lectura en lugar de ir corrigiendo sobre la marcha? ¿Qué pieza específica de información destruye un script ansioso por arreglarlo todo antes de poder quedar registrada?
 - `profile()` reporta `n_unique` para cada columna. ¿Qué te diría una columna `customer` con `n_unique` igual a 6 (su cantidad de filas) que `duplicated().sum()` solo podría pasar por alto? Pista: piensa en cómo se ve `customer` después de la corrección de espacios en blanco.
 
-## Paso 2: Elimina duplicados — y cuenta lo que eliminaste
+## Paso 2: Elimina duplicados, y cuenta lo que eliminaste
 
-Los duplicados son el problema más barato de resolver, y el que la gente más a menudo corrige a mano ("déjame simplemente borrar las repeticiones obvias"). La versión del pipeline es mejor que una pasada manual porque registra el conteo, así que cualquiera que audite el resultado sabe que se eliminó información — una transparencia que una edición manual en una hoja de cálculo nunca te da.
+Los duplicados son el problema más barato de resolver, y el que la gente más a menudo corrige a mano ("déjame simplemente borrar las repeticiones obvias"). La versión del pipeline es mejor que una pasada manual porque registra el conteo, así que cualquiera que audite el resultado sabe que se eliminó información, una transparencia que una edición manual en una hoja de cálculo nunca te da.
 
 ### 2.1 Elimina duplicados exactos con un recibo
 
@@ -183,15 +183,15 @@ print(audit)
 print("rows now:", len(df))
 ```
 
-Por defecto `drop_duplicates()` conserva la primera aparición de cada fila repetida — determinista, y eso importa, porque el registro de auditoría afirma una cantidad específica de filas eliminadas. Capturar `before` y `after` alrededor de la llamada convierte "creo que eliminé algunas" en un conteo exacto y comprobable.
+Por defecto `drop_duplicates()` conserva la primera aparición de cada fila repetida, determinista, y eso importa, porque el registro de auditoría afirma una cantidad específica de filas eliminadas. Capturar `before` y `after` alrededor de la llamada convierte "creo que eliminé algunas" en un conteo exacto y comprobable.
 
 **🎯 Resultado esperado :** El dict de auditoría reporta `removed_rows: 2` y `rows now:` lee `10`. Las dos filas previamente marcadas por `duplicated()` (la repetición de `order_id` 1 y la repetición de `order_id` 5) desaparecen y el DataFrame aún conserva la primera copia de cada una.
 
-**🩹 Si sale mal :** Si `removed_rows` lee `0`, las filas duplicadas de tu CSV difieren por un carácter invisible (un espacio final en una de ellas) — la normalización de espacios en blanco del Paso 5 debe ejecutarse *antes* de la pasada de duplicados en datos que no autoraste tú. Si la fila 3 (la repetición `1, alice, 2, 2.50`) sobrevive, los valores siguen difiriendo en algún lugar — imprime `df.iloc[[0, 2]]` fila por fila para inspeccionar la diferencia exacta.
+**🩹 Si sale mal :** Si `removed_rows` lee `0`, las filas duplicadas de tu CSV difieren por un carácter invisible (un espacio final en una de ellas), la normalización de espacios en blanco del Paso 5 debe ejecutarse *antes* de la pasada de duplicados en datos que no autoraste tú. Si la fila 3 (la repetición `1, alice, 2, 2.50`) sobrevive, los valores siguen difiriendo en algún lugar, imprime `df.iloc[[0, 2]]` fila por fila para inspeccionar la diferencia exacta.
 
 ### 2.2 Considera qué significa "duplicado"
 
-**👟 Pista inicial :** Explora una comprobación de duplicados *parcial* — `df.drop_duplicates(subset=["order_id"])` — y compara su conteo de eliminados con el conteo de duplicados exactos.
+**👟 Pista inicial :** Explora una comprobación de duplicados *parcial*, `df.drop_duplicates(subset=["order_id"])`, y compara su conteo de eliminados con el conteo de duplicados exactos.
 
 ```python
 # clean.py (continued)
@@ -204,7 +204,7 @@ print("duplicates by order_id only:", df_partial.duplicated(subset=["order_id"])
 
 **🎯 Resultado esperado :** El conteo exacto imprime `2`; el conteo con subconjunto `order_id` imprime `3` (las filas 2, 3 y 8 son todas repeticiones de un `order_id` existente), que son más filas de las que un humano probablemente estaba preparado para borrar.
 
-**🩹 Si sale mal :** Si el conteo de subconjunto es igual al exacto, revisa el CSV en busca de un cuarto `order_id` que no intencionaste. Si el enfoque de subconjunto elimina más de lo que te sientes cómodo eliminando, esa reacción es el punto — recurre a `keep="last"` o a una regla explícita cuando los datos valen más que el atajo.
+**🩹 Si sale mal :** Si el conteo de subconjunto es igual al exacto, revisa el CSV en busca de un cuarto `order_id` que no intencionaste. Si el enfoque de subconjunto elimina más de lo que te sientes cómodo eliminando, esa reacción es el punto, recurre a `keep="last"` o a una regla explícita cuando los datos valen más que el atajo.
 
 ### 2.3 Verifica la pasada de duplicados
 
@@ -240,15 +240,15 @@ def fill_missing(df: pd.DataFrame) -> pd.DataFrame:
     return df
 ```
 
-La forma del loop es el patrón: observa una columna, cuenta sus celdas faltantes y actúa solo si el conteo es distinto de cero. Omitir las columnas sin faltantes evita las entradas de auditoría ruidosas que registrarían un "relleno" de nada, e `is_numeric_dtype` mantiene honesta la estrategia — los números reciben una mediana, el texto recibe una moda, y ninguna estrategia se aplica jamás al tipo de columna equivocado.
+La forma del loop es el patrón: observa una columna, cuenta sus celdas faltantes y actúa solo si el conteo es distinto de cero. Omitir las columnas sin faltantes evita las entradas de auditoría ruidosas que registrarían un "relleno" de nada, e `is_numeric_dtype` mantiene honesta la estrategia, los números reciben una mediana, el texto recibe una moda, y ninguna estrategia se aplica jamás al tipo de columna equivocado.
 
 **🎯 Resultado esperado :** Ejecutar esto sobre el frame al que ya se eliminaron los duplicados establece las dos celdas faltantes de `units` en `2` (la mediana de los valores `[2, 10, 0, 2, 2, 2, 1000]`), y un `price` numérico rellena su celda faltante única con `2.5`.
 
-**🩹 Si sale mal :** Si las celdas faltantes siguen como `NaN` después de la llamada, la ruta de relleno nunca se alcanzó — confirma que `isna().sum()` era realmente distinto de cero para esa columna (las celdas faltantes de `units` viven en las filas de `alice` y `grace`; confirma que se eliminaron los duplicados, no las filas portadoras). Si una columna de texto como `customer` se rellenó con moda-como-mediana y te resulta extraño, ese es el comportamiento correcto aquí — la elección de estrategia solo se comporta mal cuando hay identificadores de por medio, que es lo que aborda el Paso 5.
+**🩹 Si sale mal :** Si las celdas faltantes siguen como `NaN` después de la llamada, la ruta de relleno nunca se alcanzó, confirma que `isna().sum()` era realmente distinto de cero para esa columna (las celdas faltantes de `units` viven en las filas de `alice` y `grace`; confirma que se eliminaron los duplicados, no las filas portadoras). Si una columna de texto como `customer` se rellenó con moda-como-mediana y te resulta extraño, ese es el comportamiento correcto aquí, la elección de estrategia solo se comporta mal cuando hay identificadores de por medio, que es lo que aborda el Paso 5.
 
 ### 3.2 Registra la decisión en el registro de auditoría
 
-**👟 Pista inicial :** Ahora que el relleno funciona, agrega las entradas de auditoría dentro del loop — una por columna rellenada — nombrando la columna, la estrategia y cuántas celdas se rellenaron, y luego imprime el registro creciente.
+**👟 Pista inicial :** Ahora que el relleno funciona, agrega las entradas de auditoría dentro del loop, una por columna rellenada, nombrando la columna, la estrategia y cuántas celdas se rellenaron, y luego imprime el registro creciente.
 
 ```python
 # clean.py (continued)
@@ -276,9 +276,9 @@ print(*audit, sep="\n")
 
 `pd.api.types.is_numeric_dtype(df[col])` es la rama que mantiene honesta la estrategia: los números reciben una mediana, el texto recibe una moda. Cada relleno ahora aterriza en `audit` como una fila con su propia cadena de estrategia, así que el dataset limpio final se entrega con un documento complementario de exactamente qué se inventó y por qué.
 
-**🎯 Resultado esperado :** Una entrada de relleno de `units` que lea `"median (2.00)"` con `cells_filled: 2`, más una entrada de relleno de `price` que use la estrategia `mode` — que esté presente con una estrategia de texto es la señal de que `price` *sigue siendo texto en este punto*, que es precisamente el bug de orden que el pipeline completo evita normalizando formatos primero (Paso 5).
+**🎯 Resultado esperado :** Una entrada de relleno de `units` que lea `"median (2.00)"` con `cells_filled: 2`, más una entrada de relleno de `price` que use la estrategia `mode`, que esté presente con una estrategia de texto es la señal de que `price` *sigue siendo texto en este punto*, que es precisamente el bug de orden que el pipeline completo evita normalizando formatos primero (Paso 5).
 
-**🩹 Si sale mal :** Si la entrada de `price` inexplicablemente muestra una estrategia de estilo numérico, ejecutaste el relleno después de convertir `price` fuera de orden — bien como resultado, pero ten en cuenta que la demo depende de texto-por-dentro-texto-por-fuera. Si las celdas se rellenan pero la auditoría nunca las contiene, el append a la lista está dentro de la rama `if` equivocada o la función retornó sin hacer el append.
+**🩹 Si sale mal :** Si la entrada de `price` inexplicablemente muestra una estrategia de estilo numérico, ejecutaste el relleno después de convertir `price` fuera de orden, bien como resultado, pero ten en cuenta que la demo depende de texto-por-dentro-texto-por-fuera. Si las celdas se rellenan pero la auditoría nunca las contiene, el append a la lista está dentro de la rama `if` equivocada o la función retornó sin hacer el append.
 
 ### 3.3 Verifica la pasada de relleno
 
@@ -295,7 +295,7 @@ print(*audit, sep="\n")
 
 ## Paso 4: Detecta outliers con la regla del IQR
 
-Un valor de `units` de `1000` junto a pares de `0` y `2` es casi con certeza un error tipográfico, pero borrarlo a ciegas pierde las otras columnas de la fila. La regla del IQR encuentra el corredor de valores razonables — cualquier cosa más de `1.5 × IQR` por debajo del primer cuartil o por encima del tercero — y *recorta* a los infractores al límite del corredor, preservando la fila mientras neutraliza la distorsión.
+Un valor de `units` de `1000` junto a pares de `0` y `2` es casi con certeza un error tipográfico, pero borrarlo a ciegas pierde las otras columnas de la fila. La regla del IQR encuentra el corredor de valores razonables, cualquier cosa más de `1.5 × IQR` por debajo del primer cuartil o por encima del tercero, y *recorta* a los infractores al límite del corredor, preservando la fila mientras neutraliza la distorsión.
 
 ### 4.1 Calcula el corredor y marca a los infractores
 
@@ -321,15 +321,15 @@ df, _ = drop_duplicates(df)
 print(flag_outliers(df, ["units", "price"]))
 ```
 
-`df[col].quantile([0.25, 0.75])` devuelve ambos cuartiles en una sola llamada, y la máscara booleana `(df[col] < lo) | (df[col] > hi)` selecciona las filas fuera del corredor — fíjate en el operador `|`, no `or`, porque pandas necesita máscaras combinadas elemento por elemento, y el `or` de Python las colapsa en un único valor de verdad.
+`df[col].quantile([0.25, 0.75])` devuelve ambos cuartiles en una sola llamada, y la máscara booleana `(df[col] < lo) | (df[col] > hi)` selecciona las filas fuera del corredor, fíjate en el operador `|`, no `or`, porque pandas necesita máscaras combinadas elemento por elemento, y el `or` de Python las colapsa en un único valor de verdad.
 
-**🎯 Resultado esperado :** La función reporta `units` con una fila outlier (el valor `1000` en el índice original `11`) dentro de un corredor de aproximadamente `(-1.0, 7.0)` — y `price` se omite por completo porque en este punto sigue siendo texto y la rama numérica correctamente se niega a juzgarlo.
+**🎯 Resultado esperado :** La función reporta `units` con una fila outlier (el valor `1000` en el índice original `11`) dentro de un corredor de aproximadamente `(-1.0, 7.0)`, y `price` se omite por completo porque en este punto sigue siendo texto y la rama numérica correctamente se niega a juzgarlo.
 
-**🩹 Si sale mal :** Si cada columna reporta no-outliers, la guarda numérica te está omitiendo silenciosamente — un dtype `object` produce una máscara vacía bajo esta regla, razón por la cual `price` no muestra nada a propósito; ejecuta esto *después* del paso de normalización de `price` y la guarda finalmente lo dejará pasar. Si aparece `ValueError: The truth value of a Series is ambiguous`, usaste `or` donde se requiere `|`.
+**🩹 Si sale mal :** Si cada columna reporta no-outliers, la guarda numérica te está omitiendo silenciosamente, un dtype `object` produce una máscara vacía bajo esta regla, razón por la cual `price` no muestra nada a propósito; ejecuta esto *después* del paso de normalización de `price` y la guarda finalmente lo dejará pasar. Si aparece `ValueError: The truth value of a Series is ambiguous`, usaste `or` donde se requiere `|`.
 
 ### 4.2 Recorta en lugar de borrar
 
-**👟 Pista inicial :** Reemplaza los valores infractores con `Series.clip(lower=lo, upper=hi)` y registra tanto el valor antiguo como el nuevo en el registro de auditoría — el caso raro donde el registro almacena un par antes/después.
+**👟 Pista inicial :** Reemplaza los valores infractores con `Series.clip(lower=lo, upper=hi)` y registra tanto el valor antiguo como el nuevo en el registro de auditoría, el caso raro donde el registro almacena un par antes/después.
 
 ```python
 # clean.py (continued)
@@ -353,7 +353,7 @@ df = clip_outliers(df, ["units", "price"], audit)
 print(*audit, sep="\n")
 ```
 
-`clip(lower=lo, upper=hi)` empuja cada valor dentro del corredor en una sola llamada vectorizada — sin loops, y conserva `1000` como `7.0` en lugar de borrar los otros cuatro campos de la fila. Almacenar la lista `from` junto con `to` hace que el registro de auditoría sea un paso mejor que la mayoría de los logs de producción: puede responder "¿qué cambiamos realmente para esta fila?" en lugar de solo "¿qué tocamos?".
+`clip(lower=lo, upper=hi)` empuja cada valor dentro del corredor en una sola llamada vectorizada, sin loops, y conserva `1000` como `7.0` en lugar de borrar los otros cuatro campos de la fila. Almacenar la lista `from` junto con `to` hace que el registro de auditoría sea un paso mejor que la mayoría de los logs de producción: puede responder "¿qué cambiamos realmente para esta fila?" en lugar de solo "¿qué tocamos?".
 
 **🎯 Resultado esperado :** El `1000` en `units` se convierte en `12.0`, y aparece una entrada de auditoría `{"action": "clip_outlier", "column": "units", "from": [1000], "to": 7.0}`. La columna `price` se omite mientras sea texto y permanece intacta.
 
@@ -374,7 +374,7 @@ print(*audit, sep="\n")
 
 ## Paso 5: Normaliza formatos para que los valores se comparen limpiamente
 
-La columna numérica contiene `"2.5 USD"` junto a `3.00`, y las fechas usan `2024-01-05`, `05/01/2024` y `2024/03/15` en la misma columna. Un `mean()` sobre cualquiera de las dos columnas falla o miente hoy. La normalización de formatos obliga a cada valor a tomar una sola forma — un float para `price`, un `datetime.date` para fechas, texto recortado para nombres — y este paso es *la razón* por la que los rellenos y las comprobaciones de outliers anteriores empezaron a funcionar sobre el frame.
+La columna numérica contiene `"2.5 USD"` junto a `3.00`, y las fechas usan `2024-01-05`, `05/01/2024` y `2024/03/15` en la misma columna. Un `mean()` sobre cualquiera de las dos columnas falla o miente hoy. La normalización de formatos obliga a cada valor a tomar una sola forma, un float para `price`, un `datetime.date` para fechas, texto recortado para nombres, y este paso es *la razón* por la que los rellenos y las comprobaciones de outliers anteriores empezaron a funcionar sobre el frame.
 
 ### 5.1 Convierte price a una única forma numérica
 
@@ -398,11 +398,11 @@ print(df["price"].tolist())
 print("could not convert:", stuck)
 ```
 
-La regex `[^\d.]` elimina todo lo que no sea un dígito o un punto decimal — esa es la anchura del hacha aquí, y es honesta: maneja `"2.5 USD"`, pero también destruiría un valor de moneda genuinamente diferente como `"2,50€"`. `errors="coerce"` convierte todo lo que sigue siendo imposible de analizar en `NaN` en lugar de fallar, y esas celdas sobrantes se exponen como la lista `stuck` para que el pipeline nunca queme silenciosamente un valor que no pudo leer.
+La regex `[^\d.]` elimina todo lo que no sea un dígito o un punto decimal, esa es la anchura del hacha aquí, y es honesta: maneja `"2.5 USD"`, pero también destruiría un valor de moneda genuinamente diferente como `"2,50€"`. `errors="coerce"` convierte todo lo que sigue siendo imposible de analizar en `NaN` en lugar de fallar, y esas celdas sobrantes se exponen como la lista `stuck` para que el pipeline nunca queme silenciosamente un valor que no pudo leer.
 
-**🎯 Resultado esperado :** `df["price"]` se convierte en `[2.5, nan, 2.5, 1.0, 0.75, 3.5, 4.0, 3.5, 2.25, 9.99]` — la celda `"2.5 USD"` ahora es un float — y `stuck` está vacío para este CSV.
+**🎯 Resultado esperado :** `df["price"]` se convierte en `[2.5, nan, 2.5, 1.0, 0.75, 3.5, 4.0, 3.5, 2.25, 9.99]`, la celda `"2.5 USD"` ahora es un float, y `stuck` está vacío para este CSV.
 
-**🩹 Si sale mal :** Si un valor sobrevive como `"2.5 USD"`, la regex `[^\d.]` no se ejecutó sobre esa fila porque la serie contenía algo que no es una cadena (una celda ya numérica) — fuerza con `.astype(str)` primero como se muestra. Si `stuck` no está vacío, tu CSV tiene un valor que la regex mutiló en lugar de limpiar — decide una regla por moneda y extiende la regex deliberadamente, o deja la fila marcada en lugar de borrarla.
+**🩹 Si sale mal :** Si un valor sobrevive como `"2.5 USD"`, la regex `[^\d.]` no se ejecutó sobre esa fila porque la serie contenía algo que no es una cadena (una celda ya numérica), fuerza con `.astype(str)` primero como se muestra. Si `stuck` no está vacío, tu CSV tiene un valor que la regex mutiló en lugar de limpiar, decide una regla por moneda y extiende la regex deliberadamente, o deja la fila marcada en lugar de borrarla.
 
 ### 5.2 Normaliza fechas y texto en una sola pasada
 
@@ -435,7 +435,7 @@ print(*audit, sep="\n")
 
 **🎯 Resultado esperado :** `order_date` se imprime como una única columna `datetime64` consistente, `customer` muestra `alice`, `bob`, `carol`, `dave`, `erin`, `frank`, `grace`, `henry` sin espacios circundantes, y la auditoría gana entradas `normalize_date` y `strip_text`.
 
-**🩹 Si sale mal :** Si el análisis `Mixed format` lanza una excepción, una celda contiene una ambigüedad real como `02/03/2024` donde mes y día podrían intercambiarse — `format="mixed"` lo mantiene analizable pero eligió silenciosamente una lectura; fija el formato con `format="%d/%m/%Y"` cuando conozcas tus datos. Si las columnas de texto se ven recortadas en la salida de pantalla pero conservan espacios en el frame, el DataFrame no se reasignó desde `stripped`.
+**🩹 Si sale mal :** Si el análisis `Mixed format` lanza una excepción, una celda contiene una ambigüedad real como `02/03/2024` donde mes y día podrían intercambiarse, `format="mixed"` lo mantiene analizable pero eligió silenciosamente una lectura; fija el formato con `format="%d/%m/%Y"` cuando conozcas tus datos. Si las columnas de texto se ven recortadas en la salida de pantalla pero conservan espacios en el frame, el DataFrame no se reasignó desde `stripped`.
 
 ### 5.3 Verifica la pasada de normalización
 
@@ -448,12 +448,12 @@ print(*audit, sep="\n")
 
 **🤔 Pregunta(s) socrática(s)**
 
-- La regex `[^\d.]` convierte `"2.5 USD"` limpiamente — pero ¿qué hace con un valor como `"2,500.00"` de una localidad que usa separadores de miles? ¿Qué dice eso sobre reemplazar una decisión humana con una regex?
+- La regex `[^\d.]` convierte `"2.5 USD"` limpiamente, pero ¿qué hace con un valor como `"2,500.00"` de una localidad que usa separadores de miles? ¿Qué dice eso sobre reemplazar una decisión humana con una regex?
 - Después de la normalización, pueden aparecer duplicados que no existían antes (dos filas cuyos precios eran `"2.5 USD"` y `2.5`). ¿Por qué deberían compartir la eliminación de duplicados y la normalización de formatos una sola pasada final en lugar de ser dos etapas separadas?
 
 ## Paso 6: Ensambla el pipeline completo con su registro de auditoría
 
-Cada pieza hasta ahora corrige un problema de forma aislada; el pipeline las conecta en un orden que tiene sentido — perfila, luego normaliza formatos, luego elimina duplicados (ahora confiable), luego rellena por columna, luego recorta outliers — y devuelve un DataFrame limpio *más* la lista de auditoría completa como un registro serializable a JSON.
+Cada pieza hasta ahora corrige un problema de forma aislada; el pipeline las conecta en un orden que tiene sentido, perfila, luego normaliza formatos, luego elimina duplicados (ahora confiable), luego rellena por columna, luego recorta outliers, y devuelve un DataFrame limpio *más* la lista de auditoría completa como un registro serializable a JSON.
 
 ### 6.1 Escribe `clean_dataset(path)`
 
@@ -489,7 +489,7 @@ El orden codifica juicio, no hábito: los formatos se normalizan *primero* para 
 
 **🎯 Resultado esperado :** Un frame limpio impreso con exactamente 10 filas (12 menos los dos duplicados), `price` numérico, nombres recortados, fechas uniformes, `units` y `price` rellenados con mediana, un `units` outlier recortado a `7.0` y una lista de auditoría que contiene cada acción que tomó el pipeline, en orden de ejecución.
 
-**🩹 Si sale mal :** Si aparece un `KeyError: 'price'`, la columna de precio del CSV no se llama `price` — el pipeline codifica un solo nombre; conviértelo en un parámetro `column` cuando los datos discrepen. Si la eliminación de duplicados borra más de `2` filas en el pipeline completo, una pasada de normalización fusionó dos cadenas previamente distintas — compara qué filas desaparecieron re-ejecutando sobre el archivo original.
+**🩹 Si sale mal :** Si aparece un `KeyError: 'price'`, la columna de precio del CSV no se llama `price`, el pipeline codifica un solo nombre; conviértelo en un parámetro `column` cuando los datos discrepen. Si la eliminación de duplicados borra más de `2` filas en el pipeline completo, una pasada de normalización fusionó dos cadenas previamente distintas, compara qué filas desaparecieron re-ejecutando sobre el archivo original.
 
 ### 6.2 Verifica todo el pipeline
 
@@ -502,19 +502,19 @@ El orden codifica juicio, no hábito: los formatos se normalizan *primero* para 
 **🤔 Pregunta(s) socrática(s)**
 
 - El pipeline ejecuta la normalización de formatos antes de la eliminación de duplicados. Rastrea qué pasaría si intercambiaras esas dos etapas en el `messy.csv` original: ¿qué filas sobreviven y qué decisión sobre `price` ahora es diferente?
-- `clean_dataset` devuelve una lista fija de columnas numéricas para el recorte. ¿Qué cambiarías en la firma de la función para que siga siendo correcta en un dataset sin columna `price` — una lista de columnas específica o una regla? ¿En cuál confías para que la mantenga un compañero de equipo?
+- `clean_dataset` devuelve una lista fija de columnas numéricas para el recorte. ¿Qué cambiarías en la firma de la función para que siga siendo correcta en un dataset sin columna `price`, una lista de columnas específica o una regla? ¿En cuál confías para que la mantenga un compañero de equipo?
 
 ## ⚠️ Errores comunes
 
-- **Corregir datos antes de poder describirlos.** Un script que imputa y recorta al cargar destruye la evidencia de que una corrección era necesaria — perfila primero, siempre, y conserva ese primer informe en la auditoría.
+- **Corregir datos antes de poder describirlos.** Un script que imputa y recorta al cargar destruye la evidencia de que una corrección era necesaria, perfila primero, siempre, y conserva ese primer informe en la auditoría.
 - **Rellenar identificadores con estadísticas.** Rellenar `order_id` con la mediana o `timestamp` con la moda produce valores que parecen reales y no significan nada. Restringe los rellenos por dtype y por una allowlist de columnas.
 - **Borrar en lugar de recortar.** Eliminar filas outliers pierde silenciosamente las columnas no outliers de esas filas. Cuando un campo es absurdo pero el resto es confiable, recorta el campo.
 - **Exceso de la regex en formatos.** Una limpieza `[^\d.]` convierte `"2,500.00"` y `"2.50€"` en números sorprendentes. Expón los valores irrecuperables mediante una lista `stuck` en lugar de fingir que la regex los entendió.
-- **Transformaciones rastreables a medias.** Datos limpios sin registro de auditoría son indistinguibles de datos que estaban mal desde el principio. Cada mutación — drop, relleno, recorte, normalización — es una acción auditable, y este pipeline la trata como tal.
+- **Transformaciones rastreables a medias.** Datos limpios sin registro de auditoría son indistinguibles de datos que estaban mal desde el principio. Cada mutación, drop, relleno, recorte, normalización, es una acción auditable, y este pipeline la trata como tal.
 
 ## Lo que acabas de construir
 
-Un CLI de limpieza de datos funcional: carga un CSV genuinamente desordenado, reporta qué está mal antes de tocar una celda y luego corrige duplicados, valores faltantes, outliers y caos de formato en un orden deliberado — devolviendo tanto un DataFrame limpio como una auditoría completa de cada cambio. La habilidad transferible aquí sobrevive a la herramienta: el hábito de registrar cada transformación como datos, para que un dataset limpiado siempre pueda responder "¿qué me hiciste y por qué?".
+Un CLI de limpieza de datos funcional: carga un CSV genuinamente desordenado, reporta qué está mal antes de tocar una celda y luego corrige duplicados, valores faltantes, outliers y caos de formato en un orden deliberado, devolviendo tanto un DataFrame limpio como una auditoría completa de cada cambio. La habilidad transferible aquí sobrevive a la herramienta: el hábito de registrar cada transformación como datos, para que un dataset limpiado siempre pueda responder "¿qué me hiciste y por qué?".
 
 :::tip[Ejecuta una versión más completa sin configuración local]
 [`examples/ai-data-cleaner/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/ai-data-cleaner) en el repositorio del curso es el mismo pipeline empaquetado para un notebook, con los pasos de perfilado y auditoría impresos en cada etapa. Clónalo, o abre todo el repositorio en un [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), y ejecútalo desde ahí.
@@ -529,6 +529,6 @@ Un CLI de limpieza de datos funcional: carga un CSV genuinamente desordenado, re
 
 ## Comparte tu proyecto con la clase
 
-¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado — y su README tiene un recorrido completo y amigable para principiantes sobre cómo agregar el tuyo vía un **pull request**, incluso si nunca has usado git antes: hacer fork del repositorio, crear una rama, confirmar tus archivos y abrir el PR, un paso a la vez. No se asume experiencia previa con git.
+¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado, y su README tiene un recorrido completo y amigable para principiantes sobre cómo agregar el tuyo vía un **pull request**, incluso si nunca has usado git antes: hacer fork del repositorio, crear una rama, confirmar tus archivos y abrir el PR, un paso a la vez. No se asume experiencia previa con git.
 
 Bienvenido a escribir Python fuera del navegador. 🎓

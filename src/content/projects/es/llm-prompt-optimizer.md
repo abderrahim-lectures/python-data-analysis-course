@@ -19,7 +19,7 @@ Esto asume Python 101 y comodidad con pandas de Análisis de Datos. Es opcional 
 
 ## Dónde ejecutar esto
 
-**Localmente con `uv`** es el camino principal — es una herramienta CLI que se ejecuta fuera de línea contra un modelo mock.
+**Localmente con `uv`** es el camino principal, es una herramienta CLI que se ejecuta fuera de línea contra un modelo mock.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/llm-prompt-optimizer/notebook.es.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/llm-prompt-optimizer/notebook.es.ipynb)
@@ -145,7 +145,7 @@ def build_role_based() -> PromptVariant:
 
 **🎯 Resultado esperado :** Cada `build_*` devuelve una variante con nombre cuyo `build(prompt)` inyecta estructura alrededor de la pregunta cruda.
 
-**🩹 Si sale mal :** Si las variantes se sienten idénticas, la estructura inyectada no está haciendo nada útil — amplía las diferencias.
+**🩹 Si sale mal :** Si las variantes se sienten idénticas, la estructura inyectada no está haciendo nada útil, amplía las diferencias.
 
 ### 2.2 Verifica las variantes
 
@@ -185,7 +185,7 @@ class MockModel:
         return "unknown"
 ```
 
-El mock devuelve el resultado matemático cuando aparece una expresión aritmética y los hechos de una pequeña tabla de búsqueda. Es deliberadamente ingenuo — eso es suficiente para demostrar la optimización.
+El mock devuelve el resultado matemático cuando aparece una expresión aritmética y los hechos de una pequeña tabla de búsqueda. Es deliberadamente ingenuo, eso es suficiente para demostrar la optimización.
 
 **🎯 Resultado esperado :** `MockModel().generate("Think step by step. Q: What is 6 * 7? A:")` devuelve `"42"`.
 
@@ -241,7 +241,7 @@ def evaluate_all(variants, model, gold: list[Question]) -> pd.DataFrame:
 
 **🎯 Resultado esperado :** `evaluate_all([v1, v2, v3], model, gold_set())` devuelve un DataFrame que ordena las variantes por precisión.
 
-**🩹 Si sale mal :** Si todo puntúa igual, las respuestas del mock no dependen de la estructura del prompt — eso está bien para la demo, pero añade una variante a la que el mock responda de manera diferente.
+**🩹 Si sale mal :** Si todo puntúa igual, las respuestas del mock no dependen de la estructura del prompt, eso está bien para la demo, pero añade una variante a la que el mock responda de manera diferente.
 
 ### 4.2 Verifica la puntuación
 
@@ -316,7 +316,7 @@ def optimize(out: str):
 
 ## Lo que acabas de construir
 
-Un bucle de optimización de prompts: un conjunto de datos de oro (gold), generadores de variantes programáticos (few-shot, cadena de pensamiento, basado en roles), un modelo mock fuera de línea, un puntuador de precisión y un CLI que ordena las variantes y exporta la mejor. Es la versión automatizada de lo que los ingenieros de prompts hacen a mano — y hace todo el proceso repetible y medible.
+Un bucle de optimización de prompts: un conjunto de datos de oro (gold), generadores de variantes programáticos (few-shot, cadena de pensamiento, basado en roles), un modelo mock fuera de línea, un puntuador de precisión y un CLI que ordena las variantes y exporta la mejor. Es la versión automatizada de lo que los ingenieros de prompts hacen a mano, y hace todo el proceso repetible y medible.
 
 :::tip[Ejecuta una versión más completa sin configuración local]
 [`examples/llm-prompt-optimizer/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/llm-prompt-optimizer) en el repositorio del curso tiene una versión más rica con adaptadores de modelos reales, puntuación de eficiencia de tokens y el CLI conectado de principio a fin. Clónalo, o abre el repositorio completo en un [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), y ejecútalo desde allí.
@@ -330,6 +330,6 @@ Un bucle de optimización de prompts: un conjunto de datos de oro (gold), genera
 
 ## Comparte tu proyecto con la clase
 
-¿Construiste algo de lo que te sientas orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado — y su README tiene una guía completa y apta para principiantes sobre cómo añadir el tuyo mediante una **pull request**, incluso si nunca has usado git: hacer un fork del repositorio, crear una rama, hacer commit de tus archivos y abrir la PR, paso a paso. No se asume ninguna experiencia previa con git.
+¿Construiste algo de lo que te sientas orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado, y su README tiene una guía completa y apta para principiantes sobre cómo añadir el tuyo mediante una **pull request**, incluso si nunca has usado git: hacer un fork del repositorio, crear una rama, hacer commit de tus archivos y abrir la PR, paso a paso. No se asume ninguna experiencia previa con git.
 
 Bienvenido a escribir Python fuera del navegador. 🎓

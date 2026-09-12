@@ -1,7 +1,7 @@
 ---
 // Doubles as the handler for /playground/<code> shared links.
 //
-// The site is static (`output: 'static'` in astro.config.mjs, no server) —
+// The site is static (`output: 'static'` in astro.config.mjs, no server),
 // there's no way to pre-build a page for every possible piece of shared
 // code, since that's an unbounded set chosen by whoever clicks a lesson's ⛶
 // button. Static hosts (this one included) fall back to serving 404.html for
@@ -68,7 +68,7 @@ const notfoundDescription = I18N.en.notfound_description;
 
 <Base title={notfoundTitle} description={notfoundDescription} lang="en" dir="ltr">
   <section class="container notfound" id="notfound">
-    <h1 id="nf-h1">404 — page not found</h1>
+    <h1 id="nf-h1">404, page not found</h1>
     <p id="nf-p">That page doesn't exist. Maybe it moved, or the link was mistyped.</p>
     <a class="btn btn-primary" id="nf-cta" href={base}>Back to the homepage</a>
   </section>
@@ -76,7 +76,7 @@ const notfoundDescription = I18N.en.notfound_description;
   <section class="container head" id="pg-head" hidden>
     <PlaygroundHead
       eyebrow="Shared from a lesson"
-      lead="Write and run any Python here — nothing is graded, nothing is saved when you leave. Your code came with you."
+      lead="Write and run any Python here, nothing is graded, nothing is saved when you leave. Your code came with you."
     />
   </section>
 

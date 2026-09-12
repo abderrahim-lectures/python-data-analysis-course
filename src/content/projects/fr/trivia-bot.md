@@ -6,7 +6,7 @@ description: "Construis un bot `discord.py` qui organise des manches de trivia d
 
 # 💬 Construire un Bot de Trivia pour Discord
 
-Un bot `discord.py` en direct qui organise des manches de trivia dans un serveur : poste une question, recueille les réponses dans un délai, révèle qui a trouvé la bonne réponse, et garde un classement persistant à travers les manches. La plupart des bots de trivia s'arrêtent à une banque de questions fixe — celui-ci ajoute une touche qui convient à un cours de Python : il peut aussi générer une question inédite sur n'importe quel sujet à la volée avec un LLM de niveau gratuit, au lieu de toujours puiser dans une liste préfabriquée.
+Un bot `discord.py` en direct qui organise des manches de trivia dans un serveur : poste une question, recueille les réponses dans un délai, révèle qui a trouvé la bonne réponse, et garde un classement persistant à travers les manches. La plupart des bots de trivia s'arrêtent à une banque de questions fixe, celui-ci ajoute une touche qui convient à un cours de Python : il peut aussi générer une question inédite sur n'importe quel sujet à la volée avec un LLM de niveau gratuit, au lieu de toujours puiser dans une liste préfabriquée.
 
 Cela suppose du Python de niveau Python 101. Aucun autre Projet du Monde Réel n'est requis au préalable, même si tu as déjà construit [Construire une App RAG](/fr/projets/rag-notes), la configuration du LLM de niveau gratuit ci-dessous te semblera familière.
 
@@ -19,18 +19,18 @@ C'est optionnel et non noté. Voir [Projets du monde réel](/fr/projets) pour la
 3. Construire une banque de questions de trivia fixe et une commande slash Discord de base qui en poste une.
 4. Ajouter un classement persistant par joueur, stocké entre les redémarrages.
 5. Ajouter un mode de génération de questions par LLM : donne un sujet au bot, récupère une question inédite.
-6. Brancher le tout dans une boucle de manche complète — poste une question, recueille les réponses dans un délai, révèle la réponse, met à jour le classement.
+6. Brancher le tout dans une boucle de manche complète, poste une question, recueille les réponses dans un délai, révèle la réponse, met à jour le classement.
 7. Inviter le bot sur un serveur de test et jouer de vraies manches, de bout en bout.
 
 ## Où exécuter ceci
 
-**En local avec `uv`** est vraiment la seule option pratique ici, plus que pour la plupart des autres projets de cette série. Un bot Discord n'est pas un script qui s'exécute une fois et se termine — il maintient une connexion ouverte avec Discord et doit continuer à tourner tant que tu veux qu'il réponde à `/trivia` et recueille des réponses, ce qui signifie un vrai processus local (ou hébergé) de longue durée, pas une commande ponctuelle.
+**En local avec `uv`** est vraiment la seule option pratique ici, plus que pour la plupart des autres projets de cette série. Un bot Discord n'est pas un script qui s'exécute une fois et se termine, il maintient une connexion ouverte avec Discord et doit continuer à tourner tant que tu veux qu'il réponde à `/trivia` et recueille des réponses, ce qui signifie un vrai processus local (ou hébergé) de longue durée, pas une commande ponctuelle.
 
-**GitHub Codespaces** fonctionne aussi, et c'est un substitut raisonnable si tu préfères ne rien installer localement : ouvre [tout le dépôt du cours dans un Codespace gratuit](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python et `uv` sont déjà installés, selon le `.devcontainer/devcontainer.json` du dépôt) et exécute `uv run python bot.py` dans un terminal là-bas — il reste actif aussi longtemps que ce terminal (et le Codespace) reste ouvert, la même exigence de « processus de longue durée » que de l'exécuter en local.
+**GitHub Codespaces** fonctionne aussi, et c'est un substitut raisonnable si tu préfères ne rien installer localement : ouvre [tout le dépôt du cours dans un Codespace gratuit](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python et `uv` sont déjà installés, selon le `.devcontainer/devcontainer.json` du dépôt) et exécute `uv run python bot.py` dans un terminal là-bas, il reste actif aussi longtemps que ce terminal (et le Codespace) reste ouvert, la même exigence de « processus de longue durée » que de l'exécuter en local.
 
-**Google Colab et Kaggle Notebooks sont un mauvais choix pour le bot réel** — sois honnête avec toi-même à ce sujet plutôt que de lutter contre. Les notebooks sont construits autour du fait d'exécuter une cellule, d'obtenir la sortie, et de passer à la cellule suivante ; ils ne sont pas faits pour un processus en arrière-plan qui s'assoit et attend des événements indéfiniment. Tu *peux* démarrer la boucle d'événements d'un bot dans une cellule de notebook, mais dès que le runtime du notebook est recyclé, se déconnecte, ou que tu fermes l'onglet, le bot tombe avec lui — saute Colab/Kaggle pour le bot en direct et utilise un vrai processus local ou Codespaces à la place.
+**Google Colab et Kaggle Notebooks sont un mauvais choix pour le bot réel**, sois honnête avec toi-même à ce sujet plutôt que de lutter contre. Les notebooks sont construits autour du fait d'exécuter une cellule, d'obtenir la sortie, et de passer à la cellule suivante ; ils ne sont pas faits pour un processus en arrière-plan qui s'assoit et attend des événements indéfiniment. Tu *peux* démarrer la boucle d'événements d'un bot dans une cellule de notebook, mais dès que le runtime du notebook est recyclé, se déconnecte, ou que tu fermes l'onglet, le bot tombe avec lui, saute Colab/Kaggle pour le bot en direct et utilise un vrai processus local ou Codespaces à la place.
 
-Cela dit, la génération de questions et le scoring *sous* le bot ne sont que des fonctions normales qui exécutent une cellule à la fois, ce qui est exactement ce pour quoi les notebooks sont bons. Les badges ci-dessous ouvrent un notebook qui génère de vraies questions LLM sur quelques sujets d'exemple et fait passer quelques « joueurs » factices à travers la logique de scoring, pour que tu puisses voir les deux fonctionner sans rien installer localement. Il s'arrête délibérément avant la couche Discord — pour cela, reviens ici et exécute `bot.py` en local ou dans Codespaces comme décrit ci-dessus.
+Cela dit, la génération de questions et le scoring *sous* le bot ne sont que des fonctions normales qui exécutent une cellule à la fois, ce qui est exactement ce pour quoi les notebooks sont bons. Les badges ci-dessous ouvrent un notebook qui génère de vraies questions LLM sur quelques sujets d'exemple et fait passer quelques « joueurs » factices à travers la logique de scoring, pour que tu puisses voir les deux fonctionner sans rien installer localement. Il s'arrête délibérément avant la couche Discord, pour cela, reviens ici et exécute `bot.py` en local ou dans Codespaces comme décrit ci-dessus.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/trivia-bot/notebook.fr.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/trivia-bot/notebook.fr.ipynb)
@@ -41,7 +41,7 @@ Tout dans cette section n'a besoin de se produire qu'une seule fois, avant que t
 
 ### Installer `uv`
 
-`uv` est un outil unique qui remplace la chaîne habituelle « installe Python, puis installe pip, puis installe un outil d'environnement virtuel, puis installe les paquets » — il peut installer et gérer les versions de Python lui-même, en plus des dépendances de ton projet.
+`uv` est un outil unique qui remplace la chaîne habituelle « installe Python, puis installe pip, puis installe un outil d'environnement virtuel, puis installe les paquets », il peut installer et gérer les versions de Python lui-même, en plus des dépendances de ton projet.
 
 **macOS / Linux** (terminal) :
 
@@ -67,28 +67,28 @@ Le [Portail des Développeurs](https://discord.com/developers/applications) de D
 
 1. Connecte-toi et clique sur **New Application**, donne-lui un nom (ex. « trivia-bot »), et crée-la.
 2. Ouvre l'onglet **Bot** à gauche. Discord ajoute un utilisateur bot à ton application automatiquement.
-3. Clique sur **Reset Token** (ou **View Token** si c'est la première fois) et copie-le. Ce jeton est exactement comme un mot de passe — quiconque l'a peut contrôler ton bot — alors traite-le de la même façon que tu traiterais une clé API LLM : ne le colle jamais dans le code, ne le commite jamais.
-4. Sur le même onglet **Bot**, fais défiler jusqu'à **Privileged Gateway Intents** et active **Message Content**. C'est nécessaire pour que le bot lise réellement la lettre avec laquelle un joueur répond — sans cela, `discord.py` reçoit une chaîne vide pour le contenu de chaque message, peu importe le code que tu écris.
-5. Ouvre **OAuth2 → URL Generator**. Sous **Scopes**, coche à la fois `bot` et `applications.commands` (les commandes slash ont spécifiquement besoin du second) ; sous **Bot Permissions**, coche au moins **Send Messages** et **Read Message History**. Garde l'URL générée à portée de main — tu l'utiliseras à la dernière étape pour réellement inviter le bot sur un serveur.
+3. Clique sur **Reset Token** (ou **View Token** si c'est la première fois) et copie-le. Ce jeton est exactement comme un mot de passe, quiconque l'a peut contrôler ton bot, alors traite-le de la même façon que tu traiterais une clé API LLM : ne le colle jamais dans le code, ne le commite jamais.
+4. Sur le même onglet **Bot**, fais défiler jusqu'à **Privileged Gateway Intents** et active **Message Content**. C'est nécessaire pour que le bot lise réellement la lettre avec laquelle un joueur répond, sans cela, `discord.py` reçoit une chaîne vide pour le contenu de chaque message, peu importe le code que tu écris.
+5. Ouvre **OAuth2 → URL Generator**. Sous **Scopes**, coche à la fois `bot` et `applications.commands` (les commandes slash ont spécifiquement besoin du second) ; sous **Bot Permissions**, coche au moins **Send Messages** et **Read Message History**. Garde l'URL générée à portée de main, tu l'utiliseras à la dernière étape pour réellement inviter le bot sur un serveur.
 
 :::tip[Un jeton de bot est un secret, exactement comme une clé API]
-Ne code jamais en dur le jeton du bot, ne le commite jamais, et garde-le dans un fichier `.env` local (ci-dessous) à la place — un jeton de bot divulgué permet à n'importe qui d'usurper ton bot dans chaque serveur où il se trouve, exactement comme une clé LLM divulguée permet à n'importe qui de dépenser ton quota.
+Ne code jamais en dur le jeton du bot, ne le commite jamais, et garde-le dans un fichier `.env` local (ci-dessous) à la place, un jeton de bot divulgué permet à n'importe qui d'usurper ton bot dans chaque serveur où il se trouve, exactement comme une clé LLM divulguée permet à n'importe qui de dépenser ton quota.
 :::
 
 ### Obtenir une clé API LLM gratuite
 
-Le mode de génération de questions a besoin d'une clé LLM de niveau gratuit — **choisis le fournisseur que tu veux**, aucun ne demande de carte de crédit au moment de la rédaction :
+Le mode de génération de questions a besoin d'une clé LLM de niveau gratuit, **choisis le fournisseur que tu veux**, aucun ne demande de carte de crédit au moment de la rédaction :
 
 | Fournisseur | Où obtenir une clé | Pourquoi le choisir |
 |---|---|---|
-| **GitHub Models** *(défaut suggéré)* | [github.com/settings/tokens](https://github.com/settings/tokens) — un jeton d'accès personnel avec le scope `models: read` | Pas d'inscription séparée — tu as déjà un compte GitHub. Limites de niveau gratuit plus généreuses que celles de Gemini. |
+| **GitHub Models** *(défaut suggéré)* | [github.com/settings/tokens](https://github.com/settings/tokens), un jeton d'accès personnel avec le scope `models: read` | Pas d'inscription séparée, tu as déjà un compte GitHub. Limites de niveau gratuit plus généreuses que celles de Gemini. |
 | Gemini | [Google AI Studio](https://aistudio.google.com/) | L'option la plus couramment citée. |
 | Groq | [console.groq.com/keys](https://console.groq.com/keys) | Inférence rapide, niveau gratuit généreux, sans carte. |
 | Mistral | [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys) | L'un des quotas gratuits permanents les plus généreux. |
 | Cerebras | [cloud.cerebras.ai](https://cloud.cerebras.ai/) | Volume de jetons quotidien élevé, sans carte. |
-| OpenRouter | [openrouter.ai/keys](https://openrouter.ai/keys) | Une API, de nombreux modèles gratuits — bien pour comparer les fournisseurs. |
+| OpenRouter | [openrouter.ai/keys](https://openrouter.ai/keys) | Une API, de nombreux modèles gratuits, bien pour comparer les fournisseurs. |
 
-La banque de questions fixe (Étape 1) n'a besoin d'aucune clé LLM — tu n'en as besoin qu'une fois arrivé à la génération de questions par sujet de l'Étape 3.
+La banque de questions fixe (Étape 1) n'a besoin d'aucune clé LLM, tu n'en as besoin qu'une fois arrivé à la génération de questions par sujet de l'Étape 3.
 
 ### Configurer le projet
 
@@ -98,7 +98,7 @@ cd trivia-bot
 uv add discord.py openai python-dotenv
 ```
 
-`discord.py` est la bibliothèque qui parle à Discord — se connectant à sa Gateway, enregistrant les commandes slash, et recevant/envoyant des messages. `openai` parle à l'endpoint compatible OpenAI de GitHub Models pour le fournisseur par défaut ci-dessus ; remplace-le par le paquet de ton propre fournisseur si tu en as choisi un autre. `python-dotenv` charge les secrets depuis un fichier `.env` local.
+`discord.py` est la bibliothèque qui parle à Discord, se connectant à sa Gateway, enregistrant les commandes slash, et recevant/envoyant des messages. `openai` parle à l'endpoint compatible OpenAI de GitHub Models pour le fournisseur par défaut ci-dessus ; remplace-le par le paquet de ton propre fournisseur si tu en as choisi un autre. `python-dotenv` charge les secrets depuis un fichier `.env` local.
 
 Crée un fichier `.env` dans le dossier du projet (ne le commite jamais) avec **les deux** secrets de cette section :
 
@@ -121,11 +121,11 @@ GITHUB_TOKEN=your-llm-key-here
 - Le jeton du bot et la clé API LLM sont tous deux des secrets, mais ils s'authentifient auprès de deux services complètement différents. Qu'est-ce qui irait mal si tu échangeais accidentellement quelle variable d'environnement contient quelle valeur ?
 
 ## Étape 1 : Une banque de questions fixe et une commande slash de base
-### 1.1 Commence par la source de questions la plus simple possible — une liste Python plate de dict...
+### 1.1 Commence par la source de questions la plus simple possible, une liste Python plate de dict...
 
 **👟 Indice de départ :**
 
-Commence par la source de questions la plus simple possible — une liste Python plate de dicts — et juste assez de câblage Discord pour en poster une :
+Commence par la source de questions la plus simple possible, une liste Python plate de dicts, et juste assez de câblage Discord pour en poster une :
 
 ```python
 # questions.py
@@ -201,9 +201,9 @@ async def on_ready() -> None:
 if __name__ == "__main__":
     client.run(os.environ["DISCORD_BOT_TOKEN"])
 ```
-`tree.sync()` est ce qui publie réellement `/trivia` sur Discord pour qu'il apparaisse quand quelqu'un tape `/` dans ton serveur — saute-le et la commande existe dans ton code mais nulle part où l'interface de Discord peut la trouver.
+`tree.sync()` est ce qui publie réellement `/trivia` sur Discord pour qu'il apparaisse quand quelqu'un tape `/` dans ton serveur, saute-le et la commande existe dans ton code mais nulle part où l'interface de Discord peut la trouver.
 :::tip[Les commandes slash ont besoin d'un second scope OAuth2]
-Une invitation de bot normale ne nécessite que le scope `bot`. Les commandes slash ont spécifiquement besoin aussi de `applications.commands` — si tu as généré ton URL d'invitation avant d'ajouter `/trivia`, régénère-la avec les deux scopes cochés (voir Configuration ci-dessus) ou la commande n'apparaîtra jamais en silence dans ton serveur.
+Une invitation de bot normale ne nécessite que le scope `bot`. Les commandes slash ont spécifiquement besoin aussi de `applications.commands`, si tu as généré ton URL d'invitation avant d'ajouter `/trivia`, régénère-la avec les deux scopes cochés (voir Configuration ci-dessus) ou la commande n'apparaîtra jamais en silence dans ton serveur.
 :::
 
 **🎯 Résultat attendu :**
@@ -277,11 +277,11 @@ Vous devriez voir le résultat attendu sans erreur.
 
 Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
 
-### 2.2 Teste-le de manière autonome avant de le brancher dans `bot.py` du tout — le même motif « pr...
+### 2.2 Teste-le de manière autonome avant de le brancher dans `bot.py` du tout, le même motif « pr...
 
 **👟 Indice de départ :**
 
-Teste-le de manière autonome avant de le brancher dans `bot.py` du tout — le même motif « prouve que la pièce fonctionne seule d'abord » que n'importe quel projet en plusieurs parties :
+Teste-le de manière autonome avant de le brancher dans `bot.py` du tout, le même motif « prouve que la pièce fonctionne seule d'abord » que n'importe quel projet en plusieurs parties :
 
 ```bash
 uv run python -c "
@@ -314,7 +314,7 @@ async def leaderboard_command(interaction: discord.Interaction) -> None:
     scores = load_scores()
     await interaction.response.send_message(f"**Leaderboard:**\n{leaderboard_text(scores)}")
 ```
-Rien n'attribue encore de point — `trivia_command` de l'Étape 1 ne vérifie pas du tout les réponses — c'est ce que la boucle de manche de l'Étape 4 ajoute. Cette étape n'est délibérément que la moitié stockage, testée et fonctionnant seule d'abord.
+Rien n'attribue encore de point, `trivia_command` de l'Étape 1 ne vérifie pas du tout les réponses, c'est ce que la boucle de manche de l'Étape 4 ajoute. Cette étape n'est délibérément que la moitié stockage, testée et fonctionnant seule d'abord.
 
 **🎯 Résultat attendu :**
 
@@ -335,7 +335,7 @@ Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
 **🤔 Question(s) socratique(s)**
 
 - Les scores sont indexés par `str(user_id)` plutôt que par le nom d'affichage du joueur. Quel scénario réel casserait un classement indexé par nom qu'un classement indexé par ID d'utilisateur survit ?
-- `save_scores()` réécrit tout le fichier à chaque point individuel. Pour un petit bot mono-serveur, c'est très bien — à quel moment cela cesserait-il de l'être, et vers quoi te tournerais-tu à la place ?
+- `save_scores()` réécrit tout le fichier à chaque point individuel. Pour un petit bot mono-serveur, c'est très bien, à quel moment cela cesserait-il de l'être, et vers quoi te tournerais-tu à la place ?
 
 ## Étape 3 : Générer une question inédite sur n'importe quel sujet avec un LLM
 ### 3.1 La banque fixe de l'Étape 1 ne puise toujours que dans la même poignée de questions. Cette é...
@@ -400,7 +400,7 @@ Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
 
 **👟 Indice de départ :**
 
-La vérification explicite de la forme après l'analyse compte : `response_format={"type": "json_object"}` garantit que la sortie du LLM est *du JSON valide*, pas que c'est *le bon* JSON — il pourrait encore renvoyer trois options au lieu de quatre, ou omettre `answer_index` complètement. L'attraper ici, avec une erreur claire, vaut mieux que de le découvrir plus tard comme un message Discord déroutant avec une option D manquante.
+La vérification explicite de la forme après l'analyse compte : `response_format={"type": "json_object"}` garantit que la sortie du LLM est *du JSON valide*, pas que c'est *le bon* JSON, il pourrait encore renvoyer trois options au lieu de quatre, ou omettre `answer_index` complètement. L'attraper ici, avec une erreur claire, vaut mieux que de le découvrir plus tard comme un message Discord déroutant avec une option D manquante.
 Branche un paramètre `topic` dans `/trivia` pour qu'il puisse puiser dans l'une ou l'autre source :
 
 ```python
@@ -475,7 +475,7 @@ uv run python -c "from round import pick_question; print(pick_question())"
 uv run python -c "from round import pick_question; print(pick_question('classic video games'))"
 ```
 :::tip[Valide le contenu généré par LLM avant qu'il n'atteigne un canal en direct]
-Un LLM à qui l'on demande une question de trivia peut encore se tromper sur les faits, surtout sur des sujets obscurs — il n'y a pas de `try`/`except` qui attrape « incorrect avec confiance ». La validation de forme dans `generate_question()` ne protège que contre une *structure* malformée ; pour un serveur public, parcours une poignée de questions générées sur des sujets que tu connais vraiment avant de faire confiance au mode sur des sujets que tu ne connais pas.
+Un LLM à qui l'on demande une question de trivia peut encore se tromper sur les faits, surtout sur des sujets obscurs, il n'y a pas de `try`/`except` qui attrape « incorrect avec confiance ». La validation de forme dans `generate_question()` ne protège que contre une *structure* malformée ; pour un serveur public, parcours une poignée de questions générées sur des sujets que tu connais vraiment avant de faire confiance au mode sur des sujets que tu ne connais pas.
 :::
 
 **🎯 Résultat attendu :**
@@ -504,7 +504,7 @@ Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
 
 **👟 Indice de départ :**
 
-Jusqu'ici, tout était des pièces testées de manière isolée : une source de questions, le stockage des scores, la génération. Cette étape les branche dans ce à quoi ressemble réellement une manche en direct — poste une question, attends la première bonne réponse dans un délai, révèle-la, mets à jour le classement :
+Jusqu'ici, tout était des pièces testées de manière isolée : une source de questions, le stockage des scores, la génération. Cette étape les branche dans ce à quoi ressemble réellement une manche en direct, poste une question, attends la première bonne réponse dans un délai, révèle-la, mets à jour le classement :
 
 ```python
 # bot.py (relevant part -- see examples/trivia-bot/bot.py for the full file)
@@ -572,8 +572,8 @@ Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
 
 **👟 Indice de départ :**
 
-`client.wait_for("message", check=..., timeout=...)` est la façon de `discord.py` de mettre en pause une fonction `async` jusqu'à ce qu'un type d'événement spécifique se produise — ici, tout message dans le même canal dont le contenu est exactement l'une des lettres de réponse valides. La boucle `while` le rappelle avec un timeout `remaining` qui diminue, afin que le budget de temps *total* de la manche soit `ROUND_TIME_LIMIT`, pas `ROUND_TIME_LIMIT` par mauvaise réponse — sans recalculer `remaining`, un canal plein de mauvaises réponses enthousiastes pourrait garder la manche ouverte indéfiniment.
-Seule la *première* bonne réponse marque ; fais `break` dès que `winner` est défini. Les mauvaises réponses reçoivent une réaction ❌ au lieu d'un message d'erreur — un retour gratuit sans inonder le canal de réponses.
+`client.wait_for("message", check=..., timeout=...)` est la façon de `discord.py` de mettre en pause une fonction `async` jusqu'à ce qu'un type d'événement spécifique se produise, ici, tout message dans le même canal dont le contenu est exactement l'une des lettres de réponse valides. La boucle `while` le rappelle avec un timeout `remaining` qui diminue, afin que le budget de temps *total* de la manche soit `ROUND_TIME_LIMIT`, pas `ROUND_TIME_LIMIT` par mauvaise réponse, sans recalculer `remaining`, un canal plein de mauvaises réponses enthousiastes pourrait garder la manche ouverte indéfiniment.
+Seule la *première* bonne réponse marque ; fais `break` dès que `winner` est défini. Les mauvaises réponses reçoivent une réaction ❌ au lieu d'un message d'erreur, un retour gratuit sans inonder le canal de réponses.
 Enfin, `trivia_command` de l'Étape 1 devient une fine enveloppe autour de `run_round` :
 
 ```python
@@ -616,36 +616,36 @@ Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
 
 ## Invite le bot et joue une vraie manche
 
-En utilisant l'URL OAuth2 que tu as générée dans Configuration (avec les deux scopes `bot` et `applications.commands`), ouvre-la dans un navigateur et choisis un serveur que tu contrôles — crée un serveur de test gratuit si tu n'en as pas déjà un.
+En utilisant l'URL OAuth2 que tu as générée dans Configuration (avec les deux scopes `bot` et `applications.commands`), ouvre-la dans un navigateur et choisis un serveur que tu contrôles, crée un serveur de test gratuit si tu n'en as pas déjà un.
 
 ```bash
 uv run python bot.py
 ```
 
-Tu devrais voir imprimé `Logged in as trivia-bot#1234 -- ready in 1 server(s).`. Dans le serveur de test, tape `/trivia` et choisis-le dans le menu d'autocomplétion de Discord — avec ou sans `topic`. En quelques secondes, tu devrais voir la question postée, et après avoir répondu correctement (ou laissé le minuteur expirer) la réponse révélée et le classement mis à jour. Exécute `/leaderboard` à tout moment pour vérifier les scores sans démarrer une nouvelle manche.
+Tu devrais voir imprimé `Logged in as trivia-bot#1234 -- ready in 1 server(s).`. Dans le serveur de test, tape `/trivia` et choisis-le dans le menu d'autocomplétion de Discord, avec ou sans `topic`. En quelques secondes, tu devrais voir la question postée, et après avoir répondu correctement (ou laissé le minuteur expirer) la réponse révélée et le classement mis à jour. Exécute `/leaderboard` à tout moment pour vérifier les scores sans démarrer une nouvelle manche.
 
 ## ⚠️ Pièges courants
 
-- **Oublier l'intention privilégiée « Message Content ».** Cela doit être activé à *deux* endroits — `intents.message_content = True` dans le code, **et** l'interrupteur sous Bot → Privileged Gateway Intents dans le Portail des Développeurs. Rate l'interrupteur du portail et `message.content` est silencieusement une chaîne vide pour chaque message, donc `is_candidate_answer` ne correspond jamais à aucune réponse, peu importe comment elle est tapée.
+- **Oublier l'intention privilégiée « Message Content ».** Cela doit être activé à *deux* endroits, `intents.message_content = True` dans le code, **et** l'interrupteur sous Bot → Privileged Gateway Intents dans le Portail des Développeurs. Rate l'interrupteur du portail et `message.content` est silencieusement une chaîne vide pour chaque message, donc `is_candidate_answer` ne correspond jamais à aucune réponse, peu importe comment elle est tapée.
 - **Confondre le jeton du bot avec le secret client OAuth2.** Le Portail des Développeurs montre les deux sur des onglets différents. Le jeton du bot (onglet Bot) est ce dont `client.run(...)` a besoin ; le secret client (onglet OAuth2) est pour un flux d'authentification complètement différent que ce projet n'utilise jamais. Coller le secret client dans `DISCORD_BOT_TOKEN` échoue à se connecter avec une erreur déroutante.
 - **`/trivia` n'apparaît jamais dans l'interface de Discord.** C'est généralement l'une des deux causes : `tree.sync()` n'a jamais été appelé (ou jamais attendu) dans `on_ready`, ou l'URL d'invitation du bot a été générée avant d'ajouter le scope `applications.commands`. Régénère l'URL d'invitation avec les deux scopes et ré-invite le bot si c'est le second qui pose problème.
-- **Limites de débit sur le niveau gratuit du LLM, pires avec plusieurs manches d'affilée.** Chaque appel `/trivia <topic>` est une requête LLM séparée contre le quota de niveau gratuit de ton fournisseur, et un serveur occupé qui enchaîne plusieurs manches peut l'atteindre plus vite que ce que tu attendrais des seuls tests. Une erreur 429 n'est pas un bug — ajoute une courte nouvelle tentative avec backoff autour de `generate_question()`, ou retombe sur la banque fixe quand la génération échoue.
-- **Une manche qui ne se termine jamais parce que `remaining` n'est pas recalculé.** Si tu copies la boucle de manche mais que tu appelles `client.wait_for(..., timeout=ROUND_TIME_LIMIT)` (la constante fixe) au lieu de la valeur `remaining` qui diminue, chaque mauvaise réponse redémarre effectivement le chronomètre — la manche peut durer bien plus longtemps que ce que `ROUND_TIME_LIMIT` promet réellement.
+- **Limites de débit sur le niveau gratuit du LLM, pires avec plusieurs manches d'affilée.** Chaque appel `/trivia <topic>` est une requête LLM séparée contre le quota de niveau gratuit de ton fournisseur, et un serveur occupé qui enchaîne plusieurs manches peut l'atteindre plus vite que ce que tu attendrais des seuls tests. Une erreur 429 n'est pas un bug, ajoute une courte nouvelle tentative avec backoff autour de `generate_question()`, ou retombe sur la banque fixe quand la génération échoue.
+- **Une manche qui ne se termine jamais parce que `remaining` n'est pas recalculé.** Si tu copies la boucle de manche mais que tu appelles `client.wait_for(..., timeout=ROUND_TIME_LIMIT)` (la constante fixe) au lieu de la valeur `remaining` qui diminue, chaque mauvaise réponse redémarre effectivement le chronomètre, la manche peut durer bien plus longtemps que ce que `ROUND_TIME_LIMIT` promet réellement.
 
 ## Ce que tu viens de construire
 
-Un bot de trivia Discord en direct avec deux sources de questions — une banque fixe et la génération par LLM de niveau gratuit sur n'importe quel sujet — une boucle de manche complète avec un vrai timing, et un classement persistant par joueur qui survit aux redémarrages. La source de questions, le scoring, et la logique de manche (`questions.py`, `generate.py`, `scores.py`, `round.py`) sont tous du Python simple sans `discord`, testés indépendamment avant de toucher un canal en direct ; seul `bot.py` sait que Discord existe du tout. Cette séparation vaut la peine d'être gardée à l'esprit en général : les quatre mêmes modules pourraient se retrouver derrière un bot Slack, un formulaire web, ou un jeu CLI à la place, sans aucun changement dans aucun d'entre eux.
+Un bot de trivia Discord en direct avec deux sources de questions, une banque fixe et la génération par LLM de niveau gratuit sur n'importe quel sujet, une boucle de manche complète avec un vrai timing, et un classement persistant par joueur qui survit aux redémarrages. La source de questions, le scoring, et la logique de manche (`questions.py`, `generate.py`, `scores.py`, `round.py`) sont tous du Python simple sans `discord`, testés indépendamment avant de toucher un canal en direct ; seul `bot.py` sait que Discord existe du tout. Cette séparation vaut la peine d'être gardée à l'esprit en général : les quatre mêmes modules pourraient se retrouver derrière un bot Slack, un formulaire web, ou un jeu CLI à la place, sans aucun changement dans aucun d'entre eux.
 
 ## Où aller à partir d'ici
 
-- Ajoute un **mode de jeu multi-manches** — `/trivia rounds:5` qui joue plusieurs questions d'affilée et annonce un gagnant global à la fin, au lieu d'une question par commande.
+- Ajoute un **mode de jeu multi-manches**, `/trivia rounds:5` qui joue plusieurs questions d'affilée et annonce un gagnant global à la fin, au lieu d'une question par commande.
 - Suis les **balises de difficulté ou de catégorie** sur les questions générées (demande au LLM d'en inclure une dans sa réponse JSON) et laisse les joueurs choisir une catégorie avec `/trivia topic:... difficulty:hard`.
-- Ajoute un **classement par serveur** au lieu d'un `scores.json` global — indexe `scores.json` par `(guild_id, user_id)` au lieu de seulement `user_id`, pour que deux serveurs Discord différents qui exécutent ce bot ne partagent pas un classement.
-- Déploie le bot quelque part qui reste allumé sans que ton ordinateur portable tourne — une petite VM toujours active, ou un niveau gratuit sur une plateforme comme Railway ou Fly.io — pour qu'il continue d'héberger des soirées trivia même quand tu n'es pas devant ta machine.
+- Ajoute un **classement par serveur** au lieu d'un `scores.json` global, indexe `scores.json` par `(guild_id, user_id)` au lieu de seulement `user_id`, pour que deux serveurs Discord différents qui exécutent ce bot ne partagent pas un classement.
+- Déploie le bot quelque part qui reste allumé sans que ton ordinateur portable tourne, une petite VM toujours active, ou un niveau gratuit sur une plateforme comme Railway ou Fly.io, pour qu'il continue d'héberger des soirées trivia même quand tu n'es pas devant ta machine.
 
 ## Partage ton projet avec la classe
 
-Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres étudiants — et son README a un parcours complet et adapté aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git auparavant : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable de git n'est supposée.
+Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres étudiants, et son README a un parcours complet et adapté aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git auparavant : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable de git n'est supposée.
 
 Bienvenue à l'écriture de Python hors du navigateur. 🎓
 

@@ -17,7 +17,7 @@ learningObjectives:
 
 # 🩺 Construir un Monitor de Calidad de Datos
 
-"No envíes datos que no hayas verificado" solo funciona si la verificación es barata y repetible. Este proyecto construye la herramienta que la hace barata: un archivo de reglas escrito en JSON, un motor que convierte cada regla en una lista de filas violatorias, una puntuación que resume todo el archivo, una comparación de deriva que hace sonar una campana cuando una columna empeora silenciosamente entre instantáneas, y una CLI cuyo código de salida un script de build puede realmente aprovechar. Todo es `csv`, `dataclasses` y `json` — sin framework, sin base de datos, solo tus reglas ejecutadas contra tus datos.
+"No envíes datos que no hayas verificado" solo funciona si la verificación es barata y repetible. Este proyecto construye la herramienta que la hace barata: un archivo de reglas escrito en JSON, un motor que convierte cada regla en una lista de filas violatorias, una puntuación que resume todo el archivo, una comparación de deriva que hace sonar una campana cuando una columna empeora silenciosamente entre instantáneas, y una CLI cuyo código de salida un script de build puede realmente aprovechar. Todo es `csv`, `dataclasses` y `json`, sin framework, sin base de datos, solo tus reglas ejecutadas contra tus datos.
 
 Esto asume Python 101 más `dataclasses` y `csv`. No se requiere nada del módulo de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa, en crecimiento.
 
@@ -31,11 +31,11 @@ Esto asume Python 101 más `dataclasses` y `csv`. No se requiere nada del módul
 
 ## Dónde ejecutar esto
 
-**Localmente con `uv`** es el camino recomendado — todo el punto es la pequeña CLI que un script de build o cron puede llamar, y eso necesita un sistema de archivos real.
+**Localmente con `uv`** es el camino recomendado, todo el punto es la pequeña CLI que un script de build o cron puede llamar, y eso necesita un sistema de archivos real.
 
 **GitHub Codespaces** es una alternativa sin configuración: abre [todo el repositorio del curso en un Codespace gratuito](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node y Python ya están instalados) y ejecuta los mismos comandos desde una terminal del navegador.
 
-**Google Colab, Kaggle Notebooks o Binder** funcionan para cada paso — el notebook en [`examples/data-quality-monitor/notebook.es.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-quality-monitor/notebook.es.ipynb) ejecuta el mismo motor de reglas sobre las instantáneas trimestrales incluidas en memoria.
+**Google Colab, Kaggle Notebooks o Binder** funcionan para cada paso, el notebook en [`examples/data-quality-monitor/notebook.es.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-quality-monitor/notebook.es.ipynb) ejecuta el mismo motor de reglas sobre las instantáneas trimestrales incluidas en memoria.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-quality-monitor/notebook.es.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-quality-monitor/notebook.es.ipynb)
@@ -43,7 +43,7 @@ Esto asume Python 101 más `dataclasses` y `csv`. No se requiere nada del módul
 
 ## Configuración
 
-`uv` es una sola herramienta que reemplaza la cadena "instalar Python, luego pip, luego una herramienta de entorno virtual" — y este proyecto es biblioteca estándar pura.
+`uv` es una sola herramienta que reemplaza la cadena "instalar Python, luego pip, luego una herramienta de entorno virtual", y este proyecto es biblioteca estándar pura.
 
 **macOS / Linux** (terminal):
 
@@ -74,11 +74,11 @@ cd data-quality-monitor
 
 - ✅ `uv --version` imprime un número de versión.
 - ✅ `data-quality-monitor/` existe con un `pyproject.toml`.
-- ✅ `python -c "import csv, json, dataclasses"` se ejecuta — sin paquetes de terceros.
+- ✅ `python -c "import csv, json, dataclasses"` se ejecuta, sin paquetes de terceros.
 
 ## Paso 1: Modelar una regla como datos
 
-Una verificación de calidad es una cosa pequeña: *qué columna*, *qué verificación*, *bajo qué parámetros*. En el momento en que escribes esas verificaciones como sentencias `if` esparcidas por funciones, has acoplado "qué verificar" a "cómo ejecutarlo". La dataclass `Rule` los desacopla — las reglas se vuelven *datos*, cargables desde JSON, así que tu principal añade una regla editando un archivo, no tu código.
+Una verificación de calidad es una cosa pequeña: *qué columna*, *qué verificación*, *bajo qué parámetros*. En el momento en que escribes esas verificaciones como sentencias `if` esparcidas por funciones, has acoplado "qué verificar" a "cómo ejecutarlo". La dataclass `Rule` los desacopla, las reglas se vuelven *datos*, cargables desde JSON, así que tu principal añade una regla editando un archivo, no tu código.
 
 ### 1.1 Escribir la dataclass `Rule`
 
@@ -116,7 +116,7 @@ if __name__ == "__main__":
     print(rule.name, "->", rule.check, rule.params)
 ```
 
-`from_dict` es el truco silencioso: las reglas en JSON se escriben como `{"name": ..., "column": ..., "check": ..., "min": ..., "max": ...}` y el método *permite explícitamente* las tres claves estructurales, barriendo todo lo demás a `params` — así que una futura clave `"description": "..."` cae inofensivamente en params en lugar de hacer fallar al cargador. Los type hints en params (`dict[str, Any]`) cubren el hecho de que `allowed` es una lista pero `min` es un float.
+`from_dict` es el truco silencioso: las reglas en JSON se escriben como `{"name": ..., "column": ..., "check": ..., "min": ..., "max": ...}` y el método *permite explícitamente* las tres claves estructurales, barriendo todo lo demás a `params`, así que una futura clave `"description": "..."` cae inofensivamente en params en lugar de hacer fallar al cargador. Los type hints en params (`dict[str, Any]`) cubren el hecho de que `allowed` es una lista pero `min` es un float.
 
 **🎯 Resultado esperado :**
 
@@ -124,7 +124,7 @@ if __name__ == "__main__":
 age in range -> within_range {'min': 0, 'max': 100}
 ```
 
-**🩹 Si sale mal :** Si params está vacío, `data["name"]` etc. no son las únicas claves — verifica que no pusiste también `"params": {...}` *dentro* de la regla JSON (from_dict no desempaqueta un dict anidado; aplana claves hermanas). Si `Rule` lanza `TypeError`, el campo default `params` usa `None` no `field(default_factory=dict)` — sigue siendo válido aquí, pero pasarás params explícitamente en todas partes, así que prefiere eso.
+**🩹 Si sale mal :** Si params está vacío, `data["name"]` etc. no son las únicas claves, verifica que no pusiste también `"params": {...}` *dentro* de la regla JSON (from_dict no desempaqueta un dict anidado; aplana claves hermanas). Si `Rule` lanza `TypeError`, el campo default `params` usa `None` no `field(default_factory=dict)`, sigue siendo válido aquí, pero pasarás params explícitamente en todas partes, así que prefiere eso.
 
 ### 1.2 Verifica el modelo de regla
 
@@ -141,7 +141,7 @@ age in range -> within_range {'min': 0, 'max': 100}
 
 ## Paso 2: Escribir el motor de verificación
 
-El motor es: *dada una regla y todas las filas, devuelve las filas violatorias*. Cada tipo de verificación es un predicado estrecho (`_fails`), y `rule_failures` recorre las filas recolectando registros `Violation` que dicen *qué regla, qué columna, qué índice de fila, qué valor*. Las violaciones son de primera clase aquí — no `print`s, no `assert`s — porque los pasos de informe, deriva y CLI las consumen todas.
+El motor es: *dada una regla y todas las filas, devuelve las filas violatorias*. Cada tipo de verificación es un predicado estrecho (`_fails`), y `rule_failures` recorre las filas recolectando registros `Violation` que dicen *qué regla, qué columna, qué índice de fila, qué valor*. Las violaciones son de primera clase aquí, no `print`s, no `assert`s, porque los pasos de informe, deriva y CLI las consumen todas.
 
 ### 2.1 Implementar `_fails` y `rule_failures`
 
@@ -194,7 +194,7 @@ if __name__ == "__main__":
         print(v.rule, "row", v.row_index, "->", repr(v.value))
 ```
 
-`unique` es el extraño del grupo y vale la pena leerlo dos veces: no se puede decidir celda por celda, así que cuenta cada valor de columna en *todas* las filas y luego devuelve "falla" para cualquier valor que ocurra más de una vez. La forma `{..., ...} > 1` es una prueba de pertenencia, no una comparación — `Counter` devuelve el conteo y 2 > 1 es la señal de duplicado. El `raise ValueError` para verificaciones desconocidas es deliberado: un nombre de verificación con typo en el archivo de reglas debe fallar ruidosamente en el momento de la verificación, no pasar cada fila silenciosamente.
+`unique` es el extraño del grupo y vale la pena leerlo dos veces: no se puede decidir celda por celda, así que cuenta cada valor de columna en *todas* las filas y luego devuelve "falla" para cualquier valor que ocurra más de una vez. La forma `{..., ...} > 1` es una prueba de pertenencia, no una comparación, `Counter` devuelve el conteo y 2 > 1 es la señal de duplicado. El `raise ValueError` para verificaciones desconocidas es deliberado: un nombre de verificación con typo en el archivo de reglas debe fallar ruidosamente en el momento de la verificación, no pasar cada fila silenciosamente.
 
 **🎯 Resultado esperado :**
 
@@ -203,7 +203,7 @@ age in range row 1 -> '101'
 age in range row 2 -> ''
 ```
 
-**🩹 Si sale mal :** Si la fila 2 no se atrapa, `float("")` lanzó pero tu `except` no atrapa `ValueError` — tanto `ValueError` como `TypeError` deben estar en la tupla. Si cada valor reporta como duplicado, el `Counter` en `unique` se está reconstruyendo por fila en lugar de una vez por regla — sácalo de `_fails` o confía en que `rule_failures` pase la lista completa de filas.
+**🩹 Si sale mal :** Si la fila 2 no se atrapa, `float("")` lanzó pero tu `except` no atrapa `ValueError`, tanto `ValueError` como `TypeError` deben estar en la tupla. Si cada valor reporta como duplicado, el `Counter` en `unique` se está reconstruyendo por fila en lugar de una vez por regla, sácalo de `_fails` o confía en que `rule_failures` pase la lista completa de filas.
 
 ### 2.2 Verifica el motor
 
@@ -216,12 +216,12 @@ age in range row 2 -> ''
 
 **🤔 Pregunta(s) socrática(s)**
 
-- `within_range` devuelve `True` (falla) para números no analizables como `"abc"`. ¿Es un valor basura una violación de *rango* o una violación de *formato* — y qué le pasa a la puntuación de una columna si ambos están en desacuerdo?
-- `unique` cuenta `str(value)` mientras `in_set` compara valores crudos. ¿Qué hace `"1"` vs `1` (string versus int) a cada verificación — cuándo llamaría `unique` duplicados a dos valores aparentemente diferentes?
+- `within_range` devuelve `True` (falla) para números no analizables como `"abc"`. ¿Es un valor basura una violación de *rango* o una violación de *formato*, y qué le pasa a la puntuación de una columna si ambos están en desacuerdo?
+- `unique` cuenta `str(value)` mientras `in_set` compara valores crudos. ¿Qué hace `"1"` vs `1` (string versus int) a cada verificación, cuándo llamaría `unique` duplicados a dos valores aparentemente diferentes?
 
 ## Paso 3: Agregar en un informe y una puntuación
 
-Las violaciones son la evidencia; una puntuación es el veredicto. El informe convierte 5 filas × 4 reglas en una línea por regla — tasa de aprobación y conteo de filas que fallan — y la puntuación promedia las tasas de aprobación. Un único `0.80 / 1.00` es lo que un humano o un registro de build puede analizar de un vistazo y comparar con el trimestre pasado.
+Las violaciones son la evidencia; una puntuación es el veredicto. El informe convierte 5 filas × 4 reglas en una línea por regla, tasa de aprobación y conteo de filas que fallan, y la puntuación promedia las tasas de aprobación. Un único `0.80 / 1.00` es lo que un humano o un registro de build puede analizar de un vistazo y comparar con el trimestre pasado.
 
 ### 3.1 Escribir `QualityReport` y `render`
 
@@ -285,7 +285,7 @@ if __name__ == "__main__":
     print(render(build_report(rows, rules)))
 ```
 
-El promedio está *sin ponderar por diseño*: cuatro reglas, cuatro tasas de aprobación, igual voz. `pass_rate` usa `max(self.n_rows, 1)` para que un archivo *vacío* puntúe cada regla al 0% (que todas las cero filas fallen es la lectura honesta) en lugar de fallar en una división por cero. El prefijo `:[FAIL]`/`:PASS` y el formato `:.1%` son toda la UX del informe — una columna que puntúa 80% o una deriva de −13.3% debe ser visible en un escaneo, no después de contar estrellas.
+El promedio está *sin ponderar por diseño*: cuatro reglas, cuatro tasas de aprobación, igual voz. `pass_rate` usa `max(self.n_rows, 1)` para que un archivo *vacío* puntúe cada regla al 0% (que todas las cero filas fallen es la lectura honesta) en lugar de fallar en una división por cero. El prefijo `:[FAIL]`/`:PASS` y el formato `:.1%` son toda la UX del informe, una columna que puntúa 80% o una deriva de −13.3% debe ser visible en un escaneo, no después de contar estrellas.
 
 **🎯 Resultado esperado :**
 
@@ -298,7 +298,7 @@ checked 5 rows against 4 rules
 overall quality score: 0.80 / 1.00
 ```
 
-**🩹 Si sale mal :** Si `age in range` muestra 80% en lugar de 60%, el `''` vacío de la fila 3 no se está contando — el `float('')` que lanza se está manejando, pero verifica que la cláusula `except (TypeError, ValueError)` devuelva `True` (falla); si hiciera `pass`ed, la celda vacía cae a la comparación de rango y pasa silenciosamente. Si la línea de puntuación es 1.00, el método `score` está promediando algo distinto a tus reglas — confirma que `len(self.rules)` divide *cuatro* tasas de aprobación.
+**🩹 Si sale mal :** Si `age in range` muestra 80% en lugar de 60%, el `''` vacío de la fila 3 no se está contando, el `float('')` que lanza se está manejando, pero verifica que la cláusula `except (TypeError, ValueError)` devuelva `True` (falla); si hiciera `pass`ed, la celda vacía cae a la comparación de rango y pasa silenciosamente. Si la línea de puntuación es 1.00, el método `score` está promediando algo distinto a tus reglas, confirma que `len(self.rules)` divide *cuatro* tasas de aprobación.
 
 ### 3.2 Verifica el informe
 
@@ -310,12 +310,12 @@ overall quality score: 0.80 / 1.00
 
 **🤔 Pregunta(s) socrática(s)**
 
-- La puntuación es una media simple. Una columna que falla el 40% de las veces y una columna que falla el 10% de las veces arrastran la media con su propio peso. ¿Qué tipo de puntuación *ponderada* querría un panel de hospital o un sistema de nómina — y `render` sigue teniendo sentido, o dividirías el informe en niveles?
-- `PASS` requiere exactamente 100%. Dos equipos de calidad de datos difieren sobre si una cobertura de email del 99.5% debería ser verde. ¿Dónde pertenece el umbral de aprobación — en `render` o en la puntuación?
+- La puntuación es una media simple. Una columna que falla el 40% de las veces y una columna que falla el 10% de las veces arrastran la media con su propio peso. ¿Qué tipo de puntuación *ponderada* querría un panel de hospital o un sistema de nómina, y `render` sigue teniendo sentido, o dividirías el informe en niveles?
+- `PASS` requiere exactamente 100%. Dos equipos de calidad de datos difieren sobre si una cobertura de email del 99.5% debería ser verde. ¿Dónde pertenece el umbral de aprobación, en `render` o en la puntuación?
 
 ## Paso 4: Detectar deriva entre instantáneas
 
-Un solo archivo limpio es agradable; una columna que *se ensucia* es la emergencia. La deriva compara la tasa de aprobación de cada regla entre archivos de instantánea consecutivos y marca cualquier columna cuya tasa cayó más de un umbral (5 puntos) con el marcador `  <-- regression` — para que un build pueda localizar a la persona dueña de `email present`.
+Un solo archivo limpio es agradable; una columna que *se ensucia* es la emergencia. La deriva compara la tasa de aprobación de cada regla entre archivos de instantánea consecutivos y marca cualquier columna cuya tasa cayó más de un umbral (5 puntos) con el marcador `  <-- regression`, para que un build pueda localizar a la persona dueña de `email present`.
 
 ### 4.1 Escribir el comparador
 
@@ -393,7 +393,7 @@ if __name__ == "__main__":
         print(line)
 ```
 
-La línea de base es el *primer* archivo por posición en la lista — comparando tasas de aprobación con la instantánea inmediatamente anterior (q2 vs q1, q3 vs q2), no siempre con q1. Esa es la pregunta honesta "¿fue la última carga de este equipo peor que la anterior?"; comparar todo con q1 respondería "¿es peor que hace tres meses", que es un gráfico diferente (igual de válido). El formato de delta `%(+...%)` hace imposible leer mal la ambigüedad de signo +/−.
+La línea de base es el *primer* archivo por posición en la lista, comparando tasas de aprobación con la instantánea inmediatamente anterior (q2 vs q1, q3 vs q2), no siempre con q1. Esa es la pregunta honesta "¿fue la última carga de este equipo peor que la anterior?"; comparar todo con q1 respondería "¿es peor que hace tres meses", que es un gráfico diferente (igual de válido). El formato de delta `%(+...%)` hace imposible leer mal la ambigüedad de signo +/−.
 
 **🎯 Resultado esperado :**
 
@@ -415,7 +415,7 @@ La línea de base es el *primer* archivo por posición en la lista — comparand
    plan valid       100.0% (+0.0%)
 ```
 
-**🩹 Si sale mal :** Si el marcador `regression` nunca aparece, `threshold` (default `0.05`) se está comparando contra el signo equivocado — una *caída* es `delta < -threshold`, así que verifica el menos. Si la caída de email de q2 muestra `+13.3%`, el delta se está calculando `prev - rate` en lugar de `rate - prev` — signo, volteado.
+**🩹 Si sale mal :** Si el marcador `regression` nunca aparece, `threshold` (default `0.05`) se está comparando contra el signo equivocado, una *caída* es `delta < -threshold`, así que verifica el menos. Si la caída de email de q2 muestra `+13.3%`, el delta se está calculando `prev - rate` en lugar de `rate - prev`, signo, volteado.
 
 ### 4.2 Verifica la deriva
 
@@ -427,12 +427,12 @@ La línea de base es el *primer* archivo por posición en la lista — comparand
 
 **🤔 Pregunta(s) socrática(s)**
 
-- El umbral (5 puntos) es el mismo para todas las reglas. `email present` cayendo 13.3 puntos dispara la bandera; `age in range` subiendo 6.7 puntos es un pase. ¿Qué tipo de regla merece un umbral *por regla* — y dónde viviría en la firma de `compare` sin cambiar la API?
-- La deriva compara tasa contra tasa, ignorando el *volumen* (q2 verifica 3 filas, q1 verificó 5). Una señal de regresión de una sola fila desde un archivo de 3 filas es estadísticamente débil. ¿Cómo se vería una comparación ponderada por confianza — y cuándo es de todos modos la elección pragmática "marcar todo, verificar a mano"?
+- El umbral (5 puntos) es el mismo para todas las reglas. `email present` cayendo 13.3 puntos dispara la bandera; `age in range` subiendo 6.7 puntos es un pase. ¿Qué tipo de regla merece un umbral *por regla*, y dónde viviría en la firma de `compare` sin cambiar la API?
+- La deriva compara tasa contra tasa, ignorando el *volumen* (q2 verifica 3 filas, q1 verificó 5). Una señal de regresión de una sola fila desde un archivo de 3 filas es estadísticamente débil. ¿Cómo se vería una comparación ponderada por confianza, y cuándo es de todos modos la elección pragmática "marcar todo, verificar a mano"?
 
 ## Paso 5: La CLI y el código de salida
 
-El motor está terminado; la parte que cambia cómo un equipo *contrata* con la herramienta es el código de salida. `monitor.py` lee un CSV y un archivo de reglas, imprime el informe y sale con `0` si todo pasó o `2` si algo falló — un paso de CI o un script cron puede tratar el no-cero como "bloquear el despliegue / localizar al dueño" sin analizar ni una línea de salida.
+El motor está terminado; la parte que cambia cómo un equipo *contrata* con la herramienta es el código de salida. `monitor.py` lee un CSV y un archivo de reglas, imprime el informe y sale con `0` si todo pasó o `2` si algo falló, un paso de CI o un script cron puede tratar el no-cero como "bloquear el despliegue / localizar al dueño" sin analizar ni una línea de salida.
 
 ### 5.1 Escribir `monitor.py`
 
@@ -474,28 +474,28 @@ if __name__ == "__main__":
 - ✅ `echo $?` muestra `2` para customers_q1.csv (puntuación 0.80); un archivo limpio sale `0`.
 - ✅ `--rules` respeta una ruta personalizada (p. ej., `uv run python monitor.py data.csv --rules my-rules.json`).
 
-La puntuación es lo único que conoce el código de salida, y eso es una decisión de diseño real. "Puerta de calidad" significa *la puntuación debe ser exactamente 1.00* — lo más estricto posible. Si prefieres poner la puerta en "peor que 0.95", cambias una constante; el informe, el motor y el contrato de la CLI se quedan quietos.
+La puntuación es lo único que conoce el código de salida, y eso es una decisión de diseño real. "Puerta de calidad" significa *la puntuación debe ser exactamente 1.00*, lo más estricto posible. Si prefieres poner la puerta en "peor que 0.95", cambias una constante; el informe, el motor y el contrato de la CLI se quedan quietos.
 
 ### 5.2 Verifica la CLI de extremo a extremo
 
-**🩹 Si sale mal :** Si `sys.exit(2)` parece no hacer nada, recuerda que la ayuda/versiones de `argparse` salen con sus propios códigos antes de que `main()` llegue siquiera a la puerta — y que una corrida de `--help` reportando 0 es correcto. Si el código de salida es `1` en lugar de `2`, una excepción escapó de `main()` antes de que corriera la puerta — lee el traceback; es un problema de ruta de archivo, no un problema de puerta.
+**🩹 Si sale mal :** Si `sys.exit(2)` parece no hacer nada, recuerda que la ayuda/versiones de `argparse` salen con sus propios códigos antes de que `main()` llegue siquiera a la puerta, y que una corrida de `--help` reportando 0 es correcto. Si el código de salida es `1` en lugar de `2`, una excepción escapó de `main()` antes de que corriera la puerta, lee el traceback; es un problema de ruta de archivo, no un problema de puerta.
 
 **🤔 Pregunta(s) socrática(s)**
 
 - El código de salida conoce solo aprobar/fallar; el informe conoce qué reglas derivaron. ¿Por qué esa separación es *correcta* para una puerta de CI, y qué perdería tu pipeline si la CLI imprimiera "score 0.80" pero *siempre* saliera con 0?
-- `--rules rules.json` usa por default un nombre de archivo fijo. ¿Qué *no* permite `--rules` que un equipo podría querer (reglas por directorio, overrides de variables de entorno) — y añadirlos cambiaría el contrato del código de salida?
+- `--rules rules.json` usa por default un nombre de archivo fijo. ¿Qué *no* permite `--rules` que un equipo podría querer (reglas por directorio, overrides de variables de entorno), y añadirlos cambiaría el contrato del código de salida?
 
 ## ⚠️ Errores comunes
 
 - **Convertir el vacío en un pase.** `float("")` lanza; si tu cláusula `except` devuelve `False` (pasa) o re-lanza silenciosamente, las celdas en blanco atraviesan `within_range`. El vacío es un fallo; lo no analizable es un fallo; una excepción no manejada *no* es un resultado.
-- **`unique` re-contando por cada fila.** Construir el `Counter` dentro del predicado por fila convierte un archivo de 100k filas en trabajo O(n²). Cuenta una vez por regla (o acéptalo para datos de demo) — y recuerda que `"1"` y `1` son strings diferentes.
+- **`unique` re-contando por cada fila.** Construir el `Counter` dentro del predicado por fila convierte un archivo de 100k filas en trabajo O(n²). Cuenta una vez por regla (o acéptalo para datos de demo), y recuerda que `"1"` y `1` son strings diferentes.
 - **Volteos de signo en los deltas de deriva.** `delta = rate - prev` marca caídas correctamente; `prev - rate` marca subidas. Es un carácter de un carácter que se lleva la credibilidad de un informe.
 - **Puntuación `0/0`.** Un CSV vacío debe puntuar 0.00 mediante una guardia `max(self.n_rows, 1)`, no fallar en una división por cero. La pregunta del archivo vacío es "¿0 filas deben ser un fallo o una omisión?".
-- **Deriva del código de salida.** Una herramienta que *imprime* PASS/FAIL pero siempre sale con 0 es decorativa. Si incrustas la puerta en un script, `cmd /c` (Windows) y el encadenado `&&` respetan el código de salida real — elige el código de salida deliberadamente y pruébalo.
+- **Deriva del código de salida.** Una herramienta que *imprime* PASS/FAIL pero siempre sale con 0 es decorativa. Si incrustas la puerta en un script, `cmd /c` (Windows) y el encadenado `&&` respetan el código de salida real, elige el código de salida deliberadamente y pruébalo.
 
 ## Lo que acabas de construir
 
-Una suite de calidad de datos autocontenida: reglas como datos JSON, un motor de verificación con violaciones por fila, un informe puntuado de una pantalla, una comparación de deriva instantánea a instantánea con banderas de regresión, y una CLI cuyo código de salida es una puerta de despliegue. La habilidad reutilizable es *separar el juicio de la ejecución*: datos `Rule` en un archivo, motor en `checks.py`, presentación en `render`, decisión en un código de salida — cualquiera puede cambiar (nuevo tipo de verificación, nuevo formato de informe, nueva regla de puerta) sin tocar a los otros tres.
+Una suite de calidad de datos autocontenida: reglas como datos JSON, un motor de verificación con violaciones por fila, un informe puntuado de una pantalla, una comparación de deriva instantánea a instantánea con banderas de regresión, y una CLI cuyo código de salida es una puerta de despliegue. La habilidad reutilizable es *separar el juicio de la ejecución*: datos `Rule` en un archivo, motor en `checks.py`, presentación en `render`, decisión en un código de salida, cualquiera puede cambiar (nuevo tipo de verificación, nuevo formato de informe, nueva regla de puerta) sin tocar a los otros tres.
 
 :::tip[Ejecuta una versión más completa sin configuración local]
 [`examples/data-quality-monitor/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/data-quality-monitor) en el repositorio del curso tiene los scripts completos, los CSVs de instantánea trimestrales y un `rules.json` de muestra. O abre todo el repositorio en un [GitHub Codespaces](https://codespaces.new/abderrahim-lectures/python-data-analysis-course).
@@ -504,12 +504,12 @@ Una suite de calidad de datos autocontenida: reglas como datos JSON, un motor de
 ## A dónde ir desde aquí
 
 - Añade un flag de CLI **`--threshold`** que sobrescriba el default de `compare`, respondiendo la pregunta socrática del Paso 4 sobre sensibilidad por regla sin cambiar el motor.
-- Emite un **informe JSON** (`--json report.json`) junto al humano: misma puntuación, mismas violaciones, legible por máquina — el hermano verboso del código de salida.
+- Emite un **informe JSON** (`--json report.json`) junto al humano: misma puntuación, mismas violaciones, legible por máquina, el hermano verboso del código de salida.
 - Añade **conteos de volumen por columna** a la tabla de deriva (3 filas este trimestre vs 5 el trimestre pasado) para que los lectores humanos vean *confianza* además de tasa.
-- Soporta **detección de instantáneas obsoletas**: marca las instantáneas cuya columna de marca de tiempo `as_of` tiene más de N días — la deriva se mide en tiempo, no solo en orden de archivos.
+- Soporta **detección de instantáneas obsoletas**: marca las instantáneas cuya columna de marca de tiempo `as_of` tiene más de N días, la deriva se mide en tiempo, no solo en orden de archivos.
 
 ## Comparte tu proyecto con la clase
 
-¿Construiste algo de lo que te sientes orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado — y su README tiene una guía completa, amigable para principiantes, para agregar el tuyo mediante un **pull request**, incluso si nunca has usado git: hacer fork del repositorio, crear una rama, confirmar tus archivos y abrir el PR, paso a paso. No se asume experiencia previa en git.
+¿Construiste algo de lo que te sientes orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado, y su README tiene una guía completa, amigable para principiantes, para agregar el tuyo mediante un **pull request**, incluso si nunca has usado git: hacer fork del repositorio, crear una rama, confirmar tus archivos y abrir el PR, paso a paso. No se asume experiencia previa en git.
 
 Bienvenido a escribir Python fuera del navegador. 🎓

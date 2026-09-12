@@ -17,13 +17,13 @@ learningObjectives:
 
 # 🗂️ Construir un Catálogo de Datos
 
-Antes de que cualquiera pueda usar datos, alguien tiene que poder *encontrarlos*, confiar en lo que son y saber de dónde vinieron. Ese es el trabajo de un catálogo de datos — el índice de una organización sobre sus propios conjuntos de datos. Este proyecto construye uno pequeño y real: escanea archivos CSV y registra su esquema (columnas, tipos inferidos, conteos de filas) en un índice JSON persistente, responde búsquedas de texto libre entre nombres de conjuntos de datos y columnas, y rastrea el *linaje* — qué conjunto de datos alimenta qué transformación, para que puedas responder "¿qué se rompe si este CSV cambia?" con un recorrido en lugar de una suposición.
+Antes de que cualquiera pueda usar datos, alguien tiene que poder *encontrarlos*, confiar en lo que son y saber de dónde vinieron. Ese es el trabajo de un catálogo de datos, el índice de una organización sobre sus propios conjuntos de datos. Este proyecto construye uno pequeño y real: escanea archivos CSV y registra su esquema (columnas, tipos inferidos, conteos de filas) en un índice JSON persistente, responde búsquedas de texto libre entre nombres de conjuntos de datos y columnas, y rastrea el *linaje*, qué conjunto de datos alimenta qué transformación, para que puedas responder "¿qué se rompe si este CSV cambia?" con un recorrido en lugar de una suposición.
 
-Esto asume Python 101 más una lectura cómoda de `csv` — colecciones, dicts y funciones. No se requiere nada del módulo de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa, en crecimiento.
+Esto asume Python 101 más una lectura cómoda de `csv`, colecciones, dicts y funciones. No se requiere nada del módulo de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa, en crecimiento.
 
 ## 🎯 Lo que harás
 
-1. Escribir un extractor de metadatos que convierta un archivo CSV en una entrada de catálogo — nombres de columnas, tipos inferidos, conteo de filas.
+1. Escribir un extractor de metadatos que convierta un archivo CSV en una entrada de catálogo, nombres de columnas, tipos inferidos, conteo de filas.
 2. Construir un `CatalogIndex` persistente que se guarda y recarga a sí mismo como JSON.
 3. Implementar una búsqueda de texto completo puntuada sobre nombres de conjuntos de datos y nombres de columnas.
 4. Registrar aristas de linaje y recorrer cadenas de dependencia hacia adelante y hacia atrás.
@@ -31,11 +31,11 @@ Esto asume Python 101 más una lectura cómoda de `csv` — colecciones, dicts y
 
 ## Dónde ejecutar esto
 
-**Localmente con `uv`** es el camino recomendado — un catálogo trata sobre *tus* carpetas de CSVs en disco, y todo el punto de la CLI es apuntarse a archivos reales. La configuración es solo biblioteca estándar (además de libre de `tomllib`, así que un Python reciente simple basta).
+**Localmente con `uv`** es el camino recomendado, un catálogo trata sobre *tus* carpetas de CSVs en disco, y todo el punto de la CLI es apuntarse a archivos reales. La configuración es solo biblioteca estándar (además de libre de `tomllib`, así que un Python reciente simple basta).
 
-**GitHub Codespaces** es una alternativa sin configuración: abre [todo el repositorio del curso en un Codespace gratuito](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python y `uv` ya están instalados) y ejecuta los mismos comandos — hay muchos CSVs dentro de `examples/` a los que apuntarlo.
+**GitHub Codespaces** es una alternativa sin configuración: abre [todo el repositorio del curso en un Codespace gratuito](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python y `uv` ya están instalados) y ejecuta los mismos comandos, hay muchos CSVs dentro de `examples/` a los que apuntarlo.
 
-**Google Colab, Kaggle Notebooks o Binder** funcionan bien para la mitad de la *lógica de búsqueda* de este proyecto — el notebook en [`examples/data-catalog/notebook.es.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-catalog/notebook.es.ipynb) ejecuta cada paso sobre conjuntos de datos de muestra incluidos. La nota honesta: los CSVs de muestra de un notebook son fijos, así que la magia de "escanear *mi* carpeta" es una experiencia del `uv` local.
+**Google Colab, Kaggle Notebooks o Binder** funcionan bien para la mitad de la *lógica de búsqueda* de este proyecto, el notebook en [`examples/data-catalog/notebook.es.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-catalog/notebook.es.ipynb) ejecuta cada paso sobre conjuntos de datos de muestra incluidos. La nota honesta: los CSVs de muestra de un notebook son fijos, así que la magia de "escanear *mi* carpeta" es una experiencia del `uv` local.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-catalog/notebook.es.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-catalog/notebook.es.ipynb)
@@ -43,7 +43,7 @@ Esto asume Python 101 más una lectura cómoda de `csv` — colecciones, dicts y
 
 ## Configuración
 
-`uv` es una sola herramienta que reemplaza la cadena "instalar Python, luego pip, luego una herramienta de entorno virtual" — y nada en este proyecto necesita un paquete de terceros.
+`uv` es una sola herramienta que reemplaza la cadena "instalar Python, luego pip, luego una herramienta de entorno virtual", y nada en este proyecto necesita un paquete de terceros.
 
 **macOS / Linux** (terminal):
 
@@ -74,11 +74,11 @@ cd data-catalog
 
 - ✅ `uv --version` imprime un número de versión.
 - ✅ `data-catalog/` existe con un `pyproject.toml`.
-- ✅ `python -c "import csv, json"` se ejecuta — sin paquetes de terceros.
+- ✅ `python -c "import csv, json"` se ejecuta, sin paquetes de terceros.
 
 ## Paso 1: Extraer metadatos de esquema de los CSVs
 
-Una entrada de catálogo es la *descripción de un conjunto de datos*, no los datos en sí: qué columnas existen, qué tipo de valores contiene cada una, cuántas filas. Extraer eso es el momento en que un archivo crudo se convierte en un activo encontrable — y la parte más difícil es *inferir un tipo* de los valores de una columna sin que un único número perdido te engañe.
+Una entrada de catálogo es la *descripción de un conjunto de datos*, no los datos en sí: qué columnas existen, qué tipo de valores contiene cada una, cuántas filas. Extraer eso es el momento en que un archivo crudo se convierte en un activo encontrable, y la parte más difícil es *inferir un tipo* de los valores de una columna sin que un único número perdido te engañe.
 
 ### 1.1 Escribir el extractor y un auxiliar de inferencia
 
@@ -142,7 +142,7 @@ if __name__ == "__main__":
             print(f"  {col}: {dtype}")
 ```
 
-El orden de las verificaciones en `_infer_type` es un pequeño árbol de decisión: los booleanos son un *subconjunto* de lo que podrías llamar numérico (`"true"` no es un float, en realidad — el `try float` protege eso), así que el booleano se verifica primero, y el caso `"empty"` retorna temprano para que una columna totalmente en blanco nunca puntúe como extrañamente numérica. `reader.fieldnames or []` es una defensa silenciosa: un archivo vacío tiene `fieldnames` `None`, y cada bucle posterior asume una lista.
+El orden de las verificaciones en `_infer_type` es un pequeño árbol de decisión: los booleanos son un *subconjunto* de lo que podrías llamar numérico (`"true"` no es un float, en realidad, el `try float` protege eso), así que el booleano se verifica primero, y el caso `"empty"` retorna temprano para que una columna totalmente en blanco nunca puntúe como extrañamente numérica. `reader.fieldnames or []` es una defensa silenciosa: un archivo vacío tiene `fieldnames` `None`, y cada bucle posterior asume una lista.
 
 **🎯 Resultado esperado :**
 
@@ -159,7 +159,7 @@ customers: 2 rows
   region: text
 ```
 
-**🩹 Si sale mal :** Si `price` se infiere como `text`, alguna celda tiene un valor como `"49,99"` o `"$49.99"` que `float()` rechaza — limpia los datos o acepta "text" como la respuesta honesta. Si `active` se infiere como `text`, un valor no es `true`/`false` — verifica si hay un `"1"` literal mezclado con booleanos.
+**🩹 Si sale mal :** Si `price` se infiere como `text`, alguna celda tiene un valor como `"49,99"` o `"$49.99"` que `float()` rechaza, limpia los datos o acepta "text" como la respuesta honesta. Si `active` se infiere como `text`, un valor no es `true`/`false`, verifica si hay un `"1"` literal mezclado con booleanos.
 
 ### 1.2 Verifica la extracción
 
@@ -171,12 +171,12 @@ customers: 2 rows
 
 **🤔 Pregunta(s) socrática(s)**
 
-- Un veredicto "todo numérico" proviene de que *un* `float(...)` tenga éxito para cada valor. ¿Qué se clasifica en una columna `id` de `["001", "002"]` — y por qué eso es discutiblemente *incorrecto* para un catálogo donde los IDs están destinados a ser etiquetas opacas, no aritmética?
+- Un veredicto "todo numérico" proviene de que *un* `float(...)` tenga éxito para cada valor. ¿Qué se clasifica en una columna `id` de `["001", "002"]`, y por qué eso es discutiblemente *incorrecto* para un catálogo donde los IDs están destinados a ser etiquetas opacas, no aritmética?
 - El extractor carga cada fila en memoria (`rows = list(reader)`). ¿Qué parte del código necesitaría cambiar para catalogar un CSV de 50 GB, y qué partes (encabezados, dtypes) sobreviven sin cambios?
 
 ## Paso 2: Persistir un índice buscable
 
-Un dict de entradas en memoria se evapora cuando el proceso termina, lo que lo hace inútil como catálogo de una *organización*. La solución es un `CatalogIndex` que se serializa a JSON en cada cambio y recarga al inicio — el mismo truco de durabilidad que los catálogos reales obtienen de las bases de datos, reducido a un archivo.
+Un dict de entradas en memoria se evapora cuando el proceso termina, lo que lo hace inútil como catálogo de una *organización*. La solución es un `CatalogIndex` que se serializa a JSON en cada cambio y recarga al inicio, el mismo truco de durabilidad que los catálogos reales obtienen de las bases de datos, reducido a un archivo.
 
 ### 2.1 Escribir el índice respaldado por JSON
 
@@ -225,7 +225,7 @@ if __name__ == "__main__":
         print(f"{name}: {entry.columns}")
 ```
 
-`entry.__dict__` es el truco de serialización de bajo esfuerzo: las instancias de dataclass guardan sus campos en un `__dict__` simple, así que `json.dumps` de un dict-de-`__dict__` no necesita un codificador personalizado, y `CatalogEntry(**payload)` a la vuelta lo rehidrata con las claves exactas. El archivo JSON se convierte en la *fuente de confianza* entre corridas — cierra la terminal, vuelve a abrirla, y `CatalogIndex()` reconstruye el mismo dict.
+`entry.__dict__` es el truco de serialización de bajo esfuerzo: las instancias de dataclass guardan sus campos en un `__dict__` simple, así que `json.dumps` de un dict-de-`__dict__` no necesita un codificador personalizado, y `CatalogEntry(**payload)` a la vuelta lo rehidrata con las claves exactas. El archivo JSON se convierte en la *fuente de confianza* entre corridas, cierra la terminal, vuelve a abrirla, y `CatalogIndex()` reconstruye el mismo dict.
 
 **🎯 Resultado esperado :**
 
@@ -233,7 +233,7 @@ if __name__ == "__main__":
 products: ['id', 'name', 'price', 'stock', 'active']
 ```
 
-**🩹 Si sale mal :** Si un `TypeError: __init__() got an unexpected keyword argument` aparece al recargar, `catalog.json` tiene una clave que la dataclass no define — elimina el archivo obsoleto o renombra el campo para que coincida. Si `catalog.json` nunca aparece en disco, `_save()` no se está llamando desde `add` — cada ruta de mutación debe persistir, o el estado "guardado" es una mentira.
+**🩹 Si sale mal :** Si un `TypeError: __init__() got an unexpected keyword argument` aparece al recargar, `catalog.json` tiene una clave que la dataclass no define, elimina el archivo obsoleto o renombra el campo para que coincida. Si `catalog.json` nunca aparece en disco, `_save()` no se está llamando desde `add`, cada ruta de mutación debe persistir, o el estado "guardado" es una mentira.
 
 ### 2.2 Verifica la persistencia
 
@@ -245,8 +245,8 @@ products: ['id', 'name', 'price', 'stock', 'active']
 
 **🤔 Pregunta(s) socrática(s)**
 
-- Agregar y eliminar ambas llaman a `_save`. ¿Por qué guardar por mutación es el default honesto para una herramienta pequeña, y a qué escala se volvería suficientemente derrochador como para justificar un "guardar al salir" en su lugar — y qué pierde *eso* en un fallo?
-- El índice mapea `name → CatalogEntry`, así que un segundo CSV cuyo nombre de archivo colisiona sobrescribe silenciosamente al primero. ¿Debería `add` rechazar en colisión, o sobrescribir es el comportamiento correcto — y quién debería decidir?
+- Agregar y eliminar ambas llaman a `_save`. ¿Por qué guardar por mutación es el default honesto para una herramienta pequeña, y a qué escala se volvería suficientemente derrochador como para justificar un "guardar al salir" en su lugar, y qué pierde *eso* en un fallo?
+- El índice mapea `name → CatalogEntry`, así que un segundo CSV cuyo nombre de archivo colisiona sobrescribe silenciosamente al primero. ¿Debería `add` rechazar en colisión, o sobrescribir es el comportamiento correcto, y quién debería decidir?
 
 ## Paso 3: Buscar con puntuación
 
@@ -277,7 +277,7 @@ if __name__ == "__main__":
         print(f"{query!r}: {results if results else 'no matches'}")
 ```
 
-El único `haystack = " ".join([name, *entry.columns])` en minúsculas es todo el motor: la búsqueda puntúa contra *ambos*, el nombre del conjunto de datos y su esquema, que es lo que permite que `"region"` encuentre `customers` sin que la palabra aparezca en el nombre de archivo en absoluto — la superficie de columnas es metadatos indexables. `haystack.count(term)` es deliberadamente liberal (cuenta coincidencias superpuestas) en lugar de consciente de tokens, porque para un catálogo de unos pocos cientos de entradas la precisión extra no vale el tokenizador.
+El único `haystack = " ".join([name, *entry.columns])` en minúsculas es todo el motor: la búsqueda puntúa contra *ambos*, el nombre del conjunto de datos y su esquema, que es lo que permite que `"region"` encuentre `customers` sin que la palabra aparezca en el nombre de archivo en absoluto, la superficie de columnas es metadatos indexables. `haystack.count(term)` es deliberadamente liberal (cuenta coincidencias superpuestas) en lugar de consciente de tokens, porque para un catálogo de unos pocos cientos de entradas la precisión extra no vale el tokenizador.
 
 **🎯 Resultado esperado :**
 
@@ -287,7 +287,7 @@ El único `haystack = " ".join([name, *entry.columns])` en minúsculas es todo e
 'id price': [('products', 2)]
 ```
 
-**🩹 Si sale mal :** Si las consultas de varias palabras puntúan extraño, recuerda que la suma cuenta cada término *por separado* — `'id price'` encuentra 1 + 1 en `products`. Si una consulta no coincide con algo que debería, verifica si un término contiene mayúsculas o puntuación (p. ej., `"Price"` en minúsculas por ambos lados se maneja — pero `"price,"` con una coma no).
+**🩹 Si sale mal :** Si las consultas de varias palabras puntúan extraño, recuerda que la suma cuenta cada término *por separado*, `'id price'` encuentra 1 + 1 en `products`. Si una consulta no coincide con algo que debería, verifica si un término contiene mayúsculas o puntuación (p. ej., `"Price"` en minúsculas por ambos lados se maneja, pero `"price,"` con una coma no).
 
 ### 3.2 Verifica la búsqueda
 
@@ -299,12 +299,12 @@ El único `haystack = " ".join([name, *entry.columns])` en minúsculas es todo e
 
 **🤔 Pregunta(s) socrática(s)**
 
-- Contar *ocurrencias* recompensa a las columnas que repiten un término. ¿Qué definición de "relevante" se pierde — y qué cambiaría sobre la clasificación un `count` que penalizara papajes más largos (dividiendo por el tamaño del conjunto de datos, un mini-tf-idf)?
+- Contar *ocurrencias* recompensa a las columnas que repiten un término. ¿Qué definición de "relevante" se pierde, y qué cambiaría sobre la clasificación un `count` que penalizara papajes más largos (dividiendo por el tamaño del conjunto de datos, un mini-tf-idf)?
 - La búsqueda está limitada a nombre + columnas. ¿Qué metadatos *que ya calculaste* en el Paso 1 (dtypes, row_count) querrías que fueran buscables, y qué consulta respondería que esta versión no puede?
 
 ## Paso 4: Rastrear el linaje de datos
 
-Saber *qué es* un conjunto de datos es la mitad del trabajo; saber *de dónde vino y qué alimenta* es la parte que salva migraciones. El linaje es un grafo dirigido — `fuerte → transformación → derivado` — y las operaciones que necesita son los dos recorridos de grafo: descendente ("¿qué se rompe si cambia `products.csv`?") y ascendente ("¿de qué depende la tabla de este dashboard?").
+Saber *qué es* un conjunto de datos es la mitad del trabajo; saber *de dónde vino y qué alimenta* es la parte que salva migraciones. El linaje es un grafo dirigido, `fuerte → transformación → derivado`, y las operaciones que necesita son los dos recorridos de grafo: descendente ("¿qué se rompe si cambia `products.csv`?") y ascendente ("¿de qué depende la tabla de este dashboard?").
 
 ### 4.1 Escribir el almacén de linaje y ambos recorridos
 
@@ -360,7 +360,7 @@ if __name__ == "__main__":
     print("upstream of revenue_by_category:", sorted(lineage.upstream("revenue_by_category")))
 ```
 
-El bucle `while frontier:` es un recorrido de grafo genuino (estilo BFS) escondido en Python simple: cada nodo sondeado añade sus vecinos no vistos tanto a `seen` (para que se reporten) como a `frontier` (para que se exploren), que es exactamente cómo "¿qué depende de `products.csv`?" descubre la respuesta *transitiva* — `revenue_by_category` es descendente aunque nada apunte directamente a él. El conjunto `seen` que además sirve como guardia de ciclos significa que un bucle mal declarado en los datos de linaje termina en lugar de colgar tu informe.
+El bucle `while frontier:` es un recorrido de grafo genuino (estilo BFS) escondido en Python simple: cada nodo sondeado añade sus vecinos no vistos tanto a `seen` (para que se reporten) como a `frontier` (para que se exploren), que es exactamente cómo "¿qué depende de `products.csv`?" descubre la respuesta *transitiva*, `revenue_by_category` es descendente aunque nada apunte directamente a él. El conjunto `seen` que además sirve como guardia de ciclos significa que un bucle mal declarado en los datos de linaje termina en lugar de colgar tu informe.
 
 **🎯 Resultado esperado :**
 
@@ -369,7 +369,7 @@ downstream of products.csv: ['products_clean', 'revenue_by_category']
 upstream of revenue_by_category: ['products.csv', 'products_clean']
 ```
 
-**🩹 Si sale mal :** Si el descendente devuelve *solo* `products_clean`, el bucle de la frontera no está revisando los nodos recién añadidos — confirma que `frontier.add(derived)` existe dentro del bucle, no solo `seen.add`. Si la demo re-añade aristas en cada corrida, la línea de reinicio `lineage.edges = []` está haciendo trabajo real — un almacén persistente que nunca se reinicia crece sin límite.
+**🩹 Si sale mal :** Si el descendente devuelve *solo* `products_clean`, el bucle de la frontera no está revisando los nodos recién añadidos, confirma que `frontier.add(derived)` existe dentro del bucle, no solo `seen.add`. Si la demo re-añade aristas en cada corrida, la línea de reinicio `lineage.edges = []` está haciendo trabajo real, un almacén persistente que nunca se reinicia crece sin límite.
 
 ### 4.2 Verifica el linaje
 
@@ -381,12 +381,12 @@ upstream of revenue_by_category: ['products.csv', 'products_clean']
 
 **🤔 Pregunta(s) socrática(s)**
 
-- El recorrido es *amplitud-primero mediante un conjunto*. ¿Qué cambiaría si quisieras la *ruta de dependencia más corta* de `products.csv` a `revenue_by_category` — el conjunto descarta intencionalmente qué información, y qué estructura la preservaría?
-- Ambos recorridos viven en una sola clase sobre las mismas aristas. ¿Dónde usa `upstream` `derived == current` mientras `downstream` usa `src == current` — y cómo le explicarías "invierte la comparación, reutiliza toda la fontanería" a un compañero junior?
+- El recorrido es *amplitud-primero mediante un conjunto*. ¿Qué cambiaría si quisieras la *ruta de dependencia más corta* de `products.csv` a `revenue_by_category`, el conjunto descarta intencionalmente qué información, y qué estructura la preservaría?
+- Ambos recorridos viven en una sola clase sobre las mismas aristas. ¿Dónde usa `upstream` `derived == current` mientras `downstream` usa `src == current`, y cómo le explicarías "invierte la comparación, reutiliza toda la fontanería" a un compañero junior?
 
 ## Paso 5: La CLI del catálogo
 
-La librería está hecha; la *herramienta* necesita ser un comando que alguien pueda escribir. Los subcomandos `argparse` convierten todo el proyecto en tres verbos — `add`, `search`, `lineage` — cada uno reutilizando exactamente una función de los pasos anteriores.
+La librería está hecha; la *herramienta* necesita ser un comando que alguien pueda escribir. Los subcomandos `argparse` convierten todo el proyecto en tres verbos, `add`, `search`, `lineage`, cada uno reutilizando exactamente una función de los pasos anteriores.
 
 ### 5.1 Conectar los subcomandos
 
@@ -443,11 +443,11 @@ uv run python catalog.py search price
 uv run python catalog.py lineage products.csv --direction downstream
 ```
 
-El patrón a interiorizar: cada subcomando *compone* las funciones de la librería anteriores en lugar de reimplementarlas — `add` es `extract_metadata` + `index.add`, `search` es una llamada a función, `lineage` es una llamada a clase. El `required=True` en `add_subparsers` es la diferencia entre `catalog.py` sin verbo imprimiendo una lista de uso útil versus no hacer nada silenciosamente.
+El patrón a interiorizar: cada subcomando *compone* las funciones de la librería anteriores en lugar de reimplementarlas, `add` es `extract_metadata` + `index.add`, `search` es una llamada a función, `lineage` es una llamada a clase. El `required=True` en `add_subparsers` es la diferencia entre `catalog.py` sin verbo imprimiendo una lista de uso útil versus no hacer nada silenciosamente.
 
 **🎯 Resultado esperado :** `added products: 5 cols, 2 rows`, luego `products  (score 1)`, luego `downstream of products.csv: ['products_clean', 'revenue_by_category']`.
 
-**🩹 Si sale mal :** Si ejecutar `add` dos veces sobre el mismo archivo imprime la misma línea dos veces, eso es *correcto* — `add` sobrescribe la misma clave del catálogo. Si `--direction upstream` no devuelve nada, las aristas bajo `lineage.json` se registraron con roles de `derived`/`source` que esperas al revés — el recorrido sigue la dirección registrada, así que re-verifica las llamadas `record`.
+**🩹 Si sale mal :** Si ejecutar `add` dos veces sobre el mismo archivo imprime la misma línea dos veces, eso es *correcto*, `add` sobrescribe la misma clave del catálogo. Si `--direction upstream` no devuelve nada, las aristas bajo `lineage.json` se registraron con roles de `derived`/`source` que esperas al revés, el recorrido sigue la dirección registrada, así que re-verifica las llamadas `record`.
 
 ### 5.2 Verifica la CLI
 
@@ -459,20 +459,20 @@ El patrón a interiorizar: cada subcomando *compone* las funciones de la librer�
 
 **🤔 Pregunta(s) socrática(s)**
 
-- `search` en un catálogo vacío imprime una pista, mientras que `lineage` en un archivo vacío reporta silenciosamente "nothing". ¿Por qué el caso vacío es genuinamente *diferente* para los dos comandos — cuál es la asimetría entre "sin datos que buscar" y "sin linaje registrado"?
-- Cada comando construye su propio `CatalogIndex()`/`Lineage()`. ¿Cuándo importaría compartir una sola instancia — y para una CLI donde cada corrida es un comando, por qué el estado por comando es el default *correcto* aquí?
+- `search` en un catálogo vacío imprime una pista, mientras que `lineage` en un archivo vacío reporta silenciosamente "nothing". ¿Por qué el caso vacío es genuinamente *diferente* para los dos comandos, cuál es la asimetría entre "sin datos que buscar" y "sin linaje registrado"?
+- Cada comando construye su propio `CatalogIndex()`/`Lineage()`. ¿Cuándo importaría compartir una sola instancia, y para una CLI donde cada corrida es un comando, por qué el estado por comando es el default *correcto* aquí?
 
 ## ⚠️ Errores comunes
 
-- **Etiquetar columnas como numéricas porque *algunos* valores son números.** Un `"42"` solo no hace numérica a una columna; cada valor no vacío debe analizarse. Una columna `id` de `["001", "002"]` es probablemente un identificador *texto* disfrazado — infiere cuidadosamente o deja que el catálogo diga "text" honestamente.
+- **Etiquetar columnas como numéricas porque *algunos* valores son números.** Un `"42"` solo no hace numérica a una columna; cada valor no vacío debe analizarse. Una columna `id` de `["001", "002"]` es probablemente un identificador *texto* disfrazado, infiere cuidadosamente o deja que el catálogo diga "text" honestamente.
 - **Llamar `_save` en cualquier lugar que no sea una mutación.** Una búsqueda que "olvida" persistir o una carga que nunca escribe crean un catálogo cuyo estado en disco no está de acuerdo con su estado en memoria. Guarda en cada mutación, carga en cada inicio.
 - **Buscar con sensibilidad a mayúsculas.** `Price` vs `price` está a un `.lower()` olvidado de "resultados vacíos". Pon en minúsculas el pajar y la consulta juntos.
-- **Recorridos de grafo sin un conjunto `seen`.** Cada BFS/DFS sobre un grafo con cualquier ciclo — el linaje real ocasionalmente hace bucles — se cuelga para siempre sin deduplicación. La división `seen`/`frontier` no es opcional.
+- **Recorridos de grafo sin un conjunto `seen`.** Cada BFS/DFS sobre un grafo con cualquier ciclo, el linaje real ocasionalmente hace bucles, se cuelga para siempre sin deduplicación. La división `seen`/`frontier` no es opcional.
 - **Registrar linaje pero nunca reproducirlo.** Un API `record` sin consumidores `downstream`/`upstream` produce un archivo JSON que nadie lee. Construye el recorrido en el mismo paso que el almacén, como se hace aquí.
 
 ## Lo que acabas de construir
 
-Un catálogo de datos real: archivos CSV escaneados en entradas de metadatos estructurados y tipados; un índice JSON persistente que sobrevive reinicios; una búsqueda puntuada sobre nombres *y* esquemas; y un grafo de linaje recorrido en ambas direcciones para que puedas responder "¿qué se rompe si cambio esto?" con evidencia — todo biblioteca estándar, todo expuesto como tres verbos de CLI. La habilidad transferible es la arquitectura del catálogo en sí: descriptores (metadatos) mantenidos separados de los datos, índices persistidos con una capa de consulta, y *aristas de procedencia explícitas* que convierten "creo que esto está conectado" en un recorrido de grafo que cualquiera puede auditar.
+Un catálogo de datos real: archivos CSV escaneados en entradas de metadatos estructurados y tipados; un índice JSON persistente que sobrevive reinicios; una búsqueda puntuada sobre nombres *y* esquemas; y un grafo de linaje recorrido en ambas direcciones para que puedas responder "¿qué se rompe si cambio esto?" con evidencia, todo biblioteca estándar, todo expuesto como tres verbos de CLI. La habilidad transferible es la arquitectura del catálogo en sí: descriptores (metadatos) mantenidos separados de los datos, índices persistidos con una capa de consulta, y *aristas de procedencia explícitas* que convierten "creo que esto está conectado" en un recorrido de grafo que cualquiera puede auditar.
 
 :::tip[Ejecuta una versión más completa sin configuración local]
 [`examples/data-catalog/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/data-catalog) en el repositorio del curso tiene estos scripts completos más CSVs de muestra y un índice presembrado. O abre todo el repositorio en un [GitHub Codespaces](https://codespaces.new/abderrahim-lectures/python-data-analysis-course).
@@ -480,13 +480,13 @@ Un catálogo de datos real: archivos CSV escaneados en entradas de metadatos est
 
 ## A dónde ir desde aquí
 
-- Añade un subcomando `refresh` que re-escanea cada ruta `source` almacenada en el índice y actualiza los conteos de filas/dtypes — detección de deriva sobre tu catálogo con un recorrido sobre `entry.source`.
-- Mejora `_infer_type` con un veredicto `date` (analiza con `datetime.fromisoformat`) para que los catálogos distingan fechas reales de texto — un cambio de tres líneas en el árbol de decisión.
+- Añade un subcomando `refresh` que re-escanea cada ruta `source` almacenada en el índice y actualiza los conteos de filas/dtypes, detección de deriva sobre tu catálogo con un recorrido sobre `entry.source`.
+- Mejora `_infer_type` con un veredicto `date` (analiza con `datetime.fromisoformat`) para que los catálogos distingan fechas reales de texto, un cambio de tres líneas en el árbol de decisión.
 - Invierte el puntuador de búsqueda hacia **tf-idf** (divide los conteos de términos por cuántos conjuntos de datos contienen el término) para que los nombres genéricos de columnas como `id` dejen de dominar los resultados.
 - Renderiza el linaje como un bloque **Mermaid `graph TD`** (una línea por arista) para que `catalog.py lineage --format mermaid` produzca un diagrama que cualquier issue de GitHub pueda incrustar.
 
 ## Comparte tu proyecto con la clase
 
-¿Construiste algo de lo que te sientes orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado — y su README tiene una guía completa, amigable para principiantes, para agregar el tuyo mediante un **pull request**, incluso si nunca has usado git: hacer fork del repositorio, crear una rama, confirmar tus archivos y abrir el PR, paso a paso. No se asume experiencia previa en git.
+¿Construiste algo de lo que te sientes orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado, y su README tiene una guía completa, amigable para principiantes, para agregar el tuyo mediante un **pull request**, incluso si nunca has usado git: hacer fork del repositorio, crear una rama, confirmar tus archivos y abrir el PR, paso a paso. No se asume experiencia previa en git.
 
 Bienvenido a escribir Python fuera del navegador. 🎓

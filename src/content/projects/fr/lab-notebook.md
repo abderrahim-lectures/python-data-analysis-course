@@ -19,7 +19,7 @@ Cela suppose Python 101 et l'aisance avec pandas issu de Analyse de Données. C'
 
 ## Où exécuter ceci
 
-**En local avec `uv`** est le chemin principal — c'est un outil CLI qui écrit des fichiers d'expériences et des PDF.
+**En local avec `uv`** est le chemin principal, c'est un outil CLI qui écrit des fichiers d'expériences et des PDF.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/lab-notebook/notebook.fr.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/lab-notebook/notebook.fr.ipynb)
@@ -223,7 +223,7 @@ class NotebookStore:
 
 **🎯 Résultat attendu :** `store.update(exp, hypothesis="New idea")` enregistre l'état antérieur, et `rollback` le restaure.
 
-**🩹 Si ça ne marche pas :** Si rollback plante, les mesures de la photographie peuvent ne pas se reconstruire proprement — vérifie les clés du dict.
+**🩹 Si ça ne marche pas :** Si rollback plante, les mesures de la photographie peuvent ne pas se reconstruire proprement, vérifie les clés du dict.
 
 ### 3.2 Vérifie le versionnage
 
@@ -298,7 +298,7 @@ def export_pdf(exp: Experiment, out_path: str):
 
 ## Ce que tu viens de construire
 
-Un cahier de laboratoire structuré : des modèles d'expériences typés, un moteur de statistiques qui calcule moyenne, écart type et lignes de tendance, un versionnage par photographies avec annulation et un exporteur PDF. Le résultat est un flux de travail d'analyse reproductible — enregistrer, calculer, versionner et partager — qui reflète la façon dont les équipes de recherche modernes travaillent réellement.
+Un cahier de laboratoire structuré : des modèles d'expériences typés, un moteur de statistiques qui calcule moyenne, écart type et lignes de tendance, un versionnage par photographies avec annulation et un exporteur PDF. Le résultat est un flux de travail d'analyse reproductible, enregistrer, calculer, versionner et partager, qui reflète la façon dont les équipes de recherche modernes travaillent réellement.
 
 :::tip[Exécute une version plus complète sans aucune configuration locale]
 [`examples/lab-notebook/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/lab-notebook) dans le dépôt du cours a une version plus riche avec la génération de graphiques, un index de fiches consultable et le CLI câblé de bout en bout. Clone-le, ou ouvre tout le dépôt dans un [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), et exécute-le depuis là.
@@ -312,6 +312,6 @@ Un cahier de laboratoire structuré : des modèles d'expériences typés, un mot
 
 ## Partage ton projet avec la classe
 
-Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres élèves — et son README a un tutoriel complet et adapté aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git avant : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable avec git n'est supposée.
+Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres élèves, et son README a un tutoriel complet et adapté aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git avant : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable avec git n'est supposée.
 
 Bienvenue dans l'écriture de Python en dehors du navigateur. 🎓

@@ -141,11 +141,11 @@ for word, count in sorted_words[-10:]:
     print(f"  {word}: {count}")
 ```
 
-Dans la plupart des textes anglais, « the », « of », « and », « to » et « a » dominent le sommet de la liste. Cela suit la **loi de Zipf** — le mot le plus fréquent apparaît environ deux fois plus souvent que le second, trois fois plus souvent que le troisième, et ainsi de suite.
+Dans la plupart des textes anglais, « the », « of », « and », « to » et « a » dominent le sommet de la liste. Cela suit la **loi de Zipf**, le mot le plus fréquent apparaît environ deux fois plus souvent que le second, trois fois plus souvent que le troisième, et ainsi de suite.
 
 ### Pourquoi la fréquence compte pour la génération
 
-Un modèle de langue utilise la fréquence pour pondérer les prédictions. Si « the » apparaît 500 fois et « platypus » 2 fois, « the » devrait être choisi plus souvent — mais pas toujours. Le modèle de bigrammes affine cela en conditionnant sur le mot précédent, c'est ce qui rend le texte généré lisible plutôt qu'un simple flux de « the the the ».
+Un modèle de langue utilise la fréquence pour pondérer les prédictions. Si « the » apparaît 500 fois et « platypus » 2 fois, « the » devrait être choisi plus souvent, mais pas toujours. Le modèle de bigrammes affine cela en conditionnant sur le mot précédent, c'est ce qui rend le texte généré lisible plutôt qu'un simple flux de « the the the ».
 
 ## Essayez
 

@@ -119,9 +119,9 @@ female  0.742038    314
 male    0.188908    577
 ```
 
-74 % des femmes ont survécu contre 19 % des hommes — la politique « les femmes et les enfants d'abord » est clairement reflétée.
+74 % des femmes ont survécu contre 19 % des hommes, la politique « les femmes et les enfants d'abord » est clairement reflétée.
 
-## Étape 5 : Analyse combinée — classe et sexe
+## Étape 5 : Analyse combinée, classe et sexe
 
 ```python
 print(df.groupby(["Pclass", "Sex"])["Survived"].mean().unstack())
@@ -215,7 +215,7 @@ Q       0.389610     77
 S       0.368821    646
 ```
 
-Les passagers de Cherbourg ont enregistré le taux de survie le plus élevé — probablement parce que davantage de passagers de première classe y ont embarqué.
+Les passagers de Cherbourg ont enregistré le taux de survie le plus élevé, probablement parce que davantage de passagers de première classe y ont embarqué.
 
 ## Étape 10 : Synthèse des constats
 
@@ -233,12 +233,12 @@ print(summary)
 
 ## Conclusions clés
 
-1. **La classe était le facteur prédictif de survie le plus fort** — les passagers de première classe ont survécu à 63 % contre 24 % pour la troisième classe
-2. **Le genre était tout aussi puissant** — 74 % des femmes ont survécu contre 19 % des hommes
-3. **La combinaison compte le plus** — femmes de première classe : 97 % de survie ; hommes de troisième classe : 14 %
-4. **Les enfants avaient un avantage** — 58 % de taux de survie, le plus élevé de toutes les tranches d'âge
-5. **Les tailles de famille modérées étaient un atout** — les familles de 2 à 4 personnes ont survécu plus souvent que les voyageurs solitaires
-6. **Le tarif payé était corrélé à la survie** — les passagers ayant payé plus cher ont survécu plus souvent, reflet probable de la classe et de l'emplacement de la cabine
+1. **La classe était le facteur prédictif de survie le plus fort**, les passagers de première classe ont survécu à 63 % contre 24 % pour la troisième classe
+2. **Le genre était tout aussi puissant**, 74 % des femmes ont survécu contre 19 % des hommes
+3. **La combinaison compte le plus**, femmes de première classe : 97 % de survie ; hommes de troisième classe : 14 %
+4. **Les enfants avaient un avantage**, 58 % de taux de survie, le plus élevé de toutes les tranches d'âge
+5. **Les tailles de famille modérées étaient un atout**, les familles de 2 à 4 personnes ont survécu plus souvent que les voyageurs solitaires
+6. **Le tarif payé était corrélé à la survie**, les passagers ayant payé plus cher ont survécu plus souvent, reflet probable de la classe et de l'emplacement de la cabine
 
 ## Essayez-le
 
@@ -259,7 +259,7 @@ print(df.groupby("Group")["Survived"].agg(["mean", "count"]))
 ## Points clés à retenir
 
 - Une EDA complète suit un pipeline : charger → nettoyer → créer des caractéristiques → grouper → analyser → conclure
-- Le nettoyage doit précéder l'analyse — les valeurs manquantes faussent les résultats de groupby
+- Le nettoyage doit précéder l'analyse, les valeurs manquantes faussent les résultats de groupby
 - L'ingénierie de caractéristiques (tranches d'âge, indicateurs de solitude) révèle des schémas cachés dans les chiffres bruts
 - Les multiples angles de groupby (classe, sexe, âge, famille) dressent un tableau complet
 

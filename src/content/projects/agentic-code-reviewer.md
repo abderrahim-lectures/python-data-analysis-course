@@ -6,25 +6,25 @@ difficulty: "intermediate"
 
 # 🤖 Build an Agentic Code Reviewer
 
-Every pull request eventually gets read by a human reviewer looking for bugs, style problems, missing tests, and confusing names — before that, though, it's just text: the output of `git diff`. This project builds a CLI tool that does that first pass automatically: it captures a real diff with Python's `subprocess` module, hands it to a free-tier language model with a carefully-designed reviewer system prompt, and prints back structured, actionable feedback — not a vague "looks good," but specific issues with a file, a category, a severity, and a suggested fix.
+Every pull request eventually gets read by a human reviewer looking for bugs, style problems, missing tests, and confusing names, before that, though, it's just text: the output of `git diff`. This project builds a CLI tool that does that first pass automatically: it captures a real diff with Python's `subprocess` module, hands it to a free-tier language model with a carefully-designed reviewer system prompt, and prints back structured, actionable feedback, not a vague "looks good," but specific issues with a file, a category, a severity, and a suggested fix.
 
-This assumes Python 101 and enough comfort with git to know what `git diff` shows you — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
+This assumes Python 101 and enough comfort with git to know what `git diff` shows you, nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 
-1. Install `uv`, get a free-tier LLM API key, and set up a small project — all in one place, before any building starts.
+1. Install `uv`, get a free-tier LLM API key, and set up a small project, all in one place, before any building starts.
 2. Use Python's `subprocess` module to run `git diff` for real and capture its output as text.
 3. Design a system prompt that turns a general-purpose LLM into a focused, structured code reviewer.
 4. Send a diff to the model and print its feedback in a clear, readable format.
-5. Run the whole tool against a real diff — your own uncommitted changes, and a specific past commit from this course's own repo history.
+5. Run the whole tool against a real diff, your own uncommitted changes, and a specific past commit from this course's own repo history.
 
 ## Where to run this
 
-**Locally with `uv`** is the primary, recommended path here, more so than for most other projects in this series — this tool's entire premise is running `git diff` against a real local git repository, and that means it needs an actual `.git` folder on disk to point at (your own project, or a clone of this course's repo).
+**Locally with `uv`** is the primary, recommended path here, more so than for most other projects in this series, this tool's entire premise is running `git diff` against a real local git repository, and that means it needs an actual `.git` folder on disk to point at (your own project, or a clone of this course's repo).
 
-**GitHub Codespaces** works well too: open [the whole course repo in a free Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python, `uv`, and git are already installed) — it's a real clone with real history, so every step below, including the "review a real past commit" demo, works exactly as it does locally.
+**GitHub Codespaces** works well too: open [the whole course repo in a free Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python, `uv`, and git are already installed), it's a real clone with real history, so every step below, including the "review a real past commit" demo, works exactly as it does locally.
 
-**Google Colab, Kaggle Notebooks, and Binder are a reasonable way to *try* the tool, but not to run it for real.** Neither gives you a real local git repository with commit history by default, and the whole premise of this tool is reviewing *your own* in-progress work — a notebook's ephemeral filesystem has none of that. The notebook below works around this honestly, rather than pretending the gap doesn't exist: it `!git clone`s this course's own repository into the notebook and reviews one real, small, historical commit from it with `git show`, so every piece of the tool (the `subprocess` diff capture, the system prompt, the LLM call, the structured output) still runs against real, real-looking output — it's just reviewing a fixed example commit instead of anything you personally wrote. Use it to see the tool work end to end with zero setup; switch to local `uv` or a Codespace once you want it pointed at your own actual changes.
+**Google Colab, Kaggle Notebooks, and Binder are a reasonable way to *try* the tool, but not to run it for real.** Neither gives you a real local git repository with commit history by default, and the whole premise of this tool is reviewing *your own* in-progress work, a notebook's ephemeral filesystem has none of that. The notebook below works around this honestly, rather than pretending the gap doesn't exist: it `!git clone`s this course's own repository into the notebook and reviews one real, small, historical commit from it with `git show`, so every piece of the tool (the `subprocess` diff capture, the system prompt, the LLM call, the structured output) still runs against real, real-looking output, it's just reviewing a fixed example commit instead of anything you personally wrote. Use it to see the tool work end to end with zero setup; switch to local `uv` or a Codespace once you want it pointed at your own actual changes.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/agentic-code-reviewer/notebook.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/agentic-code-reviewer/notebook.ipynb)
@@ -36,7 +36,7 @@ Everything you need before you write a line of the reviewer itself: a real Pytho
 
 ### Install `uv`
 
-`uv` is a single tool that replaces the usual "install Python, then install pip, then install a virtual environment tool, then install packages" chain — it can install and manage Python versions itself, alongside your project's dependencies.
+`uv` is a single tool that replaces the usual "install Python, then install pip, then install a virtual environment tool, then install packages" chain, it can install and manage Python versions itself, alongside your project's dependencies.
 
 **macOS / Linux** (terminal):
 
@@ -64,20 +64,20 @@ cd agentic-code-reviewer
 uv add openai python-dotenv
 ```
 
-`openai`'s client library works here for every provider in the table below, not just OpenAI itself — GitHub Models, Gemini, Groq, Mistral, Cerebras, and OpenRouter all expose an OpenAI-compatible chat endpoint, so one client, pointed at a different `base_url`, is all this project needs. `python-dotenv` lets you keep your API key in a local `.env` file instead of `export`-ing it every session.
+`openai`'s client library works here for every provider in the table below, not just OpenAI itself, GitHub Models, Gemini, Groq, Mistral, Cerebras, and OpenRouter all expose an OpenAI-compatible chat endpoint, so one client, pointed at a different `base_url`, is all this project needs. `python-dotenv` lets you keep your API key in a local `.env` file instead of `export`-ing it every session.
 
 ### Get a free LLM API key
 
-**Pick whichever provider you like** — none of them require a credit card at the time of writing, and this course doesn't favor one over another. The fuller example in the course repo ([`examples/agentic-code-reviewer/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/agentic-code-reviewer)) supports all six out of the box, selected with one setting.
+**Pick whichever provider you like**, none of them require a credit card at the time of writing, and this course doesn't favor one over another. The fuller example in the course repo ([`examples/agentic-code-reviewer/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/agentic-code-reviewer)) supports all six out of the box, selected with one setting.
 
 | Provider | Where to get a key | Why you might pick it |
 |---|---|---|
-| **GitHub Models** *(suggested default)* | [github.com/settings/tokens](https://github.com/settings/tokens) — a personal access token with the `models: read` scope | No separate signup — you already have a GitHub account. More generous free-tier limits than Gemini's. |
+| **GitHub Models** *(suggested default)* | [github.com/settings/tokens](https://github.com/settings/tokens), a personal access token with the `models: read` scope | No separate signup, you already have a GitHub account. More generous free-tier limits than Gemini's. |
 | Gemini | [Google AI Studio](https://aistudio.google.com/) | The most commonly referenced option; also exposes an OpenAI-compatible endpoint, used below. |
 | Groq | [console.groq.com/keys](https://console.groq.com/keys) | Fast inference, generous free tier, no card. |
 | Mistral | [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys) | One of the more generous permanent free quotas. |
 | Cerebras | [cloud.cerebras.ai](https://cloud.cerebras.ai/) | High daily token volume, no card. |
-| OpenRouter | [openrouter.ai/keys](https://openrouter.ai/keys) | One API, many free models — good for comparing providers. |
+| OpenRouter | [openrouter.ai/keys](https://openrouter.ai/keys) | One API, many free models, good for comparing providers. |
 
 Whichever you pick, the process is the same:
 
@@ -90,21 +90,21 @@ LLM_PROVIDER=github
 GITHUB_TOKEN=your-key-here
 ```
 
-An API key is a secret, exactly like a password — anyone with it can use your account's quota. Treating it as an environment variable rather than a hardcoded string is the standard practice for exactly this reason.
+An API key is a secret, exactly like a password, anyone with it can use your account's quota. Treating it as an environment variable rather than a hardcoded string is the standard practice for exactly this reason.
 
 :::tip[A .env file is often more convenient than export]
-Instead of `export`-ing a key in every new terminal session, `python-dotenv` reads a `.env` file in your project folder into `os.environ` automatically, the first time your script runs — see `load_dotenv()` in Step 3 below.
+Instead of `export`-ing a key in every new terminal session, `python-dotenv` reads a `.env` file in your project folder into `os.environ` automatically, the first time your script runs, see `load_dotenv()` in Step 3 below.
 :::
 
 **✅ Checklist**
 
 - ✅ `uv --version` prints a version number.
 - ✅ `agentic-code-reviewer/` exists with a `pyproject.toml`, and `openai` and `python-dotenv` are installed.
-- ✅ You have a real API key from one provider, saved in a `.env` file in your project folder — not pasted into any script.
+- ✅ You have a real API key from one provider, saved in a `.env` file in your project folder, not pasted into any script.
 
 ## Step 1: Capture a git diff with `subprocess`
 
-Python's `subprocess` module runs another program and captures its output as text — here, that program is `git` itself. This is a genuinely realistic use of `subprocess`: you're not simulating anything, you're running the exact same `git diff` command you'd type by hand, and reading back exactly what it would print to your terminal.
+Python's `subprocess` module runs another program and captures its output as text, here, that program is `git` itself. This is a genuinely realistic use of `subprocess`: you're not simulating anything, you're running the exact same `git diff` command you'd type by hand, and reading back exactly what it would print to your terminal.
 
 ### 1.1 Write the `git` wrappers
 
@@ -149,18 +149,18 @@ if __name__ == "__main__":
 
 **🎯 Expected output:** `get_diff_uncommitted()` returns real diff text when you have uncommitted changes, and an empty string when you don't. Running `review.py` inside a folder that isn't a git repo raises a clear `RuntimeError`, not a confusing traceback from deep inside `subprocess`.
 
-**🩹 If it's off:** If you get a raw `CalledProcessError` or a broken traceback, you likely used `check=True` (which throws that generic error) instead of the manual `returncode` check that raises a readable `RuntimeError` with git's stderr. If no diff appears where you expect one, `diff HEAD` compares against the last commit — with nothing committed, there's nothing to diff against.
+**🩹 If it's off:** If you get a raw `CalledProcessError` or a broken traceback, you likely used `check=True` (which throws that generic error) instead of the manual `returncode` check that raises a readable `RuntimeError` with git's stderr. If no diff appears where you expect one, `diff HEAD` compares against the last commit, with nothing committed, there's nothing to diff against.
 
 ### 1.2 Try it against a real diff
 
-Try it against this project itself — edit any file, don't commit, then run:
+Try it against this project itself, edit any file, don't commit, then run:
 
 ```bash
 uv run python review.py
 ```
 
 :::tip[This is the same subprocess pattern as any other CLI wrapper]
-`subprocess.run` doesn't care that the program being run is `git` — it works identically for any command-line tool: `ls`, a shell script, another Python program. Once this pattern clicks, "let Python drive an existing CLI tool and use its output" becomes available for a lot more than just git.
+`subprocess.run` doesn't care that the program being run is `git`, it works identically for any command-line tool: `ls`, a shell script, another Python program. Once this pattern clicks, "let Python drive an existing CLI tool and use its output" becomes available for a lot more than just git.
 :::
 
 **👟 Starter hint:** Make a small edit to any file (don't commit), then run `review.py` from that repo and watch it print the uncommitted diff.
@@ -184,7 +184,7 @@ uv run python review.py
 
 ## Step 2: Design the review system prompt
 
-A language model with no instructions will happily produce "looks good to me!" for almost anything — useless as a reviewer. The **system prompt** is what turns a general-purpose chat model into a reviewer that behaves consistently: what to look for, what to ignore, and what shape its answer should take.
+A language model with no instructions will happily produce "looks good to me!" for almost anything, useless as a reviewer. The **system prompt** is what turns a general-purpose chat model into a reviewer that behaves consistently: what to look for, what to ignore, and what shape its answer should take.
 
 ### 2.1 Write the system prompt
 
@@ -229,11 +229,11 @@ found, because ..." paragraph), not prose paragraphs.
 
 Three deliberate design choices worth noticing:
 
-- **"Review ONLY what the diff actually changes"** stops the model from inventing plausible-sounding complaints about code it can't actually see — a diff shows changed lines plus a little surrounding context, not the whole file.
+- **"Review ONLY what the diff actually changes"** stops the model from inventing plausible-sounding complaints about code it can't actually see, a diff shows changed lines plus a little surrounding context, not the whole file.
 - **A required structure** (file, category, severity, explanation, fix) is what turns free-form chat into something you can actually act on quickly, the same reason a human reviewer's "LGTM with two comments" is more useful than a paragraph of vague impressions.
-- **An explicit instruction to say when nothing's wrong** exists because models tend toward being agreeable — without this line, some models manufacture minor nitpicks just to seem thorough, which trains you to stop trusting the tool's output.
+- **An explicit instruction to say when nothing's wrong** exists because models tend toward being agreeable, without this line, some models manufacture minor nitpicks just to seem thorough, which trains you to stop trusting the tool's output.
 
-**👟 Starter hint:** Read your `SYSTEM_PROMPT` back and check that it names all three choices — the "only what the diff changes" scope, the required per-issue structure, and the explicit no-issues clause.
+**👟 Starter hint:** Read your `SYSTEM_PROMPT` back and check that it names all three choices, the "only what the diff changes" scope, the required per-issue structure, and the explicit no-issues clause.
 
 **🎯 Expected output:** You can explain in your own words why the prompt tells the model to say when it finds nothing wrong, and confirm the prompt specifies a concrete output structure rather than just "give feedback."
 
@@ -242,14 +242,14 @@ Three deliberate design choices worth noticing:
 ### 2.3 Iterate on the prompt
 
 :::tip[Iterate on the prompt like you would on code]
-Treat this system prompt as a first draft, not a finished spec. Run it against a diff you already know has a specific bug in it — if the model misses it, or the response format drifts, tighten the wording and try again. Prompt engineering for a focused task like this is closer to writing a very precise spec than "asking nicely."
+Treat this system prompt as a first draft, not a finished spec. Run it against a diff you already know has a specific bug in it, if the model misses it, or the response format drifts, tighten the wording and try again. Prompt engineering for a focused task like this is closer to writing a very precise spec than "asking nicely."
 :::
 
-**👟 Starter hint:** Take a diff you know contains a deliberate bug and run it through your prompt — check whether the model catches it and whether the output format holds.
+**👟 Starter hint:** Take a diff you know contains a deliberate bug and run it through your prompt, check whether the model catches it and whether the output format holds.
 
 **🎯 Expected output:** The model flags the known bug and sticks to the requested format; if it misses it or drifts, you've identified exactly which wording to tighten.
 
-**🩹 If it's off:** If the model consistently misses the bug, don't blame randomness — tighten the "Focus on" list or add a targeted instruction, then re-run. Iterating here is the whole point of the tip.
+**🩹 If it's off:** If the model consistently misses the bug, don't blame randomness, tighten the "Focus on" list or add a targeted instruction, then re-run. Iterating here is the whole point of the tip.
 
 ### 2.4 Verify the prompt
 
@@ -269,7 +269,7 @@ Wire the diff-capturing code from Step 1 and the system prompt from Step 2 toget
 
 ### 3.1 Write `review_diff` and `truncate_diff`
 
-**👟 Starter hint:** Extend `review.py` with `truncate_diff(diff)` (which caps oversized diffs to fit a free-tier context window) and `review_diff(diff)` — the function that sends the system prompt plus the diff to the model and returns the review. Guard the empty-diff case *before* building the client.
+**👟 Starter hint:** Extend `review.py` with `truncate_diff(diff)` (which caps oversized diffs to fit a free-tier context window) and `review_diff(diff)`, the function that sends the system prompt plus the diff to the model and returns the review. Guard the empty-diff case *before* building the client.
 
 ```python
 # review.py (continued -- add these imports and functions)
@@ -313,11 +313,11 @@ if __name__ == "__main__":
     print(review_diff(diff))
 ```
 
-`truncate_diff` matters more here than it might first appear — see the pitfalls section below for why a large diff isn't just slow, it can silently fail or get a shallow review. Wrapping the diff in a fenced ` ```diff ` code block in the user message, rather than pasting it in raw, is a small but real signal to the model about what kind of text it's looking at.
+`truncate_diff` matters more here than it might first appear, see the pitfalls section below for why a large diff isn't just slow, it can silently fail or get a shallow review. Wrapping the diff in a fenced ` ```diff ` code block in the user message, rather than pasting it in raw, is a small but real signal to the model about what kind of text it's looking at.
 
 **🎯 Expected output:** With uncommitted changes, `review_diff(diff)` returns a numbered list of real issues (or a clear "no issues found" message). With an empty diff, it returns the fixed string without making any API call.
 
-**🩹 If it's off:** If an empty diff still hits the API, your early return isn't first — check the guard sits before the `OpenAI(...)` client is built. If a very large diff errors out or reviews shallowly, `truncate_diff`'s cap is what's keeping it within the context window; don't remove the cap for genuinely huge changes, review them in pieces instead.
+**🩹 If it's off:** If an empty diff still hits the API, your early return isn't first, check the guard sits before the `OpenAI(...)` client is built. If a very large diff errors out or reviews shallowly, `truncate_diff`'s cap is what's keeping it within the context window; don't remove the cap for genuinely huge changes, review them in pieces instead.
 
 ### 3.2 Run it and try a different provider
 
@@ -328,14 +328,14 @@ uv run python review.py
 ```
 
 :::tip[Using a different provider?]
-Swap the `OpenAI(...)` block for a different `base_url` and key — e.g. `base_url="https://api.groq.com/openai/v1"` with `api_key=os.environ["GROQ_API_KEY"]` for Groq, or `base_url="https://generativelanguage.googleapis.com/v1beta/openai/"` with `api_key=os.environ["GOOGLE_API_KEY"]` for Gemini's OpenAI-compatible endpoint. Everything else in this file stays the same. See [`examples/agentic-code-reviewer/review.py`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/agentic-code-reviewer/review.py) in the course repo for all six wired up side by side, selectable with one environment variable.
+Swap the `OpenAI(...)` block for a different `base_url` and key, e.g. `base_url="https://api.groq.com/openai/v1"` with `api_key=os.environ["GROQ_API_KEY"]` for Groq, or `base_url="https://generativelanguage.googleapis.com/v1beta/openai/"` with `api_key=os.environ["GOOGLE_API_KEY"]` for Gemini's OpenAI-compatible endpoint. Everything else in this file stays the same. See [`examples/agentic-code-reviewer/review.py`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/agentic-code-reviewer/review.py) in the course repo for all six wired up side by side, selectable with one environment variable.
 :::
 
 **👟 Starter hint:** Run `review.py` on a diff you know contains a problem and confirm it reports real issues. If you want another provider, only the `OpenAI(...)` block's `base_url` and key need to change.
 
 **🎯 Expected output:** `uv run python review.py` prints a numbered list of real issues (or a clear "no issues found" message) for a diff you know has changes in it, each issue naming a file and a category.
 
-**🩹 If it's off:** If output is a vague one-liner, the model ignored the requested structure — tighten the system prompt's format instructions. If switching providers fails to authenticate, the env var name in `.env` must match whichever key the new `base_url` expects.
+**🩹 If it's off:** If output is a vague one-liner, the model ignored the requested structure, tighten the system prompt's format instructions. If switching providers fails to authenticate, the env var name in `.env` must match whichever key the new `base_url` expects.
 
 ### 3.3 Verify the review call
 
@@ -347,7 +347,7 @@ Swap the `OpenAI(...)` block for a different `base_url` and key — e.g. `base_u
 
 **🤔 Socratic Question(s)**
 
-- `review_diff` returns early with a fixed string when the diff is empty, before ever building an `OpenAI` client. Why is that ordering — checking first, calling the API second — worth doing deliberately, rather than just letting an empty prompt go to the model?
+- `review_diff` returns early with a fixed string when the diff is empty, before ever building an `OpenAI` client. Why is that ordering, checking first, calling the API second, worth doing deliberately, rather than just letting an empty prompt go to the model?
 - If two different runs of `review_diff` on the *exact same* diff produced two different lists of issues, would that surprise you? What does that suggest about treating this tool's output as a checklist to blindly trust versus a starting point for a human review?
 
 ## Step 4: Run it against a real diff, end to end
@@ -362,7 +362,7 @@ Two realistic ways to use this tool, both worth trying.
 uv run python review.py
 ```
 
-**🎯 Expected output:** `review.py` prints real feedback about the change you just made, without any extra flags — that's the tool's default behavior.
+**🎯 Expected output:** `review.py` prints real feedback about the change you just made, without any extra flags, that's the tool's default behavior.
 
 **🩹 If it's off:** If it prints "No changes to review," you haven't made/kept any uncommitted edits for `diff HEAD` to see. If the feedback is empty, double-check the diff actually contains your change.
 
@@ -411,7 +411,7 @@ git log --oneline -10          # find a real commit hash to try
 uv run python review.py --commit <hash>
 ```
 
-You can also compare your current branch against another one, or pipe a diff in directly instead of letting the script run `git` itself — handy in a CI job that already has the diff as a file:
+You can also compare your current branch against another one, or pipe a diff in directly instead of letting the script run `git` itself, handy in a CI job that already has the diff as a file:
 
 ```bash
 uv run python review.py --against main
@@ -420,7 +420,7 @@ git diff main | uv run python review.py --stdin
 
 **🎯 Expected output:** `uv run python review.py --commit <a real hash>` prints real feedback about that commit's actual changes; `--against` and `--stdin` both produce sensible output on a repo with more than one branch.
 
-**🩹 If it's off:** If `--commit` errors, the hash is wrong or you're not in a clone with that commit. If `--against main` yields nothing, you have no commit after `main` (a brand-new branch or a fast-forward). If `--stdin` silently produces an empty review, nothing was piped in — pipe a real `git diff` into it.
+**🩹 If it's off:** If `--commit` errors, the hash is wrong or you're not in a clone with that commit. If `--against main` yields nothing, you have no commit after `main` (a brand-new branch or a fast-forward). If `--stdin` silently produces an empty review, nothing was piped in, pipe a real `git diff` into it.
 
 ### 4.3 Verify end to end
 
@@ -437,14 +437,14 @@ git diff main | uv run python review.py --stdin
 
 ## ⚠️ Common pitfalls
 
-- **Huge diffs blowing past the context window or free-tier token quota.** A multi-thousand-line diff (a big refactor, a vendored dependency bump) can exceed what the model can actually attend to, or simply exceed your free tier's per-request token limit and fail outright. `truncate_diff` in Step 3 caps this, but truncation means a partial review — for genuinely large changes, review it in smaller pieces (one file or one logical commit at a time) rather than trusting a truncated pass to have seen everything.
+- **Huge diffs blowing past the context window or free-tier token quota.** A multi-thousand-line diff (a big refactor, a vendored dependency bump) can exceed what the model can actually attend to, or simply exceed your free tier's per-request token limit and fail outright. `truncate_diff` in Step 3 caps this, but truncation means a partial review, for genuinely large changes, review it in smaller pieces (one file or one logical commit at a time) rather than trusting a truncated pass to have seen everything.
 - **Reviewing generated or vendored files.** A diff that touches `uv.lock`, a minified bundle, or an auto-generated migration file wastes tokens on text no human wrote or needs commentary on, and can drown out real feedback about the files that actually matter. Filter these out before calling `git diff` (e.g. `git diff -- . ':!uv.lock' ':!*.min.js'`) rather than sending everything.
-- **Over-trusting the AI review as a replacement for a human one.** This tool is a fast first pass, not a reviewer with full project context, team conventions, or the ability to ask you *why* you made a change. Treat its output the way you'd treat a very fast, slightly inexperienced colleague's comments — worth reading, not worth merging on alone.
-- **Not handling an empty or missing diff.** Running the tool with no uncommitted changes and no `--commit`/`--against` flag against a repo with nothing to compare will produce an empty diff — `review_diff`'s early return for empty input (Step 3) exists specifically so this doesn't turn into a wasted API call or a confusing empty response from the model.
+- **Over-trusting the AI review as a replacement for a human one.** This tool is a fast first pass, not a reviewer with full project context, team conventions, or the ability to ask you *why* you made a change. Treat its output the way you'd treat a very fast, slightly inexperienced colleague's comments, worth reading, not worth merging on alone.
+- **Not handling an empty or missing diff.** Running the tool with no uncommitted changes and no `--commit`/`--against` flag against a repo with nothing to compare will produce an empty diff, `review_diff`'s early return for empty input (Step 3) exists specifically so this doesn't turn into a wasted API call or a confusing empty response from the model.
 
 ## What you just built
 
-A real, working code-review CLI: it captures an actual git diff via `subprocess` — the same command you'd type by hand — and turns it into structured, actionable feedback from a free-tier LLM, guided by a system prompt engineered specifically for reviewing code rather than chatting generically. Nothing here is a toy simulation: point it at a real commit from this course's own history, or your own uncommitted work, and it reviews the actual text, not a canned example.
+A real, working code-review CLI: it captures an actual git diff via `subprocess`, the same command you'd type by hand, and turns it into structured, actionable feedback from a free-tier LLM, guided by a system prompt engineered specifically for reviewing code rather than chatting generically. Nothing here is a toy simulation: point it at a real commit from this course's own history, or your own uncommitted work, and it reviews the actual text, not a canned example.
 
 :::tip[Run a fuller version without any local setup]
 [`examples/agentic-code-reviewer/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/agentic-code-reviewer) in the course repo is a fuller version of the code above, with all six providers from the table wired up side by side (selected with one `LLM_PROVIDER` setting) and the `--against`/`--commit`/`--stdin` options from Step 4 already included. Clone it, or open the whole repo in a [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), and run it from there.
@@ -452,12 +452,12 @@ A real, working code-review CLI: it captures an actual git diff via `subprocess`
 
 ## Where to go from here
 
-- Add a `--severity-min` flag that filters the model's output down to only `Critical` and `Warning` issues — useful once you're running this on larger diffs and want to triage quickly rather than read every `Suggestion`.
-- Wire this into a pre-commit hook or a GitHub Actions job so every pull request in your own projects gets an automatic first-pass review comment — the `--stdin` option from Step 4 is exactly the shape a CI job needs (it already has the diff, generated another way).
-- Try comparing feedback across two different providers on the *same* diff — do they flag the same issues? Where do they disagree, and what does that tell you about relying on any single model's review as ground truth?
+- Add a `--severity-min` flag that filters the model's output down to only `Critical` and `Warning` issues, useful once you're running this on larger diffs and want to triage quickly rather than read every `Suggestion`.
+- Wire this into a pre-commit hook or a GitHub Actions job so every pull request in your own projects gets an automatic first-pass review comment, the `--stdin` option from Step 4 is exactly the shape a CI job needs (it already has the diff, generated another way).
+- Try comparing feedback across two different providers on the *same* diff, do they flag the same issues? Where do they disagree, and what does that tell you about relying on any single model's review as ground truth?
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

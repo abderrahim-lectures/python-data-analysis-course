@@ -101,7 +101,7 @@ Embarked        0.2%
 ...
 ```
 
-Cabin is 77% missing — too much to fill meaningfully. Age is 20% — worth attempting to fill. Embarked has only 2 missing — easy to handle.
+Cabin is 77% missing, too much to fill meaningfully. Age is 20%, worth attempting to fill. Embarked has only 2 missing, easy to handle.
 
 ## Dropping missing values
 
@@ -149,7 +149,7 @@ df["Embarked"] = df["Embarked"].fillna("S")   # most common port
 df["Age"] = df["Age"].fillna(df["Age"].median())
 ```
 
-**Fill forward or backward** — useful for time series:
+**Fill forward or backward**, useful for time series:
 
 ```python
 # Use the previous valid value to fill gaps
@@ -178,11 +178,11 @@ df = df.fillna(fill_values)
 
 ## Common pitfalls
 
-**Filling before splitting train/test** — this leaks information. Calculate fill values on training data only, then apply to both.
+**Filling before splitting train/test**, this leaks information. Calculate fill values on training data only, then apply to both.
 
-**Dropping too aggressively** — always check how many rows you lose. `dropna()` without arguments often removes far more than expected.
+**Dropping too aggressively**, always check how many rows you lose. `dropna()` without arguments often removes far more than expected.
 
-**Forgetting to check** — always run `df.isna().sum()` after filling to confirm no NaN values remain.
+**Forgetting to check**, always run `df.isna().sum()` after filling to confirm no NaN values remain.
 
 ## Try It
 

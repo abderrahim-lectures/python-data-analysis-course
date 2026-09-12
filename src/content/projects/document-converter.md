@@ -10,9 +10,9 @@ prerequisites: ["Python basics (variables, loops, functions, strings)", "Basic f
 
 # Document Converter
 
-Documents come in many formats—Markdown for writing, HTML for the web, plain text for quick sharing. Manually converting between them is tedious and error-prone. In this project, you will build a Python tool that reads Markdown files, converts them to HTML or plain text, extracts metadata from document headers, and processes entire directories in one command.
+Documents come in many formats,Markdown for writing, HTML for the web, plain text for quick sharing. Manually converting between them is tedious and error-prone. In this project, you will build a Python tool that reads Markdown files, converts them to HTML or plain text, extracts metadata from document headers, and processes entire directories in one command.
 
-- **Run it in your browser.** An interactive companion notebook is ready — open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
+- **Run it in your browser.** An interactive companion notebook is ready, open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/document-converter/notebook.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/document-converter/notebook.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fdocument-converter%2Fnotebook.ipynb)
@@ -226,7 +226,7 @@ if __name__ == "__main__":
 
 - **Bold not converting**: Make sure `**` patterns are processed before `*` patterns. Otherwise the italic regex will match the first `*` of `**` and break the bold pattern.
 - **Code blocks eating content**: The `re.DOTALL` flag lets `.` match newlines inside the code block. Without it, the regex only matches single-line code blocks.
-- **Lists not wrapping**: The list parser relies on consecutive lines starting with `- `. Blank lines between items break the group. That is fine for this project—each list block is handled separately.
+- **Lists not wrapping**: The list parser relies on consecutive lines starting with `- `. Blank lines between items break the group. That is fine for this project,each list block is handled separately.
 
 ### Checklist
 

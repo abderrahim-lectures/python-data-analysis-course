@@ -17,7 +17,7 @@ learningObjectives:
 
 # 🩺 Construire un Moniteur de Qualité des Données
 
-« Ne livre pas des données que tu n'as pas vérifiées » ne fonctionne que si vérifier est bon marché et répétable. Ce projet construit l'outil qui rend cela bon marché : un fichier de règles écrit en JSON, un moteur qui transforme chaque règle en une liste de lignes en violation, un score qui résume tout le fichier, une comparaison de dérive qui sonne l'alerte quand une colonne empire silencieusement entre les instantanés, et une CLI dont un script de build peut réellement agir sur le code de sortie. Le tout est `csv`, `dataclasses`, et `json` — pas de framework, pas de base de données, juste tes règles exécutées contre tes données.
+« Ne livre pas des données que tu n'as pas vérifiées » ne fonctionne que si vérifier est bon marché et répétable. Ce projet construit l'outil qui rend cela bon marché : un fichier de règles écrit en JSON, un moteur qui transforme chaque règle en une liste de lignes en violation, un score qui résume tout le fichier, une comparaison de dérive qui sonne l'alerte quand une colonne empire silencieusement entre les instantanés, et une CLI dont un script de build peut réellement agir sur le code de sortie. Le tout est `csv`, `dataclasses`, et `json`, pas de framework, pas de base de données, juste tes règles exécutées contre tes données.
 
 Ceci suppose Python 101 plus les `dataclasses` et `csv`. Rien du module Analyse de Données n'est nécessaire. C'est facultatif et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
@@ -31,11 +31,11 @@ Ceci suppose Python 101 plus les `dataclasses` et `csv`. Rien du module Analyse 
 
 ## Où exécuter ceci
 
-**En local avec `uv`** est le chemin recommandé — tout l'intérêt est la minuscule CLI qu'un script de build ou de cron peut appeler, et cela nécessite un vrai système de fichiers.
+**En local avec `uv`** est le chemin recommandé, tout l'intérêt est la minuscule CLI qu'un script de build ou de cron peut appeler, et cela nécessite un vrai système de fichiers.
 
 **GitHub Codespaces** est une alternative sans configuration : ouvre [tout le dépôt du cours dans un Codespace gratuit](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node et Python sont déjà installés) et exécute les mêmes commandes depuis un terminal navigateur.
 
-**Google Colab, Kaggle Notebooks ou Binder** fonctionnent pour chaque étape — le notebook dans [`examples/data-quality-monitor/notebook.fr.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-quality-monitor/notebook.fr.ipynb) exécute le même moteur de règles sur les instantanés trimestriels fournis en mémoire.
+**Google Colab, Kaggle Notebooks ou Binder** fonctionnent pour chaque étape, le notebook dans [`examples/data-quality-monitor/notebook.fr.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-quality-monitor/notebook.fr.ipynb) exécute le même moteur de règles sur les instantanés trimestriels fournis en mémoire.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-quality-monitor/notebook.fr.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-quality-monitor/notebook.fr.ipynb)
@@ -43,7 +43,7 @@ Ceci suppose Python 101 plus les `dataclasses` et `csv`. Rien du module Analyse 
 
 ## Configuration
 
-`uv` est un outil unique qui remplace toute la chaîne « install Python, puis pip, puis un outil d'environnement virtuel » — et ce projet est pure bibliothèque standard.
+`uv` est un outil unique qui remplace toute la chaîne « install Python, puis pip, puis un outil d'environnement virtuel », et ce projet est pure bibliothèque standard.
 
 **macOS / Linux** (terminal) :
 
@@ -74,11 +74,11 @@ cd data-quality-monitor
 
 - ✅ `uv --version` affiche un numéro de version.
 - ✅ `data-quality-monitor/` existe avec un `pyproject.toml`.
-- ✅ `python -c "import csv, json, dataclasses"` réussit — aucun paquet tiers.
+- ✅ `python -c "import csv, json, dataclasses"` réussit, aucun paquet tiers.
 
 ## Étape 1 : Modéliser une règle comme des données
 
-Une vérification de qualité est une petite chose : *quelle colonne*, *quelle vérification*, *sous quels paramètres*. Le moment où tu écris ces vérifications comme des `if` éparpillés dans des fonctions, tu as couplé « quoi vérifier » à « comment l'exécuter ». La dataclass `Rule` les découple — les règles deviennent des *données*, chargeables depuis JSON, pour que votre responsable ajoute une règle en modifiant un fichier, pas ton code.
+Une vérification de qualité est une petite chose : *quelle colonne*, *quelle vérification*, *sous quels paramètres*. Le moment où tu écris ces vérifications comme des `if` éparpillés dans des fonctions, tu as couplé « quoi vérifier » à « comment l'exécuter ». La dataclass `Rule` les découple, les règles deviennent des *données*, chargeables depuis JSON, pour que votre responsable ajoute une règle en modifiant un fichier, pas ton code.
 
 ### 1.1 Écris la dataclass `Rule`
 
@@ -116,7 +116,7 @@ if __name__ == "__main__":
     print(rule.name, "->", rule.check, rule.params)
 ```
 
-`from_dict` est l'astuce silencieuse : les règles en JSON sont écrites comme `{"name": ..., "column": ..., "check": ..., "min": ..., "max": ...}` et la méthode *liste blanche* les trois clés structurelles, balayant tout le reste dans `params` — donc une future clé `"description": "..."` tombe inoffensivement dans params au lieu de faire crasher le chargeur. Les annotations de type sur params (`dict[str, Any]`) couvrent le fait que `allowed` est une liste mais `min` est un flottant.
+`from_dict` est l'astuce silencieuse : les règles en JSON sont écrites comme `{"name": ..., "column": ..., "check": ..., "min": ..., "max": ...}` et la méthode *liste blanche* les trois clés structurelles, balayant tout le reste dans `params`, donc une future clé `"description": "..."` tombe inoffensivement dans params au lieu de faire crasher le chargeur. Les annotations de type sur params (`dict[str, Any]`) couvrent le fait que `allowed` est une liste mais `min` est un flottant.
 
 **🎯 Résultat attendu :**
 
@@ -124,7 +124,7 @@ if __name__ == "__main__":
 age in range -> within_range {'min': 0, 'max': 100}
 ```
 
-**🩹 Si ça ne marche pas :** Si params est vide, `data["name"]` etc. ne sont pas les seules clés — vérifie que tu n'as pas aussi mis `"params": {...}` *à l'intérieur* de la règle JSON (from_dict ne dé-emboîte pas un dict imbriqué ; il aplatit les clés sœurs). Si `Rule` lève `TypeError`, le champ de défaut `params` utilise `None` pas `field(default_factory=dict)` — toujours valide ici, mais tu passeras params explicitement partout, donc préfère cela.
+**🩹 Si ça ne marche pas :** Si params est vide, `data["name"]` etc. ne sont pas les seules clés, vérifie que tu n'as pas aussi mis `"params": {...}` *à l'intérieur* de la règle JSON (from_dict ne dé-emboîte pas un dict imbriqué ; il aplatit les clés sœurs). Si `Rule` lève `TypeError`, le champ de défaut `params` utilise `None` pas `field(default_factory=dict)`, toujours valide ici, mais tu passeras params explicitement partout, donc préfère cela.
 
 ### 1.2 Vérifie le modèle de règle
 
@@ -141,7 +141,7 @@ age in range -> within_range {'min': 0, 'max': 100}
 
 ## Étape 2 : Écris le moteur de vérification
 
-Le moteur est : *d'une règle et de toutes les lignes données, retourne les lignes en violation*. Chaque type de vérification est un prédicat étroit (`_fails`), et `rule_failures` parcourt les lignes en collectant les enregistrements `Violation` qui disent *quelle règle, quelle colonne, quel indice de ligne, quelle valeur*. Les violations sont des citoyens de première classe ici — pas des `print`, pas des `assert` — car le rapport, la dérive, et les étapes CLI les consomment toutes.
+Le moteur est : *d'une règle et de toutes les lignes données, retourne les lignes en violation*. Chaque type de vérification est un prédicat étroit (`_fails`), et `rule_failures` parcourt les lignes en collectant les enregistrements `Violation` qui disent *quelle règle, quelle colonne, quel indice de ligne, quelle valeur*. Les violations sont des citoyens de première classe ici, pas des `print`, pas des `assert`, car le rapport, la dérive, et les étapes CLI les consomment toutes.
 
 ### 2.1 Implémente `_fails` et `rule_failures`
 
@@ -194,7 +194,7 @@ if __name__ == "__main__":
         print(v.rule, "row", v.row_index, "->", repr(v.value))
 ```
 
-`unique` est le mouton à cinq pattes et vaut la peine d'être relu deux fois : il ne peut pas être décidé cellule par cellule, donc il compte chaque valeur de colonne parmi *toutes* les lignes, puis retourne « échec » pour toute valeur apparaissant plus d'une fois. La forme `{..., ...} > 1` est un test d'appartenance, pas une comparaison — `Counter` retourne le compte et 2 > 1 est le signal de doublon. Le `raise ValueError` pour les vérifications inconnues est délibéré : un nom de vérification avec une faute de frappe dans le fichier de règles doit échouer bruyamment au moment de la vérification, pas passer silencieusement chaque ligne.
+`unique` est le mouton à cinq pattes et vaut la peine d'être relu deux fois : il ne peut pas être décidé cellule par cellule, donc il compte chaque valeur de colonne parmi *toutes* les lignes, puis retourne « échec » pour toute valeur apparaissant plus d'une fois. La forme `{..., ...} > 1` est un test d'appartenance, pas une comparaison, `Counter` retourne le compte et 2 > 1 est le signal de doublon. Le `raise ValueError` pour les vérifications inconnues est délibéré : un nom de vérification avec une faute de frappe dans le fichier de règles doit échouer bruyamment au moment de la vérification, pas passer silencieusement chaque ligne.
 
 **🎯 Résultat attendu :**
 
@@ -203,7 +203,7 @@ age in range row 1 -> '101'
 age in range row 2 -> ''
 ```
 
-**🩹 Si ça ne marche pas :** Si la ligne 2 n'est pas attrapée, `float("")` a levé mais ton `except` n'attrape pas `ValueError` — `ValueError` et `TypeError` doivent tous deux être dans le tuple. Si chaque valeur est signalée comme doublon, le `Counter` dans `unique` est reconstruit par ligne au lieu d'une fois par règle — remonte-le hors de `_fails` ou repose-toi sur `rule_failures` qui passe la liste complète des lignes.
+**🩹 Si ça ne marche pas :** Si la ligne 2 n'est pas attrapée, `float("")` a levé mais ton `except` n'attrape pas `ValueError`, `ValueError` et `TypeError` doivent tous deux être dans le tuple. Si chaque valeur est signalée comme doublon, le `Counter` dans `unique` est reconstruit par ligne au lieu d'une fois par règle, remonte-le hors de `_fails` ou repose-toi sur `rule_failures` qui passe la liste complète des lignes.
 
 ### 2.2 Vérifie le moteur
 
@@ -216,12 +216,12 @@ age in range row 2 -> ''
 
 **🤔 Question(s) socratique(s)**
 
-- `within_range` retourne `True` (échec) pour les nombres non analysables comme `"abc"`. Une valeur ordures est-elle une violation de *plage* ou une violation de *format* — et qu'arrive-t-il au score d'une colonne si les deux sont en désaccord ?
-- `unique` compte `str(value)` tandis que `in_set` compare des valeurs brutes. Que font `"1"` vs `1` (chaîne contre entier) à chaque vérification — quand `unique` appellerait-il deux valeurs apparemment différentes des doublons ?
+- `within_range` retourne `True` (échec) pour les nombres non analysables comme `"abc"`. Une valeur ordures est-elle une violation de *plage* ou une violation de *format*, et qu'arrive-t-il au score d'une colonne si les deux sont en désaccord ?
+- `unique` compte `str(value)` tandis que `in_set` compare des valeurs brutes. Que font `"1"` vs `1` (chaîne contre entier) à chaque vérification, quand `unique` appellerait-il deux valeurs apparemment différentes des doublons ?
 
 ## Étape 3 : Agréger en un rapport et un score
 
-Les violations sont la preuve ; un score est le verdict. Le rapport transforme 5 lignes × 4 règles en une ligne par règle — taux de réussite et compte de lignes en échec — et le score moyenne les taux de réussite. Un unique `0.80 / 1.00` est ce qu'un humain ou un journal de build peut analyser d'un coup d'œil et comparer au trimestre dernier.
+Les violations sont la preuve ; un score est le verdict. Le rapport transforme 5 lignes × 4 règles en une ligne par règle, taux de réussite et compte de lignes en échec, et le score moyenne les taux de réussite. Un unique `0.80 / 1.00` est ce qu'un humain ou un journal de build peut analyser d'un coup d'œil et comparer au trimestre dernier.
 
 ### 3.1 Écris `QualityReport` et `render`
 
@@ -285,7 +285,7 @@ if __name__ == "__main__":
     print(render(build_report(rows, rules)))
 ```
 
-La moyenne est *non pondérée par conception* : quatre règles, quatre taux de réussite, voix égale. `pass_rate` utilise `max(self.n_rows, 1)` pour qu'un fichier *vide* score chaque règle à 0 % (toutes les zéro lignes échouent, c'est la lecture honnête) au lieu de crasher sur une division par zéro. Le préfixe `[FAIL]`/`[PASS]` et le formatage `:.1%` sont toute l'UX du rapport — une colonne qui score 80 % ou une dérive de −13,3 % doit être visible en un scan, pas après avoir compté des étoiles.
+La moyenne est *non pondérée par conception* : quatre règles, quatre taux de réussite, voix égale. `pass_rate` utilise `max(self.n_rows, 1)` pour qu'un fichier *vide* score chaque règle à 0 % (toutes les zéro lignes échouent, c'est la lecture honnête) au lieu de crasher sur une division par zéro. Le préfixe `[FAIL]`/`[PASS]` et le formatage `:.1%` sont toute l'UX du rapport, une colonne qui score 80 % ou une dérive de −13,3 % doit être visible en un scan, pas après avoir compté des étoiles.
 
 **🎯 Résultat attendu :**
 
@@ -298,7 +298,7 @@ checked 5 rows against 4 rules
 overall quality score: 0.80 / 1.00
 ```
 
-**🩹 Si ça ne marche pas :** Si `age in range` montre 80 % au lieu de 60 %, le `''` vide de la ligne 3 n'est pas compté — `float('')` qui lève est géré, mais vérifie que la clause `except (TypeError, ValueError)` retourne `True` (échec) ; si elle `pass`ait, la cellule vide tombe à travers vers la comparaison de plage et passe silencieusement. Si la ligne de score est 1.00, la méthode `score` moyenne autre chose que tes règles — confirme que `len(self.rules)` divise *quatre* taux de réussite.
+**🩹 Si ça ne marche pas :** Si `age in range` montre 80 % au lieu de 60 %, le `''` vide de la ligne 3 n'est pas compté, `float('')` qui lève est géré, mais vérifie que la clause `except (TypeError, ValueError)` retourne `True` (échec) ; si elle `pass`ait, la cellule vide tombe à travers vers la comparaison de plage et passe silencieusement. Si la ligne de score est 1.00, la méthode `score` moyenne autre chose que tes règles, confirme que `len(self.rules)` divise *quatre* taux de réussite.
 
 ### 3.2 Vérifie le rapport
 
@@ -310,12 +310,12 @@ overall quality score: 0.80 / 1.00
 
 **🤔 Question(s) socratique(s)**
 
-- Le score est une simple moyenne. Une colonne échouant 40 % du temps et une colonne échouant 10 % du temps pèsent toutes deux sur la moyenne de leur propre poids. Quel type de score *pondéré* voudraient un tableau de bord d'hôpital ou un système de paie — et `render` a-t-il encore du sens, ou diviserais-tu le rapport en niveaux ?
-- `PASS` exige exactement 100 %. Deux équipes de qualité des données divergent sur le fait qu'une couverture email de 99,5 % devrait être verte. Où appartient le seuil de passage — dans `render` ou dans le score ?
+- Le score est une simple moyenne. Une colonne échouant 40 % du temps et une colonne échouant 10 % du temps pèsent toutes deux sur la moyenne de leur propre poids. Quel type de score *pondéré* voudraient un tableau de bord d'hôpital ou un système de paie, et `render` a-t-il encore du sens, ou diviserais-tu le rapport en niveaux ?
+- `PASS` exige exactement 100 %. Deux équipes de qualité des données divergent sur le fait qu'une couverture email de 99,5 % devrait être verte. Où appartient le seuil de passage, dans `render` ou dans le score ?
 
 ## Étape 4 : Détecter la dérive entre les instantanés
 
-Un fichier propre isolé est agréable ; une colonne qui se *salit* est l'urgence. La dérive compare le taux de réussite de chaque règle entre des fichiers d'instantanés consécutifs et signale toute colonne dont le taux a baissé de plus d'un seuil (5 points) avec le marqueur `  <-- regression` — pour qu'un build puisse appeler la personne qui possède `email present`.
+Un fichier propre isolé est agréable ; une colonne qui se *salit* est l'urgence. La dérive compare le taux de réussite de chaque règle entre des fichiers d'instantanés consécutifs et signale toute colonne dont le taux a baissé de plus d'un seuil (5 points) avec le marqueur `  <-- regression`, pour qu'un build puisse appeler la personne qui possède `email present`.
 
 ### 4.1 Écris le comparateur
 
@@ -393,7 +393,7 @@ if __name__ == "__main__":
         print(line)
 ```
 
-La ligne de base est le *premier* fichier par position dans la liste — comparant les taux de réussite à l'instantané immédiatement précédent (q2 vs q1, q3 vs q2), pas toujours à q1. C'est l'honnête question « le dernier envoi de cette équipe était-il pire que le précédent » ; tout comparer à q1 répondrait « est-ce pire qu'il y a trois mois », une différence (toujours valide) de graphique. Le formatage de delta `%(+...%)` rend l'ambiguïté de signe +/− impossible à lire à l'envers.
+La ligne de base est le *premier* fichier par position dans la liste, comparant les taux de réussite à l'instantané immédiatement précédent (q2 vs q1, q3 vs q2), pas toujours à q1. C'est l'honnête question « le dernier envoi de cette équipe était-il pire que le précédent » ; tout comparer à q1 répondrait « est-ce pire qu'il y a trois mois », une différence (toujours valide) de graphique. Le formatage de delta `%(+...%)` rend l'ambiguïté de signe +/− impossible à lire à l'envers.
 
 **🎯 Résultat attendu :**
 
@@ -415,7 +415,7 @@ La ligne de base est le *premier* fichier par position dans la liste — compara
    plan valid       100.0% (+0.0%)
 ```
 
-**🩹 Si ça ne marche pas :** Si aucun marqueur `regression` n'apparaît jamais, `threshold` (défaut `0.05`) est comparé au mauvais signe — une *baisse* est `delta < -threshold`, donc vérifie le moins. Si la baisse d'email de q2 apparaît comme `+13.3%`, le delta est calculé `prev - rate` au lieu de `rate - prev` — signe, inversé.
+**🩹 Si ça ne marche pas :** Si aucun marqueur `regression` n'apparaît jamais, `threshold` (défaut `0.05`) est comparé au mauvais signe, une *baisse* est `delta < -threshold`, donc vérifie le moins. Si la baisse d'email de q2 apparaît comme `+13.3%`, le delta est calculé `prev - rate` au lieu de `rate - prev`, signe, inversé.
 
 ### 4.2 Vérifie la dérive
 
@@ -427,12 +427,12 @@ La ligne de base est le *premier* fichier par position dans la liste — compara
 
 **🤔 Question(s) socratique(s)**
 
-- Le seuil (5 points) est le même pour toutes les règles. `email present` qui chute de 13,3 points déclenche le drapeau ; `age in range` qui monte de 6,7 points est un succès. Quel type de règle mérite un seuil *par règle* — et où vivrait-il dans la signature de `compare` sans changer l'API ?
-- La dérive compare taux-à-taux, ignorant le *volume* (q2 vérifie 3 lignes, q1 en vérifiait 5). Un signal de régression d'une seule ligne depuis un fichier de 3 lignes est statistiquement faible. À quoi ressemblerait une comparaison pondérée par confiance — et quand « signale tout, vérifie à la main » est-il de toute façon le choix pragmatique ?
+- Le seuil (5 points) est le même pour toutes les règles. `email present` qui chute de 13,3 points déclenche le drapeau ; `age in range` qui monte de 6,7 points est un succès. Quel type de règle mérite un seuil *par règle*, et où vivrait-il dans la signature de `compare` sans changer l'API ?
+- La dérive compare taux-à-taux, ignorant le *volume* (q2 vérifie 3 lignes, q1 en vérifiait 5). Un signal de régression d'une seule ligne depuis un fichier de 3 lignes est statistiquement faible. À quoi ressemblerait une comparaison pondérée par confiance, et quand « signale tout, vérifie à la main » est-il de toute façon le choix pragmatique ?
 
 ## Étape 5 : La CLI et le code de sortie
 
-Le moteur est terminé ; la partie qui change la façon dont une équipe *contracte* avec l'outil est le code de sortie. `monitor.py` lit un CSV et un fichier de règles, affiche le rapport, et sort `0` si tout a réussi ou `2` si quoi que ce soit a échoué — une étape CI ou un script cron peut traiter non-nul comme « bloque le déploiement / appelle le propriétaire » sans analyser une seule ligne de sortie.
+Le moteur est terminé ; la partie qui change la façon dont une équipe *contracte* avec l'outil est le code de sortie. `monitor.py` lit un CSV et un fichier de règles, affiche le rapport, et sort `0` si tout a réussi ou `2` si quoi que ce soit a échoué, une étape CI ou un script cron peut traiter non-nul comme « bloque le déploiement / appelle le propriétaire » sans analyser une seule ligne de sortie.
 
 ### 5.1 Écris `monitor.py`
 
@@ -474,28 +474,28 @@ if __name__ == "__main__":
 - ✅ `echo $?` montre `2` pour customers_q1.csv (score 0.80) ; un fichier propre sort avec `0`.
 - ✅ `--rules` honore un chemin personnalisé (ex. `uv run python monitor.py data.csv --rules my-rules.json`).
 
-Le score est la seule chose que le code de sortie connaît, et c'est une vraie décision de conception. « Porte de qualité » signifie *le score doit être exactement 1.00* — le plus strict possible. Si tu préfères porter la porte sur « pire que 0.95 », tu changes une constante ; le rapport, le moteur, et le contrat CLI restent en place.
+Le score est la seule chose que le code de sortie connaît, et c'est une vraie décision de conception. « Porte de qualité » signifie *le score doit être exactement 1.00*, le plus strict possible. Si tu préfères porter la porte sur « pire que 0.95 », tu changes une constante ; le rapport, le moteur, et le contrat CLI restent en place.
 
 ### 5.2 Vérifie la CLI de bout en bout
 
-**🩹 Si ça ne marche pas :** Si `sys.exit(2)` semble ne rien faire, souviens-toi que l'aide/les versions d'`argparse` sortent avec leurs propres codes avant que `main()` n'atteigne même la porte — et une exécution `--help` rapportant 0 est correcte. Si le code de sortie est `1` au lieu de `2`, une exception s'est échappée de `main()` avant que la porte ne s'exécute — lis la traceback ; c'est un problème de chemin de fichier, pas un problème de porte.
+**🩹 Si ça ne marche pas :** Si `sys.exit(2)` semble ne rien faire, souviens-toi que l'aide/les versions d'`argparse` sortent avec leurs propres codes avant que `main()` n'atteigne même la porte, et une exécution `--help` rapportant 0 est correcte. Si le code de sortie est `1` au lieu de `2`, une exception s'est échappée de `main()` avant que la porte ne s'exécute, lis la traceback ; c'est un problème de chemin de fichier, pas un problème de porte.
 
 **🤔 Question(s) socratique(s)**
 
 - Le code de sortie ne connaît que réussite/échec ; le rapport connaît quelles règles ont dérivé. Pourquoi cette séparation est-elle *correcte* pour une porte CI, et que ton pipeline perdrait-il si la CLI affichait « score 0.80 » mais *sortait toujours* par 0 ?
-- `--rules rules.json` se définit sur un nom de fichier fixe. Qu'est-ce que `--rules` n'autorise *pas* qu'une équipe pourrait vouloir (règles par répertoire, écrasements par variable d'environnement) — et ces ajouts changeraient-ils le contrat de code de sortie ?
+- `--rules rules.json` se définit sur un nom de fichier fixe. Qu'est-ce que `--rules` n'autorise *pas* qu'une équipe pourrait vouloir (règles par répertoire, écrasements par variable d'environnement), et ces ajouts changeraient-ils le contrat de code de sortie ?
 
 ## ⚠️ Pièges courants
 
 - **Transformer le vide en succès.** `float("")` lève ; si ta clause `except` retourne `False` (réussite) ou re-lève silencieusement, les cellules blanches traversent `within_range`. Vide est un échec ; non analysable est un échec ; une exception non gérée n'est *pas* un résultat.
-- **`unique` qui recompte pour chaque ligne.** Construire le `Counter` à l'intérieur du prédicat par ligne transforme un fichier de 100k lignes en travail O(n²). Compte une fois par règle (ou accepte-le pour des données de démo) — et souviens-toi que `"1"` et `1` sont des chaînes différentes.
+- **`unique` qui recompte pour chaque ligne.** Construire le `Counter` à l'intérieur du prédicat par ligne transforme un fichier de 100k lignes en travail O(n²). Compte une fois par règle (ou accepte-le pour des données de démo), et souviens-toi que `"1"` et `1` sont des chaînes différentes.
 - **Inversions de signe dans les deltas de dérive.** `delta = rate - prev` signale correctement les baisses ; `prev - rate` signale les hausses. C'est un vidage d'un caractère de la crédibilité d'un rapport.
 - **Score `0/0`.** Un CSV vide doit scorer 0,00 à travers une garde `max(self.n_rows, 1)`, pas crasher dans une division par zéro. La question du fichier vide à se poser est « 0 ligne devrait-il être un échec ou un saut ».
-- **Dérive de code de sortie.** Un outil qui *affiche* SUCCÈS/ÉCHEC mais sort toujours par 0 est décoratif. Si tu embarques la porte dans un script, `cmd /c` (Windows) et le chaînage `&&` honorent tous deux le vrai code de sortie — choisis le code de sortie délibérément et teste-le.
+- **Dérive de code de sortie.** Un outil qui *affiche* SUCCÈS/ÉCHEC mais sort toujours par 0 est décoratif. Si tu embarques la porte dans un script, `cmd /c` (Windows) et le chaînage `&&` honorent tous deux le vrai code de sortie, choisis le code de sortie délibérément et teste-le.
 
 ## Ce que tu viens de construire
 
-Une suite de qualité des données autonome : des règles comme données JSON, un moteur de vérification avec des violations par ligne, un rapport scoré sur un écran, une comparaison de dérive instantané-à-instantané avec drapeaux de régression, et une CLI dont le code de sortie est une porte de déploiement. La compétence réutilisable est de *séparer le jugement de l'exécution* : des données `Rule` dans un fichier, un moteur dans `checks.py`, une présentation dans `render`, une décision dans un code de sortie — n'importe lequel peut changer (nouveau type de vérification, nouveau format de rapport, nouvelle règle de porte) sans toucher les trois autres.
+Une suite de qualité des données autonome : des règles comme données JSON, un moteur de vérification avec des violations par ligne, un rapport scoré sur un écran, une comparaison de dérive instantané-à-instantané avec drapeaux de régression, et une CLI dont le code de sortie est une porte de déploiement. La compétence réutilisable est de *séparer le jugement de l'exécution* : des données `Rule` dans un fichier, un moteur dans `checks.py`, une présentation dans `render`, une décision dans un code de sortie, n'importe lequel peut changer (nouveau type de vérification, nouveau format de rapport, nouvelle règle de porte) sans toucher les trois autres.
 
 :::tip[Exécute une version plus complète sans aucune configuration locale]
 [`examples/data-quality-monitor/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/data-quality-monitor) dans le dépôt du cours contient les scripts complets, les CSV d'instantanés trimestriels, et un `rules.json` d'échantillon. Ou ouvre tout le dépôt dans un [GitHub Codespaces](https://codespaces.new/abderrahim-lectures/python-data-analysis-course).
@@ -504,12 +504,12 @@ Une suite de qualité des données autonome : des règles comme données JSON, u
 ## Où aller à partir d'ici
 
 - Ajoute un drapeau CLI **`--threshold`** qui écrase le défaut de `compare`, répondant à la question socratique de l'Étape 4 sur la sensibilité par règle sans changer le moteur.
-- Émets un rapport **JSON** (`--json report.json`) aux côtés du rapport humain : même score, mêmes violations, lisible par machine — le frère verbeux du code de sortie.
+- Émets un rapport **JSON** (`--json report.json`) aux côtés du rapport humain : même score, mêmes violations, lisible par machine, le frère verbeux du code de sortie.
 - Ajoute des **comptes de volume par colonne** au tableau de dérive (3 lignes ce trimestre contre 5 le dernier) pour que les lecteurs humains puissent voir la *confiance* autant que le taux.
-- Prends en charge la **détection d'instantané périmé** : signale les instantanés dont la colonne d'horodatage `as_of` est plus vieille que N jours — la dérive se mesure dans le temps, pas seulement dans l'ordre des fichiers.
+- Prends en charge la **détection d'instantané périmé** : signale les instantanés dont la colonne d'horodatage `as_of` est plus vieille que N jours, la dérive se mesure dans le temps, pas seulement dans l'ordre des fichiers.
 
 ## Partage ton projet avec la classe
 
-Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres élèves — et son README a un tutoriel complet et adapté aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git avant : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable avec git n'est supposée.
+Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres élèves, et son README a un tutoriel complet et adapté aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git avant : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable avec git n'est supposée.
 
 Bienvenue dans l'écriture de Python en dehors du navigateur. 🎓

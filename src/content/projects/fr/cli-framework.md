@@ -10,7 +10,7 @@ prerequisites: ["Bases de Python (variables, boucles, fonctions, classes)", "Fam
 
 # Framework CLI
 
-Chaque outil Python sérieux vit sur la ligne de commande. Dans ce projet, tu construiras un framework CLI réutilisable de zéro — un gestionnaire de tâches avec des sous-commandes pour ajouter, lister, supprimer et rechercher des tâches. En chemin, tu apprendras comment `argparse` analyse les arguments, comment router les sous-commandes, comment colorer la sortie du terminal, comment valider les entrées, comment charger des paramètres depuis un fichier JSON, et comment afficher des barres de progression pour les opérations lentes. Pas de frameworks tiers comme Click ou Typer — juste la bibliothèque standard de Python et quelques lignes de conception soignée.
+Chaque outil Python sérieux vit sur la ligne de commande. Dans ce projet, tu construiras un framework CLI réutilisable de zéro, un gestionnaire de tâches avec des sous-commandes pour ajouter, lister, supprimer et rechercher des tâches. En chemin, tu apprendras comment `argparse` analyse les arguments, comment router les sous-commandes, comment colorer la sortie du terminal, comment valider les entrées, comment charger des paramètres depuis un fichier JSON, et comment afficher des barres de progression pour les opérations lentes. Pas de frameworks tiers comme Click ou Typer, juste la bibliothèque standard de Python et quelques lignes de conception soignée.
 
 Ce projet suppose que tu connais les bases de Python : variables, boucles, fonctions, classes et dictionnaires. Tu devrais aussi être à l'aise pour ouvrir un terminal et exécuter des scripts Python depuis la ligne de commande. C'est optionnel et non noté. Vois [Projets du monde réel](/fr/projets) pour la liste complète.
 
@@ -36,18 +36,18 @@ Un framework CLI qui :
 
 ## Où exécuter ceci
 
-- **En local avec `uv` (recommandé).** Les outils CLI ont besoin d'un vrai terminal — ce projet ne fonctionne pas dans les notebooks.
-- **Google Colab.** Limité — tu peux tester des fonctions individuelles, mais l'expérience CLI complète exige un terminal local.
+- **En local avec `uv` (recommandé).** Les outils CLI ont besoin d'un vrai terminal, ce projet ne fonctionne pas dans les notebooks.
+- **Google Colab.** Limité, tu peux tester des fonctions individuelles, mais l'expérience CLI complète exige un terminal local.
 - **JupyterLite.** Ne convient pas à l'exécution de CLI.
 
-- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt — ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
+- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt, ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/cli-framework/notebook.fr.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/cli-framework/notebook.fr.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fcli-framework%2Fnotebook.fr.ipynb)
 
 ## Configuration
 
-`uv` est un outil unique qui remplace la chaîne habituelle « installer Python, puis pip, puis un environnement virtuel » — il gère les versions de Python et les dépendances ensemble.
+`uv` est un outil unique qui remplace la chaîne habituelle « installer Python, puis pip, puis un environnement virtuel », il gère les versions de Python et les dépendances ensemble.
 
 **macOS / Linux** (terminal) :
 
@@ -74,7 +74,7 @@ uv init cli-framework
 cd cli-framework
 ```
 
-Aucun paquet tiers n'est nécessaire — tout dans ce projet utilise la bibliothèque standard de Python.
+Aucun paquet tiers n'est nécessaire, tout dans ce projet utilise la bibliothèque standard de Python.
 
 ## Étape 1 : Analyse les arguments avec argparse
 
@@ -84,7 +84,7 @@ Apprendre comment `argparse` lit la ligne de commande et convertit les chaînes 
 
 ### Explication
 
-Quand tu tapes `python task.py add "Buy milk" --priority high`, Python voit `sys.argv` comme la liste `["task.py", "add", "Buy milk", "--priority", "high"]`. `argparse` transforme cette liste en un objet nommé où tu peux accéder à `args.command == "add"`, `args.title == "Buy milk"` et `args.priority == "high"` — pas de découpage manuel de chaînes, pas d'erreurs d'index.
+Quand tu tapes `python task.py add "Buy milk" --priority high`, Python voit `sys.argv` comme la liste `["task.py", "add", "Buy milk", "--priority", "high"]`. `argparse` transforme cette liste en un objet nommé où tu peux accéder à `args.command == "add"`, `args.title == "Buy milk"` et `args.priority == "high"`, pas de découpage manuel de chaînes, pas d'erreurs d'index.
 
 Les deux concepts clés sont les **arguments positionnels** (obligatoires, identifiés par leur position) et les **arguments optionnels** (des drapeaux comme `--priority` qui ont des valeurs par défaut).
 
@@ -221,7 +221,7 @@ Pourquoi `argparse` gère-t-il automatiquement le drapeau `--help` ? Que devrais
 
 ### Objectif
 
-Étendre l'analyseur pour supporter plusieurs commandes — `add`, `list`, `remove`, `search` — chacune avec ses propres arguments, toutes routées via un point d'entrée unique.
+Étendre l'analyseur pour supporter plusieurs commandes, `add`, `list`, `remove`, `search`, chacune avec ses propres arguments, toutes routées via un point d'entrée unique.
 
 ### Explication
 
@@ -484,21 +484,21 @@ python task.py list
 - `python task.py remove 1` supprime la première tâche et confirme le titre.
 - `python task.py remove 99` affiche une erreur claire de dépassement de plage.
 - `python task.py search keyword` trouve les tâches dont les titres correspondent.
-- Les tâches persistent d'une commande à l'autre — ajoute-en trois, liste-les, et les trois apparaissent.
+- Les tâches persistent d'une commande à l'autre, ajoute-en trois, liste-les, et les trois apparaissent.
 
 ### Question socratique
 
-Pourquoi la fonction `load_tasks` retourne-t-elle une liste vide sur `FileNotFoundError` au lieu de planter ? Quel pattern de conception cela représente-t-il — et comment cela change-t-il l'expérience utilisateur quand l'utilisateur exécute l'outil pour la première fois ?
+Pourquoi la fonction `load_tasks` retourne-t-elle une liste vide sur `FileNotFoundError` au lieu de planter ? Quel pattern de conception cela représente-t-il, et comment cela change-t-il l'expérience utilisateur quand l'utilisateur exécute l'outil pour la première fois ?
 
 ## Étape 3 : Ajoute une sortie colorée
 
 ### Objectif
 
-Rendre la sortie du terminal visuellement distincte en enveloppant le texte dans des codes de couleur ANSI — pour que les priorités, les statuts et les erreurs soient instantanément reconnaissables.
+Rendre la sortie du terminal visuellement distincte en enveloppant le texte dans des codes de couleur ANSI, pour que les priorités, les statuts et les erreurs soient instantanément reconnaissables.
 
 ### Explication
 
-Les terminaux interprètent des séquences d'échappement spéciales comme des commandes de couleur. La séquence `\033[91m` dit au terminal de passer au texte rouge, et `\033[0m` rétablit la valeur par défaut. En enveloppant la sortie dans ces codes, tu fais apparaître les tâches à haute priorité en rouge, les tâches à basse priorité en sombre, et les messages de succès en vert — sans aucune bibliothèque tierce.
+Les terminaux interprètent des séquences d'échappement spéciales comme des commandes de couleur. La séquence `\033[91m` dit au terminal de passer au texte rouge, et `\033[0m` rétablit la valeur par défaut. En enveloppant la sortie dans ces codes, tu fais apparaître les tâches à haute priorité en rouge, les tâches à basse priorité en sombre, et les messages de succès en vert, sans aucune bibliothèque tierce.
 
 ### Indice de départ
 
@@ -650,7 +650,7 @@ Sur un terminal qui supporte les couleurs ANSI, « high » apparaît en rouge, �
 
 ### Dépannage
 
-**Les couleurs apparaissent comme des codes d'échappement bruts comme `[91m`.** Ton terminal n'interprète pas les codes ANSI. Essaie `export TERM=xterm-256color` avant d'exécuter. Sur Windows, utilise Windows Terminal ou PowerShell 7+ — l'ancien `cmd.exe` ne supporte pas ANSI par défaut.
+**Les couleurs apparaissent comme des codes d'échappement bruts comme `[91m`.** Ton terminal n'interprète pas les codes ANSI. Essaie `export TERM=xterm-256color` avant d'exécuter. Sur Windows, utilise Windows Terminal ou PowerShell 7+, l'ancien `cmd.exe` ne supporte pas ANSI par défaut.
 
 **Les couleurs apparaissent dans les fichiers mais pas dans le terminal.** Tu rediriges peut-être la sortie vers un fichier (`python task.py list > output.txt`). Les codes ANSI sont destinés aux terminaux interactifs uniquement. Si tu dois écrire dans des fichiers, retire les codes ou utilise un drapeau comme `--no-color`.
 
@@ -666,7 +666,7 @@ Sur un terminal qui supporte les couleurs ANSI, « high » apparaît en rouge, �
 - La confirmation de suppression `-` est rouge.
 - La ligne d'en-tête du tableau est en gras.
 - Le libellé de statut « open » est en cyan.
-- Exécuter `python task.py list > out.txt` produit un fichier sans séquences d'échappement si la sortie passe par un outil qui les retire, ou avec les séquences d'échappement si le pipe les conserve — dans les deux cas, l'outil ne plante pas.
+- Exécuter `python task.py list > out.txt` produit un fichier sans séquences d'échappement si la sortie passe par un outil qui les retire, ou avec les séquences d'échappement si le pipe les conserve, dans les deux cas, l'outil ne plante pas.
 
 ### Question socratique
 
@@ -680,7 +680,7 @@ Rejeter les mauvaises entrées tôt avec des messages d'erreur clairs et actionn
 
 ### Explication
 
-La validation des entrées est la frontière entre l'erreur de l'utilisateur et l'échec du programme. Une tâche avec un titre vide, une priorité hors de l'ensemble autorisé, ou une catégorie avec des caractères spéciaux devrait être attrapée *avant* d'être sauvegardée. Le but est de produire des messages d'erreur qui disent exactement à l'utilisateur ce qui ne va pas et comment le corriger — pas de tracebacks, pas de corruption silencieuse.
+La validation des entrées est la frontière entre l'erreur de l'utilisateur et l'échec du programme. Une tâche avec un titre vide, une priorité hors de l'ensemble autorisé, ou une catégorie avec des caractères spéciaux devrait être attrapée *avant* d'être sauvegardée. Le but est de produire des messages d'erreur qui disent exactement à l'utilisateur ce qui ne va pas et comment le corriger, pas de tracebacks, pas de corruption silencieuse.
 
 ### Indice de départ
 
@@ -823,7 +823,7 @@ python task.py add "Write documentation" --priority medium --category work
 
 **La validation passe mais les données sont corrompues.** Assure-toi que `validate_task_input` est appelée *avant* que la tâche soit ajoutée à la liste. Si tu valides après l'ajout, les mauvaises données sont déjà sauvegardées.
 
-**Le message d'erreur est coupé.** Si le titre est très long, le message d'erreur inclut le nombre de caractères. C'est intentionnel — il dit exactement à l'utilisateur de combien il doit le raccourcir.
+**Le message d'erreur est coupé.** Si le titre est très long, le message d'erreur inclut le nombre de caractères. C'est intentionnel, il dit exactement à l'utilisateur de combien il doit le raccourcir.
 
 **`strip()` retire des espaces utiles.** Si un utilisateur saisit intentionnellement un titre avec des espaces de tête, `strip()` les retire. C'est habituellement le bon comportement pour un titre de tâche, mais si tu dois préserver les espaces, retire les appels `.strip()` et documente la politique.
 
@@ -848,7 +848,7 @@ Pourquoi est-il préférable de valider l'entrée à la frontière (quand l'util
 
 ### Objectif
 
-Laisser les utilisateurs personnaliser le comportement par défaut — priorité par défaut, catégorie par défaut, préférences de couleur — en chargeant les paramètres depuis un fichier JSON.
+Laisser les utilisateurs personnaliser le comportement par défaut, priorité par défaut, catégorie par défaut, préférences de couleur, en chargeant les paramètres depuis un fichier JSON.
 
 ### Explication
 
@@ -1103,7 +1103,7 @@ python task.py config --show
 
 **Fichier de config introuvable sur Windows.** `Path.home()` retourne `C:\Users\YourName` sur Windows. Le chemin `~/.taskconfig.json` se traduit correctement, mais si tu exécutes dans un conteneur ou WSL, le dossier personnel peut différer. Affiche `config.path` pour voir le chemin réel.
 
-**La conversion de type échoue.** Si tu définis `default_priority` à `3` (une chaîne), elle reste une chaîne au lieu de devenir un entier. La logique de conversion vérifie le type de la valeur *par défaut* — si la valeur par défaut est une chaîne, la nouvelle valeur reste une chaîne. C'est intentionnel : tu ne peux pas changer un paramètre de type chaîne en entier via `--set`.
+**La conversion de type échoue.** Si tu définis `default_priority` à `3` (une chaîne), elle reste une chaîne au lieu de devenir un entier. La logique de conversion vérifie le type de la valeur *par défaut*, si la valeur par défaut est une chaîne, la nouvelle valeur reste une chaîne. C'est intentionnel : tu ne peux pas changer un paramètre de type chaîne en entier via `--set`.
 
 **Le fichier de config est écrasé à chaque sauvegarde.** La méthode `save` écrit tout le dictionnaire de paramètres. Si tu ajoutes manuellement des clés personnalisées, elles seront perdues à la prochaine sauvegarde. Seules les clés de `DEFAULT_SETTINGS` sont préservées.
 
@@ -1127,7 +1127,7 @@ Pourquoi le chargeur de config revient-il aux valeurs par défaut au lieu d'exig
 
 ### Objectif
 
-Afficher une barre de progression pour les opérations qui prennent du temps — chargement, filtrage ou travail simulé — pour que l'utilisateur sache que l'outil fait quelque chose plutôt que d'être bloqué.
+Afficher une barre de progression pour les opérations qui prennent du temps, chargement, filtrage ou travail simulé, pour que l'utilisateur sache que l'outil fait quelque chose plutôt que d'être bloqué.
 
 ### Explication
 
@@ -1412,20 +1412,20 @@ Remplace le formateur d'aide par défaut d'`argparse` pour produire un texte d'a
 
 ## Ce que tu viens de construire
 
-Un framework CLI réutilisable en Python pur : routage de sous-commandes avec `argparse`, sortie de terminal colorée grâce aux codes ANSI, validation des entrées avec des messages d'erreur clairs, prise en charge de fichiers de configuration JSON, et une barre de progression pour les opérations en masse. Chaque pièce n'utilise que la bibliothèque standard — pas de Click, pas de Typer, aucune dépendance tierce.
+Un framework CLI réutilisable en Python pur : routage de sous-commandes avec `argparse`, sortie de terminal colorée grâce aux codes ANSI, validation des entrées avec des messages d'erreur clairs, prise en charge de fichiers de configuration JSON, et une barre de progression pour les opérations en masse. Chaque pièce n'utilise que la bibliothèque standard, pas de Click, pas de Typer, aucune dépendance tierce.
 
-Les patterns ici s'étendent directement aux outils de production. Les sous-commandes `argparse` sont la façon dont `pip`, `git` et `docker` structurent leurs CLI. La validation des entrées à la frontière empêche les mauvaises données d'atteindre ta couche de stockage. Les fichiers de configuration séparent les préférences des utilisateurs du code. Les indicateurs de progression transforment les opérations opaques en opérations transparentes. Comprendre ces briques de base signifie que tu peux construire n'importe quel outil CLI — et savoir *pourquoi* chaque partie existe.
+Les patterns ici s'étendent directement aux outils de production. Les sous-commandes `argparse` sont la façon dont `pip`, `git` et `docker` structurent leurs CLI. La validation des entrées à la frontière empêche les mauvaises données d'atteindre ta couche de stockage. Les fichiers de configuration séparent les préférences des utilisateurs du code. Les indicateurs de progression transforment les opérations opaques en opérations transparentes. Comprendre ces briques de base signifie que tu peux construire n'importe quel outil CLI, et savoir *pourquoi* chaque partie existe.
 
 ## Où aller à partir d'ici
 
 - **Passe à Click ou Typer.** Maintenant que tu comprends les mécanismes bruts, explore comment les frameworks de plus haut niveau automatisent l'analyse des arguments, la validation et la génération d'aide. Tu apprécieras ce qu'ils font parce que tu l'as construit à la main.
 - **Ajoute un backend de base de données.** Remplace le fichier JSON par SQLite pour l'accès concurrent, les requêtes et une meilleure performance sur les grandes listes de tâches.
 - **Construis un système de plugins.** Charge des sous-commandes supplémentaires depuis des fichiers Python dans un dossier `plugins/`, comme dans la version originale de ce projet.
-- **Ajoute un mode interactif.** Une commande `task interactive` qui lit les commandes dans une boucle — comme un REPL — sans relancer le processus à chaque fois.
+- **Ajoute un mode interactif.** Une commande `task interactive` qui lit les commandes dans une boucle, comme un REPL, sans relancer le processus à chaque fois.
 - **Écris des tests.** Utilise `unittest` ou `pytest` pour tester chaque sous-commande en appelant directement les fonctions de gestion avec des espaces de noms `argparse` simulés.
 
 ## Partage ton projet avec la classe
 
-Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres élèves — et son README a un tutoriel complet et adapté aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git avant : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable avec git n'est supposée.
+Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres élèves, et son README a un tutoriel complet et adapté aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git avant : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable avec git n'est supposée.
 
 Bienvenue dans l'écriture de Python en dehors du navigateur.

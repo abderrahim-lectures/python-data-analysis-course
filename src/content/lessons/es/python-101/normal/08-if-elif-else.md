@@ -1,6 +1,6 @@
 ---
 title: "If / Elif / Else"
-description: "Ramifica tu código según condiciones — el fundamento de la toma de decisiones en Python."
+description: "Ramifica tu código según condiciones, el fundamento de la toma de decisiones en Python."
 module: "control-flow"
 order: 8
 difficulty: "beginner"
@@ -46,7 +46,7 @@ if score >= 60:
     print("Passing!")
 ```
 
-La sentencia comienza con `if`, luego la condición, luego dos puntos — los dos puntos son lo que le dice a Python que viene un bloque. Todo lo indentado bajo ellos pertenece a esa rama y corre solo si la condición se cumplió.
+La sentencia comienza con `if`, luego la condición, luego dos puntos, los dos puntos son lo que le dice a Python que viene un bloque. Todo lo indentado bajo ellos pertenece a esa rama y corre solo si la condición se cumplió.
 
 ## La horquilla doble
 
@@ -64,7 +64,7 @@ Una rama doble es una partición de los resultados: la condición divide el espa
 
 ## La horquilla múltiple: elif
 
-Las fórmulas a trozos reales tienen más de dos piezas. `elif` — una contracción de "else if" — añade más condiciones, comprobadas en orden y deteniéndose en la primera que sea `True`:
+Las fórmulas a trozos reales tienen más de dos piezas. `elif`, una contracción de "else if", añade más condiciones, comprobadas en orden y deteniéndose en la primera que sea `True`:
 
 ```python
 score = 78
@@ -79,11 +79,11 @@ else:
 print(grade)  # B
 ```
 
-Observa la economía: cada condición `elif` solo necesita una cota inferior, porque los casos de arriba ya están decididos. Con $s = 85$, la primera pieza falla y la segunda acierta — las ramas posteriores nunca corren. Solo **una** rama puede dispararse, lo que la convierte en una función de verdad.
+Observa la economía: cada condición `elif` solo necesita una cota inferior, porque los casos de arriba ya están decididos. Con $s = 85$, la primera pieza falla y la segunda acierta, las ramas posteriores nunca corren. Solo **una** rama puede dispararse, lo que la convierte en una función de verdad.
 
 ## Verosimilitud: valores como condiciones
 
-La condición tras `if` no tiene por qué ser una comparación. Python pregunta: *"¿este valor es verdadero o falso?"* — y la respuesta es uniforme:
+La condición tras `if` no tiene por qué ser una comparación. Python pregunta: *"¿este valor es verdadero o falso?"*, y la respuesta es uniforme:
 
 ```python
 # Todos estos son falsy — se comportan como False en una condición:
@@ -111,7 +111,7 @@ if items:
     print("We have items")
 ```
 
-Una cadena vacía es falsy, así que `not name` es `True`; una lista no vacía es truthy, así que `if items` dispara. Te ahorras el explícito `== ""` y `!= []` — la comprobación es el vacío mismo.
+Una cadena vacía es falsy, así que `not name` es `True`; una lista no vacía es truthy, así que `if items` dispara. Te ahorras el explícito `== ""` y `!= []`, la comprobación es el vacío mismo.
 
 ## Anidar: cuando una pregunta depende de otra
 
@@ -152,7 +152,7 @@ Se lee como la fórmula que es. El orden de los tramos importa: cada `elif` supo
 
 ## Errores comunes
 
-- **Olvidar los dos puntos** tras `if`, `elif` o `else` — sin ellos, el bloque nunca empieza.
+- **Olvidar los dos puntos** tras `if`, `elif` o `else`, sin ellos, el bloque nunca empieza.
 - **`=` en lugar de `==`.** `if score = 60` es un error de sintaxis, a propósito.
 - **Sobre-anidar** cuando una cadena `elif` (o un retorno temprano) expondría la forma de la fórmula de un solo vistazo.
 - **Gana el primer `True`, no la coincidencia más específica.** En `if x > 5: ... elif x > 3: ...`, un `x = 4` entra en la segunda rama solo porque la primera falló, y cualquier cosa menor a 3 cae al `else`. Ordenar los tramos de estrecho a ancho mantiene correcta la fórmula.
@@ -160,7 +160,7 @@ Se lee como la fórmula que es. El orden de los tramos importa: cada `elif` supo
 ## 🧩 Desafíos
 
 <details class="challenge">
-<summary>🧩 Desafío — piensa primero, luego revela</summary>
+<summary>🧩 Desafío, piensa primero, luego revela</summary>
 <div class="challenge__body">
 
 Escribe `classify_temp(temp)` que devuelva `"freezing"` bajo $0$, `"cold"` en $[0,15)$, `"warm"` en $[15,30)$ y `"hot"` desde $30$.
@@ -171,12 +171,12 @@ Escribe `classify_temp(temp)` que devuelva `"freezing"` bajo $0$, `"cold"` en $[
 </details>
 
 <details class="challenge">
-<summary>🧩 Desafío — piensa primero, luego revela</summary>
+<summary>🧩 Desafío, piensa primero, luego revela</summary>
 <div class="challenge__body">
 
 Con `text = "Hello, World!"`, imprime `"uppercase"` si el texto está todo en mayúsculas, `"lowercase"` si todo en minúsculas, `"mixed"` de lo contrario.
 
-<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>if text.isupper(): print("uppercase") elif text.islower(): print("lowercase") else: print("mixed")</code> — el conjunto completo de condiciones forma una partición.</p>
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>if text.isupper(): print("uppercase") elif text.islower(): print("lowercase") else: print("mixed")</code>, el conjunto completo de condiciones forma una partición.</p>
 
 </div>
 </details>

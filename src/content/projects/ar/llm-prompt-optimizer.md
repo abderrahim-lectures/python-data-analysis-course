@@ -20,7 +20,7 @@ description: "تحسين المطالبات تلقائياً باستخدام ا
 
 ## أين تُشغّل هذا
 
-**محليًا باستخدام `uv`** هو المسار الأساسي — هذه أداة CLI تعمل دون اتصال مقابل نموذج محاكاة.
+**محليًا باستخدام `uv`** هو المسار الأساسي ، هذه أداة CLI تعمل دون اتصال مقابل نموذج محاكاة.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/llm-prompt-optimizer/notebook.ar.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/llm-prompt-optimizer/notebook.ar.ipynb)
@@ -158,7 +158,7 @@ def build_role_based() -> PromptVariant:
 
 **🩹 إذا لم يعمل :**
 
-إذا بدت الصيغ متطابقة، فالبنية المحقونة لا تفعل شيئًا مفيدًا — وسّع الفروقات.
+إذا بدت الصيغ متطابقة، فالبنية المحقونة لا تفعل شيئًا مفيدًا ، وسّع الفروقات.
 
 ### 2.2 تحقّق من الصيغ
 
@@ -200,7 +200,7 @@ class MockModel:
         return "unknown"
 ```
 
-يُرجع المحاكي نتيجة الرياضيات عندما يظهر تعبير حسابي وحقائق من بحث صغير. إنه ساذج عن عمد — ذلك يكفي لإثبات التحسين.
+يُرجع المحاكي نتيجة الرياضيات عندما يظهر تعبير حسابي وحقائق من بحث صغير. إنه ساذج عن عمد ، ذلك يكفي لإثبات التحسين.
 
 **🎯 الناتج المتوقع :**
 
@@ -266,7 +266,7 @@ def evaluate_all(variants, model, gold: list[Question]) -> pd.DataFrame:
 
 **🩹 إذا لم يعمل :**
 
-إذا سجّلت كل الصيغ نفسها، فإجابات المحاكي لا تعتمد على بنية المطالبة — هذا مقبول للعرض، لكن أضف صيغة يستجيب لها المحاكي بشكل مختلف.
+إذا سجّلت كل الصيغ نفسها، فإجابات المحاكي لا تعتمد على بنية المطالبة ، هذا مقبول للعرض، لكن أضف صيغة يستجيب لها المحاكي بشكل مختلف.
 
 ### 4.2 تحقّق من التقييم
 
@@ -347,7 +347,7 @@ def optimize(out: str):
 
 ## ما بنيته للتو
 
-حلقة تحسين مطالبات: مجموعة بيانات ذهبية، ومولّدات صيغ برمجية (أمثلة قليلة، تفكير تسلسلي، قائمة على الدور)، ونموذج محاكاة دون اتصال، ومُقيِّم دقة، وCLI يرتّب الصيغ ويصدّر الأفضل. هذا هو الإصدار الآلي مما يفعله مهندسو المطالبات يدويًا — ويجعل العملية بأكملها قابلة للتكرار والقياس.
+حلقة تحسين مطالبات: مجموعة بيانات ذهبية، ومولّدات صيغ برمجية (أمثلة قليلة، تفكير تسلسلي، قائمة على الدور)، ونموذج محاكاة دون اتصال، ومُقيِّم دقة، وCLI يرتّب الصيغ ويصدّر الأفضل. هذا هو الإصدار الآلي مما يفعله مهندسو المطالبات يدويًا ، ويجعل العملية بأكملها قابلة للتكرار والقياس.
 
 :::tip[شغّل نسخة أكمل دون أي إعداد محلي]
 [`examples/llm-prompt-optimizer/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/llm-prompt-optimizer) في مستودع الدورة نسخة أغنى بمحولات نماذج حقيقية وتقييم كفاءة الرموز وواجهة CLI موصولة من البداية للنهاية. استنسخه، أو افتح المستودع كاملًا في [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course)، وشغّله من هناك.
@@ -361,6 +361,6 @@ def optimize(out: str):
 
 ## شارك مشروعك مع الصف
 
-بنيت شيئًا فخورًا به؟ [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) معرض لمشاريع طلاب آخرين قدَّموها — وملف README الخاص به يحتوي شرحًا كاملًا وودودًا للمبتدئين لإضافة مشروعك عبر **pull request**، حتى لو لم تستخدم git من قبل قط: عمل fork للمستودع، وإنشاء فرع، وتثبيت ملفاتك، وفتح الـ PR، خطوة بخطوة. لا يُفترَض أي خبرة سابقة بـ git.
+بنيت شيئًا فخورًا به؟ [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) معرض لمشاريع طلاب آخرين قدَّموها ، وملف README الخاص به يحتوي شرحًا كاملًا وودودًا للمبتدئين لإضافة مشروعك عبر **pull request**، حتى لو لم تستخدم git من قبل قط: عمل fork للمستودع، وإنشاء فرع، وتثبيت ملفاتك، وفتح الـ PR، خطوة بخطوة. لا يُفترَض أي خبرة سابقة بـ git.
 
 مرحبًا بك في كتابة Python خارج المتصفح. 🎓

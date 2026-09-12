@@ -23,14 +23,14 @@ prerequisites:
 
 Reutilizas la misma contraseña en todas partes porque inventar una nueva cada vez es tedioso. En este proyecto construirás una herramienta que hace la parte tediosa por ti: genera contraseñas fuertes, mide lo difíciles que son de descifrar, comprueba si ya han aparecido en una brecha de datos y las almacena en una bóveda cifrada que puedes desbloquear con una contraseña maestra.
 
-Este proyecto solo asume conceptos básicos de nivel Python 101 — funciones, listas, diccionarios, bucles y formato de cadenas. Sin frameworks, sin bases de datos, sin servicios en la nube. Todo lo que necesitas proviene de la biblioteca estándar más un pequeño paquete de cifrado.
+Este proyecto solo asume conceptos básicos de nivel Python 101, funciones, listas, diccionarios, bucles y formato de cadenas. Sin frameworks, sin bases de datos, sin servicios en la nube. Todo lo que necesitas proviene de la biblioteca estándar más un pequeño paquete de cifrado.
 
 Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
 
 ## 🎯 Lo que harás
 
 1. Generar contraseñas criptográficamente seguras con conjuntos de caracteres personalizables usando el módulo `secrets`.
-2. Analizar la fortaleza de las contraseñas calculando la entropía — la medida matemática de la imprevisibilidad.
+2. Analizar la fortaleza de las contraseñas calculando la entropía, la medida matemática de la imprevisibilidad.
 3. Comprobar contraseñas contra la base de datos de brechas Have I Been Pwned sin enviar nunca la contraseña completa (k-anonymity).
 4. Construir una bóveda cifrada que almacena credenciales protegidas por una contraseña maestra usando AES-256.
 5. Crear una interfaz CLI con `argparse` para que la herramienta funcione desde la línea de comandos.
@@ -39,18 +39,18 @@ Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/es/proyec
 
 ## Dónde ejecutar esto
 
-- **Localmente con `uv` (recomendado).** Este proyecto necesita un paquete de terceros (`cryptography`) para el cifrado — un buen candidato para ejecutar Python en tu propia máquina. La sección Configuración abajo lo recorre.
+- **Localmente con `uv` (recomendado).** Este proyecto necesita un paquete de terceros (`cryptography`) para el cifrado, un buen candidato para ejecutar Python en tu propia máquina. La sección Configuración abajo lo recorre.
 - **Playground de JupyterLite.** Pega los bloques de código en celdas y ejecútalos en el navegador. El paso de verificación de brechas necesita una conexión de red; el paso de la bóveda crea archivos en el almacenamiento efímero del navegador.
 - **Google Colab.** Haz clic en la insignia de Colab en la página del proyecto para ejecutarlo en un notebook en la nube. Ten en cuenta que los archivos de la bóveda creados en Colab no sobreviven entre sesiones.
 
-- **Ejecútalo en el navegador.** Hay un cuaderno interactivo listo — ábrelo en Colab, Kaggle o Binder y sigue los pasos en orden.
+- **Ejecútalo en el navegador.** Hay un cuaderno interactivo listo, ábrelo en Colab, Kaggle o Binder y sigue los pasos en orden.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/password-generator/notebook.es.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/password-generator/notebook.es.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fpassword-generator%2Fnotebook.es.ipynb)
 
 ## Configuración
 
-`uv` es una sola herramienta que reemplaza la cadena habitual de "instala Python, luego pip, luego un entorno virtual, luego paquetes" — gestiona versiones de Python y dependencias juntas.
+`uv` es una sola herramienta que reemplaza la cadena habitual de "instala Python, luego pip, luego un entorno virtual, luego paquetes", gestiona versiones de Python y dependencias juntas.
 
 **macOS / Linux** (terminal):
 
@@ -82,7 +82,7 @@ El módulo `secrets` viene con Python y proporciona números aleatorios criptogr
 
 ## Paso 1: Genera contraseñas seguras
 
-El primer bloque de construcción: una función que produce una contraseña aleatoria con exactamente los tipos de caracteres que quieres. La idea clave es *qué* módulo aleatorio usar — el módulo `random` de Python está diseñado para simulaciones, no para seguridad. Es determinista si conoces la semilla. El módulo `secrets` usa la fuente aleatoria real del sistema operativo y es la elección correcta para cualquier cosa relacionada con la seguridad.
+El primer bloque de construcción: una función que produce una contraseña aleatoria con exactamente los tipos de caracteres que quieres. La idea clave es *qué* módulo aleatorio usar, el módulo `random` de Python está diseñado para simulaciones, no para seguridad. Es determinista si conoces la semilla. El módulo `secrets` usa la fuente aleatoria real del sistema operativo y es la elección correcta para cualquier cosa relacionada con la seguridad.
 
 ### 1.1 Construye el conjunto de caracteres
 
@@ -149,7 +149,7 @@ Cada salida debería tener 20 caracteres y contener al menos una minúscula, una
 
 ### 1.2 Verifica las garantías
 
-**👟 Pista inicial :** Escribe una comprobación rápida que afirme que cada tipo de carácter está presente en la contraseña generada. Es una comprobación de cordura, no código de producción — solo confirma que tu lógica `required` funciona.
+**👟 Pista inicial :** Escribe una comprobación rápida que afirme que cada tipo de carácter está presente en la contraseña generada. Es una comprobación de cordura, no código de producción, solo confirma que tu lógica `required` funciona.
 
 ```python
 def verify_password(pw: str) -> bool:
@@ -169,7 +169,7 @@ for _ in range(100):
 print("All 100 passwords passed verification.")
 ```
 
-**🩹 Si sale mal :** Si falla una afirmación, el conjunto de tipos de caracteres probablemente está vacío para uno de los tipos. Comprueba que los bloques `if use_*` añadan cada uno a `charset` y a `required`. Si obtienes `ValueError: At least one character type must be selected`, los cuatro indicadores están en `False` — pasa `use_lowercase=True` como mínimo.
+**🩹 Si sale mal :** Si falla una afirmación, el conjunto de tipos de caracteres probablemente está vacío para uno de los tipos. Comprueba que los bloques `if use_*` añadan cada uno a `charset` y a `required`. Si obtienes `ValueError: At least one character type must be selected`, los cuatro indicadores están en `False`, pasa `use_lowercase=True` como mínimo.
 
 ### 1.3 Confirma la corrección
 
@@ -185,7 +185,7 @@ print("All 100 passwords passed verification.")
 
 ## Paso 2: Analiza la fortaleza de la contraseña
 
-Una cadena aleatoria solo es tan fuerte como el conjunto del que se obtuvo. La medida matemática es la **entropía** — el número de bits de información que un atacante necesitaría para adivinar la contraseña. Una contraseña obtenida de un conjunto de 70 caracteres, de 16 caracteres de largo, tiene log2(70^16) ≈ 97.4 bits de entropía. Ese es un número útil porque se traduce directamente en cuántos intentos necesita un atacante de fuerza bruta.
+Una cadena aleatoria solo es tan fuerte como el conjunto del que se obtuvo. La medida matemática es la **entropía**, el número de bits de información que un atacante necesitaría para adivinar la contraseña. Una contraseña obtenida de un conjunto de 70 caracteres, de 16 caracteres de largo, tiene log2(70^16) ≈ 97.4 bits de entropía. Ese es un número útil porque se traduce directamente en cuántos intentos necesita un atacante de fuerza bruta.
 
 ### 2.1 Calcula la entropía
 
@@ -226,7 +226,7 @@ print(calculate_entropy(generate_password(16)))  # random, full pool
 97.4
 ```
 
-La contraseña aleatoria de 16 caracteres puntúa alrededor de 97 bits — muy por encima del umbral de 80 bits que la mayoría de las guías de seguridad consideran "muy fuerte".
+La contraseña aleatoria de 16 caracteres puntúa alrededor de 97 bits, muy por encima del umbral de 80 bits que la mayoría de las guías de seguridad consideran "muy fuerte".
 
 ### 2.2 Mapea la entropía a etiquetas legibles
 
@@ -298,7 +298,7 @@ for pw in ["abc", "password123", generate_password(16), generate_password(24)]:
 
 La barra se llena proporcionalmente: un bloque por ~4 bits de entropía, con tope de 30 bloques para el ancho de la barra.
 
-**🩹 Si sale mal :** Si una contraseña claramente aleatoria muestra "Weak", comprueba que `calculate_entropy` detecte los cuatro conjuntos de caracteres. Un bug común es codificar la cadena de símbolos en lugar de reutilizar la constante `SYMBOLS` — si la cadena codificada difiere aunque sea en un carácter, la comprobación de símbolos pasa por alto silenciosamente algunas contraseñas. Si `entropy` es `NaN`, el `charset_size` es cero, lo que significa que `calculate_entropy` no encontró ninguno de los cuatro conjuntos — asegúrate de que la contraseña no esté vacía.
+**🩹 Si sale mal :** Si una contraseña claramente aleatoria muestra "Weak", comprueba que `calculate_entropy` detecte los cuatro conjuntos de caracteres. Un bug común es codificar la cadena de símbolos en lugar de reutilizar la constante `SYMBOLS`, si la cadena codificada difiere aunque sea en un carácter, la comprobación de símbolos pasa por alto silenciosamente algunas contraseñas. Si `entropy` es `NaN`, el `charset_size` es cero, lo que significa que `calculate_entropy` no encontró ninguno de los cuatro conjuntos, asegúrate de que la contraseña no esté vacía.
 
 ### 2.4 Verifica el análisis
 
@@ -314,7 +314,7 @@ La barra se llena proporcionalmente: un bloque por ~4 bits de entropía, con top
 
 ## Paso 3: Comprueba contra bases de datos de brechas
 
-Incluso una contraseña de alta entropía es inútil si ya apareció en una brecha de datos. La API Have I Been Pwned (HIBP) te permite comprobarlo — pero nunca deberías enviar tu contraseña real a un servidor de terceros. La solución es la **k-anonymity**: envías solo los primeros 5 caracteres del hash SHA-1 de la contraseña y recibes una lista de sufijos de hash coincidentes. Tu contraseña completa nunca abandona tu máquina.
+Incluso una contraseña de alta entropía es inútil si ya apareció en una brecha de datos. La API Have I Been Pwned (HIBP) te permite comprobarlo, pero nunca deberías enviar tu contraseña real a un servidor de terceros. La solución es la **k-anonymity**: envías solo los primeros 5 caracteres del hash SHA-1 de la contraseña y recibes una lista de sufijos de hash coincidentes. Tu contraseña completa nunca abandona tu máquina.
 
 ### 3.1 Entiende el protocolo de k-anonymity
 
@@ -324,7 +324,7 @@ El flujo funciona así:
 2. Envía los primeros 5 caracteres (`CBFDA`) a `https://api.pwnedpasswords.com/range/CBFDA`
 3. La API responde con miles de líneas, cada una siendo un sufijo de hash y un conteo: `C6008F9CAB4083784CBD1874F76618D2A97:42`
 4. Busca en la respuesta tu sufijo de hash completo (`C6008F9CAB4083784CBD1874F76618D2A97`). Si se encuentra, tu contraseña ha estado en `42` brechas.
-5. El servidor conoce solo un prefijo de 5 caracteres que coincide con millones de contraseñas posibles — no puede determinar qué contraseña específica estás comprobando.
+5. El servidor conoce solo un prefijo de 5 caracteres que coincide con millones de contraseñas posibles, no puede determinar qué contraseña específica estás comprobando.
 
 ### 3.2 Implementa el verificador de brechas
 
@@ -381,9 +381,9 @@ print(f"Fresh password: breached={is_breached}, count={count}")
 Fresh password: breached=False, count=0
 ```
 
-Una contraseña aleatoria recién generada nunca debería aparecer en la base de datos de brechas. Si lo hace, la fuente aleatoria está rota — vuelve al Paso 1 y confirma que estás usando `secrets`, no `random`.
+Una contraseña aleatoria recién generada nunca debería aparecer en la base de datos de brechas. Si lo hace, la fuente aleatoria está rota, vuelve al Paso 1 y confirma que estás usando `secrets`, no `random`.
 
-**🩹 Si sale mal :** Si obtienes `Breach check failed: ...`, tu red podría estar bloqueando la solicitud o la API está temporalmente caída — la función devuelve `False, 0` en caso de fallo para que la herramienta no se bloquee. Si obtienes `ConnectionError`, comprueba tu conexión a internet. Si obtienes `403`, la API limita la velocidad de las solicitudes — espera un momento e inténtalo de nuevo. Si una contraseña de brecha conocida como `"password123"` vuelve como no comprometida, comprueba que el hash SHA-1 esté en mayúsculas y que la comparación del sufijo sea exacta (sin espacios en blanco extra, sin necesidad de `.strip()` en el lado derecho del `split(":")`).
+**🩹 Si sale mal :** Si obtienes `Breach check failed: ...`, tu red podría estar bloqueando la solicitud o la API está temporalmente caída, la función devuelve `False, 0` en caso de fallo para que la herramienta no se bloquee. Si obtienes `ConnectionError`, comprueba tu conexión a internet. Si obtienes `403`, la API limita la velocidad de las solicitudes, espera un momento e inténtalo de nuevo. Si una contraseña de brecha conocida como `"password123"` vuelve como no comprometida, comprueba que el hash SHA-1 esté en mayúsculas y que la comparación del sufijo sea exacta (sin espacios en blanco extra, sin necesidad de `.strip()` en el lado derecho del `split(":")`).
 
 ### 3.3 Verifica el verificador de brechas
 
@@ -392,14 +392,14 @@ Una contraseña aleatoria recién generada nunca debería aparecer en la base de
 - `"password123"` devuelve `True` con un conteo en los millones.
 - `"123456"` devuelve `True` con un conteo muy alto.
 - Una contraseña recién generada del Paso 1 devuelve `False, 0`.
-- La función maneja errores de red con elegancia — sin traceback, solo una advertencia y `False, 0`.
+- La función maneja errores de red con elegancia, sin traceback, solo una advertencia y `False, 0`.
 - La contraseña completa nunca aparece en ninguna declaración print ni registro.
 
 **🤔 Pregunta(s) socrática(s) :** La API devuelve resultados para millones de hashes de contraseñas que comparten el mismo prefijo de 5 caracteres. Si el prefijo de tu contraseña es `CBFDA`, ¿de cuántas *otras* contraseñas le estás filtrando información al servidor al hacer la solicitud? ¿Por qué es aceptable en este diseño?
 
 ## Paso 4: Construye una bóveda cifrada
 
-Generar contraseñas fuertes es solo la mitad del valor — también necesitas almacenarlas en algún lugar. Escribirlas en un archivo de texto plano anula el propósito. En su lugar, cifraremos la bóveda con **AES-256** usando la implementación Fernet del paquete `cryptography`. La bóveda se descifra en tiempo de ejecución con una contraseña maestra que escribes una vez.
+Generar contraseñas fuertes es solo la mitad del valor, también necesitas almacenarlas en algún lugar. Escribirlas en un archivo de texto plano anula el propósito. En su lugar, cifraremos la bóveda con **AES-256** usando la implementación Fernet del paquete `cryptography`. La bóveda se descifra en tiempo de ejecución con una contraseña maestra que escribes una vez.
 
 ### 4.1 Deriva una clave de cifrado de la contraseña maestra
 
@@ -489,9 +489,9 @@ loaded_bad = load_vault("wrong-password")
 Wrong master password or corrupted vault.
 ```
 
-La contraseña incorrecta produce un dict vacío y un mensaje de error claro — sin traceback, sin bloqueo.
+La contraseña incorrecta produce un dict vacío y un mensaje de error claro, sin traceback, sin bloqueo.
 
-**🩹 Si sale mal :** Si obtienes `InvalidToken` con un traceback en lugar del mensaje amigable, el bloque `except Exception` no está capturando el error de Fernet. Comprueba que `from cryptography.fernet import Fernet` esté en la parte superior de tu archivo — si falta la importación, `Fernet` no está definido y el bloque `except` falla antes de poder manejar el error. Si el archivo de la bóveda siempre está vacío tras recargar, la conversión `str(vault)` podría estar produciendo algo que `eval()` no puede analizar — comprueba que el dict de la bóveda contenga solo cadenas, no objetos ni funciones.
+**🩹 Si sale mal :** Si obtienes `InvalidToken` con un traceback en lugar del mensaje amigable, el bloque `except Exception` no está capturando el error de Fernet. Comprueba que `from cryptography.fernet import Fernet` esté en la parte superior de tu archivo, si falta la importación, `Fernet` no está definido y el bloque `except` falla antes de poder manejar el error. Si el archivo de la bóveda siempre está vacío tras recargar, la conversión `str(vault)` podría estar produciendo algo que `eval()` no puede analizar, comprueba que el dict de la bóveda contenga solo cadenas, no objetos ni funciones.
 
 :::warning[eval() en producción es peligroso]
 `eval()` ejecuta código Python arbitrario. Esto es aceptable para un proyecto de aprendizaje personal donde controlas el archivo de la bóveda, pero en producción deberías usar `json.loads()` en lugar de `eval()` para la deserialización. El formato de la bóveda necesitaría usar tipos compatibles con JSON (sin tuplas, sin conjuntos, sin objetos personalizados).
@@ -515,7 +515,7 @@ La herramienta funciona en un shell de Python, pero las herramientas reales vive
 
 ### 5.1 Configura argparse
 
-**👟 Pista inicial :** Usa subcomandos con `add_subparsers` — uno para `generate`, uno para `check`, uno para `store`, uno para `list`. Cada subcomando obtiene sus propias banderas.
+**👟 Pista inicial :** Usa subcomandos con `add_subparsers`, uno para `generate`, uno para `check`, uno para `store`, uno para `list`. Cada subcomando obtiene sus propias banderas.
 
 ```python
 import argparse
@@ -639,7 +639,7 @@ python password_generator.py list --master "my-master-password"
   github          alice                     k7G!mP2xQ#nR9wL@jT4f
 ```
 
-**🩹 Si sale mal :** Si obtienes `error: the following arguments are required`, olvidaste pasar una bandera obligatoria (como `--master` o `-u`). Si obtienes `unrecognized arguments`, comprueba el orden del subcomando — `generate` viene antes de las banderas, no después. Si `generate` no imprime nada, `--count` podría estar puesto a 0. Si `list` muestra texto corrupto, tu bóveda se guardó con el formato `str()` de una versión diferente de Python — regenérala.
+**🩹 Si sale mal :** Si obtienes `error: the following arguments are required`, olvidaste pasar una bandera obligatoria (como `--master` o `-u`). Si obtienes `unrecognized arguments`, comprueba el orden del subcomando, `generate` viene antes de las banderas, no después. Si `generate` no imprime nada, `--count` podría estar puesto a 0. Si `list` muestra texto corrupto, tu bóveda se guardó con el formato `str()` de una versión diferente de Python, regenérala.
 
 ### 5.3 Verifica el CLI
 
@@ -743,7 +743,7 @@ def list_vault_with_expiry(vault: dict):
   1 password(s) older than 90 days. Rotate them.
 ```
 
-**🩹 Si sale mal :** Si todas las entradas muestran antigüedad "unknown", la clave `created_at` no se añadió durante el almacenamiento — vuelve a la función `store_credential` y asegúrate de que se esté llamando en lugar de construir el dict manualmente. Si el cálculo de antigüedad parece incorrecto, comprueba que `datetime.now()` y `datetime.fromisoformat()` usen la misma conciencia de zona horaria (ambos naive, o ambos aware — no los mezcles).
+**🩹 Si sale mal :** Si todas las entradas muestran antigüedad "unknown", la clave `created_at` no se añadió durante el almacenamiento, vuelve a la función `store_credential` y asegúrate de que se esté llamando en lugar de construir el dict manualmente. Si el cálculo de antigüedad parece incorrecto, comprueba que `datetime.now()` y `datetime.fromisoformat()` usen la misma conciencia de zona horaria (ambos naive, o ambos aware, no los mezcles).
 
 ### 6.4 Verifica el rastreador de caducidad
 
@@ -762,7 +762,7 @@ El texto crudo es funcional pero difícil de escanear. Añadir color a la salida
 
 ### 7.1 Añade códigos de color ANSI
 
-**👟 Pista inicial :** Define constantes de color usando secuencias de escape ANSI. Envuélvelas en texto solo para la salida de la terminal — no escribas códigos de escape en archivos.
+**👟 Pista inicial :** Define constantes de color usando secuencias de escape ANSI. Envuélvelas en texto solo para la salida de la terminal, no escribas códigos de escape en archivos.
 
 ```python
 class Color:
@@ -782,7 +782,7 @@ def colored(text: str, color: str) -> str:
 
 ### 7.2 Colorea la barra de fortaleza
 
-**👟 Pista inicial :** Actualiza `analyze_password` para colorear la barra según la etiqueta de fortaleza — rojo para débil, amarillo para moderada, verde para fuerte.
+**👟 Pista inicial :** Actualiza `analyze_password` para colorear la barra según la etiqueta de fortaleza, rojo para débil, amarillo para moderada, verde para fuerte.
 
 ```python
 def analyze_password_colored(password: str) -> dict:
@@ -872,7 +872,7 @@ print_report(passwords)
   Total:         5
 ```
 
-**🩹 Si sale mal :** Si los colores no aparecen, tu terminal podría no soportar códigos ANSI — prueba con `export TERM=xterm-256color` antes de ejecutar. Si ves secuencias de escape crudas como `[91m` en la salida, los caracteres de escape no se están interpretando — asegúrate de usar `\033[` (el carácter ESC real), no la cadena literal barra-cero-tres-tres.
+**🩹 Si sale mal :** Si los colores no aparecen, tu terminal podría no soportar códigos ANSI, prueba con `export TERM=xterm-256color` antes de ejecutar. Si ves secuencias de escape crudas como `[91m` en la salida, los caracteres de escape no se están interpretando, asegúrate de usar `\033[` (el carácter ESC real), no la cadena literal barra-cero-tres-tres.
 
 ### 7.5 Verifica la salida pulida
 
@@ -888,29 +888,29 @@ print_report(passwords)
 
 ## ⚠️ Errores comunes
 
-- **Usar `random` en lugar de `secrets`.** El módulo `random` es determinista y predecible. Para cualquier cosa relacionada con la seguridad — contraseñas, tokens, claves — usa siempre `secrets`. Esta es la decisión más importante de todo este proyecto.
+- **Usar `random` en lugar de `secrets`.** El módulo `random` es determinista y predecible. Para cualquier cosa relacionada con la seguridad, contraseñas, tokens, claves, usa siempre `secrets`. Esta es la decisión más importante de todo este proyecto.
 - **Olvidar mezclar los caracteres requeridos.** Si añades los caracteres requeridos primero y luego llenas el resto, los primeros caracteres son siempre uno de cada tipo en un orden fijo. Un prefijo como "aB1!" es un patrón que los atacantes saben comprobar primero. Mezcla siempre.
 - **Enviar la contraseña completa a la API de brechas.** El diseño de k-anonymity de HIBP existe específicamente para evitar esto. Solo los primeros 5 caracteres del hash SHA-1 deberían abandonar alguna vez tu máquina.
 - **Usar `eval()` en código de producción.** `eval()` ejecuta Python arbitrario. Para un proyecto de aprendizaje personal es una forma rápida de deserializar la bóveda, pero en producción usa `json.loads()` con un formato de bóveda compatible con JSON.
-- **Guardar la bóveda solo al salir.** Si el programa falla a mitad de sesión, se pierden los cambios sin guardar. Guarda después de cada mutación — la llamada a `save_vault` en `store` ya hace esto.
+- **Guardar la bóveda solo al salir.** Si el programa falla a mitad de sesión, se pierden los cambios sin guardar. Guarda después de cada mutación, la llamada a `save_vault` en `store` ya hace esto.
 - **Mezclar datetime con y sin zona horaria.** `datetime.now()` devuelve un datetime naive (sin zona horaria). Si lo comparas contra uno aware de `datetime.now(timezone.utc)`, obtendrás un `TypeError`. Mantenlos consistentes.
 
 ## Lo que acabas de construir
 
-Una herramienta completa de gestión de contraseñas en Python puro: generación de contraseñas criptográficamente seguras, análisis de fortaleza basado en entropía, detección de brechas contra una base de datos pública usando k-anonymity, una bóveda cifrada con AES-256, una interfaz de línea de comandos, seguimiento de caducidad de contraseñas y salida de terminal de colores. Cada pieza se construye sobre fundamentos de Python 101 — cadenas, listas, diccionarios, bucles, funciones — aplicados a un problema real que enfrentas todos los días.
+Una herramienta completa de gestión de contraseñas en Python puro: generación de contraseñas criptográficamente seguras, análisis de fortaleza basado en entropía, detección de brechas contra una base de datos pública usando k-anonymity, una bóveda cifrada con AES-256, una interfaz de línea de comandos, seguimiento de caducidad de contraseñas y salida de terminal de colores. Cada pieza se construye sobre fundamentos de Python 101, cadenas, listas, diccionarios, bucles, funciones, aplicados a un problema real que enfrentas todos los días.
 
 Los patrones de seguridad aquí aplican mucho más allá de las contraseñas: la k-anonymity se usa en datos de salud y privacidad de ubicación, el cifrado AES es el estándar para datos en reposo, y el cálculo de entropía es la base de todas las métricas de fortaleza. Entender *por qué* funcionan (no solo cómo llamarlos) es lo que separa un script de una herramienta en la que puedes confiar.
 
 ## A dónde ir desde aquí
 
-- **Usa un KDF real.** Reemplaza la derivación de clave SHA-256 por PBKDF2 (`cryptography.hazmat.primitives.kdf.pbkdf2`) o argon2 para resistencia a fuerza bruta. Un hash SHA-256 es rápido — un atacante puede probar miles de millones por segundo. PBKDF2 con 600,000 iteraciones lo ralentiza en un factor de 600,000.
+- **Usa un KDF real.** Reemplaza la derivación de clave SHA-256 por PBKDF2 (`cryptography.hazmat.primitives.kdf.pbkdf2`) o argon2 para resistencia a fuerza bruta. Un hash SHA-256 es rápido, un atacante puede probar miles de millones por segundo. PBKDF2 con 600,000 iteraciones lo ralentiza en un factor de 600,000.
 - **Añade un comando de copia al portapapeles.** Un subcomando `copy` que ponga una contraseña en el portapapeles y la borre después de 30 segundos es más práctico que imprimir a stdout.
-- **Implementa detección de reutilización de contraseñas.** Antes de almacenar una nueva credencial, comprueba si la contraseña ya aparece en otra entrada — una contraseña fuerte reutilizada sigue siendo un punto único de fallo.
+- **Implementa detección de reutilización de contraseñas.** Antes de almacenar una nueva credencial, comprueba si la contraseña ya aparece en otra entrada, una contraseña fuerte reutilizada sigue siendo un punto único de fallo.
 - **Añade formato de bóveda JSON.** Migra de `eval()`/`str()` a `json.dumps()`/`json.loads()` para interoperabilidad y seguridad. JSON no soporta tuplas ni conjuntos de Python, pero la bóveda solo necesita cadenas.
-- **Construye un comando `rotate`.** Genera una nueva contraseña para una entrada existente, actualiza la marca de tiempo y, opcionalmente, copia la nueva contraseña al portapapeles — todo en un comando.
+- **Construye un comando `rotate`.** Genera una nueva contraseña para una entrada existente, actualiza la marca de tiempo y, opcionalmente, copia la nueva contraseña al portapapeles, todo en un comando.
 
 ## Comparte tu proyecto con la clase
 
-¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado — y su README tiene un recorrido completo y amigable para principiantes sobre cómo agregar el tuyo vía un **pull request**, incluso si nunca has usado git antes: hacer fork del repositorio, crear una rama, confirmar tus archivos y abrir el PR, un paso a la vez. No se asume experiencia previa con git.
+¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado, y su README tiene un recorrido completo y amigable para principiantes sobre cómo agregar el tuyo vía un **pull request**, incluso si nunca has usado git antes: hacer fork del repositorio, crear una rama, confirmar tus archivos y abrir el PR, un paso a la vez. No se asume experiencia previa con git.
 
 Bienvenido a escribir Python fuera del navegador. 🎓

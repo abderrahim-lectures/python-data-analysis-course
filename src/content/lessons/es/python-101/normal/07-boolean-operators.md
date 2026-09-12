@@ -1,6 +1,6 @@
 ---
 title: "Operadores booleanos"
-description: "Combina condiciones con and, or, not — los conectores lógicos de Python."
+description: "Combina condiciones con and, or, not, los conectores lógicos de Python."
 module: "operators"
 order: 7
 difficulty: "beginner"
@@ -22,7 +22,7 @@ track: "normal"
 
 ## Construir condiciones a partir de condiciones
 
-Los operadores de comparación te entregan un solo valor de verdad: `True` o `False`. La puerta del club hace dos preguntas a la vez —*"¿eres mayor de edad y llevas entrada?"*— y esa conjunción es en sí misma una condición. Python, como la lógica que conociste en matemáticas, ofrece los tres conectivos que combinan proposiciones:
+Los operadores de comparación te entregan un solo valor de verdad: `True` o `False`. La puerta del club hace dos preguntas a la vez,*"¿eres mayor de edad y llevas entrada?"*, y esa conjunción es en sí misma una condición. Python, como la lógica que conociste en matemáticas, ofrece los tres conectivos que combinan proposiciones:
 
 - $A \land B$ se escribe `and`
 - $A \lor B$ se escribe `or`
@@ -57,7 +57,7 @@ if not is_weekend:
     print("Time to work")
 ```
 
-Cada una es una pregunta única ensamblada a partir de otras menores — exactamente como $0 \leq x < 10$ armaba intervalos en la lección anterior.
+Cada una es una pregunta única ensamblada a partir de otras menores, exactamente como $0 \leq x < 10$ armaba intervalos en la lección anterior.
 
 ## Evaluación de cortocircuito
 
@@ -71,14 +71,14 @@ x = 0
 result = x != 0 and 10 / x > 2
 ```
 
-Si Python evaluara ambos lados, $10/x$ se rompería por división entre cero. La palabra `and` es una compuerta de pre-vuelo: se niega a volar la segunda condición salvo que la primera la libere. Por eso Python escribe `and`/`or` donde las familias C escriben `&&`/`||` — las palabras llevan el mismo cortocircuito sin los símbolos crípticos.
+Si Python evaluara ambos lados, $10/x$ se rompería por división entre cero. La palabra `and` es una compuerta de pre-vuelo: se niega a volar la segunda condición salvo que la primera la libere. Por eso Python escribe `and`/`or` donde las familias C escriben `&&`/`||`, las palabras llevan el mismo cortocircuito sin los símbolos crípticos.
 
 ## Los dos intercambios de De Morgan
 
 Las identidades más reutilizables de la lógica cruzan una negación por encima de un conectivo:
 
-- $\neg(A \land B) \equiv (\neg A) \lor (\neg B)$ — `not (A and B)` ≡ `not A or not B`
-- $\neg(A \lor B) \equiv (\neg A) \land (\neg B)$ — `not (A or B)` ≡ `not A and not B`
+- $\neg(A \land B) \equiv (\neg A) \lor (\neg B)$, `not (A and B)` ≡ `not A or not B`
+- $\neg(A \lor B) \equiv (\neg A) \land (\neg B)$, `not (A or B)` ≡ `not A and not B`
 
 En Python, la negación de una condición unida se vuelve una condición unida de negaciones:
 
@@ -113,19 +113,19 @@ denied = not (age >= 18 and has_ticket)      # False
 denied_again = age < 18 or not has_ticket    # False — De Morgan, equivale
 ```
 
-La primera línea dice "no es cierto que (mayor Y con boleto)"; la segunda dice "menor O sin boleto" — los dos lados de la ley de De Morgan, y ambos responden lo mismo. La versión desanudada se lee como la frase que describe.
+La primera línea dice "no es cierto que (mayor Y con boleto)"; la segunda dice "menor O sin boleto", los dos lados de la ley de De Morgan, y ambos responden lo mismo. La versión desanudada se lee como la frase que describe.
 
 ## Errores comunes
 
 - **`and`/`or` devuelven un operando, no un booleano.** `0 and 5` es `0`; `0 or 5` es `5`. Python entrega el valor que decidió. El 0 falso hizo la decisión, así que se devuelve 0.
 - **`not` se anuda más fuerte que `==`.** `not a == b` se analiza como `not (a == b)`, no `(not a) == b`. Pon paréntesis cuando dudes.
 - **Palabras, no símbolos bit a bit.** `True and False` es `False`; `True & False` es una operación bit a bit sobre booleanos con otro comportamiento. Reserva `&`/`|` para el trabajo a nivel de bits.
-- **`and`/`or` son perezosos de un modo que esconde errores.** Si el lado decisivo ya es truthy/falsy, el otro lado jamás se ejecuta — `1 or missing_function()` nunca llama a la función. Una mitad muerta que no chocó puede esconder un nombre que olvidaste.
+- **`and`/`or` son perezosos de un modo que esconde errores.** Si el lado decisivo ya es truthy/falsy, el otro lado jamás se ejecuta, `1 or missing_function()` nunca llama a la función. Una mitad muerta que no chocó puede esconder un nombre que olvidaste.
 
 ## 🧩 Desafíos
 
 <details class="challenge">
-<summary>🧩 Desafío — piensa primero, luego revela</summary>
+<summary>🧩 Desafío, piensa primero, luego revela</summary>
 <div class="challenge__body">
 
 Sin ejecutarlo, predice: `0 and 5`, `0 or 5`, `3 and 5`, `3 or 5`. ¿Qué patrón ves?
@@ -136,23 +136,23 @@ Sin ejecutarlo, predice: `0 and 5`, `0 or 5`, `3 and 5`, `3 or 5`. ¿Qué patró
 </details>
 
 <details class="challenge">
-<summary>🧩 Desafío — piensa primero, luego revela</summary>
+<summary>🧩 Desafío, piensa primero, luego revela</summary>
 <div class="challenge__body">
 
 Reescribe `not (x > 5 and y < 10)` con la ley de De Morgan. ¿Es más legible la versión reescrita?
 
-<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>not (x &gt; 5 and y &lt; 10)</code> ≡ <code>x &lt;= 5 or y &gt;= 10</code> — una lectura directa sin negación compuesta que desenredar.</p>
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>not (x &gt; 5 and y &lt; 10)</code> ≡ <code>x &lt;= 5 or y &gt;= 10</code>, una lectura directa sin negación compuesta que desenredar.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Desafío — piensa primero, luego revela</summary>
+<summary>🧩 Desafío, piensa primero, luego revela</summary>
 <div class="challenge__body">
 
 Escribe la condición de año bisiesto: divisible por 4, salvo los siglos (divisibles por 100) a menos que también sean divisibles por 400. Usa `and`, `or`, `not`.
 
-<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>(year % 4 == 0 and year % 100 != 0) or (year % 400 == 0)</code> — divisible por 4 pero no por 100, o divisible por 400.</p>
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>(year % 4 == 0 and year % 100 != 0) or (year % 400 == 0)</code>, divisible por 4 pero no por 100, o divisible por 400.</p>
 
 </div>
 </details>

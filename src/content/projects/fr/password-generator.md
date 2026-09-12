@@ -23,14 +23,14 @@ prerequisites:
 
 Tu utilises le même mot de passe partout, parce qu'en inventer un nouveau à chaque fois est fastidieux. Dans ce projet, tu vas construire un outil qui fait la partie fastidieuse à ta place : il génère des mots de passe forts, mesure à quel point ils sont difficiles à craquer, vérifie s'ils sont déjà apparus dans une fuite de données, et les stocke dans un coffre-fort chiffré que tu peux déverrouiller avec un mot de passe maître.
 
-Ce projet ne suppose que les bases de niveau « Python 101 » — fonctions, listes, dictionnaires, boucles et formatage de chaînes. Pas de frameworks, pas de bases de données, pas de services cloud. Tout ce dont tu as besoin provient de la bibliothèque standard plus un petit paquet de chiffrement.
+Ce projet ne suppose que les bases de niveau « Python 101 », fonctions, listes, dictionnaires, boucles et formatage de chaînes. Pas de frameworks, pas de bases de données, pas de services cloud. Tout ce dont tu as besoin provient de la bibliothèque standard plus un petit paquet de chiffrement.
 
 C'est optionnel et non noté. Vois [Projets du monde réel](/fr/projets) pour la liste complète.
 
 ## 🎯 Ce que tu vas faire
 
 1. Générer des mots de passe cryptographiquement sûrs avec des jeux de caractères personnalisables en utilisant le module `secrets`.
-2. Analyser la force d'un mot de passe en calculant son entropie — la mesure mathématique de l'imprévisibilité.
+2. Analyser la force d'un mot de passe en calculant son entropie, la mesure mathématique de l'imprévisibilité.
 3. Vérifier les mots de passe contre la base de données de fuites Have I Been Pwned sans jamais envoyer le mot de passe complet (k-anonymat).
 4. Construire un coffre-fort chiffré qui stocke des identifiants protégés par un mot de passe maître en utilisant AES-256.
 5. Créer une interface CLI avec `argparse` pour que l'outil fonctionne depuis la ligne de commande.
@@ -39,18 +39,18 @@ C'est optionnel et non noté. Vois [Projets du monde réel](/fr/projets) pour la
 
 ## Où exécuter ceci
 
-- **En local avec `uv` (recommandé).** Ce projet a besoin d'un paquet tiers (`cryptography`) pour le chiffrement — un bon candidat pour exécuter Python sur ta propre machine. La section Configuration ci-dessous détaille le processus.
+- **En local avec `uv` (recommandé).** Ce projet a besoin d'un paquet tiers (`cryptography`) pour le chiffrement, un bon candidat pour exécuter Python sur ta propre machine. La section Configuration ci-dessous détaille le processus.
 - **Playground JupyterLite.** Colle les blocs de code dans des cellules et exécute-les dans le navigateur. L'étape de vérification des fuites a besoin d'une connexion réseau ; l'étape du coffre-fort crée des fichiers dans le stockage éphémère du navigateur.
 - **Google Colab.** Clique sur le badge Colab sur la page du projet pour l'exécuter dans un notebook cloud. Note que les fichiers de coffre-fort créés dans Colab ne survivent pas entre deux sessions.
 
-- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt — ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
+- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt, ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/password-generator/notebook.fr.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/password-generator/notebook.fr.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fpassword-generator%2Fnotebook.fr.ipynb)
 
 ## Configuration
 
-`uv` est un outil unique qui remplace la chaîne habituelle « installe Python, puis pip, puis un environnement virtuel, puis les paquets » — il gère ensemble les versions de Python et les dépendances.
+`uv` est un outil unique qui remplace la chaîne habituelle « installe Python, puis pip, puis un environnement virtuel, puis les paquets », il gère ensemble les versions de Python et les dépendances.
 
 **macOS / Linux** (terminal) :
 
@@ -82,7 +82,7 @@ Le module `secrets` est fourni avec Python et offre des nombres aléatoires cryp
 
 ## Étape 1 : Génère des mots de passe sûrs
 
-La première brique : une fonction qui produit un mot de passe aléatoire avec exactement les types de caractères que tu veux. L'idée clé est *quel* module aléatoire utiliser — le module `random` de Python est conçu pour les simulations, pas pour la sécurité. Il est déterministe si tu connais la graine. Le module `secrets` utilise la vraie source aléatoire du système d'exploitation et est le bon choix pour tout ce qui touche à la sécurité.
+La première brique : une fonction qui produit un mot de passe aléatoire avec exactement les types de caractères que tu veux. L'idée clé est *quel* module aléatoire utiliser, le module `random` de Python est conçu pour les simulations, pas pour la sécurité. Il est déterministe si tu connais la graine. Le module `secrets` utilise la vraie source aléatoire du système d'exploitation et est le bon choix pour tout ce qui touche à la sécurité.
 
 ### 1.1 Construis le pool de caractères
 
@@ -149,7 +149,7 @@ Chaque sortie devrait faire 20 caractères, contenir au moins une minuscule, une
 
 ### 1.2 Vérifie les garanties
 
-**👟 Indice de départ :** Écris une vérification rapide qui affirme que chaque type de caractère est présent dans le mot de passe généré. C'est un test de cohérence, pas du code de production — confirme simplement que ta logique `required` fonctionne.
+**👟 Indice de départ :** Écris une vérification rapide qui affirme que chaque type de caractère est présent dans le mot de passe généré. C'est un test de cohérence, pas du code de production, confirme simplement que ta logique `required` fonctionne.
 
 ```python
 def verify_password(pw: str) -> bool:
@@ -169,7 +169,7 @@ for _ in range(100):
 print("All 100 passwords passed verification.")
 ```
 
-**🩹 Si ça ne marche pas :** Si une assertion échoue, le pool du type de caractère est probablement vide pour l'un des types. Vérifie que chaque bloc `if use_*` fait bien un ajout (`append`) à la fois à `charset` et à `required`. Si tu obtiens `ValueError: At least one character type must be selected`, les quatre drapeaux sont à `False` — passe `use_lowercase=True` au minimum.
+**🩹 Si ça ne marche pas :** Si une assertion échoue, le pool du type de caractère est probablement vide pour l'un des types. Vérifie que chaque bloc `if use_*` fait bien un ajout (`append`) à la fois à `charset` et à `required`. Si tu obtiens `ValueError: At least one character type must be selected`, les quatre drapeaux sont à `False`, passe `use_lowercase=True` au minimum.
 
 ### 1.3 Confirme l'exactitude
 
@@ -187,7 +187,7 @@ print("All 100 passwords passed verification.")
 
 ## Étape 2 : Analyse la force d'un mot de passe
 
-Une chaîne aléatoire n'est forte que suivant le pool dont elle est tirée. La mesure mathématique est l'**entropie** — le nombre de bits d'information qu'un attaquant devrait deviner pour trouver le mot de passe. Un mot de passe tiré d'un pool de 70 caractères, long de 16 caractères, a log2(70^16) ≈ 97,4 bits d'entropie. C'est un nombre utile, car il se traduit directement en nombre d'essais dont un attaquant par force brute a besoin.
+Une chaîne aléatoire n'est forte que suivant le pool dont elle est tirée. La mesure mathématique est l'**entropie**, le nombre de bits d'information qu'un attaquant devrait deviner pour trouver le mot de passe. Un mot de passe tiré d'un pool de 70 caractères, long de 16 caractères, a log2(70^16) ≈ 97,4 bits d'entropie. C'est un nombre utile, car il se traduit directement en nombre d'essais dont un attaquant par force brute a besoin.
 
 ### 2.1 Calcule l'entropie
 
@@ -228,7 +228,7 @@ print(calculate_entropy(generate_password(16)))  # random, full pool
 97.4
 ```
 
-Le mot de passe aléatoire de 16 caractères se situe autour de 97 bits — bien au-dessus du seuil de 80 bits que la plupart des directives de sécurité considèrent comme « très fort ».
+Le mot de passe aléatoire de 16 caractères se situe autour de 97 bits, bien au-dessus du seuil de 80 bits que la plupart des directives de sécurité considèrent comme « très fort ».
 
 ### 2.2 Associe l'entropie à des étiquettes lisibles
 
@@ -300,7 +300,7 @@ for pw in ["abc", "password123", generate_password(16), generate_password(24)]:
 
 La barre se remplit proportionnellement : un bloc pour ~4 bits d'entropie, plafonné à 30 blocs pour la largeur de la barre.
 
-**🩹 Si ça ne marche pas :** Si un mot de passe clairement aléatoire affiche « Weak », vérifie que `calculate_entropy` détecte bien les quatre pools de caractères. Un bug courant consiste à coder en dur la chaîne de symboles au lieu de réutiliser la constante `SYMBOLS` — si la chaîne codée en dur diffère ne serait-ce que d'un caractère, la vérification des symboles manque silencieusement certains mots de passe. Si `entropy` est `NaN`, le `charset_size` est nul, ce qui signifie que `calculate_entropy` n'a trouvé aucun des quatre pools — assure-toi que le mot de passe n'est pas vide.
+**🩹 Si ça ne marche pas :** Si un mot de passe clairement aléatoire affiche « Weak », vérifie que `calculate_entropy` détecte bien les quatre pools de caractères. Un bug courant consiste à coder en dur la chaîne de symboles au lieu de réutiliser la constante `SYMBOLS`, si la chaîne codée en dur diffère ne serait-ce que d'un caractère, la vérification des symboles manque silencieusement certains mots de passe. Si `entropy` est `NaN`, le `charset_size` est nul, ce qui signifie que `calculate_entropy` n'a trouvé aucun des quatre pools, assure-toi que le mot de passe n'est pas vide.
 
 ### 2.4 Vérifie l'analyse
 
@@ -318,7 +318,7 @@ La barre se remplit proportionnellement : un bloc pour ~4 bits d'entropie, plafo
 
 ## Étape 3 : Vérifie contre les bases de données de fuites
 
-Même un mot de passe à haute entropie ne vaut rien s'il est déjà apparu dans une fuite de données. L'API Have I Been Pwned (HIBP) permet de vérifier — mais tu ne devrais jamais envoyer ton vrai mot de passe à un serveur tiers. La solution est la **k-anonymat** : tu n'envoies que les 5 premiers caractères du hachage SHA-1 du mot de passe et tu reçois en retour une liste de suffixes de hachages correspondants. Ton mot de passe complet ne quitte jamais ta machine.
+Même un mot de passe à haute entropie ne vaut rien s'il est déjà apparu dans une fuite de données. L'API Have I Been Pwned (HIBP) permet de vérifier, mais tu ne devrais jamais envoyer ton vrai mot de passe à un serveur tiers. La solution est la **k-anonymat** : tu n'envoies que les 5 premiers caractères du hachage SHA-1 du mot de passe et tu reçois en retour une liste de suffixes de hachages correspondants. Ton mot de passe complet ne quitte jamais ta machine.
 
 ### 3.1 Comprends le protocole de k-anonymat
 
@@ -328,7 +328,7 @@ Le déroulement est le suivant :
 2. Envoie les 5 premiers caractères (`CBFDA`) à `https://api.pwnedpasswords.com/range/CBFDA`
 3. L'API répond avec des milliers de lignes, chacune étant un suffixe de hachage et un compte : `C6008F9CAB4083784CBD1874F76618D2A97:42`
 4. Cherche dans la réponse ton suffixe de hachage complet (`C6008F9CAB4083784CBD1874F76618D2A97`). S'il est trouvé, ton mot de passe est apparu dans `42` fuites.
-5. Le serveur ne connaît qu'un préfixe de 5 caractères qui correspond à des millions de mots de passe possibles — il ne peut pas déterminer quel mot de passe spécifique tu vérifies.
+5. Le serveur ne connaît qu'un préfixe de 5 caractères qui correspond à des millions de mots de passe possibles, il ne peut pas déterminer quel mot de passe spécifique tu vérifies.
 
 ### 3.2 Implémente le vérificateur de fuites
 
@@ -385,9 +385,9 @@ print(f"Fresh password: breached={is_breached}, count={count}")
 Fresh password: breached=False, count=0
 ```
 
-Un mot de passe aléatoire fraîchement généré ne devrait jamais apparaître dans la base de données des fuites. Si c'est le cas, la source aléatoire est cassée — retourne à l'Étape 1 et confirme que tu utilises `secrets`, pas `random`.
+Un mot de passe aléatoire fraîchement généré ne devrait jamais apparaître dans la base de données des fuites. Si c'est le cas, la source aléatoire est cassée, retourne à l'Étape 1 et confirme que tu utilises `secrets`, pas `random`.
 
-**🩹 Si ça ne marche pas :** Si tu obtiens `Breach check failed: ...`, ton réseau bloque peut-être la requête ou l'API est temporairement en panne — la fonction retourne `False, 0` en cas d'échec pour que l'outil ne plante pas. Si tu obtiens `ConnectionError`, vérifie ta connexion Internet. Si tu obtiens `403`, l'API limite le débit des requêtes — attends un moment et réessaie. Si un mot de passe connu comme compromis, tel que `"password123"`, revient comme non compromis, vérifie que le hachage SHA-1 est en majuscules et que la comparaison du suffixe est exacte (pas d'espace supplémentaire, aucun `.strip()` nécessaire du côté droit du `split(":")`).
+**🩹 Si ça ne marche pas :** Si tu obtiens `Breach check failed: ...`, ton réseau bloque peut-être la requête ou l'API est temporairement en panne, la fonction retourne `False, 0` en cas d'échec pour que l'outil ne plante pas. Si tu obtiens `ConnectionError`, vérifie ta connexion Internet. Si tu obtiens `403`, l'API limite le débit des requêtes, attends un moment et réessaie. Si un mot de passe connu comme compromis, tel que `"password123"`, revient comme non compromis, vérifie que le hachage SHA-1 est en majuscules et que la comparaison du suffixe est exacte (pas d'espace supplémentaire, aucun `.strip()` nécessaire du côté droit du `split(":")`).
 
 ### 3.3 Vérifie le vérificateur de fuites
 
@@ -396,7 +396,7 @@ Un mot de passe aléatoire fraîchement généré ne devrait jamais apparaître 
 - `"password123"` retourne `True` avec un compte de plusieurs millions.
 - `"123456"` retourne `True` avec un compte très élevé.
 - Un mot de passe fraîchement généré de l'Étape 1 retourne `False, 0`.
-- La fonction gère élégamment les erreurs réseau — pas de traceback, juste un avertissement et `False, 0`.
+- La fonction gère élégamment les erreurs réseau, pas de traceback, juste un avertissement et `False, 0`.
 - Le mot de passe complet n'apparaît jamais dans une instruction print ni dans un journal.
 
 **🤔 Question(s) socratique(s)**
@@ -405,7 +405,7 @@ Un mot de passe aléatoire fraîchement généré ne devrait jamais apparaître 
 
 ## Étape 4 : Construis un coffre-fort chiffré
 
-Générer des mots de passe forts n'est que la moitié de la valeur — tu dois aussi les stocker quelque part. Les écrire dans un fichier en texte clair va à l'encontre du but. À la place, nous chiffrerons le coffre-fort avec **AES-256** en utilisant l'implémentation Fernet du paquet `cryptography`. Le coffre-fort est déchiffré à l'exécution avec un mot de passe maître que tu saisis une fois.
+Générer des mots de passe forts n'est que la moitié de la valeur, tu dois aussi les stocker quelque part. Les écrire dans un fichier en texte clair va à l'encontre du but. À la place, nous chiffrerons le coffre-fort avec **AES-256** en utilisant l'implémentation Fernet du paquet `cryptography`. Le coffre-fort est déchiffré à l'exécution avec un mot de passe maître que tu saisis une fois.
 
 ### 4.1 Déduis une clé de chiffrement du mot de passe maître
 
@@ -495,9 +495,9 @@ loaded_bad = load_vault("wrong-password")
 Wrong master password or corrupted vault.
 ```
 
-Le mauvais mot de passe produit un dictionnaire vide et un message d'erreur clair — pas de traceback, pas de plantage.
+Le mauvais mot de passe produit un dictionnaire vide et un message d'erreur clair, pas de traceback, pas de plantage.
 
-**🩹 Si ça ne marche pas :** Si tu obtiens `InvalidToken` avec un traceback au lieu du message convivial, le bloc `except Exception` ne capte pas l'erreur de Fernet. Vérifie que `from cryptography.fernet import Fernet` est en haut de ton fichier — si l'import manque, `Fernet` est indéfini et le bloc `except` échoue avant de pouvoir gérer l'erreur. Si le fichier du coffre-fort est toujours vide après rechargement, la conversion `str(vault)` produit peut-être quelque chose que `eval()` ne peut pas analyser — vérifie que le dictionnaire du coffre-fort ne contient que des chaînes, pas des objets ni des fonctions.
+**🩹 Si ça ne marche pas :** Si tu obtiens `InvalidToken` avec un traceback au lieu du message convivial, le bloc `except Exception` ne capte pas l'erreur de Fernet. Vérifie que `from cryptography.fernet import Fernet` est en haut de ton fichier, si l'import manque, `Fernet` est indéfini et le bloc `except` échoue avant de pouvoir gérer l'erreur. Si le fichier du coffre-fort est toujours vide après rechargement, la conversion `str(vault)` produit peut-être quelque chose que `eval()` ne peut pas analyser, vérifie que le dictionnaire du coffre-fort ne contient que des chaînes, pas des objets ni des fonctions.
 
 :::warning[eval() est dangereux en production]
 `eval()` exécute du code Python arbitraire. C'est acceptable pour un projet d'apprentissage personnel où tu contrôles le fichier du coffre-fort, mais en production tu devrais utiliser `json.loads()` au lieu de `eval()` pour la désérialisation. Le format du coffre-fort devrait alors utiliser des types compatibles JSON (pas de tuples, pas d'ensembles, pas d'objets personnalisés).
@@ -523,7 +523,7 @@ L'outil fonctionne dans un interpréteur Python, mais les vrais outils vivent su
 
 ### 5.1 Configure argparse
 
-**👟 Indice de départ :** Utilise des sous-commandes avec `add_subparsers` — une pour `generate`, une pour `check`, une pour `store`, une pour `list`. Chaque sous-commande a ses propres drapeaux.
+**👟 Indice de départ :** Utilise des sous-commandes avec `add_subparsers`, une pour `generate`, une pour `check`, une pour `store`, une pour `list`. Chaque sous-commande a ses propres drapeaux.
 
 ```python
 import argparse
@@ -647,7 +647,7 @@ python password_generator.py list --master "my-master-password"
   github          alice                     k7G!mP2xQ#nR9wL@jT4f
 ```
 
-**🩹 Si ça ne marche pas :** Si tu obtiens `error: the following arguments are required`, tu as oublié de passer un drapeau obligatoire (comme `--master` ou `-u`). Si tu obtiens `unrecognized arguments`, vérifie l'ordre des sous-commandes — `generate` vient avant les drapeaux, pas après. Si `generate` n'affiche rien, `--count` est peut-être réglé à 0. Si `list` affiche du texte garbké, ton coffre-fort a été sauvegardé avec le format `str()` d'une version différente de Python — régénère-le.
+**🩹 Si ça ne marche pas :** Si tu obtiens `error: the following arguments are required`, tu as oublié de passer un drapeau obligatoire (comme `--master` ou `-u`). Si tu obtiens `unrecognized arguments`, vérifie l'ordre des sous-commandes, `generate` vient avant les drapeaux, pas après. Si `generate` n'affiche rien, `--count` est peut-être réglé à 0. Si `list` affiche du texte garbké, ton coffre-fort a été sauvegardé avec le format `str()` d'une version différente de Python, régénère-le.
 
 ### 5.3 Vérifie le CLI
 
@@ -753,7 +753,7 @@ def list_vault_with_expiry(vault: dict):
   1 password(s) older than 90 days. Rotate them.
 ```
 
-**🩹 Si ça ne marche pas :** Si toutes les entrées affichent un âge « unknown », la clé `created_at` n'a pas été ajoutée au moment du stockage — retourne à la fonction `store_credential` et assure-toi qu'elle est appelée au lieu de construire le dictionnaire à la main. Si le calcul d'âge semble faux, vérifie que `datetime.now()` et `datetime.fromisoformat()` utilisent la même notion de fuseau horaire (les deux naïfs, ou les deux conscients — ne les mélange pas).
+**🩹 Si ça ne marche pas :** Si toutes les entrées affichent un âge « unknown », la clé `created_at` n'a pas été ajoutée au moment du stockage, retourne à la fonction `store_credential` et assure-toi qu'elle est appelée au lieu de construire le dictionnaire à la main. Si le calcul d'âge semble faux, vérifie que `datetime.now()` et `datetime.fromisoformat()` utilisent la même notion de fuseau horaire (les deux naïfs, ou les deux conscients, ne les mélange pas).
 
 ### 6.4 Vérifie le suivi d'expiration
 
@@ -774,7 +774,7 @@ Le texte brut est fonctionnel mais difficile à parcourir. Ajouter de la couleur
 
 ### 7.1 Ajoute les codes de couleur ANSI
 
-**👟 Indice de départ :** Définis des constantes de couleur avec des séquences d'échappement ANSI. Enveloppe le texte avec elles pour la sortie terminal uniquement — n'écris pas de codes d'échappement dans des fichiers.
+**👟 Indice de départ :** Définis des constantes de couleur avec des séquences d'échappement ANSI. Enveloppe le texte avec elles pour la sortie terminal uniquement, n'écris pas de codes d'échappement dans des fichiers.
 
 ```python
 class Color:
@@ -794,7 +794,7 @@ def colored(text: str, color: str) -> str:
 
 ### 7.2 Colorie la barre de force
 
-**👟 Indice de départ :** Mets à jour `analyze_password` pour colorer la barre selon l'étiquette de force — rouge pour faible, jaune pour modéré, vert pour fort.
+**👟 Indice de départ :** Mets à jour `analyze_password` pour colorer la barre selon l'étiquette de force, rouge pour faible, jaune pour modéré, vert pour fort.
 
 ```python
 def analyze_password_colored(password: str) -> dict:
@@ -884,7 +884,7 @@ print_report(passwords)
   Total:         5
 ```
 
-**🩹 Si ça ne marche pas :** Si les couleurs n'apparaissent pas, ton terminal ne supporte peut-être pas les codes ANSI — essaie `export TERM=xterm-256color` avant d'exécuter. Si tu vois des séquences d'échappement brutes comme `[91m` dans la sortie, les caractères d'échappement ne sont pas interprétés — assure-toi d'utiliser `\033[` (le vrai caractère ESC), pas la chaîne littérale antislash-zéro-trois-trois.
+**🩹 Si ça ne marche pas :** Si les couleurs n'apparaissent pas, ton terminal ne supporte peut-être pas les codes ANSI, essaie `export TERM=xterm-256color` avant d'exécuter. Si tu vois des séquences d'échappement brutes comme `[91m` dans la sortie, les caractères d'échappement ne sont pas interprétés, assure-toi d'utiliser `\033[` (le vrai caractère ESC), pas la chaîne littérale antislash-zéro-trois-trois.
 
 ### 7.5 Vérifie la sortie peaufinée
 
@@ -902,29 +902,29 @@ print_report(passwords)
 
 ## ⚠️ Pièges courants
 
-- **Utiliser `random` au lieu de `secrets`.** Le module `random` est déterministe et prévisible. Pour tout ce qui touche à la sécurité — mots de passe, jetons, clés — utilise toujours `secrets`. C'est la décision la plus importante de tout ce projet.
+- **Utiliser `random` au lieu de `secrets`.** Le module `random` est déterministe et prévisible. Pour tout ce qui touche à la sécurité, mots de passe, jetons, clés, utilise toujours `secrets`. C'est la décision la plus importante de tout ce projet.
 - **Oublier de mélanger les caractères obligatoires.** Si tu ajoutes les caractères obligatoires en premier puis remplis le reste, les premiers caractères sont toujours un de chaque type dans un ordre fixe. Un préfixe comme « aB1! » est un motif que les attaquants savent vérifier en premier. Mélange toujours.
 - **Envoyer le mot de passe complet à l'API de fuites.** La conception de k-anonymat de HIBP existe précisément pour éviter cela. Seuls les 5 premiers caractères du hachage SHA-1 devraient jamais quitter ta machine.
 - **Utiliser `eval()` dans du code de production.** `eval()` exécute du Python arbitraire. Pour un projet d'apprentissage personnel, c'est un moyen rapide de désérialiser le coffre-fort, mais en production utilise `json.loads()` avec un format de coffre-fort compatible JSON.
-- **Sauvegarder le coffre-fort seulement à la sortie.** Si le programme plante en cours de session, les changements non sauvegardés sont perdus. Sauvegarde après chaque mutation — l'appel `save_vault` dans `store` le fait déjà.
+- **Sauvegarder le coffre-fort seulement à la sortie.** Si le programme plante en cours de session, les changements non sauvegardés sont perdus. Sauvegarde après chaque mutation, l'appel `save_vault` dans `store` le fait déjà.
 - **Mélanger des datetime conscients et naïfs.** `datetime.now()` retourne un datetime naïf (sans fuseau horaire). Si tu le compares à un datetime conscient du fuseau via `datetime.now(timezone.utc)`, tu obtiendras un `TypeError`. Garde-les cohérents.
 
 ## Ce que tu viens de construire
 
-Un outil complet de gestion de mots de passe en Python pur : génération de mots de passe cryptographiquement sûre, analyse de force basée sur l'entropie, détection de fuites contre une base de données publique en utilisant la k-anonymat, un coffre-fort chiffré AES-256, une interface en ligne de commande, un suivi d'expiration des mots de passe et une sortie terminal colorée. Chaque pièce s'appuie sur les fondamentaux du Python 101 — chaînes, listes, dictionnaires, boucles, fonctions — appliqués à un problème réel que tu rencontres tous les jours.
+Un outil complet de gestion de mots de passe en Python pur : génération de mots de passe cryptographiquement sûre, analyse de force basée sur l'entropie, détection de fuites contre une base de données publique en utilisant la k-anonymat, un coffre-fort chiffré AES-256, une interface en ligne de commande, un suivi d'expiration des mots de passe et une sortie terminal colorée. Chaque pièce s'appuie sur les fondamentaux du Python 101, chaînes, listes, dictionnaires, boucles, fonctions, appliqués à un problème réel que tu rencontres tous les jours.
 
 Les motifs de sécurité ici s'étendent bien au-delà des mots de passe : la k-anonymat est utilisée dans les données de santé et la confidentialité de localisation, le chiffrement AES est la norme pour les données au repos, et le calcul d'entropie est le fondement de toutes les métriques de force. Comprendre *pourquoi* ces techniques fonctionnent (et pas seulement comment les appeler) est ce qui distingue un script d'un outil auquel tu peux te fier.
 
 ## Où aller à partir d'ici
 
-- **Utilise un vrai KDF.** Remplace la dérivation de clé SHA-256 par PBKDF2 (`cryptography.hazmat.primitives.kdf.pbkdf2`) ou argon2 pour la résistance à la force brute. Un hachage SHA-256 est rapide — un attaquant peut en tenter des milliards par seconde. PBKDF2 avec 600 000 itérations ralentit cela d'un facteur 600 000.
+- **Utilise un vrai KDF.** Remplace la dérivation de clé SHA-256 par PBKDF2 (`cryptography.hazmat.primitives.kdf.pbkdf2`) ou argon2 pour la résistance à la force brute. Un hachage SHA-256 est rapide, un attaquant peut en tenter des milliards par seconde. PBKDF2 avec 600 000 itérations ralentit cela d'un facteur 600 000.
 - **Ajoute une commande de copie dans le presse-papiers.** Une sous-commande `copy` qui met un mot de passe dans le presse-papiers et l'efface après 30 secondes est plus pratique que d'afficher sur stdout.
-- **Implémente la détection de réutilisation de mots de passe.** Avant de stocker un nouvel identifiant, vérifie si le mot de passe apparaît déjà dans une autre entrée — un mot de passe fort réutilisé reste un point de défaillance unique.
+- **Implémente la détection de réutilisation de mots de passe.** Avant de stocker un nouvel identifiant, vérifie si le mot de passe apparaît déjà dans une autre entrée, un mot de passe fort réutilisé reste un point de défaillance unique.
 - **Ajoute un format de coffre-fort JSON.** Migre de `eval()`/`str()` vers `json.dumps()`/`json.loads()` pour l'interopérabilité et la sécurité. JSON ne supporte pas les tuples ni les ensembles Python, mais le coffre-fort n'a besoin que de chaînes.
-- **Construis une commande `rotate`.** Génère un nouveau mot de passe pour une entrée existante, met à jour l'horodatage, et copie éventuellement le nouveau mot de passe dans le presse-papiers — le tout en une commande.
+- **Construis une commande `rotate`.** Génère un nouveau mot de passe pour une entrée existante, met à jour l'horodatage, et copie éventuellement le nouveau mot de passe dans le presse-papiers, le tout en une commande.
 
 ## Partage ton projet avec la classe
 
-Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres élèves — et son README a un tutoriel complet et adapté aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git avant : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable avec git n'est supposée.
+Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres élèves, et son README a un tutoriel complet et adapté aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git avant : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable avec git n'est supposée.
 
 Bienvenue dans l'écriture de Python en dehors du navigateur. 🎓

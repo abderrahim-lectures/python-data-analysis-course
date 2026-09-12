@@ -42,7 +42,7 @@ quiz:
       - text: "Lo nominal siempre es binario"
       - text: "Lo ordinal solo puede tener 3 categorías"
 ---
-Las variables categóricas describen grupos, categorías o etiquetas — género, etnia, tipo de almuerzo, nivel educativo. A diferencia de los datos numéricos, no puedes calcular medias ni desviaciones estándar. En su lugar, analizas frecuencias, proporciones y moda. Esta lección cubre las herramientas y técnicas para entender los datos categóricos.
+Las variables categóricas describen grupos, categorías o etiquetas, género, etnia, tipo de almuerzo, nivel educativo. A diferencia de los datos numéricos, no puedes calcular medias ni desviaciones estándar. En su lugar, analizas frecuencias, proporciones y moda. Esta lección cubre las herramientas y técnicas para entender los datos categóricos.
 
 ## Conceptos clave
 
@@ -87,7 +87,7 @@ Entender el tipo de variable categórica determina cómo la analizas y visualiza
 | **Nominal** | Sin orden natural | race/ethnicity | Frecuencia, moda |
 | **Ordinal** | Existe un orden natural | education level | Categoría mediana, correlación de rangos |
 
-Las variables ordinales necesitan un ordenamiento explícito — no dejes que pandas las ordene alfabéticamente:
+Las variables ordinales necesitan un ordenamiento explícito, no dejes que pandas las ordene alfabéticamente:
 
 ```python
 import seaborn as sns
@@ -117,7 +117,7 @@ plt.show()
 
 ### Gráficos de conteo con seaborn
 
-Los gráficos de conteo son el equivalente categórico de los histogramas — muestran frecuencias:
+Los gráficos de conteo son el equivalente categórico de los histogramas, muestran frecuencias:
 
 ```python
 fig, axes = plt.subplots(2, 2, figsize=(12, 10))
@@ -273,7 +273,7 @@ plt.show()
 
 ## Conclusiones clave
 
-- Las tablas de frecuencia son la base del análisis categórico — calcúlalas siempre primero
+- Las tablas de frecuencia son la base del análisis categórico, calcúlalas siempre primero
 - Distingue las variables nominales, ordinales y binarias; las variables ordinales necesitan un ordenamiento explícito
 - Los gráficos de barras horizontales son mejores que los verticales cuando las etiquetas de las categorías son largas
 - Usa proporciones en lugar de conteos al comparar grupos de diferentes tamaños
@@ -285,7 +285,7 @@ plt.show()
 Crea una figura que muestre la distribución de los tipos de `lunch`, con barras coloreadas por la finalización de `test preparation course`. Añade anotaciones de conteo a cada segmento de barra. Luego calcula la proporción de estudiantes que completaron la preparación para el examen para cada tipo de almuerzo.
 
 <details class="challenge">
-<summary>🧩 Desafío — piensa primero, luego revela</summary>
+<summary>🧩 Desafío, piensa primero, luego revela</summary>
 <div class="challenge__body">
 
 ```python

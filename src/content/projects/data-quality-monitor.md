@@ -17,7 +17,7 @@ learningObjectives:
 
 # 🩺 Build a Data Quality Monitor
 
-"Don't ship data you haven't checked" only works if checking is cheap and repeatable. This project builds the tool that makes it cheap: a rule file written in JSON, an engine that turns each rule into a list of violating rows, a score that summarizes the whole file, a drift comparison that rings a bell when a column quietly gets worse between snapshots, and a CLI whose exit code a build script can actually act on. The whole thing is `csv`, `dataclasses`, and `json` — no framework, no database, just your rules run against your data.
+"Don't ship data you haven't checked" only works if checking is cheap and repeatable. This project builds the tool that makes it cheap: a rule file written in JSON, an engine that turns each rule into a list of violating rows, a score that summarizes the whole file, a drift comparison that rings a bell when a column quietly gets worse between snapshots, and a CLI whose exit code a build script can actually act on. The whole thing is `csv`, `dataclasses`, and `json`, no framework, no database, just your rules run against your data.
 
 This assumes Python 101 plus `dataclasses` and `csv`. Nothing from the Data Analysis module is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
@@ -31,11 +31,11 @@ This assumes Python 101 plus `dataclasses` and `csv`. Nothing from the Data Anal
 
 ## Where to run this
 
-**Locally with `uv`** is the recommended path — the whole point is the tiny CLI that a build or cron script can call, and that needs a real filesystem.
+**Locally with `uv`** is the recommended path, the whole point is the tiny CLI that a build or cron script can call, and that needs a real filesystem.
 
 **GitHub Codespaces** is a zero-setup alternative: open [the whole course repo in a free Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node and Python are already installed) and run the same commands from a browser terminal.
 
-**Google Colab, Kaggle Notebooks, or Binder** work for every step — the notebook at [`examples/data-quality-monitor/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-quality-monitor/notebook.ipynb) runs the same rules engine over the bundled quarterly snapshots in memory.
+**Google Colab, Kaggle Notebooks, or Binder** work for every step, the notebook at [`examples/data-quality-monitor/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-quality-monitor/notebook.ipynb) runs the same rules engine over the bundled quarterly snapshots in memory.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-quality-monitor/notebook.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-quality-monitor/notebook.ipynb)
@@ -43,7 +43,7 @@ This assumes Python 101 plus `dataclasses` and `csv`. Nothing from the Data Anal
 
 ## Setup
 
-`uv` is a single tool that replaces the "install Python, then pip, then a virtual environment tool" chain — and this project is pure standard library.
+`uv` is a single tool that replaces the "install Python, then pip, then a virtual environment tool" chain, and this project is pure standard library.
 
 **macOS / Linux** (terminal):
 
@@ -74,11 +74,11 @@ cd data-quality-monitor
 
 - ✅ `uv --version` prints a version number.
 - ✅ `data-quality-monitor/` exists with a `pyproject.toml`.
-- ✅ `python -c "import csv, json, dataclasses"` succeeds — no third-party packages.
+- ✅ `python -c "import csv, json, dataclasses"` succeeds, no third-party packages.
 
 ## Step 1: Model a rule as data
 
-A quality check is a small thing: *which column*, *what check*, *under what parameters*. The moment you write those checks as `if` statements sprayed through functions, you've coupled "what to check" to "how to run it". The `Rule` dataclass decouples them — rules become *data*, loadable from JSON, so your principal adds a rule by editing a file, not your code.
+A quality check is a small thing: *which column*, *what check*, *under what parameters*. The moment you write those checks as `if` statements sprayed through functions, you've coupled "what to check" to "how to run it". The `Rule` dataclass decouples them, rules become *data*, loadable from JSON, so your principal adds a rule by editing a file, not your code.
 
 ### 1.1 Write the `Rule` dataclass
 
@@ -116,7 +116,7 @@ if __name__ == "__main__":
     print(rule.name, "->", rule.check, rule.params)
 ```
 
-`from_dict` is the quiet trick: rules in JSON are written as `{"name": ..., "column": ..., "check": ..., "min": ..., "max": ...}` and the method *whitelists* the three structural keys, sweeping everything else into `params` — so a future `"description": "..."` key drops harmlessly into params instead of crashing the loader. Type hints on params (`dict[str, Any]`) cover the fact that `allowed` is a list but `min` is a float.
+`from_dict` is the quiet trick: rules in JSON are written as `{"name": ..., "column": ..., "check": ..., "min": ..., "max": ...}` and the method *whitelists* the three structural keys, sweeping everything else into `params`, so a future `"description": "..."` key drops harmlessly into params instead of crashing the loader. Type hints on params (`dict[str, Any]`) cover the fact that `allowed` is a list but `min` is a float.
 
 **🎯 Expected output:**
 
@@ -124,7 +124,7 @@ if __name__ == "__main__":
 age in range -> within_range {'min': 0, 'max': 100}
 ```
 
-**🩹 If it's off:** If params is empty, `data["name"]` etc. aren't the only keys — check you didn't also put `"params": {...}` *inside* the JSON rule (from_dict doesn't unwrap a nested dict; it flattens sibling keys). If `Rule` raises `TypeError`, the `params` default field uses `None` not `field(default_factory=dict)` — still valid here, but you'll pass params explicitly everywhere, so prefer that.
+**🩹 If it's off:** If params is empty, `data["name"]` etc. aren't the only keys, check you didn't also put `"params": {...}` *inside* the JSON rule (from_dict doesn't unwrap a nested dict; it flattens sibling keys). If `Rule` raises `TypeError`, the `params` default field uses `None` not `field(default_factory=dict)`, still valid here, but you'll pass params explicitly everywhere, so prefer that.
 
 ### 1.2 Verify the rule model
 
@@ -141,7 +141,7 @@ age in range -> within_range {'min': 0, 'max': 100}
 
 ## Step 2: Write the check engine
 
-The engine is: *given one rule and all rows, return the violating rows*. Each check type is one narrow predicate (`_fails`), and `rule_failures` walks rows collecting `Violation` records that say *which rule, which column, which row index, which value*. Violations are first-class here — not `print`s, not `assert`s — because the report, drift, and CLI steps all consume them.
+The engine is: *given one rule and all rows, return the violating rows*. Each check type is one narrow predicate (`_fails`), and `rule_failures` walks rows collecting `Violation` records that say *which rule, which column, which row index, which value*. Violations are first-class here, not `print`s, not `assert`s, because the report, drift, and CLI steps all consume them.
 
 ### 2.1 Implement `_fails` and `rule_failures`
 
@@ -194,7 +194,7 @@ if __name__ == "__main__":
         print(v.rule, "row", v.row_index, "->", repr(v.value))
 ```
 
-`unique` is the odd one out and worth reading twice: it can't be decided cell-by-cell, so it counts every column value across *all* rows, then returns "fails" for any value occurring more than once. The `{..., ...} > 1` shape is a membership test, not a comparison — `Counter` returns the count and 2 > 1 is the duplicate signal. The `raise ValueError` for unknown checks is deliberate: a typo'd check name in the rules file should fail loudly at check time, not silently pass every row.
+`unique` is the odd one out and worth reading twice: it can't be decided cell-by-cell, so it counts every column value across *all* rows, then returns "fails" for any value occurring more than once. The `{..., ...} > 1` shape is a membership test, not a comparison, `Counter` returns the count and 2 > 1 is the duplicate signal. The `raise ValueError` for unknown checks is deliberate: a typo'd check name in the rules file should fail loudly at check time, not silently pass every row.
 
 **🎯 Expected output:**
 
@@ -203,7 +203,7 @@ age in range row 1 -> '101'
 age in range row 2 -> ''
 ```
 
-**🩹 If it's off:** If row 2 isn't caught, `float("")` raised but your `except` doesn't catch `ValueError` — both `ValueError` and `TypeError` must be in the tuple. If every value reports as duplicate, the `Counter` in `unique` is being rebuilt per row instead of once per rule — hoist it out of `_fails` or rely on `rule_failures` passing the full row list.
+**🩹 If it's off:** If row 2 isn't caught, `float("")` raised but your `except` doesn't catch `ValueError`, both `ValueError` and `TypeError` must be in the tuple. If every value reports as duplicate, the `Counter` in `unique` is being rebuilt per row instead of once per rule, hoist it out of `_fails` or rely on `rule_failures` passing the full row list.
 
 ### 2.2 Verify the engine
 
@@ -216,12 +216,12 @@ age in range row 2 -> ''
 
 **🤔 Socratic Question(s)**
 
-- `within_range` returns `True` (fails) for unparseable numbers like `"abc"`. Is a garbage value a *range* violation or a *format* violation — and what happens to a column's score if both disagree?
-- `unique` counts `str(value)` while `in_set` compares raw values. What does `"1"` vs `1` (string versus int) do to each check — when would `unique` call two apparently-different values duplicates?
+- `within_range` returns `True` (fails) for unparseable numbers like `"abc"`. Is a garbage value a *range* violation or a *format* violation, and what happens to a column's score if both disagree?
+- `unique` counts `str(value)` while `in_set` compares raw values. What does `"1"` vs `1` (string versus int) do to each check, when would `unique` call two apparently-different values duplicates?
 
 ## Step 3: Aggregate into a report and a score
 
-Violations are the evidence; a score is the verdict. The report turns 5 rows × 4 rules into one line per rule — pass rate and failing-row count — and the score averages the pass rates. A single `0.80 / 1.00` is what a human or a build log can parse at a glance and compare to last quarter.
+Violations are the evidence; a score is the verdict. The report turns 5 rows × 4 rules into one line per rule, pass rate and failing-row count, and the score averages the pass rates. A single `0.80 / 1.00` is what a human or a build log can parse at a glance and compare to last quarter.
 
 ### 3.1 Write `QualityReport` and `render`
 
@@ -285,7 +285,7 @@ if __name__ == "__main__":
     print(render(build_report(rows, rules)))
 ```
 
-The average is *unweighted by design*: four rules, four pass rates, equal say. `pass_rate` uses `max(self.n_rows, 1)` so an *empty* file scores every rule 0% (all of zero rows fail is the honest reading) instead of crashing on a zero division. The `:[FAIL]`/`:PASS` prefix and the `:.1%` formatting are the report's whole UX — a column that scores 80% or a drift of −13.3% should be visible in one scan, not after counting stars.
+The average is *unweighted by design*: four rules, four pass rates, equal say. `pass_rate` uses `max(self.n_rows, 1)` so an *empty* file scores every rule 0% (all of zero rows fail is the honest reading) instead of crashing on a zero division. The `:[FAIL]`/`:PASS` prefix and the `:.1%` formatting are the report's whole UX, a column that scores 80% or a drift of −13.3% should be visible in one scan, not after counting stars.
 
 **🎯 Expected output:**
 
@@ -298,7 +298,7 @@ checked 5 rows against 4 rules
 overall quality score: 0.80 / 1.00
 ```
 
-**🩹 If it's off:** If `age in range` shows 80% instead of 60%, the empty `''` in row 3 isn't being counted — `float('')` raising is being handled, but check that the `except (TypeError, ValueError)` clause returns `True` (fails); if it `pass`ed, the empty cell falls through to the range comparison and silently passes. If the score line is 1.00, the `score` method is averaging something other than your rules — confirm `len(self.rules)` divides *four* pass rates.
+**🩹 If it's off:** If `age in range` shows 80% instead of 60%, the empty `''` in row 3 isn't being counted, `float('')` raising is being handled, but check that the `except (TypeError, ValueError)` clause returns `True` (fails); if it `pass`ed, the empty cell falls through to the range comparison and silently passes. If the score line is 1.00, the `score` method is averaging something other than your rules, confirm `len(self.rules)` divides *four* pass rates.
 
 ### 3.2 Verify the report
 
@@ -310,12 +310,12 @@ overall quality score: 0.80 / 1.00
 
 **🤔 Socratic Question(s)**
 
-- The score is a plain mean. A column failing 40% of the time and a column failing 10% of the time both drag the mean by their own weight. What kind of *weighted* scoring would a hospital dashboard or a payroll system want — and does `render` still make sense, or would you split the report into tiers?
-- `PASS` requires exactly 100%. Two data-quality teams differ on whether 99.5% email coverage should be green. Where does the pass threshold belong — in `render` or in the score?
+- The score is a plain mean. A column failing 40% of the time and a column failing 10% of the time both drag the mean by their own weight. What kind of *weighted* scoring would a hospital dashboard or a payroll system want, and does `render` still make sense, or would you split the report into tiers?
+- `PASS` requires exactly 100%. Two data-quality teams differ on whether 99.5% email coverage should be green. Where does the pass threshold belong, in `render` or in the score?
 
 ## Step 4: Detect drift between snapshots
 
-A single clean file is nice; a *getting dirtier* column is the emergency. Drift compares each rule's pass rate between consecutive snapshot files and flags any column whose rate dropped by more than a threshold (5 points) with the `  <-- regression` marker — so a build can page the person who owns `email present`.
+A single clean file is nice; a *getting dirtier* column is the emergency. Drift compares each rule's pass rate between consecutive snapshot files and flags any column whose rate dropped by more than a threshold (5 points) with the `  <-- regression` marker, so a build can page the person who owns `email present`.
 
 ### 4.1 Write the comparator
 
@@ -393,7 +393,7 @@ if __name__ == "__main__":
         print(line)
 ```
 
-The baseline is the *first* file by position in the list — comparing pass rates to the immediately-previous snapshot (q2 vs q1, q3 vs q2), not always to q1. That's the honest "was this team's last upload worse than their prior one" question; comparing everything to q1 would answer "is it worse than three months ago", which is a different (still valid) chart. The `%(+...%)` delta formatting makes +/− sign ambiguity impossible to read wrong.
+The baseline is the *first* file by position in the list, comparing pass rates to the immediately-previous snapshot (q2 vs q1, q3 vs q2), not always to q1. That's the honest "was this team's last upload worse than their prior one" question; comparing everything to q1 would answer "is it worse than three months ago", which is a different (still valid) chart. The `%(+...%)` delta formatting makes +/− sign ambiguity impossible to read wrong.
 
 **🎯 Expected output:**
 
@@ -415,7 +415,7 @@ The baseline is the *first* file by position in the list — comparing pass rate
    plan valid       100.0% (+0.0%)
 ```
 
-**🩹 If it's off:** If no `regression` marker ever shows, `threshold` (default `0.05`) is being compared against the wrong sign — a *drop* is `delta < -threshold`, so check the minus. If q2's email drop shows as `+13.3%`, the delta is being computed `prev - rate` instead of `rate - prev` — sign, flipped.
+**🩹 If it's off:** If no `regression` marker ever shows, `threshold` (default `0.05`) is being compared against the wrong sign, a *drop* is `delta < -threshold`, so check the minus. If q2's email drop shows as `+13.3%`, the delta is being computed `prev - rate` instead of `rate - prev`, sign, flipped.
 
 ### 4.2 Verify drift
 
@@ -427,12 +427,12 @@ The baseline is the *first* file by position in the list — comparing pass rate
 
 **🤔 Socratic Question(s)**
 
-- The threshold (5 points) is the same for all rules. `email present` dipping 13.3 points trips the flag; `age in range` rising 6.7 points is a pass. What kind of rule deserves a *per-rule* threshold — and where in `compare`'s signature would it live without changing the API?
-- Drift compares rate-to-rate, ignoring *volume* (q2 checks 3 rows, q1 checked 5). A one-row regression signal from a 3-row file is statistically weak. What would a confidence-weighted comparison look like — and when is "flag everything, verify by hand" the pragmatic choice anyway?
+- The threshold (5 points) is the same for all rules. `email present` dipping 13.3 points trips the flag; `age in range` rising 6.7 points is a pass. What kind of rule deserves a *per-rule* threshold, and where in `compare`'s signature would it live without changing the API?
+- Drift compares rate-to-rate, ignoring *volume* (q2 checks 3 rows, q1 checked 5). A one-row regression signal from a 3-row file is statistically weak. What would a confidence-weighted comparison look like, and when is "flag everything, verify by hand" the pragmatic choice anyway?
 
 ## Step 5: The CLI and the exit code
 
-The engine is finished; the part that changes how a team *contracts* with the tool is the exit code. `monitor.py` reads a CSV and a rules file, prints the report, and exits `0` if everything passed or `2` if anything failed — a CI step or cron script can treat non-zero as "block the deploy / page the owner" without parsing a single line of output.
+The engine is finished; the part that changes how a team *contracts* with the tool is the exit code. `monitor.py` reads a CSV and a rules file, prints the report, and exits `0` if everything passed or `2` if anything failed, a CI step or cron script can treat non-zero as "block the deploy / page the owner" without parsing a single line of output.
 
 ### 5.1 Write `monitor.py`
 
@@ -474,28 +474,28 @@ if __name__ == "__main__":
 - ✅ `echo $?` shows `2` for the customers_q1.csv (score 0.80); a clean file exits `0`.
 - ✅ `--rules` honors a custom path (e.g. `uv run python monitor.py data.csv --rules my-rules.json`).
 
-The score is the only thing the exit code knows about, and that's a real design decision. "Quality gate" means *score must be exactly 1.00* — strictest possible. If you'd rather gate on "worse than 0.95", you change one constant; the report, the engine, and the CLI contract stay put.
+The score is the only thing the exit code knows about, and that's a real design decision. "Quality gate" means *score must be exactly 1.00*, strictest possible. If you'd rather gate on "worse than 0.95", you change one constant; the report, the engine, and the CLI contract stay put.
 
 ### 5.2 Verify the CLI end to end
 
-**🩹 If it's off:** If `sys.exit(2)` seems to do nothing, remember `argparse` help/versions exit with their own codes before `main()` even reaches the gate — and a `--help` run reporting 0 is correct. If the exit code is `1` instead of `2`, an exception escaped `main()` before the gate ran — read the traceback; it's a file path problem, not a gate problem.
+**🩹 If it's off:** If `sys.exit(2)` seems to do nothing, remember `argparse` help/versions exit with their own codes before `main()` even reaches the gate, and a `--help` run reporting 0 is correct. If the exit code is `1` instead of `2`, an exception escaped `main()` before the gate ran, read the traceback; it's a file path problem, not a gate problem.
 
 **🤔 Socratic Question(s)**
 
 - The exit code knows only pass/fail; the report knows which rules drifted. Why is that separation *right* for a CI gate, and what would your pipeline lose if the CLI printed "score 0.80" but *always* exited 0?
-- `--rules rules.json` defaults to a fixed filename. What does `--rules` *not* allow that a team might want (per-directory rules, env-var overrides) — and would adding those change the exit-code contract?
+- `--rules rules.json` defaults to a fixed filename. What does `--rules` *not* allow that a team might want (per-directory rules, env-var overrides), and would adding those change the exit-code contract?
 
 ## ⚠️ Common pitfalls
 
 - **Turning empty into a pass.** `float("")` raises; if your `except` clause returns `False` (passes) or re-raises silently, blank cells sail through `within_range`. Empty is a failure; unparseable is a failure; an unhandled exception is *not* an outcome.
-- **`unique` re-counting for every row.** Building the `Counter` inside the per-row predicate turns a 100k-row file into O(n²) work. Count once per rule (or accept it for demo data) — and remember `"1"` and `1` are different strings.
+- **`unique` re-counting for every row.** Building the `Counter` inside the per-row predicate turns a 100k-row file into O(n²) work. Count once per rule (or accept it for demo data), and remember `"1"` and `1` are different strings.
 - **Sign flips in drift deltas.** `delta = rate - prev` flags drops correctly; `prev - rate` flags rises. It's a one-character flush of a report's credibility.
 - **Score `0/0`.** An empty CSV must score 0.00 through a `max(self.n_rows, 1)` guard, not crash in a zero-division. The empty-file question to ask is "should 0 rows be a fail or a skip".
-- **Exit-code drift.** A tool that *prints* PASS/FAIL but exits 0 always is decorative. If you embed the gate in a script, `cmd /c` (Windows) and `&&` chaining both honor the real exit code — choose the exit code deliberately and test it.
+- **Exit-code drift.** A tool that *prints* PASS/FAIL but exits 0 always is decorative. If you embed the gate in a script, `cmd /c` (Windows) and `&&` chaining both honor the real exit code, choose the exit code deliberately and test it.
 
 ## What you just built
 
-A self-contained data quality suite: rules as JSON data, a check engine with per-row violations, a scored one-screen report, a snapshot-to-snapshot drift comparison with regression flags, and a CLI whose exit code is a deploy gate. The reusable skill is *separating the judgment from the execution*: `Rule` data in a file, engine in `checks.py`, presentation in `render`, decision in an exit code — any one can change (new check type, new report format, new gate rule) without touching the other three.
+A self-contained data quality suite: rules as JSON data, a check engine with per-row violations, a scored one-screen report, a snapshot-to-snapshot drift comparison with regression flags, and a CLI whose exit code is a deploy gate. The reusable skill is *separating the judgment from the execution*: `Rule` data in a file, engine in `checks.py`, presentation in `render`, decision in an exit code, any one can change (new check type, new report format, new gate rule) without touching the other three.
 
 :::tip[Run a fuller version without any local setup]
 [`examples/data-quality-monitor/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/data-quality-monitor) in the course repo has the complete scripts, the quarterly snapshot CSVs, and a sample `rules.json`. Or open the whole repo in a [GitHub Codespaces](https://codespaces.new/abderrahim-lectures/python-data-analysis-course).
@@ -504,12 +504,12 @@ A self-contained data quality suite: rules as JSON data, a check engine with per
 ## Where to go from here
 
 - Add a **`--threshold`** CLI flag that overrides the `compare` default, answering Step 4's Socratic question about per-rule sensitivity without changing the engine.
-- Emit a **JSON report** (`--json report.json`) alongside the human one: same score, same violations, machine-readable — the exit code's verbose sibling.
+- Emit a **JSON report** (`--json report.json`) alongside the human one: same score, same violations, machine-readable, the exit code's verbose sibling.
 - Add **per-column volume counts** to the drift table (3 rows this quarter vs 5 last quarter) so human readers can see *confidence* as well as rate.
-- Support **stale-snapshot detection**: flag snapshots whose `as_of` timestamp column is older than N days — drift is measured in time, not just in file order.
+- Support **stale-snapshot detection**: flag snapshots whose `as_of` timestamp column is older than N days, drift is measured in time, not just in file order.
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

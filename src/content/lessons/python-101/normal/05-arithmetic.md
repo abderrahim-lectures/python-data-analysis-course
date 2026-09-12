@@ -1,6 +1,6 @@
 ---
 title: "Arithmetic Operators"
-description: "Add, subtract, multiply, divide, floor-divide, modulo, and exponent — all eight arithmetic operators."
+description: "Add, subtract, multiply, divide, floor-divide, modulo, and exponent, all eight arithmetic operators."
 module: "operators"
 order: 5
 difficulty: "beginner"
@@ -22,7 +22,7 @@ track: "normal"
 
 ## The operators a machine must steal from a mathematician
 
-You have written helper functions in earlier lessons: store a value, print a value, change its type. None of that is useful until a program can *do something* to numbers. So pause and take stock: a computer exists to evaluate expressions, and every expression is built from **operators** joining values. You already know the arithmetic ones from paper — but the machine splits two of them in half.
+You have written helper functions in earlier lessons: store a value, print a value, change its type. None of that is useful until a program can *do something* to numbers. So pause and take stock: a computer exists to evaluate expressions, and every expression is built from **operators** joining values. You already know the arithmetic ones from paper, but the machine splits two of them in half.
 
 ## The operators and their meanings
 
@@ -43,7 +43,7 @@ Then come three that answer questions you only ever asked in homework:
 7 ** 2   # 49  — exponentiation (7²)
 ```
 
-`**` is Python's writing of a power: $7^2 = 49$. The two newcomers are `//` and `%`, and they are not variations — they are two halves of one legal question.
+`**` is Python's writing of a power: $7^2 = 49$. The two newcomers are `//` and `%`, and they are not variations, they are two halves of one legal question.
 
 ## Two halves of one division
 
@@ -53,7 +53,7 @@ $$
 15 = 4 \cdot 3 + 3.
 $$
 
-The answer has two parts — the quotient $3$ and the remainder $3$. Python's `//` answers the first part and `%` answers the second:
+The answer has two parts, the quotient $3$ and the remainder $3$. Python's `//` answers the first part and `%` answers the second:
 
 $$
 a = (a \mathbin{//} b) \cdot b + (a \mathbin{\%} b)
@@ -65,7 +65,7 @@ $$
 4 * 3 + 3 # 15  ✓ the identity holds
 ```
 
-That identity is not decoration — it is the definition of both operators, and it cannot fail while the two parts are calculated by the same machine.
+That identity is not decoration, it is the definition of both operators, and it cannot fail while the two parts are calculated by the same machine.
 
 There is one wrinkle. Which quotient does Python report for $-7 \div 2$? Write it as a grouping question:
 
@@ -80,7 +80,7 @@ The options are $2 \cdot (-3) + (-1)$ or $2 \cdot (-4) + 1$. Python floors, like
 -7 % 2    # 1  — consistent with the floor: -7 = 2·(-4) + 1
 ```
 
-The two operators stay honest to each other — the identity $a = (a//b)\cdot b + (a\%b)$ holds with no exceptions, and that is worth more than "the intuitive answer."
+The two operators stay honest to each other, the identity $a = (a//b)\cdot b + (a\%b)$ holds with no exceptions, and that is worth more than "the intuitive answer."
 
 ## The order of operations, settled
 
@@ -96,7 +96,7 @@ Expressions containing several operators need a fixed sequencing, or every reade
 2 ** 3 ** 2    # 512, not 64
 ```
 
-That last one is a genuine surprise. `**` is **right-associative**, so `2 ** 3 ** 2` reads as $2^{(3^2)} = 2^9 = 512$, matching the stacked notation where powers climb upward in one direction. When in doubt, spell parentheses out — a reader who does not see them will not guess your intent.
+That last one is a genuine surprise. `**` is **right-associative**, so `2 ** 3 ** 2` reads as $2^{(3^2)} = 2^9 = 512$, matching the stacked notation where powers climb upward in one direction. When in doubt, spell parentheses out, a reader who does not see them will not guess your intent.
 
 ## A worked example: change for the reading plan
 
@@ -118,35 +118,35 @@ The division identity $a = (a \mathbin{//} b) \cdot b + (a \mathbin{\%} b)$ beco
 
 - **`/` vs `//`.** `7 / 2` is `3.5` (a float); `7 // 2` is `3` (an int). Reach for `//` only when the whole-quotient is what the problem needs.
 - **Floor division with negatives.** `-7 // 2` is `-4`, not `-3`. The floor goes toward $-\infty$, not toward zero.
-- **`%` works on floats too.** `7.5 % 2` is `1.5` — the identity above holds for reals as well as integers.
-- **`**` binds tighter than `*`.** `2 * 3 ** 2` is `18`, not `36` — the power is computed first. Parenthesize when you mean `(2 * 3) ** 2` = 36.
+- **`%` works on floats too.** `7.5 % 2` is `1.5`, the identity above holds for reals as well as integers.
+- **`**` binds tighter than `*`.** `2 * 3 ** 2` is `18`, not `36`, the power is computed first. Parenthesize when you mean `(2 * 3) ** 2` = 36.
 
 ## 🧩 Challenges
 
 <details class="challenge">
-<summary>🧩 Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge, think first, then reveal</summary>
 <div class="challenge__body">
 
 Without running it, compute `15 // 4` and `15 % 4` by hand, then verify that $4 \cdot (15 // 4) + (15 \% 4)$ reproduces $15$.
 
-<p class="challenge__answer">💡 <strong>Answer:</strong> <code>15 // 4</code> is <code>3</code> (the floor of $3.75$), and <code>15 % 4</code> is <code>3</code>, since $15 = 4\cdot 3 + 3$. Together <code>4 * 3 + 3 = 15</code> — the division identity, verified.</p>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>15 // 4</code> is <code>3</code> (the floor of $3.75$), and <code>15 % 4</code> is <code>3</code>, since $15 = 4\cdot 3 + 3$. Together <code>4 * 3 + 3 = 15</code>, the division identity, verified.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge, think first, then reveal</summary>
 <div class="challenge__body">
 
 How would you extract the hundreds digit of any number? Given `n = 4567`, get `5` using arithmetic only, no strings.
 
-<p class="challenge__answer">💡 <strong>Answer:</strong> <code>(n // 100) % 10</code> — first divide by 100 to shift the digit right (<code>4567 → 45</code>), then modulo 10 to keep only the last digit (<code>45 → 5</code>).</p>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>(n // 100) % 10</code>, first divide by 100 to shift the digit right (<code>4567 → 45</code>), then modulo 10 to keep only the last digit (<code>45 → 5</code>).</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge, think first, then reveal</summary>
 <div class="challenge__body">
 
 Why does Python use `**` for exponentiation instead of `^`? What does `^` actually do in Python?

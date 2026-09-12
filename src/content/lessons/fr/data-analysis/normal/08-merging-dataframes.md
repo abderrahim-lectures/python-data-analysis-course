@@ -45,7 +45,7 @@ quiz:
 
 ## Pourquoi fusionner ?
 
-Les analyses réelles exigent souvent des données provenant de plusieurs sources. La fusion combine deux DataFrames en fonction d'une clé partagée — comme une jointure SQL ou un RECHERCHEV dans Excel.
+Les analyses réelles exigent souvent des données provenant de plusieurs sources. La fusion combine deux DataFrames en fonction d'une clé partagée, comme une jointure SQL ou un RECHERCHEV dans Excel.
 
 ```python
 import pandas as pd
@@ -80,17 +80,17 @@ Sortie :
 2             3  Carol      2   26.0        S
 ```
 
-Seuls les passagers 1, 2 et 3 apparaissent — c'est une **jointure interne** (le comportement par défaut). Les passagers 4 et 5 n'ont aucune donnée de billet ; le passager 6 n'a aucune donnée de passager.
+Seuls les passagers 1, 2 et 3 apparaissent, c'est une **jointure interne** (le comportement par défaut). Les passagers 4 et 5 n'ont aucune donnée de billet ; le passager 6 n'a aucune donnée de passager.
 
 ## Types de jointure
 
-**Jointure interne** (par défaut) — uniquement les lignes correspondantes des deux côtés :
+**Jointure interne** (par défaut), uniquement les lignes correspondantes des deux côtés :
 
 ```python
 pd.merge(passengers, tickets, on="passenger_id")
 ```
 
-**Jointure gauche** — conserve toutes les lignes du DataFrame de gauche :
+**Jointure gauche**, conserve toutes les lignes du DataFrame de gauche :
 
 ```python
 pd.merge(passengers, tickets, on="passenger_id", how="left")
@@ -107,13 +107,13 @@ Sortie :
 4             5    Eve      1    NaN      NaN
 ```
 
-**Jointure droite** — conserve toutes les lignes du DataFrame de droite :
+**Jointure droite**, conserve toutes les lignes du DataFrame de droite :
 
 ```python
 pd.merge(passengers, tickets, on="passenger_id", how="right")
 ```
 
-**Jointure externe** — conserve toutes les lignes des deux côtés :
+**Jointure externe**, conserve toutes les lignes des deux côtés :
 
 ```python
 pd.merge(passengers, tickets, on="passenger_id", how="outer")

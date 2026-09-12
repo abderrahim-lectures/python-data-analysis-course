@@ -48,7 +48,7 @@ Un buen análisis comienza con una pregunta, no con un gráfico. Antes de cargar
 
 ### Del problema vago a las preguntas estructuradas
 
-Una parte interesada dice "¿Los puntajes de las pruebas de los estudiantes varían según el género?" — eso suena como una pregunta, pero en realidad es demasiado amplia para responderla directamente. Las buenas preguntas de EDA son específicas, medibles y acotadas. Divide la pregunta vaga en capas:
+Una parte interesada dice "¿Los puntajes de las pruebas de los estudiantes varían según el género?", eso suena como una pregunta, pero en realidad es demasiado amplia para responderla directamente. Las buenas preguntas de EDA son específicas, medibles y acotadas. Divide la pregunta vaga en capas:
 
 ```python
 # Vague question
@@ -81,9 +81,9 @@ Un EDA sólido avanza por los tres: describe el panorama, explora patrones inesp
 
 Estructura tus preguntas en una jerarquía que refleje el flujo de trabajo del EDA:
 
-1. **Pregunta primaria** — la única pregunta que el análisis debe responder
-2. **Preguntas secundarias** — desgloses y comparaciones que respaldan la primaria
-3. **Preguntas terciarias** — casos límite, variables de confusión y seguimientos de "¿y qué hay de X?"
+1. **Pregunta primaria**, la única pregunta que el análisis debe responder
+2. **Preguntas secundarias**, desgloses y comparaciones que respaldan la primaria
+3. **Preguntas terciarias**, casos límite, variables de confusión y seguimientos de "¿y qué hay de X?"
 
 ```python
 # Example for Students Performance dataset
@@ -171,7 +171,7 @@ print(f"\nHypothesis: {hypothesis}")
 
 ## Conclusiones clave
 
-- Un buen EDA comienza con preguntas, no con código — la calidad de tus preguntas determina la calidad de tu análisis
+- Un buen EDA comienza con preguntas, no con código, la calidad de tus preguntas determina la calidad de tu análisis
 - Divide los problemas vagos en una jerarquía: preguntas primaria, secundarias y terciarias
 - Convierte las preguntas en hipótesis falsables antes de empezar a calcular
 - El análisis descriptivo, exploratorio y confirmatorio cumplen propósitos diferentes; un EDA sólido usa los tres
@@ -184,7 +184,7 @@ Te dan un conjunto de datos llamado `housing.csv` con las columnas: `price`, `sq
 Escribe una pregunta primaria, tres preguntas secundarias y una hipótesis comprobable. Luego escribe un diccionario de Python que almacene tu jerarquía de preguntas y la imprima formateada.
 
 <details class="challenge">
-<summary>🧩 Desafío — piensa primero, luego revela</summary>
+<summary>🧩 Desafío, piensa primero, luego revela</summary>
 <div class="challenge__body">
 
 ```python

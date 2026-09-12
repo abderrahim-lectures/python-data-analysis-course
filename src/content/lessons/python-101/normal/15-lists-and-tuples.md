@@ -1,6 +1,6 @@
 ---
 title: "Lists & Tuples"
-description: "Master Python's ordered sequences — mutable lists and immutable tuples."
+description: "Master Python's ordered sequences, mutable lists and immutable tuples."
 module: "data-structures"
 order: 15
 difficulty: "beginner"
@@ -31,7 +31,7 @@ print(fruits[-1])      # cherry
 print(fruits[0:2])     # ['apple', 'banana']
 ```
 
-Indexing from $0$, negative indices counting back, slices taking windows — the same three skills, now aimed at a collection of any objects. Where a string was frozen, the list is clay.
+Indexing from $0$, negative indices counting back, slices taking windows, the same three skills, now aimed at a collection of any objects. Where a string was frozen, the list is clay.
 
 ## The list's toolkit
 
@@ -49,11 +49,11 @@ nums.reverse()       # reverses in place
 len(nums)            # current length
 ```
 
-`append` adds one item at the end; `extend` pours a whole sequence in; `insert` slides one in at a chosen position. `pop` removes from the end (or a given index) and hands you the removed value; `remove` deletes the first matching item. The list is the mutable cousin of workhorses like $\pi$'s digit expansion — a growing string of values you keep editing.
+`append` adds one item at the end; `extend` pours a whole sequence in; `insert` slides one in at a chosen position. `pop` removes from the end (or a given index) and hands you the removed value; `remove` deletes the first matching item. The list is the mutable cousin of workhorses like $\pi$'s digit expansion, a growing string of values you keep editing.
 
 ## Lists of lists: tables and matrices
 
-A list's elements can themselves be lists, which turns a flat sequence into a table — a matrix is a list of rows, and each row is a list of numbers:
+A list's elements can themselves be lists, which turns a flat sequence into a table, a matrix is a list of rows, and each row is a list of numbers:
 
 ```python
 matrix = [
@@ -77,11 +77,11 @@ result = nums.sort()   # result is None! nums is now [1, 2, 3]
 result = sorted(nums)  # result is [1, 2, 3], nums unchanged
 ```
 
-`nums.sort()` reorders in place and returns nothing — the value of your expression is `None`. `sorted(nums)` computes a new, ordered list and leaves `nums` untouched. The naming is the signal: verbs like `sort` and `reverse` touch the object; `sorted` and `list.copy()` render a copy for a new holder.
+`nums.sort()` reorders in place and returns nothing, the value of your expression is `None`. `sorted(nums)` computes a new, ordered list and leaves `nums` untouched. The naming is the signal: verbs like `sort` and `reverse` touch the object; `sorted` and `list.copy()` render a copy for a new holder.
 
 ## Tuples: the frozen sequence
 
-A tuple is an ordered, **immutable** sequence — a list that lost its editing tools:
+A tuple is an ordered, **immutable** sequence, a list that lost its editing tools:
 
 ```python
 point = (3, 4)
@@ -89,7 +89,7 @@ print(point[0])   # 3
 # point[0] = 5   # TypeError!
 ```
 
-Immutability is not a handicap; it is a promise. The point $(3, 4)$ is a single mathematical object that should not change under your feet. Coordinates, RGB colors, database rows — data that is *fixed by definition* belongs in tuples, where accidental reassignment becomes an exception instead of a silent corruption.
+Immutability is not a handicap; it is a promise. The point $(3, 4)$ is a single mathematical object that should not change under your feet. Coordinates, RGB colors, database rows, data that is *fixed by definition* belongs in tuples, where accidental reassignment becomes an exception instead of a silent corruption.
 
 ## Unpacking: one line, many names
 
@@ -101,11 +101,11 @@ a, b, *rest = [1, 2, 3, 4, 5]  # a=1, b=2, rest=[3, 4, 5]
 first, *_, last = (1, 2, 3, 4)  # first=1, last=4
 ```
 
-`*rest` swallows everything between the named slots; `*_` is the same gesture wearing the conventional "discard this" name. This is the list version of evaluating a function at a point — inputs and outputs line up by position.
+`*rest` swallows everything between the named slots; `*_` is the same gesture wearing the conventional "discard this" name. This is the list version of evaluating a function at a point, inputs and outputs line up by position.
 
 ## A worked example: the grading book
 
-Watch the toolkit work on a real task — a class's quiz scores:
+Watch the toolkit work on a real task, a class's quiz scores:
 
 ```python
 scores = []
@@ -122,7 +122,7 @@ print(average)            # 8.0
 print(best)               # 10
 ```
 
-Collect with `append`/`extend`, then read with `sum`, `max`, and `len`. Notice the division: `total / count` is the arithmetic mean — the same $\frac{\text{sum}}{\text{count}}$ you know from math, now one line of code. A list is a place to *accumulate* data, and the loop between growing it and reading it is the pattern every real program repeats.
+Collect with `append`/`extend`, then read with `sum`, `max`, and `len`. Notice the division: `total / count` is the arithmetic mean, the same $\frac{\text{sum}}{\text{count}}$ you know from math, now one line of code. A list is a place to *accumulate* data, and the loop between growing it and reading it is the pattern every real program repeats.
 
 ## Common pitfalls
 
@@ -135,23 +135,23 @@ Collect with `append`/`extend`, then read with `sum`, `max`, and `len`. Notice t
 ## 🧩 Challenges
 
 <details class="challenge">
-<summary>🧩 Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge, think first, then reveal</summary>
 <div class="challenge__body">
 
 Remove duplicates while preserving order: `[1, 3, 2, 3, 1, 4, 2]` → `[1, 3, 2, 4]`.
 
-<p class="challenge__answer">💡 <strong>Answer:</strong> <code>list(dict.fromkeys(nums))</code> — a dict keeps insertion order (so 3.7+), and duplicate keys collapse to their first position.</p>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>list(dict.fromkeys(nums))</code>, a dict keeps insertion order (so 3.7+), and duplicate keys collapse to their first position.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge, think first, then reveal</summary>
 <div class="challenge__body">
 
 Swap two variables without a temporary, using tuple unpacking.
 
-<p class="challenge__answer">💡 <strong>Answer:</strong> <code>a, b = b, a</code> — the right side is evaluated to a tuple first, so the exchange is simultaneous, not sequential.</p>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>a, b = b, a</code>, the right side is evaluated to a tuple first, so the exchange is simultaneous, not sequential.</p>
 
 </div>
 </details>
@@ -159,7 +159,7 @@ Swap two variables without a temporary, using tuple unpacking.
 ## 🤔 Socratic Questions
 
 - When do you reach for a tuple over a list, and what does immutability buy you?
-- Why does `sort()` mutate where `sorted()` returns fresh — and when would you prefer each?
+- Why does `sort()` mutate where `sorted()` returns fresh, and when would you prefer each?
 - How does `*rest` collect the overflow? Can `*_` stand in for a named discard?
 
 ## ✅ Quick check

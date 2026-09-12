@@ -58,14 +58,14 @@ df = pd.read_csv("titanic.csv")
 
 ## Selecting a single column
 
-**Bracket notation** — the most common approach:
+**Bracket notation**, the most common approach:
 
 ```python
 ages = df["Age"]
 print(type(ages))   # <class 'pandas.core.series.Series'>
 ```
 
-**Dot notation** — shorter but only works when the column name has no spaces or special characters:
+**Dot notation**, shorter but only works when the column name has no spaces or special characters:
 
 ```python
 print(df.Age.head())   # first 5 ages
@@ -109,14 +109,14 @@ The `:` means "all rows." The list of column names selects specific columns. Thi
 
 ## Practical patterns
 
-**Rename after selecting** — keep only what you need with clearer names:
+**Rename after selecting**, keep only what you need with clearer names:
 
 ```python
 demographics = df[["Name", "Age", "Sex"]].copy()
 demographics.columns = ["passenger", "age", "gender"]
 ```
 
-**Select columns by data type** — useful when you have many columns:
+**Select columns by data type**, useful when you have many columns:
 
 ```python
 numeric_cols = df.select_dtypes(include=["number"])

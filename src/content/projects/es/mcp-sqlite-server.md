@@ -8,22 +8,22 @@ description: "Construye un servidor MCP que expone una base de datos SQLite loca
 
 Las bases de datos suelen estar detrás de un muro de SQL que solo quienes lo escribieron pueden consultar con comodidad. MCP cambia esa forma: en lugar de enseñarle SQL a todo el mundo, expones una base de datos mediante un puñado de herramientas bien descritas, y dejas que un cliente LLM escriba y ejecute el SQL él mismo, en tu nombre, una pregunta a la vez. Este proyecto construye exactamente eso: una pequeña base de datos SQLite local (una biblioteca de barrio: libros, autores, socios, préstamos) y un servidor MCP que permite a un asistente de IA listar sus tablas, inspeccionar el esquema de una tabla y ejecutar consultas **de solo lectura** sobre ella, de modo que puedas preguntar algo como "¿qué libros no ha devuelto todavía la biblioteca?" en lenguaje natural y verlo respondido correctamente.
 
-Este proyecto asume Python 101, idealmente también Análisis de Datos (sentirte cómodo con tablas, columnas y consultas sobre datos estructurados hará que la parte de SQL encaje más rápido), y haber construido ya el proyecto [Construye un servidor MCP](/es/proyectos/mcp-server) — este proyecto reutiliza la configuración de `FastMCP` de ese proyecto y no la vuelve a explicar desde cero. Es opcional y no se califica; consulta [Proyectos del mundo real](/es/proyectos) para ver la lista completa y creciente.
+Este proyecto asume Python 101, idealmente también Análisis de Datos (sentirte cómodo con tablas, columnas y consultas sobre datos estructurados hará que la parte de SQL encaje más rápido), y haber construido ya el proyecto [Construye un servidor MCP](/es/proyectos/mcp-server), este proyecto reutiliza la configuración de `FastMCP` de ese proyecto y no la vuelve a explicar desde cero. Es opcional y no se califica; consulta [Proyectos del mundo real](/es/proyectos) para ver la lista completa y creciente.
 
 ## 🎯 Qué vas a hacer
 
 1. Construir una base de datos SQLite pequeña y realista con varias tablas relacionadas, usando únicamente el módulo `sqlite3` de la biblioteca estándar.
-2. Escribir funciones simples de Python para listar tablas, describir el esquema de una tabla y ejecutar una consulta — con una verificación de seguridad real, nada superficial, que rechace cualquier cosa que no sea un `SELECT` de solo lectura.
+2. Escribir funciones simples de Python para listar tablas, describir el esquema de una tabla y ejecutar una consulta, con una verificación de seguridad real, nada superficial, que rechace cualquier cosa que no sea un `SELECT` de solo lectura.
 3. Conectar esas funciones como herramientas MCP con `FastMCP`, la misma API basada en decoradores del proyecto Construye un servidor MCP.
 4. Conectar tu servidor a Claude Desktop y hacerle una pregunta genuina en lenguaje natural, observando cómo escribe y ejecuta su propio SQL a través de tus herramientas.
 
 ## Dónde ejecutar esto
 
-**Localmente con `uv`** es la ruta principal recomendada, por la misma razón que en el proyecto Construye un servidor MCP: la recompensa aquí es conectar tu servidor a Claude Desktop, y Claude Desktop es una aplicación instalada en tu propia máquina — no hay forma de evitar hacer al menos el paso final localmente. Este es un proceso local de larga duración pensado para esperar a que un cliente MCP real se conecte a él, no algo que un notebook alojado pueda ser.
+**Localmente con `uv`** es la ruta principal recomendada, por la misma razón que en el proyecto Construye un servidor MCP: la recompensa aquí es conectar tu servidor a Claude Desktop, y Claude Desktop es una aplicación instalada en tu propia máquina, no hay forma de evitar hacer al menos el paso final localmente. Este es un proceso local de larga duración pensado para esperar a que un cliente MCP real se conecte a él, no algo que un notebook alojado pueda ser.
 
 **GitHub Codespaces** funciona para construir la base de datos y escribir las funciones de herramientas y el propio servidor: abre [todo el repositorio del curso en un Codespace gratuito](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python y `uv` ya están instalados), escribe `seed.py`, `db_tools.py` y `server.py`, y prueba con el MCP Inspector a través del puerto reenviado del Codespace. Lo que no puede ser es tu punto final de conexión con Claude Desktop, por la misma razón que en el proyecto MCP anterior.
 
-**Google Colab y Kaggle tampoco pueden ejecutar el servidor real** — el mismo razonamiento que en Construye un servidor MCP: una celda de notebook no puede ser un proceso local persistente al que se conecte un cliente de escritorio. Lo que un notebook sí puede hacer aquí es demostrar las funciones subyacentes de consulta e inspección de esquema de forma aislada, con simples llamadas a funciones y sin ningún protocolo MCP de por medio — para eso está [`examples/mcp-sqlite-server/notebook.es.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/mcp-sqlite-server/notebook.es.ipynb). Haz clic en una insignia para abrirlo directamente, sin ninguna instalación local:
+**Google Colab y Kaggle tampoco pueden ejecutar el servidor real**, el mismo razonamiento que en Construye un servidor MCP: una celda de notebook no puede ser un proceso local persistente al que se conecte un cliente de escritorio. Lo que un notebook sí puede hacer aquí es demostrar las funciones subyacentes de consulta e inspección de esquema de forma aislada, con simples llamadas a funciones y sin ningún protocolo MCP de por medio, para eso está [`examples/mcp-sqlite-server/notebook.es.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/mcp-sqlite-server/notebook.es.ipynb). Haz clic en una insignia para abrirlo directamente, sin ninguna instalación local:
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/mcp-sqlite-server/notebook.es.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/mcp-sqlite-server/notebook.es.ipynb)
@@ -58,14 +58,14 @@ cd mcp-sqlite-server
 uv add "mcp[cli]"
 ```
 
-`sqlite3`, la biblioteca de base de datos que este proyecto realmente consulta, forma parte de la biblioteca estándar de Python — no hay nada que instalar para ella. Tampoco se necesita ninguna clave de API externa para ejecutar el propio servidor: es una herramienta puramente local, y el cliente LLM que se conecta a ella (Claude Desktop, en el Paso 4) aporta su propio modelo y, si lo necesita, su propia clave.
+`sqlite3`, la biblioteca de base de datos que este proyecto realmente consulta, forma parte de la biblioteca estándar de Python, no hay nada que instalar para ella. Tampoco se necesita ninguna clave de API externa para ejecutar el propio servidor: es una herramienta puramente local, y el cliente LLM que se conecta a ella (Claude Desktop, en el Paso 4) aporta su propio modelo y, si lo necesita, su propia clave.
 
 ## Paso 1: Construye una base de datos de ejemplo pequeña
-### 1.1 Crea `seed.py` — un script que construye una pequeña base de datos de biblioteca con cuatro ...
+### 1.1 Crea `seed.py`, un script que construye una pequeña base de datos de biblioteca con cuatro ...
 
 **👟 Pista inicial :**
 
-Crea `seed.py` — un script que construye una pequeña base de datos de biblioteca con cuatro tablas relacionadas:
+Crea `seed.py`, un script que construye una pequeña base de datos de biblioteca con cuatro tablas relacionadas:
 
 ```python
 # seed.py
@@ -138,7 +138,7 @@ Ejecútalo una vez:
 ```bash
 uv run python seed.py
 ```
-Que `returned_on` sea `NULL` en una fila es intencional — es lo que hace que "¿qué libros siguen prestados?" sea una pregunta real y respondible más adelante, en lugar de que todos los préstamos se vean idénticos.
+Que `returned_on` sea `NULL` en una fila es intencional, es lo que hace que "¿qué libros siguen prestados?" sea una pregunta real y respondible más adelante, en lugar de que todos los préstamos se vean idénticos.
 
 **🎯 Resultado esperado :**
 
@@ -154,7 +154,7 @@ Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
 
 - ✅ `uv run python seed.py` se ejecuta sin errores y crea `library.db`.
 - ✅ La base de datos tiene al menos tres tablas relacionadas, conectadas por claves foráneas (no una sola tabla plana).
-- ✅ Al menos una fila tiene `NULL` en una columna que lo permite (por ejemplo, un préstamo no devuelto) — los datos reales tienen huecos.
+- ✅ Al menos una fila tiene `NULL` en una columna que lo permite (por ejemplo, un préstamo no devuelto), los datos reales tienen huecos.
 
 **🤔 Pregunta(s) socrática(s)**
 
@@ -162,11 +162,11 @@ Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
 - ¿Qué se rompería, más adelante, si `book_id` en `loans` no hiciera referencia realmente a una fila real en `books`?
 
 ## Paso 2: Escribe las funciones de consulta y esquema, de forma segura
-### 2.1 Crea `db_tools.py` — funciones de Python simples, sin ningún import de MCP, que el servidor ...
+### 2.1 Crea `db_tools.py`, funciones de Python simples, sin ningún import de MCP, que el servidor ...
 
 **👟 Pista inicial :**
 
-Crea `db_tools.py` — funciones de Python simples, sin ningún import de MCP, que el servidor envolverá en el Paso 3:
+Crea `db_tools.py`, funciones de Python simples, sin ningún import de MCP, que el servidor envolverá en el Paso 3:
 
 ```python
 # db_tools.py
@@ -217,9 +217,9 @@ def run_read_only_query(sql: str, db_path: Path = DB_PATH) -> list[dict]:
     finally:
         conn.close()
 ```
-Dos cosas que vale la pena notar. Primero, `run_read_only_query` no intenta ser un analizador SQL completo — no puede serlo, no en unas pocas líneas — pero tampoco necesita serlo: rechazar cualquier cosa con una segunda sentencia encadenada por punto y coma, cualquier cosa que no sea un `SELECT`, y cualquier cosa que contenga una palabra clave de escritura o de esquema cierra las formas realistas en que una consulta compuesta por un modelo podría hacer daño, sin pretender atrapar cada truco SQL concebible. Segundo, abrir la propia conexión con el parámetro URI `mode=ro` de SQLite es una segunda capa real, independiente de la verificación de texto — si la expresión regular alguna vez pasara algo por alto, que el archivo de la base de datos sea genuinamente de solo lectura a nivel del sistema operativo sigue impidiendo que ocurra una escritura. (`describe_table`, la tercera función que necesita este proyecto, es una adición breve — consulta `examples/mcp-sqlite-server/db_tools.py` para la versión completa, que la incluye.)
+Dos cosas que vale la pena notar. Primero, `run_read_only_query` no intenta ser un analizador SQL completo, no puede serlo, no en unas pocas líneas, pero tampoco necesita serlo: rechazar cualquier cosa con una segunda sentencia encadenada por punto y coma, cualquier cosa que no sea un `SELECT`, y cualquier cosa que contenga una palabra clave de escritura o de esquema cierra las formas realistas en que una consulta compuesta por un modelo podría hacer daño, sin pretender atrapar cada truco SQL concebible. Segundo, abrir la propia conexión con el parámetro URI `mode=ro` de SQLite es una segunda capa real, independiente de la verificación de texto, si la expresión regular alguna vez pasara algo por alto, que el archivo de la base de datos sea genuinamente de solo lectura a nivel del sistema operativo sigue impidiendo que ocurra una escritura. (`describe_table`, la tercera función que necesita este proyecto, es una adición breve, consulta `examples/mcp-sqlite-server/db_tools.py` para la versión completa, que la incluye.)
 :::tip[No te saltes la aplicación de solo lectura, ni siquiera para una base de datos de juguete]
-Es tentador pensar "es solo una demo, nadie va a escribir `DROP TABLE`". El punto no es un *usuario* malicioso — es que el texto de la consulta aquí lo escribe un LLM, no tú, y los LLM ocasionalmente producen exactamente la consulta que parecía razonable dada una petición ambigua pero hace algo que no pretendías. Trata cualquier herramienta que ejecute SQL compuesto por un modelo contra una base de datos real como si necesitara esta verificación de verdad, no como una idea tardía — esta es la misma disciplina que importa (con mucho más en juego) la primera vez que apuntes una herramienta como esta a una base de datos que no es solo una muestra que construiste para una lección.
+Es tentador pensar "es solo una demo, nadie va a escribir `DROP TABLE`". El punto no es un *usuario* malicioso, es que el texto de la consulta aquí lo escribe un LLM, no tú, y los LLM ocasionalmente producen exactamente la consulta que parecía razonable dada una petición ambigua pero hace algo que no pretendías. Trata cualquier herramienta que ejecute SQL compuesto por un modelo contra una base de datos real como si necesitara esta verificación de verdad, no como una idea tardía, esta es la misma disciplina que importa (con mucho más en juego) la primera vez que apuntes una herramienta como esta a una base de datos que no es solo una muestra que construiste para una lección.
 :::
 
 **🎯 Resultado esperado :**
@@ -234,9 +234,9 @@ Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
 
 **✅ Lista de verificación**
 
-- ✅ `db_tools.py` no tiene ningún `import` de `mcp` en ninguna parte — es puro `sqlite3` y biblioteca estándar.
+- ✅ `db_tools.py` no tiene ningún `import` de `mcp` en ninguna parte, es puro `sqlite3` y biblioteca estándar.
 - ✅ `run_read_only_query("DROP TABLE books")` lanza `UnsafeQueryError` en lugar de ejecutarse.
-- ✅ `run_read_only_query("SELECT * FROM books; DROP TABLE books")` también lanza `UnsafeQueryError` — la verificación del punto y coma detecta las sentencias encadenadas.
+- ✅ `run_read_only_query("SELECT * FROM books; DROP TABLE books")` también lanza `UnsafeQueryError`, la verificación del punto y coma detecta las sentencias encadenadas.
 - ✅ Una consulta `SELECT` real contra tu base de datos devuelve las filas correctas como una lista de diccionarios.
 
 **🤔 Pregunta(s) socrática(s)**
@@ -310,8 +310,8 @@ Pruébalo exactamente igual que en el proyecto MCP anterior, con el Inspector, a
 ```bash
 uv run mcp dev server.py
 ```
-Llama a `list_db_tables`, luego a `describe_db_table` con `"books"`, y luego a `query_db` con un `SELECT` real — y, deliberadamente, una vez con algo como `DROP TABLE books`, para verlo regresar como un rechazo claro en lugar de un error a nivel del Inspector.
-Fíjate en que `query_db` captura `UnsafeQueryError` él mismo y devuelve un resultado simple `{"error": ...}`, en lugar de dejar que la excepción se propague a través de MCP. Esa es una elección de diseño pequeña pero real: una excepción no manejada de una llamada a herramienta generalmente aparece ante el cliente como un fallo opaco a nivel de protocolo, mientras que un mensaje de error devuelto es algo que el modelo puede leer, entender y ante lo cual reaccionar — por ejemplo, reformulando su propia consulta.
+Llama a `list_db_tables`, luego a `describe_db_table` con `"books"`, y luego a `query_db` con un `SELECT` real, y, deliberadamente, una vez con algo como `DROP TABLE books`, para verlo regresar como un rechazo claro en lugar de un error a nivel del Inspector.
+Fíjate en que `query_db` captura `UnsafeQueryError` él mismo y devuelve un resultado simple `{"error": ...}`, en lugar de dejar que la excepción se propague a través de MCP. Esa es una elección de diseño pequeña pero real: una excepción no manejada de una llamada a herramienta generalmente aparece ante el cliente como un fallo opaco a nivel de protocolo, mientras que un mensaje de error devuelto es algo que el modelo puede leer, entender y ante lo cual reaccionar, por ejemplo, reformulando su propia consulta.
 
 **🎯 Resultado esperado :**
 
@@ -353,7 +353,7 @@ Añade tu servidor a `claude_desktop_config.json` (el mismo archivo que usó el 
 ```
 **Cierra por completo y vuelve a abrir Claude Desktop.** Una vez que esté de vuelta, hazle una pregunta genuina en lenguaje natural que necesite más de una tabla para responderse, por ejemplo:
 > Usando las herramientas de library-db, ¿qué libros están actualmente prestados y aún no han sido devueltos? Dame los títulos y quién los tiene.
-Observa lo que sucede: Claude debería llamar a `list_db_tables`, luego a `describe_db_table` sobre `books`, `loans` y `members` para aprender los nombres de las columnas, y después componer y ejecutar su propio `SELECT ... JOIN ...` a través de `query_db` — y responder usando el resultado real, no una suposición. Esta es la recompensa real de todo el proyecto: nunca escribiste ese join tú mismo.
+Observa lo que sucede: Claude debería llamar a `list_db_tables`, luego a `describe_db_table` sobre `books`, `loans` y `members` para aprender los nombres de las columnas, y después componer y ejecutar su propio `SELECT ... JOIN ...` a través de `query_db`, y responder usando el resultado real, no una suposición. Esta es la recompensa real de todo el proyecto: nunca escribiste ese join tú mismo.
 
 **🎯 Resultado esperado :**
 
@@ -374,32 +374,32 @@ Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
 **🤔 Pregunta(s) socrática(s)**
 
 - Claude escribió su propio SQL aquí, sin que nunca le mostraras una consulta para imitar. ¿Qué en los docstrings de las herramientas y en el esquema que devuelve `describe_db_table` le dio suficiente con lo que trabajar?
-- Si hicieras una pregunta ambigua — "muéstrame los libros populares", digamos, sin ninguna definición de "popular" en tu esquema — ¿qué esperarías que hiciera Claude: adivinar una definición, pedirte que aclares, o algo distinto? Pruébalo.
+- Si hicieras una pregunta ambigua, "muéstrame los libros populares", digamos, sin ninguna definición de "popular" en tu esquema, ¿qué esperarías que hiciera Claude: adivinar una definición, pedirte que aclares, o algo distinto? Pruébalo.
 
 ## ⚠️ Errores comunes
 
-- **Confiar en `table_name` directamente en una f-string sin verificarlo primero contra `list_tables()`.** `PRAGMA table_info(...)` no puede aceptar un marcador de posición `?` para un nombre de tabla, así que es tentador simplemente interpolarlo — pero solo después de confirmar que es un nombre de tabla real que tu propio código ya conoce, nunca una cadena cruda proporcionada por el modelo sin verificar.
-- **Olvidar la verificación del punto y coma.** Un filtro de palabras clave por sí solo (bloqueando `DROP`, `DELETE`, etc.) no detiene `SELECT * FROM books; DROP TABLE books` si solo buscas palabras clave en la *primera* sentencia — rechaza ante cualquier punto y coma en la consulta, no solo ante palabras clave prohibidas.
-- **Una ruta relativa, u olvidar reiniciar completamente Claude Desktop, en el Paso 4.** Los mismos dos errores que en el proyecto Construye un servidor MCP — Claude Desktop necesita una ruta absoluta en la configuración y solo la lee tras un reinicio completo, no al cerrar y reabrir la ventana.
+- **Confiar en `table_name` directamente en una f-string sin verificarlo primero contra `list_tables()`.** `PRAGMA table_info(...)` no puede aceptar un marcador de posición `?` para un nombre de tabla, así que es tentador simplemente interpolarlo, pero solo después de confirmar que es un nombre de tabla real que tu propio código ya conoce, nunca una cadena cruda proporcionada por el modelo sin verificar.
+- **Olvidar la verificación del punto y coma.** Un filtro de palabras clave por sí solo (bloqueando `DROP`, `DELETE`, etc.) no detiene `SELECT * FROM books; DROP TABLE books` si solo buscas palabras clave en la *primera* sentencia, rechaza ante cualquier punto y coma en la consulta, no solo ante palabras clave prohibidas.
+- **Una ruta relativa, u olvidar reiniciar completamente Claude Desktop, en el Paso 4.** Los mismos dos errores que en el proyecto Construye un servidor MCP, Claude Desktop necesita una ruta absoluta en la configuración y solo la lee tras un reinicio completo, no al cerrar y reabrir la ventana.
 - **Ejecutar el servidor con `python server.py` en lugar de `uv run python server.py`.** Sin `uv run`, puede que no estés en el entorno virtual donde `uv add` instaló `mcp`, y obtengas un `ModuleNotFoundError`.
 
 ## Lo que acabas de construir
 
-Una instancia real, aunque pequeña, de un patrón genuinamente útil más allá de una lección: un cliente LLM respondiendo preguntas en lenguaje natural sobre datos estructurados que nunca ha visto antes, descubriendo el esquema y escribiendo su propio SQL a través de herramientas que expusiste — con un límite de seguridad real entre "lectura" y "escritura" aplicado en tu propio código, no dado por supuesto. La base de datos aquí es una biblioteca de juguete, pero nada en `list_db_tables`, `describe_db_table`, ni en la aplicación de solo lectura en `query_db` es específico del juguete — apunta el mismo servidor a un archivo SQLite distinto y funciona sin modificaciones.
+Una instancia real, aunque pequeña, de un patrón genuinamente útil más allá de una lección: un cliente LLM respondiendo preguntas en lenguaje natural sobre datos estructurados que nunca ha visto antes, descubriendo el esquema y escribiendo su propio SQL a través de herramientas que expusiste, con un límite de seguridad real entre "lectura" y "escritura" aplicado en tu propio código, no dado por supuesto. La base de datos aquí es una biblioteca de juguete, pero nada en `list_db_tables`, `describe_db_table`, ni en la aplicación de solo lectura en `query_db` es específico del juguete, apunta el mismo servidor a un archivo SQLite distinto y funciona sin modificaciones.
 
 ## Hacia dónde ir desde aquí
 
-- Apunta este servidor a una base de datos SQLite real que uses de verdad — una exportación de finanzas personales, los datos de un proyecto pequeño, cualquier cosa que ya tengas como archivo `.db` — y observa cómo se comportan las mismas tres herramientas frente a un esquema real y preguntas reales.
+- Apunta este servidor a una base de datos SQLite real que uses de verdad, una exportación de finanzas personales, los datos de un proyecto pequeño, cualquier cosa que ya tengas como archivo `.db`, y observa cómo se comportan las mismas tres herramientas frente a un esquema real y preguntas reales.
 - Añade un límite de tamaño de resultado o número de filas a `run_read_only_query`, para que un `SELECT *` amplio sobre una tabla mucho más grande no pueda devolver un resultado desproporcionadamente grande al modelo.
-- Lee sobre los **recursos** de MCP — este proyecto solo cubre *herramientas*, pero la información de esquema que devuelve `describe_db_table` es discutiblemente más apta para un recurso (datos legibles) que para una herramienta (una acción). La [documentación del propio SDK](https://github.com/modelcontextprotocol/python-sdk) cubre la diferencia.
+- Lee sobre los **recursos** de MCP, este proyecto solo cubre *herramientas*, pero la información de esquema que devuelve `describe_db_table` es discutiblemente más apta para un recurso (datos legibles) que para una herramienta (una acción). La [documentación del propio SDK](https://github.com/modelcontextprotocol/python-sdk) cubre la diferencia.
 
-:::tip[Ejecuta una versión más completa sin ninguna instalación local — al menos para la lógica de las herramientas]
-[`examples/mcp-sqlite-server/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/mcp-sqlite-server) en el repositorio del curso tiene el `seed.py`, `db_tools.py` y `server.py` completos de esta lección, además de un notebook que demuestra las funciones de consulta/esquema de forma aislada. Clónalo, o abre todo el repositorio en un [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), para probar las tres herramientas con `uv run mcp dev server.py` — recordando que la conexión real con Claude Desktop igual tiene que ocurrir localmente, según "Dónde ejecutar esto" más arriba.
+:::tip[Ejecuta una versión más completa sin ninguna instalación local, al menos para la lógica de las herramientas]
+[`examples/mcp-sqlite-server/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/mcp-sqlite-server) en el repositorio del curso tiene el `seed.py`, `db_tools.py` y `server.py` completos de esta lección, además de un notebook que demuestra las funciones de consulta/esquema de forma aislada. Clónalo, o abre todo el repositorio en un [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), para probar las tres herramientas con `uv run mcp dev server.py`, recordando que la conexión real con Claude Desktop igual tiene que ocurrir localmente, según "Dónde ejecutar esto" más arriba.
 :::
 
 ## Comparte tu proyecto con la clase
 
-¿Construiste algo de lo que te sientes orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado — y su README tiene un recorrido completo y amigable para principiantes sobre cómo añadir el tuyo mediante un **pull request**, incluso si nunca has usado git antes: bifurcar el repositorio, crear una rama, hacer commit de tus archivos y abrir el PR, paso a paso. No se asume ninguna experiencia previa con git.
+¿Construiste algo de lo que te sientes orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado, y su README tiene un recorrido completo y amigable para principiantes sobre cómo añadir el tuyo mediante un **pull request**, incluso si nunca has usado git antes: bifurcar el repositorio, crear una rama, hacer commit de tus archivos y abrir el PR, paso a paso. No se asume ninguna experiencia previa con git.
 
-Bienvenido a dejar que una IA escriba su propio SQL — con cuidado. 🎓
+Bienvenido a dejar que una IA escriba su propio SQL, con cuidado. 🎓
 

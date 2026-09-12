@@ -20,7 +20,7 @@ learningObjectives:
 
 # Detector de Anomalías
 
-Los valores atípicos se esconden en cada conjunto de datos — un pico de un sensor, una transacción fraudulenta, un error de medición. Encontrarlos importa porque pueden distorsionar el análisis o revelar algo importante. Este proyecto te enseña dos técnicas estadísticas clásicas para identificar anomalías (z-score e IQR) y te muestra cómo visualizar los resultados para que los valores atípicos sobresalgan en los gráficos.
+Los valores atípicos se esconden en cada conjunto de datos, un pico de un sensor, una transacción fraudulenta, un error de medición. Encontrarlos importa porque pueden distorsionar el análisis o revelar algo importante. Este proyecto te enseña dos técnicas estadísticas clásicas para identificar anomalías (z-score e IQR) y te muestra cómo visualizar los resultados para que los valores atípicos sobresalgan en los gráficos.
 
 Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
 
@@ -36,17 +36,17 @@ Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/es/proyec
 ## Dónde ejecutar esto
 
 - **Localmente con `uv` (recomendado).** Este proyecto usa `pandas`, `numpy` y `matplotlib`, por lo que una instalación local es el camino más suave. La sección de Configuración a continuación lo detalla.
-- **JupyterLite playground.** Pega las celdas de código directamente en un notebook — funciona bien para explorar los pasos de análisis, aunque la función de reporte final está diseñada para un terminal real.
+- **JupyterLite playground.** Pega las celdas de código directamente en un notebook, funciona bien para explorar los pasos de análisis, aunque la función de reporte final está diseñada para un terminal real.
 - **Google Colab.** Abre un nuevo notebook y pega las celdas. La misma advertencia que con JupyterLite: las funciones CLI funcionan mejor en un terminal real.
 
-- **Ejecútalo en el navegador.** Hay un cuaderno interactivo listo — ábrelo en Colab, Kaggle o Binder y sigue los pasos en orden.
+- **Ejecútalo en el navegador.** Hay un cuaderno interactivo listo, ábrelo en Colab, Kaggle o Binder y sigue los pasos en orden.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/anomaly-detector/notebook.es.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/anomaly-detector/notebook.es.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fanomaly-detector%2Fnotebook.es.ipynb)
 
 ## Configuración
 
-`uv` es una herramienta única que reemplaza la cadena habitual de "instalar Python, luego pip, luego un entorno virtual" — puede instalar y gestionar versiones de Python junto con las dependencias de tu proyecto.
+`uv` es una herramienta única que reemplaza la cadena habitual de "instalar Python, luego pip, luego un entorno virtual", puede instalar y gestionar versiones de Python junto con las dependencias de tu proyecto.
 
 **macOS / Linux** (terminal):
 
@@ -131,7 +131,7 @@ First 5 rows:
  2026-06-05       214.90       856
 ```
 
-**🩹 Si sale mal:** Si la media es mucho mayor que 200, los picos inyectados la están elevando — eso es esperado. Si obtienes un `ImportError`, asegúrate de que `numpy` esté instalado: `uv add numpy`.
+**🩹 Si sale mal:** Si la media es mucho mayor que 200, los picos inyectados la están elevando, eso es esperado. Si obtienes un `ImportError`, asegúrate de que `numpy` esté instalado: `uv add numpy`.
 
 ### 1.2 Inspecciona la distribución
 
@@ -168,7 +168,7 @@ Values at those positions:
   Day 81: 547.83 ms
 ```
 
-**🩹 Si sale mal:** Si algún valor inyectado está por debajo de 400, el rango aleatorio no es lo suficientemente amplio — vuelve a ejecutar la celda. El `np.random.seed(42)` garantiza la reproducibilidad, por lo que los resultados deberían ser consistentes.
+**🩹 Si sale mal:** Si algún valor inyectado está por debajo de 400, el rango aleatorio no es lo suficientemente amplio, vuelve a ejecutar la celda. El `np.random.seed(42)` garantiza la reproducibilidad, por lo que los resultados deberían ser consistentes.
 
 ### 1.3 Verifica la configuración
 
@@ -185,7 +185,7 @@ Values at those positions:
 
 ## Paso 2: Detección de anomalías con z-score
 
-El z-score te indica cuántas desviaciones estándar se separa un punto de datos de la media. Un z-score por encima de 3 (o por debajo de -3) es un umbral común para marcar valores atípicos — significa que el punto es extremadamente improbable bajo una distribución normal.
+El z-score te indica cuántas desviaciones estándar se separa un punto de datos de la media. Un z-score por encima de 3 (o por debajo de -3) es un umbral común para marcar valores atípicos, significa que el punto es extremadamente improbable bajo una distribución normal.
 
 ### 2.1 Calcula z-scores
 
@@ -227,7 +227,7 @@ Highest z-scores:
  2026-07-28       412.44  4.945678
 ```
 
-**🩹 Si sale mal:** Si todos los z-scores están cerca de cero, la desviación estándar es muy grande en relación con la media — verifica que `response_ms` no esté almacenado como enteros perdiendo precisión. Si obtienes un `ZeroDivisionError`, la desviación estándar es cero, lo que significa que todos los valores son idénticos — genera datos nuevos.
+**🩹 Si sale mal:** Si todos los z-scores están cerca de cero, la desviación estándar es muy grande en relación con la media, verifica que `response_ms` no esté almacenado como enteros perdiendo precisión. Si obtienes un `ZeroDivisionError`, la desviación estándar es cero, lo que significa que todos los valores son idénticos, genera datos nuevos.
 
 ### 2.2 Marca anomalías con un umbral configurable
 
@@ -263,7 +263,7 @@ Anomalies detected (z-score, threshold=3.0): 5
  2026-08-21       547.83  8.274567
 ```
 
-**🩹 Si sale mal:** Si detectas más de 5 anomalías, el umbral es muy bajo — incrémentalo a 3.0 o 3.5. Si detectas menos de 5, el umbral es muy alto. Experimenta con el parámetro `threshold` y observa cómo cambia el conteo.
+**🩹 Si sale mal:** Si detectas más de 5 anomalías, el umbral es muy bajo, incrémentalo a 3.0 o 3.5. Si detectas menos de 5, el umbral es muy alto. Experimenta con el parámetro `threshold` y observa cómo cambia el conteo.
 
 ### 2.3 Prueba diferentes umbrales
 
@@ -290,7 +290,7 @@ for t in [2.0, 2.5, 3.0, 3.5, 4.0]:
 **✅ Lista de verificación**
 
 - ✅ `compute_zscores` devuelve una Serie con media cercana a 0 y desviación estándar cercana a 1.
-- ✅ Con umbral 3.0, exactamente 5 anomalías están marcadas — coincidiendo con los picos inyectados.
+- ✅ Con umbral 3.0, exactamente 5 anomalías están marcadas, coincidiendo con los picos inyectados.
 - ✅ Umbrales más bajos capturan más anomalías (más sensibles).
 - ✅ Umbrales más altos capturan menos anomalías (más conservadores).
 
@@ -333,7 +333,7 @@ Lower bound: 161.26 ms
 Upper bound: 238.20 ms
 ```
 
-**🩹 Si sale mal:** Si el IQR es muy pequeño (menos de 5), tus datos pueden ser demasiado uniformes — inyecta picos más grandes. Si los límites parecen demasiado amplios, el multiplicador está configurado demasiado alto.
+**🩹 Si sale mal:** Si el IQR es muy pequeño (menos de 5), tus datos pueden ser demasiado uniformes, inyecta picos más grandes. Si los límites parecen demasiado amplios, el multiplicador está configurado demasiado alto.
 
 ### 3.2 Marca anomalías usando IQR
 
@@ -369,7 +369,7 @@ Anomalies detected (IQR, multiplier=1.5): 5
  2026-08-21       547.83
 ```
 
-**🩹 Si sale mal:** Si el método IQR captura un número diferente de anomalías que el método z-score, eso es normal — usan principios estadísticos diferentes. Si no captura ninguna, el multiplicador es demasiado alto; prueba con 1.0 en lugar de 1.5.
+**🩹 Si sale mal:** Si el método IQR captura un número diferente de anomalías que el método z-score, eso es normal, usan principios estadísticos diferentes. Si no captura ninguna, el multiplicador es demasiado alto; prueba con 1.0 en lugar de 1.5.
 
 ### 3.3 Compara resultados z-score vs IQR
 
@@ -405,7 +405,7 @@ Rows flagged by at least one method:
  2026-08-21       547.83  8.274567            True         True
 ```
 
-**🩹 Si sale mal:** Si los dos métodos no están de acuerdo en algunas filas, eso es en realidad informativo — esos puntos límite vale la pena investigarlos manualmente. En este conjunto de datos sintético con picos obvios, ambos métodos están perfectamente de acuerdo.
+**🩹 Si sale mal:** Si los dos métodos no están de acuerdo en algunas filas, eso es en realidad informativo, esos puntos límite vale la pena investigarlos manualmente. En este conjunto de datos sintético con picos obvios, ambos métodos están perfectamente de acuerdo.
 
 ### 3.4 Verifica la detección con IQR
 
@@ -457,7 +457,7 @@ plot_scatter_with_anomalies(df)
 
 **Resultado esperado:** Un gráfico de dispersión que muestra una nube de puntos azules agrupados alrededor de 200 ms, con 5 marcadores de X rojos claramente separados por encima de 400 ms. La línea punteada verde muestra la media, y la línea de puntos naranja muestra el límite superior IQR. El gráfico se guarda en `scatter_anomalies.png`.
 
-**🩹 Si sale mal:** Si todos los puntos son del mismo color, la columna booleana `zscore_anomaly` puede no existir aún — ejecuta el Paso 2.2 primero. Si las fechas se superponen y se vuelven ilegibles, aumenta el ancho de la figura con `figsize=(14, 5)`.
+**🩹 Si sale mal:** Si todos los puntos son del mismo color, la columna booleana `zscore_anomaly` puede no existir aún, ejecuta el Paso 2.2 primero. Si las fechas se superponen y se vuelven ilegibles, aumenta el ancho de la figura con `figsize=(14, 5)`.
 
 ### 4.2 Histograma con regiones de anomalía
 
@@ -488,7 +488,7 @@ plot_histogram_with_thresholds(df)
 
 **Resultado esperado:** Un histograma con la mayoría de los valores agrupados entre 160 y 240 ms. Dos líneas verticales rojas punteadas marcan los límites IQR, y líneas rojas tenues resaltan cada anomalía en la cola. El gráfico se guarda en `histogram_anomalies.png`.
 
-**🩹 Si sale mal:** Si las barras del histograma son extremadamente delgadas, aumenta el número de contenedores. Si no aparecen líneas verticales rojas en la cola, las anomalías están fuera del rango visible del eje x — añade `ax.set_xlim(left=100)` para extender el eje.
+**🩹 Si sale mal:** Si las barras del histograma son extremadamente delgadas, aumenta el número de contenedores. Si no aparecen líneas verticales rojas en la cola, las anomalías están fuera del rango visible del eje x, añade `ax.set_xlim(left=100)` para extender el eje.
 
 ### 4.3 Diagrama de caja
 
@@ -517,7 +517,7 @@ plot_boxplot(df)
 
 **Resultado esperado:** Un diagrama de caja con la caja centrada alrededor de 200 ms, bigotes que se extienden hasta las cercas IQR, y puntos rojos más allá del bigote superior marcando cada anomalía. El gráfico se guarda en `boxplot_anomalies.png`.
 
-**🩹 Si sale mal:** Si el diagrama de caja no muestra valores atípicos (puntos rojos), los datos pueden necesitar actualizarse — vuelve a ejecutar el paso de generación de datos. El diagrama de caja usa la regla predeterminada de matplotlib de 1.5*IQR, que debería coincidir con tu detección IQR.
+**🩹 Si sale mal:** Si el diagrama de caja no muestra valores atípicos (puntos rojos), los datos pueden necesitar actualizarse, vuelve a ejecutar el paso de generación de datos. El diagrama de caja usa la regla predeterminada de matplotlib de 1.5*IQR, que debería coincidir con tu detección IQR.
 
 ### 4.4 Verifica las visualizaciones
 
@@ -599,7 +599,7 @@ generate_report(df, method="zscore")
 ============================================================
 ```
 
-**🩹 Si sale mal:** Si obtienes un KeyError, la columna de anomalías no se ha creado aún — ejecuta los Pasos 2.2 o 3.2 primero. Si todas las etiquetas de severidad dicen "MEDIUM", tu media normal está demasiado cerca de los valores de anomalía — genera datos nuevos con picos más grandes.
+**🩹 Si sale mal:** Si obtienes un KeyError, la columna de anomalías no se ha creado aún, ejecuta los Pasos 2.2 o 3.2 primero. Si todas las etiquetas de severidad dicen "MEDIUM", tu media normal está demasiado cerca de los valores de anomalía, genera datos nuevos con picos más grandes.
 
 ### 5.2 Ejecuta el reporte para ambos métodos
 
@@ -654,7 +654,7 @@ Contents of anomalies_zscore.csv:
  2026-08-21       547.83        347.56 CRITICAL
 ```
 
-**🩹 Si sale mal:** Si el CSV está vacío, el filtro booleano está excluyendo todo — verifica que `zscore_anomaly` sea `True` para al menos algunas filas. Si `deviation_ms` parece incorrecto, la media normal puede estar recalculándose en el conjunto de datos completo en lugar de solo en las filas no anómalas.
+**🩹 Si sale mal:** Si el CSV está vacío, el filtro booleano está excluyendo todo, verifica que `zscore_anomaly` sea `True` para al menos algunas filas. Si `deviation_ms` parece incorrecto, la media normal puede estar recalculándose en el conjunto de datos completo en lugar de solo en las filas no anómalas.
 
 ### 5.4 Verifica el reporte
 
@@ -693,7 +693,7 @@ Contents of anomalies_zscore.csv:
 
 ## Lo que acabas de construir
 
-Un kit de herramientas reutilizable de detección de anomalías que aplica dos métodos estadísticos clásicos — z-score e IQR — para marcar valores atípicos en datos numéricos. Calculaste z-scores contra una media global, derivaste cercas IQR a partir de rangos de cuartiles, visualizaste anomalías en gráficos de dispersión, histogramas y diagramas de caja, y construiste un sistema de reporte automatizado que clasifica la severidad y exporta resultados a CSV. Estas técnicas se transfieren directamente a monitoreo del mundo real, detección de fraude, control de calidad y cualquier dominio donde los valores inusuales merezcan atención.
+Un kit de herramientas reutilizable de detección de anomalías que aplica dos métodos estadísticos clásicos, z-score e IQR, para marcar valores atípicos en datos numéricos. Calculaste z-scores contra una media global, derivaste cercas IQR a partir de rangos de cuartiles, visualizaste anomalías en gráficos de dispersión, histogramas y diagramas de caja, y construiste un sistema de reporte automatizado que clasifica la severidad y exporta resultados a CSV. Estas técnicas se transfieren directamente a monitoreo del mundo real, detección de fraude, control de calidad y cualquier dominio donde los valores inusuales merezcan atención.
 
 ## A dónde ir desde aquí
 
@@ -705,6 +705,6 @@ Un kit de herramientas reutilizable de detección de anomalías que aplica dos m
 
 ## Comparte tu proyecto con la clase
 
-¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado — y su README tiene un recorrido completo y amigable para principiantes sobre cómo agregar el tuyo vía un **pull request**, incluso si nunca has usado git antes: hacer fork del repositorio, crear una rama, confirmar tus archivos, y abrir el PR, un paso a la vez. No se asume experiencia previa con git.
+¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado, y su README tiene un recorrido completo y amigable para principiantes sobre cómo agregar el tuyo vía un **pull request**, incluso si nunca has usado git antes: hacer fork del repositorio, crear una rama, confirmar tus archivos, y abrir el PR, un paso a la vez. No se asume experiencia previa con git.
 
 Bienvenido a escribir Python fuera del navegador. 🎓

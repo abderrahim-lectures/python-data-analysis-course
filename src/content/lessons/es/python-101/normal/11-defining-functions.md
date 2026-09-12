@@ -22,7 +22,7 @@ track: "normal"
 
 ## De la fórmula a la máquina nombrada
 
-Las matemáticas aborrecen la repetición. Aprendiste $f(x) = x^2 - 5x + 6$ como una *regla* — una definición, usada mil veces, sobre mil entradas distintas:
+Las matemáticas aborrecen la repetición. Aprendiste $f(x) = x^2 - 5x + 6$ como una *regla*, una definición, usada mil veces, sobre mil entradas distintas:
 
 $$
 f(x) = x^2 - 5x + 6, \qquad f(2) = 0.
@@ -37,7 +37,7 @@ def add(a, b):
 result = add(3, 5)  # 8
 ```
 
-El nombre, los paréntesis que sostienen los parámetros $a, b$, los dos puntos que inician la receta — esa es la definición. La llamada `add(3, 5)` es aplicar la regla en $a=3$, $b=5$, exactamente como $f(2)$ aplica una regla en $x=2$.
+El nombre, los paréntesis que sostienen los parámetros $a, b$, los dos puntos que inician la receta, esa es la definición. La llamada `add(3, 5)` es aplicar la regla en $a=3$, $b=5$, exactamente como $f(2)$ aplica una regla en $x=2$.
 
 ## Definir y llamar
 
@@ -51,7 +51,7 @@ def greet(name):
 greet("Alice")  # Hello, Alice!
 ```
 
-Tres partes merecen nombre. Los **parámetros** son las variables en la definición — las ranuras de entrada $x$. Los **argumentos** son los valores concretos aportados en el lugar de la llamada — la entrada $2$. Y la línea entre comillas triples de dentro es el **docstring**: documentación que vive al lado del código, para que `help(greet)` pueda responder qué hace la función.
+Tres partes merecen nombre. Los **parámetros** son las variables en la definición, las ranuras de entrada $x$. Los **argumentos** son los valores concretos aportados en el lugar de la llamada, la entrada $2$. Y la línea entre comillas triples de dentro es el **docstring**: documentación que vive al lado del código, para que `help(greet)` pueda responder qué hace la función.
 
 ## Return: la puerta de salida
 
@@ -65,7 +65,7 @@ result = add(3, 5)          # result == 8
 printed = print("8")        # printed es None — print no devuelve nada
 ```
 
-Una función sin `return` devuelve `None` en silencio — la máquina no produce salida. Cuando quieras que el resultado aritmético de tu función siga fluyendo hacia delante, recuerda: `return`, no `print`.
+Una función sin `return` devuelve `None` en silencio, la máquina no produce salida. Cuando quieras que el resultado aritmético de tu función siga fluyendo hacia delante, recuerda: `return`, no `print`.
 
 ## Parámetros con valor predeterminado
 
@@ -92,7 +92,7 @@ def create_user(name, age, role="student"):
 user = create_user(age=25, name="Alice", role="admin")
 ```
 
-Los argumentos nombrados pueden ir en cualquier orden — el nombre del parámetro es la etiqueta de cada paquete. Una llamada que nombra sus entradas se lee como una frase, y no como un código por descifrar.
+Los argumentos nombrados pueden ir en cualquier orden, el nombre del parámetro es la etiqueta de cada paquete. Una llamada que nombra sus entradas se lee como una frase, y no como un código por descifrar.
 
 ## *args y **kwargs
 
@@ -144,7 +144,7 @@ La misma regla, tres entradas. La fórmula $f(x) = x^2 - 5x + 6$ se vuelve una m
 
 ## Errores comunes
 
-- **Argumentos mutables por defecto.** `def f(items=[])` crea *una* lista compartida entre todas las llamadas — los elementos se amontonan entre llamadas. Usa `None` por defecto y construye la lista dentro.
+- **Argumentos mutables por defecto.** `def f(items=[])` crea *una* lista compartida entre todas las llamadas, los elementos se amontonan entre llamadas. Usa `None` por defecto y construye la lista dentro.
 - **Olvidar `return`.** Una función sin él devuelve `None`; pediste un valor y recibiste una sombra.
 - **Demasiados parámetros.** Pasados tres o cuatro, las ranuras se vuelven un rompecabezas. Agrupa los argumentos afines en un dict o en un dataclass.
 - **Llamar a una función definida más abajo.** Python ejecuta de arriba a abajo; llamar a `f()` antes de que el `def f` llegue al intérprete lanza un `NameError`. Define antes de llamar.
@@ -152,18 +152,18 @@ La misma regla, tres entradas. La fórmula $f(x) = x^2 - 5x + 6$ se vuelve una m
 ## 🧩 Desafíos
 
 <details class="challenge">
-<summary>🧩 Desafío — piensa primero, luego revela</summary>
+<summary>🧩 Desafío, piensa primero, luego revela</summary>
 <div class="challenge__body">
 
 Escribe `is_palindrome(text)` que devuelva `True` cuando la cadena se lee igual de delante hacia atrás; ignora el caso de las letras.
 
-<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>def is_palindrome(text): return text.lower() == text.lower()[::-1]</code> — pasar a minúsculas vuelve simétrica la comparación, y el rebanado invertido <code>[::-1]</code> es la imagen especular.</p>
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>def is_palindrome(text): return text.lower() == text.lower()[::-1]</code>, pasar a minúsculas vuelve simétrica la comparación, y el rebanado invertido <code>[::-1]</code> es la imagen especular.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Desafío — piensa primero, luego revela</summary>
+<summary>🧩 Desafío, piensa primero, luego revela</summary>
 <div class="challenge__body">
 
 Escribe `fizzbuzz(n)` que devuelva una lista de 1 a $n$, reemplazando los múltiplos de 3 por `"Fizz"`, los de 5 por `"Buzz"` y los de ambos por `"FizzBuzz"`.

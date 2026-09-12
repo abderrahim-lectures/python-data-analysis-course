@@ -19,7 +19,7 @@ This assumes Python 101 and comfort with pandas from Data Analysis. Optional and
 
 ## Where to run this
 
-**Locally with `uv`** is the primary path — this is a CLI tool that runs offline against a mock model.
+**Locally with `uv`** is the primary path, this is a CLI tool that runs offline against a mock model.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/llm-prompt-optimizer/notebook.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/llm-prompt-optimizer/notebook.ipynb)
@@ -145,7 +145,7 @@ def build_role_based() -> PromptVariant:
 
 **🎯 Expected output:** Each `build_*` returns a named variant whose `build(prompt)` injects structure around the raw question.
 
-**🩹 If it's off:** If variants feel identical, the injected structure is doing nothing useful — widen the differences.
+**🩹 If it's off:** If variants feel identical, the injected structure is doing nothing useful, widen the differences.
 
 ### 2.2 Verify variants
 
@@ -185,7 +185,7 @@ class MockModel:
         return "unknown"
 ```
 
-The mock returns the math result when an arithmetic expression appear and facts from a small lookup. It's deliberately naive — that's enough to demonstrate optimization.
+The mock returns the math result when an arithmetic expression appear and facts from a small lookup. It's deliberately naive, that's enough to demonstrate optimization.
 
 **🎯 Expected output:** `MockModel().generate("Think step by step. Q: What is 6 * 7? A:")` returns `"42"`.
 
@@ -241,7 +241,7 @@ def evaluate_all(variants, model, gold: list[Question]) -> pd.DataFrame:
 
 **🎯 Expected output:** `evaluate_all([v1, v2, v3], model, gold_set())` returns a DataFrame ranking variants by accuracy.
 
-**🩹 If it's off:** If everything scores the same, the mock's answers don't depend on prompt structure — that's fine for the demo, but add a variant the mock responds to differently.
+**🩹 If it's off:** If everything scores the same, the mock's answers don't depend on prompt structure, that's fine for the demo, but add a variant the mock responds to differently.
 
 ### 4.2 Verify scoring
 
@@ -316,7 +316,7 @@ def optimize(out: str):
 
 ## What you just built
 
-A prompt optimization loop: a gold dataset, programmatic variant generators (few-shot, chain-of-thought, role-based), an offline mock model, an accuracy scorer, and a CLI that ranks variants and exports the best one. This is the automated version of what prompt engineers do by hand — and it makes the whole process repeatable and measurable.
+A prompt optimization loop: a gold dataset, programmatic variant generators (few-shot, chain-of-thought, role-based), an offline mock model, an accuracy scorer, and a CLI that ranks variants and exports the best one. This is the automated version of what prompt engineers do by hand, and it makes the whole process repeatable and measurable.
 
 :::tip[Run a fuller version without any local setup]
 [`examples/llm-prompt-optimizer/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/llm-prompt-optimizer) in the course repo has a richer version with real model adapters, token-efficiency scoring, and the CLI wired up end to end. Clone it, or open the whole repo in a [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), and run it from there.
@@ -330,6 +330,6 @@ A prompt optimization loop: a gold dataset, programmatic variant generators (few
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

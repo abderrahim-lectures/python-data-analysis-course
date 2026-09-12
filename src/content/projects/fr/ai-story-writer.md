@@ -21,7 +21,7 @@ prerequisites:
 
 Tu adores raconter des histoires, mais parfois la page blanche gagne. Dans ce projet, tu vas construire un outil qui apprend les schémas d'écriture d'un texte d'exemple et génère de nouvelles histoires en combinant la génération de texte par chaînes de Markov avec des modèles structurés et des profils de personnages. Le résultat est un générateur d'histoires qui produit des contes multi-paragraphes avec des personnages cohérents, des intrigues variées et un style contrôlable.
 
-Ce projet suppose seulement des bases de niveau Python 101 — fonctions, listes, dictionnaires, boucles, classes et mise en forme de chaînes. Pas de frameworks, pas de bases de données, pas de services cloud. Tout ce dont tu as besoin vient de la bibliothèque standard.
+Ce projet suppose seulement des bases de niveau Python 101, fonctions, listes, dictionnaires, boucles, classes et mise en forme de chaînes. Pas de frameworks, pas de bases de données, pas de services cloud. Tout ce dont tu as besoin vient de la bibliothèque standard.
 
 C'est optionnel et non noté. Voir [Projets du monde réel](/fr/projets) pour la liste complète.
 
@@ -37,18 +37,18 @@ C'est optionnel et non noté. Voir [Projets du monde réel](/fr/projets) pour la
 
 ## Où exécuter ceci
 
-- **En local avec `uv` (recommandé).** Ce projet utilise uniquement la bibliothèque standard de Python — aucun paquet tiers n'est nécessaire. La section Configuration ci-dessous te guide pas à pas.
+- **En local avec `uv` (recommandé).** Ce projet utilise uniquement la bibliothèque standard de Python, aucun paquet tiers n'est nécessaire. La section Configuration ci-dessous te guide pas à pas.
 - **Google Colab ou Kaggle Notebooks.** Colle les cellules de code directement dans un notebook.
-- **Aire de jeux JupyterLite.** Colle les cellules de code directement dans un notebook — aucune lecture/écriture de fichier n'est requise, donc tout fonctionne dans le navigateur.
+- **Aire de jeux JupyterLite.** Colle les cellules de code directement dans un notebook, aucune lecture/écriture de fichier n'est requise, donc tout fonctionne dans le navigateur.
 
-- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt — ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
+- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt, ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-story-writer/notebook.fr.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-story-writer/notebook.fr.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fai-story-writer%2Fnotebook.fr.ipynb)
 
 ## Configuration
 
-`uv` est un outil unique qui remplace la chaîne habituelle « installe Python, puis pip, puis un environnement virtuel, puis les paquets » — il gère ensemble les versions de Python et les dépendances.
+`uv` est un outil unique qui remplace la chaîne habituelle « installe Python, puis pip, puis un environnement virtuel, puis les paquets », il gère ensemble les versions de Python et les dépendances.
 
 **macOS / Linux** (terminal) :
 
@@ -75,11 +75,11 @@ uv init ai-story-writer
 cd ai-story-writer
 ```
 
-Aucun paquet supplémentaire — la bibliothèque standard a tout ce qu'il faut (`random`, `dataclasses`, `abc`, `json`, `textwrap`).
+Aucun paquet supplémentaire, la bibliothèque standard a tout ce qu'il faut (`random`, `dataclasses`, `abc`, `json`, `textwrap`).
 
 ## Étape 1 : Les bases de la chaîne de Markov
 
-Une chaîne de Markov est un modèle simple qui prédit l'élément suivant en se basant uniquement sur l'élément courant — elle n'a aucune mémoire de ce qui l'a précédée. Appliquée au texte, une chaîne de Markov de premier ordre regarde le mot courant et choisit le mot suivant depuis une distribution de probabilités construite sur du vrai texte. La chaîne apprend quels mots ont tendance à suivre quels autres mots, puis génère de nouvelles séquences qui imitent les schémas statistiques du texte d'entraînement.
+Une chaîne de Markov est un modèle simple qui prédit l'élément suivant en se basant uniquement sur l'élément courant, elle n'a aucune mémoire de ce qui l'a précédée. Appliquée au texte, une chaîne de Markov de premier ordre regarde le mot courant et choisit le mot suivant depuis une distribution de probabilités construite sur du vrai texte. La chaîne apprend quels mots ont tendance à suivre quels autres mots, puis génère de nouvelles séquences qui imitent les schémas statistiques du texte d'entraînement.
 
 ### 1.1 Construis la structure de données de la chaîne
 
@@ -118,7 +118,7 @@ print(dict(chain))
 {'the': ['cat', 'mat', 'cat'], 'cat': ['sat', 'sat'], 'sat': ['on', None], 'on': ['the'], 'mat': ['the']}
 ```
 
-(Remarque : le dernier mot « sat » n'a pas de successeur — il sera omis de la chaîne puisque la boucle s'arrête à `len(words) - 1`.)
+(Remarque : le dernier mot « sat » n'a pas de successeur, il sera omis de la chaîne puisque la boucle s'arrête à `len(words) - 1`.)
 
 **🩹 Si ça ne marche pas :** Si ta chaîne est vide, la chaîne de caractères d'entrée n'a peut-être pas d'espaces. Vérifie que `text.split()` produit une liste d'au moins deux mots. Si tu obtiens une `KeyError` quand tu cherches un mot, souviens-toi que la chaîne ne stocke que les mots qui ont au moins un successeur.
 
@@ -184,7 +184,7 @@ Avec une graine de 42 et un texte d'entraînement court, la chaîne boucle sur l
 
 ## Étape 2 : Entraîne-toi sur un texte d'exemple
 
-Une chaîne de Markov n'est bonne que dans la mesure de ses données d'entraînement. Donne-lui un paragraphe de contes de fées et elle écrit des contes de fées. Donne-lui de la science-fiction et elle écrit de la science-fiction. L'idée clé, c'est qu'il te faut assez de texte pour que la chaîne apprenne de vrais schémas de transition de mots — une seule phrase est trop courte, mais un roman complet est excessif.
+Une chaîne de Markov n'est bonne que dans la mesure de ses données d'entraînement. Donne-lui un paragraphe de contes de fées et elle écrit des contes de fées. Donne-lui de la science-fiction et elle écrit de la science-fiction. L'idée clé, c'est qu'il te faut assez de texte pour que la chaîne apprenne de vrais schémas de transition de mots, une seule phrase est trop courte, mais un roman complet est excessif.
 
 ### 2.1 Utilise un corpus d'entraînement intégré
 
@@ -267,7 +267,7 @@ for i in range(3):
   [2] She found a secret door hidden behind a waterfall behind the door
 ```
 
-**🩹 Si ça ne marche pas :** Si la sortie est surtout des répétitions d'un seul mot, ton texte d'entraînement est trop court ou trop répétitif. Ajoute des phrases plus variées. Si tu obtiens une `KeyError`, il manque un mot à ta chaîne — vérifie que `build_chain` met en minuscules à la fois le mot courant et le mot suivant.
+**🩹 Si ça ne marche pas :** Si la sortie est surtout des répétitions d'un seul mot, ton texte d'entraînement est trop court ou trop répétitif. Ajoute des phrases plus variées. Si tu obtiens une `KeyError`, il manque un mot à ta chaîne, vérifie que `build_chain` met en minuscules à la fois le mot courant et le mot suivant.
 
 ### 2.3 Vérifie que la chaîne fonctionne
 
@@ -315,7 +315,7 @@ Template: hero (fantasy) — 4 paragraphs
 
 ### 3.2 Construis une bibliothèque de modèles
 
-**👟 Indice de départ :** Crée une liste de modèles prédéfinis, chacun avec un genre, une description de structure et une liste d'« indices » de paragraphes — de courtes descriptions de ce que chaque paragraphe devrait contenir. Ces indices guident la génération.
+**👟 Indice de départ :** Crée une liste de modèles prédéfinis, chacun avec un genre, une description de structure et une liste d'« indices » de paragraphes, de courtes descriptions de ce que chaque paragraphe devrait contenir. Ces indices guident la génération.
 
 ```python
 TEMPLATES = [
@@ -415,7 +415,7 @@ Available templates:
 
 ## Étape 4 : Le développement des personnages
 
-Les personnages rendent les histoires dignes d'être lues. Un profil de personnage est un ensemble d'attributs — nom, traits de personnalité, objectifs, histoire passée — dans lequel le générateur puise quand il remplit les emplacements du modèle. L'objectif est de rendre les personnages cohérents tout au long d'une seule histoire sans coder en dur chaque détail.
+Les personnages rendent les histoires dignes d'être lues. Un profil de personnage est un ensemble d'attributs, nom, traits de personnalité, objectifs, histoire passée, dans lequel le générateur puise quand il remplit les emplacements du modèle. L'objectif est de rendre les personnages cohérents tout au long d'une seule histoire sans coder en dur chaque détail.
 
 ### 4.1 Conçois la classe `Character`
 
@@ -715,7 +715,7 @@ The princess set out on her journey with a gentle kiss and the ship drifted thro
 The princess set out on her journey the kingdom crossed out with black ink the only entry that remained unmarked was a meeting at the harbour morgan drove to the harbour and found a boat with the engine running on the
 ```
 
-Une température basse produit un texte répétitif et prévisible. Une température moyenne mélange naturellement les corpus d'entraînement. Une température haute fait entrer des combinaisons de mots inattendues entre les genres — parfois créatif, parfois absurde.
+Une température basse produit un texte répétitif et prévisible. Une température moyenne mélange naturellement les corpus d'entraînement. Une température haute fait entrer des combinaisons de mots inattendues entre les genres, parfois créatif, parfois absurde.
 
 ### 6.2 Intègre la température dans le générateur d'histoires
 
@@ -785,7 +785,7 @@ La sortie devrait se lire comme une nouvelle cohérente avec le nom, les traits 
 
 ## Étape 7 : Le menu CLI
 
-Un menu CLI te permet d'exécuter le générateur d'histoires de façon interactive — choisis un genre, crée un personnage, règle la température et lis ton histoire dans le terminal.
+Un menu CLI te permet d'exécuter le générateur d'histoires de façon interactive, choisis un genre, crée un personnage, règle la température et lis ton histoire dans le terminal.
 
 ### 7.1 Construis la boucle de menu
 
@@ -917,9 +917,9 @@ The princess set out on her journey with a gentle kiss and they returned to the 
 
 ## Ce que tu as appris
 
-1. **Les chaînes de Markov** — comment les probabilités de transition de mots modélisent les schémas statistiques du texte naturel.
-2. **Les données d'entraînement** — comment la taille du corpus et le genre affectent la qualité de génération.
-3. **Les modèles** — comment des espaces réservés structurés transforment du texte aléatoire en histoires cohérentes.
-4. **Les profils de personnages** — comment des attributs comme les traits, les objectifs et les histoires passées donnent de la cohérence aux histoires.
-5. **La température** — comment un paramètre unique contrôle l'équilibre entre prédictibilité et créativité.
-6. **La génération d'histoires** — comment combiner toutes ces pièces en un outil CLI fonctionnel.
+1. **Les chaînes de Markov**, comment les probabilités de transition de mots modélisent les schémas statistiques du texte naturel.
+2. **Les données d'entraînement**, comment la taille du corpus et le genre affectent la qualité de génération.
+3. **Les modèles**, comment des espaces réservés structurés transforment du texte aléatoire en histoires cohérentes.
+4. **Les profils de personnages**, comment des attributs comme les traits, les objectifs et les histoires passées donnent de la cohérence aux histoires.
+5. **La température**, comment un paramètre unique contrôle l'équilibre entre prédictibilité et créativité.
+6. **La génération d'histoires**, comment combiner toutes ces pièces en un outil CLI fonctionnel.

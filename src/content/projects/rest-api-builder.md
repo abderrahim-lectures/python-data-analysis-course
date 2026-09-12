@@ -1,6 +1,6 @@
 ---
 title: "Build a REST API Builder"
-description: "Scaffold a production-ready REST API from a YAML schema — auto-generate FastAPI routes, JWT auth, Pydantic validation, and OpenAPI docs."
+description: "Scaffold a production-ready REST API from a YAML schema, auto-generate FastAPI routes, JWT auth, Pydantic validation, and OpenAPI docs."
 difficulty: "advanced"
 estimatedMinutes: 120
 tags: ["fastapi", "pydantic", "rest-api", "jwt", "openapi"]
@@ -17,9 +17,9 @@ prerequisites:
 
 # 🛠️ 🚀 Build a REST API Builder
 
-Most real-world APIs follow the same pattern: resources with CRUD endpoints, authentication, validation, and docs. Writing each one by hand gets tedious fast — this project builds a code generator that reads a YAML schema and produces a complete FastAPI application with JWT authentication, Pydantic validation, and auto-generated OpenAPI docs, so you define your API once in YAML and get a working server.
+Most real-world APIs follow the same pattern: resources with CRUD endpoints, authentication, validation, and docs. Writing each one by hand gets tedious fast, this project builds a code generator that reads a YAML schema and produces a complete FastAPI application with JWT authentication, Pydantic validation, and auto-generated OpenAPI docs, so you define your API once in YAML and get a working server.
 
-This assumes Python basics, intermediate OOP, and enough HTTP knowledge to know what a POST request does — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
+This assumes Python basics, intermediate OOP, and enough HTTP knowledge to know what a POST request does, nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 
@@ -31,13 +31,13 @@ This assumes Python basics, intermediate OOP, and enough HTTP knowledge to know 
 
 ## Where to run this
 
-**Locally with `uv`** is the only practical path — FastAPI needs a real server (uvicorn) to run, which means a real terminal and a real file system. No browser-based playground can host a running ASGI server.
+**Locally with `uv`** is the only practical path, FastAPI needs a real server (uvicorn) to run, which means a real terminal and a real file system. No browser-based playground can host a running ASGI server.
 
 **GitHub Codespaces** works well: open [the whole course repo in a free Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python, and `uv` are already installed) and run the exact same `uv` commands from a terminal.
 
-**Google Colab** can test individual endpoints with `nest_asyncio`, but it's a workaround, not a natural fit — no persistent server, no real file system for your project. Use it to try things, not to build.
+**Google Colab** can test individual endpoints with `nest_asyncio`, but it's a workaround, not a natural fit, no persistent server, no real file system for your project. Use it to try things, not to build.
 
-- **Run it in your browser.** An interactive companion notebook is ready — open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
+- **Run it in your browser.** An interactive companion notebook is ready, open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/rest-api-builder/notebook.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/rest-api-builder/notebook.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Frest-api-builder%2Fnotebook.ipynb)
@@ -48,7 +48,7 @@ Everything you need before writing a line of the API itself: a real Python, the 
 
 ### Install `uv`
 
-`uv` is a single tool that replaces the usual "install Python, then install pip, then install a virtual environment tool, then install packages" chain — it can install and manage Python versions itself, alongside your project's dependencies.
+`uv` is a single tool that replaces the usual "install Python, then install pip, then install a virtual environment tool, then install packages" chain, it can install and manage Python versions itself, alongside your project's dependencies.
 
 **macOS / Linux** (terminal):
 
@@ -86,7 +86,7 @@ uv add fastapi uvicorn pyyaml pydantic python-jose[cryptography] passlib[bcrypt]
 
 ## Step 1: Parse a YAML schema into Python dataclasses
 
-Every API starts with a shape: what resources exist, what fields each one has, and who can do what with them. A YAML schema captures that shape in a readable, human-editable form — and parsing it into Python dataclasses is the bridge between a plain-text config and actual code that generates routes.
+Every API starts with a shape: what resources exist, what fields each one has, and who can do what with them. A YAML schema captures that shape in a readable, human-editable form, and parsing it into Python dataclasses is the bridge between a plain-text config and actual code that generates routes.
 
 ### 1.1 Define and parse the schema
 
@@ -162,7 +162,7 @@ for name, res in resources.items():
         print(f"  - {f.name}: {f.field_type} (required={f.required})")
 ```
 
-**👟 Starter hint:** Paste this block as-is — the `SCHEMA_YAML` string defines two resources (`user` and `post`) with fields, types, and permission rules. `yaml.safe_load` parses the YAML into a plain dict, and the two dataclasses (`FieldDef`, `ResourceDef`) give you typed access to each piece. The loop at the bottom prints what was parsed so you can verify it matches the YAML.
+**👟 Starter hint:** Paste this block as-is, the `SCHEMA_YAML` string defines two resources (`user` and `post`) with fields, types, and permission rules. `yaml.safe_load` parses the YAML into a plain dict, and the two dataclasses (`FieldDef`, `ResourceDef`) give you typed access to each piece. The loop at the bottom prints what was parsed so you can verify it matches the YAML.
 
 **🎯 Expected output:**
 ```
@@ -176,7 +176,7 @@ Resource: post
   - author_id: integer (required=True)
 ```
 
-**🩹 If it's off:** A `yaml.YAMLError` means the YAML string has a syntax issue — check indentation and colons. A `KeyError: 'resources'` means the YAML loaded but didn't have the top-level key your code expects — verify the outer `resources:` key is present. If fields are missing, the `get("fields", {})` default is empty, so the YAML structure matters.
+**🩹 If it's off:** A `yaml.YAMLError` means the YAML string has a syntax issue, check indentation and colons. A `KeyError: 'resources'` means the YAML loaded but didn't have the top-level key your code expects, verify the outer `resources:` key is present. If fields are missing, the `get("fields", {})` default is empty, so the YAML structure matters.
 
 ### 1.2 Verify the schema parse
 
@@ -188,12 +188,12 @@ Resource: post
 
 **🤔 Socratic Question(s)**
 
-- What would happen if you added a third resource to the YAML (say `comment`) and re-ran `parse_schema` — would any code outside the YAML string itself need to change? Why is that desirable?
+- What would happen if you added a third resource to the YAML (say `comment`) and re-ran `parse_schema`, would any code outside the YAML string itself need to change? Why is that desirable?
 - The YAML uses `unique: true` on `email`. Your `FieldDef` stores this as a bool, but nothing in the code enforces uniqueness yet. Where in the API pipeline would you add that check, and why is it better to catch it there rather than at the database level?
 
 ## Step 2: Generate Pydantic models from the schema
 
-Pydantic models are what FastAPI uses to validate incoming requests and outgoing responses — they turn loose JSON into typed, checked Python objects. Dynamically building them from your schema means adding a new resource to the YAML automatically generates the right validation without touching Python code.
+Pydantic models are what FastAPI uses to validate incoming requests and outgoing responses, they turn loose JSON into typed, checked Python objects. Dynamically building them from your schema means adding a new resource to the YAML automatically generates the right validation without touching Python code.
 
 ### 2.1 Build the model generator
 
@@ -224,7 +224,7 @@ for name, model in models.items():
     print(f"{name}: {model.__name__} fields = {list(model.model_fields.keys())}")
 ```
 
-**👟 Starter hint:** The `type(...)` call creates a Pydantic model class dynamically — `type("CreateUser", (BaseModel,), {"__annotations__": {...}})` is exactly what `class CreateUser(BaseModel): ...` does, but the class body comes from the schema instead of hand-written code. Required fields get `...` (ellipsis) as the default, which Pydantic treats as "this field is mandatory."
+**👟 Starter hint:** The `type(...)` call creates a Pydantic model class dynamically, `type("CreateUser", (BaseModel,), {"__annotations__": {...}})` is exactly what `class CreateUser(BaseModel): ...` does, but the class body comes from the schema instead of hand-written code. Required fields get `...` (ellipsis) as the default, which Pydantic treats as "this field is mandatory."
 
 **🎯 Expected output:**
 ```
@@ -232,7 +232,7 @@ user: CreateUser fields = ['name', 'email', 'role']
 post: CreatePost fields = ['title', 'content', 'author_id']
 ```
 
-**🩹 If it's off:** If `CreateUser` is missing fields, the `TYPE_MAP` lookup might have silently fallen back to `str` for an unrecognized type. Check your YAML's `type:` values against the map. If FastAPI complains about validation later, the `(ftype, ...)` vs `(ftype | None, None)` branching is the part to inspect — a required field without `...` becomes optional by accident.
+**🩹 If it's off:** If `CreateUser` is missing fields, the `TYPE_MAP` lookup might have silently fallen back to `str` for an unrecognized type. Check your YAML's `type:` values against the map. If FastAPI complains about validation later, the `(ftype, ...)` vs `(ftype | None, None)` branching is the part to inspect, a required field without `...` becomes optional by accident.
 
 ### 2.2 Verify the model generation
 
@@ -280,11 +280,11 @@ def verify_token(
 print(f"SECRET_KEY set (first 8 chars): {SECRET_KEY[:8]}...")
 ```
 
-**👟 Starter hint:** `create_token` packs a dict (username, role) into a signed JWT with a 30-minute expiry. `verify_token` is a FastAPI dependency — `Depends(security)` means FastAPI reads the `Authorization: Bearer <token>` header automatically and passes the decoded payload to any route that declares `user=Depends(verify_token)`.
+**👟 Starter hint:** `create_token` packs a dict (username, role) into a signed JWT with a 30-minute expiry. `verify_token` is a FastAPI dependency, `Depends(security)` means FastAPI reads the `Authorization: Bearer <token>` header automatically and passes the decoded payload to any route that declares `user=Depends(verify_token)`.
 
 **🎯 Expected output:** `SECRET_KEY` prints its first 8 characters. Creating a token and immediately decoding it round-trips without error.
 
-**🩹 If it's off:** A `jose.JWTError` on decode means the token was signed with a different key — `secrets.token_hex(32)` generates a new key each time the module loads, so tokens from a previous run won't decode. A `403` from FastAPI (not `401`) means the `Authorization` header is missing entirely — the client isn't sending a token at all.
+**🩹 If it's off:** A `jose.JWTError` on decode means the token was signed with a different key, `secrets.token_hex(32)` generates a new key each time the module loads, so tokens from a previous run won't decode. A `403` from FastAPI (not `401`) means the `Authorization` header is missing entirely, the client isn't sending a token at all.
 
 ### 3.2 Verify authentication
 
@@ -297,7 +297,7 @@ print(f"SECRET_KEY set (first 8 chars): {SECRET_KEY[:8]}...")
 **🤔 Socratic Question(s)**
 
 - JWT tokens carry their expiry in the token itself (`exp` claim). What happens if a user's token expires mid-request? Is that a problem, and how would a real app handle it?
-- This project stores no user passwords — `verify_token` checks the token's signature, not a database. What would you need to add if you wanted to support password-based login as well?
+- This project stores no user passwords, `verify_token` checks the token's signature, not a database. What would you need to add if you wanted to support password-based login as well?
 
 ## Step 4: Build CRUD routes with role-based access
 
@@ -320,11 +320,11 @@ def login(username: str, password: str):
     raise HTTPException(401, "Invalid credentials")
 ```
 
-**👟 Starter hint:** The login route is hardcoded to one user for demo purposes — in a real app you'd hash passwords with `passlib` and check against a database. The key point: `/login` returns a JWT token, which every subsequent request sends in the `Authorization` header.
+**👟 Starter hint:** The login route is hardcoded to one user for demo purposes, in a real app you'd hash passwords with `passlib` and check against a database. The key point: `/login` returns a JWT token, which every subsequent request sends in the `Authorization` header.
 
 **🎯 Expected output:** `POST /login?username=admin&password=secret` returns `{"access_token": "eyJ..."}`.
 
-**🩹 If it's off:** If login returns `401` for correct credentials, check the URL — `username` and `password` are query parameters here, not a JSON body. If the token looks truncated, `secrets.token_hex(32)` generates 64 hex characters; the JWT itself will be much longer (header + payload + signature).
+**🩹 If it's off:** If login returns `401` for correct credentials, check the URL, `username` and `password` are query parameters here, not a JSON body. If the token looks truncated, `secrets.token_hex(32)` generates 64 hex characters; the JWT itself will be much longer (header + payload + signature).
 
 ### 4.2 Generate CRUD routes from the schema
 
@@ -366,11 +366,11 @@ for res in resources.values():
     generate_crud_routes(res)
 ```
 
-**👟 Starter hint:** `generate_crud_routes` is a function that *defines and registers* FastAPI routes — `@app.post(f"/{name}")` is called inside the function, not at the top level. This is the dynamic generation part: one loop over `resources.values()` creates all the POST/GET/DELETE routes for both `user` and `post`. Each route declares `user=Depends(verify_token)` so FastAPI runs the auth check before executing the route body.
+**👟 Starter hint:** `generate_crud_routes` is a function that *defines and registers* FastAPI routes, `@app.post(f"/{name}")` is called inside the function, not at the top level. This is the dynamic generation part: one loop over `resources.values()` creates all the POST/GET/DELETE routes for both `user` and `post`. Each route declares `user=Depends(verify_token)` so FastAPI runs the auth check before executing the route body.
 
 **🎯 Expected output:** `POST /user` creates a user (with a token), `GET /user` lists all users, `DELETE /user/1` deletes the user with id 1. A request without a valid token gets a `401`.
 
-**🩹 If it's off:** A `405 Method Not Allowed` means the route path matches but the HTTP method doesn't — check whether you're sending GET to a POST-only endpoint. A `403 Insufficient permissions` means the token's `role` field isn't in the resource's permission list — check the YAML's `permissions` section and what role your token carries. If the `db` dict is empty between requests, you're running the server outside this script's process — `db` is in-memory and resets when the process restarts.
+**🩹 If it's off:** A `405 Method Not Allowed` means the route path matches but the HTTP method doesn't, check whether you're sending GET to a POST-only endpoint. A `403 Insufficient permissions` means the token's `role` field isn't in the resource's permission list, check the YAML's `permissions` section and what role your token carries. If the `db` dict is empty between requests, you're running the server outside this script's process, `db` is in-memory and resets when the process restarts.
 
 ### 4.3 Verify the CRUD routes
 
@@ -383,12 +383,12 @@ for res in resources.values():
 
 **🤔 Socratic Question(s)**
 
-- The `db` dict is in-memory — what happens to your data when you restart the server? What would you swap it for in a real application?
+- The `db` dict is in-memory, what happens to your data when you restart the server? What would you swap it for in a real application?
 - Why does `generate_crud_routes` take a `ResourceDef` object rather than just a resource name string? What information would be missing if it only had the name?
 
 ## Step 5: Test the API end to end
 
-FastAPI's `TestClient` lets you hit every endpoint without starting a real server — it runs the app in-process and returns `httpx`-style response objects. This is the "does it actually work?" check.
+FastAPI's `TestClient` lets you hit every endpoint without starting a real server, it runs the app in-process and returns `httpx`-style response objects. This is the "does it actually work?" check.
 
 ### 5.1 Run the full test sequence
 
@@ -429,7 +429,7 @@ resp = client.get("/user", headers={"Authorization": "Bearer bad_token"})
 print(f"Unauthorized: {resp.status_code}")
 ```
 
-**👟 Starter hint:** `TestClient(app)` wraps the whole FastAPI app — you can `POST` to `/login`, grab the token, and then hit every other endpoint with that token in the headers. Run this as a single script: the login happens first, then each test builds on the previous one's output.
+**👟 Starter hint:** `TestClient(app)` wraps the whole FastAPI app, you can `POST` to `/login`, grab the token, and then hit every other endpoint with that token in the headers. Run this as a single script: the login happens first, then each test builds on the previous one's output.
 
 **🎯 Expected output:**
 ```
@@ -439,7 +439,7 @@ Created post: {'id': 1, 'title': 'Hello World', 'content': 'My first post', 'aut
 Unauthorized: 401
 ```
 
-**🩹 If it's off:** A `422 Unprocessable Entity` means FastAPI's automatic validation rejected the request body — check that the JSON keys match the Pydantic model fields exactly. A `401` on the create/list steps means the token wasn't passed correctly — verify the `Authorization: Bearer <token>` format, not just `Authorization: <token>`. If `Users` returns `[]` instead of the created user, the `db` dict wasn't shared between the login and create routes — confirm they're all in the same script file.
+**🩹 If it's off:** A `422 Unprocessable Entity` means FastAPI's automatic validation rejected the request body, check that the JSON keys match the Pydantic model fields exactly. A `401` on the create/list steps means the token wasn't passed correctly, verify the `Authorization: Bearer <token>` format, not just `Authorization: <token>`. If `Users` returns `[]` instead of the created user, the `db` dict wasn't shared between the login and create routes, confirm they're all in the same script file.
 
 ### 5.2 Verify the end to end
 
@@ -451,19 +451,19 @@ Unauthorized: 401
 
 **🤔 Socratic Question(s)**
 
-- You tested with an admin token. What would change if you created a second token with `{"role": "viewer"}` and tried to `POST /user` — what response would you expect, and why is testing both roles important?
+- You tested with an admin token. What would change if you created a second token with `{"role": "viewer"}` and tried to `POST /user`, what response would you expect, and why is testing both roles important?
 - `TestClient` runs in-process with no real HTTP. What's one thing about your API's behavior that this test *can't* catch that a real `httpx` client against a running server could?
 
 ## ⚠️ Common pitfalls
 
-- **`secrets.token_hex(32)` regenerates on every module load.** Tokens signed with one key won't decode with the next run's key — this is correct for development (it forces you to re-login each time) but would break in production where the key must persist. Use a fixed secret from an environment variable for anything beyond local testing.
-- **In-memory `db` loses everything on restart.** The `db` dict is a teaching convenience, not a storage solution. If you're testing persistence (e.g., "create a user, restart the server, check it's gone"), that's the expected behavior — not a bug.
-- **Missing `status_code=201` on POST routes.** FastAPI defaults to `200 OK`. The HTTP spec says `201 Created` is correct for resource creation — forgetting it makes your API's responses technically wrong and harder to test with clients that check status codes.
-- **Query params vs JSON body for `/login`.** The demo uses query parameters (`/login?username=admin&password=secret`) for simplicity, but real APIs send credentials in a JSON body. Switching requires changing the function signature to accept a Pydantic model instead — a useful exercise but a breaking change to the test sequence.
+- **`secrets.token_hex(32)` regenerates on every module load.** Tokens signed with one key won't decode with the next run's key, this is correct for development (it forces you to re-login each time) but would break in production where the key must persist. Use a fixed secret from an environment variable for anything beyond local testing.
+- **In-memory `db` loses everything on restart.** The `db` dict is a teaching convenience, not a storage solution. If you're testing persistence (e.g., "create a user, restart the server, check it's gone"), that's the expected behavior, not a bug.
+- **Missing `status_code=201` on POST routes.** FastAPI defaults to `200 OK`. The HTTP spec says `201 Created` is correct for resource creation, forgetting it makes your API's responses technically wrong and harder to test with clients that check status codes.
+- **Query params vs JSON body for `/login`.** The demo uses query parameters (`/login?username=admin&password=secret`) for simplicity, but real APIs send credentials in a JSON body. Switching requires changing the function signature to accept a Pydantic model instead, a useful exercise but a breaking change to the test sequence.
 
 ## What you just built
 
-A code generator that turns a human-readable YAML schema into a working FastAPI application — JWT-authenticated, Pydantic-validated, and auto-documented. You didn't hand-write a single route; the schema drove everything. This is the same pattern behind real API generators: a declarative shape, a code generator, and runtime enforcement of the rules you declared.
+A code generator that turns a human-readable YAML schema into a working FastAPI application, JWT-authenticated, Pydantic-validated, and auto-documented. You didn't hand-write a single route; the schema drove everything. This is the same pattern behind real API generators: a declarative shape, a code generator, and runtime enforcement of the rules you declared.
 
 :::tip[Run a fuller version without any local setup]
 [`examples/rest-api-builder/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/rest-api-builder) in the course repo is a fuller version of the code above, with OpenAPI docs enabled, password hashing with `passlib`, and additional endpoints for PUT updates and query filtering. Clone it, or open the whole repo in a [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) and run it from there.
@@ -471,12 +471,12 @@ A code generator that turns a human-readable YAML schema into a working FastAPI 
 
 ## Where to go from here
 
-- Add a `PUT /{resource}/{id}` endpoint that validates the request body against the resource schema and returns the updated item — the `generate_crud_routes` function is exactly where this goes.
-- Add query parameters to the list endpoint (`GET /user?role=admin`) so users can filter by any field without writing new code — the schema already knows which fields exist and their types.
-- Try adding a third resource to the YAML (say `comment` with `text`, `author_id`, and `post_id`) and watch the API grow without touching any Python — that's the payoff of the schema-driven approach.
+- Add a `PUT /{resource}/{id}` endpoint that validates the request body against the resource schema and returns the updated item, the `generate_crud_routes` function is exactly where this goes.
+- Add query parameters to the list endpoint (`GET /user?role=admin`) so users can filter by any field without writing new code, the schema already knows which fields exist and their types.
+- Try adding a third resource to the YAML (say `comment` with `text`, `author_id`, and `post_id`) and watch the API grow without touching any Python, that's the payoff of the schema-driven approach.
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

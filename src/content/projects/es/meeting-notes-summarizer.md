@@ -1,31 +1,31 @@
 ---
 title: "Construye un Resumidor de Notas de Reuniones"
-description: "Da el salto del entorno de práctica en el navegador a Python real: escribe un script que convierte una transcripción de reunión en bruto en un resumen estructurado — decisiones, elementos de acción y preguntas abiertas — usando un LLM de nivel gratuito y un diseño cuidadoso del prompt."
+description: "Da el salto del entorno de práctica en el navegador a Python real: escribe un script que convierte una transcripción de reunión en bruto en un resumen estructurado, decisiones, elementos de acción y preguntas abiertas, usando un LLM de nivel gratuito y un diseño cuidadoso del prompt."
 ---
 
 
 # 🤖 Construye un Resumidor de Notas de Reuniones
 
-Todo en el curso hasta ahora se ejecutó en un playground aislado dentro del navegador — para que pudieras empezar a escribir Python desde el primer día sin ninguna configuración. Este proyecto es el paso de graduación: instala Python de verdad en tu propia máquina, y luego úsalo para construir una herramienta que resuelve un problema del mundo real genuinamente molesto — convertir una pared de texto en bruto de transcripción de reunión en un resumen corto y estructurado: qué se decidió, quién es responsable de qué, y qué sigue sin resolver. Esto asume Python 101; nada de Data Analysis es requerido.
+Todo en el curso hasta ahora se ejecutó en un playground aislado dentro del navegador, para que pudieras empezar a escribir Python desde el primer día sin ninguna configuración. Este proyecto es el paso de graduación: instala Python de verdad en tu propia máquina, y luego úsalo para construir una herramienta que resuelve un problema del mundo real genuinamente molesto, convertir una pared de texto en bruto de transcripción de reunión en un resumen corto y estructurado: qué se decidió, quién es responsable de qué, y qué sigue sin resolver. Esto asume Python 101; nada de Data Analysis es requerido.
 
 Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 ## 🎯 Qué harás
 
 1. Instalar `uv`, una herramienta rápida y moderna para gestionar el propio Python y las dependencias de tu proyecto.
-2. Obtener una clave de API de LLM de nivel gratuito — cualquiera de seis proveedores funciona.
+2. Obtener una clave de API de LLM de nivel gratuito, cualquiera de seis proveedores funciona.
 3. Cargar una transcripción de reunión real (tres muestras realistas se incluyen con este proyecto, así que se ejecuta sin ninguna configuración).
-4. Diseñar un prompt que le pide al modelo devolver **JSON estructurado**, no prosa fluida — la habilidad central y transferible de este proyecto.
-5. Llamar al modelo, y luego analizar y validar su respuesta JSON — manejando el caso en que vuelve ligeramente malformada, lo cual sucede más a menudo de lo que quisieras.
+4. Diseñar un prompt que le pide al modelo devolver **JSON estructurado**, no prosa fluida, la habilidad central y transferible de este proyecto.
+5. Llamar al modelo, y luego analizar y validar su respuesta JSON, manejando el caso en que vuelve ligeramente malformada, lo cual sucede más a menudo de lo que quisieras.
 6. Formatear el resultado estructurado tanto como Markdown legible como un archivo `.json`, y ejecutar todo de principio a fin sobre una transcripción real.
 
 ## Dónde ejecutar esto
 
-**Localmente con `uv`** es el camino que siguen los pasos de esta lección, y el recomendado — es Python real ejecutándose en tu propia máquina, el mismo movimiento de "graduarte a Python real" que cada otro proyecto de esta sección. La sección de Configuración de abajo explica cómo instalarlo.
+**Localmente con `uv`** es el camino que siguen los pasos de esta lección, y el recomendado, es Python real ejecutándose en tu propia máquina, el mismo movimiento de "graduarte a Python real" que cada otro proyecto de esta sección. La sección de Configuración de abajo explica cómo instalarlo.
 
 **GitHub Codespaces** es una alternativa sin configuración si prefieres no instalar nada localmente todavía: abre [todo el repositorio del curso en un Codespace gratuito](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python y `uv` ya están instalados, según el `.devcontainer/devcontainer.json` del repositorio) y ejecuta exactamente los mismos comandos `uv` desde una terminal en la pestaña de tu navegador.
 
-**Google Colab, Kaggle Notebooks o Binder** también funcionan bien, y son opciones genuinamente buenas aquí — este proyecto es un script ligero que hace un puñado de llamadas API, no algo que necesite una GPU o una estructura de proyecto real para ser útil. Una versión de notebook lista para ejecutarse se incluye con este proyecto — haz clic en una insignia abajo para abrirla, sin configuración local requerida — o crea tu propio notebook, ejecuta `!pip install openai python-dotenv` en una celda, pega los scripts de abajo como celdas, y establece tu clave de API con un secreto de notebook (Colab) o una variable de entorno en lugar de un archivo `.env`.
+**Google Colab, Kaggle Notebooks o Binder** también funcionan bien, y son opciones genuinamente buenas aquí, este proyecto es un script ligero que hace un puñado de llamadas API, no algo que necesite una GPU o una estructura de proyecto real para ser útil. Una versión de notebook lista para ejecutarse se incluye con este proyecto, haz clic en una insignia abajo para abrirla, sin configuración local requerida, o crea tu propio notebook, ejecuta `!pip install openai python-dotenv` en una celda, pega los scripts de abajo como celdas, y establece tu clave de API con un secreto de notebook (Colab) o una variable de entorno en lugar de un archivo `.env`.
 
 {/* TODO: update these badge links to point at main once this PR merges */}
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/meeting-notes-summarizer/notebook.es.ipynb)
@@ -34,11 +34,11 @@ Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/es/proyec
 
 ## Configuración
 
-Todo lo que necesitas antes de escribir cualquier código de resumen — instalar `uv`, crear el proyecto, obtener una clave API gratuita y configurarla como variable de entorno — vive en esta sección, para que solo tengas que hacerlo una vez.
+Todo lo que necesitas antes de escribir cualquier código de resumen, instalar `uv`, crear el proyecto, obtener una clave API gratuita y configurarla como variable de entorno, vive en esta sección, para que solo tengas que hacerlo una vez.
 
 ### 1. Instala `uv`
 
-`uv` es una sola herramienta que reemplaza la cadena habitual de "instala Python, luego instala pip, luego instala una herramienta de entorno virtual, luego instala paquetes" — puede instalar y gestionar versiones de Python por sí misma, junto con las dependencias de tu proyecto.
+`uv` es una sola herramienta que reemplaza la cadena habitual de "instala Python, luego instala pip, luego instala una herramienta de entorno virtual, luego instala paquetes", puede instalar y gestionar versiones de Python por sí misma, junto con las dependencias de tu proyecto.
 
 **macOS / Linux** (terminal):
 
@@ -72,20 +72,20 @@ cd meeting-notes-summarizer
 uv add openai python-dotenv
 ```
 
-`uv init` crea un proyecto pequeño (un `pyproject.toml` que rastrea tus dependencias) y `uv add` instala paquetes en un entorno aislado automáticamente — sin configuración manual de entorno virtual. `openai` se usa aquí porque varios proveedores de nivel gratuito, incluyendo el predeterminado sugerido, exponen una API compatible con OpenAI, así que la única biblioteca de cliente funciona en todos ellos, solo apuntada a un `base_url` diferente. `python-dotenv` te permite mantener tu clave de API en un archivo `.env` local en lugar de hacer `export` de ella en cada sesión.
+`uv init` crea un proyecto pequeño (un `pyproject.toml` que rastrea tus dependencias) y `uv add` instala paquetes en un entorno aislado automáticamente, sin configuración manual de entorno virtual. `openai` se usa aquí porque varios proveedores de nivel gratuito, incluyendo el predeterminado sugerido, exponen una API compatible con OpenAI, así que la única biblioteca de cliente funciona en todos ellos, solo apuntada a un `base_url` diferente. `python-dotenv` te permite mantener tu clave de API en un archivo `.env` local en lugar de hacer `export` de ella en cada sesión.
 
 ### 3. Obtén una clave de API de LLM gratuita
 
-**Elige el proveedor que quieras** — ninguno requiere una tarjeta de crédito al momento de escribir esto, y este curso no favorece a uno sobre otro.
+**Elige el proveedor que quieras**, ninguno requiere una tarjeta de crédito al momento de escribir esto, y este curso no favorece a uno sobre otro.
 
 | Proveedor | Dónde obtener una clave | Por qué podrías elegirlo |
 |---|---|---|
-| **GitHub Models** *(predeterminado sugerido)* | [github.com/settings/tokens](https://github.com/settings/tokens) — un token de acceso personal con el alcance `models: read` | Sin registro separado — ya tienes una cuenta de GitHub. Límites de nivel gratuito más generosos que los de Gemini. |
+| **GitHub Models** *(predeterminado sugerido)* | [github.com/settings/tokens](https://github.com/settings/tokens), un token de acceso personal con el alcance `models: read` | Sin registro separado, ya tienes una cuenta de GitHub. Límites de nivel gratuito más generosos que los de Gemini. |
 | Gemini | [Google AI Studio](https://aistudio.google.com/) | La opción más comúnmente referenciada. |
 | Groq | [console.groq.com/keys](https://console.groq.com/keys) | Inferencia rápida, nivel gratuito generoso, sin tarjeta. |
 | Mistral | [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys) | Una de las cuotas gratuitas permanentes más generosas. |
 | Cerebras | [cloud.cerebras.ai](https://cloud.cerebras.ai/) | Alto volumen de tokens diario, sin tarjeta. |
-| OpenRouter | [openrouter.ai/keys](https://openrouter.ai/keys) | Una API, muchos modelos gratuitos — bueno para comparar proveedores. |
+| OpenRouter | [openrouter.ai/keys](https://openrouter.ai/keys) | Una API, muchos modelos gratuitos, bueno para comparar proveedores. |
 
 Cualquiera que elijas, el proceso es el mismo: inicia sesión y genera una clave de API en el sitio de ese proveedor.
 
@@ -109,7 +109,7 @@ Con la configuración lista, todo lo de abajo trata sobre el resumidor en sí.
 
 **👟 Pista inicial :**
 
-Crea una carpeta `transcripts/` y coloca una transcripción de reunión en texto plano en ella — o copia una de las tres muestras realistas que se incluyen con el ejemplo del repositorio de este proyecto: una reunión diaria de pie, una reunión de planificación de producto y una revisión de incidente (consulta [`examples/meeting-notes-summarizer/sample_transcripts/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/meeting-notes-summarizer/sample_transcripts)). Una transcripción es solo texto plano etiquetado por hablante, nada más sofisticado:
+Crea una carpeta `transcripts/` y coloca una transcripción de reunión en texto plano en ella, o copia una de las tres muestras realistas que se incluyen con el ejemplo del repositorio de este proyecto: una reunión diaria de pie, una reunión de planificación de producto y una revisión de incidente (consulta [`examples/meeting-notes-summarizer/sample_transcripts/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/meeting-notes-summarizer/sample_transcripts)). Una transcripción es solo texto plano etiquetado por hablante, nada más sofisticado:
 
 ```text
 Maria: Let's start with the API migration. Where are we?
@@ -202,8 +202,8 @@ Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
 
 **👟 Pista inicial :**
 
-Esta es la habilidad real que enseña este proyecto: en lugar de pedirle a un modelo un resumen en párrafo de forma libre ("Por favor resume esta reunión"), le pides que devuelva **JSON con una forma específica** — un esquema que tú defines — para que la salida sea algo que tu propio código pueda analizar, almacenar y sobre lo que pueda actuar de forma confiable después. Esta es la misma idea que un contrato de API, solo que aplicado a través de la redacción del prompt en lugar de un sistema de tipos.
-El esquema para este proyecto: tres listas — `decisions`, `action_items` (cada uno con un `task` y un `owner` opcional, cuando la transcripción realmente nombra a uno) y `open_questions`.
+Esta es la habilidad real que enseña este proyecto: en lugar de pedirle a un modelo un resumen en párrafo de forma libre ("Por favor resume esta reunión"), le pides que devuelva **JSON con una forma específica**, un esquema que tú defines, para que la salida sea algo que tu propio código pueda analizar, almacenar y sobre lo que pueda actuar de forma confiable después. Esta es la misma idea que un contrato de API, solo que aplicado a través de la redacción del prompt en lugar de un sistema de tipos.
+El esquema para este proyecto: tres listas, `decisions`, `action_items` (cada uno con un `task` y un `owner` opcional, cuando la transcripción realmente nombra a uno) y `open_questions`.
 
 ```python
 # extract_prompt.py
@@ -249,8 +249,8 @@ def build_prompt(transcript: str) -> list[dict]:
     ]
 ```
 Tres cosas hacen que este diseño de prompt sea deliberado, no accidental:
-1. **El esquema se escribe literalmente**, clave por clave, con una forma de ejemplo — no se describe en prosa. Los modelos son mucho más consistentes igualando un ejemplo que infiriendo un esquema de una descripción.
-2. **`owner` explícitamente puede ser `null`**, con una regla explícita sobre cuándo usarlo. Sin esa regla, los modelos tienden a inventar un nombre que suena plausible, o escribir la cadena `"TBD"` — un valor que tu código Python tendría que tratar de forma especial para siempre.
+1. **El esquema se escribe literalmente**, clave por clave, con una forma de ejemplo, no se describe en prosa. Los modelos son mucho más consistentes igualando un ejemplo que infiriendo un esquema de una descripción.
+2. **`owner` explícitamente puede ser `null`**, con una regla explícita sobre cuándo usarlo. Sin esa regla, los modelos tienden a inventar un nombre que suena plausible, o escribir la cadena `"TBD"`, un valor que tu código Python tendría que tratar de forma especial para siempre.
 3. **El prompt del sistema declara el formato de salida como una restricción dura** ("nada más -- sin cercas de código markdown, sin comentarios"), porque la forma más común en que esto sale mal (ver Paso 3) es un modelo envolviendo su JSON en una cerca de código ```` ```json ```` por costumbre, incluso cuando se le dice que no lo haga.
 
 **🎯 Resultado esperado :**
@@ -275,11 +275,11 @@ Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
 - El prompt pide `owner: null` en lugar de omitir el campo por completo. ¿Por qué podría eso ser más fácil de manejar para tu código Python que un esquema donde un campo a veces está presente y a veces simplemente ausente?
 
 ## Paso 3: Llama al LLM y analiza la respuesta JSON
-### 3.1 Ahora envía el prompt y convierte cualquier texto que vuelva en datos reales de Python — un ...
+### 3.1 Ahora envía el prompt y convierte cualquier texto que vuelva en datos reales de Python, un ...
 
 **👟 Pista inicial :**
 
-Ahora envía el prompt y convierte cualquier texto que vuelva en datos reales de Python — un `dict` sobre el que puedes iterar, no una cadena que tengas que inspeccionar con los ojos. Aquí es donde los proyectos de extracción estructurada se rompen más a menudo en la práctica: incluso un prompt bien diseñado ocasionalmente recibe una respuesta envuelta en una cerca de código, con un comentario final, o con una coma extraviada — y un `json.loads()` ingenuo se estrella con los tres.
+Ahora envía el prompt y convierte cualquier texto que vuelva en datos reales de Python, un `dict` sobre el que puedes iterar, no una cadena que tengas que inspeccionar con los ojos. Aquí es donde los proyectos de extracción estructurada se rompen más a menudo en la práctica: incluso un prompt bien diseñado ocasionalmente recibe una respuesta envuelta en una cerca de código, con un comentario final, o con una coma extraviada, y un `json.loads()` ingenuo se estrella con los tres.
 
 ```python
 # summarize.py (part 1 -- LLM call + parsing)
@@ -383,7 +383,7 @@ Ejecuta el código de abajo y confirma que funciona.
 uv run python summarize.py transcripts/standup.txt
 ```
 :::tip[Nunca confíes a ciegas en la forma de la salida de un LLM]
-Trata la respuesta de un modelo de lenguaje igual que tratarías datos de una API no confiable o un CSV subido por un usuario: valídalos antes de usarlos, no los asumas. `extract_json` maneja los problemas comunes de envoltura, y `parse_summary` aún levanta un error claro y específico — con el texto en bruto adjunto — si el resultado realmente no coincide con el esquema, en lugar de dejar que un `KeyError` tres funciones después te haga adivinar qué salió mal. Devolver silenciosamente un resumen vacío en un fallo de análisis sería peor que estrellarse: nunca notarías que la extracción dejó de funcionar silenciosamente.
+Trata la respuesta de un modelo de lenguaje igual que tratarías datos de una API no confiable o un CSV subido por un usuario: valídalos antes de usarlos, no los asumas. `extract_json` maneja los problemas comunes de envoltura, y `parse_summary` aún levanta un error claro y específico, con el texto en bruto adjunto, si el resultado realmente no coincide con el esquema, en lugar de dejar que un `KeyError` tres funciones después te haga adivinar qué salió mal. Devolver silenciosamente un resumen vacío en un fallo de análisis sería peor que estrellarse: nunca notarías que la extracción dejó de funcionar silenciosamente.
 :::
 
 **🎯 Resultado esperado :**
@@ -404,7 +404,7 @@ Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
 
 **🤔 Pregunta(s) socrática(s)**
 
-- El fallback de `extract_json` — tomar todo entre el primer `{` y el último `}` — se rompería en una transcripción que literalmente contenga llaves en el texto hablado de alguien (ej. citando un fragmento de código). ¿Puedes pensar en un enfoque más robusto, aunque sea más trabajo de implementar?
+- El fallback de `extract_json`, tomar todo entre el primer `{` y el último `}`, se rompería en una transcripción que literalmente contenga llaves en el texto hablado de alguien (ej. citando un fragmento de código). ¿Puedes pensar en un enfoque más robusto, aunque sea más trabajo de implementar?
 - ¿Por qué `parse_summary` levanta una excepción con la respuesta en bruto adjunta, en lugar de simplemente devolver `None` cuando el análisis falla?
 
 ## Paso 4: Formatea el resultado como Markdown legible
@@ -412,7 +412,7 @@ Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
 
 **👟 Pista inicial :**
 
-El `dict` analizado es exactamente lo que querrías para guardar en una base de datos o alimentar a otro script, pero no es algo que un compañero de equipo quiera leer en un mensaje de Slack. Conviértelo también en un resumen Markdown corto y escaneable — los mismos datos, formateados para un humano en lugar de un programa.
+El `dict` analizado es exactamente lo que querrías para guardar en una base de datos o alimentar a otro script, pero no es algo que un compañero de equipo quiera leer en un mensaje de Slack. Conviértelo también en un resumen Markdown corto y escaneable, los mismos datos, formateados para un humano en lugar de un programa.
 
 ```python
 # format_summary.py
@@ -448,7 +448,7 @@ def format_markdown(summary: dict, source: str) -> str:
 
     return "\n".join(lines)
 ```
-`item.get("owner") or "unassigned"` está haciendo doble trabajo: maneja tanto un `None` literal (lo que el prompt le pide al modelo usar cuando no se nombra ningún owner) y, defensivamente, una cadena vacía o la palabra `"null"` que algunos modelos más pequeños ocasionalmente producen a pesar de las instrucciones — de cualquier manera, el lector ve "unassigned" en lugar de un espacio en blanco o un `null` literal confuso.
+`item.get("owner") or "unassigned"` está haciendo doble trabajo: maneja tanto un `None` literal (lo que el prompt le pide al modelo usar cuando no se nombra ningún owner) y, defensivamente, una cadena vacía o la palabra `"null"` que algunos modelos más pequeños ocasionalmente producen a pesar de las instrucciones, de cualquier manera, el lector ve "unassigned" en lugar de un espacio en blanco o un `null` literal confuso.
 
 **🎯 Resultado esperado :**
 
@@ -468,7 +468,7 @@ Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
 
 **🤔 Pregunta(s) socrática(s)**
 
-- Los elementos de acción se muestran como `- [ ] task` — sintaxis de casilla de verificación de Markdown con sabor a GitHub. ¿Dónde podría eso ser genuinamente útil versus puramente decorativo, dependiendo de dónde termine este archivo (un issue de GitHub, un mensaje de Slack, un archivo de texto plano)?
+- Los elementos de acción se muestran como `- [ ] task`, sintaxis de casilla de verificación de Markdown con sabor a GitHub. ¿Dónde podría eso ser genuinamente útil versus puramente decorativo, dependiendo de dónde termine este archivo (un issue de GitHub, un mensaje de Slack, un archivo de texto plano)?
 - ¿Por qué construir el Markdown a partir del `dict` *ya analizado*, en lugar de pedirle al LLM que genere Markdown directamente en el Paso 3 y omitir este paso?
 
 ## Paso 5: Ejecútalo de principio a fin
@@ -523,9 +523,9 @@ uv run python summarize.py transcripts/standup.txt
 uv run python summarize.py transcripts/product_planning.txt
 uv run python summarize.py transcripts/incident_review.txt
 ```
-Ejecútalo sobre las tres transcripciones de muestra (o la versión más completa de [`examples/meeting-notes-summarizer/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/meeting-notes-summarizer) del repositorio, que viene con las tres listas) y compara las salidas: una reunión de pie, una reunión de planificación y una revisión de incidente cada una estresa el esquema de manera diferente — la revisión de incidente, por ejemplo, tiende a producir mucho más preguntas abiertas que elementos de acción.
+Ejecútalo sobre las tres transcripciones de muestra (o la versión más completa de [`examples/meeting-notes-summarizer/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/meeting-notes-summarizer) del repositorio, que viene con las tres listas) y compara las salidas: una reunión de pie, una reunión de planificación y una revisión de incidente cada una estresa el esquema de manera diferente, la revisión de incidente, por ejemplo, tiende a producir mucho más preguntas abiertas que elementos de acción.
 :::tip[Los límites de tasa son esperados, no un error]
-Cada nivel gratuito limita las solicitudes por minuto o por día, y cada llamada a `summarize()` es exactamente una llamada API — así que ejecutar esto sobre varias transcripciones seguidas ocasionalmente puede chocar con un error `429`. Eso es el proveedor diciéndote que vayas más lento, no una señal de que algo esté roto; espera el número de segundos sugerido y vuelve a ejecutar. Consulta el proyecto [AI Agent](/es/proyectos/ai-agent#manejar-límites-de-tasa) para ver un patrón de `try`/`except`-con-reintento que puedes copiar directamente si quieres que esto se recupere automáticamente.
+Cada nivel gratuito limita las solicitudes por minuto o por día, y cada llamada a `summarize()` es exactamente una llamada API, así que ejecutar esto sobre varias transcripciones seguidas ocasionalmente puede chocar con un error `429`. Eso es el proveedor diciéndote que vayas más lento, no una señal de que algo esté roto; espera el número de segundos sugerido y vuelve a ejecutar. Consulta el proyecto [AI Agent](/es/proyectos/ai-agent#manejar-límites-de-tasa) para ver un patrón de `try`/`except`-con-reintento que puedes copiar directamente si quieres que esto se recupere automáticamente.
 :::
 
 **🎯 Resultado esperado :**
@@ -542,34 +542,34 @@ Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
 
 - ✅ `uv run python summarize.py transcripts/standup.txt` imprime un resumen Markdown legible y reporta escribir dos archivos de salida.
 - ✅ Tanto `standup_summary.json` como `standup_summary.md` existen después, y el archivo JSON es válido (ábrelo, o re-analízalo con `json.load`).
-- ✅ Ejecutarlo sobre una segunda transcripción diferente produce un resumen que realmente refleja el contenido de *esa* transcripción — no una copia de la salida de la primera.
+- ✅ Ejecutarlo sobre una segunda transcripción diferente produce un resumen que realmente refleja el contenido de *esa* transcripción, no una copia de la salida de la primera.
 
 **🤔 Pregunta(s) socrática(s)**
 
-- Si un compañero te pasara una transcripción sin decisiones claras en absoluto — solo lluvia de ideas abierta — ¿qué esperarías que pareciera `decisions`, y la redacción de tu prompt realmente garantiza eso?
+- Si un compañero te pasara una transcripción sin decisiones claras en absoluto, solo lluvia de ideas abierta, ¿qué esperarías que pareciera `decisions`, y la redacción de tu prompt realmente garantiza eso?
 - ¿Qué se rompería si ejecutaras esto sobre una transcripción de dos horas y 15,000 palabras en lugar de estas muestras cortas? ¿En qué punto necesitarías una estrategia como el enfoque de fragmentación del proyecto [RAG](/es/proyectos/rag-notes) en lugar de enviar todo en un solo prompt?
 
 ## ⚠️ Errores comunes
 
-- **El modelo envuelve su JSON en una cerca de código markdown de todos modos**, incluso cuando se le dice explícitamente que no — especialmente en modelos más pequeños/de nivel gratuito. `extract_json` en el Paso 3 lo elimina automáticamente; no lo omitas y llames a `json.loads()` directamente sobre la respuesta en bruto.
-- **`owner` vuelve como la cadena `"null"`, `"TBD"` o `"N/A"`** en lugar de un `null`/`None` real. `item.get("owner") or "unassigned"` de `format_markdown` atrapa los casos falsy, pero una cadena literal como `"TBD"` se colará tal cual — vale la pena normalizarla explícitamente (ej. `if owner in ("null", "TBD", "N/A", ""): owner = None`) si lo ves ocurrir a menudo con tu proveedor elegido.
-- **Olvidar `temperature=0`.** Las tareas de extracción quieren que la misma transcripción produzca un resumen consistente y repetible — no variación creativa entre ejecuciones. Dejar el predeterminado (a menudo `~1.0`) hace que los resultados sean notablemente menos estables de ejecución en ejecución, lo que dificulta depurar tu prompt porque no puedes saber si un cambio en la salida vino de tu edición del prompt o solo de la aleatoriedad.
+- **El modelo envuelve su JSON en una cerca de código markdown de todos modos**, incluso cuando se le dice explícitamente que no, especialmente en modelos más pequeños/de nivel gratuito. `extract_json` en el Paso 3 lo elimina automáticamente; no lo omitas y llames a `json.loads()` directamente sobre la respuesta en bruto.
+- **`owner` vuelve como la cadena `"null"`, `"TBD"` o `"N/A"`** en lugar de un `null`/`None` real. `item.get("owner") or "unassigned"` de `format_markdown` atrapa los casos falsy, pero una cadena literal como `"TBD"` se colará tal cual, vale la pena normalizarla explícitamente (ej. `if owner in ("null", "TBD", "N/A", ""): owner = None`) si lo ves ocurrir a menudo con tu proveedor elegido.
+- **Olvidar `temperature=0`.** Las tareas de extracción quieren que la misma transcripción produzca un resumen consistente y repetible, no variación creativa entre ejecuciones. Dejar el predeterminado (a menudo `~1.0`) hace que los resultados sean notablemente menos estables de ejecución en ejecución, lo que dificulta depurar tu prompt porque no puedes saber si un cambio en la salida vino de tu edición del prompt o solo de la aleatoriedad.
 - **Límites de tasa en el nivel gratuito del LLM.** Cada llamada a `summarize()` cuesta una solicitud contra la cuota de tu proveedor; ejecutarlo sobre muchas transcripciones rápidamente puede disparar un 429. Consulta el consejo de arriba.
 
 ## Lo que acabas de construir
 
-Un pipeline de extracción estructurada pequeño y completo: carga texto en bruto, diseña un prompt que fija un esquema de salida exacto, llama a un LLM de nivel gratuito, analiza y valida defensivamente lo que vuelve, y renderiza el resultado tanto para máquinas (JSON) como para humanos (Markdown). Esto no es una simplificación de juguete — exactamente la misma forma (prompt restringido por esquema → analizar → validar → degradarse con gracia) es como los sistemas de producción extraen datos estructurados de currículos, facturas, tickets de soporte y contratos. Cambia el esquema y el prompt, y este pipeline todavía funciona.
+Un pipeline de extracción estructurada pequeño y completo: carga texto en bruto, diseña un prompt que fija un esquema de salida exacto, llama a un LLM de nivel gratuito, analiza y valida defensivamente lo que vuelve, y renderiza el resultado tanto para máquinas (JSON) como para humanos (Markdown). Esto no es una simplificación de juguete, exactamente la misma forma (prompt restringido por esquema → analizar → validar → degradarse con gracia) es como los sistemas de producción extraen datos estructurados de currículos, facturas, tickets de soporte y contratos. Cambia el esquema y el prompt, y este pipeline todavía funciona.
 
 ## A dónde ir desde aquí
 
-- Extiende el esquema con un campo `sentiment` o `meeting_type`, o una `priority` en cada elemento de acción — el patrón (describe el campo en el prompt, valídalo después del análisis) es idéntico al que ya construiste.
+- Extiende el esquema con un campo `sentiment` o `meeting_type`, o una `priority` en cada elemento de acción, el patrón (describe el campo en el prompt, valídalo después del análisis) es idéntico al que ya construiste.
 - Prueba alimentar al modelo una transcripción en un formato completamente diferente (una exportación de chat, un archivo de subtítulos cerrados `.vtt` en bruto) y observa cuánta limpieza necesita `load_transcript` antes de que los resultados sigan siendo buenos.
-- Investiga una biblioteca de validación de esquemas como `pydantic` para una versión mucho más estricta de `parse_summary` — en lugar de verificar las claves a mano, define un modelo `Summary` una vez y deja que valide (e incluso fuerce) los tipos por ti, levantando un error estructurado sobre cualquier cosa que no encaje.
+- Investiga una biblioteca de validación de esquemas como `pydantic` para una versión mucho más estricta de `parse_summary`, en lugar de verificar las claves a mano, define un modelo `Summary` una vez y deja que valide (e incluso fuerce) los tipos por ti, levantando un error estructurado sobre cualquier cosa que no encaje.
 - Combina esto con el proyecto [AI Agent](/es/proyectos/ai-agent): dale al agente una herramienta que llame a `summarize()` sobre un archivo de transcripción, para que pueda decidir *cuándo* resumir como parte de una tarea más grande en lugar de que siempre ejecutes el script a mano.
 
 ## Comparte tu proyecto con la clase
 
-¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado — y su README tiene un recorrido completo y amigable para principiantes sobre cómo agregar el tuyo vía un **pull request**, incluso si nunca has usado git antes: hacer fork del repositorio, crear una rama, confirmar tus archivos, y abrir el PR, un paso a la vez. No se asume experiencia previa con git.
+¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado, y su README tiene un recorrido completo y amigable para principiantes sobre cómo agregar el tuyo vía un **pull request**, incluso si nunca has usado git antes: hacer fork del repositorio, crear una rama, confirmar tus archivos, y abrir el PR, un paso a la vez. No se asume experiencia previa con git.
 
 Bienvenido a escribir Python fuera del navegador. 🎓
 

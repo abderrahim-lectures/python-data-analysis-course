@@ -42,7 +42,7 @@ quiz:
       - text: "Nominal is always binary"
       - text: "Ordinal can only have 3 categories"
 ---
-Categorical variables describe groups, categories, or labels — gender, ethnicity, lunch type, education level. Unlike numerical data, you cannot compute means and standard deviations. Instead, you analyze frequencies, proportions, and mode. This lesson covers the tools and techniques for understanding categorical data.
+Categorical variables describe groups, categories, or labels, gender, ethnicity, lunch type, education level. Unlike numerical data, you cannot compute means and standard deviations. Instead, you analyze frequencies, proportions, and mode. This lesson covers the tools and techniques for understanding categorical data.
 
 ## Key Concepts
 
@@ -87,7 +87,7 @@ Understanding the type of categorical variable determines how you analyze and vi
 | **Nominal** | No natural order | race/ethnicity | Frequency, mode |
 | **Ordinal** | Natural order exists | education level | Median category, rank correlation |
 
-Ordinal variables need explicit ordering — do not let pandas sort them alphabetically:
+Ordinal variables need explicit ordering, do not let pandas sort them alphabetically:
 
 ```python
 import seaborn as sns
@@ -117,7 +117,7 @@ plt.show()
 
 ### Count plots with seaborn
 
-Count plots are the categorical equivalent of histograms — they show frequencies:
+Count plots are the categorical equivalent of histograms, they show frequencies:
 
 ```python
 fig, axes = plt.subplots(2, 2, figsize=(12, 10))
@@ -273,7 +273,7 @@ plt.show()
 
 ## Key Takeaways
 
-- Frequency tables are the foundation of categorical analysis — always compute them first
+- Frequency tables are the foundation of categorical analysis, always compute them first
 - Distinguish nominal, ordinal, and binary variables; ordinal variables need explicit ordering
 - Horizontal bar charts are better than vertical ones when category labels are long
 - Use proportions instead of counts when comparing groups of different sizes
@@ -285,7 +285,7 @@ plt.show()
 Create a figure showing the distribution of `lunch` types, with bars colored by `test preparation course` completion. Add count annotations to each bar segment. Then compute the proportion of students who completed test preparation for each lunch type.
 
 <details class="challenge">
-<summary>🧩 Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge, think first, then reveal</summary>
 <div class="challenge__body">
 
 ```python

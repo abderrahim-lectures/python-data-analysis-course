@@ -30,7 +30,7 @@ content = f.read()
 f.close()  # ¡cierra siempre al terminar!
 ```
 
-`"r"` significa solo lectura. Y la disciplina es pesada: `close()` debe ejecutarse cuando termines, o el manejador se fuga — el archivo queda agarrado mucho después de haber dejado de necesitarlo. Olvidarlo es la primera generación de errores de archivos.
+`"r"` significa solo lectura. Y la disciplina es pesada: `close()` debe ejecutarse cuando termines, o el manejador se fuga, el archivo queda agarrado mucho después de haber dejado de necesitarlo. Olvidarlo es la primera generación de errores de archivos.
 
 ## La instrucción with: cerrar como promesa
 
@@ -42,7 +42,7 @@ with open("data.txt") as f:
 # el archivo se cierra aquí
 ```
 
-El bloque `with` declara un contrato: ábrelo aquí, y se cerrará cuando este bloque termine — de forma normal o por excepción. La vida del manejador queda enmarcada en el bloque, así que no queda nada que olvidar.
+El bloque `with` declara un contrato: ábrelo aquí, y se cerrará cuando este bloque termine, de forma normal o por excepción. La vida del manejador queda enmarcada en el bloque, así que no queda nada que olvidar.
 
 ## Estrategias de lectura
 
@@ -93,11 +93,11 @@ with open("data.txt", encoding="utf-8") as f:
     text = f.read()
 ```
 
-Sin `encoding`, Python cae al defecto del sistema, que varía por plataforma — el mismo archivo, ilegible en una máquina Windows y limpio en Linux. Declarar `utf-8` hace que los bytes signifiquen las mismas letras en todas partes.
+Sin `encoding`, Python cae al defecto del sistema, que varía por plataforma, el mismo archivo, ilegible en una máquina Windows y limpio en Linux. Declarar `utf-8` hace que los bytes signifiquen las mismas letras en todas partes.
 
 ## Un ejemplo resuelto: el archivo de notas, línea a línea
 
-La caminata segura en memoria — acumular sin jamás sostener el archivo completo:
+La caminata segura en memoria, acumular sin jamás sostener el archivo completo:
 
 ```python
 with open("scores.txt", encoding="utf-8") as f:
@@ -110,12 +110,12 @@ with open("scores.txt", encoding="utf-8") as f:
 print(f"Avg: {total / count}")
 ```
 
-Cada línea se lee, se le pela el salto, se convierte y se suelta antes de que llegue la próxima — el archivo fluye sin juntarse nunca entero. La promesa de `with` cierra el archivo al terminar el bloque, normal o excepcional.
+Cada línea se lee, se le pela el salto, se convierte y se suelta antes de que llegue la próxima, el archivo fluye sin juntarse nunca entero. La promesa de `with` cierra el archivo al terminar el bloque, normal o excepcional.
 
 ## Errores comunes
 
 - **Olvidar `with`.** Los manejadores se fugan cuando nada los cierra; deja que el bloque posea la vida del archivo.
-- **Tragar archivos enormes.** `f.read()` sobre un archivo gigante puede agotar la memoria — itera `for line in f` en su lugar.
+- **Tragar archivos enormes.** `f.read()` sobre un archivo gigante puede agotar la memoria, itera `for line in f` en su lugar.
 - **Ignorar la codificación.** Las letras no ASCII se vuelven jeroglíficos cuando la convención se deja al azar.
 - **Rutas codificadas a fuego.** `pathlib.Path` hace que el mismo código camine en todo sistema operativo.
 - **Un archivo consumido se lee vacío.** Tras `f.read()`, la posición se sienta al final; una segunda lectura devuelve `''` y `readlines()` devuelve `[]`. Lee una vez, o reabre.
@@ -123,30 +123,30 @@ Cada línea se lee, se le pela el salto, se convierte y se suelta antes de que l
 ## 🧩 Desafíos
 
 <details class="challenge">
-<summary>🧩 Desafío — piensa primero, luego revela</summary>
+<summary>🧩 Desafío, piensa primero, luego revela</summary>
 <div class="challenge__body">
 
 Cuenta las líneas de un archivo sin cargarlo en memoria.
 
-<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>count = 0; with open("file.txt") as f: for line in f: count += 1</code> o el compacto <code>sum(1 for _ in open("file.txt"))</code> — una línea a la vez, nunca el todo.</p>
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>count = 0; with open("file.txt") as f: for line in f: count += 1</code> o el compacto <code>sum(1 for _ in open("file.txt"))</code>, una línea a la vez, nunca el todo.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Desafío — piensa primero, luego revela</summary>
+<summary>🧩 Desafío, piensa primero, luego revela</summary>
 <div class="challenge__body">
 
 Enumera todos los archivos `.txt` de un directorio con `pathlib`.
 
-<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>list(Path(".").glob("*.txt"))</code> — un único glob recorre por ti los nombres coincidentes.</p>
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>list(Path(".").glob("*.txt"))</code>, un único glob recorre por ti los nombres coincidentes.</p>
 
 </div>
 </details>
 
 ## 🤔 Preguntas socráticas
 
-- ¿Incluye `for line in f` el `\n` final? ¿Por qué se ve el bucle como se ve — y cómo retiras el salto de línea?
+- ¿Incluye `for line in f` el `\n` final? ¿Por qué se ve el bucle como se ve, y cómo retiras el salto de línea?
 - ¿Qué ocurre al leer un archivo que no existe? ¿Cómo se las arregla `with` contra la excepción?
 - ¿Cuándo vence `f.read()` a iterar línea por línea?
 

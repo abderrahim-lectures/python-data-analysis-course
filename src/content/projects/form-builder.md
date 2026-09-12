@@ -14,9 +14,9 @@ prerequisites: ["Python 101"]
 
 # 📝 Build a Form Builder
 
-Every web form is fundamentally the same thing: a list of fields, each with a type, a label, validation rules, and optionally a condition that determines when it appears. This project builds a Python form builder that takes a declarative form definition and outputs JSON schema — the same format used by React JSON Schema Form, JSON Editor, and dozens of other rendering libraries. You define the form once in Python, and any frontend can render it.
+Every web form is fundamentally the same thing: a list of fields, each with a type, a label, validation rules, and optionally a condition that determines when it appears. This project builds a Python form builder that takes a declarative form definition and outputs JSON schema, the same format used by React JSON Schema Form, JSON Editor, and dozens of other rendering libraries. You define the form once in Python, and any frontend can render it.
 
-This assumes Python 101 — nothing from Data Analysis is required. Optional and ungraded; see [Real-World Projects](/projects) for the full list.
+This assumes Python 101, nothing from Data Analysis is required. Optional and ungraded; see [Real-World Projects](/projects) for the full list.
 
 ## 🎯 What you'll do
 
@@ -29,7 +29,7 @@ This assumes Python 101 — nothing from Data Analysis is required. Optional and
 
 ## Where to run this
 
-**Locally with `uv`** is the primary path — this is a CLI tool that reads form definitions and writes JSON schema files.
+**Locally with `uv`** is the primary path, this is a CLI tool that reads form definitions and writes JSON schema files.
 
 **Google Colab, Kaggle Notebooks, and Binder** work for trying the tool. The notebook installs the same packages and uses the same code; it generates and validates sample forms in the session.
 
@@ -163,7 +163,7 @@ print(f.model_dump())
 
 ## Step 2: Generate JSON schema from form definitions
 
-JSON Schema is a standard way to describe data shapes — it's what frontend form libraries use to know what fields to render and what validation to apply. Converting your Python form definition to JSON Schema makes it interoperable with any rendering library.
+JSON Schema is a standard way to describe data shapes, it's what frontend form libraries use to know what fields to render and what validation to apply. Converting your Python form definition to JSON Schema makes it interoperable with any rendering library.
 
 ### 2.1 Write the schema generator
 
@@ -228,7 +228,7 @@ def form_to_schema(form_name: str, fields: list[Field]) -> dict:
     return schema
 ```
 
-The `TYPE_MAP` translates your Python types to JSON Schema types. The `x-conditions` key uses a custom extension (prefixed with `x-`) to attach conditional logic — JSON Schema itself doesn't define conditional visibility, but form rendering libraries like React JSON Schema Form support `x-` extensions. The `required` list is built automatically from fields where `validation.required` is `True`.
+The `TYPE_MAP` translates your Python types to JSON Schema types. The `x-conditions` key uses a custom extension (prefixed with `x-`) to attach conditional logic, JSON Schema itself doesn't define conditional visibility, but form rendering libraries like React JSON Schema Form support `x-` extensions. The `required` list is built automatically from fields where `validation.required` is `True`.
 
 **🎯 Expected output:** `form_to_schema("Contact", [name_field, email_field])` returns a dictionary with `"title": "Contact"`, `"properties"` containing both fields, and `"required": ["email"]` if email is required.
 
@@ -256,7 +256,7 @@ assert schema["properties"]["age"]["minimum"] == 0
 
 **🎯 Expected output:** The printed JSON shows `"required": ["name"]` and `"minimum": 0` under the age field. Both assertions pass.
 
-**🩹 If it's off:** If the output is missing the `required` key entirely (not just empty), the function skips adding it when the list is empty — that's correct behavior.
+**🩹 If it's off:** If the output is missing the `required` key entirely (not just empty), the function skips adding it when the list is empty, that's correct behavior.
 
 ### 2.3 Verify schema generation
 
@@ -303,7 +303,7 @@ def evaluate_condition(condition: Condition, values: dict) -> bool:
         raise ValueError(f"Unknown operator: {condition.operator}")
 ```
 
-The `str()` conversion and `.lower()` normalization means `"True"`, `"true"`, and `True` all compare equal — this prevents the common bug where Python booleans and string representations diverge. The function returns `False` for missing fields rather than raising an error, because a field that hasn't been filled in yet shouldn't make its dependents visible.
+The `str()` conversion and `.lower()` normalization means `"True"`, `"true"`, and `True` all compare equal, this prevents the common bug where Python booleans and string representations diverge. The function returns `False` for missing fields rather than raising an error, because a field that hasn't been filled in yet shouldn't make its dependents visible.
 
 **🎯 Expected output:** `evaluate_condition(Condition(field="role", operator="equals", value="admin"), {"role": "admin"})` returns `True`. Same condition with `{"role": "user"}` returns `False`.
 
@@ -324,7 +324,7 @@ def visible_fields(fields: list[Field], values: dict) -> list[Field]:
 
 **🎯 Expected output:** Given fields with and without conditions, `visible_fields(fields, {"has_company": "true"})` returns only the fields whose conditions are met (or have no condition).
 
-**🩹 If it's off:** If all fields are returned regardless of conditions, the `evaluate_condition` call is being skipped — check the `if` statement.
+**🩹 If it's off:** If all fields are returned regardless of conditions, the `evaluate_condition` call is being skipped, check the `if` statement.
 
 ### 3.3 Verify conditional logic
 
@@ -396,7 +396,7 @@ def validate_submission(fields: list[Field], values: dict) -> list[dict]:
     return errors
 ```
 
-The validator checks visible fields only — if a conditional field is hidden because its condition isn't met, its validation rules don't apply. This matches how real form UIs work: you don't validate fields the user can't see. Each error includes the field name and a human-readable message, which makes it straightforward to display errors next to the right field in a UI.
+The validator checks visible fields only, if a conditional field is hidden because its condition isn't met, its validation rules don't apply. This matches how real form UIs work: you don't validate fields the user can't see. Each error includes the field name and a human-readable message, which makes it straightforward to display errors next to the right field in a UI.
 
 **🎯 Expected output:** Submitting `{"name": ""}` for a form with `name` required returns `[{"field": "name", "message": "'Full Name' is required"}]`. Submitting `{"name": "Alice", "age": "not_a_number"}` returns an age validation error.
 
@@ -423,7 +423,7 @@ assert errors[1]["field"] == "age"
 
 **🎯 Expected output:** Both assertions pass; the error list has two entries, one per invalid field.
 
-**🩹 If it's off:** If the email error is missing, the `required` check runs after the type check — make sure `continue` skips the remaining checks once a required error is found.
+**🩹 If it's off:** If the email error is missing, the `required` check runs after the type check, make sure `continue` skips the remaining checks once a required error is found.
 
 ### 4.3 Verify the submission validator
 
@@ -573,15 +573,15 @@ This tests the full pipeline: defining a conditional form, generating its schema
 
 ## ⚠️ Common pitfalls
 
-- **Forgetting that conditional fields need validation too.** A field with `required=True` and a condition should only be validated when its condition is met — otherwise users see errors for fields they can't even see. `validate_submission` filters by visibility before checking rules.
+- **Forgetting that conditional fields need validation too.** A field with `required=True` and a condition should only be validated when its condition is met, otherwise users see errors for fields they can't even see. `validate_submission` filters by visibility before checking rules.
 - **Type mismatches between JSON and Python.** JSON doesn't distinguish between `0` and `"0"`. The validator converts string inputs to numbers for number fields, but be aware that a form submission with `"age": "twenty"` needs to be caught as a type error, not silently ignored.
-- **Custom `x-` extensions that renderers don't understand.** JSON Schema renderers ignore unknown keys, so `x-conditions` won't break rendering — but it also won't automatically apply conditional logic. You need to implement the condition evaluation in your rendering code.
-- **Not handling empty optional fields.** An optional text field submitted as `""` (empty string) should pass validation — the required check runs first and skips further checks for empty non-required fields.
+- **Custom `x-` extensions that renderers don't understand.** JSON Schema renderers ignore unknown keys, so `x-conditions` won't break rendering, but it also won't automatically apply conditional logic. You need to implement the condition evaluation in your rendering code.
+- **Not handling empty optional fields.** An optional text field submitted as `""` (empty string) should pass validation, the required check runs first and skips further checks for empty non-required fields.
 - **Overwriting the schema file without warning.** `render` writes to `output` without checking if the file exists. In a real tool, add a `--force` flag or warn before overwriting.
 
 ## What you just built
 
-A form builder that models form fields as validated Python objects, generates JSON Schema for any rendering library, evaluates conditional visibility rules, and validates submissions against the form's rules. The separation of concerns — field definitions, schema generation, condition evaluation, and submission validation — mirrors how production form builders like Typeform and JotForm work internally.
+A form builder that models form fields as validated Python objects, generates JSON Schema for any rendering library, evaluates conditional visibility rules, and validates submissions against the form's rules. The separation of concerns, field definitions, schema generation, condition evaluation, and submission validation, mirrors how production form builders like Typeform and JotForm work internally.
 
 :::tip[Run a fuller version without any local setup]
 [`examples/form-builder/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/form-builder) in the course repo has a richer version with more field types, a sample multi-step form, and the CLI wired up end to end. Clone it, or open the whole repo in a [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), and run it from there.
@@ -595,6 +595,6 @@ A form builder that models form fields as validated Python objects, generates JS
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

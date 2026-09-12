@@ -20,7 +20,7 @@ prerequisites:
 
 Publier quand ton audience est réellement réveillée, avec des hashtags que les gens cherchent pour de vrai, c'est l'essentiel du marketing social. Ce projet construit un petit gestionnaire qui étudie les données d'engagement passées avec pandas, apprend la meilleure heure de publication pour chaque plateforme, suggère des hashtags par thème grâce à un petit moteur de notation, planifie une semaine de publications dans un calendrier de contenu, et finit par un rapport analytique matplotlib que tu pourrais injecter directement dans la routine d'une vraie marque.
 
-Cela suppose le Python 101 et une aisance avec le `groupby` de pandas — rien de plus d'Analyse de Données n'est requis. C'est optionnel et non noté ; vois [Projets du monde réel](/fr/projets) pour la liste complète et grandissante.
+Cela suppose le Python 101 et une aisance avec le `groupby` de pandas, rien de plus d'Analyse de Données n'est requis. C'est optionnel et non noté ; vois [Projets du monde réel](/fr/projets) pour la liste complète et grandissante.
 
 ## 🎯 Ce que tu vas faire
 
@@ -34,7 +34,7 @@ Cela suppose le Python 101 et une aisance avec le `groupby` de pandas — rien d
 
 **En local avec `uv`** est le chemin principal. `pandas` et `matplotlib` s'installent proprement, le backend non interactif `Agg` de matplotlib (utilisé à l'Étape 5) rend les graphiques même sur une machine sans écran, et les fichiers CSV et le rapport PNG atterrissent réellement dans ton dossier de projet.
 
-**Google Colab, les Notebooks Kaggle et Binder** sont des moyens raisonnables d'*essayer* la construction complète — pandas et matplotlib y tournent tous deux d'emblée. La limite honnête est que le système de fichiers éphémère d'un notebook ne conserve pas ton `posts.csv` ni ton rapport sauvegardé d'une session à l'autre, donc traite-les comme des chemins d'essai et passe au `uv` local quand tu veux que le calendrier et les artefacts du rapport persistent.
+**Google Colab, les Notebooks Kaggle et Binder** sont des moyens raisonnables d'*essayer* la construction complète, pandas et matplotlib y tournent tous deux d'emblée. La limite honnête est que le système de fichiers éphémère d'un notebook ne conserve pas ton `posts.csv` ni ton rapport sauvegardé d'une session à l'autre, donc traite-les comme des chemins d'essai et passe au `uv` local quand tu veux que le calendrier et les artefacts du rapport persistent.
 
 [![Ouvrir dans Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/social-media-manager/notebook.fr.ipynb)
 [![Ouvrir dans Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/social-media-manager/notebook.fr.ipynb)
@@ -54,7 +54,7 @@ uv add pandas matplotlib
 uv run python -c "import pandas, matplotlib; print('ok')"
 ```
 
-`pandas` est la couche de données — charger, grouper et classer les engagements — et `matplotlib` est la couche de dessin pour le rapport final. Les installer d'emblée signifie que chaque étape ci-dessous porte sur les idées *marketing* plutôt que sur des batailles de dépendances.
+`pandas` est la couche de données, charger, grouper et classer les engagements, et `matplotlib` est la couche de dessin pour le rapport final. Les installer d'emblée signifie que chaque étape ci-dessous porte sur les idées *marketing* plutôt que sur des batailles de dépendances.
 
 **✅ Liste de vérification**
 
@@ -63,7 +63,7 @@ uv run python -c "import pandas, matplotlib; print('ok')"
 
 ## Étape 1 : Construis le jeu de données d'engagement
 
-Chaque décision de contenu de ce projet — meilleur moment, meilleurs hashtags, meilleure plateforme — est un calcul sur des engagements passés. Cette étape construit une table d'engagement réaliste et reproductible pour que les étapes suivantes aient quelque chose de réel à classer.
+Chaque décision de contenu de ce projet, meilleur moment, meilleurs hashtags, meilleure plateforme, est un calcul sur des engagements passés. Cette étape construit une table d'engagement réaliste et reproductible pour que les étapes suivantes aient quelque chose de réel à classer.
 
 ### 1.1 Génère un jeu de données reproductible
 
@@ -96,9 +96,9 @@ print(df.head(3).to_string(index=False))
 print(df.groupby("platform")["engagements"].mean().round(1))
 ```
 
-`random.seed(seed)` est ce qui rend ce jeu de données *reproductible* : la même graine produit la même heure et le même engagement « aléatoires » à chaque exécution, donc le classement des meilleurs horaires que tu obtiens à l'Étape 2 est le classement du résultat attendu plutôt qu'une nouvelle réponse à chaque fois. Épingler la `seed` à l'intérieur de la fonction — pas en haut du module — garde la table stable même si tu appelles `build_dataset` plus d'une fois. `index=False` sur `to_csv` empêche une colonne d'index parasite de se glisser dans le fichier pour que le rechargement produise un DataFrame propre.
+`random.seed(seed)` est ce qui rend ce jeu de données *reproductible* : la même graine produit la même heure et le même engagement « aléatoires » à chaque exécution, donc le classement des meilleurs horaires que tu obtiens à l'Étape 2 est le classement du résultat attendu plutôt qu'une nouvelle réponse à chaque fois. Épingler la `seed` à l'intérieur de la fonction, pas en haut du module, garde la table stable même si tu appelles `build_dataset` plus d'une fois. `index=False` sur `to_csv` empêche une colonne d'index parasite de se glisser dans le fichier pour que le rechargement produise un DataFrame propre.
 
-**🎯 Résultat attendu :** Les colonnes `platform`, `topic`, `day`, `hour`, `engagements` dans l'aperçu, puis une ligne d'engagement moyen par plateforme — par ex. `Instagram` quelque part entre 100 et 140.
+**🎯 Résultat attendu :** Les colonnes `platform`, `topic`, `day`, `hour`, `engagements` dans l'aperçu, puis une ligne d'engagement moyen par plateforme, par ex. `Instagram` quelque part entre 100 et 140.
 
 **🩹 Si ça ne marche pas :** Si les colonnes diffèrent, vérifie que les clés du dictionnaire dans le constructeur DataFrame orthographient chaque colonne. Si une deuxième exécution produit des nombres différents, `random.seed` manque ou est appelé avec une *autre* graine que celle de la signature. Si `to_csv` écrit une colonne `Unnamed: 0` au rechargement, `index=False` manque.
 
@@ -112,7 +112,7 @@ print(df.groupby("platform")["engagements"].mean().round(1))
 
 **🤔 Question(s) socratique(s)**
 
-- Si tu changes `random.seed(7)` en `random.seed(8)`, le *fichier* change — pourquoi cela compte-t-il pour un classement de l'Étape 2 que tu veux comparer avec des amis, et que cela t'apprend-il sur le moment où une graine est une fonctionnalité plutôt qu'un accident ?
+- Si tu changes `random.seed(7)` en `random.seed(8)`, le *fichier* change, pourquoi cela compte-t-il pour un classement de l'Étape 2 que tu veux comparer avec des amis, et que cela t'apprend-il sur le moment où une graine est une fonctionnalité plutôt qu'un accident ?
 - Le jeu de données n'a pas de colonne `date`, seulement `day` et `hour`. Quelle question au niveau de la semaine peux-tu répondre, et quelle question au niveau de la semaine devient impossible ?
 
 ## Étape 2 : Trouve la meilleure heure de publication par plateforme
@@ -121,7 +121,7 @@ Un calendrier de contenu ne vaut que par les horaires qu'il planifie. Cette éta
 
 ### 2.1 Groupe, moyenne et classe
 
-**👟 Indice de départ :** `groupby(["platform", "hour"])` sur les engagements, prends la moyenne, et inspecte les meilleures heures — c'est tout le classement, sans boucle requise.
+**👟 Indice de départ :** `groupby(["platform", "hour"])` sur les engagements, prends la moyenne, et inspecte les meilleures heures, c'est tout le classement, sans boucle requise.
 
 ```python
 # smm.py (suite)
@@ -144,7 +144,7 @@ ranking = best_times(df)
 print(ranking.to_string(index=False))
 ```
 
-Lis la chaîne de bas en haut : `groupby(["platform", "hour"])` crée un groupe par paire plateforme-heure, `["engagements"].mean()` réduit chaque groupe à sa moyenne, `.round(1)` garde le rapport ordonné, et `sort_values(["platform", "engagements"], ascending=[True, False])` trie d'abord par plateforme puis par engagement *décroissant* pour que la meilleure heure de chaque plateforme flotte en haut de son bloc. Le dernier `.groupby("platform", sort=False).head(top_n)` ne conserve que les `top_n` premières lignes *à l'intérieur* de chaque plateforme — c'est le « top 3 des heures par plateforme » que tu remettras au calendrier.
+Lis la chaîne de bas en haut : `groupby(["platform", "hour"])` crée un groupe par paire plateforme-heure, `["engagements"].mean()` réduit chaque groupe à sa moyenne, `.round(1)` garde le rapport ordonné, et `sort_values(["platform", "engagements"], ascending=[True, False])` trie d'abord par plateforme puis par engagement *décroissant* pour que la meilleure heure de chaque plateforme flotte en haut de son bloc. Le dernier `.groupby("platform", sort=False).head(top_n)` ne conserve que les `top_n` premières lignes *à l'intérieur* de chaque plateforme, c'est le « top 3 des heures par plateforme » que tu remettras au calendrier.
 
 **🎯 Résultat attendu :** Un tableau avec `platform`, `hour`, `engagements`, où chaque plateforme apparaît exactement 3 fois et où ses 3 lignes sont ordonnées de la plus haute à la plus basse.
 
@@ -161,7 +161,7 @@ Lis la chaîne de bas en haut : `groupby(["platform", "hour"])` crée un groupe 
 **🤔 Question(s) socratique(s)**
 
 - Le classement moyenne les engagements bruts par heure, donc une plateforme avec trois publications chanceuses sur une heure semble « la meilleure » là. Que changerait à la recommandation l'usage de la *médiane* plutôt que de la *moyenne* ?
-- Un tableau heure-de-semaine a 7 × 17 cellules. Quelle nouvelle statistique ajouterais-tu si une marque ne publiait jamais que le matin — et comment distinguerais-tu « le matin est leur meilleur moment » de « ils n'ont jamais publié le soir » ?
+- Un tableau heure-de-semaine a 7 × 17 cellules. Quelle nouvelle statistique ajouterais-tu si une marque ne publiait jamais que le matin, et comment distinguerais-tu « le matin est leur meilleur moment » de « ils n'ont jamais publié le soir » ?
 
 ## Étape 3 : Construis le moteur de suggestions de hashtags
 
@@ -169,7 +169,7 @@ Les hashtags sont l'index de recherche de la plupart des plateformes : les bons 
 
 ### 3.1 Note et classe les hashtags
 
-**👟 Indice de départ :** Stocke chaque hashtag avec un score de pertinence dans un dictionnaire de thèmes, trie par score, et tronque à `n` — le « moteur » n'est que des données plus `sorted`.
+**👟 Indice de départ :** Stocke chaque hashtag avec un score de pertinence dans un dictionnaire de thèmes, trie par score, et tronque à `n`, le « moteur » n'est que des données plus `sorted`.
 
 ```python
 # smm.py (suite)
@@ -191,11 +191,11 @@ print(suggest_hashtags("python"))
 print(suggest_hashtags("analytics"))
 ```
 
-Tout le « moteur » est un `sorted` sur des tuples notés et une tranche. Modéliser chaque hashtag comme `("#Tag", 95)` plutôt que comme une simple chaîne fait du classement une question de données plutôt qu'un choix codé en dur — `reverse=True` met le score le plus élevé en premier, et `pool[:n]` tronque à la taille de bucket demandée. Le défaut `.get(topic.lower(), ...)` signifie qu'un thème inconnu dégénère en un repli générique au lieu de faire planter le calendrier que tu construirás à l'Étape 4.
+Tout le « moteur » est un `sorted` sur des tuples notés et une tranche. Modéliser chaque hashtag comme `("#Tag", 95)` plutôt que comme une simple chaîne fait du classement une question de données plutôt qu'un choix codé en dur, `reverse=True` met le score le plus élevé en premier, et `pool[:n]` tronque à la taille de bucket demandée. Le défaut `.get(topic.lower(), ...)` signifie qu'un thème inconnu dégénère en un repli générique au lieu de faire planter le calendrier que tu construirás à l'Étape 4.
 
 **🎯 Résultat attendu :** `['#Python', '#100DaysOfCode', '#CodeNewbie', '#DataScience']` pour `"python"`, et les hashtags du pool `data` pour `"analytics"` grâce à `.lower()`.
 
-**🩹 Si ça ne marche pas :** Si l'ordre semble arbitraire, la clé de notation `key=lambda item: item[1]` manque donc `sorted` compare des tuples entiers. Si `"analytics"` renvoie le repli générique, les clés du dictionnaire — `data`, pas `analytics` — ne correspondent pas ; le défaut `.get` le cache silencieusement. Si une longueur erronée revient, la tranche `[:n]` utilise un `n` différent de celui demandé.
+**🩹 Si ça ne marche pas :** Si l'ordre semble arbitraire, la clé de notation `key=lambda item: item[1]` manque donc `sorted` compare des tuples entiers. Si `"analytics"` renvoie le repli générique, les clés du dictionnaire, `data`, pas `analytics`, ne correspondent pas ; le défaut `.get` le cache silencieusement. Si une longueur erronée revient, la tranche `[:n]` utilise un `n` différent de celui demandé.
 
 ### 3.2 Vérifie le moteur de hashtags
 
@@ -212,7 +212,7 @@ Tout le « moteur » est un `sorted` sur des tuples notés et une tranche. Modé
 
 ## Étape 4 : Génère un vrai calendrier de contenu
 
-Un calendrier est là où les décisions deviennent un emploi du temps. Cette étape fusionne le classement des meilleurs horaires de l'Étape 2 avec le moteur de hashtags de l'Étape 3 pour planifier sept publications concrètes — jour, plateforme, heure, thème et hashtags — prêtes à coller dans n'importe quel planificateur.
+Un calendrier est là où les décisions deviennent un emploi du temps. Cette étape fusionne le classement des meilleurs horaires de l'Étape 2 avec le moteur de hashtags de l'Étape 3 pour planifier sept publications concrètes, jour, plateforme, heure, thème et hashtags, prêtes à coller dans n'importe quel planificateur.
 
 ### 4.1 Planifie la semaine à partir du classement
 
@@ -246,11 +246,11 @@ for post in build_calendar(ranking, TOPICS):
           f"{post['topic']:<10} {post['hashtags']}")
 ```
 
-`best_time` réduit le classement à l'unique heure gagnante par plateforme via `.groupby(...).head(1)` et le transforme en un dict `{platform: hour}` avec `set_index` + `to_dict` — ce dict est la petite table de recherche que la boucle consulte. Faire tourner les plateformes avec le modulo (`% len(best_time)`) et les thèmes de la même façon signifie qu'un plan de 7 jours se répartit sur les quatre plateformes et les quatre thèmes sans que les répétitions ne s'empilent. Réutiliser `suggest_hashtags` ici est le gain de l'Étape 3 : les hashtags du calendrier *proviennent* du moteur de notation, donc améliorer les scores améliore chaque publication planifiée.
+`best_time` réduit le classement à l'unique heure gagnante par plateforme via `.groupby(...).head(1)` et le transforme en un dict `{platform: hour}` avec `set_index` + `to_dict`, ce dict est la petite table de recherche que la boucle consulte. Faire tourner les plateformes avec le modulo (`% len(best_time)`) et les thèmes de la même façon signifie qu'un plan de 7 jours se répartit sur les quatre plateformes et les quatre thèmes sans que les répétitions ne s'empilent. Réutiliser `suggest_hashtags` ici est le gain de l'Étape 3 : les hashtags du calendrier *proviennent* du moteur de notation, donc améliorer les scores améliore chaque publication planifiée.
 
 **🎯 Résultat attendu :** Sept lignes imprimables, une par jour, chacune avec un nom de jour, une plateforme, une heure gagnante, un thème et quatre hashtags joints par des virgules, sans deux lignes consécutives partageant une plateforme.
 
-**🩹 Si ça ne marche pas :** Si une `KeyError` sur `best_time[platform]` apparaît, une plateforme de la boucle n'est pas dans le dict — vérifie que `ranking` contient bien les quatre plateformes de l'Étape 2. Si chaque ligne a la même plateforme, la rotation modulo utilise `len(best_time)` mais indexe avec la mauvaise valeur. Si les hashtags s'affichent comme une liste Python, `", ".join(...)` manque.
+**🩹 Si ça ne marche pas :** Si une `KeyError` sur `best_time[platform]` apparaît, une plateforme de la boucle n'est pas dans le dict, vérifie que `ranking` contient bien les quatre plateformes de l'Étape 2. Si chaque ligne a la même plateforme, la rotation modulo utilise `len(best_time)` mais indexe avec la mauvaise valeur. Si les hashtags s'affichent comme une liste Python, `", ".join(...)` manque.
 
 ### 4.2 Vérifie le calendrier
 
@@ -263,7 +263,7 @@ for post in build_calendar(ranking, TOPICS):
 **🤔 Question(s) socratique(s)**
 
 - Le calendrier fait tourner les plateformes de façon uniforme, ignorant que certaines ont surperformé d'autres. Comment biaiserais-tu la rotation vers les plateformes performantes sans abandonner entièrement les faibles ?
-- Planifier exactement une publication par jour est arbitraire. Quelles données — du classement de l'Étape 2 — justifieraient de publier *deux* fois sur certaines plateformes et *zéro* sur d'autres ?
+- Planifier exactement une publication par jour est arbitraire. Quelles données, du classement de l'Étape 2, justifieraient de publier *deux* fois sur certaines plateformes et *zéro* sur d'autres ?
 
 ## Étape 5 : Construis le rapport analytique hebdomadaire
 
@@ -271,7 +271,7 @@ Le dernier artefact est celui que tu partagerais réellement : un rapport visuel
 
 ### 5.1 Dessine le graphique de performance des plateformes
 
-**👟 Indice de départ :** Règle matplotlib sur le backend `Agg` sans écran, calcule les engagements totaux par plateforme, et sauvegarde le graphique en barres dans un fichier — puis imprime les mêmes nombres sous forme de texte pour que le rapport fonctionne même quand personne ne peut voir le PNG.
+**👟 Indice de départ :** Règle matplotlib sur le backend `Agg` sans écran, calcule les engagements totaux par plateforme, et sauvegarde le graphique en barres dans un fichier, puis imprime les mêmes nombres sous forme de texte pour que le rapport fonctionne même quand personne ne peut voir le PNG.
 
 ```python
 # smm.py (suite)
@@ -297,11 +297,11 @@ def weekly_report(df: pd.DataFrame, out: str = "weekly_report.png") -> None:
 weekly_report(df)
 ```
 
-`matplotlib.use("Agg")` doit s'exécuter *avant* l'import de `pyplot` — il échange la fenêtre interactive contre un backend sans affichage, ce qui permet à ce graphique de se rendre sur un serveur, dans un notebook, ou sur une machine sans écran du tout. `fig.savefig(out, dpi=100)` est la ligne qui compte : elle écrit un vrai fichier PNG, et le `plt.close(fig)` qui suit libère la figure pour qu'une boucle appelant `weekly_report` de façon répétée n'accumule pas de mémoire. Imprimer les mêmes totaux sous forme de tableau garde le rapport utile à quiconque lit la sortie de terminal plutôt que l'image.
+`matplotlib.use("Agg")` doit s'exécuter *avant* l'import de `pyplot`, il échange la fenêtre interactive contre un backend sans affichage, ce qui permet à ce graphique de se rendre sur un serveur, dans un notebook, ou sur une machine sans écran du tout. `fig.savefig(out, dpi=100)` est la ligne qui compte : elle écrit un vrai fichier PNG, et le `plt.close(fig)` qui suit libère la figure pour qu'une boucle appelant `weekly_report` de façon répétée n'accumule pas de mémoire. Imprimer les mêmes totaux sous forme de tableau garde le rapport utile à quiconque lit la sortie de terminal plutôt que l'image.
 
 **🎯 Résultat attendu :** Un fichier `weekly_report.png` apparaît dans le dossier du projet (visible dans ton explorateur de fichiers), et le terminal imprime les quatre totaux de plateforme dans l'ordre décroissant.
 
-**🩹 Si ça ne marche pas :** Si une trace d'erreur de backend mentionne `Agg`, `matplotlib.use("Agg")` vient *après* la ligne `import matplotlib.pyplot` — déplace-le au-dessus. Si aucun PNG n'apparaît, vérifie le chemin de `savefig` : il sauvegarde relativement au répertoire de travail courant. Si le graphique est par ailleurs vide, `plt.close(fig)` s'est exécuté avant que `savefig` ait fini — échange l'ordre.
+**🩹 Si ça ne marche pas :** Si une trace d'erreur de backend mentionne `Agg`, `matplotlib.use("Agg")` vient *après* la ligne `import matplotlib.pyplot`, déplace-le au-dessus. Si aucun PNG n'apparaît, vérifie le chemin de `savefig` : il sauvegarde relativement au répertoire de travail courant. Si le graphique est par ailleurs vide, `plt.close(fig)` s'est exécuté avant que `savefig` ait fini, échange l'ordre.
 
 ### 5.2 Vérifie de bout en bout
 
@@ -309,7 +309,7 @@ weekly_report(df)
 
 - ✅ `weekly_report.py` s'exécute proprement et écrit `weekly_report.png` sur le disque.
 - ✅ Les totaux imprimés correspondent aux hauteurs de barres visuelles.
-- ✅ Tout le pipeline — données → classement → hashtags → calendrier → rapport — s'exécute depuis un seul `smm.py` sans éditions copiées-collées entre les étapes.
+- ✅ Tout le pipeline, données → classement → hashtags → calendrier → rapport, s'exécute depuis un seul `smm.py` sans éditions copiées-collées entre les étapes.
 
 **🤔 Question(s) socratique(s)**
 
@@ -326,7 +326,7 @@ weekly_report(df)
 
 ## Ce que tu viens de construire
 
-Un gestionnaire de réseaux sociaux fonctionnel : il apprend la fenêtre de publication la plus performante de chaque plateforme à partir de distributions d'engagement réelles, suggère des hashtags notés par thème, planifie une semaine complète de publications, et rend un graphique analytique partageable — une version complète de la boucle recherche-puis-publie qu'une équipe sociale exécute à la main. La compétence transférable est *laisser les données prendre les décisions d'emploi du temps* : toute question « quand devrait-on faire ça » de ton futur, des envois d'emails aux séances d'étude, est le même motif groupby-et-classe que tu as utilisé ici.
+Un gestionnaire de réseaux sociaux fonctionnel : il apprend la fenêtre de publication la plus performante de chaque plateforme à partir de distributions d'engagement réelles, suggère des hashtags notés par thème, planifie une semaine complète de publications, et rend un graphique analytique partageable, une version complète de la boucle recherche-puis-publie qu'une équipe sociale exécute à la main. La compétence transférable est *laisser les données prendre les décisions d'emploi du temps* : toute question « quand devrait-on faire ça » de ton futur, des envois d'emails aux séances d'étude, est le même motif groupby-et-classe que tu as utilisé ici.
 
 :::tip[Exécute une version plus complète sans aucune configuration locale]
 [`examples/social-media-manager/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/social-media-manager) dans le dépôt du cours est une version plus complète du code ci-dessus, avec le moteur de hashtags et le calendrier déjà câblés dans un unique CLI. Clone-le, ou ouvre tout le dépôt dans un [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), et exécute-le à partir de là.
@@ -337,10 +337,10 @@ Un gestionnaire de réseaux sociaux fonctionnel : il apprend la fenêtre de publ
 - Nourris-le avec de vraies données : exporte l'historique de publications de ta propre plateforme, dépose-le dans `posts.csv`, et regarde le classement des meilleurs horaires se recalculer à partir d'engagements réels plutôt qu'ensemencés.
 - Ajoute un facteur jour-de-semaine en regroupant sur `(day, hour)` ensemble, pour qu'une fenêtre du lundi 9:00 qui marche pour un créneau du mardi 20:00 ne prétende plus qu'elles sont identiques.
 - Persiste le calendrier avec une vraie colonne `datetime` (jour de semaine + heure + date) et écris-la en CSV pour qu'elle s'importe directement dans Buffer, Hootsuite ou le planificateur de Meta.
-- Note les hashtags à partir de la performance réelle — en recoupant les hashtags de chaque publication avec son engagement — plutôt que les scores écrits à la main de l'Étape 3.
+- Note les hashtags à partir de la performance réelle, en recoupant les hashtags de chaque publication avec son engagement, plutôt que les scores écrits à la main de l'Étape 3.
 
 ## Partage ton projet avec la classe
 
-Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres élèves — et son README contient un parcours complet et accessible aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable avec git n'est supposée.
+Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres élèves, et son README contient un parcours complet et accessible aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable avec git n'est supposée.
 
 Bienvenue dans l'écriture de Python en dehors du navigateur. 🎓

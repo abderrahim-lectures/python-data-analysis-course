@@ -12,7 +12,7 @@ prerequisites: ["Python basics (variables, loops, functions, dictionaries)", "Ba
 
 Build a terminal-based note-taking application that stores notes as JSON, supports full-text search, tag-based organization, and exports to clean Markdown files. This project reinforces dictionary manipulation, file I/O, string processing, and building a user-facing CLI from scratch.
 
-- **Run it in your browser.** An interactive companion notebook is ready — open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
+- **Run it in your browser.** An interactive companion notebook is ready, open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/note-taking-app/notebook.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/note-taking-app/notebook.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fnote-taking-app%2Fnotebook.ipynb)
@@ -43,9 +43,9 @@ uv init note-taking-app
 cd note-taking-app
 ```
 
-No external packages needed — the app uses only the Python standard library (`json`, `os`, `datetime`, `pathlib`).
+No external packages needed, the app uses only the Python standard library (`json`, `os`, `datetime`, `pathlib`).
 
-## Step 1 — Set Up the Project Structure
+## Step 1, Set Up the Project Structure
 
 Every note needs a consistent shape so the rest of the app can rely on the same fields. We'll store notes as a list of dictionaries in a JSON file. Each note will have an `id`, `title`, `content`, `tags`, `created_at`, and `updated_at` field.
 
@@ -117,7 +117,7 @@ Notes file: data/notes.json
 
 ---
 
-## Step 2 — Create Notes
+## Step 2, Create Notes
 
 Now that we can load and save, let's build the function that creates a new note. It takes a title, content, and optional tags, assigns an ID and timestamps, and appends it to the list.
 
@@ -173,12 +173,12 @@ Created note 3: Python Virtual Environments
 Total notes: 3
 ```
 
-After running, inspect `data/notes.json` — you'll see all three notes stored with IDs, tags, and timestamps.
+After running, inspect `data/notes.json`, you'll see all three notes stored with IDs, tags, and timestamps.
 
 **🩹 If it's off:**
 
 - If IDs aren't sequential, check that `load_notes()` reads the current list before generating the next ID.
-- Tags should be lowercase — if you see mixed case, the list comprehension in `create_note` isn't running.
+- Tags should be lowercase, if you see mixed case, the list comprehension in `create_note` isn't running.
 
 **✅ Checklist**
 
@@ -193,7 +193,7 @@ After running, inspect `data/notes.json` — you'll see all three notes stored w
 
 ---
 
-## Step 3 — List and Search Notes
+## Step 3, List and Search Notes
 
 A note-taking app is useless if you can't find anything. We'll implement two things: listing all notes in a readable format, and full-text search that matches against both titles and content.
 
@@ -293,7 +293,7 @@ display_search_results("docker")
 
 **🩹 If it's off:**
 
-- If search returns nothing for "python", check that `query_lower` is being compared to `note["title"].lower()` — case sensitivity is the usual culprit.
+- If search returns nothing for "python", check that `query_lower` is being compared to `note["title"].lower()`, case sensitivity is the usual culprit.
 - If the table columns are misaligned, make sure the f-string width specifiers (`:<4`, `:<35`, etc.) match the header widths.
 
 **✅ Checklist**
@@ -309,7 +309,7 @@ display_search_results("docker")
 
 ---
 
-## Step 4 — Organize with Tags
+## Step 4, Organize with Tags
 
 Tags let you group notes without rigid categories. We'll add functions to add and remove tags from existing notes, and to filter the note list by a specific tag.
 
@@ -425,7 +425,7 @@ Tags on note 1 after removal:
 
 ---
 
-## Step 5 — Edit and Delete Notes
+## Step 5, Edit and Delete Notes
 
 Users need to correct mistakes and remove stale notes. We'll add functions to update specific fields of an existing note and to delete notes by ID.
 
@@ -512,7 +512,7 @@ After edit:
 
 **🩹 If it's off:**
 
-- If `edit_note` doesn't seem to save, check that you're passing `title=` and `content=` as keyword arguments — the function uses `None` as a sentinel to skip unchanged fields.
+- If `edit_note` doesn't seem to save, check that you're passing `title=` and `content=` as keyword arguments, the function uses `None` as a sentinel to skip unchanged fields.
 - If `delete_note` says "not found" but the note exists, verify the ID is an integer, not a string.
 
 **✅ Checklist**
@@ -528,9 +528,9 @@ After edit:
 
 ---
 
-## Step 6 — Export to Markdown
+## Step 6, Export to Markdown
 
-Markdown files are easy to share, preview on GitHub, or import into other tools. We'll convert notes to clean `.md` files — one file per note, or a single combined document.
+Markdown files are easy to share, preview on GitHub, or import into other tools. We'll convert notes to clean `.md` files, one file per note, or a single combined document.
 
 Add these functions to `notes.py`:
 
@@ -634,7 +634,7 @@ Example: [x**2 for x in range(10)]
 
 **🩹 If it's off:**
 
-- If the exported file is empty, check that `note["content"]` is a string — a `None` value would silently produce no output.
+- If the exported file is empty, check that `note["content"]` is a string, a `None` value would silently produce no output.
 - If `safe_title` contains weird characters, add more replacements: `note["title"].replace(":", "").replace("'", "")`.
 
 **✅ Checklist**
@@ -650,7 +650,7 @@ Example: [x**2 for x in range(10)]
 
 ---
 
-## Step 7 — Polish the CLI
+## Step 7, Polish the CLI
 
 The final step ties everything together with a menu-driven interface. We'll add colored output using ANSI codes, input validation, and clean error handling so the app feels polished.
 
@@ -860,7 +860,7 @@ if __name__ == "__main__":
 
 **🩹 If it's off:**
 
-- If colors don't appear, your terminal might not support ANSI codes — try a different terminal or check `$TERM` is set to `xterm-256color` or similar.
+- If colors don't appear, your terminal might not support ANSI codes, try a different terminal or check `$TERM` is set to `xterm-256color` or similar.
 - If the input loop hangs, check that `handle_create` properly breaks out of the content input loop on two consecutive empty lines.
 - If `Ctrl+C` doesn't exit cleanly, the `except KeyboardInterrupt` block should catch it.
 
@@ -880,13 +880,13 @@ if __name__ == "__main__":
 
 ## 🧩 Challenges
 
-**Challenge 1 — Note pinning**
+**Challenge 1, Note pinning**
 Add a `pinned` boolean field to each note. When listing, pinned notes always appear at the top regardless of sort order.
 
-**Challenge 2 — Full export with table of contents**
+**Challenge 2, Full export with table of contents**
 Extend the combined Markdown export to include a table of contents at the top, with links to each note heading using Markdown anchor syntax (e.g., `[Python Basics](#python-basics)`).
 
-**Challenge 3 — Search by date range**
+**Challenge 3, Search by date range**
 Add a `--from` and `--to` filter to the search function so users can find notes created or updated within a specific date range. Parse dates with `datetime.fromisoformat()`.
 
 ## Stretch Goals

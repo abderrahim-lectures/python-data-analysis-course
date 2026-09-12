@@ -68,14 +68,14 @@ La columna izquierda es el **índice** (0, 1, 2, 3 por defecto). La columna dere
 
 ## Creando Series desde diferentes fuentes
 
-**Desde una lista** — el índice toma como valor por defecto un rango de enteros:
+**Desde una lista**, el índice toma como valor por defecto un rango de enteros:
 
 ```python
 temperatures = pd.Series([22.5, 24.1, 19.8, 26.3])
 print(temperatures)
 ```
 
-**Desde un diccionario** — las claves se convierten en el índice:
+**Desde un diccionario**, las claves se convierten en el índice:
 
 ```python
 population = pd.Series({
@@ -95,7 +95,7 @@ Johannesburg     5600000
 dtype: int64
 ```
 
-**Desde un escalar** — un único valor se repite para llenar el índice:
+**Desde un escalar**, un único valor se repite para llenar el índice:
 
 ```python
 zeros = pd.Series(0, index=["a", "b", "c", "d"])
@@ -185,7 +185,7 @@ print(grades > 85)
 
 ## Conclusiones clave
 
-- Una Series es un arreglo unidimensional etiquetado — la base de pandas
+- Una Series es un arreglo unidimensional etiquetado, la base de pandas
 - El índice proporciona etiquetas para acceder a los datos y hacer cortes
 - Las operaciones vectorizadas te permiten transformar columnas completas sin bucles
 - Los diccionarios son una fuente natural para Series con etiquetas significativas

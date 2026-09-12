@@ -16,7 +16,7 @@ prerequisites: ["Python 101", "Data Analysis"]
 
 Cada almacén, cada tienda minorista, cada vendedor de e-commerce se enfrenta al mismo problema: saber qué hay en stock, qué se está agotando y dónde está todo. Este proyecto construye un sistema de gestión de inventario en Python con backend SQLite: haces seguimiento de los niveles de stock en múltiples almacenes, simulas escaneos de códigos de barras para actualizaciones rápidas, recibes alertas cuando los artículos alcanzan los umbrales de reorden, transfieres stock entre ubicaciones y prevés las necesidades futuras a partir de datos históricos. El sistema se ejecuta como CLI, pero la arquitectura es la misma que impulsa las plataformas de inventario reales.
 
-Esto asume Python 101 y comodidad básica con pandas de Análisis de Datos — nada más. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
+Esto asume Python 101 y comodidad básica con pandas de Análisis de Datos, nada más. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
 
 ## 🎯 Lo que harás
 
@@ -29,7 +29,7 @@ Esto asume Python 101 y comodidad básica con pandas de Análisis de Datos — n
 
 ## Dónde ejecutar esto
 
-**Localmente con `uv`** es el camino principal — este proyecto lee y escribe un archivo de base de datos SQLite en disco, lo que funciona mejor fuera de un notebook.
+**Localmente con `uv`** es el camino principal, este proyecto lee y escribe un archivo de base de datos SQLite en disco, lo que funciona mejor fuera de un notebook.
 
 **Google Colab, Kaggle Notebooks y Binder** funcionan para probar la herramienta. El notebook crea una base de datos en memoria y usa datos de muestra.
 
@@ -61,7 +61,7 @@ cd inventory-manager
 uv add click pandas
 ```
 
-`click` construye el CLI y `pandas` impulsa la previsión de ventas. El proyecto usa SQLite de la librería estándar para la base de datos — no se necesita ningún driver de base de datos externo.
+`click` construye el CLI y `pandas` impulsa la previsión de ventas. El proyecto usa SQLite de la librería estándar para la base de datos, no se necesita ningún driver de base de datos externo.
 
 ### Crea la estructura del proyecto
 
@@ -78,7 +78,7 @@ touch inventory/__init__.py inventory/db.py inventory/scanner.py inventory/alert
 
 ## Paso 1: Diseña el esquema de la base de datos
 
-Una buena base de datos de inventario hace seguimiento de tres cosas: qué productos existen, dónde están y cuántos hay en cada ubicación. Tres tablas — `products`, `warehouses` y `stock` — con una tabla de unión que vincula los productos con los almacenes.
+Una buena base de datos de inventario hace seguimiento de tres cosas: qué productos existen, dónde están y cuántos hay en cada ubicación. Tres tablas, `products`, `warehouses` y `stock`, con una tabla de unión que vincula los productos con los almacenes.
 
 ### 1.1 Crea el esquema
 
@@ -152,7 +152,7 @@ def init_db():
     conn.close()
 ```
 
-La tabla `stock` es una tabla de unión: cada fila dice "el producto X tiene Y unidades en el almacén Z." La tabla `stock_movements` registra cada transferencia con fines de auditoría. El `reorder_point` en los productos define el umbral por debajo del cual deberías hacer un reorden — productos diferentes tienen umbrales distintos dependiendo de qué tan rápido se venden.
+La tabla `stock` es una tabla de unión: cada fila dice "el producto X tiene Y unidades en el almacén Z." La tabla `stock_movements` registra cada transferencia con fines de auditoría. El `reorder_point` en los productos define el umbral por debajo del cual deberías hacer un reorden, productos diferentes tienen umbrales distintos dependiendo de qué tan rápido se venden.
 
 **🎯 Resultado esperado :** `init_db()` crea `inventory.db` con 4 productos, 2 almacenes y 7 entradas de stock.
 
@@ -274,7 +274,7 @@ assert wh1_stock["quantity"] == 20  # was 25, removed 5
 
 **🎯 Resultado esperado :** Todas las afirmaciones pasan; el nivel de stock se actualizó correctamente después de la venta.
 
-**🩹 Si sale mal :** Si el stock no cambió, la consulta UPDATE no está coincidiendo con la fila correcta — revisa la cláusula WHERE.
+**🩹 Si sale mal :** Si el stock no cambió, la consulta UPDATE no está coincidiendo con la fila correcta, revisa la cláusula WHERE.
 
 ### 2.3 Verifica
 
@@ -321,7 +321,7 @@ La consulta SQL une los productos con su stock, suma las cantidades en todos los
 
 **🎯 Resultado esperado :** `check_reorder_alerts()` devuelve una lista que incluye `WIDGET-B` (stock total = 3, punto de reorden = 5) ordenada por urgencia.
 
-**🩹 Si sale mal :** Si no aparecen alertas, los niveles de stock de los datos de semilla están todos por encima de los puntos de reorden — revisa los valores de los datos de semilla. Si el total es incorrecto, el `SUM` está incluyendo movimientos de otros productos — revisa el JOIN.
+**🩹 Si sale mal :** Si no aparecen alertas, los niveles de stock de los datos de semilla están todos por encima de los puntos de reorden, revisa los valores de los datos de semilla. Si el total es incorrecto, el `SUM` está incluyendo movimientos de otros productos, revisa el JOIN.
 
 ### 3.2 Verifica las alertas
 
@@ -356,7 +356,7 @@ assert not any(a["sku"] == "WIDGET-A" for a in alerts)
 
 ## Paso 4: Implementa transferencias entre almacenes
 
-Mover stock entre almacenes es una transacción de dos lados: restar en el origen, sumar en el destino. Si falla cualquiera de los dos lados, no debería ocurrir ninguno — este es el requisito clásico de atomicidad de las transacciones de base de datos.
+Mover stock entre almacenes es una transacción de dos lados: restar en el origen, sumar en el destino. Si falla cualquiera de los dos lados, no debería ocurrir ninguno, este es el requisito clásico de atomicidad de las transacciones de base de datos.
 
 ### 4.1 Escribe la función de transferencia
 
@@ -425,7 +425,7 @@ def transfer_stock(sku: str, from_wh: str, to_wh: str, quantity: int) -> dict:
         conn.close()
 ```
 
-El patrón `try/except/finally` garantiza que si falla cualquier paso (stock insuficiente, error de base de datos), toda la transacción se revierte — sin transferencias a medias. El bloque `finally` siempre cierra la conexión. El movimiento se registra después de que las actualizaciones de stock tengan éxito, así que la entrada del registro solo existe si la transferencia realmente ocurrió.
+El patrón `try/except/finally` garantiza que si falla cualquier paso (stock insuficiente, error de base de datos), toda la transacción se revierte, sin transferencias a medias. El bloque `finally` siempre cierra la conexión. El movimiento se registra después de que las actualizaciones de stock tengan éxito, así que la entrada del registro solo existe si la transferencia realmente ocurrió.
 
 **🎯 Resultado esperado :** `transfer_stock("WIDGET-A", "WH1", "WH2", 5)` devuelve `{"status": "success", "quantity": 5, ...}`. WH1 baja 5 y WH2 sube 5.
 
@@ -451,7 +451,7 @@ assert wh2["quantity"] == 13  # was 8
 
 **🎯 Resultado esperado :** Todas las afirmaciones pasan; el stock se movió de forma atómica entre almacenes.
 
-**🩹 Si sale mal :** Si las cantidades no coinciden, la transferencia puede haberse ejecutado dos veces — revisa el estado de los datos de semilla.
+**🩹 Si sale mal :** Si las cantidades no coinciden, la transferencia puede haberse ejecutado dos veces, revisa el estado de los datos de semilla.
 
 ### 4.3 Verifica las transferencias
 
@@ -468,7 +468,7 @@ assert wh2["quantity"] == 13  # was 8
 
 ## Paso 5: Prevée las necesidades futuras de stock
 
-La previsión de ventas predice cuánto stock necesitarás basándose en los datos históricos de movimiento. Este paso usa una media móvil simple — el promedio de los últimos N días de ventas — para proyectar la demanda futura.
+La previsión de ventas predice cuánto stock necesitarás basándose en los datos históricos de movimiento. Este paso usa una media móvil simple, el promedio de los últimos N días de ventas, para proyectar la demanda futura.
 
 ### 5.1 Escribe la función de previsión
 
@@ -515,11 +515,11 @@ def forecast_demand(sku: str, days_ahead: int = 7, lookback: int = 30) -> dict:
     }
 ```
 
-La media móvil es el método de previsión más simple: promedia los últimos N días de ventas y multiplica por el horizonte de previsión. La calificación `confidence` se basa en la completitud de los datos — si tienes datos de ventas de la mayor parte del período de retroceso (lookback), la previsión es más confiable. Para un sistema real usarías suavizado exponencial o ARIMA, pero la media móvil captura la idea central.
+La media móvil es el método de previsión más simple: promedia los últimos N días de ventas y multiplica por el horizonte de previsión. La calificación `confidence` se basa en la completitud de los datos, si tienes datos de ventas de la mayor parte del período de retroceso (lookback), la previsión es más confiable. Para un sistema real usarías suavizado exponencial o ARIMA, pero la media móvil captura la idea central.
 
 **🎯 Resultado esperado :** `forecast_demand("WIDGET-A")` devuelve un dict con `daily_avg`, `forecast_total` y `confidence` basados en el historial de movimientos.
 
-**🩹 Si sale mal :** Si la previsión es siempre 0, no hay movimientos con `reason='sale'` en los datos de semilla — necesitarías añadir algunas ventas de muestra.
+**🩹 Si sale mal :** Si la previsión es siempre 0, no hay movimientos con `reason='sale'` en los datos de semilla, necesitarías añadir algunas ventas de muestra.
 
 ### 5.2 Añade recomendaciones de reposición
 
@@ -554,7 +554,7 @@ def restock_recommendations() -> list[dict]:
 
 **🎯 Resultado esperado :** Los productos donde la previsión supera el stock actual más el punto de reorden aparecen en las recomendaciones, ordenados por urgencia.
 
-**🩹 Si sale mal :** Si no aparecen recomendaciones, el stock actual es suficiente para cubrir la previsión — ese es el comportamiento correcto para artículos bien surtidos.
+**🩹 Si sale mal :** Si no aparecen recomendaciones, el stock actual es suficiente para cubrir la previsión, ese es el comportamiento correcto para artículos bien surtidos.
 
 ### 5.3 Verifica la previsión
 
@@ -579,7 +579,7 @@ def restock_recommendations() -> list[dict]:
 
 ## Lo que acabas de construir
 
-Un sistema de gestión de inventario con backend SQLite: catálogo de productos, seguimiento de stock multi-almacén, escaneo estilo código de barras para actualizaciones rápidas, alertas de reorden que previenen desabastecimientos, transferencias atómicas entre almacenes con registro de auditoría y previsión de ventas a partir de los datos históricos de movimiento. La arquitectura — producto, almacén, tabla de unión de stock — es el mismo patrón que usan los sistemas de inventario reales como inFlow, Sortly y Odoo.
+Un sistema de gestión de inventario con backend SQLite: catálogo de productos, seguimiento de stock multi-almacén, escaneo estilo código de barras para actualizaciones rápidas, alertas de reorden que previenen desabastecimientos, transferencias atómicas entre almacenes con registro de auditoría y previsión de ventas a partir de los datos históricos de movimiento. La arquitectura, producto, almacén, tabla de unión de stock, es el mismo patrón que usan los sistemas de inventario reales como inFlow, Sortly y Odoo.
 
 :::tip[Ejecuta una versión más completa sin configuración local]
 [`examples/inventory-manager/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/inventory-manager) en el repositorio del curso tiene una versión más rica con más datos de muestra, un panel web y el CLI conectado de principio a fin. Clónalo, o abre el repositorio completo en un [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), y ejecútalo desde allí.
@@ -593,6 +593,6 @@ Un sistema de gestión de inventario con backend SQLite: catálogo de productos,
 
 ## Comparte tu proyecto con la clase
 
-¿Construiste algo de lo que te sientas orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado — y su README tiene una guía completa y apta para principiantes sobre cómo añadir el tuyo mediante una **pull request**, incluso si nunca has usado git: hacer un fork del repositorio, crear una rama, hacer commit de tus archivos y abrir la PR, paso a paso. No se asume ninguna experiencia previa con git.
+¿Construiste algo de lo que te sientas orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado, y su README tiene una guía completa y apta para principiantes sobre cómo añadir el tuyo mediante una **pull request**, incluso si nunca has usado git: hacer un fork del repositorio, crear una rama, hacer commit de tus archivos y abrir la PR, paso a paso. No se asume ninguna experiencia previa con git.
 
 Bienvenido a escribir Python fuera del navegador. 🎓

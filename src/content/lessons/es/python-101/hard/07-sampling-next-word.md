@@ -44,7 +44,7 @@ quiz:
 ---
 El motor de la generación de texto
 
-La generación de texto es, en esencia, un problema de muestreo. Dada una palabra actual, necesitas elegir la siguiente palabra de una distribución de posibilidades — algunas palabras son probables, otras raras, pero todas son posibles. `random.choices()` hace exactamente esto.
+La generación de texto es, en esencia, un problema de muestreo. Dada una palabra actual, necesitas elegir la siguiente palabra de una distribución de posibilidades, algunas palabras son probables, otras raras, pero todas son posibles. `random.choices()` hace exactamente esto.
 
 Las celdas siguientes reutilizan las funciones `load_corpus`, `tokenize`, `build_bigrams` y `normalize_bigrams` de las lecciones 01 a 06. Cada página de lección inicia una sesión de Python nueva, así que ejecuta primero esta celda de configuración para reconstruir el modelo de bigramas:
 
@@ -146,11 +146,11 @@ next_word = sample_next(model, current)
 print(f"After '{current}' comes '{next_word}'")
 ```
 
-Si la palabra actual no está en el modelo (no tiene seguidores conocidos), devuelve `None`. Quien llama debe manejar esto — ya sea detener la generación o elegir una palabra aleatoria para continuar.
+Si la palabra actual no está en el modelo (no tiene seguidores conocidos), devuelve `None`. Quien llama debe manejar esto, ya sea detener la generación o elegir una palabra aleatoria para continuar.
 
 ### Reproducibilidad con semillas
 
-`random.choices()` usa el estado aleatorio global de Python. Configurar una semilla hace que la salida sea reproducible — útil para depurar y probar:
+`random.choices()` usa el estado aleatorio global de Python. Configurar una semilla hace que la salida sea reproducible, útil para depurar y probar:
 
 ```python
 random.seed(42)
@@ -164,9 +164,9 @@ print(sample_next(model, "the"))  # might be different
 
 Algunas palabras solo aparecen al final del corpus y no tienen seguidores conocidos. Cuando `sample_next` devuelve `None`, tienes opciones:
 
-1. **Detener la generación** — la opción más conservadora
-2. **Reiniciar desde una palabra aleatoria** — mantiene la salida en marcha
-3. **Reiniciar desde una palabra común** — elige de las N palabras más frecuentes
+1. **Detener la generación**, la opción más conservadora
+2. **Reiniciar desde una palabra aleatoria**, mantiene la salida en marcha
+3. **Reiniciar desde una palabra común**, elige de las N palabras más frecuentes
 
 La opción 3 suele producir los mejores resultados:
 
@@ -196,7 +196,7 @@ for _ in range(10):
     print(f"the → {next_word}")
 ```
 
-¿Qué tan consistentes son los resultados? Prueba a cambiar la semilla — ¿obtienes palabras diferentes?
+¿Qué tan consistentes son los resultados? Prueba a cambiar la semilla, ¿obtienes palabras diferentes?
 
 ## Conclusiones clave
 

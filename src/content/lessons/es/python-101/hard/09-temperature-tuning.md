@@ -44,7 +44,7 @@ quiz:
 ---
 Controlar la creatividad
 
-Un modelo de lenguaje con probabilidades fijas siempre produce el mismo tipo de salida — sigue el corpus exactamente. Pero a veces quieres texto más creativo y sorprendente, y a veces quieres la salida más predecible y segura. La **temperatura** es la perilla que controla este equilibrio.
+Un modelo de lenguaje con probabilidades fijas siempre produce el mismo tipo de salida, sigue el corpus exactamente. Pero a veces quieres texto más creativo y sorprendente, y a veces quieres la salida más predecible y segura. La **temperatura** es la perilla que controla este equilibrio.
 
 Las celdas siguientes reutilizan las funciones `load_corpus`, `tokenize`, `build_bigrams` y `normalize_bigrams` de las lecciones 01 a 06, la función `sample_next` de la lección 07 y un `generate_text` sensible a la temperatura (la misma implementación que verás ensamblada en la lección 10). Cada página de lección inicia una sesión de Python nueva, así que ejecuta primero esta celda de configuración:
 
@@ -123,9 +123,9 @@ model = normalize_bigrams(build_bigrams(tokenize(" ".join(texts))))
 
 La temperatura es un número (normalmente entre 0.1 y 2.0) que escala la distribución de probabilidad del modelo antes de muestrear:
 
-- **Temperatura baja** (p. ej., 0.2): Acentúa la distribución — la palabra más probable se vuelve aún más probable, y las palabras raras casi imposibles. La salida es repetitiva y predecible.
-- **Temperatura 1.0**: Sin cambios — se usan las probabilidades originales tal como están.
-- **Temperatura alta** (p. ej., 1.5): Aplana la distribución — todas las palabras se vuelven más igualmente probables. La salida es más aleatoria, creativa y potencialmente sin sentido.
+- **Temperatura baja** (p. ej., 0.2): Acentúa la distribución, la palabra más probable se vuelve aún más probable, y las palabras raras casi imposibles. La salida es repetitiva y predecible.
+- **Temperatura 1.0**: Sin cambios, se usan las probabilidades originales tal como están.
+- **Temperatura alta** (p. ej., 1.5): Aplana la distribución, todas las palabras se vuelven más igualmente probables. La salida es más aleatoria, creativa y potencialmente sin sentido.
 
 ### La matemática: escalar log-probabilidades
 
@@ -150,7 +150,7 @@ def apply_temperature(probabilities, temperature):
     return [e / total for e in exp_scaled]
 ```
 
-El truco de `math.exp(s - max_scaled)` evita el desbordamiento — sin restar el máximo, las exponenciales podrían ser astronómicamente grandes.
+El truco de `math.exp(s - max_scaled)` evita el desbordamiento, sin restar el máximo, las exponenciales podrían ser astronómicamente grandes.
 
 ### Ejemplo: distribución de tres palabras
 

@@ -176,7 +176,7 @@ Each `generate` returns `(text, latency_seconds, tokens)`. Model A answers math 
 
 ## Step 3: Score accuracy
 
-Accuracy compares a model's answer to the expected answer. To be forgiving of phrasing, normalize both sides — lowercase, strip punctuation.
+Accuracy compares a model's answer to the expected answer. To be forgiving of phrasing, normalize both sides, lowercase, strip punctuation.
 
 ### 3.1 Implement the accuracy scorer
 
@@ -229,7 +229,7 @@ def score(model, suite) -> dict:
 
 **🤔 Socratic Question(s)**
 
-- Equality after normalization is a brittle matcher — what would a better semantic matcher look like?
+- Equality after normalization is a brittle matcher, what would a better semantic matcher look like?
 
 ## Step 4: Safety check
 
@@ -321,13 +321,13 @@ def compare(models, suite) -> pd.DataFrame:
 
 - **Exact-match scoring is brittle.** "Paris, France" fails equality with "Paris". Normalization helps but isn't semantic matching. Use fuzzy or LLM-based grading for realism.
 - **Costing by tokens only.** Real cost also depends on input vs output token pricing and caching. Your estimate is a lower bound.
-- **Sleep time inflation.** Mock `time.sleep` inflates latency unrealistic goals — treat mock latency as relative, not absolute.
+- **Sleep time inflation.** Mock `time.sleep` inflates latency unrealistic goals, treat mock latency as relative, not absolute.
 - **Missing safety scenarios.** One sandbox cooking prompt won't stress a model. Real safety suites need adversarial and edge-condition prompts.
 - **Noise in a 5-case suite.** A single wrong answer swings accuracy by 20%. Run more cases or report per-category breakdowns.
 
 ## What you just built
 
-An LLM evaluation suite: a reusable benchmark of test cases, mock models behind a uniform `generate` interface, an accuracy scorer with normalization, latency/token/cost tracking, a safety checker, and a side-by-side comparison report. You can now quantify whether one model beats another on the dimensions that actually matter to your application — and swap in real APIs by implementing one interface.
+An LLM evaluation suite: a reusable benchmark of test cases, mock models behind a uniform `generate` interface, an accuracy scorer with normalization, latency/token/cost tracking, a safety checker, and a side-by-side comparison report. You can now quantify whether one model beats another on the dimensions that actually matter to your application, and swap in real APIs by implementing one interface.
 
 :::tip[Run a fuller version without any local setup]
 [`examples/llm-evaluator/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/llm-evaluator) in the course repo has a richer version with real model adapters, per-category breakdowns, and the CLI wired up end to end. Clone it, or open the whole repo in a [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), and run it from there.
@@ -341,6 +341,6 @@ An LLM evaluation suite: a reusable benchmark of test cases, mock models behind 
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

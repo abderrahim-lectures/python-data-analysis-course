@@ -144,7 +144,7 @@ plt.show()
 ```
 
 Lecture d'une boîte à moustaches :
-- **Boîte** : intervalle interquartile (IQR) — les 50 % du milieu des données
+- **Boîte** : intervalle interquartile (IQR), les 50 % du milieu des données
 - **Ligne à l'intérieur de la boîte** : médiane
 - **Moustaches** : 1,5 × IQR à partir de Q1 et Q3
 - **Points au-delà des moustaches** : valeurs aberrantes (en général > 1,5 × IQR)
@@ -228,7 +228,7 @@ plt.show()
 
 ## Points clés à retenir
 
-- Calculez toujours les statistiques récapitulatives avant de tracer des graphiques — elles vous disent quoi chercher dans le visuel
+- Calculez toujours les statistiques récapitulatives avant de tracer des graphiques, elles vous disent quoi chercher dans le visuel
 - Les histogrammes montrent les fréquences ; les diagrammes KDE montrent la densité ; les boîtes à moustaches montrent les statistiques récapitulatives ; les diagrammes en violon combinent les deux
 - L'asymétrie et l'aplatissement quantifient la forme d'une distribution en nombres
 - Les boîtes à moustaches rendent les valeurs aberrantes évidentes ; les histogrammes révèlent la modalité (unimodale contre bimodale)
@@ -239,7 +239,7 @@ plt.show()
 Créez une figure unique avec quatre sous-graphiques montrant la distribution du `math score` en utilisant : (1) un histogramme, (2) un diagramme KDE, (3) une boîte à moustaches et (4) un diagramme en violon. Ajoutez une ligne verticale à la moyenne sur chaque graphique. Définissez le titre de la figure à « Math Score Distribution Analysis ».
 
 <details class="challenge">
-<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
+<summary>🧩 Défi, réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
 ```python

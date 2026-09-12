@@ -10,9 +10,9 @@ prerequisites: ["أساسيات بايثون", "أساسيات pandas", "أسا�
 
 # لوحة تحليل المشاعر
 
-النصوص في كل مكان — المراجعات والتغريدات وتذاكر الدعم وردود الاستبيانات. معرفة ما إذا كان ذلك النص إيجابيًا أو سلبيًا أو محايدًا يساعدك على اتخاذ القرارات بسرعة. في هذا المشروع ستبني خط أنابيب لتحليل المشاعر باستخدام TextBlob وتصوّر النتائج في لوحة معلومات فورية بـ matplotlib تتحدّث مع وصول بيانات جديدة.
+النصوص في كل مكان ، المراجعات والتغريدات وتذاكر الدعم وردود الاستبيانات. معرفة ما إذا كان ذلك النص إيجابيًا أو سلبيًا أو محايدًا يساعدك على اتخاذ القرارات بسرعة. في هذا المشروع ستبني خط أنابيب لتحليل المشاعر باستخدام TextBlob وتصوّر النتائج في لوحة معلومات فورية بـ matplotlib تتحدّث مع وصول بيانات جديدة.
 
-- **شغّله في المتصفح.** هناك دفتر ملاحظات تفاعلي جاهز — افتحه على Colab أو Kaggle أو Binder وتابع خطوة بخطوة.
+- **شغّله في المتصفح.** هناك دفتر ملاحظات تفاعلي جاهز ، افتحه على Colab أو Kaggle أو Binder وتابع خطوة بخطوة.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/sentiment-dashboard/notebook.ar.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/sentiment-dashboard/notebook.ar.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsentiment-dashboard%2Fnotebook.ar.ipynb)
@@ -117,8 +117,8 @@ positive | pol=+0.625 | Best day ever! I'm so happy right now!
 
 **استكشاف الأخطاء وإصلاحها:**
 
-- `LookupError: resource not found` — تخطيت نزول مجموعات النصوص. شغّل `uv run python -m textblob.download_corpora`.
-- كل النتائج تُظهر `neutral` بـ `pol=0.0` — يحتاج TextBlob إلى مجموعة نصوص `averaged_perceptron_tagger`. أعد تشغيل نزول المجموعات.
+- `LookupError: resource not found` ، تخطيت نزول مجموعات النصوص. شغّل `uv run python -m textblob.download_corpora`.
+- كل النتائج تُظهر `neutral` بـ `pol=0.0` ، يحتاج TextBlob إلى مجموعة نصوص `averaged_perceptron_tagger`. أعد تشغيل نزول المجموعات.
 
 ## الخطوة 2: المعالجة الدفعية
 
@@ -387,7 +387,7 @@ if __name__ == "__main__":
 uv run python realtime.py
 ```
 
-سترى `dashboard_live.png` يتحدّث كل 5 ثوانٍ ببيانات جديدة تُضاف. اضغط `Ctrl+C` للتوقف مبكرًا — يطبع الملخص النهائي على أي حال.
+سترى `dashboard_live.png` يتحدّث كل 5 ثوانٍ ببيانات جديدة تُضاف. اضغط `Ctrl+C` للتوقف مبكرًا ، يطبع الملخص النهائي على أي حال.
 
 ## الخطوة 5: تقارير تلخيصية
 

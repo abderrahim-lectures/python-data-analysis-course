@@ -74,7 +74,7 @@ for col in df.select_dtypes(include="object").columns:
     print(df[col].value_counts())
 ```
 
-Cela vous donne la structure, les types de données, les distributions numériques et les fréquences catégorielles — tout ce dont vous avez besoin pour décider de la suite.
+Cela vous donne la structure, les types de données, les distributions numériques et les fréquences catégorielles, tout ce dont vous avez besoin pour décider de la suite.
 
 ### Évaluation des données manquantes
 
@@ -92,9 +92,9 @@ print(missing_report[missing_report["missing_count"] > 0])
 ```
 
 Interprétez les schémas d'absence :
-- **MCAR (Manquantes complètement au hasard)** : l'absence n'a aucune relation avec les autres variables — il est sûr de supprimer les lignes
-- **MAR (Manquantes au hasard)** : l'absence est liée à des variables observées — elle peut être imputée
-- **MNAR (Manquantes non aléatoires)** : l'absence est liée à la valeur manquante elle-même — cela nécessite une connaissance du domaine
+- **MCAR (Manquantes complètement au hasard)** : l'absence n'a aucune relation avec les autres variables, il est sûr de supprimer les lignes
+- **MAR (Manquantes au hasard)** : l'absence est liée à des variables observées, elle peut être imputée
+- **MNAR (Manquantes non aléatoires)** : l'absence est liée à la valeur manquante elle-même, cela nécessite une connaissance du domaine
 
 ```python
 # Visualize missing data with a heatmap
@@ -210,7 +210,7 @@ def profile_dataset(df, name="Dataset"):
 
 ## Essayez-le
 
-Profilez le jeu de données Students Performance avec le flux de travail ci-dessus. Répondez à ces questions à partir de la seule sortie du profilage — ne tracez encore aucun graphique.
+Profilez le jeu de données Students Performance avec le flux de travail ci-dessus. Répondez à ces questions à partir de la seule sortie du profilage, ne tracez encore aucun graphique.
 
 ```python
 import pandas as pd
@@ -238,10 +238,10 @@ Questions à répondre :
 
 ## Points clés à retenir
 
-- Profilez avant de tracer — un passage de profilage de 60 secondes détecte des problèmes qui feraient perdre des heures plus tard
+- Profilez avant de tracer, un passage de profilage de 60 secondes détecte des problèmes qui feraient perdre des heures plus tard
 - Les données manquantes relèvent de trois mécanismes (MCAR, MAR, MNAR) ; identifiez lequel s'applique avant de choisir une stratégie
 - Les doublons et les colonnes constantes dégradent silencieusement la qualité de l'analyse
-- La cardinalité compte — les catégorielles à cardinalité élevée nécessitent un regroupement avant visualisation
+- La cardinalité compte, les catégorielles à cardinalité élevée nécessitent un regroupement avant visualisation
 - Construisez une fonction de profilage réutilisable pour que chaque nouveau jeu de données reçoive le même traitement systématique
 
 ## Défi pratique
@@ -249,7 +249,7 @@ Questions à répondre :
 Écrivez une fonction `quick_profile(df)` qui renvoie un dictionnaire avec les clés : `shape`, `dtypes`, `missing_cols`, `duplicate_count`, `constant_cols` et `cardinality`. Testez-la sur le jeu de données Students Performance.
 
 <details class="challenge">
-<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
+<summary>🧩 Défi, réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
 ```python

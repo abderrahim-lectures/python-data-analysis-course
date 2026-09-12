@@ -1,6 +1,6 @@
 ---
 title: "Build an SEO Analyzer"
-description: "Analyze websites for SEO issues — meta tags, headings, keyword density, and structured reports."
+description: "Analyze websites for SEO issues, meta tags, headings, keyword density, and structured reports."
 difficulty: "intermediate"
 estimatedMinutes: 55
 tags: ["requests", "beautifulsoup4", "seo", "web-scraping", "pandas"]
@@ -17,9 +17,9 @@ prerequisites:
 
 # 🔍 Build an SEO Analyzer
 
-Every website has invisible SEO signals — meta descriptions, heading hierarchy, Open Graph tags — that determine whether search engines rank it well or bury it. This project builds a toolkit that fetches any URL, extracts those signals, scores them against best practices, and generates a structured report you can compare across multiple pages, all with pure Python libraries that run anywhere.
+Every website has invisible SEO signals, meta descriptions, heading hierarchy, Open Graph tags, that determine whether search engines rank it well or bury it. This project builds a toolkit that fetches any URL, extracts those signals, scores them against best practices, and generates a structured report you can compare across multiple pages, all with pure Python libraries that run anywhere.
 
-This assumes Python basics, HTML basics, and the `requests` library (covered in Setup) — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
+This assumes Python basics, HTML basics, and the `requests` library (covered in Setup), nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 
@@ -31,17 +31,17 @@ This assumes Python basics, HTML basics, and the `requests` library (covered in 
 
 ## Where to run this
 
-This project works almost anywhere — `requests`, `BeautifulSoup`, and `pandas` are all pure Python with no system-level dependencies.
+This project works almost anywhere, `requests`, `BeautifulSoup`, and `pandas` are all pure Python with no system-level dependencies.
 
 **JupyterLite playground** works well: paste the code cells directly into a notebook. You'll need to `!pip install requests beautifulsoup4 pandas lxml` in a cell first.
 
-**Google Colab** works out of the box — all three libraries are pre-installed on Colab's runtime.
+**Google Colab** works out of the box, all three libraries are pre-installed on Colab's runtime.
 
-**Locally with `uv`** is the recommended path for building a real project with files, not just cells — follow the Setup section below.
+**Locally with `uv`** is the recommended path for building a real project with files, not just cells, follow the Setup section below.
 
 **Binder and Kaggle Notebooks** also work, since no GPU or native dependencies are needed.
 
-- **Run it in your browser.** An interactive companion notebook is ready — open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
+- **Run it in your browser.** An interactive companion notebook is ready, open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/seo-analyzer/notebook.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/seo-analyzer/notebook.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fseo-analyzer%2Fnotebook.ipynb)
@@ -52,7 +52,7 @@ Everything you need before writing a line of analysis.
 
 ### Install `uv`
 
-`uv` is a single tool that replaces the usual "install Python, then install pip, then install a virtual environment tool, then install packages" chain — it can install and manage Python versions itself, alongside your project's dependencies.
+`uv` is a single tool that replaces the usual "install Python, then install pip, then install a virtual environment tool, then install packages" chain, it can install and manage Python versions itself, alongside your project's dependencies.
 
 **macOS / Linux** (terminal):
 
@@ -80,7 +80,7 @@ cd seo-analyzer
 uv add requests beautifulsoup4 pandas lxml
 ```
 
-`requests` fetches web pages; `beautifulsoup4` parses HTML into a navigable tree; `lxml` is a fast parser backend for BeautifulSoup; `pandas` builds the comparison reports. All four are pure Python — no compiler, no system libraries needed.
+`requests` fetches web pages; `beautifulsoup4` parses HTML into a navigable tree; `lxml` is a fast parser backend for BeautifulSoup; `pandas` builds the comparison reports. All four are pure Python, no compiler, no system libraries needed.
 
 **✅ Checklist**
 
@@ -90,7 +90,7 @@ uv add requests beautifulsoup4 pandas lxml
 
 ## Step 1: Fetch a page and extract meta tags
 
-The first building block: given a URL, fetch its HTML and pull out the SEO-critical metadata — title, description, Open Graph tags — that search engines and social platforms read.
+The first building block: given a URL, fetch its HTML and pull out the SEO-critical metadata, title, description, Open Graph tags, that search engines and social platforms read.
 
 ### 1.1 Write the fetcher and meta extractor
 
@@ -146,7 +146,7 @@ print(f"Title: {meta['title']!r} ({meta['title_length']} chars)")
 print(f"Description: {meta['description'][:80]!r} ({meta['desc_length']} chars)")
 ```
 
-**👟 Starter hint:** `fetch_page` sends a request with a custom `User-Agent` header (good practice — it identifies your crawler) and returns a BeautifulSoup object. `extract_meta` then uses `soup.find()` to pull specific tags: `<title>`, `<meta name="description">`, and the three `og:` tags. Each extraction handles the "tag missing" case gracefully by returning an empty string.
+**👟 Starter hint:** `fetch_page` sends a request with a custom `User-Agent` header (good practice, it identifies your crawler) and returns a BeautifulSoup object. `extract_meta` then uses `soup.find()` to pull specific tags: `<title>`, `<meta name="description">`, and the three `og:` tags. Each extraction handles the "tag missing" case gracefully by returning an empty string.
 
 **🎯 Expected output:**
 ```
@@ -154,7 +154,7 @@ Title: 'Example Domain' (14 chars)
 Description: '' (0 chars)
 ```
 
-**🩹 If it's off:** A `requests.exceptions.ConnectionError` means the URL is wrong or unreachable — try `https://example.com` first (it's always up). A `Timeout` means the server took longer than 10 seconds — increase the timeout or try a faster site. If `title` is empty where you expected content, the page might be JavaScript-rendered (BeautifulSoup can't see it) — try a server-rendered page instead.
+**🩹 If it's off:** A `requests.exceptions.ConnectionError` means the URL is wrong or unreachable, try `https://example.com` first (it's always up). A `Timeout` means the server took longer than 10 seconds, increase the timeout or try a faster site. If `title` is empty where you expected content, the page might be JavaScript-rendered (BeautifulSoup can't see it), try a server-rendered page instead.
 
 ### 1.2 Verify the meta extraction
 
@@ -166,12 +166,12 @@ Description: '' (0 chars)
 
 **🤔 Socratic Question(s)**
 
-- The `User-Agent` header says `SEOAnalyzer/1.0`. What would happen if you removed it entirely — would most servers reject the request? Why do well-behaved crawlers identify themselves?
-- BeautifulSoup with `lxml` can parse malformed HTML. What would happen with `"html.parser"` (the built-in) instead — would you notice a difference on a well-formed page? On a broken one?
+- The `User-Agent` header says `SEOAnalyzer/1.0`. What would happen if you removed it entirely, would most servers reject the request? Why do well-behaved crawlers identify themselves?
+- BeautifulSoup with `lxml` can parse malformed HTML. What would happen with `"html.parser"` (the built-in) instead, would you notice a difference on a well-formed page? On a broken one?
 
 ## Step 2: Audit heading hierarchy
 
-Heading tags (`<h1>` through `<h6>`) tell search engines the document structure — a page with no `<h1>`, or with `<h3>` directly after `<h1>` (skipping `<h2>`), signals poor structure. This step builds a checker that counts every heading level and flags structural issues.
+Heading tags (`<h1>` through `<h6>`) tell search engines the document structure, a page with no `<h1>`, or with `<h3>` directly after `<h1>` (skipping `<h2>`), signals poor structure. This step builds a checker that counts every heading level and flags structural issues.
 
 ### 2.1 Build the heading analyzer
 
@@ -210,7 +210,7 @@ for issue in heading_data["issues"]:
     print(f"  ⚠ {issue}")
 ```
 
-**👟 Starter hint:** The function loops through `h1` to `h6`, collects all tags at each level, then applies two rules: exactly one `<h1>` per page, and no skipped heading levels. `used_levels` tracks which levels actually appear — if `h1` and `h3` both appear but `h2` doesn't, that's a skipped level. The `[:80]` slice keeps the report readable when headings are long.
+**👟 Starter hint:** The function loops through `h1` to `h6`, collects all tags at each level, then applies two rules: exactly one `<h1>` per page, and no skipped heading levels. `used_levels` tracks which levels actually appear, if `h1` and `h3` both appear but `h2` doesn't, that's a skipped level. The `[:80]` slice keeps the report readable when headings are long.
 
 **🎯 Expected output:** For `https://example.com` (which has no headings):
 ```
@@ -218,7 +218,7 @@ H1 count: 0, Total: 0
   ⚠ Missing H1 tag — every page should have exactly one H1
 ```
 
-**🩹 If it's off:** If `total_headings` is 0 for a page you know has headings, the page might be JavaScript-rendered — BeautifulSoup only sees the initial HTML, not content loaded after page load. If the skipped-level check fires unexpectedly, confirm that `used_levels` is pulling from the right keys — a typo like `"h7"` in the range would silently shift the min/max.
+**🩹 If it's off:** If `total_headings` is 0 for a page you know has headings, the page might be JavaScript-rendered, BeautifulSoup only sees the initial HTML, not content loaded after page load. If the skipped-level check fires unexpectedly, confirm that `used_levels` is pulling from the right keys, a typo like `"h7"` in the range would silently shift the min/max.
 
 ### 2.2 Verify the heading audit
 
@@ -235,7 +235,7 @@ H1 count: 0, Total: 0
 
 ## Step 3: Calculate keyword density and content metrics
 
-Keyword density tells you how often a specific word appears relative to the total word count — too low and the page isn't about that topic; too high and it reads like keyword stuffing. This step also strips out non-visible content (scripts, navbars, footers) before counting, so the numbers reflect what a human reader actually sees.
+Keyword density tells you how often a specific word appears relative to the total word count, too low and the page isn't about that topic; too high and it reads like keyword stuffing. This step also strips out non-visible content (scripts, navbars, footers) before counting, so the numbers reflect what a human reader actually sees.
 
 ### 3.1 Build the content analyzer and keyword checker
 
@@ -272,7 +272,7 @@ for kw in ["example", "domain", "web"]:
     print(f"  '{kw}': {d['count']} occurrences ({d['density']}%)")
 ```
 
-**👟 Starter hint:** `analyze_content` uses `soup.decompose()` to remove non-visible tags (`script`, `style`, `nav`, `footer`, `header`) before extracting text — this prevents navigation links and boilerplate from inflating your word count. `keyword_density` then does a case-insensitive word-boundary match (`\b\w+\b`) for the exact keyword, and divides by total words. A 1–3% density is typically healthy; above 5% looks like stuffing.
+**👟 Starter hint:** `analyze_content` uses `soup.decompose()` to remove non-visible tags (`script`, `style`, `nav`, `footer`, `header`) before extracting text, this prevents navigation links and boilerplate from inflating your word count. `keyword_density` then does a case-insensitive word-boundary match (`\b\w+\b`) for the exact keyword, and divides by total words. A 1–3% density is typically healthy; above 5% looks like stuffing.
 
 **🎯 Expected output:** For `https://example.com`:
 ```
@@ -282,19 +282,19 @@ Word count: <some number around 20-40>
   'web': <count> occurrences (<density>%)
 ```
 
-**🩹 If it's off:** If `word_count` is suspiciously high (thousands), `decompose()` didn't remove enough — the page might use `<div>` wrappers around navigation instead of `<nav>`. If `keyword_density` returns `0.0` for a word you can see on the page, the word might be split across tags or wrapped in a `<span>` — `get_text()` joins text from nested tags, but `\b\w+\b` won't match across tag boundaries.
+**🩹 If it's off:** If `word_count` is suspiciously high (thousands), `decompose()` didn't remove enough, the page might use `<div>` wrappers around navigation instead of `<nav>`. If `keyword_density` returns `0.0` for a word you can see on the page, the word might be split across tags or wrapped in a `<span>`, `get_text()` joins text from nested tags, but `\b\w+\b` won't match across tag boundaries.
 
 ### 3.2 Verify the content analysis
 
 **✅ Checklist**
 
-- ✅ `analyze_content(soup)` returns `text`, `word_count`, and `char_count` — all non-zero for a page with visible content.
+- ✅ `analyze_content(soup)` returns `text`, `word_count`, and `char_count`, all non-zero for a page with visible content.
 - ✅ `keyword_density` returns `count=0` and `density=0.0` for a word that doesn't appear on the page.
 - ✅ The `decompose()` call removes `<script>`, `<style>`, `<nav>`, `<footer>`, and `<header>` tags before text extraction.
 
 **🤔 Socratic Question(s)**
 
-- You're counting word frequency with exact match (`w == keyword.lower()`). What would change if you wanted to match "web" inside "website" — would that be better or worse for SEO analysis, and why?
+- You're counting word frequency with exact match (`w == keyword.lower()`). What would change if you wanted to match "web" inside "website", would that be better or worse for SEO analysis, and why?
 - A page has 500 words of visible text and 5,000 words inside `<script>` tags. Why is stripping the scripts important for keyword density, and what other non-visible content would you add to the removal list?
 
 ## Step 4: Generate a scoring report
@@ -350,7 +350,7 @@ Overall Score: <number>/100
   og_tags: <score>/10
 ```
 
-**🩹 If it's off:** If `overall_score` is 0.0 for a page you know has some SEO elements, one of the sub-scores is zeroing out — check `meta["title_length"]` and `headings["h1_count"]` individually. If `scores["og_tags"]` is 0 for a page with Open Graph tags, verify the `property="og:*"` attribute name matches exactly (some sites use `name=` instead of `property=`).
+**🩹 If it's off:** If `overall_score` is 0.0 for a page you know has some SEO elements, one of the sub-scores is zeroing out, check `meta["title_length"]` and `headings["h1_count"]` individually. If `scores["og_tags"]` is 0 for a page with Open Graph tags, verify the `property="og:*"` attribute name matches exactly (some sites use `name=` instead of `property=`).
 
 ### 4.2 Build the comparison DataFrame
 
@@ -380,11 +380,11 @@ df = compare_urls(["https://example.com", "https://python.org"])
 print(df.to_string(index=False))
 ```
 
-**👟 Starter hint:** `compare_urls` wraps `analyze_url` in a try/except so one failing URL doesn't kill the whole comparison — it logs the error in the DataFrame instead. The DataFrame columns are deliberately flat (strings and numbers, not nested dicts) so pandas can sort, filter, and export them without extra wrangling.
+**👟 Starter hint:** `compare_urls` wraps `analyze_url` in a try/except so one failing URL doesn't kill the whole comparison, it logs the error in the DataFrame instead. The DataFrame columns are deliberately flat (strings and numbers, not nested dicts) so pandas can sort, filter, and export them without extra wrangling.
 
 **🎯 Expected output:** A pandas DataFrame with two rows (one per URL), columns for `Score`, `Title`, `Title Len`, `Desc Len`, `H1 Count`, and `Words`.
 
-**🩹 If it's off:** If the DataFrame shows `Error` in the `Score` column for one URL, that site blocked or timed out — try a different URL. If `compare_urls` takes a long time, it's running sequentially — see the Common Pitfalls section for a note on parallel fetching.
+**🩹 If it's off:** If the DataFrame shows `Error` in the `Score` column for one URL, that site blocked or timed out, try a different URL. If `compare_urls` takes a long time, it's running sequentially, see the Common Pitfalls section for a note on parallel fetching.
 
 ### 4.3 Verify the scoring report
 
@@ -397,18 +397,18 @@ print(df.to_string(index=False))
 **🤔 Socratic Question(s)**
 
 - A page with a perfect title (30–60 chars) and a missing description scores 50/100. A page with both perfect scores 70/100. What does this tell you about the relative weight of description vs title in this rubric, and would you change those weights for a real audit tool?
-- If you ran `compare_urls` on 50 URLs and one timed out, it appears as `Score=0` with an `Error` column. Is `Score=0` the right default for a failed fetch, or would you use `NaN` — and what would change in the DataFrame if you used `NaN`?
+- If you ran `compare_urls` on 50 URLs and one timed out, it appears as `Score=0` with an `Error` column. Is `Score=0` the right default for a failed fetch, or would you use `NaN`, and what would change in the DataFrame if you used `NaN`?
 
 ## ⚠️ Common pitfalls
 
-- **JavaScript-rendered pages return empty or wrong content.** `requests` + BeautifulSoup only see the initial HTML — any content loaded by JavaScript (single-page apps, lazy-loaded images) won't appear in the parsed tree. If a page looks empty but works in your browser, it's JS-rendered; use a headless browser (Playwright, Selenium) instead, or pick a server-rendered page for testing.
+- **JavaScript-rendered pages return empty or wrong content.** `requests` + BeautifulSoup only see the initial HTML, any content loaded by JavaScript (single-page apps, lazy-loaded images) won't appear in the parsed tree. If a page looks empty but works in your browser, it's JS-rendered; use a headless browser (Playwright, Selenium) instead, or pick a server-rendered page for testing.
 - **Blocking or rate-limiting on repeated requests.** Some sites block aggressive crawling. The 10-second timeout and custom `User-Agent` help, but if you're auditing many pages, add `time.sleep(1)` between requests or use `concurrent.futures.ThreadPoolExecutor` with a bounded pool to stay polite.
-- **Fragile `og:` tag matching.** The code uses `property="og:title"` — some sites use `name="og:title"` instead (technically wrong per the Open Graph spec, but common). If OG tags are missing on a site you know has them, try also searching for `name=` variants.
-- **Word count includes boilerplate.** The `decompose()` list removes `script`, `style`, `nav`, `footer`, `header` — but not all boilerplate lives in those tags. A page with a large `<aside>` or `<div class="sidebar">` full of links will inflate the word count. For more precise counts, you'd need site-specific selectors.
+- **Fragile `og:` tag matching.** The code uses `property="og:title"`, some sites use `name="og:title"` instead (technically wrong per the Open Graph spec, but common). If OG tags are missing on a site you know has them, try also searching for `name=` variants.
+- **Word count includes boilerplate.** The `decompose()` list removes `script`, `style`, `nav`, `footer`, `header`, but not all boilerplate lives in those tags. A page with a large `<aside>` or `<div class="sidebar">` full of links will inflate the word count. For more precise counts, you'd need site-specific selectors.
 
 ## What you just built
 
-An SEO audit toolkit that fetches any URL, extracts its meta tags and heading structure, scores them against established best practices, and produces a comparison table across multiple pages — all with four pure-Python libraries and no browser automation. The scoring rubric is simple enough to understand and extend, and the `compare_urls` function gives you a pandas DataFrame ready for sorting, filtering, or exporting to CSV.
+An SEO audit toolkit that fetches any URL, extracts its meta tags and heading structure, scores them against established best practices, and produces a comparison table across multiple pages, all with four pure-Python libraries and no browser automation. The scoring rubric is simple enough to understand and extend, and the `compare_urls` function gives you a pandas DataFrame ready for sorting, filtering, or exporting to CSV.
 
 :::tip[Run a fuller version without any local setup]
 [`examples/seo-analyzer/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/seo-analyzer) in the course repo is a fuller version with image alt-text auditing, internal/external link classification, and a sitemap crawler that audits every page listed in a sitemap XML. Clone it, or open the whole repo in a [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) and run it from there.
@@ -416,12 +416,12 @@ An SEO audit toolkit that fetches any URL, extracts its meta tags and heading st
 
 ## Where to go from here
 
-- Add image alt-text auditing: find every `<img>` tag, report which ones are missing `alt`, and calculate the percentage of images with alt text — a direct accessibility and SEO win.
+- Add image alt-text auditing: find every `<img>` tag, report which ones are missing `alt`, and calculate the percentage of images with alt text, a direct accessibility and SEO win.
 - Add internal vs external link classification: extract all `<a href>` links, count each category, and flag pages with too few internal links (below 3) as a potential SEO issue.
 - Build a sitemap crawler: given a sitemap URL, fetch every page listed in it, run the full audit on each, and export a summary CSV with `concurrent.futures.ThreadPoolExecutor` for parallel fetching.
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

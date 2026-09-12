@@ -191,7 +191,7 @@ def conversion_by_tier(df: pd.DataFrame) -> pd.DataFrame:
 
 **🎯 Résultat attendu :** `prioritize(df)` ordonne les leads chauds en premier ; `conversion_by_tier` montre que les leads chauds se convertissent à un taux plus élevé.
 
-**🩹 Si ça ne marche pas :** Si les taux de conversion sont plats à travers les paliers, les poids de scoring ne discriminent pas — resserre-les.
+**🩹 Si ça ne marche pas :** Si les taux de conversion sont plats à travers les paliers, les poids de scoring ne discriminent pas, resserre-les.
 
 ### 3.2 Vérifie la priorisation
 
@@ -314,7 +314,7 @@ def by_source(df: pd.DataFrame) -> pd.DataFrame:
 
 ## Ce que tu viens de construire
 
-Un moteur de scoring de leads : un jeu de données de leads généré, un modèle de scoring multifactoriel pondéré qui classe les leads en paliers cold/warm/hot, un tri priorisé du pipeline, une comparaison A/B de deux schémas de scoring et un résumé de santé du pipeline basé sur pandas. C'est le cœur analytique d'une équipe d'opérations commerciales — décider qui appeler, dans quel ordre et si le modèle actuel fonctionne.
+Un moteur de scoring de leads : un jeu de données de leads généré, un modèle de scoring multifactoriel pondéré qui classe les leads en paliers cold/warm/hot, un tri priorisé du pipeline, une comparaison A/B de deux schémas de scoring et un résumé de santé du pipeline basé sur pandas. C'est le cœur analytique d'une équipe d'opérations commerciales, décider qui appeler, dans quel ordre et si le modèle actuel fonctionne.
 
 :::tip[Exécute une version plus complète sans aucune configuration locale]
 [`examples/lead-scoring/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/lead-scoring) dans le dépôt du cours a une version plus riche avec un scoring basé sur le machine learning, le routage automatique des leads et le CLI câblé de bout en bout. Clone-le, ou ouvre tout le dépôt dans un [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), et exécute-le depuis là.
@@ -328,6 +328,6 @@ Un moteur de scoring de leads : un jeu de données de leads généré, un modèl
 
 ## Partage ton projet avec la classe
 
-Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres élèves — et son README a un tutoriel complet et adapté aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git avant : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable avec git n'est supposée.
+Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres élèves, et son README a un tutoriel complet et adapté aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git avant : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable avec git n'est supposée.
 
 Bienvenue dans l'écriture de Python en dehors du navigateur. 🎓

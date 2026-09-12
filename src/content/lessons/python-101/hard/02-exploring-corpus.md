@@ -75,7 +75,7 @@ print(f"Total characters: {total_chars:,}")
 print(f"Average row length: {avg_len:.0f} characters")
 ```
 
-A corpus with an average of 10 characters per row is too short — the model won't have enough context to learn word sequences.
+A corpus with an average of 10 characters per row is too short, the model won't have enough context to learn word sequences.
 
 ### Previewing sample text
 
@@ -137,7 +137,7 @@ Run `corpus_summary("slm-corpus.csv")` and note:
 
 ## Key Takeaways
 
-- Always explore your data before processing — check counts, lengths, and duplicates
+- Always explore your data before processing, check counts, lengths, and duplicates
 - Short or empty rows add noise; filter them based on a minimum word count
 - Duplicate rows inflate frequency counts without adding new patterns
 - A quick summary function saves time across projects

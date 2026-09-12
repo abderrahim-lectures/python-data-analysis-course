@@ -1,6 +1,6 @@
 ---
 title: "Opérateurs arithmétiques"
-description: "Additionnez, soustrayez, multipliez, divisez, divisez entièrement, module et puissances — les huit opérateurs arithmétiques."
+description: "Additionnez, soustrayez, multipliez, divisez, divisez entièrement, module et puissances, les huit opérateurs arithmétiques."
 module: "operators"
 order: 5
 difficulty: "beginner"
@@ -22,7 +22,7 @@ track: "normal"
 
 ## Les opérateurs qu'une machine vole aux mathématiques
 
-Vous avez écrit des fonctions auxiliaires dans les leçons précédentes : stocker une valeur, l'imprimer, changer son type. Rien de tout cela n'est utile tant qu'un programme ne peut *faire quelque chose* avec les nombres. Faites donc une pause : un ordinateur existe pour évaluer des expressions, et toute expression se construit avec des **opérateurs** qui joignent des valeurs. Vous connaissez déjà ceux de l'arithmétique sur papier — mais la machine coupe deux d'entre eux en morceaux.
+Vous avez écrit des fonctions auxiliaires dans les leçons précédentes : stocker une valeur, l'imprimer, changer son type. Rien de tout cela n'est utile tant qu'un programme ne peut *faire quelque chose* avec les nombres. Faites donc une pause : un ordinateur existe pour évaluer des expressions, et toute expression se construit avec des **opérateurs** qui joignent des valeurs. Vous connaissez déjà ceux de l'arithmétique sur papier, mais la machine coupe deux d'entre eux en morceaux.
 
 ## Les opérateurs et leurs significations
 
@@ -43,7 +43,7 @@ Viennent ensuite trois qui répondent à des questions que vous ne posiez qu'en 
 7 ** 2   # 49  — puissance (7²)
 ```
 
-`**` est l'écriture par Python d'une puissance : $7^2 = 49$. Les deux nouveaux venus sont `//` et `%`, et ce ne sont pas des variantes — ce sont les deux moitiés d'une seule question légitime.
+`**` est l'écriture par Python d'une puissance : $7^2 = 49$. Les deux nouveaux venus sont `//` et `%`, et ce ne sont pas des variantes, ce sont les deux moitiés d'une seule question légitime.
 
 ## Deux moitiés d'une seule division
 
@@ -53,7 +53,7 @@ $$
 15 = 4 \cdot 3 + 3.
 $$
 
-La réponse comporte deux parties — le quotient $3$ et le reste $3$. Le `//` de Python répond à la première et le `%` à la seconde :
+La réponse comporte deux parties, le quotient $3$ et le reste $3$. Le `//` de Python répond à la première et le `%` à la seconde :
 
 $$
 a = (a \mathbin{//} b) \cdot b + (a \mathbin{\%} b)
@@ -65,7 +65,7 @@ $$
 4 * 3 + 3 # 15  ✓ l'identité se vérifie
 ```
 
-Cette identité n'est pas une décoration — c'est la définition des deux opérateurs, et elle ne peut faillir tant que la même machine calcule les deux parties.
+Cette identité n'est pas une décoration, c'est la définition des deux opérateurs, et elle ne peut faillir tant que la même machine calcule les deux parties.
 
 Il y a un pli. Quel quotient Python rapporte-t-il pour $-7 \div 2$ ? Écrivez-le comme une question de groupement :
 
@@ -96,7 +96,7 @@ Dans une expression à plusieurs opérateurs, il faut un ordre fixe, sinon chaqu
 2 ** 3 ** 2    # 512, pas 64
 ```
 
-Ce dernier est une vraie surprise. `**` est **associatif à droite**, donc `2 ** 3 ** 2` se lit $2^{(3^2)} = 2^9 = 512$, comme dans la notation empilée où les puissances grimpent dans une seule direction. Dans le doute, écrivez les parenthèses — un lecteur qui ne les voit pas ne devinera pas votre intention.
+Ce dernier est une vraie surprise. `**` est **associatif à droite**, donc `2 ** 3 ** 2` se lit $2^{(3^2)} = 2^9 = 512$, comme dans la notation empilée où les puissances grimpent dans une seule direction. Dans le doute, écrivez les parenthèses, un lecteur qui ne les voit pas ne devinera pas votre intention.
 
 ## Un exemple travaillé : le reste du plan de lecture
 
@@ -118,35 +118,35 @@ L'identité de division $a = (a \mathbin{//} b) \cdot b + (a \mathbin{\%} b)$ de
 
 - **`/` contre `//`.** `7 / 2` vaut `3.5` (un float) ; `7 // 2` vaut `3` (un int). Prenez `//` seulement quand le quotient entier est ce que le problème demande.
 - **Division entière avec des négatifs.** `-7 // 2` vaut `-4`, pas `-3`. Le plancher va vers $-\infty$, pas vers zéro.
-- **`%` fonctionne aussi sur les floats.** `7.5 % 2` vaut `1.5` — l'identité ci-dessus vaut pour les réels comme pour les entiers.
-- **`**` lie plus fort que `*`.** `2 * 3 ** 2` vaut `18`, pas `36` — la puissance se calcule d'abord. Mettez des parenthèses quand vous voulez dire `(2 * 3) ** 2` = 36.
+- **`%` fonctionne aussi sur les floats.** `7.5 % 2` vaut `1.5`, l'identité ci-dessus vaut pour les réels comme pour les entiers.
+- **`**` lie plus fort que `*`.** `2 * 3 ** 2` vaut `18`, pas `36`, la puissance se calcule d'abord. Mettez des parenthèses quand vous voulez dire `(2 * 3) ** 2` = 36.
 
 ## 🧩 Défis
 
 <details class="challenge">
-<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
+<summary>🧩 Défi, réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
 Sans l'exécuter, calculez `15 // 4` et `15 % 4` à la main, puis vérifiez que $4 \cdot (15 // 4) + (15 \% 4)$ reproduit $15$.
 
-<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>15 // 4</code> vaut <code>3</code> (le plancher de $3.75$), et <code>15 % 4</code> vaut <code>3</code>, puisque $15 = 4\cdot 3 + 3$. Ensemble, <code>4 * 3 + 3 = 15</code> — l'identité de la division, vérifiée.</p>
+<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>15 // 4</code> vaut <code>3</code> (le plancher de $3.75$), et <code>15 % 4</code> vaut <code>3</code>, puisque $15 = 4\cdot 3 + 3$. Ensemble, <code>4 * 3 + 3 = 15</code>, l'identité de la division, vérifiée.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
+<summary>🧩 Défi, réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
 Comment extrairiez-vous le chiffre des centaines d'un nombre ? Avec `n = 4567`, obtenez `5` en n'utilisant que l'arithmétique, sans chaînes.
 
-<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>(n // 100) % 10</code> — divisez d'abord par 100 pour déplacer le chiffre vers la droite (<code>4567 → 45</code>), puis modulo 10 pour ne garder que le dernier (<code>45 → 5</code>).</p>
+<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>(n // 100) % 10</code>, divisez d'abord par 100 pour déplacer le chiffre vers la droite (<code>4567 → 45</code>), puis modulo 10 pour ne garder que le dernier (<code>45 → 5</code>).</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
+<summary>🧩 Défi, réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
 Pourquoi Python emploie-t-il `**` pour la puissance au lieu de `^` ? Que fait `^` en réalité en Python ?

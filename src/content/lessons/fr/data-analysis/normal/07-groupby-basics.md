@@ -47,9 +47,9 @@ quiz:
 
 GroupBy est l'une des fonctionnalités les plus puissantes de pandas. Il suit un schéma en trois étapes :
 
-1. **Split (diviser)** — répartir le DataFrame en groupes en fonction d'une ou plusieurs colonnes
-2. **Apply (appliquer)** — calculer une fonction sur chaque groupe indépendamment
-3. **Combine (combiner)** — fusionner les résultats en un seul DataFrame
+1. **Split (diviser)**, répartir le DataFrame en groupes en fonction d'une ou plusieurs colonnes
+2. **Apply (appliquer)**, calculer une fonction sur chaque groupe indépendamment
+3. **Combine (combiner)**, fusionner les résultats en un seul DataFrame
 
 ```python
 import pandas as pd

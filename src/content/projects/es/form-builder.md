@@ -15,9 +15,9 @@ prerequisites:
 
 # 📝 Constructor de Formularios
 
-Cada formulario web es fundamentalmente lo mismo: una lista de campos, cada uno con un tipo, una etiqueta, reglas de validación y opcionalmente una condición que determina cuándo aparece. Este proyecto construye un constructor de formularios en Python que toma una definición declarativa de formulario y genera JSON Schema — el mismo formato usado por React JSON Schema Form, JSON Editor y docenas de otras librerías de renderizado. Defines el formulario una vez en Python, y cualquier frontend puede renderizarlo.
+Cada formulario web es fundamentalmente lo mismo: una lista de campos, cada uno con un tipo, una etiqueta, reglas de validación y opcionalmente una condición que determina cuándo aparece. Este proyecto construye un constructor de formularios en Python que toma una definición declarativa de formulario y genera JSON Schema, el mismo formato usado por React JSON Schema Form, JSON Editor y docenas de otras librerías de renderizado. Defines el formulario una vez en Python, y cualquier frontend puede renderizarlo.
 
-Esto asume Python 101 — no se requiere nada de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
+Esto asume Python 101, no se requiere nada de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa.
 
 ## 🎯 Lo que harás
 
@@ -30,7 +30,7 @@ Esto asume Python 101 — no se requiere nada de Análisis de Datos. Es opcional
 
 ## Dónde ejecutar esto
 
-**Localmente con `uv`** es el camino principal — es una herramienta CLI que lee definiciones de formularios y escribe archivos JSON Schema.
+**Localmente con `uv`** es el camino principal, es una herramienta CLI que lee definiciones de formularios y escribe archivos JSON Schema.
 
 **Google Colab, Kaggle Notebooks y Binder** funcionan para probar la herramienta. El notebook instala los mismos paquetes y usa el mismo código; genera y valida formularios de muestra en la sesión.
 
@@ -164,7 +164,7 @@ print(f.model_dump())
 
 ## Paso 2: Genera JSON Schema a partir de definiciones de formularios
 
-JSON Schema es una forma estándar de describir formas de datos — es lo que las librerías de formularios de frontend usan para saber qué campos renderizar y qué validación aplicar. Convertir tu definición de formulario en Python a JSON Schema la hace interoperable con cualquier librería de renderizado.
+JSON Schema es una forma estándar de describir formas de datos, es lo que las librerías de formularios de frontend usan para saber qué campos renderizar y qué validación aplicar. Convertir tu definición de formulario en Python a JSON Schema la hace interoperable con cualquier librería de renderizado.
 
 ### 2.1 Escribe el generador de esquemas
 
@@ -229,7 +229,7 @@ def form_to_schema(form_name: str, fields: list[Field]) -> dict:
     return schema
 ```
 
-El `TYPE_MAP` traduce tus tipos de Python a tipos de JSON Schema. La clave `x-conditions` usa una extensión personalizada (prefijada con `x-`) para adjuntar la lógica condicional — JSON Schema en sí no define visibilidad condicional, pero las librerías de renderizado de formularios como React JSON Schema Form soportan extensiones `x-`. La lista `required` se construye automáticamente a partir de los campos donde `validation.required` es `True`.
+El `TYPE_MAP` traduce tus tipos de Python a tipos de JSON Schema. La clave `x-conditions` usa una extensión personalizada (prefijada con `x-`) para adjuntar la lógica condicional, JSON Schema en sí no define visibilidad condicional, pero las librerías de renderizado de formularios como React JSON Schema Form soportan extensiones `x-`. La lista `required` se construye automáticamente a partir de los campos donde `validation.required` es `True`.
 
 **🎯 Resultado esperado :** `form_to_schema("Contact", [name_field, email_field])` devuelve un diccionario con `"title": "Contact"`, `"properties"` conteniendo ambos campos y `"required": ["email"]` si el email es requerido.
 
@@ -257,7 +257,7 @@ assert schema["properties"]["age"]["minimum"] == 0
 
 **🎯 Resultado esperado :** El JSON impreso muestra `"required": ["name"]` y `"minimum": 0` bajo el campo age. Ambas aserciones pasan.
 
-**🩹 Si sale mal :** Si a la salida le falta por completo la clave `required` (no solo está vacía), la función omite añadirla cuando la lista está vacía — ese es el comportamiento correcto.
+**🩹 Si sale mal :** Si a la salida le falta por completo la clave `required` (no solo está vacía), la función omite añadirla cuando la lista está vacía, ese es el comportamiento correcto.
 
 ### 2.3 Verifica la generación del esquema
 
@@ -304,7 +304,7 @@ def evaluate_condition(condition: Condition, values: dict) -> bool:
         raise ValueError(f"Unknown operator: {condition.operator}")
 ```
 
-La conversión `str()` y la normalización `.lower()` significan que `"True"`, `"true"` y `True` se comparan como iguales — esto previene el bug común donde los booleanos de Python y las representaciones de cadena divergen. La función devuelve `False` para campos faltantes en lugar de lanzar un error, porque un campo que aún no se ha llenado no debería hacer visibles a sus dependientes.
+La conversión `str()` y la normalización `.lower()` significan que `"True"`, `"true"` y `True` se comparan como iguales, esto previene el bug común donde los booleanos de Python y las representaciones de cadena divergen. La función devuelve `False` para campos faltantes en lugar de lanzar un error, porque un campo que aún no se ha llenado no debería hacer visibles a sus dependientes.
 
 **🎯 Resultado esperado :** `evaluate_condition(Condition(field="role", operator="equals", value="admin"), {"role": "admin"})` devuelve `True`. La misma condición con `{"role": "user"}` devuelve `False`.
 
@@ -325,7 +325,7 @@ def visible_fields(fields: list[Field], values: dict) -> list[Field]:
 
 **🎯 Resultado esperado :** Dados campos con y sin condiciones, `visible_fields(fields, {"has_company": "true"})` devuelve solo los campos cuyas condiciones se cumplen (o que no tienen condición).
 
-**🩹 Si sale mal :** Si todos los campos se devuelven sin importar las condiciones, se está saltando la llamada a `evaluate_condition` — revisa la sentencia `if`.
+**🩹 Si sale mal :** Si todos los campos se devuelven sin importar las condiciones, se está saltando la llamada a `evaluate_condition`, revisa la sentencia `if`.
 
 ### 3.3 Verifica la lógica condicional
 
@@ -397,7 +397,7 @@ def validate_submission(fields: list[Field], values: dict) -> list[dict]:
     return errors
 ```
 
-El validador solo verifica los campos visibles — si un campo condicional está oculto porque su condición no se cumple, sus reglas de validación no aplican. Esto coincide con cómo funcionan las UI de formularios reales: no validas campos que el usuario no puede ver. Cada error incluye el nombre del campo y un mensaje legible, lo que hace sencillo mostrar los errores junto al campo correcto en una UI.
+El validador solo verifica los campos visibles, si un campo condicional está oculto porque su condición no se cumple, sus reglas de validación no aplican. Esto coincide con cómo funcionan las UI de formularios reales: no validas campos que el usuario no puede ver. Cada error incluye el nombre del campo y un mensaje legible, lo que hace sencillo mostrar los errores junto al campo correcto en una UI.
 
 **🎯 Resultado esperado :** Enviar `{"name": ""}` para un formulario con `name` requerido devuelve `[{"field": "name", "message": "'Full Name' is required"}]`. Enviar `{"name": "Alice", "age": "not_a_number"}` devuelve un error de validación para age.
 
@@ -424,7 +424,7 @@ assert errors[1]["field"] == "age"
 
 **🎯 Resultado esperado :** Ambas aserciones pasan; la lista de errores tiene dos entradas, una por campo inválido.
 
-**🩹 Si sale mal :** Si el error de email falta, la verificación de `required` corre después de la verificación de tipo — asegúrate de que `continue` salta las verificaciones restantes una vez que se encuentra un error de requerido.
+**🩹 Si sale mal :** Si el error de email falta, la verificación de `required` corre después de la verificación de tipo, asegúrate de que `continue` salta las verificaciones restantes una vez que se encuentra un error de requerido.
 
 ### 4.3 Verifica el validador de envíos
 
@@ -574,15 +574,15 @@ Esto prueba el pipeline completo: definir un formulario condicional, generar su 
 
 ## ⚠️ Errores comunes
 
-- **Olvidar que los campos condicionales también necesitan validación.** Un campo con `required=True` y una condición solo debe validarse cuando su condición se cumple — de otro modo los usuarios ven errores para campos que ni siquiera pueden ver. `validate_submission` filtra por visibilidad antes de verificar las reglas.
+- **Olvidar que los campos condicionales también necesitan validación.** Un campo con `required=True` y una condición solo debe validarse cuando su condición se cumple, de otro modo los usuarios ven errores para campos que ni siquiera pueden ver. `validate_submission` filtra por visibilidad antes de verificar las reglas.
 - **Discrepancias de tipo entre JSON y Python.** JSON no distingue entre `0` y `"0"`. El validador convierte las entradas de cadena a números para los campos numéricos, pero ten en cuenta que un envío de formulario con `"age": "twenty"` debe detectarse como error de tipo, no ignorarse silenciosamente.
-- **Extensiones personalizadas `x-` que los renderizadores no entienden.** Los renderizadores de JSON Schema ignoran las claves desconocidas, así que `x-conditions` no romperá el renderizado — pero tampoco aplicará automáticamente la lógica condicional. Necesitas implementar la evaluación de la condición en tu código de renderizado.
-- **No manejar campos opcionales vacíos.** Un campo de texto opcional enviado como `""` (cadena vacía) debe pasar la validación — la verificación de requerido corre primero y salta las demás verificaciones para campos no requeridos vacíos.
+- **Extensiones personalizadas `x-` que los renderizadores no entienden.** Los renderizadores de JSON Schema ignoran las claves desconocidas, así que `x-conditions` no romperá el renderizado, pero tampoco aplicará automáticamente la lógica condicional. Necesitas implementar la evaluación de la condición en tu código de renderizado.
+- **No manejar campos opcionales vacíos.** Un campo de texto opcional enviado como `""` (cadena vacía) debe pasar la validación, la verificación de requerido corre primero y salta las demás verificaciones para campos no requeridos vacíos.
 - **Sobrescribir el archivo del esquema sin aviso.** `render` escribe en `output` sin verificar si el archivo existe. En una herramienta real, añade un flag `--force` o avisa antes de sobrescribir.
 
 ## Lo que acabas de construir
 
-Un constructor de formularios que modela campos como objetos de Python validados, genera JSON Schema para cualquier librería de renderizado, evalúa reglas de visibilidad condicional y valida envíos contra las reglas del formulario. La separación de responsabilidades — definiciones de campos, generación de esquemas, evaluación de condiciones y validación de envíos — refleja cómo funcionan internamente los constructores de formularios de producción como Typeform y JotForm.
+Un constructor de formularios que modela campos como objetos de Python validados, genera JSON Schema para cualquier librería de renderizado, evalúa reglas de visibilidad condicional y valida envíos contra las reglas del formulario. La separación de responsabilidades, definiciones de campos, generación de esquemas, evaluación de condiciones y validación de envíos, refleja cómo funcionan internamente los constructores de formularios de producción como Typeform y JotForm.
 
 :::tip[Ejecuta una versión más completa sin configuración local]
 [`examples/form-builder/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/form-builder) en el repositorio del curso tiene una versión más rica con más tipos de campo, un formulario de muestra de múltiples pasos y la CLI conectada de extremo a extremo. Clónalo, o abre todo el repositorio en un [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), y ejecútalo desde ahí.
@@ -596,6 +596,6 @@ Un constructor de formularios que modela campos como objetos de Python validados
 
 ## Comparte tu proyecto con la clase
 
-¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado — y su README tiene un recorrido completo y amigable para principiantes sobre cómo agregar el tuyo vía un **pull request**, incluso si nunca has usado git antes: hacer fork del repositorio, crear una rama, confirmar tus archivos y abrir el PR, un paso a la vez. No se asume experiencia previa con git.
+¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado, y su README tiene un recorrido completo y amigable para principiantes sobre cómo agregar el tuyo vía un **pull request**, incluso si nunca has usado git antes: hacer fork del repositorio, crear una rama, confirmar tus archivos y abrir el PR, un paso a la vez. No se asume experiencia previa con git.
 
 Bienvenido a escribir Python fuera del navegador. 🎓

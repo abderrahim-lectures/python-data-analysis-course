@@ -1,6 +1,6 @@
 ---
 title: "Scrape y Analiza un Sitio Web en Vivo"
-description: "Obtén datos web reales, límpialos con pandas, y produce gráficos — sin necesidad de clave de API."
+description: "Obtén datos web reales, límpialos con pandas, y produce gráficos, sin necesidad de clave de API."
 difficulty: "intermediate"
 estimatedMinutes: 60
 xpReward: 50
@@ -10,7 +10,7 @@ prerequisites: ["Python básico", "pandas básico", "matplotlib básico"]
 
 # Scrape y Analiza un Sitio Web en Vivo
 
-Cada conjunto de datos hasta ahora llegó como un CSV listo. El análisis real rara vez empieza ahí. Este proyecto te enseña a obtener una página web en vivo vía HTTP, parsear el HTML en filas estructuradas, limpiar el resultado con pandas y producir gráficos — sin clave de API, sin servicio externo, solo tu script y un servidor.
+Cada conjunto de datos hasta ahora llegó como un CSV listo. El análisis real rara vez empieza ahí. Este proyecto te enseña a obtener una página web en vivo vía HTTP, parsear el HTML en filas estructuradas, limpiar el resultado con pandas y producir gráficos, sin clave de API, sin servicio externo, solo tu script y un servidor.
 
 ## 🎯 Lo que harás
 
@@ -23,13 +23,13 @@ Cada conjunto de datos hasta ahora llegó como un CSV listo. El análisis real r
 
 ## Dónde ejecutar esto
 
-**Localmente con `uv`** es el camino principal y recomendado aquí — la sección de Configuración a continuación detalla cómo instalarlo. Este proyecto usa `requests`, `beautifulsoup4`, `pandas` y `matplotlib`, por lo que una instalación local es el camino más suave.
+**Localmente con `uv`** es el camino principal y recomendado aquí, la sección de Configuración a continuación detalla cómo instalarlo. Este proyecto usa `requests`, `beautifulsoup4`, `pandas` y `matplotlib`, por lo que una instalación local es el camino más suave.
 
-**GitHub Codespaces** también funciona bien: abre [todo el repositorio del curso en un Codespace gratuito](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) — es un clon real con historial real, así que cada paso de abajo funciona exactamente igual que localmente.
+**GitHub Codespaces** también funciona bien: abre [todo el repositorio del curso en un Codespace gratuito](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), es un clon real con historial real, así que cada paso de abajo funciona exactamente igual que localmente.
 
 **Google Colab** puede funcionar para probar partes individuales del pipeline, pero la configuración local es más confiable para el flujo completo de trabajo.
 
-- **Ejecútalo en el navegador.** Hay un cuaderno interactivo listo — ábrelo en Colab, Kaggle o Binder y sigue los pasos en orden.
+- **Ejecútalo en el navegador.** Hay un cuaderno interactivo listo, ábrelo en Colab, Kaggle o Binder y sigue los pasos en orden.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/scrape-analyze/notebook.es.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/scrape-analyze/notebook.es.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fscrape-analyze%2Fnotebook.es.ipynb)
@@ -78,7 +78,7 @@ Realizar una petición HTTP a un sitio web en vivo y recibir su contenido HTML c
 
 ### Explicación
 
-Una petición HTTP `GET` es lo mismo que tu navegador hace cada vez que visitas una página — le pide a un servidor una URL y recibe HTML crudo como texto. La librería `requests` hace esto sencillo en Python. Apuntamos a [quotes.toscrape.com](https://quotes.toscrape.com), un sitio construido específicamente para practicar scraping: sin muro de inicio de sesión, sin límite de velocidad, estructura HTML estable.
+Una petición HTTP `GET` es lo mismo que tu navegador hace cada vez que visitas una página, le pide a un servidor una URL y recibe HTML crudo como texto. La librería `requests` hace esto sencillo en Python. Apuntamos a [quotes.toscrape.com](https://quotes.toscrape.com), un sitio construido específicamente para practicar scraping: sin muro de inicio de sesión, sin límite de velocidad, estructura HTML estable.
 
 :::tip[Siempre revisa robots.txt antes de scrapeear cualquier otro sitio]
 Antes de apuntar este código a cualquier sitio distinto de quotes.toscrape.com, revisa el `robots.txt` de ese sitio (por ejemplo, `https://example.com/robots.txt`) y sus términos de servicio. Respetar `robots.txt` es la expectativa mínima para cualquier scraper.
@@ -125,7 +125,7 @@ El conteo exacto de caracteres varía, pero `html` debería ser una cadena larga
 | Problema | Solución |
 |---|---|
 | `ConnectionError` | Estás sin conexión o la URL es incorrecta. Verifica tu internet y la escritura de la URL. |
-| `HTTPError 404` | La ruta de la URL es incorrecta — usa exactamente `https://quotes.toscrape.com/` |
+| `HTTPError 404` | La ruta de la URL es incorrecta, usa exactamente `https://quotes.toscrape.com/` |
 | `HTTPError 403` | Algunos sitios bloquean peticiones sin un encabezado User-Agent de navegador. Añade uno: `requests.get(url, headers={"User-Agent": "Mozilla/5.0"})` |
 
 ### ✅ Lista de verificación
@@ -148,7 +148,7 @@ Convertir texto HTML crudo en un árbol navegable y extraer datos estructurados 
 
 ### Explicación
 
-Esa cadena `html` es un árbol de etiquetas anidadas — `<div>`, `<span>`, `<a>` — cada una portando opcionalmente atributos como `class` o `href`. BeautifulSoup parsea ese texto en un árbol y te da `find` (primera coincidencia) y `find_all` (todas las coincidencias), ambos filtrables por nombre de etiqueta y atributos.
+Esa cadena `html` es un árbol de etiquetas anidadas, `<div>`, `<span>`, `<a>`, cada una portando opcionalmente atributos como `class` o `href`. BeautifulSoup parsea ese texto en un árbol y te da `find` (primera coincidencia) y `find_all` (todas las coincidencias), ambos filtrables por nombre de etiqueta y atributos.
 
 Abre la página en "Ver Código Fuente" de tu navegador y verás: cada cita está dentro de `<div class="quote">`, el texto está en `<span class="text">`, el autor en `<small class="author">`, y las etiquetas en `<a class="tag">`.
 
@@ -192,7 +192,7 @@ J.K. Rowling: "It is our choices..." ['abilities', 'choices', 'deep-thoughts', '
 
 | Problema | Solución |
 |---|---|
-| `AttributeError: 'NoneType' has no attribute 'get_text'` | `find(...)` devolvió `None` — el nombre de clase no coincide. Revisa "Ver Código Fuente" para los nombres de clase exactos. |
+| `AttributeError: 'NoneType' has no attribute 'get_text'` | `find(...)` devolvió `None`, el nombre de clase no coincide. Revisa "Ver Código Fuente" para los nombres de clase exactos. |
 | Menos de 10 líneas impresas | El filtro de clase CSS es demasiado estrecho o tiene un error de escritura. Verifica que `class_="quote"` coincida con el HTML real. |
 | La salida muestra caracteres distorsionados | Problema de codificación. Intenta con `soup = BeautifulSoup(response.content, "html.parser")` en lugar de `response.text`. |
 
@@ -216,7 +216,7 @@ Convertir el análisis por página en una función reutilizable, seguir la pagin
 
 ### Explicación
 
-quotes.toscrape.com distribuye las citas en 10 páginas, con un enlace "Next" en la parte inferior de cada página excepto la última. En lugar de hardcodear "iterar 10 veces", sigue el propio enlace — de esa forma el script funciona incluso si el conteo de páginas cambia. Dos sub-pasos: envuelve el bucle del Paso 2 en una función, luego sigue los enlaces hasta que no queden más.
+quotes.toscrape.com distribuye las citas en 10 páginas, con un enlace "Next" en la parte inferior de cada página excepto la última. En lugar de hardcodear "iterar 10 veces", sigue el propio enlace, de esa forma el script funciona incluso si el conteo de páginas cambia. Dos sub-pasos: envuelve el bucle del Paso 2 en una función, luego sigue los enlaces hasta que no queden más.
 
 ### Pista inicial
 
@@ -299,7 +299,7 @@ Aparece un archivo real `quotes.csv` con una fila de encabezado más una fila po
 | Problema | Solución |
 |---|---|
 | Solo se guardaron 10 citas | La URL de `next_li` no se está siguiendo. Verifica que `url = requests.compat.urljoin(...)` esté dentro del condicional, no reseteándose a la página principal. |
-| El script se cuelga o es lento | Es esperado — `time.sleep(1)` entre ~10 páginas significa ~10 segundos en total. |
+| El script se cuelga o es lento | Es esperado, `time.sleep(1)` entre ~10 páginas significa ~10 segundos en total. |
 | `Failed to fetch ... Stopping here` | Un fallo de red o tiempo de espera. El script guarda lo que tiene hasta ahora en lugar de fallar. |
 | `quotes.csv` tiene filas vacías | Un `None` o cadena vacía se metió en la lista de citas. Revisa la función `parse_quotes` para llamadas a `.get_text(strip=True)` faltantes. |
 
@@ -409,7 +409,7 @@ Producir gráficos y estadísticas resumen a partir de los datos limpios.
 
 ### Explicación
 
-Con columnas limpias y con tipo, el análisis son unas pocas líneas de `groupby` / `value_counts` — el mismo patrón de los cuadernos de pandas, solo apuntado a datos que obtuviste tú mismo. Tres gráficos: etiquetas más comunes, autores más citados y distribución de longitudes de citas.
+Con columnas limpias y con tipo, el análisis son unas pocas líneas de `groupby` / `value_counts`, el mismo patrón de los cuadernos de pandas, solo apuntado a datos que obtuviste tú mismo. Tres gráficos: etiquetas más comunes, autores más citados y distribución de longitudes de citas.
 
 ### Pista inicial
 
@@ -493,7 +493,7 @@ Aparecen dos archivos de imagen: `top_tags.png` (gráfico de barras horizontal, 
 | El eje x no empieza en 0 | La línea `ax.set_xlim(left=0)` se omitió. |
 | El histograma es una sola barra sólida | `quote_length` no tiene variación. Revisa que se calculara a partir de `text` ya limpio de espacios. |
 | `top_tags.png` no se guarda | Confirma que `fig.savefig(...)` se llama en el mismo objeto `fig` que `plt.subplots()` devolvió. |
-| Las barras se ven razonables pero difieren de lo esperado | El conjunto de datos es en vivo — los conteos cambian a medida que el sitio fuente se actualiza. |
+| Las barras se ven razonables pero difieren de lo esperado | El conjunto de datos es en vivo, los conteos cambian a medida que el sitio fuente se actualiza. |
 
 ### ✅ Lista de verificación
 
@@ -565,7 +565,7 @@ Cada nombre de autor en quotes.toscrape.com enlaza a una página de biografía c
 
 ### Desafío 2: Scrapea un sitio basado en tablas
 
-Apunta a un sitio con elementos HTML `<table>` en lugar de tarjetas `<div>` — por ejemplo, una tabla comparativa de Wikipedia. Usa BeautifulSoup para encontrar etiquetas `<tr>` y `<td>`, luego alimenta las filas a un DataFrame con `pd.DataFrame(rows, columns=headers)`. La lógica de parseo cambia, pero el pipeline obtener-limpiar-analizar se mantiene igual.
+Apunta a un sitio con elementos HTML `<table>` en lugar de tarjetas `<div>`, por ejemplo, una tabla comparativa de Wikipedia. Usa BeautifulSoup para encontrar etiquetas `<tr>` y `<td>`, luego alimenta las filas a un DataFrame con `pd.DataFrame(rows, columns=headers)`. La lógica de parseo cambia, pero el pipeline obtener-limpiar-analizar se mantiene igual.
 
 ### Desafío 3: Añade límite de velocidad y lógica de reintento
 
@@ -579,25 +579,25 @@ Si has ejecutado el scraper múltiples veces con marcas de tiempo, traza cómo c
 
 ## Lo que Aprendiste
 
-1. **Peticiones HTTP** — `requests.get()` con `raise_for_status()` y tiempos de espera para obtención robusta
-2. **Parseo de HTML** — `BeautifulSoup` con `find` / `find_all` y selectores de clase CSS
-3. **Paginación** — seguir enlaces "Next" con `urljoin` en lugar de hardcodear conteos de páginas
-4. **Manejo de errores** — `try`/`except` alrededor de llamadas de red para preservar progreso parcial
-5. **Limpieza de datos** — separar columnas empaquetadas, eliminar espacios en blanco, afirmar invariantes
-6. **Visualización** — gráficos de barras, histogramas y las reglas de honestidad (ejes etiquetados, eje x en 0, títulos descriptivos)
-7. **Etiqueta de scraping** — límite de velocidad con `sleep`, respetar `robots.txt`
+1. **Peticiones HTTP**, `requests.get()` con `raise_for_status()` y tiempos de espera para obtención robusta
+2. **Parseo de HTML**, `BeautifulSoup` con `find` / `find_all` y selectores de clase CSS
+3. **Paginación**, seguir enlaces "Next" con `urljoin` en lugar de hardcodear conteos de páginas
+4. **Manejo de errores**, `try`/`except` alrededor de llamadas de red para preservar progreso parcial
+5. **Limpieza de datos**, separar columnas empaquetadas, eliminar espacios en blanco, afirmar invariantes
+6. **Visualización**, gráficos de barras, histogramas y las reglas de honestidad (ejes etiquetados, eje x en 0, títulos descriptivos)
+7. **Etiqueta de scraping**, límite de velocidad con `sleep`, respetar `robots.txt`
 
-El pipeline se generaliza: cambia por un sitio diferente amigable para scraping, y los mismos cinco pasos — obtener, parsear, seguir paginación, limpiar, graficar — siguen siendo todo el pipeline.
+El pipeline se generaliza: cambia por un sitio diferente amigable para scraping, y los mismos cinco pasos, obtener, parsear, seguir paginación, limpiar, graficar, siguen siendo todo el pipeline.
 
 ## A Dónde Ir Desde Aquí
 
-- **Sitios diferentes** — lee el `robots.txt` y los términos de servicio de cada sitio primero; el HTML de cada sitio es diferente, así que necesitarás inspeccionar su markup tú mismo
-- **SQLite** — reemplaza CSV con el módulo incorporado `sqlite3` de Python una vez que los datos superen un solo archivo
-- **Programación** — ejecuta el scraper periódicamente con cron o un bucle, añadiendo una columna de marca de tiempo para rastrear cómo cambian los datos a lo largo del tiempo
-- **Scrapy** — un framework completo para scraping a gran escala con concurrencia incorporada, middleware y pipelines de exportación
+- **Sitios diferentes**, lee el `robots.txt` y los términos de servicio de cada sitio primero; el HTML de cada sitio es diferente, así que necesitarás inspeccionar su markup tú mismo
+- **SQLite**, reemplaza CSV con el módulo incorporado `sqlite3` de Python una vez que los datos superen un solo archivo
+- **Programación**, ejecuta el scraper periódicamente con cron o un bucle, añadiendo una columna de marca de tiempo para rastrear cómo cambian los datos a lo largo del tiempo
+- **Scrapy**, un framework completo para scraping a gran escala con concurrencia incorporada, middleware y pipelines de exportación
 
 ---
 
 ## Comparte tu Proyecto
 
-¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado. Su README tiene un recorrido amigable para principiantes sobre cómo agregar el tuyo vía un pull request — hacer fork del repositorio, crear una rama, confirmar y abrir el PR. No se requiere experiencia previa con git.
+¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado. Su README tiene un recorrido amigable para principiantes sobre cómo agregar el tuyo vía un pull request, hacer fork del repositorio, crear una rama, confirmar y abrir el PR. No se requiere experiencia previa con git.

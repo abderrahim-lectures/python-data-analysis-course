@@ -21,7 +21,7 @@ prerequisites:
 
 Build a terminal dashboard that pulls live weather data from the Open-Meteo API, crunches the numbers with pandas, draws charts with matplotlib, and prints a colorful weekly summary. Every step gives you working code you can run immediately.
 
-- **Run it in your browser.** An interactive companion notebook is ready — open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
+- **Run it in your browser.** An interactive companion notebook is ready, open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/weather-dashboard/notebook.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/weather-dashboard/notebook.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fweather-dashboard%2Fnotebook.ipynb)
@@ -49,7 +49,7 @@ You need an internet connection for the first run. After that, you can reuse sav
 
 ---
 
-## Step 1 — Fetch Weather Data from Open-Meteo
+## Step 1, Fetch Weather Data from Open-Meteo
 
 **Objective:** Learn to call a public REST API, handle the response, and deal with errors gracefully.
 
@@ -105,14 +105,14 @@ Wind speed: 12.5 km/h
 
 **If it's off:**
 
-- `ConnectionError` — You are offline. Connect to the internet or run this later.
-- `Timeout` — The server was slow. Increase the timeout value or retry.
-- `None` data — The API returned an unexpected shape. Print `data` to inspect the raw JSON.
-- Wrong city — Double-check the latitude and longitude. Use [latlong.net](https://www.latlong.net/) to find coordinates.
+- `ConnectionError`, You are offline. Connect to the internet or run this later.
+- `Timeout`, The server was slow. Increase the timeout value or retry.
+- `None` data, The API returned an unexpected shape. Print `data` to inspect the raw JSON.
+- Wrong city, Double-check the latitude and longitude. Use [latlong.net](https://www.latlong.net/) to find coordinates.
 
 ---
 
-## Step 2 — Parse JSON into a DataFrame
+## Step 2, Parse JSON into a DataFrame
 
 **Objective:** Convert the nested JSON response into a flat pandas DataFrame you can analyze.
 
@@ -159,13 +159,13 @@ print(forecast.to_string(index=False))
 
 **If it's off:**
 
-- `KeyError` — The API changed its field names. Print `data["daily"].keys()` to see what is available.
-- Dates look wrong — The API returns strings; `pd.to_datetime()` converts them. If parsing fails, check the format with `data["daily"]["time"][:1]`.
-- Empty DataFrame — The API returned no `daily` key. Check that `"daily"` is included in your request params.
+- `KeyError`, The API changed its field names. Print `data["daily"].keys()` to see what is available.
+- Dates look wrong, The API returns strings; `pd.to_datetime()` converts them. If parsing fails, check the format with `data["daily"]["time"][:1]`.
+- Empty DataFrame, The API returned no `daily` key. Check that `"daily"` is included in your request params.
 
 ---
 
-## Step 3 — Add Temperature Conversions
+## Step 3, Add Temperature Conversions
 
 **Objective:** Add Fahrenheit and Kelvin columns so the dashboard works for any audience.
 
@@ -203,13 +203,13 @@ print(forecast[["date", "temp_max", "temp_max_f", "temp_max_k"]].to_string(index
 
 **If it's off:**
 
-- Values look swapped — Check which column you are converting. `temp_max` should map to `temp_max_f`, not `temp_min_f`.
-- Decimals off — Floating point rounding is normal. Use `.round(1)` if you want fewer decimals.
-- `SettingWithCopyWarning` — Always use `.copy()` before modifying a slice of a DataFrame.
+- Values look swapped, Check which column you are converting. `temp_max` should map to `temp_max_f`, not `temp_min_f`.
+- Decimals off, Floating point rounding is normal. Use `.round(1)` if you want fewer decimals.
+- `SettingWithCopyWarning`, Always use `.copy()` before modifying a slice of a DataFrame.
 
 ---
 
-## Step 4 — Calculate Daily Statistics
+## Step 4, Calculate Daily Statistics
 
 **Objective:** Compute summary statistics so you can describe a forecast in one sentence.
 
@@ -268,13 +268,13 @@ Most common:  Mainly clear
 
 **If it's off:**
 
-- `NaN` in results — Some fields may be `None` in the JSON. Use `.fillna(0)` before computing statistics.
-- Mode returns wrong code — If there is a tie, `mode()` returns the first value. That is fine for a summary.
-- Precipitation is always 0 — Not all regions have precipitation data. Check `data["daily"].keys()` to confirm `precipitation_sum` exists.
+- `NaN` in results, Some fields may be `None` in the JSON. Use `.fillna(0)` before computing statistics.
+- Mode returns wrong code, If there is a tie, `mode()` returns the first value. That is fine for a summary.
+- Precipitation is always 0, Not all regions have precipitation data. Check `data["daily"].keys()` to confirm `precipitation_sum` exists.
 
 ---
 
-## Step 5 — Build Visualizations
+## Step 5, Build Visualizations
 
 **Objective:** Create a line chart of hourly temperatures and a bar chart of daily conditions.
 
@@ -337,14 +337,14 @@ Two chart files saved to disk and displayed if running in a notebook. The line c
 
 **If it's off:**
 
-- Chart is blank — Call `plt.show()` after the plot commands. In scripts, you may need `plt.ion()` first.
-- `UserWarning` about dates — Ensure you called `pd.to_datetime()` on the time strings before plotting.
-- Bars overlap — The width and offset calculation must center the bars. Check the list comprehension in `ax.bar()`.
-- Font looks tiny — Increase `figsize` or use `plt.rcParams["font.size"] = 12` before plotting.
+- Chart is blank, Call `plt.show()` after the plot commands. In scripts, you may need `plt.ion()` first.
+- `UserWarning` about dates, Ensure you called `pd.to_datetime()` on the time strings before plotting.
+- Bars overlap, The width and offset calculation must center the bars. Check the list comprehension in `ax.bar()`.
+- Font looks tiny, Increase `figsize` or use `plt.rcParams["font.size"] = 12` before plotting.
 
 ---
 
-## Step 6 — Create a Weekly Forecast Summary
+## Step 6, Create a Weekly Forecast Summary
 
 **Objective:** Combine everything into a formatted text summary you can read at a glance.
 
@@ -397,13 +397,13 @@ print_weekly_summary(forecast)
 
 **If it's off:**
 
-- Bar looks wrong — Adjust the scaling formula in `format_daily_bar`. The formula maps temperature to bar width.
-- Box characters misaligned — Use a monospace terminal or font. Proportional fonts break the box drawing.
-- Weather description overflows — Shorten descriptions or widen the box with more dashes.
+- Bar looks wrong, Adjust the scaling formula in `format_daily_bar`. The formula maps temperature to bar width.
+- Box characters misaligned, Use a monospace terminal or font. Proportional fonts break the box drawing.
+- Weather description overflows, Shorten descriptions or widen the box with more dashes.
 
 ---
 
-## Step 7 — Polish the CLI with Colors and a Legend
+## Step 7, Polish the CLI with Colors and a Legend
 
 **Objective:** Add colored temperature indicators and a weather code legend so the dashboard is visually clear.
 
@@ -466,9 +466,9 @@ A boxed dashboard with colored temperatures and weather icons, similar to the su
 
 **If it's off:**
 
-- Colors show as escape codes — Your terminal does not support ANSI colors. Use a modern terminal (iTerm2, Windows Terminal, GNOME Terminal).
-- Box misalignment — Stick to monospace fonts. Each line inside the box must have the same visual width.
-- Colors too bright — Adjust the ANSI code numbers. `\033[91m` is bright red; `\033[31m` is darker red.
+- Colors show as escape codes, Your terminal does not support ANSI colors. Use a modern terminal (iTerm2, Windows Terminal, GNOME Terminal).
+- Box misalignment, Stick to monospace fonts. Each line inside the box must have the same visual width.
+- Colors too bright, Adjust the ANSI code numbers. `\033[91m` is bright red; `\033[31m` is darker red.
 
 ---
 

@@ -44,7 +44,7 @@ quiz:
 ---
 The engine of text generation
 
-Text generation is, at its core, a sampling problem. Given a current word, you need to pick the next word from a distribution of possibilities — some words are likely, others are rare, but all are possible. `random.choices()` does exactly this.
+Text generation is, at its core, a sampling problem. Given a current word, you need to pick the next word from a distribution of possibilities, some words are likely, others are rare, but all are possible. `random.choices()` does exactly this.
 
 The cells below reuse the `load_corpus`, `tokenize`, `build_bigrams`, and `normalize_bigrams` helpers from lessons 01–06. Every lesson page starts with a fresh Python session, so run this setup cell first to rebuild the bigram model:
 
@@ -146,11 +146,11 @@ next_word = sample_next(model, current)
 print(f"After '{current}' comes '{next_word}'")
 ```
 
-If the current word isn't in the model (it has no known followers), return `None`. The caller needs to handle this — either stop generation or pick a random word to continue.
+If the current word isn't in the model (it has no known followers), return `None`. The caller needs to handle this, either stop generation or pick a random word to continue.
 
 ### Reproducibility with seeds
 
-`random.choices()` uses Python's global random state. Setting a seed makes the output reproducible — useful for debugging and testing:
+`random.choices()` uses Python's global random state. Setting a seed makes the output reproducible, useful for debugging and testing:
 
 ```python
 random.seed(42)
@@ -164,9 +164,9 @@ print(sample_next(model, "the"))  # might be different
 
 Some words appear only at the end of the corpus and have no known followers. When `sample_next` returns `None`, you have options:
 
-1. **Stop generation** — the most conservative choice
-2. **Restart from a random word** — keeps the output going
-3. **Restart from a common word** — pick from the top-N most frequent words
+1. **Stop generation**, the most conservative choice
+2. **Restart from a random word**, keeps the output going
+3. **Restart from a common word**, pick from the top-N most frequent words
 
 Option 3 usually produces the best results:
 
@@ -196,7 +196,7 @@ for _ in range(10):
     print(f"the → {next_word}")
 ```
 
-How consistent are the results? Try changing the seed — do you get different words?
+How consistent are the results? Try changing the seed, do you get different words?
 
 ## Key Takeaways
 

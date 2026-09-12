@@ -35,9 +35,9 @@ Une application de cartes flash en terminal qui :
 
 - **Localement avec `uv` (recommandé).** Ce projet n'utilise que la bibliothèque standard, donc il s'exécute partout où Python tourne. La section Configuration ci-dessous le parcourt.
 - **Google Colab ou Kaggle Notebooks.** Colle les cellules de code directement dans un notebook. Les appels `input()` fonctionnent pour les invites d'étude, mais l'entrée/sortie de fichiers (étape 6) fonctionne différemment dans le navigateur.
-- **JupyterLite playground.** Colle les cellules de code directement dans un notebook — note que la persistance des fichiers (étape 6) fonctionne uniquement en local.
+- **JupyterLite playground.** Colle les cellules de code directement dans un notebook, note que la persistance des fichiers (étape 6) fonctionne uniquement en local.
 
-- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt — ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
+- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt, ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/flashcard-app/notebook.fr.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/flashcard-app/notebook.fr.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fflashcard-app%2Fnotebook.fr.ipynb)
@@ -51,7 +51,7 @@ cd flashcard-app
 
 ## Étape 1 : Définir le modèle de données
 
-Avant de construire des fonctionnalités, décide comment une carte vit en mémoire. Chaque carte est un dictionnaire avec des champs pour son contenu, ses métadonnées, et son état de répétition espacée. Une liste contient toutes les cartes d'un paquet. Cette structure plate garde les choses simples — pas encore besoin de classes.
+Avant de construire des fonctionnalités, décide comment une carte vit en mémoire. Chaque carte est un dictionnaire avec des champs pour son contenu, ses métadonnées, et son état de répétition espacée. Une liste contient toutes les cartes d'un paquet. Cette structure plate garde les choses simples, pas encore besoin de classes.
 
 ### 1.1 Crée la structure de carte
 
@@ -89,7 +89,7 @@ def create_card(front: str, back: str, tags: list[str] | None = None) -> dict:
 []
 ```
 
-**🩹 Si ça ne marche pas :** Si tu obtiens une `TypeError`, assure-toi que `datetime.now().isoformat()` est appelé avec des parenthèses — `datetime.now().isoformat()` est correct, `datetime.now.isoformat` (sans parenthèses) référence la méthode sans l'appeler. Si les tags prennent par défaut une liste mutable partagée, tu as utilisé `tags or []` incorrectement — assure-toi que le `or` est dans le corps de la fonction, pas dans l'argument par défaut.
+**🩹 Si ça ne marche pas :** Si tu obtiens une `TypeError`, assure-toi que `datetime.now().isoformat()` est appelé avec des parenthèses, `datetime.now().isoformat()` est correct, `datetime.now.isoformat` (sans parenthèses) référence la méthode sans l'appeler. Si les tags prennent par défaut une liste mutable partagée, tu as utilisé `tags or []` incorrectement, assure-toi que le `or` est dans le corps de la fonction, pas dans l'argument par défaut.
 
 ### 1.2 Crée la structure de paquet
 
@@ -139,7 +139,7 @@ Added: What is a list?
 2
 ```
 
-**🩹 Si ça ne marche pas :** Si la carte n'apparaît pas dans le paquet, vérifie que tu ajoutes à `deck["cards"]`, pas à une variable locale. Si deux cartes partagent les mêmes données, tu réutilises la même référence de dict — assure-toi que `create_card` renvoie un nouveau dict à chaque fois.
+**🩹 Si ça ne marche pas :** Si la carte n'apparaît pas dans le paquet, vérifie que tu ajoutes à `deck["cards"]`, pas à une variable locale. Si deux cartes partagent les mêmes données, tu réutilises la même référence de dict, assure-toi que `create_card` renvoie un nouveau dict à chaque fois.
 
 ### 1.4 Vérifie le modèle de données
 
@@ -153,7 +153,7 @@ Added: What is a list?
 
 **🤔 Question(s) socratique(s)**
 
-Pourquoi stocker `next_review` comme une chaîne ISO au lieu d'un objet datetime ? Quel compromis la sérialisation JSON impose-t-elle — et que perdrais-tu si tu stockais un horodatage unix à la place ?
+Pourquoi stocker `next_review` comme une chaîne ISO au lieu d'un objet datetime ? Quel compromis la sérialisation JSON impose-t-elle, et que perdrais-tu si tu stockais un horodatage unix à la place ?
 
 ---
 
@@ -301,7 +301,7 @@ def study_session(deck: dict) -> list[dict]:
 
 ### 3.2 Obtiens l'évaluation de qualité de l'utilisateur
 
-**👟 Indice de départ :** Invite l'utilisateur à donner une note de 0 à 5. Valide l'entrée — rejette tout ce qui n'est pas un nombre dans la plage. Redemande en cas de mauvaise entrée.
+**👟 Indice de départ :** Invite l'utilisateur à donner une note de 0 à 5. Valide l'entrée, rejette tout ce qui n'est pas un nombre dans la plage. Redemande en cas de mauvaise entrée.
 
 ```python
 def get_quality_rating() -> int:
@@ -335,7 +335,7 @@ def get_quality_rating() -> int:
   Rating (0-5): 4
 ```
 
-**🩹 Si ça ne marche pas :** Si la boucle ne se termine jamais, tu ne renvoies pas depuis l'intérieur du `while True` — assure-toi que `return rating` est dans le bloc `if 0 <= rating <= 5`. Si saisir « abc » plante, tu as oublié le `try/except ValueError`.
+**🩹 Si ça ne marche pas :** Si la boucle ne se termine jamais, tu ne renvoies pas depuis l'intérieur du `while True`, assure-toi que `return rating` est dans le bloc `if 0 <= rating <= 5`. Si saisir « abc » plante, tu as oublié le `try/except ValueError`.
 
 ### 3.3 Vérifie le mode d'étude
 
@@ -359,7 +359,7 @@ L'algorithme SM-2 est le moteur qui fait de ceci plus qu'une simple application 
 
 ### 4.1 Implémente la mise à jour SM-2
 
-**👟 Indice de départ :** L'algorithme modifie trois champs de la carte : `repetitions`, `interval` et `ease_factor`. Si la qualité est >= 3 (correct), incrémente `repetitions` et fais grandir l'intervalle. Si la qualité est < 3 (oublié), réinitialise `repetitions` à 0 et remets l'intervalle à 1. Le facteur de facilité s'ajuste selon la qualité — il monte pour les réponses faciles et descend pour les difficiles.
+**👟 Indice de départ :** L'algorithme modifie trois champs de la carte : `repetitions`, `interval` et `ease_factor`. Si la qualité est >= 3 (correct), incrémente `repetitions` et fais grandir l'intervalle. Si la qualité est < 3 (oublié), réinitialise `repetitions` à 0 et remets l'intervalle à 1. Le facteur de facilité s'ajuste selon la qualité, il monte pour les réponses faciles et descend pour les difficiles.
 
 ```python
 def update_card_sm2(card: dict, quality: int) -> dict:
@@ -417,7 +417,7 @@ def update_card_sm2(card: dict, quality: int) -> dict:
 1
 ```
 
-**🩹 Si ça ne marche pas :** Si l'intervalle ne grandit pas après la troisième révision, vérifie que tu as la branche `elif card["repetitions"] == 1` qui renvoie 6 — sans elle, la formule `round(interval * ease_factor)` donne `round(1 * 2.5) = 2` au lieu de 6 pour la seconde réponse correcte. Si `ease_factor` descend sous 1.3, la pince `max(1.3, ...)` n'est pas là.
+**🩹 Si ça ne marche pas :** Si l'intervalle ne grandit pas après la troisième révision, vérifie que tu as la branche `elif card["repetitions"] == 1` qui renvoie 6, sans elle, la formule `round(interval * ease_factor)` donne `round(1 * 2.5) = 2` au lieu de 6 pour la seconde réponse correcte. Si `ease_factor` descend sous 1.3, la pince `max(1.3, ...)` n'est pas là.
 
 ### 4.2 Applique SM-2 après chaque révision
 
@@ -465,7 +465,7 @@ def study_session(deck: dict) -> list[dict]:
 
 Les cartes notées 0–2 apparaissent à nouveau demain ; les cartes notées 3–5 sont repoussées selon le planning SM-2.
 
-**🩹 Si ça ne marche pas :** Si la prochaine date de révision est toujours demain quelle que soit la note, `update_card_sm2` ne modifie pas l'`interval` de la carte — assure-toi de modifier `card["interval"]` en place, pas de créer une variable locale. Si la date est dans le passé, tu as oublié d'ajouter `timedelta(days=card["interval"])` à `datetime.now()`.
+**🩹 Si ça ne marche pas :** Si la prochaine date de révision est toujours demain quelle que soit la note, `update_card_sm2` ne modifie pas l'`interval` de la carte, assure-toi de modifier `card["interval"]` en place, pas de créer une variable locale. Si la date est dans le passé, tu as oublié d'ajouter `timedelta(days=card["interval"])` à `datetime.now()`.
 
 ### 4.3 Vérifie SM-2
 
@@ -529,9 +529,9 @@ def deck_stats(deck: dict) -> dict:
 {'total': 6, 'mastered': 0, 'learning': 0, 'new': 6, 'due': 6, 'avg_ease': 2.5}
 ```
 
-Après une session d'étude, les nombres bougent — maîtrisées et en apprentissage montent, nouvelles descend, dues baisse.
+Après une session d'étude, les nombres bougent, maîtrisées et en apprentissage montent, nouvelles descend, dues baisse.
 
-**🩹 Si ça ne marche pas :** Si `due` est toujours 0 après l'étude, `get_due_cards` compare des chaînes au lieu de datetimes — assure-toi d'appeler `datetime.fromisoformat()` sur la chaîne `next_review`. Si `avg_ease` est faux, tu divises par le mauvais compte — utilise `len(cards)`, pas `sum(...)`.
+**🩹 Si ça ne marche pas :** Si `due` est toujours 0 après l'étude, `get_due_cards` compare des chaînes au lieu de datetimes, assure-toi d'appeler `datetime.fromisoformat()` sur la chaîne `next_review`. Si `avg_ease` est faux, tu divises par le mauvais compte, utilise `len(cards)`, pas `sum(...)`.
 
 ### 5.2 Affiche les statistiques comme une barre de progression
 
@@ -581,7 +581,7 @@ def show_stats(deck: dict) -> None:
 
 Après avoir étudié toutes les cartes et noté 4–5 sur chacune, la barre de progression se remplit.
 
-**🩹 Si ça ne marche pas :** Si la barre de progression déborde au-delà de 30 caractères, `filled` dépasse `bar_len` — ajoute `min(filled, bar_len)` comme pince de sécurité. Si les pourcentages ne s'additionnent pas, vérifie que `mastered + learning + new == total`.
+**🩹 Si ça ne marche pas :** Si la barre de progression déborde au-delà de 30 caractères, `filled` dépasse `bar_len`, ajoute `min(filled, bar_len)` comme pince de sécurité. Si les pourcentages ne s'additionnent pas, vérifie que `mastered + learning + new == total`.
 
 ### 5.3 Vérifie le suivi de progression
 
@@ -589,7 +589,7 @@ Après avoir étudié toutes les cartes et noté 4–5 sur chacune, la barre de 
 
 - ✅ `deck_stats` renvoie total, mastered, learning, new, due et avg_ease.
 - ✅ `show_stats` imprime un résumé formaté avec une barre de progression.
-- ✅ Les paquets vides ne plantent pas — ils montrent tous des zéros.
+- ✅ Les paquets vides ne plantent pas, ils montrent tous des zéros.
 - ✅ Après une session d'étude, les statistiques reflètent les états de cartes mis à jour.
 
 **🤔 Question(s) socratique(s)**
@@ -626,11 +626,11 @@ Saved 6 cards to deck.json
 
 Le fichier `deck.json` contient désormais le paquet complet comme JSON lisible.
 
-**🩹 Si ça ne marche pas :** Si tu obtiens `TypeError: Object of type datetime is not JSON serializable`, tu as stocké un objet `datetime` directement au lieu d'appeler `.isoformat()` — retourne à `create_card` et assure-toi que l'horodatage est une chaîne. Si le fichier est vide, tu l'as ouvert avec le mode `"w"` (qui tronque) avant d'appeler `json.dump`.
+**🩹 Si ça ne marche pas :** Si tu obtiens `TypeError: Object of type datetime is not JSON serializable`, tu as stocké un objet `datetime` directement au lieu d'appeler `.isoformat()`, retourne à `create_card` et assure-toi que l'horodatage est une chaîne. Si le fichier est vide, tu l'as ouvert avec le mode `"w"` (qui tronque) avant d'appeler `json.dump`.
 
 ### 6.2 Charge le paquet depuis le JSON
 
-**👟 Indice de départ :** Utilise `json.load` pour relire le fichier. Gère le cas où le fichier n'existe pas — commence avec un paquet vide dans ce cas.
+**👟 Indice de départ :** Utilise `json.load` pour relire le fichier. Gère le cas où le fichier n'existe pas, commence avec un paquet vide dans ce cas.
 
 ```python
 def load_deck(filename: str = "deck.json") -> dict:
@@ -644,9 +644,9 @@ def load_deck(filename: str = "deck.json") -> dict:
     return deck
 ```
 
-**🎯 Résultat attendu :** Au premier lancement (pas de fichier) : `No saved deck found — starting fresh.` Aux lancements suivants : `Loaded 6 cards from deck.json`.
+**🎯 Résultat attendu :** Au premier lancement (pas de fichier) : `No saved deck found, starting fresh.` Aux lancements suivants : `Loaded 6 cards from deck.json`.
 
-**🩹 Si ça ne marche pas :** Si tu obtiens une `FileNotFoundError`, tu ne vérifies pas `path.exists()` avant d'ouvrir. Si le paquet chargé a `None` pour `cards`, le fichier JSON est malformé — ouvre-le dans un éditeur de texte pour vérifier.
+**🩹 Si ça ne marche pas :** Si tu obtiens une `FileNotFoundError`, tu ne vérifies pas `path.exists()` avant d'ouvrir. Si le paquet chargé a `None` pour `cards`, le fichier JSON est malformé, ouvre-le dans un éditeur de texte pour vérifier.
 
 ### 6.3 Vérifie la persistance
 
@@ -654,7 +654,7 @@ def load_deck(filename: str = "deck.json") -> dict:
 
 - ✅ Après l'enregistrement, `deck.json` existe et contient du JSON valide avec tous les champs de carte.
 - ✅ Après le chargement, le paquet a les mêmes cartes, tags et état SM-2.
-- ✅ Un fichier JSON manquant ne plante pas — il commence avec un paquet vide.
+- ✅ Un fichier JSON manquant ne plante pas, il commence avec un paquet vide.
 - ✅ Le fichier enregistré est lisible par l'humain avec `indent=2`.
 
 **🤔 Question(s) socratique(s)**
@@ -743,7 +743,7 @@ No cards due for review! Great job.
 ...
 ```
 
-**🩹 Si ça ne marche pas :** Si tu obtiens une `UnboundLocalError`, la variable `deck` n'est pas définie avant la boucle `while True` — assure-toi que `deck = load_deck()` s'exécute d'abord. Si les cartes ne sont pas enregistrées après l'étude, tu as oublié `save_deck(deck)` dans la branche `"1"`.
+**🩹 Si ça ne marche pas :** Si tu obtiens une `UnboundLocalError`, la variable `deck` n'est pas définie avant la boucle `while True`, assure-toi que `deck = load_deck()` s'exécute d'abord. Si les cartes ne sont pas enregistrées après l'étude, tu as oublié `save_deck(deck)` dans la branche `"1"`.
 
 ### 7.2 Ajoute un retour coloré
 
@@ -760,7 +760,7 @@ def coloured(text: str, color: str) -> str:
     return f"{color}{text}{RESET}"
 ```
 
-**🎯 Résultat attendu :** Après avoir noté une carte, le retour apparaît en couleur — vert pour les notes élevées (4–5), jaune pour le moyen (3), rouge pour les basses (0–2).
+**🎯 Résultat attendu :** Après avoir noté une carte, le retour apparaît en couleur, vert pour les notes élevées (4–5), jaune pour le moyen (3), rouge pour les basses (0–2).
 
 **🩹 Si ça ne marche pas :** Si tu vois des codes d'échappement bruts comme `[92m` au lieu des couleurs, la plupart des terminaux modernes supportent les codes ANSI, mais Windows Command Prompt peut avoir besoin de `os.system("")` appelé une fois au démarrage pour les activer.
 
@@ -791,25 +791,25 @@ def coloured(text: str, color: str) -> str:
 
 Prêt à aller plus loin ? Essaie ceci :
 
-1. **Filtrage par tag** — Ajoute une commande pour étudier uniquement les cartes avec un tag spécifique. Filtre `get_due_cards` en vérifiant si le tag est dans `card["tags"]`.
+1. **Filtrage par tag**, Ajoute une commande pour étudier uniquement les cartes avec un tag spécifique. Filtre `get_due_cards` en vérifiant si le tag est dans `card["tags"]`.
 
-2. **Import/export de paquet** — Laisse les utilisateurs exporter un paquet comme fichier texte brut (une carte par ligne, format front|back) et l'importer de retour. Cela rend les paquets partageables sans JSON.
+2. **Import/export de paquet**, Laisse les utilisateurs exporter un paquet comme fichier texte brut (une carte par ligne, format front|back) et l'importer de retour. Cela rend les paquets partageables sans JSON.
 
-3. **Historique de sessions** — Suis combien de cartes tu as révisées chaque jour, ta note moyenne, et ta précision. Stocke l'historique dans un fichier JSON séparé et montre un résumé hebdomadaire.
+3. **Historique de sessions**, Suis combien de cartes tu as révisées chaque jour, ta note moyenne, et ta précision. Stocke l'historique dans un fichier JSON séparé et montre un résumé hebdomadaire.
 
 ## Ce que tu as appris
 
-- **Modélisation de données basée sur les dictionnaires** — Représenté les cartes et paquets comme de simples dicts Python avec des noms de champs et défauts clairs.
-- **Répétition espacée SM-2** — Implémenté l'algorithme qui ajuste les intervalles de révision selon à quel point tu connais chaque carte.
-- **Interaction utilisateur** — Construit une session d'étude avec retournement-pour-révéler, validation d'entrée et évaluations de qualité.
-- **Suivi de progression** — Calculé des statistiques de maîtrise et visualisé la progression avec une barre de progression en terminal.
-- **Persistance JSON** — Enregistré et chargé les données de paquet entre sessions avec `json.dump` et `json.load`.
-- **Conception CLI** — Construit une interface pilotée par menu avec validation d'entrée, retour coloré et enregistrements automatiques.
+- **Modélisation de données basée sur les dictionnaires**, Représenté les cartes et paquets comme de simples dicts Python avec des noms de champs et défauts clairs.
+- **Répétition espacée SM-2**, Implémenté l'algorithme qui ajuste les intervalles de révision selon à quel point tu connais chaque carte.
+- **Interaction utilisateur**, Construit une session d'étude avec retournement-pour-révéler, validation d'entrée et évaluations de qualité.
+- **Suivi de progression**, Calculé des statistiques de maîtrise et visualisé la progression avec une barre de progression en terminal.
+- **Persistance JSON**, Enregistré et chargé les données de paquet entre sessions avec `json.dump` et `json.load`.
+- **Conception CLI**, Construit une interface pilotée par menu avec validation d'entrée, retour coloré et enregistrements automatiques.
 
-Tu as maintenant une application de cartes flash pleinement fonctionnelle. L'architecture basée sur les dictionnaires la rend facile à étendre — ajoute des images en stockant des URLs dans un champ `"image"`, implémente des boîtes de Leitner en ajoutant un champ `"box"`, ou construis un système de paquets partagés en lisant du JSON depuis une URL.
+Tu as maintenant une application de cartes flash pleinement fonctionnelle. L'architecture basée sur les dictionnaires la rend facile à étendre, ajoute des images en stockant des URLs dans un champ `"image"`, implémente des boîtes de Leitner en ajoutant un champ `"box"`, ou construis un système de paquets partagés en lisant du JSON depuis une URL.
 
 ## Partage ton projet avec la classe
 
-Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres étudiants — et son README contient un parcours complet et accessible aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git auparavant : forker le dépôt, créer une branche, commiter tes fichiers et ouvrir la PR, une étape à la fois. Aucune expérience préalable de git n'est supposée.
+Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres étudiants, et son README contient un parcours complet et accessible aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git auparavant : forker le dépôt, créer une branche, commiter tes fichiers et ouvrir la PR, une étape à la fois. Aucune expérience préalable de git n'est supposée.
 
 Bienvenue dans l'écriture de Python en dehors du navigateur. 🎓

@@ -45,7 +45,7 @@ quiz:
 
 ## Filtrando con condiciones booleanas
 
-Filtrar es la forma de centrarte en el subconjunto de datos que importa. Creas una **máscara booleana** — una Series de valores True/False — y la usas para seleccionar filas.
+Filtrar es la forma de centrarte en el subconjunto de datos que importa. Creas una **máscara booleana**, una Series de valores True/False, y la usas para seleccionar filas.
 
 ```python
 import pandas as pd
@@ -129,7 +129,7 @@ print(masters.shape)
 a_tickets = df[df["Ticket"].str.startswith("A", na=False)]
 ```
 
-El parámetro `na=False` maneja los valores faltantes con elegancia — sin él, las entradas NaN causarían errores.
+El parámetro `na=False` maneja los valores faltantes con elegancia, sin él, las entradas NaN causarían errores.
 
 ## Filtrando con .query()
 
@@ -184,9 +184,9 @@ print(f"Passengers with title Mrs: {len(mrs)}")
 ## Conclusiones clave
 
 - La indexación booleana `df[mask]` es el mecanismo principal de filtrado en pandas
-- Usa `&` para Y, `|` para O — envuelve siempre las condiciones individuales entre paréntesis
+- Usa `&` para Y, `|` para O, envuelve siempre las condiciones individuales entre paréntesis
 - `.isin()` coincide con una lista; `.between()` maneja rangos con limpieza
-- `.str.contains()` filtra por coincidencia de subcadena — usa `na=False` por seguridad
+- `.str.contains()` filtra por coincidencia de subcadena, usa `na=False` por seguridad
 
 ## Desafío de práctica
 

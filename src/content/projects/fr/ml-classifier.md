@@ -1,6 +1,6 @@
 ---
 title: "Entraînez votre premier modèle de machine learning"
-description: "Construisez, entraînez, et évaluez un classificateur scikit-learn avec de vraies données — aucune expérience en ML requise."
+description: "Construisez, entraînez, et évaluez un classificateur scikit-learn avec de vraies données, aucune expérience en ML requise."
 difficulty: "intermediate"
 estimatedMinutes: 60
 xpReward: 50
@@ -10,7 +10,7 @@ prerequisites: ["Python basics", "Basic pandas", "Basic matplotlib"]
 
 # 🧠 Entraînez votre premier modèle de machine learning
 
-Le machine learning semble intimidant, mais l'idée centrale est simple : montrer à un ordinateur des exemples de paires entrée/sortie, et il apprend un motif qu'il peut appliquer à de nouvelles données inédites. Dans ce projet, vous allez faire exactement ça — charger un jeu de données classique, entraîner un classificateur d'arbre de décision, et évaluer sa qualité de prédiction. Aucune formation en mathématiques n'est requise.
+Le machine learning semble intimidant, mais l'idée centrale est simple : montrer à un ordinateur des exemples de paires entrée/sortie, et il apprend un motif qu'il peut appliquer à de nouvelles données inédites. Dans ce projet, vous allez faire exactement ça, charger un jeu de données classique, entraîner un classificateur d'arbre de décision, et évaluer sa qualité de prédiction. Aucune formation en mathématiques n'est requise.
 
 ## 🎯 Ce que vous allez faire
 
@@ -27,9 +27,9 @@ Le machine learning semble intimidant, mais l'idée centrale est simple : montre
 
 **GitHub Codespaces** fonctionne bien aussi : ouvrez [tout le dépôt du cours dans un Codespace gratuit](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python, et `uv` sont déjà installés, selon le `.devcontainer/devcontainer.json` du dépôt), et les mêmes commandes `uv` fonctionnent depuis un onglet de navigateur, sans installation locale.
 
-**Google Colab et les notebooks Kaggle** sont d'excellents choix ici — entraîner un arbre de décision sur un jeu de données aussi petit ne nécessite aucun GPU, donc un environnement de notebook gratuit est amplement suffisant. Exécutez `!pip install scikit-learn pandas matplotlib` dans une cellule, puis collez et adaptez le code des étapes ci-dessous.
+**Google Colab et les notebooks Kaggle** sont d'excellents choix ici, entraîner un arbre de décision sur un jeu de données aussi petit ne nécessite aucun GPU, donc un environnement de notebook gratuit est amplement suffisant. Exécutez `!pip install scikit-learn pandas matplotlib` dans une cellule, puis collez et adaptez le code des étapes ci-dessous.
 
-- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt — ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
+- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt, ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ml-classifier/notebook.fr.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ml-classifier/notebook.fr.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fml-classifier%2Fnotebook.fr.ipynb)
@@ -71,7 +71,7 @@ df.describe()
 
 **🎯 Résultat attendu :** Vous verrez 50 échantillons par espèce (classes équilibrées), et des statistiques montrant des plages comme la longueur du sépale d'environ 4,3 à 7,9 cm.
 
-**🩹 Si ça ne marche pas :** Si `load_iris()` échoue, assurez-vous d'avoir exécuté `uv add scikit-learn` dans l'étape de configuration. Le jeu de données est inclus dans scikit-learn — aucune connexion Internet n'est requise.
+**🩹 Si ça ne marche pas :** Si `load_iris()` échoue, assurez-vous d'avoir exécuté `uv add scikit-learn` dans l'étape de configuration. Le jeu de données est inclus dans scikit-learn, aucune connexion Internet n'est requise.
 
 ### 1.1 Vérifie qu'il s'importe et se charge proprement
 
@@ -79,7 +79,7 @@ df.describe()
 
 - ✅ `df` contient 150 lignes et 6 colonnes (4 mesures + `species` + `species_name`).
 - ✅ `df["species_name"].value_counts()` affiche 50 pour chaque espèce.
-- ✅ `df.describe()` montre des statistiques raisonnables pour chaque mesure — pas de NaN, pas de valeurs absurdes.
+- ✅ `df.describe()` montre des statistiques raisonnables pour chaque mesure, pas de NaN, pas de valeurs absurdes.
 
 **🤔 Question(s) socratique(s)**
 
@@ -88,7 +88,7 @@ df.describe()
 
 ## Étape 2 : Prétraiter les caractéristiques
 
-Séparez les caractéristiques d'entrée (les mesures) de la cible (l'étiquette d'espèce). Chaque colonne entrant dans le modèle doit être numérique — heureusement, les caractéristiques de l'Iris le sont déjà, donc aucun encodage n'est nécessaire.
+Séparez les caractéristiques d'entrée (les mesures) de la cible (l'étiquette d'espèce). Chaque colonne entrant dans le modèle doit être numérique, heureusement, les caractéristiques de l'Iris le sont déjà, donc aucun encodage n'est nécessaire.
 
 ```python
 X = df.drop(columns=["species", "species_name"])
@@ -98,7 +98,7 @@ print(f"Features shape: {X.shape}")
 print(f"Target shape: {y.shape}")
 ```
 
-**🎯 Résultat attendu :** `Features shape: (150, 4)` et `Target shape: (150,)` — 150 lignes, 4 colonnes de caractéristiques.
+**🎯 Résultat attendu :** `Features shape: (150, 4)` et `Target shape: (150,)`, 150 lignes, 4 colonnes de caractéristiques.
 
 **🩹 Si ça ne marche pas :** Si vous voyez des colonnes de type `object` dans `X.dtypes`, vous avez accidentellement inclus des colonnes de chaînes. Supprimez tout ce qui n'est pas une mesure numérique.
 
@@ -113,7 +113,7 @@ print(f"Target shape: {y.shape}")
 
 **🤔 Question(s) socratique(s)**
 
-- Pourquoi ne garde-t-on pas `species_name` dans `X` — ne pourrait-il pas aider le modèle à prédire l'espèce ?
+- Pourquoi ne garde-t-on pas `species_name` dans `X`, ne pourrait-il pas aider le modèle à prédire l'espèce ?
 - Que se passerait-il si `X` contenait une colonne de type `object` non numérique ? Comment le modèle réagirait-il ?
 
 ## Étape 3 : Division entraînement/test
@@ -131,14 +131,14 @@ print(f"Training set: {X_train.shape[0]} samples")
 print(f"Test set: {X_test.shape[0]} samples")
 ```
 
-`test_size=0.2` met de côté 20 % des lignes pour le test (30 échantillons). `random_state=42` rend la division reproductible — vous obtiendrez les mêmes lignes à chaque fois.
+`test_size=0.2` met de côté 20 % des lignes pour le test (30 échantillons). `random_state=42` rend la division reproductible, vous obtiendrez les mêmes lignes à chaque fois.
 
 **🎯 Résultat attendu :** Training set: 120 samples, Test set: 30 samples.
 
-**🩹 Si ça ne marche pas :** Si les chiffres n'additionnent pas 150, vérifiez votre `test_size`. Si `y_test` ne contient qu'une seule espèce, votre déséquilibrée — essayez un `random_state` différent ou vérifiez que `y` contient bien les trois classes.
+**🩹 Si ça ne marche pas :** Si les chiffres n'additionnent pas 150, vérifiez votre `test_size`. Si `y_test` ne contient qu'une seule espèce, votre déséquilibrée, essayez un `random_state` différent ou vérifiez que `y` contient bien les trois classes.
 
 :::tip[Fuite de données]
-Toujours diviser *après* avoir chargé les données mais *avant* toute transformation qui résume le jeu de données (comme la mise à l'échelle ou l'encodage). Ici les caractéristiques de l'Iris sont déjà numériques et sur des échelles similaires, donc pas de risque de fuite — mais cette discipline compte pour des jeux de données plus sales.
+Toujours diviser *après* avoir chargé les données mais *avant* toute transformation qui résume le jeu de données (comme la mise à l'échelle ou l'encodage). Ici les caractéristiques de l'Iris sont déjà numériques et sur des échelles similaires, donc pas de risque de fuite, mais cette discipline compte pour des jeux de données plus sales.
 :::
 
 ### 3.1 Vérifie la division
@@ -147,11 +147,11 @@ Toujours diviser *après* avoir chargé les données mais *avant* toute transfor
 
 - ✅ `X_train.shape[0]` + `X_test.shape[0]` égale 150.
 - ✅ Relancer la division avec le même `random_state` reproduit exactement les mêmes lignes dans `X_test`.
-- ✅ `y_train` et `y_test` contiennent tous les deux des 0, des 1, et des 2 — pas une seule espèce.
+- ✅ `y_train` et `y_test` contiennent tous les deux des 0, des 1, et des 2, pas une seule espèce.
 
 **🤔 Question(s) socratique(s)**
 
-- Si vous entraîniez un modèle et l'évaluiez sur `X_train`/`y_train` au lieu de `X_test`/`y_test` par erreur, vous attendriez-vous à une précision *meilleure* ou *pire* que le vrai chiffre — et pourquoi ?
+- Si vous entraîniez un modèle et l'évaluiez sur `X_train`/`y_train` au lieu de `X_test`/`y_test` par erreur, vous attendriez-vous à une précision *meilleure* ou *pire* que le vrai chiffre, et pourquoi ?
 - Que donnerait `test_size=0.5` ? Avantages et inconvénients ?
 
 ## Étape 4 : Entraîner un classificateur
@@ -167,7 +167,7 @@ model.fit(X_train, y_train)
 predictions = model.predict(X_test)
 ```
 
-`.fit(X_train, y_train)` est là où l'apprentissage a lieu — le modèle ne voit jamais `X_test` pendant cette étape. Ensuite `.predict(X_test)` applique ce qu'il a appris aux données mises de côté.
+`.fit(X_train, y_train)` est là où l'apprentissage a lieu, le modèle ne voit jamais `X_test` pendant cette étape. Ensuite `.predict(X_test)` applique ce qu'il a appris aux données mises de côté.
 
 **🎯 Résultat attendu :** `predictions` est un tableau de longueur 30 ne contenant que des 0, 1, ou 2 (les étiquettes d'espèce).
 
@@ -183,12 +183,12 @@ predictions = model.predict(X_test)
 
 **🤔 Question(s) socratique(s)**
 
-- `model.fit(X_train, y_train)` voit les vraies réponses (`y_train`) pendant l'entraînement — est-ce de la triche ? Pourquoi est-ce acceptable ici mais pas lors de l'évaluation ?
+- `model.fit(X_train, y_train)` voit les vraies réponses (`y_train`) pendant l'entraînement, est-ce de la triche ? Pourquoi est-ce acceptable ici mais pas lors de l'évaluation ?
 - Que se passerait-il si vous appeliez `model.predict(X_train)` au lieu de `model.predict(X_test)` ?
 
 ## Étape 5 : Évaluer le modèle
 
-Commencez par la précision (accuracy) — la fraction des prédictions correctes — puis creusez plus profond avec la précision (precision), le rappel (recall), et une matrice de confusion.
+Commencez par la précision (accuracy), la fraction des prédictions correctes, puis creusez plus profond avec la précision (precision), le rappel (recall), et une matrice de confusion.
 
 ```python
 from sklearn.metrics import accuracy_score, precision_score, recall_score, confusion_matrix
@@ -204,9 +204,9 @@ print(f"Recall:    {recall:.1%}")
 
 La précision (accuracy) indique le taux de réussite global. La précision (precision) indique, pour chaque fois que le modèle a prédit une espèce, combien de fois il avait raison. Le rappel (recall) indique, pour chaque espèce réelle, combien le modèle en a trouvé. Le paramètre `average="weighted"` gère le cas multi-classes en moyennant sur les trois espèces.
 
-**🎯 Résultat attendu :** Les trois métriques devraient être d'environ 90 à 100 % sur ce jeu de données — l'Iris est suffisamment séparé pour qu'un arbre de décision fonctionne très bien.
+**🎯 Résultat attendu :** Les trois métriques devraient être d'environ 90 à 100 % sur ce jeu de données, l'Iris est suffisamment séparé pour qu'un arbre de décision fonctionne très bien.
 
-**🩹 Si ça ne marche pas :** Si la précision est exactement de 33 %, le modèle devine aléatoirement (niveau chance pour 3 classes). Vérifiez que `X_train` et `y_train` n'ont pas été mélangés indépendamment — ils doivent rester alignés.
+**🩹 Si ça ne marche pas :** Si la précision est exactement de 33 %, le modèle devine aléatoirement (niveau chance pour 3 classes). Vérifiez que `X_train` et `y_train` n'ont pas été mélangés indépendamment, ils doivent rester alignés.
 
 ### 5.1 Vérifie les métriques
 
@@ -219,7 +219,7 @@ La précision (accuracy) indique le taux de réussite global. La précision (pre
 **🤔 Question(s) socratique(s)**
 
 - Si la accuracy est de 95 % mais que le jeu de données est déséquilibré (95 % d'une seule classe), que vous dit vraiment ce chiffre ?
-- Dans quel cas le rappel serait-il plus important que la précision (precision) — par ex. dans un contexte médical ?
+- Dans quel cas le rappel serait-il plus important que la précision (precision), par ex. dans un contexte médical ?
 
 ## Étape 6 : Visualiser les résultats
 
@@ -253,7 +253,7 @@ plt.tight_layout()
 plt.show()
 ```
 
-Les cellules diagonales (de haut en gauche à droite en bas) montrent les prédictions correctes. Les cellules hors diagonale montrent les erreurs — par exemple, si versicolor et virginica sont parfois confondues, cette cellule s'allumera.
+Les cellules diagonales (de haut en gauche à droite en bas) montrent les prédictions correctes. Les cellules hors diagonale montrent les erreurs, par exemple, si versicolor et virginica sont parfois confondues, cette cellule s'allumera.
 
 **🎯 Résultat attendu :** Une grille 3×3 avec des nombres élevés sur la diagonale et des zéros (ou presque) en dehors. Un modèle parfait n'aurait que des entrées diagonales.
 
@@ -270,7 +270,7 @@ Les cellules diagonales (de haut en gauche à droite en bas) montrent les prédi
 **🤔 Question(s) socratique(s)**
 
 - Si versicolor et virginica étaient souvent confondues, quelle cellule de la matrice s'allumerait, et que dirait cela sur les caractéristiques de ces deux espèces ?
-- La matrice de confusion montre les erreurs, mais pas leur * gravité * — dans quel contexte serait-il plus grave de confondre versicolor avec virginica que l'inverse ?
+- La matrice de confusion montre les erreurs, mais pas leur * gravité *, dans quel contexte serait-il plus grave de confondre versicolor avec virginica que l'inverse ?
 
 ## 🧩 Défis
 
@@ -281,20 +281,20 @@ Les cellules diagonales (de haut en gauche à droite en bas) montrent les prédi
 
 ## Ce que vous avez appris
 
-Vous avez construit un flux de travail complet de machine learning : charger des données, préparer les caractéristiques, diviser en ensembles d'entraînement et de test, entraîner un classificateur, évaluer avec plusieurs métriques, et visualiser les résultats. Le flux de travail — préparer → diviser → entraîner → évaluer — est la même forme utilisée pour chaque tâche d'apprentissage supervisé, qu'il s'agisse d'un jeu de données de 150 lignes ou d'un système de production de millions de lignes. Les arbres de décision ne sont qu'une famille de modèles ; les mêmes étapes fonctionnent avec la régression logistique, les forêts aléatoires, les réseaux de neurones, et au-delà.
+Vous avez construit un flux de travail complet de machine learning : charger des données, préparer les caractéristiques, diviser en ensembles d'entraînement et de test, entraîner un classificateur, évaluer avec plusieurs métriques, et visualiser les résultats. Le flux de travail, préparer → diviser → entraîner → évaluer, est la même forme utilisée pour chaque tâche d'apprentissage supervisé, qu'il s'agisse d'un jeu de données de 150 lignes ou d'un système de production de millions de lignes. Les arbres de décision ne sont qu'une famille de modèles ; les mêmes étapes fonctionnent avec la régression logistique, les forêts aléatoires, les réseaux de neurones, et au-delà.
 
 :::tip[Vérifiez la documentation actuelle de scikit-learn]
-scikit-learn est stable, mais son API évolue entre les versions majeures — les valeurs de paramètres par défaut changent, et des fonctions sont dépréciées. Avant de vous fier à ce code au-delà d'un projet de cours, parcourez la [documentation actuelle de scikit-learn](https://scikit-learn.org/stable/) pour la version que vous avez réellement installée (`uv pip show scikit-learn`).
+scikit-learn est stable, mais son API évolue entre les versions majeures, les valeurs de paramètres par défaut changent, et des fonctions sont dépréciées. Avant de vous fier à ce code au-delà d'un projet de cours, parcourez la [documentation actuelle de scikit-learn](https://scikit-learn.org/stable/) pour la version que vous avez réellement installée (`uv pip show scikit-learn`).
 :::
 
 ## Où aller à partir d'ici
 
-- **La validation croisée.** Une seule division train/test donne un chiffre de précision qui dépend en partie de la chance. `sklearn.model_selection.cross_val_score` répète le cycle division-entraînement-évaluation plusieurs fois et moyenne le résultat — une façon plus fiable de comparer deux modèles.
+- **La validation croisée.** Une seule division train/test donne un chiffre de précision qui dépend en partie de la chance. `sklearn.model_selection.cross_val_score` répète le cycle division-entraînement-évaluation plusieurs fois et moyenne le résultat, une façon plus fiable de comparer deux modèles.
 - **L'ingénierie de caractéristiques.** Essayez de créer de nouvelles colonnes à partir des mesures existantes (par ex. le ratio longueur/largeur du pétale) et regardez si cela améliore la précision.
-- **Un jeu de données différent.** Kaggle héberge des centaines de petits jeux de données bien documentés pour débutants — une bonne prochaine étape une fois que ce flux de travail devient routinier.
+- **Un jeu de données différent.** Kaggle héberge des centaines de petits jeux de données bien documentés pour débutants, une bonne prochaine étape une fois que ce flux de travail devient routinier.
 
 ## Partagez votre projet avec la classe
 
-Vous avez construit quelque chose dont vous êtes fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets que d'autres étudiants ont soumis — et son README a un guide complet et accessible aux débutants pour ajouter le vôtre via une **pull request**, même si vous n'avez jamais utilisé git auparavant : forker le dépôt, créer une branche, valider vos fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable de git n'est présumée.
+Vous avez construit quelque chose dont vous êtes fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets que d'autres étudiants ont soumis, et son README a un guide complet et accessible aux débutants pour ajouter le vôtre via une **pull request**, même si vous n'avez jamais utilisé git auparavant : forker le dépôt, créer une branche, valider vos fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable de git n'est présumée.
 
 Bienvenue dans l'écriture de Python en dehors du navigateur. 🎓

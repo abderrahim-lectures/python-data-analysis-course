@@ -119,9 +119,9 @@ female  0.742038    314
 male    0.188908    577
 ```
 
-74% of women survived versus 19% of men — the "women and children first" policy is clearly reflected.
+74% of women survived versus 19% of men, the "women and children first" policy is clearly reflected.
 
-## Step 5: Combined analysis — class and sex
+## Step 5: Combined analysis, class and sex
 
 ```python
 print(df.groupby(["Pclass", "Sex"])["Survived"].mean().unstack())
@@ -215,7 +215,7 @@ Q       0.389610     77
 S       0.368821    646
 ```
 
-Passengers from Cherbourg had the highest survival rate — likely because more first-class passengers boarded there.
+Passengers from Cherbourg had the highest survival rate, likely because more first-class passengers boarded there.
 
 ## Step 10: Summary of findings
 
@@ -233,12 +233,12 @@ print(summary)
 
 ## Key conclusions
 
-1. **Class was the strongest predictor of survival** — first-class passengers survived at 63% versus 24% for third class
-2. **Gender was equally powerful** — 74% of women survived versus 19% of men
-3. **The combination matters most** — first-class women: 97% survival; third-class men: 14%
-4. **Children had an advantage** — 58% survival rate, the highest of any age group
-5. **Moderate family sizes helped** — families of 2-4 survived more often than solo travelers
-6. **Fare paid correlated with survival** — higher-paying passengers survived more often, likely reflecting class and cabin location
+1. **Class was the strongest predictor of survival**, first-class passengers survived at 63% versus 24% for third class
+2. **Gender was equally powerful**, 74% of women survived versus 19% of men
+3. **The combination matters most**, first-class women: 97% survival; third-class men: 14%
+4. **Children had an advantage**, 58% survival rate, the highest of any age group
+5. **Moderate family sizes helped**, families of 2-4 survived more often than solo travelers
+6. **Fare paid correlated with survival**, higher-paying passengers survived more often, likely reflecting class and cabin location
 
 ## Try It
 
@@ -259,7 +259,7 @@ print(df.groupby("Group")["Survived"].agg(["mean", "count"]))
 ## Key Takeaways
 
 - A complete EDA follows a pipeline: load → clean → engineer features → group → analyze → conclude
-- Cleaning should happen before analysis — missing values skew groupby results
+- Cleaning should happen before analysis, missing values skew groupby results
 - Feature engineering (age groups, alone flags) reveals patterns hidden in raw numbers
 - Multiple groupby angles (class, sex, age, family) build a complete picture
 

@@ -141,11 +141,11 @@ for word, count in sorted_words[-10:]:
     print(f"  {word}: {count}")
 ```
 
-En la mayoría de los textos en inglés, "the", "of", "and", "to" y "a" dominan la cima de la lista. Esto sigue la **ley de Zipf** — la palabra más frecuente aparece aproximadamente el doble de veces que la segunda, el triple que la tercera, y así sucesivamente.
+En la mayoría de los textos en inglés, "the", "of", "and", "to" y "a" dominan la cima de la lista. Esto sigue la **ley de Zipf**, la palabra más frecuente aparece aproximadamente el doble de veces que la segunda, el triple que la tercera, y así sucesivamente.
 
 ### Por qué importa la frecuencia para la generación
 
-Un modelo de lenguaje usa la frecuencia para ponderar las predicciones. Si "the" aparece 500 veces y "platypus" aparece 2 veces, "the" debería elegirse con más frecuencia — pero no siempre. El modelo de bigramas refina esto condicionando sobre la palabra anterior, que es lo que hace que el texto generado sea legible en lugar de solo un flujo de "the the the".
+Un modelo de lenguaje usa la frecuencia para ponderar las predicciones. Si "the" aparece 500 veces y "platypus" aparece 2 veces, "the" debería elegirse con más frecuencia, pero no siempre. El modelo de bigramas refina esto condicionando sobre la palabra anterior, que es lo que hace que el texto generado sea legible en lugar de solo un flujo de "the the the".
 
 ## Inténtalo
 

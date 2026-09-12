@@ -33,11 +33,11 @@ $$
 17 \cdot 3 + 4^2 = 51 + 16 = 67, \qquad \frac{67}{5} = 13.4.
 $$
 
-Getting the answer is only half of solving a problem — the other half is **communicating it**. Now hand that same expression to a computer. It computes $13.4$ in a blink — and immediately forgets to tell you. The value sits silently inside the machine, and unless you demand it come out, you will never see it.
+Getting the answer is only half of solving a problem, the other half is **communicating it**. Now hand that same expression to a computer. It computes $13.4$ in a blink, and immediately forgets to tell you. The value sits silently inside the machine, and unless you demand it come out, you will never see it.
 
-That invisible computation is the fundamental problem this lesson solves. A program needs a way to *write its results where a human can read them* — in Python, that instruction is `print()`.
+That invisible computation is the fundamental problem this lesson solves. A program needs a way to *write its results where a human can read them*, in Python, that instruction is `print()`.
 
-## `print()` — reveal a value
+## `print()`, reveal a value
 
 `print()` takes a value and sends it to the screen. Any value works: Python converts it to text first.
 
@@ -47,7 +47,7 @@ print(42)          # 42
 print("hello")     # hello
 ```
 
-You don't have to print a finished number — `print()` accepts any expression and evaluates it first:
+You don't have to print a finished number, `print()` accepts any expression and evaluates it first:
 
 ```python
 print((17 * 3 + 4**2) / 5)    # 13.4
@@ -57,7 +57,7 @@ The pattern to keep in mind: **compute something, then hand it to `print()`.** V
 
 ## A number, and its label
 
-A bare number rarely means much. On paper you wouldn't write $13.4$ alone — you would write "Score: 13.4". Give `print()` multiple arguments and it places a space between them:
+A bare number rarely means much. On paper you wouldn't write $13.4$ alone, you would write "Score: 13.4". Give `print()` multiple arguments and it places a space between them:
 
 ```python
 print("Score:", 87)    # Score: 87
@@ -73,7 +73,7 @@ $$
 \pi = 3.14159\ldots
 $$
 
-carries all of its digits with it at all times. But a table needs $\pi \approx 3.14$, a weather line needs `23.8°C`, not `23.7891°C`. The number of digits shown is a *choice of how to present* the number — it must not change the stored value, or you lose precision forever.
+carries all of its digits with it at all times. But a table needs $\pi \approx 3.14$, a weather line needs `23.8°C`, not `23.7891°C`. The number of digits shown is a *choice of how to present* the number, it must not change the stored value, or you lose precision forever.
 
 So the rounding must live in the printing, not in the computation. An **f-string** lets you decide at print time: write `f"..."`, put the expression inside `{...}`, and append a format specifier after a colon:
 
@@ -86,8 +86,8 @@ print(f"Double: {price * 2}")         # 39.998          (any expression works)
 
 Two things are going on in `{price:.2f}` that are worth teasing apart:
 
-- `{price}` says *put the value here* — the f-string does the conversion to text for you.
-- `:.2f` says *render it as a fixed-point number with 2 digits after the decimal* — rounding happens only in the displayed form.
+- `{price}` says *put the value here*, the f-string does the conversion to text for you.
+- `:.2f` says *render it as a fixed-point number with 2 digits after the decimal*, rounding happens only in the displayed form.
 
 Format specifiers do more than round: they also align. A column of `7.5`, `8.5`, `87.5` looks ragged; give every entry the same width and the column lines up:
 
@@ -110,21 +110,21 @@ print(f"{'croissant':<10}{2.95:>7.2f}")
 # croissant   2.95
 ```
 
-`<10` left-aligns the label across a width of ten columns; `>7.2f` right-aligns the number across seven, keeping two decimals. Alignment is just formatting in the other direction — the same `{value:spec}` you already know, with the arrow telling which way the text leans. This is the seed of every table the course will build: labels one way, numbers the other.
+`<10` left-aligns the label across a width of ten columns; `>7.2f` right-aligns the number across seven, keeping two decimals. Alignment is just formatting in the other direction, the same `{value:spec}` you already know, with the arrow telling which way the text leans. This is the seed of every table the course will build: labels one way, numbers the other.
 
 ## Common pitfalls
 
-- **`print()` has no return value.** `print("hi")` shows text but evaluates to `None` — you cannot capture what it printed back into a variable. Printing is the *end* of a computation, never a step inside it.
+- **`print()` has no return value.** `print("hi")` shows text but evaluates to `None`, you cannot capture what it printed back into a variable. Printing is the *end* of a computation, never a step inside it.
 - **Mixing types with `+`.** `print("Score: " + 87)` raises a `TypeError`, because a string and a number cannot be added. F-strings exist precisely to pair a label with a value: `print(f"Score: {87}")`.
 - **A literal `{` in an f-string needs `{{`.** `f"{{x}}"` prints `{x}`; a lone `{` is read as the start of an expression. Doubling is the escape hatch.
 
 ## 🧩 Challenges
 
 <details class="challenge">
-<summary>🧩 Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge, think first, then reveal</summary>
 <div class="challenge__body">
 
-Evaluate $\dfrac{2^5 + 9}{5}$ on paper, then print it *without* typing the answer yourself — let the computer compute and print in one step.
+Evaluate $\dfrac{2^5 + 9}{5}$ on paper, then print it *without* typing the answer yourself, let the computer compute and print in one step.
 
 <p class="challenge__answer">💡 <strong>Answer:</strong> <code>print((2**5 + 9) / 5)</code> → <code>8.2</code>. One expression, handed straight to <code>print()</code>: the machine evaluates it and writes the result.</p>
 
@@ -132,7 +132,7 @@ Evaluate $\dfrac{2^5 + 9}{5}$ on paper, then print it *without* typing the answe
 </details>
 
 <details class="challenge">
-<summary>🧩 Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge, think first, then reveal</summary>
 <div class="challenge__body">
 
 Given `temperature = 23.7891`, print it as `"Today: 23.8°C"` (one decimal place) without touching the stored value.

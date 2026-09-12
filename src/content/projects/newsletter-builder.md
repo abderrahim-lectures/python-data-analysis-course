@@ -17,9 +17,9 @@ prerequisites:
 
 # 🛠️ 📰 Build a Newsletter Builder
 
-Every email list faces the same pipeline: take a template, fill it in for each subscriber, track who opened and clicked, and figure out what subject line actually works. This project builds that pipeline in Python — a regex template engine, a CSV subscriber list with tags, an open/click tracker that computes honest rates, an A/B test for subject lines, and a final step that renders a personalized issue for every subscriber in a segment.
+Every email list faces the same pipeline: take a template, fill it in for each subscriber, track who opened and clicked, and figure out what subject line actually works. This project builds that pipeline in Python, a regex template engine, a CSV subscriber list with tags, an open/click tracker that computes honest rates, an A/B test for subject lines, and a final step that renders a personalized issue for every subscriber in a segment.
 
-This assumes Python 101 and comfort with functions, dictionaries, and lists — you'll meet pandas in one step, but nothing beyond that is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
+This assumes Python 101 and comfort with functions, dictionaries, and lists, you'll meet pandas in one step, but nothing beyond that is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 
@@ -31,9 +31,9 @@ This assumes Python 101 and comfort with functions, dictionaries, and lists — 
 
 ## Where to run this
 
-**Locally with `uv`** is the primary path. The only external dependency is `pandas`, which you'll use once, for the analytics step — everything else is the standard library (`re`, `csv`, `os`, `datetime`), and the CSV files you generate are first-class citizens of your own folder.
+**Locally with `uv`** is the primary path. The only external dependency is `pandas`, which you'll use once, for the analytics step, everything else is the standard library (`re`, `csv`, `os`, `datetime`), and the CSV files you generate are first-class citizens of your own folder.
 
-**Google Colab, Binder, and Kaggle Notebooks** run the whole thing identically: `!pip install pandas` once, then every step below, with the notebook returning the same rendered issues and analytics tables. **JupyterLite** can run the template and subscriber steps in the browser, and pandas is available there too — the honest caveat is the same as everywhere in this series: files created in the browser live on an ephemeral virtual filesystem, so treat it as a try-it path and use local `uv` when you want `subscribers.csv` and `issues/` to actually persist.
+**Google Colab, Binder, and Kaggle Notebooks** run the whole thing identically: `!pip install pandas` once, then every step below, with the notebook returning the same rendered issues and analytics tables. **JupyterLite** can run the template and subscriber steps in the browser, and pandas is available there too, the honest caveat is the same as everywhere in this series: files created in the browser live on an ephemeral virtual filesystem, so treat it as a try-it path and use local `uv` when you want `subscribers.csv` and `issues/` to actually persist.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/newsletter-builder/notebook.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/newsletter-builder/notebook.ipynb)
@@ -49,7 +49,7 @@ cd newsletter-builder
 uv add pandas
 ```
 
-The `re` and `csv` modules ship with Python, so `pandas` is the only package in this project — and it arrives exactly once, in Step 3's analytics. Installing everything up front keeps later steps about the *ideas* (templates, tracking, testing) rather than about dependency wrangling.
+The `re` and `csv` modules ship with Python, so `pandas` is the only package in this project, and it arrives exactly once, in Step 3's analytics. Installing everything up front keeps later steps about the *ideas* (templates, tracking, testing) rather than about dependency wrangling.
 
 **✅ Checklist**
 
@@ -58,7 +58,7 @@ The `re` and `csv` modules ship with Python, so `pandas` is the only package in 
 
 ## Step 1: Render a Markdown template
 
-A newsletter that changes for every reader starts from a template with holes in it. The holes are `{{curly}}` placeholders, and this step builds the tiny engine that swaps them for real values — the dependency-free core of a system that would otherwise pull in a full templating library.
+A newsletter that changes for every reader starts from a template with holes in it. The holes are `{{curly}}` placeholders, and this step builds the tiny engine that swaps them for real values, the dependency-free core of a system that would otherwise pull in a full templating library.
 
 ### 1.1 Write the render function
 
@@ -83,11 +83,11 @@ print(render_template(
 print(render_template("Hi {{name}}!", {}))
 ```
 
-The single line that does all the work is `re.sub(r"\{\{(.+?)\}\}", replacer, template)`. The pattern `\{\{(.+?)\}\}` matches an opening `{{`, captures anything inside, then closes at the first `}}` — the `.+?` is *non-greedy*, so it stops early instead of swallowing across multiple placeholders. For each match, the callback `replacer` looks up the captured key in `variables`, and `str(...)` coerces non-string values (like the integer `42`) so templates never crash on a number. The explicit `variables.get(key, "[MISSING: {key}]")` fallback is a design decision: a missing variable becomes a *visible* marker rather than a silent `None`.
+The single line that does all the work is `re.sub(r"\{\{(.+?)\}\}", replacer, template)`. The pattern `\{\{(.+?)\}\}` matches an opening `{{`, captures anything inside, then closes at the first `}}`, the `.+?` is *non-greedy*, so it stops early instead of swallowing across multiple placeholders. For each match, the callback `replacer` looks up the captured key in `variables`, and `str(...)` coerces non-string values (like the integer `42`) so templates never crash on a number. The explicit `variables.get(key, "[MISSING: {key}]")` fallback is a design decision: a missing variable becomes a *visible* marker rather than a silent `None`.
 
 **🎯 Expected output:** First print: `Hello Alice, this is issue 42.` Second print: `Hi [MISSING: name]!`
 
-**🩹 If it's off:** If output shows `None` in place of values, `str()` wrapping is missing on the lookup. If placeholders survive literally in the output, the regex escaped braces are wrong — `\{\{` not `{{`. If *every* variable shows missing, the keys in `variables` and the names in the template differ (check for a stray space after `{{` — which is why `.strip()` is there).
+**🩹 If it's off:** If output shows `None` in place of values, `str()` wrapping is missing on the lookup. If placeholders survive literally in the output, the regex escaped braces are wrong, `\{\{` not `{{`. If *every* variable shows missing, the keys in `variables` and the names in the template differ (check for a stray space after `{{`, which is why `.strip()` is there).
 
 ### 1.2 Render a real issue from a template
 
@@ -140,11 +140,11 @@ rendered = render_template(NEWSLETTER_TEMPLATE, variables)
 print(rendered)
 ```
 
-The template is data, not code — it even includes Markdown bullet items inside `{{highlights}}`, because the value is inserted *verbatim* and the surrounding Markdown is what gives it structure. Rendering and content are fully separated: edit the template, tweak the dict, or both, without touching the render function. The `{{date}}` value is computed once, at render time, so two readers of the same issue see the same date.
+The template is data, not code, it even includes Markdown bullet items inside `{{highlights}}`, because the value is inserted *verbatim* and the surrounding Markdown is what gives it structure. Rendering and content are fully separated: edit the template, tweak the dict, or both, without touching the render function. The `{{date}}` value is computed once, at render time, so two readers of the same issue see the same date.
 
 **🎯 Expected output:** A complete Markdown issue printed under an `# Weekly Python Tips` H1, with the date filled in, three highlight bullets, and the subscribe/unsubscribe footer.
 
-**🩹 If it's off:** If the output contains a raw `{{...}}`, that placeholder is missing from `variables` and the dictionary has a typo — the `[MISSING: ...]` fallback from 1.1 would have told you, unless the key genuinely differs in spelling. If bullets are missing, the `highlights` value doesn't contain the `\n`-joined lines.
+**🩹 If it's off:** If the output contains a raw `{{...}}`, that placeholder is missing from `variables` and the dictionary has a typo, the `[MISSING: ...]` fallback from 1.1 would have told you, unless the key genuinely differs in spelling. If bullets are missing, the `highlights` value doesn't contain the `\n`-joined lines.
 
 ### 1.3 Verify the template engine
 
@@ -157,11 +157,11 @@ The template is data, not code — it even includes Markdown bullet items inside
 **🤔 Socratic Question(s)**
 
 - The pattern uses non-greedy `.+?`. What would change in the rendered output if you wrote `\{\{(.+)\}\}` (greedy) instead, in a template containing *two* placeholders on one line?
-- The fallback for a missing variable is a visible `[MISSING: ...]` string. When is silently inserting an empty string the *better* behavior — and what kind of template bug would that choice hide?
+- The fallback for a missing variable is a visible `[MISSING: ...]` string. When is silently inserting an empty string the *better* behavior, and what kind of template bug would that choice hide?
 
 ## Step 2: Manage subscribers with CSV
 
-A list of people is a flat table: one row per subscriber, a few columns per row. CSV is the plainest honest storage for that — it's human-readable, opens in any spreadsheet, and the `csv` module handles quoting for you. This step builds add/load/segment functions around one subscriber file.
+A list of people is a flat table: one row per subscriber, a few columns per row. CSV is the plainest honest storage for that, it's human-readable, opens in any spreadsheet, and the `csv` module handles quoting for you. This step builds add/load/segment functions around one subscriber file.
 
 ### 2.1 Create and add subscribers
 
@@ -206,15 +206,15 @@ add_subscriber("bob@example.com", "Bob", ["python", "web-dev"])
 add_subscriber("carol@example.com", "Carol", ["data-science"])
 ```
 
-The `tags` column stores a list as a semicolon-joined string, `";".join(tags)` — CSV cells are flat, so a multi-valued field has to be packed somehow, and `;` is chosen because commas are already the column separator. The `file_exists` check is the subtle correctness detail: appending with `"a"` to an *existing* file must not write a second header row, while a *fresh* file created without a header would have no column names at all. `csv.DictWriter` writes rows by the column names, which guarantees every row matches every other row's shape.
+The `tags` column stores a list as a semicolon-joined string, `";".join(tags)`, CSV cells are flat, so a multi-valued field has to be packed somehow, and `;` is chosen because commas are already the column separator. The `file_exists` check is the subtle correctness detail: appending with `"a"` to an *existing* file must not write a second header row, while a *fresh* file created without a header would have no column names at all. `csv.DictWriter` writes rows by the column names, which guarantees every row matches every other row's shape.
 
 **🎯 Expected output:** `Created subscriber file: subscribers.csv` followed by three `Added subscriber: ...` lines, and a CSV whose header is `email,name,tags,subscribed_at,status` with three data rows.
 
-**🩹 If it's off:** If the CSV has a header after every row, each call is writing headers because `file_exists` is evaluated against a stale path or the file is deleted between calls. If a tag contains a comma, `.join` didn't cause breakage *because the csv module quotes that field* — but if you see the row split, you hand-built the row as a raw string instead of using `DictWriter`. If a timestamp is missing, the `datetime.now().isoformat()` assignment is absent from the row dict.
+**🩹 If it's off:** If the CSV has a header after every row, each call is writing headers because `file_exists` is evaluated against a stale path or the file is deleted between calls. If a tag contains a comma, `.join` didn't cause breakage *because the csv module quotes that field*, but if you see the row split, you hand-built the row as a raw string instead of using `DictWriter`. If a timestamp is missing, the `datetime.now().isoformat()` assignment is absent from the row dict.
 
 ### 2.2 Load and segment the list
 
-**👟 Starter hint:** Read the file back with `csv.DictReader` and filter by unpacking the packed tags — or by comparing a single status column.
+**👟 Starter hint:** Read the file back with `csv.DictReader` and filter by unpacking the packed tags, or by comparing a single status column.
 
 ```python
 # newsletter.py (continued)
@@ -240,11 +240,11 @@ print(f"Python subscribers: {len(filter_by_tag(subscribers, 'python'))}")
 print(f"Data science subscribers: {len(filter_by_tag(subscribers, 'data-science'))}")
 ```
 
-`csv.DictReader` turns each CSV row into a dict keyed by the header names — the exact inverse of the `DictWriter` from 2.1, so load and save are symmetric by construction. The two filters are tiny list comprehensions, but they're built on the earlier packing choice: `s.get("tags", "").split(";")` unpacks the stored string back into a list so the `in` membership test is per-tag, not a sloppy substring match (which would falsely match "python" against "python3🐍"). Keeping the filters as separate named functions means you can compose them — a later step combines `filter_by_tag` and `filter_by_status` in one expression.
+`csv.DictReader` turns each CSV row into a dict keyed by the header names, the exact inverse of the `DictWriter` from 2.1, so load and save are symmetric by construction. The two filters are tiny list comprehensions, but they're built on the earlier packing choice: `s.get("tags", "").split(";")` unpacks the stored string back into a list so the `in` membership test is per-tag, not a sloppy substring match (which would falsely match "python" against "python3🐍"). Keeping the filters as separate named functions means you can compose them, a later step combines `filter_by_tag` and `filter_by_status` in one expression.
 
-**🎯 Expected output:** `All subscribers: 3`, `Python subscribers: 2`, `Data science subscribers: 2` — Alice and Bob carry the `python` tag, Alice and Carol the `data-science` tag.
+**🎯 Expected output:** `All subscribers: 3`, `Python subscribers: 2`, `Data science subscribers: 2`, Alice and Bob carry the `python` tag, Alice and Carol the `data-science` tag.
 
-**🩹 If it's off:** If Python subscribers shows `0`, the `.split(";")` step is missing and membership is being tested against the raw wire string. If loading crashes on a file with an unexpected header, the file was created by something other than this project's functions. If loads return an empty list, the working directory differs from where `subscribers.csv` lives — absolute paths or a fixed relative path fix that.
+**🩹 If it's off:** If Python subscribers shows `0`, the `.split(";")` step is missing and membership is being tested against the raw wire string. If loading crashes on a file with an unexpected header, the file was created by something other than this project's functions. If loads return an empty list, the working directory differs from where `subscribers.csv` lives, absolute paths or a fixed relative path fix that.
 
 ### 2.3 Verify the subscriber list
 
@@ -256,16 +256,16 @@ print(f"Data science subscribers: {len(filter_by_tag(subscribers, 'data-science'
 
 **🤔 Socratic Question(s)**
 
-- Tags are packed with `;`, and filters unpack with `.split(";")`. What would go wrong if a tag name *itself* contained a semicolon — and where in the pipeline would that ambiguity first surface?
-- `add_subscriber` writes a header only when the file is new. Why is that branch better than always calling `create_subscriber_file()` first — and what happens to the two functions' outputs if a caller does both anyway?
+- Tags are packed with `;`, and filters unpack with `.split(";")`. What would go wrong if a tag name *itself* contained a semicolon, and where in the pipeline would that ambiguity first surface?
+- `add_subscriber` writes a header only when the file is new. Why is that branch better than always calling `create_subscriber_file()` first, and what happens to the two functions' outputs if a caller does both anyway?
 
 ## Step 3: Track opens and clicks
 
-Email providers report opens and clicks because they tell you whether a subject line was worth reading. This project doesn't send real email, so you'll log the same event stream a real mailer produces — subscriber, issue, event type, timestamp, URL — and then read it back with pandas to compute rates that mean something.
+Email providers report opens and clicks because they tell you whether a subject line was worth reading. This project doesn't send real email, so you'll log the same event stream a real mailer produces, subscriber, issue, event type, timestamp, URL, and then read it back with pandas to compute rates that mean something.
 
 ### 3.1 Log events to a tracking CSV
 
-**👟 Starter hint:** One `log_event` function appends a single row to a growing tracking file — the same shape a real email service would emit, just written by you.
+**👟 Starter hint:** One `log_event` function appends a single row to a growing tracking file, the same shape a real email service would emit, just written by you.
 
 ```python
 # newsletter.py (continued)
@@ -302,7 +302,7 @@ def simulate_tracking(subscribers: list[dict], issue: str):
 simulate_tracking(subscribers, "Issue #42")
 ```
 
-The tracker is append-only: every event is one row, and rows are never edited — that's the shape of a log, and it's what makes the analytics in 3.2 meaningful later. `simulate_tracking` stands in for a real mailer, and the calls to `log_event` it makes are exactly what a production service's webhook would produce. `random.seed(42)` makes the simulation reproducible, so the numbers you see are the numbers every learner sees — which makes the expected output below verifiable rather than vibes.
+The tracker is append-only: every event is one row, and rows are never edited, that's the shape of a log, and it's what makes the analytics in 3.2 meaningful later. `simulate_tracking` stands in for a real mailer, and the calls to `log_event` it makes are exactly what a production service's webhook would produce. `random.seed(42)` makes the simulation reproducible, so the numbers you see are the numbers every learner sees, which makes the expected output below verifiable rather than vibes.
 
 **🎯 Expected output:** A `tracking.csv` file created with the five headers and several event rows: some subscribers opened (and a couple also clicked) Issue #42.
 
@@ -310,7 +310,7 @@ The tracker is append-only: every event is one row, and rows are never edited �
 
 ### 3.2 Compute honest open and click rates
 
-**👟 Starter hint:** Load the tracking log with `pandas.read_csv`, group by issue, and divide by the *actual audience size* — pass the real subscriber count in, so rates aren't inflated by counting only the people who showed up.
+**👟 Starter hint:** Load the tracking log with `pandas.read_csv`, group by issue, and divide by the *actual audience size*, pass the real subscriber count in, so rates aren't inflated by counting only the people who showed up.
 
 ```python
 # newsletter.py (continued)
@@ -345,11 +345,11 @@ simulate_tracking(subscribers, "Issue #42")
 analytics = generate_analytics(total_subscribers=len(subscribers))
 ```
 
-The line that carries the whole step is `total = total_subscribers or len(...)`. The denominator of a rate decides whether it's honest: dividing opens by **everyone the issue was sent to** gives the real open rate; dividing by the 2 people who happened to open inflates it to ~100% and teaches nothing. Filtering with pandas — `df["newsletter_issue"] == issue` and `df["event_type"] == "open"` — produces boolean masks, and `len` of the masked frame counts matching rows, which is the idiomatic pandas way to count without looping. The `or` fallback keeps the function usable on a file with no known audience size.
+The line that carries the whole step is `total = total_subscribers or len(...)`. The denominator of a rate decides whether it's honest: dividing opens by **everyone the issue was sent to** gives the real open rate; dividing by the 2 people who happened to open inflates it to ~100% and teaches nothing. Filtering with pandas, `df["newsletter_issue"] == issue` and `df["event_type"] == "open"`, produces boolean masks, and `len` of the masked frame counts matching rows, which is the idiomatic pandas way to count without looping. The `or` fallback keeps the function usable on a file with no known audience size.
 
-**🎯 Expected output:** An analytics block for `Issue #42` — with 3 subscribers, something like `Opens: 2/3 (66.7%)` and `Clicks: 1/3 (33.3%)`, each rate this issue's events divided by 3.
+**🎯 Expected output:** An analytics block for `Issue #42`, with 3 subscribers, something like `Opens: 2/3 (66.7%)` and `Clicks: 1/3 (33.3%)`, each rate this issue's events divided by 3.
 
-**🩹 If it's off:** If open rates read `100.0%`, `total_subscribers` isn't being passed (or the `or` fallback kicked in because you passed `0`). If multiple issues appear when you expected one, earlier runs left events in `tracking.csv` — the log is append-only on purpose; delete the file for a clean slate. If you get `FileNotFoundError`, `simulate_tracking` ran on the wrong path or never ran — run 3.1 first.
+**🩹 If it's off:** If open rates read `100.0%`, `total_subscribers` isn't being passed (or the `or` fallback kicked in because you passed `0`). If multiple issues appear when you expected one, earlier runs left events in `tracking.csv`, the log is append-only on purpose; delete the file for a clean slate. If you get `FileNotFoundError`, `simulate_tracking` ran on the wrong path or never ran, run 3.1 first.
 
 ### 3.3 Verify the tracking step
 
@@ -361,7 +361,7 @@ The line that carries the whole step is `total = total_subscribers or len(...)`.
 
 **🤔 Socratic Question(s)**
 
-- The code deliberately prefers `total_subscribers or len(df['subscriber_email'].unique())` over just the unique-emails count. When would those two numbers *disagree* — and which of them produces a misleadingly high open rate?
+- The code deliberately prefers `total_subscribers or len(df['subscriber_email'].unique())` over just the unique-emails count. When would those two numbers *disagree*, and which of them produces a misleadingly high open rate?
 - A tracking log is append-only: rows are never updated or deleted. What kind of answer becomes *impossible* to give correctly with an append-only log if a subscriber unsubscribes and re-subscribes under the same email?
 
 ## Step 4: A/B-test subject lines
@@ -434,15 +434,15 @@ The crucial decision is tagging each group's events with a *different* issue lab
 
 **🎯 Expected output:** A test banner, group sizes that sum to the audience, two open rates (B's near 62%, A's near 45%), a `winner: "B"`, and a `results` dict with both rounded rates.
 
-**🩹 If it's off:** If you get `ValueError: The truth value of a DataFrame is ambiguous`, a bare `and` has leaked into the mask expression — both filters must join with `&` and each be parenthesized. If both groups are the same size as the whole list, the list wasn't spliced (`[:mid]`/`[mid:]`) from the shuffled copy. If rates are exactly 0, the events were logged under labels that don't match the read-back labels — compare `f"{issue}-A"` in both places character by character.
+**🩹 If it's off:** If you get `ValueError: The truth value of a DataFrame is ambiguous`, a bare `and` has leaked into the mask expression, both filters must join with `&` and each be parenthesized. If both groups are the same size as the whole list, the list wasn't spliced (`[:mid]`/`[mid:]`) from the shuffled copy. If rates are exactly 0, the events were logged under labels that don't match the read-back labels, compare `f"{issue}-A"` in both places character by character.
 
 ### 4.2 Reason about the result
 
-**👟 Starter hint:** Before re-running, ask what the numbers are *allowed to say* given how small the sample is — the winner is only as trustworthy as the denominator.
+**👟 Starter hint:** Before re-running, ask what the numbers are *allowed to say* given how small the sample is, the winner is only as trustworthy as the denominator.
 
 **🎯 Expected output:** A `results` dict with `winner` matching whichever rate was higher, and a one-sentence explanation of whether you'd bet your next send on that winner.
 
-**🩹 If it's off:** If a second run flips the winner, that's not a bug — it's the honest behavior of a small, unseeded sample. If that surprises you, this is the point: with three-person groups, 45% vs 62% is noise, and the fix (bigger audiences, or repeat runs) is part of the learning, not a code problem.
+**🩹 If it's off:** If a second run flips the winner, that's not a bug, it's the honest behavior of a small, unseeded sample. If that surprises you, this is the point: with three-person groups, 45% vs 62% is noise, and the fix (bigger audiences, or repeat runs) is part of the learning, not a code problem.
 
 ### 4.3 Verify the A/B test
 
@@ -454,8 +454,8 @@ The crucial decision is tagging each group's events with a *different* issue lab
 
 **🤔 Socratic Question(s)**
 
-- `random.shuffle` operates on the list in place, which is why 4.1 copies it first. What would `subscribers.copy()` actually protect, given that the list holds *dictionaries* — does it copy the dicts too? (Hint: try mutating one subscriber after the copy.)
-- The winner is `"B" if rate_b > rate_a else "A"` — note A wins ties. With this audience of three, would you trust that tiebreaker? What would a real experiment need (a p-value, a bigger `n`, a confidence interval) before you'd change your default subject line on it?
+- `random.shuffle` operates on the list in place, which is why 4.1 copies it first. What would `subscribers.copy()` actually protect, given that the list holds *dictionaries*, does it copy the dicts too? (Hint: try mutating one subscriber after the copy.)
+- The winner is `"B" if rate_b > rate_a else "A"`, note A wins ties. With this audience of three, would you trust that tiebreaker? What would a real experiment need (a p-value, a bigger `n`, a confidence interval) before you'd change your default subject line on it?
 
 ## Step 5: Ship one issue to a segment
 
@@ -463,7 +463,7 @@ Now the pipeline closes its loop: pick a segment (say, active Python readers), r
 
 ### 5.1 Render and write personalized issues
 
-**👟 Starter hint:** Compose your existing filters into one segment, then render the template repeatedly with per-person variables via a dict merge — and let the email address generate safe filenames.
+**👟 Starter hint:** Compose your existing filters into one segment, then render the template repeatedly with per-person variables via a dict merge, and let the email address generate safe filenames.
 
 ```python
 # newsletter.py (continued)
@@ -489,11 +489,11 @@ print(f"Rendered {len(written)} personalized issues into issues/")
 print(open(written[0]).read())
 ```
 
-The line `vars_for_sub = {**variables, "subscriber_name": sub["name"], "email": sub["email"]}` is dict merging: it copies the shared variables then *overrides* the per-person keys, so the same base for everyone becomes personal for each person — the template's `Hello {{subscriber_name}}!` greets the actual reader. Composing filters (`filter_by_status(filter_by_tag(...))`) is the payoff of 2.2's named, composable functions: segmenting is just nesting them. The filename comes from `sub["email"].split("@")[0]`, which turns an email into a filesystem-safe stem, and `Path.write_text` makes the file I/O a one-liner.
+The line `vars_for_sub = {**variables, "subscriber_name": sub["name"], "email": sub["email"]}` is dict merging: it copies the shared variables then *overrides* the per-person keys, so the same base for everyone becomes personal for each person, the template's `Hello {{subscriber_name}}!` greets the actual reader. Composing filters (`filter_by_status(filter_by_tag(...))`) is the payoff of 2.2's named, composable functions: segmenting is just nesting them. The filename comes from `sub["email"].split("@")[0]`, which turns an email into a filesystem-safe stem, and `Path.write_text` makes the file I/O a one-liner.
 
-**🎯 Expected output:** `Rendered 2 personalized issues into issues/` and the first file prints as a complete issue greeting `Hello Alice!` — with the same body as every other issue but that one line personalized.
+**🎯 Expected output:** `Rendered 2 personalized issues into issues/` and the first file prints as a complete issue greeting `Hello Alice!`, with the same body as every other issue but that one line personalized.
 
-**🩹 If it's off:** If every file says `Hello Reader!`, the per-person override is losing to `variables` — check the merge order in `vars_for_sub` (overrides come *after* the shared dict). If a subscriber has an empty `name`, the greeting reads `Hello !` — `sub.get("name", "")` returns an empty string for a blank CSV cell, and `[MISSING: subscriber_name]` only appears for a genuinely absent key. If `written[0]` has the wrong audience, the composed segment filters are pulling the wrong tag.
+**🩹 If it's off:** If every file says `Hello Reader!`, the per-person override is losing to `variables`, check the merge order in `vars_for_sub` (overrides come *after* the shared dict). If a subscriber has an empty `name`, the greeting reads `Hello !`, `sub.get("name", "")` returns an empty string for a blank CSV cell, and `[MISSING: subscriber_name]` only appears for a genuinely absent key. If `written[0]` has the wrong audience, the composed segment filters are pulling the wrong tag.
 
 ### 5.2 Verify the person-alized send
 
@@ -505,12 +505,12 @@ The line `vars_for_sub = {**variables, "subscriber_name": sub["name"], "email": 
 
 **🤔 Socratic Question(s)**
 
-- The per-person merge lives *inside* the loop, but the shared `variables` dict sits outside it. What would change about the rendered date if the `datetime.now()` call ran once inside the loop for every subscriber instead — and why is "computed once, not per identity" generally the right call?
-- The merge is `{**variables, "subscriber_name": <name>, "email": <email>}` — order matters. If `variables` itself already contained a `subscriber_name` key, does the merge override it, and how would you *intentionally* keep the template's default for subscribers missing a name?
+- The per-person merge lives *inside* the loop, but the shared `variables` dict sits outside it. What would change about the rendered date if the `datetime.now()` call ran once inside the loop for every subscriber instead, and why is "computed once, not per identity" generally the right call?
+- The merge is `{**variables, "subscriber_name": <name>, "email": <email>}`, order matters. If `variables` itself already contained a `subscriber_name` key, does the merge override it, and how would you *intentionally* keep the template's default for subscribers missing a name?
 
 ## ⚠️ Common pitfalls
 
-- **Greedy regex swallowing many placeholders.** `\{\{(.+?)\}\}` needs the non-greedy `?` — with plain `.+` a two-placeholder line collapses into one bogus match. Fix: keep `+?`, and test with two placeholders on one line as 1.1 does.
+- **Greedy regex swallowing many placeholders.** `\{\{(.+?)\}\}` needs the non-greedy `?`, with plain `.+` a two-placeholder line collapses into one bogus match. Fix: keep `+?`, and test with two placeholders on one line as 1.1 does.
 - **Unsplittable tag matching.** If you test `tag in s["tags"]` without `split(";")`, "python" substring-matches "python3🐍" and false positives leak into segments. Fix: always unpick the packed field with `.split(";")` before membership.
 - **Duplicate headers in log files.** Appending with `"a"` and writing a header every time corrupts `tracking.csv` and `subscribers.csv`. Fix: gate `writeheader()` behind the `os.path.exists` check exactly as written in 2.1/3.1.
 - **`and` instead of `&` in pandas filters.** `df["event_type"] == "open" and ...` raises `ValueError: The truth value of a DataFrame is ambiguous`. Fix: parenthesize each comparison and join with `&`.
@@ -526,13 +526,13 @@ A complete newsletter pipeline, end to end: a regex template engine that fills M
 
 ## Where to go from here
 
-- Add **unsubscribe handling**: scan `tracking.csv` for `"unsubscribe"` events and flip that subscriber's status to `unsubscribed` in `subscribers.csv` — you already have `filter_by_status` waiting for exactly that value.
-- Build an **issue archive**: change `render_issue_to_files` to write each issue under a dated filename (`newsletter-2026-09-06.md`) and emit an `index.md` listing every past issue — `datetime.now().strftime("%Y-%m-%d")` is the whole trick.
-- Make a **named segment catalog**: store segment rules like `tag=python AND status=active` as little JSON files and evaluate them with the two filters — the "rules as data" pattern that turns one-off scripts into a system.
-- Draw a **growth chart**: read `subscribers.csv` and plot `subscribed_at` counts over time with matplotlib — a one-`value_counts` step plus `plot()` that turns the subscriber list into a trend line.
+- Add **unsubscribe handling**: scan `tracking.csv` for `"unsubscribe"` events and flip that subscriber's status to `unsubscribed` in `subscribers.csv`, you already have `filter_by_status` waiting for exactly that value.
+- Build an **issue archive**: change `render_issue_to_files` to write each issue under a dated filename (`newsletter-2026-09-06.md`) and emit an `index.md` listing every past issue, `datetime.now().strftime("%Y-%m-%d")` is the whole trick.
+- Make a **named segment catalog**: store segment rules like `tag=python AND status=active` as little JSON files and evaluate them with the two filters, the "rules as data" pattern that turns one-off scripts into a system.
+- Draw a **growth chart**: read `subscribers.csv` and plot `subscribed_at` counts over time with matplotlib, a one-`value_counts` step plus `plot()` that turns the subscriber list into a trend line.
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python that builds its own audience. 🎓

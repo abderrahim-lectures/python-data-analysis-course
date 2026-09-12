@@ -14,9 +14,9 @@ prerequisites: ["Python 101"]
 
 # 🏠 Construis un Hub d'Automatisation Domotique
 
-Ta maison intelligente n'est aussi intelligente que les règles qui relient ses appareils — un détecteur de mouvement qui allume une lumière, un thermostat qui s'ajuste quand tu pars, une serrure de porte qui s'engage au coucher. Ce projet construit un moteur d'automatisation domotique basé sur des règles en Python : tu définis des appareils (lumières, thermostats, serrures), tu écris des règles si-alors, tu planifies des déclencheurs temporels et tu détectes la présence à partir de pings réseau. Le moteur s'exécute localement, traite les événements et exécute les actions — sans service cloud requis.
+Ta maison intelligente n'est aussi intelligente que les règles qui relient ses appareils, un détecteur de mouvement qui allume une lumière, un thermostat qui s'ajuste quand tu pars, une serrure de porte qui s'engage au coucher. Ce projet construit un moteur d'automatisation domotique basé sur des règles en Python : tu définis des appareils (lumières, thermostats, serrures), tu écris des règles si-alors, tu planifies des déclencheurs temporels et tu détectes la présence à partir de pings réseau. Le moteur s'exécute localement, traite les événements et exécute les actions, sans service cloud requis.
 
-Ceci suppose Python 101 — rien de Data Analysis n'est requis. Optionnel et non noté ; voir [Real-World Projects](/fr/projets) pour la liste complète.
+Ceci suppose Python 101, rien de Data Analysis n'est requis. Optionnel et non noté ; voir [Real-World Projects](/fr/projets) pour la liste complète.
 
 ## 🎯 Ce que tu vas faire
 
@@ -29,7 +29,7 @@ Ceci suppose Python 101 — rien de Data Analysis n'est requis. Optionnel et non
 
 ## Où exécuter ceci
 
-**Localement avec `uv`** est la voie principale — ce projet simule des pings réseau et exécute un moteur de règles qui traite les événements en boucle. Il est conçu pour s'exécuter sur une machine connectée à ton réseau domestique.
+**Localement avec `uv`** est la voie principale, ce projet simule des pings réseau et exécute un moteur de règles qui traite les événements en boucle. Il est conçu pour s'exécuter sur une machine connectée à ton réseau domestique.
 
 **Google Colab, Kaggle Notebooks et Binder** fonctionnent pour essayer l'outil. Le notebook utilise des états d'appareils simulés et des pings factices au lieu d'un vrai trafic réseau.
 
@@ -275,7 +275,7 @@ def evaluate_rules(
     return results
 ```
 
-La fonction `evaluate_condition` lit un attribut d'appareil (`is_on`, `temperature`) et le compare à la valeur de la condition en utilisant l'opérateur spécifié. `evaluate_rules` exécute toutes les règles activées et collecte celles dont toutes les conditions sont remplies — la vérification « toutes les conditions » signifie que chaque condition d'une règle doit être vraie pour que la règle se déclenche. Quand une règle se déclenche, elle exécute chaque action en appelant la méthode nommée sur l'appareil cible.
+La fonction `evaluate_condition` lit un attribut d'appareil (`is_on`, `temperature`) et le compare à la valeur de la condition en utilisant l'opérateur spécifié. `evaluate_rules` exécute toutes les règles activées et collecte celles dont toutes les conditions sont remplies, la vérification « toutes les conditions » signifie que chaque condition d'une règle doit être vraie pour que la règle se déclenche. Quand une règle se déclenche, elle exécute chaque action en appelant la méthode nommée sur l'appareil cible.
 
 **🎯 Résultat attendu :** Une règle avec la condition `thermostat.temperature < 68` déclenche `light.turn_on()` quand le thermostat affiche 65 degrés.
 
@@ -307,7 +307,7 @@ assert light.is_on
 
 **🎯 Résultat attendu :** L'assertion passe ; la lumière est allumée après l'évaluation des règles.
 
-**🩹 Si ça ne marche pas :** Si la lumière ne s'est pas allumée, la comparaison de la condition `less_than` compare peut-être des chaînes au lieu de flottants — vérifie le transtypage `float()` dans `evaluate_condition`.
+**🩹 Si ça ne marche pas :** Si la lumière ne s'est pas allumée, la comparaison de la condition `less_than` compare peut-être des chaînes au lieu de flottants, vérifie le transtypage `float()` dans `evaluate_condition`.
 
 ### 2.3 Vérifier le moteur de règles
 
@@ -319,12 +319,12 @@ assert light.is_on
 
 **🤔 Question(s) socratique(s)**
 
-- Les règles évaluent toutes les conditions à chaque changement d'état. Pour une maison avec 50 appareils et 20 règles, cela fait 1 000 vérifications de conditions par événement. Comment optimiserais-tu cela — ne réévaluer que les règles dont les conditions référencent l'appareil modifié ?
+- Les règles évaluent toutes les conditions à chaque changement d'état. Pour une maison avec 50 appareils et 20 règles, cela fait 1 000 vérifications de conditions par événement. Comment optimiserais-tu cela, ne réévaluer que les règles dont les conditions référencent l'appareil modifié ?
 - Que se passe-t-il si deux règles tentent de mettre le même appareil dans des états contradictoires ? Comment ajouterais-tu une priorité ou un ordre pour résoudre les conflits ?
 
 ## Étape 3 : Implémenter la planification temporelle
 
-Certaines automatisations ne sont pas déclenchées par l'état de l'appareil — elles s'exécutent selon un horaire. « Éteindre toutes les lumières à minuit », « baisser le thermostat à 22 h », « verrouiller les portes au coucher ». Cette étape utilise la bibliothèque `schedule` pour exécuter des règles à des heures précises.
+Certaines automatisations ne sont pas déclenchées par l'état de l'appareil, elles s'exécutent selon un horaire. « Éteindre toutes les lumières à minuit », « baisser le thermostat à 22 h », « verrouiller les portes au coucher ». Cette étape utilise la bibliothèque `schedule` pour exécuter des règles à des heures précises.
 
 ### 3.1 Construire le planificateur
 
@@ -360,11 +360,11 @@ class AutomationScheduler:
         schedule.clear()
 ```
 
-La bibliothèque `schedule` gère le minutage — tu enregistres juste une fonction à exécuter à une heure précise chaque jour. `run_pending()` est appelée en boucle pour vérifier si des travaux planifiés sont dus. La fermeture `job` capture la règle et le registre, donc quand l'heure planifiée arrive, elle évalue la règle par rapport à l'état actuel de l'appareil et exécute les actions correspondantes.
+La bibliothèque `schedule` gère le minutage, tu enregistres juste une fonction à exécuter à une heure précise chaque jour. `run_pending()` est appelée en boucle pour vérifier si des travaux planifiés sont dus. La fermeture `job` capture la règle et le registre, donc quand l'heure planifiée arrive, elle évalue la règle par rapport à l'état actuel de l'appareil et exécute les actions correspondantes.
 
 **🎯 Résultat attendu :** `scheduler.schedule_rule(rule, "22:00")` imprime « Scheduled 'Warm up' at 22:00 » et enregistre le travail.
 
-**🩹 Si ça ne marche pas :** Si le travail ne s'exécute jamais, `run_pending()` n'est pas appelée en boucle. Si le format d'heure est incorrect, `schedule` lève une `ValueError` — utilise le format 24 heures `HH:MM`.
+**🩹 Si ça ne marche pas :** Si le travail ne s'exécute jamais, `run_pending()` n'est pas appelée en boucle. Si le format d'heure est incorrect, `schedule` lève une `ValueError`, utilise le format 24 heures `HH:MM`.
 
 ### 3.2 Tester avec un temps simulé
 
@@ -394,7 +394,7 @@ schedule.run_pending()
 
 **🎯 Résultat attendu :** `schedule.run_pending()` imprime « ACTION: l1.turn_off({}) » immédiatement (puisque le travail est dû à 22:00 et que nous l'appelons dans un test).
 
-**🩹 Si ça ne marche pas :** Si rien ne s'imprime, l'heure planifiée n'est pas encore arrivée dans le test — `schedule.run_pending()` n'exécute que les travaux dont l'heure est passée depuis le dernier appel.
+**🩹 Si ça ne marche pas :** Si rien ne s'imprime, l'heure planifiée n'est pas encore arrivée dans le test, `schedule.run_pending()` n'exécute que les travaux dont l'heure est passée depuis le dernier appel.
 
 ### 3.3 Vérifier la planification
 
@@ -452,7 +452,7 @@ class PresenceDetector:
         return any(self.status.values())
 ```
 
-La fonction `ping` utilise `subprocess.run` pour exécuter un vrai ping système — la même commande que tu taperais dans un terminal. `check_all` itère sur tous les appareils enregistrés et met à jour leur statut. `anyone_home` est une propriété pratique qui renvoie `True` si un appareil est joignable. En production, tu sonderais ceci périodiquement (toutes les 30 secondes à une minute) et déclencherais des règles quand le statut change.
+La fonction `ping` utilise `subprocess.run` pour exécuter un vrai ping système, la même commande que tu taperais dans un terminal. `check_all` itère sur tous les appareils enregistrés et met à jour leur statut. `anyone_home` est une propriété pratique qui renvoie `True` si un appareil est joignable. En production, tu sonderais ceci périodiquement (toutes les 30 secondes à une minute) et déclencherais des règles quand le statut change.
 
 **🎯 Résultat attendu :** `detector.ping("127.0.0.1")` renvoie `True` (localhost est toujours joignable). `detector.ping("192.0.2.1")` renvoie `False` (une adresse TEST-NET qui ne devrait pas répondre).
 
@@ -481,7 +481,7 @@ class PresenceRuleEvaluator:
         return results
 ```
 
-Le `PresenceRuleEvaluator` ne déclenche des règles que quand la présence *change* — pas à chaque sondage. Cela empêche les règles de se déclencher en boucle pendant que quelqu'un est à la maison. Le suivi `prev_home` est la clé : quand le statut bascule de `True` à `False` (tout le monde est parti), les règles avec des conditions de présence se déclenchent une fois.
+Le `PresenceRuleEvaluator` ne déclenche des règles que quand la présence *change*, pas à chaque sondage. Cela empêche les règles de se déclencher en boucle pendant que quelqu'un est à la maison. Le suivi `prev_home` est la clé : quand le statut bascule de `True` à `False` (tout le monde est parti), les règles avec des conditions de présence se déclenchent une fois.
 
 **🎯 Résultat attendu :** `evaluate_on_change` renvoie les règles quand la présence passe de « à la maison » à « absent » (ou l'inverse), et renvoie une liste vide quand rien n'a changé.
 
@@ -577,11 +577,11 @@ if __name__ == "__main__":
     cli()
 ```
 
-La commande `demo` est la plus utile pour apprendre — elle configure un scénario complet avec trois appareils, deux règles et les évalue d'un seul coup. Les commandes `add_device` et `status` sont des stubs pour étendre le système. La CLI garde la logique d'automatisation testable sans exécuter une boucle d'événements continue.
+La commande `demo` est la plus utile pour apprendre, elle configure un scénario complet avec trois appareils, deux règles et les évalue d'un seul coup. Les commandes `add_device` et `status` sont des stubs pour étendre le système. La CLI garde la logique d'automatisation testable sans exécuter une boucle d'événements continue.
 
 **🎯 Résultat attendu :** `uv run python -m hub.cli demo` imprime « Rule 'Cold turns on light' fired » et montre que la lumière est allumée et la porte verrouillée.
 
-**🩹 Si ça ne marche pas :** Si aucune règle ne se déclenche, la température du thermostat (65.0) n'est peut-être pas comparée correctement à « 68 » — vérifie le transtypage `float()` dans l'évaluateur de conditions.
+**🩹 Si ça ne marche pas :** Si aucune règle ne se déclenche, la température du thermostat (65.0) n'est peut-être pas comparée correctement à « 68 », vérifie le transtypage `float()` dans l'évaluateur de conditions.
 
 ### 5.2 Test de fumée de bout en bout
 
@@ -614,14 +614,14 @@ assert light.is_on
 
 **🎯 Résultat attendu :** L'assertion passe ; seule la règle « Cold » se déclenche, et la lumière est allumée.
 
-**🩹 Si ça ne marche pas :** Si les deux règles se déclenchent, la condition `greater_than 80` de « Away lock » est comparée incorrectement — vérifie la conversion en flottant.
+**🩹 Si ça ne marche pas :** Si les deux règles se déclenchent, la condition `greater_than 80` de « Away lock » est comparée incorrectement, vérifie la conversion en flottant.
 
 ### 5.3 Vérifier le pipeline CLI
 
 **✅ Liste de vérification**
 
 - ✅ `uv run python -m hub.cli demo` exécute un scénario complet avec des appareils, des règles et des actions.
-- ✅ Les règles se déclenchent en fonction de l'état actuel des appareils — et non de ce que la règle attend.
+- ✅ Les règles se déclenchent en fonction de l'état actuel des appareils, et non de ce que la règle attend.
 - ✅ Le CLI imprime une sortie claire montrant quelles règles se sont déclenchées et quelles actions ont été prises.
 
 **🤔 Question(s) socratique(s)**
@@ -631,7 +631,7 @@ assert light.is_on
 
 ## ⚠️ Pièges courants
 
-- **Règles qui se déclenchent à chaque sondage au lieu de chaque changement d'état.** Si ton moteur réévalue toutes les règles chaque fois qu'un capteur rapporte (même quand rien n'a changé), tu obtiendras des actions répétées et des notifications inutiles. Le motif `PresenceRuleEvaluator` — suivre `prev_home` et ne se déclencher que sur les transitions — empêche cela.
+- **Règles qui se déclenchent à chaque sondage au lieu de chaque changement d'état.** Si ton moteur réévalue toutes les règles chaque fois qu'un capteur rapporte (même quand rien n'a changé), tu obtiendras des actions répétées et des notifications inutiles. Le motif `PresenceRuleEvaluator`, suivre `prev_home` et ne se déclencher que sur les transitions, empêche cela.
 - **Comparaisons de chaînes contre de nombres dans les conditions.** Une condition comme `temperature > 68` doit comparer des flottants, pas des chaînes. La fonction `evaluate_condition` transtype les valeurs avec `float()` pour les opérateurs numériques, mais il est facile de l'oublier quand tu ajoutes de nouveaux opérateurs.
 - **Actions qui appellent des méthodes inexistantes.** Si `action.method` est « turn_on » mais que la classe d'appareil l'épelle « TurnOn », `getattr` renvoie `None` et l'action échoue silencieusement. Valide toujours que la méthode existe avant de l'appeler.
 - **Planification avec des boucles bloquantes.** La bibliothèque `schedule` utilise `time.sleep(1)` en interne, ce qui bloque tout le thread. Pour un vrai hub qui gère aussi des connexions WebSocket ou des requêtes HTTP, tu aurais besoin d'une planification asynchrone (comme `APScheduler`) à la place.
@@ -639,7 +639,7 @@ assert light.is_on
 
 ## Ce que tu viens de construire
 
-Un moteur d'automatisation domotique basé sur des règles : des appareils avec état et méthodes, un moteur de règles déclencheur-action qui évalue les conditions par rapport à l'état vivant des appareils, une planification temporelle pour les automatisations récurrentes et une détection de présence à partir des pings réseau. L'architecture — appareils, règles, planificateur, présence — reflète le fonctionnement des plateformes domotiques comme Home Assistant et Hubitat, juste plus petit et fonctionnant entièrement en Python.
+Un moteur d'automatisation domotique basé sur des règles : des appareils avec état et méthodes, un moteur de règles déclencheur-action qui évalue les conditions par rapport à l'état vivant des appareils, une planification temporelle pour les automatisations récurrentes et une détection de présence à partir des pings réseau. L'architecture, appareils, règles, planificateur, présence, reflète le fonctionnement des plateformes domotiques comme Home Assistant et Hubitat, juste plus petit et fonctionnant entièrement en Python.
 
 :::tip[Exécute une version plus complète sans configuration locale]
 [`examples/home-automation/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/home-automation) dans le dépôt du cours a une version plus riche avec plus de types d'appareils, un tableau de bord web et le planificateur câblé de bout en bout. Clone-le, ou ouvre tout le dépôt dans un [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), et lance-le depuis là.
@@ -653,6 +653,6 @@ Un moteur d'automatisation domotique basé sur des règles : des appareils avec 
 
 ## Partage ton projet avec la classe
 
-Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres étudiants — et son README contient un parcours complet et accessible aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git auparavant : forker le dépôt, créer une branche, commiter tes fichiers et ouvrir la PR, une étape à la fois. Aucune expérience préalable de git n'est supposée.
+Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres étudiants, et son README contient un parcours complet et accessible aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git auparavant : forker le dépôt, créer une branche, commiter tes fichiers et ouvrir la PR, une étape à la fois. Aucune expérience préalable de git n'est supposée.
 
 Bienvenue dans l'écriture de Python en dehors du navigateur. 🎓

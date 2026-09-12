@@ -22,7 +22,7 @@ track: "normal"
 
 ## From formula to named machine
 
-Mathematics abhors repetition. You learned $f(x) = x^2 - 5x + 6$ as a *rule* — one definition, used a thousand times, on a thousand different inputs:
+Mathematics abhors repetition. You learned $f(x) = x^2 - 5x + 6$ as a *rule*, one definition, used a thousand times, on a thousand different inputs:
 
 $$
 f(x) = x^2 - 5x + 6, \qquad f(2) = 0.
@@ -37,7 +37,7 @@ def add(a, b):
 result = add(3, 5)  # 8
 ```
 
-The name, the parentheses holding the parameters $a, b$, the colon starting the recipe — this is the definition. The call `add(3, 5)` is applying the rule at $a=3$, $b=5$, exactly as $f(2)$ applies a rule at $x=2$.
+The name, the parentheses holding the parameters $a, b$, the colon starting the recipe, this is the definition. The call `add(3, 5)` is applying the rule at $a=3$, $b=5$, exactly as $f(2)$ applies a rule at $x=2$.
 
 ## Defining and calling
 
@@ -51,7 +51,7 @@ def greet(name):
 greet("Alice")  # Hello, Alice!
 ```
 
-Three parts deserve names. The **parameters** are the variables in the definition — the input slots $x$. The **arguments** are the concrete values supplied at the call site — the input $2$. And the triple-quoted line inside is the **docstring**: documentation living next to the code, so `help(greet)` can answer what the function does.
+Three parts deserve names. The **parameters** are the variables in the definition, the input slots $x$. The **arguments** are the concrete values supplied at the call site, the input $2$. And the triple-quoted line inside is the **docstring**: documentation living next to the code, so `help(greet)` can answer what the function does.
 
 ## Return: the output door
 
@@ -65,7 +65,7 @@ result = add(3, 5)          # result == 8
 printed = print("8")        # printed is None — print returns nothing
 ```
 
-A function without `return` quietly returns `None` — the machine produces no output. When you want the arithmetic result of your function to flow onward, remember: `return`, not `print`.
+A function without `return` quietly returns `None`, the machine produces no output. When you want the arithmetic result of your function to flow onward, remember: `return`, not `print`.
 
 ## Default parameters
 
@@ -92,7 +92,7 @@ def create_user(name, age, role="student"):
 user = create_user(age=25, name="Alice", role="admin")
 ```
 
-Named arguments may be given in any order — the parameter name is the label on each package. A call that names its inputs reads like a sentence instead of a code in need of decoding.
+Named arguments may be given in any order, the parameter name is the label on each package. A call that names its inputs reads like a sentence instead of a code in need of decoding.
 
 ## *args and **kwargs
 
@@ -144,7 +144,7 @@ The same rule, three inputs. The formula $f(x) = x^2 - 5x + 6$ turns into a reus
 
 ## Common pitfalls
 
-- **Mutable default arguments.** `def f(items=[])` creates *one* list shared across every call — items pile up between calls. Default to `None` and build the list inside.
+- **Mutable default arguments.** `def f(items=[])` creates *one* list shared across every call, items pile up between calls. Default to `None` and build the list inside.
 - **Forgetting `return`.** A function without it returns `None`; you asked for a value and got a shadow.
 - **Too many parameters.** Past three or four, the slots turn into a puzzle. Group related arguments in a dict or dataclass.
 - **Calling a function defined later.** Python executes top to bottom; calling `f()` before `def f` reaches the interpreter raises a `NameError`. Define before you call.
@@ -152,18 +152,18 @@ The same rule, three inputs. The formula $f(x) = x^2 - 5x + 6$ turns into a reus
 ## 🧩 Challenges
 
 <details class="challenge">
-<summary>🧩 Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge, think first, then reveal</summary>
 <div class="challenge__body">
 
 Write `is_palindrome(text)` returning `True` when the string reads the same forwards and backwards; ignore letter case.
 
-<p class="challenge__answer">💡 <strong>Answer:</strong> <code>def is_palindrome(text): return text.lower() == text.lower()[::-1]</code> — lowercasing symmetrizes the comparison, and the reversed slice <code>[::-1]</code> is the mirror image.</p>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>def is_palindrome(text): return text.lower() == text.lower()[::-1]</code>, lowercasing symmetrizes the comparison, and the reversed slice <code>[::-1]</code> is the mirror image.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge, think first, then reveal</summary>
 <div class="challenge__body">
 
 Write `fizzbuzz(n)` returning a list from 1 to $n$, replacing multiples of 3 with `"Fizz"`, multiples of 5 with `"Buzz"`, and multiples of both with `"FizzBuzz"`.

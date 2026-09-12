@@ -20,7 +20,7 @@ learningObjectives:
 
 # 💰 Expense Tracker
 
-Track your spending, stick to budgets, and visualize where your money goes — all from the command line. This project takes you from raw Python dictionaries through pandas analysis to matplotlib charts, building a practical tool you can actually use to manage your finances.
+Track your spending, stick to budgets, and visualize where your money goes, all from the command line. This project takes you from raw Python dictionaries through pandas analysis to matplotlib charts, building a practical tool you can actually use to manage your finances.
 
 This is optional and ungraded. See [Real-World Projects](/projects) for the full list.
 
@@ -37,17 +37,17 @@ This is optional and ungraded. See [Real-World Projects](/projects) for the full
 ## Where to run this
 
 - **Locally with `uv` (recommended).** This project uses `pandas` and `matplotlib`, so a local install is the smoothest path. The Setup section below walks through it.
-- **JupyterLite playground.** Paste the code cells directly into a notebook — works well for exploring the analysis steps (2–5), though the CLI menu (Step 7) is designed for a real terminal.
+- **JupyterLite playground.** Paste the code cells directly into a notebook, works well for exploring the analysis steps (2–5), though the CLI menu (Step 7) is designed for a real terminal.
 - **Google Colab.** Open a new notebook and paste the cells. Same caveat as JupyterLite: the interactive CLI works best in a real terminal.
 
-- **Run it in your browser.** An interactive companion notebook is ready — open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
+- **Run it in your browser.** An interactive companion notebook is ready, open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/expense-tracker/notebook.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/expense-tracker/notebook.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fexpense-tracker%2Fnotebook.ipynb)
 
 ## Setup
 
-`uv` is a single tool that replaces the usual "install Python, then pip, then a virtual environment" chain — it can install and manage Python versions alongside your project's dependencies.
+`uv` is a single tool that replaces the usual "install Python, then pip, then a virtual environment" chain, it can install and manage Python versions alongside your project's dependencies.
 
 **macOS / Linux** (terminal):
 
@@ -79,7 +79,7 @@ uv add pandas matplotlib
 
 ## Step 1: Define the data model
 
-Before writing any functions, decide how expenses and budgets live in memory. Each expense is a dictionary with four fields — date, amount, category, and description. A list holds all expenses. A separate dictionary maps each category to its monthly budget limit.
+Before writing any functions, decide how expenses and budgets live in memory. Each expense is a dictionary with four fields, date, amount, category, and description. A list holds all expenses. A separate dictionary maps each category to its monthly budget limit.
 
 ### 1.1 Create the empty containers
 
@@ -98,7 +98,7 @@ budgets = {
 }
 ```
 
-**🎯 Expected output:** No visible output yet — you just created two empty containers. Running `print(expenses)` gives `[]` and `print(budgets)` shows the four categories with their limits.
+**🎯 Expected output:** No visible output yet, you just created two empty containers. Running `print(expenses)` gives `[]` and `print(budgets)` shows the four categories with their limits.
 
 **🩹 If it's off:** If you get a `NameError` on `pd`, make sure `import pandas as pd` is at the top of the cell or script. If `budgets` shows an empty dictionary, check that you included the colons between category names and amounts.
 
@@ -166,7 +166,7 @@ Added: $55.00 in groceries
 
 Printing `expenses` shows a list of four dictionaries, each with `date`, `amount`, `category`, and `description` keys.
 
-**🩹 If it's off:** If the category doesn't appear lowercased in the output, make sure you call `.lower()` on the input — this prevents `"Groceries"` and `"groceries"` from becoming separate categories. If the date shows today's date even though you entered a different one, that's expected: the function always stamps the current date.
+**🩹 If it's off:** If the category doesn't appear lowercased in the output, make sure you call `.lower()` on the input, this prevents `"Groceries"` and `"groceries"` from becoming separate categories. If the date shows today's date even though you entered a different one, that's expected: the function always stamps the current date.
 
 ### 2.3 Verify the data
 
@@ -189,7 +189,7 @@ Raw lists of dictionaries are fine for logging, but real analysis needs pandas. 
 
 ### 3.1 Build the DataFrame
 
-**👟 Starter hint:** Pass the `expenses` list directly to `pd.DataFrame()`. Print the result with `to_string(index=False)` for clean output — no row numbers cluttering the view.
+**👟 Starter hint:** Pass the `expenses` list directly to `pd.DataFrame()`. Print the result with `to_string(index=False)` for clean output, no row numbers cluttering the view.
 
 ```python
 df = pd.DataFrame(expenses)
@@ -208,7 +208,7 @@ All expenses:
  2026-09-06   55.00   groceries          Pantry restock
 ```
 
-**🩹 If it's off:** If you see an empty DataFrame with `RangeIndex(start=0, stop=0, step=0)`, the `expenses` list is empty — you haven't called `add_expense` yet in this session. If column names look wrong, check that your expense dictionaries use exactly `"date"`, `"amount"`, `"category"`, and `"description"` as keys.
+**🩹 If it's off:** If you see an empty DataFrame with `RangeIndex(start=0, stop=0, step=0)`, the `expenses` list is empty, you haven't called `add_expense` yet in this session. If column names look wrong, check that your expense dictionaries use exactly `"date"`, `"amount"`, `"category"`, and `"description"` as keys.
 
 ### 3.2 Compute per-category totals
 
@@ -230,7 +230,7 @@ dining        28.00
 transport     15.00
 ```
 
-**🩹 If it's off:** If you get a `KeyError`, the column name doesn't match — check for typos like `"cat"` instead of `"category"`. If totals look wrong, verify you passed `["amount"]` before `.sum()` — without it, you'd try to sum every numeric column, which might include unexpected data.
+**🩹 If it's off:** If you get a `KeyError`, the column name doesn't match, check for typos like `"cat"` instead of `"category"`. If totals look wrong, verify you passed `["amount"]` before `.sum()`, without it, you'd try to sum every numeric column, which might include unexpected data.
 
 ### 3.3 Add monthly summaries
 
@@ -251,7 +251,7 @@ date
 2026-09    140.5
 ```
 
-**🩹 If it's off:** A `TypeError` on `pd.to_datetime` means the date strings aren't in a recognizable format — go back to `add_expense` and confirm you're using `date.today().isoformat()`. If dates from different months don't appear separately, your test data is all from the same month — add an expense with a different date to test.
+**🩹 If it's off:** A `TypeError` on `pd.to_datetime` means the date strings aren't in a recognizable format, go back to `add_expense` and confirm you're using `date.today().isoformat()`. If dates from different months don't appear separately, your test data is all from the same month, add an expense with a different date to test.
 
 ### 3.4 Verify the analysis
 
@@ -320,7 +320,7 @@ check_budgets(
 
 Now groceries shows a WARNING at 90% ($547 / $500). Exceed the limit and it prints OVER BUDGET.
 
-**🩹 If it's off:** If all categories show `OK` even with heavy spending, check that you're passing the *summed* totals dict, not the raw expenses list. If you get a `ZeroDivisionError`, one of your budget limits is zero — every category in `budgets` needs a positive limit.
+**🩹 If it's off:** If all categories show `OK` even with heavy spending, check that you're passing the *summed* totals dict, not the raw expenses list. If you get a `ZeroDivisionError`, one of your budget limits is zero, every category in `budgets` needs a positive limit.
 
 ### 4.3 Test the threshold
 
@@ -339,7 +339,7 @@ Why default to 80% as the warning threshold? What kinds of expenses might need a
 
 ## Step 5: Visualize spending
 
-Numbers in a table are useful, but charts make spending patterns immediately obvious. Build a bar chart for category totals and a pie chart for proportions — side by side in one figure.
+Numbers in a table are useful, but charts make spending patterns immediately obvious. Build a bar chart for category totals and a pie chart for proportions, side by side in one figure.
 
 ### 5.1 Create the side-by-side charts
 
@@ -370,7 +370,7 @@ print("Chart saved to spending_report.png")
 
 **🎯 Expected output:** A window opens (or inline image in a notebook) showing two charts: a bar chart on the left with one bar per category, and a pie chart on the right showing percentage breakdowns. A file called `spending_report.png` appears in your working directory.
 
-**🩹 If it's off:** If the pie chart shows overlapping labels, increase `figsize` to `(14, 6)` or reduce font size with `plt.rcParams["font.size"] = 10` before plotting. If `savefig` saves a blank image, make sure `plt.show()` comes *after* `savefig` — some backends clear the figure on `show()`. If you get an `IndexError` on `colors[:len(category_totals)]`, your spending data has more categories than colors — add more hex codes to the list.
+**🩹 If it's off:** If the pie chart shows overlapping labels, increase `figsize` to `(14, 6)` or reduce font size with `plt.rcParams["font.size"] = 10` before plotting. If `savefig` saves a blank image, make sure `plt.show()` comes *after* `savefig`, some backends clear the figure on `show()`. If you get an `IndexError` on `colors[:len(category_totals)]`, your spending data has more categories than colors, add more hex codes to the list.
 
 ### 5.2 Customize the appearance
 
@@ -390,11 +390,11 @@ plt.show()
 - ✅ The bar chart has one bar per category with labels on the x-axis.
 - ✅ The pie chart shows percentage labels (e.g., "69.4%") on each slice.
 - ✅ A PNG file is saved to disk and is non-empty.
-- ✅ Charts are readable — no overlapping text or clipped labels.
+- ✅ Charts are readable, no overlapping text or clipped labels.
 
 **🤔 Socratic Question(s)**
 
-When would a bar chart be more useful than a pie chart, and vice versa? What happens to the pie chart if one category dominates at 95% of spending — can you still read the smaller slices?
+When would a bar chart be more useful than a pie chart, and vice versa? What happens to the pie chart if one category dominates at 95% of spending, can you still read the smaller slices?
 
 ---
 
@@ -431,9 +431,9 @@ def load_expenses(filename: str = "expenses.csv") -> pd.DataFrame:
     return df
 ```
 
-**🎯 Expected output:** On first run (no CSV yet): `No existing data found — starting fresh.` On subsequent runs: `Loaded 4 expenses from expenses.csv`.
+**🎯 Expected output:** On first run (no CSV yet): `No existing data found, starting fresh.` On subsequent runs: `Loaded 4 expenses from expenses.csv`.
 
-**🩹 If it's off:** If you get a `ParserError` on `pd.read_csv`, the CSV has malformed rows — open it in a text editor to check for stray commas or broken quotes. If dates show up as strings instead of datetime objects, make sure you included `parse_dates=["date"]`. If the file exists but `load_expenses` returns an empty DataFrame, the file path is wrong — run your script from the same directory where you saved the CSV.
+**🩹 If it's off:** If you get a `ParserError` on `pd.read_csv`, the CSV has malformed rows, open it in a text editor to check for stray commas or broken quotes. If dates show up as strings instead of datetime objects, make sure you included `parse_dates=["date"]`. If the file exists but `load_expenses` returns an empty DataFrame, the file path is wrong, run your script from the same directory where you saved the CSV.
 
 ### 6.3 Verify persistence
 
@@ -441,7 +441,7 @@ def load_expenses(filename: str = "expenses.csv") -> pd.DataFrame:
 
 - ✅ After saving, `expenses.csv` exists and contains the header row plus data rows.
 - ✅ After loading, the DataFrame has the same data you saved.
-- ✅ Missing the CSV file doesn't crash the program — it starts fresh gracefully.
+- ✅ Missing the CSV file doesn't crash the program, it starts fresh gracefully.
 - ✅ Dates are parsed as datetime objects after loading, not plain strings.
 
 ---
@@ -601,7 +601,7 @@ if __name__ == "__main__":
 
 ## ⚠️ Common pitfalls
 
-- **Forgetting to save after changes.** If you modify `expenses` or `df` but don't call `save_expenses`, the CSV is stale. Always save right after a data-changing operation — not just at program exit — so a crash or Ctrl+C only loses the current action.
+- **Forgetting to save after changes.** If you modify `expenses` or `df` but don't call `save_expenses`, the CSV is stale. Always save right after a data-changing operation, not just at program exit, so a crash or Ctrl+C only loses the current action.
 - **Date string vs. datetime confusion.** Loading from CSV without `parse_dates=["date"]` gives you strings like `"2026-09-06"` instead of datetime objects. The `.dt.to_period("M")` call in the monthly summary will crash with a `TypeError` on strings.
 - **Inconsistent category casing.** If `"Groceries"` and `"groceries"` both appear in the data, `groupby` treats them as separate categories. Always lowercase the category inside `add_expense`, not at the call site.
 - **Pie chart with too many categories.** With 10+ categories, the pie chart becomes unreadable. Consider filtering to the top 5 and lumping the rest into "other" for the pie, while keeping the bar chart complete.
@@ -609,7 +609,7 @@ if __name__ == "__main__":
 
 ## What you just built
 
-A working command-line expense tracker that logs spending, analyzes it with pandas, monitors budgets with threshold alerts, generates charts with matplotlib, and persists everything to a CSV file. You modeled financial data with plain Python dictionaries, converted it to DataFrames for analysis, built aggregation pipelines with `groupby`, implemented threshold-based alert logic, and created publication-quality charts — all practical skills that transfer directly to real financial analysis work.
+A working command-line expense tracker that logs spending, analyzes it with pandas, monitors budgets with threshold alerts, generates charts with matplotlib, and persists everything to a CSV file. You modeled financial data with plain Python dictionaries, converted it to DataFrames for analysis, built aggregation pipelines with `groupby`, implemented threshold-based alert logic, and created publication-quality charts, all practical skills that transfer directly to real financial analysis work.
 
 ## Where to go from here
 
@@ -621,6 +621,6 @@ A working command-line expense tracker that logs spending, analyzes it with pand
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

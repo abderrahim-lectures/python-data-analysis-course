@@ -28,7 +28,7 @@ $$
 \{x^2 \mid x \in \{0, 1, \ldots, 5\}\} = \{0, 1, 4, 9, 16, 25\}.
 $$
 
-Lee *"el conjunto de $x^2$, para cada $x$ en esta fuente"* — y el Python es la misma frase invertida en código:
+Lee *"el conjunto de $x^2$, para cada $x$ en esta fuente"*, y el Python es la misma frase invertida en código:
 
 ```python
 # Bucle normal
@@ -41,7 +41,7 @@ squares = [x ** 2 for x in range(6)]
 # [0, 1, 4, 9, 16, 25]
 ```
 
-El bucle deletrea tres movimientos — empezar vacío, añadir, repetir; la comprensión enuncia toda la colección en una línea que refleja la anatomía del constructor: la expresión al frente, la variable recorrida detrás.
+El bucle deletrea tres movimientos, empezar vacío, añadir, repetir; la comprensión enuncia toda la colección en una línea que refleja la anatomía del constructor: la expresión al frente, la variable recorrida detrás.
 
 ## Filtrar con condiciones
 
@@ -59,7 +59,7 @@ Un `if` al final es un *filtro*: solo los elementos que lo superan llegan a la e
 
 ## If/else como expresión
 
-El `if...else` que ya conoces es una *expresión* — produce un valor. Pegar uno *antes* del `for` lo planta en la línea de construcción, eligiendo por elemento en lugar de filtrar por elemento:
+El `if...else` que ya conoces es una *expresión*, produce un valor. Pegar uno *antes* del `for` lo planta en la línea de construcción, eligiendo por elemento en lugar de filtrar por elemento:
 
 ```python
 labels = ["even" if x % 2 == 0 else "odd" for x in range(5)]
@@ -70,7 +70,7 @@ Las dos posiciones son una bifurcación con trabajos distintos: después del `fo
 
 ## Comprensiones de dict
 
-La misma forma construye mapeos — la expresión a la izquierda de los dos puntos se vuelve la clave, y la de la derecha el valor:
+La misma forma construye mapeos, la expresión a la izquierda de los dos puntos se vuelve la clave, y la de la derecha el valor:
 
 ```python
 squares_dict = {x: x**2 for x in range(6)}
@@ -86,7 +86,7 @@ La inversión es el clásico elegante: recorre `items()` e intercambia qué mita
 
 ## Comprensiones de set
 
-Las llaves con una comprensión producen un set — unicidad aplicada automáticamente:
+Las llaves con una comprensión producen un set, unicidad aplicada automáticamente:
 
 ```python
 lengths = {len(word) for word in ["hello", "hi", "hey"]}
@@ -97,7 +97,7 @@ Tres longitudes colapsan a un conjunto de valores, dejando caer el duplicado com
 
 ## Comprensiones anidadas: la aplanadora
 
-Una matriz es una lista de filas, y aplanarla son dos bucles en una expresión — lee las cláusulas `for` de izquierda a derecha, la exterior primero:
+Una matriz es una lista de filas, y aplanarla son dos bucles en una expresión, lee las cláusulas `for` de izquierda a derecha, la exterior primero:
 
 ```python
 matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
@@ -109,7 +109,7 @@ Cada `for` desenvuelve un nivel: `row` recorre la lista exterior, `num` recorre 
 
 ## Un ejemplo resuelto: tres líneas desde el constructor de conjuntos
 
-Los tres movimientos de la lección — construir, filtrar, etiquetar — una línea cada uno:
+Los tres movimientos de la lección, construir, filtrar, etiquetar, una línea cada uno:
 
 ```python
 squares = [x ** 2 for x in range(2, 9)]
@@ -126,31 +126,31 @@ El primero es $\{x^2 \mid x \in [2, 9)\}$, tipeado a secas; el segundo filtra lo
 
 ## Cuándo NO usar comprensiones
 
-- Cuando la lógica se anuda — un bucle `for` normal se gana su legibilidad.
-- Cuando el cuerpo necesita `try/except` — las comprensiones no tienen sitio para él.
-- Cuando importan los efectos secundarios — imprimir o escribir archivos deben ser sentencias deliberadas, no expresiones silenciosas.
+- Cuando la lógica se anuda, un bucle `for` normal se gana su legibilidad.
+- Cuando el cuerpo necesita `try/except`, las comprensiones no tienen sitio para él.
+- Cuando importan los efectos secundarios, imprimir o escribir archivos deben ser sentencias deliberadas, no expresiones silenciosas.
 - **Poner `if` antes del `for` etiqueta en vez de filtrar.** `[x if x % 2 == 0 else 'odd' for x in ...]` conserva todo elemento, apenas renombrado; solo un `if` después del `for` descarta. Mal ubicado, los rechazados se quedan callados.
 
 ## 🧩 Desafíos
 
 <details class="challenge">
-<summary>🧩 Desafío — piensa primero, luego revela</summary>
+<summary>🧩 Desafío, piensa primero, luego revela</summary>
 <div class="challenge__body">
 
 Aplana `[[1, 2], [3, 4], [5, 6]]` hasta `[1, 2, 3, 4, 5, 6]` con una comprensión.
 
-<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>[num for row in matrix for num in row]</code> — el <code>for</code> exterior abre cada fila, el interior la extiende.</p>
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>[num for row in matrix for num in row]</code>, el <code>for</code> exterior abre cada fila, el interior la extiende.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Desafío — piensa primero, luego revela</summary>
+<summary>🧩 Desafío, piensa primero, luego revela</summary>
 <div class="challenge__body">
 
 Mapea palabras a sus longitudes con una comprensión de dict: `["hi", "hello", "hey"]` → `{"hi": 2, "hello": 5, "hey": 3}`.
 
-<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>{w: len(w) for w in words}</code> — la palabra es la clave y su longitud el valor, un par por entrada.</p>
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>{w: len(w) for w in words}</code>, la palabra es la clave y su longitud el valor, un par por entrada.</p>
 
 </div>
 </details>
@@ -159,7 +159,7 @@ Mapea palabras a sus longitudes con una comprensión de dict: `["hi", "hello", "
 
 - ¿Por qué va `if...else` antes del `for` en una comprensión mientras que el `if` de filtro va detrás?
 - ¿Dónde cruza una comprensión la línea hacia una lectura más dura que un bucle? ¿Dónde la trazas?
-- ¿Puede aparecer `await` dentro de una comprensión — y qué sintaxis hace posible toda una versión asíncrona?
+- ¿Puede aparecer `await` dentro de una comprensión, y qué sintaxis hace posible toda una versión asíncrona?
 
 ## ✅ Comprobación rápida
 

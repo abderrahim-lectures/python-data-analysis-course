@@ -14,9 +14,9 @@ prerequisites: ["Python 101"]
 
 # 📝 Construis un Constructeur de Formulaires
 
-Chaque formulaire web est fondamentalement la même chose : une liste de champs, chacun avec un type, un libellé, des règles de validation et éventuellement une condition qui détermine quand il apparaît. Ce projet construit un constructeur de formulaires Python qui prend une définition de formulaire déclarative et produit un schéma JSON — le même format utilisé par React JSON Schema Form, JSON Editor et des dizaines d'autres bibliothèques de rendu. Tu définis le formulaire une fois en Python, et n'importe quel frontend peut le rendre.
+Chaque formulaire web est fondamentalement la même chose : une liste de champs, chacun avec un type, un libellé, des règles de validation et éventuellement une condition qui détermine quand il apparaît. Ce projet construit un constructeur de formulaires Python qui prend une définition de formulaire déclarative et produit un schéma JSON, le même format utilisé par React JSON Schema Form, JSON Editor et des dizaines d'autres bibliothèques de rendu. Tu définis le formulaire une fois en Python, et n'importe quel frontend peut le rendre.
 
-Ceci suppose Python 101 — rien de Data Analysis n'est requis. Optionnel et non noté ; voir [Real-World Projects](/fr/projets) pour la liste complète.
+Ceci suppose Python 101, rien de Data Analysis n'est requis. Optionnel et non noté ; voir [Real-World Projects](/fr/projets) pour la liste complète.
 
 ## 🎯 Ce que tu vas faire
 
@@ -29,7 +29,7 @@ Ceci suppose Python 101 — rien de Data Analysis n'est requis. Optionnel et non
 
 ## Où exécuter ceci
 
-**Localement avec `uv`** est la voie principale — c'est un outil CLI qui lit les définitions de formulaire et écrit les fichiers de schéma JSON.
+**Localement avec `uv`** est la voie principale, c'est un outil CLI qui lit les définitions de formulaire et écrit les fichiers de schéma JSON.
 
 **Google Colab, Kaggle Notebooks et Binder** fonctionnent pour essayer l'outil. Le notebook installe les mêmes packages et utilise le même code ; il génère et valide des formulaires d'exemple dans la session.
 
@@ -163,7 +163,7 @@ print(f.model_dump())
 
 ## Étape 2 : Générer le schéma JSON depuis les définitions de formulaire
 
-JSON Schema est un moyen standard de décrire des formes de données — c'est ce que les bibliothèques de formulaires frontend utilisent pour savoir quels champs rendre et quelle validation appliquer. Convertir ta définition de formulaire Python en JSON Schema la rend interopérable avec n'importe quelle bibliothèque de rendu.
+JSON Schema est un moyen standard de décrire des formes de données, c'est ce que les bibliothèques de formulaires frontend utilisent pour savoir quels champs rendre et quelle validation appliquer. Convertir ta définition de formulaire Python en JSON Schema la rend interopérable avec n'importe quelle bibliothèque de rendu.
 
 ### 2.1 Écrire le générateur de schéma
 
@@ -228,7 +228,7 @@ def form_to_schema(form_name: str, fields: list[Field]) -> dict:
     return schema
 ```
 
-Le `TYPE_MAP` traduit tes types Python en types JSON Schema. La clé `x-conditions` utilise une extension personnalisée (préfixée par `x-`) pour attacher la logique conditionnelle — JSON Schema lui-même ne définit pas la visibilité conditionnelle, mais les bibliothèques de rendu de formulaires comme React JSON Schema Form supportent les extensions `x-`. La liste `required` est construite automatiquement depuis les champs où `validation.required` est `True`.
+Le `TYPE_MAP` traduit tes types Python en types JSON Schema. La clé `x-conditions` utilise une extension personnalisée (préfixée par `x-`) pour attacher la logique conditionnelle, JSON Schema lui-même ne définit pas la visibilité conditionnelle, mais les bibliothèques de rendu de formulaires comme React JSON Schema Form supportent les extensions `x-`. La liste `required` est construite automatiquement depuis les champs où `validation.required` est `True`.
 
 **🎯 Résultat attendu :** `form_to_schema("Contact", [name_field, email_field])` renvoie un dictionnaire avec `"title": "Contact"`, `"properties"` contenant les deux champs, et `"required": ["email"]` si email est requis.
 
@@ -256,7 +256,7 @@ assert schema["properties"]["age"]["minimum"] == 0
 
 **🎯 Résultat attendu :** Le JSON imprimé montre `"required": ["name"]` et `"minimum": 0` sous le champ age. Les deux assertions réussissent.
 
-**🩹 Si ça ne marche pas :** Si la sortie manque complètement la clé `required` (pas seulement vide), l'ajout est volontairement sauté quand la liste est vide — c'est un comportement correct.
+**🩹 Si ça ne marche pas :** Si la sortie manque complètement la clé `required` (pas seulement vide), l'ajout est volontairement sauté quand la liste est vide, c'est un comportement correct.
 
 ### 2.3 Vérifier la génération du schéma
 
@@ -303,7 +303,7 @@ def evaluate_condition(condition: Condition, values: dict) -> bool:
         raise ValueError(f"Unknown operator: {condition.operator}")
 ```
 
-La conversion `str()` et la normalisation `.lower()` signifient que `"True"`, `"true"` et `True` se comparent tous égaux — cela empêche le bug courant où les booléens Python et les représentations de chaînes divergent. La fonction renvoie `False` pour les champs manquants plutôt que de lever une erreur, car un champ qui n'a pas encore été rempli ne devrait pas rendre ses dépendants visibles.
+La conversion `str()` et la normalisation `.lower()` signifient que `"True"`, `"true"` et `True` se comparent tous égaux, cela empêche le bug courant où les booléens Python et les représentations de chaînes divergent. La fonction renvoie `False` pour les champs manquants plutôt que de lever une erreur, car un champ qui n'a pas encore été rempli ne devrait pas rendre ses dépendants visibles.
 
 **🎯 Résultat attendu :** `evaluate_condition(Condition(field="role", operator="equals", value="admin"), {"role": "admin"})` renvoie `True`. La même condition avec `{"role": "user"}` renvoie `False`.
 
@@ -324,7 +324,7 @@ def visible_fields(fields: list[Field], values: dict) -> list[Field]:
 
 **🎯 Résultat attendu :** Étant donné des champs avec et sans conditions, `visible_fields(fields, {"has_company": "true"})` ne renvoie que les champs dont les conditions sont remplies (ou qui n'ont pas de condition).
 
-**🩹 Si ça ne marche pas :** Si tous les champs sont renvoyés quelles que soient les conditions, l'appel `evaluate_condition` est sauté — vérifie la déclaration `if`.
+**🩹 Si ça ne marche pas :** Si tous les champs sont renvoyés quelles que soient les conditions, l'appel `evaluate_condition` est sauté, vérifie la déclaration `if`.
 
 ### 3.3 Vérifier la logique conditionnelle
 
@@ -396,7 +396,7 @@ def validate_submission(fields: list[Field], values: dict) -> list[dict]:
     return errors
 ```
 
-Le validateur ne vérifie que les champs visibles — si un champ conditionnel est masqué parce que sa condition n'est pas remplie, ses règles de validation ne s'appliquent pas. Cela correspond à la façon dont les vraies interfaces de formulaires fonctionnent : tu ne valides pas les champs que l'utilisateur ne peut pas voir. Chaque erreur inclut le nom du champ et un message lisible par l'humain, ce qui rend simple d'afficher les erreurs à côté du bon champ dans une interface.
+Le validateur ne vérifie que les champs visibles, si un champ conditionnel est masqué parce que sa condition n'est pas remplie, ses règles de validation ne s'appliquent pas. Cela correspond à la façon dont les vraies interfaces de formulaires fonctionnent : tu ne valides pas les champs que l'utilisateur ne peut pas voir. Chaque erreur inclut le nom du champ et un message lisible par l'humain, ce qui rend simple d'afficher les erreurs à côté du bon champ dans une interface.
 
 **🎯 Résultat attendu :** Soumettre `{"name": ""}` pour un formulaire avec `name` requis renvoie `[{"field": "name", "message": "'Full Name' is required"}]`. Soumettre `{"name": "Alice", "age": "not_a_number"}` renvoie une erreur de validation d'âge.
 
@@ -423,7 +423,7 @@ assert errors[1]["field"] == "age"
 
 **🎯 Résultat attendu :** Les deux assertions réussissent ; la liste d'erreurs a deux entrées, une par champ invalide.
 
-**🩹 Si ça ne marche pas :** Si l'erreur email manque, la vérification `required` s'exécute avant la vérification de type — assure-toi que `continue` saute les vérifications restantes une fois une erreur requise trouvée.
+**🩹 Si ça ne marche pas :** Si l'erreur email manque, la vérification `required` s'exécute avant la vérification de type, assure-toi que `continue` saute les vérifications restantes une fois une erreur requise trouvée.
 
 ### 4.3 Vérifier le validateur de soumissions
 
@@ -573,15 +573,15 @@ Ceci teste le pipeline complet : définir un formulaire conditionnel, générer 
 
 ## ⚠️ Pièges courants
 
-- **Oublier que les champs conditionnels ont besoin de validation aussi.** Un champ avec `required=True` et une condition ne devrait être validé que quand sa condition est remplie — sinon les utilisateurs voient des erreurs pour des champs qu'ils ne peuvent même pas voir. `validate_submission` filtre par visibilité avant de vérifier les règles.
+- **Oublier que les champs conditionnels ont besoin de validation aussi.** Un champ avec `required=True` et une condition ne devrait être validé que quand sa condition est remplie, sinon les utilisateurs voient des erreurs pour des champs qu'ils ne peuvent même pas voir. `validate_submission` filtre par visibilité avant de vérifier les règles.
 - **Inadéquations de types entre JSON et Python.** JSON ne distingue pas `0` et `"0"`. Le validateur convertit les entrées de chaîne en nombres pour les champs numériques, mais sache qu'une soumission de formulaire avec `"age": "twenty"` doit être attrapée comme une erreur de type, pas ignorée en silence.
-- **Extensions `x-` personnalisées que les moteurs de rendu ne comprennent pas.** Les moteurs de rendu JSON Schema ignorent les clés inconnues, donc `x-conditions` ne cassera pas le rendu — mais il n'appliquera pas non plus automatiquement la logique conditionnelle. Tu dois implémenter l'évaluation des conditions dans ton code de rendu.
-- **Ne pas gérer les champs optionnels vides.** Un champ texte optionnel soumis comme `""` (chaîne vide) devrait passer la validation — la vérification `required` s'exécute d'abord et saute les vérifications suivantes pour les champs non requis vides.
+- **Extensions `x-` personnalisées que les moteurs de rendu ne comprennent pas.** Les moteurs de rendu JSON Schema ignorent les clés inconnues, donc `x-conditions` ne cassera pas le rendu, mais il n'appliquera pas non plus automatiquement la logique conditionnelle. Tu dois implémenter l'évaluation des conditions dans ton code de rendu.
+- **Ne pas gérer les champs optionnels vides.** Un champ texte optionnel soumis comme `""` (chaîne vide) devrait passer la validation, la vérification `required` s'exécute d'abord et saute les vérifications suivantes pour les champs non requis vides.
 - **Écraser le fichier de schéma sans avertir.** `render` écrit dans `output` sans vérifier si le fichier existe. Dans un vrai outil, ajoute un drapeau `--force` ou avertis avant d'écraser.
 
 ## Ce que tu viens de construire
 
-Un constructeur de formulaires qui modélise les champs de formulaire comme des objets Python validés, génère un JSON Schema pour n'importe quelle bibliothèque de rendu, évalue les règles de visibilité conditionnelle et valide les soumissions contre les règles du formulaire. La séparation des préoccupations — définitions de champs, génération de schéma, évaluation de conditions et validation des soumissions — reflète la façon dont les constructeurs de formulaires de production comme Typeform et JotForm fonctionnent en interne.
+Un constructeur de formulaires qui modélise les champs de formulaire comme des objets Python validés, génère un JSON Schema pour n'importe quelle bibliothèque de rendu, évalue les règles de visibilité conditionnelle et valide les soumissions contre les règles du formulaire. La séparation des préoccupations, définitions de champs, génération de schéma, évaluation de conditions et validation des soumissions, reflète la façon dont les constructeurs de formulaires de production comme Typeform et JotForm fonctionnent en interne.
 
 :::tip[Exécute une version plus complète sans configuration locale]
 [`examples/form-builder/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/form-builder) dans le dépôt du cours a une version plus riche avec plus de types de champs, un formulaire multi-étapes d'exemple et la CLI câblée de bout en bout. Clone-le, ou ouvre tout le dépôt dans un [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), et lance-le depuis là.
@@ -595,6 +595,6 @@ Un constructeur de formulaires qui modélise les champs de formulaire comme des 
 
 ## Partage ton projet avec la classe
 
-Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres étudiants — et son README contient un parcours complet et accessible aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git auparavant : forker le dépôt, créer une branche, commiter tes fichiers et ouvrir la PR, une étape à la fois. Aucune expérience préalable de git n'est supposée.
+Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres étudiants, et son README contient un parcours complet et accessible aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git auparavant : forker le dépôt, créer une branche, commiter tes fichiers et ouvrir la PR, une étape à la fois. Aucune expérience préalable de git n'est supposée.
 
 Bienvenue dans l'écriture de Python en dehors du navigateur. 🎓

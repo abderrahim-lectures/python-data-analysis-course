@@ -1,6 +1,6 @@
 ---
 title: "Comparison Operators"
-description: "Test equality, inequality, and order — plus chain comparisons in a single expression."
+description: "Test equality, inequality, and order, plus chain comparisons in a single expression."
 module: "operators"
 order: 6
 difficulty: "beginner"
@@ -22,7 +22,7 @@ track: "normal"
 
 ## The computer, asked to decide
 
-An evaluation `2 + 3` produces a number. But most of what a program needs to know is not a number — it is a *decision*. Is the score passing? Is the username taken? Is the temperature within range? Comparison operators are the branch of the arithmetical family that produces an answer out of the set $\{\mathrm{True}, \mathrm{False}\}$ instead of out of $\mathbb{R}$.
+An evaluation `2 + 3` produces a number. But most of what a program needs to know is not a number, it is a *decision*. Is the score passing? Is the username taken? Is the temperature within range? Comparison operators are the branch of the arithmetical family that produces an answer out of the set $\{\mathrm{True}, \mathrm{False}\}$ instead of out of $\mathbb{R}$.
 
 ## The six comparison operators
 
@@ -49,7 +49,7 @@ x = 5
 0 <= x < 3     # False — the second fails
 ```
 
-This is a single expression, evaluated by the same pairing you would read: $0 \leq x$ and then $x < 10$, except the middle value is computed only once. Chained comparison is the same as $0 \leq x$ `and` $x < 10$ — but the chained form reads like the mathematics it came from.
+This is a single expression, evaluated by the same pairing you would read: $0 \leq x$ and then $x < 10$, except the middle value is computed only once. Chained comparison is the same as $0 \leq x$ `and` $x < 10$, but the chained form reads like the mathematics it came from.
 
 ## `==` asks about content; `is` asks about identity
 
@@ -65,7 +65,7 @@ c = a
 a is c    # True  — the same object
 ```
 
-`==` compares the values carried; `is` compares the memory locations. There are several boxes that happen to hold the same list; there is only one object. The two coincide for small things (like Python's cached small integers) and diverge for everything else, so the rule of thumb is steady: use `==` for content, and reserve `is` for the single singleton which has no content to compare — `None`:
+`==` compares the values carried; `is` compares the memory locations. There are several boxes that happen to hold the same list; there is only one object. The two coincide for small things (like Python's cached small integers) and diverge for everything else, so the rule of thumb is steady: use `==` for content, and reserve `is` for the single singleton which has no content to compare, `None`:
 
 ```python
 if x is None:    # correct
@@ -74,7 +74,7 @@ if x == None:    # works, but you are asking the wrong question
 
 ## Comparing across types
 
-Bringing values of different sets into a comparison — $\mathbb{Z}$ versus $\mathbb{S}$ — follows a fixed policy:
+Bringing values of different sets into a comparison, $\mathbb{Z}$ versus $\mathbb{S}$, follows a fixed policy:
 
 ```python
 5 == 5.0      # True  — numeric equality is type-ignorant
@@ -99,15 +99,15 @@ The pattern is a pair of questions and a decision: are they exactly equal? `Fals
 
 ## Common pitfalls
 
-- **`=` vs `==`.** `if score = 60:` is a syntax error — Python will not let you assign inside a condition by accident. The doubled sign is a guardrail, not a formality.
+- **`=` vs `==`.** `if score = 60:` is a syntax error, Python will not let you assign inside a condition by accident. The doubled sign is a guardrail, not a formality.
 - **Floating-point equality.** `0.1 + 0.2 == 0.3` is `False`. The binary representation of $0.1$ is infinite, so the sum lands at $0.30000000000000004$. Compare within a tolerance instead: `abs((0.1 + 0.2) - 0.3) < 1e-10`.
 - **`==` with `None`.** `x == None` happens to work; `x is None` is the question you actually mean.
-- **Float equality needs a tolerance; money needs whole units.** `0.1 + 0.2 == 0.3` fails (`False`), so either compare within `abs(a - b) < 1e-9` or count in cents — `120 == 12 * 10` is exact.
+- **Float equality needs a tolerance; money needs whole units.** `0.1 + 0.2 == 0.3` fails (`False`), so either compare within `abs(a - b) < 1e-9` or count in cents, `120 == 12 * 10` is exact.
 
 ## 🧩 Challenges
 
 <details class="challenge">
-<summary>🧩 Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge, think first, then reveal</summary>
 <div class="challenge__body">
 
 Predict each result without running: `5 == 5.0`, `"5" == 5`, `5 < "6"`.
@@ -118,18 +118,18 @@ Predict each result without running: `5 == 5.0`, `"5" == 5`, `5 < "6"`.
 </details>
 
 <details class="challenge">
-<summary>🧩 Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge, think first, then reveal</summary>
 <div class="challenge__body">
 
 Write a single chained comparison that checks whether a number $n$ lies in $[1, 100]$, without using `and`.
 
-<p class="challenge__answer">💡 <strong>Answer:</strong> <code>1 <= n <= 100</code> — the chained form reads exactly like the mathematical interval $1 \leq n \leq 100$.</p>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>1 <= n <= 100</code>, the chained form reads exactly like the mathematical interval $1 \leq n \leq 100$.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge, think first, then reveal</summary>
 <div class="challenge__body">
 
 Why does `0.1 + 0.2 == 0.3` evaluate to `False`? How would you write a correct floating-point equality test?

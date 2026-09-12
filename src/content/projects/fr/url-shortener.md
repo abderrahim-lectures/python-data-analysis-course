@@ -1,6 +1,6 @@
 ---
 title: "API Raccourcisseur d'URL"
-description: "Créez un raccourcisseur d'URL avec analytics — suivez les clics, les référents et les données géographiques."
+description: "Créez un raccourcisseur d'URL avec analytics, suivez les clics, les référents et les données géographiques."
 difficulty: "intermediate"
 estimatedMinutes: 70
 tags: ["api", "database", "sqlite"]
@@ -18,23 +18,23 @@ prerequisites:
 
 # 🛠️ 🔗 API Raccourcisseur d'URL
 
-Chaque lien que tu partages dans un chat est une courte chaîne qui cache une plus longue — et une redirection qui dit à celui qui la possède exactement à quelle fréquence, d'où et quel jour elle est cliquée. Ce projet construit ce service de bout en bout : des codes courts base62 stockés dans SQLite, un clic enregistré à chaque redirection, des analytics que tu peux interroger, et enfin une vraie couche FastAPI pour pouvoir `curl` ton propre raccourcisseur. C'est une petite mais complète API adossée à une base de données — la forme derrière de nombreux services de production.
+Chaque lien que tu partages dans un chat est une courte chaîne qui cache une plus longue, et une redirection qui dit à celui qui la possède exactement à quelle fréquence, d'où et quel jour elle est cliquée. Ce projet construit ce service de bout en bout : des codes courts base62 stockés dans SQLite, un clic enregistré à chaque redirection, des analytics que tu peux interroger, et enfin une vraie couche FastAPI pour pouvoir `curl` ton propre raccourcisseur. C'est une petite mais complète API adossée à une base de données, la forme derrière de nombreux services de production.
 
-Cela suppose Python 101 et un peu de familiarité avec les API REST et `curl` — rien d'Analyse de Données n'est requis. C'est optionnel et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
+Cela suppose Python 101 et un peu de familiarité avec les API REST et `curl`, rien d'Analyse de Données n'est requis. C'est optionnel et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 
 1. Concevoir un schéma SQLite pour les liens et les événements de clic.
 2. Générer des codes courts sans collision avec base62.
 3. Résoudre un code vers son URL tout en enregistrant un clic.
-4. Interroger les analytics par lien — totaux, référents et une série jour par jour.
+4. Interroger les analytics par lien, totaux, référents et une série jour par jour.
 5. L'envelopper dans un service FastAPI que tu peux appeler avec `curl`.
 
 ## Où exécuter ceci
 
 **En local avec `uv`** est le chemin principal. Un raccourcisseur est un *serveur* : il doit lier un port et répondre aux requêtes HTTP, ce que `uvicorn` sur ta machine fait bien. Les étapes du moteur (1-4) tournent parfaitement n'importe où, mais la boucle `curl` de l'Étape 5 veut un vrai serveur en cours d'exécution.
 
-**Google Colab, Kaggle Notebooks et Binder** exécutent tout le moteur (SQLite vit heureusement dans un notebook, et le notebook d'exemple exerce même l'API via le `TestClient` de FastAPI sans lier de port). L'honnêteté impose de préciser : un notebook est un chemin d'essai pour la partie *service* — tu n'y laisseras pas un serveur de longue durée tourner, et le fichier SQLite est éphémère. Utilise les badges pour l'expérience moteur + test-client, et exécute `uvicorn` en local quand tu veux la vraie chose.
+**Google Colab, Kaggle Notebooks et Binder** exécutent tout le moteur (SQLite vit heureusement dans un notebook, et le notebook d'exemple exerce même l'API via le `TestClient` de FastAPI sans lier de port). L'honnêteté impose de préciser : un notebook est un chemin d'essai pour la partie *service*, tu n'y laisseras pas un serveur de longue durée tourner, et le fichier SQLite est éphémère. Utilise les badges pour l'expérience moteur + test-client, et exécute `uvicorn` en local quand tu veux la vraie chose.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/url-shortener/notebook.fr.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/url-shortener/notebook.fr.ipynb)
@@ -54,7 +54,7 @@ uv add fastapi uvicorn
 uv run python -c "import fastapi, sqlite3; print('ok')"
 ```
 
-`sqlite3` est la base de données du moteur — une base SQL complète dans un seul fichier, aucun serveur à installer. `fastapi` construit les routes HTTP avec une validation pilotée par les types, et `uvicorn` est le serveur ASGI qui lie réellement le port et répond à `curl`.
+`sqlite3` est la base de données du moteur, une base SQL complète dans un seul fichier, aucun serveur à installer. `fastapi` construit les routes HTTP avec une validation pilotée par les types, et `uvicorn` est le serveur ASGI qui lie réellement le port et répond à `curl`.
 
 **✅ Liste de vérification**
 
@@ -104,11 +104,11 @@ init_db()
 print("tables ready")
 ```
 
-`row_factory = sqlite3.Row` est la ligne qualité-de-vie : les résultats de requête reviennent comme des lignes de type dict (`row["url"]`) au lieu de tuples anonymes, donc les analytics de l'Étape 4 se lisent comme du Python, pas comme un fouillis de positions. `code TEXT PRIMARY KEY` fait du code la clé naturelle — tu *veux* que les collisions d'insertion soient visibles. L'auto-incrément `clicks.id` est séparé, car un lien reçoit beaucoup de clics et un clic n'est pas un lien. Envelopper tout dans `closing(get_conn())` garantit que la connexion se ferme même si une requête lève.
+`row_factory = sqlite3.Row` est la ligne qualité-de-vie : les résultats de requête reviennent comme des lignes de type dict (`row["url"]`) au lieu de tuples anonymes, donc les analytics de l'Étape 4 se lisent comme du Python, pas comme un fouillis de positions. `code TEXT PRIMARY KEY` fait du code la clé naturelle, tu *veux* que les collisions d'insertion soient visibles. L'auto-incrément `clicks.id` est séparé, car un lien reçoit beaucoup de clics et un clic n'est pas un lien. Envelopper tout dans `closing(get_conn())` garantit que la connexion se ferme même si une requête lève.
 
 **🎯 Résultat attendu :** `tables ready` affiché, et un fichier `shortener.db` apparaît dans le dossier du projet. Relancer affiche la même ligne sans erreur.
 
-**🩹 Si ça ne marche pas :** Si la seconde exécution lève `OperationalError: table already exists`, c'est que les clauses `IF NOT EXISTS` manquent. Si `row["url"]` se comporte mal plus tard, `row_factory` est défini par connexion — vérifie qu'il est à l'intérieur de `get_conn()`, pas seulement dans une fonction appelante. Si le fichier apparaît ailleurs, la connexion utilise un chemin relatif et ton répertoire de travail diffère — affiche `DB` pour confirmer.
+**🩹 Si ça ne marche pas :** Si la seconde exécution lève `OperationalError: table already exists`, c'est que les clauses `IF NOT EXISTS` manquent. Si `row["url"]` se comporte mal plus tard, `row_factory` est défini par connexion, vérifie qu'il est à l'intérieur de `get_conn()`, pas seulement dans une fonction appelante. Si le fichier apparaît ailleurs, la connexion utilise un chemin relatif et ton répertoire de travail diffère, affiche `DB` pour confirmer.
 
 ### 1.2 Vérifie le schéma
 
@@ -164,11 +164,11 @@ for i in range(1, 140):
 print("first 138 codes fit in 2 chars")
 ```
 
-`divmod(n, 62)` est tout l'algorithme : il extrait un chiffre en base 62 par boucle (`remainder`) et réduit `n` d'un facteur 62, jusqu'à ce que `n` atteigne zéro — le même calcul de « retenue » derrière le comptage dans n'importe quelle base. Inverser les chiffres collectés met le plus significatif en premier, donc l'ordre des codes correspond à l'ordre numérique. `SELECT COUNT(*) from links` est une source d'id délibérément simple : monotone croissante à mesure que les liens sont ajoutés, donc ne collisionne jamais avec le code `A`. Le vrai gain de base62 est la densité — 138 liens tiennent en deux caractères, et la boucle `assert` le prouve empiriquement.
+`divmod(n, 62)` est tout l'algorithme : il extrait un chiffre en base 62 par boucle (`remainder`) et réduit `n` d'un facteur 62, jusqu'à ce que `n` atteigne zéro, le même calcul de « retenue » derrière le comptage dans n'importe quelle base. Inverser les chiffres collectés met le plus significatif en premier, donc l'ordre des codes correspond à l'ordre numérique. `SELECT COUNT(*) from links` est une source d'id délibérément simple : monotone croissante à mesure que les liens sont ajoutés, donc ne collisionne jamais avec le code `A`. Le vrai gain de base62 est la densité, 138 liens tiennent en deux caractères, et la boucle `assert` le prouve empiriquement.
 
-**🎯 Résultat attendu :** `A`, puis `py`, puis la boucle assert passant silencieusement (138 codes ≤ 2 caractères) — aucun crash.
+**🎯 Résultat attendu :** `A`, puis `py`, puis la boucle assert passant silencieusement (138 codes ≤ 2 caractères), aucun crash.
 
-**🩹 Si ça ne marche pas :** Si les codes reviennent dans le mauvais ordre (`B` avant `A`), c'est que le `reversed(chars)` manque. Si le même `A` apparaît deux fois, c'est que `COUNT(*)` est lu sur la mauvaise table ou que le nombre n'est pas incrémenté de 1. Si un code personnalisé collisionne, `sqlite3.IntegrityError` s'échappe sans être géré — la route de l'Étape 5 devra l'attraper, mais au niveau du moteur, cette erreur *est* le signal honnête de « pris ».
+**🩹 Si ça ne marche pas :** Si les codes reviennent dans le mauvais ordre (`B` avant `A`), c'est que le `reversed(chars)` manque. Si le même `A` apparaît deux fois, c'est que `COUNT(*)` est lu sur la mauvaise table ou que le nombre n'est pas incrémenté de 1. Si un code personnalisé collisionne, `sqlite3.IntegrityError` s'échappe sans être géré, la route de l'Étape 5 devra l'attraper, mais au niveau du moteur, cette erreur *est* le signal honnête de « pris ».
 
 ### 2.2 Vérifie la génération de codes
 
@@ -185,7 +185,7 @@ print("first 138 codes fit in 2 chars")
 
 ## Étape 3 : Résous les codes en URLs et suis les clics
 
-Un raccourcisseur qui ne compte pas les clics est un demi-service. Cette étape résout un code vers son URL — l'opération qu'un redirect effectue — et enregistre une ligne de clic pour chaque résolution, pour que les analytics de l'Étape 4 aient de vraies données.
+Un raccourcisseur qui ne compte pas les clics est un demi-service. Cette étape résout un code vers son URL, l'opération qu'un redirect effectue, et enregistre une ligne de clic pour chaque résolution, pour que les analytics de l'Étape 4 aient de vraies données.
 
 ### 3.1 Écris `resolve_url`
 
@@ -215,9 +215,9 @@ print("clicks:", resolve_url("missing-code"))
 
 L'ordre est la conception : *regarde, enregistre, retourne*. Regarder d'abord laisse un mauvais code retourner `None` tôt sans polluer la table des clics ; enregistrer *à l'intérieur* de la même connexion garantit que le clic et la lecture voient les mêmes données ; et retourner l'URL est ce qu'un gestionnaire de redirect remettra à `RedirectResponse`. Le paramètre referrer est passé par la couche HTTP, pas deviné ici, donc chaque ligne de clic porte qui a envoyé le visiteur.
 
-**🎯 Résultat attendu :** `clicks: None` — les trois appels `resolve_url("A")` ont enregistré trois lignes de clic, et `resolve_url("missing-code")` a retourné `None` au lieu de planter.
+**🎯 Résultat attendu :** `clicks: None`, les trois appels `resolve_url("A")` ont enregistré trois lignes de clic, et `resolve_url("missing-code")` a retourné `None` au lieu de planter.
 
-**🩹 Si ça ne marche pas :** Si un mauvais code plante avec un KeyError ou similaire, c'est que la fonction indexe `row["url"]` avant de vérifier `row is None`. Si les clics ne s'accumulent jamais dans la table, c'est que l'`INSERT` manque son chemin de commit (un `conn.execute` simple dans `closing` commit à la fermeture — retire le contexte de connexion et il s'annule silencieusement). Si `resolve_url` mute la base partagée pendant l'appel de *recherche*, tu as `UPDATE` au lieu d'`INSERT` dans le chemin de clic.
+**🩹 Si ça ne marche pas :** Si un mauvais code plante avec un KeyError ou similaire, c'est que la fonction indexe `row["url"]` avant de vérifier `row is None`. Si les clics ne s'accumulent jamais dans la table, c'est que l'`INSERT` manque son chemin de commit (un `conn.execute` simple dans `closing` commit à la fermeture, retire le contexte de connexion et il s'annule silencieusement). Si `resolve_url` mute la base partagée pendant l'appel de *recherche*, tu as `UPDATE` au lieu d'`INSERT` dans le chemin de clic.
 
 ### 3.2 Vérifie la résolution et le suivi des clics
 
@@ -229,12 +229,12 @@ L'ordre est la conception : *regarde, enregistre, retourne*. Regarder d'abord la
 
 **🤔 Question(s) socratique(s)**
 
-- Compter les clics *à l'intérieur* de la résolution d'un redirect signifie que chaque redirect a besoin d'une écriture en base de données. Qu'est-ce qui changerait dans la latence sous un trafic intense — et quel traitement par lots ou cache un service à un million de clics par jour ajouterait-il ici en premier ?
+- Compter les clics *à l'intérieur* de la résolution d'un redirect signifie que chaque redirect a besoin d'une écriture en base de données. Qu'est-ce qui changerait dans la latence sous un trafic intense, et quel traitement par lots ou cache un service à un million de clics par jour ajouterait-il ici en premier ?
 - Le référent vient de l'appelant. Un appelant malveillant peut forger `referrer="victim.example"`. Que fait un vrai raccourcisseur d'URL à ce sujet, et qu'afficherais-tu dans les analytics si tu t'en souciais ?
 
 ## Étape 4 : Interroge les analytics de clics
 
-Maintenant le vrai gain : agrège les clics enregistrés dans les trois nombres qu'un marketeur demande réellement — total, référents, et une série jour par jour — directement depuis SQL, sans boucle Python sur les données.
+Maintenant le vrai gain : agrège les clics enregistrés dans les trois nombres qu'un marketeur demande réellement, total, référents, et une série jour par jour, directement depuis SQL, sans boucle Python sur les données.
 
 ### 4.1 Écris la requête d'analytics
 
@@ -267,11 +267,11 @@ def click_stats(code: str) -> dict:
 print(click_stats("A"))
 ```
 
-Trois agrégats, une forme. `total` est le nombre vedette ; `GROUP BY referrer … ORDER BY n DESC` classe d'où vient le trafic ; et `substr(clicked_at, 1, 10)` tronque l'horodatage ISO à sa date (`2026-09-06`), ce qui est la manière au rabais d'obtenir une série par jour sans fonction de date — SQLite est content de `GROUP BY` cette chaîne. Chaque ligne de résultat est `dict(r)` pour que la sortie soit des dictionnaires simples sérialisables en JSON, prêts pour l'API de l'Étape 5.
+Trois agrégats, une forme. `total` est le nombre vedette ; `GROUP BY referrer … ORDER BY n DESC` classe d'où vient le trafic ; et `substr(clicked_at, 1, 10)` tronque l'horodatage ISO à sa date (`2026-09-06`), ce qui est la manière au rabais d'obtenir une série par jour sans fonction de date, SQLite est content de `GROUP BY` cette chaîne. Chaque ligne de résultat est `dict(r)` pour que la sortie soit des dictionnaires simples sérialisables en JSON, prêts pour l'API de l'Étape 5.
 
 **🎯 Résultat attendu :** Un dict avec `total_clicks` = 3 pour le code `A`, deux entrées de référent (`x.com` puis le compartiment `None`), et une liste `clicks_per_day` avec une ligne de jour comptant les 3.
 
-**🩹 Si ça ne marche pas :** Si `total_clicks` reste 0, l'insert de l'Étape 3 ne commit pas (voir le piège de l'Étape 3). Si `referrer` montre une ligne `None` qui refuse de se regrouper avec les autres, `GROUP BY referrer` traite le `NULL` SQL comme distinct de la chaîne vide — coalesce avec `IFNULL` si tu veux les fusionner. Si la série par jour regroupe tout en un seul jour, c'est que `substr(clicked_at,1,10)` découpe le mauvais format.
+**🩹 Si ça ne marche pas :** Si `total_clicks` reste 0, l'insert de l'Étape 3 ne commit pas (voir le piège de l'Étape 3). Si `referrer` montre une ligne `None` qui refuse de se regrouper avec les autres, `GROUP BY referrer` traite le `NULL` SQL comme distinct de la chaîne vide, coalesce avec `IFNULL` si tu veux les fusionner. Si la série par jour regroupe tout en un seul jour, c'est que `substr(clicked_at,1,10)` découpe le mauvais format.
 
 ### 4.2 Vérifie les analytics
 
@@ -283,12 +283,12 @@ Trois agrégats, une forme. `total` est le nombre vedette ; `GROUP BY referrer �
 
 **🤔 Question(s) socratique(s)**
 
-- Les tranches de `referrer` — y compris `NULL` — fuient dans les analytics. Qu'implique une ligne `GROUP BY referrer` de `null: 0`, et *cacherais-tu* cette ligne ou la libellerais-tu pour l'utilisateur ?
+- Les tranches de `referrer`, y compris `NULL`, fuient dans les analytics. Qu'implique une ligne `GROUP BY referrer` de `null: 0`, et *cacherais-tu* cette ligne ou la libellerais-tu pour l'utilisateur ?
 - Ces trois agrégats s'exécutent comme trois requêtes séparées. Quel `GROUP BY` + `UNION` unique pourrait produire les trois, et quand la complexité SQL supplémentaire vaudrait-elle l'aller-retour unique ?
 
 ## Étape 5 : Expose-le comme un service FastAPI
 
-Le moteur est complet — maintenant il devient quelque chose que tu peux `curl`. Cette étape enveloppe les trois opérations en routes HTTP : `POST /shorten`, `GET /u/{code}` (qui redirige — et enregistre le clic), et `GET /analytics/{code}`.
+Le moteur est complet, maintenant il devient quelque chose que tu peux `curl`. Cette étape enveloppe les trois opérations en routes HTTP : `POST /shorten`, `GET /u/{code}` (qui redirige, et enregistre le clic), et `GET /analytics/{code}`.
 
 ### 5.1 Écris l'application FastAPI
 
@@ -323,11 +323,11 @@ if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8000)
 ```
 
-Chaque route est une ligne unique parce que le moteur possède déjà la logique. `@app.post("/shorten")` laisse FastAPI prendre l'URL comme paramètre de requête aujourd'hui et un corps JSON demain ; `@app.get("/u/{code}")` est le redirect que le suivi de clics de l'Étape 3 alimente — chaque hit sur cette route est un clic ; et `HTTPException(404)` est la façon dont un code manquant se manifeste comme une erreur *web* plutôt qu'un `None` Python. Exécuter `uvicorn.run(app, ...)` derrière `if __name__ == "__main__":` garde `shortener.py` importable par les tests et les notebooks tout en restant un serveur exécutable.
+Chaque route est une ligne unique parce que le moteur possède déjà la logique. `@app.post("/shorten")` laisse FastAPI prendre l'URL comme paramètre de requête aujourd'hui et un corps JSON demain ; `@app.get("/u/{code}")` est le redirect que le suivi de clics de l'Étape 3 alimente, chaque hit sur cette route est un clic ; et `HTTPException(404)` est la façon dont un code manquant se manifeste comme une erreur *web* plutôt qu'un `None` Python. Exécuter `uvicorn.run(app, ...)` derrière `if __name__ == "__main__":` garde `shortener.py` importable par les tests et les notebooks tout en restant un serveur exécutable.
 
 **🎯 Résultat attendu :** Exécuter `uv run python shortener.py` démarre un serveur sur `127.0.0.1:8000`. Dans un autre terminal, `curl -s "http://127.0.0.1:8000/shorten?url=https://example.com/x"` retourne `{"short_url":"/u/B","code":"B"}` (ou similaire), `curl -L` sur `/u/B` suit la redirection, et `/analytics/B` rapporte de vrais comptes de clics.
 
-**🩹 Si ça ne marche pas :** Si `curl` obtient `Connection refused`, le serveur ne tourne pas ou a lié un autre port — vérifie le `port` de `uvicorn.run`. Si `POST /shorten` retourne `422 Unprocessable Entity`, c'est que le paramètre `url` n'a pas été fourni ou que l'annotation de type est fausse — `url: str` est requis, donc une clé de requête mal écrite fait 422. Si `/u/{code}` avec un code personnalisé lève 500 au lieu de 409 sur les doublons, c'est que l'`IntegrityError` n'est pas attrapée dans `create_link` — enveloppe l'insert.
+**🩹 Si ça ne marche pas :** Si `curl` obtient `Connection refused`, le serveur ne tourne pas ou a lié un autre port, vérifie le `port` de `uvicorn.run`. Si `POST /shorten` retourne `422 Unprocessable Entity`, c'est que le paramètre `url` n'a pas été fourni ou que l'annotation de type est fausse, `url: str` est requis, donc une clé de requête mal écrite fait 422. Si `/u/{code}` avec un code personnalisé lève 500 au lieu de 409 sur les doublons, c'est que l'`IntegrityError` n'est pas attrapée dans `create_link`, enveloppe l'insert.
 
 ### 5.2 Vérifie le service complet
 
@@ -340,20 +340,20 @@ Chaque route est une ligne unique parce que le moteur possède déjà la logique
 
 **🤔 Question(s) socratique(s)**
 
-- Chaque hit sur `/u/{code}` enregistre un clic — y compris les humains qui cliquent le lien raccourci par accident. Qu'ajouterais-tu pour distinguer les clics « réels » (filtres de bots, attribution au premier clic, géo) et où ces données iraient-elles, si le schéma était rouvert ?
+- Chaque hit sur `/u/{code}` enregistre un clic, y compris les humains qui cliquent le lien raccourci par accident. Qu'ajouterais-tu pour distinguer les clics « réels » (filtres de bots, attribution au premier clic, géo) et où ces données iraient-elles, si le schéma était rouvert ?
 - `shorten` prend aujourd'hui l'URL comme paramètre de requête, ce qui fuit les URLs dans les journaux serveur. Que change le passage à un corps JSON `POST` en matière de caching, de journalisation et de la façon dont les navigateurs envoient la requête ?
 
 ## ⚠️ Pièges courants
 
 - **Oublier `row_factory` par connexion.** Il est défini dans `get_conn()`, donc toute fonction qui crée son propre `sqlite3.connect` obtient des tuples et `row["url"]` plante. Correction : tout accès passe par `get_conn()`.
 - **Ne pas committer le clic.** Un `INSERT` simple sur une connexion qui ne se ferme jamais proprement peut s'annuler silencieusement, laissant `resolve_url` retourner des URLs mais les analytics à zéro. Correction : utilise le contexte `closing(get_conn())` pour que le commit au moment de la fermeture s'exécute toujours.
-- **Des codes personnalisés en collision.** `INSERT` avec un code existant lève `sqlite3.IntegrityError` — le signal est honnête mais brut. Correction : attrape-le dans `create_link` et mappe-le vers un `409 Conflict` à l'Étape 5.
+- **Des codes personnalisés en collision.** `INSERT` avec un code existant lève `sqlite3.IntegrityError`, le signal est honnête mais brut. Correction : attrape-le dans `create_link` et mappe-le vers un `409 Conflict` à l'Étape 5.
 - **Des codes qui ne cessent de grandir.** `COUNT(*) + 1` produit des codes uniquement pour les lignes *existantes* ; si tu supprimes des liens, les codes sont réutilisés, cassant les anciens redirects. Correction : réserve le code par unicité, ou garde un compteur monotone dans sa propre table.
 - **Faire confiance aux en-têtes referrer.** Les référents viennent de l'appelant et sont forgeables. Correction : traite-les comme l'indice marketing qu'ils sont, et ne laisse jamais un `referrer` prétendu piloter des décisions de sécurité.
 
 ## Ce que tu viens de construire
 
-Un raccourcisseur d'URL réellement adossé à une base de données : codes base62, persistance SQLite, suivi de clics sur chaque redirection, analytics pilotées par SQL, et un service FastAPI que tu as conduit toi-même avec `curl`. La compétence transférable est la *boucle API adossée à une base de données* — schéma d'abord, fonctions de moteur ensuite, enveloppe HTTP en dernier — qui est la même forme en trois couches derrière les apps de todo, les tableaux de bord, et la plupart des configurations de « collecter des données, les stocker, les exposer ».
+Un raccourcisseur d'URL réellement adossé à une base de données : codes base62, persistance SQLite, suivi de clics sur chaque redirection, analytics pilotées par SQL, et un service FastAPI que tu as conduit toi-même avec `curl`. La compétence transférable est la *boucle API adossée à une base de données*, schéma d'abord, fonctions de moteur ensuite, enveloppe HTTP en dernier, qui est la même forme en trois couches derrière les apps de todo, les tableaux de bord, et la plupart des configurations de « collecter des données, les stocker, les exposer ».
 
 :::tip[Exécute une version plus complète sans aucune configuration locale]
 [`examples/url-shortener/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/url-shortener) dans le dépôt du cours est une version plus complète du code ci-dessus, avec la gestion du corps `POST`, le support d'expiration et une démo pilotée par `TestClient` que tu peux exécuter entièrement dans un notebook. Clone-le, ou ouvre tout le dépôt dans un [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), et exécute-le depuis là.
@@ -361,13 +361,13 @@ Un raccourcisseur d'URL réellement adossé à une base de données : codes base
 
 ## Où aller à partir d'ici
 
-- Ajoute une route `GET /latest` qui liste les liens les plus récents avec leurs totaux de clics — une requête `ORDER BY created_at DESC LIMIT 10`.
+- Ajoute une route `GET /latest` qui liste les liens les plus récents avec leurs totaux de clics, une requête `ORDER BY created_at DESC LIMIT 10`.
 - Implémente l'expiration : une colonne stockant `expires_at`, et `resolve_url` retourne `404` quand `datetime.now()` l'a dépassée.
 - Limite le débit de `/shorten` par IP pour qu'une clé récupérée ne puisse pas fabriquer mille liens par seconde.
 - Génère des codes QR pour chaque URL courte (la bibliothèque `qrcode` est une installation) et sers-les depuis `/u/{code}.png`.
 
 ## Partage ton projet avec la classe
 
-Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres élèves — et son README a un tutoriel complet et adapté aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git avant : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable avec git n'est supposée.
+Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres élèves, et son README a un tutoriel complet et adapté aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git avant : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable avec git n'est supposée.
 
 Bienvenue dans l'écriture de Python en dehors du navigateur. 🎓

@@ -41,7 +41,7 @@ const diffColor = (d: string) => d === 'beginner' ? 'var(--success)' : d === 'in
 const arrow = locale === 'ar' ? '←' : '→';
 ---
 
-<Base title={`${sectionName(section)} ${trackName(track)} Track — PyDA Course`} description={sectionDescription(section)} lang={locale} dir={dir} alternates={learnAlternates(section, track, 'track')}>
+<Base title={`${sectionName(section)} ${trackName(track)} Track, PyDA Course`} description={sectionDescription(section)} lang={locale} dir={dir} alternates={learnAlternates(section, track, 'track')}>
   <nav class="crumb container">
     <a href={learnHref(locale, base)}>{m.nav_learn()}</a> <span>/</span>
     <a href={learnHref(locale, base, section)}>{sectionName(section)}</a> <span>/</span>
@@ -50,7 +50,7 @@ const arrow = locale === 'ar' ? '←' : '→';
 
   <section class="container hero-section">
     <div class="hero-icon">{TRACK_ICONS[track]}</div>
-    <h1>{sectionName(section)} — {trackName(track)}</h1>
+    <h1>{sectionName(section)}, {trackName(track)}</h1>
     <p>{sectionDescription(section)}</p>
     <div class="hero-stats">
       <span class="stat">📖 {totalLessons}</span>
@@ -115,4 +115,5 @@ const arrow = locale === 'ar' ? '←' : '→';
   .module-card__arrow { font-size: 1.2rem; color: var(--ink-soft); transition: transform .15s ease; flex-shrink: 0; }
   .module-card:hover .module-card__arrow { transform: translateX(4px); color: var(--accent); }
   [dir='rtl'] .module-card:hover .module-card__arrow { transform: translateX(-4px); }
+  @media (max-width: 640px) { .hero-section { padding: 1.5rem 0 1.25rem; } .crumb { padding-top: .8rem; } }
 </style>

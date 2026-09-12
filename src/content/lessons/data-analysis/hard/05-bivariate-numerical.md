@@ -66,7 +66,7 @@ ax.set_ylabel("Reading Score")
 plt.show()
 ```
 
-Alpha transparency (`alpha=0.5`) is critical — it reveals point density where points overlap.
+Alpha transparency (`alpha=0.5`) is critical, it reveals point density where points overlap.
 
 ### Regression plots
 
@@ -256,7 +256,7 @@ plt.show()
 Create a figure with 4 panels showing: (1) scatter plot of math vs writing scores, (2) scatter with regression line, (3) hexbin density plot, and (4) scatter colored by lunch type. Add appropriate titles and axis labels.
 
 <details class="challenge">
-<summary>🧩 Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge, think first, then reveal</summary>
 <div class="challenge__body">
 
 ```python

@@ -1,6 +1,6 @@
 ---
 title: "Type Conversion"
-description: "Convert between int, float, str, and bool explicitly — and understand when conversions fail."
+description: "Convert between int, float, str, and bool explicitly, and understand when conversions fail."
 module: "python-basics"
 order: 4
 difficulty: "beginner"
@@ -22,7 +22,7 @@ track: "normal"
 
 ## Why would a value need to change set?
 
-You type a birth year into a form. Python's `input()` hands you back a **string** — `"2004"`. But `"2004"` is not a number in any arithmetic sense: try `"2004" + 26` and Python answers `"200426"`, because to a string `+` means *join*, not *add*.
+You type a birth year into a form. Python's `input()` hands you back a **string**, `"2004"`. But `"2004"` is not a number in any arithmetic sense: try `"2004" + 26` and Python answers `"200426"`, because to a string `+` means *join*, not *add*.
 
 You hold the digits of a number without the number. The set it belongs to is wrong. A value that crossed from the keyboard into a program arrives as text, and text cannot do arithmetic.
 
@@ -41,7 +41,7 @@ bool(0)         # False  — number -> truth value
 
 Reading these out loud says what they are: `str(42)` is "give me the string version of $42$". The function name is the name of the target set, and the parentheses are the conversion machine itself.
 
-## Conversion does not round — it truncates
+## Conversion does not round, it truncates
 
 Now a subtlety that costs beginners real bugs. You want the whole part of $3.9$. What should the answer be?
 
@@ -76,7 +76,7 @@ int("3.14")     # ValueError: invalid literal for int()  ("3.14" is digits with 
 float("hello")  # ValueError: could not convert string to float
 ```
 
-`"hello"` contains no digits at all — nothing to convert, so Python refuses. `int("3.14")` is trickier: it *has* digits, but the conversion function `int` accepts only a whole literal, and `3.14` is not whole. You must pass through `float` if you want to shrink it:
+`"hello"` contains no digits at all, nothing to convert, so Python refuses. `int("3.14")` is trickier: it *has* digits, but the conversion function `int` accepts only a whole literal, and `3.14` is not whole. You must pass through `float` if you want to shrink it:
 
 ```python
 int(float("3.14"))   # 3  — parse 3.14, truncate to 3
@@ -86,7 +86,7 @@ Notice the philosophy: Python fails loudly rather than guessing what you meant. 
 
 ## The daily trap: `input()` returns a string
 
-Every single time, `input()` returns a `str` — even when the user types `2004`. The number you wanted is still on the other side of a conversion:
+Every single time, `input()` returns a `str`, even when the user types `2004`. The number you wanted is still on the other side of a conversion:
 
 ```python
 year_text = input("Birth year? ")   # str, always
@@ -121,23 +121,23 @@ The funnel matters because each step is a different promise: `float(...)` turns 
 - **`int("3.14")` raises an error.** You cannot parse a float string straight into `int()`. Shrink it by hand: `int(float("3.14"))`, or `round(float("3.14"))`.
 - **`int()` truncates, `round()` rounds.** `int(4.7)` is `4`, not `5`. Ask yourself which operation you actually describe when you say "convert this to an integer."
 - **`float("inf")` is valid.** Python knows infinity: `float('inf')`. Handy in optimization algorithms, startling when it slips into a result you expected to be finite.
-- **`int()` and `bool()` truncate and reinterpret silently.** `int(3.9)` quietly chops the fraction; `bool("")` quietly returns `False`. Parsing text fails loudly (`ValueError`), but number-to-number conversions are quiet — those are the ones to double-check.
+- **`int()` and `bool()` truncate and reinterpret silently.** `int(3.9)` quietly chops the fraction; `bool("")` quietly returns `False`. Parsing text fails loudly (`ValueError`), but number-to-number conversions are quiet, those are the ones to double-check.
 
 ## 🧩 Challenges
 
 <details class="challenge">
-<summary>🧩 Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge, think first, then reveal</summary>
 <div class="challenge__body">
 
 Predict `int(-7.9)` and `-7.9 // 1`. Are they the same? Explain any difference.
 
-<p class="challenge__answer">💡 <strong>Answer:</strong> <code>int(-7.9)</code> is <code>-7</code> (truncates toward zero — chops the decimal part), while <code>-7.9 // 1</code> is <code>-8.0</code> (floors toward negative infinity). They agree for positive numbers and differ for negative ones.</p>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>int(-7.9)</code> is <code>-7</code> (truncates toward zero, chops the decimal part), while <code>-7.9 // 1</code> is <code>-8.0</code> (floors toward negative infinity). They agree for positive numbers and differ for negative ones.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge, think first, then reveal</summary>
 <div class="challenge__body">
 
 Write a program that asks for a name and a birth year (two separate `input()` prompts), computes an approximate age, and prints a sentence like `"Amina, you are about 21 years old."`
@@ -148,12 +148,12 @@ Write a program that asks for a name and a birth year (two separate `input()` pr
 </details>
 
 <details class="challenge">
-<summary>🧩 Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge, think first, then reveal</summary>
 <div class="challenge__body">
 
 Without running it, compute `15 // 4` and `15 % 4` by hand, then verify whether $4 \cdot (15 // 4) + (15 \% 4)$ reproduces $15$.
 
-<p class="challenge__answer">💡 <strong>Answer:</strong> <code>15 // 4</code> is <code>3</code> (the floor of $3.75$), and <code>15 % 4</code> is <code>3</code>, since $15 = 4 \cdot 3 + 3$. Together <code>4 * 3 + 3 = 15</code> — the division identity $\text{dividend} = \text{divisor} \cdot \text{quotient} + \text{remainder}$.</p>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>15 // 4</code> is <code>3</code> (the floor of $3.75$), and <code>15 % 4</code> is <code>3</code>, since $15 = 4 \cdot 3 + 3$. Together <code>4 * 3 + 3 = 15</code>, the division identity $\text{dividend} = \text{divisor} \cdot \text{quotient} + \text{remainder}$.</p>
 
 </div>
 </details>

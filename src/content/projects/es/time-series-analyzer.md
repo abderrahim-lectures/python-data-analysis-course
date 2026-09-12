@@ -18,9 +18,9 @@ prerequisites:
 
 # 🛠️ 📈 Analizador de Series Temporales
 
-Registros de temperatura, carga de servidores, tráfico web — casi todo lo real llega como una secuencia a lo largo del tiempo, y los analistas pasan sus días separando lo que una serie *hace* en tres señales: la deriva lenta (tendencia), el ritmo repetitivo (estacionalidad) y el ruido sobrante (residuo). Este proyecto construye esa descomposición desde cero con pandas, y luego usa las piezas: pronostica la próxima semana con un modelo de tendencia-más-estación, puntúa el pronóstico contra un holdout real, marca las fechas que no encajan en el patrón y correlaciona dos series en un gráfico que puedes guardar de verdad.
+Registros de temperatura, carga de servidores, tráfico web, casi todo lo real llega como una secuencia a lo largo del tiempo, y los analistas pasan sus días separando lo que una serie *hace* en tres señales: la deriva lenta (tendencia), el ritmo repetitivo (estacionalidad) y el ruido sobrante (residuo). Este proyecto construye esa descomposición desde cero con pandas, y luego usa las piezas: pronostica la próxima semana con un modelo de tendencia-más-estación, puntúa el pronóstico contra un holdout real, marca las fechas que no encajan en el patrón y correlaciona dos series en un gráfico que puedes guardar de verdad.
 
-Esto asume Python 101 y comodidad con las Series de pandas — no se requiere nada de Análisis de Datos más allá de eso. Es opcional y no se califica; consulta [Proyectos del Mundo Real](/es/proyectos) para ver la lista completa y en crecimiento.
+Esto asume Python 101 y comodidad con las Series de pandas, no se requiere nada de Análisis de Datos más allá de eso. Es opcional y no se califica; consulta [Proyectos del Mundo Real](/es/proyectos) para ver la lista completa y en crecimiento.
 
 ## 🎯 Lo que harás
 
@@ -34,7 +34,7 @@ Esto asume Python 101 y comodidad con las Series de pandas — no se requiere na
 
 **Localmente con `uv`** es la ruta principal. pandas y NumPy se instalan limpiamente, el backend no interactivo `Agg` de matplotlib (Paso 5) renderiza los gráficos incluso sin pantalla, y tus archivos de gráfico aterrizan de verdad en la carpeta del proyecto.
 
-**Google Colab, Kaggle Notebooks y Binder** ejecutan cada paso de forma idéntica — las tres bibliotecas están preinstaladas ahí. La salvedad honesta es la habitual para los proyectos de visualización de datos: el sistema de archivos de un notebook es efímero, así que el PNG guardado y cualquier CSV que escribas pueden no sobrevivir a un reinicio de sesión. Trátalos como caminos de prueba y cambia a `uv` local cuando los artefactos necesiten persistir.
+**Google Colab, Kaggle Notebooks y Binder** ejecutan cada paso de forma idéntica, las tres bibliotecas están preinstaladas ahí. La salvedad honesta es la habitual para los proyectos de visualización de datos: el sistema de archivos de un notebook es efímero, así que el PNG guardado y cualquier CSV que escribas pueden no sobrevivir a un reinicio de sesión. Trátalos como caminos de prueba y cambia a `uv` local cuando los artefactos necesiten persistir.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/time-series-analyzer/notebook.es.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/time-series-analyzer/notebook.es.ipynb)
@@ -67,7 +67,7 @@ El análisis de series temporales vive o muere por el índice: cada ventana, dí
 
 ### 1.1 Genera la serie de clientes de la cafetería
 
-**👟 Pista inicial :** Construye la serie a partir de tres partes deliberadamente nombradas — una tendencia lineal, una estacionalidad semanal sinusoidal clave basada en `dayofweek` y ruido sembrado — para que la descomposición del Paso 2 tenga estructura real que recuperar.
+**👟 Pista inicial :** Construye la serie a partir de tres partes deliberadamente nombradas, una tendencia lineal, una estacionalidad semanal sinusoidal clave basada en `dayofweek` y ruido sembrado, para que la descomposición del Paso 2 tenga estructura real que recuperar.
 
 ```python
 # series.py
@@ -87,7 +87,7 @@ print(s.head(3))
 print("index type:", type(s.index).__name__, "| dtype:", s.dtype)
 ```
 
-`idx.dayofweek` es el accessor crucial de pandas: produce 0–6 (lunes–domingo) para cada fila, y multiplicar por `2π/7` desfasa el seno para que los días de la semana alternen alto y bajo — *estacionalidad* semanal real, no una fluctuación aleatoria. `np.random.default_rng(seed)` es la API moderna de sembrado de NumPy; la semilla fija hace que el ruido sea reproducible. Devolver una `Series` con `index=idx, name="guests"` significa que cada función posterior (ventanas móviles, `groupby` por día de la semana, trazado) obtiene las marcas de tiempo de forma gratuita.
+`idx.dayofweek` es el accessor crucial de pandas: produce 0–6 (lunes–domingo) para cada fila, y multiplicar por `2π/7` desfasa el seno para que los días de la semana alternen alto y bajo, *estacionalidad* semanal real, no una fluctuación aleatoria. `np.random.default_rng(seed)` es la API moderna de sembrado de NumPy; la semilla fija hace que el ruido sea reproducible. Devolver una `Series` con `index=idx, name="guests"` significa que cada función posterior (ventanas móviles, `groupby` por día de la semana, trazado) obtiene las marcas de tiempo de forma gratuita.
 
 **🎯 Resultado esperado :** Tres filas con fecha (empezando `2025-01-01`), valores cerca de 100, más `index type: DatetimeIndex | dtype: float64`.
 
@@ -108,11 +108,11 @@ print("index type:", type(s.index).__name__, "| dtype:", s.dtype)
 
 ## Paso 2: Descompón en tendencia, estacionalidad y residuo
 
-Una tendencia es "lo que la serie hace lentamente"; la estacionalidad es "el ritmo que se repite"; el residuo es "todo lo demás". Este paso calcula los tres directamente — una media móvil para la tendencia, promedios por día de la semana para la estacionalidad y lo que quede como el residuo.
+Una tendencia es "lo que la serie hace lentamente"; la estacionalidad es "el ritmo que se repite"; el residuo es "todo lo demás". Este paso calcula los tres directamente, una media móvil para la tendencia, promedios por día de la semana para la estacionalidad y lo que quede como el residuo.
 
 ### 2.1 Escribe la descomposición aditiva
 
-**👟 Pista inicial :** El orden de curador de museo importa — primero la tendencia (media móvil), luego `series - trend` para el resto des-tendencializado, luego los promedios por día de la semana de ese resto como estacionalidad, y luego `detrended - seasonal` como residuo.
+**👟 Pista inicial :** El orden de curador de museo importa, primero la tendencia (media móvil), luego `series - trend` para el resto des-tendencializado, luego los promedios por día de la semana de ese resto como estacionalidad, y luego `detrended - seasonal` como residuo.
 
 ```python
 # series.py (continuación)
@@ -128,11 +128,11 @@ print(seasonal.groupby(seasonal.index.dayofweek).first().to_string())
 print("residual std: {:.2f}".format(residual.std()))
 ```
 
-La media móvil con `center=True` es el estimador de tendencia: cada punto se convierte en el promedio de su vecindario de ±7 días, lo que suaviza el ciclo semanal mientras preserva la deriva lenta. Restarlo (`detrended`) deja el puro ritmo más el ruido, y `groupby(dayofweek).transform("mean")` es el truco ordenado de la estacionalidad — calcula el promedio para cada día de la semana *y lo transmite* de vuelta a cada fila con ese día de la semana, así que `seasonal` tiene la misma longitud que `series`. El residuo es solo lo que sobrevivió a ambas restas, y su desviación estándar es tu primera señal de corrección: debería estar muy por debajo del `std` de la serie cruda.
+La media móvil con `center=True` es el estimador de tendencia: cada punto se convierte en el promedio de su vecindario de ±7 días, lo que suaviza el ciclo semanal mientras preserva la deriva lenta. Restarlo (`detrended`) deja el puro ritmo más el ruido, y `groupby(dayofweek).transform("mean")` es el truco ordenado de la estacionalidad, calcula el promedio para cada día de la semana *y lo transmite* de vuelta a cada fila con ese día de la semana, así que `seasonal` tiene la misma longitud que `series`. El residuo es solo lo que sobrevivió a ambas restas, y su desviación estándar es tu primera señal de corrección: debería estar muy por debajo del `std` de la serie cruda.
 
-**🎯 Resultado esperado :** Siete filas (una por día de la semana) de desplazamiento estacional, más un `residual std` alrededor de 4–6 — claramente más pequeño que la dispersión de ~16 de la serie cruda.
+**🎯 Resultado esperado :** Siete filas (una por día de la semana) de desplazamiento estacional, más un `residual std` alrededor de 4–6, claramente más pequeño que la dispersión de ~16 de la serie cruda.
 
-**🩹 Si sale mal :** Si `seasonal` tiene filas `NaN` en los bordes, la ventana `center=True` deja los primeros/últimos 7 días indefinidos — esperado, filtra con `.dropna()`. Si el std del residuo es casi cero, el término de ruido nunca llegó al generador. Si los desplazamientos semanales varían mucho entre filas del mismo día de la semana, `transform` se reemplazó por `apply` — `transform` es lo que transmite a cada fila.
+**🩹 Si sale mal :** Si `seasonal` tiene filas `NaN` en los bordes, la ventana `center=True` deja los primeros/últimos 7 días indefinidos, esperado, filtra con `.dropna()`. Si el std del residuo es casi cero, el término de ruido nunca llegó al generador. Si los desplazamientos semanales varían mucho entre filas del mismo día de la semana, `transform` se reemplazó por `apply`, `transform` es lo que transmite a cada fila.
 
 ### 2.2 Verifica la descomposición
 
@@ -144,7 +144,7 @@ La media móvil con `center=True` es el estimador de tendencia: cada punto se co
 
 **🤔 Pregunta(s) socrática(s)**
 
-- Una media móvil es un *filtro de paso bajo* sobre la serie. ¿Qué le sucede a un pico genuino de una sola vez en el `residual` del Paso 4 si la ventana de tendencia es enorme (digamos 90 días) en lugar de 14 — y cuándo sería eso útil o perjudicial?
+- Una media móvil es un *filtro de paso bajo* sobre la serie. ¿Qué le sucede a un pico genuino de una sola vez en el `residual` del Paso 4 si la ventana de tendencia es enorme (digamos 90 días) en lugar de 14, y cuándo sería eso útil o perjudicial?
 - El valor estacional es un promedio por día de la semana, así que trata los cinco lunes de un mes como idénticos. ¿Qué cambiaría si la estacionalidad misma se desviara a lo largo del año (invierno vs verano)?
 
 ## Paso 3: Pronostica con tendencia más estacionalidad
@@ -173,9 +173,9 @@ fc = forecast_next(s, seasonal)
 print(fc.round(1).to_string())
 ```
 
-`np.polyfit(X, y, 1)` encuentra la mejor línea recta a través de los últimos `window` valores reales — obtienes la pendiente, y la intersección la sitúa. Pronosticar es entonces aritmética: extiende esa línea a los índices `window … window+horizon` (posiciones del eje X *después* de la ventana de entrenamiento) y añade `seasonal[future.dayofweek]` para que el ritmo semanal de cada día cabalgue sobre la línea. Hacer la tendencia y el ritmo por separado — en lugar de pronosticar valores ruidosos crudos con un solo modelo — es todo el punto del Paso 2.
+`np.polyfit(X, y, 1)` encuentra la mejor línea recta a través de los últimos `window` valores reales, obtienes la pendiente, y la intersección la sitúa. Pronosticar es entonces aritmética: extiende esa línea a los índices `window … window+horizon` (posiciones del eje X *después* de la ventana de entrenamiento) y añade `seasonal[future.dayofweek]` para que el ritmo semanal de cada día cabalgue sobre la línea. Hacer la tendencia y el ritmo por separado, en lugar de pronosticar valores ruidosos crudos con un solo modelo, es todo el punto del Paso 2.
 
-**🎯 Resultado esperado :** Siete valores con fecha, aproximadamente 140–160 y *no* una rampa recta — los días de la semana cabalgan visiblemente el seno semanal.
+**🎯 Resultado esperado :** Siete valores con fecha, aproximadamente 140–160 y *no* una rampa recta, los días de la semana cabalgan visiblemente el seno semanal.
 
 **🩹 Si sale mal :** Si el pronóstico es constante, `np.polyfit` devolvió una pendiente ~cero porque `window` era demasiado corto o `y` no era la cola. Si el pronóstico es ruido dentado, no se ha añadido `weekly` y solo sobrevivió la línea. Si las fechas aterrizan *antes* del final de la serie, falta el desplazamiento `pd.Timedelta(days=1)`.
 
@@ -190,11 +190,11 @@ print(fc.round(1).to_string())
 **🤔 Pregunta(s) socrática(s)**
 
 - Ajustar una línea recta asume una tasa constante de crecimiento. ¿Qué forma tomaría el pronóstico si la *verdadera* tendencia se estuviera acelerando, y dónde falla la suposición de la línea recta de forma más visible en los datos reales?
-- El pronóstico usa la pendiente de los últimos 30 puntos. ¿Cómo cambiaría el pronóstico de la próxima semana si en su lugar ajustaras la línea sobre el componente de tendencia de todo el *año* — y qué elección se siente más robusta, y por qué?
+- El pronóstico usa la pendiente de los últimos 30 puntos. ¿Cómo cambiaría el pronóstico de la próxima semana si en su lugar ajustaras la línea sobre el componente de tendencia de todo el *año*, y qué elección se siente más robusta, y por qué?
 
 ## Paso 4: Haz backtest del pronóstico y mide el error
 
-Un pronóstico que no puedes puntuar es una conjetura. El backtesting re-ajusta el modelo sobre los datos *anteriores* a una semana retenida y compara sus predicciones con los valores que esa semana realmente tuvo — la forma honesta de saber si tu modelo es bueno antes de confiar en él hacia adelante.
+Un pronóstico que no puedes puntuar es una conjetura. El backtesting re-ajusta el modelo sobre los datos *anteriores* a una semana retenida y compara sus predicciones con los valores que esa semana realmente tuvo, la forma honesta de saber si tu modelo es bueno antes de confiar en él hacia adelante.
 
 ### 4.1 Puntúa el pronóstico contra el holdout
 
@@ -213,11 +213,11 @@ def backtest(series: pd.Series, seasonal: pd.Series,
 print("MAE on held-out week: {:.2f} guests".format(backtest(s, seasonal)))
 ```
 
-`series.iloc[:-horizon]` corta la última semana — el modelo literalmente no puede ver esos días — y `forecast_next` corre sobre lo que queda, así que la comparación `fc - actual` es una prueba genuina fuera de muestra. Reportar el **error absoluto medio** (`abs().mean()`) mantiene las unidades humanas: "equivocado por ~4 clientes", no un número al cuadrado que nadie siente. El componente estacional se pasa sin cambios; el atajo honesto es que el *ritmo* se aprendió de la serie completa, mientras que la *tendencia* se re-ajustó sobre los datos truncados — un ajuste solucionable documentado como tal.
+`series.iloc[:-horizon]` corta la última semana, el modelo literalmente no puede ver esos días, y `forecast_next` corre sobre lo que queda, así que la comparación `fc - actual` es una prueba genuina fuera de muestra. Reportar el **error absoluto medio** (`abs().mean()`) mantiene las unidades humanas: "equivocado por ~4 clientes", no un número al cuadrado que nadie siente. El componente estacional se pasa sin cambios; el atajo honesto es que el *ritmo* se aprendió de la serie completa, mientras que la *tendencia* se re-ajustó sobre los datos truncados, un ajuste solucionable documentado como tal.
 
 **🎯 Resultado esperado :** Un MAE de un solo dígito bajo (aproximadamente 3–6 clientes), consistentemente muy por debajo de una conjetura ingenua como predecir el promedio general.
 
-**🩹 Si sale mal :** Si el MAE se infla a 20+, el pronóstico todavía incluye la estacionalidad de la próxima semana construida desde la serie completa pero el ajuste de tendencia se está calculando sobre un marco vacío — comprueba que `train` no esté vacío. Si `fc` y `actual` se desalinean, `forecast_next` produce fechas más allá de `train.index[- horizon]` — confirma el desplazamiento `days=1`. Si el puntaje se desvía entre ejecuciones, `seasonal` vino de una serie sembrada de forma diferente.
+**🩹 Si sale mal :** Si el MAE se infla a 20+, el pronóstico todavía incluye la estacionalidad de la próxima semana construida desde la serie completa pero el ajuste de tendencia se está calculando sobre un marco vacío, comprueba que `train` no esté vacío. Si `fc` y `actual` se desalinean, `forecast_next` produce fechas más allá de `train.index[- horizon]`, confirma el desplazamiento `days=1`. Si el puntaje se desvía entre ejecuciones, `seasonal` vino de una serie sembrada de forma diferente.
 
 ### 4.2 Verifica el backtest
 
@@ -234,7 +234,7 @@ print("MAE on held-out week: {:.2f} guests".format(backtest(s, seasonal)))
 
 ## Paso 5: Detecta anomalías y grafica el par
 
-Dos movimientos finales convierten el analizador en un artefacto terminado: marca las fechas donde la realidad no encajó en el modelo (residuos grandes) y grafica la serie contra un par correlacionado — guardado como un archivo que puedes compartir.
+Dos movimientos finales convierten el analizador en un artefacto terminado: marca las fechas donde la realidad no encajó en el modelo (residuos grandes) y grafica la serie contra un par correlacionado, guardado como un archivo que puedes compartir.
 
 ### 5.1 Marca anomalías y dibuja el gráfico de correlación
 
@@ -269,11 +269,11 @@ fig.tight_layout()
 fig.savefig("series.png", dpi=100)
 ```
 
-`(residual - residual.mean()) / residual.std()` convierte cada residuo en una z-score — "¿cuántas desviaciones estándar lejos del patrón está este día?" — y el corte `> 2.5` mantiene los valores atípicos honestos (un día de 3 sigma) sin marcar la mitad del archivo. La correlación es la estadística de resumen: `s.corr(spend)` devuelve un número en [-1, 1], y los valores cerca de 0.9 te dicen que las dos métricas se mueven juntas. En el gráfico, dividir `spend` por su multiplicador aproximado superpone ambas series en la misma escala — una afirmación visual que el número `.corr()` luego confirma.
+`(residual - residual.mean()) / residual.std()` convierte cada residuo en una z-score, "¿cuántas desviaciones estándar lejos del patrón está este día?", y el corte `> 2.5` mantiene los valores atípicos honestos (un día de 3 sigma) sin marcar la mitad del archivo. La correlación es la estadística de resumen: `s.corr(spend)` devuelve un número en [-1, 1], y los valores cerca de 0.9 te dicen que las dos métricas se mueven juntas. En el gráfico, dividir `spend` por su multiplicador aproximado superpone ambas series en la misma escala, una afirmación visual que el número `.corr()` luego confirma.
 
 **🎯 Resultado esperado :** Un conteo de anomalías (un puñado como máximo), una correlación cerca de `0.9` y un archivo `series.png` que muestra las dos series siguiéndose la una a la otra.
 
-**🩹 Si sale mal :** Si `detect_anomalies` marca docenas de días, los datos se descompusieron con un `window` demasiado pequeño para suavizar el ruido — amplíalo. Si la correlación imprime `NaN`, una serie tiene una alineación de índice diferente después de `.dropna()` — alinea con `.align()` o calcula sobre el índice compartido. Si no aparece ningún PNG, `savefig` se ejecuta desde un directorio de trabajo que no puedes ver — imprime `Path("series.png").resolve()` para confirmar dónde aterrizó.
+**🩹 Si sale mal :** Si `detect_anomalies` marca docenas de días, los datos se descompusieron con un `window` demasiado pequeño para suavizar el ruido, amplíalo. Si la correlación imprime `NaN`, una serie tiene una alineación de índice diferente después de `.dropna()`, alinea con `.align()` o calcula sobre el índice compartido. Si no aparece ningún PNG, `savefig` se ejecuta desde un directorio de trabajo que no puedes ver, imprime `Path("series.png").resolve()` para confirmar dónde aterrizó.
 
 ### 5.2 Verifica el analizador terminado
 
@@ -286,7 +286,7 @@ fig.savefig("series.png", dpi=100)
 
 **🤔 Pregunta(s) socrática(s)**
 
-- La serie de gasto se *construyó* a partir de los clientes, así que la correlación casi-1.0 está diseñada. ¿Qué implica una correlación real y más baja (digamos 0.4) sobre si una cafetería debería planificar personal a partir de los conteos de clientes — y qué *no* prueba sobre que uno cause al otro?
+- La serie de gasto se *construyó* a partir de los clientes, así que la correlación casi-1.0 está diseñada. ¿Qué implica una correlación real y más baja (digamos 0.4) sobre si una cafetería debería planificar personal a partir de los conteos de clientes, y qué *no* prueba sobre que uno cause al otro?
 - Las marcas de anomalía apuntan a fallos del modelo y a eventos reales al mismo tiempo. Si la cafetería cerrara por renovación, ¿aparecería eso como una z-score positiva o negativa, y cómo distinguirías una "anomalía interesante" de un "modelo roto" sin llamar a la cafetería?
 
 ## ⚠️ Errores comunes
@@ -299,7 +299,7 @@ fig.savefig("series.png", dpi=100)
 
 ## Lo que acabas de construir
 
-Un analizador de series temporales completo: una serie diaria generada, una descomposición aditiva construida a mano en tendencia/estacionalidad/residuo, un pronóstico de tendencia-más-estación con un MAE con backtest, detección de anomalías sobre el residuo y un gráfico de par correlacionado guardado en disco. La habilidad transferible es *separar la señal del ruido*: divide cualquier secuencia ruidosa en deriva lenta, ritmo repetitivo y residuo sobrante, luego pronostica las partes y marca el resto — la misma receta detrás de la planificación de demanda, el monitoreo y la pregunta de "¿qué cambió realmente?"
+Un analizador de series temporales completo: una serie diaria generada, una descomposición aditiva construida a mano en tendencia/estacionalidad/residuo, un pronóstico de tendencia-más-estación con un MAE con backtest, detección de anomalías sobre el residuo y un gráfico de par correlacionado guardado en disco. La habilidad transferible es *separar la señal del ruido*: divide cualquier secuencia ruidosa en deriva lenta, ritmo repetitivo y residuo sobrante, luego pronostica las partes y marca el resto, la misma receta detrás de la planificación de demanda, el monitoreo y la pregunta de "¿qué cambió realmente?"
 
 :::tip[Ejecuta una versión más completa sin configuración local]
 [`examples/time-series-analyzer/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/time-series-analyzer) en el repo del curso es una versión más completa del código anterior, con una descomposición de cuatro componentes y un ajuste de tendencia estilo SARIMA. Clónalo, o abre todo el repo en un [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), y ejecútalo desde ahí.
@@ -307,13 +307,13 @@ Un analizador de series temporales completo: una serie diaria generada, una desc
 
 ## Hacia dónde ir desde aquí
 
-- Añade el cuarto componente faltante — efectos de día de trading o de día festivo — con una pasada más de `groupby` sobre el residuo.
+- Añade el cuarto componente faltante, efectos de día de trading o de día festivo, con una pasada más de `groupby` sobre el residuo.
 - Reemplaza el ajuste de línea manual por `numpy.polyfit` de grado 2 y usa la comparación estilo AIC para decidir si la curva mereció su parámetro extra.
 - Barre el `threshold` en `detect_anomalies` de 1.5 a 4 e imprime cuántos días marca cada uno, para que el corte deje de ser mágico.
 - Escribe el pronóstico más las z-scores en un solo CSV para que el script de shell que envía el email al gerente de la cafetería pueda leer un archivo, no tres.
 
 ## Comparte tu proyecto con la clase
 
-¿Construiste algo de lo que te sientas orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado — y su README tiene un recorrido completo, apto para principiantes, para añadir el tuyo mediante un **pull request**, incluso si nunca has usado git antes: hacer fork del repo, crear una rama, hacer commit de tus archivos y abrir el PR, un paso a la vez. No se asume experiencia previa con git.
+¿Construiste algo de lo que te sientas orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado, y su README tiene un recorrido completo, apto para principiantes, para añadir el tuyo mediante un **pull request**, incluso si nunca has usado git antes: hacer fork del repo, crear una rama, hacer commit de tus archivos y abrir el PR, un paso a la vez. No se asume experiencia previa con git.
 
 Bienvenido a escribir Python fuera del navegador. 🎓

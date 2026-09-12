@@ -1,6 +1,6 @@
 ---
 title: "Scrape and Analyze a Live Website"
-description: "Scrape real web data, clean it with pandas, and produce charts — no API key needed."
+description: "Scrape real web data, clean it with pandas, and produce charts, no API key needed."
 difficulty: "intermediate"
 estimatedMinutes: 60
 xpReward: 50
@@ -10,9 +10,9 @@ prerequisites: ["Python basics", "Basic pandas", "Basic matplotlib"]
 
 # Scrape and Analyze a Live Website
 
-Every dataset so far arrived as a ready-made CSV. Real analysis rarely starts there. This project teaches you to fetch a live web page over HTTP, parse the HTML into structured rows, clean the result with pandas, and produce charts — no API key, no external service, just your script and a server.
+Every dataset so far arrived as a ready-made CSV. Real analysis rarely starts there. This project teaches you to fetch a live web page over HTTP, parse the HTML into structured rows, clean the result with pandas, and produce charts, no API key, no external service, just your script and a server.
 
-- **Run it in your browser.** An interactive companion notebook is ready — open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
+- **Run it in your browser.** An interactive companion notebook is ready, open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/scrape-analyze/notebook.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/scrape-analyze/notebook.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fscrape-analyze%2Fnotebook.ipynb)
@@ -81,7 +81,7 @@ Make an HTTP request to a live website and receive its raw HTML content.
 
 ### Explanation
 
-An HTTP `GET` request is the same thing your browser does every time you visit a page — it asks a server for a URL and gets back raw HTML as text. The `requests` library makes this straightforward in Python. We target [quotes.toscrape.com](https://quotes.toscrape.com), a site built specifically for scraping practice: no login wall, no rate limiting, stable HTML structure.
+An HTTP `GET` request is the same thing your browser does every time you visit a page, it asks a server for a URL and gets back raw HTML as text. The `requests` library makes this straightforward in Python. We target [quotes.toscrape.com](https://quotes.toscrape.com), a site built specifically for scraping practice: no login wall, no rate limiting, stable HTML structure.
 
 :::tip[Always check robots.txt before scraping anywhere else]
 Before pointing this code at any site other than quotes.toscrape.com, check that site's `robots.txt` (e.g. `https://example.com/robots.txt`) and terms of service. Respecting `robots.txt` is the baseline expectation for any scraper.
@@ -128,7 +128,7 @@ The exact character count varies, but `html` should be a long string starting wi
 | Problem | Fix |
 |---|---|
 | `ConnectionError` | You're offline or the URL is wrong. Check your internet and the URL spelling. |
-| `HTTPError 404` | The URL path is wrong — use exactly `https://quotes.toscrape.com/` |
+| `HTTPError 404` | The URL path is wrong, use exactly `https://quotes.toscrape.com/` |
 | `HTTPError 403` | Some sites block requests without a browser User-Agent header. Add one: `requests.get(url, headers={"User-Agent": "Mozilla/5.0"})` |
 
 ### Checklist
@@ -151,7 +151,7 @@ Turn raw HTML text into a navigable tree and extract structured data from it.
 
 ### Explanation
 
-That `html` string is a tree of nested tags — `<div>`, `<span>`, `<a>` — each optionally carrying attributes like `class` or `href`. BeautifulSoup parses that text into a tree and gives you `find` (first match) and `find_all` (every match), both filterable by tag name and attributes.
+That `html` string is a tree of nested tags, `<div>`, `<span>`, `<a>`, each optionally carrying attributes like `class` or `href`. BeautifulSoup parses that text into a tree and gives you `find` (first match) and `find_all` (every match), both filterable by tag name and attributes.
 
 Open the page in your browser's "View Page Source" and you'll see: each quote sits inside `<div class="quote">`, the text is in `<span class="text">`, the author in `<small class="author">`, and tags in `<a class="tag">`.
 
@@ -195,7 +195,7 @@ J.K. Rowling: "It is our choices..." ['abilities', 'choices', 'deep-thoughts', '
 
 | Problem | Fix |
 |---|---|
-| `AttributeError: 'NoneType' has no attribute 'get_text'` | `find(...)` returned `None` — the class name doesn't match. Re-check "View Page Source" for exact class names. |
+| `AttributeError: 'NoneType' has no attribute 'get_text'` | `find(...)` returned `None`, the class name doesn't match. Re-check "View Page Source" for exact class names. |
 | Fewer than 10 lines printed | The CSS class filter is too narrow or misspelled. Verify `class_="quote"` matches the actual HTML. |
 | Output shows garbled characters | Encoding issue. Try `soup = BeautifulSoup(response.content, "html.parser")` instead of `response.text`. |
 
@@ -219,7 +219,7 @@ Turn the per-page parsing into a reusable function, follow pagination across all
 
 ### Explanation
 
-quotes.toscrape.com spreads quotes across 10 pages, with a "Next" link at the bottom of every page except the last. Rather than hardcode "loop 10 times," follow the link itself — that way the script works even if the page count changes. Two sub-steps: wrap Step 2's loop in a function, then follow links until there are no more.
+quotes.toscrape.com spreads quotes across 10 pages, with a "Next" link at the bottom of every page except the last. Rather than hardcode "loop 10 times," follow the link itself, that way the script works even if the page count changes. Two sub-steps: wrap Step 2's loop in a function, then follow links until there are no more.
 
 ### Starter Hint
 
@@ -302,7 +302,7 @@ A real `quotes.csv` file appears with a header row plus one row per quote.
 | Problem | Fix |
 |---|---|
 | Only 10 quotes saved | The `next_li` URL isn't being followed. Check that `url = requests.compat.urljoin(...)` is inside the conditional, not resetting to the front page. |
-| Script hangs or is slow | Expected — `time.sleep(1)` between ~10 pages means ~10 seconds total. |
+| Script hangs or is slow | Expected, `time.sleep(1)` between ~10 pages means ~10 seconds total. |
 | `Failed to fetch ... Stopping here` | A network glitch or timeout. The script saves what it has so far instead of crashing. |
 | `quotes.csv` has blank rows | A `None` or empty string got into the quotes list. Check the `parse_quotes` function for missing `.get_text(strip=True)` calls. |
 
@@ -412,7 +412,7 @@ Produce charts and summary statistics from the cleaned data.
 
 ### Explanation
 
-With clean, typed columns, analysis is a few lines of `groupby` / `value_counts` — the same pattern from pandas notebooks, just pointed at data you fetched yourself. Three charts: most common tags, most-quoted authors, and quote-length distribution.
+With clean, typed columns, analysis is a few lines of `groupby` / `value_counts`, the same pattern from pandas notebooks, just pointed at data you fetched yourself. Three charts: most common tags, most-quoted authors, and quote-length distribution.
 
 ### Starter Hint
 
@@ -496,7 +496,7 @@ Two image files appear: `top_tags.png` (horizontal bar chart, longest bar at top
 | X-axis doesn't start at 0 | The `ax.set_xlim(left=0)` line was dropped. |
 | Histogram is one solid bar | `quote_length` has no variation. Re-check that it was computed from stripped `text`. |
 | `top_tags.png` doesn't save | Confirm `fig.savefig(...)` is called on the same `fig` object `plt.subplots()` returned. |
-| Bars look reasonable but differ from expected | The dataset is live — counts change as the source site updates. |
+| Bars look reasonable but differ from expected | The dataset is live, counts change as the source site updates. |
 
 ### Checklist
 
@@ -568,7 +568,7 @@ Each author name on quotes.toscrape.com links to a bio page with a birth date an
 
 ### Challenge 2: Scrape a table-based site
 
-Target a site with HTML `<table>` elements instead of `<div>` cards — for example, a Wikipedia comparison table. Use BeautifulSoup to find `<tr>` and `<td>` tags, then feed the rows into a DataFrame with `pd.DataFrame(rows, columns=headers)`. The parsing logic changes, but the fetch-clean-analyze pipeline stays the same.
+Target a site with HTML `<table>` elements instead of `<div>` cards, for example, a Wikipedia comparison table. Use BeautifulSoup to find `<tr>` and `<td>` tags, then feed the rows into a DataFrame with `pd.DataFrame(rows, columns=headers)`. The parsing logic changes, but the fetch-clean-analyze pipeline stays the same.
 
 ### Challenge 3: Add rate limiting and retry logic
 
@@ -582,25 +582,25 @@ If you've run the scraper multiple times with timestamps, plot how tag popularit
 
 ## What You Learned
 
-1. **HTTP requests** — `requests.get()` with `raise_for_status()` and timeouts for robust fetching
-2. **HTML parsing** — `BeautifulSoup` with `find` / `find_all` and CSS class selectors
-3. **Pagination** — following "Next" links with `urljoin` instead of hardcoding page counts
-4. **Error handling** — `try`/`except` around network calls to preserve partial progress
-5. **Data cleaning** — splitting packed columns, stripping whitespace, asserting invariants
-6. **Visualization** — bar charts, histograms, and the honesty rules (labeled axes, x-axis at 0, descriptive titles)
-7. **Scraping etiquette** — rate limiting with `sleep`, respecting `robots.txt`
+1. **HTTP requests**, `requests.get()` with `raise_for_status()` and timeouts for robust fetching
+2. **HTML parsing**, `BeautifulSoup` with `find` / `find_all` and CSS class selectors
+3. **Pagination**, following "Next" links with `urljoin` instead of hardcoding page counts
+4. **Error handling**, `try`/`except` around network calls to preserve partial progress
+5. **Data cleaning**, splitting packed columns, stripping whitespace, asserting invariants
+6. **Visualization**, bar charts, histograms, and the honesty rules (labeled axes, x-axis at 0, descriptive titles)
+7. **Scraping etiquette**, rate limiting with `sleep`, respecting `robots.txt`
 
-The pipeline generalizes: swap in a different scraping-friendly site, and the same five steps — request, parse, follow pagination, clean, chart — are still the whole pipeline.
+The pipeline generalizes: swap in a different scraping-friendly site, and the same five steps, request, parse, follow pagination, clean, chart, are still the whole pipeline.
 
 ## Where to Go From Here
 
-- **Different sites** — read each site's `robots.txt` and terms of service first; every site's HTML is different, so you'll need to inspect its markup yourself
-- **SQLite** — replace CSV with Python's built-in `sqlite3` module once data outgrows a single file
-- **Scheduling** — run the scraper periodically with cron or a loop, appending a timestamp column to track how data changes over time
-- **Scrapy** — a full framework for large-scale scraping with built-in concurrency, middleware, and export pipelines
+- **Different sites**, read each site's `robots.txt` and terms of service first; every site's HTML is different, so you'll need to inspect its markup yourself
+- **SQLite**, replace CSV with Python's built-in `sqlite3` module once data outgrows a single file
+- **Scheduling**, run the scraper periodically with cron or a loop, appending a timestamp column to track how data changes over time
+- **Scrapy**, a full framework for large-scale scraping with built-in concurrency, middleware, and export pipelines
 
 ---
 
 ## Share Your Project
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted. Its README has a beginner-friendly walkthrough for adding yours via a pull request — forking the repo, making a branch, committing, and opening the PR. No prior git experience required.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted. Its README has a beginner-friendly walkthrough for adding yours via a pull request, forking the repo, making a branch, committing, and opening the PR. No prior git experience required.

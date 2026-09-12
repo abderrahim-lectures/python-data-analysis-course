@@ -22,7 +22,7 @@ track: "normal"
 
 ## The language of windows
 
-A string is a sequence, and its characters stand at positions $0, 1, 2, \ldots, n-1$. Slicing asks for the window between two boundaries. The notation is `string[start:stop:step]` — and the one asymmetry to memorize is that **`start` is included and `stop` is excluded**, the same half-open rule `range` taught you:
+A string is a sequence, and its characters stand at positions $0, 1, 2, \ldots, n-1$. Slicing asks for the window between two boundaries. The notation is `string[start:stop:step]`, and the one asymmetry to memorize is that **`start` is included and `stop` is excluded**, the same half-open rule `range` taught you:
 
 $$
 s[a:b] = s_a s_{a+1} \cdots s_{b-1}, \qquad |s[a:b]| = \max(0, b - a).
@@ -51,7 +51,7 @@ text[:-2]    # 'Pyth' (all except last 2)
 text[-4:-1]  # 'tho'
 ```
 
-Position $-k$ is the character $n - k$ from the front. Asking for the last three characters is `text[-3:]` — a small mental gesture that reads naturally: *the final three*.
+Position $-k$ is the character $n - k$ from the front. Asking for the last three characters is `text[-3:]`, a small mental gesture that reads naturally: *the final three*.
 
 ## Step: the stride
 
@@ -65,11 +65,11 @@ text[::-1]   # 'jihgfedcba'  (reversed!)
 text[::-2]   # 'jhfdb'   (every 2nd, reversed)
 ```
 
-A negative step reverses the direction of travel — this is the arithmetic of $a, a+d, a+2d, \ldots$ with negative $d$. The canonical reversal `[::-1]` is worth one hard recollection, because from it everything finer is a variation.
+A negative step reverses the direction of travel, this is the arithmetic of $a, a+d, a+2d, \ldots$ with negative $d$. The canonical reversal `[::-1]` is worth one hard recollection, because from it everything finer is a variation.
 
 ## Slicing never errors
 
-Indexing a position that doesn't exist raises `IndexError`. Slicing is gentler — it clips to the available range and returns what exists, asking nothing on the way:
+Indexing a position that doesn't exist raises `IndexError`. Slicing is gentler, it clips to the available range and returns what exists, asking nothing on the way:
 
 ```python
 text = "hi"
@@ -89,7 +89,7 @@ nums[1:4]     # [1, 2, 3]
 nums[::-1]    # [5, 4, 3, 2, 1, 0]
 ```
 
-Whatever you learned on characters transfers to any ordered collection — and beyond reading, lists accept slice assignment where strings do not: `nums[1:3] = [9, 9]` swaps a window in place.
+Whatever you learned on characters transfers to any ordered collection, and beyond reading, lists accept slice assignment where strings do not: `nums[1:3] = [9, 9]` swaps a window in place.
 
 ## A worked example: dissecting a filename
 
@@ -102,7 +102,7 @@ stem      = filename[:-4]     # 'report_2026_summary'
 print(stem, extension)        # report_2026_summary txt
 ```
 
-`[-3:]` reads *from three positions before the end, to the end* — the final three characters. `[:-4]` reads *from the start, up to four positions before the end*, which is everything before the dot. The half-open rule reappears: `[:-4]` excludes position $n - 4$, the dot itself, so the tail `.txt` never leaks into the stem. One rule, both ends.
+`[-3:]` reads *from three positions before the end, to the end*, the final three characters. `[:-4]` reads *from the start, up to four positions before the end*, which is everything before the dot. The half-open rule reappears: `[:-4]` excludes position $n - 4$, the dot itself, so the tail `.txt` never leaks into the stem. One rule, both ends.
 
 And the reverse of taking apart is reading whole: the palindrome check is a one-liner with the same instrument:
 
@@ -113,31 +113,31 @@ print(word == word[::-1])     # True
 
 ## Common pitfalls
 
-- **Confusing indexing with slicing.** `text[3]` is one character, a claim; `text[3:4]` is one character, a request — and a new string.
+- **Confusing indexing with slicing.** `text[3]` is one character, a claim; `text[3:4]` is one character, a request, and a new string.
 - **Assuming `stop` is included.** `text[0:3]` yields characters at $0, 1, 2$; position $3$ is where the window shuts.
-- **Slice assignment on strings.** Strings refuse it — that mutability is a list privilege.
-- **A step's sign must match its direction.** `"abcdef"[0:5:-1]` is empty — a window that walks right and a step that points left meet nowhere. Keep start, stop, and step pointing the same way.
+- **Slice assignment on strings.** Strings refuse it, that mutability is a list privilege.
+- **A step's sign must match its direction.** `"abcdef"[0:5:-1]` is empty, a window that walks right and a step that points left meet nowhere. Keep start, stop, and step pointing the same way.
 
 ## 🧩 Challenges
 
 <details class="challenge">
-<summary>🧩 Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge, think first, then reveal</summary>
 <div class="challenge__body">
 
 Reverse the string `"racecar"` with slicing.
 
-<p class="challenge__answer">💡 <strong>Answer:</strong> <code>"racecar"[::-1]</code> → <code>"racecar"</code> — it reads the same both ways, which is precisely why a palindrome survives its own reversal.</p>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>"racecar"[::-1]</code> → <code>"racecar"</code>, it reads the same both ways, which is precisely why a palindrome survives its own reversal.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge, think first, then reveal</summary>
 <div class="challenge__body">
 
 From `"abcdefghij"`, extract every third character: `a`, `d`, `g`, `j`.
 
-<p class="challenge__answer">💡 <strong>Answer:</strong> <code>"abcdefghij"[::3]</code> → <code>"adgj"</code> — the default start pins you to index 0 and the stride 3 marches you through the arithmetic sequence.</p>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>"abcdefghij"[::3]</code> → <code>"adgj"</code>, the default start pins you to index 0 and the stride 3 marches you through the arithmetic sequence.</p>
 
 </div>
 </details>

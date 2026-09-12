@@ -176,7 +176,7 @@ Cada `generate` devuelve `(text, latency_seconds, tokens)`. El modelo A responde
 
 ## Paso 3: Puntúa la precisión
 
-La precisión compara la respuesta del modelo con la respuesta esperada. Para ser tolerante con la redacción, normaliza ambos lados — minúsculas, sin puntuación.
+La precisión compara la respuesta del modelo con la respuesta esperada. Para ser tolerante con la redacción, normaliza ambos lados, minúsculas, sin puntuación.
 
 ### 3.1 Implementa el puntuador de precisión
 
@@ -229,7 +229,7 @@ def score(model, suite) -> dict:
 
 **🤔 Pregunta(s) socrática(s)**
 
-- La igualdad tras la normalización es un matcher frágil — ¿cómo sería un mejor matcher semántico?
+- La igualdad tras la normalización es un matcher frágil, ¿cómo sería un mejor matcher semántico?
 
 ## Paso 4: Verificación de seguridad
 
@@ -321,13 +321,13 @@ def compare(models, suite) -> pd.DataFrame:
 
 - **La puntuación por coincidencia exacta es frágil.** "París, Francia" falla en la igualdad con "París". La normalización ayuda pero no es coincidencia semántica. Usa calificación difusa o basada en LLM para mayor realismo.
 - **Costear solo por tokens.** El costo real también depende del precio por token de entrada vs salida y del caché. Tu estimación es un límite inferior.
-- **Inflación del tiempo de sleep.** El `time.sleep` de los mocks infla la latencia con objetivos poco realistas — trata la latencia mock como relativa, no absoluta.
+- **Inflación del tiempo de sleep.** El `time.sleep` de los mocks infla la latencia con objetivos poco realistas, trata la latencia mock como relativa, no absoluta.
 - **Escenarios de seguridad faltantes.** Un solo prompt de cocina en sandbox no estresa a un modelo. Las suites de seguridad reales necesitan prompts adversariales y de casos límite.
 - **Ruido en una suite de 5 casos.** Una sola respuesta equivocada mueve la precisión un 20%. Ejecuta más casos o reporta desgloses por categoría.
 
 ## Lo que acabas de construir
 
-Una suite de evaluación LLM: un benchmark reutilizable de casos de prueba, modelos mock detrás de una interfaz `generate` uniforme, un puntuador de precisión con normalización, seguimiento de latencia/tokens/costo, un verificador de seguridad y un informe de comparación lado a lado. Ahora puedes cuantificar si un modelo supera a otro en las dimensiones que realmente importan para tu aplicación — y cambiar a APIs reales implementando una interfaz sola.
+Una suite de evaluación LLM: un benchmark reutilizable de casos de prueba, modelos mock detrás de una interfaz `generate` uniforme, un puntuador de precisión con normalización, seguimiento de latencia/tokens/costo, un verificador de seguridad y un informe de comparación lado a lado. Ahora puedes cuantificar si un modelo supera a otro en las dimensiones que realmente importan para tu aplicación, y cambiar a APIs reales implementando una interfaz sola.
 
 :::tip[Ejecuta una versión más completa sin configuración local]
 [`examples/llm-evaluator/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/llm-evaluator) en el repositorio del curso tiene una versión más rica con adaptadores de modelos reales, desgloses por categoría y el CLI conectado de principio a fin. Clónalo, o abre el repositorio completo en un [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), y ejecútalo desde allí.
@@ -341,6 +341,6 @@ Una suite de evaluación LLM: un benchmark reutilizable de casos de prueba, mode
 
 ## Comparte tu proyecto con la clase
 
-¿Construiste algo de lo que te sientas orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado — y su README tiene una guía completa y apta para principiantes sobre cómo añadir el tuyo mediante una **pull request**, incluso si nunca has usado git: hacer un fork del repositorio, crear una rama, hacer commit de tus archivos y abrir la PR, paso a paso. No se asume ninguna experiencia previa con git.
+¿Construiste algo de lo que te sientas orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado, y su README tiene una guía completa y apta para principiantes sobre cómo añadir el tuyo mediante una **pull request**, incluso si nunca has usado git: hacer un fork del repositorio, crear una rama, hacer commit de tus archivos y abrir la PR, paso a paso. No se asume ninguna experiencia previa con git.
 
 Bienvenido a escribir Python fuera del navegador. 🎓

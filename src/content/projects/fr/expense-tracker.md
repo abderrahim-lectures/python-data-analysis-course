@@ -20,7 +20,7 @@ learningObjectives:
 
 # 💰 Suiveur de Dépenses
 
-Suis tes dépenses, tiens-toi aux budgets et visualise où va ton argent — tout depuis la ligne de commande. Ce projet te fait passer des dictionnaires Python bruts à l'analyse pandas puis aux graphiques matplotlib, en construisant un outil pratique que tu peux réellement utiliser pour gérer tes finances.
+Suis tes dépenses, tiens-toi aux budgets et visualise où va ton argent, tout depuis la ligne de commande. Ce projet te fait passer des dictionnaires Python bruts à l'analyse pandas puis aux graphiques matplotlib, en construisant un outil pratique que tu peux réellement utiliser pour gérer tes finances.
 
 Ceci est facultatif et non noté. Consulte [Real-World Projects](/fr/projets) pour la liste complète.
 
@@ -37,17 +37,17 @@ Ceci est facultatif et non noté. Consulte [Real-World Projects](/fr/projets) po
 ## Où exécuter ceci
 
 - **Localement avec `uv` (recommandé).** Ce projet utilise `pandas` et `matplotlib`, donc une installation locale est le chemin le plus fluide. La section Configuration ci-dessous le parcourt.
-- **JupyterLite playground.** Colle les cellules de code directement dans un notebook — cela fonctionne bien pour explorer les étapes d'analyse (2–5), bien que le menu CLI (étape 7) soit conçu pour un vrai terminal.
+- **JupyterLite playground.** Colle les cellules de code directement dans un notebook, cela fonctionne bien pour explorer les étapes d'analyse (2–5), bien que le menu CLI (étape 7) soit conçu pour un vrai terminal.
 - **Google Colab.** Ouvre un nouveau notebook et colle les cellules. Même réserve que JupyterLite : la CLI interactive fonctionne le mieux dans un vrai terminal.
 
-- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt — ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
+- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt, ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/expense-tracker/notebook.fr.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/expense-tracker/notebook.fr.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fexpense-tracker%2Fnotebook.fr.ipynb)
 
 ## Configuration
 
-`uv` est un outil unique qui remplace la chaîne habituelle « installer Python, puis pip, puis un environnement virtuel » — il peut installer et gérer des versions de Python aux côtés des dépendances de ton projet.
+`uv` est un outil unique qui remplace la chaîne habituelle « installer Python, puis pip, puis un environnement virtuel », il peut installer et gérer des versions de Python aux côtés des dépendances de ton projet.
 
 **macOS / Linux** (terminal) :
 
@@ -79,7 +79,7 @@ uv add pandas matplotlib
 
 ## Étape 1 : Définir le modèle de données
 
-Avant d'écrire des fonctions, décide comment les dépenses et budgets vivent en mémoire. Chaque dépense est un dictionnaire avec quatre champs — date, montant, catégorie et description. Une liste contient toutes les dépenses. Un dictionnaire séparé mappe chaque catégorie à sa limite de budget mensuelle.
+Avant d'écrire des fonctions, décide comment les dépenses et budgets vivent en mémoire. Chaque dépense est un dictionnaire avec quatre champs, date, montant, catégorie et description. Une liste contient toutes les dépenses. Un dictionnaire séparé mappe chaque catégorie à sa limite de budget mensuelle.
 
 ### 1.1 Crée les conteneurs vides
 
@@ -98,7 +98,7 @@ budgets = {
 }
 ```
 
-**🎯 Résultat attendu :** Pas encore de sortie visible — tu viens de créer deux conteneurs vides. Lancer `print(expenses)` donne `[]` et `print(budgets)` montre les quatre catégories avec leurs limites.
+**🎯 Résultat attendu :** Pas encore de sortie visible, tu viens de créer deux conteneurs vides. Lancer `print(expenses)` donne `[]` et `print(budgets)` montre les quatre catégories avec leurs limites.
 
 **🩹 Si ça ne marche pas :** Si tu obtiens une `NameError` sur `pd`, assure-toi qu'`import pandas as pd` est en haut de la cellule ou du script. Si `budgets` affiche un dictionnaire vide, vérifie que tu as inclus les deux-points entre les noms de catégories et les montants.
 
@@ -166,7 +166,7 @@ Added: $55.00 in groceries
 
 L'impression de `expenses` montre une liste de quatre dictionnaires, chacun avec les clés `date`, `amount`, `category` et `description`.
 
-**🩹 Si ça ne marche pas :** Si la catégorie n'apparaît pas en minuscules dans la sortie, assure-toi d'appeler `.lower()` sur l'entrée — cela empêche `"Groceries"` et `"groceries"` de devenir des catégories séparées. Si la date affiche la date du jour même si tu en as entré une autre, c'est attendu : la fonction estampille toujours la date courante.
+**🩹 Si ça ne marche pas :** Si la catégorie n'apparaît pas en minuscules dans la sortie, assure-toi d'appeler `.lower()` sur l'entrée, cela empêche `"Groceries"` et `"groceries"` de devenir des catégories séparées. Si la date affiche la date du jour même si tu en as entré une autre, c'est attendu : la fonction estampille toujours la date courante.
 
 ### 2.3 Vérifie les données
 
@@ -189,7 +189,7 @@ Les listes brutes de dictionnaires sont bien pour la journalisation, mais une vr
 
 ### 3.1 Construis le DataFrame
 
-**👟 Indice de départ :** Passe la liste `expenses` directement à `pd.DataFrame()`. Imprime le résultat avec `to_string(index=False)` pour une sortie propre — pas de numéros de ligne encombrant la vue.
+**👟 Indice de départ :** Passe la liste `expenses` directement à `pd.DataFrame()`. Imprime le résultat avec `to_string(index=False)` pour une sortie propre, pas de numéros de ligne encombrant la vue.
 
 ```python
 df = pd.DataFrame(expenses)
@@ -208,7 +208,7 @@ All expenses:
  2026-09-06   55.00   groceries          Pantry restock
 ```
 
-**🩹 Si ça ne marche pas :** Si tu vois un DataFrame vide avec `RangeIndex(start=0, stop=0, step=0)`, la liste `expenses` est vide — tu n'as pas encore appelé `add_expense` dans cette session. Si les noms de colonnes semblent faux, vérifie que tes dictionnaires de dépense utilisent exactement `"date"`, `"amount"`, `"category"` et `"description"` comme clés.
+**🩹 Si ça ne marche pas :** Si tu vois un DataFrame vide avec `RangeIndex(start=0, stop=0, step=0)`, la liste `expenses` est vide, tu n'as pas encore appelé `add_expense` dans cette session. Si les noms de colonnes semblent faux, vérifie que tes dictionnaires de dépense utilisent exactement `"date"`, `"amount"`, `"category"` et `"description"` comme clés.
 
 ### 3.2 Calcule les totaux par catégorie
 
@@ -230,7 +230,7 @@ dining        28.00
 transport     15.00
 ```
 
-**🩹 Si ça ne marche pas :** Si tu obtiens une `KeyError`, le nom de colonne ne correspond pas — vérifie les fautes de frappe comme `"cat"` au lieu de `"category"`. Si les totaux semblent faux, vérifie que tu as passé `["amount"]` avant `.sum()` — sans cela, tu essaierais d'additionner chaque colonne numérique, ce qui pourrait inclure des données inattendues.
+**🩹 Si ça ne marche pas :** Si tu obtiens une `KeyError`, le nom de colonne ne correspond pas, vérifie les fautes de frappe comme `"cat"` au lieu de `"category"`. Si les totaux semblent faux, vérifie que tu as passé `["amount"]` avant `.sum()`, sans cela, tu essaierais d'additionner chaque colonne numérique, ce qui pourrait inclure des données inattendues.
 
 ### 3.3 Ajoute des résumés mensuels
 
@@ -251,7 +251,7 @@ date
 2026-09    140.5
 ```
 
-**🩹 Si ça ne marche pas :** Une `TypeError` sur `pd.to_datetime` signifie que les chaînes de date ne sont pas dans un format reconnaissable — retourne à `add_expense` et confirme que tu utilises `date.today().isoformat()`. Si les dates de mois différents n'apparaissent pas séparément, tes données de test sont toutes du même mois — ajoute une dépense avec une date différente pour tester.
+**🩹 Si ça ne marche pas :** Une `TypeError` sur `pd.to_datetime` signifie que les chaînes de date ne sont pas dans un format reconnaissable, retourne à `add_expense` et confirme que tu utilises `date.today().isoformat()`. Si les dates de mois différents n'apparaissent pas séparément, tes données de test sont toutes du même mois, ajoute une dépense avec une date différente pour tester.
 
 ### 3.4 Vérifie l'analyse
 
@@ -320,7 +320,7 @@ check_budgets(
 
 Maintenant groceries affiche un WARNING à 90 % ($547 / $500). Dépasser la limite et il imprime OVER BUDGET.
 
-**🩹 Si ça ne marche pas :** Si toutes les catégories affichent `OK` même avec de grosses dépenses, vérifie que tu passes le dict *additionné* des totaux, pas la liste brute des dépenses. Si tu obtiens une `ZeroDivisionError`, une de tes limites de budget est zéro — chaque catégorie de `budgets` a besoin d'une limite positive.
+**🩹 Si ça ne marche pas :** Si toutes les catégories affichent `OK` même avec de grosses dépenses, vérifie que tu passes le dict *additionné* des totaux, pas la liste brute des dépenses. Si tu obtiens une `ZeroDivisionError`, une de tes limites de budget est zéro, chaque catégorie de `budgets` a besoin d'une limite positive.
 
 ### 4.3 Teste le seuil
 
@@ -339,7 +339,7 @@ Pourquoi prendre 80 % par défaut comme seuil d'avertissement ? Quels types de d
 
 ## Étape 5 : Visualiser les dépenses
 
-Les nombres dans un tableau sont utiles, mais les graphiques rendent les schémas de dépenses immédiatement évidents. Construis un diagramme en barres pour les totaux par catégorie et un diagramme en secteurs pour les proportions — côte à côte dans une seule figure.
+Les nombres dans un tableau sont utiles, mais les graphiques rendent les schémas de dépenses immédiatement évidents. Construis un diagramme en barres pour les totaux par catégorie et un diagramme en secteurs pour les proportions, côte à côte dans une seule figure.
 
 ### 5.1 Crée les graphiques côte à côte
 
@@ -370,7 +370,7 @@ print("Chart saved to spending_report.png")
 
 **🎯 Résultat attendu :** Une fenêtre s'ouvre (ou une image en ligne dans un notebook) montrant deux graphiques : un diagramme en barres à gauche avec une barre par catégorie, et un diagramme en secteurs à droite montrant les ventilations en pourcentage. Un fichier appelé `spending_report.png` apparaît dans ton répertoire de travail.
 
-**🩹 Si ça ne marche pas :** Si le diagramme en secteurs montre des étiquettes qui se chevauchent, augmente `figsize` à `(14, 6)` ou réduis la taille de police avec `plt.rcParams["font.size"] = 10` avant de tracer. Si `savefig` enregistre une image vide, assure-toi que `plt.show()` vient *après* `savefig` — certains backends effacent la figure sur `show()`. Si tu obtiens une `IndexError` sur `colors[:len(category_totals)]`, tes données de dépenses ont plus de catégories que de couleurs — ajoute plus de codes hex à la liste.
+**🩹 Si ça ne marche pas :** Si le diagramme en secteurs montre des étiquettes qui se chevauchent, augmente `figsize` à `(14, 6)` ou réduis la taille de police avec `plt.rcParams["font.size"] = 10` avant de tracer. Si `savefig` enregistre une image vide, assure-toi que `plt.show()` vient *après* `savefig`, certains backends effacent la figure sur `show()`. Si tu obtiens une `IndexError` sur `colors[:len(category_totals)]`, tes données de dépenses ont plus de catégories que de couleurs, ajoute plus de codes hex à la liste.
 
 ### 5.2 Personnalise l'apparence
 
@@ -390,11 +390,11 @@ plt.show()
 - ✅ Le diagramme en barres a une barre par catégorie avec des étiquettes sur l'axe des x.
 - ✅ Le diagramme en secteurs montre des étiquettes en pourcentage (par ex. « 69.4% ») sur chaque part.
 - ✅ Un fichier PNG est enregistré sur disque et n'est pas vide.
-- ✅ Les graphiques sont lisibles — pas de texte qui se chevauche ni d'étiquettes coupées.
+- ✅ Les graphiques sont lisibles, pas de texte qui se chevauche ni d'étiquettes coupées.
 
 **🤔 Question(s) socratique(s)**
 
-Quand un diagramme en barres est-il plus utile qu'un diagramme en secteurs, et vice versa ? Qu'arrive-t-il au diagramme en secteurs si une catégorie domine à 95 % des dépenses — peux-tu encore lire les plus petites parts ?
+Quand un diagramme en barres est-il plus utile qu'un diagramme en secteurs, et vice versa ? Qu'arrive-t-il au diagramme en secteurs si une catégorie domine à 95 % des dépenses, peux-tu encore lire les plus petites parts ?
 
 ---
 
@@ -431,9 +431,9 @@ def load_expenses(filename: str = "expenses.csv") -> pd.DataFrame:
     return df
 ```
 
-**🎯 Résultat attendu :** Au premier lancement (pas encore de CSV) : `No existing data found — starting fresh.` Aux lancements suivants : `Loaded 4 expenses from expenses.csv`.
+**🎯 Résultat attendu :** Au premier lancement (pas encore de CSV) : `No existing data found, starting fresh.` Aux lancements suivants : `Loaded 4 expenses from expenses.csv`.
 
-**🩹 Si ça ne marche pas :** Si tu obtiens une `ParserError` sur `pd.read_csv`, le CSV a des lignes malformées — ouvre-le dans un éditeur de texte pour vérifier les virgules errantes ou les guillemets cassés. Si les dates apparaissent comme des chaînes au lieu d'objets datetime, assure-toi d'avoir inclus `parse_dates=["date"]`. Si le fichier existe mais que `load_expenses` renvoie un DataFrame vide, le chemin de fichier est faux — exécute ton script depuis le même répertoire où tu as enregistré le CSV.
+**🩹 Si ça ne marche pas :** Si tu obtiens une `ParserError` sur `pd.read_csv`, le CSV a des lignes malformées, ouvre-le dans un éditeur de texte pour vérifier les virgules errantes ou les guillemets cassés. Si les dates apparaissent comme des chaînes au lieu d'objets datetime, assure-toi d'avoir inclus `parse_dates=["date"]`. Si le fichier existe mais que `load_expenses` renvoie un DataFrame vide, le chemin de fichier est faux, exécute ton script depuis le même répertoire où tu as enregistré le CSV.
 
 ### 6.3 Vérifie la persistance
 
@@ -441,7 +441,7 @@ def load_expenses(filename: str = "expenses.csv") -> pd.DataFrame:
 
 - ✅ Après l'enregistrement, `expenses.csv` existe et contient la ligne d'en-tête plus les lignes de données.
 - ✅ Après le chargement, le DataFrame a les mêmes données que celles enregistrées.
-- ✅ L'absence du fichier CSV ne fait pas planter le programme — il repart proprement de zéro.
+- ✅ L'absence du fichier CSV ne fait pas planter le programme, il repart proprement de zéro.
 - ✅ Les dates sont analysées comme des objets datetime après le chargement, pas comme de simples chaînes.
 
 ---
@@ -601,7 +601,7 @@ if __name__ == "__main__":
 
 ## ⚠️ Pièges courants
 
-- **Oublier d'enregistrer après les changements.** Si tu modifies `expenses` ou `df` mais n'appelles pas `save_expenses`, le CSV est périmé. Enregistre toujours juste après une opération qui change les données — pas seulement à la sortie du programme — pour qu'un plantage ou un Ctrl+C ne perde que l'action courante.
+- **Oublier d'enregistrer après les changements.** Si tu modifies `expenses` ou `df` mais n'appelles pas `save_expenses`, le CSV est périmé. Enregistre toujours juste après une opération qui change les données, pas seulement à la sortie du programme, pour qu'un plantage ou un Ctrl+C ne perde que l'action courante.
 - **Confusion chaîne de date contre datetime.** Charger depuis le CSV sans `parse_dates=["date"]` donne des chaînes comme `"2026-09-06"` au lieu d'objets datetime. L'appel `.dt.to_period("M")` du résumé mensuel plantera avec une `TypeError` sur des chaînes.
 - **Casse de catégorie incohérente.** Si `"Groceries"` et `"groceries"` apparaissent tous deux dans les données, `groupby` les traite comme des catégories séparées. Mets toujours la catégorie en minuscules dans `add_expense`, pas au site d'appel.
 - **Diagramme en secteurs avec trop de catégories.** Avec 10+ catégories, le diagramme en secteurs devient illisible. Envisage de filtrer sur le top 5 et de regrouper le reste sous « other » pour le secteur, tout en gardant le diagramme en barres complet.
@@ -609,7 +609,7 @@ if __name__ == "__main__":
 
 ## Ce que tu viens de construire
 
-Un traqueur de dépenses en ligne de commande qui fonctionne : il journalise les dépenses, les analyse avec pandas, surveille les budgets avec des alertes à seuil, génère des graphiques avec matplotlib et persiste tout dans un fichier CSV. Tu as modélisé des données financières avec de simples dictionnaires Python, convertis en DataFrames pour l'analyse, construit des pipelines d'agrégation avec `groupby`, implémenté une logique d'alerte basée sur des seuils et créé des graphiques dignes de publication — toutes des compétences pratiques qui se transfèrent directement à un vrai travail d'analyse financière.
+Un traqueur de dépenses en ligne de commande qui fonctionne : il journalise les dépenses, les analyse avec pandas, surveille les budgets avec des alertes à seuil, génère des graphiques avec matplotlib et persiste tout dans un fichier CSV. Tu as modélisé des données financières avec de simples dictionnaires Python, convertis en DataFrames pour l'analyse, construit des pipelines d'agrégation avec `groupby`, implémenté une logique d'alerte basée sur des seuils et créé des graphiques dignes de publication, toutes des compétences pratiques qui se transfèrent directement à un vrai travail d'analyse financière.
 
 ## Où aller ensuite
 
@@ -621,6 +621,6 @@ Un traqueur de dépenses en ligne de commande qui fonctionne : il journalise les
 
 ## Partage ton projet avec la classe
 
-Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres étudiants — et son README contient un parcours complet et accessible aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git auparavant : forker le dépôt, créer une branche, commiter tes fichiers et ouvrir la PR, une étape à la fois. Aucune expérience préalable de git n'est supposée.
+Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres étudiants, et son README contient un parcours complet et accessible aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git auparavant : forker le dépôt, créer une branche, commiter tes fichiers et ouvrir la PR, une étape à la fois. Aucune expérience préalable de git n'est supposée.
 
 Bienvenue dans l'écriture de Python en dehors du navigateur. 🎓

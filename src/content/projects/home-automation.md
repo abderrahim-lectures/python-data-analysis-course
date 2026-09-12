@@ -14,9 +14,9 @@ prerequisites: ["Python 101"]
 
 # 🏠 Build a Home Automation Hub
 
-Your smart home is only as smart as the rules that connect its devices — a motion sensor that turns on a light, a thermostat that adjusts when you leave, a door lock that engages at bedtime. This project builds a rule-based home automation engine in Python: you define devices (lights, thermostats, locks), write if-this-then-that rules, schedule time-based triggers, and detect presence from network pings. The engine runs locally, processes events, and executes actions — no cloud service required.
+Your smart home is only as smart as the rules that connect its devices, a motion sensor that turns on a light, a thermostat that adjusts when you leave, a door lock that engages at bedtime. This project builds a rule-based home automation engine in Python: you define devices (lights, thermostats, locks), write if-this-then-that rules, schedule time-based triggers, and detect presence from network pings. The engine runs locally, processes events, and executes actions, no cloud service required.
 
-This assumes Python 101 — nothing from Data Analysis is required. Optional and ungraded; see [Real-World Projects](/projects) for the full list.
+This assumes Python 101, nothing from Data Analysis is required. Optional and ungraded; see [Real-World Projects](/projects) for the full list.
 
 ## 🎯 What you'll do
 
@@ -29,7 +29,7 @@ This assumes Python 101 — nothing from Data Analysis is required. Optional and
 
 ## Where to run this
 
-**Locally with `uv`** is the primary path — this project simulates network pings and runs a rule engine that processes events in a loop. It's designed to run on a machine connected to your home network.
+**Locally with `uv`** is the primary path, this project simulates network pings and runs a rule engine that processes events in a loop. It's designed to run on a machine connected to your home network.
 
 **Google Colab, Kaggle Notebooks, and Binder** work for trying the tool. The notebook uses simulated device states and mock pings instead of real network traffic.
 
@@ -275,7 +275,7 @@ def evaluate_rules(
     return results
 ```
 
-The `evaluate_condition` function reads a device attribute (`is_on`, `temperature`) and compares it against the condition's value using the specified operator. `evaluate_rules` runs all enabled rules and collects those whose conditions are all met — the "all conditions" check means every condition in a rule must be true for the rule to fire. When a rule fires, it executes each action by calling the named method on the target device.
+The `evaluate_condition` function reads a device attribute (`is_on`, `temperature`) and compares it against the condition's value using the specified operator. `evaluate_rules` runs all enabled rules and collects those whose conditions are all met, the "all conditions" check means every condition in a rule must be true for the rule to fire. When a rule fires, it executes each action by calling the named method on the target device.
 
 **🎯 Expected output:** A rule with condition `thermostat.temperature < 68` fires `light.turn_on()` when the thermostat reads 65 degrees.
 
@@ -307,7 +307,7 @@ assert light.is_on
 
 **🎯 Expected output:** The assertion passes; the light is on after rule evaluation.
 
-**🩹 If it's off:** If the light didn't turn on, the condition `less_than` comparison may be comparing strings instead of floats — check the `float()` cast in `evaluate_condition`.
+**🩹 If it's off:** If the light didn't turn on, the condition `less_than` comparison may be comparing strings instead of floats, check the `float()` cast in `evaluate_condition`.
 
 ### 2.3 Verify the rule engine
 
@@ -319,12 +319,12 @@ assert light.is_on
 
 **🤔 Socratic Question(s)**
 
-- Rules evaluate all conditions every time a state change occurs. For a house with 50 devices and 20 rules, that's 1,000 condition checks per event. How would you optimize this — only re-evaluate rules whose conditions reference the changed device?
+- Rules evaluate all conditions every time a state change occurs. For a house with 50 devices and 20 rules, that's 1,000 condition checks per event. How would you optimize this, only re-evaluate rules whose conditions reference the changed device?
 - What happens if two rules try to set the same device to conflicting states? How would you add priority or ordering to resolve conflicts?
 
 ## Step 3: Implement time-based scheduling
 
-Some automations aren't triggered by device state — they run on a schedule. "Turn off all lights at midnight," "lower the thermostat at 10 PM," "lock the doors at bedtime." This step uses the `schedule` library to run rules at specific times.
+Some automations aren't triggered by device state, they run on a schedule. "Turn off all lights at midnight," "lower the thermostat at 10 PM," "lock the doors at bedtime." This step uses the `schedule` library to run rules at specific times.
 
 ### 3.1 Build the scheduler
 
@@ -360,11 +360,11 @@ class AutomationScheduler:
         schedule.clear()
 ```
 
-The `schedule` library handles the timing — you just register a function to run at a specific time each day. `run_pending()` is called in a loop to check if any scheduled jobs are due. The `job` closure captures the rule and registry, so when the scheduled time arrives, it evaluates the rule against the current device state and executes any matching actions.
+The `schedule` library handles the timing, you just register a function to run at a specific time each day. `run_pending()` is called in a loop to check if any scheduled jobs are due. The `job` closure captures the rule and registry, so when the scheduled time arrives, it evaluates the rule against the current device state and executes any matching actions.
 
 **🎯 Expected output:** `scheduler.schedule_rule(rule, "22:00")` prints "Scheduled 'Warm up' at 22:00" and registers the job.
 
-**🩹 If it's off:** If the job never runs, `run_pending()` isn't being called in a loop. If the time format is wrong, `schedule` raises a `ValueError` — use 24-hour `HH:MM` format.
+**🩹 If it's off:** If the job never runs, `run_pending()` isn't being called in a loop. If the time format is wrong, `schedule` raises a `ValueError`, use 24-hour `HH:MM` format.
 
 ### 3.2 Test with simulated time
 
@@ -394,7 +394,7 @@ schedule.run_pending()
 
 **🎯 Expected output:** `schedule.run_pending()` prints "ACTION: l1.turn_off({})" immediately (since the job is due at 22:00 and we're calling it in a test).
 
-**🩹 If it's off:** If nothing prints, the scheduled time hasn't arrived yet in the test — `schedule.run_pending()` only runs jobs whose time has passed since the last call.
+**🩹 If it's off:** If nothing prints, the scheduled time hasn't arrived yet in the test, `schedule.run_pending()` only runs jobs whose time has passed since the last call.
 
 ### 3.3 Verify scheduling
 
@@ -452,7 +452,7 @@ class PresenceDetector:
         return any(self.status.values())
 ```
 
-The `ping` function uses `subprocess.run` to execute a real system ping — the same command you'd type in a terminal. `check_all` iterates over all registered devices and updates their status. `anyone_home` is a convenience property that returns `True` if any device is reachable. In production, you'd poll this periodically (every 30 seconds to a minute) and trigger rules when the status changes.
+The `ping` function uses `subprocess.run` to execute a real system ping, the same command you'd type in a terminal. `check_all` iterates over all registered devices and updates their status. `anyone_home` is a convenience property that returns `True` if any device is reachable. In production, you'd poll this periodically (every 30 seconds to a minute) and trigger rules when the status changes.
 
 **🎯 Expected output:** `detector.ping("127.0.0.1")` returns `True` (localhost is always reachable). `detector.ping("192.0.2.1")` returns `False` (a TEST-NET address that shouldn't respond).
 
@@ -481,7 +481,7 @@ class PresenceRuleEvaluator:
         return results
 ```
 
-The `PresenceRuleEvaluator` only triggers rules when presence *changes* — not on every poll. This prevents rules from firing repeatedly while someone is home. The `prev_home` tracking is the key: when the status flips from `True` to `False` (everyone left), rules with presence conditions fire once.
+The `PresenceRuleEvaluator` only triggers rules when presence *changes*, not on every poll. This prevents rules from firing repeatedly while someone is home. The `prev_home` tracking is the key: when the status flips from `True` to `False` (everyone left), rules with presence conditions fire once.
 
 **🎯 Expected output:** `evaluate_on_change` returns rules when presence transitions from home to away (or vice versa), and returns an empty list when nothing changed.
 
@@ -577,11 +577,11 @@ if __name__ == "__main__":
     cli()
 ```
 
-The `demo` command is the most useful for learning — it sets up a complete scenario with three devices, two rules, and evaluates them in one shot. The `add_device` and `status` commands are stubs for extending the system. The CLI keeps the automation logic testable without running a continuous event loop.
+The `demo` command is the most useful for learning, it sets up a complete scenario with three devices, two rules, and evaluates them in one shot. The `add_device` and `status` commands are stubs for extending the system. The CLI keeps the automation logic testable without running a continuous event loop.
 
 **🎯 Expected output:** `uv run python -m hub.cli demo` prints "Rule 'Cold turns on light' fired" and shows the light is on and the door is locked.
 
-**🩹 If it's off:** If no rules fire, the thermostat temperature (65.0) may not be compared correctly against "68" — check the `float()` cast in the condition evaluator.
+**🩹 If it's off:** If no rules fire, the thermostat temperature (65.0) may not be compared correctly against "68", check the `float()` cast in the condition evaluator.
 
 ### 5.2 End-to-end smoke test
 
@@ -614,14 +614,14 @@ assert light.is_on
 
 **🎯 Expected output:** The assertion passes; only the "Cold" rule fires, and the light is on.
 
-**🩹 If it's off:** If both rules fire, the "Away lock" condition `greater_than 80` is being compared incorrectly — check the float conversion.
+**🩹 If it's off:** If both rules fire, the "Away lock" condition `greater_than 80` is being compared incorrectly, check the float conversion.
 
 ### 5.3 Verify the CLI pipeline
 
 **✅ Checklist**
 
 - ✅ `uv run python -m hub.cli demo` runs a complete scenario with devices, rules, and actions.
-- ✅ Rules fire based on current device state — not based on what the rule expects.
+- ✅ Rules fire based on current device state, not based on what the rule expects.
 - ✅ The CLI prints clear output showing which rules fired and what actions were taken.
 
 **🤔 Socratic Question(s)**
@@ -631,7 +631,7 @@ assert light.is_on
 
 ## ⚠️ Common pitfalls
 
-- **Rules that fire on every poll instead of on state change.** If your engine re-evaluates all rules every time a sensor reports (even when nothing changed), you'll get repeated actions and unnecessary notifications. The `PresenceRuleEvaluator` pattern — tracking `prev_home` and only firing on transitions — prevents this.
+- **Rules that fire on every poll instead of on state change.** If your engine re-evaluates all rules every time a sensor reports (even when nothing changed), you'll get repeated actions and unnecessary notifications. The `PresenceRuleEvaluator` pattern, tracking `prev_home` and only firing on transitions, prevents this.
 - **String vs. numeric comparisons in conditions.** A condition like `temperature > 68` must compare floats, not strings. The `evaluate_condition` function casts values with `float()` for numeric operators, but this is easy to forget when adding new operators.
 - **Actions that call methods that don't exist.** If `action.method` is `"turn_on"` but the device class spells it `"TurnOn"`, `getattr` returns `None` and the action silently fails. Always validate that the method exists before calling it.
 - **Scheduling with blocking loops.** The `schedule` library uses `time.sleep(1)` internally, which blocks the entire thread. For a real hub that also handles WebSocket connections or HTTP requests, you'd need async scheduling (like `APScheduler`) instead.
@@ -639,7 +639,7 @@ assert light.is_on
 
 ## What you just built
 
-A rule-based home automation engine: devices with state and methods, a trigger-action rule engine that evaluates conditions against live device state, time-based scheduling for recurring automations, and presence detection from network pings. The architecture — devices, rules, scheduler, presence — mirrors how home automation platforms like Home Assistant and Hubitat work, just smaller and running entirely in Python.
+A rule-based home automation engine: devices with state and methods, a trigger-action rule engine that evaluates conditions against live device state, time-based scheduling for recurring automations, and presence detection from network pings. The architecture, devices, rules, scheduler, presence, mirrors how home automation platforms like Home Assistant and Hubitat work, just smaller and running entirely in Python.
 
 :::tip[Run a fuller version without any local setup]
 [`examples/home-automation/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/home-automation) in the course repo has a richer version with more device types, a web dashboard, and the scheduler wired up end to end. Clone it, or open the whole repo in a [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), and run it from there.
@@ -653,6 +653,6 @@ A rule-based home automation engine: devices with state and methods, a trigger-a
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

@@ -66,7 +66,7 @@ ax.set_ylabel("Reading Score")
 plt.show()
 ```
 
-La transparencia alfa (`alpha=0.5`) es crítica — revela la densidad de puntos donde los puntos se superponen.
+La transparencia alfa (`alpha=0.5`) es crítica, revela la densidad de puntos donde los puntos se superponen.
 
 ### Gráficos de regresión
 
@@ -256,7 +256,7 @@ plt.show()
 Crea una figura con 4 paneles que muestren: (1) un gráfico de dispersión de puntajes de matemáticas vs escritura, (2) una dispersión con línea de regresión, (3) un gráfico de densidad hexbin y (4) una dispersión coloreada por tipo de almuerzo. Añade títulos y etiquetas de ejes adecuados.
 
 <details class="challenge">
-<summary>🧩 Desafío — piensa primero, luego revela</summary>
+<summary>🧩 Desafío, piensa primero, luego revela</summary>
 <div class="challenge__body">
 
 ```python

@@ -43,7 +43,7 @@ quiz:
       - text: "La cartographie des valeurs distinctes en nombres"
 ---
 
-Les variables catégorielles décrivent des groupes, des catégories ou des étiquettes — genre, origine ethnique, type de repas, niveau d'éducation. Contrairement aux données numériques, on ne peut pas calculer de moyennes ni d'écarts-types. On analyse plutôt les fréquences, les proportions et le mode. Cette leçon couvre les outils et les techniques pour comprendre les données catégorielles.
+Les variables catégorielles décrivent des groupes, des catégories ou des étiquettes, genre, origine ethnique, type de repas, niveau d'éducation. Contrairement aux données numériques, on ne peut pas calculer de moyennes ni d'écarts-types. On analyse plutôt les fréquences, les proportions et le mode. Cette leçon couvre les outils et les techniques pour comprendre les données catégorielles.
 
 ## Concepts clés
 
@@ -88,7 +88,7 @@ Comprendre le type de variable catégorielle détermine la façon dont vous l'an
 | **Nominal** | Pas d'ordre naturel | origine ethnique | Fréquence, mode |
 | **Ordinal** | Un ordre naturel existe | niveau d'éducation | Catégorie médiane, corrélation de rang |
 
-Les variables ordinales nécessitent un ordre explicite — ne laissez pas pandas les trier alphabétiquement :
+Les variables ordinales nécessitent un ordre explicite, ne laissez pas pandas les trier alphabétiquement :
 
 ```python
 import seaborn as sns
@@ -118,7 +118,7 @@ plt.show()
 
 ### Graphiques en comptage avec seaborn
 
-Les graphiques en comptage sont l'équivalent catégoriel des histogrammes — ils montrent les fréquences :
+Les graphiques en comptage sont l'équivalent catégoriel des histogrammes, ils montrent les fréquences :
 
 ```python
 fig, axes = plt.subplots(2, 2, figsize=(12, 10))
@@ -274,7 +274,7 @@ plt.show()
 
 ## Points clés à retenir
 
-- Les tables de fréquences sont le fondement de l'analyse catégorielle — calculez-les toujours en premier
+- Les tables de fréquences sont le fondement de l'analyse catégorielle, calculez-les toujours en premier
 - Distinguez les variables nominales, ordinales et binaires ; les variables ordinales nécessitent un ordre explicite
 - Les graphiques en barres horizontaux sont meilleurs que les verticaux lorsque les étiquettes de catégories sont longues
 - Utilisez des proportions plutôt que des comptages lorsque vous comparez des groupes de tailles différentes
@@ -286,7 +286,7 @@ plt.show()
 Créez une figure montrant la distribution des types de `lunch`, avec des barres colorées selon la réalisation du `test preparation course`. Ajoutez des annotations de comptage à chaque segment de barre. Calculez ensuite la proportion d'étudiants ayant réalisé la préparation aux tests pour chaque type de repas.
 
 <details class="challenge">
-<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
+<summary>🧩 Défi, réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
 ```python

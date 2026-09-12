@@ -17,9 +17,9 @@ prerequisites:
 
 # 🛠️ 📊 Build a Report Builder
 
-Business reporting is a loop that never changes shape: take raw data, summarize it, show it, and share it. This project builds that loop with pandas and matplotlib — load a sales CSV, compute the totals a manager actually asks for, draw a bar, line, pie, and scatter chart, format everything into a clean table, and assemble it all into one report file.
+Business reporting is a loop that never changes shape: take raw data, summarize it, show it, and share it. This project builds that loop with pandas and matplotlib, load a sales CSV, compute the totals a manager actually asks for, draw a bar, line, pie, and scatter chart, format everything into a clean table, and assemble it all into one report file.
 
-This assumes Python 101 and comfort with basic functions and lists — nothing beyond that is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
+This assumes Python 101 and comfort with basic functions and lists, nothing beyond that is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 
@@ -33,7 +33,7 @@ This assumes Python 101 and comfort with basic functions and lists — nothing b
 
 **Locally with `uv`** is the primary path. `pandas` and `matplotlib` install cleanly, matplotlib's non-interactive `Agg` backend (used in Step 2) means charts render even on a headless machine, and the report files genuinely land in your project folder.
 
-**Google Colab and Binder notebook runs** work the same way — install the pair with one `!pip install pandas matplotlib` line, and the notebook mirrors every step with charts saved into the notebook environment. **JupyterLite** can run the pandas portions in the browser, but it's the weakest of the three for this project: matplotlib runs there, yet saving PNG chart *files* to a real disk is awkward, so treat it as a try-it path and use the notebook badges or local `uv` when you want the report artifacts to persist.
+**Google Colab and Binder notebook runs** work the same way, install the pair with one `!pip install pandas matplotlib` line, and the notebook mirrors every step with charts saved into the notebook environment. **JupyterLite** can run the pandas portions in the browser, but it's the weakest of the three for this project: matplotlib runs there, yet saving PNG chart *files* to a real disk is awkward, so treat it as a try-it path and use the notebook badges or local `uv` when you want the report artifacts to persist.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/report-builder/notebook.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/report-builder/notebook.ipynb)
@@ -53,7 +53,7 @@ uv add pandas matplotlib
 uv run python -c "import pandas, matplotlib; print('ok')"
 ```
 
-`pandas` is the data layer — load, aggregate, filter — and `matplotlib` is the drawing layer that turns the aggregates into charts. Starting with both installed means every step below is about the *reporting* ideas rather than dependency wrangling.
+`pandas` is the data layer, load, aggregate, filter, and `matplotlib` is the drawing layer that turns the aggregates into charts. Starting with both installed means every step below is about the *reporting* ideas rather than dependency wrangling.
 
 **✅ Checklist**
 
@@ -62,7 +62,7 @@ uv run python -c "import pandas, matplotlib; print('ok')"
 
 ## Step 1: Load and prepare the data
 
-Every report starts with data that may or may not exist yet. This step builds a loader that generates a realistic sales CSV when none is present — so the project runs out of the box — and parses dates so time-based reporting works later.
+Every report starts with data that may or may not exist yet. This step builds a loader that generates a realistic sales CSV when none is present, so the project runs out of the box, and parses dates so time-based reporting works later.
 
 ### 1.1 Write the data generator and loader
 
@@ -105,11 +105,11 @@ df = load_data()
 print(df.head(10).to_string(index=False))
 ```
 
-`random.seed(42)` is what makes the sample data *reproducible*: the same seed yields the same "random" variation on every run, so the charts and totals you produce are the charts and totals in the expected outputs, not a different report each time. `parse_dates=["date"]` tells pandas to decode the date column into real `datetime` objects at load time — that's what makes "average daily revenue" and the report's date range in Step 5 computable rather than string-sorting. `index=False` on `to_csv` keeps a stray index column out of the file, so re-loading produces a clean DataFrame again.
+`random.seed(42)` is what makes the sample data *reproducible*: the same seed yields the same "random" variation on every run, so the charts and totals you produce are the charts and totals in the expected outputs, not a different report each time. `parse_dates=["date"]` tells pandas to decode the date column into real `datetime` objects at load time, that's what makes "average daily revenue" and the report's date range in Step 5 computable rather than string-sorting. `index=False` on `to_csv` keeps a stray index column out of the file, so re-loading produces a clean DataFrame again.
 
-**🎯 Expected output:** `Sample data saved to sales_data.csv (100 rows)` — or, on a second run with the file present, `Loaded 100 rows from sales_data.csv`. Then a 10-row preview with columns `date`, `category`, `revenue`, `units_sold`.
+**🎯 Expected output:** `Sample data saved to sales_data.csv (100 rows)`, or, on a second run with the file present, `Loaded 100 rows from sales_data.csv`. Then a 10-row preview with columns `date`, `category`, `revenue`, `units_sold`.
 
-**🩹 If it's off:** If the file is regenerated every run, `os.path.exists` is checking a different path than the one used by the generator — pass the same `filepath` default to both. If `df["date"]` prints as strings like `2024-01-01` without a `T`, it's not actually parsed — confirm with `df.dtypes` (`date` should be `datetime64[ns]`). If every revenue value is identical, the `random.seed(42)` multiplication wasn't applied to the list.
+**🩹 If it's off:** If the file is regenerated every run, `os.path.exists` is checking a different path than the one used by the generator, pass the same `filepath` default to both. If `df["date"]` prints as strings like `2024-01-01` without a `T`, it's not actually parsed, confirm with `df.dtypes` (`date` should be `datetime64[ns]`). If every revenue value is identical, the `random.seed(42)` multiplication wasn't applied to the list.
 
 ### 1.2 Check what you're working with
 
@@ -121,11 +121,11 @@ print(f"Rows: {len(df)}, Columns: {list(df.columns)}")
 print(df.groupby("category")["revenue"].count())
 ```
 
-`df.groupby("category")["revenue"].count()` is your first real aggregate: `groupby("category")` splits the frame into one group per category, the `["revenue"]` picks a column to measure, and `.count()` tallies non-null entries per group. It's the same shape of expression you'll use in Step 2 to *sum* revenue by category — the only difference is the final method.
+`df.groupby("category")["revenue"].count()` is your first real aggregate: `groupby("category")` splits the frame into one group per category, the `["revenue"]` picks a column to measure, and `.count()` tallies non-null entries per group. It's the same shape of expression you'll use in Step 2 to *sum* revenue by category, the only difference is the final method.
 
 **🎯 Expected output:** `Rows: 100, Columns: ['date', 'category', 'revenue', 'units_sold']`, then a per-category count of `25` for each of the four categories.
 
-**🩹 If it's off:** If a count is not 25, the `* 25` tile pattern in the generator didn't produce a balanced dataset — check the original list length. If `groupby` errors, the `category` column name is misspelled or missing from the CSV.
+**🩹 If it's off:** If a count is not 25, the `* 25` tile pattern in the generator didn't produce a balanced dataset, check the original list length. If `groupby` errors, the `category` column name is misspelled or missing from the CSV.
 
 ### 1.3 Verify the data layer
 
@@ -137,12 +137,12 @@ print(df.groupby("category")["revenue"].count())
 
 **🤔 Socratic Question(s)**
 
-- The sample data uses a fixed `random.seed(42)`. What would you *trade* if you removed the seed — and in which real workflow (a demo, an audit trail, a live dashboard) would you actually want non-seeded variation?
-- Dates are parsed with `parse_dates=["date"]`. What kind of bug would a report hit if the date column stayed as strings — pick one concrete operation (sorting, finding the min date, plotting a time series) and say how it breaks.
+- The sample data uses a fixed `random.seed(42)`. What would you *trade* if you removed the seed, and in which real workflow (a demo, an audit trail, a live dashboard) would you actually want non-seeded variation?
+- Dates are parsed with `parse_dates=["date"]`. What kind of bug would a report hit if the date column stayed as strings, pick one concrete operation (sorting, finding the min date, plotting a time series) and say how it breaks.
 
 ## Step 2: Draw your first chart
 
-A chart is a summary you can see. This step draws the first of four figures — a horizontal bar chart of revenue by category — and establishes the pattern every later chart follows: build a `figure` and `axes`, plot, label, save, close.
+A chart is a summary you can see. This step draws the first of four figures, a horizontal bar chart of revenue by category, and establishes the pattern every later chart follows: build a `figure` and `axes`, plot, label, save, close.
 
 ### 2.1 Save a revenue-by-category bar chart
 
@@ -172,19 +172,19 @@ def chart_revenue_by_category(df: pd.DataFrame, output: str = "chart_bar.png"):
 chart_revenue_by_category(df)
 ```
 
-The `matplotlib.use("Agg")` call, placed **before** importing `pyplot`, is what makes this project run on a server or in CI with no display: `Agg` is the pure-raster backend that renders straight to files. `groupby("category")["revenue"].sum().sort_values()` combines aggregation with ordering, so the bar chart renders *sorted* — smallest at the bottom with `barh`, which reads naturally. `plt.savefig(output, dpi=150)` writes a file rather than popping a window, and the disciplined `plt.close()` releases the figure's memory so a long-running loop of charts doesn't leak.
+The `matplotlib.use("Agg")` call, placed **before** importing `pyplot`, is what makes this project run on a server or in CI with no display: `Agg` is the pure-raster backend that renders straight to files. `groupby("category")["revenue"].sum().sort_values()` combines aggregation with ordering, so the bar chart renders *sorted*, smallest at the bottom with `barh`, which reads naturally. `plt.savefig(output, dpi=150)` writes a file rather than popping a window, and the disciplined `plt.close()` releases the figure's memory so a long-running loop of charts doesn't leak.
 
 **🎯 Expected output:** A `chart_bar.png` file, plus the printout `Bar chart saved to chart_bar.png`. Open the image: four horizontal bars, one per category, sorted ascending.
 
-**🩹 If it's off:** If you get `UserWarning: Starting a Matplotlib GUI outside of the main thread` or a `TclError` about no display, `matplotlib.use("Agg")` runs *after* `pyplot` is already imported — the `use` must precede every pyplot import. If the file is blank, `savefig` was called before any plotting happened. If colors don't line up with categories, the `colors[:len(summary)]` slice and the sorted series must have the same length and order.
+**🩹 If it's off:** If you get `UserWarning: Starting a Matplotlib GUI outside of the main thread` or a `TclError` about no display, `matplotlib.use("Agg")` runs *after* `pyplot` is already imported, the `use` must precede every pyplot import. If the file is blank, `savefig` was called before any plotting happened. If colors don't line up with categories, the `colors[:len(summary)]` slice and the sorted series must have the same length and order.
 
 ### 2.2 Verify the repeatable chart pattern
 
-**👟 Starter hint:** Re-run the function and confirm the file is rebuilt identically — idempotent output (same input → same PNG) is what makes batch reporting trustworthy.
+**👟 Starter hint:** Re-run the function and confirm the file is rebuilt identically, idempotent output (same input → same PNG) is what makes batch reporting trustworthy.
 
-**🎯 Expected output:** Re-running the chunk overwrites `chart_bar.png` with the same chart and prints `Bar chart saved to chart_bar.png` again — no error, no window popping up.
+**🎯 Expected output:** Re-running the chunk overwrites `chart_bar.png` with the same chart and prints `Bar chart saved to chart_bar.png` again, no error, no window popping up.
 
-**🩹 If it's off:** If the second run pops a window or errors about a display, the `Agg` backend line drifted below the pyplot import on a re-paste. If `FileNotFoundError` appears at save, the output directory doesn't exist — `savefig` won't create folders, so `os.makedirs` (or the report step) must.
+**🩹 If it's off:** If the second run pops a window or errors about a display, the `Agg` backend line drifted below the pyplot import on a re-paste. If `FileNotFoundError` appears at save, the output directory doesn't exist, `savefig` won't create folders, so `os.makedirs` (or the report step) must.
 
 **✅ Checklist**
 
@@ -194,8 +194,8 @@ The `matplotlib.use("Agg")` call, placed **before** importing `pyplot`, is what 
 
 **🤔 Socratic Question(s)**
 
-- The chart sorts ascending and uses `barh`. What changes about a viewer's reading of the same data if you plotted the *unsorted* series as vertical bars instead — is there any case where the "wrong" order is the honest one?
-- `plt.close()` ends this function, but the initials `fig, ax = plt.subplots(...)` bind a pair of objects. What would happen if you forgot the close in a loop building 200 charts — and why does that failure usually show up late, not immediately?
+- The chart sorts ascending and uses `barh`. What changes about a viewer's reading of the same data if you plotted the *unsorted* series as vertical bars instead, is there any case where the "wrong" order is the honest one?
+- `plt.close()` ends this function, but the initials `fig, ax = plt.subplots(...)` bind a pair of objects. What would happen if you forgot the close in a loop building 200 charts, and why does that failure usually show up late, not immediately?
 
 ## Step 3: Add the other three chart types
 
@@ -226,11 +226,11 @@ def chart_revenue_trend(df: pd.DataFrame, output: str = "chart_line.png"):
 chart_revenue_trend(df)
 ```
 
-`daily = df.groupby("date")["revenue"].sum()` collapses the frame into one point per date — because `groupby` groups *unique date values*, and every date appears in the data exactly once, this is effectively a full-resolution time series. `ax.plot(daily.index, daily.values, ...)` is the un-pandas-native way of plotting (we took the summary out of the DataFrame), which lets you pass the date index directly to matplotlib. `fill_between` with a low `alpha=0.1` tints the area under the line — a cheap readability win that turns a line into a shape.
+`daily = df.groupby("date")["revenue"].sum()` collapses the frame into one point per date, because `groupby` groups *unique date values*, and every date appears in the data exactly once, this is effectively a full-resolution time series. `ax.plot(daily.index, daily.values, ...)` is the un-pandas-native way of plotting (we took the summary out of the DataFrame), which lets you pass the date index directly to matplotlib. `fill_between` with a low `alpha=0.1` tints the area under the line, a cheap readability win that turns a line into a shape.
 
 **🎯 Expected output:** A `chart_line.png` showing a daily revenue line across the 100-day range, with a light blue fill underneath and rotated date labels along the x-axis.
 
-**🩹 If it's off:** If the x-axis labels overlap into a smear, `rotation=45, ha="right"` was left off. If matplotlib plots an index of raw integers instead of dates, the `parse_dates` from Step 1 wasn't applied. If the line is completely flat, `groupby("date")` may not be summing — check `daily.describe()` for variance.
+**🩹 If it's off:** If the x-axis labels overlap into a smear, `rotation=45, ha="right"` was left off. If matplotlib plots an index of raw integers instead of dates, the `parse_dates` from Step 1 wasn't applied. If the line is completely flat, `groupby("date")` may not be summing, check `daily.describe()` for variance.
 
 ### 3.2 Add the pie and the scatter
 
@@ -274,11 +274,11 @@ chart_category_distribution(df)
 chart_price_vs_units(df)
 ```
 
-The pie's `autopct="%1.1f%%"` is a mini format spec — matplotlib calls that string with each slice's percentage and it renders one decimal place plus a literal `%`, so a slice of `0.27` becomes `27.0%` (the doubled `%%` escapes the single `%`). The scatter's `for cat, color in zip(...)` loop splits the frame per category and draws each as its own colored series, so a legend can tell four groups apart — and `alpha=0.6` makes overlapping points visible rather than solid blobs. Both functions keep the Step 2 discipline: idempotent input, one PNG out.
+The pie's `autopct="%1.1f%%"` is a mini format spec, matplotlib calls that string with each slice's percentage and it renders one decimal place plus a literal `%`, so a slice of `0.27` becomes `27.0%` (the doubled `%%` escapes the single `%`). The scatter's `for cat, color in zip(...)` loop splits the frame per category and draws each as its own colored series, so a legend can tell four groups apart, and `alpha=0.6` makes overlapping points visible rather than solid blobs. Both functions keep the Step 2 discipline: idempotent input, one PNG out.
 
 **🎯 Expected output:** `chart_pie.png` showing the four categories' unit shares with percentage labels, and `chart_scatter.png` with four colored series, axis labels, and a legend.
 
-**🩹 If it's off:** If the pie's labels overlap or vanish, there are too many or too-similar slices for a clean label — `autopct` is not removing small slices, it just labels them. If the scatter shows a single color or empty legend, the `zip(categories, colors)` pairing mismatched — both sequences must have the same order. If `%1.1f%%` prints a literal `1.1f`, the format string is missing the `%` operator's escape.
+**🩹 If it's off:** If the pie's labels overlap or vanish, there are too many or too-similar slices for a clean label, `autopct` is not removing small slices, it just labels them. If the scatter shows a single color or empty legend, the `zip(categories, colors)` pairing mismatched, both sequences must have the same order. If `%1.1f%%` prints a literal `1.1f`, the format string is missing the `%` operator's escape.
 
 ### 3.3 Verify all four charts
 
@@ -290,12 +290,12 @@ The pie's `autopct="%1.1f%%"` is a mini format spec — matplotlib calls that st
 
 **🤔 Socratic Question(s)**
 
-- The pie and the bar both show per-category summaries, from the same data. When is a pie chart genuinely the wrong choice for a category comparison, even though it displays fine — and what does a *reader* lose that a bar conveys?
-- Each chart function hardcodes its own title. If a report needed every chart themed (same font, same header format), what would change structurally — and why does the `fig, ax = plt.subplots(...)` pattern make that easier than plotting on a global implicit figure?
+- The pie and the bar both show per-category summaries, from the same data. When is a pie chart genuinely the wrong choice for a category comparison, even though it displays fine, and what does a *reader* lose that a bar conveys?
+- Each chart function hardcodes its own title. If a report needed every chart themed (same font, same header format), what would change structurally, and why does the `fig, ax = plt.subplots(...)` pattern make that easier than plotting on a global implicit figure?
 
 ## Step 4: Format a summary table
 
-Charts answer "what do the numbers say at a glance"; a table answers "what exactly are they." This step builds a text table with aligned columns, totals, and dollar formatting — output that's ready to drop into a report, an email, or a terminal.
+Charts answer "what do the numbers say at a glance"; a table answers "what exactly are they." This step builds a text table with aligned columns, totals, and dollar formatting, output that's ready to drop into a report, an email, or a terminal.
 
 ### 4.1 Aggregate and align the table
 
@@ -333,11 +333,11 @@ table = format_summary_table(df)
 print(table)
 ```
 
-`df.groupby("category").agg(...)` runs *four* aggregations in one pass — each entry names an output column and the `(source_column, operation)` pair to produce it, which is far readier than four separate `groupby` calls. The f-string widths are doing real layout work: `:>12` right-aligns the revenue in 12 characters and `,` in `:>10,.2f` adds thousands separators, so `2984.5` becomes `  $2,984.50` and every row lines up at the same column. The final `TOTAL` row reuses the same width specifiers with an empty padding string so the footer aligns with the data rows above it.
+`df.groupby("category").agg(...)` runs *four* aggregations in one pass, each entry names an output column and the `(source_column, operation)` pair to produce it, which is far readier than four separate `groupby` calls. The f-string widths are doing real layout work: `:>12` right-aligns the revenue in 12 characters and `,` in `:>10,.2f` adds thousands separators, so `2984.5` becomes `  $2,984.50` and every row lines up at the same column. The final `TOTAL` row reuses the same width specifiers with an empty padding string so the footer aligns with the data rows above it.
 
-**🎯 Expected output:** A five-line header, then four data rows (one per category) ending in a `TOTAL` row — each column vertically aligned and dollar values comma-formatted.
+**🎯 Expected output:** A five-line header, then four data rows (one per category) ending in a `TOTAL` row, each column vertically aligned and dollar values comma-formatted.
 
-**🩹 If it's off:** If columns visibly misalign, the width numbers in the header and the body rows disagree — both must use the same specifiers. If `TOTAL` drifts right, its empty padding field has a different width than the `Avg Sale` column. If values show as `2984.5` without commas, the `,` flag is missing from the `.2f` format.
+**🩹 If it's off:** If columns visibly misalign, the width numbers in the header and the body rows disagree, both must use the same specifiers. If `TOTAL` drifts right, its empty padding field has a different width than the `Avg Sale` column. If values show as `2984.5` without commas, the `,` flag is missing from the `.2f` format.
 
 ### 4.2 Verify the table
 
@@ -349,12 +349,12 @@ print(table)
 
 **🤔 Socratic Question(s)**
 
-- The table is built with fixed-width f-strings, which works because the column *names* fit those widths. What breaks the alignment if a category name is 30 characters long — and what are the two or three options (truncate, dynamic width, a library) when real data outgrows your columns?
+- The table is built with fixed-width f-strings, which works because the column *names* fit those widths. What breaks the alignment if a category name is 30 characters long, and what are the two or three options (truncate, dynamic width, a library) when real data outgrows your columns?
 - `int(row['total_units'])` deliberately floors fractional unit counts. The `.round(2)` above rounds the averages first. Why is independently rounding the *display* values, rather than the underlying aggregate, usually the safer reporting choice?
 
 ## Step 5: Assemble the report
 
-The final step is the payoff: run all four charts and the table into a single report file — complete with a generated timestamp and the date range covered — so a manager can open one folder and see the whole story.
+The final step is the payoff: run all four charts and the table into a single report file, complete with a generated timestamp and the date range covered, so a manager can open one folder and see the whole story.
 
 ### 5.1 Generate the report folder
 
@@ -414,11 +414,11 @@ def generate_report(df: pd.DataFrame, output_dir: str = "report"):
 generate_report(df)
 ```
 
-Two design choices make this a genuine report tool rather than a demo. It's *regenerable*: the assembler recreates every artifact into its own directory, so the same command on updated data produces an updated report, and the directory always contains exactly the current set. It carries *metadata*: `datetime.now()` stamps when it ran and `df['date'].min() ... max()` records the period covered, so a reader (or an email recipient) can tell whether the report is current or stale at a glance. Every function this project built is now assembled in one place — the whole Step 1→4 pipeline, invoked by one call.
+Two design choices make this a genuine report tool rather than a demo. It's *regenerable*: the assembler recreates every artifact into its own directory, so the same command on updated data produces an updated report, and the directory always contains exactly the current set. It carries *metadata*: `datetime.now()` stamps when it ran and `df['date'].min() ... max()` records the period covered, so a reader (or an email recipient) can tell whether the report is current or stale at a glance. Every function this project built is now assembled in one place, the whole Step 1→4 pipeline, invoked by one call.
 
 **🎯 Expected output:** A `report/` folder containing `report.txt` and the four chart PNGs. The text report opens with the timestamped header, summary stats, the aligned category table, and a chart manifest.
 
-**🩹 If it's off:** If the header prints `Period: NaT to NaT`, the dates weren't parsed on load (Step 1's `parse_dates` is missing). If charts are missing from the folder, one of the four chart functions failed before saving — run each function's "if it's off" independently. If `report.txt` is rejected by an email system for weird characters, check whether the f-strings inserted a stray field; rerunning should be atomic.
+**🩹 If it's off:** If the header prints `Period: NaT to NaT`, the dates weren't parsed on load (Step 1's `parse_dates` is missing). If charts are missing from the folder, one of the four chart functions failed before saving, run each function's "if it's off" independently. If `report.txt` is rejected by an email system for weird characters, check whether the f-strings inserted a stray field; rerunning should be atomic.
 
 ### 5.2 Verify the assembled report
 
@@ -430,20 +430,20 @@ Two design choices make this a genuine report tool rather than a demo. It's *reg
 
 **🤔 Socratic Question(s)**
 
-- The report writes charts and text *together* on every run. What does a broken run — say, an exception halfway through the chart section — leave on disk, and what two small changes (temp directory + rename, or try/finally) would make regeneration atomic?
+- The report writes charts and text *together* on every run. What does a broken run, say, an exception halfway through the chart section, leave on disk, and what two small changes (temp directory + rename, or try/finally) would make regeneration atomic?
 - The timestamp is the report's freshness signal. If the report ran on a schedule every Monday, would `Generated:` alone tell a reader whether the *data* was current? What second field would you add to separate "when the report was made" from "how old the data is"?
 
 ## ⚠️ Common pitfalls
 
-- **`Agg` import order.** `matplotlib.use("Agg")` must execute *before* `import matplotlib.pyplot as plt`, or the GUI backend wins and headless runs crash with a "no display" error. Fix: keep the `use` line physically above the pyplot import — the file's import block does this deliberately.
+- **`Agg` import order.** `matplotlib.use("Agg")` must execute *before* `import matplotlib.pyplot as plt`, or the GUI backend wins and headless runs crash with a "no display" error. Fix: keep the `use` line physically above the pyplot import, the file's import block does this deliberately.
 - **Unparsed dates.** Without `parse_dates=["date"]`, the date column stays strings, so `df['date'].min()` sorts textually and line charts put strange ticks on the axis. Fix: parse at load time (Step 1) and confirm with `df.dtypes`.
-- **Running charts without a display.** The `Agg` backend renders to files — that's the entire reason it's switched on here. Fix: never remove the `use` line for this project; charts are saved, not shown.
+- **Running charts without a display.** The `Agg` backend renders to files, that's the entire reason it's switched on here. Fix: never remove the `use` line for this project; charts are saved, not shown.
 - **Misaligned tables.** Mixing header widths and body widths quietly breaks column alignment. Fix: keep the format strings for header and data rows identical, and let the `TOTAL` row reuse them.
 - **Extra columns from an index.** `df.to_csv(...)` without `index=False` writes an unnamed index column that loads back as noise. Fix: always pass `index=False`, as the generator does.
 
 ## What you just built
 
-A report generator that takes raw sales CSV and produces a complete package: a cleaned DataFrame, four intentional chart types, a publication-ready summary table, and a timestamped report file that names every artifact. The transferable skill is the *data-to-deliverable loop* — load, aggregate, visualize, assemble — which is the identical skeleton behind dashboards, executive summaries, and any "email me this week's numbers" automation you'll encounter in a job.
+A report generator that takes raw sales CSV and produces a complete package: a cleaned DataFrame, four intentional chart types, a publication-ready summary table, and a timestamped report file that names every artifact. The transferable skill is the *data-to-deliverable loop*, load, aggregate, visualize, assemble, which is the identical skeleton behind dashboards, executive summaries, and any "email me this week's numbers" automation you'll encounter in a job.
 
 :::tip[Run a fuller version without any local setup]
 [`examples/report-builder/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/report-builder) in the course repo ships the complete assembler plus a `reportlab`-based PDF export and date-range filtering. Clone it, or open the whole repo in a [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), and run it from there.
@@ -451,13 +451,13 @@ A report generator that takes raw sales CSV and produces a complete package: a c
 
 ## Where to go from here
 
-- Add a **PDF export** with `reportlab` — the summary on page one and one chart per page. The tiny hint: `uv add reportlab` and `from reportlab.platypus import SimpleDocTemplate, Paragraph, Image` covers ~90% of what you need.
-- Give `generate_report` **date filtering** — accept `start_date`/`end_date` and slice `df` before charting, so one function produces weekly, monthly, or quarterly reports from the same source.
-- Add a **quarter-over-quarter section**: aggregate revenue into two quarters and print the growth percent plus up/down arrow — a six-line addition to `format_summary_table`'s sibling.
-- Schedule it with the `schedule` package so Monday's `generate_report(df)` runs itself — then move the text report's path into an email via `smtplib` and you've built the classic "auto-reporting to stakeholders" pipeline.
+- Add a **PDF export** with `reportlab`, the summary on page one and one chart per page. The tiny hint: `uv add reportlab` and `from reportlab.platypus import SimpleDocTemplate, Paragraph, Image` covers ~90% of what you need.
+- Give `generate_report` **date filtering**, accept `start_date`/`end_date` and slice `df` before charting, so one function produces weekly, monthly, or quarterly reports from the same source.
+- Add a **quarter-over-quarter section**: aggregate revenue into two quarters and print the growth percent plus up/down arrow, a six-line addition to `format_summary_table`'s sibling.
+- Schedule it with the `schedule` package so Monday's `generate_report(df)` runs itself, then move the text report's path into an email via `smtplib` and you've built the classic "auto-reporting to stakeholders" pipeline.
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to turning spreadsheets into stories. 🎓

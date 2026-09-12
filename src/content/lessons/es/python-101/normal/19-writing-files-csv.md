@@ -31,7 +31,7 @@ open("file.txt", "a")   # añadir (agrega al final)
 open("file.txt", "x")   # crear (error si el archivo existe)
 ```
 
-`"w"` arroja el contenido viejo en el instante en que abre; `"a"` lo conserva y remienda al final; `"x"` se niega a tocar un archivo que ya existe. Elige el modo que declare lo que realmente quieres — el archivo se destruye o se preserva por esa elección.
+`"w"` arroja el contenido viejo en el instante en que abre; `"a"` lo conserva y remienda al final; `"x"` se niega a tocar un archivo que ya existe. Elige el modo que declare lo que realmente quieres, el archivo se destruye o se preserva por esa elección.
 
 ## Escribir archivos de texto
 
@@ -47,7 +47,7 @@ with open("output.txt", "w") as f:
     f.writelines(lines)
 ```
 
-`write` entrega una cadena a la vez; `writelines` entrega una lista entera en una llamada. Ambas respetan el mismo contrato `with` que ya confías: cuando el bloque termina, el archivo se vacía y cierra. Nota el `\n` colándose en cada cadena escrita — el salto de línea no se agrega por ti, solo se almacena.
+`write` entrega una cadena a la vez; `writelines` entrega una lista entera en una llamada. Ambas respetan el mismo contrato `with` que ya confías: cuando el bloque termina, el archivo se vacía y cierra. Nota el `\n` colándose en cada cadena escrita, el salto de línea no se agrega por ti, solo se almacena.
 
 ## Añadir
 
@@ -62,7 +62,7 @@ El modo añadir convierte el archivo en un acumulador: cada ejecución agrega un
 
 ## Trabajar con CSV
 
-Un CSV es una tabla sobre el cable: filas separadas por saltos de línea, celdas separadas por comas. El módulo `csv` es dueño de las partes delicadas — comillas, escape de delimitadores, finales de línea:
+Un CSV es una tabla sobre el cable: filas separadas por saltos de línea, celdas separadas por comas. El módulo `csv` es dueño de las partes delicadas, comillas, escape de delimitadores, finales de línea:
 
 ```python
 import csv
@@ -82,7 +82,7 @@ with open("data.csv") as f:
         print(f"{row[0]}: {row[1]}")
 ```
 
-El escritor acepta una lista por fila e inserta las comas; el lector devuelve cada fila a una lista. `next(reader)` despega la línea de cabecera, y la iteración continúa con los datos — el mismo paseo que ya conoces, por un archivo cuyas filas son estructuras.
+El escritor acepta una lista por fila e inserta las comas; el lector devuelve cada fila a una lista. `next(reader)` despega la línea de cabecera, y la iteración continúa con los datos, el mismo paseo que ya conoces, por un archivo cuyas filas son estructuras.
 
 ## DictReader y DictWriter
 
@@ -104,7 +104,7 @@ with open("output.csv", "w", newline="") as f:
     writer.writerow({"Name": "Charlie", "Score": 88})
 ```
 
-`DictReader` lee la cabecera y convierte cada fila posterior en un dict con sus claves; `DictWriter` hace lo inverso — declara los `fieldnames`, escribe la cabecera y luego se alimenta de dicts cuyos valores caen bajo sus columnas nombradas.
+`DictReader` lee la cabecera y convierte cada fila posterior en un dict con sus claves; `DictWriter` hace lo inverso, declara los `fieldnames`, escribe la cabecera y luego se alimenta de dicts cuyos valores caen bajo sus columnas nombradas.
 
 ## Pathlib para escribir
 
@@ -124,7 +124,7 @@ Path("data/logs").mkdir(parents=True, exist_ok=True)
 
 ## Un ejemplo resuelto: la libreta de notas, volcada a CSV
 
-El mapeo va al disco como tabla — encabezado primero, luego una fila por entrada:
+El mapeo va al disco como tabla, encabezado primero, luego una fila por entrada:
 
 ```python
 import csv
@@ -144,24 +144,24 @@ Los `items()` del dict se vuelven las filas; el encabezado nombra las columnas. 
 
 - **`"w"` sobrescribe en silencio.** El archivo viejo se fue en el instante en que el modo abre. Si el pasado importa, elige `"a"`.
 - **Olvidar `newline=""` en CSV.** En Windows el escritor duplica los finales de línea salvo que fijes `newline=""`; aparecen filas vacías entre los datos.
-- **Saltarse `writeheader()`.** Un `DictWriter` alimentado de dicts no escribe ninguna fila de cabecera salvo que la llames — los lectores pierden sus claves.
-- **`writerow` toma una secuencia — y una cadena es una secuencia de caracteres.** `writer.writerow("Alice")` esparce `A,l,i,c,e` en cinco celdas. Envuelve el valor en una lista cuando el campo es una sola cadena.
+- **Saltarse `writeheader()`.** Un `DictWriter` alimentado de dicts no escribe ninguna fila de cabecera salvo que la llames, los lectores pierden sus claves.
+- **`writerow` toma una secuencia, y una cadena es una secuencia de caracteres.** `writer.writerow("Alice")` esparce `A,l,i,c,e` en cinco celdas. Envuelve el valor en una lista cuando el campo es una sola cadena.
 
 ## 🧩 Desafíos
 
 <details class="challenge">
-<summary>🧩 Desafío — piensa primero, luego revela</summary>
+<summary>🧩 Desafío, piensa primero, luego revela</summary>
 <div class="challenge__body">
 
 Escribe una función que tome una lista de números y los escriba a un archivo, uno por línea.
 
-<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>with open("nums.txt", "w") as f: for n in nums: f.write(f"{n}\n")</code> — una cadena por número, cada una con su propio salto de línea.</p>
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>with open("nums.txt", "w") as f: for n in nums: f.write(f"{n}\n")</code>, una cadena por número, cada una con su propio salto de línea.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Desafío — piensa primero, luego revela</summary>
+<summary>🧩 Desafío, piensa primero, luego revela</summary>
 <div class="challenge__body">
 
 Lee un CSV de notas de estudiantes e imprime el promedio.
@@ -174,7 +174,7 @@ Lee un CSV de notas de estudiantes e imprime el promedio.
 ## 🤔 Preguntas socráticas
 
 - ¿Por qué la escritura CSV necesita `newline=""` en Windows pero no en Linux? ¿Qué sucede bajo el capó?
-- ¿Dónde yace la diferencia entre `csv.writer` y `csv.DictWriter` — y cuándo alcanzas cada uno?
+- ¿Dónde yace la diferencia entre `csv.writer` y `csv.DictWriter`, y cuándo alcanzas cada uno?
 - Si el CSV se abrirá en Excel, ¿qué precauciones extra deberías tomar?
 
 ## ✅ Comprobación rápida

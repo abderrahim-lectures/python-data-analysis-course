@@ -17,9 +17,9 @@ learningObjectives:
 
 # 🕶️ Build a Data Masker
 
-Copying real customer data into a development database, a bug report, or a demo is how sensitive information leaks — and the fix is the discipline of *masking*: replacing real values with fake-but-plausible ones before data goes anywhere it shouldn't. The craft is in the details: an email must keep its domain (so test code still routes), a phone number should stay phone-shaped, a numeric field like salary must keep its *distribution* (so test analytics don't collapse). This project builds a masker that detects sensitive columns, applies the right strategy per column, preserves what should be preserved, and writes an audit log of every operation.
+Copying real customer data into a development database, a bug report, or a demo is how sensitive information leaks, and the fix is the discipline of *masking*: replacing real values with fake-but-plausible ones before data goes anywhere it shouldn't. The craft is in the details: an email must keep its domain (so test code still routes), a phone number should stay phone-shaped, a numeric field like salary must keep its *distribution* (so test analytics don't collapse). This project builds a masker that detects sensitive columns, applies the right strategy per column, preserves what should be preserved, and writes an audit log of every operation.
 
-This assumes Python 101 plus comfortable `csv` and `re` — functions, lists, sets. Nothing from the Data Analysis module is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
+This assumes Python 101 plus comfortable `csv` and `re`, functions, lists, sets. Nothing from the Data Analysis module is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 
@@ -31,11 +31,11 @@ This assumes Python 101 plus comfortable `csv` and `re` — functions, lists, se
 
 ## Where to run this
 
-**Locally with `uv`** is the recommended path — masking is inherently a *file* operation ("mask this CSV, keep that one"), so the local CLI against your own files is the honest home for it.
+**Locally with `uv`** is the recommended path, masking is inherently a *file* operation ("mask this CSV, keep that one"), so the local CLI against your own files is the honest home for it.
 
 **GitHub Codespaces** is a zero-setup alternative: open [the whole course repo in a free Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node and Python are already installed) and run the same commands from a browser terminal.
 
-**Google Colab, Kaggle Notebooks, or Binder** work well for the strategy-and-planner half — the notebook at [`examples/data-masker/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-masker/notebook.ipynb) runs every step on bundled sample rows. The honest note: the notebook handles fixed sample data, while the local CLI can be pointed at a real CSV you actually own.
+**Google Colab, Kaggle Notebooks, or Binder** work well for the strategy-and-planner half, the notebook at [`examples/data-masker/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-masker/notebook.ipynb) runs every step on bundled sample rows. The honest note: the notebook handles fixed sample data, while the local CLI can be pointed at a real CSV you actually own.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-masker/notebook.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-masker/notebook.ipynb)
@@ -43,7 +43,7 @@ This assumes Python 101 plus comfortable `csv` and `re` — functions, lists, se
 
 ## Setup
 
-`uv` is a single tool that replaces the "install Python, then pip, then a virtual environment tool" chain — and this project is pure standard library.
+`uv` is a single tool that replaces the "install Python, then pip, then a virtual environment tool" chain, and this project is pure standard library.
 
 **macOS / Linux** (terminal):
 
@@ -74,7 +74,7 @@ cd data-masker
 
 - ✅ `uv --version` prints a version number.
 - ✅ `data-masker/` exists with a `pyproject.toml`.
-- ✅ `python -c "import csv, hashlib, re"` succeeds — no third-party packages.
+- ✅ `python -c "import csv, hashlib, re"` succeeds, no third-party packages.
 
 ## Step 1: Detect sensitive columns
 
@@ -121,7 +121,7 @@ if __name__ == "__main__":
     print(detect_columns(headers, rows))
 ```
 
-`contact` is the test that keeps the detector honest: its header says nothing sensitive, but its values are emails, so `EMAIL_RE.search(joined)` is what catches it. Notice detection works on a *column's joined text*, not cell-by-cell — one regex search over the whole column is both simpler and enough for pattern signals, at the cost of not telling you which *rows* are sensitive (the plan step doesn't need that yet).
+`contact` is the test that keeps the detector honest: its header says nothing sensitive, but its values are emails, so `EMAIL_RE.search(joined)` is what catches it. Notice detection works on a *column's joined text*, not cell-by-cell, one regex search over the whole column is both simpler and enough for pattern signals, at the cost of not telling you which *rows* are sensitive (the plan step doesn't need that yet).
 
 **🎯 Expected output:**
 
@@ -129,28 +129,28 @@ if __name__ == "__main__":
 ['full_name', 'email', 'phone', 'contact']
 ```
 
-**🩹 If it's off:** If `contact` is missed, the joined `EMAIL_RE` search isn't running for every column — confirm the regex block sits inside the `for col` loop. If `city` is flagged, a `NAME_HINTS` fragment like `user` is matching a substring of an innocent header (`city`? no — check for a header like `username_last_change`); the hint list is substring-based by design, and substring matching is exactly as loose as it looks.
+**🩹 If it's off:** If `contact` is missed, the joined `EMAIL_RE` search isn't running for every column, confirm the regex block sits inside the `for col` loop. If `city` is flagged, a `NAME_HINTS` fragment like `user` is matching a substring of an innocent header (`city`? no, check for a header like `username_last_change`); the hint list is substring-based by design, and substring matching is exactly as loose as it looks.
 
 ### 1.2 Verify detection
 
 **✅ Checklist**
 
 - ✅ The sample detects `full_name`, `email`, `phone`, and `contact`, in that header order.
-- ✅ Removing the `contact` column's email *values* (but keeping its header) means it's no longer flagged — value patterns are genuinely value-based.
+- ✅ Removing the `contact` column's email *values* (but keeping its header) means it's no longer flagged, value patterns are genuinely value-based.
 - ✅ An `address` column and an `iban` column are flagged by name alone, even with empty values.
 
 **🤔 Socratic Question(s)**
 
 - Detection is per-*column*, not per-*cell*: one email in a 10,000-row "notes" column flags the whole column. What would the masker have to gain (and lose) by switching to cell-level detection for free-text columns like `notes`?
-- Name hints match substrings (`user` matches `user_name` *and* `userscript_repo`). Why is substring matching the pragmatic default here rather than exact `==` matching — and what single false-positive would change your mind?
+- Name hints match substrings (`user` matches `user_name` *and* `userscript_repo`). Why is substring matching the pragmatic default here rather than exact `==` matching, and what single false-positive would change your mind?
 
 ## Step 2: Build the strategy zoo
 
-Detection decides *which* columns; strategies decide *how* each is masked. The useful set is: redact (the shredder), hash (deterministic pseudonym — same input always maps to same output, so joins still work), length-preserving text (test fixtures stay plausible), format-preserving email/phone (domain and structure survive routing/matching). Each is a one-idea function.
+Detection decides *which* columns; strategies decide *how* each is masked. The useful set is: redact (the shredder), hash (deterministic pseudonym, same input always maps to same output, so joins still work), length-preserving text (test fixtures stay plausible), format-preserving email/phone (domain and structure survive routing/matching). Each is a one-idea function.
 
 ### 2.1 Write one strategy per function
 
-**👟 Starter hint:** Five small functions, then an `apply` helper any planner can reuse — `mask_email` keeps the domain after the `@`, `mask_phone` keeps only the last four digits, both under a shared strategy dispatch table:
+**👟 Starter hint:** Five small functions, then an `apply` helper any planner can reuse, `mask_email` keeps the domain after the `@`, `mask_phone` keeps only the last four digits, both under a shared strategy dispatch table:
 
 ```python
 # mask.py
@@ -206,7 +206,7 @@ if __name__ == "__main__":
         print(row)
 ```
 
-The `STRATEGY` dict mapping names to functions is the *dispatch table* — the planner (next step) produces string strategy names and `apply` turns them into behavior, so adding strategy #6 means one function plus one table entry, not a rewrite of the planner. Two formats to admire: `mask_email` keeps everything after the `@` (a joined email still routes to the same domain) and hashes the local part; `mask_phone` counts digits to preserve the dialing *shape* (`+X-----0101`) while destroying the number's identity.
+The `STRATEGY` dict mapping names to functions is the *dispatch table*, the planner (next step) produces string strategy names and `apply` turns them into behavior, so adding strategy #6 means one function plus one table entry, not a rewrite of the planner. Two formats to admire: `mask_email` keeps everything after the `@` (a joined email still routes to the same domain) and hashes the local part; `mask_phone` counts digits to preserve the dialing *shape* (`+X-----0101`) while destroying the number's identity.
 
 **🎯 Expected output:**
 
@@ -215,29 +215,29 @@ The `STRATEGY` dict mapping names to functions is the *dispatch table* — the p
 {'full_name': '***** ******', 'email': 'e010fd1c@navy.mil', 'phone': '+X-----0102', 'city': 'Arlington'}
 ```
 
-**🩹 If it's off:** If `mask_email`'s hashes differ every run, you used `random` somewhere instead of `hashlib` — deterministic is the whole point. If `mask_phone`'s mask length is wrong, `len(digits)` counts a country code that shouldn't be visible — that's correct behavior (shape preserved, real prefix destroyed); check the `-` count against `len(digits) - 4` rather than eyeballing.
+**🩹 If it's off:** If `mask_email`'s hashes differ every run, you used `random` somewhere instead of `hashlib`, deterministic is the whole point. If `mask_phone`'s mask length is wrong, `len(digits)` counts a country code that shouldn't be visible, that's correct behavior (shape preserved, real prefix destroyed); check the `-` count against `len(digits) - 4` rather than eyeballing.
 
 ### 2.2 Verify the strategies
 
 **✅ Checklist**
 
-- ✅ `mask_hash("Ada")` equals `mask_hash("Ada")` across runs, but differs from `mask_hash("ada")` (case matters — that's a real trap, see below).
+- ✅ `mask_hash("Ada")` equals `mask_hash("Ada")` across runs, but differs from `mask_hash("ada")` (case matters, that's a real trap, see below).
 - ✅ `mask_email("grace@navy.mil")` still ends `@navy.mil`; `mask_phone("+1 555 0102")` still ends `0102`.
-- ✅ `mask_text("Ada")` is `***` — same length, no letters.
+- ✅ `mask_text("Ada")` is `***`, same length, no letters.
 - ✅ `apply` masks only the columns named by the plan and leaves every other cell untouched.
 
 **🤔 Socratic Question(s)**
 
 - `mask_hash` is deterministic, which is what makes it reversible by guessing: `mask_hash("secret")` is public knowledge once you've seen the hash. When is hash-masking acceptable (what property of the data makes it safe), and when is it trivially unmaskable?
-- `mask_email` hashes the *local* part but keeps the domain. What real downstream behavior would a fully-redacted email destroy — and what's the residual privacy risk of keeping the domain visible?
+- `mask_email` hashes the *local* part but keeps the domain. What real downstream behavior would a fully-redacted email destroy, and what's the residual privacy risk of keeping the domain visible?
 
 ## Step 3: Auto-build the masking plan
 
-Nobody wants to hand-write `{"email": "email", "full_name": "text", ...}` per dataset. The planner closes the loop with detection: sensitive columns get a strategy chosen by *their name's hint* — `email` → email preserver, phone → phone preserver, `name` variants → length-preserving text, everything else sensitive → hash. Detection + one lookup = a complete plan.
+Nobody wants to hand-write `{"email": "email", "full_name": "text", ...}` per dataset. The planner closes the loop with detection: sensitive columns get a strategy chosen by *their name's hint*, `email` → email preserver, phone → phone preserver, `name` variants → length-preserving text, everything else sensitive → hash. Detection + one lookup = a complete plan.
 
 ### 3.1 Write the planner
 
-**👟 Starter hint:** Reuse `detect_columns`, then walk the detected list choosing a strategy per hint with a small `if/elif` — the plan is a plain dict that `mask.apply` already knows how to execute:
+**👟 Starter hint:** Reuse `detect_columns`, then walk the detected list choosing a strategy per hint with a small `if/elif`, the plan is a plain dict that `mask.apply` already knows how to execute:
 
 ```python
 # planner.py
@@ -276,7 +276,7 @@ if __name__ == "__main__":
         print(row)
 ```
 
-The cascade `email → phone → name → hash` is deliberately ordered by *how much format must survive*: email keeps the most structure, and everything that falls through ends up as a hash — the privacy-conservative default. Because `build_plan` returns a plain dict and `apply` consumes a plain dict, the two halves could be replaced independently (a YAML-driven planner, a strategy registry) without touching each other.
+The cascade `email → phone → name → hash` is deliberately ordered by *how much format must survive*: email keeps the most structure, and everything that falls through ends up as a hash, the privacy-conservative default. Because `build_plan` returns a plain dict and `apply` consumes a plain dict, the two halves could be replaced independently (a YAML-driven planner, a strategy registry) without touching each other.
 
 **🎯 Expected output:**
 
@@ -286,7 +286,7 @@ plan: {'full_name': 'text', 'email': 'email', 'phone': 'phone', 'ssn': 'hash'}
 {'id': '2', 'full_name': '***** ******', 'email': 'e010fd1c@navy.mil', 'phone': '+X-----0102', 'ssn': '74e4145b168a', 'city': 'Arlington'}
 ```
 
-**🩹 If it's off:** If `ssn` isn't in the plan, `detect_columns` found it sensitive but the plan's "else → hash" branch isn't reached — check the `if/elif` ordering didn't accidentally swallow `ssn` under a `name` hint (it shouldn't). If the masked output *drops* `city`, `apply` is rebuilding rows instead of copying them — it must `dict(row)` then overwrite in place.
+**🩹 If it's off:** If `ssn` isn't in the plan, `detect_columns` found it sensitive but the plan's "else → hash" branch isn't reached, check the `if/elif` ordering didn't accidentally swallow `ssn` under a `name` hint (it shouldn't). If the masked output *drops* `city`, `apply` is rebuilding rows instead of copying them, it must `dict(row)` then overwrite in place.
 
 ### 3.2 Verify the planner
 
@@ -294,16 +294,16 @@ plan: {'full_name': 'text', 'email': 'email', 'phone': 'phone', 'ssn': 'hash'}
 
 - ✅ `build_plan` maps all four sensitive columns to `text`/`email`/`phone`/`hash` respectively.
 - ✅ `id` and `city` are absent from the plan and unchanged in every masked row.
-- ✅ Calling `mask_with_plan` twice on the same rows yields identical output — determinism end to end.
+- ✅ Calling `mask_with_plan` twice on the same rows yields identical output, determinism end to end.
 
 **🤔 Socratic Question(s)**
 
-- The fallback is `hash` "by default". If a dataset had a `date_of_birth` column, `hash` is what it'd get — but hash of a birthday is exactly the *trivially-guessable* case flagged in Step 2's question. What would a smarter fallback key off (the *value* shape, not just the name) and is the current default a bug or a scope decision?
-- `build_plan` returns a dict but doesn't know how it'll be applied. Where does that separation become valuable — what's an example of applying the *same* plan to a different pipeline (a database, an API response) without touching the planner?
+- The fallback is `hash` "by default". If a dataset had a `date_of_birth` column, `hash` is what it'd get, but hash of a birthday is exactly the *trivially-guessable* case flagged in Step 2's question. What would a smarter fallback key off (the *value* shape, not just the name) and is the current default a bug or a scope decision?
+- `build_plan` returns a dict but doesn't know how it'll be applied. Where does that separation become valuable, what's an example of applying the *same* plan to a different pipeline (a database, an API response) without touching the planner?
 
 ## Step 4: Preserve distributions for numeric identifiers
 
-Text masking has an easy "preserve" yardstick (same length). For numbers — salary, age, bonus — the yardstick is a *distribution*, and the honest technique for preserving it exactly is **in-column permutation**: shuffle each sensitive numeric column on its own. Every value survives, so mean/median are intact by construction; what's destroyed is the *association* between a row's identity and its number.
+Text masking has an easy "preserve" yardstick (same length). For numbers, salary, age, bonus, the yardstick is a *distribution*, and the honest technique for preserving it exactly is **in-column permutation**: shuffle each sensitive numeric column on its own. Every value survives, so mean/median are intact by construction; what's destroyed is the *association* between a row's identity and its number.
 
 ### 4.1 Write the permutation masker and stats checkers
 
@@ -340,7 +340,7 @@ if __name__ == "__main__":
     print(f"median before {before['median']:>9,.2f}  after {after['median']:>9,.2f}")
 ```
 
-Shuffling is *exactly* distribution-preserving because the result is the same multiset of values — `sorted(masked) == sorted(original)` is not a heuristic, it's a proof. What permutation buys privacy-wise is subtler and more valuable: the mapping *person ↔ salary* is cut, while the *shape* the analysts model ("six salaries averaging ~59.8k, median ~59.5k") survives untouched. The `seed` argument is what makes runs reproducible — without it, every mask run would scatter your test fixtures differently.
+Shuffling is *exactly* distribution-preserving because the result is the same multiset of values, `sorted(masked) == sorted(original)` is not a heuristic, it's a proof. What permutation buys privacy-wise is subtler and more valuable: the mapping *person ↔ salary* is cut, while the *shape* the analysts model ("six salaries averaging ~59.8k, median ~59.5k") survives untouched. The `seed` argument is what makes runs reproducible, without it, every mask run would scatter your test fixtures differently.
 
 **🎯 Expected output:**
 
@@ -350,7 +350,7 @@ mean  before 59,833.33  after 59,833.33
 median before 59,500.00  after 59,500.00
 ```
 
-**🩹 If it's off:** If the mean differs, you mutated values instead of permuting them — a transform like `value * factor` changes the distribution; a *shuffle* cannot. If the same `seed` produces different shuffles across runs, `random.Random(seed)` is being recreated inside a loop instead of once.
+**🩹 If it's off:** If the mean differs, you mutated values instead of permuting them, a transform like `value * factor` changes the distribution; a *shuffle* cannot. If the same `seed` produces different shuffles across runs, `random.Random(seed)` is being recreated inside a loop instead of once.
 
 ### 4.2 Verify preservation
 
@@ -362,12 +362,12 @@ median before 59,500.00  after 59,500.00
 
 **🤔 Socratic Question(s)**
 
-- Permutation preserves each column's distribution but *breaks nothing about other columns' distributions either*. So what is actually lost to a downstream analyst — can they still answer "do engineers out-earn designers here", and can they still answer "which *person* earns most"? Which loss is the privacy win?
-- `column_stats` reports mean and median. Which *other* distribution property would two columns with the same mean/median still differ on, and does permutation preserve that property too — or is it only the association that broke?
+- Permutation preserves each column's distribution but *breaks nothing about other columns' distributions either*. So what is actually lost to a downstream analyst, can they still answer "do engineers out-earn designers here", and can they still answer "which *person* earns most"? Which loss is the privacy win?
+- `column_stats` reports mean and median. Which *other* distribution property would two columns with the same mean/median still differ on, and does permutation preserve that property too, or is it only the association that broke?
 
 ## Step 5: Audit log and the CLI
 
-Masking without records is a compliance hole — you need to be able to prove *which* file was masked, *which* columns, *how many rows*, and *when*. An append-only JSONL audit log provides that, and a `masker.py` CLI composes detection → plan → apply → save → audit into one command.
+Masking without records is a compliance hole, you need to be able to prove *which* file was masked, *which* columns, *how many rows*, and *when*. An append-only JSONL audit log provides that, and a `masker.py` CLI composes detection → plan → apply → save → audit into one command.
 
 ### 5.1 Write `AuditLog` and the CLI
 
@@ -437,11 +437,11 @@ EOF
 uv run python masker.py users.csv --output masked.csv
 ```
 
-The audit log's append-only shape is the discipline: *never rewrite* — each `record` appends a newline-delimited JSON line, so the log is the complete history, impossible to accidentally shrink. The CLI composes the entire pipeline in eleven lines because every stage is a function you already wrote: `build_plan(headers, rows)` → `mask_with_plan(rows, plan)` → `DictWriter`.
+The audit log's append-only shape is the discipline: *never rewrite*, each `record` appends a newline-delimited JSON line, so the log is the complete history, impossible to accidentally shrink. The CLI composes the entire pipeline in eleven lines because every stage is a function you already wrote: `build_plan(headers, rows)` → `mask_with_plan(rows, plan)` → `DictWriter`.
 
-**🎯 Expected output:** `masked 4 columns across 2 rows -> masked.csv` then `audit entries: 1` — and `masked.csv` shares the headers of the input with sensitive cells masked, `audit.jsonl` containing one ISO-timestamped JSON line.
+**🎯 Expected output:** `masked 4 columns across 2 rows -> masked.csv` then `audit entries: 1`, and `masked.csv` shares the headers of the input with sensitive cells masked, `audit.jsonl` containing one ISO-timestamped JSON line.
 
-**🩹 If it's off:** If `masked.csv` is empty, `DictReader` consumed the file but no rows were read — check the CSV isn't a single header with no data and that you didn't open `args.output` before closing the reader. If the audit count climbs by more than one per run, you called `record` inside a loop instead of once.
+**🩹 If it's off:** If `masked.csv` is empty, `DictReader` consumed the file but no rows were read, check the CSV isn't a single header with no data and that you didn't open `args.output` before closing the reader. If the audit count climbs by more than one per run, you called `record` inside a loop instead of once.
 
 ### 5.2 Verify the CLI
 
@@ -449,24 +449,24 @@ The audit log's append-only shape is the discipline: *never rewrite* — each `r
 
 - ✅ After one run, `masked.csv` has identical headers to the source and identical values in all non-sensitive columns.
 - ✅ `audit.jsonl` contains exactly one line per run, with a UTC timestamp, source, masked columns, and row count.
-- ✅ Re-masking the same file still works (masking masked data is fine — the plans target the same columns).
+- ✅ Re-masking the same file still works (masking masked data is fine, the plans target the same columns).
 
 **🤔 Socratic Question(s)**
 
-- The audit records *what was masked* but not the masking *secrets* (the hash seeds or the specific transform). Would recording the seed make the log more auditable or more dangerous — and what does that tell you about audit logs holding *just enough* to reproduce results without revealing data?
-- `masker.py` writes a new file and never touches the source. What would an `--in-place` flag have to add (hint: audit — and what about `output == csv_path`) before it were safe enough to ship?
+- The audit records *what was masked* but not the masking *secrets* (the hash seeds or the specific transform). Would recording the seed make the log more auditable or more dangerous, and what does that tell you about audit logs holding *just enough* to reproduce results without revealing data?
+- `masker.py` writes a new file and never touches the source. What would an `--in-place` flag have to add (hint: audit, and what about `output == csv_path`) before it were safe enough to ship?
 
 ## ⚠️ Common pitfalls
 
 - **Using unseeded randomness.** `random.shuffle` with no seed produces a different masked dataset every run, which breaks tests and makes "reproduce this masking job" impossible. Always construct `random.Random(seed)` explicitly.
-- **Hashing without determinism in mind.** `hash()` is salted per-process in Python and useless here; `hashlib.sha256(...)` is stable. Also lowercase/whitespace differences quietly change hashes — normalize input or document that case matters.
+- **Hashing without determinism in mind.** `hash()` is salted per-process in Python and useless here; `hashlib.sha256(...)` is stable. Also lowercase/whitespace differences quietly change hashes, normalize input or document that case matters.
 - **Masking by replacing values instead of permuting.** `salary * 1.1` changes the distribution your test analytics depend on. If shape must survive, permute; transform only when you want shape to drift.
-- **Preserving the format past the point of privacy.** Keeping 8 of 10 phone digits "for realism" leaks most of the number. Preserve *shape*, not digits — the last 4 are the informationally-densest anyway, so even that is a judgment call worth revisiting.
+- **Preserving the format past the point of privacy.** Keeping 8 of 10 phone digits "for realism" leaks most of the number. Preserve *shape*, not digits, the last 4 are the informationally-densest anyway, so even that is a judgment call worth revisiting.
 - **No audit trail.** A masker that can't answer "what got masked, when, where" fails the compliance purpose it exists for. Append-only JSONL is ten lines; the absence of it is a red flag in any real review.
 
 ## What you just built
 
-A working data masker: column detection by names and value patterns, a strategy zoo from redact to format-preserving, an auto-building plan, distribution-preserving permutation for numbers, and an append-only audit trail — all standard library, all behind one CLI verb. The transferable skill is *purpose-fit anonymization*: choosing destruction (redact), pseudonymity (hash), structure-preservation (format), or distribution-preservation (permute) by asking what the downstream data actually needs, then proving each choice with a check instead of a hope.
+A working data masker: column detection by names and value patterns, a strategy zoo from redact to format-preserving, an auto-building plan, distribution-preserving permutation for numbers, and an append-only audit trail, all standard library, all behind one CLI verb. The transferable skill is *purpose-fit anonymization*: choosing destruction (redact), pseudonymity (hash), structure-preservation (format), or distribution-preservation (permute) by asking what the downstream data actually needs, then proving each choice with a check instead of a hope.
 
 :::tip[Run a fuller version without any local setup]
 [`examples/data-masker/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/data-masker) in the course repo has these complete scripts plus sample CSVs and a pre-written audit. Or open the whole repo in a [GitHub Codespaces](https://codespaces.new/abderrahim-lectures/python-data-analysis-course).
@@ -474,13 +474,13 @@ A working data masker: column detection by names and value patterns, a strategy 
 
 ## Where to go from here
 
-- Add a **cell-level** mode for free-text columns (mask only the cells that match the email/phone regex), keeping the column's non-sensitive values intact — the honest answer to Step 1's Socratic question.
+- Add a **cell-level** mode for free-text columns (mask only the cells that match the email/phone regex), keeping the column's non-sensitive values intact, the honest answer to Step 1's Socratic question.
 - Make the `ssn`-style fallback smarter with a **value-shape registry** (groups of `\d{3}-\d{2}-\d{4}` → dedicated SSN mask) instead of the catch-all hash.
 - Emit per-strategy statistics in the audit entry (columns preserved-format, columns permuted, columns hashed) so compliance reviews can skim one line per job.
-- Add `--seed` as a CLI flag so a partner team can reproduce *your exact* masked snapshot for their own tests — reproducibility as a public API.
+- Add `--seed` as a CLI flag so a partner team can reproduce *your exact* masked snapshot for their own tests, reproducibility as a public API.
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

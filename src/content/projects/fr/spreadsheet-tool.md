@@ -19,7 +19,7 @@ prerequisites:
 
 # Processeur de Tableurs
 
-- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt — ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
+- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt, ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/spreadsheet-tool/notebook.fr.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/spreadsheet-tool/notebook.fr.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fspreadsheet-tool%2Fnotebook.fr.ipynb)
@@ -144,9 +144,9 @@ Charlie   35      Chicago   78.1
 
 ### Si ça ne marche pas
 
-- **`FileNotFoundError`** — Le chemin du fichier est incorrect. Utilise `Path(filepath).resolve()` pour obtenir le chemin absolu et vérifie-le.
-- **`ParserError: Error tokenizing`** — La détection du séparateur a choisi le mauvais caractère. Essaie de passer `sep=None` et `engine="python"` à `pd.read_csv`, ou spécifie le séparateur manuellement.
-- **Caractères corrompus** — La détection de l'encodage s'est trompée. Ouvre le fichier dans un éditeur de texte, vérifie son encodage, et passe-le directement à `pd.read_csv(encoding=...)`.
+- **`FileNotFoundError`**, Le chemin du fichier est incorrect. Utilise `Path(filepath).resolve()` pour obtenir le chemin absolu et vérifie-le.
+- **`ParserError: Error tokenizing`**, La détection du séparateur a choisi le mauvais caractère. Essaie de passer `sep=None` et `engine="python"` à `pd.read_csv`, ou spécifie le séparateur manuellement.
+- **Caractères corrompus**, La détection de l'encodage s'est trompée. Ouvre le fichier dans un éditeur de texte, vérifie son encodage, et passe-le directement à `pd.read_csv(encoding=...)`.
 
 ---
 
@@ -226,9 +226,9 @@ max    35.0   95.00
 
 ### Si ça ne marche pas
 
-- **Toutes les colonnes sont de type `object`** — Les nombres étaient stockés comme des chaînes (peut-être avec des virgules ou des signes dollar). Tu corrigeras cela à l'Étape 5 avec `pd.to_numeric`.
-- **`describe()` n'affiche rien** — Aucune colonne numérique n'existe. Vérifie si les données se sont chargées correctement et si une conversion de type est nécessaire.
-- **Les valeurs manquantes apparaissent de façon inattendue** — Pandas traite `""`, `"NA"`, `"N/A"` et `"null"` comme NaN par défaut. Passe `na_values=["ton_marqueur"]` à `read_csv` si tes données utilisent un marqueur différent.
+- **Toutes les colonnes sont de type `object`**, Les nombres étaient stockés comme des chaînes (peut-être avec des virgules ou des signes dollar). Tu corrigeras cela à l'Étape 5 avec `pd.to_numeric`.
+- **`describe()` n'affiche rien**, Aucune colonne numérique n'existe. Vérifie si les données se sont chargées correctement et si une conversion de type est nécessaire.
+- **Les valeurs manquantes apparaissent de façon inattendue**, Pandas traite `""`, `"NA"`, `"N/A"` et `"null"` comme NaN par défaut. Passe `na_values=["ton_marqueur"]` à `read_csv` si tes données utilisent un marqueur différent.
 
 ---
 
@@ -338,9 +338,9 @@ print(sorted_df.to_string(index=False))
 
 ### Si ça ne marche pas
 
-- **TypeError lors de la comparaison** — La colonne est numérique mais tu as passé une chaîne (ou l'inverse). La conversion automatique dans `filter_data` gère les cas courants, mais les formats inhabituels peuvent nécessiter une conversion manuelle préalable.
-- **Le filtre retourne un résultat vide** — Vérifie `df[column].unique()` pour voir les valeurs réelles. Les espaces, les différences de casse ou les types inattendus sont des coupables courants.
-- **`sort_values` lève un KeyError** — Tu as mal orthographié un nom de colonne. Utilise `df.columns.tolist()` pour vérifier.
+- **TypeError lors de la comparaison**, La colonne est numérique mais tu as passé une chaîne (ou l'inverse). La conversion automatique dans `filter_data` gère les cas courants, mais les formats inhabituels peuvent nécessiter une conversion manuelle préalable.
+- **Le filtre retourne un résultat vide**, Vérifie `df[column].unique()` pour voir les valeurs réelles. Les espaces, les différences de casse ou les types inattendus sont des coupables courants.
+- **`sort_values` lève un KeyError**, Tu as mal orthographié un nom de colonne. Utilise `df.columns.tolist()` pour vérifier.
 
 ---
 
@@ -458,9 +458,9 @@ print(crosstab.to_string())
 
 ### Si ça ne marche pas
 
-- **`groupby` retourne une forme inattendue** — Tugroupes peut-être par une colonne avec trop de valeurs uniques. Vérifie avec `df[group_col].nunique()`.
-- **Le tableau croisé dynamique affiche que des zéros** — Le `fill_value=0` remplace les NaN. Si beaucoup de groupes n'ont pas de valeurs pour une combinaison, c'est correct. Supprime `fill_value` pour voir les NaN à la place.
-- **Le tableau croisé a trop de lignes** — Trop de valeurs uniques dans une colonne. Envisage de regrouper les données numériques avec `pd.cut()` d'abord.
+- **`groupby` retourne une forme inattendue**, Tugroupes peut-être par une colonne avec trop de valeurs uniques. Vérifie avec `df[group_col].nunique()`.
+- **Le tableau croisé dynamique affiche que des zéros**, Le `fill_value=0` remplace les NaN. Si beaucoup de groupes n'ont pas de valeurs pour une combinaison, c'est correct. Supprime `fill_value` pour voir les NaN à la place.
+- **Le tableau croisé a trop de lignes**, Trop de valeurs uniques dans une colonne. Envisage de regrouper les données numériques avec `pd.cut()` d'abord.
 
 ---
 
@@ -602,9 +602,9 @@ df = clean_data(df, {
 
 ### Si ça ne marche pas
 
-- **`to_numeric` convertit trop en NaN** — La colonne contient du texte non numérique (comme "thirty-two"). Vérifie `df[col].unique()` avant la conversion, et décide de supprimer ou remplacer les mauvaises valeurs.
-- **Les espaces ne sont pas entièrement supprimés** — Des espaces non sécables (`\xa0`) ou des tabulations peuvent être présents. Utilise `df[col].str.replace(r'\s+', ' ', regex=True)` pour un nettoyage agressif.
-- **Les doublons ne sont pas supprimés** — Les lignes diffèrent dans au moins une colonne. Utilise `df.duplicated(subset=["col1", "col2"])` pour vérifier la similarité sur des colonnes spécifiques.
+- **`to_numeric` convertit trop en NaN**, La colonne contient du texte non numérique (comme "thirty-two"). Vérifie `df[col].unique()` avant la conversion, et décide de supprimer ou remplacer les mauvaises valeurs.
+- **Les espaces ne sont pas entièrement supprimés**, Des espaces non sécables (`\xa0`) ou des tabulations peuvent être présents. Utilise `df[col].str.replace(r'\s+', ' ', regex=True)` pour un nettoyage agressif.
+- **Les doublons ne sont pas supprimés**, Les lignes diffèrent dans au moins une colonne. Utilise `df.duplicated(subset=["col1", "col2"])` pour vérifier la similarité sur des colonnes spécifiques.
 
 ---
 
@@ -679,10 +679,10 @@ Exporting 'output'...
 
 ### Si ça ne marche pas
 
-- **`ModuleNotFoundError: No openpyxl`** — Installe-le : `pip install openpyxl`. Il n'est pas inclus avec pandas.
-- **Le fichier Excel est corrompu** — Tu écrases peut-être un fichier qui est ouvert dans Excel. Ferme-le d'abord, ou utilise un nom de fichier différent.
-- **Le JSON contient des chaînes `NaN`** — Pandas sérialise NaN comme `null` par défaut, mais certaines configurations diffèrent. Passe `default_handler=str` ou nettoie les NaN avant l'export.
-- **Le CSV contient des antislashs ou guillemets en trop** — Vérifie les paramètres `quoting` et `escapechar`. Les valeurs par défaut gèrent la plupart des cas, mais les retours à la ligne intégrés dans les cellules peuvent causer des problèmes.
+- **`ModuleNotFoundError: No openpyxl`**, Installe-le : `pip install openpyxl`. Il n'est pas inclus avec pandas.
+- **Le fichier Excel est corrompu**, Tu écrases peut-être un fichier qui est ouvert dans Excel. Ferme-le d'abord, ou utilise un nom de fichier différent.
+- **Le JSON contient des chaînes `NaN`**, Pandas sérialise NaN comme `null` par défaut, mais certaines configurations diffèrent. Passe `default_handler=str` ou nettoie les NaN avant l'export.
+- **Le CSV contient des antislashs ou guillemets en trop**, Vérifie les paramètres `quoting` et `escapechar`. Les valeurs par défaut gèrent la plupart des cas, mais les retours à la ligne intégrés dans les cellules peuvent causer des problèmes.
 
 ---
 
@@ -854,9 +854,9 @@ DATA EXPLORATION
 
 ### Si ça ne marche pas
 
-- **La boucle du menu est infinie** — Vérifie que `break` existe dans la branche de sortie. La boucle `while True` nécessite une sortie explicite.
-- **`input()` bloque dans les environnements non interactifs** — Utilise `sys.stdin.isatty()` pour détecter si tu es dans un terminal, et reviens à une entrée basée sur des fichiers ou des arguments.
-- **L'état est perdu entre les exécutions** — C'est normal. Le menu est sans état ; chaque exécution commence à zéro. Pour la persistance, tu pourrais ajouter une fonctionnalité de sauvegarde/chargement avec JSON.
+- **La boucle du menu est infinie**, Vérifie que `break` existe dans la branche de sortie. La boucle `while True` nécessite une sortie explicite.
+- **`input()` bloque dans les environnements non interactifs**, Utilise `sys.stdin.isatty()` pour détecter si tu es dans un terminal, et reviens à une entrée basée sur des fichiers ou des arguments.
+- **L'état est perdu entre les exécutions**, C'est normal. Le menu est sans état ; chaque exécution commence à zéro. Pour la persistance, tu pourrais ajouter une fonctionnalité de sauvegarde/chargement avec JSON.
 
 ---
 

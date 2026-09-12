@@ -8,7 +8,7 @@ difficulty: beginner
 
 Construis une base de connaissances personnelle qui stocke des notes avec des métadonnées riches, te permet de chercher dans tout instantanément, organise les idées avec des tags, affiche le contenu avec Markdown, et exporte le tout en un site HTML statique. Ce projet assemble des dictionnaires, des entrées/sorties fichiers, du traitement de chaînes, et de la génération de templates en un outil que tu peux réellement utiliser.
 
-- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt — ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
+- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt, ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/knowledge-base/notebook.fr.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/knowledge-base/notebook.fr.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fknowledge-base%2Fnotebook.fr.ipynb)
@@ -29,7 +29,7 @@ Une base de connaissances personnelle qui te permet de :
 - **Recherche en texte complet** sur tout le contenu des notes avec correspondance insensible à la casse
 - **Filtrer par tags** et plages de dates pour trouver exactement ce dont tu as besoin
 - **Afficher du Markdown** avec coloration syntaxique dans le terminal
-- **Exporter en HTML** — un seul site statique que tu peux ouvrir dans n'importe quel navigateur
+- **Exporter en HTML**, un seul site statique que tu peux ouvrir dans n'importe quel navigateur
 
 ## Configuration
 
@@ -38,9 +38,9 @@ uv init knowledge-base
 cd knowledge-base
 ```
 
-Aucun paquet externe nécessaire — l'application utilise uniquement la bibliothèque standard de Python (`json`, `os`, `datetime`, `pathlib`, `html`).
+Aucun paquet externe nécessaire, l'application utilise uniquement la bibliothèque standard de Python (`json`, `os`, `datetime`, `pathlib`, `html`).
 
-## Étape 1 — Concevoir le modèle de données
+## Étape 1, Concevoir le modèle de données
 
 Chaque note a besoin d'une forme cohérente pour que le reste de l'application puisse compter sur les mêmes champs. Nous stockerons les notes comme une liste de dictionnaires dans un fichier JSON. Chaque note aura un champ `id`, `title`, `content`, `tags`, `created_at`, et `updated_at`.
 
@@ -112,7 +112,7 @@ Notes file: data/knowledge.json
 
 ---
 
-## Étape 2 — Ajouter et modifier des notes
+## Étape 2, Ajouter et modifier des notes
 
 Maintenant que nous pouvons charger et sauvegarder, construisons la fonction qui crée une nouvelle note. Elle prend un titre, un contenu, et des tags optionnels, assigne un ID et des horodatages, et l'ajoute à la liste. Nous ajouterons aussi des fonctions pour modifier et supprimer des notes.
 
@@ -216,7 +216,7 @@ After edit: Git: Rebase vs Merge
 **🩹 Si ça ne marche pas :**
 
 - Si les IDs ne sont pas séquentiels, vérifie que `load_notes()` lit la liste courante avant de générer le prochain ID.
-- Les tags doivent être en minuscules — si tu vois des majuscules/minuscules mélangées, la liste de compréhension dans `create_note` ne s'exécute pas.
+- Les tags doivent être en minuscules, si tu vois des majuscules/minuscules mélangées, la liste de compréhension dans `create_note` ne s'exécute pas.
 - Si `edit_note` ne semble pas sauvegarder, vérifie que tu passes `title=` et `content=` comme arguments nommés.
 
 **✅ Liste de vérification**
@@ -233,7 +233,7 @@ After edit: Git: Rebase vs Merge
 
 ---
 
-## Étape 3 — Recherche en texte complet
+## Étape 3, Recherche en texte complet
 
 Une base de connaissances est inutile si tu ne trouves rien. Nous implémenterons une recherche en texte complet qui correspond aux titres et au contenu, plus une fonction pour lister toutes les notes dans un format lisible.
 
@@ -333,7 +333,7 @@ display_search_results("docker")
 
 **🩹 Si ça ne marche pas :**
 
-- Si la recherche ne retourne rien pour « python », vérifie que `query_lower` est comparé à `note["title"].lower()` — la sensibilité à la casse est le coupable habituel.
+- Si la recherche ne retourne rien pour « python », vérifie que `query_lower` est comparé à `note["title"].lower()`, la sensibilité à la casse est le coupable habituel.
 - Si les colonnes du tableau sont mal alignées, assure-toi que les spécificateurs de largeur f-string (`:<4`, `:<35`, etc.) correspondent aux largeurs des en-têtes.
 
 **✅ Liste de vérification**
@@ -349,7 +349,7 @@ display_search_results("docker")
 
 ---
 
-## Étape 4 — Système de tags
+## Étape 4, Système de tags
 
 Les tags te permettent de regrouper des notes sans catégories rigides. Nous ajouterons des fonctions pour ajouter et supprimer des tags des notes existantes, filtrer par tag, et compter l'utilisation des tags dans toute la base de connaissances.
 
@@ -485,7 +485,7 @@ Notes created today:
 
 ---
 
-## Étape 5 — Affichage de Markdown
+## Étape 5, Affichage de Markdown
 
 La sortie du terminal est bien pour la navigation rapide, mais les notes contiennent souvent du formatage Markdown. Nous construirons un afficheur qui convertit le Markdown en sortie adaptée au terminal avec du gras, de l'italique, et du formatage de code en utilisant les codes d'échappement ANSI.
 
@@ -579,9 +579,9 @@ display_note_full(4)
 
 **🩹 Si ça ne marche pas :**
 
-- Si les codes ANSI apparaissent comme des séquences d'échappement brutes, ton terminal ne les supporte peut-être pas — essaie `echo $TERM` et assure-toi qu'il est défini sur `xterm-256color` ou similaire.
+- Si les codes ANSI apparaissent comme des séquences d'échappement brutes, ton terminal ne les supporte peut-être pas, essaie `echo $TERM` et assure-toi qu'il est défini sur `xterm-256color` ou similaire.
 - Si les titres ne sont pas mis en surbrillance, vérifie que l'expression régulière correspond à `# ` avec un espace après le dièse.
-- Les appels `re.sub` traitent le gras avant l'italique — si tu inverses l'ordre, `**gras**` est partiellement consommé par le motif italique.
+- Les appels `re.sub` traitent le gras avant l'italique, si tu inverses l'ordre, `**gras**` est partiellement consommé par le motif italique.
 
 **✅ Liste de vérification**
 
@@ -597,7 +597,7 @@ display_note_full(4)
 
 ---
 
-## Étape 6 — Export en HTML
+## Étape 6, Export en HTML
 
 Un site HTML statique te permet de parcourir ta base de connaissances dans n'importe quel navigateur, de la partager avec d'autres, ou de l'héberger sur GitHub Pages. Nous convertirons toutes les notes en un seul fichier HTML avec recherche, filtrage par tags, et navigation.
 
@@ -757,8 +757,8 @@ Ouvre `exports/index.html` dans ton navigateur pour voir le site complet avec :
 
 **🩹 Si ça ne marche pas :**
 
-- Si le fichier HTML est vide, vérifie que `notes_json` est interpolé correctement — la f-string doit utiliser des doubles accolades `{{` pour échapper les accolades littérales dans le JavaScript.
-- Si la recherche ne fonctionne pas dans le navigateur, ouvre la console du navigateur (F12) et vérifie les erreurs JavaScript — le problème le plus courant est une accolade de fermeture manquante dans la fonction `renderNotes`.
+- Si le fichier HTML est vide, vérifie que `notes_json` est interpolé correctement, la f-string doit utiliser des doubles accolades `{{` pour échapper les accolades littérales dans le JavaScript.
+- Si la recherche ne fonctionne pas dans le navigateur, ouvre la console du navigateur (F12) et vérifie les erreurs JavaScript, le problème le plus courant est une accolade de fermeture manquante dans la fonction `renderNotes`.
 - Si des caractères spéciaux cassent le HTML, vérifie que `escapeHtml()` est appelé sur tout le contenu généré par l'utilisateur avant de l'insérer dans le template.
 
 **✅ Liste de vérification**
@@ -775,7 +775,7 @@ Ouvre `exports/index.html` dans ton navigateur pour voir le site complet avec :
 
 ---
 
-## Étape 7 — Interface CLI
+## Étape 7, Interface CLI
 
 La dernière étape assemble le tout avec une interface à menu. Nous ajouterons une sortie colorée, de la validation d'entrées, et une gestion propre des erreurs.
 
@@ -995,7 +995,7 @@ if __name__ == "__main__":
 
 **🩹 Si ça ne marche pas :**
 
-- Si les couleurs n'apparaissent pas, ton terminal ne supporte peut-être pas les codes ANSI — essaie un terminal différent ou vérifie que `$TERM` est défini sur `xterm-256color` ou similaire.
+- Si les couleurs n'apparaissent pas, ton terminal ne supporte peut-être pas les codes ANSI, essaie un terminal différent ou vérifie que `$TERM` est défini sur `xterm-256color` ou similaire.
 - Si la boucle d'entrée se bloque, vérifie que `handle_create` sort correctement de la boucle de saisie de contenu sur deux lignes vides consécutives.
 - Si `Ctrl+C` ne sort pas proprement, le bloc `except KeyboardInterrupt` devrait le capturer.
 
@@ -1016,18 +1016,18 @@ if __name__ == "__main__":
 
 ## 🧩 Défis
 
-**Défi 1 — Épinglage de notes**
+**Défi 1, Épinglage de notes**
 Ajoute un champ booléen `pinned` à chaque note. Lors du listage, les notes épinglées apparaissent toujours en premier quel que soit l'ordre de tri.
 
-**Défi 2 — Recherche en texte complet avec surbrillance**
+**Défi 2, Recherche en texte complet avec surbrillance**
 Étends la fonction de recherche pour mettre en surbrillance les termes correspondants dans les résultats. Enveloppe les correspondances dans un marqueur coloré (par ex. `[MATCH]terme[/MATCH]`) pour que les utilisateurs puissent voir exactement où la requête apparaît.
 
-**Défi 3 — Sauvegarde et restauration**
+**Défi 3, Sauvegarde et restauration**
 Ajoute une fonction qui crée une sauvegarde horodatée de `knowledge.json` (par ex. `data/backup-20260906-143022.json`), et une fonction de restauration qui charge un fichier de sauvegarde dans la base de connaissances.
 
 ## Objectifs avancés
 
-- [ ] Ajouter le liage de notes — détecte la syntaxe `[[Titre de la note]]` et crée des références cliquables entre les notes
+- [ ] Ajouter le liage de notes, détecte la syntaxe `[[Titre de la note]]` et crée des références cliquables entre les notes
 - [ ] Implémenter la recherche floue avec `difflib.SequenceMatcher` pour une correspondance tolérante aux fautes de frappe
 - [ ] Ajouter l'export Markdown (un fichier `.md` par note) en plus de l'export HTML
 - [ ] Construire une interface web simple avec `flask` pour l'accès via navigateur

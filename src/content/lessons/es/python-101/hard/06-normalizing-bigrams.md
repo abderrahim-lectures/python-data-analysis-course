@@ -90,7 +90,7 @@ def normalize_bigrams(bigrams):
     return normalized
 ```
 
-Ahora `normalized["the"]["cat"]` devuelve un float entre 0 y 1 — la probabilidad de que "cat" siga a "the".
+Ahora `normalized["the"]["cat"]` devuelve un float entre 0 y 1, la probabilidad de que "cat" siga a "the".
 
 ### Ejemplo
 
@@ -109,7 +109,7 @@ print(sum(norm["the"].values()))  # 1.0
 
 ### Por qué importa la normalización para el muestreo
 
-`random.choices()` necesita pesos que representen la probabilidad relativa. Si pasas recuentos crudos (15, 5, 10), funciona — pero tener las probabilidades correctas (0.5, 0.167, 0.333) hace que el modelo sea portable y comparable entre distintos tamaños de corpus.
+`random.choices()` necesita pesos que representen la probabilidad relativa. Si pasas recuentos crudos (15, 5, 10), funciona, pero tener las probabilidades correctas (0.5, 0.167, 0.333) hace que el modelo sea portable y comparable entre distintos tamaños de corpus.
 
 ```python
 import random

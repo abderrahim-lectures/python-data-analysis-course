@@ -44,7 +44,7 @@ quiz:
 ---
 Why start with data?
 
-Every machine learning project begins with data. For a text-based language model, that data is a **corpus** — a collection of text that the model will learn patterns from. Our corpus lives in `slm-corpus.csv`, a small CSV file that ships with the course in `static/datasets/`.
+Every machine learning project begins with data. For a text-based language model, that data is a **corpus**, a collection of text that the model will learn patterns from. Our corpus lives in `slm-corpus.csv`, a small CSV file that ships with the course in `static/datasets/`.
 
 Before you can tokenize, count, or generate anything, you need to load this file into Python. This lesson covers two approaches: `csv.reader` for raw access and `csv.DictReader` for header-aware access.
 
@@ -63,7 +63,7 @@ with open("slm-corpus.csv", newline="") as f:
     print(header)  # e.g. ['id', 'text']
 ```
 
-The `newline=""` argument is required by the `csv` module docs — without it, you may get blank rows on Windows or double-spaced output.
+The `newline=""` argument is required by the `csv` module docs, without it, you may get blank rows on Windows or double-spaced output.
 
 ### Reading with DictReader
 
@@ -78,7 +78,7 @@ with open("slm-corpus.csv", newline="") as f:
         print(row["text"])  # access by column name, not index
 ```
 
-The first call to `next(reader)` is automatic — `DictReader` consumes the header row itself.
+The first call to `next(reader)` is automatic, `DictReader` consumes the header row itself.
 
 ### Extracting the full text
 
@@ -116,7 +116,7 @@ print(f"First row: {rows[0]}")
 print(f"Last row:  {rows[-1]}")
 ```
 
-If the file is large, avoid `list(reader)` — it loads everything into memory. Instead, iterate and process row by row.
+If the file is large, avoid `list(reader)`, it loads everything into memory. Instead, iterate and process row by row.
 
 ## Try It
 
@@ -148,7 +148,7 @@ print(f"Sample: {rows[0]['text'][:200]}")
 
 ## Practice Challenge
 
-Write a function `load_corpus(path)` that takes a CSV file path and returns a list of strings — one per row's `text` column. Handle the case where the file doesn't exist by printing an error message and returning an empty list.
+Write a function `load_corpus(path)` that takes a CSV file path and returns a list of strings, one per row's `text` column. Handle the case where the file doesn't exist by printing an error message and returning an empty list.
 
 ```python
 def load_corpus(path):

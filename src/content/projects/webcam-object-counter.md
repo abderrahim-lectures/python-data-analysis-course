@@ -1,12 +1,12 @@
 ---
 title: "Count Objects in Real Time with a Webcam"
-description: "Count objects live from a webcam feed with OpenCV and a pretrained YOLO11n model — or run the same detection on a bundled sample image or video with no camera at all."
+description: "Count objects live from a webcam feed with OpenCV and a pretrained YOLO11n model, or run the same detection on a bundled sample image or video with no camera at all."
 difficulty: "intermediate"
 ---
 
 # 👁️ Count Objects in Real Time with a Webcam
 
-This project assumes you're comfortable with Python 101 — functions, loops, and installing packages — and needs no prior data-analysis or machine-learning background. It's this course's first foray into computer vision: instead of loading a pretrained model that reads text or tabular rows, you'll load one that reads pixels, and use it to answer a genuinely practical question in real time — "how many of *this* are in front of the camera right now?"
+This project assumes you're comfortable with Python 101, functions, loops, and installing packages, and needs no prior data-analysis or machine-learning background. It's this course's first foray into computer vision: instead of loading a pretrained model that reads text or tabular rows, you'll load one that reads pixels, and use it to answer a genuinely practical question in real time, "how many of *this* are in front of the camera right now?"
 
 This is optional and ungraded. See [Real-World Projects](/projects) for the full, growing list.
 
@@ -20,9 +20,9 @@ This is optional and ungraded. See [Real-World Projects](/projects) for the full
 
 ## Where to run this
 
-**Locally with `uv` is the only way to get the full, live-webcam experience.** A physical webcam attached to your computer is hardware — there is no route from a browser tab running in the cloud to a camera sitting on your desk. Steps 1–5 below assume this path, and Step 5 specifically will simply not work anywhere else.
+**Locally with `uv` is the only way to get the full, live-webcam experience.** A physical webcam attached to your computer is hardware, there is no route from a browser tab running in the cloud to a camera sitting on your desk. Steps 1–5 below assume this path, and Step 5 specifically will simply not work anywhere else.
 
-- **GitHub Codespaces** gets you a zero-setup cloud dev environment (Node, Python, and `uv` already installed — see [`.devcontainer/devcontainer.json`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/.devcontainer/devcontainer.json)), and Steps 1–4 (sample image, counting, sample video) work fine there. Step 5 will not — a Codespace runs on a remote server with no access to your local webcam either.
+- **GitHub Codespaces** gets you a zero-setup cloud dev environment (Node, Python, and `uv` already installed, see [`.devcontainer/devcontainer.json`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/.devcontainer/devcontainer.json)), and Steps 1–4 (sample image, counting, sample video) work fine there. Step 5 will not, a Codespace runs on a remote server with no access to your local webcam either.
 - **Google Colab, Kaggle Notebooks, or Binder** are good for the **sample-image-only** variant of this project, not the live webcam. A real, runnable notebook that downloads the bundled sample images and runs the same detection code lives at [`examples/webcam-object-counter/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/webcam-object-counter/notebook.ipynb). Click a badge to launch it directly:
 
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/webcam-object-counter/notebook.ipynb)
@@ -33,7 +33,7 @@ This is optional and ungraded. See [Real-World Projects](/projects) for the full
 
 ## Setup
 
-`uv` is a single tool that replaces the usual "install Python, then install pip, then install a virtual environment tool, then install packages" chain — it can install and manage Python versions itself, alongside your project's dependencies.
+`uv` is a single tool that replaces the usual "install Python, then install pip, then install a virtual environment tool, then install packages" chain, it can install and manage Python versions itself, alongside your project's dependencies.
 
 **macOS / Linux** (terminal):
 
@@ -61,15 +61,15 @@ cd webcam-object-counter
 uv add opencv-python ultralytics
 ```
 
-No API key is needed anywhere in this project — detection runs fully locally, no external service involved. Be mindful of size, though: `opencv-python` and `ultralytics` (which pulls in PyTorch) are a real download — expect this `uv add` to take a few minutes and a few hundred megabytes of disk space the first time.
+No API key is needed anywhere in this project, detection runs fully locally, no external service involved. Be mindful of size, though: `opencv-python` and `ultralytics` (which pulls in PyTorch) are a real download, expect this `uv add` to take a few minutes and a few hundred megabytes of disk space the first time.
 
-:::tip[Two ways to detect objects — pick the one that fits]
-OpenCV ships **Haar cascades** built in — small, fast, no extra download, but narrow: each cascade is trained for one specific thing (the classic example is `haarcascade_frontalface_default.xml` for frontal faces) and works best on a fairly clean, front-facing view. This project instead uses **YOLO11n** via the `ultralytics` package — a small (a few megabytes) but genuinely modern object-detection model, pretrained on the COCO dataset's 80 everyday object classes (person, car, dog, bus, chair, and more), that recognizes far more than faces and handles messier real-world scenes much better. The honest tradeoff: YOLO11n is a bigger install and a bit slower per frame than a Haar cascade, but it detects real objects, not just faces, which is the whole point of a general-purpose "count objects" project. If you only ever need to detect faces, a Haar cascade is a perfectly reasonable, lighter-weight alternative worth knowing about.
+:::tip[Two ways to detect objects, pick the one that fits]
+OpenCV ships **Haar cascades** built in, small, fast, no extra download, but narrow: each cascade is trained for one specific thing (the classic example is `haarcascade_frontalface_default.xml` for frontal faces) and works best on a fairly clean, front-facing view. This project instead uses **YOLO11n** via the `ultralytics` package, a small (a few megabytes) but genuinely modern object-detection model, pretrained on the COCO dataset's 80 everyday object classes (person, car, dog, bus, chair, and more), that recognizes far more than faces and handles messier real-world scenes much better. The honest tradeoff: YOLO11n is a bigger install and a bit slower per frame than a Haar cascade, but it detects real objects, not just faces, which is the whole point of a general-purpose "count objects" project. If you only ever need to detect faces, a Haar cascade is a perfectly reasonable, lighter-weight alternative worth knowing about.
 :::
 
 ## Step 1: Detect objects in a single sample image
 
-Every script below reuses this same core idea. `yolo11n.pt` is a pretrained checkpoint — `ultralytics` downloads it automatically the first time you construct `YOLO(...)`, and caches it locally after that:
+Every script below reuses this same core idea. `yolo11n.pt` is a pretrained checkpoint, `ultralytics` downloads it automatically the first time you construct `YOLO(...)`, and caches it locally after that:
 
 ### 1.1 Detect and draw boxes
 
@@ -99,13 +99,13 @@ cv2.imwrite("output_street.jpg", annotated)
 uv run python detect_image.py
 ```
 
-`model(image_path)` runs the full detection pipeline in one call: resize the image, run it through the network, and convert the raw output into a list of boxes, each with a class label and a confidence score. `result.boxes` is that list — `box.cls` is a class index into `model.names` (a dict of all 80 COCO class names), and `box.conf` is the model's confidence that the box actually contains that class. `result.plot()` is a convenience method that draws all of that back onto the image for you, so you don't have to write your own box-drawing loop with `cv2.rectangle`.
+`model(image_path)` runs the full detection pipeline in one call: resize the image, run it through the network, and convert the raw output into a list of boxes, each with a class label and a confidence score. `result.boxes` is that list, `box.cls` is a class index into `model.names` (a dict of all 80 COCO class names), and `box.conf` is the model's confidence that the box actually contains that class. `result.plot()` is a convenience method that draws all of that back onto the image for you, so you don't have to write your own box-drawing loop with `cv2.rectangle`.
 
 ### 1.2 Verify against the sample image
 
 **🎯 Expected output:** Console lines like `person (94% confidence)` for each detected object, and `output_street.jpg` opens as the same photo with colored boxes and labels drawn over real objects.
 
-**🩹 If it's off:** A long pause with no output on the very first run is `ultralytics` downloading `yolo11n.pt` (a few MB) — let it finish; it's cached after that. If `Detected 0 object(s)`, confirm `samples/street.jpg` actually exists at that relative path from where you're running the script, not just that the file exists somewhere in the project.
+**🩹 If it's off:** A long pause with no output on the very first run is `ultralytics` downloading `yolo11n.pt` (a few MB), let it finish; it's cached after that. If `Detected 0 object(s)`, confirm `samples/street.jpg` actually exists at that relative path from where you're running the script, not just that the file exists somewhere in the project.
 
 **✅ Checklist**
 
@@ -115,11 +115,11 @@ uv run python detect_image.py
 
 **🤔 Socratic Question(s)**
 
-The model returns a confidence score for every box, not just a yes/no "object here." If you filtered out any box with confidence below 90%, would you expect to see more false detections or more missed detections — and which of those two mistakes matters more for a project whose whole point is an accurate *count*?
+The model returns a confidence score for every box, not just a yes/no "object here." If you filtered out any box with confidence below 90%, would you expect to see more false detections or more missed detections, and which of those two mistakes matters more for a project whose whole point is an accurate *count*?
 
 ## Step 2: Count one target class and keep a running total
 
-Detecting everything is a good start, but "count objects" usually means counting *one kind* of thing — people walking through a doorway, cars in a lot, and so on:
+Detecting everything is a good start, but "count objects" usually means counting *one kind* of thing, people walking through a doorway, cars in a lot, and so on:
 
 ### 2.1 Filter and sum
 
@@ -154,7 +154,7 @@ The count is just a filter-and-sum over `result.boxes`, comparing each box's cla
 
 **🎯 Expected output:** One line per image (`samples/street.jpg: N person(s) -- running total: N`), then a final `Total person(s): M` line where M is the sum across all images.
 
-**🩹 If it's off:** If the count is always 0 regardless of `target_class`, check the spelling matches a real COCO class name exactly (`"person"`, not `"people"` or `"Person"`) — `model.names.values()` prints the full valid list if you're unsure. If `running_total` doesn't match the sum of the per-image counts you saw printed, you likely reset it inside the loop instead of before it.
+**🩹 If it's off:** If the count is always 0 regardless of `target_class`, check the spelling matches a real COCO class name exactly (`"person"`, not `"people"` or `"Person"`), `model.names.values()` prints the full valid list if you're unsure. If `running_total` doesn't match the sum of the per-image counts you saw printed, you likely reset it inside the loop instead of before it.
 
 **✅ Checklist**
 
@@ -168,11 +168,11 @@ If two people in a photo are standing so close together that their bounding boxe
 
 ## Step 3: Process a short sample video frame-by-frame
 
-A video is just a sequence of images — the exact same per-image detection code from Steps 1–2, run once per frame in a loop:
+A video is just a sequence of images, the exact same per-image detection code from Steps 1–2, run once per frame in a loop:
 
 ### 3.1 Loop over frames and write the annotated video
 
-**👟 Starter hint:** Open the file with `cv2.VideoCapture(path)`, and inside a `while True:` loop call `.read()` each iteration — it returns `(ok, frame)`, and `ok` turning `False` is your signal to `break`, not an error to handle:
+**👟 Starter hint:** Open the file with `cv2.VideoCapture(path)`, and inside a `while True:` loop call `.read()` each iteration, it returns `(ok, frame)`, and `ok` turning `False` is your signal to `break`, not an error to handle:
 
 ```python
 # detect_video.py
@@ -209,13 +209,13 @@ writer.release()
 uv run python detect_video.py
 ```
 
-`cv2.VideoCapture` reads a video file (or, in Step 4, a live camera) one frame at a time via `.read()`, which returns `(ok, frame)` — `ok` is `False` once there are no more frames. `cv2.VideoWriter` is the same idea in reverse: it accumulates frames you hand it into a new video file. Note the `if not ok: break` here means "the file ended" — Step 4 reuses this exact same check, but there it means something importantly different.
+`cv2.VideoCapture` reads a video file (or, in Step 4, a live camera) one frame at a time via `.read()`, which returns `(ok, frame)`, `ok` is `False` once there are no more frames. `cv2.VideoWriter` is the same idea in reverse: it accumulates frames you hand it into a new video file. Note the `if not ok: break` here means "the file ended", Step 4 reuses this exact same check, but there it means something importantly different.
 
 ### 3.2 Verify the output video
 
 **🎯 Expected output:** `output_video.mp4` written to disk, playable in any video app, showing bounding boxes and a `persons: N` overlay that updates every frame.
 
-**🩹 If it's off:** A 0-byte or unplayable `output_video.mp4` usually means the `fourcc`/codec isn't supported on your platform — try `"avc1"` instead of `"mp4v"` if `mp4v` fails silently on your machine. If the script finishes instantly with no frames written, `cap.get(cv2.CAP_PROP_FPS)` may have returned 0 and the `or 15` fallback masked a deeper problem — confirm `samples/sample_street.mp4` actually opened by checking `cap.isOpened()`.
+**🩹 If it's off:** A 0-byte or unplayable `output_video.mp4` usually means the `fourcc`/codec isn't supported on your platform, try `"avc1"` instead of `"mp4v"` if `mp4v` fails silently on your machine. If the script finishes instantly with no frames written, `cap.get(cv2.CAP_PROP_FPS)` may have returned 0 and the `or 15` fallback masked a deeper problem, confirm `samples/sample_street.mp4` actually opened by checking `cap.isOpened()`.
 
 **✅ Checklist**
 
@@ -225,7 +225,7 @@ uv run python detect_video.py
 
 **🤔 Socratic Question(s)**
 
-The count you print is a per-frame snapshot, not a per-video total — running the same person past the camera for three seconds could get counted in every single frame. What would "count how many *distinct* people crossed the frame" require, beyond what this script currently does?
+The count you print is a per-frame snapshot, not a per-video total, running the same person past the camera for three seconds could get counted in every single frame. What would "count how many *distinct* people crossed the frame" require, beyond what this script currently does?
 
 ## Step 4: Go live with your webcam
 
@@ -274,13 +274,13 @@ else:
 uv run python detect_webcam.py
 ```
 
-`cv2.VideoCapture(0)` opens your default camera the same way `VideoCapture("some_file.mp4")` opened a file in Step 3 — same `.read()` loop, same `(ok, frame)` shape. The two important differences: `.isOpened()` is checked *up front* here, since "no webcam available" is a real, common failure that should produce a clear message rather than a confusing crash deep in the loop; and once running, `ok` turning `False` mid-loop means the camera connection was lost (unplugged, permission revoked), not "reached the end," since a live camera has no end. `cv2.imshow` opens a live window — a real GUI window, so this script won't produce visible output in a plain remote terminal with no display.
+`cv2.VideoCapture(0)` opens your default camera the same way `VideoCapture("some_file.mp4")` opened a file in Step 3, same `.read()` loop, same `(ok, frame)` shape. The two important differences: `.isOpened()` is checked *up front* here, since "no webcam available" is a real, common failure that should produce a clear message rather than a confusing crash deep in the loop; and once running, `ok` turning `False` mid-loop means the camera connection was lost (unplugged, permission revoked), not "reached the end," since a live camera has no end. `cv2.imshow` opens a live window, a real GUI window, so this script won't produce visible output in a plain remote terminal with no display.
 
 ### 4.2 Verify live counting works
 
 **🎯 Expected output:** A live "Webcam Object Counter" window showing your camera feed with boxes and a running `persons: N` count that updates as you move in and out of frame, closing cleanly when you press "q".
 
-**🩹 If it's off:** `Could not open the webcam` almost always means an OS camera-permission prompt was dismissed or never shown — check your terminal app's (or Python interpreter's) camera permission in system privacy settings, not the code. If the window opens but never updates, another app (a video-call tool left running in the background) may already have the camera locked — close it and rerun. See the pitfalls list below for the multi-camera-index case.
+**🩹 If it's off:** `Could not open the webcam` almost always means an OS camera-permission prompt was dismissed or never shown, check your terminal app's (or Python interpreter's) camera permission in system privacy settings, not the code. If the window opens but never updates, another app (a video-call tool left running in the background) may already have the camera locked, close it and rerun. See the pitfalls list below for the multi-camera-index case.
 
 **✅ Checklist**
 
@@ -295,27 +295,27 @@ Steps 3 and 4 use `if not ok: break` in the exact same spot in the code, but tha
 
 ## ⚠️ Common pitfalls
 
-- **Webcam permission denied.** macOS and Windows both prompt for camera access the first time an app tries to use it — if you dismissed that prompt (or it appeared behind another window), `cv2.VideoCapture(0).isOpened()` will return `False` even with a perfectly working camera. Check your OS's camera privacy settings for your terminal app or Python interpreter specifically.
-- **The first run is slow and needs an internet connection.** `ultralytics` downloads `yolo11n.pt` from Ultralytics' servers the first time you construct `YOLO(...)` — after that it's cached locally (typically under `~/.cache` or the current directory) and every later run is fully offline. If the very first run seems to hang, it's probably still downloading, not stuck.
-- **Confusing "no objects detected" with "the camera isn't working."** These look identical at first glance — an empty count either way — but they have completely different fixes. Check `cap.isOpened()` and whether `cv2.imshow` shows a live picture at all *before* worrying about why the count is zero; a working feed with a genuinely empty count (nothing that matches your target class is in frame) is not a bug.
-- **Camera index mismatches on machines with more than one camera.** `VideoCapture(0)` opens whichever camera your OS considers the default, which isn't always the one you expect on a laptop with an external webcam plugged in — try `1`, `2`, etc. if `0` opens the wrong one.
+- **Webcam permission denied.** macOS and Windows both prompt for camera access the first time an app tries to use it, if you dismissed that prompt (or it appeared behind another window), `cv2.VideoCapture(0).isOpened()` will return `False` even with a perfectly working camera. Check your OS's camera privacy settings for your terminal app or Python interpreter specifically.
+- **The first run is slow and needs an internet connection.** `ultralytics` downloads `yolo11n.pt` from Ultralytics' servers the first time you construct `YOLO(...)`, after that it's cached locally (typically under `~/.cache` or the current directory) and every later run is fully offline. If the very first run seems to hang, it's probably still downloading, not stuck.
+- **Confusing "no objects detected" with "the camera isn't working."** These look identical at first glance, an empty count either way, but they have completely different fixes. Check `cap.isOpened()` and whether `cv2.imshow` shows a live picture at all *before* worrying about why the count is zero; a working feed with a genuinely empty count (nothing that matches your target class is in frame) is not a bug.
+- **Camera index mismatches on machines with more than one camera.** `VideoCapture(0)` opens whichever camera your OS considers the default, which isn't always the one you expect on a laptop with an external webcam plugged in, try `1`, `2`, etc. if `0` opens the wrong one.
 
 ## What you just built
 
-A real, working computer-vision pipeline: load a pretrained model, run it on pixels instead of rows or text, and turn its raw output (boxes, class indices, confidence scores) into something a person actually wants — a live count of a specific kind of object. The same three-step shape (per-image detection → filter to one class → loop over frames) scales from a single photo up to a genuinely live camera feed with only the input source changing.
+A real, working computer-vision pipeline: load a pretrained model, run it on pixels instead of rows or text, and turn its raw output (boxes, class indices, confidence scores) into something a person actually wants, a live count of a specific kind of object. The same three-step shape (per-image detection → filter to one class → loop over frames) scales from a single photo up to a genuinely live camera feed with only the input source changing.
 
 :::tip[This generalizes past "count objects"]
-Everything here — a pretrained detector, a loop over frames, a running count — is also the backbone of things like people-counting sensors at store entrances, basic traffic-counting cameras, and wildlife camera-trap species counters. The counting logic in Step 2 is deliberately simple (no object tracking between frames, so a person standing still for ten frames gets counted in all ten), which is an honest simplification, not a hidden bug — see the "Where to go from here" section for what real systems add on top.
+Everything here, a pretrained detector, a loop over frames, a running count, is also the backbone of things like people-counting sensors at store entrances, basic traffic-counting cameras, and wildlife camera-trap species counters. The counting logic in Step 2 is deliberately simple (no object tracking between frames, so a person standing still for ten frames gets counted in all ten), which is an honest simplification, not a hidden bug, see the "Where to go from here" section for what real systems add on top.
 :::
 
 ## Where to go from here
 
 - **Object tracking, not just detection.** Step 3's Socratic question points at the real gap: this project counts objects *per frame*, not distinct objects *across* a video. Libraries like `ultralytics`'s own built-in tracking mode (`model.track(...)`, using algorithms like ByteTrack) assign a persistent ID to each object across frames, so "how many distinct people crossed the frame" becomes answerable instead of just "how many are in frame right now."
-- **A bigger, more accurate model.** `yolo11n.pt` ("n" for nano) trades some accuracy for speed and size. `ultralytics` ships larger checkpoints (`yolo11s.pt`, `yolo11m.pt`, and up) that detect more reliably, especially on small or partially obscured objects, at the cost of needing more compute per frame — worth trying if Step 4's live counts feel unreliable on your particular setup.
-- **A custom class, not just COCO's 80.** YOLO11n only recognizes what it was trained on. Fine-tuning a YOLO model on your own labeled images (a much smaller version of the same idea as the [Fine-tune a Small Language Model project](/projects/finetune-llm-unsloth)) lets you count something COCO never included — a specific product on a shelf, a specific tool, anything you can label a few hundred examples of.
+- **A bigger, more accurate model.** `yolo11n.pt` ("n" for nano) trades some accuracy for speed and size. `ultralytics` ships larger checkpoints (`yolo11s.pt`, `yolo11m.pt`, and up) that detect more reliably, especially on small or partially obscured objects, at the cost of needing more compute per frame, worth trying if Step 4's live counts feel unreliable on your particular setup.
+- **A custom class, not just COCO's 80.** YOLO11n only recognizes what it was trained on. Fine-tuning a YOLO model on your own labeled images (a much smaller version of the same idea as the [Fine-tune a Small Language Model project](/projects/finetune-llm-unsloth)) lets you count something COCO never included, a specific product on a shelf, a specific tool, anything you can label a few hundred examples of.
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

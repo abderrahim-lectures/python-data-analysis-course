@@ -101,7 +101,7 @@ Embarked        0.2%
 ...
 ```
 
-Cabin est manquant à 77 % — trop pour être comblé de manière pertinente. Age est manquant à 20 % — cela vaut la peine de tenter de le combler. Embarked n'a que 2 valeurs manquantes — facile à gérer.
+Cabin est manquant à 77 %, trop pour être comblé de manière pertinente. Age est manquant à 20 %, cela vaut la peine de tenter de le combler. Embarked n'a que 2 valeurs manquantes, facile à gérer.
 
 ## Supprimer les valeurs manquantes
 
@@ -149,7 +149,7 @@ df["Embarked"] = df["Embarked"].fillna("S")   # most common port
 df["Age"] = df["Age"].fillna(df["Age"].median())
 ```
 
-**Comblement vers l'avant ou vers l'arrière** — utile pour les séries temporelles :
+**Comblement vers l'avant ou vers l'arrière**, utile pour les séries temporelles :
 
 ```python
 # Use the previous valid value to fill gaps
@@ -178,11 +178,11 @@ df = df.fillna(fill_values)
 
 ## Pièges courants
 
-**Combler avant de diviser entraînement/test** — cela fuit des informations. Calculez les valeurs de comblement uniquement sur les données d'entraînement, puis appliquez-les aux deux ensembles.
+**Combler avant de diviser entraînement/test**, cela fuit des informations. Calculez les valeurs de comblement uniquement sur les données d'entraînement, puis appliquez-les aux deux ensembles.
 
-**Supprimer trop agressivement** — vérifiez toujours combien de lignes vous perdez. `dropna()` sans arguments supprime souvent beaucoup plus que prévu.
+**Supprimer trop agressivement**, vérifiez toujours combien de lignes vous perdez. `dropna()` sans arguments supprime souvent beaucoup plus que prévu.
 
-**Oublier de vérifier** — exécutez toujours `df.isna().sum()` après le comblement pour confirmer qu'aucune valeur NaN ne subsiste.
+**Oublier de vérifier**, exécutez toujours `df.isna().sum()` après le comblement pour confirmer qu'aucune valeur NaN ne subsiste.
 
 ## Essayez-le
 

@@ -16,7 +16,7 @@ prerequisites: ["Python 101", "Data Analysis"]
 
 Every warehouse, every retail store, every e-commerce seller faces the same problem: knowing what's in stock, what's running low, and where everything is. This project builds an inventory management system in Python with a SQLite backend: you track stock levels across multiple warehouses, simulate barcode scans for fast updates, get alerts when items hit reorder thresholds, transfer stock between locations, and forecast future needs from historical data. The system runs as a CLI, but the architecture is the same one that powers real inventory platforms.
 
-This assumes Python 101 and basic comfort with pandas from Data Analysis — nothing beyond. Optional and ungraded; see [Real-World Projects](/projects) for the full list.
+This assumes Python 101 and basic comfort with pandas from Data Analysis, nothing beyond. Optional and ungraded; see [Real-World Projects](/projects) for the full list.
 
 ## 🎯 What you'll do
 
@@ -29,7 +29,7 @@ This assumes Python 101 and basic comfort with pandas from Data Analysis — not
 
 ## Where to run this
 
-**Locally with `uv`** is the primary path — this project reads and writes a SQLite database file on disk, which works best outside a notebook.
+**Locally with `uv`** is the primary path, this project reads and writes a SQLite database file on disk, which works best outside a notebook.
 
 **Google Colab, Kaggle Notebooks, and Binder** work for trying the tool. The notebook creates an in-memory database and uses sample data.
 
@@ -61,7 +61,7 @@ cd inventory-manager
 uv add click pandas
 ```
 
-`click` builds the CLI and `pandas` powers the sales forecasting. The project uses SQLite from the standard library for the database — no external database driver needed.
+`click` builds the CLI and `pandas` powers the sales forecasting. The project uses SQLite from the standard library for the database, no external database driver needed.
 
 ### Create the project structure
 
@@ -78,7 +78,7 @@ touch inventory/__init__.py inventory/db.py inventory/scanner.py inventory/alert
 
 ## Step 1: Design the database schema
 
-A good inventory database tracks three things: what products exist, where they are, and how many are in each location. Three tables — `products`, `warehouses`, and `stock` — with a junction table linking products to warehouses.
+A good inventory database tracks three things: what products exist, where they are, and how many are in each location. Three tables, `products`, `warehouses`, and `stock`, with a junction table linking products to warehouses.
 
 ### 1.1 Create the schema
 
@@ -152,7 +152,7 @@ def init_db():
     conn.close()
 ```
 
-The `stock` table is a junction table: each row says "product X has Y units in warehouse Z." The `stock_movements` table logs every transfer for audit purposes. The `reorder_point` on products defines the threshold below which you should reorder — different products have different thresholds depending on how fast they sell.
+The `stock` table is a junction table: each row says "product X has Y units in warehouse Z." The `stock_movements` table logs every transfer for audit purposes. The `reorder_point` on products defines the threshold below which you should reorder, different products have different thresholds depending on how fast they sell.
 
 **🎯 Expected output:** `init_db()` creates `inventory.db` with 4 products, 2 warehouses, and 7 stock entries.
 
@@ -274,7 +274,7 @@ assert wh1_stock["quantity"] == 20  # was 25, removed 5
 
 **🎯 Expected output:** All assertions pass; the stock level updated correctly after the sale.
 
-**🩹 If it's off:** If the stock didn't change, the UPDATE query isn't matching the right row — check the WHERE clause.
+**🩹 If it's off:** If the stock didn't change, the UPDATE query isn't matching the right row, check the WHERE clause.
 
 ### 2.3 Verify the scanner
 
@@ -321,7 +321,7 @@ The SQL query joins products with their stock, sums quantities across all wareho
 
 **🎯 Expected output:** `check_reorder_alerts()` returns a list including `WIDGET-B` (total stock = 3, reorder point = 5) sorted by urgency.
 
-**🩹 If it's off:** If no alerts appear, the seed data stock levels are all above reorder points — check the seed data values. If the total is wrong, the `SUM` is including movements from other products — check the JOIN.
+**🩹 If it's off:** If no alerts appear, the seed data stock levels are all above reorder points, check the seed data values. If the total is wrong, the `SUM` is including movements from other products, check the JOIN.
 
 ### 3.2 Verify the alerts
 
@@ -356,7 +356,7 @@ assert not any(a["sku"] == "WIDGET-A" for a in alerts)
 
 ## Step 4: Implement warehouse transfers
 
-Moving stock between warehouses is a two-sided transaction: decrease at the source, increase at the destination. If either side fails, neither should happen — this is the classic atomicity requirement of database transactions.
+Moving stock between warehouses is a two-sided transaction: decrease at the source, increase at the destination. If either side fails, neither should happen, this is the classic atomicity requirement of database transactions.
 
 ### 4.1 Write the transfer function
 
@@ -425,7 +425,7 @@ def transfer_stock(sku: str, from_wh: str, to_wh: str, quantity: int) -> dict:
         conn.close()
 ```
 
-The `try/except/finally` pattern ensures that if any step fails (insufficient stock, database error), the entire transaction rolls back — no half-finished transfers. The `finally` block always closes the connection. The movement is logged after the stock updates succeed, so the log entry only exists if the transfer actually happened.
+The `try/except/finally` pattern ensures that if any step fails (insufficient stock, database error), the entire transaction rolls back, no half-finished transfers. The `finally` block always closes the connection. The movement is logged after the stock updates succeed, so the log entry only exists if the transfer actually happened.
 
 **🎯 Expected output:** `transfer_stock("WIDGET-A", "WH1", "WH2", 5)` returns `{"status": "success", "quantity": 5, ...}`. WH1 drops by 5, WH2 increases by 5.
 
@@ -451,7 +451,7 @@ assert wh2["quantity"] == 13  # was 8
 
 **🎯 Expected output:** All assertions pass; stock moved atomically between warehouses.
 
-**🩹 If it's off:** If the quantities don't match, the transfer may have run twice — check the seed data state.
+**🩹 If it's off:** If the quantities don't match, the transfer may have run twice, check the seed data state.
 
 ### 4.3 Verify transfers
 
@@ -468,7 +468,7 @@ assert wh2["quantity"] == 13  # was 8
 
 ## Step 5: Forecast future stock needs
 
-Sales forecasting predicts how much stock you'll need based on historical movement data. This step uses a simple moving average — the average of the last N days of sales — to project future demand.
+Sales forecasting predicts how much stock you'll need based on historical movement data. This step uses a simple moving average, the average of the last N days of sales, to project future demand.
 
 ### 5.1 Write the forecast function
 
@@ -515,11 +515,11 @@ def forecast_demand(sku: str, days_ahead: int = 7, lookback: int = 30) -> dict:
     }
 ```
 
-The moving average is the simplest forecasting method: average the last N days of sales, multiply by the forecast horizon. The `confidence` rating is based on data completeness — if you have sales data for most of the lookback period, the forecast is more trustworthy. For a real system, you'd use exponential smoothing or ARIMA, but the moving average captures the core idea.
+The moving average is the simplest forecasting method: average the last N days of sales, multiply by the forecast horizon. The `confidence` rating is based on data completeness, if you have sales data for most of the lookback period, the forecast is more trustworthy. For a real system, you'd use exponential smoothing or ARIMA, but the moving average captures the core idea.
 
 **🎯 Expected output:** `forecast_demand("WIDGET-A")` returns a dict with `daily_avg`, `forecast_total`, and `confidence` based on the movement history.
 
-**🩹 If it's off:** If the forecast is always 0, there are no movements with `reason='sale'` in the seed data — you'd need to add some sample sales.
+**🩹 If it's off:** If the forecast is always 0, there are no movements with `reason='sale'` in the seed data, you'd need to add some sample sales.
 
 ### 5.2 Add restock recommendations
 
@@ -554,7 +554,7 @@ def restock_recommendations() -> list[dict]:
 
 **🎯 Expected output:** Products where the forecast exceeds current stock plus reorder point appear in the recommendations, sorted by urgency.
 
-**🩹 If it's off:** If no recommendations appear, the current stock is high enough to cover the forecast — that's correct behavior for well-stocked items.
+**🩹 If it's off:** If no recommendations appear, the current stock is high enough to cover the forecast, that's correct behavior for well-stocked items.
 
 ### 5.3 Verify forecasting
 
@@ -579,7 +579,7 @@ def restock_recommendations() -> list[dict]:
 
 ## What you just built
 
-An inventory management system with a SQLite backend: product catalog, multi-warehouse stock tracking, barcode-style scanning for quick updates, reorder alerts that prevent stockouts, atomic transfers between warehouses with audit logging, and sales forecasting from historical movement data. The architecture — product, warehouse, stock junction table — is the same pattern used by real inventory systems like inFlow, Sortly, and Odoo.
+An inventory management system with a SQLite backend: product catalog, multi-warehouse stock tracking, barcode-style scanning for quick updates, reorder alerts that prevent stockouts, atomic transfers between warehouses with audit logging, and sales forecasting from historical movement data. The architecture, product, warehouse, stock junction table, is the same pattern used by real inventory systems like inFlow, Sortly, and Odoo.
 
 :::tip[Run a fuller version without any local setup]
 [`examples/inventory-manager/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/inventory-manager) in the course repo has a richer version with more sample data, a web dashboard, and the CLI wired up end to end. Clone it, or open the whole repo in a [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), and run it from there.
@@ -593,6 +593,6 @@ An inventory management system with a SQLite backend: product catalog, multi-war
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

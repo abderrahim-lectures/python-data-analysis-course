@@ -17,9 +17,9 @@ prerequisites:
 
 # 📋 Constructor de Encuestas
 
-Las encuestas están en todas partes — formularios de retroalimentación, investigación de mercado, evaluaciones de curso — y detrás de cada una hay un motor estructurado: tipos de pregunta, validación, ramificación condicional y análisis. Este proyecto construye ese motor desde cero: un conjunto de clases de Python que modelan diferentes tipos de pregunta (opción múltiple, escalas de calificación, texto abierto), un ejecutor que secuencia las preguntas con lógica de ramificación y un pipeline de pandas que convierte las respuestas crudas en gráficos de frecuencia y tabulaciones cruzadas.
+Las encuestas están en todas partes, formularios de retroalimentación, investigación de mercado, evaluaciones de curso, y detrás de cada una hay un motor estructurado: tipos de pregunta, validación, ramificación condicional y análisis. Este proyecto construye ese motor desde cero: un conjunto de clases de Python que modelan diferentes tipos de pregunta (opción múltiple, escalas de calificación, texto abierto), un ejecutor que secuencia las preguntas con lógica de ramificación y un pipeline de pandas que convierte las respuestas crudas en gráficos de frecuencia y tabulaciones cruzadas.
 
-Esto asume fundamentos de Python incluyendo clases, listas y dicts, y comodidad con `input()` — nada más allá. Es opcional y no se califica; consulta [Proyectos del Mundo Real](/es/proyectos) para ver la lista completa y en crecimiento.
+Esto asume fundamentos de Python incluyendo clases, listas y dicts, y comodidad con `input()`, nada más allá. Es opcional y no se califica; consulta [Proyectos del Mundo Real](/es/proyectos) para ver la lista completa y en crecimiento.
 
 ## 🎯 Lo que harás
 
@@ -31,15 +31,15 @@ Esto asume fundamentos de Python incluyendo clases, listas y dicts, y comodidad 
 
 ## Dónde ejecutar esto
 
-Este proyecto corre casi en cualquier lugar — pandas y matplotlib son Python puro, y la única pieza interactiva es `input()`, que funciona en cualquier terminal.
+Este proyecto corre casi en cualquier lugar, pandas y matplotlib son Python puro, y la única pieza interactiva es `input()`, que funciona en cualquier terminal.
 
-**El playground de JupyterLite** funciona bien — pega las celdas directamente en un notebook. Necesitarás `!pip install pandas matplotlib` en una celda primero. Ten en cuenta que `input()` funciona de forma diferente en un notebook que en una terminal — la función `simulate_responses()` del Paso 3 existe en parte por esto.
+**El playground de JupyterLite** funciona bien, pega las celdas directamente en un notebook. Necesitarás `!pip install pandas matplotlib` en una celda primero. Ten en cuenta que `input()` funciona de forma diferente en un notebook que en una terminal, la función `simulate_responses()` del Paso 3 existe en parte por esto.
 
-**Google Colab** funciona de fábrica — ambas bibliotecas están preinstaladas, y `input()` funciona de forma nativa en los notebooks.
+**Google Colab** funciona de fábrica, ambas bibliotecas están preinstaladas, y `input()` funciona de forma nativa en los notebooks.
 
-**Localmente con `uv`** es la ruta recomendada para ejecutar el bucle de encuesta interactivo real (Paso 2) donde `input()` te pregunta pregunta por pregunta — sigue la sección de Configuración de abajo.
+**Localmente con `uv`** es la ruta recomendada para ejecutar el bucle de encuesta interactivo real (Paso 2) donde `input()` te pregunta pregunta por pregunta, sigue la sección de Configuración de abajo.
 
-- **Ejecútalo en el navegador.** Hay un cuaderno interactivo listo — ábrelo en Colab, Kaggle o Binder y sigue los pasos en orden.
+- **Ejecútalo en el navegador.** Hay un cuaderno interactivo listo, ábrelo en Colab, Kaggle o Binder y sigue los pasos en orden.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/survey-builder/notebook.es.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/survey-builder/notebook.es.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fsurvey-builder%2Fnotebook.es.ipynb)
@@ -50,7 +50,7 @@ Todo lo que necesitas antes de escribir una pregunta de encuesta.
 
 ### Instalar `uv`
 
-`uv` es una única herramienta que reemplaza la cadena habitual de "instala Python, luego instala pip, luego instala una herramienta de entorno virtual, luego instala paquetes" — puede instalar y gestionar versiones de Python por sí mismo, junto con las dependencias de tu proyecto.
+`uv` es una única herramienta que reemplaza la cadena habitual de "instala Python, luego instala pip, luego instala una herramienta de entorno virtual, luego instala paquetes", puede instalar y gestionar versiones de Python por sí mismo, junto con las dependencias de tu proyecto.
 
 **macOS / Linux** (terminal):
 
@@ -88,7 +88,7 @@ uv add pandas matplotlib
 
 ## Paso 1: Define los tipos de pregunta
 
-Una encuesta no es un solo formulario — es una serie de preguntas diferentes, cada una con su propio formato de entrada, reglas de validación y comportamiento de ramificación. Modelar cada tipo como una clase te permite compartir las partes comunes (visualización, validación, ramificación) en una clase base mientras personalizas los detalles por tipo.
+Una encuesta no es un solo formulario, es una serie de preguntas diferentes, cada una con su propio formato de entrada, reglas de validación y comportamiento de ramificación. Modelar cada tipo como una clase te permite compartir las partes comunes (visualización, validación, ramificación) en una clase base mientras personalizas los detalles por tipo.
 
 ### 1.1 Crea la clase base `Question` y dos subclases
 
@@ -147,7 +147,7 @@ rating.display()
 print(f"MC valid '2': {mc.validate('2')} | Rating valid '6': {rating.validate('6')}")
 ```
 
-**👟 Pista inicial :** La clase base `Question` hace solo lo que es común a todas las preguntas: almacenar el texto, validar (trivialmente, `True`) y buscar una regla de rama. `MultipleChoice` y `RatingScale` la subclasifican y sobrescriben `display()` y `validate()` — exactamente el patrón de herencia que le permite a un ejecutor `Survey` tratar todas las preguntas de la misma manera. Observa que `branch_rules` es un dict que mapea una respuesta al id de la siguiente pregunta.
+**👟 Pista inicial :** La clase base `Question` hace solo lo que es común a todas las preguntas: almacenar el texto, validar (trivialmente, `True`) y buscar una regla de rama. `MultipleChoice` y `RatingScale` la subclasifican y sobrescriben `display()` y `validate()`, exactamente el patrón de herencia que le permite a un ejecutor `Survey` tratar todas las preguntas de la misma manera. Observa que `branch_rules` es un dict que mapea una respuesta al id de la siguiente pregunta.
 
 **🎯 Resultado esperado :**
 ```
@@ -162,7 +162,7 @@ print(f"MC valid '2': {mc.validate('2')} | Rating valid '6': {rating.validate('6
 MC valid '2': True | Rating valid '6': False
 ```
 
-**🩹 Si sale mal :** Si `MultipleChoice.validate('2')` devuelve `False`, comprueba que `options` tenga al menos 2 entradas — la validación construye `range(1, len(options)+1)`. Si `RatingScale.validate('6')` devuelve `True`, el `scale_max` no se está aplicando — confirma la conversión `int(answer)` y el orden de la comparación `<=`.
+**🩹 Si sale mal :** Si `MultipleChoice.validate('2')` devuelve `False`, comprueba que `options` tenga al menos 2 entradas, la validación construye `range(1, len(options)+1)`. Si `RatingScale.validate('6')` devuelve `True`, el `scale_max` no se está aplicando, confirma la conversión `int(answer)` y el orden de la comparación `<=`.
 
 ### 1.2 Verifica las clases de pregunta
 
@@ -174,8 +174,8 @@ MC valid '2': True | Rating valid '6': False
 
 **🤔 Pregunta(s) socrática(s)**
 
-- La clase `RatingScale` almacena `scale_min` y `scale_max` como atributos de clase con valores predeterminados. Si quisieras una escala de 1–10, ¿qué sobrescribirías en la instanciación — y `validate` necesitaría cambiar?
-- `MultipleChoice.validate` construye la lista de respuestas válidas desde `len(self.options)`. ¿Qué pasaría si tuvieras 10 opciones — el código de validación necesitaría cambiar, o escala automáticamente? ¿Por qué?
+- La clase `RatingScale` almacena `scale_min` y `scale_max` como atributos de clase con valores predeterminados. Si quisieras una escala de 1–10, ¿qué sobrescribirías en la instanciación, y `validate` necesitaría cambiar?
+- `MultipleChoice.validate` construye la lista de respuestas válidas desde `len(self.options)`. ¿Qué pasaría si tuvieras 10 opciones, el código de validación necesitaría cambiar, o escala automáticamente? ¿Por qué?
 
 ## Paso 2: Construye el ejecutor de encuestas
 
@@ -230,11 +230,11 @@ class Survey:
         return SurveyResponse(survey_title=self.title, answers=answers)
 ```
 
-**👟 Pista inicial :** El bucle `while idx < len(self.order)` recorre las preguntas en orden. Después de cada respuesta, busca `next_question_id(answer)` — si las reglas de rama dicen "la respuesta 2 salta a la pregunta 'followup'", el índice salta allí; de lo contrario avanza en uno. `SurveyResponse.__post_init__` estampa una marca de tiempo cuando no se proporciona una — los dataclasses ejecutan `__post_init__` justo después de `__init__`, que es el lugar idiomático para la lógica que depende de valores predeterminados.
+**👟 Pista inicial :** El bucle `while idx < len(self.order)` recorre las preguntas en orden. Después de cada respuesta, busca `next_question_id(answer)`, si las reglas de rama dicen "la respuesta 2 salta a la pregunta 'followup'", el índice salta allí; de lo contrario avanza en uno. `SurveyResponse.__post_init__` estampa una marca de tiempo cuando no se proporciona una, los dataclasses ejecutan `__post_init__` justo después de `__init__`, que es el lugar idiomático para la lógica que depende de valores predeterminados.
 
 **🎯 Resultado esperado :** Ejecutar `Survey("Health Survey").run()` pregunta pregunta por pregunta y devuelve un `SurveyResponse` con las respuestas recolectadas y una marca de tiempo.
 
-**🩹 Si sale mal :** Si el ejecutor se queda atrapado en un bucle infinito, `branch` probablemente apunta a un id de pregunta que no está en `self.questions` — el fallback `else idx + 1` solo se ejecuta cuando la rama es None o no se encuentra, así que un id mal escrito en `branch_rules` hace que el bucle repita la misma pregunta. Si `input()` falla de inmediato en un notebook, estás en una celda no interactiva — usa el enfoque de simulación del Paso 3 en su lugar.
+**🩹 Si sale mal :** Si el ejecutor se queda atrapado en un bucle infinito, `branch` probablemente apunta a un id de pregunta que no está en `self.questions`, el fallback `else idx + 1` solo se ejecuta cuando la rama es None o no se encuentra, así que un id mal escrito en `branch_rules` hace que el bucle repita la misma pregunta. Si `input()` falla de inmediato en un notebook, estás en una celda no interactiva, usa el enfoque de simulación del Paso 3 en su lugar.
 
 ### 2.2 Verifica el ejecutor de encuestas
 
@@ -249,7 +249,7 @@ class Survey:
 - El ejecutor usa un bucle `while idx < len(self.order)`, no un bucle `for` sobre `self.order`. ¿Por qué es necesario un bucle `while` cuando una instrucción de rama puede saltar el índice hacia adelante o atrás?
 - Si dos preguntas tuvieran el mismo texto de visualización pero ids diferentes, ¿cómo distinguiría la encuesta entre ellas? ¿Qué sugiere esto sobre por qué los ids de pregunta deben ser únicos?
 
-## Paso 3: Recolecta respuestas — en vivo y simuladas
+## Paso 3: Recolecta respuestas, en vivo y simuladas
 
 Las encuestas reales necesitan muchas respuestas, pero ejecutar `input()` 30 veces en una terminal no es práctico. Este paso construye ambos caminos: un bucle que llama a `survey.run()` para la recolección en vivo y una función `simulate_responses()` que genera respuestas aleatorias realistas para que el análisis no dependa de alguien sentado frente al teclado.
 
@@ -280,14 +280,14 @@ responses = simulate_responses()
 print(f"Collected {len(responses)} simulated responses")
 ```
 
-**👟 Pista inicial :** `collect_responses` es el camino en vivo — llámala con una `Survey` y un conteo y ejecuta la encuesta ese número de veces, cada una produciendo un `SurveyResponse`. `simulate_responses` es el camino automatizado — usa `random` para generar 30 respuestas plausibles con las mismas claves que producirían las preguntas de tu encuesta. Las claves deben coincidir exactamente con tus ids de pregunta, o el paso de pandas de abajo no encontrará las columnas correctas.
+**👟 Pista inicial :** `collect_responses` es el camino en vivo, llámala con una `Survey` y un conteo y ejecuta la encuesta ese número de veces, cada una produciendo un `SurveyResponse`. `simulate_responses` es el camino automatizado, usa `random` para generar 30 respuestas plausibles con las mismas claves que producirían las preguntas de tu encuesta. Las claves deben coincidir exactamente con tus ids de pregunta, o el paso de pandas de abajo no encontrará las columnas correctas.
 
 **🎯 Resultado esperado :**
 ```
 Collected 30 simulated responses
 ```
 
-**🩹 Si sale mal :** Si `random.choice([1, 2, 3, 4])` devuelve un int de numpy que rompe el código aguas abajo, los valores se almacenan como cadenas (`str(...)`) — eso es deliberado. Si ves un `KeyError` al construir el DataFrame más tarde, a una respuesta simulada le falta una clave que producen las preguntas de tu encuesta — comprueba que las claves del dict `simulate_responses` coincidan con tus ids de pregunta.
+**🩹 Si sale mal :** Si `random.choice([1, 2, 3, 4])` devuelve un int de numpy que rompe el código aguas abajo, los valores se almacenan como cadenas (`str(...)`), eso es deliberado. Si ves un `KeyError` al construir el DataFrame más tarde, a una respuesta simulada le falta una clave que producen las preguntas de tu encuesta, comprueba que las claves del dict `simulate_responses` coincidan con tus ids de pregunta.
 
 ### 3.3 Verifica la recolección de respuestas
 
@@ -299,12 +299,12 @@ Collected 30 simulated responses
 
 **🤔 Pregunta(s) socrática(s)**
 
-- Las respuestas se almacenan como cadenas (`"2"`, `"4"`) aunque representan números. ¿Por qué eso coincide con la realidad — qué devuelve `input()`, y cómo almacenarlo crudo preserva información?
+- Las respuestas se almacenan como cadenas (`"2"`, `"4"`) aunque representan números. ¿Por qué eso coincide con la realidad, qué devuelve `input()`, y cómo almacenarlo crudo preserva información?
 - `simulate_responses` usa `random.choice` para todo. ¿Cómo sería la distribución si usaras `random.randint(1, 4)` en lugar de `random.choice([1, 2, 3, 4])`? ¿Cómo cambiaría eso el análisis?
 
 ## Paso 4: Analiza los resultados con pandas
 
-Los datos están recolectados — ahora necesitan convertirse en percepción. Este paso convierte la lista de respuestas a un DataFrame, mapea las respuestas numéricas crudas a etiquetas legibles y calcula conteos de frecuencia y promedios que responden preguntas como "¿con qué frecuencia hace ejercicio la gente?" y "¿qué tan satisfecha está, en promedio?"
+Los datos están recolectados, ahora necesitan convertirse en percepción. Este paso convierte la lista de respuestas a un DataFrame, mapea las respuestas numéricas crudas a etiquetas legibles y calcula conteos de frecuencia y promedios que responden preguntas como "¿con qué frecuencia hace ejercicio la gente?" y "¿qué tan satisfecha está, en promedio?"
 
 ### 4.1 Convierte a un DataFrame y calcula estadísticas
 
@@ -323,7 +323,7 @@ print(exercise_counts)
 print(f"\nAverage Satisfaction: {df['satisfaction'].astype(int).mean():.2f}")
 ```
 
-**👟 Pista inicial :** `pd.DataFrame(responses)` convierte una lista de dicts en filas y columnas automáticamente. `.map(freq_map)` convierte el `"1"` crudo a la cadena legible `"Daily"` — este es el paso clásico de búsqueda/recodificación en el análisis de encuestas. `value_counts()` cuenta con qué frecuencia aparece cada valor, y `df[...].astype(int).mean()` calcula el promedio numérico convirtiendo la columna de cadenas a enteros primero.
+**👟 Pista inicial :** `pd.DataFrame(responses)` convierte una lista de dicts en filas y columnas automáticamente. `.map(freq_map)` convierte el `"1"` crudo a la cadena legible `"Daily"`, este es el paso clásico de búsqueda/recodificación en el análisis de encuestas. `value_counts()` cuenta con qué frecuencia aparece cada valor, y `df[...].astype(int).mean()` calcula el promedio numérico convirtiendo la columna de cadenas a enteros primero.
 
 **🎯 Resultado esperado :**
 ```
@@ -337,7 +337,7 @@ Name: exercise_label, dtype: int64
 Average Satisfaction: <number between 1.0 and 5.0>
 ```
 
-**🩹 Si sale mal :** Un `KeyError: 'exercise_freq'` significa que `responses` no tiene esa columna — comprueba que las claves de `simulate_responses` coincidan con `exercise_freq`, `satisfaction`, etc. exactamente. Si `exercise_counts` está vacío, `value_counts()` solo encontró valores NaN — comprueba si `df["exercise_freq"]` es None o NaN en algunas filas. Si `.astype(int)` falla, un valor de respuesta no es una cadena de entero limpia — comprueba si hay espacios en blanco o caracteres extra.
+**🩹 Si sale mal :** Un `KeyError: 'exercise_freq'` significa que `responses` no tiene esa columna, comprueba que las claves de `simulate_responses` coincidan con `exercise_freq`, `satisfaction`, etc. exactamente. Si `exercise_counts` está vacío, `value_counts()` solo encontró valores NaN, comprueba si `df["exercise_freq"]` es None o NaN en algunas filas. Si `.astype(int)` falla, un valor de respuesta no es una cadena de entero limpia, comprueba si hay espacios en blanco o caracteres extra.
 
 ### 4.2 Construye una tabulación cruzada
 
@@ -349,24 +349,24 @@ print(cross_tab)
 
 **🎯 Resultado esperado :** Una tabla de 4 filas por 5 columnas donde cada celda es el conteo de encuestados con esa frecuencia de ejercicio y esa puntuación de satisfacción.
 
-**🩹 Si sale mal :** Si `pd.crosstab` devuelve un error sobre índices duplicados, puedes tener etiquetas de ejercicio duplicadas — poco probable con un `map` limpio, pero comprueba si hay errores tipográficos en `freq_map`. Si la tabla tiene celdas NaN, `pd.crosstab` maneja las combinaciones vacías como 0 por defecto — verifica que no estás mirando datos faltantes en lugar de un conteo de cero real.
+**🩹 Si sale mal :** Si `pd.crosstab` devuelve un error sobre índices duplicados, puedes tener etiquetas de ejercicio duplicadas, poco probable con un `map` limpio, pero comprueba si hay errores tipográficos en `freq_map`. Si la tabla tiene celdas NaN, `pd.crosstab` maneja las combinaciones vacías como 0 por defecto, verifica que no estás mirando datos faltantes en lugar de un conteo de cero real.
 
 ### 4.3 Verifica el análisis
 
 **✅ Lista de verificación**
 
 - ✅ `pd.DataFrame(responses)` crea un DataFrame con las mismas claves como columnas.
-- ✅ `exercise_counts` muestra una distribución de frecuencia en las cuatro etiquetas — ninguna etiqueta falta nunca cuando está representada en los datos.
+- ✅ `exercise_counts` muestra una distribución de frecuencia en las cuatro etiquetas, ninguna etiqueta falta nunca cuando está representada en los datos.
 - ✅ `pd.crosstab(df["exercise_label"], df["satisfaction"])` produce una tabla no trivial (filas > 1).
 
 **🤔 Pregunta(s) socrática(s)**
 
-- `value_counts()` descarta los valores faltantes por defecto, mientras que `crosstab` trata una combinación que no aparece como 0. ¿Cuándo importa esa distinción — puedes pensar en un caso donde *querrías* que una fila faltante permaneciera faltante en lugar de convertirse en 0?
-- Si cambiaras la escala de satisfacción de 1–5 a 1–10, ¿qué código se rompería? El `crosstab` mostrará automáticamente 10 columnas — ¿algún otro paso necesitaría cambios?
+- `value_counts()` descarta los valores faltantes por defecto, mientras que `crosstab` trata una combinación que no aparece como 0. ¿Cuándo importa esa distinción, puedes pensar en un caso donde *querrías* que una fila faltante permaneciera faltante en lugar de convertirse en 0?
+- Si cambiaras la escala de satisfacción de 1–5 a 1–10, ¿qué código se rompería? El `crosstab` mostrará automáticamente 10 columnas, ¿algún otro paso necesitaría cambios?
 
 ## Paso 5: Visualiza los resultados
 
-Los números en un DataFrame son precisos pero lentos de asimilar. Dos gráficos de barras — uno para la frecuencia de ejercicio, uno para la distribución de satisfacción — convierten los conteos en una imagen de un vistazo.
+Los números en un DataFrame son precisos pero lentos de asimilar. Dos gráficos de barras, uno para la frecuencia de ejercicio, uno para la distribución de satisfacción, convierten los conteos en una imagen de un vistazo.
 
 ### 5.1 Construye los gráficos
 
@@ -391,11 +391,11 @@ plt.savefig("survey_results.png", dpi=150)
 plt.show()
 ```
 
-**👟 Pista inicial :** `plt.subplots(1, 2, figsize=(12, 5))` crea una sola figura con dos ejes lado a lado. Cada `Series.plot(kind="bar", ax=axes[n])` dibuja en un subplot específico; los arreglos de color están ordenados para que la satisfacción baja sea roja y la alta sea verde — una elección visual intencional que coincide con las asociaciones intuitivas de "rojo = malo, verde = bueno". `color=colors_sat[:len(satisfaction_counts)]` reban reban la paleta hasta el número real de valores de calificación presentes, así que una encuesta donde nadie eligió 5 no muestra una barra vacía.
+**👟 Pista inicial :** `plt.subplots(1, 2, figsize=(12, 5))` crea una sola figura con dos ejes lado a lado. Cada `Series.plot(kind="bar", ax=axes[n])` dibuja en un subplot específico; los arreglos de color están ordenados para que la satisfacción baja sea roja y la alta sea verde, una elección visual intencional que coincide con las asociaciones intuitivas de "rojo = malo, verde = bueno". `color=colors_sat[:len(satisfaction_counts)]` reban reban la paleta hasta el número real de valores de calificación presentes, así que una encuesta donde nadie eligió 5 no muestra una barra vacía.
 
 **🎯 Resultado esperado :** Dos gráficos de barras en una figura: frecuencia de ejercicio a la izquierda (4 barras de colores), calificaciones de satisfacción a la derecha (hasta 5 barras de colores). La figura se guarda en `survey_results.png` en tu carpeta de proyecto y se muestra en pantalla.
 
-**🩹 Si sale mal :** Una figura en blanco (sin barras) significa que la Serie que estás trazando está vacía — comprueba que `exercise_counts` y `satisfaction_counts` tengan datos. Si el gráfico de satisfacción muestra solo 3 colores pero 5 calificaciones, `satisfaction_counts` tiene menos de 5 valores únicos — eso son datos, no un error, y la rebanada es lo que mantiene la paleta alineada. Si `plt.show()` no muestra nada en un entorno sin cabeza de pantalla, el `savefig` igual escribió el archivo — comprueba ese.
+**🩹 Si sale mal :** Una figura en blanco (sin barras) significa que la Serie que estás trazando está vacía, comprueba que `exercise_counts` y `satisfaction_counts` tengan datos. Si el gráfico de satisfacción muestra solo 3 colores pero 5 calificaciones, `satisfaction_counts` tiene menos de 5 valores únicos, eso son datos, no un error, y la rebanada es lo que mantiene la paleta alineada. Si `plt.show()` no muestra nada en un entorno sin cabeza de pantalla, el `savefig` igual escribió el archivo, comprueba ese.
 
 ### 5.2 Verifica la visualización
 
@@ -407,14 +407,14 @@ plt.show()
 
 **🤔 Pregunta(s) socrática(s)**
 
-- Los arreglos de color están codificados con cinco códigos hex. ¿Qué pasaría si ejecutaras la encuesta con una escala de 10 puntos — los colores seguirían mapeando de forma sensible, o necesitarías generarlos programáticamente?
+- Los arreglos de color están codificados con cinco códigos hex. ¿Qué pasaría si ejecutaras la encuesta con una escala de 10 puntos, los colores seguirían mapeando de forma sensible, o necesitarías generarlos programáticamente?
 - `plt.savefig("survey_results.png")` escribe en el directorio actual. ¿Qué se rompería si ejecutaras este script desde un directorio de trabajo diferente, y qué te da `Path(__file__).parent` en su lugar?
 
 ## ⚠️ Errores comunes
 
-- **Los ids de pregunta no coinciden con las claves de respuesta.** `Survey.run()` almacena las respuestas bajo los ids de pregunta que pasas a `add_question`, y `simulate_responses()` devuelve dicts con claves codificadas. Si el id en `add_question` es `"exercise_freq_x"` pero la simulación usa `"exercise_freq"`, tu DataFrame tendrá una columna faltante. Mantén los dos sincronizados — o mejor, impulsa las claves de simulación desde la propia encuesta.
+- **Los ids de pregunta no coinciden con las claves de respuesta.** `Survey.run()` almacena las respuestas bajo los ids de pregunta que pasas a `add_question`, y `simulate_responses()` devuelve dicts con claves codificadas. Si el id en `add_question` es `"exercise_freq_x"` pero la simulación usa `"exercise_freq"`, tu DataFrame tendrá una columna faltante. Mantén los dos sincronizados, o mejor, impulsa las claves de simulación desde la propia encuesta.
 - **Confusión entre cadena e int.** `input()` devuelve cadenas, así que comentarios como "`6` no está en el rango" son comparaciones de cadenas. `df["satisfaction"].astype(int).mean()` convierte antes de promediar; una cadena no numérica descarriada (como un espacio en blanco de una pregunta opcional) hace que `.astype(int)` se lance. Filtra o rellena NaN antes de convertir.
-- **El bucle de rama puede girar para siempre.** Si `branch_rules` mapea una respuesta a un id de pregunta que no está `in self.questions`, el `else idx + 1` no se dispara y el ejecutor vuelve a preguntar la misma pregunta. Los ids mal escritos son la causa clásica — mantén una única fuente de verdad para los ids de pregunta.
+- **El bucle de rama puede girar para siempre.** Si `branch_rules` mapea una respuesta a un id de pregunta que no está `in self.questions`, el `else idx + 1` no se dispara y el ejecutor vuelve a preguntar la misma pregunta. Los ids mal escritos son la causa clásica, mantén una única fuente de verdad para los ids de pregunta.
 - **La diferencia de `value_counts` que descarta faltantes vs `crosstab` que cuenta 0.** Un encuestado que salta una pregunta opcional desaparece de `value_counts()` pero aparece como un conteo de 0 en `crosstab` solo si la categoría existe en otro lugar. Sabe qué comportamiento necesita tu análisis antes de interpretar el gráfico.
 
 ## Lo que acabas de construir
@@ -428,11 +428,11 @@ Una plataforma de encuestas completa: clases de pregunta con seguridad de tipos 
 ## Hacia dónde ir desde aquí
 
 - Añade un mapa de calor de tabulación cruzada: usa `pd.crosstab` + `matplotlib.imshow` (o el `heatmap` de Seaborn) para visualizar la frecuencia de ejercicio vs. la satisfacción como una cuadrícula de colores en lugar de una tabla de números.
-- Añade filtrado de respuestas: escribe una función que devuelva solo los encuestados que eligieron una respuesta específica (p. ej., todos los que hacen ejercicio a diario) y calcula su satisfacción promedio — el filtro revela la percepción de subgrupo que el agregado pierde.
+- Añade filtrado de respuestas: escribe una función que devuelva solo los encuestados que eligieron una respuesta específica (p. ej., todos los que hacen ejercicio a diario) y calcula su satisfacción promedio, el filtro revela la percepción de subgrupo que el agregado pierde.
 - Extiende la ramificación a múltiples niveles: cuando la respuesta A en la pregunta 1 salta a la pregunta X, y la respuesta B en la pregunta X salta a la pregunta Y, tu lógica de `next_question_id` y `order.index(branch)` necesita manejar cadenas de ramas, no solo saltos únicos.
 
 ## Comparte tu proyecto con la clase
 
-¿Construiste algo de lo que te sientas orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado — y su README tiene un recorrido completo, apto para principiantes, para añadir el tuyo mediante un **pull request**, incluso si nunca has usado git antes: hacer fork del repo, crear una rama, hacer commit de tus archivos y abrir el PR, un paso a la vez. No se asume experiencia previa con git.
+¿Construiste algo de lo que te sientas orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado, y su README tiene un recorrido completo, apto para principiantes, para añadir el tuyo mediante un **pull request**, incluso si nunca has usado git antes: hacer fork del repo, crear una rama, hacer commit de tus archivos y abrir el PR, un paso a la vez. No se asume experiencia previa con git.
 
 Bienvenido a escribir Python fuera del navegador. 🎓

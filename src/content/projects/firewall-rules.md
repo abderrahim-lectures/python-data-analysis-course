@@ -14,9 +14,9 @@ prerequisites: ["Python 101"]
 
 # 🔥 Build a Firewall Rule Manager
 
-Firewall rules are the guardrails of network security — a single misconfigured rule can open a port to the internet or block legitimate traffic silently. This project builds a CLI tool that manages a rule set as structured data: you write rules in Python, validate them for conflicts, simulate how real traffic would flow through the rules, and deploy changes as a diff against the current state with one-command rollback. The goal is a tool that makes firewall management auditable and reversible instead of scary and mysterious.
+Firewall rules are the guardrails of network security, a single misconfigured rule can open a port to the internet or block legitimate traffic silently. This project builds a CLI tool that manages a rule set as structured data: you write rules in Python, validate them for conflicts, simulate how real traffic would flow through the rules, and deploy changes as a diff against the current state with one-command rollback. The goal is a tool that makes firewall management auditable and reversible instead of scary and mysterious.
 
-This assumes Python 101 — nothing from Data Analysis is required. Optional and ungraded; see [Real-World Projects](/projects) for the full list.
+This assumes Python 101, nothing from Data Analysis is required. Optional and ungraded; see [Real-World Projects](/projects) for the full list.
 
 ## 🎯 What you'll do
 
@@ -29,7 +29,7 @@ This assumes Python 101 — nothing from Data Analysis is required. Optional and
 
 ## Where to run this
 
-**Locally with `uv`** is the primary path — this is a CLI tool that reads and writes rule files on disk and simulates traffic patterns.
+**Locally with `uv`** is the primary path, this is a CLI tool that reads and writes rule files on disk and simulates traffic patterns.
 
 **Google Colab, Kaggle Notebooks, and Binder** work for trying the tool. The notebook installs the same packages and uses the same code; it uses sample rules and simulated traffic instead of touching real firewall configurations.
 
@@ -78,7 +78,7 @@ touch fw/__init__.py fw/rules.py fw/validate.py fw/simulate.py fw/deploy.py fw/c
 
 ## Step 1: Model firewall rules as data
 
-Every firewall rule has the same shape: an action (allow or deny), a protocol (TCP, UDP, or ICMP), a port range, and an optional source IP or CIDR block. Modeling this as a Pydantic model gives you automatic validation — a rule with port `99999` or an action of `"maybe"` fails immediately instead of silently corrupting the rule set.
+Every firewall rule has the same shape: an action (allow or deny), a protocol (TCP, UDP, or ICMP), a port range, and an optional source IP or CIDR block. Modeling this as a Pydantic model gives you automatic validation, a rule with port `99999` or an action of `"maybe"` fails immediately instead of silently corrupting the rule set.
 
 ### 1.1 Define the rule schema
 
@@ -122,11 +122,11 @@ class FirewallRule(BaseModel):
         ip_network(self.source, strict=False)  # validates CIDR syntax
 ```
 
-Pydantic catches bad data at construction time — `port_start > port_end`, invalid CIDR blocks, or unrecognized protocols all raise `ValueError` with a clear message. The `source` field defaults to `0.0.0.0/0` (any IP), which is the common case for most rules.
+Pydantic catches bad data at construction time, `port_start > port_end`, invalid CIDR blocks, or unrecognized protocols all raise `ValueError` with a clear message. The `source` field defaults to `0.0.0.0/0` (any IP), which is the common case for most rules.
 
 **🎯 Expected output:** `FirewallRule(name="web", action="allow", protocol="tcp", port_start=80, port_end=443)` creates a valid rule. `FirewallRule(name="bad", action="allow", protocol="tcp", port_start=99999, port_end=99999)` raises a `ValidationError`.
 
-**🩹 If it's off:** If `ip_network` doesn't catch a bad CIDR, you may be importing from the wrong module — use `from ipaddress import ip_network`. If Pydantic doesn't run the port validator, make sure the `@field_validator` decorator is present.
+**🩹 If it's off:** If `ip_network` doesn't catch a bad CIDR, you may be importing from the wrong module, use `from ipaddress import ip_network`. If Pydantic doesn't run the port validator, make sure the `@field_validator` decorator is present.
 
 ### 1.2 Verify rule creation
 
@@ -144,7 +144,7 @@ The model round-trips cleanly: create a rule, access its fields, and serialize i
 
 **🎯 Expected output:** The assertion passes; `model_dump()` prints a dictionary with all fields.
 
-**🩹 If it's off:** If `model_dump()` doesn't exist, you're on an older Pydantic version — use `.dict()` instead.
+**🩹 If it's off:** If `model_dump()` doesn't exist, you're on an older Pydantic version, use `.dict()` instead.
 
 ### 1.3 Verify the rule model
 
@@ -161,7 +161,7 @@ The model round-trips cleanly: create a rule, access its fields, and serialize i
 
 ## Step 2: Detect rule conflicts
 
-A rule set is only useful if its rules don't contradict each other. Two rules that match the same traffic with different actions create ambiguity — most firewalls handle this with a "first match wins" order, but you still need to warn the user.
+A rule set is only useful if its rules don't contradict each other. Two rules that match the same traffic with different actions create ambiguity, most firewalls handle this with a "first match wins" order, but you still need to warn the user.
 
 ### 2.1 Write the conflict detector
 
@@ -208,7 +208,7 @@ def validate_ruleset(rules: list[FirewallRule]) -> dict:
 
 **🎯 Expected output:** A rule set with no overlaps returns `{"valid": True, "issues": [], "rule_count": N}`. A conflicting set returns `{"valid": False, "issues": [...], ...}` with human-readable conflict descriptions.
 
-**🩹 If it's off:** If the summary always shows `"valid": True`, the issues list isn't being populated — check `find_conflicts` returns the right tuples.
+**🩹 If it's off:** If the summary always shows `"valid": True`, the issues list isn't being populated, check `find_conflicts` returns the right tuples.
 
 ### 2.3 Verify conflict detection
 
@@ -220,7 +220,7 @@ def validate_ruleset(rules: list[FirewallRule]) -> dict:
 
 **🤔 Socratic Question(s)**
 
-- Most real firewalls use "first match wins" ordering. How would adding rule priority change the conflict detection logic — would overlapping rules still be conflicts, or just ordering concerns?
+- Most real firewalls use "first match wins" ordering. How would adding rule priority change the conflict detection logic, would overlapping rules still be conflicts, or just ordering concerns?
 - What happens if a rule set has a `deny all` rule in the middle? Would your validator flag the rules below it as redundant?
 
 ## Step 3: Simulate traffic against the rule set
@@ -254,11 +254,11 @@ def simulate_packet(
     return "deny", None  # default: deny if no rule matches
 ```
 
-Walking the rules in order and returning on the first match is how most firewalls actually work. If no rule matches, the default action is deny — this is the secure default. The `ipaddress` module handles CIDR matching correctly, including edge cases like `192.168.1.0/24`.
+Walking the rules in order and returning on the first match is how most firewalls actually work. If no rule matches, the default action is deny, this is the secure default. The `ipaddress` module handles CIDR matching correctly, including edge cases like `192.168.1.0/24`.
 
 **🎯 Expected output:** A rule set with `allow tcp 80-80` and `deny tcp 1-1023` produces `("allow", rule)` for a packet to port 80 from any source, and `("deny", rule)` for port 22 from any source.
 
-**🩹 If it's off:** If port 80 returns `deny`, the rules aren't ordered correctly — first match matters. If CIDR matching doesn't work, check that you're using `ip_network` with `strict=False`.
+**🩹 If it's off:** If port 80 returns `deny`, the rules aren't ordered correctly, first match matters. If CIDR matching doesn't work, check that you're using `ip_network` with `strict=False`.
 
 ### 3.2 Add batch simulation
 
@@ -292,7 +292,7 @@ def simulate_traffic(rules: list[FirewallRule], packets: list[dict]) -> list[dic
 **🤔 Socratic Question(s)**
 
 - If you reversed the rule order, which packets would change their outcome? Does this tell you something about why rule ordering matters in real firewalls?
-- What would it take to add logging — recording *which* rules were checked but didn't match — so you can debug a denied packet after the fact?
+- What would it take to add logging, recording *which* rules were checked but didn't match, so you can debug a denied packet after the fact?
 
 ## Step 4: Diff-based deployment with rollback
 
@@ -355,11 +355,11 @@ def deploy(new_rules: list[FirewallRule]) -> dict:
     }
 ```
 
-The deploy function snapshots first, then computes, then applies — this ordering ensures you always have a rollback point even if the new rules are malformed. The diff report tells the operator exactly what changed: which rules are new, which are gone, and which were modified.
+The deploy function snapshots first, then computes, then applies, this ordering ensures you always have a rollback point even if the new rules are malformed. The diff report tells the operator exactly what changed: which rules are new, which are gone, and which were modified.
 
 **🎯 Expected output:** Deploying rules that add one, remove one, and modify one produces a diff dict with `added: ["new_rule"]`, `removed: ["old_rule"]`, `changed: ["modified_rule"]`.
 
-**🩹 If it's off:** If the snapshot file isn't created, `HISTORY_DIR.mkdir()` isn't called before writing. If the diff shows everything as added, `old_rules` loaded as an empty list — check `rules.json` exists before deploy.
+**🩹 If it's off:** If the snapshot file isn't created, `HISTORY_DIR.mkdir()` isn't called before writing. If the diff shows everything as added, `old_rules` loaded as an empty list, check `rules.json` exists before deploy.
 
 ### 4.2 Add rollback
 
@@ -383,7 +383,7 @@ Rollback reads the most recent snapshot and writes it back to `rules.json`. The 
 
 **🎯 Expected output:** Calling `rollback()` after a deploy reverts `rules.json` to the previous version and returns the snapshot name.
 
-**🩹 If it's off:** If rollback returns "No snapshots found", the `rule_history/` directory is empty — deploy must run before rollback. If the restored rules are wrong, the snapshot naming isn't sorted chronologically.
+**🩹 If it's off:** If rollback returns "No snapshots found", the `rule_history/` directory is empty, deploy must run before rollback. If the restored rules are wrong, the snapshot naming isn't sorted chronologically.
 
 ### 4.3 Verify deployment
 
@@ -457,11 +457,11 @@ if __name__ == "__main__":
     cli()
 ```
 
-The CLI is thin — each command is a few lines that parse input, call the library function, and print the result. This separation means the library code (`rules.py`, `validate.py`, `simulate.py`, `deploy.py`) is testable without the CLI, and the CLI is trivial to extend with new commands.
+The CLI is thin, each command is a few lines that parse input, call the library function, and print the result. This separation means the library code (`rules.py`, `validate.py`, `simulate.py`, `deploy.py`) is testable without the CLI, and the CLI is trivial to extend with new commands.
 
 **🎯 Expected output:** `uv run python -m fw.cli validate rules.json` prints "Valid: N rules, no conflicts" for a clean rule set, or lists conflicts and exits with code 1.
 
-**🩹 If it's off:** If the CLI can't find `click`, check that `click` is in `pyproject.toml`. If `validate` always shows valid, the rules aren't being loaded from the file — check the file read path.
+**🩹 If it's off:** If the CLI can't find `click`, check that `click` is in `pyproject.toml`. If `validate` always shows valid, the rules aren't being loaded from the file, check the file read path.
 
 ### 5.2 End-to-end smoke test
 
@@ -521,13 +521,13 @@ This runs the full pipeline: validate, simulate, deploy. Each piece was tested i
 
 - **Forgetting that rule order matters.** The simulator walks rules top-to-bottom and returns on first match. A `deny all` rule above an `allow http` rule blocks HTTP traffic. Always put specific allow rules before broad deny rules.
 - **Port ranges that silently wrap.** A rule with `port_start=80` and `port_end=80` is correct; `port_start=443` and `port_end=80` should fail validation but won't if the range check is missing. Always validate `port_start <= port_end`.
-- **Not snapshotting before deploy.** If you apply new rules without saving the old ones first, there's no rollback point. The deploy function always snapshots first — don't skip that step.
+- **Not snapshotting before deploy.** If you apply new rules without saving the old ones first, there's no rollback point. The deploy function always snapshots first, don't skip that step.
 - **CIDR matching without `strict=False`.** `ip_network("192.168.1.1/24")` raises a `ValueError` because the host bits are set. Using `strict=False` silently masks the host bits, which is the correct behavior for firewall source matching.
 - **Treating validation as deployment.** A rule set that passes validation can still cause problems in production (wrong order, missing defaults). Validation catches conflicts; simulation catches logical errors. Run both before deploying.
 
 ## What you just built
 
-A firewall rule management tool that models rules as validated Python objects, detects conflicts before they reach production, simulates real traffic against the rule set, and deploys changes with a snapshot-and-diff workflow that makes every change auditable and reversible. The architecture — model, validate, simulate, deploy — is the same pattern used in infrastructure-as-code tools like Terraform and Pulumi.
+A firewall rule management tool that models rules as validated Python objects, detects conflicts before they reach production, simulates real traffic against the rule set, and deploys changes with a snapshot-and-diff workflow that makes every change auditable and reversible. The architecture, model, validate, simulate, deploy, is the same pattern used in infrastructure-as-code tools like Terraform and Pulumi.
 
 :::tip[Run a fuller version without any local setup]
 [`examples/firewall-rules/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/firewall-rules) in the course repo has a richer version with more rule types, a traffic CSV for batch simulation, and sample rule files. Clone it, or open the whole repo in a [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), and run it from there.
@@ -541,6 +541,6 @@ A firewall rule management tool that models rules as validated Python objects, d
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

@@ -20,7 +20,7 @@ learningObjectives:
 
 # Anomaly Detector
 
-Outliers hide in every dataset — a sensor spike, a fraudulent transaction, a measurement error. Finding them matters because they can distort analysis or reveal something important. This project teaches you two classic statistical techniques for flagging anomalies (z-score and IQR) and shows you how to visualize the results so the outliers stand out on charts.
+Outliers hide in every dataset, a sensor spike, a fraudulent transaction, a measurement error. Finding them matters because they can distort analysis or reveal something important. This project teaches you two classic statistical techniques for flagging anomalies (z-score and IQR) and shows you how to visualize the results so the outliers stand out on charts.
 
 This is optional and ungraded. See [Real-World Projects](/projects) for the full list.
 
@@ -36,17 +36,17 @@ This is optional and ungraded. See [Real-World Projects](/projects) for the full
 ## Where to run this
 
 - **Locally with `uv` (recommended).** This project uses `pandas`, `numpy`, and `matplotlib`, so a local install is the smoothest path. The Setup section below walks through it.
-- **JupyterLite playground.** Paste the code cells directly into a notebook — works well for exploring the analysis steps, though the final reporting function is designed for a real terminal.
+- **JupyterLite playground.** Paste the code cells directly into a notebook, works well for exploring the analysis steps, though the final reporting function is designed for a real terminal.
 - **Google Colab.** Open a new notebook and paste the cells. Same caveat as JupyterLite: the CLI functions work best in a real terminal.
 
-- **Run it in your browser.** An interactive companion notebook is ready — open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
+- **Run it in your browser.** An interactive companion notebook is ready, open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/anomaly-detector/notebook.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/anomaly-detector/notebook.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fanomaly-detector%2Fnotebook.ipynb)
 
 ## Setup
 
-`uv` is a single tool that replaces the usual "install Python, then pip, then a virtual environment" chain — it can install and manage Python versions alongside your project's dependencies.
+`uv` is a single tool that replaces the usual "install Python, then pip, then a virtual environment" chain, it can install and manage Python versions alongside your project's dependencies.
 
 **macOS / Linux** (terminal):
 
@@ -131,7 +131,7 @@ First 5 rows:
  2026-06-05       214.90       856
 ```
 
-**If it's off:** If the mean is much higher than 200, the injected spikes are pulling it up — that's expected. If you get an `ImportError`, make sure `numpy` is installed: `uv add numpy`.
+**If it's off:** If the mean is much higher than 200, the injected spikes are pulling it up, that's expected. If you get an `ImportError`, make sure `numpy` is installed: `uv add numpy`.
 
 ### 1.2 Inspect the distribution
 
@@ -168,7 +168,7 @@ Values at those positions:
   Day 81: 547.83 ms
 ```
 
-**If it's off:** If any injected value is below 400, the random range isn't wide enough — re-run the cell. The `np.random.seed(42)` ensures reproducibility, so results should be consistent.
+**If it's off:** If any injected value is below 400, the random range isn't wide enough, re-run the cell. The `np.random.seed(42)` ensures reproducibility, so results should be consistent.
 
 ### 1.3 Verify the setup
 
@@ -185,7 +185,7 @@ Values at those positions:
 
 ## Step 2: Z-score anomaly detection
 
-The z-score tells you how many standard deviations a data point sits from the mean. A z-score above 3 (or below -3) is a common threshold for flagging outliers — it means the point is extremely unlikely under a normal distribution.
+The z-score tells you how many standard deviations a data point sits from the mean. A z-score above 3 (or below -3) is a common threshold for flagging outliers, it means the point is extremely unlikely under a normal distribution.
 
 ### 2.1 Compute z-scores
 
@@ -227,7 +227,7 @@ Highest z-scores:
  2026-07-28       412.44  4.945678
 ```
 
-**If it's off:** If all z-scores are close to zero, the standard deviation is very large relative to the mean — check that `response_ms` isn't stored as integers losing precision. If you get a `ZeroDivisionError`, the standard deviation is zero, meaning all values are identical — generate fresh data.
+**If it's off:** If all z-scores are close to zero, the standard deviation is very large relative to the mean, check that `response_ms` isn't stored as integers losing precision. If you get a `ZeroDivisionError`, the standard deviation is zero, meaning all values are identical, generate fresh data.
 
 ### 2.2 Flag anomalies with a configurable threshold
 
@@ -263,7 +263,7 @@ Anomalies detected (z-score, threshold=3.0): 5
  2026-08-21       547.83  8.274567
 ```
 
-**If it's off:** If you detect more than 5 anomalies, the threshold is too low — increase it to 3.0 or 3.5. If you detect fewer than 5, the threshold is too high. Play with the `threshold` parameter and watch the count change.
+**If it's off:** If you detect more than 5 anomalies, the threshold is too low, increase it to 3.0 or 3.5. If you detect fewer than 5, the threshold is too high. Play with the `threshold` parameter and watch the count change.
 
 ### 2.3 Try different thresholds
 
@@ -290,7 +290,7 @@ for t in [2.0, 2.5, 3.0, 3.5, 4.0]:
 **Checklist**
 
 - ✅ `compute_zscores` returns a Series with mean near 0 and std near 1.
-- ✅ At threshold 3.0, exactly 5 anomalies are flagged — matching the injected spikes.
+- ✅ At threshold 3.0, exactly 5 anomalies are flagged, matching the injected spikes.
 - ✅ Lower thresholds catch more anomalies (more sensitive).
 - ✅ Higher thresholds catch fewer anomalies (more conservative).
 
@@ -333,7 +333,7 @@ Lower bound: 161.26 ms
 Upper bound: 238.20 ms
 ```
 
-**If it's off:** If the IQR is very small (under 5), your data might be too uniform — inject larger spikes. If the bounds seem too wide, the multiplier is set too high.
+**If it's off:** If the IQR is very small (under 5), your data might be too uniform, inject larger spikes. If the bounds seem too wide, the multiplier is set too high.
 
 ### 3.2 Flag anomalies using IQR
 
@@ -369,7 +369,7 @@ Anomalies detected (IQR, multiplier=1.5): 5
  2026-08-21       547.83
 ```
 
-**If it's off:** If the IQR method catches a different number of anomalies than the z-score method, that's normal — they use different statistical principles. If it catches zero, the multiplier is too high; try 1.0 instead of 1.5.
+**If it's off:** If the IQR method catches a different number of anomalies than the z-score method, that's normal, they use different statistical principles. If it catches zero, the multiplier is too high; try 1.0 instead of 1.5.
 
 ### 3.3 Compare z-score vs IQR results
 
@@ -405,7 +405,7 @@ Rows flagged by at least one method:
  2026-08-21       547.83  8.274567            True         True
 ```
 
-**If it's off:** If the two methods disagree on some rows, that's actually informative — those borderline points are worth investigating manually. In this synthetic dataset with obvious spikes, both methods agree perfectly.
+**If it's off:** If the two methods disagree on some rows, that's actually informative, those borderline points are worth investigating manually. In this synthetic dataset with obvious spikes, both methods agree perfectly.
 
 ### 3.4 Verify IQR detection
 
@@ -457,7 +457,7 @@ plot_scatter_with_anomalies(df)
 
 **Expected output:** A scatter plot showing a cloud of blue dots clustered around 200 ms, with 5 red X markers clearly separated above 400 ms. The dashed green line shows the mean, and the dotted orange line shows the upper IQR bound. The chart is saved to `scatter_anomalies.png`.
 
-**If it's off:** If all dots are the same color, the boolean column `zscore_anomaly` might not exist yet — run Step 2.2 first. If dates overlap and become unreadable, increase the figure width with `figsize=(14, 5)`.
+**If it's off:** If all dots are the same color, the boolean column `zscore_anomaly` might not exist yet, run Step 2.2 first. If dates overlap and become unreadable, increase the figure width with `figsize=(14, 5)`.
 
 ### 4.2 Histogram with anomaly regions
 
@@ -488,7 +488,7 @@ plot_histogram_with_thresholds(df)
 
 **Expected output:** A histogram with most values clustered between 160 and 240 ms. Two dashed red vertical lines mark the IQR bounds, and faint red lines highlight each anomaly in the tail. The chart is saved to `histogram_anomalies.png`.
 
-**If it's off:** If the histogram bars are extremely thin, increase the number of bins. If no red vertical lines appear in the tail, the anomalies are outside the visible x-range — add `ax.set_xlim(left=100)` to extend the axis.
+**If it's off:** If the histogram bars are extremely thin, increase the number of bins. If no red vertical lines appear in the tail, the anomalies are outside the visible x-range, add `ax.set_xlim(left=100)` to extend the axis.
 
 ### 4.3 Box plot
 
@@ -517,7 +517,7 @@ plot_boxplot(df)
 
 **Expected output:** A box plot with the box centered around 200 ms, whiskers extending to the IQR fences, and red dots beyond the upper whisker marking each anomaly. The chart is saved to `boxplot_anomalies.png`.
 
-**If it's off:** If the box plot shows no outliers (red dots), the data might need refreshing — re-run the data generation step. The box plot uses matplotlib's default 1.5*IQR rule, which should match your IQR detection.
+**If it's off:** If the box plot shows no outliers (red dots), the data might need refreshing, re-run the data generation step. The box plot uses matplotlib's default 1.5*IQR rule, which should match your IQR detection.
 
 ### 4.4 Verify visualizations
 
@@ -599,7 +599,7 @@ generate_report(df, method="zscore")
 ============================================================
 ```
 
-**If it's off:** If you get a KeyError, the anomaly column hasn't been created yet — run Steps 2.2 or 3.2 first. If severity labels all say "MEDIUM", your normal mean is too close to the anomaly values — generate fresh data with larger spikes.
+**If it's off:** If you get a KeyError, the anomaly column hasn't been created yet, run Steps 2.2 or 3.2 first. If severity labels all say "MEDIUM", your normal mean is too close to the anomaly values, generate fresh data with larger spikes.
 
 ### 5.2 Run the report for both methods
 
@@ -654,7 +654,7 @@ Contents of anomalies_zscore.csv:
  2026-08-21       547.83        347.56 CRITICAL
 ```
 
-**If it's off:** If the CSV is empty, the boolean filter is excluding everything — check that `zscore_anomaly` is `True` for at least some rows. If `deviation_ms` looks wrong, the normal mean might be recalculated on the full dataset instead of just the non-anomaly rows.
+**If it's off:** If the CSV is empty, the boolean filter is excluding everything, check that `zscore_anomaly` is `True` for at least some rows. If `deviation_ms` looks wrong, the normal mean might be recalculated on the full dataset instead of just the non-anomaly rows.
 
 ### 5.4 Verify reporting
 
@@ -693,7 +693,7 @@ Contents of anomalies_zscore.csv:
 
 ## What you just built
 
-A reusable anomaly detection toolkit that applies two classic statistical methods — z-score and IQR — to flag outliers in numerical data. You computed z-scores against a global mean, derived IQR fences from quartile ranges, visualized anomalies on scatter plots, histograms, and box plots, and built an automated reporting system that classifies severity and exports results to CSV. These techniques transfer directly to real-world monitoring, fraud detection, quality control, and any domain where unusual values deserve attention.
+A reusable anomaly detection toolkit that applies two classic statistical methods, z-score and IQR, to flag outliers in numerical data. You computed z-scores against a global mean, derived IQR fences from quartile ranges, visualized anomalies on scatter plots, histograms, and box plots, and built an automated reporting system that classifies severity and exports results to CSV. These techniques transfer directly to real-world monitoring, fraud detection, quality control, and any domain where unusual values deserve attention.
 
 ## Where to go from here
 
@@ -705,6 +705,6 @@ A reusable anomaly detection toolkit that applies two classic statistical method
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

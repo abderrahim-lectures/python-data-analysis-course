@@ -14,9 +14,9 @@ prerequisites: ["Python 101"]
 
 # 🔥 Construis un Gestionnaire de Règles de Pare-feu
 
-Les règles de pare-feu sont les garde-fous de la sécurité réseau — une seule règle mal configurée peut ouvrir un port sur internet ou bloquer silencieusement du trafic légitime. Ce projet construit un outil CLI qui gère un ensemble de règles comme des données structurées : tu écris les règles en Python, tu les valides pour détecter les conflits, tu simules comment le trafic réel circulerait à travers les règles, et tu déploies les changements comme un diff contre l'état courant avec un retour arrière en une commande. L'objectif est un outil qui rend la gestion du pare-feu auditable et réversible au lieu d'effrayante et mystérieuse.
+Les règles de pare-feu sont les garde-fous de la sécurité réseau, une seule règle mal configurée peut ouvrir un port sur internet ou bloquer silencieusement du trafic légitime. Ce projet construit un outil CLI qui gère un ensemble de règles comme des données structurées : tu écris les règles en Python, tu les valides pour détecter les conflits, tu simules comment le trafic réel circulerait à travers les règles, et tu déploies les changements comme un diff contre l'état courant avec un retour arrière en une commande. L'objectif est un outil qui rend la gestion du pare-feu auditable et réversible au lieu d'effrayante et mystérieuse.
 
-Ceci suppose Python 101 — rien venant d'Analyse de données n'est requis. Facultatif et non noté ; consulte [Real-World Projects](/fr/projets) pour la liste complète.
+Ceci suppose Python 101, rien venant d'Analyse de données n'est requis. Facultatif et non noté ; consulte [Real-World Projects](/fr/projets) pour la liste complète.
 
 ## 🎯 Ce que tu vas faire
 
@@ -29,7 +29,7 @@ Ceci suppose Python 101 — rien venant d'Analyse de données n'est requis. Facu
 
 ## Où exécuter ceci
 
-**Localement avec `uv`** est le chemin principal — c'est un outil CLI qui lit et écrit des fichiers de règles sur disque et simule des schémas de trafic.
+**Localement avec `uv`** est le chemin principal, c'est un outil CLI qui lit et écrit des fichiers de règles sur disque et simule des schémas de trafic.
 
 **Google Colab, Kaggle Notebooks, et Binder** fonctionnent pour essayer l'outil. Le notebook installe les mêmes bibliothèques et utilise le même code ; il utilise des règles d'échantillon et un trafic simulé au lieu de toucher de vraies configurations de pare-feu.
 
@@ -78,7 +78,7 @@ touch fw/__init__.py fw/rules.py fw/validate.py fw/simulate.py fw/deploy.py fw/c
 
 ## Étape 1 : Modéliser les règles de pare-feu comme des données
 
-Chaque règle de pare-feu a la même forme : une action (allow ou deny), un protocole (TCP, UDP, ou ICMP), une plage de ports, et une source IP ou un bloc CIDR optionnel. Modéliser ceci comme un modèle Pydantic te donne une validation automatique — une règle avec le port `99999` ou une action `"maybe"` échoue immédiatement au lieu de corrompre silencieusement l'ensemble de règles.
+Chaque règle de pare-feu a la même forme : une action (allow ou deny), un protocole (TCP, UDP, ou ICMP), une plage de ports, et une source IP ou un bloc CIDR optionnel. Modéliser ceci comme un modèle Pydantic te donne une validation automatique, une règle avec le port `99999` ou une action `"maybe"` échoue immédiatement au lieu de corrompre silencieusement l'ensemble de règles.
 
 ### 1.1 Définis le schéma de règle
 
@@ -122,11 +122,11 @@ class FirewallRule(BaseModel):
         ip_network(self.source, strict=False)  # validates CIDR syntax
 ```
 
-Pydantic attrape les mauvaises données au moment de la construction — `port_start > port_end`, des blocs CIDR invalides, ou des protocoles non reconnus lèvent tous une `ValueError` avec un message clair. Le champ `source` a pour défaut `0.0.0.0/0` (n'importe quelle IP), ce qui est le cas courant pour la plupart des règles.
+Pydantic attrape les mauvaises données au moment de la construction, `port_start > port_end`, des blocs CIDR invalides, ou des protocoles non reconnus lèvent tous une `ValueError` avec un message clair. Le champ `source` a pour défaut `0.0.0.0/0` (n'importe quelle IP), ce qui est le cas courant pour la plupart des règles.
 
 **🎯 Résultat attendu :** `FirewallRule(name="web", action="allow", protocol="tcp", port_start=80, port_end=443)` crée une règle valide. `FirewallRule(name="bad", action="allow", protocol="tcp", port_start=99999, port_end=99999)` lève une `ValidationError`.
 
-**🩹 Si ça ne marche pas :** Si `ip_network` n'attrape pas un CIDR invalide, tu importes peut-être depuis le mauvais module — utilise `from ipaddress import ip_network`. Si Pydantic n'exécute pas le validateur de ports, assure-toi que le décorateur `@field_validator` est présent.
+**🩹 Si ça ne marche pas :** Si `ip_network` n'attrape pas un CIDR invalide, tu importes peut-être depuis le mauvais module, utilise `from ipaddress import ip_network`. Si Pydantic n'exécute pas le validateur de ports, assure-toi que le décorateur `@field_validator` est présent.
 
 ### 1.2 Vérifie la création de règle
 
@@ -144,7 +144,7 @@ Le modèle fait un aller-retour propre : crée une règle, accède à ses champs
 
 **🎯 Résultat attendu :** L'assertion passe ; `model_dump()` imprime un dictionnaire avec tous les champs.
 
-**🩹 Si ça ne marche pas :** Si `model_dump()` n'existe pas, tu es sur une version plus ancienne de Pydantic — utilise `.dict()` à la place.
+**🩹 Si ça ne marche pas :** Si `model_dump()` n'existe pas, tu es sur une version plus ancienne de Pydantic, utilise `.dict()` à la place.
 
 ### 1.3 Vérifie le modèle de règle
 
@@ -161,7 +161,7 @@ Le modèle fait un aller-retour propre : crée une règle, accède à ses champs
 
 ## Étape 2 : Détecter les conflits de règles
 
-Un ensemble de règles n'est utile que si ses règles ne se contredisent pas. Deux règles qui correspondent au même trafic avec des actions différentes créent de l'ambiguïté — la plupart des pare-feux gèrent cela avec un ordre « première correspondance gagne », mais tu dois quand même avertir l'utilisateur.
+Un ensemble de règles n'est utile que si ses règles ne se contredisent pas. Deux règles qui correspondent au même trafic avec des actions différentes créent de l'ambiguïté, la plupart des pare-feux gèrent cela avec un ordre « première correspondance gagne », mais tu dois quand même avertir l'utilisateur.
 
 ### 2.1 Écris le détecteur de conflits
 
@@ -208,7 +208,7 @@ def validate_ruleset(rules: list[FirewallRule]) -> dict:
 
 **🎯 Résultat attendu :** Un ensemble de règles sans chevauchement renvoie `{"valid": True, "issues": [], "rule_count": N}`. Un ensemble conflictuel renvoie `{"valid": False, "issues": [...], ...}` avec des descriptions de conflits lisibles par l'humain.
 
-**🩹 Si ça ne marche pas :** Si le résumé montre toujours `"valid": True`, la liste des problèmes n'est pas remplie — vérifie que `find_conflicts` renvoie les bons tuples.
+**🩹 Si ça ne marche pas :** Si le résumé montre toujours `"valid": True`, la liste des problèmes n'est pas remplie, vérifie que `find_conflicts` renvoie les bons tuples.
 
 ### 2.3 Vérifie la détection de conflits
 
@@ -220,7 +220,7 @@ def validate_ruleset(rules: list[FirewallRule]) -> dict:
 
 **🤔 Question(s) socratique(s)**
 
-- La plupart des pare-feux réels utilisent un ordre « première correspondance gagne ». Comment l'ajout d'une priorité de règle changerait la logique de détection de conflits — les règles qui se chevauchent seraient-elles toujours des conflits, ou juste des préoccupations de tri ?
+- La plupart des pare-feux réels utilisent un ordre « première correspondance gagne ». Comment l'ajout d'une priorité de règle changerait la logique de détection de conflits, les règles qui se chevauchent seraient-elles toujours des conflits, ou juste des préoccupations de tri ?
 - Que se passe-t-il si un ensemble de règles a une règle `deny all` au milieu ? Ton validateur signalerait-il les règles en dessous comme redondantes ?
 
 ## Étape 3 : Simuler le trafic contre l'ensemble de règles
@@ -254,11 +254,11 @@ def simulate_packet(
     return "deny", None  # default: deny if no rule matches
 ```
 
-Parcourir les règles dans l'ordre et renvoyer à la première correspondance est la façon dont la plupart des pare-feux fonctionnent réellement. Si aucune règle ne correspond, l'action par défaut est deny — c'est le défaut sûr. Le module `ipaddress` gère correctement la correspondance CIDR, y compris les cas limites comme `192.168.1.0/24`.
+Parcourir les règles dans l'ordre et renvoyer à la première correspondance est la façon dont la plupart des pare-feux fonctionnent réellement. Si aucune règle ne correspond, l'action par défaut est deny, c'est le défaut sûr. Le module `ipaddress` gère correctement la correspondance CIDR, y compris les cas limites comme `192.168.1.0/24`.
 
 **🎯 Résultat attendu :** Un ensemble de règles avec `allow tcp 80-80` et `deny tcp 1-1023` produit `("allow", rule)` pour un paquet vers le port 80 depuis n'importe quelle source, et `("deny", rule)` pour le port 22 depuis n'importe quelle source.
 
-**🩹 Si ça ne marche pas :** Si le port 80 renvoie `deny`, les règles ne sont pas ordonnées correctement — la première correspondance compte. Si la correspondance CIDR ne fonctionne pas, vérifie que tu utilises `ip_network` avec `strict=False`.
+**🩹 Si ça ne marche pas :** Si le port 80 renvoie `deny`, les règles ne sont pas ordonnées correctement, la première correspondance compte. Si la correspondance CIDR ne fonctionne pas, vérifie que tu utilises `ip_network` avec `strict=False`.
 
 ### 3.2 Ajoute la simulation par lots
 
@@ -292,7 +292,7 @@ def simulate_traffic(rules: list[FirewallRule], packets: list[dict]) -> list[dic
 **🤔 Question(s) socratique(s)**
 
 - Si tu inversais l'ordre des règles, quels paquets changeraient d'issue ? Cela te dit-il quelque chose sur pourquoi l'ordre des règles compte dans les pare-feux réels ?
-- Que faudrait-il pour ajouter de la journalisation — enregistrer *quelles* règles ont été vérifiées mais ne correspondaient pas — pour pouvoir déboguer un paquet refusé après coup ?
+- Que faudrait-il pour ajouter de la journalisation, enregistrer *quelles* règles ont été vérifiées mais ne correspondaient pas, pour pouvoir déboguer un paquet refusé après coup ?
 
 ## Étape 4 : Déploiement basé sur les différences avec retour arrière
 
@@ -355,11 +355,11 @@ def deploy(new_rules: list[FirewallRule]) -> dict:
     }
 ```
 
-La fonction de déploiement fait d'abord l'instantané, puis calcule, puis applique — cet ordre garantit que tu as toujours un point de retour arrière même si les nouvelles règles sont malformées. Le rapport de diff dit à l'opérateur exactement ce qui a changé : quelles règles sont nouvelles, lesquelles ont disparu, et lesquelles ont été modifiées.
+La fonction de déploiement fait d'abord l'instantané, puis calcule, puis applique, cet ordre garantit que tu as toujours un point de retour arrière même si les nouvelles règles sont malformées. Le rapport de diff dit à l'opérateur exactement ce qui a changé : quelles règles sont nouvelles, lesquelles ont disparu, et lesquelles ont été modifiées.
 
 **🎯 Résultat attendu :** Déployer des règles qui en ajoutent une, en retirent une et en modifient une produit un dict de diff avec `added: ["new_rule"]`, `removed: ["old_rule"]`, `changed: ["modified_rule"]`.
 
-**🩹 Si ça ne marche pas :** Si le fichier d'instantané n'est pas créé, `HISTORY_DIR.mkdir()` n'est pas appelé avant l'écriture. Si le diff montre tout comme ajouté, `old_rules` s'est chargé comme une liste vide — vérifie que `rules.json` existe avant le déploiement.
+**🩹 Si ça ne marche pas :** Si le fichier d'instantané n'est pas créé, `HISTORY_DIR.mkdir()` n'est pas appelé avant l'écriture. Si le diff montre tout comme ajouté, `old_rules` s'est chargé comme une liste vide, vérifie que `rules.json` existe avant le déploiement.
 
 ### 4.2 Ajoute le retour arrière
 
@@ -383,7 +383,7 @@ Le retour arrière lit l'instantané le plus récent et l'écrit de retour dans 
 
 **🎯 Résultat attendu :** Appeler `rollback()` après un déploiement rétablit `rules.json` à la version précédente et renvoie le nom de l'instantané.
 
-**🩹 Si ça ne marche pas :** Si le retour arrière renvoie « No snapshots found », le répertoire `rule_history/` est vide — le déploiement doit se dérouler avant le retour arrière. Si les règles restaurées sont fausses, le nommage des instantanés n'est pas trié chronologiquement.
+**🩹 Si ça ne marche pas :** Si le retour arrière renvoie « No snapshots found », le répertoire `rule_history/` est vide, le déploiement doit se dérouler avant le retour arrière. Si les règles restaurées sont fausses, le nommage des instantanés n'est pas trié chronologiquement.
 
 ### 4.3 Vérifie le déploiement
 
@@ -457,11 +457,11 @@ if __name__ == "__main__":
     cli()
 ```
 
-La CLI est fine — chaque commande tient en quelques lignes qui analysent l'entrée, appellent la fonction de bibliothèque, et impriment le résultat. Cette séparation signifie que le code de bibliothèque (`rules.py`, `validate.py`, `simulate.py`, `deploy.py`) est testable sans la CLI, et la CLI est triviale à étendre avec de nouvelles commandes.
+La CLI est fine, chaque commande tient en quelques lignes qui analysent l'entrée, appellent la fonction de bibliothèque, et impriment le résultat. Cette séparation signifie que le code de bibliothèque (`rules.py`, `validate.py`, `simulate.py`, `deploy.py`) est testable sans la CLI, et la CLI est triviale à étendre avec de nouvelles commandes.
 
 **🎯 Résultat attendu :** `uv run python -m fw.cli validate rules.json` imprime « Valid: N rules, no conflicts » pour un ensemble de règles propre, ou liste les conflits et sort avec le code 1.
 
-**🩹 Si ça ne marche pas :** Si la CLI ne trouve pas `click`, vérifie que `click` est dans `pyproject.toml`. Si `validate` montre toujours valide, les règles ne sont pas chargées depuis le fichier — vérifie le chemin de lecture du fichier.
+**🩹 Si ça ne marche pas :** Si la CLI ne trouve pas `click`, vérifie que `click` est dans `pyproject.toml`. Si `validate` montre toujours valide, les règles ne sont pas chargées depuis le fichier, vérifie le chemin de lecture du fichier.
 
 ### 5.2 Test de fumée de bout en bout
 
@@ -521,13 +521,13 @@ Cela exécute le pipeline complet : valider, simuler, déployer. Chaque morceau 
 
 - **Oublier que l'ordre des règles compte.** Le simulateur parcourt les règles de haut en bas et renvoie à la première correspondance. Une règle `deny all` au-dessus d'une règle `allow http` bloque le trafic HTTP. Mets toujours les règles allow spécifiques avant les règles deny larges.
 - **Plages de ports qui s'enroulent silencieusement.** Une règle avec `port_start=80` et `port_end=80` est correcte ; `port_start=443` et `port_end=80` devrait échouer à la validation mais ne le fait pas si la vérification de plage manque. Valide toujours `port_start <= port_end`.
-- **Ne pas faire d'instantané avant le déploiement.** Si tu appliques de nouvelles règles sans enregistrer les anciennes d'abord, il n'y a aucun point de retour arrière. La fonction de déploiement fait toujours l'instantané d'abord — ne saute pas cette étape.
+- **Ne pas faire d'instantané avant le déploiement.** Si tu appliques de nouvelles règles sans enregistrer les anciennes d'abord, il n'y a aucun point de retour arrière. La fonction de déploiement fait toujours l'instantané d'abord, ne saute pas cette étape.
 - **Correspondance CIDR sans `strict=False`.** `ip_network("192.168.1.1/24")` lève une `ValueError` parce que les bits d'hôte sont définis. Utiliser `strict=False` masque silencieusement les bits d'hôte, ce qui est le comportement correct pour la correspondance de source de pare-feu.
 - **Traiter la validation comme un déploiement.** Un ensemble de règles qui passe la validation peut quand même causer des problèmes en production (mauvais ordre, défauts manquants). La validation attrape les conflits ; la simulation attrape les erreurs logiques. Exécute les deux avant de déployer.
 
 ## Ce que tu viens de construire
 
-Un outil de gestion de règles de pare-feu qui modélise les règles comme des objets Python validés, détecte les conflits avant qu'ils n'atteignent la production, simule le trafic réel contre l'ensemble de règles, et déploie les changements avec un flux basé sur instantané-et-diff qui rend chaque changement auditable et réversible. L'architecture — modèle, valider, simuler, déployer — est le même schéma que celui des outils d'infrastructure-as-code comme Terraform et Pulumi.
+Un outil de gestion de règles de pare-feu qui modélise les règles comme des objets Python validés, détecte les conflits avant qu'ils n'atteignent la production, simule le trafic réel contre l'ensemble de règles, et déploie les changements avec un flux basé sur instantané-et-diff qui rend chaque changement auditable et réversible. L'architecture, modèle, valider, simuler, déployer, est le même schéma que celui des outils d'infrastructure-as-code comme Terraform et Pulumi.
 
 :::tip[Exécute une version plus complète sans aucune configuration locale]
 [`examples/firewall-rules/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/firewall-rules) dans le dépôt du cours a une version plus riche avec plus de types de règles, un CSV de trafic pour la simulation par lots, et des fichiers de règles d'échantillon. Clone-le, ou ouvre tout le dépôt dans un [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), et exécute-le depuis là.
@@ -541,6 +541,6 @@ Un outil de gestion de règles de pare-feu qui modélise les règles comme des o
 
 ## Partage ton projet avec la classe
 
-Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres étudiants — et son README contient un parcours complet et accessible aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git auparavant : forker le dépôt, créer une branche, commiter tes fichiers et ouvrir la PR, une étape à la fois. Aucune expérience préalable de git n'est supposée.
+Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres étudiants, et son README contient un parcours complet et accessible aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git auparavant : forker le dépôt, créer une branche, commiter tes fichiers et ouvrir la PR, une étape à la fois. Aucune expérience préalable de git n'est supposée.
 
 Bienvenue dans l'écriture de Python en dehors du navigateur. 🎓

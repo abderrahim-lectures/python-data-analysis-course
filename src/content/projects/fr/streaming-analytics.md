@@ -18,9 +18,9 @@ prerequisites:
 
 # 🛠️ ⚡ Moteur d'Analytique de Streaming
 
-Les tableaux de bord qui affichent « utilisateurs actifs en ce moment » ne recalculent pas toute la base de données à chaque instant — ils consomment un flux sans fin d'événements et gardent une petite fenêtre constamment mise à jour de ce qui vient de se passer. Ce projet construit ce moteur en Python pur : un générateur qui émet un flux d'événements réaliste, une fenêtre glissante qui maintient les moyennes à jour, la détection de pics par rapport à une ligne de base glissante, une jointure qui corrèle les achats aux pages vues qui les ont précédés, et enfin un tampon borné pour qu'une rafale d'événements ralentisse le pipeline au lieu de faire exploser sa mémoire.
+Les tableaux de bord qui affichent « utilisateurs actifs en ce moment » ne recalculent pas toute la base de données à chaque instant, ils consomment un flux sans fin d'événements et gardent une petite fenêtre constamment mise à jour de ce qui vient de se passer. Ce projet construit ce moteur en Python pur : un générateur qui émet un flux d'événements réaliste, une fenêtre glissante qui maintient les moyennes à jour, la détection de pics par rapport à une ligne de base glissante, une jointure qui corrèle les achats aux pages vues qui les ont précédés, et enfin un tampon borné pour qu'une rafale d'événements ralentisse le pipeline au lieu de faire exploser sa mémoire.
 
-Cela suppose Python 101 et une certaine aisance avec les générateurs — aucun paquet externe ni rien d'Analyse de Données n'est requis. C'est optionnel et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
+Cela suppose Python 101 et une certaine aisance avec les générateurs, aucun paquet externe ni rien d'Analyse de Données n'est requis. C'est optionnel et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 
@@ -32,7 +32,7 @@ Cela suppose Python 101 et une certaine aisance avec les générateurs — aucun
 
 ## Où exécuter ceci
 
-**En local avec `uv`** est le chemin principal. Ce moteur est uniquement de la bibliothèque standard pure — `uv init` et tu es immédiatement opérationnel — et chaque étape est une fonction que tu peux appeler, inspecter et relancer depuis un terminal exactement comme écrit ci-dessous.
+**En local avec `uv`** est le chemin principal. Ce moteur est uniquement de la bibliothèque standard pure, `uv init` et tu es immédiatement opérationnel, et chaque étape est une fonction que tu peux appeler, inspecter et relancer depuis un terminal exactement comme écrit ci-dessous.
 
 **Google Colab, Kaggle Notebooks et Binder** exécutent chaque étape à l'identique, car il n'y a aucune dépendance externe à installer ni fichier à conserver entre les cellules. L'honnêteté impose de préciser : les cellules d'un notebook remplacent la *sortie terminal* de ce moteur par la sortie du notebook, donc ce que tu perds, c'est le ressenti « relance le flux et regarde-le changer ». Utilise les badges pour voir tout le pipeline en un clic, et passe au `uv` local une fois que tu veux pointer le générateur vers un vrai fichier ou une vraie socket.
 
@@ -58,11 +58,11 @@ Ces trois imports couvrent toute la surface de dépendances de ce projet : `dequ
 **✅ Liste de vérification**
 
 - ✅ `uv init streaming-analytics` a créé un dossier avec un `pyproject.toml`.
-- ✅ `uv run python -c "from collections import deque; import random, datetime"` affiche `ok` — zéro paquet ajouté.
+- ✅ `uv run python -c "from collections import deque; import random, datetime"` affiche `ok`, zéro paquet ajouté.
 
 ## Étape 1 : Construis un générateur de flux d'événements en direct
 
-Chaque moteur d'analytique commence au même endroit : des événements qui arrivent un par un, pour toujours. Les générateurs Python sont la manière honnête de modéliser cela — une fonction qui `yield` des événements paresseusement ressemble exactement à un flux en direct pour tout ce qui est en aval, sans avoir réellement besoin d'un serveur.
+Chaque moteur d'analytique commence au même endroit : des événements qui arrivent un par un, pour toujours. Les générateurs Python sont la manière honnête de modéliser cela, une fonction qui `yield` des événements paresseusement ressemble exactement à un flux en direct pour tout ce qui est en aval, sans avoir réellement besoin d'un serveur.
 
 ### 1.1 Émets des événements horodatés
 
@@ -96,7 +96,7 @@ for ev in event_stream(5):
     print(ev.ts.strftime("%H:%M:%S"), ev.kind, ev.value)
 ```
 
-La `@dataclass` te donne un `Event` lisible et immuable sans écrire de constructeur. Le générateur est l'idée porteuse : `event_stream` ne calcule rien tant qu'on ne l'*itère* pas, et chaque `yield` le suspend en pleine boucle — exactement la forme d'un flux qui continue de produire après que tu as consommé 50 événements. Les horodatages avancent de 1 à 3 secondes aléatoires par événement, pour que les fenêtres et jointures ultérieures aient un timing réaliste et irrégulier avec lequel travailler plutôt qu'un tic parfaitement régulier.
+La `@dataclass` te donne un `Event` lisible et immuable sans écrire de constructeur. Le générateur est l'idée porteuse : `event_stream` ne calcule rien tant qu'on ne l'*itère* pas, et chaque `yield` le suspend en pleine boucle, exactement la forme d'un flux qui continue de produire après que tu as consommé 50 événements. Les horodatages avancent de 1 à 3 secondes aléatoires par événement, pour que les fenêtres et jointures ultérieures aient un timing réaliste et irrégulier avec lequel travailler plutôt qu'un tic parfaitement régulier.
 
 **🎯 Résultat attendu :** Cinq lignes comme `09:00:00 click 3`, chacune avec un horodatage plus tard que le précédent et un des trois types d'événement.
 
@@ -112,12 +112,12 @@ La `@dataclass` te donne un `Event` lisible et immuable sans écrire de construc
 
 **🤔 Question(s) socratique(s)**
 
-- Quand tu appelles `event_stream(50)`, aucun événement n'existe encore — où la mémoire du code est-elle dépensée avant le premier appel `next()`, et pourquoi est-ce exactement ce qu'un consommateur réel de flux veut ?
+- Quand tu appelles `event_stream(50)`, aucun événement n'existe encore, où la mémoire du code est-elle dépensée avant le premier appel `next()`, et pourquoi est-ce exactement ce qu'un consommateur réel de flux veut ?
 - Chaque événement avance l'horloge de 1 à 3 secondes aléatoires. Qu'est-ce qui changerait dans les fenêtres de l'Étape 2 si `timedelta` était toujours exactement de 2 secondes ?
 
 ## Étape 2 : Ajoute une fenêtre de temps glissante
 
-Un flux que tu ne peux pas résumer n'est que du bruit. Cette étape construit une fenêtre glissante — « les 10 dernières secondes d'événements, gardées fraîches » — et émet une moyenne glissante chaque fois que la fenêtre avance, ce qui est la forme d'un chiffre d'« activité récente » en direct.
+Un flux que tu ne peux pas résumer n'est que du bruit. Cette étape construit une fenêtre glissante, « les 10 dernières secondes d'événements, gardées fraîches », et émet une moyenne glissante chaque fois que la fenêtre avance, ce qui est la forme d'un chiffre d'« activité récente » en direct.
 
 ### 2.1 Agrège les dernières `window_s` secondes
 
@@ -144,11 +144,11 @@ for ts, avg in windowed_average(event_stream(30), window_s=10, step_s=4):
     print(ts.strftime("%H:%M:%S"), "window avg:", avg)
 ```
 
-Deux choses rendent cela en O(1)-ish par événement au lieu d'un re-scan de l'historique : la `deque` — dont `.append` à droite et `.popleft` à gauche sont tous deux en temps constant — et la boucle `while` qui expulse les événements périmés en comparant à `window[0]`, le plus ancien survivant. Comme les événements arrivent par ordre d'horodatage, un seul contrôle sur l'extrémité gauche suffit à garder toute la fenêtre fraîche. La logique `boundary` est ce qui transforme une fenêtre continue en *sortie* périodique : elle ne yield que lorsque le dernier événement a dépassé la prochaine frontière d'étape, donc tu obtiens une moyenne lisible par étape au lieu d'une par événement.
+Deux choses rendent cela en O(1)-ish par événement au lieu d'un re-scan de l'historique : la `deque`, dont `.append` à droite et `.popleft` à gauche sont tous deux en temps constant, et la boucle `while` qui expulse les événements périmés en comparant à `window[0]`, le plus ancien survivant. Comme les événements arrivent par ordre d'horodatage, un seul contrôle sur l'extrémité gauche suffit à garder toute la fenêtre fraîche. La logique `boundary` est ce qui transforme une fenêtre continue en *sortie* périodique : elle ne yield que lorsque le dernier événement a dépassé la prochaine frontière d'étape, donc tu obtiens une moyenne lisible par étape au lieu d'une par événement.
 
 **🎯 Résultat attendu :** Quelques lignes imprimées, ex. `09:00:13 window avg: 6.67`, une par frontière d'étape, chacune couvrant environ les 10 dernières secondes simulées.
 
-**🩹 Si ça ne marche pas :** Si la moyenne de chaque ligne est énorme, c'est que le `while` d'expulsion manque, donc la fenêtre grandit sans fin. Si rien ne s'affiche, le flux que tu as passé a moins d'événements qu'une étape — passe un nombre `events` plus grand. Si les horodatages semblent se chevaucher bizarrement, c'est que `window_s`/`step_s` sont inversés, rendant la fenêtre plus longue que l'entrée.
+**🩹 Si ça ne marche pas :** Si la moyenne de chaque ligne est énorme, c'est que le `while` d'expulsion manque, donc la fenêtre grandit sans fin. Si rien ne s'affiche, le flux que tu as passé a moins d'événements qu'une étape, passe un nombre `events` plus grand. Si les horodatages semblent se chevaucher bizarrement, c'est que `window_s`/`step_s` sont inversés, rendant la fenêtre plus longue que l'entrée.
 
 ### 2.2 Vérifie la fenêtre
 
@@ -165,7 +165,7 @@ Deux choses rendent cela en O(1)-ish par événement au lieu d'un re-scan de l'h
 
 ## Étape 3 : Détecte des pics par rapport à une ligne de base glissante
 
-La détection d'anomalies sur un flux ne peut pas utiliser un seuil fixe — le trafic culmine naturellement à midi et meurt à 3h du matin. Cette étape signale les événements qui dépassent une *ligne de base glissante*, donc « trop haut » signifie « haut pour maintenant ».
+La détection d'anomalies sur un flux ne peut pas utiliser un seuil fixe, le trafic culmine naturellement à midi et meurt à 3h du matin. Cette étape signale les événements qui dépassent une *ligne de base glissante*, donc « trop haut » signifie « haut pour maintenant ».
 
 ### 3.1 Signale les événements au-dessus de la moyenne en direct
 
@@ -188,11 +188,11 @@ for ts, kind, value, baseline in detect_spikes(event_stream(200), window_s=15, m
     print(ts.strftime("%H:%M:%S"), f"{kind:>8} {value:>3} vs baseline {baseline}")
 ```
 
-La perspicacité est de comparer à *où se trouve le flux en ce moment*, pas à une moyenne globale. Avec `multiplier=2.5`, une `view` de 25 déclenche une alerte quand les 15 dernières secondes ont moyenné 10, mais la *même* valeur reste silencieuse si la ligne de base est déjà à 30 — car un événement normal pendant une période chargée est un pic pendant une période calme. Le garde-fou `baseline > 0` compte : une fenêtre qui contient par hasard uniquement des zéros ne doit pas transformer la comparaison en un pathologique `0 > 0` divise-par-n'importe-quoi.
+La perspicacité est de comparer à *où se trouve le flux en ce moment*, pas à une moyenne globale. Avec `multiplier=2.5`, une `view` de 25 déclenche une alerte quand les 15 dernières secondes ont moyenné 10, mais la *même* valeur reste silencieuse si la ligne de base est déjà à 30, car un événement normal pendant une période chargée est un pic pendant une période calme. Le garde-fou `baseline > 0` compte : une fenêtre qui contient par hasard uniquement des zéros ne doit pas transformer la comparaison en un pathologique `0 > 0` divise-par-n'importe-quoi.
 
-**🎯 Résultat attendu :** Moins de lignes de sortie que d'événements d'entrée (200 → environ une poignée), chacune montrant une valeur d'événement bien au-dessus de sa propre ligne de base glissante — jamais une inondation de chaque événement.
+**🎯 Résultat attendu :** Moins de lignes de sortie que d'événements d'entrée (200 → environ une poignée), chacune montrant une valeur d'événement bien au-dessus de sa propre ligne de base glissante, jamais une inondation de chaque événement.
 
-**🩹 Si ça ne marche pas :** Si *chaque* événement s'affiche, le multiplicateur est trop bas ou la fenêtre de ligne de base est si courte qu'elle ne contient jamais que le seul événement le plus fort. Si deux sorties consécutives partagent le même horodatage, c'est que le `while` d'expulsion manque, donc la ligne de base inclut les événements *passés* pour toujours. Si rien ne s'affiche du tout, `multiplier=2.5` est peu probable avec le seed que tu utilises — essaie 1.5 pour voir les détections se déclencher.
+**🩹 Si ça ne marche pas :** Si *chaque* événement s'affiche, le multiplicateur est trop bas ou la fenêtre de ligne de base est si courte qu'elle ne contient jamais que le seul événement le plus fort. Si deux sorties consécutives partagent le même horodatage, c'est que le `while` d'expulsion manque, donc la ligne de base inclut les événements *passés* pour toujours. Si rien ne s'affiche du tout, `multiplier=2.5` est peu probable avec le seed que tu utilises, essaie 1.5 pour voir les détections se déclencher.
 
 ### 3.2 Vérifie la détection de pics
 
@@ -204,12 +204,12 @@ La perspicacité est de comparer à *où se trouve le flux en ce moment*, pas à
 
 **🤔 Question(s) socratique(s)**
 
-- Une semaine lente et régulière signifie que la ligne de base glissante *est* le pic — une montée progressive ne dépasse jamais 2,5×. Quel test supplémentaire attraperait une tendance qui passe de 10 à 30 sur une heure ?
+- Une semaine lente et régulière signifie que la ligne de base glissante *est* le pic, une montée progressive ne dépasse jamais 2,5×. Quel test supplémentaire attraperait une tendance qui passe de 10 à 30 sur une heure ?
 - Le multiplicateur est constant. Comment se comporterait le détecteur sur une plateforme normalement calme mais avec une rafale annuelle légitime, et de quoi aurais-tu besoin pour garder l'alerte utile pendant cette rafale ?
 
 ## Étape 4 : Joins deux flux corrélés
 
-Une page vue solitaire est banale ; une page vue suivie rapidement d'un *achat* du même utilisateur est l'histoire. Les jointures corrèlent les événements qui référencent la même clé (ici, un utilisateur) dans un budget de temps — le parent calme d'un `JOIN` SQL, fait sur le temps plutôt que sur des tables.
+Une page vue solitaire est banale ; une page vue suivie rapidement d'un *achat* du même utilisateur est l'histoire. Les jointures corrèlent les événements qui référencent la même clé (ici, un utilisateur) dans un budget de temps, le parent calme d'un `JOIN` SQL, fait sur le temps plutôt que sur des tables.
 
 ### 4.1 Corrèle les achats aux vues antérieures
 
@@ -242,11 +242,11 @@ for user, age, label in correlated_join(user_stream(120)):
     print(f"{user} purchased {age}s after viewing -> {label}")
 ```
 
-La jointure est un dictionnaire indexé par la clé de jointure (`user`) plus un budget de temps : `last_view` ne mémorise que la vue la plus récente de chaque utilisateur, et un achat la consulte plutôt que de re-scanner tous les événements antérieurs. La comparaison `age <= lookback_s` est ce qui transforme une corrélation inconditionnelle en une corrélation bornée dans le temps — un achat cinq minutes après une vue n'est probablement pas le même parcours. Comme le tampon stocke un horodatage par utilisateur actif, sa mémoire est proportionnelle au nombre d'utilisateurs distincts, pas au nombre d'événements — la même raison pour laquelle les vrais moteurs gardent un état par clé et font expirer les clés obsolètes.
+La jointure est un dictionnaire indexé par la clé de jointure (`user`) plus un budget de temps : `last_view` ne mémorise que la vue la plus récente de chaque utilisateur, et un achat la consulte plutôt que de re-scanner tous les événements antérieurs. La comparaison `age <= lookback_s` est ce qui transforme une corrélation inconditionnelle en une corrélation bornée dans le temps, un achat cinq minutes après une vue n'est probablement pas le même parcours. Comme le tampon stocke un horodatage par utilisateur actif, sa mémoire est proportionnelle au nombre d'utilisateurs distincts, pas au nombre d'événements, la même raison pour laquelle les vrais moteurs gardent un état par clé et font expirer les clés obsolètes.
 
 **🎯 Résultat attendu :** Une poignée de conversions imprimées (environ 20 % des événements sont des achats, et seule une partie a une vue dans les 30 s), chacune comme `u3 purchased 12.3s after viewing -> converted`.
 
-**🩹 Si ça ne marche pas :** Si chaque achat se convertit, c'est que le contrôle `age <= lookback_s` n'est pas là ou que `lookback_s` est énorme. Si rien ne se convertit, les valeurs `kind` de `user_stream` ne correspondent pas aux chaînes que la jointure contrôle. Si l'*ancienne* vue d'un utilisateur continue de correspondre à des achats des minutes plus tard, `last_view[user] = ev["ts"]` ne s'écrase que sur les vues comme prévu — mais les clés obsolètes ne sont jamais expulsées, ce qui est la dérive à surveiller dans un flux long.
+**🩹 Si ça ne marche pas :** Si chaque achat se convertit, c'est que le contrôle `age <= lookback_s` n'est pas là ou que `lookback_s` est énorme. Si rien ne se convertit, les valeurs `kind` de `user_stream` ne correspondent pas aux chaînes que la jointure contrôle. Si l'*ancienne* vue d'un utilisateur continue de correspondre à des achats des minutes plus tard, `last_view[user] = ev["ts"]` ne s'écrase que sur les vues comme prévu, mais les clés obsolètes ne sont jamais expulsées, ce qui est la dérive à surveiller dans un flux long.
 
 ### 4.2 Vérifie la jointure
 
@@ -259,11 +259,11 @@ La jointure est un dictionnaire indexé par la clé de jointure (`user`) plus un
 **🤔 Question(s) socratique(s)**
 
 - La jointure ne met en tampon que la vue la *plus récente* par utilisateur. Qu'est-ce qui changerait dans les conversions si tu mettais plutôt en tampon la première vue de la journée de l'utilisateur ?
-- Les vraies jointures de flux doivent aussi *expirer* les clés que personne ne touche. Si `lookback_s` bornait la fenêtre de jointure, pourquoi le dict `last_view` n'est-il pas déjà borné — et que pourrait grandir sans borne dans une jointure de longue durée ?
+- Les vraies jointures de flux doivent aussi *expirer* les clés que personne ne touche. Si `lookback_s` bornait la fenêtre de jointure, pourquoi le dict `last_view` n'est-il pas déjà borné, et que pourrait grandir sans borne dans une jointure de longue durée ?
 
 ## Étape 5 : Borne le pipeline avec de la contre-pression
 
-Un vrai flux peut dépasser son consommateur — une rafale de mille événements empêche le processus de suivre, et la réponse naïve (tout garder) est la façon dont un pic d'une seconde devient un crash hors-mémoire. La contre-pression signifie que le consommateur *dit* au producteur de ralentir, rendu ici honnêtement comme un tampon borné qui lâche plutôt que de grandir.
+Un vrai flux peut dépasser son consommateur, une rafale de mille événements empêche le processus de suivre, et la réponse naïve (tout garder) est la façon dont un pic d'une seconde devient un crash hors-mémoire. La contre-pression signifie que le consommateur *dit* au producteur de ralentir, rendu ici honnêtement comme un tampon borné qui lâche plutôt que de grandir.
 
 ### 5.1 Ajoute un tampon borné et exécute tout
 
@@ -300,11 +300,11 @@ if __name__ == "__main__":
     main()
 ```
 
-`with_backpressure` rend le compromis visible : jusqu'à `max_pending` événements attendent en ligne, tout ce qui dépasse est *lâché* et rapporté via le hook `on_overflow` au lieu d'être perdu en silence ou thésaurisé en silence. Composer chaque étape sur `iter(buffered)` montre l'autre propriété qui vaut la peine d'être testée — chaque fonction en aval des Étapes 2 à 4 consomme n'importe quel itérable paresseusement, donc le pipeline reste une chaîne de petits lecteurs plutôt qu'une seule boucle monolithique. Le compteur `main()` donne un signal de bout en bout : fenêtres, pics et conversions tous calculés depuis le même flux borné, avec le dépassement visible comme un nombre plutôt qu'un crash.
+`with_backpressure` rend le compromis visible : jusqu'à `max_pending` événements attendent en ligne, tout ce qui dépasse est *lâché* et rapporté via le hook `on_overflow` au lieu d'être perdu en silence ou thésaurisé en silence. Composer chaque étape sur `iter(buffered)` montre l'autre propriété qui vaut la peine d'être testée, chaque fonction en aval des Étapes 2 à 4 consomme n'importe quel itérable paresseusement, donc le pipeline reste une chaîne de petits lecteurs plutôt qu'une seule boucle monolithique. Le compteur `main()` donne un signal de bout en bout : fenêtres, pics et conversions tous calculés depuis le même flux borné, avec le dépassement visible comme un nombre plutôt qu'un crash.
 
-**🎯 Résultat attendu :** Un bloc de synthèse unique, ex. `buffered: 300  dropped: 0  windows emitted: 54  spikes: 9  conversions: 4` — chaque étape a tourné, rien n'a levé.
+**🎯 Résultat attendu :** Un bloc de synthèse unique, ex. `buffered: 300  dropped: 0  windows emitted: 54  spikes: 9  conversions: 4`, chaque étape a tourné, rien n'a levé.
 
-**🩹 Si ça ne marche pas :** Si un `TypeError` sur un argument manquant apparaît, c'est qu'une étape reçoit le *résultat* d'une étape au lieu d'un itérable — passe `iter(buffered)` de façon cohérente. Si `dropped` est non nul sur un flux de 300 événements, `max_pending=8` est atteint en plein flux, ce qui est un comportement correct ; confirme que lâcher correspondait à ton intention avant de paniquer. Si `detect_spikes` a besoin d'un flux plus long, augmente le nombre d'`events`, pas le multiplicateur.
+**🩹 Si ça ne marche pas :** Si un `TypeError` sur un argument manquant apparaît, c'est qu'une étape reçoit le *résultat* d'une étape au lieu d'un itérable, passe `iter(buffered)` de façon cohérente. Si `dropped` est non nul sur un flux de 300 événements, `max_pending=8` est atteint en plein flux, ce qui est un comportement correct ; confirme que lâcher correspondait à ton intention avant de paniquer. Si `detect_spikes` a besoin d'un flux plus long, augmente le nombre d'`events`, pas le multiplicateur.
 
 ### 5.2 Vérifie de bout en bout
 
@@ -317,7 +317,7 @@ if __name__ == "__main__":
 **🤔 Question(s) socratique(s)**
 
 - `with_backpressure` lâche des événements plutôt que de bloquer le producteur. Que *perd* un consommateur en lâchant pendant une rafale, et qu'enregistrerais-tu à côté de chaque événement lâché pour rendre la perte auditable ?
-- Les quatre étapes lisent la même liste `buffered` en séquence, donc tout le pipeline doit finir l'Étape 1 avant que l'Étape 2 ne commence. Qu'est-ce qui changerait dans la latence si les étapes tournaient *en parallèle* — et quel problème de synchronisation devrais-tu soudainement résoudre ?
+- Les quatre étapes lisent la même liste `buffered` en séquence, donc tout le pipeline doit finir l'Étape 1 avant que l'Étape 2 ne commence. Qu'est-ce qui changerait dans la latence si les étapes tournaient *en parallèle*, et quel problème de synchronisation devrais-tu soudainement résoudre ?
 
 ## ⚠️ Pièges courants
 
@@ -329,7 +329,7 @@ if __name__ == "__main__":
 
 ## Ce que tu viens de construire
 
-Un moteur d'analytique de streaming fonctionnel : un générateur d'événements, un résumeur à fenêtre glissante, une détection de pics à ligne de base glissante, une jointure bornée dans le temps, et un tampon borné avec contre-pression visible — chaque étape une petite fonction composable en Python pur, sans paquet tiers. La compétence transférable est *traiter les données à mesure qu'elles arrivent plutôt qu'après leur stockage* : une fois que tu as construit une fenêtre `deque` et un générateur, les tableaux de bord en direct, les boucles de surveillance et les processeurs d'événements cessent d'être mystérieux et deviennent les mêmes cinq fonctions.
+Un moteur d'analytique de streaming fonctionnel : un générateur d'événements, un résumeur à fenêtre glissante, une détection de pics à ligne de base glissante, une jointure bornée dans le temps, et un tampon borné avec contre-pression visible, chaque étape une petite fonction composable en Python pur, sans paquet tiers. La compétence transférable est *traiter les données à mesure qu'elles arrivent plutôt qu'après leur stockage* : une fois que tu as construit une fenêtre `deque` et un générateur, les tableaux de bord en direct, les boucles de surveillance et les processeurs d'événements cessent d'être mystérieux et deviennent les mêmes cinq fonctions.
 
 :::tip[Exécute une version plus complète sans aucune configuration locale]
 [`examples/streaming-analytics/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/streaming-analytics) dans le dépôt du cours est une version plus complète du code ci-dessus, y compris un flux d'événements imprimable et une ventilation par étape. Clone-le, ou ouvre tout le dépôt dans un [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), et exécute-le depuis là.
@@ -337,13 +337,13 @@ Un moteur d'analytique de streaming fonctionnel : un générateur d'événements
 
 ## Où aller à partir d'ici
 
-- Pointe le générateur vers une source réelle — un fichier auquel on ajoute, ou une socket — pour que le « flux » soit de vrais événements en direct au lieu d'un hasard seedé.
+- Pointe le générateur vers une source réelle, un fichier auquel on ajoute, ou une socket, pour que le « flux » soit de vrais événements en direct au lieu d'un hasard seedé.
 - Ajoute la sessionisation à la jointure : regroupe les vues d'un utilisateur en une session logique, puis attribue un achat à la session dans laquelle il est tombé (c'est ainsi que les vrais outils d'attribution rapportent les « conversions par session »).
 - Remplace la moyenne recalculée de `windowed_average` par des variables `count`/`sum` incrémentales pour que l'émission soit à temps constant quelle que soit la longueur de la fenêtre.
 - Persiste fenêtres et pics dans un fichier JSONL avec un writer flush-par-lot, transformant le pipeline en direct en quelque chose qu'un tableau de bord peut lire.
 
 ## Partage ton projet avec la classe
 
-Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres élèves — et son README a un tutoriel complet et adapté aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git avant : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable avec git n'est supposée.
+Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres élèves, et son README a un tutoriel complet et adapté aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git avant : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable avec git n'est supposée.
 
 Bienvenue dans l'écriture de Python en dehors du navigateur. 🎓

@@ -44,7 +44,7 @@ quiz:
 ---
 ¿Por qué empezar con los datos?
 
-Todo proyecto de aprendizaje de máquina comienza con datos. Para un modelo de lenguaje basado en texto, esos datos son un **corpus** — una colección de texto de la que el modelo aprenderá patrones. Nuestro corpus vive en `slm-corpus.csv`, un pequeño archivo CSV que viene con el curso en `static/datasets/`.
+Todo proyecto de aprendizaje de máquina comienza con datos. Para un modelo de lenguaje basado en texto, esos datos son un **corpus**, una colección de texto de la que el modelo aprenderá patrones. Nuestro corpus vive en `slm-corpus.csv`, un pequeño archivo CSV que viene con el curso en `static/datasets/`.
 
 Antes de poder tokenizar, contar o generar nada, necesitas cargar este archivo en Python. Esta lección cubre dos enfoques: `csv.reader` para el acceso crudo y `csv.DictReader` para el acceso consciente del encabezado.
 
@@ -63,7 +63,7 @@ with open("slm-corpus.csv", newline="") as f:
     print(header)  # e.g. ['id', 'text']
 ```
 
-El argumento `newline=""` es requerido por la documentación del módulo `csv` — sin él, puedes obtener filas en blanco en Windows o una salida con doble espaciado.
+El argumento `newline=""` es requerido por la documentación del módulo `csv`, sin él, puedes obtener filas en blanco en Windows o una salida con doble espaciado.
 
 ### Leer con DictReader
 
@@ -78,7 +78,7 @@ with open("slm-corpus.csv", newline="") as f:
         print(row["text"])  # access by column name, not index
 ```
 
-La primera llamada a `next(reader)` es automática — `DictReader` consume la fila de encabezado por sí mismo.
+La primera llamada a `next(reader)` es automática, `DictReader` consume la fila de encabezado por sí mismo.
 
 ### Extraer el texto completo
 
@@ -116,7 +116,7 @@ print(f"First row: {rows[0]}")
 print(f"Last row:  {rows[-1]}")
 ```
 
-Si el archivo es grande, evita `list(reader)` — carga todo en memoria. En su lugar, itera y procesa fila por fila.
+Si el archivo es grande, evita `list(reader)`, carga todo en memoria. En su lugar, itera y procesa fila por fila.
 
 ## Inténtalo
 
@@ -148,7 +148,7 @@ print(f"Sample: {rows[0]['text'][:200]}")
 
 ## Reto de práctica
 
-Escribe una función `load_corpus(path)` que tome la ruta de un archivo CSV y devuelva una lista de cadenas — una por la columna `text` de cada fila. Maneja el caso de que el archivo no exista imprimiendo un mensaje de error y devolviendo una lista vacía.
+Escribe una función `load_corpus(path)` que tome la ruta de un archivo CSV y devuelva una lista de cadenas, una por la columna `text` de cada fila. Maneja el caso de que el archivo no exista imprimiendo un mensaje de error y devolviendo una lista vacía.
 
 ```python
 def load_corpus(path):

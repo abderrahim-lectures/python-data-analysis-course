@@ -20,7 +20,7 @@ description: "سجّل التجارب مع بيانات منظمة وحسابا�
 
 ## أين تُشغّل هذا
 
-**محليًا باستخدام `uv`** هو المسار الأساسي — هذه أداة CLI تكتب ملفات تجارب وملفات PDF.
+**محليًا باستخدام `uv`** هو المسار الأساسي ، هذه أداة CLI تكتب ملفات تجارب وملفات PDF.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/lab-notebook/notebook.ar.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/lab-notebook/notebook.ar.ipynb)
@@ -242,7 +242,7 @@ class NotebookStore:
 
 **🩹 إذا لم يعمل :**
 
-إذا تعطل التراجع، فقد لا تعيد قياسات اللقطة بناءَ كائنات نظيفة — تحقّق من مفاتيح القاموس.
+إذا تعطل التراجع، فقد لا تعيد قياسات اللقطة بناءَ كائنات نظيفة ، تحقّق من مفاتيح القاموس.
 
 ### 3.2 تحقّق من إدارة النسخ
 
@@ -323,7 +323,7 @@ def export_pdf(exp: Experiment, out_path: str):
 
 ## ما بنيته للتو
 
-دفتر مختبر منظم: قوالب تجارب مُنمّطة، ومحرك إحصاءات يحسب المتوسط والانحراف المعياري وخطوط الاتجاه، وإدارة نسخ بلقطات مع التراجع، ومُصدِّر PDF. النتيجة سير عمل تحليل قابل للتكرار — سجّل، واحسب، وعنون بالإصدارات، وشارك — يعكس كيف يعمل فرق البحث الحديثة فعلًا.
+دفتر مختبر منظم: قوالب تجارب مُنمّطة، ومحرك إحصاءات يحسب المتوسط والانحراف المعياري وخطوط الاتجاه، وإدارة نسخ بلقطات مع التراجع، ومُصدِّر PDF. النتيجة سير عمل تحليل قابل للتكرار ، سجّل، واحسب، وعنون بالإصدارات، وشارك ، يعكس كيف يعمل فرق البحث الحديثة فعلًا.
 
 :::tip[شغّل نسخة أكمل دون أي إعداد محلي]
 [`examples/lab-notebook/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/lab-notebook) في مستودع الدورة نسخة أغنى بإنشاء الرسوم البيانية وفهرس سجلات قابل للبحث وواجهة CLI موصولة من البداية للنهاية. استنسخه، أو افتح المستودع كاملًا في [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course)، وشغّله من هناك.
@@ -337,6 +337,6 @@ def export_pdf(exp: Experiment, out_path: str):
 
 ## شارك مشروعك مع الصف
 
-بنيت شيئًا فخورًا به؟ [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) معرض لمشاريع طلاب آخرين قدَّموها — وملف README الخاص به يحتوي شرحًا كاملًا وودودًا للمبتدئين لإضافة مشروعك عبر **pull request**، حتى لو لم تستخدم git من قبل قط: عمل fork للمستودع، وإنشاء فرع، وتثبيت ملفاتك، وفتح الـ PR، خطوة بخطوة. لا يُفترَض أي خبرة سابقة بـ git.
+بنيت شيئًا فخورًا به؟ [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) معرض لمشاريع طلاب آخرين قدَّموها ، وملف README الخاص به يحتوي شرحًا كاملًا وودودًا للمبتدئين لإضافة مشروعك عبر **pull request**، حتى لو لم تستخدم git من قبل قط: عمل fork للمستودع، وإنشاء فرع، وتثبيت ملفاتك، وفتح الـ PR، خطوة بخطوة. لا يُفترَض أي خبرة سابقة بـ git.
 
 مرحبًا بك في كتابة Python خارج المتصفح. 🎓

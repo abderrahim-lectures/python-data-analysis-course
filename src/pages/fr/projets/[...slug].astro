@@ -1,8 +1,8 @@
 ---
-// FR project detail — thin wrapper over the shared ProjectDetail component,
+// FR project detail, thin wrapper over the shared ProjectDetail component,
 // which serves the markdown, step-clearing and mark-done gamification.
 // getStaticPaths emits BOTH the localized slug (canonical, e.g. /fr/projets/construis-un-agent-ia)
-// and the English slug (alias — old links/bookmarks keep resolving, but the
+// and the English slug (alias, old links/bookmarks keep resolving, but the
 // page's rel=canonical points at the localized route).
 import {getCollection} from 'astro:content';
 import ProjectDetail from '../../../components/projects/ProjectDetail.astro';

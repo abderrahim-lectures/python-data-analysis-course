@@ -35,9 +35,9 @@ Una aplicación de tarjetas de estudio en la terminal que:
 
 - **Localmente con `uv` (recomendado).** Este proyecto usa solo la biblioteca estándar, así que funciona dondequiera que corra Python. La sección Configuración de abajo lo recorre.
 - **Google Colab o Kaggle Notebooks.** Pega las celdas de código directamente en un notebook. Las llamadas a `input()` funcionan para los avisos de estudio, pero la E/S de archivos (Paso 6) funciona de manera distinta en el navegador.
-- **Playground de JupyterLite.** Pega las celdas de código directamente en un notebook — ten en cuenta que la persistencia de archivos (Paso 6) solo funciona localmente.
+- **Playground de JupyterLite.** Pega las celdas de código directamente en un notebook, ten en cuenta que la persistencia de archivos (Paso 6) solo funciona localmente.
 
-- **Ejecútalo en el navegador.** Hay un cuaderno interactivo listo — ábrelo en Colab, Kaggle o Binder y sigue los pasos en orden.
+- **Ejecútalo en el navegador.** Hay un cuaderno interactivo listo, ábrelo en Colab, Kaggle o Binder y sigue los pasos en orden.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/flashcard-app/notebook.es.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/flashcard-app/notebook.es.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fflashcard-app%2Fnotebook.es.ipynb)
@@ -51,7 +51,7 @@ cd flashcard-app
 
 ## Paso 1: Define el modelo de datos
 
-Antes de construir cualquier función, decide cómo vive una tarjeta de estudio en memoria. Cada tarjeta es un diccionario con campos para su contenido, metadatos y estado de repetición espaciada. Una lista contiene todas las tarjetas de un mazo. Esta estructura plana mantiene las cosas simples — aún no se necesitan clases.
+Antes de construir cualquier función, decide cómo vive una tarjeta de estudio en memoria. Cada tarjeta es un diccionario con campos para su contenido, metadatos y estado de repetición espaciada. Una lista contiene todas las tarjetas de un mazo. Esta estructura plana mantiene las cosas simples, aún no se necesitan clases.
 
 ### 1.1 Crea la estructura de la tarjeta
 
@@ -89,7 +89,7 @@ def create_card(front: str, back: str, tags: list[str] | None = None) -> dict:
 []
 ```
 
-**🩹 Si sale mal :** Si obtienes un `TypeError`, asegúrate de que `datetime.now().isoformat()` se llame con paréntesis — `datetime.now().isoformat()` es correcto; `datetime.now.isoformat` (sin paréntesis) hace referencia al método sin llamarlo. Si las etiquetas vuelven como una lista mutable compartida por defecto, usaste `tags or []` incorrectamente — asegúrate de que el `or` está dentro del cuerpo de la función, no en el argumento por defecto.
+**🩹 Si sale mal :** Si obtienes un `TypeError`, asegúrate de que `datetime.now().isoformat()` se llame con paréntesis, `datetime.now().isoformat()` es correcto; `datetime.now.isoformat` (sin paréntesis) hace referencia al método sin llamarlo. Si las etiquetas vuelven como una lista mutable compartida por defecto, usaste `tags or []` incorrectamente, asegúrate de que el `or` está dentro del cuerpo de la función, no en el argumento por defecto.
 
 ### 1.2 Crea la estructura del mazo
 
@@ -139,7 +139,7 @@ Added: What is a list?
 2
 ```
 
-**🩹 Si sale mal :** Si la tarjeta no aparece en el mazo, verifica que estás agregando a `deck["cards"]`, no a una variable local. Si dos tarjetas comparten los mismos datos, estás reutilizando la misma referencia de dict — asegúrate de que `create_card` devuelve un dict nuevo cada vez.
+**🩹 Si sale mal :** Si la tarjeta no aparece en el mazo, verifica que estás agregando a `deck["cards"]`, no a una variable local. Si dos tarjetas comparten los mismos datos, estás reutilizando la misma referencia de dict, asegúrate de que `create_card` devuelve un dict nuevo cada vez.
 
 ### 1.4 Verifica el modelo de datos
 
@@ -153,7 +153,7 @@ Added: What is a list?
 
 **🤔 Pregunta(s) socrática(s)**
 
-¿Por qué almacenar `next_review` como una cadena ISO en lugar de un objeto datetime? ¿Qué compensación impone la serialización JSON — y qué perderías si almacenaras una marca de tiempo unix en su lugar?
+¿Por qué almacenar `next_review` como una cadena ISO en lugar de un objeto datetime? ¿Qué compensación impone la serialización JSON, y qué perderías si almacenaras una marca de tiempo unix en su lugar?
 
 ---
 
@@ -301,7 +301,7 @@ def study_session(deck: dict) -> list[dict]:
 
 ### 3.2 Obtén la calificación de calidad del usuario
 
-**👟 Pista inicial :** Pide al usuario una calificación de 0 a 5. Valida la entrada — rechaza cualquier cosa que no sea un número dentro del rango. Vuelve a preguntar ante una entrada incorrecta.
+**👟 Pista inicial :** Pide al usuario una calificación de 0 a 5. Valida la entrada, rechaza cualquier cosa que no sea un número dentro del rango. Vuelve a preguntar ante una entrada incorrecta.
 
 ```python
 def get_quality_rating() -> int:
@@ -335,7 +335,7 @@ def get_quality_rating() -> int:
   Rating (0-5): 4
 ```
 
-**🩹 Si sale mal :** Si el bucle nunca sale, no estás retornando desde dentro del `while True` — asegúrate de que `return rating` está dentro del bloque `if 0 <= rating <= 5`. Si escribir "abc" hace que se bloquee, olvidaste el `try/except ValueError`.
+**🩹 Si sale mal :** Si el bucle nunca sale, no estás retornando desde dentro del `while True`, asegúrate de que `return rating` está dentro del bloque `if 0 <= rating <= 5`. Si escribir "abc" hace que se bloquee, olvidaste el `try/except ValueError`.
 
 ### 3.3 Verifica el modo de estudio
 
@@ -359,7 +359,7 @@ El algoritmo SM-2 es el motor que hace que esto sea más que una simple aplicaci
 
 ### 4.1 Implementa la actualización SM-2
 
-**👟 Pista inicial :** El algoritmo modifica tres campos de la tarjeta: `repetitions`, `interval` y `ease_factor`. Si la calidad es >= 3 (correcta), incrementa `repetitions` y haz crecer el intervalo. Si la calidad es < 3 (fallida), restablece `repetitions` a 0 y vuelve el intervalo a 1. El factor de facilidad se ajusta según la calidad — sube para respuestas fáciles y baja para las difíciles.
+**👟 Pista inicial :** El algoritmo modifica tres campos de la tarjeta: `repetitions`, `interval` y `ease_factor`. Si la calidad es >= 3 (correcta), incrementa `repetitions` y haz crecer el intervalo. Si la calidad es < 3 (fallida), restablece `repetitions` a 0 y vuelve el intervalo a 1. El factor de facilidad se ajusta según la calidad, sube para respuestas fáciles y baja para las difíciles.
 
 ```python
 def update_card_sm2(card: dict, quality: int) -> dict:
@@ -417,7 +417,7 @@ def update_card_sm2(card: dict, quality: int) -> dict:
 1
 ```
 
-**🩹 Si sale mal :** Si el intervalo no crece después de la tercera revisión, verifica que la rama `elif card["repetitions"] == 1` devuelve 6 — sin ella, la fórmula `round(interval * ease_factor)` da `round(1 * 2.5) = 2` en lugar de 6 para la segunda respuesta correcta. Si `ease_factor` cae por debajo de 1.3, el tope `max(1.3, ...)` no está ahí.
+**🩹 Si sale mal :** Si el intervalo no crece después de la tercera revisión, verifica que la rama `elif card["repetitions"] == 1` devuelve 6, sin ella, la fórmula `round(interval * ease_factor)` da `round(1 * 2.5) = 2` en lugar de 6 para la segunda respuesta correcta. Si `ease_factor` cae por debajo de 1.3, el tope `max(1.3, ...)` no está ahí.
 
 ### 4.2 Aplica SM-2 después de cada revisión
 
@@ -465,7 +465,7 @@ def study_session(deck: dict) -> list[dict]:
 
 Las tarjetas calificadas con 0–2 aparecen de nuevo mañana; las calificadas con 3–5 se alejan según el programa SM-2.
 
-**🩹 Si sale mal :** Si la fecha de la próxima revisión es siempre mañana sin importar la calificación, `update_card_sm2` no está modificando el `interval` de la tarjeta — asegúrate de que estás modificando `card["interval"]` en el lugar, no creando una variable local. Si la fecha está en el pasado, olvidaste agregar `timedelta(days=card["interval"])` a `datetime.now()`.
+**🩹 Si sale mal :** Si la fecha de la próxima revisión es siempre mañana sin importar la calificación, `update_card_sm2` no está modificando el `interval` de la tarjeta, asegúrate de que estás modificando `card["interval"]` en el lugar, no creando una variable local. Si la fecha está en el pasado, olvidaste agregar `timedelta(days=card["interval"])` a `datetime.now()`.
 
 ### 4.3 Verifica SM-2
 
@@ -529,9 +529,9 @@ def deck_stats(deck: dict) -> dict:
 {'total': 6, 'mastered': 0, 'learning': 0, 'new': 6, 'due': 6, 'avg_ease': 2.5}
 ```
 
-Después de una sesión de estudio, los números cambian — dominadas y en aprendizaje suben, nuevas bajan, pendientes caen.
+Después de una sesión de estudio, los números cambian, dominadas y en aprendizaje suben, nuevas bajan, pendientes caen.
 
-**🩹 Si sale mal :** Si `due` siempre es 0 después de estudiar, `get_due_cards` compara cadenas en lugar de datetimes — asegúrate de llamar `datetime.fromisoformat()` sobre la cadena `next_review`. Si `avg_ease` es incorrecto, estás dividiendo por el conteo equivocado — usa `len(cards)`, no `sum(...)`.
+**🩹 Si sale mal :** Si `due` siempre es 0 después de estudiar, `get_due_cards` compara cadenas en lugar de datetimes, asegúrate de llamar `datetime.fromisoformat()` sobre la cadena `next_review`. Si `avg_ease` es incorrecto, estás dividiendo por el conteo equivocado, usa `len(cards)`, no `sum(...)`.
 
 ### 5.2 Muestra estadísticas como una barra de progreso
 
@@ -581,7 +581,7 @@ def show_stats(deck: dict) -> None:
 
 Después de estudiar todas las tarjetas y calificar 4–5 en cada una, la barra de progreso se llena.
 
-**🩹 Si sale mal :** Si la barra de progreso se desborda más de 30 caracteres, `filled` excede `bar_len` — agrega `min(filled, bar_len)` como un tope de seguridad. Si los porcentajes no suman, verifica que `mastered + learning + new == total`.
+**🩹 Si sale mal :** Si la barra de progreso se desborda más de 30 caracteres, `filled` excede `bar_len`, agrega `min(filled, bar_len)` como un tope de seguridad. Si los porcentajes no suman, verifica que `mastered + learning + new == total`.
 
 ### 5.3 Verifica el seguimiento del progreso
 
@@ -589,7 +589,7 @@ Después de estudiar todas las tarjetas y calificar 4–5 en cada una, la barra 
 
 - ✅ `deck_stats` devuelve total, dominadas, en aprendizaje, nuevas, pendientes y avg_ease.
 - ✅ `show_stats` imprime un resumen formateado con una barra de progreso.
-- ✅ Los mazos vacíos no se bloquean — muestran todo en ceros.
+- ✅ Los mazos vacíos no se bloquean, muestran todo en ceros.
 - ✅ Después de una sesión de estudio, las estadísticas reflejan los estados actualizados de las tarjetas.
 
 **🤔 Pregunta(s) socrática(s)**
@@ -626,11 +626,11 @@ Saved 6 cards to deck.json
 
 El archivo `deck.json` ahora contiene el mazo completo como JSON legible.
 
-**🩹 Si sale mal :** Si obtienes `TypeError: Object of type datetime is not JSON serializable`, almacenaste un objeto `datetime` directamente en lugar de llamar `.isoformat()` — vuelve a `create_card` y asegúrate de que la marca de tiempo es una cadena. Si el archivo está vacío, lo abriste con el modo `"w"` (que trunca) antes de llamar `json.dump`.
+**🩹 Si sale mal :** Si obtienes `TypeError: Object of type datetime is not JSON serializable`, almacenaste un objeto `datetime` directamente en lugar de llamar `.isoformat()`, vuelve a `create_card` y asegúrate de que la marca de tiempo es una cadena. Si el archivo está vacío, lo abriste con el modo `"w"` (que trunca) antes de llamar `json.dump`.
 
 ### 6.2 Carga el mazo desde JSON
 
-**👟 Pista inicial :** Usa `json.load` para leer el archivo de vuelta. Maneja el caso en que el archivo no existe — empieza con un mazo vacío en ese caso.
+**👟 Pista inicial :** Usa `json.load` para leer el archivo de vuelta. Maneja el caso en que el archivo no existe, empieza con un mazo vacío en ese caso.
 
 ```python
 def load_deck(filename: str = "deck.json") -> dict:
@@ -644,9 +644,9 @@ def load_deck(filename: str = "deck.json") -> dict:
     return deck
 ```
 
-**🎯 Resultado esperado :** En la primera ejecución (sin archivo): `No saved deck found — starting fresh.` En las ejecuciones siguientes: `Loaded 6 cards from deck.json`.
+**🎯 Resultado esperado :** En la primera ejecución (sin archivo): `No saved deck found, starting fresh.` En las ejecuciones siguientes: `Loaded 6 cards from deck.json`.
 
-**🩹 Si sale mal :** Si obtienes `FileNotFoundError`, no estás verificando `path.exists()` antes de abrir. Si el mazo cargado tiene `None` para `cards`, el archivo JSON está malformado — ábrelo en un editor de texto para revisarlo.
+**🩹 Si sale mal :** Si obtienes `FileNotFoundError`, no estás verificando `path.exists()` antes de abrir. Si el mazo cargado tiene `None` para `cards`, el archivo JSON está malformado, ábrelo en un editor de texto para revisarlo.
 
 ### 6.3 Verifica la persistencia
 
@@ -654,7 +654,7 @@ def load_deck(filename: str = "deck.json") -> dict:
 
 - ✅ Después de guardar, `deck.json` existe y contiene JSON válido con todos los campos de las tarjetas.
 - ✅ Después de cargar, el mazo tiene las mismas tarjetas, etiquetas y estado SM-2.
-- ✅ La ausencia del archivo JSON no bloquea — empieza con un mazo vacío.
+- ✅ La ausencia del archivo JSON no bloquea, empieza con un mazo vacío.
 - ✅ El archivo guardado es legible para humanos con `indent=2`.
 
 **🤔 Pregunta(s) socrática(s)**
@@ -743,7 +743,7 @@ No cards due for review! Great job.
 ...
 ```
 
-**🩹 Si sale mal :** Si obtienes `UnboundLocalError`, la variable `deck` no está definida antes del bucle `while True` — asegúrate de que `deck = load_deck()` corre primero. Si las tarjetas no se guardan después de estudiar, olvidaste `save_deck(deck)` dentro de la rama `"1"`.
+**🩹 Si sale mal :** Si obtienes `UnboundLocalError`, la variable `deck` no está definida antes del bucle `while True`, asegúrate de que `deck = load_deck()` corre primero. Si las tarjetas no se guardan después de estudiar, olvidaste `save_deck(deck)` dentro de la rama `"1"`.
 
 ### 7.2 Agrega retroalimentación a color
 
@@ -760,7 +760,7 @@ def coloured(text: str, color: str) -> str:
     return f"{color}{text}{RESET}"
 ```
 
-**🎯 Resultado esperado :** Después de calificar una tarjeta, la retroalimentación aparece a color — verde para calificaciones altas (4–5), amarillo para medianas (3), rojo para bajas (0–2).
+**🎯 Resultado esperado :** Después de calificar una tarjeta, la retroalimentación aparece a color, verde para calificaciones altas (4–5), amarillo para medianas (3), rojo para bajas (0–2).
 
 **🩹 Si sale mal :** Si ves códigos de escape crudos como `[92m` en lugar de colores, la mayoría de los terminales modernos soportan códigos ANSI, pero el Símbolo del sistema de Windows puede necesitar `os.system("")` llamado una vez al inicio para habilitarlos.
 
@@ -791,25 +791,25 @@ def coloured(text: str, color: str) -> str:
 
 ¿Listo para ir más lejos? Prueba estos:
 
-1. **Filtrado por etiqueta** — Agrega un comando para estudiar solo tarjetas con una etiqueta específica. Filtra `get_due_cards` verificando si la etiqueta está en `card["tags"]`.
+1. **Filtrado por etiqueta**, Agrega un comando para estudiar solo tarjetas con una etiqueta específica. Filtra `get_due_cards` verificando si la etiqueta está en `card["tags"]`.
 
-2. **Importación/exportación de mazos** — Permite a los usuarios exportar un mazo como un archivo de texto plano (una tarjeta por línea, formato front|back) e importarlo de vuelta. Esto hace que los mazos se puedan compartir sin JSON.
+2. **Importación/exportación de mazos**, Permite a los usuarios exportar un mazo como un archivo de texto plano (una tarjeta por línea, formato front|back) e importarlo de vuelta. Esto hace que los mazos se puedan compartir sin JSON.
 
-3. **Historial de sesiones** — Rastrea cuántas tarjetas revisaste cada día, tu calificación promedio y tu precisión. Guarda el historial en un archivo JSON separado y muestra un resumen semanal.
+3. **Historial de sesiones**, Rastrea cuántas tarjetas revisaste cada día, tu calificación promedio y tu precisión. Guarda el historial en un archivo JSON separado y muestra un resumen semanal.
 
 ## Lo que aprendiste
 
-- **Modelado de datos basado en diccionarios** — Representaste tarjetas y mazos como dicts de Python simples con nombres de campo claros y valores por defecto.
-- **Repetición espaciada SM-2** — Implementaste el algoritmo que ajusta los intervalos de revisión según qué tan bien conoces cada tarjeta.
-- **Interacción con el usuario** — Construiste una sesión de estudio con volteo para revelar, validación de entrada y calificaciones de calidad.
-- **Seguimiento del progreso** — Calculaste estadísticas de dominio y visualizaste el progreso con una barra de progreso en la terminal.
-- **Persistencia JSON** — Guardaste y cargaste datos del mazo entre sesiones usando `json.dump` y `json.load`.
-- **Diseño de CLI** — Construiste una interfaz guiada por menú con validación de entrada, retroalimentación a color y guardado automático.
+- **Modelado de datos basado en diccionarios**, Representaste tarjetas y mazos como dicts de Python simples con nombres de campo claros y valores por defecto.
+- **Repetición espaciada SM-2**, Implementaste el algoritmo que ajusta los intervalos de revisión según qué tan bien conoces cada tarjeta.
+- **Interacción con el usuario**, Construiste una sesión de estudio con volteo para revelar, validación de entrada y calificaciones de calidad.
+- **Seguimiento del progreso**, Calculaste estadísticas de dominio y visualizaste el progreso con una barra de progreso en la terminal.
+- **Persistencia JSON**, Guardaste y cargaste datos del mazo entre sesiones usando `json.dump` y `json.load`.
+- **Diseño de CLI**, Construiste una interfaz guiada por menú con validación de entrada, retroalimentación a color y guardado automático.
 
-Ahora tienes una aplicación de tarjetas de estudio completamente funcional. La arquitectura basada en diccionarios hace que sea fácil de extender — agrega imágenes almacenando URLs en un campo `"image"`, implementa cajas Leitner agregando un campo `"box"`, o construye un sistema de mazos compartidos leyendo JSON desde una URL.
+Ahora tienes una aplicación de tarjetas de estudio completamente funcional. La arquitectura basada en diccionarios hace que sea fácil de extender, agrega imágenes almacenando URLs en un campo `"image"`, implementa cajas Leitner agregando un campo `"box"`, o construye un sistema de mazos compartidos leyendo JSON desde una URL.
 
 ## Comparte tu proyecto con la clase
 
-¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado — y su README tiene un recorrido completo y amigable para principiantes sobre cómo agregar el tuyo vía un **pull request**, incluso si nunca has usado git antes: hacer fork del repositorio, crear una rama, confirmar tus archivos y abrir el PR, un paso a la vez. No se asume experiencia previa con git.
+¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado, y su README tiene un recorrido completo y amigable para principiantes sobre cómo agregar el tuyo vía un **pull request**, incluso si nunca has usado git antes: hacer fork del repositorio, crear una rama, confirmar tus archivos y abrir el PR, un paso a la vez. No se asume experiencia previa con git.
 
 Bienvenido a escribir Python fuera del navegador. 🎓

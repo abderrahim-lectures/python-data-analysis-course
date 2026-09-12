@@ -19,7 +19,7 @@ learningObjectives:
 
 # 📊 Data Visualization Explorer
 
-Numbers buried in tables are hard to act on. Charts make patterns, outliers, and trends jump out immediately. This project takes you from basic matplotlib plots through seaborn statistical visuals to interactive plotly dashboards — building a toolkit you can reuse on any dataset you encounter.
+Numbers buried in tables are hard to act on. Charts make patterns, outliers, and trends jump out immediately. This project takes you from basic matplotlib plots through seaborn statistical visuals to interactive plotly dashboards, building a toolkit you can reuse on any dataset you encounter.
 
 This is optional and ungraded. See [Real-World Projects](/projects) for the full list.
 
@@ -35,17 +35,17 @@ This is optional and ungraded. See [Real-World Projects](/projects) for the full
 ## Where to run this
 
 - **Locally with `uv` (recommended).** This project uses `matplotlib`, `seaborn`, and `plotly`, so a local install is the smoothest path. The Setup section below walks through it.
-- **JupyterLite playground.** Paste the code cells directly into a notebook — works well for exploring the analysis steps (1–5), though the dashboard layout (Step 5) benefits from a real terminal for saving files.
+- **JupyterLite playground.** Paste the code cells directly into a notebook, works well for exploring the analysis steps (1–5), though the dashboard layout (Step 5) benefits from a real terminal for saving files.
 - **Google Colab.** Open a new notebook and paste the cells. Same caveat as JupyterLite: file saving works best in a real terminal.
 
-- **Run it in your browser.** An interactive companion notebook is ready — open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
+- **Run it in your browser.** An interactive companion notebook is ready, open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-visualization/notebook.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/data-visualization/notebook.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fdata-visualization%2Fnotebook.ipynb)
 
 ## Setup
 
-`uv` is a single tool that replaces the usual "install Python, then pip, then a virtual environment" chain — it can install and manage Python versions alongside your project's dependencies.
+`uv` is a single tool that replaces the usual "install Python, then pip, then a virtual environment" chain, it can install and manage Python versions alongside your project's dependencies.
 
 **macOS / Linux** (terminal):
 
@@ -77,7 +77,7 @@ uv add matplotlib seaborn plotly pandas
 
 ## Step 1: Create sample data and load it
 
-Build a CSV with multi-category sales data, then load it into a DataFrame. Every subsequent step uses this same dataset — varied enough to show different chart types, small enough to read through by hand.
+Build a CSV with multi-category sales data, then load it into a DataFrame. Every subsequent step uses this same dataset, varied enough to show different chart types, small enough to read through by hand.
 
 ### 1.1 Write the CSV and load it
 
@@ -147,13 +147,13 @@ mean   123.888889   41083.333333  24227.777778
 ...
 ```
 
-**🩹 If it's off:** If you get `FileNotFoundError`, your working directory is wrong — run `pwd` to check. If the shape shows `(0, 6)`, the CSV string has a quoting issue — make sure there are no stray quotes inside the data rows. If `units` shows `float64` instead of `int64`, one of your values might have a decimal point.
+**🩹 If it's off:** If you get `FileNotFoundError`, your working directory is wrong, run `pwd` to check. If the shape shows `(0, 6)`, the CSV string has a quoting issue, make sure there are no stray quotes inside the data rows. If `units` shows `float64` instead of `int64`, one of your values might have a decimal point.
 
 ### 1.2 Verify the data loaded correctly
 
 **✅ Checklist**
 
-- ✅ `df.shape` is `(18, 6)` — 18 rows, 6 columns.
+- ✅ `df.shape` is `(18, 6)`, 18 rows, 6 columns.
 - ✅ All six column names appear: `month`, `category`, `region`, `units`, `revenue`, `cost`.
 - ✅ `df.dtypes` shows three object columns (text) and three int64 columns (numbers).
 - ✅ `df.describe()` produces stats for the numeric columns without errors.
@@ -166,7 +166,7 @@ Why store `month` as a string (`"2026-01"`) instead of a datetime object? What a
 
 ## Step 2: Basic charts with matplotlib
 
-Matplotlib is the foundation — every other Python visualization library either wraps it or mirrors its API. Master the four essential chart types here: bar, line, scatter, and pie.
+Matplotlib is the foundation, every other Python visualization library either wraps it or mirrors its API. Master the four essential chart types here: bar, line, scatter, and pie.
 
 ### 2.1 Bar chart: revenue by category
 
@@ -196,7 +196,7 @@ print("Saved: revenue_by_category.png")
 
 **🎯 Expected output:** A bar chart with three bars (Clothing, Electronics, Home). Electronics is the tallest at roughly $367,500. Dollar amounts sit on top of each bar. A file `revenue_by_category.png` is saved to disk.
 
-**🩹 If it's off:** If bars look squished, increase `figsize` to `(10, 6)`. If dollar labels overlap the bars, check that `va="bottom"` is set — this pushes text above the bar top. If `tight_layout()` throws a warning, it means your subplots have fixed sizes that can't adjust — that's normal, the warning is safe to ignore.
+**🩹 If it's off:** If bars look squished, increase `figsize` to `(10, 6)`. If dollar labels overlap the bars, check that `va="bottom"` is set, this pushes text above the bar top. If `tight_layout()` throws a warning, it means your subplots have fixed sizes that can't adjust, that's normal, the warning is safe to ignore.
 
 ### 2.2 Line chart: monthly revenue trend
 
@@ -222,9 +222,9 @@ plt.show()
 print("Saved: monthly_trend.png")
 ```
 
-**🎯 Expected output:** Two lines — green for revenue, red for cost — with the shaded gap between them representing profit. Revenue sits above cost in every month. A file `monthly_trend.png` is saved.
+**🎯 Expected output:** Two lines, green for revenue, red for cost, with the shaded gap between them representing profit. Revenue sits above cost in every month. A file `monthly_trend.png` is saved.
 
-**🩹 If it's off:** If the lines look jagged or out of order, your `month` column isn't sorted — add `.sort_index()` after the groupby. If the shaded area fills the wrong region, check that `fill_between` uses `monthly["revenue"]` first and `monthly["cost"]` second — the order determines which line is the top boundary.
+**🩹 If it's off:** If the lines look jagged or out of order, your `month` column isn't sorted, add `.sort_index()` after the groupby. If the shaded area fills the wrong region, check that `fill_between` uses `monthly["revenue"]` first and `monthly["cost"]` second, the order determines which line is the top boundary.
 
 ### 2.3 Scatter plot: revenue vs. cost
 
@@ -252,9 +252,9 @@ plt.savefig("revenue_vs_cost.png", dpi=150)
 plt.show()
 ```
 
-**🎯 Expected output:** Colored dots clustered above the dashed break-even line — meaning every record is profitable. Electronics dots sit furthest from the line (highest margins). A file `revenue_vs_cost.png` is saved.
+**🎯 Expected output:** Colored dots clustered above the dashed break-even line, meaning every record is profitable. Electronics dots sit furthest from the line (highest margins). A file `revenue_vs_cost.png` is saved.
 
-**🩹 If it's off:** If dots overlap badly, increase `alpha` to `0.6` for more transparency or increase `s` to `150` for bigger dots. If the break-even line doesn't appear diagonal, your x and y axes have different scales — call `ax.set_aspect("equal")` to fix it, though this may compress one axis.
+**🩹 If it's off:** If dots overlap badly, increase `alpha` to `0.6` for more transparency or increase `s` to `150` for bigger dots. If the break-even line doesn't appear diagonal, your x and y axes have different scales, call `ax.set_aspect("equal")` to fix it, though this may compress one axis.
 
 ### 2.4 Pie chart: category share
 
@@ -280,7 +280,7 @@ plt.show()
 
 **🎯 Expected output:** A pie chart split into three slices with percentage labels. Electronics dominates at roughly 56%, Clothing around 19%, Home around 25%.
 
-**🩹 If it's off:** If the pie chart labels overlap, increase `figsize` to `(9, 9)`. If percentages add up to more than 100%, your groupby didn't sum correctly — check that you called `.sum()` and not `.count()`.
+**🩹 If it's off:** If the pie chart labels overlap, increase `figsize` to `(9, 9)`. If percentages add up to more than 100%, your groupby didn't sum correctly, check that you called `.sum()` and not `.count()`.
 
 **✅ Checklist**
 
@@ -291,7 +291,7 @@ plt.show()
 
 **🤔 Socratic Question(s)**
 
-When would a bar chart be more informative than a pie chart for the same data? What happens to the pie chart if you have ten categories instead of three — can you still read the smaller slices?
+When would a bar chart be more informative than a pie chart for the same data? What happens to the pie chart if you have ten categories instead of three, can you still read the smaller slices?
 
 ---
 
@@ -320,7 +320,7 @@ print("Saved: revenue_boxplot.png")
 
 **🎯 Expected output:** Three box-and-whisker plots side by side. Electronics has the widest spread (highest variability). The median line inside each box shows the typical revenue per record. A file `revenue_boxplot.png` is saved.
 
-**🩹 If it's off:** If all three boxes look identical, your data might have duplicate rows — go back to Step 1 and check. If the boxes are shifted off-center, `sns.set_theme(style="whitegrid")` might not have run before the plot — call it again right before the figure.
+**🩹 If it's off:** If all three boxes look identical, your data might have duplicate rows, go back to Step 1 and check. If the boxes are shifted off-center, `sns.set_theme(style="whitegrid")` might not have run before the plot, call it again right before the figure.
 
 ### 3.2 Heatmap: correlation matrix
 
@@ -340,9 +340,9 @@ plt.show()
 print("Saved: correlation_heatmap.png")
 ```
 
-**🎯 Expected output:** A colored grid where `revenue` and `cost` show a strong positive correlation (close to 1.0 — higher cost means higher revenue). `units` correlates with both but less strongly. A file `correlation_heatmap.png` is saved.
+**🎯 Expected output:** A colored grid where `revenue` and `cost` show a strong positive correlation (close to 1.0, higher cost means higher revenue). `units` correlates with both but less strongly. A file `correlation_heatmap.png` is saved.
 
-**🩹 If it's off:** If the heatmap is all one color, your `vmin`/`vmax` range is too wide for the actual correlation values — try `vmin=corr.values.min() - 0.1` and `vmax=corr.values.max() + 0.1`. If you get `ValueError: correlation matrix is not symmetric`, you passed the raw DataFrame instead of the `.corr()` result.
+**🩹 If it's off:** If the heatmap is all one color, your `vmin`/`vmax` range is too wide for the actual correlation values, try `vmin=corr.values.min() - 0.1` and `vmax=corr.values.max() + 0.1`. If you get `ValueError: correlation matrix is not symmetric`, you passed the raw DataFrame instead of the `.corr()` result.
 
 ### 3.3 Pair plot: all numeric relationships
 
@@ -359,7 +359,7 @@ print("Saved: pair_plot.png")
 
 **🎯 Expected output:** A 3x3 grid of plots. Off-diagonal cells are scatter plots showing how `units`, `revenue`, and `cost` relate to each other. Diagonal cells are density curves (KDE) showing each variable's distribution, colored by category. A file `pair_plot.png` is saved.
 
-**🩹 If it's off:** If the pair plot is huge and hard to read, your dataset has too many numeric columns — limit to 3–4 with `df[["units", "revenue", "cost"]]` before passing to `pairplot`. If colors don't match across subplots, make sure `hue="category"` is set — without it, all points are the same color.
+**🩹 If it's off:** If the pair plot is huge and hard to read, your dataset has too many numeric columns, limit to 3–4 with `df[["units", "revenue", "cost"]]` before passing to `pairplot`. If colors don't match across subplots, make sure `hue="category"` is set, without it, all points are the same color.
 
 **✅ Checklist**
 
@@ -370,7 +370,7 @@ print("Saved: pair_plot.png")
 
 **🤔 Socratic Question(s)**
 
-The correlation matrix shows `revenue` and `cost` are strongly correlated. Does correlation mean causation here — does spending more *cause* higher revenue, or is there a simpler explanation?
+The correlation matrix shows `revenue` and `cost` are strongly correlated. Does correlation mean causation here, does spending more *cause* higher revenue, or is there a simpler explanation?
 
 ---
 
@@ -395,13 +395,13 @@ fig.write_html("interactive_bar.html")
 print("Saved: interactive_bar.html")
 ```
 
-**🎯 Expected output:** A browser window (or notebook cell) opens with a grouped bar chart. Hover over any bar to see the exact month, category, and revenue amount. Zoom by clicking and dragging. A file `interactive_bar.html` is saved — open it in any browser.
+**🎯 Expected output:** A browser window (or notebook cell) opens with a grouped bar chart. Hover over any bar to see the exact month, category, and revenue amount. Zoom by clicking and dragging. A file `interactive_bar.html` is saved, open it in any browser.
 
-**🩹 If it's off:** If bars stack instead of grouping, you forgot `barmode="group"` — the default is `"relative"` which stacks. If the HTML file opens but shows nothing, your browser may be blocking local file JavaScript — try opening it from a local server or using `fig.show()` in a notebook instead.
+**🩹 If it's off:** If bars stack instead of grouping, you forgot `barmode="group"`, the default is `"relative"` which stacks. If the HTML file opens but shows nothing, your browser may be blocking local file JavaScript, try opening it from a local server or using `fig.show()` in a notebook instead.
 
 ### 4.2 Interactive scatter plot
 
-**👟 Starter hint:** Use `px.scatter()` with `x`, `y`, `color`, and `size` to encode four dimensions at once — cost on x, revenue on y, category as color, and units as dot size.
+**👟 Starter hint:** Use `px.scatter()` with `x`, `y`, `color`, and `size` to encode four dimensions at once, cost on x, revenue on y, category as color, and units as dot size.
 
 ```python
 fig = px.scatter(df, x="cost", y="revenue", color="category", size="units",
@@ -417,7 +417,7 @@ print("Saved: interactive_scatter.html")
 
 **🎯 Expected output:** Colored dots of varying sizes. Larger dots mean more units sold. Hover over any dot to see month, region, cost, revenue, and units. A file `interactive_scatter.html` is saved.
 
-**🩹 If it's off:** If all dots are the same size, `size="units"` isn't being applied — check that `units` is numeric, not a string. If hover data shows `NaN`, the column name has a typo or the column doesn't exist.
+**🩹 If it's off:** If all dots are the same size, `size="units"` isn't being applied, check that `units` is numeric, not a string. If hover data shows `NaN`, the column name has a typo or the column doesn't exist.
 
 ### 4.3 Interactive line chart with range slider
 
@@ -438,7 +438,7 @@ print("Saved: interactive_line.html")
 
 **🎯 Expected output:** Two lines (revenue and cost) with a draggable range slider at the bottom. Grab the slider handles to zoom into a specific month range. A file `interactive_line.html` is saved.
 
-**🩹 If it's off:** If the range slider doesn't appear, you may be using an older plotly version — run `uv add --upgrade plotly`. If the legend shows `variable` as the title instead of a blank space, check that `legend_title_text=""` is set.
+**🩹 If it's off:** If the range slider doesn't appear, you may be using an older plotly version, run `uv add --upgrade plotly`. If the legend shows `variable` as the title instead of a blank space, check that `legend_title_text=""` is set.
 
 **✅ Checklist**
 
@@ -450,7 +450,7 @@ print("Saved: interactive_line.html")
 
 **🤔 Socratic Question(s)**
 
-When would you choose an interactive plotly chart over a static matplotlib PNG? When would you choose the static PNG instead? Think about your audience — who sees the chart, and how do they consume it?
+When would you choose an interactive plotly chart over a static matplotlib PNG? When would you choose the static PNG instead? Think about your audience, who sees the chart, and how do they consume it?
 
 ---
 
@@ -530,7 +530,7 @@ print("Saved: themed_bar.png")
 
 **🎯 Expected output:** The same bar chart from Step 2, but now with a light gray background, no top/right spines, consistent font sizes, and the custom color palette. A file `themed_bar.png` is saved.
 
-**🩹 If it's off:** If the background is still white, `plt.rcParams.update()` hasn't been called in this session — rerun the entire Step 5.1 block. If colors don't match the theme, you're using hardcoded hex values instead of the `CATEGORY_COLORS` dictionary — replace them.
+**🩹 If it's off:** If the background is still white, `plt.rcParams.update()` hasn't been called in this session, rerun the entire Step 5.1 block. If colors don't match the theme, you're using hardcoded hex values instead of the `CATEGORY_COLORS` dictionary, replace them.
 
 ### 5.3 Build a seaborn theme for statistical plots
 
@@ -553,9 +553,9 @@ plt.show()
 print("Saved: seaborn_styled.png")
 ```
 
-**🎯 Expected output:** Side-by-side box and violin plots with the seaborn whitegrid theme. The violin plot shows the density shape of the distribution — wider where more data points cluster. A file `seaborn_styled.png` is saved.
+**🎯 Expected output:** Side-by-side box and violin plots with the seaborn whitegrid theme. The violin plot shows the density shape of the distribution, wider where more data points cluster. A file `seaborn_styled.png` is saved.
 
-**🩹 If it's off:** If the violin plot looks empty or collapsed, your data might have too few points for kernel density estimation — try `inner="quartile"` to show quartile lines inside the violin, which makes small datasets more readable.
+**🩹 If it's off:** If the violin plot looks empty or collapsed, your data might have too few points for kernel density estimation, try `inner="quartile"` to show quartile lines inside the violin, which makes small datasets more readable.
 
 **✅ Checklist**
 
@@ -566,7 +566,7 @@ print("Saved: seaborn_styled.png")
 
 **🤔 Socratic Question(s)**
 
-Why does removing the top and right spines (`spines[["top", "right"]].set_visible(False)`) make charts more readable? What information did those spines ever convey — and was it worth the visual clutter?
+Why does removing the top and right spines (`spines[["top", "right"]].set_visible(False)`) make charts more readable? What information did those spines ever convey, and was it worth the visual clutter?
 
 ---
 
@@ -626,11 +626,11 @@ print("Saved: dashboard.png")
 
 **🎯 Expected output:** A single large figure with four charts arranged in a 2x2 grid. The top row has a bar chart and a line chart. The bottom row has a scatter plot and a pie chart. A file `dashboard.png` is saved.
 
-**🩹 If it's off:** If charts overlap, `tight_layout()` is being called before all axes are set up — move it to the very end. If `suptitle` overlaps the top charts, adjust `y=1.02` to push it higher or use `plt.subplots_adjust(top=0.93)` instead. If the pie chart is squished into an oval, add `axes[1, 1].set_aspect("equal")`.
+**🩹 If it's off:** If charts overlap, `tight_layout()` is being called before all axes are set up, move it to the very end. If `suptitle` overlaps the top charts, adjust `y=1.02` to push it higher or use `plt.subplots_adjust(top=0.93)` instead. If the pie chart is squished into an oval, add `axes[1, 1].set_aspect("equal")`.
 
 ### 6.2 Build a seaborn-style dashboard with FacetGrid
 
-**👟 Starter hint:** Use `sns.FacetGrid()` to create a grid of small multiples — one scatter plot per region, sharing the same axes for direct comparison.
+**👟 Starter hint:** Use `sns.FacetGrid()` to create a grid of small multiples, one scatter plot per region, sharing the same axes for direct comparison.
 
 ```python
 g = sns.FacetGrid(df, col="region", hue="category", palette="Set2", height=4, aspect=1.2)
@@ -643,9 +643,9 @@ plt.show()
 print("Saved: facet_dashboard.png")
 ```
 
-**🎯 Expected output:** Two scatter plots side by side — one for North, one for South — with the same x/y scale for easy comparison. Each dot is colored by category. A file `facet_dashboard.png` is saved.
+**🎯 Expected output:** Two scatter plots side by side, one for North, one for South, with the same x/y scale for easy comparison. Each dot is colored by category. A file `facet_dashboard.png` is saved.
 
-**🩹 If it's off:** If the facet columns have different x-axis ranges, `sharex=True` and `sharey=True` aren't set — they're the defaults for `FacetGrid`, but if you overrode them, remove the override. If the legend overlaps a facet panel, use `g.add_legend(loc="upper right", bbox_to_anchor=(1, 0))`.
+**🩹 If it's off:** If the facet columns have different x-axis ranges, `sharex=True` and `sharey=True` aren't set, they're the defaults for `FacetGrid`, but if you overrode them, remove the override. If the legend overlaps a facet panel, use `g.add_legend(loc="upper right", bbox_to_anchor=(1, 0))`.
 
 **✅ Checklist**
 
@@ -698,9 +698,9 @@ Exported to exports/
   revenue_bar.png (45,231 bytes)
 ```
 
-Each file is at least 30KB — tiny PNGs mean something went wrong with the rendering.
+Each file is at least 30KB, tiny PNGs mean something went wrong with the rendering.
 
-**🩹 If it's off:** If the PNG is under 5KB, the figure was empty when `savefig` ran — make sure you call `savefig` before `plt.close()`. If text is clipped at the edges, add `bbox_inches="tight"` to the `savefig` call.
+**🩹 If it's off:** If the PNG is under 5KB, the figure was empty when `savefig` ran, make sure you call `savefig` before `plt.close()`. If text is clipped at the edges, add `bbox_inches="tight"` to the `savefig` call.
 
 ### 7.2 Create an interactive HTML report
 
@@ -738,15 +738,15 @@ with open("dashboard_report.html", "w") as f:
 print("Saved: dashboard_report.html")
 ```
 
-**🎯 Expected output:** A file `dashboard_report.html` opens in your browser with a styled page containing both interactive charts — scroll to see them, hover to inspect values, zoom with click-drag.
+**🎯 Expected output:** A file `dashboard_report.html` opens in your browser with a styled page containing both interactive charts, scroll to see them, hover to inspect values, zoom with click-drag.
 
-**🩹 If it's off:** If the HTML file shows raw code instead of charts, `pio.to_html()` might be returning a full HTML page instead of a fragment — check that `full_html=False` is set. If the page looks unstyled, the `<style>` block has a syntax error — check for unclosed braces or tags.
+**🩹 If it's off:** If the HTML file shows raw code instead of charts, `pio.to_html()` might be returning a full HTML page instead of a fragment, check that `full_html=False` is set. If the page looks unstyled, the `<style>` block has a syntax error, check for unclosed braces or tags.
 
 **✅ Checklist**
 
 - ✅ The `exports/` directory contains at least one PNG file over 30KB.
 - ✅ `dashboard_report.html` opens in a browser with working interactive charts.
-- ✅ Charts render at 300 DPI — suitable for printing without pixelation.
+- ✅ Charts render at 300 DPI, suitable for printing without pixelation.
 - ✅ No clipped text, missing labels, or blank chart areas in the exports.
 
 **🤔 Socratic Question(s)**
@@ -794,7 +794,7 @@ plt.show()
 <details>
 <summary><strong>Challenge 3: Interactive Dashboard with Dropdown</strong></summary>
 
-Use plotly's `updatemenus` to add a dropdown that lets the user switch between viewing revenue, cost, and units on the y-axis of a single chart — three views in one interactive figure.
+Use plotly's `updatemenus` to add a dropdown that lets the user switch between viewing revenue, cost, and units on the y-axis of a single chart, three views in one interactive figure.
 
 ```python
 import plotly.graph_objects as go
@@ -837,13 +837,13 @@ fig.show()
 ## Where to go from here
 
 - **Streamlit dashboard.** Wrap the same charts in a Streamlit app with `st.pyplot()` and `st.plotly_chart()` for a live web dashboard that updates as data changes.
-- **Matplotlib animation.** Use `matplotlib.animation.FuncAnimation` to create animated charts that show data changing over time — great for presentations.
-- **Altair or Vega-Lite.** Explore declarative visualization where you describe *what* to plot rather than *how* to plot it — a different paradigm from matplotlib's imperative approach.
-- **Geographic data.** Use `plotly.express.choropleth()` or `folium` to map data onto geographic regions — sales by country, weather by city, etc.
+- **Matplotlib animation.** Use `matplotlib.animation.FuncAnimation` to create animated charts that show data changing over time, great for presentations.
+- **Altair or Vega-Lite.** Explore declarative visualization where you describe *what* to plot rather than *how* to plot it, a different paradigm from matplotlib's imperative approach.
+- **Geographic data.** Use `plotly.express.choropleth()` or `folium` to map data onto geographic regions, sales by country, weather by city, etc.
 - **Real data.** Replace the sample CSV with real datasets from [Kaggle](https://www.kaggle.com/datasets), [data.gov](https://data.gov), or your own spreadsheets. The same chart code works on any tabular data.
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

@@ -14,11 +14,11 @@ icon: "🎲"
 
 ## Pourquoi c'est important
 
-C'est là que la magie opère. Vous avez chargé des données, les avez tokenisées, compté les fréquences de mots et construit des tables de probabilité de bigrammes. Maintenant, vous regardez votre modèle parler. La fonction `generate_text()` est le moment où des statistiques abstraites deviennent du langage — où un dictionnaire de nombres produit des phrases qu'un humain peut lire et comprendre.
+C'est là que la magie opère. Vous avez chargé des données, les avez tokenisées, compté les fréquences de mots et construit des tables de probabilité de bigrammes. Maintenant, vous regardez votre modèle parler. La fonction `generate_text()` est le moment où des statistiques abstraites deviennent du langage, où un dictionnaire de nombres produit des phrases qu'un humain peut lire et comprendre.
 
-Chaque fois que vous voyez une « réponse suggérée » dans votre application de messagerie, une prédiction de « phrase suivante » dans un outil d'écriture, ou une suggestion d'autocomplétion pendant que vous tapez — il y a un mécanisme d'échantillonnage derrière. L'idée centrale est identique : étant donné un mot actuel, cherchez une distribution de probabilité sur ce qui vient ensuite, puis choisissez aléatoirement l'un de ces candidats pondéré par sa probabilité. Les mots à forte probabilité sont choisis souvent, les mots à faible probabilité sont choisis rarement. Le résultat semble naturel parce qu'il reflète les motifs des données d'entraînement.
+Chaque fois que vous voyez une « réponse suggérée » dans votre application de messagerie, une prédiction de « phrase suivante » dans un outil d'écriture, ou une suggestion d'autocomplétion pendant que vous tapez, il y a un mécanisme d'échantillonnage derrière. L'idée centrale est identique : étant donné un mot actuel, cherchez une distribution de probabilité sur ce qui vient ensuite, puis choisissez aléatoirement l'un de ces candidats pondéré par sa probabilité. Les mots à forte probabilité sont choisis souvent, les mots à faible probabilité sont choisis rarement. Le résultat semble naturel parce qu'il reflète les motifs des données d'entraînement.
 
-Ce qui rend ce module particulièrement excitant, c'est que c'est la première fois que votre travail produit quelque chose de visible et de tangible. Vous tapez un mot de départ, et votre programme génère une séquence de mots qui forme un texte anglais cohérent (même si parfois surprenant). C'est le même mécanisme fondamental derrière les modèles de type GPT — l'échelle diffère, mais le principe d'échantillonnage depuis une distribution apprise est identique.
+Ce qui rend ce module particulièrement excitant, c'est que c'est la première fois que votre travail produit quelque chose de visible et de tangible. Vous tapez un mot de départ, et votre programme génère une séquence de mots qui forme un texte anglais cohérent (même si parfois surprenant). C'est le même mécanisme fondamental derrière les modèles de type GPT, l'échelle diffère, mais le principe d'échantillonnage depuis une distribution apprise est identique.
 
 ## Ce que vous allez apprendre
 
@@ -32,7 +32,7 @@ Ce qui rend ce module particulièrement excitant, c'est que c'est la première f
 
 **Le problème :** Vous avez une table de probabilité de bigrammes et vous voulez produire une séquence de mots qui suit les motifs statistiques de votre corpus. Vous devez enchaîner des prédictions : choisissez un mot de départ, puis échantillonnez à plusieurs reprises le mot suivant dans la distribution du mot actuel.
 
-**L'approche naïve :** Vous pourriez utiliser `random.choice()` pour choisir le mot suivant uniformément au hasard. Mais l'échantillonnage uniforme ignore les probabilités apprises — il traite « the » et « xylophone » comme des mots suivants également probables de « the ». Le texte généré serait absurde parce qu'il ne respecte pas la structure statistique que vous avez travaillé dur à construire.
+**L'approche naïve :** Vous pourriez utiliser `random.choice()` pour choisir le mot suivant uniformément au hasard. Mais l'échantillonnage uniforme ignore les probabilités apprises, il traite « the » et « xylophone » comme des mots suivants également probables de « the ». Le texte généré serait absurde parce qu'il ne respecte pas la structure statistique que vous avez travaillé dur à construire.
 
 **La solution :** `random.choices()` avec le paramètre `weights`. Cette fonction prend une population (liste de mots candidats) et une liste parallèle de poids (leurs probabilités), et renvoie une sélection aléatoire biaisée vers les poids les plus élevés. Si « cat » a une probabilité de 0,4 et « dog » de 0,1, « cat » sera choisi environ 4 fois plus souvent. C'est le mécanisme d'échantillonnage central.
 
@@ -40,23 +40,23 @@ Ce qui rend ce module particulièrement excitant, c'est que c'est la première f
 
 ## Gamification
 
-- **Récompense XP** : +150 XP par leçon (bonus de piste avancée)
-- **Défis** : Chaque leçon a des défis interactifs — échantillonner des distributions, construire le générateur, tester les cas limites
-- **Progression** : Terminez les deux leçons pour débloquer le module CLI final
-- **Bonus de série** : Terminez ce module après les Modules 1-3 pour un bonus de +15 XP
-- **Jalon PBL** : Votre fonction `generate_text()` produit un vrai anglais lisible — vous avez construit un modèle de langage
+- **Récompense XP** : +60 XP par leçon terminée (120 XP au total pour ce module)
+- **Défis** : Chaque leçon a des défis interactifs, échantillonner des distributions, construire le générateur, tester les cas limites
+- **Progression** : terminez les deux leçons pour terminer ce module
+- **Bonus de série** : +15 XP supplémentaires par jour une fois votre série au-delà de 3 jours
+- **Jalon PBL** : Votre fonction `generate_text()` produit un vrai anglais lisible, vous avez construit un modèle de langage
 
 ## Projets que vous pouvez créer
 
 Après avoir terminé ce module, vous serez prêt à attaquer ces projets réels :
 
-- 🤖 **Écrivain d'histoires IA** — la fonction `generate_text()` est le cœur de toute IA créative d'écriture
-- 💬 **Constructeur de chatbot** — la génération de texte est la façon dont les chatbots produisent des réponses à l'entrée utilisateur
-- 📝 **Tuteur IA** — générez des explications et des exemples en échantillonnant des corpus de textes éducatifs
-- 📰 **Générateur de newsletters** — générez automatiquement des brouillons d'articles et des résumés à partir du matériel source
-- 🎮 **Moteur de fiction interactive** — utilisez la génération de texte pour créer des jeux narratifs à embranchements
+- 🤖 **Écrivain d'histoires IA**, la fonction `generate_text()` est le cœur de toute IA créative d'écriture
+- 💬 **Constructeur de chatbot**, la génération de texte est la façon dont les chatbots produisent des réponses à l'entrée utilisateur
+- 📝 **Tuteur IA**, générez des explications et des exemples en échantillonnant des corpus de textes éducatifs
+- 📰 **Générateur de newsletters**, générez automatiquement des brouillons d'articles et des résumés à partir du matériel source
+- 🎮 **Moteur de fiction interactive**, utilisez la génération de texte pour créer des jeux narratifs à embranchements
 
 ## Leçons
 
-1. **Échantillonner le mot suivant** — utilisez `random.choices()` pour choisir des mots suivants pondérés
-2. **Implémenter generate_text()** — transformez la boucle d'échantillonnage en un générateur de texte complet
+1. **Échantillonner le mot suivant**, utilisez `random.choices()` pour choisir des mots suivants pondérés
+2. **Implémenter generate_text()**, transformez la boucle d'échantillonnage en un générateur de texte complet

@@ -1,6 +1,6 @@
 ---
 title: "Conversión de tipos"
-description: "Convierte de forma explícita entre int, float, str y bool — y comprende cuándo fallan las conversiones."
+description: "Convierte de forma explícita entre int, float, str y bool, y comprende cuándo fallan las conversiones."
 module: "python-basics"
 order: 4
 difficulty: "beginner"
@@ -22,7 +22,7 @@ track: "normal"
 
 ## ¿Por qué cambiaría un valor de conjunto?
 
-Escribes tu año de nacimiento en un formulario. La `input()` de Python te devuelve una **cadena** — `"2004"`. Pero `"2004"` no es un número en ningún sentido aritmético: prueba `"2004" + 26` y Python responde `"200426"`, porque para una cadena `+` significa *unir*, no *sumar*.
+Escribes tu año de nacimiento en un formulario. La `input()` de Python te devuelve una **cadena**, `"2004"`. Pero `"2004"` no es un número en ningún sentido aritmético: prueba `"2004" + 26` y Python responde `"200426"`, porque para una cadena `+` significa *unir*, no *sumar*.
 
 Tienes los dígitos de un número sin tener el número. El conjunto al que pertenece es el equivocado. Un valor que cruza desde el teclado hasta un programa llega como texto, y el texto no puede hacer aritmética.
 
@@ -76,7 +76,7 @@ int("3.14")     # ValueError: invalid literal for int()  ("3.14" son dígitos co
 float("hello")  # ValueError: could not convert string to float
 ```
 
-`"hello"` no contiene ningún dígito — no hay nada que convertir, así que Python se niega. `int("3.14")` es más retorcido: *tiene* dígitos, pero la función de conversión `int` solo acepta un literal entero, y $3.14$ no es entero. Debes pasar por `float` si quieres empequeñecerlo:
+`"hello"` no contiene ningún dígito, no hay nada que convertir, así que Python se niega. `int("3.14")` es más retorcido: *tiene* dígitos, pero la función de conversión `int` solo acepta un literal entero, y $3.14$ no es entero. Debes pasar por `float` si quieres empequeñecerlo:
 
 ```python
 int(float("3.14"))   # 3  — analiza 3.14, trunca a 3
@@ -86,7 +86,7 @@ Fíjate en la filosofía: Python falla en voz alta en lugar de adivinar en silen
 
 ## La trampa cotidiana: `input()` devuelve una cadena
 
-En todas y cada una de las ocasiones, `input()` devuelve un `str` — incluso cuando el usuario teclea `2004`. El número que querías sigue al otro lado de una conversión:
+En todas y cada una de las ocasiones, `input()` devuelve un `str`, incluso cuando el usuario teclea `2004`. El número que querías sigue al otro lado de una conversión:
 
 ```python
 year_text = input("Birth year? ")   # str, siempre
@@ -121,23 +121,23 @@ El embudo importa porque cada paso es una promesa distinta: `float(...)` transfo
 - **`int("3.14")` lanza un error.** No puedes convertir una cadena con decimales directamente a `int()`. Encógela a mano: `int(float("3.14"))`, o `round(float("3.14"))`.
 - **`int()` trunca; `round()` redondea.** `int(4.7)` es `4`, no `5`. Pregúntate qué operación describes realmente cuando dices "convierte esto a entero".
 - **`float("inf")` es válido.** Python conoce el infinito: `float('inf')`. Útil en algoritmos de optimización; desconcertante cuando se cuela en un resultado que esperabas finito.
-- **`int()` y `bool()` truncan y reinterpretan en silencio.** `int(3.9)` trocea la fracción en silencio; `bool("")` devuelve `False` en silencio. Analizar texto falla ruidosamente (`ValueError`), pero las conversiones de número a número son calladas — el ojo en esas.
+- **`int()` y `bool()` truncan y reinterpretan en silencio.** `int(3.9)` trocea la fracción en silencio; `bool("")` devuelve `False` en silencio. Analizar texto falla ruidosamente (`ValueError`), pero las conversiones de número a número son calladas, el ojo en esas.
 
 ## 🧩 Desafíos
 
 <details class="challenge">
-<summary>🧩 Desafío — piensa primero, luego revela</summary>
+<summary>🧩 Desafío, piensa primero, luego revela</summary>
 <div class="challenge__body">
 
 Predice `int(-7.9)` y `-7.9 // 1`. ¿Son iguales? Explica cualquier diferencia.
 
-<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>int(-7.9)</code> es <code>-7</code> (trunca hacia cero — corta la parte decimal), mientras que <code>-7.9 // 1</code> es <code>-8.0</code> (piso hacia menos infinito). Coinciden para números positivos y difieren para los negativos.</p>
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>int(-7.9)</code> es <code>-7</code> (trunca hacia cero, corta la parte decimal), mientras que <code>-7.9 // 1</code> es <code>-8.0</code> (piso hacia menos infinito). Coinciden para números positivos y difieren para los negativos.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Desafío — piensa primero, luego revela</summary>
+<summary>🧩 Desafío, piensa primero, luego revela</summary>
 <div class="challenge__body">
 
 Escribe un programa que pida un nombre y un año de nacimiento (dos preguntas independientes con `input()`), calcule una edad aproximada e imprima una frase como `"Amina, you are about 21 years old."`
@@ -148,12 +148,12 @@ Escribe un programa que pida un nombre y un año de nacimiento (dos preguntas in
 </details>
 
 <details class="challenge">
-<summary>🧩 Desafío — piensa primero, luego revela</summary>
+<summary>🧩 Desafío, piensa primero, luego revela</summary>
 <div class="challenge__body">
 
 Sin ejecutarlo, calcula `15 // 4` y `15 % 4` a mano y luego verifica si $4 \cdot (15 // 4) + (15 \% 4)$ reproduce $15$.
 
-<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>15 // 4</code> es <code>3</code> (el piso de $3.75$), y <code>15 % 4</code> es <code>3</code>, ya que $15 = 4 \cdot 3 + 3$. Juntos, <code>4 * 3 + 3 = 15</code> — la identidad de la división $\text{dividendo} = \text{divisor} \cdot \text{cociente} + \text{resto}$.</p>
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>15 // 4</code> es <code>3</code> (el piso de $3.75$), y <code>15 % 4</code> es <code>3</code>, ya que $15 = 4 \cdot 3 + 3$. Juntos, <code>4 * 3 + 3 = 15</code>, la identidad de la división $\text{dividendo} = \text{divisor} \cdot \text{cociente} + \text{resto}$.</p>
 
 </div>
 </details>

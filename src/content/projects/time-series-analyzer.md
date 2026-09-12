@@ -18,9 +18,9 @@ prerequisites:
 
 # 🛠️ 📈 Build a Time Series Analyzer
 
-Temperature records, server load, web traffic — nearly everything real arrives as a sequence over time, and analysts spend their days separating what a series is *doing* into three signals: the slow drift (trend), the repeating rhythm (seasonality), and the leftover noise (residual). This project builds that decomposition from scratch with pandas, then uses the pieces: it forecasts next week with a trend-plus-season model, scores the forecast against a real holdout, flags dates that don't fit the pattern, and correlates two series into a chart you can actually save.
+Temperature records, server load, web traffic, nearly everything real arrives as a sequence over time, and analysts spend their days separating what a series is *doing* into three signals: the slow drift (trend), the repeating rhythm (seasonality), and the leftover noise (residual). This project builds that decomposition from scratch with pandas, then uses the pieces: it forecasts next week with a trend-plus-season model, scores the forecast against a real holdout, flags dates that don't fit the pattern, and correlates two series into a chart you can actually save.
 
-This assumes Python 101 and comfort with pandas Series — nothing from Data Analysis beyond that is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
+This assumes Python 101 and comfort with pandas Series, nothing from Data Analysis beyond that is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 
@@ -34,7 +34,7 @@ This assumes Python 101 and comfort with pandas Series — nothing from Data Ana
 
 **Locally with `uv`** is the primary path. pandas and NumPy install cleanly, matplotlib's non-interactive `Agg` backend (Step 5) renders charts even headless, and your chart files genuinely land in the project folder.
 
-**Google Colab, Kaggle Notebooks, and Binder** run every step identically — all three libraries are pre-installed there. The honest caveat is the usual one for data-viz projects: a notebook's file system is ephemeral, so the saved PNG and any CSV you write may not survive a session restart. Treat them as try-it paths and switch to local `uv` when artifacts need to persist.
+**Google Colab, Kaggle Notebooks, and Binder** run every step identically, all three libraries are pre-installed there. The honest caveat is the usual one for data-viz projects: a notebook's file system is ephemeral, so the saved PNG and any CSV you write may not survive a session restart. Treat them as try-it paths and switch to local `uv` when artifacts need to persist.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/time-series-analyzer/notebook.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/time-series-analyzer/notebook.ipynb)
@@ -67,7 +67,7 @@ Time series analysis lives or dies on the index: every window, weekday, and lag 
 
 ### 1.1 Generate the café-guests series
 
-**👟 Starter hint:** Build the series from three deliberately named parts — a linear trend, a weekly sine seasonality keyed on `dayofweek`, and seeded noise — so the decomposition in Step 2 has real structure to recover.
+**👟 Starter hint:** Build the series from three deliberately named parts, a linear trend, a weekly sine seasonality keyed on `dayofweek`, and seeded noise, so the decomposition in Step 2 has real structure to recover.
 
 ```python
 # series.py
@@ -87,7 +87,7 @@ print(s.head(3))
 print("index type:", type(s.index).__name__, "| dtype:", s.dtype)
 ```
 
-`idx.dayofweek` is the crucial pandas accessor: it yields 0–6 (Monday–Sunday) for every row, and multiplying by `2π/7` phases the sine so weekdays alternate high and low — real *weekly* seasonality, not a random wobble. `np.random.default_rng(seed)` is the modern NumPy seeding API; the fixed seed makes the noise reproducible. Returning a `Series` with `index=idx, name="guests"` means every later function (rolling windows, `groupby` on weekday, plotting) gets the timestamps for free.
+`idx.dayofweek` is the crucial pandas accessor: it yields 0–6 (Monday–Sunday) for every row, and multiplying by `2π/7` phases the sine so weekdays alternate high and low, real *weekly* seasonality, not a random wobble. `np.random.default_rng(seed)` is the modern NumPy seeding API; the fixed seed makes the noise reproducible. Returning a `Series` with `index=idx, name="guests"` means every later function (rolling windows, `groupby` on weekday, plotting) gets the timestamps for free.
 
 **🎯 Expected output:** Three dated rows (starting `2025-01-01`), values near 100, plus `index type: DatetimeIndex | dtype: float64`.
 
@@ -108,11 +108,11 @@ print("index type:", type(s.index).__name__, "| dtype:", s.dtype)
 
 ## Step 2: Decompose into trend, seasonality, and residual
 
-A trend is "what the series does slowly"; seasonality is "the rhythm that repeats"; residual is "everything else." This step computes all three directly — a rolling mean for the trend, weekday averages for the seasonality, and whatever's left as the residual.
+A trend is "what the series does slowly"; seasonality is "the rhythm that repeats"; residual is "everything else." This step computes all three directly, a rolling mean for the trend, weekday averages for the seasonality, and whatever's left as the residual.
 
 ### 2.1 Write the additive decomposition
 
-**👟 Starter hint:** Museum-curator order matters — trend first (rolling mean), then `series - trend` for the detrended remainder, then weekday averages of that remainder as seasonality, then `detrended - seasonal` as residual.
+**👟 Starter hint:** Museum-curator order matters, trend first (rolling mean), then `series - trend` for the detrended remainder, then weekday averages of that remainder as seasonality, then `detrended - seasonal` as residual.
 
 ```python
 # series.py (continued)
@@ -128,11 +128,11 @@ print(seasonal.groupby(seasonal.index.dayofweek).first().to_string())
 print("residual std: {:.2f}".format(residual.std()))
 ```
 
-The rolling mean with `center=True` is the trend estimator: each point becomes the average of its ±7-day neighborhood, which smooths the weekly cycle while preserving slow drift. Subtracting it (`detrended`) leaves the pure rhythm plus noise, and `groupby(dayofweek).transform("mean")` is the tidy seasonality trick — it computes the average for each weekday *and broadcasts it back* to every row with that weekday, so `seasonal` has the same length as `series`. The residual is just whatever survived both subtractions, and its standard deviation is your first correctness signal: it should be far below the raw series' `std`.
+The rolling mean with `center=True` is the trend estimator: each point becomes the average of its ±7-day neighborhood, which smooths the weekly cycle while preserving slow drift. Subtracting it (`detrended`) leaves the pure rhythm plus noise, and `groupby(dayofweek).transform("mean")` is the tidy seasonality trick, it computes the average for each weekday *and broadcasts it back* to every row with that weekday, so `seasonal` has the same length as `series`. The residual is just whatever survived both subtractions, and its standard deviation is your first correctness signal: it should be far below the raw series' `std`.
 
-**🎯 Expected output:** Seven rows (one per weekday) of seasonal offset, plus a `residual std` around 4–6 — clearly smaller than the raw series' spread of ~16.
+**🎯 Expected output:** Seven rows (one per weekday) of seasonal offset, plus a `residual std` around 4–6, clearly smaller than the raw series' spread of ~16.
 
-**🩹 If it's off:** If `seasonal` has `NaN` rows on the edges, the `center=True` window leaves the first/last 7 days undefined — expected, filter with `.dropna()`. If the residual std is near zero, the noise term never made it into the generator. If weekday offsets vary wildly between rows of the same weekday, `transform` was replaced by `apply` — `transform` is what broadcasts to every row.
+**🩹 If it's off:** If `seasonal` has `NaN` rows on the edges, the `center=True` window leaves the first/last 7 days undefined, expected, filter with `.dropna()`. If the residual std is near zero, the noise term never made it into the generator. If weekday offsets vary wildly between rows of the same weekday, `transform` was replaced by `apply`, `transform` is what broadcasts to every row.
 
 ### 2.2 Verify the decomposition
 
@@ -144,7 +144,7 @@ The rolling mean with `center=True` is the trend estimator: each point becomes t
 
 **🤔 Socratic Question(s)**
 
-- A rolling mean is a *low-pass filter* on the series. What happens to a genuine one-off spike in Step 4's `residual` if the trend window is enormous (say 90 days) instead of 14 — and when would that be useful or harmful?
+- A rolling mean is a *low-pass filter* on the series. What happens to a genuine one-off spike in Step 4's `residual` if the trend window is enormous (say 90 days) instead of 14, and when would that be useful or harmful?
 - The seasonal value is a per-weekday average, so it treats all five Mondays of a month as identical. What would change if seasonality itself drifted across the year (winter vs summer)?
 
 ## Step 3: Forecast with trend plus seasonality
@@ -173,9 +173,9 @@ fc = forecast_next(s, seasonal)
 print(fc.round(1).to_string())
 ```
 
-`np.polyfit(X, y, 1)` finds the best straight line through the last `window` real values — the slopes you get, and the intercept places it. Forecasting is then arithmetic: extend that line to indices `window … window+horizon` (X-axis positions *after* the training window), and add `seasonal[future.dayofweek]` so each day's weekly rhythm rides on top of the line. Doing the trend and rhythm separately — rather than forecasting raw noisy values with one model — is the whole point of Step 2.
+`np.polyfit(X, y, 1)` finds the best straight line through the last `window` real values, the slopes you get, and the intercept places it. Forecasting is then arithmetic: extend that line to indices `window … window+horizon` (X-axis positions *after* the training window), and add `seasonal[future.dayofweek]` so each day's weekly rhythm rides on top of the line. Doing the trend and rhythm separately, rather than forecasting raw noisy values with one model, is the whole point of Step 2.
 
-**🎯 Expected output:** Seven dated values, roughly 140–160 and *not* a straight ramp — weekdays visibly ride the weekly sine.
+**🎯 Expected output:** Seven dated values, roughly 140–160 and *not* a straight ramp, weekdays visibly ride the weekly sine.
 
 **🩹 If it's off:** If the forecast is constant, `np.polyfit` returned a ~zero slope because `window` was too short or `y` wasn't the tail. If the forecast is jagged noise, `weekly` hasn't been added and only the line survived. If dates land *before* the series end, the `pd.Timedelta(days=1)` offset is missing.
 
@@ -190,11 +190,11 @@ print(fc.round(1).to_string())
 **🤔 Socratic Question(s)**
 
 - Fitting a straight line assumes a constant rate of growth. What shape would the forecast take if the *true* trend were accelerating, and where does the straight-line assumption fail most visibly on real data?
-- The forecast uses the last 30 points' slope. How would the next-week forecast change if you instead fit the line on the *entire* year's trend component — and which choice feels more robust, and why?
+- The forecast uses the last 30 points' slope. How would the next-week forecast change if you instead fit the line on the *entire* year's trend component, and which choice feels more robust, and why?
 
 ## Step 4: Backtest the forecast and measure error
 
-A forecast you can't score is a guess. Backtesting re-fits the model on the data *before* a held-out week and compares its predictions to the values that week actually took — the honest way to know if your model is any good before you trust it forward.
+A forecast you can't score is a guess. Backtesting re-fits the model on the data *before* a held-out week and compares its predictions to the values that week actually took, the honest way to know if your model is any good before you trust it forward.
 
 ### 4.1 Score the forecast against holdout
 
@@ -213,11 +213,11 @@ def backtest(series: pd.Series, seasonal: pd.Series,
 print("MAE on held-out week: {:.2f} guests".format(backtest(s, seasonal)))
 ```
 
-`series.iloc[:-horizon]` carves off the last week — the model literally cannot see those days — and `forecast_next` runs on what remains, so the comparison `fc - actual` is a genuine out-of-sample test. Reporting **mean absolute error** (`abs().mean()`) keeps the units human: "off by ~4 guests", not a squared number nobody feels. The seasonal component is passed in unchanged; the honest shortcut is that the *rhythm* was learned from the full series, while the *trend* was refit on the truncated data — a fixable tightening documented as such.
+`series.iloc[:-horizon]` carves off the last week, the model literally cannot see those days, and `forecast_next` runs on what remains, so the comparison `fc - actual` is a genuine out-of-sample test. Reporting **mean absolute error** (`abs().mean()`) keeps the units human: "off by ~4 guests", not a squared number nobody feels. The seasonal component is passed in unchanged; the honest shortcut is that the *rhythm* was learned from the full series, while the *trend* was refit on the truncated data, a fixable tightening documented as such.
 
 **🎯 Expected output:** A MAE in the low single digits (roughly 3–6 guests), consistently far below a naive guess like predicting the overall mean.
 
-**🩹 If it's off:** If MAE inflates to 20+, the forecast still includes next-week seasonality built from the full series but the trend fit is being computed on an empty frame — check `train` isn't empty. If `fc` and `actual` misalign, `forecast_next` produces dates beyond `train.index[- horizon]` — confirm the `days=1` offset. If the score drifts between runs, `seasonal` came from a differently-seeded series.
+**🩹 If it's off:** If MAE inflates to 20+, the forecast still includes next-week seasonality built from the full series but the trend fit is being computed on an empty frame, check `train` isn't empty. If `fc` and `actual` misalign, `forecast_next` produces dates beyond `train.index[- horizon]`, confirm the `days=1` offset. If the score drifts between runs, `seasonal` came from a differently-seeded series.
 
 ### 4.2 Verify the backtest
 
@@ -234,7 +234,7 @@ print("MAE on held-out week: {:.2f} guests".format(backtest(s, seasonal)))
 
 ## Step 5: Detect anomalies and chart the pair
 
-Two closing moves turn the analyzer into a finished artifact: flag dates where reality didn't fit the model (large residuals), and chart the series against a correlated peer — saved as a file you can share.
+Two closing moves turn the analyzer into a finished artifact: flag dates where reality didn't fit the model (large residuals), and chart the series against a correlated peer, saved as a file you can share.
 
 ### 5.1 Flag anomalies and draw the correlation chart
 
@@ -269,11 +269,11 @@ fig.tight_layout()
 fig.savefig("series.png", dpi=100)
 ```
 
-`(residual - residual.mean()) / residual.std()` converts each residual into a z-score — "how many standard deviations off-pattern is this day?" — and the `> 2.5` cutoff keeps honest outliers (a 3-sigma day) without flagging half the file. The correlation is the summary statistic: `s.corr(spend)` returns one number in [-1, 1], and values near 0.9 tell you the two metrics move together. On the chart, dividing `spend` by its rough multiplier overlays both series on the same scale — a visual claim the `.corr()` number then confirms.
+`(residual - residual.mean()) / residual.std()` converts each residual into a z-score, "how many standard deviations off-pattern is this day?", and the `> 2.5` cutoff keeps honest outliers (a 3-sigma day) without flagging half the file. The correlation is the summary statistic: `s.corr(spend)` returns one number in [-1, 1], and values near 0.9 tell you the two metrics move together. On the chart, dividing `spend` by its rough multiplier overlays both series on the same scale, a visual claim the `.corr()` number then confirms.
 
 **🎯 Expected output:** A count of anomalies (a handful at most), a correlation near `0.9`, and a `series.png` file showing the two series tracking each other.
 
-**🩹 If it's off:** If `detect_anomalies` flags dozens of days, the data was decomposed with a `window` too small to smooth noise — widen it. If the correlation prints `NaN`, one series has a different index alignment after `.dropna()` — align with `.align()` or compute on the shared index. If no PNG appears, `savefig` runs from a working directory you can't see — print `Path("series.png").resolve()` to confirm where it landed.
+**🩹 If it's off:** If `detect_anomalies` flags dozens of days, the data was decomposed with a `window` too small to smooth noise, widen it. If the correlation prints `NaN`, one series has a different index alignment after `.dropna()`, align with `.align()` or compute on the shared index. If no PNG appears, `savefig` runs from a working directory you can't see, print `Path("series.png").resolve()` to confirm where it landed.
 
 ### 5.2 Verify the finished analyzer
 
@@ -286,7 +286,7 @@ fig.savefig("series.png", dpi=100)
 
 **🤔 Socratic Question(s)**
 
-- The spend series was *built* from guests, so the near-1.0 correlation is engineered. What does a real, lower correlation (say 0.4) imply about whether a café should plan staffing from guest counts — and what does it *not* prove about one causing the other?
+- The spend series was *built* from guests, so the near-1.0 correlation is engineered. What does a real, lower correlation (say 0.4) imply about whether a café should plan staffing from guest counts, and what does it *not* prove about one causing the other?
 - Anomaly flags point to model failures and real events at the same time. If the café closed for a renovation, would that show up as a positive or negative z-score, and how would you tell "interesting anomaly" from "broken model" without calling the café?
 
 ## ⚠️ Common pitfalls
@@ -299,7 +299,7 @@ fig.savefig("series.png", dpi=100)
 
 ## What you just built
 
-A complete time series analyzer: a generated daily series, a hand-built additive decomposition into trend/seasonality/residual, a trend-plus-season forecast with a backtested MAE, anomaly detection on the residual, and a correlated pair chart saved to disk. The transferable skill is *separating signal from noise*: break any noisy sequence into slow drift, repeating rhythm, and leftover residual, then forecast the parts and flag the rest — the same recipe behind demand planning, monitoring, and the "what actually changed?" question.
+A complete time series analyzer: a generated daily series, a hand-built additive decomposition into trend/seasonality/residual, a trend-plus-season forecast with a backtested MAE, anomaly detection on the residual, and a correlated pair chart saved to disk. The transferable skill is *separating signal from noise*: break any noisy sequence into slow drift, repeating rhythm, and leftover residual, then forecast the parts and flag the rest, the same recipe behind demand planning, monitoring, and the "what actually changed?" question.
 
 :::tip[Run a fuller version without any local setup]
 [`examples/time-series-analyzer/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/time-series-analyzer) in the course repo is a fuller version of the code above, with a four-component decomposition and SARIMA-style trend fitting. Clone it, or open the whole repo in a [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), and run it from there.
@@ -307,13 +307,13 @@ A complete time series analyzer: a generated daily series, a hand-built additive
 
 ## Where to go from here
 
-- Add the missing fourth component — trading-day or holiday effects — by one more `groupby` pass over the residual.
+- Add the missing fourth component, trading-day or holiday effects, by one more `groupby` pass over the residual.
 - Replace the manual line fit with `numpy.polyfit` degree 2 and use the AIC-style comparison to decide whether the curve earned its extra parameter.
 - Sweep the `threshold` in `detect_anomalies` from 1.5 to 4 and print how many days each flags, so the cutoff stops being magic.
 - Write the forecast plus the z-scores to a single CSV so the shell script that emails the café manager can read one file, not three.
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

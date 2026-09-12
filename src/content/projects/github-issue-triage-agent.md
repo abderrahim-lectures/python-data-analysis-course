@@ -6,25 +6,25 @@ difficulty: "intermediate"
 
 # 🤖 Build a GitHub Issue Triage Agent
 
-Every open-source repo with any traffic accumulates a backlog of untriaged issues — bug reports, feature requests, questions, and duplicates, all sitting there unlabeled until a maintainer has time to sort through them by hand. This project builds a small script that does the first pass for them: it fetches a real public repo's OPEN issues straight from GitHub's own API, sends each one to a free-tier LLM, and prints a report suggesting a triage label and a one-sentence rationale for each issue — the kind of thing a maintainer could skim in a minute instead of reading every issue from scratch.
+Every open-source repo with any traffic accumulates a backlog of untriaged issues, bug reports, feature requests, questions, and duplicates, all sitting there unlabeled until a maintainer has time to sort through them by hand. This project builds a small script that does the first pass for them: it fetches a real public repo's OPEN issues straight from GitHub's own API, sends each one to a free-tier LLM, and prints a report suggesting a triage label and a one-sentence rationale for each issue, the kind of thing a maintainer could skim in a minute instead of reading every issue from scratch.
 
-This assumes Python 101 — nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
+This assumes Python 101, nothing from Data Analysis is required. It's optional and ungraded; see [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 
 1. Install `uv`, get a free-tier LLM API key, and set up a small project.
-2. Fetch OPEN issues from a real public GitHub repo using GitHub's free REST API — no authentication required for public reads.
+2. Fetch OPEN issues from a real public GitHub repo using GitHub's free REST API, no authentication required for public reads.
 3. Write a prompt that turns one issue's title and body into a request for a suggested triage label and a one-sentence rationale.
 4. Call the LLM for each issue and parse its reply.
 5. Print a readable triage report, and run the whole thing end to end against a real repo.
 
 ## Where to run this
 
-**Locally with `uv`** is the primary, recommended path — the same "graduate to real Python" move as every other project in this section.
+**Locally with `uv`** is the primary, recommended path, the same "graduate to real Python" move as every other project in this section.
 
-**GitHub Codespaces** works just as well, and is notably convenient for this particular project: open [the whole course repo in a free Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python, and `uv` are already installed, per the repo's `.devcontainer/devcontainer.json`) and you're already sitting inside a `git`/`gh`-aware environment with a real GitHub identity attached — a natural fit for a project that's all about GitHub repos and issues.
+**GitHub Codespaces** works just as well, and is notably convenient for this particular project: open [the whole course repo in a free Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python, and `uv` are already installed, per the repo's `.devcontainer/devcontainer.json`) and you're already sitting inside a `git`/`gh`-aware environment with a real GitHub identity attached, a natural fit for a project that's all about GitHub repos and issues.
 
-**Google Colab or Kaggle Notebooks** are also fine here — this is a lightweight, API-calling script with no local file server or long-running process to manage, so `!pip install requests python-dotenv openai` in a cell followed by pasting the code in as notebook cells works without much adaptation. A ready-made notebook version is in [`examples/github-issue-triage-agent/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/github-issue-triage-agent/notebook.ipynb) if you'd rather not paste the code in yourself:
+**Google Colab or Kaggle Notebooks** are also fine here, this is a lightweight, API-calling script with no local file server or long-running process to manage, so `!pip install requests python-dotenv openai` in a cell followed by pasting the code in as notebook cells works without much adaptation. A ready-made notebook version is in [`examples/github-issue-triage-agent/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/github-issue-triage-agent/notebook.ipynb) if you'd rather not paste the code in yourself:
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/github-issue-triage-agent/notebook.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/github-issue-triage-agent/notebook.ipynb)
@@ -34,7 +34,7 @@ This assumes Python 101 — nothing from Data Analysis is required. It's optiona
 
 ### 1. Install `uv`
 
-`uv` is a single tool that replaces the usual "install Python, then install pip, then install a virtual environment tool, then install packages" chain — it can install and manage Python versions itself, alongside your project's dependencies.
+`uv` is a single tool that replaces the usual "install Python, then install pip, then install a virtual environment tool, then install packages" chain, it can install and manage Python versions itself, alongside your project's dependencies.
 
 **macOS / Linux** (terminal):
 
@@ -62,25 +62,25 @@ cd github-issue-triage-agent
 uv add requests python-dotenv openai
 ```
 
-`requests` fetches issues from GitHub's REST API; `python-dotenv` loads your API key from a local `.env` file; `openai` is the client used to call GitHub Models by default (its API is OpenAI-compatible) — see the tip below if you pick a different LLM provider.
+`requests` fetches issues from GitHub's REST API; `python-dotenv` loads your API key from a local `.env` file; `openai` is the client used to call GitHub Models by default (its API is OpenAI-compatible), see the tip below if you pick a different LLM provider.
 
 ### 3. Get a free LLM API key
 
-**Pick whichever provider you like** — none of them require a credit card at the time of writing, and this course doesn't favor one over another. The fuller example in the course repo ([`examples/github-issue-triage-agent/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/github-issue-triage-agent)) supports all six out of the box, selected with one setting.
+**Pick whichever provider you like**, none of them require a credit card at the time of writing, and this course doesn't favor one over another. The fuller example in the course repo ([`examples/github-issue-triage-agent/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/github-issue-triage-agent)) supports all six out of the box, selected with one setting.
 
 | Provider | Where to get a key | Why you might pick it |
 |---|---|---|
-| **GitHub Models** *(suggested default)* | [github.com/settings/tokens](https://github.com/settings/tokens) — a personal access token with the `models: read` scope | No separate signup — you already have a GitHub account, and this project already needs one for the issues API. More generous free-tier limits than Gemini's. |
+| **GitHub Models** *(suggested default)* | [github.com/settings/tokens](https://github.com/settings/tokens), a personal access token with the `models: read` scope | No separate signup, you already have a GitHub account, and this project already needs one for the issues API. More generous free-tier limits than Gemini's. |
 | Gemini | [Google AI Studio](https://aistudio.google.com/) | The most commonly referenced option; used in earlier drafts of this page. |
 | Groq | [console.groq.com/keys](https://console.groq.com/keys) | Fast inference, generous free tier, no card. |
 | Mistral | [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys) | One of the more generous permanent free quotas. |
 | Cerebras | [cloud.cerebras.ai](https://cloud.cerebras.ai/) | High daily token volume, no card. |
-| OpenRouter | [openrouter.ai/keys](https://openrouter.ai/keys) | One API, many free models — good for comparing providers. |
+| OpenRouter | [openrouter.ai/keys](https://openrouter.ai/keys) | One API, many free models, good for comparing providers. |
 
-Whichever you pick, the process is the same: sign in and generate an API key on that provider's site, then **never paste it directly into code or commit it to a repository** — put it in a `.env` file instead (next section).
+Whichever you pick, the process is the same: sign in and generate an API key on that provider's site, then **never paste it directly into code or commit it to a repository**, put it in a `.env` file instead (next section).
 
 :::tip[Using a different provider than GitHub Models?]
-The code in this lesson uses the `openai` package to call GitHub Models, since GitHub Models, Cerebras, and OpenRouter are all OpenAI-compatible (same client, different `base_url`). Gemini, Groq, and Mistral need their own SDK — `uv add google-generativeai`, `uv add groq`, or `uv add mistralai` respectively — and a small swap in `call_llm` below. The repo's fuller example ([`examples/github-issue-triage-agent/triage.py`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/github-issue-triage-agent)) already has all six wired up side by side.
+The code in this lesson uses the `openai` package to call GitHub Models, since GitHub Models, Cerebras, and OpenRouter are all OpenAI-compatible (same client, different `base_url`). Gemini, Groq, and Mistral need their own SDK, `uv add google-generativeai`, `uv add groq`, or `uv add mistralai` respectively, and a small swap in `call_llm` below. The repo's fuller example ([`examples/github-issue-triage-agent/triage.py`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/github-issue-triage-agent)) already has all six wired up side by side.
 :::
 
 ### 4. Create your `.env` file
@@ -94,11 +94,11 @@ GITHUB_TOKEN=your-llm-provider-key-here
 GITHUB_API_TOKEN=
 ```
 
-`GITHUB_TOKEN` here is your **LLM provider** key (GitHub Models specifically) — not required to be the same token as `GITHUB_API_TOKEN`, which is a completely separate, optional token used only for the issues-fetching step below. It's fine for them to be the same personal access token if you generated one with both uses in mind, but neither this project nor GitHub requires that.
+`GITHUB_TOKEN` here is your **LLM provider** key (GitHub Models specifically), not required to be the same token as `GITHUB_API_TOKEN`, which is a completely separate, optional token used only for the issues-fetching step below. It's fine for them to be the same personal access token if you generated one with both uses in mind, but neither this project nor GitHub requires that.
 
 ## Step 1: Fetch open issues from a real repo
 
-GitHub exposes a free REST API for reading public repo data — no authentication needed to read issues from a public repo.
+GitHub exposes a free REST API for reading public repo data, no authentication needed to read issues from a public repo.
 
 ### 1.1 Write the fetch function
 
@@ -134,22 +134,22 @@ if __name__ == "__main__":
 uv run python triage.py
 ```
 
-You should see up to 10 lines, each a real, currently-open issue number and title from [`psf/requests`](https://github.com/psf/requests). `params={"state": "open", ...}` is doing the important filtering here — GitHub's default would include closed issues too, and this project only cares about ones that still need triage.
+You should see up to 10 lines, each a real, currently-open issue number and title from [`psf/requests`](https://github.com/psf/requests). `params={"state": "open", ...}` is doing the important filtering here, GitHub's default would include closed issues too, and this project only cares about ones that still need triage.
 
 :::tip[GitHub's unauthenticated rate limit is low]
-Unauthenticated requests to GitHub's REST API are capped at **60 requests/hour, per IP address** — easy to hit if you're re-running this script a lot while developing, or sharing an IP with classmates on the same network. This lesson only makes one API request per run (one call fetches up to 100 issues at once), so you likely won't hit it just following along — but if you do see a `403` with a message about rate limiting, that's what happened. Setting `GITHUB_API_TOKEN` (any personal access token, no scopes required for public reads) in your `.env` raises the limit to 5,000 requests/hour — see the optional step in Setup above.
+Unauthenticated requests to GitHub's REST API are capped at **60 requests/hour, per IP address**, easy to hit if you're re-running this script a lot while developing, or sharing an IP with classmates on the same network. This lesson only makes one API request per run (one call fetches up to 100 issues at once), so you likely won't hit it just following along, but if you do see a `403` with a message about rate limiting, that's what happened. Setting `GITHUB_API_TOKEN` (any personal access token, no scopes required for public reads) in your `.env` raises the limit to 5,000 requests/hour, see the optional step in Setup above.
 :::
 
-**🎯 Expected output:** `uv run python triage.py` runs without errors and prints up to 10 real issue numbers and titles from `psf/requests` — and no printed line is a pull request (check a couple of the numbers against the repo's Issues tab).
+**🎯 Expected output:** `uv run python triage.py` runs without errors and prints up to 10 real issue numbers and titles from `psf/requests`, and no printed line is a pull request (check a couple of the numbers against the repo's Issues tab).
 
-**🩹 If it's off:** A `403` with a "rate limit" message means GitHub's unauthenticated cap is exhausted — set `GITHUB_API_TOKEN` in `.env`. If a printed line turns out to be a PR, your `"pull_request" not in item` filter isn't running (every PR also surfaces on the `/issues` endpoint). If nothing prints for a valid repo, `fetch_open_issues` may be returning fewer than `limit` issues, or the repo has none open — try a different, active public repo.
+**🩹 If it's off:** A `403` with a "rate limit" message means GitHub's unauthenticated cap is exhausted, set `GITHUB_API_TOKEN` in `.env`. If a printed line turns out to be a PR, your `"pull_request" not in item` filter isn't running (every PR also surfaces on the `/issues` endpoint). If nothing prints for a valid repo, `fetch_open_issues` may be returning fewer than `limit` issues, or the repo has none open, try a different, active public repo.
 
 ### 1.2 Verify the fetch
 
 **✅ Checklist**
 
 - ✅ `uv run python triage.py` runs without errors and prints real issue numbers and titles.
-- ✅ No printed line is a pull request — check a couple of the printed numbers against the repo's actual Issues tab on GitHub.
+- ✅ No printed line is a pull request, check a couple of the printed numbers against the repo's actual Issues tab on GitHub.
 - ✅ Changing `owner`/`repo` to a different real public repo still works.
 
 **🤔 Socratic Question(s)**
@@ -186,15 +186,15 @@ def build_triage_prompt(issue: dict) -> str:
     )
 ```
 
-Two deliberate choices here. First, `MAX_BODY_CHARS` truncates the issue body — some issues run to thousands of words (pasted stack traces, long logs), and there's no benefit to spending tokens on more of it than the model needs to get the gist; see the pitfalls section below for what happens if you skip this. Second, the prompt asks for a fixed, simple two-line reply format (`Label: ...` / `Rationale: ...`) rather than JSON — easier for a small free-tier model to follow reliably, and easy enough to parse with plain string methods in the next step.
+Two deliberate choices here. First, `MAX_BODY_CHARS` truncates the issue body, some issues run to thousands of words (pasted stack traces, long logs), and there's no benefit to spending tokens on more of it than the model needs to get the gist; see the pitfalls section below for what happens if you skip this. Second, the prompt asks for a fixed, simple two-line reply format (`Label: ...` / `Rationale: ...`) rather than JSON, easier for a small free-tier model to follow reliably, and easy enough to parse with plain string methods in the next step.
 
 :::tip["Suggest, don't apply" is a load-bearing instruction, not a nicety]
-Notice the prompt explicitly tells the model it's drafting a suggestion for human review, not applying anything. This script backs that up with real behavior, not just wording: nothing in `triage.py` ever calls a GitHub endpoint that would add a label or comment to a real issue — it only reads issues and prints text to your terminal. That's a deliberate safety boundary, the same principle behind any AI tool that touches other people's things: draft confidently, act only with a human in the loop, especially for something as easy to get subtly wrong as a one-sentence read of somebody else's bug report.
+Notice the prompt explicitly tells the model it's drafting a suggestion for human review, not applying anything. This script backs that up with real behavior, not just wording: nothing in `triage.py` ever calls a GitHub endpoint that would add a label or comment to a real issue, it only reads issues and prints text to your terminal. That's a deliberate safety boundary, the same principle behind any AI tool that touches other people's things: draft confidently, act only with a human in the loop, especially for something as easy to get subtly wrong as a one-sentence read of somebody else's bug report.
 :::
 
-**🎯 Expected output:** Printing `build_triage_prompt(issues[0])` for a real fetched issue produces a well-formed, readable prompt that includes the real issue title and truncated body — not placeholder text.
+**🎯 Expected output:** Printing `build_triage_prompt(issues[0])` for a real fetched issue produces a well-formed, readable prompt that includes the real issue title and truncated body, not placeholder text.
 
-**🩹 If it's off:** If the prompt shows placeholder text like `{title}`, the `.format`-style f-string didn't interpolate — make sure you're calling the returned string with the real issue dict, not a stub. If an issue's body is empty (some really do have none), the `(issue.get("body") or "(no description provided)")` fallback kicks in so the prompt still reads sensibly — confirm that's working rather than interpolating `None`.
+**🩹 If it's off:** If the prompt shows placeholder text like `{title}`, the `.format`-style f-string didn't interpolate, make sure you're calling the returned string with the real issue dict, not a stub. If an issue's body is empty (some really do have none), the `(issue.get("body") or "(no description provided)")` fallback kicks in so the prompt still reads sensibly, confirm that's working rather than interpolating `None`.
 
 ### 2.2 Verify the prompt
 
@@ -249,21 +249,21 @@ def suggest_triage(issue: dict) -> dict:
     return parse_triage_reply(reply)
 ```
 
-Don't forget `from dotenv import load_dotenv` plus `load_dotenv()` near the top of the file, so `os.environ["GITHUB_TOKEN"]` actually finds the key from your `.env` file — same pattern as the [AI Agent project](/projects/ai-agent).
+Don't forget `from dotenv import load_dotenv` plus `load_dotenv()` near the top of the file, so `os.environ["GITHUB_TOKEN"]` actually finds the key from your `.env` file, same pattern as the [AI Agent project](/projects/ai-agent).
 
-`parse_triage_reply` deliberately falls back to `label="other"` and the raw reply as the rationale if the model doesn't follow the requested two-line format exactly — free-tier models occasionally add stray text or skip a line, and a slightly malformed triage *draft* is still more useful printed for a human to skim than dropped silently on a parsing error.
+`parse_triage_reply` deliberately falls back to `label="other"` and the raw reply as the rationale if the model doesn't follow the requested two-line format exactly, free-tier models occasionally add stray text or skip a line, and a slightly malformed triage *draft* is still more useful printed for a human to skim than dropped silently on a parsing error.
 
-**🎯 Expected output:** Calling `suggest_triage` on one real fetched issue returns a `dict` with a real `label` (always one of `LABEL_CHOICES` or the `"other"` fallback) and a real, sentence-length `rationale` — not an error or empty strings.
+**🎯 Expected output:** Calling `suggest_triage` on one real fetched issue returns a `dict` with a real `label` (always one of `LABEL_CHOICES` or the `"other"` fallback) and a real, sentence-length `rationale`, not an error or empty strings.
 
-**🩹 If it's off:** An empty `rationale` usually means the model skipped the `Rationale:` line — feed a deliberately malformed reply (e.g. just `"I think this is a bug"`) to `parse_triage_reply` and confirm it falls back gracefully rather than raising. A `KeyError` on `GITHUB_TOKEN` means `load_dotenv()` isn't finding your `.env` — add both `from dotenv import load_dotenv` and `load_dotenv()` near the top of the file.
+**🩹 If it's off:** An empty `rationale` usually means the model skipped the `Rationale:` line, feed a deliberately malformed reply (e.g. just `"I think this is a bug"`) to `parse_triage_reply` and confirm it falls back gracefully rather than raising. A `KeyError` on `GITHUB_TOKEN` means `load_dotenv()` isn't finding your `.env`, add both `from dotenv import load_dotenv` and `load_dotenv()` near the top of the file.
 
 ### 3.2 Verify the LLM call and parse
 
 **✅ Checklist**
 
-- ✅ Calling `suggest_triage` on one real fetched issue returns a `dict` with a real `label` and a real, sentence-length `rationale` — not an error or empty strings.
+- ✅ Calling `suggest_triage` on one real fetched issue returns a `dict` with a real `label` and a real, sentence-length `rationale`, not an error or empty strings.
 - ✅ The returned `label` is always one of `LABEL_CHOICES` (or the `"other"` fallback), never arbitrary text leaking through unparsed.
-- ✅ Deliberately feeding `parse_triage_reply` a malformed reply (e.g. just `"I think this is a bug"`, no `Label:`/`Rationale:` lines) doesn't crash — it falls back gracefully.
+- ✅ Deliberately feeding `parse_triage_reply` a malformed reply (e.g. just `"I think this is a bug"`, no `Label:`/`Rationale:` lines) doesn't crash, it falls back gracefully.
 
 **🤔 Socratic Question(s)**
 
@@ -272,7 +272,7 @@ Don't forget `from dotenv import load_dotenv` plus `load_dotenv()` near the top 
 
 ## Step 4: Print the report and run it end to end
 
-Put the whole pipeline together — fetch, suggest, report.
+Put the whole pipeline together, fetch, suggest, report.
 
 ### 4.1 Print the report and run it end to end
 
@@ -308,11 +308,11 @@ if __name__ == "__main__":
 uv run python triage.py
 ```
 
-You should see a full report: a header naming the repo and issue count, then one block per issue with its number, title, real GitHub URL, suggested label, and one-sentence rationale — plus that reminder line up top that these are drafts, not applied changes. Try pointing `owner`/`repo` at a different real, active public repo (anything with open issues works) and confirm the report adapts to genuinely different issue content, not just repeating the same output.
+You should see a full report: a header naming the repo and issue count, then one block per issue with its number, title, real GitHub URL, suggested label, and one-sentence rationale, plus that reminder line up top that these are drafts, not applied changes. Try pointing `owner`/`repo` at a different real, active public repo (anything with open issues works) and confirm the report adapts to genuinely different issue content, not just repeating the same output.
 
-**🎯 Expected output:** Running `triage.py` end to end prints a full report with no unhandled tracebacks — every issue has a real GitHub URL, a suggested label, and a non-empty rationale.
+**🎯 Expected output:** Running `triage.py` end to end prints a full report with no unhandled tracebacks, every issue has a real GitHub URL, a suggested label, and a non-empty rationale.
 
-**🩹 If it's off:** A `429` partway through the loop means you hit the LLM's free-tier rate cap — the `time.sleep(0.5)` gap between calls is there to help; add a retry-with-delay if you re-run a lot (see the AI Agent project's rate-limit pattern). If the report repeats nearly identical suggestions for every issue, either the issues genuinely are similar or the model is pattern-matching on titles alone — try a repo with more varied issues and confirm the rationales track each issue's actual content.
+**🩹 If it's off:** A `429` partway through the loop means you hit the LLM's free-tier rate cap, the `time.sleep(0.5)` gap between calls is there to help; add a retry-with-delay if you re-run a lot (see the AI Agent project's rate-limit pattern). If the report repeats nearly identical suggestions for every issue, either the issues genuinely are similar or the model is pattern-matching on titles alone, try a repo with more varied issues and confirm the rationales track each issue's actual content.
 
 ### 4.2 Verify the end-to-end report
 
@@ -324,26 +324,26 @@ You should see a full report: a header naming the repo and issue count, then one
 
 **🤔 Socratic Question(s)**
 
-- If two issues in the same repo are near-duplicates of each other, would this script notice? What would it take to add a "possible duplicate of #N" suggestion — what extra information would the prompt need?
+- If two issues in the same repo are near-duplicates of each other, would this script notice? What would it take to add a "possible duplicate of #N" suggestion, what extra information would the prompt need?
 - Right now every issue gets its own separate LLM call. What would change, for better or worse, if you instead sent all 10 issues to the model in a single prompt and asked for 10 labeled suggestions back at once?
 
 ## ⚠️ Common pitfalls
 
-- **Hitting GitHub's unauthenticated rate limit on a busy repo or a fast dev loop.** 60 requests/hour sounds like a lot until you're re-running the script every minute while debugging. A `403` mentioning rate limiting means this, not a bug in your code — set `GITHUB_API_TOKEN` in `.env` to raise it to 5,000/hour.
-- **Issues with very long bodies blowing past a model's context, or just wasting tokens/quota.** Some issues include full stack traces, pasted logs, or embedded screenshots-as-text that run to thousands of words. `MAX_BODY_CHARS` truncates this — remove that truncation and you risk a request that's slow, expensive against your free-tier quota, or in rare cases too large for the model entirely.
-- **Treating the LLM's suggestion as ground truth instead of a draft.** A free-tier model reading a title and a truncated body has no access to the repo's actual conventions, its label taxonomy, or context from related issues — it can mislabel a real bug as a "question," or miss that two issues are duplicates. Always frame this as speeding up a human's first pass, never as a replacement for one.
-- **Forgetting that GitHub's `/issues` endpoint also returns pull requests.** Skip the `"pull_request" not in item` filter from Step 1 and you'll end up asking an LLM to triage PRs as if they were bug reports — a confusing, wrong result for something that isn't an issue at all.
+- **Hitting GitHub's unauthenticated rate limit on a busy repo or a fast dev loop.** 60 requests/hour sounds like a lot until you're re-running the script every minute while debugging. A `403` mentioning rate limiting means this, not a bug in your code, set `GITHUB_API_TOKEN` in `.env` to raise it to 5,000/hour.
+- **Issues with very long bodies blowing past a model's context, or just wasting tokens/quota.** Some issues include full stack traces, pasted logs, or embedded screenshots-as-text that run to thousands of words. `MAX_BODY_CHARS` truncates this, remove that truncation and you risk a request that's slow, expensive against your free-tier quota, or in rare cases too large for the model entirely.
+- **Treating the LLM's suggestion as ground truth instead of a draft.** A free-tier model reading a title and a truncated body has no access to the repo's actual conventions, its label taxonomy, or context from related issues, it can mislabel a real bug as a "question," or miss that two issues are duplicates. Always frame this as speeding up a human's first pass, never as a replacement for one.
+- **Forgetting that GitHub's `/issues` endpoint also returns pull requests.** Skip the `"pull_request" not in item` filter from Step 1 and you'll end up asking an LLM to triage PRs as if they were bug reports, a confusing, wrong result for something that isn't an issue at all.
 
 ## What you just built
 
-A real fetch → prompt → suggest → report pipeline against a live, public GitHub repo — not a toy dataset. The shape here generalizes well beyond triage: any workflow where you want an LLM to draft a first-pass judgment on a batch of real-world items (support tickets, pull request descriptions, customer messages) for a human to review follows the same fetch-one-item, build-a-focused-prompt, call-the-model, report-the-result loop you just wrote.
+A real fetch → prompt → suggest → report pipeline against a live, public GitHub repo, not a toy dataset. The shape here generalizes well beyond triage: any workflow where you want an LLM to draft a first-pass judgment on a batch of real-world items (support tickets, pull request descriptions, customer messages) for a human to review follows the same fetch-one-item, build-a-focused-prompt, call-the-model, report-the-result loop you just wrote.
 
 ## Where to go from here
 
-- **Actually apply labels — carefully, once you trust the suggestions.** The [`gh` CLI](https://cli.github.com/) (`gh issue edit 123 --add-label bug`) or the GitHub API's own issues-edit endpoint can add a label for real. If you build this, keep a human explicitly in the loop — e.g. print the suggestions first, prompt for confirmation per issue (or per batch) before calling the API, and never auto-apply a label straight from a model's first pass. Treat write access to someone else's repo's issues with real caution, especially one you don't maintain yourself.
-- **Batch multiple issues into one LLM call** instead of one call per issue — fewer round trips, but a more complex prompt and a harder parsing problem (structured output/JSON mode is worth exploring here).
+- **Actually apply labels, carefully, once you trust the suggestions.** The [`gh` CLI](https://cli.github.com/) (`gh issue edit 123 --add-label bug`) or the GitHub API's own issues-edit endpoint can add a label for real. If you build this, keep a human explicitly in the loop, e.g. print the suggestions first, prompt for confirmation per issue (or per batch) before calling the API, and never auto-apply a label straight from a model's first pass. Treat write access to someone else's repo's issues with real caution, especially one you don't maintain yourself.
+- **Batch multiple issues into one LLM call** instead of one call per issue, fewer round trips, but a more complex prompt and a harder parsing problem (structured output/JSON mode is worth exploring here).
 - **Add a "possible duplicate" check** by embedding issue titles (see the [RAG project](/projects/rag-notes) for the embeddings pattern) and flagging pairs that are suspiciously similar, instead of relying on the LLM to remember every other open issue on its own.
-- **Cache results** so re-running the script doesn't re-triage issues you've already reviewed — a simple JSON file keyed by issue number, checked before each LLM call, is enough for a first version.
+- **Cache results** so re-running the script doesn't re-triage issues you've already reviewed, a simple JSON file keyed by issue number, checked before each LLM call, is enough for a first version.
 
 :::tip[Run a fuller version without any local setup]
 [`examples/github-issue-triage-agent/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/github-issue-triage-agent) in the course repo is a fuller version of the code above, with all six providers from the table wired up side by side, selected with one setting, plus an optional `GITHUB_API_TOKEN` for the higher GitHub rate limit. Clone it, or open the whole repo in a [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python, and `uv` already installed) and run it from there.
@@ -351,6 +351,6 @@ A real fetch → prompt → suggest → report pipeline against a live, public G
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

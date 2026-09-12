@@ -8,28 +8,28 @@ difficulty: "intermediate"
 
 This project assumes you're comfortable with Python 101, and it leans on ideas from two other Real-World Projects without strictly requiring either: pandas data-cleaning at roughly the level of [Train Your First Machine Learning Model](/projects/ml-classifier) (loading a CSV, handling messy columns), and the tool-calling agent pattern from [Build an AI Agent](/projects/ai-agent) (a language model that decides to call your Python functions instead of just replying with text). Having seen either helps, but the steps below re-explain what they need as they go.
 
-This is optional and ungraded — a good fit once you've finished Python 101. See [Real-World Projects](/projects) for the full, growing list.
+This is optional and ungraded, a good fit once you've finished Python 101. See [Real-World Projects](/projects) for the full, growing list.
 
 ## 🎯 What you'll do
 
 1. Load and clean a sample bank CSV export with pandas.
-2. Build a fast, rule-based baseline categorizer — and see exactly where keyword rules run out of road.
+2. Build a fast, rule-based baseline categorizer, and see exactly where keyword rules run out of road.
 3. Build an LLM agent tool that categorizes the transactions the rules couldn't confidently label, and explains its reasoning.
 4. Flag statistically unusual transactions (an unusually large purchase compared to that category's typical spend) and have the agent summarize what it found in plain English.
 
 ## Where to run this
 
-**Locally with `uv`** is the path this lesson's steps follow, and the recommended one — real Python on your own machine, same as every other project in this section. The Setup section below walks through installing it.
+**Locally with `uv`** is the path this lesson's steps follow, and the recommended one, real Python on your own machine, same as every other project in this section. The Setup section below walks through installing it.
 
 **GitHub Codespaces** is a zero-setup alternative: open [the whole course repo in a free Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python, and `uv` are already installed, per the repo's `.devcontainer/devcontainer.json`) and run the exact same `uv` commands from a terminal in your browser tab.
 
-**Google Colab, Kaggle Notebooks, or Binder** also work — this project needs no GPU, just pandas and one LLM API call per ambiguous transaction. A real, runnable notebook version (the same pipeline as the steps below, working on the same synthetic sample CSV) lives at [`examples/finance-agent/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/finance-agent/notebook.ipynb). Click a badge to launch it directly, no local install at all:
+**Google Colab, Kaggle Notebooks, or Binder** also work, this project needs no GPU, just pandas and one LLM API call per ambiguous transaction. A real, runnable notebook version (the same pipeline as the steps below, working on the same synthetic sample CSV) lives at [`examples/finance-agent/notebook.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/finance-agent/notebook.ipynb). Click a badge to launch it directly, no local install at all:
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/finance-agent/notebook.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/finance-agent/notebook.ipynb)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Ffinance-agent%2Fnotebook.ipynb)
 
-Be honest with yourself about the tradeoff, though: this is a lower-fidelity way to experience the project than a real local `uv` project — no separate files, no real project structure, just cells in a notebook. Treat it as a quick way to experiment, not the primary path.
+Be honest with yourself about the tradeoff, though: this is a lower-fidelity way to experience the project than a real local `uv` project, no separate files, no real project structure, just cells in a notebook. Treat it as a quick way to experiment, not the primary path.
 
 ## Setup
 
@@ -63,20 +63,20 @@ cd finance-agent
 uv add pandas deepagents langchain-openai python-dotenv
 ```
 
-`pandas` handles loading and cleaning the CSV; `deepagents` is LangChain's framework for building tool-calling agents; `langchain-openai` talks to GitHub Models (its API is OpenAI-compatible — see the tip below if you picked a different provider); `python-dotenv` reads your API key from a local `.env` file.
+`pandas` handles loading and cleaning the CSV; `deepagents` is LangChain's framework for building tool-calling agents; `langchain-openai` talks to GitHub Models (its API is OpenAI-compatible, see the tip below if you picked a different provider); `python-dotenv` reads your API key from a local `.env` file.
 
 ### Get a free AI API key
 
-**Pick whichever provider you like** — none require a credit card at the time of writing. The full example in the course repo ([`examples/finance-agent/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/finance-agent)) supports all six out of the box, selected with one setting.
+**Pick whichever provider you like**, none require a credit card at the time of writing. The full example in the course repo ([`examples/finance-agent/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/finance-agent)) supports all six out of the box, selected with one setting.
 
 | Provider | Where to get a key | Why you might pick it |
 |---|---|---|
-| **GitHub Models** *(suggested default)* | [github.com/settings/tokens](https://github.com/settings/tokens) — a personal access token with the `models: read` scope | No separate signup — you already have a GitHub account. More generous free-tier limits than Gemini's. |
+| **GitHub Models** *(suggested default)* | [github.com/settings/tokens](https://github.com/settings/tokens), a personal access token with the `models: read` scope | No separate signup, you already have a GitHub account. More generous free-tier limits than Gemini's. |
 | Gemini | [Google AI Studio](https://aistudio.google.com/) | The most commonly referenced option. |
 | Groq | [console.groq.com/keys](https://console.groq.com/keys) | Fast inference, generous free tier, no card. |
 | Mistral | [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys) | One of the more generous permanent free quotas. |
 | Cerebras | [cloud.cerebras.ai](https://cloud.cerebras.ai/) | High daily token volume, no card. |
-| OpenRouter | [openrouter.ai/keys](https://openrouter.ai/keys) | One API, many free models — good for comparing providers. |
+| OpenRouter | [openrouter.ai/keys](https://openrouter.ai/keys) | One API, many free models, good for comparing providers. |
 
 Create a `.env` file (never commit this) with the key for whichever provider you picked:
 
@@ -92,10 +92,10 @@ Instead of `export`-ing a key in every new terminal session, put it in a `.env` 
 ## Step 1: Load and clean a sample bank CSV export
 
 :::tip[Never send real, unredacted bank data to a third-party API]
-This project works on a **synthetic** sample CSV — fake dates, fake merchant names, fake amounts, bundled at [`examples/finance-agent/transactions.csv`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/finance-agent/transactions.csv). Steps 3 and 4 send transaction descriptions and amounts to a third-party LLM API. Doing that with your *real* bank export means a copy of your actual financial history — merchant names, spending amounts, potentially more if you exported extra columns — now sits on that provider's servers, subject to whatever retention and training policies they currently have, entirely outside your control. If you ever adapt this to your real spending, redact or synthesize first: strip account numbers, generalize merchant names that reveal something sensitive, round or jitter amounts. This is a genuinely important habit, not a course formality — treat any script that calls an external API as something that will see everything you hand it.
+This project works on a **synthetic** sample CSV, fake dates, fake merchant names, fake amounts, bundled at [`examples/finance-agent/transactions.csv`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/finance-agent/transactions.csv). Steps 3 and 4 send transaction descriptions and amounts to a third-party LLM API. Doing that with your *real* bank export means a copy of your actual financial history, merchant names, spending amounts, potentially more if you exported extra columns, now sits on that provider's servers, subject to whatever retention and training policies they currently have, entirely outside your control. If you ever adapt this to your real spending, redact or synthesize first: strip account numbers, generalize merchant names that reveal something sensitive, round or jitter amounts. This is a genuinely important habit, not a course formality, treat any script that calls an external API as something that will see everything you hand it.
 :::
 
-Download the sample CSV, or copy it from [`examples/finance-agent/transactions.csv`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/finance-agent/transactions.csv) into your project folder. It looks like a real export: one row per transaction, a date, a raw merchant description exactly as a bank would print it (abbreviated, sometimes cryptic), and a signed amount — negative for money out, positive for deposits.
+Download the sample CSV, or copy it from [`examples/finance-agent/transactions.csv`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/finance-agent/transactions.csv) into your project folder. It looks like a real export: one row per transaction, a date, a raw merchant description exactly as a bank would print it (abbreviated, sometimes cryptic), and a signed amount, negative for money out, positive for deposits.
 
 ### 1.1 Load and clean the CSV
 
@@ -114,7 +114,7 @@ df.head()
 
 **🎯 Expected output:** `df["date"].dtype` shows a datetime type (not `object`), `df["amount"]` contains both negative and positive values, and `df.isna().sum()` shows no missing values in `date`, `description`, or `amount`.
 
-**🩹 If it's off:** If `date` is still `object`, the CSV's date column didn't parse — check `parse_dates=["date"]` matches the actual column name (a `ParserError` or a silently-string dtype both mean the column name is off). If there are still NaNs after `dropna`, some rows are missing one of the three columns and were kept — but that's expected handling, so confirm the drop actually ran by checking the row count changed.
+**🩹 If it's off:** If `date` is still `object`, the CSV's date column didn't parse, check `parse_dates=["date"]` matches the actual column name (a `ParserError` or a silently-string dtype both mean the column name is off). If there are still NaNs after `dropna`, some rows are missing one of the three columns and were kept, but that's expected handling, so confirm the drop actually ran by checking the row count changed.
 
 ### 1.2 Verify the cleaned DataFrame
 
@@ -126,11 +126,11 @@ df.head()
 
 **🤔 Socratic Question(s)**
 
-A real bank export might also include a running `balance` column. Nothing in this project uses it — but can you think of a sanity check you could run using `balance` that `date`, `description`, and `amount` alone can't give you?
+A real bank export might also include a running `balance` column. Nothing in this project uses it, but can you think of a sanity check you could run using `balance` that `date`, `description`, and `amount` alone can't give you?
 
-## Step 2: Build a rule-based baseline categorizer — and see its limits
+## Step 2: Build a rule-based baseline categorizer, and see its limits
 
-The cheapest way to categorize a transaction is a keyword lookup: if `"STARBUCKS"` appears in the description, call it `"Dining"`. This is fast, free, and needs no API key at all — a good instinct to reach for before adding any AI to a pipeline.
+The cheapest way to categorize a transaction is a keyword lookup: if `"STARBUCKS"` appears in the description, call it `"Dining"`. This is fast, free, and needs no API key at all, a good instinct to reach for before adding any AI to a pipeline.
 
 ### 2.1 Write the rule-based categorizer
 
@@ -158,18 +158,18 @@ resolved = df["category"].notna().sum()
 print(f"Rule-based pass: {resolved}/{len(df)} categorized. {len(df) - resolved} left ambiguous.")
 ```
 
-Run this against the sample data and a solid majority of rows get categorized instantly. But look at what's left in `df[df["category"].isna()]`: descriptions like `SQ *JOES COFFEE CART`, `TST* CORNER BISTRO`, `PAYPAL *MERCHXYZ123`, `AMZN MKTP US*1H8KX2LP2`, and `VENMO PAYMENT JSMITH`. A human glancing at `SQ *JOES COFFEE CART` recognizes "coffee cart" instantly — but no fixed keyword list can anticipate every payment-processor prefix (`SQ *`, `TST*`, `PAYPAL *`) or peer-to-peer transfer a bank export will ever contain. This is a real, common limitation of rule-based approaches to messy real-world text, not a contrived one — it's exactly the gap the next step exists to close.
+Run this against the sample data and a solid majority of rows get categorized instantly. But look at what's left in `df[df["category"].isna()]`: descriptions like `SQ *JOES COFFEE CART`, `TST* CORNER BISTRO`, `PAYPAL *MERCHXYZ123`, `AMZN MKTP US*1H8KX2LP2`, and `VENMO PAYMENT JSMITH`. A human glancing at `SQ *JOES COFFEE CART` recognizes "coffee cart" instantly, but no fixed keyword list can anticipate every payment-processor prefix (`SQ *`, `TST*`, `PAYPAL *`) or peer-to-peer transfer a bank export will ever contain. This is a real, common limitation of rule-based approaches to messy real-world text, not a contrived one, it's exactly the gap the next step exists to close.
 
-**🎯 Expected output:** The printout shows a solid majority of rows categorized and a handful left ambiguous — and printing `df[df["category"].isna()]` shows rows that are genuinely ambiguous (a payment-processor prefix or a P2P transfer), not just typos in your rules dict.
+**🎯 Expected output:** The printout shows a solid majority of rows categorized and a handful left ambiguous, and printing `df[df["category"].isna()]` shows rows that are genuinely ambiguous (a payment-processor prefix or a P2P transfer), not just typos in your rules dict.
 
-**🩹 If it's off:** If *everything* comes back `None`, your `RULES` keywords don't match anything in the lowercase descriptions — check a few real description strings against your keywords. If you added a keyword per remaining row until they were all resolved, you're rules-patching the problem away: a few unresolved rows is the expected outcome this step exists to surface, not a bug.
+**🩹 If it's off:** If *everything* comes back `None`, your `RULES` keywords don't match anything in the lowercase descriptions, check a few real description strings against your keywords. If you added a keyword per remaining row until they were all resolved, you're rules-patching the problem away: a few unresolved rows is the expected outcome this step exists to surface, not a bug.
 
 ### 2.2 Verify the rule-based pass
 
 **✅ Checklist**
 
 - ✅ You can print the exact rows `categorize_rule_based` left as `None`, and see why each one is genuinely ambiguous (a payment-processor prefix or a P2P transfer, not just a typo in your rules dict).
-- ✅ You resisted the urge to just add more keywords for every case — a handful of remaining unresolved rows is expected, not a bug to rules-patch away.
+- ✅ You resisted the urge to just add more keywords for every case, a handful of remaining unresolved rows is expected, not a bug to rules-patch away.
 
 **🤔 Socratic Question(s)**
 
@@ -181,7 +181,7 @@ This is the same tool-calling shape from [Build an AI Agent](/projects/ai-agent)
 
 ### 3.1 Build the categorize tool and the agent
 
-**👟 Starter hint:** The smallest first move is one tool — `categorize_transaction(description, amount)` with a docstring that lists all 13 valid categories — wired into a `create_deep_agent`. Copy the code below, then loop it over the rows Step 2 left unresolved:
+**👟 Starter hint:** The smallest first move is one tool, `categorize_transaction(description, amount)` with a docstring that lists all 13 valid categories, wired into a `create_deep_agent`. Copy the code below, then loop it over the rows Step 2 left unresolved:
 
 ```python
 import os
@@ -249,15 +249,15 @@ for idx, row in unresolved.iterrows():
 df["category"].value_counts()
 ```
 
-Notice the loop calls `agent.invoke(...)` once per unresolved row, each a separate round trip to the model — the same rate-limit consideration from the AI Agent project applies here: run this against a large CSV and you can hit a free tier's per-minute cap. See that project's "Handling rate limits" section, and `ask()` in [`examples/ai-agent/agent.py`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/ai-agent/agent.py), for a retry pattern you can reuse here.
+Notice the loop calls `agent.invoke(...)` once per unresolved row, each a separate round trip to the model, the same rate-limit consideration from the AI Agent project applies here: run this against a large CSV and you can hit a free tier's per-minute cap. See that project's "Handling rate limits" section, and `ask()` in [`examples/ai-agent/agent.py`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/ai-agent/agent.py), for a retry pattern you can reuse here.
 
 :::tip[Let the model reason, don't just re-hide the rules in the tool]
-The `categorize_transaction` body above is deliberately still a small heuristic, not a hardcoded lookup — but you can go further: give the agent's `system_prompt` the full category list and ask it to reason about an unfamiliar description directly (`"SQ *"` is Square's point-of-sale prefix; `"TST*"` is Toast's — a model that's seen enough real-world payment data can often infer "this is probably a small restaurant or cart" from the shape of the string alone, the same way a human would). The repo's fuller example at [`examples/finance-agent/finance_agent.py`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/finance-agent) is written to make this swap easy — see its comments.
+The `categorize_transaction` body above is deliberately still a small heuristic, not a hardcoded lookup, but you can go further: give the agent's `system_prompt` the full category list and ask it to reason about an unfamiliar description directly (`"SQ *"` is Square's point-of-sale prefix; `"TST*"` is Toast's, a model that's seen enough real-world payment data can often infer "this is probably a small restaurant or cart" from the shape of the string alone, the same way a human would). The repo's fuller example at [`examples/finance-agent/finance_agent.py`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/finance-agent) is written to make this swap easy, see its comments.
 :::
 
 **🎯 Expected output:** Every row that was `None` after Step 2 now has a non-null `category`, and `df["category"].value_counts()` shows categories that make sense for what you know about each merchant.
 
-**🩹 If it's off:** If some rows are still `NaN`, the `next((c for c in CATEGORIES if c.lower() in text.lower()), "Other")` fallback found no known category in the model's reply and the loop hit an exception — print the raw model text for one row to see what it returned. If you hit a 429, you're running one `agent.invoke` per unresolved row and hitting the free-tier rate cap; see the rate-limit note above for a retry pattern.
+**🩹 If it's off:** If some rows are still `NaN`, the `next((c for c in CATEGORIES if c.lower() in text.lower()), "Other")` fallback found no known category in the model's reply and the loop hit an exception, print the raw model text for one row to see what it returned. If you hit a 429, you're running one `agent.invoke` per unresolved row and hitting the free-tier rate cap; see the rate-limit note above for a retry pattern.
 
 ### 3.2 Verify the LLM categorization
 
@@ -273,11 +273,11 @@ The tool's docstring lists all 13 valid categories, and the code that reads the 
 
 ## Step 4: Flag statistical anomalies and summarize them in plain English
 
-"Anomaly" here means: unusually large *for that category*. A $400 hotel charge is unremarkable for Travel but a clear outlier for Dining — so instead of one global dollar threshold, compute a per-category **z-score**: how many standard deviations a transaction sits above its own category's mean spend.
+"Anomaly" here means: unusually large *for that category*. A $400 hotel charge is unremarkable for Travel but a clear outlier for Dining, so instead of one global dollar threshold, compute a per-category **z-score**: how many standard deviations a transaction sits above its own category's mean spend.
 
 ### 4.1 Compute per-category z-scores
 
-**👟 Starter hint:** The smallest first move is computing how far each transaction sits above its own category's mean. Copy the code below — it adds `spend_abs`, per-category `category_mean`/`category_std`, a `z_score`, and an `is_anomaly` flag:
+**👟 Starter hint:** The smallest first move is computing how far each transaction sits above its own category's mean. Copy the code below, it adds `spend_abs`, per-category `category_mean`/`category_std`, a `z_score`, and an `is_anomaly` flag:
 
 ```python
 spend = df["amount"].where(df["amount"] < 0)
@@ -296,11 +296,11 @@ flagged = df[df["is_anomaly"]].sort_values("z_score", ascending=False)
 flagged[["date", "description", "spend_abs", "category", "category_mean", "z_score"]]
 ```
 
-A z-score of 2.0 means "more than two standard deviations above this category's average" — a common, if somewhat arbitrary, statistical rule of thumb for "unusual." Run this on the sample data and you should see a couple of transactions stand out clearly: an outsized electronics purchase relative to typical Shopping spend, and one restaurant charge far above typical Dining spend (a big group dinner, maybe — the data can't say why, only that it's unusual).
+A z-score of 2.0 means "more than two standard deviations above this category's average", a common, if somewhat arbitrary, statistical rule of thumb for "unusual." Run this on the sample data and you should see a couple of transactions stand out clearly: an outsized electronics purchase relative to typical Shopping spend, and one restaurant charge far above typical Dining spend (a big group dinner, maybe, the data can't say why, only that it's unusual).
 
-**🎯 Expected output:** `flagged` contains the transaction(s) you'd expect to stand out by eye (an outsized electronics purchase, a big restaurant charge) and excludes ordinary, predictable ones — and you can explain why the z-score is computed *per category*, not globally across all spending.
+**🎯 Expected output:** `flagged` contains the transaction(s) you'd expect to stand out by eye (an outsized electronics purchase, a big restaurant charge) and excludes ordinary, predictable ones, and you can explain why the z-score is computed *per category*, not globally across all spending.
 
-**🩹 If it's off:** If `flagged` is empty, the `>= 2.0` threshold is too strict for this data (or NaN `z_score`s weren't filled by `.fillna(False)`). If `flagged` contains rows you wouldn't call unusual, the math is being pulled by a category with very few transactions whose standard deviation is tiny — check `category_std` and revisit the Socratic question below.
+**🩹 If it's off:** If `flagged` is empty, the `>= 2.0` threshold is too strict for this data (or NaN `z_score`s weren't filled by `.fillna(False)`). If `flagged` contains rows you wouldn't call unusual, the math is being pulled by a category with very few transactions whose standard deviation is tiny, check `category_std` and revisit the Socratic question below.
 
 ### 4.2 Summarize the anomalies in plain English
 
@@ -329,11 +329,11 @@ result = agent.invoke({
 print(result["messages"][-1].content)
 ```
 
-The prompt deliberately says "no new numbers, no advice beyond what the data supports" — a real guard against a common failure mode of LLM summaries: inventing a plausible-sounding but unsupported explanation ("this was probably a birthday dinner") instead of sticking to what the statistics actually show.
+The prompt deliberately says "no new numbers, no advice beyond what the data supports", a real guard against a common failure mode of LLM summaries: inventing a plausible-sounding but unsupported explanation ("this was probably a birthday dinner") instead of sticking to what the statistics actually show.
 
-**🎯 Expected output:** The agent prints a 2-4 sentence plain-English summary that mentions only categories and amounts that actually appear in `anomaly_summary` — nothing invented.
+**🎯 Expected output:** The agent prints a 2-4 sentence plain-English summary that mentions only categories and amounts that actually appear in `anomaly_summary`, nothing invented.
 
-**🩹 If it's off:** If the summary invents a reason ("this was probably a birthday dinner"), the prompt let it drift past the numbers it was given — re-add the strict "no new numbers, no advice beyond what the data supports" constraint. If it lists figures that aren't in `anomaly_summary`, the model hallucinated a number; treat any value it didn't receive as fabricated and constrain it harder.
+**🩹 If it's off:** If the summary invents a reason ("this was probably a birthday dinner"), the prompt let it drift past the numbers it was given, re-add the strict "no new numbers, no advice beyond what the data supports" constraint. If it lists figures that aren't in `anomaly_summary`, the model hallucinated a number; treat any value it didn't receive as fabricated and constrain it harder.
 
 ### 4.3 Verify the anomaly report
 
@@ -341,23 +341,23 @@ The prompt deliberately says "no new numbers, no advice beyond what the data sup
 
 - ✅ `flagged` contains the transaction(s) you'd expect to stand out by eye, and excludes ordinary ones.
 - ✅ You understand why the z-score is computed *per category*, not globally across all spending.
-- ✅ The agent's plain-English summary mentions only categories/amounts that actually appear in `anomaly_summary` — nothing invented.
+- ✅ The agent's plain-English summary mentions only categories/amounts that actually appear in `anomaly_summary`, nothing invented.
 
 **🤔 Socratic Question(s)**
 
-A category with only one or two transactions has an undefined or near-zero standard deviation — the code above guards against dividing by that with `.replace(0, pd.NA)`. What would happen to a category's z-scores if that guard weren't there, and why might a category with very few transactions be a poor candidate for this kind of anomaly detection in the first place?
+A category with only one or two transactions has an undefined or near-zero standard deviation, the code above guards against dividing by that with `.replace(0, pd.NA)`. What would happen to a category's z-scores if that guard weren't there, and why might a category with very few transactions be a poor candidate for this kind of anomaly detection in the first place?
 
 ## ⚠️ Common pitfalls
 
 - **Sending real financial data to a third-party API.** Covered above, worth repeating: this project is built around a synthetic CSV specifically so you build the habit of treating any script that calls an external API as something that will see everything you hand it.
-- **Re-running the categorization loop needlessly.** Calling `agent.invoke(...)` once per unresolved row burns real API quota every time you rerun your script — cache results (e.g. to a local CSV or dict keyed by description) instead of re-categorizing the same rows on every run while you're iterating on Step 4.
+- **Re-running the categorization loop needlessly.** Calling `agent.invoke(...)` once per unresolved row burns real API quota every time you rerun your script, cache results (e.g. to a local CSV or dict keyed by description) instead of re-categorizing the same rows on every run while you're iterating on Step 4.
 - **A global anomaly threshold instead of a per-category one.** Flagging "any transaction over $200" would miss a $150 outlier in a category that normally spends $20, and would flag ordinary rent or travel charges constantly. Compare each transaction to its own category's typical spend, as Step 4 does.
 - **Letting the summary agent invent explanations.** An LLM asked to "explain" an anomaly will happily fabricate a plausible-sounding reason if you let it. Constrain the prompt to the actual numbers, as in Step 4, and treat anything beyond that as the model guessing, not reporting.
-- **Trusting `is_anomaly` from a category with 1-2 transactions.** A category almost every value came from a tiny sample doesn't tell you much about what's "normal" for it yet — see the Socratic question above.
+- **Trusting `is_anomaly` from a category with 1-2 transactions.** A category almost every value came from a tiny sample doesn't tell you much about what's "normal" for it yet, see the Socratic question above.
 
 ## What you just built
 
-A small but genuinely useful pipeline: a rule-based pass that handles the easy 80% of transactions for free, an LLM agent that picks up the ambiguous remainder a fixed keyword list structurally can't cover, and a statistical anomaly check that turns "does anything here look off?" into an actual, defensible answer — then a plain-English summary a non-technical reader could act on. This "cheap deterministic pass first, AI for the genuinely ambiguous remainder" shape generalizes well beyond finance — it's the same instinct behind a lot of real-world data pipelines that use LLMs.
+A small but genuinely useful pipeline: a rule-based pass that handles the easy 80% of transactions for free, an LLM agent that picks up the ambiguous remainder a fixed keyword list structurally can't cover, and a statistical anomaly check that turns "does anything here look off?" into an actual, defensible answer, then a plain-English summary a non-technical reader could act on. This "cheap deterministic pass first, AI for the genuinely ambiguous remainder" shape generalizes well beyond finance, it's the same instinct behind a lot of real-world data pipelines that use LLMs.
 
 :::tip[Run a fuller version without any local setup]
 [`examples/finance-agent/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/finance-agent) in the course repo has the full pipeline as separate, reusable files (`rules.py`, `anomalies.py`, `finance_agent.py`) plus a synthetic sample CSV, and supports all six providers from the table above, selected with one setting. Clone it, or open the whole repo in a [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) and run it from there.
@@ -365,13 +365,13 @@ A small but genuinely useful pipeline: a rule-based pass that handles the easy 8
 
 ## Where to go from here
 
-- **A confusion-free summary across months.** Group by `date.dt.to_period("M")` and compare each month's category totals — is spending trending up somewhere specific, beyond any single flagged transaction?
+- **A confusion-free summary across months.** Group by `date.dt.to_period("M")` and compare each month's category totals, is spending trending up somewhere specific, beyond any single flagged transaction?
 - **A smarter anomaly check.** A z-score assumes spending within a category is roughly bell-shaped, which isn't always true (rent is nearly constant; dining varies a lot). Look into more robust measures like the median and interquartile range (IQR) for categories where a few large values skew the mean.
 - **A real categorization budget.** Instead of re-categorizing every unresolved row on every run, persist categorized results (a local SQLite file or a CSV cache keyed by description) so re-running the script only calls the agent on genuinely new transactions.
 - **Multiple months, multiple accounts.** Real finances span more than one account. Try extending the pipeline to load several CSVs and reconcile categories consistently across them.
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

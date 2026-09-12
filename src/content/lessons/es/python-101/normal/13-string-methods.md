@@ -9,7 +9,7 @@ learningObjectives:
   - "Usar split() y join() para convertir entre cadenas y listas"
   - "Aplicar strip(), replace(), find(), startswith(), endswith()"
   - "Dar formato a cadenas con sintaxis avanzada de f-strings"
-  - "Comprender la inmutabilidad — los métodos de cadenas devuelven cadenas nuevas"
+  - "Comprender la inmutabilidad, los métodos de cadenas devuelven cadenas nuevas"
 prerequisites: ["12-scope-and-lambdas"]
 tags: ["cadenas", "métodos", "split", "join", "strip", "replace"]
 hasPlayground: true
@@ -31,7 +31,7 @@ print(name)    # alice  (sin cambios)
 print(upper)   # ALICE
 ```
 
-Merece la pena interiorizarlo como ley: los métodos de cadenas nunca mutan; entregan copias recién construidas. Una vez que esperas cadenas nuevas, el arsenal se vuelve predecible — y el ocasional bucle `while` que parece no hacer nada se colapsa en una reasignación.
+Merece la pena interiorizarlo como ley: los métodos de cadenas nunca mutan; entregan copias recién construidas. Una vez que esperas cadenas nuevas, el arsenal se vuelve predecible, y el ocasional bucle `while` que parece no hacer nada se colapsa en una reasignación.
 
 ## Dividir y unir
 
@@ -52,7 +52,7 @@ $$
 \text{split}(s, \text{sep}) = [w_1, w_2, \ldots, w_n] \qquad \text{join}(\text{sep}, [w_1, \ldots, w_n]) = w_1 + \text{sep} + w_2 + \cdots + w_n.
 $$
 
-Nota la asimetría: `split()` sin argumento divide en tramos de espacio en blanco — varios espacios colapsan —, mientras que un espacio en minúscula es tu delimitador en `" ".join(words)`. El delimitador de join es lo que quieres *entre* piezas; por eso `","`, y no `""`.
+Nota la asimetría: `split()` sin argumento divide en tramos de espacio en blanco, varios espacios colapsan,, mientras que un espacio en minúscula es tu delimitador en `" ".join(words)`. El delimitador de join es lo que quieres *entre* piezas; por eso `","`, y no `""`.
 
 ## Buscar y probar
 
@@ -66,7 +66,7 @@ text.count("l")            # 3
 text.replace("World", "Python")  # 'Hello, Python!'
 ```
 
-`startswith` y `endswith` son preguntas de sí/no sobre los bordes de la cadena — guardias baratos que sustituyen a las rebanadas. `find` responde *dónde*, devolviendo el índice donde comienza la subcadena, o $-1$ cuando la búsqueda fracasa. `count` enumera las apariciones no solapadas; `replace` canjea cada coincidencia por un sustituto.
+`startswith` y `endswith` son preguntas de sí/no sobre los bordes de la cadena, guardias baratos que sustituyen a las rebanadas. `find` responde *dónde*, devolviendo el índice donde comienza la subcadena, o $-1$ cuando la búsqueda fracasa. `count` enumera las apariciones no solapadas; `replace` canjea cada coincidencia por un sustituto.
 
 ## Mayúsculas/minúsculas y espacios
 
@@ -79,7 +79,7 @@ text.replace("World", "Python")  # 'Hello, Python!'
 "hello world".title()  # 'Hello World'
 ```
 
-`strip` recorta el relleno que añade la contaminación — los espacios sueltos alrededor de un texto pegado. `title` capitaliza la primera letra de cada palabra, el disfraz suburbano para la desidia al introducir datos. Cada una es una transformación con un propósito, a la que se llega por su nombre más que memorizándola.
+`strip` recorta el relleno que añade la contaminación, los espacios sueltos alrededor de un texto pegado. `title` capitaliza la primera letra de cada palabra, el disfraz suburbano para la desidia al introducir datos. Cada una es una transformación con un propósito, a la que se llega por su nombre más que memorizándola.
 
 ## Formato avanzado de f-strings
 
@@ -100,11 +100,11 @@ print(f"{42:05d}")        # 00042  (relleno con ceros)
 print(f"{0.857:.1%}")     # 85.7%  (porcentaje)
 ```
 
-La especificación `%` es una pequeña multiplicación por $100$ con un signo: $\{0.857 \mapsto 85.7\%\}$. `.2f` redondea a dos decimales en la pantalla mientras el número subyacente queda entero. La alineación convierte una columna irregular de valores en una tabla con nombre — presentación sin aritmética en el cuerpo.
+La especificación `%` es una pequeña multiplicación por $100$ con un signo: $\{0.857 \mapsto 85.7\%\}$. `.2f` redondea a dos decimales en la pantalla mientras el número subyacente queda entero. La alineación convierte una columna irregular de valores en una tabla con nombre, presentación sin aritmética en el cuerpo.
 
 ## Un ejemplo resuelto: limpiar la línea pegada
 
-Las herramientas se ensamblan en un circuito para la entrada más sucia del mundo real — una línea pegada desde una tabla:
+Las herramientas se ensamblan en un circuito para la entrada más sucia del mundo real, una línea pegada desde una tabla:
 
 ```python
 raw = "  apple, banana, cherry  "
@@ -115,35 +115,35 @@ back = ", ".join(fruits)
 print(back)            # 'apple, banana, cherry'
 ```
 
-Tres gestos, un circuito: `strip` pela el padding que trae el pegado, `split` corta en piezas, `join` vuelve a pegar con el separador elegido. La dupla inversa `split`/`join` es el puente entre texto y lista — la misma relación que la ecuación de la apertura.
+Tres gestos, un circuito: `strip` pela el padding que trae el pegado, `split` corta en piezas, `join` vuelve a pegar con el separador elegido. La dupla inversa `split`/`join` es el puente entre texto y lista, la misma relación que la ecuación de la apertura.
 
 ## Errores comunes
 
 - **Olvidar qué es `split()` sin argumento.** Divide en tramos de espacios; pedirle que divida por la cadena vacía no es una opción que ofrezca.
 - **Esperar que `find()` lance un error ante subcadenas ausentes.** Devuelve $-1$. Comprueba antes de rebanar sobre él.
 - **Intentar modificar una cadena en su sitio.** No existe la edición en el sitio; reasigna el resultado.
-- **`join` se sienta sobre el delimitador, `split` sobre la cadena.** `" ".join(words)`, no `words.join(" ")` — el separador es dueño del método, y olvidar cuál es cuál te da un `AttributeError`.
+- **`join` se sienta sobre el delimitador, `split` sobre la cadena.** `" ".join(words)`, no `words.join(" ")`, el separador es dueño del método, y olvidar cuál es cuál te da un `AttributeError`.
 
 ## 🧩 Desafíos
 
 <details class="challenge">
-<summary>🧩 Desafío — piensa primero, luego revela</summary>
+<summary>🧩 Desafío, piensa primero, luego revela</summary>
 <div class="challenge__body">
 
 Escribe `title_case(s)` que capitalice la primera letra de cada palabra: `title_case("hello world")` → `"Hello World"`.
 
-<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>return s.title()</code> — el método incorporado de Python hace exactamente esto; a veces una línea es la solución entera.</p>
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>return s.title()</code>, el método incorporado de Python hace exactamente esto; a veces una línea es la solución entera.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Desafío — piensa primero, luego revela</summary>
+<summary>🧩 Desafío, piensa primero, luego revela</summary>
 <div class="challenge__body">
 
 Dado `"one,two,,three"`, divide por comas y descarta las cadenas vacías.
 
-<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>[x for x in s.split(",") if x]</code> o <code>list(filter(None, s.split(",")))</code> — la cadena vacía es falsy, así que el filtro de veracidad la descarta sin comprobar la longitud.</p>
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>[x for x in s.split(",") if x]</code> o <code>list(filter(None, s.split(",")))</code>, la cadena vacía es falsy, así que el filtro de veracidad la descarta sin comprobar la longitud.</p>
 
 </div>
 </details>
@@ -152,7 +152,7 @@ Dado `"one,two,,three"`, divide por comas y descarta las cadenas vacías.
 
 - ¿Por qué `find()` devuelve $-1$ en lugar de lanzar un error? ¿Qué cuesta cada elección?
 - ¿Cómo inviertes una cadena? ¿Existe un método para ello, o la respuesta vive en otra parte?
-- ¿Cuándo es `str.replace()` la herramienta equivocada — y qué encaja para una sustitución más delicada?
+- ¿Cuándo es `str.replace()` la herramienta equivocada, y qué encaja para una sustitución más delicada?
 
 ## ✅ Comprobación rápida
 

@@ -10,7 +10,7 @@ prerequisites: ["Python basics (variables, loops, functions, dictionaries)", "Ba
 
 # Spreadsheet Processor
 
-- **Run it in your browser.** An interactive companion notebook is ready — open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
+- **Run it in your browser.** An interactive companion notebook is ready, open it in Colab, Kaggle, or Binder and follow along top-to-bottom.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/spreadsheet-tool/notebook.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/spreadsheet-tool/notebook.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fspreadsheet-tool%2Fnotebook.ipynb)
@@ -135,9 +135,9 @@ Charlie   35      Chicago   78.1
 
 ### If It's Off
 
-- **`FileNotFoundError`** — The file path is wrong. Use `Path(filepath).resolve()` to get the absolute path and double-check it.
-- **`ParserError: Error tokenizing`** — The delimiter detection picked the wrong character. Try passing `sep=None` and `engine="python"` to `pd.read_csv`, or specify the delimiter manually.
-- **Garbled characters** — The encoding detection picked wrong. Open the file in a text editor, check its encoding, and pass it directly to `pd.read_csv(encoding=...)`.
+- **`FileNotFoundError`**, The file path is wrong. Use `Path(filepath).resolve()` to get the absolute path and double-check it.
+- **`ParserError: Error tokenizing`**, The delimiter detection picked the wrong character. Try passing `sep=None` and `engine="python"` to `pd.read_csv`, or specify the delimiter manually.
+- **Garbled characters**, The encoding detection picked wrong. Open the file in a text editor, check its encoding, and pass it directly to `pd.read_csv(encoding=...)`.
 
 ---
 
@@ -217,9 +217,9 @@ max    35.0   95.00
 
 ### If It's Off
 
-- **All columns are `object` type** — Numbers were stored as strings (maybe with commas or dollar signs). You'll fix this in Step 5 with `pd.to_numeric`.
-- **`describe()` shows nothing** — No numeric columns exist. Check if the data loaded correctly and if type conversion is needed.
-- **Missing values show up unexpectedly** — Pandas treats `""`, `"NA"`, `"N/A"`, and `"null"` as NaN by default. Pass `na_values=["your_marker"]` to `read_csv` if your data uses a different sentinel.
+- **All columns are `object` type**, Numbers were stored as strings (maybe with commas or dollar signs). You'll fix this in Step 5 with `pd.to_numeric`.
+- **`describe()` shows nothing**, No numeric columns exist. Check if the data loaded correctly and if type conversion is needed.
+- **Missing values show up unexpectedly**, Pandas treats `""`, `"NA"`, `"N/A"`, and `"null"` as NaN by default. Pass `na_values=["your_marker"]` to `read_csv` if your data uses a different sentinel.
 
 ---
 
@@ -329,9 +329,9 @@ print(sorted_df.to_string(index=False))
 
 ### If It's Off
 
-- **TypeError when comparing** — The column is numeric but you passed a string (or vice versa). The auto-casting in `filter_data` handles common cases, but unusual formats may need manual conversion first.
-- **Filter returns empty** — Check `df[column].unique()` to see actual values. Whitespace, case differences, or unexpected types are common culprits.
-- **`sort_values` raises KeyError** — You misspelled a column name. Use `df.columns.tolist()` to check.
+- **TypeError when comparing**, The column is numeric but you passed a string (or vice versa). The auto-casting in `filter_data` handles common cases, but unusual formats may need manual conversion first.
+- **Filter returns empty**, Check `df[column].unique()` to see actual values. Whitespace, case differences, or unexpected types are common culprits.
+- **`sort_values` raises KeyError**, You misspelled a column name. Use `df.columns.tolist()` to check.
 
 ---
 
@@ -449,9 +449,9 @@ print(crosstab.to_string())
 
 ### If It's Off
 
-- **`groupby` returns unexpected shape** — You might be grouping by a column with too many unique values. Check with `df[group_col].nunique()`.
-- **Pivot table shows all zeros** — The `fill_value=0` replaces NaN. If many groups don't have values for a combination, this is correct. Remove `fill_value` to see NaN instead.
-- **Crosstab has too many rows** — Too many unique values in one column. Consider binning numeric data with `pd.cut()` first.
+- **`groupby` returns unexpected shape**, You might be grouping by a column with too many unique values. Check with `df[group_col].nunique()`.
+- **Pivot table shows all zeros**, The `fill_value=0` replaces NaN. If many groups don't have values for a combination, this is correct. Remove `fill_value` to see NaN instead.
+- **Crosstab has too many rows**, Too many unique values in one column. Consider binning numeric data with `pd.cut()` first.
 
 ---
 
@@ -593,9 +593,9 @@ df = clean_data(df, {
 
 ### If It's Off
 
-- **`to_numeric` converts too much to NaN** — The column has non-numeric text (like "thirty-two"). Check `df[col].unique()` before converting, and decide whether to drop or replace bad values.
-- **Whitespace not fully stripped** — Non-breaking spaces (`\xa0`) or tabs might be present. Use `df[col].str.replace(r'\s+', ' ', regex=True)` for aggressive cleanup.
-- **Duplicates not removed** — The rows differ in at least one column. Use `df.duplicated(subset=["col1", "col2"])` to check similarity on specific columns.
+- **`to_numeric` converts too much to NaN**, The column has non-numeric text (like "thirty-two"). Check `df[col].unique()` before converting, and decide whether to drop or replace bad values.
+- **Whitespace not fully stripped**, Non-breaking spaces (`\xa0`) or tabs might be present. Use `df[col].str.replace(r'\s+', ' ', regex=True)` for aggressive cleanup.
+- **Duplicates not removed**, The rows differ in at least one column. Use `df.duplicated(subset=["col1", "col2"])` to check similarity on specific columns.
 
 ---
 
@@ -670,10 +670,10 @@ Exporting 'output'...
 
 ### If It's Off
 
-- **`ModuleNotFoundError: No openpyxl`** — Install it: `pip install openpyxl`. It's not bundled with pandas.
-- **Excel file is corrupt** — You might be overwriting a file that's open in Excel. Close it first, or use a different filename.
-- **JSON has `NaN` strings** — Pandas serializes NaN as `null` by default, but some configurations differ. Pass `default_handler=str` or clean NaN before exporting.
-- **CSV has extra backslashes or quotes** — Check `quoting` and `escapechar` parameters. The defaults handle most cases, but embedded newlines in cells can cause issues.
+- **`ModuleNotFoundError: No openpyxl`**, Install it: `pip install openpyxl`. It's not bundled with pandas.
+- **Excel file is corrupt**, You might be overwriting a file that's open in Excel. Close it first, or use a different filename.
+- **JSON has `NaN` strings**, Pandas serializes NaN as `null` by default, but some configurations differ. Pass `default_handler=str` or clean NaN before exporting.
+- **CSV has extra backslashes or quotes**, Check `quoting` and `escapechar` parameters. The defaults handle most cases, but embedded newlines in cells can cause issues.
 
 ---
 
@@ -845,9 +845,9 @@ DATA EXPLORATION
 
 ### If It's Off
 
-- **Menu loops infinitely** — Check that `break` exists in the quit branch. The `while True` loop needs an explicit exit.
-- **`input()` blocks in non-interactive environments** — Use `sys.stdin.isatty()` to detect whether you're in a terminal, and fall back to file-based or argument-based input.
-- **State is lost between runs** — This is expected. The menu is stateless; each run starts fresh. For persistence, you could add save/load functionality using JSON.
+- **Menu loops infinitely**, Check that `break` exists in the quit branch. The `while True` loop needs an explicit exit.
+- **`input()` blocks in non-interactive environments**, Use `sys.stdin.isatty()` to detect whether you're in a terminal, and fall back to file-based or argument-based input.
+- **State is lost between runs**, This is expected. The menu is stateless; each run starts fresh. For persistence, you could add save/load functionality using JSON.
 
 ---
 

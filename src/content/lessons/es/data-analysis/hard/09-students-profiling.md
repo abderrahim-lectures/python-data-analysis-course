@@ -261,7 +261,7 @@ for q, a in answers.items():
 
 - Carga siempre los datos desde una fuente reproducible (URL) para que otros puedan replicar tu análisis
 - El flujo de trabajo de perfilado del Módulo 1 es tu punto de partida estándar para cualquier conjunto de datos
-- Formula preguntas antes del análisis — te mantienen enfocado y evitan que el alcance se expanda
+- Formula preguntas antes del análisis, te mantienen enfocado y evitan que el alcance se expanda
 - El conjunto de datos Students Performance está limpio (sin valores faltantes) pero tiene variables categóricas interesantes para explorar
 - Tu plan de análisis debe fluir de forma lógica: univariado → bivariado → multivariado → narración
 
@@ -270,7 +270,7 @@ for q, a in answers.items():
 Escribe un script de Python que cargue el conjunto de datos, lo perfiles y genere un diccionario de resumen con: `row_count`, `column_count`, `missing_columns`, `score_means`, `score_stds`, `categorical_cardinalities` y `eda_questions`. Imprime el diccionario formateado.
 
 <details class="challenge">
-<summary>🧩 Desafío — piensa primero, luego revela</summary>
+<summary>🧩 Desafío, piensa primero, luego revela</summary>
 <div class="challenge__body">
 
 ```python

@@ -295,7 +295,7 @@ plt.show()
 
 ## Points clés à retenir
 
-- FacetGrid et catplot créent des vues multi-panneaux réparties par variables catégorielles — essentiels pour comparer les distributions entre groupes
+- FacetGrid et catplot créent des vues multi-panneaux réparties par variables catégorielles, essentiels pour comparer les distributions entre groupes
 - PairGrid donne un contrôle total sur les types de graphiques de la diagonale, du triangle supérieur et du triangle inférieur
 - GridSpec crée des mises en page personnalisées où les sous-graphiques ont des tailles différentes
 - Combiner plusieurs types de graphiques sur un même axe (dispersion + régression + moyennes) empile l'information efficacement
@@ -306,7 +306,7 @@ plt.show()
 Créez une figure de 2×2 : (1) un FacetGrid d'histogrammes des notes de maths répartis par genre, (2) un PairGrid des trois notes avec KDE sur la diagonale et dispersion en dessous, (3) un graphique combiné dispersion + régression + lignes de moyennes et (4) une heatmap de corrélation. Définissez un titre de figure unique pour l'ensemble.
 
 <details class="challenge">
-<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
+<summary>🧩 Défi, réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
 ```python

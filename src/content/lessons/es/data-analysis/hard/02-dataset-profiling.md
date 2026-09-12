@@ -74,7 +74,7 @@ for col in df.select_dtypes(include="object").columns:
     print(df[col].value_counts())
 ```
 
-Esto te da la estructura, los tipos de datos, las distribuciones numéricas y las frecuencias categóricas — todo lo que necesitas para decidir qué hacer a continuación.
+Esto te da la estructura, los tipos de datos, las distribuciones numéricas y las frecuencias categóricas, todo lo que necesitas para decidir qué hacer a continuación.
 
 ### Evaluación de datos faltantes
 
@@ -92,9 +92,9 @@ print(missing_report[missing_report["missing_count"] > 0])
 ```
 
 Interpreta los patrones de falta:
-- **MCAR (Falta completamente al azar)**: la falta no tiene relación con ninguna variable — seguro eliminar filas
-- **MAR (Falta al azar)**: la falta se relaciona con variables observadas — puede ser imputada
-- **MNAR (Falta no al azar)**: la falta se relaciona con el valor faltante en sí — requiere conocimiento del dominio
+- **MCAR (Falta completamente al azar)**: la falta no tiene relación con ninguna variable, seguro eliminar filas
+- **MAR (Falta al azar)**: la falta se relaciona con variables observadas, puede ser imputada
+- **MNAR (Falta no al azar)**: la falta se relaciona con el valor faltante en sí, requiere conocimiento del dominio
 
 ```python
 # Visualize missing data with a heatmap
@@ -210,7 +210,7 @@ def profile_dataset(df, name="Dataset"):
 
 ## Inténtalo
 
-Perfila el conjunto de datos Students Performance usando el flujo de trabajo anterior. Responde estas preguntas solo a partir de la salida del perfilado — no grafiques nada todavía.
+Perfila el conjunto de datos Students Performance usando el flujo de trabajo anterior. Responde estas preguntas solo a partir de la salida del perfilado, no grafiques nada todavía.
 
 ```python
 import pandas as pd
@@ -238,10 +238,10 @@ Preguntas para responder:
 
 ## Conclusiones clave
 
-- Perfila antes de graficar — una pasada de perfilado de 60 segundos detecta problemas que desperdiciarían horas después
+- Perfila antes de graficar, una pasada de perfilado de 60 segundos detecta problemas que desperdiciarían horas después
 - Los datos faltantes tienen tres mecanismos (MCAR, MAR, MNAR); identifica cuál aplica antes de elegir una estrategia
 - Los duplicados y las columnas constantes degradan la calidad del análisis en silencio
-- La cardinalidad importa — las categóricas de alta cardinalidad necesitan agrupación antes de la visualización
+- La cardinalidad importa, las categóricas de alta cardinalidad necesitan agrupación antes de la visualización
 - Construye una función de perfilado reutilizable para que cada nuevo conjunto de datos reciba el mismo tratamiento sistemático
 
 ## Desafío de práctica
@@ -249,7 +249,7 @@ Preguntas para responder:
 Escribe una función `quick_profile(df)` que devuelva un diccionario con las claves: `shape`, `dtypes`, `missing_cols`, `duplicate_count`, `constant_cols` y `cardinality`. Pruébala en el conjunto de datos Students Performance.
 
 <details class="challenge">
-<summary>🧩 Desafío — piensa primero, luego revela</summary>
+<summary>🧩 Desafío, piensa primero, luego revela</summary>
 <div class="challenge__body">
 
 ```python

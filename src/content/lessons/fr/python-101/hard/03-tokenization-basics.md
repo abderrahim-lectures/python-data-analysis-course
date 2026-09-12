@@ -44,7 +44,7 @@ quiz:
 ---
 Du texte brut aux jetons
 
-Le texte brut n'est qu'une chaîne de caractères. Pour construire un modèle de langue, vous devez le diviser en unités discrètes — des **jetons** — que le modèle peut compter et prédire. Pour simplifier, nous utiliserons les mots comme jetons. Les modèles plus avancés utilisent des jetons de sous-mots (BPE, SentencePiece), mais la tokenisation au niveau des mots suffit pour démontrer les idées centrales.
+Le texte brut n'est qu'une chaîne de caractères. Pour construire un modèle de langue, vous devez le diviser en unités discrètes, des **jetons**, que le modèle peut compter et prédire. Pour simplifier, nous utiliserons les mots comme jetons. Les modèles plus avancés utilisent des jetons de sous-mots (BPE, SentencePiece), mais la tokenisation au niveau des mots suffit pour démontrer les idées centrales.
 
 ## Concepts clés
 
@@ -74,7 +74,7 @@ Maintenant, "The" et "mat" correspondent aux mêmes jetons que "the" et "Mat" ai
 
 ### Suppression de la ponctuation
 
-La ponctuation attachée aux mots crée de faux jetons — "hello," et "hello" deviennent des mots différents. Supprimez-la avant de diviser :
+La ponctuation attachée aux mots crée de faux jetons, "hello," et "hello" deviennent des mots différents. Supprimez-la avant de diviser :
 
 ```python
 import string
@@ -90,7 +90,7 @@ print(clean.lower().split())
 # ['hello', 'world', 'how', 's', 'it', 'going']
 ```
 
-Chaque caractère de ponctuation est remplacé par un espace, puis la division donne des jetons propres. Notez que "How's" devient deux jetons : "how" et "s". C'est un compromis connu de la tokenisation simple — les outils plus avancés traitent les contractions différemment.
+Chaque caractère de ponctuation est remplacé par un espace, puis la division donne des jetons propres. Notez que "How's" devient deux jetons : "how" et "s". C'est un compromis connu de la tokenisation simple, les outils plus avancés traitent les contractions différemment.
 
 ### Combiner dans une fonction tokenize()
 
@@ -123,7 +123,7 @@ Différentes stratégies de tokenisation produisent des vocabulaires différents
 | "can't" | ["can't"] | ["can't"] |
 | "hello,world" | ["hello,world"] | ["hello,world"] |
 
-Le dernier exemple montre un problème : sans supprimer la ponctuation d'abord, "hello,world" reste un jeton unique. Notre étape `strip_punctuation` gère cela. Il n'y a pas de tokenisation unique « correcte » — cela dépend de ce que votre modèle doit apprendre.
+Le dernier exemple montre un problème : sans supprimer la ponctuation d'abord, "hello,world" reste un jeton unique. Notre étape `strip_punctuation` gère cela. Il n'y a pas de tokenisation unique « correcte », cela dépend de ce que votre modèle doit apprendre.
 
 ## Essayez
 
@@ -140,10 +140,10 @@ Combien de jetons uniques obtenez-vous ? Quel mot apparaît le plus souvent ?
 
 ## Points clés
 
-- `str.split()` divise sur les espaces blancs — le tokeniseur le plus simple
+- `str.split()` divise sur les espaces blancs, le tokeniseur le plus simple
 - La mise en minuscules fusionne les variantes de casse pour que "The" et "the" comptent comme un seul jeton
 - La suppression de la ponctuation empêche des jetons comme "hello," et "hello" d'être différents
-- La tokenisation est un choix de conception — il n'y a pas de réponse unique correcte pour tous les modèles
+- La tokenisation est un choix de conception, il n'y a pas de réponse unique correcte pour tous les modèles
 
 ## Défi pratique
 

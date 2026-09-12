@@ -42,7 +42,7 @@ quiz:
       - text: "It reduces the sample size"
       - text: "It causes missing values"
 ---
-Correlation measures the strength and direction of a linear relationship between two numerical variables. This lesson covers Pearson and Spearman correlation, how to build and read correlation heatmaps, and how to detect multicollinearity — the silent destroyer of regression models.
+Correlation measures the strength and direction of a linear relationship between two numerical variables. This lesson covers Pearson and Spearman correlation, how to build and read correlation heatmaps, and how to detect multicollinearity, the silent destroyer of regression models.
 
 ## Key Concepts
 
@@ -65,17 +65,17 @@ print(f"Pearson r (math vs reading): {r:.4f}")
 Interpreting r:
 | Range | Strength | Direction |
 |-------|----------|-----------|
-| 0.00 – 0.19 | Very weak | — |
-| 0.20 – 0.39 | Weak | — |
-| 0.40 – 0.59 | Moderate | — |
-| 0.60 – 0.79 | Strong | — |
-| 0.80 – 1.00 | Very strong | — |
+| 0.00 – 0.19 | Very weak |, |
+| 0.20 – 0.39 | Weak |, |
+| 0.40 – 0.59 | Moderate |, |
+| 0.60 – 0.79 | Strong |, |
+| 0.80 – 1.00 | Very strong |, |
 
 The sign indicates direction: positive (both increase together) or negative (one increases as the other decreases).
 
 ### Spearman correlation
 
-Spearman correlation (ρ) measures monotonic relationships — it works with ordinal data and is robust to outliers:
+Spearman correlation (ρ) measures monotonic relationships, it works with ordinal data and is robust to outliers:
 
 ```python
 rho = df["math score"].corr(df["reading score"], method="spearman")
@@ -130,7 +130,7 @@ plt.show()
 
 ### Triangular heatmap (remove redundancy)
 
-The full matrix is symmetric — the upper triangle repeats the lower triangle. Remove it:
+The full matrix is symmetric, the upper triangle repeats the lower triangle. Remove it:
 
 ```python
 import numpy as np
@@ -194,8 +194,8 @@ for gender in df["gender"].unique():
 When two or more features in a regression model are highly correlated, multicollinearity inflates standard errors and makes coefficient estimates unstable.
 
 Rules of thumb:
-- |r| > 0.7: investigate — may need to drop one variable
-- |r| > 0.9: serious multicollinearity — drop or combine
+- |r| > 0.7: investigate, may need to drop one variable
+- |r| > 0.9: serious multicollinearity, drop or combine
 
 ```python
 # Find highly correlated pairs
@@ -254,10 +254,10 @@ for i in range(len(corr.columns)):
 
 ## Key Takeaways
 
-- Pearson measures linear correlation; Spearman measures monotonic correlation — use both when the relationship might be non-linear
+- Pearson measures linear correlation; Spearman measures monotonic correlation, use both when the relationship might be non-linear
 - Heatmaps make correlation matrices visual; triangular heatmaps remove redundant information
 - Pair plots give a complete multivariate overview with marginal distributions
-- Correlation never implies causation — confounders, reverse causation, and spurious correlations are always possible
+- Correlation never implies causation, confounders, reverse causation, and spurious correlations are always possible
 - Multicollinearity (|r| > 0.7) inflates standard errors in regression models and should be addressed
 
 ## Practice Challenge
@@ -265,7 +265,7 @@ for i in range(len(corr.columns)):
 Compute both Pearson and Spearman correlations for all score pairs. Create a figure with two heatmaps side by side (one for each method). Annotate which pairs have the biggest discrepancy between Pearson and Spearman, and explain what that discrepancy means.
 
 <details class="challenge">
-<summary>🧩 Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge, think first, then reveal</summary>
 <div class="challenge__body">
 
 ```python

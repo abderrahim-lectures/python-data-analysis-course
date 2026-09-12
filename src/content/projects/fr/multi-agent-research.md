@@ -1,32 +1,32 @@
 ---
 title: "Construire un Assistant de Recherche Multi-Agents"
-description: "Passe du bac à sable dans le navigateur à du vrai Python : construis un petit système multi-agents — un planificateur, un chercheur et un rédacteur — qui décompose une question de recherche et synthétise un vrai rapport, en utilisant les sous-agents de deepagents de LangChain et un LLM de palier gratuit."
+description: "Passe du bac à sable dans le navigateur à du vrai Python : construis un petit système multi-agents, un planificateur, un chercheur et un rédacteur, qui décompose une question de recherche et synthétise un vrai rapport, en utilisant les sous-agents de deepagents de LangChain et un LLM de palier gratuit."
 ---
 
 
 # 🧩 Construire un Assistant de Recherche Multi-Agents
 
-Un seul agent avec une pile d'outils et un long prompt système fonctionne bien pour les petites tâches, mais il commence à craquer dès qu'une tâche a des *phases* vraiment différentes qui demandent des instructions différentes — planifier quoi chercher, chercher réellement chaque morceau, puis tout rédiger. Ce projet répartit ce travail entre trois petits agents aux instructions étroites au lieu d'un seul gros : un **planificateur** qui décompose une question de recherche en une poignée de sous-questions, un **chercheur** qui répond à chaque sous-question par lui-même, et un **rédacteur** qui synthétise tout en un rapport final — coordonnés avec la fonctionnalité de sous-agents `deepagents` de LangChain.
+Un seul agent avec une pile d'outils et un long prompt système fonctionne bien pour les petites tâches, mais il commence à craquer dès qu'une tâche a des *phases* vraiment différentes qui demandent des instructions différentes, planifier quoi chercher, chercher réellement chaque morceau, puis tout rédiger. Ce projet répartit ce travail entre trois petits agents aux instructions étroites au lieu d'un seul gros : un **planificateur** qui décompose une question de recherche en une poignée de sous-questions, un **chercheur** qui répond à chaque sous-question par lui-même, et un **rédacteur** qui synthétise tout en un rapport final, coordonnés avec la fonctionnalité de sous-agents `deepagents` de LangChain.
 
-Cela suppose du Python 101, et cela s'appuie directement sur le [projet Agent IA](/fr/projets/ai-agent) — même bibliothèque `deepagents`, même configuration API de palier gratuit, même idée d'un modèle décidant quoi appeler et quand, juste appliquée à la délégation de sous-tâches entières plutôt qu'à l'appel d'outils individuels. Faire ce projet d'abord n'est pas strictement requis, mais c'est une rampe d'accès bien plus douce que de commencer ici à froid.
+Cela suppose du Python 101, et cela s'appuie directement sur le [projet Agent IA](/fr/projets/ai-agent), même bibliothèque `deepagents`, même configuration API de palier gratuit, même idée d'un modèle décidant quoi appeler et quand, juste appliquée à la délégation de sous-tâches entières plutôt qu'à l'appel d'outils individuels. Faire ce projet d'abord n'est pas strictement requis, mais c'est une rampe d'accès bien plus douce que de commencer ici à froid.
 
 C'est optionnel et non noté. Voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 
 1. Installer `uv`, un outil rapide et moderne pour gérer Python lui-même et les dépendances de ton projet.
-2. Obtenir une clé API IA de palier gratuit — le même choix de six fournisseurs que le projet Agent IA.
+2. Obtenir une clé API IA de palier gratuit, le même choix de six fournisseurs que le projet Agent IA.
 3. Configurer un petit projet et installer `deepagents`.
-4. Définir trois sous-agents — planificateur, chercheur, rédacteur — chacun avec son propre prompt système étroit.
+4. Définir trois sous-agents, planificateur, chercheur, rédacteur, chacun avec son propre prompt système étroit.
 5. Les relier ensemble en un seul agent de niveau supérieur et l'exécuter sur une vraie question de recherche, de bout en bout.
 
 ## Où exécuter ceci
 
-**En local avec `uv`** est le chemin que suivent les étapes de cette leçon, et celui recommandé — c'est du vrai Python qui tourne sur ta propre machine, le même mouvement « passage au vrai Python » que chaque autre projet de cette section. La section Configuration ci-dessous explique comment l'installer.
+**En local avec `uv`** est le chemin que suivent les étapes de cette leçon, et celui recommandé, c'est du vrai Python qui tourne sur ta propre machine, le même mouvement « passage au vrai Python » que chaque autre projet de cette section. La section Configuration ci-dessous explique comment l'installer.
 
 **GitHub Codespaces** est une alternative sans configuration si tu préfères ne rien installer localement pour l'instant : ouvre [tout le dépôt du cours dans un Codespace gratuit](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python et `uv` sont déjà installés, selon le `.devcontainer/devcontainer.json` du dépôt) et exécute exactement les mêmes commandes `uv` depuis un terminal dans l'onglet de ton navigateur.
 
-**Google Colab, Kaggle Notebooks, ou Binder** fonctionnent aussi, puisque rien ici n'a besoin de GPU — chaque étape n'est qu'un appel API à un LLM de palier gratuit. Une vraie version notebook exécutable de ce projet se trouve dans le dépôt à [`examples/multi-agent-research/notebook.fr.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/multi-agent-research/notebook.fr.ipynb) — clique sur un badge ci-dessous pour la lancer avec zéro configuration locale, sans besoin de fichier `.env` (il demande ta clé API de façon interactive avec `getpass` à la place) :
+**Google Colab, Kaggle Notebooks, ou Binder** fonctionnent aussi, puisque rien ici n'a besoin de GPU, chaque étape n'est qu'un appel API à un LLM de palier gratuit. Une vraie version notebook exécutable de ce projet se trouve dans le dépôt à [`examples/multi-agent-research/notebook.fr.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/multi-agent-research/notebook.fr.ipynb), clique sur un badge ci-dessous pour la lancer avec zéro configuration locale, sans besoin de fichier `.env` (il demande ta clé API de façon interactive avec `getpass` à la place) :
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/multi-agent-research/notebook.fr.ipynb)
 [![Open in Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/multi-agent-research/notebook.fr.ipynb)
@@ -40,7 +40,7 @@ Tout ce qui suit prépare entièrement ton environnement avant que la constructi
 
 ### Installer `uv`
 
-`uv` est un outil unique qui remplace la chaîne habituelle « installer Python, puis installer pip, puis installer un outil d'environnement virtuel, puis installer les paquets » — il peut installer et gérer lui-même les versions de Python, en plus des dépendances de ton projet.
+`uv` est un outil unique qui remplace la chaîne habituelle « installer Python, puis installer pip, puis installer un outil d'environnement virtuel, puis installer les paquets », il peut installer et gérer lui-même les versions de Python, en plus des dépendances de ton projet.
 
 **macOS / Linux** (terminal) :
 
@@ -62,16 +62,16 @@ uv --version
 
 ### Obtenir une clé API IA gratuite
 
-**Choisis le fournisseur de ton choix** — aucun d'eux ne nécessite de carte de crédit au moment de l'écriture, et ce cours n'en favorise aucun par rapport aux autres. L'agent d'exemple du dépôt du cours ([`examples/multi-agent-research/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/multi-agent-research)) prend en charge les six directement, sélectionnés avec un seul paramètre, le même modèle que le projet Agent IA.
+**Choisis le fournisseur de ton choix**, aucun d'eux ne nécessite de carte de crédit au moment de l'écriture, et ce cours n'en favorise aucun par rapport aux autres. L'agent d'exemple du dépôt du cours ([`examples/multi-agent-research/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/multi-agent-research)) prend en charge les six directement, sélectionnés avec un seul paramètre, le même modèle que le projet Agent IA.
 
 | Fournisseur | Où obtenir une clé | Pourquoi tu pourrais le choisir |
 |---|---|---|
-| **GitHub Models** *(défaut suggéré)* | [github.com/settings/tokens](https://github.com/settings/tokens) — un jeton d'accès personnel avec le scope `models: read` | Pas d'inscription séparée — tu as déjà un compte GitHub. Limites de palier gratuit plus généreuses que celles de Gemini. |
+| **GitHub Models** *(défaut suggéré)* | [github.com/settings/tokens](https://github.com/settings/tokens), un jeton d'accès personnel avec le scope `models: read` | Pas d'inscription séparée, tu as déjà un compte GitHub. Limites de palier gratuit plus généreuses que celles de Gemini. |
 | Gemini | [Google AI Studio](https://aistudio.google.com/) | L'option la plus couramment référencée. |
 | Groq | [console.groq.com/keys](https://console.groq.com/keys) | Inférence rapide, palier gratuit généreux, pas de carte. |
 | Mistral | [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys) | L'un des quotas gratuits permanents les plus généreux. |
 | Cerebras | [cloud.cerebras.ai](https://cloud.cerebras.ai/) | Volume élevé de tokens quotidiens, pas de carte. |
-| OpenRouter | [openrouter.ai/keys](https://openrouter.ai/keys) | Une seule API, de nombreux modèles gratuits — bon pour comparer les fournisseurs. |
+| OpenRouter | [openrouter.ai/keys](https://openrouter.ai/keys) | Une seule API, de nombreux modèles gratuits, bon pour comparer les fournisseurs. |
 
 Quel que soit celui que tu choisis, le processus est le même :
 
@@ -87,7 +87,7 @@ $env:GITHUB_TOKEN = "your-key-here"
 ```
 
 :::tip[Un fichier .env est souvent plus pratique qu'export]
-Plutôt que de faire `export` d'une clé à chaque nouvelle session de terminal, tu peux la mettre dans un fichier `.env` dans le dossier de ton projet (voir le `.env.example` de l'exemple du dépôt) et la charger automatiquement avec le paquet `python-dotenv` — couvert plus bas.
+Plutôt que de faire `export` d'une clé à chaque nouvelle session de terminal, tu peux la mettre dans un fichier `.env` dans le dossier de ton projet (voir le `.env.example` de l'exemple du dépôt) et la charger automatiquement avec le paquet `python-dotenv`, couvert plus bas.
 :::
 
 ### Configurer le projet avec `uv`
@@ -98,7 +98,7 @@ cd multi-agent-research
 uv add deepagents langchain-openai python-dotenv
 ```
 
-`deepagents` est le même framework LangChain que celui utilisé dans le projet Agent IA, et c'est ce qui rend tout ce projet petit : en plus de l'utilisation d'outils, il a une fonctionnalité intégrée de **sous-agents** — une façon de transmettre une partie d'une tâche à un agent instruit séparément, plutôt que de coder à la main ta propre boucle qui appelle le modèle trois fois avec trois prompts différents et recoud les résultats toi-même. `langchain-openai` parle à GitHub Models (son API est compatible OpenAI) ; remplace-le par `langchain-google-genai`, `langchain-groq`, ou `langchain-mistralai` si tu as choisi un fournisseur différent ci-dessus — Cerebras et OpenRouter sont aussi compatibles OpenAI, donc `langchain-openai` les couvre aussi, juste avec une `base_url` différente, exactement comme dans le projet Agent IA.
+`deepagents` est le même framework LangChain que celui utilisé dans le projet Agent IA, et c'est ce qui rend tout ce projet petit : en plus de l'utilisation d'outils, il a une fonctionnalité intégrée de **sous-agents**, une façon de transmettre une partie d'une tâche à un agent instruit séparément, plutôt que de coder à la main ta propre boucle qui appelle le modèle trois fois avec trois prompts différents et recoud les résultats toi-même. `langchain-openai` parle à GitHub Models (son API est compatible OpenAI) ; remplace-le par `langchain-google-genai`, `langchain-groq`, ou `langchain-mistralai` si tu as choisi un fournisseur différent ci-dessus, Cerebras et OpenRouter sont aussi compatibles OpenAI, donc `langchain-openai` les couvre aussi, juste avec une `base_url` différente, exactement comme dans le projet Agent IA.
 
 Crée un fichier `.env` (ne le valide jamais) avec la clé du fournisseur que tu as choisi :
 
@@ -110,7 +110,7 @@ GITHUB_TOKEN=your-key-here
 **✅ Liste de vérification**
 
 - ✅ `uv add deepagents langchain-openai python-dotenv` terminé sans aucune erreur.
-- ✅ Un fichier `.env` existe dans le dossier du projet avec une vraie clé, et il n'est pas suivi par git (`uv init` te donne un `.gitignore` — confirme que `.env` y figure).
+- ✅ Un fichier `.env` existe dans le dossier du projet avec une vraie clé, et il n'est pas suivi par git (`uv init` te donne un `.gitignore`, confirme que `.env` y figure).
 
 ## Étape 1 : Définis les sous-agents planificateur, chercheur et rédacteur
 ### 1.1 Chaque sous-agent dans `deepagents` n'est qu'un simple dict : un `name`, un `description` (u...
@@ -169,7 +169,7 @@ writer_subagent = {
 }
 ```
 :::tip[Sois honnête sur ce que « recherche » signifie ici]
-Le sous-agent chercheur ci-dessus répond depuis les propres connaissances d'entraînement du modèle — aucun véritable outil de recherche web n'est branché. C'est une simplification délibérée, pas un raccourci caché : cela garde ce projet petit et adapté au palier gratuit, mais cela signifie que les réponses peuvent être obsolètes ou fausses sur tout ce sur quoi le modèle n'a pas été bien entraîné, sans moyen de vérifier contre une source en direct. Voir « Où aller à partir d'ici » pour savoir comment brancher un vrai outil de recherche une fois que tu es à l'aise avec cette version.
+Le sous-agent chercheur ci-dessus répond depuis les propres connaissances d'entraînement du modèle, aucun véritable outil de recherche web n'est branché. C'est une simplification délibérée, pas un raccourci caché : cela garde ce projet petit et adapté au palier gratuit, mais cela signifie que les réponses peuvent être obsolètes ou fausses sur tout ce sur quoi le modèle n'a pas été bien entraîné, sans moyen de vérifier contre une source en direct. Voir « Où aller à partir d'ici » pour savoir comment brancher un vrai outil de recherche une fois que tu es à l'aise avec cette version.
 :::
 
 **🎯 Résultat attendu :**
@@ -185,7 +185,7 @@ Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
 **✅ Liste de vérification**
 
 - ✅ `agent.py` définit `planner_subagent`, `researcher_subagent`, et `writer_subagent`, chacun avec un `system_prompt` distinct.
-- ✅ Chaque `system_prompt` dit clairement ce que ce rôle fait et *ne fait pas* — ex. le prompt du planificateur dit de ne pas répondre aux sous-questions qu'il génère.
+- ✅ Chaque `system_prompt` dit clairement ce que ce rôle fait et *ne fait pas*, ex. le prompt du planificateur dit de ne pas répondre aux sous-questions qu'il génère.
 
 **🤔 Question(s) socratique(s)**
 
@@ -193,11 +193,11 @@ Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
 - Pourquoi pourrait-il compter que le `description` de chaque sous-agent soit écrit pour que l'*agent de niveau supérieur* le lise, pas un humain ? Que te coûterait ici un `description` vague (« fait des trucs de recherche ») ?
 
 ## Étape 2 : Relie les sous-agents entre eux et exécute-le
-### 2.1 L'agent de niveau supérieur ne fait aucune recherche lui-même — tout son travail est de la d...
+### 2.1 L'agent de niveau supérieur ne fait aucune recherche lui-même, tout son travail est de la d...
 
 **👟 Indice de départ :**
 
-L'agent de niveau supérieur ne fait aucune recherche lui-même — tout son travail est de la délégation, dans l'ordre : planifier, puis rechercher chaque sous-question, puis rédiger. Ajoute ceci en bas de `agent.py` :
+L'agent de niveau supérieur ne fait aucune recherche lui-même, tout son travail est de la délégation, dans l'ordre : planifier, puis rechercher chaque sous-question, puis rédiger. Ajoute ceci en bas de `agent.py` :
 
 ```python
 agent = create_deep_agent(
@@ -238,8 +238,8 @@ uv run python agent.py
 ```
 `subagents=[...]` est tout le mécanisme : l'agent de niveau supérieur voit le `name` et le `description` de chaque sous-agent de la même façon qu'il verrait le nom et la docstring d'un outil, et décide quand transmettre à lequel, en se basant sur les instructions du `system_prompt` de niveau supérieur et l'état de la conversation jusqu'à présent. C'est exactement l'idée enseignée dans la section « Où aller à partir d'ici » du projet Agent IA, juste utilisée ici pour tout le pipeline plutôt que pour un spécialiste supplémentaire aux côtés d'un agent à usage général.
 ### Ce que tu devrais voir
-Un seul bloc de texte affiché — le rapport final synthétisé du rédacteur, quelques paragraphes couvrant les sous-questions trouvées par le planificateur. Si tu affiches plutôt la liste complète de `result["messages"]` (le même modèle que le projet Agent IA), tu verras toute la trace : la liste numérotée du planificateur, chaque appel du chercheur et sa réponse, puis le passage final du rédacteur — tous comme de vrais messages échangés entre l'agent de niveau supérieur et chaque sous-agent.
-Si à la place tu vois une trace d'erreur, vérifie laquelle — les mêmes trois catégories que le projet Agent IA : une variable d'environnement manquante/erronée (`KeyError`), une mauvaise clé (401/403), ou une limite de débit (429, voir le piège ci-dessous).
+Un seul bloc de texte affiché, le rapport final synthétisé du rédacteur, quelques paragraphes couvrant les sous-questions trouvées par le planificateur. Si tu affiches plutôt la liste complète de `result["messages"]` (le même modèle que le projet Agent IA), tu verras toute la trace : la liste numérotée du planificateur, chaque appel du chercheur et sa réponse, puis le passage final du rédacteur, tous comme de vrais messages échangés entre l'agent de niveau supérieur et chaque sous-agent.
+Si à la place tu vois une trace d'erreur, vérifie laquelle, les mêmes trois catégories que le projet Agent IA : une variable d'environnement manquante/erronée (`KeyError`), une mauvaise clé (401/403), ou une limite de débit (429, voir le piège ci-dessous).
 
 **🎯 Résultat attendu :**
 
@@ -255,7 +255,7 @@ Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
 
 - ✅ `uv run python agent.py` affiche un rapport final, pas une trace d'erreur.
 - ✅ Le rapport se lit vraiment comme une synthèse de plusieurs sous-questions, pas un seul paragraphe superficiel.
-- ✅ Afficher la liste complète de `result["messages"]` montre que les trois rôles ont été réellement invoqués — planificateur, chercheur (plusieurs fois), puis rédacteur.
+- ✅ Afficher la liste complète de `result["messages"]` montre que les trois rôles ont été réellement invoqués, planificateur, chercheur (plusieurs fois), puis rédacteur.
 
 **🤔 Question(s) socratique(s)**
 
@@ -268,25 +268,25 @@ L'API de sous-agents de `deepagents` est plus récente et moins éprouvée que s
 
 ## ⚠️ Pièges courants
 
-- **Fuite de rôles.** Si le `system_prompt` d'un sous-agent n'est pas assez étroit, il commence à faire le travail d'un autre rôle — un planificateur qui répond aussi à ses propres questions, ou un rédacteur qui invente de nouvelles sous-questions au lieu de synthétiser celles qu'on lui a données. Si la sortie semble étrange, le correctif est presque toujours de resserrer le prompt du sous-agent fautif, pas d'ajouter plus d'instructions à celui de niveau supérieur.
-- **Les limites de débit se multiplient vite.** Une question de recherche ici coûte au moins un appel du planificateur, un appel du chercheur *par sous-question* (typiquement 3-5), et un appel du rédacteur — six à huit allers-retours minimum, contre les appels à un chiffre que fait un simple agent d'appel d'outils. Attends-toi à heurter un 429 plus tôt que dans le projet Agent IA ; le même modèle de réessai avec délai de la fonction `ask()` de ce projet s'applique ici sans changement.
-- **Le chercheur hallucine avec assurance.** Sans véritable outil de recherche, le sous-agent chercheur peut produire une réponse fluide qui semble juste mais qui est fausse sur tout ce qui est obscur ou récent. Son prompt système lui demande de signaler explicitement une faible confiance, mais il n'est pas garanti qu'un modèle de langage suive cette instruction parfaitement à chaque fois — vérifie les réponses sur des questions dont tu connais déjà la réponse.
+- **Fuite de rôles.** Si le `system_prompt` d'un sous-agent n'est pas assez étroit, il commence à faire le travail d'un autre rôle, un planificateur qui répond aussi à ses propres questions, ou un rédacteur qui invente de nouvelles sous-questions au lieu de synthétiser celles qu'on lui a données. Si la sortie semble étrange, le correctif est presque toujours de resserrer le prompt du sous-agent fautif, pas d'ajouter plus d'instructions à celui de niveau supérieur.
+- **Les limites de débit se multiplient vite.** Une question de recherche ici coûte au moins un appel du planificateur, un appel du chercheur *par sous-question* (typiquement 3-5), et un appel du rédacteur, six à huit allers-retours minimum, contre les appels à un chiffre que fait un simple agent d'appel d'outils. Attends-toi à heurter un 429 plus tôt que dans le projet Agent IA ; le même modèle de réessai avec délai de la fonction `ask()` de ce projet s'applique ici sans changement.
+- **Le chercheur hallucine avec assurance.** Sans véritable outil de recherche, le sous-agent chercheur peut produire une réponse fluide qui semble juste mais qui est fausse sur tout ce qui est obscur ou récent. Son prompt système lui demande de signaler explicitement une faible confiance, mais il n'est pas garanti qu'un modèle de langage suive cette instruction parfaitement à chaque fois, vérifie les réponses sur des questions dont tu connais déjà la réponse.
 - **Le rédacteur perd les réponses des sous-questions au lieu de les citer.** Si le `system_prompt` de niveau supérieur ne dit pas clairement à l'agent de niveau supérieur de passer *chaque* paire sous-question/réponse au rédacteur, il peut n'en résumer que certaines, ou inventer des connexions entre des réponses qu'il n'a jamais réellement vues. Affiche la trace complète (Étape 2) pour confirmer que le rédacteur a bien reçu tout ce que le chercheur a produit.
 
 ## Ce que tu viens de construire
 
-Un petit pipeline où trois agents aux instructions étroites, chacun avec un prompt système limité à exactement un travail, produisent un résultat qu'aucun d'eux ne pourrait produire correctement seul — un planificateur doué pour décomposer, pas pour répondre ; un chercheur doué pour répondre à une question ciblée, pas pour gérer un rapport entier ; un rédacteur doué pour synthétiser, pas pour rechercher. C'est la même idée derrière les plus grands systèmes multi-agents en production : pas un énorme prompt essayant de tout faire, mais plusieurs petits, chacun facile à raisonner et à déboguer séparément, coordonnés par un agent de niveau supérieur qui ne décide que *qui* continue.
+Un petit pipeline où trois agents aux instructions étroites, chacun avec un prompt système limité à exactement un travail, produisent un résultat qu'aucun d'eux ne pourrait produire correctement seul, un planificateur doué pour décomposer, pas pour répondre ; un chercheur doué pour répondre à une question ciblée, pas pour gérer un rapport entier ; un rédacteur doué pour synthétiser, pas pour rechercher. C'est la même idée derrière les plus grands systèmes multi-agents en production : pas un énorme prompt essayant de tout faire, mais plusieurs petits, chacun facile à raisonner et à déboguer séparément, coordonnés par un agent de niveau supérieur qui ne décide que *qui* continue.
 
 ## Où aller à partir d'ici
 
-- **Donne au chercheur un véritable outil de recherche.** La plus grande faille d'honnêteté de cette version est que « recherche » ici signifie « les propres connaissances d'entraînement du modèle », pas une vraie recherche web. Plusieurs fournisseurs ont des API de recherche de palier gratuit (Tavily et l'API non officielle de DuckDuckGo sont des points de départ courants) — branche-en une comme outil sur `researcher_subagent["tools"]`, le même modèle `tools=[...]` du projet Agent IA, et le chercheur pourra citer de vraies sources actuelles au lieu de se rappeler des données d'entraînement.
-- **Ajoute un quatrième rôle**, comme un sous-agent critique qui examine le rapport du rédacteur par rapport aux sous-questions originales et signale les lacunes avant la sortie finale — un modèle courant une fois qu'un pipeline a plus de quelques étapes.
+- **Donne au chercheur un véritable outil de recherche.** La plus grande faille d'honnêteté de cette version est que « recherche » ici signifie « les propres connaissances d'entraînement du modèle », pas une vraie recherche web. Plusieurs fournisseurs ont des API de recherche de palier gratuit (Tavily et l'API non officielle de DuckDuckGo sont des points de départ courants), branche-en une comme outil sur `researcher_subagent["tools"]`, le même modèle `tools=[...]` du projet Agent IA, et le chercheur pourra citer de vraies sources actuelles au lieu de se rappeler des données d'entraînement.
+- **Ajoute un quatrième rôle**, comme un sous-agent critique qui examine le rapport du rédacteur par rapport aux sous-questions originales et signale les lacunes avant la sortie finale, un modèle courant une fois qu'un pipeline a plus de quelques étapes.
 - **Diffuse la sortie intermédiaire** au lieu de n'afficher que le rapport final, pour que tu puisses voir arriver les sous-questions du planificateur et chaque réponse du chercheur en temps réel plutôt que d'attendre que tout le pipeline se termine en silence.
-- Revisite la section du projet Agent IA sur la trace interne complète (`result["messages"]`) — la même technique pour transformer un résultat brut bruyant en un compte rendu lisible étape par étape s'applique ici, juste avec les messages de trois rôles entrelacés au lieu d'un.
+- Revisite la section du projet Agent IA sur la trace interne complète (`result["messages"]`), la même technique pour transformer un résultat brut bruyant en un compte rendu lisible étape par étape s'applique ici, juste avec les messages de trois rôles entrelacés au lieu d'un.
 
 ## Partage ton projet avec la classe
 
-Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets que d'autres étudiants ont soumis — et son README a un guide complet et accessible aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git auparavant : forker le dépôt, créer une branche, valider tes fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable de git n'est présumée.
+Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets que d'autres étudiants ont soumis, et son README a un guide complet et accessible aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git auparavant : forker le dépôt, créer une branche, valider tes fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable de git n'est présumée.
 
 Bienvenue dans l'écriture de Python en dehors du navigateur. 🎓
 

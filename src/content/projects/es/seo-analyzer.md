@@ -1,6 +1,6 @@
 ---
 title: "Analizador SEO"
-description: "Analiza sitios web en busca de problemas SEO — meta tags, encabezados, rendimiento y optimización de palabras clave."
+description: "Analiza sitios web en busca de problemas SEO, meta tags, encabezados, rendimiento y optimización de palabras clave."
 difficulty: "intermediate"
 estimatedMinutes: 55
 tags: ["requests", "beautifulsoup4", "seo", "web-scraping", "pandas"]
@@ -17,9 +17,9 @@ prerequisites:
 
 # 🔍 Construye un Analizador SEO
 
-Cada sitio web tiene señales SEO invisibles — meta descripciones, jerarquía de encabezados, tags de Open Graph — que determinan si los buscadores lo clasifican bien o lo entierran. Este proyecto construye un kit de herramientas que obtiene cualquier URL, extrae esas señales, las puntúa contra mejores prácticas y genera un informe estructurado que puedes comparar entre múltiples páginas, todo con librerías de Python puro que corren en cualquier lugar.
+Cada sitio web tiene señales SEO invisibles, meta descripciones, jerarquía de encabezados, tags de Open Graph, que determinan si los buscadores lo clasifican bien o lo entierran. Este proyecto construye un kit de herramientas que obtiene cualquier URL, extrae esas señales, las puntúa contra mejores prácticas y genera un informe estructurado que puedes comparar entre múltiples páginas, todo con librerías de Python puro que corren en cualquier lugar.
 
-Esto asume conceptos básicos de Python, conceptos básicos de HTML y la librería `requests` (cubierta en Configuración) — nada de Análisis de Datos se requiere. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
+Esto asume conceptos básicos de Python, conceptos básicos de HTML y la librería `requests` (cubierta en Configuración), nada de Análisis de Datos se requiere. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 ## 🎯 Lo que harás
 
@@ -31,17 +31,17 @@ Esto asume conceptos básicos de Python, conceptos básicos de HTML y la librer�
 
 ## Dónde ejecutar esto
 
-Este proyecto funciona casi en cualquier lugar — `requests`, `BeautifulSoup` y `pandas` son Python puro sin dependencias a nivel de sistema.
+Este proyecto funciona casi en cualquier lugar, `requests`, `BeautifulSoup` y `pandas` son Python puro sin dependencias a nivel de sistema.
 
 **JupyterLite playground** funciona bien: pega las celdas de código directamente en un notebook. Primero necesitarás `!pip install requests beautifulsoup4 pandas lxml` en una celda.
 
-**Google Colab** funciona de fábrica — las tres librerías están pre-instaladas en el runtime de Colab.
+**Google Colab** funciona de fábrica, las tres librerías están pre-instaladas en el runtime de Colab.
 
-**Localmente con `uv`** es el camino recomendado para construir un proyecto real con archivos, no solo celdas — sigue la sección de Configuración abajo.
+**Localmente con `uv`** es el camino recomendado para construir un proyecto real con archivos, no solo celdas, sigue la sección de Configuración abajo.
 
 **Binder y Kaggle Notebooks** también funcionan, ya que no se necesitan GPU ni dependencias nativas.
 
-- **Ejecútalo en el navegador.** Hay un cuaderno interactivo listo — ábrelo en Colab, Kaggle o Binder y sigue los pasos en orden.
+- **Ejecútalo en el navegador.** Hay un cuaderno interactivo listo, ábrelo en Colab, Kaggle o Binder y sigue los pasos en orden.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/seo-analyzer/notebook.es.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/seo-analyzer/notebook.es.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fseo-analyzer%2Fnotebook.es.ipynb)
@@ -52,7 +52,7 @@ Todo lo que necesitas antes de escribir una línea de análisis.
 
 ### Instala `uv`
 
-`uv` es una sola herramienta que reemplaza la cadena habitual de "instalar Python, luego instalar pip, luego instalar una herramienta de entorno virtual, luego instalar paquetes" — puede instalar y gestionar versiones de Python por sí misma, junto con las dependencias de tu proyecto.
+`uv` es una sola herramienta que reemplaza la cadena habitual de "instalar Python, luego instalar pip, luego instalar una herramienta de entorno virtual, luego instalar paquetes", puede instalar y gestionar versiones de Python por sí misma, junto con las dependencias de tu proyecto.
 
 **macOS / Linux** (terminal):
 
@@ -80,7 +80,7 @@ cd seo-analyzer
 uv add requests beautifulsoup4 pandas lxml
 ```
 
-`requests` obtiene páginas web; `beautifulsoup4` analiza HTML en un árbol navegable; `lxml` es un backend de análisis rápido para BeautifulSoup; `pandas` construye los informes de comparación. Las cuatro son Python puro — sin compilador, sin librerías del sistema necesarias.
+`requests` obtiene páginas web; `beautifulsoup4` analiza HTML en un árbol navegable; `lxml` es un backend de análisis rápido para BeautifulSoup; `pandas` construye los informes de comparación. Las cuatro son Python puro, sin compilador, sin librerías del sistema necesarias.
 
 **✅ Lista de verificación**
 
@@ -90,7 +90,7 @@ uv add requests beautifulsoup4 pandas lxml
 
 ## Paso 1: Obtén una página y extrae meta tags
 
-El primer bloque de construcción: dada una URL, obtén su HTML y extrae los metadatos críticos para SEO — título, descripción, tags de Open Graph — que los buscadores y las plataformas sociales leen.
+El primer bloque de construcción: dada una URL, obtén su HTML y extrae los metadatos críticos para SEO, título, descripción, tags de Open Graph, que los buscadores y las plataformas sociales leen.
 
 ### 1.1 Escribe el obtentor y el extractor de meta
 
@@ -146,7 +146,7 @@ print(f"Title: {meta['title']!r} ({meta['title_length']} chars)")
 print(f"Description: {meta['description'][:80]!r} ({meta['desc_length']} chars)")
 ```
 
-**👟 Pista inicial:** `fetch_page` envía una solicitud con un encabezado `User-Agent` personalizado (buena práctica — identifica a tu rastreador) y devuelve un objeto BeautifulSoup. `extract_meta` luego usa `soup.find()` para extraer tags específicos: `<title>`, `<meta name="description">` y los tres tags `og:`. Cada extracción maneja con gracia el caso de "tag faltante" devolviendo un string vacío.
+**👟 Pista inicial:** `fetch_page` envía una solicitud con un encabezado `User-Agent` personalizado (buena práctica, identifica a tu rastreador) y devuelve un objeto BeautifulSoup. `extract_meta` luego usa `soup.find()` para extraer tags específicos: `<title>`, `<meta name="description">` y los tres tags `og:`. Cada extracción maneja con gracia el caso de "tag faltante" devolviendo un string vacío.
 
 **🎯 Resultado esperado:**
 ```
@@ -154,7 +154,7 @@ Title: 'Example Domain' (14 chars)
 Description: '' (0 chars)
 ```
 
-**🩹 Si sale mal:** Un `requests.exceptions.ConnectionError` significa que la URL es incorrecta o inalcanzable — prueba `https://example.com` primero (siempre está activo). Un `Timeout` significa que el servidor tardó más de 10 segundos — aumenta el timeout o prueba un sitio más rápido. Si `title` está vacío donde esperabas contenido, la página podría estar renderizada por JavaScript (BeautifulSoup no puede verlo) — prueba una página renderizada por servidor en su lugar.
+**🩹 Si sale mal:** Un `requests.exceptions.ConnectionError` significa que la URL es incorrecta o inalcanzable, prueba `https://example.com` primero (siempre está activo). Un `Timeout` significa que el servidor tardó más de 10 segundos, aumenta el timeout o prueba un sitio más rápido. Si `title` está vacío donde esperabas contenido, la página podría estar renderizada por JavaScript (BeautifulSoup no puede verlo), prueba una página renderizada por servidor en su lugar.
 
 ### 1.2 Verifica la extracción de meta
 
@@ -166,12 +166,12 @@ Description: '' (0 chars)
 
 **🤔 Pregunta(s) socrática(s)**
 
-- El encabezado `User-Agent` dice `SEOAnalyzer/1.0`. ¿Qué pasaría si lo eliminaras por completo — la mayoría de los servidores rechazarían la solicitud? ¿Por qué los rastreadores bien portados se identifican a sí mismos?
-- BeautifulSoup con `lxml` puede analizar HTML malformado. ¿Qué pasaría con `"html.parser"` (el integrado) en su lugar — notarías una diferencia en una página bien formada? ¿En una rota?
+- El encabezado `User-Agent` dice `SEOAnalyzer/1.0`. ¿Qué pasaría si lo eliminaras por completo, la mayoría de los servidores rechazarían la solicitud? ¿Por qué los rastreadores bien portados se identifican a sí mismos?
+- BeautifulSoup con `lxml` puede analizar HTML malformado. ¿Qué pasaría con `"html.parser"` (el integrado) en su lugar, notarías una diferencia en una página bien formada? ¿En una rota?
 
 ## Paso 2: Audita la jerarquía de encabezados
 
-Los tags de encabezado (`<h1>` hasta `<h6>`) le dicen a los buscadores la estructura del documento — una página sin `<h1>`, o con `<h3>` directamente después de `<h1>` (saltándose `<h2>`), señala una estructura pobre. Este paso construye un comprobador que cuenta cada nivel de encabezado y marca problemas estructurales.
+Los tags de encabezado (`<h1>` hasta `<h6>`) le dicen a los buscadores la estructura del documento, una página sin `<h1>`, o con `<h3>` directamente después de `<h1>` (saltándose `<h2>`), señala una estructura pobre. Este paso construye un comprobador que cuenta cada nivel de encabezado y marca problemas estructurales.
 
 ### 2.1 Construye el analizador de encabezados
 
@@ -210,7 +210,7 @@ for issue in heading_data["issues"]:
     print(f"  ⚠ {issue}")
 ```
 
-**👟 Pista inicial:** La función recorre de `h1` a `h6`, recolecta todos los tags en cada nivel y luego aplica dos reglas: exactamente un `<h1>` por página, y ningún nivel de encabezado saltado. `used_levels` rastrea qué niveles aparecen realmente — si `h1` y `h3` ambos aparecen pero `h2` no, ese es un nivel saltado. El corte `[:80]` mantiene el informe legible cuando los encabezados son largos.
+**👟 Pista inicial:** La función recorre de `h1` a `h6`, recolecta todos los tags en cada nivel y luego aplica dos reglas: exactamente un `<h1>` por página, y ningún nivel de encabezado saltado. `used_levels` rastrea qué niveles aparecen realmente, si `h1` y `h3` ambos aparecen pero `h2` no, ese es un nivel saltado. El corte `[:80]` mantiene el informe legible cuando los encabezados son largos.
 
 **🎯 Resultado esperado:** Para `https://example.com` (que no tiene encabezados):
 ```
@@ -218,7 +218,7 @@ H1 count: 0, Total: 0
   ⚠ Missing H1 tag — every page should have exactly one H1
 ```
 
-**🩹 Si sale mal:** Si `total_headings` es 0 para una página que sabes que tiene encabezados, la página podría estar renderizada por JavaScript — BeautifulSoup solo ve el HTML inicial, no el contenido cargado después del renderizado de la página. Si la comprobación de nivel saltado salta inesperadamente, confirma que `used_levels` está tirando de las claves correctas — un typo como `"h7"` en el rango desplazaría silenciosamente el min/max.
+**🩹 Si sale mal:** Si `total_headings` es 0 para una página que sabes que tiene encabezados, la página podría estar renderizada por JavaScript, BeautifulSoup solo ve el HTML inicial, no el contenido cargado después del renderizado de la página. Si la comprobación de nivel saltado salta inesperadamente, confirma que `used_levels` está tirando de las claves correctas, un typo como `"h7"` en el rango desplazaría silenciosamente el min/max.
 
 ### 2.2 Verifica la auditoría de encabezados
 
@@ -235,7 +235,7 @@ H1 count: 0, Total: 0
 
 ## Paso 3: Calcula densidad de palabras clave y métricas de contenido
 
-La densidad de palabras clave te dice con qué frecuencia aparece una palabra específica en relación con el conteo total de palabras — demasiado baja y la página no trata sobre ese tema; demasiado alta y se lee como relleno de palabras clave. Este paso también elimina el contenido no visible (scripts, barras de navegación, pies de página) antes de contar, para que los números reflejen lo que un lector humano realmente ve.
+La densidad de palabras clave te dice con qué frecuencia aparece una palabra específica en relación con el conteo total de palabras, demasiado baja y la página no trata sobre ese tema; demasiado alta y se lee como relleno de palabras clave. Este paso también elimina el contenido no visible (scripts, barras de navegación, pies de página) antes de contar, para que los números reflejen lo que un lector humano realmente ve.
 
 ### 3.1 Construye el analizador de contenido y el comprobador de palabras clave
 
@@ -272,7 +272,7 @@ for kw in ["example", "domain", "web"]:
     print(f"  '{kw}': {d['count']} occurrences ({d['density']}%)")
 ```
 
-**👟 Pista inicial:** `analyze_content` usa `soup.decompose()` para eliminar tags no visibles (`script`, `style`, `nav`, `footer`, `header`) antes de extraer el texto — esto evita que los enlaces de navegación y el texto repetitivo inflen tu conteo de palabras. `keyword_density` luego hace una coincidencia de límite de palabra insensible a mayúsculas (`\b\w+\b`) para la palabra clave exacta, y divide por el total de palabras. Una densidad de 1–3% es típicamente saludable; por encima de 5% parece relleno.
+**👟 Pista inicial:** `analyze_content` usa `soup.decompose()` para eliminar tags no visibles (`script`, `style`, `nav`, `footer`, `header`) antes de extraer el texto, esto evita que los enlaces de navegación y el texto repetitivo inflen tu conteo de palabras. `keyword_density` luego hace una coincidencia de límite de palabra insensible a mayúsculas (`\b\w+\b`) para la palabra clave exacta, y divide por el total de palabras. Una densidad de 1–3% es típicamente saludable; por encima de 5% parece relleno.
 
 **🎯 Resultado esperado:** Para `https://example.com`:
 ```
@@ -282,19 +282,19 @@ Word count: <some number around 20-40>
   'web': <count> occurrences (<density>%)
 ```
 
-**🩹 Si sale mal:** Si `word_count` es sospechosamente alto (miles), `decompose()` no eliminó lo suficiente — la página podría usar envoltorios `<div>` alrededor de la navegación en lugar de `<nav>`. Si `keyword_density` devuelve `0.0` para una palabra que puedes ver en la página, la palabra podría estar dividida entre tags o envuelta en un `<span>` — `get_text()` une el texto de tags anidados, pero `\b\w+\b` no coincide a través de límites de tags.
+**🩹 Si sale mal:** Si `word_count` es sospechosamente alto (miles), `decompose()` no eliminó lo suficiente, la página podría usar envoltorios `<div>` alrededor de la navegación en lugar de `<nav>`. Si `keyword_density` devuelve `0.0` para una palabra que puedes ver en la página, la palabra podría estar dividida entre tags o envuelta en un `<span>`, `get_text()` une el texto de tags anidados, pero `\b\w+\b` no coincide a través de límites de tags.
 
 ### 3.2 Verifica el análisis de contenido
 
 **✅ Lista de verificación**
 
-- ✅ `analyze_content(soup)` devuelve `text`, `word_count` y `char_count` — todos no nulos para una página con contenido visible.
+- ✅ `analyze_content(soup)` devuelve `text`, `word_count` y `char_count`, todos no nulos para una página con contenido visible.
 - ✅ `keyword_density` devuelve `count=0` y `density=0.0` para una palabra que no aparece en la página.
 - ✅ La llamada a `decompose()` elimina los tags `<script>`, `<style>`, `<nav>`, `<footer>` y `<header>` antes de la extracción de texto.
 
 **🤔 Pregunta(s) socrática(s)**
 
-- Estás contando la frecuencia de palabras con coincidencia exacta (`w == keyword.lower()`). ¿Qué cambiaría si quisieras coincidir "web" dentro de "website" — sería mejor o peor para el análisis SEO, y por qué?
+- Estás contando la frecuencia de palabras con coincidencia exacta (`w == keyword.lower()`). ¿Qué cambiaría si quisieras coincidir "web" dentro de "website", sería mejor o peor para el análisis SEO, y por qué?
 - Una página tiene 500 palabras de texto visible y 5,000 palabras dentro de tags `<script>`. ¿Por qué es importante eliminar los scripts para la densidad de palabras clave, y qué otro contenido no visible añadirías a la lista de eliminación?
 
 ## Paso 4: Genera un informe de puntuación
@@ -350,7 +350,7 @@ Overall Score: <number>/100
   og_tags: <score>/10
 ```
 
-**🩹 Si sale mal:** Si `overall_score` es 0.0 para una página que sabes que tiene algunos elementos SEO, uno de los sub-puntajes se está anulando — comprueba `meta["title_length"]` y `headings["h1_count"]` individualmente. Si `scores["og_tags"]` es 0 para una página con tags de Open Graph, verifica que el nombre del atributo `property="og:*"` coincide exactamente (algunos sitios usan `name=` en lugar de `property=`).
+**🩹 Si sale mal:** Si `overall_score` es 0.0 para una página que sabes que tiene algunos elementos SEO, uno de los sub-puntajes se está anulando, comprueba `meta["title_length"]` y `headings["h1_count"]` individualmente. Si `scores["og_tags"]` es 0 para una página con tags de Open Graph, verifica que el nombre del atributo `property="og:*"` coincide exactamente (algunos sitios usan `name=` en lugar de `property=`).
 
 ### 4.2 Construye el DataFrame de comparación
 
@@ -380,11 +380,11 @@ df = compare_urls(["https://example.com", "https://python.org"])
 print(df.to_string(index=False))
 ```
 
-**👟 Pista inicial:** `compare_urls` envuelve `analyze_url` en un try/except para que una URL que falla no mate toda la comparación — registra el error en el DataFrame en su lugar. Las columnas del DataFrame son deliberadamente planas (strings y números, no dicts anidados) para que pandas pueda ordenar, filtrar y exportarlas sin trabajo extra de manipulación.
+**👟 Pista inicial:** `compare_urls` envuelve `analyze_url` en un try/except para que una URL que falla no mate toda la comparación, registra el error en el DataFrame en su lugar. Las columnas del DataFrame son deliberadamente planas (strings y números, no dicts anidados) para que pandas pueda ordenar, filtrar y exportarlas sin trabajo extra de manipulación.
 
 **🎯 Resultado esperado:** Un DataFrame de pandas con dos filas (una por URL), columnas para `Score`, `Title`, `Title Len`, `Desc Len`, `H1 Count` y `Words`.
 
-**🩹 Si sale mal:** Si el DataFrame muestra `Error` en la columna `Score` para una URL, ese sitio bloqueó o expiró el timeout — prueba una URL diferente. Si `compare_urls` tarda mucho, está corriendo secuencialmente — consulta la sección de Errores Comunes para una nota sobre la obtención paralela.
+**🩹 Si sale mal:** Si el DataFrame muestra `Error` en la columna `Score` para una URL, ese sitio bloqueó o expiró el timeout, prueba una URL diferente. Si `compare_urls` tarda mucho, está corriendo secuencialmente, consulta la sección de Errores Comunes para una nota sobre la obtención paralela.
 
 ### 4.3 Verifica el informe de puntuación
 
@@ -397,18 +397,18 @@ print(df.to_string(index=False))
 **🤔 Pregunta(s) socrática(s)**
 
 - Una página con un título perfecto (30–60 caracteres) y una descripción faltante puntúa 50/100. Una página con ambos perfectos puntúa 70/100. ¿Qué te dice esto sobre el peso relativo de descripción vs título en esta rúbrica, y cambiarías esos pesos para una herramienta de auditoría real?
-- Si ejecutaras `compare_urls` en 50 URLs y una expirara el timeout, aparece como `Score=0` con una columna `Error`. ¿Es `Score=0` el valor por defecto correcto para una obtención fallida, o usarías `NaN` — y qué cambiaría en el DataFrame si usaras `NaN`?
+- Si ejecutaras `compare_urls` en 50 URLs y una expirara el timeout, aparece como `Score=0` con una columna `Error`. ¿Es `Score=0` el valor por defecto correcto para una obtención fallida, o usarías `NaN`, y qué cambiaría en el DataFrame si usaras `NaN`?
 
 ## ⚠️ Errores comunes
 
-- **Las páginas renderizadas por JavaScript devuelven contenido vacío o equivocado.** `requests` + BeautifulSoup solo ven el HTML inicial — cualquier contenido cargado por JavaScript (apps de una sola página, imágenes con carga perezosa) no aparecerá en el árbol analizado. Si una página se ve vacía pero funciona en tu navegador, está renderizada por JS; usa un navegador sin pantalla (Playwright, Selenium) en su lugar, o elige una página renderizada por servidor para probar.
+- **Las páginas renderizadas por JavaScript devuelven contenido vacío o equivocado.** `requests` + BeautifulSoup solo ven el HTML inicial, cualquier contenido cargado por JavaScript (apps de una sola página, imágenes con carga perezosa) no aparecerá en el árbol analizado. Si una página se ve vacía pero funciona en tu navegador, está renderizada por JS; usa un navegador sin pantalla (Playwright, Selenium) en su lugar, o elige una página renderizada por servidor para probar.
 - **Bloqueo o limitación de tasa en solicitudes repetidas.** Algunos sitios bloquean el rastreo agresivo. El timeout de 10 segundos y el `User-Agent` personalizado ayudan, pero si estás auditando muchas páginas, añade `time.sleep(1)` entre solicitudes o usa `concurrent.futures.ThreadPoolExecutor` con un pool acotado para ser cortés.
-- **Coincidencia frágil de tag `og:`.** El código usa `property="og:title"` — algunos sitios usan `name="og:title"` en su lugar (técnicamente incorrecto según la especificación de Open Graph, pero común). Si los tags OG faltan en un sitio que sabes que los tiene, prueba también buscar variantes `name=`.
-- **El conteo de palabras incluye texto repetitivo.** La lista de `decompose()` elimina `script`, `style`, `nav`, `footer`, `header` — pero no todo el texto repetitivo vive en esos tags. Una página con un `<aside>` grande o un `<div class="sidebar">` lleno de enlaces inflará el conteo de palabras. Para conteos más precisos, necesitarías selectores específicos del sitio.
+- **Coincidencia frágil de tag `og:`.** El código usa `property="og:title"`, algunos sitios usan `name="og:title"` en su lugar (técnicamente incorrecto según la especificación de Open Graph, pero común). Si los tags OG faltan en un sitio que sabes que los tiene, prueba también buscar variantes `name=`.
+- **El conteo de palabras incluye texto repetitivo.** La lista de `decompose()` elimina `script`, `style`, `nav`, `footer`, `header`, pero no todo el texto repetitivo vive en esos tags. Una página con un `<aside>` grande o un `<div class="sidebar">` lleno de enlaces inflará el conteo de palabras. Para conteos más precisos, necesitarías selectores específicos del sitio.
 
 ## Lo que acabas de construir
 
-Un kit de auditoría SEO que obtiene cualquier URL, extrae sus meta tags y estructura de encabezados, los puntúa contra mejores prácticas establecidas y produce una tabla de comparación entre múltiples páginas — todo con cuatro librerías de Python puro y sin automatización de navegador. La rúbrica de puntuación es lo suficientemente simple para entenderla y extenderla, y la función `compare_urls` te da un DataFrame de pandas listo para ordenar, filtrar o exportar a CSV.
+Un kit de auditoría SEO que obtiene cualquier URL, extrae sus meta tags y estructura de encabezados, los puntúa contra mejores prácticas establecidas y produce una tabla de comparación entre múltiples páginas, todo con cuatro librerías de Python puro y sin automatización de navegador. La rúbrica de puntuación es lo suficientemente simple para entenderla y extenderla, y la función `compare_urls` te da un DataFrame de pandas listo para ordenar, filtrar o exportar a CSV.
 
 :::tip[Ejecuta una versión más completa sin configuración local]
 [`examples/seo-analyzer/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/seo-analyzer) en el repositorio del curso es una versión más completa con auditoría de texto alternativo de imágenes, clasificación de enlaces internos/externos y un rastreador de sitemaps que audita cada página listada en un XML de sitemap. Clónalo, o abre todo el repositorio en un [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) y ejecútalo desde ahí.
@@ -416,12 +416,12 @@ Un kit de auditoría SEO que obtiene cualquier URL, extrae sus meta tags y estru
 
 ## A dónde ir desde aquí
 
-- Añade auditoría de texto alternativo de imágenes: encuentra cada tag `<img>`, reporta cuáles faltan `alt` y calcula el porcentaje de imágenes con texto alternativo — una victoria directa de accesibilidad y SEO.
+- Añade auditoría de texto alternativo de imágenes: encuentra cada tag `<img>`, reporta cuáles faltan `alt` y calcula el porcentaje de imágenes con texto alternativo, una victoria directa de accesibilidad y SEO.
 - Añade clasificación de enlaces internos vs externos: extrae todos los enlaces `<a href>`, cuenta cada categoría y marca las páginas con demasiados pocos enlaces internos (por debajo de 3) como un posible problema SEO.
 - Construye un rastreador de sitemaps: dada una URL de sitemap, obtén cada página listada en él, ejecuta la auditoría completa en cada una y exporta un CSV de resumen con `concurrent.futures.ThreadPoolExecutor` para la obtención paralela.
 
 ## Comparte tu proyecto con la clase
 
-¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado — y su README tiene un recorrido completo, amigable para principiantes, para agregar el tuyo vía un **pull request**, incluso si nunca usaste git antes: hacer fork del repo, crear una rama, commitear tus archivos y abrir el PR, paso a paso. No se asume experiencia previa con git.
+¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado, y su README tiene un recorrido completo, amigable para principiantes, para agregar el tuyo vía un **pull request**, incluso si nunca usaste git antes: hacer fork del repo, crear una rama, commitear tus archivos y abrir el PR, paso a paso. No se asume experiencia previa con git.
 
 Bienvenido a escribir Python fuera del navegador. 🎓

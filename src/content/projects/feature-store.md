@@ -16,7 +16,7 @@ prerequisites: ["Python 101", "Data Analysis"]
 
 Machine learning models break when the code that computes features during training drifts from the code that computes them in production. A feature store fixes this by computing features once, versioning them, and serving the same values whether you're fitting a model or scoring a request. This project builds a lightweight, file-backed feature store with a CLI: you register feature definitions, compute them from raw data, and fetch them by entity key with point-in-time correctness.
 
-This assumes Python 101 and comfort with pandas from Data Analysis — nothing beyond. Optional and ungraded; see [Real-World Projects](/projects) for the full list.
+This assumes Python 101 and comfort with pandas from Data Analysis, nothing beyond. Optional and ungraded; see [Real-World Projects](/projects) for the full list.
 
 ## 🎯 What you'll do
 
@@ -29,7 +29,7 @@ This assumes Python 101 and comfort with pandas from Data Analysis — nothing b
 
 ## Where to run this
 
-**Locally with `uv`** is the primary path here — this project reads and writes files on disk (Parquet snapshots, a JSON registry), which works most naturally outside a notebook.
+**Locally with `uv`** is the primary path here, this project reads and writes files on disk (Parquet snapshots, a JSON registry), which works most naturally outside a notebook.
 
 **Google Colab, Kaggle Notebooks, and Binder** work fine for trying the tool. The notebook installs the same dependencies and uses the same code; file-backed storage works in a notebook's ephemeral filesystem for the duration of the session.
 
@@ -122,7 +122,7 @@ class Registry:
         self.path.write_text(json.dumps(data, indent=2))
 ```
 
-The registry is a dictionary keyed by feature name, backed by a flat JSON file. Each `Feature` carries a `version` integer so you can roll forward without destroying old definitions. The `entity_key` field records which column serves as the lookup key — this matters later when fetching features for a specific entity.
+The registry is a dictionary keyed by feature name, backed by a flat JSON file. Each `Feature` carries a `version` integer so you can roll forward without destroying old definitions. The `entity_key` field records which column serves as the lookup key, this matters later when fetching features for a specific entity.
 
 **🎯 Expected output:** `Registry().register("avg_order_value", 1, "Mean order value", "user_id")` creates a `feature_registry.json` file containing one entry with all four fields.
 
@@ -140,11 +140,11 @@ reg2 = Registry()  # re-load from disk
 assert reg2.features["avg_order_value"].version == 1
 ```
 
-Re-loading the registry from disk should produce the same `Feature` you just registered — this confirms the JSON round-trip works end to end.
+Re-loading the registry from disk should produce the same `Feature` you just registered, this confirms the JSON round-trip works end to end.
 
 **🎯 Expected output:** The assertion passes silently; `feature_registry.json` contains the registered entry.
 
-**🩹 If it's off:** If `reg2` is empty, the `_load()` path isn't running — check `self.path.exists()` returns `True` at load time.
+**🩹 If it's off:** If `reg2` is empty, the `_load()` path isn't running, check `self.path.exists()` returns `True` at load time.
 
 ### 1.3 Verify the registry
 
@@ -181,7 +181,7 @@ def compute_avg_order_value(transactions: pd.DataFrame) -> pd.DataFrame:
     )
 ```
 
-The computation is a single pandas `groupby` + `mean` — the same pattern you'd use in any data analysis. The function returns a DataFrame with exactly two columns: the entity key (`user_id`) and the feature value (`avg_order_value`). This two-column shape is the standard output format every computation function should follow.
+The computation is a single pandas `groupby` + `mean`, the same pattern you'd use in any data analysis. The function returns a DataFrame with exactly two columns: the entity key (`user_id`) and the feature value (`avg_order_value`). This two-column shape is the standard output format every computation function should follow.
 
 **🎯 Expected output:** Given a DataFrame with columns `user_id` and `amount`, the function returns a DataFrame with columns `user_id` and `avg_order_value` where each row is one user's mean.
 
@@ -218,7 +218,7 @@ Adding a second function confirms the pattern: each computation is a standalone 
 **🤔 Socratic Question(s)**
 
 - Why enforce a two-column output (entity key + feature value) instead of returning a Series or a dict? How does that shape simplify the storage and retrieval steps?
-- What happens if two different raw tables share the same entity key but have different entity types — say `user_id` in orders and `product_id` in inventory?
+- What happens if two different raw tables share the same entity key but have different entity types, say `user_id` in orders and `product_id` in inventory?
 
 ## Step 3: Persist features to Parquet with versioned snapshots
 
@@ -247,11 +247,11 @@ def load_features(feature_name: str, version: int) -> pd.DataFrame:
     return pd.read_parquet(path)
 ```
 
-The file naming convention `{name}_v{version}.parquet` is simple and human-readable. `mkdir(exist_ok=True)` means the function works on first run without a separate setup step. Writing with `index=False` keeps the Parquet file clean — the entity key is a regular column, not an index, which makes downstream joins simpler.
+The file naming convention `{name}_v{version}.parquet` is simple and human-readable. `mkdir(exist_ok=True)` means the function works on first run without a separate setup step. Writing with `index=False` keeps the Parquet file clean, the entity key is a regular column, not an index, which makes downstream joins simpler.
 
 **🎯 Expected output:** `save_features("avg_order_value", 1, df)` creates `feature_store_data/avg_order_value_v1.parquet`, and `load_features("avg_order_value", 1)` returns an identical DataFrame.
 
-**🩹 If it's off:** If `load_features` raises `FileNotFoundError`, the file path doesn't match — check that `STORE_DIR` and the naming pattern are consistent between save and load. If the loaded DataFrame has an extra `__index_level_0__` column, you saved with `index=True` instead of `False`.
+**🩹 If it's off:** If `load_features` raises `FileNotFoundError`, the file path doesn't match, check that `STORE_DIR` and the naming pattern are consistent between save and load. If the loaded DataFrame has an extra `__index_level_0__` column, you saved with `index=True` instead of `False`.
 
 ### 3.2 Verify the round-trip
 
@@ -310,7 +310,7 @@ The `isin` filter is the simplest form of point-in-time correctness: you load a 
 
 **🎯 Expected output:** `fetch_features("avg_order_value", 1, [1, 3])` returns a DataFrame with only the rows where `user_id` is 1 or 3.
 
-**🩹 If it's off:** If the result includes keys you didn't request, the filter column name is wrong. If the result is empty, the keys might not exist in the stored snapshot — check the version number.
+**🩹 If it's off:** If the result includes keys you didn't request, the filter column name is wrong. If the result is empty, the keys might not exist in the stored snapshot, check the version number.
 
 ### 4.2 Build the `FeatureStore` facade
 
@@ -335,11 +335,11 @@ class FeatureStore:
         return fetch_features(name, feat.version, entity_keys, key_column)
 ```
 
-The facade ties the three layers together: `compute_and_store` calls the computation function and persists the result under the version from the registry. `get` reads back the stored feature for specific entities. This separation of compute, store, and fetch is the same architecture used in production feature stores — it's just smaller here.
+The facade ties the three layers together: `compute_and_store` calls the computation function and persists the result under the version from the registry. `get` reads back the stored feature for specific entities. This separation of compute, store, and fetch is the same architecture used in production feature stores, it's just smaller here.
 
 **🎯 Expected output:** `store.get("avg_order_value", [1, 2])` returns a two-column DataFrame with values for those two users.
 
-**🩹 If it's off:** If `get` raises a `KeyError`, the feature isn't in the registry — register it before fetching. If the returned DataFrame has all rows instead of just the requested keys, check that `fetch_features` is filtering, not returning the full DataFrame.
+**🩹 If it's off:** If `get` raises a `KeyError`, the feature isn't in the registry, register it before fetching. If the returned DataFrame has all rows instead of just the requested keys, check that `fetch_features` is filtering, not returning the full DataFrame.
 
 ### 4.3 Verify point-in-time fetch
 
@@ -419,7 +419,7 @@ if __name__ == "__main__":
     cli()
 ```
 
-The `COMPUTE_MAP` dictionary is the dispatch table: it maps feature names to their computation functions. Adding a new feature means writing a computation function and adding one line to this map. The CLI is thin — it parses arguments, delegates to the library code, and prints results — which makes it easy to test each subcommand independently.
+The `COMPUTE_MAP` dictionary is the dispatch table: it maps feature names to their computation functions. Adding a new feature means writing a computation function and adding one line to this map. The CLI is thin, it parses arguments, delegates to the library code, and prints results, which makes it easy to test each subcommand independently.
 
 **🎯 Expected output:** `uv run python -m store.cli register --name avg_order_value --version 1 --description "Mean order value" --entity-key user_id` prints "Registered 'avg_order_value' v1" and creates the registry file.
 
@@ -476,12 +476,12 @@ This runs the full pipeline: register, compute, store, fetch. Each piece was tes
 - **Computing features on the full dataset including future rows.** When training on historical data, your raw DataFrame must be filtered to the training period *before* passing it to the computation function. Point-in-time correctness lives in the input data, not in the feature store's fetch logic.
 - **Overwriting feature files without versioning.** If `save_features` writes to the same path every time, you lose the ability to serve old versions. Always include the version number in the filename and bump it when the computation logic changes.
 - **Index leakage in Parquet round-trips.** Pandas writes the DataFrame index to Parquet by default. Use `index=False` on save and `reset_index(drop=True)` on fetch to keep the entity key as a plain column, not a hidden index.
-- **Hardcoding the entity key column name.** Different features may be keyed on different columns (`user_id`, `product_id`, `session_id`). The `key_column` parameter exists for this reason — don't assume every feature uses `user_id`.
-- **Forgetting to register before computing.** `FeatureStore.compute_and_store` reads the version from the registry. If the feature isn't registered, you get a `KeyError` — always register first.
+- **Hardcoding the entity key column name.** Different features may be keyed on different columns (`user_id`, `product_id`, `session_id`). The `key_column` parameter exists for this reason, don't assume every feature uses `user_id`.
+- **Forgetting to register before computing.** `FeatureStore.compute_and_store` reads the version from the registry. If the feature isn't registered, you get a `KeyError`, always register first.
 
 ## What you just built
 
-A lightweight but real feature store: a registry that catalogs feature definitions with versioning, computation functions that transform raw data into reusable features, Parquet-backed persistence for versioned snapshots, and a CLI that ties register-compute-fetch into one pipeline. The architecture — separating metadata, computation, storage, and serving — mirrors how production feature stores like Feast and Tecton work, just with files instead of a distributed database.
+A lightweight but real feature store: a registry that catalogs feature definitions with versioning, computation functions that transform raw data into reusable features, Parquet-backed persistence for versioned snapshots, and a CLI that ties register-compute-fetch into one pipeline. The architecture, separating metadata, computation, storage, and serving, mirrors how production feature stores like Feast and Tecton work, just with files instead of a distributed database.
 
 :::tip[Run a fuller version without any local setup]
 [`examples/feature-store/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/feature-store) in the course repo has a richer version with more feature computation functions, a CSV sample dataset, and the CLI wired up end to end. Clone it, or open the whole repo in a [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), and run it from there.
@@ -495,6 +495,6 @@ A lightweight but real feature store: a registry that catalogs feature definitio
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

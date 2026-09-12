@@ -141,11 +141,11 @@ for word, count in sorted_words[-10:]:
     print(f"  {word}: {count}")
 ```
 
-In most English text, "the", "of", "and", "to", and "a" dominate the top of the list. This follows **Zipf's law** — the most frequent word appears roughly twice as often as the second, three times as often as the third, and so on.
+In most English text, "the", "of", "and", "to", and "a" dominate the top of the list. This follows **Zipf's law**, the most frequent word appears roughly twice as often as the second, three times as often as the third, and so on.
 
 ### Why frequency matters for generation
 
-A language model uses frequency to weight predictions. If "the" appears 500 times and "platypus" appears 2 times, "the" should be chosen more often — but not always. The bigram model refines this by conditioning on the previous word, which is what makes generated text readable rather than just a stream of "the the the."
+A language model uses frequency to weight predictions. If "the" appears 500 times and "platypus" appears 2 times, "the" should be chosen more often, but not always. The bigram model refines this by conditioning on the previous word, which is what makes generated text readable rather than just a stream of "the the the."
 
 ## Try It
 

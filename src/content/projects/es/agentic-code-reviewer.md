@@ -6,25 +6,25 @@ description: "Gradúate del playground del navegador a Python real: construye un
 
 # 🤖 Construye un Revisor de Código Agéntico
 
-Todo pull request eventualmente es leído por un revisor humano que busca errores, problemas de estilo, tests faltantes y nombres confusos — antes de eso, sin embargo, es solo texto: la salida de `git diff`. Este proyecto construye una herramienta CLI que hace esa primera pasada automáticamente: captura un diff real con el módulo `subprocess` de Python, se lo entrega a un modelo de lenguaje de nivel gratuito con un system prompt de revisor cuidadosamente diseñado, y devuelve retroalimentación estructurada y accionable — no un vago "se ve bien", sino problemas específicos con un archivo, una categoría, una severidad y una corrección sugerida.
+Todo pull request eventualmente es leído por un revisor humano que busca errores, problemas de estilo, tests faltantes y nombres confusos, antes de eso, sin embargo, es solo texto: la salida de `git diff`. Este proyecto construye una herramienta CLI que hace esa primera pasada automáticamente: captura un diff real con el módulo `subprocess` de Python, se lo entrega a un modelo de lenguaje de nivel gratuito con un system prompt de revisor cuidadosamente diseñado, y devuelve retroalimentación estructurada y accionable, no un vago "se ve bien", sino problemas específicos con un archivo, una categoría, una severidad y una corrección sugerida.
 
-Esto asume Python 101 y suficiente comodidad con git para saber qué muestra `git diff` — no se requiere nada de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
+Esto asume Python 101 y suficiente comodidad con git para saber qué muestra `git diff`, no se requiere nada de Análisis de Datos. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 ## 🎯 Lo que harás
 
-1. Instalar `uv`, obtener una clave de API de un LLM de nivel gratuito, y configurar un pequeño proyecto — todo en un solo lugar, antes de empezar a construir.
+1. Instalar `uv`, obtener una clave de API de un LLM de nivel gratuito, y configurar un pequeño proyecto, todo en un solo lugar, antes de empezar a construir.
 2. Usar el módulo `subprocess` de Python para ejecutar `git diff` de verdad y capturar su salida como texto.
 3. Diseñar un system prompt que convierta un modelo de chat de propósito general en un revisor enfocado y estructurado.
 4. Enviar un diff al modelo e imprimir su retroalimentación en un formato claro y legible.
-5. Ejecutar la herramienta completa contra un diff real — tus propios cambios sin confirmar, y un commit específico del pasado del propio historial de este curso.
+5. Ejecutar la herramienta completa contra un diff real, tus propios cambios sin confirmar, y un commit específico del pasado del propio historial de este curso.
 
 ## Dónde ejecutar esto
 
-**Localmente con `uv`** es el camino principal y recomendado aquí, más que para la mayoría de otros proyectos de esta serie — la premisa completa de esta herramienta es ejecutar `git diff` contra un repositorio git local real, y eso significa que necesita una carpeta `.git` real en disco a la cual apuntar (tu propio proyecto, o un clon del repositorio de este curso).
+**Localmente con `uv`** es el camino principal y recomendado aquí, más que para la mayoría de otros proyectos de esta serie, la premisa completa de esta herramienta es ejecutar `git diff` contra un repositorio git local real, y eso significa que necesita una carpeta `.git` real en disco a la cual apuntar (tu propio proyecto, o un clon del repositorio de este curso).
 
-**GitHub Codespaces** también funciona bien: abre [todo el repositorio del curso en un Codespace gratuito](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python, `uv` y git ya están instalados) — es un clon real con historial real, así que cada paso de abajo, incluyendo la demo de "revisar un commit real del pasado", funciona exactamente igual que localmente.
+**GitHub Codespaces** también funciona bien: abre [todo el repositorio del curso en un Codespace gratuito](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python, `uv` y git ya están instalados), es un clon real con historial real, así que cada paso de abajo, incluyendo la demo de "revisar un commit real del pasado", funciona exactamente igual que localmente.
 
-**Google Colab, Kaggle Notebooks y Binder son una forma razonable de *probar* la herramienta, pero no de ejecutarla de verdad.** Ninguno te da un repositorio git local real con historial de commits por defecto, y la premisa completa de esta herramienta es revisar *tu propio* trabajo en progreso — el sistema de archivos efímero de un notebook no tiene nada de eso. El notebook de abajo sortea esto honestamente, en lugar de fingir que la brecha no existe: hace `!git clone` del propio repositorio de este curso dentro del notebook y revisa un commit histórico real y pequeño de él con `git show`, así que cada pieza de la herramienta (la captura de diff con `subprocess`, el system prompt, la llamada al LLM, la salida estructurada) sigue ejecutándose contra una salida real y con apariencia real — solo que está revisando un commit de ejemplo fijo en lugar de algo que tú escribiste personalmente. Úsalo para ver la herramienta funcionar de principio a fin sin ninguna configuración; cambia a `uv` local o a un Codespace cuando quieras apuntarla a tus propios cambios reales.
+**Google Colab, Kaggle Notebooks y Binder son una forma razonable de *probar* la herramienta, pero no de ejecutarla de verdad.** Ninguno te da un repositorio git local real con historial de commits por defecto, y la premisa completa de esta herramienta es revisar *tu propio* trabajo en progreso, el sistema de archivos efímero de un notebook no tiene nada de eso. El notebook de abajo sortea esto honestamente, en lugar de fingir que la brecha no existe: hace `!git clone` del propio repositorio de este curso dentro del notebook y revisa un commit histórico real y pequeño de él con `git show`, así que cada pieza de la herramienta (la captura de diff con `subprocess`, el system prompt, la llamada al LLM, la salida estructurada) sigue ejecutándose contra una salida real y con apariencia real, solo que está revisando un commit de ejemplo fijo en lugar de algo que tú escribiste personalmente. Úsalo para ver la herramienta funcionar de principio a fin sin ninguna configuración; cambia a `uv` local o a un Codespace cuando quieras apuntarla a tus propios cambios reales.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/agentic-code-reviewer/notebook.es.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/agentic-code-reviewer/notebook.es.ipynb)
@@ -36,7 +36,7 @@ Todo lo que necesitas antes de escribir una línea del revisor en sí: un Python
 
 ### Instala `uv`
 
-`uv` es una sola herramienta que reemplaza la cadena habitual de "instala Python, luego instala pip, luego instala una herramienta de entorno virtual, luego instala paquetes" — puede instalar y gestionar versiones de Python por sí misma, junto con las dependencias de tu proyecto.
+`uv` es una sola herramienta que reemplaza la cadena habitual de "instala Python, luego instala pip, luego instala una herramienta de entorno virtual, luego instala paquetes", puede instalar y gestionar versiones de Python por sí misma, junto con las dependencias de tu proyecto.
 
 **macOS / Linux** (terminal):
 
@@ -64,20 +64,20 @@ cd agentic-code-reviewer
 uv add openai python-dotenv
 ```
 
-La librería cliente de `openai` funciona aquí para cada proveedor de la tabla de abajo, no solo para OpenAI mismo — GitHub Models, Gemini, Groq, Mistral, Cerebras y OpenRouter todos exponen un endpoint de chat compatible con OpenAI, así que un solo cliente, apuntado a una `base_url` diferente, es todo lo que este proyecto necesita. `python-dotenv` te permite mantener tu clave de API en un archivo `.env` local en lugar de hacer `export` cada sesión.
+La librería cliente de `openai` funciona aquí para cada proveedor de la tabla de abajo, no solo para OpenAI mismo, GitHub Models, Gemini, Groq, Mistral, Cerebras y OpenRouter todos exponen un endpoint de chat compatible con OpenAI, así que un solo cliente, apuntado a una `base_url` diferente, es todo lo que este proyecto necesita. `python-dotenv` te permite mantener tu clave de API en un archivo `.env` local en lugar de hacer `export` cada sesión.
 
 ### Obtén una clave de API de LLM gratuita
 
-**Elige el proveedor que prefieras** — ninguno requiere tarjeta de crédito al momento de escribir esto, y este curso no favorece a uno sobre otro. El ejemplo más completo en el repositorio del curso ([`examples/agentic-code-reviewer/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/agentic-code-reviewer)) soporta los seis de fábrica, seleccionables con una sola configuración.
+**Elige el proveedor que prefieras**, ninguno requiere tarjeta de crédito al momento de escribir esto, y este curso no favorece a uno sobre otro. El ejemplo más completo en el repositorio del curso ([`examples/agentic-code-reviewer/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/agentic-code-reviewer)) soporta los seis de fábrica, seleccionables con una sola configuración.
 
 | Proveedor | Dónde obtener una clave | Por qué podrías elegirlo |
 |---|---|---|
-| **GitHub Models** *(sugerido por defecto)* | [github.com/settings/tokens](https://github.com/settings/tokens) — un token de acceso personal con el scope `models: read` | Sin registro aparte — ya tienes una cuenta de GitHub. Límites de nivel gratuito más generosos que Gemini. |
+| **GitHub Models** *(sugerido por defecto)* | [github.com/settings/tokens](https://github.com/settings/tokens), un token de acceso personal con el scope `models: read` | Sin registro aparte, ya tienes una cuenta de GitHub. Límites de nivel gratuito más generosos que Gemini. |
 | Gemini | [Google AI Studio](https://aistudio.google.com/) | La opción más comúnmente referenciada; también expone un endpoint compatible con OpenAI, usado abajo. |
 | Groq | [console.groq.com/keys](https://console.groq.com/keys) | Inferencia rápida, nivel gratuito generoso, sin tarjeta. |
 | Mistral | [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys) | Una de las cuotas gratuitas permanentes más generosas. |
 | Cerebras | [cloud.cerebras.ai](https://cloud.cerebras.ai/) | Alto volumen diario de tokens, sin tarjeta. |
-| OpenRouter | [openrouter.ai/keys](https://openrouter.ai/keys) | Una API, muchos modelos gratuitos — bueno para comparar proveedores. |
+| OpenRouter | [openrouter.ai/keys](https://openrouter.ai/keys) | Una API, muchos modelos gratuitos, bueno para comparar proveedores. |
 
 Sea cual sea el que elijas, el proceso es el mismo:
 
@@ -90,24 +90,24 @@ LLM_PROVIDER=github
 GITHUB_TOKEN=tu-clave-aquí
 ```
 
-Una clave de API es un secreto, exactamente como una contraseña — cualquiera que la tenga puede usar la cuota de tu cuenta. Tratarla como una variable de entorno en lugar de una cadena fija en el código es la práctica estándar exactamente por esta razón.
+Una clave de API es un secreto, exactamente como una contraseña, cualquiera que la tenga puede usar la cuota de tu cuenta. Tratarla como una variable de entorno en lugar de una cadena fija en el código es la práctica estándar exactamente por esta razón.
 
 :::tip[Un archivo .env suele ser más conveniente que export]
-En lugar de hacer `export` de una clave en cada nueva sesión de terminal, `python-dotenv` lee un archivo `.env` en la carpeta de tu proyecto hacia `os.environ` automáticamente, la primera vez que se ejecuta tu script — mira `load_dotenv()` en el Paso 3 de abajo.
+En lugar de hacer `export` de una clave en cada nueva sesión de terminal, `python-dotenv` lee un archivo `.env` en la carpeta de tu proyecto hacia `os.environ` automáticamente, la primera vez que se ejecuta tu script, mira `load_dotenv()` en el Paso 3 de abajo.
 :::
 
 **✅ Lista de verificación**
 
 - ✅ `uv --version` imprime un número de versión.
 - ✅ `agentic-code-reviewer/` existe con un `pyproject.toml`, y `openai` y `python-dotenv` están instalados.
-- ✅ Tienes una clave de API real de un proveedor, guardada en un archivo `.env` en la carpeta de tu proyecto — no pegada en ningún script.
+- ✅ Tienes una clave de API real de un proveedor, guardada en un archivo `.env` en la carpeta de tu proyecto, no pegada en ningún script.
 
 ## Paso 1: Captura un git diff con `subprocess`
-### 1.1 El módulo `subprocess` de Python ejecuta otro programa y captura su salida como texto — aquí...
+### 1.1 El módulo `subprocess` de Python ejecuta otro programa y captura su salida como texto, aquí...
 
 **👟 Pista inicial :**
 
-El módulo `subprocess` de Python ejecuta otro programa y captura su salida como texto — aquí, ese programa es `git` mismo. Este es un uso genuinamente realista de `subprocess`: no estás simulando nada, estás ejecutando exactamente el mismo comando `git diff` que escribirías a mano, y leyendo de vuelta exactamente lo que imprimiría en tu terminal.
+El módulo `subprocess` de Python ejecuta otro programa y captura su salida como texto, aquí, ese programa es `git` mismo. Este es un uso genuinamente realista de `subprocess`: no estás simulando nada, estás ejecutando exactamente el mismo comando `git diff` que escribirías a mano, y leyendo de vuelta exactamente lo que imprimiría en tu terminal.
 Crea `review.py`:
 
 ```python
@@ -156,13 +156,13 @@ Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
 **👟 Pista inicial :**
 
 `subprocess.run([...], capture_output=True, text=True)` es la línea clave: pasar el comando como una **lista** de argumentos (`["git", "diff", "HEAD"]`) en lugar de una cadena única de shell evita toda una clase de bugs de quoting de shell e inyección, `capture_output=True` captura stdout/stderr en lugar de dejarlos imprimir directamente a tu terminal, y `text=True` decodifica esa salida como una cadena en lugar de bytes crudos. `check=False` más un `if result.returncode != 0` manual es deliberado aquí en lugar de `check=True`: permite que esta función lance su *propio* mensaje de error claro (incluyendo el stderr real de git) en lugar de un `CalledProcessError` genérico.
-Pruébalo contra este mismo proyecto — edita cualquier archivo, no lo confirmes, luego ejecuta:
+Pruébalo contra este mismo proyecto, edita cualquier archivo, no lo confirmes, luego ejecuta:
 
 ```bash
 uv run python review.py
 ```
 :::tip[Este es el mismo patrón de subprocess que cualquier otro wrapper de CLI]
-`subprocess.run` no le importa que el programa que se ejecuta sea `git` — funciona idénticamente para cualquier herramienta de línea de comandos: `ls`, un script de shell, otro programa Python. Una vez que este patrón hace clic, "dejar que Python controle una herramienta CLI existente y usar su salida" está disponible para mucho más que solo git.
+`subprocess.run` no le importa que el programa que se ejecuta sea `git`, funciona idénticamente para cualquier herramienta de línea de comandos: `ls`, un script de shell, otro programa Python. Una vez que este patrón hace clic, "dejar que Python controle una herramienta CLI existente y usar su salida" está disponible para mucho más que solo git.
 :::
 
 **🎯 Resultado esperado :**
@@ -191,7 +191,7 @@ Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
 
 **👟 Pista inicial :**
 
-Un modelo de lenguaje sin instrucciones felizmente producirá "¡se ve bien!" para casi cualquier cosa — inútil como revisor. El **system prompt** es lo que convierte un modelo de chat de propósito general en un revisor que se comporta consistentemente: qué buscar, qué ignorar, y qué forma debe tomar su respuesta.
+Un modelo de lenguaje sin instrucciones felizmente producirá "¡se ve bien!" para casi cualquier cosa, inútil como revisor. El **system prompt** es lo que convierte un modelo de chat de propósito general en un revisor que se comporta consistentemente: qué buscar, qué ignorar, y qué forma debe tomar su respuesta.
 
 ```python
 SYSTEM_PROMPT = """\
@@ -224,11 +224,11 @@ found, because ..." paragraph), not prose paragraphs.
 """
 ```
 Tres decisiones de diseño deliberadas que vale la pena notar:
-- **"Revisa SOLO lo que el diff realmente cambia"** evita que el modelo invente quejas que suenan plausibles sobre código que no puede ver realmente — un diff muestra líneas cambiadas más un poco de contexto circundante, no el archivo completo.
+- **"Revisa SOLO lo que el diff realmente cambia"** evita que el modelo invente quejas que suenan plausibles sobre código que no puede ver realmente, un diff muestra líneas cambiadas más un poco de contexto circundante, no el archivo completo.
 - **Una estructura requerida** (archivo, categoría, severidad, explicación, corrección) es lo que convierte un chat de formato libre en algo sobre lo que realmente puedes actuar rápidamente, la misma razón por la que "LGTM con dos comentarios" de un revisor humano es más útil que un párrafo de impresiones vagas.
-- **Una instrucción explícita de decir cuándo no hay nada mal** existe porque los modelos tienden a ser complacientes — sin esta línea, algunos modelos fabrican pequeñas quejas solo para parecer minuciosos, lo cual te entrena a dejar de confiar en la salida de la herramienta.
+- **Una instrucción explícita de decir cuándo no hay nada mal** existe porque los modelos tienden a ser complacientes, sin esta línea, algunos modelos fabrican pequeñas quejas solo para parecer minuciosos, lo cual te entrena a dejar de confiar en la salida de la herramienta.
 :::tip[Itera sobre el prompt como lo harías con código]
-Trata este system prompt como un primer borrador, no una especificación terminada. Ejecútalo contra un diff que ya sabes que tiene un bug específico — si el modelo lo pasa por alto, o el formato de respuesta se desvía, ajusta la redacción e inténtalo de nuevo. La ingeniería de prompts para una tarea enfocada como esta se parece más a escribir una especificación muy precisa que a "pedir amablemente".
+Trata este system prompt como un primer borrador, no una especificación terminada. Ejecútalo contra un diff que ya sabes que tiene un bug específico, si el modelo lo pasa por alto, o el formato de respuesta se desvía, ajusta la redacción e inténtalo de nuevo. La ingeniería de prompts para una tarea enfocada como esta se parece más a escribir una especificación muy precisa que a "pedir amablemente".
 :::
 
 **🎯 Resultado esperado :**
@@ -308,18 +308,18 @@ Deberías ver la salida esperada sin errores.
 
 Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
 
-### 3.2 `truncate_diff` importa más aquí de lo que podría parecer a primera vista — mira la sección ...
+### 3.2 `truncate_diff` importa más aquí de lo que podría parecer a primera vista, mira la sección ...
 
 **👟 Pista inicial :**
 
-`truncate_diff` importa más aquí de lo que podría parecer a primera vista — mira la sección de pitfalls abajo para saber por qué un diff grande no es solo lento, puede fallar silenciosamente u obtener una revisión superficial. Envolver el diff en un bloque de código con fence ` ```diff ` en el mensaje del usuario, en lugar de pegarlo crudo, es una señal pequeña pero real al modelo sobre qué tipo de texto está viendo.
+`truncate_diff` importa más aquí de lo que podría parecer a primera vista, mira la sección de pitfalls abajo para saber por qué un diff grande no es solo lento, puede fallar silenciosamente u obtener una revisión superficial. Envolver el diff en un bloque de código con fence ` ```diff ` en el mensaje del usuario, en lugar de pegarlo crudo, es una señal pequeña pero real al modelo sobre qué tipo de texto está viendo.
 Ejecútalo:
 
 ```bash
 uv run python review.py
 ```
 :::tip[¿Usando un proveedor diferente?]
-Cambia el bloque `OpenAI(...)` por una `base_url` y clave diferentes — ej. `base_url="https://api.groq.com/openai/v1"` con `api_key=os.environ["GROQ_API_KEY"]` para Groq, o `base_url="https://generativelanguage.googleapis.com/v1beta/openai/"` con `api_key=os.environ["GOOGLE_API_KEY"]` para el endpoint compatible con OpenAI de Gemini. Todo lo demás en este archivo permanece igual. Mira [`examples/agentic-code-reviewer/review.py`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/agentic-code-reviewer/review.py) en el repositorio del curso para ver los seis conectados lado a lado, seleccionables con una variable de entorno.
+Cambia el bloque `OpenAI(...)` por una `base_url` y clave diferentes, ej. `base_url="https://api.groq.com/openai/v1"` con `api_key=os.environ["GROQ_API_KEY"]` para Groq, o `base_url="https://generativelanguage.googleapis.com/v1beta/openai/"` con `api_key=os.environ["GOOGLE_API_KEY"]` para el endpoint compatible con OpenAI de Gemini. Todo lo demás en este archivo permanece igual. Mira [`examples/agentic-code-reviewer/review.py`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/agentic-code-reviewer/review.py) en el repositorio del curso para ver los seis conectados lado a lado, seleccionables con una variable de entorno.
 :::
 
 **🎯 Resultado esperado :**
@@ -340,7 +340,7 @@ Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
 
 **🤔 Pregunta(s) socrática(s)**
 
-- `review_diff` retorna temprano con una cadena fija cuando el diff está vacío, antes de siquiera construir un cliente `OpenAI`. ¿Por qué ese orden — verificar primero, llamar a la API después — vale la pena hacerlo deliberadamente, en lugar de simplemente dejar que un prompt vacío vaya al modelo?
+- `review_diff` retorna temprano con una cadena fija cuando el diff está vacío, antes de siquiera construir un cliente `OpenAI`. ¿Por qué ese orden, verificar primero, llamar a la API después, vale la pena hacerlo deliberadamente, en lugar de simplemente dejar que un prompt vacío vaya al modelo?
 - Si dos ejecuciones diferentes de `review_diff` sobre el *mismo* diff exacto produjeran dos listas diferentes de problemas, ¿te sorprendería? ¿Qué sugiere eso sobre tratar la salida de esta herramienta como una lista de verificación en la que confiar ciegamente versus un punto de partida para una revisión humana?
 
 ## Paso 4: Ejecútalo contra un diff real, de principio a fin
@@ -349,7 +349,7 @@ Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
 **👟 Pista inicial :**
 
 Dos formas realistas de usar esta herramienta, ambas vale la pena probar:
-**1. Revisa tus propios cambios sin confirmar** — el caso de uso cotidiano. Haz un cambio pequeño y deliberado en cualquier archivo (introduce un bug obvio a propósito, si quieres una prueba clara), luego:
+**1. Revisa tus propios cambios sin confirmar**, el caso de uso cotidiano. Haz un cambio pequeño y deliberado en cualquier archivo (introduce un bug obvio a propósito, si quieres una prueba clara), luego:
 
 ```bash
 uv run python review.py
@@ -363,11 +363,11 @@ Deberías ver la salida esperada sin errores.
 
 Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
 
-### 4.2 **2. Revisa un commit específico del propio historial de este curso** — una buena forma de v...
+### 4.2 **2. Revisa un commit específico del propio historial de este curso**, una buena forma de v...
 
 **👟 Pista inicial :**
 
-**2. Revisa un commit específico del propio historial de este curso** — una buena forma de ver la herramienta funcionar en un diff real que tú no escribiste. Agrega una pequeña opción de CLI para poder apuntarla a cualquier commit por su hash:
+**2. Revisa un commit específico del propio historial de este curso**, una buena forma de ver la herramienta funcionar en un diff real que tú no escribiste. Agrega una pequeña opción de CLI para poder apuntarla a cualquier commit por su hash:
 
 ```python
 # review.py (continuación)
@@ -432,7 +432,7 @@ Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
 
 **👟 Pista inicial :**
 
-También puedes comparar tu rama actual contra otra, o pasar un diff directamente por pipe en lugar de dejar que el script ejecute `git` por sí mismo — útil en un job de CI que ya tiene el diff como archivo:
+También puedes comparar tu rama actual contra otra, o pasar un diff directamente por pipe en lugar de dejar que el script ejecute `git` por sí mismo, útil en un job de CI que ya tiene el diff como archivo:
 
 ```bash
 uv run python review.py --against main
@@ -462,14 +462,14 @@ Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
 
 ## ⚠️ Errores comunes
 
-- **Diffs enormes que exceden la ventana de contexto o la cuota de tokens de nivel gratuito.** Un diff de varios miles de líneas (una refactorización grande, una actualización de dependencia vendorizada) puede exceder lo que el modelo puede realmente atender, o simplemente exceder el límite de tokens por solicitud de tu nivel gratuito y fallar directamente. `truncate_diff` en el Paso 3 limita esto, pero la truncación significa una revisión parcial — para cambios genuinamente grandes, revísalos en piezas más pequeñas (un archivo o un commit lógico a la vez) en lugar de confiar en que una pasada truncada lo haya visto todo.
+- **Diffs enormes que exceden la ventana de contexto o la cuota de tokens de nivel gratuito.** Un diff de varios miles de líneas (una refactorización grande, una actualización de dependencia vendorizada) puede exceder lo que el modelo puede realmente atender, o simplemente exceder el límite de tokens por solicitud de tu nivel gratuito y fallar directamente. `truncate_diff` en el Paso 3 limita esto, pero la truncación significa una revisión parcial, para cambios genuinamente grandes, revísalos en piezas más pequeñas (un archivo o un commit lógico a la vez) en lugar de confiar en que una pasada truncada lo haya visto todo.
 - **Revisar archivos generados o vendorizados.** Un diff que toca `uv.lock`, un bundle minificado, o un archivo de migración autogenerado desperdicia tokens en texto que ningún humano escribió ni necesita comentarios sobre él, y puede ahogar la retroalimentación real sobre los archivos que sí importan. Filtra estos antes de llamar a `git diff` (ej. `git diff -- . ':!uv.lock' ':!*.min.js'`) en lugar de enviarlo todo.
-- **Confiar demasiado en la revisión de la IA como reemplazo de una humana.** Esta herramienta es una primera pasada rápida, no un revisor con contexto completo del proyecto, convenciones del equipo, o la capacidad de preguntarte *por qué* hiciste un cambio. Trata su salida como tratarías los comentarios de un colega muy rápido pero un poco inexperto — vale la pena leerla, no vale la pena fusionar (merge) basándose solo en ella.
-- **No manejar un diff vacío o faltante.** Ejecutar la herramienta sin cambios sin confirmar y sin la bandera `--commit`/`--against` contra un repositorio sin nada que comparar producirá un diff vacío — el retorno temprano de `review_diff` para entrada vacía (Paso 3) existe específicamente para que esto no se convierta en una llamada a la API desperdiciada o una respuesta confusa y vacía del modelo.
+- **Confiar demasiado en la revisión de la IA como reemplazo de una humana.** Esta herramienta es una primera pasada rápida, no un revisor con contexto completo del proyecto, convenciones del equipo, o la capacidad de preguntarte *por qué* hiciste un cambio. Trata su salida como tratarías los comentarios de un colega muy rápido pero un poco inexperto, vale la pena leerla, no vale la pena fusionar (merge) basándose solo en ella.
+- **No manejar un diff vacío o faltante.** Ejecutar la herramienta sin cambios sin confirmar y sin la bandera `--commit`/`--against` contra un repositorio sin nada que comparar producirá un diff vacío, el retorno temprano de `review_diff` para entrada vacía (Paso 3) existe específicamente para que esto no se convierta en una llamada a la API desperdiciada o una respuesta confusa y vacía del modelo.
 
 ## Lo que acabas de construir
 
-Un CLI de revisión de código real y funcional: captura un git diff real vía `subprocess` — el mismo comando que escribirías a mano — y lo convierte en retroalimentación estructurada y accionable de un LLM de nivel gratuito, guiado por un system prompt diseñado específicamente para revisar código en lugar de chatear genéricamente. Nada aquí es una simulación de juguete: apúntalo a un commit real del propio historial de este curso, o a tu propio trabajo sin confirmar, y revisa el texto real, no un ejemplo enlatado.
+Un CLI de revisión de código real y funcional: captura un git diff real vía `subprocess`, el mismo comando que escribirías a mano, y lo convierte en retroalimentación estructurada y accionable de un LLM de nivel gratuito, guiado por un system prompt diseñado específicamente para revisar código en lugar de chatear genéricamente. Nada aquí es una simulación de juguete: apúntalo a un commit real del propio historial de este curso, o a tu propio trabajo sin confirmar, y revisa el texto real, no un ejemplo enlatado.
 
 :::tip[Ejecuta una versión más completa sin configuración local]
 [`examples/agentic-code-reviewer/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/agentic-code-reviewer) en el repositorio del curso es una versión más completa del código de arriba, con los seis proveedores de la tabla conectados lado a lado (seleccionados con una configuración `LLM_PROVIDER`) y las opciones `--against`/`--commit`/`--stdin` del Paso 4 ya incluidas. Clónalo, o abre todo el repositorio en un [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), y ejecútalo desde ahí.
@@ -477,13 +477,13 @@ Un CLI de revisión de código real y funcional: captura un git diff real vía `
 
 ## A dónde ir desde aquí
 
-- Agrega una bandera `--severity-min` que filtre la salida del modelo a solo problemas `Critical` y `Warning` — útil una vez que estés ejecutando esto en diffs más grandes y quieras triar rápido en lugar de leer cada `Suggestion`.
-- Conecta esto a un hook de pre-commit o a un job de GitHub Actions para que cada pull request en tus propios proyectos reciba automáticamente un comentario de primera revisión — la opción `--stdin` del Paso 4 es exactamente la forma que necesita un job de CI (ya tiene el diff, generado de otra forma).
-- Prueba comparando la retroalimentación entre dos proveedores diferentes sobre el *mismo* diff — ¿marcan los mismos problemas? ¿Dónde discrepan, y qué te dice eso sobre confiar en la revisión de un solo modelo como verdad absoluta?
+- Agrega una bandera `--severity-min` que filtre la salida del modelo a solo problemas `Critical` y `Warning`, útil una vez que estés ejecutando esto en diffs más grandes y quieras triar rápido en lugar de leer cada `Suggestion`.
+- Conecta esto a un hook de pre-commit o a un job de GitHub Actions para que cada pull request en tus propios proyectos reciba automáticamente un comentario de primera revisión, la opción `--stdin` del Paso 4 es exactamente la forma que necesita un job de CI (ya tiene el diff, generado de otra forma).
+- Prueba comparando la retroalimentación entre dos proveedores diferentes sobre el *mismo* diff, ¿marcan los mismos problemas? ¿Dónde discrepan, y qué te dice eso sobre confiar en la revisión de un solo modelo como verdad absoluta?
 
 ## Comparte tu proyecto con la clase
 
-¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado — y su README tiene un recorrido completo y amigable para principiantes sobre cómo agregar el tuyo vía un **pull request**, incluso si nunca has usado git antes: hacer fork del repositorio, crear una rama, confirmar tus archivos, y abrir el PR, un paso a la vez. No se asume experiencia previa con git.
+¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado, y su README tiene un recorrido completo y amigable para principiantes sobre cómo agregar el tuyo vía un **pull request**, incluso si nunca has usado git antes: hacer fork del repositorio, crear una rama, confirmar tus archivos, y abrir el PR, un paso a la vez. No se asume experiencia previa con git.
 
 Bienvenido a escribir Python fuera del navegador. 🎓
 

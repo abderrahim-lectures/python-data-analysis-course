@@ -221,7 +221,7 @@ Cela pourrait produire quelque chose comme :
 the old man had been a good teacher and he had a
 ```
 
-La sortie ne sera pas grammaticalement parfaite — c'est un petit modèle avec seulement un contexte de bigrammes. Mais elle capture de vraies séquences de mots anglais parce que les probabilités de bigrammes proviennent de texte réel.
+La sortie ne sera pas grammaticalement parfaite, c'est un petit modèle avec seulement un contexte de bigrammes. Mais elle capture de vraies séquences de mots anglais parce que les probabilités de bigrammes proviennent de texte réel.
 
 ## Essayez
 
@@ -238,7 +238,7 @@ for word in starts:
 ## Points clés
 
 - `generate_text()` enchaîne les appels `sample_next()` dans une boucle pour construire des séquences de mots
-- Les impasses surviennent quand un mot n'a pas de mots suivants connus — gérez-les en vous arrêtant ou en redémarrant
+- Les impasses surviennent quand un mot n'a pas de mots suivants connus, gérez-les en vous arrêtant ou en redémarrant
 - Le choix du mot de départ affecte fortement la qualité de la sortie
 - Utilisez `random.seed()` et `verbose=True` pour le débogage
 

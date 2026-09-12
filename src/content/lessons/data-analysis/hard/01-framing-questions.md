@@ -48,7 +48,7 @@ A good analysis begins with a question, not a plot. Before you load a dataset, b
 
 ### From vague problem to structured questions
 
-A stakeholder says "Do student test scores vary by gender?" — that sounds like a question, but it is actually too broad to answer directly. Good EDA questions are specific, measurable, and scoped. Break the vague question into layers:
+A stakeholder says "Do student test scores vary by gender?", that sounds like a question, but it is actually too broad to answer directly. Good EDA questions are specific, measurable, and scoped. Break the vague question into layers:
 
 ```python
 # Vague question
@@ -81,9 +81,9 @@ A strong EDA moves through all three: describe the landscape, explore unexpected
 
 Structure your questions into a hierarchy that mirrors the EDA workflow:
 
-1. **Primary question** — the single question the analysis must answer
-2. **Secondary questions** — breakdowns and comparisons that support the primary
-3. **Tertiary questions** — edge cases, confounders, and "what about X?" follow-ups
+1. **Primary question**, the single question the analysis must answer
+2. **Secondary questions**, breakdowns and comparisons that support the primary
+3. **Tertiary questions**, edge cases, confounders, and "what about X?" follow-ups
 
 ```python
 # Example for Students Performance dataset
@@ -171,7 +171,7 @@ print(f"\nHypothesis: {hypothesis}")
 
 ## Key Takeaways
 
-- Good EDA starts with questions, not code — the quality of your questions determines the quality of your analysis
+- Good EDA starts with questions, not code, the quality of your questions determines the quality of your analysis
 - Break vague problems into a hierarchy: primary, secondary, and tertiary questions
 - Convert questions into falsifiable hypotheses before you start computing
 - Descriptive, exploratory, and confirmatory analysis each serve a different purpose; a strong EDA uses all three
@@ -184,7 +184,7 @@ You are given a dataset called `housing.csv` with columns: `price`, `sqft`, `bed
 Write a primary question, three secondary questions, and one testable hypothesis. Then write a Python dictionary that stores your question hierarchy and prints it formatted.
 
 <details class="challenge">
-<summary>🧩 Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge, think first, then reveal</summary>
 <div class="challenge__body">
 
 ```python

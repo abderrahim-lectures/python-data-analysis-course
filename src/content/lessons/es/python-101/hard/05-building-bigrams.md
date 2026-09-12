@@ -44,7 +44,7 @@ quiz:
 ---
 De los recuentos de palabras a las transiciones de palabras
 
-La frecuencia de palabras te dice *qué* palabras aparecen. Los bigramas te dicen *qué sigue a qué*. "The cat" es mucho más común que "the refrigerator" — una tabla de bigramas captura esa relación. Es la forma más simple de un modelo de lenguaje: dada una palabra, ¿qué palabras tienden a venir después?
+La frecuencia de palabras te dice *qué* palabras aparecen. Los bigramas te dicen *qué sigue a qué*. "The cat" es mucho más común que "the refrigerator", una tabla de bigramas captura esa relación. Es la forma más simple de un modelo de lenguaje: dada una palabra, ¿qué palabras tienden a venir después?
 
 Las celdas siguientes reutilizan las funciones `load_corpus` y `tokenize` de las lecciones 01 y 03. Cada página de lección inicia una sesión de Python nueva, así que ejecuta primero esta celda de configuración:
 
@@ -152,7 +152,7 @@ print(f"  Followers: {bigrams[top_word]}")
 
 ### Límites de oración
 
-Al construir bigramas a partir de varias oraciones, la última palabra de una oración y la primera de la siguiente se convierten en un bigrama. Esto suele estar bien para un modelo pequeño — el modelo no sabe nada de la estructura de oraciones de todos modos. Pero si quieres resultados más limpios, puedes añadir marcadores de límite de oración:
+Al construir bigramas a partir de varias oraciones, la última palabra de una oración y la primera de la siguiente se convierten en un bigrama. Esto suele estar bien para un modelo pequeño, el modelo no sabe nada de la estructura de oraciones de todos modos. Pero si quieres resultados más limpios, puedes añadir marcadores de límite de oración:
 
 ```python
 def build_bigrams(tokens, add_boundaries=True):
@@ -187,7 +187,7 @@ print(f"Unique bigram pairs: {total_pairs}")
 
 ## Conclusiones clave
 
-- Un bigrama es un par de palabras consecutivas — el modelo de secuencias más simple
+- Un bigrama es un par de palabras consecutivas, el modelo de secuencias más simple
 - La tabla de bigramas es un dict anidado: `bigrams[word] = {seguidor: recuento}`
 - `defaultdict(lambda: defaultdict(int))` simplifica el conteo anidado
 - Los límites de oración se pueden rastrear con tokens especiales como `<END>`

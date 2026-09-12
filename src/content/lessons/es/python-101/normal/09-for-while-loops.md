@@ -28,7 +28,7 @@ $$
 \sum_{i=1}^{100} i = 1 + 2 + \cdots + 100
 $$
 
-El signo $\sum$ es una instrucción de repetir. Un bucle es el $\sum$ de la computadora — y Python parte la idea en dos máquinas para dos clases de repetición. `for` repite sobre una *secuencia conocida*. `while` repite *hasta que una condición deje de ser verdadera*.
+El signo $\sum$ es una instrucción de repetir. Un bucle es el $\sum$ de la computadora, y Python parte la idea en dos máquinas para dos clases de repetición. `for` repite sobre una *secuencia conocida*. `while` repite *hasta que una condición deje de ser verdadera*.
 
 ## For: repetición sobre una secuencia
 
@@ -44,7 +44,7 @@ for fruit in ["apple", "banana", "cherry"]:
 
 Léelo como corre: *"para cada fruta **en** la lista, haz esto."* La variable del bucle, `fruit`, toma un valor nuevo cada ronda hasta agotar la lista.
 
-Las cadenas también son secuencias — los elementos son caracteres:
+Las cadenas también son secuencias, los elementos son caracteres:
 
 ```python
 for letter in "Python":
@@ -55,7 +55,7 @@ Como un carácter es un elemento único, la matemática y la máquina coinciden:
 
 ## La secuencia numérica: range
 
-La mayoría de las sumas van sobre números, así que Python ofrece `range` — una secuencia que puedes recorrer a saltos:
+La mayoría de las sumas van sobre números, así que Python ofrece `range`, una secuencia que puedes recorrer a saltos:
 
 ```python
 for n in range(5):
@@ -73,7 +73,7 @@ Vale la pena enunciar la regla de parada con exactitud: $n$ viaja mientras $n < 
 
 ## While: repetición hasta una condición
 
-Algunas tareas no pueden enumerar sus rondas de antemano — sigues hasta que alguna condición se voltea. La aproximación de Newton es el prototipo: refina hasta que el cambio encaje por debajo de una tolerancia. Eso es un bucle `while`:
+Algunas tareas no pueden enumerar sus rondas de antemano, sigues hasta que alguna condición se voltea. La aproximación de Newton es el prototipo: refina hasta que el cambio encaje por debajo de una tolerancia. Eso es un bucle `while`:
 
 ```python
 count = 0
@@ -83,7 +83,7 @@ while count < 5:
 # 0 1 2 3 4
 ```
 
-La condición está arriba y se reexamina cada ronda. **Asegúrate de que con el tiempo se vuelva `False`** — si nada en el cuerpo cambia las variables que lee la condición, el bucle no termina jamás. Una suma que debe terminar se escribe con `for`; una búsqueda que solo acaba al hallar su respuesta se escribe con `while`.
+La condición está arriba y se reexamina cada ronda. **Asegúrate de que con el tiempo se vuelva `False`**, si nada en el cuerpo cambia las variables que lee la condición, el bucle no termina jamás. Una suma que debe terminar se escribe con `for`; una búsqueda que solo acaba al hallar su respuesta se escribe con `while`.
 
 ## Break y continue
 
@@ -121,7 +121,7 @@ for n in range(10):
         print(n)
 ```
 
-No hace nada — que es precisamente su trabajo: mantener el bloque sintácticamente válido mientras se redacta la sentencia real.
+No hace nada, que es precisamente su trabajo: mantener el bloque sintácticamente válido mientras se redacta la sentencia real.
 
 ## Un ejemplo resuelto: la máquina Σ trabajando
 
@@ -142,36 +142,36 @@ El bucle es $\sum$ mecanizado: cada vuelta suma un término, `continue` cuela la
 
 - **Bucles `while` infinitos.** Olvida actualizar la variable que lee la condición y el bucle girará para siempre. Verifica que el cuerpo mueva el estado hacia `False`.
 - **Modificar una lista mientras la iteras.** Rebanar o borrar elementos a mitad de camino desplaza los índices bajo tus pies. Itera sobre una copia, o construye una lista nueva.
-- **`for i in range(len(items))`.** A menos que necesites el índice en sí, itera sobre la secuencia directamente — `for fruit in fruits` dice lo que quieres.
+- **`for i in range(len(items))`.** A menos que necesites el índice en sí, itera sobre la secuencia directamente, `for fruit in fruits` dice lo que quieres.
 - **`continue` se salta la vuelta; `break` abandona el bucle.** `continue` se salta solo la iteración actual; `break` termina el bucle entero. Confundirlos es cómo un bucle que debía parar sigue girando.
 
 ## 🧩 Desafíos
 
 <details class="challenge">
-<summary>🧩 Desafío — piensa primero, luego revela</summary>
+<summary>🧩 Desafío, piensa primero, luego revela</summary>
 <div class="challenge__body">
 
 Escribe un bucle `for` que imprima los primeros diez múltiplos de 3: $3, 6, 9, \ldots, 30$.
 
-<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>for i in range(3, 31, 3): print(i)</code> — <code>range(3, 31, 3)</code> empieza en 3, avanza de 3 en 3 y se detiene antes de 31, así que cae exactamente en $3, 6, \ldots, 30$.</p>
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>for i in range(3, 31, 3): print(i)</code>, <code>range(3, 31, 3)</code> empieza en 3, avanza de 3 en 3 y se detiene antes de 31, así que cae exactamente en $3, 6, \ldots, 30$.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Desafío — piensa primero, luego revela</summary>
+<summary>🧩 Desafío, piensa primero, luego revela</summary>
 <div class="challenge__body">
 
 Escribe un bucle `while` que recorra una cola (simúlala con una lista) y se detenga en el elemento `"quit"`, imprimiendo cada elemento que pise.
 
-<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>inputs = ["hello", "world", "quit"]; i = 0; while inputs[i] != "quit": print(inputs[i]); i += 1</code> — la condición guarda el centinela y el índice mueve el estado hacia él.</p>
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>inputs = ["hello", "world", "quit"]; i = 0; while inputs[i] != "quit": print(inputs[i]); i += 1</code>, la condición guarda el centinela y el índice mueve el estado hacia él.</p>
 
 </div>
 </details>
 
 ## 🤔 Preguntas socráticas
 
-- ¿Cuándo recurres a `while` en lugar de `for`? Da una tarea real para cada uno — una que puedas contar de antemano y otra que no.
+- ¿Cuándo recurres a `while` en lugar de `for`? Da una tarea real para cada uno, una que puedas contar de antemano y otra que no.
 - ¿Qué le pasa a una lista que modificas mientras un bucle `for` la recorre? ¿Cómo lo esquivas?
 - Python no tiene `do…while` como C. ¿Cómo escribes un cuerpo que debe correr al menos una vez antes de comprobar condición alguna?
 

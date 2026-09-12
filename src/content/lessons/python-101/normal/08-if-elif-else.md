@@ -1,6 +1,6 @@
 ---
 title: "If / Elif / Else"
-description: "Branch your code based on conditions — the foundation of decision-making in Python."
+description: "Branch your code based on conditions, the foundation of decision-making in Python."
 module: "control-flow"
 order: 8
 difficulty: "beginner"
@@ -46,7 +46,7 @@ if score >= 60:
     print("Passing!")
 ```
 
-The statement begins with `if`, then the condition, then a colon — the colon is what tells Python a block is coming. Everything indented under it belongs to that branch and runs only if the condition held.
+The statement begins with `if`, then the condition, then a colon, the colon is what tells Python a block is coming. Everything indented under it belongs to that branch and runs only if the condition held.
 
 ## The two-way fork
 
@@ -64,7 +64,7 @@ A two-way branch is a partition of the outcomes: the condition divides the value
 
 ## The many-way fork: elif
 
-Real piecewise formulas have more than two pieces. `elif` — a contraction of "else if" — appends further conditions, checked in order, stopping at the first that is `True`:
+Real piecewise formulas have more than two pieces. `elif`, a contraction of "else if", appends further conditions, checked in order, stopping at the first that is `True`:
 
 ```python
 score = 78
@@ -79,11 +79,11 @@ else:
 print(grade)  # B
 ```
 
-Notice the economy: each `elif` condition needs only a lower bound, because the cases above have already been decided. With $s = 85$, the first piece fails and the second matches — later branches never run. Only **one** branch can fire, which is what makes this a true function.
+Notice the economy: each `elif` condition needs only a lower bound, because the cases above have already been decided. With $s = 85$, the first piece fails and the second matches, later branches never run. Only **one** branch can fire, which is what makes this a true function.
 
 ## Truthiness: values as conditions
 
-The condition after `if` need not be a comparison at all. Python asks, *"is this value truthy or falsy?"* — and the answer is uniform:
+The condition after `if` need not be a comparison at all. Python asks, *"is this value truthy or falsy?"*, and the answer is uniform:
 
 ```python
 # These are all falsy — they behave like False in a condition:
@@ -111,7 +111,7 @@ if items:
     print("We have items")
 ```
 
-An empty string is falsy, so `not name` is `True`; a non-empty list is truthy, so `if items` fires. You skip the explicit `== ""` and `!= []` — the check is the emptiness itself.
+An empty string is falsy, so `not name` is `True`; a non-empty list is truthy, so `if items` fires. You skip the explicit `== ""` and `!= []`, the check is the emptiness itself.
 
 ## Nesting: when one question depends on another
 
@@ -152,15 +152,15 @@ It reads like the formula it is. The order of the pieces matters: each `elif` as
 
 ## Common pitfalls
 
-- **Forgetting the colon** after `if`, `elif`, or `else` — without it, the block never begins.
+- **Forgetting the colon** after `if`, `elif`, or `else`, without it, the block never begins.
 - **`=` instead of `==`.** `if score = 60` is a syntax error, on purpose.
 - **Over-nesting** when an `elif` chain (or an early `return`) would state the shape of the formula in one pass.
-- **The first `True` wins, not the most specific match.** In `if x > 5: ... elif x > 3: ...`, an `x = 4` enters the second branch only if the first already failed — and a value below 3 falls to `else`. Ordering the pieces from narrow to wide is what keeps the formula correct.
+- **The first `True` wins, not the most specific match.** In `if x > 5: ... elif x > 3: ...`, an `x = 4` enters the second branch only if the first already failed, and a value below 3 falls to `else`. Ordering the pieces from narrow to wide is what keeps the formula correct.
 
 ## 🧩 Challenges
 
 <details class="challenge">
-<summary>🧩 Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge, think first, then reveal</summary>
 <div class="challenge__body">
 
 Write `classify_temp(temp)` returning `"freezing"` under $0$, `"cold"` in $[0,15)$, `"warm"` in $[15,30)$, and `"hot"` from $30$ up.
@@ -171,12 +171,12 @@ Write `classify_temp(temp)` returning `"freezing"` under $0$, `"cold"` in $[0,15
 </details>
 
 <details class="challenge">
-<summary>🧩 Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge, think first, then reveal</summary>
 <div class="challenge__body">
 
 Given `text = "Hello, World!"`, print `"uppercase"` if the text is all caps, `"lowercase"` if all lower, `"mixed"` otherwise.
 
-<p class="challenge__answer">💡 <strong>Answer:</strong> <code>if text.isupper(): print("uppercase") elif text.islower(): print("lowercase") else: print("mixed")</code> — the whole condition set forms a partition.</p>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>if text.isupper(): print("uppercase") elif text.islower(): print("lowercase") else: print("mixed")</code>, the whole condition set forms a partition.</p>
 
 </div>
 </details>

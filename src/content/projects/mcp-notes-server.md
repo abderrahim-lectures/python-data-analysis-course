@@ -119,9 +119,9 @@ You should see every note's title printed back. If the list is empty, `NOTES_DIR
 
 ### 1.2 Verify against your real notes folder
 
-**🎯 Expected output:** A Python list of real titles, one per `.md` file in `NOTES_DIR` — e.g. `['Sourdough starter notes', 'Side project ideas', ...]`.
+**🎯 Expected output:** A Python list of real titles, one per `.md` file in `NOTES_DIR`, e.g. `['Sourdough starter notes', 'Side project ideas', ...]`.
 
-**🩹 If it's off:** An empty list almost always means `NOTES_DIR` still points at the placeholder path — replace it with your real folder's absolute path. A title that's just the filename (not the heading text) for a note that does have a `# Title` line means the heading detection missed it — check the line actually starts with `"# "` (one hash, one space) and not `"## "` or a bare `"#Title"`.
+**🩹 If it's off:** An empty list almost always means `NOTES_DIR` still points at the placeholder path, replace it with your real folder's absolute path. A title that's just the filename (not the heading text) for a note that does have a `# Title` line means the heading detection missed it, check the line actually starts with `"# "` (one hash, one space) and not `"## "` or a bare `"#Title"`.
 
 **✅ Checklist**
 
@@ -207,7 +207,7 @@ Every bug is easier to find here than after `@mcp.tool()`, the Inspector, and Cl
 
 **🎯 Expected output:** `search_notes('sourdough')` (or any keyword genuinely in your notes) returns `Found in:\n"Note Title": ...snippet...`; a title-based `get_note_by_title` call returns full note text; an ambiguous partial title returns a "Be more specific" message naming the candidates.
 
-**🩹 If it's off:** If `get_note_by_title` silently returns the wrong note for an ambiguous partial title instead of the "be more specific" message, the `len(partial) > 1` branch isn't running before a fallback — check it's checked before any code that just returns `partial[0]`. If `search_notes` reports "No notes mention" for a keyword you can see with your own eyes, confirm the match is happening on `line.lower()` against `query_lower`, not comparing cased strings directly.
+**🩹 If it's off:** If `get_note_by_title` silently returns the wrong note for an ambiguous partial title instead of the "be more specific" message, the `len(partial) > 1` branch isn't running before a fallback, check it's checked before any code that just returns `partial[0]`. If `search_notes` reports "No notes mention" for a keyword you can see with your own eyes, confirm the match is happening on `line.lower()` against `query_lower`, not comparing cased strings directly.
 
 **✅ Checklist**
 
@@ -226,7 +226,7 @@ Everything so far has been plain Python. Turning it into an MCP server is one de
 
 ### 3.1 Wrap the three functions with `@mcp.tool()`
 
-**👟 Starter hint:** Same three function bodies from Step 2, unchanged — just add `@mcp.tool()` above each and write a docstring that's specific enough for the model to pick the right one of three, not just "does something with notes":
+**👟 Starter hint:** Same three function bodies from Step 2, unchanged, just add `@mcp.tool()` above each and write a docstring that's specific enough for the model to pick the right one of three, not just "does something with notes":
 
 ```python
 from mcp.server.fastmcp import FastMCP
@@ -288,7 +288,7 @@ With one tool, the model has nothing to choose between. With three, try asking t
 
 **🎯 Expected output:** The Inspector's tool list shows all three tools with parameter forms auto-generated from the type hints; calling each with real arguments returns the same results you verified in Step 2.2.
 
-**🩹 If it's off:** If a tool is missing from the Inspector's list, its `@mcp.tool()` decorator is likely missing or misspelled. If results differ from what Step 2.2 showed, `server.py`'s copy of the function body may have diverged from the tested version — diff them, don't retype from memory.
+**🩹 If it's off:** If a tool is missing from the Inspector's list, its `@mcp.tool()` decorator is likely missing or misspelled. If results differ from what Step 2.2 showed, `server.py`'s copy of the function body may have diverged from the tested version, diff them, don't retype from memory.
 
 **✅ Checklist**
 
@@ -341,7 +341,7 @@ Claude Desktop should show it calling `search_notes`, `list_recent_notes`, or `g
 
 **🎯 Expected output:** For each example question, a visible "used a tool" block naming the right tool, followed by an answer grounded in your actual notes content.
 
-**🩹 If it's off:** If `notes` never appears in the connector list, check the config JSON for a syntax error (trailing comma is the classic one) and confirm you did a *full* quit, not just closing the window. If Claude answers from general knowledge instead of calling a tool, try rephrasing more explicitly ("use my notes tools") — same tool-selection behavior noted in the earlier MCP project.
+**🩹 If it's off:** If `notes` never appears in the connector list, check the config JSON for a syntax error (trailing comma is the classic one) and confirm you did a *full* quit, not just closing the window. If Claude answers from general knowledge instead of calling a tool, try rephrasing more explicitly ("use my notes tools"), same tool-selection behavior noted in the earlier MCP project.
 
 **✅ Checklist**
 

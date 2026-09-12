@@ -74,7 +74,7 @@ for col in df.select_dtypes(include="object").columns:
     print(df[col].value_counts())
 ```
 
-This gives you the structure, the data types, the numerical distributions, and the categorical frequencies — everything you need to decide what to do next.
+This gives you the structure, the data types, the numerical distributions, and the categorical frequencies, everything you need to decide what to do next.
 
 ### Missing data assessment
 
@@ -92,9 +92,9 @@ print(missing_report[missing_report["missing_count"] > 0])
 ```
 
 Interpret missingness patterns:
-- **MCAR (Missing Completely at Random)**: missingness has no relationship with any variable — safe to drop rows
-- **MAR (Missing at Random)**: missingness relates to observed variables — can be imputed
-- **MNAR (Missing Not at Random)**: missingness relates to the missing value itself — requires domain knowledge
+- **MCAR (Missing Completely at Random)**: missingness has no relationship with any variable, safe to drop rows
+- **MAR (Missing at Random)**: missingness relates to observed variables, can be imputed
+- **MNAR (Missing Not at Random)**: missingness relates to the missing value itself, requires domain knowledge
 
 ```python
 # Visualize missing data with a heatmap
@@ -210,7 +210,7 @@ def profile_dataset(df, name="Dataset"):
 
 ## Try It
 
-Profile the Students Performance dataset using the workflow above. Answer these questions from the profiling output alone — do not plot anything yet.
+Profile the Students Performance dataset using the workflow above. Answer these questions from the profiling output alone, do not plot anything yet.
 
 ```python
 import pandas as pd
@@ -238,10 +238,10 @@ Questions to answer:
 
 ## Key Takeaways
 
-- Profile before you plot — a 60-second profiling pass catches issues that would waste hours later
+- Profile before you plot, a 60-second profiling pass catches issues that would waste hours later
 - Missing data has three mechanisms (MCAR, MAR, MNAR); identify which applies before choosing a strategy
 - Duplicates and constant columns silently degrade analysis quality
-- Cardinality matters — high-cardinality categoricals need grouping before visualization
+- Cardinality matters, high-cardinality categoricals need grouping before visualization
 - Build a reusable profiling function so every new dataset gets the same systematic treatment
 
 ## Practice Challenge
@@ -249,7 +249,7 @@ Questions to answer:
 Write a function `quick_profile(df)` that returns a dictionary with keys: `shape`, `dtypes`, `missing_cols`, `duplicate_count`, `constant_cols`, and `cardinality`. Test it on the Students Performance dataset.
 
 <details class="challenge">
-<summary>🧩 Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge, think first, then reveal</summary>
 <div class="challenge__body">
 
 ```python

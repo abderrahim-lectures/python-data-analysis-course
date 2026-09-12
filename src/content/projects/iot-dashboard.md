@@ -14,9 +14,9 @@ prerequisites: ["Python 101", "Data Analysis"]
 
 # 📊 Build an IoT Dashboard
 
-An IoT system without a dashboard is like a car without a speedometer — the data exists, but nobody can see it. This project builds a real-time monitoring dashboard using Dash and Plotly: you simulate sensor data streams, render live gauges that update every second, plot historical trends as time-series charts, and group devices by type or location. The dashboard runs in your browser and refreshes automatically.
+An IoT system without a dashboard is like a car without a speedometer, the data exists, but nobody can see it. This project builds a real-time monitoring dashboard using Dash and Plotly: you simulate sensor data streams, render live gauges that update every second, plot historical trends as time-series charts, and group devices by type or location. The dashboard runs in your browser and refreshes automatically.
 
-This assumes Python 101 and comfort with pandas from Data Analysis — nothing beyond. Optional and ungraded; see [Real-World Projects](/projects) for the full list.
+This assumes Python 101 and comfort with pandas from Data Analysis, nothing beyond. Optional and ungraded; see [Real-World Projects](/projects) for the full list.
 
 ## 🎯 What you'll do
 
@@ -29,7 +29,7 @@ This assumes Python 101 and comfort with pandas from Data Analysis — nothing b
 
 ## Where to run this
 
-**Locally with `uv`** is the primary path — this is a web server that runs on `localhost` and opens in your browser.
+**Locally with `uv`** is the primary path, this is a web server that runs on `localhost` and opens in your browser.
 
 **Google Colab, Kaggle Notebooks, and Binder** can run the server for testing, but the dashboard URL won't be accessible from outside the notebook.
 
@@ -353,14 +353,14 @@ if __name__ == "__main__":
 ## ⚠️ Common pitfalls
 
 - **Callback ID mismatches.** Every `Input`/`Output` ID must exactly match a component's `id` prop. A typo silently disables the callback.
-- **Importing deprecated modules.** `dash_core_components` and `dash_html_components` are now inside `dash` — import from `dash` directly.
+- **Importing deprecated modules.** `dash_core_components` and `dash_html_components` are now inside `dash`, import from `dash` directly.
 - **Unbounded memory growth.** The `DataBuffer` trims old data to `max_points`. Without trimming, the dashboard's memory grows forever.
 - **Blocking the main thread.** Dash callbacks run synchronously. A slow callback (like a database query) freezes the entire dashboard. Use `dcc.Interval` wisely and keep callbacks fast.
-- **Forgetting `debug=True` during development.** Without it, callback errors are silent — the dashboard just stops updating. Always develop with debug mode on.
+- **Forgetting `debug=True` during development.** Without it, callback errors are silent, the dashboard just stops updating. Always develop with debug mode on.
 
 ## What you just built
 
-A real-time IoT monitoring dashboard: a sensor simulator that produces realistic data patterns, live-updating Plotly gauges, a historical time-series chart with dual axes, and location-based filtering. The Dash callback architecture — where every user interaction triggers a function that returns updated figures — is the same pattern used in production dashboards for monitoring, analytics, and control systems.
+A real-time IoT monitoring dashboard: a sensor simulator that produces realistic data patterns, live-updating Plotly gauges, a historical time-series chart with dual axes, and location-based filtering. The Dash callback architecture, where every user interaction triggers a function that returns updated figures, is the same pattern used in production dashboards for monitoring, analytics, and control systems.
 
 :::tip[Run a fuller version without any local setup]
 [`examples/iot-dashboard/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/iot-dashboard) in the course repo has a richer version with more sensor types, alert indicators, and the CLI wired up end to end. Clone it, or open the whole repo in a [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), and run it from there.
@@ -374,6 +374,6 @@ A real-time IoT monitoring dashboard: a sensor simulator that produces realistic
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

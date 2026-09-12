@@ -75,7 +75,7 @@ print(f"Total characters: {total_chars:,}")
 print(f"Average row length: {avg_len:.0f} characters")
 ```
 
-Un corpus avec une moyenne de 10 caractères par ligne est trop court — le modèle n'aura pas assez de contexte pour apprendre les séquences de mots.
+Un corpus avec une moyenne de 10 caractères par ligne est trop court, le modèle n'aura pas assez de contexte pour apprendre les séquences de mots.
 
 ### Prévisualiser le texte d'échantillon
 
@@ -137,7 +137,7 @@ Exécutez `corpus_summary("slm-corpus.csv")` et notez :
 
 ## Points clés
 
-- Explorez toujours vos données avant de les traiter — vérifiez les comptes, les longueurs et les doublons
+- Explorez toujours vos données avant de les traiter, vérifiez les comptes, les longueurs et les doublons
 - Les lignes courtes ou vides ajoutent du bruit ; filtrez-les sur la base d'un nombre minimum de mots
 - Les lignes en double gonflent les comptes de fréquence sans ajouter de nouveaux motifs
 - Une fonction de résumé rapide fait gagner du temps entre projets

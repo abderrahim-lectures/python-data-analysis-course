@@ -21,7 +21,7 @@ prerequisites:
 
 Construis un tableau de bord terminal qui récupère des données météo en temps réel depuis l'API Open-Meteo, les traite avec pandas, dessine des graphiques avec matplotlib et affiche un résumé hebdomadaire coloré. Chaque étape te fournit du code fonctionnel que tu peux exécuter immédiatement.
 
-- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt — ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
+- **Exécutez-le dans le navigateur.** Un compagnon notebook interactif est prêt, ouvrez-le dans Colab, Kaggle ou Binder et suivez les étapes dans l'ordre.
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/weather-dashboard/notebook.fr.ipynb)
   [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/weather-dashboard/notebook.fr.ipynb)
   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fweather-dashboard%2Fnotebook.fr.ipynb)
@@ -49,7 +49,7 @@ Tu as besoin d'une connexion internet pour la première exécution. Après cela,
 
 ---
 
-## Étape 1 — Récupérer les données météo depuis Open-Meteo
+## Étape 1, Récupérer les données météo depuis Open-Meteo
 
 **Objectif :** Appeler une API REST publique, gérer la réponse et traiter les erreurs avec grâce.
 
@@ -105,14 +105,14 @@ Wind speed: 12.5 km/h
 
 **Si ça ne marche pas :**
 
-- `ConnectionError` — Tu es hors ligne. Connecte-toi à internet ou exécute ceci plus tard.
-- `Timeout` — Le serveur était lent. Augmente la valeur du timeout ou réessaie.
-- Données `None` — L'API a retourné une forme inattendue. Affiche `data` pour inspecter le JSON brut.
-- Mauvaise ville — Vérifie la latitude et la longitude. Utilise [latlong.net](https://www.latlong.net/) pour trouver les coordonnées.
+- `ConnectionError`, Tu es hors ligne. Connecte-toi à internet ou exécute ceci plus tard.
+- `Timeout`, Le serveur était lent. Augmente la valeur du timeout ou réessaie.
+- Données `None`, L'API a retourné une forme inattendue. Affiche `data` pour inspecter le JSON brut.
+- Mauvaise ville, Vérifie la latitude et la longitude. Utilise [latlong.net](https://www.latlong.net/) pour trouver les coordonnées.
 
 ---
 
-## Étape 2 — Parser le JSON en un DataFrame
+## Étape 2, Parser le JSON en un DataFrame
 
 **Objectif :** Convertir la réponse JSON imbriquée en un DataFrame pandas plat que tu peux analyser.
 
@@ -159,13 +159,13 @@ print(forecast.to_string(index=False))
 
 **Si ça ne marche pas :**
 
-- `KeyError` — L'API a changé ses noms de champs. Affiche `data["daily"].keys()` pour voir ce qui est disponible.
-- Les dates semblent fausses — L'API retourne des chaînes ; `pd.to_datetime()` les convertit. Si le parsing échoue, vérifie le format avec `data["daily"]["time"][:1]`.
-- DataFrame vide — L'API n'a pas retourné de clé `daily`. Vérifie que `"daily"` est inclus dans les paramètres de ta requête.
+- `KeyError`, L'API a changé ses noms de champs. Affiche `data["daily"].keys()` pour voir ce qui est disponible.
+- Les dates semblent fausses, L'API retourne des chaînes ; `pd.to_datetime()` les convertit. Si le parsing échoue, vérifie le format avec `data["daily"]["time"][:1]`.
+- DataFrame vide, L'API n'a pas retourné de clé `daily`. Vérifie que `"daily"` est inclus dans les paramètres de ta requête.
 
 ---
 
-## Étape 3 — Ajouter les conversions de température
+## Étape 3, Ajouter les conversions de température
 
 **Objectif :** Ajouter des colonnes Fahrenheit et Kelvin pour que le tableau de bord fonctionne pour tout public.
 
@@ -203,13 +203,13 @@ print(forecast[["date", "temp_max", "temp_max_f", "temp_max_k"]].to_string(index
 
 **Si ça ne marche pas :**
 
-- Les valeurs semblent interverties — Vérifie quelle colonne tu convertis. `temp_max` devrait correspondre à `temp_max_f`, pas `temp_min_f`.
-- Les décimales sont fausses — L'arrondi en virgule flottante est normal. Utilise `.round(1)` si tu veux moins de décimales.
-- `SettingWithCopyWarning` — Utilise toujours `.copy()` avant de modifier une tranche d'un DataFrame.
+- Les valeurs semblent interverties, Vérifie quelle colonne tu convertis. `temp_max` devrait correspondre à `temp_max_f`, pas `temp_min_f`.
+- Les décimales sont fausses, L'arrondi en virgule flottante est normal. Utilise `.round(1)` si tu veux moins de décimales.
+- `SettingWithCopyWarning`, Utilise toujours `.copy()` avant de modifier une tranche d'un DataFrame.
 
 ---
 
-## Étape 4 — Calculer les statistiques quotidiennes
+## Étape 4, Calculer les statistiques quotidiennes
 
 **Objectif :** Calculer des statistiques de résumé pour pouvoir décrire une prévision en une phrase.
 
@@ -268,13 +268,13 @@ Most common:  Mainly clear
 
 **Si ça ne marche pas :**
 
-- `NaN` dans les résultats — Certains champs peuvent être `None` dans le JSON. Utilise `.fillna(0)` avant de calculer les statistiques.
-- Le mode retourne le mauvais code — S'il y a une égalité, `mode()` retourne la première valeur. C'est acceptable pour un résumé.
-- Les précipitations sont toujours à 0 — Pas toutes les régions ont des données de précipitations. Vérifie `data["daily"].keys()` pour confirmer que `precipitation_sum` existe.
+- `NaN` dans les résultats, Certains champs peuvent être `None` dans le JSON. Utilise `.fillna(0)` avant de calculer les statistiques.
+- Le mode retourne le mauvais code, S'il y a une égalité, `mode()` retourne la première valeur. C'est acceptable pour un résumé.
+- Les précipitations sont toujours à 0, Pas toutes les régions ont des données de précipitations. Vérifie `data["daily"].keys()` pour confirmer que `precipitation_sum` existe.
 
 ---
 
-## Étape 5 — Construire les visualisations
+## Étape 5, Construire les visualisations
 
 **Objectif :** Créer un graphique en courbes des températures horaires et un graphique en barres des conditions quotidiennes.
 
@@ -337,14 +337,14 @@ Deux fichiers de graphiques sauvegardés sur le disque et affichés si exécuté
 
 **Si ça ne marche pas :**
 
-- Le graphique est vide — Appelle `plt.show()` après les commandes de tracé. Dans les scripts, tu peux avoir besoin de `plt.ion()` d'abord.
-- `UserWarning` à propos des dates — Assure-toi d'avoir appelé `pd.to_datetime()` sur les chaînes de temps avant de tracer.
-- Les barres se chevauchent — La largeur et le calcul du décalage doivent centrer les barres. Vérifie la compréhension de liste dans `ax.bar()`.
-- La police paraît minuscule — Augmente `figsize` ou utilise `plt.rcParams["font.size"] = 12` avant de tracer.
+- Le graphique est vide, Appelle `plt.show()` après les commandes de tracé. Dans les scripts, tu peux avoir besoin de `plt.ion()` d'abord.
+- `UserWarning` à propos des dates, Assure-toi d'avoir appelé `pd.to_datetime()` sur les chaînes de temps avant de tracer.
+- Les barres se chevauchent, La largeur et le calcul du décalage doivent centrer les barres. Vérifie la compréhension de liste dans `ax.bar()`.
+- La police paraît minuscule, Augmente `figsize` ou utilise `plt.rcParams["font.size"] = 12` avant de tracer.
 
 ---
 
-## Étape 6 — Créer un résumé de prévision hebdomadaire
+## Étape 6, Créer un résumé de prévision hebdomadaire
 
 **Objectif :** Combiner le tout en un résumé texte formaté que tu peux lire en un coup d'œil.
 
@@ -397,13 +397,13 @@ print_weekly_summary(forecast)
 
 **Si ça ne marche pas :**
 
-- La barre semble fausse — Ajuste la formule de mise à l'échelle dans `format_daily_bar`. La formule mappe la température à la largeur de la barre.
-- Les caractères de boîte sont désalignés — Utilise un terminal ou une police à chasse fixe. Les polices proportionnelles cassent le dessin de boîte.
-- La description météo déborde — Raccourcis les descriptions ou élargis la boîte avec plus de tirets.
+- La barre semble fausse, Ajuste la formule de mise à l'échelle dans `format_daily_bar`. La formule mappe la température à la largeur de la barre.
+- Les caractères de boîte sont désalignés, Utilise un terminal ou une police à chasse fixe. Les polices proportionnelles cassent le dessin de boîte.
+- La description météo déborde, Raccourcis les descriptions ou élargis la boîte avec plus de tirets.
 
 ---
 
-## Étape 7 — Ennoblir le CLI avec couleurs et légende
+## Étape 7, Ennoblir le CLI avec couleurs et légende
 
 **Objectif :** Ajouter des indicateurs de température colorés et une légende des codes météo pour que le tableau de bord soit visuellement clair.
 
@@ -466,9 +466,9 @@ Un tableau de bord encadré avec des températures colorées et des icônes mét
 
 **Si ça ne marche pas :**
 
-- Les couleurs s'affichent comme des codes d'échappement — Ton terminal ne supporte pas les couleurs ANSI. Utilise un terminal moderne (iTerm2, Windows Terminal, GNOME Terminal).
-- Désalignement de la boîte — Reste avec des polices à chasse fixe. Chaque ligne à l'intérieur de la boîte doit avoir la même largeur visuelle.
-- Couleurs trop vives — Ajuste les numéros de codes ANSI. `\033[91m` est le rouge vif ; `\033[31m` est le rouge plus sombre.
+- Les couleurs s'affichent comme des codes d'échappement, Ton terminal ne supporte pas les couleurs ANSI. Utilise un terminal moderne (iTerm2, Windows Terminal, GNOME Terminal).
+- Désalignement de la boîte, Reste avec des polices à chasse fixe. Chaque ligne à l'intérieur de la boîte doit avoir la même largeur visuelle.
+- Couleurs trop vives, Ajuste les numéros de codes ANSI. `\033[91m` est le rouge vif ; `\033[31m` est le rouge plus sombre.
 
 ---
 

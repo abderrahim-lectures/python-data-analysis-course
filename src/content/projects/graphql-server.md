@@ -16,7 +16,7 @@ prerequisites: ["Python 101", "Data Analysis"]
 
 REST APIs force you to design one endpoint per resource, but real clients often need data from five different resources in a single screen load. GraphQL solves this by letting the client ask for exactly what it needs in one request. This project builds a GraphQL API server from scratch: you define a schema with types and queries, write resolvers that fetch real data, use DataLoader to batch database lookups and prevent the N+1 query problem, and add subscriptions for real-time updates. The server runs on Strawberry (a Python GraphQL library) with an in-memory data store.
 
-This assumes Python 101 and comfort with pandas from Data Analysis — nothing beyond. Optional and ungraded; see [Real-World Projects](/projects) for the full list.
+This assumes Python 101 and comfort with pandas from Data Analysis, nothing beyond. Optional and ungraded; see [Real-World Projects](/projects) for the full list.
 
 ## 🎯 What you'll do
 
@@ -29,9 +29,9 @@ This assumes Python 101 and comfort with pandas from Data Analysis — nothing b
 
 ## Where to run this
 
-**Locally with `uv`** is the primary path — this is a server that runs on `localhost` and serves HTTP requests. You'll interact with it through a browser-based GraphQL Playground or a tool like `curl`.
+**Locally with `uv`** is the primary path, this is a server that runs on `localhost` and serves HTTP requests. You'll interact with it through a browser-based GraphQL Playground or a tool like `curl`.
 
-**GitHub Codespaces** works well: open [the whole course repo in a free Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) — Python, `uv`, and networking are already set up, so every step works exactly as it does locally.
+**GitHub Codespaces** works well: open [the whole course repo in a free Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), Python, `uv`, and networking are already set up, so every step works exactly as it does locally.
 
 **Google Colab, Kaggle Notebooks, and Binder** can run the server for a quick test, but the GraphQL Playground may not render in a notebook's output pane. The notebook starts the server on a port and tests it with `curl` instead.
 
@@ -63,7 +63,7 @@ cd graphql-server
 uv add strawberry-graphql uvicorn
 ```
 
-`strawberry-graphql` is a code-first GraphQL library for Python — you define your schema as Python types, and it generates the GraphQL schema and resolvers automatically. `uvicorn` is the ASGI server that runs the app. `asyncio` is in the standard library and powers the DataLoader batching.
+`strawberry-graphql` is a code-first GraphQL library for Python, you define your schema as Python types, and it generates the GraphQL schema and resolvers automatically. `uvicorn` is the ASGI server that runs the app. `asyncio` is in the standard library and powers the DataLoader batching.
 
 ### Create the project structure
 
@@ -118,7 +118,7 @@ POSTS: dict[int, Post] = {
 }
 ```
 
-The store is deliberately simple — plain dictionaries with dataclass values. This keeps the focus on GraphQL mechanics rather than database drivers. In production, you'd replace these dictionaries with a database, but the GraphQL layer stays identical.
+The store is deliberately simple, plain dictionaries with dataclass values. This keeps the focus on GraphQL mechanics rather than database drivers. In production, you'd replace these dictionaries with a database, but the GraphQL layer stays identical.
 
 **🎯 Expected output:** `USERS[1].name` returns `"Alice"`; `POSTS[101].author_id` returns `1`.
 
@@ -153,7 +153,7 @@ class Mutation:
     pass  # extended in schema.py
 ```
 
-Strawberry uses Python type hints to generate the GraphQL schema. Each `@strawberry.type` class becomes a GraphQL `type`, and each field becomes a GraphQL field. The `author` field on `PostType` is marked as a `UserType` — its actual resolution (loading the user by `author_id`) happens in a resolver, not in the type definition. This separation is what makes GraphQL flexible: the client can ask for `post.author.name` or just `post.title`, and only the resolvers needed for the requested fields actually run.
+Strawberry uses Python type hints to generate the GraphQL schema. Each `@strawberry.type` class becomes a GraphQL `type`, and each field becomes a GraphQL field. The `author` field on `PostType` is marked as a `UserType`, its actual resolution (loading the user by `author_id`) happens in a resolver, not in the type definition. This separation is what makes GraphQL flexible: the client can ask for `post.author.name` or just `post.title`, and only the resolvers needed for the requested fields actually run.
 
 **🎯 Expected output:** `UserType(id=1, name="Alice", email="alice@example.com")` creates a Strawberry type that serializes correctly.
 
@@ -215,7 +215,7 @@ PostType.author = resolve_author
 schema = strawberry.Schema(query=Query, mutation=Mutation)
 ```
 
-The `schema` object is the entry point — Strawberry generates the full GraphQL schema from it, including introspection. The `resolve_author` function is attached directly to `PostType.author`, so when a client requests `post.author`, this function runs. When the client doesn't request `author`, it never runs — that's the core efficiency of GraphQL.
+The `schema` object is the entry point, Strawberry generates the full GraphQL schema from it, including introspection. The `resolve_author` function is attached directly to `PostType.author`, so when a client requests `post.author`, this function runs. When the client doesn't request `author`, it never runs, that's the core efficiency of GraphQL.
 
 **🎯 Expected output:** `schema.execute_sync("{ users { name } }")` returns the user list. `schema.execute_sync("{ posts { title author { name } } }")` returns posts with their author names.
 
@@ -229,7 +229,7 @@ The `schema` object is the entry point — Strawberry generates the full GraphQL
 # Strawberry infers the GraphQL argument from the Python function signature.
 ```
 
-The `id: int` parameter on `resolve_user` automatically becomes a required GraphQL argument `user(id: Int!)`. No extra configuration needed — Strawberry reads the function signature.
+The `id: int` parameter on `resolve_user` automatically becomes a required GraphQL argument `user(id: Int!)`. No extra configuration needed, Strawberry reads the function signature.
 
 **🎯 Expected output:** `schema.execute_sync("{ user(id: 1) { name email } }")` returns Alice's data. `schema.execute_sync("{ user(id: 999) { name } }")` returns `null` for the user.
 
@@ -242,7 +242,7 @@ The `id: int` parameter on `resolve_user` automatically becomes a required Graph
 - ✅ `schema.execute_sync("{ users { name } }")` returns all three users.
 - ✅ `schema.execute_sync("{ user(id: 1) { name } }")` returns Alice.
 - ✅ `schema.execute_sync("{ posts { title } }")` returns all posts.
-- ✅ Only requested fields are returned — no over-fetching.
+- ✅ Only requested fields are returned, no over-fetching.
 
 **🤔 Socratic Question(s)**
 
@@ -292,11 +292,11 @@ class UserLoader:
         return await self.loader.load(user_id)
 ```
 
-The real magic is in `_batch_load`: instead of calling `USERS.get` once per post, DataLoader collects all the user IDs from a single request cycle and calls `_batch_load` once with all of them. The `print` statement proves the batching — you should see one log line with all IDs, not one per post. In production, this DataLoader pattern (popularized by Facebook's `dataloader` library for JavaScript) reduces database round-trips from N+1 to 2.
+The real magic is in `_batch_load`: instead of calling `USERS.get` once per post, DataLoader collects all the user IDs from a single request cycle and calls `_batch_load` once with all of them. The `print` statement proves the batching, you should see one log line with all IDs, not one per post. In production, this DataLoader pattern (popularized by Facebook's `dataloader` library for JavaScript) reduces database round-trips from N+1 to 2.
 
 **🎯 Expected output:** `await loader.load(1)` returns `USERS[1]` and prints one batch log line. Loading users 1, 2, 3 in sequence prints one log line with `[1, 2, 3]`.
 
-**🩹 If it's off:** If you see multiple log lines (one per load call), the batching isn't working — check that the DataLoader is collecting IDs before calling `batch_fn`.
+**🩹 If it's off:** If you see multiple log lines (one per load call), the batching isn't working, check that the DataLoader is collecting IDs before calling `batch_fn`.
 
 ### 3.2 Integrate DataLoader into resolvers
 
@@ -324,7 +324,7 @@ PostType.author = resolve_author_with_loader
 
 - ✅ Loading multiple users prints one batch log line, not one per user.
 - ✅ Each loaded user matches the expected data from the store.
-- ✅ The DataLoader caches results — loading the same ID twice doesn't re-batch.
+- ✅ The DataLoader caches results, loading the same ID twice doesn't re-batch.
 
 **🤔 Socratic Question(s)**
 
@@ -333,7 +333,7 @@ PostType.author = resolve_author_with_loader
 
 ## Step 4: Add real-time subscriptions
 
-Subscriptions push updates to clients when data changes — unlike queries (pull once) or mutations (push once), subscriptions maintain an open connection. This step adds a subscription that notifies clients when a new post is published.
+Subscriptions push updates to clients when data changes, unlike queries (pull once) or mutations (push once), subscriptions maintain an open connection. This step adds a subscription that notifies clients when a new post is published.
 
 ### 4.1 Define a subscription
 
@@ -357,11 +357,11 @@ class Subscription:
         yield PostType(id=999, title="Live Post", body="This appeared in real time!", published=True, author=None)
 ```
 
-Subscriptions use Python's `async generator` syntax — `yield` sends each update to the client. In production, you'd replace the `asyncio.sleep` with a real event source (Redis pub/sub, a database trigger, or a message queue). Strawberry handles the WebSocket protocol that keeps the connection open and delivers each yielded value.
+Subscriptions use Python's `async generator` syntax, `yield` sends each update to the client. In production, you'd replace the `asyncio.sleep` with a real event source (Redis pub/sub, a database trigger, or a message queue). Strawberry handles the WebSocket protocol that keeps the connection open and delivers each yielded value.
 
-**🎯 Expected output:** `schema.execute_sync` isn't used for subscriptions — instead, the subscription runs asynchronously and yields the post after 1 second.
+**🎯 Expected output:** `schema.execute_sync` isn't used for subscriptions, instead, the subscription runs asynchronously and yields the post after 1 second.
 
-**🩹 If it's off:** If the subscription doesn't yield, the `async generator` isn't set up correctly — check the `AsyncGenerator` type hint and the `yield` statement.
+**🩹 If it's off:** If the subscription doesn't yield, the `async generator` isn't set up correctly, check the `AsyncGenerator` type hint and the `yield` statement.
 
 ### 4.2 Wire the subscription into the schema
 
@@ -434,7 +434,7 @@ if __name__ == "__main__":
     uvicorn.run("gql.server:app", host="0.0.0.0", port=8000, reload=True)
 ```
 
-Strawberry's integration with ASGI means you can run it with `uvicorn` directly. The `reload=True` flag watches for file changes during development. The GraphQL Playground is available at `http://localhost:8000/graphql` in your browser — it provides auto-complete, schema documentation, and a history of your queries.
+Strawberry's integration with ASGI means you can run it with `uvicorn` directly. The `reload=True` flag watches for file changes during development. The GraphQL Playground is available at `http://localhost:8000/graphql` in your browser, it provides auto-complete, schema documentation, and a history of your queries.
 
 **🎯 Expected output:** Running `uv run python -m gql.server` starts a server at `http://localhost:8000/graphql`. Opening that URL in a browser shows the GraphQL Playground.
 
@@ -454,7 +454,7 @@ curl -X POST http://localhost:8000/graphql \
   -d '{"query": "{ posts { title author { name } } }"}'
 ```
 
-The `curl` tests confirm the server works outside the browser — useful for scripting, CI, and debugging. The response is a JSON object with a `data` key containing the query results.
+The `curl` tests confirm the server works outside the browser, useful for scripting, CI, and debugging. The response is a JSON object with a `data` key containing the query results.
 
 **🎯 Expected output:** The first curl returns `{"data": {"users": [{"name": "Alice", ...}, ...]}}`. The second returns posts with author names resolved.
 
@@ -470,20 +470,20 @@ The `curl` tests confirm the server works outside the browser — useful for scr
 
 **🤔 Socratic Question(s)**
 
-- GraphQL introspection lets clients discover the entire schema by querying `__schema`. In production, this is a security risk — what would you do to disable introspection while keeping the API functional?
+- GraphQL introspection lets clients discover the entire schema by querying `__schema`. In production, this is a security risk, what would you do to disable introspection while keeping the API functional?
 - If you added a `createPost` mutation, how would you trigger the `post_published` subscription so all connected clients see the new post appear in real time?
 
 ## ⚠️ Common pitfalls
 
-- **The N+1 query problem.** Without DataLoader, every post's author resolution is a separate database call. For a page showing 50 posts, that's 51 queries. Always use DataLoader for relationship resolution in GraphQL — it's the single biggest performance win.
+- **The N+1 query problem.** Without DataLoader, every post's author resolution is a separate database call. For a page showing 50 posts, that's 51 queries. Always use DataLoader for relationship resolution in GraphQL, it's the single biggest performance win.
 - **Over-fetching in resolvers.** The whole point of GraphQL is that clients request only what they need. If your resolver loads the entire database table and converts it all to Strawberry types, you've lost the efficiency gain. Filter and paginate in the resolver.
-- **Subscriptions holding connections open.** Each subscription maintains a WebSocket connection. If you have thousands of concurrent subscribers, you need horizontal scaling (Redis pub/sub or a message broker) — a single server can't hold thousands of persistent connections efficiently.
-- **Forgetting that GraphQL errors don't stop execution.** A field resolver that raises an exception returns `null` for that field plus an error in the `errors` array — the rest of the query still returns data. This is different from REST, where a 500 kills the entire response.
+- **Subscriptions holding connections open.** Each subscription maintains a WebSocket connection. If you have thousands of concurrent subscribers, you need horizontal scaling (Redis pub/sub or a message broker), a single server can't hold thousands of persistent connections efficiently.
+- **Forgetting that GraphQL errors don't stop execution.** A field resolver that raises an exception returns `null` for that field plus an error in the `errors` array, the rest of the query still returns data. This is different from REST, where a 500 kills the entire response.
 - **Introspection in production.** GraphQL introspection lets anyone discover your entire API schema. In production, disable it unless you're building a public API.
 
 ## What you just built
 
-A complete GraphQL API server: a schema with types and queries, resolvers that fetch data from an in-memory store, DataLoader batching to prevent N+1 queries, real-time subscriptions for live updates, and an interactive playground for testing. The architecture — schema-first design, resolver-per-field, DataLoader for batching — is the same pattern used by production GraphQL servers at companies like GitHub, Shopify, and Airbnb.
+A complete GraphQL API server: a schema with types and queries, resolvers that fetch data from an in-memory store, DataLoader batching to prevent N+1 queries, real-time subscriptions for live updates, and an interactive playground for testing. The architecture, schema-first design, resolver-per-field, DataLoader for batching, is the same pattern used by production GraphQL servers at companies like GitHub, Shopify, and Airbnb.
 
 :::tip[Run a fuller version without any local setup]
 [`examples/graphql-server/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/graphql-server) in the course repo has a richer version with mutations, a real database backend, and the DataLoader wired up end to end. Clone it, or open the whole repo in a [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), and run it from there.
@@ -497,6 +497,6 @@ A complete GraphQL API server: a schema with types and queries, resolvers that f
 
 ## Share your project with the class
 
-Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted — and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
+Built something you're proud of? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) is a gallery of projects other students have submitted, and its README has a full, beginner-friendly walkthrough for adding yours via a **pull request**, even if you've never used git before: forking the repo, making a branch, committing your files, and opening the PR, one step at a time. No prior git experience assumed.
 
 Welcome to writing Python outside the browser. 🎓

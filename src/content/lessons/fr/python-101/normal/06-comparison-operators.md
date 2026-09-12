@@ -1,6 +1,6 @@
 ---
 title: "Opérateurs de comparaison"
-description: "Testez l'égalité, l'inégalité et l'ordre — et enchaînez les comparaisons dans une seule expression."
+description: "Testez l'égalité, l'inégalité et l'ordre, et enchaînez les comparaisons dans une seule expression."
 module: "operators"
 order: 6
 difficulty: "beginner"
@@ -22,7 +22,7 @@ track: "normal"
 
 ## L'ordinateur, mis en demeure de trancher
 
-Une évaluation `2 + 3` produit un nombre. Mais la plus grande partie de ce qu'un programme a besoin de savoir n'est pas un nombre — c'est une *décision*. La note valide-t-elle ? Le nom d'utilisateur est-il pris ? La température est-elle dans la plage ? Les opérateurs de comparaison sont la branche de la famille arithmétique qui produit une réponse dans l'ensemble $\{\mathrm{True}, \mathrm{False}\}$ au lieu de $\mathbb{R}$.
+Une évaluation `2 + 3` produit un nombre. Mais la plus grande partie de ce qu'un programme a besoin de savoir n'est pas un nombre, c'est une *décision*. La note valide-t-elle ? Le nom d'utilisateur est-il pris ? La température est-elle dans la plage ? Les opérateurs de comparaison sont la branche de la famille arithmétique qui produit une réponse dans l'ensemble $\{\mathrm{True}, \mathrm{False}\}$ au lieu de $\mathbb{R}$.
 
 ## Les six opérateurs de comparaison
 
@@ -49,7 +49,7 @@ x = 5
 0 <= x < 3     # False — la seconde échoue
 ```
 
-C'est une expression unique, évaluée par le même appariement que vous liriez : $0 \leq x$ puis $x < 10$, la valeur du milieu n'étant calculée qu'une fois. La comparaison enchaînée vaut $0 \leq x$ `and` $x < 10$ — mais la forme enchaînée se lit comme les mathématiques dont elle sort.
+C'est une expression unique, évaluée par le même appariement que vous liriez : $0 \leq x$ puis $x < 10$, la valeur du milieu n'étant calculée qu'une fois. La comparaison enchaînée vaut $0 \leq x$ `and` $x < 10$, mais la forme enchaînée se lit comme les mathématiques dont elle sort.
 
 ## `==` interroge le contenu ; `is` interroge l'identité
 
@@ -65,7 +65,7 @@ c = a
 a is c    # True  — le même objet
 ```
 
-`==` compare les valeurs portées ; `is` compare les adresses mémoire. Plusieurs boîtes peuvent par hasard contenir la même liste ; il n'y a qu'un seul objet. Les deux coïncident pour les petites choses (comme les petits entiers que Python met en cache) et divergent pour tout le reste, donc la règle est stable : utilisez `==` pour le contenu, et réservez `is` au singleton unique qui n'a pas de contenu à comparer — `None` :
+`==` compare les valeurs portées ; `is` compare les adresses mémoire. Plusieurs boîtes peuvent par hasard contenir la même liste ; il n'y a qu'un seul objet. Les deux coïncident pour les petites choses (comme les petits entiers que Python met en cache) et divergent pour tout le reste, donc la règle est stable : utilisez `==` pour le contenu, et réservez `is` au singleton unique qui n'a pas de contenu à comparer, `None` :
 
 ```python
 if x is None:    # correct
@@ -74,7 +74,7 @@ if x == None:    # fonctionne, mais vous posez la mauvaise question
 
 ## Comparer entre types
 
-Amener des valeurs d'ensembles différents dans une comparaison — $\mathbb{Z}$ contre $\mathbb{S}$ — suit une politique fixe :
+Amener des valeurs d'ensembles différents dans une comparaison, $\mathbb{Z}$ contre $\mathbb{S}$, suit une politique fixe :
 
 ```python
 5 == 5.0      # True  — l'égalité numérique ignore le type
@@ -99,15 +99,15 @@ Le motif est une paire de questions et une décision : sont-ils exactement égau
 
 ## Pièges courants
 
-- **`=` contre `==`.** `if score = 60:` est une erreur de syntaxe — Python ne vous laisse pas affecter dans une condition par accident. Le signe doublé est un garde-fou, pas une formalité.
+- **`=` contre `==`.** `if score = 60:` est une erreur de syntaxe, Python ne vous laisse pas affecter dans une condition par accident. Le signe doublé est un garde-fou, pas une formalité.
 - **Égalité en virgule flottante.** `0.1 + 0.2 == 0.3` est `False`. La représentation binaire de $0.1$ est infinie, donc la somme tombe sur $0.30000000000000004$. Comparez dans une tolérance à la place : `abs((0.1 + 0.2) - 0.3) < 1e-10`.
 - **`==` avec `None`.** `x == None` marche par hasard ; `x is None` est la question que vous posez vraiment.
-- **L'égalité de floats demande une tolérance ; l'argent demande des unités entières.** `0.1 + 0.2 == 0.3` échoue (`False`), alors comparez dans `abs(a - b) < 1e-9` ou comptez en centimes — `120 == 12 * 10` est exact.
+- **L'égalité de floats demande une tolérance ; l'argent demande des unités entières.** `0.1 + 0.2 == 0.3` échoue (`False`), alors comparez dans `abs(a - b) < 1e-9` ou comptez en centimes, `120 == 12 * 10` est exact.
 
 ## 🧩 Défis
 
 <details class="challenge">
-<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
+<summary>🧩 Défi, réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
 Prédisez chaque résultat sans exécuter : `5 == 5.0`, `"5" == 5`, `5 < "6"`.
@@ -118,18 +118,18 @@ Prédisez chaque résultat sans exécuter : `5 == 5.0`, `"5" == 5`, `5 < "6"`.
 </details>
 
 <details class="challenge">
-<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
+<summary>🧩 Défi, réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
 Écrivez une seule comparaison enchaînée qui vérifie qu'un nombre $n$ est dans $[1, 100]$, sans `and`.
 
-<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>1 &lt;= n &lt;= 100</code> — la forme enchaînée se lit exactement comme l'intervalle $1 \leq n \leq 100$.</p>
+<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>1 &lt;= n &lt;= 100</code>, la forme enchaînée se lit exactement comme l'intervalle $1 \leq n \leq 100$.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
+<summary>🧩 Défi, réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
 Pourquoi `0.1 + 0.2 == 0.3` renvoie-t-il `False` ? Comment écrirez-vous un test d'égalité en virgule flottante correct ?

@@ -6,9 +6,9 @@ description: "Passe du bac à sable dans le navigateur au vrai Python : envelopp
 
 # 📚 Construire un Bot Discord de Questions-Réponses Adossé au RAG
 
-Ce projet reprend le pipeline de génération augmentée par récupération du [projet Appli RAG](/fr/projets/rag-notes) — embeddings locaux, recherche de similarité cosinus avec NumPy, un LLM gratuit pour la réponse finale — et lui met un front-end différent : au lieu d'un script que tu exécutes depuis un terminal une question à la fois, le même pipeline répond aux questions en direct, dans un serveur Discord, chaque fois que quelqu'un mentionne le bot. Rien sur *comment* il récupère ou génère ne change ; seule l'interface change.
+Ce projet reprend le pipeline de génération augmentée par récupération du [projet Appli RAG](/fr/projets/rag-notes), embeddings locaux, recherche de similarité cosinus avec NumPy, un LLM gratuit pour la réponse finale, et lui met un front-end différent : au lieu d'un script que tu exécutes depuis un terminal une question à la fois, le même pipeline répond aux questions en direct, dans un serveur Discord, chaque fois que quelqu'un mentionne le bot. Rien sur *comment* il récupère ou génère ne change ; seule l'interface change.
 
-Cela suppose Python 101. Avoir déjà construit le [projet Appli RAG](/fr/projets/rag-notes) est fortement recommandé — ce projet réutilise directement son code d'embedding/récupération et passe rapidement sur les parties déjà expliquées en profondeur.
+Cela suppose Python 101. Avoir déjà construit le [projet Appli RAG](/fr/projets/rag-notes) est fortement recommandé, ce projet réutilise directement son code d'embedding/récupération et passe rapidement sur les parties déjà expliquées en profondeur.
 
 C'est optionnel et non noté. Voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
@@ -22,13 +22,13 @@ C'est optionnel et non noté. Voir [Projets du monde réel](/fr/projets) pour la
 
 ## Où exécuter ceci
 
-**En local avec `uv`** est vraiment la seule option pratique ici, plus que pour la plupart des autres projets de cette série. Un bot Discord n'est pas un script qui s'exécute une fois et se termine — il maintient une connexion ouverte à Discord et doit continuer à tourner tant que tu veux que le bot réponde, ce qui signifie un vrai processus local (ou hébergé) de longue durée, pas une commande ponctuelle.
+**En local avec `uv`** est vraiment la seule option pratique ici, plus que pour la plupart des autres projets de cette série. Un bot Discord n'est pas un script qui s'exécute une fois et se termine, il maintient une connexion ouverte à Discord et doit continuer à tourner tant que tu veux que le bot réponde, ce qui signifie un vrai processus local (ou hébergé) de longue durée, pas une commande ponctuelle.
 
-**GitHub Codespaces** fonctionne aussi, et est un substitut raisonnable si tu préfères ne rien installer localement : ouvre [tout le dépôt du cours dans un Codespace gratuit](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python et `uv` sont déjà installés, selon le `.devcontainer/devcontainer.json` du dépôt) et exécute `uv run python bot.py` dans un terminal là-bas — il continue de tourner tant que ce terminal (et le Codespace) reste ouvert, la même exigence de « processus de longue durée » qu'en local.
+**GitHub Codespaces** fonctionne aussi, et est un substitut raisonnable si tu préfères ne rien installer localement : ouvre [tout le dépôt du cours dans un Codespace gratuit](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python et `uv` sont déjà installés, selon le `.devcontainer/devcontainer.json` du dépôt) et exécute `uv run python bot.py` dans un terminal là-bas, il continue de tourner tant que ce terminal (et le Codespace) reste ouvert, la même exigence de « processus de longue durée » qu'en local.
 
-**Google Colab, Kaggle Notebooks, et Binder sont mal adaptés au vrai bot** — sois honnête avec toi-même là-dessus plutôt que de lutter contre. Les notebooks sont construits autour de l'exécution d'une cellule, l'obtention d'une sortie, et le passage à la cellule suivante ; ils ne sont pas faits pour un processus en arrière-plan qui attend des événements indéfiniment. Tu *peux* démarrer la boucle d'événements d'un bot dans une cellule de notebook, mais dès que le runtime du notebook se recycle, se déconnecte, ou que tu fermes l'onglet, le bot tombe avec lui — saute Colab/Kaggle/Binder pour le bot en direct et utilise plutôt un vrai processus local ou Codespaces.
+**Google Colab, Kaggle Notebooks, et Binder sont mal adaptés au vrai bot**, sois honnête avec toi-même là-dessus plutôt que de lutter contre. Les notebooks sont construits autour de l'exécution d'une cellule, l'obtention d'une sortie, et le passage à la cellule suivante ; ils ne sont pas faits pour un processus en arrière-plan qui attend des événements indéfiniment. Tu *peux* démarrer la boucle d'événements d'un bot dans une cellule de notebook, mais dès que le runtime du notebook se recycle, se déconnecte, ou que tu fermes l'onglet, le bot tombe avec lui, saute Colab/Kaggle/Binder pour le bot en direct et utilise plutôt un vrai processus local ou Codespaces.
 
-Cela dit, le pipeline RAG *sous-jacent* au bot — découpage, embedding, récupération, et génération — n'est que du code normal qui s'exécute une cellule à la fois, ce en quoi les notebooks excellent justement. Les badges ci-dessous ouvrent un notebook qui parcourt ce pipeline central contre la documentation d'exemple du projet et affiche de vraies réponses récupérées-et-générées, pour que tu puisses le voir fonctionner sans rien installer localement. Il s'arrête délibérément avant la couche Discord — pour ça, reviens ici et exécute `bot.py` en local ou dans Codespaces comme décrit ci-dessus.
+Cela dit, le pipeline RAG *sous-jacent* au bot, découpage, embedding, récupération, et génération, n'est que du code normal qui s'exécute une cellule à la fois, ce en quoi les notebooks excellent justement. Les badges ci-dessous ouvrent un notebook qui parcourt ce pipeline central contre la documentation d'exemple du projet et affiche de vraies réponses récupérées-et-générées, pour que tu puisses le voir fonctionner sans rien installer localement. Il s'arrête délibérément avant la couche Discord, pour ça, reviens ici et exécute `bot.py` en local ou dans Codespaces comme décrit ci-dessus.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/docs-qa-bot/notebook.fr.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/docs-qa-bot/notebook.fr.ipynb)
@@ -40,7 +40,7 @@ Tout dans cette section n'a besoin de se produire qu'une fois, avant d'écrire u
 
 ### Installe `uv`
 
-`uv` est un seul outil qui remplace la chaîne habituelle « installe Python, puis installe pip, puis installe un outil d'environnement virtuel, puis installe les paquets » — il peut installer et gérer les versions de Python lui-même, en plus des dépendances de ton projet.
+`uv` est un seul outil qui remplace la chaîne habituelle « installe Python, puis installe pip, puis installe un outil d'environnement virtuel, puis installe les paquets », il peut installer et gérer les versions de Python lui-même, en plus des dépendances de ton projet.
 
 **macOS / Linux** (terminal) :
 
@@ -66,8 +66,8 @@ Le [Portail Développeur](https://discord.com/developers/applications) de Discor
 
 1. Connecte-toi et clique sur **New Application**, donne-lui un nom (ex. « docs-qa-bot »), et crée-la.
 2. Ouvre l'onglet **Bot** à gauche. Discord ajoute automatiquement un utilisateur bot à ton application.
-3. Clique sur **Reset Token** (ou **View Token** si c'est la première fois) et copie-le. Ce jeton est exactement comme un mot de passe — quiconque le possède peut contrôler ton bot — traite-le donc de la même façon que tu traites déjà une clé API LLM : ne le colle jamais dans le code, ne le commite jamais.
-4. Sur le même onglet **Bot**, fais défiler jusqu'à **Privileged Gateway Intents** et active **Message Content**. C'est requis pour que le bot voie réellement le texte des messages dans lesquels il est mentionné — sans ça, `discord.py` reçoit une chaîne vide pour le contenu de chaque message peu importe le code que tu écris.
+3. Clique sur **Reset Token** (ou **View Token** si c'est la première fois) et copie-le. Ce jeton est exactement comme un mot de passe, quiconque le possède peut contrôler ton bot, traite-le donc de la même façon que tu traites déjà une clé API LLM : ne le colle jamais dans le code, ne le commite jamais.
+4. Sur le même onglet **Bot**, fais défiler jusqu'à **Privileged Gateway Intents** et active **Message Content**. C'est requis pour que le bot voie réellement le texte des messages dans lesquels il est mentionné, sans ça, `discord.py` reçoit une chaîne vide pour le contenu de chaque message peu importe le code que tu écris.
 
 :::tip[Un jeton de bot est un secret, exactement comme une clé API]
 Tout ce que le [projet Appli RAG](/fr/projets/rag-notes) a enseigné sur la gestion des clés API LLM s'applique ici aussi, pour un deuxième secret : ne code jamais en dur le jeton du bot, ne le commite jamais, et garde-le dans un fichier `.env` local (ci-dessous) à la place.
@@ -75,18 +75,18 @@ Tout ce que le [projet Appli RAG](/fr/projets/rag-notes) a enseigné sur la gest
 
 ### Obtiens une clé API LLM gratuite
 
-La moitié génération de ce pipeline a besoin du même genre de clé LLM gratuite que le [projet Appli RAG](/fr/projets/rag-notes) — **choisis le fournisseur que tu préfères**, aucun ne nécessite de carte de crédit au moment de l'écriture :
+La moitié génération de ce pipeline a besoin du même genre de clé LLM gratuite que le [projet Appli RAG](/fr/projets/rag-notes), **choisis le fournisseur que tu préfères**, aucun ne nécessite de carte de crédit au moment de l'écriture :
 
 | Fournisseur | Où obtenir une clé | Pourquoi le choisir |
 |---|---|---|
-| **GitHub Models** *(par défaut suggéré)* | [github.com/settings/tokens](https://github.com/settings/tokens) — un jeton d'accès personnel avec le scope `models: read` | Pas d'inscription séparée — tu as déjà un compte GitHub. Limites de niveau gratuit plus généreuses que Gemini. |
+| **GitHub Models** *(par défaut suggéré)* | [github.com/settings/tokens](https://github.com/settings/tokens), un jeton d'accès personnel avec le scope `models: read` | Pas d'inscription séparée, tu as déjà un compte GitHub. Limites de niveau gratuit plus généreuses que Gemini. |
 | Gemini | [Google AI Studio](https://aistudio.google.com/) | L'option la plus couramment référencée. |
 | Groq | [console.groq.com/keys](https://console.groq.com/keys) | Inférence rapide, niveau gratuit généreux, pas de carte. |
 | Mistral | [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys) | Un des quotas gratuits permanents les plus généreux. |
 | Cerebras | [cloud.cerebras.ai](https://cloud.cerebras.ai/) | Volume quotidien de tokens élevé, pas de carte. |
-| OpenRouter | [openrouter.ai/keys](https://openrouter.ai/keys) | Une API, plusieurs modèles gratuits — bon pour comparer les fournisseurs. |
+| OpenRouter | [openrouter.ai/keys](https://openrouter.ai/keys) | Une API, plusieurs modèles gratuits, bon pour comparer les fournisseurs. |
 
-Si tu as déjà une clé du projet Appli RAG, la même fonctionne ici — pas besoin d'en générer une seconde.
+Si tu as déjà une clé du projet Appli RAG, la même fonctionne ici, pas besoin d'en générer une seconde.
 
 ### Mets en place le projet
 
@@ -96,7 +96,7 @@ cd docs-qa-bot
 uv add discord.py sentence-transformers numpy python-dotenv openai
 ```
 
-`discord.py` est la bibliothèque qui parle réellement à Discord — se connectant à sa Gateway, recevant les événements de messages, et envoyant des réponses. `sentence-transformers` et `numpy` sont les mêmes bibliothèques de récupération du projet Appli RAG, faisant le même travail ici : embeddings locaux et recherche de similarité cosinus, juste sur de la documentation plutôt que des notes. `openai` parle à l'endpoint compatible OpenAI de GitHub Models pour le fournisseur par défaut ci-dessus ; remplace-le par le propre paquet de ton fournisseur si tu en as choisi un différent, exactement comme le décrit le projet Appli RAG.
+`discord.py` est la bibliothèque qui parle réellement à Discord, se connectant à sa Gateway, recevant les événements de messages, et envoyant des réponses. `sentence-transformers` et `numpy` sont les mêmes bibliothèques de récupération du projet Appli RAG, faisant le même travail ici : embeddings locaux et recherche de similarité cosinus, juste sur de la documentation plutôt que des notes. `openai` parle à l'endpoint compatible OpenAI de GitHub Models pour le fournisseur par défaut ci-dessus ; remplace-le par le propre paquet de ton fournisseur si tu en as choisi un différent, exactement comme le décrit le projet Appli RAG.
 
 Crée un fichier `.env` dans le dossier du projet (ne le commite jamais) avec **les deux** secrets de cette section :
 
@@ -183,7 +183,7 @@ Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
 
 **👟 Indice de départ :**
 
-Mets toute la documentation dont tu veux que le bot réponde dans un dossier `docs/` sous forme de fichiers `.md`/`.txt` — le README et les pages wiki d'un projet, le manuel interne d'une équipe, les propres fichiers de leçon de ce cours, n'importe quoi de réel. Ensuite embedde-la, en réutilisant le `build_index.py` du projet Appli RAG textuellement (seul l'import change, de `prepare_notes` à `prepare_docs`) :
+Mets toute la documentation dont tu veux que le bot réponde dans un dossier `docs/` sous forme de fichiers `.md`/`.txt`, le README et les pages wiki d'un projet, le manuel interne d'une équipe, les propres fichiers de leçon de ce cours, n'importe quoi de réel. Ensuite embedde-la, en réutilisant le `build_index.py` du projet Appli RAG textuellement (seul l'import change, de `prepare_notes` à `prepare_docs`) :
 
 ```python
 # build_index.py
@@ -265,11 +265,11 @@ Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
 - Si ton dossier de documentation a un fichier avec un formatage très incohérent (pas de lignes vides, un gros bloc de texte), qu'est-ce que tu attendrais qu'il arrive à la qualité des fragments qu'il produit ?
 
 ## Étape 2 : Récupère les fragments pertinents
-### 2.1 La récupération reste aussi inchangée par rapport au projet Appli RAG — embedde la question ...
+### 2.1 La récupération reste aussi inchangée par rapport au projet Appli RAG, embedde la question ...
 
 **👟 Indice de départ :**
 
-La récupération reste aussi inchangée par rapport au projet Appli RAG — embedde la question avec le même modèle, puis classe chaque fragment par similarité cosinus, ce qui se réduit à un simple produit scalaire puisque chaque vecteur a déjà été normalisé à longueur 1 au moment de l'embedding :
+La récupération reste aussi inchangée par rapport au projet Appli RAG, embedde la question avec le même modèle, puis classe chaque fragment par similarité cosinus, ce qui se réduit à un simple produit scalaire puisque chaque vecteur a déjà été normalisé à longueur 1 au moment de l'embedding :
 
 ```python
 # retrieve.py
@@ -331,9 +331,9 @@ Exécutez le code ci-dessous et confirmez qu'il fonctionne.
 ```bash
 uv run python retrieve.py
 ```
-Si ça semble aller trop vite, c'est délibéré — le [projet Appli RAG](/fr/projets/rag-notes#step-4-retrieve-relevant-chunks) couvre exactement pourquoi la similarité cosinus fonctionne ainsi, ce que la normalisation t'apporte, et comment les maths se connectent à une multiplication matrice-vecteur, avec bien plus de profondeur que ce que le répéter ici apporterait.
+Si ça semble aller trop vite, c'est délibéré, le [projet Appli RAG](/fr/projets/rag-notes#step-4-retrieve-relevant-chunks) couvre exactement pourquoi la similarité cosinus fonctionne ainsi, ce que la normalisation t'apporte, et comment les maths se connectent à une multiplication matrice-vecteur, avec bien plus de profondeur que ce que le répéter ici apporterait.
 :::tip[Teste la récupération avant de toucher à Discord du tout]
-Fais en sorte que `retrieve.py` retourne des fragments authentiquement pertinents pour quelques questions de test *avant* d'écrire du code de bot. Si la récupération est mauvaise, un bot enroulé autour d'elle livrera simplement des réponses erronées avec confiance dans un canal Discord — bien plus difficile à déboguer en direct qu'un script de terminal silencieux.
+Fais en sorte que `retrieve.py` retourne des fragments authentiquement pertinents pour quelques questions de test *avant* d'écrire du code de bot. Si la récupération est mauvaise, un bot enroulé autour d'elle livrera simplement des réponses erronées avec confiance dans un canal Discord, bien plus difficile à déboguer en direct qu'un script de terminal silencieux.
 :::
 
 **🎯 Résultat attendu :**
@@ -363,7 +363,7 @@ Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
 **👟 Indice de départ :**
 
 C'est la vraie nouvelle partie de ce projet : un gestionnaire d'événements `discord.py` qui appelle `retrieve()`, construit le même prompt « réponds en utilisant uniquement ce contexte » que le projet Appli RAG, et répond avec la réponse du modèle.
-Le pattern central de `discord.py` est une boucle d'événements : tu crées un `Client` avec un ensemble d'`intents` (quelles catégories d'événements il est autorisé à recevoir), puis tu enregistres des fonctions `async def` décorées avec `@client.event` pour les événements qui t'intéressent — le plus souvent `on_ready` (se déclenche une fois, quand la connexion est établie) et `on_message` (se déclenche pour chaque message que le bot peut voir) :
+Le pattern central de `discord.py` est une boucle d'événements : tu crées un `Client` avec un ensemble d'`intents` (quelles catégories d'événements il est autorisé à recevoir), puis tu enregistres des fonctions `async def` décorées avec `@client.event` pour les événements qui t'intéressent, le plus souvent `on_ready` (se déclenche une fois, quand la connexion est établie) et `on_message` (se déclenche pour chaque message que le bot peut voir) :
 
 ```python
 # bot.py
@@ -443,10 +443,10 @@ async def on_message(message: discord.Message):
 if __name__ == "__main__":
     client.run(os.environ["DISCORD_BOT_TOKEN"])
 ```
-`answer()` est ligne pour ligne la même idée que le `ask()` du projet Appli RAG — récupérer, construire un prompt, appeler le LLM — mais retourne une chaîne au lieu de l'afficher, pour que `on_message` puisse transmettre cette chaîne à `message.reply(...)`. Tout au-dessus de `on_ready`/`on_message` s'exécute une fois au démarrage ; tout à l'intérieur de ces deux fonctions s'exécute une fois par événement, tant que `client.run(...)` maintient la connexion vivante.
-La garde `if message.author == client.user: return` compte plus qu'il n'y paraît : sans elle, si la propre réponse du bot se mentionnait elle-même (ça n'arrivera pas ici, mais c'est une erreur facile en général), ça déclencherait `on_message` à nouveau sur sa propre sortie — une boucle infinie d'un bot se répondant à lui-même.
+`answer()` est ligne pour ligne la même idée que le `ask()` du projet Appli RAG, récupérer, construire un prompt, appeler le LLM, mais retourne une chaîne au lieu de l'afficher, pour que `on_message` puisse transmettre cette chaîne à `message.reply(...)`. Tout au-dessus de `on_ready`/`on_message` s'exécute une fois au démarrage ; tout à l'intérieur de ces deux fonctions s'exécute une fois par événement, tant que `client.run(...)` maintient la connexion vivante.
+La garde `if message.author == client.user: return` compte plus qu'il n'y paraît : sans elle, si la propre réponse du bot se mentionnait elle-même (ça n'arrivera pas ici, mais c'est une erreur facile en général), ça déclencherait `on_message` à nouveau sur sa propre sortie, une boucle infinie d'un bot se répondant à lui-même.
 :::tip[async def et await ne sont pas optionnels ici]
-`discord.py` est entièrement construit sur `asyncio` de Python — chaque gestionnaire d'événements doit être déclaré `async def`, et tout appel qui attend sur le réseau (envoyer un message, récupérer des données) doit avoir `await`. Oublier l'un ou l'autre est l'un des tout premiers bugs les plus courants : oublier `async` sur `on_message` lève une erreur immédiatement, et oublier `await` sur `message.reply(...)` ne fait silencieusement rien du tout, puisque ça crée juste une coroutine non attendue au lieu de réellement l'exécuter.
+`discord.py` est entièrement construit sur `asyncio` de Python, chaque gestionnaire d'événements doit être déclaré `async def`, et tout appel qui attend sur le réseau (envoyer un message, récupérer des données) doit avoir `await`. Oublier l'un ou l'autre est l'un des tout premiers bugs les plus courants : oublier `async` sur `on_message` lève une erreur immédiatement, et oublier `await` sur `message.reply(...)` ne fait silencieusement rien du tout, puisque ça crée juste une coroutine non attendue au lieu de réellement l'exécuter.
 :::
 
 **🎯 Résultat attendu :**
@@ -490,16 +490,16 @@ Vous devriez voir le résultat attendu sans erreur.
 
 Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
 
-### 4.2 Tu devrais voir `Logged in as docs-qa-bot#1234 -- ready in 1 server(s).` affiché — le silenc...
+### 4.2 Tu devrais voir `Logged in as docs-qa-bot#1234 -- ready in 1 server(s).` affiché, le silenc...
 
 **👟 Indice de départ :**
 
-Tu devrais voir `Logged in as docs-qa-bot#1234 -- ready in 1 server(s).` affiché — le silence après ça est normal ; le processus est juste en attente d'événements sur la Gateway de Discord, la même idée « pas de sortie signifie que ça fonctionne » qu'un serveur MCP en attente sur stdio. Dans le serveur de test, mentionne le bot avec une vraie question sur ce qui se trouve dans ton dossier `docs/` :
+Tu devrais voir `Logged in as docs-qa-bot#1234 -- ready in 1 server(s).` affiché, le silence après ça est normal ; le processus est juste en attente d'événements sur la Gateway de Discord, la même idée « pas de sortie signifie que ça fonctionne » qu'un serveur MCP en attente sur stdio. Dans le serveur de test, mentionne le bot avec une vraie question sur ce qui se trouve dans ton dossier `docs/` :
 
 ```
 @docs-qa-bot how do I enable the message content intent?
 ```
-En quelques secondes tu devrais voir un indicateur « en train d'écrire », puis une réponse ancrée dans ta vraie documentation — pas une supposition venant des données d'entraînement générales du modèle.
+En quelques secondes tu devrais voir un indicateur « en train d'écrire », puis une réponse ancrée dans ta vraie documentation, pas une supposition venant des données d'entraînement générales du modèle.
 
 **🎯 Résultat attendu :**
 
@@ -524,25 +524,25 @@ Consultez la section ⚠️ Pièges courants pour les problèmes habituels.
 
 ## ⚠️ Pièges courants
 
-- **Oublier l'intent privilégié « Message Content ».** Ça doit être activé en *deux* endroits — `intents.message_content = True` dans le code, **et** l'interrupteur sous Bot → Privileged Gateway Intents dans le Portail Développeur. Rate l'interrupteur du portail et `message.content` est silencieusement une chaîne vide pour chaque message, sans aucune erreur pour te dire pourquoi.
-- **Limites de débit sur le niveau LLM gratuit, aggravées par le vrai trafic du bot.** Un script CLI comme le `ask.py` du projet Appli RAG n'appelle le LLM que quand tu l'exécutes ; un bot en direct peut recevoir plusieurs questions en succession rapide de différentes personnes dans un serveur actif, et chacune est un appel séparé contre le quota de niveau gratuit de ton fournisseur. Une erreur 429 sous charge n'est pas un bug — voir les [pièges du projet Appli RAG](/fr/projets/rag-notes#️-common-pitfalls) pour le même pattern de limite de débit et comment ajouter une nouvelle tentative.
+- **Oublier l'intent privilégié « Message Content ».** Ça doit être activé en *deux* endroits, `intents.message_content = True` dans le code, **et** l'interrupteur sous Bot → Privileged Gateway Intents dans le Portail Développeur. Rate l'interrupteur du portail et `message.content` est silencieusement une chaîne vide pour chaque message, sans aucune erreur pour te dire pourquoi.
+- **Limites de débit sur le niveau LLM gratuit, aggravées par le vrai trafic du bot.** Un script CLI comme le `ask.py` du projet Appli RAG n'appelle le LLM que quand tu l'exécutes ; un bot en direct peut recevoir plusieurs questions en succession rapide de différentes personnes dans un serveur actif, et chacune est un appel séparé contre le quota de niveau gratuit de ton fournisseur. Une erreur 429 sous charge n'est pas un bug, voir les [pièges du projet Appli RAG](/fr/projets/rag-notes#️-common-pitfalls) pour le même pattern de limite de débit et comment ajouter une nouvelle tentative.
 - **Ne pas reconstruire l'index après avoir modifié `docs/`.** Exactement comme le projet Appli RAG : `build_index.py` ne tourne que quand tu l'exécutes. Ajoute ou modifie un doc et le bot continue de répondre depuis l'*ancien* index jusqu'à ce que tu relances `uv run python build_index.py` et redémarres le bot.
-- **Exécuter le bot avec un jeton obsolète ou incorrect après l'avoir régénéré.** Cliquer sur « Reset Token » dans le Portail Développeur invalide immédiatement l'ancien jeton — si `.env` a toujours l'ancienne valeur, `client.run(...)` échoue à se connecter. Mets à jour `.env` chaque fois que tu réinitialises le jeton, et ne suppose jamais que la valeur que tu as copiée une fois est toujours valide.
+- **Exécuter le bot avec un jeton obsolète ou incorrect après l'avoir régénéré.** Cliquer sur « Reset Token » dans le Portail Développeur invalide immédiatement l'ancien jeton, si `.env` a toujours l'ancienne valeur, `client.run(...)` échoue à se connecter. Mets à jour `.env` chaque fois que tu réinitialises le jeton, et ne suppose jamais que la valeur que tu as copiée une fois est toujours valide.
 
 ## Ce que tu viens de construire
 
-Un bot Discord en direct qui répond à de vraies questions à partir de vraie documentation, ancré dans du texte récupéré plutôt que dans la connaissance générale du modèle — exactement le même pipeline RAG que le [projet Appli RAG](/fr/projets/rag-notes), avec une boucle d'événements `discord.py` remplaçant un script CLI comme interface. Le code de récupération et de génération n'a pas changé de façon significative ; seule la façon dont une question entre et une réponse sort a changé. C'est une chose utile à remarquer en général : la logique centrale d'un pipeline RAG est indépendante de l'interface, et la même paire `retrieve()`/`answer()` ici pourrait tout aussi facilement se trouver derrière un bot Slack, un formulaire web, ou un endpoint API à la place.
+Un bot Discord en direct qui répond à de vraies questions à partir de vraie documentation, ancré dans du texte récupéré plutôt que dans la connaissance générale du modèle, exactement le même pipeline RAG que le [projet Appli RAG](/fr/projets/rag-notes), avec une boucle d'événements `discord.py` remplaçant un script CLI comme interface. Le code de récupération et de génération n'a pas changé de façon significative ; seule la façon dont une question entre et une réponse sort a changé. C'est une chose utile à remarquer en général : la logique centrale d'un pipeline RAG est indépendante de l'interface, et la même paire `retrieve()`/`answer()` ici pourrait tout aussi facilement se trouver derrière un bot Slack, un formulaire web, ou un endpoint API à la place.
 
 ## Où aller à partir d'ici
 
-- Ajoute une **commande slash** (`/ask <question>`) en utilisant les `app_commands` de `discord.py` en plus, ou à la place, des réponses basées sur mention — les commandes slash apparaissent dans l'UI de Discord avec autocomplétion et ne nécessitent pas de taper une `@mention`, au prix d'une petite quantité de code d'enregistrement supplémentaire.
-- Suis quelle source `docs/` chaque réponse a réellement citée, et fais en sorte que le bot inclue une ligne « Source : fichier.md » dans sa réponse — une petite mais réelle fonctionnalité de renforcement de confiance pour quiconque lit la réponse.
-- Une fois que ton dossier de documentation dépasse ce qui tient confortablement en mémoire, regarde une vraie base de données vectorielle comme [ChromaDB](https://www.trychroma.com/), exactement comme suggéré dans le [« Où aller à partir d'ici » du projet Appli RAG](/fr/projets/rag-notes#where-to-go-from-here) — rien sur la couche Discord n'a besoin de changer pour le supporter.
-- Déploie le bot quelque part qui reste actif sans que ton propre ordinateur portable tourne — une petite VM toujours active, ou un niveau gratuit sur une plateforme comme Railway ou Fly.io — pour qu'il continue de répondre aux questions même quand tu n'es pas à ta machine.
+- Ajoute une **commande slash** (`/ask <question>`) en utilisant les `app_commands` de `discord.py` en plus, ou à la place, des réponses basées sur mention, les commandes slash apparaissent dans l'UI de Discord avec autocomplétion et ne nécessitent pas de taper une `@mention`, au prix d'une petite quantité de code d'enregistrement supplémentaire.
+- Suis quelle source `docs/` chaque réponse a réellement citée, et fais en sorte que le bot inclue une ligne « Source : fichier.md » dans sa réponse, une petite mais réelle fonctionnalité de renforcement de confiance pour quiconque lit la réponse.
+- Une fois que ton dossier de documentation dépasse ce qui tient confortablement en mémoire, regarde une vraie base de données vectorielle comme [ChromaDB](https://www.trychroma.com/), exactement comme suggéré dans le [« Où aller à partir d'ici » du projet Appli RAG](/fr/projets/rag-notes#where-to-go-from-here), rien sur la couche Discord n'a besoin de changer pour le supporter.
+- Déploie le bot quelque part qui reste actif sans que ton propre ordinateur portable tourne, une petite VM toujours active, ou un niveau gratuit sur une plateforme comme Railway ou Fly.io, pour qu'il continue de répondre aux questions même quand tu n'es pas à ta machine.
 
 ## Partage ton projet avec la classe
 
-Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres élèves — et son README a un tutoriel complet et adapté aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git avant : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable avec git n'est supposée.
+Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres élèves, et son README a un tutoriel complet et adapté aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git avant : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable avec git n'est supposée.
 
 Bienvenue dans l'écriture de Python en dehors du navigateur. 🎓
 

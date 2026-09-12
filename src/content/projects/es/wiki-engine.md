@@ -1,6 +1,6 @@
 ---
 title: "Motor de Wiki"
-description: "Almacena páginas Markdown en disco, represéntalas en HTML, mantén diffs de historial de versiones, calcula mapas de [[backlinks]] y clasifica resultados de búsqueda de texto completo — pura biblioteca estándar."
+description: "Almacena páginas Markdown en disco, represéntalas en HTML, mantén diffs de historial de versiones, calcula mapas de [[backlinks]] y clasifica resultados de búsqueda de texto completo, pura biblioteca estándar."
 difficulty: "intermediate"
 estimatedMinutes: 60
 tags: ["markdown", "cli", "automation"]
@@ -20,7 +20,7 @@ prerequisites:
 
 Una wiki es *páginas en disco más tres índices*. Las páginas son archivos Markdown; los índices son backlinks (¿qué páginas apuntan aquí?), historial (¿qué solía decir esta página?) y búsqueda (¿qué páginas mencionan estas palabras?). Este proyecto construye los tres desde cero con la biblioteca estándar: un esquema de nombres por slug, un minúsculo renderizador Markdown-lite, historial de versiones de solo añadido con diffs, un mapa de backlinks `[[Page]]` y una búsqueda que tokeniza y clasifica por frecuencia de término. Cuando termines puedes convertir tus propias notas en una wiki.
 
-Esto asume Python 101 más un poco de regex — no se requiere nada de Análisis de Datos. Es opcional y no se califica; consulta [Proyectos del Mundo Real](/es/proyectos) para ver la lista completa y en crecimiento.
+Esto asume Python 101 más un poco de regex, no se requiere nada de Análisis de Datos. Es opcional y no se califica; consulta [Proyectos del Mundo Real](/es/proyectos) para ver la lista completa y en crecimiento.
 
 ## 🎯 Lo que harás
 
@@ -33,9 +33,9 @@ Esto asume Python 101 más un poco de regex — no se requiere nada de Análisis
 
 ## Dónde ejecutar esto
 
-**Localmente con `uv`** es el hogar principal — una wiki son archivos en disco, y el punto entero de este motor es hacer el viaje de ida y vuelta a través de una carpeta `wiki/` que puedes abrir en cualquier editor. El motor es pura biblioteca estándar, así que cada celda corre de forma idéntica también en la nube.
+**Localmente con `uv`** es el hogar principal, una wiki son archivos en disco, y el punto entero de este motor es hacer el viaje de ida y vuelta a través de una carpeta `wiki/` que puedes abrir en cualquier editor. El motor es pura biblioteca estándar, así que cada celda corre de forma idéntica también en la nube.
 
-**Google Colab, Kaggle Notebooks y Binder** ejecutan los seis pasos sin modificación — las celdas crean un directorio `wiki/` y lo inspeccionan a medida que avanzan, así que el notebook *demuestra* el motor contra sus propias páginas. La salvedad honesta: los sistemas de archivos en la nube son efímeros, así que una wiki que realmente conserves vive en local. Usa las insignias para ver funcionar el motor; usa `uv` donde viven tus notas.
+**Google Colab, Kaggle Notebooks y Binder** ejecutan los seis pasos sin modificación, las celdas crean un directorio `wiki/` y lo inspeccionan a medida que avanzan, así que el notebook *demuestra* el motor contra sus propias páginas. La salvedad honesta: los sistemas de archivos en la nube son efímeros, así que una wiki que realmente conserves vive en local. Usa las insignias para ver funcionar el motor; usa `uv` donde viven tus notas.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/wiki-engine/notebook.es.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/wiki-engine/notebook.es.ipynb)
@@ -43,7 +43,7 @@ Esto asume Python 101 más un poco de regex — no se requiere nada de Análisis
 
 ## Configuración
 
-Crea el proyecto. El motor usa solo la biblioteca estándar — `re` para slugificar/analizar, `json` para el historial, `difflib` para los diffs y `pathlib` para el árbol de archivos. No hay paquetes que instalar.
+Crea el proyecto. El motor usa solo la biblioteca estándar, `re` para slugificar/analizar, `json` para el historial, `difflib` para los diffs y `pathlib` para el árbol de archivos. No hay paquetes que instalar.
 
 ```bash
 uv init wiki-engine
@@ -54,16 +54,16 @@ cd wiki-engine
 uv run python -c "import re, json, difflib; from pathlib import Path; print('stdlib ok')"
 ```
 
-En serio, esa es toda la lista de dependencias. `difflib` te da `unified_diff` gratis — la misma salida que muestra `git diff` — `re` talla slugs y `[[links]]` fuera del texto, y `pathlib` hace que "listar cada archivo `.md`" sea una línea. El directorio `wiki/` que crearás en el Paso 1 es la base de datos.
+En serio, esa es toda la lista de dependencias. `difflib` te da `unified_diff` gratis, la misma salida que muestra `git diff`, `re` talla slugs y `[[links]]` fuera del texto, y `pathlib` hace que "listar cada archivo `.md`" sea una línea. El directorio `wiki/` que crearás en el Paso 1 es la base de datos.
 
 **✅ Lista de verificación**
 
 - ✅ `uv init wiki-engine` creó un proyecto con un `pyproject.toml`.
-- ✅ La comprobación de importación imprimió `stdlib ok` — no se añadieron paquetes.
+- ✅ La comprobación de importación imprimió `stdlib ok`, no se añadieron paquetes.
 
 ## Paso 1: Modela una página y slugifica su nombre
 
-La verdad más simple de una wiki es un archivo por página. Este paso define el dataclass `Page` (`slug`, `title`, `body`), decide dónde viven los archivos (`wiki/<slug>.md`) y escribe el slugificador — la función que convierte "Data Analysis" en un `data-analysis` seguro para URL y único.
+La verdad más simple de una wiki es un archivo por página. Este paso define el dataclass `Page` (`slug`, `title`, `body`), decide dónde viven los archivos (`wiki/<slug>.md`) y escribe el slugificador, la función que convierte "Data Analysis" en un `data-analysis` seguro para URL y único.
 
 ### 1.1 Escribe `Page`, `slugify` y `page_path`
 
@@ -95,11 +95,11 @@ for title in ["Data Analysis", "Sci-kit & Tools!", "  Pandas  "]:
     print(f"{title!r:26} -> {slugify(title)}")
 ```
 
-El slug es la *identidad* de la wiki: es en lo que se apoyan los nombres de archivo, los `[[links]]` y los resultados de búsqueda, así que hacerlo determinista ("Data Analysis" y "data analysis" aterrizan en el mismo archivo) previene páginas duplicadas para la misma idea. `re.sub(r"[^a-z0-9]+", "-", ...)` colapsa espacios, puntuación e incluso separadores múltiples en un guion, y el `.strip("-")` final mantiene los bordes limpios. Anidar `WIKI_DIR / f"{slug}.md"` dentro de `page_path` canaliza cada escritura de archivo a través de una convención — ninguna página puede escapar de la carpeta wiki.
+El slug es la *identidad* de la wiki: es en lo que se apoyan los nombres de archivo, los `[[links]]` y los resultados de búsqueda, así que hacerlo determinista ("Data Analysis" y "data analysis" aterrizan en el mismo archivo) previene páginas duplicadas para la misma idea. `re.sub(r"[^a-z0-9]+", "-", ...)` colapsa espacios, puntuación e incluso separadores múltiples en un guion, y el `.strip("-")` final mantiene los bordes limpios. Anidar `WIKI_DIR / f"{slug}.md"` dentro de `page_path` canaliza cada escritura de archivo a través de una convención, ninguna página puede escapar de la carpeta wiki.
 
 **🎯 Resultado esperado :** `'Data Analysis'            -> data-analysis`, `'Sci-kit & Tools!'         -> sci-kit-tools`, `'  Pandas  '               -> pandas`.
 
-**🩹 Si sale mal :** Si los huecos del slug se quedan como espacios, el recorte de borde `strip("-")` corrió pero el regex de colapso no — comprueba el cuantificador `+`. Si `Sci-kit & Tools!` se muestra como `sci-kit--tools`, un doble guion no se fusionó — de nuevo el `+`. Si un slug está vacío, el título era todo no ASCII/emoji; decide un fallback (`"page"`) antes de que las páginas empiecen a colisionar.
+**🩹 Si sale mal :** Si los huecos del slug se quedan como espacios, el recorte de borde `strip("-")` corrió pero el regex de colapso no, comprueba el cuantificador `+`. Si `Sci-kit & Tools!` se muestra como `sci-kit--tools`, un doble guion no se fusionó, de nuevo el `+`. Si un slug está vacío, el título era todo no ASCII/emoji; decide un fallback (`"page"`) antes de que las páginas empiecen a colisionar.
 
 ### 1.2 Verifica el slugificado
 
@@ -111,7 +111,7 @@ El slug es la *identidad* de la wiki: es en lo que se apoyan los nombres de arch
 
 **🤔 Pregunta(s) socrática(s)**
 
-- Dos páginas reales "Plotting" y "Plotting & Plots" se slugifican al mismo archivo — una sobrescribe a la otra en silencio. ¿Cómo se vería una *comprobación de colisión* al guardar, y es mejor fallar en voz alta que sobrescribir?
+- Dos páginas reales "Plotting" y "Plotting & Plots" se slugifican al mismo archivo, una sobrescribe a la otra en silencio. ¿Cómo se vería una *comprobación de colisión* al guardar, y es mejor fallar en voz alta que sobrescribir?
 - Los slugs se derivan de los títulos aquí. Si un usuario renombra "Data Analysis" a "Analysis", ¿qué pasa con cada archivo y cada enlace `[[Data Analysis]]`? ¿Dónde argumenta eso a favor de un slug *inmutable* que sobreviva a las ediciones de título?
 
 ## Paso 2: Lee, escribe y muestra páginas
@@ -150,19 +150,19 @@ save_page(demo)
 print(render_html(load_page("welcome")))
 ```
 
-La convención de la primera línea `# Title` significa que el archivo es a la vez un spec y una página: cualquier editor puede abrir `wiki/welcome.md`, cambiar el texto bajo el encabezado, y la wiki lo capta — sin esquema de base de datos oculto. `render_html` convierte deliberadamente *exactamente* `**bold**` y `[[wiki-links]]` y envuelve todo lo demás en `<p>`; un subconjunto consciente del profesor vale más que un analizador Markdown completo a medias, y los dos regex son todo el "renderizador". `load_page` hace el viaje de ida y vuelta del cuerpo tal cual, así que las ediciones hechas en un editor de texto sobreviven a las conjeturas.
+La convención de la primera línea `# Title` significa que el archivo es a la vez un spec y una página: cualquier editor puede abrir `wiki/welcome.md`, cambiar el texto bajo el encabezado, y la wiki lo capta, sin esquema de base de datos oculto. `render_html` convierte deliberadamente *exactamente* `**bold**` y `[[wiki-links]]` y envuelve todo lo demás en `<p>`; un subconjunto consciente del profesor vale más que un analizador Markdown completo a medias, y los dos regex son todo el "renderizador". `load_page` hace el viaje de ida y vuelta del cuerpo tal cual, así que las ediciones hechas en un editor de texto sobreviven a las conjeturas.
 
-**🎯 Resultado esperado :** `<h1>Welcome</h1>\n<p>This wiki covers <strong>Python</strong>. See <a href="/Data Analysis">Data Analysis</a>.</p>` — nota que el enlace apunta al título crudo; la resolución de enlaces a *slugs* llega en el Paso 5.
+**🎯 Resultado esperado :** `<h1>Welcome</h1>\n<p>This wiki covers <strong>Python</strong>. See <a href="/Data Analysis">Data Analysis</a>.</p>`, nota que el enlace apunta al título crudo; la resolución de enlaces a *slugs* llega en el Paso 5.
 
-**🩹 Si sale mal :** Si el título se filtra al cuerpo, el slice `lines[2:]` asumió una línea en blanco después de `# Title` cuando no la hay. Si nada se muestra en negrita, al regex `\*\*(.+?)\*\*` le falta el `?` (codicioso) y abarca párrafos enteros. Si `save_page` lanzó `FileNotFoundError`, `WIKI_DIR.mkdir` nunca corrió — crea la carpeta una vez por adelantado.
+**🩹 Si sale mal :** Si el título se filtra al cuerpo, el slice `lines[2:]` asumió una línea en blanco después de `# Title` cuando no la hay. Si nada se muestra en negrita, al regex `\*\*(.+?)\*\*` le falta el `?` (codicioso) y abarca párrafos enteros. Si `save_page` lanzó `FileNotFoundError`, `WIKI_DIR.mkdir` nunca corrió, crea la carpeta una vez por adelantado.
 
 ### 2.2 Verifica el viaje de ida y vuelta
 
 **✅ Lista de verificación**
 
 - ✅ `render_html(load_page("welcome"))` coincide con la salida anterior palabra por palabra.
-- ✅ Editar `wiki/welcome.md` en cualquier editor de texto y volver a cargar muestra la edición — los archivos son la fuente de verdad, no Python.
-- ✅ Una página sin enlaces se muestra como párrafos `<p>` simples — sin choque del regex de enlaces ante la ausencia.
+- ✅ Editar `wiki/welcome.md` en cualquier editor de texto y volver a cargar muestra la edición, los archivos son la fuente de verdad, no Python.
+- ✅ Una página sin enlaces se muestra como párrafos `<p>` simples, sin choque del regex de enlaces ante la ausencia.
 
 **🤔 Pregunta(s) socrática(s)**
 
@@ -200,11 +200,11 @@ def diff_versions(slug: str, index: int = -1) -> str:
         entry["before"].splitlines(), entry["after"].splitlines(), lineterm=""))
 ```
 
-El *añadido* en `history.setdefault(...).append(...)` es la disciplina que hace confiable el historial: las versiones más antiguas nunca se editan, solo se añade a ellas, así que el registro es una pista de auditoría en lugar de un caché. `difflib.unified_diff` es exactamente el algoritmo que usa `git diff`; devolverlo como cadena mantiene el formato fuera de la capa de datos. Escribir todo el JSON en cada guardado está bien a la escala de una wiki y hace el archivo inspeccionable a mano — un trade-off que cualquier gran almacén de versiones ya ha hecho de forma diferente, y que la pregunta de abajo toca.
+El *añadido* en `history.setdefault(...).append(...)` es la disciplina que hace confiable el historial: las versiones más antiguas nunca se editan, solo se añade a ellas, así que el registro es una pista de auditoría en lugar de un caché. `difflib.unified_diff` es exactamente el algoritmo que usa `git diff`; devolverlo como cadena mantiene el formato fuera de la capa de datos. Escribir todo el JSON en cada guardado está bien a la escala de una wiki y hace el archivo inspeccionable a mano, un trade-off que cualquier gran almacén de versiones ya ha hecho de forma diferente, y que la pregunta de abajo toca.
 
 **🎯 Resultado esperado :** Después de dos ediciones, `history_for("welcome")` tiene dos entradas, y `print(diff_versions("welcome", -1))` muestra líneas `-` y `+` que marcan exactamente lo que cambió.
 
-**🩹 Si sale mal :** Si el historial nunca crece más allá de una entrada, `log_version` se está llamando con el *mismo* `before` en cada guardado (el texto antiguo se capturó demasiado tarde). Si `diff_versions(-1)` muestra una reescritura de archivo completo, el `after` se guardó como un cuerpo vacío (admite el caso no vacío). Si el JSON se escribe dañado, un cuerpo que contiene `\n` crudo no se escapó con `json.dumps` — siempre lo hace `write_text(json.dumps(...))`, así que sospecha ediciones manuales a `history.json`.
+**🩹 Si sale mal :** Si el historial nunca crece más allá de una entrada, `log_version` se está llamando con el *mismo* `before` en cada guardado (el texto antiguo se capturó demasiado tarde). Si `diff_versions(-1)` muestra una reescritura de archivo completo, el `after` se guardó como un cuerpo vacío (admite el caso no vacío). Si el JSON se escribe dañado, un cuerpo que contiene `\n` crudo no se escapó con `json.dumps`, siempre lo hace `write_text(json.dumps(...))`, así que sospecha ediciones manuales a `history.json`.
 
 ### 3.2 Verifica el historial
 
@@ -217,9 +217,9 @@ El *añadido* en `history.setdefault(...).append(...)` es la disciplina que hace
 **🤔 Pregunta(s) socrática(s)**
 
 - El historial almacena instantáneas completas de `before`/`after`. Para una wiki grande eso es O(archivo × ediciones) en disco. ¿Qué ahorra almacenar *deltas* (solo las regiones cambiadas por versión), y qué cuesta la reconstrucción en el momento de la lectura?
-- Este historial registra el *texto* de la página pero no *quién* la editó ni *cuándo*. ¿Cuál de esos dos latentes — autor o marca de tiempo — añadirías primero, y dónde deja el historial de una wiki de ser una red de seguridad y empieza a ser un registro de gobernanza?
+- Este historial registra el *texto* de la página pero no *quién* la editó ni *cuándo*. ¿Cuál de esos dos latentes, autor o marca de tiempo, añadirías primero, y dónde deja el historial de una wiki de ser una red de seguridad y empieza a ser un registro de gobernanza?
 
-## Paso 4: Backlinks — el mapa inverso de páginas
+## Paso 4: Backlinks, el mapa inverso de páginas
 
 Los enlaces son solo la mitad de una wiki; el *backlink* (¿quién apunta a mí?) es la otra mitad, y es lo que convierte las páginas en una red navegable. Este paso escanea el cuerpo de cada página en busca de `[[Target]]` y construye el mapa inverso `target -> [páginas que enlazan a él]`.
 
@@ -246,11 +246,11 @@ for slug, source in sorted(backlink_index().items()):
     print(f"{slug:16} <- {', '.join(source)}")
 ```
 
-`outbound_links` responde "¿a dónde apunta esta página?" y `backlink_index` lo invierte a "¿qué apunta aquí?" — la inversión de índice estándar, un file-glob y un `setdefault` a la vez. Apoyarse en `slugify(target)` es la recompensa de los slugs deterministas del Paso 1: un cuerpo que dice `[[Data Analysis]]` y uno que dice `[[data-analysis]]` ambas se registran bajo `data-analysis`, así que el índice sobrevive a la variación de nombres. Recorrer `WIKI_DIR.glob("*.md")` significa que el árbol de archivos *es* la lista de páginas — sin registro separado que mantener en sincronía.
+`outbound_links` responde "¿a dónde apunta esta página?" y `backlink_index` lo invierte a "¿qué apunta aquí?", la inversión de índice estándar, un file-glob y un `setdefault` a la vez. Apoyarse en `slugify(target)` es la recompensa de los slugs deterministas del Paso 1: un cuerpo que dice `[[Data Analysis]]` y uno que dice `[[data-analysis]]` ambas se registran bajo `data-analysis`, así que el índice sobrevive a la variación de nombres. Recorrer `WIKI_DIR.glob("*.md")` significa que el árbol de archivos *es* la lista de páginas, sin registro separado que mantener en sincronía.
 
 **🎯 Resultado esperado :** Con la página `welcome` ("See [[Data Analysis]]") y una página `data-analysis` correspondiente, la impresión muestra `data-analysis     <- welcome`.
 
-**🩹 Si sale mal :** Si un objetivo se mapea a la lista vacía, las páginas con backlinks existen pero el escaneo de objetivos no encontró fuente — comprueba que los regex de objetivos vinieron del texto del cuerpo. Si los backlinks listan la propia página, `findall` está leyendo la línea de *título* (los enlaces viven solo en los cuerpos; `[[self]]` honestamente es auto-referencial — decide si cuenta). Si aparece una lista de slugs revuelta/tupla, múltiples fuentes enlazan un objetivo y eso es correcto — el orden es solo el orden del glob.
+**🩹 Si sale mal :** Si un objetivo se mapea a la lista vacía, las páginas con backlinks existen pero el escaneo de objetivos no encontró fuente, comprueba que los regex de objetivos vinieron del texto del cuerpo. Si los backlinks listan la propia página, `findall` está leyendo la línea de *título* (los enlaces viven solo en los cuerpos; `[[self]]` honestamente es auto-referencial, decide si cuenta). Si aparece una lista de slugs revuelta/tupla, múltiples fuentes enlazan un objetivo y eso es correcto, el orden es solo el orden del glob.
 
 ### 4.2 Verifica los backlinks
 
@@ -263,7 +263,7 @@ for slug, source in sorted(backlink_index().items()):
 **🤔 Pregunta(s) socrática(s)**
 
 - Un enlace a `[[Missing Page]]` registra una entrada de backlink para una página que no existe. ¿Qué reportaría tu motor para los objetivos "huérfanos", y por qué importa más un reporte de enlace muerto en una wiki que en un libro?
-- Los backlinks aquí se calculan en cada llamada. Si una wiki crece a miles de páginas, ¿qué *almacenarías en caché* — y qué evento invalidaría ese caché para que nunca sirva enlaces obsoletos?
+- Los backlinks aquí se calculan en cada llamada. Si una wiki crece a miles de páginas, ¿qué *almacenarías en caché*, y qué evento invalidaría ese caché para que nunca sirva enlaces obsoletos?
 
 ## Paso 5: Búsqueda de texto completo
 
@@ -299,11 +299,11 @@ for slug, score in search("pandas grouping"):
     print(f"{score:3}  {slug}")
 ```
 
-Tokenizar título *y* cuerpo significa que una página cuyo título dice "Pandas" se clasifica para una consulta "pandas" incluso si el cuerpo nunca lo escribe — las páginas se autopromocionan. Descartar stopwords ("this", "see") es la ganancia de precisión más barata que hace un motor de búsqueda: `[[see]]` no es algo que nadie busque. Puntuar por conteo de términos crudos es deliberadamente ingenuo — la pregunta de abajo señala por qué "Pandas" que aparece dos veces en el *título* sobre-confía en una página de diez palabras — pero es una clasificación completa y honesta donde más menciones vence a menos.
+Tokenizar título *y* cuerpo significa que una página cuyo título dice "Pandas" se clasifica para una consulta "pandas" incluso si el cuerpo nunca lo escribe, las páginas se autopromocionan. Descartar stopwords ("this", "see") es la ganancia de precisión más barata que hace un motor de búsqueda: `[[see]]` no es algo que nadie busque. Puntuar por conteo de términos crudos es deliberadamente ingenuo, la pregunta de abajo señala por qué "Pandas" que aparece dos veces en el *título* sobre-confía en una página de diez palabras, pero es una clasificación completa y honesta donde más menciones vence a menos.
 
 **🎯 Resultado esperado :** `search("pandas")` clasifica una página cuyo título/cuerpo menciona `pandas` (puntuación 1+) por encima de cualquier página que nunca use la palabra; `search("pandas grouping")` puntúa la página `data-analysis` en 2 (un acierto por cada término de consulta) mientras que la página `welcome` puntúa 0.
 
-**🩹 Si sale mal :** Si una palabra de un carácter como `R` (¡el lenguaje!) desaparece, `len(word) > 1` la filtró — eso es una fuga de política de stopwords, elimina el tope de longitud para uso real. Si nada coincide nunca, `tokenize` recibió un no-string (título `None`) o la clase regex era `.`, con coincidencias en puntuación. Si los resultados vuelven en orden de glob sin importar la puntuación, falta el sort `key=lambda item: -item[1]`.
+**🩹 Si sale mal :** Si una palabra de un carácter como `R` (¡el lenguaje!) desaparece, `len(word) > 1` la filtró, eso es una fuga de política de stopwords, elimina el tope de longitud para uso real. Si nada coincide nunca, `tokenize` recibió un no-string (título `None`) o la clase regex era `.`, con coincidencias en puntuación. Si los resultados vuelven en orden de glob sin importar la puntuación, falta el sort `key=lambda item: -item[1]`.
 
 ### 5.2 Verifica la búsqueda
 
@@ -328,7 +328,7 @@ Tokenizar título *y* cuerpo significa que una página cuyo título dice "Pandas
 
 ## Lo que acabas de construir
 
-Un motor de wiki completo y sin dependencias: páginas slugificadas en disco, un renderizador Markdown-lite, historial de versiones de solo añadido con diffs estilo git, un índice inverso de `[[link]]` y búsqueda de texto completo clasificada. La lección transferible es que *una wiki son tres índices sobre un árbol de archivos* — escaneo de mismo-archivo para backlinks, un registro para historial, un contador de tokens para búsqueda — y que indexar es simplemente "precomputar las respuestas que nadie quiere recomputar". Todo generador de sitios estáticos que hayas usado es este mismo bucle con una interfaz frontal.
+Un motor de wiki completo y sin dependencias: páginas slugificadas en disco, un renderizador Markdown-lite, historial de versiones de solo añadido con diffs estilo git, un índice inverso de `[[link]]` y búsqueda de texto completo clasificada. La lección transferible es que *una wiki son tres índices sobre un árbol de archivos*, escaneo de mismo-archivo para backlinks, un registro para historial, un contador de tokens para búsqueda, y que indexar es simplemente "precomputar las respuestas que nadie quiere recomputar". Todo generador de sitios estáticos que hayas usado es este mismo bucle con una interfaz frontal.
 
 :::tip[Ejecuta una versión más completa sin configuración local]
 [`examples/wiki-engine/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/wiki-engine) en el repo del curso es una versión más completa del código anterior, con un renderizador Markdown-lite que resuelve los enlaces a slugs y un panel de conteo de páginas. Clónalo, o abre todo el repo en un [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), y ejecútalo desde ahí.
@@ -337,12 +337,12 @@ Un motor de wiki completo y sin dependencias: páginas slugificadas en disco, un
 ## Hacia dónde ir desde aquí
 
 - Resuelve `[[links]]` a *slugs* en el renderizador (la pregunta del Paso 2), para que los aciertos nunca se muestren como `href="/Data Analysis"` sino como `href="/data-analysis"`.
-- Añade un reporte `broken_links()` que marque `[[Target]]` donde `page_path(slugify(Target))` no existe — el escáner de enlaces muertos de la propia wiki.
-- Almacena deltas en lugar de instantáneas completas en el historial, reconstruyendo un cuerpo bajo demanda — la mejora de la pregunta del Paso 3 hecha real.
+- Añade un reporte `broken_links()` que marque `[[Target]]` donde `page_path(slugify(Target))` no existe, el escáner de enlaces muertos de la propia wiki.
+- Almacena deltas en lugar de instantáneas completas en el historial, reconstruyendo un cuerpo bajo demanda, la mejora de la pregunta del Paso 3 hecha real.
 - Construye un índice invertido precomputado para la búsqueda (término → slugs), reconstruyelo al guardar, y deja que los títulos superen al texto del cuerpo.
 
 ## Comparte tu proyecto con la clase
 
-¿Construiste algo de lo que te sientas orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado — y su README tiene un recorrido completo, apto para principiantes, para añadir el tuyo mediante un **pull request**, incluso si nunca has usado git antes: hacer fork del repo, crear una rama, hacer commit de tus archivos y abrir el PR, un paso a la vez. No se asume experiencia previa con git.
+¿Construiste algo de lo que te sientas orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado, y su README tiene un recorrido completo, apto para principiantes, para añadir el tuyo mediante un **pull request**, incluso si nunca has usado git antes: hacer fork del repo, crear una rama, hacer commit de tus archivos y abrir el PR, un paso a la vez. No se asume experiencia previa con git.
 
 Bienvenido a escribir Python fuera del navegador. 🎓

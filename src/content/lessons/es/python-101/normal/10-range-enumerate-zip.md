@@ -26,7 +26,7 @@ Los bucles te dieron la repetición; esta lección te entrega los tres ayudantes
 
 ## Range: la secuencia aritmética, perezosa
 
-En la lección anterior sumaste con `range(5)`. Merece una mirada de cerca — es la herramienta clásica para *"hacer esto un número conocido de veces"*:
+En la lección anterior sumaste con `range(5)`. Merece una mirada de cerca, es la herramienta clásica para *"hacer esto un número conocido de veces"*:
 
 ```python
 for i in range(5):
@@ -41,7 +41,7 @@ range(2, 8)     # 2, 3, 4, 5, 6, 7
 range(0, 20, 3) # 0, 3, 6, 9, 12, 15, 18
 ```
 
-Un argumento da $0, 1, \ldots, n-1$; dos dan el intervalo semiabierto $[\text{start}, \text{stop})$; tres añaden la diferencia común $d$. Por lo decisivo, `range` es **perezoso**: registra los parámetros y calcula cada valor solo cuando el bucle lo pide. Pedir un millón de pasos cuesta en memoria lo mismo que pedir cinco — la secuencia jamás se materializa.
+Un argumento da $0, 1, \ldots, n-1$; dos dan el intervalo semiabierto $[\text{start}, \text{stop})$; tres añaden la diferencia común $d$. Por lo decisivo, `range` es **perezoso**: registra los parámetros y calcula cada valor solo cuando el bucle lo pide. Pedir un millón de pasos cuesta en memoria lo mismo que pedir cinco, la secuencia jamás se materializa.
 
 ## Enumerate: la posición, sin el contador
 
@@ -56,7 +56,7 @@ for fruit in fruits:
     i += 1
 ```
 
-El `i += 1` es una tentación a desincronizarse: olvida uno y las etiquetas de posición se desordenan. `enumerate` produce ambas mitades en un paso — el índice y el elemento — así que no hay nada que mantener al día:
+El `i += 1` es una tentación a desincronizarse: olvida uno y las etiquetas de posición se desordenan. `enumerate` produce ambas mitades en un paso, el índice y el elemento, así que no hay nada que mantener al día:
 
 ```python
 for i, fruit in enumerate(fruits):
@@ -71,7 +71,7 @@ Donde un matemático escribe $b_i = a_i + i$ para pegar la posición al valor, `
 
 ## Zip: alineación por posición
 
-Dos listas paralelas — nombres y notas — suplican leerse juntas. `zip` las alinea elemento por elemento:
+Dos listas paralelas, nombres y notas, suplican leerse juntas. `zip` las alinea elemento por elemento:
 
 ```python
 names = ["Alice", "Bob", "Charlie"]
@@ -109,11 +109,11 @@ for i, (name, score) in enumerate(zip(names, scores), start=1):
 print(f"Top score: {max(scores)}")   # Top score: 91
 ```
 
-Lee el encabezado del bucle de dentro hacia afuera: `zip` empareja cada nombre con su nota; los paréntesis `(name, score)` desempaquetan ese par; `enumerate` numera los pares empezando en uno. Cuatro gestos que te habrían costado un contador escrito a mano ahora se leen como la frase que describen — la posición se une al valor, par por par, exactamente como $b_i = a_i + i$ une un índice a cada término.
+Lee el encabezado del bucle de dentro hacia afuera: `zip` empareja cada nombre con su nota; los paréntesis `(name, score)` desempaquetan ese par; `enumerate` numera los pares empezando en uno. Cuatro gestos que te habrían costado un contador escrito a mano ahora se leen como la frase que describen, la posición se une al valor, par por par, exactamente como $b_i = a_i + i$ une un índice a cada término.
 
 ## Errores comunes
 
-- **`range` es excluyente arriba.** `range(5)` produce $0, 1, 2, 3, 4$ — cinco números, ninguno igual a $5$. Piensa en intervalo semiabierto, $[0, 5)$.
+- **`range` es excluyente arriba.** `range(5)` produce $0, 1, 2, 3, 4$, cinco números, ninguno igual a $5$. Piensa en intervalo semiabierto, $[0, 5)$.
 - **`enumerate` sobre un dict.** Iterar un dict da sus claves; `enumerate` numeraría las claves, no los pares. Usa `dict.items()` cuando quieras clave y valor.
 - **`zip` con longitudes desiguales.** Los elementos más allá de la entrada corta se desvanecen en silencio. Nota la pérdida, o rellena con `zip_longest`.
 - **`zip` es un iterador de un solo uso.** En Python 3, `p = zip(a, b)` te da un iterador, no una lista: `list(p)` lo consume, y un segundo `list(p)` queda vacío. Convierte con prisas con `list(zip(a, b))` cuando vayas a volver a visitar los pares.
@@ -121,23 +121,23 @@ Lee el encabezado del bucle de dentro hacia afuera: `zip` empareja cada nombre c
 ## 🧩 Desafíos
 
 <details class="challenge">
-<summary>🧩 Desafío — piensa primero, luego revela</summary>
+<summary>🧩 Desafío, piensa primero, luego revela</summary>
 <div class="challenge__body">
 
 Usa `enumerate` para imprimir cada color de `colors = ["red", "green", "blue"]` con su posición empezando en 1.
 
-<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>for i, color in enumerate(colors, 1): print(f"{i}. {color}")</code> — el argumento <code>start</code> renumera los pares desde uno.</p>
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>for i, color in enumerate(colors, 1): print(f"{i}. {color}")</code>, el argumento <code>start</code> renumera los pares desde uno.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Desafío — piensa primero, luego revela</summary>
+<summary>🧩 Desafío, piensa primero, luego revela</summary>
 <div class="challenge__body">
 
 Con `keys = ["a", "b"]` y `values = [1, 2]`, usa `zip` para construir un diccionario.
 
-<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>dict(zip(keys, values))</code> → <code>{"a": 1, "b": 2}</code> — los pares alineados se vuelven las entradas del mapeo.</p>
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>dict(zip(keys, values))</code> → <code>{"a": 1, "b": 2}</code>, los pares alineados se vuelven las entradas del mapeo.</p>
 
 </div>
 </details>

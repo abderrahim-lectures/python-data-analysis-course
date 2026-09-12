@@ -22,7 +22,7 @@ track: "normal"
 
 ## El lenguaje de las ventanas
 
-Una cadena es una secuencia, y sus caracteres se hallan en las posiciones $0, 1, 2, \ldots, n-1$. El corte pide la ventana entre dos fronteras. La notación es `string[start:stop:step]` — y la única asimetría que memorizar es que **`start` está incluido y `stop` excluido**, la misma regla semiabierta que te enseñó `range`:
+Una cadena es una secuencia, y sus caracteres se hallan en las posiciones $0, 1, 2, \ldots, n-1$. El corte pide la ventana entre dos fronteras. La notación es `string[start:stop:step]`, y la única asimetría que memorizar es que **`start` está incluido y `stop` excluido**, la misma regla semiabierta que te enseñó `range`:
 
 $$
 s[a:b] = s_a s_{a+1} \cdots s_{b-1}, \qquad |s[a:b]| = \max(0, b - a).
@@ -51,7 +51,7 @@ text[:-2]    # 'Pyth' (todo excepto los 2 últimos)
 text[-4:-1]  # 'tho'
 ```
 
-La posición $-k$ es el carácter $n - k$ desde el frente. Pedir los tres últimos es `text[-3:]` — un gesto mental pequeño que se lee con naturalidad: *los tres finales*.
+La posición $-k$ es el carácter $n - k$ desde el frente. Pedir los tres últimos es `text[-3:]`, un gesto mental pequeño que se lee con naturalidad: *los tres finales*.
 
 ## Paso: la zancada
 
@@ -65,11 +65,11 @@ text[::-1]   # 'jihgfedcba'  (¡invertida!)
 text[::-2]   # 'jhfdb'   (cada segundo, invertida)
 ```
 
-Un paso negativo invierte el sentido del recorrido — es la aritmética de $a, a+d, a+2d, \ldots$ con $d$ negativa. La inversión canónica `[::-1]` merece una sola memorización firme, porque de ella todo lo más fino es una variación.
+Un paso negativo invierte el sentido del recorrido, es la aritmética de $a, a+d, a+2d, \ldots$ con $d$ negativa. La inversión canónica `[::-1]` merece una sola memorización firme, porque de ella todo lo más fino es una variación.
 
 ## El corte nunca da error
 
-Indexar una posición que no existe lanza `IndexError`. El corte es más amable — se sujeta al intervalo disponible y devuelve lo que existe, sin exigir nada por el camino:
+Indexar una posición que no existe lanza `IndexError`. El corte es más amable, se sujeta al intervalo disponible y devuelve lo que existe, sin exigir nada por el camino:
 
 ```python
 text = "hi"
@@ -89,7 +89,7 @@ nums[1:4]     # [1, 2, 3]
 nums[::-1]    # [5, 4, 3, 2, 1, 0]
 ```
 
-Lo que aprendiste sobre caracteres se transfiere a cualquier colección ordenada — y, más allá de la lectura, las listas aceptan asignación de rebanada donde las cadenas no: `nums[1:3] = [9, 9]` intercambia una ventana en su sitio.
+Lo que aprendiste sobre caracteres se transfiere a cualquier colección ordenada, y, más allá de la lectura, las listas aceptan asignación de rebanada donde las cadenas no: `nums[1:3] = [9, 9]` intercambia una ventana en su sitio.
 
 ## Un ejemplo resuelto: diseccionar un nombre de archivo
 
@@ -102,7 +102,7 @@ stem      = filename[:-4]     # 'report_2026_summary'
 print(stem, extension)        # report_2026_summary txt
 ```
 
-`[-3:]` lee *desde tres posiciones antes del final, hasta el final* — los últimos tres caracteres. `[:-4]` lee *desde el principio, hasta cuatro posiciones antes del final*, que es todo lo anterior al punto. La regla del intervalo semiabierto reaparece: `[:-4]` excluye la posición $n - 4$, el punto mismo, así que la cola `.txt` nunca se cuela en el tallo. Una regla, ambos extremos.
+`[-3:]` lee *desde tres posiciones antes del final, hasta el final*, los últimos tres caracteres. `[:-4]` lee *desde el principio, hasta cuatro posiciones antes del final*, que es todo lo anterior al punto. La regla del intervalo semiabierto reaparece: `[:-4]` excluye la posición $n - 4$, el punto mismo, así que la cola `.txt` nunca se cuela en el tallo. Una regla, ambos extremos.
 
 Y lo inverso de leer por partes es leer entero: la comprobación de palíndromo es una línea del mismo instrumento:
 
@@ -113,31 +113,31 @@ print(word == word[::-1])     # True
 
 ## Errores comunes
 
-- **Confundir indexar con cortar.** `text[3]` es un carácter, una reclamación; `text[3:4]` es un carácter, una petición — y una cadena nueva.
+- **Confundir indexar con cortar.** `text[3]` es un carácter, una reclamación; `text[3:4]` es un carácter, una petición, y una cadena nueva.
 - **Dar por incluido `stop`.** `text[0:3]` entrega los caracteres en $0, 1, 2$; la posición $3$ es donde se cierra la ventana.
-- **Asignar rebanada a cadenas.** Las cadenas se niegan — esa mutabilidad es un privilegio de las listas.
-- **El signo del paso debe concordar con la dirección.** `"abcdef"[0:5:-1]` está vacío — una ventana que camina a la derecha y un paso que apunta a la izquierda no se encuentran en ninguna parte. Mantén inicio, fin y paso apuntando en la misma dirección.
+- **Asignar rebanada a cadenas.** Las cadenas se niegan, esa mutabilidad es un privilegio de las listas.
+- **El signo del paso debe concordar con la dirección.** `"abcdef"[0:5:-1]` está vacío, una ventana que camina a la derecha y un paso que apunta a la izquierda no se encuentran en ninguna parte. Mantén inicio, fin y paso apuntando en la misma dirección.
 
 ## 🧩 Desafíos
 
 <details class="challenge">
-<summary>🧩 Desafío — piensa primero, luego revela</summary>
+<summary>🧩 Desafío, piensa primero, luego revela</summary>
 <div class="challenge__body">
 
 Invierte la cadena `"racecar"` con corte.
 
-<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>"racecar"[::-1]</code> → <code>"racecar"</code> — se lee igual en ambos sentidos, que es exactamente por qué un palíndromo sobrevive a su propia inversión.</p>
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>"racecar"[::-1]</code> → <code>"racecar"</code>, se lee igual en ambos sentidos, que es exactamente por qué un palíndromo sobrevive a su propia inversión.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Desafío — piensa primero, luego revela</summary>
+<summary>🧩 Desafío, piensa primero, luego revela</summary>
 <div class="challenge__body">
 
 De `"abcdefghij"`, extrae cada tercer carácter: `a`, `d`, `g`, `j`.
 
-<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>"abcdefghij"[::3]</code> → <code>"adgj"</code> — el inicio por defecto te fija en el índice 0 y el paso 3 te hace avanzar por la progresión aritmética.</p>
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> <code>"abcdefghij"[::3]</code> → <code>"adgj"</code>, el inicio por defecto te fija en el índice 0 y el paso 3 te hace avanzar por la progresión aritmética.</p>
 
 </div>
 </details>

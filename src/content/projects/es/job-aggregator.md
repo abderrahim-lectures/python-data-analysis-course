@@ -1,12 +1,12 @@
 ---
 title: "Construye un Agregador de Ofertas de Empleo"
-description: "Extrae datos de múltiples fuentes estilo bolsa de trabajo, elimina duplicados entre ellas, y alerta sobre nuevas coincidencias contra un filtro de palabras clave — con requests/BeautifulSoup y pandas, sin clave de API necesaria."
+description: "Extrae datos de múltiples fuentes estilo bolsa de trabajo, elimina duplicados entre ellas, y alerta sobre nuevas coincidencias contra un filtro de palabras clave, con requests/BeautifulSoup y pandas, sin clave de API necesaria."
 ---
 
 
 # 🕷️ Construye un Agregador de Ofertas de Empleo
 
-[Extrae y Analiza un Sitio Web en Vivo](/es/proyectos/scrape-analyze) obtuvo un sitio y convirtió su HTML en un CSV. Buscar empleo de verdad significa vigilar *varias* fuentes a la vez, ninguna de las cuales concuerda en marcado, y preocuparse solo por lo que es genuinamente nuevo desde la última vez que revisaste. Este proyecto construye eso: analiza ofertas de un puñado de páginas de "bolsa de trabajo" estructuradas de forma diferente, combínalas en una tabla, elimina duplicados de las publicaciones que aparecen en más de una bolsa, filtra a los roles que coinciden con una palabra clave que te importa, y alerta solo sobre coincidencias nuevas — no las mismas diez ofertas cada ejecución. Asume Python a nivel 101 y, para el paso de eliminación de duplicados/filtrado, comodidad con pandas a nivel de Análisis de Datos — filtrado, `drop_duplicates`, máscaras booleanas.
+[Extrae y Analiza un Sitio Web en Vivo](/es/proyectos/scrape-analyze) obtuvo un sitio y convirtió su HTML en un CSV. Buscar empleo de verdad significa vigilar *varias* fuentes a la vez, ninguna de las cuales concuerda en marcado, y preocuparse solo por lo que es genuinamente nuevo desde la última vez que revisaste. Este proyecto construye eso: analiza ofertas de un puñado de páginas de "bolsa de trabajo" estructuradas de forma diferente, combínalas en una tabla, elimina duplicados de las publicaciones que aparecen en más de una bolsa, filtra a los roles que coinciden con una palabra clave que te importa, y alerta solo sobre coincidencias nuevas, no las mismas diez ofertas cada ejecución. Asume Python a nivel 101 y, para el paso de eliminación de duplicados/filtrado, comodidad con pandas a nivel de Análisis de Datos, filtrado, `drop_duplicates`, máscaras booleanas.
 
 Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
@@ -19,21 +19,21 @@ Esto es opcional y no calificado. Consulta [Proyectos del mundo real](/es/proyec
 
 ## Dónde ejecutar esto
 
-**Localmente con `uv`** es el camino que siguen los pasos de esta lección, y el recomendado — es Python real corriendo en tu propia máquina, el mismo movimiento de "gradúate a Python real" que cualquier otro proyecto de esta sección. La sección de Configuración de abajo explica cómo instalarlo.
+**Localmente con `uv`** es el camino que siguen los pasos de esta lección, y el recomendado, es Python real corriendo en tu propia máquina, el mismo movimiento de "gradúate a Python real" que cualquier otro proyecto de esta sección. La sección de Configuración de abajo explica cómo instalarlo.
 
 **GitHub Codespaces** es una alternativa de configuración cero si prefieres no instalar nada localmente todavía: abre [todo el repositorio del curso en un Codespace gratuito](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python y `uv` ya están instalados, según el `.devcontainer/devcontainer.json` del repositorio) y ejecuta los mismos comandos `uv` exactos desde una terminal en tu pestaña del navegador.
 
-**Google Colab, Kaggle Notebooks, o Binder** son un ajuste genuinamente bueno para este proyecto en particular — sin GPU, sin clave de API, sin proceso de larga duración que gestionar, y todo el pipeline cabe cómodamente en un puñado de celdas. Una versión real y ejecutable en notebook (los mismos analizadores, clave de eliminación de duplicados, y filtro de palabras clave que los pasos de abajo) vive en [`examples/job-aggregator/notebook.es.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/job-aggregator/notebook.es.ipynb). Haz clic en una insignia para lanzarlo directamente, sin instalación local en absoluto:
+**Google Colab, Kaggle Notebooks, o Binder** son un ajuste genuinamente bueno para este proyecto en particular, sin GPU, sin clave de API, sin proceso de larga duración que gestionar, y todo el pipeline cabe cómodamente en un puñado de celdas. Una versión real y ejecutable en notebook (los mismos analizadores, clave de eliminación de duplicados, y filtro de palabras clave que los pasos de abajo) vive en [`examples/job-aggregator/notebook.es.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/job-aggregator/notebook.es.ipynb). Haz clic en una insignia para lanzarlo directamente, sin instalación local en absoluto:
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/job-aggregator/notebook.es.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/job-aggregator/notebook.es.ipynb)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fjob-aggregator%2Fnotebook.es.ipynb)
 
-Sé honesto contigo mismo sobre la compensación, sin embargo: esta es una forma de menor fidelidad de experimentar el proyecto que un proyecto `uv` local real — sin archivos separados, sin estructura de proyecto real, solo celdas en un notebook. Trátalo como una forma rápida de experimentar, no el camino principal.
+Sé honesto contigo mismo sobre la compensación, sin embargo: esta es una forma de menor fidelidad de experimentar el proyecto que un proyecto `uv` local real, sin archivos separados, sin estructura de proyecto real, solo celdas en un notebook. Trátalo como una forma rápida de experimentar, no el camino principal.
 
 ## Configuración
 
-`uv` es una sola herramienta que reemplaza la cadena habitual de "instala Python, luego instala pip, luego instala una herramienta de entorno virtual, luego instala paquetes" — puede instalar y gestionar versiones de Python por sí misma, junto con las dependencias de tu proyecto.
+`uv` es una sola herramienta que reemplaza la cadena habitual de "instala Python, luego instala pip, luego instala una herramienta de entorno virtual, luego instala paquetes", puede instalar y gestionar versiones de Python por sí misma, junto con las dependencias de tu proyecto.
 
 **macOS / Linux** (terminal):
 
@@ -65,12 +65,12 @@ Sin clave de API, sin registro de nivel gratuito, nada que configurar antes de p
 
 ## Una nota sobre lo que este proyecto extrae
 
-Las bolsas de trabajo reales — LinkedIn, Indeed, y sitios similares — prohíben explícitamente el scraping automatizado en sus términos de servicio, activamente detectan y bloquean scrapers, y cambian su marcado con suficiente frecuencia como para que cualquier lección construida contra ellos se rompiera en meses. Nada de eso es una buena base para un proyecto de curso destinado a seguir funcionando durante años.
+Las bolsas de trabajo reales, LinkedIn, Indeed, y sitios similares, prohíben explícitamente el scraping automatizado en sus términos de servicio, activamente detectan y bloquean scrapers, y cambian su marcado con suficiente frecuencia como para que cualquier lección construida contra ellos se rompiera en meses. Nada de eso es una buena base para un proyecto de curso destinado a seguir funcionando durante años.
 
-En su lugar, este proyecto viene con su propio pequeño **conjunto de datos de muestra incluido**: tres archivos HTML estáticos bajo [`examples/job-aggregator/sample_data/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/job-aggregator/sample_data), cada uno con estilo de una "bolsa de trabajo" de juguete diferente (`board_alpha.html`, `board_beta.html`, `board_gamma.html`), cada uno usando HTML genuinamente diferente para sus ofertas — un diseño de tarjeta div-y-span, una lista con viñetas, y una `<table>` simple. Dos de las diez ofertas entre ellos son el mismo trabajo publicado en más de una bolsa, a propósito, para que haya algo real que deduplicar. Estás analizando HTML real con llamadas reales de BeautifulSoup en todo momento — la única diferencia de extraer un sitio en vivo es que `requests.get()` se reemplaza por leer un archivo local, así que la lección nunca depende del tiempo de actividad, marcado, o tolerancia de algún sitio externo hacia ser extraído.
+En su lugar, este proyecto viene con su propio pequeño **conjunto de datos de muestra incluido**: tres archivos HTML estáticos bajo [`examples/job-aggregator/sample_data/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/job-aggregator/sample_data), cada uno con estilo de una "bolsa de trabajo" de juguete diferente (`board_alpha.html`, `board_beta.html`, `board_gamma.html`), cada uno usando HTML genuinamente diferente para sus ofertas, un diseño de tarjeta div-y-span, una lista con viñetas, y una `<table>` simple. Dos de las diez ofertas entre ellos son el mismo trabajo publicado en más de una bolsa, a propósito, para que haya algo real que deduplicar. Estás analizando HTML real con llamadas reales de BeautifulSoup en todo momento, la única diferencia de extraer un sitio en vivo es que `requests.get()` se reemplaza por leer un archivo local, así que la lección nunca depende del tiempo de actividad, marcado, o tolerancia de algún sitio externo hacia ser extraído.
 
 :::tip[Siempre verifica robots.txt y los términos de servicio antes de extraer cualquier sitio real]
-Si extiendes este proyecto para apuntar a una bolsa de trabajo real y en vivo o cualquier otro sitio real, verifica primero el `robots.txt` de ese sitio (ej. `https://example.com/robots.txt`) y los términos de servicio. `robots.txt` indica qué partes de un sitio las herramientas automatizadas pueden y no pueden obtener. Muchas bolsas de trabajo van más allá y prohíben explícitamente el scraping en sus términos — lee esos, no solo `robots.txt`, ya que un sitio puede permitir una URL en `robots.txt` mientras aún prohíbe el acceso automatizado en sus términos de servicio.
+Si extiendes este proyecto para apuntar a una bolsa de trabajo real y en vivo o cualquier otro sitio real, verifica primero el `robots.txt` de ese sitio (ej. `https://example.com/robots.txt`) y los términos de servicio. `robots.txt` indica qué partes de un sitio las herramientas automatizadas pueden y no pueden obtener. Muchas bolsas de trabajo van más allá y prohíben explícitamente el scraping en sus términos, lee esos, no solo `robots.txt`, ya que un sitio puede permitir una URL en `robots.txt` mientras aún prohíbe el acceso automatizado en sus términos de servicio.
 :::
 
 ## Paso 1: Analiza una sola página de ofertas en campos estructurados
@@ -130,7 +130,7 @@ Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
 
 - ✅ `uv run python aggregate.py` se ejecuta sin errores.
 - ✅ Imprime exactamente 4 líneas, una por cada oferta en `board_alpha.html`.
-- ✅ Cada línea tiene un título, empresa, y ubicación reales — no `None` o una cadena vacía.
+- ✅ Cada línea tiene un título, empresa, y ubicación reales, no `None` o una cadena vacía.
 
 **🤔 Pregunta(s) socrática(s)**
 
@@ -138,11 +138,11 @@ Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
 - Cada campo aquí es requerido por el analizador (`card.find(...)` llama inmediatamente a `.get_text(...)` en el resultado). ¿Qué pasa si a una oferta en una bolsa con formato diferente le falta su `<span>` de ubicación por completo? ¿Dónde exactamente fallaría eso, y cómo te ayudaría el mensaje de error a encontrarlo?
 
 ## Paso 2: Analiza múltiples fuentes y combínalas
-### 2.1 `board_beta.html` y `board_gamma.html` contienen el mismo *tipo* de datos — título, empresa,...
+### 2.1 `board_beta.html` y `board_gamma.html` contienen el mismo *tipo* de datos, título, empresa,...
 
 **👟 Pista inicial :**
 
-`board_beta.html` y `board_gamma.html` contienen el mismo *tipo* de datos — título, empresa, ubicación, descripción — pero ninguno usa el marcado de Alpha. Beta lista trabajos como elementos `<li class="listing">` con un `<a class="position-title">`; Gamma los lista como filas de tabla `<tr class="job-row">` con celdas `<td>` simples. Un solo scraper de "un selector para todas las bolsas" no existe — en su lugar, escribe una pequeña función analizadora por fuente, cada una devolviendo exactamente la misma forma de diccionario, para que el resto del pipeline nunca tenga que saber de qué bolsa vino una oferta:
+`board_beta.html` y `board_gamma.html` contienen el mismo *tipo* de datos, título, empresa, ubicación, descripción, pero ninguno usa el marcado de Alpha. Beta lista trabajos como elementos `<li class="listing">` con un `<a class="position-title">`; Gamma los lista como filas de tabla `<tr class="job-row">` con celdas `<td>` simples. Un solo scraper de "un selector para todas las bolsas" no existe, en su lugar, escribe una pequeña función analizadora por fuente, cada una devolviendo exactamente la misma forma de diccionario, para que el resto del pipeline nunca tenga que saber de qué bolsa vino una oferta:
 
 ```python
 # aggregate.py (continued)
@@ -221,7 +221,7 @@ Ejecuta el código de abajo y confirma que funciona.
 ```bash
 uv run python aggregate.py
 ```
-Deberías ver 10 ofertas crudas en total (4 + 3 + 3) — "crudas" porque nada se ha deduplicado todavía.
+Deberías ver 10 ofertas crudas en total (4 + 3 + 3), "crudas" porque nada se ha deduplicado todavía.
 
 **🎯 Resultado esperado :**
 
@@ -249,7 +249,7 @@ Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
 
 **👟 Pista inicial :**
 
-Dos de las diez ofertas son exactamente el mismo trabajo, publicado en dos bolsas diferentes: un rol de "Senior Python Developer" en Northwind Analytics aparece tanto en Alpha como en Beta, y un rol de "Data Analyst" en Contoso Retail aparece tanto en Alpha como en Gamma. Dejado así, una alerta posterior reportaría la misma vacante dos veces. La solución es una clave de deduplicación — algo lo suficientemente estable como para reconocer "el mismo trabajo" entre fuentes aunque la redacción de la descripción difiera ligeramente de bolsa a bolsa:
+Dos de las diez ofertas son exactamente el mismo trabajo, publicado en dos bolsas diferentes: un rol de "Senior Python Developer" en Northwind Analytics aparece tanto en Alpha como en Beta, y un rol de "Data Analyst" en Contoso Retail aparece tanto en Alpha como en Gamma. Dejado así, una alerta posterior reportaría la misma vacante dos veces. La solución es una clave de deduplicación, algo lo suficientemente estable como para reconocer "el mismo trabajo" entre fuentes aunque la redacción de la descripción difiera ligeramente de bolsa a bolsa:
 
 ```python
 # aggregate.py (continued)
@@ -294,7 +294,7 @@ Ejecuta el código de abajo y confirma que funciona.
 uv run python aggregate.py
 ```
 Deberías ver "Deduped 10 listings -> 8 unique jobs (2 duplicate posting(s) removed)".
-La clave de deduplicación aquí es texto normalizado de `title + company`, no un hash de la fila completa — deliberadamente. Hacer hash de la fila completa (incluyendo `description`) trataría las descripciones ligeramente diferentes de Alpha y Beta del mismo trabajo como dos trabajos *diferentes*, derrotando el propósito.
+La clave de deduplicación aquí es texto normalizado de `title + company`, no un hash de la fila completa, deliberadamente. Hacer hash de la fila completa (incluyendo `description`) trataría las descripciones ligeramente diferentes de Alpha y Beta del mismo trabajo como dos trabajos *diferentes*, derrotando el propósito.
 
 **🎯 Resultado esperado :**
 
@@ -383,9 +383,9 @@ Ejecuta el código de abajo y confirma que funciona.
 ```bash
 uv run python filter_alerts.py
 ```
-La primera ejecución debería reportar 6 coincidencias nuevas (cada oferta cuyo título o descripción menciona "python"). Ejecútalo de nuevo sin cambiar nada, y debería reportar cero coincidencias nuevas — `seen.json` recuerda sobre qué ya alertó, exactamente como un agregador programado real revisando cada mañana necesitaría.
+La primera ejecución debería reportar 6 coincidencias nuevas (cada oferta cuyo título o descripción menciona "python"). Ejecútalo de nuevo sin cambiar nada, y debería reportar cero coincidencias nuevas, `seen.json` recuerda sobre qué ya alertó, exactamente como un agregador programado real revisando cada mañana necesitaría.
 :::tip[Un filtro de palabra clave es solo la versión más simple de "coincide con lo que me importa"]
-`str.contains` con un patrón unido por `|` es intencionalmente el filtro más simple posible — suficientemente bueno para probar que la lógica de alertas funciona. Una versión más realista podría coincidir contra varios *grupos* de palabras clave (ej. "python" O "django" para roles de backend, "remoto" como un filtro requerido separado en `location`), o puntuar una coincidencia por cuántas palabras clave coinciden en lugar de tratarla como pasa/no pasa. Haz que la versión simple funcione primero; la lógica de coincidencia es la parte más fácil de reemplazar después.
+`str.contains` con un patrón unido por `|` es intencionalmente el filtro más simple posible, suficientemente bueno para probar que la lógica de alertas funciona. Una versión más realista podría coincidir contra varios *grupos* de palabras clave (ej. "python" O "django" para roles de backend, "remoto" como un filtro requerido separado en `location`), o puntuar una coincidencia por cuántas palabras clave coinciden en lugar de tratarla como pasa/no pasa. Haz que la versión simple funcione primero; la lógica de coincidencia es la parte más fácil de reemplazar después.
 :::
 
 **🎯 Resultado esperado :**
@@ -411,23 +411,23 @@ Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
 
 ## ⚠️ Errores comunes
 
-- **Escribir un analizador universal en lugar de uno por fuente.** Es tentador intentar un solo conjunto de selectores que "mayormente funciona" entre bolsas. No funcionará — Alpha, Beta, y Gamma no comparten un solo nombre de clase. Una pequeña función por fuente, todas devolviendo la misma forma de diccionario, es menos código en general que luchar contra un selector de talla única.
+- **Escribir un analizador universal en lugar de uno por fuente.** Es tentador intentar un solo conjunto de selectores que "mayormente funciona" entre bolsas. No funcionará, Alpha, Beta, y Gamma no comparten un solo nombre de clase. Una pequeña función por fuente, todas devolviendo la misma forma de diccionario, es menos código en general que luchar contra un selector de talla única.
 - **Deduplicar con la clave equivocada.** Hacer hash de la oferta completa (incluyendo `description`) significa que dos publicaciones del mismo trabajo con redacción ligeramente diferente nunca coinciden, derrotando el propósito de deduplicar en absoluto. Elige una clave estable a través de *cómo* se describe un trabajo, no solo *si* es idéntico palabra por palabra.
 - **Perder el estado de "nuevo desde la última ejecución" entre ejecuciones.** Sin algo como `seen.json` persistido en disco, cada ejecución re-reporta cada coincidencia como nueva, que es exactamente el comportamiento ruidoso que una alerta real debería evitar. Este es también el primer lugar donde un trabajo cron real o proceso en segundo plano difiere de un script de una sola vez: el estado tiene que sobrevivir entre invocaciones, no solo vivir en una variable.
 - **Olvidar `na=False` en un filtro de cadena de pandas.** `Series.str.contains` en una columna con cualquier valor faltante lanza o produce resultados `NaN` sin él, lo cual puede silenciosamente eliminar filas de una máscara booleana de formas fáciles de pasar por alto.
 
 ## Lo que acabas de construir
 
-Un pipeline completo de analizar → combinar → deduplicar → filtrar → alertar: análisis HTML real a través de múltiples fuentes estructuradas de forma diferente, una estrategia de deduplicación que sobrevive a redacción casi duplicada, y una alerta de palabra clave que recuerda lo que ya te dijo. Apunta los mismos cuatro pasos a un conjunto diferente de fuentes amigables con el scraping (después de verificar su `robots.txt` y términos de servicio) y el pipeline no cambia — solo las funciones analizadoras por fuente lo hacen.
+Un pipeline completo de analizar → combinar → deduplicar → filtrar → alertar: análisis HTML real a través de múltiples fuentes estructuradas de forma diferente, una estrategia de deduplicación que sobrevive a redacción casi duplicada, y una alerta de palabra clave que recuerda lo que ya te dijo. Apunta los mismos cuatro pasos a un conjunto diferente de fuentes amigables con el scraping (después de verificar su `robots.txt` y términos de servicio) y el pipeline no cambia, solo las funciones analizadoras por fuente lo hacen.
 
 ## A dónde ir desde aquí
 
-- Conecta una notificación real en lugar de imprimir a la terminal — `smtplib` para un correo, o un webhook `POST` a un canal de Discord o Slack, disparado solo para `new_matches`.
+- Conecta una notificación real en lugar de imprimir a la terminal, `smtplib` para un correo, o un webhook `POST` a un canal de Discord o Slack, disparado solo para `new_matches`.
 - Programa el pipeline completo para correr periódicamente (un trabajo cron, GitHub Actions en un horario, o un bucle simple con `time.sleep()`) para que revise nuevas ofertas por sí mismo en lugar de manualmente.
-- Puntúa las coincidencias en lugar de tratar el filtro de palabra clave como pasa/no pasa — ej. cuenta cuántos de varios grupos de palabras clave coinciden en una oferta, y ordena `new_matches` por esa puntuación antes de alertar.
-- Cambia los archivos CSV/JSON por una pequeña base de datos SQLite (el módulo integrado `sqlite3` de Python) una vez que estés rastreando suficiente historial como para querer consultarlo — ej. "¿cuántas nuevas ofertas de Python aparecieron cada semana este mes?"
+- Puntúa las coincidencias en lugar de tratar el filtro de palabra clave como pasa/no pasa, ej. cuenta cuántos de varios grupos de palabras clave coinciden en una oferta, y ordena `new_matches` por esa puntuación antes de alertar.
+- Cambia los archivos CSV/JSON por una pequeña base de datos SQLite (el módulo integrado `sqlite3` de Python) una vez que estés rastreando suficiente historial como para querer consultarlo, ej. "¿cuántas nuevas ofertas de Python aparecieron cada semana este mes?"
 
 ## Comparte tu proyecto con la clase
 
-¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado — y su README tiene un recorrido completo y amigable para principiantes sobre cómo agregar el tuyo vía un **pull request**, incluso si nunca has usado git antes: hacer fork del repositorio, crear una rama, confirmar tus archivos, y abrir el PR, un paso a la vez. No se asume experiencia previa con git.
+¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado, y su README tiene un recorrido completo y amigable para principiantes sobre cómo agregar el tuyo vía un **pull request**, incluso si nunca has usado git antes: hacer fork del repositorio, crear una rama, confirmar tus archivos, y abrir el PR, un paso a la vez. No se asume experiencia previa con git.
 

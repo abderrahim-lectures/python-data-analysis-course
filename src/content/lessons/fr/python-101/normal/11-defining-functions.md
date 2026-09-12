@@ -22,7 +22,7 @@ track: "normal"
 
 ## De la formule à la machine nommée
 
-Les mathématiques abhorrent la répétition. Vous avez appris $f(x) = x^2 - 5x + 6$ comme une *règle* — une définition, employée mille fois, sur mille entrées différentes :
+Les mathématiques abhorrent la répétition. Vous avez appris $f(x) = x^2 - 5x + 6$ comme une *règle*, une définition, employée mille fois, sur mille entrées différentes :
 
 $$
 f(x) = x^2 - 5x + 6, \qquad f(2) = 0.
@@ -37,7 +37,7 @@ def add(a, b):
 result = add(3, 5)  # 8
 ```
 
-Le nom, les parenthèses tenant les paramètres $a, b$, les deux points qui amorcent la recette — voilà la définition. L'appel `add(3, 5)` consiste à appliquer la règle en $a=3$, $b=5$, exactement comme $f(2)$ applique une règle en $x=2$.
+Le nom, les parenthèses tenant les paramètres $a, b$, les deux points qui amorcent la recette, voilà la définition. L'appel `add(3, 5)` consiste à appliquer la règle en $a=3$, $b=5$, exactement comme $f(2)$ applique une règle en $x=2$.
 
 ## Définir et appeler
 
@@ -51,7 +51,7 @@ def greet(name):
 greet("Alice")  # Hello, Alice!
 ```
 
-Trois parties méritent un nom. Les **paramètres** sont les variables de la définition — les fentes d'entrée $x$. Les **arguments** sont les valeurs concrètes fournies au site d'appel — l'entrée $2$. Et la ligne entre triples guillemets à l'intérieur est la **docstring** : de la documentation vivant à côté du code, pour que `help(greet)` puisse répondre ce que fait la fonction.
+Trois parties méritent un nom. Les **paramètres** sont les variables de la définition, les fentes d'entrée $x$. Les **arguments** sont les valeurs concrètes fournies au site d'appel, l'entrée $2$. Et la ligne entre triples guillemets à l'intérieur est la **docstring** : de la documentation vivant à côté du code, pour que `help(greet)` puisse répondre ce que fait la fonction.
 
 ## Return : la porte de sortie
 
@@ -65,7 +65,7 @@ result = add(3, 5)          # result == 8
 printed = print("8")        # printed est None — print ne renvoie rien
 ```
 
-Une fonction sans `return` renvoie silencieusement `None` — la machine ne produit aucune sortie. Quand vous voulez que le résultat arithmétique de votre fonction continue de circuler, souvenez-vous : `return`, pas `print`.
+Une fonction sans `return` renvoie silencieusement `None`, la machine ne produit aucune sortie. Quand vous voulez que le résultat arithmétique de votre fonction continue de circuler, souvenez-vous : `return`, pas `print`.
 
 ## Paramètres par défaut
 
@@ -92,7 +92,7 @@ def create_user(name, age, role="student"):
 user = create_user(age=25, name="Alice", role="admin")
 ```
 
-Les arguments nommés peuvent venir dans n'importe quel ordre — le nom du paramètre est l'étiquette de chaque paquet. Un appel qui nomme ses entrées se lit comme une phrase au lieu d'un code à décoder.
+Les arguments nommés peuvent venir dans n'importe quel ordre, le nom du paramètre est l'étiquette de chaque paquet. Un appel qui nomme ses entrées se lit comme une phrase au lieu d'un code à décoder.
 
 ## *args et **kwargs
 
@@ -144,7 +144,7 @@ La même règle, trois entrées. La formule $f(x) = x^2 - 5x + 6$ devient une ma
 
 ## Pièges courants
 
-- **Arguments par défaut mutables.** `def f(items=[])` crée *une* liste partagée entre tous les appels — les éléments s'empilent d'un appel à l'autre. Mettez `None` par défaut et construisez la liste à l'intérieur.
+- **Arguments par défaut mutables.** `def f(items=[])` crée *une* liste partagée entre tous les appels, les éléments s'empilent d'un appel à l'autre. Mettez `None` par défaut et construisez la liste à l'intérieur.
 - **Oublier `return`.** Une fonction sans retour rend `None` ; vous demandiez une valeur et avez reçu une ombre.
 - **Trop de paramètres.** Passé trois ou quatre, les fentes deviennent un casse-tête. Regroupez les arguments affines dans un dict ou un dataclass.
 - **Appeler une fonction définie plus bas.** Python exécute de haut en bas ; appeler `f()` avant que le `def f` n'atteigne l'interpréteur lève une `NameError`. Définissez avant d'appeler.
@@ -152,18 +152,18 @@ La même règle, trois entrées. La formule $f(x) = x^2 - 5x + 6$ devient une ma
 ## 🧩 Défis
 
 <details class="challenge">
-<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
+<summary>🧩 Défi, réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
 Écrivez `is_palindrome(text)` qui renvoie `True` quand la chaîne se lit pareil dans les deux sens ; ignorez la casse.
 
-<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>def is_palindrome(text): return text.lower() == text.lower()[::-1]</code> — la mise en minuscules symétrise la comparaison, et la tranche inversée <code>[::-1]</code> est l'image miroir.</p>
+<p class="challenge__answer">💡 <strong>Réponse :</strong> <code>def is_palindrome(text): return text.lower() == text.lower()[::-1]</code>, la mise en minuscules symétrise la comparaison, et la tranche inversée <code>[::-1]</code> est l'image miroir.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
+<summary>🧩 Défi, réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
 Écrivez `fizzbuzz(n)` qui renvoie une liste de 1 à $n$, remplaçant les multiples de 3 par `"Fizz"`, les multiples de 5 par `"Buzz"` et les multiples des deux par `"FizzBuzz"`.

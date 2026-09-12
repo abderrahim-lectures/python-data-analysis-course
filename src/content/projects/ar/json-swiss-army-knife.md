@@ -21,7 +21,7 @@ tags: ["cli", "data-pipeline", "developer-tools"]
 
 ## أين تُشغّل هذا
 
-**محليًا باستخدام `uv`** هو المسار الأساسي — هذه أداة CLI تقرأ الملفات وتكتبها.
+**محليًا باستخدام `uv`** هو المسار الأساسي ، هذه أداة CLI تقرأ الملفات وتكتبها.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/json-swiss-army-knife/notebook.ar.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/json-swiss-army-knife/notebook.ar.ipynb)
@@ -280,7 +280,7 @@ def convert_from_json(data: dict, to_format: str) -> str:
 
 ## ما بنيته للتو
 
-أداة CLI واحدة تتعامل مع العمليات الأربع الأكثر شيوعًا على JSON: التنسيق والتحقق والاستعلام وتحويل الصيغ. يمشي محرك الاستعلامات بترميز النقاط عبر البنى المتداخلة بشكل متكرر ويوسّع الرموز البديلة. يسدّ تحويل الصيغ الفجوة بين JSON وYAML وTOML لسير عمل خطوط البيانات. هذه الأداة تحل ألمًا حقيقيًا عند المطوّرين — كل فريق لديه شخص يظل يشغّل `python -m json.tool` ويتمنى لو كان يفعل أكثر.
+أداة CLI واحدة تتعامل مع العمليات الأربع الأكثر شيوعًا على JSON: التنسيق والتحقق والاستعلام وتحويل الصيغ. يمشي محرك الاستعلامات بترميز النقاط عبر البنى المتداخلة بشكل متكرر ويوسّع الرموز البديلة. يسدّ تحويل الصيغ الفجوة بين JSON وYAML وTOML لسير عمل خطوط البيانات. هذه الأداة تحل ألمًا حقيقيًا عند المطوّرين ، كل فريق لديه شخص يظل يشغّل `python -m json.tool` ويتمنى لو كان يفعل أكثر.
 
 :::tip[شغّل نسخة أكمل دون أي إعداد محلي]
 [`examples/json-swiss-army-knife/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/json-swiss-army-knife) في مستودع الدورة نسخة أغنى باستعلامات متدفقة ومقارنة JSON والتحقق من المخطط وواجهة CLI موصولة من البداية للنهاية. استنسخه، أو افتح المستودع كاملًا في [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course)، وشغّله من هناك.
@@ -294,6 +294,6 @@ def convert_from_json(data: dict, to_format: str) -> str:
 
 ## شارك مشروعك مع الصف
 
-بنيت شيئًا فخورًا به؟ [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) معرض لمشاريع طلاب آخرين قدَّموها — وملف README الخاص به يحتوي شرحًا كاملًا وودودًا للمبتدئين لإضافة مشروعك عبر **pull request**، حتى لو لم تستخدم git من قبل قط: عمل fork للمستودع، وإنشاء فرع، وتثبيت ملفاتك، وفتح الـ PR، خطوة بخطوة. لا يُفترَض أي خبرة سابقة بـ git.
+بنيت شيئًا فخورًا به؟ [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) معرض لمشاريع طلاب آخرين قدَّموها ، وملف README الخاص به يحتوي شرحًا كاملًا وودودًا للمبتدئين لإضافة مشروعك عبر **pull request**، حتى لو لم تستخدم git من قبل قط: عمل fork للمستودع، وإنشاء فرع، وتثبيت ملفاتك، وفتح الـ PR، خطوة بخطوة. لا يُفترَض أي خبرة سابقة بـ git.
 
 مرحبًا بك في كتابة Python خارج المتصفح. 🎓

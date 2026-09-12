@@ -1,37 +1,37 @@
 ---
 title: "Convierte un Código Base en un Grafo de Conocimiento"
-description: "Gradúate del playground del navegador a Python real: analiza los archivos Python de un código base real con el módulo ast, construye un grafo de su estructura con networkx, y visualízalo y consúltalo — sin clave de API, sin acceso a red."
+description: "Gradúate del playground del navegador a Python real: analiza los archivos Python de un código base real con el módulo ast, construye un grafo de su estructura con networkx, y visualízalo y consúltalo, sin clave de API, sin acceso a red."
 ---
 
 
 # 🕸️ Convierte un Código Base en un Grafo de Conocimiento
 
-Cada otro proyecto de esta sección eventualmente recurre a una clave de API, un registro de nivel gratuito, o un sitio web en vivo. Este no necesita nada de eso. Escribirás una herramienta que lee código fuente Python de la misma forma que lo hace el propio intérprete — analizándolo en un **AST** (árbol de sintaxis abstracta) con el módulo `ast` integrado de la biblioteca estándar — luego convierte lo que encuentra en un **grafo**: archivos, funciones y clases como nodos, relaciones "importa"/"llama"/"definido en" como aristas. Ese es un ejemplo real y funcional de una estructura de datos de muy atrás en el curso apareciendo en una herramienta genuinamente útil, no un ejercicio de clase: un grafo es solo nodos y aristas, y resulta que la propia estructura de un código base ya es uno.
+Cada otro proyecto de esta sección eventualmente recurre a una clave de API, un registro de nivel gratuito, o un sitio web en vivo. Este no necesita nada de eso. Escribirás una herramienta que lee código fuente Python de la misma forma que lo hace el propio intérprete, analizándolo en un **AST** (árbol de sintaxis abstracta) con el módulo `ast` integrado de la biblioteca estándar, luego convierte lo que encuentra en un **grafo**: archivos, funciones y clases como nodos, relaciones "importa"/"llama"/"definido en" como aristas. Ese es un ejemplo real y funcional de una estructura de datos de muy atrás en el curso apareciendo en una herramienta genuinamente útil, no un ejercicio de clase: un grafo es solo nodos y aristas, y resulta que la propia estructura de un código base ya es uno.
 
-Esto asume Python 101 y comodidad con funciones e imports — no se requiere nada de Análisis de Datos, y nada aquí llama a ningún modelo de IA o servicio web. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
+Esto asume Python 101 y comodidad con funciones e imports, no se requiere nada de Análisis de Datos, y nada aquí llama a ningún modelo de IA o servicio web. Es opcional y no calificado; consulta [Proyectos del mundo real](/es/proyectos) para la lista completa y creciente.
 
 ## 🎯 Lo que harás
 
-1. Instalar `uv` y configurar un pequeño proyecto con `networkx` y `pyvis` — sin clave de API, sin registro, nada que configurar.
+1. Instalar `uv` y configurar un pequeño proyecto con `networkx` y `pyvis`, sin clave de API, sin registro, nada que configurar.
 2. Analizar el AST de un solo archivo Python para encontrar sus definiciones de función, definiciones de clase, e imports.
 3. Recorrer un repositorio completo y construir un grafo con todo lo que encuentres, usando `networkx`.
 4. Añadir aristas para relaciones de **import** y **llamada**, para que el grafo capture cómo las piezas realmente se conectan, no solo qué existe.
 5. Visualizar el grafo como una página HTML interactiva con `pyvis` (y, opcionalmente, una imagen estática con `matplotlib`).
-6. Escribir una pequeña función de consulta — "¿qué llama esta función?", "¿qué importa este módulo?" — y ejecutar todo contra un repositorio real.
+6. Escribir una pequeña función de consulta, "¿qué llama esta función?", "¿qué importa este módulo?", y ejecutar todo contra un repositorio real.
 
 ## Dónde ejecutar esto
 
-**Localmente con `uv`** es el camino principal y recomendado — Python real, en tu propia máquina, leyendo archivos reales de una carpeta real en disco.
+**Localmente con `uv`** es el camino principal y recomendado, Python real, en tu propia máquina, leyendo archivos reales de una carpeta real en disco.
 
-**GitHub Codespaces** también funciona genial aquí: abre [todo el repositorio del curso en un Codespace gratuito](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python y `uv` ya están instalados, según el `.devcontainer/devcontainer.json` del repositorio) y ejecuta los mismos comandos `uv` exactos desde una terminal en tu pestaña del navegador — y ya tienes un repositorio real ahí mismo para apuntar la herramienta.
+**GitHub Codespaces** también funciona genial aquí: abre [todo el repositorio del curso en un Codespace gratuito](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) (Node, Python y `uv` ya están instalados, según el `.devcontainer/devcontainer.json` del repositorio) y ejecuta los mismos comandos `uv` exactos desde una terminal en tu pestaña del navegador, y ya tienes un repositorio real ahí mismo para apuntar la herramienta.
 
-**Google Colab o Kaggle Notebooks** son una opción genuinamente fácil también, no solo un respaldo — este proyecto no necesita GPU, ni un proceso de servidor de larga duración, ni clave de API, solo `pip install`s y computación pura. Haz `!pip install networkx pyvis` en una celda, luego ya sea `!git clone` de un repositorio público para analizar o sube una pequeña carpeta de archivos `.py`, y el resto del código de abajo funciona esencialmente sin cambios (la salida HTML de pyvis incluso puede mostrarse en línea en una celda de notebook).
+**Google Colab o Kaggle Notebooks** son una opción genuinamente fácil también, no solo un respaldo, este proyecto no necesita GPU, ni un proceso de servidor de larga duración, ni clave de API, solo `pip install`s y computación pura. Haz `!pip install networkx pyvis` en una celda, luego ya sea `!git clone` de un repositorio público para analizar o sube una pequeña carpeta de archivos `.py`, y el resto del código de abajo funciona esencialmente sin cambios (la salida HTML de pyvis incluso puede mostrarse en línea en una celda de notebook).
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/codebase-knowledge-graph/notebook.es.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/codebase-knowledge-graph/notebook.es.ipynb)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fcodebase-knowledge-graph%2Fnotebook.es.ipynb)
 
-Un notebook listo con todo el código de abajo — incluyendo los archivos de juguete `sample_repo/` escritos en línea, así que no hay nada que subir o clonar — está en [`examples/codebase-knowledge-graph/notebook.es.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/codebase-knowledge-graph/notebook.es.ipynb). Haz clic en una insignia de arriba para lanzarlo directamente.
+Un notebook listo con todo el código de abajo, incluyendo los archivos de juguete `sample_repo/` escritos en línea, así que no hay nada que subir o clonar, está en [`examples/codebase-knowledge-graph/notebook.es.ipynb`](https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/codebase-knowledge-graph/notebook.es.ipynb). Haz clic en una insignia de arriba para lanzarlo directamente.
 
 ## Configuración
 
@@ -65,12 +65,12 @@ cd codebase-graph
 uv add networkx pyvis matplotlib
 ```
 
-`networkx` es una biblioteca de grafos gratuita y de Python puro — maneja la estructura de datos de grafo real (nodos, aristas, recorrido) para que no tengas que escribir una desde cero. `pyvis` convierte un grafo de `networkx` en una página HTML interactiva que puedes arrastrar y hacer zoom en un navegador. `matplotlib` es opcional, usado para una alternativa de imagen estática en el Paso 5.
+`networkx` es una biblioteca de grafos gratuita y de Python puro, maneja la estructura de datos de grafo real (nodos, aristas, recorrido) para que no tengas que escribir una desde cero. `pyvis` convierte un grafo de `networkx` en una página HTML interactiva que puedes arrastrar y hacer zoom en un navegador. `matplotlib` es opcional, usado para una alternativa de imagen estática en el Paso 5.
 
-Esa es toda la configuración. **Sin clave de API, sin archivo `.env`, sin registro de nivel gratuito, sin variable de entorno que configurar** — cada paso de aquí en adelante lee archivos locales y ejecuta computación local.
+Esa es toda la configuración. **Sin clave de API, sin archivo `.env`, sin registro de nivel gratuito, sin variable de entorno que configurar**, cada paso de aquí en adelante lee archivos locales y ejecuta computación local.
 
 :::tip[No se necesita acceso a internet después de la instalación]
-Una vez que `uv add` termine de descargar estos tres paquetes, el resto completo de este proyecto puede correr con tu red desconectada. Vale la pena notar esto: todo lo demás en esta sección del curso gira alrededor de llamar a un modelo remoto o un sitio web remoto, y es fácil empezar a asumir que cada proyecto Python "real" necesita una llamada de red en algún lugar. Este es un contraejemplo útil — el análisis estático y la teoría de grafos son completamente offline.
+Una vez que `uv add` termine de descargar estos tres paquetes, el resto completo de este proyecto puede correr con tu red desconectada. Vale la pena notar esto: todo lo demás en esta sección del curso gira alrededor de llamar a un modelo remoto o un sitio web remoto, y es fácil empezar a asumir que cada proyecto Python "real" necesita una llamada de red en algún lugar. Este es un contraejemplo útil, el análisis estático y la teoría de grafos son completamente offline.
 :::
 
 ## Paso 1: Analiza el AST de un solo archivo
@@ -78,7 +78,7 @@ Una vez que `uv add` termine de descargar estos tres paquetes, el resto completo
 
 **👟 Pista inicial :**
 
-Antes de analizar un repositorio completo, haz que un archivo funcione. El módulo `ast` integrado de Python convierte código fuente en un árbol de objetos que describe su estructura — la misma representación que el propio intérprete construye antes de ejecutar tu código. `ast.parse` te da la raíz de ese árbol; `ast.walk` te permite visitar cada nodo en él.
+Antes de analizar un repositorio completo, haz que un archivo funcione. El módulo `ast` integrado de Python convierte código fuente en un árbol de objetos que describe su estructura, la misma representación que el propio intérprete construye antes de ejecutar tu código. `ast.parse` te da la raíz de ese árbol; `ast.walk` te permite visitar cada nodo en él.
 Crea un pequeño archivo de prueba, `sample.py`:
 
 ```python
@@ -145,9 +145,9 @@ Ejecuta el código de abajo y confirma que funciona.
 ```bash
 uv run python explore_ast.py
 ```
-Deberías ver `function: greet`, `class: Greeter`, e `import: os` impresos — más `function: greet_twice`, ya que `ast.walk` visita *cada* nodo en el árbol, incluyendo una definición de método anidada dentro de una clase. Ese anidamiento importa para el Paso 2: una función encontrada de esta forma podría ser una función genuina de nivel superior, o podría ser un método que solo tiene sentido adjunto a su clase, y el grafo necesita mantener esa distinción en lugar de aplanar todo en un montón indiferenciado de "funciones."
-:::tip[ast.parse puede fallar — y eso es esperado, no un bug en tu código]
-No todo archivo `.py` en un repositorio real se analiza limpiamente: un archivo podría ser código Python 2 sobrante en un repositorio antiguo, un archivo de plantilla con extensión `.py` que no es Python válido en absoluto, o genuinamente tener un error de sintaxis que alguien olvidó arreglar. `ast.parse` lanza `SyntaxError` exactamente en este caso. Envolverlo en `try`/`except SyntaxError` y saltar el archivo con una advertencia — en lugar de dejar que toda la herramienta falle en el archivo uno de dos mil — es práctica estándar para cualquier herramienta que recorra un código base real, y está incorporado en la versión del Paso 2.
+Deberías ver `function: greet`, `class: Greeter`, e `import: os` impresos, más `function: greet_twice`, ya que `ast.walk` visita *cada* nodo en el árbol, incluyendo una definición de método anidada dentro de una clase. Ese anidamiento importa para el Paso 2: una función encontrada de esta forma podría ser una función genuina de nivel superior, o podría ser un método que solo tiene sentido adjunto a su clase, y el grafo necesita mantener esa distinción en lugar de aplanar todo en un montón indiferenciado de "funciones."
+:::tip[ast.parse puede fallar, y eso es esperado, no un bug en tu código]
+No todo archivo `.py` en un repositorio real se analiza limpiamente: un archivo podría ser código Python 2 sobrante en un repositorio antiguo, un archivo de plantilla con extensión `.py` que no es Python válido en absoluto, o genuinamente tener un error de sintaxis que alguien olvidó arreglar. `ast.parse` lanza `SyntaxError` exactamente en este caso. Envolverlo en `try`/`except SyntaxError` y saltar el archivo con una advertencia, en lugar de dejar que toda la herramienta falle en el archivo uno de dos mil, es práctica estándar para cualquier herramienta que recorra un código base real, y está incorporado en la versión del Paso 2.
 :::
 
 **🎯 Resultado esperado :**
@@ -163,7 +163,7 @@ Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
 **✅ Lista de verificación**
 
 - ✅ `uv run python explore_ast.py` se ejecuta sin errores e imprime `function: greet`, `class: Greeter`, e `import: os`.
-- ✅ `function: greet_twice` también se imprime, aunque está anidada dentro de `Greeter` — confirmando que `ast.walk` visita cada nodo, no solo los de nivel superior.
+- ✅ `function: greet_twice` también se imprime, aunque está anidada dentro de `Greeter`, confirmando que `ast.walk` visita cada nodo, no solo los de nivel superior.
 - ✅ Puedes explicar, en una frase, la diferencia entre `ast.Import` (`import os`) y `ast.ImportFrom` (`from x import y`).
 
 **🤔 Pregunta(s) socrática(s)**
@@ -176,7 +176,7 @@ Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
 
 **👟 Pista inicial :**
 
-La estructura de un solo archivo es un comienzo; el valor de todo un repositorio de archivos, funciones, clases y sus relaciones es lo que hace de esto un verdadero *grafo de conocimiento* en lugar de una lista. `networkx.DiGraph` (grafo dirigido — las aristas tienen una dirección, ya que "el archivo A importa el módulo B" no es la misma afirmación que "el módulo B importa el archivo A") es la estructura de datos que contiene todo esto.
+La estructura de un solo archivo es un comienzo; el valor de todo un repositorio de archivos, funciones, clases y sus relaciones es lo que hace de esto un verdadero *grafo de conocimiento* en lugar de una lista. `networkx.DiGraph` (grafo dirigido, las aristas tienen una dirección, ya que "el archivo A importa el módulo B" no es la misma afirmación que "el módulo B importa el archivo A") es la estructura de datos que contiene todo esto.
 
 ```python
 # build_graph.py (excerpt -- Step 2)
@@ -234,7 +234,7 @@ if __name__ == "__main__":
     graph = build_graph(Path("sample_repo"))
     print(f"{graph.number_of_nodes()} nodes, {graph.number_of_edges()} edges")
 ```
-Cada nodo en un grafo de `networkx` es solo un valor hasheable — aquí, una cadena simple como `"models.py"` o `"models.py::Order"` — con un diccionario opcional de atributos (`kind`, `short_name`) adjunto. Usar `"file.py::name"` como id del nodo, en lugar de solo `"name"`, importa tan pronto como un repositorio tenga dos archivos que ambos definan una función llamada `helper` — sin el prefijo de archivo, `networkx` silenciosamente los trataría como el *mismo* nodo.
+Cada nodo en un grafo de `networkx` es solo un valor hasheable, aquí, una cadena simple como `"models.py"` o `"models.py::Order"`, con un diccionario opcional de atributos (`kind`, `short_name`) adjunto. Usar `"file.py::name"` como id del nodo, en lugar de solo `"name"`, importa tan pronto como un repositorio tenga dos archivos que ambos definan una función llamada `helper`, sin el prefijo de archivo, `networkx` silenciosamente los trataría como el *mismo* nodo.
 
 **🎯 Resultado esperado :**
 
@@ -255,14 +255,14 @@ Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
 **🤔 Pregunta(s) socrática(s)**
 
 - ¿Por qué usar `"file.py::function_name"` como id de nodo en lugar de solo `"function_name"`? ¿Qué específicamente saldría mal en un repositorio con dos archivos `utils.py` en subcarpetas diferentes, cada uno definiendo una función llamada `run`?
-- `graph.add_node(module, kind="module")` corre cada vez que se encuentra un import, incluso si ese módulo ya fue añadido por un archivo anterior. ¿`networkx` crea un nodo duplicado, o simplemente deja el existente en paz? Revisa la documentación de `networkx` (o simplemente pruébalo) — ¿por qué ese comportamiento hace que este código sea seguro de llamar repetidamente sin verificar "¿he visto este módulo antes" tú mismo?
+- `graph.add_node(module, kind="module")` corre cada vez que se encuentra un import, incluso si ese módulo ya fue añadido por un archivo anterior. ¿`networkx` crea un nodo duplicado, o simplemente deja el existente en paz? Revisa la documentación de `networkx` (o simplemente pruébalo), ¿por qué ese comportamiento hace que este código sea seguro de llamar repetidamente sin verificar "¿he visto este módulo antes" tú mismo?
 
 ## Paso 3: Añade aristas de llamada
 ### 3.1 Archivos, funciones, clases e imports describen lo que *existe*. Para capturar cómo las piez...
 
 **👟 Pista inicial :**
 
-Archivos, funciones, clases e imports describen lo que *existe*. Para capturar cómo las piezas realmente *se usan* entre sí, necesitas una relación más: qué función llama a cuál. Esta es la parte menos precisa de la herramienta — el análisis estático no siempre puede estar seguro de a qué apunta una llamada (más sobre esto en los pitfalls de abajo) — pero una versión de "mejor esfuerzo, emparejada por nombre" sigue siendo genuinamente útil.
+Archivos, funciones, clases e imports describen lo que *existe*. Para capturar cómo las piezas realmente *se usan* entre sí, necesitas una relación más: qué función llama a cuál. Esta es la parte menos precisa de la herramienta, el análisis estático no siempre puede estar seguro de a qué apunta una llamada (más sobre esto en los pitfalls de abajo), pero una versión de "mejor esfuerzo, emparejada por nombre" sigue siendo genuinamente útil.
 
 ```python
 # build_graph.py (excerpt -- Step 3, extends parse_file's per-function work)
@@ -291,7 +291,7 @@ Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
 
 **👟 Pista inicial :**
 
-`node.func` en un `ast.Call` es o un `ast.Name` (una llamada directa como `add(...)`) o un `ast.Attribute` (una llamada con punto como `utils.add(...)` o `self.total()`) — obteniendo `.id` o `.attr` respectivamente te da el nombre corto de cualquier forma, aunque nota que tanto `utils.add(...)` como `some_other_object.add(...)` colapsan a la misma cadena, `"add"`. Esa es una limitación real, no un descuido, y es exactamente por qué el emparejamiento del siguiente paso es por *nombre*, no por certeza.
+`node.func` en un `ast.Call` es o un `ast.Name` (una llamada directa como `add(...)`) o un `ast.Attribute` (una llamada con punto como `utils.add(...)` o `self.total()`), obteniendo `.id` o `.attr` respectivamente te da el nombre corto de cualquier forma, aunque nota que tanto `utils.add(...)` como `some_other_object.add(...)` colapsan a la misma cadena, `"add"`. Esa es una limitación real, no un descuido, y es exactamente por qué el emparejamiento del siguiente paso es por *nombre*, no por certeza.
 Una vez que cada función/clase/método en el repositorio ha sido añadido como un nodo (Paso 2), una segunda pasada resuelve cada llamada registrada contra cualquier nodo que comparta ese nombre corto, y añade una arista `"calls"`:
 
 ```python
@@ -308,7 +308,7 @@ def add_call_edges(graph, calls_by_function):
                 if target != caller:
                     graph.add_edge(caller, target, kind="calls")
 ```
-Esta estructura de dos pasadas — primero recolectar cada definición, *luego* resolver llamadas contra el conjunto completo — es necesaria porque una función definida cerca de la parte superior de un archivo puede llamar a una definida cerca del final; una sola pasada de arriba a abajo se perdería completamente las referencias hacia adelante.
+Esta estructura de dos pasadas, primero recolectar cada definición, *luego* resolver llamadas contra el conjunto completo, es necesaria porque una función definida cerca de la parte superior de un archivo puede llamar a una definida cerca del final; una sola pasada de arriba a abajo se perdería completamente las referencias hacia adelante.
 
 **🎯 Resultado esperado :**
 
@@ -328,15 +328,15 @@ Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
 
 **🤔 Pregunta(s) socrática(s)**
 
-- Dos clases no relacionadas en tu repositorio de prueba ambas definen un método llamado `run`. Si una tercera función llama `some_object.run()`, ¿añadirá el emparejamiento por nombre de esta herramienta una arista `"calls"` a *ambos* métodos `run`, o solo al correcto? ¿Qué haría falta para arreglar eso — y vale la pena la complejidad añadida para una herramienta de aprendizaje como esta?
+- Dos clases no relacionadas en tu repositorio de prueba ambas definen un método llamado `run`. Si una tercera función llama `some_object.run()`, ¿añadirá el emparejamiento por nombre de esta herramienta una arista `"calls"` a *ambos* métodos `run`, o solo al correcto? ¿Qué haría falta para arreglar eso, y vale la pena la complejidad añadida para una herramienta de aprendizaje como esta?
 - `add_call_edges` evita crear un self-loop (`if target != caller`). ¿Qué patrón real de Python crearía un self-loop aquí si esa verificación fuera eliminada, y sería un self-loop realmente *incorrecto*, o solo visualmente ruidoso en el renderizado del Paso 4?
 
 ## Paso 4: Visualiza el grafo
-### 4.1 Un grafo con unos pocos cientos de nodos es ilegible como una lista de aristas — visualizarl...
+### 4.1 Un grafo con unos pocos cientos de nodos es ilegible como una lista de aristas, visualizarl...
 
 **👟 Pista inicial :**
 
-Un grafo con unos pocos cientos de nodos es ilegible como una lista de aristas — visualizarlo es lo que realmente te permite *ver* la forma de un código base. `pyvis` envuelve la salida de `networkx` en una página HTML autocontenida e interactiva: arrastra nodos, haz zoom, pasa el cursor para detalles, sin servidor necesario más allá de abrir el archivo en un navegador.
+Un grafo con unos pocos cientos de nodos es ilegible como una lista de aristas, visualizarlo es lo que realmente te permite *ver* la forma de un código base. `pyvis` envuelve la salida de `networkx` en una página HTML autocontenida e interactiva: arrastra nodos, haz zoom, pasa el cursor para detalles, sin servidor necesario más allá de abrir el archivo en un navegador.
 
 ```python
 # build_graph.py (excerpt -- Step 4)
@@ -409,7 +409,7 @@ def visualize_matplotlib(graph, output_path="graph.png"):
     fig.savefig(output_path, dpi=150)
 ```
 :::tip[pyvis para explorar, matplotlib para compartir una única vista fija]
-La interactividad de `pyvis` (arrastrar, hacer zoom, pasar el cursor) es genuinamente mejor para *explorar* un grafo desconocido — puedes separar un clúster denso para ver qué está realmente conectado con qué. La imagen estática de `matplotlib` es mejor una vez que ya sabes qué quieres mostrar y solo necesitas una imagen fija e incrustable — una captura de pantalla de una página `pyvis` no refleja un layout que elegiste a propósito. Ninguna es estrictamente mejor; resuelven momentos diferentes en el mismo flujo de trabajo.
+La interactividad de `pyvis` (arrastrar, hacer zoom, pasar el cursor) es genuinamente mejor para *explorar* un grafo desconocido, puedes separar un clúster denso para ver qué está realmente conectado con qué. La imagen estática de `matplotlib` es mejor una vez que ya sabes qué quieres mostrar y solo necesitas una imagen fija e incrustable, una captura de pantalla de una página `pyvis` no refleja un layout que elegiste a propósito. Ninguna es estrictamente mejor; resuelven momentos diferentes en el mismo flujo de trabajo.
 :::
 
 **🎯 Resultado esperado :**
@@ -424,14 +424,14 @@ Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
 
 **✅ Lista de verificación**
 
-- ✅ `graph.html` se abre en un navegador y muestra un grafo real y no vacío — no una página en blanco.
+- ✅ `graph.html` se abre en un navegador y muestra un grafo real y no vacío, no una página en blanco.
 - ✅ Arrastrar un nodo lo mueve, y las aristas conectadas lo siguen.
 - ✅ Pasar el cursor sobre un nodo muestra su tipo e id completo en un tooltip.
 - ✅ (Si probaste la versión de matplotlib) `graph.png` existe y se abre como una imagen real, con colores de nodo distinguibles.
 
 **🤔 Pregunta(s) socrática(s)**
 
-- `net.barnes_hut()` ejecuta una simulación física para distribuir los nodos. ¿Qué esperarías que le pase a la utilidad de ese layout mientras el grafo crece de 20 nodos a 2,000 — y es eso una limitación específica de `pyvis`, o una limitación de *cualquier* algoritmo de layout de grafo de propósito general en un grafo grande y densamente conectado?
+- `net.barnes_hut()` ejecuta una simulación física para distribuir los nodos. ¿Qué esperarías que le pase a la utilidad de ese layout mientras el grafo crece de 20 nodos a 2,000, y es eso una limitación específica de `pyvis`, o una limitación de *cualquier* algoritmo de layout de grafo de propósito general en un grafo grande y densamente conectado?
 - La versión de matplotlib pasa `seed=42` a `spring_layout`. ¿Qué cambiaría sobre la imagen resultante, ejecución tras ejecución, si eliminaras la semilla? ¿Por qué podría importar un layout reproducible si estás comparando dos versiones del mismo grafo a lo largo del tiempo (ej. "cómo cambió la estructura de este repositorio después de una refactorización")?
 
 ## Paso 5: Consulta el grafo
@@ -439,7 +439,7 @@ Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
 
 **👟 Pista inicial :**
 
-Un grafo que solo puedes mirar ya es útil, pero un grafo al que puedes *hacerle preguntas* es más útil — y ya que `networkx` te da recorrido de grafo real, esto es un puñado de líneas, no un sistema nuevo.
+Un grafo que solo puedes mirar ya es útil, pero un grafo al que puedes *hacerle preguntas* es más útil, y ya que `networkx` te da recorrido de grafo real, esto es un puñado de líneas, no un sistema nuevo.
 
 ```python
 # build_graph.py (excerpt -- Step 5)
@@ -479,7 +479,7 @@ Ejecuta el código de abajo y confirma que funciona.
 >>> who_imports(graph, "utils")
 ['main.py', 'models.py']
 ```
-`graph.out_edges(node, data=True)` y `graph.in_edges(node, data=True)` son las dos direcciones de "seguir una arista desde este nodo" — saliente para "qué llama/importa esto", entrante para "qué llama/importa a esto." Esa direccionalidad es exactamente por qué el Paso 2 construyó un `DiGraph` (dirigido) en lugar de un `Graph` no dirigido: "A importa B" y "B importa A" son afirmaciones diferentes y verificables, y un grafo no dirigido habría desechado esa distinción.
+`graph.out_edges(node, data=True)` y `graph.in_edges(node, data=True)` son las dos direcciones de "seguir una arista desde este nodo", saliente para "qué llama/importa esto", entrante para "qué llama/importa a esto." Esa direccionalidad es exactamente por qué el Paso 2 construyó un `DiGraph` (dirigido) en lugar de un `Graph` no dirigido: "A importa B" y "B importa A" son afirmaciones diferentes y verificables, y un grafo no dirigido habría desechado esa distinción.
 
 **🎯 Resultado esperado :**
 
@@ -499,8 +499,8 @@ Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
 
 **🤔 Pregunta(s) socrática(s)**
 
-- `what_does_it_call` empareja por `short_name`, que — como planteó la pregunta socrática del Paso 3 — puede colisionar entre clases no relacionadas con un método del mismo nombre. Escribe una consulta que en su lugar tome un id de nodo *completamente calificado* (ej. `"models.py::Order.total_with_tax"`) directamente. ¿Cuál es la compensación entre los dos estilos de consulta — uno es más fácil de escribir, el otro no es ambiguo?
-- ¿Podrías escribir un `what_calls_it(graph, short_name)` — el reverso de `what_does_it_call` — usando `in_edges` en lugar de `out_edges`? ¿Qué te diría eso que `what_does_it_call` no puede?
+- `what_does_it_call` empareja por `short_name`, que, como planteó la pregunta socrática del Paso 3, puede colisionar entre clases no relacionadas con un método del mismo nombre. Escribe una consulta que en su lugar tome un id de nodo *completamente calificado* (ej. `"models.py::Order.total_with_tax"`) directamente. ¿Cuál es la compensación entre los dos estilos de consulta, uno es más fácil de escribir, el otro no es ambiguo?
+- ¿Podrías escribir un `what_calls_it(graph, short_name)`, el reverso de `what_does_it_call`, usando `in_edges` en lugar de `out_edges`? ¿Qué te diría eso que `what_does_it_call` no puede?
 
 ## Paso 6: Ejecútalo de principio a fin contra un repositorio real
 ### 6.1 Todo hasta ahora ha estado construyendo hacia una sola cosa: apuntar la herramienta terminad...
@@ -521,11 +521,11 @@ Deberías ver la salida esperada sin errores.
 
 Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
 
-### 6.2 Una vez que eso funcione, apúntalo a algo real — **el propio repositorio de este curso es un...
+### 6.2 Una vez que eso funcione, apúntalo a algo real, **el propio repositorio de este curso es un...
 
 **👟 Pista inicial :**
 
-Una vez que eso funcione, apúntalo a algo real — **el propio repositorio de este curso es un código base Python genuino y no trivial ya sentado en tu disco si lo has clonado**, o usa cualquier otro repositorio local que tengas:
+Una vez que eso funcione, apúntalo a algo real, **el propio repositorio de este curso es un código base Python genuino y no trivial ya sentado en tu disco si lo has clonado**, o usa cualquier otro repositorio local que tengas:
 
 ```bash
 uv run python build_graph.py /path/to/python-data-analysis-course/examples --html course_graph.html
@@ -555,25 +555,25 @@ Consulta la sección ⚠️ Errores comunes abajo para los problemas habituales.
 
 ## ⚠️ Errores comunes
 
-- **Que `ast.parse` falle en un archivo no debería matar todo el escaneo.** Un solo archivo con un error de sintaxis, un archivo no-Python con extensión `.py`, o código Python 2 antiguo dejado en un repositorio lanzará `SyntaxError`. Captúralo, salta ese archivo con una advertencia, y continúa — el `try`/`except` del Paso 1 está ahí específicamente para que un archivo malo de dos mil no termine la ejecución.
-- **El análisis estático no puede ver imports dinámicos o llamadas dinámicas.** `importlib.import_module("some_module")`, `__import__(name)`, o una llamada construida desde una variable (`getattr(obj, method_name)()`) no aparecen como un nodo `ast.Import`/`ast.Call` con un nombre literal de la forma en que lo hacen `import os` o `add(1, 2)` — esta herramienta, como cualquier analizador puramente estático, simplemente no verá esas aristas. Esa es una limitación real y permanente, no un bug que arreglar; un análisis completamente dinámico necesitaría realmente *ejecutar* el código y rastrear qué pasa, lo cual es un tipo diferente (y mucho más pesado) de herramienta.
-- **La resolución de llamadas basada en nombre produce falsos positivos.** El `add_call_edges` del Paso 3 empareja llamadas solo por nombre corto, así que dos clases no relacionadas que cada una define un método `run` obtendrán ambas una arista de cualquier llamada que parezca `something.run()`, incluso si solo una de ellas era realmente la intencionada. Esta es una compensación legítima para un proyecto de aprendizaje — la resolución completa de llamadas necesita inferencia de tipos real, que es lo que hace un servidor de lenguaje o una herramienta como `pyright` internamente.
-- **Los grafos en un repositorio grande se vuelven demasiado densos para leer visualmente.** Unos pocos cientos de archivos con imports cruzados pesados convierte el layout dirigido por fuerza de `pyvis` en un enredo ilegible — los layouts basados en física separan los nodos, pero no reducen el conteo de aristas. Filtra antes de visualizar: elige una subcarpeta, el vecindario de un archivo (solo sus imports/llamadores directos), o usa las funciones de consulta del Paso 5 para responder una pregunta específica en lugar de intentar renderizar todo el grafo a la vez.
+- **Que `ast.parse` falle en un archivo no debería matar todo el escaneo.** Un solo archivo con un error de sintaxis, un archivo no-Python con extensión `.py`, o código Python 2 antiguo dejado en un repositorio lanzará `SyntaxError`. Captúralo, salta ese archivo con una advertencia, y continúa, el `try`/`except` del Paso 1 está ahí específicamente para que un archivo malo de dos mil no termine la ejecución.
+- **El análisis estático no puede ver imports dinámicos o llamadas dinámicas.** `importlib.import_module("some_module")`, `__import__(name)`, o una llamada construida desde una variable (`getattr(obj, method_name)()`) no aparecen como un nodo `ast.Import`/`ast.Call` con un nombre literal de la forma en que lo hacen `import os` o `add(1, 2)`, esta herramienta, como cualquier analizador puramente estático, simplemente no verá esas aristas. Esa es una limitación real y permanente, no un bug que arreglar; un análisis completamente dinámico necesitaría realmente *ejecutar* el código y rastrear qué pasa, lo cual es un tipo diferente (y mucho más pesado) de herramienta.
+- **La resolución de llamadas basada en nombre produce falsos positivos.** El `add_call_edges` del Paso 3 empareja llamadas solo por nombre corto, así que dos clases no relacionadas que cada una define un método `run` obtendrán ambas una arista de cualquier llamada que parezca `something.run()`, incluso si solo una de ellas era realmente la intencionada. Esta es una compensación legítima para un proyecto de aprendizaje, la resolución completa de llamadas necesita inferencia de tipos real, que es lo que hace un servidor de lenguaje o una herramienta como `pyright` internamente.
+- **Los grafos en un repositorio grande se vuelven demasiado densos para leer visualmente.** Unos pocos cientos de archivos con imports cruzados pesados convierte el layout dirigido por fuerza de `pyvis` en un enredo ilegible, los layouts basados en física separan los nodos, pero no reducen el conteo de aristas. Filtra antes de visualizar: elige una subcarpeta, el vecindario de un archivo (solo sus imports/llamadores directos), o usa las funciones de consulta del Paso 5 para responder una pregunta específica en lugar de intentar renderizar todo el grafo a la vez.
 
 ## Lo que acabas de construir
 
-Una herramienta que lee código fuente Python real de la misma forma en que lo analiza el propio intérprete, convierte relaciones de archivo/función/clase/import/llamada en una estructura de datos de grafo honesta, y te permite tanto *ver* esa estructura (interactivamente, con `pyvis`) como *consultarla* (programáticamente, con recorrido de `networkx`) — todo sin una sola llamada de red. La misma forma de tres pasos — analizar con `ast`, construir un grafo con `networkx`, consultarlo o visualizarlo — escala desde el `sample_repo/` de juguete hasta un código base real de miles de archivos; nada sobre el enfoque fue simplificado en algo que deja de funcionar a mayor escala, solo la *legibilidad* de una visualización completa sí lo hace.
+Una herramienta que lee código fuente Python real de la misma forma en que lo analiza el propio intérprete, convierte relaciones de archivo/función/clase/import/llamada en una estructura de datos de grafo honesta, y te permite tanto *ver* esa estructura (interactivamente, con `pyvis`) como *consultarla* (programáticamente, con recorrido de `networkx`), todo sin una sola llamada de red. La misma forma de tres pasos, analizar con `ast`, construir un grafo con `networkx`, consultarlo o visualizarlo, escala desde el `sample_repo/` de juguete hasta un código base real de miles de archivos; nada sobre el enfoque fue simplificado en algo que deja de funcionar a mayor escala, solo la *legibilidad* de una visualización completa sí lo hace.
 
 ## A dónde ir desde aquí
 
-- Añade un nuevo tipo de arista: "hereda de," leyendo la lista `bases` de una definición de clase (`ast.ClassDef.bases`) — una adición genuinamente útil para entender la estructura de un código base orientado a objetos que esta lección no cubrió.
-- Calcula métricas de grafo reales con los algoritmos integrados de `networkx` en lugar de estimar a ojo la visualización — `nx.pagerank` o centralidad de grado de entrada para encontrar las funciones más "centrales" de un código base, o `nx.weakly_connected_components` para encontrar clústeres aislados de código que nada más toca.
+- Añade un nuevo tipo de arista: "hereda de," leyendo la lista `bases` de una definición de clase (`ast.ClassDef.bases`), una adición genuinamente útil para entender la estructura de un código base orientado a objetos que esta lección no cubrió.
+- Calcula métricas de grafo reales con los algoritmos integrados de `networkx` en lugar de estimar a ojo la visualización, `nx.pagerank` o centralidad de grado de entrada para encontrar las funciones más "centrales" de un código base, o `nx.weakly_connected_components` para encontrar clústeres aislados de código que nada más toca.
 - Prueba `nx.readwrite.json_graph.node_link_data` para exportar el grafo como JSON, para que una herramienta separada (o un frontend web, si te sientes cómodo con uno) pueda consumirlo sin necesitar `networkx` instalado en absoluto.
-- Compara dos grafos de dos puntos diferentes en el historial de git de un repositorio (`git worktree` o dos clones en commits diferentes) para ver, estructuralmente, cómo una refactorización realmente cambió la forma del código base — no solo qué líneas cambiaron, sino qué relaciones aparecieron o desaparecieron.
+- Compara dos grafos de dos puntos diferentes en el historial de git de un repositorio (`git worktree` o dos clones en commits diferentes) para ver, estructuralmente, cómo una refactorización realmente cambió la forma del código base, no solo qué líneas cambiaron, sino qué relaciones aparecieron o desaparecieron.
 
 ## Comparte tu proyecto con la clase
 
-¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado — y su README tiene un recorrido completo y amigable para principiantes sobre cómo agregar el tuyo vía un **pull request**, incluso si nunca has usado git antes: hacer fork del repositorio, crear una rama, confirmar tus archivos, y abrir el PR, un paso a la vez. No se asume experiencia previa con git.
+¿Construiste algo de lo que estás orgulloso? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) es una galería de proyectos que otros estudiantes han enviado, y su README tiene un recorrido completo y amigable para principiantes sobre cómo agregar el tuyo vía un **pull request**, incluso si nunca has usado git antes: hacer fork del repositorio, crear una rama, confirmar tus archivos, y abrir el PR, un paso a la vez. No se asume experiencia previa con git.
 
 Bienvenido a escribir Python fuera del navegador. 🎓
 

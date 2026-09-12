@@ -138,8 +138,8 @@ dtypes: float64(2), int64(5), object(5)
 
 Observaciones clave:
 - **Age**: 177 valores faltantes (20%)
-- **Cabin**: 687 valores faltantes (77%) — demasiado para rellenar
-- **Embarked**: solo 2 valores faltantes — fácil de corregir
+- **Cabin**: 687 valores faltantes (77%), demasiado para rellenar
+- **Embarked**: solo 2 valores faltantes, fácil de corregir
 
 ## Resumen estadístico
 
@@ -148,9 +148,9 @@ print(df.describe())
 ```
 
 Esto muestra conteo, media, desviación estándar, mín, cuartiles y máx para todas las columnas numéricas. Observa:
-- `Fare` tiene un rango amplio (0 a 512) con un máximo alto — probablemente valores atípicos
+- `Fare` tiene un rango amplio (0 a 512) con un máximo alto, probablemente valores atípicos
 - `Age` va de 0.42 (bebé) a 80 años
-- `Survived` es binario — una media de 0.38 significa que sobrevivió el 38%
+- `Survived` es binario, una media de 0.38 significa que sobrevivió el 38%
 
 ## Distribuciones categóricas
 
@@ -190,11 +190,11 @@ Embarked    2      0.2
 ## Observaciones iniciales
 
 Antes de cualquier análisis, anota estos patrones:
-1. **Brecha de clase en la supervivencia** — la primera clase probablemente tuvo tasas de supervivencia más altas
-2. **Sesgo de género** — la política de "mujeres y niños primero" puede reflejarse en los datos
-3. **Edad faltante** — 20% faltante, necesita una estrategia de relleno
-4. **Cabin inútil** — 77% faltante, probablemente debería eliminarse
-5. **Atípicos en Fare** — algunos pasajeros pagaron mucho más que otros
+1. **Brecha de clase en la supervivencia**, la primera clase probablemente tuvo tasas de supervivencia más altas
+2. **Sesgo de género**, la política de "mujeres y niños primero" puede reflejarse en los datos
+3. **Edad faltante**, 20% faltante, necesita una estrategia de relleno
+4. **Cabin inútil**, 77% faltante, probablemente debería eliminarse
+5. **Atípicos en Fare**, algunos pasajeros pagaron mucho más que otros
 
 ## Inténtalo
 
@@ -222,7 +222,7 @@ print(df.groupby("Embarked")["Survived"].mean())
 - Empieza siempre el EDA con `head()`, `info()` y `describe()` para comprender la estructura
 - `value_counts()` revela la distribución de las columnas categóricas
 - El análisis de valores faltantes debe ocurrir antes de cualquier decisión de limpieza
-- Documenta las observaciones — guían tu plan de análisis completo
+- Documenta las observaciones, guían tu plan de análisis completo
 
 ## Desafío de práctica
 

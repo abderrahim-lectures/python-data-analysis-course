@@ -58,14 +58,14 @@ df = pd.read_csv("titanic.csv")
 
 ## Sélectionner une colonne unique
 
-**Notation entre crochets** — l'approche la plus courante :
+**Notation entre crochets**, l'approche la plus courante :
 
 ```python
 ages = df["Age"]
 print(type(ages))   # <class 'pandas.core.series.Series'>
 ```
 
-**Notation par point** — plus courte mais ne fonctionne que lorsque le nom de la colonne ne contient ni espaces ni caractères spéciaux :
+**Notation par point**, plus courte mais ne fonctionne que lorsque le nom de la colonne ne contient ni espaces ni caractères spéciaux :
 
 ```python
 print(df.Age.head())   # first 5 ages
@@ -109,14 +109,14 @@ subset = df.loc[:, ["Name", "Survived"]]
 
 ## Schémas pratiques
 
-**Renommer après la sélection** — ne gardez que ce dont vous avez besoin avec des noms plus clairs :
+**Renommer après la sélection**, ne gardez que ce dont vous avez besoin avec des noms plus clairs :
 
 ```python
 demographics = df[["Name", "Age", "Sex"]].copy()
 demographics.columns = ["passenger", "age", "gender"]
 ```
 
-**Sélectionner des colonnes par type de données** — utile lorsque vous avez beaucoup de colonnes :
+**Sélectionner des colonnes par type de données**, utile lorsque vous avez beaucoup de colonnes :
 
 ```python
 numeric_cols = df.select_dtypes(include=["number"])

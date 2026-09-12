@@ -271,7 +271,7 @@ for q, a in answers.items():
 Écrivez un script Python qui charge le jeu de données, le profile et génère un dictionnaire récapitulatif avec : `row_count`, `column_count`, `missing_columns`, `score_means`, `score_stds`, `categorical_cardinalities` et `eda_questions`. Affichez le dictionnaire mis en forme.
 
 <details class="challenge">
-<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
+<summary>🧩 Défi, réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
 ```python

@@ -1,6 +1,6 @@
 ---
 title: "Nettoyeur de Données IA"
-description: "Détectez et corrigez automatiquement les problèmes de qualité des données — valeurs manquantes, outliers, doublons et erreurs de format."
+description: "Détectez et corrigez automatiquement les problèmes de qualité des données, valeurs manquantes, outliers, doublons et erreurs de format."
 difficulty: "intermediate"
 estimatedMinutes: 90
 xpReward: 100
@@ -20,13 +20,13 @@ learningObjectives:
 
 # 🛠️ 🐼 Construire un Nettoyeur de Données IA
 
-Tout analyste a déjà rencontré le même jeu de données : des lignes en double, des cellules vides, une colonne `price` où une valeur vaut `"2.5 USD"` et une autre vaut `2.5`, et une date de commande où certaines lignes disent `2024-01-05` et certaines disent `05/01/2024`. Ces problèmes cachent du vrai signal et cassent les outils en aval de façon confuse. Ce projet construit un nettoyeur de données en ligne de commande qui prend un CSV en désordre, trouve ces problèmes automatiquement, applique la bonne correction par colonne et — la partie qui le rend digne de confiance — enregistre chaque changement dans une trace d'audit que tu peux lire comme un reçu.
+Tout analyste a déjà rencontré le même jeu de données : des lignes en double, des cellules vides, une colonne `price` où une valeur vaut `"2.5 USD"` et une autre vaut `2.5`, et une date de commande où certaines lignes disent `2024-01-05` et certaines disent `05/01/2024`. Ces problèmes cachent du vrai signal et cassent les outils en aval de façon confuse. Ce projet construit un nettoyeur de données en ligne de commande qui prend un CSV en désordre, trouve ces problèmes automatiquement, applique la bonne correction par colonne et, la partie qui le rend digne de confiance, enregistre chaque changement dans une trace d'audit que tu peux lire comme un reçu.
 
-Cela suppose Python 101 et les bases de pandas du module Analyse de Données — rien au-delà. C'est optionnel et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
+Cela suppose Python 101 et les bases de pandas du module Analyse de Données, rien au-delà. C'est optionnel et non noté ; voir [Projets du monde réel](/fr/projets) pour la liste complète et croissante.
 
 ## 🎯 Ce que tu vas faire
 
-1. Profiler un CSV en désordre avec pandas et produire un rapport de qualité couvrant les valeurs manquantes, les doublons et les problèmes de type — sans modifier les données.
+1. Profiler un CSV en désordre avec pandas et produire un rapport de qualité couvrant les valeurs manquantes, les doublons et les problèmes de type, sans modifier les données.
 2. Supprimer les lignes en double et prouver exactement combien de lignes ont disparu.
 3. Remplir les valeurs manquantes avec une stratégie choisie par colonne (médiane pour les nombres, mode pour le texte) et journaliser la décision.
 4. Trouver les valeurs aberrantes avec la règle IQR et les plafonner dans un corridor raisonnable.
@@ -35,11 +35,11 @@ Cela suppose Python 101 et les bases de pandas du module Analyse de Données —
 
 ## Où exécuter ceci
 
-**En local avec `uv`** est le chemin recommandé — le nettoyeur est un script pandas déterministe et le flux de travail principal consiste à l'exécuter contre des fichiers CSV présents sur ton propre disque, donc un vrai environnement Python avec pandas installé est exactement le bon endroit pour lui. La section Configuration ci-dessous passe en revue `uv` et un environnement virtuel.
+**En local avec `uv`** est le chemin recommandé, le nettoyeur est un script pandas déterministe et le flux de travail principal consiste à l'exécuter contre des fichiers CSV présents sur ton propre disque, donc un vrai environnement Python avec pandas installé est exactement le bon endroit pour lui. La section Configuration ci-dessous passe en revue `uv` et un environnement virtuel.
 
-**GitHub Codespaces** fonctionne bien aussi : ouvre [tout le dépôt du cours dans un Codespace gratuit](https://codespaces.new/abderrahim-lectures/python-data-analysis-course) — pandas et `uv` sont déjà installés, et chaque étape ci-dessous s'exécute sans changement.
+**GitHub Codespaces** fonctionne bien aussi : ouvre [tout le dépôt du cours dans un Codespace gratuit](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), pandas et `uv` sont déjà installés, et chaque étape ci-dessous s'exécute sans changement.
 
-**Google Colab, Kaggle Notebooks et Binder sont un moyen réellement bon d'exécuter ceci** — contrairement aux projets qui ont besoin d'un dépôt git local ou d'un état de vrai système de fichiers, un nettoyeur de données n'a besoin que d'un CSV en mémoire. Le notebook ci-dessous construit un petit DataFrame volontairement en désordre pour que chaque détection et correction s'exécute pour de vrai ; utilise un notebook pour expérimenter rapidement, puis passe au `uv` local quand tu veux pointer l'outil vers de vrais fichiers `.csv` sur ta machine.
+**Google Colab, Kaggle Notebooks et Binder sont un moyen réellement bon d'exécuter ceci**, contrairement aux projets qui ont besoin d'un dépôt git local ou d'un état de vrai système de fichiers, un nettoyeur de données n'a besoin que d'un CSV en mémoire. Le notebook ci-dessous construit un petit DataFrame volontairement en désordre pour que chaque détection et correction s'exécute pour de vrai ; utilise un notebook pour expérimenter rapidement, puis passe au `uv` local quand tu veux pointer l'outil vers de vrais fichiers `.csv` sur ta machine.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-data-cleaner/notebook.fr.ipynb)
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-data-cleaner/notebook.fr.ipynb)
@@ -57,11 +57,11 @@ cd ai-data-cleaner
 uv add pandas
 ```
 
-`uv` installe Python pour toi, crée le projet et ajoute pandas à son environnement virtuel — une chaîne de commandes unique au lieu du tour habituel « installe Python, installe pip, crée un venv, pip install ».
+`uv` installe Python pour toi, crée le projet et ajoute pandas à son environnement virtuel, une chaîne de commandes unique au lieu du tour habituel « installe Python, installe pip, crée un venv, pip install ».
 
 ### Crée un CSV en désordre pour tester
 
-Esquisse un petit fichier avec les problèmes que l'outil existe pour attraper — colle ceci dans `messy.csv` :
+Esquisse un petit fichier avec les problèmes que l'outil existe pour attraper, colle ceci dans `messy.csv` :
 
 ```csv
 order_id,customer,units,price,order_date
@@ -88,11 +88,11 @@ Ce seul fichier contient chaque mode de défaillance que le pipeline gère : deu
 
 ## Étape 1 : Profile le jeu de données sans le toucher
 
-La première passe de tout script de nettoyage doit être *en lecture seule* — tu ne peux pas faire confiance aux corrections d'un outil tant qu'il ne peut pas décrire ce qui ne va pas, et tu ne peux pas décrire ce qui ne va pas dans un jeu de données que tu as déjà mutilé. Le profilage charge le CSV, puis parcourt colonne par colonne en posant trois questions : combien de valeurs sont manquantes, combien de lignes sont des doublons exacts, et quel dtype chaque colonne tient réellement.
+La première passe de tout script de nettoyage doit être *en lecture seule*, tu ne peux pas faire confiance aux corrections d'un outil tant qu'il ne peut pas décrire ce qui ne va pas, et tu ne peux pas décrire ce qui ne va pas dans un jeu de données que tu as déjà mutilé. Le profilage charge le CSV, puis parcourt colonne par colonne en posant trois questions : combien de valeurs sont manquantes, combien de lignes sont des doublons exacts, et quel dtype chaque colonne tient réellement.
 
 ### 1.1 Charge et évalue la taille des données
 
-**👟 Indice de départ :** Charge `messy.csv` dans `df`, affiche sa forme, ses dtypes, le nombre de valeurs manquantes par colonne et son nombre de lignes en double — que des lectures, aucune écriture.
+**👟 Indice de départ :** Charge `messy.csv` dans `df`, affiche sa forme, ses dtypes, le nombre de valeurs manquantes par colonne et son nombre de lignes en double, que des lectures, aucune écriture.
 
 ```python
 # clean.py
@@ -106,11 +106,11 @@ print("\nduplicate rows:", df.duplicated().sum())
 print("\nfirst 3 rows:\n", df.head(3))
 ```
 
-`df.isna().sum()` retourne un décompte par colonne des cellules manquantes et `df.duplicated().sum()` compte les lignes qui répètent exactement une ligne précédente — ce sont toutes deux de pures lectures qui produisent les nombres sur lesquels le pipeline agira. Le `head(3)` sur un DataFrame en désordre est l'habitude qui attrape les problèmes avant même les nombres : dans celui-ci, tu peux déjà voir `price` contenir du texte et un nom avec des espaces de tête.
+`df.isna().sum()` retourne un décompte par colonne des cellules manquantes et `df.duplicated().sum()` compte les lignes qui répètent exactement une ligne précédente, ce sont toutes deux de pures lectures qui produisent les nombres sur lesquels le pipeline agira. Le `head(3)` sur un DataFrame en désordre est l'habitude qui attrape les problèmes avant même les nombres : dans celui-ci, tu peux déjà voir `price` contenir du texte et un nom avec des espaces de tête.
 
 **🎯 Résultat attendu :** Un rapport imprimé montrant `shape: (12, 5)`, `price` typé comme `object` (pas numérique) à cause de la ligne `"2.5 USD"`, exactement deux valeurs manquantes dans `units`, une valeur manquante dans `price`, et `duplicate rows: 2`.
 
-**🩹 Si ça ne marche pas :** Si `price` s'affiche comme `int64`/`float64`, quelqu'un a édité le CSV à la main et a retiré la ligne `"2.5 USD"` sur laquelle la sonde s'appuie. Si `df` échoue complètement à charger, le CSV a un commentaire `#` ou une ligne d'en-tête parasite — ouvre `messy.csv` et vérifie que les deux premières lignes correspondent exactement à l'esquisse d'en-tête.
+**🩹 Si ça ne marche pas :** Si `price` s'affiche comme `int64`/`float64`, quelqu'un a édité le CSV à la main et a retiré la ligne `"2.5 USD"` sur laquelle la sonde s'appuie. Si `df` échoue complètement à charger, le CSV a un commentaire `#` ou une ligne d'en-tête parasite, ouvre `messy.csv` et vérifie que les deux premières lignes correspondent exactement à l'esquisse d'en-tête.
 
 ### 1.2 Transforme le profil en dict de rapport
 
@@ -140,11 +140,11 @@ def profile(df: pd.DataFrame) -> dict[str, dict[str, Any]]:
 print(profile(df))
 ```
 
-Le rapport cesse de décrire les problèmes en prose et commence à les décrire comme des données — chaque fonction suivante peut consommer `report[col]["missing"]` et décider quoi faire. La vérification d'espace blanc est la subtile : `.str.strip().ne(elle-même)` est vrai pour toute valeur qui change quand les espaces environnants sont retirés.
+Le rapport cesse de décrire les problèmes en prose et commence à les décrire comme des données, chaque fonction suivante peut consommer `report[col]["missing"]` et décider quoi faire. La vérification d'espace blanc est la subtile : `.str.strip().ne(elle-même)` est vrai pour toute valeur qui change quand les espaces environnants sont retirés.
 
 **🎯 Résultat attendu :** `profile(df)` retourne un dict dans lequel `price` liste `dtype: object`, `units` liste `missing: 2`, et `customer` liste `leading/trailing whitespace` dans sa liste d'issues.
 
-**🩹 Si ça ne marche pas :** Si aucune colonne ne signale d'espace blanc, le CSV a été réenregistré avec des guillemets autour des valeurs et les espaces de fin sont devenus partie du texte — vérifie les valeurs de `df["customer"]` directement avec `.repr()`. Si une colonne numérique s'affiche comme `object`, au moins une cellule contient une chaîne ; la bonne correction est de décider quoi faire de cette chaîne, pas de forcer le cast pour l'instant.
+**🩹 Si ça ne marche pas :** Si aucune colonne ne signale d'espace blanc, le CSV a été réenregistré avec des guillemets autour des valeurs et les espaces de fin sont devenus partie du texte, vérifie les valeurs de `df["customer"]` directement avec `.repr()`. Si une colonne numérique s'affiche comme `object`, au moins une cellule contient une chaîne ; la bonne correction est de décider quoi faire de cette chaîne, pas de forcer le cast pour l'instant.
 
 ### 1.3 Vérifie le profil
 
@@ -153,16 +153,16 @@ Le rapport cesse de décrire les problèmes en prose et commence à les décrire
 - ✅ `df.shape` se lit `(12, 5)` et `df.duplicated().sum()` se lit `2`.
 - ✅ `units` signale deux valeurs manquantes, `price` signale une valeur manquante et un dtype `object`.
 - ✅ `profile(df)` retourne ses constats sous forme d'un dictionnaire que le code suivant peut lire.
-- ✅ Aucun avertissement de pandas concernant les `mixed types` au chargement — c'est ton premier signal de dérive.
+- ✅ Aucun avertissement de pandas concernant les `mixed types` au chargement, c'est ton premier signal de dérive.
 
 **🤔 Question(s) socratique(s)**
 
 - Pourquoi commencer délibérément par un profil en lecture seule plutôt que de corriger au fur et à mesure ? Quelle information précise un script qui corrige tout à la hâte détruit-il avant qu'elle puisse être enregistrée ?
 - `profile()` signale `n_unique` pour chaque colonne. Que te dirait une colonne `customer` avec `n_unique` égal à 6 (son nombre de lignes) que `duplicated().sum()` seul pourrait manquer ? Indice : pense à ce à quoi ressemble `customer` après la correction des espaces blancs.
 
-## Étape 2 : Supprime les doublons — et compte ce que tu as retiré
+## Étape 2 : Supprime les doublons, et compte ce que tu as retiré
 
-Les doublons sont le problème le moins cher à corriger, et celui que les gens corrigent le plus souvent à la main (« laisse-moi juste supprimer les répétitions évidentes »). La version du pipeline est meilleure qu'une passe manuelle parce qu'elle enregistre le compte, pour que quiconque audite le résultat sache que des données ont été retirées — une transparence qu'une édition manuelle d'un tableur ne te donne jamais.
+Les doublons sont le problème le moins cher à corriger, et celui que les gens corrigent le plus souvent à la main (« laisse-moi juste supprimer les répétitions évidentes »). La version du pipeline est meilleure qu'une passe manuelle parce qu'elle enregistre le compte, pour que quiconque audite le résultat sache que des données ont été retirées, une transparence qu'une édition manuelle d'un tableur ne te donne jamais.
 
 ### 2.1 Supprime les doublons exacts avec un reçu
 
@@ -184,15 +184,15 @@ print(audit)
 print("rows now:", len(df))
 ```
 
-`drop_duplicates()` garde la première occurrence de chaque ligne répétée par défaut — déterministe, ce qui compte, parce que la trace d'audit prétend un nombre spécifique de lignes retirées. Capturer `before` et `after` autour de l'appel transforme « je pense avoir retiré quelques-unes » en un compte exact et prouvable.
+`drop_duplicates()` garde la première occurrence de chaque ligne répétée par défaut, déterministe, ce qui compte, parce que la trace d'audit prétend un nombre spécifique de lignes retirées. Capturer `before` et `after` autour de l'appel transforme « je pense avoir retiré quelques-unes » en un compte exact et prouvable.
 
 **🎯 Résultat attendu :** Le dict d'audit signale `removed_rows: 2`, et `rows now:` se lit `10`. Les deux lignes précédemment signalées par `duplicated()` (la répétition de `order_id` 1 et la répétition de `order_id` 5) ont disparu et le DataFrame a toujours la première copie de chacune.
 
-**🩹 Si ça ne marche pas :** Si `removed_rows` se lit `0`, tes lignes en double diffèrent par un caractère invisible (un espace de fin sur l'une d'elles) — la normalisation d'espaces blancs de l'Étape 5 doit s'exécuter *avant* la passe des doublons sur des données que tu n'as pas écrites. Si la ligne 3 (la répétition de `1, alice, 2, 2.50`) survit, les valeurs diffèrent encore quelque part — imprime `df.iloc[[0, 2]]` ligne par ligne pour repérer la différence exacte.
+**🩹 Si ça ne marche pas :** Si `removed_rows` se lit `0`, tes lignes en double diffèrent par un caractère invisible (un espace de fin sur l'une d'elles), la normalisation d'espaces blancs de l'Étape 5 doit s'exécuter *avant* la passe des doublons sur des données que tu n'as pas écrites. Si la ligne 3 (la répétition de `1, alice, 2, 2.50`) survit, les valeurs diffèrent encore quelque part, imprime `df.iloc[[0, 2]]` ligne par ligne pour repérer la différence exacte.
 
 ### 2.2 Réfléchis à ce que « doublon » signifie
 
-**👟 Indice de départ :** Explore une vérification de doublon *partielle* — `df.drop_duplicates(subset=["order_id"])` — et compare son compte de retraits au compte de doublons exacts.
+**👟 Indice de départ :** Explore une vérification de doublon *partielle*, `df.drop_duplicates(subset=["order_id"])`, et compare son compte de retraits au compte de doublons exacts.
 
 ```python
 # clean.py (continued)
@@ -205,7 +205,7 @@ print("duplicates by order_id only:", df_partial.duplicated(subset=["order_id"])
 
 **🎯 Résultat attendu :** Le compte exact s'imprime `2` ; le compte par sous-ensemble `order_id` s'imprime `3` (les lignes 2, 3 et 8 sont toutes des répétitions d'un `order_id` existant), ce qui est plus de lignes qu'un humain n'était probablement prêt à supprimer.
 
-**🩹 Si ça ne marche pas :** Si le compte du sous-ensemble égale le compte exact, revois le CSV pour un quatrième `order_id` que tu n'avais pas prévu. Si l'approche par sous-ensemble supprime plus que ce avec quoi tu es à l'aise, cette réaction est le propos — opte pour `keep="last"` ou une règle explicite quand les données valent plus que le raccourci.
+**🩹 Si ça ne marche pas :** Si le compte du sous-ensemble égale le compte exact, revois le CSV pour un quatrième `order_id` que tu n'avais pas prévu. Si l'approche par sous-ensemble supprime plus que ce avec quoi tu es à l'aise, cette réaction est le propos, opte pour `keep="last"` ou une règle explicite quand les données valent plus que le raccourci.
 
 ### 2.3 Vérifie la passe de suppression des doublons
 
@@ -241,15 +241,15 @@ def fill_missing(df: pd.DataFrame) -> pd.DataFrame:
     return df
 ```
 
-La forme de la boucle est le pattern : regarde une colonne, compte ses cellules manquantes, et agis seulement si le compte est non nul. Sauter les colonnes sans valeurs manquantes évite les entrées d'audit bruyantes qui enregistreraient un « remplissage » de rien, et `is_numeric_dtype` garde la stratégie honnête — les nombres obtiennent une médiane, le texte obtient un mode, et aucune stratégie n'est jamais appliquée au mauvais type de colonne.
+La forme de la boucle est le pattern : regarde une colonne, compte ses cellules manquantes, et agis seulement si le compte est non nul. Sauter les colonnes sans valeurs manquantes évite les entrées d'audit bruyantes qui enregistreraient un « remplissage » de rien, et `is_numeric_dtype` garde la stratégie honnête, les nombres obtiennent une médiane, le texte obtient un mode, et aucune stratégie n'est jamais appliquée au mauvais type de colonne.
 
 **🎯 Résultat attendu :** Exécuter ceci sur le DataFrame sans doublons met les deux cellules `units` manquantes à `2` (la médiane des valeurs `[2, 10, 0, 2, 2, 2, 1000]`), et un `price` numérique voit son unique cellule manquante remplie avec `2.5`.
 
-**🩹 Si ça ne marche pas :** Si les cellules manquantes restent `NaN` après l'appel, le chemin de remplissage n'a jamais été atteint — confirme que `isna().sum()` était réellement non nul pour cette colonne (les cellules `units` manquantes vivent dans les lignes `alice` et `grace` ; confirme que ce sont les doublons qui ont été supprimés, pas les lignes porteuses). Si une colonne de texte comme `customer` a été remplie médiane-comme-mode et que tu trouves cela étrange, c'est le comportement correct ici — le choix de stratégie ne se comporte mal que lorsque des identifiants sont impliqués, ce que l'Étape 5 adresse.
+**🩹 Si ça ne marche pas :** Si les cellules manquantes restent `NaN` après l'appel, le chemin de remplissage n'a jamais été atteint, confirme que `isna().sum()` était réellement non nul pour cette colonne (les cellules `units` manquantes vivent dans les lignes `alice` et `grace` ; confirme que ce sont les doublons qui ont été supprimés, pas les lignes porteuses). Si une colonne de texte comme `customer` a été remplie médiane-comme-mode et que tu trouves cela étrange, c'est le comportement correct ici, le choix de stratégie ne se comporte mal que lorsque des identifiants sont impliqués, ce que l'Étape 5 adresse.
 
 ### 3.2 Enregistre la décision dans la trace d'audit
 
-**👟 Indice de départ :** Maintenant que le remplissage fonctionne, ajoute les entrées d'audit à l'intérieur de la boucle — une par colonne remplie — nommant la colonne, la stratégie, et combien de cellules ont été remplies, puis imprime la trace grandissante.
+**👟 Indice de départ :** Maintenant que le remplissage fonctionne, ajoute les entrées d'audit à l'intérieur de la boucle, une par colonne remplie, nommant la colonne, la stratégie, et combien de cellules ont été remplies, puis imprime la trace grandissante.
 
 ```python
 # clean.py (continued)
@@ -277,9 +277,9 @@ print(*audit, sep="\n")
 
 `pd.api.types.is_numeric_dtype(df[col])` est la branche qui garde la stratégie honnête : les nombres obtiennent une médiane, le texte obtient un mode. Chaque remplissage atterrit maintenant dans `audit` comme une ligne avec sa propre chaîne de stratégie, pour que le jeu de données nettoyé final parte accompagné d'un document compagnon de exactement ce qui a été inventé et pourquoi.
 
-**🎯 Résultat attendu :** Une entrée de remplissage `units` se lisant `"median (2.00)"` avec `cells_filled: 2`, plus une entrée de remplissage `price` utilisant la stratégie `mode` — sa présence avec une stratégie de texte est le signe que `price` est *encore du texte à ce stade*, ce qui est précisément le bug d'ordre que le pipeline complet empêche en normalisant les formats d'abord (Étape 5).
+**🎯 Résultat attendu :** Une entrée de remplissage `units` se lisant `"median (2.00)"` avec `cells_filled: 2`, plus une entrée de remplissage `price` utilisant la stratégie `mode`, sa présence avec une stratégie de texte est le signe que `price` est *encore du texte à ce stade*, ce qui est précisément le bug d'ordre que le pipeline complet empêche en normalisant les formats d'abord (Étape 5).
 
-**🩹 Si ça ne marche pas :** Si l'entrée de `price` affiche inexplicablement une stratégie de style numérique, tu as exécuté le remplissage après avoir converti `price` hors ordre — un résultat correct, mais note que la démo dépend de texte-en, texte-out. Si les cellules sont remplies mais que l'audit ne les contient jamais, l'append de liste est dans la mauvaise branche `if` ou la fonction est retournée sans ajouter.
+**🩹 Si ça ne marche pas :** Si l'entrée de `price` affiche inexplicablement une stratégie de style numérique, tu as exécuté le remplissage après avoir converti `price` hors ordre, un résultat correct, mais note que la démo dépend de texte-en, texte-out. Si les cellules sont remplies mais que l'audit ne les contient jamais, l'append de liste est dans la mauvaise branche `if` ou la fonction est retournée sans ajouter.
 
 ### 3.3 Vérifie la passe de remplissage
 
@@ -296,7 +296,7 @@ print(*audit, sep="\n")
 
 ## Étape 4 : Attrape les valeurs aberrantes avec la règle IQR
 
-Une valeur `units` de `1000` à côté de pairs de `0` et `2` est presque certainement une faute de frappe, mais la supprimer à l'aveugle perd les autres colonnes de la ligne. La règle IQR trouve le corridor des valeurs raisonnables — tout ce qui est à plus de `1.5 × IQR` sous le premier quartile ou au-dessus du troisième — et *plafonne* les fautifs au bord du corridor, préservant la ligne tout en neutralisant la distorsion.
+Une valeur `units` de `1000` à côté de pairs de `0` et `2` est presque certainement une faute de frappe, mais la supprimer à l'aveugle perd les autres colonnes de la ligne. La règle IQR trouve le corridor des valeurs raisonnables, tout ce qui est à plus de `1.5 × IQR` sous le premier quartile ou au-dessus du troisième, et *plafonne* les fautifs au bord du corridor, préservant la ligne tout en neutralisant la distorsion.
 
 ### 4.1 Calcule le corridor et signale les fautifs
 
@@ -322,15 +322,15 @@ df, _ = drop_duplicates(df)
 print(flag_outliers(df, ["units", "price"]))
 ```
 
-`df[col].quantile([0.25, 0.75])` retourne les deux quartiles en un appel, et le masque booléen `(df[col] < lo) | (df[col] > hi)` sélectionne les lignes en dehors du corridor — note l'opérateur `|`, pas `or`, parce que pandas a besoin de masques combinés élément par élément, et que `or` de Python les réduit à une seule valeur de vérité.
+`df[col].quantile([0.25, 0.75])` retourne les deux quartiles en un appel, et le masque booléen `(df[col] < lo) | (df[col] > hi)` sélectionne les lignes en dehors du corridor, note l'opérateur `|`, pas `or`, parce que pandas a besoin de masques combinés élément par élément, et que `or` de Python les réduit à une seule valeur de vérité.
 
-**🎯 Résultat attendu :** La fonction signale `units` avec une ligne aberrante (la valeur `1000` à l'index d'origine `11`) dans un corridor d'environ `(-1.0, 7.0)` — et `price` est entièrement sauté parce qu'à ce stade c'est encore du texte et la branche numérique décline correctement de le juger.
+**🎯 Résultat attendu :** La fonction signale `units` avec une ligne aberrante (la valeur `1000` à l'index d'origine `11`) dans un corridor d'environ `(-1.0, 7.0)`, et `price` est entièrement sauté parce qu'à ce stade c'est encore du texte et la branche numérique décline correctement de le juger.
 
-**🩹 Si ça ne marche pas :** Si chaque colonne ne signale aucune valeur aberrante, la garde numérique te saute silencieusement — un dtype `object` produit un masque vide sous cette règle, ce qui est pourquoi `price` ne montre délibérément rien ; exécute ceci *après* l'étape de normalisation de `price` et la garde le laissera enfin passer. Si `ValueError: The truth value of a Series is ambiguous` apparaît, tu as utilisé `or` là où `|` est requis.
+**🩹 Si ça ne marche pas :** Si chaque colonne ne signale aucune valeur aberrante, la garde numérique te saute silencieusement, un dtype `object` produit un masque vide sous cette règle, ce qui est pourquoi `price` ne montre délibérément rien ; exécute ceci *après* l'étape de normalisation de `price` et la garde le laissera enfin passer. Si `ValueError: The truth value of a Series is ambiguous` apparaît, tu as utilisé `or` là où `|` est requis.
 
 ### 4.2 Plafonne au lieu de supprimer
 
-**👟 Indice de départ :** Remplace les valeurs fautives avec `Series.clip(lower=lo, upper=hi)` et enregistre à la fois l'ancienne et la nouvelle valeur dans la trace d'audit — le cas rare où la trace stocke une paire avant/après.
+**👟 Indice de départ :** Remplace les valeurs fautives avec `Series.clip(lower=lo, upper=hi)` et enregistre à la fois l'ancienne et la nouvelle valeur dans la trace d'audit, le cas rare où la trace stocke une paire avant/après.
 
 ```python
 # clean.py (continued)
@@ -354,7 +354,7 @@ df = clip_outliers(df, ["units", "price"], audit)
 print(*audit, sep="\n")
 ```
 
-`clip(lower=lo, upper=hi)` pousse chaque valeur à l'intérieur du corridor en un appel vectorisé — pas de boucle, et il garde `1000` comme `7.0` plutôt que de supprimer les quatre autres champs de la ligne. Stocker la liste `from` à côté de `to` rend la trace d'audit un cran meilleure que la plupart des journaux de production : elle peut répondre à « qu'avons-nous réellement changé pour cette ligne ? » au lieu de seulement « qu'avons-nous touché ? ».
+`clip(lower=lo, upper=hi)` pousse chaque valeur à l'intérieur du corridor en un appel vectorisé, pas de boucle, et il garde `1000` comme `7.0` plutôt que de supprimer les quatre autres champs de la ligne. Stocker la liste `from` à côté de `to` rend la trace d'audit un cran meilleure que la plupart des journaux de production : elle peut répondre à « qu'avons-nous réellement changé pour cette ligne ? » au lieu de seulement « qu'avons-nous touché ? ».
 
 **🎯 Résultat attendu :** Le `1000` dans `units` devient `12.0`, et une entrée d'audit `{"action": "clip_outlier", "column": "units", "from": [1000], "to": 7.0}` apparaît. La colonne `price` est sautée tant qu'elle est du texte et reste intacte.
 
@@ -375,7 +375,7 @@ print(*audit, sep="\n")
 
 ## Étape 5 : Normalise les formats pour que les valeurs se comparent proprement
 
-La colonne numérique tient `"2.5 USD"` à côté de `3.00`, et les dates utilisent `2024-01-05`, `05/01/2024` et `2024/03/15` dans la même colonne. Un `mean()` sur l'une ou l'autre colonne échoue ou ment aujourd'hui. La normalisation de format force chaque valeur dans une seule forme — un float pour `price`, une `datetime.date` pour les dates, du texte épuré pour les noms — et c'est cette étape qui explique *pourquoi* les remplissages et vérifications de valeurs aberrantes précédents ont commencé à fonctionner sur le DataFrame.
+La colonne numérique tient `"2.5 USD"` à côté de `3.00`, et les dates utilisent `2024-01-05`, `05/01/2024` et `2024/03/15` dans la même colonne. Un `mean()` sur l'une ou l'autre colonne échoue ou ment aujourd'hui. La normalisation de format force chaque valeur dans une seule forme, un float pour `price`, une `datetime.date` pour les dates, du texte épuré pour les noms, et c'est cette étape qui explique *pourquoi* les remplissages et vérifications de valeurs aberrantes précédents ont commencé à fonctionner sur le DataFrame.
 
 ### 5.1 Convertit price en une seule forme numérique
 
@@ -399,11 +399,11 @@ print(df["price"].tolist())
 print("could not convert:", stuck)
 ```
 
-Le regex `[^\d.]` retire tout ce qui n'est pas un chiffre ou un point décimal — c'est la largeur de la hache ici, et c'est honnête : il gère `"2.5 USD"`, mais il détruirait aussi une valeur de devise véritablement différente comme `"2,50€"`. `errors="coerce"` transforme tout ce qui reste non analysable en `NaN` au lieu de planter, et ces cellules restantes sont remontées comme la liste `stuck` pour que le pipeline ne brûle jamais silencieusement une valeur qu'il n'a pas pu lire.
+Le regex `[^\d.]` retire tout ce qui n'est pas un chiffre ou un point décimal, c'est la largeur de la hache ici, et c'est honnête : il gère `"2.5 USD"`, mais il détruirait aussi une valeur de devise véritablement différente comme `"2,50€"`. `errors="coerce"` transforme tout ce qui reste non analysable en `NaN` au lieu de planter, et ces cellules restantes sont remontées comme la liste `stuck` pour que le pipeline ne brûle jamais silencieusement une valeur qu'il n'a pas pu lire.
 
-**🎯 Résultat attendu :** `df["price"]` devient `[2.5, nan, 2.5, 1.0, 0.75, 3.5, 4.0, 3.5, 2.25, 9.99]` — la cellule `"2.5 USD"` est maintenant un float — et `stuck` est vide pour ce CSV.
+**🎯 Résultat attendu :** `df["price"]` devient `[2.5, nan, 2.5, 1.0, 0.75, 3.5, 4.0, 3.5, 2.25, 9.99]`, la cellule `"2.5 USD"` est maintenant un float, et `stuck` est vide pour ce CSV.
 
-**🩹 Si ça ne marche pas :** Si une valeur survit comme `"2.5 USD"`, le regex `[^\d.]` n'a pas tourné sur cette ligne parce que la série tenait un non-chaîne (une cellule déjà numérique) — force avec `.astype(str)` d'abord comme montré. Si `stuck` est non vide, ton CSV a une valeur que le regex a mutilée plutôt que nettoyée — décide une règle par devise et étends le regex délibérément, ou laisse la ligne signalée plutôt que de la supprimer.
+**🩹 Si ça ne marche pas :** Si une valeur survit comme `"2.5 USD"`, le regex `[^\d.]` n'a pas tourné sur cette ligne parce que la série tenait un non-chaîne (une cellule déjà numérique), force avec `.astype(str)` d'abord comme montré. Si `stuck` est non vide, ton CSV a une valeur que le regex a mutilée plutôt que nettoyée, décide une règle par devise et étends le regex délibérément, ou laisse la ligne signalée plutôt que de la supprimer.
 
 ### 5.2 Normalise les dates et le texte en une passe
 
@@ -436,7 +436,7 @@ print(*audit, sep="\n")
 
 **🎯 Résultat attendu :** `order_date` s'imprime comme une colonne `datetime64` cohérente, `customer` montre `alice`, `bob`, `carol`, `dave`, `erin`, `frank`, `grace`, `henry` sans espaces environnants, et l'audit gagne des entrées `normalize_date` et `strip_text`.
 
-**🩹 Si ça ne marche pas :** Si l'analyse `Mixed format` lève une erreur, une cellule contient une ambiguïté réelle comme `02/03/2024` où le mois et le jour pourraient s'inverser — `format="mixed"` la garde analysable mais a silencieusement choisi une lecture ; épingle le format avec `format="%d/%m/%Y"` quand tu connais tes données. Si les colonnes de texte restent épurées dans la sortie écran mais gardent des espaces dans le DataFrame, le DataFrame n'a pas été ré-affecté depuis `stripped`.
+**🩹 Si ça ne marche pas :** Si l'analyse `Mixed format` lève une erreur, une cellule contient une ambiguïté réelle comme `02/03/2024` où le mois et le jour pourraient s'inverser, `format="mixed"` la garde analysable mais a silencieusement choisi une lecture ; épingle le format avec `format="%d/%m/%Y"` quand tu connais tes données. Si les colonnes de texte restent épurées dans la sortie écran mais gardent des espaces dans le DataFrame, le DataFrame n'a pas été ré-affecté depuis `stripped`.
 
 ### 5.3 Vérifie la passe de normalisation
 
@@ -449,12 +449,12 @@ print(*audit, sep="\n")
 
 **🤔 Question(s) socratique(s)**
 
-- Le regex `[^\d.]` convertit `"2.5 USD"` proprement — mais que fait-il à une valeur comme `"2,500.00"` provenant d'une locale qui utilise des séparateurs de milliers ? Qu'est-ce que cela dit du fait de remplacer une décision humaine par un regex ?
+- Le regex `[^\d.]` convertit `"2.5 USD"` proprement, mais que fait-il à une valeur comme `"2,500.00"` provenant d'une locale qui utilise des séparateurs de milliers ? Qu'est-ce que cela dit du fait de remplacer une décision humaine par un regex ?
 - Après la normalisation, des doublons peuvent apparaître qui n'existaient pas avant (deux lignes dont les prix étaient `"2.5 USD"` et `2.5`). Pourquoi la suppression des doublons et la normalisation des formats devraient-elles partager une passe finale unique plutôt que d'être deux étapes séparées ?
 
 ## Étape 6 : Assemble le pipeline complet avec sa trace d'audit
 
-Chaque pièce jusqu'ici corrige un problème en isolation ; le pipeline les câble dans un ordre qui a du sens — profile, puis normalise les formats, puis supprime les doublons (maintenant fiables), puis remplit par colonne, puis plafonne les valeurs aberrantes — et retourne un DataFrame propre *plus* la liste d'audit complète comme enregistrement sérialisable en JSON.
+Chaque pièce jusqu'ici corrige un problème en isolation ; le pipeline les câble dans un ordre qui a du sens, profile, puis normalise les formats, puis supprime les doublons (maintenant fiables), puis remplit par colonne, puis plafonne les valeurs aberrantes, et retourne un DataFrame propre *plus* la liste d'audit complète comme enregistrement sérialisable en JSON.
 
 ### 6.1 Écris `clean_dataset(path)`
 
@@ -490,7 +490,7 @@ L'ordre encode du jugement, pas de l'habitude : les formats se normalisent *d'ab
 
 **🎯 Résultat attendu :** Un DataFrame propre imprimé avec exactement 10 lignes (12 moins les deux doublons), `price` numérique, des noms épurés, des dates uniformes, `units` et `price` remplis à la médiane, une valeur aberrante `units` plafonnée à `7.0`, et une liste d'audit contenant chaque action du pipeline, dans l'ordre d'exécution.
 
-**🩹 Si ça ne marche pas :** Si un `KeyError: 'price'` remonte, la colonne price du CSV ne s'appelle pas `price` — le pipeline code en dur un nom ; fais-en un paramètre `column` quand les données ne sont pas d'accord. Si la suppression des doublons supprime plus de `2` lignes dans le pipeline complet, une passe de normalisation a fusionné deux chaînes auparavant distinctes — compare quelles lignes ont disparu en ré-exécutant sur le fichier original.
+**🩹 Si ça ne marche pas :** Si un `KeyError: 'price'` remonte, la colonne price du CSV ne s'appelle pas `price`, le pipeline code en dur un nom ; fais-en un paramètre `column` quand les données ne sont pas d'accord. Si la suppression des doublons supprime plus de `2` lignes dans le pipeline complet, une passe de normalisation a fusionné deux chaînes auparavant distinctes, compare quelles lignes ont disparu en ré-exécutant sur le fichier original.
 
 ### 6.2 Vérifie le pipeline complet
 
@@ -503,19 +503,19 @@ L'ordre encode du jugement, pas de l'habitude : les formats se normalisent *d'ab
 **🤔 Question(s) socratique(s)**
 
 - Le pipeline exécute la normalisation de format avant la suppression des doublons. Trace ce qui se passe si tu échanges ces deux étapes sur le `messy.csv` original : quelles lignes survivent, et quelle décision devient différente à propos de `price` ?
-- `clean_dataset` retourne une liste fixe de colonnes numériques pour le plafonnement. Que changerais-tu dans la signature de la fonction pour qu'elle reste correcte sur un jeu de données sans colonne `price` — une liste spécifique de colonnes, ou une règle ? Auquel fais-tu confiance à un coéquipier pour maintenir ?
+- `clean_dataset` retourne une liste fixe de colonnes numériques pour le plafonnement. Que changerais-tu dans la signature de la fonction pour qu'elle reste correcte sur un jeu de données sans colonne `price`, une liste spécifique de colonnes, ou une règle ? Auquel fais-tu confiance à un coéquipier pour maintenir ?
 
 ## ⚠️ Pièges courants
 
-- **Corriger des données avant de pouvoir les décrire.** Un script qui impute et plafonne au chargement détruit la preuve qu'une correction était nécessaire — profile d'abord, toujours, et garde ce premier rapport dans l'audit.
+- **Corriger des données avant de pouvoir les décrire.** Un script qui impute et plafonne au chargement détruit la preuve qu'une correction était nécessaire, profile d'abord, toujours, et garde ce premier rapport dans l'audit.
 - **Remplir des identifiants avec des statistiques.** Remplir `order_id` à la médiane ou `timestamp` au mode produit des valeurs qui ont l'air réelles et ne veulent rien dire. Restreins les remplissages par dtype et par une liste blanche de colonnes.
 - **Supprimer au lieu de plafonner.** Supprimer des lignes aberrantes perd silencieusement les colonnes non-aberrantes de ces lignes. Quand un champ est absurde mais que le reste est digne de confiance, plafonne le champ.
 - **Portée excessive des regex sur les formats.** Un nettoyage `[^\d.]` convertit `"2,500.00"` et `"2.50€"` en nombres surprenants. Remonte les valeurs irrécupérables via une liste `stuck` au lieu de prétendre que le regex les a comprises.
-- **Transformations intraçables.** Des données propres sans trace d'audit sont impossibles à distinguer de données qui étaient fausses dès le départ. Chaque mutation — suppression, remplissage, plafonnement, normalisation — est une action auditable, et ce pipeline la traite comme telle.
+- **Transformations intraçables.** Des données propres sans trace d'audit sont impossibles à distinguer de données qui étaient fausses dès le départ. Chaque mutation, suppression, remplissage, plafonnement, normalisation, est une action auditable, et ce pipeline la traite comme telle.
 
 ## Ce que tu viens de construire
 
-Un CLI de nettoyage de données fonctionnel : il charge un CSV vraiment en désordre, signale ce qui ne va pas avant de toucher une cellule, puis corrige les doublons, les valeurs manquantes, les valeurs aberrantes et le chaos de formats dans un ordre délibéré — retournant à la fois un DataFrame propre et un audit complet de chaque changement. La compétence transférable ici survit à l'outil : l'habitude d'enregistrer chaque transformation comme données, pour qu'un jeu de données nettoyé puisse toujours répondre « que m'as-tu fait, et pourquoi ? ».
+Un CLI de nettoyage de données fonctionnel : il charge un CSV vraiment en désordre, signale ce qui ne va pas avant de toucher une cellule, puis corrige les doublons, les valeurs manquantes, les valeurs aberrantes et le chaos de formats dans un ordre délibéré, retournant à la fois un DataFrame propre et un audit complet de chaque changement. La compétence transférable ici survit à l'outil : l'habitude d'enregistrer chaque transformation comme données, pour qu'un jeu de données nettoyé puisse toujours répondre « que m'as-tu fait, et pourquoi ? ».
 
 :::tip[Exécute une version plus complète sans aucune configuration locale]
 [`examples/ai-data-cleaner/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/ai-data-cleaner) dans le dépôt du cours est le même pipeline conditionné pour un notebook, avec les étapes de profilage et d'audit imprimées à chaque stade. Clone-le, ou ouvre tout le dépôt dans un [GitHub Codespace](https://codespaces.new/abderrahim-lectures/python-data-analysis-course), et exécute-le depuis là.
@@ -530,6 +530,6 @@ Un CLI de nettoyage de données fonctionnel : il charge un CSV vraiment en déso
 
 ## Partage ton projet avec la classe
 
-Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres élèves — et son README a un tutoriel complet et adapté aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git avant : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable de git n'est supposée.
+Tu as construit quelque chose dont tu es fier ? [`examples/student-projects/`](https://github.com/abderrahim-lectures/python-data-analysis-course/tree/main/examples/student-projects) est une galerie de projets soumis par d'autres élèves, et son README a un tutoriel complet et adapté aux débutants pour ajouter le tien via une **pull request**, même si tu n'as jamais utilisé git avant : forker le dépôt, créer une branche, commiter tes fichiers, et ouvrir la PR, une étape à la fois. Aucune expérience préalable de git n'est supposée.
 
 Bienvenue dans l'écriture de Python en dehors du navigateur. 🎓

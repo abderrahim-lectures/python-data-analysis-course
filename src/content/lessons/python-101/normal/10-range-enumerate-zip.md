@@ -26,7 +26,7 @@ Loops gave you repetition; this lesson hands you the three helpers that keep the
 
 ## Range: the arithmetic sequence, lazily
 
-In the last lesson you summed with `range(5)`. It deserves a closer look — it is the classical tool for *"do this a known number of times"*:
+In the last lesson you summed with `range(5)`. It deserves a closer look, it is the classical tool for *"do this a known number of times"*:
 
 ```python
 for i in range(5):
@@ -41,7 +41,7 @@ range(2, 8)     # 2, 3, 4, 5, 6, 7
 range(0, 20, 3) # 0, 3, 6, 9, 12, 15, 18
 ```
 
-One argument gives $0, 1, \ldots, n-1$; two give the half-open interval $[\text{start}, \text{stop})$; three add the common difference $d$. Crucially, `range` is **lazy**: it records the parameters and computes each value only as the loop asks for it. Asking for a million steps costs no more memory than asking for five — the sequence is never materialized.
+One argument gives $0, 1, \ldots, n-1$; two give the half-open interval $[\text{start}, \text{stop})$; three add the common difference $d$. Crucially, `range` is **lazy**: it records the parameters and computes each value only as the loop asks for it. Asking for a million steps costs no more memory than asking for five, the sequence is never materialized.
 
 ## Enumerate: the position, without the counter
 
@@ -56,7 +56,7 @@ for fruit in fruits:
     i += 1
 ```
 
-The `i += 1` is a temptation to drift out of sync: forget one, and position labels scramble. `enumerate` produces both halves in one step — the index and the item — so there is nothing to keep in sync:
+The `i += 1` is a temptation to drift out of sync: forget one, and position labels scramble. `enumerate` produces both halves in one step, the index and the item, so there is nothing to keep in sync:
 
 ```python
 for i, fruit in enumerate(fruits):
@@ -71,7 +71,7 @@ Where a mathematician writes $b_i = a_i + i$ to attach position to value, `enume
 
 ## Zip: alignment by position
 
-Two parallel lists — names and scores — cry out to be read together. `zip` aligns them element by element:
+Two parallel lists, names and scores, cry out to be read together. `zip` aligns them element by element:
 
 ```python
 names = ["Alice", "Bob", "Charlie"]
@@ -109,11 +109,11 @@ for i, (name, score) in enumerate(zip(names, scores), start=1):
 print(f"Top score: {max(scores)}")   # Top score: 91
 ```
 
-Read the loop header from the inside out: `zip` pairs each name with its score; the parentheses `(name, score)` unpack that pair; `enumerate` numbers the pairs starting at one; and `i` receives the number. Four gestures that would have cost you a hand-written counter now read like the sentence they describe — position attaches to value, pair by pair, exactly as $b_i = a_i + i$ attaches an index to every term.
+Read the loop header from the inside out: `zip` pairs each name with its score; the parentheses `(name, score)` unpack that pair; `enumerate` numbers the pairs starting at one; and `i` receives the number. Four gestures that would have cost you a hand-written counter now read like the sentence they describe, position attaches to value, pair by pair, exactly as $b_i = a_i + i$ attaches an index to every term.
 
 ## Common pitfalls
 
-- **`range` is exclusive at the top.** `range(5)` yields $0, 1, 2, 3, 4$ — five numbers, none equal to $5$. Think half-open interval, $[0, 5)$.
+- **`range` is exclusive at the top.** `range(5)` yields $0, 1, 2, 3, 4$, five numbers, none equal to $5$. Think half-open interval, $[0, 5)$.
 - **`enumerate` on a dict.** Iterating a dict gives its keys; `enumerate` would number the keys, not the pairs. Use `dict.items()` when you want key and value.
 - **`zip` with unequal lengths.** Elements past the shorter input vanish silently. Notice the loss, or fill with `zip_longest`.
 - **`zip` is a one-shot iterator.** In Python 3, `p = zip(a, b)` hands you an iterator, not a list: `list(p)` consumes it, and a second `list(p)` is empty. Convert eagerly with `list(zip(a, b))` when you'll revisit the pairs.
@@ -121,23 +121,23 @@ Read the loop header from the inside out: `zip` pairs each name with its score; 
 ## 🧩 Challenges
 
 <details class="challenge">
-<summary>🧩 Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge, think first, then reveal</summary>
 <div class="challenge__body">
 
 Use `enumerate` to print each color in `colors = ["red", "green", "blue"]` with its position starting at 1.
 
-<p class="challenge__answer">💡 <strong>Answer:</strong> <code>for i, color in enumerate(colors, 1): print(f"{i}. {color}")</code> — the <code>start</code> argument renumbers the pairings from one.</p>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>for i, color in enumerate(colors, 1): print(f"{i}. {color}")</code>, the <code>start</code> argument renumbers the pairings from one.</p>
 
 </div>
 </details>
 
 <details class="challenge">
-<summary>🧩 Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge, think first, then reveal</summary>
 <div class="challenge__body">
 
 Given `keys = ["a", "b"]` and `values = [1, 2]`, use `zip` to build a dictionary.
 
-<p class="challenge__answer">💡 <strong>Answer:</strong> <code>dict(zip(keys, values))</code> → <code>{"a": 1, "b": 2}</code> — the aligned pairs become the mapping's entries.</p>
+<p class="challenge__answer">💡 <strong>Answer:</strong> <code>dict(zip(keys, values))</code> → <code>{"a": 1, "b": 2}</code>, the aligned pairs become the mapping's entries.</p>
 
 </div>
 </details>

@@ -67,7 +67,7 @@ ax.set_ylabel("Reading Score")
 plt.show()
 ```
 
-La transparence alpha (`alpha=0.5`) est essentielle — elle révèle la densité des points là où ils se chevauchent.
+La transparence alpha (`alpha=0.5`) est essentielle, elle révèle la densité des points là où ils se chevauchent.
 
 ### Graphiques de régression
 
@@ -257,7 +257,7 @@ plt.show()
 Créez une figure avec 4 panneaux montrant : (1) un diagramme de dispersion des notes de maths contre les notes de rédaction, (2) une dispersion avec droite de régression, (3) un hexbin plot de densité et (4) une dispersion colorée par type de repas. Ajoutez des titres et des étiquettes d'axes appropriés.
 
 <details class="challenge">
-<summary>🧩 Défi — réfléchissez d'abord, puis révélez</summary>
+<summary>🧩 Défi, réfléchissez d'abord, puis révélez</summary>
 <div class="challenge__body">
 
 ```python

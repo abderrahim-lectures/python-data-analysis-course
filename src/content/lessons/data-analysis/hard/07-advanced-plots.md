@@ -294,7 +294,7 @@ plt.show()
 
 ## Key Takeaways
 
-- FacetGrid and catplot create multi-panel views split by categorical variables — essential for comparing distributions across groups
+- FacetGrid and catplot create multi-panel views split by categorical variables, essential for comparing distributions across groups
 - PairGrid gives full control over diagonal, upper, and lower triangle plot types
 - GridSpec creates custom layouts where subplots have different sizes
 - Combining plot types on one axes (scatter + regression + means) layers information efficiently
@@ -305,7 +305,7 @@ plt.show()
 Create a 2×2 figure: (1) FacetGrid of math score histograms split by gender, (2) PairGrid of all three scores with KDE on diagonal and scatter below, (3) a combined scatter + regression + mean lines plot, and (4) a correlation heatmap. Set a single figure title across all four.
 
 <details class="challenge">
-<summary>🧩 Challenge — think first, then reveal</summary>
+<summary>🧩 Challenge, think first, then reveal</summary>
 <div class="challenge__body">
 
 ```python
