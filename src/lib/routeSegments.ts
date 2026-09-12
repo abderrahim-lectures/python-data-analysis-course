@@ -29,11 +29,11 @@ export function detectLocale(pathname: string): Locale {
   return 'en';
 }
 
-export const NAV_WORDS: Record<Locale, {learn: string; projects: string; progress: string; credits: string; cheatsheets: string; progressGuide: string}> = {
-  en: {learn: 'learn', projects: 'projects', progress: 'progress', credits: 'credits', cheatsheets: 'cheatsheets', progressGuide: 'progress-guide'},
-  ar: {learn: 'تعلم', projects: 'مشاريع', progress: 'تقدم', credits: 'المصادر', cheatsheets: 'ملخصات', progressGuide: 'دليل-التقدم'},
-  es: {learn: 'aprender', projects: 'proyectos', progress: 'progreso', credits: 'creditos', cheatsheets: 'referencias', progressGuide: 'guia-progreso'},
-  fr: {learn: 'apprendre', projects: 'projets', progress: 'progression', credits: 'credits', cheatsheets: 'antiseche', progressGuide: 'guide-progression'},
+export const NAV_WORDS: Record<Locale, {learn: string; projects: string; progress: string; credits: string; cheatsheets: string; progressGuide: string; pedagogy: string}> = {
+  en: {learn: 'learn', projects: 'projects', progress: 'progress', credits: 'credits', cheatsheets: 'cheatsheets', progressGuide: 'progress-guide', pedagogy: 'teaching-approach'},
+  ar: {learn: 'تعلم', projects: 'مشاريع', progress: 'تقدم', credits: 'المصادر', cheatsheets: 'ملخصات', progressGuide: 'دليل-التقدم', pedagogy: 'المنهج-التعليمي'},
+  es: {learn: 'aprender', projects: 'proyectos', progress: 'progreso', credits: 'creditos', cheatsheets: 'referencias', progressGuide: 'guia-progreso', pedagogy: 'enfoque-pedagogico'},
+  fr: {learn: 'apprendre', projects: 'projets', progress: 'progression', credits: 'credits', cheatsheets: 'antiseche', progressGuide: 'guide-progression', pedagogy: 'approche-pedagogique'},
 };
 
 export const TRACK_WORDS: Record<Locale, {normal: string; hard: string}> = {
@@ -124,6 +124,11 @@ export function navWordAlternates(word: keyof typeof NAV_WORDS[Locale]): Record<
 /** Top-level `/progress-guide`/`/guia-progreso`/… link. */
 export function progressGuideHref(locale: Locale, base: string): string {
   return withBase(localizedPath([NAV_WORDS[locale].progressGuide], locale), base);
+}
+
+/** Top-level `/teaching-approach`/`/enfoque-pedagogico`/… link. */
+export function pedagogyHref(locale: Locale, base: string): string {
+  return withBase(localizedPath([NAV_WORDS[locale].pedagogy], locale), base);
 }
 
 /** Build a module href with the localized track word and modules word. */

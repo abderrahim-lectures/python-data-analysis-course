@@ -4,7 +4,7 @@
 // All markup lives here; each locale page is a thin <ProgressGuide locale="…"/> wrapper.
 import Base from '../layouts/Base.astro';
 import {m} from '../paraglide/messages';
-import {NAV_WORDS, progressHref, type Locale} from '../lib/routeSegments';
+import {NAV_WORDS, progressHref, pedagogyHref, type Locale} from '../lib/routeSegments';
 
 interface Props {
   locale: Locale;
@@ -138,6 +138,12 @@ const stretchWords = [m.progress_guide_quest_firsts(), m.progress_guide_quest_st
     </section>
 
     <a class="guide__back" href={progressHref(locale, base)} aria-label={m.progress_guide_back()}>{m.progress_guide_back()}</a>
+
+    <section class="guide__card guide__card--cross">
+      <h2>{m.pedagogy_guide_link()}</h2>
+      <p>{m.pedagogy_guide_link_lede()}</p>
+      <a class="guide__cta" href={pedagogyHref(locale, base)}>{m.pedagogy_guide_link_cta()}</a>
+    </section>
   </section>
 </Base>
 
@@ -154,6 +160,7 @@ const stretchWords = [m.progress_guide_quest_firsts(), m.progress_guide_quest_st
     box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: .5rem;
   }
   .guide__card--wide { grid-column: 1 / -1; }
+  section.guide__card + section.guide__card { margin-top: 1.25rem; }
   .guide__lede { color: var(--ink-soft); margin: 0; line-height: 1.6; }
   .guide p { margin: 0; line-height: 1.6; }
   .guide__table { width: 100%; border-collapse: collapse; margin-top: .5rem; }
@@ -186,4 +193,7 @@ const stretchWords = [m.progress_guide_quest_firsts(), m.progress_guide_quest_st
     font-weight: 600; text-decoration: none;
   }
   .guide__back:hover { text-decoration: underline; }
+  .guide__card--cross { margin-top: 1.25rem; }
+  .guide__cta { display: inline-flex; align-self: flex-start; color: var(--accent); font-weight: 600; text-decoration: none; }
+  .guide__cta:hover { text-decoration: underline; }
 </style>
