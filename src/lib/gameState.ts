@@ -12,8 +12,16 @@ export interface ActivityEntry {
   meta?: string;       // optional extra info (lesson id, project slug, etc.)
 }
 
+export interface LessonMastery {
+  correct: number;
+  total: number;
+  firstWrongAt: number | null;
+  lastWrongAt: number | null;
+}
+
 export interface PDAState {
   xp: number;
+  lessonMastery: Record<string, LessonMastery>;
   lessonsCompleted: Record<string, boolean>;
   lessonsRun: Record<string, boolean>;
   projectsViewed: Record<string, boolean>;
@@ -57,6 +65,7 @@ function today(): string { return new Date().toISOString().slice(0, 10); }
 function defaults(): PDAState {
   return {
     xp: 0,
+    lessonMastery: {},
     lessonsCompleted: {},
     lessonsRun: {},
     projectsViewed: {},
@@ -97,6 +106,7 @@ function repairLegacy(s: PDAState): PDAState {
   if (!s.projectsCompleted) s.projectsCompleted = {};
   if (!s.projectsSteps) s.projectsSteps = {};
   if (!s.challengesCompleted) s.challengesCompleted = {};
+  if (!s.lessonMastery) s.lessonMastery = {};
   if (!s.activityLog) s.activityLog = [];
   evaluateMilestones(s);
   return s;
@@ -275,7 +285,7 @@ export function isProjectStepDone(projectSlug: string, stepIdx: number): boolean
 }
 
 // ── Quizzes ─────────────────────────────────────────────────────────
-export function recordQuiz(correct: boolean): void {
+export function recordQuiz(correct: boolean, lessonId?: string): void {
   const s = read();
   s.quizTotal += 1;
   if (correct) {
@@ -286,9 +296,24 @@ export function recordQuiz(correct: boolean): void {
   } else {
     addLog(s, 'quiz', 'Quiz attempt', 0);
   }
+  if (lessonId) {
+    const m = s.lessonMastery[lessonId] ?? {correct: 0, total: 0, firstWrongAt: null, lastWrongAt: null};
+    m.total += 1;
+    if (correct) {
+      m.correct += 1;
+    } else {
+      if (m.firstWrongAt === null) m.firstWrongAt = Date.now();
+      m.lastWrongAt = Date.now();
+    }
+    s.lessonMastery[lessonId] = m;
+  }
   s.lastActive = today();
   evaluateMilestones(s);
   write(s);
+}
+
+export function getLessonMastery(): Record<string, LessonMastery> {
+  return read().lessonMastery;
 }
 
 export function recordQuizPerfect(): void {

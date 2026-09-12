@@ -109,7 +109,7 @@ const {title = m.quiz_title(), questions, xp = 10, lessonId = ''} = Astro.props;
         if (qAnswered) {
           answered = true;
           try {
-            import('../lib/gameState.ts').then((gs) => gs.recordQuiz(userCorrect));
+            import('../lib/gameState.ts').then((gs) => gs.recordQuiz(userCorrect, lessonId || undefined));
           } catch (e) {
             console.warn('[quiz] failed to record quiz', e);
           }

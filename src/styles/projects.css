@@ -92,6 +92,9 @@
 .card__badge--beginner { background: #065f46; color: #fff; }
 .card__badge--intermediate { background: #92400e; color: #fff; }
 .card__badge--advanced { background: #7f1d1d; color: #fff; }
+.card__badge--scaffold-full { background: rgba(6,95,70,.14); color: var(--success-text, #065f46); }
+.card__badge--scaffold-partial { background: rgba(146,64,14,.14); color: var(--streak-text, #92400e); }
+.card__badge--scaffold-open { background: rgba(124,58,237,.14); color: var(--accent-text, #7c3aed); }
 
 .card__body { padding: .4rem 1.2rem 1.2rem; display: flex; flex-direction: column; gap: .45rem; flex: 1; }
 .card h2 { font-size: 1.05rem; margin: 0; line-height: 1.3; }

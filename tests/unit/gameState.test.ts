@@ -696,3 +696,44 @@ describe('XP milestones', () => {
     expect(q.find((x) => x.id === 'xp-500')?.done).toBe(false);
   });
 });
+
+describe('per-lesson mastery', () => {
+  test('recordQuiz with a lessonId tracks totals per lesson', async () => {
+    const gs = await fresh();
+    gs.recordQuiz(true, 'python-101/normal/01-printing');
+    gs.recordQuiz(false, 'python-101/normal/01-printing');
+
+    const m = gs.getLessonMastery()['python-101/normal/01-printing'];
+    expect(m.correct).toBe(1);
+    expect(m.total).toBe(2);
+    expect(m.firstWrongAt).not.toBeNull();
+    expect(m.lastWrongAt).not.toBeNull();
+  });
+
+  test('recordQuiz without a lessonId leaves mastery untouched', async () => {
+    const gs = await fresh();
+    gs.recordQuiz(true);
+
+    expect(gs.getLessonMastery()).toEqual({});
+  });
+
+  test('mastery is keyed separately per lesson', async () => {
+    const gs = await fresh();
+    gs.recordQuiz(false, 'lesson-a');
+    gs.recordQuiz(true, 'lesson-b');
+
+    expect(gs.getLessonMastery()['lesson-a'].total).toBe(1);
+    expect(gs.getLessonMastery()['lesson-b'].total).toBe(1);
+    expect(gs.getLessonMastery()['lesson-a'].correct).toBe(0);
+    expect(gs.getLessonMastery()['lesson-b'].correct).toBe(1);
+  });
+
+  test('state saved without lessonMastery still loads', async () => {
+    vi.resetModules();
+    installLocalStorage();
+    localStorage.setItem('pda:state', JSON.stringify({xp: 5, quizCorrect: 1, quizTotal: 1}));
+
+    const gs = await import('../../src/lib/gameState.ts');
+    expect(gs.getLessonMastery()).toEqual({});
+  });
+});

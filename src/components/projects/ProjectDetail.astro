@@ -49,6 +49,10 @@ const slug = rawSlug.replace(/^\/?projects\//, '');
 const diff = difficulty ?? 'beginner';
 const diffLabel = `difficulty_${diff}` as 'difficulty_beginner' | 'difficulty_intermediate' | 'difficulty_advanced';
 const diffText = diff === 'beginner' ? 'var(--success-text)' : diff === 'intermediate' ? 'var(--streak-text)' : 'var(--bad-text)';
+// ZPD rung: full guidance on the first projects, freestyle on the capstones.
+// Explicit frontmatter wins; otherwise difficulty is the natural proxy.
+const scaffold = entry.data.scaffold ?? (diff === 'advanced' ? 'open' : diff === 'intermediate' ? 'partial' : 'full');
+const scaffoldKey = `project_scaffold_${scaffold}` as 'project_scaffold_full' | 'project_scaffold_partial' | 'project_scaffold_open';
 const projectTags = (tags?.length ? tags : PROJECT_TAGS[slug] ?? []) as string[];
 
 const enUrl = `projects/${slug}`;
@@ -99,6 +103,7 @@ const jsonLd = {
     <header class="project-head">
       <div class="project-head__meta">
         <span class="project-head__diff" style={`color:${diffText}`}>{m[diffLabel]()}</span>
+        <span class="project-head__scaffold project-head__scaffold--{scaffold}">{m[scaffoldKey]()}</span>
         {estimatedMinutes && <span class="project-head__time">{m.minutes_label({n: estimatedMinutes})}</span>}
         <span class="project-head__xp">⚡ +{xpAward} XP</span>
         <span class="project-head__xp project-head__xp--step">{m.project_xp_per_step({n: XP.PROJECT_STEP})}</span>
@@ -286,6 +291,13 @@ const jsonLd = {
   .project-done__btn { font-size: 1rem; padding: .8rem 1.6rem; }
   .project-done__hint { color: var(--ink-soft); font-size: .82rem; margin-top: .5rem; }
   .project-head__xp--step { opacity: .75; }
+  .project-head__scaffold {
+    font-size: .78rem; font-weight: 800; letter-spacing: .03em;
+    text-transform: uppercase; padding: .15rem .6rem; border-radius: var(--radius-pill);
+  }
+  .project-head__scaffold--full { color: var(--success-text); background: var(--success-soft); border: 1px solid var(--success); }
+  .project-head__scaffold--partial { color: var(--streak-text); background: var(--warn-soft); border: 1px solid var(--warn); }
+  .project-head__scaffold--open { color: var(--accent-text); background: var(--accent-soft); border: 1px solid var(--accent); }
   .project-content :global(h2.is-step-done) { color: var(--success-text); position: relative; }
   .project-content :global(h2.is-step-done::after) {
     content: '✅ ' attr(data-step-cleared) ' · +' attr(data-step-xp) ' XP'; font-size: .72rem; font-weight: 700;

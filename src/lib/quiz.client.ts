@@ -12,6 +12,7 @@ function initQuiz(quiz: Element) {
   if (!quiz.querySelector('.quiz-q[data-answer]')) return;
   quiz.setAttribute('data-hydrated', '1');
   const questions = Array.from(quiz.querySelectorAll('.quiz-q'));
+  const lessonId = quiz.closest?.('[data-lesson-id]')?.getAttribute('data-lesson-id') ?? '';
   let answered = 0;
   let correct = 0;
 
@@ -36,7 +37,7 @@ function initQuiz(quiz: Element) {
         if (isCorrect) correct++;
         try {
           const gs = await import('./gameState.ts');
-          gs.recordQuiz(isCorrect);
+          gs.recordQuiz(isCorrect, lessonId || undefined);
         } catch {
           // offline: skip
         }

@@ -57,6 +57,7 @@ const projects = defineCollection({
     slug: z.string().optional(),
     description: z.string(),
     difficulty: z.enum(["beginner", "intermediate", "advanced"]).optional(),
+    scaffold: z.enum(["full", "partial", "open"]).optional(),
     estimatedMinutes: z.number().optional(),
     xpReward: z.number().default(50),
     tags: z.array(z.string()).default([]),

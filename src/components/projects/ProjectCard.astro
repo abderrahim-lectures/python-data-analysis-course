@@ -20,6 +20,8 @@ const emoji = projectArtEmoji(tags);
 const diff: Difficulty = difficulty;
 const diffColor = DIFFICULTY_COLORS[diff];
 const diffLabel = `difficulty_${diff}` as 'difficulty_beginner' | 'difficulty_intermediate' | 'difficulty_advanced';
+const scaffold = diff === 'advanced' ? 'open' : diff === 'intermediate' ? 'partial' : 'full';
+const scaffoldKey = `project_scaffold_${scaffold}` as 'project_scaffold_full' | 'project_scaffold_partial' | 'project_scaffold_open';
 const haystack = `${title} ${description} ${tags.join(' ')}`.toLowerCase();
 const tagIcon = (t: string): string => projectArtEmoji([t]);
 ---
@@ -28,6 +30,7 @@ const tagIcon = (t: string): string => projectArtEmoji([t]);
   <div class="card__header">
     <span class="card__icon">{emoji}</span>
     <span class={`card__badge card__badge--${diff}`}>{m[diffLabel]()}</span>
+    <span class={`card__badge card__badge--scaffold-${scaffold}`}>{m[scaffoldKey]()}</span>
   </div>
   <div class="card__body">
     <h2>{title}</h2>
