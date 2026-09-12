@@ -174,6 +174,11 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
     {allJsonLdBlocks.map((block) => (
       <script type="application/ld+json" set:html={JSON.stringify(block)} />
     ))}
+    <script type="application/json" id="pyodide-i18n" set:html={JSON.stringify({
+      first: m.pyodide_loading_first(),
+      indeterminate: m.pyodide_loading_engine_indeterminate(),
+      template: m.pyodide_loading_engine({pct: '__PCT__'}),
+    })} />
     <script is:inline>
       // Persisted theme — must run before first paint to avoid a flash.
       const t = localStorage.getItem('pda:theme');
@@ -202,22 +207,21 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
           busy.setAttribute('aria-hidden', String(!on));
           if (!on) label.textContent = '';
         };
+        const i18n = JSON.parse(document.getElementById('pyodide-i18n').textContent);
         const hideFirst = () => busy.classList.remove('app-busy--first');
         if (document.readyState !== 'complete') {
           busy.classList.add('app-busy--first');
-          label.textContent = {JSON.stringify(m.pyodide_loading_first())};
+          label.textContent = i18n.first;
           window.addEventListener('load', hideFirst);
           setTimeout(hideFirst, 1200); // safety net for slow third-party fonts
         }
-        const pyodideLoadingIndeterminate = {JSON.stringify(m.pyodide_loading_engine_indeterminate())};
-        const pyodideLoadingTemplate = {JSON.stringify(m.pyodide_loading_engine({pct: '__PCT__'}))};
         window.addEventListener('pyodide:loading', () => {
-          label.textContent = pyodideLoadingIndeterminate;
+          label.textContent = i18n.indeterminate;
           setBusy(true);
         });
         window.addEventListener('pyodide:progress', (e) => {
           const pct = e.detail && e.detail.pct;
-          if (typeof pct === 'number') label.textContent = pyodideLoadingTemplate.replace('__PCT__', String(pct));
+          if (typeof pct === 'number') label.textContent = i18n.template.replace('__PCT__', String(pct));
         });
         window.addEventListener('pyodide:ready', () => setBusy(false));
         // Pyodide loading bar (top edge)
