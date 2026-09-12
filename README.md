@@ -1,7 +1,6 @@
 # Python & Data Analysis Course
 
 [![Deploy to GitHub Pages](https://github.com/abderrahim-lectures/python-data-analysis-course/actions/workflows/deploy.yml/badge.svg)](https://github.com/abderrahim-lectures/python-data-analysis-course/actions/workflows/deploy.yml)
-[![CI](https://github.com/abderrahim-lectures/python-data-analysis-course/actions/workflows/ci.yml/badge.svg)](https://github.com/abderrahim-lectures/python-data-analysis-course/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/code-MIT-blue.svg)](./LICENSE)
 [![Content: CC BY 4.0](https://img.shields.io/badge/content-CC--BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
 [![Live site](https://img.shields.io/badge/live-pyda--course.online-5b3df5)](https://pyda-course.online/)
@@ -101,9 +100,11 @@ Every change — a lesson, a component, a bug fix, a translation — goes throug
 
 1. **Open an issue** describing the change, labeled by type (`type:feature`, `type:bug`, `type:content`, `type:infra`, `type:i18n`) and area (`area:python-101`, `area:data-analysis`, `area:playground`, `area:gamification`, `area:design`).
 2. **Branch off `main`** (`issue-<number>-<short-slug>`) and do the work there.
-3. **Open a PR** referencing the issue (`Closes #N`), with `npm run build` (and `npm run test:e2e` for anything touching interactive components) passing.
-4. **CI runs automatically** on the PR — typecheck (`astro check`), build, and the unit + CDP smoke suites.
-5. Once checks pass, the PR merges into `main` and the [deploy workflow](./.github/workflows/deploy.yml) publishes the update.
+3. **Open a PR** referencing the issue (`Closes #N`), with the checks below passing. There is no CI — tests run locally:
+   - `npm run check` (typecheck, `astro check`)
+   - `npm run build`
+   - `npm run test` (unit suites) and `npm run test:e2e` for anything touching interactive components.
+4. Once checks pass, the PR merges into `main` and the [deploy workflow](./.github/workflows/deploy.yml) publishes the update.
 
 Found a typo or a broken example while going through a lesson? Lesson content lives in `src/content/lessons/` (and `src/content/projects/` for the Real-World Project pages) — the fastest fix is a PR against that file.
 
