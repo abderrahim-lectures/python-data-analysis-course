@@ -1,0 +1,118 @@
+#!/usr/bin/env node
+/**
+ * Generate localized project slugs from the localized titles in
+ * src/content/projects/{ar,es,fr}/*.md. The canonical English slug is the
+ * bare filename (without .md). The localized slug is derived from the
+ * localized `title` frontmatter value, slugified per locale.
+ *
+ * Outputs:
+ *   src/lib/projectSlugs.data.json – the single source of truth (imported by the
+ *   app, astro.config sitemap filter, and rehype-fix-docs-links).
+ *
+ * Run via:  node scripts/generate-project-slugs.cjs
+ * (also runs automatically in prebuild / predev)
+ */
+'use strict';
+const fs = require('fs');
+const path = require('path');
+
+const CONTENT_DIR = path.join(__dirname, '..', 'src', 'content', 'projects');
+const OUT_JSON = path.join(__dirname, '..', 'src', 'lib', 'projectSlugs.data.json');
+
+// ── title extraction ─────────────────────────────────────────────────────────
+
+function readTitle(filePath) {
+  const src = fs.readFileSync(filePath, 'utf8');
+  // Capture everything between `---` blocks (frontmatter only).
+  const fmMatch = src.match(/^---\s*\n([\s\S]*?)\n---/);
+  if (!fmMatch) return '';
+  const fm = fmMatch[1];
+  // title: "..."  OR  title: ...
+  const m = fm.match(/^title:\s*"([^"]*)"$/m) || fm.match(/^title:\s*(.+?)\s*$/m);
+  return m ? m[1].trim() : '';
+}
+
+// ── slugify helpers ──────────────────────────────────────────────────────────
+
+/** Arabic slug: keep Arabic-Indic letters + digits, strip diacritics/tatweel, spaces → hyphens. */
+function slugifyAr(title) {
+  return title
+    .normalize('NFC')
+    .replace(/[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06ED]/g, '') // tashkeel
+    .replace(/\u0640/g, '')  // tatweel
+    .replace(/[^\u0600-\u06FF0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+/** Latin slug: lowercase, strip accents (NFD), keep [a-z0-9]. */
+function slugifyLatin(title) {
+  return title
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036F]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+function slugify(title, locale) {
+  if (locale === 'ar') return slugifyAr(title);
+  return slugifyLatin(title);
+}
+
+// ── collision-safe assignment ─────────────────────────────────────────────────
+
+function assignSlug(map, candidate, enSlug, used) {
+  let c = candidate || enSlug;
+  if (!c) c = enSlug; // fallback to english if slugify yields empty
+  let final = c;
+  let n = 2;
+  while (used.has(final)) {
+    final = `${c}-${n}`;
+    n++;
+  }
+  used.add(final);
+  map[enSlug] = final;
+}
+
+// ── main ─────────────────────────────────────────────────────────────────────
+
+const LOCALES = ['ar', 'es', 'fr'];
+
+// 1. Collect all English filenames (the canonical slugs used as keys everywhere)
+const enFiles = fs.readdirSync(CONTENT_DIR)
+  .filter((f) => f.endsWith('.md') && !f.startsWith('.'));
+const enSlugs = enFiles.map((f) => f.replace(/\.md$/, ''));
+
+// 2. Read localized titles per locale
+const titles = {};
+for (const loc of LOCALES) {
+  titles[loc] = {};
+  const dir = path.join(CONTENT_DIR, loc);
+  if (!fs.existsSync(dir)) continue;
+  for (const f of enFiles) {
+    const fp = path.join(dir, f);
+    if (fs.existsSync(fp)) {
+      titles[loc][f.replace(/\.md$/, '')] = readTitle(fp);
+    }
+  }
+}
+
+// 3. Build slug maps; dedupe against english filenames + other translated slugs
+const result = {};
+for (const loc of LOCALES) {
+  result[loc] = {};
+  const used = new Set(enSlugs); // english slugs are reserved (alias param collision)
+  for (const enSlug of enSlugs) {
+    const title = titles[loc]?.[enSlug];
+    const candidate = title ? slugify(title, loc) : enSlug;
+    assignSlug(result[loc], candidate, enSlug, used);
+  }
+}
+
+// 4. Write JSON (single source of truth)
+const jsonContent = JSON.stringify(result, null, 2) + '\n';
+fs.writeFileSync(OUT_JSON, jsonContent, 'utf8');
+
+// Summary
+const total = LOCALES.reduce((n, l) => n + Object.keys(result[l]).length, 0);
+console.log(`projectSlugs: ${total} slugs written (${enSlugs.length} projects × ${LOCALES.length} locales)`);

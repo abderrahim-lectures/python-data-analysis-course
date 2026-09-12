@@ -1,0 +1,185 @@
+.hero { padding: 2.5rem 0 1.5rem; }
+.head__eyebrow { color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: .08em; font-size: .76rem; display: inline-flex; align-items: center; gap: .3rem; }
+.head h1 { font-size: clamp(2rem, 4vw, 2.8rem); margin: .4rem 0 .2rem; }
+.head p { color: var(--ink-soft); }
+
+.finder { margin: 0 0 1.25rem; display: flex; flex-direction: column; gap: .75rem; }
+.finder__search {
+  display: flex; align-items: center; gap: .6rem;
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-md);
+  padding: .65rem .9rem; color: var(--ink-soft);
+}
+.finder__search:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.finder__search input {
+  border: none; outline: none; background: none; color: var(--ink);
+  font-size: .95rem; width: 100%; font-family: inherit;
+}
+.finder__search input::placeholder { color: var(--ink-faint); }
+.finder__actions { display: flex; flex-direction: column; gap: .5rem; }
+.finder__tags { display: flex; flex-wrap: wrap; gap: .5rem; }
+.tag-pill {
+  border: 1px solid var(--line); background: var(--surface); color: var(--ink-soft);
+  border-radius: var(--radius-pill); padding: .35rem .85rem; font-size: .8rem; font-weight: 700;
+  cursor: pointer; transition: all var(--transition-fast);
+}
+.tag-pill:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+.tag-pill:active { transform: translateY(1px); }
+.tag-pill:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.tag-pill.is-active { background: var(--accent); border-color: var(--accent); color: var(--accent-contrast); }
+.finder__view { display: flex; gap: .25rem; }
+.view-btn {
+  border: 1px solid var(--line); background: var(--surface); color: var(--ink-soft);
+  border-radius: var(--radius-pill); padding: .3rem .55rem; cursor: pointer;
+  transition: all var(--transition-fast); display: inline-flex; align-items: center;
+}
+.view-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+.view-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.view-btn.is-active { background: var(--accent); border-color: var(--accent); color: var(--accent-contrast); }
+.finder__count { margin: 0; font-size: .82rem; color: var(--ink-soft); }
+
+/* ── Difficulty filter pills ──────────────────────────────────── */
+.finder__difficulty { display: flex; gap: .35rem; }
+.diff-pill {
+  border: 1px solid var(--line); background: var(--surface); color: var(--ink-soft);
+  border-radius: var(--radius-pill); padding: .3rem .7rem; font-size: .75rem; font-weight: 700;
+  cursor: pointer; transition: all var(--transition-fast); text-transform: capitalize;
+}
+.diff-pill:hover { border-color: var(--accent); color: var(--accent); }
+.diff-pill.is-active { color: #fff; }
+.diff-pill[data-diff=""].is-active { background: var(--accent); border-color: var(--accent); color: var(--accent-contrast); }
+.diff-pill[data-diff="beginner"].is-active { background: #065f46; border-color: #065f46; }
+.diff-pill[data-diff="intermediate"].is-active { background: #92400e; border-color: #92400e; }
+.diff-pill[data-diff="advanced"].is-active { background: #7f1d1d; border-color: #7f1d1d; }
+
+/* ── Project cards ────────────────────────────────────────────── */
+.list { display: flex; flex-direction: column; gap: .75rem; margin: 1rem 0 3rem; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); gap: 1.1rem; margin: 1.5rem 0 3rem; }
+.card {
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg);
+  overflow: hidden; text-decoration: none; color: var(--ink); box-shadow: var(--shadow-sm);
+  transition: all var(--transition-smooth); display: flex; flex-direction: column;
+  position: relative;
+}
+.card[hidden] { display: none; }
+.card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); border-color: var(--accent); }
+.card:active { box-shadow: var(--shadow-sm); transform: translateY(1px); }
+.card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Top accent stripe by difficulty */
+.card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: var(--accent); opacity: .6; transition: opacity var(--transition-fast);
+}
+.card:hover::before { opacity: 1; }
+.card[data-diff="beginner"]::before { background: #34d399; }
+.card[data-diff="intermediate"]::before { background: #fbbf24; }
+.card[data-diff="advanced"]::before { background: #f87171; }
+
+.card__header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  padding: .85rem 1.2rem 0; gap: .5rem; flex-wrap: wrap;
+}
+
+/* Grid view: keep the difficulty badge from overlapping the icon by giving
+   it its own line when the card is too narrow to fit both nowrap items. */
+.grid .card__badge { margin-inline-start: auto; }
+.card__icon { font-size: 1.8rem; line-height: 1; }
+.card__badge {
+  font-size: .65rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em;
+  padding: .2rem .55rem; border-radius: var(--radius-pill); white-space: nowrap;
+  flex-shrink: 0;
+}
+.card__badge--beginner { background: #065f46; color: #fff; }
+.card__badge--intermediate { background: #92400e; color: #fff; }
+.card__badge--advanced { background: #7f1d1d; color: #fff; }
+.card__badge--scaffold-full { background: rgba(6,95,70,.14); color: var(--success-text, #065f46); }
+.card__badge--scaffold-partial { background: rgba(146,64,14,.14); color: var(--streak-text, #92400e); }
+.card__badge--scaffold-open { background: rgba(124,58,237,.14); color: var(--accent-text, #7c3aed); }
+
+.card__body { padding: .4rem 1.2rem 1.2rem; display: flex; flex-direction: column; gap: .45rem; flex: 1; min-width: 0; }
+.card h2 { font-size: 1.05rem; margin: 0; line-height: 1.3; }
+.card p { color: var(--ink-soft); font-size: .85rem; margin: 0; line-height: 1.5; flex-grow: 1; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.card__tags { display: flex; flex-wrap: wrap; gap: .3rem; align-items: center; margin-top: .2rem; }
+.chip {
+  background: var(--accent-soft); color: var(--accent); font-size: .7rem; font-weight: 700;
+  padding: .12rem .5rem; border-radius: var(--radius-pill); display: inline-flex;
+  align-items: center; gap: .15rem; transition: background var(--transition-fast);
+}
+.card:hover .chip { background: var(--accent); color: var(--accent-contrast); }
+.chip__icon { font-size: .6rem; }
+
+/* List view card layout */
+.list .card { flex-direction: row; align-items: stretch; }
+.list .card__header { flex-direction: row; align-items: center; justify-content: flex-start; gap: .5rem; padding-block-start: .75rem; padding-inline-end: 0; padding-inline-start: 1.25rem; flex-shrink: 0; }
+.list .card__badge { position: static; white-space: nowrap; }
+.list .card__icon { font-size: 1.5rem; }
+.list .card__body { padding-block: .8rem; padding-inline-start: .25rem; padding-inline-end: 1.2rem; min-width: 0; }
+.list .card p { -webkit-line-clamp: 1; }
+
+/* List view: replace the top accent stripe with a vertical ribbon on the
+   inline-start edge of the card (left in LTR, right in RTL), colored by
+   difficulty. */
+.list .card::before {
+  top: 0; bottom: 0; height: auto;
+  inset-inline-start: 0; inset-inline-end: auto;
+  width: 6px; opacity: 1;
+}
+.list .card[data-diff="beginner"]::before { background: #34d399; }
+.list .card[data-diff="intermediate"]::before { background: #fbbf24; }
+.list .card[data-diff="advanced"]::before { background: #f87171; }
+
+.tag-pill__icon { margin-inline-end: .2rem; }
+.empty { text-align: center; color: var(--ink-soft); padding: 2.5rem 1rem; margin: 0 0 3rem; }
+
+/* ── Card entrance animation ──────────────────────────────────── */
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.card { animation: cardIn .35s ease both; }
+.grid .card:nth-child(1) { animation-delay: .02s; }
+.grid .card:nth-child(2) { animation-delay: .06s; }
+.grid .card:nth-child(3) { animation-delay: .10s; }
+.grid .card:nth-child(4) { animation-delay: .14s; }
+.grid .card:nth-child(5) { animation-delay: .18s; }
+.grid .card:nth-child(n+6) { animation-delay: .22s; }
+
+/* Responsive: fix overflow at 320px */
+@media (max-width: 640px) {
+  .hero { padding: 1.75rem 0 1.25rem; }
+  .grid, .list { margin-bottom: 1.75rem; }
+  .empty { padding: 1.75rem 1rem; }
+  /* List view: a row (201px header + body) is too cramped for a 288px phone
+     card; stack the header above the body like grid view. */
+  .list .card { flex-direction: column; }
+  .list .card__header { padding-block-start: .85rem; }
+  .list .card__body { padding-block: .4rem 1.2rem; }
+}
+@media (max-width: 480px) {
+  .finder__actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: .5rem;
+  }
+  .finder__difficulty {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .25rem;
+    justify-content: center;
+  }
+  .diff-pill {
+    padding: .25rem .5rem;
+    font-size: .7rem;
+    flex: 1 1 auto;
+    min-width: 0;
+    text-align: center;
+  }
+  .finder__tags {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .tag-pill {
+    padding: .25rem .5rem;
+    font-size: .7rem;
+  }
+}

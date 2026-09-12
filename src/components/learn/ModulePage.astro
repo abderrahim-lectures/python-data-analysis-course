@@ -1,0 +1,194 @@
+---
+// Shared module page for locale learn trees, e.g. /ar/تعلم/python-101/hard/modules/[module].
+import {getCollection, type CollectionEntry} from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import ModuleNav from '../ModuleNav.astro';
+import {learnHref, lessonHref, MODULE_WORDS, trackWord, learnAlternates, idInLocale, type Locale} from '../../lib/routeSegments';
+import {m} from '../../paraglide/messages.js';
+import {sectionName} from '../../lib/sections';
+
+interface Props {
+  locale: Locale;
+  section: string;
+  track: 'normal' | 'hard';
+  entry: CollectionEntry<'modules'>;
+}
+
+const {locale, section, track, entry} = Astro.props;
+const {title, description, order, difficulty, tags, icon} = entry.data;
+const base = import.meta.env.BASE_URL;
+const dir = locale === 'ar' ? 'rtl' : 'ltr';
+
+const trackPath = `${section}/${track}`;
+const moduleSlug = entry.id.split('/').pop()!.replace(/^module-\d+-/, '');
+const allLessons = await getCollection('lessons');
+const moduleLessons = allLessons
+  .filter((e) => idInLocale(locale, e.id) && e.id.includes(trackPath) && e.data.module === moduleSlug)
+  .sort((a, b) => a.data.order - b.data.order);
+
+const allModules = await getCollection('modules');
+const sortedModules = allModules
+  .filter((e) => idInLocale(locale, e.id) && e.id.includes(trackPath))
+  .sort((a, b) => a.data.order - b.data.order);
+const moduleIdx = sortedModules.findIndex((e) => e.id === entry.id);
+const prevModule = moduleIdx > 0 ? sortedModules[moduleIdx - 1] : null;
+const nextModule = moduleIdx >= 0 && moduleIdx < sortedModules.length - 1 ? sortedModules[moduleIdx + 1] : null;
+
+const totalMinutes = moduleLessons.reduce((sum, l) => sum + (l.data.estimatedMinutes ?? 15), 0);
+const diffColor = difficulty === 'beginner' ? 'var(--success-text)' : difficulty === 'intermediate' ? 'var(--streak-text)' : 'var(--bad-text)';
+const modulesPath = learnHref(locale, base, section, trackWord(locale, track), MODULE_WORDS[locale], '').replace(/^\/+/, '').replace(/\/$/, '');
+const arrow = locale === 'ar' ? '←' : '→';
+const trackLessons = allLessons.filter((e) => idInLocale(locale, e.id) && e.id.includes(trackPath));
+const trackBySlug = new Map(trackLessons.map((e) => [e.id.split('/').pop() ?? '', e]));
+const prereqMapOf = (prereqs: string[]): Record<string, string> => {
+  const map: Record<string, string> = {};
+  for (const p of prereqs) {
+    const pe = trackBySlug.get(p);
+    if (pe) map[`${trackPath}/${p}`] = pe.data.title;
+  }
+  return map;
+};
+---
+
+<Base title={`${title}, PyDA Course`} description={description} lang={locale} dir={dir} alternates={learnAlternates(section, track, 'module', entry.id.split('/').pop()!)}>
+  <nav class="crumb container">
+    <a href={learnHref(locale, base)}>{m.nav_learn()}</a> <span>/</span>
+    <a href={learnHref(locale, base, section)}>{sectionName(section)}</a> <span>/</span>
+    <span class="crumb__here">{title}</span>
+  </nav>
+
+  <section class="container module-head">
+    <div class="module-head__icon">{icon}</div>
+    <div class="module-head__info">
+      <div class="module-head__meta">
+        <span class="module-head__diff" style={`color:${diffColor}`}>{m[`difficulty_${difficulty}`]()}</span>
+        <span class="module-head__time">{totalMinutes >= 60 ? `~${Math.round(totalMinutes / 60)}h` : m.minutes_label({n: totalMinutes})}</span>
+        <span class="module-head__count">📖 {moduleLessons.length} {m.module_lessons_label()}</span>
+      </div>
+      <h1>{m.module_label()} {order}: {title}</h1>
+      <p>{description}</p>
+      {tags.length > 0 && (
+        <div class="module-head__tags">
+          {tags.map((tag) => <span class="module-tag">{tag}</span>)}
+        </div>
+      )}
+    </div>
+  </section>
+
+  <section class="container lessons-list">
+    <h2>{m.module_lessons_label()}</h2>
+    <div class="lessons-grid">
+      {moduleLessons.map((lesson, i) => {
+        const lDiff = lesson.data.difficulty ?? 'beginner';
+        const lDiffColor = lDiff === 'beginner' ? 'var(--success)' : lDiff === 'intermediate' ? 'var(--streak-text)' : 'var(--bad)';
+        return (
+          <a class="lesson-card" href={lessonHref(locale, base, section, track, lesson.id.split('/').pop()!)} data-mastery={`${trackPath}/${lesson.id.split('/').pop()}`} data-prereqs={JSON.stringify(prereqMapOf(lesson.data.prerequisites))}>
+            <span class="lesson-card__num">{i + 1}</span>
+            <div class="lesson-card__body">
+              <span class="lesson-card__title">{lesson.data.title}</span>
+              <span class="lesson-card__desc">{lesson.data.description}</span>
+              <div class="lesson-card__meta">
+                <span style={`color:${lDiffColor}`}>{({beginner: m.difficulty_beginner(), intermediate: m.difficulty_intermediate(), advanced: m.difficulty_advanced()})[lDiff] ?? lDiff}</span>
+                <span>{m.minutes_label({n: lesson.data.estimatedMinutes})}</span>
+                <span>⚡ +{lesson.data.xpReward} XP</span>
+              </div>
+            </div>
+            <span class="lesson-card__arrow">{arrow}</span>
+          </a>
+        );
+      })}
+    </div>
+  </section>
+
+  <ModuleNav prevModule={prevModule} nextModule={nextModule} modulesPath={modulesPath} />
+</Base>
+
+<script>
+  import {m} from '../../paraglide/messages.js';
+  const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-mastery]'));
+  if (cards.length) {
+    Promise.all([
+      import('../../lib/gameState.ts'),
+      import('../../lib/mastery.ts'),
+    ]).then(([{getLessonMastery}, {isMastered, dueForRevisit, accuracy}]) => {
+      const mastery = getLessonMastery();
+      cards.forEach((card) => {
+        const lessonId = card.getAttribute('data-mastery') ?? '';
+        const rec = mastery[lessonId];
+        let label = '';
+        let tone = '';
+        if (isMastered(rec)) {
+          tone = 'ok';
+          label = m.mastery_mastered();
+        } else if (dueForRevisit(rec)) {
+          let prereqs: Record<string, string> = {};
+          try { prereqs = JSON.parse(card.getAttribute('data-prereqs') ?? '{}') as Record<string, string>; } catch { /* skip */ }
+          const blockerId = Object.keys(prereqs).find((id) => !isMastered(mastery[id]));
+          if (blockerId) {
+            tone = 'warn';
+            label = m.mastery_blocked({title: prereqs[blockerId]});
+          } else {
+            tone = 'warn';
+            label = m.mastery_due();
+          }
+        } else if (rec && rec.total > 0) {
+          tone = 'busy';
+          label = m.mastery_practice({acc: Math.round(accuracy(rec) * 100)});
+        }
+        if (!label) return;
+        const chip = document.createElement('span');
+        chip.className = 'lesson-card__zpd';
+        chip.classList.add(`lesson-card__zpd--${tone}`);
+        chip.textContent = label;
+        card.querySelector('.lesson-card__body')?.appendChild(chip);
+      });
+    });
+  }
+</script>
+
+<style>
+  .crumb { display: flex; gap: .5rem; padding-top: 1.2rem; color: var(--ink-soft); font-size: .88rem; align-items: center; flex-wrap: wrap; }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb__here { font-weight: 700; color: var(--ink); }
+  .module-head { padding: 1.5rem 0 1rem; display: flex; gap: 1.25rem; align-items: flex-start; }
+  .module-head__icon { font-size: 3rem; line-height: 1; }
+  .module-head__info { flex: 1; }
+  .module-head__meta { display: flex; gap: .75rem; align-items: center; margin-bottom: .5rem; flex-wrap: wrap; }
+  .module-head__diff { font-weight: 800; text-transform: uppercase; font-size: .78rem; letter-spacing: .04em; }
+  .module-head__time, .module-head__count { font-size: .82rem; color: var(--ink-soft); font-weight: 600; }
+  .module-head h1 { font-size: clamp(1.6rem, 3.5vw, 2.2rem); margin: .3rem 0; }
+  .module-head p { color: var(--ink-soft); font-size: 1rem; }
+  .module-head__tags { display: flex; gap: .4rem; flex-wrap: wrap; margin-top: .5rem; }
+  .module-tag { padding: .15rem .5rem; border-radius: var(--radius-pill); background: var(--surface-2); font-size: .72rem; font-weight: 600; color: var(--ink-soft); }
+  .lessons-list { margin-bottom: 2rem; }
+  .lessons-list h2 { font-size: 1.2rem; margin-bottom: 1rem; }
+  .lessons-grid { display: flex; flex-direction: column; gap: .5rem; }
+  .lesson-card {
+    display: flex; align-items: center; gap: 1rem;
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-md);
+    padding: .8rem 1rem; text-decoration: none; color: var(--ink);
+    box-shadow: var(--shadow-sm); transition: all var(--transition-smooth);
+  }
+  .lesson-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); border-color: var(--accent); }
+  .lesson-card__num {
+    width: 2rem; height: 2rem; border-radius: 50%;
+    background: var(--accent-soft); color: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: .85rem; flex-shrink: 0;
+  }
+  .lesson-card__body { flex: 1; display: flex; flex-direction: column; gap: .15rem; }
+  .lesson-card__title { font-weight: 700; font-size: .95rem; }
+  .lesson-card__desc { font-size: .82rem; color: var(--ink-soft); }
+  .lesson-card__meta { display: flex; gap: .6rem; font-size: .74rem; font-weight: 600; color: var(--ink-soft); }
+  .lesson-card__arrow { font-size: 1.1rem; color: var(--ink-soft); transition: transform .15s ease; }
+  .lesson-card:hover .lesson-card__arrow { transform: translateX(3px); color: var(--accent); }
+  [dir='rtl'] .lesson-card:hover .lesson-card__arrow { transform: translateX(-3px); }
+  .lesson-card__zpd {
+    align-self: flex-start; font-size: .7rem; font-weight: 800;
+    padding: .12rem .55rem; border-radius: var(--radius-pill);
+    border: 1px solid var(--line); background: var(--surface-2);
+  }
+  .lesson-card__zpd--ok { color: var(--success-text); border-color: var(--success); background: var(--success-soft); }
+  .lesson-card__zpd--warn { color: var(--bad-text); border-color: var(--bad); background: var(--bad-soft); }
+  .lesson-card__zpd--busy { color: var(--streak-text); border-color: var(--warn); background: var(--warn-soft); }
+</style>

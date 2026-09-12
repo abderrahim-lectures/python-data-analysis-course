@@ -1,0 +1,211 @@
+---
+// Shared "our teaching approach" page: /teaching-approach,
+// /ar/المنهج-التعليمي, /es/enfoque-pedagogico, /fr/approche-pedagogique.
+// All markup lives here; each locale page is a thin <Pedagogy locale="…"/> wrapper.
+import Base from '../layouts/Base.astro';
+import {m} from '../paraglide/messages';
+import {NAV_WORDS, progressHref, progressGuideHref, type Locale} from '../lib/routeSegments';
+
+interface Props {
+  locale: Locale;
+}
+
+const {locale} = Astro.props;
+const dir = locale === 'ar' ? 'rtl' : 'ltr';
+const base = import.meta.env.BASE_URL;
+const studyHref = 'https://doi.org/10.58477/dj.v4i1.348';
+const alternates = {
+  en: NAV_WORDS.en.pedagogy,
+  ar: `ar/${NAV_WORDS.ar.pedagogy}`,
+  es: `es/${NAV_WORDS.es.pedagogy}`,
+  fr: `fr/${NAV_WORDS.fr.pedagogy}`,
+};
+
+const loopSteps = [
+  {key: 'hook', title: m.pedagogy_core_hook()},
+  {key: 'derive', title: m.pedagogy_core_derive()},
+  {key: 'run', title: m.pedagogy_core_run()},
+  {key: 'check', title: m.pedagogy_core_check()},
+];
+
+const anatomySteps = [
+  m.pedagogy_anatomy_1(),
+  m.pedagogy_anatomy_2(),
+  m.pedagogy_anatomy_3(),
+  m.pedagogy_anatomy_4(),
+  m.pedagogy_anatomy_5(),
+];
+
+const shortReasons = [
+  m.pedagogy_short_1(),
+  m.pedagogy_short_2(),
+  m.pedagogy_short_3(),
+  m.pedagogy_short_4(),
+];
+
+const mathLinks = [
+  m.pedagogy_math_1(),
+  m.pedagogy_math_2(),
+  m.pedagogy_math_3(),
+  m.pedagogy_math_4(),
+];
+
+const teacherPoints = [
+  m.pedagogy_teacher_1(),
+  m.pedagogy_teacher_2(),
+  m.pedagogy_teacher_3(),
+  m.pedagogy_teacher_4(),
+];
+---
+
+<Base title={m.pedagogy_title()} description={m.pedagogy_description()} lang={locale} dir={dir} alternates={alternates}>
+  <section class="container guide">
+    <h1 class="guide__eyebrow">{m.pedagogy_heading()}</h1>
+    <div class="guide__intro">
+      <p>{m.pedagogy_intro_1()}</p>
+      <p>{m.pedagogy_intro_2()}</p>
+    </div>
+
+    <div class="guide__grid">
+      <article class="guide__card guide__card--wide">
+        <h2>{m.pedagogy_core_heading()}</h2>
+        <p class="guide__lede">{m.pedagogy_core_lede()}</p>
+        <ol class="guide__list guide__list--num">
+          {loopSteps.map((step) => (
+            <li>{step.title}</li>
+          ))}
+        </ol>
+      </article>
+
+      <article class="guide__card">
+        <h2>{m.pedagogy_anatomy_heading()}</h2>
+        <p class="guide__lede">{m.pedagogy_anatomy_lede()}</p>
+        <ol class="guide__list guide__list--num">
+          {anatomySteps.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ol>
+      </article>
+
+      <article class="guide__card">
+        <h2>{m.pedagogy_short_heading()}</h2>
+        <p class="guide__lede">{m.pedagogy_short_lede()}</p>
+        <ul class="guide__list">
+          {shortReasons.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      </article>
+
+      <article class="guide__card">
+        <h2>{m.pedagogy_spiral_heading()}</h2>
+        <p class="guide__lede">{m.pedagogy_spiral_lede()}</p>
+        <ul class="guide__list">
+          <li>{m.pedagogy_spiral_py()}</li>
+          <li>{m.pedagogy_spiral_da()}</li>
+          <li>{m.pedagogy_spiral_projects()}</li>
+        </ul>
+      </article>
+
+      <article class="guide__card">
+        <h2>{m.pedagogy_math_heading()}</h2>
+        <p class="guide__lede">{m.pedagogy_math_lede()}</p>
+        <ul class="guide__list">
+          {mathLinks.map((item) => (
+            <li set:html={item}></li>
+          ))}
+        </ul>
+      </article>
+
+      <article class="guide__card">
+        <h2>{m.pedagogy_assess_heading()}</h2>
+        <p>{m.pedagogy_assess_lede()}</p>
+      </article>
+    </div>
+
+    <section class="guide__card">
+      <h2>{m.pedagogy_game_heading()}</h2>
+      <p class="guide__lede">
+        {m.pedagogy_game_lede()}
+        <a href={studyHref} target="_blank" rel="noopener noreferrer">{m.progress_guide_report_study_link()}</a>
+        {m.pedagogy_game_post()}
+      </p>
+      <p>{m.pedagogy_game_body()}</p>
+    </section>
+
+    <section class="guide__card">
+      <h2>{m.pedagogy_growth_heading()}</h2>
+      <p>{m.pedagogy_growth_lede()}</p>
+      <p class="guide__note">
+        <a href={progressGuideHref(locale, base)}>{m.progress_guide_heading()}</a>
+      </p>
+    </section>
+
+    <section class="guide__card">
+      <h2>{m.pedagogy_ecology_heading()}</h2>
+      <p class="guide__lede">{m.pedagogy_ecology_lede()}</p>
+      <ul class="guide__list">
+        <li>{m.pedagogy_ecology_1()}</li>
+        <li>{m.pedagogy_ecology_2()}</li>
+        <li>{m.pedagogy_ecology_3()}</li>
+        <li>{m.pedagogy_ecology_4()}</li>
+      </ul>
+      <p>
+        <a href="https://www.youtube.com/watch?v=vMyiySyx0AU" target="_blank" rel="noopener noreferrer">{m.pedagogy_ecology_ref()}</a>
+      </p>
+    </section>
+
+    <section class="guide__card">
+      <h2>{m.pedagogy_privacy_heading()}</h2>
+      <p>{m.pedagogy_privacy_lede()}</p>
+    </section>
+
+    <section class="guide__card">
+      <h2>{m.pedagogy_teacher_heading()}</h2>
+      <p class="guide__lede">{m.pedagogy_teacher_lede()}</p>
+      <ol class="guide__list guide__list--num">
+        {teacherPoints.map((item) => (
+          <li>{item}</li>
+        ))}
+      </ol>
+    </section>
+
+    <a class="guide__back" href={progressHref(locale, base)} aria-label={m.progress_guide_back()}>{m.progress_guide_back()}</a>
+  </section>
+</Base>
+
+<style>
+  .guide { padding: 2.5rem 0 3rem; max-width: 76ch; }
+  .guide h1 { font-size: clamp(1.8rem, 4vw, 2.6rem); margin: 0 0 .4rem; }
+  .guide h2 { font-size: 1.25rem; margin: 0 0 .6rem; }
+  .guide__eyebrow { color: var(--accent); font-size: .95rem; letter-spacing: .04em; }
+  .guide__intro { color: var(--ink-soft); margin: 0 0 2rem; display: flex; flex-direction: column; gap: .7rem; }
+  .guide__intro p:first-child { font-size: 1.12rem; }
+  @media (max-width: 640px) { .guide { padding: 1.75rem 0 2rem; } }
+  .guide__grid { display: grid; gap: 1.25rem; margin: 0 0 1.25rem; }
+  .guide__card {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius-lg); padding: 1.25rem 1.4rem;
+    box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: .5rem;
+  }
+  .guide__card--wide { grid-column: 1 / -1; }
+  section.guide__card + section.guide__card { margin-top: 1.25rem; }
+  .guide__lede { color: var(--ink-soft); margin: 0; line-height: 1.6; }
+  .guide p { margin: 0; line-height: 1.6; }
+  .guide__list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: .45rem; }
+  .guide__list--num { counter-reset: step; }
+  .guide__list--num li { counter-increment: step; display: flex; gap: .6rem; }
+  .guide__list--num li::before {
+    content: counter(step); flex: none; width: 1.5rem; height: 1.5rem; border-radius: 999px;
+    background: var(--accent-soft, var(--accent)); color: var(--on-accent, var(--ink));
+    font-size: .8rem; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;
+  }
+  .guide__list li::marker { content: none; }
+  .guide__lede a, .guide p a, .guide__note a { color: var(--accent); }
+  .guide__note { color: var(--ink-soft); font-size: .88rem; line-height: 1.55; }
+  .guide__back {
+    display: inline-block; margin-top: 1.25rem; color: var(--accent);
+    font-weight: 600; text-decoration: none;
+  }
+  .guide__back:hover { text-decoration: underline; }
+</style>

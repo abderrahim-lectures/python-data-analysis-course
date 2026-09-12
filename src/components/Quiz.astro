@@ -1,0 +1,292 @@
+---
+import {m} from '../paraglide/messages.js';
+interface QuizOption {
+  text: string;
+  correct?: boolean;
+}
+interface QuizQuestion {
+  question: string;
+  options: QuizOption[];
+  explanation?: string;
+}
+interface Props {
+  title?: string;
+  questions: QuizQuestion[];
+  xp?: number;
+  lessonId?: string;
+}
+const {title = m.quiz_title(), questions, xp = 10, lessonId = ''} = Astro.props;
+---
+
+<div class="quiz" data-quiz data-xp={xp} data-lesson={lessonId} data-total={questions.length}>
+  <div class="quiz__head">
+    <span class="quiz__icon">✅</span>
+    <span class="quiz__title">{title}</span>
+    <span class="quiz__xp">+{xp} XP</span>
+  </div>
+
+  <div class="quiz__body">
+    {questions.map((q, qi) => (
+      <div class="quiz-q" data-qi={qi}>
+        <p class="quiz-q__prompt">{qi + 1}. {q.question}</p>
+        <div class="quiz-q__options">
+          {q.options.map((opt, oi) => (
+            <label class="quiz-q__opt" data-correct={opt.correct ? '1' : '0'}>
+              <input type="radio" name={`q${qi}`} value={oi} />
+              <span class="quiz-q__radio"></span>
+              <span class="quiz-q__text">{opt.text}</span>
+            </label>
+          ))}
+        </div>
+        {q.explanation && (
+          <div class="quiz-q__explain" data-explain hidden>{q.explanation}</div>
+        )}
+      </div>
+    ))}
+  </div>
+
+  <div class="quiz__foot">
+    <button type="button" class="btn btn-primary quiz__check" data-quiz-check>{m.quiz_check()}</button>
+    <span class="quiz__score" data-quiz-score hidden></span>
+  </div>
+
+  <div class="quiz__feedback" data-quiz-feedback hidden></div>
+</div>
+
+<script>
+  import {m} from '../paraglide/messages.js';
+  document.querySelectorAll('[data-quiz]').forEach((el) => {
+    if (el.hasAttribute('data-hydrated')) return;
+    // Own-format check: only Quiz.astro blocks carry the check button.
+    // Markdown quick-check blocks (`.quiz-q[data-answer]`) are hydrated by
+    // the shared quiz.client.ts.
+    if (!el.querySelector('[data-quiz-check]')) return;
+    el.setAttribute('data-hydrated', '1');
+
+    const checkBtn = el.querySelector('[data-quiz-check]') as HTMLButtonElement;
+    const feedback = el.querySelector('[data-quiz-feedback]') as HTMLElement;
+    const scoreEl = el.querySelector('[data-quiz-score]') as HTMLElement;
+    const xp = Number((el as HTMLElement).dataset.xp) || 10;
+    const total = Number((el as HTMLElement).dataset.total) || 0;
+    const lessonId = (el as HTMLElement).dataset.lesson ?? '';
+
+    // Single guarded handler replaces the stacked {once} retry listeners that
+    // previously re-graded (and could over-credit) on every retry click.
+    let state: 'check' | 'retry' = 'check';
+
+    const grade = () => {
+      const questions = el.querySelectorAll('.quiz-q');
+      let correct = 0;
+      let answered = false;
+
+      questions.forEach((q) => {
+        const opts = q.querySelectorAll('.quiz-q__opt');
+        const explain = q.querySelector('[data-explain]') as HTMLElement;
+        let userCorrect = false;
+        let qAnswered = false;
+
+        opts.forEach((opt) => {
+          const radio = opt.querySelector('input') as HTMLInputElement;
+          const isCorrect = (opt as HTMLElement).dataset.correct === '1';
+
+          opt.classList.remove('quiz-q__opt--correct', 'quiz-q__opt--wrong', 'quiz-q__opt--selected');
+
+          if (radio.checked) {
+            qAnswered = true;
+            opt.classList.add('quiz-q__opt--selected');
+            if (isCorrect) {
+              opt.classList.add('quiz-q__opt--correct');
+              userCorrect = true;
+            } else {
+              opt.classList.add('quiz-q__opt--wrong');
+            }
+          } else if (isCorrect) {
+            opt.classList.add('quiz-q__opt--correct');
+          }
+        });
+
+        // Credit XP once per fresh attempt, only for actually-answered questions.
+        if (qAnswered) {
+          answered = true;
+          try {
+            import('../lib/gameState.ts').then((gs) => gs.recordQuiz(userCorrect, lessonId || undefined));
+          } catch (e) {
+            console.warn('[quiz] failed to record quiz', e);
+          }
+        }
+        if (userCorrect) correct++;
+        if (explain) explain.hidden = false;
+      });
+
+      scoreEl.hidden = false;
+      scoreEl.textContent = m.quiz_correct({correct, total});
+
+      if (!answered) {
+        state = 'retry';
+        checkBtn.textContent = m.quiz_retry();
+        return;
+      }
+
+      if (correct === total) {
+        try {
+          import('../lib/gameState.ts').then((gs) => {
+            gs.recordQuizPerfect();
+            if (lessonId) gs.recordChallenge(lessonId);
+          });
+        } catch (e) {
+          console.warn('[quiz] failed to record perfect quiz', e);
+        }
+        feedback.hidden = false;
+        feedback.textContent = m.quiz_perfect({xp});
+        feedback.className = 'quiz__feedback quiz__feedback--correct';
+      } else if (correct > 0) {
+        feedback.hidden = false;
+        feedback.textContent = m.quiz_partial({correct, total});
+        feedback.className = 'quiz__feedback quiz__feedback--partial';
+      } else {
+        feedback.hidden = false;
+        feedback.textContent = m.quiz_wrong({total});
+        feedback.className = 'quiz__feedback quiz__feedback--wrong';
+      }
+      state = 'retry';
+      checkBtn.textContent = m.quiz_retry();
+    };
+
+    const reset = () => {
+      el.querySelectorAll('.quiz-q').forEach((q) => {
+        q.querySelectorAll('.quiz-q__opt').forEach((opt) => {
+          opt.classList.remove('quiz-q__opt--correct', 'quiz-q__opt--wrong', 'quiz-q__opt--selected');
+          (opt.querySelector('input') as HTMLInputElement).checked = false;
+        });
+        const explain = q.querySelector('[data-explain]') as HTMLElement | null;
+        if (explain) explain.hidden = true;
+      });
+      scoreEl.hidden = true;
+      feedback.hidden = true;
+      state = 'check';
+      checkBtn.textContent = m.quiz_check();
+    };
+
+    checkBtn?.addEventListener('click', () => {
+      if (state === 'check') grade();
+      else reset();
+    });
+  });
+</script>
+
+<style>
+  .quiz {
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin: 1.5rem 0;
+    background: var(--surface);
+    box-shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+    transition: box-shadow .25s ease, border-color .25s ease;
+  }
+  .quiz:hover { box-shadow: 0 4px 12px rgba(0,0,0,.08); border-color: var(--accent); }
+  .quiz__head {
+    display: flex; align-items: center; gap: .6rem;
+    padding: .7rem 1rem;
+    background: linear-gradient(135deg, var(--accent-soft), color-mix(in srgb, var(--accent-soft) 70%, transparent));
+    border-bottom: 1px solid var(--line);
+  }
+  .quiz__icon { font-size: 1.2rem; }
+  .quiz__title { font-weight: 700; font-size: .92rem; color: var(--ink); flex: 1; }
+  .quiz__xp {
+    font-size: .76rem; font-weight: 800; color: var(--accent);
+    background: var(--accent-soft); padding: .2rem .6rem;
+    border-radius: var(--radius-pill);
+  }
+  .quiz__body { padding: .8rem 1rem; }
+  .quiz-q { margin-bottom: 1.2rem; }
+  .quiz-q:last-child { margin-bottom: 0; }
+  .quiz-q__prompt { font-weight: 600; margin-bottom: .5rem; font-size: .95rem; }
+  .quiz-q__options { display: flex; flex-direction: column; gap: .35rem; }
+  .quiz-q__opt {
+    display: flex; align-items: center; gap: .5rem;
+    padding: .5rem .7rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all .15s ease;
+    font-size: .9rem;
+  }
+  .quiz-q__opt:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .quiz-q__opt input {
+    position: absolute; width: 1px; height: 1px; margin: -1px;
+    padding: 0; overflow: hidden; clip: rect(0 0 0 0);
+    white-space: nowrap; border: 0;
+  }
+  .quiz-q__opt:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .quiz-q__opt:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+  .quiz-q__radio {
+    width: 16px; height: 16px;
+    border: 2px solid var(--line);
+    border-radius: 50%;
+    flex-shrink: 0;
+    transition: all .15s ease;
+    position: relative;
+  }
+  .quiz-q__opt:has(input:checked) .quiz-q__radio {
+    border-color: var(--accent);
+    background: var(--accent);
+  }
+  .quiz-q__opt:has(input:checked) .quiz-q__radio::after {
+    content: '';
+    position: absolute;
+    top: 3px; left: 3px;
+    width: 6px; height: 6px;
+    background: var(--accent-contrast);
+    border-radius: 50%;
+  }
+  .quiz-q__opt--correct {
+    border-color: var(--success);
+    background: var(--success-soft);
+  }
+  .quiz-q__opt--correct .quiz-q__radio {
+    border-color: var(--success);
+    background: var(--success);
+  }
+  .quiz-q__opt--wrong {
+    border-color: var(--bad);
+    background: var(--bad-soft);
+  }
+  .quiz-q__opt--wrong .quiz-q__radio {
+    border-color: var(--bad);
+    background: var(--bad);
+  }
+  .quiz-q__explain {
+    margin-top: .4rem;
+    padding: .5rem .7rem;
+    background: var(--surface-2);
+    border-radius: var(--radius-sm);
+    font-size: .85rem;
+    color: var(--ink-soft);
+    border-left: 3px solid var(--accent);
+  }
+  .quiz__foot {
+    display: flex; align-items: center; gap: 1rem;
+    padding: .7rem 1rem;
+    border-top: 1px solid var(--line);
+    background: var(--surface-2);
+  }
+  .quiz__foot .btn {
+    font-size: .85rem; font-weight: 700;
+    padding: .45rem 1rem;
+  }
+  .quiz__score {
+    font-size: .85rem; font-weight: 700; color: var(--ink-soft);
+  }
+  .quiz__feedback {
+    padding: .7rem 1rem;
+    font-weight: 700;
+    font-size: .88rem;
+    border-top: 1px solid var(--line);
+  }
+  .quiz__feedback--correct { background: linear-gradient(135deg, var(--success-soft), color-mix(in srgb, var(--success-soft) 60%, transparent)); color: var(--success-text); }
+  .quiz__feedback--partial { background: linear-gradient(135deg, var(--warn-soft), color-mix(in srgb, var(--warn-soft) 60%, transparent)); color: var(--warn); }
+  .quiz__feedback--wrong { background: linear-gradient(135deg, var(--bad-soft), color-mix(in srgb, var(--bad-soft) 60%, transparent)); color: var(--bad-text); }
+  [data-theme='dark'] .quiz__check { background: var(--accent); border-color: var(--accent); }
+  [data-theme='dark'] .quiz__check:hover { background: var(--accent-strong); }
+</style>

@@ -1,0 +1,26 @@
+---
+// AR project detail ، thin wrapper over the shared ProjectDetail component,
+// which serves the markdown, step-clearing and mark-done gamification.
+// getStaticPaths emits BOTH the localized slug (canonical, e.g. /ar/مشاريع/بناء-وكيل-ذكاء-اصطناعي)
+// and the English slug (alias ، old links/bookmarks keep resolving, but the
+// page's rel=canonical points at the localized route).
+import {getCollection} from 'astro:content';
+import ProjectDetail from '../../../components/projects/ProjectDetail.astro';
+import {localizedProjectSlug} from '../../../lib/projectSlugs';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  const paths = [];
+  for (const entry of projects.filter((p) => p.id.split('/')[0] === 'ar')) {
+    const enSlug = entry.id.slice('ar'.length + 1);
+    const localized = localizedProjectSlug('ar', enSlug);
+    paths.push({params: {slug: localized}, props: {entry}});
+    if (localized !== enSlug) paths.push({params: {slug: enSlug}, props: {entry}});
+  }
+  return paths;
+}
+
+const {entry} = Astro.props;
+---
+
+<ProjectDetail entry={entry} locale="ar" />

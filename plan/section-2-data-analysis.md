@@ -16,4 +16,4 @@
 - Week 9: advanced/storytelling visualizations
 - Week 10: final deliverable — full EDA report on **"Students Performance in Exams"** (scores in math/reading/writing vs. gender, parental education, lunch type, test-prep completion) — one of Kaggle's most-voted beginner EDA datasets, and thematically on-topic for a course about education — loaded via a public raw-CSV URL, with a required set of charts
 
-Every external dataset/tool used (Titanic mirror, the Students Performance in Exams dataset, JupyterLite/Pyodide) is credited on the `credits.tsx` page — good academic practice for a course aimed at students who'll be expected to cite sources themselves.
+Every external dataset/tool used (Titanic mirror, the Students Performance in Exams dataset, Pyodide) is credited on the [`credits` page](https://pyda-course.online/credits) — good academic practice for a course aimed at students who'll be expected to cite sources themselves. The datasets are bundled at `public/datasets/` (`titanic.csv`, `students-performance.csv`, `students-normal.csv`) and auto-mounted for lesson cells that reference them.

@@ -1,0 +1,31 @@
+---
+// EN project detail: serves only English projects (Bug A fix, no more
+// locale loop that let the last locale's content win on /projects/* URLs).
+// Renders through the shared ProjectDetail component so the gamified
+// step-clearing and mark-done wiring live in one place for all locales.
+import {getCollection} from 'astro:content';
+import ProjectDetail from '../../components/projects/ProjectDetail.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  const byLocale = {ar: new Set<string>(), es: new Set<string>(), fr: new Set<string>()};
+  for (const e of projects) {
+    const m = /^(ar|es|fr)\/(.+)$/.exec(e.id);
+    if (m) byLocale[m[1] as keyof typeof byLocale].add(m[2].replace(/^\/?projects?\//, ''));
+  }
+  const hasAllTwins = (slug: string) => byLocale.ar.has(slug) && byLocale.es.has(slug) && byLocale.fr.has(slug);
+  const paths = projects
+    .filter((entry) => !/^(ar|es|fr)\//.test(entry.id))
+    .map((entry) => {
+      // Some EN files keep a legacy `slug: /projects/<name>` frontmatter that
+      // overrides entry.id; normalize so the URL is /projects/<name>.
+      const slug = entry.id.replace(/^\/?projects\//, '');
+      return {params: {slug}, props: {entry, hasAlternates: hasAllTwins(slug)}};
+    });
+  return paths;
+}
+
+const {entry} = Astro.props;
+---
+
+<ProjectDetail entry={entry} locale="en" hasAlternates={Astro.props.hasAlternates} />

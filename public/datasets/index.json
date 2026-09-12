@@ -1,0 +1,7 @@
+{
+ "indexjson": "index.json",
+ "slmcorpuscsv": "slm-corpus.csv",
+ "studentsnormalcsv": "students-normal.csv",
+ "studentsperformancecsv": "students-performance.csv",
+ "titaniccsv": "titanic.csv"
+}

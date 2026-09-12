@@ -1,0 +1,35 @@
+---
+// Gold-line SVG glyph set (LoL HUD icons) to replace emoji.
+interface Props { name: string; size?: number; stroke?: number; }
+const {name, size = 18, stroke = 1.6} = Astro.props;
+const G: Record<string, string> = {
+  // snake / code
+  code: '<path d="M12 8l-3 4 3 4M8 8l-3 4 3 4M16 8l3 4-3 4"/>',
+  // upward chart (stats)
+  chart: '<path d="M4 20h16M6 16l4-6 3 3 5-7"/><path d="M15 6h3v3"/>',
+  // trail / progress (flag, reads clearly at small sizes, unlike a winding-path glyph)
+  trail: '<path d="M5 21V4"/><path d="M5 4h13l-3 4 3 4H5"/>',
+  // globe (projects)
+  globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18-3-3-3-15 0-18z"/>',
+   // sun (theme)
+   sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/>',
+   // fire (streak)
+   fire: '<path d="M12 22c-3-4-6-7-6-11a6 6 0 0112 0c0 4-3 7-6 11z"/><path d="M12 22c2-3 4-5 4-9a4 4 0 00-8 0c0 4 2 6 4 9z"/>',
+  // play
+  play: '<path d="M7 4l13 8-13 8z"/>',
+  // home
+  home: '<path d="M4 10l8-6 8 6"/><path d="M6 9v11h12V9"/>',
+  // trophy
+  trophy: '<path d="M8 4h8M9 4v3a4 4 0 006 0V4M9 4h6M8 21h8M12 11a5 5 0 01-5-5M12 11a5 5 0 005-5"/><path d="M6 7H4a2 2 0 002 2M18 7h2a2 2 0 01-2 2"/>',
+  // expand / full-screen editor
+  expand: '<path d="M9 4H4v5M15 4h5v5M9 20H4v-5M15 20h5v-5"/>',
+  // grid
+  grid: '<path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/>',
+  // list
+  list: '<line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>',
+  search: '<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>',
+};
+---
+<svg class="ic" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor"
+     stroke-width={stroke} stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+     set:html={G[name] ?? G.code}></svg>

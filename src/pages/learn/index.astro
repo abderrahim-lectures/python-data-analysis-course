@@ -1,0 +1,179 @@
+---
+import {getCollection} from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import {m} from '../../paraglide/messages.js';
+import {detectLocale, idInLocale, navWordAlternates} from '../../lib/routeSegments';
+const base = import.meta.env.BASE_URL;
+const locale = detectLocale(Astro.url.pathname);
+const dir = locale === 'ar' ? 'rtl' : 'ltr';
+const alternates = navWordAlternates('learn');
+
+const allLessons = await getCollection('lessons');
+const allModules = await getCollection('modules');
+const py101Lessons = allLessons.filter(e => idInLocale(locale, e.id) && e.id.includes('python-101')).length;
+const py101Modules = allModules.filter(e => idInLocale(locale, e.id) && e.id.includes('python-101')).length;
+const daLessons = allLessons.filter(e => idInLocale(locale, e.id) && e.id.includes('data-analysis')).length;
+const daModules = allModules.filter(e => idInLocale(locale, e.id) && e.id.includes('data-analysis')).length;
+const py101Minutes = allLessons.filter(e => idInLocale(locale, e.id) && e.id.includes('python-101')).reduce((s, l) => s + (l.data.estimatedMinutes ?? 15), 0);
+const daMinutes = allLessons.filter(e => idInLocale(locale, e.id) && e.id.includes('data-analysis')).reduce((s, l) => s + (l.data.estimatedMinutes ?? 15), 0);
+const py101Xp = allLessons.filter(e => idInLocale(locale, e.id) && e.id.includes('python-101')).reduce((s, l) => s + (l.data.xpReward ?? 0), 0);
+const daXp = allLessons.filter(e => idInLocale(locale, e.id) && e.id.includes('data-analysis')).reduce((s, l) => s + (l.data.xpReward ?? 0), 0);
+---
+
+<Base title={m.learn_hub_title()} description={m.learn_hub_description()} lang={locale} dir={dir} alternates={alternates}>
+  <section class="hero">
+    <div class="container head">
+      <div class="head__eyebrow"><Icon name="code" size={16} /> {m.learn_hub_eyebrow()}</div>
+      <h1>{m.learn_hub_h1()}</h1>
+      <p>{m.learn_hub_lead()}</p>
+    </div>
+  </section>
+
+  <section class="container">
+    <div class="note">
+      <Fragment set:html={m.learn_hub_module_explanation()} />
+      {m.learn_hub_switch_routes()}
+      <span class="note__extra"><Fragment set:html={m.learn_hub_cheatsheets_hint()} /></span>
+    </div>
+  </section>
+
+  <section class="container">
+    <div class="sections">
+      <div class="sectioncard">
+        <div class="sectioncard__badge">🐍 {m.track_1()}</div>
+        <div class="sectioncard__icon">🐍</div>
+        <h2>{m.track_1_name()}</h2>
+        <p>{m.track_1_desc()}</p>
+        <div class="sectioncard__meta">
+          <span class="badge badge--xp">⚡ {py101Xp} XP</span>
+          <span class="badge badge--streak">📖 {py101Modules} {m.learn_hub_modules()} · {py101Lessons} {m.learn_hub_lessons()}</span>
+          <span class="badge">⏱ ~{Math.round(py101Minutes / 60)}h</span>
+        </div>
+        <div class="routes">
+          <span class="routes__label">{m.choose_route()}</span>
+          <div class="routes__pills">
+            <a class="route-pill route-pill--normal" href={`${base}learn/python-101/normal`}>🌿 {m.normal_start()}</a>
+            <a class="route-pill route-pill--hard" href={`${base}learn/python-101/hard`}>⚡ {m.hard_start()}</a>
+          </div>
+        </div>
+        <a class="sectioncard__all" href={`${base}learn/python-101`}>{m.see_all_modules()} {locale === 'ar' ? '←' : '→'}</a>
+      </div>
+      <div class="sectioncard">
+        <div class="sectioncard__badge sectioncard__badge--streak">📊 {m.track_2()}</div>
+        <div class="sectioncard__icon">📊</div>
+        <h2>{m.track_2_name()}</h2>
+        <p>{m.track_2_desc()}</p>
+        <div class="sectioncard__meta">
+          <span class="badge badge--xp">⚡ {daXp} XP</span>
+          <span class="badge badge--streak">📖 {daModules} {m.learn_hub_modules()} · {daLessons} {m.learn_hub_lessons()}</span>
+          <span class="badge">⏱ ~{Math.round(daMinutes / 60)}h</span>
+        </div>
+        <div class="routes">
+          <span class="routes__label">{m.choose_route()}</span>
+          <div class="routes__pills">
+            <a class="route-pill route-pill--normal" href={`${base}learn/data-analysis/normal`}>🌿 {m.normal_start()}</a>
+            <a class="route-pill route-pill--hard" href={`${base}learn/data-analysis/hard`}>⚡ {m.hard_start()}</a>
+          </div>
+        </div>
+        <a class="sectioncard__all" href={`${base}learn/data-analysis`}>{m.see_all_modules()} {locale === 'ar' ? '←' : '→'}</a>
+      </div>
+    </div>
+
+    <div class="rewards-preview">
+      <h3>{m.learn_hub_what_you_earn()} <span class="text-gradient">{m.learn_hub_along_the_way()}</span></h3>
+      <div class="rewards-preview__grid">
+        <div class="rpv">
+          <span class="rpv__icon">⚡</span>
+          <span class="rpv__val">{py101Xp + daXp}</span>
+          <span class="rpv__label">{m.learn_hub_total_xp()}</span>
+        </div>
+        <div class="rpv">
+          <span class="rpv__icon">📖</span>
+          <span class="rpv__val">{py101Lessons + daLessons}</span>
+          <span class="rpv__label">{m.learn_hub_lessons()}</span>
+        </div>
+        <div class="rpv">
+          <span class="rpv__icon">📦</span>
+          <span class="rpv__val">{py101Modules + daModules}</span>
+          <span class="rpv__label">{m.learn_hub_modules()}</span>
+        </div>
+        <div class="rpv">
+          <span class="rpv__icon">⏱</span>
+          <span class="rpv__val">~{Math.round((py101Minutes + daMinutes) / 60)}h</span>
+          <span class="rpv__label">{m.learn_hub_of_content()}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero { padding: 2.5rem 0 1.5rem; }
+  .head__eyebrow { color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: .08em; font-size: .76rem; display: inline-flex; align-items: center; gap: .3rem; }
+  .head h1 { font-size: clamp(2rem, 4vw, 2.8rem); margin: .4rem 0 .2rem; }
+  .head p { color: var(--ink-soft); }
+
+  .note__extra { display: block; margin-top: .6rem; padding-top: .6rem; border-top: 1px solid rgba(124, 58, 237, 0.2); }
+  .note__extra a { color: var(--accent); font-weight: 600; text-decoration: none; }
+  .note__extra a:hover { text-decoration: underline; }
+
+  .sections { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 1.25rem; margin: 1.5rem 0 2rem; }
+  .sectioncard {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg);
+    padding: 1.5rem; display: flex; flex-direction: column; gap: .75rem;
+    box-shadow: var(--shadow-sm); transition: all var(--transition-smooth);
+    position: relative;
+  }
+  .sectioncard:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
+  .sectioncard__badge {
+    display: inline-flex; align-items: center; gap: .25rem;
+    padding: .2rem .6rem; border-radius: var(--radius-pill);
+    font-size: .72rem; font-weight: 700; width: fit-content;
+    background: var(--accent-soft); color: var(--accent);
+  }
+  .sectioncard__badge--streak { background: rgba(255,150,0,.1); color: var(--streak-text); }
+  .sectioncard__icon { font-size: 2rem; }
+  .sectioncard h2 { font-size: 1.2rem; margin: 0; }
+  .sectioncard p { color: var(--ink-soft); font-size: .9rem; margin: 0; line-height: 1.5; }
+  .sectioncard__meta { display: flex; gap: .5rem; flex-wrap: wrap; }
+  .routes { margin-top: auto; padding-top: .5rem; border-top: 1px solid var(--line); }
+  .routes__label { display: block; font-size: .74rem; font-weight: 700; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .04em; margin-bottom: .5rem; }
+  .routes__pills { display: flex; gap: .7rem; flex-wrap: wrap; }
+  .route-pill {
+    display: inline-flex; align-items: center; gap: .4rem;
+    text-decoration: none; padding: .6rem 1.1rem; border-radius: var(--radius-md);
+    font-weight: 700; font-size: .85rem; color: #fff; border: none;
+    box-shadow: var(--shadow-tactile); transition: transform .1s ease, box-shadow .1s ease;
+  }
+  .route-pill:active { transform: translateY(3px); box-shadow: 0 1px 0 rgba(0,0,0,.08), 0 2px 8px rgba(16,24,40,.06); }
+  .route-pill--normal { color: var(--ink); background: var(--success); box-shadow: 0 4px 0 rgba(46,125,10,.5), 0 6px 16px var(--success-soft); }
+  .route-pill--normal:hover, .route-pill--hard:hover { transform: translateY(-1px); }
+  .route-pill--normal:hover { color: var(--ink); filter: brightness(1.06); box-shadow: 0 4px 0 rgba(46,125,10,.5), 0 8px 20px var(--success-soft); }
+  .route-pill--normal:active { box-shadow: 0 1px 0 rgba(46,125,10,.5), 0 2px 8px var(--success-soft); }
+  .route-pill--hard { color: var(--ink); background: var(--bad); box-shadow: 0 4px 0 rgba(244,63,94,.5), 0 6px 16px var(--bad-soft); }
+  .route-pill--hard:hover { color: var(--ink); filter: brightness(1.06); box-shadow: 0 4px 0 rgba(244,63,94,.5), 0 8px 20px var(--bad-soft); }
+  .route-pill--hard:active { box-shadow: 0 1px 0 rgba(244,63,94,.5), 0 2px 8px var(--bad-soft); }
+  .route-pill:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .sectioncard__all { align-self: flex-start; font-size: .82rem; font-weight: 700; color: var(--ink-soft); text-decoration: none; transition: color var(--transition-fast), transform var(--transition-fast); }
+  .sectioncard__all:hover { color: var(--accent); transform: translateX(2px); }
+  .sectioncard__all:active { transform: translateX(1px); }
+  .sectioncard__all:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .rewards-preview { padding: 1.5rem 0 2rem; }
+  .rewards-preview h3 { font-size: 1.2rem; margin-bottom: .75rem; }
+  .rewards-preview__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: .75rem; }
+  .rpv {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg);
+    padding: 1rem; text-align: center; box-shadow: var(--shadow-sm);
+    display: flex; flex-direction: column; align-items: center; gap: .2rem;
+    transition: all var(--transition-smooth);
+  }
+  .rpv:hover { box-shadow: var(--shadow-sm); }
+  .rpv__icon { font-size: 1.25rem; }
+  .rpv__val { font-family: var(--font-display); font-weight: 800; font-size: 1.4rem; color: var(--ink-hi); }
+  .rpv__label { font-size: .72rem; font-weight: 700; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .03em; }
+
+  @media (max-width: 720px) { .sections { grid-template-columns: 1fr; } .rewards-preview__grid { grid-template-columns: repeat(2, 1fr); } }
+
+  </style>

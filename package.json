@@ -1,60 +1,40 @@
 {
-  "name": "python-data-analysis-course",
-  "version": "1.4.0",
+  "name": "pyda-course-astro",
+  "version": "2.0.0",
   "private": true,
-  "author": "Abderrahim Adrabi",
+  "type": "module",
   "scripts": {
-    "docusaurus": "docusaurus",
-    "start": "docusaurus start",
-    "build": "docusaurus build",
-    "swizzle": "docusaurus swizzle",
-    "deploy": "docusaurus deploy",
-    "clear": "docusaurus clear",
-    "serve": "docusaurus serve",
-    "write-translations": "docusaurus write-translations",
-    "write-heading-ids": "docusaurus write-heading-ids",
-    "typecheck": "tsc",
-    "test:e2e": "playwright test"
-  },
-  "dependencies": {
-    "@docusaurus/core": "3.10.2",
-    "@docusaurus/faster": "3.10.2",
-    "@docusaurus/plugin-client-redirects": "^3.10.2",
-    "@docusaurus/plugin-pwa": "^3.10.2",
-    "@docusaurus/preset-classic": "3.10.2",
-    "@easyops-cn/docusaurus-search-local": "^0.55.2",
-    "@mdx-js/react": "^3.0.0",
-    "clsx": "^2.0.0",
-    "html-to-image": "^1.11.13",
-    "prism-react-renderer": "^2.3.0",
-    "qrcode": "^1.5.4",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "rehype-katex": "^7.0.1",
-    "remark-math": "^6.0.0"
+    "prebuild": "node scripts/reset-astro-cache.cjs && node scripts/apply-lix-patch.cjs && node scripts/generate-project-slugs.cjs",
+    "predev": "node scripts/reset-astro-cache.cjs && node scripts/apply-lix-patch.cjs && node scripts/generate-project-slugs.cjs",
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "node scripts/reset-astro-cache.cjs && astro check",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run tests/unit",
+    "test:watch": "vitest tests/unit",
+    "test:coverage": "vitest run tests/unit --coverage",
+    "test:e2e": "node tests/e2e/smoke.mjs",
+    "test:contrast": "node tests/e2e/contrast.mjs",
+    "test:responsive": "node tests/e2e/responsive.mjs",
+    "test:all": "npm run test && npm run test:e2e && npm run test:a11y && npm run test:hreflang && npm run test:contrast && npm run test:responsive",
+    "test:a11y": "node tests/e2e/a11y.mjs",
+    "test:hreflang": "node tests/e2e/hreflang.mjs",
+    "test:lesson": "node tests/e2e/lesson-runtime.mjs"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "3.10.2",
-    "@docusaurus/tsconfig": "3.10.2",
-    "@docusaurus/types": "3.10.2",
-    "@playwright/test": "^1.61.1",
-    "@types/qrcode": "^1.5.6",
-    "@types/react": "^19.0.0",
-    "typescript": "~6.0.2"
-  },
-  "browserslist": {
-    "production": [
-      ">0.5%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 3 chrome version",
-      "last 3 firefox version",
-      "last 5 safari version"
-    ]
-  },
-  "engines": {
-    "node": ">=20.0"
+    "@astrojs/check": "^0.9.10",
+    "@astrojs/markdown-remark": "^7.3.0",
+    "@astrojs/sitemap": "^3.7.4",
+    "@inlang/paraglide-js": "^2.25.0",
+    "@vitest/coverage-v8": "^4.1.11",
+    "astro": "^7.3.1",
+    "hast-util-to-string": "^3.0.1",
+    "hastscript": "^9.0.1",
+    "katex": "^0.18.4",
+    "rehype-katex": "^7.0.1",
+    "remark-math": "^6.0.0",
+    "typescript": "^5.6.0",
+    "vitest": "^4.1.11"
   }
 }

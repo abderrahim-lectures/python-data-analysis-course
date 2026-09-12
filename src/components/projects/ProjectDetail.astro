@@ -1,0 +1,342 @@
+---
+// Shared project detail page for every locale: /projects/<slug> (en) and
+// /<locale>/<projects-word>/<slug> (ar/es/fr). Each locale's [...id].astro
+// page is a thin wrapper passing its entry + locale here, so the date/UX
+// markup lives in exactly one place.
+//
+// Gamification: the client script below turns every `## Step N: ...` heading
+// into a clearable "step" (recordProjectStep, +15 XP) and the article into a
+// mark-done flow (completeProject, +100 XP + quests). This is the single home
+// for that wiring -- content files just write `## Step N:` headings.
+import {render, type CollectionEntry} from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import ProjectArt from '../ProjectArt.astro';
+import {m} from '../../paraglide/messages.js';
+import {detectLocale, projectsHref, NAV_WORDS, type Locale} from '../../lib/routeSegments';
+import {localizedProjectSlug} from '../../lib/projectSlugs';
+import {PROJECT_TAGS, DIFFICULTY_COLORS} from '../../lib/projectArt';
+import {XP} from '../../lib/gameState';
+import '../../styles/project-detail.css';
+
+interface Props {
+  entry: CollectionEntry<'projects'>;
+  locale?: Locale;
+  hasAlternates?: boolean;
+}
+
+const {entry} = Astro.props;
+const locale: Locale = Astro.props.locale ?? detectLocale(Astro.url.pathname);
+const dir = locale === 'ar' ? 'rtl' : 'ltr';
+// EN-only content (e.g. `data-visualization`, whose ar/es/fr twins are still
+// on the translation backlog) must not advertise alternates that 404. The
+// EN wrapper page computes this from the collection and passes it in; the
+// localized wrappers themselves are only built when a twin exists, so they
+// always have alternates.
+const hasAlternates = Astro.props.hasAlternates ?? true;
+const base = import.meta.env.BASE_URL;
+
+const {title, description, difficulty, estimatedMinutes, tags} = entry.data;
+const {Content} = await render(entry);
+const xpAward = XP.PROJECT_COMPLETE;
+
+// Clean slug: strip the locale prefix and any frontmatter-override
+// /projects/ prefix so it matches gameState keys and hrefs (e.g. an EN file
+// whose `slug: /projects/<name>` frontmatter yields entry.id with that
+// prefix). Normalize to the bare name used everywhere, including on the
+// [[...id]] getStaticPaths param and localStorage XP keys.
+const rawSlug = entry.id.replace(/^(ar|es|fr)\//, '');
+const slug = rawSlug.replace(/^\/?projects\//, '');
+const diff = difficulty ?? 'beginner';
+const diffLabel = `difficulty_${diff}` as 'difficulty_beginner' | 'difficulty_intermediate' | 'difficulty_advanced';
+const diffText = diff === 'beginner' ? 'var(--success-text)' : diff === 'intermediate' ? 'var(--streak-text)' : 'var(--bad-text)';
+// ZPD rung: full guidance on the first projects, freestyle on the capstones.
+// Explicit frontmatter wins; otherwise difficulty is the natural proxy.
+const scaffold = entry.data.scaffold ?? (diff === 'advanced' ? 'open' : diff === 'intermediate' ? 'partial' : 'full');
+const scaffoldKey = `project_scaffold_${scaffold}` as 'project_scaffold_full' | 'project_scaffold_partial' | 'project_scaffold_open';
+const projectTags = (tags?.length ? tags : PROJECT_TAGS[slug] ?? []) as string[];
+
+const enUrl = `projects/${slug}`;
+// Every locale links to its own localized slug route (falling back to the
+// English slug for untranslated projects). EN stays the English slug.
+const alternates: Record<Locale, string> = hasAlternates
+  ? {
+      en: enUrl,
+      ar: `ar/${NAV_WORDS.ar.projects}/${localizedProjectSlug('ar', slug)}`,
+      es: `es/${NAV_WORDS.es.projects}/${localizedProjectSlug('es', slug)}`,
+      fr: `fr/${NAV_WORDS.fr.projects}/${localizedProjectSlug('fr', slug)}`,
+    }
+  : {en: enUrl, ar: enUrl, es: enUrl, fr: enUrl};
+
+// The canonical URL is always the *localized-slug* route, even when this page
+// was reached via the English-slug alias, so search engines converge on one
+// URL per (project, locale) instead of two.
+const canonicalPath = projectsHref(locale, base, slug);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'LearningResource',
+  name: title,
+  description,
+  learningResourceType: 'Project',
+  educationalLevel: difficulty ?? diff ?? 'Beginner',
+  isAccessibleForFree: true,
+  inLanguage: locale,
+  url: String(new URL(projectsHref(locale, base, slug), Astro.site)),
+  isPartOf: {
+    '@type': 'Course',
+    name: 'PyDA Course',
+    description: m.course_description(),
+  },
+};
+---
+
+<Base title={`${title}, PyDA Course`} description={description} lang={locale} dir={dir} alternates={alternates} canonicalPath={canonicalPath} jsonLd={jsonLd}>
+  <nav class="crumb container">
+    <a href={projectsHref(locale, base)}>{m.projects_eyebrow()}</a> <span>/</span> <span class="crumb__here">{title}</span>
+  </nav>
+
+  <div class="container">
+    <ProjectArt slug={slug} class="hero-art" />
+  </div>
+
+  <article class="container lesson-content project-article" data-project-slug={slug} data-step-label={m.mark_complete()} data-cleared={m.project_step_cleared()} data-step-xp={String(XP.PROJECT_STEP)} data-step-check-hint={m.project_checklist_hint({n: XP.PROJECT_STEP})}>
+    <header class="project-head">
+      <div class="project-head__meta">
+        <span class="project-head__diff" style={`color:${diffText}`}>{m[diffLabel]()}</span>
+        <span class="project-head__scaffold project-head__scaffold--{scaffold}">{m[scaffoldKey]()}</span>
+        {estimatedMinutes && <span class="project-head__time">{m.minutes_label({n: estimatedMinutes})}</span>}
+        <span class="project-head__xp">⚡ +{xpAward} XP</span>
+        <span class="project-head__xp project-head__xp--step">{m.project_xp_per_step({n: XP.PROJECT_STEP})}</span>
+      </div>
+      <h1 class="project-title">{title}</h1>
+      {projectTags.length > 0 && (
+        <div class="project-head__tags">
+          {projectTags.map((tag: string) => <span class="project-tag">{tag}</span>)}
+        </div>
+      )}
+    </header>
+
+    <div class="project-content">
+      <Content />
+    </div>
+
+    <div class="project-done">
+      <button type="button" class="btn btn-soft project-done__btn" data-mark-project-done data-label-done={m.project_completed()}>
+        {m.project_mark_done()}
+      </button>
+      <p class="project-done__hint">{m.project_done_hint()}</p>
+    </div>
+  </article>
+</Base>
+
+<script>
+  import {viewProject, completeProject, isProjectComplete, recordProjectStep, isProjectStepDone, loadState, XP} from '../../lib/gameState.ts';
+
+  const article = document.querySelector('[data-project-slug]');
+  const slug = article?.getAttribute('data-project-slug') ?? '';
+
+  // ── project-view XP ──────────────────────────────────────────────
+  if (slug) viewProject(slug);
+
+  // ── step clearing: any "## Step N: …" heading becomes a clear button ──
+  // Locale-safe: ar/es/fr projects number their steps as الخطوة / Paso / Étape.
+  const STEP_RE = /^(?:Step|Paso|Étape|الخطوة)\s+(\d+)/i;
+  const content = article?.querySelector('.project-content');
+  const steps: HTMLHeadingElement[] = content
+    ? Array.from(content.querySelectorAll('h2')).filter((h) => STEP_RE.test(h.textContent ?? ''))
+    : [];
+
+  // Step buttons live in different places depending on whether the step has a
+  // checklist: gated steps get their button in a `.step-actions` row after the
+  // `<ul>` (so `h.querySelector('.step-clear')` can't see it), ungated steps
+  // keep it in the heading. Keep a per-index map so clearStep can always reach it.
+  const rowButtons = new Map<number, HTMLButtonElement>();
+
+  const clearStep = (h: HTMLHeadingElement): void => {
+    const idx = parseInt(h.textContent?.match(STEP_RE)?.[1] ?? '0', 10) - 1;
+    const stepSlug = slug.replace(/.*\//, '');
+    if (idx < 0 || !slug || isProjectStepDone(stepSlug, idx)) return;
+    recordProjectStep(stepSlug, idx);
+    h.classList.add('is-step-done');
+    const button = rowButtons.get(idx);
+    button?.setAttribute('aria-pressed', 'true');
+    button?.setAttribute('aria-label', `${button.getAttribute('aria-label') ?? 'Mark complete'}, done`);
+    button?.setAttribute('disabled', '');
+    document.dispatchEvent(new CustomEvent('lesson:complete', {detail: {xp: XP.PROJECT_STEP}}));
+  };
+
+  // ── checklist gating: `- ✅ …` items inside a step become checkboxes; the
+  // step's "Mark complete" button stays disabled until every item is checked.
+  // Persisted per (project, step, item) so a reload keeps the ticks.
+  const cleanSlug = slug.replace(/.*\//, '');
+  const doneHint = article?.getAttribute('data-step-check-hint') ?? 'Complete every checklist item to mark this step done.';
+  const checkState = (() => {
+    try {
+      return JSON.parse(localStorage.getItem(`pda.steps.${cleanSlug}`) ?? '{}') as Record<string, boolean[]>;
+    } catch {
+      return {};
+    }
+  })();
+  const persistChecks = () => {
+    try { localStorage.setItem(`pda.steps.${cleanSlug}`, JSON.stringify(checkState)); } catch { /* ignore */ }
+  };
+
+  steps.forEach((h, i) => {
+    h.classList.remove('is-step-done');
+    const idx = parseInt(h.textContent?.match(STEP_RE)?.[1] ?? '0', 10) - 1;
+    const done = slug ? isProjectStepDone(cleanSlug, idx) : false;
+    if (done) h.classList.add('is-step-done');
+    h.dataset.stepCleared = article?.getAttribute('data-cleared') ?? 'cleared';
+    h.dataset.stepXp = article?.getAttribute('data-step-xp') ?? '15';
+    const stepLabel = article?.getAttribute('data-step-label') ?? 'Mark complete';
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'step-clear';
+    btn.textContent = stepLabel;
+    btn.setAttribute('aria-pressed', String(done));
+    btn.setAttribute('aria-label', `${stepLabel} (${idx >= 0 ? idx + 1 : i + 1})`);
+    rowButtons.set(idx >= 0 ? idx : i, btn);
+    btn.addEventListener('click', (e) => { e.stopPropagation(); clearStep(h); });
+
+    // Collect the `- ✅ …` checklist items scoped to this step (from this h2
+    // up to the next step h2 or the end of the article's content).
+    const items: HTMLLIElement[] = [];
+    let node: Element | null = h.nextElementSibling;
+    while (node) {
+      if (node.tagName === 'H2' && STEP_RE.test(node.textContent ?? '')) break;
+      if (node.tagName === 'UL') {
+        Array.from(node.children).forEach((li) => {
+          if (li.tagName === 'LI' && /^\s*✅/.test(li.textContent ?? '')) items.push(li as HTMLLIElement);
+        });
+      }
+      node = node.nextElementSibling;
+    }
+    if (items.length === 0) {
+      // Step has no checklist: keep the button on the heading, never gated.
+      h.appendChild(btn);
+      return;
+    }
+
+    const key = String(idx);
+    checkState[key] = checkState[key] ?? items.map(() => done);
+    const ul = items[0].parentElement as HTMLUListElement | null;
+    const checkboxes: HTMLInputElement[] = [];
+
+    items.forEach((li, j) => {
+      const label = document.createElement('label');
+      label.className = 'step-check';
+      const box = document.createElement('input');
+      box.type = 'checkbox';
+      box.checked = !!checkState[key][j];
+      const span = document.createElement('span');
+      Array.from(li.childNodes).forEach((child) => {
+        if (child.nodeType === Node.TEXT_NODE && /^\s*✅/.test(child.textContent ?? '')) {
+          const rest = (child.textContent ?? '').replace(/^\s*✅\s*/, '');
+          if (rest) span.appendChild(document.createTextNode(rest));
+        } else {
+          span.appendChild(child);
+        }
+      });
+      label.replaceChildren(box, span);
+      li.replaceWith(label);
+      box.addEventListener('change', () => {
+        checkState[key][j] = box.checked;
+        persistChecks();
+        btn.disabled = !checkState[key].every(Boolean);
+        if (!btn.disabled) btn.title = '';
+      });
+      checkboxes.push(box);
+    });
+
+    const row = document.createElement('div');
+    row.className = 'step-actions';
+    const note = document.createElement('p');
+    note.className = 'step-check-hint';
+    note.textContent = doneHint;
+    row.appendChild(note);
+    row.appendChild(btn);
+    ul?.insertAdjacentElement('afterend', row);
+
+    if (done) {
+      checkboxes.forEach((box) => box.disabled = true);
+      btn.disabled = true;
+      return;
+    }
+    btn.disabled = !checkState[key].every(Boolean);
+    if (btn.disabled) btn.title = doneHint;
+    btn.addEventListener('click', () => checkboxes.forEach((box) => box.disabled = true));
+  });
+
+  // ── mark-done ────────────────────────────────────────────────────
+  const btn = document.querySelector('[data-mark-project-done]') as HTMLButtonElement | null;
+  const markDone = () => {
+    if (!btn) return;
+    btn.textContent = btn.dataset.labelDone ?? '✓ Completed';
+    btn.classList.add('is-done');
+    btn.disabled = true;
+  };
+  if (slug && isProjectComplete(slug)) markDone();
+  btn?.addEventListener('click', () => {
+    if (!slug) return;
+    const xpBefore = loadState().xp ?? 0;
+    completeProject(slug);
+    markDone();
+    const gained = (loadState().xp ?? 0) - xpBefore;
+    document.dispatchEvent(new CustomEvent('lesson:complete', {detail: {xp: gained}}));
+  });
+</script>
+
+<style>
+  .project-done { padding: 1.5rem 0 3rem; text-align: center; }
+  .project-done__btn { font-size: 1rem; padding: .8rem 1.6rem; }
+  .project-done__hint { color: var(--ink-soft); font-size: .82rem; margin-top: .5rem; }
+  .project-head__xp--step { opacity: .75; }
+  .project-head__scaffold {
+    font-size: .78rem; font-weight: 800; letter-spacing: .03em;
+    text-transform: uppercase; padding: .15rem .6rem; border-radius: var(--radius-pill);
+  }
+  .project-head__scaffold--full { color: var(--success-text); background: var(--success-soft); border: 1px solid var(--success); }
+  .project-head__scaffold--partial { color: var(--streak-text); background: var(--warn-soft); border: 1px solid var(--warn); }
+  .project-head__scaffold--open { color: var(--accent-text); background: var(--accent-soft); border: 1px solid var(--accent); }
+  .project-content :global(h2.is-step-done) { color: var(--success-text); position: relative; }
+  .project-content :global(h2.is-step-done::after) {
+    content: '✅ ' attr(data-step-cleared) ' · +' attr(data-step-xp) ' XP'; font-size: .72rem; font-weight: 700;
+    margin-inline-start: .5rem; color: var(--success-text); vertical-align: middle;
+  }
+  .project-content :global(.step-clear) {
+    padding: .45rem 1rem; border: 1px solid var(--line);
+    border-radius: 999px; background: var(--bg-soft); color: var(--ink-soft);
+    font-size: .8rem; font-weight: 700; cursor: pointer;
+  }
+  .project-content :global(.step-clear:hover),
+  .project-content :global(.step-clear:focus-visible) {
+    border-color: var(--success); color: var(--success-text); outline: none;
+  }
+  .project-content :global(h2.is-step-done .step-clear) {
+    border-color: var(--success); color: var(--success-text); background: var(--success-soft);
+  }
+  .project-content :global(.step-actions) {
+    display: flex; align-items: center; gap: .9rem; flex-wrap: wrap; margin: .5rem 0 1.2rem;
+  }
+  .project-content :global(.step-actions .step-clear) {
+    margin-inline-start: 0; flex: none; padding: .55rem 1.15rem;
+    background: var(--accent-soft); color: var(--accent-strong); border-color: var(--accent);
+    font-size: .88rem;
+  }
+  .project-content :global(.step-actions .step-clear:disabled) {
+    background: var(--bg-soft); color: var(--ink-soft); border-color: var(--line);
+  }
+  .project-content :global(.step-check) {
+    display: flex; gap: .5rem; align-items: flex-start; padding: .3rem 0; font-size: .9rem; cursor: pointer;
+  }
+  .project-content :global(.step-check input[type="checkbox"]) {
+    accent-color: var(--success); margin-top: .22rem; flex: none; cursor: pointer;
+  }
+  .project-content :global(.step-check:has(input:checked) span) {
+    color: var(--ink-soft);
+  }
+  .project-content :global(.step-check input:disabled) { cursor: not-allowed; }
+  .project-content :global(.step-check-hint) {
+    color: var(--ink-soft); font-size: .78rem; font-style: italic; margin: 0;
+  }
+</style>

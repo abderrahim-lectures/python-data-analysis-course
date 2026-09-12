@@ -1,0 +1,55 @@
+---
+// PageViews.astro, anonymous page-view logging to Supabase.
+// Renders no visible markup; the inline script POSTs one row to the
+// `pageviews` table on page load, but only after the visitor opts in via the
+// footer analytics toggle (default off). Credentials come from the
+// PUBLIC_SUPABASE_* env vars (optional, the script no-ops without them).
+//
+// Uses fetch(keepalive) rather than sendBeacon: Supabase PostgREST requires
+// the `apikey` header on every request, which beacons cannot set (so the old
+// sendBeacon path 401'd silently). fetch also lets us observe failures,
+// a misconfigured or RLS-blocked table is now visible in the console instead
+// of vanishing.
+interface Props {
+  supabaseUrl?: string;
+  supabaseKey?: string;
+  locale?: string;
+}
+const {supabaseUrl = '', supabaseKey = '', locale = 'en'} = Astro.props;
+---
+
+{
+  supabaseUrl && supabaseKey && (
+    <script is:inline define:vars={{supabaseUrl, supabaseKey, viewLocale: locale}}>
+      (function () {
+        if (window.__pydaPageViewSent) return;
+        try {
+          window.__pydaPageViewSent = true;
+        } catch (e) {}
+        // Anonymous analytics only: default on (opt-out).
+        try {
+          if (localStorage.getItem('pda:analytics-consent') === '0') return;
+        } catch (e) { return; }
+        const body = JSON.stringify({
+          path: window.location.pathname,
+          locale: viewLocale,
+        });
+        fetch(`${supabaseUrl}/rest/v1/pageviews`, {
+          method: 'POST',
+          headers: {
+            apikey: supabaseKey,
+            Authorization: `Bearer ${supabaseKey}`,
+            'Content-Type': 'application/json',
+            Prefer: 'return=minimal',
+          },
+          body,
+          keepalive: true,
+        })
+          .then((res) => {
+            if (!res.ok) console.warn(`[pyda] pageview not recorded (${res.status})`);
+          })
+          .catch(() => {});
+      })();
+    </script>
+  )
+}

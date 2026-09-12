@@ -14,4 +14,4 @@
 - Week 4: a `generate_text()` function sampling the next word via `random.choices` weighted by those probabilities
 - Week 5: assembling the pieces into a simple CLI text generator + a "temperature" tuning knob, then **timing it** on a slightly larger corpus to feel it get sluggish — this timing becomes the hook picked up at the start of Section 2
 
-A small hand-authored sentence corpus (public-domain/original, avoiding copyright issues) ships in `static/datasets/slm-corpus.csv`.
+A small hand-authored sentence corpus (public-domain/original, avoiding copyright issues) is bundled at `public/datasets/slm-corpus.csv` and auto-mounted for any lesson cell that references it (see [`playground.md`](./playground.md)).

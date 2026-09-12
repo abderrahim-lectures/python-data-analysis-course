@@ -1,0 +1,812 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import { xpProgress, loadState, questsToShow, streakProgress, getActivityStats, getActivityLog, rankFor, RANK_EMOJIS } from '../lib/gameState.ts';
+import { computeGameStats } from '../lib/gamestats.ts';
+import { getCollection } from 'astro:content';
+import {m} from '../paraglide/messages.js';
+import {learnHref, progressGuideHref, trackWord, type Locale} from '../lib/routeSegments';
+
+interface Props {
+  locale: Locale;
+}
+const {locale} = Astro.props;
+const base = import.meta.env.BASE_URL;
+const dir = locale === 'ar' ? 'rtl' : 'ltr';
+const alternates = {
+  en: 'progress',
+  ar: 'ar/تقدم',
+  es: 'es/progreso',
+  fr: 'fr/progression',
+};
+const gs = computeGameStats();
+const st = loadState();
+
+const xp = xpProgress();
+const quests = questsToShow();
+const sp = streakProgress();
+const actStats = getActivityStats();
+
+const mods = await getCollection('modules');
+const lessons = await getCollection('lessons');
+const MODULES = moduleMap(mods, lessons);
+// Stations are modules. A module counts as reached once any single lesson in
+// it is complete, so a second lesson in the same module doesn't inflate the
+// trail, and my trail is no longer conflated with my lesson count.
+const py = modulesReached('python-101', st);
+const da = modulesReached('data-analysis', st);
+
+function moduleMap(modEntries: typeof mods, lessonEntries: typeof lessons): Record<string, {lessons: string[]}[]> {
+  const out: Record<string, {lessons: string[]}[]> = {};
+  for (const section of ['python-101', 'data-analysis'] as const) {
+    out[section] = modEntries
+      .filter((m) => m.id.startsWith(`${section}/normal/`))
+      .sort((a, b) => a.data.order - b.data.order)
+      .map((m) => {
+        const key = String(m.id.split('/').pop()).replace(/^module-\d+-/, '');
+        return {
+          lessons: lessonEntries
+            .filter((l) => l.id.startsWith(`${section}/`) && l.data.module === key)
+            .map((l) => l.id),
+        };
+      });
+  }
+  return out;
+}
+function modulesReached(section: string, s: {lessonsCompleted: Record<string, boolean>}): {done: number; total: number} {
+  const list = MODULES[section] ?? [];
+  const done = list.filter((m) => m.lessons.some((id) => s.lessonsCompleted[id])).length;
+  return {done, total: list.length};
+}
+function xpEarnedOn(section: string): number {
+  return getActivityLog(500)
+    .filter((e) => (e.meta ?? '').startsWith(`${section}/`))
+    .reduce((sum, e) => sum + (e.xp ?? 0), 0);
+}
+
+const pyModules = [1,2,3,4,5,6,7].map((w) => {
+  const done = w <= py.done;
+  return {w, done};
+});
+const daModules = [1,2,3,4,5].map((w) => {
+  const done = w <= da.done;
+  return {w, done};
+});
+
+// ── Localized lookup tables (EN token → locale string) ───────────────────────
+const QUEST_KEYS: Record<string, () => string> = {
+  'first-run': () => m.progress_quest_first_run(),
+  'first-lesson': () => m.progress_quest_first_lesson(),
+  'first-project': () => m.progress_quest_first_project(),
+  'first-project-done': () => m.progress_quest_first_project_done(),
+  'first-project-step': () => m.progress_quest_first_project_step(),
+  'project-steps-10': () => m.progress_quest_project_steps_10(),
+  'project-steps-25': () => m.progress_quest_project_steps_25(),
+  'project-steps-50': () => m.progress_quest_project_steps_50(),
+  'track-python-101': () => m.progress_quest_track_python_101(),
+  'track-data-analysis': () => m.progress_quest_track_data_analysis(),
+  'streak-3': () => m.progress_quest_streak_3(),
+  'streak-7': () => m.progress_quest_streak_7(),
+  'streak-14': () => m.progress_quest_streak_14(),
+  'streak-30': () => m.progress_quest_streak_30(),
+  'xp-100': () => m.progress_quest_xp_100(),
+  'xp-500': () => m.progress_quest_xp_500(),
+  'xp-1000': () => m.progress_quest_xp_1000(),
+  'xp-2000': () => m.progress_quest_xp_2000(),
+  'xp-3000': () => m.progress_quest_xp_3000(),
+  'xp-5000': () => m.progress_quest_xp_5000(),
+  'xp-7500': () => m.progress_quest_xp_7500(),
+  'projects-5': () => m.progress_quest_projects_5(),
+  'projects-10': () => m.progress_quest_projects_10(),
+  'projects-25': () => m.progress_quest_projects_25(),
+  'projects-50': () => m.progress_quest_projects_50(),
+  'first-challenge': () => m.progress_quest_first_challenge(),
+  'challenges-10': () => m.progress_quest_challenges_10(),
+  'challenges-25': () => m.progress_quest_challenges_25(),
+  'challenges-50': () => m.progress_quest_challenges_50(),
+  'all-python': () => m.progress_quest_all_python(),
+  'all-data': () => m.progress_quest_all_data(),
+};
+const questLabels = Object.fromEntries(quests.map((q) => [q.id, QUEST_KEYS[q.id] ? QUEST_KEYS[q.id]() : q.label]));
+const questEn2Lc = Object.fromEntries(quests.map((q) => [q.label, questLabels[q.id] ?? q.label]));
+
+const rankNames: Record<string, string> = {
+  Bronze: m.progress_rank_bronze(),
+  Silver: m.progress_rank_silver(),
+  Gold: m.progress_rank_gold(),
+  Platinum: m.progress_rank_platinum(),
+  Diamond: m.progress_rank_diamond(),
+  Master: m.progress_rank_master(),
+  Grandmaster: m.progress_rank_grandmaster(),
+};
+const kdaNames: Record<string, string> = {
+  Legend: m.progress_kda_frag(),
+  'On Fire': m.progress_kda_fire(),
+  Steady: m.progress_kda_steady(),
+  Grinding: m.progress_kda_grind(),
+  Rookie: m.progress_kda_rookie(),
+};
+
+const rank = rankFor(xp.xp);
+const rankEmoji = RANK_EMOJIS[rank] ?? '🌱';
+const lvWord = m.progress_lv();
+const normTrack = trackWord(locale, 'normal');
+
+// Localized strings handed to the client renderer via a JSON data block.
+// Placeholder tokens are passed through untouched so the client's fmt()
+// replacer fills them in with live values.
+const i18nData = {
+  XP_UNIT: m.progress_xp_unit(),
+  TO_NEXT: m.progress_to_next(),
+  PCT_DONE: m.progress_pct_done({done: '{done}', total: '{total}'}),
+  XP_EARNED: m.progress_xp_earned({n: '{n}'}),
+  ACTIONS: m.progress_actlog_actions({n: '{n}'}),
+  CORRECT_COUNT: m.progress_correct_count({correct: '{correct}', total: '{total}'}),
+  RATIO: m.progress_kpi_ratio({n: '{n}'}),
+  STREAK_DAYS: m.progress_eng_streak_days({n: '{n}'}),
+  SESSION_LESSONS: m.progress_eng_session_lessons({n: '{n}'}),
+  TIME_JUST_NOW: m.progress_time_just_now(),
+  TIME_MIN: m.progress_time_min_ago({n: '{n}'}),
+  TIME_HOUR: m.progress_time_hour_ago({n: '{n}'}),
+  TIME_DAY: m.progress_time_day_ago({n: '{n}'}),
+  QUEST_LABELS: questLabels,
+  QUEST_EN2LC: questEn2Lc,
+  RANK_NAMES: rankNames,
+  KDA_NAMES: kdaNames,
+  MODULES,
+  ACT_TYPES: {
+    'lesson-run': m.progress_acttype_lesson_run(),
+    'lesson-complete': m.progress_acttype_lesson_complete(),
+    'project-view': m.progress_acttype_project_view(),
+    'project-complete': m.progress_acttype_project_complete(),
+    'project-step': m.progress_acttype_project_step({n: '{n}'}),
+    'quiz': m.progress_acttype_quiz(),
+    'daily-login': m.progress_acttype_daily_login(),
+    'streak': m.progress_acttype_streak(),
+    'milestone': m.progress_acttype_milestone(),
+    'challenge': m.progress_acttype_challenge(),
+  },
+  ACT_QUIZ: {
+    'Quiz correct': m.progress_actquiz_correct(),
+    'Quiz attempt': m.progress_actquiz_attempt(),
+    'Perfect quiz!': m.progress_actquiz_perfect(),
+  },
+};
+---
+
+<Base title={m.progress_page_title()} lang={locale} dir={dir} alternates={alternates}>
+  <section class="hero">
+    <div class="container head">
+      <div class="head__eyebrow"><Icon name="trophy" size={16} /> {m.progress_eyebrow()}</div>
+      <h1>{m.progress_h1()}</h1>
+      <p>{m.progress_lead()}</p>
+    </div>
+  </section>
+
+  <section class="container">
+    <!-- Player card -->
+    <div class="player-card" id="progress-player">
+      <div class="player-card__left">
+        <div class="player-card__avatar">🧑‍💻</div>
+        <div class="player-card__info">
+          <div class="player-card__rank"><span class="badge badge--streak" id="p-rank">{rankEmoji} {rankNames[rank]}</span></div>
+          <div class="player-card__level">{lvWord}<span id="p-level">{xp.level}</span></div>
+        </div>
+      </div>
+      <div class="player-card__xp">
+        <div class="player-card__xpbar" role="progressbar" aria-label={m.progress_xp_bar_aria()}>
+          <div class="player-card__xpfill" id="p-xpfill" style="width:{xp.pct}%"></div>
+        </div>
+        <div class="player-card__xptext"><span id="p-xp">{xp.xp}</span> {m.progress_xp_unit()} · <span id="p-xpnext">{xp.toNext}</span> {m.progress_to_next()}</div>
+      </div>
+      <div class="player-card__stats">
+        <div class="player-card__stat">
+          <span class="player-card__stat-val" id="p-streak">{sp.current}🔥</span>
+          <span class="player-card__stat-label">{m.progress_stat_streak()}</span>
+        </div>
+        <div class="player-card__stat">
+          <span class="player-card__stat-val" id="p-best">{sp.best}</span>
+          <span class="player-card__stat-label">{m.progress_stat_best()}</span>
+        </div>
+        <div class="player-card__stat">
+          <span class="player-card__stat-val" id="p-quests">{quests.filter((q) => q.done).length}/{quests.length}</span>
+          <span class="player-card__stat-label">{m.progress_stat_quests()}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- XP bar -->
+    <div class="xpbar-wrap">
+      <div class="xpbar" role="progressbar" aria-label={m.progress_xp_bar_aria()} aria-valuenow={xp.pct} aria-valuemin="0" aria-valuemax="100" id="xpbar">
+        <div class="xpbar__fill" id="xpbar-fill" style="width:{xp.pct}%"></div>
+      </div>
+      <span class="xpbar__text" id="xpbar-text">{xp.xp} {m.progress_xp_unit()}</span>
+    </div>
+
+    <!-- Milestones -->
+    <div class="milestones" id="milestones"></div>
+  </section>
+
+  <!-- Trails -->
+  <section class="container">
+    <div class="trails">
+      <div class="trail">
+        <div class="trail__head">
+          <div>
+            <h2>🐍 {m.track_1_name()}</h2>
+            <span class="trail__meta">{m.progress_trail_python_meta()}</span>
+          </div>
+          <span class="trail__pct" id="pct-python-101">{m.progress_pct_done({done: py.done, total: py.total})}</span>
+        </div>
+        <ol class="stations" data-track="python-101">
+          {pyModules.map(({w, done}) => (
+            <li class="station{done ? ' station--done' : ''}" data-week={w}>
+              <a class="station__link" href={learnHref(locale, base, 'python-101', normTrack)}>
+                <span class="station__dot"></span>
+                <span class="station__label">{m.module_label()} {w}</span>
+                <span class="station__check">✅</span>
+              </a>
+            </li>
+          ))}
+        </ol>
+        <div class="trail__xp" id="xp-python-101">{m.progress_xp_earned({n: xpEarnedOn('python-101')})}</div>
+      </div>
+
+      <div class="trail">
+        <div class="trail__head">
+          <div>
+            <h2>📊 {m.track_2_name()}</h2>
+            <span class="trail__meta">{m.progress_trail_data_meta()}</span>
+          </div>
+          <span class="trail__pct" id="pct-data-analysis">{m.progress_pct_done({done: da.done, total: da.total})}</span>
+        </div>
+        <ol class="stations" data-track="data-analysis">
+          {daModules.map(({w, done}) => (
+            <li class="station{done ? ' station--done' : ''}" data-week={w}>
+              <a class="station__link" href={learnHref(locale, base, 'data-analysis', normTrack)}>
+                <span class="station__dot"></span>
+                <span class="station__label">{m.module_label()} {w}</span>
+                <span class="station__check">✅</span>
+              </a>
+            </li>
+          ))}
+        </ol>
+        <div class="trail__xp trail__xp--streak" id="xp-data-analysis">{m.progress_xp_earned({n: xpEarnedOn('data-analysis')})}</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quests -->
+  <section class="container">
+    <div class="quests">
+      <div class="quests__head">
+        <h2>{m.progress_quests_heading()}</h2>
+        <span class="badge badge--accent" id="quests-pct">{m.progress_pct_done({done: quests.filter((q) => q.done).length, total: quests.length})}</span>
+      </div>
+      <p class="quests__legend">
+        {m.progress_quests_legend()}
+      </p>
+      <div class="quest-grid" id="quest-grid">
+        {quests.map((q) => (
+          <div class={`quest${!q.done ? ' quest--locked' : ''}`} data-quest={q.id}>
+            <span class="quest__icon">{q.done ? '✅' : '🔒'}</span>
+            <span class="quest__label">{questLabels[q.id] ?? q.label}</span>
+            <span class="quest__check">✓</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Activity Log -->
+  <section class="container">
+    <div class="actlog">
+      <div class="actlog__head">
+        <h2>{m.progress_actlog_heading()}</h2>
+        <span class="badge badge--accent" id="actlog-total">{m.progress_actlog_actions({n: actStats.totalActions})}</span>
+      </div>
+      <p class="actlog__legend">{m.progress_actlog_legend()}</p>
+      <div class="actlog__grid" id="actlog-grid"></div>
+      <p class="actlog__empty" id="actlog-empty">{m.progress_actlog_empty()}</p>
+    </div>
+  </section>
+
+  <!-- Improvement report -->
+  <section class="container">
+    <div class="report">
+      <div class="report__empty" id="report-empty">
+        <span class="report__empty-icon" aria-hidden="true">📈</span>
+        <h2>{m.progress_report_empty_h()}</h2>
+        <p>{m.progress_report_empty_p()}</p>
+        <a class="btn btn-primary" href={learnHref(locale, base)}>{m.progress_report_empty_cta()}</a>
+      </div>
+
+      <div class="report__body" id="report-body" hidden>
+      <div class="report__head">
+        <h2>{m.progress_report_heading()}</h2>
+        <span class="report__kda" id="r-kda-label">{kdaNames[gs.kda.label] ?? gs.kda.label}</span>
+      </div>
+      <p class="report__lede">
+        {m.progress_report_lede_pre()}<a href="https://doi.org/10.58477/dj.v4i1.348" target="_blank" rel="noreferrer">{m.progress_report_lede_study()}</a>{m.progress_report_lede_end()}
+      </p>
+
+      <div class="kpis">
+        <div class="kpi">
+          <span class="kpi__label">{m.progress_kpi_winrate()}</span>
+          <span class="kpi__value" id="r-winrate">{gs.quiz.winRate}%</span>
+          <span class="kpi__sub" id="r-winrate-sub">{m.progress_kpi_winrate_sub()}</span>
+          <span class="kpi__hint" title={m.progress_kpi_winrate_hint()}>?</span>
+        </div>
+        <div class="kpi">
+          <span class="kpi__label">{m.progress_kpi_kda()}</span>
+          <span class="kpi__value" id="r-kda">{gs.kda.kills}/{gs.kda.deaths}/{gs.kda.assists}</span>
+          <span class="kpi__sub" id="r-kda-ratio">{m.progress_kpi_ratio({n: gs.kda.ratio})}</span>
+        </div>
+        <div class="kpi">
+          <span class="kpi__label">{m.progress_kpi_farm()}</span>
+          <span class="kpi__value" id="r-farm">{gs.lessonsDone}/{gs.lessonsTotal}</span>
+          <span class="kpi__sub">{m.progress_kpi_farm_sub()}</span>
+        </div>
+      </div>
+
+      <div class="activity-grid">
+        <div class="activity-card">
+          <div class="activity-card__icon">📅</div>
+          <div class="activity-card__content">
+            <span class="activity-card__label">{m.progress_act_days_active()}</span>
+            <span class="activity-card__value" id="r-days-active">{gs.activity.daysActive}</span>
+          </div>
+        </div>
+        <div class="activity-card">
+          <div class="activity-card__icon">📊</div>
+          <div class="activity-card__content">
+            <span class="activity-card__label">{m.progress_act_lessons_week()}</span>
+            <span class="activity-card__value" id="r-lessons-week">{gs.activity.lessonsPerWeek}</span>
+          </div>
+        </div>
+        <div class="activity-card">
+          <div class="activity-card__icon">⚡</div>
+          <div class="activity-card__content">
+            <span class="activity-card__label">{m.progress_act_xp_day()}</span>
+            <span class="activity-card__value" id="r-xp-day">{gs.activity.avgXpPerDay}</span>
+          </div>
+        </div>
+        <div class="activity-card">
+          <div class="activity-card__icon">🎯</div>
+          <div class="activity-card__content">
+            <span class="activity-card__label">{m.progress_act_consistency()}</span>
+            <span class="activity-card__value" id="r-consistency">{gs.activity.consistencyScore}%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="engagement-row">
+        <div class="engagement-item">
+          <span class="engagement-item__label">{m.progress_eng_return_rate()}</span>
+          <span class="engagement-item__value" id="r-return-rate">{gs.engagement.returnRate}%</span>
+          <span class="engagement-item__sub">{m.progress_eng_return_sub()}</span>
+        </div>
+        <div class="engagement-item">
+          <span class="engagement-item__label">{m.progress_eng_streak()}</span>
+          <span class="engagement-item__value" id="r-streak-length">{m.progress_eng_streak_days({n: gs.engagement.streakLength})}</span>
+          <span class="engagement-item__sub">{m.progress_eng_streak_sub()}</span>
+        </div>
+        <div class="engagement-item">
+          <span class="engagement-item__label">{m.progress_eng_best_session()}</span>
+          <span class="engagement-item__value" id="r-longest-session">{m.progress_eng_session_lessons({n: gs.engagement.longestSession})}</span>
+          <span class="engagement-item__sub">{m.progress_eng_session_sub()}</span>
+        </div>
+      </div>
+
+      <div class="diag" id="r-diag">
+        <div class="diag__row">
+          <span class="diag__name">{m.progress_diag_progress()}</span>
+          <div class="diag__bar"><div class="diag__fill" id="r-diag-improvement" style={`width:${gs.diagnostics.improvementPct}%`}></div></div>
+          <span class="diag__val" id="r-diag-improvement-val">{gs.diagnostics.improvementPct}%</span>
+        </div>
+        <div class="diag__row">
+          <span class="diag__name">{m.progress_diag_ngain()}</span>
+          <div class="diag__bar"><div class="diag__fill" id="r-diag-ngain" style="width:0%"></div></div>
+          <span class="diag__val" id="r-diag-ngain-val">{gs.diagnostics.nGainEquivalent.toFixed(2)}</span>
+        </div>
+        <div class="diag__row">
+          <span class="diag__name">{m.progress_diag_acceptance()}</span>
+          <div class="diag__bar"><div class="diag__fill" id="r-diag-acceptance" style={`width:${gs.diagnostics.acceptancePct}%`}></div></div>
+          <span class="diag__val" id="r-diag-acceptance-val">{gs.diagnostics.acceptancePct}%</span>
+        </div>
+        <div class="diag__row">
+          <span class="diag__name">{m.progress_diag_usefulness()}</span>
+          <div class="diag__bar"><div class="diag__fill" id="r-diag-usefulness" style={`width:${gs.diagnostics.usefulnessPct}%`}></div></div>
+          <span class="diag__val" id="r-diag-usefulness-val">{gs.diagnostics.usefulnessPct}%</span>
+        </div>
+        <div class="diag__row">
+          <span class="diag__name">{m.progress_diag_experience()}</span>
+          <div class="diag__bar"><div class="diag__fill" id="r-diag-experience" style={`width:${gs.diagnostics.learningExperiencePct}%`}></div></div>
+          <span class="diag__val" id="r-diag-experience-val">{gs.diagnostics.learningExperiencePct}%</span>
+        </div>
+      </div>
+
+      <p class="report__footnote">
+        {m.progress_footnote()}<strong>{m.progress_footnote_own()}</strong>{m.progress_footnote_end()}
+      </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- How progress is computed -->
+  <section class="container">
+    <a class="guide-link" href={progressGuideHref(locale, base)}>
+      <span class="guide-link__icon" aria-hidden="true">🧮</span>
+      <span class="guide-link__body">
+        <span class="guide-link__heading">{m.progress_guide_link_heading()}</span>
+        <span class="guide-link__lede">{m.progress_guide_link_lede()}</span>
+      </span>
+      <span class="guide-link__cta">{m.progress_guide_link_cta()} →</span>
+    </a>
+  </section>
+
+  <div id="progress-i18n" hidden>{JSON.stringify(i18nData).replace(/</g, '\u003c')}</div>
+  <script>
+    import {xpProgress, questsToShow, streakProgress, rankFor, RANK_EMOJIS, getActivityLog, getActivityStats, loadState} from '../lib/gameState.ts';
+    import {computeGameStats} from '../lib/gamestats.ts';
+
+    const I18N = JSON.parse(document.getElementById('progress-i18n')?.textContent ?? '{}');
+    const {XP_UNIT, TO_NEXT, PCT_DONE, XP_EARNED, ACTIONS, CORRECT_COUNT, RATIO, STREAK_DAYS, SESSION_LESSONS, TIME_JUST_NOW, TIME_MIN, TIME_HOUR, TIME_DAY, QUEST_LABELS, QUEST_EN2LC, RANK_NAMES, KDA_NAMES, ACT_TYPES, ACT_QUIZ, MODULES} = I18N;
+
+    const ACT_ICONS: Record<string, string> = {
+      'lesson-run': '▶️',
+      'lesson-complete': '✅',
+      'project-view': '👁️',
+      'project-complete': '🏆',
+      'quiz': '❓',
+      'daily-login': '🌅',
+      'streak': '🔥',
+      'milestone': '🎖️',
+    };
+
+    const T = {xpUnit: XP_UNIT, toNext: TO_NEXT, pctDone: PCT_DONE, xpEarned: XP_EARNED, actlogActions: ACTIONS, correctCount: CORRECT_COUNT, ratio: RATIO, streakDays: STREAK_DAYS, sessionLessons: SESSION_LESSONS};
+
+    function fmt(tpl: string, vars: Record<string, string | number>): string {
+      return tpl.replace(/\{(\w+)\}/g, (_, k: string) => String(vars[k] ?? ''));
+    }
+
+    function timeAgo(ts: number): string {
+      const mins = Math.floor((Date.now() - ts) / 60000);
+      if (mins < 1) return TIME_JUST_NOW;
+      if (mins < 60) return fmt(TIME_MIN, {n: mins});
+      const hrs = Math.floor(mins / 60);
+      if (hrs < 24) return fmt(TIME_HOUR, {n: hrs});
+      return fmt(TIME_DAY, {n: Math.floor(hrs / 24)});
+    }
+
+    function actLabel(e: {type: string; label?: string; meta?: string}): string {
+      const label = e.label ?? '';
+      if (e.type === 'quiz') return ACT_QUIZ[label] ?? ACT_TYPES['quiz'] ?? label;
+      if (e.type === 'project-step') {
+        const nums = /\d+/.exec(label);
+        return fmt(ACT_TYPES['project-step'], {n: nums ? nums[0] : ''});
+      }
+      if (e.type === 'milestone') {
+        const rest = label.replace(/^Milestone:\s*/, '');
+        return `${ACT_TYPES['milestone']}: ${QUEST_EN2LC[rest] ?? rest}`;
+      }
+      const base = ACT_TYPES[e.type] ?? label;
+      return e.meta ? `${base}, ${e.meta}` : base;
+    }
+
+    function renderActivityLog() {
+      const log = getActivityLog(50);
+      const grid = document.getElementById('actlog-grid');
+      const empty = document.getElementById('actlog-empty');
+      if (!grid) return;
+      if (log.length === 0) {
+        if (empty) empty.hidden = false;
+        return;
+      }
+      if (empty) empty.hidden = true;
+      grid.innerHTML = '';
+      for (const e of log) {
+        const item = document.createElement('div');
+        item.className = 'actlog__item';
+        const icon = document.createElement('span');
+        icon.className = 'actlog__icon';
+        icon.textContent = ACT_ICONS[e.type] ?? '📌';
+        const label = document.createElement('span');
+        label.className = 'actlog__label';
+        label.textContent = actLabel(e);
+        const xpEl = document.createElement('span');
+        xpEl.className = 'actlog__xp';
+        xpEl.textContent = e.xp > 0 ? `+${e.xp} ${T.xpUnit}` : '';
+        const time = document.createElement('span');
+        time.className = 'actlog__time';
+        time.textContent = timeAgo(e.ts);
+        item.append(icon, label, xpEl, time);
+        grid.appendChild(item);
+      }
+    }
+
+    function render() {
+      const xp = xpProgress();
+      const sp = streakProgress();
+      const quests = questsToShow();
+      const rank = rankFor(xp.xp);
+
+      const set = (id: string, text: string) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = text;
+      };
+      set('p-xp', String(xp.xp));
+      set('p-xpnext', String(xp.toNext));
+      set('p-level', String(xp.level));
+      set('p-streak', `${sp.current}🔥`);
+      set('p-best', String(sp.best));
+      set('p-quests', `${quests.filter((q) => q.done).length}/${quests.length}`);
+      const xpfill = document.getElementById('p-xpfill');
+      if (xpfill) xpfill.style.width = xp.pct + '%';
+      const rankEl = document.getElementById('p-rank');
+      if (rankEl) rankEl.textContent = `${RANK_EMOJIS[rank] ?? '🌱'} ${RANK_NAMES[rank] ?? rank}`;
+
+      const xpbarFill = document.getElementById('xpbar-fill');
+      if (xpbarFill) xpbarFill.style.width = xp.pct + '%';
+      set('xpbar-text', `${xp.xp} ${T.xpUnit}`);
+
+      // Tracks: stations are modules. A module counts as reached once any
+      // lesson in it is complete; the "+N XP earned" line reports the real
+      // XP logged under each track instead of a fake done*100 estimate.
+      const st = loadState();
+      for (const section of ['python-101', 'data-analysis'] as const) {
+        const list = document.querySelector(`.stations[data-track="${section}"]`);
+        const mods = (MODULES[section] as {lessons: string[]}[] | undefined) ?? [];
+        const done = mods.filter((m) => m.lessons.some((id) => st.lessonsCompleted[id])).length;
+        const total = mods.length;
+        mods.forEach((_, i) => {
+          const w = i + 1;
+          const complete = w <= done;
+          list?.querySelector(`li[data-week="${w}"]`)?.classList.toggle('station--done', complete);
+        });
+        set(`pct-${section}`, fmt(T.pctDone, {done, total}));
+        const earned = getActivityLog(500)
+          .filter((e) => (e.meta ?? '').startsWith(`${section}/`))
+          .reduce((sum, e) => sum + (e.xp ?? 0), 0);
+        set(`xp-${section}`, fmt(T.xpEarned, {n: earned}));
+      }
+
+      // Quests grid + milestones preview.
+      quests.forEach((q) => {
+        const el = document.querySelector(`.quest[data-quest="${q.id}"]`);
+        if (!el) return;
+        el.classList.toggle('quest--locked', !q.done);
+        const icon = el.querySelector('.quest__icon');
+        if (icon) icon.textContent = q.done ? '✅' : '🔒';
+      });
+      set('quests-pct', fmt(T.pctDone, {done: quests.filter((q) => q.done).length, total: quests.length}));
+
+      const milestones = document.getElementById('milestones');
+      if (milestones) {
+        const done = quests.filter((q) => q.done).slice(0, 6);
+        const locked = quests.filter((q) => !q.done).slice(0, 3);
+        milestones.innerHTML = [
+          ...done.map((q) => `<span class="badge badge--success">✅ ${QUEST_LABELS[q.id] ?? q.label}</span>`),
+          ...locked.map((q) => `<span class="badge badge--locked">🔒 ${QUEST_LABELS[q.id] ?? q.label}</span>`),
+        ].join('');
+      }
+
+      // Improvement report (merged in from the old /stats page).
+      const gs = computeGameStats();
+      const fmtPct = (pct: number) => `${Math.max(0, Math.min(100, Math.round(pct)))}%`;
+      const fillWidth = (id: string, pct: number) => {
+        const el = document.getElementById(id);
+        if (el) el.style.width = fmtPct(pct);
+      };
+      // A fresh visitor was shown 0% win rate, 0/0/0 K/D/A and empty bars under
+      // a confident benchmark headline, which reads as broken rather than empty.
+      const hasProgress = xp.xp > 0;
+      const emptyEl = document.getElementById('report-empty');
+      const bodyEl = document.getElementById('report-body');
+      if (emptyEl) emptyEl.hidden = hasProgress;
+      if (bodyEl) bodyEl.hidden = !hasProgress;
+
+      set('r-kda-label', KDA_NAMES[gs.kda.label] ?? gs.kda.label);
+      set('r-winrate', fmtPct(gs.quiz.winRate));
+      set('r-winrate-sub', fmt(T.correctCount, {correct: gs.quiz.correct, total: gs.quiz.total}));
+      set('r-kda', `${gs.kda.kills}/${gs.kda.deaths}/${gs.kda.assists}`);
+      set('r-kda-ratio', fmt(T.ratio, {n: gs.kda.ratio}));
+      set('r-farm', `${gs.lessonsDone}/${gs.lessonsTotal}`);
+      fillWidth('r-diag-improvement', gs.diagnostics.improvementPct);
+      set('r-diag-improvement-val', fmtPct(gs.diagnostics.improvementPct));
+      fillWidth('r-diag-ngain', gs.diagnostics.nGainEquivalent * 100);
+      set('r-diag-ngain-val', gs.diagnostics.nGainEquivalent.toFixed(2));
+      fillWidth('r-diag-acceptance', gs.diagnostics.acceptancePct);
+      set('r-diag-acceptance-val', fmtPct(gs.diagnostics.acceptancePct));
+      fillWidth('r-diag-usefulness', gs.diagnostics.usefulnessPct);
+      set('r-diag-usefulness-val', fmtPct(gs.diagnostics.usefulnessPct));
+      fillWidth('r-diag-experience', gs.diagnostics.learningExperiencePct);
+      set('r-diag-experience-val', fmtPct(gs.diagnostics.learningExperiencePct));
+
+      // Activity metrics
+      set('r-days-active', String(gs.activity.daysActive));
+      set('r-lessons-week', String(gs.activity.lessonsPerWeek));
+      set('r-xp-day', String(gs.activity.avgXpPerDay));
+      set('r-consistency', fmtPct(gs.activity.consistencyScore));
+
+      // Engagement metrics
+      set('r-return-rate', fmtPct(gs.engagement.returnRate));
+      set('r-streak-length', fmt(T.streakDays, {n: gs.engagement.streakLength}));
+      set('r-longest-session', fmt(T.sessionLessons, {n: gs.engagement.longestSession}));
+
+      // Activity log
+      const actStats = getActivityStats();
+      set('actlog-total', fmt(T.actlogActions, {n: actStats.totalActions}));
+      renderActivityLog();
+    }
+    render();
+  </script>
+</Base>
+
+<style>
+  .hero { padding: 2.5rem 0 1.5rem; }
+  .head__eyebrow { color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: .08em; font-size: .76rem; display: inline-flex; align-items: center; gap: .3rem; }
+  .head h1 { font-size: clamp(2rem, 4vw, 2.8rem); margin: .4rem 0 .2rem; }
+  .head p { color: var(--ink-soft); }
+
+  /* Player card */
+  .player-card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg);
+    padding: 1.25rem; margin-bottom: 1.25rem; box-shadow: var(--shadow-md);
+    display: flex; flex-direction: column; gap: .75rem;
+    animation: slide-up .5s cubic-bezier(.34,1.56,.64,1);
+  }
+  .player-card__left { display: flex; align-items: center; gap: .75rem; }
+  .player-card__avatar {
+    font-size: 2rem; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center;
+    background: var(--bg-soft); border-radius: var(--radius-md); border: 2px solid var(--line);
+  }
+  .player-card__info { display: flex; flex-direction: column; gap: .2rem; }
+  .player-card__level { font-family: var(--font-display); font-weight: 800; font-size: .85rem; color: var(--ink-soft); }
+  .player-card__xp { display: flex; flex-direction: column; gap: 3px; }
+  .player-card__xpbar { height: 8px; background: var(--surface-2); border-radius: var(--radius-pill); overflow: hidden; }
+  .player-card__xpfill { height: 100%; width: 0; border-radius: var(--radius-pill); background: linear-gradient(90deg, var(--accent), var(--accent-strong)); transition: width .6s cubic-bezier(.4,0,.2,1); }
+  .player-card__xptext { font-size: .72rem; font-weight: 700; color: var(--ink-soft); }
+  .player-card__stats { display: flex; gap: 1.5rem; }
+  .player-card__stat { display: flex; flex-direction: column; align-items: center; gap: .1rem; }
+  .player-card__stat-val { font-family: var(--font-display); font-weight: 800; font-size: 1.1rem; color: var(--ink-hi); }
+  .player-card__stat-label { font-size: .78rem; font-weight: 700; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .04em; }
+
+  /* XP bar */
+  .xpbar-wrap { display: flex; align-items: center; gap: .6rem; margin-bottom: 1.5rem; }
+  .xpbar { flex: 1; height: 12px; background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--radius-pill); overflow: hidden; position: relative; }
+  .xpbar__fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-strong)); border-radius: var(--radius-pill); transition: width .6s ease; }
+  .xpbar__text { flex: none; font-size: .78rem; font-weight: 800; color: var(--ink); font-variant-numeric: tabular-nums; }
+
+  /* Milestones */
+  .milestones { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 2rem; }
+
+  /* Trails */
+  .trails { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 3rem; }
+  .trail { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 1.25rem; box-shadow: var(--shadow-sm); transition: box-shadow var(--transition-smooth); }
+  .trail:hover { box-shadow: var(--shadow-md); }
+  .trail__head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
+  .trail__head h2 { font-size: 1.15rem; margin: 0; }
+  .trail__meta { color: var(--ink-soft); font-size: .8rem; margin-top: .15rem; }
+  .trail__pct { color: var(--streak-text); font-weight: 800; font-size: .85rem; white-space: nowrap; }
+  .stations { list-style: none; padding: 0; margin: 0 0 .75rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(52px, 1fr)); gap: .5rem; }
+  .station__link { display: flex; flex-direction: column; align-items: center; gap: .3rem; text-decoration: none; color: var(--ink-soft); padding: .75rem .5rem; border-radius: var(--radius-md); border: 2px solid var(--line); background: var(--bg); transition: all var(--transition-fast); position: relative; }
+  .station__link:hover { transform: translateY(-2px); border-color: var(--accent); background: var(--accent-soft); }
+.station__link:active { transform: translateY(0); border-color: var(--accent); background: var(--accent-soft); }
+.station__link:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .station--done .station__link { border-color: var(--accent); background: var(--accent-soft); }
+  .station__dot { width: 14px; height: 14px; border-radius: 50%; border: 3px solid var(--line); background: var(--bg); transition: all var(--transition-fast); }
+  .station--done .station__dot { border-color: var(--accent); background: var(--accent); box-shadow: 0 0 8px var(--accent-soft); }
+  .station__label { font-size: .78rem; font-weight: 700; }
+  .station__check { font-size: .7rem; display: none; }
+  .station--done .station__check { display: inline; }
+.trail__xp { font-size: .75rem; font-weight: 700; color: var(--ink-soft); }
+.trail__xp--streak { color: var(--ink); }
+
+  /* Quests */
+  .quests { margin-bottom: 3rem; }
+  .quests__head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+  .quests h2 { margin: 0; }
+  .quests__legend { color: var(--ink-soft); font-size: .85rem; margin: .1rem 0 .9rem; }
+  .quest-grid { display: flex; flex-wrap: wrap; gap: .6rem; }
+  .quest { display: flex; align-items: center; gap: .5rem; padding: .5rem .9rem; border-radius: var(--radius-pill); border: 1px solid var(--line); background: var(--surface); font-size: .85rem; font-weight: 600; transition: all var(--transition-fast); }
+  .quest:hover { box-shadow: var(--shadow-sm); border-color: var(--accent); background: var(--accent-soft); }
+.quest:active { box-shadow: var(--shadow-sm); transform: translateY(1px); }
+.quest:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .quest--locked { opacity: .45; filter: grayscale(.4); }
+  .quest__icon { font-size: .95rem; }
+  .quest__check { color: var(--success-text); font-weight: 800; display: none; }
+  .quest:not(.quest--locked) .quest__check { display: inline; }
+
+  /* Improvement report (merged in from the old /stats page) */
+  .report { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 1.25rem; margin-bottom: 3rem; box-shadow: var(--shadow-sm); }
+  .report__head { display: flex; justify-content: space-between; align-items: center; gap: .6rem; }
+  .report__head h2 { margin: 0; font-size: 1.25rem; }
+  .report__kda { color: var(--accent); font-weight: 800; font-size: .85rem; }
+  .report__lede { color: var(--ink-soft); margin: .2rem 0 1.1rem; font-size: .9rem; }
+  .report__lede a { color: var(--accent); }
+  .kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: .75rem; margin-bottom: 1.4rem; }
+  .kpi { background: var(--bg-soft); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 1rem .6rem; text-align: center; }
+  .kpi__label { display: block; color: var(--ink-soft); font-size: .72rem; text-transform: uppercase; letter-spacing: .04em; font-weight: 700; }
+  .kpi__value { display: block; font-family: var(--font-display); font-size: 1.6rem; font-weight: 800; color: var(--accent); margin: .1rem 0; }
+  .kpi__sub { color: var(--ink-soft); font-size: .75rem; }
+  .diag { display: flex; flex-direction: column; gap: .55rem; }
+  .diag__row { display: grid; grid-template-columns: 170px 1fr 52px; gap: .6rem; align-items: center; }
+  .diag__name { font-size: .85rem; font-weight: 600; }
+  .diag__bar { height: 10px; background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--radius-sm); overflow: hidden; }
+  .diag__fill { height: 100%; border-radius: var(--radius-sm); background: linear-gradient(90deg, var(--accent), var(--accent-strong)); transition: width .8s cubic-bezier(.4,0,.2,1); }
+  .diag__val { font-weight: 800; font-size: .85rem; text-align: right; color: var(--accent); }
+  .report__empty { text-align: center; padding: 1.5rem 1rem; }
+  .report__empty[hidden] { display: none; }
+  .report__empty-icon { font-size: 2.2rem; display: block; margin-bottom: .4rem; }
+  .report__empty h2 { margin: 0 0 .35rem; font-size: 1.25rem; }
+  .report__empty p { color: var(--ink-soft); margin: 0 auto 1rem; max-width: 46ch; font-size: .9rem; }
+  .report__footnote { color: var(--ink-soft); font-size: .82rem; border-top: 1px dashed var(--line); padding-top: .8rem; margin-top: 1rem; }
+  .guide-link {
+    display: flex; align-items: center; gap: .9rem; text-decoration: none;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius-lg); padding: 1.1rem 1.25rem; margin-bottom: 3rem;
+    box-shadow: var(--shadow-sm); transition: border-color .15s ease, box-shadow .15s ease;
+  }
+  .guide-link:hover, .guide-link:focus-visible {
+    border-color: var(--accent); box-shadow: var(--shadow-md); outline: none;
+  }
+  .guide-link__icon { font-size: 1.4rem; }
+  .guide-link__body { display: flex; flex-direction: column; gap: .15rem; min-width: 0; }
+  .guide-link__heading { font-weight: 700; color: var(--ink); }
+  .guide-link__lede { color: var(--ink-soft); font-size: .85rem; line-height: 1.5; }
+  .guide-link__cta { margin-inline-start: auto; color: var(--accent); font-weight: 700; font-size: .9rem; white-space: nowrap; }
+  .kpi { position: relative; }
+  .kpi__hint {
+    position: absolute; top: .4rem; right: .4rem; width: 16px; height: 16px; border-radius: 50%;
+    background: var(--surface-2); color: var(--ink-soft); font-size: .65rem; font-weight: 800;
+    display: inline-flex; align-items: center; justify-content: center; cursor: help;
+    border: 1px solid var(--line);
+  }
+  .activity-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: .6rem; margin-bottom: 1rem; }
+  .activity-card {
+    background: var(--bg-soft); border: 1px solid var(--line); border-radius: var(--radius-md);
+    padding: .7rem .6rem; display: flex; align-items: center; gap: .5rem;
+  }
+  .activity-card__icon { font-size: 1.1rem; }
+  .activity-card__content { display: flex; flex-direction: column; }
+  .activity-card__label { font-size: .68rem; font-weight: 700; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .03em; }
+  .activity-card__value { font-family: var(--font-display); font-weight: 800; font-size: 1rem; color: var(--ink-hi); }
+  .engagement-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: .6rem; margin-bottom: 1.2rem; }
+  .engagement-item {
+    background: var(--bg-soft); border: 1px solid var(--line); border-radius: var(--radius-md);
+    padding: .6rem .7rem; text-align: center;
+  }
+  .engagement-item__label { display: block; font-size: .68rem; font-weight: 700; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .03em; }
+  .engagement-item__value { display: block; font-family: var(--font-display); font-weight: 800; font-size: 1.05rem; color: var(--accent); margin: .1rem 0; }
+  .engagement-item__sub { font-size: .78rem; color: var(--ink-soft); }
+
+  @media (max-width: 640px) {
+    .trails { grid-template-columns: 1fr; }
+    .player-card__stats { gap: 1rem; }
+    .kpis { grid-template-columns: repeat(2, 1fr); }
+    .diag__row { grid-template-columns: 96px 1fr 42px; }
+    .activity-grid { grid-template-columns: repeat(2, 1fr); }
+    .engagement-row { grid-template-columns: 1fr; }
+  }
+
+  /* Activity Log */
+  .actlog { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 1.25rem; margin-bottom: 3rem; box-shadow: var(--shadow-sm); }
+  .actlog__head { display: flex; justify-content: space-between; align-items: center; margin-bottom: .5rem; }
+  .actlog__head h2 { margin: 0; }
+  .actlog__legend { color: var(--ink-soft); font-size: .85rem; margin: .1rem 0 1rem; }
+  .actlog__grid { display: flex; flex-direction: column; gap: .4rem; max-height: 400px; overflow-y: auto; }
+  .actlog__item {
+    display: grid; grid-template-columns: auto 1fr auto auto; gap: .6rem; align-items: center;
+    padding: .55rem .75rem; border-radius: var(--radius-md); border: 1px solid var(--line);
+    background: var(--bg); font-size: .82rem; transition: background var(--transition-fast);
+  }
+  .actlog__item:hover { background: var(--accent-soft); }
+  .actlog__icon { font-size: 1rem; }
+  .actlog__label { font-weight: 600; color: var(--ink); }
+  .actlog__xp { font-weight: 800; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .actlog__time { color: var(--ink-soft); font-size: .72rem; font-variant-numeric: tabular-nums; }
+  .actlog__empty { color: var(--ink-soft); text-align: center; padding: 1.5rem 1rem; font-size: .9rem; }
+  .actlog__empty[hidden] { display: none; }
+  @media (max-width: 640px) { .hero { padding: 1.75rem 0 1rem; } }
+</style>

@@ -1,0 +1,123 @@
+---
+// Shared project index for all four locales. Each locale's index.astro is a
+// thin wrapper that passes its locale; the search/tag/difficulty finder and
+// the card grid live only here (DRY + projectsHref fix for locale paths).
+import type {CollectionEntry} from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Icon from '../Icon.astro';
+import ProjectCard from './ProjectCard.astro';
+import {PROJECT_TAGS, projectArtEmoji, type Difficulty} from '../../lib/projectArt';
+import {m} from '../../paraglide/messages.js';
+import type {Locale} from '../../lib/routeSegments';
+import '../../styles/projects.css';
+
+interface Props {
+  locale: Locale;
+  projects: CollectionEntry<'projects'>[];
+  filterStrings: {
+    searchPlaceholder: string;
+    searchAria: string;
+    filterTagAria: string;
+    tagAll: string;
+    filterDiffAria: string;
+    diffAll: string;
+    diffBeginner: string;
+    diffIntermediate: string;
+    diffAdvanced: string;
+    viewAria: string;
+    viewListAria: string;
+    viewGridAria: string;
+    noMatchPrefix: string;
+    trySearch: string;
+  };
+}
+
+const {locale, projects: rawProjects, filterStrings: fs} = Astro.props;
+const localeProjects = rawProjects.filter((p) => {
+  if (locale === 'en') return !/^(ar|es|fr)\//.test(p.id);
+  return p.id.startsWith(`${locale}/`);
+});
+const projectCount = localeProjects.length;
+const searchPlaceholder = fs.searchPlaceholder.replace('{n}', String(projectCount));
+
+const projects = localeProjects
+  .map((p) => ({...p, slug: p.id.replace(/^(ar|es|fr)\//, '').replace(/^\/?projects\//, '')}))
+  .sort((a, b) => a.data.title.localeCompare(b.data.title));
+
+const allTags = [...new Set(projects.flatMap((p) => PROJECT_TAGS[p.slug] ?? []))].sort();
+const tagIcon: Record<string, string> = {};
+for (const [, tags] of Object.entries(PROJECT_TAGS)) {
+  for (const t of tags) {
+    if (!tagIcon[t]) tagIcon[t] = projectArtEmoji([t]);
+  }
+}
+const alternates = {
+  en: 'projects',
+  ar: 'ar/مشاريع',
+  es: 'es/proyectos',
+  fr: 'fr/projets',
+};
+---
+
+<Base title={m.projects_title()} description={m.projects_description()} lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'} alternates={alternates}>
+  <section class="hero">
+    <div class="container head">
+      <div class="head__eyebrow"><Icon name="code" size={16} /> {m.projects_eyebrow()}</div>
+      <h1>{m.projects_h1()}</h1>
+      <p>{m.projects_lead()}</p>
+    </div>
+  </section>
+
+  <section class="container">
+    <div class="finder">
+      <div class="finder__search">
+        <Icon name="search" size={16} />
+        <input
+          type="search"
+          id="project-search"
+          placeholder={searchPlaceholder}
+          aria-label={fs.searchAria}
+          autocomplete="off"
+        />
+      </div>
+      <div class="finder__actions">
+        <div class="finder__tags" role="group" aria-label={fs.filterTagAria}>
+          <button type="button" class="tag-pill tag-pill--all is-active" data-tag="">
+            <span class="tag-pill__icon">🏷️</span>{fs.tagAll}
+          </button>
+          {allTags.map((tag) => (
+            <button type="button" class="tag-pill" data-tag={tag}>
+              <span class="tag-pill__icon">{tagIcon[tag] ?? '🏷️'}</span>{tag}
+            </button>
+          ))}
+        </div>
+        <div style="display:flex; gap:1rem; align-items:center; flex-wrap:wrap;">
+          <div class="finder__difficulty" role="group" aria-label={fs.filterDiffAria}>
+            <button type="button" class="diff-pill is-active" data-diff="">{fs.diffAll}</button>
+            <button type="button" class="diff-pill" data-diff="beginner">🌱 {fs.diffBeginner}</button>
+            <button type="button" class="diff-pill" data-diff="intermediate">⚡ {fs.diffIntermediate}</button>
+            <button type="button" class="diff-pill" data-diff="advanced">🔥 {fs.diffAdvanced}</button>
+          </div>
+          <div class="finder__view" role="group" aria-label={fs.viewAria}>
+            <button type="button" class="view-btn view-btn--list is-active" data-view="list" aria-label={fs.viewListAria}><Icon name="list" size={16} /></button>
+            <button type="button" class="view-btn view-btn--grid" data-view="grid" aria-label={fs.viewGridAria}><Icon name="grid" size={16} /></button>
+          </div>
+        </div>
+      </div>
+      <p class="finder__count" id="project-count" aria-live="polite"></p>
+    </div>
+
+    <div class="list" id="project-grid">
+      {projects.map((p) => (
+        <ProjectCard slug={p.slug} title={p.data.title} description={p.data.description} tags={PROJECT_TAGS[p.slug] ?? []} difficulty={(p.data.difficulty ?? 'beginner') as Difficulty} locale={locale} />
+      ))}
+    </div>
+
+    <p class="empty" id="project-empty" hidden>{fs.noMatchPrefix} "<span id="project-empty-query"></span>". {fs.trySearch}</p>
+  </section>
+</Base>
+
+<script>
+  import {initProjectsFinder} from '../../lib/projectsRender.ts';
+  initProjectsFinder();
+</script>

@@ -1,0 +1,109 @@
+---
+// PopularPages.astro, "most viewed pages" widget powered by the
+// popular_pages() Supabase RPC. Hidden entirely when Supabase creds are
+// absent or the RPC returns nothing. Localized via message keys.
+import {m} from '../paraglide/messages.js';
+import type {Locale} from '../lib/routeSegments';
+
+interface Props {
+  supabaseUrl?: string;
+  supabaseKey?: string;
+  locale?: Locale;
+}
+const {supabaseUrl = '', supabaseKey = ''} = Astro.props;
+---
+
+{
+  supabaseUrl && supabaseKey && (
+    <section class="popular-pages" aria-label={m.popular_pages_label()}>
+      <h2 class="popular-pages__title">{m.popular_pages_title()}</h2>
+      <ol class="popular-pages__list" id="popular-pages-list"></ol>
+      <script is:inline define:vars={{supabaseUrl, supabaseKey}}>
+        (async function () {
+          const list = document.getElementById('popular-pages-list');
+          if (!list) return;
+          try {
+            const res = await fetch(`${supabaseUrl}/rest/v1/rpc/popular_pages`, {
+              headers: {
+                apikey: supabaseKey,
+                Authorization: `Bearer ${supabaseKey}`,
+                Accept: 'application/json',
+              },
+            });
+            if (!res.ok) return;
+            const rows = await res.json();
+            if (!Array.isArray(rows) || rows.length === 0) return;
+            const frag = document.createDocumentFragment();
+            // `path` is anon-writable, so it must never become a live link:
+            // only same-origin http(s) paths survive, and only as a pathname.
+            const origin = location.origin;
+            const MAX_PATH = 200;
+            for (const row of rows) {
+              if (typeof row !== 'object' || row === null) continue;
+              const raw = String(row.path ?? '');
+              if (raw.length > MAX_PATH) continue;
+              let path;
+              try {
+                const url = new URL(raw, origin);
+                if (url.origin !== origin) continue;
+                if (url.protocol !== 'http:' && url.protocol !== 'https:') continue;
+                path = url.pathname;
+              } catch {
+                continue;
+              }
+              const li = document.createElement('li');
+              const a = document.createElement('a');
+              a.href = path;
+              a.textContent = path.replace(/-/g, ' ').replace(/\//g, ' › ');
+              const views = document.createElement('span');
+              views.className = 'popular-pages__views';
+              views.textContent = String(row.views);
+              li.append(a, views);
+              frag.appendChild(li);
+            }
+            if (frag.childNodes.length) list.appendChild(frag);
+          } catch (e) {
+            // stats are progressive enhancement; fail silently
+          }
+        })();
+      </script>
+    </section>
+  )
+}
+
+<style>
+  .popular-pages {
+    margin: 2rem 0;
+    padding: 1.25rem 1.5rem;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--surface);
+  }
+  .popular-pages__title {
+    margin: 0 0 .75rem;
+    font-size: 1.05rem;
+  }
+  .popular-pages__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: .35rem;
+  }
+  .popular-pages__list a {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    text-decoration: none;
+    color: var(--ink);
+    text-transform: capitalize;
+  }
+  .popular-pages__list a:hover {
+    color: var(--accent);
+  }
+  .popular-pages__views {
+    color: var(--ink-faint);
+    font-variant-numeric: tabular-nums;
+    font-size: .85em;
+  }
+</style>

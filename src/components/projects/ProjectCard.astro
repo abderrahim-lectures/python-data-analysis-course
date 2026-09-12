@@ -1,0 +1,42 @@
+---
+// Shared project card used by every locale's project index. The href goes
+// through projectsHref() so locale paths are always correct (Bug B fix).
+import {projectArtEmoji, DIFFICULTY_COLORS, type Difficulty} from '../../lib/projectArt';
+import {projectsHref, type Locale} from '../../lib/routeSegments';
+import {m} from '../../paraglide/messages.js';
+
+interface Props {
+  slug: string;
+  title: string;
+  description: string;
+  tags: string[];
+  difficulty: Difficulty;
+  locale: Locale;
+}
+
+const {slug, title, description, tags, difficulty, locale} = Astro.props;
+const base = import.meta.env.BASE_URL;
+const emoji = projectArtEmoji(tags);
+const diff: Difficulty = difficulty;
+const diffColor = DIFFICULTY_COLORS[diff];
+const diffLabel = `difficulty_${diff}` as 'difficulty_beginner' | 'difficulty_intermediate' | 'difficulty_advanced';
+const scaffold = diff === 'advanced' ? 'open' : diff === 'intermediate' ? 'partial' : 'full';
+const scaffoldKey = `project_scaffold_${scaffold}` as 'project_scaffold_full' | 'project_scaffold_partial' | 'project_scaffold_open';
+const haystack = `${title} ${description} ${tags.join(' ')}`.toLowerCase();
+const tagIcon = (t: string): string => projectArtEmoji([t]);
+---
+
+<a class="card" href={projectsHref(locale, base, slug)} data-project data-tags={tags.join('|')} data-diff={diff} data-search={haystack}>
+  <div class="card__header">
+    <span class="card__icon">{emoji}</span>
+    <span class={`card__badge card__badge--${diff}`}>{m[diffLabel]()}</span>
+    <span class={`card__badge card__badge--scaffold-${scaffold}`}>{m[scaffoldKey]()}</span>
+  </div>
+  <div class="card__body">
+    <h2>{title}</h2>
+    <p>{description}</p>
+    <div class="card__tags">
+      {tags.slice(0, 3).map((t) => <span class="chip">{tagIcon(t)} {t}</span>)}
+    </div>
+  </div>
+</a>

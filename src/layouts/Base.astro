@@ -1,0 +1,432 @@
+---
+// Base page layout: sticky top nav (locale + theme + progress) + footer.
+import '../styles/global.css';
+import 'katex/dist/katex.min.css';
+import Icon from '../components/Icon.astro';
+import LearnerActivity from '../components/LearnerActivity.astro';
+import PageViews from '../components/PageViews.astro';
+import pkg from '../../package.json';
+import {m} from '../paraglide/messages.js';
+import {NAV_WORDS, localeBase, type Locale as RouteLocale} from '../lib/routeSegments';
+
+interface Props {
+  title?: string;
+  description?: string;
+  lang?: string;
+  dir?: 'ltr' | 'rtl';
+  image?: string;
+  /** Path (no leading base, no leading slash) to this page's equivalent in
+   *  each locale — e.g. {en: 'learn/python-101', es: 'es/aprender/python-101'}.
+   *  Powers both the locale switcher and hreflang tags. Pages that don't
+   *  pass this fall back to that locale's learn hub. */
+  alternates?: Partial<Record<RouteLocale, string>>;
+  /** Root-absolute path to prefer as the canonical URL for this page, when it
+   *  differs from the requested pathname (e.g. a localized project page served
+   *  at its old English-slug alias URL). Defaults to Astro.url.pathname. */
+  canonicalPath?: string;
+  /** One schema.org object (or array of them) to emit as JSON-LD, on top of
+   *  the site-wide Organization/WebSite block every page already gets. */
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const {
+  title = 'PyDA Course',
+  lang = 'en',
+  dir = 'ltr',
+  image,
+  alternates,
+  jsonLd,
+} = Astro.props;
+const canonicalPath = Astro.props.canonicalPath ?? Astro.url.pathname;
+const description = Astro.props.description ?? m.home_description();
+const canonicalURL = new URL(canonicalPath, Astro.site);
+const ogImage = image ? new URL(image, Astro.site) : new URL('og-default.png', Astro.site);
+const jsonLdBlocks = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
+const base = import.meta.env.BASE_URL;
+const defaultAlternates: Record<RouteLocale, string> = {
+  en: '',
+  ar: 'ar',
+  es: 'es',
+  fr: 'fr',
+};
+const alt: Record<RouteLocale, string> = {...defaultAlternates, ...alternates};
+const OG_LOCALE: Record<string, string> = {
+  en: 'en_US',
+  ar: 'ar_MA',
+  es: 'es_ES',
+  fr: 'fr_FR',
+};
+const locales = [
+  {code: 'en', label: 'EN', href: () => `${base}${alt.en}`},
+  {code: 'ar', label: 'عربي', href: () => `${base}${alt.ar}`},
+  {code: 'es', label: 'ES', href: () => `${base}${alt.es}`},
+  {code: 'fr', label: 'FR', href: () => `${base}${alt.fr}`},
+];
+const navLocale = (lang === 'ar' || lang === 'es' || lang === 'fr' ? lang : 'en') as RouteLocale;
+const nav = NAV_WORDS[navLocale];
+const locBase = localeBase(navLocale, base);
+const siteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'PyDA Course',
+  description: m.footer_tagline(),
+  url: String(new URL(import.meta.env.BASE_URL, Astro.site)),
+};
+const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
+---
+
+<!doctype html>
+<html lang={lang} dir={dir} data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://www.google-analytics.com https://cdn.jsdelivr.net; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'" />
+    <script is:inline>
+      (function() {
+        var KEY = 'pda:locale-redirected';
+        if (sessionStorage.getItem(KEY)) return;
+        var path = location.pathname;
+        if (path !== '/' && path !== '') return;
+        var langs = navigator.languages || [navigator.language || ''];
+        var map = { ar: 'ar', es: 'es', fr: 'fr' };
+        for (var i = 0; i < langs.length; i++) {
+          var tag = langs[i].toLowerCase().split('-')[0];
+          if (map[tag]) {
+            sessionStorage.setItem(KEY, '1');
+            location.replace('/' + map[tag] + '/');
+            return;
+          }
+        }
+        sessionStorage.setItem(KEY, '1');
+      })();
+    </script>
+    {import.meta.env.PUBLIC_GA_ID && (
+      <script is:inline>
+        // Consent-gated GA, default on. gtag loads unless a visitor explicitly
+        // opted out via the footer analytics toggle (localStorage
+        // "pda:analytics-consent" = "0"). The same key gates pageviews,
+        // the learner bar, and gtag.
+        (function () {
+          function loadGtag(id) {
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag('js', new Date());
+            gtag('config', id);
+            var s = document.createElement('script');
+            s.async = true;
+            s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(id);
+            document.head.appendChild(s);
+          }
+          try {
+            if (localStorage.getItem('pda:analytics-consent') !== '0') {
+              loadGtag('{import.meta.env.PUBLIC_GA_ID}');
+            }
+          } catch (e) { /* private mode: stay off */ }
+        })();
+      </script>
+    )}
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content="Abderrahim Adrabi" />
+    <link rel="canonical" href={canonicalURL} />
+    <link rel="icon" href={new URL('favicon.ico', Astro.site)} sizes="32x32" />
+    <link rel="icon" type="image/svg+xml" href="/icons/icon-192.svg" />
+    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+    <link rel="alternate" hreflang="en" href={new URL(`${base}${alt.en}`, Astro.site)} />
+    <link rel="alternate" hreflang="ar" href={new URL(`${base}${alt.ar}`, Astro.site)} />
+    <link rel="alternate" hreflang="es" href={new URL(`${base}${alt.es}`, Astro.site)} />
+    <link rel="alternate" hreflang="fr" href={new URL(`${base}${alt.fr}`, Astro.site)} />
+    <link rel="alternate" hreflang="x-default" href={new URL(`${base}${alt.en}`, Astro.site)} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:site_name" content="PyDA Course" />
+    <meta property="og:locale" content={OG_LOCALE[navLocale]} />
+    {locales.filter((l) => l.code !== navLocale).map((l) => (
+      <meta property="og:locale:alternate" content={OG_LOCALE[l.code]} />
+    ))}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <!-- Pyodide loads lazily on the first "Run" click (see runnable-cell.client.ts),
+         never on page load -- this just warms the DNS/TLS handshake early so
+         that first click doesn't also pay for connection setup. -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#5b21b6" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="PyDA" />
+    <style is:global>
+      .pyodide-bar { position: fixed; top: 0; left: 0; height: 3px; background: var(--accent); z-index: 99999; transition: width .3s ease; width: 0; }
+      .pyodide-bar--active { width: 70%; animation: pyodide-pulse 1.5s ease-in-out infinite; }
+      @keyframes pyodide-pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+    </style>
+    {allJsonLdBlocks.map((block) => (
+      <script type="application/ld+json" set:html={JSON.stringify(block)} />
+    ))}
+    <script is:inline>
+      // Persisted theme — must run before first paint to avoid a flash.
+      const t = localStorage.getItem('pda:theme');
+      if (t) document.documentElement.dataset.theme = t;
+      document.addEventListener('DOMContentLoaded', () => {
+        // Pyodide loading bar
+        const bar = document.createElement('div');
+        bar.className = 'pyodide-bar';
+        document.body?.appendChild(bar);
+        window.addEventListener('pyodide:loading', () => bar.classList.add('pyodide-bar--active'));
+        window.addEventListener('pyodide:ready', () => bar.classList.remove('pyodide-bar--active'));
+        // Register PWA service worker
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('/sw.js').catch(() => {});
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{m.skip_to_content()}</a>
+    <header class="topnav">
+      <div class="container topnav__inner">
+        <a class="topnav__brand" href={locBase}>
+          <span class="topnav__logo" aria-hidden="true"><Icon name="code" size={16} /></span>
+          <span class="topnav__name">PyDA Course</span>
+        </a>
+        <nav class="topnav__right" aria-label={m.aria_label_primary()}>
+          <a class="topnav__link" href={`${locBase}${nav.learn}`}><Icon name="code" size={15} /> {m.nav_learn()}</a>
+          <a class="topnav__link" href={`${locBase}${nav.projects}`}><Icon name="globe" size={15} /> {m.nav_projects()}</a>
+          <a class="topnav__link" href={`${locBase}${nav.cheatsheets}`}><Icon name="chart" size={15} /> {m.nav_cheatsheets()}</a>
+          <a class="topnav__link" href={`${locBase}${nav.progress}`}><Icon name="trail" size={15} /> {m.nav_progress()}</a>
+          <div class="topnav__xp" id="xp-bar"></div>
+          <div class="topnav__group" aria-label={m.switch_locale()}>
+            {locales.map((l) => (
+              <a
+                class:list={['topnav__lang', l.code === lang && 'topnav__lang--active']}
+                href={l.href()}
+                aria-current={l.code === lang ? 'page' : undefined}
+              >{l.label}</a>
+            ))}
+          </div>
+          <button type="button" class="topnav__btn" data-theme-toggle aria-label={m.theme_toggle_label()}><Icon name="sun" size={16} /></button>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+
+    <!-- Starts hidden: it used to render visible and get hidden by JS after
+         load, so every returning visitor saw it flash on every page. -->
+    <div class="onboarding" id="onboarding" hidden role="dialog" aria-modal="true"
+      aria-labelledby="onboarding-title" aria-describedby="onboarding-sub">
+      <div class="onboarding__card">
+        <div class="onboarding__emoji" aria-hidden="true">🚀</div>
+        <h2 class="onboarding__title" id="onboarding-title">{m.onboarding_title()}</h2>
+        <p class="onboarding__sub" id="onboarding-sub">{m.onboarding_sub()}</p>
+        <ol class="onboarding__steps">
+          {[m.onboarding_step_1(), m.onboarding_step_2(), m.onboarding_step_3()].map((step, i) => (
+            <li class="onboarding__step"><span class="onboarding__step-num" aria-hidden="true">{i + 1}</span> {step}</li>
+          ))}
+        </ol>
+        <button type="button" class="onboarding__cta btn btn-primary" id="onboarding-start">{m.onboarding_cta()}</button>
+        <button type="button" class="onboarding__skip" id="onboarding-skip">{m.onboarding_skip()}</button>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div class="container footer__grid">
+        <div class="footer__brand">
+          <a class="footer__brandmark" href={locBase}>
+            <span class="footer__logo" aria-hidden="true"><Icon name="code" size={16} /></span>
+            <span>PyDA Course</span>
+          </a>
+          <p class="footer__tagline">{m.footer_tagline()}</p>
+        </div>
+        <div class="footer__col">
+          <h3><Icon name="code" size={13} /> {m.footer_course_col()}</h3>
+          <a href={`${locBase}${nav.learn}/python-101`}>{m.footer_python_101()}</a>
+          <a href={`${locBase}${nav.learn}/data-analysis`}>{m.footer_data_analysis()}</a>
+          <a href={`${locBase}${nav.projects}`}>{m.footer_projects()}</a>
+          <a href={`${locBase}${nav.cheatsheets}`}>{m.footer_cheatsheets()}</a>
+        </div>
+        <div class="footer__col">
+          <h3><Icon name="chart" size={13} /> {m.footer_site_col()}</h3>
+          <a href={`${locBase}${nav.progress}`}>{m.footer_my_progress()}</a>
+          <a href={`${locBase}${nav.progressGuide}`}>{m.progress_guide_heading()}</a>
+          <a href={`${locBase}${nav.pedagogy}`}>{m.pedagogy_nav()}</a>
+        </div>
+        <div class="footer__col">
+          <h3><Icon name="globe" size={13} /> {m.footer_more_col()}</h3>
+          <a href="https://github.com/abderrahim-lectures/python-data-analysis-course" target="_blank" rel="noopener noreferrer">{m.footer_github()}</a>
+          <a href="https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/CHANGELOG.md" target="_blank" rel="noopener noreferrer">{m.footer_changelog()}</a>
+        </div>
+      </div>
+      <div class="container footer__bottom">
+        <p>{m.footer_copyright({year: new Date().getFullYear(), version: pkg.version})}</p>
+        <div class="consent-card">
+          <div class="consent-card__text">
+            <span><Icon name="chart" size={14} /> {m.consent_label()}</span>
+            <p>{m.consent_desc()}</p>
+          </div>
+          <label class="switch" for="consent-toggle" title={m.consent_label()}>
+            <input type="checkbox" id="consent-toggle" />
+            <span class="switch__track" aria-hidden="true"><span class="switch__thumb"></span></span>
+          </label>
+        </div>
+      </div>
+    </footer>
+
+    <nav class="mobilenav" aria-label={m.aria_label_mobile()}>
+      <a class="mobilenav__item" href={locBase}><Icon name="home" size={18} /> <span>{m.mobile_nav_home()}</span></a>
+      <a class="mobilenav__item" href={`${locBase}${nav.learn}`}><Icon name="code" size={18} /> <span>{m.mobile_nav_learn()}</span></a>
+      <a class="mobilenav__item" href={`${locBase}${nav.projects}`}><Icon name="globe" size={18} /> <span>{m.mobile_nav_projects()}</span></a>
+      <a class="mobilenav__item" href={`${locBase}${nav.cheatsheets}`}><Icon name="chart" size={18} /> <span>{m.mobile_nav_cheatsheets()}</span></a>
+      <a class="mobilenav__item" href={`${locBase}${nav.progress}`}><Icon name="trail" size={18} /> <span>{m.mobile_nav_progress()}</span></a>
+    </nav>
+
+    <div class="xp-toast-container" id="xp-toast-container" role="status" aria-live="polite" aria-atomic={false}></div>
+
+    <!-- Level-up celebration overlay -->
+    <div class="lvlup" id="lvlup" role="status" aria-live="polite" hidden>
+      <div class="lvlup__bg"></div>
+      <div class="lvlup__text">{m.lvl_up_text()}</div>
+      <div class="lvlup__sub" id="lvlup-sub"></div>
+    </div>
+
+    <script>
+      import '../lib/runnable-cell.client.ts';
+      import '../lib/quiz.client.ts';
+      import '../lib/gamestrip.client.ts';
+    </script>
+    <LearnerActivity locale={lang} supabaseUrl={import.meta.env.PUBLIC_SUPABASE_URL || ''} supabaseKey={import.meta.env.PUBLIC_SUPABASE_KEY || ''} />
+    <PageViews locale={lang} supabaseUrl={import.meta.env.PUBLIC_SUPABASE_URL || ''} supabaseKey={import.meta.env.PUBLIC_SUPABASE_KEY || ''} />
+    <script is:inline>
+    (function() {
+      var bar = document.getElementById('learner-bar');
+      if (!bar) { console.warn('[learner-bar] element not found'); return; }
+      var LOCALE = bar.getAttribute('data-locale') || 'en';
+      var URL = bar.getAttribute('data-url') || '';
+      var KEY = bar.getAttribute('data-key') || '';
+      var NOW = bar.getAttribute('data-now') || 'learning now';
+      var ONE = bar.getAttribute('data-online-one') || 'learner online';
+      var MANY = bar.getAttribute('data-online-many') || 'learners online';
+      // Anonymous analytics only: default on (opt-out). No consent key stored or
+      // explicit opt-out ('0') = no learner id, no heartbeat, no completions writes.
+      try { if (localStorage.getItem('pda:analytics-consent') === '0') { return; } } catch(e) { return; }
+      try { if (localStorage.getItem('pda:learner-dismissed')) return; } catch(e) {}
+      if (!URL || !KEY) { console.warn('[learner-bar] Supabase credentials not configured'); return; }
+      var closeBtn = document.getElementById('learner-close');
+      if (closeBtn) closeBtn.addEventListener('click', function() {
+        bar.style.display = 'none';
+        try { localStorage.setItem('pda:learner-dismissed', '1'); } catch(e) {}
+      });
+      var HDR = {apikey: KEY, Authorization: 'Bearer ' + KEY, 'Content-Type': 'application/json'};
+      var lid;
+      try { lid = localStorage.getItem('pda:learner-id'); } catch(e) {}
+      if (!lid) { lid = crypto.randomUUID ? crypto.randomUUID() : 'x'+Math.random().toString(36).slice(2); try{localStorage.setItem('pda:learner-id',lid)}catch(e){} }
+      async function beat() {
+        try { await fetch(URL+'/rest/v1/learners',{method:'POST',headers:{...HDR,'Prefer':'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({id:lid,last_seen:new Date().toISOString(),locale:LOCALE,track:''})}); } catch(e) { console.warn('[learner-bar] beat failed', e); }
+      }
+      async function count() {
+        try {
+          var c = new Date(Date.now()-60000).toISOString();
+          var r = await fetch(URL+'/rest/v1/learners?last_seen=gt.'+encodeURIComponent(c)+'&select=id',{headers:HDR});
+          var d = await r.json();
+          return Array.isArray(d) ? d.length : 0;
+        } catch(e) { console.warn('[learner-bar] count failed', e); return 0; }
+      }
+      async function recent() {
+        try {
+          var r = await fetch(URL+'/rest/v1/completions?order=created_at.desc&limit=1&select=type,slug,created_at',{headers:HDR});
+          var d = await r.json();
+          return Array.isArray(d)&&d.length ? d[0] : null;
+        } catch(e) { return null; }
+      }
+      function ago(iso, locale) {
+        try {
+          var rtf = new Intl.RelativeTimeFormat(locale, {numeric: 'auto'});
+          var secs = Math.round((new Date(iso).getTime() - Date.now()) / 1000);
+          if (Math.abs(secs) < 60) return rtf.format(0, 'second');
+          if (Math.abs(secs) < 3600) return rtf.format(Math.round(secs / 60), 'minute');
+          if (Math.abs(secs) < 86400) return rtf.format(Math.round(secs / 3600), 'hour');
+          return rtf.format(Math.round(secs / 86400), 'day');
+        } catch (e) { return ''; }
+      }
+      function lbl(slug) { var p=slug.split('/'); return p.length>=3?p[0].replace(/-/g,' ')+' W'+p[2].replace('week-',''):slug.replace(/-/g,' '); }
+      async function refresh() {
+        var n = await count();
+        var r = await recent();
+        var ce=document.getElementById('learner-count'),le=document.getElementById('learner-label'),re=document.getElementById('learner-recent');
+        if(ce)ce.textContent=n;if(le)le.textContent = n===1?ONE:MANY;
+        if(re&&r)re.textContent=lbl(r.slug)+' · '+ago(r.created_at, LOCALE);
+        bar.style.display=n>0?'flex':'none';
+      }
+      async function logComp(type,slug,track) {
+        try{await fetch(URL+'/rest/v1/completions',{method:'POST',headers:{...HDR,'Prefer':'return=minimal'},body:JSON.stringify({learner_id:lid,type,slug,track:track||'',locale:LOCALE})})}catch(e){}
+      }
+      beat(); refresh();
+      setInterval(beat,30000); setInterval(refresh,30000);
+      window.__supabaseLogCompletion = logComp;
+    })();
+</script>
+    <script is:inline>
+      (function () {
+        var t = document.getElementById('consent-toggle');
+        if (!t) return;
+        try { t.checked = localStorage.getItem('pda:analytics-consent') !== '0'; } catch (e) {}
+        t.addEventListener('change', function () {
+          try { localStorage.setItem('pda:analytics-consent', t.checked ? '1' : '0'); } catch (e) {}
+          location.reload();
+        });
+      })();
+    </script>
+    <script is:inline>
+      // RTL bidi fix: isolate LTR code tokens (e.g. generate_text()) in
+      // Arabic headings/titles so trailing () , : do not mirror or reorder.
+      (function () {
+        if (!document.documentElement || document.documentElement.dir !== 'rtl') return;
+        var RE = /[A-Za-z][A-Za-z0-9_.]*\([^()]*(?:\([^()]*\)[^()]*)*\)/g;
+        var t = document.title;
+        if (t) document.title = t.replace(RE, function (m) { return '\u2066' + m + '\u2069'; });
+        function fix(root) {
+          var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+            acceptNode: function (n) {
+              var tag = n.parentNode ? n.parentNode.tagName : '';
+              return /^(CODE|PRE|SCRIPT|STYLE|BDI)$/.test(tag) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT;
+            }
+          });
+          var nodes = [];
+          for (var n = walker.nextNode(); n; n = walker.nextNode()) nodes.push(n);
+          for (var i = 0; i < nodes.length; i++) {
+            var node = nodes[i];
+            if (!RE.test(node.nodeValue)) continue;
+            var frag = document.createDocumentFragment();
+            var rest = node.nodeValue, last = 0, m;
+            RE.lastIndex = 0;
+            while ((m = RE.exec(rest))) {
+              frag.appendChild(document.createTextNode(rest.slice(last, m.index)));
+              var b = document.createElement('bdi');
+              b.dir = 'ltr';
+              b.textContent = m[0];
+              frag.appendChild(b);
+              last = m.index + m[0].length;
+            }
+            if (last < rest.length) frag.appendChild(document.createTextNode(rest.slice(last)));
+            node.parentNode.replaceChild(frag, node);
+          }
+        }
+        fix(document.body);
+      })();
+    </script>
+  </body>
+  </html>
+
+

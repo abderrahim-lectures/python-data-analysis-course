@@ -1,0 +1,204 @@
+---
+// Shared "how your progress is computed" page: /progress-guide,
+// /ar/دليل-التقدم, /es/guia-progreso, /fr/guide-progression.
+// All markup lives here; each locale page is a thin <ProgressGuide locale="…"/> wrapper.
+import Base from '../layouts/Base.astro';
+import {m} from '../paraglide/messages';
+import {NAV_WORDS, progressHref, pedagogyHref, type Locale} from '../lib/routeSegments';
+
+interface Props {
+  locale: Locale;
+}
+
+const {locale} = Astro.props;
+const dir = locale === 'ar' ? 'rtl' : 'ltr';
+const base = import.meta.env.BASE_URL;
+const alternates = {
+  en: NAV_WORDS.en.progressGuide,
+  ar: `ar/${NAV_WORDS.ar.progressGuide}`,
+  es: `es/${NAV_WORDS.es.progressGuide}`,
+  fr: `fr/${NAV_WORDS.fr.progressGuide}`,
+};
+
+const xpRows = [
+  {value: 5, label: m.progress_guide_xp_run(), note: m.progress_guide_xp_run_note()},
+  {value: 60, label: m.progress_guide_xp_lesson(), note: m.progress_guide_xp_lesson_note()},
+  {value: 5, label: m.progress_guide_xp_pview(), note: m.progress_guide_xp_pview_note()},
+  {value: 15, label: m.progress_guide_xp_pstep(), note: m.progress_guide_xp_pstep_note()},
+  {value: 100, label: m.progress_guide_xp_pcomplete(), note: m.progress_guide_xp_pcomplete_note()},
+  {value: 5, label: m.progress_guide_xp_qcorrect(), note: m.progress_guide_xp_qcorrect_note()},
+  {value: 25, label: m.progress_guide_xp_qperfect(), note: m.progress_guide_xp_qperfect_note()},
+  {value: 5, label: m.progress_guide_xp_daily(), note: m.progress_guide_xp_daily_note()},
+  {value: 15, label: m.progress_guide_xp_sbonus(), note: m.progress_guide_xp_sbonus_note()},
+  {value: 30, label: m.progress_guide_xp_smile(), note: m.progress_guide_xp_smile_note()},
+  {value: 25, label: m.progress_guide_xp_milestone(), note: m.progress_guide_xp_milestone_note()},
+  {value: 15, label: m.progress_guide_xp_challenge(), note: m.progress_guide_xp_challenge_note()},
+];
+
+const rankRows = [
+  {rank: m.progress_rank_bronze(), xp: 0},
+  {rank: m.progress_rank_silver(), xp: 500},
+  {rank: m.progress_rank_gold(), xp: 1500},
+  {rank: m.progress_rank_platinum(), xp: 3000},
+  {rank: m.progress_rank_diamond(), xp: 5000},
+  {rank: m.progress_rank_master(), xp: 7500},
+  {rank: m.progress_rank_grandmaster(), xp: 9999},
+];
+
+const stretchWords = [m.progress_guide_quest_firsts(), m.progress_guide_quest_streaks(), m.progress_guide_quest_xp()];
+---
+
+<Base title={m.progress_guide_title()} description={m.progress_guide_description()} lang={locale} dir={dir} alternates={alternates}>
+  <section class="container guide">
+    <h1 class="guide__eyebrow">{m.progress_guide_heading()}</h1>
+    <div class="guide__intro">
+      <p>{m.progress_guide_intro_1()}</p>
+      <p>{m.progress_guide_intro_2()}</p>
+    </div>
+
+    <div class="guide__grid">
+      <article class="guide__card guide__card--wide">
+        <h2>{m.progress_guide_xp_heading()}</h2>
+        <p class="guide__lede">{m.progress_guide_xp_intro()}</p>
+        <table class="guide__table">
+          <tbody>
+            {xpRows.map((row) => (
+              <tr>
+                <td class="guide__value">
+                  <span class="guide__badge">+{row.value} XP</span>
+                </td>
+                <td>
+                  <strong>{row.label}</strong>
+                  <span class="guide__note">{row.note}</span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </article>
+
+      <article class="guide__card">
+        <h2>{m.progress_guide_level_heading()}</h2>
+        <p class="guide__formula">{m.progress_guide_level_formula()}</p>
+        <p class="guide__lede">{m.progress_guide_level_intro()}</p>
+        <p class="guide__note">{m.progress_guide_level_note()}</p>
+      </article>
+
+      <article class="guide__card">
+        <h2>{m.progress_guide_rank_heading()}</h2>
+        <p class="guide__lede">{m.progress_guide_rank_intro()}</p>
+        <ul class="guide__ranks">
+          {rankRows.map((row) => (
+            <li>
+              <span>{row.rank}</span>
+              <span class="guide__xp">{row.xp.toLocaleString(locale)} XP</span>
+            </li>
+          ))}
+        </ul>
+      </article>
+
+      <article class="guide__card">
+        <h2>{m.progress_guide_streak_heading()}</h2>
+        <p class="guide__lede">{m.progress_guide_streak_intro()}</p>
+        <p>{m.progress_guide_streak_inc()}</p>
+        <p>{m.progress_guide_streak_bonus()}</p>
+      </article>
+
+      <article class="guide__card">
+        <h2>{m.progress_guide_quest_heading()}</h2>
+        <p class="guide__lede">{m.progress_guide_quest_intro()}</p>
+        <ul class="guide__list">
+          {[m.progress_guide_quest_firsts(), m.progress_guide_quest_streaks(), m.progress_guide_quest_xp(), m.progress_guide_quest_projects(), m.progress_guide_quest_challenges(), m.progress_guide_quest_tracks()].map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      </article>
+    </div>
+
+    <section class="guide__card guide__card--report">
+      <h2>{m.progress_guide_report_heading()}</h2>
+      <p class="guide__lede">{m.progress_guide_report_intro()}</p>
+      <ul class="guide__report">
+        <li><strong>{m.progress_guide_report_winrate()}</strong><span>{m.progress_guide_report_winrate_note()}</span></li>
+        <li><strong>{m.progress_guide_report_kda()}</strong><span>{m.progress_guide_report_kda_note()}</span></li>
+        <li><strong>{m.progress_guide_report_farm()}</strong><span>{m.progress_guide_report_farm_note()}</span></li>
+        <li><strong>{m.progress_guide_report_activity()}</strong><span>{m.progress_guide_report_activity_note()}</span></li>
+        <li><strong>{m.progress_guide_report_engagement()}</strong><span>{m.progress_guide_report_engagement_note()}</span></li>
+        <li><strong>{m.progress_guide_report_diag()}</strong><span>{m.progress_guide_report_diag_note()}</span></li>
+      </ul>
+      <p class="guide__lede">
+        {m.progress_guide_report_study_pre()}
+        <a href="https://doi.org/10.58477/dj.v4i1.348" target="_blank" rel="noopener noreferrer">{m.progress_guide_report_study_link()}</a>
+        {m.progress_guide_report_study_post()}
+      </p>
+      <p class="guide__note">{m.progress_guide_report_footnote()}</p>
+    </section>
+
+    <section class="guide__card">
+      <h2>{m.progress_guide_storage_heading()}</h2>
+      <p class="guide__lede">{m.progress_guide_storage_intro()}</p>
+      <p>{m.progress_guide_storage_body()}</p>
+    </section>
+
+    <a class="guide__back" href={progressHref(locale, base)} aria-label={m.progress_guide_back()}>{m.progress_guide_back()}</a>
+
+    <section class="guide__card guide__card--cross">
+      <h2>{m.pedagogy_guide_link()}</h2>
+      <p>{m.pedagogy_guide_link_lede()}</p>
+      <a class="guide__cta" href={pedagogyHref(locale, base)}>{m.pedagogy_guide_link_cta()}</a>
+    </section>
+  </section>
+</Base>
+
+<style>
+  .guide { padding: 2.5rem 0 3rem; max-width: 76ch; }
+  .guide h1 { font-size: clamp(1.8rem, 4vw, 2.6rem); margin: 0 0 .4rem; }
+  .guide h2 { font-size: 1.25rem; margin: 0 0 .6rem; }
+  .guide__eyebrow { color: var(--accent); font-size: .95rem; letter-spacing: .04em; }
+  .guide__intro { color: var(--ink-soft); margin: 0 0 2rem; display: flex; flex-direction: column; gap: .7rem; }
+  .guide__intro p:first-child { font-size: 1.12rem; }
+  @media (max-width: 640px) { .guide { padding: 1.75rem 0 2rem; } }
+  .guide__grid { display: grid; gap: 1.25rem; margin: 0 0 1.25rem; }
+  .guide__card {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius-lg); padding: 1.25rem 1.4rem;
+    box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: .5rem;
+  }
+  .guide__card--wide { grid-column: 1 / -1; }
+  section.guide__card + section.guide__card { margin-top: 1.25rem; }
+  .guide__lede { color: var(--ink-soft); margin: 0; line-height: 1.6; }
+  .guide p { margin: 0; line-height: 1.6; }
+  .guide__table { width: 100%; border-collapse: collapse; margin-top: .5rem; }
+  .guide__table td { padding: .55rem .25rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .guide__table tr:last-child td { border-bottom: none; }
+  .guide__table strong { display: block; margin-bottom: .15rem; }
+  .guide__value { width: 7.5rem; }
+  .guide__badge {
+    display: inline-block; background: var(--accent-soft, var(--accent));
+    color: var(--on-accent, var(--ink)); font-weight: 700; font-size: .8rem;
+    border-radius: 999px; padding: .2rem .65rem; white-space: nowrap;
+  }
+  .guide__note { color: var(--ink-soft); font-size: .88rem; line-height: 1.55; }
+  .guide__formula {
+    font-family: var(--font-mono, monospace); background: var(--bg-soft, var(--surface));
+    border: 1px dashed var(--line); border-radius: var(--radius-sm, .5rem);
+    padding: .7rem .9rem; margin: 0; font-size: 1rem;
+  }
+  .guide__ranks { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: .4rem; }
+  .guide__ranks li { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+  .guide__xp { color: var(--ink-soft); font-size: .85rem; white-space: nowrap; }
+  .guide__list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: .35rem; }
+  .guide__list li::before { content: '•'; color: var(--accent); margin-inline-end: .5rem; }
+  .guide__report { list-style: none; padding: 0; margin: 0 0 .75rem; display: flex; flex-direction: column; gap: .6rem; }
+  .guide__report li { display: flex; flex-direction: column; gap: .1rem; }
+  .guide__report span { color: var(--ink-soft); font-size: .9rem; line-height: 1.5; }
+  .guide__report a { color: var(--accent); }
+  .guide__back {
+    display: inline-block; margin-top: 1.25rem; color: var(--accent);
+    font-weight: 600; text-decoration: none;
+  }
+  .guide__back:hover { text-decoration: underline; }
+  .guide__card--cross { margin-top: 1.25rem; }
+  .guide__cta { display: inline-flex; align-self: flex-start; color: var(--accent); font-weight: 600; text-decoration: none; }
+  .guide__cta:hover { text-decoration: underline; }
+</style>

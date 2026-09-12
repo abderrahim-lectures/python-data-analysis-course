@@ -1,0 +1,258 @@
+// Deterministic, dependency-free per-project card art: a stable on-brand
+// gradient (hashed from the project slug) plus an emoji picked from the
+// project's most distinctive tag. Includes difficulty levels for badge rendering.
+export interface GradientPair {
+  from: string;
+  to: string;
+}
+
+const GRADIENTS: GradientPair[] = [
+  {from: '#2a11c0', to: '#7c3aed'},
+  {from: '#171428', to: '#4f46e5'},
+  {from: '#0f2440', to: '#0ea5b7'},
+  {from: '#241a3d', to: '#b45309'},
+  {from: '#16213e', to: '#533483'},
+  {from: '#2b1038', to: '#db2777'},
+  {from: '#0c2340', to: '#059669'},
+  {from: '#1a1a2e', to: '#e94560'},
+];
+
+/** Tags with higher visual specificity are listed first — the first match wins. */
+const TAG_EMOJI: Array<[string, string]> = [
+  ['Playwright', '🎭'],
+  ['Speech-to-Text', '🎙️'],
+  ['Fine-tuning', '🎛️'],
+  ['Computer Vision', '👁️'],
+  ['Web Scraping', '🕷️'],
+  ['Knowledge Graphs', '🕸️'],
+  ['RAG', '📚'],
+  ['Multi-Agent', '🧩'],
+  ['Tool Calling', '🧰'],
+  ['Chatbots', '💬'],
+  ['Discord', '💬'],
+  ['Games', '🎮'],
+  ['Data Visualization', '📈'],
+  ['pandas', '🐼'],
+  ['Pandas', '🐼'],
+  ['Machine Learning', '🧠'],
+  ['scikit-learn', '🧪'],
+  ['MCP', '🔌'],
+  ['Git', '🌿'],
+  ['CLI Tools', '⌨️'],
+  ['APIs', '🌐'],
+  ['FastAPI', '🚀'],
+  ['SQL', '🗄️'],
+  ['Databases', '🗄️'],
+  ['PDFs', '📄'],
+  ['Embeddings', '🧲'],
+  ['OpenCV', '📷'],
+  ['Finance', '💰'],
+  ['Education', '🎓'],
+  ['Search', '🔍'],
+  ['AI Agents', '🤖'],
+  ['Automation', '⚙️'],
+  ['Productivity', '✅'],
+  ['Developer Tools', '🛠️'],
+  ['Static Analysis', '🔬'],
+  ['LangChain', '⛓️'],
+  ['LLMs', '🧠'],
+  // New tags for expanded projects
+  ['NLP', '📝'],
+  ['Audio', '🔊'],
+  ['Creative', '🎨'],
+  ['Real-time', '⚡'],
+  ['Security', '🔒'],
+  ['Health', '❤️'],
+  ['Environment', '🌍'],
+  ['IoT', '📡'],
+  ['Science', '🔬'],
+  ['Business', '💼'],
+  ['Testing', '🧪'],
+  ['No-Code', '🖱️'],
+  ['Marketing', '📣'],
+  ['Frontend', '🖥️'],
+  ['Backend', '🔧'],
+  ['data-pipeline', '🔀'],
+  ['data-visualization', '📊'],
+  ['developer-tools', '🛠️'],
+  ['utility', '🧰'],
+  ['Utility', '🧰'],
+];
+
+const FALLBACK_EMOJI = '💻';
+
+export type Difficulty = 'beginner' | 'intermediate' | 'advanced';
+
+/** Tags per project slug. */
+export const PROJECT_TAGS: Record<string, string[]> = {
+  // ── Original 29 ──────────────────────────────────────────────────
+  'dependency-freshness-checker': ['CLI Tools', 'Automation'],
+  'commit-message-agent': ['CLI Tools', 'Git', 'AI Agents'],
+  'mcp-sqlite-server': ['MCP', 'SQL', 'Databases'],
+  'trivia-bot': ['Discord', 'Chatbots', 'Games'],
+  'chat-with-pdfs': ['RAG', 'PDFs', 'Embeddings'],
+  'mcp-notes-server': ['MCP', 'Search'],
+  'recipe-planner-agent': ['AI Agents', 'Tool Calling', 'Productivity'],
+  'meeting-notes-summarizer': ['AI Agents', 'Productivity', 'Automation'],
+  'github-issue-triage-agent': ['AI Agents', 'Developer Tools', 'Automation'],
+  'voice-to-task-agent': ['AI Agents', 'Speech-to-Text', 'Automation'],
+  'study-buddy-agent': ['AI Agents', 'Education', 'Productivity'],
+  'codebase-knowledge-graph': ['Knowledge Graphs', 'Static Analysis', 'Developer Tools'],
+  'docs-qa-bot': ['AI Agents', 'RAG', 'Chatbots'],
+  'email-triage-agent': ['AI Agents', 'Automation', 'Productivity'],
+  'multi-agent-research': ['AI Agents', 'Multi-Agent', 'LangChain'],
+  'agentic-code-reviewer': ['AI Agents', 'Developer Tools', 'Automation'],
+  'mcp-server': ['MCP', 'AI Agents'],
+  'ml-classifier': ['Machine Learning', 'scikit-learn', 'Pandas'],
+  'rag-notes': ['RAG', 'Embeddings', 'LLMs'],
+  'scrape-analyze': ['Web Scraping', 'Pandas', 'Automation'],
+  'job-aggregator': ['Web Scraping', 'Pandas', 'Automation'],
+  'finetune-llm-unsloth': ['Fine-tuning', 'LLMs'],
+  'rate-limited-api': ['APIs', 'FastAPI'],
+  'webcam-object-counter': ['Computer Vision', 'OpenCV'],
+  'ai-agent': ['AI Agents', 'LangChain'],
+  'finance-agent': ['AI Agents', 'Pandas', 'Finance'],
+  'browser-automation-agent': ['AI Agents', 'Automation', 'Playwright'],
+  'wordle-clone': ['Games', 'CLI Tools'],
+  'habit-streak-visualizer': ['Data Visualization', 'Pandas', 'Productivity'],
+  // ── Batch 1: AI/ML, Web/API, Data ────────────────────────────────
+  'sentiment-dashboard': ['NLP', 'Data Visualization', 'APIs'],
+  'image-caption-generator': ['Machine Learning', 'Creative', 'APIs'],
+  'llm-prompt-optimizer': ['LLMs', 'Developer Tools', 'CLI Tools'],
+  'voice-cloning-toolkit': ['Audio', 'Machine Learning'],
+  'document-qa-engine': ['RAG', 'PDFs', 'Data Visualization'],
+  'code-review-bot': ['AI Agents', 'Developer Tools', 'APIs'],
+  'meeting-transcriber': ['Audio', 'AI Agents', 'Productivity'],
+  'ai-story-writer': ['Creative', 'NLP', 'LLMs'],
+  'semantic-search-engine': ['Search', 'Embeddings', 'Data Visualization'],
+  'anomaly-detector': ['Machine Learning', 'Data Visualization', 'APIs'],
+  'recommendation-engine': ['Machine Learning', 'APIs', 'Data Visualization'],
+  'chatbot-builder': ['Chatbots', 'No-Code', 'APIs'],
+  'ai-data-cleaner': ['Data Visualization', 'Developer Tools', 'Pandas'],
+  'llm-evaluator': ['LLMs', 'Developer Tools', 'Machine Learning'],
+  'ai-image-editor': ['Creative', 'Machine Learning', 'APIs'],
+  'knowledge-graph-builder': ['Knowledge Graphs', 'NLP', 'Data Visualization'],
+  'automl-pipeline': ['Machine Learning', 'Developer Tools', 'Pandas'],
+  'ai-test-generator': ['Developer Tools', 'Testing', 'LLMs'],
+  'ai-tutor': ['Education', 'AI Agents', 'NLP'],
+  'ai-music-composer': ['Creative', 'Audio', 'Machine Learning'],
+  'rest-api-builder': ['APIs', 'Backend', 'Developer Tools'],
+  'websocket-chat': ['Real-time', 'Backend', 'APIs'],
+  'graphql-server': ['APIs', 'Backend', 'Databases'],
+  'etl-pipeline': ['Data Visualization', 'Backend', 'Databases'],
+  'streaming-analytics': ['Real-time', 'Data Visualization', 'Data Visualization'],
+  // ── Batch 2: Data, DevTools, Productivity ─────────────────────────
+  'data-catalog': ['Data Visualization', 'Developer Tools', 'APIs'],
+  'data-quality-monitor': ['Data Visualization', 'Machine Learning', 'Developer Tools'],
+  'feature-store': ['Machine Learning', 'Backend', 'Data Visualization'],
+  'data-lineage-tracker': ['Data Visualization', 'Developer Tools', 'Data Visualization'],
+  'data-masker': ['Security', 'Developer Tools', 'Data Visualization'],
+  'time-series-analyzer': ['Data Visualization', 'Machine Learning', 'Pandas'],
+  'geospatial-analyzer': ['Data Visualization', 'APIs', 'Pandas'],
+  'cli-framework': ['CLI Tools', 'Developer Tools', 'Utility'],
+  'python-linter': ['Developer Tools', 'CLI Tools', 'Testing'],
+  'code-formatter': ['Developer Tools', 'CLI Tools', 'Utility'],
+  'dependency-analyzer': ['Developer Tools', 'CLI Tools', 'Security'],
+  'api-mock-server': ['APIs', 'Developer Tools', 'Testing'],
+  'log-analyzer': ['Developer Tools', 'Data Visualization', 'Backend'],
+  'config-manager': ['Developer Tools', 'Security', 'Backend'],
+  'secret-manager': ['Developer Tools', 'Security', 'Backend'],
+  'note-taking-app': ['Productivity', 'CLI Tools', 'Utility'],
+  'task-manager': ['Productivity', 'CLI Tools', 'Utility'],
+  'time-tracker': ['Productivity', 'CLI Tools', 'Data Visualization'],
+  'knowledge-base': ['Productivity', 'Data Visualization', 'CLI Tools'],
+  'wiki-engine': ['Productivity', 'Backend', 'APIs'],
+  'document-converter': ['Utility', 'CLI Tools', 'Developer Tools'],
+  'spreadsheet-tool': ['Data Visualization', 'Utility', 'Pandas'],
+  'presentation-builder': ['Creative', 'CLI Tools', 'Utility'],
+  'form-builder': ['APIs', 'Backend', 'Frontend'],
+  'email-campaign': ['APIs', 'Backend', 'Marketing'],
+  // ── Batch 3: Science, Business, Creative ──────────────────────────
+  'lab-notebook': ['Science', 'Data Visualization', 'Productivity'],
+  'research-paper-parser': ['Science', 'NLP', 'Data Visualization'],
+  'citation-manager': ['Science', 'Productivity', 'Utility'],
+  'experiment-tracker': ['Science', 'Machine Learning', 'Data Visualization'],
+  'grant-tracker': ['Science', 'Productivity', 'APIs'],
+  'crm-system': ['Business', 'Backend', 'APIs'],
+  'invoice-generator': ['Business', 'Utility', 'APIs'],
+  'expense-tracker': ['Business', 'Data Visualization', 'CLI Tools'],
+  'inventory-manager': ['Business', 'Backend', 'APIs'],
+  'survey-builder': ['Business', 'Data Visualization', 'APIs'],
+  'report-builder': ['Business', 'Data Visualization', 'Data Visualization'],
+  'lead-scoring': ['Business', 'Machine Learning', 'APIs'],
+  'customer-support': ['Business', 'Backend', 'Data Visualization'],
+  'image-editor': ['Creative', 'Utility', 'CLI Tools'],
+  'video-processor': ['Creative', 'CLI Tools', 'Utility'],
+  'audio-editor': ['Creative', 'CLI Tools', 'Audio'],
+  'design-system': ['Creative', 'Frontend', 'Utility'],
+  'animation-engine': ['Creative', 'Frontend', 'Utility'],
+  'color-palette': ['Creative', 'Utility', 'Data Visualization'],
+  'font-scanner': ['Creative', 'Frontend', 'Utility'],
+  'podcast-analyzer': ['Audio', 'NLP', 'AI Agents'],
+  'newsletter-builder': ['Business', 'APIs', 'Creative'],
+  'social-media-manager': ['Business', 'APIs', 'Data Visualization'],
+  'seo-analyzer': ['Developer Tools', 'APIs', 'Data Visualization'],
+  'web-scraper-api': ['APIs', 'Backend', 'Web Scraping'],
+  // ── Batch 4: Education, Health, Environment, IoT, Security, Games ─
+  'quiz-engine': ['Education', 'Backend', 'Data Visualization'],
+  'flashcard-app': ['Education', 'CLI Tools', 'Productivity'],
+  'course-builder': ['Education', 'Backend', 'APIs'],
+  'plagiarism-checker': ['Education', 'NLP', 'Developer Tools'],
+  'gradebook': ['Education', 'Backend', 'Data Visualization'],
+  'fitness-tracker': ['Health', 'Data Visualization', 'CLI Tools'],
+  'meal-planner': ['Health', 'Productivity', 'APIs'],
+  'symptom-checker': ['Health', 'AI Agents', 'APIs'],
+  'meditation-timer': ['Health', 'Productivity', 'CLI Tools'],
+  'sleep-analyzer': ['Health', 'Machine Learning', 'Data Visualization'],
+  'carbon-tracker': ['Environment', 'Data Visualization', 'CLI Tools'],
+  'energy-monitor': ['Environment', 'IoT', 'Data Visualization'],
+  'water-quality': ['Environment', 'IoT', 'Data Visualization'],
+  'air-quality': ['Environment', 'APIs', 'Data Visualization'],
+  'biodiversity-logger': ['Environment', 'AI Agents', 'Data Visualization'],
+  'sensor-hub': ['IoT', 'Backend', 'Real-time'],
+  'device-manager': ['IoT', 'Backend', 'APIs'],
+  'home-automation': ['IoT', 'Backend', 'Automation'],
+  'iot-dashboard': ['IoT', 'Data Visualization', 'Real-time'],
+  'alerting-engine': ['IoT', 'Backend', 'Developer Tools'],
+  'password-generator': ['Security', 'CLI Tools', 'Utility'],
+  'vulnerability-scanner': ['Security', 'Developer Tools', 'CLI Tools'],
+  'encryption-toolkit': ['Security', 'CLI Tools', 'Utility'],
+  'firewall-rules': ['Security', 'Backend', 'CLI Tools'],
+  'audit-logger': ['Security', 'Backend', 'Data Visualization'],
+  // ── Earlier additions ─────────────────────────────────────────────
+  'url-shortener': ['APIs', 'Backend', 'Databases'],
+  'markdown-blog-engine': ['CLI Tools', 'Frontend', 'Data Visualization'],
+  'weather-dashboard': ['APIs', 'CLI Tools', 'Data Visualization'],
+  'json-swiss-army-knife': ['CLI Tools', 'Utility', 'Developer Tools'],
+  'qr-code-studio': ['Creative', 'Utility', 'CLI Tools'],
+};
+
+
+/** Stable per-slug hash so a project keeps its gradient across re-renders. */
+function hashString(input: string): number {
+  let hash = 0;
+  for (let i = 0; i < input.length; i++) {
+    hash = (hash * 31 + input.charCodeAt(i)) >>> 0;
+  }
+  return hash;
+}
+
+/** Emoji picked from the project's most distinctive tag. */
+export function projectArtEmoji(tags: string[]): string {
+  for (const [tag, emoji] of TAG_EMOJI) {
+    if (tags.includes(tag)) return emoji;
+  }
+  return FALLBACK_EMOJI;
+}
+
+/** On-brand dark gradient (as stop colors) picked by hashing the project slug. */
+export function projectArtGradient(slug: string): GradientPair {
+  return GRADIENTS[hashString(slug) % GRADIENTS.length];
+}
+
+/** Difficulty badge color config. The `label` is the localizable message key. */
+export const DIFFICULTY_COLORS: Record<Difficulty, {bg: string; text: string; label: string}> = {
+  beginner: {bg: '#065f46', text: '#a7f3d0', label: 'difficulty_beginner'},
+  intermediate: {bg: '#92400e', text: '#fde68a', label: 'difficulty_intermediate'},
+  advanced: {bg: '#7f1d1d', text: '#fca5a5', label: 'difficulty_advanced'},
+};

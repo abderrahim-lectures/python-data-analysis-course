@@ -1,0 +1,37 @@
+---
+import Base from '../../layouts/Base.astro';
+import PlaygroundHead from '../../components/PlaygroundHead.astro';
+import PlaygroundCell from '../../components/PlaygroundCell.astro';
+import {PLAYGROUND_STARTER} from '../../lib/playgroundStarter.ts';
+import * as m from '../../paraglide/messages.js';
+---
+
+<Base
+  title={m.playground_title() + ', PyDA Course'}
+  description={m.playground_lead()}
+  lang="es"
+  dir="ltr"
+>
+  <section class="container head">
+    <PlaygroundHead
+      eyebrow={m.playground_eyebrow()}
+      lead={m.playground_lead()}
+    />
+  </section>
+
+  <section class="container playground-page">
+    <PlaygroundCell starter={PLAYGROUND_STARTER} />
+  </section>
+</Base>
+
+<script define:vars={{STARTER: PLAYGROUND_STARTER}}>
+  document.getElementById('pg-reset')?.addEventListener('click', () => {
+    const codeEl = document.getElementById('pg-code');
+    codeEl.textContent = STARTER;
+    codeEl.dispatchEvent(new Event('input', {bubbles: true}));
+  });
+</script>
+
+<style>
+  .head { padding: 2.5rem 0 1rem; }
+</style>

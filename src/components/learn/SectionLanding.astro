@@ -1,0 +1,124 @@
+---
+// Shared section landing for locale pages, e.g. /ar/تعلم/python-101.
+import {getCollection} from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import {learnHref, moduleHref, learnAlternates, idInLocale, type Locale} from '../../lib/routeSegments';
+import {m} from '../../paraglide/messages.js';
+import {TRACK_ICONS, sectionIcon, sectionName, sectionDescription} from '../../lib/sections';
+import {XP} from '../../lib/gameState';
+
+interface Props {
+  locale: Locale;
+  section: string;
+}
+
+const {locale, section} = Astro.props;
+const base = import.meta.env.BASE_URL;
+const dir = locale === 'ar' ? 'rtl' : 'ltr';
+
+const allModules = await getCollection('modules');
+const allLessons = await getCollection('lessons');
+
+const diffColor = (d: string) => d === 'beginner' ? 'var(--success)' : d === 'intermediate' ? 'var(--streak-text)' : 'var(--bad)';
+const arrow = locale === 'ar' ? '←' : '→';
+
+const getModuleLessonCount = (slug: string, track: string) => {
+  const moduleKey = slug.replace(/^module-\d+-/, '');
+  return allLessons.filter((l) => idInLocale(locale, l.id) && l.id.includes(`${section}/${track}`) && l.data.module === moduleKey).length;
+};
+const getModuleMinutes = (slug: string, track: string) => {
+  const moduleKey = slug.replace(/^module-\d+-/, '');
+  return allLessons.filter((l) => idInLocale(locale, l.id) && l.id.includes(`${section}/${track}`) && l.data.module === moduleKey).reduce((sum, l) => sum + (l.data.estimatedMinutes ?? 15), 0);
+};
+
+const normalModules = allModules.filter((e) => idInLocale(locale, e.id) && e.id.includes(`${section}/normal`)).sort((a, b) => a.data.order - b.data.order);
+const hardModules = allModules.filter((e) => idInLocale(locale, e.id) && e.id.includes(`${section}/hard`)).sort((a, b) => a.data.order - b.data.order);
+const normalLessons = allLessons.filter((l) => idInLocale(locale, l.id) && l.id.includes(`${section}/normal`));
+const hardLessons = allLessons.filter((l) => idInLocale(locale, l.id) && l.id.includes(`${section}/hard`));
+const totalXp = [...normalLessons, ...hardLessons].length * XP.LESSON_COMPLETE;
+const totalMinutes = [...normalLessons, ...hardLessons].reduce((sum, l) => sum + (l.data.estimatedMinutes ?? 15), 0);
+const totalHours = Math.round(totalMinutes / 60);
+---
+
+<Base title={`${sectionName(section)}, PyDA Course`} description={sectionDescription(section)} lang={locale} dir={dir} alternates={learnAlternates(section, 'normal', 'section')}>
+  <nav class="crumb container">
+    <a href={learnHref(locale, base)}>{m.nav_learn()}</a> <span>/</span>
+    <span class="crumb__here">{sectionName(section)}</span>
+  </nav>
+
+  <section class="container hero-section">
+    <div class="hero-icon">{sectionIcon(section)}</div>
+    <h1>{sectionName(section)}</h1>
+    <p>{sectionDescription(section)}</p>
+    <div class="hero-stats">
+      <span class="stat">📖 {normalLessons.length + hardLessons.length}</span>
+      <span class="stat">⏱ ~{totalHours}h</span>
+      <span class="stat">📦 {normalModules.length + hardModules.length}</span>
+      <span class="stat">⚡ +{totalXp} XP</span>
+    </div>
+  </section>
+
+  {(['normal', 'hard'] as const).map((track) => {
+    const mods = track === 'normal' ? normalModules : hardModules;
+    return (
+      <section class="container track-section">
+        <h2>{TRACK_ICONS[track]} {track === 'normal' ? m.track_normal_label() : m.track_hard_label()}</h2>
+        <div class="modules-grid">
+          {mods.map((mod) => {
+            const slug = mod.id.split('/').pop()!;
+            const lessonCount = getModuleLessonCount(slug, track);
+            const totalMin = getModuleMinutes(slug, track);
+            return (
+              <a class="module-card" href={moduleHref(locale, base, section, track, slug)}>
+                <div class="module-card__icon">{mod.data.icon}</div>
+                <div class="module-card__body">
+                  <span class="module-card__order">{m.module_label()} {mod.data.order}</span>
+                  <h3>{mod.data.title}</h3>
+                  <p>{mod.data.description}</p>
+                  <div class="module-card__meta">
+                    <span style={`color:${diffColor(mod.data.difficulty)}`}>{m[`difficulty_${mod.data.difficulty}`]()}</span>
+                    <span>📖 {lessonCount}</span>
+                    <span>⏱ ~{Math.round(totalMin / 60)}h</span>
+                  </div>
+                </div>
+                <span class="module-card__arrow">{arrow}</span>
+              </a>
+            );
+          })}
+        </div>
+      </section>
+    );
+  })}
+</Base>
+
+<style>
+  .crumb { display: flex; gap: .5rem; padding-top: 1.2rem; color: var(--ink-soft); font-size: .88rem; align-items: center; }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb__here { font-weight: 700; color: var(--ink); }
+  .hero-section { padding: 2rem 0 1.5rem; text-align: center; }
+  .hero-icon { font-size: 4rem; margin-bottom: .5rem; }
+  .hero-section h1 { font-size: clamp(2rem, 4vw, 2.8rem); margin: .3rem 0; }
+  .hero-section p { color: var(--ink-soft); font-size: 1.05rem; }
+  .hero-stats { display: flex; gap: 1.25rem; justify-content: center; margin-top: 1rem; flex-wrap: wrap; }
+  .stat { font-size: .88rem; font-weight: 600; color: var(--ink-soft); }
+  .track-section { margin-bottom: 2rem; }
+  .track-section h2 { font-size: 1.4rem; margin-bottom: 1rem; }
+  .modules-grid { display: flex; flex-direction: column; gap: .75rem; }
+  .module-card {
+    display: flex; align-items: center; gap: 1.25rem;
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg);
+    padding: 1.25rem; text-decoration: none; color: var(--ink);
+    box-shadow: var(--shadow-sm); transition: all var(--transition-smooth);
+  }
+  .module-card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); border-color: var(--accent); }
+  .module-card__icon { font-size: 2.5rem; flex-shrink: 0; }
+  .module-card__body { flex: 1; }
+  .module-card__order { font-size: .74rem; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; color: var(--accent); }
+  .module-card__body h3 { font-size: 1.1rem; margin: .2rem 0; }
+  .module-card__body p { font-size: .85rem; color: var(--ink-soft); margin: 0; }
+  .module-card__meta { display: flex; gap: .75rem; margin-top: .4rem; font-size: .78rem; font-weight: 600; color: var(--ink-soft); }
+  .module-card__arrow { font-size: 1.2rem; color: var(--ink-soft); transition: transform .15s ease; flex-shrink: 0; }
+  .module-card:hover .module-card__arrow { transform: translateX(4px); color: var(--accent); }
+  [dir='rtl'] .module-card:hover .module-card__arrow { transform: translateX(-4px); }
+  @media (max-width: 640px) { .hero-section { padding: 1.5rem 0 1.25rem; } .crumb { padding-top: .8rem; } }
+</style>

@@ -1,0 +1,249 @@
+---
+// Shared lesson page for locale learn trees, e.g. /ar/تعلم/python-101/hard/lessons/[lesson].
+import {getCollection, render, type CollectionEntry} from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Quiz from '../Quiz.astro';
+import RelatedProjects from './RelatedProjects.astro';
+import {lessonHref, learnHref, moduleHref, idInLocale, trackWord, learnAlternates, type Locale} from '../../lib/routeSegments';
+import {NOTEBOOK_OPENERS} from '../../lib/notebookLinks';
+import {m} from '../../paraglide/messages.js';
+import {TRACK_ICONS, sectionName} from '../../lib/sections';
+
+interface Props {
+  locale: Locale;
+  section: string;
+  track: 'normal' | 'hard';
+  entry: CollectionEntry<'lessons'>;
+}
+
+const {locale, section, track, entry} = Astro.props;
+const {title, description, module: moduleId, order, difficulty, estimatedMinutes, learningObjectives, tags, hasChallenge, hasQuiz, quiz, xpReward} = entry.data;
+const {Content} = await render(entry);
+const base = import.meta.env.BASE_URL;
+const dir = locale === 'ar' ? 'rtl' : 'ltr';
+
+const trackPath = `${section}/${track}`;
+const allLessons = await getCollection('lessons');
+const siblings = allLessons
+  .filter((e) => idInLocale(locale, e.id) && e.id.includes(trackPath))
+  .sort((a, b) => a.data.order - b.data.order);
+const allModules = await getCollection('modules');
+const sortedModules = allModules
+  .filter((e) => idInLocale(locale, e.id) && e.id.includes(trackPath))
+  .sort((a, b) => a.data.order - b.data.order);
+const idx = siblings.findIndex((e) => e.id === entry.id);
+const prev = idx > 0 ? siblings[idx - 1] : null;
+const next = idx >= 0 && idx < siblings.length - 1 ? siblings[idx + 1] : null;
+
+const slug = entry.id.split('/').pop()!;
+const lessonId = `${section}/${track}/${slug}`;
+const diffColor = difficulty === 'beginner' ? 'var(--success-text)' : difficulty === 'intermediate' ? 'var(--streak-text)' : 'var(--bad-text)';
+const otherTrack = track === 'normal' ? 'hard' as const : 'normal' as const;
+const arrow = locale === 'ar' ? '→' : '←';
+const counterArrow = locale === 'ar' ? '←' : '→';
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'LearningResource',
+    name: title,
+    description,
+    learningResourceType: 'Lesson',
+    educationalLevel: difficulty,
+    isAccessibleForFree: true,
+    inLanguage: locale,
+    url: String(new URL(lessonHref(locale, base, section, track, slug), Astro.site)),
+    position: order,
+    timeRequired: `PT${estimatedMinutes}M`,
+    isPartOf: {
+      '@type': 'Course',
+      name: 'PyDA Course',
+      description: m.course_description(),
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: m.nav_learn(),
+        item: String(new URL(learnHref(locale, base), Astro.site)),
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: sectionName(section),
+        item: String(new URL(learnHref(locale, base, section), Astro.site)),
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: title,
+      },
+    ],
+  },
+];
+---
+
+<Base title={`${title}, PyDA Course`} description={description} lang={locale} dir={dir} jsonLd={jsonLd} alternates={learnAlternates(section, track, 'lesson', slug)}>
+  <nav class="crumb container">
+    <a href={learnHref(locale, base)}>{m.nav_learn()}</a> <span>/</span>
+    <a href={learnHref(locale, base, section)}>{sectionName(section)}</a> <span>/</span>
+    {(() => { const mod = sortedModules.find(x => x.id.split('/').pop()!.replace(/^module-\d+-/, '') === moduleId); return mod ? <a href={moduleHref(locale, base, section, track, mod.id.split('/').pop()!)}>{mod.data.title}</a> : <span>{moduleId}</span>; })()} <span>/</span>
+    <span class="crumb__here">{title}</span>
+  </nav>
+
+  <article class="container lesson-body" data-lesson-id={lessonId} data-lesson-xp={xpReward}>
+    <header class="lesson-head">
+      <div class="lesson-head__meta">
+        <span class="lesson-head__tag">📖 {m.lesson_label()} {order}</span>
+        <span class="lesson-head__diff" style={`color:${diffColor}`}>{m[`difficulty_${difficulty}`]()}</span>
+        <span class="lesson-head__time">{m.minutes_label({n: estimatedMinutes})}</span>
+        <span class="lesson-head__xp">⚡ +{xpReward} XP</span>
+        <span class="lesson-head__openers" aria-label={m.open_notebook_aria()}>
+          {NOTEBOOK_OPENERS.map((o) => (
+            <a class="lesson-head__open" href={o.href(locale, section, track, slug)} target="_blank" rel="noopener noreferrer">{o.label}</a>
+          ))}
+        </span>
+        {tags.length > 0 && <span class="lesson-head__tags">{tags.join(' · ')}</span>}
+      </div>
+      <h1>{title}</h1>
+      {description && <p class="lesson-head__sub">{description}</p>}
+      {learningObjectives.length > 0 && (
+        <div class="lesson-head__objectives">
+          <strong>🎯 {m.objectives()}</strong>
+          <ul>
+            {learningObjectives.map((obj) => <li>{obj}</li>)}
+          </ul>
+        </div>
+      )}
+    </header>
+
+    <div class="lesson-content">
+      <Content />
+    </div>
+
+    {hasChallenge && (
+      <RelatedProjects
+        locale={locale}
+        section={section}
+        track={track}
+        lessonSlug={entry.id.split('/').pop() ?? ''}
+      />
+    )}
+
+    {hasQuiz && quiz.length > 0 && (
+      <Quiz questions={quiz} xp={10} lessonId={lessonId} />
+    )}
+
+    {tags.length > 0 && (
+      <div class="lesson-tags">
+        {tags.map((tag) => <span class="lesson-tag">{tag}</span>)}
+      </div>
+    )}
+
+    <div class="lesson-nav">
+      <div class="lesson-nav__group">
+        {prev
+          ? <a class="btn btn-soft lesson-nav__prev" href={lessonHref(locale, base, section, track, prev.id.split('/').pop()!)}>{arrow} {m.prev_lesson()}</a>
+          : <span />}
+        {next
+          ? <a class="btn btn-primary lesson-nav__next" href={lessonHref(locale, base, section, track, next.id.split('/').pop()!)}>{m.next_lesson()} {counterArrow}</a>
+          : <span />}
+      </div>
+      <button type="button" class="btn btn-soft lesson-nav__done" data-mark-complete
+        data-label-done={m.completed()}>{m.mark_complete()}</button>
+    </div>
+
+    <div class="route">
+      <a class="route__card" href={learnHref(locale, base, section, trackWord(locale, otherTrack))}>
+        <span class="route__icon">{TRACK_ICONS[otherTrack]}</span>
+        <strong>{m.switch_to()} {track === 'normal' ? m.track_hard_label() : m.track_normal_label()}</strong>
+        <small>{track === 'normal' ? m.same_week_steep() : m.same_week_calm()}</small>
+      </a>
+    </div>
+  </article>
+</Base>
+
+<script>
+  import {completeLesson, isLessonComplete, loadState} from '../../lib/gameState';
+  const article = document.querySelector('[data-lesson-id]');
+  const id = article?.getAttribute('data-lesson-id');
+  const reward = Number(article?.getAttribute('data-lesson-xp') || 0) || undefined;
+  const btn = document.querySelector('[data-mark-complete]') as HTMLButtonElement | null;
+
+  const markDone = () => {
+    if (!btn) return;
+    btn.textContent = btn.dataset.labelDone ?? 'Completed';
+    btn.classList.add('is-done');
+    btn.disabled = true;
+  };
+
+  if (id && isLessonComplete(id)) markDone();
+
+  btn?.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (!id) return;
+    const xpBefore = loadState().xp ?? 0;
+    completeLesson(id, reward);
+    markDone();
+    const gained = (loadState().xp ?? 0) - xpBefore;
+    document.dispatchEvent(new CustomEvent('lesson:complete', {detail: {xp: gained}}));
+  });
+</script>
+
+<style>
+  .crumb { display: flex; gap: .5rem; padding-top: 1.2rem; color: var(--ink-soft); font-size: .88rem; align-items: center; flex-wrap: wrap; }
+  .crumb a { color: var(--ink-soft); text-decoration: none; }
+  .crumb__here { font-weight: 700; color: var(--ink); }
+  .lesson-head { margin: 1.5rem 0 1rem; }
+  .lesson-head__meta { display: flex; gap: .75rem; align-items: center; margin-bottom: .5rem; flex-wrap: wrap; }
+  .lesson-head__tag { color: var(--accent); font-weight: 800; letter-spacing: .04em; text-transform: uppercase; font-size: .8rem; }
+  .lesson-head__diff { font-weight: 800; text-transform: uppercase; font-size: .78rem; letter-spacing: .04em; }
+  .lesson-head__time, .lesson-head__xp, .lesson-head__tags { font-size: .82rem; color: var(--ink-soft); font-weight: 600; }
+  .lesson-head__openers { display: inline-flex; gap: .3rem; flex-wrap: wrap; }
+  .lesson-head__open {
+    font-size: .78rem; font-weight: 700; text-decoration: none;
+    padding: .15rem .55rem; border-radius: var(--radius-pill);
+    background: var(--surface-2); color: var(--accent-text);
+    border: 1px solid var(--line); transition: border-color .15s ease, background .15s ease;
+    white-space: nowrap;
+  }
+  .lesson-head__open:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .lesson-head__tags { font-style: italic; }
+  .lesson-head h1 { font-size: clamp(1.8rem, 4vw, 2.6rem); margin: .3rem 0; text-wrap: balance; }
+  .lesson-head__sub { color: var(--ink-soft); font-size: 1.05rem; }
+  .lesson-head__objectives { margin-top: 1rem; padding: 1rem; background: var(--accent-soft); border-radius: var(--radius-md); border-inline-start: 4px solid var(--accent); }
+  .lesson-head__objectives strong { display: block; margin-bottom: .4rem; }
+  .lesson-head__objectives ul { margin: 0; padding-inline-start: 1.2rem; }
+  .lesson-head__objectives li { margin: .2rem 0; font-size: .92rem; }
+  .lesson-content :global(h2) { margin-top: 2.2rem; }
+  .lesson-content :global(.gamified-flourish) { display: block; background: var(--accent-soft); color: var(--accent-text); border-radius: var(--radius-md); padding: .8rem 1rem; margin: 1rem 0; font-weight: 600; }
+
+  .lesson-content :global(ol.quiz-list) { list-style: none; counter-reset: quiz; padding: 0; margin: 1rem 0; }
+  .lesson-content :global(ol.quiz-list li) { counter-increment: quiz; padding: 1rem; margin-bottom: 1rem; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-md); }
+  .lesson-content :global(ol.quiz-list li::before) { content: counter(quiz); display: inline-flex; align-items: center; justify-content: center; width: 1.6rem; height: 1.6rem; background: var(--accent); color: #fff; border-radius: 50%; font-size: .78rem; font-weight: 800; margin-right: .5rem; }
+  .lesson-content :global(.quiz-opts) { margin: .5rem 0 0; padding: 0; list-style: none; }
+  .lesson-content :global(.quiz-opts li) { padding: .4rem .6rem; margin: .25rem 0; border: 1px solid var(--line); border-radius: var(--radius-sm); font-size: .9rem; cursor: default; transition: all .15s ease; }
+  .lesson-content :global(.quiz-opts li:hover) { border-color: var(--accent); background: rgba(124,58,237,.04); }
+  .lesson-content :global(.quiz-opts li.correct) { border-color: #22c55e; background: rgba(34,197,94,.08); color: #16a34a; font-weight: 600; }
+
+  .lesson-tags { display: flex; gap: .4rem; flex-wrap: wrap; margin: 1.5rem 0; }
+  .lesson-tag { padding: .2rem .6rem; border-radius: var(--radius-pill); background: var(--surface-2); font-size: .74rem; font-weight: 600; color: var(--ink-soft); }
+
+  .lesson-nav { display: flex; justify-content: space-between; align-items: center; margin: 2rem 0; gap: 1rem; flex-wrap: wrap; }
+  .lesson-nav__group { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
+  .lesson-nav a { text-decoration: none; font-weight: 700; padding: .6rem 1.1rem; border-radius: var(--radius-pill); background: var(--surface); border: 1px solid var(--line); color: var(--ink); box-shadow: var(--shadow-sm); }
+  .lesson-nav__done { cursor: pointer; }
+  .lesson-nav__done.is-done { background: var(--success-soft); color: #2e8b0b; border-color: var(--success); cursor: default; }
+  [data-theme='dark'] .lesson-nav__done.is-done { color: #6ce07f; }
+  .lesson-nav__done.is-done::before { content: '\2713 '; font-weight: 900; }
+
+  .route { display: grid; margin: 1.5rem 0 3rem; }
+  .route__card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 1.2rem; text-decoration: none; color: var(--ink); display: flex; flex-direction: column; gap: .3rem; box-shadow: var(--shadow-sm); transition: transform .2s ease, box-shadow .2s ease; }
+  .route__card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+  .route__card small { color: var(--ink-soft); }
+  .route__icon { font-size: 1.6rem; }
+</style>

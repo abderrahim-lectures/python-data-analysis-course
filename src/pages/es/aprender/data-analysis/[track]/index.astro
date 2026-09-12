@@ -1,0 +1,19 @@
+---
+// Track hub: /es/aprender/data-analysis/dificil. Thin wrapper, all markup lives in TrackHub.
+import {getCollection} from 'astro:content';
+import TrackHub from '../../../../../components/learn/TrackHub.astro';
+import {bareId, idInLocale, trackWord} from '../../../../../lib/routeSegments';
+const locale = 'es' as const;
+
+export async function getStaticPaths() {
+  const locale = 'es' as const;
+  const modules = await getCollection('modules');
+  const tracks = [...new Set(
+    modules
+      .filter((m) => idInLocale(locale, m.id) && bareId(m.id).split('/')[0] === 'data-analysis')
+      .map((m) => bareId(m.id).split('/')[1] as 'normal' | 'hard'),
+  )];
+  return tracks.map((track) => ({params: {track: trackWord(locale, track)}, props: {track}}));
+}
+---
+<TrackHub locale={locale} section="data-analysis" track={Astro.props.track} />

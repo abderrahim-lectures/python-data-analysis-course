@@ -1,0 +1,72 @@
+---
+// Gradient scene background, no assets, just color.
+interface Props {
+  scene?: 'lab' | 'forest' | 'city' | 'space' | 'library' | 'none';
+  height?: number;
+  particles?: boolean;
+}
+const {scene = 'lab', height = 340, particles = true} = Astro.props;
+---
+
+<div class="scene" style="--sh:${height}px" data-scene={scene}>
+  <div class="scene__gradient" aria-hidden="true"></div>
+  <div class="scene__grade" aria-hidden="true"></div>
+  <div class="scene__scrim" aria-hidden="true"></div>
+  {particles && (
+    <div class="scene__particles" aria-hidden="true">
+      {Array.from({length: 16}).map((_, i) => <span style={`--i:${i}`}></span>)}
+    </div>
+  )}
+  <div class="scene__vignette" aria-hidden="true"></div>
+  <div class="scene__slot"><slot /></div>
+</div>
+
+<style>
+  .scene {
+    position: relative;
+    height: var(--sh);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    isolation: isolate;
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-md);
+  }
+  .scene__gradient, .scene__grade, .scene__scrim, .scene__vignette { position:absolute; inset:0; }
+  .scene__slot { position:relative; z-index:3; height:100%; display:flex; align-items:flex-end; justify-content:center; }
+
+  /* gradient backdrops per scene */
+  .scene[data-scene='city'] .scene__gradient { background: linear-gradient(160deg, #1a1040 0%, #2d1b69 50%, #4a208a 100%); }
+  .scene[data-scene='space'] .scene__gradient { background: linear-gradient(160deg, #0a0612 0%, #150d2e 50%, #1f1444 100%); }
+  .scene[data-scene='forest'] .scene__gradient { background: linear-gradient(160deg, #0f2020 0%, #1a4a3a 50%, #1f6b4a 100%); }
+  .scene[data-scene='library'] .scene__gradient { background: linear-gradient(160deg, #2a1f0e 0%, #5c4033 50%, #8b6b4a 100%); }
+  .scene[data-scene='lab'] .scene__gradient { background: linear-gradient(160deg, #0f1a30 0%, #1f2d5a 50%, #2e4080 100%); }
+  .scene[data-scene='none'] .scene__gradient { background: var(--surface-2); }
+
+  /* cinematic color grade */
+  .scene[data-scene='city'] .scene__grade { background: linear-gradient(180deg, rgba(20,14,58,.18), rgba(10,6,30,.92) 100%); mix-blend-mode:multiply; }
+  .scene[data-scene='space'] .scene__grade { background: linear-gradient(180deg, rgba(10,8,45,.22), rgba(8,5,30,.94) 100%); mix-blend-mode:multiply; }
+  .scene[data-scene='forest'] .scene__grade { background: linear-gradient(180deg, rgba(20,60,40,.15), rgba(10,34,24,.92) 100%); mix-blend-mode:multiply; }
+  .scene[data-scene='library'] .scene__grade { background: linear-gradient(180deg, rgba(60,40,10,.15), rgba(32,20,8,.92) 100%); mix-blend-mode:multiply; }
+  .scene[data-scene='lab'] .scene__grade { background: linear-gradient(180deg, rgba(30,50,120,.18), rgba(12,8,40,.92) 100%); mix-blend-mode:multiply; }
+  .scene[data-scene='none'] .scene__grade { display:none; }
+
+  .scene__scrim {
+    background: radial-gradient(75% 60% at 50% 88%, rgba(255,255,255,.14), transparent 60%);
+  }
+
+  .scene__particles { position:absolute; inset:0; z-index:2; overflow:hidden; pointer-events:none; }
+  .scene__particles span {
+    position:absolute; bottom:-12px; width:5px; height:5px; border-radius:50%;
+    background: rgba(255,255,255,.7);
+    left: calc(var(--i) * 6.7% - 2px);
+    filter: blur(.5px); opacity:0;
+    animation: rise var(--d, 9s) linear infinite;
+    animation-delay: calc(var(--i) * -0.65s);
+  }
+  .scene__particles span:nth-child(odd){ background: rgba(247,201,72,.8); }
+  .scene__particles span:nth-child(3n){ background: rgba(124,92,240,.8); }
+  @keyframes rise { 0%{transform:translateY(0);opacity:0;} 12%{opacity:.9;} 100%{transform:translateY(calc(-1 * var(--sh)));opacity:0;} }
+
+  .scene__vignette { z-index:2; background: radial-gradient(120% 100% at 50% 42%, transparent 58%, rgba(6,4,18,.55) 100%); pointer-events:none; }
+  @media (prefers-reduced-motion: reduce){ .scene__particles span{ animation:none; opacity:.5; } }
+</style>

@@ -1,18 +1,29 @@
 # Client-Side Persistence (localStorage)
 
-No backend/login exists, so all per-student state lives in the browser via a single small `useLocalStorage` hook (JSON-serialized, namespaced under a `pda-course:` prefix so it doesn't collide with anything else on the domain). **Every key below stores plain facts, not presentation** (a completed week, a quiz score, a revealed answer) — `UiModeContext` is the only thing that decides whether `BadgeCase` renders those facts as badges-and-confetti or `ModeToggle`'s classical sibling renders them as a plain checklist. This is what makes switching Gamified↔Classical lossless: there's one data model underneath, not two. Concerns, each with its own key so they can be cleared/reset independently:
+No backend/login exists, so all per-student progress lives in the browser. The model is deliberately small: **one JSON blob under `pda:state`** plus two tiny flags.
 
-- **UI mode** (`pda-course:ui-mode`): `"gamified" | "classical"`, written by `LearningStylePicker`/`ModeToggle`, read by every component that has a gamified vs. classical presentation.
+## Keys
 
-- **Progress tracking** (`pda-course:progress`): a map of `weekId -> completed boolean`, written by a `ProgressCheckbox` on each week page. The section landing pages read this to render a progress bar/checklist across the 5 weeks.
-- **Challenge answers revealed** (`pda-course:revealed`): a map of `challengeId -> boolean`, written by the `Challenge` component so a previously-revealed answer stays expanded on return visits instead of re-hiding.
-- **Playground scratch code**: JupyterLite (both the REPL and Notebook apps) persists everything a student types itself, via its own browser storage (IndexedDB) — no separate scratch-pane mechanism of our own was needed. (`pda-course:playground-code` exists as a reserved key in `storageKeys.ts` for a possible future "notes" pane, but is currently unused.)
-- **Track selection** (`pda-course:track`): `"normal" | "hard"` per section, written by `TrackSelector`. Section landing pages and the sidebar default to the student's last-chosen track (with an obvious way to switch).
-- **Placement quiz result** (`pda-course:quiz-data-analysis`): score + pass/fail + timestamp from `PlacementQuiz`, so returning students who already took it aren't asked again (a "retake" link resets just this key).
-- **Weekly quiz results** (`pda-course:weekly-quiz`): a map of `weekId -> {score, passed}`, written by `WeeklyQuiz`. `BonusContent` on that week's page reads this to decide whether to render unlocked or show a "🔒 pass this week's quiz to unlock" teaser.
-- **Badges** (`pda-course:badges`): a set of earned badge IDs (e.g. `week-1-complete`, `week-1-quiz-ace`, `python101-hard-graduate`, `bonus-try-except-unlocked`, `course-graduate` for finishing all 10 weeks and unlocking the Capstone Projects list, `capstone-2026-ai-agent-complete` for finishing that specific year's project), written whenever `ProgressCheckbox`/`WeeklyQuiz`/`PlacementQuiz`/`CapstoneProgressCheckbox` cross a threshold. `BadgeCase` (and the `progress.tsx` page) render these; a small toast fires the moment a new one is earned.
-- **Student name** (`pda-course:student-name`): optional first name captured at onboarding, used to personalize copy ("Welcome back, {name}!"). Never required — components fall back to generic phrasing ("Welcome back!") if empty.
-- **Last visit** (`pda-course:last-visit`): a timestamp updated on every page load, read by `WelcomeBackBanner` to decide whether to show a "pick up where you left off" nudge.
-- **Student ID** (`pda-course:student-id`): a random, short, easy-to-read-aloud ID (e.g. 8 alphanumeric characters) generated once at onboarding — the thing an instructor can ask a student to state for a quick spot-check against what the certificate/QR code shows (see Capstone/Sharing Progress).
+- **`pda:state`** — the whole game-state object, written by `src/lib/gameState.ts`:
+  - `xp` (uncapped) and the economy constants (`LESSON_COMPLETE` 60, `LESSON_RUN` 5, `PROJECT_VIEW` 5, `PROJECT_STEP` 15, `PROJECT_COMPLETE` 100, `QUIZ_CORRECT` 5, `QUIZ_PERFECT` 25, `DAILY_LOGIN` 5, `STREAK_BONUS` 15, `STREAK_MILESTONE` 30, `MILESTONE_XP` 25, `CHALLENGE_COMPLETE` 15);
+  - `lessonsCompleted` / `lessonsRun` (per lesson id, shared across locales — ids stay byte-identical);
+  - `projectsViewed` / `projectsCompleted` / `projectsSteps`;
+  - `challengesCompleted`; `quizCorrect` / `quizTotal`;
+  - `streak` / `bestStreak` / `lastActive`;
+  - `quests` (31 quests) and `badges`;
+  - `activityLog` — a timestamped log of every earning event (`lesson-run`, `lesson-complete`, `quiz`, `project-view`, `project-complete`, `daily-login`, `streak`, `milestone`), which is what the transparent progress/stats rendering reads.
+  - Reads/writes go through `load()/save()` with a try/catch quota guard; there is a legacy-state repair path that backfills milestones/quests/streak for students who have pre-rebalance saves.
+- **`pda:onboarded`** — `"1"` once the onboarding dialog is dismissed; the dialog is gated on it so it never reappears for returning visitors (and never flashes on first load).
+- **`pda-course:editor-tutorial-seen`** — `"1"` once the in-editor tutorial is dismissed.
+- **`pda-course:tutorial-step`** — `sessionStorage`, the editor tutorial's current step (session-only).
 
-All of this is best-effort, client-only, and per-browser. There's no live cross-device sync (that would need an account/backend), but `DataTransfer` gives students a manual way to move between devices: **Export** bundles every `pda-course:*` key into one downloadable JSON file; **Import** (on another device/browser) reads that file back in and reloads, so opening the course on a laptop after starting on a phone doesn't mean losing progress — the student just has to remember to export/carry the file themselves, since nothing here is automatic. Import validates the file only contains recognized `pda-course:*` keys before writing, and warns that it overwrites whatever's already on that device. A visible "reset my progress" control (same settings area as `DataTransfer`) clears the namespaced keys.
+No per-page keys, no namespaced scatter: because the whole state is one key, a hard reset is a single `localStorage.clear()` (that's exactly what the e2e suite does between scenarios). There is no cross-device sync and no export/import mechanism in the current build — the course is per-browser by design; sharing is limited to the "open in Colab/notebook" story and progress visibility, not state transfer.
+
+## Progress week model (decision, 2026-09-09)
+
+- The progress page's "stations" follow **per-track week numbering equal to the track's module count**: python-101 = weeks 1–7 (7 normal modules), data-analysis = weeks 1–5. `trackProgress` totals are 7 and 5 respectively; both the server render and the client loop compute station done-state as `week <= trackProgress(section, total).done`.
+- `isWeekComplete` in `gameState.ts` is **legacy and unused by the page** (it returns "any lesson in the section complete" and ignores the week argument). Kept for the unit tests that exercise it; do not use it for new progress UI.
+
+## `pda:state` cross-locale scope (decision, 2026-09-09)
+
+- **Keep the single shared `pda:state` bucket across all four locales — do not namespace.** Lesson/module/project ids are deliberately byte-identical across locales (a lesson completed in English stays completed in Arabic; XP and streak carry over), so a per-locale store would double-count the same work and split streaks. This is intended behavior, not a bug; the earlier audit flag to namespace it is closed as "by design".

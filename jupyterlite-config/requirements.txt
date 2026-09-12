@@ -1,0 +1,5 @@
+jupyterlite-core[translation]
+jupyterlab-language-pack-fr-FR
+jupyterlab-language-pack-es
+jupyterlab-language-pack-ar
+jupyterlab_server

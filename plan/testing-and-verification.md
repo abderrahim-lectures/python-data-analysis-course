@@ -1,28 +1,38 @@
-# Automated Smoke Tests
+# Automated Tests & Verification
 
-Given the Development Workflow above means many small, independent PRs over time, a handful of Playwright smoke tests (run in CI on every PR, alongside `npm run build`) catch regressions in the riskiest custom logic cheaply — this is deliberately a *small* suite, not full coverage:
-- `localStorage` round-trip: progress/badges/quiz-result/ui-mode survive a reload.
-- `UiModeContext` toggle actually changes rendering (gamified flourishes present/absent).
-- `PlacementQuiz` gate: choosing Hard on Data Analysis shows the quiz; "continue anyway" reaches Week 6.
-- `PlaygroundFab` opens the correct JupyterLite app (REPL vs. Notebook) depending on section.
+Verification is layered: typecheck, unit tests, CDP smoke/visual suites, and CI. All suites run against the built site.
 
-## Verification
+## Typecheck & build
 
-- `npm run build` succeeds with no broken links (Docusaurus's built-in broken-link checker).
-- **The actual deployed GH Pages URL loads correctly** (not just local `npm run serve`) — this is the real test of `baseUrl`/`trailingSlash` correctness, since GH Pages' static-file serving can behave differently from the local dev server.
-- `npm run serve` locally; click through every week page in both tracks/sections to confirm nav, challenge answer-reveal, and socratic question rendering.
-- Manually click the FAB on a Python 101 page to confirm the JupyterLite REPL loads and a sample snippet runs inside it.
-- Manually click the FAB on a Data Analysis week page to confirm it opens JupyterLite's Notebook app (not Lab), deep-linked to that week's starter notebook, and that a `pandas`/`pd.read_csv(...)` cell against a bundled dataset actually executes and returns a DataFrame.
-- Confirm localStorage persistence: mark a week complete, reveal a challenge answer, pick a track, take the quiz, reload the page, and verify all states survive; then use the reset control and confirm the namespaced keys clear.
-- Walk the full flow end-to-end: welcome page → section objectives → choose Hard on Data Analysis → confirm `PlacementQuiz` appears and both a high score and "continue anyway" on a low score correctly proceed into Week 6.
-- Complete a week's `WeeklyQuiz` with a passing score and confirm: a badge toast fires, the badge appears on `progress.tsx`, and that week's `BonusContent` (try/except or classes teaser) switches from locked to unlocked and stays unlocked on reload.
-- Earn progress/badges in Gamified mode, flip `ModeToggle` to Classical, and confirm the same completions/quiz results still show (as plain text/checklist, no badges/toasts) with nothing lost; flip back to Gamified and confirm the badges reappear exactly as before.
-- Test primarily at a phone viewport (e.g. 375px wide) in browser devtools: FAB reachability, full-screen JupyterLite REPL and full-screen JupyterLite Notebook both usable one-handed (this is the highest-risk mobile item — the Notebook app in particular must be confirmed genuinely workable at phone width, not just "technically renders"), stacked track-comparison cards, quiz and challenge components usable one-handed. Then confirm desktop still looks intentional, not just "stretched mobile."
-- Run a mobile Lighthouse pass on a representative lesson page (not one with the FAB open) and confirm the performance score reflects lazy-loaded iframes and dynamically-imported certificate libraries actually working — a low score here likely means something is loading eagerly that shouldn't be.
-- Switch the locale to Arabic and confirm the layout mirrors correctly (RTL) including the FAB, sidebar, homepage, and badge/quiz components — done, confirmed via a real screenshot showing a fully translated, correctly-mirrored Arabic homepage. Switch to Spanish/French and confirm the UI chrome and lesson content are both translated (all four locales are now fully translated, so there's no English-fallback case left to check here).
-- Enter a name at onboarding and confirm it's used in personalized copy (badge toast, welcome-back banner); skip the name field on a fresh profile and confirm everything still reads naturally with generic phrasing.
-- Manually backdate `pda-course:last-visit` (devtools) to simulate a multi-day gap, reload, and confirm `WelcomeBackBanner` appears and links to the correct next-incomplete week; dismiss it and confirm it doesn't reappear the same day.
-- Generate a `ShareProgress` link, open it in a fresh incognito/private window (no localStorage from the original session) and confirm the read-only summary renders correctly purely from the URL — then complete a full track and confirm the link's "🎓 completed" variant renders instead, including a working "Download certificate" PNG/PDF export.
-- Scan the certificate's QR code with a phone and confirm it decodes to the expected student ID/name/completion summary; edit `pda-course:progress` directly in devtools to fake completion and confirm (for your own awareness, not as a "bug") that the certificate/QR still generates — this is the expected, documented limitation of the lightweight verification approach, not something to try to "fix" without adding a backend.
-- Mark all 10 weeks complete across both sections and confirm the `course-graduate` badge fires and the completion banner on `progress.tsx` links to the Real-World Projects list (`/docs/projects`); confirm the list itself is reachable and shows every project (newest first) even for a brand-new profile that hasn't completed anything yet, since it's no longer gated. Mark one project complete via its `CapstoneProgressCheckbox` and confirm a `capstone-<id>-complete` badge appears and that project shows ✅ back on the chooser page.
-- Build up some progress/badges, use `DataTransfer`'s Export to download the JSON file, clear all `pda-course:*` localStorage (simulating a second device), Import that file, and confirm every piece of state (progress, badges, name, track, ui-mode, quiz results) comes back identical; also confirm importing a malformed/unrelated JSON file is rejected with a clear error rather than silently corrupting localStorage.
+- `npm run check` — `astro check` (tsc over `.astro` + TS); must be 0 errors. Covers content-collection schemas, Paraglide message types + `routeSegments.ts` shape, and component props.
+- `npm run build` — clean static build (~1,280 pages). If `astro check` reports a phantom error on a file that "looks right", it is usually the stale content/`.astro/` cache — `npm run check` (and `prebuild`/`predev`) run `scripts/reset-astro-cache.cjs` first for exactly this reason; only bypass it deliberately.
+
+## Unit tests — `tests/unit/` (vitest, `npm run test`)
+
+Twenty-two fast suites (~1,219 tests, run in CI):
+
+- `i18n.test.ts` — every locale defines exactly the same `messages/*.json` keys as EN (a missing key fails, not silently undefined), no locale key is empty, non-English locales actually differ from EN (guards hardcoded-English bugs), hub templates render messages not literals, and the shared layout (footer tagline from locale pack, onboarding dialog hidden + labeled) is correct.
+- `links.test.ts` — every `public/datasets/index.json` manifest entry maps to a real shipped CSV file.
+- `lessonWiring.test.ts`, `moduleWiring.test.ts`, `contentSchema.test.ts` — content-collection wiring and schema compliance across lessons/modules/projects.
+- `gameState.test.ts` — XP economy, quest/badge thresholds, streak/legacy-repair math.
+- `pythonGuard.test.ts` — the cell sandbox blocks the `js`/`pyodide` bridge modules.
+- `jsonLd.test.ts`, `hoverColor.test.ts` — structured-data output and hover-contrast invariants.
+
+## E2E suites — `tests/e2e/` (CDP, no Playwright dependency)
+
+Headless-Chrome via the CDP helper in the smoke scripts. Each runs against the built site (build + serve first):
+
+- `npm run test:e2e` (`smoke.mjs`, **40 checks**) — per-page console/error monitoring; game-state reset; clicking through a lesson to an exact "Mark complete"; XP/level/XP-bar and quest counts reflecting the rebalanced economy (lesson complete 60 XP, milestone 25 XP, 31 quests, legacy repair → 175 XP); streak tracking; project-grid card count consistency with the live DOM (`[data-project]:not([hidden])`, since projects render card count from a hidden filter pass); linked lessons/projects resolve; and a locale/hub round-trip. Onboarding is suppressed in tests via `pda:onboarded` so the dialog doesn't swallow completion clicks.
+- `npm run test:contrast` (`contrast.mjs`) — automated WCAG-ish contrast scan over key pages.
+- `npm run test:responsive` (`responsive.mjs`) — phone-viewport rendering checks across key pages.
+- `npm run test:a11y` (`a11y.mjs`) — accessibility smoke (roles/landmarks/labels on the riskiest interactive components).
+- `npm run test:all` — `test` + `test:e2e` + `test:a11y` + `test:contrast` + `test:responsive`.
+
+## Manual checklist (still worth doing on major changes)
+
+- Click through a lesson and confirm the runnable cells execute (Pyodide load, ▶ Run, output, print-wrapping of expression-only cells), the ⛶ button hands code to `/playground`, and dataset references (`open('students-performance.csv')` etc.) resolve from the mounted filesystem.
+- Confirm a notebook badge on a lesson opens a real Colab/Binder/nbviewer URL.
+- Confirm completion → XP/toast/quest updates, mark-complete stays in all four locales, and reload round-trips through `pda:state`.
+- Check Arabic RTL mirrors correctly (nav, hubs, lesson pages) and Spanish/French chrome is translated.
+- Phone viewport: cell actions, quiz options, bottom nav, challenge reveal usable one-handed; desktop still intentional.
+- Confirm `/playground/<code>` shared links render the code (404-page fallback on a static host).

@@ -1,5 +1,15 @@
 # Visual Design & UX
 
+> **SUPERSEDED (2026-09-09).** This file describes the **Docusaurus-era** site
+> (Infima theming, `docusaurus.config.js` KaTeX, the Docusaurus search plugin,
+> the mobile hamburger drawer). The site is now **Astro with a custom design
+> system** — see `plan/site-structure.md`, `plan/astro-rebuild.md`, and
+> `plan/gamification.md` for the current architecture, and `src/styles/global.css`
+> (design tokens) for the palette/type system that replaced the "tune the
+> Docusaurus default" pass. KaTeX is wired via Astro's remark/rehype plugins, not
+> `docusaurus.config.js`. Retained only as historical context; do not implement
+> anything from this file as-is.
+
 Not a stock docs-theme reskin — the UI needs to feel built for this audience, and explicitly **not generic or default-looking**:
 
 - **A real design pass before component-by-component styling**: pick a distinct color palette, type scale, and badge/icon treatment *up front* (one small design/tokens issue, before the individual component PRs), so the site reads as one coherent system rather than default Docusaurus Infima blue with ad hoc tweaks bolted on per-component later. Badges in particular get an actual designed frame/shape/color around the emoji, not a bare emoji floating with no styling.
