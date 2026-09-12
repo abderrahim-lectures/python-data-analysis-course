@@ -8,7 +8,7 @@ import {planDatasetMounts} from './datasetMount.ts';
 import {friendlyError} from './friendlyError.ts';
 
 const PYODIDE_VERSION = '0.26.4';
-const INDEX = `https://cdn.jsdelivr.net/pyodide/v${PYODIDE_VERSION}/full/`;
+const INDEX = `${import.meta.env.BASE_URL}pyodide/`;
 
 // Pure-Python packages the lessons use that are NOT part of the Pyodide wheel
 // set. seaborn is the only one today; its runtime deps (numpy, pandas,
@@ -538,8 +538,5 @@ export function initRunnableCells(root: ParentNode = document): void {
 if (typeof document !== 'undefined') {
   document.addEventListener('DOMContentLoaded', () => {
     initRunnableCells();
-    // Preload Pyodide immediately on DOMContentLoaded so the first Run click is instant.
-    const preload = () => py();
-    preload();
   });
 }

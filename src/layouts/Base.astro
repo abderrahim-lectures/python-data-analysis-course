@@ -80,7 +80,7 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://www.google-analytics.com https://cdn.jsdelivr.net; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://www.google-analytics.com; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'" />
     <script is:inline>
       (function() {
         var KEY = 'pda:locale-redirected';
@@ -155,21 +155,19 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <!-- Pyodide loads lazily on the first "Run" click (see runnable-cell.client.ts),
-         never on page load -- this just warms the DNS/TLS handshake early so
-         that first click doesn't also pay for connection setup. -->
-    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
-    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+    <!-- Pyodide is vendored under /pyodide/ (scripts/vendor-pyodide.mjs) and
+         loaded lazily on the first "Run" click -- never on page load. -->
+    <link rel="dns-prefetch" href={base} />
     <meta name="theme-color" content="#5b21b6" />
     <style is:global>
       .pyodide-bar { position: fixed; top: 0; left: 0; height: 3px; background: var(--accent); z-index: 99999; transition: width .3s ease; width: 0; }
       .pyodide-bar--active { width: 70%; animation: pyodide-pulse 1.5s ease-in-out infinite; }
       @keyframes pyodide-pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
-      .app-busy { position: fixed; inset: 0; display: grid; place-items: center; z-index: 99998; opacity: 0; pointer-events: none; transition: opacity .2s ease; background: color-mix(in srgb, var(--surface) 72%, transparent); backdrop-filter: blur(2px); }
+      .app-busy { position: fixed; inset: 0; display: grid; place-items: center; z-index: 99998; opacity: 0; pointer-events: none; background: color-mix(in srgb, var(--surface) 72%, transparent); backdrop-filter: blur(2px); }
       .app-busy--first { opacity: 1; pointer-events: auto; background: var(--surface); }
       .app-busy--active { opacity: 1; pointer-events: auto; }
-      .app-busy__spinner { width: 3rem; height: 3rem; border: 4px solid var(--line); border-top-color: var(--accent); border-radius: 50%; animation: slow-spin .9s linear infinite; }
-      @keyframes slow-spin { to { transform: rotate(360deg); } }
+      .app-busy__spinner { width: 3rem; height: 3rem; border: 4px solid var(--line); border-top-color: var(--accent); border-radius: 50%; will-change: transform; animation: slow-spin .9s linear infinite; }
+      @keyframes slow-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     </style>
     {allJsonLdBlocks.map((block) => (
       <script type="application/ld+json" set:html={JSON.stringify(block)} />

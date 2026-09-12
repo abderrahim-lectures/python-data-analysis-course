@@ -47,3 +47,7 @@ examples/**/.venv/
 examples/**/venv/
 examples/**/.venv_*/
 examples/**/node_modules/
+
+# Vendored at build time by scripts/vendor-pyodide.mjs; keep the seaborn wheel (missing from the Pyodide lock)
+public/pyodide/*
+!public/pyodide/seaborn-0.13.2-py3-none-any.whl
