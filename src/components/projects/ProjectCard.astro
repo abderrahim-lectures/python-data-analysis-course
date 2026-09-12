@@ -1,7 +1,7 @@
 ---
 // Shared project card used by every locale's project index. The href goes
 // through projectsHref() so locale paths are always correct (Bug B fix).
-import {PROJECT_TAGS, projectArtEmoji, projectDifficulty, DIFFICULTY_COLORS, type Difficulty} from '../../lib/projectArt';
+import {projectArtEmoji, DIFFICULTY_COLORS, type Difficulty} from '../../lib/projectArt';
 import {projectsHref, type Locale} from '../../lib/routeSegments';
 import {m} from '../../paraglide/messages.js';
 
@@ -9,14 +9,15 @@ interface Props {
   slug: string;
   title: string;
   description: string;
+  tags: string[];
+  difficulty: Difficulty;
   locale: Locale;
 }
 
-const {slug, title, description, locale} = Astro.props;
+const {slug, title, description, tags, difficulty, locale} = Astro.props;
 const base = import.meta.env.BASE_URL;
-const tags = PROJECT_TAGS[slug] ?? [];
 const emoji = projectArtEmoji(tags);
-const diff: Difficulty = projectDifficulty(slug);
+const diff: Difficulty = difficulty;
 const diffColor = DIFFICULTY_COLORS[diff];
 const diffLabel = `difficulty_${diff}` as 'difficulty_beginner' | 'difficulty_intermediate' | 'difficulty_advanced';
 const haystack = `${title} ${description} ${tags.join(' ')}`.toLowerCase();

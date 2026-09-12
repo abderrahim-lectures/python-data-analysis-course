@@ -1,6 +1,7 @@
 ---
 title: "Build a Discord Trivia Bot"
 description: "Build a discord.py bot that runs trivia rounds in a server, tracks scores on a persistent leaderboard, and can generate fresh questions on any topic with a free-tier LLM."
+difficulty: "beginner"
 ---
 
 # 💬 Build a Discord Trivia Bot

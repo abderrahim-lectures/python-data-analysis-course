@@ -3,7 +3,7 @@
 import {getCollection} from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Icon from '../Icon.astro';
-import {learnHref, trackWord, idInLocale, type Locale} from '../../lib/routeSegments';
+import {learnHref, trackWord, idInLocale, navWordAlternates, type Locale} from '../../lib/routeSegments';
 import {m} from '../../paraglide/messages.js';
 
 interface Props {
@@ -13,12 +13,7 @@ interface Props {
 const {locale} = Astro.props;
 const base = import.meta.env.BASE_URL;
 const dir = locale === 'ar' ? 'rtl' : 'ltr';
-const alternates: Record<Locale, string> = {
-  en: 'learn',
-  ar: 'ar/تعلم',
-  es: 'es/aprender',
-  fr: 'fr/apprendre',
-};
+const alternates: Record<Locale, string> = navWordAlternates('learn');
 
 const sections = [
   {slug: 'python-101', icon: '🐍', badge: m.track_1(), name: m.track_1_name(), desc: m.track_1_desc()},

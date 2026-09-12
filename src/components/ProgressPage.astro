@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
 import { xpProgress, loadState, questsToShow, streakProgress, getActivityStats, getActivityLog, rankFor, RANK_EMOJIS } from '../lib/gameState.ts';
-import { emptyStats } from '../lib/gamestats.ts';
+import { computeGameStats } from '../lib/gamestats.ts';
 import { getCollection } from 'astro:content';
 import {m} from '../paraglide/messages.js';
 import {learnHref, progressGuideHref, trackWord, type Locale} from '../lib/routeSegments';
@@ -19,7 +19,7 @@ const alternates = {
   es: 'es/progreso',
   fr: 'fr/progression',
 };
-const gs = emptyStats();
+const gs = computeGameStats();
 const st = loadState();
 
 const xp = xpProgress();

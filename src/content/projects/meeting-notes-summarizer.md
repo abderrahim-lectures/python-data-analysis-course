@@ -1,6 +1,7 @@
 ---
 title: "Build a Meeting-Notes Summarizer"
 description: "Graduate from the in-browser playground to real Python: write a script that turns a raw meeting transcript into a structured summary — decisions, action items, and open questions — using a free-tier LLM and careful prompt design."
+difficulty: "intermediate"
 ---
 
 # 🤖 Build a Meeting-Notes Summarizer

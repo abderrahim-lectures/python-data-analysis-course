@@ -1,11 +1,11 @@
 import {describe, expect, test} from 'vitest';
+import {readFileSync, readdirSync} from 'node:fs';
+import {join} from 'node:path';
 import {
   DIFFICULTY_COLORS,
-  PROJECT_DIFFICULTY,
   PROJECT_TAGS,
   projectArtEmoji,
   projectArtGradient,
-  projectDifficulty,
 } from '../../src/lib/projectArt';
 
 describe('projectArtEmoji', () => {
@@ -55,20 +55,27 @@ describe('projectArtGradient', () => {
   });
 });
 
-describe('projectDifficulty', () => {
-  test('known slugs resolve to their declared level', () => {
-    expect(projectDifficulty('multi-agent-research')).toBe('advanced');
-    expect(projectDifficulty('wordle-clone')).toBe('beginner');
-    expect(projectDifficulty('chat-with-pdfs')).toBe('intermediate');
-  });
+describe('frontmatter difficulty', () => {
+  const projectsDir = join(process.cwd(), 'src/content/projects');
+  const files = readdirSync(projectsDir).filter((f) => f.endsWith('.md'));
 
-  test('unknown slugs default to beginner', () => {
-    expect(projectDifficulty('nope-not-a-project')).toBe('beginner');
+  const frontmatterOf = (f: string) =>
+    readFileSync(join(projectsDir, f), 'utf8').match(/^---\r?\n([\s\S]*?)\r?\n---/m)?.[1] ?? '';
+
+  test('every project file declares a difficulty', () => {
+    for (const f of files) {
+      const frontmatter = frontmatterOf(f);
+      expect(frontmatter, f).toMatch(/^difficulty:\s+"?(\w+)/m);
+    }
   });
 
   test('every declared difficulty is one of the three levels', () => {
-    for (const level of Object.values(PROJECT_DIFFICULTY)) {
-      expect(['beginner', 'intermediate', 'advanced']).toContain(level);
+    const levels = new Set(['beginner', 'intermediate', 'advanced']);
+    for (const f of files) {
+      const frontmatter = frontmatterOf(f);
+      const match = frontmatter.match(/^difficulty:\s+"?(\w+)/m);
+      expect(match, f).toBeTruthy();
+      expect(levels.has(match![1]), `${f}: ${match![1]}`).toBe(true);
     }
   });
 

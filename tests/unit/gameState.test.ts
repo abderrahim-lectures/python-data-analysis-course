@@ -124,29 +124,6 @@ describe('streaks', () => {
   });
 });
 
-describe('section progress', () => {
-  test('is true when any lesson in the section is done', async () => {
-    const gs = await fresh();
-    gs.completeLesson('python-101/normal/03-data-types');
-
-    expect(gs.isWeekComplete('python-101', 1)).toBe(true);
-  });
-
-  test('is true when only the hard track lesson is done', async () => {
-    const gs = await fresh();
-    gs.completeLesson('python-101/hard/03-tokenization-basics');
-
-    expect(gs.isWeekComplete('python-101', 1)).toBe(true);
-  });
-
-  test('does not leak completion across sections', async () => {
-    const gs = await fresh();
-    gs.completeLesson('python-101/normal/03-data-types');
-
-    expect(gs.isWeekComplete('data-analysis', 1)).toBe(false);
-  });
-});
-
 describe('quests', () => {
   test('all quests start locked', async () => {
     const gs = await fresh();
@@ -177,9 +154,10 @@ describe('quests', () => {
 
   test('finishing every Python lesson unlocks the track-completion quest', async () => {
     const gs = await fresh();
-    // Complete all 19 Python 101 Normal lessons
-    const lessons = ['01-printing','02-variables','03-data-types','04-type-conversion','05-arithmetic','06-comparison-operators','07-boolean-operators','08-if-elif-else','09-for-while-loops','10-range-enumerate-zip','11-defining-functions','12-scope-and-lambdas','13-string-methods','14-string-slicing','15-lists-and-tuples','16-dicts-and-sets','17-comprehensions','18-reading-files','19-writing-files-csv'];
-    lessons.forEach((l) => gs.completeLesson(`python-101/normal/${l}`));
+    // Complete all 29 Python 101 lessons (19 normal + 10 hard)
+    const normal = ['01-printing','02-variables','03-data-types','04-type-conversion','05-arithmetic','06-comparison-operators','07-boolean-operators','08-if-elif-else','09-for-while-loops','10-range-enumerate-zip','11-defining-functions','12-scope-and-lambdas','13-string-methods','14-string-slicing','15-lists-and-tuples','16-dicts-and-sets','17-comprehensions','18-reading-files','19-writing-files-csv'];
+    const hard = ['01-csv-loading','02-exploring-corpus','03-tokenization-basics','04-word-frequency','05-building-bigrams','06-normalizing-bigrams','07-sampling-next-word','08-generate-text-impl','09-temperature-tuning','10-cli-generator'];
+    [...normal, ...hard].forEach((l) => gs.completeLesson(`python-101/${hard.includes(l) ? 'hard' : 'normal'}/${l}`));
 
     expect(gs.questsToShow().find((q) => q.id === 'all-python')?.done).toBe(true);
   });

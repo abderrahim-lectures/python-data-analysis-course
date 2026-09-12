@@ -14,7 +14,7 @@ import ProjectArt from '../ProjectArt.astro';
 import {m} from '../../paraglide/messages.js';
 import {detectLocale, projectsHref, NAV_WORDS, type Locale} from '../../lib/routeSegments';
 import {localizedProjectSlug} from '../../lib/projectSlugs';
-import {PROJECT_TAGS, projectDifficulty, DIFFICULTY_COLORS} from '../../lib/projectArt';
+import {PROJECT_TAGS, DIFFICULTY_COLORS} from '../../lib/projectArt';
 import {XP} from '../../lib/gameState';
 import '../../styles/project-detail.css';
 
@@ -46,7 +46,7 @@ const xpAward = XP.PROJECT_COMPLETE;
 // [[...id]] getStaticPaths param and localStorage XP keys.
 const rawSlug = entry.id.replace(/^(ar|es|fr)\//, '');
 const slug = rawSlug.replace(/^\/?projects\//, '');
-const diff = difficulty ?? projectDifficulty(slug);
+const diff = difficulty ?? 'beginner';
 const diffLabel = `difficulty_${diff}` as 'difficulty_beginner' | 'difficulty_intermediate' | 'difficulty_advanced';
 const diffText = diff === 'beginner' ? 'var(--success-text)' : diff === 'intermediate' ? 'var(--streak-text)' : 'var(--bad-text)';
 const projectTags = (tags?.length ? tags : PROJECT_TAGS[slug] ?? []) as string[];

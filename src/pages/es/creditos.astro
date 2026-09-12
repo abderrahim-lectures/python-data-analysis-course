@@ -3,7 +3,7 @@
 // dropped in the Astro migration, leaving 8 lesson pages linking to a 404.
 import Base from '../../layouts/Base.astro';
 import {m} from '../../paraglide/messages';
-import {NAV_WORDS} from '../../lib/routeSegments';
+import {navWordAlternates} from '../../lib/routeSegments';
 
 const locale = 'es' as const;
 const entries = [
@@ -11,12 +11,7 @@ const entries = [
   {href: 'https://www.kaggle.com/c/titanic', name: m.credits_entry_2_name(), note: m.credits_entry_2_note()},
   {href: 'https://www.kaggle.com/datasets/spscientist/students-performance-in-exams', name: m.credits_entry_3_name(), note: m.credits_entry_3_note()},
 ];
-const alternates = {
-  en: NAV_WORDS.en.credits,
-  ar: `ar/${NAV_WORDS.ar.credits}`,
-  es: `es/${NAV_WORDS.es.credits}`,
-  fr: `fr/${NAV_WORDS.fr.credits}`,
-};
+const alternates = navWordAlternates('credits');
 ---
 
 <Base title={m.credits_title()} description={m.credits_description()} lang={locale} dir="ltr" alternates={alternates}>

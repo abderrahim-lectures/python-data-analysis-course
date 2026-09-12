@@ -1,6 +1,7 @@
 ---
 title: "Build a Study-Buddy Quiz Agent"
 description: "Graduate from the in-browser playground to real Python: build a terminal app that turns your own study notes into a quiz, using a free-tier LLM to write the questions and judge your answers."
+difficulty: "intermediate"
 ---
 
 # 🎓 Build a Study-Buddy Quiz Agent

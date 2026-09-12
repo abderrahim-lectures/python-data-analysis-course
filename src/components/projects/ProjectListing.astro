@@ -6,7 +6,7 @@ import type {CollectionEntry} from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Icon from '../Icon.astro';
 import ProjectCard from './ProjectCard.astro';
-import {PROJECT_TAGS, projectArtEmoji} from '../../lib/projectArt';
+import {PROJECT_TAGS, projectArtEmoji, type Difficulty} from '../../lib/projectArt';
 import {m} from '../../paraglide/messages.js';
 import type {Locale} from '../../lib/routeSegments';
 import '../../styles/projects.css';
@@ -109,7 +109,7 @@ const alternates = {
 
     <div class="list" id="project-grid">
       {projects.map((p) => (
-        <ProjectCard slug={p.slug} title={p.data.title} description={p.data.description} locale={locale} />
+        <ProjectCard slug={p.slug} title={p.data.title} description={p.data.description} tags={PROJECT_TAGS[p.slug] ?? []} difficulty={(p.data.difficulty ?? 'beginner') as Difficulty} locale={locale} />
       ))}
     </div>
 

@@ -1,6 +1,6 @@
 // Game-style "after-action report" — computed from gameState (localStorage).
 // Renders server with empty values, client script fills real metrics.
-import { loadState, trackProgress, streakProgress, getQuizProgress, rankFor as gsRankFor } from './gameState.ts';
+import { loadState, trackProgress, streakProgress, getQuizProgress, rankFor, questsToShow } from './gameState.ts';
 import { levelForXp, xpProgressFor } from './levelMath';
 
 export interface GameStats {
@@ -44,13 +44,9 @@ export interface Diagnostics {
 }
 
 export const TRACKS = [
-  { id: 'python-101', label: 'Python 101', total: 7 },
-  { id: 'data-analysis', label: 'Pandas & Data', total: 5 },
+  { id: 'python-101', label: 'Python 101', total: 29 },
+  { id: 'data-analysis', label: 'Pandas & Data', total: 20 },
 ];
-
-function rankFor(xp: number): Rank {
-  return gsRankFor(xp) as Rank;
-}
 
 export function computeGameStats(): GameStats {
   const s = loadState();
@@ -84,8 +80,11 @@ export function computeGameStats(): GameStats {
   const usefulnessPct = winRate;
   const learningExperiencePct = Math.min(100, Math.round(sp.best * 6 + Math.min(40, level * 5)));
 
-  const questsTotal = 11;
-  const questsDone = Object.values(s.quests).filter(Boolean).length;
+  // Visible quest list is the source of truth (internal quests like
+  // `completed-*`, daily logins, and track starters aren't counted).
+  const visibleQuests = questsToShow();
+  const questsTotal = visibleQuests.length;
+  const questsDone = visibleQuests.filter((q) => q.done).length;
 
   // Activity metrics
   const lastActive = s.lastActive || new Date().toISOString().slice(0, 10);
@@ -123,19 +122,5 @@ export function computeGameStats(): GameStats {
       streakLength,
       longestSession,
     },
-  };
-}
-
-export function emptyStats(): GameStats {
-  return {
-    level: 1, rank: 'Bronze', xp: 0, xpToNext: 100,
-    lanes: TRACKS.map(t => ({ ...t, done: 0, pct: 0 })),
-    quiz: { correct: 0, total: 0, winRate: 0 },
-    lessonsDone: 0, lessonsTotal: TRACKS.reduce((a, t) => a + t.total, 0), streak: 0, bestStreak: 0,
-    kda: { kills: 0, deaths: 0, assists: 0, ratio: 0, label: 'Rookie' },
-    diagnostics: { improvementPct: 0, nGainEquivalent: 0, acceptancePct: 0, usefulnessPct: 0, learningExperiencePct: 0 },
-    badges: [], questsDone: 0, questsTotal: 11,
-    activity: { daysActive: 0, lessonsPerWeek: 0, avgXpPerDay: 0, consistencyScore: 0 },
-    engagement: { returnRate: 0, streakLength: 0, longestSession: 0 },
   };
 }

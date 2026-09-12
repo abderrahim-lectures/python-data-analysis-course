@@ -1,6 +1,7 @@
 ---
 title: "Build a Dependency-Freshness Checker"
 description: "Build a real CLI tool that reads a pyproject.toml, checks PyPI for newer versions of every dependency, and reports what's outdated — no API key needed."
+difficulty: "intermediate"
 ---
 
 # ⌨️ Build a Dependency-Freshness Checker

@@ -82,8 +82,8 @@ describe('track and challenge quests', () => {
 
   test('completing every lesson in a track unlocks the track quests', () => {
     const lessonsCompleted: Record<string, boolean> = {};
-    for (let i = 0; i < 19; i++) lessonsCompleted[`python-101/normal/day-${i}`] = true;
-    for (let i = 0; i < 10; i++) lessonsCompleted[`data-analysis/normal/day-${i}`] = true;
+    for (let i = 0; i < 29; i++) lessonsCompleted[`python-101/normal/day-${i}`] = true;
+    for (let i = 0; i < 20; i++) lessonsCompleted[`data-analysis/normal/day-${i}`] = true;
     seedState({lessonsCompleted});
     const s = loadState();
     expect(s.quests['all-python']).toBe(true);

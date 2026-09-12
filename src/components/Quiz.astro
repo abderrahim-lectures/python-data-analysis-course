@@ -57,6 +57,10 @@ const {title = m.quiz_title(), questions, xp = 10, lessonId = ''} = Astro.props;
   import {m} from '../paraglide/messages.js';
   document.querySelectorAll('[data-quiz]').forEach((el) => {
     if (el.hasAttribute('data-hydrated')) return;
+    // Own-format check: only Quiz.astro blocks carry the check button.
+    // Markdown quick-check blocks (`.quiz-q[data-answer]`) are hydrated by
+    // the shared quiz.client.ts.
+    if (!el.querySelector('[data-quiz-check]')) return;
     el.setAttribute('data-hydrated', '1');
 
     const checkBtn = el.querySelector('[data-quiz-check]') as HTMLButtonElement;

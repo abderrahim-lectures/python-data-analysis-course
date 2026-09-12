@@ -87,13 +87,13 @@ describe('renderHomepage', () => {
     expect(streakItem.classSet.has('gamestrip__item--blazing')).toBe(false);
   });
 
-  test('hub progress fills scale counts to 100% at five done', () => {
+  test('hub progress fills scale against real lesson totals (29/20)', () => {
     withState(0, 0, ['python-101/normal/01-printing', 'python-101/normal/02-strings'], []);
     const stub = stubDom();
     const pythonFill = el('hub-python', stub);
     const dataFill = el('hub-data', stub);
     renderHomepage();
-    expect(pythonFill.style.width).toBe('40%');
+    expect(pythonFill.style.width).toBe((2 / 29 * 100) + '%');
     expect(dataFill.style.width).toBe('0%');
   });
 

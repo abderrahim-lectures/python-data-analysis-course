@@ -6,6 +6,10 @@ import {m} from '../paraglide/messages.js';
 
 function initQuiz(quiz: Element) {
   if (quiz.hasAttribute('data-hydrated')) return;
+  // Only the markdown quick-check format (python-101/normal lessons):
+  // `.quiz-q[data-answer]` with `data-idx` buttons. Quiz.astro blocks carry a
+  // `[data-quiz-check]` button and are hydrated by their own inline script.
+  if (!quiz.querySelector('.quiz-q[data-answer]')) return;
   quiz.setAttribute('data-hydrated', '1');
   const questions = Array.from(quiz.querySelectorAll('.quiz-q'));
   let answered = 0;

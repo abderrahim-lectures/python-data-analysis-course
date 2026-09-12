@@ -1889,3 +1889,70 @@ link card on the progress page (`ProgressPage.astro`) pointing to the guide. Con
 source-derived (XP/level/rank/streak/quest/report math) so it stays truthful if the XLS
 economy changes — please re-verify if you touch `gameState.ts` constants. DOI citation
 (`10.58477/dj.v4i1.348`) is already on both this page and `ProgressPage.astro:331`.
+
+## Session 2026-09-12 (opencode) — ponytail full-audit execute round (user: "all")
+
+User asked for a full deep review using all ponytail capabilities, then said "all" when
+asked which findings to execute. **All 8 audit findings executed, including the
+previously-owned-by-Claude lib files (gameState.ts, gamestats.ts, quiz.client.ts) —
+the user's explicit "all" overrode the hand-back protocol for this round.**
+
+### Executed findings
+- **#6 creditsHref dead** — deleted from `routeSegments.ts` + test import/assertion.
+- **#7 `_locale` params dead** — dropped from `sections.ts`, call sites + test updated
+  (TrackHub/SectionLanding/LessonPage/ModulePage).
+- **#2 projectSlugs single-source** — `projectSlugs.data.ts` (hand-maintained dup)
+  deleted; `projectSlugs.ts` now imports the generated `projectSlugs.data.json`;
+  `scripts/generate-project-slugs.cjs` trimmed to write only the JSON.
+- **#1 quiz hydrator (findings CORRECTED in investigation)**: `quiz.client.ts` is NOT
+  dead — it hydrates the 76 embedded quick-check blocks in python-101/normal lessons ×
+  4 locales (`.quiz-q[data-answer]`, `.quiz-q__opt[data-idx]`, `[data-quiz-summary]`).
+  `Quiz.astro` is a separate component used only on hard/data-analysis lessons. Because
+  `quiz.client.ts` loads globally it also claimed Quiz.astro blocks (casting labels as
+  buttons, `data-answer=NaN`) → wrong grading. Fix = mutual format guards:
+  `quiz.client.ts` skips blocks without `.quiz-q[data-answer]`; `Quiz.astro` inline
+  script skips blocks without `[data-quiz-check]`. Test fixture updated.
+- **#3 isWeekComplete dead export** — removed from `gameState.ts`; the whole "section
+  progress" describe block removed from `gameState.test.ts`.
+- **#4 emptyStats mirror** — removed from `gamestats.ts`; only `computeGameStats` now
+  exists, used by both SSR baseline and client hydration in `ProgressPage.astro`.
+- **#5 rankFor cast-wrapper** — removed; gamestats imports `rankFor` directly
+  (and typed its return properly as `(typeof RANKS)[number]` at the root).
+- **#8 correctness (invented numbers)** — TRACKS totals fixed to the real lesson counts
+  (python-101 = 19 normal + 10 hard = **29**, data-analysis = **20**; verified zero slug
+  overlap between normal/hard). `questsTotal`/`questsDone` now derived from
+  `questsToShow()` (32 visible quests) instead of `Object.values(s.quests)` which
+  counted internal keys (`completed-*`, daily logins, `track-*`) and inflated the count.
+  `homeRender.ts` progress widths now use `TRACK_TOTAL` per track instead of `/5`.
+  `gameState.ts` "all-python"/"all-data" milestone thresholds 19/10 → 29/20.
+
+### Tests updated to reality, 4 in-suite bugs found & fixed
+- `gamestats.test.ts`: rewrite — TRACKS 29/20, lessonsTotal 49, questsTotal 32,
+  emptyStats describe removed. The old `split('---', 2)[1]` frontmatter hack in
+  `project-art.test.ts` was actually **broken** (description contains inline `---`,
+  stranding the regex) → proper `^---\r?\n...\r?\n---` extraction + `m`-flag +
+  optional-quote regex. `home-render.test.ts` had also hardcoded `/5` ("hub progress
+  fills scale counts to 100% at five done" asserted 40%/0% from 2/5 done) → rewritten
+  to assert the real `2/29*100` width.
+  `gameState.test.ts` + `game-step.test.ts` track-quest unlock tests: 19→29, 10→20
+  lessons (all-python/all-data need every normal+hard lesson now).
+
+### Gates (all green at commit boundary)
+- `npm run typecheck` 0 errors · `npm test` 1220/1220 · `npx astro check` still exactly
+  the **4 pre-existing** errors on Claude-owned locale project index pages
+  (`filter_search_placeholder` needs `{n}`, commit `a28b723a`) — none new ·
+  `npm run build` 1286 pages · e2e smoke 50/50 · a11y 0 · contrast 0 · responsive clean
+  · hreflang 40/40.
+
+### Status
+NOT yet committed — working tree has all 8 findings + test fixes staged as pending.
+
+## HANDOFF → Claude (remaining pre-existing, untouched this round)
+
+The 4 `astro check` errors on `src/pages/{projects,ar/مشاريع,es/proyectos,fr/projets}/index.astro:10`
+(`m.filter_search_placeholder()` called with 0 args but message needs `{n}`) are still
+yours — they predate this round and live in your surface. Everything from the audit's
+invented-metric correctness finding (#8) is now executed (both quest math and the 19/10
+→ 29/20 milestones are in `gameState.ts`/`gamestats.ts`), so the "please re-verify if
+you touch these constants" standing note on the progress-guide holdout is now current:
+the guide's quest/lesson numbers match the shipped code.

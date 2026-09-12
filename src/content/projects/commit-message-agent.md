@@ -1,6 +1,7 @@
 ---
 title: "Build a Git Commit-Message Generator"
 description: "Build a CLI tool that reads a real staged git diff via subprocess, drafts a Conventional-Commits-style message with a free-tier LLM, and only commits it after you explicitly confirm."
+difficulty: "intermediate"
 ---
 
 # 🌿 Build a Git Commit-Message Generator

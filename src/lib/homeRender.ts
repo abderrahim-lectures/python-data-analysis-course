@@ -1,4 +1,7 @@
 import {xpProgress, streakProgress, loadState, rankFor, RANK_EMOJIS} from './gameState.ts';
+import {TRACKS} from './gamestats.ts';
+
+const TRACK_TOTAL = Object.fromEntries(TRACKS.map((t) => [t.id, t.total]));
 
 export function renderHomepage() {
   const xp = xpProgress();
@@ -38,6 +41,6 @@ export function renderHomepage() {
   const dataDone = Object.keys(s.lessonsCompleted || {}).filter((k: string) => k.includes('data-analysis')).length;
   const pythonFill = document.getElementById('hub-python') as HTMLElement | null;
   const dataFill = document.getElementById('hub-data') as HTMLElement | null;
-  if (pythonFill) pythonFill.style.width = (pythonDone / 5 * 100) + '%';
-  if (dataFill) dataFill.style.width = (dataDone / 5 * 100) + '%';
+  if (pythonFill) pythonFill.style.width = (pythonDone / TRACK_TOTAL['python-101'] * 100) + '%';
+  if (dataFill) dataFill.style.width = (dataDone / TRACK_TOTAL['data-analysis'] * 100) + '%';
 }

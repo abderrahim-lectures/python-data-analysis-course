@@ -365,11 +365,11 @@ function evaluateMilestones(s: PDAState): void {
     }
   }
 
-  // Section completion: check if all lessons in a section are done
+  // Section completion: check if all lessons in a section are done (normal + hard)
   const pythonLessons = Object.keys(s.lessonsCompleted).filter(k => k.startsWith('python-101/'));
-  if (pythonLessons.length >= 19) markQuest(s, 'all-python', 'Python 101 done');  // 19 lessons total
+  if (pythonLessons.length >= 29) markQuest(s, 'all-python', 'Python 101 done');  // 29 lessons total
   const dataLessons = Object.keys(s.lessonsCompleted).filter(k => k.startsWith('data-analysis/'));
-  if (dataLessons.length >= 10) markQuest(s, 'all-data', 'Data Analysis done');   // 10 lessons total
+  if (dataLessons.length >= 20) markQuest(s, 'all-data', 'Data Analysis done');   // 20 lessons total
 }
 
 // ── Quests ──────────────────────────────────────────────────────────
@@ -438,12 +438,6 @@ export function trackProgress(trackId: string, totalLessons: number): { done: nu
   return { done, total: totalLessons, pct: Math.round((done / totalLessons) * 100) };
 }
 
-export function isWeekComplete(section: string, _week: number): boolean {
-  const s = read();
-  // Legacy function - now checks if any lesson in the section is complete
-  return Object.keys(s.lessonsCompleted).some(k => k.startsWith(`${section}/`));
-}
-
 // ── Activity Log ────────────────────────────────────────────────────
 export function getActivityLog(limit: number = 50): ActivityEntry[] {
   const s = read();
@@ -473,8 +467,8 @@ const RANK_THRESHOLDS: Record<string, number> = {
   Grandmaster: 9999,
 };
 
-export function rankFor(xp: number): string {
-  let r: string = RANKS[0];
+export function rankFor(xp: number): (typeof RANKS)[number] {
+  let r: (typeof RANKS)[number] = RANKS[0];
   for (const k of RANKS) { if (xp >= (RANK_THRESHOLDS[k] || 0)) r = k; }
   return r;
 }

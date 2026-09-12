@@ -36,6 +36,7 @@ function quizFixture() {
 
   const quiz = fakeEl('quiz') as any;
   quiz.querySelectorAllFor['.quiz-q'] = [q1, q2];
+  quiz.querySelectorFor['.quiz-q[data-answer]'] = q1;
   quiz.querySelectorFor['[data-quiz-summary]'] = summary;
 
   stub.queryAll['[data-quiz]'] = [quiz];

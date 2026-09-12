@@ -2,8 +2,10 @@
 // from the localized `title` frontmatter. Keys are the canonical English slug
 // (the content filename); values are the URL-safe localized slug for that
 // locale. The EN route never uses a translated slug — it stays /projects/<english>.
-import {PROJECT_SLUGS} from './projectSlugs.data';
+import projectSlugs from './projectSlugs.data.json';
 import type {Locale} from './routeSegments';
+
+const PROJECT_SLUGS = projectSlugs as Record<'ar' | 'es' | 'fr', Record<string, string>>;
 
 /** URL slug for a project in the given locale. EN always stays the canonical
  *  English filename; unknown slugs (e.g. untranslated projects) fall back to

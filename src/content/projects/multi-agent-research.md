@@ -1,6 +1,7 @@
 ---
 title: "Build a Multi-Agent Research Assistant"
 description: "Graduate from the in-browser playground to real Python: build a small multi-agent system — a planner, a researcher, and a writer — that breaks down a research question and synthesizes a real report, using LangChain's deepagents sub-agents and a free-tier LLM."
+difficulty: "advanced"
 ---
 
 # 🧩 Build a Multi-Agent Research Assistant

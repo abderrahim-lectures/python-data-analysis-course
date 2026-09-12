@@ -57,14 +57,6 @@ export const LESSON_WORDS: Record<Locale, string> = {
   fr: 'cours',
 };
 
-/** Reverse lookup: URL track word -> canonical 'normal' | 'hard', per locale. */
-export function trackFromWord(locale: Locale, word: string): 'normal' | 'hard' | null {
-  const w = TRACK_WORDS[locale];
-  if (word === w.normal) return 'normal';
-  if (word === w.hard) return 'hard';
-  return null;
-}
-
 /** `/` for EN, `/<locale>/` for others. */
 export function localeBase(locale: Locale, base: string): string {
   return locale === 'en' ? base : `${base}${locale}/`;
@@ -122,23 +114,16 @@ export function playgroundHref(locale: Locale, base: string): string {
   return withBase(localizedPath(['playground'], locale), base);
 }
 
-/** Top-level `/credits`/`/creditos`/… link. */
-export function creditsHref(locale: Locale, base: string): string {
-  return withBase(localizedPath([NAV_WORDS[locale].credits], locale), base);
+/** hreflang/switcher alternates for a top-level nav page (`learn`, `credits`, …). */
+export function navWordAlternates(word: keyof typeof NAV_WORDS[Locale]): Record<Locale, string> {
+  return Object.fromEntries(
+    ALL_LOCALES.map((locale) => [locale, locale === 'en' ? NAV_WORDS[locale][word] : `${locale}/${NAV_WORDS[locale][word]}`]),
+  ) as Record<Locale, string>;
 }
 
 /** Top-level `/progress-guide`/`/guia-progreso`/… link. */
 export function progressGuideHref(locale: Locale, base: string): string {
   return withBase(localizedPath([NAV_WORDS[locale].progressGuide], locale), base);
-}
-
-/** Top-level `/cheatsheets`/`/referencias`/… link. */
-export function cheatsheetsHref(locale: Locale, base: string): string {
-  return withBase(localizedPath([NAV_WORDS[locale].cheatsheets], locale), base);
-}
-
-export function weekHref(locale: Locale, base: string, section: string, track: 'normal' | 'hard', week: number): string {
-  return learnHref(locale, base, section, trackWord(locale, track), `week-${week}`);
 }
 
 /** Build a module href with the localized track word and modules word. */

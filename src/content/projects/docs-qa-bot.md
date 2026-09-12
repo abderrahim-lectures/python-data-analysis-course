@@ -1,6 +1,7 @@
 ---
 title: "Build a RAG-Backed Docs Q&A Discord Bot"
 description: "Graduate from the in-browser playground to real Python: wrap the RAG App project's retrieval pipeline in a live Discord bot that answers questions from a folder of documentation."
+difficulty: "intermediate"
 ---
 
 # 📚 Build a RAG-Backed Docs Q&A Discord Bot

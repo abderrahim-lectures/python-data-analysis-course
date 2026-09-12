@@ -1,6 +1,7 @@
 ---
 title: "Build a Recipe-Planner Agent"
 description: "Graduate from the in-browser playground to real Python: build a tool-using AI agent with LangChain's deepagents that suggests meals from the ingredients you have on hand, grounded in a real local recipe database."
+difficulty: "intermediate"
 ---
 
 # 🧰 Build a Recipe-Planner Agent

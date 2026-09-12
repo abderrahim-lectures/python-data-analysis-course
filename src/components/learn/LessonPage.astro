@@ -74,7 +74,7 @@ const jsonLd = [
       {
         '@type': 'ListItem',
         position: 2,
-        name: sectionName(locale, section),
+        name: sectionName(section),
         item: String(new URL(learnHref(locale, base, section), Astro.site)),
       },
       {
@@ -90,7 +90,7 @@ const jsonLd = [
 <Base title={`${title} — PyDA Course`} description={description} lang={locale} dir={dir} jsonLd={jsonLd} alternates={learnAlternates(section, track, 'lesson', slug)}>
   <nav class="crumb container">
     <a href={learnHref(locale, base)}>{m.nav_learn()}</a> <span>/</span>
-    <a href={learnHref(locale, base, section)}>{sectionName(locale, section)}</a> <span>/</span>
+    <a href={learnHref(locale, base, section)}>{sectionName(section)}</a> <span>/</span>
     {(() => { const mod = sortedModules.find(x => x.id.split('/').pop()!.replace(/^module-\d+-/, '') === moduleId); return mod ? <a href={moduleHref(locale, base, section, track, mod.id.split('/').pop()!)}>{mod.data.title}</a> : <span>{moduleId}</span>; })()} <span>/</span>
     <span class="crumb__here">{title}</span>
   </nav>

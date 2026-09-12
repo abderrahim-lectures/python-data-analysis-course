@@ -15,12 +15,6 @@ const base = import.meta.env.BASE_URL;
 const sampleTags = [...new Set(Object.values(PROJECT_TAGS).flat())].slice(0, 6);
 const tagEmoji: Record<string, string> = {};
 for (const t of sampleTags) tagEmoji[t] = projectArtEmoji([t]);
-const alternates = {
-  en: '',
-  ar: 'ar',
-  es: 'es',
-  fr: 'fr',
-};
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Course',
@@ -41,7 +35,7 @@ const jsonLd = {
 };
 ---
 
-<Base title={m.home_title()} description={m.home_description()} lang={locale} dir="ltr" alternates={alternates} jsonLd={jsonLd}>
+<Base title={m.home_title()} description={m.home_description()} lang={locale} dir="ltr" jsonLd={jsonLd}>
   <section class="hero">
     <div class="hero__bg" aria-hidden="true"></div>
     <div class="hero__grid">

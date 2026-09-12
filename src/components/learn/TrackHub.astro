@@ -41,17 +41,17 @@ const diffColor = (d: string) => d === 'beginner' ? 'var(--success)' : d === 'in
 const arrow = locale === 'ar' ? '←' : '→';
 ---
 
-<Base title={`${sectionName(locale, section)} ${trackName(locale, track)} Track — PyDA Course`} description={sectionDescription(locale, section)} lang={locale} dir={dir} alternates={learnAlternates(section, track, 'track')}>
+<Base title={`${sectionName(section)} ${trackName(track)} Track — PyDA Course`} description={sectionDescription(section)} lang={locale} dir={dir} alternates={learnAlternates(section, track, 'track')}>
   <nav class="crumb container">
     <a href={learnHref(locale, base)}>{m.nav_learn()}</a> <span>/</span>
-    <a href={learnHref(locale, base, section)}>{sectionName(locale, section)}</a> <span>/</span>
-    <span class="crumb__here">{trackName(locale, track)}</span>
+    <a href={learnHref(locale, base, section)}>{sectionName(section)}</a> <span>/</span>
+    <span class="crumb__here">{trackName(track)}</span>
   </nav>
 
   <section class="container hero-section">
     <div class="hero-icon">{TRACK_ICONS[track]}</div>
-    <h1>{sectionName(locale, section)} — {trackName(locale, track)}</h1>
-    <p>{sectionDescription(locale, section)}</p>
+    <h1>{sectionName(section)} — {trackName(track)}</h1>
+    <p>{sectionDescription(section)}</p>
     <div class="hero-stats">
       <span class="stat">📖 {totalLessons}</span>
       <span class="stat">⏱ ~{totalHours}h</span>

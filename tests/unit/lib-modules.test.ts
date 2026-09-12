@@ -7,10 +7,10 @@ import {
   notebookBinderUrl, notebookDeepnoteUrl, NOTEBOOK_OPENERS,
 } from '../../src/lib/notebookLinks';
 import {
-  detectLocale, trackFromWord, localeBase, idInLocale, bareId,
-  learnHref, projectsHref, progressHref, playgroundHref, creditsHref,
-  cheatsheetsHref, weekHref, moduleHref, lessonHref, trackWord,
-  ALL_LOCALES,
+  detectLocale, localeBase, idInLocale, bareId,
+  learnHref, projectsHref, progressHref, playgroundHref,
+  moduleHref, lessonHref, trackWord,
+  ALL_LOCALES, navWordAlternates,
 } from '../../src/lib/routeSegments';
 import {sectionName, sectionDescription, sectionIcon, trackName} from '../../src/lib/sections';
 import {relatedProjectSlugs, RELATED_PROJECTS} from '../../src/lib/relatedProjects';
@@ -122,12 +122,9 @@ describe('routeSegments', () => {
     expect(detectLocale('/learn/es/titanic')).toBe('es');
   });
 
-  test('trackFromWord maps words per locale and rejects strangers', () => {
-    expect(trackFromWord('en', 'hard')).toBe('hard');
-    expect(trackFromWord('ar', 'عادي')).toBe('normal');
-    expect(trackFromWord('es', 'dificil')).toBe('hard');
-    expect(trackFromWord('fr', 'normale')).toBeNull();
-    expect(trackFromWord('en', 'bogus')).toBeNull();
+  test('navWordAlternates covers all locales for top-level pages', () => {
+    const alts = navWordAlternates('credits');
+    for (const l of ALL_LOCALES) expect(alts[l]).toBeTruthy();
   });
 
   test('localeBase and trackWord', () => {
@@ -156,14 +153,11 @@ describe('routeSegments', () => {
     expect(dec(projectsHref('es', '', ...[] as string[]))).toBe('/es/proyectos');
     expect(progressHref('fr', '')).toBe('/fr/progression');
     expect(playgroundHref('ar', '')).toBe('/ar/playground');
-    expect(creditsHref('es', '')).toBe('/es/creditos');
-    expect(cheatsheetsHref('fr', '')).toBe('/fr/antiseche');
     expect(learnHref('en', '/base/', 'python-101', 'normal', 'modules', 'm1')).toBe('/base/learn/python-101/normal/modules/m1');
   });
 
-  test('week/module/lesson hrefs compose interior words', () => {
+  test('module/lesson hrefs compose interior words', () => {
     const dec = (p: string) => decodeURIComponent(p);
-    expect(weekHref('en', '', 'python-101', 'normal', 3)).toBe('/learn/python-101/normal/week-3');
     expect(dec(moduleHref('fr', '', 'data-analysis', 'hard', 'm1'))).toBe('/fr/apprendre/data-analysis/difficile/modules/m1');
     expect(dec(lessonHref('ar', '', 'data-analysis', 'normal', 'l9'))).toBe('/ar/تعلم/data-analysis/عادي/دروس/l9');
   });
@@ -171,14 +165,14 @@ describe('routeSegments', () => {
 
 describe('sections', () => {
   test('names/descriptions resolve per section and icon fallback works', () => {
-    expect(sectionName('en', 'python-101')).toBeTruthy();
-    expect(sectionDescription('en', 'data-analysis')).toBeTruthy();
-    expect(sectionName('en', 'unknown-slug')).toBeTruthy();
+    expect(sectionName('python-101')).toBeTruthy();
+    expect(sectionDescription('data-analysis')).toBeTruthy();
+    expect(sectionName('unknown-slug')).toBeTruthy();
     expect(sectionIcon('python-101')).toBe('🐍');
     expect(sectionIcon('data-analysis')).toBe('📊');
     expect(sectionIcon('nope')).toBe('📚');
-    expect(trackName('en', 'normal')).toBeTruthy();
-    expect(trackName('en', 'hard')).toBeTruthy();
+    expect(trackName('normal')).toBeTruthy();
+    expect(trackName('hard')).toBeTruthy();
   });
 });
 

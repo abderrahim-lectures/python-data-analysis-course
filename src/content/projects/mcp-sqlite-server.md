@@ -1,6 +1,7 @@
 ---
 title: "Query a Database in Plain English with MCP"
 description: "Build an MCP server that exposes a local SQLite database, then watch an LLM client write and run its own SQL to answer plain-English questions about it."
+difficulty: "intermediate"
 ---
 
 # 🔌 Query a Database in Plain English with MCP

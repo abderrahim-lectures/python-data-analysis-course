@@ -1,6 +1,7 @@
 ---
 title: "Build an LLM Prompt Optimizer"
 description: "Automatically refine prompts using A/B testing, few-shot examples, and chain-of-thought patterns."
+difficulty: "intermediate"
 ---
 # ✨ Build an LLM Prompt Optimizer
 

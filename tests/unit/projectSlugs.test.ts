@@ -1,6 +1,8 @@
 import {describe, expect, test} from 'vitest';
 import {localizedProjectSlug} from '../../src/lib/projectSlugs';
-import {PROJECT_SLUGS} from '../../src/lib/projectSlugs.data';
+import projectSlugs from '../../src/lib/projectSlugs.data.json';
+
+const PROJECT_SLUGS = projectSlugs as Record<'ar' | 'es' | 'fr', Record<string, string>>;
 
 describe('localizedProjectSlug', () => {
   test('EN always returns the canonical English slug', () => {

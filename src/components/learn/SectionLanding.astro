@@ -39,16 +39,16 @@ const totalMinutes = [...normalLessons, ...hardLessons].reduce((sum, l) => sum +
 const totalHours = Math.round(totalMinutes / 60);
 ---
 
-<Base title={`${sectionName(locale, section)} — PyDA Course`} description={sectionDescription(locale, section)} lang={locale} dir={dir} alternates={learnAlternates(section, 'normal', 'section')}>
+<Base title={`${sectionName(section)} — PyDA Course`} description={sectionDescription(section)} lang={locale} dir={dir} alternates={learnAlternates(section, 'normal', 'section')}>
   <nav class="crumb container">
     <a href={learnHref(locale, base)}>{m.nav_learn()}</a> <span>/</span>
-    <span class="crumb__here">{sectionName(locale, section)}</span>
+    <span class="crumb__here">{sectionName(section)}</span>
   </nav>
 
   <section class="container hero-section">
     <div class="hero-icon">{sectionIcon(section)}</div>
-    <h1>{sectionName(locale, section)}</h1>
-    <p>{sectionDescription(locale, section)}</p>
+    <h1>{sectionName(section)}</h1>
+    <p>{sectionDescription(section)}</p>
     <div class="hero-stats">
       <span class="stat">📖 {normalLessons.length + hardLessons.length}</span>
       <span class="stat">⏱ ~{totalHours}h</span>

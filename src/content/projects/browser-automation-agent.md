@@ -1,6 +1,7 @@
 ---
 title: "Build a Browser-Automation Agent"
 description: "Combine Playwright browser automation with a free-tier LLM tool-calling agent that fills out a real practice web form on its own."
+difficulty: "advanced"
 ---
 
 # 🎭 Build a Browser-Automation Agent

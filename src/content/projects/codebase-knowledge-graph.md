@@ -1,6 +1,7 @@
 ---
 title: "Turn a Codebase into a Knowledge Graph"
 description: "Graduate from the in-browser playground to real Python: parse a real codebase's Python files with the ast module, build a graph of its structure with networkx, and visualize and query it — no API key, no network access needed."
+difficulty: "intermediate"
 ---
 
 # 🕸️ Turn a Codebase into a Knowledge Graph

@@ -1,6 +1,7 @@
 ---
 title: "Build a Job-Listing Aggregator"
 description: "Scrape multiple job-board-style sources, dedupe listings across them, and alert on new matches against a keyword filter — with requests/BeautifulSoup and pandas, no API key needed."
+difficulty: "intermediate"
 ---
 
 # 🕷️ Build a Job-Listing Aggregator

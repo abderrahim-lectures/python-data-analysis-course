@@ -1,6 +1,7 @@
 ---
 title: "Build a Personal Email-Triage Agent"
 description: "Graduate from the in-browser playground to real Python: build an agent that categorizes, prioritizes, and drafts (but never sends) replies for your email, using a free-tier LLM."
+difficulty: "intermediate"
 ---
 
 # 🤖 Build a Personal Email-Triage Agent

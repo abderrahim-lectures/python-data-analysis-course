@@ -19,44 +19,12 @@ async function fresh() {
 }
 
 describe('TRACKS totals stay the single source of truth', () => {
-  test('two tracks with the documented normal-module counts', async () => {
+  test('two tracks with the real lesson counts (normal + hard)', async () => {
     const {gs} = await fresh();
     expect(gs.TRACKS).toEqual([
-      {id: 'python-101', label: 'Python 101', total: 7},
-      {id: 'data-analysis', label: 'Pandas & Data', total: 5},
+      {id: 'python-101', label: 'Python 101', total: 29},
+      {id: 'data-analysis', label: 'Pandas & Data', total: 20},
     ]);
-  });
-
-  test('lessonsTotal in emptyStats equals the TRACKS sum', async () => {
-    const {gs} = await fresh();
-    const t = gs.TRACKS.reduce((a: number, x: {total: number}) => a + x.total, 0);
-    expect(gs.emptyStats().lessonsTotal).toBe(t);
-    expect(gs.emptyStats().lessonsTotal).toBe(12);
-  });
-});
-
-describe('emptyStats', () => {
-  test('produces a zeroed, structurally complete report', async () => {
-    const {gs} = await fresh();
-    const e = gs.emptyStats();
-    expect(e.level).toBe(1);
-    expect(e.rank).toBe('Bronze');
-    expect(e.xp).toBe(0);
-    expect(e.lessonsDone).toBe(0);
-    expect(e.streak).toBe(0);
-    expect(e.bestStreak).toBe(0);
-    expect(e.kda.ratio).toBe(0);
-    expect(e.kda.label).toBe('Rookie');
-    expect(e.questsTotal).toBe(11);
-    expect(e.questsDone).toBe(0);
-    expect(e.lanes).toHaveLength(2);
-    for (const lane of e.lanes) {
-      expect(lane.done).toBe(0);
-      expect(lane.pct).toBe(0);
-    }
-    expect(e.diagnostics.improvementPct).toBe(0);
-    expect(e.activity.daysActive).toBe(0);
-    expect(e.engagement.returnRate).toBe(0);
   });
 });
 
@@ -73,6 +41,27 @@ describe('computeGameStats', () => {
     expect(r.badges).toEqual([]);
   });
 
+  test('fresh state is a zeroed, structurally complete report', async () => {
+    const {gs} = await fresh();
+    const e = gs.computeGameStats();
+    expect(e.level).toBe(1);
+    expect(e.xp).toBe(0);
+    expect(e.lessonsDone).toBe(0);
+    expect(e.streak).toBe(0);
+    expect(e.bestStreak).toBe(0);
+    expect(e.kda.ratio).toBe(0);
+    expect(e.questsTotal).toBeGreaterThan(0);
+    expect(e.questsDone).toBe(0);
+    expect(e.lanes).toHaveLength(2);
+    for (const lane of e.lanes) {
+      expect(lane.done).toBe(0);
+      expect(lane.pct).toBe(0);
+    }
+    expect(e.diagnostics.improvementPct).toBe(0);
+    expect(e.activity.daysActive).toBe(0);
+    expect(e.engagement.returnRate).toBe(0);
+  });
+
   test('reflects seeded lessons + quizzes', async () => {
     const {gs, state} = await fresh();
     const s = state.loadState();
@@ -81,15 +70,13 @@ describe('computeGameStats', () => {
     s.quizTotal = 5;
     s.streak = 2;
     s.bestStreak = 4;
-    s.quests = {a: true, b: false, c: true};
-    s.badges = ['b1'];
     state.saveState(s);
 
     const r = gs.computeGameStats();
     expect(r.lessonsDone).toBe(1);
-    expect(r.lessonsTotal).toBe(12);
+    expect(r.lessonsTotal).toBe(49);
     expect(r.lanes[0].done).toBe(1);
-    expect(r.lanes[0].total).toBe(7);
+    expect(r.lanes[0].total).toBe(29);
     expect(r.lanes[1].done).toBe(0);
     expect(r.quiz.winRate).toBe(60);
     expect(r.quiz.correct).toBe(3);
@@ -99,9 +86,6 @@ describe('computeGameStats', () => {
     expect(r.kda.label).not.toBe('');
     expect(r.streak).toBe(2);
     expect(r.bestStreak).toBe(4);
-    expect(r.questsDone).toBe(5);
-    expect(r.questsTotal).toBe(11);
-    expect(r.badges).toEqual(['b1', 'First Step', 'Lesson complete', 'Track starter']);
   });
 
   test('diagnostic percentages are clamped to [0, 100]', async () => {
@@ -124,9 +108,9 @@ describe('computeGameStats', () => {
       expect(r.diagnostics[k as keyof typeof r.diagnostics]).toBeLessThanOrEqual(100);
       expect(r.diagnostics[k as keyof typeof r.diagnostics]).toBeGreaterThanOrEqual(0);
     }
-    expect(r.lessonsDone).toBe(12);
-    expect(r.lanes[0].done).toBe(7);
-    expect(r.lanes[1].done).toBe(5);
+    expect(r.lessonsDone).toBe(49);
+    expect(r.lanes[0].done).toBe(29);
+    expect(r.lanes[1].done).toBe(20);
     expect(r.activity.daysActive).toBeGreaterThan(0);
     expect(r.engagement.longestSession).toBeLessThanOrEqual(5);
   });

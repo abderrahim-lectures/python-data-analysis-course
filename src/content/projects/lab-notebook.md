@@ -1,6 +1,7 @@
 ---
 title: "Build a Digital Lab Notebook"
 description: "Record experiments with structured data, calculations, and reproducible analysis pipelines."
+difficulty: "intermediate"
 ---
 # 📓 Build a Digital Lab Notebook
 
