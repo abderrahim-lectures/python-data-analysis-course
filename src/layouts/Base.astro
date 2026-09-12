@@ -40,7 +40,8 @@ const {
 const canonicalPath = Astro.props.canonicalPath ?? Astro.url.pathname;
 const description = Astro.props.description ?? m.home_description();
 const canonicalURL = new URL(canonicalPath, Astro.site);
-const ogImage = image ? new URL(image, Astro.site) : new URL('og-default.png', Astro.site);
+const defaultOgImage = lang === 'en' ? 'og-default.png' : `og-default-${lang}.png`;
+const ogImage = image ? new URL(image, Astro.site) : new URL(defaultOgImage, Astro.site);
 const jsonLdBlocks = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 const base = import.meta.env.BASE_URL;
 const defaultAlternates: Record<RouteLocale, string> = {
