@@ -45,34 +45,74 @@ export interface PyodideModel {
 type PyodideModule = {loadPyodide: (opts: {indexURL: string}) => Promise<PyodideModel>};
 let pyPromise: Promise<PyodideModel> | null = null;
 
-// Wraps window.fetch for the duration of the engine download so Base.astro's
-// busy overlay can show a real download percent instead of a bare spinner.
-// Pyodide fetches its own wasm/zip files internally (no progress callback in
-// its public API), so the only hook available is intercepting fetch itself:
-// each response's body is re-read chunk-by-chunk (then reassembled into an
-// equivalent Response) purely to count bytes as they arrive. `coreBytes` is
-// the known size of the always-fetched runtime files (see vendor-pyodide.mjs
-// manifest.json); it excludes package wheels, which are fetched later,
-// per-lesson, and shown as an indeterminate step instead.
-function trackEngineDownload(coreBytes: number, onProgress: (pct: number) => void): () => void {
+// `window.dispatchEvent?.()` only guards the *property* lookup, not the
+// `window` identifier itself -- it still throws a ReferenceError wherever
+// `window` isn't declared at all (unit tests that stub then unstub it as a
+// global; a stray microtask from one test's fixture can resume after a
+// later test's `afterEach` has already un-stubbed it). These dispatches are
+// a UI hook for the busy overlay, never load-bearing for the actual Python
+// run, so a missing `window` should be a silent no-op, not a crash.
+function dispatchPyodideEvent(name: string, detail?: unknown): void {
+  if (typeof window === 'undefined' || typeof window.dispatchEvent !== 'function') return;
+  window.dispatchEvent(new CustomEvent(name, detail === undefined ? undefined : {detail}));
+}
+
+// GitHub Pages hardcodes `Cache-Control: max-age=600` on every response and
+// gives static sites no way to override it, so the browser's own HTTP cache
+// re-validates (and can fall back to a full re-download) after just 10
+// minutes -- nowhere near "downloaded once". The Cache Storage API isn't
+// bound by that header at all: once a file is `cache.put()` here it stays
+// available across page navigations and reloads until this code evicts it
+// (on a Pyodide version bump, since the cache name is versioned) or the
+// browser reclaims storage under real pressure. This patches window.fetch
+// once, permanently, for the page's lifetime -- not just the initial engine
+// boot -- so the same origin-hosted package wheels a later lesson pulls in
+// via loadPackagesFromImports/micropip are cache-first too, not just the
+// core runtime.
+const PYODIDE_CACHE_NAME = `pyodide-${PYODIDE_VERSION}`;
+let onPyodideBytes: ((n: number) => void) | null = null;
+let pyodideCachePatched = false;
+
+function ensurePyodideCache(): void {
+  if (pyodideCachePatched) return;
+  pyodideCachePatched = true;
   const originalFetch = window.fetch.bind(window);
-  let loaded = 0;
   window.fetch = async (input: RequestInfo | URL, init?: RequestInit) => {
     const url = input instanceof Request ? input.url : String(input);
+    if (!url.startsWith(INDEX) || typeof caches === 'undefined') return originalFetch(input, init);
+    let cache: Cache | null = null;
+    try {
+      cache = await caches.open(PYODIDE_CACHE_NAME);
+      const cached = await cache.match(url);
+      if (cached) {
+        const len = Number(cached.headers.get('content-length') ?? 0);
+        if (len > 0) onPyodideBytes?.(len);
+        return cached;
+      }
+    } catch {
+      cache = null; // Cache Storage unavailable (private browsing, quota, etc.) -- fetch normally below.
+    }
     const res = await originalFetch(input, init);
-    if (!url.startsWith(INDEX) || !res.body || coreBytes <= 0) return res;
+    if (!res.ok || !res.body) return res;
     const reader = res.body.getReader();
     const chunks: BlobPart[] = [];
     for (;;) {
       const {done, value} = await reader.read();
       if (done) break;
       chunks.push(value as BlobPart);
-      loaded += value.byteLength;
-      onProgress(Math.min(99, Math.round((loaded / coreBytes) * 100)));
+      onPyodideBytes?.(value.byteLength);
     }
-    return new Response(new Blob(chunks), {headers: res.headers, status: res.status, statusText: res.statusText});
+    const blob = new Blob(chunks);
+    const responseInit = {headers: res.headers, status: res.status, statusText: res.statusText};
+    if (cache) {
+      try {
+        await cache.put(url, new Response(blob.slice(), responseInit));
+      } catch {
+        // Storage quota exceeded, etc. -- the fetch itself still succeeds below.
+      }
+    }
+    return new Response(blob, responseInit);
   };
-  return () => { window.fetch = originalFetch; };
 }
 
 async function getCoreBytes(): Promise<number> {
@@ -89,16 +129,21 @@ async function getCoreBytes(): Promise<number> {
 async function py(): Promise<PyodideModel> {
   if (!pyPromise) {
     pyPromise = (async () => {
+      ensurePyodideCache();
       const coreBytes = await getCoreBytes();
-      const restoreFetch = trackEngineDownload(coreBytes, (pct) => {
-        window.dispatchEvent(new CustomEvent('pyodide:progress', {detail: {pct}}));
-      });
+      let loaded = 0;
+      if (coreBytes > 0) {
+        onPyodideBytes = (n) => {
+          loaded += n;
+          dispatchPyodideEvent('pyodide:progress', {pct: Math.min(99, Math.round((loaded / coreBytes) * 100))});
+        };
+      }
       let engine: PyodideModel;
       try {
         const mod = (await import(/* @vite-ignore */ `${INDEX}pyodide.mjs`)) as PyodideModule;
         engine = await mod.loadPyodide({indexURL: INDEX});
       } finally {
-        restoreFetch();
+        onPyodideBytes = null;
       }
       // Deprecation/Future warnings from third-party stack (Pyarrow becoming a
       // pandas requirement, seaborn's `palette`-without-`hue` deprecation) are
@@ -418,13 +463,22 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
     run.disabled = true;
     run.textContent = m.run_loading();
     run.classList.add('cell__run--loading');
+    // The busy overlay stays up for the whole run -- engine bootstrap,
+    // package installs, and code execution -- not just the parts with their
+    // own progress signal. Pyodide runs on the main thread, so a slow cell
+    // genuinely blocks the page; showing nothing during that stretch reads
+    // as frozen, and the overlay's pointer-events also stop an impatient
+    // scroll/click from landing on stale content mid-run. It's dismissed
+    // before afterRun's XP toast is created (not just before the toast is
+    // awaited) -- the toast sits at a lower z-index than the overlay, so
+    // if it were created first it would render invisible, hidden behind
+    // the still-active backdrop until the overlay caught up and cleared.
     let engine: PyodideModel;
-    window.dispatchEvent?.(new CustomEvent('pyodide:loading'));
+    dispatchPyodideEvent('pyodide:loading');
     try {
       engine = await (deps.loadEngine ?? py)();
-      window.dispatchEvent?.(new CustomEvent('pyodide:ready'));
     } catch (e) {
-      window.dispatchEvent?.(new CustomEvent('pyodide:ready'));
+      dispatchPyodideEvent('pyodide:ready');
       console.warn('[runnable-cell] failed to load Pyodide', e);
       appendLine('err', m.cell_engine_load_failed());
       run.textContent = m.run_button();
@@ -437,12 +491,6 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
       .filter((el) => el !== codeEl)
       .map((el) => el.textContent ?? '')
       .join('\n');
-    // Installing a lesson's Python packages (numpy/pandas/matplotlib/... via
-    // Pyodide, seaborn via micropip) can take several seconds of wasm
-    // compilation with no visible progress otherwise, which reads as a
-    // frozen page -- so it gets the same full-page busy overlay as the
-    // one-time engine download, not just the button's own label.
-    let loadingPackages = false;
     const executed = await runCellCode(src, {
       appendLine,
       appendFigure,
@@ -450,19 +498,22 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
       otherCellSources,
       onPhase: (phase) => {
         if (phase === 'packages') {
-          loadingPackages = true;
           run.textContent = m.run_loading_packages();
-          window.dispatchEvent?.(new CustomEvent('pyodide:loading', {detail: {phase: 'packages'}}));
+          dispatchPyodideEvent('pyodide:loading', {phase: 'packages'});
         } else {
-          if (loadingPackages) { window.dispatchEvent?.(new CustomEvent('pyodide:ready')); loadingPackages = false; }
           run.textContent = m.run_loading();
+          dispatchPyodideEvent('pyodide:loading', {phase: 'running'});
         }
       },
     });
-    if (loadingPackages) window.dispatchEvent?.(new CustomEvent('pyodide:ready')); // safety net: packages install failed before the 'running' phase
+    dispatchPyodideEvent('pyodide:ready');
     run.textContent = m.run_button();
     run.disabled = false;
     run.classList.remove('cell__run--loading');
+    await afterRun(executed);
+  });
+
+  async function afterRun(executed: boolean): Promise<void> {
     if (executed && !awarded && lessonId) {
       awarded = true;
       try {
@@ -483,7 +534,7 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
         }
       } catch { /* offline: skip XP award */ }
     }
-  });
+  }
   clear.addEventListener('click', () => { lines.innerHTML = ''; out.hidden = true; clear.hidden = true; });
 
   // Copy source code button.
