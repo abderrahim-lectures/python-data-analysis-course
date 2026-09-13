@@ -2,48 +2,34 @@ import {highlightPython} from './pyHighlight.ts';
 // Hydrates every `.cell[data-runnable]` on the page (whether hand-authored via
 // <RunnableCell> or generated from ```python fences by rehype-runnable-python)
 // with a Pyodide-backed Run button. Loaded once per page from Base.astro.
-import {usesJsBridge} from './pythonGuard.ts';
+//
+// Two execution paths:
+// - The vast majority of cells run in a Web Worker (pyodide.worker.ts via
+//   pyodideWorkerClient.ts) so a slow cell can't freeze the page.
+// - Cells that call input() run on the main thread instead, through py()/
+//   runCellCode() directly (both now in pythonRunnerCore.ts, shared with the
+//   worker) -- Pyodide's stdin callback is synchronous and a Worker has no
+//   way to satisfy that without cross-origin-isolation headers GitHub Pages
+//   can't set (see pythonGuard.usesBlockingInput for the full rationale).
+import {usesBlockingInput} from './pythonGuard.ts';
 import {m} from '../paraglide/messages.js';
-import {planDatasetMounts} from './datasetMount.ts';
-import {friendlyError} from './friendlyError.ts';
+import {getLocale} from '../paraglide/runtime.js';
+import {
+  py,
+  runCellCode,
+  mountDatasets,
+  resetExtraPackagesCache,
+  resetMountedDatasetsCache,
+  type PyodideModel,
+  type CellRuntime,
+} from './pythonRunnerCore.ts';
+import {runInWorker} from './pyodideWorkerClient.ts';
 
-const PYODIDE_VERSION = '0.26.4';
-const INDEX = `${import.meta.env.BASE_URL}pyodide/`;
-
-// Pure-Python packages the lessons use that are NOT part of the Pyodide wheel
-// set. seaborn is the only one today; its runtime deps (numpy, pandas,
-// matplotlib, scipy, statsmodels) are all Pyodide packages, so we preload
-// those from the regular index and then install the vendored wheel from our
-// own origin (`public/`), which the site CSP's connect-src 'self' allows.
-type ExtraPackages = {imports: string; wheel: string};
-const EXTRA_PACKAGES: Record<string, string> = {
-  seaborn: `${import.meta.env.BASE_URL}pyodide/seaborn-0.13.2-py3-none-any.whl`,
-};
-const EXTRA_PACKAGE_IMPORTS = 'micropip, numpy, pandas, matplotlib, scipy, statsmodels';
-const extraPackagesInstalled = new Set<string>();
-
-// Unit tests reset the per-install cache between cases (it is per-page-load in
-// the browser, but module-scoped in a single vitest process).
-export function resetExtraPackagesCache(): void {
-  extraPackagesInstalled.clear();
-}
-
-// Minimal structural typing for the subset of the Pyodide runtime this module
-// touches (stdout/stderr/stdin wiring, package loading, script execution, and
-// the virtual filesystem used to pre-mount datasets). Keeps the CDN import
-// (`loadPyodide`) and the DOM wiring fully typed instead of `any`.
-export interface PyodideModel {
-  setStdout(cb: {batched: (s: string) => void}): void;
-  setStderr(cb: {batched: (s: string) => void}): void;
-  setStdin(cb: {stdin: () => string}): void;
-  loadPackagesFromImports(src: string): Promise<unknown>;
-  runPython(src: string): Promise<(src: string) => string>;
-  runPythonAsync(src: string): Promise<unknown>;
-  FS: {writeFile(path: string, data: Uint8Array): void};
-}
-
-type PyodideModule = {loadPyodide: (opts: {indexURL: string}) => Promise<PyodideModel>};
-let pyPromise: Promise<PyodideModel> | null = null;
+// Re-exported for unit tests, which import these from this module rather
+// than pythonRunnerCore.ts directly (kept stable across the worker-migration
+// refactor so the existing test suite didn't need to change its imports).
+export {runCellCode, resetExtraPackagesCache, resetMountedDatasetsCache};
+export type {PyodideModel, CellRuntime};
 
 // `window.dispatchEvent?.()` only guards the *property* lookup, not the
 // `window` identifier itself -- it still throws a ReferenceError wherever
@@ -57,315 +43,6 @@ function dispatchPyodideEvent(name: string, detail?: unknown): void {
   window.dispatchEvent(new CustomEvent(name, detail === undefined ? undefined : {detail}));
 }
 
-// GitHub Pages hardcodes `Cache-Control: max-age=600` on every response and
-// gives static sites no way to override it, so the browser's own HTTP cache
-// re-validates (and can fall back to a full re-download) after just 10
-// minutes -- nowhere near "downloaded once". The Cache Storage API isn't
-// bound by that header at all: once a file is `cache.put()` here it stays
-// available across page navigations and reloads until this code evicts it
-// (on a Pyodide version bump, since the cache name is versioned) or the
-// browser reclaims storage under real pressure. This patches window.fetch
-// once, permanently, for the page's lifetime -- not just the initial engine
-// boot -- so the same origin-hosted package wheels a later lesson pulls in
-// via loadPackagesFromImports/micropip are cache-first too, not just the
-// core runtime.
-const PYODIDE_CACHE_NAME = `pyodide-${PYODIDE_VERSION}`;
-let onPyodideBytes: ((n: number) => void) | null = null;
-let pyodideCachePatched = false;
-
-function ensurePyodideCache(): void {
-  if (pyodideCachePatched) return;
-  pyodideCachePatched = true;
-  const originalFetch = window.fetch.bind(window);
-  window.fetch = async (input: RequestInfo | URL, init?: RequestInit) => {
-    const url = input instanceof Request ? input.url : String(input);
-    if (!url.startsWith(INDEX) || typeof caches === 'undefined') return originalFetch(input, init);
-    let cache: Cache | null = null;
-    try {
-      cache = await caches.open(PYODIDE_CACHE_NAME);
-      const cached = await cache.match(url);
-      if (cached) {
-        // No onPyodideBytes report here: a cache hit resolves near-instantly
-        // and isn't a download in progress, so it shouldn't move a "download
-        // percent" the visitor would read as network activity that isn't
-        // actually happening (only a real fetch below does that).
-        return cached;
-      }
-    } catch {
-      cache = null; // Cache Storage unavailable (private browsing, quota, etc.) -- fetch normally below.
-    }
-    const res = await originalFetch(input, init);
-    if (!res.ok || !res.body) return res;
-    const reader = res.body.getReader();
-    const chunks: BlobPart[] = [];
-    for (;;) {
-      const {done, value} = await reader.read();
-      if (done) break;
-      chunks.push(value as BlobPart);
-      onPyodideBytes?.(value.byteLength);
-    }
-    const blob = new Blob(chunks);
-    const responseInit = {headers: res.headers, status: res.status, statusText: res.statusText};
-    if (cache) {
-      try {
-        await cache.put(url, new Response(blob.slice(), responseInit));
-      } catch {
-        // Storage quota exceeded, etc. -- the fetch itself still succeeds below.
-      }
-    }
-    return new Response(blob, responseInit);
-  };
-}
-
-async function getCoreBytes(): Promise<number> {
-  try {
-    const res = await fetch(`${INDEX}manifest.json`);
-    if (!res.ok) return 0;
-    const manifest = (await res.json()) as {coreBytes?: number};
-    return manifest.coreBytes ?? 0;
-  } catch {
-    return 0;
-  }
-}
-
-async function py(): Promise<PyodideModel> {
-  if (!pyPromise) {
-    pyPromise = (async () => {
-      ensurePyodideCache();
-      const coreBytes = await getCoreBytes();
-      let loaded = 0;
-      if (coreBytes > 0) {
-        onPyodideBytes = (n) => {
-          loaded += n;
-          dispatchPyodideEvent('pyodide:progress', {pct: Math.min(99, Math.round((loaded / coreBytes) * 100))});
-        };
-      }
-      let engine: PyodideModel;
-      try {
-        const mod = (await import(/* @vite-ignore */ `${INDEX}pyodide.mjs`)) as PyodideModule;
-        engine = await mod.loadPyodide({indexURL: INDEX});
-      } finally {
-        onPyodideBytes = null;
-      }
-      // Deprecation/Future warnings from third-party stack (Pyarrow becoming a
-      // pandas requirement, seaborn's `palette`-without-`hue` deprecation) are
-      // noise for learners — they'd render as red error lines. Filter them so
-      // a successful cell shows clean stdout-only output.
-      await engine.runPython('import warnings; warnings.filterwarnings("ignore")');
-      return engine;
-    })();
-  }
-  return pyPromise;
-}
-
-// Datasets the course ships (public/datasets/*) are fetched into the Pyodide
-// virtual filesystem before first run, so lesson code can do
-// `open('slm-corpus.csv')` / `pd.read_csv(...)` the same way it would on disk.
-// Only files actually referenced by the page's code are mounted. Mounted names
-// are cached so each file is fetched once per page load.
-let datasetManifest: Record<string, string> | null = null;
-async function getDatasetManifest(): Promise<Record<string, string> | null> {
-  if (datasetManifest) return datasetManifest;
-  try {
-    const res = await fetch(`${import.meta.env.BASE_URL}datasets/index.json`);
-    if (!res.ok) return null;
-    datasetManifest = (await res.json()) as Record<string, string>;
-  } catch (e) {
-    console.warn('[datasetMount] failed to load manifest', e);
-  }
-  return datasetManifest;
-}
-
-// Pyodide runs each cell as a script, so a bare expression (`` 2 ** 10 ``,
-// `` df.head() ``) silently produces nothing — while the identical cell in a
-// Jupyter/Colab notebook echoes its value. Restore that REPL behavior: the
-// cell's last top-level expression is wrapped in print(repr(...)), mirroring
-// how a notebook displays a cell's trailing value. Detection is done with
-// Python's own ast so assignments, control flow, def/class, and
-// already-printing cells are never touched.
-const WRAP_EXPR_SRC = `
-import ast
-
-def _wrap_bare_expr(src):
-    try:
-        tree = ast.parse(src)
-    except SyntaxError:
-        return src
-    if not tree.body:
-        return src
-    node = tree.body[-1]
-    if not isinstance(node, ast.Expr):
-        return src
-    value = node.value
-    if (
-        isinstance(value, ast.Call)
-        and (
-            (isinstance(value.func, ast.Name) and value.func.id in ('print', 'display'))
-            or (isinstance(value.func, ast.Attribute) and value.func.attr in ('show', 'display'))
-        )
-    ):
-        return src
-    # Mirror how a Jupyter/Colab cell echoes its last expression: rerun the
-    # cell but replace that trailing expression with print(repr(<expr>)).
-    # repr() gives 'hello' with quotes and escapes for strings, plain text for
-    # numbers and collections. Precise AST offsets keep same-line statements
-    # ('x = 1; 2 + 3'), multi-line expressions, and trailing comments intact
-    # (the comment lands on the line after the closing paren).
-    lines = src.splitlines(keepends=True)
-    start_off = sum(len(l) for l in lines[: node.lineno - 1]) + node.col_offset
-    expr = ast.get_source_segment(src, node) or ''
-    end_off = start_off + len(expr)
-    return src[:start_off] + 'print(repr(\\n' + expr + '\\n))' + src[end_off:]
-`;
-
-// Pyodide ships matplotlib with a canvas backend (matplotlib-pyodide) that, on
-// a real browser, renders `plt.show()` by appending a canvas to the bottom of
-// the document — then closes the figure. That places the plot at the page
-// bottom instead of in the cell, and closes figures before we can read them.
-// Before each run we force matplotlib onto the compiled Agg backend: plt.show()
-// becomes a no-op, no canvas reaches the page body, and every figure stays in
-// the Gcf manager where the post-run drain collects it as an inline PNG.
-const FIG_SHOW_PATCH_SRC = `
-import sys as _sys
-try:
-    import matplotlib as _mpl
-    try:
-        _mpl.use('Agg')
-    except Exception:
-        pass
-    # A previous cell may have died mid-figure (a NameError after
-    # plt.subplots() leaves the figure in the Gcf manager; the failed run's
-    # drain never runs). Detach those orphaned figures so THIS cell's drain
-    # renders only the figures this cell actually created.
-    _plt = _sys.modules.get('matplotlib.pyplot')
-    if _plt is not None:
-        import matplotlib._pylab_helpers as _gcf
-        for _num in list(_plt.get_fignums()):
-            _gcf.Gcf.figs.pop(_num, None)
-except Exception:
-    pass
-`;
-
-// After a cell run, collect every matplotlib figure the cell left open (Agg's
-// plt.show() is a no-op, so figures stay managed) as base64 PNGs for JS to
-// render inline. The figures are detached from the Gcf manager here so a
-// re-run doesn't accumulate stale figures. Returns a JSON string (a PyProxy
-// list does not survive the runPythonAsync boundary as a JS array).
-const FIG_DRAIN_SRC = `
-import sys as _sys
-import io as _io
-import base64 as _b64
-def _drain_figs():
-    _out = []
-    _plt = _sys.modules.get('matplotlib.pyplot')
-    if _plt is None:
-        return '[]'
-    import matplotlib._pylab_helpers as _gcf
-    for _num in list(_plt.get_fignums()):
-        _fig = _plt.figure(_num)
-        _buf = _io.BytesIO()
-        _fig.savefig(_buf, format='png', dpi=110, bbox_inches='tight')
-        _out.append(_b64.b64encode(_buf.getvalue()).decode('ascii'))
-        _gcf.Gcf.figs.pop(_num, None)
-    import json as _dj
-    return _dj.dumps(_out)
-_drain_figs()
-`;
-
-// Run a cell against a Pyodide model, route script stdout/stderr to the
-// output lines, and restore notebook-style `print(repr(...))` for trailing bare
-// expressions. Resolves false when the code was refused (js/pyodide bridge) so
-// callers can skip XP awards — a refused cell never ran, so it earns nothing.
-// Exported for unit tests; initCell wires it to the DOM.
-export interface CellRuntime {
-  appendLine(kind: 'out' | 'err', text: string): void;
-  /** Render a matplotlib figure captured after a successful cell run into the
-   *  output panel. Optional so callers that only route text (unit tests) can
-   *  omit it. */
-  appendFigure?(pngB64: string): void;
-  engine: PyodideModel;
-  /** Concatenated source of every other runnable cell on the page, so a
-   *  NameError can be distinguished from "that dataset was never loaded".
-   *  Optional so unit tests can omit it. */
-  otherCellSources?: string;
-  /** Reports which step is running so the Run button's label can say why it's
-   *  spinning ("Loading libraries…" vs "Running…") instead of a bare spinner.
-   *  Optional so unit tests can omit it. */
-  onPhase?(phase: 'packages' | 'running'): void;
-}
-
-// Some lesson cells `import seaborn`, which is not a Pyodide wheel. seaborn is
-// pure Python, so instead of rewriting the lessons we preload its Pyodide deps
-// (numpy/pandas/matplotlib/scipy/statsmodels are all in the index) and install
-// the vendored wheel from our own origin via micropip. scipy is also required
-// at runtime, not just at import time: pandas' `corr(method="spearman")`
-// imports it internally, so the deps are loaded once per page whenever ANY
-// cell on the page needs the seaborn stack — not only the cell that imports it.
-async function ensureExtraPackages(
-  engine: PyodideModel,
-  code: string,
-  pageSource: string = '',
-): Promise<void> {
-  const source = pageSource ? `${pageSource}\n${code}` : code;
-  for (const [pkg, wheelUrl] of Object.entries(EXTRA_PACKAGES)) {
-    if (extraPackagesInstalled.has(pkg)) continue;
-    if (!new RegExp(`import ${pkg}|from ${pkg}`).test(source)) continue;
-    await engine.loadPackagesFromImports(`import ${EXTRA_PACKAGE_IMPORTS}`);
-    await engine.runPythonAsync(`import micropip; await micropip.install(${JSON.stringify(wheelUrl)}, deps=False)`);
-    extraPackagesInstalled.add(pkg);
-  }
-}
-export async function runCellCode(code: string, rt: CellRuntime): Promise<boolean> {
-  rt.engine.setStdout({batched: (s: string) => rt.appendLine('out', s)});
-  rt.engine.setStderr({batched: (s: string) => rt.appendLine('err', s)});
-  rt.engine.setStdin({stdin: () => window.prompt('') ?? ''});
-  if (usesJsBridge(code)) {
-    rt.appendLine('err', m.blocked_bridge());
-    return false;
-  }
-  try {
-    const pageSource = rt.otherCellSources ?? '';
-    rt.onPhase?.('packages');
-    await ensureExtraPackages(rt.engine, code, pageSource);
-    await rt.engine.loadPackagesFromImports(code);
-    rt.onPhase?.('running');
-    // Force matplotlib onto the compiled Agg backend *before* the cell's code
-    // runs. matplotlib-pyodide's default canvas backend appends a <canvas> to
-    // the bottom of the page on plt.show() and then closes the figure, so
-    // without this the plots land at the page bottom and can't be drained.
-    // Under Agg, plt.show() is a silent no-op and figures stay in the manager.
-    await rt.engine.runPythonAsync(FIG_SHOW_PATCH_SRC);
-    const toRun = await rt.engine.runPython(WRAP_EXPR_SRC + '_wrap_bare_expr');
-    await rt.engine.runPythonAsync(toRun(code));
-    // Drain every figure the cell left open, render each inline in the output
-    // panel. Skipped on error — a failed cell renders its traceback, not
-    // half-drawn figures.
-    const pngsJson = (await rt.engine.runPythonAsync(FIG_DRAIN_SRC)) as string | undefined;
-    const pngs = typeof pngsJson === 'string' ? (JSON.parse(pngsJson) as string[]) : undefined;
-    if (Array.isArray(pngs) && pngs.length && rt.appendFigure) {
-      for (const png of pngs) rt.appendFigure(png);
-    }
-  } catch (e) {
-    const raw = e instanceof Error ? e.message : String(e);
-    let hint = friendlyError(raw);
-    // A name that should exist but hasn't been created yet most often means the
-    // dataset-loading cell at the top of the page hasn't been run. Point them
-    // there only when the missing name is literally assigned by that cell —
-    // `df = pd.read_csv(...)` — not for e.g. `np` or `plt` imports.
-    const missing = raw.match(/NameError: name '([^']+)' is not defined/)?.[1];
-    if (
-      missing &&
-      rt.otherCellSources &&
-      new RegExp(`\\b${missing}\\s*=\\s*(?:pd\\.read_csv|open\\s*\\(\\s*['"][^'"]+\\.csv)`).test(rt.otherCellSources) &&
-      !code.match(/pd\.read_csv\s*\(|open\s*\(\s*['"][^'"]+\.csv/)
-    ) {
-      hint += ` ${m.cell_load_dataset_first()}`;
-    }
-    rt.appendLine('err', hint);
-  }
-  return true;
-}
-
 // Award XP for completing a lesson run and report how much was gained and the
 // pre-award balance (the first-success toast keys off xpBefore === 0).
 export async function awardLessonXp(lessonId: string, reward?: number): Promise<{gained: number; xpBefore: number}> {
@@ -373,37 +50,6 @@ export async function awardLessonXp(lessonId: string, reward?: number): Promise<
   const xpBefore = gs.loadState().xp;
   gs.addXP(lessonId, reward);
   return {gained: gs.loadState().xp - xpBefore, xpBefore};
-}
-
-const mountedDatasets = new Set<string>();
-async function mountDatasets(engine: PyodideModel): Promise<void> {
-  const manifest = await getDatasetManifest();
-  if (!manifest) return;
-  const source = Array.from(document.querySelectorAll('[data-runnable] code'))
-    .map((el) => el.textContent ?? '')
-    .join('\n');
-  for (const {ref, shipped} of planDatasetMounts(source, manifest)) {
-    if (mountedDatasets.has(shipped)) continue;
-    try {
-      const res = await fetch(`${import.meta.env.BASE_URL}datasets/${encodeURIComponent(shipped)}`);
-      if (!res.ok) continue;
-      const data = new Uint8Array(await res.arrayBuffer());
-      // Pyodide starts in /home/pyodide — writing there (and at the root for
-      // code that uses an absolute path) makes `open('name.csv')` work with a
-      // bare filename, matching how the lesson cells reference it. Write under
-      // both the shipped name and the reference, so `StudentsPerformance.csv`
-      // vs `students-performance.csv` both work.
-      engine.FS.writeFile(`/home/pyodide/${shipped}`, data);
-      engine.FS.writeFile(`/${shipped}`, data);
-      if (ref !== shipped) {
-        engine.FS.writeFile(`/home/pyodide/${ref}`, data);
-        engine.FS.writeFile(`/${ref}`, data);
-      }
-      mountedDatasets.add(shipped);
-    } catch (e) {
-      console.warn('[datasetMount] failed to mount', shipped, e);
-    }
-  }
 }
 
 export interface InitCellDeps {
@@ -467,48 +113,74 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
     run.classList.add('cell__run--loading');
     // The busy overlay stays up for the whole run -- engine bootstrap,
     // package installs, and code execution -- not just the parts with their
-    // own progress signal. Pyodide runs on the main thread, so a slow cell
-    // genuinely blocks the page; showing nothing during that stretch reads
-    // as frozen, and the overlay's pointer-events also stop an impatient
-    // scroll/click from landing on stale content mid-run. It's dismissed
-    // before afterRun's XP toast is created (not just before the toast is
-    // awaited) -- the toast sits at a lower z-index than the overlay, so
-    // if it were created first it would render invisible, hidden behind
-    // the still-active backdrop until the overlay caught up and cleared.
-    let engine: PyodideModel;
-    dispatchPyodideEvent('pyodide:loading');
-    try {
-      engine = await (deps.loadEngine ?? py)();
-    } catch (e) {
+    // own progress signal, and regardless of which path below runs the code.
+    // It's dismissed before afterRun's XP toast is created (not just before
+    // the toast is awaited) -- the toast sits at a lower z-index than the
+    // overlay, so if it were created first it would render invisible, hidden
+    // behind the still-active backdrop until the overlay caught up and
+    // cleared.
+    const setPhaseLabel = (phase: 'packages' | 'running') => {
+      run.textContent = phase === 'packages' ? m.run_loading_packages() : m.run_loading();
+    };
+
+    let executed: boolean;
+    // A test-injected mock engine (deps.loadEngine) always means "run this
+    // on the main thread with the fake I supplied" -- a real Worker can't be
+    // meaningfully mocked that way, and the DOM-wiring test suite isn't
+    // testing worker plumbing. Cells that call input() also stay on the main
+    // thread in production: Pyodide's stdin callback is synchronous and a
+    // Worker has no way to satisfy that (see pythonGuard.usesBlockingInput).
+    if (deps.loadEngine || usesBlockingInput(src)) {
+      let engine: PyodideModel;
+      dispatchPyodideEvent('pyodide:loading');
+      try {
+        engine = await (deps.loadEngine ?? py)();
+      } catch (e) {
+        dispatchPyodideEvent('pyodide:ready');
+        console.warn('[runnable-cell] failed to load Pyodide', e);
+        appendLine('err', m.cell_engine_load_failed());
+        run.textContent = m.run_button();
+        run.disabled = false;
+        run.classList.remove('cell__run--loading');
+        return;
+      }
+      const allSource = Array.from(document.querySelectorAll('[data-runnable] code'))
+        .map((el) => el.textContent ?? '')
+        .join('\n');
+      await mountDatasets(engine, allSource);
+      const otherCellSources = Array.from(document.querySelectorAll('[data-runnable] code'))
+        .filter((el) => el !== codeEl)
+        .map((el) => el.textContent ?? '')
+        .join('\n');
+      executed = await runCellCode(src, {
+        appendLine,
+        appendFigure,
+        engine,
+        otherCellSources,
+        onPhase: (phase) => {
+          setPhaseLabel(phase);
+          dispatchPyodideEvent('pyodide:loading', {phase});
+        },
+      });
       dispatchPyodideEvent('pyodide:ready');
-      console.warn('[runnable-cell] failed to load Pyodide', e);
-      appendLine('err', m.cell_engine_load_failed());
-      run.textContent = m.run_button();
-      run.disabled = false;
-      run.classList.remove('cell__run--loading');
-      return;
+    } else {
+      const allSource = Array.from(document.querySelectorAll('[data-runnable] code'))
+        .map((el) => el.textContent ?? '')
+        .join('\n');
+      const otherCellSources = Array.from(document.querySelectorAll('[data-runnable] code'))
+        .filter((el) => el !== codeEl)
+        .map((el) => el.textContent ?? '')
+        .join('\n');
+      executed = await runInWorker(src, {allSource, otherCellSources, locale: getLocale()}, {
+        appendLine,
+        appendFigure,
+        onPhase: setPhaseLabel,
+        onLoading: (detail) => dispatchPyodideEvent('pyodide:loading', detail),
+        onProgress: (pct) => dispatchPyodideEvent('pyodide:progress', {pct}),
+        onReady: () => dispatchPyodideEvent('pyodide:ready'),
+      });
     }
-    await mountDatasets(engine);
-    const otherCellSources = Array.from(document.querySelectorAll('[data-runnable] code'))
-      .filter((el) => el !== codeEl)
-      .map((el) => el.textContent ?? '')
-      .join('\n');
-    const executed = await runCellCode(src, {
-      appendLine,
-      appendFigure,
-      engine,
-      otherCellSources,
-      onPhase: (phase) => {
-        if (phase === 'packages') {
-          run.textContent = m.run_loading_packages();
-          dispatchPyodideEvent('pyodide:loading', {phase: 'packages'});
-        } else {
-          run.textContent = m.run_loading();
-          dispatchPyodideEvent('pyodide:loading', {phase: 'running'});
-        }
-      },
-    });
-    dispatchPyodideEvent('pyodide:ready');
+
     run.textContent = m.run_button();
     run.disabled = false;
     run.classList.remove('cell__run--loading');

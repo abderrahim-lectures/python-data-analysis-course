@@ -20,3 +20,20 @@ const BRIDGE = new RegExp(
 export function usesJsBridge(src: string): boolean {
   return BRIDGE.test(src);
 }
+
+// A cell that calls input() must run on the main thread: Pyodide's stdin
+// callback is synchronous (the interpreter blocks waiting for a return
+// value), and today that's window.prompt(). A Web Worker has no window and
+// no synchronous way to ask the main thread for a value -- that needs
+// Atomics.wait() on a SharedArrayBuffer, which needs cross-origin-isolation
+// (COOP/COEP) response headers GitHub Pages cannot set. So cells using
+// input() are routed to the legacy in-page engine instead of the worker
+// (see runnable-cell.client.ts); everything else gets the non-blocking path.
+// Deliberately conservative like usesJsBridge above: a mention inside a
+// string or comment still routes to the main thread, which only costs that
+// one cell the worker's benefit, never correctness.
+const BLOCKING_INPUT = /\binput\s*\(/;
+
+export function usesBlockingInput(src: string): boolean {
+  return BLOCKING_INPUT.test(src);
+}

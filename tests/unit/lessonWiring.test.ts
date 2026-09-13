@@ -42,9 +42,21 @@ describe('runnable cells', () => {
     expect(src).toContain("document.querySelector('[data-lesson-id]')");
   });
 
+  test('routes cells that call input() to the main thread, not the worker', () => {
+    // Pyodide's stdin callback is synchronous; a Worker has no way to
+    // satisfy that without cross-origin-isolation headers GitHub Pages
+    // can't set, so those cells must stay off the worker path.
+    expect(src).toContain('usesBlockingInput(src)');
+  });
+});
+
+describe('shared Pyodide engine core', () => {
+  const src = readFileSync('src/lib/pythonRunnerCore.ts', 'utf8');
+
   test('screens code through the bridge guard before executing', () => {
-    // The guard runs inside the extracted runCellCode helper, which every Run
-    // handler delegates to — the check must precede any engine execution.
+    // The guard runs inside runCellCode, which both the main-thread path and
+    // the Worker path delegate to — the check must precede any engine
+    // execution in either case.
     const guardIdx = src.indexOf('usesJsBridge(code)');
     expect(guardIdx).toBeGreaterThan(-1);
     // Guard runs before any engine execution at the runCellCode call site.
