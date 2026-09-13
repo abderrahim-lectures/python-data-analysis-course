@@ -493,11 +493,34 @@ button { font-family: inherit; cursor: pointer; }
   white-space: pre; font: inherit; line-height: 1.6; overflow: hidden;
   border-right: 1px solid rgba(226,220,255,.12);
 }
-.cell__output { border-top: 1px solid var(--line); background: #15122a; color: #d8d0ff; padding: .6rem .9rem; font-family: ui-monospace, monospace; font-size: .9rem; }
+.cell__output {
+  border-top: 1px solid var(--line); background: #15122a; color: #d8d0ff;
+  padding: .6rem .9rem; font-family: ui-monospace, monospace; font-size: .9rem;
+  /* Revealed by JS clearing [hidden] then adding --show a frame later, so the
+     panel fades and eases in instead of snapping straight from display:none
+     to block -- on a fast cell run that snap read as a glitch, especially on
+     mobile where the sudden downward shove of everything below is more
+     noticeable in a small viewport. */
+  opacity: 0; transform: translateY(-4px);
+  transition: opacity .2s ease, transform .2s ease;
+}
+.cell__output--show { opacity: 1; transform: translateY(0); }
 .o-line { white-space: pre-wrap; padding: .1rem 0; }
 .o-line--cmd { color: #8f86c9; }
 .o-line--out { color: #d8d0ff; }
 .o-line--err { color: #ff8fa3; }
+/* Each output line/figure animates in on insert instead of popping in
+   abruptly, so streamed output (multiple lines, or a figure after them)
+   reads as progressive rather than jumpy. */
+.o-line, .o-line--fig { animation: cell-line-in .18s ease both; }
+@keyframes cell-line-in {
+  from { opacity: 0; transform: translateY(3px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cell__output { transition: none; }
+  .o-line, .o-line--fig { animation: none; }
+}
 /* Matplotlib figures rendered from `plt.show()` (drained as base64 PNG after a
    successful cell run). Block-level so an <img> doesn't sit inline with text,
    sized to the output panel; RTL pages keep figures LTR via the .o-line rule. */

@@ -42,7 +42,7 @@ export interface PyodideModel {
   loadPackagesFromImports(src: string): Promise<unknown>;
   runPython(src: string): Promise<(src: string) => string>;
   runPythonAsync(src: string): Promise<unknown>;
-  FS: {writeFile(path: string, data: Uint8Array): void};
+  FS: {writeFile(path: string, data: Uint8Array): void; mkdirTree(path: string): void};
 }
 
 type PyodideModule = {loadPyodide: (opts: {indexURL: string}) => Promise<PyodideModel>};
@@ -205,6 +205,15 @@ export async function mountDatasets(engine: PyodideModel, allSource: string): Pr
       if (ref !== shipped) {
         engine.FS.writeFile(`/home/pyodide/${ref}`, data);
         engine.FS.writeFile(`/${ref}`, data);
+      }
+      // 18-reading-files.md's pathlib cell reads `Path("data") / "scores.txt"`
+      // -- a nested path DATASET_FILE_RE never matches (only bare open()/
+      // read_csv() calls), so scores.txt is mounted flat above because some
+      // OTHER cell on the same page calls open("scores.txt") directly. Mirror
+      // it under data/ too so the pathlib cell finds it either way.
+      if (shipped === 'scores.txt') {
+        engine.FS.mkdirTree('/home/pyodide/data');
+        engine.FS.writeFile('/home/pyodide/data/scores.txt', data);
       }
       mountedDatasets.add(shipped);
     } catch (e) {

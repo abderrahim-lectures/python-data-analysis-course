@@ -22,33 +22,41 @@ const {supabaseUrl = '', supabaseKey = '', locale = 'en'} = Astro.props;
   supabaseUrl && supabaseKey && (
     <script is:inline define:vars={{supabaseUrl, supabaseKey, viewLocale: locale}}>
       (function () {
-        if (window.__pydaPageViewSent) return;
-        try {
-          window.__pydaPageViewSent = true;
-        } catch (e) {}
-        // Anonymous analytics only: default on (opt-out).
-        try {
-          if (localStorage.getItem('pda:analytics-consent') === '0') return;
-        } catch (e) { return; }
-        const body = JSON.stringify({
-          path: window.location.pathname,
-          locale: viewLocale,
-        });
-        fetch(`${supabaseUrl}/rest/v1/pageviews`, {
-          method: 'POST',
-          headers: {
-            apikey: supabaseKey,
-            Authorization: `Bearer ${supabaseKey}`,
-            'Content-Type': 'application/json',
-            Prefer: 'return=minimal',
-          },
-          body,
-          keepalive: true,
-        })
-          .then((res) => {
-            if (!res.ok) console.warn(`[pyda] pageview not recorded (${res.status})`);
+        // Client-side navigation means this same module-ish scope survives
+        // across pages (window is never torn down), so a plain "already
+        // sent" flag would record only the very first page of a visit.
+        // Track the last-recorded path instead and re-check it on every
+        // astro:page-load (fired on first load too), which is the actual
+        // per-page-view boundary now.
+        function send() {
+          var path = window.location.pathname;
+          if (window.__pydaLastPageViewPath === path) return;
+          window.__pydaLastPageViewPath = path;
+          // Anonymous analytics only: default on (opt-out).
+          try {
+            if (localStorage.getItem('pda:analytics-consent') === '0') return;
+          } catch (e) { return; }
+          var body = JSON.stringify({path: path, locale: viewLocale});
+          fetch(supabaseUrl + '/rest/v1/pageviews', {
+            method: 'POST',
+            headers: {
+              apikey: supabaseKey,
+              Authorization: 'Bearer ' + supabaseKey,
+              'Content-Type': 'application/json',
+              Prefer: 'return=minimal',
+            },
+            body: body,
+            keepalive: true,
           })
-          .catch(() => {});
+            .then(function (res) {
+              if (!res.ok) console.warn('[pyda] pageview not recorded (' + res.status + ')');
+            })
+            .catch(function () {});
+        }
+        if (!window.__pydaPageViewListenerBound) {
+          window.__pydaPageViewListenerBound = true;
+          document.addEventListener('astro:page-load', send);
+        }
       })();
     </script>
   )

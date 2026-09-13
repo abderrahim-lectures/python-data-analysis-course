@@ -240,12 +240,12 @@ describe('initRunnableCells bootstrapping', () => {
     expect(stub.queryAll['[data-runnable]'] ?? []).toEqual([]);
   });
 
-  test('registers a DOMContentLoaded autoboot when the page is loading', async () => {
+  test('registers an astro:page-load autoboot when the page is loading', async () => {
     vi.resetModules();
     const stub = stubDom();
     (stub.restore() as any).readyState = 'loading';
     await import('../../src/lib/runnable-cell.client.ts');
-    expect(stub.listeners['DOMContentLoaded']).toBeDefined();
+    expect(stub.listeners['astro:page-load']).toBeDefined();
   });
 
   afterEach(() => {

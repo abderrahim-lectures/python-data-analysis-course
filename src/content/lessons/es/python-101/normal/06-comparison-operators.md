@@ -68,8 +68,9 @@ a is c    # True  — el mismo objeto
 `==` compara los valores que se llevan; `is` compara las direcciones de memoria. Varias cajas pueden por casualidad tener la misma lista; solo hay un objeto. Los dos coinciden para cosas pequeñas (como los enteros pequeños que Python cachea) y divergen para todo lo demás, así que la regla es firme: usa `==` para contenido y reserva `is` para el único singleton que no tiene contenido que comparar, `None`:
 
 ```python
-if x is None:    # correcto
-if x == None:    # funciona, pero te haces la pregunta equivocada
+x = None
+print(x is None)   # True — correcto
+print(x == None)   # True — funciona, pero te haces la pregunta equivocada
 ```
 
 ## Comparar entre tipos

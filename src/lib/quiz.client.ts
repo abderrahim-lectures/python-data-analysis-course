@@ -59,5 +59,7 @@ export function initQuizzes(root: ParentNode = document) {
 }
 
 if (typeof document !== 'undefined') {
-  document.addEventListener('DOMContentLoaded', () => initQuizzes());
+  // astro:page-load covers both the initial load and every soft navigation
+  // under View Transitions; DOMContentLoaded only ever fires once.
+  document.addEventListener('astro:page-load', () => initQuizzes());
 }

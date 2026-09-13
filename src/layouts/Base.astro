@@ -2,6 +2,7 @@
 // Base page layout: sticky top nav (locale + theme + progress) + footer.
 import '../styles/global.css';
 import 'katex/dist/katex.min.css';
+import {ClientRouter} from 'astro:transitions';
 import Icon from '../components/Icon.astro';
 import PageViews from '../components/PageViews.astro';
 import pkg from '../../package.json';
@@ -81,6 +82,14 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://www.google-analytics.com; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'" />
+    <!-- Client-side (soft) navigation: without this, every lesson-to-lesson
+         click is a full page reload, tearing down the Pyodide Worker (and
+         every package micropip.install'd into it) even though the wasm bytes
+         themselves are cache-fast. With it, window/module state survives
+         navigation, so the engine and its loaded libraries are booted once
+         per session instead of once per page. -->
+    <ClientRouter />
+
     <script is:inline>
       (function() {
         var KEY = 'pda:locale-redirected';

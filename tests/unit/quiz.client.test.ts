@@ -102,12 +102,12 @@ describe('initQuizzes', () => {
     expect(q1opts[0].listeners.click).toBeUndefined();
   });
 
-  test('auto-hydrates quizzes on DOMContentLoaded', async () => {
+  test('auto-hydrates quizzes on astro:page-load', async () => {
     vi.resetModules();
     const {stub, quiz, q1opts} = quizFixture();
     await import('../../src/lib/quiz.client.ts');
-    expect(stub.listeners['DOMContentLoaded']).toBeDefined();
-    stub.listeners['DOMContentLoaded']();
+    expect(stub.listeners['astro:page-load']).toBeDefined();
+    stub.listeners['astro:page-load']();
     expect(quiz.dataset['data-hydrated']).toBe('1');
     expect(q1opts[0].listeners.click).toBeDefined();
   });

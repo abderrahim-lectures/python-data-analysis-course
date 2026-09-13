@@ -25,10 +25,13 @@ track: "normal"
 Lire était une porte à sens unique : `"r"` laisse entrer les données. Écrire exige le vocabulaire de l'intention, car chaque mode promet quelque chose de différent sur le sort du fichier :
 
 ```python
-open("file.txt", "r")   # lecture (par défaut)
-open("file.txt", "w")   # écriture (écrase !)
+open("file.txt", "w")   # écriture (crée le fichier, écrase s'il existe)
+open("file.txt", "r")   # lecture (par défaut — fonctionne car le fichier existe déjà)
 open("file.txt", "a")   # ajout (ajoute à la fin)
-open("file.txt", "x")   # création (erreur si le fichier existe)
+try:
+    open("file.txt", "x")   # création — erreur si le fichier existe, et il existe maintenant
+except FileExistsError as e:
+    print(e)
 ```
 
 `"w"` jette l'ancien contenu à l'instant où il ouvre ; `"a"` le garde et raccroche à la fin ; `"x"` refuse de toucher un fichier qui existe déjà. Choisissez le mode qui énonce ce que vous voulez vraiment, le fichier est détruit ou préservé selon ce choix.

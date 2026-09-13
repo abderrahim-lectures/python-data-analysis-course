@@ -68,8 +68,9 @@ a is c    # True  — the same object
 `==` compares the values carried; `is` compares the memory locations. There are several boxes that happen to hold the same list; there is only one object. The two coincide for small things (like Python's cached small integers) and diverge for everything else, so the rule of thumb is steady: use `==` for content, and reserve `is` for the single singleton which has no content to compare, `None`:
 
 ```python
-if x is None:    # correct
-if x == None:    # works, but you are asking the wrong question
+x = None
+print(x is None)   # True — correct
+print(x == None)   # True — works, but you are asking the wrong question
 ```
 
 ## Comparing across types

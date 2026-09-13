@@ -25,10 +25,13 @@ track: "normal"
 Leer era una puerta de una sola dirección: `"r"` deja pasar los datos. Escribir necesita el vocabulario de la intención, porque cada modo promete algo distinto sobre el destino del archivo:
 
 ```python
-open("file.txt", "r")   # leer (por defecto)
-open("file.txt", "w")   # escribir (¡sobrescribe!)
+open("file.txt", "w")   # escribir (crea el archivo, sobrescribe si existe)
+open("file.txt", "r")   # leer (por defecto — funciona porque el archivo ya existe)
 open("file.txt", "a")   # añadir (agrega al final)
-open("file.txt", "x")   # crear (error si el archivo existe)
+try:
+    open("file.txt", "x")   # crear — error si el archivo existe, y ahora existe
+except FileExistsError as e:
+    print(e)
 ```
 
 `"w"` arroja el contenido viejo en el instante en que abre; `"a"` lo conserva y remienda al final; `"x"` se niega a tocar un archivo que ya existe. Elige el modo que declare lo que realmente quieres, el archivo se destruye o se preserva por esa elección.

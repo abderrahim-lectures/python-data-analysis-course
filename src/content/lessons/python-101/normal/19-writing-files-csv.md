@@ -25,10 +25,13 @@ track: "normal"
 Reading was a one-way door: `"r"` lets data walk in. Writing needs the vocabulary of intention, because each mode promises something different about the file's fate:
 
 ```python
-open("file.txt", "r")   # read (default)
-open("file.txt", "w")   # write (overwrites!)
+open("file.txt", "w")   # write (creates the file, overwrites if it exists)
+open("file.txt", "r")   # read (default — works now that the file exists)
 open("file.txt", "a")   # append (adds to end)
-open("file.txt", "x")   # create (errors if file exists)
+try:
+    open("file.txt", "x")   # create — errors if the file exists, and it does now
+except FileExistsError as e:
+    print(e)
 ```
 
 `"w"` throws the old contents away the moment it opens; `"a"` keeps them and tacks on at the end; `"x"` refuses to touch a file that already exists. Choose the mode that states what you truly mean, the file is destroyed or preserved by that choice.

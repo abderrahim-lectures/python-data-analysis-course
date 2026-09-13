@@ -175,11 +175,21 @@ function initThemeToggle() {
 }
 
 if (typeof document !== 'undefined') {
-  renderXPBar();
-  initOnboarding();
+  // This module is a bundled script, so it only ever executes once (the
+  // browser's module registry caches it by URL) -- under View Transitions a
+  // soft navigation swaps in a fresh #xp-bar/#onboarding/#lvlup/theme-toggle
+  // DOM without re-running this file. astro:page-load fires on the initial
+  // load and again after every swap, so the per-page DOM binding lives
+  // there. The `document`-level listener below is bound once, since
+  // `document` itself survives a swap -- rebinding it per page-load would
+  // stack duplicate 'lesson:complete' handlers and show every XP toast N times.
   initXPToastListener();
-  initThemeToggle();
-  // Daily login: awards 5 XP and bumps the streak once per day (idempotent).
-  awardDailyLogin();
-  renderXPBar();
+  document.addEventListener('astro:page-load', () => {
+    renderXPBar();
+    initOnboarding();
+    initThemeToggle();
+    // Daily login: awards 5 XP and bumps the streak once per day (idempotent).
+    awardDailyLogin();
+    renderXPBar();
+  });
 }

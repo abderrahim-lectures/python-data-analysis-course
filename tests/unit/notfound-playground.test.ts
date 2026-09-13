@@ -33,17 +33,19 @@ function pgFixture(path: string, referrer = '') {
   const win = {__PDA404_I18N__: {notfound_play_title: 'PyDA', playground_title: 'PG'}, __PDA404_LOCALE__: 'en'};
   vi.stubGlobal('window', win);
 
-  return {notfound, pgHead, pgSection, pgCode, pgBack, eyebrow, h1, lead, dispatched};
+  return {stub, notfound, pgHead, pgSection, pgCode, pgBack, eyebrow, h1, lead, dispatched};
 }
 
-// Reset module cache so the client module's top-level init() runs again, with
-// the option to shape decodeShareCode's behavior before the page loads.
+// Reset module cache so the client module's init() runs again (bound to
+// astro:page-load, fired manually below), with the option to shape
+// decodeShareCode's behavior before the page loads.
 async function loadPage(path: string, referrer = '', shape?: (m: typeof decodeShareCode) => void) {
   const f = pgFixture(path, referrer);
   shape?.(decodeShareCode);
   vi.resetModules();
   const client = await import('../../src/lib/notFoundPlayground.client.ts');
   expect(client).toBeTruthy();
+  f.stub.listeners['astro:page-load']();
   await new Promise((r) => setTimeout(r, 0));
   return f;
 }
@@ -104,7 +106,7 @@ describe('notFoundPlayground', () => {
     expect(f.h1.textContent).toBe('PG');
   });
 
-  test('deferred init runs on DOMContentLoaded when the page is still loading', async () => {
+  test('deferred init runs on astro:page-load when the page is still loading', async () => {
     const stub = stubDom();
     (stub.restore() as any).readyState = 'loading';
     vi.stubGlobal('location', {pathname: '/playground/ZZZ', origin: 'http://localhost:4321'});
@@ -114,6 +116,6 @@ describe('notFoundPlayground', () => {
     });
     vi.resetModules();
     await import('../../src/lib/notFoundPlayground.client.ts');
-    expect(stub.listeners['DOMContentLoaded']).toBeDefined();
+    expect(stub.listeners['astro:page-load']).toBeDefined();
   });
 });

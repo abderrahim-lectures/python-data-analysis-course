@@ -69,9 +69,7 @@ async function init() {
 }
 
 if (typeof document !== 'undefined') {
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
+  // astro:page-load fires once on the initial load and again after every
+  // View Transitions swap; DOMContentLoaded only ever fires once.
+  document.addEventListener('astro:page-load', init);
 }

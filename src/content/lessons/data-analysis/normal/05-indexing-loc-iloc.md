@@ -160,8 +160,8 @@ This targeted editing is essential for data cleaning.
 **Get a specific cell value:**
 
 ```python
-# The name of the passenger at position 100
-name = df.loc[100, "Name"]
+# The name of the passenger at position 50
+name = df.loc[50, "Name"]
 print(name)
 ```
 

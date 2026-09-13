@@ -153,10 +153,10 @@ df["Age"] = df["Age"].fillna(df["Age"].median())
 
 ```python
 # Use the previous valid value to fill gaps
-df["Price"] = df["Price"].ffill()
+df["Fare"] = df["Fare"].ffill()
 
 # Use the next valid value
-df["Price"] = df["Price"].bfill()
+df["Fare"] = df["Fare"].bfill()
 ```
 
 **الملء بقيم مختلفة لكل عمود:**

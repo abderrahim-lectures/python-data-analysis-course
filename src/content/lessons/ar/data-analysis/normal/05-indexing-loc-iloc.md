@@ -160,8 +160,8 @@ df.loc[df["Age"] >= 18, "Category"] = "Adult"
 **الحصول على قيمة خلية محددة:**
 
 ```python
-# The name of the passenger at position 100
-name = df.loc[100, "Name"]
+# The name of the passenger at position 50
+name = df.loc[50, "Name"]
 print(name)
 ```
 

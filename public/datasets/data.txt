@@ -1,0 +1,4 @@
+Python was created by Guido van Rossum.
+It was first released in 1991.
+The language emphasizes readability.
+Indentation is part of the syntax.

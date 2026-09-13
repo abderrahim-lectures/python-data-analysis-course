@@ -107,6 +107,11 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
     out.hidden = false;
     clear.hidden = false;
     lines.innerHTML = '';
+    // Added a frame after clearing [hidden] (not in the same tick) so the
+    // browser paints the opacity:0/translateY starting state first -- the
+    // .cell__output--show CSS transition needs that before-and-after to
+    // animate instead of snapping straight to visible.
+    requestAnimationFrame(() => out.classList.add('cell__output--show'));
     appendLine('cmd', '$ python');
     run.disabled = true;
     run.textContent = m.run_loading();
@@ -209,7 +214,12 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
       } catch { /* offline: skip XP award */ }
     }
   }
-  clear.addEventListener('click', () => { lines.innerHTML = ''; out.hidden = true; clear.hidden = true; });
+  clear.addEventListener('click', () => {
+    lines.innerHTML = '';
+    out.hidden = true;
+    out.classList.remove('cell__output--show'); // next Run re-triggers the entrance transition
+    clear.hidden = true;
+  });
 
   // Copy source code button.
   const copyBtn = document.createElement('button');
@@ -340,7 +350,14 @@ export function initRunnableCells(root: ParentNode = document): void {
 }
 
 if (typeof document !== 'undefined') {
-  document.addEventListener('DOMContentLoaded', () => {
+  // astro:page-load fires once on the initial load and again after every
+  // client-side (View Transitions) navigation -- DOMContentLoaded only ever
+  // fires once, so cells on a page reached via soft navigation would never
+  // get wired up. Module-level state (the shared Pyodide worker, the
+  // main-thread engine promise) is untouched by a swap since the JS module
+  // itself isn't re-evaluated, so this only re-attaches DOM listeners for
+  // the cells the swap just inserted.
+  document.addEventListener('astro:page-load', () => {
     initRunnableCells();
   });
 }
