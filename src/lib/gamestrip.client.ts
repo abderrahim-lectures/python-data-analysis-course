@@ -88,12 +88,15 @@ function spawnParticles() {
   }
 }
 
+// A dismissible corner card, not a blocking modal -- it explains the XP/
+// streak/badge layer without making a first-time visitor deal with it before
+// they can reach the lesson they came for. No focus trap or Escape handling:
+// nothing here blocks interaction, so there's nothing to trap focus inside.
 function initOnboarding() {
-  const overlay = document.getElementById('onboarding');
-  if (!overlay) return;
+  const card = document.getElementById('onboarding');
+  if (!card) return;
 
-  // A blocked/absent localStorage must not take the rest of init down
-  // with it, and must not trap the visitor behind an undismissable modal.
+  // A blocked/absent localStorage must not take the rest of init down with it.
   let seen = true;
   try {
     seen = !!localStorage.getItem('pda:onboarded');
@@ -102,48 +105,18 @@ function initOnboarding() {
   }
   if (seen || new URLSearchParams(location.search).has('onboarded')) return;
 
-  const opener = document.activeElement;
   const dismiss = () => {
     try {
       localStorage.setItem('pda:onboarded', '1');
     } catch {
       // private mode
     }
-    overlay.hidden = true;
-    document.removeEventListener('keydown', onKey);
-    if (opener instanceof HTMLElement) opener.focus();
+    card.hidden = true;
   };
-  const focusable = (): HTMLElement[] => Array.from(
-    overlay.querySelectorAll<HTMLElement>('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'),
-  );
-  function onKey(e: KeyboardEvent) {
-    if (e.key === 'Escape') {
-      dismiss();
-      return;
-    }
-    if (e.key !== 'Tab') return;
-    // Keep focus inside the dialog while it is open.
-    const items = focusable();
-    if (items.length === 0) return;
-    const first = items[0];
-    const last = items[items.length - 1];
-    if (e.shiftKey && document.activeElement === first) {
-      e.preventDefault();
-      last.focus();
-    } else if (!e.shiftKey && document.activeElement === last) {
-      e.preventDefault();
-      first.focus();
-    }
-  }
 
-  overlay.hidden = false;
-  document.addEventListener('keydown', onKey);
-  overlay.addEventListener('click', (e) => {
-    if (e.target === overlay) dismiss();
-  });
+  card.hidden = false;
   document.getElementById('onboarding-start')?.addEventListener('click', dismiss);
   document.getElementById('onboarding-skip')?.addEventListener('click', dismiss);
-  focusable()[0]?.focus();
 }
 
 function initXPToastListener() {
@@ -184,12 +157,25 @@ if (typeof document !== 'undefined') {
   // `document` itself survives a swap -- rebinding it per page-load would
   // stack duplicate 'lesson:complete' handlers and show every XP toast N times.
   initXPToastListener();
-  document.addEventListener('astro:page-load', () => {
+  const boot = () => {
     renderXPBar();
     initOnboarding();
     initThemeToggle();
     // Daily login: awards 5 XP and bumps the streak once per day (idempotent).
     awardDailyLogin();
     renderXPBar();
-  });
+  };
+  document.addEventListener('astro:page-load', boot);
+  // astro:page-load fires exactly once for the initial load, on window's
+  // `load` event -- Astro's own ClientRouter script binds that listener, not
+  // this module. Nothing guarantees this deferred bundle finishes fetching
+  // and registering its own listener before `load` already fired (a cold
+  // cache, a slow connection, several chained imports each a separate
+  // request in dev): if that happens the one-time dispatch is gone before
+  // this line ever runs, and boot() would never fire on a real visitor's
+  // first page. readyState is 'complete' only after `load` has fired, so
+  // this catches exactly that case without ever double-firing boot() --
+  // either this branch runs (event already missed) or the listener above
+  // does (event still to come), never both for the same dispatch.
+  if (document.readyState === 'complete') boot();
 }

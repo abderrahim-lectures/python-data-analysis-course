@@ -286,46 +286,51 @@ button { font-family: inherit; cursor: pointer; }
 .mobilenav { display: none; }
 
 /* === Onboarding overlay === */
+/* A corner card, not a modal -- no backdrop, no inset:0, nothing blocks the
+   rest of the page. It sits above the mobile tab bar and doesn't fight the
+   RTL layout: it hugs the inline-end edge either way. */
 .onboarding {
-  position: fixed; inset: 0; z-index: 200;
-  background: rgba(0,0,0,.55); backdrop-filter: blur(8px);
-  display: flex; align-items: center; justify-content: center;
-  animation: fade-in .4s ease;
+  position: fixed; z-index: 200; bottom: 1rem; inset-inline-end: 1rem;
+  max-width: 300px; width: calc(100% - 2rem);
 }
 .onboarding[hidden] { display: none; }
 .onboarding__card {
-  background: var(--surface); border-radius: var(--radius-lg); padding: 2.5rem 2rem;
-  max-width: 400px; width: 90%; text-align: center;
-  box-shadow: var(--shadow-glow), 0 20px 60px rgba(0,0,0,.3);
-  animation: slide-up .5s cubic-bezier(.34,1.56,.64,1);
+  position: relative;
+  background: var(--surface); border-radius: var(--radius-lg); padding: 1.1rem 1.1rem 1rem;
+  box-shadow: var(--shadow-glow), 0 12px 32px rgba(0,0,0,.25);
+  animation: slide-up .4s cubic-bezier(.34,1.56,.64,1);
   border: 1px solid var(--line);
 }
-.onboarding__emoji { font-size: 3rem; margin-bottom: .75rem; animation: float-emoji 3s ease-in-out infinite; }
-@keyframes float-emoji { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
-.onboarding__title { font-size: 1.75rem; font-weight: 800; color: var(--ink-hi); margin: 0 0 .35rem; }
-.onboarding__sub { color: var(--ink-soft); font-size: 1rem; margin: 0 0 1.5rem; }
-.onboarding__steps { display: flex; flex-direction: column; gap: .65rem; margin-bottom: 1.5rem; }
+.onboarding__close {
+  position: absolute; top: .5rem; inset-inline-end: .5rem;
+  width: 26px; height: 26px; display: grid; place-items: center;
+  background: none; border: none; color: var(--ink-faint); font-size: 1.2rem; line-height: 1;
+  cursor: pointer; border-radius: var(--radius-sm);
+  transition: color var(--transition-fast), background var(--transition-fast);
+}
+.onboarding__close:hover { color: var(--ink); background: var(--surface-2); }
+.onboarding__title {
+  font-size: .95rem; font-weight: 800; color: var(--ink-hi);
+  margin: 0 1.5rem .6rem 0; display: flex; align-items: center; gap: .4rem;
+}
+.onboarding__steps { display: flex; flex-direction: column; gap: .3rem; margin: 0 0 .8rem; padding: 0; list-style: none; }
 .onboarding__step {
-  display: flex; align-items: center; gap: .75rem;
-  padding: .65rem .85rem; border-radius: var(--radius-md); background: var(--bg-soft);
-  text-align: start; font-weight: 600; font-size: .9rem; color: var(--ink);
+  font-size: .8rem; color: var(--ink-soft); font-weight: 600;
+  padding-inline-start: 1rem; position: relative;
 }
-.onboarding__step-num {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 28px; height: 28px; border-radius: var(--radius-pill);
+.onboarding__step::before { content: '•'; position: absolute; inset-inline-start: 0; color: var(--accent); }
+.onboarding__cta {
+  width: 100%; justify-content: center; min-height: 36px; padding: .4rem 1rem;
+  border-radius: var(--radius-md); border: none; cursor: pointer;
   background: linear-gradient(135deg, var(--accent), var(--accent-strong));
-  color: #fff; font-size: .78rem; font-weight: 800; flex-shrink: 0;
+  color: #fff; font-weight: 700; font-size: .85rem;
+  transition: transform var(--transition-fast);
 }
-.onboarding__cta { width: 100%; justify-content: center; }
-.onboarding__skip {
-  display: block; width: 100%; margin-top: .75rem; padding: .5rem;
-  background: none; border: none; color: var(--ink-faint); font-size: .85rem;
-  min-height: 44px; padding: .5rem 1rem; border-radius: var(--radius-md); width: 100%;
-  font-weight: 600; cursor: pointer; border-radius: var(--radius-sm);
-  transition: color var(--transition-fast);
+.onboarding__cta:hover { transform: translateY(-1px); }
+.onboarding__cta:active { transform: translateY(0); }
+@media (max-width: 900px) {
+  .onboarding { bottom: calc(1rem + 60px); } /* clears .mobilenav's fixed 60px height */
 }
-.onboarding__skip:hover { color: var(--ink); background: var(--surface-2); }
-.onboarding__skip:active { transform: translateY(1px); }
 
 /* === Floating XP toast === */
 .xp-toast-container { position: fixed; top: 72px; right: 1rem; z-index: 100; display: flex; flex-direction: column; gap: .4rem; pointer-events: none; }
@@ -345,7 +350,7 @@ button { font-family: inherit; cursor: pointer; }
 .lvlup {
   position: fixed; inset: 0; z-index: 300;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
-  pointer-events: none;
+  pointer-events: none; padding: 1.25rem;
 }
 .lvlup[hidden] { display: none; }
 .lvlup__bg {
@@ -354,6 +359,16 @@ button { font-family: inherit; cursor: pointer; }
   opacity: 0;
 }
 .lvlup--show .lvlup__bg { animation: lup-burst .7s ease forwards; }
+/* A solid panel behind the text: without it, whatever the page happens to
+   show at that instant (a card, body copy) shows straight through and
+   visually collides with "LEVEL UP" -- unreadable, not just unpolished. */
+.lvlup__card {
+  position: relative; z-index: 1;
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius-lg); padding: 1.5rem 2rem;
+  box-shadow: var(--shadow-glow), 0 20px 60px rgba(0,0,0,.35);
+  text-align: center; max-width: min(90vw, 360px);
+}
 .lvlup__ring {
   position: absolute; width: 200px; height: 200px; border-radius: 50%;
   border: 3px solid transparent; border-top-color: var(--accent); border-right-color: var(--streak);
@@ -366,15 +381,17 @@ button { font-family: inherit; cursor: pointer; }
   animation: lup-rotate 1.5s linear infinite reverse; opacity: 0;
 }
 .lvlup--show .lvlup__ring-inner { opacity: 1; }
+.lvlup__emoji { font-size: 2.25rem; margin-bottom: .25rem; animation: float-emoji 2s ease-in-out infinite; }
+@keyframes float-emoji { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
 .lvlup__text {
-  font-size: 4.5rem; font-weight: 900; color: var(--accent);
-  text-shadow: 0 0 40px rgba(124,58,237,.5), 0 0 80px rgba(255,150,0,.2);
+  font-size: clamp(2rem, 8vw, 3rem); font-weight: 900; color: var(--accent);
+  text-shadow: 0 0 30px rgba(124,58,237,.35);
   animation: lup-text .6s ease .1s both;
   font-family: var(--font-display); letter-spacing: -.02em;
-  line-height: 1;
+  line-height: 1; white-space: nowrap;
 }
 .lvlup__sub {
-  font-size: 1.15rem; font-weight: 700; color: var(--ink); margin-top: .5rem;
+  font-size: 1.05rem; font-weight: 700; color: var(--ink-soft); margin-top: .5rem;
   animation: lup-text .5s ease .3s both;
   font-family: var(--font-display);
 }
@@ -425,8 +442,6 @@ button { font-family: inherit; cursor: pointer; }
 }
 
 @media (max-width: 640px) {
-  .onboarding__card { padding: 2rem 1.5rem; }
-  .lvlup__text { font-size: 3rem; }
   .badge-grid { grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); }
   /* Four language pills plus the theme button overflowed 320px viewports. */
   .topnav__lang { padding: .2rem .45rem; font-size: .68rem; }
@@ -709,7 +724,6 @@ button { font-family: inherit; cursor: pointer; }
 .lesson-nav__done:disabled { cursor: default; }
 .btn:disabled { opacity: .5; cursor: not-allowed; filter: grayscale(.4); transform: none; }
 .btn:disabled:hover { transform: none; filter: grayscale(.4); }
-.onboarding__steps { list-style: none; padding: 0; }
 
 /* Skip link — keyboard users hit ~6 nav stops before content on every page. */
 .skip-link {

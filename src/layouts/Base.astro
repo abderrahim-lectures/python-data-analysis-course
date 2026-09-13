@@ -290,21 +290,23 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
       <slot />
     </main>
 
-    <!-- Starts hidden: it used to render visible and get hidden by JS after
-         load, so every returning visitor saw it flash on every page. -->
-    <div class="onboarding" id="onboarding" hidden role="dialog" aria-modal="true"
-      aria-labelledby="onboarding-title" aria-describedby="onboarding-sub">
+    <!-- A non-blocking corner card, not a modal: it used to be a full-screen
+         dialog that stopped a first-time visitor from reaching the lesson
+         they actually came for. It starts hidden -- it used to render
+         visible and get hidden by JS after load, so every returning visitor
+         saw it flash on every page. role="status" (not "dialog") plus no
+         focus trap means it never steals focus or blocks interaction; a
+         visitor can just start clicking around and it stays out of the way. -->
+    <div class="onboarding" id="onboarding" hidden role="status" aria-labelledby="onboarding-title">
       <div class="onboarding__card">
-        <div class="onboarding__emoji" aria-hidden="true">🚀</div>
-        <h2 class="onboarding__title" id="onboarding-title">{m.onboarding_title()}</h2>
-        <p class="onboarding__sub" id="onboarding-sub">{m.onboarding_sub()}</p>
+        <button type="button" class="onboarding__close" id="onboarding-skip" aria-label={m.onboarding_skip()}>&times;</button>
+        <p class="onboarding__title" id="onboarding-title"><span aria-hidden="true">🚀</span> {m.onboarding_title()}</p>
         <ol class="onboarding__steps">
-          {[m.onboarding_step_1(), m.onboarding_step_2(), m.onboarding_step_3()].map((step, i) => (
-            <li class="onboarding__step"><span class="onboarding__step-num" aria-hidden="true">{i + 1}</span> {step}</li>
+          {[m.onboarding_step_1(), m.onboarding_step_2(), m.onboarding_step_3()].map((step) => (
+            <li class="onboarding__step">{step}</li>
           ))}
         </ol>
-        <button type="button" class="onboarding__cta btn btn-primary" id="onboarding-start">{m.onboarding_cta()}</button>
-        <button type="button" class="onboarding__skip" id="onboarding-skip">{m.onboarding_skip()}</button>
+        <button type="button" class="onboarding__cta" id="onboarding-start">{m.onboarding_cta()}</button>
       </div>
     </div>
 
@@ -364,8 +366,11 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
     <!-- Level-up celebration overlay -->
     <div class="lvlup" id="lvlup" role="status" aria-live="polite" hidden>
       <div class="lvlup__bg"></div>
-      <div class="lvlup__text">{m.lvl_up_text()}</div>
-      <div class="lvlup__sub" id="lvlup-sub"></div>
+      <div class="lvlup__card">
+        <div class="lvlup__emoji" aria-hidden="true">🎉</div>
+        <div class="lvlup__text">{m.lvl_up_text()}</div>
+        <div class="lvlup__sub" id="lvlup-sub"></div>
+      </div>
     </div>
 
     <script>

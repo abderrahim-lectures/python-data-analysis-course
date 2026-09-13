@@ -107,7 +107,9 @@ describe('initQuizzes', () => {
     const {stub, quiz, q1opts} = quizFixture();
     await import('../../src/lib/quiz.client.ts');
     expect(stub.listeners['astro:page-load']).toBeDefined();
-    stub.listeners['astro:page-load']();
+    // The domstub's document.readyState is 'complete', so the module's own
+    // readyState guard already ran initQuizzes() once during import -- no
+    // need to fire the listener manually too.
     expect(quiz.dataset['data-hydrated']).toBe('1');
     expect(q1opts[0].listeners.click).toBeDefined();
   });

@@ -360,4 +360,13 @@ if (typeof document !== 'undefined') {
   document.addEventListener('astro:page-load', () => {
     initRunnableCells();
   });
+  // The initial astro:page-load dispatch fires on window's `load` event via
+  // Astro's own router script, not this one -- if this deferred bundle is
+  // still fetching (cold cache, slow connection) when `load` fires, that
+  // one-time event is gone before the listener above ever registers, and
+  // every cell on a real visitor's first page would stay unwired. readyState
+  // is 'complete' only after `load` has already fired, so this covers
+  // exactly that miss without ever double-firing (either this runs, or the
+  // listener does, never both for the same dispatch).
+  if (document.readyState === 'complete') initRunnableCells();
 }

@@ -16,8 +16,10 @@ function seedLocalStorage(pdaState: Record<string, unknown>) {
 }
 
 // The module binds its per-page init to astro:page-load (fired once on the
-// initial load and again after every soft navigation), so each test imports
-// it fresh and then fires that event manually.
+// initial load and again after every soft navigation). The domstub's
+// document.readyState is 'complete', so the module's own readyState guard
+// (covering a real initial dispatch missed by a slow-loading bundle) runs
+// that init immediately on import -- no need to fire the event manually.
 function setupDom() {
   const stub = stubDom();
   vi.stubGlobal('location', {search: '', href: 'http://local.test/'});
@@ -41,7 +43,6 @@ describe('gamestrip.client.ts', () => {
 
     vi.resetModules();
     await import('../../src/lib/gamestrip.client.ts');
-    stub.listeners['astro:page-load']();
 
     expect(bar.dataset.level).toBe('2');
     expect(bar.innerHTML).toContain('Lv.2');
@@ -59,7 +60,6 @@ describe('gamestrip.client.ts', () => {
 
     vi.resetModules();
     await import('../../src/lib/gamestrip.client.ts');
-    stub.listeners['astro:page-load']();
 
     const overlay = stub.elements.get('lvlup')!;
     expect(overlay.hidden).toBe(false);
@@ -79,7 +79,6 @@ describe('gamestrip.client.ts', () => {
 
     vi.resetModules();
     await import('../../src/lib/gamestrip.client.ts');
-    stub.listeners['astro:page-load']();
 
     seedLocalStorage({xp: 40, streak: 0, badges: []});
     stub.listeners['lesson:complete']?.({detail: {xp: 40}});
@@ -97,7 +96,6 @@ describe('gamestrip.client.ts', () => {
 
     vi.resetModules();
     await import('../../src/lib/gamestrip.client.ts');
-    stub.listeners['astro:page-load']();
 
     stub.listeners['lesson:complete']?.({});
     expect(container.children.length).toBe(0);
@@ -113,7 +111,6 @@ describe('gamestrip.client.ts', () => {
 
     vi.resetModules();
     await import('../../src/lib/gamestrip.client.ts');
-    stub.listeners['astro:page-load']();
 
     expect(overlay.hidden).toBe(false);
     const start = stub.elements.get('onboarding-start')!;
@@ -131,7 +128,6 @@ describe('gamestrip.client.ts', () => {
     vi.resetModules();
     vi.stubGlobal('location', {search: '?onboarded', href: 'http://local.test/?onboarded'});
     await import('../../src/lib/gamestrip.client.ts');
-    stub.listeners['astro:page-load']();
 
     expect(overlay.hidden).toBe(true);
     expect(overlay.listeners.keydown).toBeUndefined();
@@ -148,7 +144,6 @@ describe('gamestrip.client.ts', () => {
 
     vi.resetModules();
     await import('../../src/lib/gamestrip.client.ts');
-    stub.listeners['astro:page-load']();
 
     btn.listeners.click?.({});
     expect(html.dataset.theme).toBe('dark');

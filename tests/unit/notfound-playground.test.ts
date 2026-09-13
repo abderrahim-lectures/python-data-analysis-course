@@ -36,16 +36,17 @@ function pgFixture(path: string, referrer = '') {
   return {stub, notfound, pgHead, pgSection, pgCode, pgBack, eyebrow, h1, lead, dispatched};
 }
 
-// Reset module cache so the client module's init() runs again (bound to
-// astro:page-load, fired manually below), with the option to shape
-// decodeShareCode's behavior before the page loads.
+// Reset module cache so the client module's init() runs again. The domstub's
+// document.readyState is 'complete', so the module's own readyState guard
+// (covering a real initial astro:page-load dispatch missed by a slow-loading
+// bundle) fires init() immediately on import -- no need to fire the listener
+// manually here too.
 async function loadPage(path: string, referrer = '', shape?: (m: typeof decodeShareCode) => void) {
   const f = pgFixture(path, referrer);
   shape?.(decodeShareCode);
   vi.resetModules();
   const client = await import('../../src/lib/notFoundPlayground.client.ts');
   expect(client).toBeTruthy();
-  f.stub.listeners['astro:page-load']();
   await new Promise((r) => setTimeout(r, 0));
   return f;
 }
