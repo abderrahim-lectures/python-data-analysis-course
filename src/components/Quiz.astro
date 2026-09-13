@@ -55,6 +55,17 @@ const {title = m.quiz_title(), questions, xp = 10, lessonId = ''} = Astro.props;
 
 <script>
   import {m} from '../paraglide/messages.js';
+
+  // This script's content is identical on every render of this component, so
+  // under View Transitions the browser's module registry runs it only once,
+  // ever -- a soft navigation to a second lesson page would otherwise leave
+  // its quiz completely unhydrated (no click handlers, no grading). The
+  // per-element data-hydrated guard below already makes re-running this safe
+  // (a fresh page's elements never carry it), so wrapping the whole scan in
+  // astro:page-load just makes it actually run again. The readyState
+  // fallback covers the initial dispatch being missed if this deferred
+  // bundle is still loading when window's `load` event fires first.
+  function init() {
   document.querySelectorAll('[data-quiz]').forEach((el) => {
     if (el.hasAttribute('data-hydrated')) return;
     // Own-format check: only Quiz.astro blocks carry the check button.
@@ -172,6 +183,10 @@ const {title = m.quiz_title(), questions, xp = 10, lessonId = ''} = Astro.props;
       else reset();
     });
   });
+  }
+
+  document.addEventListener('astro:page-load', init);
+  if (document.readyState === 'complete') init();
 </script>
 
 <style>

@@ -196,6 +196,14 @@ const jsonLd = {
 
 <script>
   import {renderHomepage} from '../../lib/homeRender.ts';
-  renderHomepage();
+  // This script only ever executes once (the browser's module registry
+  // caches it by URL), so under View Transitions a soft navigation back to
+  // this page after visiting it once would leave the player card stale.
+  // astro:page-load fires on the initial load and again after every soft
+  // navigation; the readyState fallback covers the initial dispatch being
+  // missed if this deferred bundle is still loading when window's `load`
+  // event fires first.
+  document.addEventListener('astro:page-load', renderHomepage);
+  if (document.readyState === 'complete') renderHomepage();
 </script>
 

@@ -105,6 +105,15 @@ const prereqMapOf = (prereqs: string[]): Record<string, string> => {
 
 <script>
   import {m} from '../../paraglide/messages.js';
+
+  // This script's content is identical on every render of this component, so
+  // under View Transitions the browser's module registry runs it only once,
+  // ever -- a soft navigation to a second module page would otherwise never
+  // get its mastery chips rendered at all. astro:page-load fires on the
+  // initial load and again after every soft navigation; the readyState
+  // fallback covers the initial dispatch being missed if this deferred
+  // bundle is still loading when window's `load` event fires first.
+  function init() {
   const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-mastery]'));
   if (cards.length) {
     Promise.all([
@@ -144,6 +153,10 @@ const prereqMapOf = (prereqs: string[]): Record<string, string> => {
       });
     });
   }
+  }
+
+  document.addEventListener('astro:page-load', init);
+  if (document.readyState === 'complete') init();
 </script>
 
 <style>

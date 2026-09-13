@@ -132,6 +132,18 @@ const jsonLd = {
 <script>
   import {viewProject, completeProject, isProjectComplete, recordProjectStep, isProjectStepDone, loadState, XP} from '../../lib/gameState.ts';
 
+  // This script's content is identical on every render of this component, so
+  // under View Transitions the browser's module registry runs it only once,
+  // ever -- a soft navigation to a second project page would otherwise leave
+  // every step button, checklist, and "Mark complete" button on it dead.
+  // astro:page-load fires on the initial load and again after every soft
+  // navigation, so the per-page wiring needs to live in that handler. Each
+  // dispatch corresponds to a genuinely new DOM (a real swap happened), so
+  // this never re-runs against the same already-wired elements and can't
+  // create duplicate step buttons. The readyState fallback covers the
+  // initial dispatch being missed if this deferred bundle is still loading
+  // when window's `load` event fires first.
+  function init() {
   const article = document.querySelector('[data-project-slug]');
   const slug = article?.getAttribute('data-project-slug') ?? '';
 
@@ -284,6 +296,10 @@ const jsonLd = {
     const gained = (loadState().xp ?? 0) - xpBefore;
     document.dispatchEvent(new CustomEvent('lesson:complete', {detail: {xp: gained}}));
   });
+  }
+
+  document.addEventListener('astro:page-load', init);
+  if (document.readyState === 'complete') init();
 </script>
 
 <style>

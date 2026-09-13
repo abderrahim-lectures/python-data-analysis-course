@@ -169,29 +169,51 @@ const jsonLd = [
 
 <script>
   import {completeLesson, isLessonComplete, loadState} from '../../lib/gameState';
-  const article = document.querySelector('[data-lesson-id]');
-  const id = article?.getAttribute('data-lesson-id');
-  const reward = Number(article?.getAttribute('data-lesson-xp') || 0) || undefined;
-  const btn = document.querySelector('[data-mark-complete]') as HTMLButtonElement | null;
 
-  const markDone = () => {
+  // This script's content is identical across every lesson page (only the
+  // DOM it queries differs), so under View Transitions the browser's module
+  // registry caches and runs it only once, ever -- a soft navigation to a
+  // second lesson page reuses that already-evaluated module and never
+  // re-runs this top-level code. Binding used to happen once here at import
+  // time, which wired up the *first* lesson visited in a session and left
+  // every later one's "Mark complete" button permanently dead. astro:page-load
+  // fires on the initial load and again after every soft navigation, so the
+  // per-page binding needs to live in that handler instead.
+  function init() {
+    const article = document.querySelector('[data-lesson-id]');
+    const id = article?.getAttribute('data-lesson-id');
+    const reward = Number(article?.getAttribute('data-lesson-xp') || 0) || undefined;
+    const btn = document.querySelector('[data-mark-complete]') as HTMLButtonElement | null;
     if (!btn) return;
-    btn.textContent = btn.dataset.labelDone ?? 'Completed';
-    btn.classList.add('is-done');
-    btn.disabled = true;
-  };
 
-  if (id && isLessonComplete(id)) markDone();
+    const markDone = () => {
+      btn.textContent = btn.dataset.labelDone ?? 'Completed';
+      btn.classList.add('is-done');
+      btn.disabled = true;
+    };
 
-  btn?.addEventListener('click', (e) => {
-    e.preventDefault();
-    if (!id) return;
-    const xpBefore = loadState().xp ?? 0;
-    completeLesson(id, reward);
-    markDone();
-    const gained = (loadState().xp ?? 0) - xpBefore;
-    document.dispatchEvent(new CustomEvent('lesson:complete', {detail: {xp: gained}}));
-  });
+    if (id && isLessonComplete(id)) markDone();
+
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (!id) return;
+      const xpBefore = loadState().xp ?? 0;
+      completeLesson(id, reward);
+      markDone();
+      const gained = (loadState().xp ?? 0) - xpBefore;
+      document.dispatchEvent(new CustomEvent('lesson:complete', {detail: {xp: gained}}));
+    });
+  }
+
+  document.addEventListener('astro:page-load', init);
+  // The initial astro:page-load dispatch fires on window's `load` event via
+  // Astro's own router script, not this one -- if this deferred bundle is
+  // still fetching (cold cache, slow connection) when `load` fires, that
+  // one-time event is gone before the listener above ever registers.
+  // readyState is 'complete' only after `load` has already fired, so this
+  // covers exactly that miss without ever double-firing (either this runs,
+  // or the listener does, never both for the same dispatch).
+  if (document.readyState === 'complete') init();
 </script>
 
 <style>

@@ -639,7 +639,17 @@ const i18nData = {
       set('actlog-total', fmt(T.actlogActions, {n: actStats.totalActions}));
       renderActivityLog();
     }
-    render();
+
+    // This script's content is identical on every render of this component,
+    // so under View Transitions the browser's module registry runs it only
+    // once, ever -- a soft navigation to /progress after visiting any other
+    // page would leave every stat on this page blank/stale forever.
+    // astro:page-load fires on the initial load and again after every soft
+    // navigation; the readyState fallback covers the initial dispatch being
+    // missed if this deferred bundle is still loading when window's `load`
+    // event fires first.
+    document.addEventListener('astro:page-load', render);
+    if (document.readyState === 'complete') render();
   </script>
 </Base>
 
