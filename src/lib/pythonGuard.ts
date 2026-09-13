@@ -17,8 +17,30 @@ const BRIDGE = new RegExp(
   'm',
 );
 
+// Dynamic execution can smuggle bridge imports past the static regex above
+// (e.g. `exec("from js import window")`). Block the execution builtins
+// themselves — no lesson or playground snippet needs them.
+// Anchored on [^\w.] (not just \b) so `re.compile(...)`, `obj.eval(...)`
+// etc. are not mistaken for the bare builtins.
+const DYNAMIC_EXEC = /(?:^|[^\w.])(?:exec|eval|compile)\s*\(/;
+const BUILTIN_IMPORT = /\bbuiltins\s*\.\s*__import__\b/;
+
+// getattr(__builtins__, "ex"+"ec")(...), vars(__builtins__)["exec"](...),
+// globals()["__builtins__"], and subclass-hunting chains
+// (().__class__.__bases__[0].__subclasses__()) all reach exec/eval/import
+// without ever writing a literal "exec(" that DYNAMIC_EXEC would catch.
+// Every one of those techniques has to name the introspection hook it
+// walks through, so blocking those names outright (rather than trying to
+// enumerate every way to call them) closes the class of bypass instead of
+// one instance of it. `__import__` itself is deliberately excluded here:
+// several real projects legitimately call `__import__("pathlib")` etc.,
+// and the js/pyodide-targeted form is already precisely caught by BRIDGE
+// above, so blanket-blocking the name would break real content to guard
+// against a case that's already covered.
+const DUNDER_INTROSPECTION = /__builtins__|__loader__|__subclasses__|__globals__|__bases__|__base__|__mro__/;
+
 export function usesJsBridge(src: string): boolean {
-  return BRIDGE.test(src);
+  return BRIDGE.test(src) || DYNAMIC_EXEC.test(src) || BUILTIN_IMPORT.test(src) || DUNDER_INTROSPECTION.test(src);
 }
 
 // A cell that calls input() must run on the main thread: Pyodide's stdin

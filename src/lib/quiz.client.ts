@@ -3,6 +3,7 @@
 // into gameState.recordQuiz() so the "quiz accuracy" stat on /progress becomes
 // real instead of permanently 0%. Loaded once from Base.astro.
 import {m} from '../paraglide/messages.js';
+import {recordQuiz} from './gameState.ts';
 
 function initQuiz(quiz: Element) {
   if (quiz.hasAttribute('data-hydrated')) return;
@@ -36,8 +37,7 @@ function initQuiz(quiz: Element) {
         answered++;
         if (isCorrect) correct++;
         try {
-          const gs = await import('./gameState.ts');
-          gs.recordQuiz(isCorrect, lessonId || undefined);
+          recordQuiz(isCorrect, lessonId || undefined);
         } catch {
           // offline: skip
         }

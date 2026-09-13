@@ -36,8 +36,8 @@ describe('completeLesson', () => {
     gs.completeLesson('python-101/normal/01-printing');
 
     expect(gs.isLessonComplete('python-101/normal/01-printing')).toBe(true);
-    // 60 base; xp-100 milestone not reached by one lesson alone
-    expect(gs.xpProgress().xp).toBe(60);
+    // 10 base XP (fallback when no reward passed); xp-100 milestone not reached
+    expect(gs.xpProgress().xp).toBe(10);
   });
 
   test('is idempotent — completing twice does not double-award XP', async () => {
@@ -59,22 +59,22 @@ describe('completeLesson', () => {
 });
 
 describe('addXP (running a code cell)', () => {
-  test('awards XP for a lesson the learner has not completed yet', async () => {
+  test('awards run XP without auto-completing the lesson', async () => {
     const gs = await fresh();
     gs.addXP('python-101/normal/01-printing');
 
-    // 5 (run) + 60 (complete) = 65; xp-100 milestone not reached
-    expect(gs.xpProgress().xp).toBe(65);
-    expect(gs.isLessonComplete('python-101/normal/01-printing')).toBe(true);
+    // 5 (run only — lesson-complete is separate via the "Mark complete" button)
+    expect(gs.xpProgress().xp).toBe(5);
+    expect(gs.isLessonComplete('python-101/normal/01-printing')).toBe(false);
   });
 
-  test('running a second cell in the same lesson does not re-award completion', async () => {
+  test('running a second cell in the same lesson awards run XP each time', async () => {
     const gs = await fresh();
     gs.addXP('python-101/normal/01-printing');
     gs.addXP('python-101/normal/01-printing');
 
-    // 5 (first run) + 5 (second run) + 60 (complete, idempotent) = 70
-    expect(gs.xpProgress().xp).toBe(70);
+    // 5 (first run) + 5 (second run) = 10
+    expect(gs.xpProgress().xp).toBe(10);
   });
 });
 
@@ -119,8 +119,8 @@ describe('streaks', () => {
     const gs = await seed({streak: 2, bestStreak: 2, lastActive: daysAgo(1)});
     gs.completeLesson('python-101/normal/01-printing');
 
-    // 60 (lesson) + 15 (streak bonus) + 30 (streak-3 milestone) + 25 (xp-100 milestone)
-    expect(gs.xpProgress().xp).toBe(130);
+    // 10 (lesson) + 15 (streak bonus) + 30 (streak-3 milestone) = 55
+    expect(gs.xpProgress().xp).toBe(55);
   });
 });
 
@@ -171,7 +171,10 @@ describe('quests', () => {
 
   test('crossing 100 XP unlocks the XP milestone', async () => {
     const gs = await fresh();
-    ['01-printing','02-variables','03-data-types','04-type-conversion','05-arithmetic'].forEach((l) => gs.completeLesson(`python-101/normal/${l}`));
+    // 10 lessons * 10 XP = 100 XP, triggering xp-100 milestone (+25 bonus)
+    for (let i = 1; i <= 10; i++) {
+      gs.completeLesson(`python-101/normal/${String(i).padStart(2, '0')}-x`);
+    }
 
     expect(gs.xpProgress().xp).toBeGreaterThanOrEqual(100);
     expect(gs.questsToShow().find((q) => q.id === 'xp-100')?.done).toBe(true);
@@ -216,7 +219,7 @@ describe('activity log', () => {
     const log = gs.getActivityLog();
     const lessonEntry = log.find((e) => e.type === 'lesson-complete');
     expect(lessonEntry).toBeDefined();
-    expect(lessonEntry!.xp).toBe(60);
+    expect(lessonEntry!.xp).toBe(10);
   });
 
   test('viewing a project logs an activity entry', async () => {
@@ -672,12 +675,12 @@ describe('rank thresholds', () => {
 describe('XP milestones', () => {
   test('milestone bonus XP is added to total', async () => {
     const gs = await fresh();
-    // Two lessons (60 each) cross the xp-100 threshold, adding a 25 XP milestone
+    // Two lessons (10 each) do NOT cross the xp-100 threshold
     gs.completeLesson('python-101/normal/01-printing');
     gs.completeLesson('python-101/normal/02-variables');
 
-    // 120 base + 25 milestone bonus = 145
-    expect(gs.xpProgress().xp).toBe(145);
+    // 20 base, no milestone triggered
+    expect(gs.xpProgress().xp).toBe(20);
   });
 
   test('low XP does not trigger XP-100 milestone', async () => {
@@ -686,14 +689,14 @@ describe('XP milestones', () => {
     expect(q.find((x) => x.id === 'xp-100')?.done).toBe(false);
   });
 
-  test('completing lessons triggers xp-100 milestone', async () => {
+  test('completing lessons does not trigger xp-100 milestone at low XP', async () => {
     const gs = await fresh();
     gs.completeLesson('python-101/normal/01-printing');
     gs.completeLesson('python-101/normal/02-variables');
 
     const q = gs.questsToShow();
-    expect(q.find((x) => x.id === 'xp-100')?.done).toBe(true);
-    expect(q.find((x) => x.id === 'xp-500')?.done).toBe(false);
+    // 20 XP total, well below 100 threshold
+    expect(q.find((x) => x.id === 'xp-100')?.done).toBe(false);
   });
 });
 

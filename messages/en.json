@@ -1,5 +1,6 @@
 {
   "$schema": "https://inlang.com/schema/message-format-plugin.json",
+  "footer_architecture": "How this site works",
   "related_aria_label": "Related projects",
   "related_title": "🚀 Keep building",
   "related_lead": "Put this lesson's skills to work in a guided project:",

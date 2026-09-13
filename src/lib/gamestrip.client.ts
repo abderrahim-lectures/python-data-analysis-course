@@ -3,19 +3,9 @@
 // under the strict tsconfig (no @ts-nocheck). Runs once as a deferred module.
 import {xpProgressFor} from './levelMath.ts';
 import type {PDAState} from './gameState.ts';
-import {awardDailyLogin} from './gameState.ts';
+import {awardDailyLogin, loadState} from './gameState.ts';
 import {badgeLabel} from './badgeLabel.ts';
 import {m} from '../paraglide/messages.js';
-
-const STORAGE_KEY = 'pda:state';
-
-function readState(): Partial<PDAState> {
-  try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}') as Partial<PDAState>;
-  } catch {
-    return {};
-  }
-}
 
 function xpProgress(s: Partial<PDAState>) {
   return xpProgressFor(s.xp || 0);
@@ -33,7 +23,7 @@ let prevLevel = 0;
 function renderXPBar() {
   const bar = document.getElementById('xp-bar');
   if (!bar) return;
-  const s = readState();
+  const s = loadState();
   const {xp, level, pct, toNext} = xpProgress(s);
   const streak = s.streak || 0;
   prevLevel = parseInt(bar.dataset.level || '0');
@@ -163,7 +153,6 @@ if (typeof document !== 'undefined') {
     initThemeToggle();
     // Daily login: awards 5 XP and bumps the streak once per day (idempotent).
     awardDailyLogin();
-    renderXPBar();
   };
   document.addEventListener('astro:page-load', boot);
   // astro:page-load fires exactly once for the initial load, on window's

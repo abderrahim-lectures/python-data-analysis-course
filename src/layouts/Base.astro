@@ -1,7 +1,6 @@
 ---
 // Base page layout: sticky top nav (locale + theme + progress) + footer.
 import '../styles/global.css';
-import 'katex/dist/katex.min.css';
 import {ClientRouter} from 'astro:transitions';
 import Icon from '../components/Icon.astro';
 import PageViews from '../components/PageViews.astro';
@@ -81,7 +80,7 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://www.google-analytics.com; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://www.google-analytics.com; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests" />
     <!-- Client-side (soft) navigation: without this, every lesson-to-lesson
          click is a full page reload, tearing down the Pyodide Worker (and
          every package micropip.install'd into it) even though the wasm bytes
@@ -336,6 +335,7 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
           <h3><Icon name="globe" size={13} /> {m.footer_more_col()}</h3>
           <a href="https://github.com/abderrahim-lectures/python-data-analysis-course" target="_blank" rel="noopener noreferrer">{m.footer_github()}</a>
           <a href="https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/CHANGELOG.md" target="_blank" rel="noopener noreferrer">{m.footer_changelog()}</a>
+          <a href={`${base}architecture.html`} target="_blank" rel="noopener noreferrer">{m.footer_architecture()}</a>
         </div>
       </div>
       <div class="container footer__bottom">
@@ -346,7 +346,7 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
             <p>{m.consent_desc()}</p>
           </div>
           <label class="switch" for="consent-toggle" title={m.consent_label()}>
-            <input type="checkbox" id="consent-toggle" />
+            <input type="checkbox" id="consent-toggle" aria-label={m.consent_label()} />
             <span class="switch__track" aria-hidden="true"><span class="switch__thumb"></span></span>
           </label>
         </div>
@@ -374,26 +374,37 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
     </div>
 
     <script>
+      import {initAuth} from '../lib/supabaseAuth.ts';
       import '../lib/runnable-cell.client.ts';
       import '../lib/quiz.client.ts';
       import '../lib/gamestrip.client.ts';
+      initAuth(import.meta.env.PUBLIC_SUPABASE_URL || '', import.meta.env.PUBLIC_SUPABASE_KEY || '');
     </script>
     <PageViews locale={lang} supabaseUrl={import.meta.env.PUBLIC_SUPABASE_URL || ''} supabaseKey={import.meta.env.PUBLIC_SUPABASE_KEY || ''} />
     <script is:inline>
-      (function () {
+      // Astro's View Transitions router only ever runs an identical inline
+      // script once per session, so soft-navigating to a new page leaves its
+      // (freshly rendered) #consent-toggle checkbox with no listener and no
+      // synced state unless this re-binds on every astro:page-load too.
+      function pydaInitConsentToggle() {
         var t = document.getElementById('consent-toggle');
-        if (!t) return;
+        if (!t || t.dataset.pydaBound) return;
+        t.dataset.pydaBound = '1';
         try { t.checked = localStorage.getItem('pda:analytics-consent') !== '0'; } catch (e) {}
         t.addEventListener('change', function () {
           try { localStorage.setItem('pda:analytics-consent', t.checked ? '1' : '0'); } catch (e) {}
           location.reload();
         });
-      })();
+      }
+      document.addEventListener('astro:page-load', pydaInitConsentToggle);
+      if (document.readyState === 'complete') pydaInitConsentToggle();
     </script>
     <script is:inline>
       // RTL bidi fix: isolate LTR code tokens (e.g. generate_text()) in
       // Arabic headings/titles so trailing () , : do not mirror or reorder.
-      (function () {
+      // Same astro:page-load re-run requirement as the consent toggle above:
+      // without it, this only ever fixes the first page visited per session.
+      function pydaFixRtlBidi() {
         if (!document.documentElement || document.documentElement.dir !== 'rtl') return;
         var RE = /[A-Za-z][A-Za-z0-9_.]*\([^()]*(?:\([^()]*\)[^()]*)*\)/g;
         var t = document.title;
@@ -426,7 +437,9 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
           }
         }
         fix(document.body);
-      })();
+      }
+      document.addEventListener('astro:page-load', pydaFixRtlBidi);
+      if (document.readyState === 'complete') pydaFixRtlBidi();
     </script>
   </body>
   </html>

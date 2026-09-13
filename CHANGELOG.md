@@ -2,6 +2,25 @@
 
 All notable changes to this project are documented in this file. Format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [2.0.7] — 2026-09-13
+
+### Added
+- Supabase anonymous auth (`src/lib/supabaseAuth.ts`): each visitor signs in once per session; RLS policies on `learners`, `completions`, and `pageviews` are now keyed on `auth.uid()` instead of open `with check (true)` policies, with rate-limit triggers capping writes per user.
+- An interactive runtime architecture diagram at `/architecture.html`, linked from the footer ("How this site works").
+- View Transitions (`<ClientRouter />`) for true SPA-like soft navigation: one Pyodide Worker per session instead of a fresh engine per page.
+
+### Changed
+- Lesson/project XP now splits "run a cell" (5 XP) from "mark complete" (frontmatter `xpReward`, own quest), instead of auto-awarding both on first run.
+- CSP tightened: dropped `'unsafe-eval'` from `script-src`.
+- Onboarding is a non-blocking dismissible corner card instead of a full-screen modal; the level-up overlay is a legible card instead of oversized borderless text.
+
+### Fixed
+- Per-page inline scripts (Mark Complete, quiz, module mastery chips, project checklists, progress page, consent toggle, RTL bidi fix, homepage render) now re-bind on every `astro:page-load`, not just the first page load — Astro's View Transitions router only ever runs an identical inline/module script once per session, so every one of these silently went dead after the first soft navigation.
+- Popular-pages widget decodes percent-encoded non-ASCII path segments (e.g. Arabic route slugs) before display instead of showing raw `%D8%..` sequences.
+- `pythonGuard.ts`'s exec/eval/compile guard no longer false-positives on `re.compile(...)`.
+- Supabase rate-limit trigger's count query, previously a no-op that always evaluated to 0 or 1 regardless of actual row count.
+- Assorted lesson-content dataset/cell bugs found via a full run of every lesson's runnable cells across all four locales.
+
 ## [2.0.0] — 2026-09-07
 
 Rebuilt the site as a static **Astro** app (replacing Docusaurus/React), reworked the run-code story end to end, and completed the Real-World Projects catalog expansion.

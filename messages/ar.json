@@ -1,5 +1,6 @@
 {
   "$schema": "https://inlang.com/schema/message-format-plugin.json",
+  "footer_architecture": "كيف يعمل هذا الموقع",
   "related_aria_label": "مشاريع ذات صلة",
   "related_title": "🚀 تابع البناء",
   "related_lead": "طبق مهارات هذا الدرس في مشروع موجَّه:",

@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
 import { xpProgress, loadState, questsToShow, streakProgress, getActivityStats, getActivityLog, rankFor, RANK_EMOJIS } from '../lib/gameState.ts';
 import { computeGameStats } from '../lib/gamestats.ts';
+import { questById } from '../lib/badgeLabel.ts';
 import { getCollection } from 'astro:content';
 import {m} from '../paraglide/messages.js';
 import {learnHref, progressGuideHref, trackWord, type Locale} from '../lib/routeSegments';
@@ -74,40 +75,7 @@ const daModules = [1,2,3,4,5].map((w) => {
 });
 
 // ── Localized lookup tables (EN token → locale string) ───────────────────────
-const QUEST_KEYS: Record<string, () => string> = {
-  'first-run': () => m.progress_quest_first_run(),
-  'first-lesson': () => m.progress_quest_first_lesson(),
-  'first-project': () => m.progress_quest_first_project(),
-  'first-project-done': () => m.progress_quest_first_project_done(),
-  'first-project-step': () => m.progress_quest_first_project_step(),
-  'project-steps-10': () => m.progress_quest_project_steps_10(),
-  'project-steps-25': () => m.progress_quest_project_steps_25(),
-  'project-steps-50': () => m.progress_quest_project_steps_50(),
-  'track-python-101': () => m.progress_quest_track_python_101(),
-  'track-data-analysis': () => m.progress_quest_track_data_analysis(),
-  'streak-3': () => m.progress_quest_streak_3(),
-  'streak-7': () => m.progress_quest_streak_7(),
-  'streak-14': () => m.progress_quest_streak_14(),
-  'streak-30': () => m.progress_quest_streak_30(),
-  'xp-100': () => m.progress_quest_xp_100(),
-  'xp-500': () => m.progress_quest_xp_500(),
-  'xp-1000': () => m.progress_quest_xp_1000(),
-  'xp-2000': () => m.progress_quest_xp_2000(),
-  'xp-3000': () => m.progress_quest_xp_3000(),
-  'xp-5000': () => m.progress_quest_xp_5000(),
-  'xp-7500': () => m.progress_quest_xp_7500(),
-  'projects-5': () => m.progress_quest_projects_5(),
-  'projects-10': () => m.progress_quest_projects_10(),
-  'projects-25': () => m.progress_quest_projects_25(),
-  'projects-50': () => m.progress_quest_projects_50(),
-  'first-challenge': () => m.progress_quest_first_challenge(),
-  'challenges-10': () => m.progress_quest_challenges_10(),
-  'challenges-25': () => m.progress_quest_challenges_25(),
-  'challenges-50': () => m.progress_quest_challenges_50(),
-  'all-python': () => m.progress_quest_all_python(),
-  'all-data': () => m.progress_quest_all_data(),
-};
-const questLabels = Object.fromEntries(quests.map((q) => [q.id, QUEST_KEYS[q.id] ? QUEST_KEYS[q.id]() : q.label]));
+const questLabels = Object.fromEntries(quests.map((q) => [q.id, questById[q.id] ? questById[q.id]() : q.label]));
 const questEn2Lc = Object.fromEntries(quests.map((q) => [q.label, questLabels[q.id] ?? q.label]));
 
 const rankNames: Record<string, string> = {
@@ -458,10 +426,12 @@ const i18nData = {
       'lesson-complete': '✅',
       'project-view': '👁️',
       'project-complete': '🏆',
+      'project-step': '🔧',
       'quiz': '❓',
       'daily-login': '🌅',
       'streak': '🔥',
       'milestone': '🎖️',
+      'challenge': '🧩',
     };
 
     const T = {xpUnit: XP_UNIT, toNext: TO_NEXT, pctDone: PCT_DONE, xpEarned: XP_EARNED, actlogActions: ACTIONS, correctCount: CORRECT_COUNT, ratio: RATIO, streakDays: STREAK_DAYS, sessionLessons: SESSION_LESSONS};
@@ -585,10 +555,20 @@ const i18nData = {
       if (milestones) {
         const done = quests.filter((q) => q.done).slice(0, 6);
         const locked = quests.filter((q) => !q.done).slice(0, 3);
-        milestones.innerHTML = [
-          ...done.map((q) => `<span class="badge badge--success">✅ ${QUEST_LABELS[q.id] ?? q.label}</span>`),
-          ...locked.map((q) => `<span class="badge badge--locked">🔒 ${QUEST_LABELS[q.id] ?? q.label}</span>`),
-        ].join('');
+        // Build with createElement/textContent rather than innerHTML: q.label
+        // falls back to whatever's in localStorage state for any quest id
+        // not in the known-labels map, and that fallback string must never
+        // be interpreted as markup.
+        const badge = (q: {id: string; label: string}, cls: string, icon: string) => {
+          const span = document.createElement('span');
+          span.className = cls;
+          span.textContent = `${icon} ${QUEST_LABELS[q.id] ?? q.label}`;
+          return span;
+        };
+        milestones.replaceChildren(
+          ...done.map((q) => badge(q, 'badge badge--success', '✅')),
+          ...locked.map((q) => badge(q, 'badge badge--locked', '🔒')),
+        );
       }
 
       // Improvement report (merged in from the old /stats page).

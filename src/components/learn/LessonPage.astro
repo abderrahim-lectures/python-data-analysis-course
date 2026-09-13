@@ -1,6 +1,7 @@
 ---
 // Shared lesson page for locale learn trees, e.g. /ar/تعلم/python-101/hard/lessons/[lesson].
 import {getCollection, render, type CollectionEntry} from 'astro:content';
+import 'katex/dist/katex.min.css';
 import Base from '../../layouts/Base.astro';
 import Quiz from '../Quiz.astro';
 import RelatedProjects from './RelatedProjects.astro';
@@ -135,7 +136,7 @@ const jsonLd = [
     )}
 
     {hasQuiz && quiz.length > 0 && (
-      <Quiz questions={quiz} xp={10} lessonId={lessonId} />
+      <Quiz questions={quiz} xp={5} lessonId={lessonId} />
     )}
 
     {tags.length > 0 && (

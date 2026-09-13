@@ -63,7 +63,21 @@ const {supabaseUrl = '', supabaseKey = ''} = Astro.props;
               const a = document.createElement('a');
               a.className = 'popular-pages__link';
               a.href = path;
-              a.textContent = trimmed.replace(/-/g, ' ').replace(/\//g, ' › ');
+              // url.pathname is always percent-encoded (unlike location.pathname,
+              // which browsers show decoded), so non-ASCII segments like the
+              // Arabic route slugs must be decoded per-segment before display.
+              a.textContent = trimmed
+                .split('/')
+                .map((seg) => {
+                  try {
+                    return decodeURIComponent(seg);
+                  } catch {
+                    return seg;
+                  }
+                })
+                .join('/')
+                .replace(/-/g, ' ')
+                .replace(/\//g, ' › ');
               const views = document.createElement('span');
               views.className = 'popular-pages__views';
               views.textContent = String(row.views);

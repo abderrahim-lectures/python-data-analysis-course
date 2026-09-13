@@ -24,6 +24,7 @@ import {
   type CellRuntime,
 } from './pythonRunnerCore.ts';
 import {runInWorker} from './pyodideWorkerClient.ts';
+import {addXP, loadState} from './gameState.ts';
 
 // Re-exported for unit tests, which import these from this module rather
 // than pythonRunnerCore.ts directly (kept stable across the worker-migration
@@ -43,13 +44,15 @@ function dispatchPyodideEvent(name: string, detail?: unknown): void {
   window.dispatchEvent(new CustomEvent(name, detail === undefined ? undefined : {detail}));
 }
 
-// Award XP for completing a lesson run and report how much was gained and the
+// Award XP for running a code cell and report how much was gained and the
 // pre-award balance (the first-success toast keys off xpBefore === 0).
-export async function awardLessonXp(lessonId: string, reward?: number): Promise<{gained: number; xpBefore: number}> {
-  const gs = await import('./gameState.ts');
-  const xpBefore = gs.loadState().xp;
-  gs.addXP(lessonId, reward);
-  return {gained: gs.loadState().xp - xpBefore, xpBefore};
+// gained comes straight from addXP's own atomic before/after, not a second
+// loadState() call here -- two overlapping runs could otherwise interleave
+// between this function's own reads and report the other run's gain.
+export async function awardLessonXp(lessonId: string): Promise<{gained: number; xpBefore: number}> {
+  const xpBefore = loadState().xp;
+  const {gained} = addXP(lessonId);
+  return {gained, xpBefore};
 }
 
 export interface InitCellDeps {
@@ -196,7 +199,7 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
     if (executed && !awarded && lessonId) {
       awarded = true;
       try {
-        const {gained, xpBefore} = await awardLessonXp(lessonId, lessonReward);
+        const {gained, xpBefore} = await awardLessonXp(lessonId);
         cell.dispatchEvent(new CustomEvent('lesson:complete', {bubbles: true, detail: {lessonId, xp: gained}}));
         if (xpBefore === 0) {
           const style = document.createElement('style');

@@ -6,9 +6,10 @@
 //
 // Gamification: the client script below turns every `## Step N: ...` heading
 // into a clearable "step" (recordProjectStep, +15 XP) and the article into a
-// mark-done flow (completeProject, +100 XP + quests). This is the single home
-// for that wiring -- content files just write `## Step N:` headings.
+// mark-done flow (completeProject, frontmatter xpReward + quests). This is the
+// single home for that wiring -- content files just write `## Step N:` headings.
 import {render, type CollectionEntry} from 'astro:content';
+import 'katex/dist/katex.min.css';
 import Base from '../../layouts/Base.astro';
 import ProjectArt from '../ProjectArt.astro';
 import {m} from '../../paraglide/messages.js';
@@ -35,9 +36,9 @@ const dir = locale === 'ar' ? 'rtl' : 'ltr';
 const hasAlternates = Astro.props.hasAlternates ?? true;
 const base = import.meta.env.BASE_URL;
 
-const {title, description, difficulty, estimatedMinutes, tags} = entry.data;
+const {title, description, difficulty, estimatedMinutes, tags, xpReward} = entry.data;
 const {Content} = await render(entry);
-const xpAward = XP.PROJECT_COMPLETE;
+const xpAward = xpReward ?? XP.PROJECT_COMPLETE;
 
 // Clean slug: strip the locale prefix and any frontmatter-override
 // /projects/ prefix so it matches gameState keys and hrefs (e.g. an EN file
@@ -99,7 +100,7 @@ const jsonLd = {
     <ProjectArt slug={slug} class="hero-art" />
   </div>
 
-  <article class="container lesson-content project-article" data-project-slug={slug} data-step-label={m.mark_complete()} data-cleared={m.project_step_cleared()} data-step-xp={String(XP.PROJECT_STEP)} data-step-check-hint={m.project_checklist_hint({n: XP.PROJECT_STEP})}>
+  <article class="container lesson-content project-article" data-project-slug={slug} data-project-xp={String(xpAward)} data-step-label={m.mark_complete()} data-cleared={m.project_step_cleared()} data-step-xp={String(XP.PROJECT_STEP)} data-step-check-hint={m.project_checklist_hint({n: XP.PROJECT_STEP})}>
     <header class="project-head">
       <div class="project-head__meta">
         <span class="project-head__diff" style={`color:${diffText}`}>{m[diffLabel]()}</span>
@@ -146,6 +147,7 @@ const jsonLd = {
   function init() {
   const article = document.querySelector('[data-project-slug]');
   const slug = article?.getAttribute('data-project-slug') ?? '';
+  const xpReward = Number(article?.getAttribute('data-project-xp')) || undefined;
 
   // ── project-view XP ──────────────────────────────────────────────
   if (slug) viewProject(slug);
@@ -291,7 +293,7 @@ const jsonLd = {
   btn?.addEventListener('click', () => {
     if (!slug) return;
     const xpBefore = loadState().xp ?? 0;
-    completeProject(slug);
+    completeProject(slug, xpReward);
     markDone();
     const gained = (loadState().xp ?? 0) - xpBefore;
     document.dispatchEvent(new CustomEvent('lesson:complete', {detail: {xp: gained}}));
