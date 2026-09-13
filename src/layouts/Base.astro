@@ -225,7 +225,7 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
         // timer spans every phase of a run (loading/packages/running all
         // fire 'pyodide:loading' without an intervening 'ready'), so it
         // still won't flash even if the run is slow only in a later phase.
-        const BUSY_SHOW_DELAY_MS = 500;
+        const BUSY_SHOW_DELAY_MS = 200;
         let busyShowTimer = null;
         window.addEventListener('pyodide:loading', (e) => {
           const phase = e.detail && e.detail.phase;
