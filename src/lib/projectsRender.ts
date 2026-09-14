@@ -1,10 +1,19 @@
 export function initProjectsFinder() {
+  // This is bound to the global `astro:page-load` event, which fires on
+  // every soft navigation site-wide, not just navigations to /projects --
+  // and since `document` persists across soft navs, that binding stays
+  // registered for the rest of the session once first loaded. Without this
+  // guard, every subsequent navigation to any other page throws here (the
+  // old `!` non-null assertion crashed immediately in setView()'s
+  // `grid.className = ...`), and — because the throw happens mid-callback —
+  // leaves the ClientRouter's own transition sequencing half-finished too.
+  const grid = document.getElementById('project-grid');
+  if (!grid) return;
   const search = document.getElementById('project-search') as HTMLInputElement | null;
   const tagButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('.tag-pill'));
   const diffButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('.diff-pill'));
   const viewButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('.view-btn'));
   const cards = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-project]'));
-  const grid = document.getElementById('project-grid')!;
   const countEl = document.getElementById('project-count');
   const emptyEl = document.getElementById('project-empty');
   const emptyQueryEl = document.getElementById('project-empty-query');
