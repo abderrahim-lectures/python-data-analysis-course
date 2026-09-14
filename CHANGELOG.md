@@ -2,6 +2,11 @@
 
 All notable changes to this project are documented in this file. Format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [2.0.11] — 2026-09-14
+
+### Fixed
+- "Most viewed pages" showed the same page twice with its views split across two rows (e.g. "Learn" appearing at both rank 2 and rank 4) — `popular_pages()` grouped by the raw `path` column with no normalization, so `/learn` and `/learn/` counted as separate pages competing independently for one of only 10 slots, uncorrectable client-side after the `LIMIT`. New migration groups by the trailing-slash-stripped path instead; `PageViews.astro` now also records paths pre-normalized going forward. `schema.sql` brought back in sync with this and the earlier locale-root exclusion (migration 008), which it had also drifted out of sync with. (#319)
+
 ## [2.0.10] — 2026-09-14
 
 ### Fixed

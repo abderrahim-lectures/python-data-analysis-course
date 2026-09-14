@@ -80,17 +80,23 @@ create policy "pageviews_select_social" on pageviews
 -- ── popular_pages RPC ─────────────────────────────────────────
 -- Aggregate page views into a top-N ranking over the last N days.
 -- Callable as anon via PostgREST: GET /rest/v1/rpc/popular_pages?days=30
+-- Excludes locale-root paths ("/", "/ar/", "/es/", "/fr/") before the LIMIT
+-- so they can't crowd out real content (see migration 008), and groups by
+-- the trailing-slash-stripped path so "/learn" and "/learn/" are counted as
+-- the same page instead of splitting one page's views across two rows that
+-- each independently compete for a top-10 slot (see migration 011).
 
 create or replace function popular_pages(days int default 30)
 returns table (path text, views bigint, last_seen timestamptz)
 language sql stable security invoker set search_path = public
 as $$
-  select pageviews.path,
+  select regexp_replace(pageviews.path, '/+$', '') as path,
          count(*)::bigint as views,
          max(pageviews.created_at) as last_seen
     from pageviews
    where pageviews.created_at > now() - make_interval(days => days)
-   group by pageviews.path
+     and pageviews.path !~ '^/(ar|es|fr)?/?$'
+   group by regexp_replace(pageviews.path, '/+$', '')
    order by views desc
    limit 10;
 $$;
