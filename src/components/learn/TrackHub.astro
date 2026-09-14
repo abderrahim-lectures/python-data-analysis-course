@@ -37,7 +37,7 @@ const totalMinutes = allLessons
 const totalHours = Math.round(totalMinutes / 60);
 const trackXpPerLesson = track === 'hard' ? 150 : 100;
 
-const diffColor = (d: string) => d === 'beginner' ? 'var(--success)' : d === 'intermediate' ? 'var(--streak-text)' : 'var(--bad)';
+const diffColorCls = (d: string) => d === 'beginner' ? 'diff-color-beginner' : d === 'intermediate' ? 'diff-color-intermediate' : 'diff-color-advanced';
 const arrow = locale === 'ar' ? '←' : '→';
 ---
 
@@ -76,7 +76,7 @@ const arrow = locale === 'ar' ? '←' : '→';
             <h2>{mod.data.title}</h2>
             <p>{mod.data.description}</p>
             <div class="module-card__meta">
-              <span style={`color:${diffColor(mod.data.difficulty)}`}>{m[`difficulty_${mod.data.difficulty}`]()}</span>
+              <span class={diffColorCls(mod.data.difficulty)}>{m[`difficulty_${mod.data.difficulty}`]()}</span>
               <span>📖 {lessonCount}</span>
               <span>⏱ ~{Math.round(totalMin / 60)}h</span>
             </div>

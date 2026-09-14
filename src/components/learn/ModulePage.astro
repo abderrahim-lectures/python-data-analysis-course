@@ -35,7 +35,7 @@ const prevModule = moduleIdx > 0 ? sortedModules[moduleIdx - 1] : null;
 const nextModule = moduleIdx >= 0 && moduleIdx < sortedModules.length - 1 ? sortedModules[moduleIdx + 1] : null;
 
 const totalMinutes = moduleLessons.reduce((sum, l) => sum + (l.data.estimatedMinutes ?? 15), 0);
-const diffColor = difficulty === 'beginner' ? 'var(--success-text)' : difficulty === 'intermediate' ? 'var(--streak-text)' : 'var(--bad-text)';
+const diffTextCls = difficulty === 'beginner' ? 'diff-text-beginner' : difficulty === 'intermediate' ? 'diff-text-intermediate' : 'diff-text-advanced';
 const modulesPath = learnHref(locale, base, section, trackWord(locale, track), MODULE_WORDS[locale], '').replace(/^\/+/, '').replace(/\/$/, '');
 const arrow = locale === 'ar' ? '←' : '→';
 const trackLessons = allLessons.filter((e) => idInLocale(locale, e.id) && e.id.includes(trackPath));
@@ -61,7 +61,7 @@ const prereqMapOf = (prereqs: string[]): Record<string, string> => {
     <div class="module-head__icon">{icon}</div>
     <div class="module-head__info">
       <div class="module-head__meta">
-        <span class="module-head__diff" style={`color:${diffColor}`}>{m[`difficulty_${difficulty}`]()}</span>
+        <span class={`module-head__diff ${diffTextCls}`}>{m[`difficulty_${difficulty}`]()}</span>
         <span class="module-head__time">{totalMinutes >= 60 ? `~${Math.round(totalMinutes / 60)}h` : m.minutes_label({n: totalMinutes})}</span>
         <span class="module-head__count">📖 {moduleLessons.length} {m.module_lessons_label()}</span>
       </div>
@@ -80,7 +80,7 @@ const prereqMapOf = (prereqs: string[]): Record<string, string> => {
     <div class="lessons-grid">
       {moduleLessons.map((lesson, i) => {
         const lDiff = lesson.data.difficulty ?? 'beginner';
-        const lDiffColor = lDiff === 'beginner' ? 'var(--success)' : lDiff === 'intermediate' ? 'var(--streak-text)' : 'var(--bad)';
+        const lDiffColorCls = lDiff === 'beginner' ? 'diff-color-beginner' : lDiff === 'intermediate' ? 'diff-color-intermediate' : 'diff-color-advanced';
         return (
           <a class="lesson-card" href={lessonHref(locale, base, section, track, lesson.id.split('/').pop()!)} data-mastery={`${trackPath}/${lesson.id.split('/').pop()}`} data-prereqs={JSON.stringify(prereqMapOf(lesson.data.prerequisites))}>
             <span class="lesson-card__num">{i + 1}</span>
@@ -88,7 +88,7 @@ const prereqMapOf = (prereqs: string[]): Record<string, string> => {
               <span class="lesson-card__title">{lesson.data.title}</span>
               <span class="lesson-card__desc">{lesson.data.description}</span>
               <div class="lesson-card__meta">
-                <span style={`color:${lDiffColor}`}>{({beginner: m.difficulty_beginner(), intermediate: m.difficulty_intermediate(), advanced: m.difficulty_advanced()})[lDiff] ?? lDiff}</span>
+                <span class={lDiffColorCls}>{({beginner: m.difficulty_beginner(), intermediate: m.difficulty_intermediate(), advanced: m.difficulty_advanced()})[lDiff] ?? lDiff}</span>
                 <span>{m.minutes_label({n: lesson.data.estimatedMinutes})}</span>
                 <span>⚡ +{lesson.data.xpReward} XP</span>
               </div>

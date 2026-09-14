@@ -6,15 +6,24 @@ interface Props {
   particles?: boolean;
 }
 const {scene = 'lab', height = 340, particles = true} = Astro.props;
+// Bucketed to the nearest 20px instead of a literal style="--sh:{height}px"
+// -- CSP's style-src can't allow-list an arbitrary per-instance inline
+// style with a hash, so this picks one of a small set of .scene--hN classes
+// defined below instead. (This also happens to fix a pre-existing bug:
+// style="--sh:${height}px" was a plain double-quoted attribute, not an
+// Astro expression, so it was never actually being interpolated -- every
+// scene rendered with the literal string "--sh:${height}px" as its style
+// attribute, which browsers discard as invalid.)
+const heightBucket = Math.max(100, Math.min(420, Math.round(height / 20) * 20));
 ---
 
-<div class="scene" style="--sh:${height}px" data-scene={scene}>
+<div class={`scene scene--h${heightBucket}`} data-scene={scene}>
   <div class="scene__gradient" aria-hidden="true"></div>
   <div class="scene__grade" aria-hidden="true"></div>
   <div class="scene__scrim" aria-hidden="true"></div>
   {particles && (
     <div class="scene__particles" aria-hidden="true">
-      {Array.from({length: 16}).map((_, i) => <span style={`--i:${i}`}></span>)}
+      {Array.from({length: 16}).map((_, i) => <span class={`i${i}`}></span>)}
     </div>
   )}
   <div class="scene__vignette" aria-hidden="true"></div>
@@ -31,6 +40,13 @@ const {scene = 'lab', height = 340, particles = true} = Astro.props;
     border: 1px solid var(--line);
     box-shadow: var(--shadow-md);
   }
+  .scene--h100 { --sh: 100px; } .scene--h120 { --sh: 120px; } .scene--h140 { --sh: 140px; } .scene--h160 { --sh: 160px; }
+  .scene--h180 { --sh: 180px; } .scene--h200 { --sh: 200px; } .scene--h220 { --sh: 220px; } .scene--h240 { --sh: 240px; }
+  .scene--h260 { --sh: 260px; } .scene--h280 { --sh: 280px; } .scene--h300 { --sh: 300px; } .scene--h320 { --sh: 320px; }
+  .scene--h340 { --sh: 340px; } .scene--h360 { --sh: 360px; } .scene--h380 { --sh: 380px; } .scene--h400 { --sh: 400px; }
+  .scene--h420 { --sh: 420px; }
+  .i0{--i:0} .i1{--i:1} .i2{--i:2} .i3{--i:3} .i4{--i:4} .i5{--i:5} .i6{--i:6} .i7{--i:7}
+  .i8{--i:8} .i9{--i:9} .i10{--i:10} .i11{--i:11} .i12{--i:12} .i13{--i:13} .i14{--i:14} .i15{--i:15}
   .scene__gradient, .scene__grade, .scene__scrim, .scene__vignette { position:absolute; inset:0; }
   .scene__slot { position:relative; z-index:3; height:100%; display:flex; align-items:flex-end; justify-content:center; }
 

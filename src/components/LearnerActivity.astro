@@ -77,9 +77,15 @@ const {locale = 'en', supabaseUrl = '', supabaseKey = ''} = Astro.props;
           async function count() {
             try {
               var c = new Date(Date.now() - 60000).toISOString();
-              var r = await authedFetch(URL + '/rest/v1/learners?last_seen=gt.' + encodeURIComponent(c) + '&select=id', {});
-              var d = await r.json();
-              return Array.isArray(d) ? d.length : 0;
+              // Prefer: count=exact + a 0-row range asks PostgREST for just
+              // the Content-Range total, not the matching rows themselves --
+              // this widget only ever needs the number, not the row bodies.
+              var r = await authedFetch(URL + '/rest/v1/learners?last_seen=gt.' + encodeURIComponent(c) + '&select=id', {
+                headers: {Prefer: 'count=exact', Range: '0-0'},
+              });
+              var range = r.headers.get('content-range'); // "0-0/N"
+              var total = range ? parseInt(range.split('/')[1], 10) : NaN;
+              return Number.isFinite(total) ? total : 0;
             } catch (e) { return 0; }
           }
           async function refresh() {

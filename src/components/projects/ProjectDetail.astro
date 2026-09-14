@@ -49,7 +49,7 @@ const rawSlug = entry.id.replace(/^(ar|es|fr)\//, '');
 const slug = rawSlug.replace(/^\/?projects\//, '');
 const diff = difficulty ?? 'beginner';
 const diffLabel = `difficulty_${diff}` as 'difficulty_beginner' | 'difficulty_intermediate' | 'difficulty_advanced';
-const diffText = diff === 'beginner' ? 'var(--success-text)' : diff === 'intermediate' ? 'var(--streak-text)' : 'var(--bad-text)';
+const diffTextCls = diff === 'beginner' ? 'diff-text-beginner' : diff === 'intermediate' ? 'diff-text-intermediate' : 'diff-text-advanced';
 // ZPD rung: full guidance on the first projects, freestyle on the capstones.
 // Explicit frontmatter wins; otherwise difficulty is the natural proxy.
 const scaffold = entry.data.scaffold ?? (diff === 'advanced' ? 'open' : diff === 'intermediate' ? 'partial' : 'full');
@@ -103,7 +103,7 @@ const jsonLd = {
   <article class="container lesson-content project-article" data-project-slug={slug} data-project-xp={String(xpAward)} data-step-label={m.mark_complete()} data-cleared={m.project_step_cleared()} data-step-xp={String(XP.PROJECT_STEP)} data-step-check-hint={m.project_checklist_hint({n: XP.PROJECT_STEP})}>
     <header class="project-head">
       <div class="project-head__meta">
-        <span class="project-head__diff" style={`color:${diffText}`}>{m[diffLabel]()}</span>
+        <span class={`project-head__diff ${diffTextCls}`}>{m[diffLabel]()}</span>
         <span class="project-head__scaffold project-head__scaffold--{scaffold}">{m[scaffoldKey]()}</span>
         {estimatedMinutes && <span class="project-head__time">{m.minutes_label({n: estimatedMinutes})}</span>}
         <span class="project-head__xp">⚡ +{xpAward} XP</span>
@@ -317,7 +317,7 @@ const jsonLd = {
   .project-head__scaffold--partial { color: var(--streak-text); background: var(--warn-soft); border: 1px solid var(--warn); }
   .project-head__scaffold--open { color: var(--accent-text); background: var(--accent-soft); border: 1px solid var(--accent); }
   .project-content :global(h2.is-step-done) { color: var(--success-text); position: relative; }
-  .project-content :global(h2.is-step-done::after) {
+  .project-content :global(h2.is-step-done)::after {
     content: '✅ ' attr(data-step-cleared) ' · +' attr(data-step-xp) ' XP'; font-size: .72rem; font-weight: 700;
     margin-inline-start: .5rem; color: var(--success-text); vertical-align: middle;
   }

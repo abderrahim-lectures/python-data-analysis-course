@@ -1,5 +1,6 @@
 import {xpProgress, streakProgress, loadState, rankFor, RANK_EMOJIS} from './gameState.ts';
 import {TRACKS} from './gamestats.ts';
+import {setPctWidth} from './pctWidth.ts';
 
 const TRACK_TOTAL = Object.fromEntries(TRACKS.map((t) => [t.id, t.total]));
 
@@ -18,7 +19,7 @@ export function renderHomepage() {
   if (levelEl) levelEl.textContent = String(xp.level);
   if (xpEl) xpEl.textContent = String(xp.xp);
   if (xpnextEl) xpnextEl.textContent = String(xp.toNext);
-  if (xpfillEl) xpfillEl.style.width = xp.pct + '%';
+  setPctWidth(xpfillEl, xp.pct);
   if (rankEl) rankEl.innerHTML = `<span class="badge badge--streak">${RANK_EMOJIS[rank] ?? '🌱'} ${rank}</span>`;
 
   const gsLevel = document.getElementById('gs-level-val');
@@ -41,6 +42,6 @@ export function renderHomepage() {
   const dataDone = Object.keys(s.lessonsCompleted || {}).filter((k: string) => k.includes('data-analysis')).length;
   const pythonFill = document.getElementById('hub-python') as HTMLElement | null;
   const dataFill = document.getElementById('hub-data') as HTMLElement | null;
-  if (pythonFill) pythonFill.style.width = (pythonDone / TRACK_TOTAL['python-101'] * 100) + '%';
-  if (dataFill) dataFill.style.width = (dataDone / TRACK_TOTAL['data-analysis'] * 100) + '%';
+  setPctWidth(pythonFill, (pythonDone / TRACK_TOTAL['python-101']) * 100);
+  setPctWidth(dataFill, (dataDone / TRACK_TOTAL['data-analysis']) * 100);
 }

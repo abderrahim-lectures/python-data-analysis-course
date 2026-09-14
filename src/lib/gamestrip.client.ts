@@ -6,6 +6,7 @@ import type {PDAState} from './gameState.ts';
 import {awardDailyLogin, loadState} from './gameState.ts';
 import {badgeLabel} from './badgeLabel.ts';
 import {m} from '../paraglide/messages.js';
+import {setPctWidth} from './pctWidth.ts';
 
 function xpProgress(s: Partial<PDAState>) {
   return xpProgressFor(s.xp || 0);
@@ -31,10 +32,11 @@ function renderXPBar() {
   bar.innerHTML = `
     <div class="xp-bar" title="${m.level_label()} ${level} · ${xp} XP · ${streakEmoji(streak)}">
       <span class="xp-bar__level">Lv.${level}</span>
-      <div class="xp-bar__track"><div class="xp-bar__fill" style="width:${pct}%"></div></div>
+      <div class="xp-bar__track"><div class="xp-bar__fill" id="xp-bar-fill"></div></div>
       <span class="xp-bar__streak">${streakEmoji(streak)}</span>
       ${toNext <= 20 && xp > 0 ? `<span class="xp-bar__milestone">${toNext} XP!</span>` : ''}
     </div>`;
+  setPctWidth(document.getElementById('xp-bar-fill'), pct);
   if (prevLevel && level > prevLevel) {
     showLevelUp(level, xp, s.badges || []);
   }
@@ -59,21 +61,25 @@ function showLevelUp(level: number, xp: number, badges: string[]) {
   }, 2200);
 }
 
+// Positions/velocities/delay are picked from the pt-* bucket classes in
+// global.css, not set via style="" -- CSP's style-src can't allow-list a
+// randomized per-instance inline style with a hash (there's no one fixed
+// string to match), and this stays off style-src entirely rather than
+// needing 'unsafe-inline' for it.
 function spawnParticles() {
   const container = document.getElementById('lvlup');
   if (!container) return;
-  const colors = ['#5b21b6', '#4c1d95', '#8b5cf6', '#a78bfa', '#fbbf24', '#34d399'];
+  // Each level-up appended 24 more <div class="particle"> without ever
+  // removing the previous burst's, so multiple level-ups in one session
+  // left the DOM growing by 24 nodes every time. The animation is a
+  // one-off "fly out and fade" (see particle-fly in global.css), so any
+  // still in the DOM from an earlier burst are already invisible -- safe
+  // to clear unconditionally before adding the new batch.
+  container.querySelectorAll('.particle').forEach((p) => p.remove());
+  const pick = (n: number) => Math.floor(Math.random() * n);
   for (let i = 0; i < 24; i++) {
     const p = document.createElement('div');
-    p.className = 'particle';
-    const dx = (Math.random() - 0.5) * 160;
-    const dy = -(40 + Math.random() * 120);
-    p.style.left = Math.random() * 100 + '%';
-    p.style.top = Math.random() * 100 + '%';
-    p.style.setProperty('--c', colors[Math.floor(Math.random() * colors.length)]);
-    p.style.setProperty('--dx', dx + 'px');
-    p.style.setProperty('--dy', dy + 'px');
-    p.style.animationDelay = Math.random() * 0.4 + 's';
+    p.className = `particle pt-l${pick(11)} pt-t${pick(11)} pt-dx${pick(9)} pt-dy${pick(7)} pt-delay${pick(5)}`;
     container.appendChild(p);
   }
 }

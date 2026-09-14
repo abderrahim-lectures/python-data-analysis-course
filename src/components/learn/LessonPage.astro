@@ -38,7 +38,7 @@ const next = idx >= 0 && idx < siblings.length - 1 ? siblings[idx + 1] : null;
 
 const slug = entry.id.split('/').pop()!;
 const lessonId = `${section}/${track}/${slug}`;
-const diffColor = difficulty === 'beginner' ? 'var(--success-text)' : difficulty === 'intermediate' ? 'var(--streak-text)' : 'var(--bad-text)';
+const diffTextCls = difficulty === 'beginner' ? 'diff-text-beginner' : difficulty === 'intermediate' ? 'diff-text-intermediate' : 'diff-text-advanced';
 const otherTrack = track === 'normal' ? 'hard' as const : 'normal' as const;
 const arrow = locale === 'ar' ? '→' : '←';
 const counterArrow = locale === 'ar' ? '←' : '→';
@@ -100,7 +100,7 @@ const jsonLd = [
     <header class="lesson-head">
       <div class="lesson-head__meta">
         <span class="lesson-head__tag">📖 {m.lesson_label()} {order}</span>
-        <span class="lesson-head__diff" style={`color:${diffColor}`}>{m[`difficulty_${difficulty}`]()}</span>
+        <span class={`lesson-head__diff ${diffTextCls}`}>{m[`difficulty_${difficulty}`]()}</span>
         <span class="lesson-head__time">{m.minutes_label({n: estimatedMinutes})}</span>
         <span class="lesson-head__xp">⚡ +{xpReward} XP</span>
         <span class="lesson-head__openers" aria-label={m.open_notebook_aria()}>
@@ -264,7 +264,7 @@ const jsonLd = [
 
   .lesson-content :global(ol.quiz-list) { list-style: none; counter-reset: quiz; padding: 0; margin: 1rem 0; }
   .lesson-content :global(ol.quiz-list li) { counter-increment: quiz; padding: 1rem; margin-bottom: 1rem; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-md); }
-  .lesson-content :global(ol.quiz-list li::before) { content: counter(quiz); display: inline-flex; align-items: center; justify-content: center; width: 1.6rem; height: 1.6rem; background: var(--accent); color: #fff; border-radius: 50%; font-size: .78rem; font-weight: 800; margin-right: .5rem; }
+  .lesson-content :global(ol.quiz-list li)::before { content: counter(quiz); display: inline-flex; align-items: center; justify-content: center; width: 1.6rem; height: 1.6rem; background: var(--accent); color: #fff; border-radius: 50%; font-size: .78rem; font-weight: 800; margin-right: .5rem; }
   .lesson-content :global(.quiz-opts) { margin: .5rem 0 0; padding: 0; list-style: none; }
   .lesson-content :global(.quiz-opts li) { padding: .4rem .6rem; margin: .25rem 0; border: 1px solid var(--line); border-radius: var(--radius-sm); font-size: .9rem; cursor: default; transition: all .15s ease; }
   .lesson-content :global(.quiz-opts li:hover) { border-color: var(--accent); background: rgba(124,58,237,.04); }

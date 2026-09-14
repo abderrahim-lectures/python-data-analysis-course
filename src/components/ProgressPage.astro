@@ -163,7 +163,7 @@ const i18nData = {
       </div>
       <div class="player-card__xp">
         <div class="player-card__xpbar" role="progressbar" aria-label={m.progress_xp_bar_aria()}>
-          <div class="player-card__xpfill" id="p-xpfill" style="width:{xp.pct}%"></div>
+          <div class={`player-card__xpfill w-pct-${Math.round(xp.pct)}`} id="p-xpfill"></div>
         </div>
         <div class="player-card__xptext"><span id="p-xp">{xp.xp}</span> {m.progress_xp_unit()} · <span id="p-xpnext">{xp.toNext}</span> {m.progress_to_next()}</div>
       </div>
@@ -186,7 +186,7 @@ const i18nData = {
     <!-- XP bar -->
     <div class="xpbar-wrap">
       <div class="xpbar" role="progressbar" aria-label={m.progress_xp_bar_aria()} aria-valuenow={xp.pct} aria-valuemin="0" aria-valuemax="100" id="xpbar">
-        <div class="xpbar__fill" id="xpbar-fill" style="width:{xp.pct}%"></div>
+        <div class={`xpbar__fill w-pct-${Math.round(xp.pct)}`} id="xpbar-fill"></div>
       </div>
       <span class="xpbar__text" id="xpbar-text">{xp.xp} {m.progress_xp_unit()}</span>
     </div>
@@ -369,27 +369,27 @@ const i18nData = {
       <div class="diag" id="r-diag">
         <div class="diag__row">
           <span class="diag__name">{m.progress_diag_progress()}</span>
-          <div class="diag__bar"><div class="diag__fill" id="r-diag-improvement" style={`width:${gs.diagnostics.improvementPct}%`}></div></div>
+          <div class="diag__bar"><div class={`diag__fill w-pct-${Math.round(gs.diagnostics.improvementPct)}`} id="r-diag-improvement"></div></div>
           <span class="diag__val" id="r-diag-improvement-val">{gs.diagnostics.improvementPct}%</span>
         </div>
         <div class="diag__row">
           <span class="diag__name">{m.progress_diag_ngain()}</span>
-          <div class="diag__bar"><div class="diag__fill" id="r-diag-ngain" style="width:0%"></div></div>
+          <div class="diag__bar"><div class="diag__fill w-pct-0" id="r-diag-ngain"></div></div>
           <span class="diag__val" id="r-diag-ngain-val">{gs.diagnostics.nGainEquivalent.toFixed(2)}</span>
         </div>
         <div class="diag__row">
           <span class="diag__name">{m.progress_diag_acceptance()}</span>
-          <div class="diag__bar"><div class="diag__fill" id="r-diag-acceptance" style={`width:${gs.diagnostics.acceptancePct}%`}></div></div>
+          <div class="diag__bar"><div class={`diag__fill w-pct-${Math.round(gs.diagnostics.acceptancePct)}`} id="r-diag-acceptance"></div></div>
           <span class="diag__val" id="r-diag-acceptance-val">{gs.diagnostics.acceptancePct}%</span>
         </div>
         <div class="diag__row">
           <span class="diag__name">{m.progress_diag_usefulness()}</span>
-          <div class="diag__bar"><div class="diag__fill" id="r-diag-usefulness" style={`width:${gs.diagnostics.usefulnessPct}%`}></div></div>
+          <div class="diag__bar"><div class={`diag__fill w-pct-${Math.round(gs.diagnostics.usefulnessPct)}`} id="r-diag-usefulness"></div></div>
           <span class="diag__val" id="r-diag-usefulness-val">{gs.diagnostics.usefulnessPct}%</span>
         </div>
         <div class="diag__row">
           <span class="diag__name">{m.progress_diag_experience()}</span>
-          <div class="diag__bar"><div class="diag__fill" id="r-diag-experience" style={`width:${gs.diagnostics.learningExperiencePct}%`}></div></div>
+          <div class="diag__bar"><div class={`diag__fill w-pct-${Math.round(gs.diagnostics.learningExperiencePct)}`} id="r-diag-experience"></div></div>
           <span class="diag__val" id="r-diag-experience-val">{gs.diagnostics.learningExperiencePct}%</span>
         </div>
       </div>
@@ -417,6 +417,7 @@ const i18nData = {
   <script>
     import {xpProgress, questsToShow, streakProgress, rankFor, RANK_EMOJIS, getActivityLog, getActivityStats, loadState} from '../lib/gameState.ts';
     import {computeGameStats} from '../lib/gamestats.ts';
+    import {setPctWidth} from '../lib/pctWidth.ts';
 
     const I18N = JSON.parse(document.getElementById('progress-i18n')?.textContent ?? '{}');
     const {XP_UNIT, TO_NEXT, PCT_DONE, XP_EARNED, ACTIONS, CORRECT_COUNT, RATIO, STREAK_DAYS, SESSION_LESSONS, TIME_JUST_NOW, TIME_MIN, TIME_HOUR, TIME_DAY, QUEST_LABELS, QUEST_EN2LC, RANK_NAMES, KDA_NAMES, ACT_TYPES, ACT_QUIZ, MODULES} = I18N;
@@ -511,13 +512,11 @@ const i18nData = {
       set('p-streak', `${sp.current}🔥`);
       set('p-best', String(sp.best));
       set('p-quests', `${quests.filter((q) => q.done).length}/${quests.length}`);
-      const xpfill = document.getElementById('p-xpfill');
-      if (xpfill) xpfill.style.width = xp.pct + '%';
+      setPctWidth(document.getElementById('p-xpfill'), xp.pct);
       const rankEl = document.getElementById('p-rank');
       if (rankEl) rankEl.textContent = `${RANK_EMOJIS[rank] ?? '🌱'} ${RANK_NAMES[rank] ?? rank}`;
 
-      const xpbarFill = document.getElementById('xpbar-fill');
-      if (xpbarFill) xpbarFill.style.width = xp.pct + '%';
+      setPctWidth(document.getElementById('xpbar-fill'), xp.pct);
       set('xpbar-text', `${xp.xp} ${T.xpUnit}`);
 
       // Tracks: stations are modules. A module counts as reached once any
@@ -574,10 +573,7 @@ const i18nData = {
       // Improvement report (merged in from the old /stats page).
       const gs = computeGameStats();
       const fmtPct = (pct: number) => `${Math.max(0, Math.min(100, Math.round(pct)))}%`;
-      const fillWidth = (id: string, pct: number) => {
-        const el = document.getElementById(id);
-        if (el) el.style.width = fmtPct(pct);
-      };
+      const fillWidth = (id: string, pct: number) => setPctWidth(document.getElementById(id), pct);
       // A fresh visitor was shown 0% win rate, 0/0/0 K/D/A and empty bars under
       // a confident benchmark headline, which reads as broken rather than empty.
       const hasProgress = xp.xp > 0;

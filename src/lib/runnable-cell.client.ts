@@ -152,11 +152,10 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
         run.classList.remove('cell__run--loading');
         return;
       }
-      const allSource = Array.from(document.querySelectorAll('[data-runnable] code'))
-        .map((el) => el.textContent ?? '')
-        .join('\n');
+      const cellCodeEls = Array.from(document.querySelectorAll('[data-runnable] code'));
+      const allSource = cellCodeEls.map((el) => el.textContent ?? '').join('\n');
       await mountDatasets(engine, allSource);
-      const otherCellSources = Array.from(document.querySelectorAll('[data-runnable] code'))
+      const otherCellSources = cellCodeEls
         .filter((el) => el !== codeEl)
         .map((el) => el.textContent ?? '')
         .join('\n');
@@ -172,10 +171,9 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
       });
       dispatchPyodideEvent('pyodide:ready');
     } else {
-      const allSource = Array.from(document.querySelectorAll('[data-runnable] code'))
-        .map((el) => el.textContent ?? '')
-        .join('\n');
-      const otherCellSources = Array.from(document.querySelectorAll('[data-runnable] code'))
+      const cellCodeEls = Array.from(document.querySelectorAll('[data-runnable] code'));
+      const allSource = cellCodeEls.map((el) => el.textContent ?? '').join('\n');
+      const otherCellSources = cellCodeEls
         .filter((el) => el !== codeEl)
         .map((el) => el.textContent ?? '')
         .join('\n');
@@ -244,8 +242,7 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
         const ta = document.createElement('textarea');
         ta.value = text;
         ta.setAttribute('readonly', '');
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
+        ta.className = 'pda-clipboard-helper';
         document.body.appendChild(ta);
         ta.select();
         ok = document.execCommand('copy');

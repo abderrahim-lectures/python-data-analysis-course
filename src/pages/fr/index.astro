@@ -55,7 +55,7 @@ const jsonLd = {
           </div>
           <div class="player-card__xp">
             <div class="player-card__xpbar" role="progressbar" aria-label={m.home_xp_aria_label()}>
-              <div class="player-card__xpfill" id="player-xpfill" style="width:0%"></div>
+              <div class="player-card__xpfill w-pct-0" id="player-xpfill"></div>
             </div>
             <div class="player-card__xptext"><span id="player-xp">0</span> XP · <span id="player-xpnext">100</span> {m.home_xp_to_next()}</div>
           </div>
@@ -151,12 +151,12 @@ const jsonLd = {
         <SceneBg scene="forest" height={140} particles={false}>
           <span class="hub__icon">🐍</span>
         </SceneBg>
-        <div class="hub__badge" style="color:var(--accent)">{m.home_hub_track_1()}</div>
+        <div class="hub__badge hub__badge--accent">{m.home_hub_track_1()}</div>
         <div class="hub__inner">
           <div class="hub__meta">{m.home_hub_track_1_meta()}</div>
           <h2>{m.home_hub_track_1_name()}</h2>
           <p>{m.home_hub_track_1_desc()}</p>
-          <div class="hub__progress"><div class="hub__progress-fill" id="hub-python" style="width:0%"></div></div>
+          <div class="hub__progress"><div class="hub__progress-fill w-pct-0" id="hub-python"></div></div>
           <span class="btn btn-primary hub__cta">{m.home_hub_track_1_cta()} <Icon name="play" size={14} /></span>
         </div>
       </a>
@@ -164,12 +164,12 @@ const jsonLd = {
         <SceneBg scene="city" height={140} particles={false}>
           <span class="hub__icon">📊</span>
         </SceneBg>
-        <div class="hub__badge" style="color:var(--streak-text)">{m.home_hub_track_2()}</div>
+        <div class="hub__badge hub__badge--streak">{m.home_hub_track_2()}</div>
         <div class="hub__inner">
           <div class="hub__meta">{m.home_hub_track_2_meta()}</div>
           <h2>{m.home_hub_track_2_name()}</h2>
           <p>{m.home_hub_track_2_desc()}</p>
-          <div class="hub__progress"><div class="hub__progress-fill hub__progress-fill--streak" id="hub-data" style="width:0%"></div></div>
+          <div class="hub__progress"><div class="hub__progress-fill hub__progress-fill--streak w-pct-0" id="hub-data"></div></div>
           <span class="btn btn-streak hub__cta">{m.home_hub_track_2_cta()} <Icon name="play" size={14} /></span>
         </div>
       </a>
@@ -177,7 +177,7 @@ const jsonLd = {
         <SceneBg scene="library" height={140} particles={false}>
           <span class="hub__icon">🚀</span>
         </SceneBg>
-        <div class="hub__badge" style="color:var(--warn)">{m.home_hub_projects()}</div>
+        <div class="hub__badge hub__badge--warn">{m.home_hub_projects()}</div>
         <div class="hub__inner">
           <div class="hub__meta">{m.home_hub_projects_meta()}</div>
           <h2>{m.home_hub_projects_name()}</h2>

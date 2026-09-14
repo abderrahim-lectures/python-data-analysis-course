@@ -162,7 +162,19 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
     <meta name="twitter:image" content={ogImage} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <!-- media="print" fetches at full priority (media queries don't gate the
+         request, only whether it blocks render) without blocking first paint
+         the way a plain rel="stylesheet" link does; the inline script right
+         after flips it to "all" as soon as the link exists in the DOM. A
+         plain onload="" attribute would do this in one line, but that's an
+         inline event handler, a different CSP surface than script element
+         content hashing covers -- a real script element keeps this on the same
+         hashing mechanism as everything else instead of adding a second one
+         to maintain. -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" />
+    <link id="font-css" rel="stylesheet" media="print" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" />
+    <script is:inline>document.getElementById('font-css')?.setAttribute('media', 'all');</script>
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" /></noscript>
     <!-- Pyodide is vendored under /pyodide/ (scripts/vendor-pyodide.mjs) and
          loaded lazily on the first "Run" click -- never on page load. -->
     <link rel="dns-prefetch" href={base} />
