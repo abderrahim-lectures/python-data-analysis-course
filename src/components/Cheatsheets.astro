@@ -29,24 +29,26 @@ const alternates = {
     </div>
   </section>
 
-  <section class="container cheats">
-    <ul class="cheats__list">
-      {cheatSections(locale).map((section) => (
-        <li class="cheats__section">
-          <h2 class="cheats__title"><span aria-hidden="true">{section.icon}</span> {section.title}</h2>
-          <ul class="cheats__cards">
-            {section.cards.map((card) => (
-              <li class="cheats__card">
-                <h3 class="cheats__card-title">{card.title}</h3>
-                <pre class="cheats__code" dir="ltr"><code>{card.code}</code></pre>
-                <p class="cheats__note">{card.note}</p>
-              </li>
-            ))}
-          </ul>
-        </li>
-      ))}
-    </ul>
-  </section>
+  <div class="container">
+    <section class="cheats">
+      <ul class="cheats__list">
+        {cheatSections(locale).map((section) => (
+          <li class="cheats__section">
+            <h2 class="cheats__title"><span aria-hidden="true">{section.icon}</span> {section.title}</h2>
+            <ul class="cheats__cards">
+              {section.cards.map((card) => (
+                <li class="cheats__card">
+                  <h3 class="cheats__card-title">{card.title}</h3>
+                  <pre class="cheats__code" dir="ltr"><code>{card.code}</code></pre>
+                  <p class="cheats__note">{card.note}</p>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ul>
+    </section>
+  </div>
 </Base>
 
 <style>
