@@ -8,8 +8,16 @@
 //   open('name.csv')                          -> group 1
 //   pd.read_csv("titanic.csv")                -> group 1
 //   pd.read_csv('data.csv', newline='')       -> group 2
+// `load_corpus(...)` is the python-101/hard SLM-generator arc's own wrapper
+// around open() (defined once in 01-csv-loading.md, reused verbatim in every
+// later lesson of that arc) -- it takes the filename as a variable, not a
+// literal, so plain open()/read_csv() detection below can't see through it.
+// Most lessons in that arc also open the file literally elsewhere on the
+// same page (which the generic rule already catches), but 10-cli-generator.md
+// (the arc's final lesson) only ever calls load_corpus("slm-corpus.csv") with
+// the literal inline, so that call site needs its own match here.
 export const DATASET_FILE_RE =
-  /(?:open|read_csv|read_excel|read_json|np\.loadtxt|np\.genfromtxt|loadtxt|genfromtxt)\s*\(\s*["']([\w.\-/]+)["']|(?:open|read_csv)\s*\(\s*["']([\w.\-/]+)["']\s*,\s*newline/mg;
+  /(?:open|read_csv|read_excel|read_json|np\.loadtxt|np\.genfromtxt|loadtxt|genfromtxt|load_corpus)\s*\(\s*["']([\w.\-/]+)["']|(?:open|read_csv)\s*\(\s*["']([\w.\-/]+)["']\s*,\s*newline/mg;
 
 export function normalizeDatasetName(name: string): string {
   return name.toLowerCase().replace(/[^a-z0-9]+/g, '');

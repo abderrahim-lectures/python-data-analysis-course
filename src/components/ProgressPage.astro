@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
 import { xpProgress, loadState, questsToShow, streakProgress, getActivityStats, getActivityLog, rankFor, RANK_EMOJIS } from '../lib/gameState.ts';
 import { computeGameStats } from '../lib/gamestats.ts';
+import { questById } from '../lib/badgeLabel.ts';
 import { getCollection } from 'astro:content';
 import {m} from '../paraglide/messages.js';
 import {learnHref, progressGuideHref, trackWord, type Locale} from '../lib/routeSegments';
@@ -74,40 +75,7 @@ const daModules = [1,2,3,4,5].map((w) => {
 });
 
 // ── Localized lookup tables (EN token → locale string) ───────────────────────
-const QUEST_KEYS: Record<string, () => string> = {
-  'first-run': () => m.progress_quest_first_run(),
-  'first-lesson': () => m.progress_quest_first_lesson(),
-  'first-project': () => m.progress_quest_first_project(),
-  'first-project-done': () => m.progress_quest_first_project_done(),
-  'first-project-step': () => m.progress_quest_first_project_step(),
-  'project-steps-10': () => m.progress_quest_project_steps_10(),
-  'project-steps-25': () => m.progress_quest_project_steps_25(),
-  'project-steps-50': () => m.progress_quest_project_steps_50(),
-  'track-python-101': () => m.progress_quest_track_python_101(),
-  'track-data-analysis': () => m.progress_quest_track_data_analysis(),
-  'streak-3': () => m.progress_quest_streak_3(),
-  'streak-7': () => m.progress_quest_streak_7(),
-  'streak-14': () => m.progress_quest_streak_14(),
-  'streak-30': () => m.progress_quest_streak_30(),
-  'xp-100': () => m.progress_quest_xp_100(),
-  'xp-500': () => m.progress_quest_xp_500(),
-  'xp-1000': () => m.progress_quest_xp_1000(),
-  'xp-2000': () => m.progress_quest_xp_2000(),
-  'xp-3000': () => m.progress_quest_xp_3000(),
-  'xp-5000': () => m.progress_quest_xp_5000(),
-  'xp-7500': () => m.progress_quest_xp_7500(),
-  'projects-5': () => m.progress_quest_projects_5(),
-  'projects-10': () => m.progress_quest_projects_10(),
-  'projects-25': () => m.progress_quest_projects_25(),
-  'projects-50': () => m.progress_quest_projects_50(),
-  'first-challenge': () => m.progress_quest_first_challenge(),
-  'challenges-10': () => m.progress_quest_challenges_10(),
-  'challenges-25': () => m.progress_quest_challenges_25(),
-  'challenges-50': () => m.progress_quest_challenges_50(),
-  'all-python': () => m.progress_quest_all_python(),
-  'all-data': () => m.progress_quest_all_data(),
-};
-const questLabels = Object.fromEntries(quests.map((q) => [q.id, QUEST_KEYS[q.id] ? QUEST_KEYS[q.id]() : q.label]));
+const questLabels = Object.fromEntries(quests.map((q) => [q.id, questById[q.id] ? questById[q.id]() : q.label]));
 const questEn2Lc = Object.fromEntries(quests.map((q) => [q.label, questLabels[q.id] ?? q.label]));
 
 const rankNames: Record<string, string> = {
@@ -195,7 +163,7 @@ const i18nData = {
       </div>
       <div class="player-card__xp">
         <div class="player-card__xpbar" role="progressbar" aria-label={m.progress_xp_bar_aria()}>
-          <div class="player-card__xpfill" id="p-xpfill" style="width:{xp.pct}%"></div>
+          <div class={`player-card__xpfill w-pct-${Math.round(xp.pct)}`} id="p-xpfill"></div>
         </div>
         <div class="player-card__xptext"><span id="p-xp">{xp.xp}</span> {m.progress_xp_unit()} · <span id="p-xpnext">{xp.toNext}</span> {m.progress_to_next()}</div>
       </div>
@@ -218,7 +186,7 @@ const i18nData = {
     <!-- XP bar -->
     <div class="xpbar-wrap">
       <div class="xpbar" role="progressbar" aria-label={m.progress_xp_bar_aria()} aria-valuenow={xp.pct} aria-valuemin="0" aria-valuemax="100" id="xpbar">
-        <div class="xpbar__fill" id="xpbar-fill" style="width:{xp.pct}%"></div>
+        <div class={`xpbar__fill w-pct-${Math.round(xp.pct)}`} id="xpbar-fill"></div>
       </div>
       <span class="xpbar__text" id="xpbar-text">{xp.xp} {m.progress_xp_unit()}</span>
     </div>
@@ -401,27 +369,27 @@ const i18nData = {
       <div class="diag" id="r-diag">
         <div class="diag__row">
           <span class="diag__name">{m.progress_diag_progress()}</span>
-          <div class="diag__bar"><div class="diag__fill" id="r-diag-improvement" style={`width:${gs.diagnostics.improvementPct}%`}></div></div>
+          <div class="diag__bar"><div class={`diag__fill w-pct-${Math.round(gs.diagnostics.improvementPct)}`} id="r-diag-improvement"></div></div>
           <span class="diag__val" id="r-diag-improvement-val">{gs.diagnostics.improvementPct}%</span>
         </div>
         <div class="diag__row">
           <span class="diag__name">{m.progress_diag_ngain()}</span>
-          <div class="diag__bar"><div class="diag__fill" id="r-diag-ngain" style="width:0%"></div></div>
+          <div class="diag__bar"><div class="diag__fill w-pct-0" id="r-diag-ngain"></div></div>
           <span class="diag__val" id="r-diag-ngain-val">{gs.diagnostics.nGainEquivalent.toFixed(2)}</span>
         </div>
         <div class="diag__row">
           <span class="diag__name">{m.progress_diag_acceptance()}</span>
-          <div class="diag__bar"><div class="diag__fill" id="r-diag-acceptance" style={`width:${gs.diagnostics.acceptancePct}%`}></div></div>
+          <div class="diag__bar"><div class={`diag__fill w-pct-${Math.round(gs.diagnostics.acceptancePct)}`} id="r-diag-acceptance"></div></div>
           <span class="diag__val" id="r-diag-acceptance-val">{gs.diagnostics.acceptancePct}%</span>
         </div>
         <div class="diag__row">
           <span class="diag__name">{m.progress_diag_usefulness()}</span>
-          <div class="diag__bar"><div class="diag__fill" id="r-diag-usefulness" style={`width:${gs.diagnostics.usefulnessPct}%`}></div></div>
+          <div class="diag__bar"><div class={`diag__fill w-pct-${Math.round(gs.diagnostics.usefulnessPct)}`} id="r-diag-usefulness"></div></div>
           <span class="diag__val" id="r-diag-usefulness-val">{gs.diagnostics.usefulnessPct}%</span>
         </div>
         <div class="diag__row">
           <span class="diag__name">{m.progress_diag_experience()}</span>
-          <div class="diag__bar"><div class="diag__fill" id="r-diag-experience" style={`width:${gs.diagnostics.learningExperiencePct}%`}></div></div>
+          <div class="diag__bar"><div class={`diag__fill w-pct-${Math.round(gs.diagnostics.learningExperiencePct)}`} id="r-diag-experience"></div></div>
           <span class="diag__val" id="r-diag-experience-val">{gs.diagnostics.learningExperiencePct}%</span>
         </div>
       </div>
@@ -449,6 +417,7 @@ const i18nData = {
   <script>
     import {xpProgress, questsToShow, streakProgress, rankFor, RANK_EMOJIS, getActivityLog, getActivityStats, loadState} from '../lib/gameState.ts';
     import {computeGameStats} from '../lib/gamestats.ts';
+    import {setPctWidth} from '../lib/pctWidth.ts';
 
     const I18N = JSON.parse(document.getElementById('progress-i18n')?.textContent ?? '{}');
     const {XP_UNIT, TO_NEXT, PCT_DONE, XP_EARNED, ACTIONS, CORRECT_COUNT, RATIO, STREAK_DAYS, SESSION_LESSONS, TIME_JUST_NOW, TIME_MIN, TIME_HOUR, TIME_DAY, QUEST_LABELS, QUEST_EN2LC, RANK_NAMES, KDA_NAMES, ACT_TYPES, ACT_QUIZ, MODULES} = I18N;
@@ -458,10 +427,12 @@ const i18nData = {
       'lesson-complete': '✅',
       'project-view': '👁️',
       'project-complete': '🏆',
+      'project-step': '🔧',
       'quiz': '❓',
       'daily-login': '🌅',
       'streak': '🔥',
       'milestone': '🎖️',
+      'challenge': '🧩',
     };
 
     const T = {xpUnit: XP_UNIT, toNext: TO_NEXT, pctDone: PCT_DONE, xpEarned: XP_EARNED, actlogActions: ACTIONS, correctCount: CORRECT_COUNT, ratio: RATIO, streakDays: STREAK_DAYS, sessionLessons: SESSION_LESSONS};
@@ -541,13 +512,11 @@ const i18nData = {
       set('p-streak', `${sp.current}🔥`);
       set('p-best', String(sp.best));
       set('p-quests', `${quests.filter((q) => q.done).length}/${quests.length}`);
-      const xpfill = document.getElementById('p-xpfill');
-      if (xpfill) xpfill.style.width = xp.pct + '%';
+      setPctWidth(document.getElementById('p-xpfill'), xp.pct);
       const rankEl = document.getElementById('p-rank');
       if (rankEl) rankEl.textContent = `${RANK_EMOJIS[rank] ?? '🌱'} ${RANK_NAMES[rank] ?? rank}`;
 
-      const xpbarFill = document.getElementById('xpbar-fill');
-      if (xpbarFill) xpbarFill.style.width = xp.pct + '%';
+      setPctWidth(document.getElementById('xpbar-fill'), xp.pct);
       set('xpbar-text', `${xp.xp} ${T.xpUnit}`);
 
       // Tracks: stations are modules. A module counts as reached once any
@@ -585,19 +554,26 @@ const i18nData = {
       if (milestones) {
         const done = quests.filter((q) => q.done).slice(0, 6);
         const locked = quests.filter((q) => !q.done).slice(0, 3);
-        milestones.innerHTML = [
-          ...done.map((q) => `<span class="badge badge--success">✅ ${QUEST_LABELS[q.id] ?? q.label}</span>`),
-          ...locked.map((q) => `<span class="badge badge--locked">🔒 ${QUEST_LABELS[q.id] ?? q.label}</span>`),
-        ].join('');
+        // Build with createElement/textContent rather than innerHTML: q.label
+        // falls back to whatever's in localStorage state for any quest id
+        // not in the known-labels map, and that fallback string must never
+        // be interpreted as markup.
+        const badge = (q: {id: string; label: string}, cls: string, icon: string) => {
+          const span = document.createElement('span');
+          span.className = cls;
+          span.textContent = `${icon} ${QUEST_LABELS[q.id] ?? q.label}`;
+          return span;
+        };
+        milestones.replaceChildren(
+          ...done.map((q) => badge(q, 'badge badge--success', '✅')),
+          ...locked.map((q) => badge(q, 'badge badge--locked', '🔒')),
+        );
       }
 
       // Improvement report (merged in from the old /stats page).
       const gs = computeGameStats();
       const fmtPct = (pct: number) => `${Math.max(0, Math.min(100, Math.round(pct)))}%`;
-      const fillWidth = (id: string, pct: number) => {
-        const el = document.getElementById(id);
-        if (el) el.style.width = fmtPct(pct);
-      };
+      const fillWidth = (id: string, pct: number) => setPctWidth(document.getElementById(id), pct);
       // A fresh visitor was shown 0% win rate, 0/0/0 K/D/A and empty bars under
       // a confident benchmark headline, which reads as broken rather than empty.
       const hasProgress = xp.xp > 0;
@@ -639,7 +615,17 @@ const i18nData = {
       set('actlog-total', fmt(T.actlogActions, {n: actStats.totalActions}));
       renderActivityLog();
     }
-    render();
+
+    // This script's content is identical on every render of this component,
+    // so under View Transitions the browser's module registry runs it only
+    // once, ever -- a soft navigation to /progress after visiting any other
+    // page would leave every stat on this page blank/stale forever.
+    // astro:page-load fires on the initial load and again after every soft
+    // navigation; the readyState fallback covers the initial dispatch being
+    // missed if this deferred bundle is still loading when window's `load`
+    // event fires first.
+    document.addEventListener('astro:page-load', render);
+    if (document.readyState === 'complete') render();
   </script>
 </Base>
 

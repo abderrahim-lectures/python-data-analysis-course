@@ -1,5 +1,5 @@
 import {describe, expect, test} from 'vitest';
-import {usesJsBridge} from '../../src/lib/pythonGuard.ts';
+import {usesJsBridge, usesBlockingInput} from '../../src/lib/pythonGuard.ts';
 
 describe('blocks the host bridge', () => {
   const blocked = [
@@ -50,5 +50,31 @@ describe('deliberately conservative', () => {
   // shared ?code= link read access to the viewer's saved progress.
   test('refuses a bridge import mentioned inside a docstring', () => {
     expect(usesJsBridge('"""import js is just prose here"""\nprint(1)')).toBe(true);
+  });
+});
+
+describe('routes input() to the main thread', () => {
+  const blocking = [
+    'name = input("Name? ")',
+    'x = int(input())',
+    '  age = input("Age: ").strip()', // indented, inside a function
+    'while True:\n    word = input("Start word: ")',
+  ];
+
+  test.each(blocking)('detects %j', (src) => {
+    expect(usesBlockingInput(src)).toBe(true);
+  });
+
+  const nonBlocking = [
+    'print("hello")',
+    'x = 5\nx = x + 1',
+    'import json',
+    // Identifiers that merely contain "input" must not trip it.
+    'user_input_value = 5',
+    'def get_input_stream(): pass',
+  ];
+
+  test.each(nonBlocking)('allows %j', (src) => {
+    expect(usesBlockingInput(src)).toBe(false);
   });
 });

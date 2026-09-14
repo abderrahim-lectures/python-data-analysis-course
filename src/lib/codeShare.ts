@@ -29,17 +29,32 @@ async function gzip(bytes: Uint8Array): Promise<Uint8Array> {
   return out;
 }
 
+// gzip can compress highly repetitive input at ratios well over 1000:1, so a
+// ?code= link small enough to fit in a URL can decompress into hundreds of
+// MB and freeze or crash the tab of anyone who clicks a maliciously crafted
+// shared link. No real playground snippet needs anywhere near this much
+// source, so the read loop aborts once decompressed output exceeds the cap
+// instead of trusting the compressed size as a proxy for the real one.
+const MAX_DECOMPRESSED_BYTES = 1_000_000; // 1MB of Python source is already absurd
+
 async function gunzip(bytes: Uint8Array): Promise<Uint8Array> {
   const ds = new DecompressionStream('gzip');
   const writer = ds.writable.getWriter();
   writer.write(bytes as BufferSource);
   writer.close();
   const chunks: Uint8Array[] = [];
+  let total = 0;
   const reader = ds.readable.getReader();
-  for (;;) {
-    const {done, value} = await reader.read();
-    if (done) break;
-    chunks.push(value);
+  try {
+    for (;;) {
+      const {done, value} = await reader.read();
+      if (done) break;
+      total += value.length;
+      if (total > MAX_DECOMPRESSED_BYTES) throw new Error('decompressed payload too large');
+      chunks.push(value);
+    }
+  } finally {
+    reader.cancel().catch(() => {});
   }
   const out = new Uint8Array(chunks.reduce((n, c) => n + c.length, 0));
   let offset = 0;

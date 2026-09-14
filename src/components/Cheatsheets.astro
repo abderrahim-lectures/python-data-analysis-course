@@ -29,24 +29,26 @@ const alternates = {
     </div>
   </section>
 
-  <section class="container cheats">
-    <ul class="cheats__list">
-      {cheatSections(locale).map((section) => (
-        <li class="cheats__section">
-          <h2 class="cheats__title"><span aria-hidden="true">{section.icon}</span> {section.title}</h2>
-          <ul class="cheats__cards">
-            {section.cards.map((card) => (
-              <li class="cheats__card">
-                <h3 class="cheats__card-title">{card.title}</h3>
-                <pre class="cheats__code" dir="ltr"><code>{card.code}</code></pre>
-                <p class="cheats__note">{card.note}</p>
-              </li>
-            ))}
-          </ul>
-        </li>
-      ))}
-    </ul>
-  </section>
+  <div class="container">
+    <section class="cheats">
+      <ul class="cheats__list">
+        {cheatSections(locale).map((section) => (
+          <li class="cheats__section">
+            <h2 class="cheats__title"><span aria-hidden="true">{section.icon}</span> {section.title}</h2>
+            <ul class="cheats__cards">
+              {section.cards.map((card) => (
+                <li class="cheats__card">
+                  <h3 class="cheats__card-title">{card.title}</h3>
+                  <pre class="cheats__code" dir="ltr"><code>{card.code}</code></pre>
+                  <p class="cheats__note">{card.note}</p>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ul>
+    </section>
+  </div>
 </Base>
 
 <style>
@@ -55,8 +57,10 @@ const alternates = {
   .cheats__title { font-size: 1.25rem; margin: 0 0 .75rem; display: flex; align-items: center; gap: .5rem; }
   .cheats__cards { list-style: none; padding: 0; margin: 0; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
   .cheats__card {
+    /* Matches .hub__inner's padding for visual consistency with the hub
+       cards on the homepage. */
     background: var(--surface); border: 1px solid var(--line);
-    border-radius: var(--radius-lg); padding: 1rem 1.15rem 1.1rem;
+    border-radius: var(--radius-lg); padding: 1.15rem;
     box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: .5rem;
   }
   .cheats__card-title { font-size: .95rem; margin: 0; color: var(--ink); }

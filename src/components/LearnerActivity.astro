@@ -17,16 +17,30 @@ const {locale = 'en', supabaseUrl = '', supabaseKey = ''} = Astro.props;
 
 {
   supabaseUrl && supabaseKey && (
-    <section class="container learner-activity" id="learner-bar" data-locale={locale} data-url={supabaseUrl} data-key={supabaseKey}
-      data-now={m.learner_learning_now()} data-online-one={m.learner_online_one()} data-online-many={m.learner_online_many()}
-      role="status" aria-live="polite" hidden>
-      <span class="learner-activity__dot" aria-hidden="true"></span>
-      <span class="learner-activity__count" id="learner-count">0</span>
-      <span class="learner-activity__label" id="learner-label">{m.learner_learning_now()}</span>
-      <span class="learner-activity__sep" aria-hidden="true">·</span>
-      <span class="learner-activity__recent" id="learner-recent"></span>
+    <div class="container">
+      <section class="learner-activity" id="learner-bar" data-locale={locale} data-url={supabaseUrl} data-key={supabaseKey}
+        data-now={m.learner_learning_now()} data-online-one={m.learner_online_one()} data-online-many={m.learner_online_many()}
+        role="status" aria-live="polite" hidden>
+        <span class="learner-activity__dot" aria-hidden="true"></span>
+        <span class="learner-activity__count" id="learner-count">0</span>
+        <span class="learner-activity__label" id="learner-label">{m.learner_learning_now()}</span>
+      </section>
       <script is:inline>
-        (function () {
+        // astro:page-load re-runs this on every soft navigation (the same
+        // Astro dedup that meant a single-run guard here would only ever
+        // bind to the very first #learner-bar of the session -- any later
+        // homepage revisit would render a fresh node this script never
+        // touches again). Re-binding on every load means re-entering here
+        // more than once per session too, so the previous run's intervals
+        // must be cleared first -- otherwise each homepage revisit stacks
+        // another pair of 30s pollers on top of the ones from the last visit,
+        // none of which ever get cleared on navigating away either.
+        function pydaInitLearnerActivity() {
+          if (window.__pydaLearnerIntervals) {
+            clearInterval(window.__pydaLearnerIntervals.beat);
+            clearInterval(window.__pydaLearnerIntervals.refresh);
+            window.__pydaLearnerIntervals = null;
+          }
           var bar = document.getElementById('learner-bar');
           if (!bar) return;
           var LOCALE = bar.getAttribute('data-locale') || 'en';
@@ -38,67 +52,64 @@ const {locale = 'en', supabaseUrl = '', supabaseKey = ''} = Astro.props;
             if (localStorage.getItem('pda:analytics-consent') === '0') return;
           } catch (e) { return; }
           if (!URL || !KEY) return;
-          var HDR = {apikey: KEY, Authorization: 'Bearer ' + KEY, 'Content-Type': 'application/json'};
-          var lid;
-          try { lid = localStorage.getItem('pda:learner-id'); } catch (e) {}
-          if (!lid) {
-            lid = crypto.randomUUID ? crypto.randomUUID() : 'x' + Math.random().toString(36).slice(2);
-            try { localStorage.setItem('pda:learner-id', lid); } catch (e) {}
+          function getUid() { return window.__pydaUserId || null; }
+          function authedFetch(url, init) {
+            if (window.__pydaFetch) return window.__pydaFetch(url, init);
+            var headers = Object.assign({apikey: KEY, Authorization: 'Bearer ' + KEY}, (init && init.headers) || {});
+            return fetch(url, Object.assign({}, init, {headers: headers}));
+          }
+          function waitForAuth(cb) {
+            if (getUid()) { cb(); return; }
+            var done = false;
+            function guard() { if (!done) { done = true; cb(); } }
+            document.addEventListener('pyda:auth-ready', guard, {once: true});
+            setTimeout(guard, 3000);
           }
           async function beat() {
+            var uid = getUid();
+            if (!uid) return;
             try {
-              await fetch(URL + '/rest/v1/learners', {
+              await authedFetch(URL + '/rest/v1/learners', {
                 method: 'POST',
-                headers: {...HDR, Prefer: 'resolution=merge-duplicates,return=minimal'},
-                body: JSON.stringify({id: lid, last_seen: new Date().toISOString(), locale: LOCALE, track: ''}),
+                headers: {'Content-Type': 'application/json', Prefer: 'resolution=merge-duplicates,return=minimal'},
+                body: JSON.stringify({id: uid, last_seen: new Date().toISOString(), locale: LOCALE, track: ''}),
               });
             } catch (e) {}
           }
           async function count() {
             try {
               var c = new Date(Date.now() - 60000).toISOString();
-              var r = await fetch(URL + '/rest/v1/learners?last_seen=gt.' + encodeURIComponent(c) + '&select=id', {headers: HDR});
-              var d = await r.json();
-              return Array.isArray(d) ? d.length : 0;
+              // Prefer: count=exact + a 0-row range asks PostgREST for just
+              // the Content-Range total, not the matching rows themselves --
+              // this widget only ever needs the number, not the row bodies.
+              var r = await authedFetch(URL + '/rest/v1/learners?last_seen=gt.' + encodeURIComponent(c) + '&select=id', {
+                headers: {Prefer: 'count=exact', Range: '0-0'},
+              });
+              var range = r.headers.get('content-range'); // "0-0/N"
+              var total = range ? parseInt(range.split('/')[1], 10) : NaN;
+              return Number.isFinite(total) ? total : 0;
             } catch (e) { return 0; }
-          }
-          async function recent() {
-            try {
-              var r = await fetch(URL + '/rest/v1/completions?order=created_at.desc&limit=1&select=type,slug,created_at', {headers: HDR});
-              var d = await r.json();
-              return Array.isArray(d) && d.length ? d[0] : null;
-            } catch (e) { return null; }
-          }
-          function ago(iso, locale) {
-            try {
-              var rtf = new Intl.RelativeTimeFormat(locale, {numeric: 'auto'});
-              var secs = Math.round((new Date(iso).getTime() - Date.now()) / 1000);
-              if (Math.abs(secs) < 60) return rtf.format(0, 'second');
-              if (Math.abs(secs) < 3600) return rtf.format(Math.round(secs / 60), 'minute');
-              if (Math.abs(secs) < 86400) return rtf.format(Math.round(secs / 3600), 'hour');
-              return rtf.format(Math.round(secs / 86400), 'day');
-            } catch (e) { return ''; }
-          }
-          function lbl(slug) {
-            var p = slug.split('/');
-            return p.length >= 3 ? p[0].replace(/-/g, ' ') + ' W' + p[2].replace('week-', '') : slug.replace(/-/g, ' ');
           }
           async function refresh() {
             var n = await count();
-            var r = await recent();
-            var ce = document.getElementById('learner-count'), le = document.getElementById('learner-label'), re = document.getElementById('learner-recent');
+            var ce = document.getElementById('learner-count'), le = document.getElementById('learner-label');
             if (ce) ce.textContent = n;
             if (le) le.textContent = n === 1 ? ONE : MANY;
-            if (re && r) re.textContent = lbl(r.slug) + ' · ' + ago(r.created_at, LOCALE);
             bar.hidden = n === 0;
           }
-          beat();
-          refresh();
-          setInterval(beat, 30000);
-          setInterval(refresh, 30000);
-        })();
+          waitForAuth(function () {
+            beat();
+            refresh();
+            window.__pydaLearnerIntervals = {
+              beat: setInterval(beat, 30000),
+              refresh: setInterval(refresh, 30000),
+            };
+          });
+        }
+        document.addEventListener('astro:page-load', pydaInitLearnerActivity);
+        if (document.readyState === 'complete') pydaInitLearnerActivity();
       </script>
-    </section>
+    </div>
   )
 }
 
@@ -126,16 +137,16 @@ const {locale = 'en', supabaseUrl = '', supabaseKey = ''} = Astro.props;
     animation: learner-pulse 2s ease-in-out infinite; flex-shrink: 0;
   }
   .learner-activity__count { font-weight: 700; color: var(--ink); }
-  .learner-activity__sep { color: var(--line); }
-  .learner-activity__recent { color: var(--ink-faint); font-style: italic; }
   @keyframes learner-pulse {
     0%, 100% { opacity: 1; }
     50% { opacity: .4; }
   }
   @media (max-width: 640px) {
     .learner-activity {
+      /* Matches .hub__inner's mobile padding (1.15rem) for visual
+         consistency with the hub cards above it. */
       margin-block: 1rem 1.5rem;
-      padding: .85rem 1rem;
+      padding: 1.15rem;
     }
   }
 </style>

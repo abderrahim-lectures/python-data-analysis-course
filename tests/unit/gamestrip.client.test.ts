@@ -15,8 +15,11 @@ function seedLocalStorage(pdaState: Record<string, unknown>) {
   });
 }
 
-// The module runs its init on import (deferred module script), so each test
-// builds a fresh DOM + globals and dynamically imports it.
+// The module binds its per-page init to astro:page-load (fired once on the
+// initial load and again after every soft navigation). The domstub's
+// document.readyState is 'complete', so the module's own readyState guard
+// (covering a real initial dispatch missed by a slow-loading bundle) runs
+// that init immediately on import -- no need to fire the event manually.
 function setupDom() {
   const stub = stubDom();
   vi.stubGlobal('location', {search: '', href: 'http://local.test/'});

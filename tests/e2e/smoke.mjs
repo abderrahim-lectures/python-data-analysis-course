@@ -96,9 +96,16 @@ check('it starts enabled', await evaluate('document.querySelector("[data-mark-co
 await evaluate('(document.querySelector("[data-mark-complete]").click(), 1)');
 await new Promise(r => setTimeout(r, 300));
 check('clicking it marks the lesson done', await evaluate('document.querySelector("[data-mark-complete]").disabled'), true);
-check('XP is awarded', await evaluate('JSON.parse(localStorage.getItem("pda:state")).xp'), 60);
+// This lesson's frontmatter xpReward (10) + the daily-login bonus (5,
+// awarded once per day by gamestrip.client.ts on the navigation above,
+// since the full localStorage.clear() in reset() wipes that quest flag
+// too) -- no streak bonus, since streak is 1 here, not >=3.
+check('XP is awarded', await evaluate('JSON.parse(localStorage.getItem("pda:state")).xp'), 15);
 check('the streak starts at 1, not 0', await evaluate('JSON.parse(localStorage.getItem("pda:state")).streak'), 1);
-check('a toast shows the exact XP gained', await evaluate('document.querySelector(".floating-xp")?.textContent?.includes("60") ?? false'), true);
+// The toast shows only this click's own delta (xpBefore is captured inside
+// the click handler, after the page-load daily-login bonus already landed),
+// so it's just the lesson reward (10) -- not the cumulative state.xp (15).
+check('a toast shows the exact XP gained', await evaluate('document.querySelector(".floating-xp")?.textContent?.includes("10") ?? false'), true);
 
 await goto('/learn/python-101/normal/lessons/02-variables');
 check('completion survives a reload', await evaluate('document.querySelector("[data-mark-complete]").disabled'), true);
@@ -153,7 +160,16 @@ check('all 7 python stations light', await evaluate('document.querySelector(".st
 check('python track reports 7/7 done', await evaluate('document.getElementById("pct-python-101").textContent'), '7/7 done');
 check('data track counts progressive done', await evaluate('document.getElementById("pct-data-analysis").textContent'), '2/5 done');
 check('data stations beyond done stay dim', await evaluate('document.querySelector(".stations[data-track=\'data-analysis\'] li[data-week=\'3\']").classList.contains("station--done")'), false);
-await evaluate('(localStorage.setItem("pda:state", JSON.stringify({xp:0,lessonsCompleted:{},lessonsRun:{},quizCorrect:0,quizTotal:0,streak:0,bestStreak:0,lastActive:\'\',quests:{},badges:[]})),1)');
+// Pre-seed today's daily-login quest key: gamestrip.client.ts's
+// awardDailyLogin() unconditionally fires +5 XP on the first page load once
+// per calendar day, keyed off this exact quest id. Resetting `quests` to {}
+// wipes that flag, so the very next navigation below would otherwise award
+// it again on top of the quiz XP this block is actually testing.
+await evaluate(`(() => {
+  const today = new Date().toISOString().slice(0, 10);
+  localStorage.setItem('pda:state', JSON.stringify({xp:0,lessonsCompleted:{},lessonsRun:{},quizCorrect:0,quizTotal:0,streak:0,bestStreak:0,lastActive:'',quests:{['login-' + today]: true},badges:[]}));
+  return 1;
+})()`);
 
 console.log('\nquiz XP is real (recordQuiz/recordQuizPerfect wired)');
 await goto('/learn/python-101/hard/lessons/01-csv-loading');
@@ -250,8 +266,12 @@ await goto('/');
 await evaluate('(localStorage.clear(), 1)');
 await goto('/');
 check('shows on a first visit', await evaluate('!document.getElementById("onboarding").hidden'), true);
-check('is a labelled dialog', await evaluate('document.getElementById("onboarding").getAttribute("role")'), 'dialog');
-check('moves focus into the dialog', await evaluate('document.getElementById("onboarding").contains(document.activeElement)'), true);
+// A non-blocking corner card, not a modal dialog (see the comment above its
+// markup in Base.astro): role="status" and no focus trap are deliberate --
+// it must never steal focus or block a first-time visitor from reaching the
+// lesson they came for.
+check('is a labelled status card, not a modal dialog', await evaluate('document.getElementById("onboarding").getAttribute("role")'), 'status');
+check('does not steal focus (non-blocking)', await evaluate('document.getElementById("onboarding").contains(document.activeElement)'), false);
 await evaluate('(document.getElementById("onboarding-start").click(), 1)');
 check('dismisses on the CTA', await evaluate('document.getElementById("onboarding").hidden'), true);
 check('remembers the dismissal', await evaluate('localStorage.getItem("pda:onboarded")'), '1');
@@ -261,8 +281,11 @@ check('does not reappear for a returning visitor', await evaluate('document.getE
 
 await evaluate('(localStorage.clear(), 1)');
 await goto('/');
-await evaluate(`(document.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape'})), 1)`);
-check('closes on Escape', await evaluate('document.getElementById("onboarding").hidden'), true);
+// No Escape-to-close handler exists (nor should it, for a non-blocking
+// card) -- the close (x) button is the second real dismiss path alongside
+// the CTA tested above.
+await evaluate('(document.getElementById("onboarding-skip").click(), 1)');
+check('dismisses on the close button', await evaluate('document.getElementById("onboarding").hidden'), true);
 
 await evaluate('(localStorage.clear(), 1)');
 await goto('/?onboarded=1');

@@ -211,11 +211,11 @@ describe('awardLessonXp', () => {
     } as Storage;
   }
 
-  test('awards the run + completion bonus and reports the gain', async () => {
+  test('awards run XP only and reports the gain', async () => {
     vi.stubGlobal('localStorage', storage());
     const first = await awardLessonXp('titanic-exploration');
     expect(first.xpBefore).toBe(0);
-    expect(first.gained).toBe(65);
+    expect(first.gained).toBe(5);
   });
 
   test('reports the balance before the award', async () => {
@@ -225,7 +225,7 @@ describe('awardLessonXp', () => {
     vi.stubGlobal('localStorage', storage(seed));
     const next = await awardLessonXp('titanic-eda');
     expect(next.xpBefore).toBe(70);
-    expect(next.gained).toBe(90);
+    expect(next.gained).toBe(5);
   });
 
   afterEach(() => {
@@ -240,12 +240,12 @@ describe('initRunnableCells bootstrapping', () => {
     expect(stub.queryAll['[data-runnable]'] ?? []).toEqual([]);
   });
 
-  test('registers a DOMContentLoaded autoboot when the page is loading', async () => {
+  test('registers an astro:page-load autoboot when the page is loading', async () => {
     vi.resetModules();
     const stub = stubDom();
     (stub.restore() as any).readyState = 'loading';
     await import('../../src/lib/runnable-cell.client.ts');
-    expect(stub.listeners['DOMContentLoaded']).toBeDefined();
+    expect(stub.listeners['astro:page-load']).toBeDefined();
   });
 
   afterEach(() => {
@@ -369,7 +369,7 @@ describe('initCell DOM wiring', () => {
     f.calls.stdout?.batched('hi\n');
     expect(lines.children[lines.children.length - 1].textContent).toBe('hi\n');
     expect(completeSpy).toHaveBeenCalledTimes(1);
-    expect(completeSpy.mock.calls[0][0].detail).toEqual({lessonId: 'titanic', xp: 65});
+    expect(completeSpy.mock.calls[0][0].detail).toEqual({lessonId: 'titanic', xp: 5});
     const body = f.stub.restore().body as unknown as FakeEl;
     expect(body.children.some((c) => c.classSet.has('firstsuccess-toast'))).toBe(true);
   });

@@ -160,8 +160,8 @@ Esta edición dirigida es esencial para la limpieza de datos.
 **Obtener el valor de una celda específica:**
 
 ```python
-# The name of the passenger at position 100
-name = df.loc[100, "Name"]
+# The name of the passenger at position 50
+name = df.loc[50, "Name"]
 print(name)
 ```
 

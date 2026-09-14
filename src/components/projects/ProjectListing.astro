@@ -91,7 +91,7 @@ const alternates = {
             </button>
           ))}
         </div>
-        <div style="display:flex; gap:1rem; align-items:center; flex-wrap:wrap;">
+        <div class="finder__filter-row">
           <div class="finder__difficulty" role="group" aria-label={fs.filterDiffAria}>
             <button type="button" class="diff-pill is-active" data-diff="">{fs.diffAll}</button>
             <button type="button" class="diff-pill" data-diff="beginner">🌱 {fs.diffBeginner}</button>
@@ -119,5 +119,13 @@ const alternates = {
 
 <script>
   import {initProjectsFinder} from '../../lib/projectsRender.ts';
-  initProjectsFinder();
+  // This script's content is identical on every render of this component, so
+  // under View Transitions the browser's module registry runs it only once,
+  // ever -- a soft navigation back to /projects after visiting it once would
+  // otherwise leave the search/filter UI completely unwired. astro:page-load
+  // fires on the initial load and again after every soft navigation; the
+  // readyState fallback covers the initial dispatch being missed if this
+  // deferred bundle is still loading when window's `load` event fires first.
+  document.addEventListener('astro:page-load', initProjectsFinder);
+  if (document.readyState === 'complete') initProjectsFinder();
 </script>

@@ -45,7 +45,7 @@ const STORAGE_KEY = 'pda:state';
 // single lesson, and each project step pays meaningfully toward it.
 export const XP = {
   LESSON_RUN:         5,    // ran code in playground
-  LESSON_COMPLETE:    60,   // finished a lesson
+  LESSON_COMPLETE:    10,   // finished a lesson (fallback when frontmatter missing)
   PROJECT_VIEW:       5,    // opened a project page
   PROJECT_STEP:       15,   // completed one guided project step
   PROJECT_COMPLETE:  100,   // finished a whole project (rivals a lesson)
@@ -93,11 +93,11 @@ function repairLegacy(s: PDAState): PDAState {
   if (!s.lastActive) s.lastActive = today();
   s.bestStreak = Math.max(s.bestStreak, s.streak);
 
-  markQuest(s, 'first-lesson', 'First Step');
-  if (Object.keys(s.lessonsRun).length > 0) markQuest(s, 'first-run', 'First Run');
+  markQuest(s, 'first-lesson');
+  if (Object.keys(s.lessonsRun).length > 0) markQuest(s, 'first-run');
   for (const id of completed) {
-    markQuest(s, `completed-${id}`, 'Lesson complete');
-    markQuest(s, `track-${id.split('/')[0]}`, 'Track starter');
+    markQuest(s, `completed-${id}`);
+    markQuest(s, `track-${id.split('/')[0]}`);
   }
   // Ensure new arrays exist for legacy state
   if (!s.projectsViewed) s.projectsViewed = {};
@@ -110,12 +110,26 @@ function repairLegacy(s: PDAState): PDAState {
   return s;
 }
 
+// Numeric fields render straight into innerHTML in gamestrip.client.ts /
+// ProgressPage.astro (level, xp, streak, pct, toNext all interpolated into
+// template strings, not built via textContent). Coercing them to actual
+// numbers here -- the one place every read() passes through -- means a
+// tampered localStorage value (devtools, a buggy import feature, a prior
+// unrelated XSS planting state for later) can never smuggle a markup string
+// into one of those templates; a non-numeric value becomes 0, never itself.
+function coerceNumericFields(s: PDAState): PDAState {
+  s.xp = Number(s.xp) || 0;
+  s.streak = Number(s.streak) || 0;
+  s.bestStreak = Number(s.bestStreak) || 0;
+  return s;
+}
+
 function read(): PDAState {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return defaults();
     const parsed = JSON.parse(raw) as Partial<PDAState>;
-    return repairLegacy({ ...defaults(), ...parsed });
+    return repairLegacy(coerceNumericFields({ ...defaults(), ...parsed }));
   } catch { return defaults(); }
 }
 
@@ -129,7 +143,7 @@ function addLog(s: PDAState, type: string, label: string, xp: number, meta?: str
   if (s.activityLog.length > 200) s.activityLog = s.activityLog.slice(-200);
 }
 
-function markQuest(s: PDAState, id: string, _label: string): void {
+function markQuest(s: PDAState, id: string): void {
   if (s.quests[id]) return;
   s.quests[id] = true;
   s.badges = [...s.badges, id];
@@ -160,7 +174,7 @@ export function awardDailyLogin(): number {
   if (s.quests[key]) return s.xp; // already awarded today
   bumpStreak(s);
   s.xp += XP.DAILY_LOGIN;
-  markQuest(s, key, 'Daily login');
+  markQuest(s, key);
   addLog(s, 'daily-login', 'Daily login', XP.DAILY_LOGIN);
   evaluateMilestones(s);
   write(s);
@@ -174,23 +188,30 @@ function awardLessonComplete(s: PDAState, lessonId: string, reward?: number): vo
   const streakBonus = s.streak >= 3 ? XP.STREAK_BONUS : 0;
   const earned = (reward ?? XP.LESSON_COMPLETE) + streakBonus;
   s.xp += earned;
-  markQuest(s, 'first-lesson', 'First Step');
-  markQuest(s, `completed-${lessonId}`, 'Lesson complete');
-  markQuest(s, `track-${lessonId.split('/')[0]}`, 'Track starter');
+  markQuest(s, 'first-lesson');
+  markQuest(s, `completed-${lessonId}`);
+  markQuest(s, `track-${lessonId.split('/')[0]}`);
   addLog(s, 'lesson-complete', `Completed lesson`, earned, lessonId);
 }
 
-export function addXP(lessonId: string, reward?: number): number {
+// Returns both the new total and the amount gained, computed from the same
+// read-modify-write as the rest of this function (no separate loadState()
+// call before/after): a caller that snapshots xp before calling addXP and
+// diffs against a loadState() after can read a delta that includes another
+// concurrent addXP/completeLesson call's gain too, since there's an await
+// point between the two loadState() calls in an async caller. Keeping the
+// "before" xp inside this synchronous call closes that window.
+export function addXP(lessonId: string): {xp: number; gained: number} {
   const s = read();
+  const xpBefore = s.xp;
   bumpStreak(s);
-  markQuest(s, 'first-run', 'First Run');
+  markQuest(s, 'first-run');
   s.xp += XP.LESSON_RUN;
   addLog(s, 'lesson-run', 'Ran code', XP.LESSON_RUN, lessonId);
-  awardLessonComplete(s, lessonId, reward);
   s.lessonsRun[lessonId] = true;
   evaluateMilestones(s);
   write(s);
-  return s.xp;
+  return {xp: s.xp, gained: s.xp - xpBefore};
 }
 
 export function completeLesson(lessonId: string, reward?: number): number {
@@ -210,29 +231,29 @@ export function viewProject(slug: string): number {
     s.projectsViewed[slug] = true;
     s.xp += XP.PROJECT_VIEW;
     addLog(s, 'project-view', 'Viewed project', XP.PROJECT_VIEW, slug);
-    markQuest(s, 'first-project', 'Explorer');
+    markQuest(s, 'first-project');
   }
   evaluateMilestones(s);
   write(s);
   return s.xp;
 }
 
-export function completeProject(slug: string): number {
+export function completeProject(slug: string, reward?: number): number {
   const s = read();
   bumpStreak(s);
   if (!s.projectsCompleted[slug]) {
     s.projectsCompleted[slug] = true;
     s.projectsViewed[slug] = true;
     const streakBonus = s.streak >= 3 ? XP.STREAK_BONUS : 0;
-    const earned = XP.PROJECT_COMPLETE + streakBonus;
+    const earned = (reward ?? XP.PROJECT_COMPLETE) + streakBonus;
     s.xp += earned;
     addLog(s, 'project-complete', 'Completed project', earned, slug);
-    markQuest(s, 'first-project-done', 'Builder');
+    markQuest(s, 'first-project-done');
     const count = Object.keys(s.projectsCompleted).length;
-    if (count >= 5) markQuest(s, 'projects-5', '5 Projects');
-    if (count >= 10) markQuest(s, 'projects-10', '10 Projects');
-    if (count >= 25) markQuest(s, 'projects-25', '25 Projects');
-    if (count >= 50) markQuest(s, 'projects-50', '50 Projects');
+    if (count >= 5) markQuest(s, 'projects-5');
+    if (count >= 10) markQuest(s, 'projects-10');
+    if (count >= 25) markQuest(s, 'projects-25');
+    if (count >= 50) markQuest(s, 'projects-50');
   }
   evaluateMilestones(s);
   write(s);
@@ -255,11 +276,11 @@ export function recordProjectStep(projectSlug: string, stepIdx: number): number 
     s.projectsSteps[key] = true;
     s.xp += XP.PROJECT_STEP;
     addLog(s, 'project-step', `Project step ${stepIdx + 1}`, XP.PROJECT_STEP, projectSlug);
-    markQuest(s, 'first-project-step', 'Step by Step');
+    markQuest(s, 'first-project-step');
     const stepCount = Object.keys(s.projectsSteps).filter(k => k.startsWith(`${projectSlug}:step:`)).length;
-    if (stepCount >= 10) markQuest(s, 'project-steps-10', '10 Steps');
-    if (stepCount >= 25) markQuest(s, 'project-steps-25', '25 Steps');
-    if (stepCount >= 50) markQuest(s, 'project-steps-50', '50 Steps');
+    if (stepCount >= 10) markQuest(s, 'project-steps-10');
+    if (stepCount >= 25) markQuest(s, 'project-steps-25');
+    if (stepCount >= 50) markQuest(s, 'project-steps-50');
   }
   evaluateMilestones(s);
   write(s);
@@ -308,7 +329,7 @@ export function recordQuizPerfect(): void {
   const key = 'quiz-perfect-' + today();
   if (s.quests[key]) return;
   s.xp += XP.QUIZ_PERFECT;
-  markQuest(s, key, 'Perfect quiz!');
+  markQuest(s, key);
   addLog(s, 'quiz', 'Perfect quiz!', XP.QUIZ_PERFECT);
   evaluateMilestones(s);
   write(s);
@@ -331,11 +352,11 @@ export function recordChallenge(challengeId: string): number {
     s.challengesCompleted[challengeId] = true;
     s.xp += XP.CHALLENGE_COMPLETE;
     addLog(s, 'challenge', 'Solved challenge', XP.CHALLENGE_COMPLETE, challengeId);
-    markQuest(s, 'first-challenge', 'Problem Solver');
+    markQuest(s, 'first-challenge');
     const count = Object.keys(s.challengesCompleted).length;
-    if (count >= 10) markQuest(s, 'challenges-10', '10 Challenges');
-    if (count >= 25) markQuest(s, 'challenges-25', '25 Challenges');
-    if (count >= 50) markQuest(s, 'challenges-50', '50 Challenges');
+    if (count >= 10) markQuest(s, 'challenges-10');
+    if (count >= 25) markQuest(s, 'challenges-25');
+    if (count >= 50) markQuest(s, 'challenges-50');
   }
   evaluateMilestones(s);
   write(s);
@@ -357,7 +378,7 @@ function evaluateMilestones(s: PDAState): void {
   ];
   for (const m of streakMilestones) {
     if (s.streak >= m.d && !s.quests[m.id]) {
-      markQuest(s, m.id, '');
+      markQuest(s, m.id);
       s.xp += XP.STREAK_MILESTONE;
       addLog(s, 'streak', `Streak ${m.d} days`, XP.STREAK_MILESTONE);
     }
@@ -373,9 +394,17 @@ function evaluateMilestones(s: PDAState): void {
     {xp: 5000, id: 'xp-5000', label: '5K XP'},
     {xp: 7500, id: 'xp-7500', label: '7.5K XP'},
   ];
+  // Checked against a snapshot taken before the loop, not the live s.xp:
+  // each milestone hit adds XP.MILESTONE_XP to s.xp, and checking `s.xp >=
+  // m.xp` against that same mutating value would let one milestone's bonus
+  // count toward crossing the next threshold in the same pass. With today's
+  // constants (25 XP bonus, >=400 XP between thresholds) that can't actually
+  // cascade, but the check should reflect genuine progress regardless of how
+  // those constants are tuned later, not rely on the gap staying that wide.
+  const xpBeforeMilestones = s.xp;
   for (const m of xpMilestones) {
-    if (s.xp >= m.xp && !s.quests[m.id]) {
-      markQuest(s, m.id, m.label);
+    if (xpBeforeMilestones >= m.xp && !s.quests[m.id]) {
+      markQuest(s, m.id);
       s.xp += XP.MILESTONE_XP;
       addLog(s, 'milestone', `Milestone: ${m.label}`, XP.MILESTONE_XP);
     }
@@ -383,9 +412,9 @@ function evaluateMilestones(s: PDAState): void {
 
   // Section completion: check if all lessons in a section are done (normal + hard)
   const pythonLessons = Object.keys(s.lessonsCompleted).filter(k => k.startsWith('python-101/'));
-  if (pythonLessons.length >= 29) markQuest(s, 'all-python', 'Python 101 done');  // 29 lessons total
+  if (pythonLessons.length >= 29) markQuest(s, 'all-python');  // 29 lessons total
   const dataLessons = Object.keys(s.lessonsCompleted).filter(k => k.startsWith('data-analysis/'));
-  if (dataLessons.length >= 20) markQuest(s, 'all-data', 'Data Analysis done');   // 20 lessons total
+  if (dataLessons.length >= 20) markQuest(s, 'all-data');   // 20 lessons total
 }
 
 // ── Quests ──────────────────────────────────────────────────────────

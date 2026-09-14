@@ -1,7 +1,7 @@
 ---
 // Base page layout: sticky top nav (locale + theme + progress) + footer.
 import '../styles/global.css';
-import 'katex/dist/katex.min.css';
+import {ClientRouter} from 'astro:transitions';
 import Icon from '../components/Icon.astro';
 import PageViews from '../components/PageViews.astro';
 import pkg from '../../package.json';
@@ -80,7 +80,15 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://www.google-analytics.com; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'" />
+    <meta http-equiv="Content-Security-Policy" content={`default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://www.google-analytics.com; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'${import.meta.env.PROD ? '; upgrade-insecure-requests' : ''}`} />
+    <!-- Client-side (soft) navigation: without this, every lesson-to-lesson
+         click is a full page reload, tearing down the Pyodide Worker (and
+         every package micropip.install'd into it) even though the wasm bytes
+         themselves are cache-fast. With it, window/module state survives
+         navigation, so the engine and its loaded libraries are booted once
+         per session instead of once per page. -->
+    <ClientRouter />
+
     <script is:inline>
       (function() {
         var KEY = 'pda:locale-redirected';
@@ -154,7 +162,19 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
     <meta name="twitter:image" content={ogImage} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <!-- media="print" fetches at full priority (media queries don't gate the
+         request, only whether it blocks render) without blocking first paint
+         the way a plain rel="stylesheet" link does; the inline script right
+         after flips it to "all" as soon as the link exists in the DOM. A
+         plain onload="" attribute would do this in one line, but that's an
+         inline event handler, a different CSP surface than script element
+         content hashing covers -- a real script element keeps this on the same
+         hashing mechanism as everything else instead of adding a second one
+         to maintain. -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" />
+    <link id="font-css" rel="stylesheet" media="print" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" />
+    <script is:inline>document.getElementById('font-css')?.setAttribute('media', 'all');</script>
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" /></noscript>
     <!-- Pyodide is vendored under /pyodide/ (scripts/vendor-pyodide.mjs) and
          loaded lazily on the first "Run" click -- never on page load. -->
     <link rel="dns-prefetch" href={base} />
@@ -189,21 +209,12 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
         // Busy overlay: shown while the page's scripts hydrate after load
         // ("first" mode) and while Pyodide boots on the first Run click
         // ("active" mode), so clicks never feel frozen without feedback.
-        const busy = document.createElement('div');
-        busy.className = 'app-busy';
-        busy.setAttribute('aria-hidden', 'true');
-        const inner = document.createElement('div');
-        inner.className = 'app-busy__inner';
-        const spinner = document.createElement('div');
-        spinner.className = 'app-busy__spinner';
-        const label = document.createElement('div');
-        label.className = 'app-busy__label';
-        label.setAttribute('role', 'status');
-        label.setAttribute('aria-live', 'polite');
-        inner.appendChild(spinner);
-        inner.appendChild(label);
-        busy.appendChild(inner);
-        document.body.appendChild(busy);
+        // The elements themselves are static markup with transition:persist
+        // (see the <body> template) so they survive every soft navigation --
+        // this handler only ever runs once anyway (identical inline scripts
+        // are deduped across View Transitions navigations).
+        const busy = document.getElementById('app-busy');
+        const label = document.getElementById('app-busy-label');
         const setBusy = (on) => {
           busy.classList.toggle('app-busy--active', on);
           busy.setAttribute('aria-hidden', String(!on));
@@ -241,15 +252,41 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
           setBusy(false);
         });
         // Pyodide loading bar (top edge)
-        const bar = document.createElement('div');
-        bar.className = 'pyodide-bar';
-        document.body?.appendChild(bar);
+        const bar = document.getElementById('pyodide-bar');
         window.addEventListener('pyodide:loading', () => bar.classList.add('pyodide-bar--active'));
         window.addEventListener('pyodide:ready', () => bar.classList.remove('pyodide-bar--active'));
+        // Once a Python session has actually booted, warn before a real
+        // browser reload/close -- the Worker (and everything it ran) can't
+        // survive one, so an accidental reload silently throws away the
+        // running session. Never armed for visitors who never clicked Run.
+        let pyodideSessionActive = false;
+        window.addEventListener('pyodide:ready', () => { pyodideSessionActive = true; });
+        window.addEventListener('beforeunload', (e) => {
+          if (!pyodideSessionActive) return;
+          e.preventDefault();
+          e.returnValue = '';
+        });
       });
     </script>
   </head>
   <body>
+    <!-- Static (not JS-created) so `transition:persist` can keep these two
+         nodes alive across every soft navigation. They used to be built with
+         document.createElement()/appendChild() from a DOMContentLoaded
+         handler that (via Astro's dedup of identical inline scripts) only
+         ever ran once per session -- View Transitions then swapped them out
+         of the live DOM on the very next soft nav along with the rest of the
+         old page's body, while the 'pyodide:loading'/'ready' listeners kept
+         holding onto (and mutating) the now-detached, invisible nodes. Static
+         + transition:persist makes Astro carry the same elements across
+         every navigation instead of replacing them. -->
+    <div class="app-busy" id="app-busy" aria-hidden="true" transition:persist>
+      <div class="app-busy__inner">
+        <div class="app-busy__spinner"></div>
+        <div class="app-busy__label" id="app-busy-label" role="status" aria-live="polite"></div>
+      </div>
+    </div>
+    <div class="pyodide-bar" id="pyodide-bar" transition:persist></div>
     <a class="skip-link" href="#main">{m.skip_to_content()}</a>
     <header class="topnav">
       <div class="container topnav__inner">
@@ -281,21 +318,23 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
       <slot />
     </main>
 
-    <!-- Starts hidden: it used to render visible and get hidden by JS after
-         load, so every returning visitor saw it flash on every page. -->
-    <div class="onboarding" id="onboarding" hidden role="dialog" aria-modal="true"
-      aria-labelledby="onboarding-title" aria-describedby="onboarding-sub">
+    <!-- A non-blocking corner card, not a modal: it used to be a full-screen
+         dialog that stopped a first-time visitor from reaching the lesson
+         they actually came for. It starts hidden -- it used to render
+         visible and get hidden by JS after load, so every returning visitor
+         saw it flash on every page. role="status" (not "dialog") plus no
+         focus trap means it never steals focus or blocks interaction; a
+         visitor can just start clicking around and it stays out of the way. -->
+    <div class="onboarding" id="onboarding" hidden role="status" aria-labelledby="onboarding-title">
       <div class="onboarding__card">
-        <div class="onboarding__emoji" aria-hidden="true">🚀</div>
-        <h2 class="onboarding__title" id="onboarding-title">{m.onboarding_title()}</h2>
-        <p class="onboarding__sub" id="onboarding-sub">{m.onboarding_sub()}</p>
+        <button type="button" class="onboarding__close" id="onboarding-skip" aria-label={m.onboarding_skip()}>&times;</button>
+        <p class="onboarding__title" id="onboarding-title"><span aria-hidden="true">🚀</span> {m.onboarding_title()}</p>
         <ol class="onboarding__steps">
-          {[m.onboarding_step_1(), m.onboarding_step_2(), m.onboarding_step_3()].map((step, i) => (
-            <li class="onboarding__step"><span class="onboarding__step-num" aria-hidden="true">{i + 1}</span> {step}</li>
+          {[m.onboarding_step_1(), m.onboarding_step_2(), m.onboarding_step_3()].map((step) => (
+            <li class="onboarding__step">{step}</li>
           ))}
         </ol>
-        <button type="button" class="onboarding__cta btn btn-primary" id="onboarding-start">{m.onboarding_cta()}</button>
-        <button type="button" class="onboarding__skip" id="onboarding-skip">{m.onboarding_skip()}</button>
+        <button type="button" class="onboarding__cta" id="onboarding-start">{m.onboarding_cta()}</button>
       </div>
     </div>
 
@@ -325,6 +364,7 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
           <h3><Icon name="globe" size={13} /> {m.footer_more_col()}</h3>
           <a href="https://github.com/abderrahim-lectures/python-data-analysis-course" target="_blank" rel="noopener noreferrer">{m.footer_github()}</a>
           <a href="https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/CHANGELOG.md" target="_blank" rel="noopener noreferrer">{m.footer_changelog()}</a>
+          <a href={`${base}architecture.html`} target="_blank" rel="noopener noreferrer">{m.footer_architecture()}</a>
         </div>
       </div>
       <div class="container footer__bottom">
@@ -335,7 +375,7 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
             <p>{m.consent_desc()}</p>
           </div>
           <label class="switch" for="consent-toggle" title={m.consent_label()}>
-            <input type="checkbox" id="consent-toggle" />
+            <input type="checkbox" id="consent-toggle" aria-label={m.consent_label()} />
             <span class="switch__track" aria-hidden="true"><span class="switch__thumb"></span></span>
           </label>
         </div>
@@ -355,31 +395,56 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
     <!-- Level-up celebration overlay -->
     <div class="lvlup" id="lvlup" role="status" aria-live="polite" hidden>
       <div class="lvlup__bg"></div>
-      <div class="lvlup__text">{m.lvl_up_text()}</div>
-      <div class="lvlup__sub" id="lvlup-sub"></div>
+      <div class="lvlup__card">
+        <div class="lvlup__emoji" aria-hidden="true">🎉</div>
+        <div class="lvlup__text">{m.lvl_up_text()}</div>
+        <div class="lvlup__sub" id="lvlup-sub"></div>
+      </div>
     </div>
 
     <script>
-      import '../lib/runnable-cell.client.ts';
-      import '../lib/quiz.client.ts';
+      import {initAuth} from '../lib/supabaseAuth.ts';
       import '../lib/gamestrip.client.ts';
+      initAuth(import.meta.env.PUBLIC_SUPABASE_URL || '', import.meta.env.PUBLIC_SUPABASE_KEY || '');
+      // Runnable cells and quizzes only exist on lesson/project pages -- load
+      // their (Pyodide-adjacent) client bundles only when that markup shows
+      // up, instead of shipping them to every page in the site. Both modules
+      // bind their own astro:page-load listener once imported (dynamic
+      // import() is cached, so re-checking on every navigation is cheap and
+      // covers the case where the first page a visitor lands on has neither
+      // block but a later soft-navigation does).
+      function pydaLoadInteractiveModules() {
+        if (document.querySelector('[data-runnable]')) import('../lib/runnable-cell.client.ts');
+        if (document.querySelector('[data-quiz]')) import('../lib/quiz.client.ts');
+      }
+      document.addEventListener('astro:page-load', pydaLoadInteractiveModules);
+      if (document.readyState === 'complete') pydaLoadInteractiveModules();
     </script>
     <PageViews locale={lang} supabaseUrl={import.meta.env.PUBLIC_SUPABASE_URL || ''} supabaseKey={import.meta.env.PUBLIC_SUPABASE_KEY || ''} />
     <script is:inline>
-      (function () {
+      // Astro's View Transitions router only ever runs an identical inline
+      // script once per session, so soft-navigating to a new page leaves its
+      // (freshly rendered) #consent-toggle checkbox with no listener and no
+      // synced state unless this re-binds on every astro:page-load too.
+      function pydaInitConsentToggle() {
         var t = document.getElementById('consent-toggle');
-        if (!t) return;
+        if (!t || t.dataset.pydaBound) return;
+        t.dataset.pydaBound = '1';
         try { t.checked = localStorage.getItem('pda:analytics-consent') !== '0'; } catch (e) {}
         t.addEventListener('change', function () {
           try { localStorage.setItem('pda:analytics-consent', t.checked ? '1' : '0'); } catch (e) {}
           location.reload();
         });
-      })();
+      }
+      document.addEventListener('astro:page-load', pydaInitConsentToggle);
+      if (document.readyState === 'complete') pydaInitConsentToggle();
     </script>
     <script is:inline>
       // RTL bidi fix: isolate LTR code tokens (e.g. generate_text()) in
       // Arabic headings/titles so trailing () , : do not mirror or reorder.
-      (function () {
+      // Same astro:page-load re-run requirement as the consent toggle above:
+      // without it, this only ever fixes the first page visited per session.
+      function pydaFixRtlBidi() {
         if (!document.documentElement || document.documentElement.dir !== 'rtl') return;
         var RE = /[A-Za-z][A-Za-z0-9_.]*\([^()]*(?:\([^()]*\)[^()]*)*\)/g;
         var t = document.title;
@@ -412,7 +477,9 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
           }
         }
         fix(document.body);
-      })();
+      }
+      document.addEventListener('astro:page-load', pydaFixRtlBidi);
+      if (document.readyState === 'complete') pydaFixRtlBidi();
     </script>
   </body>
   </html>

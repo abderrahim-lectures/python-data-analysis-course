@@ -127,13 +127,16 @@ describe('shared layout', () => {
     expect(src).not.toContain('Zero installs, zero boring.</p>');
   });
 
-  test('the onboarding dialog starts hidden so it cannot flash', () => {
+  test('the onboarding card starts hidden so it cannot flash', () => {
     expect(src).toMatch(/id="onboarding"[^>]*\shidden/);
   });
 
-  test('the onboarding dialog is labelled for screen readers', () => {
-    expect(src).toContain('role="dialog"');
-    expect(src).toContain('aria-modal="true"');
+  test('the onboarding card is a non-blocking status region, not a modal dialog', () => {
+    // It's a dismissible corner card, not a full-screen modal -- role="status"
+    // (not "dialog"/aria-modal) means it never steals focus or blocks
+    // interaction with the rest of the page.
+    expect(src).toContain('role="status"');
+    expect(src).not.toContain('aria-modal');
     expect(src).toContain('aria-labelledby="onboarding-title"');
   });
 });

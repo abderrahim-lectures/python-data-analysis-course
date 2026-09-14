@@ -52,7 +52,7 @@ describe('renderHomepage', () => {
     expect(level.textContent).toBe(String(levelForXp(90)));
     expect(xp.textContent).toBe('90');
     expect(Number(xpnext.textContent)).toBeGreaterThan(0);
-    expect(xpfill.style.width).toMatch(/%$/);
+    expect([...xpfill.classSet].some((c: string) => /^w-pct-\d+$/.test(c))).toBe(true);
     expect(rank.innerHTML).toContain('badge badge--streak');
     expect(rank.innerHTML).toContain('Bronze');
   });
@@ -100,8 +100,8 @@ describe('renderHomepage', () => {
     const pythonFill = el('hub-python', stub);
     const dataFill = el('hub-data', stub);
     renderHomepage();
-    expect(pythonFill.style.width).toBe((2 / 29 * 100) + '%');
-    expect(dataFill.style.width).toBe('0%');
+    expect(pythonFill.classSet.has(`w-pct-${Math.round((2 / 29) * 100)}`)).toBe(true);
+    expect(dataFill.classSet.has('w-pct-0')).toBe(true);
   });
 
   test('missing progress bars are skipped', () => {
@@ -110,7 +110,7 @@ describe('renderHomepage', () => {
     const pythonFill = el('hub-python', stub);
     stub.elements.delete('hub-data');
     renderHomepage();
-    expect(pythonFill.style.width).toBe('0%');
+    expect(pythonFill.classSet.has('w-pct-0')).toBe(true);
   });
 });
 

@@ -2,6 +2,48 @@
 
 All notable changes to this project are documented in this file. Format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [2.0.8] — 2026-09-14
+
+### Fixed
+- `pythonGuard.ts` sandbox-escape bypass: `getattr(__builtins__, ...)`, `vars(__builtins__)`, `globals()["__builtins__"]`, and `().__class__.__bases__[0].__subclasses__()`-style dunder introspection were unblocked; now closed as a class (`__import__` stays intentionally allowed).
+- CSP `script-src` now fully sha256-hashed at build time instead of `'unsafe-inline'` (postbuild `scripts/harden-csp.mjs`); `style-src` stays `'unsafe-inline'` since KaTeX renders unique per-formula inline styles that can't be hash-allow-listed the same way.
+- `upgrade-insecure-requests` only sent in production — it broke every plain-`http://` dev/preview server (`ERR_SSL_PROTOCOL_ERROR` on same-origin subresources).
+- The Cache Storage layer meant to survive GitHub Pages' 10-minute `Cache-Control` cap was comparing an absolute URL against a relative prefix and never actually matched, so the ~11MB Pyodide core runtime (wasm, stdlib, lockfile) was never cached — only a 64-byte manifest was.
+- The loading overlay and top progress bar stopped showing after any soft navigation: both were `document.createElement()`'d once into a DOMContentLoaded handler that (via Astro's script dedup) only ever ran on the very first hard page load; View Transitions then swapped the node out of the DOM on the next navigation while listeners kept mutating the now-detached element. Made static with `transition:persist` instead.
+- `window.__pydaGetAuthToken()` removed from the global scope (was a copyable token getter); replaced with `window.__pydaFetch(url, init)`, which merges auth headers internally.
+- `LearnerActivity`'s polling intervals now clear on every `astro:page-load` instead of stacking forever across soft navigations; its Supabase count query uses `Prefer: count=exact` + `Range: 0-0` instead of fetching full rows.
+- XP milestone bonuses checked against a live-mutating `s.xp` instead of a before-loop snapshot, letting one milestone's bonus count toward crossing the next threshold in the same pass.
+- "See all modules" links on `/learn` 404'd — pointed at a combined-tracks overview page deleted in an earlier redesign; now point at the `normal` track.
+- Several sections (`.notfound`, `.head`, `.credits`, `.guide`, `.hero-section`, `.module-head`, the homepage's Most Viewed Pages / learner-activity cards, cheatsheet cards) combined Astro's `.container` utility class with a component padding/border rule on the *same element*; a padding shorthand or an added border on that element silently zeroed or widened past `.container`'s own side padding, so these sections sat flush against the viewport edge instead of inset like every sibling section.
+- Decompression-bomb guard in `codeShare.ts` now checks the running byte total mid-stream, not just the final size.
+- Runnable-cell and quiz client bundles now lazy-load only on pages that actually have that markup, re-checked on every soft navigation, instead of shipping to every page site-wide.
+- Fixed the same "runs once, never rebinds after a soft navigation" class of bug (Astro's script-dedup + View Transitions) in several more places this pass: Google Fonts render-blocking swap, particle DOM leak on level-up, redundant `querySelectorAll` calls in the run-cell handler.
+- E2E suite (`tests/e2e/smoke.mjs`) had three stale expectations left over from earlier redesigns/tuning, now corrected to match current, intentional behavior: quiz/lesson XP assertions didn't account for the once-daily +5 login bonus; onboarding assertions (`role="dialog"`, focus-trap, Escape-to-close) predated the switch to a non-blocking `role="status"` corner card.
+- `/playground` skipped from `<h1>` straight to the footer's `<h3>`; added a visually-hidden `<h2>` section heading.
+- Two WCAG AA contrast failures in light mode only (the "Guided" project badge, the anonymous-analytics footer description) both cleared 4.5:1 in dark mode already.
+
+### Added
+- `beforeunload` confirmation once a Python session has actually booted (armed only after a real `Run` click, since a browser reload/close can't be prevented, only warned against).
+
+## [2.0.7] — 2026-09-13
+
+### Added
+- Supabase anonymous auth (`src/lib/supabaseAuth.ts`): each visitor signs in once per session; RLS policies on `learners`, `completions`, and `pageviews` are now keyed on `auth.uid()` instead of open `with check (true)` policies, with rate-limit triggers capping writes per user.
+- An interactive runtime architecture diagram at `/architecture.html`, linked from the footer ("How this site works").
+- View Transitions (`<ClientRouter />`) for true SPA-like soft navigation: one Pyodide Worker per session instead of a fresh engine per page.
+
+### Changed
+- Lesson/project XP now splits "run a cell" (5 XP) from "mark complete" (frontmatter `xpReward`, own quest), instead of auto-awarding both on first run.
+- CSP tightened: dropped `'unsafe-eval'` from `script-src`.
+- Onboarding is a non-blocking dismissible corner card instead of a full-screen modal; the level-up overlay is a legible card instead of oversized borderless text.
+
+### Fixed
+- Per-page inline scripts (Mark Complete, quiz, module mastery chips, project checklists, progress page, consent toggle, RTL bidi fix, homepage render) now re-bind on every `astro:page-load`, not just the first page load — Astro's View Transitions router only ever runs an identical inline/module script once per session, so every one of these silently went dead after the first soft navigation.
+- Popular-pages widget decodes percent-encoded non-ASCII path segments (e.g. Arabic route slugs) before display instead of showing raw `%D8%..` sequences.
+- `pythonGuard.ts`'s exec/eval/compile guard no longer false-positives on `re.compile(...)`.
+- Supabase rate-limit trigger's count query, previously a no-op that always evaluated to 0 or 1 regardless of actual row count.
+- Assorted lesson-content dataset/cell bugs found via a full run of every lesson's runnable cells across all four locales.
+
 ## [2.0.0] — 2026-09-07
 
 Rebuilt the site as a static **Astro** app (replacing Docusaurus/React), reworked the run-code story end to end, and completed the Real-World Projects catalog expansion.

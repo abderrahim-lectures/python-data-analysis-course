@@ -2,7 +2,7 @@
 // label pushed by older builds) to a localized name for the level-up overlay.
 import {m} from '../paraglide/messages.js';
 
-const questById: Record<string, () => string> = {
+export const questById: Record<string, () => string> = {
   'first-run': () => m.progress_quest_first_run(),
   'first-lesson': () => m.progress_quest_first_lesson(),
   'first-project': () => m.progress_quest_first_project(),

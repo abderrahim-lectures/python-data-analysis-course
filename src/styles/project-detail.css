@@ -16,36 +16,36 @@
   .project-head { margin: 1rem 0 .8rem; }
   .project-content { padding-bottom: 2rem; }
 }
-.project-content :global(h2) { margin-top: 2.2rem; }
-.project-content :global(h3) { margin-top: 1.5rem; font-size: 1.1rem; }
-.project-content :global(.step-objective) {
+.project-content h2 { margin-top: 2.2rem; }
+.project-content h3 { margin-top: 1.5rem; font-size: 1.1rem; }
+.project-content .step-objective {
   background: var(--accent-soft); border-inline-start: 4px solid var(--accent);
   padding: .7rem 1rem; border-radius: var(--radius-md); margin: 1rem 0;
   font-weight: 600; font-size: .92rem;
 }
-.project-content :global(.step-objective::before) { content: '🎯 Objective: '; }
-.project-content :global(.expected-output) {
+.project-content .step-objective::before { content: '🎯 Objective: '; }
+.project-content .expected-output {
   background: var(--surface-2); border: 1px solid var(--line);
   padding: .7rem 1rem; border-radius: var(--radius-md); margin: .75rem 0;
   font-size: .88rem;
 }
-.project-content :global(.expected-output::before) { content: '🎯 Expected output: '; font-weight: 700; }
-.project-content :global(.troubleshoot) {
+.project-content .expected-output::before { content: '🎯 Expected output: '; font-weight: 700; }
+.project-content .troubleshoot {
   background: rgba(251,191,36,.08); border-inline-start: 3px solid var(--streak);
   padding: .6rem 1rem; border-radius: var(--radius-md); margin: .75rem 0;
   font-size: .88rem;
 }
-.project-content :global(.troubleshoot::before) { content: '🩹 If it\'s off: '; font-weight: 700; }
-.project-content :global(.checklist) {
+.project-content .troubleshoot::before { content: '🩹 If it\'s off: '; font-weight: 700; }
+.project-content .checklist {
   list-style: none; padding: 0; margin: .75rem 0;
 }
-.project-content :global(.checklist li) {
+.project-content .checklist li {
   padding: .3rem 0; font-size: .9rem;
 }
-.project-content :global(.checklist li::before) { content: '✅ '; }
-.project-content :global(.socratic) {
+.project-content .checklist li::before { content: '✅ '; }
+.project-content .socratic {
   background: var(--surface); border: 1px solid var(--line);
   padding: .7rem 1rem; border-radius: var(--radius-md); margin: .75rem 0;
   font-size: .88rem; font-style: italic;
 }
-.project-content :global(.socratic::before) { content: '🤔 Socratic Question: '; font-weight: 700; font-style: normal; }
+.project-content .socratic::before { content: '🤔 Socratic Question: '; font-weight: 700; font-style: normal; }

@@ -24,15 +24,10 @@ create index if not exists completions_learner_idx on completions(learner_id);
 create index if not exists completions_created_idx on completions(created_at);
 
 -- ── Row Level Security ──────────────────────────────────────────────
--- Honest read: RLS here is coarse. There is no Supabase Auth in the static
--- site — "learner" identity is a client-generated UUID kept in localStorage,
--- which RLS cannot verify, so the open `select true` / `with check (true)`
--- policies keep the social-proof widgets working at the cost of any anon
--- client reading all rows. What we can remove cheaply is the destructive
--- surface: no anon UPDATE or DELETE on either table. (The live "learning
--- now" heartbeat needs the learners UPDATE, which leaks only last_seen /
--- locale / track; the durable fix is Supabase anonymous Auth + policies
--- keyed on auth.uid().)
+-- Uses Supabase anonymous Auth: each visitor signs in once, RLS policies
+-- key on auth.uid(). Social-proof reads (learner count, popular pages,
+-- recent completions) remain public. Writes are scoped to the user's
+-- own rows.
 
 alter table learners enable row level security;
 alter table completions enable row level security;
@@ -42,32 +37,32 @@ alter table completions enable row level security;
 create policy "learners_select_social" on learners
   for select using (true);  -- anyone can count active learners (social proof)
 
-create policy "learners_insert_social" on learners
-  for insert with check (true);  -- anyone can register a new learner
+create policy "learners_insert_own" on learners
+  for insert with check (auth.uid() = id);  -- register own learner row
 
 create policy "learners_update_heartbeat" on learners
-  for update using (true);  -- upsert heartbeat updates last_seen/locale/track
+  for update using (auth.uid() = id);  -- upsert heartbeat updates own row
 
--- Completions: append-only. Anyone can log one and read them (social
--- proof); nobody can update or delete rows anon.
+-- Completions: append-only. Each user can log their own; read is public
+-- (social proof); nobody can update or delete rows anon.
+-- Rate limit: max 10 inserts per user per minute (trigger).
 create policy "completions_select_social" on completions
   for select using (true);  -- recent completions shown to all (social proof)
 
-create policy "completions_insert_social" on completions
-  for insert with check (true);  -- anyone can log a completion
+create policy "completions_insert_own" on completions
+  for insert with check (auth.uid() = learner_id);  -- log own completions
 
 -- ── pageviews ─────────────────────────────────────────────────
--- Anonymous page-view logging for site-wide stats (popular pages,
--- counting). One row per page load, written by the client from the
--- PUBLIC_SUPABASE_* env vars in Base.astro. No RLS restrictions on
--- insert (anyone may report a view) or select (the popularity widget
--- aggregates as anon). No update/delete for anon.
+-- Page-view logging for site-wide stats (popular pages, counting).
+-- RLS: read public, insert scoped to auth.uid() = learner_id.
+-- Rate limit: max 20 inserts per user per minute (trigger).
 
 create table if not exists pageviews (
   id          uuid primary key default gen_random_uuid(),
   path        text not null,
   locale      text not null default 'en',
   referrer    text,
+  learner_id  uuid,  -- set by client; links pageviews to anonymous users
   created_at  timestamptz not null default now()
 );
 
@@ -76,10 +71,10 @@ create index if not exists pageviews_created_idx on pageviews(created_at);
 
 alter table pageviews enable row level security;
 
-create policy "pageviews_insert_anon" on pageviews
-  for insert with check (true);
+create policy "pageviews_insert_own" on pageviews
+  for insert with check (auth.uid() = learner_id);
 
-create policy "pageviews_select_anon" on pageviews
+create policy "pageviews_select_social" on pageviews
   for select using (true);
 
 -- ── popular_pages RPC ─────────────────────────────────────────
@@ -103,3 +98,36 @@ $$;
 -- anon may execute the RPC (default is granted to public; kept explicit)
 revoke all on function popular_pages(int) from anon;
 grant execute on function popular_pages(int) to anon;
+
+-- ── rate-limit triggers ───────────────────────────────────────
+-- Cap anonymous inserts to prevent storage abuse.
+-- Pageviews: 20/min, Completions: 10/min (rare event).
+
+create or replace function check_rate_limit()
+returns trigger as $$
+declare
+  max_per_minute int := case TG_TABLE_NAME
+    when 'pageviews' then 20
+    when 'completions' then 10
+    else 20
+  end;
+  cnt int;
+begin
+  execute format(
+    'select count(*) from %I where learner_id = $1 and created_at > now() - interval ''1 minute''',
+    TG_TABLE_NAME
+  ) using NEW.learner_id into cnt;
+  if cnt >= max_per_minute then
+    raise exception 'Rate limit exceeded: max % inserts per minute', max_per_minute;
+  end if;
+  return NEW;
+end;
+$$ language plpgsql;
+
+create trigger rate_limit_pageviews
+  before insert on pageviews
+  for each row execute function check_rate_limit();
+
+create trigger rate_limit_completions
+  before insert on completions
+  for each row execute function check_rate_limit();

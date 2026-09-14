@@ -1,5 +1,0 @@
-{
-  "@jupyterlab/console-extension:tracker": {
-    "promptCellPosition": "top"
-  }
-}

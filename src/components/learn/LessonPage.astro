@@ -1,6 +1,7 @@
 ---
 // Shared lesson page for locale learn trees, e.g. /ar/تعلم/python-101/hard/lessons/[lesson].
 import {getCollection, render, type CollectionEntry} from 'astro:content';
+import 'katex/dist/katex.min.css';
 import Base from '../../layouts/Base.astro';
 import Quiz from '../Quiz.astro';
 import RelatedProjects from './RelatedProjects.astro';
@@ -37,7 +38,7 @@ const next = idx >= 0 && idx < siblings.length - 1 ? siblings[idx + 1] : null;
 
 const slug = entry.id.split('/').pop()!;
 const lessonId = `${section}/${track}/${slug}`;
-const diffColor = difficulty === 'beginner' ? 'var(--success-text)' : difficulty === 'intermediate' ? 'var(--streak-text)' : 'var(--bad-text)';
+const diffTextCls = difficulty === 'beginner' ? 'diff-text-beginner' : difficulty === 'intermediate' ? 'diff-text-intermediate' : 'diff-text-advanced';
 const otherTrack = track === 'normal' ? 'hard' as const : 'normal' as const;
 const arrow = locale === 'ar' ? '→' : '←';
 const counterArrow = locale === 'ar' ? '←' : '→';
@@ -99,7 +100,7 @@ const jsonLd = [
     <header class="lesson-head">
       <div class="lesson-head__meta">
         <span class="lesson-head__tag">📖 {m.lesson_label()} {order}</span>
-        <span class="lesson-head__diff" style={`color:${diffColor}`}>{m[`difficulty_${difficulty}`]()}</span>
+        <span class={`lesson-head__diff ${diffTextCls}`}>{m[`difficulty_${difficulty}`]()}</span>
         <span class="lesson-head__time">{m.minutes_label({n: estimatedMinutes})}</span>
         <span class="lesson-head__xp">⚡ +{xpReward} XP</span>
         <span class="lesson-head__openers" aria-label={m.open_notebook_aria()}>
@@ -135,7 +136,7 @@ const jsonLd = [
     )}
 
     {hasQuiz && quiz.length > 0 && (
-      <Quiz questions={quiz} xp={10} lessonId={lessonId} />
+      <Quiz questions={quiz} xp={5} lessonId={lessonId} />
     )}
 
     {tags.length > 0 && (
@@ -169,29 +170,51 @@ const jsonLd = [
 
 <script>
   import {completeLesson, isLessonComplete, loadState} from '../../lib/gameState';
-  const article = document.querySelector('[data-lesson-id]');
-  const id = article?.getAttribute('data-lesson-id');
-  const reward = Number(article?.getAttribute('data-lesson-xp') || 0) || undefined;
-  const btn = document.querySelector('[data-mark-complete]') as HTMLButtonElement | null;
 
-  const markDone = () => {
+  // This script's content is identical across every lesson page (only the
+  // DOM it queries differs), so under View Transitions the browser's module
+  // registry caches and runs it only once, ever -- a soft navigation to a
+  // second lesson page reuses that already-evaluated module and never
+  // re-runs this top-level code. Binding used to happen once here at import
+  // time, which wired up the *first* lesson visited in a session and left
+  // every later one's "Mark complete" button permanently dead. astro:page-load
+  // fires on the initial load and again after every soft navigation, so the
+  // per-page binding needs to live in that handler instead.
+  function init() {
+    const article = document.querySelector('[data-lesson-id]');
+    const id = article?.getAttribute('data-lesson-id');
+    const reward = Number(article?.getAttribute('data-lesson-xp') || 0) || undefined;
+    const btn = document.querySelector('[data-mark-complete]') as HTMLButtonElement | null;
     if (!btn) return;
-    btn.textContent = btn.dataset.labelDone ?? 'Completed';
-    btn.classList.add('is-done');
-    btn.disabled = true;
-  };
 
-  if (id && isLessonComplete(id)) markDone();
+    const markDone = () => {
+      btn.textContent = btn.dataset.labelDone ?? 'Completed';
+      btn.classList.add('is-done');
+      btn.disabled = true;
+    };
 
-  btn?.addEventListener('click', (e) => {
-    e.preventDefault();
-    if (!id) return;
-    const xpBefore = loadState().xp ?? 0;
-    completeLesson(id, reward);
-    markDone();
-    const gained = (loadState().xp ?? 0) - xpBefore;
-    document.dispatchEvent(new CustomEvent('lesson:complete', {detail: {xp: gained}}));
-  });
+    if (id && isLessonComplete(id)) markDone();
+
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (!id) return;
+      const xpBefore = loadState().xp ?? 0;
+      completeLesson(id, reward);
+      markDone();
+      const gained = (loadState().xp ?? 0) - xpBefore;
+      document.dispatchEvent(new CustomEvent('lesson:complete', {detail: {xp: gained}}));
+    });
+  }
+
+  document.addEventListener('astro:page-load', init);
+  // The initial astro:page-load dispatch fires on window's `load` event via
+  // Astro's own router script, not this one -- if this deferred bundle is
+  // still fetching (cold cache, slow connection) when `load` fires, that
+  // one-time event is gone before the listener above ever registers.
+  // readyState is 'complete' only after `load` has already fired, so this
+  // covers exactly that miss without ever double-firing (either this runs,
+  // or the listener does, never both for the same dispatch).
+  if (document.readyState === 'complete') init();
 </script>
 
 <style>
@@ -241,7 +264,7 @@ const jsonLd = [
 
   .lesson-content :global(ol.quiz-list) { list-style: none; counter-reset: quiz; padding: 0; margin: 1rem 0; }
   .lesson-content :global(ol.quiz-list li) { counter-increment: quiz; padding: 1rem; margin-bottom: 1rem; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-md); }
-  .lesson-content :global(ol.quiz-list li::before) { content: counter(quiz); display: inline-flex; align-items: center; justify-content: center; width: 1.6rem; height: 1.6rem; background: var(--accent); color: #fff; border-radius: 50%; font-size: .78rem; font-weight: 800; margin-right: .5rem; }
+  .lesson-content :global(ol.quiz-list li)::before { content: counter(quiz); display: inline-flex; align-items: center; justify-content: center; width: 1.6rem; height: 1.6rem; background: var(--accent); color: #fff; border-radius: 50%; font-size: .78rem; font-weight: 800; margin-right: .5rem; }
   .lesson-content :global(.quiz-opts) { margin: .5rem 0 0; padding: 0; list-style: none; }
   .lesson-content :global(.quiz-opts li) { padding: .4rem .6rem; margin: .25rem 0; border: 1px solid var(--line); border-radius: var(--radius-sm); font-size: .9rem; cursor: default; transition: all .15s ease; }
   .lesson-content :global(.quiz-opts li:hover) { border-color: var(--accent); background: rgba(124,58,237,.04); }

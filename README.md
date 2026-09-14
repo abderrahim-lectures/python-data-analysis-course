@@ -43,6 +43,10 @@ By the end of the course, a student can:
 - **Honest, not hyped.** The EDA track explicitly teaches correlation-vs-causation and chart-honesty practices (truncated axes, cherry-picked ranges) as core material, not a footnote. With no backend, progress lives in your own browser and there is no certificate — the shareable unit is the content itself (permanent URLs, notebook badges), not a per-student snapshot.
 - **Zero-install first, real install as a reward.** Every core week runs in-browser via Pyodide (Python compiled to WebAssembly). Installing Python for real is saved for the real-world projects, once fundamentals are solid enough to make that step feel like graduation rather than a chore.
 
+## Architecture
+
+An interactive runtime architecture diagram (Astro SSG, browser, Pyodide, game engine, Supabase/anonymous auth) is in [docs/architecture.html](docs/architecture.html) — open it locally in a browser.
+
 ## Development
 
 ```bash

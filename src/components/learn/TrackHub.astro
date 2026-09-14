@@ -37,7 +37,7 @@ const totalMinutes = allLessons
 const totalHours = Math.round(totalMinutes / 60);
 const trackXpPerLesson = track === 'hard' ? 150 : 100;
 
-const diffColor = (d: string) => d === 'beginner' ? 'var(--success)' : d === 'intermediate' ? 'var(--streak-text)' : 'var(--bad)';
+const diffColorCls = (d: string) => d === 'beginner' ? 'diff-color-beginner' : d === 'intermediate' ? 'diff-color-intermediate' : 'diff-color-advanced';
 const arrow = locale === 'ar' ? '←' : '→';
 ---
 
@@ -76,7 +76,7 @@ const arrow = locale === 'ar' ? '←' : '→';
             <h2>{mod.data.title}</h2>
             <p>{mod.data.description}</p>
             <div class="module-card__meta">
-              <span style={`color:${diffColor(mod.data.difficulty)}`}>{m[`difficulty_${mod.data.difficulty}`]()}</span>
+              <span class={diffColorCls(mod.data.difficulty)}>{m[`difficulty_${mod.data.difficulty}`]()}</span>
               <span>📖 {lessonCount}</span>
               <span>⏱ ~{Math.round(totalMin / 60)}h</span>
             </div>
@@ -96,10 +96,10 @@ const arrow = locale === 'ar' ? '←' : '→';
   @media (max-width: 640px) {
     .crumb { gap: .3rem .5rem; font-size: .8rem; align-items: flex-start; padding-top: .9rem; }
     .crumb__here { overflow-wrap: anywhere; }
-    .hero-section { padding: 1.25rem 0 1rem; }
+    .hero-section { padding-block: 1.25rem 1rem; }
     .hero-section h1 { font-size: clamp(1.6rem, 6vw, 2rem); overflow-wrap: anywhere; }
   }
-  .hero-section { padding: 2rem 0 1.5rem; text-align: center; }
+  .hero-section { padding-block: 2rem 1.5rem; text-align: center; }
   .hero-icon { font-size: 4rem; margin-bottom: .5rem; }
   .hero-section h1 { font-size: clamp(2rem, 4vw, 2.8rem); margin: .3rem 0; }
   .hero-section p { color: var(--ink-soft); font-size: 1.05rem; }
@@ -122,5 +122,5 @@ const arrow = locale === 'ar' ? '←' : '→';
   .module-card__arrow { font-size: 1.2rem; color: var(--ink-soft); transition: transform .15s ease; flex-shrink: 0; }
   .module-card:hover .module-card__arrow { transform: translateX(4px); color: var(--accent); }
   [dir='rtl'] .module-card:hover .module-card__arrow { transform: translateX(-4px); }
-  @media (max-width: 640px) { .hero-section { padding: 1.5rem 0 1.25rem; } .crumb { padding-top: .8rem; } }
+  @media (max-width: 640px) { .hero-section { padding-block: 1.5rem 1.25rem; } .crumb { padding-top: .8rem; } }
 </style>

@@ -3,5 +3,8 @@
  "slmcorpuscsv": "slm-corpus.csv",
  "studentsnormalcsv": "students-normal.csv",
  "studentsperformancecsv": "students-performance.csv",
- "titaniccsv": "titanic.csv"
+ "titaniccsv": "titanic.csv",
+ "datatxt": "data.txt",
+ "scorestxt": "scores.txt",
+ "datacsv": "data.csv"
 }

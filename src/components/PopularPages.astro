@@ -15,9 +15,11 @@ const {supabaseUrl = '', supabaseKey = ''} = Astro.props;
 
 {
   supabaseUrl && supabaseKey && (
-    <section class="container popular-pages" aria-label={m.popular_pages_label()}>
-      <h2 class="popular-pages__title">{m.popular_pages_title()}</h2>
-      <ol class="popular-pages__list" id="popular-pages-list"></ol>
+    <div class="container">
+      <section class="popular-pages" aria-label={m.popular_pages_label()}>
+        <h2 class="popular-pages__title">{m.popular_pages_title()}</h2>
+        <ol class="popular-pages__list" id="popular-pages-list"></ol>
+      </section>
       <script is:inline define:vars={{supabaseUrl, supabaseKey}}>
         (async function () {
           const list = document.getElementById('popular-pages-list');
@@ -63,7 +65,21 @@ const {supabaseUrl = '', supabaseKey = ''} = Astro.props;
               const a = document.createElement('a');
               a.className = 'popular-pages__link';
               a.href = path;
-              a.textContent = trimmed.replace(/-/g, ' ').replace(/\//g, ' › ');
+              // url.pathname is always percent-encoded (unlike location.pathname,
+              // which browsers show decoded), so non-ASCII segments like the
+              // Arabic route slugs must be decoded per-segment before display.
+              a.textContent = trimmed
+                .split('/')
+                .map((seg) => {
+                  try {
+                    return decodeURIComponent(seg);
+                  } catch {
+                    return seg;
+                  }
+                })
+                .join('/')
+                .replace(/-/g, ' ')
+                .replace(/\//g, ' › ');
               const views = document.createElement('span');
               views.className = 'popular-pages__views';
               views.textContent = String(row.views);
@@ -76,7 +92,7 @@ const {supabaseUrl = '', supabaseKey = ''} = Astro.props;
           }
         })();
       </script>
-    </section>
+    </div>
   )
 }
 
@@ -85,8 +101,8 @@ const {supabaseUrl = '', supabaseKey = ''} = Astro.props;
      the inline script, so they never receive Astro's scoped data-astro-cid
      attribute — scoped styles would silently not match them at all. */
   .popular-pages {
-    margin-block: 2rem;
-    padding: 1.5rem 1.75rem;
+    margin-block: 2.5rem;
+    padding: 2rem 2.25rem;
     border: 1px solid var(--line);
     border-radius: var(--radius-lg);
     background: var(--surface);
@@ -94,12 +110,14 @@ const {supabaseUrl = '', supabaseKey = ''} = Astro.props;
   }
   @media (max-width: 640px) {
     .popular-pages {
-      margin-block: 1.25rem;
-      padding: 1.25rem 1rem;
+      /* Matches .hub__inner's mobile padding (1.15rem) for visual
+         consistency with the hub cards above it. */
+      margin-block: 1.5rem;
+      padding: 1.15rem;
     }
   }
   .popular-pages__title {
-    margin: 0 0 1rem;
+    margin: 0 0 1.25rem;
     font-size: 1.05rem;
     font-weight: 700;
   }
@@ -108,7 +126,7 @@ const {supabaseUrl = '', supabaseKey = ''} = Astro.props;
     margin: 0;
     padding: 0;
     display: grid;
-    gap: .25rem;
+    gap: .15rem;
   }
   .popular-pages__item {
     display: grid;
@@ -130,7 +148,7 @@ const {supabaseUrl = '', supabaseKey = ''} = Astro.props;
   }
   .popular-pages__link {
     display: block;
-    padding: .55rem 0;
+    padding: .1rem 0;
     text-decoration: none;
     color: var(--ink);
     text-transform: capitalize;

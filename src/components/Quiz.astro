@@ -15,14 +15,14 @@ interface Props {
   xp?: number;
   lessonId?: string;
 }
-const {title = m.quiz_title(), questions, xp = 10, lessonId = ''} = Astro.props;
+const {title = m.quiz_title(), questions, xp = 5, lessonId = ''} = Astro.props;
 ---
 
 <div class="quiz" data-quiz data-xp={xp} data-lesson={lessonId} data-total={questions.length}>
   <div class="quiz__head">
     <span class="quiz__icon">✅</span>
     <span class="quiz__title">{title}</span>
-    <span class="quiz__xp">+{xp} XP</span>
+    <span class="quiz__xp">+{xp} XP/each</span>
   </div>
 
   <div class="quiz__body">
@@ -55,6 +55,17 @@ const {title = m.quiz_title(), questions, xp = 10, lessonId = ''} = Astro.props;
 
 <script>
   import {m} from '../paraglide/messages.js';
+
+  // This script's content is identical on every render of this component, so
+  // under View Transitions the browser's module registry runs it only once,
+  // ever -- a soft navigation to a second lesson page would otherwise leave
+  // its quiz completely unhydrated (no click handlers, no grading). The
+  // per-element data-hydrated guard below already makes re-running this safe
+  // (a fresh page's elements never carry it), so wrapping the whole scan in
+  // astro:page-load just makes it actually run again. The readyState
+  // fallback covers the initial dispatch being missed if this deferred
+  // bundle is still loading when window's `load` event fires first.
+  function init() {
   document.querySelectorAll('[data-quiz]').forEach((el) => {
     if (el.hasAttribute('data-hydrated')) return;
     // Own-format check: only Quiz.astro blocks carry the check button.
@@ -66,7 +77,6 @@ const {title = m.quiz_title(), questions, xp = 10, lessonId = ''} = Astro.props;
     const checkBtn = el.querySelector('[data-quiz-check]') as HTMLButtonElement;
     const feedback = el.querySelector('[data-quiz-feedback]') as HTMLElement;
     const scoreEl = el.querySelector('[data-quiz-score]') as HTMLElement;
-    const xp = Number((el as HTMLElement).dataset.xp) || 10;
     const total = Number((el as HTMLElement).dataset.total) || 0;
     const lessonId = (el as HTMLElement).dataset.lesson ?? '';
 
@@ -137,7 +147,7 @@ const {title = m.quiz_title(), questions, xp = 10, lessonId = ''} = Astro.props;
           console.warn('[quiz] failed to record perfect quiz', e);
         }
         feedback.hidden = false;
-        feedback.textContent = m.quiz_perfect({xp});
+        feedback.textContent = m.quiz_perfect({xp: 25});
         feedback.className = 'quiz__feedback quiz__feedback--correct';
       } else if (correct > 0) {
         feedback.hidden = false;
@@ -172,6 +182,10 @@ const {title = m.quiz_title(), questions, xp = 10, lessonId = ''} = Astro.props;
       else reset();
     });
   });
+  }
+
+  document.addEventListener('astro:page-load', init);
+  if (document.readyState === 'complete') init();
 </script>
 
 <style>

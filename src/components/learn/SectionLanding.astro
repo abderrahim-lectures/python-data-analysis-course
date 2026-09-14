@@ -5,7 +5,6 @@ import Base from '../../layouts/Base.astro';
 import {learnHref, moduleHref, learnAlternates, idInLocale, type Locale} from '../../lib/routeSegments';
 import {m} from '../../paraglide/messages.js';
 import {TRACK_ICONS, sectionIcon, sectionName, sectionDescription} from '../../lib/sections';
-import {XP} from '../../lib/gameState';
 
 interface Props {
   locale: Locale;
@@ -19,7 +18,7 @@ const dir = locale === 'ar' ? 'rtl' : 'ltr';
 const allModules = await getCollection('modules');
 const allLessons = await getCollection('lessons');
 
-const diffColor = (d: string) => d === 'beginner' ? 'var(--success)' : d === 'intermediate' ? 'var(--streak-text)' : 'var(--bad)';
+const diffColorCls = (d: string) => d === 'beginner' ? 'diff-color-beginner' : d === 'intermediate' ? 'diff-color-intermediate' : 'diff-color-advanced';
 const arrow = locale === 'ar' ? '←' : '→';
 
 const getModuleLessonCount = (slug: string, track: string) => {
@@ -35,7 +34,7 @@ const normalModules = allModules.filter((e) => idInLocale(locale, e.id) && e.id.
 const hardModules = allModules.filter((e) => idInLocale(locale, e.id) && e.id.includes(`${section}/hard`)).sort((a, b) => a.data.order - b.data.order);
 const normalLessons = allLessons.filter((l) => idInLocale(locale, l.id) && l.id.includes(`${section}/normal`));
 const hardLessons = allLessons.filter((l) => idInLocale(locale, l.id) && l.id.includes(`${section}/hard`));
-const totalXp = [...normalLessons, ...hardLessons].length * XP.LESSON_COMPLETE;
+const totalXp = [...normalLessons, ...hardLessons].reduce((sum, l) => sum + (l.data.xpReward ?? 10), 0);
 const totalMinutes = [...normalLessons, ...hardLessons].reduce((sum, l) => sum + (l.data.estimatedMinutes ?? 15), 0);
 const totalHours = Math.round(totalMinutes / 60);
 ---
@@ -76,7 +75,7 @@ const totalHours = Math.round(totalMinutes / 60);
                   <h3>{mod.data.title}</h3>
                   <p>{mod.data.description}</p>
                   <div class="module-card__meta">
-                    <span style={`color:${diffColor(mod.data.difficulty)}`}>{m[`difficulty_${mod.data.difficulty}`]()}</span>
+                    <span class={diffColorCls(mod.data.difficulty)}>{m[`difficulty_${mod.data.difficulty}`]()}</span>
                     <span>📖 {lessonCount}</span>
                     <span>⏱ ~{Math.round(totalMin / 60)}h</span>
                   </div>
@@ -99,10 +98,10 @@ const totalHours = Math.round(totalMinutes / 60);
   @media (max-width: 640px) {
     .crumb { gap: .3rem .5rem; font-size: .8rem; align-items: flex-start; padding-top: .9rem; }
     .crumb__here { overflow-wrap: anywhere; }
-    .hero-section { padding: 1.25rem 0 1rem; }
+    .hero-section { padding-block: 1.25rem 1rem; }
     .hero-section h1 { font-size: clamp(1.6rem, 6vw, 2rem); overflow-wrap: anywhere; }
   }
-  .hero-section { padding: 2rem 0 1.5rem; text-align: center; }
+  .hero-section { padding-block: 2rem 1.5rem; text-align: center; }
   .hero-icon { font-size: 4rem; margin-bottom: .5rem; }
   .hero-section h1 { font-size: clamp(2rem, 4vw, 2.8rem); margin: .3rem 0; }
   .hero-section p { color: var(--ink-soft); font-size: 1.05rem; }
@@ -127,5 +126,5 @@ const totalHours = Math.round(totalMinutes / 60);
   .module-card__arrow { font-size: 1.2rem; color: var(--ink-soft); transition: transform .15s ease; flex-shrink: 0; }
   .module-card:hover .module-card__arrow { transform: translateX(4px); color: var(--accent); }
   [dir='rtl'] .module-card:hover .module-card__arrow { transform: translateX(-4px); }
-  @media (max-width: 640px) { .hero-section { padding: 1.5rem 0 1.25rem; } .crumb { padding-top: .8rem; } }
+  @media (max-width: 640px) { .hero-section { padding-block: 1.5rem 1.25rem; } .crumb { padding-top: .8rem; } }
 </style>

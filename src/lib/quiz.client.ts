@@ -3,6 +3,7 @@
 // into gameState.recordQuiz() so the "quiz accuracy" stat on /progress becomes
 // real instead of permanently 0%. Loaded once from Base.astro.
 import {m} from '../paraglide/messages.js';
+import {recordQuiz} from './gameState.ts';
 
 function initQuiz(quiz: Element) {
   if (quiz.hasAttribute('data-hydrated')) return;
@@ -36,8 +37,7 @@ function initQuiz(quiz: Element) {
         answered++;
         if (isCorrect) correct++;
         try {
-          const gs = await import('./gameState.ts');
-          gs.recordQuiz(isCorrect, lessonId || undefined);
+          recordQuiz(isCorrect, lessonId || undefined);
         } catch {
           // offline: skip
         }
@@ -59,5 +59,14 @@ export function initQuizzes(root: ParentNode = document) {
 }
 
 if (typeof document !== 'undefined') {
-  document.addEventListener('DOMContentLoaded', () => initQuizzes());
+  // astro:page-load covers both the initial load and every soft navigation
+  // under View Transitions; DOMContentLoaded only ever fires once. But the
+  // initial dispatch fires on window's `load` event via Astro's own router
+  // script, not this one -- if this deferred bundle is still fetching (cold
+  // cache, slow connection) when `load` fires, that one-time event is gone
+  // before the listener below ever registers. readyState is 'complete' only
+  // after `load` has already fired, so this covers exactly that miss without
+  // ever double-firing (either this runs, or the listener does, never both).
+  document.addEventListener('astro:page-load', () => initQuizzes());
+  if (document.readyState === 'complete') initQuizzes();
 }

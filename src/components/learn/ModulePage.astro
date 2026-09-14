@@ -35,7 +35,7 @@ const prevModule = moduleIdx > 0 ? sortedModules[moduleIdx - 1] : null;
 const nextModule = moduleIdx >= 0 && moduleIdx < sortedModules.length - 1 ? sortedModules[moduleIdx + 1] : null;
 
 const totalMinutes = moduleLessons.reduce((sum, l) => sum + (l.data.estimatedMinutes ?? 15), 0);
-const diffColor = difficulty === 'beginner' ? 'var(--success-text)' : difficulty === 'intermediate' ? 'var(--streak-text)' : 'var(--bad-text)';
+const diffTextCls = difficulty === 'beginner' ? 'diff-text-beginner' : difficulty === 'intermediate' ? 'diff-text-intermediate' : 'diff-text-advanced';
 const modulesPath = learnHref(locale, base, section, trackWord(locale, track), MODULE_WORDS[locale], '').replace(/^\/+/, '').replace(/\/$/, '');
 const arrow = locale === 'ar' ? '←' : '→';
 const trackLessons = allLessons.filter((e) => idInLocale(locale, e.id) && e.id.includes(trackPath));
@@ -61,7 +61,7 @@ const prereqMapOf = (prereqs: string[]): Record<string, string> => {
     <div class="module-head__icon">{icon}</div>
     <div class="module-head__info">
       <div class="module-head__meta">
-        <span class="module-head__diff" style={`color:${diffColor}`}>{m[`difficulty_${difficulty}`]()}</span>
+        <span class={`module-head__diff ${diffTextCls}`}>{m[`difficulty_${difficulty}`]()}</span>
         <span class="module-head__time">{totalMinutes >= 60 ? `~${Math.round(totalMinutes / 60)}h` : m.minutes_label({n: totalMinutes})}</span>
         <span class="module-head__count">📖 {moduleLessons.length} {m.module_lessons_label()}</span>
       </div>
@@ -80,7 +80,7 @@ const prereqMapOf = (prereqs: string[]): Record<string, string> => {
     <div class="lessons-grid">
       {moduleLessons.map((lesson, i) => {
         const lDiff = lesson.data.difficulty ?? 'beginner';
-        const lDiffColor = lDiff === 'beginner' ? 'var(--success)' : lDiff === 'intermediate' ? 'var(--streak-text)' : 'var(--bad)';
+        const lDiffColorCls = lDiff === 'beginner' ? 'diff-color-beginner' : lDiff === 'intermediate' ? 'diff-color-intermediate' : 'diff-color-advanced';
         return (
           <a class="lesson-card" href={lessonHref(locale, base, section, track, lesson.id.split('/').pop()!)} data-mastery={`${trackPath}/${lesson.id.split('/').pop()}`} data-prereqs={JSON.stringify(prereqMapOf(lesson.data.prerequisites))}>
             <span class="lesson-card__num">{i + 1}</span>
@@ -88,7 +88,7 @@ const prereqMapOf = (prereqs: string[]): Record<string, string> => {
               <span class="lesson-card__title">{lesson.data.title}</span>
               <span class="lesson-card__desc">{lesson.data.description}</span>
               <div class="lesson-card__meta">
-                <span style={`color:${lDiffColor}`}>{({beginner: m.difficulty_beginner(), intermediate: m.difficulty_intermediate(), advanced: m.difficulty_advanced()})[lDiff] ?? lDiff}</span>
+                <span class={lDiffColorCls}>{({beginner: m.difficulty_beginner(), intermediate: m.difficulty_intermediate(), advanced: m.difficulty_advanced()})[lDiff] ?? lDiff}</span>
                 <span>{m.minutes_label({n: lesson.data.estimatedMinutes})}</span>
                 <span>⚡ +{lesson.data.xpReward} XP</span>
               </div>
@@ -105,6 +105,15 @@ const prereqMapOf = (prereqs: string[]): Record<string, string> => {
 
 <script>
   import {m} from '../../paraglide/messages.js';
+
+  // This script's content is identical on every render of this component, so
+  // under View Transitions the browser's module registry runs it only once,
+  // ever -- a soft navigation to a second module page would otherwise never
+  // get its mastery chips rendered at all. astro:page-load fires on the
+  // initial load and again after every soft navigation; the readyState
+  // fallback covers the initial dispatch being missed if this deferred
+  // bundle is still loading when window's `load` event fires first.
+  function init() {
   const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-mastery]'));
   if (cards.length) {
     Promise.all([
@@ -144,6 +153,10 @@ const prereqMapOf = (prereqs: string[]): Record<string, string> => {
       });
     });
   }
+  }
+
+  document.addEventListener('astro:page-load', init);
+  if (document.readyState === 'complete') init();
 </script>
 
 <style>
@@ -154,10 +167,10 @@ const prereqMapOf = (prereqs: string[]): Record<string, string> => {
   @media (max-width: 640px) {
     .crumb { gap: .3rem .5rem; font-size: .8rem; align-items: flex-start; padding-top: .9rem; }
     .crumb__here { overflow-wrap: anywhere; }
-    .module-head { padding: 1rem 0 .9rem; gap: .8rem; }
+    .module-head { padding-block: 1rem .9rem; gap: .8rem; }
     .module-head h1 { overflow-wrap: anywhere; }
   }
-  .module-head { padding: 1.5rem 0 1rem; display: flex; gap: 1.25rem; align-items: flex-start; }
+  .module-head { padding-block: 1.5rem 1rem; display: flex; gap: 1.25rem; align-items: flex-start; }
   .module-head__icon { font-size: 3rem; line-height: 1; }
   .module-head__info { flex: 1; }
   .module-head__meta { display: flex; gap: .75rem; align-items: center; margin-bottom: .5rem; flex-wrap: wrap; }

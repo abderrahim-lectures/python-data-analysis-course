@@ -33,11 +33,14 @@ function pgFixture(path: string, referrer = '') {
   const win = {__PDA404_I18N__: {notfound_play_title: 'PyDA', playground_title: 'PG'}, __PDA404_LOCALE__: 'en'};
   vi.stubGlobal('window', win);
 
-  return {notfound, pgHead, pgSection, pgCode, pgBack, eyebrow, h1, lead, dispatched};
+  return {stub, notfound, pgHead, pgSection, pgCode, pgBack, eyebrow, h1, lead, dispatched};
 }
 
-// Reset module cache so the client module's top-level init() runs again, with
-// the option to shape decodeShareCode's behavior before the page loads.
+// Reset module cache so the client module's init() runs again. The domstub's
+// document.readyState is 'complete', so the module's own readyState guard
+// (covering a real initial astro:page-load dispatch missed by a slow-loading
+// bundle) fires init() immediately on import -- no need to fire the listener
+// manually here too.
 async function loadPage(path: string, referrer = '', shape?: (m: typeof decodeShareCode) => void) {
   const f = pgFixture(path, referrer);
   shape?.(decodeShareCode);
@@ -104,7 +107,7 @@ describe('notFoundPlayground', () => {
     expect(f.h1.textContent).toBe('PG');
   });
 
-  test('deferred init runs on DOMContentLoaded when the page is still loading', async () => {
+  test('deferred init runs on astro:page-load when the page is still loading', async () => {
     const stub = stubDom();
     (stub.restore() as any).readyState = 'loading';
     vi.stubGlobal('location', {pathname: '/playground/ZZZ', origin: 'http://localhost:4321'});
@@ -114,6 +117,6 @@ describe('notFoundPlayground', () => {
     });
     vi.resetModules();
     await import('../../src/lib/notFoundPlayground.client.ts');
-    expect(stub.listeners['DOMContentLoaded']).toBeDefined();
+    expect(stub.listeners['astro:page-load']).toBeDefined();
   });
 });

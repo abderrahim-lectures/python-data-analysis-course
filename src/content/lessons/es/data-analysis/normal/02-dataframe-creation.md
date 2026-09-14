@@ -112,7 +112,7 @@ Parámetros útiles para `read_csv()`:
 df = pd.read_csv(
     "data.csv",
     index_col="id",        # use 'id' column as the index
-    usecols=["name", "age", "fare"],  # load only these columns
+    usecols=["id", "name", "age", "fare"],  # load only these columns (must include the index column)
     na_values=["?", ""],   # treat '?' and empty strings as NaN
     dtype={"age": "float"} # force column type
 )
