@@ -223,7 +223,7 @@ button { font-family: inherit; cursor: pointer; }
   overflow: hidden; position: relative;
 }
 .xp-bar__fill {
-  height: 100%; width: 0; border-radius: var(--radius-pill);
+  height: 100%; border-radius: var(--radius-pill);
   background: linear-gradient(90deg, var(--accent), var(--accent-strong));
   transition: width .6s cubic-bezier(.4,0,.2,1);
   position: relative;
@@ -823,7 +823,7 @@ main:focus { outline: none; }
 .player-card__level { font-family: var(--font-display); font-weight: 800; font-size: .85rem; color: var(--ink-soft); }
 .player-card__xp { display: flex; flex-direction: column; gap: 3px; }
 .player-card__xpbar { height: 8px; background: var(--surface-2); border-radius: var(--radius-pill); overflow: hidden; }
-.player-card__xpfill { height: 100%; width: 0; border-radius: var(--radius-pill); background: linear-gradient(90deg, var(--accent), var(--accent-strong)); transition: width .6s cubic-bezier(.4,0,.2,1); }
+.player-card__xpfill { height: 100%; border-radius: var(--radius-pill); background: linear-gradient(90deg, var(--accent), var(--accent-strong)); transition: width .6s cubic-bezier(.4,0,.2,1); }
 .player-card__xptext { font-size: .72rem; font-weight: 700; color: var(--ink-soft); }
 .player-card__actions { display: flex; gap: .5rem; }
 .player-card__actions .btn { flex: 1; justify-content: center; min-width: 0; }
@@ -892,7 +892,7 @@ main:focus { outline: none; }
 .hub__card h2 { margin: .25rem 0 .25rem; font-size: 1.2rem; }
 .hub__card p { color: var(--ink-soft); flex: 1; font-size: .9rem; margin: 0 0 .6rem; }
 .hub__progress { height: 6px; background: var(--surface-2); border-radius: var(--radius-pill); overflow: hidden; margin-bottom: .75rem; }
-.hub__progress-fill { height: 100%; width: 0; border-radius: var(--radius-pill); background: linear-gradient(90deg, var(--accent), var(--accent-strong)); transition: width .8s cubic-bezier(.4,0,.2,1); }
+.hub__progress-fill { height: 100%; border-radius: var(--radius-pill); background: linear-gradient(90deg, var(--accent), var(--accent-strong)); transition: width .8s cubic-bezier(.4,0,.2,1); }
 .hub__progress-fill--streak { background: linear-gradient(90deg, var(--streak), var(--streak-deep)); }
 .hub__cta { margin-top: auto; }
 .hub__tags { display: flex; flex-wrap: wrap; gap: .35rem; margin-bottom: .75rem; }
@@ -951,7 +951,7 @@ main:focus { outline: none; }
 
 /* === Mobile touch target minimum (44×44px WCAG 2.5.8) === */
 @media (pointer: coarse) {
-  button, a, input, select, textarea, [role="button"], [role="tab"], [role="option"] {
+  button, a, input:not([type="checkbox"]):not([type="radio"]), select, textarea, [role="button"], [role="tab"], [role="option"] {
     min-height: 44px;
     min-width: 44px;
   }

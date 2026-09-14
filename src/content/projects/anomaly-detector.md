@@ -172,7 +172,7 @@ Values at those positions:
 
 ### 1.3 Verify the setup
 
-**Checklist**
+**✅ Checklist**
 
 - ✅ `df` has 90 rows and 3 columns: `date`, `response_ms`, `requests`.
 - ✅ The mean is around 210 (slightly above 200 due to injected spikes).
@@ -287,7 +287,7 @@ for t in [2.0, 2.5, 3.0, 3.5, 4.0]:
 
 ### 2.4 Verify z-score detection
 
-**Checklist**
+**✅ Checklist**
 
 - ✅ `compute_zscores` returns a Series with mean near 0 and std near 1.
 - ✅ At threshold 3.0, exactly 5 anomalies are flagged, matching the injected spikes.
@@ -409,7 +409,7 @@ Rows flagged by at least one method:
 
 ### 3.4 Verify IQR detection
 
-**Checklist**
+**✅ Checklist**
 
 - ✅ `iqr_bounds` returns a lower and upper fence around the middle 50% of data.
 - ✅ At multiplier 1.5, IQR catches the same 5 injected spikes.
@@ -521,7 +521,7 @@ plot_boxplot(df)
 
 ### 4.4 Verify visualizations
 
-**Checklist**
+**✅ Checklist**
 
 - ✅ The scatter plot shows 5 clearly separated red X markers above the normal cluster.
 - ✅ The histogram shows anomaly threshold lines in the tail region.
@@ -658,7 +658,7 @@ Contents of anomalies_zscore.csv:
 
 ### 5.4 Verify reporting
 
-**Checklist**
+**✅ Checklist**
 
 - ✅ `generate_report` prints a structured summary with counts, means, and individual anomalies.
 - ✅ Severity labels (CRITICAL, HIGH, MEDIUM) reflect the magnitude of each anomaly.
