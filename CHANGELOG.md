@@ -2,6 +2,11 @@
 
 All notable changes to this project are documented in this file. Format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [2.0.10] — 2026-09-14
+
+### Fixed
+- CSP blocked scripts after a soft (client-side) navigation, breaking Astro's own ClientRouter script re-execution and, on any page other than the visitor's entry page, that page's own inline scripts too. `<meta http-equiv="Content-Security-Policy">` is only evaluated from the real, server-delivered HTML document — a soft-navigation DOM swap of a different page's CSP `<meta>` tag never actually takes effect, so only the visitor's first-loaded page's hash list was ever enforced. `scripts/harden-csp.mjs` now computes one global union of every page's inline-script hashes (plus the ClientRouter's own fixed placeholder-script hash) and applies that same set to every page, instead of a different set per page. Invisible in `astro dev` since the hardening pass only runs postbuild against a real `astro build`. (#314)
+
 ## [2.0.9] — 2026-09-14
 
 ### Fixed

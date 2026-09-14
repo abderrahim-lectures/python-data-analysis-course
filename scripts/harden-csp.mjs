@@ -41,6 +41,15 @@ function sha256(content) {
   return 'sha256-' + createHash('sha256').update(content, 'utf-8').digest('base64');
 }
 
+// Astro's ClientRouter (View Transitions) inserts a fixed
+// `<script type="module" src="data:application/javascript,"/>` on every
+// soft navigation as a synchronization barrier while waiting for other
+// module scripts to load. Its content never varies across builds or pages,
+// so its hash is hardcoded here rather than computed -- without it, EVERY
+// soft navigation on the site throws a CSP violation and blocks the
+// ClientRouter's own script re-execution.
+const CLIENT_ROUTER_PLACEHOLDER_HASH = 'sha256-REaHnPdgxmRomsKzMwMY6VF7JTR0qH10P8XPa+y2FGU=';
+
 function isHashableScript(attrs) {
   if (/\bsrc\s*=/.test(attrs)) return false; // external script, governed by 'self' already
   const typeMatch = attrs.match(/type\s*=\s*["']([^"']+)["']/);
@@ -56,6 +65,25 @@ function replaceUnsafeInline(directive, content, hashes) {
   );
 }
 
+function stripComments(html) {
+  // Strip HTML comments before scanning: SCRIPT_RE/STYLE_RE are plain
+  // regexes, not a real HTML parser, so an authoring comment that happens
+  // to mention "<script>" or "<style>" in prose would otherwise be
+  // mistaken for a real tag, corrupting where the "content" capture
+  // starts and producing a hash that never matches what the browser
+  // actually executes.
+  return html.replace(/<!--[\s\S]*?-->/g, '');
+}
+
+function collectScriptHashes(html) {
+  const hashes = new Set();
+  for (const m of stripComments(html).matchAll(SCRIPT_RE)) {
+    const [, attrs, content] = m;
+    if (isHashableScript(attrs)) hashes.add(sha256(content));
+  }
+  return hashes;
+}
+
 async function main() {
   let files = [];
   for await (const f of glob('**/*.html', {cwd: DIST})) files.push(f);
@@ -65,35 +93,42 @@ async function main() {
     return;
   }
 
-  let patched = 0;
+  // Content-Security-Policy delivered via <meta http-equiv> is locked in by
+  // the browser at the moment it parses the real HTML document -- it is
+  // NOT re-evaluated when Astro's ClientRouter (View Transitions) swaps in
+  // a different page's DOM on a soft navigation. That means whichever page
+  // a visitor happens to land on first is the ONLY page whose CSP <meta>
+  // ever actually takes effect for their whole session; every other page's
+  // own (never-enforced) per-page hash list is irrelevant once they've
+  // navigated once. A per-page hash set therefore breaks as soon as a
+  // visitor soft-navigates to a page whose inline scripts weren't also
+  // present, byte-for-byte, on their entry page. The fix is to compute one
+  // global union of every page's inline-script hashes and apply that same
+  // set to every page -- whichever page loads first, its CSP already covers
+  // every other page's scripts too.
+  const html = new Map();
+  const globalHashes = new Set([CLIENT_ROUTER_PLACEHOLDER_HASH]);
   for (const rel of files) {
     const path = new URL(rel, DIST);
-    const html = await readFile(path, 'utf-8');
-    if (!CSP_RE.test(html)) continue;
+    const content = await readFile(path, 'utf-8');
+    html.set(rel, content);
+    if (!CSP_RE.test(content)) continue;
+    for (const h of collectScriptHashes(content)) globalHashes.add(h);
+  }
 
-    // Strip HTML comments before scanning: SCRIPT_RE/STYLE_RE are plain
-    // regexes, not a real HTML parser, so an authoring comment that happens
-    // to mention "<script>" or "<style>" in prose would otherwise be
-    // mistaken for a real tag, corrupting where the "content" capture
-    // starts and producing a hash that never matches what the browser
-    // actually executes.
-    const stripped = html.replace(/<!--[\s\S]*?-->/g, '');
-
-    const scriptHashes = new Set();
-    for (const m of stripped.matchAll(SCRIPT_RE)) {
-      const [, attrs, content] = m;
-      if (isHashableScript(attrs)) scriptHashes.add(sha256(content));
-    }
-    const next = html.replace(CSP_RE, (_full, pre, content, post) => {
-      return pre + replaceUnsafeInline('script-src', content, scriptHashes) + post;
+  let patched = 0;
+  for (const rel of files) {
+    const content = html.get(rel);
+    if (!CSP_RE.test(content)) continue;
+    const next = content.replace(CSP_RE, (_full, pre, directives, post) => {
+      return pre + replaceUnsafeInline('script-src', directives, globalHashes) + post;
     });
-
-    if (next !== html) {
-      await writeFile(path, next, 'utf-8');
+    if (next !== content) {
+      await writeFile(new URL(rel, DIST), next, 'utf-8');
       patched++;
     }
   }
-  console.log(`[harden-csp] Patched ${patched}/${files.length} HTML files.`);
+  console.log(`[harden-csp] Patched ${patched}/${files.length} HTML files with ${globalHashes.size} shared script hashes.`);
 }
 
 main();
