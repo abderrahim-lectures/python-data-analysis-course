@@ -1,5 +1,0 @@
-id,name,age,fare,extra
-1,Alice,25,10.5,x
-2,Bob,?,20.0,y
-3,,30,,z
-4,Cleo,28,15.25,w

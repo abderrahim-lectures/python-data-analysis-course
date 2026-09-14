@@ -1,8 +1,0 @@
-{
-  "LiteBuildConfig": {
-    "apps": ["notebooks", "repl"],
-    "contents": ["files"],
-    "output_dir": "_output",
-    "base_url": "/lite/"
-  }
-}
