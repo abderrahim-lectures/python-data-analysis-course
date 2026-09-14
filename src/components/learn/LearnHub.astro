@@ -74,7 +74,7 @@ const totalXp = sections.reduce((sum, {slug}) => sum + stats[slug].xp, 0);
               <a class="route-pill route-pill--hard" href={learnHref(locale, base, slug, trackWord(locale, 'hard'))}>⚡ {m.hard_start()}</a>
             </div>
           </div>
-          <a class="sectioncard__all" href={learnHref(locale, base, slug)}>{m.see_all_modules()}</a>
+          <a class="sectioncard__all" href={learnHref(locale, base, slug, trackWord(locale, 'normal'))}>{m.see_all_modules()}</a>
         </div>
       ))}
     </div>
