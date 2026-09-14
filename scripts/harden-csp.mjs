@@ -1,6 +1,5 @@
 // Postbuild pass: replaces 'unsafe-inline' in each page's CSP script-src
-// and style-src with the exact sha256 hashes of that page's own inline
-// <script> and <style> content.
+// with the exact sha256 hashes of that page's own inline <script> content.
 //
 // This is a static site (output: 'static') -- there's no per-request server
 // to mint a per-response nonce, and a nonce baked into the static HTML at
@@ -11,12 +10,20 @@
 // known in advance, and attacker-injected content (different bytes) never
 // matches an allow-listed hash no matter how it got onto the page.
 //
-// style-src hashing only needs to cover <style> elements here, not style=""
-// attributes: every dynamic and per-instance inline style attribute in the
-// app was converted to a fixed class name (see the pt-*/w-pct-*/diff-*
-// classes in global.css) specifically so this script doesn't need
-// 'unsafe-hashes', a newer CSP3 feature with weaker browser support than
-// plain hash-source.
+// style-src stays 'unsafe-inline' rather than being hashed: every dynamic
+// and per-instance inline style attribute in our own code was converted to
+// a fixed class name (see the pt-*/w-pct-*/diff-* classes in global.css),
+// but third-party content we don't control -- KaTeX renders each formula
+// with unique, per-formula inline style="" attributes baked in at build
+// time (e.g. style="top:-2.314em;") -- can't be hash-allow-listed the same
+// way, since a hash only matches one exact string and these values vary per
+// formula. 'unsafe-hashes' (CSP3) would let hashed style attributes coexist
+// with hash-source for the rest, but browsers ignore 'unsafe-inline'
+// entirely once ANY hash-source is present in a directive, so hashing
+// *some* style-src content forces hashing all of it -- infeasible for
+// KaTeX's per-formula values. script-src (the higher-value target for XSS)
+// stays fully hashed; style-src keeps 'unsafe-inline' rather than lose
+// KaTeX rendering.
 //
 // <script type="application/ld+json"> and type="application/json"> blocks
 // are skipped: per the CSP "script-like element" definition, those aren't
@@ -28,7 +35,6 @@ import {glob} from 'node:fs/promises';
 
 const DIST = new URL('../dist/', import.meta.url);
 const SCRIPT_RE = /<script([^>]*)>([\s\S]*?)<\/script>/g;
-const STYLE_RE = /<style([^>]*)>([\s\S]*?)<\/style>/g;
 const CSP_RE = /(<meta http-equiv="Content-Security-Policy" content=")([^"]*)(")/;
 
 function sha256(content) {
@@ -78,15 +84,8 @@ async function main() {
       const [, attrs, content] = m;
       if (isHashableScript(attrs)) scriptHashes.add(sha256(content));
     }
-    const styleHashes = new Set();
-    for (const m of stripped.matchAll(STYLE_RE)) {
-      styleHashes.add(sha256(m[2]));
-    }
-
     const next = html.replace(CSP_RE, (_full, pre, content, post) => {
-      let withHashes = replaceUnsafeInline('script-src', content, scriptHashes);
-      withHashes = replaceUnsafeInline('style-src', withHashes, styleHashes);
-      return pre + withHashes + post;
+      return pre + replaceUnsafeInline('script-src', content, scriptHashes) + post;
     });
 
     if (next !== html) {

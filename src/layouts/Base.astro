@@ -387,10 +387,21 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
 
     <script>
       import {initAuth} from '../lib/supabaseAuth.ts';
-      import '../lib/runnable-cell.client.ts';
-      import '../lib/quiz.client.ts';
       import '../lib/gamestrip.client.ts';
       initAuth(import.meta.env.PUBLIC_SUPABASE_URL || '', import.meta.env.PUBLIC_SUPABASE_KEY || '');
+      // Runnable cells and quizzes only exist on lesson/project pages -- load
+      // their (Pyodide-adjacent) client bundles only when that markup shows
+      // up, instead of shipping them to every page in the site. Both modules
+      // bind their own astro:page-load listener once imported (dynamic
+      // import() is cached, so re-checking on every navigation is cheap and
+      // covers the case where the first page a visitor lands on has neither
+      // block but a later soft-navigation does).
+      function pydaLoadInteractiveModules() {
+        if (document.querySelector('[data-runnable]')) import('../lib/runnable-cell.client.ts');
+        if (document.querySelector('[data-quiz]')) import('../lib/quiz.client.ts');
+      }
+      document.addEventListener('astro:page-load', pydaLoadInteractiveModules);
+      if (document.readyState === 'complete') pydaLoadInteractiveModules();
     </script>
     <PageViews locale={lang} supabaseUrl={import.meta.env.PUBLIC_SUPABASE_URL || ''} supabaseKey={import.meta.env.PUBLIC_SUPABASE_KEY || ''} />
     <script is:inline>
