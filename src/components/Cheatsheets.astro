@@ -55,8 +55,10 @@ const alternates = {
   .cheats__title { font-size: 1.25rem; margin: 0 0 .75rem; display: flex; align-items: center; gap: .5rem; }
   .cheats__cards { list-style: none; padding: 0; margin: 0; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
   .cheats__card {
+    /* Matches .hub__inner's padding for visual consistency with the hub
+       cards on the homepage. */
     background: var(--surface); border: 1px solid var(--line);
-    border-radius: var(--radius-lg); padding: 1rem 1.15rem 1.1rem;
+    border-radius: var(--radius-lg); padding: 1.15rem;
     box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: .5rem;
   }
   .cheats__card-title { font-size: .95rem; margin: 0; color: var(--ink); }
