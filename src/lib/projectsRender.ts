@@ -7,8 +7,14 @@ export function initProjectsFinder() {
   // old `!` non-null assertion crashed immediately in setView()'s
   // `grid.className = ...`), and — because the throw happens mid-callback —
   // leaves the ClientRouter's own transition sequencing half-finished too.
-  const grid = document.getElementById('project-grid');
-  if (!grid) return;
+  const gridEl = document.getElementById('project-grid');
+  if (!gridEl) return;
+  // Re-bound to a fresh `const` with a non-nullable declared type: TypeScript's
+  // control flow narrowing from the guard above doesn't persist into the
+  // setView() closure defined below (it's scoped to this function, not
+  // propagated into nested function bodies), so `grid` inside that closure
+  // would still type as `HTMLElement | null` without this.
+  const grid: HTMLElement = gridEl;
   const search = document.getElementById('project-search') as HTMLInputElement | null;
   const tagButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('.tag-pill'));
   const diffButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('.diff-pill'));
