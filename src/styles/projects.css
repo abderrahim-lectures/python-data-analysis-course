@@ -93,7 +93,15 @@
 .card__badge--beginner { background: #065f46; color: #fff; }
 .card__badge--intermediate { background: #92400e; color: #fff; }
 .card__badge--advanced { background: #7f1d1d; color: #fff; }
-.card__badge--scaffold-full { background: rgba(6,95,70,.14); color: var(--success-text, #065f46); }
+.card__badge--scaffold-full { background: rgba(6,95,70,.14); color: var(--success-text); }
+/* --success-text (#2e7d0a) doesn't clear 4.5:1 against this badge's own
+   pale translucent green background in light mode (unlike every other use
+   of --success-text elsewhere, which sits on plain page backgrounds) --
+   darkened for light mode only. The dark-mode value already passes (a
+   light green against a near-black page background), so it's restored
+   explicitly rather than darkened along with it. */
+[data-theme='light'] .card__badge--scaffold-full { color: #1b5e20; }
+[data-theme='dark'] .card__badge--scaffold-full { color: var(--success-text); }
 .card__badge--scaffold-partial { background: rgba(146,64,14,.14); color: var(--streak-text, #92400e); }
 .card__badge--scaffold-open { background: rgba(124,58,237,.14); color: var(--accent-text, #7c3aed); }
 
