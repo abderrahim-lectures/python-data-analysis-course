@@ -69,9 +69,16 @@ function ensurePyodideCache(): void {
   if (pyodideCachePatched) return;
   pyodideCachePatched = true;
   const originalFetch = fetch.bind(globalThis);
+  // pyodide.mjs resolves `indexURL` to an absolute URL (new URL(indexURL,
+  // location)) before fetching pyodide.asm.wasm/python_stdlib.zip/
+  // pyodide-lock.json, so comparing against the plain relative INDEX string
+  // here would never match those requests -- only ever the one fetch this
+  // module makes directly with the relative string (manifest.json),
+  // silently leaving the actual multi-megabyte core runtime uncached.
+  const absoluteIndex = new URL(INDEX, self.location.href).href;
   (globalThis as {fetch: typeof fetch}).fetch = async (input: RequestInfo | URL, init?: RequestInit) => {
     const url = input instanceof Request ? input.url : String(input);
-    if (!url.startsWith(INDEX) || typeof caches === 'undefined') return originalFetch(input, init);
+    if (!url.startsWith(absoluteIndex) || typeof caches === 'undefined') return originalFetch(input, init);
     let cache: Cache | null = null;
     try {
       cache = await caches.open(PYODIDE_CACHE_NAME);
