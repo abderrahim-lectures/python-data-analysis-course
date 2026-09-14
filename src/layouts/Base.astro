@@ -209,21 +209,12 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
         // Busy overlay: shown while the page's scripts hydrate after load
         // ("first" mode) and while Pyodide boots on the first Run click
         // ("active" mode), so clicks never feel frozen without feedback.
-        const busy = document.createElement('div');
-        busy.className = 'app-busy';
-        busy.setAttribute('aria-hidden', 'true');
-        const inner = document.createElement('div');
-        inner.className = 'app-busy__inner';
-        const spinner = document.createElement('div');
-        spinner.className = 'app-busy__spinner';
-        const label = document.createElement('div');
-        label.className = 'app-busy__label';
-        label.setAttribute('role', 'status');
-        label.setAttribute('aria-live', 'polite');
-        inner.appendChild(spinner);
-        inner.appendChild(label);
-        busy.appendChild(inner);
-        document.body.appendChild(busy);
+        // The elements themselves are static markup with transition:persist
+        // (see the <body> template) so they survive every soft navigation --
+        // this handler only ever runs once anyway (identical inline scripts
+        // are deduped across View Transitions navigations).
+        const busy = document.getElementById('app-busy');
+        const label = document.getElementById('app-busy-label');
         const setBusy = (on) => {
           busy.classList.toggle('app-busy--active', on);
           busy.setAttribute('aria-hidden', String(!on));
@@ -261,9 +252,7 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
           setBusy(false);
         });
         // Pyodide loading bar (top edge)
-        const bar = document.createElement('div');
-        bar.className = 'pyodide-bar';
-        document.body?.appendChild(bar);
+        const bar = document.getElementById('pyodide-bar');
         window.addEventListener('pyodide:loading', () => bar.classList.add('pyodide-bar--active'));
         window.addEventListener('pyodide:ready', () => bar.classList.remove('pyodide-bar--active'));
         // Once a Python session has actually booted, warn before a real
@@ -281,6 +270,23 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
     </script>
   </head>
   <body>
+    <!-- Static (not JS-created) so `transition:persist` can keep these two
+         nodes alive across every soft navigation. They used to be built with
+         document.createElement()/appendChild() from a DOMContentLoaded
+         handler that (via Astro's dedup of identical inline scripts) only
+         ever ran once per session -- View Transitions then swapped them out
+         of the live DOM on the very next soft nav along with the rest of the
+         old page's body, while the 'pyodide:loading'/'ready' listeners kept
+         holding onto (and mutating) the now-detached, invisible nodes. Static
+         + transition:persist makes Astro carry the same elements across
+         every navigation instead of replacing them. -->
+    <div class="app-busy" id="app-busy" aria-hidden="true" transition:persist>
+      <div class="app-busy__inner">
+        <div class="app-busy__spinner"></div>
+        <div class="app-busy__label" id="app-busy-label" role="status" aria-live="polite"></div>
+      </div>
+    </div>
+    <div class="pyodide-bar" id="pyodide-bar" transition:persist></div>
     <a class="skip-link" href="#main">{m.skip_to_content()}</a>
     <header class="topnav">
       <div class="container topnav__inner">
