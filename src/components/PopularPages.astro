@@ -99,8 +99,8 @@ const {supabaseUrl = '', supabaseKey = ''} = Astro.props;
      the inline script, so they never receive Astro's scoped data-astro-cid
      attribute — scoped styles would silently not match them at all. */
   .popular-pages {
-    margin-block: 2rem;
-    padding: 1.5rem 1.75rem;
+    margin-block: 2.5rem;
+    padding: 2rem 2.25rem;
     border: 1px solid var(--line);
     border-radius: var(--radius-lg);
     background: var(--surface);
@@ -108,12 +108,12 @@ const {supabaseUrl = '', supabaseKey = ''} = Astro.props;
   }
   @media (max-width: 640px) {
     .popular-pages {
-      margin-block: 1.25rem;
-      padding: 1.25rem 1rem;
+      margin-block: 1.5rem;
+      padding: 1.5rem 1.25rem;
     }
   }
   .popular-pages__title {
-    margin: 0 0 1rem;
+    margin: 0 0 1.25rem;
     font-size: 1.05rem;
     font-weight: 700;
   }
@@ -122,14 +122,14 @@ const {supabaseUrl = '', supabaseKey = ''} = Astro.props;
     margin: 0;
     padding: 0;
     display: grid;
-    gap: .25rem;
+    gap: .5rem;
   }
   .popular-pages__item {
     display: grid;
     grid-template-columns: 1.5rem 1fr auto;
     align-items: center;
     gap: .75rem;
-    padding: .1rem .5rem;
+    padding: .5rem .75rem;
     border-radius: var(--radius-md);
     transition: background .15s ease;
   }
