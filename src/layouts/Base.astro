@@ -266,6 +266,17 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
         document.body?.appendChild(bar);
         window.addEventListener('pyodide:loading', () => bar.classList.add('pyodide-bar--active'));
         window.addEventListener('pyodide:ready', () => bar.classList.remove('pyodide-bar--active'));
+        // Once a Python session has actually booted, warn before a real
+        // browser reload/close -- the Worker (and everything it ran) can't
+        // survive one, so an accidental reload silently throws away the
+        // running session. Never armed for visitors who never clicked Run.
+        let pyodideSessionActive = false;
+        window.addEventListener('pyodide:ready', () => { pyodideSessionActive = true; });
+        window.addEventListener('beforeunload', (e) => {
+          if (!pyodideSessionActive) return;
+          e.preventDefault();
+          e.returnValue = '';
+        });
       });
     </script>
   </head>
