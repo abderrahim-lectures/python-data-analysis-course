@@ -2,6 +2,29 @@
 
 All notable changes to this project are documented in this file. Format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [2.0.8] — 2026-09-14
+
+### Fixed
+- `pythonGuard.ts` sandbox-escape bypass: `getattr(__builtins__, ...)`, `vars(__builtins__)`, `globals()["__builtins__"]`, and `().__class__.__bases__[0].__subclasses__()`-style dunder introspection were unblocked; now closed as a class (`__import__` stays intentionally allowed).
+- CSP `script-src` now fully sha256-hashed at build time instead of `'unsafe-inline'` (postbuild `scripts/harden-csp.mjs`); `style-src` stays `'unsafe-inline'` since KaTeX renders unique per-formula inline styles that can't be hash-allow-listed the same way.
+- `upgrade-insecure-requests` only sent in production — it broke every plain-`http://` dev/preview server (`ERR_SSL_PROTOCOL_ERROR` on same-origin subresources).
+- The Cache Storage layer meant to survive GitHub Pages' 10-minute `Cache-Control` cap was comparing an absolute URL against a relative prefix and never actually matched, so the ~11MB Pyodide core runtime (wasm, stdlib, lockfile) was never cached — only a 64-byte manifest was.
+- The loading overlay and top progress bar stopped showing after any soft navigation: both were `document.createElement()`'d once into a DOMContentLoaded handler that (via Astro's script dedup) only ever ran on the very first hard page load; View Transitions then swapped the node out of the DOM on the next navigation while listeners kept mutating the now-detached element. Made static with `transition:persist` instead.
+- `window.__pydaGetAuthToken()` removed from the global scope (was a copyable token getter); replaced with `window.__pydaFetch(url, init)`, which merges auth headers internally.
+- `LearnerActivity`'s polling intervals now clear on every `astro:page-load` instead of stacking forever across soft navigations; its Supabase count query uses `Prefer: count=exact` + `Range: 0-0` instead of fetching full rows.
+- XP milestone bonuses checked against a live-mutating `s.xp` instead of a before-loop snapshot, letting one milestone's bonus count toward crossing the next threshold in the same pass.
+- "See all modules" links on `/learn` 404'd — pointed at a combined-tracks overview page deleted in an earlier redesign; now point at the `normal` track.
+- Several sections (`.notfound`, `.head`, `.credits`, `.guide`, `.hero-section`, `.module-head`, the homepage's Most Viewed Pages / learner-activity cards, cheatsheet cards) combined Astro's `.container` utility class with a component padding/border rule on the *same element*; a padding shorthand or an added border on that element silently zeroed or widened past `.container`'s own side padding, so these sections sat flush against the viewport edge instead of inset like every sibling section.
+- Decompression-bomb guard in `codeShare.ts` now checks the running byte total mid-stream, not just the final size.
+- Runnable-cell and quiz client bundles now lazy-load only on pages that actually have that markup, re-checked on every soft navigation, instead of shipping to every page site-wide.
+- Fixed the same "runs once, never rebinds after a soft navigation" class of bug (Astro's script-dedup + View Transitions) in several more places this pass: Google Fonts render-blocking swap, particle DOM leak on level-up, redundant `querySelectorAll` calls in the run-cell handler.
+- E2E suite (`tests/e2e/smoke.mjs`) had three stale expectations left over from earlier redesigns/tuning, now corrected to match current, intentional behavior: quiz/lesson XP assertions didn't account for the once-daily +5 login bonus; onboarding assertions (`role="dialog"`, focus-trap, Escape-to-close) predated the switch to a non-blocking `role="status"` corner card.
+- `/playground` skipped from `<h1>` straight to the footer's `<h3>`; added a visually-hidden `<h2>` section heading.
+- Two WCAG AA contrast failures in light mode only (the "Guided" project badge, the anonymous-analytics footer description) both cleared 4.5:1 in dark mode already.
+
+### Added
+- `beforeunload` confirmation once a Python session has actually booted (armed only after a real `Run` click, since a browser reload/close can't be prevented, only warned against).
+
 ## [2.0.7] — 2026-09-13
 
 ### Added
