@@ -173,13 +173,13 @@ print("All 100 passwords passed verification.")
 
 ### 1.3 Confirm correctness
 
-**Checklist**
+**✅ Checklist**
 
-- `generate_password(length=20)` returns a string exactly 20 characters long.
-- Every generated password contains at least one lowercase, one uppercase, one digit, and one symbol.
-- Generating 100 passwords in a loop produces 100 distinct results (no repeats).
-- Passing `use_symbols=False` produces passwords with no symbols.
-- Passing `length=8` with all types enabled returns an 8-character string.
+- ✅ `generate_password(length=20)` returns a string exactly 20 characters long.
+- ✅ Every generated password contains at least one lowercase, one uppercase, one digit, and one symbol.
+- ✅ Generating 100 passwords in a loop produces 100 distinct results (no repeats).
+- ✅ Passing `use_symbols=False` produces passwords with no symbols.
+- ✅ Passing `length=8` with all types enabled returns an 8-character string.
 
 **Socratic question:** If you replaced `secrets.choice` with `random.choice` throughout this function, would the output *look* different to a human eye? What about to someone who knew the seed? Why does that distinction matter for passwords?
 
@@ -302,13 +302,13 @@ The bar fills proportionally: one block per ~4 bits of entropy, capped at 30 blo
 
 ### 2.4 Verify the analysis
 
-**Checklist**
+**✅ Checklist**
 
-- `"abc"` (3 chars, lowercase only) labels as "Very Weak" with entropy under 20 bits.
-- `"password123"` (common pattern) labels as "Weak" despite being 11 characters, because its charset is small.
-- A 16-character random password from Step 1 labels as "Very Strong" with entropy above 95 bits.
-- A 24-character random password shows higher entropy than the 16-character version.
-- The bar visualization fills more for stronger passwords.
+- ✅ `"abc"` (3 chars, lowercase only) labels as "Very Weak" with entropy under 20 bits.
+- ✅ `"password123"` (common pattern) labels as "Weak" despite being 11 characters, because its charset is small.
+- ✅ A 16-character random password from Step 1 labels as "Very Strong" with entropy above 95 bits.
+- ✅ A 24-character random password shows higher entropy than the 16-character version.
+- ✅ The bar visualization fills more for stronger passwords.
 
 **Socratic question:** Why does `"password123"` have low entropy despite being 11 characters long? If an attacker knows people tend to pick dictionary words plus digits, how does that change the *effective* charset size compared to what `calculate_entropy` assumes?
 
@@ -387,13 +387,13 @@ A freshly generated random password should never appear in the breach database. 
 
 ### 3.3 Verify the breach checker
 
-**Checklist**
+**✅ Checklist**
 
-- `"password123"` returns `True` with a count in the millions.
-- `"123456"` returns `True` with a very high count.
-- A freshly generated password from Step 1 returns `False, 0`.
-- The function handles network errors gracefully, no traceback, just a warning and `False, 0`.
-- The full password never appears in any print statement or log.
+- ✅ `"password123"` returns `True` with a count in the millions.
+- ✅ `"123456"` returns `True` with a very high count.
+- ✅ A freshly generated password from Step 1 returns `False, 0`.
+- ✅ The function handles network errors gracefully, no traceback, just a warning and `False, 0`.
+- ✅ The full password never appears in any print statement or log.
 
 **Socratic question:** The API returns results for millions of password hashes that share the same 5-character prefix. If your password's prefix is `CBFDA`, how many *other* passwords are you leaking information about to the server by making the request? Why is that acceptable in this design?
 
@@ -499,13 +499,13 @@ The wrong password produces an empty dict and a clear error message, no tracebac
 
 ### 4.4 Verify the vault
 
-**Checklist**
+**✅ Checklist**
 
-- Saving a vault with two entries creates a `vault.enc` file on disk.
-- Loading with the correct master password returns both entries with their usernames and passwords intact.
-- Loading with a wrong master password prints an error and returns an empty dict.
-- Loading when no vault file exists prints a message and returns an empty dict.
-- The `vault.enc` file contents are binary ciphertext, not readable text.
+- ✅ Saving a vault with two entries creates a `vault.enc` file on disk.
+- ✅ Loading with the correct master password returns both entries with their usernames and passwords intact.
+- ✅ Loading with a wrong master password prints an error and returns an empty dict.
+- ✅ Loading when no vault file exists prints a message and returns an empty dict.
+- ✅ The `vault.enc` file contents are binary ciphertext, not readable text.
 
 **Socratic question:** If someone steals your `vault.enc` file, how many guesses would they need to decrypt it? How does that number change if they know your master password is only 8 lowercase letters versus a 20-character random password from Step 1?
 
@@ -643,14 +643,14 @@ python password_generator.py list --master "my-master-password"
 
 ### 5.3 Verify the CLI
 
-**Checklist**
+**✅ Checklist**
 
-- `generate --length 20 --count 3` prints three 20-character passwords, one per line.
-- `generate --no-symbols` produces passwords with no symbols.
-- `check "password123"` shows "Weak" and "Found in ... breaches."
-- `store github -u alice --master X` creates or updates the vault file.
-- `list --master X` shows all stored entries in a formatted table.
-- Running `list` with the wrong master password prints an error, not a traceback.
+- ✅ `generate --length 20 --count 3` prints three 20-character passwords, one per line.
+- ✅ `generate --no-symbols` produces passwords with no symbols.
+- ✅ `check "password123"` shows "Weak" and "Found in ... breaches."
+- ✅ `store github -u alice --master X` creates or updates the vault file.
+- ✅ `list --master X` shows all stored entries in a formatted table.
+- ✅ Running `list` with the wrong master password prints an error, not a traceback.
 
 **Socratic question:** Why does `generate` print to stdout instead of saving to a file? What advantage does that give a CLI tool compared to always writing to disk?
 
@@ -747,12 +747,12 @@ def list_vault_with_expiry(vault: dict):
 
 ### 6.4 Verify the expiry tracker
 
-**Checklist**
+**✅ Checklist**
 
-- A newly stored entry shows "OK" status with age of 0d.
-- An entry with `created_at` set to 100 days ago shows "EXPIRED [!]" status.
-- An entry without a `created_at` key shows "unknown" age, not a crash.
-- The summary line at the bottom counts only expired entries.
+- ✅ A newly stored entry shows "OK" status with age of 0d.
+- ✅ An entry with `created_at` set to 100 days ago shows "EXPIRED [!]" status.
+- ✅ An entry without a `created_at` key shows "unknown" age, not a crash.
+- ✅ The summary line at the bottom counts only expired entries.
 
 **Socratic question:** What happens if the user changes their system clock backward by 100 days after storing a password? Would the expiry check still work correctly? What real-world problem does this reveal about client-side timestamp-based security checks?
 
@@ -876,13 +876,13 @@ print_report(passwords)
 
 ### 7.5 Verify the polished output
 
-**Checklist**
+**✅ Checklist**
 
-- The strength bar is red for weak passwords, yellow for moderate, and green for strong.
-- The breach warning is red when a password is found in breaches.
-- The summary table shows correct counts for each strength level.
-- The average entropy calculation is correct.
-- Running the tool in a terminal that supports ANSI codes shows colors; redirecting to a file does not include escape sequences.
+- ✅ The strength bar is red for weak passwords, yellow for moderate, and green for strong.
+- ✅ The breach warning is red when a password is found in breaches.
+- ✅ The summary table shows correct counts for each strength level.
+- ✅ The average entropy calculation is correct.
+- ✅ Running the tool in a terminal that supports ANSI codes shows colors; redirecting to a file does not include escape sequences.
 
 **Socratic question:** Why should the `colored()` function be used only for terminal output and not for writing to log files? What happens if you pipe the colored output to `less` or redirect it to a file?
 

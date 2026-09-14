@@ -117,12 +117,17 @@
 .card:hover .chip { background: var(--accent); color: var(--accent-contrast); }
 .chip__icon { font-size: .6rem; }
 
-/* List view card layout */
-.list .card { flex-direction: row; align-items: stretch; }
-.list .card__header { flex-direction: row; align-items: center; justify-content: flex-start; gap: .5rem; padding-block-start: .75rem; padding-inline-end: 0; padding-inline-start: 1.25rem; flex-shrink: 0; }
+/* List view card layout: header stacked above body (same arrangement at
+   every width -- this used to be a row layout on desktop with the body
+   squeezed in beside the header, but that meant a separate mobile media
+   query had to re-stack it and kept drifting out of sync with the header's
+   padding, e.g. the body's tighter .25rem side gap only made sense next to
+   the header, not underneath it). */
+.list .card { flex-direction: column; align-items: stretch; }
+.list .card__header { flex-direction: row; align-items: center; justify-content: flex-start; gap: .5rem; padding-block-start: .85rem; padding-inline-end: 1.2rem; padding-inline-start: 1.2rem; flex-shrink: 0; }
 .list .card__badge { position: static; white-space: nowrap; }
 .list .card__icon { font-size: 1.5rem; }
-.list .card__body { padding-block: .8rem; padding-inline-start: .25rem; padding-inline-end: 1.2rem; min-width: 0; }
+.list .card__body { padding-block: .4rem 1.2rem; padding-inline-start: 1.2rem; padding-inline-end: 1.2rem; min-width: 0; }
 .list .card p { -webkit-line-clamp: 1; }
 
 /* List view: replace the top accent stripe with a vertical ribbon on the
@@ -158,11 +163,6 @@
   .hero { padding: 1.75rem 0 1.25rem; }
   .grid, .list { margin-bottom: 1.75rem; }
   .empty { padding: 1.75rem 1rem; }
-  /* List view: a row (201px header + body) is too cramped for a 288px phone
-     card; stack the header above the body like grid view. */
-  .list .card { flex-direction: column; }
-  .list .card__header { padding-block-start: .85rem; }
-  .list .card__body { padding-block: .4rem 1.2rem; }
 }
 @media (max-width: 480px) {
   .finder__actions {

@@ -118,6 +118,9 @@ const {locale = 'en', supabaseUrl = '', supabaseKey = ''} = Astro.props;
      static markup here, but this block also has to match the section itself
      which is created before hydration — kept global for consistency and to
      avoid a second scoping footgun if this ever grows dynamic children. */
+  .learner-activity[hidden] {
+    display: none;
+  }
   .learner-activity {
     display: flex;
     align-items: center;

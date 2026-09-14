@@ -2,6 +2,18 @@
 
 All notable changes to this project are documented in this file. Format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [2.0.9] — 2026-09-14
+
+### Fixed
+- Every XP/progress bar (header gamestrip, homepage hero player-card, /progress player-card, /progress track bars) rendered stuck at 0% width: base rules in `global.css` hardcoded `width: 0` *after* the `.w-pct-N` utility classes in source order, so the hardcoded value always won regardless of the JS-applied percentage. (#305)
+- Learner-activity widget ("N learning now") always rendered even at 0 online — `.learner-activity { display: flex }` had no `[hidden]` override, so author CSS beat the browser's default `[hidden]{display:none}`. "Most viewed pages" widget went permanently blank after any soft navigation away from and back to the homepage — its fetch script was an unguarded top-level IIFE with no `astro:page-load` binding. (#306)
+- Checklist checkboxes rendered as oversized ~44×44px squares on touch devices — the WCAG touch-target rule applied to every `input`, including checkboxes already wrapped in a tappable label. (#307)
+- Notebook-opener chips (Colab/Kaggle/nbviewer/Binder/Deepnote/GitHub) showed their label text top-anchored instead of centered on mobile, a side effect of the same touch-target rule inflating the chip's height with no vertical-centering rule to compensate. (#308)
+- Every project step rendered two "Mark complete" buttons instead of one when the project page's first visit in a session happened via a soft navigation — the component-scoped init script's readyState fallback and its `astro:page-load` listener both fired for the same navigation. (#309)
+- Checklists in `ai-story-writer.md` and `password-generator.md` (14 checklists total) rendered as plain, non-interactive bullets instead of checkboxes — missing the `✅` prefix the gating script requires; `anomaly-detector.md`'s checklist headings had the same cosmetic gap. (#310)
+- `/progress` rendered the same XP bar twice — a redundant standalone `.xpbar-wrap` duplicated the player card's own bar. Removed it and its dead JS/CSS. (#311)
+- Project list-view cards misaligned their title/description/tags against the difficulty ribbon on mobile — the body kept the desktop row-layout's `.25rem` inline padding after the mobile media query re-stacked it under the header, which used `1.2rem`. Unified the list-view layout to always stack vertically with consistent padding at every width. (#312)
+
 ## [2.0.8] — 2026-09-14
 
 ### Fixed

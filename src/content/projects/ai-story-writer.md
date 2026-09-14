@@ -171,12 +171,12 @@ With a seed of 42 and a short training text, the chain loops through the same pa
 
 ### 1.3 Confirm the chain works
 
-**Checklist**
+**✅ Checklist**
 
-- `build_chain("a b c a b c")` returns a dict where `"a"` maps to `["b", "b"]` and `"b"` maps to `["c", "c"]`.
-- `generate_from_chain(chain, num_words=5, seed=1)` returns exactly 5 words.
-- Running the same seed twice produces identical output (deterministic).
-- Running different seeds produces different output.
+- ✅ `build_chain("a b c a b c")` returns a dict where `"a"` maps to `["b", "b"]` and `"b"` maps to `["c", "c"]`.
+- ✅ `generate_from_chain(chain, num_words=5, seed=1)` returns exactly 5 words.
+- ✅ Running the same seed twice produces identical output (deterministic).
+- ✅ Running different seeds produces different output.
 
 **Socratic question:** Why does a first-order Markov chain sometimes produce nonsensical sentences like "the the the cat cat"? What information is it missing that a second-order chain (looking at the last two words instead of one) would have?
 
@@ -269,12 +269,12 @@ for i in range(3):
 
 ### 2.3 Confirm the chain works
 
-**Checklist**
+**✅ Checklist**
 
-- The chain has at least 50 unique words after training on the fairy tales corpus.
-- `generate_from_chain(chain, num_words=30, seed=7)` returns exactly 30 words.
-- Output reads as broken but recognizable English, not random character soup.
-- Different seeds produce different text.
+- ✅ The chain has at least 50 unique words after training on the fairy tales corpus.
+- ✅ `generate_from_chain(chain, num_words=30, seed=7)` returns exactly 30 words.
+- ✅ Output reads as broken but recognizable English, not random character soup.
+- ✅ Different seeds produce different text.
 
 ## Step 3: Story templates
 
@@ -404,12 +404,12 @@ Available templates:
 
 ### 3.3 Confirm the templates work
 
-**Checklist**
+**✅ Checklist**
 
-- `list_templates()` returns at least 4 template names.
-- `get_template("hero_journey")` returns a template with `genre="fantasy"` and `len(structure) == 6`.
-- Each template's `structure` list has between 4 and 8 entries.
-- `get_template("nonexistent")` raises `ValueError`.
+- ✅ `list_templates()` returns at least 4 template names.
+- ✅ `get_template("hero_journey")` returns a template with `genre="fantasy"` and `len(structure) == 6`.
+- ✅ Each template's `structure` list has between 4 and 8 entries.
+- ✅ `get_template("nonexistent")` raises `ValueError`.
 
 ## Step 4: Character development
 
@@ -514,12 +514,12 @@ Kira is cunning, loyal, mysterious. Their goal is to uncover a secret. They were
 
 ### 4.2 Confirm character generation works
 
-**Checklist**
+**✅ Checklist**
 
-- `Character.random()` returns a `Character` with a non-empty name, at least 2 traits, a goal, and a backstory.
-- `c.describe()` returns a paragraph string starting with the character's name.
-- Two calls to `Character.random()` with different seeds produce different characters.
-- Calling `c.describe()` multiple times returns the same text (deterministic).
+- ✅ `Character.random()` returns a `Character` with a non-empty name, at least 2 traits, a goal, and a backstory.
+- ✅ `c.describe()` returns a paragraph string starting with the character's name.
+- ✅ Two calls to `Character.random()` with different seeds produce different characters.
+- ✅ Calling `c.describe()` multiple times returns the same text (deterministic).
 
 **Socratic question:** If you wanted characters to have a "speech_style" field that generates dialogue, how would you extend `describe()` without breaking the existing interface?
 
@@ -604,13 +604,13 @@ The opening paragraph uses the character's name and traits. The body paragraphs 
 
 ### 5.2 Confirm the story generator works
 
-**Checklist**
+**✅ Checklist**
 
-- `generate_story(chain, template, character, seed=42)` returns a string with at least 5 paragraphs.
-- The first paragraph contains the character's name.
-- The last paragraph references the character's goal.
-- Running with different seeds produces different stories.
-- Running with the same seed produces identical stories.
+- ✅ `generate_story(chain, template, character, seed=42)` returns a string with at least 5 paragraphs.
+- ✅ The first paragraph contains the character's name.
+- ✅ The last paragraph references the character's goal.
+- ✅ Running with different seeds produces different stories.
+- ✅ Running with the same seed produces identical stories.
 
 ## Step 6: Control output quality
 
@@ -771,13 +771,13 @@ The output should read as a coherent short story with the character's name, trai
 
 ### 6.3 Confirm temperature control works
 
-**Checklist**
+**✅ Checklist**
 
-- `temperature=0.5` produces text that repeats the same word pairs frequently.
-- `temperature=1.0` produces text that mixes training corpora evenly.
-- `temperature=2.0` produces text with unexpected word combinations.
-- The story generator produces the same opening and closing regardless of temperature (they are hardcoded).
-- The body paragraphs change meaningfully between temperatures.
+- ✅ `temperature=0.5` produces text that repeats the same word pairs frequently.
+- ✅ `temperature=1.0` produces text that mixes training corpora evenly.
+- ✅ `temperature=2.0` produces text with unexpected word combinations.
+- ✅ The story generator produces the same opening and closing regardless of temperature (they are hardcoded).
+- ✅ The body paragraphs change meaningfully between temperatures.
 
 ## Step 7: CLI menu
 
@@ -886,14 +886,14 @@ The princess set out on her journey with a gentle kiss and they returned to the 
 
 ### 7.2 Confirm the CLI works
 
-**Checklist**
+**✅ Checklist**
 
-- The menu prints 4 options and reads user input.
-- Choosing "1" generates a story and prints it.
-- Choosing "2" creates a new random character and prints their description.
-- Choosing "3" lists templates and lets the user pick one.
-- Choosing "4" exits the loop.
-- Entering an invalid number prints an error and re-shows the menu.
+- ✅ The menu prints 4 options and reads user input.
+- ✅ Choosing "1" generates a story and prints it.
+- ✅ Choosing "2" creates a new random character and prints their description.
+- ✅ Choosing "3" lists templates and lets the user pick one.
+- ✅ Choosing "4" exits the loop.
+- ✅ Entering an invalid number prints an error and re-shows the menu.
 
 ## Challenges
 

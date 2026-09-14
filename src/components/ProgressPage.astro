@@ -183,14 +183,6 @@ const i18nData = {
       </div>
     </div>
 
-    <!-- XP bar -->
-    <div class="xpbar-wrap">
-      <div class="xpbar" role="progressbar" aria-label={m.progress_xp_bar_aria()} aria-valuenow={xp.pct} aria-valuemin="0" aria-valuemax="100" id="xpbar">
-        <div class={`xpbar__fill w-pct-${Math.round(xp.pct)}`} id="xpbar-fill"></div>
-      </div>
-      <span class="xpbar__text" id="xpbar-text">{xp.xp} {m.progress_xp_unit()}</span>
-    </div>
-
     <!-- Milestones -->
     <div class="milestones" id="milestones"></div>
   </section>
@@ -516,9 +508,6 @@ const i18nData = {
       const rankEl = document.getElementById('p-rank');
       if (rankEl) rankEl.textContent = `${RANK_EMOJIS[rank] ?? '🌱'} ${RANK_NAMES[rank] ?? rank}`;
 
-      setPctWidth(document.getElementById('xpbar-fill'), xp.pct);
-      set('xpbar-text', `${xp.xp} ${T.xpUnit}`);
-
       // Tracks: stations are modules. A module counts as reached once any
       // lesson in it is complete; the "+N XP earned" line reports the real
       // XP logged under each track instead of a fake done*100 estimate.
@@ -651,18 +640,12 @@ const i18nData = {
   .player-card__level { font-family: var(--font-display); font-weight: 800; font-size: .85rem; color: var(--ink-soft); }
   .player-card__xp { display: flex; flex-direction: column; gap: 3px; }
   .player-card__xpbar { height: 8px; background: var(--surface-2); border-radius: var(--radius-pill); overflow: hidden; }
-  .player-card__xpfill { height: 100%; width: 0; border-radius: var(--radius-pill); background: linear-gradient(90deg, var(--accent), var(--accent-strong)); transition: width .6s cubic-bezier(.4,0,.2,1); }
+  .player-card__xpfill { height: 100%; border-radius: var(--radius-pill); background: linear-gradient(90deg, var(--accent), var(--accent-strong)); transition: width .6s cubic-bezier(.4,0,.2,1); }
   .player-card__xptext { font-size: .72rem; font-weight: 700; color: var(--ink-soft); }
   .player-card__stats { display: flex; gap: 1.5rem; }
   .player-card__stat { display: flex; flex-direction: column; align-items: center; gap: .1rem; }
   .player-card__stat-val { font-family: var(--font-display); font-weight: 800; font-size: 1.1rem; color: var(--ink-hi); }
   .player-card__stat-label { font-size: .78rem; font-weight: 700; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .04em; }
-
-  /* XP bar */
-  .xpbar-wrap { display: flex; align-items: center; gap: .6rem; margin-bottom: 1.5rem; }
-  .xpbar { flex: 1; height: 12px; background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--radius-pill); overflow: hidden; position: relative; }
-  .xpbar__fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-strong)); border-radius: var(--radius-pill); transition: width .6s ease; }
-  .xpbar__text { flex: none; font-size: .78rem; font-weight: 800; color: var(--ink); font-variant-numeric: tabular-nums; }
 
   /* Milestones */
   .milestones { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 2rem; }

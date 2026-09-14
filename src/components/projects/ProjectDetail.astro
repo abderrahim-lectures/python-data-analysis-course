@@ -196,6 +196,16 @@ const jsonLd = {
   };
 
   steps.forEach((h, i) => {
+    // init() can legitimately run twice for the same page: a component-scoped
+    // script like this one only loads the first time a project page is
+    // visited, and if that first visit happens via a soft navigation (not a
+    // hard reload), `document.readyState` is already 'complete' by the time
+    // the module evaluates -- so the readyState fallback below fires
+    // immediately *and* the astro:page-load listener also catches this same
+    // navigation's dispatch. Without this guard, that doubles every step's
+    // "Mark complete" button and checklist.
+    if (h.dataset.stepWired) return;
+    h.dataset.stepWired = '1';
     h.classList.remove('is-step-done');
     const idx = parseInt(h.textContent?.match(STEP_RE)?.[1] ?? '0', 10) - 1;
     const done = slug ? isProjectStepDone(cleanSlug, idx) : false;

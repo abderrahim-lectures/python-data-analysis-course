@@ -21,9 +21,16 @@ const {supabaseUrl = '', supabaseKey = ''} = Astro.props;
         <ol class="popular-pages__list" id="popular-pages-list"></ol>
       </section>
       <script is:inline define:vars={{supabaseUrl, supabaseKey}}>
-        (async function () {
+        // astro:page-load re-runs this on every soft navigation back to the
+        // homepage -- an unguarded top-level IIFE (as this used to be) only
+        // ever executes on the page's very first hard load, so after any
+        // soft nav away and back, #popular-pages-list is a fresh empty <ol>
+        // this script never touches again, leaving the widget permanently
+        // blank for the rest of the session. Same fix as LearnerActivity.astro.
+        async function pydaInitPopularPages() {
           const list = document.getElementById('popular-pages-list');
           if (!list) return;
+          list.replaceChildren();
           try {
             const res = await fetch(`${supabaseUrl}/rest/v1/rpc/popular_pages`, {
               headers: {
@@ -90,7 +97,9 @@ const {supabaseUrl = '', supabaseKey = ''} = Astro.props;
           } catch (e) {
             // stats are progressive enhancement; fail silently
           }
-        })();
+        }
+        document.addEventListener('astro:page-load', pydaInitPopularPages);
+        if (document.readyState === 'complete') pydaInitPopularPages();
       </script>
     </div>
   )
