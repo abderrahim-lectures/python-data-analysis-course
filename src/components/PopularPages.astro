@@ -15,9 +15,11 @@ const {supabaseUrl = '', supabaseKey = ''} = Astro.props;
 
 {
   supabaseUrl && supabaseKey && (
-    <section class="container popular-pages" aria-label={m.popular_pages_label()}>
-      <h2 class="popular-pages__title">{m.popular_pages_title()}</h2>
-      <ol class="popular-pages__list" id="popular-pages-list"></ol>
+    <div class="container">
+      <section class="popular-pages" aria-label={m.popular_pages_label()}>
+        <h2 class="popular-pages__title">{m.popular_pages_title()}</h2>
+        <ol class="popular-pages__list" id="popular-pages-list"></ol>
+      </section>
       <script is:inline define:vars={{supabaseUrl, supabaseKey}}>
         (async function () {
           const list = document.getElementById('popular-pages-list');
@@ -90,7 +92,7 @@ const {supabaseUrl = '', supabaseKey = ''} = Astro.props;
           }
         })();
       </script>
-    </section>
+    </div>
   )
 }
 
@@ -108,8 +110,10 @@ const {supabaseUrl = '', supabaseKey = ''} = Astro.props;
   }
   @media (max-width: 640px) {
     .popular-pages {
+      /* Matches .hub__inner's mobile padding (1.15rem) for visual
+         consistency with the hub cards above it. */
       margin-block: 1.5rem;
-      padding: 1.5rem 1.25rem;
+      padding: 1.15rem;
     }
   }
   .popular-pages__title {
@@ -144,7 +148,7 @@ const {supabaseUrl = '', supabaseKey = ''} = Astro.props;
   }
   .popular-pages__link {
     display: block;
-    padding: .55rem 0;
+    padding: .1rem 0;
     text-decoration: none;
     color: var(--ink);
     text-transform: capitalize;
