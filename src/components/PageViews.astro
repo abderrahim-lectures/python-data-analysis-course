@@ -25,7 +25,13 @@ const {supabaseUrl = '', supabaseKey = '', locale = 'en'} = Astro.props;
           setTimeout(guard, 3000);
         }
         function send() {
-          var path = window.location.pathname;
+          // Stripped of any trailing slash so "/learn" and "/learn/" record
+          // as the same path -- popular_pages() also normalizes this way
+          // for pre-existing rows (see migration 011), but recording
+          // consistently going forward means the RPC's grouping is doing
+          // less work and the raw pageviews table doesn't accumulate
+          // needless duplicate path strings for the same page.
+          var path = window.location.pathname.replace(/\/+$/, '') || '/';
           if (window.__pydaLastPageViewPath === path) return;
           window.__pydaLastPageViewPath = path;
           try {

@@ -2,11 +2,16 @@
 
 All notable changes to this project are documented in this file. Format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [2.0.11] — 2026-09-14
+## [2.0.12] — 2026-09-15
 
 ### Fixed
 - The 2.0.10 CSP fix was incomplete: it added a sha256 hash for the ClientRouter's `data:application/javascript,` placeholder script, but CSP hash-source only governs truly inline (no-`src`) scripts — it never applied to `<script src="data:...">` at all, hash or no hash. Added the `data:` scheme directly to `script-src` instead, which does govern `src`-loaded scripts. (#316)
 - Because that placeholder script never loaded, the ClientRouter's transition sequencing ran its next step against the pre-swap DOM, surfacing as `Uncaught TypeError: Cannot set properties of null (setting 'className')` on every soft navigation. Root cause once isolated: `initProjectsFinder()` bound itself to the *global* `astro:page-load` event (firing on every soft nav site-wide, not just `/projects`) and grabbed `#project-grid` with a non-null assertion, so any navigation to a page other than `/projects` crashed immediately. Replaced the assertion with an early-return guard. (#317)
+
+## [2.0.11] — 2026-09-14
+
+### Fixed
+- "Most viewed pages" showed the same page twice with its views split across two rows (e.g. "Learn" appearing at both rank 2 and rank 4) — `popular_pages()` grouped by the raw `path` column with no normalization, so `/learn` and `/learn/` counted as separate pages competing independently for one of only 10 slots, uncorrectable client-side after the `LIMIT`. New migration groups by the trailing-slash-stripped path instead; `PageViews.astro` now also records paths pre-normalized going forward. `schema.sql` brought back in sync with this and the earlier locale-root exclusion (migration 008), which it had also drifted out of sync with. (#319)
 
 ## [2.0.10] — 2026-09-14
 
