@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented in this file. Format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [2.0.12] — 2026-09-15
+
+### Fixed
+- The 2.0.10 CSP fix was incomplete: it added a sha256 hash for the ClientRouter's `data:application/javascript,` placeholder script, but CSP hash-source only governs truly inline (no-`src`) scripts — it never applied to `<script src="data:...">` at all, hash or no hash. Added the `data:` scheme directly to `script-src` instead, which does govern `src`-loaded scripts. (#316)
+- Because that placeholder script never loaded, the ClientRouter's transition sequencing ran its next step against the pre-swap DOM, surfacing as `Uncaught TypeError: Cannot set properties of null (setting 'className')` on every soft navigation. Root cause once isolated: `initProjectsFinder()` bound itself to the *global* `astro:page-load` event (firing on every soft nav site-wide, not just `/projects`) and grabbed `#project-grid` with a non-null assertion, so any navigation to a page other than `/projects` crashed immediately. Replaced the assertion with an early-return guard. (#317)
+
 ## [2.0.11] — 2026-09-14
 
 ### Fixed
