@@ -365,6 +365,19 @@ message protocol, the client, and the overlay that covers the page while a run i
 
 ## 6 — Toolchain: what this VM can and cannot run, measured
 
+- **Dependencies were refreshed to 2.0.14** (`npm update`, inside the declared ranges): astro
+  7.3.1 → **7.4.4**, vitest 4.1.11 → 4.1.12, `@inlang/paraglide-js` 2.25.0 → 2.29.3,
+  `@supabase/supabase-js` 2.116.0 → 2.118.0, katex 0.18.4 → 0.18.10, `@astrojs/markdown-remark`
+  7.3.0 → 7.3.5, `@astrojs/check` 0.9.10 → 0.9.12, hastscript 9.0.1 → 9.0.3. The majors were
+  left alone deliberately: vitest 5, katex 0.19 and typescript 7 all need their own migration pass
+  (typescript's is moot until `astro sync` can generate its types). Two consequences worth
+  knowing: **astro 7.4 replaced the wasm compiler with a native one** (`@astrojs/compiler` →
+  `@astrojs/compiler-rs`), which the template test depended on as a hoisted transitive package —
+  it is now an explicit devDependency and the test uses the compiler the build actually
+  compiles with; and astro 7.4's engine floor is node `>=22.23.4`, so the deploy workflow moved
+  from node 22 to 24 (which is also the version this branch is tested against).
+  Pyodide stays pinned at 0.26.4 — the cell runtime is verified against it and re-vendoring an
+  engine cannot be validated in this VM.
 - **Node is installed and on `PATH` for every project**: `~/.local/bin/node` →
   `~/.local/lib/node-v24.9.0-linux-x64` (`node -v` → `v24.9.0`, `npm` → `11.6.0`). The VM ships
   no Node, so this is what makes `vitest`/`tsc`/`npm` usable at all — and **Node 22.14 cannot

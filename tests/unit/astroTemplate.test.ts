@@ -1,10 +1,12 @@
 import {describe, expect, test} from 'vitest';
-import {transform} from '@astrojs/compiler';
+import {transform} from '@astrojs/compiler-rs';
 import {readFileSync, readdirSync, statSync} from 'node:fs';
 import {join} from 'node:path';
 
 // Static checks on the .astro sources, run through the same compiler the build
-// uses (@astrojs/compiler, the version in package-lock). `astro build` and
+// uses (@astrojs/compiler-rs as of astro 7.4, the version pinned in
+// package.json — it stopped being a hoisted transitive dependency when the
+// build switched from the wasm compiler, which is how this test found out). `astro build` and
 // `astro sync` cannot run in this VM (the wasm address-space reservation plus a
 // hard 32 GB `ulimit -v`), so without these two invariants nothing in the
 // test suite can see a template that compiles fine and renders wrong.
@@ -38,6 +40,22 @@ async function compile(file: string) {
 describe('astro templates', () => {
   test('the compiler finds the component tree', () => {
     expect(FILES.length).toBeGreaterThan(50);
+  });
+
+  // The compiler reports syntax errors as diagnostics rather than throwing, so
+  // without this a template with an unclosed tag or an unparsable script would
+  // still satisfy the two invariants below (it replaces an esbuild gate that
+  // died with astro 7.4). Severity is numeric in the Rust binding.
+  test('no template has a compiler error', async () => {
+    const offenders: string[] = [];
+    for (const file of FILES) {
+      const {diagnostics} = await compile(file);
+      for (const d of diagnostics ?? []) {
+        if (d.severity !== 'error') continue;
+        offenders.push(`${file}: ${d.text}`);
+      }
+    }
+    expect(offenders).toEqual([]);
   });
 
   // A quoted attribute is a string literal to the compiler: `{…}` inside it is

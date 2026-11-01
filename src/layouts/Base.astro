@@ -207,10 +207,19 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
       // getter throws, and an uncaught throw here would skip the rest of this
       // script — which is the busy-overlay wiring below.
       (function () {
-        try {
-          const saved = localStorage.getItem('pda:theme');
-          if (saved) document.documentElement.dataset.theme = saved;
-        } catch { /* storage blocked: keep the default theme */ }
+        const applyTheme = () => {
+          try {
+            const saved = localStorage.getItem('pda:theme');
+            if (saved) document.documentElement.dataset.theme = saved;
+          } catch { /* storage blocked: keep the default theme */ }
+        };
+        applyTheme();
+        // The ClientRouter copies the incoming document's <html> attributes on
+        // every soft navigation, and every page is rendered with
+        // data-theme="light" — so the swap put a dark-mode visitor back to
+        // light, and this script (identical text, deduped by the router) never
+        // ran again to correct it. Re-assert after each swap.
+        document.addEventListener('astro:page-load', applyTheme);
       })();
       document.addEventListener('DOMContentLoaded', () => {
         // Busy overlay: shown while the page's scripts hydrate after load

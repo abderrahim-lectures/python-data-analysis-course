@@ -73,7 +73,9 @@ const notfoundDescription = I18N.en.notfound_description;
         }
       }
     } catch (e) { /* fall through to normal 404 */ }
-    go();
+    // No go() here: the localisation helper is scoped to the next inline
+    // script's IIFE, so calling it from this one only logged a ReferenceError
+    // on every 404. That script runs and calls its own go().
   })();
 </script>
 
