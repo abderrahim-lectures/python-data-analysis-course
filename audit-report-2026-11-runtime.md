@@ -190,6 +190,7 @@ The fixes above were themselves reviewed before being called done. Five defects,
 | R3 | MED | Enter in a *non-last* input field ran the cell immediately, so a two-question cell executed with the second answer empty (`int('')` → ValueError). | Enter now advances to the next field and only runs from the last one — what a terminal does. DOM test covers both halves. |
 | R4 | LOW | `rb"…"` / `br"…"` string prefixes were not recognised (the prefix window was 2 characters), so the field fell back to "Value 1" instead of the prompt. | Prefix window widened; tests for `r`, `rb`, `R`. |
 | R5 | LOW | `CellRuntime.stdin` became required but three test literals omitted it, so `tsc` flagged the test file; the fake engine also lacked `FS.mkdirTree`. | Fixed — `tsc --noEmit` now reports only the four files that need `astro sync`'s generated types. |
+| R6 | **MED** | **Found only in a real browser**: the transcript read `2004` *above* `Birth year?`, with the prompt glued to the next line (`Birth year? About 22 years old`). Pyodide's batched stdout only hands JS a complete line — a flushed partial one stays buffered (`print("X", end="", flush=True); print("Y")` renders as `XY`), so `input()`'s newline-less prompt arrived after the echoed answer. | `input()` is wrapped at engine boot (`INPUT_SHIM_SRC`) to write the prompt as a whole line before reading, so the panel reads prompt → answer → output. Verified in the browser (§6). |
 
 Two dead exports found in the same pass (`needsStdin` in `pythonInputs.ts`, `remaining()` on the stdin queue) were removed rather than left as API nobody calls.
 
@@ -223,10 +224,29 @@ Two dead exports found in the same pass (`needsStdin` in `pythonInputs.ts`, `rem
   browser check in this report: no build, no `astro preview`, no e2e (`tests/e2e/*` all need
   `BASE_URL`), and no headless Chrome (`chrome-headless-shell` traps on startup in this VM,
   even for `--version`).
+- **A browser does exist here — Firefox, not Chromium.** Playwright's Firefox 157 launches;
+  Playwright's Chromium 156 (headless shell and full build) and chrome-for-testing 141 both die
+  with `SIGTRAP` before printing `--version`, so no Chromium-family engine can run in this VM.
 - **What that leaves verifiable here:** the unit suite, `tsc` on the modules (still noisy from
   the *pre-existing* missing `astro:content`/`import.meta.env` types, which `astro sync` would
-  generate), and Python-semantics probes like the ones in B3. CI (`deploy.yml`: `npm ci` +
-  `npm run build`) is the only place the rendered page is exercised.
+  generate), Python-semantics probes like the ones in B3 — and, via Vite + Playwright Firefox, the
+  real cell runtime (below).
+
+### Browser check actually performed
+
+`public/pyodide/` was vendored (`scripts/vendor-pyodide.mjs`) and Vite served a harness page that
+mounts the **real** `runnable-cell.client.ts` and therefore the real `pyodide.worker.ts`, the real
+engine and the real form; Firefox drove it. Results:
+
+| Scenario | Observed |
+|---|---|
+| The reported lesson cell (`year_text = input("Birth year? ")`, then `int`, then an f-string) | field labelled `Birth year?`; transcript `$ python` / `Birth year?` / `2004` / `About 22 years old` — prompt, echoed answer, output, in that order |
+| Two questions (`Name?`, `Year?`) | Enter moved focus to the second field; Enter there ran the cell; `Amina was born in 2004` |
+| One call site, three calls (`for _ in range(3): print(input("Value? "))`) | first answer consumed, then `EOFError` → friendly line, form grew from 1 field to 2 |
+| `import js` | refused: "Blocked: this snippet uses something the in-browser sandbox refuses…" |
+
+No console errors in any of the runs. That is what caught R6: the ordering bug is invisible to a
+DOM stub, because the stub never had a real Pyodide stream to buffer the prompt.
 
 ## 7 — Re-checked against the September audit
 

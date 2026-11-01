@@ -158,11 +158,36 @@ export async function py(onProgress?: (pct: number) => void): Promise<PyodideMod
       // noise for learners — they'd render as red error lines. Filter them so
       // a successful cell shows clean stdout-only output.
       await engine.runPython('import warnings; warnings.filterwarnings("ignore")');
+      await engine.runPython(INPUT_SHIM_SRC);
       return engine;
     })();
   }
   return pyPromise;
 }
+
+// Pyodide's batched stdout only hands JS a complete line: a flushed partial
+// line sits in the Python buffer until a newline arrives (verified in a real
+// browser — `print("PARTIAL", end="", flush=True); print("AFTER")` renders as
+// one "PARTIALAFTER" line). `input("Birth year? ")` writes its prompt without
+// a newline, so the prompt reached the output panel *after* the value the
+// learner had just typed — the answer appeared above its question.
+// Wrapping `input` so it writes the prompt as a whole line fixes the order
+// without touching the cell's own code: prompt line, then the echoed value,
+// then whatever the cell prints.
+const INPUT_SHIM_SRC = `
+import builtins as _pyda_builtins
+
+if getattr(_pyda_builtins.input, '__name__', '') != '_pyda_input':
+    _pyda_real_input = _pyda_builtins.input
+
+    def _pyda_input(prompt='', /):
+        text = '' if prompt is None else str(prompt)
+        if text:
+            print(text)  # newline-terminated, so the batched stream delivers it now
+        return _pyda_real_input('')
+
+    _pyda_builtins.input = _pyda_input
+`;
 
 // Datasets the course ships (public/datasets/*) are fetched into the Pyodide
 // virtual filesystem before first run, so lesson code can do
