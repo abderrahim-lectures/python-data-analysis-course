@@ -53,8 +53,24 @@ describe('renderHomepage', () => {
     expect(xp.textContent).toBe('90');
     expect(Number(xpnext.textContent)).toBeGreaterThan(0);
     expect([...xpfill.classSet].some((c: string) => /^w-pct-\d+$/.test(c))).toBe(true);
-    expect(rank.innerHTML).toContain('badge badge--streak');
-    expect(rank.innerHTML).toContain('Bronze');
+    // The badge is a real child node now (not an innerHTML template), so the
+    // rank name goes through the localised table in badgeLabel.ts.
+    expect(rank.children).toHaveLength(1);
+    expect(rank.children[0].classSet.has('badge')).toBe(true);
+    expect(rank.children[0].classSet.has('badge--streak')).toBe(true);
+    expect(rank.children[0].textContent).toContain('Bronze');
+  });
+
+  test('does not re-append the rank badge when it re-renders', () => {
+    withState(90, 0, ['python-101/normal/01-printing'], []);
+    const stub = stubDom();
+    const rank = el('player-rank', stub);
+
+    renderHomepage();
+    renderHomepage();
+
+    // renderHomepage is bound to astro:page-load, i.e. once per navigation.
+    expect(rank.children).toHaveLength(1);
   });
 
   test('falls through quietly when DOM nodes are absent', () => {

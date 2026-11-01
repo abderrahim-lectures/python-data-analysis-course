@@ -17,13 +17,6 @@ const {supabaseUrl = '', supabaseKey = '', locale = 'en'} = Astro.props;
     <script is:inline define:vars={{supabaseUrl, supabaseKey, viewLocale: locale}}>
       (function () {
         function getUid() { return window.__pydaUserId || null; }
-        function waitForAuth(cb) {
-          if (getUid()) { cb(); return; }
-          var done = false;
-          function guard() { if (!done) { done = true; cb(); } }
-          document.addEventListener('pyda:auth-ready', guard, {once: true});
-          setTimeout(guard, 3000);
-        }
         function send() {
           // Stripped of any trailing slash so "/learn" and "/learn/" record
           // as the same path -- popular_pages() also normalizes this way
@@ -33,13 +26,23 @@ const {supabaseUrl = '', supabaseKey = '', locale = 'en'} = Astro.props;
           // needless duplicate path strings for the same page.
           var path = window.location.pathname.replace(/\/+$/, '') || '/';
           if (window.__pydaLastPageViewPath === path) return;
-          window.__pydaLastPageViewPath = path;
           try {
             if (localStorage.getItem('pda:analytics-consent') === '0') return;
           } catch (e) { return; }
-          waitForAuth(function () {
+          // The marker used to be written here, before auth was known. On the
+          // first load of a session the anonymous sign-in is still in flight,
+          // and if it took longer than the old 3s grace the whole pageview was
+          // dropped with the path already marked "recorded" -- so a slow first
+          // load silently lost the landing page and nothing retried. Now the
+          // marker is written when a row is actually posted, and the post is
+          // retried once auth announces itself.
+          var sent = false;
+          function post() {
+            if (sent) return;
             var uid = getUid();
             if (!uid) return;
+            sent = true;
+            window.__pydaLastPageViewPath = path;
             var body = JSON.stringify({path: path, locale: viewLocale, learner_id: uid});
             var doFetch = window.__pydaFetch || fetch;
             doFetch(supabaseUrl + '/rest/v1/pageviews', {
@@ -57,7 +60,12 @@ const {supabaseUrl = '', supabaseKey = '', locale = 'en'} = Astro.props;
                 if (!res.ok) console.warn('[pyda] pageview not recorded (' + res.status + ')');
               })
               .catch(function () {});
-          });
+          }
+          if (getUid()) { post(); return; }
+          document.addEventListener('pyda:auth-ready', post, {once: true});
+          // No Supabase anonymous auth configured (or it failed): post() sees
+          // no uid and returns, so nothing is recorded and nothing waits.
+          setTimeout(post, 3000);
         }
         if (!window.__pydaPageViewListenerBound) {
           window.__pydaPageViewListenerBound = true;

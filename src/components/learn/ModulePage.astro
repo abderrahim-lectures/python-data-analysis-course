@@ -145,6 +145,17 @@ const prereqMapOf = (prereqs: string[]): Record<string, string> => {
           label = m.mastery_practice({acc: Math.round(accuracy(rec) * 100)});
         }
         if (!label) return;
+        // init() can legitimately run twice for the same DOM: a page bundle
+        // first evaluated during a soft navigation finishes *before* the
+        // router dispatches astro:page-load (router.js awaits runScripts(),
+        // then calls onPageLoad()), so the `readyState === 'complete'`
+        // fallback below fires and the listener catches the same navigation.
+        // Both reach here, and both append -- the guard has to be per card,
+        // not per init(), because the two runs' promise callbacks both land
+        // after this point. Without it every module opened by clicking a
+        // card in a track hub showed each mastery chip twice.
+        if (card.hasAttribute('data-mastery-rendered')) return;
+        card.setAttribute('data-mastery-rendered', '1');
         const chip = document.createElement('span');
         chip.className = 'lesson-card__zpd';
         chip.classList.add(`lesson-card__zpd--${tone}`);

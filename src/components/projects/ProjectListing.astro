@@ -29,6 +29,8 @@ interface Props {
     viewGridAria: string;
     noMatchPrefix: string;
     trySearch: string;
+    countTemplate: string;
+    thatFilter: string;
   };
 }
 
@@ -69,7 +71,7 @@ const alternates = {
   </section>
 
   <section class="container">
-    <div class="finder">
+    <div class="finder" data-count-template={fs.countTemplate} data-that-filter={fs.thatFilter}>
       <div class="finder__search">
         <Icon name="search" size={16} />
         <input

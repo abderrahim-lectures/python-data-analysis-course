@@ -65,7 +65,22 @@ const {locale = 'en', supabaseUrl = '', supabaseKey = ''} = Astro.props;
             document.addEventListener('pyda:auth-ready', guard, {once: true});
             setTimeout(guard, 3000);
           }
+          // The intervals below belong to whichever homepage render created
+          // them, but nothing used to stop them when the visitor navigated
+          // away: they only got cleared on the *next* homepage visit, so after
+          // one visit to "/" every other page in the session kept POSTing
+          // learners.last_seen and re-reading the count every 30s, forever.
+          // A soft navigation detaches this widget's node, so both pollers can
+          // notice that and shut the pair down.
+          function stopPolling() {
+            var iv = window.__pydaLearnerIntervals;
+            if (!iv) return;
+            clearInterval(iv.beat);
+            clearInterval(iv.refresh);
+            window.__pydaLearnerIntervals = null;
+          }
           async function beat() {
+            if (!bar.isConnected) { stopPolling(); return; }
             var uid = getUid();
             if (!uid) return;
             try {
@@ -91,6 +106,7 @@ const {locale = 'en', supabaseUrl = '', supabaseKey = ''} = Astro.props;
             } catch (e) { return 0; }
           }
           async function refresh() {
+            if (!bar.isConnected) { stopPolling(); return; }
             var n = await count();
             var ce = document.getElementById('learner-count'), le = document.getElementById('learner-label');
             if (ce) ce.textContent = n;
@@ -98,6 +114,10 @@ const {locale = 'en', supabaseUrl = '', supabaseKey = ''} = Astro.props;
             bar.hidden = n === 0;
           }
           waitForAuth(function () {
+            // The 3s auth fallback can fire after a soft navigation has
+            // already replaced this widget; starting a poller for a detached
+            // node would just run beat() once to clear it again.
+            if (!bar.isConnected) return;
             beat();
             refresh();
             window.__pydaLearnerIntervals = {

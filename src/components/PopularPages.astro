@@ -30,7 +30,15 @@ const {supabaseUrl = '', supabaseKey = ''} = Astro.props;
         async function pydaInitPopularPages() {
           const list = document.getElementById('popular-pages-list');
           if (!list) return;
+          const section = list.closest('section');
           list.replaceChildren();
+          // Hidden until there is something to show. The header comment on
+          // this component has always said it disappears when the RPC returns
+          // nothing, but only the missing-credentials case ever did -- an
+          // empty or young database rendered a "Popular pages" heading over an
+          // empty list, which reads as a broken widget rather than an empty
+          // one.
+          if (section) section.hidden = true;
           try {
             const res = await fetch(`${supabaseUrl}/rest/v1/rpc/popular_pages`, {
               headers: {
@@ -93,7 +101,10 @@ const {supabaseUrl = '', supabaseKey = ''} = Astro.props;
               li.append(rank, a, views);
               frag.appendChild(li);
             }
-            if (frag.childNodes.length) list.appendChild(frag);
+            if (frag.childNodes.length) {
+              list.appendChild(frag);
+              if (section) section.hidden = false;
+            }
           } catch (e) {
             // stats are progressive enhancement; fail silently
           }
@@ -109,6 +120,9 @@ const {supabaseUrl = '', supabaseKey = ''} = Astro.props;
   /* Global: the list items below are built with document.createElement in
      the inline script, so they never receive Astro's scoped data-astro-cid
      attribute — scoped styles would silently not match them at all. */
+  .popular-pages[hidden] {
+    display: none;
+  }
   .popular-pages {
     margin-block: 2.5rem;
     padding: 2rem 2.25rem;

@@ -493,5 +493,7 @@
   "progress_badge_login": "تسجيل دخول يومي",
   "progress_badge_lesson": "إتمام الدرس",
   "progress_badge_track": "تقدّم المسار",
-  "progress_badge_quiz": "اختبار مثالي"
+  "progress_badge_quiz": "اختبار مثالي",
+  "filter_count": "{visible} من {total} مشروعًا",
+  "filter_that": "ذلك الفلتر"
 }

@@ -243,6 +243,54 @@ that `gamestats.TRACKS` duplicates; `Quiz.astro` files a lesson id into `challen
 perfect quiz; `repairLegacy` can pay milestones into a *read* without persisting them.
 
 
+### Review round 4 — the components and the shared UI
+
+The remaining Astro components (`src/components/**`) and the shared client modules they lean on,
+reviewed for the first time in this pass.
+
+**The one mechanism worth stating first**, because four of these findings turn on it and the code
+comments in the tree are inconsistent about it. Astro's client router does
+`await runScripts(); onPageLoad();` (`node_modules/astro/dist/transitions/router.js:351`), and
+`runScripts()` marks each script `data-astro-exec` *after* re-inserting it. Consequences:
+
+- A **page bundle evaluated for the first time during a soft navigation finishes before
+  `astro:page-load` is dispatched.** So a component script that ends with
+  `document.addEventListener('astro:page-load', init); if (document.readyState === 'complete') init();`
+  calls `init()` **twice** for that navigation — once from the fallback, once from the listener.
+  `ProjectDetail.astro` already guards this per element and says so in a comment; `Quiz.astro`
+  guards it with `data-hydrated`; everything else did not.
+- **Inline scripts are deduped by text content** (`swap-functions.js` `scriptsAlreadyRan` /
+  `detectScriptExecuted`), so the `is:inline` widgets do *not* re-bind their `astro:page-load`
+  listeners on every navigation. That is why the same `readyState` idiom is harmless there, and
+  why "add a re-bind guard" to those would have been dead code.
+- The double-init is **not automatically a bug**: `LessonPage.astro` ends up with two click
+  listeners on "Mark complete", but the second `completeLesson` call pays nothing (the lesson is
+  already recorded) and dispatches a `lesson:complete` with `xp: 0`, which `gamestrip` ignores.
+  `projectsRender` re-runs `apply()` and re-binds its `input` handler; also invisible. Those were
+  checked and left alone rather than "fixed" for symmetry.
+
+| # | Severity | Finding | Fix |
+|---|----------|---------|-----|
+| R22 | **HIGH** | **Every mastery chip on a module page rendered twice** when the page was reached by clicking a module card (i.e. the first visit to a module page in a session). `ModulePage.astro`'s `init()` appends the chip inside a `Promise.all(...).then`, so the two runs above both get there — the per-`init()` structure had no per-card guard, and a chip is a plain `appendChild` with no idempotence. A hard load of the same page showed one. | `data-mastery-rendered` per card, checked inside the callback. |
+| R23 | **HIGH** | A project page could lose its whole gamified UI: `ProjectDetail.astro` read the checklist blob with a guarded `JSON.parse` and then trusted the *shape* — `checkState[key].every(Boolean)` on a non-array (or `checkState[key] = …` on a blob that parsed to a string/number, which throws in strict mode). The throw aborted `init()` at that step, so every later step stayed unwired **and so did the page's "Mark complete" button**, while the steps already processed looked correct. Same failure class as R19, one component over. | Both levels coerced: the blob to a plain object, each entry to exactly one boolean per current checklist item (so a list that gained or lost an item also keeps its ticks). |
+| R24 | MED | `/learn/python-101/normal` advertised **"+2900 XP"** for a track whose 19 lessons pay **10 XP each — 190 total** (hard: 4350 advertised, 100 actual; data-analysis is the only track where the two agree, at 100/lesson). `TrackHub.astro` used `totalLessons * (track === 'hard' ? 150 : 100)`, a constant from when lessons paid 100; `SectionLanding.astro` one click away summed the real frontmatter (290 for python-101, i.e. both tracks). Two adjacent pages, two different numbers, one of them 15× the truth. | Summed from the lessons' `xpReward`, the way SectionLanding already did. Measured after: py-normal 190, py-hard 100, da-normal 1000, da-hard 1150. |
+| R25 | MED | The progress page's station trail ticked a **prefix of the stations** rather than the ones reached: `w <= done`, where `done` was the *number* of modules reached. A learner who finished module 5 and nothing else saw module 1 ticked and module 5 not. Present in both the server render (`[1,2,3,4,5,6,7].map(w => w <= py.done)`) and the client re-render. | `trailStations()` derives one station per `MODULES[section]` entry with `done` from that module's own lessons; the client does the same. The hardcoded 7/5 station counts went with it. |
+| R26 | MED | Localized homepages showed the **English rank name**. `homeRender.ts` interpolated `rankFor()`'s English key straight into an `innerHTML` template — so `/es/`, `/ar/` and `/fr/` printed "Gold"/"Grandmaster" while `/es/progreso` on the same site printed "Oro"/"Gran maestro". | New `rankLabel()` in `badgeLabel.ts`, which already holds the localized-name tables; the badge is built as a node instead of an HTML string. |
+| R27 | MED | The project finder printed **"1 of 12 projects"** in English on `/es/proyectos`, `/fr/projets` and `/ar/مشاريع`, and its empty-state fallback said `"that filter"` in English. Everything around them was localized; these two strings were the last hardcoded English in a localized page — the same class as the `/es/cheatsheets` link bug (R5). | `filter_count` + `filter_that` message keys in all four locales, passed to `projectsRender` as `data-` attributes on `.finder` (it already reads its config from the DOM). The count template goes through the same `{visible}`/`{total}` placeholder trick `ProgressPage` uses. |
+| R28 | MED | After one visit to the homepage, the **learner-activity pollers kept running on every other page for the rest of the session** — `beat()` POSTing `learners.last_seen` and `refresh()` re-reading the count, every 30s, forever. The intervals were only cleared at the *start* of the next homepage visit; the component's own comment admitted "none of which ever get cleared on navigating away either". Its own scoping fix (moving the widget off `Base.astro`) is what made the leak visible, since leaving the homepage is now an ordinary navigation. | Both pollers stop themselves when their captured node is no longer connected; the 3s auth-timeout callback no longer starts a pair for an already-detached node. |
+| R29 | LOW | "Most viewed pages" rendered a **"Popular pages" heading over an empty list** whenever the RPC returned no rows (a fresh or young database). The component's header comment has always claimed it is "hidden entirely when Supabase creds are absent or the RPC returns nothing" — only the first half was implemented, which is the half that matters least. | The section starts hidden and is revealed only when rows survive filtering. |
+| R30 | LOW | The **first pageview of a session was silently lost** when anonymous auth took longer than the 3s grace: `send()` wrote `__pydaLastPageViewPath` *before* auth was known, then the timeout fired with no uid, returned, and nothing retried — with the path already marked recorded. Slow first loads under-counted their landing page. | The marker is written when a row is actually posted, and the post retries once on `pyda:auth-ready`. A `sent` flag keeps it to one POST per `send()`. |
+
+Verified in the same pass: every `getElementById`/`set(...)` target in every component's client
+script exists in its markup (no silently-blank stat), every `m[...]` difficulty/scaffold key
+resolves, `routeSegments`' locale hrefs and `learnAlternates` produce the localized-slug forms, and
+the `Icon` name table covers every name passed at every call site.
+
+Two new checks worth keeping: a syntax gate over all 27 inline `<script>` blocks and all 85
+frontmatter blocks in `src/**/*.astro` (esbuild transform — `astro build` cannot run here, so
+nothing else would have caught a broken component script), and the two unit tests added below.
+
+
 ---
 
 ## 6 — Toolchain: what this VM can and cannot run, measured

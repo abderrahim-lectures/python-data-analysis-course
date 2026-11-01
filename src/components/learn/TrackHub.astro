@@ -30,12 +30,16 @@ for (const m of modules) {
   moduleLessonCounts.set(slug, count);
 }
 
-const totalLessons = allLessons.filter((l) => idInLocale(locale, l.id) && l.id.includes(trackPath)).length;
-const totalMinutes = allLessons
-  .filter((l) => idInLocale(locale, l.id) && l.id.includes(trackPath))
-  .reduce((sum, l) => sum + (l.data.estimatedMinutes ?? 15), 0);
+const trackLessons = allLessons.filter((l) => idInLocale(locale, l.id) && l.id.includes(trackPath));
+const totalLessons = trackLessons.length;
+const totalMinutes = trackLessons.reduce((sum, l) => sum + (l.data.estimatedMinutes ?? 15), 0);
 const totalHours = Math.round(totalMinutes / 60);
-const trackXpPerLesson = track === 'hard' ? 150 : 100;
+// Summed from the lessons' own frontmatter, the way SectionLanding does it.
+// This used to be `totalLessons * (track === 'hard' ? 150 : 100)`, a constant
+// left over from when every lesson paid 100 XP: python-101/normal now pays 10
+// per lesson, so its track page advertised "+2900 XP" for a track that awards
+// 190, and the section page above it said 290 for the same content.
+const totalXp = trackLessons.reduce((sum, l) => sum + (l.data.xpReward ?? 10), 0);
 
 const diffColorCls = (d: string) => d === 'beginner' ? 'diff-color-beginner' : d === 'intermediate' ? 'diff-color-intermediate' : 'diff-color-advanced';
 const arrow = locale === 'ar' ? '←' : '→';
@@ -56,7 +60,7 @@ const arrow = locale === 'ar' ? '←' : '→';
       <span class="stat">📖 {totalLessons}</span>
       <span class="stat">⏱ ~{totalHours}h</span>
       <span class="stat">📦 {modules.length}</span>
-      <span class="stat">⚡ +{totalLessons * trackXpPerLesson} XP</span>
+      <span class="stat">⚡ +{totalXp} XP</span>
     </div>
   </section>
 

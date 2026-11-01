@@ -493,5 +493,7 @@
   "progress_badge_login": "Connexion quotidienne",
   "progress_badge_lesson": "Leçon terminée",
   "progress_badge_track": "Progression du parcours",
-  "progress_badge_quiz": "Quiz parfait"
+  "progress_badge_quiz": "Quiz parfait",
+  "filter_count": "{visible} sur {total} projets",
+  "filter_that": "ce filtre"
 }

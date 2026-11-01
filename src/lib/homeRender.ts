@@ -1,4 +1,5 @@
 import {xpProgress, streakProgress, loadState, rankFor, RANK_EMOJIS, questsDoneCount} from './gameState.ts';
+import {rankLabel} from './badgeLabel.ts';
 import {TRACKS} from './gamestats.ts';
 import {setPctWidth} from './pctWidth.ts';
 
@@ -19,7 +20,16 @@ export function renderHomepage() {
   if (xpEl) xpEl.textContent = String(xp.xp);
   if (xpnextEl) xpnextEl.textContent = String(xp.toNext);
   setPctWidth(xpfillEl, xp.pct);
-  if (rankEl) rankEl.innerHTML = `<span class="badge badge--streak">${RANK_EMOJIS[rank] ?? '🌱'} ${rank}</span>`;
+  if (rankEl) {
+    // Built as a node, and named through badgeLabel.rankLabel(): this runs on
+    // /es/, /ar/ and /fr/ homepages too, where interpolating `rank` showed the
+    // English key ("Gold") next to a localised progress page.
+    rankEl.replaceChildren();
+    const badge = document.createElement('span');
+    badge.className = 'badge badge--streak';
+    badge.textContent = `${RANK_EMOJIS[rank] ?? '🌱'} ${rankLabel(rank)}`;
+    rankEl.appendChild(badge);
+  }
 
   const gsLevel = document.getElementById('gs-level-val');
   const gsStreak = document.getElementById('gs-streak-val');

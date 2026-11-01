@@ -25,6 +25,7 @@ export interface FakeEl {
   focus(): void;
   select(): void;
   appendChild(child: FakeEl): void;
+  replaceChildren(...nodes: FakeEl[]): void;
   insertBefore(child: FakeEl, ref: FakeEl | null): void;
   remove(): void;
   querySelectorAll(sel: string): FakeEl[];
@@ -87,6 +88,15 @@ export function fakeEl(id?: string): FakeEl {
     appendChild(child: FakeEl) {
       children.push(child);
       child.parentElement = this;
+    },
+    // Same contract as the real one: drop the old subtree, then append.
+    replaceChildren(...nodes: FakeEl[]) {
+      for (const child of children) child.parentElement = null;
+      children.length = 0;
+      for (const node of nodes) {
+        children.push(node);
+        node.parentElement = this;
+      }
     },
     insertBefore(child: FakeEl, _ref: FakeEl | null) {
       children.push(child);

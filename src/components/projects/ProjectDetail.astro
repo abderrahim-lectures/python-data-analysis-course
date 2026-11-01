@@ -184,13 +184,23 @@ const jsonLd = {
   // Persisted per (project, step, item) so a reload keeps the ticks.
   const cleanSlug = slug.replace(/.*\//, '');
   const doneHint = article?.getAttribute('data-step-check-hint') ?? 'Complete every checklist item to mark this step done.';
-  const checkState = (() => {
+  // Shape guard on the whole blob: this is JSON from storage, so a tampered,
+  // half-written or older-format value can be any JSON value at all. It used
+  // to be trusted and then indexed -- assigning `checkState[key]` on a parsed
+  // string or number throws ("Cannot create property ... on string"), and the
+  // throw took the rest of init() with it, so every later step and the page's
+  // "Mark complete" button were left unwired.
+  const storedChecks = (() => {
     try {
-      return JSON.parse(localStorage.getItem(`pda.steps.${cleanSlug}`) ?? '{}') as Record<string, boolean[]>;
+      return JSON.parse(localStorage.getItem(`pda.steps.${cleanSlug}`) ?? '{}') as unknown;
     } catch {
-      return {};
+      return null;
     }
   })();
+  const checkState: Record<string, boolean[]> =
+    storedChecks && typeof storedChecks === 'object' && !Array.isArray(storedChecks)
+      ? (storedChecks as Record<string, boolean[]>)
+      : {};
   const persistChecks = () => {
     try { localStorage.setItem(`pda.steps.${cleanSlug}`, JSON.stringify(checkState)); } catch { /* ignore */ }
   };
@@ -242,7 +252,13 @@ const jsonLd = {
     }
 
     const key = String(idx);
-    checkState[key] = checkState[key] ?? items.map(() => done);
+    // Per-step guard, same reasoning: the entry can be a non-array, hold
+    // non-booleans, or have a different length than the checklist does now
+    // (the content gained or lost an item since the ticks were saved). Rebuild
+    // it as exactly one boolean per item so `.every(Boolean)` below is safe;
+    // `done` pre-checks everything for an already-cleared step.
+    const storedEntry = checkState[key];
+    checkState[key] = items.map((_, j) => (Array.isArray(storedEntry) && storedEntry[j] === true) || done);
     const ul = items[0].parentElement as HTMLUListElement | null;
     const checkboxes: HTMLInputElement[] = [];
 

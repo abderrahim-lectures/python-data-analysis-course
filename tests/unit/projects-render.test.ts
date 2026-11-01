@@ -91,6 +91,20 @@ describe('initProjectsFinder', () => {
     expect(s.history.replaceState).toHaveBeenCalledWith(null, '', '?q=pandas');
   });
 
+  test('count line uses the locale template the page supplies', () => {
+    const s = setup();
+    const finder = fakeEl();
+    finder.dataset.countTemplate = '{visible} de {total} proyectos';
+    finder.dataset.thatFilter = 'ese filtro';
+    (document as any).querySelector = (sel: string) => (sel === '.finder' ? finder : null);
+
+    initProjectsFinder();
+
+    // /es/proyectos and friends used to print "3 of 3 projects" in English
+    // while the rest of the finder was localised.
+    expect(s.count.textContent).toBe('3 de 3 proyectos');
+  });
+
   test('clicking a tag pill narrows to that tag', () => {
     const s = setup();
     initProjectsFinder();

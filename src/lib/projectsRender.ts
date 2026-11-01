@@ -23,6 +23,13 @@ export function initProjectsFinder() {
   const countEl = document.getElementById('project-count');
   const emptyEl = document.getElementById('project-empty');
   const emptyQueryEl = document.getElementById('project-empty-query');
+  // The finder's own copy comes from the locale's messages, the same way the
+  // static markup around it does: both strings used to be English literals in
+  // this module, so /es/proyectos, /fr/projets and /ar/مشاريع printed
+  // "1 of 12 projects" and '"that filter"' in English.
+  const finderEl = document.querySelector<HTMLElement>('.finder');
+  const countTemplate = finderEl?.dataset.countTemplate || '{visible} of {total} projects';
+  const thatFilter = finderEl?.dataset.thatFilter || 'that filter';
 
   const params = new URLSearchParams(location.search);
   let activeTag = params.get('tag') ?? '';
@@ -47,9 +54,13 @@ export function initProjectsFinder() {
       card.hidden = !show;
       if (show) visible++;
     }
-    if (countEl) countEl.textContent = `${visible} of ${cards.length} project${cards.length === 1 ? '' : 's'}`;
+    if (countEl) {
+      countEl.textContent = countTemplate
+        .replace('{visible}', String(visible))
+        .replace('{total}', String(cards.length));
+    }
     if (emptyEl) emptyEl.hidden = visible > 0;
-    if (emptyQueryEl) emptyQueryEl.textContent = q || (activeTag || activeDiff || 'that filter');
+    if (emptyQueryEl) emptyQueryEl.textContent = q || (activeTag || activeDiff || thatFilter);
 
     const next = new URLSearchParams();
     if (viewMode !== 'list') next.set('view', viewMode);

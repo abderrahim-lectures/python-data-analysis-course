@@ -493,5 +493,7 @@
   "progress_badge_login": "Daily login",
   "progress_badge_lesson": "Lesson complete",
   "progress_badge_track": "Track progress",
-  "progress_badge_quiz": "Perfect quiz"
+  "progress_badge_quiz": "Perfect quiz",
+  "filter_count": "{visible} of {total} projects",
+  "filter_that": "that filter"
 }

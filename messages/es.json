@@ -493,5 +493,7 @@
   "progress_badge_login": "Inicio de sesión diario",
   "progress_badge_lesson": "Lección completada",
   "progress_badge_track": "Progreso del itinerario",
-  "progress_badge_quiz": "Cuestionario perfecto"
+  "progress_badge_quiz": "Cuestionario perfecto",
+  "filter_count": "{visible} de {total} proyectos",
+  "filter_that": "ese filtro"
 }

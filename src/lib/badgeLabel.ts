@@ -90,3 +90,23 @@ export function badgeLabel(badge: string): string {
   if (id) return questById[id]();
   return badge;
 }
+
+// Rank names are `rankFor()`'s English keys ('Bronze', 'Grandmaster', …); the
+// keys stay English because they are what gameState compares and what older
+// saved state holds, but every user-facing rendering of one goes through here.
+// The homepage used to interpolate the key directly, so /es/, /ar/ and /fr/
+// showed "Gold"/"Grandmaster" while /progress on the same site showed
+// "Oro"/"غراند ماستر"/"Or".
+const rankLabels: Record<string, () => string> = {
+  Bronze: () => m.progress_rank_bronze(),
+  Silver: () => m.progress_rank_silver(),
+  Gold: () => m.progress_rank_gold(),
+  Platinum: () => m.progress_rank_platinum(),
+  Diamond: () => m.progress_rank_diamond(),
+  Master: () => m.progress_rank_master(),
+  Grandmaster: () => m.progress_rank_grandmaster(),
+};
+
+export function rankLabel(rank: string): string {
+  return rankLabels[rank] ? rankLabels[rank]() : rank;
+}

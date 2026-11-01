@@ -65,14 +65,19 @@ function xpEarnedOn(section: string): number {
     .reduce((sum, e) => sum + (e.xp ?? 0), 0);
 }
 
-const pyModules = [1,2,3,4,5,6,7].map((w) => {
-  const done = w <= py.done;
-  return {w, done};
-});
-const daModules = [1,2,3,4,5].map((w) => {
-  const done = w <= da.done;
-  return {w, done};
-});
+// One station per module, in module order. Derived from MODULES rather than a
+// literal [1..7]/[1..5] so the trail cannot disagree with the collection.
+// `done` is per station: it used to be `w <= py.done`, i.e. the first N
+// stations ticked where N was the *number* reached -- so a learner who
+// finished module 5 and nothing else saw module 1 ticked and module 5 not.
+function trailStations(section: string, s: {lessonsCompleted: Record<string, boolean>}): {w: number; done: boolean}[] {
+  return (MODULES[section] ?? []).map((m, i) => ({
+    w: i + 1,
+    done: m.lessons.some((id) => s.lessonsCompleted[id]),
+  }));
+}
+const pyModules = trailStations('python-101', st);
+const daModules = trailStations('data-analysis', st);
 
 // ── Localized lookup tables (EN token → locale string) ───────────────────────
 const questLabels = Object.fromEntries(quests.map((q) => [q.id, questById[q.id] ? questById[q.id]() : q.label]));
@@ -515,12 +520,14 @@ const i18nData = {
       for (const section of ['python-101', 'data-analysis'] as const) {
         const list = document.querySelector(`.stations[data-track="${section}"]`);
         const mods = (MODULES[section] as {lessons: string[]}[] | undefined) ?? [];
-        const done = mods.filter((m) => m.lessons.some((id) => st.lessonsCompleted[id])).length;
+        // Per-station, matching trailStations() on the server. `w <= done`
+        // ticked the first `done` stations instead of the ones actually
+        // reached, so finishing module 5 and nothing else ticked module 1.
+        const reached = mods.map((m) => m.lessons.some((id) => st.lessonsCompleted[id]));
+        const done = reached.filter(Boolean).length;
         const total = mods.length;
-        mods.forEach((_, i) => {
-          const w = i + 1;
-          const complete = w <= done;
-          list?.querySelector(`li[data-week="${w}"]`)?.classList.toggle('station--done', complete);
+        reached.forEach((complete, i) => {
+          list?.querySelector(`li[data-week="${i + 1}"]`)?.classList.toggle('station--done', complete);
         });
         set(`pct-${section}`, fmt(T.pctDone, {done, total}));
         const earned = getActivityLog(500)
