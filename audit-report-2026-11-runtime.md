@@ -196,6 +196,7 @@ The fixes above were themselves reviewed before being called done. Five defects,
 | R5 | LOW | `CellRuntime.stdin` became required but three test literals omitted it, so `tsc` flagged the test file; the fake engine also lacked `FS.mkdirTree`. | Fixed — `tsc --noEmit` now reports only the four files that need `astro sync`'s generated types. |
 | R7 | **MED** | **Found in the real-user pass**: the friendly-error layer *replaced* the exception text, so `int("hello")` and `age + 1` showed only the hint — while 04-type-conversion quotes `ValueError: invalid literal for int()` and `TypeError: can only concatenate str (not "int") to str` verbatim. The lesson's own point never appeared in the panel. | The raw exception is printed first, the hint after it. |
 | R8 | **MED** | **Found in the real-user pass**: pressing Enter in an editable cell put the caret *before* the newline (a caret cannot sit after a trailing newline inside a `<pre>`), so the next characters landed on the previous line — "a = 1" + Enter + "b = 2" ran as `a = 1b = 2` with an empty second line, and `b = 2` was silently part of the first statement. | A trailing `<br>` gives the caret a home after the newline when the source ends with one; verified by typing two lines and running them in the browser. |
+| R11 | **HIGH** | **Found by sweeping every cell of every English lesson through the real engine**: `scipy` is broken for every visitor. `import scipy.stats` dies with `ImportError: Could not load dynamic lib … _fblas … bad export type for 'ztrsm_'`. `scripts/vendor-pyodide.mjs` copied only `.whl` files, so `openblas-0.3.26.zip` — the shared library scipy's BLAS links against — was never vendored. Production confirms: the scipy wheel is served (200), the openblas zip is **404**. | The vendor script now accepts `.zip` too; re-running it adds the missing 6.1 MB, and all ten cells of the correlation-analysis lesson run clean (Spearman 0.2313 on the real data). |
 | R9 | **HIGH** | **Found by fuzzing the guard, confirmed in the browser**: two whole families still reached `js`. (a) `E = exec` / `E = eval` binds the builtin to a name, so no `exec(` ever appears. (b) stdlib modules that compile and run strings: `code.InteractiveInterpreter().runsource(...)`, `timeit.timeit(...)`, `profile`/`cProfile.run(...)`, `trace.Trace().run(...)`, `runpy.run_module(...)`, `pdb.Pdb().runsource(...)`. With `"import " + "js"` split across literals, each of them executed `import js` against the real engine (the error was `AttributeError: window`, i.e. the module had been obtained). | The bare names `exec`/`eval`/`compile` are refused (attributes like `re.compile`/`model.eval()` still pass), and imports of those seven stdlib modules plus `_pyodide` are refused. 24-payload fuzz corpus: 13 escapes before, 0 after (the two survivors are `unittest` loading a module and `ast.literal_eval`, neither of which executes a string). |
 | R10 | **MED — corrects B3's impact** | The B3 impact paragraph (inherited from the pre-fix main-thread design) says a bypass reads the viewer's `localStorage` and rewrites the DOM. In the **worker**, `js` exposes `fetch`, `indexedDB`, `caches`, `location`, `self`, `navigator`, `importScripts` — and **not** `localStorage` or `document`. Measured in the browser with the `E = exec` route: `CAP ['fetch', 'indexedDB', 'caches', 'location', 'self', 'navigator', 'importScripts']`. | The guard still matters (same-origin `fetch` with the page's credentials, Cache Storage, `importScripts`), but the rating drops from "can read the learner's progress" to "can call the origin's endpoints and read origin caches". The structural fix (opaque-origin iframe) remains the boundary. |
 | R6 | **MED** | **Found only in a real browser**: the transcript read `2004` *above* `Birth year?`, with the prompt glued to the next line (`Birth year? About 22 years old`). Pyodide's batched stdout only hands JS a complete line — a flushed partial one stays buffered (`print("X", end="", flush=True); print("Y")` renders as `XY`), so `input()`'s newline-less prompt arrived after the echoed answer. | `input()` is wrapped at engine boot (`INPUT_SHIM_SRC`) to write the prompt as a whole line before reading, so the panel reads prompt → answer → output. Verified in the browser (§6). |
@@ -266,6 +267,24 @@ the lesson's three quiz questions:
 | Editing a cell (type two lines, add an `input()` call, run) | newline stays on its line, gutter renumbers, the new field appears labelled with the new prompt, cell runs |
 
 No console errors in any of the runs.
+
+### Cell sweep
+
+Every ```python fence of the 49 English lessons (394 cells) was mounted from its markdown and run
+in order through the real engine, with input fields filled so they do not fail for want of a value:
+
+```
+TOTAL cells run: 394, with errors: 6, lessons: 49
+page errors: none
+```
+
+Six error cells: five are lessons *demonstrating* an exception on purpose (`int("hello")` →
+`ValueError`, `"5" < 6` → `TypeError`, `{[1, 2]: "bad"}` → `TypeError`, `age + 1` → `TypeError`,
+one more the same kind), and the sixth was the scipy failure above. Re-running the affected
+lesson after the vendor fix gives **10/10 cells, 0 errors**. One cell is broken by construction:
+`python-101/hard/10-cli-generator.md`'s Practice Challenge is a *fragment* (`parser.add_argument…`,
+`# In main():`) that the rehype plugin turns into a runnable cell, so it can only ever raise
+`NameError: parser` — issue 07.
 
 ### Link check
 

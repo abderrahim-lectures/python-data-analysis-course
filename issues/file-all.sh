@@ -34,3 +34,9 @@ file 04-editor-enter-newline.md \
 file 05-i18n-cheatsheets-404.md \
   'Localized learn hubs link /{es,ar,fr}/cheatsheets and 404' \
   'type:bug,area:i18n'
+file 06-vendored-openblas-missing.md \
+  'Vendored Pyodide is missing openblas, so scipy is broken' \
+  'type:bug,area:data-analysis,area:infra'
+file 07-fragment-cell-cli-generator.md \
+  'A lesson fence is a code fragment, so its cell always fails' \
+  'type:bug,area:python-101,area:content'

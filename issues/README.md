@@ -28,4 +28,6 @@ gh issue create --title 'pythonGuard is bypassable: nine routes to js/pyodide wi
 gh issue create --title 'A failing cell shows only the hint — the exception the lesson teaches disappears' --label 'type:bug,area:ui,area:python-101' --body-file issues/03-hint-hides-exception.md
 gh issue create --title 'Enter in an editable cell puts the caret before the newline, so two statements run as one' --label 'type:bug,area:ui,area:playground' --body-file issues/04-editor-enter-newline.md
 gh issue create --title 'Localized learn hubs link /{es,ar,fr}/cheatsheets — 404' --label 'type:bug,area:i18n' --body-file issues/05-i18n-cheatsheets-404.md
+gh issue create --title 'Vendored Pyodide is missing openblas, so scipy is broken' --label 'type:bug,area:data-analysis,area:infra' --body-file issues/06-vendored-openblas-missing.md
+gh issue create --title 'A lesson fence is a code fragment, so its cell always fails' --label 'type:bug,area:python-101,area:content' --body-file issues/07-fragment-cell-cli-generator.md
 ```

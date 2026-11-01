@@ -28,7 +28,12 @@ function closureFor(rootNames) {
     const p = lock.packages[name.replace(/==\d.*/, '')];
     if (!p || seen.has(name)) return;
     seen.add(name);
-    if (/\S+\.whl$/.test(p.file_name)) closure.add(p.file_name);
+    // Pyodide ships some dependencies as separate shared libraries
+    // (`openblas-0.3.26.zip`, `libhdf5-…zip`, …) rather than wheels. Skipping
+    // them broke scipy for every visitor: `scipy.linalg._fblas.so` needs
+    // openblas, and without it `import scipy.stats` dies with "Could not load
+    // dynamic lib … bad export type for 'ztrsm_'".
+    if (/\.(?:whl|zip)$/.test(p.file_name)) closure.add(p.file_name);
     (p.depends ?? []).forEach(walk);
   };
   rootNames.forEach(walk);
