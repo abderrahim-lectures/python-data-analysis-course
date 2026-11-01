@@ -25,7 +25,7 @@ const post = (m: OutMessage) => (self as unknown as {postMessage(m: OutMessage):
 // worker regardless of the page's actual locale, since the url/cookie/
 // localStorage strategies all require `window`/`document`, neither of which
 // exist here.
-let localeConfigured = false;
+let configuredLocale: string | null = null;
 
 let enginePromise: Promise<PyodideModel> | null = null;
 
@@ -50,9 +50,13 @@ async function drainQueue(): Promise<void> {
 }
 
 async function runOne(msg: RunMessage): Promise<void> {
-  if (!localeConfigured) {
-    localeConfigured = true;
-    const locale = toLocale(msg.locale) ?? baseLocale;
+  // Re-pointed on every run, not latched once: this worker survives soft
+  // navigation, so a learner who switched locale kept getting the two
+  // engine-side strings (the `import js` refusal and "load the dataset first")
+  // in the language of the first page that ran a cell.
+  const locale = toLocale(msg.locale) ?? baseLocale;
+  if (locale !== configuredLocale) {
+    configuredLocale = locale;
     overwriteGetLocale(() => locale);
   }
 

@@ -48,10 +48,14 @@ function dispatchPyodideEvent(name: string, detail?: unknown): void {
 // gained comes straight from addXP's own atomic before/after, not a second
 // loadState() call here -- two overlapping runs could otherwise interleave
 // between this function's own reads and report the other run's gain.
-export async function awardLessonXp(lessonId: string): Promise<{gained: number; xpBefore: number}> {
-  const xpBefore = loadState().xp;
+export async function awardLessonXp(lessonId: string): Promise<{gained: number; firstRunEver: boolean}> {
+  // "First success" has to mean the first run, not "XP was zero": the daily
+  // login (gamestrip's boot) pays 5 XP before the learner can click anything,
+  // so a balance of 0 was unreachable and the toast never rendered for anyone
+  // with working storage.
+  const firstRunEver = Object.keys(loadState().lessonsRun ?? {}).length === 0;
   const {gained} = addXP(lessonId);
-  return {gained, xpBefore};
+  return {gained, firstRunEver};
 }
 
 export interface InitCellDeps {
@@ -207,9 +211,9 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
     if (executed && !awarded && lessonId) {
       awarded = true;
       try {
-        const {gained, xpBefore} = await awardLessonXp(lessonId);
+        const {gained, firstRunEver} = await awardLessonXp(lessonId);
         cell.dispatchEvent(new CustomEvent('lesson:complete', {bubbles: true, detail: {lessonId, xp: gained}}));
-        if (xpBefore === 0) {
+        if (firstRunEver) {
           const toast = document.createElement('div');
           toast.className = 'firstsuccess-toast';
           toast.setAttribute('role', 'status');

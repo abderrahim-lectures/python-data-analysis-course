@@ -347,6 +347,20 @@ Open, reported and deliberately not changed in this pass:
 - The `/progress` "diagnostics" are invented numbers presented as measurements (`acceptancePct` starts at 62 for a learner with one run).
 
 
+### Review round 7 — the run path
+
+The cell runtime is what this PR was about, so it got a review of its own: worker queue,
+message protocol, the client, and the overlay that covers the page while a run is in flight.
+
+| # | Severity | Finding | Status |
+|---|----------|---------|--------|
+| R49 | **HIGH** | **A cell that does not return bricks the page.** The worker drains its queue strictly serially with no interrupt path (`pyodide.worker.ts`'s `drainQueue` awaits `runOne`), `runInWorker` settles only on a `done`/`fatal` message, nothing in `src/` ever calls `Worker#terminate()`, and Pyodide's interrupt buffer is unusable here (no cross-origin isolation → no `SharedArrayBuffer`). Meanwhile `phase: 'running'` is posted *before* the code runs, so `.app-busy--active` (a `position: fixed; inset: 0; pointer-events: auto; z-index: 99998` layer) covers the page and is only cleared on `pyodide:ready`. So `while True: pass` — or a loop missing its `break`, which module 3 teaches — takes every pointer/touch target on the site with it, leaves Run disabled on "Executing…", and queues every later cell on every page behind it (the worker is a page-lifetime singleton, so a soft navigation keeps it). The only way out is a hard reload, which `beforeunload` asks the learner to confirm. | **Open.** The fix is a Stop control: `terminate()` the worker, settle the in-flight promise as `false`, clear the engine cache on the main-thread side so the next Run reboots, and dispatch `pyodide:ready` to clear the overlay — a new control in two markup sources plus four locales of copy, which needs a browser pass this VM cannot give it. Reported rather than half-built. |
+| R50 | MED | **A worker that failed once was never replaced.** The `error` handler settled the current run and printed "check your connection and try again", but kept the dead worker — and `postMessage` to a browser-terminated worker is a silent no-op. So the retry it invited posted into the void, no message or error ever came back, and Run stayed disabled on "Executing…" until a hard reload. Reachable from a stale tab across a redeploy, an offline blip, or a blocked `worker-src`. | Fixed: the handler terminates and drops the worker so the next run builds a fresh one. Three tests, negative-controlled (the replacement test fails against the old handler). |
+| R51 | MED-LOW | **The trailing-expression wrapper mixed byte and character offsets.** CPython reports `ast` offsets in UTF-8 *bytes*; the snippet summed `len()` of str lines and sliced a str, so a non-ASCII character earlier on the last line moved the insert point right by one per extra byte and silently corrupted the learner's code: `print("café"); 2 + 2` → `2print(repr(…))` (`SyntaxError`), `nom = "José"; nom` → `nprint(…)` (`NameError`). Latent for every lesson fence (a scan of all 5686 found none that trip it) and live for edited cells, which is the case that matters. | Fixed: the splice is done on the encoded bytes. Verified by extracting `WRAP_EXPR_SRC` from the module and running it under CPython 3 over six cases, including both broken ones. |
+| R52 | LOW | The worker froze its message locale at the first run (`localeConfigured` latch), and it survives soft navigation — so after switching language, the two engine-side strings (the `import js` refusal and "load the dataset first") came out in the previous locale inside an otherwise translated page. | Fixed: the locale is re-pointed per run; the message already carried it. |
+| R53 | LOW | The "first success" toast was unreachable: it keyed off `xpBefore === 0`, but `gamestrip`'s boot pays the daily login (5 XP) on every page before any Run, so a new visitor's balance was never 0 — the toast only appeared when storage was broken. | Fixed: `awardLessonXp` reports "this is the learner's first run" (empty `lessonsRun`) instead, and the toast keys off that. Three tests. |
+
+
 ---
 
 ## 6 — Toolchain: what this VM can and cannot run, measured

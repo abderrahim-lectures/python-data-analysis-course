@@ -39,11 +39,18 @@ def _wrap_bare_expr(src):
     # numbers and collections. Precise AST offsets keep same-line statements
     # ('x = 1; 2 + 3'), multi-line expressions, and trailing comments intact
     # (the comment lands on the line after the closing paren).
+    # ast's col_offset is a UTF-8 *byte* offset while len() and str slicing
+    # count characters, so splicing by characters moved the insert point right
+    # by one for every non-ASCII byte earlier on the line: 'print("café"); 2 + 2'
+    # became '2print(...)' (SyntaxError) and 'nom = "José"; nom' became
+    # 'nprint(...)' (NameError). Splice in bytes, where every offset ast reports
+    # is already valid.
     lines = src.splitlines(keepends=True)
-    start_off = sum(len(l) for l in lines[: node.lineno - 1]) + node.col_offset
-    expr = ast.get_source_segment(src, node) or ''
-    end_off = start_off + len(expr)
-    return src[:start_off] + 'print(repr(\\n' + expr + '\\n))' + src[end_off:]
+    raw = src.encode()
+    start_off = len(''.join(lines[: node.lineno - 1]).encode()) + node.col_offset
+    expr = (ast.get_source_segment(src, node) or '').encode()
+    out = raw[:start_off] + b'print(repr(\\n' + expr + b'\\n))' + raw[start_off + len(expr):]
+    return out.decode()
 `;
 
 // Pyodide ships matplotlib with a canvas backend (matplotlib-pyodide) that, on

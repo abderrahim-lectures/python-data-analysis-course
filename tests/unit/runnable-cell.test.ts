@@ -222,21 +222,34 @@ describe('awardLessonXp', () => {
     } as Storage;
   }
 
-  test('awards run XP only and reports the gain', async () => {
+  test('awards run XP only, and flags the very first run', async () => {
     vi.stubGlobal('localStorage', storage());
     const first = await awardLessonXp('titanic-exploration');
-    expect(first.xpBefore).toBe(0);
+    // The first-success toast keys off this, not off a zero balance: the daily
+    // login pays 5 XP before any click, so `xp === 0` was unreachable.
+    expect(first.firstRunEver).toBe(true);
     expect(first.gained).toBe(5);
   });
 
-  test('reports the balance before the award', async () => {
+  test('a later run is no longer the first one', async () => {
+    // A learner who has already run something, with a non-zero balance.
     const seed = {
-      'pda:state': JSON.stringify({version: 1, xp: 70, lessonsRun: {}, lessonsCompleted: {}}),
+      'pda:state': JSON.stringify({version: 1, xp: 70, lessonsRun: {'titanic-eda': true}, lessonsCompleted: {}}),
     };
     vi.stubGlobal('localStorage', storage(seed));
     const next = await awardLessonXp('titanic-eda');
-    expect(next.xpBefore).toBe(70);
+    expect(next.firstRunEver).toBe(false);
     expect(next.gained).toBe(5);
+  });
+
+  test('a non-zero balance alone does not make it a repeat run', async () => {
+    // Daily login XP with nothing run yet: still the first run.
+    const seed = {
+      'pda:state': JSON.stringify({version: 1, xp: 5, lessonsRun: {}, lessonsCompleted: {}}),
+    };
+    vi.stubGlobal('localStorage', storage(seed));
+    const first = await awardLessonXp('intro');
+    expect(first.firstRunEver).toBe(true);
   });
 
   afterEach(() => {

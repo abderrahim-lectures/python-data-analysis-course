@@ -98,6 +98,14 @@ export function runInWorker(
     const onError = (ev: ErrorEvent) => {
       console.warn('[pyodideWorkerClient] worker error', ev.message);
       cb.appendLine('err', m.cell_engine_load_failed());
+      // Drop the worker. The browser terminates a Worker whose script failed to
+      // load, and postMessage to a terminated worker is a silent no-op -- so
+      // keeping it around meant the "try again" this message invites could
+      // never work: the next Run posted into the void, no message or error ever
+      // came back, and the button stayed disabled on "Executing…" until a hard
+      // reload. Dropping it makes the next run build a fresh one.
+      try { w.terminate(); } catch { /* already gone */ }
+      if (worker === w) worker = null;
       finish(false);
     };
     w.addEventListener('message', onMessage);
