@@ -740,3 +740,70 @@ describe('per-lesson mastery', () => {
     expect(gs.getLessonMastery()).toEqual({});
   });
 });
+
+describe('what counts as a badge', () => {
+  test('internal quest keys do not count as badges', async () => {
+    const gs = await fresh();
+    gs.completeLesson('python-101/normal/01-printing');
+    const s = gs.loadState();
+    // A completed lesson also records internal keys: completed-<id>, track-<section>.
+    expect(Object.keys(s.quests)).toContain('completed-python-101/normal/01-printing');
+    expect(gs.questsDoneCount()).toBe(gs.questsToShow().filter((q) => q.done).length);
+    expect(gs.questsDoneCount()).toBeLessThan(Object.keys(s.quests).length);
+  });
+
+  test('recentUnlockedQuests lists visible quests, newest last', async () => {
+    const gs = await fresh();
+    gs.completeLesson('python-101/normal/01-printing');
+    const recent = gs.recentUnlockedQuests(3);
+    expect(recent.length).toBeGreaterThan(0);
+    expect(recent).toContain('first-lesson');
+    expect(recent.every((id) => !id.startsWith('completed-') && !id.startsWith('login-'))).toBe(true);
+  });
+});
+
+describe('quizzes and the streak', () => {
+  test('a quiz is activity: it advances the streak like any other action', async () => {
+    const gs = await seed({streak: 3, bestStreak: 3, lastActive: daysAgo(1)});
+    gs.recordQuiz(true, 'python-101/normal/01-printing');
+
+    expect(gs.streakProgress().current).toBe(4);
+  });
+
+  test('a second quiz on the same day does not inflate the streak', async () => {
+    const gs = await fresh();
+    gs.recordQuiz(true);
+    gs.recordQuiz(false);
+
+    expect(gs.streakProgress().current).toBe(1);
+  });
+});
+
+describe('a malformed stored state', () => {
+  test('a wrong-typed collection is repaired, not treated as a wipe', async () => {
+    const gs = await fresh();
+    // 500 XP and a completed lesson, but one collection has the wrong shape
+    // (an older format, a hand-edit, a half-written save).
+    localStorage.setItem('pda:state', JSON.stringify({
+      xp: 500,
+      lessonsCompleted: {'python-101/normal/01-printing': true},
+      quests: 'not-a-map',
+      activityLog: 'nope',
+    }));
+
+    const s = gs.loadState();
+    // >= because reading also pays any milestones the stored XP has crossed.
+    expect(s.xp).toBeGreaterThanOrEqual(500);
+    expect(s.lessonsCompleted['python-101/normal/01-printing']).toBe(true);
+    // The wrong-typed map is replaced by a real one (repairLegacy then
+    // reconstructs the quests it can derive from the record).
+    expect(typeof s.quests).toBe('object');
+    expect(s.quests['first-lesson']).toBe(true);
+    // The string log is replaced by an array (repair may log the milestones
+    // the stored XP had already crossed).
+    expect(Array.isArray(s.activityLog)).toBe(true);
+    // ...and a write after that keeps the XP rather than persisting defaults.
+    gs.completeLesson('python-101/normal/02-variables');
+    expect(gs.loadState().xp).toBeGreaterThanOrEqual(500);
+  });
+});

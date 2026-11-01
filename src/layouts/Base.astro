@@ -203,8 +203,15 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
     })} />
     <script is:inline>
       // Persisted theme — must run before first paint to avoid a flash.
-      const t = localStorage.getItem('pda:theme');
-      if (t) document.documentElement.dataset.theme = t;
+      // Wrapped: with storage blocked (private mode, site-data blocked) the
+      // getter throws, and an uncaught throw here would skip the rest of this
+      // script — which is the busy-overlay wiring below.
+      (function () {
+        try {
+          const saved = localStorage.getItem('pda:theme');
+          if (saved) document.documentElement.dataset.theme = saved;
+        } catch { /* storage blocked: keep the default theme */ }
+      })();
       document.addEventListener('DOMContentLoaded', () => {
         // Busy overlay: shown while the page's scripts hydrate after load
         // ("first" mode) and while Pyodide boots on the first Run click

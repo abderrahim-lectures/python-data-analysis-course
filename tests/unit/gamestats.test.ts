@@ -159,3 +159,23 @@ describe('computeGameStats', () => {
     expect(r.engagement.streakLength).toBe(0);
   });
 });
+describe('the activity window', () => {
+  test('starts at the first logged action, not at the last active day', async () => {
+    const {gs, state} = await fresh();
+    const s = state.loadState();
+    s.lessonsCompleted = {
+      'python-101/normal/01-printing': true,
+      'python-101/normal/02-variables': true,
+    };
+    // A reader is, by definition, active today: lastActive is today. The span
+    // must come from the log, or every metric collapses to "day 1".
+    s.lastActive = new Date().toISOString().slice(0, 10);
+    s.activityLog = [{ts: Date.now() - 10 * 86400000, type: 'lesson-complete', label: 'x', xp: 10}];
+    state.saveState(s);
+
+    const r = gs.computeGameStats();
+    // 2 lessons over ~10 days → ~1.4/week, and 2 active days out of 10.
+    expect(r.activity.lessonsPerWeek).toBeLessThanOrEqual(2);
+    expect(r.engagement.returnRate).toBeLessThan(100);
+  });
+});

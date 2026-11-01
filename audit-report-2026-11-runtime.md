@@ -221,6 +221,28 @@ clipboard-with-fallback to `clipboard.ts`, and the error explanation out of `run
 `runnable-cell.client.ts` is 448 → 285 lines across the two passes.
 
 
+### Review round 3 — `gameState.ts` and the page shell
+
+The economy module and the shell script that every page loads, reviewed for the first time in
+this pass.
+
+| # | Severity | Finding | Fix |
+|---|----------|---------|-----|
+| R15 | **HIGH** | `gamestats.computeGameStats()` derived "days since start" from `lastActive` — which is the *last* active day. A learner reading the progress page is active today, so the span collapsed to one day: **lessons/week came out as lessons × 7** (10 lessons → "70"), `returnRate` was 100% for everybody, `daysActive`/`avgXpPerDay` were skewed the same way. | The span now comes from the first entry in the activity log (falling back to `lastActive` for legacy state with an empty log). New test: 2 lessons over 10 logged days → ≤2/week and a return rate below 100%. |
+| R16 | MED | Calendar days were UTC (`toISOString().slice(0,10)`): the daily-login gate and the streak flipped at 19:00 in New York and 10:00 in Sydney, so an evening session could pay the daily login twice — or break a streak for someone who practised two evenings running. | Local calendar days (`localDay`), with `yesterday()` derived locally. |
+| R17 | MED | `recordQuiz()` stamped `lastActive = today()` **without** bumping the streak, unlike every other action: a learner who only answered quizzes never built a streak, and the stamp stopped the next action that day from advancing it either. | `recordQuiz` calls `bumpStreak`, like the rest. Two tests. |
+| R18 | MED | The homepage "Badges" counter showed `badges.length`, and `markQuest` pushes *internal* keys into that array (`login-<date>`, `completed-<lesson>`, `quiz-perfect-<date>`, `track-<section>`): the number grew by one every day and disagreed with the progress page's "5/31 quests". The level-up overlay's "unlocked" line listed the last three raw keys. | `questsDoneCount()` and `recentUnlockedQuests(n)` over the one visible quest list; both consumers use them. |
+| R19 | MED | `read()` merged stored state over the defaults without type checks. A wrong-typed collection (`quests: "x"`, an older format, a half-written save) made `repairLegacy` throw, and the catch returned **defaults** — so the next write persisted zeros over the learner's XP history. | Collections are coerced to the right shape (and the log filtered to real entries) before repair; a test asserts 500 XP survives a corrupted map. |
+| R20 | LOW | `Base.astro`'s theme script read `localStorage` unguarded. With storage blocked the throw skipped the rest of the same inline script — which is the busy-overlay wiring for the whole site. | Wrapped in its own try/catch. |
+| R21 | LOW | The theme toggle wrote `localStorage` unguarded; a throw aborted the XP-bar re-render after the theme changed. | Wrapped. |
+
+Reported, deliberately not changed: `addXP` pays 5 XP per run with no cap (unlimited farming of
+XP milestones and ranks — a product decision); `Quiz.astro` and `quiz.client.ts` are two
+implementations of the same quiz flow; `evaluateMilestones` hardcodes the section totals (29 / 20)
+that `gamestats.TRACKS` duplicates; `Quiz.astro` files a lesson id into `challengesCompleted` on a
+perfect quiz; `repairLegacy` can pay milestones into a *read* without persisting them.
+
+
 ---
 
 ## 6 — Toolchain: what this VM can and cannot run, measured

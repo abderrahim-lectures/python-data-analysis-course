@@ -58,7 +58,21 @@ export const XP = {
   CHALLENGE_COMPLETE: 15,   // solved an interactive challenge
 } as const;
 
-function today(): string { return new Date().toISOString().slice(0, 10); }
+// The learner's calendar day, not UTC's. A UTC date flips at 19:00 in New York
+// and 10:00 in Sydney, so a practice session after dinner could count as the
+// next day's login (double daily XP) or skip one, and the streak could break
+// for someone who practised two evenings in a row.
+function localDay(d: Date): string {
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${d.getFullYear()}-${m}-${day}`;
+}
+function today(): string { return localDay(new Date()); }
+function yesterday(): string {
+  const d = new Date();
+  d.setDate(d.getDate() - 1);
+  return localDay(d);
+}
 
 function defaults(): PDAState {
   return {
@@ -121,6 +135,28 @@ function coerceNumericFields(s: PDAState): PDAState {
   s.xp = Number(s.xp) || 0;
   s.streak = Number(s.streak) || 0;
   s.bestStreak = Number(s.bestStreak) || 0;
+  s.quizCorrect = Number(s.quizCorrect) || 0;
+  s.quizTotal = Number(s.quizTotal) || 0;
+  // Shape guard for the collections. `{...defaults(), ...parsed}` fills in
+  // missing keys but keeps whatever type the stored value had, and every
+  // writer here assigns into these maps — a state holding `quests: "x"` (an
+  // older format, a hand-edited value, a half-written save) threw inside
+  // repairLegacy, and read()'s catch then returned *defaults*: the learner's
+  // whole XP history vanished on the next write.
+  const maps = [
+    'lessonMastery', 'lessonsCompleted', 'lessonsRun', 'projectsViewed',
+    'projectsCompleted', 'projectsSteps', 'challengesCompleted', 'quests',
+  ] as const;
+  for (const key of maps) {
+    const v = s[key] as unknown;
+    if (!v || typeof v !== 'object' || Array.isArray(v)) {
+      (s as unknown as Record<string, unknown>)[key] = {};
+    }
+  }
+  if (!Array.isArray(s.badges)) s.badges = [];
+  if (!Array.isArray(s.activityLog)) s.activityLog = [];
+  // Every activity entry is read in renderers; drop anything that is not one.
+  s.activityLog = s.activityLog.filter((e) => e && typeof e === 'object' && typeof e.ts === 'number');
   return s;
 }
 
@@ -158,7 +194,7 @@ function bumpStreak(s: PDAState): void {
   const prev = s.lastActive;
   if (prev === today()) {
     if (s.streak === 0) s.streak = 1;
-  } else if (prev === new Date(Date.now() - 86400000).toISOString().slice(0, 10)) {
+  } else if (prev === yesterday()) {
     s.streak += 1;
   } else {
     s.streak = 1;
@@ -315,7 +351,10 @@ export function recordQuiz(correct: boolean, lessonId?: string): void {
     }
     s.lessonMastery[lessonId] = m;
   }
-  s.lastActive = today();
+  // A quiz is activity like any other. Stamping lastActive without bumping the
+  // streak meant a learner who only answered quizzes never built one — and the
+  // stamp stopped the next action that day from advancing it either.
+  bumpStreak(s);
   evaluateMilestones(s);
   write(s);
 }
@@ -418,42 +457,63 @@ function evaluateMilestones(s: PDAState): void {
 }
 
 // ── Quests ──────────────────────────────────────────────────────────
+// The quests the UI shows, in display order. `markQuest` also records internal
+// bookkeeping keys in the same map (`login-<date>`, `completed-<lesson>`,
+// `quiz-perfect-<date>`, `track-<section>`); those are not badges, and counting
+// them made the homepage "badges" number grow by one every day while the
+// progress page still showed 5 of 31 quests.
+const VISIBLE_QUESTS = [
+  {id: 'first-run', label: 'First run'},
+  {id: 'first-lesson', label: 'First step'},
+  {id: 'first-project', label: 'Explorer'},
+  {id: 'first-project-done', label: 'Builder'},
+  {id: 'first-project-step', label: 'Step by Step'},
+  {id: 'project-steps-10', label: '10 Steps'},
+  {id: 'project-steps-25', label: '25 Steps'},
+  {id: 'project-steps-50', label: '50 Steps'},
+  {id: 'track-python-101', label: 'Python track'},
+  {id: 'track-data-analysis', label: 'Data track'},
+  {id: 'streak-3', label: '3-day streak'},
+  {id: 'streak-7', label: '7-day streak'},
+  {id: 'streak-14', label: '14-day streak'},
+  {id: 'streak-30', label: '30-day streak'},
+  {id: 'xp-100', label: '100 XP'},
+  {id: 'xp-500', label: '500 XP'},
+  {id: 'xp-1000', label: '1K XP'},
+  {id: 'xp-2000', label: '2K XP'},
+  {id: 'xp-3000', label: '3K XP'},
+  {id: 'xp-5000', label: '5K XP'},
+  {id: 'xp-7500', label: '7.5K XP'},
+  {id: 'projects-5', label: '5 Projects'},
+  {id: 'projects-10', label: '10 Projects'},
+  {id: 'projects-25', label: '25 Projects'},
+  {id: 'projects-50', label: '50 Projects'},
+  {id: 'first-challenge', label: 'Problem Solver'},
+  {id: 'challenges-10', label: '10 Challenges'},
+  {id: 'challenges-25', label: '25 Challenges'},
+  {id: 'challenges-50', label: '50 Challenges'},
+  {id: 'all-python', label: 'Python 101 done'},
+  {id: 'all-data', label: 'Data Analysis done'},
+] as const;
+const VISIBLE_QUEST_IDS = new Set<string>(VISIBLE_QUESTS.map((q) => q.id));
+
 export function questsToShow(): { id: string; label: string; done: boolean }[] {
   const s = read();
-  const all = [
-    { id: 'first-run', label: 'First run' },
-    { id: 'first-lesson', label: 'First step' },
-    { id: 'first-project', label: 'Explorer' },
-    { id: 'first-project-done', label: 'Builder' },
-    { id: 'first-project-step', label: 'Step by Step' },
-    { id: 'project-steps-10', label: '10 Steps' },
-    { id: 'project-steps-25', label: '25 Steps' },
-    { id: 'project-steps-50', label: '50 Steps' },
-    { id: 'track-python-101', label: 'Python track' },
-    { id: 'track-data-analysis', label: 'Data track' },
-    { id: 'streak-3', label: '3-day streak' },
-    { id: 'streak-7', label: '7-day streak' },
-    { id: 'streak-14', label: '14-day streak' },
-    { id: 'streak-30', label: '30-day streak' },
-    { id: 'xp-100', label: '100 XP' },
-    { id: 'xp-500', label: '500 XP' },
-    { id: 'xp-1000', label: '1K XP' },
-    { id: 'xp-2000', label: '2K XP' },
-    { id: 'xp-3000', label: '3K XP' },
-    { id: 'xp-5000', label: '5K XP' },
-    { id: 'xp-7500', label: '7.5K XP' },
-    { id: 'projects-5', label: '5 Projects' },
-    { id: 'projects-10', label: '10 Projects' },
-    { id: 'projects-25', label: '25 Projects' },
-    { id: 'projects-50', label: '50 Projects' },
-    { id: 'first-challenge', label: 'Problem Solver' },
-    { id: 'challenges-10', label: '10 Challenges' },
-    { id: 'challenges-25', label: '25 Challenges' },
-    { id: 'challenges-50', label: '50 Challenges' },
-    { id: 'all-python', label: 'Python 101 done' },
-    { id: 'all-data', label: 'Data Analysis done' },
-  ];
-  return all.map(q => ({ ...q, done: !!s.quests[q.id] }));
+  return VISIBLE_QUESTS.map((q) => ({id: q.id, label: q.label, done: !!s.quests[q.id]}));
+}
+
+/** How many of the *visible* quests are done — the number the homepage strip
+ *  and the progress page both show. Internal keys do not count. */
+export function questsDoneCount(): number {
+  const s = read();
+  return Object.keys(s.quests).filter((id) => VISIBLE_QUEST_IDS.has(id)).length;
+}
+
+/** The most recently unlocked visible quests, newest last (the level-up
+ *  overlay lists them). */
+export function recentUnlockedQuests(limit = 3): string[] {
+  const s = read();
+  return Object.keys(s.quests).filter((id) => VISIBLE_QUEST_IDS.has(id)).slice(-limit);
 }
 
 // ── Streak ──────────────────────────────────────────────────────────

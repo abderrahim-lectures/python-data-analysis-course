@@ -1,7 +1,7 @@
 import {beforeEach, describe, expect, test} from 'vitest';
 import {el, fakeEl, stubDom} from './_domstub.ts';
 import {renderHomepage} from '../../src/lib/homeRender.ts';
-import {loadState, saveState} from '../../src/lib/gameState.ts';
+import {loadState, questsDoneCount, saveState} from '../../src/lib/gameState.ts';
 import {levelForXp} from '../../src/lib/levelMath.ts';
 
 function seedLocalStorage() {
@@ -67,7 +67,8 @@ describe('renderHomepage', () => {
     withState(50, 8, ['python-101/normal/01-printing'], []);
     const stub = stubDom();
     const s = loadState();
-    s.badges = ['a', 'b'];
+    s.quests = {...s.quests, 'first-run': true, 'completed-python-101/normal/01-printing': true, 'login-2026-01-01': true};
+    s.badges = ['first-run', 'completed-python-101/normal/01-printing', 'login-2026-01-01'];
     saveState(s);
     const gsLevel = el('gs-level-val', stub);
     const gsStreak = el('gs-streak-val', stub);
@@ -79,10 +80,13 @@ describe('renderHomepage', () => {
 
     expect(gsLevel.textContent).toBe(String(levelForXp(50)));
     expect(gsStreak.textContent).toBe('8');
-    expect(gsBadges.textContent).toBe('2');
     expect(gsXp.textContent).toBe('50');
     expect(streakItem.classSet.has('gamestrip__item--blazing')).toBe(true);
     expect(streakItem.classSet.has('gamestrip__item--hot')).toBe(false);
+    // The strip reports the visible-quest count (see gameState.test.ts: internal
+    // keys such as completed-*/login-* are not badges), not `badges.length`.
+    expect(gsBadges.textContent).toBe(String(questsDoneCount()));
+    expect(Number(gsBadges.textContent)).toBeGreaterThan(0);
   });
 
   test('hot (>=3) but not blazing at streak 3', () => {

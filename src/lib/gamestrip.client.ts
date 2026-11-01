@@ -3,7 +3,7 @@
 // under the strict tsconfig (no @ts-nocheck). Runs once as a deferred module.
 import {xpProgressFor} from './levelMath.ts';
 import type {PDAState} from './gameState.ts';
-import {awardDailyLogin, loadState} from './gameState.ts';
+import {awardDailyLogin, loadState, recentUnlockedQuests} from './gameState.ts';
 import {badgeLabel} from './badgeLabel.ts';
 import {m} from '../paraglide/messages.js';
 import {setPctWidth} from './pctWidth.ts';
@@ -38,15 +38,15 @@ function renderXPBar() {
     </div>`;
   setPctWidth(document.getElementById('xp-bar-fill'), pct);
   if (prevLevel && level > prevLevel) {
-    showLevelUp(level, xp, s.badges || []);
+    showLevelUp(level, xp, recentUnlockedQuests(3));
   }
 }
 
-function showLevelUp(level: number, xp: number, badges: string[]) {
+function showLevelUp(level: number, xp: number, unlocked: string[]) {
   const overlay = document.getElementById('lvlup');
   if (!overlay) return;
   const subEl = document.getElementById('lvlup-sub');
-  const newBadges = badges.slice(-3).map(badgeLabel);
+  const newBadges = unlocked.map(badgeLabel);
   if (subEl) subEl.textContent = newBadges.length ? `${m.unlocked_prefix()}${newBadges.join(', ')}` : `${xp} ${m.total_xp_label()}`;
   overlay.hidden = false;
   overlay.classList.remove('lvlup--hide');
@@ -138,7 +138,11 @@ function initThemeToggle() {
     const el = document.documentElement;
     const next = el.dataset.theme === 'dark' ? 'light' : 'dark';
     el.dataset.theme = next;
-    localStorage.setItem('pda:theme', next);
+    try {
+      localStorage.setItem('pda:theme', next);
+    } catch {
+      // private mode / quota: the theme still applies for this page
+    }
     renderXPBar();
   });
 }

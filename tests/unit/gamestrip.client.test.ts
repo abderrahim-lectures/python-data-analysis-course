@@ -50,7 +50,7 @@ describe('gamestrip.client.ts', () => {
   });
 
   test('shows the level-up overlay when XP crosses a level boundary', async () => {
-    seedLocalStorage({xp: 60, streak: 0, badges: ['one-two-three']});
+    seedLocalStorage({xp: 60, streak: 0, quests: {'first-run': true, 'login-2026-01-01': true}});
     const stub = setupDom();
     const bar = fakeEl('xp-bar');
     bar.dataset.level = '1';
@@ -66,7 +66,9 @@ describe('gamestrip.client.ts', () => {
     expect(overlay.classList.has('lvlup--show')).toBe(true);
     expect(overlay.children.length).toBeGreaterThan(0); // particles
     const sub = stub.elements.get('lvlup-sub')!;
-    expect(sub.textContent).toContain('one-two-three');
+    // The unlocked list names the visible quest, not the internal login key.
+    expect(sub.textContent).toContain('First run');
+    expect(sub.textContent).not.toContain('login-');
   });
 
   test('appends an XP toast when a lesson:complete event fires', async () => {

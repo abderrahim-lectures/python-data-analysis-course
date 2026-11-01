@@ -48,6 +48,14 @@ export const TRACKS = [
   { id: 'data-analysis', label: 'Pandas & Data', total: 20 },
 ];
 
+// `lastActive` is stored as a local calendar date (see gameState.ts); parse it
+// back in local time, not as UTC midnight.
+function localDateMs(iso: string): number {
+  const [y, m, d] = iso.split('-').map(Number);
+  if (!y || !m || !d) return Date.now();
+  return new Date(y, m - 1, d).getTime();
+}
+
 export function computeGameStats(): GameStats {
   const s = loadState();
   const xp = s.xp;
@@ -86,9 +94,19 @@ export function computeGameStats(): GameStats {
   const questsTotal = visibleQuests.length;
   const questsDone = visibleQuests.filter((q) => q.done).length;
 
-  // Activity metrics
-  const lastActive = s.lastActive || new Date().toISOString().slice(0, 10);
-  const daysSinceStart = Math.max(1, Math.ceil((Date.now() - new Date(lastActive).getTime()) / 86400000));
+  // Activity metrics. "Days since start" has to come from the first thing that
+  // ever happened (the activity log), not from `lastActive` — that is the LAST
+  // active day, so for anyone reading this page (active today) the span
+  // collapsed to one day: lessons/week came out as lessons × 7 and return rate
+  // as 100% for everybody. Fall back to lastActive for legacy state with no log.
+  const firstActivityTs = Number(s.activityLog?.[0]?.ts);
+  const startMs =
+    Number.isFinite(firstActivityTs) && firstActivityTs > 0
+      ? firstActivityTs
+      : s.lastActive
+        ? localDateMs(s.lastActive)
+        : Date.now();
+  const daysSinceStart = Math.max(1, Math.ceil((Date.now() - startMs) / 86400000));
   const daysActive = lessonsDone > 0 ? Math.min(daysSinceStart, Math.max(1, lessonsDone)) : 0;
   const lessonsPerWeek = +((lessonsDone / daysSinceStart) * 7).toFixed(1);
   const avgXpPerDay = daysActive > 0 ? Math.round(xp / daysActive) : 0;

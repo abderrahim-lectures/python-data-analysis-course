@@ -1,4 +1,4 @@
-import {xpProgress, streakProgress, loadState, rankFor, RANK_EMOJIS} from './gameState.ts';
+import {xpProgress, streakProgress, loadState, rankFor, RANK_EMOJIS, questsDoneCount} from './gameState.ts';
 import {TRACKS} from './gamestats.ts';
 import {setPctWidth} from './pctWidth.ts';
 
@@ -8,7 +8,6 @@ export function renderHomepage() {
   const xp = xpProgress();
   const sp = streakProgress();
   const s = loadState();
-  const badges = s.badges || [];
   const rank = rankFor(xp.xp);
 
   const levelEl = document.getElementById('player-level');
@@ -28,7 +27,9 @@ export function renderHomepage() {
   const gsXp = document.getElementById('gs-xp-val');
   if (gsLevel) gsLevel.textContent = String(xp.level);
   if (gsStreak) gsStreak.textContent = String(sp.current);
-  if (gsBadges) gsBadges.textContent = String(badges.length);
+  // Visible quests only: `badges` also collects daily logins and per-lesson
+  // keys, so its length grew every day while the progress page showed 5 of 31.
+  if (gsBadges) gsBadges.textContent = String(questsDoneCount());
   if (gsXp) gsXp.textContent = String(xp.xp);
 
   const streakItem = document.getElementById('gs-streak');
