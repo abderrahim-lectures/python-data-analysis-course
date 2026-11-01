@@ -14,7 +14,10 @@ The fixes for all five are in PR #321; add `Closes #N` to the PR body once the n
 | 4 | `04-editor-enter-newline.md` | Enter in an editable cell puts the caret before the newline, so two statements run as one | `type:bug,area:ui,area:playground` |
 | 5 | `05-i18n-cheatsheets-404.md` | Localized learn hubs link /{es,ar,fr}/cheatsheets — 404 | `type:bug,area:i18n` |
 
-One command files all five and prints their numbers (needs an authenticated `gh`):
+No authenticated `gh`? [`new-issue-links.md`](new-issue-links.md) has one prefilled
+"[New issue]" link per entry — title, body and labels already in the form; press Submit.
+
+One command files all seven and prints their numbers (needs an authenticated `gh`):
 
 ```bash
 ./issues/file-all.sh

@@ -27,13 +27,23 @@ Plus two lexical variants that defeated every rule at once: a backslash line con
 (`import \`⏎`js`, `exe`⏎`c(...)`) and a dangerous module that is not first in an import list
 (`import os, sys`).
 
+A second round of fuzzing (24 payloads, each run against the real engine when it passed) found two
+more families:
+
+| Payload | Why it passed |
+|---|---|
+| `E = exec` then `E("import " + "js" + …)` | the builtin is bound to a name, so no `exec(` ever appears |
+| `code.InteractiveInterpreter().runsource(…)`, `timeit.timeit(…)`, `profile`/`cProfile.run(…)`, `trace.Trace().run(…)`, `runpy.run_module(…)`, `pdb.Pdb().runsource(…)` | stdlib modules that compile and run strings; each executed `import js` with the literals split |
+
 ### Fix (PR #321)
 
-`usesJsBridge` joins continuations before scanning (what the interpreter sees), refuses the
+Both rounds: `usesJsBridge` joins continuations before scanning (what the interpreter sees), refuses the
 escape names in the form that escapes (`import x` anywhere in the statement, `x.`, `x(`, and
 `vars`/`globals`/`locals` by call), and extends the dunder list to the introspection hooks that
 walk an object to the class graph. All nine payloads are regression tests, and all **1576**
-lesson code fences still pass the guard (0 refused), so no lesson cell changes behaviour.
+lesson code fences still pass the guard (0 refused), so no lesson cell changes behaviour. The bare
+names `exec`/`eval`/`compile` are refused (attributes such as `re.compile`/`model.eval()` still
+pass), and imports of those seven stdlib modules plus `_pyodide` are refused.
 
 ### Still open
 
