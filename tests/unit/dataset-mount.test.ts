@@ -5,7 +5,7 @@ import {
   planDatasetMounts,
   uniqueRefsFromSource,
 } from '../../src/lib/datasetMount';
-import {friendlyError} from '../../src/lib/friendlyError';
+import {explainRunError, friendlyError} from '../../src/lib/friendlyError';
 
 const MANIFEST: Record<string, string> = {
   titaniccsv: 'titanic.csv',
@@ -129,5 +129,43 @@ describe('DATASET_FILE_RE export', () => {
     const src = `open('a.csv') pd.read_csv("b.csv")`;
     const got = Array.from(src.matchAll(DATASET_FILE_RE), (m) => m[1]);
     expect(got).toEqual(['a.csv', 'b.csv']);
+  });
+});
+describe('explainRunError', () => {
+  const base = {code: 'df.head()', loadDatasetFirstHint: 'Run the cell that loads df first.'};
+
+  test('keeps the raw exception and adds the hint', () => {
+    const {raw, hint} = explainRunError("NameError: name 'df' is not defined", {
+      ...base,
+      otherCellSources: 'df = pd.read_csv("titanic.csv")',
+    });
+    expect(raw).toContain("NameError: name 'df' is not defined");
+    expect(hint).toContain('recognize');
+    expect(hint).toContain('Run the cell that loads df first.');
+  });
+
+  test('does not blame the dataset when the cell loads it itself', () => {
+    const {hint} = explainRunError("NameError: name 'df' is not defined", {
+      ...base,
+      code: 'df = pd.read_csv("titanic.csv")\ndf.head()',
+      otherCellSources: 'df = pd.read_csv("titanic.csv")',
+    });
+    expect(hint).not.toContain('Run the cell that loads df first.');
+  });
+
+  test('does not blame the dataset when no other cell loads that name', () => {
+    const {hint} = explainRunError("NameError: name 'np' is not defined", {
+      ...base,
+      code: 'np.zeros(3)',
+      otherCellSources: 'df = pd.read_csv("titanic.csv")',
+    });
+    expect(hint).not.toContain('Run the cell that loads df first.');
+  });
+
+  test('an unmapped error is returned unchanged, with no duplicate line', () => {
+    const raw = 'KeyError: "missing"';
+    const out = explainRunError(raw, base);
+    expect(out.raw).toBe(raw);
+    expect(out.hint).toBe(raw);
   });
 });

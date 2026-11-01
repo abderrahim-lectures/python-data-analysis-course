@@ -26,3 +26,43 @@ export function friendlyError(msg: string): string {
   }
   return msg;
 }
+
+export interface ExplainContext {
+  /** Every *other* runnable cell's source on the page. */
+  otherCellSources?: string;
+  /** The cell that failed, so the cell that loads the data is not nagged. */
+  code: string;
+  /** Localized suffix for the "load the dataset first" hint. */
+  loadDatasetFirstHint: string;
+}
+
+export interface ExplainedError {
+  /** What the engine raised, verbatim — shown first, because a lesson may be
+   *  teaching that exact exception. */
+  raw: string;
+  /** The beginner-facing sentence, shown after it. */
+  hint: string;
+}
+
+/**
+ * Turns a raw Pyodide error into the two lines the output panel shows.
+ *
+ * Beyond the static map above there is one context-dependent case: a name that
+ * should exist but hasn't been created yet usually means the page's
+ * dataset-loading cell hasn't been run. That is only worth saying when the
+ * missing name is literally assigned by another cell (`df = pd.read_csv(...)`)
+ * and this cell does not load data itself.
+ */
+export function explainRunError(raw: string, ctx: ExplainContext): ExplainedError {
+  let hint = friendlyError(raw);
+  const missing = raw.match(/NameError: name '([^']+)' is not defined/)?.[1];
+  if (
+    missing &&
+    ctx.otherCellSources &&
+    new RegExp(`\\b${missing}\\s*=\\s*(?:pd\\.read_csv|open\\s*\\(\\s*['"][^'"]+\\.csv)`).test(ctx.otherCellSources) &&
+    !ctx.code.match(/pd\.read_csv\s*\(|open\s*\(\s*['"][^'"]+\.csv/)
+  ) {
+    hint += ` ${ctx.loadDatasetFirstHint}`;
+  }
+  return {raw, hint};
+}

@@ -204,6 +204,23 @@ The fixes above were themselves reviewed before being called done. Five defects,
 Two dead exports found in the same pass (`needsStdin` in `pythonInputs.ts`, `remaining()` on the stdin queue) were removed rather than left as API nobody calls.
 
 
+### Review round 2 — the runner itself
+
+A second pass over the cell runtime, with the browser smoke re-run afterwards:
+
+| # | Severity | Finding | Fix |
+|---|----------|---------|-----|
+| R12 | **HIGH** | `py()` cached the engine promise **including a rejection**: one transient failure (offline for a second, a flaky CDN edge) made every later Run reject with the same error until the page was reloaded. The worker nulls its own `enginePromise` on failure, but that only re-awaits the same rejected `pyPromise`. | The cached promise drops itself on failure, so the next click retries. |
+| R13 | LOW | The figure drain `JSON.parse`d inside `runCellCode`'s main `try`, so a malformed payload was reported as *the cell* failing, after the cell had succeeded. | Parsed in its own guard; a broken figure is dropped, not blamed on the learner. |
+| R14 | LOW | The first-success toast injected a `<style>` at runtime; the element is created before the transition starts, so the first frame could paint unstyled. | The toast CSS lives in `global.css`. |
+
+Factorization in the same pass: the worker message contract moved to `workerProtocol.ts` (it was
+declared twice, so a new message had to be added in two places or be silently ignored), the
+clipboard-with-fallback to `clipboard.ts`, and the error explanation out of `runCellCode` into
+`friendlyError.explainRunError()` — pure, context-in/result-out, directly unit-tested.
+`runnable-cell.client.ts` is 448 → 285 lines across the two passes.
+
+
 ---
 
 ## 6 — Toolchain: what this VM can and cannot run, measured

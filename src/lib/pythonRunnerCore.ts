@@ -9,7 +9,7 @@
 import {m} from '../paraglide/messages.js';
 import {usesJsBridge} from './pythonGuard.ts';
 import {planDatasetMounts} from './datasetMount.ts';
-import {friendlyError} from './friendlyError.ts';
+import {explainRunError} from './friendlyError.ts';
 import {FIG_DRAIN_SRC, FIG_SHOW_PATCH_SRC, INPUT_SHIM_SRC, WRAP_EXPR_SRC} from './pythonSnippets.ts';
 
 export const PYODIDE_VERSION = '0.26.4';
@@ -137,6 +137,10 @@ async function getCoreBytes(): Promise<number> {
 // needing to know which context it's running in.
 export async function py(onProgress?: (pct: number) => void): Promise<PyodideModel> {
   if (!pyPromise) {
+    // A rejected promise used to be cached here, so one transient failure
+    // (offline for a second, a flaky CDN edge) made every later Run reject
+    // with the same error until the page was reloaded. Drop it instead, so the
+    // next click tries again.
     pyPromise = (async () => {
       ensurePyodideCache();
       const coreBytes = await getCoreBytes();
@@ -161,7 +165,10 @@ export async function py(onProgress?: (pct: number) => void): Promise<PyodideMod
       await engine.runPython('import warnings; warnings.filterwarnings("ignore")');
       await engine.runPython(INPUT_SHIM_SRC);
       return engine;
-    })();
+    })().catch((e) => {
+      pyPromise = null;
+      throw e;
+    });
   }
   return pyPromise;
 }
@@ -317,32 +324,25 @@ export async function runCellCode(code: string, rt: CellRuntime): Promise<boolea
     // Drain every figure the cell left open, render each inline in the output
     // panel. Skipped on error — a failed cell renders its traceback, not
     // half-drawn figures.
+    // The cell already succeeded; a broken figure payload is our problem, not
+    // a reason to show the learner a Python error.
     const pngsJson = (await rt.engine.runPythonAsync(FIG_DRAIN_SRC)) as string | undefined;
-    const pngs = typeof pngsJson === 'string' ? (JSON.parse(pngsJson) as string[]) : undefined;
-    if (Array.isArray(pngs) && pngs.length && rt.appendFigure) {
-      for (const png of pngs) rt.appendFigure(png);
+    if (typeof pngsJson === 'string' && rt.appendFigure) {
+      try {
+        const pngs = JSON.parse(pngsJson) as string[];
+        if (Array.isArray(pngs)) for (const png of pngs) rt.appendFigure(png);
+      } catch {
+        // nothing rendered; the cell's output is already on screen
+      }
     }
   } catch (e) {
-    const raw = e instanceof Error ? e.message : String(e);
-    let hint = friendlyError(raw);
-    // A name that should exist but hasn't been created yet most often means the
-    // dataset-loading cell at the top of the page hasn't been run. Point them
-    // there only when the missing name is literally assigned by that cell —
-    // `df = pd.read_csv(...)` — not for e.g. `np` or `plt` imports.
-    const missing = raw.match(/NameError: name '([^']+)' is not defined/)?.[1];
-    if (
-      missing &&
-      rt.otherCellSources &&
-      new RegExp(`\\b${missing}\\s*=\\s*(?:pd\\.read_csv|open\\s*\\(\\s*['"][^'"]+\\.csv)`).test(rt.otherCellSources) &&
-      !code.match(/pd\.read_csv\s*\(|open\s*\(\s*['"][^'"]+\.csv/)
-    ) {
-      hint += ` ${m.cell_load_dataset_first()}`;
-    }
-    // Show what the engine actually raised *and* the beginner hint. Replacing
-    // the raw message hides the error a lesson may be teaching — 04-type
-    // conversion quotes `TypeError: can only concatenate str (not "int") to
-    // str` and `ValueError: invalid literal for int()` verbatim, and those
-    // never reached the panel while the hint replaced them.
+    const {raw, hint} = explainRunError(e instanceof Error ? e.message : String(e), {
+      otherCellSources: rt.otherCellSources,
+      code,
+      loadDatasetFirstHint: m.cell_load_dataset_first(),
+    });
+    // Show what the engine actually raised *and* the beginner hint: replacing
+    // the raw message hides the error a lesson may be teaching.
     if (hint !== raw) rt.appendLine('err', raw);
     rt.appendLine('err', hint);
   }

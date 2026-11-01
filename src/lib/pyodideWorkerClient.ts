@@ -6,6 +6,7 @@
 // overlay listens to -- so nothing downstream of a Run click needs to know
 // or care whether the code actually ran on the main thread or in the worker.
 import {m} from '../paraglide/messages.js';
+import type {RunMessage, WorkerOutMessage} from './workerProtocol.ts';
 
 export interface WorkerRunCallbacks {
   /** `in` renders a value the learner supplied to input(), echoed into the
@@ -21,17 +22,6 @@ export interface WorkerRunCallbacks {
    *  to grow the form for the next run. */
   onStdinExhausted?(): void;
 }
-
-type OutMessage =
-  | {type: 'loading'; id: number}
-  | {type: 'progress'; id: number; pct: number}
-  | {type: 'phase'; id: number; phase: 'packages' | 'running'}
-  | {type: 'stdout' | 'stderr'; id: number; text: string}
-  | {type: 'stdin'; id: number; text: string}
-  | {type: 'eof'; id: number}
-  | {type: 'figure'; id: number; png: string}
-  | {type: 'done'; id: number; executed: boolean}
-  | {type: 'fatal'; id: number; message: string};
 
 let worker: Worker | null = null;
 let nextId = 1;
@@ -66,7 +56,7 @@ export function runInWorker(
       w.removeEventListener('error', onError);
       resolve(executed);
     };
-    const onMessage = (ev: MessageEvent<OutMessage>) => {
+    const onMessage = (ev: MessageEvent<WorkerOutMessage>) => {
       const msg = ev.data;
       if (msg.id !== id) return;
       switch (msg.type) {
@@ -112,7 +102,7 @@ export function runInWorker(
     };
     w.addEventListener('message', onMessage);
     w.addEventListener('error', onError);
-    w.postMessage({
+    const message: RunMessage = {
       type: 'run',
       id,
       code,
@@ -120,6 +110,7 @@ export function runInWorker(
       otherCellSources: opts.otherCellSources,
       locale: opts.locale,
       stdin: opts.stdin,
-    });
+    };
+    w.postMessage(message);
   });
 }

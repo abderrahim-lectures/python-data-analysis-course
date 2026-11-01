@@ -444,6 +444,19 @@ button { font-family: inherit; cursor: pointer; }
    runnable-cell.client.ts -- a class instead of .style.position/.opacity
    so that path doesn't need style-src 'unsafe-inline' either. */
 .pda-clipboard-helper { position: fixed; opacity: 0; }
+/* First-success toast (runnable-cell.client.ts). Lives here rather than in an
+   inline <style> the runner injected on first success: the element is created
+   before the transition starts, and a stylesheet that is already parsed cannot
+   lose that race. */
+.firstsuccess-toast {
+  position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: var(--accent); color: var(--accent-contrast);
+  padding: .85rem 1.5rem; border-radius: var(--radius-lg);
+  font-weight: 700; font-size: .9rem; box-shadow: var(--shadow-md);
+  opacity: 0; transition: all .4s cubic-bezier(.4, 0, .2, 1);
+  z-index: 9999; pointer-events: none; white-space: nowrap;
+}
+.firstsuccess-toast--visible { opacity: 1; transform: translateX(-50%) translateY(0); }
 /* Difficulty-label text color, as classes instead of style={`color:${...}`}
    -- same style-src reasoning as the pt- and w-pct- classes above. Two
    variants because LessonPage/ModulePage/ProjectDetail and TrackHub/

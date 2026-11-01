@@ -11,39 +11,10 @@
 import {overwriteGetLocale, toLocale, baseLocale} from '../paraglide/runtime.js';
 import {py, runCellCode, mountDatasets, type PyodideModel} from './pythonRunnerCore.ts';
 import {stdinQueue} from './stdinQueue.ts';
+import type {RunMessage, WorkerInMessage, WorkerOutMessage} from './workerProtocol.ts';
 
-type RunMessage = {
-  type: 'run';
-  id: number;
-  code: string;
-  allSource: string;
-  otherCellSources: string;
-  locale: string;
-  /** Values for the cell's input() calls, in order. The client reads them from
-   *  the cell's input fields before sending the run. */
-  stdin: string[];
-};
-
-type InMessage = RunMessage;
-
-// `id` echoes the triggering RunMessage's id on every reply so the client
-// (one shared worker serving every cell on the page) can route each message
-// to the right cell instead of whichever `runInWorker()` call happens to be
-// listening.
-type OutMessage =
-  | {type: 'loading'; id: number}
-  | {type: 'progress'; id: number; pct: number}
-  | {type: 'phase'; id: number; phase: 'packages' | 'running'}
-  | {type: 'stdout' | 'stderr'; id: number; text: string}
-  // A value handed to input(): echoed so the output panel reads like a
-  // terminal (`Birth year?` then `2004`) instead of showing only the prompt.
-  | {type: 'stdin'; id: number; text: string}
-  // The run asked for input() values it was not given (at most once per run,
-  // so a cell that swallows EOFError and retries cannot grow the form forever).
-  | {type: 'eof'; id: number}
-  | {type: 'figure'; id: number; png: string}
-  | {type: 'done'; id: number; executed: boolean}
-  | {type: 'fatal'; id: number; message: string};
+type InMessage = WorkerInMessage;
+type OutMessage = WorkerOutMessage;
 
 const post = (m: OutMessage) => (self as unknown as {postMessage(m: OutMessage): void}).postMessage(m);
 

@@ -1,4 +1,5 @@
 import {makeEditableCode} from './codeEditor.ts';
+import {copyToClipboard} from './clipboard.ts';
 // Hydrates every `.cell[data-runnable]` on the page (whether hand-authored via
 // <RunnableCell> or generated from ```python fences by rehype-runnable-python)
 // with a Pyodide-backed Run button. Loaded once per page from Base.astro.
@@ -209,17 +210,16 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
         const {gained, xpBefore} = await awardLessonXp(lessonId);
         cell.dispatchEvent(new CustomEvent('lesson:complete', {bubbles: true, detail: {lessonId, xp: gained}}));
         if (xpBefore === 0) {
-          const style = document.createElement('style');
-          style.textContent = `.firstsuccess-toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--accent);color:var(--accent-contrast);padding:.85rem 1.5rem;border-radius:var(--radius-lg);font-weight:700;font-size:.9rem;box-shadow:var(--shadow-md);opacity:0;transition:all .4s cubic-bezier(.4,0,.2,1);z-index:9999;pointer-events:none;white-space:nowrap}.firstsuccess-toast--visible{opacity:1;transform:translateX(-50%) translateY(0)}`;
-          document.head.appendChild(style);
           const toast = document.createElement('div');
           toast.className = 'firstsuccess-toast';
           toast.setAttribute('role', 'status');
           toast.textContent = m.first_success_toast();
           document.body.appendChild(toast);
           requestAnimationFrame(() => toast.classList.add('firstsuccess-toast--visible'));
-          setTimeout(() => { toast.classList.remove('firstsuccess-toast--visible'); setTimeout(() => toast.remove(), 400); }, 3000);
-          setTimeout(() => style.remove(), 3500);
+          setTimeout(() => {
+            toast.classList.remove('firstsuccess-toast--visible');
+            setTimeout(() => toast.remove(), 400);
+          }, 3000);
         }
       } catch { /* offline: skip XP award */ }
     }
@@ -239,27 +239,7 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
   };
   setCopyLabel('idle');
   copyBtn.addEventListener('click', async () => {
-    const text = codeEl.textContent ?? '';
-    let ok = false;
-    try {
-      await navigator.clipboard.writeText(text);
-      ok = true;
-    } catch {
-      // The async Clipboard API can be blocked (permissions, private mode);
-      // fall back to the legacy selection-based copy before giving up.
-      try {
-        const ta = document.createElement('textarea');
-        ta.value = text;
-        ta.setAttribute('readonly', '');
-        ta.className = 'pda-clipboard-helper';
-        document.body.appendChild(ta);
-        ta.select();
-        ok = document.execCommand('copy');
-        ta.remove();
-      } catch {
-        ok = false;
-      }
-    }
+    const ok = await copyToClipboard(codeEl.textContent ?? '');
     if (ok) {
       setCopyLabel('done');
       setTimeout(() => setCopyLabel('idle'), 1500);
