@@ -14,6 +14,14 @@ The fixes for all five are in PR #321; add `Closes #N` to the PR body once the n
 | 4 | `04-editor-enter-newline.md` | Enter in an editable cell puts the caret before the newline, so two statements run as one | `type:bug,area:ui,area:playground` |
 | 5 | `05-i18n-cheatsheets-404.md` | Localized learn hubs link /{es,ar,fr}/cheatsheets — 404 | `type:bug,area:i18n` |
 
+One command files all five and prints their numbers (needs an authenticated `gh`):
+
+```bash
+./issues/file-all.sh
+```
+
+Or one at a time:
+
 ```bash
 gh issue create --title 'Runnable cells that call input() freeze the page' --label 'type:bug,area:playground,area:python-101' --body-file issues/01-input-freeze.md
 gh issue create --title 'pythonGuard is bypassable: nine routes to js/pyodide without `import js`' --label 'type:bug,area:playground' --body-file issues/02-guard-bypass.md
