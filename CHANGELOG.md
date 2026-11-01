@@ -35,7 +35,7 @@ Recorded as R1–R53 in [`audit-report-2026-11-runtime.md`](audit-report-2026-11
 
 ### Changed
 - **Dependencies refreshed** (`npm update`, inside the declared ranges): astro 7.3.1 → 7.4.4, vitest 4.1.11 → 4.1.12, `@inlang/paraglide-js` 2.25.0 → 2.29.3, `@supabase/supabase-js` 2.116.0 → 2.118.0, katex 0.18.4 → 0.18.10, `@astrojs/markdown-remark` 7.3.0 → 7.3.5, `@astrojs/check` 0.9.10 → 0.9.12, hastscript 9.0.1 → 9.0.3. Majors (vitest 5, katex 0.19, typescript 7) are deliberately not taken — each needs its own migration pass. astro 7.4 also swapped its wasm compiler for a native one, so the template test now depends on `@astrojs/compiler-rs` explicitly (it had been reaching `@astrojs/compiler` as a hoisted transitive package — the kind of accident that breaks on someone else's release day).
-- The deploy workflow builds on **node 24** instead of 22: astro 7.4's floor is `>=22.23.4`, and node 22.14 cannot even run this repo's vitest suite.
+- The deploy workflow still builds on **node 22**, which is fine: astro 7.4's floor is node `>=22.23.4` and `node-version: 22` resolves to the newest 22.x, which is now exactly v22.23.4. Bumping it to 24 (the version this branch is tested against, and the only one that can run the suite in the audit VM) needs a push with the GitHub App's `workflows` permission — this connection does not have it, so that one-line change is left to someone who does.
 - Pyodide stays pinned at **0.26.4**. The cell runtime is verified against that exact engine (`input()`'s stdin shim, the scipy/openblas closure), and re-vendoring a new one cannot be validated in this VM — no browser, no `astro build`.
 
 ## [2.0.13] — 2026-11-01

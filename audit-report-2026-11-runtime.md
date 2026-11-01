@@ -374,8 +374,11 @@ message protocol, the client, and the overlay that covers the page while a run i
   knowing: **astro 7.4 replaced the wasm compiler with a native one** (`@astrojs/compiler` →
   `@astrojs/compiler-rs`), which the template test depended on as a hoisted transitive package —
   it is now an explicit devDependency and the test uses the compiler the build actually
-  compiles with; and astro 7.4's engine floor is node `>=22.23.4`, so the deploy workflow moved
-  from node 22 to 24 (which is also the version this branch is tested against).
+  compiles with; and astro 7.4's engine floor is node `>=22.23.4`, which `.github/workflows/deploy.yml`'s
+  `node-version: 22` now resolves to exactly (the newest 22.x is v22.23.4). Moving that workflow to
+  node 24 — what this branch is tested against, and the only version that can run the suite in this
+  VM — is a one-line change this session cannot make: the GitHub connection has no `workflows`
+  permission, and a push touching that file is rejected outright.
   Pyodide stays pinned at 0.26.4 — the cell runtime is verified against it and re-vendoring an
   engine cannot be validated in this VM.
 - **Node is installed and on `PATH` for every project**: `~/.local/bin/node` →
