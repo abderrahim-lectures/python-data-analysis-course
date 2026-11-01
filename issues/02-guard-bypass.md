@@ -1,4 +1,4 @@
-## 2. `pythonGuard` is bypassable: nine ways to reach `js`/`pyodide` without writing `import js`
+## 2. `pythonGuard` is bypassable: eleven ways to reach `js`/`pyodide` without writing `import js`
 
 **Labels:** `type:bug`, `area:playground`
 **Severity:** high (security), reduced but not closed
