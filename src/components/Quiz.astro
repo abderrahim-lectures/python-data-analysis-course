@@ -118,11 +118,11 @@ const {title = m.quiz_title(), questions, xp = 5, lessonId = ''} = Astro.props;
         // Credit XP once per fresh attempt, only for actually-answered questions.
         if (qAnswered) {
           answered = true;
-          try {
-            import('../lib/gameState.ts').then((gs) => gs.recordQuiz(userCorrect, lessonId || undefined));
-          } catch (e) {
-            console.warn('[quiz] failed to record quiz', e);
-          }
+          // The .catch is the point: `import()` returns a promise, so the
+          // surrounding try/catch this used to have could never see a rejection.
+          import('../lib/gameState.ts')
+            .then((gs) => gs.recordQuiz(userCorrect, lessonId || undefined))
+            .catch((e) => console.warn('[quiz] failed to record quiz', e));
         }
         if (userCorrect) correct++;
         if (explain) explain.hidden = false;
@@ -138,17 +138,21 @@ const {title = m.quiz_title(), questions, xp = 5, lessonId = ''} = Astro.props;
       }
 
       if (correct === total) {
-        try {
-          import('../lib/gameState.ts').then((gs) => {
-            gs.recordQuizPerfect();
-            if (lessonId) gs.recordChallenge(lessonId);
-          });
-        } catch (e) {
-          console.warn('[quiz] failed to record perfect quiz', e);
-        }
         feedback.hidden = false;
-        feedback.textContent = m.quiz_perfect({xp: 25});
         feedback.className = 'quiz__feedback quiz__feedback--correct';
+        // A perfect quiz pays 25 XP, but only the first one each day
+        // (recordQuizPerfect keys on today's date). The banner used to promise
+        // "+25 XP" unconditionally, so a learner on their second perfect quiz
+        // of the day was told they earned 25 and their XP did not move. Paint
+        // the usual copy immediately, then correct it from what was paid.
+        feedback.textContent = m.quiz_perfect({xp: 25});
+        import('../lib/gameState.ts')
+          .then((gs) => {
+            const paid = gs.recordQuizPerfect();
+            if (paid <= 0) feedback.textContent = m.quiz_perfect_no_xp();
+            if (lessonId) gs.recordChallenge(lessonId);
+          })
+          .catch((e) => console.warn('[quiz] failed to record perfect quiz', e));
       } else if (correct > 0) {
         feedback.hidden = false;
         feedback.textContent = m.quiz_partial({correct, total});
@@ -301,6 +305,6 @@ const {title = m.quiz_title(), questions, xp = 5, lessonId = ''} = Astro.props;
   .quiz__feedback--correct { background: linear-gradient(135deg, var(--success-soft), color-mix(in srgb, var(--success-soft) 60%, transparent)); color: var(--success-text); }
   .quiz__feedback--partial { background: linear-gradient(135deg, var(--warn-soft), color-mix(in srgb, var(--warn-soft) 60%, transparent)); color: var(--warn); }
   .quiz__feedback--wrong { background: linear-gradient(135deg, var(--bad-soft), color-mix(in srgb, var(--bad-soft) 60%, transparent)); color: var(--bad-text); }
-  [data-theme='dark'] .quiz__check { background: var(--accent); border-color: var(--accent); }
-  [data-theme='dark'] .quiz__check:hover { background: var(--accent-strong); }
+  :global([data-theme='dark']) .quiz__check { background: var(--accent); border-color: var(--accent); }
+  :global([data-theme='dark']) .quiz__check:hover { background: var(--accent-strong); }
 </style>

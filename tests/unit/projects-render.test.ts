@@ -4,7 +4,10 @@ import {initProjectsFinder} from '../../src/lib/projectsRender.ts';
 
 function stubChrome(initialSearch: string) {
   const location = {search: initialSearch, pathname: '/projects'};
-  const history = {replaceState: vi.fn(), pushState: vi.fn()};
+  // Stands in for the ClientRouter's own entry state: Astro keys Back/Forward
+  // off `history.state.index` and ignores a popstate whose state is null.
+  const entryState = {index: 3, scrollX: 0, scrollY: 0};
+  const history = {replaceState: vi.fn(), pushState: vi.fn(), state: entryState as unknown};
   vi.stubGlobal('location', location);
   vi.stubGlobal('history', history);
   return {location, history};
@@ -88,7 +91,10 @@ describe('initProjectsFinder', () => {
     expect(s.cards[2].hidden).toBe(false);
     expect(s.cards[0].hidden).toBe(true);
     expect(s.count.textContent).toBe('1 of 3 projects');
-    expect(s.history.replaceState).toHaveBeenCalledWith(null, '', '?q=pandas');
+    // The state argument matters: passing null here (as this used to) destroys
+    // the ClientRouter's entry state, and its onPopState returns early on
+    // `ev.state === null` -- so Back changed the URL and left the old page up.
+    expect(s.history.replaceState).toHaveBeenCalledWith(s.history.state, '', '?q=pandas');
   });
 
   test('count line uses the locale template the page supplies', () => {
@@ -133,7 +139,7 @@ describe('initProjectsFinder', () => {
     expect(s.cards[0].hidden).toBe(false);
     expect(s.cards[2].hidden).toBe(false);
     expect(s.cards[1].hidden).toBe(true);
-    expect(s.history.replaceState).toHaveBeenCalledWith(null, '', '?diff=easy');
+    expect(s.history.replaceState).toHaveBeenCalledWith(s.history.state, '', '?diff=easy');
   });
 
   test('view buttons toggle grid/list mode', () => {

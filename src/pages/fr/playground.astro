@@ -24,13 +24,6 @@ import * as m from '../../paraglide/messages.js';
   </section>
 </Base>
 
-<script define:vars={{STARTER: PLAYGROUND_STARTER}}>
-  document.getElementById('pg-reset')?.addEventListener('click', () => {
-    const codeEl = document.getElementById('pg-code');
-    codeEl.textContent = STARTER;
-    codeEl.dispatchEvent(new Event('input', {bubbles: true}));
-  });
-</script>
 
 <style>
   .head { padding-block: 2.5rem 1rem; }

@@ -377,7 +377,7 @@
   "progress_guide_xp_daily": "تسجيل دخول يومي",
   "progress_guide_xp_daily_note": "فتح الموقع في يوم جديد",
   "progress_guide_xp_sbonus": "مكافأة السلسلة",
-  "progress_guide_xp_sbonus_note": "إضافية كل يوم بعد تجاوز سلسلتك اليوم الثالث",
+  "progress_guide_xp_sbonus_note": "إضافية عن كل درس أو مشروع تُكمله بينما تبلغ سلسلتك 3 أيام أو أكثر",
   "progress_guide_xp_smile": "إنجاز السلسلة",
   "progress_guide_xp_smile_note": "مكافأة عند إنجازات السلسلة",
   "progress_guide_xp_milestone": "إنجاز نقاط",
@@ -393,7 +393,7 @@
   "progress_guide_streak_heading": "السلسلة",
   "progress_guide_streak_intro": "السلسلة تحسب الأيام المتتالية التي تفتح فيها الموقع.",
   "progress_guide_streak_inc": "العودة اليوم تحافظ عليها؛ والعودة غداً تزيدها بواحد؛ وتخطي يوم يعيدها إلى 1. أطول سلسلة تحققت تُحفظ دائماً.",
-  "progress_guide_streak_bonus": "من اليوم الثالث فصاعداً، كل يوم يضيف مكافأة سلسلة 15 نقطة فوق تسجيل الدخول اليومي، وإنجازات السلسلة (3/7/14/30 يوماً) تدفع مكافأة 30 نقطة.",
+  "progress_guide_streak_bonus": "عندما تبلغ سلسلتك 3 أيام، يمنح إكمال درس أو مشروع مكافأة سلسلة قدرها 15 نقطة فوق مكافأته، وتُمنح إنجازات السلسلة (3/7/14/30 يوماً) مكافأة 30 نقطة.",
   "progress_guide_quest_heading": "المهام",
   "progress_guide_quest_intro": "المهام إنجازات تُفتح تلقائياً, لا شيء لتطلبه. تغطي:",
   "progress_guide_quest_firsts": "الأوليات (أول تشغيل، أول درس، أول مشروع، أول خطوة)",
@@ -495,5 +495,6 @@
   "progress_badge_track": "تقدّم المسار",
   "progress_badge_quiz": "اختبار مثالي",
   "filter_count": "{visible} من {total} مشروعًا",
-  "filter_that": "ذلك الفلتر"
+  "filter_that": "ذلك الفلتر",
+  "quiz_perfect_no_xp": "🎉 ممتاز!"
 }

@@ -377,7 +377,7 @@
   "progress_guide_xp_daily": "Inicio de sesión diario",
   "progress_guide_xp_daily_note": "abrir el sitio en un día nuevo",
   "progress_guide_xp_sbonus": "Bono de racha",
-  "progress_guide_xp_sbonus_note": "extra por día cuando tu racha supera el día 3",
+  "progress_guide_xp_sbonus_note": "extra por cada lección o proyecto que termines con una racha de 3 días o más",
   "progress_guide_xp_smile": "Hito de racha",
   "progress_guide_xp_smile_note": "bonificación en los hitos de racha",
   "progress_guide_xp_milestone": "Hito de XP",
@@ -393,7 +393,7 @@
   "progress_guide_streak_heading": "Rachas",
   "progress_guide_streak_intro": "Una racha cuenta los días consecutivos en que abres el sitio.",
   "progress_guide_streak_inc": "Volver hoy la mantiene; volver mañana la aumenta en 1; saltarse un día la reinicia a 1. Tu mejor racha siempre se recuerda.",
-  "progress_guide_streak_bonus": "Desde el día 3, cada día suma un bono de racha de 15 XP además de tu inicio de sesión diario, y los hitos de racha (3/7/14/30 días) pagan 30 XP.",
+  "progress_guide_streak_bonus": "Cuando tu racha llega a 3 días, terminar una lección o un proyecto paga un bono de racha de 15 XP además de su propia recompensa, y los hitos de racha (3/7/14/30 días) pagan 30 XP.",
   "progress_guide_quest_heading": "Misiones",
   "progress_guide_quest_intro": "Las misiones son hitos que se desbloquean solos, no hay nada que reclamar. Cubren:",
   "progress_guide_quest_firsts": "primeras veces (primer run, primera lección, primer proyecto, primer paso)",
@@ -495,5 +495,6 @@
   "progress_badge_track": "Progreso del itinerario",
   "progress_badge_quiz": "Cuestionario perfecto",
   "filter_count": "{visible} de {total} proyectos",
-  "filter_that": "ese filtro"
+  "filter_that": "ese filtro",
+  "quiz_perfect_no_xp": "🎉 ¡Perfecto!"
 }

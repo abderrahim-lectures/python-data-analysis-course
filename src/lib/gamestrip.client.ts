@@ -158,11 +158,16 @@ if (typeof document !== 'undefined') {
   // stack duplicate 'lesson:complete' handlers and show every XP toast N times.
   initXPToastListener();
   const boot = () => {
+    // Award first, then render. The daily login is 5 XP plus a streak
+    // milestone bonus every 3/7/14/30 days, and it can cross a level -- all of
+    // which the bar was rendering *before* it was paid, so the first load of
+    // each day showed the previous day's XP and streak (Level 1 · 0 XP on a
+    // fresh profile) until some later action re-rendered it, and a level
+    // crossed by the login itself was never celebrated.
+    awardDailyLogin();
     renderXPBar();
     initOnboarding();
     initThemeToggle();
-    // Daily login: awards 5 XP and bumps the streak once per day (idempotent).
-    awardDailyLogin();
   };
   document.addEventListener('astro:page-load', boot);
   // astro:page-load fires exactly once for the initial load, on window's

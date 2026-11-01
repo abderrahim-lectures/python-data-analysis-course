@@ -279,7 +279,7 @@ const jsonLd = [
   .lesson-nav a { text-decoration: none; font-weight: 700; padding: .6rem 1.1rem; border-radius: var(--radius-pill); background: var(--surface); border: 1px solid var(--line); color: var(--ink); box-shadow: var(--shadow-sm); }
   .lesson-nav__done { cursor: pointer; }
   .lesson-nav__done.is-done { background: var(--success-soft); color: #2e8b0b; border-color: var(--success); cursor: default; }
-  [data-theme='dark'] .lesson-nav__done.is-done { color: #6ce07f; }
+  :global([data-theme='dark']) .lesson-nav__done.is-done { color: #6ce07f; }
   .lesson-nav__done.is-done::before { content: '\2713 '; font-weight: 900; }
 
   .route { display: grid; margin: 1.5rem 0 3rem; }

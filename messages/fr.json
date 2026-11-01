@@ -377,7 +377,7 @@
   "progress_guide_xp_daily": "Connexion quotidienne",
   "progress_guide_xp_daily_note": "ouvrir le site un jour nouveau",
   "progress_guide_xp_sbonus": "Bonus de série",
-  "progress_guide_xp_sbonus_note": "supplément par jour une fois votre série passée le jour 3",
+  "progress_guide_xp_sbonus_note": "supplément pour chaque leçon ou projet terminé tant que votre série atteint 3 jours",
   "progress_guide_xp_smile": "Jalon de série",
   "progress_guide_xp_smile_note": "bonus aux jalons de série",
   "progress_guide_xp_milestone": "Jalon d'XP",
@@ -393,7 +393,7 @@
   "progress_guide_streak_heading": "Séries",
   "progress_guide_streak_intro": "Une série compte les jours consécutifs où vous ouvrez le site.",
   "progress_guide_streak_inc": "Revenir aujourd'hui la maintient ; revenir demain l'augmente de 1 ; sauter un jour la remet à 1. Votre meilleure série est toujours mémorisée.",
-  "progress_guide_streak_bonus": "Dès le jour 3, chaque jour ajoute un bonus de série de 15 XP en plus de votre connexion quotidienne, et les jalons de série (3/7/14/30 jours) rapportent 30 XP.",
+  "progress_guide_streak_bonus": "Dès que votre série atteint 3 jours, terminer une leçon ou un projet rapporte un bonus de série de 15 XP en plus de sa propre récompense, et les jalons de série (3/7/14/30 jours) rapportent 30 XP.",
   "progress_guide_quest_heading": "Quêtes",
   "progress_guide_quest_intro": "Les quêtes sont des jalons qui se débloquent automatiquement, rien à réclamer. Elles couvrent :",
   "progress_guide_quest_firsts": "les premières fois (premier run, première leçon, premier projet, premier pas)",
@@ -495,5 +495,6 @@
   "progress_badge_track": "Progression du parcours",
   "progress_badge_quiz": "Quiz parfait",
   "filter_count": "{visible} sur {total} projets",
-  "filter_that": "ce filtre"
+  "filter_that": "ce filtre",
+  "quiz_perfect_no_xp": "🎉 Parfait !"
 }

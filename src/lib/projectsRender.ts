@@ -68,7 +68,18 @@ export function initProjectsFinder() {
     if (activeTag) next.set('tag', activeTag);
     if (activeDiff) next.set('diff', activeDiff);
     const qs = next.toString();
-    history.replaceState(null, '', qs ? `?${qs}` : location.pathname);
+    // `history.replaceState(null, …)` used to be passed here, which destroys
+    // the ClientRouter's own state on this history entry: Astro keeps its
+    // position in `history.state.index` and `onPopState` returns immediately
+    // when `ev.state === null` (transitions/router.js). Since apply() also runs
+    // on init, simply visiting /projects nulled it -- so after clicking through
+    // to a project and pressing Back, the URL changed to /projects and the
+    // project page stayed on screen. Carry the existing state through, and only
+    // touch the URL when the filter actually changed it.
+    const target = qs ? `?${qs}` : location.pathname;
+    if (target !== `${location.pathname}${location.search}`) {
+      history.replaceState(history.state, '', target);
+    }
   }
 
   for (const btn of viewButtons) {

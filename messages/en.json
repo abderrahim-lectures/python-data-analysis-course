@@ -377,7 +377,7 @@
   "progress_guide_xp_daily": "Daily login",
   "progress_guide_xp_daily_note": "opening the site on a new day",
   "progress_guide_xp_sbonus": "Streak bonus",
-  "progress_guide_xp_sbonus_note": "extra per day once your streak passes day 3",
+  "progress_guide_xp_sbonus_note": "extra for each lesson or project you finish while your streak is 3 days or more",
   "progress_guide_xp_smile": "Streak milestone",
   "progress_guide_xp_smile_note": "bonus at streak milestones",
   "progress_guide_xp_milestone": "XP milestone",
@@ -393,7 +393,7 @@
   "progress_guide_streak_heading": "Streaks",
   "progress_guide_streak_intro": "A streak counts consecutive days you open the site.",
   "progress_guide_streak_inc": "Coming back today keeps it; returning yesterday-tomorrow advances it by 1; skipping a day resets it to 1. Your best streak is always remembered.",
-  "progress_guide_streak_bonus": "From day 3 on, each day adds a 15 XP streak bonus on top of your daily login, and streak milestones (3/7/14/30 days) pay a 30 XP bonus.",
+  "progress_guide_streak_bonus": "Once your streak reaches 3 days, finishing a lesson or a project pays a 15 XP streak bonus on top of its own reward, and streak milestones (3/7/14/30 days) pay a 30 XP bonus.",
   "progress_guide_quest_heading": "Quests",
   "progress_guide_quest_intro": "Quests are milestones that unlock automatically, there is nothing to claim. They cover:",
   "progress_guide_quest_firsts": "firsts (first run, first lesson, first project, first step)",
@@ -495,5 +495,6 @@
   "progress_badge_track": "Track progress",
   "progress_badge_quiz": "Perfect quiz",
   "filter_count": "{visible} of {total} projects",
-  "filter_that": "that filter"
+  "filter_that": "that filter",
+  "quiz_perfect_no_xp": "🎉 Perfect!"
 }

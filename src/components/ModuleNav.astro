@@ -37,6 +37,6 @@ function moduleSlug(entry: { id: string }) {
      in RTL, so flip them with the per-locale [dir] on <html>. */
   .module-nav__arrow::before { content: '←'; }
   .module-nav__next .module-nav__arrow::before { content: '→'; }
-  [dir='rtl'] .module-nav__prev .module-nav__arrow::before { content: '→'; }
-  [dir='rtl'] .module-nav__next .module-nav__arrow::before { content: '←'; }
+  :global([dir='rtl']) .module-nav__prev .module-nav__arrow::before { content: '→'; }
+  :global([dir='rtl']) .module-nav__next .module-nav__arrow::before { content: '←'; }
 </style>

@@ -492,6 +492,16 @@ describe('quiz tracking', () => {
     expect(gs.xpProgress().xp).toBe(first);
   });
 
+  // Quiz.astro prints the amount this returns in its "Perfect!" banner, so it
+  // has to say 0 once the daily bonus is spent -- the banner used to hardcode
+  // "+25 XP" and promise it on every perfect quiz of the day.
+  test('recordQuizPerfect reports what it actually paid', async () => {
+    const gs = await fresh();
+
+    expect(gs.recordQuizPerfect()).toBe(25);
+    expect(gs.recordQuizPerfect()).toBe(0);
+  });
+
   test('getQuizProgress returns correct percentage', async () => {
     const gs = await fresh();
     gs.recordQuiz(true);

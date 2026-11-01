@@ -11,10 +11,10 @@ interface Props {
 const {starter} = Astro.props;
 ---
 
-<div class="cell cell--big" data-runnable>
+<div class="cell cell--big" data-runnable data-playground data-starter={starter}>
   <div class="cell__actions">
     <button type="button" class="btn btn-primary cell__run" data-run aria-label={m.run_aria()}>{m.run_button()}</button>
-    <button type="button" class="btn btn-ghost btn-sm" id="pg-reset">{m.reset_button()}</button>
+    <button type="button" class="btn btn-ghost btn-sm" id="pg-reset" data-playground-reset>{m.reset_button()}</button>
     <span class="cell__lang">python</span>
   </div>
   <pre class="cell__code"><code id="pg-code">{starter}</code></pre>
@@ -24,11 +24,55 @@ const {starter} = Astro.props;
   </div>
 </div>
 
-<style>
+<script>
+  // Reset is wired here rather than in each page's inline script. The four
+  // /playground pages did it with `<script define:vars={{STARTER}}>`, and
+  // define:vars makes a script `is:inline` -- which the ClientRouter dedupes by
+  // text content (`swap-functions.js` scriptsAlreadyRan), so the handler was
+  // bound once per session and the button went dead after any soft navigation
+  // back to /playground. 404.astro's shared-link playground renders this same
+  // component and never bound it at all, so Reset there did nothing from the
+  // first visit. A bundled component script runs once and re-runs its binding
+  // per astro:page-load, which covers both hosts.
+  //
+  // The starter comes from `data-starter` rather than the code element's text:
+  // on a shared link `notFoundPlayground.client.ts` overwrites that text with
+  // the decoded code, and both wait on the same event.
+  function initPlaygroundReset(): void {
+    const cell = document.querySelector<HTMLElement>('[data-playground]');
+    const btn = cell?.querySelector<HTMLButtonElement>('[data-playground-reset]');
+    if (!cell || !btn || btn.dataset.wired) return;
+    btn.dataset.wired = '1';
+    btn.addEventListener('click', () => {
+      const codeEl = document.getElementById('pg-code');
+      if (!codeEl) return;
+      codeEl.textContent = cell.dataset.starter ?? '';
+      // The cell's editor listens for `input` to re-highlight and resize.
+      codeEl.dispatchEvent(new Event('input', {bubbles: true}));
+    });
+  }
+
+  document.addEventListener('astro:page-load', initPlaygroundReset);
+  if (document.readyState === 'complete') initPlaygroundReset();
+</script>
+
+<style is:global>
+  /* Global (not scoped) because none of these selectors can be scoped: Astro
+     prefixes the first compound of every selector with *this component's*
+     scope class, and
+       - `.playground-page` is the page's wrapper (`<section class="container
+         playground-page">` in the four /playground pages and in 404.astro's
+         shared-link section), which carries the page's scope class, never
+         this one's;
+       - the rest target the cell subtree from outside it.
+     So all five rules used to compile to selectors that could not match and
+     had no effect at all: the "big freeform editor" was one line tall, the
+     output pane had no max-height (a loop printing 5000 lines stretched the
+     page instead of scrolling), and the action row did not wrap on a narrow
+     screen. */
   .playground-page { padding-bottom: 3rem; }
-  .playground-page :global(.cell--big .cell__code) { min-height: 50vh; font-size: 1rem; }
-  .playground-page :global(.cell--big .cell__output) { max-height: 30vh; overflow-y: auto; }
-  /* Run/Reset/python cram into one line on narrow viewports; let them wrap. */
-  .playground-page :global(.cell__actions) { flex-wrap: wrap; }
-  .playground-page :global(.cell__actions .btn) { white-space: nowrap; }
+  .cell--big .cell__code { min-height: 50vh; font-size: 1rem; }
+  .cell--big .cell__output { max-height: 30vh; overflow-y: auto; }
+  .cell__actions { flex-wrap: wrap; }
+  .cell__actions .btn { white-space: nowrap; }
 </style>

@@ -291,6 +291,35 @@ frontmatter blocks in `src/**/*.astro` (esbuild transform — `astro build` cann
 nothing else would have caught a broken component script), and the two unit tests added below.
 
 
+### Review round 5 — a second pass over the same components, with the compiler
+
+The round-4 fixes were then reviewed again, by a second reader working from the shipped
+`@astrojs/compiler` (the one `astro build` uses) rather than from the source text. That is what
+found the four defects below: they are invisible in review because the source reads exactly like
+the JSX it looks like, and no test in the suite could see them (`astro build` and `astro sync`
+cannot run in this VM). Both mechanisms are now pinned by `tests/unit/astroTemplate.test.ts`,
+which runs over every `.astro` file under `src/`, and which I negative-controlled by reintroducing
+each bug and watching it fail.
+
+| # | Severity | Finding | Fix |
+|---|----------|---------|-----|
+| R31 | **HIGH** | **Two attributes shipped their own source text.** Astro treats a quoted attribute as a string literal — `{…}` inside it is never evaluated — so `ProgressPage.astro`'s `class="station{done ? ' station--done' : ''}"` compiled to exactly that text, and `ProjectDetail.astro`'s `class="project-head__scaffold--{scaffold}"` to exactly that. Splitting the first on whitespace gives `station--done'` *with the quote attached*, so no element ever carried `station--done`: the prerendered station trail showed **zero** progress (corrected only once the client render ran), and with JS off or a failed bundle it stayed wrong. The scaffold badge on every project page never got its full/partial/open colour, so "Full guidance" and "Open-ended" looked identical. | Both are whole-value template-literal expressions now (`class={`station${done ? ' station--done' : ''}`}`). |
+| R32 | **HIGH** | **Back was broken on every project page after the listing had been visited.** `projectsRender` ended `apply()` with `history.replaceState(null, …)`, and `apply()` also runs on init — so merely visiting `/projects` overwrote its history entry's state with `null`. Astro keeps its position in `history.state.index` and `onPopState` **returns immediately when `ev.state === null`** (`transitions/router.js:389-391`): from a project page, Back changed the address bar to `/projects` and left the project page on screen, and the index was never rewound so the next Back skipped an entry. | `history.replaceState(history.state, …)`, and the write is skipped entirely when the filter did not change the query. |
+| R33 | MED | **Six scoped rules could never match.** `dir` and `data-theme` live on `<html>`, which `Base.astro` renders and which therefore carries *Base's* scope class. Astro prefixes every compound selector with `:where(.astro-<thisComponent>)`, so `[dir='rtl'] .thing` compiled to `:where(.astro-x)[dir=rtl] …` — an element that cannot exist. Worst case: on **every Arabic module page** the prev/next arrows kept their LTR glyphs, i.e. "previous" pointed forward. Also lost: the dark-mode colour on a completed lesson, and the RTL hover nudge on module cards in three hubs. | `:global([dir='rtl'])` / `:global([data-theme='dark'])` in all six places, verified by compiling each file. |
+| R34 | MED | **`PlaygroundCell`'s entire stylesheet was dead.** All five rules were written `.playground-page :global(…)`, but `.playground-page` is the *page's* wrapper (`<section>` in the four `/playground` pages and in 404.astro), carrying the page's scope class, never the component's. So: the "big freeform editor" rendered one line tall instead of 50vh, the output pane had no `max-height` (a loop printing 5000 lines stretched the page tens of thousands of pixels tall and pushed Run off-screen, with no scroll container), and the action row did not wrap on a narrow viewport. | The block is `is:global` (two of the four other widgets already were, for the same reason). |
+| R35 | MED | The header XP bar was rendered **before** the daily login was paid, and nothing re-rendered it: the first load of each day showed the previous day's XP/streak (a fresh profile: "Level 1 · 0 XP" with 5 XP already stored), and a level crossed by the login itself was never celebrated, because `renderXPBar` also records the level the overlay compares against. | `boot()` awards first, then renders. |
+| R36 | MED | **Two places where the UI promised XP the code does not pay.** (a) The progress guide said the 15 XP streak bonus is paid "per day … on top of your daily login"; the code pays it per *completed lesson or project* (`awardLessonComplete`, `completeProject`) and `awardDailyLogin` pays 5 only — so a login-only day got 0 of the promised 15 and a two-lesson day got 30. (b) The quiz banner said "🎉 Perfect! +25 XP" on every perfect quiz, while `recordQuizPerfect` keys on today's date: the second perfect quiz of a day paid nothing and still said +25. | Copy fixed, not the economy (both are product decisions): the guide now describes the per-lesson bonus in all four locales, and `recordQuizPerfect` returns what it actually paid so `Quiz.astro` reports that — no "+25" when the day's bonus is spent. |
+| R37 | LOW-MED | The playground's **Reset button** was bound only by page-level `<script define:vars>` blocks in the four `/playground` pages. `define:vars` makes a script `is:inline`, which the router dedupes by text content, so the handler was bound once per session — dead after any soft navigation back to `/playground` — and `404.astro`'s shared-link playground, which renders the same component, never bound it at all. | The wiring moved into the component's own bundled script (bound per `astro:page-load`, guarded per button), reading the starter from a `data-starter` attribute because the 404 handler overwrites the code element's text; the four page scripts are gone. |
+| R38 | LOW-MED | A shared playground link under a locale prefix — `/es/playground/<code>`, which is what a learner on `/es/` would hand-edit or paste — was rejected by the 404 handler's `path.startsWith(base + 'playground/')` test and got the plain not-found page. When it did render, the fallback link was `${base}learn` regardless of locale, i.e. the English learn hub: the same "English slug behind a locale prefix" bug as the learn-hub cheatsheets (R5), and a locale switch for the visitor. | The prefix is locale-aware, and the fallback is that locale's learn hub from `NAV_WORDS`. Two tests. |
+
+Reported, not changed: `encodeShareCode` in `codeShare.ts` has no caller anywhere — the *decoder*
+(`404.astro` + `notFoundPlayground.client.ts`) and its tests are live, so the shared-link feature is
+half-wired; deleting the encoder would leave the decoder untestable, so it stays until the share
+button exists. And the five "diagnostics" on `/progress` (`acceptancePct` starts at 62 for a learner
+with one run, `nGainEquivalent` is a proxy for an education-research quantity) are invented numbers
+presented as measurements — pre-existing by design, and a product question rather than a bug.
+
+
 ---
 
 ## 6 — Toolchain: what this VM can and cannot run, measured

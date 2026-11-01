@@ -4,7 +4,7 @@ import {el, fakeEl, stubDom} from './_domstub.ts';
 const decodeShareCode = vi.fn(async (segment: string) => `decoded:${segment}`);
 vi.mock('../../src/lib/codeShare.ts', () => ({decodeShareCode}));
 
-function pgFixture(path: string, referrer = '') {
+function pgFixture(path: string, referrer = '', locale = 'en') {
   const stub = stubDom();
   const notfound = el('notfound', stub);
   const pgHead = el('pg-head', stub);
@@ -30,7 +30,7 @@ function pgFixture(path: string, referrer = '') {
   doc.referrer = referrer;
 
   vi.stubGlobal('location', {pathname: path, origin: 'http://localhost:4321'});
-  const win = {__PDA404_I18N__: {notfound_play_title: 'PyDA', playground_title: 'PG'}, __PDA404_LOCALE__: 'en'};
+  const win = {__PDA404_I18N__: {notfound_play_title: 'PyDA', playground_title: 'PG'}, __PDA404_LOCALE__: locale};
   vi.stubGlobal('window', win);
 
   return {stub, notfound, pgHead, pgSection, pgCode, pgBack, eyebrow, h1, lead, dispatched};
@@ -41,8 +41,8 @@ function pgFixture(path: string, referrer = '') {
 // (covering a real initial astro:page-load dispatch missed by a slow-loading
 // bundle) fires init() immediately on import -- no need to fire the listener
 // manually here too.
-async function loadPage(path: string, referrer = '', shape?: (m: typeof decodeShareCode) => void) {
-  const f = pgFixture(path, referrer);
+async function loadPage(path: string, referrer = '', shape?: (m: typeof decodeShareCode) => void, locale = 'en') {
+  const f = pgFixture(path, referrer, locale);
   shape?.(decodeShareCode);
   vi.resetModules();
   const client = await import('../../src/lib/notFoundPlayground.client.ts');
@@ -75,6 +75,22 @@ describe('notFoundPlayground', () => {
     const f = await loadPage('/playground/ABC123', 'http://localhost:4321/learn/python-101/01-intro');
     expect(f.pgBack.getAttribute('href')).toBe('http://localhost:4321/learn/python-101/01-intro');
     expect(f.pgBack.textContent).toBe('← Back to the lesson');
+  });
+
+  test('a locale-prefixed share link is handled and stays in its locale', async () => {
+    // /es/playground and friends exist as pages but have no <code> route, so a
+    // pasted link lands on the 404 handler with a localized prefix. It used to
+    // be rejected (the prefix test was the bare "/playground/"), and the
+    // fallback link went to the English /learn hub even when it was not.
+    const f = await loadPage('/es/playground/ABC123', '', undefined, 'es');
+    expect(decodeShareCode).toHaveBeenCalledWith('ABC123');
+    expect(f.pgSection.hasAttribute('hidden')).toBe(false);
+    expect(f.pgBack.getAttribute('href')).toBe('/es/aprender');
+  });
+
+  test('the locale fallback link follows the locale table', async () => {
+    const f = await loadPage('/fr/playground/ABC123', '', undefined, 'fr');
+    expect(f.pgBack.getAttribute('href')).toBe('/fr/apprendre');
   });
 
   test('non-playground paths leave the 404 alone', async () => {

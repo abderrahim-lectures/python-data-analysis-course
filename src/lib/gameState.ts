@@ -363,15 +363,18 @@ export function getLessonMastery(): Record<string, LessonMastery> {
   return read().lessonMastery;
 }
 
-export function recordQuizPerfect(): void {
+export function recordQuizPerfect(): number {
   const s = read();
   const key = 'quiz-perfect-' + today();
-  if (s.quests[key]) return;
+  // Once per calendar day, per quiz answers -- see the call site in Quiz.astro,
+  // which reports this return value rather than assuming it was paid.
+  if (s.quests[key]) return 0;
   s.xp += XP.QUIZ_PERFECT;
   markQuest(s, key);
   addLog(s, 'quiz', 'Perfect quiz!', XP.QUIZ_PERFECT);
   evaluateMilestones(s);
   write(s);
+  return XP.QUIZ_PERFECT;
 }
 
 export function getQuizProgress(): { correct: number; total: number; pct: number } {

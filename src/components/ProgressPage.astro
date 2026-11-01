@@ -205,7 +205,7 @@ const i18nData = {
         </div>
         <ol class="stations" data-track="python-101">
           {pyModules.map(({w, done}) => (
-            <li class="station{done ? ' station--done' : ''}" data-week={w}>
+            <li class={`station${done ? ' station--done' : ''}`} data-week={w}>
               <a class="station__link" href={learnHref(locale, base, 'python-101', normTrack)}>
                 <span class="station__dot"></span>
                 <span class="station__label">{m.module_label()} {w}</span>
@@ -227,7 +227,7 @@ const i18nData = {
         </div>
         <ol class="stations" data-track="data-analysis">
           {daModules.map(({w, done}) => (
-            <li class="station{done ? ' station--done' : ''}" data-week={w}>
+            <li class={`station${done ? ' station--done' : ''}`} data-week={w}>
               <a class="station__link" href={learnHref(locale, base, 'data-analysis', normTrack)}>
                 <span class="station__dot"></span>
                 <span class="station__label">{m.module_label()} {w}</span>
