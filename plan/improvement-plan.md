@@ -111,13 +111,14 @@ Errors include a **friendly explanation** below the raw message (new in this pla
 
 ### How Pyodide Handles `input()`
 
-`input()` works differently in the browser than in a real terminal. When your code calls `input("What's your name? ")`:
+`input()` works differently in the browser than in a real terminal. Pyodide's stdin callback is **synchronous**: the interpreter blocks inside the wasm call until JavaScript hands it a line, so a modal `window.prompt()` there freezes the whole tab (and, on the old design, forced those cells onto the main thread — booting a second copy of the engine just to ask one question). When a cell calls `input("What's your name? ")`:
 
-1. A browser prompt dialog appears at the top of the page
-2. You type your answer in the dialog
-3. The value is passed back to your Python code
+1. The cell shows an **inline input form** between the code and the output, one field per `input()` call, labelled with the prompt text the code passes (`What's your name?`).
+2. You type the answers and press Run — the fields stay filled, so re-running replays the same answers.
+3. The worker feeds them to Python in order and echoes each value into the output panel, so the transcript reads `What's your name?` / `Amina`.
+4. If the code asks for more values than there are fields (a `while` loop reading lines), Python raises `EOFError` and the cell adds one more field; the friendly-error line says to fill it and run again.
 
-This is a known limitation of the in-browser environment — it can't show a custom inline prompt the way a real terminal would. The browser prompt is functional but less polished. **This is only relevant for Week 1** (which covers `input()`); from Week 2 onward, most exercises use pre-defined variables, not interactive input.
+The values are asked for up front rather than mid-run because there is no way to pause a synchronous wasm interpreter to ask the page for one without cross-origin isolation (COOP/COEP headers GitHub Pages can't set). **This is mostly relevant for Week 1** (which covers `input()`); from Week 2 onward, most exercises use pre-defined variables, not interactive input.
 
 ### How JupyterLite Differs (Section 2)
 

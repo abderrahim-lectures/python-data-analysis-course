@@ -1,14 +1,16 @@
 // Runs Pyodide off the main thread so a slow cell (a cold engine boot, a
-// heavy pandas operation, a big matplotlib render) never freezes scrolling,
-// clicking, or any other tab. Owns exactly one engine for its lifetime (a
-// full page navigation still tears the worker down and pays the boot cost
-// again, same as the previous main-thread design -- see pythonRunnerCore.ts
-// for why the actual bytes are cache-first regardless). Cells that call
-// input() never reach this worker at all (see pythonGuard.usesBlockingInput
-// and the routing in runnable-cell.client.ts) since Pyodide's stdin callback
-// is synchronous and this worker has no way to satisfy that.
+// heavy pandas operation, a big matplotlib render, or a cell waiting on
+// input()) never freezes scrolling, clicking, or any other tab. Owns exactly
+// one engine for its lifetime (a full page navigation still tears the worker
+// down and pays the boot cost again, same as the previous main-thread design --
+// see pythonRunnerCore.ts for why the actual bytes are cache-first
+// regardless). Cells that call input() run here too: the client sends the
+// values the learner filled in before pressing Run, and the synchronous stdin
+// callback below replays them from a queue (see pythonInputs.ts for why the
+// values are collected up front instead of prompted for mid-run).
 import {overwriteGetLocale, toLocale, baseLocale} from '../paraglide/runtime.js';
 import {py, runCellCode, mountDatasets, type PyodideModel} from './pythonRunnerCore.ts';
+import {stdinQueue} from './stdinQueue.ts';
 
 type RunMessage = {
   type: 'run';
@@ -17,6 +19,9 @@ type RunMessage = {
   allSource: string;
   otherCellSources: string;
   locale: string;
+  /** Values for the cell's input() calls, in order. The client reads them from
+   *  the cell's input fields before sending the run. */
+  stdin: string[];
 };
 
 type InMessage = RunMessage;
@@ -30,6 +35,12 @@ type OutMessage =
   | {type: 'progress'; id: number; pct: number}
   | {type: 'phase'; id: number; phase: 'packages' | 'running'}
   | {type: 'stdout' | 'stderr'; id: number; text: string}
+  // A value handed to input(): echoed so the output panel reads like a
+  // terminal (`Birth year?` then `2004`) instead of showing only the prompt.
+  | {type: 'stdin'; id: number; text: string}
+  // The run asked for input() values it was not given (at most once per run,
+  // so a cell that swallows EOFError and retries cannot grow the form forever).
+  | {type: 'eof'; id: number}
   | {type: 'figure'; id: number; png: string}
   | {type: 'done'; id: number; executed: boolean}
   | {type: 'fatal'; id: number; message: string};
@@ -89,13 +100,24 @@ async function runOne(msg: RunMessage): Promise<void> {
 
   await mountDatasets(engine, msg.allSource);
 
+  // One value per input() call, in order. Running dry reports EOF (returning
+  // `undefined`) rather than inventing a value: Python raises EOFError, the
+  // friendly-error layer turns that into "add another value and run again",
+  // and the client grows the form by one field. That is the honest outcome
+  // for a loop that reads more values than the static scan counted, and it is
+  // what a closed stdin does in a real terminal. Each value is echoed back so
+  // the output panel reads like a terminal transcript.
+  const stdin = stdinQueue(msg.stdin ?? [], {
+    onValue: (text) => post({type: 'stdin', id: msg.id, text}),
+    onEnd: () => post({type: 'eof', id: msg.id}),
+  });
   const executed = await runCellCode(msg.code, {
     engine,
     otherCellSources: msg.otherCellSources,
     appendLine: (kind, text) => post({type: kind === 'out' ? 'stdout' : 'stderr', id: msg.id, text}),
     appendFigure: (png) => post({type: 'figure', id: msg.id, png}),
     onPhase: (phase) => post({type: 'phase', id: msg.id, phase}),
-    stdin: () => '', // never exercised -- see the module doc comment above
+    stdin: stdin.read,
   });
   post({type: 'done', id: msg.id, executed});
 }

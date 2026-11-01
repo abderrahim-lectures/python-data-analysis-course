@@ -9,7 +9,7 @@ function makeEngine() {
   const calls = {
     stdout: undefined as undefined | {batched: (s: string) => void},
     stderr: undefined as undefined | {batched: (s: string) => void},
-    stdin: undefined as undefined | {stdin: () => string},
+    stdin: undefined as undefined | {stdin: () => string | undefined},
     loaded: [] as string[],
     wrapped: [] as string[],
     ran: [] as string[],
@@ -21,7 +21,7 @@ function makeEngine() {
     setStderr: (cb: {batched: (s: string) => void}) => {
       calls.stderr = cb;
     },
-    setStdin: (cb: {stdin: () => string}) => {
+    setStdin: (cb: {stdin: () => string | undefined}) => {
       calls.stdin = cb;
     },
     loadPackagesFromImports: async (src: string) => {
@@ -35,15 +35,20 @@ function makeEngine() {
       calls.ran.push(src);
       return undefined;
     },
-    FS: {writeFile: (_path: string, _data: Uint8Array) => {}},
+    FS: {writeFile: (_path: string, _data: Uint8Array) => {}, mkdirTree: (_path: string) => {}},
   };
   return {engine, calls};
 }
 
-function makeRuntime(engine: ReturnType<typeof makeEngine>['engine'], out: Recorded): CellRuntime {
+function makeRuntime(
+  engine: ReturnType<typeof makeEngine>['engine'],
+  out: Recorded,
+  stdin: () => string | undefined = () => undefined,
+): CellRuntime {
   return {
     appendLine: (kind, text) => out.push({kind, text}),
     engine,
+    stdin,
   };
 }
 
@@ -62,9 +67,9 @@ describe('runCellCode', () => {
     resetExtraPackagesCache();
   });
 
-  test('routes stdout, stderr and reads stdin via prompt', async () => {
-    vi.stubGlobal('window', {prompt: () => 'typed', location: {href: 'http://localhost/learn/titanic'}});
-    await runCellCode('x = 1', makeRuntime(mock.engine, out));
+  test('routes stdout, stderr and reads stdin from the supplied callback', async () => {
+    const queued = ['typed'];
+    await runCellCode('x = 1', makeRuntime(mock.engine, out, () => queued.shift()));
     mock.calls.stdout?.batched('hello\n');
     mock.calls.stderr?.batched('oops\n');
     expect(out).toEqual([
@@ -72,6 +77,8 @@ describe('runCellCode', () => {
       {kind: 'err', text: 'oops\n'},
     ]);
     expect(mock.calls.stdin?.stdin()).toBe('typed');
+    // Exhausted queue => EOF, not an invented empty line.
+    expect(mock.calls.stdin?.stdin()).toBeUndefined();
   });
 
   test('loads imports, wraps the trailing expression, then runs it', async () => {
@@ -131,6 +138,7 @@ describe('runCellCode', () => {
     const rt: CellRuntime = {
       appendLine: (kind, text) => out.push({kind, text}),
       engine: mock.engine,
+      stdin: () => undefined,
       otherCellSources: 'import seaborn as sns\nsns.histplot(df["math score"])',
     };
     await runCellCode('rho = df["math score"].corr(df["reading score"], method="spearman")', rt);
@@ -168,6 +176,7 @@ describe('runCellCode', () => {
     const rt: CellRuntime = {
       appendLine: (kind, text) => out.push({kind, text}),
       engine: mock.engine,
+      stdin: () => undefined,
       otherCellSources: 'df = pd.read_csv("titanic.csv")\ndf.head()',
     };
     await runCellCode('df.head()', rt);
@@ -185,6 +194,7 @@ describe('runCellCode', () => {
     const rt: CellRuntime = {
       appendLine: (kind, text) => out.push({kind, text}),
       engine: mock.engine,
+      stdin: () => undefined,
       otherCellSources: 'df = pd.read_csv("titanic.csv")\ndf.head()',
     };
     await runCellCode('z = np.polyfit(...)', rt);
@@ -329,6 +339,11 @@ describe('initCell DOM wiring', () => {
   const flush = () => new Promise((r) => setTimeout(r, 10));
   const asElement = (el: FakeEl) => el as unknown as Element;
   const gutterOf = (pre: FakeEl) => pre.children.find((c) => c.classSet.has('cell__gutter'));
+  const fieldOf = (cell: FakeEl, i: number) =>
+    cell.children
+      .find((c) => c.classSet.has('cell__stdin'))
+      ?.children.filter((c) => c.classSet.has('cell__stdin-field'))[i]
+      ?.children.find((c) => c.classSet.has('cell__stdin-input'));
 
   test('localizes chrome, paints a gutter, and makes the code editable', () => {
     const fixture = buildFixture('line1\nline2\nline3');
@@ -497,6 +512,87 @@ await (run.listeners['click']() as unknown as Promise<unknown>);
     code.listeners['input']();
 
     expect(gutterOf(pre)?.textContent).toBe('1\n2\n3\n');
+  });
+
+  test('a cell that calls input() gets one field per call, labelled by its prompt', async () => {
+    const f = buildFixture('year_text = input("Birth year? ")\nprint(int(year_text) + 1)');
+    const {cell, run, calls} = f;
+    vi.stubGlobal('localStorage', memoryStorage());
+    initCell(asElement(cell), {loadEngine: f.loadEngine});
+
+    const stdinBox = cell.children.find((c) => c.classSet.has('cell__stdin'));
+    expect(stdinBox?.hidden).toBe(false);
+    const fields = (stdinBox?.children ?? []).filter((c) => c.classSet.has('cell__stdin-field'));
+    expect(fields).toHaveLength(1);
+    expect(fields[0].children.find((c) => c.classSet.has('cell__stdin-prompt'))?.textContent).toBe('Birth year?');
+
+    // Whatever the learner types becomes input()'s return value, in order,
+    // with EOF once the fields run out -- no window.prompt dialog anywhere.
+    const input = fields[0].children.find((c) => c.classSet.has('cell__stdin-input'));
+    input!.value = '2004';
+    await (run.listeners['click']() as unknown as Promise<unknown>);
+    expect(calls.stdin?.stdin()).toBe('2004');
+    expect(calls.stdin?.stdin()).toBeUndefined();
+  });
+
+  test('input() calls without a prompt get numbered labels, and edits resize the form', async () => {
+    const f = buildFixture('a = input()\nb = input()');
+    const {cell, code} = f;
+    vi.stubGlobal('localStorage', memoryStorage());
+    initCell(asElement(cell), {loadEngine: f.loadEngine});
+
+    const labels = () =>
+      (cell.children.find((c) => c.classSet.has('cell__stdin'))?.children ?? [])
+        .filter((c) => c.classSet.has('cell__stdin-field'))
+        .map((row) => row.children.find((c) => c.classSet.has('cell__stdin-prompt'))?.textContent);
+    expect(labels()).toHaveLength(2);
+    expect(labels()[0]).not.toBe(labels()[1]);
+
+    code.textContent = 'a = input("Only one")';
+    code.listeners['input']();
+    expect(labels()).toEqual(['Only one']);
+  });
+
+  test('Enter in an input field runs the cell, like a terminal prompt', async () => {
+    const f = buildFixture('name = input("Name? ")');
+    const {cell, run} = f;
+    vi.stubGlobal('localStorage', memoryStorage());
+    initCell(asElement(cell), {loadEngine: f.loadEngine});
+
+    const field = fieldOf(cell, 0);
+    expect(field).toBeTruthy();
+    const preventDefault = vi.fn();
+    field!.dispatchEvent({type: 'keydown', key: 'Enter', preventDefault});
+    // The Run click handler disables the button synchronously, before it awaits.
+    expect(preventDefault).toHaveBeenCalled();
+    expect(run.disabled).toBe(true);
+  });
+
+  test('Enter moves to the next input field before it runs the cell', async () => {
+    const f = buildFixture('name = input("Name? ")\nyear = input("Year? ")');
+    const {cell, run} = f;
+    vi.stubGlobal('localStorage', memoryStorage());
+    initCell(asElement(cell), {loadEngine: f.loadEngine});
+
+    const first = fieldOf(cell, 0);
+    const second = fieldOf(cell, 1);
+    expect(first && second).toBeTruthy();
+    const preventDefault = vi.fn();
+    first!.dispatchEvent({type: 'keydown', key: 'Enter', preventDefault});
+    // A terminal asks one question at a time: Enter advances, it does not run a
+    // half-filled cell.
+    expect(second!.focused).toBe(true);
+    expect(run.disabled).toBe(false);
+
+    second!.dispatchEvent({type: 'keydown', key: 'Enter', preventDefault});
+    expect(run.disabled).toBe(true);
+  });
+
+  test('a cell without input() keeps the input form hidden', () => {
+    const f = buildFixture('print("hi")');
+    vi.stubGlobal('localStorage', memoryStorage());
+    initCell(asElement(f.cell), {loadEngine: f.loadEngine});
+    expect(f.cell.children.find((c) => c.classSet.has('cell__stdin'))?.hidden).toBe(true);
   });
 
   afterEach(() => {

@@ -1,11 +1,11 @@
-// Engine-agnostic Pyodide glue shared by the main-thread runner
-// (runnable-cell.client.ts, used only for the handful of cells that need a
-// synchronous window.prompt() for input()) and the Web Worker runner
-// (pyodide.worker.ts, used for everything else so a slow cell doesn't block
-// the page). Nothing here may assume `window` or `document` exist — a Worker
-// has neither. The one exception is `stdin`, which is deliberately made the
-// caller's responsibility (see CellRuntime.stdin) rather than defaulted to
-// `window.prompt` here, so this module stays usable from either context.
+// Engine-agnostic Pyodide glue shared by the in-page runner
+// (runnable-cell.client.ts, used only when a test injects its own engine) and
+// the Web Worker runner (pyodide.worker.ts, used for every real cell so a slow
+// cell doesn't block the page). Nothing here may assume `window` or `document`
+// exist — a Worker has neither. That is why `stdin` is the caller's job (see
+// CellRuntime.stdin) rather than defaulted to `window.prompt` here: Pyodide's
+// stdin callback is synchronous, so a prompt() inside it freezes whatever
+// thread runs the code.
 import {m} from '../paraglide/messages.js';
 import {usesJsBridge} from './pythonGuard.ts';
 import {planDatasetMounts} from './datasetMount.ts';
@@ -38,7 +38,7 @@ export function resetExtraPackagesCache(): void {
 export interface PyodideModel {
   setStdout(cb: {batched: (s: string) => void}): void;
   setStderr(cb: {batched: (s: string) => void}): void;
-  setStdin(cb: {stdin: () => string}): void;
+  setStdin(cb: {stdin: () => string | undefined}): void;
   loadPackagesFromImports(src: string): Promise<unknown>;
   runPython(src: string): Promise<(src: string) => string>;
   runPythonAsync(src: string): Promise<unknown>;
@@ -345,11 +345,15 @@ export interface CellRuntime {
    *  spinning ("Loading libraries…" vs "Running…") instead of a bare spinner.
    *  Optional so unit tests can omit it. */
   onPhase?(phase: 'packages' | 'running'): void;
-  /** Supplies `input()`'s return value. Defaults to `window.prompt` when
-   *  omitted and `window` exists (the main-thread path); a Worker has no
-   *  `window`; cells that call `input()` never reach the worker (see
-   *  usesBlockingInput), so its stdin is never actually exercised. */
-  stdin?(): string;
+  /** Supplies `input()`'s return value. Called once per `input()`; return
+   *  `undefined` to signal end-of-file (Python then raises EOFError, which is
+   *  what a terminal does when stdin closes). Required, and never wired to
+   *  `window.prompt`: a synchronous browser dialog inside this callback blocks
+   *  the thread that is running the interpreter — the whole tab on the
+   *  main-thread path, the shared worker on the worker path. Both callers feed
+   *  it from values the learner typed into the cell's input fields before
+   *  pressing Run. */
+  stdin: () => string | undefined;
 }
 
 // Some lesson cells `import seaborn`, which is not a Pyodide wheel. seaborn is
@@ -377,12 +381,7 @@ async function ensureExtraPackages(
 export async function runCellCode(code: string, rt: CellRuntime): Promise<boolean> {
   rt.engine.setStdout({batched: (s: string) => rt.appendLine('out', s)});
   rt.engine.setStderr({batched: (s: string) => rt.appendLine('err', s)});
-  rt.engine.setStdin({
-    stdin: () => {
-      if (rt.stdin) return rt.stdin();
-      return typeof window !== 'undefined' && typeof window.prompt === 'function' ? (window.prompt('') ?? '') : '';
-    },
-  });
+  rt.engine.setStdin({stdin: rt.stdin});
   if (usesJsBridge(code)) {
     rt.appendLine('err', m.blocked_bridge());
     return false;

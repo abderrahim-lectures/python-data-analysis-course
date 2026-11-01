@@ -11,6 +11,7 @@ export interface FakeEl {
   innerHTML: string;
   hidden: boolean;
   value: string;
+  focused: boolean;
   disabled: boolean;
   children: FakeEl[];
   parentElement: FakeEl | null;
@@ -21,6 +22,8 @@ export interface FakeEl {
   addEventListener(kind: string, fn: (ev?: any) => void): void;
   dispatchEvent(ev: any): void;
   click(): void;
+  focus(): void;
+  select(): void;
   appendChild(child: FakeEl): void;
   insertBefore(child: FakeEl, ref: FakeEl | null): void;
   remove(): void;
@@ -52,6 +55,7 @@ export function fakeEl(id?: string): FakeEl {
     innerHTML: '',
     hidden: false,
     value: '',
+    focused: false,
     disabled: false,
     children,
     parentElement: null,
@@ -78,6 +82,8 @@ export function fakeEl(id?: string): FakeEl {
       for (const fn of this.allListeners[kind] ?? []) fn(ev);
     },
     click() { this.dispatchEvent({type: 'click'}); },
+    focus() { this.focused = true; },
+    select() {},
     appendChild(child: FakeEl) {
       children.push(child);
       child.parentElement = this;
@@ -86,7 +92,13 @@ export function fakeEl(id?: string): FakeEl {
       children.push(child);
       child.parentElement = this;
     },
-    remove() {},
+    remove() {
+      const parent = this.parentElement;
+      if (!parent) return;
+      const i = parent.children.indexOf(this);
+      if (i >= 0) parent.children.splice(i, 1);
+      this.parentElement = null;
+    },
     querySelectorAll(sel: string) { return this.querySelectorAllFor[sel] ?? []; },
     querySelectorFor: {},
     querySelector(sel: string) { return this.querySelectorFor[sel] ?? null; },

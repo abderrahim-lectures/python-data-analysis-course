@@ -1,11 +1,26 @@
-// Pyodide's `js` and `pyodide` modules bridge into the host page — they can
-// read this origin's localStorage, rewrite the DOM, and issue same-origin
-// fetches. No lesson or playground snippet needs them, and ?code= links are
-// attacker-controllable, so they are refused before execution.
+// Refuses the handful of Python constructs that reach past the lesson sandbox
+// and into the host page. Pyodide's `js` and `pyodide` modules bridge into the
+// browser — they can read this origin's localStorage, rewrite the DOM and
+// issue same-origin fetches — and a shared /playground/<code> link is
+// attacker-written code that runs on the viewer's origin, so it is screened
+// here before the engine ever sees it.
+//
+// What this is: a *guardrail*. A text scan cannot be a security boundary —
+// `__import__("\u006a\u0073")`, `__import__("builtins").exec(...)`,
+// `sys.modules["js"]` and `vars()["__builtins__"]` all walked straight through
+// the earlier version of this file, and `marshal` + `types` can still build a
+// callable from bytes without naming exec at all. The deny list below closes
+// those routes; audit-report-2026-11-runtime.md §B3 explains why the real
+// boundary has to be structural (do not execute foreign code in this origin)
+// and what that change would look like.
+//
+// The trade is deliberate and one-directional: over-blocking costs a learner
+// one reworded snippet, under-blocking hands someone else's link their saved
+// progress. Nothing in src/content/** uses any name refused here, so no lesson
+// cell is affected — the cost is only paid by a playground snippet that reaches
+// for one of them.
+
 // Matches the submodule forms too (`from pyodide.ffi import to_js`).
-// Deliberately conservative: a mention inside a string or comment is also
-// refused. Over-blocking costs a learner nothing here; under-blocking hands
-// a shared link read access to their saved progress.
 const MOD = String.raw`(?:js|pyodide)(?:\.\w+)*`;
 const BRIDGE = new RegExp(
   String.raw`(?:^|[^\w.])(?:` +
@@ -17,45 +32,58 @@ const BRIDGE = new RegExp(
   'm',
 );
 
-// Dynamic execution can smuggle bridge imports past the static regex above
-// (e.g. `exec("from js import window")`). Block the execution builtins
-// themselves — no lesson or playground snippet needs them.
-// Anchored on [^\w.] (not just \b) so `re.compile(...)`, `obj.eval(...)`
-// etc. are not mistaken for the bare builtins.
+// Dynamic execution can smuggle bridge imports past BRIDGE
+// (`exec("from js import window")`). Block the execution builtins themselves.
+// Anchored on [^\w.] (not just \b) so `re.compile(...)`, `obj.eval(...)` etc.
+// are not mistaken for the bare builtins.
 const DYNAMIC_EXEC = /(?:^|[^\w.])(?:exec|eval|compile)\s*\(/;
-const BUILTIN_IMPORT = /\bbuiltins\s*\.\s*__import__\b/;
 
-// getattr(__builtins__, "ex"+"ec")(...), vars(__builtins__)["exec"](...),
-// globals()["__builtins__"], and subclass-hunting chains
-// (().__class__.__bases__[0].__subclasses__()) all reach exec/eval/import
-// without ever writing a literal "exec(" that DYNAMIC_EXEC would catch.
-// Every one of those techniques has to name the introspection hook it
-// walks through, so blocking those names outright (rather than trying to
-// enumerate every way to call them) closes the class of bypass instead of
-// one instance of it. `__import__` itself is deliberately excluded here:
-// several real projects legitimately call `__import__("pathlib")` etc.,
-// and the js/pyodide-targeted form is already precisely caught by BRIDGE
-// above, so blanket-blocking the name would break real content to guard
-// against a case that's already covered.
-const DUNDER_INTROSPECTION = /__builtins__|__loader__|__subclasses__|__globals__|__bases__|__base__|__mro__/;
+// The names that turn "run my snippet" into "reach the host". Every route to
+// the real `exec`/`__import__` has to name one of them first:
+//   __import__("builtins").exec(...)         the builtins module by import
+//   sys.modules["js"]                        the module cache, no import needed
+//   vars() / globals() / locals()            the caller's namespace, incl. __builtins__
+//   importlib.import_module("\u006a\u0073")  an import that escapes BRIDGE's literal
+//   marshal + types.FunctionType(...)        a callable built from bytecode
+// `getattr`, `setattr` and `delattr` are deliberately NOT here: they are only
+// dangerous once one of the names above has produced the object they poke at,
+// and `getattr` is ordinary Python a learner may legitimately experiment with.
+//
+// Each name is matched in the form that actually escapes, not bare: a lesson
+// comment saying "column names and types" must not be refused, and
+// `sns.pairplot(df, vars=[...])` is a real lesson cell. So modules are caught
+// by `import x` (anywhere in the import list — `import os, sys` counts), by
+// `x.` / `x(`, and the namespace builtins by their call form (a bare
+// `vars = ...` cannot reach the caller's namespace).
+const ESCAPE_NAMES = new RegExp(
+  [
+    String.raw`\b__import__\b`,
+    String.raw`\b(?:builtins|importlib|marshal|sys|types)\s*[.(]`,
+    String.raw`\bimport\b[^\n]*(?:\b(?:builtins|importlib|marshal|sys|types)\b)`,
+    String.raw`\b(?:vars|globals|locals)\b(?!\s*=)`,
+  ].join('|'),
+);
+
+// Introspection hooks that walk from an ordinary object to the class graph, and
+// from a class to everything else (`print.__self__` is the builtins module;
+// `().__class__.__bases__[0].__subclasses__()` is the classic chain). Every one
+// of those has to name the hook it walks through, so blocking the names closes
+// the class of bypass instead of one instance of it. `__name__`/`__main__` are
+// deliberately absent: `if __name__ == "__main__":` is a beginner idiom and
+// several lessons use it.
+const DUNDER_INTROSPECTION =
+  /__builtins__|__loader__|__subclasses__|__globals__|__bases__|__base__|__mro__|__self__|__class__|__dict__|__getattribute__|__getattr__|__setattr__|__delattr__|__call__|__code__|__closure__|__reduce__|__reduce_ex__|__module__|__spec__|__wrapped__|__func__|__defaults__|__kwdefaults__|__objclass__|__weakref__|__qualname__|__slots__/;
 
 export function usesJsBridge(src: string): boolean {
-  return BRIDGE.test(src) || DYNAMIC_EXEC.test(src) || BUILTIN_IMPORT.test(src) || DUNDER_INTROSPECTION.test(src);
-}
-
-// A cell that calls input() must run on the main thread: Pyodide's stdin
-// callback is synchronous (the interpreter blocks waiting for a return
-// value), and today that's window.prompt(). A Web Worker has no window and
-// no synchronous way to ask the main thread for a value -- that needs
-// Atomics.wait() on a SharedArrayBuffer, which needs cross-origin-isolation
-// (COOP/COEP) response headers GitHub Pages cannot set. So cells using
-// input() are routed to the legacy in-page engine instead of the worker
-// (see runnable-cell.client.ts); everything else gets the non-blocking path.
-// Deliberately conservative like usesJsBridge above: a mention inside a
-// string or comment still routes to the main thread, which only costs that
-// one cell the worker's benefit, never correctness.
-const BLOCKING_INPUT = /\binput\s*\(/;
-
-export function usesBlockingInput(src: string): boolean {
-  return BLOCKING_INPUT.test(src);
+  // Python removes a backslash-newline before tokenizing, so `import \` +
+  // newline + `js`, `exe` + newline + `c(...)` and `__imp` + newline + `ort__`
+  // are ordinary code that a line-by-line scan would miss. Join them first —
+  // this is what the interpreter will actually see.
+  const code = src.replace(/\\\r?\n/g, '');
+  return (
+    BRIDGE.test(code) ||
+    DYNAMIC_EXEC.test(code) ||
+    ESCAPE_NAMES.test(code) ||
+    DUNDER_INTROSPECTION.test(code)
+  );
 }

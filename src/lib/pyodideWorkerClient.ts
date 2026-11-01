@@ -8,12 +8,18 @@
 import {m} from '../paraglide/messages.js';
 
 export interface WorkerRunCallbacks {
-  appendLine(kind: 'out' | 'err', text: string): void;
+  /** `in` renders a value the learner supplied to input(), echoed into the
+   *  output panel so it reads like a terminal transcript. */
+  appendLine(kind: 'out' | 'err' | 'in', text: string): void;
   appendFigure(pngB64: string): void;
   onPhase(phase: 'packages' | 'running'): void;
   onLoading(detail?: {phase?: string}): void;
   onProgress(pct: number): void;
   onReady(): void;
+  /** The cell asked for more input() values than the run was given. The cell
+   *  then fails with EOFError (reported through appendLine), so this only has
+   *  to grow the form for the next run. */
+  onStdinExhausted?(): void;
 }
 
 type OutMessage =
@@ -21,6 +27,8 @@ type OutMessage =
   | {type: 'progress'; id: number; pct: number}
   | {type: 'phase'; id: number; phase: 'packages' | 'running'}
   | {type: 'stdout' | 'stderr'; id: number; text: string}
+  | {type: 'stdin'; id: number; text: string}
+  | {type: 'eof'; id: number}
   | {type: 'figure'; id: number; png: string}
   | {type: 'done'; id: number; executed: boolean}
   | {type: 'fatal'; id: number; message: string};
@@ -46,7 +54,7 @@ function getWorker(): Worker {
 // cell's output, never another cell's.
 export function runInWorker(
   code: string,
-  opts: {allSource: string; otherCellSources: string; locale: string},
+  opts: {allSource: string; otherCellSources: string; locale: string; stdin: string[]},
   cb: WorkerRunCallbacks,
 ): Promise<boolean> {
   const w = getWorker();
@@ -78,11 +86,17 @@ export function runInWorker(
         case 'stderr':
           cb.appendLine('err', msg.text);
           break;
+        case 'stdin':
+          cb.appendLine('in', msg.text);
+          break;
         case 'figure':
           cb.appendFigure(msg.png);
           break;
         case 'done':
           finish(msg.executed);
+          break;
+        case 'eof':
+          cb.onStdinExhausted?.();
           break;
         case 'fatal':
           console.warn('[pyodideWorkerClient] engine failed to load in worker', msg.message);
@@ -105,6 +119,7 @@ export function runInWorker(
       allSource: opts.allSource,
       otherCellSources: opts.otherCellSources,
       locale: opts.locale,
+      stdin: opts.stdin,
     });
   });
 }

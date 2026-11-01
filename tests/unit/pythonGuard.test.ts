@@ -1,5 +1,5 @@
 import {describe, expect, test} from 'vitest';
-import {usesJsBridge, usesBlockingInput} from '../../src/lib/pythonGuard.ts';
+import {usesJsBridge} from '../../src/lib/pythonGuard.ts';
 
 describe('blocks the host bridge', () => {
   const blocked = [
@@ -36,6 +36,10 @@ describe('allows ordinary teaching code', () => {
     'js = 5\nprint(js)',
     'import numpy as js',
     'data.js_field = 3',
+    // Names that are ordinary Python and must keep working.
+    'if __name__ == "__main__":\n    main()',
+    'import re\npattern = re.compile(r"\\d+")',
+    'class Point: pass\np = Point()\nprint(getattr(p, "x", 1))',
   ];
 
   test.each(allowed)('allows %j', (src) => {
@@ -53,28 +57,57 @@ describe('deliberately conservative', () => {
   });
 });
 
-describe('routes input() to the main thread', () => {
-  const blocking = [
-    'name = input("Name? ")',
-    'x = int(input())',
-    '  age = input("Age: ").strip()', // indented, inside a function
-    'while True:\n    word = input("Start word: ")',
+describe('refuses the routes that walk around the bridge import', () => {
+  // Each of these reached the host before the escape-name list existed: the
+  // bridge was importable without ever writing `import js`.
+  const escapes = [
+    // an escaped module name defeats a scan for the literal "js"
+    String.raw`m = __import__("\u006a\u0073")`,
+    // the builtins module, by import
+    '__import__("builtins").exec("from " + "js import window")',
+    // ... bound to a name first, so no bare exec( appears
+    'E = __import__("builtins").exec\nE("import " + "js")',
+    // ... or with the payload hidden in base64
+    '__import__("builtins").exec(__import__("base64").b64decode("ZnJvbSBqcw==").decode())',
+    // the module cache: sys.modules already holds `js` in Pyodide
+    'import sys\nm = sys.modules["js"]\nprint(m.window.location.href)',
+    // the caller's namespace still holds __builtins__
+    'b = [v for k, v in vars().items() if hasattr(v, "exec")][0]\nb.exec("import js")',
+    // a builtin function is a door to its own module
+    'print.__self__.exec("import js")',
+    // the classic subclass chain
+    'print(().__class__.__bases__[0].__subclasses__())',
+    // bytecode needs neither exec nor __import__ to name itself
+    'import marshal, types\ntypes.FunctionType(marshal.loads(b""), {})()',
   ];
 
-  test.each(blocking)('detects %j', (src) => {
-    expect(usesBlockingInput(src)).toBe(true);
+  test.each(escapes)('refuses %j', (src) => {
+    expect(usesJsBridge(src)).toBe(true);
+  });
+});
+
+describe('lexical tricks that split a refused token', () => {
+  // Python deletes a backslash-newline before tokenizing, so the scan has to
+  // join those lines first — otherwise every rule above is one character apart
+  // from a bypass.
+  const continuations = [
+    'import ' + '\\\n' + 'js',
+    'exe' + '\\\n' + 'c("print(1)")',
+    '__imp' + '\\\n' + 'ort__("js")',
+    'im' + '\\\n' + 'port sys',
+    'import ' + '\\\r\n' + 'js',
+  ];
+  test.each(continuations)('refuses %j', (src) => {
+    expect(usesJsBridge(src)).toBe(true);
   });
 
-  const nonBlocking = [
-    'print("hello")',
-    'x = 5\nx = x + 1',
-    'import json',
-    // Identifiers that merely contain "input" must not trip it.
-    'user_input_value = 5',
-    'def get_input_stream(): pass',
-  ];
+  test('refuses a dangerous module that is not first in the import list', () => {
+    expect(usesJsBridge('import os, sys\nx = sys\nx.modules["js"]')).toBe(true);
+    expect(usesJsBridge('from os import path, sys')).toBe(true);
+    expect(usesJsBridge('import json, types')).toBe(true);
+  });
 
-  test.each(nonBlocking)('allows %j', (src) => {
-    expect(usesBlockingInput(src)).toBe(false);
+  test('a plain join with backslashes in a string is not a call to exec', () => {
+    expect(usesJsBridge('print("a\\\nb")')).toBe(false);
   });
 });

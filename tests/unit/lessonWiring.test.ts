@@ -42,11 +42,16 @@ describe('runnable cells', () => {
     expect(src).toContain("document.querySelector('[data-lesson-id]')");
   });
 
-  test('routes cells that call input() to the main thread, not the worker', () => {
-    // Pyodide's stdin callback is synchronous; a Worker has no way to
-    // satisfy that without cross-origin-isolation headers GitHub Pages
-    // can't set, so those cells must stay off the worker path.
-    expect(src).toContain('usesBlockingInput(src)');
+  test('runs input() cells in the worker and feeds them from the cell fields', () => {
+    // Pyodide's stdin callback is synchronous, so a browser prompt() inside it
+    // froze the tab; the values are collected in the cell's input form and
+    // replayed by the worker instead. Every cell, input() included, stays off
+    // the main thread.
+    expect(src).toContain('inputCallSites(src)');
+    expect(src).toContain('stdinValues()');
+    expect(src).toContain('onStdinExhausted: growStdinForm');
+    expect(src).not.toContain('window.prompt');
+    expect(src).not.toContain('usesBlockingInput');
   });
 });
 

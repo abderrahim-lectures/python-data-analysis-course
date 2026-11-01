@@ -51,3 +51,8 @@ examples/**/node_modules/
 # Vendored at build time by scripts/vendor-pyodide.mjs; keep the seaborn wheel (missing from the Pyodide lock)
 public/pyodide/*
 !public/pyodide/seaborn-0.13.2-py3-none-any.whl
+
+# Local scratch space for agents/tooling (node toolchain, temporary harnesses).
+# Nothing here is part of the site; see the working notes on keeping caches
+# out of the tree rather than in it.
+.scratch/

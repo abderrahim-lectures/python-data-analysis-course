@@ -3,19 +3,17 @@ import {highlightPython} from './pyHighlight.ts';
 // <RunnableCell> or generated from ```python fences by rehype-runnable-python)
 // with a Pyodide-backed Run button. Loaded once per page from Base.astro.
 //
-// Two execution paths:
-// - The vast majority of cells run in a Web Worker (pyodide.worker.ts via
-//   pyodideWorkerClient.ts) so a slow cell can't freeze the page.
-// - Cells that call input() run on the main thread instead, through py()/
-//   runCellCode() directly (both now in pythonRunnerCore.ts, shared with the
-//   worker) -- Pyodide's stdin callback is synchronous and a Worker has no
-//   way to satisfy that without cross-origin-isolation headers GitHub Pages
-//   can't set (see pythonGuard.usesBlockingInput for the full rationale).
-import {usesBlockingInput} from './pythonGuard.ts';
+// Every cell runs in a Web Worker (pyodide.worker.ts via
+// pyodideWorkerClient.ts) so a slow cell — a cold engine boot, a heavy pandas
+// operation, a cell waiting on input() — can't freeze the page. Cells that call
+// input() get an inline form above the output: the learner types the answers
+// there and the worker replays them through Pyodide's (synchronous) stdin
+// callback. See pythonInputs.ts for why the values are collected before the
+// run rather than asked for mid-run.
+import {inputCallSites} from './pythonInputs.ts';
 import {m} from '../paraglide/messages.js';
 import {getLocale} from '../paraglide/runtime.js';
 import {
-  py,
   runCellCode,
   mountDatasets,
   resetExtraPackagesCache,
@@ -71,7 +69,6 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
   const lessonId = (cell as HTMLElement).dataset.lesson
     || document.querySelector('[data-lesson-id]')?.getAttribute('data-lesson-id')
     || '';
-  const lessonReward = Number(document.querySelector('[data-lesson-xp]')?.getAttribute('data-lesson-xp') || 0) || undefined;
   let awarded = false;
   const run = cell.querySelector('[data-run]') as HTMLButtonElement | null;
   const out = cell.querySelector('[data-output]') as HTMLElement | null;
@@ -104,6 +101,109 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
     lines.appendChild(img);
   };
 
+  // --- input() values -----------------------------------------------------
+  // Pyodide's stdin callback is synchronous, so a browser prompt() inside it
+  // would freeze whichever thread runs the interpreter (and used to boot a
+  // second engine on the main thread just for that). Instead the cell shows
+  // one field per input() call site, the learner fills them in, and the run
+  // replays them from a queue. The form is built here, client-side, so it
+  // works for markdown-generated cells and hand-authored ones alike.
+  const stdinBox = document.createElement('div');
+  stdinBox.className = 'cell__stdin';
+  stdinBox.hidden = true;
+  const stdinHint = document.createElement('p');
+  stdinHint.className = 'cell__stdin-hint';
+  stdinHint.textContent = m.cell_input_hint();
+  stdinBox.appendChild(stdinHint);
+  out.parentElement?.insertBefore(stdinBox, out);
+
+  interface StdinField {
+    row: HTMLElement;
+    prompt: HTMLElement;
+    input: HTMLInputElement;
+  }
+  const stdinFields: StdinField[] = [];
+  // The source the fields were last built from. Rebuilding only on an actual
+  // edit (not on every Run) is what lets a field added by the end-of-input
+  // path below survive the next Run while the code is unchanged.
+  let stdinBuiltFrom: string | null = null;
+
+  const appendStdinField = (prompt: string): StdinField => {
+    const row = document.createElement('label');
+    row.className = 'cell__stdin-field';
+    const promptEl = document.createElement('span');
+    promptEl.className = 'cell__stdin-prompt';
+    const input = document.createElement('input');
+    input.className = 'cell__stdin-input';
+    input.type = 'text';
+    input.autocomplete = 'off';
+    input.spellcheck = false;
+    // The label text comes from here, via relabel(); keeping it in the dataset
+    // means a field can be renumbered without losing its own prompt.
+    input.dataset.prompt = prompt;
+    row.appendChild(promptEl);
+    row.appendChild(input);
+    // Enter is what a learner expects in a field that is asking a question.
+    // With several fields it should move to the next one (a terminal asks one
+    // at a time); on the last field it runs the cell.
+    const index = stdinFields.length;
+    input.addEventListener('keydown', (e) => {
+      if (e.key !== 'Enter') return;
+      e.preventDefault();
+      const next = stdinFields[index + 1];
+      if (next) {
+        next.input.focus();
+        next.input.select();
+        return;
+      }
+      run.click();
+    });
+    stdinBox.appendChild(row);
+    const field = {row, prompt: promptEl, input};
+    stdinFields.push(field);
+    return field;
+  };
+
+  const relabel = () => {
+    stdinFields.forEach((f, i) => {
+      f.prompt.textContent = f.input.dataset.prompt || `${m.cell_input_label()} ${i + 1}`;
+    });
+  };
+
+  // Add one beyond the statically-detected calls (end of input reached), so a
+  // loop that reads more values than the scan could count has somewhere to put
+  // the next one instead of dead-ending on EOFError.
+  const growStdinForm = (): void => {
+    const field = appendStdinField('');
+    relabel();
+    stdinBox.hidden = false;
+    field.input.focus();
+  };
+
+  // Keep one field per input() call site in the current source, preserving
+  // whatever the learner already typed by position.
+  const syncStdinForm = (): void => {
+    const src = codeEl.textContent ?? '';
+    if (src === stdinBuiltFrom) return;
+    stdinBuiltFrom = src;
+    const sites = inputCallSites(src);
+    while (stdinFields.length > sites.length) stdinFields.pop()?.row.remove();
+    sites.forEach((site, i) => {
+      const field = stdinFields[i] ?? appendStdinField('');
+      field.input.dataset.prompt = site.prompt;
+    });
+    relabel();
+    stdinBox.hidden = stdinFields.length === 0;
+  };
+
+  const stdinValues = (): string[] => stdinFields.map((f) => f.input.value);
+  // End-of-file for the in-page path (tests, and any future main-thread run):
+  // undefined is Pyodide's EOF, exactly as the worker's queue reports it.
+  const stdinFromFields = (): (() => string | undefined) => {
+    const pending = stdinValues();
+    return () => pending.shift();
+  };
+
   run.addEventListener('click', async () => {
     if (run.disabled) return;
     const src = codeEl.textContent ?? '';
@@ -132,17 +232,25 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
     };
 
     let executed: boolean;
-    // A test-injected mock engine (deps.loadEngine) always means "run this
-    // on the main thread with the fake I supplied" -- a real Worker can't be
-    // meaningfully mocked that way, and the DOM-wiring test suite isn't
-    // testing worker plumbing. Cells that call input() also stay on the main
-    // thread in production: Pyodide's stdin callback is synchronous and a
-    // Worker has no way to satisfy that (see pythonGuard.usesBlockingInput).
-    if (deps.loadEngine || usesBlockingInput(src)) {
+    const cellCodeEls = Array.from(document.querySelectorAll('[data-runnable] code'));
+    const allSource = cellCodeEls.map((el) => el.textContent ?? '').join('\n');
+    const otherCellSources = cellCodeEls
+      .filter((el) => el !== codeEl)
+      .map((el) => el.textContent ?? '')
+      .join('\n');
+    // Pick up any input() call site the learner just added (or removed) before
+    // reading the values, so the queue matches the code about to run.
+    syncStdinForm();
+    const stdin = stdinValues();
+    // A test-injected mock engine (deps.loadEngine) means "run this in-page
+    // with the fake I supplied" -- a real Worker can't be meaningfully mocked
+    // that way, and the DOM-wiring test suite isn't testing worker plumbing.
+    // Production never takes this branch: input() cells included.
+    if (deps.loadEngine) {
       let engine: PyodideModel;
       dispatchPyodideEvent('pyodide:loading');
       try {
-        engine = await (deps.loadEngine ?? py)();
+        engine = await deps.loadEngine();
       } catch (e) {
         dispatchPyodideEvent('pyodide:ready');
         console.warn('[runnable-cell] failed to load Pyodide', e);
@@ -152,18 +260,13 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
         run.classList.remove('cell__run--loading');
         return;
       }
-      const cellCodeEls = Array.from(document.querySelectorAll('[data-runnable] code'));
-      const allSource = cellCodeEls.map((el) => el.textContent ?? '').join('\n');
       await mountDatasets(engine, allSource);
-      const otherCellSources = cellCodeEls
-        .filter((el) => el !== codeEl)
-        .map((el) => el.textContent ?? '')
-        .join('\n');
       executed = await runCellCode(src, {
         appendLine,
         appendFigure,
         engine,
         otherCellSources,
+        stdin: stdinFromFields(),
         onPhase: (phase) => {
           setPhaseLabel(phase);
           dispatchPyodideEvent('pyodide:loading', {phase});
@@ -171,19 +274,14 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
       });
       dispatchPyodideEvent('pyodide:ready');
     } else {
-      const cellCodeEls = Array.from(document.querySelectorAll('[data-runnable] code'));
-      const allSource = cellCodeEls.map((el) => el.textContent ?? '').join('\n');
-      const otherCellSources = cellCodeEls
-        .filter((el) => el !== codeEl)
-        .map((el) => el.textContent ?? '')
-        .join('\n');
-      executed = await runInWorker(src, {allSource, otherCellSources, locale: getLocale()}, {
+      executed = await runInWorker(src, {allSource, otherCellSources, locale: getLocale(), stdin}, {
         appendLine,
         appendFigure,
         onPhase: setPhaseLabel,
         onLoading: (detail) => dispatchPyodideEvent('pyodide:loading', detail),
         onProgress: (pct) => dispatchPyodideEvent('pyodide:progress', {pct}),
         onReady: () => dispatchPyodideEvent('pyodide:ready'),
+        onStdinExhausted: growStdinForm,
       });
     }
 
@@ -342,7 +440,14 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
     codeEl.innerHTML = highlightPython(codeEl.textContent ?? '');
     restoreCaret(offset);
     renumber();
+    // Editing the snippet can add or remove input() calls; keep the form in
+    // step so the Run that follows has the right number of fields.
+    syncStdinForm();
   });
+
+  // Cells that call input() show their fields on load, before the first Run --
+  // that is where the learner is supposed to type.
+  syncStdinForm();
 }
 
 export function initRunnableCells(root: ParentNode = document): void {

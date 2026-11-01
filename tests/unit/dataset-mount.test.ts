@@ -105,6 +105,11 @@ describe('friendlyError', () => {
     ['ZeroDivisionError: division by zero', /can't divide by zero/],
     ['ValueError: invalid literal for int() with base 10: "a"', /Make sure it's digits only/],
     ['ModuleNotFoundError: No module named "pandas"', /available in the browser/],
+    // The cell's input form ran dry: say how to continue instead of showing a
+    // bare EOFError traceback.
+    ['Traceback …\nEOFError: EOF when reading a line', /ran out of input values/],
+    // Files are preloaded only when the page names them literally.
+    ["FileNotFoundError: [Errno 44] No such file or directory: 'x.csv'", /open it by its literal name once/],
   ];
   test.each(cases)('%s → friendly hint', (raw, hint) => {
     expect(friendlyError(raw)).toMatch(hint);

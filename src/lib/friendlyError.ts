@@ -10,6 +10,14 @@ export const BEGINNER_ERRORS: Record<string, string> = {
   'ZeroDivisionError': "You can't divide by zero. Check your denominator.",
   'ValueError: invalid literal for int()': "Can't convert that to a number. Make sure it's digits only.",
   'ModuleNotFoundError': "This package isn't available in the browser. Try importing built-in Python modules only.",
+  // The cell's input fields were used up: the code asked input() for more
+  // values than were supplied (typically a loop). Say what to do instead of
+  // leaving the beginner with a bare traceback.
+  'EOFError': 'This cell ran out of input values. Add one more value to the fields above the output, then run it again.',
+  // Files are only preloaded when the page names them literally somewhere, so
+  // a path built from a variable can 404 inside the virtual filesystem.
+  'FileNotFoundError': "That file isn't loaded in this page. Check the spelling, and open it by its literal name once (e.g. open('data.csv')) so the page knows to load it.",
+  'No such file or directory': "That file isn't loaded in this page. Check the spelling, and open it by its literal name once (e.g. open('data.csv')) so the page knows to load it.",
 };
 
 export function friendlyError(msg: string): string {

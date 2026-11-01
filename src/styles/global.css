@@ -523,9 +523,9 @@ button { font-family: inherit; cursor: pointer; }
 /* Code and console surfaces carry Python syntax and stdout, so they must stay
    LTR even on RTL pages (/ar/*) where <html dir=rtl> would otherwise mirror
    brackets and reverse the order of multi-arg output like `print(1, 2, 3)`. */
-.cell, .cell__code, .cell__gutter, .cell__output, .o-line { direction: ltr; }
+.cell, .cell__code, .cell__gutter, .cell__output, .cell__stdin, .o-line { direction: ltr; }
 .cell__code { text-align: left; }
-.cell__output, .o-line { text-align: left; }
+.cell__output, .cell__stdin, .o-line { text-align: left; }
 .cell { border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); overflow: hidden; margin: 1.25rem 0; box-shadow: var(--shadow-sm); }
 .cell__actions { display: flex; align-items: center; gap: .75rem; padding: .6rem .9rem; border-bottom: 1px solid var(--line); }
 .cell__lang { color: var(--ink-soft); font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
@@ -559,6 +559,33 @@ button { font-family: inherit; cursor: pointer; }
 .o-line--cmd { color: #8f86c9; }
 .o-line--out { color: #d8d0ff; }
 .o-line--err { color: #ff8fa3; }
+/* A value the learner supplied to input(), echoed into the transcript so the
+   run reads like a terminal session instead of showing the prompt alone.
+   Distinct hue from stdout so "typed" and "printed" stay distinguishable. */
+.o-line--in { color: #7ee0b8; }
+/* input() fields: Pyodide's stdin callback is synchronous, so instead of a
+   blocking browser prompt() the cell asks for the values up front (built
+   client-side in runnable-cell.client.ts, one field per input() call site).
+   Sits between the code and the output panel, on the same dark console. */
+.cell__stdin {
+  border-top: 1px solid var(--line); background: #131026; color: #d8d0ff;
+  padding: .7rem .9rem .8rem; font-family: var(--font-mono); font-size: .88rem;
+}
+.cell__stdin-hint {
+  margin: 0 0 .55rem; color: #a79fd6;
+  font-family: var(--font-body); font-size: .82rem; line-height: 1.45;
+}
+.cell__stdin-field { display: flex; align-items: center; gap: .55rem; margin: .3rem 0; flex-wrap: wrap; }
+.cell__stdin-prompt {
+  flex: none; max-width: 60%; color: #b8b0e6; white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.cell__stdin-input {
+  flex: 1 1 8rem; min-width: 5rem; padding: .22rem .5rem;
+  border: 1px solid rgba(226, 220, 255, .25); border-radius: var(--radius-sm);
+  background: #0f0c1d; color: #e2dcff; font: inherit;
+}
+.cell__stdin-input:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: transparent; }
 /* Each output line/figure animates in on insert instead of popping in
    abruptly, so streamed output (multiple lines, or a figure after them)
    reads as progressive rather than jumpy. */
