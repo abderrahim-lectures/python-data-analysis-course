@@ -154,6 +154,27 @@ describe('initProjectsFinder', () => {
     expect(s.viewList.classSet.has('is-active')).toBe(true);
   });
 
+  test('filter and view buttons expose their selected state to assistive tech', () => {
+    // These are toggles whose state used to live only in `is-active`, so a
+    // screen reader read the same thing before and after activating one.
+    const s = setup();
+    initProjectsFinder();
+
+    expect(s.tagAll.getAttribute('aria-pressed')).toBe('true');
+    expect(s.tagSql.getAttribute('aria-pressed')).toBe('false');
+    expect(s.viewList.getAttribute('aria-pressed')).toBe('true');
+    expect(s.viewGrid.getAttribute('aria-pressed')).toBe('false');
+
+    s.tagSql.listeners.click();
+    s.viewGrid.listeners.click();
+
+    expect(s.tagSql.getAttribute('aria-pressed')).toBe('true');
+    expect(s.tagAll.getAttribute('aria-pressed')).toBe('false');
+    expect(s.viewGrid.getAttribute('aria-pressed')).toBe('true');
+    expect(s.viewList.getAttribute('aria-pressed')).toBe('false');
+    expect(s.diffEasy.getAttribute('aria-pressed')).toBe('false');
+  });
+
   test('combined filter, empty-query falls back to the filter label', () => {
     const s = setup('?diff=extreme');
     initProjectsFinder();

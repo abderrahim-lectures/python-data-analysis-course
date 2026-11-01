@@ -320,6 +320,33 @@ with one run, `nGainEquivalent` is a proxy for an education-research quantity) a
 presented as measurements — pre-existing by design, and a product question rather than a bug.
 
 
+### Review round 6 — accessibility, i18n and the economy page
+
+A third reader took the accessibility/i18n half explicitly and the economy copy of `/progress-guide`,
+then the findings were re-checked against the tree before being applied. Two of the tests below were
+written by that reader and fail against the code they describe.
+
+| # | Severity | Finding | Fix |
+|---|----------|---------|-----|
+| R39 | **HIGH** | **Every code cell was a keyboard trap.** `codeEditor.ts` made the `<code>` `contenteditable` (so it is in the tab order) and then handled `keydown` with `if (e.key !== 'Tab') return; e.preventDefault();` — which swallows **Tab and Shift+Tab** alike into four spaces, with no `Escape` handler anywhere in the client code. A keyboard-only learner who tabbed into any of the ~390 cells (or `/playground`, in any locale) could not get out: WCAG 2.1.2. | Tab still indents; `Shift+Tab` and `Escape` now leave, and the region announces itself as `role="textbox"` + `aria-multiline`. Two tests, one of which fails against the old handler. |
+| R40 | MED | **The XP-economy page advertised the schema defaults, not what the content pays.** It said a lesson is 10 XP and a project 100; in fact only the 19 `python-101/normal` lessons pay 10 (the other 30 of 49 English lessons pay 100–200), and 119 of the 135 projects pay 50. Every lesson and project page prints its *own* figure, so the page whose stated job is transparency contradicted the pages it describes. Its intro also claimed XP is "capped at 9,999 total" — nothing clamps XP; 9,999 is the top *rank* threshold. | Both rows are computed from the content collections and show the real range (10–200, 50–100); the intro says what is actually true, in four locales. |
+| R41 | MED | A cell's output was announced to nobody: everything a run produces is appended to `[data-lines]`, which carried no `role` and no `aria-live`, and nothing else signalled completion (WCAG 4.1.3). Pressing Run with a screen reader gave no feedback at all. | `role="log"` + `aria-live="polite"` on the transcript in both markup sources (the rehype plugin and `PlaygroundCell`). |
+| R42 | MED | The project finder's tag, difficulty and view controls are toggles whose selected state lived only in the `is-active` class — no `aria-pressed`, no radio semantics — so assistive tech read the same thing before and after a filter was applied and could not tell which view was current (WCAG 4.1.2). | One `setPressed()` helper now sets the class *and* `aria-pressed` everywhere either was set, and the markup ships the initial state. Test. |
+| R43 | MED-LOW | Every XP bar was `role="progressbar"` with no `aria-valuenow`, which ARIA exposes as **indeterminate**: the percentage to the next level — the only thing the widget conveys — was missing for assistive tech, and never changed. | `setPctWidth()` sets `aria-valuenow/min/max` on the enclosing progressbar, so all five bars and both renderers follow from one place. |
+| R44 | MED-LOW | Quiz verdicts were silent DOM changes (the feedback element is not a live region) and, once answered, the options stayed enabled no-ops — a keyboard user got controls that did nothing and said nothing. | `role="status"` on the feedback and score; answered options get `aria-disabled="true"` rather than `disabled`, which would have dropped focus from the button just activated. |
+| R45 | LOW | `PageViews` recorded the **landing page's locale on every later page**: the `astro:page-load` listener is bound once per session, so `send()` runs in the first page's closure and always posts that page's `viewLocale`. Any per-locale reporting was wrong for every page after the first. | The locale is read at post time from `<html lang>`, which `Base.astro` renders and the router updates on each swap. |
+| R46 | LOW | The busy overlay's status text was written while its container was `aria-hidden="true"`, and revealed 200 ms later — a live-region update inside a hidden subtree is not announced and is not replayed when the container appears, so the site's only "something is running" feedback was silent. | The region is exposed *before* the label is written, in both the first-load and the `pyodide:loading` branches (and `hideFirst` only re-hides it when no run has taken the overlay over). |
+| R47 | LOW | Every localized track page's `<title>` had an English noun in the middle: `Python 101 Normal Track, PyDA Course` / `بايثون 101 عادي Track, …`. It is the only localized page whose title is not built from the catalogue. | New `track_word` key (Track / Pista / Parcours / مسار). |
+| R48 | LOW | `+{xp} XP/each` was the last hardcoded English fragment on an otherwise localized quiz header. | `quiz_xp_each`, four locales. |
+
+Open, reported and deliberately not changed in this pass:
+
+- **The trail's "+N XP earned" is derived from a log that is capped at 200 entries** (`getActivityLog(500)` over `addLog`'s `slice(-200)`). So it is "XP from the last ≤200 actions whose `meta` starts with the track", not the track's XP: it can *decrease* as older entries roll off, and since quiz, milestone and streak awards carry no `meta` at all, a learner who mostly practises by quiz sees `+0 XP earned` under both trails. A correct fix needs a `trackXp` field in `PDAState` (a state-schema change with migration questions), not a different argument to `getActivityLog`.
+- **The ⛶ "open in the full-screen editor" flow lost its producer.** `097d392` added a `[data-expand]` handler and `d4f5f92` removed it; `rg 'data-expand' src` now returns nothing, so `encodeShareCode` has no call site — while the entire receiving end (`404.astro`'s shared-link handler, `notFoundPlayground.client.ts`, nine tests) is live. The site can serve a playground link it can no longer create. Restoring the button is a product decision (the same commit deliberately rewrote the cell toolbar), so it is recorded rather than re-added.
+- **Run is `disabled` while a run is in flight**, which drops focus to the document body for the duration — the same focus-loss class as R44. Changing it to `aria-disabled` needs the runner's own busy flag re-checked end to end, because the disabled state is also what prevents a second run.
+- The `/progress` "diagnostics" are invented numbers presented as measurements (`acceptancePct` starts at 62 for a learner with one run).
+
+
 ---
 
 ## 6 — Toolchain: what this VM can and cannot run, measured

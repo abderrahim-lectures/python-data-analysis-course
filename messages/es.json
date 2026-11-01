@@ -359,7 +359,7 @@
   "progress_guide_storage_intro": "Todo el progreso, XP, lecciones, cuestionarios, rachas, misiones, insignias y un registro de actividad completo, se guarda en el almacenamiento local de tu navegador bajo una sola clave (`pda:state`).",
   "progress_guide_storage_body": "Nunca sale de tu dispositivo: no hay cuenta, ni servidor, ni tabla de clasificación. El registro de actividad conserva las últimas 200 acciones y se muestra en la página de progreso para que veas exactamente qué ganas con cada cosa. Las insignias son etiquetas planas que se añaden al alcanzar misiones e hitos.",
   "progress_guide_xp_heading": "La economía de XP",
-  "progress_guide_xp_intro": "Cada acción otorga XP fijos, con un tope de 9.999 en total:",
+  "progress_guide_xp_intro": "La mayoría de las acciones dan una cantidad fija de XP; cada lección y cada proyecto fija su propia recompensa, así que esas dos filas muestran el rango del catálogo:",
   "progress_guide_xp_run": "Ejecutar código",
   "progress_guide_xp_run_note": "ejecutar una celda en una lección, el laboratorio o un desafío",
   "progress_guide_xp_lesson": "Lección completada",
@@ -496,5 +496,7 @@
   "progress_badge_quiz": "Cuestionario perfecto",
   "filter_count": "{visible} de {total} proyectos",
   "filter_that": "ese filtro",
-  "quiz_perfect_no_xp": "🎉 ¡Perfecto!"
+  "quiz_perfect_no_xp": "🎉 ¡Perfecto!",
+  "track_word": "Pista",
+  "quiz_xp_each": "+{xp} XP por pregunta"
 }

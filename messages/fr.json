@@ -359,7 +359,7 @@
   "progress_guide_storage_intro": "Toute la progression, XP, leçons, quiz, séries, quêtes, badges et un journal d'activité complet, est stockée dans le stockage local de votre navigateur sous une seule clé (`pda:state`).",
   "progress_guide_storage_body": "Ces données ne quittent jamais votre appareil : pas de compte, pas de serveur, pas de classement. Le journal d'activité conserve les 200 dernières actions et s'affiche sur la page de progression pour que vous voyiez exactement ce qui a rapporté quoi. Les badges sont des étiquettes plates ajoutées à mesure que vous atteignez quêtes et jalons.",
   "progress_guide_xp_heading": "L'économie d'XP",
-  "progress_guide_xp_intro": "Chaque action rapporte de l'XP fixe, plafonnée à 9 999 au total :",
+  "progress_guide_xp_intro": "La plupart des actions rapportent un montant fixe d’XP ; chaque leçon et chaque projet fixe sa propre récompense, donc ces deux lignes indiquent l’amplitude du catalogue :",
   "progress_guide_xp_run": "Code exécuté",
   "progress_guide_xp_run_note": "exécuter une cellule dans une leçon, le laboratoire ou un défi",
   "progress_guide_xp_lesson": "Leçon terminée",
@@ -496,5 +496,7 @@
   "progress_badge_quiz": "Quiz parfait",
   "filter_count": "{visible} sur {total} projets",
   "filter_that": "ce filtre",
-  "quiz_perfect_no_xp": "🎉 Parfait !"
+  "quiz_perfect_no_xp": "🎉 Parfait !",
+  "track_word": "Parcours",
+  "quiz_xp_each": "+{xp} XP par question"
 }

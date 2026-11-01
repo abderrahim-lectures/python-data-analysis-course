@@ -43,7 +43,16 @@ const {supabaseUrl = '', supabaseKey = '', locale = 'en'} = Astro.props;
             if (!uid) return;
             sent = true;
             window.__pydaLastPageViewPath = path;
-            var body = JSON.stringify({path: path, locale: viewLocale, learner_id: uid});
+            var body = JSON.stringify({
+              path: path,
+              // Read at post time, not from this script's closure: the
+              // listener is bound once per session (see the guard at the
+              // bottom), so `viewLocale` is the locale of the page the visitor
+              // *landed* on -- every later page recorded its landing locale.
+              // <html lang> is set by Base.astro and updated on each swap.
+              locale: document.documentElement.lang || viewLocale,
+              learner_id: uid,
+            });
             var doFetch = window.__pydaFetch || fetch;
             doFetch(supabaseUrl + '/rest/v1/pageviews', {
               method: 'POST',

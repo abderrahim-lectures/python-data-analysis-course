@@ -228,9 +228,19 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
           if (!on) label.textContent = '';
         };
         const i18n = JSON.parse(document.getElementById('pyodide-i18n').textContent);
-        const hideFirst = () => busy.classList.remove('app-busy--first');
+        const hideFirst = () => {
+          busy.classList.remove('app-busy--first');
+          // Leave the region exposed if a real run took over in the meantime.
+          if (!busy.classList.contains('app-busy--active')) busy.setAttribute('aria-hidden', 'true');
+        };
         if (document.readyState !== 'complete') {
           busy.classList.add('app-busy--first');
+          // Expose the live region *before* filling it: a status update written
+          // into an aria-hidden subtree (or into one that is only unhidden
+          // later) is not announced, and revealing the container afterwards
+          // does not replay it. The visual fade is a CSS transition on the
+          // overlay, so it is unaffected by this attribute.
+          busy.setAttribute('aria-hidden', 'false');
           label.textContent = i18n.first;
           window.addEventListener('load', hideFirst);
           setTimeout(hideFirst, 1200); // safety net for slow third-party fonts
@@ -247,6 +257,12 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
         let busyShowTimer = null;
         window.addEventListener('pyodide:loading', (e) => {
           const phase = e.detail && e.detail.phase;
+          // Same reason as the first-load branch above: the label is a live
+          // region, and this overlay is the only "something is happening"
+          // feedback on the page — writing it while the container is
+          // aria-hidden (which it is until the 200ms timer reveals it) meant a
+          // screen-reader user pressing Run heard nothing at all.
+          busy.setAttribute('aria-hidden', 'false');
           label.textContent = phase === 'packages' ? i18n.packages : phase === 'running' ? i18n.running : i18n.indeterminate;
           if (!busyShowTimer) busyShowTimer = setTimeout(() => { busyShowTimer = null; setBusy(true); }, BUSY_SHOW_DELAY_MS);
         });

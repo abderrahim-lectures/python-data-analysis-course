@@ -19,7 +19,7 @@ const {starter} = Astro.props;
   </div>
   <pre class="cell__code"><code id="pg-code">{starter}</code></pre>
   <div class="cell__output" data-output hidden>
-    <div class="cell__lines" data-lines></div>
+    <div class="cell__lines" data-lines role="log" aria-live="polite"></div>
     <button type="button" class="cell__clear" data-clear hidden>{m.clear_button()}</button>
   </div>
 </div>

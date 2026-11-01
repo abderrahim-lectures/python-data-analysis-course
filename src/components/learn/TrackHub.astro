@@ -45,7 +45,7 @@ const diffColorCls = (d: string) => d === 'beginner' ? 'diff-color-beginner' : d
 const arrow = locale === 'ar' ? '←' : '→';
 ---
 
-<Base title={`${sectionName(section)} ${trackName(track)} Track, PyDA Course`} description={sectionDescription(section)} lang={locale} dir={dir} alternates={learnAlternates(section, track, 'track')}>
+<Base title={`${sectionName(section)} ${trackName(track)} ${m.track_word()}, PyDA Course`} description={sectionDescription(section)} lang={locale} dir={dir} alternates={learnAlternates(section, track, 'track')}>
   <nav class="crumb container">
     <a href={learnHref(locale, base)}>{m.nav_learn()}</a>
     <a href={learnHref(locale, base, section)}>{sectionName(section)}</a>

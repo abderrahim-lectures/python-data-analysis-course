@@ -84,25 +84,25 @@ const alternates = {
       </div>
       <div class="finder__actions">
         <div class="finder__tags" role="group" aria-label={fs.filterTagAria}>
-          <button type="button" class="tag-pill tag-pill--all is-active" data-tag="">
+          <button type="button" class="tag-pill tag-pill--all is-active" data-tag="" aria-pressed="true">
             <span class="tag-pill__icon">🏷️</span>{fs.tagAll}
           </button>
           {allTags.map((tag) => (
-            <button type="button" class="tag-pill" data-tag={tag}>
+            <button type="button" class="tag-pill" data-tag={tag} aria-pressed="false">
               <span class="tag-pill__icon">{tagIcon[tag] ?? '🏷️'}</span>{tag}
             </button>
           ))}
         </div>
         <div class="finder__filter-row">
           <div class="finder__difficulty" role="group" aria-label={fs.filterDiffAria}>
-            <button type="button" class="diff-pill is-active" data-diff="">{fs.diffAll}</button>
-            <button type="button" class="diff-pill" data-diff="beginner">🌱 {fs.diffBeginner}</button>
-            <button type="button" class="diff-pill" data-diff="intermediate">⚡ {fs.diffIntermediate}</button>
-            <button type="button" class="diff-pill" data-diff="advanced">🔥 {fs.diffAdvanced}</button>
+            <button type="button" class="diff-pill is-active" data-diff="" aria-pressed="true">{fs.diffAll}</button>
+            <button type="button" class="diff-pill" data-diff="beginner" aria-pressed="false">🌱 {fs.diffBeginner}</button>
+            <button type="button" class="diff-pill" data-diff="intermediate" aria-pressed="false">⚡ {fs.diffIntermediate}</button>
+            <button type="button" class="diff-pill" data-diff="advanced" aria-pressed="false">🔥 {fs.diffAdvanced}</button>
           </div>
           <div class="finder__view" role="group" aria-label={fs.viewAria}>
-            <button type="button" class="view-btn view-btn--list is-active" data-view="list" aria-label={fs.viewListAria}><Icon name="list" size={16} /></button>
-            <button type="button" class="view-btn view-btn--grid" data-view="grid" aria-label={fs.viewGridAria}><Icon name="grid" size={16} /></button>
+            <button type="button" class="view-btn view-btn--list is-active" data-view="list" aria-pressed="true" aria-label={fs.viewListAria}><Icon name="list" size={16} /></button>
+            <button type="button" class="view-btn view-btn--grid" data-view="grid" aria-pressed="false" aria-label={fs.viewGridAria}><Icon name="grid" size={16} /></button>
           </div>
         </div>
       </div>

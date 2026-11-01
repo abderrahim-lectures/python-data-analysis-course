@@ -19,8 +19,19 @@ export function makeEditableCode(codeEl: HTMLElement, opts: CodeEditorOptions = 
   // "playground" part of a runnable cell, not just a static example.
   codeEl.setAttribute('contenteditable', 'plaintext-only' as string);
   codeEl.setAttribute('spellcheck', 'false');
+  // `contenteditable` puts the element in the tab order, so this handler is the
+  // only way out of the editor for a keyboard user — and it used to swallow
+  // both Tab and Shift+Tab into four spaces with no Escape handling, i.e. a
+  // keyboard trap (WCAG 2.1.2) on every lesson cell and on /playground. Tab
+  // still indents (a code editor should); Shift+Tab and Escape now leave.
+  codeEl.setAttribute('role', 'textbox');
+  codeEl.setAttribute('aria-multiline', 'true');
   codeEl.addEventListener('keydown', (e) => {
-    if (e.key !== 'Tab') return;
+    if (e.key === 'Escape') {
+      codeEl.blur();
+      return;
+    }
+    if (e.key !== 'Tab' || e.shiftKey) return;
     e.preventDefault();
     document.execCommand('insertText', false, '    ');
   });

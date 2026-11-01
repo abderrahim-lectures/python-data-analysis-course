@@ -42,7 +42,9 @@ export default function rehypeRunnablePython() {
         ]),
         highlightedPre,
         h('div.cell__output', {dataOutput: '', hidden: true}, [
-          h('div.cell__lines', {dataLines: ''}),
+          // Append-only transcript: role=log tells assistive tech to read
+          // new lines as they arrive. Nothing announced the output before.
+          h('div.cell__lines', {dataLines: '', role: 'log', ariaLive: 'polite'}),
           h('button.cell__clear', {dataClear: '', hidden: true}, 'Clear'),
         ]),
       ]);

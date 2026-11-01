@@ -10,4 +10,15 @@ export function setPctWidth(el: Element | null, pct: number): void {
     if (cls.startsWith('w-pct-')) el.classList.remove(cls);
   }
   el.classList.add(`w-pct-${clamped}`);
+  // A role="progressbar" with no aria-valuenow is exposed as *indeterminate*,
+  // which is what every XP bar on the site was: the percentage to the next
+  // level is the only thing the widget conveys and assistive tech never got it.
+  // The fill element is the one whose width changes, so the value is derived
+  // here rather than at each of the five call sites.
+  const bar = (el as Element & {closest?: (sel: string) => Element | null}).closest?.('[role="progressbar"]');
+  if (bar) {
+    bar.setAttribute('aria-valuemin', '0');
+    bar.setAttribute('aria-valuemax', '100');
+    bar.setAttribute('aria-valuenow', String(clamped));
+  }
 }

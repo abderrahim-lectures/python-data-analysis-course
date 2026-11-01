@@ -22,7 +22,7 @@ const {title = m.quiz_title(), questions, xp = 5, lessonId = ''} = Astro.props;
   <div class="quiz__head">
     <span class="quiz__icon">✅</span>
     <span class="quiz__title">{title}</span>
-    <span class="quiz__xp">+{xp} XP/each</span>
+    <span class="quiz__xp">{m.quiz_xp_each({xp})}</span>
   </div>
 
   <div class="quiz__body">
@@ -47,10 +47,10 @@ const {title = m.quiz_title(), questions, xp = 5, lessonId = ''} = Astro.props;
 
   <div class="quiz__foot">
     <button type="button" class="btn btn-primary quiz__check" data-quiz-check>{m.quiz_check()}</button>
-    <span class="quiz__score" data-quiz-score hidden></span>
+    <span class="quiz__score" data-quiz-score role="status" hidden></span>
   </div>
 
-  <div class="quiz__feedback" data-quiz-feedback hidden></div>
+  <div class="quiz__feedback" data-quiz-feedback role="status" hidden></div>
 </div>
 
 <script>

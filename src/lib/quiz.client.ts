@@ -30,10 +30,18 @@ function initQuiz(quiz: Element) {
         opt.classList.add(isCorrect ? 'quiz-q__opt--correct' : 'quiz-q__opt--wrong');
         if (!isCorrect) options[answerIdx]?.classList.add('quiz-q__opt--correct');
         if (feedback) {
+          // The verdict is the whole point of the question, and it was a silent
+          // DOM change: the element is not a live region, so a screen-reader
+          // user pressed Enter and heard nothing.
+          feedback.setAttribute('role', 'status');
           feedback.hidden = false;
           feedback.textContent = isCorrect ? m.quiz_feedback_correct() : m.quiz_feedback_wrong();
           feedback.classList.toggle('quiz-q__feedback--correct', isCorrect);
         }
+        // The question is closed now, and further clicks are no-ops. Say so --
+        // with aria-disabled rather than `disabled`, which would drop focus from
+        // the button the learner is standing on.
+        options.forEach((b) => b.setAttribute('aria-disabled', 'true'));
         answered++;
         if (isCorrect) correct++;
         try {

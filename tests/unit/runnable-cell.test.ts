@@ -502,6 +502,42 @@ await (run.listeners['click']() as unknown as Promise<unknown>);
     expect(clicks).toHaveBeenCalledTimes(1);
   });
 
+  test('Shift+Tab and Escape leave the editor instead of indenting it', () => {
+    // The cell is contenteditable, so it sits in the tab order and this
+    // handler is the only keyboard exit. Swallowing both directions of Tab and
+    // handling no Escape made it a keyboard trap (WCAG 2.1.2).
+    const f = buildFixture();
+    const {cell, code} = f;
+    vi.stubGlobal('localStorage', memoryStorage());
+    initCell(asElement(cell), {loadEngine: f.loadEngine});
+    const doc = f.stub.restore() as {execCommand: ReturnType<typeof vi.fn>};
+    const blurred = vi.fn();
+    (code as unknown as {blur: () => void}).blur = blurred;
+
+    const shiftTab = {key: 'Tab', shiftKey: true, preventDefault: vi.fn()};
+    for (const fn of code.allListeners['keydown'] ?? []) fn(shiftTab);
+    expect(shiftTab.preventDefault).not.toHaveBeenCalled();
+    expect(doc.execCommand).not.toHaveBeenCalled();
+
+    const esc = {key: 'Escape', preventDefault: vi.fn()};
+    for (const fn of code.allListeners['keydown'] ?? []) fn(esc);
+    expect(blurred).toHaveBeenCalled();
+
+    // Tab alone still indents.
+    for (const fn of code.allListeners['keydown'] ?? []) fn({key: 'Tab', preventDefault: vi.fn()});
+    expect(doc.execCommand).toHaveBeenCalledWith('insertText', false, '    ');
+  });
+
+  test('the editable code region is named for assistive tech', () => {
+    const f = buildFixture();
+    const {cell, code} = f;
+    vi.stubGlobal('localStorage', memoryStorage());
+    initCell(asElement(cell), {loadEngine: f.loadEngine});
+
+    expect(code.getAttribute('role')).toBe('textbox');
+    expect(code.getAttribute('aria-multiline')).toBe('true');
+  });
+
   test('edits re-highlight the code and renumber the gutter', () => {
     const f = buildFixture('a = 1\nb = 2');
     const {cell, code, pre} = f;

@@ -3,6 +3,7 @@
 // /ar/دليل-التقدم, /es/guia-progreso, /fr/guide-progression.
 // All markup lives here; each locale page is a thin <ProgressGuide locale="…"/> wrapper.
 import Base from '../layouts/Base.astro';
+import {getCollection} from 'astro:content';
 import {m} from '../paraglide/messages';
 import {NAV_WORDS, progressHref, pedagogyHref, type Locale} from '../lib/routeSegments';
 
@@ -20,12 +21,30 @@ const alternates = {
   fr: `fr/${NAV_WORDS.fr.progressGuide}`,
 };
 
+// Lessons and projects carry their own reward (`xpReward`), so the two rows
+// below show the range the content actually pays rather than the schema
+// default. Before this, the guide said 10 XP per lesson and 100 per project:
+// only the 19 python-101/normal lessons pay 10 (the other 30 pay 100-200), and
+// 119 of the 135 projects pay 50, not 100. Each lesson and project page prints
+// its own figure, so the two pages disagreed about the same award.
+const rewardsOf = async (collection: 'lessons' | 'projects') =>
+  (await getCollection(collection)).map((e) => e.data.xpReward);
+const rewardRange = (values: number[]): string => {
+  const known = values.filter((v) => Number.isFinite(v));
+  if (known.length === 0) return '0';
+  const min = Math.min(...known);
+  const max = Math.max(...known);
+  return min === max ? String(min) : `${min}–${max}`;
+};
+const lessonXp = rewardRange(await rewardsOf('lessons'));
+const projectXp = rewardRange(await rewardsOf('projects'));
+
 const xpRows = [
   {value: 5, label: m.progress_guide_xp_run(), note: m.progress_guide_xp_run_note()},
-  {value: 10, label: m.progress_guide_xp_lesson(), note: m.progress_guide_xp_lesson_note()},
+  {value: lessonXp, label: m.progress_guide_xp_lesson(), note: m.progress_guide_xp_lesson_note()},
   {value: 5, label: m.progress_guide_xp_pview(), note: m.progress_guide_xp_pview_note()},
   {value: 15, label: m.progress_guide_xp_pstep(), note: m.progress_guide_xp_pstep_note()},
-  {value: 100, label: m.progress_guide_xp_pcomplete(), note: m.progress_guide_xp_pcomplete_note()},
+  {value: projectXp, label: m.progress_guide_xp_pcomplete(), note: m.progress_guide_xp_pcomplete_note()},
   {value: 5, label: m.progress_guide_xp_qcorrect(), note: m.progress_guide_xp_qcorrect_note()},
   {value: 25, label: m.progress_guide_xp_qperfect(), note: m.progress_guide_xp_qperfect_note()},
   {value: 5, label: m.progress_guide_xp_daily(), note: m.progress_guide_xp_daily_note()},

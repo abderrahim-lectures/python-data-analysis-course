@@ -37,10 +37,23 @@ export function initProjectsFinder() {
   let viewMode = params.get('view') ?? 'list';
   if (search) search.value = params.get('q') ?? '';
 
+  // Every one of these controls is a toggle whose selected state used to live
+  // only in the `is-active` class: a screen reader read "Python button" before
+  // and after activating it, with no way to tell which filter was narrowing the
+  // list or which view was current. `aria-pressed` carries the same state for
+  // assistive tech, set everywhere the class is.
+  function setPressed(btns: HTMLButtonElement[], isOn: (b: HTMLButtonElement) => boolean) {
+    for (const b of btns) {
+      const on = isOn(b);
+      b.classList.toggle('is-active', on);
+      b.setAttribute('aria-pressed', String(on));
+    }
+  }
+
   function setView(mode: string) {
     viewMode = mode;
     grid.className = mode === 'grid' ? 'grid' : 'list';
-    for (const b of viewButtons) b.classList.toggle('is-active', b.dataset.view === mode);
+    setPressed(viewButtons, (b) => b.dataset.view === mode);
   }
 
   function apply() {
@@ -86,30 +99,22 @@ export function initProjectsFinder() {
     btn.addEventListener('click', () => setView(btn.dataset.view ?? 'list'));
   }
 
+  setPressed(tagButtons, (b) => (b.dataset.tag ?? '') === activeTag);
   for (const btn of tagButtons) {
-    if (btn.dataset.tag === activeTag) btn.classList.add('is-active');
-    else if (btn.dataset.tag !== '') btn.classList.remove('is-active');
     btn.addEventListener('click', () => {
       activeTag = btn.dataset.tag ?? '';
-      for (const b of tagButtons) b.classList.toggle('is-active', b === btn);
+      setPressed(tagButtons, (b) => (b.dataset.tag ?? '') === activeTag);
       apply();
     });
-  }
-  if (activeTag) {
-    for (const b of tagButtons) b.classList.toggle('is-active', b.dataset.tag === activeTag);
   }
 
+  setPressed(diffButtons, (b) => (b.dataset.diff ?? '') === activeDiff);
   for (const btn of diffButtons) {
-    if (btn.dataset.diff === activeDiff) btn.classList.add('is-active');
-    else if (btn.dataset.diff !== '') btn.classList.remove('is-active');
     btn.addEventListener('click', () => {
       activeDiff = btn.dataset.diff ?? '';
-      for (const b of diffButtons) b.classList.toggle('is-active', b === btn);
+      setPressed(diffButtons, (b) => (b.dataset.diff ?? '') === activeDiff);
       apply();
     });
-  }
-  if (activeDiff) {
-    for (const b of diffButtons) b.classList.toggle('is-active', b.dataset.diff === activeDiff);
   }
 
   search?.addEventListener('input', apply);

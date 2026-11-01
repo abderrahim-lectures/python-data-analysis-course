@@ -359,7 +359,7 @@
   "progress_guide_storage_intro": "All progress, XP, lessons, quizzes, streaks, quests, badges, and a full activity log, is stored in your browser's local storage under a single key (`pda:state`).",
   "progress_guide_storage_body": "It never leaves your device: there is no account, no server, and no leaderboard. The activity log keeps the last 200 actions and is rendered on the progress page so you can see exactly what earned what. Badges are flat labels appended as you hit quests and milestones.",
   "progress_guide_xp_heading": "The XP economy",
-  "progress_guide_xp_intro": "Every action earns fixed XP, capped at 9,999 total:",
+  "progress_guide_xp_intro": "Most actions earn a fixed amount of XP; each lesson and each project sets its own reward, so those two rows show the range across the catalog:",
   "progress_guide_xp_run": "Ran code",
   "progress_guide_xp_run_note": "running a cell in any lesson, the playground, or a challenge",
   "progress_guide_xp_lesson": "Lesson complete",
@@ -496,5 +496,7 @@
   "progress_badge_quiz": "Perfect quiz",
   "filter_count": "{visible} of {total} projects",
   "filter_that": "that filter",
-  "quiz_perfect_no_xp": "🎉 Perfect!"
+  "quiz_perfect_no_xp": "🎉 Perfect!",
+  "track_word": "Track",
+  "quiz_xp_each": "+{xp} XP each"
 }
