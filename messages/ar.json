@@ -127,7 +127,7 @@
   "learn_hub_title": "تعلّم بايثون وتحليل البيانات, دروس تفاعلية مجانية | PyDA Course",
   "learn_hub_module_explanation": "<strong>الوحدة</strong> هي طريقك في الدورة. كل وحدة تحتوي على دروس، وإكمال كل درس يمنح <span class=\"text-gradient\">+60 نقطة خبرة</span>.",
   "learn_hub_switch_routes": "يمكنك تبديل المسارات في أي وقت. حافظ على سلسلتك لكسب نقاط إضافية.",
-  "learn_hub_cheatsheets_hint": "📋 <a href=\"/ar/cheatsheets\">ملخصات بايثون</a>, الأنماط التي تنسخها في كل درس.",
+  "learn_hub_cheatsheets_hint": "📋 <a href=\"/ar/ملخصات\">ملخصات بايثون</a>, الأنماط التي تنسخها في كل درس.",
   "learn_hub_modules": "وحدات",
   "learn_hub_lessons": "دروس",
   "learn_hub_what_you_earn": "ما ستكسبه",

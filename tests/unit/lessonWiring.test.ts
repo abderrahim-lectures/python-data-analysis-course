@@ -42,16 +42,22 @@ describe('runnable cells', () => {
     expect(src).toContain("document.querySelector('[data-lesson-id]')");
   });
 
-  test('runs input() cells in the worker and feeds them from the cell fields', () => {
+  test('runs input() cells in the worker and feeds them from the cell form', () => {
     // Pyodide's stdin callback is synchronous, so a browser prompt() inside it
-    // froze the tab; the values are collected in the cell's input form and
-    // replayed by the worker instead. Every cell, input() included, stays off
-    // the main thread.
-    expect(src).toContain('inputCallSites(src)');
-    expect(src).toContain('stdinValues()');
-    expect(src).toContain('onStdinExhausted: growStdinForm');
+    // froze the tab; the values are collected in the cell's input form
+    // (cellInputForm.ts) and replayed by the worker instead. Every cell,
+    // input() included, stays off the main thread.
+    expect(src).toContain('createCellInputForm');
+    expect(src).toContain('inputs.values()');
+    expect(src).toContain('onStdinExhausted: inputs.grow');
     expect(src).not.toContain('window.prompt');
     expect(src).not.toContain('usesBlockingInput');
+
+    const form = readFileSync('src/lib/cellInputForm.ts', 'utf8');
+    expect(form).toContain('inputCallSites');
+    // Enter must ask the next question instead of running a half-filled cell.
+    expect(form).toContain("e.key !== 'Enter'");
+    expect(form).toContain('opts.run()');
   });
 });
 
@@ -97,13 +103,15 @@ describe('playground', () => {
 
 describe('line-number gutter', () => {
   const src = readFileSync('src/lib/runnable-cell.client.ts', 'utf8');
+  const editor = readFileSync('src/lib/codeEditor.ts', 'utf8');
 
-  test('injects a gutter for every runnable cell, not just the playground', () => {
-    expect(src).toContain("gutter.className = 'cell__gutter'");
+  test('every runnable cell gets an editable editor with a gutter', () => {
+    expect(src).toContain('makeEditableCode(codeEl');
+    expect(editor).toContain("gutter.className = 'cell__gutter'");
   });
 
   test('renumbers on every edit', () => {
-    const inputHandler = src.slice(src.indexOf("codeEl.addEventListener('input'"));
+    const inputHandler = editor.slice(editor.indexOf("codeEl.addEventListener('input'"));
     expect(inputHandler).toContain('renumber()');
   });
 });

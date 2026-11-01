@@ -1,4 +1,4 @@
-import {highlightPython} from './pyHighlight.ts';
+import {makeEditableCode} from './codeEditor.ts';
 // Hydrates every `.cell[data-runnable]` on the page (whether hand-authored via
 // <RunnableCell> or generated from ```python fences by rehype-runnable-python)
 // with a Pyodide-backed Run button. Loaded once per page from Base.astro.
@@ -10,7 +10,7 @@ import {highlightPython} from './pyHighlight.ts';
 // there and the worker replays them through Pyodide's (synchronous) stdin
 // callback. See pythonInputs.ts for why the values are collected before the
 // run rather than asked for mid-run.
-import {inputCallSites} from './pythonInputs.ts';
+import {createCellInputForm} from './cellInputForm.ts';
 import {m} from '../paraglide/messages.js';
 import {getLocale} from '../paraglide/runtime.js';
 import {
@@ -104,105 +104,16 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
   // --- input() values -----------------------------------------------------
   // Pyodide's stdin callback is synchronous, so a browser prompt() inside it
   // would freeze whichever thread runs the interpreter (and used to boot a
-  // second engine on the main thread just for that). Instead the cell shows
-  // one field per input() call site, the learner fills them in, and the run
-  // replays them from a queue. The form is built here, client-side, so it
-  // works for markdown-generated cells and hand-authored ones alike.
-  const stdinBox = document.createElement('div');
-  stdinBox.className = 'cell__stdin';
-  stdinBox.hidden = true;
-  const stdinHint = document.createElement('p');
-  stdinHint.className = 'cell__stdin-hint';
-  stdinHint.textContent = m.cell_input_hint();
-  stdinBox.appendChild(stdinHint);
-  out.parentElement?.insertBefore(stdinBox, out);
-
-  interface StdinField {
-    row: HTMLElement;
-    prompt: HTMLElement;
-    input: HTMLInputElement;
-  }
-  const stdinFields: StdinField[] = [];
-  // The source the fields were last built from. Rebuilding only on an actual
-  // edit (not on every Run) is what lets a field added by the end-of-input
-  // path below survive the next Run while the code is unchanged.
-  let stdinBuiltFrom: string | null = null;
-
-  const appendStdinField = (prompt: string): StdinField => {
-    const row = document.createElement('label');
-    row.className = 'cell__stdin-field';
-    const promptEl = document.createElement('span');
-    promptEl.className = 'cell__stdin-prompt';
-    const input = document.createElement('input');
-    input.className = 'cell__stdin-input';
-    input.type = 'text';
-    input.autocomplete = 'off';
-    input.spellcheck = false;
-    // The label text comes from here, via relabel(); keeping it in the dataset
-    // means a field can be renumbered without losing its own prompt.
-    input.dataset.prompt = prompt;
-    row.appendChild(promptEl);
-    row.appendChild(input);
-    // Enter is what a learner expects in a field that is asking a question.
-    // With several fields it should move to the next one (a terminal asks one
-    // at a time); on the last field it runs the cell.
-    const index = stdinFields.length;
-    input.addEventListener('keydown', (e) => {
-      if (e.key !== 'Enter') return;
-      e.preventDefault();
-      const next = stdinFields[index + 1];
-      if (next) {
-        next.input.focus();
-        next.input.select();
-        return;
-      }
-      run.click();
-    });
-    stdinBox.appendChild(row);
-    const field = {row, prompt: promptEl, input};
-    stdinFields.push(field);
-    return field;
-  };
-
-  const relabel = () => {
-    stdinFields.forEach((f, i) => {
-      f.prompt.textContent = f.input.dataset.prompt || `${m.cell_input_label()} ${i + 1}`;
-    });
-  };
-
-  // Add one beyond the statically-detected calls (end of input reached), so a
-  // loop that reads more values than the scan could count has somewhere to put
-  // the next one instead of dead-ending on EOFError.
-  const growStdinForm = (): void => {
-    const field = appendStdinField('');
-    relabel();
-    stdinBox.hidden = false;
-    field.input.focus();
-  };
-
-  // Keep one field per input() call site in the current source, preserving
-  // whatever the learner already typed by position.
-  const syncStdinForm = (): void => {
-    const src = codeEl.textContent ?? '';
-    if (src === stdinBuiltFrom) return;
-    stdinBuiltFrom = src;
-    const sites = inputCallSites(src);
-    while (stdinFields.length > sites.length) stdinFields.pop()?.row.remove();
-    sites.forEach((site, i) => {
-      const field = stdinFields[i] ?? appendStdinField('');
-      field.input.dataset.prompt = site.prompt;
-    });
-    relabel();
-    stdinBox.hidden = stdinFields.length === 0;
-  };
-
-  const stdinValues = (): string[] => stdinFields.map((f) => f.input.value);
-  // End-of-file for the in-page path (tests, and any future main-thread run):
-  // undefined is Pyodide's EOF, exactly as the worker's queue reports it.
-  const stdinFromFields = (): (() => string | undefined) => {
-    const pending = stdinValues();
-    return () => pending.shift();
-  };
+  // second engine on the main thread just for that). The cell shows one field
+  // per input() call site instead, and the run replays them from a queue; see
+  // cellInputForm.ts.
+  const inputs = createCellInputForm({
+    output: out,
+    source: () => codeEl.textContent ?? '',
+    hint: m.cell_input_hint(),
+    fallbackLabel: (n) => `${m.cell_input_label()} ${n}`,
+    run: () => run.click(),
+  });
 
   run.addEventListener('click', async () => {
     if (run.disabled) return;
@@ -240,8 +151,8 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
       .join('\n');
     // Pick up any input() call site the learner just added (or removed) before
     // reading the values, so the queue matches the code about to run.
-    syncStdinForm();
-    const stdin = stdinValues();
+    inputs.sync();
+    const stdin = inputs.values();
     // A test-injected mock engine (deps.loadEngine) means "run this in-page
     // with the fake I supplied" -- a real Worker can't be meaningfully mocked
     // that way, and the DOM-wiring test suite isn't testing worker plumbing.
@@ -266,7 +177,7 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
         appendFigure,
         engine,
         otherCellSources,
-        stdin: stdinFromFields(),
+        stdin: inputs.stdin(),
         onPhase: (phase) => {
           setPhaseLabel(phase);
           dispatchPyodideEvent('pyodide:loading', {phase});
@@ -281,7 +192,7 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
         onLoading: (detail) => dispatchPyodideEvent('pyodide:loading', detail),
         onProgress: (pct) => dispatchPyodideEvent('pyodide:progress', {pct}),
         onReady: () => dispatchPyodideEvent('pyodide:ready'),
-        onStdinExhausted: growStdinForm,
+        onStdinExhausted: inputs.grow,
       });
     }
 
@@ -356,98 +267,16 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
   });
   cell.querySelector('.cell__actions')?.appendChild(copyBtn);
 
-  // Learners can edit the snippet in place before running it — this is the
-  // "playground" part of a runnable cell, not just a static example.
-  codeEl.setAttribute('contenteditable', 'plaintext-only' as string);
-  codeEl.setAttribute('spellcheck', 'false');
-  codeEl.addEventListener('keydown', (e) => {
-    if (e.key !== 'Tab') return;
-    e.preventDefault();
-    document.execCommand('insertText', false, '    ');
-  });
-
-  // Ctrl+Enter (or Cmd+Enter) to run code.
-  codeEl.addEventListener('keydown', (e) => {
-    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-      e.preventDefault();
-      run.click();
-    }
-  });
-
-  // Lesson cells arrive pre-highlighted by Shiki at build time; the
-  // playground and any ?code= handoff arrive as plain text. Paint those on
-  // load too, so highlighting isn't something that only appears after the
-  // first edit.
-  if (!codeEl.querySelector('span')) {
-    codeEl.innerHTML = highlightPython(codeEl.textContent ?? '');
-  }
-
-  // Line-number gutter — every cell gets one, not just the playground.
-  // Inserted client-side rather than at build/markdown time so it works
-  // uniformly for markdown-generated cells, <RunnableCell>, and the
-  // playground alike.
-  const gutter = document.createElement('span');
-  gutter.className = 'cell__gutter';
-  gutter.setAttribute('aria-hidden', 'true');
-  codeEl.parentElement?.insertBefore(gutter, codeEl);
-  const renumber = () => {
-    const n = (codeEl.textContent ?? '').split('\n').length;
-    let out = '';
-    for (let i = 1; i <= n; i++) out += i + '\n';
-    gutter.textContent = out;
-  };
-  renumber();
-
-  // Re-highlight on every edit, preserving the caret by character offset —
-  // innerHTML replacement otherwise drops the cursor to the start.
-  const caretOffset = (): number => {
-    const sel = window.getSelection();
-    if (!sel || sel.rangeCount === 0) return 0;
-    const range = sel.getRangeAt(0);
-    const pre = range.cloneRange();
-    pre.selectNodeContents(codeEl);
-    pre.setEnd(range.endContainer, range.endOffset);
-    return pre.toString().length;
-  };
-  const restoreCaret = (offset: number) => {
-    const sel = window.getSelection();
-    if (!sel) return;
-    const walker = document.createTreeWalker(codeEl, NodeFilter.SHOW_TEXT);
-    let remaining = offset;
-    let node = walker.nextNode();
-    while (node) {
-      const len = node.textContent?.length ?? 0;
-      if (remaining <= len) {
-        const range = document.createRange();
-        range.setStart(node, remaining);
-        range.collapse(true);
-        sel.removeAllRanges();
-        sel.addRange(range);
-        return;
-      }
-      remaining -= len;
-      node = walker.nextNode();
-    }
-    // Offset past the end (e.g. typed at the very end) — park at the last node.
-    const range = document.createRange();
-    range.selectNodeContents(codeEl);
-    range.collapse(false);
-    sel.removeAllRanges();
-    sel.addRange(range);
-  };
-  codeEl.addEventListener('input', () => {
-    const offset = caretOffset();
-    codeEl.innerHTML = highlightPython(codeEl.textContent ?? '');
-    restoreCaret(offset);
-    renumber();
-    // Editing the snippet can add or remove input() calls; keep the form in
-    // step so the Run that follows has the right number of fields.
-    syncStdinForm();
+  // Editing, highlighting and the line-number gutter; onEdit keeps the input
+  // form in step with the source (see cellInputForm.ts).
+  makeEditableCode(codeEl, {
+    onEdit: () => inputs.sync(),
+    onRun: () => run.click(),
   });
 
   // Cells that call input() show their fields on load, before the first Run --
   // that is where the learner is supposed to type.
-  syncStdinForm();
+  inputs.sync();
 }
 
 export function initRunnableCells(root: ParentNode = document): void {

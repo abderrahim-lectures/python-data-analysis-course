@@ -190,6 +190,8 @@ The fixes above were themselves reviewed before being called done. Five defects,
 | R3 | MED | Enter in a *non-last* input field ran the cell immediately, so a two-question cell executed with the second answer empty (`int('')` → ValueError). | Enter now advances to the next field and only runs from the last one — what a terminal does. DOM test covers both halves. |
 | R4 | LOW | `rb"…"` / `br"…"` string prefixes were not recognised (the prefix window was 2 characters), so the field fell back to "Value 1" instead of the prompt. | Prefix window widened; tests for `r`, `rb`, `R`. |
 | R5 | LOW | `CellRuntime.stdin` became required but three test literals omitted it, so `tsc` flagged the test file; the fake engine also lacked `FS.mkdirTree`. | Fixed — `tsc --noEmit` now reports only the four files that need `astro sync`'s generated types. |
+| R7 | **MED** | **Found in the real-user pass**: the friendly-error layer *replaced* the exception text, so `int("hello")` and `age + 1` showed only the hint — while 04-type-conversion quotes `ValueError: invalid literal for int()` and `TypeError: can only concatenate str (not "int") to str` verbatim. The lesson's own point never appeared in the panel. | The raw exception is printed first, the hint after it. |
+| R8 | **MED** | **Found in the real-user pass**: pressing Enter in an editable cell put the caret *before* the newline (a caret cannot sit after a trailing newline inside a `<pre>`), so the next characters landed on the previous line — "a = 1" + Enter + "b = 2" ran as `a = 1b = 2` with an empty second line, and `b = 2` was silently part of the first statement. | A trailing `<br>` gives the caret a home after the newline when the source ends with one; verified by typing two lines and running them in the browser. |
 | R6 | **MED** | **Found only in a real browser**: the transcript read `2004` *above* `Birth year?`, with the prompt glued to the next line (`Birth year? About 22 years old`). Pyodide's batched stdout only hands JS a complete line — a flushed partial one stays buffered (`print("X", end="", flush=True); print("Y")` renders as `XY`), so `input()`'s newline-less prompt arrived after the echoed answer. | `input()` is wrapped at engine boot (`INPUT_SHIM_SRC`) to write the prompt as a whole line before reading, so the panel reads prompt → answer → output. Verified in the browser (§6). |
 
 Two dead exports found in the same pass (`needsStdin` in `pythonInputs.ts`, `remaining()` on the stdin queue) were removed rather than left as API nobody calls.
@@ -245,7 +247,28 @@ engine and the real form; Firefox drove it. Results:
 | One call site, three calls (`for _ in range(3): print(input("Value? "))`) | first answer consumed, then `EOFError` → friendly line, form grew from 1 field to 2 |
 | `import js` | refused: "Blocked: this snippet uses something the in-browser sandbox refuses…" |
 
-No console errors in any of the runs. That is what caught R6: the ordering bug is invisible to a
+Then a full pass over the reported lesson as a learner sees it — **all eight** code fences of
+`04-type-conversion.md` rendered as cells from the lesson's own markdown and run in order — plus
+the lesson's three quiz questions:
+
+| Surface | Observed |
+|---|---|
+| Cells 1–3, 5, 8 (`int`/`float`/`str`/`bool`, truncation vs round, `math.floor`, the sensor example) | the documented output: `False`, `4`, `-4`, `3`, `3 units` |
+| Cell 4 `int("hello")`, cell 7 `age = input(); age + 1` | the traceback the lesson quotes (`ValueError`, `TypeError`) followed by the hint |
+| Cell 6 `year_text = input("Birth year? ")` | `Birth year?` / `2004` / `About 22 years old` |
+| Quiz (one wrong, two right) | per-question feedback, the question locks after answering, summary `You got 2/3 right.`, `pda:state` written |
+| Editing a cell (type two lines, add an `input()` call, run) | newline stays on its line, gutter renumbers, the new field appears labelled with the new prompt, cell runs |
+
+No console errors in any of the runs.
+
+### Link check
+
+The branch changes no page content, so the rendered link graph is the published one. A crawl of
+the live site from `/` — **1047 pages fetched, every internal link followed** — found **three**
+broken links, all the same mistake: the localized learn hubs linked the *English* cheatsheet
+slug with a locale prefix (`/es/cheatsheets`, `/ar/cheatsheets`, `/fr/cheatsheets`) instead of
+the localized routes (`/es/referencias`, `/ar/ملخصات`, `/fr/antiseche`). The three
+`learn_hub_cheatsheets_hint` messages are fixed; everything else resolved 200. That is what caught R6: the ordering bug is invisible to a
 DOM stub, because the stub never had a real Pyodide stream to buffer the prompt.
 
 ## 7 — Re-checked against the September audit

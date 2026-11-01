@@ -162,10 +162,12 @@ describe('runCellCode', () => {
       throw new Error("NameError: name 'y' is not defined");
     };
     await runCellCode('x', makeRuntime(mock.engine, out));
-    expect(out).toHaveLength(1);
-    expect(out[0].kind).toBe('err');
-    expect(out[0].text).toContain('recognize');
-    expect(out[0].text).not.toContain('dataset');
+    // The raw exception stays visible (a lesson may be teaching that very
+    // error) and the hint follows it.
+    expect(out.map((l) => l.kind)).toEqual(['err', 'err']);
+    expect(out[0].text).toContain("NameError: name 'y' is not defined");
+    expect(out[1].text).toContain('recognize');
+    expect(out[1].text).not.toContain('dataset');
   });
 
   test('a NameError with a dataset-loading sibling cell hints to load the dataset first', async () => {
@@ -180,10 +182,9 @@ describe('runCellCode', () => {
       otherCellSources: 'df = pd.read_csv("titanic.csv")\ndf.head()',
     };
     await runCellCode('df.head()', rt);
-    expect(out).toHaveLength(1);
-    expect(out[0].kind).toBe('err');
-    expect(out[0].text).toContain('recognize');
-    expect(out[0].text).toContain('pd.read_csv');
+    expect(out.map((l) => l.kind)).toEqual(['err', 'err']);
+    expect(out[1].text).toContain('recognize');
+    expect(out[1].text).toContain('pd.read_csv');
   });
 
   test('an unrelated NameError in a lesson that loads a dataset does not hint the dataset', async () => {
@@ -198,9 +199,9 @@ describe('runCellCode', () => {
       otherCellSources: 'df = pd.read_csv("titanic.csv")\ndf.head()',
     };
     await runCellCode('z = np.polyfit(...)', rt);
-    expect(out).toHaveLength(1);
-    expect(out[0].text).toContain('recognize');
-    expect(out[0].text).not.toContain('pd.read_csv');
+    expect(out.map((l) => l.kind)).toEqual(['err', 'err']);
+    expect(out[1].text).toContain('recognize');
+    expect(out[1].text).not.toContain('pd.read_csv');
   });
 
   afterEach(() => {

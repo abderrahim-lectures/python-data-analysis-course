@@ -127,7 +127,7 @@
   "learn_hub_title": "Apprendre, PyDA Course",
   "learn_hub_module_explanation": "Un <strong>module</strong> est ton chemin dans le cours. Chaque module a des leçons, et en terminer une rapporte <span class=\"text-gradient\">+60 XP</span>.",
   "learn_hub_switch_routes": "Tu peux changer de route à tout moment. Maintiens ta série pour gagner des XP bonus.",
-  "learn_hub_cheatsheets_hint": "📋 <a href=\"/fr/cheatsheets\">Antisèches Python</a>, les motifs à copier dans chaque leçon.",
+  "learn_hub_cheatsheets_hint": "📋 <a href=\"/fr/antiseche\">Antisèches Python</a>, les motifs à copier dans chaque leçon.",
   "learn_hub_modules": "modules",
   "learn_hub_lessons": "leçons",
   "learn_hub_what_you_earn": "Ce que tu gagneras",
