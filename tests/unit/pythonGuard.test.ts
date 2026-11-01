@@ -111,3 +111,38 @@ describe('lexical tricks that split a refused token', () => {
     expect(usesJsBridge('print("a\\\nb")')).toBe(false);
   });
 });
+
+describe('the second round: aliasing and the string-executing stdlib', () => {
+  // Found by fuzzing the guard and then running the payloads in a real browser
+  // (Firefox + Pyodide): `E = exec` + `E("import " + "js")` reached the bridge,
+  // and so did `code.InteractiveInterpreter().runsource(...)`, `timeit`,
+  // `profile`/`cProfile`, `trace` and `runpy` — none of which names exec.
+  const payloads = [
+    'E = eval\nE("print(1)")',
+    'F = exec\nF("print(1)")',
+    'compile("1", "<s>", "eval")',
+    'import code\ncode.InteractiveInterpreter().runsource("print(1)")',
+    'import timeit\ntimeit.timeit("print(1)", number=1)',
+    'import pdb\npdb.Pdb().runsource("print(1)")',
+    'import profile\nprofile.run("print(1)")',
+    'import cProfile\ncProfile.run("print(1)")',
+    'import trace\ntrace.Trace().run("print(1)")',
+    'import runpy\nrunpy.run_module("js")',
+    'import _pyodide\nprint(dir(_pyodide))',
+  ];
+  test.each(payloads)('refuses %j', (src) => {
+    expect(usesJsBridge(src)).toBe(true);
+  });
+
+  // ...while the same words as attributes, or in prose, stay allowed.
+  const allowed = [
+    'import re\npattern = re.compile(r"\\d+")',
+    'model.eval()',
+    'stats.exec_time = 1',
+    '# the code. Then run it.\nprint(1)',
+    '# 3 evaluates to 3\nprint(3)',
+  ];
+  test.each(allowed)('still allows %j', (src) => {
+    expect(usesJsBridge(src)).toBe(false);
+  });
+});

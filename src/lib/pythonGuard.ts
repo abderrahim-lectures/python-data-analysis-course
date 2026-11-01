@@ -33,10 +33,23 @@ const BRIDGE = new RegExp(
 );
 
 // Dynamic execution can smuggle bridge imports past BRIDGE
-// (`exec("from js import window")`). Block the execution builtins themselves.
-// Anchored on [^\w.] (not just \b) so `re.compile(...)`, `obj.eval(...)` etc.
-// are not mistaken for the bare builtins.
-const DYNAMIC_EXEC = /(?:^|[^\w.])(?:exec|eval|compile)\s*\(/;
+// (`exec("from js import window")`). Blocking the call form is not enough:
+// `E = exec` then `E("...")` reaches the same builtin without ever writing
+// `exec(`, and that payload ran in a real browser before this rule existed. So
+// the bare *names* are refused too — while `re.compile(...)` and `model.eval()`
+// stay allowed, because those are attributes, not the builtins.
+const EXEC_NAMES = /(?<![\w.])(?:exec|eval|compile)\b/;
+
+// stdlib modules that compile and run source they are handed:
+// `code.InteractiveInterpreter().runsource(...)`, `timeit.timeit(...)`,
+// `cProfile.run(...)`, `trace.Trace().run(...)`, `runpy.run_module(...)`,
+// `pdb.Pdb().runsource(...)`. Each of them reached `js` in a real browser with
+// `"import " + "js"` split across two literals, i.e. without naming exec.
+const EXEC_MODULES = 'code|timeit|pdb|profile|cProfile|trace|runpy';
+
+// `_pyodide` is the runtime's own internals (`_importhook`, `jsbind`, …): no
+// snippet needs it, and it is the layer that owns the bridge.
+const INTERNAL_MODULES = '_pyodide';
 
 // The names that turn "run my snippet" into "reach the host". Every route to
 // the real `exec`/`__import__` has to name one of them first:
@@ -60,6 +73,8 @@ const ESCAPE_NAMES = new RegExp(
     String.raw`\b__import__\b`,
     String.raw`\b(?:builtins|importlib|marshal|sys|types)\s*[.(]`,
     String.raw`\bimport\b[^\n]*(?:\b(?:builtins|importlib|marshal|sys|types)\b)`,
+    String.raw`\bimport\b[^\n]*(?:\b(?:${EXEC_MODULES})\b)`,
+    String.raw`\bimport\b[^\n]*(?:\b${INTERNAL_MODULES}\b)`,
     String.raw`\b(?:vars|globals|locals)\b(?!\s*=)`,
   ].join('|'),
 );
@@ -82,7 +97,7 @@ export function usesJsBridge(src: string): boolean {
   const code = src.replace(/\\\r?\n/g, '');
   return (
     BRIDGE.test(code) ||
-    DYNAMIC_EXEC.test(code) ||
+    EXEC_NAMES.test(code) ||
     ESCAPE_NAMES.test(code) ||
     DUNDER_INTROSPECTION.test(code)
   );

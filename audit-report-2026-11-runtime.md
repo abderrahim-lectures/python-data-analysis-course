@@ -94,11 +94,15 @@ That severity is wrong, and the bypass is worse than a Unicode curiosity:
    to `os`; `__import__('builtins').exec(<decoded base64>)` executes and mutates the caller's
    globals.
 
-**Impact, stated precisely.** No passwords or emails are involved (auth is anonymous), so this
-is not account takeover. What an attacker gains over a viewer who clicks Run: read/write of
-that viewer's local progress state and use of their anonymous Supabase session against the
-site's own endpoints. That is exactly the harm the guard was written to prevent — hence the
-rating, not because the attacker can do anything more.
+**Impact, stated precisely — and corrected after measuring it.** No passwords or emails are
+involved (auth is anonymous), so this is not account takeover. The original paragraph here said
+a bypass reads the viewer's `localStorage` and rewrites the DOM; that was true of the old
+main-thread engine. Since every cell now runs in the worker, the reachable globals are
+`fetch`, `indexedDB`, `caches`, `location`, `self`, `navigator` and `importScripts` — measured,
+not assumed (R10). So an attacker gets same-origin `fetch` (the site's own endpoints, the
+public anon key), origin caches, and code loading into the worker: spam and reconnaissance, not
+the learner's saved progress. Still worth refusing — the guard is what makes a shared link
+inert — but the rating should reflect the worker boundary.
 
 **Fixed (November 2026), as a guardrail.** `pythonGuard.ts` now refuses every route listed above, in
 the *form that escapes* rather than as bare words: `__import__`, `builtins`/`importlib`/`marshal`/`sys`/`types`
@@ -192,6 +196,8 @@ The fixes above were themselves reviewed before being called done. Five defects,
 | R5 | LOW | `CellRuntime.stdin` became required but three test literals omitted it, so `tsc` flagged the test file; the fake engine also lacked `FS.mkdirTree`. | Fixed — `tsc --noEmit` now reports only the four files that need `astro sync`'s generated types. |
 | R7 | **MED** | **Found in the real-user pass**: the friendly-error layer *replaced* the exception text, so `int("hello")` and `age + 1` showed only the hint — while 04-type-conversion quotes `ValueError: invalid literal for int()` and `TypeError: can only concatenate str (not "int") to str` verbatim. The lesson's own point never appeared in the panel. | The raw exception is printed first, the hint after it. |
 | R8 | **MED** | **Found in the real-user pass**: pressing Enter in an editable cell put the caret *before* the newline (a caret cannot sit after a trailing newline inside a `<pre>`), so the next characters landed on the previous line — "a = 1" + Enter + "b = 2" ran as `a = 1b = 2` with an empty second line, and `b = 2` was silently part of the first statement. | A trailing `<br>` gives the caret a home after the newline when the source ends with one; verified by typing two lines and running them in the browser. |
+| R9 | **HIGH** | **Found by fuzzing the guard, confirmed in the browser**: two whole families still reached `js`. (a) `E = exec` / `E = eval` binds the builtin to a name, so no `exec(` ever appears. (b) stdlib modules that compile and run strings: `code.InteractiveInterpreter().runsource(...)`, `timeit.timeit(...)`, `profile`/`cProfile.run(...)`, `trace.Trace().run(...)`, `runpy.run_module(...)`, `pdb.Pdb().runsource(...)`. With `"import " + "js"` split across literals, each of them executed `import js` against the real engine (the error was `AttributeError: window`, i.e. the module had been obtained). | The bare names `exec`/`eval`/`compile` are refused (attributes like `re.compile`/`model.eval()` still pass), and imports of those seven stdlib modules plus `_pyodide` are refused. 24-payload fuzz corpus: 13 escapes before, 0 after (the two survivors are `unittest` loading a module and `ast.literal_eval`, neither of which executes a string). |
+| R10 | **MED — corrects B3's impact** | The B3 impact paragraph (inherited from the pre-fix main-thread design) says a bypass reads the viewer's `localStorage` and rewrites the DOM. In the **worker**, `js` exposes `fetch`, `indexedDB`, `caches`, `location`, `self`, `navigator`, `importScripts` — and **not** `localStorage` or `document`. Measured in the browser with the `E = exec` route: `CAP ['fetch', 'indexedDB', 'caches', 'location', 'self', 'navigator', 'importScripts']`. | The guard still matters (same-origin `fetch` with the page's credentials, Cache Storage, `importScripts`), but the rating drops from "can read the learner's progress" to "can call the origin's endpoints and read origin caches". The structural fix (opaque-origin iframe) remains the boundary. |
 | R6 | **MED** | **Found only in a real browser**: the transcript read `2004` *above* `Birth year?`, with the prompt glued to the next line (`Birth year? About 22 years old`). Pyodide's batched stdout only hands JS a complete line — a flushed partial one stays buffered (`print("X", end="", flush=True); print("Y")` renders as `XY`), so `input()`'s newline-less prompt arrived after the echoed answer. | `input()` is wrapped at engine boot (`INPUT_SHIM_SRC`) to write the prompt as a whole line before reading, so the panel reads prompt → answer → output. Verified in the browser (§6). |
 
 Two dead exports found in the same pass (`needsStdin` in `pythonInputs.ts`, `remaining()` on the stdin queue) were removed rather than left as API nobody calls.
