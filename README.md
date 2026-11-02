@@ -20,9 +20,9 @@ See [`plan/`](./plan/README.md) for the full design plan and rationale behind ev
 
 ## Screenshots
 
-| Homepage | Lesson + playground | Progress & badges | Mobile |
+| Homepage + onboarding | Lesson + playground | Progress & badges | Mobile |
 |---|---|---|---|
-| ![Homepage](./static/img/screenshots/homepage.png) | ![Lesson page with runnable cells](./static/img/screenshots/lesson-page.png) | ![Progress page with badges](./static/img/screenshots/progress-page.png) | ![Mobile lesson view](./static/img/screenshots/mobile-lesson.png) |
+| ![Homepage with the onboarding card](./static/img/screenshots/homepage.png) | ![Lesson page with runnable cells](./static/img/screenshots/lesson-page.png) | ![Progress page with badges](./static/img/screenshots/progress-page.png) | ![Mobile lesson view](./static/img/screenshots/mobile-lesson.png) |
 
 ## Learning objectives
 
@@ -74,7 +74,7 @@ Content coverage: project write-ups, lesson/module body content (49 lessons + 22
 
 ### Building from a clean checkout
 
-`npm run build`/`npm run dev` run the `prebuild`/`predev` hooks first, in order: `scripts/reset-astro-cache.cjs` (clears the stale content-collection cache that can silently omit recent edits), `scripts/apply-lix-patch.cjs`, and `scripts/generate-project-slugs.cjs`. The lix patch guards a known upstream defect: on a fresh project the inlang compiler writes ~500 entities in one database transaction and the commit fails (lix issue #422, no released fix at `@lix-js/sdk@0.15.1`). The script splits the fresh import into chunked commits and is a no-op when already patched. If the installed SDK changes shape and the patch no longer applies, the build fails loudly instead of producing a half-written project — port the patch to the new layout rather than deleting the guard.
+`npm run build`/`npm run dev` run the `prebuild`/`predev` hooks first, in order: `scripts/reset-astro-cache.cjs` (clears the stale content-collection cache that can silently omit recent edits), `scripts/apply-lix-patch.cjs`, and `scripts/generate-project-slugs.cjs`. The lix patch guarded a known upstream defect: on a fresh project the inlang compiler wrote ~500 entities in one database transaction and the commit failed (lix issue #422). Current dependencies (`@inlang/sdk@4.1.0` via `@lix-js/sdk@0.20.1`) already split that import into chunked commits, so the script is a no-op on them; it still patches older SDKs. If a future SDK changes shape without carrying the chunking, the build fails loudly instead of producing a half-written project — port the patch to the new layout rather than deleting the guard.
 
 ### Codespaces
 

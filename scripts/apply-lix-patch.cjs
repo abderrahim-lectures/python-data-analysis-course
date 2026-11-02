@@ -1,19 +1,17 @@
 // @inlang/sdk fresh-project import workaround (lix issue #422).
 //
 // The compiler writes a brand-new inlang project in ONE giant transaction.
-// With 500+ entities (4-locale message files) the single COMMIT fails with
+// With 500+ entities (4-locale message files) the single COMMIT failed with
 //   tracked_state replacement native commit-delta projection certification
 //   failed: Invalid("native field count differs between rows")
-// while every INSERT individually succeeds. There is no released fix
-// (@lix-js/sdk@0.15.1 is the newest on npm), so this re-assembles
-// dist/import-export/importFiles.js to split the fresh import into
-// chunked transactions (COMMIT_CHUNK_SIZE = 150) on a fast path that
-// returns before the legacy single-transaction block runs.
+// while every INSERT individually succeeded. @lix-js/sdk@0.15.1 had no fix,
+// so this re-assembled dist/import-export/importFiles.js to split the fresh
+// import into chunked transactions (COMMIT_CHUNK_SIZE = 150).
 //
-// It is idempotent: on an already-patched install it is a no-op. On a
-// vanilla `npm ci` it re-applies the patch before `astro build`. If the
-// installed @inlang/sdk changes shape such that the markers no longer
-// match, it fails loudly instead of corrupting the file.
+// @inlang/sdk@4.1.0 (via @lix-js/sdk@0.20.1) now chunks fresh imports
+// upstream, so on that shape this is a no-op. It still patches older SDKs.
+// If a future SDK changes shape without carrying the chunking, it fails
+// loudly instead of corrupting the file.
 //
 // Run manually:   node scripts/apply-lix-patch.cjs
 const fs = require('fs');
@@ -33,6 +31,11 @@ function main() {
   }
   const original = fs.readFileSync(abs, 'utf8');
 
+  if (original.includes('groupFreshImportCommits')) {
+    console.log('[apply-lix-patch] upstream SDK chunks fresh imports, no-op');
+    return;
+  }
+
   if (original.includes(CHUNK_MARK)) {
     console.log('[apply-lix-patch] already patched, no-op');
     return;
@@ -41,7 +44,8 @@ function main() {
   const startIdx = original.indexOf(START_MARK);
   const endIdx = original.indexOf(END_MARK);
   if (startIdx < 0 || endIdx < 0) {
-    const sdk = require(path.join('node_modules', '@inlang', 'sdk', 'package.json')).version;
+    const sdkPath = path.join(path.dirname(abs), '..', '..', 'package.json');
+    const sdk = JSON.parse(fs.readFileSync(sdkPath, 'utf8')).version;
     throw new Error(
       `[apply-lix-patch] markers not found in @inlang/sdk@${sdk} importFiles.js. ` +
       'The SDK shape changed — port this patch to the new layout instead of building.'

@@ -107,7 +107,7 @@ describe('runCellCode', () => {
   });
 
   test('a failed cell skips the figure drain', async () => {
-    vi.stubGlobal('window', {prompt: () => ''});
+    vi.stubGlobal('window', {prompt: () => '', location: {href: 'http://localhost/'}});
     mock.engine.runPythonAsync = async () => {
       throw new Error("NameError: name 'z' is not defined");
     };
@@ -157,7 +157,7 @@ describe('runCellCode', () => {
   });
 
   test('maps runtime failures to friendly errors on the err line', async () => {
-    vi.stubGlobal('window', {prompt: () => ''});
+    vi.stubGlobal('window', {prompt: () => '', location: {href: 'http://localhost/'}});
     mock.engine.runPythonAsync = async () => {
       throw new Error("NameError: name 'y' is not defined");
     };
@@ -171,7 +171,7 @@ describe('runCellCode', () => {
   });
 
   test('a NameError with a dataset-loading sibling cell hints to load the dataset first', async () => {
-    vi.stubGlobal('window', {prompt: () => ''});
+    vi.stubGlobal('window', {prompt: () => '', location: {href: 'http://localhost/'}});
     mock.engine.runPythonAsync = async () => {
       throw new Error("NameError: name 'df' is not defined");
     };
@@ -188,7 +188,7 @@ describe('runCellCode', () => {
   });
 
   test('an unrelated NameError in a lesson that loads a dataset does not hint the dataset', async () => {
-    vi.stubGlobal('window', {prompt: () => ''});
+    vi.stubGlobal('window', {prompt: () => '', location: {href: 'http://localhost/'}});
     mock.engine.runPythonAsync = async () => {
       throw new Error("NameError: name 'np' is not defined");
     };
