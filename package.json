@@ -1,6 +1,6 @@
 {
   "name": "pyda-course-astro",
-  "version": "2.0.15",
+  "version": "2.0.16",
   "private": true,
   "type": "module",
   "scripts": {
@@ -29,10 +29,10 @@
     "@astrojs/sitemap": "^3.7.4",
     "@inlang/paraglide-js": "^2.25.0",
     "@vitest/coverage-v8": "^4.1.11",
-    "astro": "^7.3.1",
+    "astro": "^7.4.12",
     "hast-util-to-string": "^3.0.1",
     "hastscript": "^9.0.1",
-    "katex": "^0.18.4",
+    "katex": "0.18.10",
     "rehype-katex": "^7.0.1",
     "remark-math": "^6.0.0",
     "typescript": "^5.6.0",
@@ -40,5 +40,11 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.116.0"
+  },
+  "overrides": {
+    "katex": "0.18.10"
+  },
+  "engines": {
+    "node": ">=22.23.4"
   }
 }
