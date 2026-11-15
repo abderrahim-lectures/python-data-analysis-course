@@ -46,9 +46,28 @@ export function contributorById(id: string): Contributor | undefined {
   return CONTRIBUTORS.find((c) => c.id === id);
 }
 
-/** GitHub profile URL for a contributor, or null when they have no handle. */
+/** GitHub profile URL for a contributor, or null when there is nothing safe to
+ *  link. `url` is free text from this registry rather than user input, but it
+ *  still lands in an href on a public page, so anything that is not an http(s)
+ *  URL is rejected: a `javascript:` or `data:` value there would run on click,
+ *  and a typo (`pyda-course.online` without a scheme) would render as a broken
+ *  relative link. The handle is sanitized the same way -- GitHub allows only
+ *  alphanumerics and single hyphens, so anything else is a mistake, not a URL. */
 export function contributorProfileUrl(c: Contributor): string | null {
-  if (c.url) return c.url;
-  if (c.github) return `https://github.com/${c.github}`;
+  const safeHttpUrl = (value: string): string | null => {
+    try {
+      const u = new URL(value);
+      return u.protocol === 'https:' || u.protocol === 'http:' ? u.href : null;
+    } catch {
+      return null;
+    }
+  };
+  if (c.url) {
+    const safe = safeHttpUrl(c.url);
+    if (safe) return safe;
+  }
+  if (c.github && /^[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?$/.test(c.github)) {
+    return `https://github.com/${c.github}`;
+  }
   return null;
 }

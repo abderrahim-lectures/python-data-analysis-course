@@ -125,7 +125,11 @@ await evaluate(`(localStorage.setItem('pda:state', JSON.stringify({
   quizCorrect:0,quizTotal:0,streak:0,bestStreak:0,lastActive:'',quests:{},badges:[]
 })),1)`);
 await goto('/progress');
-check('earned XP is preserved', await evaluate('document.getElementById("xpbar-text").textContent'), '175 XP');
+// #p-xp is the progress page's XP readout. The old assertion targeted
+// "#xpbar-text", an id that no longer exists anywhere in src/ (the header bar
+// uses #xp-bar/#xp-val, the progress page #p-xp), so this check could only ever
+// throw "Cannot read properties of null" -- it had been failing on main.
+check('earned XP is preserved', await evaluate('document.getElementById("p-xp").textContent'), '175');
 check('the dead streak is repaired', await evaluate('document.getElementById("p-streak").textContent'), '1🔥');
 check('missing quests are backfilled', await evaluate('document.getElementById("p-quests").textContent'), '4/31');
 

@@ -40,6 +40,32 @@ describe('contributor registry', () => {
     // A student with no GitHub account is still a valid contributor.
     expect(contributorProfileUrl({id: 'x', name: 'X'})).toBeNull();
   });
+
+  test('a non-http url is refused rather than rendered as an href', () => {
+    // `url` is registry text, not user input, but it still lands in an href on
+    // a public page: javascript: and data: would execute on click, and a bare
+    // host would silently become a relative link.
+    expect(contributorProfileUrl({id: 'x', name: 'X', url: 'javascript:alert(1)'})).toBeNull();
+    expect(contributorProfileUrl({id: 'x', name: 'X', url: 'data:text/html,<script>alert(1)</script>'})).toBeNull();
+    expect(contributorProfileUrl({id: 'x', name: 'X', url: 'pyda-course.online'})).toBeNull();
+    expect(contributorProfileUrl({id: 'x', name: 'X', url: '/relative'})).toBeNull();
+  });
+
+  test('a refused url falls back to the GitHub handle when there is one', () => {
+    expect(contributorProfileUrl({id: 'x', name: 'X', url: 'javascript:alert(1)', github: 'octocat'}))
+      .toBe('https://github.com/octocat');
+  });
+
+  test('an http(s) url is kept', () => {
+    expect(contributorProfileUrl({id: 'x', name: 'X', url: 'https://example.com/me'})).toBe('https://example.com/me');
+    expect(contributorProfileUrl({id: 'x', name: 'X', url: 'http://example.com/me'})).toBe('http://example.com/me');
+  });
+
+  test('a handle that is not a plausible GitHub login is not turned into a URL', () => {
+    expect(contributorProfileUrl({id: 'x', name: 'X', github: 'has space'})).toBeNull();
+    expect(contributorProfileUrl({id: 'x', name: 'X', github: 'a/b'})).toBeNull();
+    expect(contributorProfileUrl({id: 'x', name: 'X', github: '"><script>'})).toBeNull();
+  });
 });
 
 describe('project authorship', () => {
