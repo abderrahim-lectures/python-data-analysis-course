@@ -14,6 +14,7 @@ prerequisites:
   - "Python basics (functions, loops, dictionaries)"
   - "Comfort with generators and yield"
   - "Basic understanding of lists and time math"
+author: abderrahim-adrabi
 ---
 
 # 🛠️ ⚡ Build a Streaming Analytics Engine

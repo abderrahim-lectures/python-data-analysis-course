@@ -11,6 +11,7 @@ learningObjectives:
   - "Roll a history into pandas and compute a rolling average"
   - "Plot body weight and training volume trends side by side"
 prerequisites: ["Python basics (classes, dictionaries, lists)", "pip install pandas matplotlib"]
+author: abderrahim-adrabi
 ---
 
 # 🛠️ 💪 Build a Fitness Tracker

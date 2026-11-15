@@ -6,6 +6,7 @@ estimatedMinutes: 55
 xpReward: 50
 tags: ["NLP", "sentiment", "matplotlib", "pandas"]
 prerequisites: ["Python basics", "Basic pandas", "Basic matplotlib"]
+author: abderrahim-adrabi
 ---
 
 # Sentiment Analysis Dashboard

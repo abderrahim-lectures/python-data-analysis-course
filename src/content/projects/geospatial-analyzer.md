@@ -10,6 +10,7 @@ learningObjectives:
   - "Calculate distances between coordinates using the Haversine formula"
   - "Generate a heatmap visualization of point density on a real map"
 prerequisites: ["Python 101", "Data Analysis"]
+author: abderrahim-adrabi
 ---
 
 # 🌍 Build a Geospatial Data Analyzer

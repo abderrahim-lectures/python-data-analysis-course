@@ -63,6 +63,13 @@ const projects = defineCollection({
     tags: z.array(z.string()).default([]),
     prerequisites: z.array(z.string()).default([]),
     learningObjectives: z.array(z.string()).default([]),
+    // Who wrote this project, by contributor id from
+    // src/lib/contributors.ts. Optional: content added before the
+    // contributors page existed has no author, and the site's own pages are
+    // not credited there (see the page's "maintainer" note). Localized twins
+    // leave this off and inherit the English file's author, so a translator
+    // does not appear as the project's creator.
+    author: z.string().optional(),
   }),
 });
 

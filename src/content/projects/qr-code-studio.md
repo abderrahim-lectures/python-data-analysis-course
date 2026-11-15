@@ -10,6 +10,7 @@ learningObjectives:
   - "Understand error-correction levels and their data-density tradeoff"
   - "Batch-generate codes from a CSV and validate the whole folder"
 prerequisites: ["python-101/file-io", "python-101/strings", "python-101/functions"]
+author: abderrahim-adrabi
 ---
 
 # 🔳 Build a QR Code Studio

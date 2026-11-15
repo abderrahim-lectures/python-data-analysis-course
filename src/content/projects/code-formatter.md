@@ -15,6 +15,7 @@ learningObjectives:
   - "Collapse blank-line runs and enforce a final newline"
   - "Diagnose indentation that isn't a multiple of 4"
   - "Report before/after stats and wrap the tool in a sys.argv CLI"
+author: abderrahim-adrabi
 ---
 
 # 🛠️ 🧹 Build a Code Formatter

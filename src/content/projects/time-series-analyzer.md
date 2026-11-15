@@ -14,6 +14,7 @@ prerequisites:
   - "Python basics (functions, loops)"
   - "Pandas DataFrames and Series (indexing, dtypes)"
   - "Installing packages with uv"
+author: abderrahim-adrabi
 ---
 
 # 🛠️ 📈 Build a Time Series Analyzer

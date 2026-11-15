@@ -10,6 +10,7 @@ learningObjectives:
   - "Dot-map imported names to their uses to detect unused imports"
   - "Grade findings by severity and emit an exit-code report for CI"
 prerequisites: ["python-101/functions", "python-101/data-structures", "python-101/file-io", "python-101/scope-and-lambdas"]
+author: abderrahim-adrabi
 ---
 
 # 🧹 Build a Python Linter

@@ -6,6 +6,7 @@ estimatedMinutes: 60
 xpReward: 50
 tags: ["Web Scraping", "pandas", "matplotlib", "data-analysis"]
 prerequisites: ["Python basics", "Basic pandas", "Basic matplotlib"]
+author: abderrahim-adrabi
 ---
 
 # Scrape and Analyze a Live Website

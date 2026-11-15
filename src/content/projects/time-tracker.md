@@ -14,6 +14,7 @@ prerequisites:
   - "Python basics (functions, lists, dictionaries)"
   - "Comfort with date and datetime basics"
   - "Optional: a little experience running scripts from the terminal"
+author: abderrahim-adrabi
 ---
 
 # 🛠️ ⏱️ Build a Time Tracker

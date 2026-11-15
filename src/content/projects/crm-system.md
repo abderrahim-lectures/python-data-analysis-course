@@ -12,6 +12,7 @@ learningObjectives:
   - "Log activities and reconstruct a contact's chronological timeline"
   - "Render every view as a styled rich table"
 prerequisites: ["Python basics (classes, functions, dicts)", "pip install rich"]
+author: abderrahim-adrabi
 ---
 
 # 🛠️ 🤝 Build a CRM System

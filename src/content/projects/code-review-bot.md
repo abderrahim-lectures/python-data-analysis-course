@@ -15,6 +15,7 @@ learningObjectives:
   - "Attach per-line comments and aggregate them by severity"
   - "Compute an APPROVE/REJECT verdict and export the review as JSON"
   - "Re-review the fixed diff and see the verdict flip"
+author: abderrahim-adrabi
 ---
 
 # 🛠️ 🤖 Build a Code Review Bot

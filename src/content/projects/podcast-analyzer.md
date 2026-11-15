@@ -10,6 +10,7 @@ learningObjectives:
   - "Score a transcript against topic keyword sets with Counter"
   - "Compose an episode fact sheet and export it as CSV"
 prerequisites: ["python-101/strings", "python-101/file-io", "python-101/sets", "python-101/functions"]
+author: abderrahim-adrabi
 ---
 
 # 🎧 Build a Podcast Analyzer

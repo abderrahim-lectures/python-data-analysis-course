@@ -10,6 +10,7 @@ learningObjectives:
   - "Prompt for feedback and append structured rows to a CSV session log"
   - "Compute streaks across dates with datetime and date arithmetic"
 prerequisites: ["python-101/loops", "python-101/functions", "python-101/file-io", "python-101/date-time"]
+author: abderrahim-adrabi
 ---
 
 # 🧘 Build a Meditation Timer

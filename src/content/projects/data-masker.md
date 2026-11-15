@@ -13,6 +13,7 @@ learningObjectives:
   - "Auto-build a per-column masking plan from detection"
   - "Mask numeric identifiers while preserving the column's distribution"
   - "Write an audit log of every masking operation"
+author: abderrahim-adrabi
 ---
 
 # 🕶️ Build a Data Masker

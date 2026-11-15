@@ -2,6 +2,7 @@
 title: "Build an AI Agent"
 description: "Graduate from the in-browser playground to real Python: install Python locally and build your first AI agent with LangChain's deepagents."
 difficulty: "intermediate"
+author: abderrahim-adrabi
 ---
 
 # 🤖 Build an AI Agent

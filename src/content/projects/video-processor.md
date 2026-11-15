@@ -13,6 +13,7 @@ prerequisites:
   - "Python basics (functions, strings, f-strings)"
   - "FFmpeg installed on your system (covered in Setup)"
   - "A sample video file to work with (any MP4 will do)"
+author: abderrahim-adrabi
 ---
 
 # 🎬 Build a Video Processor

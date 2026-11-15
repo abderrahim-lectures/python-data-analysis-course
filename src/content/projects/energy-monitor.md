@@ -13,6 +13,7 @@ learningObjectives:
   - "Price energy with a two-bracket tiered tariff"
   - "Audit standby draw and generate rules-based savings hints"
   - "Compare two usage scenarios and report a savings delta"
+author: abderrahim-adrabi
 ---
 
 # ⚡ Build an Energy Monitor

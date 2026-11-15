@@ -10,6 +10,7 @@ learningObjectives:
   - "Implement conditional logic that shows or hides fields based on user input"
   - "Handle form submissions with validation and structured output"
 prerequisites: ["Python 101"]
+author: abderrahim-adrabi
 ---
 
 # 📝 Build a Form Builder

@@ -29,11 +29,11 @@ export function detectLocale(pathname: string): Locale {
   return 'en';
 }
 
-export const NAV_WORDS: Record<Locale, {learn: string; projects: string; progress: string; credits: string; cheatsheets: string; progressGuide: string; pedagogy: string}> = {
-  en: {learn: 'learn', projects: 'projects', progress: 'progress', credits: 'credits', cheatsheets: 'cheatsheets', progressGuide: 'progress-guide', pedagogy: 'teaching-approach'},
-  ar: {learn: 'تعلم', projects: 'مشاريع', progress: 'تقدم', credits: 'المصادر', cheatsheets: 'ملخصات', progressGuide: 'دليل-التقدم', pedagogy: 'المنهج-التعليمي'},
-  es: {learn: 'aprender', projects: 'proyectos', progress: 'progreso', credits: 'creditos', cheatsheets: 'referencias', progressGuide: 'guia-progreso', pedagogy: 'enfoque-pedagogico'},
-  fr: {learn: 'apprendre', projects: 'projets', progress: 'progression', credits: 'credits', cheatsheets: 'antiseche', progressGuide: 'guide-progression', pedagogy: 'approche-pedagogique'},
+export const NAV_WORDS: Record<Locale, {learn: string; projects: string; progress: string; credits: string; cheatsheets: string; progressGuide: string; pedagogy: string; contributors: string; contributorsGuide: string}> = {
+  en: {learn: 'learn', projects: 'projects', progress: 'progress', credits: 'credits', cheatsheets: 'cheatsheets', progressGuide: 'progress-guide', pedagogy: 'teaching-approach', contributors: 'contributors', contributorsGuide: 'contributors-guide'},
+  ar: {learn: 'تعلم', projects: 'مشاريع', progress: 'تقدم', credits: 'المصادر', cheatsheets: 'ملخصات', progressGuide: 'دليل-التقدم', pedagogy: 'المنهج-التعليمي', contributors: 'المساهمون', contributorsGuide: 'دليل-المساهمة'},
+  es: {learn: 'aprender', projects: 'proyectos', progress: 'progreso', credits: 'creditos', cheatsheets: 'referencias', progressGuide: 'guia-progreso', pedagogy: 'enfoque-pedagogico', contributors: 'colaboradores', contributorsGuide: 'guia-colaboradores'},
+  fr: {learn: 'apprendre', projects: 'projets', progress: 'progression', credits: 'credits', cheatsheets: 'antiseche', progressGuide: 'guide-progression', pedagogy: 'approche-pedagogique', contributors: 'contributeurs', contributorsGuide: 'guide-contributeurs'},
 };
 
 export const TRACK_WORDS: Record<Locale, {normal: string; hard: string}> = {

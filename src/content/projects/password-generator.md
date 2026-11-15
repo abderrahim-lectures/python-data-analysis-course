@@ -17,6 +17,7 @@ prerequisites:
   - Basic Python strings and functions
   - Understanding of lists and loops
   - Familiarity with pip/uv for installing packages
+author: abderrahim-adrabi
 ---
 
 # Password Generator

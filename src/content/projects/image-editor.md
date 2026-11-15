@@ -13,6 +13,7 @@ learningObjectives:
 prerequisites:
   - "Python basics (functions, loops, dictionaries)"
   - "File I/O and working with folders"
+author: abderrahim-adrabi
 ---
 
 # 🛠️ 🖼️ Build an Image Editor Toolkit

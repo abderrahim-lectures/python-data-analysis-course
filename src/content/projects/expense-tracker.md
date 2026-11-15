@@ -16,6 +16,7 @@ learningObjectives:
   - "Build a threshold-based budget alert system"
   - "Create bar charts and pie charts with matplotlib"
   - "Persist data to CSV and load it back across sessions"
+author: abderrahim-adrabi
 ---
 
 # 💰 Expense Tracker

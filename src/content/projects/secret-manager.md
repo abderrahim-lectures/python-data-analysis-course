@@ -10,6 +10,7 @@ learningObjectives:
   - "Decrypt and audit-append every access with a rotating key"
   - "Detect tampered ciphertext via authenticated decryption failure"
 prerequisites: ["python-101/file-io", "python-101/dictionaries", "python-101/functions"]
+author: abderrahim-adrabi
 ---
 
 # 🔐 Build a Secret Manager

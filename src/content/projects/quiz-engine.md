@@ -13,6 +13,7 @@ learningObjectives:
   - "Persist quiz history to JSON across sessions"
   - "Build a CLI menu for interactive quiz sessions"
 prerequisites: ["Python basics (classes, dictionaries, lists)", "Basic pandas and matplotlib"]
+author: abderrahim-adrabi
 ---
 
 # Quiz Engine

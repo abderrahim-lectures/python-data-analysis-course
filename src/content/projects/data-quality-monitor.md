@@ -13,6 +13,7 @@ learningObjectives:
   - "Compute an overall quality score from per-rule pass rates"
   - "Detect regressions by comparing pass rates between snapshots"
   - "Ship a CLI that returns a non-zero exit code on quality failure"
+author: abderrahim-adrabi
 ---
 
 # 🩺 Build a Data Quality Monitor

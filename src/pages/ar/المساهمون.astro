@@ -1,0 +1,7 @@
+---
+// المساهمون (Arabic), wrapper over the shared component.
+import {getCollection} from 'astro:content';
+import ContributorsPage from '../../components/ContributorsPage.astro';
+const projects = await getCollection('projects');
+---
+<ContributorsPage locale="ar" projects={projects} />

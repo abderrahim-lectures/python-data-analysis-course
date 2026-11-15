@@ -13,6 +13,7 @@ learningObjectives:
   - "Score and rank chunks for an arbitrary query with term frequency"
   - "Extract a sentence-level answer from the top chunk with a source citation"
   - "Wrap retrieval + answers in an interactive CLI that never depends on a network"
+author: abderrahim-adrabi
 ---
 
 # 📄 Build a Document Q&A Engine

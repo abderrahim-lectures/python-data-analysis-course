@@ -15,6 +15,7 @@ learningObjectives:
   - "Detect outliers with the IQR rule and clip them instead of deleting data"
   - "Normalize dates and strings so values compare cleanly"
   - "Build a full clean pipeline that returns one clean DataFrame plus an audit summary"
+author: abderrahim-adrabi
 ---
 
 # 🛠️ 🐼 Build an AI Data Cleaner

@@ -10,6 +10,7 @@ learningObjectives:
   - "Predict missing ratings from nearest-neighbor averages and measure the error"
   - "Build content-based profiles from item attributes and blend a hybrid recommender"
 prerequisites: ["python-101/libraries", "data-analysis/pandas", "data-analysis/groupby-aggregation", "numpy-101/arrays"]
+author: abderrahim-adrabi
 ---
 
 # 🎯 Build a Recommendation Engine

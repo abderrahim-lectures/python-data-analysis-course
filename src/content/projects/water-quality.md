@@ -14,6 +14,7 @@ prerequisites:
   - "Python basics (functions, loops, dictionaries)"
   - "Basic matplotlib pyplot (subplots, axhline)"
   - "Comfortable writing and reading CSV files"
+author: abderrahim-adrabi
 ---
 
 # 🛠️ 💧 Build a Water Quality Monitor

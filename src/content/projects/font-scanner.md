@@ -11,6 +11,7 @@ learningObjectives:
   - "Render font preview images showing heading and body text"
   - "Generate CSS font-family fallback chains with web-safe generics"
 prerequisites: ["Python basics", "Pillow basics"]
+author: abderrahim-adrabi
 ---
 
 # 🛠️ 🔤 Build a Font Pairing Tool

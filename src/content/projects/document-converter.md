@@ -6,6 +6,7 @@ estimatedMinutes: 40
 xpReward: 50
 tags: ["file-io", "markdown", "html", "cli"]
 prerequisites: ["Python basics (variables, loops, functions, strings)", "Basic file I/O"]
+author: abderrahim-adrabi
 ---
 
 # Document Converter

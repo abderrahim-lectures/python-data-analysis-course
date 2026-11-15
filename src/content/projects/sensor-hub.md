@@ -10,6 +10,7 @@ learningObjectives:
   - "Trigger threshold alerts and persist them with the stream"
   - "Visualize historical sensor data with Matplotlib"
 prerequisites: ["python-101/file-io", "python-101/dictionaries", "python-101/functions", "data-visualization/matplotlib"]
+author: abderrahim-adrabi
 ---
 
 # 📡 Build an IoT Sensor Hub

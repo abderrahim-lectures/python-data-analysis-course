@@ -15,6 +15,7 @@ learningObjectives:
 prerequisites:
   - "Python basics (variables, loops, functions, dictionaries)"
   - "Basic pandas and matplotlib"
+author: abderrahim-adrabi
 ---
 
 # Weather Dashboard

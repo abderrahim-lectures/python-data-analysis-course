@@ -2,6 +2,7 @@
 title: "Build an MCP Server"
 description: "Graduate from the in-browser playground to real Python: build a Model Context Protocol server exposing your own tools, and connect it to a real AI client like Claude Desktop."
 difficulty: "intermediate"
+author: abderrahim-adrabi
 ---
 
 # 🔌 Build an MCP Server

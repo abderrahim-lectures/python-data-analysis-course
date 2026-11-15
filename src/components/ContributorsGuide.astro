@@ -1,0 +1,189 @@
+---
+// Shared "how to add a project" guide: /contributors-guide,
+// /ar/دليل-المساهمة, /es/guia-colaboradores, /fr/guide-contributeurs.
+//
+// This page is the written version of what a first-time contributor actually
+// has to do. The file paths are the load-bearing part: they are the ones the
+// build reads, verified by tests/unit/contributors.test.ts, so a rename in the
+// repo that is not reflected here fails the suite rather than sending a
+// student to a path that no longer exists.
+import Base from '../layouts/Base.astro';
+import Icon from './Icon.astro';
+import {m} from '../paraglide/messages.js';
+import {NAV_WORDS, navWordAlternates, type Locale} from '../lib/routeSegments';
+
+interface Props {
+  locale: Locale;
+}
+const {locale} = Astro.props;
+const dir = locale === 'ar' ? 'rtl' : 'ltr';
+const base = import.meta.env.BASE_URL;
+const alternates = navWordAlternates('contributorsGuide');
+
+const steps = [
+  {title: m.guide_step_1_title(), body: m.guide_step_1_body()},
+  {title: m.guide_step_2_title(), body: m.guide_step_2_body()},
+  {title: m.guide_step_3_title(), body: m.guide_step_3_body()},
+  {title: m.guide_step_4_title(), body: m.guide_step_4_body()},
+  {title: m.guide_step_5_title(), body: m.guide_step_5_body()},
+  {title: m.guide_step_6_title(), body: m.guide_step_6_body()},
+  {title: m.guide_step_7_title(), body: m.guide_step_7_body()},
+];
+
+// The paths are literal on purpose: a contributor copies them, so they must
+// read as real paths, not as a chart. `required` drives the badge, and mirrors
+// what the content collection actually requires.
+interface GuideFile {
+  path: string;
+  what: string;
+  badge: 'required' | 'optional' | 'registry';
+}
+const files: GuideFile[] = [
+  {
+    path: 'src/content/projects/<your-slug>.md',
+    what: m.guide_file_project(),
+    badge: 'required',
+  },
+  {
+    path: 'examples/<your-slug>/',
+    what: m.guide_file_example(),
+    badge: 'optional',
+  },
+  {
+    path: 'src/lib/contributors.ts',
+    what: m.guide_file_registry_body(),
+    badge: 'registry',
+  },
+];
+
+const tips = [m.guide_tip_1(), m.guide_tip_2(), m.guide_tip_3(), m.guide_tip_4()];
+const badgeLabel: Record<GuideFile['badge'], string> = {
+  required: m.guide_file_required(),
+  optional: m.guide_file_optional(),
+  registry: m.guide_file_registry(),
+};
+
+const repo = 'https://github.com/abderrahim-lectures/python-data-analysis-course';
+---
+
+<Base title={m.guide_title()} description={m.guide_description()} lang={locale} dir={dir} alternates={alternates}>
+  <section class="container guide">
+    <header class="guide__head">
+      <p class="guide__eyebrow">{m.guide_eyebrow()}</p>
+      <h1>{m.guide_heading()}</h1>
+      <p class="guide__intro">{m.guide_intro()}</p>
+    </header>
+
+    <ol class="guide__steps">
+      {steps.map((s, i) => (
+        <li class="guide-step">
+          <span class="guide-step__num" aria-hidden="true">{i + 1}</span>
+          <div class="guide-step__body">
+            <h2>{s.title}</h2>
+            <p>{s.body}</p>
+            {i === 0 && (
+              <pre class="guide__code"><code>{`git clone https://github.com/YOUR-USERNAME/python-data-analysis-course.git
+cd python-data-analysis-course`}</code></pre>
+            )}
+            {i === 1 && (
+              <pre class="guide__code"><code>{`git checkout -b add-my-project`}</code></pre>
+            )}
+            {i === 2 && (
+              <pre class="guide__code"><code>{`cp src/content/projects/ai-agent.md src/content/projects/my-project.md`}</code></pre>
+            )}
+            {i === 5 && (
+              <pre class="guide__code"><code>{`npm install
+npm run test      # unit suites, including the contributor checks
+npm run typecheck
+npm run build`}</code></pre>
+            )}
+            {i === 6 && (
+              <pre class="guide__code"><code>{`git add src/content/projects/my-project.md src/lib/contributors.ts
+git commit -m "content: add <my project> project"
+git push -u origin add-my-project`}</code></pre>
+            )}
+          </div>
+        </li>
+      ))}
+    </ol>
+
+    <section class="guide__files">
+      <h2>{m.guide_files_heading()}</h2>
+      <ul>
+        {files.map((f) => (
+          <li class="guide-file">
+            <code class="guide-file__path">{f.path}</code>
+            <span class={`guide-file__badge guide-file__badge--${f.badge}`}>{badgeLabel[f.badge]}</span>
+            <p>{f.what}</p>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="guide__tips">
+      <h2>{m.guide_tips_heading()}</h2>
+      <ul>
+        {tips.map((t) => <li>{t}</li>)}
+      </ul>
+    </section>
+
+    <div class="guide__foot">
+      <a class="btn btn-ghost" href={`${base}${locale === 'en' ? '' : `${locale}/`}${NAV_WORDS[locale].contributors}`}>
+        <Icon name="trail" size={15} /> {m.guide_back_cta()}
+      </a>
+      <a class="btn btn-primary" href={`${repo}/issues/new`} target="_blank" rel="noopener noreferrer">
+        <Icon name="globe" size={15} /> {m.footer_github()}
+      </a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .guide { padding-block: 2.5rem 3.5rem; max-width: 78ch; }
+  .guide__eyebrow {
+    text-transform: uppercase; letter-spacing: .08em; font-size: .72rem;
+    font-weight: 800; color: var(--accent-text); margin: 0 0 .5rem;
+  }
+  .guide h1 { font-size: clamp(1.9rem, 4.4vw, 2.8rem); margin: 0 0 .6rem; line-height: 1.15; }
+  .guide__intro { color: var(--ink-soft); margin: 0 0 2rem; font-size: 1.02rem; }
+
+  .guide__steps { list-style: none; padding: 0; margin: 0 0 2.2rem; display: flex; flex-direction: column; gap: 1.1rem; counter-reset: step; }
+  .guide-step { display: flex; gap: .9rem; }
+  .guide-step__num {
+    flex: none; width: 1.9rem; height: 1.9rem; border-radius: 50%;
+    display: grid; place-items: center; font-weight: 800; font-size: .9rem;
+    background: var(--accent); color: var(--accent-contrast);
+  }
+  .guide-step__body { min-width: 0; flex: 1 1 auto; }
+  .guide-step h2 { font-size: 1.08rem; margin: .2rem 0 .3rem; }
+  .guide-step p { margin: 0; color: var(--ink-soft); font-size: .94rem; line-height: 1.55; }
+  .guide__code {
+    margin: .7rem 0 0; padding: .75rem .9rem; border-radius: var(--radius-md);
+    background: var(--bg-soft); border: 1px solid var(--line);
+    overflow-x: auto; font-size: .84rem; line-height: 1.55;
+  }
+  .guide__code code { font-family: var(--font-mono, ui-monospace, monospace); }
+
+  .guide__files, .guide__tips { margin-bottom: 2.2rem; }
+  .guide__files h2, .guide__tips h2 { font-size: 1.2rem; margin: 0 0 .8rem; }
+  .guide__files ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: .7rem; }
+  .guide-file {
+    border: 1px solid var(--line); border-radius: var(--radius-md);
+    padding: .8rem .9rem; background: var(--surface);
+  }
+  .guide-file__path { font-size: .86rem; font-weight: 700; word-break: break-all; }
+  .guide-file__badge {
+    margin-inline-start: .5rem; font-size: .68rem; font-weight: 800;
+    text-transform: uppercase; letter-spacing: .04em;
+    padding: .15rem .5rem; border-radius: 999px; white-space: nowrap;
+  }
+  .guide-file__badge--required { background: var(--accent-soft); color: var(--accent-text); }
+  .guide-file__badge--optional { background: var(--bg-soft); color: var(--ink-soft); }
+  .guide-file__badge--registry { background: var(--warn-soft); color: var(--xp-text); }
+  .guide-file p { margin: .4rem 0 0; color: var(--ink-soft); font-size: .89rem; line-height: 1.5; }
+
+  .guide__tips ul { margin: 0; padding-inline-start: 1.1rem; display: flex; flex-direction: column; gap: .45rem; }
+  .guide__tips li { color: var(--ink-soft); font-size: .94rem; line-height: 1.5; }
+
+  .guide__foot { display: flex; flex-wrap: wrap; gap: .6rem; }
+</style>

@@ -13,6 +13,7 @@ learningObjectives:
   - "Detect firmware drift against a latest-version map"
   - "Resolve each device's effective config by layering room overrides"
   - "Print a fleet report and expose it as a CLI"
+author: abderrahim-adrabi
 ---
 
 # 📡 Build a Device Manager

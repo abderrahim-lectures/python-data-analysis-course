@@ -10,6 +10,7 @@ learningObjectives:
   - "Score night quality from duration and a consistency component"
   - "Read a CSV history back and compare averages week over week"
 prerequisites: ["python-101/file-io", "python-101/strings", "python-101/datetime", "python-101/functions"]
+author: abderrahim-adrabi
 ---
 
 # 😴 Build a Sleep Analyzer

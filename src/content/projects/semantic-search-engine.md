@@ -10,6 +10,7 @@ learningObjectives:
   - "Rank documents by cosine similarity to a natural-language query"
   - "Diagnose when keywords beat semantics (and vice versa) with a hybrid probe"
 prerequisites: ["python-101/libraries", "numpy-101/arrays", "data-analysis/pandas"]
+author: abderrahim-adrabi
 ---
 
 # 🧠 Build a Semantic Search Engine

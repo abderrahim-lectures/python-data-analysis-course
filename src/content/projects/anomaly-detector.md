@@ -16,6 +16,7 @@ learningObjectives:
   - "Apply z-score based anomaly detection"
   - "Visualize anomalies on scatter plots and histograms"
   - "Build an automated anomaly reporting system"
+author: abderrahim-adrabi
 ---
 
 # Anomaly Detector

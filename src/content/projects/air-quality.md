@@ -15,6 +15,7 @@ learningObjectives:
   - "Label every hour with a category and find the worst and best readings"
   - "Aggregate hourly readings across a week and print a plain-language health report"
   - "Plot hourly AQI against category thresholds and save the figure to disk"
+author: abderrahim-adrabi
 ---
 
 # 🛠️ 🌬️ Build an Air Quality Dashboard

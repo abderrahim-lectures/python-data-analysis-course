@@ -13,6 +13,7 @@ learningObjectives:
   - "Rank runs and pick the best per metric with a direction table"
   - "Register artifact files with SHA-256 digests"
   - "Drive add / list / best from a small command-line interface"
+author: abderrahim-adrabi
 ---
 
 # 🧪 Build an Experiment Tracker

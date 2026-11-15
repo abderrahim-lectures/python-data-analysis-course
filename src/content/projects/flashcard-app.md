@@ -6,6 +6,7 @@ estimatedMinutes: 40
 xpReward: 50
 tags: ["cli", "json", "spaced-repetition", "file-io"]
 prerequisites: ["Python basics (variables, loops, functions, dictionaries)", "Basic file I/O"]
+author: abderrahim-adrabi
 ---
 
 # Flashcard App

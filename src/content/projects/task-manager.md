@@ -14,6 +14,7 @@ prerequisites:
   - "Python basics (functions, lists, dictionaries)"
   - "Comfort with sys.argv and running scripts from a terminal"
   - "Optional: a light touch of datetime and date"
+author: abderrahim-adrabi
 ---
 
 # 🛠️ 🗂️ Build a Task Manager CLI

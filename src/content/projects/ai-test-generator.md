@@ -15,6 +15,7 @@ learningObjectives:
   - "Synthesize a pytest module programmatically from those inputs plus property checks"
   - "Compose an LLM 'intent test' prompt and degrade gracefully when no API key exists"
   - "Run the generated suite as a subprocess and turn its exit code into a verdict"
+author: abderrahim-adrabi
 ---
 
 # 🛠️ 🧪 Build an AI Test Generator

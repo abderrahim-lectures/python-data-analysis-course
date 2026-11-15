@@ -10,6 +10,7 @@ learningObjectives:
   - "Classify methods and results text by section membership"
   - "Implement a tiny ranked search over parsed paper content"
 prerequisites: ["python-101/file-io", "python-101/strings", "python-101/functions", "python-101/dictionaries"]
+author: abderrahim-adrabi
 ---
 
 # 📄 Build a Research Paper Parser

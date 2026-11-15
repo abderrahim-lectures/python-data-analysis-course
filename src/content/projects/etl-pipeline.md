@@ -13,6 +13,7 @@ learningObjectives:
   - "Aggregate line totals by city into a revenue report"
   - "Load records into SQLite idempotently with primary keys"
   - "Guard the pipeline against a missing source and re-run safely"
+author: abderrahim-adrabi
 ---
 
 # 🔄 Build an ETL Pipeline

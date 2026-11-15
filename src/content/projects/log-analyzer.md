@@ -10,6 +10,7 @@ learningObjectives:
   - "Detect recurring patterns and anomalies with collections.Counter"
   - "Render a timeline of events per hour with matplotlib"
 prerequisites: ["python-101/file-io", "python-101/strings", "python-101/data-structures", "data-analysis/groupby-aggregation"]
+author: abderrahim-adrabi
 ---
 
 # 📊 Build a Log Analyzer & Visualizer

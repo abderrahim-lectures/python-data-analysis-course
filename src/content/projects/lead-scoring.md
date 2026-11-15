@@ -2,6 +2,7 @@
 title: "Build a Lead Scoring Engine"
 description: "Score and prioritize sales leads based on engagement, demographics, and behavior signals."
 difficulty: "intermediate"
+author: abderrahim-adrabi
 ---
 # 🎯 Build a Lead Scoring Engine
 
