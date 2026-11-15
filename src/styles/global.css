@@ -260,6 +260,12 @@ button { font-family: inherit; cursor: pointer; }
 .footer__col a:hover { color: var(--accent); transform: translateX(2px); }
 .footer__bottom { padding-block: 1.25rem; border-top: 1px solid var(--line); color: var(--ink-faint); font-size: .82rem; display: flex; flex-wrap: wrap; gap: .75rem 2rem; align-items: center; justify-content: space-between; }
 .footer__bottom p { margin: 0; }
+/* "Supported by Open Math Model" -- a real credit, so it reads as text with a
+   link, not as a badge; sits between the copyright and the consent card and
+   wraps to its own line on narrow screens rather than squeezing them. */
+.footer__support { display: inline-flex; align-items: center; gap: .4rem; color: var(--ink-soft); text-decoration: none; font-weight: 600; }
+.footer__support .ic { color: var(--accent); }
+.footer__support:hover { color: var(--accent-text); text-decoration: underline; }
 .consent-card { display: flex; align-items: center; gap: 1rem; padding: .55rem .9rem; border: 1px solid var(--line); border-radius: 12px; background: color-mix(in srgb, var(--accent) 6%, transparent); }
 .consent-card__text { display: flex; flex-direction: column; gap: .1rem; }
 .consent-card__text span { display: inline-flex; align-items: center; gap: .35rem; color: var(--ink); font-weight: 700; font-size: .82rem; }
@@ -629,6 +635,16 @@ button { font-family: inherit; cursor: pointer; }
 /* Copy button sits right of Run in the action bar; the class is assigned
    client-side, so it's styled here with the rest of the cell chrome. */
 .cell__copy { margin-left: .5rem; }
+
+/* Stop control, created client-side for the duration of a run. It must sit
+   ABOVE the busy overlay (z-index 99998, inset 0, pointer-events: auto) or it
+   would be covered by the very thing it interrupts; the overlay is a plain
+   centred spinner, so the bottom-right corner stays readable. Bottom-right on
+   desktop, full-width bar on phones where a corner button is a poor target. */
+.run-stop { position: fixed; right: 1.25rem; bottom: 1.25rem; z-index: 99999; }
+@media (max-width: 560px) {
+  .run-stop { right: 1rem; left: 1rem; bottom: 1rem; width: auto; }
+}
 
 /* === Generic (non-runnable) fenced code blocks, e.g. shell/output snippets === */
 .lesson-content pre:not(.cell__code):not([data-runnable] pre) {

@@ -22,7 +22,7 @@ import {
   type PyodideModel,
   type CellRuntime,
 } from './pythonRunnerCore.ts';
-import {runInWorker} from './pyodideWorkerClient.ts';
+import {runInWorker, stopRun} from './pyodideWorkerClient.ts';
 import {addXP, loadState} from './gameState.ts';
 
 // Re-exported for unit tests, which import these from this module rather
@@ -56,6 +56,26 @@ export async function awardLessonXp(lessonId: string): Promise<{gained: number; 
   const firstRunEver = Object.keys(loadState().lessonsRun ?? {}).length === 0;
   const {gained} = addXP(lessonId);
   return {gained, firstRunEver};
+}
+
+// The busy overlay is `position: fixed; inset: 0; pointer-events: auto` at
+// z-index 99998, so a Stop button inside the cell would be covered by the very
+// thing it has to interrupt. It floats above the overlay instead, in the
+// bottom-right corner where the overlay has no content, and exists only while
+// a run is in flight. Not per-cell there: there is exactly one worker and one
+// overlay, so there is exactly one stop affordance.
+const STOP_CLASS = 'run-stop';
+
+function showStopButton(onStop: () => void): () => void {
+  if (typeof document === 'undefined') return () => {};
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = `btn btn-primary ${STOP_CLASS}`;
+  btn.textContent = m.stop_button();
+  btn.setAttribute('aria-label', m.stop_aria());
+  btn.addEventListener('click', onStop);
+  document.body.appendChild(btn);
+  return () => btn.remove();
 }
 
 export interface InitCellDeps {
@@ -190,15 +210,35 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
       });
       dispatchPyodideEvent('pyodide:ready');
     } else {
-      executed = await runInWorker(src, {allSource, otherCellSources, locale: getLocale(), stdin}, {
-        appendLine,
-        appendFigure,
-        onPhase: setPhaseLabel,
-        onLoading: (detail) => dispatchPyodideEvent('pyodide:loading', detail),
-        onProgress: (pct) => dispatchPyodideEvent('pyodide:progress', {pct}),
-        onReady: () => dispatchPyodideEvent('pyodide:ready'),
-        onStdinExhausted: inputs.grow,
+      // A cell that never returns (a `while True:` with no break, which module
+      // 3 teaches people to write by accident) otherwise wedges the whole site:
+      // the worker drains its queue serially, the overlay covers every pointer
+      // target, and there is no interrupt -- Pyodide's interrupt buffer needs
+      // SharedArrayBuffer, and this site has no cross-origin isolation. The
+      // only exit is terminating the worker, which is what Stop does.
+      let stopped = false;
+      const removeStop = showStopButton(() => {
+        if (stopped) return;
+        stopped = true;
+        if (!stopRun()) return;
+        appendLine('err', m.cell_stopped());
+        // Clears the overlay and the loading bar; the run's own promise is
+        // settled by stopRun, so the code below this await still runs.
+        dispatchPyodideEvent('pyodide:ready');
       });
+      try {
+        executed = await runInWorker(src, {allSource, otherCellSources, locale: getLocale(), stdin}, {
+          appendLine,
+          appendFigure,
+          onPhase: setPhaseLabel,
+          onLoading: (detail) => dispatchPyodideEvent('pyodide:loading', detail),
+          onProgress: (pct) => dispatchPyodideEvent('pyodide:progress', {pct}),
+          onReady: () => dispatchPyodideEvent('pyodide:ready'),
+          onStdinExhausted: inputs.grow,
+        });
+      } finally {
+        removeStop();
+      }
     }
 
     run.textContent = m.run_button();

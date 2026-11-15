@@ -26,11 +26,46 @@ export interface WorkerRunCallbacks {
 let worker: Worker | null = null;
 let nextId = 1;
 
+// Every run awaiting a reply, by request id. A Stop terminates the worker, so
+// none of these will ever hear a 'done' -- they are settled here instead, or
+// their promise (and the cell's "Executing…" state) would hang forever.
+const pending = new Map<number, () => void>();
+
 function getWorker(): Worker {
   if (!worker) {
     worker = new Worker(new URL('./pyodide.worker.ts', import.meta.url), {type: 'module'});
   }
   return worker;
+}
+
+/**
+ * Abort whatever the shared worker is doing and drop it. The next run builds a
+ * fresh worker with a fresh engine, which is the only way out of a cell that
+ * never returns: Pyodide's interrupt buffer needs SharedArrayBuffer, and this
+ * site has no cross-origin isolation, so `while True: pass` can only be ended
+ * by killing the thread it runs on.
+ *
+ * Returns false when nothing was running (so callers can stay silent).
+ */
+export function stopRun(): boolean {
+  if (!worker) return false;
+  try { worker.terminate(); } catch { /* already gone */ }
+  worker = null;
+  // Snapshot: finish() deletes from the map as it settles each one.
+  for (const settle of [...pending.values()]) settle();
+  pending.clear();
+  return true;
+}
+
+export function isWorkerRunning(): boolean {
+  return worker !== null && pending.size > 0;
+}
+
+/** For tests: drop whatever worker the previous case left behind. */
+export function resetWorkerForTests(): void {
+  stopRun();
+  worker = null;
+  nextId = 1;
 }
 
 // Runs one cell's code in the worker and resolves once it's done (never
@@ -51,11 +86,21 @@ export function runInWorker(
   const id = nextId++;
   return new Promise((resolve) => {
     const finish = (executed: boolean) => {
+      pending.delete(id);
       cb.onReady();
       w.removeEventListener('message', onMessage);
       w.removeEventListener('error', onError);
       resolve(executed);
     };
+    // Registered before the first await so a Stop landing mid-run can settle
+    // this promise. A stop does not run cb.onReady() from here -- the cell
+    // that owns the run reports it in its own words and clears the overlay.
+    pending.set(id, () => {
+      pending.delete(id);
+      w.removeEventListener('message', onMessage);
+      w.removeEventListener('error', onError);
+      resolve(false);
+    });
     const onMessage = (ev: MessageEvent<WorkerOutMessage>) => {
       const msg = ev.data;
       if (msg.id !== id) return;

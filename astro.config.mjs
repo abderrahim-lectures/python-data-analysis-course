@@ -8,6 +8,7 @@ import {unified} from '@astrojs/markdown-remark';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import remarkAdmonitions from './src/lib/remark-admonitions.mjs';
+import remarkNoRunFences from './src/lib/remark-no-run-fences.mjs';
 import rehypeRunnablePython from './src/lib/rehype-runnable-python.mjs';
 import rehypeSectionBlocks from './src/lib/rehype-section-blocks.mjs';
 import rehypeDropLeadingH1 from './src/lib/rehype-drop-leading-h1.mjs';
@@ -62,7 +63,7 @@ export default defineConfig({
   markdown: {
     shikiConfig: {theme: 'github-dark-default'},
     processor: unified({
-      remarkPlugins: [remarkAdmonitions, remarkMath],
+      remarkPlugins: [remarkAdmonitions, remarkMath, remarkNoRunFences],
       rehypePlugins: [
         rehypeFixDocsLinks,
         rehypeDropLeadingH1,
