@@ -1,6 +1,6 @@
 # Codebase Knowledge Graph Example
 
-The local companion to the course's [Turn a Codebase into a Knowledge Graph](../../docs/projects/codebase-knowledge-graph/index.md) project — a real, runnable tool that parses a Python repo's own source with the built-in `ast` module, builds a graph of its files/functions/classes with `networkx`, and visualizes it as an interactive HTML page with `pyvis`.
+The local companion to the course's [Turn a Codebase into a Knowledge Graph](https://pyda-course.online/projects/codebase-knowledge-graph/) project — a real, runnable tool that parses a Python repo's own source with the built-in `ast` module, builds a graph of its files/functions/classes with `networkx`, and visualizes it as an interactive HTML page with `pyvis`.
 
 <!-- TODO: update these badge links to point at main once this PR merges -->
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/abderrahim-lectures/python-data-analysis-course/blob/main/examples/codebase-knowledge-graph/notebook.ipynb)
@@ -41,7 +41,7 @@ uv run python build_graph.py /path/to/python-data-analysis-course/examples
 
 `uv run` reads `pyproject.toml`/`uv.lock` and creates an isolated environment for this project automatically on first run — no manual virtual environment setup needed.
 
-See the full [Turn a Codebase into a Knowledge Graph lesson](../../docs/projects/codebase-knowledge-graph/index.md) for the step-by-step walkthrough, including how the AST parsing and call-resolution logic work.
+See the full [Turn a Codebase into a Knowledge Graph lesson](https://pyda-course.online/projects/codebase-knowledge-graph/) for the step-by-step walkthrough, including how the AST parsing and call-resolution logic work.
 
 ## Built your own version?
 

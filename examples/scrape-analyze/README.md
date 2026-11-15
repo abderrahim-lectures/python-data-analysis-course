@@ -1,6 +1,6 @@
 # Scrape and Analyze a Live Website Example
 
-The local companion to the course's [Scrape and Analyze a Live Website](../../docs/projects/scrape-analyze/index.md) project — a real, runnable scraper and analysis pipeline targeting [quotes.toscrape.com](https://quotes.toscrape.com), a public site built specifically for scraping practice.
+The local companion to the course's [Scrape and Analyze a Live Website](https://pyda-course.online/projects/scrape-analyze/) project — a real, runnable scraper and analysis pipeline targeting [quotes.toscrape.com](https://quotes.toscrape.com), a public site built specifically for scraping practice.
 
 ## What's here
 
@@ -19,9 +19,9 @@ uv run python analyze.py
 
 `uv run` reads `pyproject.toml`/`uv.lock` and creates an isolated environment for this project automatically on first run — no manual virtual environment setup needed. `scrape.py` must run first; `analyze.py` reads the `quotes.csv` it produces.
 
-Prefer a hosted notebook instead? Open `notebook.ipynb` via one of the Open in Colab / Kaggle / Binder badges on the [lesson page](../../docs/projects/scrape-analyze/index.md#where-to-run-this) — same pipeline, no local install.
+Prefer a hosted notebook instead? Open `notebook.ipynb` via one of the Open in Colab / Kaggle / Binder badges on the [lesson page](https://pyda-course.online/projects/scrape-analyze/#where-to-run-this) — same pipeline, no local install.
 
-See the full [Scrape and Analyze a Live Website lesson](../../docs/projects/scrape-analyze/index.md) for the step-by-step walkthrough, including what each part of the scraper does and how to read the resulting charts.
+See the full [Scrape and Analyze a Live Website lesson](https://pyda-course.online/projects/scrape-analyze/) for the step-by-step walkthrough, including what each part of the scraper does and how to read the resulting charts.
 
 ## Built your own scraper?
 

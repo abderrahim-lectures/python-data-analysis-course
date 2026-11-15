@@ -2,7 +2,7 @@
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/abderrahim-lectures/python-data-analysis-course)
 
-A real, runnable issue-triage *drafting* script — the fuller version of the one built step by step in [the course's Real-World Projects lesson](../../docs/projects/github-issue-triage-agent/index.md). Fetches OPEN issues from a real public GitHub repo, asks a free-tier LLM to suggest a triage label and a one-sentence rationale for each one, and prints a readable report.
+A real, runnable issue-triage *drafting* script — the fuller version of the one built step by step in [the course's Real-World Projects lesson](https://pyda-course.online/projects/github-issue-triage-agent/). Fetches OPEN issues from a real public GitHub repo, asks a free-tier LLM to suggest a triage label and a one-sentence rationale for each one, and prints a readable report.
 
 ## This drafts suggestions. It never applies anything.
 
@@ -12,7 +12,7 @@ Every suggestion this script prints is exactly that — a suggestion, for a huma
 
 **You're free to use whichever free-tier LLM provider you like** — this isn't locked to GitHub Models. Six are wired up in `triage.py`'s `PROVIDERS` dict: **GitHub Models** (the default — no separate signup, uses a GitHub account you already have), Gemini, Groq, Mistral, Cerebras, and OpenRouter.
 
-1. **Get a free-tier API key** from your chosen provider — see the table in the [lesson's Setup section](../../docs/projects/github-issue-triage-agent/index.md#setup) for where to get one for each.
+1. **Get a free-tier API key** from your chosen provider — see the table in the [lesson's Setup section](https://pyda-course.online/projects/github-issue-triage-agent/#setup) for where to get one for each.
 2. **Copy `.env.example` to `.env`** and fill in the key for your provider (and `LLM_PROVIDER`/`GITHUB_REPO` if you don't want the defaults):
    ```bash
    cp .env.example .env
@@ -45,7 +45,7 @@ print_triage_report("psf", "requests", issues, suggestions)
 
 ## Running it in a hosted notebook (Colab / Kaggle / Binder)
 
-Prefer not to set up `uv` locally? [`notebook.ipynb`](notebook.ipynb) in this folder is a self-contained port of `triage.py` — same fetch-issues / build-prompt / call-LLM / print-report logic, split into cells with a `getpass()` prompt for your GitHub Models API key (and an optional second one for a higher GitHub REST API rate limit). Open it with the "Open in Colab" / "Open in Kaggle" / "Binder" badges at the top of the [lesson's "Where to run this" section](../../docs/projects/github-issue-triage-agent/index.md#where-to-run-this) and run the cells top to bottom — no local install required.
+Prefer not to set up `uv` locally? [`notebook.ipynb`](notebook.ipynb) in this folder is a self-contained port of `triage.py` — same fetch-issues / build-prompt / call-LLM / print-report logic, split into cells with a `getpass()` prompt for your GitHub Models API key (and an optional second one for a higher GitHub REST API rate limit). Open it with the "Open in Colab" / "Open in Kaggle" / "Binder" badges at the top of the [lesson's "Where to run this" section](https://pyda-course.online/projects/github-issue-triage-agent/#where-to-run-this) and run the cells top to bottom — no local install required.
 
 ## Running it in GitHub Codespaces
 

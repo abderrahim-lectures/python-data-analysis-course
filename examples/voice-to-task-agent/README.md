@@ -7,7 +7,7 @@
 
 <!-- TODO: update the Colab/Kaggle/Binder badge links above to point at main once this PR merges -->
 
-A real, runnable version of the pipeline built step by step in the course's [Build a Voice-to-Task Agent](../../docs/projects/voice-to-task-agent/index.md) project: transcribe a voice memo locally with OpenAI's open-source [Whisper](https://github.com/openai/whisper) model, then ask a free-tier LLM to turn the transcript into a structured task list.
+A real, runnable version of the pipeline built step by step in the course's [Build a Voice-to-Task Agent](https://pyda-course.online/projects/voice-to-task-agent/) project: transcribe a voice memo locally with OpenAI's open-source [Whisper](https://github.com/openai/whisper) model, then ask a free-tier LLM to turn the transcript into a structured task list.
 
 **Zero-install alternative:** click one of the Colab / Kaggle / Binder badges above to run the whole pipeline in a hosted notebook — no `uv`, no local Python setup, and (on Colab) a free GPU for faster transcription. See [`notebook.ipynb`](./notebook.ipynb) for the source, or "Running it" below for the local `uv` path.
 
@@ -32,7 +32,7 @@ Feel free to record your own memo and pass its path in instead — see "Running 
 
 **You're free to use whichever free-tier provider you like** for the extraction step — this isn't locked to any one of them. Six are wired up already: **GitHub Models** (the default — no separate signup, uses a GitHub account you already have), Gemini, Groq, Mistral, Cerebras, and OpenRouter.
 
-1. **Get a free-tier API key** from your chosen provider — see the table in the [lesson](../../docs/projects/voice-to-task-agent/index.md#step-3-get-a-free-llm-api-key) for where to get one for each.
+1. **Get a free-tier API key** from your chosen provider — see the table in the [lesson](https://pyda-course.online/projects/voice-to-task-agent/#step-3-get-a-free-llm-api-key) for where to get one for each.
 2. **Copy `.env.example` to `.env`** and fill in the key for your provider (and `LLM_PROVIDER` if you're not using the default):
    ```bash
    cp .env.example .env
@@ -70,7 +70,7 @@ Transcription is CPU work, so a Codespace handles it fine, just somewhat slower 
 
 ## A note on staying current
 
-Model names and provider API details in this space change fast — the model IDs and endpoints here were verified against live runs while writing this example, but may have drifted by the time you read this. See the callout in the [lesson](../../docs/projects/voice-to-task-agent/index.md) for what to check before relying on this code.
+Model names and provider API details in this space change fast — the model IDs and endpoints here were verified against live runs while writing this example, but may have drifted by the time you read this. See the callout in the [lesson](https://pyda-course.online/projects/voice-to-task-agent/) for what to check before relying on this code.
 
 ## Built your own project?
 

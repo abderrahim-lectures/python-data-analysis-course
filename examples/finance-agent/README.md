@@ -5,7 +5,7 @@
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/finance-agent/notebook.ipynb)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Ffinance-agent%2Fnotebook.ipynb)
 
-The local companion to the course's [Build a Personal Finance Agent](../../docs/projects/finance-agent/index.md) Real-World Project — a real, runnable pipeline that categorizes a bank CSV export and flags spending anomalies, combining pandas with a LangChain [`deepagents`](https://github.com/langchain-ai/deepagents) tool-calling agent.
+The local companion to the course's [Build a Personal Finance Agent](https://pyda-course.online/projects/finance-agent/) Real-World Project — a real, runnable pipeline that categorizes a bank CSV export and flags spending anomalies, combining pandas with a LangChain [`deepagents`](https://github.com/langchain-ai/deepagents) tool-calling agent.
 
 Badges above point at this PR's branch and will be updated to point at `main` once it's merged.
 
@@ -33,7 +33,7 @@ Take a raw bank CSV export and turn it into something a person can actually act 
 
 **You're free to use whichever free-tier provider you like** — this isn't locked to any one of them. Six are wired up already: **GitHub Models** (the default), Gemini, Groq, Mistral, Cerebras, and OpenRouter.
 
-1. **Get a free-tier API key** from your chosen provider — see the table in the [project doc](../../docs/projects/finance-agent/index.md#setup) for where to get one for each.
+1. **Get a free-tier API key** from your chosen provider — see the table in the [project doc](https://pyda-course.online/projects/finance-agent/#setup) for where to get one for each.
 2. **Copy `.env.example` to `.env`** and fill in the key for your provider:
    ```bash
    cp .env.example .env

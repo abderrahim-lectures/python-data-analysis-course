@@ -1,6 +1,6 @@
 # Webcam Object Counter Example
 
-The local companion to the course's [Count Objects in Real Time with a Webcam](../../docs/projects/webcam-object-counter/index.md) Real-World Project — real, runnable scripts that detect and count objects with OpenCV and a pretrained YOLO11n model, on a bundled sample image, a bundled sample video, and (locally only) a live webcam.
+The local companion to the course's [Count Objects in Real Time with a Webcam](https://pyda-course.online/projects/webcam-object-counter/) Real-World Project — real, runnable scripts that detect and count objects with OpenCV and a pretrained YOLO11n model, on a bundled sample image, a bundled sample video, and (locally only) a live webcam.
 
 ## What's here
 
@@ -41,4 +41,4 @@ Saved annotated image to output_street.jpg
 
 Exact confidence numbers can shift slightly between `ultralytics` versions as the underlying weights get refreshed, but the object counts on these particular sample images should stay stable.
 
-See the full [lesson](../../docs/projects/webcam-object-counter/index.md) for the step-by-step walkthrough, including the tradeoffs between a full YOLO model and OpenCV's lighter Haar cascades, and how to read a webcam permission failure versus "no objects detected."
+See the full [lesson](https://pyda-course.online/projects/webcam-object-counter/) for the step-by-step walkthrough, including the tradeoffs between a full YOLO model and OpenCV's lighter Haar cascades, and how to read a webcam permission failure versus "no objects detected."

@@ -1,6 +1,6 @@
 # Rate-Limited API Service Example
 
-The local companion to the course's [Build a Rate-Limited API Service](../../docs/projects/rate-limited-api/index.md) project -- a real, runnable [FastAPI](https://fastapi.tiangolo.com/) app wrapping a bundled quotes dataset, with genuine API-key auth and a from-scratch sliding-window rate limiter.
+The local companion to the course's [Build a Rate-Limited API Service](https://pyda-course.online/projects/rate-limited-api/) project -- a real, runnable [FastAPI](https://fastapi.tiangolo.com/) app wrapping a bundled quotes dataset, with genuine API-key auth and a from-scratch sliding-window rate limiter.
 
 ## What's here
 

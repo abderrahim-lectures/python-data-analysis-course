@@ -3,7 +3,7 @@
 A real, runnable browser-automation agent — combines Python [Playwright](https://playwright.dev/python/)
 (real browser control) with an LLM tool-calling agent built with LangChain's
 [`deepagents`](https://github.com/langchain-ai/deepagents), the fuller version of the one built step
-by step in the course's [Browser-Automation Agent project](../../docs/projects/browser-automation-agent/index.md).
+by step in the course's [Browser-Automation Agent project](https://pyda-course.online/projects/browser-automation-agent/).
 
 ## Objective
 
@@ -35,7 +35,7 @@ the two never interact, and you don't need Node installed to run anything in thi
 ### 2. Get a free-tier API key
 
 **You're free to use whichever provider you like** — see the table in the
-[project doc's Setup section](../../docs/projects/browser-automation-agent/index.md#setup) for where
+[project doc's Setup section](https://pyda-course.online/projects/browser-automation-agent/#setup) for where
 to get one for each. Six are wired up already: **GitHub Models** (the default), Gemini, Groq, Mistral,
 Cerebras, and OpenRouter.
 
@@ -63,7 +63,7 @@ to get a ready-to-go cloud dev environment. Browser install works fine there too
 Unlike this course's other agent examples, there's no Colab/Kaggle/Binder notebook for this one — a
 real Playwright browser needs a real browser binary and (for a visible window) a display, neither of
 which a hosted notebook can give you. See the project doc's
-["Where to run this"](../../docs/projects/browser-automation-agent/index.md#where-to-run-this) section
+["Where to run this"](https://pyda-course.online/projects/browser-automation-agent/#where-to-run-this) section
 for the reasoning, including what a notebook-friendly *partial* demo would look like if you want to
 build one yourself.
 
