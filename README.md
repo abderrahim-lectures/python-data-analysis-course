@@ -45,7 +45,7 @@ By the end of the course, a student can:
 
 ## Architecture
 
-An interactive runtime architecture diagram (Astro SSG, browser, Pyodide, game engine, Supabase/anonymous auth) is in [docs/architecture.html](docs/architecture.html) — open it locally in a browser.
+An interactive runtime architecture diagram (Astro SSG, browser, Pyodide, game engine, Supabase/anonymous auth) is in [architecture.html](https://pyda-course.online/architecture.html) (source: `public/architecture.html`) — open it locally in a browser.
 
 ## Development
 
@@ -114,8 +114,11 @@ Found a typo or a broken example while going through a lesson? Lesson content li
 
 **Ways to contribute:**
 - **Content**: write or improve a week's lesson, challenges, or socratic questions — see [`plan/content-pattern.md`](./plan/content-pattern.md) and [`plan/content-style-guide.md`](./plan/content-style-guide.md) for the expected structure and tone.
+- **A real-world project**: the full walkthrough — which files to add, how to get credited, and the commands to check your work — is on the site at [pyda-course.online/contributors-guide](https://pyda-course.online/contributors-guide/). In short: one markdown file under `src/content/projects/`, an optional `examples/<slug>/` folder, and your entry in `src/lib/contributors.ts`.
 - **Translations**: the whole surface — UI chrome plus lesson, module, project, and cheatsheet body content — is translated for Arabic, Spanish, and French. UI strings live in `messages/{en,ar,es,fr}.json` (compiled by [Paraglide](https://inlang.com/m/gerre34r/library-inlang-paraglideJs) into `src/paraglide/`), route segments in `src/lib/routeSegments.ts`, translated project content under `src/content/projects/<locale>/`. Project URLs are localized per locale (e.g. `/es/proyectos/catalogo-de-datos`) — the English slug still resolves as a canonical alias. A `type:i18n` PR fixing or improving an existing translation is welcome.
 - **Components/infra**: bug fixes, accessibility improvements, and performance work on the playground, gamification, or sharing features.
+
+Contributors are credited by what they wrote, on the site's [Contributors page](https://pyda-course.online/contributors/) — authorship is declared (`author:` in a project's frontmatter, resolved through `src/lib/contributors.ts`) rather than derived from git, so a student without a GitHub account is credited just as well as one with.
 
 Please don't open a PR without a linked issue first for anything non-trivial — it avoids duplicated or conflicting work.
 

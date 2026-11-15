@@ -2,6 +2,45 @@
 
 All notable changes to this project are documented in this file. Format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [2.0.16] — 2026-11-15
+
+A contributors page, a written guide for the people who write for it, and the
+open defects from the November audit. The top item is R49: a cell that never
+returns used to take the whole site with it.
+
+### Added
+- **Contributors page** (`/contributors`, `/es/colaboradores`, `/fr/contributeurs`, `/ar/المساهمون`): every person who wrote a project, credited for what they wrote, with the projects they wrote linked. Authorship is declared, not derived: `author:` in a project's frontmatter resolves through the new `src/lib/contributors.ts` registry. Deriving it from git does not work in this repo — all 135 English project files were added in one commit by the maintainer, and a student who writes outside GitHub leaves no trail at all. The registry takes a name with no GitHub handle, so a contributor without an account is credited the same as one with.
+- **A guide to adding a project** (`/contributors-guide` and three locales): the seven steps from forking to opening the pull request, the exact files to touch, and the commands to check the work first. `tests/unit/contributors.test.ts` couples the guide's paths to the tree, so renaming a file without updating the instructions fails the suite.
+- **"Supported by Open Math Model"** in the footer, linked to `openmathmodel.org`, in all four locales. Open Math Model is an initiative of the SAIR Foundation ("Infrastructure for Math 2.0").
+- **A Stop button** while a cell runs (see R49 below), with copy in four locales.
+- **Fence opt-out**: a lesson fence can be marked ```` ```python no-run ```` to stay a plain code block (`src/lib/remark-no-run-fences.mjs`). The marker survives Shiki, which drops `hProperties`, by recording the fence's source on the vfile and matching it in the rehype pass.
+
+### Fixed
+- **R49, the top open item in the runtime audit: a cell that never returns bricked the page.** `while True: pass`, or a loop missing its `break` — which module 3 teaches people to write by accident — pinned the full-screen busy overlay (`position: fixed; inset: 0; pointer-events: auto`), left Run disabled on "Executing…", and queued every later run behind it on every page, because the worker is a page-lifetime singleton and the overlay survives soft navigation. Pyodide's interrupt buffer is unusable here (no cross-origin isolation, so no `SharedArrayBuffer`), so terminating the worker is the only exit. `stopRun()` in `pyodideWorkerClient.ts` terminates it, settles every pending run as not-executed (so no XP is awarded for a cancelled run), and drops it so the next Run boots a fresh engine. The Stop control is a fixed-position button with `z-index` above the overlay — inside the cell it would have been covered by the very thing it interrupts — and the cell prints "⏹ Stopped" rather than the engine-load error the client would otherwise report. Verified in a real browser: overlay up and pointer-blocked while stuck, Stop on top of it, page interactive afterwards, and a subsequent run printing normally. Four tests, including that a stop settles the runs queued behind the stuck one.
+- **Issue 07: the CLI generator's "Practice Challenge" cell always failed.** The fence is a fragment to paste into the script above it, so running it standalone raised `NameError: name 'parser' is not defined`. Marked `no-run`; it now renders as a plain code block.
+- **Issue 06's remaining half**: the vendor script failed the build on the first bad CDN response, with no retry. It now tries jsdelivr and the official Pyodide release host, three attempts with backoff and a 120 s timeout each, and reports every failure together.
+- **A flaky unit suite**: three tests per run timed out at vitest's default 5 s budget under parallel execution while passing serially — `pyodideWorkerClient.test.ts` and `gamestrip.client.test.ts` both compile a large import graph on their first case, and the whole suite's transform is ~45 s. Three consecutive runs failed 3/1306 before, and three pass clean after raising `testTimeout`/`hookTimeout` to 20 s. A flaky red suite trains people to ignore it.
+- **The credits page was unreachable.** It exists in all four locales and nothing linked it — not the nav, not the footer, not a single content file. It is now linked from the footer.
+- **10 example folders had four notebooks each and no README**, so their gallery entries were bare. Each now has one, generated from the project's own frontmatter, linking its notebook and its lesson page.
+- **80 broken relative links across 24 example READMEs.** 73 pointed at `../../docs/projects/...`, a tree deleted in the Astro restructure; the rest at `docs/bonus/`, `student-agents/` (renamed) and `capstone-agent/` (never existed). All now point at the live project URLs.
+- **`PopularPages` was dead code** — no importer since the homepage card was removed, with two message keys still shipped in four locales. Deleted, along with its strings.
+- **The eight docs claims that no longer matched the tree**: README linked `docs/architecture.html` (it is `public/architecture.html`); `plan/pwa.md` described a manifest and service worker that do not exist (marked as an unimplemented design); `plan/deferred.md` said Pyodide loads from a CDN at runtime (it is vendored); `plan/code-organization.md` cited `src/content/config.ts` (it is `src/content.config.ts`).
+
+### Changed
+- **The four homepages are one component.** They were 207–208 lines each and 93–94% identical — import depth and a locale string were the only differences — so every homepage change had to be made four times and drift between them was invisible. `src/components/HomePage.astro` holds the markup; each locale route is a six-line wrapper. 830 lines became 246.
+- **Dependencies**: astro 7.4.4 → **7.4.12**, past GHSA-mh32-jxcr-mh9f (XSS via attribute injection in dynamic tag names, which affects `<=7.4.6`). KaTeX is pinned to a single 0.18.10 through an npm `overrides` entry, deduping the two nested 0.16.47 copies that `rehype-katex` and `micromark-extension-math` pulled in and clearing four advisories; the alternative `npm audit` offered was downgrading `rehype-katex` to 1.2.0. `npm audit` now reports **0 vulnerabilities**. 0.18.11 was skipped deliberately — npm marks it as accidentally published with breaking changes.
+- **Deploys no longer re-download 138 MB of Pyodide every time.** `public/pyodide/` is gitignored, so a fresh runner started empty and every deploy pulled the whole closure from one CDN. The workflow caches it, keyed on the vendor script (so bumping the Pyodide version busts it).
+- **Node floor**: `package.json` now declares `engines.node >=22.23.4` (Astro's own floor) and `.nvmrc` pins it. This machine's 22.22.1 makes `astro` refuse to build.
+- `issues/README.md` documents that all seven prepared bugs are fixed and none were ever filed; `file-all.sh` is marked do-not-run rather than filed as seven already-closed issues.
+
+### Known, not fixed
+- **33 local branches carry unique files** and are not merged into `main`. Deleting them would lose work, so they are left in place for a decision; the 7 merged ones are safe to prune.
+
+## [2.0.15] — 2026-11-02
+
+### Changed
+- The `apply-lix-patch` guard was rewritten for the newer inlang SDK layout, refreshed onboarding screenshots, and two runnable-cell test expectations. No user-facing change.
+
 ## [2.0.14] — 2026-11-01
 
 The review rounds that came out of auditing the `input()` fix: the game-state module, the page

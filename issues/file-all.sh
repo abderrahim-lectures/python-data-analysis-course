@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
-# Files the five issues in this folder and prints their numbers.
+# DO NOT RUN: all seven issues in this folder are already fixed in the tree
+# (see README.md). Running this files seven issues that open already-closed.
+#
+# Kept only because the issue bodies are referenced from README.md's table.
+#
+# Original purpose: files the seven issues in this folder and prints their numbers.
 #
 #   gh auth status          # must be authenticated for this repo
 #   ./issues/file-all.sh
