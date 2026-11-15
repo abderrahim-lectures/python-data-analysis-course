@@ -153,6 +153,29 @@ function coerceNumericFields(s: PDAState): PDAState {
       (s as unknown as Record<string, unknown>)[key] = {};
     }
   }
+  // The maps above are checked for being objects, but not their *values*.
+  // `lessonMastery: {"python-101/…/01": "bad"}` passed that check, and then
+  // recordQuiz's `m.total += 1` threw "Cannot create property 'total' on
+  // string" -- after quizTotal and xp had been bumped in memory but before
+  // write(), so the quiz was silently lost and every later quiz on that
+  // lesson threw again. Repair each entry instead of trusting it.
+  const mastery = s.lessonMastery as Record<string, unknown>;
+  for (const [id, rec] of Object.entries(mastery)) {
+    if (!rec || typeof rec !== 'object' || Array.isArray(rec)) {
+      mastery[id] = {correct: 0, total: 0, firstWrongAt: null, lastWrongAt: null};
+      continue;
+    }
+    const r = rec as Record<string, unknown>;
+    r.correct = Number(r.correct) || 0;
+    r.total = Number(r.total) || 0;
+    r.firstWrongAt = typeof r.firstWrongAt === 'number' ? r.firstWrongAt : null;
+    r.lastWrongAt = typeof r.lastWrongAt === 'number' ? r.lastWrongAt : null;
+  }
+  const steps = s.projectsSteps as Record<string, unknown>;
+  for (const [id, v] of Object.entries(steps)) {
+    if (!Array.isArray(v)) steps[id] = [];
+    else steps[id] = (v as unknown[]).map((b) => b === true);
+  }
   if (!Array.isArray(s.badges)) s.badges = [];
   if (!Array.isArray(s.activityLog)) s.activityLog = [];
   // Every activity entry is read in renderers; drop anything that is not one.

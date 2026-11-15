@@ -134,17 +134,20 @@ describe('pyodideWorkerClient', () => {
   });
 
   test('stopRun is a no-op when nothing is running, so the UI stays silent', async () => {
-    const {stopRun} = await loadClient();
+    // One module instance for both halves: the old version called loadClient()
+    // twice, and its second call reset the module registry, so the assertion
+    // "the worker was not terminated" was looking at a different worker than
+    // the one the run had used. It could never have failed.
+    const {runInWorker, stopRun} = await loadClient();
     expect(stopRun()).toBe(false);
 
-    const {runInWorker} = await loadClient();
     const run = runInWorker('print(1)', RUN_OPTS, callbacks());
     const w = FakeWorker.instances.at(-1)!;
     w.emit('message', {data: {type: 'done', id: (w.posted[0] as {id: number}).id, executed: true}});
     await expect(run).resolves.toBe(true);
 
-    // Worker still alive and healthy -- nothing to stop, and a stale Stop
-    // click must not kill a session just to be safe.
+    // Worker alive, nothing pending -- a stale Stop click must not kill a
+    // healthy session (and throw away every package it had installed).
     expect(stopRun()).toBe(false);
     expect(w.terminated).toBe(false);
   });

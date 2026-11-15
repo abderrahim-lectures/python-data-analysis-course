@@ -48,7 +48,12 @@ function getWorker(): Worker {
  * Returns false when nothing was running (so callers can stay silent).
  */
 export function stopRun(): boolean {
-  if (!worker) return false;
+  // `pending.size === 0` matters as much as the null check: the worker stays
+  // alive between runs, so without it a Stop click with nothing running would
+  // kill a healthy engine (and throw away every package the learner had
+  // installed) while reporting success. The UI only shows the button while a
+  // run is in flight, but this is the contract the function documents.
+  if (!worker || pending.size === 0) return false;
   try { worker.terminate(); } catch { /* already gone */ }
   worker = null;
   // Snapshot: finish() deletes from the map as it settles each one.

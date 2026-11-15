@@ -23,7 +23,7 @@ class FakeWorker {
   emit(t: string, ev: unknown) { for (const fn of [...(this.listeners[t] ?? [])]) fn(ev); }
 }
 
-function cellFixture(stub: DomStub) {
+function cellFixture(stub: DomStub, _tag?: string) {
   const cell = fakeEl('div');
   const run = fakeEl('button');
   const out = fakeEl('div');
@@ -137,5 +137,44 @@ describe('the Stop control lives in the persistent overlay', () => {
     // Simulate the soft navigation: the panel the run belongs to is gone.
     f.out.isConnected = false;
     expect(() => stop.click()).not.toThrow();
+  });
+});
+
+// Two cells can have runs in flight at once: the worker is serial, but nothing
+// stops a learner clicking Run on cell 2 inside the overlay's 200ms show delay.
+// Each cell's `finally` used to hide the shared button unconditionally, so the
+// first cell to finish hid the control for the second -- which was still
+// running, possibly forever, with the overlay up and the page inert. That is
+// R49 again, reached through a second cell rather than a navigation.
+describe('the Stop button is shared between overlapping runs', () => {
+  test('the first cell finishing does not hide it while a second run runs', async () => {
+    const stub = stubDom();
+    const stop = el('app-stop', stub);
+    stop.hidden = true;
+    const {initCell} = await loadModule();
+    const cellA = cellFixture(stub, 'div');
+    const cellB = cellFixture(stub, 'div');
+    stub.queryAll['[data-runnable] code'] = [cellA.code, cellB.code];
+
+    initCell(cellA.cell as unknown as Element);
+    initCell(cellB.cell as unknown as Element);
+    (cellA.run.allListeners['click'] ?? []).forEach((fn) => fn({}));
+    await Promise.resolve();
+    (cellB.run.allListeners['click'] ?? []).forEach((fn) => fn({}));
+    await Promise.resolve();
+
+    const w = FakeWorker.instances.at(-1)!;
+    expect(stop.hidden).toBe(false);
+
+    // Cell A's run finishes while B is still queued behind it.
+    w.emit('message', {data: {type: 'done', id: w.posted[0].id, executed: true}});
+    await new Promise((r) => setTimeout(r, 20));
+    // Still visible: B has not been given a reply yet.
+    expect(stop.hidden).toBe(false);
+
+    // Now B finishes too; the button goes away.
+    w.emit('message', {data: {type: 'done', id: w.posted[1].id, executed: true}});
+    await new Promise((r) => setTimeout(r, 20));
+    expect(stop.hidden).toBe(true);
   });
 });

@@ -169,3 +169,37 @@ describe('explainRunError', () => {
     expect(out.hint).toBe(raw);
   });
 });
+
+// The friendly-error mapper builds a hint from the *exception text*, so a
+// crafted message reaches code that used to interpolate it into a RegExp.
+// `NameError: name '[' is not defined` threw SyntaxError out of
+// explainRunError; because that escaped runCellCode's own catch, it rejected
+// the run, and the worker's drain loop had no recovery -- one bad message
+// wedged every later cell on the page-lifetime worker.
+describe('a crafted exception message cannot throw out of the mapper', () => {
+  const ctx = {
+    otherCellSources: 'df = pd.read_csv("x.csv")',
+    code: '',
+    loadDatasetFirstHint: 'load it first',
+  };
+
+  test.each([
+    "NameError: name '[' is not defined",
+    "NameError: name '(' is not defined",
+    "NameError: name '\\\\' is not defined",
+    "NameError: name '.*' is not defined",
+    "NameError: name '' is not defined",
+  ])('does not throw for %j', (raw) => {
+    expect(() => explainRunError(raw, ctx)).not.toThrow();
+  });
+
+  test('still explains the ordinary dataset-load case', () => {
+    const r = explainRunError("NameError: name 'df' is not defined", ctx);
+    expect(r.hint).toContain('load it first');
+  });
+
+  test('the hint only fires when another cell really assigns that name', () => {
+    const r = explainRunError("NameError: name 'nope' is not defined", ctx);
+    expect(r.hint).not.toContain('load it first');
+  });
+});

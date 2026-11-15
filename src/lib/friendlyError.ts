@@ -59,10 +59,29 @@ export function explainRunError(raw: string, ctx: ExplainContext): ExplainedErro
   if (
     missing &&
     ctx.otherCellSources &&
-    new RegExp(`\\b${missing}\\s*=\\s*(?:pd\\.read_csv|open\\s*\\(\\s*['"][^'"]+\\.csv)`).test(ctx.otherCellSources) &&
+    assignsFromDataLoad(missing, ctx.otherCellSources) &&
     !ctx.code.match(/pd\.read_csv\s*\(|open\s*\(\s*['"][^'"]+\.csv/)
   ) {
     hint += ` ${ctx.loadDatasetFirstHint}`;
   }
   return {raw, hint};
+}
+
+/** Does any other cell assign `name` from a CSV read? Matched by plain string
+ *  work rather than by building a RegExp: the name comes from the exception
+ *  text, so `NameError: name '[' is not defined` (a learner can raise that
+ *  themselves) used to throw SyntaxError out of this function -- and because
+ *  the throw escaped runCellCode's own catch, it rejected the run, which then
+ *  killed the worker's drain loop and wedged every later cell. Escaping would
+ *  fix that input; not interpolating user text into a pattern fixes the class. */
+function assignsFromDataLoad(name: string, source: string): boolean {
+  for (const line of source.split('\n')) {
+    const eq = line.indexOf('=');
+    if (eq === -1) continue;
+    if (line.slice(0, eq).trim() !== name) continue;
+    const rhs = line.slice(eq + 1);
+    if (/pd\.read_csv/.test(rhs)) return true;
+    if (/open\s*\(\s*['"][^'"]+\.csv/.test(rhs)) return true;
+  }
+  return false;
 }

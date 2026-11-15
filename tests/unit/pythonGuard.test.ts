@@ -146,3 +146,79 @@ describe('the second round: aliasing and the string-executing stdlib', () => {
     expect(usesJsBridge(src)).toBe(false);
   });
 });
+
+// Five routes that reached the bridge without naming `js`, `sys` or any of the
+// names the earlier rules refused. Each was confirmed in CPython: pickle's
+// GLOBAL opcode imports and calls a named attribute from bytes, inspect's
+// currentframe() returns the caller's frame and therefore its builtins,
+// os re-exports sys as an attribute, and two short adjacent literals rebuild a
+// refused dunder without ever containing one.
+describe('closures found by the runtime audit', () => {
+  const blocked = [
+    // pickle GLOBAL/STACK_GLOBAL: imports the module and looks up the
+    // attribute from the payload, so neither name appears in the source.
+    'import pickle\npickle.loads(b"cjs\\nfetch\\n(X\'https://e.test/c\'\\ntR.")',
+    'import _pickle',
+    // inspect hands back the caller's frame, and its builtins with it.
+    'import inspect\nE = inspect.currentframe().f_builtins["ex" + "ec"]',
+    // os.sys is sys, without writing `sys.` or `import sys`.
+    'import os\ns = getattr(os, "sys")\nm = s.modules["j" + "s"]',
+    // implicit concatenation rebuilds a dunder the literal list cannot see.
+    'B = getattr(print, "__se" "lf__")',
+    'E = getattr(B, "ex" "ec")',
+    // Pyodide registers the bridge under this name too; `\b` cannot end a
+    // match after `pyodide` because `_` is a word character.
+    'import pyodide_js',
+    'from pyodide_js import loadPackagesFromImports',
+  ];
+
+  test.each(blocked)('rejects %j', (src) => {
+    expect(usesJsBridge(src)).toBe(true);
+  });
+
+  const stillAllowed = [
+    'import os\nprint(os.path.join("a", "b"))',
+    'import os\nkey = os.environ["KEY"]',
+    'print("=" * 70)',
+    'print("-" * 40)',
+    'msg = ("Students who complete a test "\n       "preparation course")\nprint(msg)',
+    'print("Hello, " + name)',
+    'd = {"a": "x", "b": "y"}',
+    'print("a", "b")',
+    // `import pickle` is refused outright: the only reason to import it in a
+    // lesson would be to call loads(), and the module is not used anywhere in
+    // the 1576-fence corpus below.
+    'parser.add_argument("--interactive", action="store_true")',
+  ];
+
+  test.each(stillAllowed)('still allows %j', (src) => {
+    expect(usesJsBridge(src)).toBe(false);
+  });
+
+  // The rule that closes the split-literal trick matches on source *shape*, so
+  // it is the one most likely to catch lesson text by accident. This is the
+  // whole English corpus plus all three translations: 1576 fences.
+  test('no lesson fence in any locale is refused', async () => {
+    const {readFileSync, readdirSync, statSync} = await import('node:fs');
+    const {join} = await import('node:path');
+    const walk = (dir: string, out: string[] = []): string[] => {
+      for (const n of readdirSync(dir)) {
+        const p = join(dir, n);
+        if (statSync(p).isDirectory()) walk(p, out);
+        else if (p.endsWith('.md')) out.push(p);
+      }
+      return out;
+    };
+    const offenders: string[] = [];
+    let fences = 0;
+    for (const f of walk('src/content/lessons')) {
+      const src = readFileSync(f, 'utf8');
+      for (const m of src.matchAll(/```python[^\n]*\n([\s\S]*?)```/g)) {
+        fences += 1;
+        if (usesJsBridge(m[1])) offenders.push(f);
+      }
+    }
+    expect(fences).toBeGreaterThan(1000);
+    expect(offenders).toEqual([]);
+  });
+});

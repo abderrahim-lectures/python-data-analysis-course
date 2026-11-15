@@ -62,7 +62,21 @@ export async function awardLessonXp(lessonId: string): Promise<{gained: number; 
 // (the overlay carries transition:persist, so it survives soft navigation;
 // a button created per-run on document.body did not, and a runaway cell
 // followed the learner to the next page with the overlay up and no way out).
-// These helpers only show and hide it.
+//
+// There is ONE button for the page and the worker runs cells serially, so two
+// cells can have runs in flight at once (click Run on cell 1, then cell 2
+// inside the overlay's 200ms show delay). Each cell's `finally` used to hide
+// the button unconditionally, so the first cell to finish hid the control for
+// the second -- which was still running, possibly forever, with the overlay up
+// and the page inert. That is the R49 wedge reached through a second cell.
+// Ownership is counted now: hide() only hides the button when this run was the
+// last one pending.
+let stopOwners = 0;
+// The handler currently bound to the shared button. Rebinding removes the old
+// one explicitly rather than relying on {once}: with several owners, a click
+// must stop the worker once and clear every owner's handler.
+let stopHandler: (() => void) | null = null;
+
 interface StopControl {
   /** Bind the handler for this run, show the button, return a hider. */
   show(onStop: () => void): {hide: () => void};
@@ -74,16 +88,27 @@ function stopControl(): StopControl | null {
   if (!btn) return null;
   return {
     show(onStop) {
-      // Rebind per run: the button persists, its handler must not.
-      const handler = () => onStop();
+      stopOwners += 1;
+      // Rebind per run: the button persists, its handler must not. Stopping
+      // kills the worker and settles every pending run, so one handler is
+      // enough no matter how many cells are queued behind it.
+      if (stopHandler) btn.removeEventListener('click', stopHandler);
+      stopHandler = () => onStop();
+      btn.addEventListener('click', stopHandler);
       btn.textContent = m.stop_button();
       btn.setAttribute('aria-label', m.stop_aria());
-      btn.addEventListener('click', handler, {once: true});
       btn.hidden = false;
       return {
         hide() {
-          btn.removeEventListener('click', handler);
-          btn.hidden = true;
+          stopOwners = Math.max(0, stopOwners - 1);
+          if (stopOwners > 0) return; // another cell's run still needs it
+          if (stopHandler) {
+            btn.removeEventListener('click', stopHandler);
+            stopHandler = null;
+          }
+          // A run that survived a soft navigation keeps the button up until
+          // the worker actually goes idle.
+          btn.hidden = !isWorkerRunning();
         },
       };
     },
