@@ -391,9 +391,11 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
           <a href={`${locBase}${nav.progress}`}>{m.footer_my_progress()}</a>
           <a href={`${locBase}${nav.progressGuide}`}>{m.progress_guide_heading()}</a>
           <a href={`${locBase}${nav.pedagogy}`}>{m.pedagogy_nav()}</a>
+          <a href={`${locBase}${nav.contributors}`}>{m.nav_contributors()}</a>
         </div>
         <div class="footer__col">
           <h3><Icon name="globe" size={13} /> {m.footer_more_col()}</h3>
+          <a href={`${locBase}${nav.credits}`}>{m.credits_heading()}</a>
           <a href="https://github.com/abderrahim-lectures/python-data-analysis-course" target="_blank" rel="noopener noreferrer">{m.footer_github()}</a>
           <a href="https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/CHANGELOG.md" target="_blank" rel="noopener noreferrer">{m.footer_changelog()}</a>
           <a href={`${base}architecture.html`} target="_blank" rel="noopener noreferrer">{m.footer_architecture()}</a>
@@ -401,6 +403,9 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
       </div>
       <div class="container footer__bottom">
         <p>{m.footer_copyright({year: new Date().getFullYear(), version: pkg.version})}</p>
+        <a class="footer__support" href="https://www.openmathmodel.org/" target="_blank" rel="noopener noreferrer">
+          <Icon name="globe" size={13} /> {m.supported_by()}
+        </a>
         <div class="consent-card">
           <div class="consent-card__text">
             <span><Icon name="chart" size={14} /> {m.consent_label()}</span>
