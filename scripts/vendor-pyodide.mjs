@@ -8,18 +8,48 @@
 const VERSION = '0.26.4';
 const TARGET = new URL('../public/pyodide/', import.meta.url);
 const BASE = `https://cdn.jsdelivr.net/pyodide/v${VERSION}/full/`;
+// Fallback origin if jsdelivr is unreachable or serving errors. The official
+// Pyodide release host serves the same layout, so a CDN incident on one edge
+// no longer fails a deploy that has no other way to get these bytes.
+const MIRRORS = [BASE, `https://github.com/pyodide/pyodide/releases/download/${VERSION}/`];
 const CORE = ['pyodide.mjs', 'pyodide.js', 'pyodide.js.map', 'pyodide.asm.js',
   'pyodide.asm.wasm', 'python_stdlib.zip', 'pyodide-lock.json'];
 const ROOTS = ['numpy', 'pandas', 'matplotlib', 'scipy', 'statsmodels', 'micropip'];
 const CONCURRENCY = 8;
+const RETRIES = 3;
+const RETRY_DELAY_MS = 800;
 
 const fs = await import('node:fs');
 const path = await import('node:path');
 
-const lock = await (await fetch(`${BASE}pyodide-lock.json`)).json().catch((e) => {
-  console.error(`[vendor-pyodide] failed to fetch ${BASE}pyodide-lock.json: ${e}`);
-  process.exit(1);
-});
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+// One file, tried against every mirror with a short backoff. A CDN blip that
+// used to fail the whole build (process.exit on the first bad response) now
+// costs a second and a half and the deploy continues.
+async function fetchBytes(name) {
+  let lastError;
+  for (let attempt = 0; attempt < RETRIES; attempt++) {
+    for (const origin of MIRRORS) {
+      try {
+        const res = await fetch(origin + encodeURIComponent(name), {signal: AbortSignal.timeout(120_000)});
+        if (!res.ok) { lastError = new Error(`${origin}${name} -> HTTP ${res.status}`); continue; }
+        const buf = Buffer.from(await res.arrayBuffer());
+        if (buf.length === 0) { lastError = new Error(`${origin}${name} -> empty body`); continue; }
+        return buf;
+      } catch (e) {
+        lastError = e; // network error, DNS, timeout -- try the next mirror
+      }
+    }
+    if (attempt < RETRIES - 1) await sleep(RETRY_DELAY_MS * (attempt + 1));
+  }
+  throw new Error(`[vendor-pyodide] ${name}: ${lastError?.message ?? 'unknown error'}`);
+}
+
+const lock = await (async () => {
+  const buf = await fetchBytes('pyodide-lock.json');
+  return JSON.parse(buf.toString('utf8'));
+})();
 
 function closureFor(rootNames) {
   const closure = new Set();
@@ -44,21 +74,33 @@ const files = [...new Set([...CORE, ...closureFor(ROOTS)])];
 async function save(name) {
   const dest = path.join(TARGET.pathname, name);
   if (fs.existsSync(dest) && fs.statSync(dest).size > 0) return 'skip';
-  const res = await fetch(BASE + encodeURIComponent(name));
-  if (!res.ok) throw new Error(`${name} -> HTTP ${res.status}`);
+  const buf = await fetchBytes(name);
   fs.mkdirSync(path.dirname(dest), { recursive: true });
-  fs.writeFileSync(dest, Buffer.from(await res.arrayBuffer()));
+  fs.writeFileSync(dest, buf);
   return 'down';
 }
 let down = 0, skipped = 0;
 const queue = [...files];
+let failed = null;
 async function worker() {
-  while (queue.length) {
+  while (queue.length && !failed) {
     const name = queue.shift();
-    (await save(name)) === 'down' ? down++ : skipped++;
+    try {
+      (await save(name)) === 'down' ? down++ : skipped++;
+    } catch (e) {
+      // Stop pulling new files after the first hard failure, but let the
+      // in-flight ones finish and report every failure at once rather than
+      // an unhandled rejection from one of eight concurrent workers.
+      failed = failed ?? e;
+    }
   }
 }
 await Promise.all(Array.from({ length: CONCURRENCY }, worker));
+if (failed) {
+  console.error(`[vendor-pyodide] FAILED after ${down} download(s): ${failed.message}`);
+  console.error('[vendor-pyodide] public/pyodide/ is incomplete; a build from it would serve 404s for the missing files.');
+  process.exit(1);
+}
 const sizeOf = (name) => fs.statSync(path.join(TARGET.pathname, name)).size;
 const totalBytes = fs.readdirSync(TARGET.pathname)
   .reduce((n, f) => n + fs.statSync(path.join(TARGET.pathname, f)).size, 0);

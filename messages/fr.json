@@ -180,8 +180,6 @@
   "filter_no_match": "Aucun projet ne correspond",
   "filter_try_search": "Essayez une autre recherche ou un autre tag.",
   "open_notebook_aria": "Ouvrir cette leçon comme cahier",
-  "popular_pages_label": "Les pages les plus consultées des 30 derniers jours",
-  "popular_pages_title": "Pages les plus consultées",
   "prev_lesson": "Précédent",
   "prev_week": "← Semaine",
   "project_completed": "Projet terminé ✓",
@@ -498,5 +496,9 @@
   "filter_that": "ce filtre",
   "quiz_perfect_no_xp": "🎉 Parfait !",
   "track_word": "Parcours",
-  "quiz_xp_each": "+{xp} XP par question"
+  "quiz_xp_each": "+{xp} XP par question",
+  "stop_button": "Arrêter",
+  "stop_aria": "Arrêter la cellule en cours",
+  "cell_stopped": "⏹ Arrêté. La session Python a redémarré, donc les variables précédentes sont perdues.",
+  "supported_by": "Avec le soutien d'Open Math Model"
 }

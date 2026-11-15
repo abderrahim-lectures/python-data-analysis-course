@@ -1,9 +1,9 @@
 ---
 // LearnerActivity.astro — "N learners online" + most recent completion.
-// Rendered in-flow on the homepage only (after PopularPages), not as a
-// site-wide fixed bar: the heartbeat/count/recent fetches and their 30s
-// polling intervals used to run on every single page via Base.astro, which
-// meant lesson/project pages paid for this widget's network traffic without
+// Rendered in-flow on the homepage only, not as a site-wide fixed bar: the
+// heartbeat/count/recent fetches and their 30s polling intervals used to run
+// on every single page via Base.astro, which meant lesson/project pages paid
+// for this widget's network traffic without
 // ever showing it. Scoping it to the homepage removes that cost from every
 // other page.
 import {m} from '../paraglide/messages.js';
@@ -134,10 +134,10 @@ const {locale = 'en', supabaseUrl = '', supabaseKey = ''} = Astro.props;
 }
 
 <style is:global>
-  /* Global for the same reason as PopularPages: #learner-bar's children are
-     static markup here, but this block also has to match the section itself
-     which is created before hydration — kept global for consistency and to
-     avoid a second scoping footgun if this ever grows dynamic children. */
+  /* Global (not scoped): the section is static markup here, but this block
+     also has to match the section itself which is created before hydration —
+     kept global for consistency and to avoid a second scoping footgun if this
+     ever grows dynamic children. */
   .learner-activity[hidden] {
     display: none;
   }

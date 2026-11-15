@@ -28,6 +28,19 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # The ~138 MB Pyodide runtime is vendored at build time from jsdelivr
+      # (public/pyodide/ is gitignored, so a fresh runner starts empty). Without
+      # a cache, every single deploy re-downloads the whole closure and any CDN
+      # hiccup fails the build. Keyed on the pinned version, so bumping Pyodide
+      # in scripts/vendor-pyodide.mjs busts it automatically.
+      - name: Cache vendored Pyodide
+        uses: actions/cache@v4
+        with:
+          path: public/pyodide
+          key: pyodide-${{ runner.os }}-${{ hashFiles('scripts/vendor-pyodide.mjs') }}
+          restore-keys: |
+            pyodide-${{ runner.os }}-
+
       - name: Build site
         run: npm run build
         env:

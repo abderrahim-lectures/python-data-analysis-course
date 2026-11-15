@@ -56,3 +56,6 @@ public/pyodide/*
 # Nothing here is part of the site; see the working notes on keeping caches
 # out of the tree rather than in it.
 .scratch/
+
+# Serena MCP tooling cache (local, per-machine)
+.serena/

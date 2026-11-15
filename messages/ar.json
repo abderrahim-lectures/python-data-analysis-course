@@ -180,8 +180,6 @@
   "filter_no_match": "لا توجد مشاريع مطابقة",
   "filter_try_search": "جرّب بحثًا أو وسمًا مختلفًا.",
   "open_notebook_aria": "افتح هذا الدرس كدفتر ملاحظات",
-  "popular_pages_label": "الصفحات الأكثر زيارة في آخر 30 يومًا",
-  "popular_pages_title": "الصفحات الأكثر زيارة",
   "prev_lesson": "السابق",
   "prev_week": "الأسبوع ←",
   "project_completed": "المشروع مكتمل ✓",
@@ -498,5 +496,9 @@
   "filter_that": "ذلك الفلتر",
   "quiz_perfect_no_xp": "🎉 ممتاز!",
   "track_word": "مسار",
-  "quiz_xp_each": "+{xp} نقطة لكل سؤال"
+  "quiz_xp_each": "+{xp} نقطة لكل سؤال",
+  "stop_button": "إيقاف",
+  "stop_aria": "إيقاف الخلية قيد التشغيل",
+  "cell_stopped": "⏹ تم الإيقاف. أُعيد تشغيل جلسة بايثون، لذا ضاعت المتغيّرات السابقة.",
+  "supported_by": "بدعم من Open Math Model"
 }
