@@ -96,6 +96,20 @@ function showStopButton(onStop: () => void): {hide: () => void} {
   return c.show(onStop);
 }
 
+/** The persistent Stop control, if this page has one. */
+function stopElement(): Element | null {
+  return typeof document === 'undefined' ? null : document.getElementById('app-stop');
+}
+
+/** Accessible name for one cell's editor: "Python code editor, cell 3 of 5".
+ *  A lesson can carry five or more editors and they are otherwise
+ *  indistinguishable to a screen reader. */
+function cellLabel(cell: Element): string {
+  const all = Array.from(document.querySelectorAll('[data-runnable]'));
+  const n = all.indexOf(cell) + 1;
+  return m.cell_editor_label({n: String(n), total: String(all.length)});
+}
+
 export interface InitCellDeps {
   loadEngine?: () => Promise<PyodideModel>;
 }
@@ -263,6 +277,14 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
     run.textContent = m.run_button();
     run.disabled = false;
     run.classList.remove('cell__run--loading');
+    // The overlay moved focus to Stop while the run was in flight. Put it back
+    // on this cell's Run button -- the control the learner actually pressed --
+    // unless the page was swapped under us or they moved focus themselves.
+    if (typeof document !== 'undefined' && run.isConnected) {
+      const active = document.activeElement;
+      const lost = !active || active === document.body || active === stopElement();
+      if (lost) run.focus();
+    }
     await afterRun(executed);
   });
 
@@ -311,10 +333,14 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
   cell.querySelector('.cell__actions')?.appendChild(copyBtn);
 
   // Editing, highlighting and the line-number gutter; onEdit keeps the input
-  // form in step with the source (see cellInputForm.ts).
+  // form in step with the source (see cellInputForm.ts). The label names this
+  // cell among the page's several editors; Escape lands on Run rather than
+  // dropping focus to <body>.
   makeEditableCode(codeEl, {
     onEdit: () => inputs.sync(),
     onRun: () => run.click(),
+    ariaLabel: cellLabel(cell),
+    onEscape: () => run.focus(),
   });
 
   // Cells that call input() show their fields on load, before the first Run --

@@ -547,5 +547,10 @@
   "contributors_project_count_zero": "Todavía sin proyectos",
   "guide_file_project": "La página del proyecto en sí. Campos del frontmatter: title, description, difficulty, tags y author (tu id de colaborador). Todo lo que va después del frontmatter es la lección que sigue quien lee.",
   "guide_file_example": "Código de acompañamiento que se puede ejecutar en local, si el proyecto tiene código. Los proyectos que enseñan un concepto sin construir una herramienta pueden omitirlo.",
-  "guide_file_registry_body": "Añade una entrada con tu id, tu nombre y, si quieres, tu usuario de GitHub. Pon author: <tu-id> en la página de tu proyecto y aparecerá en la página de colaboradores."
+  "guide_file_registry_body": "Añade una entrada con tu id, tu nombre y, si quieres, tu usuario de GitHub. Pon author: <tu-id> en la página de tu proyecto y aparecerá en la página de colaboradores.",
+  "cell_editor_label": "Editor de código Python, celda {n} de {total}",
+  "breadcrumb_label": "Ruta de navegación",
+  "switch_to_dark": "Cambiar al tema oscuro",
+  "switch_to_light": "Cambiar al tema claro",
+  "stop_hint": "Ejecutando. Pulsa Detener para interrumpir."
 }

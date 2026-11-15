@@ -170,7 +170,7 @@ const jsonLd = {
           <div class="hub__meta">{m.home_hub_track_1_meta()}</div>
           <h2>{m.home_hub_track_1_name()}</h2>
           <p>{m.home_hub_track_1_desc()}</p>
-          <div class="hub__progress"><div class="hub__progress-fill w-pct-0" id="hub-python"></div></div>
+          <div class="hub__progress" role="progressbar" aria-label={m.home_hub_track_1_name()} aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="hub__progress-fill w-pct-0" id="hub-python"></div></div>
           <span class="btn btn-primary hub__cta">{m.home_hub_track_1_cta()} <Icon name="play" size={14} /></span>
         </div>
       </a>
@@ -183,7 +183,7 @@ const jsonLd = {
           <div class="hub__meta">{m.home_hub_track_2_meta()}</div>
           <h2>{m.home_hub_track_2_name()}</h2>
           <p>{m.home_hub_track_2_desc()}</p>
-          <div class="hub__progress"><div class="hub__progress-fill hub__progress-fill--streak w-pct-0" id="hub-data"></div></div>
+          <div class="hub__progress" role="progressbar" aria-label={m.home_hub_track_2_name()} aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="hub__progress-fill hub__progress-fill--streak w-pct-0" id="hub-data"></div></div>
           <span class="btn btn-streak hub__cta">{m.home_hub_track_2_cta()} <Icon name="play" size={14} /></span>
         </div>
       </a>

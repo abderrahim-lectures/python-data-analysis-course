@@ -40,7 +40,7 @@ const totalHours = Math.round(totalMinutes / 60);
 ---
 
 <Base title={`${sectionName(section)}, PyDA Course`} description={sectionDescription(section)} lang={locale} dir={dir} alternates={learnAlternates(section, 'normal', 'section')}>
-  <nav class="crumb container">
+  <nav class="crumb container" aria-label={m.breadcrumb_label()}>
     <a href={learnHref(locale, base)}>{m.nav_learn()}</a>
     <span class="crumb__here">{sectionName(section)}</span>
   </nav>

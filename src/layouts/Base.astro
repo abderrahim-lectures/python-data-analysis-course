@@ -231,10 +231,37 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
         // are deduped across View Transitions navigations).
         const busy = document.getElementById('app-busy');
         const label = document.getElementById('app-busy-label');
+        const stopBtn = document.getElementById('app-stop');
+        // SC 2.4.11 (Focus Not Obscured): the overlay is an opaque sheet over
+        // the whole viewport, so without this a keyboard user who pressed Run
+        // keeps focus on a control they cannot see and Tab keeps walking the
+        // nav, footer and consent switch underneath it. `inert` removes those
+        // subtrees from focus and the accessibility tree while the sheet is
+        // up; it is supported everywhere the site targets. The overlay itself
+        // is not inerted, so the Stop button inside it stays reachable.
+        const PAGE_REGIONS = ['header.topnav', 'main', 'footer.footer', 'nav.mobilenav'];
+        const setPageInert = (on) => {
+          for (const sel of PAGE_REGIONS) {
+            const el = document.querySelector(sel);
+            if (!el) continue;
+            if (on) el.setAttribute('inert', '');
+            else el.removeAttribute('inert');
+          }
+        };
         const setBusy = (on) => {
           busy.classList.toggle('app-busy--active', on);
           busy.setAttribute('aria-hidden', String(!on));
+          setPageInert(on);
           if (!on) label.textContent = '';
+        };
+        // Focus moves to Stop when the sheet is revealed, so the escape hatch
+        // is the first thing a keyboard or screen-reader user reaches instead
+        // of tabbing through the page underneath it. The cell that owns the
+        // run restores focus to its own Run button when the run ends (see
+        // runnable-cell.client.ts) -- it is the only code that knows which
+        // button that was.
+        const focusStop = () => {
+          if (stopBtn && !stopBtn.hidden) stopBtn.focus();
         };
         const i18n = JSON.parse(document.getElementById('pyodide-i18n').textContent);
         const hideFirst = () => {
@@ -273,7 +300,7 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
           // screen-reader user pressing Run heard nothing at all.
           busy.setAttribute('aria-hidden', 'false');
           label.textContent = phase === 'packages' ? i18n.packages : phase === 'running' ? i18n.running : i18n.indeterminate;
-          if (!busyShowTimer) busyShowTimer = setTimeout(() => { busyShowTimer = null; setBusy(true); }, BUSY_SHOW_DELAY_MS);
+          if (!busyShowTimer) busyShowTimer = setTimeout(() => { busyShowTimer = null; setBusy(true); focusStop(); }, BUSY_SHOW_DELAY_MS);
         });
         window.addEventListener('pyodide:progress', (e) => {
           const pct = e.detail && e.detail.pct;
@@ -338,7 +365,7 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
           <a class="topnav__link" href={`${locBase}${nav.cheatsheets}`}><Icon name="chart" size={15} /> {m.nav_cheatsheets()}</a>
           <a class="topnav__link" href={`${locBase}${nav.progress}`}><Icon name="trail" size={15} /> {m.nav_progress()}</a>
           <div class="topnav__xp" id="xp-bar"></div>
-          <div class="topnav__group" aria-label={m.switch_locale()}>
+          <div class="topnav__group" role="group" aria-label={m.switch_locale()}>
             {locales.map((l) => (
               <a
                 class:list={['topnav__lang', l.code === lang && 'topnav__lang--active']}
@@ -386,21 +413,21 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
           <p class="footer__tagline">{m.footer_tagline()}</p>
         </div>
         <div class="footer__col">
-          <h3><Icon name="code" size={13} /> {m.footer_course_col()}</h3>
+          <h2><Icon name="code" size={13} /> {m.footer_course_col()}</h2>
           <a href={`${locBase}${nav.learn}/python-101`}>{m.footer_python_101()}</a>
           <a href={`${locBase}${nav.learn}/data-analysis`}>{m.footer_data_analysis()}</a>
           <a href={`${locBase}${nav.projects}`}>{m.footer_projects()}</a>
           <a href={`${locBase}${nav.cheatsheets}`}>{m.footer_cheatsheets()}</a>
         </div>
         <div class="footer__col">
-          <h3><Icon name="chart" size={13} /> {m.footer_site_col()}</h3>
+          <h2><Icon name="chart" size={13} /> {m.footer_site_col()}</h2>
           <a href={`${locBase}${nav.progress}`}>{m.footer_my_progress()}</a>
           <a href={`${locBase}${nav.progressGuide}`}>{m.progress_guide_heading()}</a>
           <a href={`${locBase}${nav.pedagogy}`}>{m.pedagogy_nav()}</a>
           <a href={`${locBase}${nav.contributors}`}>{m.nav_contributors()}</a>
         </div>
         <div class="footer__col">
-          <h3><Icon name="globe" size={13} /> {m.footer_more_col()}</h3>
+          <h2><Icon name="globe" size={13} /> {m.footer_more_col()}</h2>
           <a href={`${locBase}${nav.credits}`}>{m.credits_heading()}</a>
           <a href="https://github.com/abderrahim-lectures/python-data-analysis-course" target="_blank" rel="noopener noreferrer">{m.footer_github()}</a>
           <a href="https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/CHANGELOG.md" target="_blank" rel="noopener noreferrer">{m.footer_changelog()}</a>

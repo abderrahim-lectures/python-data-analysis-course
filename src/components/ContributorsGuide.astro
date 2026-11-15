@@ -74,7 +74,7 @@ const repo = 'https://github.com/abderrahim-lectures/python-data-analysis-course
       <p class="guide__intro">{m.guide_intro()}</p>
     </header>
 
-    <ol class="guide__steps">
+    <ol class="guide__steps" role="list">
       {steps.map((s, i) => (
         <li class="guide-step">
           <span class="guide-step__num" aria-hidden="true">{i + 1}</span>
@@ -109,7 +109,7 @@ git push -u origin add-my-project`}</code></pre>
 
     <section class="guide__files">
       <h2>{m.guide_files_heading()}</h2>
-      <ul>
+      <ul role="list">
         {files.map((f) => (
           <li class="guide-file">
             <code class="guide-file__path">{f.path}</code>
@@ -122,7 +122,7 @@ git push -u origin add-my-project`}</code></pre>
 
     <section class="guide__tips">
       <h2>{m.guide_tips_heading()}</h2>
-      <ul>
+      <ul role="list">
         {tips.map((t) => <li>{t}</li>)}
       </ul>
     </section>

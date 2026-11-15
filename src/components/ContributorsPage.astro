@@ -69,7 +69,7 @@ const alternates = navWordAlternates('contributors');
       <p class="contributors__intro">{m.contributors_intro()}</p>
     </header>
 
-    <ul class="contributors__list">
+    <ul class="contributors__list" role="list">
       {people.map(({contributor, projects, profile}) => (
         <li class="contributor" id={contributor.id}>
           <div class="contributor__head">
@@ -96,7 +96,7 @@ const alternates = navWordAlternates('contributors');
           </div>
 
           {projects.length > 0 ? (
-            <ul class="contributor__projects">
+            <ul class="contributor__projects" role="list">
               {projects.map((p) => (
                 <li>
                   <a href={projectsHref(locale, base, p.slug)}>

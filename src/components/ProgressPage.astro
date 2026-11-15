@@ -711,7 +711,7 @@ const i18nData = {
   .diag__name { font-size: .85rem; font-weight: 600; }
   .diag__bar { height: 10px; background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--radius-sm); overflow: hidden; }
   .diag__fill { height: 100%; border-radius: var(--radius-sm); background: linear-gradient(90deg, var(--accent), var(--accent-strong)); transition: width .8s cubic-bezier(.4,0,.2,1); }
-  .diag__val { font-weight: 800; font-size: .85rem; text-align: right; color: var(--accent); }
+  .diag__val { font-weight: 800; font-size: .85rem; text-align: end; color: var(--accent); }
   .report__empty { text-align: center; padding: 1.5rem 1rem; }
   .report__empty[hidden] { display: none; }
   .report__empty-icon { font-size: 2.2rem; display: block; margin-bottom: .4rem; }
@@ -734,7 +734,7 @@ const i18nData = {
   .guide-link__cta { margin-inline-start: auto; color: var(--accent); font-weight: 700; font-size: .9rem; white-space: nowrap; }
   .kpi { position: relative; }
   .kpi__hint {
-    position: absolute; top: .4rem; right: .4rem; width: 16px; height: 16px; border-radius: 50%;
+    position: absolute; top: .4rem; inset-inline-end: .4rem; width: 16px; height: 16px; border-radius: 50%;
     background: var(--surface-2); color: var(--ink-soft); font-size: .65rem; font-weight: 800;
     display: inline-flex; align-items: center; justify-content: center; cursor: help;
     border: 1px solid var(--line);

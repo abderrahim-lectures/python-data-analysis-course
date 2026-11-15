@@ -28,8 +28,14 @@ const {title = m.quiz_title(), questions, xp = 5, lessonId = ''} = Astro.props;
   <div class="quiz__body">
     {questions.map((q, qi) => (
       <div class="quiz-q" data-qi={qi}>
-        <p class="quiz-q__prompt">{qi + 1}. {q.question}</p>
-        <div class="quiz-q__options">
+        {/* The four options are one radio group, so the question belongs on the
+            group's accessible name. Without it a screen reader announces
+            "option text, radio, 2 of 4" with no way to tell which question --
+            role=radiogroup + aria-labelledby gives the group its prompt.
+            (A fieldset/legend would work too; the div keeps the existing
+            layout and the options are already direct children.) */}
+        <p class="quiz-q__prompt" id={`quiz-q-${qi}-prompt`}>{qi + 1}. {q.question}</p>
+        <div class="quiz-q__options" role="radiogroup" aria-labelledby={`quiz-q-${qi}-prompt`}>
           {q.options.map((opt, oi) => (
             <label class="quiz-q__opt" data-correct={opt.correct ? '1' : '0'}>
               <input type="radio" name={`q${qi}`} value={oi} />
@@ -303,7 +309,7 @@ const {title = m.quiz_title(), questions, xp = 5, lessonId = ''} = Astro.props;
     border-top: 1px solid var(--line);
   }
   .quiz__feedback--correct { background: linear-gradient(135deg, var(--success-soft), color-mix(in srgb, var(--success-soft) 60%, transparent)); color: var(--success-text); }
-  .quiz__feedback--partial { background: linear-gradient(135deg, var(--warn-soft), color-mix(in srgb, var(--warn-soft) 60%, transparent)); color: var(--warn); }
+  .quiz__feedback--partial { background: linear-gradient(135deg, var(--warn-soft), color-mix(in srgb, var(--warn-soft) 60%, transparent)); color: var(--warn-text); }
   .quiz__feedback--wrong { background: linear-gradient(135deg, var(--bad-soft), color-mix(in srgb, var(--bad-soft) 60%, transparent)); color: var(--bad-text); }
   :global([data-theme='dark']) .quiz__check { background: var(--accent); border-color: var(--accent); }
   :global([data-theme='dark']) .quiz__check:hover { background: var(--accent-strong); }

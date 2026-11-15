@@ -547,5 +547,10 @@
   "contributors_project_count_zero": "Pas encore de projet",
   "guide_file_project": "La page du projet elle-même. Champs du frontmatter : title, description, difficulty, tags et author (votre identifiant de contributeur). Tout ce qui suit le frontmatter est la leçon que suit le lecteur.",
   "guide_file_example": "Du code d'accompagnement exécutable en local, si le projet contient du code. Les projets qui enseignent un concept sans construire d'outil peuvent s'en passer.",
-  "guide_file_registry_body": "Ajoutez une entrée avec votre identifiant, votre nom et, si vous le souhaitez, votre compte GitHub. Renseignez author: <votre-id> dans la page du projet pour apparaître sur la page des contributeurs."
+  "guide_file_registry_body": "Ajoutez une entrée avec votre identifiant, votre nom et, si vous le souhaitez, votre compte GitHub. Renseignez author: <votre-id> dans la page du projet pour apparaître sur la page des contributeurs.",
+  "cell_editor_label": "Éditeur de code Python, cellule {n} sur {total}",
+  "breadcrumb_label": "Fil d'Ariane",
+  "switch_to_dark": "Passer au thème sombre",
+  "switch_to_light": "Passer au thème clair",
+  "stop_hint": "Exécution en cours. Appuyez sur Arrêter pour interrompre."
 }

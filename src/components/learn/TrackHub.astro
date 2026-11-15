@@ -46,7 +46,7 @@ const arrow = locale === 'ar' ? '←' : '→';
 ---
 
 <Base title={`${sectionName(section)} ${trackName(track)} ${m.track_word()}, PyDA Course`} description={sectionDescription(section)} lang={locale} dir={dir} alternates={learnAlternates(section, track, 'track')}>
-  <nav class="crumb container">
+  <nav class="crumb container" aria-label={m.breadcrumb_label()}>
     <a href={learnHref(locale, base)}>{m.nav_learn()}</a>
     <a href={learnHref(locale, base, section)}>{sectionName(section)}</a>
     <span class="crumb__here">{trackName(track)}</span>

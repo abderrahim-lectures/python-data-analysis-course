@@ -12,6 +12,13 @@ export interface CodeEditorOptions {
   onEdit?(): void;
   /** Ctrl/Cmd+Enter, and nothing else — the Run button is the runner's. */
   onRun?(): void;
+  /** Accessible name for the editor. A lesson can hold five or more of these,
+   *  and `role="textbox"` with no name announces only "textbox, multiline,
+   *  <contents>" -- the reader cannot tell which cell they are in. */
+  ariaLabel?: string;
+  /** Called by Escape. The cell focuses its own Run button: blur() drops
+   *  focus to <body>, which loses the reader's place in the page. */
+  onEscape?(): void;
 }
 
 export function makeEditableCode(codeEl: HTMLElement, opts: CodeEditorOptions = {}): void {
@@ -26,9 +33,14 @@ export function makeEditableCode(codeEl: HTMLElement, opts: CodeEditorOptions = 
   // still indents (a code editor should); Shift+Tab and Escape now leave.
   codeEl.setAttribute('role', 'textbox');
   codeEl.setAttribute('aria-multiline', 'true');
+  if (opts.ariaLabel) codeEl.setAttribute('aria-label', opts.ariaLabel);
   codeEl.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
-      codeEl.blur();
+      // Move to the cell's own Run button rather than blurring: blur() sends
+      // focus to <body>, so a keyboard user who escaped the editor lost their
+      // place and had to tab from the top of the page again.
+      if (opts.onEscape) opts.onEscape();
+      else codeEl.blur();
       return;
     }
     if (e.key !== 'Tab' || e.shiftKey) return;

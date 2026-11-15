@@ -532,9 +532,15 @@ await (run.listeners['click']() as unknown as Promise<unknown>);
     expect(shiftTab.preventDefault).not.toHaveBeenCalled();
     expect(doc.execCommand).not.toHaveBeenCalled();
 
+    // Escape now moves focus to the cell's Run button rather than calling
+    // blur(): blur() drops focus to <body>, so the reader lost their place and
+    // had to tab from the top of the page again. A cell with no Run button
+    // still falls back to blur().
+    const focused = vi.fn();
+    (f.run as unknown as {focus: () => void}).focus = focused;
     const esc = {key: 'Escape', preventDefault: vi.fn()};
     for (const fn of code.allListeners['keydown'] ?? []) fn(esc);
-    expect(blurred).toHaveBeenCalled();
+    expect(focused).toHaveBeenCalled();
 
     // Tab alone still indents.
     for (const fn of code.allListeners['keydown'] ?? []) fn({key: 'Tab', preventDefault: vi.fn()});

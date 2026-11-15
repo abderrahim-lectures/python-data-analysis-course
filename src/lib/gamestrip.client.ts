@@ -133,8 +133,20 @@ function initXPToastListener() {
 }
 
 function initThemeToggle() {
-  const btn = document.querySelector('[data-theme-toggle]');
-  btn?.addEventListener('click', () => {
+  const btn = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
+  if (!btn) return;
+  // The button used to carry the same static "Toggle theme" label in every
+  // state, so a screen-reader user could not tell whether the page was light
+  // or dark, before or after activating it. The label now names the action it
+  // will perform, and aria-pressed reports the current state.
+  const syncLabel = () => {
+    const dark = document.documentElement.dataset.theme === 'dark';
+    btn.setAttribute('aria-pressed', String(dark));
+    btn.setAttribute('aria-label', dark ? m.switch_to_light() : m.switch_to_dark());
+    btn.setAttribute('title', dark ? m.switch_to_light() : m.switch_to_dark());
+  };
+  syncLabel();
+  btn.addEventListener('click', () => {
     const el = document.documentElement;
     const next = el.dataset.theme === 'dark' ? 'light' : 'dark';
     el.dataset.theme = next;
@@ -143,6 +155,7 @@ function initThemeToggle() {
     } catch {
       // private mode / quota: the theme still applies for this page
     }
+    syncLabel();
     renderXPBar();
   });
 }

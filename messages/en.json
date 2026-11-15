@@ -547,5 +547,10 @@
   "contributors_project_count_zero": "No projects yet",
   "guide_file_project": "The project page itself. Frontmatter fields: title, description, difficulty, tags, and author (your contributor id). Everything after the frontmatter is the lesson the reader follows.",
   "guide_file_example": "Companion code that a reader can run locally, if the project has code. Projects that teach a concept rather than build a tool can skip it.",
-  "guide_file_registry_body": "Add an entry with your id, display name, and optionally your GitHub handle. Set author: <your-id> on your project page and it appears on the contributors page."
+  "guide_file_registry_body": "Add an entry with your id, display name, and optionally your GitHub handle. Set author: <your-id> on your project page and it appears on the contributors page.",
+  "cell_editor_label": "Python code editor, cell {n} of {total}",
+  "breadcrumb_label": "Breadcrumb",
+  "switch_to_dark": "Switch to dark theme",
+  "switch_to_light": "Switch to light theme",
+  "stop_hint": "Running. Press Stop to interrupt."
 }

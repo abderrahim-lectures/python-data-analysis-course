@@ -92,7 +92,7 @@ const jsonLd = {
 ---
 
 <Base title={`${title}, PyDA Course`} description={description} lang={locale} dir={dir} alternates={alternates} canonicalPath={canonicalPath} jsonLd={jsonLd}>
-  <nav class="crumb container">
+  <nav class="crumb container" aria-label={m.breadcrumb_label()}>
     <a href={projectsHref(locale, base)}>{m.projects_eyebrow()}</a> <span>/</span> <span class="crumb__here">{title}</span>
   </nav>
 
@@ -354,7 +354,11 @@ const jsonLd = {
   }
   .project-content :global(.step-clear:hover),
   .project-content :global(.step-clear:focus-visible) {
-    border-color: var(--success); color: var(--success-text); outline: none;
+    /* --success as a focus ring is 2.09:1 on white, under the 3:1 that
+       SC 1.4.11 requires for a non-text indicator. Keep the success tint but
+       restore a real, high-contrast outline. */
+    border-color: var(--success); color: var(--success-text);
+    outline: 2px solid var(--ink-hi); outline-offset: 2px;
   }
   .project-content :global(h2.is-step-done .step-clear) {
     border-color: var(--success); color: var(--success-text); background: var(--success-soft);
