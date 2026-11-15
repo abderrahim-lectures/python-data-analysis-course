@@ -316,6 +316,12 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
       <div class="app-busy__inner">
         <div class="app-busy__spinner"></div>
         <div class="app-busy__label" id="app-busy-label" role="status" aria-live="polite"></div>
+        <!-- Lives inside the overlay and persists with it. A Stop affordance
+             created per-run on document.body disappeared on any soft
+             navigation while the overlay (transition:persist) stayed up, so a
+             runaway cell followed the learner to the next page with no way
+             out. It is hidden unless a worker run is in flight. -->
+        <button type="button" class="btn btn-primary run-stop" id="app-stop" hidden>{m.stop_button()}</button>
       </div>
     </div>
     <div class="pyodide-bar" id="pyodide-bar" transition:persist></div>

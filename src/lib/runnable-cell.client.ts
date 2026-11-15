@@ -22,7 +22,7 @@ import {
   type PyodideModel,
   type CellRuntime,
 } from './pythonRunnerCore.ts';
-import {runInWorker, stopRun} from './pyodideWorkerClient.ts';
+import {runInWorker, stopRun, isWorkerRunning} from './pyodideWorkerClient.ts';
 import {addXP, loadState} from './gameState.ts';
 
 // Re-exported for unit tests, which import these from this module rather
@@ -58,24 +58,42 @@ export async function awardLessonXp(lessonId: string): Promise<{gained: number; 
   return {gained, firstRunEver};
 }
 
-// The busy overlay is `position: fixed; inset: 0; pointer-events: auto` at
-// z-index 99998, so a Stop button inside the cell would be covered by the very
-// thing it has to interrupt. It floats above the overlay instead, in the
-// bottom-right corner where the overlay has no content, and exists only while
-// a run is in flight. Not per-cell there: there is exactly one worker and one
-// overlay, so there is exactly one stop affordance.
-const STOP_CLASS = 'run-stop';
+// The Stop control is static markup inside the busy overlay in Base.astro
+// (the overlay carries transition:persist, so it survives soft navigation;
+// a button created per-run on document.body did not, and a runaway cell
+// followed the learner to the next page with the overlay up and no way out).
+// These helpers only show and hide it.
+interface StopControl {
+  /** Bind the handler for this run, show the button, return a hider. */
+  show(onStop: () => void): {hide: () => void};
+}
 
-function showStopButton(onStop: () => void): () => void {
-  if (typeof document === 'undefined') return () => {};
-  const btn = document.createElement('button');
-  btn.type = 'button';
-  btn.className = `btn btn-primary ${STOP_CLASS}`;
-  btn.textContent = m.stop_button();
-  btn.setAttribute('aria-label', m.stop_aria());
-  btn.addEventListener('click', onStop);
-  document.body.appendChild(btn);
-  return () => btn.remove();
+function stopControl(): StopControl | null {
+  if (typeof document === 'undefined') return null;
+  const btn = document.getElementById('app-stop') as HTMLButtonElement | null;
+  if (!btn) return null;
+  return {
+    show(onStop) {
+      // Rebind per run: the button persists, its handler must not.
+      const handler = () => onStop();
+      btn.textContent = m.stop_button();
+      btn.setAttribute('aria-label', m.stop_aria());
+      btn.addEventListener('click', handler, {once: true});
+      btn.hidden = false;
+      return {
+        hide() {
+          btn.removeEventListener('click', handler);
+          btn.hidden = true;
+        },
+      };
+    },
+  };
+}
+
+function showStopButton(onStop: () => void): {hide: () => void} {
+  const c = stopControl();
+  if (!c) return {hide() {}};
+  return c.show(onStop);
 }
 
 export interface InitCellDeps {
@@ -216,14 +234,15 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
       // target, and there is no interrupt -- Pyodide's interrupt buffer needs
       // SharedArrayBuffer, and this site has no cross-origin isolation. The
       // only exit is terminating the worker, which is what Stop does.
-      let stopped = false;
-      const removeStop = showStopButton(() => {
-        if (stopped) return;
-        stopped = true;
+      const stopBtn = showStopButton(() => {
         if (!stopRun()) return;
-        appendLine('err', m.cell_stopped());
-        // Clears the overlay and the loading bar; the run's own promise is
-        // settled by stopRun, so the code below this await still runs.
+        // Report the stop in the cell that owns the run, unless a soft
+        // navigation already detached it (the button persists with the
+        // overlay, so a click can land after the panel is gone).
+        if (out.isConnected) appendLine('err', m.cell_stopped());
+        // Clear the overlay and the loading bar; stopRun settles the run's own
+        // promise as not-executed, so the code below this await still runs and
+        // readies the cell's own button.
         dispatchPyodideEvent('pyodide:ready');
       });
       try {
@@ -237,7 +256,7 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
           onStdinExhausted: inputs.grow,
         });
       } finally {
-        removeStop();
+        stopBtn.hide();
       }
     }
 
@@ -307,6 +326,18 @@ export function initRunnableCells(root: ParentNode = document): void {
   root.querySelectorAll('[data-runnable]').forEach((cell) => initCell(cell));
 }
 
+// A run that spans a soft navigation outlives the cell that started it: the
+// overlay persists, the Stop button persists (so the learner can still end
+// it), but the cell's panel is detached and its `finally` never runs. Hide
+// the button on the next page once no run is pending any more, so it cannot
+// linger over a page with nothing running.
+function reconcileStopButton(): void {
+  if (typeof document === 'undefined') return;
+  const btn = document.getElementById('app-stop');
+  if (!btn) return;
+  btn.hidden = !isWorkerRunning();
+}
+
 if (typeof document !== 'undefined') {
   // astro:page-load fires once on the initial load and again after every
   // client-side (View Transitions) navigation -- DOMContentLoaded only ever
@@ -317,6 +348,7 @@ if (typeof document !== 'undefined') {
   // the cells the swap just inserted.
   document.addEventListener('astro:page-load', () => {
     initRunnableCells();
+    reconcileStopButton();
   });
   // The initial astro:page-load dispatch fires on window's `load` event via
   // Astro's own router script, not this one -- if this deferred bundle is

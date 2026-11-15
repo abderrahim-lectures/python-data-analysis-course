@@ -636,15 +636,15 @@ button { font-family: inherit; cursor: pointer; }
    client-side, so it's styled here with the rest of the cell chrome. */
 .cell__copy { margin-left: .5rem; }
 
-/* Stop control, created client-side for the duration of a run. It must sit
-   ABOVE the busy overlay (z-index 99998, inset 0, pointer-events: auto) or it
-   would be covered by the very thing it interrupts; the overlay is a plain
-   centred spinner, so the bottom-right corner stays readable. Bottom-right on
-   desktop, full-width bar on phones where a corner button is a poor target. */
-.run-stop { position: fixed; right: 1.25rem; bottom: 1.25rem; z-index: 99999; }
-@media (max-width: 560px) {
-  .run-stop { right: 1rem; left: 1rem; bottom: 1rem; width: auto; }
-}
+/* Stop control, inside the busy overlay (which carries transition:persist so
+   it survives soft navigation). It is a child of the overlay rather than a
+   separate fixed element: the overlay is `inset: 0` with pointer-events auto,
+   so anything underneath it is unreachable, and a sibling with a higher
+   z-index would disappear on navigation while the overlay stayed. The .btn
+   display rule would beat the [hidden] attribute, so hidden is restored
+   explicitly. */
+.run-stop[hidden] { display: none; }
+.run-stop { margin-top: .9rem; }
 
 /* === Generic (non-runnable) fenced code blocks, e.g. shell/output snippets === */
 .lesson-content pre:not(.cell__code):not([data-runnable] pre) {
