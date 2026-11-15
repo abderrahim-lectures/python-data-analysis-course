@@ -10,7 +10,7 @@
 import Base from '../layouts/Base.astro';
 import Icon from './Icon.astro';
 import {m} from '../paraglide/messages.js';
-import {NAV_WORDS, navWordAlternates, type Locale} from '../lib/routeSegments';
+import {contributorsHref, navWordAlternates, type Locale} from '../lib/routeSegments';
 
 interface Props {
   locale: Locale;
@@ -128,7 +128,7 @@ git push -u origin add-my-project`}</code></pre>
     </section>
 
     <div class="guide__foot">
-      <a class="btn btn-ghost" href={`${base}${locale === 'en' ? '' : `${locale}/`}${NAV_WORDS[locale].contributors}`}>
+      <a class="btn btn-ghost" href={contributorsHref(locale, base)}>
         <Icon name="trail" size={15} /> {m.guide_back_cta()}
       </a>
       <a class="btn btn-primary" href={`${repo}/issues/new`} target="_blank" rel="noopener noreferrer">

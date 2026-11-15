@@ -552,5 +552,6 @@
   "breadcrumb_label": "Ruta de navegación",
   "switch_to_dark": "Cambiar al tema oscuro",
   "switch_to_light": "Cambiar al tema claro",
-  "stop_hint": "Ejecutando. Pulsa Detener para interrumpir."
+  "stop_hint": "Ejecutando. Pulsa Detener para interrumpir.",
+  "progress_page_description": "Tu XP, nivel, racha, misiones e insignias, calculados en tu navegador a partir de las lecciones y proyectos que has completado."
 }

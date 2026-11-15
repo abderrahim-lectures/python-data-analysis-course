@@ -114,6 +114,16 @@ export function playgroundHref(locale: Locale, base: string): string {
   return withBase(localizedPath(['playground'], locale), base);
 }
 
+/** hreflang alternates for the playground pages. The route word is the same in
+    every locale, but the *locale prefix* is not: without this the plain
+    `alternates` default (which describes the homepages) was emitted, telling a
+    crawler that /es/playground is an alternate of the Spanish homepage. */
+export function playgroundAlternates(): Record<Locale, string> {
+  return Object.fromEntries(
+    ALL_LOCALES.map((locale) => [locale, locale === 'en' ? 'playground' : `${locale}/playground`]),
+  ) as Record<Locale, string>;
+}
+
 /** hreflang/switcher alternates for a top-level nav page (`learn`, `credits`, …). */
 export function navWordAlternates(word: keyof typeof NAV_WORDS[Locale]): Record<Locale, string> {
   return Object.fromEntries(
@@ -129,6 +139,25 @@ export function progressGuideHref(locale: Locale, base: string): string {
 /** Top-level `/teaching-approach`/`/enfoque-pedagogico`/… link. */
 export function pedagogyHref(locale: Locale, base: string): string {
   return withBase(localizedPath([NAV_WORDS[locale].pedagogy], locale), base);
+}
+
+/** Top-level `/credits`/`/creditos`/… link. */
+export function creditsHref(locale: Locale, base: string): string {
+  return withBase(localizedPath([NAV_WORDS[locale].credits], locale), base);
+}
+
+/** Top-level `/contributors`/`/colaboradores`/… link. */
+export function contributorsHref(locale: Locale, base: string): string {
+  return withBase(localizedPath([NAV_WORDS[locale].contributors], locale), base);
+}
+
+/** Top-level contributors *guide* link. Each locale has its own route word
+    (`/ar/دليل-المساهمة`, `/es/guia-colaboradores`, `/fr/guide-contributeurs`);
+    building this by hand from the English word plus a locale prefix produces
+    a 404 on all three, which is exactly what the first cut of the contributors
+    page shipped. */
+export function contributorsGuideHref(locale: Locale, base: string): string {
+  return withBase(localizedPath([NAV_WORDS[locale].contributorsGuide], locale), base);
 }
 
 /** Build a module href with the localized track word and modules word. */

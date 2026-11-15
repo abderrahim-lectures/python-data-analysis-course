@@ -10,7 +10,7 @@ import type {CollectionEntry} from 'astro:content';
 import Base from '../layouts/Base.astro';
 import Icon from './Icon.astro';
 import {m} from '../paraglide/messages.js';
-import {NAV_WORDS, projectsHref, navWordAlternates, type Locale} from '../lib/routeSegments';
+import {projectsHref, contributorsGuideHref, navWordAlternates, type Locale} from '../lib/routeSegments';
 import {CONTRIBUTORS, contributorProfileUrl} from '../lib/contributors';
 
 interface Props {
@@ -23,18 +23,37 @@ const {locale, projects: allProjects} = Astro.props;
 const dir = locale === 'ar' ? 'rtl' : 'ltr';
 const base = import.meta.env.BASE_URL;
 
-// English entries only: authorship is declared once, on the English file, and
-// a translated twin is a translation rather than a separate contribution.
+// Authorship is declared once, on the English file -- a translated twin is a
+// translation, not a separate contribution. But the *display* copy should be
+// the reader's language, so each entry is joined to its localized twin by id
+// for the title and description, falling back to English when there is none.
+// Before this the Arabic page listed 135 English project titles under an
+// otherwise fully translated page.
+const isEn = (id: string) => !/^(ar|es|fr)\//.test(id);
+const bareSlug = (id: string) => id.replace(/^(ar|es|fr)\//, '').replace(/^\/?projects?\//, '');
+
+const localizedCopy = new Map<string, {title: string; description: string}>();
+if (locale !== 'en') {
+  for (const p of allProjects) {
+    if (!p.id.startsWith(`${locale}/`)) continue;
+    localizedCopy.set(bareSlug(p.id), {title: p.data.title, description: p.data.description});
+  }
+}
+
 const authored = allProjects
-  .filter((p) => !/^(ar|es|fr)\//.test(p.id) && p.data.author)
-  .map((p) => ({
-    slug: p.id.replace(/^\/?projects\//, ''),
-    title: p.data.title,
-    description: p.data.description,
-    author: p.data.author as string,
-    tags: p.data.tags,
-  }))
-  .sort((a, b) => a.title.localeCompare(b.title));
+  .filter((p) => isEn(p.id) && p.data.author)
+  .map((p) => {
+    const slug = bareSlug(p.id);
+    const local = localizedCopy.get(slug);
+    return {
+      slug,
+      title: local?.title ?? p.data.title,
+      description: local?.description ?? p.data.description,
+      author: p.data.author as string,
+      tags: p.data.tags,
+    };
+  })
+  .sort((a, b) => a.title.localeCompare(b.title, locale));
 
 // People in registry order, each with the projects they wrote, most recent
 // contribution ordering irrelevant -- alphabetical by title reads better as a
@@ -123,10 +142,10 @@ const alternates = navWordAlternates('contributors');
       <h2>{m.contributors_join_heading()}</h2>
       <p>{m.contributors_join_body()}</p>
       <div class="contributors__cta-actions">
-        <a class="btn btn-primary" href={`${base}${locale === 'en' ? '' : `${locale}/`}contributors-guide/`}>
+        <a class="btn btn-primary" href={contributorsGuideHref(locale, base)}>
           <Icon name="code" size={15} /> {m.contributors_join_guide_cta()}
         </a>
-        <a class="btn btn-ghost" href={`${base}${NAV_WORDS[locale].projects}`}>
+        <a class="btn btn-ghost" href={projectsHref(locale, base)}>
           <Icon name="globe" size={15} /> {m.nav_projects()}
         </a>
       </div>

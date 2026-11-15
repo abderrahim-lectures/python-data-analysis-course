@@ -28,12 +28,28 @@ const projectSlugs = JSON.parse(
 // localized URL, so listing both would send search engines to the same
 // document twice. A slug whose localized form equals its English form has a
 // single page and must NOT be filtered out.
+//
+// The comparison has to happen on the *same shape* @astrojs/sitemap passes to
+// the filter. That is a fully built URL (site + path), and for `build.format:
+// 'directory'` it ends in a trailing slash. Two normalizations matter and both
+// were missing before, which made the filter silently match nothing -- 405
+// alias URLs shipped in the sitemap:
+//   1. trailing slash: the filter saw `/es/proyectos/ai-agent/` and the set
+//      held `/es/proyectos/ai-agent`;
+//   2. percent-encoding: Arabic paths arrive encoded
+//      (`/ar/%D9%85%D8%B4.../`) while the set held raw Arabic.
 const localizedProjectsWord = /** @type {Record<string,string>} */ ({ar: 'مشاريع', es: 'proyectos', fr: 'projets'});
 const projectAliasPaths = new Set();
+/** Normalize a pathname so encoded/raw and slash/no-slash forms compare equal. */
+const normalizePath = (/** @type {string} */ pathname) => {
+  let p = pathname;
+  try { p = decodeURIComponent(p); } catch { /* keep the raw form */ }
+  return p.replace(/\/+$/, '') || '/';
+};
 for (const locale of ['ar', 'es', 'fr']) {
   for (const [en, localized] of Object.entries(projectSlugs[locale] ?? {})) {
     if (localized !== en) {
-      projectAliasPaths.add(`/${locale}/${localizedProjectsWord[locale]}/${en}`);
+      projectAliasPaths.add(normalizePath(`/${locale}/${localizedProjectsWord[locale]}/${en}`));
     }
   }
 }
@@ -80,10 +96,7 @@ export default defineConfig({
     // is a wrong signal. The pages' <head> tags carry the correct
     // alternates (verified by tests/e2e/hreflang.mjs).
     sitemap({
-      filter: (page) => {
-        const url = new URL(page);
-        return !projectAliasPaths.has(url.pathname);
-      },
+      filter: (page) => !projectAliasPaths.has(normalizePath(new URL(page).pathname)),
     }),
   ],
 });

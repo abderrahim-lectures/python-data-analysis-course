@@ -543,7 +543,7 @@
   "guide_tip_4": "لا تضف ترجمة بنفسك إلا إن كنت تتحدث اللغة فعلًا. الإنجليزية تكفي؛ والمترجمون يتولّون الباقي.",
   "guide_back_cta": "رجوع إلى المساهمين",
   "contributors_project_count_one": "مشروع واحد",
-  "contributors_project_count_many": "{count} مشاريع",
+  "contributors_project_count_many": "{count} مشروعًا",
   "contributors_project_count_zero": "لا مشاريع بعد",
   "guide_file_project": "صفحة المشروع نفسها. حقول الـ frontmatter: title و description و difficulty و tags و author (معرّفك كمساهم). وكل ما بعد الـ frontmatter هو الدرس الذي يتبعه القارئ.",
   "guide_file_example": "كود مرافق يمكن تشغيله محليًا، إن كان للمشروع كود. المشاريع التي تعلّم مفهومًا دون بناء أداة يمكنها تجاوزه.",
@@ -552,5 +552,6 @@
   "breadcrumb_label": "مسار التنقّل",
   "switch_to_dark": "التبديل إلى المظهر الداكن",
   "switch_to_light": "التبديل إلى المظهر الفاتح",
-  "stop_hint": "قيد التشغيل. اضغط إيقاف للمقاطعة."
+  "stop_hint": "قيد التشغيل. اضغط إيقاف للمقاطعة.",
+  "progress_page_description": "نقاط خبرتك ومستواك وسلسلتك ومهامك وشاراتك، محسوبة في متصفحك من الدروس والمشاريع التي أكملتها."
 }

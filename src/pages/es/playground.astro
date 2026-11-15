@@ -1,4 +1,5 @@
 ---
+import {playgroundAlternates} from '../../lib/routeSegments';
 import Base from '../../layouts/Base.astro';
 import PlaygroundHead from '../../components/PlaygroundHead.astro';
 import PlaygroundCell from '../../components/PlaygroundCell.astro';
@@ -11,6 +12,7 @@ import * as m from '../../paraglide/messages.js';
   description={m.playground_lead()}
   lang="es"
   dir="ltr"
+  alternates={playgroundAlternates()}
 >
   <section class="container head">
     <PlaygroundHead

@@ -552,5 +552,6 @@
   "breadcrumb_label": "Fil d'Ariane",
   "switch_to_dark": "Passer au thème sombre",
   "switch_to_light": "Passer au thème clair",
-  "stop_hint": "Exécution en cours. Appuyez sur Arrêter pour interrompre."
+  "stop_hint": "Exécution en cours. Appuyez sur Arrêter pour interrompre.",
+  "progress_page_description": "Votre XP, niveau, série, quêtes et badges, calculés dans votre navigateur à partir des leçons et projets terminés."
 }

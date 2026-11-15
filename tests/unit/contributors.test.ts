@@ -151,3 +151,48 @@ describe('the guide names the files that actually exist', () => {
     expect(existsSync('src/content/projects/ai-agent.md')).toBe(true);
   });
 });
+
+describe('the contributors page links to pages that exist', () => {
+  // Both CTAs on the localized pages were dead: the guide link was built from
+  // the English route word plus a locale prefix (`/ar/contributors-guide/`)
+  // and the projects link dropped the locale prefix entirely (`/مشاريع`). The
+  // page looked right in English, which is why nothing caught it. These pin
+  // the helpers the component now uses.
+  test('contributorsGuideHref uses each locale\'s own route word', async () => {
+    const {contributorsGuideHref, NAV_WORDS} = await import('../../src/lib/routeSegments.ts');
+    expect(contributorsGuideHref('en', '/')).toBe('/contributors-guide');
+    expect(contributorsGuideHref('es', '/')).toBe('/es/guia-colaboradores');
+    expect(contributorsGuideHref('fr', '/')).toBe('/fr/guide-contributeurs');
+    // Paraglide percent-encodes non-ASCII path segments, which is what an href
+    // should carry; compare after decoding so the assertion reads as the word.
+    expect(decodeURIComponent(contributorsGuideHref('ar', '/'))).toBe('/ar/دليل-المساهمة');
+    // The English word must not leak under a locale prefix.
+    for (const loc of ['ar', 'es', 'fr'] as const) {
+      expect(contributorsGuideHref(loc, '/')).not.toContain('contributors-guide');
+      expect(decodeURIComponent(contributorsGuideHref(loc, '/'))).toContain(NAV_WORDS[loc].contributorsGuide);
+    }
+  });
+
+  test('contributorsHref and projectsHref keep the locale prefix', async () => {
+    const {contributorsHref, projectsHref} = await import('../../src/lib/routeSegments.ts');
+    expect(decodeURIComponent(contributorsHref('ar', '/'))).toBe('/ar/المساهمون');
+    expect(contributorsHref('es', '/')).toBe('/es/colaboradores');
+    expect(contributorsHref('fr', '/')).toBe('/fr/contributeurs');
+    for (const loc of ['ar', 'es', 'fr'] as const) {
+      expect(projectsHref(loc, '/')).toMatch(new RegExp(`^/${loc}/`));
+    }
+    expect(decodeURIComponent(projectsHref('ar', '/'))).toBe('/ar/مشاريع');
+    expect(projectsHref('es', '/')).toBe('/es/proyectos');
+    expect(projectsHref('fr', '/')).toBe('/fr/projets');
+  });
+
+  test('the component builds no top-level href by hand', () => {
+    // The failure mode was string-building: `${locale}/contributors-guide`.
+    // Anything of that shape in the page is a regression waiting to happen.
+    for (const p of ['src/components/ContributorsPage.astro', 'src/components/ContributorsGuide.astro']) {
+      const src = readFileSync(p, 'utf8');
+      expect(src, p).not.toMatch(/\$\{locale\}\/.*(contributors-guide|colaboradores|contributeurs)/);
+      expect(src, p).not.toMatch(/\$\{base\}\$\{NAV_WORDS/);
+    }
+  });
+});
