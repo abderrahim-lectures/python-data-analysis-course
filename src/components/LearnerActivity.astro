@@ -109,9 +109,20 @@ const {locale = 'en', supabaseUrl = '', supabaseKey = ''} = Astro.props;
             if (!bar.isConnected) { stopPolling(); return; }
             var n = await count();
             var ce = document.getElementById('learner-count'), le = document.getElementById('learner-label');
+            // Reveal before writing: the widget is a live region, and text
+            // written into a hidden subtree is neither announced nor replayed
+            // when the container is shown. It also stops announcing after the
+            // first update -- a polite region re-reading "3 learners online"
+            // every 30 seconds interrupts whatever the visitor is reading.
+            var wasHidden = bar.hidden;
+            bar.hidden = n === 0;
+            if (wasHidden && n > 0) {
+              bar.setAttribute('aria-live', 'polite');
+            } else if (!wasHidden) {
+              bar.setAttribute('aria-live', 'off');
+            }
             if (ce) ce.textContent = n;
             if (le) le.textContent = n === 1 ? ONE : MANY;
-            bar.hidden = n === 0;
           }
           waitForAuth(function () {
             // The 3s auth fallback can fire after a soft navigation has

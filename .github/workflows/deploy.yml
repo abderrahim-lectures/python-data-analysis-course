@@ -41,6 +41,14 @@ jobs:
           restore-keys: |
             pyodide-${{ runner.os }}-
 
+      # Tests before the build: several defects this repo has shipped would
+      # have been caught here (a stale e2e selector that could only ever
+      # throw, the sitemap filter matching nothing, an untranslated project
+      # breaking its localized links). They run against source, not the
+      # built site, so they need no server.
+      - name: Unit tests
+        run: npm run test
+
       - name: Build site
         run: npm run build
         env:

@@ -47,10 +47,25 @@ function showLevelUp(level: number, xp: number, unlocked: string[]) {
   if (!overlay) return;
   const subEl = document.getElementById('lvlup-sub');
   const newBadges = unlocked.map(badgeLabel);
-  if (subEl) subEl.textContent = newBadges.length ? `${m.unlocked_prefix()}${newBadges.join(', ')}` : `${xp} ${m.total_xp_label()}`;
+  const line = newBadges.length ? `${m.unlocked_prefix()}${newBadges.join(', ')}` : `${xp} ${m.total_xp_label()}`;
+  // Reveal first, write second. #lvlup is a role="status" live region, and a
+  // status update written into a hidden subtree is not announced and is not
+  // replayed when the container is revealed -- the level-up announcement was
+  // silent for every screen-reader user. Same ordering the busy overlay
+  // already documents.
   overlay.hidden = false;
   overlay.classList.remove('lvlup--hide');
   overlay.classList.add('lvlup--show');
+  if (subEl) {
+    subEl.textContent = '';
+    // rAF is absent in the unit-test harness and in any environment without a
+    // rendering loop; fall back to writing immediately rather than throwing.
+    if (typeof requestAnimationFrame === 'function') {
+      requestAnimationFrame(() => { subEl.textContent = line; });
+    } else {
+      subEl.textContent = line;
+    }
+  }
   spawnParticles();
   setTimeout(() => {
     overlay.classList.remove('lvlup--show');

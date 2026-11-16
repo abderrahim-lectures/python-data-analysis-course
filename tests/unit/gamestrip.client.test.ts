@@ -65,6 +65,9 @@ describe('gamestrip.client.ts', () => {
     expect(overlay.hidden).toBe(false);
     expect(overlay.classList.has('lvlup--show')).toBe(true);
     expect(overlay.children.length).toBeGreaterThan(0); // particles
+    // Revealed before the text is written (a status update into a hidden
+    // subtree is never announced), so let the next frame run first.
+    await new Promise((r) => setTimeout(r, 20));
     const sub = stub.elements.get('lvlup-sub')!;
     // The unlocked list names the visible quest, not the internal login key.
     expect(sub.textContent).toContain('First run');

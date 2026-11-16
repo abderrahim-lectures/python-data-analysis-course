@@ -151,12 +151,14 @@
   to { opacity: 1; transform: translateY(0); }
 }
 .card { animation: cardIn .35s ease both; }
-.grid .card:nth-child(1) { animation-delay: .02s; }
-.grid .card:nth-child(2) { animation-delay: .06s; }
-.grid .card:nth-child(3) { animation-delay: .10s; }
-.grid .card:nth-child(4) { animation-delay: .14s; }
-.grid .card:nth-child(5) { animation-delay: .18s; }
-.grid .card:nth-child(n+6) { animation-delay: .22s; }
+/* The listing container is #project-grid (class `list`), not `.grid` -- these
+   six rules never matched anything, so the intended stagger never happened. */
+#project-grid .card:nth-child(1) { animation-delay: .02s; }
+#project-grid .card:nth-child(2) { animation-delay: .06s; }
+#project-grid .card:nth-child(3) { animation-delay: .10s; }
+#project-grid .card:nth-child(4) { animation-delay: .14s; }
+#project-grid .card:nth-child(5) { animation-delay: .18s; }
+#project-grid .card:nth-child(n+6) { animation-delay: .22s; }
 
 /* Responsive: fix overflow at 320px */
 @media (max-width: 640px) {

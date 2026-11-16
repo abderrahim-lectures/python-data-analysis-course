@@ -271,10 +271,12 @@ await evaluate('(localStorage.clear(), 1)');
 await goto('/');
 check('shows on a first visit', await evaluate('!document.getElementById("onboarding").hidden'), true);
 // A non-blocking corner card, not a modal dialog (see the comment above its
-// markup in Base.astro): role="status" and no focus trap are deliberate --
+// markup in Base.astro): a labelled region with no focus trap is deliberate --
 // it must never steal focus or block a first-time visitor from reaching the
-// lesson they came for.
-check('is a labelled status card, not a modal dialog', await evaluate('document.getElementById("onboarding").getAttribute("role")'), 'status');
+// lesson they came for. role="region" rather than role="status": status makes
+// the whole card one atomic announcement and flattens the <ol> of steps.
+check('is a labelled region, not a modal dialog', await evaluate('document.getElementById("onboarding").getAttribute("role")'), 'region');
+check('is not a modal', await evaluate('document.getElementById("onboarding").hasAttribute("aria-modal")'), false);
 check('does not steal focus (non-blocking)', await evaluate('document.getElementById("onboarding").contains(document.activeElement)'), false);
 await evaluate('(document.getElementById("onboarding-start").click(), 1)');
 check('dismisses on the CTA', await evaluate('document.getElementById("onboarding").hidden'), true);

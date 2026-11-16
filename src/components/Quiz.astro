@@ -41,6 +41,7 @@ const {title = m.quiz_title(), questions, xp = 5, lessonId = ''} = Astro.props;
               <input type="radio" name={`q${qi}`} value={oi} />
               <span class="quiz-q__radio"></span>
               <span class="quiz-q__text">{opt.text}</span>
+              <span class="quiz-q__verdict" aria-hidden="true"></span>
             </label>
           ))}
         </div>
@@ -106,18 +107,28 @@ const {title = m.quiz_title(), questions, xp = 5, lessonId = ''} = Astro.props;
           const isCorrect = (opt as HTMLElement).dataset.correct === '1';
 
           opt.classList.remove('quiz-q__opt--correct', 'quiz-q__opt--wrong', 'quiz-q__opt--selected');
+          const v1 = opt.querySelector('.quiz-q__verdict') as HTMLElement | null; if (v1) v1.textContent = '';
 
+          // The verdict glyph is the point: before this, correct and wrong
+          // options differed only by border and background colour (SC 1.4.1).
+          const verdict = opt.querySelector('.quiz-q__verdict') as HTMLElement | null;
           if (radio.checked) {
             qAnswered = true;
             opt.classList.add('quiz-q__opt--selected');
             if (isCorrect) {
               opt.classList.add('quiz-q__opt--correct');
+              if (verdict) verdict.textContent = '\u2713';
+              opt.setAttribute('aria-label', `${opt.textContent?.trim() ?? ''} - ${m.quiz_correct_label()}`);
               userCorrect = true;
             } else {
               opt.classList.add('quiz-q__opt--wrong');
+              if (verdict) verdict.textContent = '\u2717';
+              opt.setAttribute('aria-label', `${opt.textContent?.trim() ?? ''} - ${m.quiz_wrong_label()}`);
             }
           } else if (isCorrect) {
             opt.classList.add('quiz-q__opt--correct');
+            if (verdict) verdict.textContent = '\u2713';
+            opt.setAttribute('aria-label', `${opt.textContent?.trim() ?? ''} - ${m.quiz_correct_label()}`);
           }
         });
 
@@ -176,6 +187,7 @@ const {title = m.quiz_title(), questions, xp = 5, lessonId = ''} = Astro.props;
       el.querySelectorAll('.quiz-q').forEach((q) => {
         q.querySelectorAll('.quiz-q__opt').forEach((opt) => {
           opt.classList.remove('quiz-q__opt--correct', 'quiz-q__opt--wrong', 'quiz-q__opt--selected');
+          const v2 = opt.querySelector('.quiz-q__verdict') as HTMLElement | null; if (v2) v2.textContent = '';
           (opt.querySelector('input') as HTMLInputElement).checked = false;
         });
         const explain = q.querySelector('[data-explain]') as HTMLElement | null;
@@ -264,6 +276,15 @@ const {title = m.quiz_title(), questions, xp = 5, lessonId = ''} = Astro.props;
     background: var(--accent-contrast);
     border-radius: 50%;
   }
+  /* The verdict glyph: before this a graded option was marked correct or
+     wrong by colour alone (SC 1.4.1). Positioned at the end of the row so it
+     reads after the option text in both LTR and RTL. */
+  .quiz-q__verdict {
+    margin-inline-start: auto; font-weight: 900; font-size: 1rem;
+    padding-inline-start: .4rem; flex: none;
+  }
+  .quiz-q__opt--correct .quiz-q__verdict { color: var(--success-text); }
+  .quiz-q__opt--wrong .quiz-q__verdict { color: var(--bad-text); }
   .quiz-q__opt--correct {
     border-color: var(--success);
     background: var(--success-soft);

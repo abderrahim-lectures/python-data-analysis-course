@@ -387,10 +387,11 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
          dialog that stopped a first-time visitor from reaching the lesson
          they actually came for. It starts hidden -- it used to render
          visible and get hidden by JS after load, so every returning visitor
-         saw it flash on every page. role="status" (not "dialog") plus no
-         focus trap means it never steals focus or blocks interaction; a
-         visitor can just start clicking around and it stays out of the way. -->
-    <div class="onboarding" id="onboarding" hidden role="status" aria-labelledby="onboarding-title">
+         saw it flash on every page. role="region" (not "dialog"/status) plus
+         no focus trap means it never steals focus or blocks interaction, and
+         the card's <ol> keeps its list semantics -- role="status" makes the
+         whole card one atomic announcement, which flattens the steps. -->
+    <div class="onboarding" id="onboarding" hidden role="region" aria-labelledby="onboarding-title">
       <div class="onboarding__card">
         <button type="button" class="onboarding__close" id="onboarding-skip" aria-label={m.onboarding_skip()}>&times;</button>
         <p class="onboarding__title" id="onboarding-title"><span aria-hidden="true">🚀</span> {m.onboarding_title()}</p>

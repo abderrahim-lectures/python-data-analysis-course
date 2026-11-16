@@ -50,9 +50,9 @@ describe('message files stay complete and translated', () => {
   const SHARED = new Set([
     '$schema', 'credits_entry_1_name', 'credits_entry_3_name',
     'footer_changelog', 'footer_github', 'footer_python_101', 'footer_site_col',
-    'home_hub_track_1_name', 'home_terminal_line_1', 'mobile_nav_playground',
-    'module_label', 'nav_playground', 'playground_title',
-    'track_1_name', 'track_normal_label', 'ui_changelog', 'xp_toast',
+    'home_hub_track_1_name', 'home_terminal_line_1',
+    'module_label', 'playground_title',
+    'track_1_name', 'track_normal_label', 'xp_toast',
     // Progress page: the XP acronym, the K/D/A gaming acronym, the external
     // study citation, and the French rank "Bronze" are universal tokens that
     // read identically in every locale by design.
@@ -131,11 +131,13 @@ describe('shared layout', () => {
     expect(src).toMatch(/id="onboarding"[^>]*\shidden/);
   });
 
-  test('the onboarding card is a non-blocking status region, not a modal dialog', () => {
-    // It's a dismissible corner card, not a full-screen modal -- role="status"
-    // (not "dialog"/aria-modal) means it never steals focus or blocks
-    // interaction with the rest of the page.
-    expect(src).toContain('role="status"');
+  test('the onboarding card is a non-blocking region, not a modal dialog', () => {
+    // A dismissible corner card, not a full-screen modal: no "dialog" and no
+    // aria-modal, so it never steals focus or blocks the page. role="region"
+    // rather than role="status", because status makes the card one atomic
+    // announcement and flattens the <ol> of steps inside it.
+    expect(src).toContain('role="region"');
+    expect(src).not.toContain('role="dialog"');
     expect(src).not.toContain('aria-modal');
     expect(src).toContain('aria-labelledby="onboarding-title"');
   });
