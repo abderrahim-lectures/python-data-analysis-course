@@ -22,9 +22,10 @@
 
 ## Filing something new
 
-`new-issue-links.md` still holds one prefilled "[New issue]" link per entry —
-harmless to leave, but each one now duplicates a closed defect. `file-all.sh`
-would file all seven and should not be run.
+`file-all.sh` would file all seven and should not be run. (The prefilled
+one-click issue links that used to sit beside it are gone: each duplicated a
+defect that is now fixed, and every body was double-URL-encoded in the query
+string, so the form opened with mangled text.)
 
 For a new bug, follow [`plan/development-workflow.md`](../plan/development-workflow.md):
 issue first, then a branch named `issue-<number>-<slug>`.
