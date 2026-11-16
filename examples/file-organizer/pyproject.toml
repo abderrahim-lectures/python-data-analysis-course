@@ -1,0 +1,7 @@
+[project]
+name = "file-organizer"
+version = "0.1.0"
+description = "Local companion to the course's Build a File-Organizer Bot project: sorts a folder into category subfolders with a real --dry-run mode and an undo log."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
