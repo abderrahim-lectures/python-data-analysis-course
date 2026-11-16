@@ -4,6 +4,7 @@ import {getCollection} from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Icon from '../Icon.astro';
 import {learnHref, trackWord, idInLocale, navWordAlternates, type Locale} from '../../lib/routeSegments';
+import {sectionList} from '../../lib/sections';
 import {m} from '../../paraglide/messages.js';
 
 interface Props {
@@ -15,10 +16,9 @@ const base = import.meta.env.BASE_URL;
 const dir = locale === 'ar' ? 'rtl' : 'ltr';
 const alternates: Record<Locale, string> = navWordAlternates('learn');
 
-const sections = [
-  {slug: 'python-101', icon: '🐍', badge: m.track_1(), name: m.track_1_name(), desc: m.track_1_desc()},
-  {slug: 'data-analysis', icon: '📊', badge: m.track_2(), name: m.track_2_name(), desc: m.track_2_desc()},
-];
+// One card per registered section; adding a section is a change to
+// src/lib/sections.ts plus its content, not to this component.
+const sections = sectionList();
 
 const allLessons = await getCollection('lessons');
 const allModules = await getCollection('modules');
@@ -56,9 +56,9 @@ const totalXp = sections.reduce((sum, {slug}) => sum + stats[slug].xp, 0);
 
   <section class="container">
     <div class="sections">
-      {sections.map(({slug, icon, badge, name, desc}) => (
+      {sections.map(({slug, icon, badge, name, desc}, i) => (
         <div class="sectioncard">
-          <div class={`sectioncard__badge${slug === 'data-analysis' ? ' sectioncard__badge--streak' : ''}`}>{icon} {badge}</div>
+          <div class={`sectioncard__badge${i === 1 ? ' sectioncard__badge--streak' : ''}`}>{icon} {badge}</div>
           <div class="sectioncard__icon">{icon}</div>
           <h2>{name}</h2>
           <p>{desc}</p>

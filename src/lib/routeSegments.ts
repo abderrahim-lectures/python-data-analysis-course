@@ -29,11 +29,11 @@ export function detectLocale(pathname: string): Locale {
   return 'en';
 }
 
-export const NAV_WORDS: Record<Locale, {learn: string; projects: string; progress: string; credits: string; cheatsheets: string; progressGuide: string; pedagogy: string; contributors: string; contributorsGuide: string}> = {
-  en: {learn: 'learn', projects: 'projects', progress: 'progress', credits: 'credits', cheatsheets: 'cheatsheets', progressGuide: 'progress-guide', pedagogy: 'teaching-approach', contributors: 'contributors', contributorsGuide: 'contributors-guide'},
-  ar: {learn: 'تعلم', projects: 'مشاريع', progress: 'تقدم', credits: 'المصادر', cheatsheets: 'ملخصات', progressGuide: 'دليل-التقدم', pedagogy: 'المنهج-التعليمي', contributors: 'المساهمون', contributorsGuide: 'دليل-المساهمة'},
-  es: {learn: 'aprender', projects: 'proyectos', progress: 'progreso', credits: 'creditos', cheatsheets: 'referencias', progressGuide: 'guia-progreso', pedagogy: 'enfoque-pedagogico', contributors: 'colaboradores', contributorsGuide: 'guia-colaboradores'},
-  fr: {learn: 'apprendre', projects: 'projets', progress: 'progression', credits: 'credits', cheatsheets: 'antiseche', progressGuide: 'guide-progression', pedagogy: 'approche-pedagogique', contributors: 'contributeurs', contributorsGuide: 'guide-contributeurs'},
+export const NAV_WORDS: Record<Locale, {learn: string; projects: string; progress: string; credits: string; cheatsheets: string; progressGuide: string; pedagogy: string; contributors: string; contributorsGuide: string; statisticsReferences: string}> = {
+  en: {learn: 'learn', projects: 'projects', progress: 'progress', credits: 'credits', cheatsheets: 'cheatsheets', progressGuide: 'progress-guide', pedagogy: 'teaching-approach', contributors: 'contributors', contributorsGuide: 'contributors-guide', statisticsReferences: 'statistics-references'},
+  ar: {learn: 'تعلم', projects: 'مشاريع', progress: 'تقدم', credits: 'المصادر', cheatsheets: 'ملخصات', progressGuide: 'دليل-التقدم', pedagogy: 'المنهج-التعليمي', contributors: 'المساهمون', contributorsGuide: 'دليل-المساهمة', statisticsReferences: 'مراجع-الإحصاء'},
+  es: {learn: 'aprender', projects: 'proyectos', progress: 'progreso', credits: 'creditos', cheatsheets: 'referencias', progressGuide: 'guia-progreso', pedagogy: 'enfoque-pedagogico', contributors: 'colaboradores', contributorsGuide: 'guia-colaboradores', statisticsReferences: 'bibliografia-estadistica'},
+  fr: {learn: 'apprendre', projects: 'projets', progress: 'progression', credits: 'credits', cheatsheets: 'antiseche', progressGuide: 'guide-progression', pedagogy: 'approche-pedagogique', contributors: 'contributeurs', contributorsGuide: 'guide-contributeurs', statisticsReferences: 'references-statistiques'},
 };
 
 export const TRACK_WORDS: Record<Locale, {normal: string; hard: string}> = {
@@ -158,6 +158,11 @@ export function contributorsHref(locale: Locale, base: string): string {
     page shipped. */
 export function contributorsGuideHref(locale: Locale, base: string): string {
   return withBase(localizedPath([NAV_WORDS[locale].contributorsGuide], locale), base);
+}
+
+/** The Statistics 101 references page, at its localized path. */
+export function referencesHref(locale: Locale, base: string): string {
+  return withBase(localizedPath([NAV_WORDS[locale].statisticsReferences], locale), base);
 }
 
 /** Build a module href with the localized track word and modules word. */

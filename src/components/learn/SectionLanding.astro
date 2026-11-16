@@ -2,7 +2,7 @@
 // Shared section landing for locale pages, e.g. /ar/تعلم/python-101.
 import {getCollection} from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import {learnHref, moduleHref, learnAlternates, idInLocale, type Locale} from '../../lib/routeSegments';
+import {learnHref, moduleHref, learnAlternates, idInLocale, referencesHref, type Locale} from '../../lib/routeSegments';
 import {m} from '../../paraglide/messages.js';
 import {TRACK_ICONS, sectionIcon, sectionName, sectionDescription} from '../../lib/sections';
 
@@ -88,6 +88,19 @@ const totalHours = Math.round(totalMinutes / 60);
       </section>
     );
   })}
+
+  {section === 'statistics-101' && (
+    <section class="container refs-link">
+      <a class="refs-link__card" href={referencesHref(locale, base)}>
+        <span class="refs-link__icon" aria-hidden="true">📚</span>
+        <span class="refs-link__body">
+          <strong>{m.guide_refs_heading()}</strong>
+          <span>{m.guide_refs_link_lede()}</span>
+        </span>
+        <span class="refs-link__arrow" aria-hidden="true">{locale === 'ar' ? '←' : '→'}</span>
+      </a>
+    </section>
+  )}
 </Base>
 
 <style>
@@ -107,6 +120,20 @@ const totalHours = Math.round(totalMinutes / 60);
   .hero-section p { color: var(--ink-soft); font-size: 1.05rem; }
   .hero-stats { display: flex; gap: 1.25rem; justify-content: center; margin-top: 1rem; flex-wrap: wrap; }
   .stat { font-size: .88rem; font-weight: 600; color: var(--ink-soft); }
+  .refs-link { margin-bottom: 2rem; }
+  .refs-link__card {
+    display: flex; align-items: center; gap: 1rem;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius-lg); padding: 1.1rem 1.25rem;
+    text-decoration: none; color: var(--ink); box-shadow: var(--shadow-sm);
+    transition: all var(--transition-smooth);
+  }
+  .refs-link__card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); border-color: var(--accent); }
+  .refs-link__icon { font-size: 1.9rem; flex-shrink: 0; }
+  .refs-link__body { display: flex; flex-direction: column; gap: .15rem; flex: 1 1 auto; min-width: 0; }
+  .refs-link__body strong { font-size: 1.02rem; }
+  .refs-link__body span { color: var(--ink-soft); font-size: .88rem; }
+  .refs-link__arrow { color: var(--accent); font-weight: 800; flex-shrink: 0; }
   .track-section { margin-bottom: 2rem; }
   .track-section h2 { font-size: 1.4rem; margin-bottom: 1rem; }
   .modules-grid { display: flex; flex-direction: column; gap: .75rem; }

@@ -74,6 +74,11 @@ const repo = 'https://github.com/abderrahim-lectures/python-data-analysis-course
       <p class="guide__intro">{m.guide_intro()}</p>
     </header>
 
+    <figure class="guide__figure">
+      <img src={`${base}img/guide/three-files.svg`} alt={m.guide_fig_files_alt()} width="900" height="430" loading="lazy" decoding="async" />
+      <figcaption>{m.guide_fig_files_caption()}</figcaption>
+    </figure>
+
     <ol class="guide__steps" role="list">
       {steps.map((s, i) => (
         <li class="guide-step">
@@ -106,6 +111,11 @@ git push -u origin add-my-project`}</code></pre>
         </li>
       ))}
     </ol>
+
+    <figure class="guide__figure">
+      <img src={`${base}img/guide/contribution-flow.svg`} alt={m.guide_fig_flow_alt()} width="900" height="340" loading="lazy" decoding="async" />
+      <figcaption>{m.guide_fig_flow_caption()}</figcaption>
+    </figure>
 
     <section class="guide__files">
       <h2>{m.guide_files_heading()}</h2>
@@ -146,6 +156,20 @@ git push -u origin add-my-project`}</code></pre>
   }
   .guide h1 { font-size: clamp(1.9rem, 4.4vw, 2.8rem); margin: 0 0 .6rem; line-height: 1.15; }
   .guide__intro { color: var(--ink-soft); margin: 0 0 2rem; font-size: 1.02rem; }
+
+  /* Diagrams: the two figures are the parts a beginner gets stuck on. They
+     scale to the column, keep their aspect ratio, and the caption carries the
+     one-line summary for anyone who cannot see the image. */
+  .guide__figure { margin: 0 0 2.2rem; }
+  .guide__figure img {
+    display: block; width: 100%; height: auto;
+    border: 1px solid var(--line); border-radius: var(--radius-lg);
+    background: var(--surface);
+  }
+  .guide__figure figcaption {
+    margin-top: .55rem; font-size: .84rem; color: var(--ink-faint);
+    text-align: center;
+  }
 
   .guide__steps { list-style: none; padding: 0; margin: 0 0 2.2rem; display: flex; flex-direction: column; gap: 1.1rem; counter-reset: step; }
   .guide-step { display: flex; gap: .9rem; }

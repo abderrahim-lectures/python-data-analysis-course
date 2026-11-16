@@ -2,6 +2,26 @@
 
 All notable changes to this project are documented in this file. Format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Unreleased]
+
+### Added
+- **Statistics 101, a third course section, in all four locales.** 19 lessons and 7 modules, normal and hard tracks, with runnable Pyodide cells and generated notebooks like the other two sections. It follows the house lesson template — what a notion means, what it adds, a worked-by-hand example before any code, the Python, a GeoGebra link for the geometric view, when to use it, its limitations, common pitfalls, challenges, socratic questions and a quiz — and adds the five-part treatment you asked for: meaning, added value, a concrete example showing why it is needed, when to use it, and its limitations. It opens with a Foundations module (what statistics is for, variables and their four measurement scales, where data comes from) so the vocabulary is set before any arithmetic. Content: mean, median, variance and standard deviation, quartiles and IQR, mode, correlation (Pearson and Spearman), the normal distribution, standard error, confidence intervals, Simpson's paradox, hypothesis testing, reading a dataset honestly, then an exploratory pass, regression, multiple regression and confounding, and uncertainty/bootstrap.
+- **A third track in every place that lists tracks**: the learn hub, the homepage, the progress page, the section registry, the badge and quest tables, and 13 new message keys in four locales. `src/lib/sections.ts` was a two-branch ternary that gave any new section the second section's name and description; it is now a registry.
+- **A references page for Statistics 101** (`/statistics-references` and three locales). Five standard texts — Kaptein & van den Heuvel (2022), Peck/Olsen/Devore (2011), Bruce & Bruce (2017), Taylor & Cihon (2004) and Gillard (2020) — each with the topics it is genuinely best for, so a learner who wants more on one lesson knows which book to open rather than being handed a bibliography. Linked from the section landing and from the foot of every statistics lesson, because a learner working through the section never returns to the landing page.
+- **Two diagrams on the contributor guide** (`public/img/guide/*.svg`), drawn to match the site's light and dark themes: the three files a project needs, and how a contribution travels from a fork to the live site. Both carry localized alt text and captions. A first-time contributor said the guide was hard to follow without them.
+
+### Fixed
+- **`/projects` advertised "Search all 540 projects" in every locale.** The four wrapper pages interpolated the placeholder with the whole collection (135 × 4 locales) before `ProjectListing` could substitute the per-locale count, so the number never matched the 135 cards below it. The wrappers now pass the token through. Regression-tested.
+- **Google Analytics was dead on the live site, for three independent reasons.** `PUBLIC_GA_ID` was never set in `.env` or the deploy workflow, so the conditional gtag block never rendered — the real measurement ID was recovered from the commit that added it and lost it in the Docusaurus→Astro migration. The CSP allowed only `www.google-analytics.com` while GA4 also beacons to `region1` and `*.analytics.google.com`. And because the site is an Astro ClientRouter app, GA4's automatic `page_view` covered only the first document load, so every soft navigation went unrecorded. Now one pageview per load and per navigation, verified in a browser, and none when consent is off.
+- **README claimed "There is no CI — tests run locally"** while the deploy workflow has run the unit suite since `4e14657`. Corrected to say what CI does and what still runs locally.
+
+### Changed
+- **The contributors page lists a count per person, not every project.** One contributor with 135 projects pushed everyone else below a 12,000-pixel scroll. Each card now shows the count chip and a "View projects" disclosure; the list opens on demand. It is a native `<details>`, so it works without JavaScript and keeps keyboard and screen-reader behaviour. Labels are translated in all four locales.
+- **The repository's GitHub metadata was stale.** The description advertised "Trinket + JupyterLite", neither of which the site has used since the Astro migration; it now describes the current stack and content counts, and the repository has topics. The GitHub license badge read "Other" because a CC-BY note was appended inside the MIT `LICENSE` file, which broke detection; the note moved to `LICENSE-CONTENT.md`, so the code reads as MIT and the content license is still stated.
+
+### Testing
+- 1713 unit tests pass (up from 1389 at the start of this work). New guards: the statistics lesson total is checked against the files on disk rather than trusted as a literal, the projects placeholder count is pinned per locale, and the analytics wiring is covered end to end.
+
 ## [2.0.16] — 2026-11-15
 
 A contributors page, a written guide for the people who write for it, and the

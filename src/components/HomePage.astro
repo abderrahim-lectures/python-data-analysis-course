@@ -187,6 +187,19 @@ const jsonLd = {
           <span class="btn btn-streak hub__cta">{m.home_hub_track_2_cta()} <Icon name="play" size={14} /></span>
         </div>
       </a>
+      <a class="hub__card" href={learnHref(locale, base, 'statistics-101')}>
+        <SceneBg scene="forest" height={140} particles={false}>
+          <span class="hub__icon">🎲</span>
+        </SceneBg>
+        <div class="hub__badge hub__badge--warn">{m.home_hub_track_3()}</div>
+        <div class="hub__inner">
+          <div class="hub__meta">{m.home_hub_track_3_meta()}</div>
+          <h2>{m.home_hub_track_3_name()}</h2>
+          <p>{m.home_hub_track_3_desc()}</p>
+          <div class="hub__progress" role="progressbar" aria-label={m.home_hub_track_3_name()} aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="hub__progress-fill w-pct-0" id="hub-stats"></div></div>
+          <span class="btn btn-soft hub__cta">{m.home_hub_track_3_cta()} <Icon name="play" size={14} /></span>
+        </div>
+      </a>
       <a class="hub__card" href={projectsHref(locale, base)}>
         <SceneBg scene="library" height={140} particles={false}>
           <span class="hub__icon">🚀</span>

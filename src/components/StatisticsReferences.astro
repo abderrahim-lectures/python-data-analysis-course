@@ -1,0 +1,179 @@
+---
+// Shared references page for Statistics 101: the books the section is built
+// from, each with what it actually covers, so a learner can go deeper on a
+// specific lesson rather than being handed a bibliography.
+//
+// The coverage notes are specific on purpose: "covers statistics" is useless,
+// and a student looking for the bootstrap needs to know which of six books
+// has it. Each entry names the chapters or topics it is good for.
+import Base from '../layouts/Base.astro';
+import Icon from './Icon.astro';
+import {m} from '../paraglide/messages.js';
+import {learnHref, navWordAlternates, type Locale} from '../lib/routeSegments';
+
+interface Props {
+  locale: Locale;
+}
+const {locale} = Astro.props;
+const dir = locale === 'ar' ? 'rtl' : 'ltr';
+const base = import.meta.env.BASE_URL;
+const alternates = navWordAlternates('learn');
+
+interface Reference {
+  authors: string;
+  year: string;
+  title: string;
+  publisher: string;
+  /** Which lessons this book is genuinely useful for. */
+  covers: string[];
+  note: string;
+}
+
+// Kept in one place and identical in every locale: the bibliographic details
+// are not translated, only the framing copy around them is.
+const REFERENCES: Reference[] = [
+  {
+    authors: 'Maurits Kaptein, Edwin van den Heuvel',
+    year: '2022',
+    title: 'Statistics for Data Scientists: An Introduction to Applied Data Analysis with R',
+    publisher: 'Springer',
+    covers: ['correlation', 'bootstrap', 'simpson', 'confidence-intervals'],
+    note: 'guide_ref_kaptein',
+  },
+  {
+    authors: 'Roxy Peck, Chris Olsen, Jay L. Devore',
+    year: '2011',
+    title: 'Introduction to Statistics and Data Analysis',
+    publisher: 'Brooks Cole / Cengage',
+    covers: ['descriptive', 'quartiles', 'confidence-intervals', 'hypothesis'],
+    note: 'guide_ref_peck',
+  },
+  {
+    authors: 'Peter Bruce, Andrew Bruce',
+    year: '2017',
+    title: 'Practical Statistics for Data Scientists',
+    publisher: "O'Reilly Media",
+    covers: ['descriptive', 'bootstrap', 'hypothesis', 'regression'],
+    note: 'guide_ref_bruce',
+  },
+  {
+    authors: 'John K. Taylor, Cheryl Cihon',
+    year: '2004',
+    title: 'Statistical Techniques for Data Analysis',
+    publisher: 'Chapman and Hall/CRC',
+    covers: ['confidence-intervals', 'hypothesis'],
+    note: 'guide_ref_taylor',
+  },
+  {
+    authors: 'Jonathan Gillard',
+    year: '2020',
+    title: 'A First Course in Statistical Inference',
+    publisher: 'Springer Undergraduate Mathematics Series',
+    covers: ['confidence-intervals', 'hypothesis', 'descriptive'],
+    note: 'guide_ref_gillard',
+  },
+];
+
+// Labels for what each book is good for; keyed so the note stays one line and
+// the topic chips stay translatable.
+const TOPIC_KEYS: Record<string, string> = {
+  descriptive: 'guide_topic_descriptive',
+  quartiles: 'guide_topic_quartiles',
+  correlation: 'guide_topic_correlation',
+  simpson: 'guide_topic_simpson',
+  'confidence-intervals': 'guide_topic_ci',
+  bootstrap: 'guide_topic_bootstrap',
+  hypothesis: 'guide_topic_hypothesis',
+  regression: 'guide_topic_regression',
+};
+
+const topicLabel = (key: string): string => {
+  const msgs = m as unknown as Record<string, () => string>;
+  const fn = msgs[TOPIC_KEYS[key]];
+  return fn ? fn() : key;
+};
+
+const noteFor = (key: string): string => {
+  const msgs = m as unknown as Record<string, () => string>;
+  const fn = msgs[key];
+  return fn ? fn() : '';
+};
+---
+
+<Base
+  title={m.guide_refs_title()}
+  description={m.guide_refs_description()}
+  lang={locale}
+  dir={dir}
+  alternates={alternates}
+>
+  <section class="container refs">
+    <header class="refs__head">
+      <p class="refs__eyebrow">{m.guide_refs_eyebrow()}</p>
+      <h1>{m.guide_refs_heading()}</h1>
+      <p class="refs__intro">{m.guide_refs_intro()}</p>
+    </header>
+
+    <ul class="refs__list" role="list">
+      {REFERENCES.map((r) => (
+        <li class="ref">
+          <div class="ref__meta">
+            <span class="ref__year">{r.year}</span>
+            <span class="ref__authors">{r.authors}</span>
+          </div>
+          <h2 class="ref__title">{r.title}</h2>
+          <p class="ref__publisher">{r.publisher}</p>
+          <p class="ref__note">{noteFor(r.note)}</p>
+          <div class="ref__covers">
+            <span class="ref__covers-label">{m.guide_refs_covers()}</span>
+            {r.covers.map((c) => <span class="ref__chip">{topicLabel(c)}</span>)}
+          </div>
+        </li>
+      ))}
+    </ul>
+
+    <p class="refs__foot">{m.guide_refs_foot()}</p>
+
+    <div class="refs__actions">
+      <a class="btn btn-ghost" href={learnHref(locale, base, 'statistics-101', 'normal')}>
+        <Icon name="trail" size={15} /> {m.guide_refs_back()}
+      </a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .refs { padding-block: 2.5rem 3.5rem; max-width: 76ch; }
+  .refs__head { margin-bottom: 2rem; }
+  .refs__eyebrow {
+    text-transform: uppercase; letter-spacing: .08em; font-size: .72rem;
+    font-weight: 800; color: var(--accent-text); margin: 0 0 .5rem;
+  }
+  .refs h1 { font-size: clamp(1.9rem, 4.4vw, 2.8rem); margin: 0 0 .6rem; line-height: 1.15; }
+  .refs__intro { color: var(--ink-soft); margin: 0; font-size: 1.02rem; }
+
+  .refs__list { list-style: none; padding: 0; margin: 0 0 1.5rem; display: flex; flex-direction: column; gap: 1rem; }
+  .ref {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius-lg); padding: 1.15rem 1.25rem;
+    box-shadow: var(--shadow-sm);
+  }
+  .ref__meta { display: flex; align-items: baseline; gap: .6rem; flex-wrap: wrap; }
+  .ref__year {
+    font-size: .72rem; font-weight: 800; color: var(--accent-text);
+    background: var(--accent-soft); border-radius: 999px; padding: .15rem .55rem;
+  }
+  .ref__authors { font-size: .86rem; color: var(--ink-faint); }
+  .ref__title { font-size: 1.1rem; margin: .45rem 0 .15rem; line-height: 1.3; }
+  .ref__publisher { margin: 0; font-size: .84rem; color: var(--ink-faint); font-style: italic; }
+  .ref__note { margin: .7rem 0 .8rem; font-size: .93rem; color: var(--ink-soft); line-height: 1.6; }
+  .ref__covers { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem; }
+  .ref__covers-label { font-size: .76rem; font-weight: 700; color: var(--ink-faint); margin-inline-end: .2rem; }
+  .ref__chip {
+    font-size: .74rem; font-weight: 600; color: var(--ink-soft);
+    background: var(--bg-soft); border: 1px solid var(--line);
+    border-radius: 999px; padding: .15rem .55rem;
+  }
+  .refs__foot { color: var(--ink-faint); font-size: .87rem; line-height: 1.6; margin: 0 0 1.5rem; }
+  .refs__actions { display: flex; gap: .6rem; flex-wrap: wrap; }
+</style>

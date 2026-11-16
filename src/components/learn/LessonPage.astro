@@ -5,7 +5,7 @@ import 'katex/dist/katex.min.css';
 import Base from '../../layouts/Base.astro';
 import Quiz from '../Quiz.astro';
 import RelatedProjects from './RelatedProjects.astro';
-import {lessonHref, learnHref, moduleHref, idInLocale, trackWord, learnAlternates, type Locale} from '../../lib/routeSegments';
+import {lessonHref, learnHref, moduleHref, idInLocale, trackWord, learnAlternates, referencesHref, type Locale} from '../../lib/routeSegments';
 import {NOTEBOOK_OPENERS} from '../../lib/notebookLinks';
 import {m} from '../../paraglide/messages.js';
 import {TRACK_ICONS, sectionName} from '../../lib/sections';
@@ -164,6 +164,16 @@ const jsonLd = [
         <strong>{m.switch_to()} {track === 'normal' ? m.track_hard_label() : m.track_normal_label()}</strong>
         <small>{track === 'normal' ? m.same_week_steep() : m.same_week_calm()}</small>
       </a>
+      {section === 'statistics-101' && (
+        // A learner who works through the section never returns to the
+        // landing page, so the references were unreachable from anywhere they
+        // actually were. This is the one place a lesson points outwards.
+        <a class="route__card route__card--refs" href={referencesHref(locale, base)}>
+          <span class="route__icon" aria-hidden="true">📚</span>
+          <strong>{m.guide_refs_heading()}</strong>
+          <small>{m.guide_refs_link_lede()}</small>
+        </a>
+      )}
     </div>
   </article>
 </Base>
@@ -281,7 +291,9 @@ const jsonLd = [
   .lesson-nav__done.is-done { background: var(--success-soft); color: var(--success-text); border-color: var(--success); cursor: default; }
   .lesson-nav__done.is-done::before { content: '\2713 '; font-weight: 900; }
 
-  .route { display: grid; margin: 1.5rem 0 3rem; }
+  .route { display: grid; margin: 1.5rem 0 3rem; gap: .75rem; }
+  /* The references card sits under the cross-track card: same shape, quieter. */
+  .route__card--refs { background: var(--bg-soft); }
   .route__card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 1.2rem; text-decoration: none; color: var(--ink); display: flex; flex-direction: column; gap: .3rem; box-shadow: var(--shadow-sm); transition: transform .2s ease, box-shadow .2s ease; }
   .route__card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
   .route__card small { color: var(--ink-soft); }

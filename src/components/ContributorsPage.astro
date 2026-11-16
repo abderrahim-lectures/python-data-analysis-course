@@ -115,16 +115,27 @@ const alternates = navWordAlternates('contributors');
           </div>
 
           {projects.length > 0 ? (
-            <ul class="contributor__projects" role="list">
-              {projects.map((p) => (
-                <li>
-                  <a href={projectsHref(locale, base, p.slug)}>
-                    <span class="contributor__project-title">{p.title}</span>
-                    <span class="contributor__project-desc">{p.description}</span>
-                  </a>
-                </li>
-              ))}
-            </ul>
+            // The list is collapsed by default: the page's job is to say who
+            // took part and how much, and a card per project made every
+            // contributor push everyone else off the screen. A native
+            // <details> gives the disclosure keyboard and screen-reader
+            // behaviour for free, and needs no JavaScript on a static page.
+            <details class="contributor__disclosure">
+              <summary class="contributor__toggle">
+                <span class="contributor__toggle-view">{m.contributors_view_projects()}</span>
+                <span class="contributor__toggle-hide">{m.contributors_hide_projects()}</span>
+              </summary>
+              <ul class="contributor__projects" role="list">
+                {projects.map((p) => (
+                  <li>
+                    <a href={projectsHref(locale, base, p.slug)}>
+                      <span class="contributor__project-title">{p.title}</span>
+                      <span class="contributor__project-desc">{p.description}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </details>
           ) : (
             <p class="contributor__empty">{m.contributors_no_projects()}</p>
           )}
@@ -186,8 +197,33 @@ const alternates = navWordAlternates('contributors');
     background: var(--bg-soft); border-radius: 999px; padding: .25rem .7rem;
   }
 
-  .contributor__projects { list-style: none; padding: 0; margin: .9rem 0 0; display: grid; gap: .5rem; }
-  .contributor__projects a {
+  /* Disclosure: collapsed by default, so the page shows people and counts
+     first and project detail only when asked for. */
+  .contributor__disclosure { margin-top: .9rem; }
+  .contributor__toggle {
+    display: inline-flex; align-items: center; gap: .4rem;
+    cursor: pointer; list-style: none;
+    font-size: .84rem; font-weight: 700; color: var(--accent-text);
+    padding: .35rem .7rem; border-radius: 999px;
+    background: var(--accent-soft);
+    border: 1px solid color-mix(in srgb, var(--accent) 24%, transparent);
+  }
+  .contributor__toggle::-webkit-details-marker { display: none; }
+  .contributor__toggle::after {
+    content: ''; width: .42rem; height: .42rem;
+    border-right: 2px solid currentColor; border-bottom: 2px solid currentColor;
+    transform: rotate(45deg) translateY(-1px); transition: transform .15s ease;
+  }
+  .contributor__disclosure[open] > .contributor__toggle::after {
+    transform: rotate(-135deg) translateY(-1px);
+  }
+  .contributor__toggle:hover { filter: brightness(.96); }
+  .contributor__toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .contributor__toggle-hide { display: none; }
+  .contributor__disclosure[open] .contributor__toggle-view { display: none; }
+  .contributor__disclosure[open] .contributor__toggle-hide { display: inline; }
+
+  .contributor__projects { list-style: none; padding: 0; margin: .9rem 0 0; display: grid; gap: .5rem; }  .contributor__projects a {
     display: flex; flex-direction: column; gap: .15rem;
     padding: .6rem .75rem; border-radius: var(--radius-md);
     border: 1px solid var(--line); text-decoration: none; color: inherit;

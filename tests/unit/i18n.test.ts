@@ -67,6 +67,9 @@ describe('message files stay complete and translated', () => {
     // Progress guide: "Engagement" is the same word in French, matching the
     // learn-hub "modules" precedent.
     'progress_guide_report_engagement',
+    // Statistics references: the resampling technique is called "bootstrap"
+    // in French too; it is a loanword, not an untranslated string.
+    'guide_topic_bootstrap',
   ]);
 
   test.each(LOCALES)('%s has every message key (parity with en)', (loc) => {
@@ -88,10 +91,33 @@ describe('message files stay complete and translated', () => {
 });
 
 describe('locale hub templates render strings, not literals', () => {
+  // The hub markup lives only in the shared component now: every locale's
+  // /learn page, including English, is a thin wrapper. These checks used to
+  // also assert against src/pages/learn/index.astro, which was a copy of the
+  // component -- the copy is why the English hub kept rendering two track
+  // cards after a third section was added.
   const HUBS = [
-    'src/pages/learn/index.astro',
     'src/components/learn/LearnHub.astro',
   ];
+
+  test('the English learn page is a wrapper, not a second copy of the hub', () => {
+    const src = readFileSync('src/pages/learn/index.astro', 'utf8');
+    expect(src).toContain('<LearnHub locale={locale} />');
+    // A full copy would carry the hub's own markup markers.
+    expect(src).not.toContain('sectioncard');
+    expect(src).not.toContain('learn_hub_module_explanation');
+  });
+
+  test('every locale learn wrapper renders the shared component', () => {
+    for (const p of [
+      'src/pages/learn/index.astro',
+      'src/pages/es/aprender/index.astro',
+      'src/pages/fr/apprendre/index.astro',
+      'src/pages/ar/تعلم/index.astro',
+    ]) {
+      expect(readFileSync(p, 'utf8'), p).toContain('<LearnHub locale={locale} />');
+    }
+  });
 
   test.each(HUBS)('%s has no hardcoded English track copy', (path) => {
     const src = readFileSync(path, 'utf8');

@@ -3,6 +3,14 @@
 // quests, badges, and the full activity log for transparent progress tracking.
 
 import {xpProgressFor} from './levelMath';
+import {TRACKS} from './gamestats';
+
+// Quest id for finishing a section, where the historic id is not `all-<slug>`
+// (the first two sections predate the shared naming).
+const SECTION_QUEST: Record<string, string> = {
+  'python-101': 'all-python',
+  'data-analysis': 'all-data',
+};
 
 export interface ActivityEntry {
   ts: number;          // epoch ms
@@ -475,11 +483,13 @@ function evaluateMilestones(s: PDAState): void {
     }
   }
 
-  // Section completion: check if all lessons in a section are done (normal + hard)
-  const pythonLessons = Object.keys(s.lessonsCompleted).filter(k => k.startsWith('python-101/'));
-  if (pythonLessons.length >= 29) markQuest(s, 'all-python');  // 29 lessons total
-  const dataLessons = Object.keys(s.lessonsCompleted).filter(k => k.startsWith('data-analysis/'));
-  if (dataLessons.length >= 20) markQuest(s, 'all-data');   // 20 lessons total
+  // Section completion: each section's quest fires once every lesson in it is
+  // done (normal + hard). The totals come from gamestats.TRACKS rather than
+  // being repeated here, so adding a section cannot leave a stale constant.
+  for (const track of TRACKS) {
+    const done = Object.keys(s.lessonsCompleted).filter(k => k.startsWith(`${track.id}/`)).length;
+    if (done >= track.total) markQuest(s, SECTION_QUEST[track.id] ?? `all-${track.id}`);
+  }
 }
 
 // ── Quests ──────────────────────────────────────────────────────────
@@ -499,6 +509,7 @@ const VISIBLE_QUESTS = [
   {id: 'project-steps-50', label: '50 Steps'},
   {id: 'track-python-101', label: 'Python track'},
   {id: 'track-data-analysis', label: 'Data track'},
+  {id: 'track-statistics-101', label: 'Statistics track'},
   {id: 'streak-3', label: '3-day streak'},
   {id: 'streak-7', label: '7-day streak'},
   {id: 'streak-14', label: '14-day streak'},
@@ -520,6 +531,7 @@ const VISIBLE_QUESTS = [
   {id: 'challenges-50', label: '50 Challenges'},
   {id: 'all-python', label: 'Python 101 done'},
   {id: 'all-data', label: 'Data Analysis done'},
+  {id: 'all-statistics-101', label: 'Statistics 101 done'},
 ] as const;
 const VISIBLE_QUEST_IDS = new Set<string>(VISIBLE_QUESTS.map((q) => q.id));
 

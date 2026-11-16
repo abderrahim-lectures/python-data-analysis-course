@@ -80,7 +80,7 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta http-equiv="Content-Security-Policy" content={`default-src 'self'; script-src 'self' 'unsafe-inline' data: https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://www.google-analytics.com; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'${import.meta.env.PROD ? '; upgrade-insecure-requests' : ''}`} />
+    <meta http-equiv="Content-Security-Policy" content={`default-src 'self'; script-src 'self' 'unsafe-inline' data: https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'${import.meta.env.PROD ? '; upgrade-insecure-requests' : ''}`} />
     <!-- Client-side (soft) navigation: without this, every lesson-to-lesson
          click is a full page reload, tearing down the Pyodide Worker (and
          every package micropip.install'd into it) even though the wasm bytes
@@ -110,26 +110,60 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
     </script>
     {import.meta.env.PUBLIC_GA_ID && (
       <script is:inline>
-        // Consent-gated GA, default on. gtag loads unless a visitor explicitly
-        // opted out via the footer analytics toggle (localStorage
-        // "pda:analytics-consent" = "0"). The same key gates pageviews,
-        // the learner bar, and gtag.
+        // Consent-gated GA4, default on. gtag loads unless a visitor opted out
+        // via the footer analytics toggle (localStorage "pda:analytics-consent"
+        // = "0"). The same key gates pageviews, the learner bar, and gtag.
+        //
+        // Three details are deliberate:
+        //   1. `send_page_view: false` plus an explicit page_view. GA4's
+        //      automatic page_view only fires on the initial document load, and
+        //      this site is an Astro ClientRouter (soft navigation) app -- every
+        //      navigation after the first was invisible in analytics. Sending
+        //      the event ourselves covers both paths with one code path.
+        //   2. Dedupe on URL, because the router fires `astro:page-load` for
+        //      the initial page as well as for each navigation; without the
+        //      guard the first view would be counted twice.
+        //   3. The loader is idempotent: appending gtag.js twice would
+        //      double-init the library.
         (function () {
-          function loadGtag(id) {
+          var ID = '{import.meta.env.PUBLIC_GA_ID}';
+          var lastUrl = null;
+          function consented() {
+            try { return localStorage.getItem('pda:analytics-consent') !== '0'; }
+            catch (e) { return false; } // private mode: stay off
+          }
+          function load() {
+            if (window.__pydaGtag) return;
+            window.__pydaGtag = true;
             window.dataLayer = window.dataLayer || [];
-            function gtag() { dataLayer.push(arguments); }
-            gtag('js', new Date());
-            gtag('config', id);
+            window.gtag = function () { window.dataLayer.push(arguments); };
+            window.gtag('js', new Date());
+            window.gtag('config', ID, {send_page_view: false});
             var s = document.createElement('script');
             s.async = true;
-            s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(id);
+            s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(ID);
             document.head.appendChild(s);
           }
-          try {
-            if (localStorage.getItem('pda:analytics-consent') !== '0') {
-              loadGtag('{import.meta.env.PUBLIC_GA_ID}');
-            }
-          } catch (e) { /* private mode: stay off */ }
+          function track() {
+            if (!consented()) return;
+            var url = location.pathname + location.search;
+            if (url === lastUrl) return;
+            lastUrl = url;
+            load();
+            window.gtag('event', 'page_view', {
+              page_location: location.href,
+              page_path: url,
+              page_title: document.title,
+            });
+          }
+          if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', track, {once: true});
+          } else {
+            track();
+          }
+          // Soft navigations; the URL guard drops the router's initial-page
+          // event when DOMContentLoaded already handled it.
+          document.addEventListener('astro:page-load', track);
         })();
       </script>
     )}

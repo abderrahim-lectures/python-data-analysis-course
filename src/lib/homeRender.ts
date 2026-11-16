@@ -5,6 +5,15 @@ import {setPctWidth} from './pctWidth.ts';
 
 const TRACK_TOTAL = Object.fromEntries(TRACKS.map((t) => [t.id, t.total]));
 
+// The homepage progress-bar ids predate the section ids (`hub-python`, not
+// `hub-python-101`). Mapping them here keeps the markup's existing ids and
+// means a new section only needs an entry in TRACKS plus this table.
+const HUB_IDS: Record<string, string> = {
+  'python-101': 'python',
+  'data-analysis': 'data',
+  'statistics-101': 'stats',
+};
+
 export function renderHomepage() {
   const xp = xpProgress();
   const sp = streakProgress();
@@ -49,10 +58,10 @@ export function renderHomepage() {
     else if (sp.current >= 3) streakItem.classList.add('gamestrip__item--hot');
   }
 
-  const pythonDone = Object.keys(s.lessonsCompleted || {}).filter((k: string) => k.includes('python-101')).length;
-  const dataDone = Object.keys(s.lessonsCompleted || {}).filter((k: string) => k.includes('data-analysis')).length;
-  const pythonFill = document.getElementById('hub-python') as HTMLElement | null;
-  const dataFill = document.getElementById('hub-data') as HTMLElement | null;
-  setPctWidth(pythonFill, (pythonDone / TRACK_TOTAL['python-101']) * 100);
-  setPctWidth(dataFill, (dataDone / TRACK_TOTAL['data-analysis']) * 100);
+  const doneIn = (section: string) =>
+    Object.keys(s.lessonsCompleted || {}).filter((k: string) => k.includes(section)).length;
+  for (const id of Object.keys(TRACK_TOTAL)) {
+    const fill = document.getElementById(`hub-${HUB_IDS[id] ?? id}`) as HTMLElement | null;
+    setPctWidth(fill, (doneIn(id) / TRACK_TOTAL[id]) * 100);
+  }
 }

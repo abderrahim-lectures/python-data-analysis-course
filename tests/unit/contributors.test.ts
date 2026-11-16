@@ -136,6 +136,47 @@ describe('contributor routes exist in all four locales', () => {
   });
 });
 
+describe('the page shows a count per person, with the projects behind a disclosure', () => {
+  // A contributor with 135 projects pushed every other person off the page.
+  // The card now shows the count, and the list is a native <details> so it
+  // needs no JavaScript and keeps keyboard and screen-reader behaviour.
+  const src = readFileSync('src/components/ContributorsPage.astro', 'utf8');
+
+  test('the project list is inside a details element', () => {
+    const details = src.indexOf('<details class="contributor__disclosure">');
+    const summary = src.indexOf('<summary');
+    const list = src.indexOf('<ul class="contributor__projects"');
+    const close = src.indexOf('</details>');
+    expect(details).toBeGreaterThan(-1);
+    expect(summary).toBeGreaterThan(details);
+    expect(list).toBeGreaterThan(summary);
+    expect(close).toBeGreaterThan(list);
+  });
+
+  test('the disclosure starts collapsed, not open', () => {
+    expect(src).not.toMatch(/<details[^>]*\bopen\b/);
+  });
+
+  test('the count chip stays outside the disclosure', () => {
+    const count = src.indexOf('class="contributor__count"');
+    const details = src.indexOf('<details class="contributor__disclosure">');
+    expect(count).toBeGreaterThan(-1);
+    expect(count).toBeLessThan(details);
+  });
+
+  test('both toggle labels exist in all four locales and are translated', () => {
+    const en = JSON.parse(readFileSync('messages/en.json', 'utf8')) as Record<string, string>;
+    for (const key of ['contributors_view_projects', 'contributors_hide_projects']) {
+      expect(en[key], key).toBeTruthy();
+      for (const loc of ['ar', 'es', 'fr']) {
+        const pack = JSON.parse(readFileSync(`messages/${loc}.json`, 'utf8')) as Record<string, string>;
+        expect(pack[key], `${loc}:${key}`).toBeTruthy();
+        expect(pack[key], `${loc}:${key} should be translated`).not.toBe(en[key]);
+      }
+    }
+  });
+});
+
 describe('the guide names the files that actually exist', () => {
   // The guide tells a student exactly which paths to touch. If one is renamed
   // without the guide, the instructions quietly become wrong; this couples the

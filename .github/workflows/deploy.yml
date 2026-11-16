@@ -46,6 +46,10 @@ jobs:
         env:
           PUBLIC_SUPABASE_URL: ${{ secrets.PUBLIC_SUPABASE_URL }}
           PUBLIC_SUPABASE_KEY: ${{ secrets.PUBLIC_SUPABASE_KEY }}
+          # Measurement ID, not a secret: it is visible in the page source.
+          # A repository variable so it survives a secret rotation and can be
+          # read by anyone auditing the build; an empty value ships no gtag.
+          PUBLIC_GA_ID: ${{ vars.PUBLIC_GA_ID }}
 
       # After the build, not before: several defects this repo has shipped
       # would have failed here (a stale e2e selector that could only ever

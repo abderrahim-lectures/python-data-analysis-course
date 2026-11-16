@@ -17,9 +17,29 @@ export async function initAuth(url: string, key: string): Promise<string | null>
   if (!url || !key) return null;
   try {
     const supabase = createClient(url, key);
-    const {data} = await supabase.auth.signInAnonymously();
-    const uid = data.user?.id ?? null;
-    _token = data.session?.access_token ?? null;
+    // Reuse the persisted anonymous session when there is one. Calling
+    // signInAnonymously() unconditionally creates a *new* Supabase user on
+    // every page load: the library persists the session under
+    // `sb-<ref>-auth-token`, but nothing read it back before signing up
+    // again. That inflated the users table by one row per navigation, reset
+    // the per-user rate limit on every reload (so the limit was per page
+    // load, not per visitor), and made "learners online" count loads rather
+    // than learners.
+    let uid: string | null = null;
+    let token: string | null = null;
+    try {
+      const {data: existing} = await supabase.auth.getSession();
+      uid = existing?.session?.user?.id ?? null;
+      token = existing?.session?.access_token ?? null;
+    } catch { /* no readable session: fall through to a fresh sign-in */ }
+
+    if (!uid) {
+      const {data} = await supabase.auth.signInAnonymously();
+      uid = data.user?.id ?? null;
+      token = data.session?.access_token ?? null;
+    }
+
+    _token = token;
     _apikey = key;
     if (uid) {
       (window as any).__pydaUserId = uid;

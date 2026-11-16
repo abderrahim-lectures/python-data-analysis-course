@@ -43,9 +43,14 @@ export interface Diagnostics {
   learningExperiencePct: number;
 }
 
+// `total` is the number of lessons in the section, normal and hard combined.
+// It is the denominator for that section's progress bar and its completion
+// quest, so it has to match the content tree; tests/unit/gamestats.test.ts
+// compares these against the markdown files rather than trusting the number.
 export const TRACKS = [
   { id: 'python-101', label: 'Python 101', total: 29 },
   { id: 'data-analysis', label: 'Pandas & Data', total: 20 },
+  { id: 'statistics-101', label: 'Statistics 101', total: 19 },
 ];
 
 // `lastActive` is stored as a local calendar date (see gameState.ts); parse it

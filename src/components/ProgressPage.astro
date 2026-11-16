@@ -36,6 +36,7 @@ const MODULES = moduleMap(mods, lessons);
 // trail, and my trail is no longer conflated with my lesson count.
 const py = modulesReached('python-101', st);
 const da = modulesReached('data-analysis', st);
+const sts = modulesReached('statistics-101', st);
 
 function moduleMap(modEntries: typeof mods, lessonEntries: typeof lessons): Record<string, {lessons: string[]}[]> {
   const out: Record<string, {lessons: string[]}[]> = {};
@@ -78,6 +79,7 @@ function trailStations(section: string, s: {lessonsCompleted: Record<string, boo
 }
 const pyModules = trailStations('python-101', st);
 const daModules = trailStations('data-analysis', st);
+const stsModules = trailStations('statistics-101', st);
 
 // ── Localized lookup tables (EN token → locale string) ───────────────────────
 const questLabels = Object.fromEntries(quests.map((q) => [q.id, questById[q.id] ? questById[q.id]() : q.label]));
@@ -237,6 +239,28 @@ const i18nData = {
           ))}
         </ol>
         <div class="trail__xp trail__xp--streak" id="xp-data-analysis">{m.progress_xp_earned({n: xpEarnedOn('data-analysis')})}</div>
+      </div>
+
+      <div class="trail">
+        <div class="trail__head">
+          <div>
+            <h2>🎲 {m.track_3_name()}</h2>
+            <span class="trail__meta">{m.progress_trail_stats_meta()}</span>
+          </div>
+          <span class="trail__pct" id="pct-statistics-101">{m.progress_pct_done({done: sts.done, total: sts.total})}</span>
+        </div>
+        <ol class="stations" data-track="statistics-101">
+          {stsModules.map(({w, done}) => (
+            <li class={`station${done ? ' station--done' : ''}`} data-week={w}>
+              <a class="station__link" href={learnHref(locale, base, 'statistics-101', normTrack)}>
+                <span class="station__dot"></span>
+                <span class="station__label">{m.module_label()} {w}</span>
+                <span class="station__check">✅</span>
+              </a>
+            </li>
+          ))}
+        </ol>
+        <div class="trail__xp" id="xp-statistics-101">{m.progress_xp_earned({n: xpEarnedOn('statistics-101')})}</div>
       </div>
     </div>
   </section>

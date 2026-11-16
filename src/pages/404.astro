@@ -66,9 +66,20 @@ const notfoundDescription = I18N.en.notfound_description;
           try {
             twice = decodeURIComponent(escape(String.fromCharCode.apply(null, bytes)));
           } catch (e) { twice = null; }
+          // Only ever redirect to a path on this origin. A double-decoded URL
+          // can begin with `//` (or `/\`), which the browser reads as a
+          // protocol-relative URL: `/%2F%2Fevil.example/x` decoded twice is
+          // `///evil.example/x`, and location.replace() would send the visitor
+          // to an attacker's site while the address bar still shows this
+          // domain -- a usable phishing primitive. Requiring a single leading
+          // slash, and rejecting backslashes (which browsers normalise to
+          // slashes), keeps the redirect on this origin.
           if (twice && twice !== once && twice !== raw) {
-            location.replace(twice + location.search + location.hash);
-            return;
+            var safe = twice.charAt(0) === '/' && twice.charAt(1) !== '/' && twice.charAt(1) !== '\\';
+            if (safe && twice.indexOf('\\') === -1) {
+              location.replace(twice + location.search + location.hash);
+              return;
+            }
           }
         }
       }

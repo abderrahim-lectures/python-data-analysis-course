@@ -12,6 +12,7 @@ A free, browser-based Python and data analysis course — no installs required u
 
 - **Section 1: Python 101** (5 weeks) — fundamentals, with a Normal track and a Hard track (build a tiny language model from scratch, pure Python, deliberately no numpy).
 - **Section 2: Pandas & Data Analysis** (5 weeks) — pandas basics reproducing a Kaggle-style notebook, with a Hard track doing a full exploratory data analysis project with visualizations.
+- **Section 3: Statistics 101** (19 lessons) — vocabulary and measurement scales first, then descriptive statistics (mean, median, spread, quartiles, correlation), the normal distribution, standard error and confidence intervals, Simpson's paradox and hypothesis testing; the Hard track adds an exploratory pass, regression, multiple regression and confounding, and resampling. Every notion is taught three ways: the meaning and its added value, a by-hand worked example, then the Python — with GeoGebra links where a geometric picture helps.
 - **Real-World Projects** — install Python locally for real with `uv` and build something the in-browser playground never could. New projects are added whenever a trending tool or framework is worth a hands-on write-up (e.g. building an AI agent with LangChain's `deepagents`, fine-tuning a small LLM with Unsloth) — browsable any time, not gated behind finishing the course.
 
 Run entirely in the browser: every lesson's code is a runnable cell powered by Pyodide (Python compiled to WebAssembly) — hit ▶ Run and it executes right on the page, no install, no account. A dedicated [playground page](https://pyda-course.online/playground) offers a big scratch editor with a ⛶ "open in full-screen editor" button on every lesson cell. Each lesson also ships a generated `.ipynb` companion (see `notebooks/`) with one-click Colab/Kaggle/Binder/nbviewer/Deepnote badges for anyone who wants a real Jupyter environment, and bundled datasets (CSVs under `public/datasets/`, served via a manifest) are mounted into the in-browser filesystem automatically so `open('students-performance.csv')` just works.
@@ -37,7 +38,7 @@ By the end of the course, a student can:
 ## Pedagogical approach
 
 - **Math-first framing.** The audience is math/data-analysis students, so new concepts are introduced in the notation they already know — a `for` loop via summation notation before syntax, a function as $f(x)$ before `def`, list comprehensions via set-builder notation — before showing the Python code.
-- **Build, don't just read.** Both Hard tracks are project-based: a tiny language model built from nothing but the standard library, and a full EDA report on a real-shaped dataset. Struggling with plain Python's speed limits in Week 5 of Python 101 is the intentional setup for *why* pandas exists in Section 2.
+- **Build, don't just read.** Both Hard tracks are project-based: a tiny language model built from nothing but the standard library, and a full EDA report on a real-shaped dataset. Struggling with plain Python's speed limits in Week 5 of Python 101 is the intentional setup for *why* pandas exists in Section 2; the Statistics Hard track then puts those descriptive tools to work on a real analysis, where every claim has to survive its own assumption checks.
 - **Challenge + Socratic pattern, every week.** Each lesson pairs 🧩 **Challenges** (a concrete task with a collapsible answer you can self-check) with 🤔 **Socratic Questions** (open-ended, no answer provided — designed to make you reason about edge cases and *why*, not just *how*).
 - **Always-on progress, never a wall.** A single gamified layer (XP, levels, streaks, quests, badges, activity log — all in one `localStorage` blob) marks progress as you go, but it never gates access: every lesson, challenge answer, and project is free to read. There is no mode toggle and no hidden unlock; what the progress page shows in your browser is the whole picture.
 - **Honest, not hyped.** The EDA track explicitly teaches correlation-vs-causation and chart-honesty practices (truncated axes, cherry-picked ranges) as core material, not a footnote. With no backend, progress lives in your own browser and there is no certificate — the shareable unit is the content itself (permanent URLs, notebook badges), not a per-student snapshot.
@@ -70,7 +71,7 @@ Every lesson's runnable cells execute in-browser via Pyodide, vendored under `pu
 
 The site's UI is bilingual-to-quadrilingual: page chrome (nav, home, learn hub, credits, cheatsheets, lesson completion labels…) is translated through [Paraglide](https://inlang.com/m/gerre34r/library-inlang-paraglideJs) into en/ar/es/fr. Source strings live in `messages/{en,ar,es,fr}.json`; generated code lands in `src/paraglide/` (gitignored) and is produced by `npx paraglide-js compile` (run automatically by `astro build`/`astro dev`). `tests/unit/i18n.test.ts` enforces per-locale key parity, non-empty values, and that non-English locales are genuinely translated.
 
-Content coverage: project write-ups, lesson/module body content (49 lessons + 22 modules), and the cheatsheet reference cards are fully translated into ar/es/fr. Locale routing lives in `src/lib/routeSegments.ts`; see `plan/i18n-migration.md` for the design.
+Content coverage: project write-ups, lesson/module body content (68 lessons + 29 modules), and the cheatsheet reference cards are fully translated into ar/es/fr. Locale routing lives in `src/lib/routeSegments.ts`; see `plan/i18n-migration.md` for the design.
 
 ### Building from a clean checkout
 
@@ -104,7 +105,7 @@ Every change — a lesson, a component, a bug fix, a translation — goes throug
 
 1. **Open an issue** describing the change, labeled by type (`type:feature`, `type:bug`, `type:content`, `type:infra`, `type:i18n`) and area (`area:python-101`, `area:data-analysis`, `area:playground`, `area:gamification`, `area:design`).
 2. **Branch off `main`** (`issue-<number>-<short-slug>`) and do the work there.
-3. **Open a PR** referencing the issue (`Closes #N`), with the checks below passing. There is no CI — tests run locally:
+3. **Open a PR** referencing the issue (`Closes #N`), with the checks below passing. CI runs the unit suite after the build on every push to `main` (`.github/workflows/deploy.yml`); the rest run locally before you open the PR:
    - `npm run check` (typecheck, `astro check`)
    - `npm run build`
    - `npm run test` (unit suites) and `npm run test:e2e` for anything touching interactive components.
@@ -124,7 +125,7 @@ Please don't open a PR without a linked issue first for anything non-trivial —
 
 ## License
 
-Code is MIT-licensed (see [`LICENSE`](./LICENSE)); course content is additionally available under CC-BY 4.0. Third-party datasets and tools are credited on the site's [Credits page](https://pyda-course.online/credits).
+Code is MIT-licensed (see [`LICENSE`](./LICENSE)); course content is additionally available under CC-BY 4.0 (see [`LICENSE-CONTENT.md`](./LICENSE-CONTENT.md)). Third-party datasets and tools are credited on the site's [Credits page](https://pyda-course.online/credits).
 
 ---
 
