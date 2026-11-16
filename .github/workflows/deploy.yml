@@ -41,19 +41,20 @@ jobs:
           restore-keys: |
             pyodide-${{ runner.os }}-
 
-      # Tests before the build: several defects this repo has shipped would
-      # have been caught here (a stale e2e selector that could only ever
-      # throw, the sitemap filter matching nothing, an untranslated project
-      # breaking its localized links). They run against source, not the
-      # built site, so they need no server.
-      - name: Unit tests
-        run: npm run test
-
       - name: Build site
         run: npm run build
         env:
           PUBLIC_SUPABASE_URL: ${{ secrets.PUBLIC_SUPABASE_URL }}
           PUBLIC_SUPABASE_KEY: ${{ secrets.PUBLIC_SUPABASE_KEY }}
+
+      # After the build, not before: several defects this repo has shipped
+      # would have failed here (a stale e2e selector that could only ever
+      # throw, an untranslated project breaking its localized links), and two
+      # of the sitemap checks read dist/ and *skip* when it is absent -- run
+      # before the build, they would have gone on passing silently while the
+      # alias filter matched nothing at all.
+      - name: Unit tests
+        run: npm run test
 
       - uses: actions/configure-pages@v5
 
