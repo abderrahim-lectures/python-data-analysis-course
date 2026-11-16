@@ -24,3 +24,4 @@ The design plan and rationale behind every major decision in this course, split 
 - [`pwa.md`](./pwa.md) — the installable, offline-capable Progressive Web App setup.
 - [`testing-and-verification.md`](./testing-and-verification.md) — the vitest + CDP smoke-test suite and the full manual verification checklist.
 - [`deferred.md`](./deferred.md) — what was deliberately left out of this pass, and why.
+- [`archived-branches.md`](./archived-branches.md) — eleven project drafts written for the Docusaurus tree before the Astro migration, preserved on `archive/*` tags and mapped to their open issues.
