@@ -14,6 +14,7 @@ prerequisites:
   - "Python basics (functions, dictionaries, exceptions)"
   - "REST API basics: routes, status codes, JSON"
   - "Installing packages with uv"
+author: abderrahim-adrabi
 ---
 
 # 🛠️ 🔗 Build a URL Shortener API

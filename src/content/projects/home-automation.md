@@ -10,6 +10,7 @@ learningObjectives:
   - "Build a scheduling system for time-based automations"
   - "Detect presence from network pings and trigger rule chains"
 prerequisites: ["Python 101"]
+author: abderrahim-adrabi
 ---
 
 # 🏠 Build a Home Automation Hub

@@ -241,7 +241,7 @@ Compare the outputs. Which temperature produces the most readable text?
 
 Extend the CLI with a `--interactive` flag that enters a REPL loop:
 
-```python
+```python no-run
 parser.add_argument("--interactive", action="store_true", help="Interactive mode")
 
 # In main():

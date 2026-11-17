@@ -50,9 +50,9 @@ describe('message files stay complete and translated', () => {
   const SHARED = new Set([
     '$schema', 'credits_entry_1_name', 'credits_entry_3_name',
     'footer_changelog', 'footer_github', 'footer_python_101', 'footer_site_col',
-    'home_hub_track_1_name', 'home_terminal_line_1', 'mobile_nav_playground',
-    'module_label', 'nav_playground', 'playground_title',
-    'track_1_name', 'track_normal_label', 'ui_changelog', 'xp_toast',
+    'home_hub_track_1_name', 'home_terminal_line_1',
+    'module_label', 'playground_title',
+    'track_1_name', 'track_normal_label', 'xp_toast',
     // Progress page: the XP acronym, the K/D/A gaming acronym, the external
     // study citation, and the French rank "Bronze" are universal tokens that
     // read identically in every locale by design.
@@ -67,6 +67,14 @@ describe('message files stay complete and translated', () => {
     // Progress guide: "Engagement" is the same word in French, matching the
     // learn-hub "modules" precedent.
     'progress_guide_report_engagement',
+    // Statistics references: the resampling technique is called "bootstrap"
+    // in French too; it is a loanword, not an untranslated string.
+    'guide_topic_bootstrap',
+    // Contributor guide "you should see" blocks. These are literal terminal
+    // output a learner compares against their own screen: `Switched to a new
+    // branch 'add-file-organizer'`, `1743 passed`. Translating them would make
+    // them not match what the tool actually prints.
+    ...Array.from({length: 12}, (_, i) => `guide_step_${i + 1}_expect`),
   ]);
 
   test.each(LOCALES)('%s has every message key (parity with en)', (loc) => {
@@ -88,10 +96,33 @@ describe('message files stay complete and translated', () => {
 });
 
 describe('locale hub templates render strings, not literals', () => {
+  // The hub markup lives only in the shared component now: every locale's
+  // /learn page, including English, is a thin wrapper. These checks used to
+  // also assert against src/pages/learn/index.astro, which was a copy of the
+  // component -- the copy is why the English hub kept rendering two track
+  // cards after a third section was added.
   const HUBS = [
-    'src/pages/learn/index.astro',
     'src/components/learn/LearnHub.astro',
   ];
+
+  test('the English learn page is a wrapper, not a second copy of the hub', () => {
+    const src = readFileSync('src/pages/learn/index.astro', 'utf8');
+    expect(src).toContain('<LearnHub locale={locale} />');
+    // A full copy would carry the hub's own markup markers.
+    expect(src).not.toContain('sectioncard');
+    expect(src).not.toContain('learn_hub_module_explanation');
+  });
+
+  test('every locale learn wrapper renders the shared component', () => {
+    for (const p of [
+      'src/pages/learn/index.astro',
+      'src/pages/es/aprender/index.astro',
+      'src/pages/fr/apprendre/index.astro',
+      'src/pages/ar/تعلم/index.astro',
+    ]) {
+      expect(readFileSync(p, 'utf8'), p).toContain('<LearnHub locale={locale} />');
+    }
+  });
 
   test.each(HUBS)('%s has no hardcoded English track copy', (path) => {
     const src = readFileSync(path, 'utf8');
@@ -131,11 +162,13 @@ describe('shared layout', () => {
     expect(src).toMatch(/id="onboarding"[^>]*\shidden/);
   });
 
-  test('the onboarding card is a non-blocking status region, not a modal dialog', () => {
-    // It's a dismissible corner card, not a full-screen modal -- role="status"
-    // (not "dialog"/aria-modal) means it never steals focus or blocks
-    // interaction with the rest of the page.
-    expect(src).toContain('role="status"');
+  test('the onboarding card is a non-blocking region, not a modal dialog', () => {
+    // A dismissible corner card, not a full-screen modal: no "dialog" and no
+    // aria-modal, so it never steals focus or blocks the page. role="region"
+    // rather than role="status", because status makes the card one atomic
+    // announcement and flattens the <ol> of steps inside it.
+    expect(src).toContain('role="region"');
+    expect(src).not.toContain('role="dialog"');
     expect(src).not.toContain('aria-modal');
     expect(src).toContain('aria-labelledby="onboarding-title"');
   });

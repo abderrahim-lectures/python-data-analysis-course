@@ -7,6 +7,13 @@
 import {visit} from 'unist-util-visit';
 import {h} from 'hastscript';
 
+/** Concatenate an element's text descendants -- Shiki splits source into
+ *  per-token spans, so the fence's text is only reachable by walking them. */
+function textOf(node) {
+  if (node.type === 'text') return node.value;
+  return (node.children ?? []).map(textOf).join('');
+}
+
 // Projects (src/content/projects/**) are explicitly "graduate to real Python
 // on your machine" content — notebooks/uv/local scripts that use file I/O,
 // external packages, or CLI args Pyodide can't run. A "▶ Run" button there
@@ -15,10 +22,15 @@ import {h} from 'hastscript';
 export default function rehypeRunnablePython() {
   return (tree, file) => {
     if (file?.path?.includes('/content/projects/')) return;
+    // Fences the lesson marked `no-run` (see remark-no-run-fences.mjs). Matched
+    // by source text because Shiki rewrites the tree before this pass runs and
+    // the fence's metastring does not survive it.
+    const noRun = file?.data?.noRunFences;
     visit(tree, 'element', (node, index, parent) => {
       if (node.tagName !== 'pre' || !parent || index == null) return;
       const code = node.children.find((c) => c.type === 'element' && c.tagName === 'code');
       if (!code) return;
+      if (noRun && noRun.size > 0 && noRun.has(textOf(code))) return;
       // Astro's Shiki transform runs before this plugin and rewrites the tree:
       // `<pre data-language="python" class="astro-code ...">` with per-token
       // spans inside `<code>` — no `language-python` class on `<code>` anymore.

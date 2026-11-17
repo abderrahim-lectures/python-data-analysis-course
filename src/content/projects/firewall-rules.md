@@ -10,6 +10,7 @@ learningObjectives:
   - "Simulate traffic against a rule set to predict accept/deny outcomes"
   - "Generate deploy diffs and roll back to previous rule sets"
 prerequisites: ["Python 101"]
+author: abderrahim-adrabi
 ---
 
 # 🔥 Build a Firewall Rule Manager

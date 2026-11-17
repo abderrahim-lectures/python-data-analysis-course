@@ -56,3 +56,17 @@ public/pyodide/*
 # Nothing here is part of the site; see the working notes on keeping caches
 # out of the tree rather than in it.
 .scratch/
+
+# Serena MCP tooling cache (local, per-machine)
+.serena/
+
+# Archify working folder and finalize receipts. The diagram itself
+# (public/architecture.html) is committed; these are the authoring input and
+# the gate evidence from the run that produced it, regenerable and noisy.
+.archify/
+public/architecture.*.json
+
+# The archify skill is a third-party package (18 MB, mostly its own example
+# galleries). skills-lock.json pins the version it was installed from, so a
+# fresh checkout can reinstall the exact tool rather than vendoring it here.
+.claude/skills/

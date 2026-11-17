@@ -42,11 +42,28 @@ let draining = false;
 async function drainQueue(): Promise<void> {
   if (draining) return;
   draining = true;
-  let msg: RunMessage | undefined;
-  while ((msg = queue.shift())) {
-    await runOne(msg);
+  try {
+    let msg: RunMessage | undefined;
+    while ((msg = queue.shift())) {
+      try {
+        await runOne(msg);
+      } catch (e) {
+        // runOne is supposed to report every failure as a message, but a bug
+        // inside the reporting path (a throw from the friendly-error mapper,
+        // say) escapes it. Without this catch that rejection left `draining`
+        // true forever: the worker then queued every later run and never
+        // drained one, so the page hung on "Executing…" until Stop was
+        // clicked. One bad run must cost one cell, not the session.
+        post({
+          type: 'fatal',
+          id: msg.id,
+          message: e instanceof Error ? e.message : String(e),
+        });
+      }
+    }
+  } finally {
+    draining = false;
   }
-  draining = false;
 }
 
 async function runOne(msg: RunMessage): Promise<void> {

@@ -12,6 +12,7 @@ learningObjectives:
   - "Score quizzes against an answer key with a pass threshold"
   - "Render a text dashboard of progress and quiz grades"
   - "Generate a completion certificate only when the course is finished"
+author: abderrahim-adrabi
 ---
 
 # 🎓 Build a Course Builder

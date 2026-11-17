@@ -15,6 +15,7 @@ learningObjectives:
   - "Simulate failures with a counter-based flaky route and report a clean 404"
   - "Read, reflect, and validate a JSON POST body end to end"
   - "Record every call to a transcript and replay it to check response stability"
+author: abderrahim-adrabi
 ---
 
 # 🛠️ 🎛️ Build an API Mock Server

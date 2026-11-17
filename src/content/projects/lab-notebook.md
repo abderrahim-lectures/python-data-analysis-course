@@ -2,6 +2,7 @@
 title: "Build a Digital Lab Notebook"
 description: "Record experiments with structured data, calculations, and reproducible analysis pipelines."
 difficulty: "intermediate"
+author: abderrahim-adrabi
 ---
 # 📓 Build a Digital Lab Notebook
 

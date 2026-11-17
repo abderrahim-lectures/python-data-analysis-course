@@ -13,6 +13,7 @@ prerequisites:
   - "Python basics and intermediate OOP"
   - "Familiarity with HTTP methods and REST concepts"
   - "Understanding of JSON and YAML formats"
+author: abderrahim-adrabi
 ---
 
 # 🛠️ 🚀 Build a REST API Builder

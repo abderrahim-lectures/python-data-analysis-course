@@ -1,8 +1,15 @@
 # i18n migration design — Paraglide JS 2.x on Astro 7 (SSG)
 
-Status: design complete. Validated end-to-end in a PoC
-(`/tmp/opencode/i18n-poc`, astro 7.3.1 + `@inlang/paraglide-js` 2.25.0).
-Not yet implemented on main.
+Status: **implemented on main.** Paraglide is wired into `astro.config.mjs`,
+`src/paraglide/` holds the generated runtime, and the four packs in
+`messages/` are the source of truth (`tests/unit/i18n.test.ts` enforces key
+parity, non-empty values and genuine translation).
+
+This document is the *design record* from before that landed. The counts below
+(49 lessons, 22 modules, 135 projects) are what the tree held at the time of
+writing, not today's totals — Statistics 101 has since added 19 lessons and 7
+modules per locale (68 lessons, 29 modules per locale, 272 lesson files, 136
+projects). Read them as history.
 
 Constraint this design answers: **no hardcoded i18n** (no hand-rolled
 `Record<Locale, string>` maps — the current `pageStrings`/`uiStrings`
@@ -189,7 +196,8 @@ bounds the migration to components, not 537 content files.
   easy but doesn't translate content. The body-translation backlog remains
   (49 lessons, 22 modules, `data-visualization` twins).
 - **CI workflow Node 20→22** was bumped for astro@7 already; Paraglide's
-  vite plugin runs on Node 22 fine.
+  vite plugin runs on Node 22 fine. (Since this was written, CI also runs
+  `tsc --noEmit` and all six browser suites against the built site.)
 
 ## 5. Explicit non-goals in the PoC
 - No server adapter (`output: 'server'` is the *other* Paraglide path).

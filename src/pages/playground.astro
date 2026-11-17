@@ -4,6 +4,7 @@
 // hydrates it automatically). A lesson cell's ⛶ button links to
 // /playground/<code> instead, see src/pages/404.astro for why that's a
 // static-site 404 handler rather than a real dynamic route.
+import {playgroundAlternates} from '../lib/routeSegments';
 import Base from '../layouts/Base.astro';
 import PlaygroundHead from '../components/PlaygroundHead.astro';
 import PlaygroundCell from '../components/PlaygroundCell.astro';
@@ -16,6 +17,7 @@ import * as m from '../paraglide/messages.js';
   description={m.playground_lead()}
   lang="en"
   dir="ltr"
+  alternates={playgroundAlternates()}
 >
   <section class="container head">
     <PlaygroundHead

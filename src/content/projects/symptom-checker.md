@@ -14,6 +14,7 @@ prerequisites:
   - "Python basics (functions, loops, dictionaries, sets)"
   - "Comfort with dataclasses or plain dictionaries for domain data"
   - "Basic CLI input handling (input and sys.argv)"
+author: abderrahim-adrabi
 ---
 
 # 🛠️ 🩺 Build a Symptom Checker

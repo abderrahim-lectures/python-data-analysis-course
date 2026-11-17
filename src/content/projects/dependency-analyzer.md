@@ -13,6 +13,7 @@ learningObjectives:
   - "Cross-reference declared vs imported to find unused dependencies"
   - "Check declared versions against a local advisory baseline"
   - "Package the pipeline as a CLI whose exit code gates a build"
+author: abderrahim-adrabi
 ---
 
 # 🧩 Build a Dependency Analyzer

@@ -20,6 +20,12 @@ against the current source. Clean working tree at review time (commit `c9d2f1f`)
   are localized per locale (2026-09-11) with the English slug kept as an
   alias route pointing `rel=canonical` at the localized URL, navigational
   words localize via paraglide.
+
+> **Update (2026-11-17):** the figures above are from the September audit.
+> The tree now holds 136 projects, 68 lessons and 29 modules per locale
+> (three sections after Statistics 101 landed), and the English-slug alias
+> routes now also carry `robots: noindex,follow` so they stop competing with
+> their canonical twins in search.
 - **Localization catalogs are complete and correct**: sampled `project_completed`,
   `project_done_hint`, `project_mark_done`, `quiz_*` across ar/es/fr.
 - Test suites already cover EN journeys: `test:a11y`, `test:contrast`,

@@ -22,7 +22,7 @@ import {
   type PyodideModel,
   type CellRuntime,
 } from './pythonRunnerCore.ts';
-import {runInWorker} from './pyodideWorkerClient.ts';
+import {runInWorker, stopRun, isWorkerRunning} from './pyodideWorkerClient.ts';
 import {addXP, loadState} from './gameState.ts';
 
 // Re-exported for unit tests, which import these from this module rather
@@ -56,6 +56,83 @@ export async function awardLessonXp(lessonId: string): Promise<{gained: number; 
   const firstRunEver = Object.keys(loadState().lessonsRun ?? {}).length === 0;
   const {gained} = addXP(lessonId);
   return {gained, firstRunEver};
+}
+
+// The Stop control is static markup inside the busy overlay in Base.astro
+// (the overlay carries transition:persist, so it survives soft navigation;
+// a button created per-run on document.body did not, and a runaway cell
+// followed the learner to the next page with the overlay up and no way out).
+//
+// There is ONE button for the page and the worker runs cells serially, so two
+// cells can have runs in flight at once (click Run on cell 1, then cell 2
+// inside the overlay's 200ms show delay). Each cell's `finally` used to hide
+// the button unconditionally, so the first cell to finish hid the control for
+// the second -- which was still running, possibly forever, with the overlay up
+// and the page inert. That is the R49 wedge reached through a second cell.
+// Ownership is counted now: hide() only hides the button when this run was the
+// last one pending.
+let stopOwners = 0;
+// The handler currently bound to the shared button. Rebinding removes the old
+// one explicitly rather than relying on {once}: with several owners, a click
+// must stop the worker once and clear every owner's handler.
+let stopHandler: (() => void) | null = null;
+
+interface StopControl {
+  /** Bind the handler for this run, show the button, return a hider. */
+  show(onStop: () => void): {hide: () => void};
+}
+
+function stopControl(): StopControl | null {
+  if (typeof document === 'undefined') return null;
+  const btn = document.getElementById('app-stop') as HTMLButtonElement | null;
+  if (!btn) return null;
+  return {
+    show(onStop) {
+      stopOwners += 1;
+      // Rebind per run: the button persists, its handler must not. Stopping
+      // kills the worker and settles every pending run, so one handler is
+      // enough no matter how many cells are queued behind it.
+      if (stopHandler) btn.removeEventListener('click', stopHandler);
+      stopHandler = () => onStop();
+      btn.addEventListener('click', stopHandler);
+      btn.textContent = m.stop_button();
+      btn.setAttribute('aria-label', m.stop_aria());
+      btn.hidden = false;
+      return {
+        hide() {
+          stopOwners = Math.max(0, stopOwners - 1);
+          if (stopOwners > 0) return; // another cell's run still needs it
+          if (stopHandler) {
+            btn.removeEventListener('click', stopHandler);
+            stopHandler = null;
+          }
+          // A run that survived a soft navigation keeps the button up until
+          // the worker actually goes idle.
+          btn.hidden = !isWorkerRunning();
+        },
+      };
+    },
+  };
+}
+
+function showStopButton(onStop: () => void): {hide: () => void} {
+  const c = stopControl();
+  if (!c) return {hide() {}};
+  return c.show(onStop);
+}
+
+/** The persistent Stop control, if this page has one. */
+function stopElement(): Element | null {
+  return typeof document === 'undefined' ? null : document.getElementById('app-stop');
+}
+
+/** Accessible name for one cell's editor: "Python code editor, cell 3 of 5".
+ *  A lesson can carry five or more editors and they are otherwise
+ *  indistinguishable to a screen reader. */
+function cellLabel(cell: Element): string {
+  const all = Array.from(document.querySelectorAll('[data-runnable]'));
+  const n = all.indexOf(cell) + 1;
+  return m.cell_editor_label({n: String(n), total: String(all.length)});
 }
 
 export interface InitCellDeps {
@@ -190,20 +267,49 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
       });
       dispatchPyodideEvent('pyodide:ready');
     } else {
-      executed = await runInWorker(src, {allSource, otherCellSources, locale: getLocale(), stdin}, {
-        appendLine,
-        appendFigure,
-        onPhase: setPhaseLabel,
-        onLoading: (detail) => dispatchPyodideEvent('pyodide:loading', detail),
-        onProgress: (pct) => dispatchPyodideEvent('pyodide:progress', {pct}),
-        onReady: () => dispatchPyodideEvent('pyodide:ready'),
-        onStdinExhausted: inputs.grow,
+      // A cell that never returns (a `while True:` with no break, which module
+      // 3 teaches people to write by accident) otherwise wedges the whole site:
+      // the worker drains its queue serially, the overlay covers every pointer
+      // target, and there is no interrupt -- Pyodide's interrupt buffer needs
+      // SharedArrayBuffer, and this site has no cross-origin isolation. The
+      // only exit is terminating the worker, which is what Stop does.
+      const stopBtn = showStopButton(() => {
+        if (!stopRun()) return;
+        // Report the stop in the cell that owns the run, unless a soft
+        // navigation already detached it (the button persists with the
+        // overlay, so a click can land after the panel is gone).
+        if (out.isConnected) appendLine('err', m.cell_stopped());
+        // Clear the overlay and the loading bar; stopRun settles the run's own
+        // promise as not-executed, so the code below this await still runs and
+        // readies the cell's own button.
+        dispatchPyodideEvent('pyodide:ready');
       });
+      try {
+        executed = await runInWorker(src, {allSource, otherCellSources, locale: getLocale(), stdin}, {
+          appendLine,
+          appendFigure,
+          onPhase: setPhaseLabel,
+          onLoading: (detail) => dispatchPyodideEvent('pyodide:loading', detail),
+          onProgress: (pct) => dispatchPyodideEvent('pyodide:progress', {pct}),
+          onReady: () => dispatchPyodideEvent('pyodide:ready'),
+          onStdinExhausted: inputs.grow,
+        });
+      } finally {
+        stopBtn.hide();
+      }
     }
 
     run.textContent = m.run_button();
     run.disabled = false;
     run.classList.remove('cell__run--loading');
+    // The overlay moved focus to Stop while the run was in flight. Put it back
+    // on this cell's Run button -- the control the learner actually pressed --
+    // unless the page was swapped under us or they moved focus themselves.
+    if (typeof document !== 'undefined' && run.isConnected) {
+      const active = document.activeElement;
+      const lost = !active || active === document.body || active === stopElement();
+      if (lost) run.focus();
+    }
     await afterRun(executed);
   });
 
@@ -252,10 +358,14 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
   cell.querySelector('.cell__actions')?.appendChild(copyBtn);
 
   // Editing, highlighting and the line-number gutter; onEdit keeps the input
-  // form in step with the source (see cellInputForm.ts).
+  // form in step with the source (see cellInputForm.ts). The label names this
+  // cell among the page's several editors; Escape lands on Run rather than
+  // dropping focus to <body>.
   makeEditableCode(codeEl, {
     onEdit: () => inputs.sync(),
     onRun: () => run.click(),
+    ariaLabel: cellLabel(cell),
+    onEscape: () => run.focus(),
   });
 
   // Cells that call input() show their fields on load, before the first Run --
@@ -265,6 +375,18 @@ export function initCell(cell: Element, deps: InitCellDeps = {}): void {
 
 export function initRunnableCells(root: ParentNode = document): void {
   root.querySelectorAll('[data-runnable]').forEach((cell) => initCell(cell));
+}
+
+// A run that spans a soft navigation outlives the cell that started it: the
+// overlay persists, the Stop button persists (so the learner can still end
+// it), but the cell's panel is detached and its `finally` never runs. Hide
+// the button on the next page once no run is pending any more, so it cannot
+// linger over a page with nothing running.
+function reconcileStopButton(): void {
+  if (typeof document === 'undefined') return;
+  const btn = document.getElementById('app-stop');
+  if (!btn) return;
+  btn.hidden = !isWorkerRunning();
 }
 
 if (typeof document !== 'undefined') {
@@ -277,6 +399,7 @@ if (typeof document !== 'undefined') {
   // the cells the swap just inserted.
   document.addEventListener('astro:page-load', () => {
     initRunnableCells();
+    reconcileStopButton();
   });
   // The initial astro:page-load dispatch fires on window's `load` event via
   // Astro's own router script, not this one -- if this deferred bundle is

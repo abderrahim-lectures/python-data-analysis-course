@@ -13,6 +13,7 @@ prerequisites:
   - "Python basics (functions, loops, dictionaries)"
   - "Understanding of lists and basic arithmetic"
   - "Installing packages with uv"
+author: abderrahim-adrabi
 ---
 
 # 🛠️ 📊 Build a Report Builder

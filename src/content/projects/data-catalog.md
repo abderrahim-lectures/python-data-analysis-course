@@ -13,6 +13,7 @@ learningObjectives:
   - "Score and rank dataset search results by term matches"
   - "Record data lineage edges and walk upstream and downstream dependency chains"
   - "Expose add, search, and lineage as CLI subcommands"
+author: abderrahim-adrabi
 ---
 
 # 🗂️ Build a Data Catalog

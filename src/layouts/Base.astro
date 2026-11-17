@@ -23,6 +23,11 @@ interface Props {
    *  differs from the requested pathname (e.g. a localized project page served
    *  at its old English-slug alias URL). Defaults to Astro.url.pathname. */
   canonicalPath?: string;
+  /** Emit robots noindex,follow. Used by alias routes that duplicate a
+   *  canonical page; they still serve visitors and pass link equity on. */
+  noindex?: boolean;
+  /** Extra tags for <head>, e.g. a stylesheet only some pages need. */
+  headExtra?: string;
   /** One schema.org object (or array of them) to emit as JSON-LD, on top of
    *  the site-wide Organization/WebSite block every page already gets. */
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
@@ -37,6 +42,7 @@ const {
   jsonLd,
 } = Astro.props;
 const canonicalPath = Astro.props.canonicalPath ?? Astro.url.pathname;
+const {noindex = false, headExtra} = Astro.props;
 const description = Astro.props.description ?? m.home_description();
 const canonicalURL = new URL(canonicalPath, Astro.site);
 const defaultOgImage = lang === 'en' ? 'og-default.png' : `og-default-${lang}.png`;
@@ -80,7 +86,7 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta http-equiv="Content-Security-Policy" content={`default-src 'self'; script-src 'self' 'unsafe-inline' data: https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://www.google-analytics.com; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'${import.meta.env.PROD ? '; upgrade-insecure-requests' : ''}`} />
+    <meta http-equiv="Content-Security-Policy" content={`default-src 'self'; script-src 'self' 'unsafe-inline' data: https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'${import.meta.env.PROD ? '; upgrade-insecure-requests' : ''}`} />
     <!-- Client-side (soft) navigation: without this, every lesson-to-lesson
          click is a full page reload, tearing down the Pyodide Worker (and
          every package micropip.install'd into it) even though the wasm bytes
@@ -110,26 +116,104 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
     </script>
     {import.meta.env.PUBLIC_GA_ID && (
       <script is:inline>
-        // Consent-gated GA, default on. gtag loads unless a visitor explicitly
-        // opted out via the footer analytics toggle (localStorage
-        // "pda:analytics-consent" = "0"). The same key gates pageviews,
-        // the learner bar, and gtag.
+        // Consent-gated GA4, default on. gtag loads unless a visitor opted out
+        // via the footer analytics toggle (localStorage "pda:analytics-consent"
+        // = "0"). The same key gates pageviews, the learner bar, and gtag.
+        //
+        // Three details are deliberate:
+        //   1. `send_page_view: false` plus an explicit page_view. GA4's
+        //      automatic page_view only fires on the initial document load, and
+        //      this site is an Astro ClientRouter (soft navigation) app -- every
+        //      navigation after the first was invisible in analytics. Sending
+        //      the event ourselves covers both paths with one code path.
+        //   2. Dedupe on URL, because the router fires `astro:page-load` for
+        //      the initial page as well as for each navigation; without the
+        //      guard the first view would be counted twice.
+        //   3. The loader is idempotent: appending gtag.js twice would
+        //      double-init the library.
         (function () {
-          function loadGtag(id) {
+          var ID = '{import.meta.env.PUBLIC_GA_ID}';
+          var lastUrl = null;
+          function consented() {
+            try { return localStorage.getItem('pda:analytics-consent') !== '0'; }
+            catch (e) { return false; } // private mode: stay off
+          }
+          function load() {
+            if (window.__pydaGtag) return;
+            window.__pydaGtag = true;
             window.dataLayer = window.dataLayer || [];
-            function gtag() { dataLayer.push(arguments); }
-            gtag('js', new Date());
-            gtag('config', id);
+            window.gtag = function () { window.dataLayer.push(arguments); };
+            window.gtag('js', new Date());
+            window.gtag('config', ID, {send_page_view: false});
             var s = document.createElement('script');
             s.async = true;
-            s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(id);
+            s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(ID);
             document.head.appendChild(s);
           }
-          try {
-            if (localStorage.getItem('pda:analytics-consent') !== '0') {
-              loadGtag('{import.meta.env.PUBLIC_GA_ID}');
-            }
-          } catch (e) { /* private mode: stay off */ }
+          function track() {
+            if (!consented()) return;
+            var url = location.pathname + location.search;
+            if (url === lastUrl) return;
+            lastUrl = url;
+            load();
+            window.gtag('event', 'page_view', {
+              page_location: location.href,
+              page_path: url,
+              page_title: document.title,
+            });
+          }
+          if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', track, {once: true});
+          } else {
+            track();
+          }
+          // Soft navigations; the URL guard drops the router's initial-page
+          // event when DOMContentLoaded already handled it.
+          document.addEventListener('astro:page-load', track);
+
+          // Client-side error reporting. Without this a learner's broken page
+          // fails silently: the cell shows nothing, the console fills up, and
+          // nobody finds out. Reported through the same consent gate and the
+          // same tag as page views, so it costs no extra request and stops
+          // when a visitor opts out.
+          //
+          // Each error is reported once per page view: a render loop can throw
+          // the same message thousands of times, and GA4 bills per event.
+          var reported = Object.create(null);
+          function report(kind, message, extra) {
+            if (!consented() || !window.gtag) return;
+            var key = kind + '|' + message;
+            if (reported[key]) return;
+            reported[key] = true;
+            window.gtag('event', 'exception', {
+              description: message,
+              fatal: false,
+              error_kind: kind,
+              page_path: location.pathname,
+              detail: extra || '',
+            });
+          }
+          window.addEventListener('error', function (e) {
+            // Resource errors (a failed <img>/<script>) fire here with no
+            // message and a target instead of an ErrorEvent; report the URL.
+            var msg = e.message || (e.target && (e.target.src || e.target.href)) || 'resource error';
+            report('error', String(msg).slice(0, 200),
+              (e.filename || '') + (e.lineno ? ':' + e.lineno : ''));
+          }, true);
+          window.addEventListener('unhandledrejection', function (e) {
+            var r = e.reason;
+            var msg = (r && (r.message || r.toString())) || 'unhandled rejection';
+            report('rejection', String(msg).slice(0, 200));
+          });
+          // CSP violations. This site is static, so there is no server to
+          // receive a `report-uri`; but the violation also fires a DOM event,
+          // which is enough to make a policy regression visible. A CSP bug has
+          // shipped here before and was invisible in production precisely
+          // because nothing observed it.
+          document.addEventListener('securitypolicyviolation', function (e) {
+            report('csp', (e.violatedDirective || 'csp') + ' blocked ' +
+              String(e.blockedURI || 'inline').slice(0, 120));
+          });
         })();
       </script>
     )}
@@ -137,6 +221,8 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="author" content="Abderrahim Adrabi" />
+    {noindex && <meta name="robots" content="noindex,follow" />}
+    {headExtra && <Fragment set:html={headExtra} />}
     <link rel="canonical" href={canonicalURL} />
     <link rel="icon" href={new URL('favicon.ico', Astro.site)} sizes="32x32" />
     <link rel="icon" type="image/svg+xml" href="/icons/icon-192.svg" />
@@ -231,10 +317,37 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
         // are deduped across View Transitions navigations).
         const busy = document.getElementById('app-busy');
         const label = document.getElementById('app-busy-label');
+        const stopBtn = document.getElementById('app-stop');
+        // SC 2.4.11 (Focus Not Obscured): the overlay is an opaque sheet over
+        // the whole viewport, so without this a keyboard user who pressed Run
+        // keeps focus on a control they cannot see and Tab keeps walking the
+        // nav, footer and consent switch underneath it. `inert` removes those
+        // subtrees from focus and the accessibility tree while the sheet is
+        // up; it is supported everywhere the site targets. The overlay itself
+        // is not inerted, so the Stop button inside it stays reachable.
+        const PAGE_REGIONS = ['header.topnav', 'main', 'footer.footer', 'nav.mobilenav'];
+        const setPageInert = (on) => {
+          for (const sel of PAGE_REGIONS) {
+            const el = document.querySelector(sel);
+            if (!el) continue;
+            if (on) el.setAttribute('inert', '');
+            else el.removeAttribute('inert');
+          }
+        };
         const setBusy = (on) => {
           busy.classList.toggle('app-busy--active', on);
           busy.setAttribute('aria-hidden', String(!on));
+          setPageInert(on);
           if (!on) label.textContent = '';
+        };
+        // Focus moves to Stop when the sheet is revealed, so the escape hatch
+        // is the first thing a keyboard or screen-reader user reaches instead
+        // of tabbing through the page underneath it. The cell that owns the
+        // run restores focus to its own Run button when the run ends (see
+        // runnable-cell.client.ts) -- it is the only code that knows which
+        // button that was.
+        const focusStop = () => {
+          if (stopBtn && !stopBtn.hidden) stopBtn.focus();
         };
         const i18n = JSON.parse(document.getElementById('pyodide-i18n').textContent);
         const hideFirst = () => {
@@ -273,7 +386,7 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
           // screen-reader user pressing Run heard nothing at all.
           busy.setAttribute('aria-hidden', 'false');
           label.textContent = phase === 'packages' ? i18n.packages : phase === 'running' ? i18n.running : i18n.indeterminate;
-          if (!busyShowTimer) busyShowTimer = setTimeout(() => { busyShowTimer = null; setBusy(true); }, BUSY_SHOW_DELAY_MS);
+          if (!busyShowTimer) busyShowTimer = setTimeout(() => { busyShowTimer = null; setBusy(true); focusStop(); }, BUSY_SHOW_DELAY_MS);
         });
         window.addEventListener('pyodide:progress', (e) => {
           const pct = e.detail && e.detail.pct;
@@ -316,6 +429,12 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
       <div class="app-busy__inner">
         <div class="app-busy__spinner"></div>
         <div class="app-busy__label" id="app-busy-label" role="status" aria-live="polite"></div>
+        <!-- Lives inside the overlay and persists with it. A Stop affordance
+             created per-run on document.body disappeared on any soft
+             navigation while the overlay (transition:persist) stayed up, so a
+             runaway cell followed the learner to the next page with no way
+             out. It is hidden unless a worker run is in flight. -->
+        <button type="button" class="btn btn-primary run-stop" id="app-stop" hidden>{m.stop_button()}</button>
       </div>
     </div>
     <div class="pyodide-bar" id="pyodide-bar" transition:persist></div>
@@ -327,12 +446,12 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
           <span class="topnav__name">PyDA Course</span>
         </a>
         <nav class="topnav__right" aria-label={m.aria_label_primary()}>
-          <a class="topnav__link" href={`${locBase}${nav.learn}`}><Icon name="code" size={15} /> {m.nav_learn()}</a>
-          <a class="topnav__link" href={`${locBase}${nav.projects}`}><Icon name="globe" size={15} /> {m.nav_projects()}</a>
-          <a class="topnav__link" href={`${locBase}${nav.cheatsheets}`}><Icon name="chart" size={15} /> {m.nav_cheatsheets()}</a>
-          <a class="topnav__link" href={`${locBase}${nav.progress}`}><Icon name="trail" size={15} /> {m.nav_progress()}</a>
+          <a class="topnav__link" data-astro-prefetch href={`${locBase}${nav.learn}`}><Icon name="code" size={15} /> {m.nav_learn()}</a>
+          <a class="topnav__link" data-astro-prefetch href={`${locBase}${nav.projects}`}><Icon name="globe" size={15} /> {m.nav_projects()}</a>
+          <a class="topnav__link" data-astro-prefetch href={`${locBase}${nav.cheatsheets}`}><Icon name="chart" size={15} /> {m.nav_cheatsheets()}</a>
+          <a class="topnav__link" data-astro-prefetch href={`${locBase}${nav.progress}`}><Icon name="trail" size={15} /> {m.nav_progress()}</a>
           <div class="topnav__xp" id="xp-bar"></div>
-          <div class="topnav__group" aria-label={m.switch_locale()}>
+          <div class="topnav__group" role="group" aria-label={m.switch_locale()}>
             {locales.map((l) => (
               <a
                 class:list={['topnav__lang', l.code === lang && 'topnav__lang--active']}
@@ -354,10 +473,11 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
          dialog that stopped a first-time visitor from reaching the lesson
          they actually came for. It starts hidden -- it used to render
          visible and get hidden by JS after load, so every returning visitor
-         saw it flash on every page. role="status" (not "dialog") plus no
-         focus trap means it never steals focus or blocks interaction; a
-         visitor can just start clicking around and it stays out of the way. -->
-    <div class="onboarding" id="onboarding" hidden role="status" aria-labelledby="onboarding-title">
+         saw it flash on every page. role="region" (not "dialog"/status) plus
+         no focus trap means it never steals focus or blocks interaction, and
+         the card's <ol> keeps its list semantics -- role="status" makes the
+         whole card one atomic announcement, which flattens the steps. -->
+    <div class="onboarding" id="onboarding" hidden role="region" aria-labelledby="onboarding-title">
       <div class="onboarding__card">
         <button type="button" class="onboarding__close" id="onboarding-skip" aria-label={m.onboarding_skip()}>&times;</button>
         <p class="onboarding__title" id="onboarding-title"><span aria-hidden="true">🚀</span> {m.onboarding_title()}</p>
@@ -380,20 +500,22 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
           <p class="footer__tagline">{m.footer_tagline()}</p>
         </div>
         <div class="footer__col">
-          <h3><Icon name="code" size={13} /> {m.footer_course_col()}</h3>
+          <h2><Icon name="code" size={13} /> {m.footer_course_col()}</h2>
           <a href={`${locBase}${nav.learn}/python-101`}>{m.footer_python_101()}</a>
           <a href={`${locBase}${nav.learn}/data-analysis`}>{m.footer_data_analysis()}</a>
           <a href={`${locBase}${nav.projects}`}>{m.footer_projects()}</a>
           <a href={`${locBase}${nav.cheatsheets}`}>{m.footer_cheatsheets()}</a>
         </div>
         <div class="footer__col">
-          <h3><Icon name="chart" size={13} /> {m.footer_site_col()}</h3>
+          <h2><Icon name="chart" size={13} /> {m.footer_site_col()}</h2>
           <a href={`${locBase}${nav.progress}`}>{m.footer_my_progress()}</a>
           <a href={`${locBase}${nav.progressGuide}`}>{m.progress_guide_heading()}</a>
           <a href={`${locBase}${nav.pedagogy}`}>{m.pedagogy_nav()}</a>
+          <a href={`${locBase}${nav.contributors}`}>{m.nav_contributors()}</a>
         </div>
         <div class="footer__col">
-          <h3><Icon name="globe" size={13} /> {m.footer_more_col()}</h3>
+          <h2><Icon name="globe" size={13} /> {m.footer_more_col()}</h2>
+          <a href={`${locBase}${nav.credits}`}>{m.credits_heading()}</a>
           <a href="https://github.com/abderrahim-lectures/python-data-analysis-course" target="_blank" rel="noopener noreferrer">{m.footer_github()}</a>
           <a href="https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/CHANGELOG.md" target="_blank" rel="noopener noreferrer">{m.footer_changelog()}</a>
           <a href={`${base}architecture.html`} target="_blank" rel="noopener noreferrer">{m.footer_architecture()}</a>
@@ -401,6 +523,9 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
       </div>
       <div class="container footer__bottom">
         <p>{m.footer_copyright({year: new Date().getFullYear(), version: pkg.version})}</p>
+        <a class="footer__support" href="https://www.openmathmodel.org/" target="_blank" rel="noopener noreferrer">
+          <Icon name="globe" size={13} /> {m.supported_by()}
+        </a>
         <div class="consent-card">
           <div class="consent-card__text">
             <span><Icon name="chart" size={14} /> {m.consent_label()}</span>

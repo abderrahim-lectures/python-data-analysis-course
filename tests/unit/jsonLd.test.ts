@@ -10,9 +10,19 @@ describe('JSON-LD structured data', () => {
   });
 
   test('the homepage passes a Course schema to Base', () => {
-    const src = readFileSync('src/pages/index.astro', 'utf8');
+    // All four locale routes delegate to the shared HomePage component, which
+    // owns the Course JSON-LD and the Base call (the four near-identical
+    // copies this replaced are now six-line wrappers).
+    const src = readFileSync('src/components/HomePage.astro', 'utf8');
     expect(src).toContain("'@type': 'Course'");
     expect(src).toMatch(/<Base[^>]*jsonLd={jsonLd}/);
+  });
+
+  test('every locale homepage route renders that shared component', () => {
+    for (const path of ['src/pages/index.astro', 'src/pages/ar/index.astro', 'src/pages/es/index.astro', 'src/pages/fr/index.astro']) {
+      const src = readFileSync(path, 'utf8');
+      expect(src, path).toContain('<HomePage locale=');
+    }
   });
 
   test('every project page passes a LearningResource schema to Base', () => {

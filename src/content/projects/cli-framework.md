@@ -6,6 +6,7 @@ estimatedMinutes: 50
 xpReward: 50
 tags: ["cli", "argparse", "classes", "json"]
 prerequisites: ["Python basics (variables, loops, functions, classes)", "Familiarity with command-line terminals"]
+author: abderrahim-adrabi
 ---
 
 # CLI Framework

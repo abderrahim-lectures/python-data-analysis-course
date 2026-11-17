@@ -10,6 +10,7 @@ learningObjectives:
   - "Build a reorder alert system that flags low-stock items"
   - "Implement inter-warehouse transfers with transaction safety"
 prerequisites: ["Python 101", "Data Analysis"]
+author: abderrahim-adrabi
 ---
 
 # 📦 Build an Inventory Manager

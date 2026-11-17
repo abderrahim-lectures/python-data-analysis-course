@@ -13,6 +13,7 @@ export const questById: Record<string, () => string> = {
   'project-steps-50': () => m.progress_quest_project_steps_50(),
   'track-python-101': () => m.progress_quest_track_python_101(),
   'track-data-analysis': () => m.progress_quest_track_data_analysis(),
+  'track-statistics-101': () => m.progress_quest_track_statistics_101(),
   'streak-3': () => m.progress_quest_streak_3(),
   'streak-7': () => m.progress_quest_streak_7(),
   'streak-14': () => m.progress_quest_streak_14(),
@@ -34,6 +35,7 @@ export const questById: Record<string, () => string> = {
   'challenges-50': () => m.progress_quest_challenges_50(),
   'all-python': () => m.progress_quest_all_python(),
   'all-data': () => m.progress_quest_all_data(),
+  'all-statistics-101': () => m.progress_quest_all_statistics_101(),
 };
 
 const legacyLabelToId: Record<string, string> = {
@@ -47,6 +49,7 @@ const legacyLabelToId: Record<string, string> = {
   '50 Steps': 'project-steps-50',
   'Python track': 'track-python-101',
   'Data track': 'track-data-analysis',
+  'Statistics track': 'track-statistics-101',
   '3-day streak': 'streak-3',
   '7-day streak': 'streak-7',
   '14-day streak': 'streak-14',

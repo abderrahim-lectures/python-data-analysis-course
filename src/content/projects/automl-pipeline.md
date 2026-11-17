@@ -15,6 +15,7 @@ learningObjectives:
   - "Compare three estimators with cross_val_score and read the race honestly"
   - "Tune a model with GridSearchCV and discriminate cv-selected from test metrics"
   - "Export the chosen pipeline with joblib and reload it as a drop-in predictor"
+author: abderrahim-adrabi
 ---
 
 # 🛠️ 🤖 Build an Automated ML Pipeline

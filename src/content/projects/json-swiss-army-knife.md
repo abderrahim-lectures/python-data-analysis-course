@@ -3,6 +3,7 @@ title: "Build a JSON Swiss Army Knife"
 description: "A CLI tool that formats, validates, queries, and transforms JSON files with JQ-like power."
 difficulty: "beginner"
 tags: ["cli", "data-pipeline", "developer-tools"]
+author: abderrahim-adrabi
 ---
 
 # 🔧 Build a JSON Swiss Army Knife

@@ -2,6 +2,7 @@
 title: "Build a Knowledge Graph Builder"
 description: "Extract entities and relationships from text to build interactive knowledge graphs."
 difficulty: "intermediate"
+author: abderrahim-adrabi
 ---
 # 🕸️ Build a Knowledge Graph Builder
 

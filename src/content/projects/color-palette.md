@@ -12,6 +12,7 @@ learningObjectives:
   - "Compute WCAG contrast ratios and judge AA/AAA compliance"
   - "Export palettes as CSS variables and JSON"
   - "Wrap the whole tool in a small command-line interface"
+author: abderrahim-adrabi
 ---
 
 # 🎨 Build a Color Palette Generator

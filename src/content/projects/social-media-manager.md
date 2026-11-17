@@ -14,6 +14,7 @@ prerequisites:
   - "Python basics (functions, loops, dictionaries)"
   - "Grouping and aggregating with pandas"
   - "Installing packages with uv"
+author: abderrahim-adrabi
 ---
 
 # 🛠️ 📱 Build a Social Media Manager

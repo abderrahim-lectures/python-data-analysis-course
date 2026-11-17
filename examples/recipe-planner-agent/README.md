@@ -5,7 +5,7 @@
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/recipe-planner-agent/notebook.ipynb)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Frecipe-planner-agent%2Fnotebook.ipynb)
 
-A real, runnable "recipe planner" agent — the example that accompanies the course's [Recipe-Planner Agent](../../docs/projects/recipe-planner-agent/index.md) project, built with LangChain's [`deepagents`](https://github.com/langchain-ai/deepagents).
+A real, runnable "recipe planner" agent — the example that accompanies the course's [Recipe-Planner Agent](https://pyda-course.online/projects/recipe-planner-agent/) project, built with LangChain's [`deepagents`](https://github.com/langchain-ai/deepagents).
 
 ## Objective
 
@@ -14,11 +14,11 @@ Given a list of ingredients you have on hand, suggest 2-3 real meals you could m
 - **`search_recipes_by_ingredients`** searches the 13 recipes in `recipes.py` for the ones that best overlap with your ingredients, and reports exactly what's missing from each.
 - The agent's system prompt (in `planner.py`) explicitly forbids inventing a recipe that tool didn't return — every suggestion traces back to a real entry in `recipes.py`.
 
-This is the same tool-calling pattern taught in the [AI Agent project](../../docs/projects/ai-agent/index.md), applied to a small, structured, local dataset instead of a toy topic list.
+This is the same tool-calling pattern taught in the [AI Agent project](https://pyda-course.online/projects/ai-agent/), applied to a small, structured, local dataset instead of a toy topic list.
 
 ## Running it
 
-1. **Get a free-tier API key** — see the six-provider table in the [lesson's Setup section](../../docs/projects/recipe-planner-agent/index.md#setup). Defaults to GitHub Models.
+1. **Get a free-tier API key** — see the six-provider table in the [lesson's Setup section](https://pyda-course.online/projects/recipe-planner-agent/#setup). Defaults to GitHub Models.
 2. **Copy `.env.example` to `.env`** and fill in your key:
    ```bash
    cp .env.example .env
@@ -64,7 +64,7 @@ print(result["messages"][-1].content)
 
 ## A note on staying current
 
-Model names and library APIs in this space change fast — the model ID and `create_deep_agent()` call here were both verified against a live run while writing this example, but may have drifted by the time you read this. See the callout in the [lesson's Setup section](../../docs/projects/recipe-planner-agent/index.md#setup) for what to check before relying on this code.
+Model names and library APIs in this space change fast — the model ID and `create_deep_agent()` call here were both verified against a live run while writing this example, but may have drifted by the time you read this. See the callout in the [lesson's Setup section](https://pyda-course.online/projects/recipe-planner-agent/#setup) for what to check before relying on this code.
 
 ## Built your own version for the class?
 

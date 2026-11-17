@@ -10,6 +10,7 @@ learningObjectives:
   - "Sum per-recipe nutrition into daily totals with rolling accumulators"
   - "Derive a consolidated grocery list by merging repeating ingredients"
 prerequisites: ["python-101/data-structures", "python-101/reading-files", "python-101/dicts-and-sets"]
+author: abderrahim-adrabi
 ---
 
 # 🍽️ Build a Meal Planner

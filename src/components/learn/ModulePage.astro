@@ -51,7 +51,7 @@ const prereqMapOf = (prereqs: string[]): Record<string, string> => {
 ---
 
 <Base title={`${title}, PyDA Course`} description={description} lang={locale} dir={dir} alternates={learnAlternates(section, track, 'module', entry.id.split('/').pop()!)}>
-  <nav class="crumb container">
+  <nav class="crumb container" aria-label={m.breadcrumb_label()}>
     <a href={learnHref(locale, base)}>{m.nav_learn()}</a>
     <a href={learnHref(locale, base, section)}>{sectionName(section)}</a>
     <span class="crumb__here">{title}</span>

@@ -28,11 +28,63 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # The ~138 MB Pyodide runtime is vendored at build time from jsdelivr
+      # (public/pyodide/ is gitignored, so a fresh runner starts empty). Without
+      # a cache, every single deploy re-downloads the whole closure and any CDN
+      # hiccup fails the build. Keyed on the pinned version, so bumping Pyodide
+      # in scripts/vendor-pyodide.mjs busts it automatically.
+      - name: Cache vendored Pyodide
+        uses: actions/cache@v4
+        with:
+          path: public/pyodide
+          key: pyodide-${{ runner.os }}-${{ hashFiles('scripts/vendor-pyodide.mjs') }}
+          restore-keys: |
+            pyodide-${{ runner.os }}-
+
       - name: Build site
         run: npm run build
         env:
           PUBLIC_SUPABASE_URL: ${{ secrets.PUBLIC_SUPABASE_URL }}
           PUBLIC_SUPABASE_KEY: ${{ secrets.PUBLIC_SUPABASE_KEY }}
+          # Measurement ID, not a secret: it is visible in the page source.
+          # A repository variable so it survives a secret rotation and can be
+          # read by anyone auditing the build; an empty value ships no gtag.
+          PUBLIC_GA_ID: ${{ vars.PUBLIC_GA_ID }}
+
+      # TypeScript, which the unit suite does not cover. `astro check` is
+      # deliberately absent: it is worth adding once someone has confirmed it
+      # stays under the runner's memory limit, and adding an unverified step
+      # to a deploy gate is worse than not having it.
+      - name: Typecheck
+        run: npx tsc --noEmit
+
+      # After the build, not before: several defects this repo has shipped
+      # would have failed here (a stale e2e selector that could only ever
+      # throw, an untranslated project breaking its localized links), and two
+      # of the sitemap checks read dist/ and *skip* when it is absent -- run
+      # before the build, they would have gone on passing silently while the
+      # alias filter matched nothing at all.
+      - name: Unit tests
+        run: npm run test
+
+      # The browser suites had never run in CI at all. Serve the built site and
+      # run every one of them against it. GitHub's ubuntu-latest image ships
+      # Chrome, and the harness reads CHROME_BIN.
+      - name: Serve the built site
+        run: |
+          npx astro preview --port 4321 &
+          npx --yes wait-on http://127.0.0.1:4321 --timeout 120000
+
+      - name: E2E, a11y, contrast, responsive, notebook and hreflang suites
+        env:
+          BASE_URL: http://127.0.0.1:4321
+          CHROME_BIN: google-chrome
+        run: |
+          for suite in smoke a11y contrast responsive hreflang lesson-runtime; do
+            echo "::group::$suite"
+            node "tests/e2e/$suite.mjs"
+            echo "::endgroup::"
+          done
 
       - uses: actions/configure-pages@v5
 

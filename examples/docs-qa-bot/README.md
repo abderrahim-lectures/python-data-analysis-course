@@ -5,7 +5,7 @@
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/docs-qa-bot/notebook.ipynb)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fdocs-qa-bot%2Fnotebook.ipynb)
 
-The local companion to the course's [Build a RAG-Backed Docs Q&A Discord Bot](../../docs/projects/docs-qa-bot/index.md) project — the same local-embedding, NumPy-cosine-similarity retrieval pipeline as the [RAG App project](../../docs/projects/rag-notes/index.md), wrapped in a live `discord.py` bot instead of a CLI script.
+The local companion to the course's [Build a RAG-Backed Docs Q&A Discord Bot](https://pyda-course.online/projects/docs-qa-bot/) project — the same local-embedding, NumPy-cosine-similarity retrieval pipeline as the [RAG App project](https://pyda-course.online/projects/rag-notes/), wrapped in a live `discord.py` bot instead of a CLI script.
 
 ## What's here
 
@@ -26,8 +26,8 @@ uv run python retrieve.py      # try a search with no bot or LLM involved yet
 
 Running the bot itself needs two things the retrieval steps above don't:
 
-1. **A Discord bot token** — create an application at the [Discord Developer Portal](https://discord.com/developers/applications), add a Bot to it, reset/copy its token, and **enable the "Message Content" privileged intent** under Bot settings (the bot's `on_message` handler otherwise only ever sees empty content). See [Step 1 of the lesson](../../docs/projects/docs-qa-bot/index.md#step-1-create-a-discord-bot-application) for the full walkthrough.
-2. **A free-tier LLM API key**, same as the RAG App project — see the table in the [lesson's generation step](../../docs/projects/docs-qa-bot/index.md#step-4-wire-up-the-bots-message-handler) for where to get one.
+1. **A Discord bot token** — create an application at the [Discord Developer Portal](https://discord.com/developers/applications), add a Bot to it, reset/copy its token, and **enable the "Message Content" privileged intent** under Bot settings (the bot's `on_message` handler otherwise only ever sees empty content). See [Step 1 of the lesson](https://pyda-course.online/projects/docs-qa-bot/#step-1-create-a-discord-bot-application) for the full walkthrough.
+2. **A free-tier LLM API key**, same as the RAG App project — see the table in the [lesson's generation step](https://pyda-course.online/projects/docs-qa-bot/#step-4-wire-up-the-bots-message-handler) for where to get one.
 
 ```bash
 cp .env.example .env
@@ -70,7 +70,7 @@ uv run python bot.py
 
 ## A note on staying current
 
-Model names and library APIs in this space change fast. `all-MiniLM-L6-v2`, the GitHub Models endpoint, and `discord.py`'s intents API used here were all verified working while writing this example, but may have drifted by the time you read this — see the callout in the [lesson](../../docs/projects/docs-qa-bot/index.md) for what to check before relying on this code.
+Model names and library APIs in this space change fast. `all-MiniLM-L6-v2`, the GitHub Models endpoint, and `discord.py`'s intents API used here were all verified working while writing this example, but may have drifted by the time you read this — see the callout in the [lesson](https://pyda-course.online/projects/docs-qa-bot/) for what to check before relying on this code.
 
 ## Built your own docs bot?
 

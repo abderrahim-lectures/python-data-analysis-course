@@ -6,6 +6,7 @@ estimatedMinutes: 50
 xpReward: 50
 tags: ["pandas", "csv", "classes", "statistics"]
 prerequisites: ["Python basics (variables, loops, functions, dictionaries)", "Basic pandas (DataFrames, groupby)"]
+author: abderrahim-adrabi
 ---
 
 # Gradebook

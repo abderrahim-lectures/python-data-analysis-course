@@ -13,6 +13,7 @@ learningObjectives:
   - "Encrypt and decrypt files on disk, proving round-trip integrity"
   - "Encrypt a shared session key with RSA public/private pairs"
   - "Sign a message and verify it against a tampered copy"
+author: abderrahim-adrabi
 ---
 
 # 🔐 Build an Encryption Toolkit

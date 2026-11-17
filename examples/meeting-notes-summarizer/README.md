@@ -5,7 +5,7 @@
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/meeting-notes-summarizer/notebook.ipynb)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fmeeting-notes-summarizer%2Fnotebook.ipynb)
 
-The local companion to the course's [Build a Meeting-Notes Summarizer](../../docs/projects/meeting-notes-summarizer/index.md) project — a small, complete structured-extraction pipeline that turns a plain-text meeting transcript into decisions, action items, and open questions, using a free-tier LLM and a carefully designed JSON-extraction prompt.
+The local companion to the course's [Build a Meeting-Notes Summarizer](https://pyda-course.online/projects/meeting-notes-summarizer/) project — a small, complete structured-extraction pipeline that turns a plain-text meeting transcript into decisions, action items, and open questions, using a free-tier LLM and a carefully designed JSON-extraction prompt.
 
 ## What's here
 
@@ -15,7 +15,7 @@ The local companion to the course's [Build a Meeting-Notes Summarizer](../../doc
 
 ## Running it
 
-1. **Get a free-tier API key** from your chosen provider — see the table in the [lesson's Setup section](../../docs/projects/meeting-notes-summarizer/index.md#3-get-a-free-llm-api-key) for where to get one for each.
+1. **Get a free-tier API key** from your chosen provider — see the table in the [lesson's Setup section](https://pyda-course.online/projects/meeting-notes-summarizer/#3-get-a-free-llm-api-key) for where to get one for each.
 2. **Copy `.env.example` to `.env`** and fill in the key for your provider (and `LLM_PROVIDER` if you're not using the default):
    ```bash
    cp .env.example .env
@@ -60,7 +60,7 @@ uv run python summarize.py sample_transcripts/standup.txt
 
 ## A note on staying current
 
-Model names and library APIs in this space change fast — the model IDs used here were verified against a live run while writing this example, but may have drifted by the time you read this. See the callout in the [lesson](../../docs/projects/meeting-notes-summarizer/index.md#step-3-call-the-llm-and-parse-the-json-response) for what to check before relying on this code.
+Model names and library APIs in this space change fast — the model IDs used here were verified against a live run while writing this example, but may have drifted by the time you read this. See the callout in the [lesson](https://pyda-course.online/projects/meeting-notes-summarizer/#step-3-call-the-llm-and-parse-the-json-response) for what to check before relying on this code.
 
 ## Built your own summarizer?
 

@@ -40,7 +40,17 @@ async function init() {
   const prefix = `${localeBase}playground/`;
   if (!path.startsWith(prefix) || path.length <= prefix.length) return;
 
-  const segment = decodeURIComponent(path.slice(prefix.length).replace(/\/$/, ''));
+  // decodeURIComponent throws URIError on a malformed escape (`/playground/%zz`),
+  // and it used to sit *outside* the try below: init() is async and registered
+  // directly as an astro:page-load listener, so that throw became an unhandled
+  // rejection in the console. The page still fell back to the plain 404, so
+  // this is noise, but there is no reason to emit it.
+  let segment: string;
+  try {
+    segment = decodeURIComponent(path.slice(prefix.length).replace(/\/$/, ''));
+  } catch {
+    return;
+  }
   if (segment.length > MAX_SEGMENT_LENGTH) return;
   try {
     const code = await decodeShareCode(segment);

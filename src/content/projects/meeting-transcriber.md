@@ -10,6 +10,7 @@ learningObjectives:
   - "Extract action items with owner names via keyword rules"
   - "Assemble a compressed summary report and share it as a file"
 prerequisites: ["python-101/strings", "python-101/file-io", "python-101/loops", "python-101/functions"]
+author: abderrahim-adrabi
 ---
 
 # 🎙️ Build a Meeting Transcriber & Summarizer

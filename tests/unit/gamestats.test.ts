@@ -19,12 +19,53 @@ async function fresh() {
 }
 
 describe('TRACKS totals stay the single source of truth', () => {
-  test('two tracks with the real lesson counts (normal + hard)', async () => {
+  test('three tracks with the real lesson counts (normal + hard)', async () => {
     const {gs} = await fresh();
     expect(gs.TRACKS).toEqual([
       {id: 'python-101', label: 'Python 101', total: 29},
       {id: 'data-analysis', label: 'Pandas & Data', total: 20},
+      {id: 'statistics-101', label: 'Statistics 101', total: 19},
     ]);
+  });
+
+  test('every module lessonCount matches the lessons that name it', async () => {
+    // A module page prints "N lessons"; a stale count contradicts the list
+    // directly beneath it. Four were wrong when this was added: relationships
+    // said 3 for 2 lessons, samples-and-uncertainty said 3 for 6,
+    // applied-statistics said 2 for 4, and inference-and-reporting said 2
+    // for 0 because its lessons were attributed to the wrong module.
+    const {readdirSync, readFileSync} = await import('node:fs');
+    const {join} = await import('node:path');
+    const mismatches: string[] = [];
+    for (const section of ['statistics-101']) {
+      for (const track of ['normal', 'hard']) {
+        const mdir = `src/content/modules/${section}/${track}`;
+        const ldir = `src/content/lessons/${section}/${track}`;
+        for (const f of readdirSync(mdir)) {
+          const src = readFileSync(join(mdir, f), 'utf8');
+          const declared = Number(/^lessonCount:\s*(\d+)$/m.exec(src)?.[1]);
+          const key = f.replace(/^module-\d+-/, '').replace(/\.md$/, '');
+          const actual = readdirSync(ldir).filter((l) =>
+            new RegExp(`^module:\\s*"?${key}"?$`, 'm').test(readFileSync(join(ldir, l), 'utf8')),
+          ).length;
+          if (declared !== actual) mismatches.push(`${track}/${f}: says ${declared}, has ${actual}`);
+        }
+      }
+    }
+    expect(mismatches).toEqual([]);
+  });
+
+  test('every declared total matches the lesson files on disk', async () => {
+    // The total is a denominator: a stale one silently caps a progress bar at
+    // under 100% forever. Count the markdown instead of trusting the literal.
+    const {readdirSync} = await import('node:fs');
+    const {gs} = await fresh();
+    for (const t of gs.TRACKS) {
+      const dir = `src/content/lessons/${t.id}`;
+      const count = readdirSync(dir, {recursive: true} as never)
+        .filter((f: unknown) => String(f).endsWith('.md')).length;
+      expect(count, `${t.id} lesson files`).toBe(t.total);
+    }
   });
 });
 
@@ -35,7 +76,7 @@ describe('computeGameStats', () => {
     expect(r.level).toBe(1);
     expect(r.rank).toBe('Bronze');
     expect(r.xpToNext).toBeGreaterThan(0);
-    expect(r.lanes.map((l: {id: string}) => l.id)).toEqual(['python-101', 'data-analysis']);
+    expect(r.lanes.map((l: {id: string}) => l.id)).toEqual(['python-101', 'data-analysis', 'statistics-101']);
     expect(r.lanes.reduce((a: number, l: {done: number}) => a + l.done, 0)).toBe(0);
     expect(r.quiz).toEqual({correct: 0, total: 0, winRate: 0});
     expect(r.badges).toEqual([]);
@@ -52,7 +93,7 @@ describe('computeGameStats', () => {
     expect(e.kda.ratio).toBe(0);
     expect(e.questsTotal).toBeGreaterThan(0);
     expect(e.questsDone).toBe(0);
-    expect(e.lanes).toHaveLength(2);
+    expect(e.lanes).toHaveLength(3);
     for (const lane of e.lanes) {
       expect(lane.done).toBe(0);
       expect(lane.pct).toBe(0);
@@ -74,7 +115,7 @@ describe('computeGameStats', () => {
 
     const r = gs.computeGameStats();
     expect(r.lessonsDone).toBe(1);
-    expect(r.lessonsTotal).toBe(49);
+    expect(r.lessonsTotal).toBe(gs.TRACKS.reduce((a: number, t: {total: number}) => a + t.total, 0));
     expect(r.lanes[0].done).toBe(1);
     expect(r.lanes[0].total).toBe(29);
     expect(r.lanes[1].done).toBe(0);
@@ -108,9 +149,10 @@ describe('computeGameStats', () => {
       expect(r.diagnostics[k as keyof typeof r.diagnostics]).toBeLessThanOrEqual(100);
       expect(r.diagnostics[k as keyof typeof r.diagnostics]).toBeGreaterThanOrEqual(0);
     }
-    expect(r.lessonsDone).toBe(49);
+    expect(r.lessonsDone).toBe(gs.TRACKS.reduce((a: number, t: {total: number}) => a + t.total, 0));
     expect(r.lanes[0].done).toBe(29);
     expect(r.lanes[1].done).toBe(20);
+    expect(r.lanes[2].done).toBe(19);
     expect(r.activity.daysActive).toBeGreaterThan(0);
     expect(r.engagement.longestSession).toBeLessThanOrEqual(5);
   });

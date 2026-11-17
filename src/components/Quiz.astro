@@ -28,13 +28,20 @@ const {title = m.quiz_title(), questions, xp = 5, lessonId = ''} = Astro.props;
   <div class="quiz__body">
     {questions.map((q, qi) => (
       <div class="quiz-q" data-qi={qi}>
-        <p class="quiz-q__prompt">{qi + 1}. {q.question}</p>
-        <div class="quiz-q__options">
+        {/* The four options are one radio group, so the question belongs on the
+            group's accessible name. Without it a screen reader announces
+            "option text, radio, 2 of 4" with no way to tell which question --
+            role=radiogroup + aria-labelledby gives the group its prompt.
+            (A fieldset/legend would work too; the div keeps the existing
+            layout and the options are already direct children.) */}
+        <p class="quiz-q__prompt" id={`quiz-q-${qi}-prompt`}>{qi + 1}. {q.question}</p>
+        <div class="quiz-q__options" role="radiogroup" aria-labelledby={`quiz-q-${qi}-prompt`}>
           {q.options.map((opt, oi) => (
             <label class="quiz-q__opt" data-correct={opt.correct ? '1' : '0'}>
               <input type="radio" name={`q${qi}`} value={oi} />
               <span class="quiz-q__radio"></span>
               <span class="quiz-q__text">{opt.text}</span>
+              <span class="quiz-q__verdict" aria-hidden="true"></span>
             </label>
           ))}
         </div>
@@ -100,18 +107,28 @@ const {title = m.quiz_title(), questions, xp = 5, lessonId = ''} = Astro.props;
           const isCorrect = (opt as HTMLElement).dataset.correct === '1';
 
           opt.classList.remove('quiz-q__opt--correct', 'quiz-q__opt--wrong', 'quiz-q__opt--selected');
+          const v1 = opt.querySelector('.quiz-q__verdict') as HTMLElement | null; if (v1) v1.textContent = '';
 
+          // The verdict glyph is the point: before this, correct and wrong
+          // options differed only by border and background colour (SC 1.4.1).
+          const verdict = opt.querySelector('.quiz-q__verdict') as HTMLElement | null;
           if (radio.checked) {
             qAnswered = true;
             opt.classList.add('quiz-q__opt--selected');
             if (isCorrect) {
               opt.classList.add('quiz-q__opt--correct');
+              if (verdict) verdict.textContent = '\u2713';
+              opt.setAttribute('aria-label', `${opt.textContent?.trim() ?? ''} - ${m.quiz_correct_label()}`);
               userCorrect = true;
             } else {
               opt.classList.add('quiz-q__opt--wrong');
+              if (verdict) verdict.textContent = '\u2717';
+              opt.setAttribute('aria-label', `${opt.textContent?.trim() ?? ''} - ${m.quiz_wrong_label()}`);
             }
           } else if (isCorrect) {
             opt.classList.add('quiz-q__opt--correct');
+            if (verdict) verdict.textContent = '\u2713';
+            opt.setAttribute('aria-label', `${opt.textContent?.trim() ?? ''} - ${m.quiz_correct_label()}`);
           }
         });
 
@@ -170,6 +187,7 @@ const {title = m.quiz_title(), questions, xp = 5, lessonId = ''} = Astro.props;
       el.querySelectorAll('.quiz-q').forEach((q) => {
         q.querySelectorAll('.quiz-q__opt').forEach((opt) => {
           opt.classList.remove('quiz-q__opt--correct', 'quiz-q__opt--wrong', 'quiz-q__opt--selected');
+          const v2 = opt.querySelector('.quiz-q__verdict') as HTMLElement | null; if (v2) v2.textContent = '';
           (opt.querySelector('input') as HTMLInputElement).checked = false;
         });
         const explain = q.querySelector('[data-explain]') as HTMLElement | null;
@@ -258,6 +276,15 @@ const {title = m.quiz_title(), questions, xp = 5, lessonId = ''} = Astro.props;
     background: var(--accent-contrast);
     border-radius: 50%;
   }
+  /* The verdict glyph: before this a graded option was marked correct or
+     wrong by colour alone (SC 1.4.1). Positioned at the end of the row so it
+     reads after the option text in both LTR and RTL. */
+  .quiz-q__verdict {
+    margin-inline-start: auto; font-weight: 900; font-size: 1rem;
+    padding-inline-start: .4rem; flex: none;
+  }
+  .quiz-q__opt--correct .quiz-q__verdict { color: var(--success-text); }
+  .quiz-q__opt--wrong .quiz-q__verdict { color: var(--bad-text); }
   .quiz-q__opt--correct {
     border-color: var(--success);
     background: var(--success-soft);
@@ -303,7 +330,7 @@ const {title = m.quiz_title(), questions, xp = 5, lessonId = ''} = Astro.props;
     border-top: 1px solid var(--line);
   }
   .quiz__feedback--correct { background: linear-gradient(135deg, var(--success-soft), color-mix(in srgb, var(--success-soft) 60%, transparent)); color: var(--success-text); }
-  .quiz__feedback--partial { background: linear-gradient(135deg, var(--warn-soft), color-mix(in srgb, var(--warn-soft) 60%, transparent)); color: var(--warn); }
+  .quiz__feedback--partial { background: linear-gradient(135deg, var(--warn-soft), color-mix(in srgb, var(--warn-soft) 60%, transparent)); color: var(--warn-text); }
   .quiz__feedback--wrong { background: linear-gradient(135deg, var(--bad-soft), color-mix(in srgb, var(--bad-soft) 60%, transparent)); color: var(--bad-text); }
   :global([data-theme='dark']) .quiz__check { background: var(--accent); border-color: var(--accent); }
   :global([data-theme='dark']) .quiz__check:hover { background: var(--accent-strong); }

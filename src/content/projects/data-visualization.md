@@ -15,6 +15,7 @@ learningObjectives:
   - "Create interactive charts with plotly"
   - "Customize chart styling and color themes"
   - "Combine multiple charts into dashboards"
+author: abderrahim-adrabi
 ---
 
 # 📊 Data Visualization Explorer

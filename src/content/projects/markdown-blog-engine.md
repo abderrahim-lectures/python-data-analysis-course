@@ -10,6 +10,7 @@ learningObjectives:
   - "Render templates with Python f-strings and string.Template"
   - "Assemble posts and a tag index into a complete static site"
 prerequisites: ["python-101/file-io", "python-101/strings", "python-101/data-structures", "python-101/functions"]
+author: abderrahim-adrabi
 ---
 
 # 📝 Build a Markdown Blog Engine

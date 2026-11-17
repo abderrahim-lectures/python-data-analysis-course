@@ -1,4 +1,5 @@
 # Deliberately deferred (flagged, not built in this pass)
+
 - **Real push notifications while away from the site** (Duolingo-style) — would need a minimal server component (scheduled job + Web Push/VAPID) that this fully-static architecture deliberately doesn't include; the on-visit streaks/progress nudge is the chosen no-infrastructure alternative.
-- **Running Python offline from a cold start** — Pyodide is loaded from the CDN at runtime, so a first-run lesson page with no network can't execute cells (see [`pwa.md`](./pwa.md)). Pre-building/vendoring Pyodide wheels into the deploy (`public/pyodide/`) would close this; deferred because it roughly doubles the shipped bundle.
+- **Running Python from a cold offline start** — Pyodide is vendored into `public/pyodide/` at build time (`scripts/vendor-pyodide.mjs`) and served from the site's own origin, so there is no runtime CDN dependency any more. The remaining gap is that nothing prefetches those bytes before a first Run: a brand-new offline visit can read a lesson but cannot execute a cell. A service worker that precaches `/pyodide/` would close it (see [`pwa.md`](./pwa.md), which is itself still a design, not an implementation).
 - **Versioned course content** if the course gets re-run for a future cohort and old content needs to stay addressable — not needed for a first run.

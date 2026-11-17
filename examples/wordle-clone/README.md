@@ -7,7 +7,7 @@
 
 <!-- Badges above point at this PR's branch; will point at `main` once merged. -->
 
-The local companion to the course's [Build a Wordle Clone](../../docs/projects/wordle-clone/index.md) Real-World Project — a real, runnable terminal Wordle game with a bundled word list and persistent stats saved across runs.
+The local companion to the course's [Build a Wordle Clone](https://pyda-course.online/projects/wordle-clone/) Real-World Project — a real, runnable terminal Wordle game with a bundled word list and persistent stats saved across runs.
 
 ## What's here
 
@@ -63,4 +63,4 @@ Play again? [y/N]
 
 Delete `stats.json` in this folder — a fresh one with all-zero stats will be created the next time you play.
 
-See the full [lesson](../../docs/projects/wordle-clone/index.md) for the step-by-step walkthrough, including why the repeated-letter feedback logic is trickier than it looks, and how the stats persistence works.
+See the full [lesson](https://pyda-course.online/projects/wordle-clone/) for the step-by-step walkthrough, including why the repeated-letter feedback logic is trickier than it looks, and how the stats persistence works.

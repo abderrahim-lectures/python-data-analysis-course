@@ -10,6 +10,7 @@ learningObjectives:
   - "Serve features by point-in-time key lookup for training and inference"
   - "Expose a simple CLI for registering, computing, and fetching features"
 prerequisites: ["Python 101", "Data Analysis"]
+author: abderrahim-adrabi
 ---
 
 # 🗄️ Build a Feature Store

@@ -6,6 +6,7 @@ estimatedMinutes: 60
 xpReward: 50
 tags: ["Machine Learning", "scikit-learn", "pandas", "matplotlib"]
 prerequisites: ["Python basics", "Basic pandas", "Basic matplotlib"]
+author: abderrahim-adrabi
 ---
 
 # Train Your First Machine Learning Model

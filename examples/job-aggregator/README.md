@@ -1,6 +1,6 @@
 # Job-Listing Aggregator Example
 
-The local companion to the course's [Build a Job-Listing Aggregator](../../docs/projects/job-aggregator/index.md) project — a real, runnable scraper, dedupe, and keyword-alert pipeline over a small bundled sample dataset of "job board" HTML pages.
+The local companion to the course's [Build a Job-Listing Aggregator](https://pyda-course.online/projects/job-aggregator/) project — a real, runnable scraper, dedupe, and keyword-alert pipeline over a small bundled sample dataset of "job board" HTML pages.
 
 ## What's here
 
@@ -22,7 +22,7 @@ uv run python filter_alerts.py
 
 Run `filter_alerts.py` a second time without changing anything and it will report zero new matches — `seen.json` remembers what it already alerted on, the same way a real scheduled aggregator would.
 
-See the full [Build a Job-Listing Aggregator lesson](../../docs/projects/job-aggregator/index.md) for the step-by-step walkthrough, including how the dedupe key is chosen and how to extend this to a real, live source.
+See the full [Build a Job-Listing Aggregator lesson](https://pyda-course.online/projects/job-aggregator/) for the step-by-step walkthrough, including how the dedupe key is chosen and how to extend this to a real, live source.
 
 ## Built your own aggregator?
 

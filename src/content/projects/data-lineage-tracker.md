@@ -13,6 +13,7 @@ learningObjectives:
   - "Traverse the graph downstream and upstream with cycle guards"
   - "Run impact analysis that reports the dependency path to every affected asset"
   - "Render lineage as a Mermaid diagram or an indented terminal tree"
+author: abderrahim-adrabi
 ---
 
 # 🌊 Build a Data Lineage Tracker

@@ -14,6 +14,7 @@ learningObjectives:
   - "Generate a stepwise-varied melody that respects the seed's statistics"
   - "Derive triad chords from scale degrees and layer them as accompaniment"
   - "Write a real MIDI file with midiutil and verify it on disk"
+author: abderrahim-adrabi
 ---
 
 # 🛠️ 🎼 Build an AI Music Composer

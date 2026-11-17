@@ -6,6 +6,7 @@ estimatedMinutes: 45
 xpReward: 50
 tags: ["cli", "file-io", "json", "search"]
 prerequisites: ["Python basics (variables, loops, functions, dictionaries)", "Basic file I/O"]
+author: abderrahim-adrabi
 ---
 
 # Markdown Note-Taking App

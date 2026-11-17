@@ -14,6 +14,7 @@ prerequisites:
   - "Python basics (functions, sets, tuples)"
   - "asyncio basics (async def, await, asyncio.run, asyncio.gather)"
   - "A second terminal open for the live two-terminal demo"
+author: abderrahim-adrabi
 ---
 
 # 🛠️ 💬 Build a WebSocket Chat App

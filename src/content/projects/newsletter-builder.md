@@ -13,6 +13,7 @@ learningObjectives:
 prerequisites:
   - "Python basics (functions, loops, dictionaries)"
   - "CSV basics and installing packages with uv"
+author: abderrahim-adrabi
 ---
 
 # 🛠️ 📰 Build a Newsletter Builder

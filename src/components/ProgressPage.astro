@@ -6,7 +6,7 @@ import { computeGameStats } from '../lib/gamestats.ts';
 import { questById } from '../lib/badgeLabel.ts';
 import { getCollection } from 'astro:content';
 import {m} from '../paraglide/messages.js';
-import {learnHref, progressGuideHref, trackWord, type Locale} from '../lib/routeSegments';
+import {learnHref, progressGuideHref, trackWord, idInLocale, type Locale} from '../lib/routeSegments';
 
 interface Props {
   locale: Locale;
@@ -36,6 +36,7 @@ const MODULES = moduleMap(mods, lessons);
 // trail, and my trail is no longer conflated with my lesson count.
 const py = modulesReached('python-101', st);
 const da = modulesReached('data-analysis', st);
+const sts = modulesReached('statistics-101', st);
 
 function moduleMap(modEntries: typeof mods, lessonEntries: typeof lessons): Record<string, {lessons: string[]}[]> {
   const out: Record<string, {lessons: string[]}[]> = {};
@@ -54,6 +55,11 @@ function moduleMap(modEntries: typeof mods, lessonEntries: typeof lessons): Reco
   }
   return out;
 }
+/** How many lessons a section has in this locale, for the "N lessons" label. */
+function lessonTotal(section: string): string {
+  return String(lessons.filter((l) => idInLocale(locale, l.id) && l.id.includes(section)).length);
+}
+
 function modulesReached(section: string, s: {lessonsCompleted: Record<string, boolean>}): {done: number; total: number} {
   const list = MODULES[section] ?? [];
   const done = list.filter((m) => m.lessons.some((id) => s.lessonsCompleted[id])).length;
@@ -78,6 +84,7 @@ function trailStations(section: string, s: {lessonsCompleted: Record<string, boo
 }
 const pyModules = trailStations('python-101', st);
 const daModules = trailStations('data-analysis', st);
+const stsModules = trailStations('statistics-101', st);
 
 // ── Localized lookup tables (EN token → locale string) ───────────────────────
 const questLabels = Object.fromEntries(quests.map((q) => [q.id, questById[q.id] ? questById[q.id]() : q.label]));
@@ -109,6 +116,9 @@ const normTrack = trackWord(locale, 'normal');
 // Placeholder tokens are passed through untouched so the client's fmt()
 // replacer fills them in with live values.
 const i18nData = {
+  PORTABLE_EXPORTED: m.progress_portable_exported(),
+  PORTABLE_IMPORTED: m.progress_portable_imported({n: '{n}'}),
+  PORTABLE_FAILED: m.progress_portable_failed(),
   XP_UNIT: m.progress_xp_unit(),
   TO_NEXT: m.progress_to_next(),
   PCT_DONE: m.progress_pct_done({done: '{done}', total: '{total}'}),
@@ -147,7 +157,7 @@ const i18nData = {
 };
 ---
 
-<Base title={m.progress_page_title()} lang={locale} dir={dir} alternates={alternates}>
+<Base title={m.progress_page_title()} description={m.progress_page_description()} lang={locale} dir={dir} alternates={alternates}>
   <section class="hero">
     <div class="container head">
       <div class="head__eyebrow"><Icon name="trophy" size={16} /> {m.progress_eyebrow()}</div>
@@ -199,7 +209,7 @@ const i18nData = {
         <div class="trail__head">
           <div>
             <h2>🐍 {m.track_1_name()}</h2>
-            <span class="trail__meta">{m.progress_trail_python_meta()}</span>
+            <span class="trail__meta">{m.progress_trail_python_meta({n: lessonTotal('python-101')})}</span>
           </div>
           <span class="trail__pct" id="pct-python-101">{m.progress_pct_done({done: py.done, total: py.total})}</span>
         </div>
@@ -221,7 +231,7 @@ const i18nData = {
         <div class="trail__head">
           <div>
             <h2>📊 {m.track_2_name()}</h2>
-            <span class="trail__meta">{m.progress_trail_data_meta()}</span>
+            <span class="trail__meta">{m.progress_trail_data_meta({n: lessonTotal('data-analysis')})}</span>
           </div>
           <span class="trail__pct" id="pct-data-analysis">{m.progress_pct_done({done: da.done, total: da.total})}</span>
         </div>
@@ -237,6 +247,28 @@ const i18nData = {
           ))}
         </ol>
         <div class="trail__xp trail__xp--streak" id="xp-data-analysis">{m.progress_xp_earned({n: xpEarnedOn('data-analysis')})}</div>
+      </div>
+
+      <div class="trail">
+        <div class="trail__head">
+          <div>
+            <h2>🎲 {m.track_3_name()}</h2>
+            <span class="trail__meta">{m.progress_trail_stats_meta({n: lessonTotal('statistics-101')})}</span>
+          </div>
+          <span class="trail__pct" id="pct-statistics-101">{m.progress_pct_done({done: sts.done, total: sts.total})}</span>
+        </div>
+        <ol class="stations" data-track="statistics-101">
+          {stsModules.map(({w, done}) => (
+            <li class={`station${done ? ' station--done' : ''}`} data-week={w}>
+              <a class="station__link" href={learnHref(locale, base, 'statistics-101', normTrack)}>
+                <span class="station__dot"></span>
+                <span class="station__label">{m.module_label()} {w}</span>
+                <span class="station__check">✅</span>
+              </a>
+            </li>
+          ))}
+        </ol>
+        <div class="trail__xp" id="xp-statistics-101">{m.progress_xp_earned({n: xpEarnedOn('statistics-101')})}</div>
       </div>
     </div>
   </section>
@@ -398,6 +430,23 @@ const i18nData = {
     </div>
   </section>
 
+  <!-- Portable progress: a copyable code, so a cleared browser or a new
+       device does not mean losing everything. -->
+  <section class="container">
+    <div class="portable">
+      <h2>{m.progress_portable_heading()}</h2>
+      <p class="portable__lede">{m.progress_portable_lede()}</p>
+      <div class="portable__row">
+        <button type="button" class="btn btn-soft" id="progress-export">{m.progress_portable_export()}</button>
+        <button type="button" class="btn btn-ghost" id="progress-import">{m.progress_portable_import()}</button>
+      </div>
+      <label class="portable__label" for="progress-code">{m.progress_portable_label()}</label>
+      <textarea id="progress-code" class="portable__code" rows="3" spellcheck="false"
+        placeholder={m.progress_portable_placeholder()}></textarea>
+      <p class="portable__status" id="progress-portable-status" role="status" aria-live="polite"></p>
+    </div>
+  </section>
+
   <!-- How progress is computed -->
   <section class="container">
     <a class="guide-link" href={progressGuideHref(locale, base)}>
@@ -412,7 +461,7 @@ const i18nData = {
 
   <div id="progress-i18n" hidden>{JSON.stringify(i18nData).replace(/</g, '\u003c')}</div>
   <script>
-    import {xpProgress, questsToShow, streakProgress, rankFor, RANK_EMOJIS, getActivityLog, getActivityStats, loadState} from '../lib/gameState.ts';
+    import {xpProgress, questsToShow, streakProgress, rankFor, RANK_EMOJIS, getActivityLog, getActivityStats, loadState, exportProgress, importProgress} from '../lib/gameState.ts';
     import {computeGameStats} from '../lib/gamestats.ts';
     import {setPctWidth} from '../lib/pctWidth.ts';
 
@@ -622,6 +671,29 @@ const i18nData = {
     // event fires first.
     document.addEventListener('astro:page-load', render);
     if (document.readyState === 'complete') render();
+
+    // Portable progress: copy the code out, paste it back later.
+    const portableCode = document.getElementById('progress-code') as HTMLTextAreaElement | null;
+    const portableStatus = document.getElementById('progress-portable-status');
+    const setStatus = (msg: string) => { if (portableStatus) portableStatus.textContent = msg; };
+    document.getElementById('progress-export')?.addEventListener('click', () => {
+      if (!portableCode) return;
+      portableCode.value = exportProgress();
+      portableCode.select();
+      setStatus(I18N.PORTABLE_EXPORTED ?? '');
+    });
+    document.getElementById('progress-import')?.addEventListener('click', () => {
+      if (!portableCode) return;
+      const result = importProgress(portableCode.value);
+      if (result.ok) {
+        setStatus((I18N.PORTABLE_IMPORTED ?? '').replace('{n}', result.summary));
+        // Reload so every rendered number reflects the merged state.
+        setTimeout(() => location.reload(), 900);
+      } else {
+        setStatus(I18N.PORTABLE_FAILED ?? '');
+      }
+    });
+
   </script>
 </Base>
 
@@ -711,30 +783,42 @@ const i18nData = {
   .diag__name { font-size: .85rem; font-weight: 600; }
   .diag__bar { height: 10px; background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--radius-sm); overflow: hidden; }
   .diag__fill { height: 100%; border-radius: var(--radius-sm); background: linear-gradient(90deg, var(--accent), var(--accent-strong)); transition: width .8s cubic-bezier(.4,0,.2,1); }
-  .diag__val { font-weight: 800; font-size: .85rem; text-align: right; color: var(--accent); }
+  .diag__val { font-weight: 800; font-size: .85rem; text-align: end; color: var(--accent); }
   .report__empty { text-align: center; padding: 1.5rem 1rem; }
   .report__empty[hidden] { display: none; }
   .report__empty-icon { font-size: 2.2rem; display: block; margin-bottom: .4rem; }
   .report__empty h2 { margin: 0 0 .35rem; font-size: 1.25rem; }
   .report__empty p { color: var(--ink-soft); margin: 0 auto 1rem; max-width: 46ch; font-size: .9rem; }
   .report__footnote { color: var(--ink-soft); font-size: .82rem; border-top: 1px dashed var(--line); padding-top: .8rem; margin-top: 1rem; }
+  /* The card is the page's last block, in a bare container section: without a
+     top margin it butts against the block above, and the bottom margin has to
+     clear the footer rather than the page edge. */
   .guide-link {
     display: flex; align-items: center; gap: .9rem; text-decoration: none;
     background: var(--surface); border: 1px solid var(--line);
-    border-radius: var(--radius-lg); padding: 1.1rem 1.25rem; margin-bottom: 3rem;
+    border-radius: var(--radius-lg); padding: 1.35rem 1.5rem;
+    margin: 2.5rem 0 3.5rem;
     box-shadow: var(--shadow-sm); transition: border-color .15s ease, box-shadow .15s ease;
+    flex-wrap: wrap;
   }
   .guide-link:hover, .guide-link:focus-visible {
     border-color: var(--accent); box-shadow: var(--shadow-md); outline: none;
   }
-  .guide-link__icon { font-size: 1.4rem; }
-  .guide-link__body { display: flex; flex-direction: column; gap: .15rem; min-width: 0; }
+  .guide-link__icon { font-size: 1.5rem; flex: none; }
+  .guide-link__body { display: flex; flex-direction: column; gap: .25rem; min-width: 12ch; flex: 1 1 60%; }
   .guide-link__heading { font-weight: 700; color: var(--ink); }
-  .guide-link__lede { color: var(--ink-soft); font-size: .85rem; line-height: 1.5; }
-  .guide-link__cta { margin-inline-start: auto; color: var(--accent); font-weight: 700; font-size: .9rem; white-space: nowrap; }
+  .guide-link__lede { color: var(--ink-soft); font-size: .87rem; line-height: 1.55; }
+  .guide-link__cta {
+    margin-inline-start: auto; color: var(--accent); font-weight: 700;
+    font-size: .9rem; white-space: nowrap; padding-inline-start: 1rem;
+  }
+  @media (max-width: 640px) {
+    .guide-link { padding: 1.1rem 1.15rem; }
+    .guide-link__cta { margin-inline-start: 0; padding-inline-start: 0; }
+  }
   .kpi { position: relative; }
   .kpi__hint {
-    position: absolute; top: .4rem; right: .4rem; width: 16px; height: 16px; border-radius: 50%;
+    position: absolute; top: .4rem; inset-inline-end: .4rem; width: 16px; height: 16px; border-radius: 50%;
     background: var(--surface-2); color: var(--ink-soft); font-size: .65rem; font-weight: 800;
     display: inline-flex; align-items: center; justify-content: center; cursor: help;
     border: 1px solid var(--line);
@@ -779,6 +863,22 @@ const i18nData = {
   }
   .actlog__item:hover { background: var(--accent-soft); }
   .actlog__icon { font-size: 1rem; }
+  .portable {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius-lg); padding: 1.2rem 1.3rem; box-shadow: var(--shadow-sm);
+  }
+  .portable h2 { margin: 0 0 .35rem; font-size: 1.15rem; }
+  .portable__lede { margin: 0 0 .9rem; color: var(--ink-soft); font-size: .92rem; }
+  .portable__row { display: flex; gap: .55rem; flex-wrap: wrap; margin-bottom: .9rem; }
+  .portable__label { display: block; font-size: .82rem; font-weight: 700; color: var(--ink-soft); margin-bottom: .3rem; }
+  .portable__code {
+    width: 100%; box-sizing: border-box; resize: vertical;
+    font-family: var(--font-mono, ui-monospace, monospace); font-size: .76rem;
+    padding: .6rem .7rem; border-radius: var(--radius-md);
+    border: 1px solid var(--line); background: var(--bg); color: var(--ink);
+    word-break: break-all;
+  }
+  .portable__status { margin: .5rem 0 0; font-size: .85rem; color: var(--ink-soft); min-height: 1.2em; }
   .actlog__label { font-weight: 600; color: var(--ink); }
   .actlog__xp { font-weight: 800; color: var(--accent); font-variant-numeric: tabular-nums; }
   .actlog__time { color: var(--ink-soft); font-size: .72rem; font-variant-numeric: tabular-nums; }

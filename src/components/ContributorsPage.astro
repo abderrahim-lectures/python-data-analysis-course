@@ -1,0 +1,257 @@
+---
+// Shared contributors page: who has written for this course, and what they
+// wrote. Every locale's route is a thin wrapper passing `locale`.
+//
+// The page is built from two declarations rather than from git history:
+// `author:` in each project's frontmatter, and the people registry in
+// src/lib/contributors.ts. See that file for why derived authorship does not
+// work for this repo.
+import type {CollectionEntry} from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Icon from './Icon.astro';
+import {m} from '../paraglide/messages.js';
+import {projectsHref, contributorsGuideHref, navWordAlternates, type Locale} from '../lib/routeSegments';
+import {CONTRIBUTORS, contributorProfileUrl} from '../lib/contributors';
+
+interface Props {
+  locale: Locale;
+  /** Every project entry (all locales); the page keeps the English ones. */
+  projects: CollectionEntry<'projects'>[];
+}
+
+const {locale, projects: allProjects} = Astro.props;
+const dir = locale === 'ar' ? 'rtl' : 'ltr';
+const base = import.meta.env.BASE_URL;
+
+// Authorship is declared once, on the English file -- a translated twin is a
+// translation, not a separate contribution. But the *display* copy should be
+// the reader's language, so each entry is joined to its localized twin by id
+// for the title and description, falling back to English when there is none.
+// Before this the Arabic page listed 135 English project titles under an
+// otherwise fully translated page.
+const isEn = (id: string) => !/^(ar|es|fr)\//.test(id);
+const bareSlug = (id: string) => id.replace(/^(ar|es|fr)\//, '').replace(/^\/?projects?\//, '');
+
+const localizedCopy = new Map<string, {title: string; description: string}>();
+if (locale !== 'en') {
+  for (const p of allProjects) {
+    if (!p.id.startsWith(`${locale}/`)) continue;
+    localizedCopy.set(bareSlug(p.id), {title: p.data.title, description: p.data.description});
+  }
+}
+
+const authored = allProjects
+  .filter((p) => isEn(p.id) && p.data.author)
+  .map((p) => {
+    const slug = bareSlug(p.id);
+    const local = localizedCopy.get(slug);
+    return {
+      slug,
+      title: local?.title ?? p.data.title,
+      description: local?.description ?? p.data.description,
+      author: p.data.author as string,
+      tags: p.data.tags,
+    };
+  })
+  .sort((a, b) => a.title.localeCompare(b.title, locale));
+
+// People in registry order, each with the projects they wrote, most recent
+// contribution ordering irrelevant -- alphabetical by title reads better as a
+// list. A contributor with no projects yet is still shown: they may have
+// written lesson content, and an empty "projects" section is honest.
+const people = CONTRIBUTORS.map((c) => ({
+  contributor: c,
+  projects: authored.filter((p) => p.author === c.id),
+  profile: contributorProfileUrl(c),
+}));
+
+// An author id with no registry entry would silently drop a credit, so it is
+// surfaced here rather than swallowed. tests/unit/contributors.test.ts fails
+// the build's test run on the same condition.
+const knownIds = new Set(CONTRIBUTORS.map((c) => c.id));
+const unresolved = [...new Set(authored.map((p) => p.author))].filter((id) => !knownIds.has(id));
+
+const alternates = navWordAlternates('contributors');
+---
+
+<Base
+  title={m.contributors_title()}
+  description={m.contributors_description()}
+  lang={locale}
+  dir={dir}
+  alternates={alternates}
+>
+  <section class="container contributors">
+    <header class="contributors__head">
+      <p class="contributors__eyebrow">{m.contributors_eyebrow()}</p>
+      <h1>{m.contributors_heading()}</h1>
+      <p class="contributors__intro">{m.contributors_intro()}</p>
+    </header>
+
+    <ul class="contributors__list" role="list">
+      {people.map(({contributor, projects, profile}) => (
+        <li class="contributor" id={contributor.id}>
+          <div class="contributor__head">
+            <span class="contributor__avatar" aria-hidden="true">
+              {contributor.name.slice(0, 1).toUpperCase()}
+            </span>
+            <div class="contributor__who">
+              <h2>
+                {profile ? (
+                  <a href={profile} target="_blank" rel="noopener noreferrer">{contributor.name}</a>
+                ) : (
+                  contributor.name
+                )}
+              </h2>
+              {contributor.role && <p class="contributor__role">{contributor.role}</p>}
+            </div>
+          </div>
+
+          {projects.length > 0 ? (
+            // The list is collapsed by default: the page's job is to say who
+            // took part and how much, and a card per project made every
+            // contributor push everyone else off the screen. A native
+            // <details> gives the disclosure keyboard and screen-reader
+            // behaviour for free, and needs no JavaScript on a static page.
+            <div class="contributor__actions">
+              <span class="contributor__count">
+                {projects.length === 1
+                  ? m.contributors_project_count_one({count: '1'})
+                  : m.contributors_project_count_many({count: String(projects.length)})}
+              </span>
+              <details class="contributor__disclosure">
+                <summary class="contributor__toggle">
+                  <span class="contributor__toggle-view">{m.contributors_view_projects()}</span>
+                  <span class="contributor__toggle-hide">{m.contributors_hide_projects()}</span>
+                </summary>
+                <ul class="contributor__projects" role="list">
+                  {projects.map((p) => (
+                    <li>
+                      <a href={projectsHref(locale, base, p.slug)}>
+                        <span class="contributor__project-title">{p.title}</span>
+                        <span class="contributor__project-desc">{p.description}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            </div>
+          ) : (
+            <p class="contributor__empty">{m.contributors_no_projects()}</p>
+          )}
+        </li>
+      ))}
+    </ul>
+
+    {unresolved.length > 0 && (
+      <p class="contributors__warning" role="status">
+        {m.contributors_unresolved({ids: unresolved.join(', ')})}
+      </p>
+    )}
+
+    <section class="contributors__cta">
+      <h2>{m.contributors_join_heading()}</h2>
+      <p>{m.contributors_join_body()}</p>
+      <div class="contributors__cta-actions">
+        <a class="btn btn-primary" href={contributorsGuideHref(locale, base)}>
+          <Icon name="code" size={15} /> {m.contributors_join_guide_cta()}
+        </a>
+        <a class="btn btn-ghost" href={projectsHref(locale, base)}>
+          <Icon name="globe" size={15} /> {m.nav_projects()}
+        </a>
+      </div>
+    </section>
+  </section>
+</Base>
+
+<style>
+  .contributors { padding-block: 2.5rem 3.5rem; max-width: 78ch; }
+  .contributors__head { margin-bottom: 2rem; }
+  .contributors__eyebrow {
+    text-transform: uppercase; letter-spacing: .08em; font-size: .72rem;
+    font-weight: 800; color: var(--accent-text); margin: 0 0 .5rem;
+  }
+  .contributors h1 { font-size: clamp(1.9rem, 4.4vw, 2.8rem); margin: 0 0 .6rem; line-height: 1.15; }
+  .contributors__intro { color: var(--ink-soft); margin: 0; font-size: 1.02rem; }
+
+  .contributors__list { list-style: none; padding: 0; margin: 0 0 2rem; display: flex; flex-direction: column; gap: 1.1rem; }
+  .contributor {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius-lg); padding: 1.15rem 1.25rem;
+    box-shadow: var(--shadow-sm);
+  }
+  .contributor__head { display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; }
+  .contributor__avatar {
+    flex: none; width: 2.5rem; height: 2.5rem; border-radius: 50%;
+    display: grid; place-items: center; font-weight: 800; font-size: 1.05rem;
+    background: var(--accent-soft); color: var(--accent-text);
+    border: 1px solid color-mix(in srgb, var(--accent) 24%, transparent);
+  }
+  .contributor__who { flex: 1 1 auto; min-width: 0; }
+  .contributor__who h2 { font-size: 1.15rem; margin: 0; line-height: 1.25; }
+  .contributor__who h2 a { color: inherit; text-decoration: none; }
+  .contributor__who h2 a:hover { color: var(--accent-text); text-decoration: underline; }
+  .contributor__role { margin: .15rem 0 0; color: var(--ink-soft); font-size: .88rem; }
+  .contributor__count {
+    flex: none; font-size: .74rem; font-weight: 800; color: var(--ink-soft);
+    background: var(--bg-soft); border-radius: 999px; padding: .25rem .7rem;
+  }
+
+  /* Disclosure: collapsed by default, so the page shows people and counts
+     first and project detail only when asked for. */
+  /* Count and toggle share a row so the card reads "136 projects  [View projects]"
+     instead of stacking a pill above a button with a gap between. */
+  .contributor__disclosure { margin-top: .9rem; }
+  .contributor__actions { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; }
+  @media (max-width: 480px) {
+    /* Full-width target on a phone; the pill stays inline to its left. */
+    .contributor__toggle { justify-content: center; }
+  }
+  .contributor__toggle {
+    display: inline-flex; align-items: center; gap: .4rem;
+    cursor: pointer; list-style: none;
+    font-size: .84rem; font-weight: 700; color: var(--accent-text);
+    /* 44px tall: a touch target, not a text chip. */
+    min-height: 44px; padding: .55rem .95rem; border-radius: 999px;
+    background: var(--accent-soft);
+    border: 1px solid color-mix(in srgb, var(--accent) 24%, transparent);
+  }
+  .contributor__toggle::-webkit-details-marker { display: none; }
+  .contributor__toggle::after {
+    content: ''; width: .42rem; height: .42rem;
+    border-right: 2px solid currentColor; border-bottom: 2px solid currentColor;
+    transform: rotate(45deg) translateY(-1px); transition: transform .15s ease;
+  }
+  .contributor__disclosure[open] > .contributor__toggle::after {
+    transform: rotate(-135deg) translateY(-1px);
+  }
+  .contributor__toggle:hover { filter: brightness(.96); }
+  .contributor__toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .contributor__toggle-hide { display: none; }
+  .contributor__disclosure[open] .contributor__toggle-view { display: none; }
+  .contributor__disclosure[open] .contributor__toggle-hide { display: inline; }
+
+  .contributor__projects { list-style: none; padding: 0; margin: .9rem 0 0; display: grid; gap: .5rem; }  .contributor__projects a {
+    display: flex; flex-direction: column; gap: .15rem;
+    padding: .6rem .75rem; border-radius: var(--radius-md);
+    border: 1px solid var(--line); text-decoration: none; color: inherit;
+    transition: border-color .15s ease, background .15s ease;
+  }
+  .contributor__projects a:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .contributor__project-title { font-weight: 700; font-size: .95rem; }
+  .contributor__project-desc { color: var(--ink-soft); font-size: .84rem; line-height: 1.45; }
+  .contributor__empty { margin: .9rem 0 0; color: var(--ink-faint); font-size: .88rem; }
+
+  .contributors__warning {
+    border: 1px solid var(--warn); background: var(--warn-soft);
+    border-radius: var(--radius-md); padding: .7rem .9rem; font-size: .86rem;
+  }
+
+  .contributors__cta {
+    border: 1px solid var(--line); border-radius: var(--radius-lg);
+    padding: 1.3rem 1.35rem; background: var(--bg-soft);
+  }
+  .contributors__cta h2 { margin: 0 0 .4rem; font-size: 1.2rem; }
+  .contributors__cta p { margin: 0 0 1rem; color: var(--ink-soft); font-size: .93rem; }
+  .contributors__cta-actions { display: flex; flex-wrap: wrap; gap: .6rem; }
+</style>

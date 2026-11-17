@@ -15,6 +15,7 @@ learningObjectives:
   - "Search across authors, titles, and venues with substring matching"
   - "Find missing and unused references with set difference"
   - "Detect near-duplicates by normalized title and generate a sorted References section"
+author: abderrahim-adrabi
 ---
 
 # 🛠️ 📚 Build a Citation Manager

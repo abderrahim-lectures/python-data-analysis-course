@@ -5,7 +5,7 @@
 [![Open In Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/ai-agent/notebook.ipynb)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fai-agent%2Fnotebook.ipynb)
 
-A real, runnable "course study assistant" agent — the fuller version of the one built step by step in the course's [Capstone Bonus](../../docs/bonus/2026-ai-agent/index.md), built with LangChain's [`deepagents`](https://github.com/langchain-ai/deepagents) and your choice of free-tier API provider.
+A real, runnable "course study assistant" agent — the fuller version of the one built step by step in the course's [Capstone Bonus](https://pyda-course.online/projects/ai-agent/), built with LangChain's [`deepagents`](https://github.com/langchain-ai/deepagents) and your choice of free-tier API provider.
 
 ## Objective
 
@@ -21,7 +21,7 @@ This is the difference between a chatbot that might hallucinate an answer and an
 
 **You're free to use whichever free-tier provider you like** — this isn't locked to any one of them. Six are wired up already: **GitHub Models** (the default — no separate signup, uses a GitHub account you already have), Gemini, Groq, Mistral, Cerebras, and OpenRouter.
 
-1. **Get a free-tier API key** from your chosen provider — see the table in the [Capstone Bonus doc](../../docs/bonus/2026-ai-agent/index.md#step-2-get-a-free-ai-api-key) for where to get one for each.
+1. **Get a free-tier API key** from your chosen provider — see the table in the [Capstone Bonus doc](https://pyda-course.online/projects/ai-agent/#step-2-get-a-free-ai-api-key) for where to get one for each.
 2. **Copy `.env.example` to `.env`** and fill in the key for your provider (and `LLM_PROVIDER` if you're not using the default):
    ```bash
    cp .env.example .env
@@ -50,7 +50,7 @@ print(final_answer(result))  # just the final text answer
 ## Running it without any local install
 
 Prefer not to install anything at all? [`notebook.ipynb`](./notebook.ipynb) in this folder is a Colab/Kaggle/Binder-friendly
-version of this same agent (the toy tools + `create_deep_agent` setup from the [project doc](../../docs/projects/ai-agent/index.md#step-4-write-your-first-agent),
+version of this same agent (the toy tools + `create_deep_agent` setup from the [project doc](https://pyda-course.online/projects/ai-agent/#step-4-write-your-first-agent),
 not the fuller `docs`/`static/datasets`-searching tools above, since those need a real repo checkout). Click a badge above to launch it directly in your browser —
 it installs its own dependencies and prompts for your API key with `getpass`, so no `.env` file or local setup is needed.
 
@@ -65,8 +65,8 @@ uv run python agent.py
 
 ## A note on staying current
 
-Model names and library APIs in this space change fast — the model ID and `create_deep_agent()` call here were both verified against a live run while writing this example, but may have drifted by the time you read this. See the callout in the [Capstone Bonus doc](../../docs/bonus/2026-ai-agent/index.md#step-4-write-your-first-agent) for what to check before relying on this code.
+Model names and library APIs in this space change fast — the model ID and `create_deep_agent()` call here were both verified against a live run while writing this example, but may have drifted by the time you read this. See the callout in the [Capstone Bonus doc](https://pyda-course.online/projects/ai-agent/#step-4-write-your-first-agent) for what to check before relying on this code.
 
 ## Built your own agent for the capstone?
 
-See [`examples/student-projects/`](../student-agents/) for how to share it with the class via a pull request — no git experience required, it walks through every step.
+See [`examples/student-projects/`](../student-projects/) for how to share it with the class via a pull request — no git experience required, it walks through every step.

@@ -2,6 +2,7 @@
 title: "Build a Rate-Limited API Service"
 description: "Graduate from the in-browser playground to real Python: build a FastAPI service wrapping your own dataset, with genuine API-key auth and a rate limiter you build from scratch."
 difficulty: "intermediate"
+author: abderrahim-adrabi
 ---
 
 # 🌐 Build a Rate-Limited API Service

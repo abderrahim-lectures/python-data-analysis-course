@@ -18,6 +18,7 @@
   --streak: #ff9600;
   --streak-deep: #cc7a00;
   --streak-glow: rgba(255, 150, 0, 0.35);
+  --streak-soft: rgba(255, 150, 0, 0.14);
   /* --streak/--xp are fill colours; they fail AA as text, so text uses these. */
   --streak-text: #8f4e00;
   --xp-text: #8a5a06;
@@ -31,6 +32,9 @@
   --bad-text: #b91c1c;
   --bad-soft: rgba(244, 63, 94, 0.1);
   --warn: #f59e0b;
+  /* --warn is a fill colour (#f59e0b is 2.15:1 on white, 1.93:1 on
+     --warn-soft); warning *text* uses this, like --success-text above. */
+  --warn-text: #8a4b00;
   --warn-soft: rgba(245, 158, 11, 0.12);
   /* Shape language */
   --radius-lg: 16px;
@@ -73,6 +77,7 @@
   --streak: #fb923c;
   --streak-deep: #ea580c;
   --streak-glow: rgba(251, 146, 60, .4);
+  --streak-soft: rgba(251, 146, 60, .18);
   --streak-text: #fb923c;
   --xp-text: #fcd34d;
   --success-text: #6ee7a0;
@@ -85,6 +90,7 @@
   --bad-text: #fca5a5;
   --bad-soft: rgba(251, 113, 133, .14);
   --warn: #fbbf24;
+  --warn-text: #fcd34d;
   --warn-soft: rgba(251, 191, 36, .16);
   --shadow-tactile: 0 4px 0 rgba(0,0,0,.2), 0 6px 16px rgba(0,0,0,.3);
   --shadow-tactile-hover: 0 4px 0 rgba(0,0,0,.2), 0 8px 24px rgba(0,0,0,.4);
@@ -254,19 +260,25 @@ button { font-family: inherit; cursor: pointer; }
 .footer__logo { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: var(--radius-sm); background: var(--accent); color: var(--accent-contrast); }
 .footer__tagline { color: var(--ink-soft); font-size: .85rem; line-height: 1.5; margin: 0; max-width: 26ch; }
 .footer__col { display: flex; flex-direction: column; gap: .6rem; }
-.footer__col h3 { display: flex; align-items: center; gap: .35rem; font-size: .76rem; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--ink); margin: 0 0 .2rem; }
-.footer__col h3 .ic { color: var(--accent); }
+.footer__col h2 { display: flex; align-items: center; gap: .35rem; font-size: .76rem; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--ink); margin: 0 0 .2rem; }
+.footer__col h2 .ic { color: var(--accent); }
 .footer__col a { color: var(--ink-soft); text-decoration: none; font-size: .9rem; width: fit-content; transition: color var(--transition-fast), transform var(--transition-fast); }
 .footer__col a:hover { color: var(--accent); transform: translateX(2px); }
 .footer__bottom { padding-block: 1.25rem; border-top: 1px solid var(--line); color: var(--ink-faint); font-size: .82rem; display: flex; flex-wrap: wrap; gap: .75rem 2rem; align-items: center; justify-content: space-between; }
 .footer__bottom p { margin: 0; }
+/* "Supported by Open Math Model" -- a real credit, so it reads as text with a
+   link, not as a badge; sits between the copyright and the consent card and
+   wraps to its own line on narrow screens rather than squeezing them. */
+.footer__support { display: inline-flex; align-items: center; gap: .4rem; color: var(--ink-soft); text-decoration: none; font-weight: 600; }
+.footer__support .ic { color: var(--accent); }
+.footer__support:hover { color: var(--accent-text); text-decoration: underline; }
 .consent-card { display: flex; align-items: center; gap: 1rem; padding: .55rem .9rem; border: 1px solid var(--line); border-radius: 12px; background: color-mix(in srgb, var(--accent) 6%, transparent); }
 .consent-card__text { display: flex; flex-direction: column; gap: .1rem; }
 .consent-card__text span { display: inline-flex; align-items: center; gap: .35rem; color: var(--ink); font-weight: 700; font-size: .82rem; }
 .consent-card__text span .ic { color: var(--accent); }
 .consent-card__text p { color: var(--ink-soft); font-size: .74rem; line-height: 1.45; max-width: 34ch; }
 .switch { position: relative; display: inline-block; width: 44px; height: 24px; flex: none; cursor: pointer; }
-.switch input { position: absolute; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
+.switch input { position: absolute; opacity: 0; width: 100%; height: 100%; cursor: pointer; box-sizing: border-box; border: 0; padding: 0; margin: 0; }
 .switch__track { position: absolute; inset: 0; border-radius: 999px; background: var(--line); transition: background var(--transition-fast); }
 .switch__thumb { position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.25); transition: transform var(--transition-fast); }
 .switch input:checked + .switch__track { background: var(--accent); }
@@ -311,7 +323,7 @@ button { font-family: inherit; cursor: pointer; }
 .onboarding__close:hover { color: var(--ink); background: var(--surface-2); }
 .onboarding__title {
   font-size: .95rem; font-weight: 800; color: var(--ink-hi);
-  margin: 0 1.5rem .6rem 0; display: flex; align-items: center; gap: .4rem;
+  margin: 0; margin-inline-end: 1.5rem; margin-block-end: .6rem; display: flex; align-items: center; gap: .4rem;
 }
 .onboarding__steps { display: flex; flex-direction: column; gap: .3rem; margin: 0 0 .8rem; padding: 0; list-style: none; }
 .onboarding__step {
@@ -333,7 +345,7 @@ button { font-family: inherit; cursor: pointer; }
 }
 
 /* === Floating XP toast === */
-.xp-toast-container { position: fixed; top: 72px; right: 1rem; z-index: 100; display: flex; flex-direction: column; gap: .4rem; pointer-events: none; }
+.xp-toast-container { position: fixed; top: 72px; inset-inline-end: 1rem; z-index: 100; display: flex; flex-direction: column; gap: .4rem; pointer-events: none; }
 .floating-xp {
   display: inline-flex; align-items: center; gap: .35rem;
   background: linear-gradient(135deg, var(--accent), var(--accent-strong));
@@ -463,7 +475,30 @@ button { font-family: inherit; cursor: pointer; }
    SectionLanding independently picked different CSS variable names for
    the same three difficulty tiers. */
 .diff-text-beginner { color: var(--success-text); } .diff-text-intermediate { color: var(--streak-text); } .diff-text-advanced { color: var(--bad-text); }
-.diff-color-beginner { color: var(--success); } .diff-color-intermediate { color: var(--streak-text); } .diff-color-advanced { color: var(--bad); }
+/* Fill colours as text fail AA on --surface (--success 2.09:1, --bad 3.67:1
+   in light mode), so these use the text-safe variants. The -color- names are
+   kept because every call site already uses them. */
+.diff-color-beginner { color: var(--success-text); } .diff-color-intermediate { color: var(--streak-text); } .diff-color-advanced { color: var(--bad-text); }
+
+/* Status pills. `.badge` and its modifiers are used on four pages (the rank
+   pill on the homepage and progress page, the quest and activity counters, the
+   XP and lesson-count pills on the learn hub, earned/locked milestones) and
+   were never defined anywhere -- every one of them rendered as unstyled inline
+   text. Colors follow the same rule as the difficulty labels above: text-safe
+   variables, never the fill colors. */
+.badge {
+  display: inline-flex; align-items: center; gap: .3rem;
+  padding: .18rem .55rem; border-radius: var(--radius-pill);
+  font-size: .72rem; font-weight: 800; line-height: 1.6;
+  white-space: nowrap; vertical-align: middle;
+  background: var(--bg-soft); color: var(--ink-soft);
+  border: 1px solid transparent;
+}
+.badge--xp { background: var(--warn-soft); color: var(--xp-text); }
+.badge--streak { background: var(--streak-soft); color: var(--streak-text); }
+.badge--accent { background: var(--accent-soft); color: var(--accent-text); }
+.badge--success { background: var(--success-soft); color: var(--success-text); }
+.badge--locked { background: var(--bg-soft); color: var(--ink-faint); opacity: .75; }
 
 /* === Animations === */
 @keyframes fade-in { from{opacity:0} to{opacity:1} }
@@ -510,11 +545,14 @@ button { font-family: inherit; cursor: pointer; }
 /* backwards (not both) so the retained end-state transform doesn't make #main a
    containing block — that would pin position:fixed descendants like the lesson
    editor FAB to the document flow instead of the viewport. */
+/* The skip link targets #main, and a sticky 64px .topnav covers the top of
+   whatever the browser scrolls into view -- so the first lines of the content
+   a keyboard user just asked for sat under the nav. Applies to :target anchors
+   for the same reason (lesson headings, footnotes). */
+#main { scroll-margin-top: calc(var(--nav-h) + 1rem); }
 #main { animation: page-in .35s cubic-bezier(.16,1,.3,1) backwards; }
 
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
-}
+/* (reduced-motion block consolidated at the end of this file) */
 /* === Missing classes === */
 
 /* Note callout */
@@ -630,6 +668,16 @@ button { font-family: inherit; cursor: pointer; }
    client-side, so it's styled here with the rest of the cell chrome. */
 .cell__copy { margin-left: .5rem; }
 
+/* Stop control, inside the busy overlay (which carries transition:persist so
+   it survives soft navigation). It is a child of the overlay rather than a
+   separate fixed element: the overlay is `inset: 0` with pointer-events auto,
+   so anything underneath it is unreachable, and a sibling with a higher
+   z-index would disappear on navigation while the overlay stayed. The .btn
+   display rule would beat the [hidden] attribute, so hidden is restored
+   explicitly. */
+.run-stop[hidden] { display: none; }
+.run-stop { margin-top: .9rem; }
+
 /* === Generic (non-runnable) fenced code blocks, e.g. shell/output snippets === */
 .lesson-content pre:not(.cell__code):not([data-runnable] pre) {
   margin: 1.25rem 0;
@@ -672,9 +720,9 @@ button { font-family: inherit; cursor: pointer; }
 .admonition--tip { border-inline-start-color: var(--success); background: var(--success-soft); }
 .admonition--tip .admonition__title { color: var(--success-text); }
 .admonition--warning { border-inline-start-color: var(--warn); background: var(--warn-soft); }
-.admonition--warning .admonition__title { color: var(--warn); }
+.admonition--warning .admonition__title { color: var(--warn-text); }
 .admonition--danger { border-inline-start-color: var(--bad); background: var(--bad-soft); }
-.admonition--danger .admonition__title { color: var(--bad); }
+.admonition--danger .admonition__title { color: var(--bad-text); }
 .admonition--note { border-inline-start-color: var(--accent); background: var(--accent-soft); }
 
 /* === Lesson content tables === */
@@ -786,7 +834,7 @@ button { font-family: inherit; cursor: pointer; }
 .quiz-q--answered .quiz-q__opt { cursor: default; pointer-events: none; }
 .quiz-q__opt--correct { border-color: var(--success); background: var(--success-soft); color: var(--success-text); font-weight: 700; }
 .quiz-q__opt--wrong { border-color: var(--bad); background: var(--bad-soft); color: var(--bad); }
-.quiz-q__feedback { margin: .5rem 0 0; font-size: .88rem; font-weight: 700; color: var(--bad); }
+.quiz-q__feedback { margin: .5rem 0 0; font-size: .88rem; font-weight: 700; color: var(--bad-text); }
 .quiz-q__feedback--correct { color: var(--success-text); }
 .quiz__summary { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--line); font-weight: 800; }
 
@@ -795,14 +843,14 @@ button { font-family: inherit; cursor: pointer; }
 .katex { color: var(--ink-hi); }
 
 /* Mark-complete control on every lesson week (not just the last one). */
-.lesson-nav__done.is-done { background: var(--success, #16a34a); color: #fff; cursor: default; opacity: 1; }
+.lesson-nav__done.is-done { background: var(--success-soft); color: var(--success-text); border-color: var(--success); cursor: default; opacity: 1; }
 .lesson-nav__done:disabled { cursor: default; }
 .btn:disabled { opacity: .5; cursor: not-allowed; filter: grayscale(.4); transform: none; }
 .btn:disabled:hover { transform: none; filter: grayscale(.4); }
 
 /* Skip link — keyboard users hit ~6 nav stops before content on every page. */
 .skip-link {
-  position: absolute; left: .5rem; top: -100px; z-index: 300;
+  position: absolute; inset-inline-start: .5rem; top: -100px; z-index: 300;
   background: var(--accent); color: var(--accent-contrast);
   padding: .6rem 1rem; border-radius: var(--radius-md); font-weight: 700;
   transition: top var(--transition-fast);
@@ -943,7 +991,7 @@ main:focus { outline: none; }
 .hero__termbar span { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,.22); }
 .hero__termbar span:nth-child(1) { background: var(--bad); }
 .hero__termbar span:nth-child(2) { background: var(--warn); }
-.hero__termbar span:nth-child(3) { background: var(--good); }
+.hero__termbar span:nth-child(3) { background: var(--success); }
 .hero__termbody { padding: 1.1rem 1.2rem; display: flex; flex-direction: column; gap: .5rem; font-family: var(--font-mono); font-size: .88rem; line-height: 1.6; }
 .hero__termbody .t-soft { color: #a89ec4; }
 .hero__termbody .t-prompt { color: var(--accent); font-weight: 700; }
@@ -987,6 +1035,10 @@ main:focus { outline: none; }
   .particle { display: none !important; }
   .lvlup { display: none !important; }
   .floating-xp { animation: none !important; opacity: 1 !important; }
+  /* Cards in the project grid use animation-fill-mode: both with a staggered
+     delay up to 220ms, so collapsing only the duration still left them
+     invisible for that long. */
+  .card { animation-delay: 0s !important; animation: none !important; }
 }
 
 /* === Mobile touch target minimum (44×44px WCAG 2.5.8) === */

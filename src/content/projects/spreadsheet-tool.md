@@ -6,6 +6,7 @@ difficulty: beginner
 estimatedMinutes: 45
 xpReward: 50
 prerequisites: ["Python basics (variables, loops, functions, dictionaries)", "Basic pandas"]
+author: abderrahim-adrabi
 ---
 
 # Spreadsheet Processor

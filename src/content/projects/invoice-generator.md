@@ -10,6 +10,7 @@ learningObjectives:
   - "Calculate subtotals, taxes, and totals automatically"
   - "Track payment status and due dates for generated invoices"
 prerequisites: ["Python 101"]
+author: abderrahim-adrabi
 ---
 
 # 🧾 Build an Invoice Generator

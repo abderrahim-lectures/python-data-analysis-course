@@ -15,6 +15,7 @@ learningObjectives:
   - "Build a CLI menu for interactive story generation"
 prerequisites:
   - "Python basics (variables, loops, functions, dictionaries, classes)"
+author: abderrahim-adrabi
 ---
 
 # AI Story Writer

@@ -6,7 +6,7 @@
 
 <!-- TODO: update the Colab/Kaggle badge links above to point at main once this PR merges -->
 
-The local companion to the course's [Build a Discord Trivia Bot](../../docs/projects/trivia-bot/index.md) project — a `discord.py` bot that runs trivia rounds in a server, from a fixed question bank or freshly LLM-generated on a topic, and keeps a persistent per-player leaderboard.
+The local companion to the course's [Build a Discord Trivia Bot](https://pyda-course.online/projects/trivia-bot/) project — a `discord.py` bot that runs trivia rounds in a server, from a fixed question bank or freshly LLM-generated on a topic, and keeps a persistent per-player leaderboard.
 
 ## What's here
 
@@ -27,8 +27,8 @@ uv run python scores.py      # sanity-check score persistence with fake players
 
 Running the bot itself needs two things the steps above don't:
 
-1. **A Discord bot token** — create an application at the [Discord Developer Portal](https://discord.com/developers/applications), add a Bot to it, reset/copy its token, and **enable the "Message Content" privileged intent** under Bot settings (the bot's answer-collection otherwise only ever sees empty message content). See the [lesson's Setup section](../../docs/projects/trivia-bot/index.md#setup) for the full walkthrough.
-2. **A free-tier LLM API key** — only needed for `/trivia` with a topic (`generate.py`); the fixed question bank works with no key at all. See the table in the [lesson's Setup section](../../docs/projects/trivia-bot/index.md#setup) for where to get one.
+1. **A Discord bot token** — create an application at the [Discord Developer Portal](https://discord.com/developers/applications), add a Bot to it, reset/copy its token, and **enable the "Message Content" privileged intent** under Bot settings (the bot's answer-collection otherwise only ever sees empty message content). See the [lesson's Setup section](https://pyda-course.online/projects/trivia-bot/#setup) for the full walkthrough.
+2. **A free-tier LLM API key** — only needed for `/trivia` with a topic (`generate.py`); the fixed question bank works with no key at all. See the table in the [lesson's Setup section](https://pyda-course.online/projects/trivia-bot/#setup) for where to get one.
 
 ```bash
 cp .env.example .env
@@ -68,7 +68,7 @@ uv run python bot.py
 
 ## A note on staying current
 
-Model names and library APIs in this space change fast. `gpt-4o-mini` via the GitHub Models endpoint and `discord.py`'s `app_commands`/intents APIs used here were all verified working while writing this example, but may have drifted by the time you read this — see the callout in the [lesson](../../docs/projects/trivia-bot/index.md) for what to check before relying on this code.
+Model names and library APIs in this space change fast. `gpt-4o-mini` via the GitHub Models endpoint and `discord.py`'s `app_commands`/intents APIs used here were all verified working while writing this example, but may have drifted by the time you read this — see the callout in the [lesson](https://pyda-course.online/projects/trivia-bot/) for what to check before relying on this code.
 
 ## Built your own trivia bot?
 

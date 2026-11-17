@@ -17,9 +17,12 @@ export interface FakeEl {
   parentElement: FakeEl | null;
   listeners: Record<string, (ev?: any) => void>;
   allListeners: Record<string, Array<(ev?: any) => void>>;
+  onceListeners?: Record<string, boolean>;
+  isConnected?: boolean;
   querySelectorAllFor: Record<string, FakeEl[]>;
   querySelectorFor: Record<string, FakeEl>;
-  addEventListener(kind: string, fn: (ev?: any) => void): void;
+  addEventListener(kind: string, fn: (ev?: any) => void, opts?: {once?: boolean}): void;
+  removeEventListener(kind: string, fn?: (ev?: any) => void): void;
   dispatchEvent(ev: any): void;
   click(): void;
   focus(): void;
@@ -74,13 +77,25 @@ export function fakeEl(id?: string): FakeEl {
         return on;
       },
     },
-    addEventListener(kind: string, fn: (ev?: any) => void) {
+    addEventListener(kind: string, fn: (ev?: any) => void, opts?: {once?: boolean}) {
       this.listeners[kind] = fn;
       (this.allListeners[kind] ??= []).push(fn);
+      // Honour {once} like the real DOM: a handler bound once must not fire on
+      // a second click (the Stop button rebinds per run and relies on this).
+      if (opts?.once) (this.onceListeners ??= {})[kind] = true;
+    },
+    removeEventListener(kind: string, fn?: (ev?: any) => void) {
+      if (!(kind in this.allListeners)) return;
+      if (!fn) { this.allListeners[kind] = []; return; }
+      this.allListeners[kind] = (this.allListeners[kind] ?? []).filter((f) => f !== fn);
     },
     dispatchEvent(ev: any) {
       const kind = ev?.type;
-      for (const fn of this.allListeners[kind] ?? []) fn(ev);
+      for (const fn of [...(this.allListeners[kind] ?? [])]) fn(ev);
+      if (this.onceListeners?.[kind]) {
+        this.allListeners[kind] = [];
+        delete this.onceListeners[kind];
+      }
     },
     click() { this.dispatchEvent({type: 'click'}); },
     focus() { this.focused = true; },

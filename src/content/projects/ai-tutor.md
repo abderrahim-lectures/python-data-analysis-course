@@ -15,6 +15,7 @@ learningObjectives:
   - "Run an interactive practice loop that updates the same list in-place per review"
   - "Round-trip progress to and from JSON to survive across sessions"
   - "Compose a tutor-hint prompt and degrade gracefully when no API key is configured"
+author: abderrahim-adrabi
 ---
 
 # 🛠️ 📚 Build an AI Tutor Assistant

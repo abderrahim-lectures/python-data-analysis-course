@@ -11,6 +11,7 @@ learningObjectives:
   - "Lift speaker notes out of the visible slides with a comment convention"
   - "Assemble a complete self-contained HTML file you can open in any browser"
 prerequisites: ["python-101/file-io", "python-101/strings", "python-101/functions"]
+author: abderrahim-adrabi
 ---
 
 # 📽️ Build a Presentation Builder

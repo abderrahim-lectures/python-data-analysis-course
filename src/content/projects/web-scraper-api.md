@@ -14,6 +14,7 @@ prerequisites:
   - "Python basics (functions, loops, dictionaries)"
   - "Understanding of HTTP and basic HTML structure"
   - "Familiarity with JSON format"
+author: abderrahim-adrabi
 ---
 
 # 🛠️ 🕷️ Build a Web Scraper API

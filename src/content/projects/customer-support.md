@@ -12,6 +12,7 @@ learningObjectives:
   - "Track response and resolution times against SLA limits from CSV logs"
   - "Compute per-agent CSAT scores from survey data"
   - "Print a combined support summary report"
+author: abderrahim-adrabi
 ---
 
 # 🎧 Build a Customer Support Dashboard

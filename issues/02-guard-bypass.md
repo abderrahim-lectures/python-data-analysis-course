@@ -52,4 +52,4 @@ in the site's origin — render `/playground/<code>` in a `<iframe sandbox="allo
 (opaque origin). That needs `frame-src` added to the CSP (currently `'none'`) and a prototype to
 answer one question: a same-origin `new Worker(...)` is blocked from an opaque origin, so the
 frame must run Pyodide on its own main thread or boot the worker from a `blob:` URL. Written up
-in `audit-report-2026-11-runtime.md` §B3.
+in `plan/audit-report-2026-11-runtime.md` §B3.

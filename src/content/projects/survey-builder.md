@@ -13,6 +13,7 @@ prerequisites:
   - "Python basics (classes, lists, dicts)"
   - "Comfort with `input()` for terminal input"
   - "pandas and matplotlib installed (covered in Setup)"
+author: abderrahim-adrabi
 ---
 
 # 📋 Build a Survey Builder

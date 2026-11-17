@@ -12,6 +12,7 @@ learningObjectives:
   - "Validate required keys and types against a schema"
   - "Automatically redact secret values in any human-readable dump"
   - "Wrap loading, validation, and inspection in one CLI"
+author: abderrahim-adrabi
 ---
 
 # ⚙️ Build a Configuration Manager

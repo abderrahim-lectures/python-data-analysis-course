@@ -1,0 +1,192 @@
+---
+title: "Intervalos de confianza"
+description: "Un rango que suele contener la verdad, construido con una media, un error típico y un multiplicador que puedes justificar."
+module: "samples-and-uncertainty"
+order: 12
+difficulty: "intermediate"
+estimatedMinutes: 22
+learningObjectives:
+  - "Construir a mano un intervalo de confianza del 95 % para una media"
+  - "Interpretar correctamente un intervalo de confianza, incluido lo que no dice"
+  - "Explicar a qué se refiere el 95 %, usando muestreo repetido"
+  - "Elegir un intervalo más ancho o más estrecho y decir qué gana cada uno"
+prerequisites: []
+tags: ["intervalo-de-confianza", "inferencia", "margen-de-error", "incertidumbre"]
+hasPlayground: true
+hasChallenge: true
+hasQuiz: true
+xpReward: 15
+section: "statistics-101"
+track: "normal"
+---
+
+## Qué significa
+
+Un **intervalo de confianza** es un rango de valores plausibles para un parámetro poblacional, construido a partir de una estimación muestral más y menos un margen:
+
+$$
+\bar{x} \pm t_{n-1,\,0{,}975}\cdot \frac{s}{\sqrt{n}}
+$$
+
+Para muestras grandes el multiplicador $t$ se acerca a 2, de donde viene el conocido "±2 errores típicos". Su interpretación es la parte sutil:
+
+> Si repitieras el estudio muchas veces, alrededor del 95 % de los intervalos que construyas así contendrían el parámetro verdadero.
+
+El 95 % describe el **procedimiento**, no tu intervalo concreto. Cualquier intervalo individual contiene la verdad o no la contiene, y no puedes saber cuál de las dos. Lo que sí puedes decir es que el método acierta el 95 % de las veces.
+
+## Qué aporta
+
+Una estimación puntual finge una precisión que no tiene. "El tiempo medio de entrega es de 18 minutos" suena exacto y casi con seguridad está mal en la tercera cifra. "Entre 11,7 y 24,3 minutos, con un 95 % de confianza" es una afirmación que permite actuar: le dice a un gerente que todavía no puede prometer un servicio de 15 minutos, porque 15 está dentro del rango plausible.
+
+Los intervalos también hacen honestas las comparaciones. Dos grupos cuyos intervalos se solapan en buena medida no son claramente distintos, digan lo que digan sus medias.
+
+## A mano, paso a paso
+
+Muestra de $n=25$ entregas: media 18 minutos, desviación típica 15,3 minutos, error típico 3,06 minutos.
+
+**Paso 1: elige el nivel de confianza.** El 95 % es lo convencional. Para $n=25$ el multiplicador correcto es el valor $t$ con 24 grados de libertad, que es aproximadamente 2,064.
+
+**Paso 2: el margen.**
+
+$$
+2{,}064 \times 3{,}06 \approx 6{,}3 \text{ minutos}
+$$
+
+**Paso 3: el intervalo.**
+
+$$
+18 \pm 6{,}3 \;=\; (11{,}7,\; 24{,}3) \text{ minutos}
+$$
+
+**Paso 4: di qué significa.** "Estimamos el tiempo medio de entrega en 18 minutos, con un intervalo de confianza del 95 % de 11,7 a 24,3". Una promesa de servicio por debajo de 12 minutos está en el borde mismo de la plausibilidad; una promesa de 30 queda cómodamente por encima.
+
+<details class="challenge">
+<summary>🧩 Reto: piensa primero y luego revela</summary>
+<div class="challenge__body">
+
+El mismo estudio con $n=100$ entregas da la misma media y la misma desviación típica. ¿Cuál es el nuevo intervalo, y cuánto más estrecho es?
+
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> El error típico pasa a $15{,}3/10 = 1{,}53$, el multiplicador $t$ se reduce un poco hasta aproximadamente 1,984, y el margen es de unos 3,0 minutos. El intervalo es $(15{,}0, 21{,}0)$, más o menos la mitad de ancho. Cuatro veces más datos reducen a la mitad la incertidumbre: la misma ley de la raíz cuadrada que el error típico.</p>
+
+</div>
+</details>
+
+## Lo que no dice
+
+Cuatro lecturas equivocadas habituales, todas merecedoras de que las reconozcas en los informes ajenos:
+
+- **"Hay un 95 % de probabilidad de que la media verdadera esté entre 11,7 y 24,3".** En la lectura frecuentista, la media verdadera es un número fijo; lo incierto es el intervalo.
+- **"El 95 % de las entregas tardan entre 11,7 y 24,3 minutos".** No: eso sería un intervalo de predicción, que es mucho más ancho.
+- **"El intervalo contiene el 95 % de los datos".** Contiene la media, no los datos.
+- **"Intervalos que se solapan significan que no hay diferencia".** El solapamiento es una pista aproximada, no una prueba; los intervalos pueden solaparse y la diferencia seguir siendo clara.
+
+## Lo mismo en Python
+
+La aritmética a mano, y luego la versión de librería:
+
+```python
+import statistics as st
+
+times = [8, 10, 12, 15, 45]
+n = len(times)
+m = st.mean(times)
+se = st.stdev(times) / n ** 0.5
+margin = 2.064 * se            # t para 24 gl, 95%; para n=5 usa tus propios gl
+print(round(m - margin, 1), round(m + margin, 1))
+```
+
+`scipy` calcula el multiplicador para cualquier tamaño de muestra y nivel de confianza:
+
+```python
+from scipy import stats
+
+lo, hi = stats.t.interval(0.95, df=n - 1, loc=m, scale=se)
+print(round(lo, 1), round(hi, 1))
+```
+
+Y el experimento que hay detrás de la interpretación: construye muchos intervalos a partir de muchas muestras y cuenta cuántas veces contienen la verdad.
+
+```python
+import random, statistics as st
+from scipy import stats
+
+population = [random.gauss(50, 10) for _ in range(10_000)]
+truth = st.mean(population)
+hits = 0
+for _ in range(500):
+    sample = random.sample(population, 25)
+    lo, hi = stats.t.interval(0.95, df=24, loc=st.mean(sample), scale=st.stdev(sample) / 5)
+    hits += lo <= truth <= hi
+print(hits / 500)      # ≈ 0.95
+```
+
+Esa salida —alrededor del 95 %— es todo el significado de la frase.
+
+## Verlo geométricamente
+
+Recuerda la distribución muestral de la lección anterior: el intervalo es su 95 % central, trasladado de vuelta a la escala de los datos. En la [demostración de intervalos de confianza de GeoGebra](https://www.geogebra.org/m/sfqjzhcm) puedes cambiar el nivel de confianza y ver cómo el intervalo se ensancha cuando exiges más certeza, y cómo se estrecha de nuevo al aumentar $n$.
+
+## Cuándo usarlo
+
+- Informar de cualquier estimación cuya precisión importe: resultados de encuestas, tiempos de referencia, mediciones de calidad.
+- Comparar dos grupos cuando quieres mostrar el tamaño de una diferencia plausible.
+- Decidir si una decisión es segura con el peor valor plausible, no solo con la mejor estimación.
+
+## Limitaciones
+
+- **Válido solo si el muestreo no está sesgado.** Un intervalo de confianza alrededor de una estimación sesgada es una afirmación precisa sobre lo equivocado.
+- **Supone independencia.** Las mediciones agrupadas o repetidas necesitan otra fórmula.
+- **Los intervalos estrechos no son intervalos importantes.** Con un $n$ enorme, una diferencia trivial puede tener un intervalo muy ajustado.
+- **No es un intervalo de predicción.** Los valores individuales varían mucho más que la media.
+
+## Errores frecuentes
+
+- **Usar 1,96 para muestras pequeñas.** Ese es el valor para muestras grandes; con $n=5$ el multiplicador correcto supera 2,7.
+- **Informar el intervalo sin decir para qué es.** La media, una diferencia o una proporción: cada una tiene su propio intervalo.
+- **Tratar la falta de solapamiento como prueba de diferencia.** Es sugerente; la herramienta adecuada es una comparación formal.
+
+## 🧩 Retos
+
+<details class="challenge">
+<summary>🧩 Reto: piensa primero y luego revela</summary>
+<div class="challenge__body">
+
+Un informe dice "nota media 70, IC del 95 % [69,5; 70,5]" a partir de una muestra de 10.000 estudiantes, y concluye "el método de enseñanza es claramente eficaz". ¿Qué le falta a ese argumento?
+
+<p class="challenge__answer">💡 <strong>Respuesta:</strong> Una comparación. El intervalo dice que la media se conoce con precisión, no que sea buena. Sin un grupo de control, una línea base o un intervalo de comparación, "70 ± 0,5" solo establece que la estimación es ajustada; un $n$ grande hace que casi cualquier diferencia sea estadísticamente visible, y por eso los intervalos de confianza deben leerse junto al tamaño del efecto.</p>
+
+</div>
+</details>
+
+## 🤔 Preguntas socráticas
+
+- ¿Por qué un intervalo del 99 % tiene que ser más ancho que uno del 95 % sobre los mismos datos?
+- Si dos estudios dan intervalos muy distintos para la misma cantidad, ¿qué podría explicarlo aparte de un error?
+- ¿Por qué un intervalo de confianza no puede decirte nunca la probabilidad de que tu intervalo concreto sea correcto?
+- ¿Qué necesitarías para construir un intervalo de confianza para una mediana en lugar de una media?
+
+## ✅ Comprobación rápida
+
+<div class="quiz" data-quiz="statistics-101-ci-es">
+  <div class="quiz-q" data-answer="3">
+    <p class="quiz-q__prompt">1. ¿A qué se refiere "95 % de confianza"?</p>
+    <div class="quiz-q__options">
+      <button class="quiz-q__opt" data-idx="0">A la probabilidad de que este intervalo concreto contenga la verdad.</button>
+      <button class="quiz-q__opt" data-idx="1">A la proporción de los datos dentro del intervalo.</button>
+      <button class="quiz-q__opt" data-idx="2">A la probabilidad de que la media muestral sea correcta.</button>
+      <button class="quiz-q__opt" data-idx="3">A la proporción de intervalos construidos así que contendrían el valor verdadero.</button>
+    </div>
+    <p class="quiz-q__feedback" hidden></p>
+  </div>
+  <div class="quiz-q" data-answer="1">
+    <p class="quiz-q__prompt">2. ¿Qué cambio hace más estrecho un intervalo de confianza?</p>
+    <div class="quiz-q__options">
+      <button class="quiz-q__opt" data-idx="0">Subir el nivel de confianza del 95 % al 99 %.</button>
+      <button class="quiz-q__opt" data-idx="1">Aumentar el tamaño de la muestra.</button>
+      <button class="quiz-q__opt" data-idx="2">Aumentar la variabilidad de la muestra.</button>
+      <button class="quiz-q__opt" data-idx="3">Tomar una muestra sesgada.</button>
+    </div>
+    <p class="quiz-q__feedback" hidden></p>
+  </div>
+  <p class="quiz__summary" data-quiz-summary hidden></p>
+</div>

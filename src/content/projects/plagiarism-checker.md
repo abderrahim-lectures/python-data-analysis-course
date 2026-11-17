@@ -10,6 +10,7 @@ learningObjectives:
   - "Score pairwise similarity with Jaccard overlap between shingle sets"
   - "Run a batch report across a corpus and flag high-similarity pairs"
 prerequisites: ["python-101/strings", "python-101/sets", "python-101/loops", "python-101/functions"]
+author: abderrahim-adrabi
 ---
 
 # 🔍 Build a Plagiarism Checker

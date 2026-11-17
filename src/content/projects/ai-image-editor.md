@@ -15,6 +15,7 @@ learningObjectives:
   - "Build an undo/redo history stack so editing stays non-destructive"
   - "Batch-process a whole folder of images with one consistent instruction"
   - "Ship a CLI that applies, verifies, and saves edits end to end"
+author: abderrahim-adrabi
 ---
 
 # 🛠️ 📷 Build an AI Image Editor

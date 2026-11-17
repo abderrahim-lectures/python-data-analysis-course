@@ -15,6 +15,7 @@ learningObjectives:
   - "Render totals as an ASCII bar chart and check a weekly budget"
   - "Persist activity rows to CSV and reload them"
   - "Wrap the analysis in add / report / reset CLI subcommands"
+author: abderrahim-adrabi
 ---
 
 # 🛠️ 🌍 Build a Carbon Tracker

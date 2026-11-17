@@ -13,6 +13,7 @@ prerequisites:
   - "Python basics (functions, dicts, lists)"
   - "HTML basics (tags, attributes, nesting)"
   - "Comfort with `requests` or willingness to learn it in the setup"
+author: abderrahim-adrabi
 ---
 
 # 🔍 Build an SEO Analyzer

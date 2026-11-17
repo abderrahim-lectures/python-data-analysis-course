@@ -1,0 +1,337 @@
+---
+// Shared "how to add a project" guide: /contributors-guide,
+// /ar/دليل-المساهمة, /es/guia-colaboradores, /fr/guide-contributeurs.
+//
+// This page is the written version of what a first-time contributor actually
+// has to do. The file paths are the load-bearing part: they are the ones the
+// build reads, verified by tests/unit/contributors.test.ts, so a rename in the
+// repo that is not reflected here fails the suite rather than sending a
+// student to a path that no longer exists.
+import Base from '../layouts/Base.astro';
+import Icon from './Icon.astro';
+import {m} from '../paraglide/messages.js';
+import {contributorsHref, navWordAlternates, type Locale} from '../lib/routeSegments';
+
+interface Props {
+  locale: Locale;
+}
+const {locale} = Astro.props;
+const dir = locale === 'ar' ? 'rtl' : 'ltr';
+const base = import.meta.env.BASE_URL;
+const alternates = navWordAlternates('contributorsGuide');
+
+// Each step carries three things a beginner needs: why it exists, the
+// numbered sub-steps to follow, and what success looks like. A single
+// paragraph per step was a summary, not a walkthrough.
+const msgs = m as unknown as Record<string, (() => string) | undefined>;
+const message = (key: string): string => msgs[key]?.() ?? '';
+
+const steps = Array.from({length: 12}, (_, i) => {
+  const n = i + 1;
+  return {
+    title: message(`guide_step_${n}_title`),
+    body: message(`guide_step_${n}_body`),
+    substr: message(`guide_step_${n}_steps`).split('\n').filter(Boolean),
+    expect: message(`guide_step_${n}_expect`),
+  };
+}).filter((s) => s.title);
+
+// Inside a template literal, a backtick and ${ must be escaped or the
+// expression breaks -- these blocks are shown as text, not evaluated.
+const FRONTMATTER_EXAMPLE = [
+  '---',
+  'title: "Build a File-Organizer Bot"',
+  'description: "Sort a messy folder into category subfolders with a bot that plans before it moves."',
+  'difficulty: "beginner"',
+  'author: your-id',
+  '---',
+].join('\n');
+
+const BODY_EXAMPLE = [
+  '# \u{1F4C1} Build a File-Organizer Bot',
+  '',
+  'A folder you have been dumping things into for a year. You could sort it',
+  'by hand, or write the thing that sorts it.',
+  '',
+  '## \u{1F3AF} What you will do',
+  '',
+  '1. Scan a folder and classify each file by extension.',
+  '2. Build a dry run: compute every move, print it, touch nothing.',
+  '3. Perform the moves, handling collisions instead of overwriting.',
+].join('\n');
+
+const REGISTRY_EXAMPLE = [
+  'export const CONTRIBUTORS: Contributor[] = [',
+  '  {',
+  "    id: 'your-id',",
+  "    name: 'Your Name',",
+  "    github: 'your-handle',",
+  "    role: 'Wrote the file-organizer project',",
+  '  },',
+  '];',
+].join('\n');
+
+// The paths are literal on purpose: a contributor copies them, so they must
+// read as real paths, not as a chart. `required` drives the badge, and mirrors
+// what the content collection actually requires.
+interface GuideFile {
+  path: string;
+  what: string;
+  badge: 'required' | 'optional' | 'registry';
+}
+const files: GuideFile[] = [
+  {
+    path: 'src/content/projects/<your-slug>.md',
+    what: m.guide_file_project(),
+    badge: 'required',
+  },
+  {
+    path: 'examples/<your-slug>/',
+    what: m.guide_file_example(),
+    badge: 'optional',
+  },
+  {
+    path: 'src/lib/contributors.ts',
+    what: m.guide_file_registry_body(),
+    badge: 'registry',
+  },
+];
+
+const tips = [m.guide_tip_1(), m.guide_tip_2(), m.guide_tip_3(), m.guide_tip_4()];
+const badgeLabel: Record<GuideFile['badge'], string> = {
+  required: m.guide_file_required(),
+  optional: m.guide_file_optional(),
+  registry: m.guide_file_registry(),
+};
+
+const repo = 'https://github.com/abderrahim-lectures/python-data-analysis-course';
+
+// The command for each step, index-aligned with `steps`. Kept as data rather
+// than a chain of `{i === n && ...}` blocks so adding a step is one entry in
+// two places instead of one entry and a new JSX branch.
+// Index-aligned with `steps` (0-based). These were written against the old
+// nine-step guide, so after the rebuild they printed under the wrong headings:
+// the clone command appeared between "Clone your fork" and "Create a branch".
+const COMMANDS: Record<number, string> = {
+  // 0: the commands are the sub-steps, so no block (see below).
+  // 1: no shell command at all - you fork in the browser.
+  2: `git clone https://github.com/YOUR-USERNAME/python-data-analysis-course.git
+cd python-data-analysis-course
+npm install`,
+  3: `git checkout -b add-file-organizer`,
+  4: `cp src/content/projects/ai-agent.md src/content/projects/file-organizer.md`,
+  7: `mkdir -p examples/file-organizer
+# add README.md, organizer.py and pyproject.toml`,
+  9: `npm run test
+npx tsc --noEmit
+npm run build`,
+  10: `git add src/content/projects/file-organizer.md src/lib/contributors.ts
+git commit -m "content: add file-organizer"
+git push -u origin add-file-organizer`,
+};
+---
+
+<Base title={m.guide_title()} description={m.guide_description()} lang={locale} dir={dir} alternates={alternates}>
+  <section class="container guide">
+    <header class="guide__head">
+      <p class="guide__eyebrow">{m.guide_eyebrow()}</p>
+      <h1>{m.guide_heading()}</h1>
+      <p class="guide__intro">{m.guide_intro()}</p>
+    </header>
+
+    <figure class="guide__figure">
+      <img src={`${base}img/guide/three-files.svg`} alt={m.guide_fig_files_alt()} width="900" height="430" loading="lazy" decoding="async" />
+      <figcaption>{m.guide_fig_files_caption()}</figcaption>
+    </figure>
+
+    <ol class="guide__steps" role="list">
+      {steps.map((s, i) => (
+        <li class="guide-step">
+          <span class="guide-step__num" aria-hidden="true">{i + 1}</span>
+          <div class="guide-step__body">
+            <h2>{s.title}</h2>
+            <p>{s.body}</p>
+            {s.substr.length > 0 && (
+              <ol class="guide-step__substeps">
+                {s.substr.map((line) => <li>{line}</li>)}
+              </ol>
+            )}
+            {s.expect && (
+              <div class="guide-step__expect">
+                <span class="guide-step__expect-label">{m.guide_expect_label()}</span>
+                <pre class="guide__code guide__code--expect" tabindex="0"><code>{s.expect}</code></pre>
+              </div>
+            )}
+            {COMMANDS[i] && (
+              <>
+                <pre class="guide__code" tabindex="0"><code>{COMMANDS[i]}</code></pre>
+              </>
+            )}
+            {i === 5 && (
+              <>
+                <p class="guide__example-label">{m.guide_example_frontmatter()}</p>
+                <pre class="guide__code" tabindex="0"><code>{FRONTMATTER_EXAMPLE}</code></pre>
+                <p class="guide__example-note">{m.guide_example_note()}</p>
+              </>
+            )}
+            {i === 6 && (
+              <>
+                <p class="guide__example-label">{m.guide_example_body()}</p>
+                <pre class="guide__code" tabindex="0"><code>{BODY_EXAMPLE}</code></pre>
+              </>
+            )}
+            {i === 8 && (
+              <>
+                <p class="guide__example-label">{m.guide_example_registry()}</p>
+                <pre class="guide__code" tabindex="0"><code>{REGISTRY_EXAMPLE}</code></pre>
+              </>
+            )}
+          </div>
+        </li>
+      ))}
+    </ol>
+
+    <figure class="guide__figure">
+      <img src={`${base}img/guide/contribution-flow.svg`} alt={m.guide_fig_flow_alt()} width="900" height="340" loading="lazy" decoding="async" />
+      <figcaption>{m.guide_fig_flow_caption()}</figcaption>
+    </figure>
+
+    <section class="guide__files">
+      <h2>{m.guide_files_heading()}</h2>
+      <ul role="list">
+        {files.map((f) => (
+          <li class="guide-file">
+            <code class="guide-file__path">{f.path}</code>
+            <span class={`guide-file__badge guide-file__badge--${f.badge}`}>{badgeLabel[f.badge]}</span>
+            <p>{f.what}</p>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="guide__tips">
+      <h2>{m.guide_tips_heading()}</h2>
+      <ul role="list">
+        {tips.map((t) => <li>{t}</li>)}
+      </ul>
+    </section>
+
+    <div class="guide__foot">
+      <a class="btn btn-ghost" href={contributorsHref(locale, base)}>
+        <Icon name="trail" size={15} /> {m.guide_back_cta()}
+      </a>
+      <a class="btn btn-primary" href={`${repo}/issues/new`} target="_blank" rel="noopener noreferrer">
+        <Icon name="globe" size={15} /> {m.footer_github()}
+      </a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .guide { padding-block: 2.5rem 3.5rem; max-width: 78ch; }
+  .guide__eyebrow {
+    text-transform: uppercase; letter-spacing: .08em; font-size: .72rem;
+    font-weight: 800; color: var(--accent-text); margin: 0 0 .5rem;
+  }
+  .guide h1 { font-size: clamp(1.9rem, 4.4vw, 2.8rem); margin: 0 0 .6rem; line-height: 1.15; }
+  .guide__intro { color: var(--ink-soft); margin: 0 0 2rem; font-size: 1.02rem; }
+  .guide__example-label {
+    margin: .9rem 0 .4rem; font-size: .86rem; font-weight: 600; color: var(--ink-soft);
+  }
+  /* Sub-steps: the actual things to do, in order. A numbered list reads as
+     instructions, where a paragraph reads as explanation. */
+  .guide-step__substeps {
+    margin: .6rem 0 0; padding-inline-start: 1.35rem;
+    display: flex; flex-direction: column; gap: .3rem;
+    font-size: .92rem; color: var(--ink-soft); line-height: 1.55;
+  }
+  .guide-step__substeps li::marker { color: var(--accent); font-weight: 700; }
+
+  /* Expected output: the feedback loop a beginner needs to know they are on
+     track. Kept visually distinct from the command block above it. */
+  .guide-step__expect { margin-top: .8rem; }
+  .guide-step__expect-label {
+    display: inline-block; font-size: .74rem; font-weight: 800;
+    text-transform: uppercase; letter-spacing: .05em;
+    color: var(--success-text, var(--accent-text));
+  }
+  .guide__code--expect {
+    margin-top: .35rem;
+    border-inline-start: 3px solid var(--success, var(--accent));
+  }
+
+  .guide__example-note {
+    margin: .4rem 0 0; font-size: .84rem; color: var(--ink-faint); line-height: 1.55;
+  }
+
+  /* Diagrams: the two figures are the parts a beginner gets stuck on. They
+     scale to the column, keep their aspect ratio, and the caption carries the
+     one-line summary for anyone who cannot see the image. */
+  .guide__figure { margin: 0 0 2.2rem; }
+  .guide__figure img {
+    display: block; width: 100%; height: auto;
+    border: 1px solid var(--line); border-radius: var(--radius-lg);
+    background: var(--surface);
+  }
+  .guide__figure figcaption {
+    margin-top: .55rem; font-size: .84rem; color: var(--ink-faint);
+    text-align: center;
+  }
+
+  .guide__steps { list-style: none; padding: 0; margin: 0 0 2.2rem; display: flex; flex-direction: column; gap: 1.1rem; counter-reset: step; }
+  .guide-step { display: flex; gap: .9rem; }
+  .guide-step__num {
+    flex: none; width: 1.9rem; height: 1.9rem; border-radius: 50%;
+    display: grid; place-items: center; font-weight: 800; font-size: .9rem;
+    background: var(--accent); color: var(--accent-contrast);
+  }
+  .guide-step__body { min-width: 0; flex: 1 1 auto; }
+  .guide-step h2 { font-size: 1.08rem; margin: .2rem 0 .3rem; }
+  .guide-step p { margin: 0; color: var(--ink-soft); font-size: .94rem; line-height: 1.55; }
+  .guide__code {
+    margin: .7rem 0 0; padding: .75rem .9rem; border-radius: var(--radius-md);
+    background: var(--bg-soft); border: 1px solid var(--line);
+    overflow-x: auto; font-size: .84rem; line-height: 1.55;
+  }
+  /* Focusable because it scrolls: a keyboard user must be able to reach and
+     scroll the one block that overflows on a narrow screen. */
+  .guide__code:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  /* `overflow-x: auto` on the <pre> only scrolls if the <code> inside is
+     allowed to be wider than it. Without `white-space: pre` the code block
+     wraps and looks fine, but with long unbroken command lines the inline
+     <code> still forced the whole document wider than the phone viewport —
+     which is what made the page scroll sideways on mobile. `white-space: pre`
+     keeps the code unbroken and `overflow-x` then scrolls it inside the box. */
+  .guide__code code {
+    font-family: var(--font-mono, ui-monospace, monospace);
+    white-space: pre;
+    display: block;
+    min-width: 0;
+  }
+  /* A long line scrolls inside the block; a thin scrollbar makes that
+     discoverable rather than looking like clipped text. */
+  .guide__code { scrollbar-width: thin; }
+
+  .guide__files, .guide__tips { margin-bottom: 2.2rem; }
+  .guide__files h2, .guide__tips h2 { font-size: 1.2rem; margin: 0 0 .8rem; }
+  .guide__files ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: .7rem; }
+  .guide-file {
+    border: 1px solid var(--line); border-radius: var(--radius-md);
+    padding: .8rem .9rem; background: var(--surface);
+  }
+  .guide-file__path { font-size: .86rem; font-weight: 700; word-break: break-all; }
+  .guide-file__badge {
+    margin-inline-start: .5rem; font-size: .68rem; font-weight: 800;
+    text-transform: uppercase; letter-spacing: .04em;
+    padding: .15rem .5rem; border-radius: 999px; white-space: nowrap;
+  }
+  .guide-file__badge--required { background: var(--accent-soft); color: var(--accent-text); }
+  .guide-file__badge--optional { background: var(--bg-soft); color: var(--ink-soft); }
+  .guide-file__badge--registry { background: var(--warn-soft); color: var(--xp-text); }
+  .guide-file p { margin: .4rem 0 0; color: var(--ink-soft); font-size: .89rem; line-height: 1.5; }
+
+  .guide__tips ul { margin: 0; padding-inline-start: 1.1rem; display: flex; flex-direction: column; gap: .45rem; }
+  .guide__tips li { color: var(--ink-soft); font-size: .94rem; line-height: 1.5; }
+
+  .guide__foot { display: flex; flex-wrap: wrap; gap: .6rem; }
+</style>

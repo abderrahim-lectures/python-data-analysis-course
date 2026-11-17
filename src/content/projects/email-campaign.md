@@ -13,6 +13,7 @@ learningObjectives:
   - "Render a whole campaign into an append-only outbox (JSONL)"
   - "Compute open and click rates from an engagement log"
   - "Split a list between two subject lines and report the winner"
+author: abderrahim-adrabi
 ---
 
 # ✉️ Build an Email Campaign Manager

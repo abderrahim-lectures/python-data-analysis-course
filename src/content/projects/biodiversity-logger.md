@@ -15,6 +15,7 @@ learningObjectives:
   - "Apply a threshold rule (SURVEY/WATCH/OK) as the agent's decision function"
   - "Ingest weekly observation batches and log per-species decisions to CSV"
   - "Visualize species totals as an ASCII bar chart and order a survey priority queue"
+author: abderrahim-adrabi
 ---
 
 # 🛠️ 🦉 Build a Biodiversity Logger

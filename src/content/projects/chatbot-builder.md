@@ -14,6 +14,7 @@ learningObjectives:
   - "Track conversation state with a class"
   - "Give a chatbot a consistent personality and mood"
   - "Handle unknown inputs with graceful fallbacks"
+author: abderrahim-adrabi
 ---
 
 # Chatbot Builder

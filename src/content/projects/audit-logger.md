@@ -15,6 +15,7 @@ learningObjectives:
   - "Query the log by severity and source and aggregate counts for a dashboard"
   - "Prune old entries with retention while re-anchoring a still-valid chain"
   - "Export a JSONL compliance feed verified against the source log"
+author: abderrahim-adrabi
 ---
 
 # 🛠️ 🔐 Build an Audit Logger

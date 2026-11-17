@@ -45,7 +45,15 @@ const EXEC_NAMES = /(?<![\w.])(?:exec|eval|compile)\b/;
 // `cProfile.run(...)`, `trace.Trace().run(...)`, `runpy.run_module(...)`,
 // `pdb.Pdb().runsource(...)`. Each of them reached `js` in a real browser with
 // `"import " + "js"` split across two literals, i.e. without naming exec.
-const EXEC_MODULES = 'code|timeit|pdb|profile|cProfile|trace|runpy';
+//
+// `pickle` is here for a different reason: its GLOBAL/STACK_GLOBAL opcodes
+// import a named module and look up a named attribute out of *data*, so
+// `pickle.loads(b"cjs\\nfetch\\n(X'url'\\ntR.")` reaches `js.fetch` without the
+// source ever naming either one. Ditto `inspect`, whose `currentframe()` hands
+// back the caller's frame and therefore its builtins -- one attribute access
+// from `exec` without ever writing the token.
+const EXEC_MODULES = 'code|timeit|pdb|profile|cProfile|trace|runpy|pickle|_pickle';
+const INTROSPECTION_MODULES = 'inspect';
 
 // `_pyodide` is the runtime's own internals (`_importhook`, `jsbind`, …): no
 // snippet needs it, and it is the layer that owns the bridge.
@@ -73,9 +81,20 @@ const ESCAPE_NAMES = new RegExp(
     String.raw`\b__import__\b`,
     String.raw`\b(?:builtins|importlib|marshal|sys|types)\s*[.(]`,
     String.raw`\bimport\b[^\n]*(?:\b(?:builtins|importlib|marshal|sys|types)\b)`,
-    String.raw`\bimport\b[^\n]*(?:\b(?:${EXEC_MODULES})\b)`,
+    String.raw`\bimport\b[^\n]*(?:\b(?:${EXEC_MODULES}|${INTROSPECTION_MODULES})\b)`,
     String.raw`\bimport\b[^\n]*(?:\b${INTERNAL_MODULES}\b)`,
     String.raw`\b(?:vars|globals|locals)\b(?!\s*=)`,
+    // `os` is not itself an escape (lesson content uses it), but it re-exports
+    // `sys` as an attribute: `getattr(os, "sys").modules["js"]` reaches the
+    // module cache without ever writing `sys.` or `import sys`. Both the
+    // attribute form and the split-literal form are refused.
+    String.raw`\bos\s*\.\s*sys\b`,
+    String.raw`getattr\s*\(\s*\bos\b\s*,\s*['"]sys['"]`,
+    // Pyodide registers the JS bridge under both `js` and `pyodide_js`.
+    // `\b` cannot end a match after `pyodide` in `pyodide_js` (`_` is a word
+    // character), so the plain MOD pattern let it through.
+    String.raw`\bimport\b[^\n]*\b(?:pyodide_js|js_)\b`,
+    String.raw`\bfrom\s+(?:pyodide_js|js_)\s+import\b`,
   ].join('|'),
 );
 
@@ -89,6 +108,40 @@ const ESCAPE_NAMES = new RegExp(
 const DUNDER_INTROSPECTION =
   /__builtins__|__loader__|__subclasses__|__globals__|__bases__|__base__|__mro__|__self__|__class__|__dict__|__getattribute__|__getattr__|__setattr__|__delattr__|__call__|__code__|__closure__|__reduce__|__reduce_ex__|__module__|__spec__|__wrapped__|__func__|__defaults__|__kwdefaults__|__objclass__|__weakref__|__qualname__|__slots__/;
 
+// The dunder list matches literal text, so splitting the name defeats it:
+// `"__se" "lf__"` (implicit concatenation) and `"ex" + "ec"` both reconstruct
+// a refused name at runtime while the source contains no match. Rather than
+// try to evaluate string arithmetic (undecidable in general), refuse the
+// *shape*: a quoted fragment being glued to another quoted fragment with
+// nothing but whitespace or `+` between them.
+//
+// That shape is tested on a copy of the source with string and comment
+// *contents* removed. Testing raw source matched every wrapped string literal
+// -- Python's implicit concatenation across a line break is how lesson authors
+// write long sentences, and 17 real lesson cells tripped it. Replacing the
+// inside of each literal with a single marker keeps the quotes and their
+// neighbours, which is all the shape needs.
+// Adjacent short literals only, no `+` form. `"__se" "lf__"` is the implicit
+// concatenation Python performs at compile time, and it is the one that leaves
+// no operator for a text scan to notice. `"a" + "b"` is left alone because
+// lessons use short-string arithmetic constantly for rules and separators
+// (`print("=" * 70)`, `print("-" + "-" * n)`), and those would all be refused
+// to catch a form that the `getattr`/name rules already cover.
+const STRING_SPLICE_ESCAPE = /(?<![\w.])s\s+s(?![\w.])/;
+
+/** Replace every string literal with a marker naming its length, so the only
+ *  thing left to inspect is *code shape*: operators, names and calls. A short
+ *  literal is `s`, a long one `S` -- the split-identifier trick only ever
+ *  builds a name out of short fragments (`"__se" "lf__"`, `"ex" + "ec"`),
+ *  while prose wrapped across lines is made of long ones. Without that
+ *  distinction the rule matched ordinary lesson text, which chain-wraps
+ *  sentences inside parentheses all the time. */
+function codeShapeOnly(src: string): string {
+  return src
+    .replace(/(["'])((?:\\.|(?!\1)[^\\\n])*)\1/g, (_m, _q, body: string) => (body.length <= 4 ? 's' : 'S'))
+    .replace(/#[^\n]*/g, '');
+}
+
 export function usesJsBridge(src: string): boolean {
   // Python removes a backslash-newline before tokenizing, so `import \` +
   // newline + `js`, `exe` + newline + `c(...)` and `__imp` + newline + `ort__`
@@ -99,6 +152,7 @@ export function usesJsBridge(src: string): boolean {
     BRIDGE.test(code) ||
     EXEC_NAMES.test(code) ||
     ESCAPE_NAMES.test(code) ||
-    DUNDER_INTROSPECTION.test(code)
+    DUNDER_INTROSPECTION.test(code) ||
+    STRING_SPLICE_ESCAPE.test(codeShapeOnly(code))
   );
 }

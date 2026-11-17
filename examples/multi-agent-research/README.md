@@ -6,7 +6,7 @@
 [![Open in Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://kaggle.com/kernels/welcome?src=https://github.com/abderrahim-lectures/python-data-analysis-course/blob/main/examples/multi-agent-research/notebook.ipynb)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/abderrahim-lectures/python-data-analysis-course/main?filepath=examples%2Fmulti-agent-research%2Fnotebook.ipynb)
 
-A real, runnable multi-agent research assistant — the fuller version of the one built step by step in the course's [Multi-Agent Research Assistant project](../../docs/projects/multi-agent-research/index.md), built with LangChain's [`deepagents`](https://github.com/langchain-ai/deepagents) and your choice of free-tier API provider.
+A real, runnable multi-agent research assistant — the fuller version of the one built step by step in the course's [Multi-Agent Research Assistant project](https://pyda-course.online/projects/multi-agent-research/), built with LangChain's [`deepagents`](https://github.com/langchain-ai/deepagents) and your choice of free-tier API provider.
 
 ## Objective
 
@@ -24,7 +24,7 @@ A top-level agent coordinates the hand-offs, using `deepagents`' `subagents=[...
 
 **You're free to use whichever free-tier provider you like** — this isn't locked to any one of them. Six are wired up already: **GitHub Models** (the default — no separate signup, uses a GitHub account you already have), Gemini, Groq, Mistral, Cerebras, and OpenRouter.
 
-1. **Get a free-tier API key** from your chosen provider — see the table in the [project's Setup section](../../docs/projects/multi-agent-research/index.md#get-a-free-ai-api-key) for where to get one for each.
+1. **Get a free-tier API key** from your chosen provider — see the table in the [project's Setup section](https://pyda-course.online/projects/multi-agent-research/#get-a-free-ai-api-key) for where to get one for each.
 2. **Copy `.env.example` to `.env`** and fill in the key for your provider (and `LLM_PROVIDER` if you're not using the default):
    ```bash
    cp .env.example .env
@@ -65,7 +65,7 @@ uv run python agent.py
 
 ## A note on staying current
 
-Model names and library APIs in this space change fast, and `deepagents`' sub-agent API is newer and less battle-tested than its plain tool-calling API — the model ID and `subagents=[...]` shape here were both verified against a live run while writing this example, but may have drifted by the time you read this. See the callout in the [project doc](../../docs/projects/multi-agent-research/index.md#step-2-wire-the-sub-agents-together-and-run-it) for what to check before relying on this code.
+Model names and library APIs in this space change fast, and `deepagents`' sub-agent API is newer and less battle-tested than its plain tool-calling API — the model ID and `subagents=[...]` shape here were both verified against a live run while writing this example, but may have drifted by the time you read this. See the callout in the [project doc](https://pyda-course.online/projects/multi-agent-research/#step-2-wire-the-sub-agents-together-and-run-it) for what to check before relying on this code.
 
 ## Built your own multi-agent project?
 

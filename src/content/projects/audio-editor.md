@@ -11,6 +11,7 @@ learningObjectives:
   - "Combine multiple clips into a single track"
   - "Generate waveform visualizations for audio analysis"
 prerequisites: ["Python basics", "File I/O"]
+author: abderrahim-adrabi
 ---
 
 # 🛠️ 🎧 Build an Audio Editor

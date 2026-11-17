@@ -10,6 +10,7 @@ learningObjectives:
   - "Process batches of images with progress tracking"
   - "Embed generated captions into image EXIF metadata"
 prerequisites: ["Python 101"]
+author: abderrahim-adrabi
 ---
 
 # 🖼️ Build an Image Caption Generator

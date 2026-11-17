@@ -10,6 +10,7 @@ learningObjectives:
   - "Use DataLoader to batch database queries and prevent N+1 problems"
   - "Implement real-time subscriptions for live data updates"
 prerequisites: ["Python 101", "Data Analysis"]
+author: abderrahim-adrabi
 ---
 
 # 🔷 Build a GraphQL API Server

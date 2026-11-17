@@ -1,6 +1,6 @@
 # Habit-Streak Visualizer Example
 
-The local companion to the course's [Build a Habit-Streak Visualizer](../../docs/projects/habit-streak-visualizer/index.md) Real-World Project — a real, runnable CLI that logs daily habit check-ins locally and renders a GitHub-contributions-graph-style calendar heatmap with pandas and matplotlib.
+The local companion to the course's [Build a Habit-Streak Visualizer](https://pyda-course.online/projects/habit-streak-visualizer/) Real-World Project — a real, runnable CLI that logs daily habit check-ins locally and renders a GitHub-contributions-graph-style calendar heatmap with pandas and matplotlib.
 
 ## What's here
 
@@ -47,4 +47,4 @@ Saved heatmap to exercise_heatmap.png
 
 ...plus a PNG that looks like a GitHub contributions graph: seven rows (Mon–Sun), one column per week, cells shaded from pale to deep blue as a streak builds, and flat gray for days outside the logged range.
 
-See the full [lesson](../../docs/projects/habit-streak-visualizer/index.md) for the step-by-step walkthrough, including why the grid uses a day-offset anchor instead of ISO week numbers, and how the streak math treats an unlogged day the same as an explicit "missed."
+See the full [lesson](https://pyda-course.online/projects/habit-streak-visualizer/) for the step-by-step walkthrough, including why the grid uses a day-offset anchor instead of ISO week numbers, and how the streak math treats an unlogged day the same as an explicit "missed."

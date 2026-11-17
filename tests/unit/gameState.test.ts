@@ -817,3 +817,31 @@ describe('a malformed stored state', () => {
     expect(gs.loadState().xp).toBeGreaterThanOrEqual(500);
   });
 });
+
+// The collection guard checked that each map was an object, not that its
+// entries were. `lessonMastery: {"lesson": "bad"}` passed, and then
+// recordQuiz's `m.total += 1` threw "Cannot create property 'total' on
+// string" -- after quizTotal and xp were bumped in memory but before write(),
+// so the quiz was lost and every later quiz on that lesson threw again.
+describe('a wrong-typed mastery entry is repaired, not fatal', () => {
+  test('recordQuiz survives a string where a record belongs', async () => {
+    const {loadState, recordQuiz, saveState} = await import('../../src/lib/gameState');
+    saveState({
+      xp: 100,
+      lessonsCompleted: {},
+      lessonsRun: {},
+      lessonMastery: {'python-101/normal/01-printing': 'bad' as unknown as never},
+      quizCorrect: 0,
+      quizTotal: 0,
+      streak: 0,
+      bestStreak: 0,
+      lastActive: '',
+      quests: {},
+      badges: [],
+    } as never);
+    expect(() => recordQuiz(true, 'python-101/normal/01-printing')).not.toThrow();
+    const rec = loadState().lessonMastery['python-101/normal/01-printing'];
+    expect(rec.correct).toBe(1);
+    expect(rec.total).toBe(1);
+  });
+});

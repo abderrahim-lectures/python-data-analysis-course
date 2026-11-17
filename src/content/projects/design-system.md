@@ -14,6 +14,7 @@ prerequisites:
   - "Basic Python functions and loops"
   - "Understanding of hex color codes"
   - "Familiarity with CSS variables (helpful but not required)"
+author: abderrahim-adrabi
 ---
 
 # 🛠️ 🎨 Build a Design System Generator

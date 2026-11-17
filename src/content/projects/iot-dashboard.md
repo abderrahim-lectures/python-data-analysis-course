@@ -10,6 +10,7 @@ learningObjectives:
   - "Create historical time-series charts for sensor trends"
   - "Implement device grouping and filtering by type or location"
 prerequisites: ["Python 101", "Data Analysis"]
+author: abderrahim-adrabi
 ---
 
 # 📊 Build an IoT Dashboard

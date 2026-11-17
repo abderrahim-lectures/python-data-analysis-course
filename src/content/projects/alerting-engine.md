@@ -15,6 +15,7 @@ learningObjectives:
   - "Apply a cooldown so one ongoing incident fires once, not hundreds of times"
   - "Serialize and restore rule state to and from JSON for continuity across a restart"
   - "Aggregate per-rule alerts into a one-line summary"
+author: abderrahim-adrabi
 ---
 
 # 🛠️ 🔔 Build an Alerting Engine

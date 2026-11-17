@@ -12,6 +12,7 @@ learningObjectives:
 prerequisites:
   - "Python basics (variables, loops, functions)"
   - "Dictionaries and lists"
+author: abderrahim-adrabi
 ---
 
 # 🛠️ 💰 Build a Grant Application Tracker

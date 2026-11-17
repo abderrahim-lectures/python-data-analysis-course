@@ -15,6 +15,7 @@ learningObjectives:
   - "Compose sprites onto a 2D grid and render scenes as text frames"
   - "Follow a keyframed path with time-based, eased interpolation"
   - "Export a sequence of frames to files and rebuild the filmstrip from them"
+author: abderrahim-adrabi
 ---
 
 # 🛠️ 🎬 Build an Animation Engine

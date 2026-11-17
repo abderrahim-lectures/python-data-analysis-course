@@ -14,6 +14,7 @@ prerequisites:
   - "Python basics (functions, dictionaries, file I/O)"
   - "Comfortable with basic regex (findall, sub)"
   - "Usage of pathlib paths for reading and listing files"
+author: abderrahim-adrabi
 ---
 
 # 🛠️ 📚 Build a Wiki Engine

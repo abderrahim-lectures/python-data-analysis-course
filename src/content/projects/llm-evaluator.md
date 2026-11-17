@@ -2,6 +2,7 @@
 title: "Build an LLM Evaluation Suite"
 description: "Benchmark and compare LLM performance across accuracy, speed, cost, and safety metrics."
 difficulty: "advanced"
+author: abderrahim-adrabi
 ---
 # ⚖️ Build an LLM Evaluation Suite
 

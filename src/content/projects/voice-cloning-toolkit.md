@@ -14,6 +14,7 @@ prerequisites:
   - "Python basics (functions, loops)"
   - "Comfort with numpy arrays, slicing, and small math"
   - "Intuition for frequency and sample rate (one hour of audio basics)"
+author: abderrahim-adrabi
 ---
 
 # 🛠️ 🎙️ Build a Voice Cloning Toolkit

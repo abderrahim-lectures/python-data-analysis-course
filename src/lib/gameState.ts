@@ -3,6 +3,14 @@
 // quests, badges, and the full activity log for transparent progress tracking.
 
 import {xpProgressFor} from './levelMath';
+import {TRACKS} from './gamestats';
+
+// Quest id for finishing a section, where the historic id is not `all-<slug>`
+// (the first two sections predate the shared naming).
+const SECTION_QUEST: Record<string, string> = {
+  'python-101': 'all-python',
+  'data-analysis': 'all-data',
+};
 
 export interface ActivityEntry {
   ts: number;          // epoch ms
@@ -152,6 +160,29 @@ function coerceNumericFields(s: PDAState): PDAState {
     if (!v || typeof v !== 'object' || Array.isArray(v)) {
       (s as unknown as Record<string, unknown>)[key] = {};
     }
+  }
+  // The maps above are checked for being objects, but not their *values*.
+  // `lessonMastery: {"python-101/…/01": "bad"}` passed that check, and then
+  // recordQuiz's `m.total += 1` threw "Cannot create property 'total' on
+  // string" -- after quizTotal and xp had been bumped in memory but before
+  // write(), so the quiz was silently lost and every later quiz on that
+  // lesson threw again. Repair each entry instead of trusting it.
+  const mastery = s.lessonMastery as Record<string, unknown>;
+  for (const [id, rec] of Object.entries(mastery)) {
+    if (!rec || typeof rec !== 'object' || Array.isArray(rec)) {
+      mastery[id] = {correct: 0, total: 0, firstWrongAt: null, lastWrongAt: null};
+      continue;
+    }
+    const r = rec as Record<string, unknown>;
+    r.correct = Number(r.correct) || 0;
+    r.total = Number(r.total) || 0;
+    r.firstWrongAt = typeof r.firstWrongAt === 'number' ? r.firstWrongAt : null;
+    r.lastWrongAt = typeof r.lastWrongAt === 'number' ? r.lastWrongAt : null;
+  }
+  const steps = s.projectsSteps as Record<string, unknown>;
+  for (const [id, v] of Object.entries(steps)) {
+    if (!Array.isArray(v)) steps[id] = [];
+    else steps[id] = (v as unknown[]).map((b) => b === true);
   }
   if (!Array.isArray(s.badges)) s.badges = [];
   if (!Array.isArray(s.activityLog)) s.activityLog = [];
@@ -452,11 +483,13 @@ function evaluateMilestones(s: PDAState): void {
     }
   }
 
-  // Section completion: check if all lessons in a section are done (normal + hard)
-  const pythonLessons = Object.keys(s.lessonsCompleted).filter(k => k.startsWith('python-101/'));
-  if (pythonLessons.length >= 29) markQuest(s, 'all-python');  // 29 lessons total
-  const dataLessons = Object.keys(s.lessonsCompleted).filter(k => k.startsWith('data-analysis/'));
-  if (dataLessons.length >= 20) markQuest(s, 'all-data');   // 20 lessons total
+  // Section completion: each section's quest fires once every lesson in it is
+  // done (normal + hard). The totals come from gamestats.TRACKS rather than
+  // being repeated here, so adding a section cannot leave a stale constant.
+  for (const track of TRACKS) {
+    const done = Object.keys(s.lessonsCompleted).filter(k => k.startsWith(`${track.id}/`)).length;
+    if (done >= track.total) markQuest(s, SECTION_QUEST[track.id] ?? `all-${track.id}`);
+  }
 }
 
 // ── Quests ──────────────────────────────────────────────────────────
@@ -476,6 +509,7 @@ const VISIBLE_QUESTS = [
   {id: 'project-steps-50', label: '50 Steps'},
   {id: 'track-python-101', label: 'Python track'},
   {id: 'track-data-analysis', label: 'Data track'},
+  {id: 'track-statistics-101', label: 'Statistics track'},
   {id: 'streak-3', label: '3-day streak'},
   {id: 'streak-7', label: '7-day streak'},
   {id: 'streak-14', label: '14-day streak'},
@@ -497,6 +531,7 @@ const VISIBLE_QUESTS = [
   {id: 'challenges-50', label: '50 Challenges'},
   {id: 'all-python', label: 'Python 101 done'},
   {id: 'all-data', label: 'Data Analysis done'},
+  {id: 'all-statistics-101', label: 'Statistics 101 done'},
 ] as const;
 const VISIBLE_QUEST_IDS = new Set<string>(VISIBLE_QUESTS.map((q) => q.id));
 
@@ -588,4 +623,95 @@ export function projectStats(): { viewed: number; completed: number; steps: numb
     completed: Object.keys(s.projectsCompleted).length,
     steps: Object.keys(s.projectsSteps).length,
   };
+}
+
+// ── Portable progress ───────────────────────────────────────────────
+// Progress lives in localStorage alone, so clearing site data, switching
+// devices, or using a private window silently loses every lesson, streak and
+// badge. A copyable code turns that into something recoverable without adding
+// an account system: the learner copies one string out of the progress page
+// and pastes it back later (or on another machine).
+//
+// The payload is versioned and validated on the way back in through the same
+// coerceNumericFields / repairLegacy path every other read uses, so an
+// imported code cannot smuggle in a shape the renderers would choke on.
+
+const EXPORT_PREFIX = 'PDA1:';
+
+/** Encode the current state as a portable ASCII string. */
+export function exportProgress(): string {
+  const s = read();
+  const payload = JSON.stringify({
+    v: 1,
+    xp: s.xp,
+    streak: s.streak,
+    bestStreak: s.bestStreak,
+    quizCorrect: s.quizCorrect,
+    quizTotal: s.quizTotal,
+    lessonsCompleted: s.lessonsCompleted,
+    lessonsRun: s.lessonsRun,
+    projectsViewed: s.projectsViewed,
+    projectsCompleted: s.projectsCompleted,
+    projectsSteps: s.projectsSteps,
+    challengesCompleted: s.challengesCompleted,
+    quests: s.quests,
+    badges: s.badges,
+    lessonMastery: s.lessonMastery,
+  });
+  // base64 of UTF-8 bytes: the maps contain lesson ids with Arabic path
+  // segments, so btoa alone would throw on them.
+  const bytes = new TextEncoder().encode(payload);
+  let binary = '';
+  for (const b of bytes) binary += String.fromCharCode(b);
+  return EXPORT_PREFIX + btoa(binary);
+}
+
+export interface ImportResult {
+  ok: boolean;
+  /** Why it failed, for the UI to show. Empty on success. */
+  error: string;
+  /** What changed, for the UI to confirm. */
+  summary: string;
+}
+
+/** Merge a portable code into the current state. Returns a result, never throws. */
+export function importProgress(code: string): ImportResult {
+  const trimmed = code.trim();
+  if (!trimmed) return {ok: false, error: 'empty', summary: ''};
+  if (!trimmed.startsWith(EXPORT_PREFIX)) return {ok: false, error: 'prefix', summary: ''};
+  try {
+    const binary = atob(trimmed.slice(EXPORT_PREFIX.length));
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    const parsed = JSON.parse(new TextDecoder().decode(bytes)) as Record<string, unknown>;
+    if (parsed.v !== 1) return {ok: false, error: 'version', summary: ''};
+
+    const current = read();
+    // Take the higher XP and the longer streak: an import is a restore, and
+    // silently discarding progress the device already had would be a loss.
+    const before = current.xp;
+    current.xp = Math.max(current.xp, Number(parsed.xp) || 0);
+    current.streak = Math.max(current.streak, Number(parsed.streak) || 0);
+    current.bestStreak = Math.max(current.bestStreak, Number(parsed.bestStreak) || 0);
+    current.quizCorrect = Math.max(current.quizCorrect, Number(parsed.quizCorrect) || 0);
+    current.quizTotal = Math.max(current.quizTotal, Number(parsed.quizTotal) || 0);
+    const merge = (key: keyof PDAState) => {
+      const incoming = parsed[key as string];
+      if (!incoming || typeof incoming !== 'object') return;
+      Object.assign(current[key] as object, incoming);
+    };
+    for (const key of ['lessonsCompleted', 'lessonsRun', 'projectsViewed',
+      'projectsCompleted', 'projectsSteps', 'challengesCompleted', 'quests',
+      'lessonMastery'] as const) merge(key);
+    if (Array.isArray(parsed.badges)) {
+      current.badges = [...new Set([...current.badges, ...(parsed.badges as string[])])];
+    }
+
+    const repaired = repairLegacy(coerceNumericFields(current));
+    write(repaired);
+    const gained = repaired.xp - before;
+    return {ok: true, error: '', summary: String(gained)};
+  } catch {
+    return {ok: false, error: 'malformed', summary: ''};
+  }
 }

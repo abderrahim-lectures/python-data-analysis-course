@@ -1,11 +1,14 @@
 ---
 // Shared lesson page for locale learn trees, e.g. /ar/تعلم/python-101/hard/lessons/[lesson].
 import {getCollection, render, type CollectionEntry} from 'astro:content';
-import 'katex/dist/katex.min.css';
+// Imported conditionally below: see the hasMath check. Loading KaTeX's
+// stylesheet on a lesson with no formula costs 8 KB gzip for nothing, and it
+// was doing that on 1,035 of 1,141 math-free pages.
 import Base from '../../layouts/Base.astro';
 import Quiz from '../Quiz.astro';
 import RelatedProjects from './RelatedProjects.astro';
-import {lessonHref, learnHref, moduleHref, idInLocale, trackWord, learnAlternates, type Locale} from '../../lib/routeSegments';
+import {lessonHref, learnHref, moduleHref, idInLocale, trackWord, learnAlternates, referencesHref, type Locale} from '../../lib/routeSegments';
+import {katexCssUrl} from '../../lib/katexCss';
 import {NOTEBOOK_OPENERS} from '../../lib/notebookLinks';
 import {m} from '../../paraglide/messages.js';
 import {TRACK_ICONS, sectionName} from '../../lib/sections';
@@ -19,7 +22,18 @@ interface Props {
 
 const {locale, section, track, entry} = Astro.props;
 const {title, description, module: moduleId, order, difficulty, estimatedMinutes, learningObjectives, tags, hasChallenge, hasQuiz, quiz, xpReward} = entry.data;
-const {Content} = await render(entry);
+const {Content, remarkPluginFrontmatter} = await render(entry);
+// hasMath is set by src/lib/remark-record-math.mjs from the lesson's own
+// markdown. The <link> below is emitted from that flag rather than from a
+// dynamic import(), because a dynamic CSS import is still a static edge in the
+// module graph — Vite emitted the stylesheet on all 1,426 pages even though
+// only 128 lessons render a formula.
+const lessonHasMath = remarkPluginFrontmatter?.hasMath === true;
+// The URL comes from a helper module so the CSS import is not a static edge
+// in every lesson page's graph; only math lessons await it.
+const headExtra = lessonHasMath
+  ? `<link rel="stylesheet" href="${await katexCssUrl()}">`
+  : undefined;
 const base = import.meta.env.BASE_URL;
 const dir = locale === 'ar' ? 'rtl' : 'ltr';
 
@@ -88,8 +102,8 @@ const jsonLd = [
 ];
 ---
 
-<Base title={`${title}, PyDA Course`} description={description} lang={locale} dir={dir} jsonLd={jsonLd} alternates={learnAlternates(section, track, 'lesson', slug)}>
-  <nav class="crumb container">
+<Base title={`${title}, PyDA Course`} description={description} lang={locale} dir={dir} jsonLd={jsonLd} alternates={learnAlternates(section, track, 'lesson', slug)} headExtra={headExtra}>
+  <nav class="crumb container" aria-label={m.breadcrumb_label()}>
     <a href={learnHref(locale, base)}>{m.nav_learn()}</a>
     <a href={learnHref(locale, base, section)}>{sectionName(section)}</a>
     {(() => { const mod = sortedModules.find(x => x.id.split('/').pop()!.replace(/^module-\d+-/, '') === moduleId); return mod ? <a href={moduleHref(locale, base, section, track, mod.id.split('/').pop()!)}>{mod.data.title}</a> : <span>{moduleId}</span>; })()}
@@ -103,7 +117,7 @@ const jsonLd = [
         <span class={`lesson-head__diff ${diffTextCls}`}>{m[`difficulty_${difficulty}`]()}</span>
         <span class="lesson-head__time">{m.minutes_label({n: estimatedMinutes})}</span>
         <span class="lesson-head__xp">⚡ +{xpReward} XP</span>
-        <span class="lesson-head__openers" aria-label={m.open_notebook_aria()}>
+        <span class="lesson-head__openers" role="group" aria-label={m.open_notebook_aria()}>
           {NOTEBOOK_OPENERS.map((o) => (
             <a class="lesson-head__open" href={o.href(locale, section, track, slug)} target="_blank" rel="noopener noreferrer">{o.label}</a>
           ))}
@@ -148,10 +162,10 @@ const jsonLd = [
     <div class="lesson-nav">
       <div class="lesson-nav__group">
         {prev
-          ? <a class="btn btn-soft lesson-nav__prev" href={lessonHref(locale, base, section, track, prev.id.split('/').pop()!)}>{arrow} {m.prev_lesson()}</a>
+          ? <a class="btn btn-soft lesson-nav__prev" data-astro-prefetch href={lessonHref(locale, base, section, track, prev.id.split('/').pop()!)}>{arrow} {m.prev_lesson()}</a>
           : <span />}
         {next
-          ? <a class="btn btn-primary lesson-nav__next" href={lessonHref(locale, base, section, track, next.id.split('/').pop()!)}>{m.next_lesson()} {counterArrow}</a>
+          ? <a class="btn btn-primary lesson-nav__next" data-astro-prefetch href={lessonHref(locale, base, section, track, next.id.split('/').pop()!)}>{m.next_lesson()} {counterArrow}</a>
           : <span />}
       </div>
       <button type="button" class="btn btn-soft lesson-nav__done" data-mark-complete
@@ -164,6 +178,16 @@ const jsonLd = [
         <strong>{m.switch_to()} {track === 'normal' ? m.track_hard_label() : m.track_normal_label()}</strong>
         <small>{track === 'normal' ? m.same_week_steep() : m.same_week_calm()}</small>
       </a>
+      {section === 'statistics-101' && (
+        // A learner who works through the section never returns to the
+        // landing page, so the references were unreachable from anywhere they
+        // actually were. This is the one place a lesson points outwards.
+        <a class="route__card route__card--refs" href={referencesHref(locale, base)}>
+          <span class="route__icon" aria-hidden="true">📚</span>
+          <strong>{m.guide_refs_heading()}</strong>
+          <small>{m.guide_refs_link_lede()}</small>
+        </a>
+      )}
     </div>
   </article>
 </Base>
@@ -265,11 +289,11 @@ const jsonLd = [
 
   .lesson-content :global(ol.quiz-list) { list-style: none; counter-reset: quiz; padding: 0; margin: 1rem 0; }
   .lesson-content :global(ol.quiz-list li) { counter-increment: quiz; padding: 1rem; margin-bottom: 1rem; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-md); }
-  .lesson-content :global(ol.quiz-list li)::before { content: counter(quiz); display: inline-flex; align-items: center; justify-content: center; width: 1.6rem; height: 1.6rem; background: var(--accent); color: #fff; border-radius: 50%; font-size: .78rem; font-weight: 800; margin-right: .5rem; }
+  .lesson-content :global(ol.quiz-list li)::before { content: counter(quiz); display: inline-flex; align-items: center; justify-content: center; width: 1.6rem; height: 1.6rem; background: var(--accent); color: #fff; border-radius: 50%; font-size: .78rem; font-weight: 800; margin-inline-end: .5rem; }
   .lesson-content :global(.quiz-opts) { margin: .5rem 0 0; padding: 0; list-style: none; }
   .lesson-content :global(.quiz-opts li) { padding: .4rem .6rem; margin: .25rem 0; border: 1px solid var(--line); border-radius: var(--radius-sm); font-size: .9rem; cursor: default; transition: all .15s ease; }
   .lesson-content :global(.quiz-opts li:hover) { border-color: var(--accent); background: rgba(124,58,237,.04); }
-  .lesson-content :global(.quiz-opts li.correct) { border-color: #22c55e; background: rgba(34,197,94,.08); color: #16a34a; font-weight: 600; }
+  .lesson-content :global(.quiz-opts li.correct) { border-color: var(--success); background: var(--success-soft); color: var(--success-text); font-weight: 600; }
 
   .lesson-tags { display: flex; gap: .4rem; flex-wrap: wrap; margin: 1.5rem 0; }
   .lesson-tag { padding: .2rem .6rem; border-radius: var(--radius-pill); background: var(--surface-2); font-size: .74rem; font-weight: 600; color: var(--ink-soft); }
@@ -278,11 +302,12 @@ const jsonLd = [
   .lesson-nav__group { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
   .lesson-nav a { text-decoration: none; font-weight: 700; padding: .6rem 1.1rem; border-radius: var(--radius-pill); background: var(--surface); border: 1px solid var(--line); color: var(--ink); box-shadow: var(--shadow-sm); }
   .lesson-nav__done { cursor: pointer; }
-  .lesson-nav__done.is-done { background: var(--success-soft); color: #2e8b0b; border-color: var(--success); cursor: default; }
-  :global([data-theme='dark']) .lesson-nav__done.is-done { color: #6ce07f; }
+  .lesson-nav__done.is-done { background: var(--success-soft); color: var(--success-text); border-color: var(--success); cursor: default; }
   .lesson-nav__done.is-done::before { content: '\2713 '; font-weight: 900; }
 
-  .route { display: grid; margin: 1.5rem 0 3rem; }
+  .route { display: grid; margin: 1.5rem 0 3rem; gap: .75rem; }
+  /* The references card sits under the cross-track card: same shape, quieter. */
+  .route__card--refs { background: var(--bg-soft); }
   .route__card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 1.2rem; text-decoration: none; color: var(--ink); display: flex; flex-direction: column; gap: .3rem; box-shadow: var(--shadow-sm); transition: transform .2s ease, box-shadow .2s ease; }
   .route__card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
   .route__card small { color: var(--ink-soft); }
