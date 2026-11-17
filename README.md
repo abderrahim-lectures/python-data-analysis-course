@@ -48,6 +48,8 @@ By the end of the course, a student can:
 
 An interactive runtime architecture diagram (Astro SSG, browser, Pyodide, game engine, Supabase/anonymous auth) is in [architecture.html](https://pyda-course.online/architecture.html) (source: `public/architecture.html`) — open it locally in a browser.
 
+That file is generated, not hand-written: it is an [Archify](https://github.com/tt-a1i/archify) diagram pinned to a commit, and it carries source evidence for each node. Regenerate it with the archify skill (`node .claude/skills/archify/bin/archify.mjs finalize architecture <candidate> public/architecture.html --repo-root . --quality showcase`); `skills-lock.json` records the version the current file was built with. The skill itself is gitignored — reinstall it with `npx skills add https://archify.si --skill archify --agent claude-code --copy`. `scripts/inject-csp.mjs` gives the generated page the same hash-based CSP every Astro page already has.
+
 ## Development
 
 ```bash

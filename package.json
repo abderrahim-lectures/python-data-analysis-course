@@ -7,7 +7,7 @@
     "prebuild": "node scripts/reset-astro-cache.cjs && node scripts/apply-lix-patch.cjs && node scripts/generate-project-slugs.cjs && node scripts/vendor-pyodide.mjs",
     "predev": "node scripts/reset-astro-cache.cjs && node scripts/apply-lix-patch.cjs && node scripts/generate-project-slugs.cjs",
     "dev": "astro dev",
-    "build": "astro build && node scripts/harden-csp.mjs",
+    "build": "astro build && node scripts/inject-csp.mjs && node scripts/harden-csp.mjs",
     "preview": "astro preview",
     "check": "node scripts/reset-astro-cache.cjs && astro check",
     "typecheck": "tsc --noEmit",
