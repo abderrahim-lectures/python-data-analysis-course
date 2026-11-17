@@ -105,13 +105,6 @@ const alternates = navWordAlternates('contributors');
               </h2>
               {contributor.role && <p class="contributor__role">{contributor.role}</p>}
             </div>
-            <span class="contributor__count">
-              {projects.length === 0
-                ? m.contributors_project_count_zero()
-                : projects.length === 1
-                  ? m.contributors_project_count_one({count: '1'})
-                  : m.contributors_project_count_many({count: String(projects.length)})}
-            </span>
           </div>
 
           {projects.length > 0 ? (
@@ -120,22 +113,29 @@ const alternates = navWordAlternates('contributors');
             // contributor push everyone else off the screen. A native
             // <details> gives the disclosure keyboard and screen-reader
             // behaviour for free, and needs no JavaScript on a static page.
-            <details class="contributor__disclosure">
-              <summary class="contributor__toggle">
-                <span class="contributor__toggle-view">{m.contributors_view_projects()}</span>
-                <span class="contributor__toggle-hide">{m.contributors_hide_projects()}</span>
-              </summary>
-              <ul class="contributor__projects" role="list">
-                {projects.map((p) => (
-                  <li>
-                    <a href={projectsHref(locale, base, p.slug)}>
-                      <span class="contributor__project-title">{p.title}</span>
-                      <span class="contributor__project-desc">{p.description}</span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </details>
+            <div class="contributor__actions">
+              <span class="contributor__count">
+                {projects.length === 1
+                  ? m.contributors_project_count_one({count: '1'})
+                  : m.contributors_project_count_many({count: String(projects.length)})}
+              </span>
+              <details class="contributor__disclosure">
+                <summary class="contributor__toggle">
+                  <span class="contributor__toggle-view">{m.contributors_view_projects()}</span>
+                  <span class="contributor__toggle-hide">{m.contributors_hide_projects()}</span>
+                </summary>
+                <ul class="contributor__projects" role="list">
+                  {projects.map((p) => (
+                    <li>
+                      <a href={projectsHref(locale, base, p.slug)}>
+                        <span class="contributor__project-title">{p.title}</span>
+                        <span class="contributor__project-desc">{p.description}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            </div>
           ) : (
             <p class="contributor__empty">{m.contributors_no_projects()}</p>
           )}
@@ -199,12 +199,20 @@ const alternates = navWordAlternates('contributors');
 
   /* Disclosure: collapsed by default, so the page shows people and counts
      first and project detail only when asked for. */
+  /* Count and toggle share a row so the card reads "136 projects  [View projects]"
+     instead of stacking a pill above a button with a gap between. */
   .contributor__disclosure { margin-top: .9rem; }
+  .contributor__actions { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; }
+  @media (max-width: 480px) {
+    /* Full-width target on a phone; the pill stays inline to its left. */
+    .contributor__toggle { justify-content: center; }
+  }
   .contributor__toggle {
     display: inline-flex; align-items: center; gap: .4rem;
     cursor: pointer; list-style: none;
     font-size: .84rem; font-weight: 700; color: var(--accent-text);
-    padding: .35rem .7rem; border-radius: 999px;
+    /* 44px tall: a touch target, not a text chip. */
+    min-height: 44px; padding: .55rem .95rem; border-radius: 999px;
     background: var(--accent-soft);
     border: 1px solid color-mix(in srgb, var(--accent) 24%, transparent);
   }
