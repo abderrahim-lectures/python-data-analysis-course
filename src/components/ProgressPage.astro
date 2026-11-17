@@ -790,20 +790,32 @@ const i18nData = {
   .report__empty h2 { margin: 0 0 .35rem; font-size: 1.25rem; }
   .report__empty p { color: var(--ink-soft); margin: 0 auto 1rem; max-width: 46ch; font-size: .9rem; }
   .report__footnote { color: var(--ink-soft); font-size: .82rem; border-top: 1px dashed var(--line); padding-top: .8rem; margin-top: 1rem; }
+  /* The card is the page's last block, in a bare container section: without a
+     top margin it butts against the block above, and the bottom margin has to
+     clear the footer rather than the page edge. */
   .guide-link {
     display: flex; align-items: center; gap: .9rem; text-decoration: none;
     background: var(--surface); border: 1px solid var(--line);
-    border-radius: var(--radius-lg); padding: 1.1rem 1.25rem; margin-bottom: 3rem;
+    border-radius: var(--radius-lg); padding: 1.35rem 1.5rem;
+    margin: 2.5rem 0 3.5rem;
     box-shadow: var(--shadow-sm); transition: border-color .15s ease, box-shadow .15s ease;
+    flex-wrap: wrap;
   }
   .guide-link:hover, .guide-link:focus-visible {
     border-color: var(--accent); box-shadow: var(--shadow-md); outline: none;
   }
-  .guide-link__icon { font-size: 1.4rem; }
-  .guide-link__body { display: flex; flex-direction: column; gap: .15rem; min-width: 0; }
+  .guide-link__icon { font-size: 1.5rem; flex: none; }
+  .guide-link__body { display: flex; flex-direction: column; gap: .25rem; min-width: 12ch; flex: 1 1 60%; }
   .guide-link__heading { font-weight: 700; color: var(--ink); }
-  .guide-link__lede { color: var(--ink-soft); font-size: .85rem; line-height: 1.5; }
-  .guide-link__cta { margin-inline-start: auto; color: var(--accent); font-weight: 700; font-size: .9rem; white-space: nowrap; }
+  .guide-link__lede { color: var(--ink-soft); font-size: .87rem; line-height: 1.55; }
+  .guide-link__cta {
+    margin-inline-start: auto; color: var(--accent); font-weight: 700;
+    font-size: .9rem; white-space: nowrap; padding-inline-start: 1rem;
+  }
+  @media (max-width: 640px) {
+    .guide-link { padding: 1.1rem 1.15rem; }
+    .guide-link__cta { margin-inline-start: 0; padding-inline-start: 0; }
+  }
   .kpi { position: relative; }
   .kpi__hint {
     position: absolute; top: .4rem; inset-inline-end: .4rem; width: 16px; height: 16px; border-radius: 50%;
