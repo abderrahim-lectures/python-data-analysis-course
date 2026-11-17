@@ -1,7 +1,7 @@
 ---
 title: "Adjusting for a Second Variable"
 description: "Multiple regression as the cure for Simpson's paradox: what an adjusted coefficient means, and when adjusting makes things worse."
-module: "applied-statistics"
+module: "inference-and-reporting"
 order: 18
 difficulty: "advanced"
 estimatedMinutes: 35

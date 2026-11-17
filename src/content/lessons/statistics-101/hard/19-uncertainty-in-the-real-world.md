@@ -1,7 +1,7 @@
 ---
 title: "Uncertainty in the Real World"
 description: "Bootstrap intervals, the assumptions behind every test, and how to write up an analysis a reviewer can trust."
-module: "applied-statistics"
+module: "inference-and-reporting"
 order: 19
 difficulty: "advanced"
 estimatedMinutes: 35

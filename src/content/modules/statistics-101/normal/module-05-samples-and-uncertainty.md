@@ -6,7 +6,7 @@ section: "statistics-101"
 track: "normal"
 difficulty: "intermediate"
 estimatedHours: 2
-lessonCount: 3
+lessonCount: 6
 tags: ["sampling", "standard-error", "normal-distribution", "confidence-interval"]
 prerequisites: []
 icon: "🎯"

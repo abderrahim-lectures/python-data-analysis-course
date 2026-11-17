@@ -28,6 +28,33 @@ describe('TRACKS totals stay the single source of truth', () => {
     ]);
   });
 
+  test('every module lessonCount matches the lessons that name it', async () => {
+    // A module page prints "N lessons"; a stale count contradicts the list
+    // directly beneath it. Four were wrong when this was added: relationships
+    // said 3 for 2 lessons, samples-and-uncertainty said 3 for 6,
+    // applied-statistics said 2 for 4, and inference-and-reporting said 2
+    // for 0 because its lessons were attributed to the wrong module.
+    const {readdirSync, readFileSync} = await import('node:fs');
+    const {join} = await import('node:path');
+    const mismatches: string[] = [];
+    for (const section of ['statistics-101']) {
+      for (const track of ['normal', 'hard']) {
+        const mdir = `src/content/modules/${section}/${track}`;
+        const ldir = `src/content/lessons/${section}/${track}`;
+        for (const f of readdirSync(mdir)) {
+          const src = readFileSync(join(mdir, f), 'utf8');
+          const declared = Number(/^lessonCount:\s*(\d+)$/m.exec(src)?.[1]);
+          const key = f.replace(/^module-\d+-/, '').replace(/\.md$/, '');
+          const actual = readdirSync(ldir).filter((l) =>
+            new RegExp(`^module:\\s*"?${key}"?$`, 'm').test(readFileSync(join(ldir, l), 'utf8')),
+          ).length;
+          if (declared !== actual) mismatches.push(`${track}/${f}: says ${declared}, has ${actual}`);
+        }
+      }
+    }
+    expect(mismatches).toEqual([]);
+  });
+
   test('every declared total matches the lesson files on disk', async () => {
     // The total is a denominator: a stale one silently caps a progress bar at
     // under 100% forever. Count the markdown instead of trusting the literal.

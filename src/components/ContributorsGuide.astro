@@ -28,7 +28,44 @@ const steps = [
   {title: m.guide_step_5_title(), body: m.guide_step_5_body()},
   {title: m.guide_step_6_title(), body: m.guide_step_6_body()},
   {title: m.guide_step_7_title(), body: m.guide_step_7_body()},
+  {title: m.guide_step_8_title(), body: m.guide_step_8_body()},
+  {title: m.guide_step_9_title(), body: m.guide_step_9_body()},
 ];
+
+// Inside a template literal, a backtick and ${ must be escaped or the
+// expression breaks -- these blocks are shown as text, not evaluated.
+const FRONTMATTER_EXAMPLE = [
+  '---',
+  'title: "Build a File-Organizer Bot"',
+  'description: "Sort a messy folder into category subfolders with a bot that plans before it moves."',
+  'difficulty: "beginner"',
+  'author: your-id',
+  '---',
+].join('\n');
+
+const BODY_EXAMPLE = [
+  '# \u{1F4C1} Build a File-Organizer Bot',
+  '',
+  'A folder you have been dumping things into for a year. You could sort it',
+  'by hand, or write the thing that sorts it.',
+  '',
+  '## \u{1F3AF} What you will do',
+  '',
+  '1. Scan a folder and classify each file by extension.',
+  '2. Build a dry run: compute every move, print it, touch nothing.',
+  '3. Perform the moves, handling collisions instead of overwriting.',
+].join('\n');
+
+const REGISTRY_EXAMPLE = [
+  'export const CONTRIBUTORS: Contributor[] = [',
+  '  {',
+  "    id: 'your-id',",
+  "    name: 'Your Name',",
+  "    github: 'your-handle',",
+  "    role: 'Wrote the file-organizer project',",
+  '  },',
+  '];',
+].join('\n');
 
 // The paths are literal on purpose: a contributor copies them, so they must
 // read as real paths, not as a chart. `required` drives the badge, and mirrors
@@ -64,6 +101,25 @@ const badgeLabel: Record<GuideFile['badge'], string> = {
 };
 
 const repo = 'https://github.com/abderrahim-lectures/python-data-analysis-course';
+
+// The command for each step, index-aligned with `steps`. Kept as data rather
+// than a chain of `{i === n && ...}` blocks so adding a step is one entry in
+// two places instead of one entry and a new JSX branch.
+const COMMANDS: Record<number, string> = {
+  0: `git clone https://github.com/YOUR-USERNAME/python-data-analysis-course.git
+cd python-data-analysis-course
+npm install`,
+  1: `git checkout -b add-my-project`,
+  2: `cp src/content/projects/ai-agent.md src/content/projects/my-project.md`,
+  5: `mkdir -p examples/my-project
+# add README.md, the code, and pyproject.toml`,
+  7: `npm run test
+npx tsc --noEmit
+npm run build`,
+  8: `git add src/content/projects/my-project.md src/lib/contributors.ts
+git commit -m "content: add my-project"
+git push -u origin add-my-project`,
+};
 ---
 
 <Base title={m.guide_title()} description={m.guide_description()} lang={locale} dir={dir} alternates={alternates}>
@@ -86,26 +142,29 @@ const repo = 'https://github.com/abderrahim-lectures/python-data-analysis-course
           <div class="guide-step__body">
             <h2>{s.title}</h2>
             <p>{s.body}</p>
-            {i === 0 && (
-              <pre class="guide__code"><code>{`git clone https://github.com/YOUR-USERNAME/python-data-analysis-course.git
-cd python-data-analysis-course`}</code></pre>
+            {COMMANDS[i] && (
+              <>
+                <pre class="guide__code" tabindex="0"><code>{COMMANDS[i]}</code></pre>
+              </>
             )}
-            {i === 1 && (
-              <pre class="guide__code"><code>{`git checkout -b add-my-project`}</code></pre>
+            {i === 3 && (
+              <>
+                <p class="guide__example-label">{m.guide_example_frontmatter()}</p>
+                <pre class="guide__code" tabindex="0"><code>{FRONTMATTER_EXAMPLE}</code></pre>
+                <p class="guide__example-note">{m.guide_example_note()}</p>
+              </>
             )}
-            {i === 2 && (
-              <pre class="guide__code"><code>{`cp src/content/projects/ai-agent.md src/content/projects/my-project.md`}</code></pre>
-            )}
-            {i === 5 && (
-              <pre class="guide__code"><code>{`npm install
-npm run test      # unit suites, including the contributor checks
-npm run typecheck
-npm run build`}</code></pre>
+            {i === 4 && (
+              <>
+                <p class="guide__example-label">{m.guide_example_body()}</p>
+                <pre class="guide__code" tabindex="0"><code>{BODY_EXAMPLE}</code></pre>
+              </>
             )}
             {i === 6 && (
-              <pre class="guide__code"><code>{`git add src/content/projects/my-project.md src/lib/contributors.ts
-git commit -m "content: add <my project> project"
-git push -u origin add-my-project`}</code></pre>
+              <>
+                <p class="guide__example-label">{m.guide_example_registry()}</p>
+                <pre class="guide__code" tabindex="0"><code>{REGISTRY_EXAMPLE}</code></pre>
+              </>
             )}
           </div>
         </li>
@@ -156,6 +215,12 @@ git push -u origin add-my-project`}</code></pre>
   }
   .guide h1 { font-size: clamp(1.9rem, 4.4vw, 2.8rem); margin: 0 0 .6rem; line-height: 1.15; }
   .guide__intro { color: var(--ink-soft); margin: 0 0 2rem; font-size: 1.02rem; }
+  .guide__example-label {
+    margin: .9rem 0 .4rem; font-size: .86rem; font-weight: 600; color: var(--ink-soft);
+  }
+  .guide__example-note {
+    margin: .4rem 0 0; font-size: .84rem; color: var(--ink-faint); line-height: 1.55;
+  }
 
   /* Diagrams: the two figures are the parts a beginner gets stuck on. They
      scale to the column, keep their aspect ratio, and the caption carries the
@@ -186,6 +251,9 @@ git push -u origin add-my-project`}</code></pre>
     background: var(--bg-soft); border: 1px solid var(--line);
     overflow-x: auto; font-size: .84rem; line-height: 1.55;
   }
+  /* Focusable because it scrolls: a keyboard user must be able to reach and
+     scroll the one block that overflows on a narrow screen. */
+  .guide__code:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   .guide__code code { font-family: var(--font-mono, ui-monospace, monospace); }
 
   .guide__files, .guide__tips { margin-bottom: 2.2rem; }

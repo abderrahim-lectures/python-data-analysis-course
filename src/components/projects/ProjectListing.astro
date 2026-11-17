@@ -61,7 +61,7 @@ const alternates = {
 };
 ---
 
-<Base title={m.projects_title()} description={m.projects_description()} lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'} alternates={alternates}>
+<Base title={m.projects_title()} description={m.projects_description({n: String(projectCount)})} lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'} alternates={alternates}>
   <section class="hero">
     <div class="container head">
       <div class="head__eyebrow"><Icon name="code" size={16} /> {m.projects_eyebrow()}</div>

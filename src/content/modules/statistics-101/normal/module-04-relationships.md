@@ -6,7 +6,7 @@ section: "statistics-101"
 track: "normal"
 difficulty: "beginner"
 estimatedHours: 3
-lessonCount: 3
+lessonCount: 2
 tags: ["correlation", "scatter", "pearson", "spearman", "mode"]
 prerequisites: []
 icon: "🔗"

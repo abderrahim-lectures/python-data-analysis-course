@@ -9,7 +9,7 @@
 import Base from '../layouts/Base.astro';
 import Icon from './Icon.astro';
 import {m} from '../paraglide/messages.js';
-import {learnHref, navWordAlternates, type Locale} from '../lib/routeSegments';
+import {learnHref, trackWord, navWordAlternates, type Locale} from '../lib/routeSegments';
 
 interface Props {
   locale: Locale;
@@ -135,7 +135,7 @@ const noteFor = (key: string): string => {
     <p class="refs__foot">{m.guide_refs_foot()}</p>
 
     <div class="refs__actions">
-      <a class="btn btn-ghost" href={learnHref(locale, base, 'statistics-101', 'normal')}>
+      <a class="btn btn-ghost" href={learnHref(locale, base, 'statistics-101', trackWord(locale, 'normal'))}>
         <Icon name="trail" size={15} /> {m.guide_refs_back()}
       </a>
     </div>

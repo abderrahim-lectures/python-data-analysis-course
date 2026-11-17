@@ -11,7 +11,9 @@ import Icon from './Icon.astro';
 import SceneBg from './SceneBg.astro';
 import LearnerActivity from './LearnerActivity.astro';
 
+import {getCollection} from 'astro:content';
 import {PROJECT_TAGS, projectArtEmoji} from '../lib/projectArt.ts';
+import {idInLocale} from '../lib/routeSegments';
 import {learnHref, progressHref, playgroundHref, projectsHref, type Locale} from '../lib/routeSegments';
 
 interface Props {
@@ -28,6 +30,25 @@ const alternates = {
 };
 
 const sampleTags = [...new Set(Object.values(PROJECT_TAGS).flat())].slice(0, 6);
+
+// The project count on this card used to be a literal inside four message
+// strings, which drifted: the homepage said 135 while the projects index
+// counted 136, and Spanish said 134 in one string and 135 in the next. Count
+// the collection instead, so adding a project updates every string at once.
+const projectCount = (await getCollection('projects')).filter((p) => idInLocale(locale, p.id)).length;
+// paraglide compiles a `{n}` placeholder into a function parameter, so the
+// count has to be passed as an argument -- post-processing the returned string
+// does nothing, and calling the function with no argument renders "undefined".
+const count = String(projectCount);
+// One lesson count per section, read from the collection so a new lesson
+// updates the card rather than leaving "29 lessons" behind.
+const allLessons = await getCollection('lessons');
+const lessonCounts = Object.fromEntries(
+  ['python-101', 'data-analysis', 'statistics-101'].map((id) => [
+    id,
+    String(allLessons.filter((l) => idInLocale(locale, l.id) && l.id.includes(id)).length),
+  ]),
+);
 const tagEmoji: Record<string, string> = {};
 for (const t of sampleTags) tagEmoji[t] = projectArtEmoji([t]);
 const jsonLd = {
@@ -167,7 +188,7 @@ const jsonLd = {
         </SceneBg>
         <div class="hub__badge hub__badge--accent">{m.home_hub_track_1()}</div>
         <div class="hub__inner">
-          <div class="hub__meta">{m.home_hub_track_1_meta()}</div>
+          <div class="hub__meta">{m.home_hub_track_1_meta({n: lessonCounts['python-101']})}</div>
           <h2>{m.home_hub_track_1_name()}</h2>
           <p>{m.home_hub_track_1_desc()}</p>
           <div class="hub__progress" role="progressbar" aria-label={m.home_hub_track_1_name()} aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="hub__progress-fill w-pct-0" id="hub-python"></div></div>
@@ -180,7 +201,7 @@ const jsonLd = {
         </SceneBg>
         <div class="hub__badge hub__badge--streak">{m.home_hub_track_2()}</div>
         <div class="hub__inner">
-          <div class="hub__meta">{m.home_hub_track_2_meta()}</div>
+          <div class="hub__meta">{m.home_hub_track_2_meta({n: lessonCounts['data-analysis']})}</div>
           <h2>{m.home_hub_track_2_name()}</h2>
           <p>{m.home_hub_track_2_desc()}</p>
           <div class="hub__progress" role="progressbar" aria-label={m.home_hub_track_2_name()} aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="hub__progress-fill hub__progress-fill--streak w-pct-0" id="hub-data"></div></div>
@@ -193,7 +214,7 @@ const jsonLd = {
         </SceneBg>
         <div class="hub__badge hub__badge--warn">{m.home_hub_track_3()}</div>
         <div class="hub__inner">
-          <div class="hub__meta">{m.home_hub_track_3_meta()}</div>
+          <div class="hub__meta">{m.home_hub_track_3_meta({n: lessonCounts['statistics-101']})}</div>
           <h2>{m.home_hub_track_3_name()}</h2>
           <p>{m.home_hub_track_3_desc()}</p>
           <div class="hub__progress" role="progressbar" aria-label={m.home_hub_track_3_name()} aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="hub__progress-fill w-pct-0" id="hub-stats"></div></div>
@@ -206,13 +227,13 @@ const jsonLd = {
         </SceneBg>
         <div class="hub__badge hub__badge--warn">{m.home_hub_projects()}</div>
         <div class="hub__inner">
-          <div class="hub__meta">{m.home_hub_projects_meta()}</div>
+          <div class="hub__meta">{m.home_hub_projects_meta({n: count})}</div>
           <h2>{m.home_hub_projects_name()}</h2>
-          <p>{m.home_hub_projects_desc()}</p>
+          <p>{m.home_hub_projects_desc({n: count})}</p>
           <div class="hub__tags">
             {sampleTags.map((t) => <span class="chip">{tagEmoji[t] ?? ''} {t}</span>)}
           </div>
-          <span class="btn btn-xp hub__cta">{m.home_hub_projects_cta()}</span>
+          <span class="btn btn-xp hub__cta">{m.home_hub_projects_cta({n: count})}</span>
         </div>
       </a>
     </div>

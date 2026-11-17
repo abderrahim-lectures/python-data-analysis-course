@@ -45,6 +45,15 @@ describe('statistics references page', () => {
     expect(src).toContain("section === 'statistics-101'");
   });
 
+  test('the back-link uses the localized track word, not "normal"', () => {
+    // Arabic routes its normal track as /…/عادي, so a hardcoded English
+    // 'normal' produced /ar/تعلم/statistics-101/normal, which 404s. The same
+    // bug class broke every localized project CTA before.
+    const src = readFileSync('src/components/StatisticsReferences.astro', 'utf8');
+    expect(src).toContain("trackWord(locale, 'normal')");
+    expect(src).not.toMatch(/learnHref\(locale, base, 'statistics-101', 'normal'\)/);
+  });
+
   test('the localized route words are distinct from the cheatsheets word', () => {
     // Spanish already has /es/referencias (cheatsheets); a references page at
     // the same word would be ambiguous even though the paths differ.

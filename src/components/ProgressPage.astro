@@ -6,7 +6,7 @@ import { computeGameStats } from '../lib/gamestats.ts';
 import { questById } from '../lib/badgeLabel.ts';
 import { getCollection } from 'astro:content';
 import {m} from '../paraglide/messages.js';
-import {learnHref, progressGuideHref, trackWord, type Locale} from '../lib/routeSegments';
+import {learnHref, progressGuideHref, trackWord, idInLocale, type Locale} from '../lib/routeSegments';
 
 interface Props {
   locale: Locale;
@@ -55,6 +55,11 @@ function moduleMap(modEntries: typeof mods, lessonEntries: typeof lessons): Reco
   }
   return out;
 }
+/** How many lessons a section has in this locale, for the "N lessons" label. */
+function lessonTotal(section: string): string {
+  return String(lessons.filter((l) => idInLocale(locale, l.id) && l.id.includes(section)).length);
+}
+
 function modulesReached(section: string, s: {lessonsCompleted: Record<string, boolean>}): {done: number; total: number} {
   const list = MODULES[section] ?? [];
   const done = list.filter((m) => m.lessons.some((id) => s.lessonsCompleted[id])).length;
@@ -201,7 +206,7 @@ const i18nData = {
         <div class="trail__head">
           <div>
             <h2>🐍 {m.track_1_name()}</h2>
-            <span class="trail__meta">{m.progress_trail_python_meta()}</span>
+            <span class="trail__meta">{m.progress_trail_python_meta({n: lessonTotal('python-101')})}</span>
           </div>
           <span class="trail__pct" id="pct-python-101">{m.progress_pct_done({done: py.done, total: py.total})}</span>
         </div>
@@ -223,7 +228,7 @@ const i18nData = {
         <div class="trail__head">
           <div>
             <h2>📊 {m.track_2_name()}</h2>
-            <span class="trail__meta">{m.progress_trail_data_meta()}</span>
+            <span class="trail__meta">{m.progress_trail_data_meta({n: lessonTotal('data-analysis')})}</span>
           </div>
           <span class="trail__pct" id="pct-data-analysis">{m.progress_pct_done({done: da.done, total: da.total})}</span>
         </div>
@@ -245,7 +250,7 @@ const i18nData = {
         <div class="trail__head">
           <div>
             <h2>🎲 {m.track_3_name()}</h2>
-            <span class="trail__meta">{m.progress_trail_stats_meta()}</span>
+            <span class="trail__meta">{m.progress_trail_stats_meta({n: lessonTotal('statistics-101')})}</span>
           </div>
           <span class="trail__pct" id="pct-statistics-101">{m.progress_pct_done({done: sts.done, total: sts.total})}</span>
         </div>

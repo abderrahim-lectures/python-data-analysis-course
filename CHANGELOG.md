@@ -20,8 +20,18 @@ All notable changes to this project are documented in this file. Format loosely 
 - **The contributors page lists a count per person, not every project.** One contributor with 135 projects pushed everyone else below a 12,000-pixel scroll. Each card now shows the count chip and a "View projects" disclosure; the list opens on demand. It is a native `<details>`, so it works without JavaScript and keeps keyboard and screen-reader behaviour. Labels are translated in all four locales.
 - **The repository's GitHub metadata was stale.** The description advertised "Trinket + JupyterLite", neither of which the site has used since the Astro migration; it now describes the current stack and content counts, and the repository has topics. The GitHub license badge read "Other" because a CC-BY note was appended inside the MIT `LICENSE` file, which broke detection; the note moved to `LICENSE-CONTENT.md`, so the code reads as MIT and the content license is still stated.
 
+### Fixed, found by the full audit
+
+- **The project count was wrong in three places at once.** The homepage said 135 while the projects index counted 136, and Spanish said "134 proyectos" in its CTA and "135 proyectos" in the very next string. The count was a literal inside four message strings per locale. It is now a `{n}` placeholder filled from the content collection, so adding a project updates every string.
+- **`+60 XP per lesson` was false.** No lesson awards 60: thirty award 10 and twenty-eight award 100. The rewards card now says "10–100 XP per lesson".
+- **Statistics 101 said "12 lessons"** on the progress page and the home card, from before the foundations module was added. It is 19.
+- **Four module `lessonCount` values disagreed with the lessons that name them** (relationships said 3 for 2, samples-and-uncertainty 3 for 6, applied-statistics 2 for 4, inference-and-reporting 2 for 0). Two hard lessons were also attributed to the wrong module, which is why one module read as empty. All corrected, with a test that compares every declared count to the files.
+- **The Arabic references page linked to `/ar/تعلم/statistics-101/normal`**, a 404, because the track word was hardcoded in English instead of using `trackWord`. The same bug class that once broke every localized project CTA.
+- **The contributor guide was seven one-sentence steps.** It is now nine steps with the reasoning behind each, a complete frontmatter example, a body example, a registry entry showing the id that must match `author`, and a copy of every command. Its code blocks are also keyboard-focusable, since one overflows on a narrow screen.
+- **A dead message key** (`stop_hint`, superseded by `stop_button`) removed from four locales.
+
 ### Testing
-- 1713 unit tests pass (up from 1389 at the start of this work). New guards: the statistics lesson total is checked against the files on disk rather than trusted as a literal, the projects placeholder count is pinned per locale, and the analytics wiring is covered end to end.
+- 1743 unit tests pass (up from 1389 at the start of this work). New guards: track totals and every module's lessonCount are checked against the files on disk rather than trusted as literals, project counts must interpolate rather than hardcode, the analytics wiring is covered end to end, the 404 redirect is pinned against the open-redirect shape, and the contributor guide must stay a walkthrough with examples.
 
 ## [2.0.16] — 2026-11-15
 
