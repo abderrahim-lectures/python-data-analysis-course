@@ -70,10 +70,17 @@ jobs:
       # The browser suites had never run in CI at all. Serve the built site and
       # run every one of them against it. GitHub's ubuntu-latest image ships
       # Chrome, and the harness reads CHROME_BIN.
+      # Astro preview binds to localhost, which resolves to ::1 before 127.0.0.1
+      # on the runner image, so polling 127.0.0.1 timed out even though the
+      # server was up ("ready in 12ms" in the log). Bind explicitly to IPv4 and
+      # poll the same address.
       - name: Serve the built site
         run: |
-          npx astro preview --port 4321 &
+          npx astro preview --host 127.0.0.1 --port 4321 &
           npx --yes wait-on http://127.0.0.1:4321 --timeout 120000
+
+      - name: Confirm the server answers
+        run: curl -fsS -o /dev/null http://127.0.0.1:4321/ && echo "preview is serving"
 
       - name: E2E, a11y, contrast, responsive, notebook and hreflang suites
         env:
