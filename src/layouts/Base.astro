@@ -23,6 +23,11 @@ interface Props {
    *  differs from the requested pathname (e.g. a localized project page served
    *  at its old English-slug alias URL). Defaults to Astro.url.pathname. */
   canonicalPath?: string;
+  /** Emit robots noindex,follow. Used by alias routes that duplicate a
+   *  canonical page; they still serve visitors and pass link equity on. */
+  noindex?: boolean;
+  /** Extra tags for <head>, e.g. a stylesheet only some pages need. */
+  headExtra?: string;
   /** One schema.org object (or array of them) to emit as JSON-LD, on top of
    *  the site-wide Organization/WebSite block every page already gets. */
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
@@ -37,6 +42,7 @@ const {
   jsonLd,
 } = Astro.props;
 const canonicalPath = Astro.props.canonicalPath ?? Astro.url.pathname;
+const {noindex = false, headExtra} = Astro.props;
 const description = Astro.props.description ?? m.home_description();
 const canonicalURL = new URL(canonicalPath, Astro.site);
 const defaultOgImage = lang === 'en' ? 'og-default.png' : `og-default-${lang}.png`;
@@ -164,6 +170,50 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
           // Soft navigations; the URL guard drops the router's initial-page
           // event when DOMContentLoaded already handled it.
           document.addEventListener('astro:page-load', track);
+
+          // Client-side error reporting. Without this a learner's broken page
+          // fails silently: the cell shows nothing, the console fills up, and
+          // nobody finds out. Reported through the same consent gate and the
+          // same tag as page views, so it costs no extra request and stops
+          // when a visitor opts out.
+          //
+          // Each error is reported once per page view: a render loop can throw
+          // the same message thousands of times, and GA4 bills per event.
+          var reported = Object.create(null);
+          function report(kind, message, extra) {
+            if (!consented() || !window.gtag) return;
+            var key = kind + '|' + message;
+            if (reported[key]) return;
+            reported[key] = true;
+            window.gtag('event', 'exception', {
+              description: message,
+              fatal: false,
+              error_kind: kind,
+              page_path: location.pathname,
+              detail: extra || '',
+            });
+          }
+          window.addEventListener('error', function (e) {
+            // Resource errors (a failed <img>/<script>) fire here with no
+            // message and a target instead of an ErrorEvent; report the URL.
+            var msg = e.message || (e.target && (e.target.src || e.target.href)) || 'resource error';
+            report('error', String(msg).slice(0, 200),
+              (e.filename || '') + (e.lineno ? ':' + e.lineno : ''));
+          }, true);
+          window.addEventListener('unhandledrejection', function (e) {
+            var r = e.reason;
+            var msg = (r && (r.message || r.toString())) || 'unhandled rejection';
+            report('rejection', String(msg).slice(0, 200));
+          });
+          // CSP violations. This site is static, so there is no server to
+          // receive a `report-uri`; but the violation also fires a DOM event,
+          // which is enough to make a policy regression visible. A CSP bug has
+          // shipped here before and was invisible in production precisely
+          // because nothing observed it.
+          document.addEventListener('securitypolicyviolation', function (e) {
+            report('csp', (e.violatedDirective || 'csp') + ' blocked ' +
+              String(e.blockedURI || 'inline').slice(0, 120));
+          });
         })();
       </script>
     )}
@@ -171,6 +221,8 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="author" content="Abderrahim Adrabi" />
+    {noindex && <meta name="robots" content="noindex,follow" />}
+    {headExtra && <Fragment set:html={headExtra} />}
     <link rel="canonical" href={canonicalURL} />
     <link rel="icon" href={new URL('favicon.ico', Astro.site)} sizes="32x32" />
     <link rel="icon" type="image/svg+xml" href="/icons/icon-192.svg" />
@@ -394,10 +446,10 @@ const allJsonLdBlocks = [siteJsonLd, ...jsonLdBlocks];
           <span class="topnav__name">PyDA Course</span>
         </a>
         <nav class="topnav__right" aria-label={m.aria_label_primary()}>
-          <a class="topnav__link" href={`${locBase}${nav.learn}`}><Icon name="code" size={15} /> {m.nav_learn()}</a>
-          <a class="topnav__link" href={`${locBase}${nav.projects}`}><Icon name="globe" size={15} /> {m.nav_projects()}</a>
-          <a class="topnav__link" href={`${locBase}${nav.cheatsheets}`}><Icon name="chart" size={15} /> {m.nav_cheatsheets()}</a>
-          <a class="topnav__link" href={`${locBase}${nav.progress}`}><Icon name="trail" size={15} /> {m.nav_progress()}</a>
+          <a class="topnav__link" data-astro-prefetch href={`${locBase}${nav.learn}`}><Icon name="code" size={15} /> {m.nav_learn()}</a>
+          <a class="topnav__link" data-astro-prefetch href={`${locBase}${nav.projects}`}><Icon name="globe" size={15} /> {m.nav_projects()}</a>
+          <a class="topnav__link" data-astro-prefetch href={`${locBase}${nav.cheatsheets}`}><Icon name="chart" size={15} /> {m.nav_cheatsheets()}</a>
+          <a class="topnav__link" data-astro-prefetch href={`${locBase}${nav.progress}`}><Icon name="trail" size={15} /> {m.nav_progress()}</a>
           <div class="topnav__xp" id="xp-bar"></div>
           <div class="topnav__group" role="group" aria-label={m.switch_locale()}>
             {locales.map((l) => (

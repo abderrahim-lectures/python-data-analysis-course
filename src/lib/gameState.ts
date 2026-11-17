@@ -624,3 +624,94 @@ export function projectStats(): { viewed: number; completed: number; steps: numb
     steps: Object.keys(s.projectsSteps).length,
   };
 }
+
+// ── Portable progress ───────────────────────────────────────────────
+// Progress lives in localStorage alone, so clearing site data, switching
+// devices, or using a private window silently loses every lesson, streak and
+// badge. A copyable code turns that into something recoverable without adding
+// an account system: the learner copies one string out of the progress page
+// and pastes it back later (or on another machine).
+//
+// The payload is versioned and validated on the way back in through the same
+// coerceNumericFields / repairLegacy path every other read uses, so an
+// imported code cannot smuggle in a shape the renderers would choke on.
+
+const EXPORT_PREFIX = 'PDA1:';
+
+/** Encode the current state as a portable ASCII string. */
+export function exportProgress(): string {
+  const s = read();
+  const payload = JSON.stringify({
+    v: 1,
+    xp: s.xp,
+    streak: s.streak,
+    bestStreak: s.bestStreak,
+    quizCorrect: s.quizCorrect,
+    quizTotal: s.quizTotal,
+    lessonsCompleted: s.lessonsCompleted,
+    lessonsRun: s.lessonsRun,
+    projectsViewed: s.projectsViewed,
+    projectsCompleted: s.projectsCompleted,
+    projectsSteps: s.projectsSteps,
+    challengesCompleted: s.challengesCompleted,
+    quests: s.quests,
+    badges: s.badges,
+    lessonMastery: s.lessonMastery,
+  });
+  // base64 of UTF-8 bytes: the maps contain lesson ids with Arabic path
+  // segments, so btoa alone would throw on them.
+  const bytes = new TextEncoder().encode(payload);
+  let binary = '';
+  for (const b of bytes) binary += String.fromCharCode(b);
+  return EXPORT_PREFIX + btoa(binary);
+}
+
+export interface ImportResult {
+  ok: boolean;
+  /** Why it failed, for the UI to show. Empty on success. */
+  error: string;
+  /** What changed, for the UI to confirm. */
+  summary: string;
+}
+
+/** Merge a portable code into the current state. Returns a result, never throws. */
+export function importProgress(code: string): ImportResult {
+  const trimmed = code.trim();
+  if (!trimmed) return {ok: false, error: 'empty', summary: ''};
+  if (!trimmed.startsWith(EXPORT_PREFIX)) return {ok: false, error: 'prefix', summary: ''};
+  try {
+    const binary = atob(trimmed.slice(EXPORT_PREFIX.length));
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    const parsed = JSON.parse(new TextDecoder().decode(bytes)) as Record<string, unknown>;
+    if (parsed.v !== 1) return {ok: false, error: 'version', summary: ''};
+
+    const current = read();
+    // Take the higher XP and the longer streak: an import is a restore, and
+    // silently discarding progress the device already had would be a loss.
+    const before = current.xp;
+    current.xp = Math.max(current.xp, Number(parsed.xp) || 0);
+    current.streak = Math.max(current.streak, Number(parsed.streak) || 0);
+    current.bestStreak = Math.max(current.bestStreak, Number(parsed.bestStreak) || 0);
+    current.quizCorrect = Math.max(current.quizCorrect, Number(parsed.quizCorrect) || 0);
+    current.quizTotal = Math.max(current.quizTotal, Number(parsed.quizTotal) || 0);
+    const merge = (key: keyof PDAState) => {
+      const incoming = parsed[key as string];
+      if (!incoming || typeof incoming !== 'object') return;
+      Object.assign(current[key] as object, incoming);
+    };
+    for (const key of ['lessonsCompleted', 'lessonsRun', 'projectsViewed',
+      'projectsCompleted', 'projectsSteps', 'challengesCompleted', 'quests',
+      'lessonMastery'] as const) merge(key);
+    if (Array.isArray(parsed.badges)) {
+      current.badges = [...new Set([...current.badges, ...(parsed.badges as string[])])];
+    }
+
+    const repaired = repairLegacy(coerceNumericFields(current));
+    write(repaired);
+    const gained = repaired.xp - before;
+    return {ok: true, error: '', summary: String(gained)};
+  } catch {
+    return {ok: false, error: 'malformed', summary: ''};
+  }
+}

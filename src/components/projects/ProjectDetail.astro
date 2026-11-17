@@ -9,7 +9,8 @@
 // mark-done flow (completeProject, frontmatter xpReward + quests). This is the
 // single home for that wiring -- content files just write `## Step N:` headings.
 import {render, type CollectionEntry} from 'astro:content';
-import 'katex/dist/katex.min.css';
+import {katexCssUrl} from '../../lib/katexCss';
+// Loaded conditionally after render(): most project pages carry no formula.
 import Base from '../../layouts/Base.astro';
 import ProjectArt from '../ProjectArt.astro';
 import {m} from '../../paraglide/messages.js';
@@ -37,7 +38,11 @@ const hasAlternates = Astro.props.hasAlternates ?? true;
 const base = import.meta.env.BASE_URL;
 
 const {title, description, difficulty, estimatedMinutes, tags, xpReward} = entry.data;
-const {Content} = await render(entry);
+const {Content, remarkPluginFrontmatter} = await render(entry);
+const projectHasMath = remarkPluginFrontmatter?.hasMath === true;
+const headExtra = projectHasMath
+  ? `<link rel="stylesheet" href="${await katexCssUrl()}">`
+  : undefined;
 const xpAward = xpReward ?? XP.PROJECT_COMPLETE;
 
 // Clean slug: strip the locale prefix and any frontmatter-override
@@ -73,6 +78,19 @@ const alternates: Record<Locale, string> = hasAlternates
 // URL per (project, locale) instead of two.
 const canonicalPath = projectsHref(locale, base, slug);
 
+// A localized project is served twice: once under its localized slug (the
+// canonical URL) and once under the English slug as an alias so older links
+// keep working. The alias is a full duplicate of the page -- 405 of them, 43 MB
+// of the artifact -- and without a directive they compete with their canonical
+// twin in search results. `noindex,follow` keeps them crawlable for the links
+// they carry while telling engines which URL to keep.
+const isAliasRoute = (() => {
+  if (locale === 'en') return false;
+  const requested = Astro.url.pathname.replace(/\/+$/, '');
+  const canonical = new URL(canonicalPath, Astro.site).pathname.replace(/\/+$/, '');
+  return requested !== canonical;
+})();
+
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'LearningResource',
@@ -91,7 +109,7 @@ const jsonLd = {
 };
 ---
 
-<Base title={`${title}, PyDA Course`} description={description} lang={locale} dir={dir} alternates={alternates} canonicalPath={canonicalPath} jsonLd={jsonLd}>
+<Base title={`${title}, PyDA Course`} description={description} lang={locale} dir={dir} alternates={alternates} canonicalPath={canonicalPath} noindex={isAliasRoute} headExtra={headExtra} jsonLd={jsonLd}>
   <nav class="crumb container" aria-label={m.breadcrumb_label()}>
     <a href={projectsHref(locale, base)}>{m.projects_eyebrow()}</a> <span>/</span> <span class="crumb__here">{title}</span>
   </nav>

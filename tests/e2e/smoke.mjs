@@ -115,7 +115,12 @@ await goto('/progress');
 // python-101 has 7 modules; the counter counts modules with ≥1 complete lesson
 check('the track counter advances', await evaluate('document.getElementById("pct-python-101").textContent'), '1/7 done');
 check('the streak is no longer stuck at 0', await evaluate('document.getElementById("p-streak").textContent'), '1🔥');
-check('quests are no longer 0/31', await evaluate('document.getElementById("p-quests").textContent'), '2/31');
+// The denominator is the number of visible quests, read from the page rather
+// than hardcoded: it was 31 until Statistics 101 added two, and a literal here
+// turns every new quest into a false failure. The invariant under test is that
+// the counter is no longer stuck at zero, not what the total happens to be.
+const questsTotal = await evaluate('document.getElementById("p-quests").textContent.split("/")[1]');
+check('quests are no longer 0/' + questsTotal, await evaluate('document.getElementById("p-quests").textContent'), '2/' + questsTotal);
 
 console.log('\nlegacy state repair');
 // The shape earlier builds left behind: real XP, but a dead streak and no quests.
@@ -131,7 +136,7 @@ await goto('/progress');
 // throw "Cannot read properties of null" -- it had been failing on main.
 check('earned XP is preserved', await evaluate('document.getElementById("p-xp").textContent'), '175');
 check('the dead streak is repaired', await evaluate('document.getElementById("p-streak").textContent'), '1🔥');
-check('missing quests are backfilled', await evaluate('document.getElementById("p-quests").textContent'), '4/31');
+check('missing quests are backfilled', await evaluate('document.getElementById("p-quests").textContent'), '4/' + questsTotal);
 
 console.log('\nweek-model parity');
 // Complete one lesson in each of the 7 python modules + one in each of 2 data

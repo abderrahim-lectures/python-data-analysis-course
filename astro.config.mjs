@@ -9,6 +9,7 @@ import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import remarkAdmonitions from './src/lib/remark-admonitions.mjs';
 import remarkNoRunFences from './src/lib/remark-no-run-fences.mjs';
+import remarkRecordMath from './src/lib/remark-record-math.mjs';
 import rehypeRunnablePython from './src/lib/rehype-runnable-python.mjs';
 import rehypeSectionBlocks from './src/lib/rehype-section-blocks.mjs';
 import rehypeDropLeadingH1 from './src/lib/rehype-drop-leading-h1.mjs';
@@ -75,11 +76,20 @@ export default defineConfig({
   },
   build: {inlineStylesheets: 'auto'},
   compressHTML: true,
-  prefetch: {defaultStrategy: 'hover', prefetchAll: true},
+  // Prefetch on hover, but only for links that opt in.
+  //
+  // `prefetchAll: true` made every anchor prefetchable, and Astro's router
+  // treats keyboard focus like hover: tabbing through the project grid fired
+  // up to 136 prefetches of 190-238 KB pages apiece, roughly 30 MB for one
+  // keyboard user moving through the page. Prefetching is a latency trick, not
+  // a correctness feature, so it now applies where it pays: the main nav and
+  // the next/previous lesson links, which a reader actually follows. Opt in
+  // with `data-astro-prefetch` on an anchor.
+  prefetch: {defaultStrategy: 'hover', prefetchAll: false},
   markdown: {
     shikiConfig: {theme: 'github-dark-default'},
     processor: unified({
-      remarkPlugins: [remarkAdmonitions, remarkMath, remarkNoRunFences],
+      remarkPlugins: [remarkAdmonitions, remarkMath, remarkNoRunFences, remarkRecordMath],
       rehypePlugins: [
         rehypeFixDocsLinks,
         rehypeDropLeadingH1,

@@ -1,13 +1,15 @@
 {
   "name": "Python & Data Analysis Course",
-  "image": "mcr.microsoft.com/devcontainers/javascript-node:20",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:22",
   "features": {
     "ghcr.io/devcontainers/features/python:1": {
       "version": "3.12"
     }
   },
   "postCreateCommand": "npm install && curl -LsSf https://astral.sh/uv/install.sh | sh && (cd examples/ai-agent && $HOME/.local/bin/uv sync)",
-  "forwardPorts": [4321],
+  "forwardPorts": [
+    4321
+  ],
   "portsAttributes": {
     "4321": {
       "label": "Astro dev server",

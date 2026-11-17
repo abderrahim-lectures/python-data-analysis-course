@@ -116,6 +116,9 @@ const normTrack = trackWord(locale, 'normal');
 // Placeholder tokens are passed through untouched so the client's fmt()
 // replacer fills them in with live values.
 const i18nData = {
+  PORTABLE_EXPORTED: m.progress_portable_exported(),
+  PORTABLE_IMPORTED: m.progress_portable_imported({n: '{n}'}),
+  PORTABLE_FAILED: m.progress_portable_failed(),
   XP_UNIT: m.progress_xp_unit(),
   TO_NEXT: m.progress_to_next(),
   PCT_DONE: m.progress_pct_done({done: '{done}', total: '{total}'}),
@@ -427,6 +430,23 @@ const i18nData = {
     </div>
   </section>
 
+  <!-- Portable progress: a copyable code, so a cleared browser or a new
+       device does not mean losing everything. -->
+  <section class="container">
+    <div class="portable">
+      <h2>{m.progress_portable_heading()}</h2>
+      <p class="portable__lede">{m.progress_portable_lede()}</p>
+      <div class="portable__row">
+        <button type="button" class="btn btn-soft" id="progress-export">{m.progress_portable_export()}</button>
+        <button type="button" class="btn btn-ghost" id="progress-import">{m.progress_portable_import()}</button>
+      </div>
+      <label class="portable__label" for="progress-code">{m.progress_portable_label()}</label>
+      <textarea id="progress-code" class="portable__code" rows="3" spellcheck="false"
+        placeholder={m.progress_portable_placeholder()}></textarea>
+      <p class="portable__status" id="progress-portable-status" role="status" aria-live="polite"></p>
+    </div>
+  </section>
+
   <!-- How progress is computed -->
   <section class="container">
     <a class="guide-link" href={progressGuideHref(locale, base)}>
@@ -441,7 +461,7 @@ const i18nData = {
 
   <div id="progress-i18n" hidden>{JSON.stringify(i18nData).replace(/</g, '\u003c')}</div>
   <script>
-    import {xpProgress, questsToShow, streakProgress, rankFor, RANK_EMOJIS, getActivityLog, getActivityStats, loadState} from '../lib/gameState.ts';
+    import {xpProgress, questsToShow, streakProgress, rankFor, RANK_EMOJIS, getActivityLog, getActivityStats, loadState, exportProgress, importProgress} from '../lib/gameState.ts';
     import {computeGameStats} from '../lib/gamestats.ts';
     import {setPctWidth} from '../lib/pctWidth.ts';
 
@@ -651,6 +671,29 @@ const i18nData = {
     // event fires first.
     document.addEventListener('astro:page-load', render);
     if (document.readyState === 'complete') render();
+
+    // Portable progress: copy the code out, paste it back later.
+    const portableCode = document.getElementById('progress-code') as HTMLTextAreaElement | null;
+    const portableStatus = document.getElementById('progress-portable-status');
+    const setStatus = (msg: string) => { if (portableStatus) portableStatus.textContent = msg; };
+    document.getElementById('progress-export')?.addEventListener('click', () => {
+      if (!portableCode) return;
+      portableCode.value = exportProgress();
+      portableCode.select();
+      setStatus(I18N.PORTABLE_EXPORTED ?? '');
+    });
+    document.getElementById('progress-import')?.addEventListener('click', () => {
+      if (!portableCode) return;
+      const result = importProgress(portableCode.value);
+      if (result.ok) {
+        setStatus((I18N.PORTABLE_IMPORTED ?? '').replace('{n}', result.summary));
+        // Reload so every rendered number reflects the merged state.
+        setTimeout(() => location.reload(), 900);
+      } else {
+        setStatus(I18N.PORTABLE_FAILED ?? '');
+      }
+    });
+
   </script>
 </Base>
 
@@ -808,6 +851,22 @@ const i18nData = {
   }
   .actlog__item:hover { background: var(--accent-soft); }
   .actlog__icon { font-size: 1rem; }
+  .portable {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius-lg); padding: 1.2rem 1.3rem; box-shadow: var(--shadow-sm);
+  }
+  .portable h2 { margin: 0 0 .35rem; font-size: 1.15rem; }
+  .portable__lede { margin: 0 0 .9rem; color: var(--ink-soft); font-size: .92rem; }
+  .portable__row { display: flex; gap: .55rem; flex-wrap: wrap; margin-bottom: .9rem; }
+  .portable__label { display: block; font-size: .82rem; font-weight: 700; color: var(--ink-soft); margin-bottom: .3rem; }
+  .portable__code {
+    width: 100%; box-sizing: border-box; resize: vertical;
+    font-family: var(--font-mono, ui-monospace, monospace); font-size: .76rem;
+    padding: .6rem .7rem; border-radius: var(--radius-md);
+    border: 1px solid var(--line); background: var(--bg); color: var(--ink);
+    word-break: break-all;
+  }
+  .portable__status { margin: .5rem 0 0; font-size: .85rem; color: var(--ink-soft); min-height: 1.2em; }
   .actlog__label { font-weight: 600; color: var(--ink); }
   .actlog__xp { font-weight: 800; color: var(--accent); font-variant-numeric: tabular-nums; }
   .actlog__time { color: var(--ink-soft); font-size: .72rem; font-variant-numeric: tabular-nums; }

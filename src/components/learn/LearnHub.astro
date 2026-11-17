@@ -4,7 +4,10 @@ import {getCollection} from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Icon from '../Icon.astro';
 import {learnHref, trackWord, idInLocale, navWordAlternates, type Locale} from '../../lib/routeSegments';
+import {join} from 'node:path';
 import {sectionList} from '../../lib/sections';
+import {buildLessonIndex} from '../../lib/lessonIndex.mjs';
+import {NAV_WORDS, LESSON_WORDS, TRACK_WORDS} from '../../lib/routeSegments';
 import {m} from '../../paraglide/messages.js';
 
 interface Props {
@@ -19,6 +22,13 @@ const alternates: Record<Locale, string> = navWordAlternates('learn');
 // One card per registered section; adding a section is a change to
 // src/lib/sections.ts plus its content, not to this component.
 const sections = sectionList();
+
+// Search index for this locale only: a learner on /es/aprender should not get
+// English lesson titles in their results. Built at compile time, inlined
+// below as JSON so there is no fetch and no loading state.
+const lessonIndex = buildLessonIndex(join(process.cwd(), 'src/content/lessons'))
+  .filter((e) => e.locale === locale);
+const lessonRouteWords = {learn: NAV_WORDS[locale].learn, lessons: LESSON_WORDS[locale], tracks: TRACK_WORDS[locale]};
 
 const allLessons = await getCollection('lessons');
 const allModules = await getCollection('modules');
@@ -53,6 +63,21 @@ const totalXp = sections.reduce((sum, {slug}) => sum + stats[slug].xp, 0);
       <span class="note__extra"><Fragment set:html={m.learn_hub_cheatsheets_hint()} /></span>
     </div>
   </section>
+
+  <section class="container">
+    <div class="lesson-search">
+      <label class="lesson-search__label" for="lesson-search">{m.learn_search_label()}</label>
+      <input id="lesson-search" class="lesson-search__input" type="search" autocomplete="off"
+        placeholder={m.learn_search_placeholder()} aria-describedby="lesson-search-hint" />
+      <p id="lesson-search-hint" class="lesson-search__hint">{m.learn_search_hint()}</p>
+      <ul id="lesson-search-results" class="lesson-search__results" role="list" hidden></ul>
+      <p id="lesson-search-empty" class="lesson-search__empty" role="status" aria-live="polite" hidden></p>
+    </div>
+  </section>
+
+  <div id="lesson-index" hidden>{JSON.stringify(lessonIndex).replace(/</g, '\u003c')}</div>
+  <div id="lesson-route-words" hidden>{JSON.stringify(lessonRouteWords).replace(/</g, '\u003c')}</div>
+  <div id="lesson-search-i18n" hidden>{JSON.stringify({NO_MATCH: m.learn_search_no_match({q: '{q}'})}).replace(/</g, '\u003c')}</div>
 
   <section class="container">
     <div class="sections">
@@ -114,6 +139,34 @@ const totalXp = sections.reduce((sum, {slug}) => sum + stats[slug].xp, 0);
   .head__eyebrow { color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: .08em; font-size: .76rem; display: inline-flex; align-items: center; gap: .3rem; }
   .head h1 { font-size: clamp(2rem, 4vw, 2.8rem); margin: .4rem 0 .2rem; }
   .head p { color: var(--ink-soft); }
+
+  .lesson-search { margin-bottom: 1.5rem; }
+  .lesson-search__label { display: block; font-size: .82rem; font-weight: 800;
+    text-transform: uppercase; letter-spacing: .05em; color: var(--accent-text); margin-bottom: .4rem; }
+  .lesson-search__input {
+    width: 100%; box-sizing: border-box; padding: .7rem .85rem;
+    border: 1px solid var(--line); border-radius: var(--radius-md);
+    background: var(--surface); color: var(--ink); font-size: .98rem;
+  }
+  .lesson-search__input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .lesson-search__hint { margin: .4rem 0 0; font-size: .82rem; color: var(--ink-faint); }
+  .lesson-search__results { list-style: none; padding: 0; margin: .8rem 0 0;
+    display: flex; flex-direction: column; gap: .4rem; }
+  /* :global because the list items are built by the script below, so they
+     carry no data-astro-cid attribute for scoped selectors to match. */
+  .lesson-search__results :global(a) {
+    display: flex; flex-direction: column; gap: .12rem;
+    padding: .6rem .75rem; border-radius: var(--radius-md);
+    border: 1px solid var(--line); text-decoration: none; color: inherit;
+    background: var(--surface);
+  }
+  .lesson-search__results :global(a:hover),
+  .lesson-search__results :global(a:focus-visible) {
+    border-color: var(--accent); background: var(--accent-soft);
+  }
+  .lesson-search__results :global(.lesson-search__title) { font-weight: 700; font-size: .95rem; }
+  .lesson-search__results :global(.lesson-search__meta) { font-size: .78rem; color: var(--ink-faint); }
+  .lesson-search__empty { margin: .8rem 0 0; font-size: .88rem; color: var(--ink-soft); }
 
   .note__extra { display: block; margin-top: .6rem; padding-top: .6rem; border-top: 1px solid rgba(124, 58, 237, 0.2); }
   .note__extra a { color: var(--accent); font-weight: 600; text-decoration: none; }
@@ -177,3 +230,63 @@ const totalXp = sections.reduce((sum, {slug}) => sum + stats[slug].xp, 0);
   @media (max-width: 720px) { .sections { grid-template-columns: 1fr; } .rewards-preview__grid { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 640px) { .hero { padding: 1.75rem 0 1rem; } .rewards-preview { padding: 1.25rem 0 1.5rem; } }
 </style>
+<script>
+  import {searchLessons, lessonHrefFor} from '../../lib/lessonSearch';
+  import type {LessonIndexEntry} from '../../lib/lessonIndexTypes';
+
+  // The index and the locale's route words are inlined by the component, so
+  // this runs with no fetch and no loading state.
+  const index: LessonIndexEntry[] = JSON.parse(
+    document.getElementById('lesson-index')?.textContent || '[]',
+  );
+  const routeWords = JSON.parse(
+    document.getElementById('lesson-route-words')?.textContent || '{}',
+  ) as {learn: string; lessons: string; tracks: Record<string, string>};
+
+  const input = document.getElementById('lesson-search') as HTMLInputElement | null;
+  const results = document.getElementById('lesson-search-results');
+  const empty = document.getElementById('lesson-search-empty');
+  const i18n = JSON.parse(document.getElementById('lesson-search-i18n')?.textContent || '{}');
+
+  function clearResults() {
+    if (results) { results.innerHTML = ''; results.hidden = true; }
+    if (empty) { empty.hidden = true; empty.textContent = ''; }
+  }
+
+  function render(query: string) {
+    if (!results || !empty) return;
+    if (!query.trim()) { clearResults(); return; }
+
+    const hits = searchLessons(index, query, 8);
+    results.innerHTML = '';
+    if (hits.length === 0) {
+      results.hidden = true;
+      empty.hidden = false;
+      empty.textContent = (i18n.NO_MATCH || '').replace('{q}', query.trim());
+      return;
+    }
+    empty.hidden = true;
+    results.hidden = false;
+    for (const {entry} of hits) {
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = lessonHrefFor(entry, routeWords);
+      const title = document.createElement('span');
+      title.className = 'lesson-search__title';
+      title.textContent = entry.title;
+      const meta = document.createElement('span');
+      meta.className = 'lesson-search__meta';
+      // Show which section and track, so two similar titles are distinguishable.
+      meta.textContent = entry.section.replace(/-/g, ' ') + ' · ' + entry.track;
+      a.append(title, meta);
+      li.append(a);
+      results.append(li);
+    }
+  }
+
+  input?.addEventListener('input', () => render(input.value));
+  // Escape clears, which is what a search field is expected to do.
+  input?.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && input.value) { input.value = ''; render(''); }
+  });
+</script>
