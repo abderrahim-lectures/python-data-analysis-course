@@ -15,7 +15,7 @@ tags: ["regresión-múltiple", "confusión", "ajuste", "inferencia-causal"]
 hasPlayground: true
 hasChallenge: true
 hasQuiz: true
-xpReward: 25
+xpReward: 100
 section: "statistics-101"
 track: "hard"
 ---

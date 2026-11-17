@@ -15,7 +15,7 @@ tags: ["hypothesis-testing", "p-value", "t-test", "significance"]
 hasPlayground: true
 hasChallenge: true
 hasQuiz: true
-xpReward: 15
+xpReward: 10
 section: "statistics-101"
 track: "normal"
 ---

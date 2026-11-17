@@ -15,7 +15,7 @@ tags: ["intervalo-de-confianza", "inferencia", "margen-de-error", "incertidumbre
 hasPlayground: true
 hasChallenge: true
 hasQuiz: true
-xpReward: 15
+xpReward: 10
 section: "statistics-101"
 track: "normal"
 ---

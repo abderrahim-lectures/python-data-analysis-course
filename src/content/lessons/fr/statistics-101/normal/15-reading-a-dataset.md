@@ -15,7 +15,7 @@ tags: ["flux-de-travail", "qualité-des-données", "valeurs-aberrantes", "rappor
 hasPlayground: true
 hasChallenge: true
 hasQuiz: true
-xpReward: 15
+xpReward: 10
 section: "statistics-101"
 track: "normal"
 ---
