@@ -15,7 +15,7 @@ tags: ["contraste-de-hipótesis", "valor-p", "prueba-t", "significación"]
 hasPlayground: true
 hasChallenge: true
 hasQuiz: true
-xpReward: 15
+xpReward: 10
 section: "statistics-101"
 track: "normal"
 ---

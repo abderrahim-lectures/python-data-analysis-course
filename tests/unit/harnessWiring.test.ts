@@ -1,5 +1,5 @@
 import {describe, expect, test} from 'vitest';
-import {readFileSync, existsSync} from 'node:fs';
+import {readFileSync, existsSync, readdirSync} from 'node:fs';
 
 // Several of the site's bugs have been "a check that could never have failed":
 // e2e suites that never ran in CI, an astro check that silently skipped, a CSP
@@ -79,6 +79,63 @@ describe('crawlable duplicates and error visibility', () => {
     expect(BASE).toContain('unhandledrejection');
     expect(BASE).toContain('securitypolicyviolation');
     expect(BASE).toContain("'exception'");
+  });
+});
+
+describe('XP rewards follow one convention across sections', () => {
+  const xpOf = (path: string): number => Number(/^xpReward:\s*(\d+)$/m.exec(readFileSync(path, 'utf8'))?.[1] ?? 0);
+  const files = (dir: string) => readdirSync(dir).filter((f: string) => f.endsWith('.md'));
+
+  test('a track does not invent values outside its section', () => {
+    // There is no single global number: Python normal is 10, Data Analysis
+    // normal is 100 (its lessons are notebook-style deep dives), and hard is
+    // 100 everywhere with two Data Analysis capstones at 150 and 200.
+    // Statistics shipped with 15/20/25 because it was written later and nobody
+    // checked, which made its 19 lessons worth 265 XP against 1190 and 2150 --
+    // visibly odd on the learn hub, where the three cards sit side by side.
+    // The invariant is that a section uses its own values consistently.
+    const allowed: Record<string, number[]> = {
+      'python-101': [10, 100],
+      'data-analysis': [100, 150, 200],
+      'statistics-101': [10, 100],
+    };
+    const wrong: string[] = [];
+    for (const [section, ok] of Object.entries(allowed)) {
+      for (const track of ['normal', 'hard']) {
+        for (const f of files(`src/content/lessons/${section}/${track}`)) {
+          const xp = xpOf(`src/content/lessons/${section}/${track}/${f}`);
+          if (!ok.includes(xp)) wrong.push(`${section}/${track}/${f}: ${xp}`);
+        }
+      }
+    }
+    expect(wrong).toEqual([]);
+  });
+
+  test('hard lessons award 100 XP, except the two Data Analysis capstones', () => {
+    const wrong: string[] = [];
+    for (const section of ['python-101', 'data-analysis', 'statistics-101']) {
+      for (const f of files(`src/content/lessons/${section}/hard`)) {
+        const xp = xpOf(`src/content/lessons/${section}/hard/${f}`);
+        if (xp !== 100 && xp !== 150 && xp !== 200) wrong.push(`${section}/hard/${f}: ${xp}`);
+      }
+    }
+    expect(wrong).toEqual([]);
+    // Statistics should not have invented its own tiers.
+    for (const f of files('src/content/lessons/statistics-101/hard')) {
+      expect(xpOf(`src/content/lessons/statistics-101/hard/${f}`), f).toBe(100);
+    }
+  });
+
+  test('every locale of a section awards the same total', () => {
+    const total = (dir: string): number =>
+      files(`${dir}/normal`).reduce((n: number, f: string) => n + xpOf(`${dir}/normal/${f}`), 0) +
+      files(`${dir}/hard`).reduce((n: number, f: string) => n + xpOf(`${dir}/hard/${f}`), 0);
+    const base = 'src/content/lessons/statistics-101';
+    const en = total(base);
+    expect(en).toBeGreaterThan(0);
+    for (const loc of ['es', 'fr', 'ar']) {
+      expect(total(`src/content/lessons/${loc}/statistics-101`), loc).toBe(en);
+    }
   });
 });
 

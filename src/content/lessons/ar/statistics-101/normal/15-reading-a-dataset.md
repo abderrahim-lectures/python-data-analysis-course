@@ -15,7 +15,7 @@ tags: ["سير-العمل", "جودة-البيانات", "القيم-الشاذ�
 hasPlayground: true
 hasChallenge: true
 hasQuiz: true
-xpReward: 15
+xpReward: 10
 section: "statistics-101"
 track: "normal"
 ---

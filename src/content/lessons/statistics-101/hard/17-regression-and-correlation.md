@@ -16,7 +16,7 @@ tags: ["regression", "least-squares", "residuals", "assumptions"]
 hasPlayground: true
 hasChallenge: true
 hasQuiz: true
-xpReward: 25
+xpReward: 100
 section: "statistics-101"
 track: "hard"
 ---

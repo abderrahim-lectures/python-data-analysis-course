@@ -15,7 +15,7 @@ tags: ["test-d-hypothèse", "valeur-p", "test-t", "signification"]
 hasPlayground: true
 hasChallenge: true
 hasQuiz: true
-xpReward: 15
+xpReward: 10
 section: "statistics-101"
 track: "normal"
 ---

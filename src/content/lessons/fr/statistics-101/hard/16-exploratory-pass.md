@@ -15,7 +15,7 @@ tags: ["eda", "profilage-de-données", "visualisation", "rapport"]
 hasPlayground: true
 hasChallenge: true
 hasQuiz: true
-xpReward: 20
+xpReward: 100
 section: "statistics-101"
 track: "hard"
 ---
