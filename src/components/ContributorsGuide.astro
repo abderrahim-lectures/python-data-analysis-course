@@ -20,17 +20,21 @@ const dir = locale === 'ar' ? 'rtl' : 'ltr';
 const base = import.meta.env.BASE_URL;
 const alternates = navWordAlternates('contributorsGuide');
 
-const steps = [
-  {title: m.guide_step_1_title(), body: m.guide_step_1_body()},
-  {title: m.guide_step_2_title(), body: m.guide_step_2_body()},
-  {title: m.guide_step_3_title(), body: m.guide_step_3_body()},
-  {title: m.guide_step_4_title(), body: m.guide_step_4_body()},
-  {title: m.guide_step_5_title(), body: m.guide_step_5_body()},
-  {title: m.guide_step_6_title(), body: m.guide_step_6_body()},
-  {title: m.guide_step_7_title(), body: m.guide_step_7_body()},
-  {title: m.guide_step_8_title(), body: m.guide_step_8_body()},
-  {title: m.guide_step_9_title(), body: m.guide_step_9_body()},
-];
+// Each step carries three things a beginner needs: why it exists, the
+// numbered sub-steps to follow, and what success looks like. A single
+// paragraph per step was a summary, not a walkthrough.
+const msgs = m as unknown as Record<string, (() => string) | undefined>;
+const message = (key: string): string => msgs[key]?.() ?? '';
+
+const steps = Array.from({length: 12}, (_, i) => {
+  const n = i + 1;
+  return {
+    title: message(`guide_step_${n}_title`),
+    body: message(`guide_step_${n}_body`),
+    substr: message(`guide_step_${n}_steps`).split('\n').filter(Boolean),
+    expect: message(`guide_step_${n}_expect`),
+  };
+}).filter((s) => s.title);
 
 // Inside a template literal, a backtick and ${ must be escaped or the
 // expression breaks -- these blocks are shown as text, not evaluated.
@@ -105,20 +109,25 @@ const repo = 'https://github.com/abderrahim-lectures/python-data-analysis-course
 // The command for each step, index-aligned with `steps`. Kept as data rather
 // than a chain of `{i === n && ...}` blocks so adding a step is one entry in
 // two places instead of one entry and a new JSX branch.
+// Index-aligned with `steps` (0-based). These were written against the old
+// nine-step guide, so after the rebuild they printed under the wrong headings:
+// the clone command appeared between "Clone your fork" and "Create a branch".
 const COMMANDS: Record<number, string> = {
-  0: `git clone https://github.com/YOUR-USERNAME/python-data-analysis-course.git
+  // 0: the commands are the sub-steps, so no block (see below).
+  // 1: no shell command at all - you fork in the browser.
+  2: `git clone https://github.com/YOUR-USERNAME/python-data-analysis-course.git
 cd python-data-analysis-course
 npm install`,
-  1: `git checkout -b add-my-project`,
-  2: `cp src/content/projects/ai-agent.md src/content/projects/my-project.md`,
-  5: `mkdir -p examples/my-project
-# add README.md, the code, and pyproject.toml`,
-  7: `npm run test
+  3: `git checkout -b add-file-organizer`,
+  4: `cp src/content/projects/ai-agent.md src/content/projects/file-organizer.md`,
+  7: `mkdir -p examples/file-organizer
+# add README.md, organizer.py and pyproject.toml`,
+  9: `npm run test
 npx tsc --noEmit
 npm run build`,
-  8: `git add src/content/projects/my-project.md src/lib/contributors.ts
-git commit -m "content: add my-project"
-git push -u origin add-my-project`,
+  10: `git add src/content/projects/file-organizer.md src/lib/contributors.ts
+git commit -m "content: add file-organizer"
+git push -u origin add-file-organizer`,
 };
 ---
 
@@ -142,25 +151,36 @@ git push -u origin add-my-project`,
           <div class="guide-step__body">
             <h2>{s.title}</h2>
             <p>{s.body}</p>
+            {s.substr.length > 0 && (
+              <ol class="guide-step__substeps">
+                {s.substr.map((line) => <li>{line}</li>)}
+              </ol>
+            )}
+            {s.expect && (
+              <div class="guide-step__expect">
+                <span class="guide-step__expect-label">{m.guide_expect_label()}</span>
+                <pre class="guide__code guide__code--expect" tabindex="0"><code>{s.expect}</code></pre>
+              </div>
+            )}
             {COMMANDS[i] && (
               <>
                 <pre class="guide__code" tabindex="0"><code>{COMMANDS[i]}</code></pre>
               </>
             )}
-            {i === 3 && (
+            {i === 5 && (
               <>
                 <p class="guide__example-label">{m.guide_example_frontmatter()}</p>
                 <pre class="guide__code" tabindex="0"><code>{FRONTMATTER_EXAMPLE}</code></pre>
                 <p class="guide__example-note">{m.guide_example_note()}</p>
               </>
             )}
-            {i === 4 && (
+            {i === 6 && (
               <>
                 <p class="guide__example-label">{m.guide_example_body()}</p>
                 <pre class="guide__code" tabindex="0"><code>{BODY_EXAMPLE}</code></pre>
               </>
             )}
-            {i === 6 && (
+            {i === 8 && (
               <>
                 <p class="guide__example-label">{m.guide_example_registry()}</p>
                 <pre class="guide__code" tabindex="0"><code>{REGISTRY_EXAMPLE}</code></pre>
@@ -218,6 +238,28 @@ git push -u origin add-my-project`,
   .guide__example-label {
     margin: .9rem 0 .4rem; font-size: .86rem; font-weight: 600; color: var(--ink-soft);
   }
+  /* Sub-steps: the actual things to do, in order. A numbered list reads as
+     instructions, where a paragraph reads as explanation. */
+  .guide-step__substeps {
+    margin: .6rem 0 0; padding-inline-start: 1.35rem;
+    display: flex; flex-direction: column; gap: .3rem;
+    font-size: .92rem; color: var(--ink-soft); line-height: 1.55;
+  }
+  .guide-step__substeps li::marker { color: var(--accent); font-weight: 700; }
+
+  /* Expected output: the feedback loop a beginner needs to know they are on
+     track. Kept visually distinct from the command block above it. */
+  .guide-step__expect { margin-top: .8rem; }
+  .guide-step__expect-label {
+    display: inline-block; font-size: .74rem; font-weight: 800;
+    text-transform: uppercase; letter-spacing: .05em;
+    color: var(--success-text, var(--accent-text));
+  }
+  .guide__code--expect {
+    margin-top: .35rem;
+    border-inline-start: 3px solid var(--success, var(--accent));
+  }
+
   .guide__example-note {
     margin: .4rem 0 0; font-size: .84rem; color: var(--ink-faint); line-height: 1.55;
   }
@@ -254,7 +296,21 @@ git push -u origin add-my-project`,
   /* Focusable because it scrolls: a keyboard user must be able to reach and
      scroll the one block that overflows on a narrow screen. */
   .guide__code:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-  .guide__code code { font-family: var(--font-mono, ui-monospace, monospace); }
+  /* `overflow-x: auto` on the <pre> only scrolls if the <code> inside is
+     allowed to be wider than it. Without `white-space: pre` the code block
+     wraps and looks fine, but with long unbroken command lines the inline
+     <code> still forced the whole document wider than the phone viewport —
+     which is what made the page scroll sideways on mobile. `white-space: pre`
+     keeps the code unbroken and `overflow-x` then scrolls it inside the box. */
+  .guide__code code {
+    font-family: var(--font-mono, ui-monospace, monospace);
+    white-space: pre;
+    display: block;
+    min-width: 0;
+  }
+  /* A long line scrolls inside the block; a thin scrollbar makes that
+     discoverable rather than looking like clipped text. */
+  .guide__code { scrollbar-width: thin; }
 
   .guide__files, .guide__tips { margin-bottom: 2.2rem; }
   .guide__files h2, .guide__tips h2 { font-size: 1.2rem; margin: 0 0 .8rem; }

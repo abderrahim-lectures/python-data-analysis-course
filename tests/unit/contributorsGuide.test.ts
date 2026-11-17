@@ -15,7 +15,7 @@ describe('contributors guide is a walkthrough, not a summary', () => {
     for (const loc of LOCALES) {
       const m = pack(loc);
       const steps = Object.keys(m).filter((k) => /^guide_step_\d+_title$/.test(k));
-      expect(steps.length, loc).toBeGreaterThanOrEqual(9);
+      expect(steps.length, loc).toBeGreaterThanOrEqual(12);
       for (let i = 1; i <= steps.length; i++) {
         expect(m[`guide_step_${i}_title`], `${loc} step ${i} title`).toBeTruthy();
         expect(m[`guide_step_${i}_body`], `${loc} step ${i} body`).toBeTruthy();
@@ -27,11 +27,24 @@ describe('contributors guide is a walkthrough, not a summary', () => {
   });
 
   test('every step in the component maps to a message key that exists', () => {
+    // The component now builds its steps from a range, so it is the message
+    // keys that must exist rather than a literal call per step.
     const en = pack('en');
-    for (let i = 1; i <= 9; i++) {
-      expect(SRC, `step ${i}`).toContain(`m.guide_step_${i}_title()`);
-      expect(en[`guide_step_${i}_title`]).toBeTruthy();
+    expect(SRC).toContain('guide_step_${n}_title');
+    for (let i = 1; i <= 12; i++) {
+      expect(en[`guide_step_${i}_title`], `step ${i} title`).toBeTruthy();
+      expect(en[`guide_step_${i}_steps`], `step ${i} sub-steps`).toBeTruthy();
     }
+  });
+
+  test('every step says what success looks like', () => {
+    // The "you should see" block is the feedback loop: without it a beginner
+    // cannot tell a silent success from a silent failure.
+    const en = pack('en');
+    for (let i = 1; i <= 12; i++) {
+      expect(en[`guide_step_${i}_expect`], `step ${i} expected output`).toBeTruthy();
+    }
+    expect(SRC).toContain('guide-step__expect');
   });
 
   test('the guide shows a real frontmatter example', () => {

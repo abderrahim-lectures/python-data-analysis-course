@@ -70,6 +70,11 @@ describe('message files stay complete and translated', () => {
     // Statistics references: the resampling technique is called "bootstrap"
     // in French too; it is a loanword, not an untranslated string.
     'guide_topic_bootstrap',
+    // Contributor guide "you should see" blocks. These are literal terminal
+    // output a learner compares against their own screen: `Switched to a new
+    // branch 'add-file-organizer'`, `1743 passed`. Translating them would make
+    // them not match what the tool actually prints.
+    ...Array.from({length: 12}, (_, i) => `guide_step_${i + 1}_expect`),
   ]);
 
   test.each(LOCALES)('%s has every message key (parity with en)', (loc) => {
