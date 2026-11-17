@@ -18,6 +18,7 @@
     .chip-req { fill: #7c3aed; }
     .chip-opt { fill: #d97706; }
     .chip-txt { fill: #ffffff; font-size: 10.5px; font-weight: 700; letter-spacing: .05em; }
+    .chip-txt-c { text-anchor: middle; }
     .step { fill: #7c3aed; }
     .step-opt { fill: #d97706; }
     .step-txt { fill: #ffffff; font-size: 13px; font-weight: 800; }
@@ -58,8 +59,8 @@
   <text class="mono accent" x="56" y="150" font-size="11.5">src/content/projects/</text>
   <text class="mono accent" x="56" y="166" font-size="11.5">&lt;your-slug&gt;.md</text>
 
-  <rect class="chip-req" x="56" y="186" width="62" height="19" rx="9"/>
-  <text class="sans chip-txt" x="64" y="199">REQUIRED</text>
+  <rect class="chip-req" x="56" y="186" width="84" height="19" rx="9.5"/>
+  <text class="sans chip-txt chip-txt-c" x="98" y="199">REQUIRED</text>
 
   <line class="divider" x1="56" y1="218" x2="268" y2="218"/>
   <text class="sans ink-soft" x="56" y="242" font-size="11.5">Frontmatter: title,</text>
@@ -81,8 +82,8 @@
   <text class="mono amber" x="346" y="150" font-size="11.5">examples/</text>
   <text class="mono amber" x="346" y="166" font-size="11.5">&lt;your-slug&gt;/</text>
 
-  <rect class="chip-opt" x="346" y="186" width="62" height="19" rx="9"/>
-  <text class="sans chip-txt" x="354" y="199">OPTIONAL</text>
+  <rect class="chip-opt" x="346" y="186" width="84" height="19" rx="9.5"/>
+  <text class="sans chip-txt chip-txt-c" x="388" y="199">OPTIONAL</text>
 
   <line class="divider" x1="346" y1="218" x2="554" y2="218"/>
   <text class="sans ink-soft" x="346" y="242" font-size="11.5">A runnable version of</text>
@@ -104,8 +105,8 @@
   <text class="mono accent" x="632" y="150" font-size="11.5">src/lib/</text>
   <text class="mono accent" x="632" y="166" font-size="11.5">contributors.ts</text>
 
-  <rect class="chip-req" x="632" y="186" width="62" height="19" rx="9"/>
-  <text class="sans chip-txt" x="640" y="199">REQUIRED</text>
+  <rect class="chip-req" x="632" y="186" width="84" height="19" rx="9.5"/>
+  <text class="sans chip-txt chip-txt-c" x="674" y="199">REQUIRED</text>
 
   <line class="divider" x1="632" y1="218" x2="844" y2="218"/>
   <text class="sans ink-soft" x="632" y="242" font-size="11.5">One entry with a stable</text>
