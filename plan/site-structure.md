@@ -1,63 +1,81 @@
 # Site Structure
 
+Verified against the tree on 2026-11-17 (Astro 7.4.12, 1,426 built pages).
+
 ```
 pyda-course/
-├── astro.config.mjs           # Astro 5, static output, sitemap, remark/rehype pipeline
-├── package.json               # scripts (dev/build/check/test/test:e2e/contrast/responsive/a11y)
-├── tsconfig.json              # strict TypeScript used by astro check + tsc
+├── astro.config.mjs           # Astro 7, static output, sitemap, remark/rehype pipeline,
+│                              #   prefetch opt-in, i18n routing
+├── package.json               # scripts; engines.node >= 22.23.4
+├── tsconfig.json              # strict TypeScript, used by tsc --noEmit
+├── src/
+│   ├── content.config.ts      # collection schemas: lessons, modules, projects
+│   ├── content/
+│   │   ├── lessons/           # python-101/, data-analysis/, statistics-101/, each {normal,hard}
+│   │   │   └── ar/ es/ fr/    # per-locale mirrors (272 lesson files total; 68 per locale)
+│   │   ├── modules/           # same layout (29 modules per locale)
+│   │   └── projects/          # <slug>.md for 136 English projects, plus ar/ es/ fr/ twins
+│   ├── pages/                 # 77 route files
+│   │   ├── index.astro        # EN home (six-line wrapper over HomePage.astro)
+│   │   ├── contributors.astro, contributors-guide.astro, statistics-references.astro
+│   │   ├── progress.astro, credits.astro, cheatsheets.astro, playground.astro
+│   │   ├── 404.astro          # also the /playground/<code> shared-link fallback
+│   │   ├── learn/             # EN: /learn/[section]/[track]/lessons/[lesson]
+│   │   │   ├── [section]/     # generic section landing + lesson/module templates
+│   │   │   ├── python-101/[track]/, data-analysis/[track]/, statistics-101/[track]/
+│   │   │   └── index.astro    # wrapper over components/learn/LearnHub.astro
+│   │   ├── projects/
+│   │   └── ar/ es/ fr/        # translated route words: تعلم/aprender/apprendre, etc.
+│   ├── layouts/
+│   │   └── Base.astro         # html shell: CSP, GA + error reporting, nav, footer,
+│   │                          #   hreflang, lang/dir, noindex, headExtra
+│   ├── components/
+│   │   ├── HomePage.astro, ProgressPage.astro, ContributorsPage.astro,
+│   │   │   ContributorsGuide.astro, StatisticsReferences.astro, Cheatsheets.astro
+│   │   ├── learn/             # LearnHub, SectionLanding, TrackHub, LessonPage, RelatedProjects
+│   │   ├── projects/          # ProjectListing, ProjectDetail, ProjectCard
+│   │   └── Quiz, PlaygroundCell, PlaygroundHead, LearnerActivity, PageViews, SceneBg,
+│   │       Icon, ModuleNav, Pedagogy, ProjectArt, ProgressGuide
+│   ├── lib/                   # 51 modules; the load-bearing ones:
+│   │   ├── gameState.ts       # single `pda:state` localStorage key + progress export/import
+│   │   ├── gamestats.ts       # TRACKS totals, lane progress, diagnostics
+│   │   ├── sections.ts        # the section registry every page reads
+│   │   ├── routeSegments.ts   # NAV_WORDS, detectLocale, translated href builders
+│   │   ├── pyodideWorkerClient.ts  # shared Worker, request ids, Stop/terminate
+│   │   ├── pythonRunnerCore.ts     # engine load, package install, runCellCode
+│   │   ├── pythonGuard.ts     # text scan refusing the js/pyodide bridge
+│   │   ├── supabaseAuth.ts    # direct REST auth (no supabase-js)
+│   │   ├── lessonIndex.mjs    # compile-time search index builder
+│   │   ├── lessonSearch.ts    # ranking + localized hrefs
+│   │   └── remark-*.mjs, rehype-*.mjs   # markdown pipeline
+│   └── styles/                # global.css (tokens, nav, buttons), projects.css, project-detail.css
 ├── public/
 │   ├── CNAME                  # pyda-course.online
-│   ├── manifest.json, sw.js   # PWA: installable + offline page precache
-│   ├── datasets/              # bundled CSVs (slm-corpus, students-*, titanic)
-│   │   └── index.json         # manifest: lesson-referenced names -> shipped CSV files
-│   └── (favicons, icons, robots.txt, static assets)
-├── src/
-│   ├── content/
-│   │   ├── config.ts          # content-collection schemas (lessons, projects)
-│   │   ├── lessons/           # lesson markdown, fully translated per locale
-│   │   │   ├── python-101/{normal,hard}/, data-analysis/{normal,hard}/
-│   │   │   └── ar/ es/ fr/    # per-locale lesson copies (49 lessons × 4)
-│   │   └── projects/          # Real-World Project pages
-│   │       ├── <slug>.md      # English
-│   │       ├── ar/ es/ fr/    # per-locale translations
-│   ├── pages/
-│   │   ├── index.astro        # EN home
-│   │   ├── playground.astro    # standalone playground (no lesson context)
-│   │   ├── 404.astro          # 404 page = /playground/<code> shared-link fallback
-│   │   ├── progress.astro, credits.astro, projects/[...slug].astro
-│   │   ├── learn/             # EN lesson tree: /learn/learn/[section]/[track]/lessons/[lesson]
-│   │   │   └── python-101/ data-analysis/ lessons templates, modules
-│   │   └── ar/ es/ fr/        # translated routes: /ar/تعلم/..., /es/aprender/..., /fr/apprendre/...
-│   ├── layouts/
-│   │   └── Base.astro         # html shell, nav, footer, hreflang alternates, PWA wiring, lang/dir
-│   ├── components/
-│   │   ├── learn/             # LessonPage.astro, RelatedProjects.astro (shared lesson renderer)
-│   │   ├── RunnableCell.astro, NotebookCell.astro, PlaygroundCell.astro, PlaygroundHead.astro
-│   │   ├── projects/          # ProjectArt.astro + project listing/filter components
-│   │   ├── Quiz.astro, Toast.astro, LearnerActivity.astro, SceneBg.astro, ModuleNav.astro
-│   │   └── (gamified: xp-bar, quests — markup inline in Base.astro + messages)
-│   ├── lib/
-│   │   ├── gameState.ts       # single pda:state localStorage key: XP/lessons/projects/quests/badges
-│   │   ├── routeSegments.ts   # NAV_WORDS + detectLocale + translated URL segments + href builders
-│   │   ├── projectSlugs.ts    # localizedProjectSlug: per-locale project URL slug map
-│   │   ├── runnable-cell.client.ts  # Pyodide engine, print-wrapping, mountDatasets, friendly errors
-│   │   ├── notebookLinks.ts   # Colab/Kaggle/nbviewer/Binder/Deepnote/GitHub URLs from notebooks/
-│   │   ├── relatedProjects.ts # lesson -> related-project mapping
-│   │   └── rehype-*.mjs       # markdown pipeline: runnable python, section blocks, drop h1, docs links
-│   └── styles/
-│       ├── global.css         # design tokens, nav, buttons (shared, Claude-owned)
-│       └── project-detail.css # project page + hero-art styling
-├── notebooks/                 # committed .ipynb companions per lesson (49), generated
+│   ├── datasets/              # bundled CSVs + index.json manifest
+│   ├── pyodide/               # vendored at build time, gitignored (seaborn wheel kept)
+│   ├── img/guide/             # the two contributor-guide diagrams (SVG, theme-aware)
+│   └── architecture.html      # generated by Archify; see README
+├── notebooks/                 # committed .ipynb companions (272: 68 per locale)
 ├── scripts/
-│   └── generate-notebooks.mjs # regenerates notebooks/ from lesson content
-├── examples/<slug>/           # real, runnable project companions (uv-friendly)
-├── jupyterlite-config/        # vestigial (JupyterLite retired) — remove when CI is next touched
+│   ├── check-node.mjs         # preflight: names the version, floor and fix
+│   ├── vendor-pyodide.mjs     # fetches the Pyodide closure with retry across mirrors
+│   ├── generate-notebooks.mjs # regenerates notebooks/ from lesson content
+│   ├── inject-csp.mjs         # gives a base policy to any page shipping without one
+│   └── harden-csp.mjs         # replaces 'unsafe-inline' with the global script-hash union
+├── examples/<slug>/           # 137 runnable project companions (uv-friendly)
 ├── tests/
-│   ├── unit/                  # vitest: manifest mapping, content wiring, related-projects, strings
-│   └── e2e/                   # CDP suites: smoke.mjs (40 checks), contrast.mjs, responsive.mjs, a11y.mjs
+│   ├── unit/                  # vitest, 42 files
+│   └── e2e/                   # CDP suites: smoke (49 checks + 2 derived), a11y, contrast,
+│                              #   responsive, hreflang, lesson-runtime
 └── .github/workflows/
-    ├── deploy.yml             # GH Pages deploy (still builds JupyterLite — stale, merge /lite no longer used)
-    └── ci.yml
+    └── deploy.yml             # build → typecheck → unit → serve dist → all six e2e → deploy
 ```
 
-The lesson tree (`src/pages/learn/...` + the `ar|es|fr` translated mirrors) is generated statically from the `lessons` content collection; project index and detail pages come from the `projects` collection (EN + locale subfolders). `Base.astro` is the single layout — nav, footer, per-locale `lang`/`dir`, `hreflang` alternates, PWA/manifest wiring.
+The lesson tree (`src/pages/learn/...` plus the `ar|es|fr` mirrors) is generated statically from
+the `lessons` collection; project index and detail pages come from `projects`. `Base.astro` is the
+single layout — nav, footer, per-locale `lang`/`dir`, `hreflang` alternates, the CSP, GA and the
+error beacon.
+
+Two things that existed in earlier revisions and no longer do: the PWA (`manifest.json`, `sw.js`,
+service worker wiring) was retired and `plan/pwa.md` marks it as an unimplemented design, and
+`jupyterlite-config/` was removed with JupyterLite. There is one workflow, not two.

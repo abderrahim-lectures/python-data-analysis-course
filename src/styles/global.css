@@ -278,7 +278,7 @@ button { font-family: inherit; cursor: pointer; }
 .consent-card__text span .ic { color: var(--accent); }
 .consent-card__text p { color: var(--ink-soft); font-size: .74rem; line-height: 1.45; max-width: 34ch; }
 .switch { position: relative; display: inline-block; width: 44px; height: 24px; flex: none; cursor: pointer; }
-.switch input { position: absolute; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
+.switch input { position: absolute; opacity: 0; width: 100%; height: 100%; cursor: pointer; box-sizing: border-box; border: 0; padding: 0; margin: 0; }
 .switch__track { position: absolute; inset: 0; border-radius: 999px; background: var(--line); transition: background var(--transition-fast); }
 .switch__thumb { position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.25); transition: transform var(--transition-fast); }
 .switch input:checked + .switch__track { background: var(--accent); }

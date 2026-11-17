@@ -48,7 +48,7 @@ All notable changes to this project are documented in this file. Format loosely 
 - **A dead message key** (`stop_hint`, superseded by `stop_button`) removed from four locales.
 
 ### Testing
-- 1787 unit tests pass (up from 1389 at the start of this work). New guards: track totals and every module's lessonCount are checked against the files on disk rather than trusted as literals, project counts must interpolate rather than hardcode, the analytics wiring is covered end to end, the 404 redirect is pinned against the open-redirect shape, and the contributor guide must stay a walkthrough with examples.
+- 1787 unit tests pass (up from 1389 at the start of this work), and every browser suite now runs in CI. New guards: track totals and every module's lessonCount are checked against the files on disk rather than trusted as literals, project counts must interpolate rather than hardcode, the analytics wiring and the CSP-injection pass are covered end to end, the 404 redirect is pinned against the open-redirect shape, the contributor guide must stay a walkthrough with examples, and `harnessWiring.test.ts` fails if a suite stops running in CI, prefetch becomes unconditional again, `supabase-js` returns as a dependency, or the KaTeX link stops being conditional.
 
 ## [2.0.16] — 2026-11-15
 
