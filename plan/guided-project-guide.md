@@ -5,6 +5,12 @@ follow this exact structure. It is the single spec for rewriting the remaining
 30 partial + 77 pitch-only EN projects (and, later, the 134-per-locale pitch
 files). The gold reference is `src/content/projects/agentic-code-reviewer.md`.
 
+## Starter templates
+
+Begin the English entry with `templates/project.md`, a complete small runnable example with meaningful assertions and explicit error cases. Adapt its material instead of merely editing its headings. Use `templates/project.translated.md` for each Arabic, Spanish, and French entry, and share the same English filename across every locale.
+
+Keep `author` only in English. Translate the localized title, description and prose, but preserve `difficulty` precisely as the English schema enum: `beginner`, `intermediate`, or `advanced`. Include the generated slug-map changes with those four language entries in the same pull request.
+
 ## Why this shape
 
 - **Setup before any Step.** A learner must be able to run **something** before
