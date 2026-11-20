@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 430" role="img" aria-labelledby="t d">
-  <title id="t">The three files a new project needs</title>
-  <desc id="d">Step one is a markdown file under src/content/projects, which is required. Step two is an optional examples folder holding runnable code. Step three is one entry in src/lib/contributors.ts so your name appears on the contributors page.</desc>
+  <title id="t">The files a new project needs</title>
+  <desc id="d">Four Markdown files are required: English, Arabic, Spanish, and French. Only English has an author field. An examples folder is optional, and a new contributor checks or adds a registry entry. The build regenerates the slug map to include in the commit.</desc>
   <style>
     .bg { fill: #faf9fc; }
     .card { fill: #ffffff; stroke: #e5e1ea; stroke-width: 1.5; }
@@ -17,8 +17,7 @@
     .sans { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; }
     .chip-req { fill: #7c3aed; }
     .chip-opt { fill: #d97706; }
-    .chip-txt { fill: #ffffff; font-size: 10.5px; font-weight: 700; letter-spacing: .05em; }
-    .chip-txt-c { text-anchor: middle; }
+    .chip-txt { fill: #ffffff; font-size: 10.5px; font-weight: 700; letter-spacing: .05em; text-anchor: middle; }
     .step { fill: #7c3aed; }
     .step-opt { fill: #d97706; }
     .step-txt { fill: #ffffff; font-size: 13px; font-weight: 800; }
@@ -35,88 +34,72 @@
       .line { stroke: #3f3b54; }
       .divider { stroke: #2e2b42; }
       .step { fill: #8b5cf6; }
-      .step-opt { fill: #d97706; }
     }
   </style>
 
   <rect class="bg" width="900" height="430" rx="14"/>
-
-  <text class="sans ink" x="36" y="42" font-size="19" font-weight="800">Three files, one project</text>
-  <text class="sans ink-soft" x="36" y="65" font-size="12.5">Work left to right. The chip on each card says whether you must touch that file.</text>
-
+  <text class="sans ink" x="36" y="42" font-size="19" font-weight="800">One project, four language entries</text>
+  <text class="sans ink-soft" x="36" y="65" font-size="12.5">Check the slug before copying the teaching template to your new English filename.</text>
   <defs>
     <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
       <path d="M0 0 L10 5 L0 10 z" fill="#a78bfa"/>
     </marker>
   </defs>
 
-  <!-- card 1 -->
   <rect class="card" x="36" y="92" width="252" height="292" rx="12"/>
   <path class="head-1" d="M36 104 a12 12 0 0 1 12 -12 h228 a12 12 0 0 1 12 12 v40 h-252 z"/>
   <circle class="step" cx="62" cy="118" r="11"/>
   <text class="sans step-txt" x="62" y="123" text-anchor="middle">1</text>
-  <text class="sans ink" x="82" y="123" font-size="13.5" font-weight="700">Write the project</text>
+  <text class="sans ink" x="82" y="123" font-size="13.5" font-weight="700">Write all four</text>
   <text class="mono accent" x="56" y="150" font-size="11.5">src/content/projects/</text>
   <text class="mono accent" x="56" y="166" font-size="11.5">&lt;your-slug&gt;.md</text>
-
   <rect class="chip-req" x="56" y="186" width="84" height="19" rx="9.5"/>
-  <text class="sans chip-txt chip-txt-c" x="98" y="199">REQUIRED</text>
-
+  <text class="sans chip-txt" x="98" y="199">REQUIRED</text>
   <line class="divider" x1="56" y1="218" x2="268" y2="218"/>
-  <text class="sans ink-soft" x="56" y="242" font-size="11.5">Frontmatter: title,</text>
-  <text class="sans ink-soft" x="56" y="259" font-size="11.5">description, difficulty,</text>
-  <text class="sans ink-soft" x="56" y="276" font-size="11.5">author. Then the lesson</text>
-  <text class="sans ink-soft" x="56" y="293" font-size="11.5">body, in markdown.</text>
-  <text class="sans ink-faint" x="56" y="325" font-size="11">Fastest start: copy</text>
-  <text class="mono ink-faint" x="56" y="342" font-size="11">ai-agent.md</text>
+  <text class="mono ink-soft" x="56" y="242" font-size="11.5">en: &lt;your-slug&gt;.md</text>
+  <text class="mono ink-soft" x="56" y="263" font-size="11.5">ar: &lt;your-slug&gt;.md</text>
+  <text class="mono ink-soft" x="56" y="284" font-size="11.5">es: &lt;your-slug&gt;.md</text>
+  <text class="mono ink-soft" x="56" y="305" font-size="11.5">fr: &lt;your-slug&gt;.md</text>
+  <text class="sans ink-faint" x="56" y="334" font-size="11">Keep the same filename;</text>
+  <text class="sans ink-faint" x="56" y="352" font-size="11">author stays in English.</text>
+  <text class="sans ink-faint" x="56" y="370" font-size="11">Copy templates/project.md</text>
 
-  <!-- arrow 1->2 -->
   <line class="line" x1="292" y1="238" x2="322" y2="238" marker-end="url(#arw)"/>
-
-  <!-- card 2 -->
   <rect class="card" x="326" y="92" width="248" height="292" rx="12"/>
   <path class="head-2" d="M326 104 a12 12 0 0 1 12 -12 h224 a12 12 0 0 1 12 12 v40 h-248 z"/>
   <circle class="step-opt" cx="352" cy="118" r="11"/>
   <text class="sans step-txt" x="352" y="123" text-anchor="middle">2</text>
-  <text class="sans ink" x="372" y="123" font-size="13.5" font-weight="700">Add the code</text>
+  <text class="sans ink" x="372" y="123" font-size="13.5" font-weight="700">Add example code</text>
   <text class="mono amber" x="346" y="150" font-size="11.5">examples/</text>
   <text class="mono amber" x="346" y="166" font-size="11.5">&lt;your-slug&gt;/</text>
-
   <rect class="chip-opt" x="346" y="186" width="84" height="19" rx="9.5"/>
-  <text class="sans chip-txt chip-txt-c" x="388" y="199">OPTIONAL</text>
-
+  <text class="sans chip-txt" x="388" y="199">OPTIONAL</text>
   <line class="divider" x1="346" y1="218" x2="554" y2="218"/>
-  <text class="sans ink-soft" x="346" y="242" font-size="11.5">A runnable version of</text>
-  <text class="sans ink-soft" x="346" y="259" font-size="11.5">what the project builds,</text>
-  <text class="sans ink-soft" x="346" y="276" font-size="11.5">with its own README.</text>
-  <text class="sans ink-faint" x="346" y="308" font-size="11">Skip it when the code</text>
-  <text class="sans ink-faint" x="346" y="325" font-size="11">is short enough to sit</text>
-  <text class="sans ink-faint" x="346" y="342" font-size="11">inside the lesson.</text>
+  <text class="sans ink-soft" x="346" y="242" font-size="11.5">Use files or a notebook</text>
+  <text class="sans ink-soft" x="346" y="259" font-size="11.5">when the lesson needs</text>
+  <text class="sans ink-soft" x="346" y="276" font-size="11.5">runnable companion code.</text>
+  <text class="sans ink-faint" x="346" y="308" font-size="11">Include a README with</text>
+  <text class="sans ink-faint" x="346" y="325" font-size="11">tested instructions. Keep</text>
+  <text class="sans ink-faint" x="346" y="342" font-size="11">short code in the lesson.</text>
 
-  <!-- arrow 2->3 -->
   <line class="line" x1="578" y1="238" x2="608" y2="238" marker-end="url(#arw)"/>
-
-  <!-- card 3 -->
   <rect class="card" x="612" y="92" width="252" height="292" rx="12"/>
   <path class="head-1" d="M612 104 a12 12 0 0 1 12 -12 h228 a12 12 0 0 1 12 12 v40 h-252 z"/>
   <circle class="step" cx="638" cy="118" r="11"/>
   <text class="sans step-txt" x="638" y="123" text-anchor="middle">3</text>
-  <text class="sans ink" x="658" y="123" font-size="13.5" font-weight="700">Claim the credit</text>
+  <text class="sans ink" x="658" y="123" font-size="13.5" font-weight="700">Find your author id</text>
   <text class="mono accent" x="632" y="150" font-size="11.5">src/lib/</text>
   <text class="mono accent" x="632" y="166" font-size="11.5">contributors.ts</text>
-
-  <rect class="chip-req" x="632" y="186" width="84" height="19" rx="9.5"/>
-  <text class="sans chip-txt chip-txt-c" x="674" y="199">REQUIRED</text>
-
+  <rect class="chip-req" x="632" y="186" width="153" height="19" rx="9.5"/>
+  <text class="sans chip-txt" x="708" y="199">ONLY IF YOUR ID IS NEW</text>
   <line class="divider" x1="632" y1="218" x2="844" y2="218"/>
-  <text class="sans ink-soft" x="632" y="242" font-size="11.5">One entry with a stable</text>
-  <text class="sans ink-soft" x="632" y="259" font-size="11.5">id and your name, then</text>
-  <text class="sans ink-soft" x="632" y="276" font-size="11.5">the same id in the</text>
-  <text class="sans ink-soft" x="632" y="293" font-size="11.5">project's author field.</text>
-  <text class="sans ink-faint" x="632" y="325" font-size="11">No GitHub account</text>
-  <text class="sans ink-faint" x="632" y="342" font-size="11">needed to be credited.</text>
+  <text class="sans ink-soft" x="632" y="242" font-size="11.5">Reuse your existing id.</text>
+  <text class="sans ink-soft" x="632" y="259" font-size="11.5">Add an entry only if it is</text>
+  <text class="sans ink-soft" x="632" y="276" font-size="11.5">not in the registry yet.</text>
+  <text class="sans ink-faint" x="632" y="308" font-size="11">After the build, stage</text>
+  <text class="mono ink-faint" x="632" y="325" font-size="10">projectSlugs.data.json</text>
+  <text class="sans ink-faint" x="632" y="342" font-size="11">with all your content.</text>
 
-  <!-- footer -->
   <rect x="36" y="396" width="828" height="1" class="divider"/>
-  <text class="sans ink-faint" x="36" y="416" font-size="11">After the three files: run the tests, commit, push, and open a pull request. The next diagram shows where those steps happen.</text>
+  <text class="sans ink-faint" x="36" y="416" font-size="11">All four Markdown entries are required. A merge publishes every language; this project format has no draft flag.</text>
 </svg>

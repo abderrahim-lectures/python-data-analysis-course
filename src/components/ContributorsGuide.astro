@@ -26,7 +26,7 @@ const alternates = navWordAlternates('contributorsGuide');
 const msgs = m as unknown as Record<string, (() => string) | undefined>;
 const message = (key: string): string => msgs[key]?.() ?? '';
 
-const steps = Array.from({length: 12}, (_, i) => {
+const steps = Array.from({length: 14}, (_, i) => {
   const n = i + 1;
   return {
     title: message(`guide_step_${n}_title`),
@@ -40,33 +40,45 @@ const steps = Array.from({length: 12}, (_, i) => {
 // expression breaks -- these blocks are shown as text, not evaluated.
 const FRONTMATTER_EXAMPLE = [
   '---',
-  'title: "Build a File-Organizer Bot"',
-  'description: "Sort a messy folder into category subfolders with a bot that plans before it moves."',
+  'title: "Build a Study-Grade Calculator"',
+  'description: "Turn assignment scores into an average and a letter grade, with clear errors for scores you cannot use."',
   'difficulty: "beginner"',
   'author: your-id',
   '---',
 ].join('\n');
 
+const TRANSLATED_FRONTMATTER_EXAMPLE = [
+  '---',
+  'title: "Build a Study-Grade Calculator"',
+  'description: "Translate the description for this language."',
+  'difficulty: "beginner"',
+  '---',
+  '# author belongs only in src/content/projects/<your-slug>.md',
+].join('\n');
+
 const BODY_EXAMPLE = [
-  '# \u{1F4C1} Build a File-Organizer Bot',
+  '# 🧮 Build a Study-Grade Calculator',
   '',
-  'A folder you have been dumping things into for a year. You could sort it',
-  'by hand, or write the thing that sorts it.',
+  'A list of assignment scores tells you more than one average suggests.',
+  'Here you will calculate the average and test what happens on the boundaries.',
   '',
-  '## \u{1F3AF} What you will do',
+  '## 🎯 What you will do',
   '',
-  '1. Scan a folder and classify each file by extension.',
-  '2. Build a dry run: compute every move, print it, touch nothing.',
-  '3. Perform the moves, handling collisions instead of overwriting.',
+  '1. Calculate the mean of a list of scores.',
+  '2. Check the result with known cases, including one score.',
+  '3. Explain what the average hides and reject empty input.',
+  '',
+  'That outline becomes a runnable worked example in the full template.',
 ].join('\n');
 
 const REGISTRY_EXAMPLE = [
   'export const CONTRIBUTORS: Contributor[] = [',
+  '  // Keep the existing entry. Add yours only if the id is not listed.',
   '  {',
   "    id: 'your-id',",
   "    name: 'Your Name',",
   "    github: 'your-handle',",
-  "    role: 'Wrote the file-organizer project',",
+  "    role: 'Wrote the study-grade-calculator project',",
   '  },',
   '];',
 ].join('\n');
@@ -77,7 +89,7 @@ const REGISTRY_EXAMPLE = [
 interface GuideFile {
   path: string;
   what: string;
-  badge: 'required' | 'optional' | 'registry';
+  badge: 'required' | 'optional' | 'registry' | 'template' | 'generated';
 }
 const files: GuideFile[] = [
   {
@@ -91,9 +103,24 @@ const files: GuideFile[] = [
     badge: 'optional',
   },
   {
+    path: 'src/content/projects/{ar,es,fr}/<your-slug>.md',
+    what: m.guide_file_translations(),
+    badge: 'required',
+  },
+  {
     path: 'src/lib/contributors.ts',
     what: m.guide_file_registry_body(),
     badge: 'registry',
+  },
+  {
+    path: 'src/lib/projectSlugs.data.json',
+    what: m.guide_file_slugs(),
+    badge: 'generated',
+  },
+  {
+    path: 'templates/project.md',
+    what: m.guide_file_template(),
+    badge: 'template',
   },
 ];
 
@@ -102,35 +129,72 @@ const badgeLabel: Record<GuideFile['badge'], string> = {
   required: m.guide_file_required(),
   optional: m.guide_file_optional(),
   registry: m.guide_file_registry(),
+  template: m.guide_file_template_badge(),
+  generated: m.guide_file_generated(),
 };
 
 const repo = 'https://github.com/abderrahim-lectures/python-data-analysis-course';
+const templateUrl = `${repo}/blob/main/templates/project.md`;
+const translatedTemplateUrl = `${repo}/blob/main/templates/project.translated.md`;
 
-// The command for each step, index-aligned with `steps`. Kept as data rather
-// than a chain of `{i === n && ...}` blocks so adding a step is one entry in
-// two places instead of one entry and a new JSX branch.
-// Index-aligned with `steps` (0-based). These were written against the old
-// nine-step guide, so after the rebuild they printed under the wrong headings:
-// the clone command appeared between "Clone your fork" and "Create a branch".
+interface CodeGroup {
+  before?: string;
+  code: string;
+  after?: string;
+}
+
 const COMMANDS: Record<number, string> = {
-  // 0: the commands are the sub-steps, so no block (see below).
-  // 1: no shell command at all - you fork in the browser.
-  2: `git clone https://github.com/YOUR-USERNAME/python-data-analysis-course.git
+  0: `nvm install 22.23.4 && nvm use
+node --version
+git --version`,
+  2: `# External contributors: clone your fork instead.
+git clone https://github.com/abderrahim-lectures/python-data-analysis-course.git
 cd python-data-analysis-course
 npm install`,
-  3: `git checkout -b add-file-organizer`,
-  4: `cp src/content/projects/ai-agent.md src/content/projects/file-organizer.md`,
-  7: `mkdir -p examples/file-organizer
-# add README.md, organizer.py and pyproject.toml`,
-  9: `npm run test
-npx tsc --noEmit
-npm run build`,
-  10: `git add src/content/projects/file-organizer.md src/lib/contributors.ts
-git commit -m "content: add file-organizer"
-git push -u origin add-file-organizer`,
+  3: `# Replace each your-project-slug placeholder before running these commands.
+find src/content/projects -name "your-project-slug.md" -print
+ls src/content/projects/file-organizer.md
+# Choose a new slug when the find above finds an existing project.
+git checkout -b add-your-project-slug`,
+  4: `cp templates/project.md src/content/projects/your-project-slug.md`,
+  7: `mkdir -p examples/your-project-slug
+# add README.md, your code, and pyproject.toml when using uv`,
+  9: `npm run build
+npm run test
+npx tsc --noEmit`,
+  10: `npm run dev
+# http://localhost:4321/contributors-guide/`,
+  11: `git status --short
+git add -A
+git status --short
+# Include examples/, all four Markdown entries, and
+# src/lib/projectSlugs.data.json in the staged files.
+git commit -m "content: add your-project-slug"
+git push -u origin add-your-project-slug`,
 };
----
 
+// Each block belongs to the step whose actions it demonstrates. The zero-based
+// index keeps the blocks aligned as a contributor moves through the workflow.
+const EXAMPLES = new Map<number, CodeGroup[]>([
+  [4, [{before: m.guide_example_choices(), code: m.guide_example_choices_body()}]],
+  [5, [
+    {before: m.guide_example_frontmatter(), code: FRONTMATTER_EXAMPLE},
+    {before: m.guide_step_6_translation(), code: TRANSLATED_FRONTMATTER_EXAMPLE, after: m.guide_example_note()},
+  ]],
+  [6, [
+    {before: m.guide_example_body(), code: BODY_EXAMPLE},
+    {before: m.guide_translation_paths(), code: m.guide_translation_example()},
+  ]],
+  [8, [{before: m.guide_example_registry(), code: REGISTRY_EXAMPLE}]],
+]);
+for (const [step, code] of Object.entries(COMMANDS)) {
+  EXAMPLES.set(Number(step), [{code}]);
+}
+
+// This prevents Astro's agent-detection timeout from terminating a slow
+// first initialization. It also ignores a different server's lock file.
+const AGENT_DEV_COMMAND = 'npm run dev -- --host 127.0.0.1 --port 4322 --ignore-lock';
+---
 <Base title={m.guide_title()} description={m.guide_description()} lang={locale} dir={dir} alternates={alternates}>
   <section class="container guide">
     <header class="guide__head">
@@ -145,51 +209,44 @@ git push -u origin add-file-organizer`,
     </figure>
 
     <ol class="guide__steps" role="list">
-      {steps.map((s, i) => (
+      {steps.map((step, i) => (
         <li class="guide-step">
           <span class="guide-step__num" aria-hidden="true">{i + 1}</span>
           <div class="guide-step__body">
-            <h2>{s.title}</h2>
-            <p>{s.body}</p>
-            {s.substr.length > 0 && (
-              <ol class="guide-step__substeps">
-                {s.substr.map((line) => <li>{line}</li>)}
-              </ol>
-            )}
-            {s.expect && (
-              <div class="guide-step__expect">
-                <span class="guide-step__expect-label">{m.guide_expect_label()}</span>
-                <pre class="guide__code guide__code--expect" tabindex="0"><code>{s.expect}</code></pre>
-              </div>
-            )}
-            {COMMANDS[i] && (
-              <>
-                <pre class="guide__code" tabindex="0"><code>{COMMANDS[i]}</code></pre>
-              </>
-            )}
-            {i === 5 && (
-              <>
-                <p class="guide__example-label">{m.guide_example_frontmatter()}</p>
-                <pre class="guide__code" tabindex="0"><code>{FRONTMATTER_EXAMPLE}</code></pre>
-                <p class="guide__example-note">{m.guide_example_note()}</p>
-              </>
+            <h2>{step.title}</h2>
+            <p>{step.body}</p>
+            <ol class="guide-step__substeps">
+              {step.substr.map((line) => <li>{line}</li>)}
+            </ol>
+            <div class="guide-step__expect">
+              <span class="guide-step__expect-label">{m.guide_expect_label()}</span>
+              <pre class="guide__code guide__code--expect" tabindex="0"><code>{step.expect}</code></pre>
+            </div>
+            {i === 4 && (
+              <p><a class="guide__template-link" href={templateUrl} target="_blank" rel="noopener noreferrer">{m.guide_template_link()} <Icon name="github" size={14} /></a></p>
             )}
             {i === 6 && (
-              <>
-                <p class="guide__example-label">{m.guide_example_body()}</p>
-                <pre class="guide__code" tabindex="0"><code>{BODY_EXAMPLE}</code></pre>
-              </>
+              <p><a class="guide__template-link" href={translatedTemplateUrl} target="_blank" rel="noopener noreferrer">{m.guide_translated_template_link()} <Icon name="github" size={14} /></a></p>
             )}
-            {i === 8 && (
-              <>
-                <p class="guide__example-label">{m.guide_example_registry()}</p>
-                <pre class="guide__code" tabindex="0"><code>{REGISTRY_EXAMPLE}</code></pre>
-              </>
+            {(EXAMPLES.get(i) ?? []).map((example) => (
+              <div class="guide__example">
+                {example.before && <p class="guide__example-label">{example.before}</p>}
+                <pre class="guide__code" tabindex="0"><code>{example.code}</code></pre>
+                {example.after && <p class="guide__example-note">{example.after}</p>}
+              </div>
+            ))}
+            {i === 10 && (
+              <details class="guide__agent">
+                <summary>{m.guide_agent_dev()}</summary>
+                <p>{m.guide_agent_dev_body()}</p>
+                <pre class="guide__code" tabindex="0"><code>{AGENT_DEV_COMMAND}</code></pre>
+                <p>{m.guide_agent_dev_expect()}</p>
+              </details>
             )}
           </div>
         </li>
       ))}
-    </ol>
+</ol>
 
     <figure class="guide__figure">
       <img src={`${base}img/guide/contribution-flow.svg`} alt={m.guide_fig_flow_alt()} width="900" height="340" loading="lazy" decoding="async" />
@@ -263,6 +320,14 @@ git push -u origin add-file-organizer`,
   .guide__example-note {
     margin: .4rem 0 0; font-size: .84rem; color: var(--ink-faint); line-height: 1.55;
   }
+  .guide__agent {
+    margin-top: .8rem; padding: .65rem .9rem; border: 1px solid var(--line);
+    border-radius: var(--radius-md); background: var(--bg-soft);
+  }
+  .guide__agent summary { cursor: pointer; font-weight: 650; font-size: .9rem; }
+  .guide__agent p { margin-top: .6rem; font-size: .86rem; }
+  .guide-file__badge--template { background: var(--accent-soft); color: var(--accent-text); }
+  .guide-file__badge--generated { background: var(--warn-soft); color: var(--xp-text); }
 
   /* Diagrams: the two figures are the parts a beginner gets stuck on. They
      scale to the column, keep their aspect ratio, and the caption carries the
